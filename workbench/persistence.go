@@ -17,6 +17,7 @@ const DocumentVersion = 4
 const MaxDocumentBytes = 256 * 1024
 
 type Document struct {
+	DiodeModel        *DiodeModel        `json:"diode_model,omitempty"`
 	SwitchModel       *SwitchModel       `json:"switch_model,omitempty"`
 	Recordings        *ProjectRecordings `json:"recordings,omitempty"`
 	Paused            *bool              `json:"paused,omitempty"`
@@ -226,6 +227,15 @@ func decodeDocument(data []byte) (Document, error) {
 	if len(d.Graph.Components) > MaxComponents || len(d.Graph.Wires) > MaxWires {
 		return d, fmt.Errorf("schematic exceeds component/wire limits")
 	}
+	if d.DiodeModel != nil && *d.DiodeModel != SiliconDiodeModel() {
+		return d, fmt.Errorf("unsupported diode model parameters/version")
+	}
+	for _, part := range d.Graph.Components {
+		if part.Kind == "diode" && (d.DiodeModel == nil || *d.DiodeModel != SiliconDiodeModel()) {
+			return d, fmt.Errorf("diode schematics require supported diode_model parameters")
+		}
+	}
+
 	if d.SwitchModel != nil && *d.SwitchModel != SwitchDeviceModel() {
 		return d, fmt.Errorf("unsupported switch model parameters/version")
 	}
@@ -458,6 +468,13 @@ func (s *Service) documentLocked() Document {
 	probes := ProbeParams{IDs: s.scopeLocked(compiled).Selected}
 	paused := s.paused
 	d := Document{Recordings: s.projectRecordingsLocked(), Paused: &paused, ScopeProbes: &probes, Format: DocumentFormat, Version: DocumentVersion, Graph: s.graph.Clone(), View: s.view, LEDModel: Model(), TransientSettings: &settings}
+	for _, part := range s.graph.Components {
+		if part.Kind == "diode" {
+			model := SiliconDiodeModel()
+			d.DiodeModel = &model
+			break
+		}
+	}
 	for _, c := range s.graph.Components {
 		if c.Kind == "switch" {
 			model := SwitchDeviceModel()

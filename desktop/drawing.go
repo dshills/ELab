@@ -133,6 +133,11 @@ func schematic(state workbench.Snapshot, view canvas.Viewport) (*canvas.Mesh, er
 			stroke(ink, 3, canvas.Point{X: -25}, end)
 		case "resistor":
 			stroke(ink, 2.5, canvas.Point{X: -55}, canvas.Point{X: -43}, canvas.Point{X: -35, Y: -15}, canvas.Point{X: -21, Y: 15}, canvas.Point{X: -7, Y: -15}, canvas.Point{X: 7, Y: 15}, canvas.Point{X: 21, Y: -15}, canvas.Point{X: 35, Y: 15}, canvas.Point{X: 43}, canvas.Point{X: 55})
+		case "diode":
+			stroke(ink, 3, canvas.Point{X: -20, Y: -24}, canvas.Point{X: 20, Y: -24}, canvas.Point{Y: 17}, canvas.Point{X: -20, Y: -24})
+			stroke(ink, 3, canvas.Point{X: -22, Y: 19}, canvas.Point{X: 22, Y: 19})
+			stroke(wireColor, 2.5, canvas.Point{Y: -32}, canvas.Point{Y: -24})
+			stroke(wireColor, 2.5, canvas.Point{Y: 19}, canvas.Point{Y: 32})
 		case "led":
 			led := color.NRGBA{R: 157, G: 42, B: 50, A: 255}
 			current := 0.

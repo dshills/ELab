@@ -69,9 +69,19 @@ The existing bounded MNA kernel now accepts switched LED/RC/NPN circuits and pas
 
 Packaged slice: **0.15.0 / 29**, with [final validation](../docs/validation/switch-validation.json), [headless workflow](../docs/validation/headless-switch.json) and [packaged desktop workflow](../docs/validation/desktop-switch.json). The switched RC reference differs by about 1.4 mV at 20 ms; headless and native numerical outputs match exactly. Root/desktop race tests, lint, vet, native control parity and packaged GPU/UI smoke pass. Prior bundles and user sessions were preserved.
 
+## Generic silicon diode and rectification
+
+Implemented the [generic silicon diode](../docs/diodes.md) with named anode/cathode pins, fixed inspectable versioned Shockley/series-resistance parameters, signed reverse leakage, analytic conductance, native/SVG symbols, readouts, probes and complete project/record/recovery metadata. The model combines with the existing bounded network devices and supports up to eight diodes. The red LED's existing model is unchanged.
+
+Independent inverse-Shockley and RK4 fixtures cover DC and nonlinear capacitor charging. Tests also check reverse hold/leakage, derivative agreement, monotonicity, conservation, internal finite series resistance, strict model imports and captured CSV values after live edits. Review removed unnecessary division by a valueless nonlinear component, made small branch readings visible with significant digits, and added switch/diode model attribution to recorded CSVs.
+
+Captured metadata schemas now share a local registry definition, keeping the original catalog size bound instead of increasing it. Registry and command references are checked for resolution; protocol and discovery versions remain compatible.
+
+Packaged slice: **0.16.0 / 30**, with [final validation](../docs/validation/diode-validation.json), [headless fixture](../docs/validation/headless-diode.json) and [packaged desktop fixture](../docs/validation/desktop-diode.json). Headless/native numerical outputs match exactly; nonlinear RC charging differs from the independent reference by under 1 mV at 10 ms. Automatic pulse rectification, source edge events, independent Verify, standalone record import, two embedded recordings and project reopening pass, alongside root/desktop race tests, lint, vet and packaged GPU/UI smoke. Prior bundles/sessions remain preserved.
+
 ## Next work queue
 
-1. Generic diode and potentiometer models with electrical fixtures and supported topology expansion.
+1. Potentiometer model, bounded wiper controls and electrical fixtures.
 2. Broader source waveforms and finite pulse transitions from the curated PRD.
 3. Capacity/latency measurements, keyboard/screen-reader checks and distribution qualification.
 

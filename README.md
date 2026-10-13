@@ -21,7 +21,7 @@ From the ELab directory:
 ./build/elab
 ```
 
-The window starts with a blank schematic. Pick a DC or pulse source, resistor, capacitor, red LED, NPN, SPST switch, junction, net label, or ground from the left palette, then click the sheet. Use Wire to click pairs of terminal dots. Select a component to edit its value in the right inspector; inputs such as `2.2k ohm` are accepted. The inspector also offers exact X/Y placement while a part is selected for placement, and named terminal connections while Wire is active.
+The window starts with a blank schematic. Pick a DC or pulse source, resistor, capacitor, red LED, silicon diode, NPN, SPST switch, junction, net label, or ground from the left palette, then click the sheet. Use Wire to click pairs of terminal dots. Select a component to edit its value in the right inspector; inputs such as `2.2k ohm` are accepted. The inspector also offers exact X/Y placement while a part is selected for placement, and named terminal connections while Wire is active.
 
 Connect source positive → resistor → LED anode, LED cathode → ground, and ground → source negative. Completing the loop starts live simulation. The LED example button loads a ready-made 5 V / 1 kΩ circuit. The 1 kΩ and 2 kΩ presets produce approximately 2.9168 mA and 1.4767 mA.
 
@@ -32,7 +32,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.15.0 --build-version 29 --platform darwin
+  --version 0.16.0 --build-version 30 --platform darwin
 ```
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
@@ -131,7 +131,7 @@ Run `python3 scripts/verification-demo.py --output docs/validation/headless-veri
 
 ## Scope and structure
 
-The current engines support series LED DC, exact first-order RC, grounded-emitter NPN, coupled RC/NPN and bounded passive/switched circuit networks. Unsupported topologies report explicit diagnostics. Scope probes/cursors, recorded verification, recovery, atomic batches and portable exports are implemented. Generic diode/potentiometer models, broader source waveforms, participant usability, accessibility and distribution qualification remain upcoming work. DC results remain stable until input changes; transient results advance in simulated time with a bounded live trace.
+The current engines support series LED DC, exact first-order RC, grounded-emitter NPN, coupled RC/NPN and bounded passive/switched circuit networks. Unsupported topologies report explicit diagnostics. Scope probes/cursors, recorded verification, recovery, atomic batches and portable exports are implemented. Potentiometer models, broader source waveforms, participant usability, accessibility and distribution qualification remain upcoming work. DC results remain stable until input changes; transient results advance in simulated time with a bounded live trace.
 
 - `workbench/`: portable circuit model, LED/RC/NPN solvers, shared semantic commands, revisions, history, and snapshots.
 - `transport/`: bounded JSON-line stdio and private local socket adapters.
@@ -150,3 +150,5 @@ Projects now save kept recorded results with their complete inputs/data, and reo
 Junctions and net labels now support explicit branched/named connectivity. Select a wire to insert a junction, or review crossing routes in the X/Y controls. Matching label names join attached nets; crossings remain separate. [Shared primitive commands and rules](docs/schematic-primitives.md).
 
 SPST switches preserve capacitor charge and simulation time during live actuation. The bounded network solver also supports resistor dividers. [Shared switch commands, model parameters and network limits](docs/switches.md).
+
+The silicon diode adds nonlinear forward conduction and signed reverse leakage to bounded networks. [Model parameters, shared workflow and evidence](docs/diodes.md).

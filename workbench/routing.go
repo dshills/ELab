@@ -41,7 +41,7 @@ func routeBody(p Component) routeRect {
 	switch p.Kind {
 	case "resistor", "switch":
 		w, h = 58, 24
-	case "led":
+	case "led", "diode":
 		w = 56
 	case "junction", "net-label":
 		w, h = 4, 4

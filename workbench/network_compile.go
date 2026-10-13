@@ -5,7 +5,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	fail := func(status, code, msg, id string) (Compiled, string, *Diagnostic) {
 		return out, status, &Diagnostic{code, msg, id}
 	}
-	sources, caps, qs, rs, leds, grounds, switches := []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}
+	sources, caps, qs, rs, leds, grounds, switches, diodes := []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}
 	for _, p := range g.Components {
 		switch p.Kind {
 		case "dc-source", "pulse-source":
@@ -20,15 +20,17 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			rs = append(rs, p)
 		case "led":
 			leds = append(leds, p)
+		case "diode":
+			diodes = append(diodes, p)
 		case "junction", "net-label":
 			continue
 		case "ground":
 			grounds = append(grounds, p)
 		default:
-			return fail("unsupported", "unsupported-model", "The network solver supports sources, resistors, SPST switches, capacitors, red LEDs and grounded-emitter NPNs.", p.ID)
+			return fail("unsupported", "unsupported-model", "The network solver supports sources, resistors, SPST switches, capacitors, diodes, red LEDs and grounded-emitter NPNs.", p.ID)
 		}
 	}
-	if len(switches) > 0 || len(caps) == 0 || len(qs) == 0 {
+	if len(diodes) > 0 || len(switches) > 0 || len(caps) == 0 || len(qs) == 0 {
 		out.Analysis = NetworkDCAnalysis
 		if len(caps) > 0 {
 			out.Analysis = NetworkTransientAnalysis
@@ -40,11 +42,11 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			}
 		}
 	}
-	if len(switches) > 8 || len(sources) > 3 || len(caps) > 4 || len(qs) > 2 || len(rs) > 12 || len(leds) > 4 || len(out.Nets) > MaxMixedNodes+1 {
-		return fail("unsupported", "mixed-limit", "Network simulation supports at most 12 non-ground nets, 3 sources, 4 capacitors, 2 NPNs, 12 resistors, 8 switches and 4 LEDs.", "")
+	if len(diodes) > 8 || len(switches) > 8 || len(sources) > 3 || len(caps) > 4 || len(qs) > 2 || len(rs) > 12 || len(leds) > 4 || len(out.Nets) > MaxMixedNodes+1 {
+		return fail("unsupported", "mixed-limit", "Network simulation supports at most 12 non-ground nets, 3 sources, 4 capacitors, 2 NPNs, 12 resistors, 8 switches, 8 diodes and 4 LEDs.", "")
 	}
-	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches) == 0 {
-		return fail("incomplete", "missing-parts", "Add ground, a source and a resistor or switch to complete the network.", "")
+	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes) == 0 {
+		return fail("incomplete", "missing-parts", "Add ground, a source and a resistor, switch or diode to complete the network.", "")
 	}
 	net := func(p Component, t string) string { return out.TerminalNet[p.ID+"."+t] }
 	out.Ground = net(grounds[0], "reference")
@@ -161,6 +163,8 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		}
 	} else if len(leds) > 0 {
 		out.Output = net(leds[0], "anode")
+	} else if len(diodes) > 0 {
+		out.Output = net(diodes[0], "anode")
 	} else if len(rs) > 0 {
 		out.Output = net(rs[0], "2")
 	}

@@ -23,6 +23,8 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 	}
 	if len(r.LEDs) > 0 {
 		p.Current = r.LEDs[0].Current
+	} else if len(r.Diodes) > 0 {
+		p.Current = r.Diodes[0].Current
 	} else if len(r.Resistors) > 0 {
 		p.Current = r.Resistors[0].Current
 	} else if len(r.Switches) > 0 {
@@ -45,7 +47,7 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 	for _, cap := range r.Capacitors {
 		currents[cap.ID] = cap.Current
 	}
-	for _, parts := range [][]BranchResult{r.LEDs, r.Resistors, r.Sources, r.Switches} {
+	for _, parts := range [][]BranchResult{r.LEDs, r.Resistors, r.Sources, r.Switches, r.Diodes} {
 		for _, part := range parts {
 			currents[part.ID] = part.Current
 		}

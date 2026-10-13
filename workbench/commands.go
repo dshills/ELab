@@ -57,6 +57,8 @@ func typedCapability(id, description string, t reflect.Type) Capability {
 	return capability(id, description, true, string(data))
 }
 
+const VerificationMetadataSchemaID = "urn:elab:verification-metadata:1"
+
 const SnapshotSchemaID = "urn:elab:snapshot:1"
 const DiscoverySchemaVersion = 2
 
@@ -71,10 +73,16 @@ var snapshotDefinition = func() json.RawMessage {
 // Schema references are local identifiers, never URLs to fetch. Returning a
 // fresh registry keeps in-process clients from changing future discovery data.
 func SchemaRegistry() map[string]json.RawMessage {
-	return map[string]json.RawMessage{SnapshotSchemaID: append(json.RawMessage(nil), snapshotDefinition...)}
+	metadata := structSchema(reflect.TypeOf(VerificationMetadata{}))
+	metadata["$id"] = VerificationMetadataSchemaID
+	data, _ := json.Marshal(metadata)
+	return map[string]json.RawMessage{SnapshotSchemaID: append(json.RawMessage(nil), snapshotDefinition...), VerificationMetadataSchemaID: data}
 }
 
 func typeSchema(t reflect.Type) map[string]any {
+	if t == reflect.TypeOf(VerificationMetadata{}) {
+		return map[string]any{"$ref": VerificationMetadataSchemaID}
+	}
 	if t == reflect.TypeOf(json.RawMessage{}) {
 		return map[string]any{"type": "object"}
 	}
@@ -83,23 +91,7 @@ func typeSchema(t reflect.Type) map[string]any {
 	}
 	switch t.Kind() {
 	case reflect.Struct:
-		properties := map[string]any{}
-		required := []string{}
-		for i := 0; i < t.NumField(); i++ {
-			field := t.Field(i)
-			if field.PkgPath != "" || field.Tag.Get("json") == "-" {
-				continue
-			}
-			tag := field.Tag.Get("json")
-			name := tag
-			if comma := bytes.IndexByte([]byte(tag), ','); comma >= 0 {
-				name = tag[:comma]
-			} else {
-				required = append(required, name)
-			}
-			properties[name] = typeSchema(field.Type)
-		}
-		return map[string]any{"type": "object", "properties": properties, "required": required, "additionalProperties": false}
+		return structSchema(t)
 	case reflect.Slice:
 		return map[string]any{"type": "array", "items": typeSchema(t.Elem())}
 	case reflect.Map:
@@ -350,4 +342,24 @@ func params(raw json.RawMessage, dst any, required ...string) error {
 		}
 	}
 	return nil
+}
+
+func structSchema(t reflect.Type) map[string]any {
+	properties := map[string]any{}
+	required := []string{}
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		if field.PkgPath != "" || field.Tag.Get("json") == "-" {
+			continue
+		}
+		tag := field.Tag.Get("json")
+		name := tag
+		if comma := bytes.IndexByte([]byte(tag), ','); comma >= 0 {
+			name = tag[:comma]
+		} else {
+			required = append(required, name)
+		}
+		properties[name] = typeSchema(field.Type)
+	}
+	return map[string]any{"type": "object", "properties": properties, "required": required, "additionalProperties": false}
 }

@@ -35,6 +35,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	Diodes             []BranchResult     `json:"diodes,omitempty"`
 	Switches           []BranchResult     `json:"switches,omitempty"`
 	Engine             string             `json:"engine"`
 	RunID              uint64             `json:"run_id"`
@@ -67,6 +68,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 	o.LEDs = append([]BranchResult{}, r.LEDs...)
 	o.Resistors = append([]BranchResult{}, r.Resistors...)
 	o.Sources = append([]BranchResult{}, r.Sources...)
+	o.Diodes = append([]BranchResult{}, r.Diodes...)
 	o.Switches = append([]BranchResult{}, r.Switches...)
 	return &o
 }
@@ -201,6 +203,10 @@ func (n *mixedNetwork) equations(x, old []float64, dt float64, t *Transient, at 
 			}
 			g := 1 / resistance
 			flow(u, v, (voltage(x, u)-voltage(x, v))*g, g)
+		case "diode":
+			u, v := n.pin(p, "anode"), n.pin(p, "cathode")
+			i, g := siliconDiodeCurrent(voltage(x, u) - voltage(x, v))
+			flow(u, v, i, g)
 		case "led":
 			u, v := n.pin(p, "anode"), n.pin(p, "cathode")
 			i, g := diodeCurrent(voltage(x, u) - voltage(x, v))
@@ -360,9 +366,9 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 	energyRate := 0.
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
-		case "resistor", "led", "switch":
+		case "resistor", "led", "switch", "diode":
 			a, b := "1", "2"
-			if p.Kind == "led" {
+			if p.Kind == "led" || p.Kind == "diode" {
 				a, b = "anode", "cathode"
 			}
 			v := voltage(x, n.pin(p, a)) - voltage(x, n.pin(p, b))
@@ -370,14 +376,21 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			if p.Kind == "switch" {
 				resistance = switchResistance(p)
 			}
-			i := v / resistance
-			if p.Kind == "led" {
+			var i float64
+			switch p.Kind {
+			case "led":
 				i, _ = diodeCurrent(v)
+			case "diode":
+				i, _ = siliconDiodeCurrent(v)
+			default:
+				i = v / resistance
 			}
 			br := BranchResult{p.ID, i, v, i * v}
 			powers += br.Power
 			if p.Kind == "led" {
 				r.LEDs = append(r.LEDs, br)
+			} else if p.Kind == "diode" {
+				r.Diodes = append(r.Diodes, br)
 			} else if p.Kind == "switch" {
 				r.Switches = append(r.Switches, br)
 			} else {

@@ -33,6 +33,8 @@ func recordingModelHashes(m VerificationMetadata) map[string]string {
 		switch part.Model {
 		case ModelID:
 			data, _ = json.Marshal(m.LEDModel)
+		case DiodeModelID:
+			data, _ = json.Marshal(m.DiodeModel)
 		case SwitchModelID:
 			data, _ = json.Marshal(m.SwitchModel)
 		case NPNModelID:

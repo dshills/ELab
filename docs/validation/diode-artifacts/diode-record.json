@@ -1,0 +1,397 @@
+{
+  "metadata": {
+    "diode_model": {
+      "id": "elab.generic-silicon-diode.v1",
+      "is_a": 1e-9,
+      "n": 1.7,
+      "rs_ohm": 1,
+      "temperature_c": 27,
+      "limitations": "Generic silicon junction with Shockley forward/reverse leakage and finite series resistance; no reverse breakdown, capacitance, charge storage, thermal dynamics, ratings or physical part identity."
+    },
+    "format": "elab.verification",
+    "version": 1,
+    "operation_id": "verify-1",
+    "created_at": "2026-10-13T23:57:35.342925Z",
+    "input_revision": 14,
+    "electrical_revision": 7,
+    "document_generation": 3,
+    "graph": {
+      "components": [
+        {
+          "id": "V1",
+          "kind": "pulse-source",
+          "name": "Pulse source",
+          "terminals": [
+            "positive",
+            "negative"
+          ],
+          "position": {
+            "x": -200,
+            "y": 0
+          },
+          "value": 5,
+          "unit": "V",
+          "model": "ideal-square.v1",
+          "rotation": 0
+        },
+        {
+          "id": "R1",
+          "kind": "resistor",
+          "name": "Resistor",
+          "terminals": [
+            "1",
+            "2"
+          ],
+          "position": {
+            "x": 0,
+            "y": -110
+          },
+          "value": 10000,
+          "unit": "Ω",
+          "model": "ideal-resistor.v1",
+          "rotation": 0
+        },
+        {
+          "id": "C1",
+          "kind": "capacitor",
+          "name": "Capacitor",
+          "terminals": [
+            "1",
+            "2"
+          ],
+          "position": {
+            "x": 200,
+            "y": 0
+          },
+          "value": 0.000001,
+          "unit": "F",
+          "model": "ideal-capacitor.v1",
+          "rotation": 0
+        },
+        {
+          "id": "GND",
+          "kind": "ground",
+          "name": "Ground",
+          "terminals": [
+            "reference"
+          ],
+          "position": {
+            "x": 0,
+            "y": 110
+          },
+          "value": 0,
+          "model": "ground.v1",
+          "rotation": 0
+        },
+        {
+          "id": "Rectifier",
+          "kind": "diode",
+          "name": "Silicon diode",
+          "terminals": [
+            "anode",
+            "cathode"
+          ],
+          "position": {
+            "x": 100,
+            "y": -60
+          },
+          "value": 0,
+          "model": "elab.generic-silicon-diode.v1",
+          "rotation": 0
+        }
+      ],
+      "wires": [
+        {
+          "id": "W1",
+          "from": "V1.positive",
+          "to": "R1.1",
+          "connected": true
+        },
+        {
+          "id": "W3",
+          "from": "C1.2",
+          "to": "GND.reference",
+          "connected": true
+        },
+        {
+          "id": "W4",
+          "from": "GND.reference",
+          "to": "V1.negative",
+          "connected": true
+        },
+        {
+          "id": "W9",
+          "from": "R1.2",
+          "to": "Rectifier.anode",
+          "connected": true
+        },
+        {
+          "id": "W10",
+          "from": "Rectifier.cathode",
+          "to": "C1.1",
+          "connected": true
+        }
+      ]
+    },
+    "settings": {
+      "step_s": 0.001,
+      "high_s": 0.01,
+      "low_s": 0.01,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 0.02
+    },
+    "input_mode": "auto",
+    "analysis": "Network transient",
+    "engine": "elab.network-mna-be.v1",
+    "led_model": {
+      "id": "elab.generic-red-led.v1",
+      "is_a": 1e-20,
+      "n": 2,
+      "rs_ohm": 1,
+      "temperature_c": 27,
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+    },
+    "probes": [
+      {
+        "id": "i:Rectifier",
+        "label": "Rectifier current",
+        "unit": "A",
+        "positive": "Rectifier.anode",
+        "reference": "Rectifier.cathode"
+      },
+      {
+        "id": "v:C1",
+        "label": "C1 voltage",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      }
+    ],
+    "duration_s": 0.019,
+    "sample_count": 22,
+    "statistics": [
+      {
+        "probe_id": "i:Rectifier",
+        "count": 22,
+        "min": -1e-9,
+        "max": 0.0004427904788573371,
+        "sample_mean": 0.00014191331872462004,
+        "sample_rms": 0.000209999513126133
+      },
+      {
+        "probe_id": "v:C1",
+        "count": 22,
+        "min": 0,
+        "max": 2.814062041595766,
+        "sample_mean": 2.2127525258973275,
+        "sample_rms": 2.377377264395194
+      }
+    ],
+    "mixed": {
+      "diodes": [
+        {
+          "id": "Rectifier",
+          "current_a": -1e-9,
+          "voltage_v": -2.8140430415957645,
+          "power_w": 2.814043041595765e-9
+        }
+      ],
+      "engine": "elab.network-mna-be.v1",
+      "run_id": 1,
+      "electrical_revision": 7,
+      "time_s": 0.019,
+      "nodes_v": {
+        "net:C1.1": 2.8140530415957645,
+        "net:C1.2": 0,
+        "net:R1.1": 0,
+        "net:R1.2": 0.00001
+      },
+      "transistors": [],
+      "capacitors": [
+        {
+          "id": "C1",
+          "voltage_v": 2.8140530415957645,
+          "current_a": -1.0000000001397806e-9,
+          "energy_j": 0.0000039594472604571865
+        }
+      ],
+      "leds": [],
+      "resistors": [
+        {
+          "id": "R1",
+          "current_a": -1e-9,
+          "voltage_v": -0.00001,
+          "power_w": 1.0000000000000002e-14
+        }
+      ],
+      "sources": [
+        {
+          "id": "V1",
+          "current_a": -1e-9,
+          "voltage_v": 0,
+          "power_w": -0
+        }
+      ],
+      "kcl_residual_a": 1.397805275990315e-19,
+      "power_residual_w": 2.913892698260044e-19,
+      "numerical_damping_w": 2.5000000006988964e-16,
+      "stale": false
+    }
+  },
+  "rows": [
+    {
+      "time_s": 0,
+      "values": [
+        0.0004427904788573371,
+        0
+      ]
+    },
+    {
+      "time_s": 0.001,
+      "values": [
+        0.000401077602699832,
+        0.4215209891430844
+      ]
+    },
+    {
+      "time_s": 0.002,
+      "values": [
+        0.00036333840499000957,
+        0.8032961087577964
+      ]
+    },
+    {
+      "time_s": 0.003,
+      "values": [
+        0.0003291911569123302,
+        1.1491431282463684
+      ]
+    },
+    {
+      "time_s": 0.004,
+      "values": [
+        0.00029829132521101644,
+        1.4625063099872764
+      ]
+    },
+    {
+      "time_s": 0.005,
+      "values": [
+        0.0002703401765755682,
+        1.746371079012049
+      ]
+    },
+    {
+      "time_s": 0.006,
+      "values": [
+        0.0002450461359840647,
+        2.0036561732206186
+      ]
+    },
+    {
+      "time_s": 0.007,
+      "values": [
+        0.0002221564162855975,
+        2.2368881869712656
+      ]
+    },
+    {
+      "time_s": 0.008,
+      "values": [
+        0.0002014423386667609,
+        2.4483534125126685
+      ]
+    },
+    {
+      "time_s": 0.009000000000000001,
+      "values": [
+        0.00018269696169607617,
+        2.640120682740895
+      ]
+    },
+    {
+      "time_s": 0.01,
+      "values": [
+        0.00016573301406304732,
+        2.814062041595766
+      ]
+    },
+    {
+      "time_s": 0.01,
+      "values": [
+        -1e-9,
+        2.814062041595766
+      ]
+    },
+    {
+      "time_s": 0.01,
+      "values": [
+        -1e-9,
+        2.814062041595766
+      ]
+    },
+    {
+      "time_s": 0.011,
+      "values": [
+        -1e-9,
+        2.8140610415957656
+      ]
+    },
+    {
+      "time_s": 0.012,
+      "values": [
+        -1e-9,
+        2.8140600415957655
+      ]
+    },
+    {
+      "time_s": 0.013000000000000001,
+      "values": [
+        -1e-9,
+        2.8140590415957654
+      ]
+    },
+    {
+      "time_s": 0.014,
+      "values": [
+        -1e-9,
+        2.8140580415957652
+      ]
+    },
+    {
+      "time_s": 0.015,
+      "values": [
+        -1e-9,
+        2.814057041595765
+      ]
+    },
+    {
+      "time_s": 0.016,
+      "values": [
+        -1e-9,
+        2.814056041595765
+      ]
+    },
+    {
+      "time_s": 0.017,
+      "values": [
+        -1e-9,
+        2.814055041595765
+      ]
+    },
+    {
+      "time_s": 0.018000000000000002,
+      "values": [
+        -1e-9,
+        2.8140540415957647
+      ]
+    },
+    {
+      "time_s": 0.019,
+      "values": [
+        -1e-9,
+        2.8140530415957645
+      ]
+    }
+  ]
+}

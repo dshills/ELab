@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "date": "2026-10-13",
+  "version": "0.16.0",
+  "build": "30",
+  "binary_sha256": "9273198cde54949b553592cd0763ab650fd55f450123c2add557b5b30ddae5ed",
+  "packaged_binary_matches": true,
+  "capabilities": 79,
+  "library_kinds": 11,
+  "headless_desktop_numerical_equivalence": true,
+  "nonlinear_rc_absolute_error_v": 0.000965425915836704,
+  "checks": [
+    "pinned Staticcheck/import formatting",
+    "Go vet and root/native race tests",
+    "manual model/solver/clone/import review",
+    "analytic conductance finite-difference and monotonicity",
+    "KCL/power conservation",
+    "finite internal diode series resistance",
+    "strict project model validation",
+    "resolved local schema refs with unchanged catalog-size bound",
+    "CSV captured-state model attribution",
+    "native construction/agent numerical parity",
+    "native and packaged GPU/UI smoke",
+    "forward inverse-Shockley reference",
+    "signed reverse leakage",
+    "independent nonlinear RC reference",
+    "automatic pulse rectification/hold",
+    "exact source edge event",
+    "live/Verify equivalence",
+    "record JSON import and CSV model/units",
+    "two kept records and complete model save/reopen",
+    "native schematic SVG"
+  ],
+  "limits": [
+    "educational fixed junction parameters, no physical device identity or ratings",
+    "no breakdown, charge storage, junction capacitance or thermal behavior",
+    "up to 8 diodes within bounded network topology, \u00b130 V node range and work budget",
+    "existing red LED model unchanged",
+    "private unsigned local app; hardware/usability/accessibility/distribution qualification pending"
+  ]
+}

@@ -102,7 +102,7 @@ func (s *screen) view() ui.Node {
 	statusNode.Style.Typography = ui.Some(ui.Typography{Size: 13, Weight: 600})
 
 	palette := []ui.Node{section("parts-title", "Components"), quiet("placement-help", "Choose a part, then click the sheet.")}
-	names := map[string]string{"dc-source": "+  DC source", "resistor": "∿  Resistor", "led": "▷  Red LED", "ground": "⊥  Ground", "capacitor": "Ⅱ  Capacitor", "pulse-source": "▥  Pulse source", "npn": "↗  NPN transistor", "junction": "●  Junction", "net-label": "→  Net label", "switch": "/  SPST switch"}
+	names := map[string]string{"dc-source": "+  DC source", "resistor": "∿  Resistor", "led": "▷  Red LED", "ground": "⊥  Ground", "capacitor": "Ⅱ  Capacitor", "pulse-source": "▥  Pulse source", "npn": "↗  NPN transistor", "junction": "●  Junction", "net-label": "→  Net label", "switch": "/  SPST switch", "diode": "▷  Silicon diode"}
 	palette = append(palette, ui.Node{ID: "part-search", Kind: ui.TextField, Text: state.PartSearch, Accessibility: ui.Accessibility{Name: "Search components"}, Change: func(e ui.ChangeEvent) { s.invoke("parts.search.set", workbench.SearchParams{Query: e.Text}) }})
 	for _, part := range state.MatchingParts {
 		n := s.action("part-"+part.Kind, names[part.Kind], "drawing.tool.set", workbench.ToolParams{Tool: "place", Kind: part.Kind})
@@ -234,18 +234,20 @@ func (s *screen) view() ui.Node {
 			}
 		} else if part.Kind == "npn" {
 			inspector = append(inspector, quiet("npn-model", "Generic NPN · βF 100 / βR 1\nIS 10 fA · 27°C\nInstantaneous junction response.\nNo heating or switching delay."))
+		} else if part.Kind == "diode" {
+			inspector = append(inspector, quiet("diode-model", "Generic silicon diode · 27°C\nIS 1 nA · n 1.7 · Rs 1 Ω\nReverse leakage included. No breakdown, charge storage or ratings."))
 		} else if part.Kind == "led" {
 			inspector = append(inspector, quiet("led-model", "Generic red LED\nBrightness is illustrative."))
 		}
 		if r := state.Mixed; r != nil {
-			for _, branches := range [][]workbench.BranchResult{r.LEDs, r.Resistors, r.Sources} {
+			for _, branches := range [][]workbench.BranchResult{r.LEDs, r.Diodes, r.Resistors, r.Sources} {
 				for _, b := range branches {
 					if b.ID == part.ID {
 						status := "Live"
 						if r.Stale {
 							status = "Stale"
 						}
-						inspector = append(inspector, quiet("mixed-selected-reading", fmt.Sprintf("%s · %.3f mA · %.3f V\nPower %.3f mW", status, b.Current*1000, b.Voltage, b.Power*1000)))
+						inspector = append(inspector, quiet("mixed-selected-reading", fmt.Sprintf("%s · %.6g mA · %.6g V\nPower %.6g mW", status, b.Current*1000, b.Voltage, b.Power*1000)))
 					}
 				}
 			}

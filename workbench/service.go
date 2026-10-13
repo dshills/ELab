@@ -12,6 +12,7 @@ import (
 )
 
 type Snapshot struct {
+	DiodeModel           *DiodeModel          `json:"diode_model,omitempty"`
 	SwitchModel          *SwitchModel         `json:"switch_model,omitempty"`
 	Recording            *RecordingView       `json:"recording,omitempty"`
 	Recovery             RecoveryState        `json:"recovery"`
@@ -159,6 +160,13 @@ func (s *Service) snapshotLocked() Snapshot {
 			preview.Readings = append(preview.Readings, VerificationReading{Probe: probe, Value: record.rows[len(record.rows)-1].Values[i], Minimum: stat.Minimum, Maximum: stat.Maximum})
 		}
 		out.Verification = preview
+	}
+	for _, part := range graph.Components {
+		if part.Kind == "diode" {
+			model := SiliconDiodeModel()
+			out.DiodeModel = &model
+			break
+		}
 	}
 	for _, part := range graph.Components {
 		if part.Kind == "switch" {
@@ -512,6 +520,10 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	if state.DiodeModel != nil {
+		model := *state.DiodeModel
+		state.DiodeModel = &model
+	}
 	if state.SwitchModel != nil {
 		model := *state.SwitchModel
 		state.SwitchModel = &model

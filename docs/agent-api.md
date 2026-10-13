@@ -156,7 +156,7 @@ Save, Load, and both exports accept optional `expected_document_generation` in a
 
 ## Verify operations and schema registry
 
-`capabilities.list` now includes `schema_version:2` and `schemas`. Resolve output-schema references such as `urn:elab:snapshot:1` from that local registry; no network fetching is needed. Query output schemas stay explicit.
+`capabilities.list` now includes `schema_version:2` and `schemas`. Resolve output-schema references such as `urn:elab:snapshot:1` from that local registry; no network fetching is needed. Query output schemas may contain nested references to `urn:elab:verification-metadata:1`; recursively resolve all references from the same registry.
 
 `simulation.verify` accepts a bounded startup scenario and returns a Snapshot's `last_operation` immediately. Inspect status/captured input/results with `operation.inspect`, page completed SI samples with `operation.samples`, and cancel/select through `operation.cancel` / `operation.select`. `verification.settings.set` changes session defaults without changing live state. `verification.export` saves the completed captured record as JSON or CSV. Recorded data is separate from current live readings. See [Verify command/lifecycle/validation details](verification.md).
 
@@ -167,3 +167,7 @@ Recorded JSON import, independent playback, index/time seeking, captured-probe s
 Project save/open now embeds kept completed recordings. `recording.keep.set {id,keep}` controls inclusion and protects kept assets from eviction; `document` exposes separate schematic/recording dirty flags and recording count. `recovery.samples` pages embedded recovery data. See [project format and lifecycle](project-format.md).
 
 `junction` and `net-label` are single-node tray kinds. `wire.junction.insert` splits/joins explicitly named routes atomically; `component.place` / `.set` use `value` for a net label name. Net inspection includes sorted label names, and `v:<id>.node` probes read their actual nets. See [schematic primitive rules](schematic-primitives.md).
+
+## Curated switch and diode devices
+
+[SPST model and live actuation](switches.md) use `component.place` and `switch.set`. [Silicon diode defaults and probes](diodes.md) use `component.place` with `kind:"diode"`, named `anode`/`cathode` wires and ordinary scope/Verify commands. Snapshots, saved projects and records carry optional `switch_model` and `diode_model` parameters; network branch results include `mixed.switches` and `mixed.diodes`. Discovery is authoritative for the complete schemas.

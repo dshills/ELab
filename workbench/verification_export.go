@@ -52,20 +52,32 @@ func (s *Service) exportVerificationLocked(p VerificationExportParams) error {
 	} else {
 		var b bytes.Buffer
 		writer := csv.NewWriter(&b)
-		header := []string{"operation_id", "input_revision", "electrical_revision", "engine", "led_model", "npn_model", "input_mode", "duration_s", "sample_step_s", "time_s"}
+		header := []string{"operation_id", "input_revision", "electrical_revision", "engine", "led_model", "npn_model"}
+		m := record.metadata
+		modelIDs := []string{}
+		if m.SwitchModel != nil {
+			header = append(header, "switch_model")
+			modelIDs = append(modelIDs, m.SwitchModel.ID)
+		}
+		if m.DiodeModel != nil {
+			header = append(header, "diode_model")
+			modelIDs = append(modelIDs, m.DiodeModel.ID)
+		}
+		header = append(header, "input_mode", "duration_s", "sample_step_s", "time_s")
 		for _, probe := range record.metadata.Probes {
 			header = append(header, probe.ID+" ["+probe.Unit+"]")
 		}
 		if err := writer.Write(header); err != nil {
 			return fileError(err)
 		}
-		m := record.metadata
 		npnModel := ""
 		if m.NPNModel != nil {
 			npnModel = m.NPNModel.ID
 		}
 		for _, sample := range record.rows {
-			row := []string{m.OperationID, strconv.FormatUint(m.InputRevision, 10), strconv.FormatUint(m.ElectricalRevision, 10), m.Engine, m.LEDModel.ID, npnModel, m.InputMode, number(m.Duration), number(m.Settings.StepSeconds), number(sample.Time)}
+			row := []string{m.OperationID, strconv.FormatUint(m.InputRevision, 10), strconv.FormatUint(m.ElectricalRevision, 10), m.Engine, m.LEDModel.ID, npnModel}
+			row = append(row, modelIDs...)
+			row = append(row, m.InputMode, number(m.Duration), number(m.Settings.StepSeconds), number(sample.Time))
 			for _, value := range sample.Values {
 				row = append(row, number(value))
 			}

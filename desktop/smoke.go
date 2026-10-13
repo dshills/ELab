@@ -141,7 +141,10 @@ rendered:
 	if err := nativePrimitivesSmoke(ctx, a, s); err != nil {
 		return err
 	}
-	return nativeSwitchSmoke(ctx, a, s)
+	if err := nativeSwitchSmoke(ctx, a, s); err != nil {
+		return err
+	}
+	return nativeDiodeSmoke(ctx, a, s)
 }
 
 func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
@@ -907,6 +910,67 @@ func nativeSwitchSmoke(ctx context.Context, a *app.Application, s *screen) error
 			return
 		}
 		checked <- nil
+	}); err != nil {
+		return err
+	}
+	return <-checked
+}
+
+// Build a silicon diode from tray controls and named terminal connections.
+// Existing session IDs remain reserved, so inspect the newly selected identity.
+func smokeConstructDiode(s *screen) error {
+	if err := smokeUI(s, "example.reset", nil); err != nil {
+		return err
+	}
+	if s.pendingCommand != "" {
+		if err := smokeUI(s, "discard-continue", nil); err != nil {
+			return err
+		}
+	}
+	for _, action := range []struct {
+		id    string
+		event *ui.ChangeEvent
+	}{
+		{"selection", &ui.ChangeEvent{SelectedID: "D1"}}, {"delete-object", nil},
+		{"part-diode", nil}, {"position-x", &ui.ChangeEvent{Number: 200}}, {"position-y", &ui.ChangeEvent{Number: 0}}, {"place-at-position", nil},
+	} {
+		if err := smokeUI(s, action.id, action.event); err != nil {
+			return err
+		}
+	}
+	id := s.service.Snapshot().Selected
+	for _, pair := range [][2]string{{"R1.2", id + ".anode"}, {id + ".cathode", "GND.reference"}} {
+		for _, action := range []struct {
+			id    string
+			event *ui.ChangeEvent
+		}{
+			{"tool-wire", nil}, {"wire-from", &ui.ChangeEvent{SelectedID: pair[0]}}, {"wire-to", &ui.ChangeEvent{SelectedID: pair[1]}}, {"connect-terminals", nil},
+		} {
+			if err := smokeUI(s, action.id, action.event); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+func nativeDiodeSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	checked := make(chan error, 1)
+	if err := a.PostWait(ctx, func() {
+		if err := smokeConstructDiode(s); err != nil {
+			checked <- err
+			return
+		}
+		state := s.service.Snapshot()
+		if state.DiodeModel == nil || state.Mixed == nil || len(state.Mixed.Diodes) != 1 || state.Mixed.Diodes[0].Current < .004 {
+			checked <- fmt.Errorf("native silicon diode conduction failed")
+			return
+		}
+		if _, ok := findNode(s.view(), "diode-model"); !ok {
+			checked <- fmt.Errorf("native diode model absent")
+			return
+		}
+		_, err := s.mesh(*s.drawing.View)
+		checked <- err
 	}); err != nil {
 		return err
 	}

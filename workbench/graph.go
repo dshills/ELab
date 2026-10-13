@@ -137,6 +137,7 @@ func Library() []Part {
 		{"ground", "Ground", []string{"reference"}, "", "", "ground.v1"},
 		{"junction", "Junction", []string{"node"}, "", "", "junction.v1"},
 		{"net-label", "Net label", []string{"node"}, "", "", "net-label.v1"},
+		{"diode", "Silicon diode", []string{"anode", "cathode"}, "", "", DiodeModelID},
 		{"switch", "SPST switch", []string{"1", "2"}, "", "", SwitchModelID},
 	}
 }
@@ -246,7 +247,7 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 		default:
 			found = false
 		}
-	case "led":
+	case "led", "diode":
 		switch name {
 		case "anode":
 			p = Point{0, -32}
@@ -322,6 +323,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		parent[b] = a
 	}
 	hasSwitch := false
+	hasDiode := false
 	sources, resistors, leds, grounds := []Component{}, []Component{}, []Component{}, []Component{}
 	capacitors := []Component{}
 	transistors := []Component{}
@@ -335,6 +337,8 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 			sources = append(sources, c)
 		case "switch":
 			hasSwitch = true
+		case "diode":
+			hasDiode = true
 		case "resistor":
 			resistors = append(resistors, c)
 		case "npn":
@@ -419,7 +423,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		return out, "incomplete", &Diagnostic{code, message, id}
 	}
 	networkTopology := len(transistors) == 0 && (len(sources) > 1 || len(resistors) > 1 || len(leds) > 1 || len(capacitors) > 1 || len(capacitors) == 0 && len(leds) == 0 && len(resistors) > 0)
-	if hasSwitch || networkTopology || len(transistors) > 0 && len(capacitors) > 0 {
+	if hasSwitch || hasDiode || networkTopology || len(transistors) > 0 && len(capacitors) > 0 {
 		return compileNetwork(out, g, groups, root)
 	}
 	if len(transistors) > 0 {

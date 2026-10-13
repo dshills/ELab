@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "transport": "packaged-native-private-socket",
+  "capabilities": 79,
+  "library_kinds": 11,
+  "forward_current_a": 0.004323824207767779,
+  "independent_current_a": 0.004323824207767708,
+  "reverse_current_a": -1e-09,
+  "capacitor_voltage_v": 2.814062041595766,
+  "independent_capacitor_voltage_v": 2.8150274675116025,
+  "held_voltage_v": 2.8140530415957645,
+  "checks": [
+    "forward inverse-Shockley reference",
+    "signed reverse leakage",
+    "independent nonlinear RC reference",
+    "automatic pulse rectification/hold",
+    "exact source edge event",
+    "live/Verify equivalence",
+    "record JSON import and CSV model/units",
+    "two kept records and complete model save/reopen",
+    "native schematic SVG"
+  ]
+}
