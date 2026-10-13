@@ -122,6 +122,13 @@ func queryCapability(id, description string, input, output reflect.Type) Capabil
 }
 func Catalog() []Capability {
 	return []Capability{
+		typedCapability("recovery.configure", "Configure a private local recovery directory, automatic snapshots and 1–60 s interval; saved project files are never overwritten", reflect.TypeOf(RecoveryConfigureParams{})),
+		capability("recovery.scan", "Validate and list newest complete snapshots per document, with corrupt-file diagnostics", true, `{"type":"object","additionalProperties":false}`),
+		capability("recovery.checkpoint", "Write a complete recovery snapshot now (or retire owned snapshots when clean); does not save/associate the project", true, `{"type":"object","additionalProperties":false}`),
+		typedCapability("recovery.select", "Select a listed recovery candidate; empty ID clears", reflect.TypeOf(IDParams{})),
+		typedCapability("recovery.restore", "Validate hash and complete snapshot, then restore as a dirty unassociated copy; protects unsaved work and document generation", reflect.TypeOf(RecoveryChoiceParams{})),
+		typedCapability("recovery.dismiss", "Remove exactly the hash-confirmed recovery snapshot; other active sessions are protected", reflect.TypeOf(RecoveryChoiceParams{})),
+		queryCapability("recovery.inspect", "Read a fully validated recovery candidate and its portable schematic without modifying the editor", reflect.TypeOf(RecoveryChoiceParams{}), reflect.TypeOf(RecoveryInspection{})),
 		typedCapability("verification.export", "Atomically export a completed recorded verification as json (captured graph/models/settings/full data) or csv (SI units/input identity); never substitutes live data", reflect.TypeOf(VerificationExportParams{})),
 		typedCapability("simulation.verify", "Start an independent recorded verification from explicit/captured startup, returning last_operation ID; <=10 s and 1000 output steps; DC duration zero; one active operation", reflect.TypeOf(VerifyParams{})),
 		typedCapability("verification.settings.set", "Set session Verify duration, sample step (0 follows project), source mode and optional initial overrides without altering the schematic/live state", reflect.TypeOf(VerificationSettings{})),

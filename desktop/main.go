@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"image/color"
 	"log"
+	"os"
 	"time"
 
 	"github.com/dshills/elab/transport"
@@ -20,10 +21,26 @@ import (
 
 func main() {
 	endpoint := flag.String("agent-endpoint", "", "enable local agent access and write a private descriptor to this new file")
+	recoveryDirectory := flag.String("recovery-directory", "", "private autosave directory (default: user configuration directory)")
+	noRecovery := flag.Bool("no-recovery", false, "skip automatic recovery setup")
 	smoke := flag.Bool("smoke", false, "verify native drawing and UI command results, then close")
 	flag.Parse()
 	service := workbench.New()
 	defer service.Close()
+	if !*noRecovery {
+		directory := *recoveryDirectory
+		if *smoke && directory == "" {
+			var err error
+			directory, err = os.MkdirTemp("", "elab-smoke-recovery-")
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer func() { service.Close(); _ = os.RemoveAll(directory) }()
+		}
+		if err := setupRecovery(service, directory); err != nil {
+			log.Print("Recovery unavailable: ", err)
+		}
+	}
 	a, err := app.New(app.Config{})
 	if err != nil {
 		log.Fatal(err)

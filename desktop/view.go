@@ -240,6 +240,7 @@ func (s *screen) view() ui.Node {
 	if workbench.IsTransientAnalysis(state.Analysis) || state.Transient != nil {
 		inspector = append(inspector, s.transientInspector(state)...)
 	}
+	inspector = append(inspector, s.recoveryInspector(state)...)
 	inspector = append(inspector, s.verificationInspector(state)...)
 	tools := ui.Node{ID: "tools", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 36}), Align: ui.Some(ui.AlignCenter), Gap: ui.Some(float32(6))}, Children: []ui.Node{}}
 	for _, tool := range []string{"select", "wire", "pan"} {
@@ -260,6 +261,15 @@ func (s *screen) view() ui.Node {
 		hints = "Wire from " + state.Drawing.WireStart + " · click its destination"
 	}
 	message := "Ready to experiment. Values update the simulation automatically."
+	for _, candidate := range state.Recovery.Candidates {
+		if !candidate.ActiveSession {
+			message = "Recovery available · choose a snapshot in the Inspector to restore a copy."
+			break
+		}
+	}
+	if state.Recovery.Error != "" {
+		message = "Autosave needs attention · " + state.Recovery.Error
+	}
 	if s.fileMessage != "" && !(state.Document.Dirty && strings.HasPrefix(s.fileMessage, "Saved ")) {
 		message = s.fileMessage
 	}

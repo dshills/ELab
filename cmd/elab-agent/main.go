@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
@@ -14,8 +15,17 @@ import (
 )
 
 func main() {
+	if err := run(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+}
+
+// Return through deferred cleanup before main chooses the process exit status.
+func run() error {
 	connect := flag.String("connect", "", "forward JSON commands to an existing endpoint descriptor")
 	listen := flag.String("listen", "", "run a headless socket session; write a private endpoint descriptor here")
+	recoveryDirectory := flag.String("recovery-directory", "", "opt into autosave using this private directory")
 	flag.Parse()
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
@@ -26,6 +36,14 @@ func main() {
 	} else {
 		s := workbench.New()
 		defer s.Close()
+		if *recoveryDirectory != "" {
+			raw, _ := json.Marshal(workbench.RecoveryConfigureParams{Directory: *recoveryDirectory, Enabled: true, Interval: 2})
+			revision := s.Snapshot().Revision
+			response := s.Dispatch(ctx, workbench.Request{Version: 1, ID: "startup-recovery", Command: "recovery.configure", Params: raw, ExpectedRevision: &revision, Key: "startup-recovery"}, "agent")
+			if response.Error != nil {
+				return fmt.Errorf("configure recovery: %s", response.Error.Message)
+			}
+		}
 		if *listen != "" {
 			server, e := transport.Listen(s, *listen)
 			if e != nil {
@@ -47,7 +65,7 @@ func main() {
 		}
 	}
 	if err != nil && ctx.Err() == nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		return err
 	}
+	return nil
 }

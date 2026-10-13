@@ -27,6 +27,7 @@ type Document struct {
 	TransientSettings *TransientSettings `json:"transient_settings,omitempty"`
 }
 type DocumentState struct {
+	RecoveredFrom string `json:"recovered_from,omitempty"`
 	Path          string `json:"path"`
 	Dirty         bool   `json:"dirty"`
 	FormatVersion int    `json:"format_version"`
@@ -66,6 +67,7 @@ func (s *Service) detachDocumentLocked() {
 	s.inputMode = "auto"
 	s.pendingInputMode = ""
 	s.documentGeneration++
+	s.recoveredFrom = ""
 	s.documentPath = ""
 	s.transientSettings = DefaultTransientSettings()
 	s.savedGraph = contentHash(EmptyGraph(), s.transientSettings)
@@ -300,17 +302,7 @@ func (s *Service) saveLocked(p SaveParams) error {
 	} else if !os.IsNotExist(err) {
 		return fileError(err)
 	}
-	settings := s.transientSettings
-	compiled, _, _ := s.graph.Compile()
-	probes := ProbeParams{IDs: s.scopeLocked(compiled).Selected}
-	d := Document{ScopeProbes: &probes, Format: DocumentFormat, Version: DocumentVersion, Graph: s.graph.Clone(), View: s.view, LEDModel: Model(), TransientSettings: &settings}
-	for _, c := range s.graph.Components {
-		if c.Kind == "npn" {
-			m := TransistorModel()
-			d.NPNModel = &m
-			break
-		}
-	}
+	d := s.documentLocked()
 	data, err := json.MarshalIndent(d, "", "  ")
 	if err != nil {
 		return err
@@ -353,9 +345,21 @@ func (s *Service) saveLocked(p SaveParams) error {
 		_ = dir.Sync()
 		_ = dir.Close()
 	}
+	s.recoveredFrom = ""
 	s.documentPath = path
 	s.savedGraph = contentHash(s.graph, s.transientSettings)
 	s.diskHash = sha256.Sum256(data)
+	if s.recoveryStore != nil {
+		capture := s.recoveryCaptureLocked()
+		capture.commandRevision++ // Blocks dirty captures made before this save.
+		if _, _, err := s.recoveryStore.checkpoint(capture); err != nil {
+			s.recovery.Error = err.Error()
+		}
+		// A saved file remains successful if recovery cleanup fails.
+		if err := s.scanRecoveryLocked(); err != nil {
+			s.recovery.Error = err.Error()
+		}
+	}
 	return nil
 }
 func (s *Service) loadLocked(p LoadParams) error {
@@ -377,6 +381,40 @@ func (s *Service) loadLocked(p LoadParams) error {
 	if err != nil {
 		return &actionError{"invalid-document", err.Error()}
 	}
+	s.installDocumentLocked(d)
+	s.recoveredFrom = ""
+	s.documentPath = path
+	s.savedGraph = contentHash(s.graph, s.transientSettings)
+	s.diskHash = sha256.Sum256(data)
+
+	return nil
+}
+
+// File choices may outlive the project they were made for. A generation guard
+// survives harmless clock ticks but refuses to act on a replacement project.
+func (s *Service) checkDocumentGenerationLocked(expected *uint64) error {
+	if expected != nil && *expected != s.documentGeneration {
+		return &actionError{"conflict", fmt.Sprintf("Schematic changed while this file action was pending (expected document generation %d, current %d). Choose the file again.", *expected, s.documentGeneration)}
+	}
+	return nil
+}
+
+func (s *Service) documentLocked() Document {
+	settings := s.transientSettings
+	compiled, _, _ := s.graph.Compile()
+	probes := ProbeParams{IDs: s.scopeLocked(compiled).Selected}
+	d := Document{ScopeProbes: &probes, Format: DocumentFormat, Version: DocumentVersion, Graph: s.graph.Clone(), View: s.view, LEDModel: Model(), TransientSettings: &settings}
+	for _, c := range s.graph.Components {
+		if c.Kind == "npn" {
+			m := TransistorModel()
+			d.NPNModel = &m
+			break
+		}
+	}
+	return d
+}
+
+func (s *Service) installDocumentLocked(d Document) {
 	s.inputMode = "auto"
 	s.pendingInputMode = ""
 	s.documentGeneration++
@@ -395,9 +433,6 @@ func (s *Service) loadLocked(p LoadParams) error {
 	s.view = d.View
 	s.selected = ""
 	s.drawing = DefaultDrawing()
-	s.documentPath = path
-	s.savedGraph = contentHash(s.graph, s.transientSettings)
-	s.diskHash = sha256.Sum256(data)
 	for _, c := range s.graph.Components {
 		s.usedIDs[c.ID] = true
 	}
@@ -412,14 +447,4 @@ func (s *Service) loadLocked(p LoadParams) error {
 	s.result = nil
 	s.transient = nil
 	s.paused = false
-	return nil
-}
-
-// File choices may outlive the project they were made for. A generation guard
-// survives harmless clock ticks but refuses to act on a replacement project.
-func (s *Service) checkDocumentGenerationLocked(expected *uint64) error {
-	if expected != nil && *expected != s.documentGeneration {
-		return &actionError{"conflict", fmt.Sprintf("Schematic changed while this file action was pending (expected document generation %d, current %d). Choose the file again.", *expected, s.documentGeneration)}
-	}
-	return nil
 }

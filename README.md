@@ -32,7 +32,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.10.0 --build-version 24 --platform darwin
+  --version 0.11.0 --build-version 25 --platform darwin
 ```
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
@@ -140,3 +140,5 @@ The current engines support a series LED DC circuit, an ideal first-order RC tra
 - `research/`: evidence, [PRD](research/07-product-requirements.md), and [Vellum integration decision](research/08-vellum-integration.md).
 
 Vellum's own code is MIT licensed; Cogent and other native dependencies retain their upstream licenses. No framework source is vendored here. Application licensing has not been selected.
+
+Autosave and crash recovery are available in the Inspector. Snapshots preserve dirty edits separately from saved files; restoring opens a new copy for Save As. See [recovery commands and limits](docs/recovery.md). Native startup enables autosave by default; headless sessions opt in with `--recovery-directory` or the shared configuration command.

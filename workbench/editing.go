@@ -115,6 +115,8 @@ func (s *Service) connectLocked(p ConnectParams) error {
 }
 func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "recovery.configure", "recovery.scan", "recovery.checkpoint", "recovery.select", "recovery.restore", "recovery.dismiss":
+		return s.recoveryCommandLocked(command, raw)
 	case "verification.export":
 		var p VerificationExportParams
 		if err := params(raw, &p, "id", "path", "format"); err != nil {
@@ -661,6 +663,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if err := s.requireCleanLocked(p.DiscardChanges); err != nil {
 			return err
 		}
+		s.discardRecoveryOnClose = p.DiscardChanges
 		s.closeLocked()
 	default:
 		return fmt.Errorf("unknown command")

@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "date": "2026-10-13",
+  "version": "0.11.0",
+  "build": "25",
+  "binary_sha256": "45f3efe52619d1b7e2f135dba1c0ece541b17d0ad57486e4227e96f012d8b99b",
+  "packaged_binary_matches": true,
+  "capabilities": 63,
+  "schema_version": 2,
+  "checks": [
+    "pinned Staticcheck and import formatting",
+    "root and native race tests / Go vet",
+    "native and agent recovery control parity",
+    "automatic snapshots and immutable two-copy retention",
+    "checksum validation and damaged-newest fallback",
+    "dirty/hash/generation refusal without editor mutation",
+    "late worker refusal after save/discard/close",
+    "private directory, symlink and failed-write guards",
+    "actual SIGKILL recovery preserves original saved file",
+    "native GPU/UI checkpoint and copy restore",
+    "packaged native smoke and private-socket recovery workflow",
+    "CLI startup-failure lease cleanup and nonzero exit"
+  ],
+  "limits": [
+    "bounded educational simulation kernels",
+    "128 recovery directory entries; 272 KiB capsule bound; two owned snapshots per document",
+    "live physical state, undo history and recorded Verify results are not recovery payloads",
+    "Windows process liveness and power-loss behavior are not qualified",
+    "private unsigned local app; distribution audit pending"
+  ]
+}

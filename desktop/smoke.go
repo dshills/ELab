@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"reflect"
 	"time"
 
 	"github.com/dshills/elab/workbench"
@@ -123,7 +124,10 @@ rendered:
 	if err := nativeWorkflowSmoke(ctx, a, s); err != nil {
 		return err
 	}
-	return nativeVerificationSmoke(ctx, a, s)
+	if err := nativeVerificationSmoke(ctx, a, s); err != nil {
+		return err
+	}
+	return nativeRecoverySmoke(ctx, a, s)
 }
 
 func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
@@ -617,5 +621,50 @@ func nativeVerificationSmoke(ctx context.Context, a *app.Application, s *screen)
 				return nil
 			}
 		}
+	}
+}
+
+func nativeRecoverySmoke(ctx context.Context, a *app.Application, s *screen) error {
+	completed := make(chan error, 1)
+	if err := a.PostWait(ctx, func() {
+		before := s.service.Snapshot()
+		if err := smokeUI(s, "recovery-checkpoint", nil); err != nil {
+			completed <- err
+			return
+		}
+		if len(s.service.Snapshot().Recovery.Candidates) == 0 {
+			completed <- fmt.Errorf("native recovery snapshot missing")
+			return
+		}
+		if err := smokeUI(s, "recovery-choice", &ui.ChangeEvent{SelectedID: s.service.Snapshot().Recovery.LastSnapshot}); err != nil {
+			completed <- err
+			return
+		}
+		if err := smokeUI(s, "recovery-restore", nil); err != nil {
+			completed <- err
+			return
+		}
+		if s.pendingCommand != "recovery.restore" {
+			completed <- fmt.Errorf("recovery bypassed unsaved decision")
+			return
+		}
+		if err := smokeUI(s, "discard-continue", nil); err != nil {
+			completed <- err
+			return
+		}
+		after := s.service.Snapshot()
+		if !reflect.DeepEqual(before.Components, after.Components) || !reflect.DeepEqual(before.Wires, after.Wires) || !after.Document.Dirty || after.Document.Path != "" || after.Document.RecoveredFrom == "" {
+			completed <- fmt.Errorf("native recovery copy changed schematic")
+			return
+		}
+		completed <- nil
+	}); err != nil {
+		return err
+	}
+	select {
+	case err := <-completed:
+		return err
+	case <-ctx.Done():
+		return ctx.Err()
 	}
 }

@@ -12,6 +12,7 @@ import (
 )
 
 type Snapshot struct {
+	Recovery             RecoveryState        `json:"recovery"`
 	VerificationSettings VerificationSettings `json:"verification_settings"`
 	Operations           []OperationSummary   `json:"operations"`
 	SelectedOperation    string               `json:"selected_operation"`
@@ -55,6 +56,12 @@ type savedResponse struct {
 	response    Response
 }
 type Service struct {
+	recovery                         RecoveryState
+	recoverySelectionCleared         bool
+	recoveryStore                    *recoveryStore
+	recoveryCancel                   context.CancelFunc
+	recoveredFrom                    string
+	discardRecoveryOnClose           bool
 	operations                       map[string]*verificationOperation
 	operationOrder                   []string
 	operationSerial                  uint64
@@ -118,6 +125,7 @@ func newGraphService(solver func(context.Context, Circuit) (Result, error), grap
 	s.inputMode = "auto"
 	s.transientSettings = DefaultTransientSettings()
 	s.verificationSettings = DefaultVerificationSettings()
+	s.recovery = RecoveryState{Interval: 2, Candidates: []RecoveryCandidate{}, Problems: []RecoveryProblem{}}
 	s.documentGeneration = 1
 	s.savedGraph = contentHash(EmptyGraph(), s.transientSettings)
 	s.startLocked()
@@ -132,7 +140,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	if analysis == "" {
 		analysis = "DC operating point"
 	}
-	out := Snapshot{VerificationSettings: cloneVerificationSettings(s.verificationSettings), Operations: []OperationSummary{}, SelectedOperation: s.selectedOperation, LastOperation: s.lastOperation, PartSearch: s.partSearch, MatchingParts: filteredParts(s.partSearch), Scope: s.scopeLocked(compiled), Mixed: cloneMixed(s.mixed), NPN: cloneNPN(s.npn), CommandRevision: s.commandRevision, Transient: cloneTransient(s.transient), TransientSettings: s.transientSettings, Document: DocumentState{s.documentPath, s.dirtyLocked(), DocumentVersion, s.documentGeneration}, Revision: s.revision, ElectricalRevision: s.electrical, Circuit: s.circuit, Components: graph.Components, Wires: graph.Wires, Nets: compiled.Nets, Drawing: s.drawing, Model: Model(), Selected: s.selected, View: s.view, Status: s.status, Analysis: analysis, Paused: s.paused, RunID: s.run, Diagnostics: append([]Diagnostic{}, s.diagnostics...), CanUndo: len(s.undo) > 0, CanRedo: len(s.redo) > 0, LastActor: s.actor, Closed: s.closed}
+	out := Snapshot{Recovery: cloneRecovery(s.recovery), VerificationSettings: cloneVerificationSettings(s.verificationSettings), Operations: []OperationSummary{}, SelectedOperation: s.selectedOperation, LastOperation: s.lastOperation, PartSearch: s.partSearch, MatchingParts: filteredParts(s.partSearch), Scope: s.scopeLocked(compiled), Mixed: cloneMixed(s.mixed), NPN: cloneNPN(s.npn), CommandRevision: s.commandRevision, Transient: cloneTransient(s.transient), TransientSettings: s.transientSettings, Document: DocumentState{Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: DocumentVersion, Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom}, Revision: s.revision, ElectricalRevision: s.electrical, Circuit: s.circuit, Components: graph.Components, Wires: graph.Wires, Nets: compiled.Nets, Drawing: s.drawing, Model: Model(), Selected: s.selected, View: s.view, Status: s.status, Analysis: analysis, Paused: s.paused, RunID: s.run, Diagnostics: append([]Diagnostic{}, s.diagnostics...), CanUndo: len(s.undo) > 0, CanRedo: len(s.redo) > 0, LastActor: s.actor, Closed: s.closed}
 	for i := len(s.operationOrder) - 1; i >= 0; i-- {
 		out.Operations = append(out.Operations, s.operationSummaryLocked(s.operations[s.operationOrder[i]]))
 	}
@@ -262,6 +270,14 @@ func (s *Service) closeLocked() {
 	if s.closed {
 		return
 	}
+	if s.recoveryStore != nil {
+		if err := s.recoveryStore.finish(s.recoveryCaptureLocked(), s.discardRecoveryOnClose, s.recovery.Enabled); err != nil {
+			s.recovery.Error = err.Error()
+		}
+		if s.recoveryCancel != nil {
+			s.recoveryCancel()
+		}
+	}
 	s.closed = true
 	for _, operation := range s.operations {
 		if operationActive(operation.summary.Status) {
@@ -326,6 +342,18 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 		return fail("unknown-command", "enumerate capabilities.list for supported commands")
 	}
 	if !cap.Mutation {
+		if r.Command == "recovery.inspect" {
+			inspection, err := s.recoveryInspectionLocked(r.Params)
+			if err != nil {
+				var action *actionError
+				if errors.As(err, &action) {
+					return fail(action.code, action.message)
+				}
+				return fail("invalid-params", err.Error())
+			}
+			out.Result = inspection
+			return out
+		}
 		if r.Command == "operation.inspect" || r.Command == "operation.samples" {
 			result, err := s.verificationQueryLocked(r.Command, r.Params)
 			if err != nil {
@@ -394,7 +422,7 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 	changedGraph := !reflect.DeepEqual(before.Graph, s.graph)
 	changedSettings := before.Settings != s.transientSettings
 	changedDocument := changedGraph || changedSettings
-	forceRestart := r.Command == "project.load" || r.Command == "example.rc" || r.Command == "example.npn" || r.Command == "example.npn-pulse" || r.Command == "example.flasher"
+	forceRestart := r.Command == "project.load" || r.Command == "recovery.restore" || r.Command == "example.rc" || r.Command == "example.npn" || r.Command == "example.npn-pulse" || r.Command == "example.flasher"
 	if changedDocument {
 		if r.Command != "edit.undo" && r.Command != "edit.redo" {
 			before.Name = historyName(r.Command)
@@ -417,7 +445,7 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 		s.electrical++
 		s.startLocked()
 	}
-	if r.Command == "project.clear" || r.Command == "example.reset" || forceRestart && r.Command != "simulation.restart" && r.Command != "project.load" {
+	if r.Command == "project.clear" || r.Command == "example.reset" || forceRestart && r.Command != "simulation.restart" && r.Command != "project.load" && r.Command != "recovery.restore" {
 		s.verificationSettings = DefaultVerificationSettings()
 		s.scopeConfigured = false
 		s.scopeProbes = nil
@@ -446,6 +474,7 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	state.Recovery = cloneRecovery(state.Recovery)
 	state.VerificationSettings = cloneVerificationSettings(state.VerificationSettings)
 	state.Operations = append([]OperationSummary{}, state.Operations...)
 	for i := range state.Operations {

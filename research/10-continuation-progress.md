@@ -29,12 +29,21 @@ Completed queue items: bounded Verify, operation lifecycle, and portable recorde
 
 Packaged slice: **0.10.0 / 24**, with [final validation](../docs/validation/verification-validation.json). The prior application bundle was preserved.
 
+## Autosave and crash recovery
+
+Implemented [autosave/recovery](../docs/recovery.md) through seven shared commands and native Inspector controls. Native startup defaults to two-second private snapshots; headless sessions opt in explicitly. Snapshots contain complete validated portable schematics, with immutable publication, checksums, per-session ownership and two-copy retention per document. Saved projects are preserved. Restoring opens a dirty unassociated copy for Save As; dirty/generation/hash guards and the existing native unsaved-change prompt apply.
+
+Review fixes include serializing final shutdown with pending writes so explicit discard cannot be undone by a late autosave, rejecting old captures after an explicit save, retaining a valid older snapshot if the newest is damaged, preserving other live sessions' snapshots (including damaged bodies with identifiable ownership), bounding scans/diagnostics, preserving an explicitly cleared candidate selection, and returning through CLI deferred cleanup before choosing a nonzero process exit. Filesystem work for automatic capture occurs outside the editor mutex. Shared document serialization/installation was extracted from persistence rather than duplicated.
+
+Validation includes core/desktop race tests, Staticcheck/import formatting, Go vet, native/agent control parity and actual GPU/UI smoke. An owned headless process was killed with SIGKILL and reopened: [crash recovery report](../docs/validation/crash-recovery.json) shows successful automatic capture, validated copy restoration, Save As and byte-for-byte preservation of the original `.elab` file. This is process-crash validation, not power-loss qualification.
+
+Packaged slice: **0.11.0 / 25**, with [final validation](../docs/validation/recovery-validation.json) and [desktop endpoint validation](../docs/validation/desktop-recovery.json). Recovery copies, leases, build artifacts and running older application sessions remain local; no user files or earlier bundles were removed. Recorded results/history are not recovery payloads; Windows liveness and public distribution remain unqualified.
+
 ## Next work queue
 
-1. Autosave/recovery that preserves explicitly saved files and validates recovery before replacement.
-2. Recorded result-file import and replay as explicitly recorded data.
-3. Explicit schematic junction/net-label primitives and supported topology expansion.
-4. Generic diode, switch and potentiometer models with electrical fixtures.
-5. Capacity/latency measurements, keyboard/screen-reader checks and distribution qualification.
+1. Recorded result-file import and replay as explicitly recorded data.
+2. Explicit schematic junction/net-label primitives and supported topology expansion.
+3. Generic diode, switch and potentiometer models with electrical fixtures.
+4. Capacity/latency measurements, keyboard/screen-reader checks and distribution qualification.
 
 Every shipped user operation continues to require the same public agent command/state path. Each slice adds meaningful regression checks and records its actual limits. Participant usability and physical hardware validation remain future gates.
