@@ -217,7 +217,7 @@ func (s *Service) scopeLocked(c Compiled) Scope {
 		index := nearestSample(t.Samples, *request)
 		r.Time = t.Samples[index].Time
 		r.Valid = !t.Stale
-		if s.scopeWindow != nil && (!out.WindowValid || r.Time < out.Window.Start || r.Time > out.Window.End) {
+		if s.scopeWindow != nil && (!out.WindowValid || !scopeTimeInside(r.Time, out.Window.Start, out.Window.End)) {
 			r.Valid = false
 			r.Reason = "outside visible window"
 			return r

@@ -3,12 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/dshills/elab/workbench"
-	"github.com/dshills/vellum/ui"
 	"math"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/dshills/elab/workbench"
+	"github.com/dshills/vellum/ui"
 )
 
 func TestFlasherDrawingInitialConditionsAndAgentParity(t *testing.T) {

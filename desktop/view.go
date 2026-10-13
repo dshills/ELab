@@ -313,7 +313,7 @@ func (s *screen) view() ui.Node {
 		if r := state.NPN; r != nil {
 			current = fmt.Sprintf("%.3f mA", r.CollectorCurrent*1000)
 			voltage = fmt.Sprintf("%.3f V", r.VCE)
-			power = strings.Title(r.State)
+			power = transistorStateLabel(r.State)
 			readStatus = r.TransistorID + " · DC operating point"
 			if t := state.Transient; t != nil && workbench.IsNPNTransientEngine(t.Engine) {
 				readStatus = fmt.Sprintf("%s · t = %.4g s", r.TransistorID, t.Sample.Time)
@@ -338,7 +338,7 @@ func (s *screen) view() ui.Node {
 				voltageTitle = r.Capacitors[0].ID + " voltage"
 			}
 			if len(r.Transistors) > 0 {
-				power = strings.Title(r.Transistors[0].State)
+				power = transistorStateLabel(r.Transistors[0].State)
 			}
 			readStatus = fmt.Sprintf("Mixed · t = %.4g s", r.Time)
 			if r.Stale {
@@ -390,4 +390,17 @@ func (s *screen) view() ui.Node {
 		root.Children = children
 	}
 	return root
+}
+
+func transistorStateLabel(state string) string {
+	switch state {
+	case "cutoff":
+		return "Cutoff"
+	case "active":
+		return "Active"
+	case "saturation":
+		return "Saturation"
+	default:
+		return state
+	}
 }

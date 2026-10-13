@@ -33,18 +33,19 @@ type DocumentState struct {
 	Generation    uint64 `json:"generation"`
 }
 type SaveParams struct {
-	Path      string `json:"path,omitempty"`
-	Overwrite bool   `json:"overwrite,omitempty"`
+	ExpectedGeneration *uint64 `json:"expected_document_generation,omitempty"`
+	Path               string  `json:"path,omitempty"`
+	Overwrite          bool    `json:"overwrite,omitempty"`
 }
 type LoadParams struct {
-	Path           string `json:"path"`
-	DiscardChanges bool   `json:"discard_changes,omitempty"`
+	ExpectedGeneration *uint64 `json:"expected_document_generation,omitempty"`
+	Path               string  `json:"path"`
+	DiscardChanges     bool    `json:"discard_changes,omitempty"`
 }
 type ReplaceParams struct {
 	DiscardChanges bool `json:"discard_changes,omitempty"`
 }
 
-func graphHash(g Graph) [32]byte { data, _ := json.Marshal(g); return sha256.Sum256(data) }
 func contentHash(g Graph, settings TransientSettings) [32]byte {
 	data, _ := json.Marshal(struct {
 		Graph    Graph
@@ -265,6 +266,9 @@ func decodeDocument(data []byte) (Document, error) {
 func absOutOfBounds(p Point) bool { return p.X < -1e6 || p.X > 1e6 || p.Y < -1e6 || p.Y > 1e6 }
 
 func (s *Service) saveLocked(p SaveParams) error {
+	if err := s.checkDocumentGenerationLocked(p.ExpectedGeneration); err != nil {
+		return err
+	}
 	path := p.Path
 	if path == "" {
 		path = s.documentPath
@@ -355,6 +359,9 @@ func (s *Service) saveLocked(p SaveParams) error {
 	return nil
 }
 func (s *Service) loadLocked(p LoadParams) error {
+	if err := s.checkDocumentGenerationLocked(p.ExpectedGeneration); err != nil {
+		return err
+	}
 	if err := s.requireCleanLocked(p.DiscardChanges); err != nil {
 		return err
 	}
@@ -404,5 +411,14 @@ func (s *Service) loadLocked(p LoadParams) error {
 	s.result = nil
 	s.transient = nil
 	s.paused = false
+	return nil
+}
+
+// File choices may outlive the project they were made for. A generation guard
+// survives harmless clock ticks but refuses to act on a replacement project.
+func (s *Service) checkDocumentGenerationLocked(expected *uint64) error {
+	if expected != nil && *expected != s.documentGeneration {
+		return &actionError{"conflict", fmt.Sprintf("Schematic changed while this file action was pending (expected document generation %d, current %d). Choose the file again.", *expected, s.documentGeneration)}
+	}
 	return nil
 }

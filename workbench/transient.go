@@ -350,14 +350,18 @@ func (s *Service) transientCommandLocked(command string, raw []byte) error {
 			return s.stepMixedLocked(p.Duration)
 		}
 		if s.transient.PendingMode != "" {
-			_ = s.applyTransientInputLocked(c, s.transient.PendingMode)
+			if err := s.applyTransientInputLocked(c, s.transient.PendingMode); err != nil {
+				return err
+			}
 		}
 		for s.transient.Sample.Time < end {
 			next := math.Min(end, s.transient.Sample.Time+s.transientSettings.StepSeconds)
 			if end-next < 1e-12 {
 				next = end
 			}
-			s.advanceTransientLocked(c, next)
+			if err := s.advanceTransientLocked(c, next); err != nil {
+				return err
+			}
 		}
 	}
 	return nil

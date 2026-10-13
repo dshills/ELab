@@ -14,8 +14,9 @@ import (
 )
 
 type ExportParams struct {
-	Path      string `json:"path"`
-	Overwrite bool   `json:"overwrite,omitempty"`
+	ExpectedGeneration *uint64 `json:"expected_document_generation,omitempty"`
+	Path               string  `json:"path"`
+	Overwrite          bool    `json:"overwrite,omitempty"`
 }
 
 type Artifact struct {
@@ -28,6 +29,9 @@ type Artifact struct {
 
 func number(v float64) string { return strconv.FormatFloat(v, 'g', 17, 64) }
 func (s *Service) exportLocked(command string, p ExportParams) error {
+	if err := s.checkDocumentGenerationLocked(p.ExpectedGeneration); err != nil {
+		return err
+	}
 	path, err := documentPath(p.Path)
 	if err != nil {
 		return err
@@ -53,7 +57,9 @@ func (s *Service) exportLocked(command string, p ExportParams) error {
 		for _, trace := range scope.Traces {
 			header = append(header, trace.Probe.ID+" ["+trace.Probe.Unit+"]")
 		}
-		writer.Write(header)
+		if err := writer.Write(header); err != nil {
+			return fileError(err)
+		}
 		for _, sample := range t.Samples {
 			if !scopeTimeInside(sample.Time, scope.Window.Start, scope.Window.End) {
 				continue
@@ -67,7 +73,9 @@ func (s *Service) exportLocked(command string, p ExportParams) error {
 				}
 				row = append(row, text)
 			}
-			writer.Write(row)
+			if err := writer.Write(row); err != nil {
+				return fileError(err)
+			}
 		}
 		writer.Flush()
 		if err := writer.Error(); err != nil {
@@ -105,7 +113,7 @@ func publishExport(path string, data []byte, overwrite bool) error {
 		return fileError(err)
 	}
 	temp := f.Name()
-	defer os.Remove(temp)
+	defer func() { _ = os.Remove(temp) }()
 	if _, err = f.Write(data); err == nil {
 		err = f.Sync()
 	}
@@ -125,8 +133,8 @@ func publishExport(path string, data []byte, overwrite bool) error {
 		return fileError(err)
 	}
 	if dir, err := os.Open(filepath.Dir(path)); err == nil {
-		dir.Sync()
-		dir.Close()
+		_ = dir.Sync()
+		_ = dir.Close()
 	}
 	return nil
 }

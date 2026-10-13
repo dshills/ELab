@@ -2,12 +2,13 @@ package main
 
 import (
 	"context"
-	"github.com/dshills/elab/workbench"
-	"github.com/dshills/vellum/ui"
 	"math"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/dshills/elab/workbench"
+	"github.com/dshills/vellum/ui"
 )
 
 func TestNPNPulseDrawingAndControlsMatchAgents(t *testing.T) {

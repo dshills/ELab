@@ -33,6 +33,14 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 	serial := s.serial
 	state := s.service.Snapshot()
 	raw, _ := json.Marshal(p)
+	var fields map[string]json.RawMessage
+	_ = json.Unmarshal(raw, &fields)
+	generation := state.Document.Generation
+	// Preserve the original generation through a later unsaved-changes decision.
+	if _, present := fields["expected_document_generation"]; !present {
+		fields["expected_document_generation"], _ = json.Marshal(generation)
+	}
+	raw, _ = json.Marshal(fields)
 	s.app.Invalidate("main")
 	go func() {
 		ctx := s.app.Context()
@@ -72,9 +80,9 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 			}
 			if err == nil {
 				if id == "project.save" || id == "export.scope.csv" || id == "export.schematic.svg" {
-					raw, err = json.Marshal(workbench.SaveParams{Path: path, Overwrite: true})
+					raw, err = json.Marshal(workbench.SaveParams{Path: path, Overwrite: true, ExpectedGeneration: &generation})
 				} else {
-					raw, err = json.Marshal(workbench.LoadParams{Path: path})
+					raw, err = json.Marshal(workbench.LoadParams{Path: path, ExpectedGeneration: &generation})
 				}
 			}
 		}
@@ -83,7 +91,7 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 			revision := s.service.Snapshot().Revision
 			request := workbench.Request{Version: 1, ID: fmt.Sprintf("ui-%d", serial), Key: fmt.Sprintf("ui-%d", serial), Command: id, Params: raw, ExpectedRevision: &revision}
 			response = s.service.Dispatch(ctx, request, "user")
-			if response.Error != nil && response.Error.Code == "conflict" {
+			if response.Error != nil && response.Error.Code == "conflict" && response.Revision != revision {
 				revision = response.Revision
 				response = s.service.Dispatch(ctx, request, "user")
 			}

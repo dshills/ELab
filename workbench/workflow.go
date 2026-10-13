@@ -39,19 +39,26 @@ func (s *Service) duplicateLocked(p DuplicateParams) error {
 		return fmt.Errorf("choose an existing component to duplicate")
 	}
 	position := p.Position
+
 	if position == nil {
+	candidates:
 		for offset := 40.; offset <= 400; offset += 20 {
-			point := Point{part.Position.X + offset, part.Position.Y + offset}
-			occupied := false
-			for _, other := range s.graph.Components {
-				if other.Position == point {
-					occupied = true
-					break
+			for _, direction := range []Point{{1, 1}, {-1, 1}, {1, -1}, {-1, -1}, {1, 0}, {-1, 0}, {0, 1}, {0, -1}} {
+				point := Point{part.Position.X + offset*direction.X, part.Position.Y + offset*direction.Y}
+				if _, err := snapPoint(point); err != nil {
+					continue
 				}
-			}
-			if !occupied {
-				position = &point
-				break
+				occupied := false
+				for _, other := range s.graph.Components {
+					if other.Position == point {
+						occupied = true
+						break
+					}
+				}
+				if !occupied {
+					position = &point
+					break candidates
+				}
 			}
 		}
 	}

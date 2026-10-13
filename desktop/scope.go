@@ -1,14 +1,15 @@
 package main
 
 import (
-	"cogentcore.org/core/core"
-	"cogentcore.org/core/events"
-	"cogentcore.org/core/tree"
 	"fmt"
-	"github.com/dshills/vellum/drivers/cogent"
 	"image/color"
 	"math"
 	"strings"
+
+	"cogentcore.org/core/core"
+	"cogentcore.org/core/events"
+	"cogentcore.org/core/tree"
+	"github.com/dshills/vellum/drivers/cogent"
 
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/canvas"
@@ -65,8 +66,7 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 		p := v.World(canvas.Point{X: x, Y: y})
 		b.text(p.X, p.Y, content, c)
 	}
-	left, right, top, bottom := 58., v.Width-20, 12., v.Height-28
-	right = v.Width - 78
+	left, right, top, bottom := 58., v.Width-78, 12., v.Height-28
 	if right <= left || bottom <= top {
 		return canvas.NewMesh(nil, nil)
 	}
