@@ -294,7 +294,7 @@ func NPNExampleGraph() Graph {
 	}
 	return g
 }
-func (s *Service) startNPNLocked(c Compiled) {
+func (s *Service) startNPNLocked(c Compiled, allowPaused bool) {
 	s.result = nil
 	s.transient = nil
 	s.status = "updating"
@@ -305,7 +305,7 @@ func (s *Service) startNPNLocked(c Compiled) {
 		r, err := SolveNPN(ctx, c)
 		s.mu.Lock()
 		defer s.mu.Unlock()
-		if s.closed || s.paused || s.electrical != revision || s.run != run || ctx.Err() != nil {
+		if s.closed || s.paused && !allowPaused || s.electrical != revision || s.run != run || ctx.Err() != nil {
 			return
 		}
 		s.cancel = nil
@@ -317,7 +317,11 @@ func (s *Service) startNPNLocked(c Compiled) {
 			r.RunID = run
 			r.ElectricalRevision = revision
 			s.npn = &r
-			s.status = "running"
+			if s.paused {
+				s.status = "paused"
+			} else {
+				s.status = "running"
+			}
 		}
 		s.revision++
 		s.signalLocked()

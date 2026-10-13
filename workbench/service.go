@@ -57,6 +57,8 @@ type savedResponse struct {
 	response    Response
 }
 type Service struct {
+	savedRecordings                  [32]byte
+	restorePaused                    bool
 	recording                        recordingState
 	recovery                         RecoveryState
 	recoverySelectionCleared         bool
@@ -130,6 +132,7 @@ func newGraphService(solver func(context.Context, Circuit) (Result, error), grap
 	s.recovery = RecoveryState{Interval: 2, Candidates: []RecoveryCandidate{}, Problems: []RecoveryProblem{}}
 	s.documentGeneration = 1
 	s.savedGraph = contentHash(EmptyGraph(), s.transientSettings)
+	s.savedRecordings = s.recordingMembershipHashLocked()
 	s.startLocked()
 	return s
 }
@@ -142,7 +145,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	if analysis == "" {
 		analysis = "DC operating point"
 	}
-	out := Snapshot{Recording: s.recordingViewLocked(), Recovery: cloneRecovery(s.recovery), VerificationSettings: cloneVerificationSettings(s.verificationSettings), Operations: []OperationSummary{}, SelectedOperation: s.selectedOperation, LastOperation: s.lastOperation, PartSearch: s.partSearch, MatchingParts: filteredParts(s.partSearch), Scope: s.scopeLocked(compiled), Mixed: cloneMixed(s.mixed), NPN: cloneNPN(s.npn), CommandRevision: s.commandRevision, Transient: cloneTransient(s.transient), TransientSettings: s.transientSettings, Document: DocumentState{Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: DocumentVersion, Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom}, Revision: s.revision, ElectricalRevision: s.electrical, Circuit: s.circuit, Components: graph.Components, Wires: graph.Wires, Nets: compiled.Nets, Drawing: s.drawing, Model: Model(), Selected: s.selected, View: s.view, Status: s.status, Analysis: analysis, Paused: s.paused, RunID: s.run, Diagnostics: append([]Diagnostic{}, s.diagnostics...), CanUndo: len(s.undo) > 0, CanRedo: len(s.redo) > 0, LastActor: s.actor, Closed: s.closed}
+	out := Snapshot{Recording: s.recordingViewLocked(), Recovery: cloneRecovery(s.recovery), VerificationSettings: cloneVerificationSettings(s.verificationSettings), Operations: []OperationSummary{}, SelectedOperation: s.selectedOperation, LastOperation: s.lastOperation, PartSearch: s.partSearch, MatchingParts: filteredParts(s.partSearch), Scope: s.scopeLocked(compiled), Mixed: cloneMixed(s.mixed), NPN: cloneNPN(s.npn), CommandRevision: s.commandRevision, Transient: cloneTransient(s.transient), TransientSettings: s.transientSettings, Document: DocumentState{SchematicDirty: contentHash(s.graph, s.transientSettings) != s.savedGraph, RecordingsDirty: s.recordingsDirtyLocked(), RecordingCount: s.recordingCountLocked(), Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: DocumentVersion, Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom}, Revision: s.revision, ElectricalRevision: s.electrical, Circuit: s.circuit, Components: graph.Components, Wires: graph.Wires, Nets: compiled.Nets, Drawing: s.drawing, Model: Model(), Selected: s.selected, View: s.view, Status: s.status, Analysis: analysis, Paused: s.paused, RunID: s.run, Diagnostics: append([]Diagnostic{}, s.diagnostics...), CanUndo: len(s.undo) > 0, CanRedo: len(s.redo) > 0, LastActor: s.actor, Closed: s.closed}
 	for i := len(s.operationOrder) - 1; i >= 0; i-- {
 		out.Operations = append(out.Operations, s.operationSummaryLocked(s.operations[s.operationOrder[i]]))
 	}
@@ -182,6 +185,8 @@ func (s *Service) snapshotLocked() Snapshot {
 	return out
 }
 func (s *Service) startLocked() {
+	allowPaused := s.restorePaused
+	s.restorePaused = false
 	s.cursorA = nil
 	s.cursorB = nil
 	s.scopeWindow = nil
@@ -214,7 +219,7 @@ func (s *Service) startLocked() {
 		}
 		return
 	}
-	if s.paused {
+	if s.paused && !allowPaused {
 		s.status = "paused"
 		return
 	}
@@ -229,7 +234,7 @@ func (s *Service) startLocked() {
 		return
 	}
 	if compiled.Analysis == NPNAnalysis {
-		s.startNPNLocked(compiled)
+		s.startNPNLocked(compiled, allowPaused)
 		return
 	}
 	s.npn = nil
@@ -249,7 +254,7 @@ func (s *Service) startLocked() {
 		}
 		s.mu.Lock()
 		defer s.mu.Unlock()
-		if s.closed || s.paused || s.electrical != revision || s.run != run || ctx.Err() != nil {
+		if s.closed || s.paused && !allowPaused || s.electrical != revision || s.run != run || ctx.Err() != nil {
 			return
 		}
 		s.cancel = nil
@@ -261,7 +266,11 @@ func (s *Service) startLocked() {
 			result.RunID = run
 			result.ElectricalRevision = revision
 			s.result = &result
-			s.status = "running"
+			if s.paused {
+				s.status = "paused"
+			} else {
+				s.status = "running"
+			}
 		}
 		s.revision++
 		s.signalLocked()
@@ -348,8 +357,14 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 		return fail("unknown-command", "enumerate capabilities.list for supported commands")
 	}
 	if !cap.Mutation {
-		if r.Command == "recovery.inspect" {
-			inspection, err := s.recoveryInspectionLocked(r.Params)
+		if r.Command == "recovery.inspect" || r.Command == "recovery.samples" {
+			var inspection any
+			var err error
+			if r.Command == "recovery.samples" {
+				inspection, err = s.recoverySamplesLocked(r.Params)
+			} else {
+				inspection, err = s.recoveryInspectionLocked(r.Params)
+			}
 			if err != nil {
 				var action *actionError
 				if errors.As(err, &action) {

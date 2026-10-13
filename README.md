@@ -32,7 +32,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.12.0 --build-version 26 --platform darwin
+  --version 0.13.0 --build-version 27 --platform darwin
 ```
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
@@ -69,7 +69,7 @@ The right inspector's **Verify from startup** panel runs the current circuit wit
 
 ## Keep your schematics
 
-Use **Save** (Cmd+S), **Save As** (Cmd+Shift+S), and **Open** (Cmd+O). Native file pickers choose `.elab` files. Schematics keep component IDs, positions/rotations, exact values, wires, the saved view, versioned model parameters, capacitor startup overrides, and transient experiment settings. Version 3 files also capture selected probes. Existing version 1/2 files still load; v1 uses default RC settings. Opening validates the whole file before replacing the drawing and recalculates live readings; incomplete circuits can also be saved.
+Use **Save** (Cmd+S), **Save As** (Cmd+Shift+S), and **Open** (Cmd+O). Native file pickers choose `.elab` files. Schematics keep component IDs, positions/rotations, exact values, wires, the saved view, versioned model parameters, capacitor startup overrides, and transient experiment settings. Version 4 files include kept recorded results, dependency hashes and the current paused/viewer preferences. Version 3 adds selected probes; existing version 1/2/3 files still load; v1 uses default RC settings. Opening validates the whole file before replacing the drawing and recalculates live readings; incomplete circuits can also be saved.
 
 The footer names the current file and marks unsaved changes. New, Open, loading the example, and closing protect unsaved work with Save / Discard / Cancel. Saving replaces the destination atomically and detects changes made outside ELab. Use Save As to keep both versions. View navigation alone does not mark the circuit dirty; an explicit Save captures the current view.
 
@@ -144,3 +144,5 @@ Vellum's own code is MIT licensed; Cogent and other native dependencies retain t
 Autosave and crash recovery are available in the Inspector. Snapshots preserve dirty edits separately from saved files; restoring opens a new copy for Save As. See [recovery commands and limits](docs/recovery.md). Native startup enables autosave by default; headless sessions opt in with `--recovery-directory` or the shared configuration command.
 
 Open exported recorded JSON from the Verify inspector to inspect/play its captured samples in a separate Recorded scope. Live state remains independent. [Recorded viewer commands and limits](docs/recording.md) describe exact edge stepping, probes and timing measurements.
+
+Projects now save kept recorded results with their complete inputs/data, and reopen with fresh live startup alongside the recorded viewer. Completion/import marks those assets unsaved; Include/Exclude controls are shared with agents. [Project format, ownership and bounds](docs/project-format.md).

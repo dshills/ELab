@@ -149,7 +149,7 @@ func TestInvalidDocumentsLeaveCurrentDrawingIntact(t *testing.T) {
 		change func([]byte) []byte
 	}{
 		{"truncated", func(b []byte) []byte { return b[:len(b)/2] }},
-		{"future-version", func(b []byte) []byte { return []byte(strings.Replace(string(b), `"version": 3`, `"version": 99`, 1)) }},
+		{"future-version", func(b []byte) []byte { return []byte(strings.Replace(string(b), `"version": 4`, `"version": 99`, 1)) }},
 		{"missing-wire-pin", func(b []byte) []byte { return []byte(strings.Replace(string(b), `R1.1`, `R1.unknown`, 1)) }},
 		{"unknown-model", func(b []byte) []byte { return []byte(strings.Replace(string(b), ModelID, "other-led.v9", 1)) }},
 		{"noncanonical-id", func(b []byte) []byte { return []byte(strings.Replace(string(b), `"id": "V1"`, `"ID": "V1"`, 1)) }},
@@ -174,4 +174,12 @@ func TestInvalidDocumentsLeaveCurrentDrawingIntact(t *testing.T) {
 	if state.Status != "incomplete" || state.Result != nil || state.Document.Dirty {
 		t.Fatal("loading incomplete circuit reused old readings")
 	}
+}
+
+// Recording assets may change while the live schematic/file association does not.
+func schematicDocumentState(document DocumentState) DocumentState {
+	document.Dirty = document.SchematicDirty
+	document.RecordingsDirty = false
+	document.RecordingCount = 0
+	return document
 }

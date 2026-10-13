@@ -295,6 +295,39 @@ func (s *Service) recoveryInspectionLocked(raw json.RawMessage) (RecoveryInspect
 	if err != nil {
 		return RecoveryInspection{}, err
 	}
-	candidate := RecoveryCandidate{ID: capsule.ID, DocumentKey: capsule.DocumentKey, SavedAt: capsule.SavedAt, SourcePath: capsule.SourcePath, SHA256: hash, CurrentSession: capsule.Session == s.recoveryStore.session, ActiveSession: s.recoveryStore.sessionActive(capsule.Session), Components: len(document.Graph.Components)}
-	return RecoveryInspection{Candidate: candidate, Document: document}, nil
+	candidate := RecoveryCandidate{ID: capsule.ID, DocumentKey: capsule.DocumentKey, SavedAt: capsule.SavedAt, SourcePath: capsule.SourcePath, SHA256: hash, CurrentSession: capsule.Session == s.recoveryStore.session, ActiveSession: s.recoveryStore.sessionActive(capsule.Session), Recordings: documentRecordingCount(document), Components: len(document.Graph.Components)}
+	return RecoveryInspection{Candidate: candidate, Document: inspectDocument(document)}, nil
+}
+
+func documentRecordingCount(d Document) int {
+	if d.Recordings == nil {
+		return 0
+	}
+	return len(d.Recordings.Entries)
+}
+func inspectDocument(d Document) DocumentInspection {
+	out := DocumentInspection{Format: d.Format, Version: d.Version, Graph: d.Graph.Clone(), View: d.View, ScopeProbes: d.ScopeProbes, TransientSettings: d.TransientSettings, LEDModel: d.LEDModel, NPNModel: d.NPNModel, Paused: d.Paused != nil && *d.Paused, Recordings: []VerificationMetadata{}, SelectedRecording: -1}
+	if d.Recordings != nil {
+		out.SelectedRecording = d.Recordings.Selected
+		out.ViewingRecording = d.Recordings.Viewing
+		for _, entry := range d.Recordings.Entries {
+			out.Recordings = append(out.Recordings, cloneVerificationMetadata(entry.Data.Metadata))
+		}
+	}
+	return out
+}
+func (s *Service) recoverySamplesLocked(raw json.RawMessage) (VerificationPage, error) {
+	var p RecoverySamplesParams
+	if err := params(raw, &p, "id", "sha256", "recording_index"); err != nil {
+		return VerificationPage{}, err
+	}
+	_, document, _, err := s.recoveryReadLocked(RecoveryChoiceParams{ID: p.ID, SHA256: p.SHA256})
+	if err != nil {
+		return VerificationPage{}, err
+	}
+	if document.Recordings == nil || p.Recording < 0 || p.Recording >= len(document.Recordings.Entries) {
+		return VerificationPage{}, fmt.Errorf("choose an embedded recovery recording index")
+	}
+	data := document.Recordings.Entries[p.Recording].Data
+	return recordedSamplePage(p.ID, data.Metadata.Probes, data.Rows, p.Offset, p.Limit)
 }

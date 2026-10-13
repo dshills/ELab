@@ -69,7 +69,7 @@ def main():
             saved = client.ask('project.save', {'path': str(doc_path), 'overwrite': True}, True)
             assert not saved['document']['dirty']
             doc = json.loads(doc_path.read_text())
-            assert doc['version'] == 3 and doc['scope_probes']['ids'] == ids
+            assert doc['version'] == 4 and doc['scope_probes']['ids'] == ids
             fresh = helper.Client()
             reopened = fresh.ask('project.load', {'path': str(doc_path)}, True)
             assert reopened['scope']['selected'] == ids and reopened['transient']['sample']['time_s'] == 0
@@ -88,7 +88,7 @@ def main():
             client.ask('export.scope.csv', {'path': str(csv_path)}, True, expect='file-exists')
             client.ask('export.schematic.svg', {'path': str(doc_path), 'overwrite': True}, True, expect='invalid-params')
             report = {'passed': True, 'transport': 'desktop socket' if args.connect else 'headless stdio',
-                      'capabilities': len(catalog), 'document_version': 3,
+                      'capabilities': len(catalog), 'document_version': 4,
                       'scope_window': window['scope']['window'], 'statistics': window['scope']['statistics'],
                       'interval_rows': len(rows) - 1, 'cursor_interval_s': measured['scope']['delta_s'],
                       'svg_bytes': svg_path.stat().st_size,

@@ -101,7 +101,7 @@ func (store *recoveryStore) checkpointLocked(capture recoveryCapture) (string, s
 	id := fmt.Sprintf("rec-%s-%010d", key, store.sequence)
 	savedAt := time.Now().UTC().Format(time.RFC3339Nano)
 	capsule := recoveryCapsule{Format: RecoveryFormat, Version: RecoveryVersion, ID: id, DocumentKey: key, Session: store.session, Sequence: store.sequence, CommandRevision: capture.commandRevision, SavedAt: savedAt, SourcePath: capture.sourcePath, DocumentSHA256: hex.EncodeToString(digest[:]), Document: data}
-	encoded, err := json.MarshalIndent(capsule, "", "  ")
+	encoded, err := json.Marshal(capsule)
 	if err != nil {
 		return "", "", err
 	}
@@ -273,7 +273,7 @@ func (store *recoveryStore) scan() ([]RecoveryCandidate, []RecoveryProblem, erro
 			continue
 		}
 		latest[capsule.DocumentKey] = capsule
-		candidates[capsule.DocumentKey] = RecoveryCandidate{ID: id, DocumentKey: capsule.DocumentKey, SavedAt: capsule.SavedAt, SourcePath: capsule.SourcePath, SHA256: hash, CurrentSession: capsule.Session == store.session, ActiveSession: store.sessionActive(capsule.Session), Components: len(document.Graph.Components)}
+		candidates[capsule.DocumentKey] = RecoveryCandidate{ID: id, DocumentKey: capsule.DocumentKey, SavedAt: capsule.SavedAt, SourcePath: capsule.SourcePath, SHA256: hash, CurrentSession: capsule.Session == store.session, ActiveSession: store.sessionActive(capsule.Session), Recordings: documentRecordingCount(document), Components: len(document.Graph.Components)}
 	}
 	out := []RecoveryCandidate{}
 	for _, candidate := range candidates {

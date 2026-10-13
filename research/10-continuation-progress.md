@@ -45,13 +45,20 @@ Implemented [native record import and replay](../docs/recording.md), with strict
 
 Recorded plots preserve ordered bucket extrema and label reduction. Full data remains available for cursors, statistics, paged inspection and exports. Imported revision counters never claim association with a live source. Import retention preserves an active Verify job. Review repaired typed Go requests collapsing explicit empty lists into omission, rejected null probe lists, preserved valid DC metadata-only sample overrides, grouped private playback state and separated plotting from command/timer code. Queued ticks cannot rewind playback after a new position/rate. Import checks every interior output step as well as endpoints, and extremely close cursor timestamps cannot publish an infinite frequency. Native GPU smoke found and repaired a view-switch mount error by retaining the scope panel/canvas identity across live and recorded modes.
 
-Packaged slice: **0.12.0 / 26**, with [final validation](../docs/validation/recording-validation.json), [headless workflow](../docs/validation/headless-recording.json) and [desktop workflow](../docs/validation/desktop-recording.json). This slice reopens standalone recorded JSON. It does not yet fulfill project-embedded recorded-result portability; that P0 requirement is the immediate next slice.
+Packaged slice: **0.12.0 / 26**, with [final validation](../docs/validation/recording-validation.json), [headless workflow](../docs/validation/headless-recording.json) and [desktop workflow](../docs/validation/desktop-recording.json). This slice reopens standalone recorded JSON. Project embedding was the immediate next slice and is now implemented below.
+
+## Embedded project recordings and lifecycle
+
+Implemented [project format 4](../docs/project-format.md): kept completed recordings, complete captured metadata/rows, canonical dependency hashes, selected recorded view and saved pause preference travel with the project. Versions 1–3 remain readable. The complete project and every embedded recording validate before replacement. Live reopening starts at zero and respects pause, without resuming recorded physics.
+
+Completed Verify/import results become unsaved project assets; shared Include/Exclude controls leave excluded session replay/export available. Kept recordings are protected from eviction, capacity refuses explicitly, and restored membership restores a clean save point. Saving refuses pending verification. Project replacement cancels old workers and blocks late publication. Recovery includes kept records and exposes bounded metadata/sample queries. Native and agent save/open/inclusion paths share the same dispatcher.
+
+Packaged slice: **0.13.0 / 27**, with [final validation](../docs/validation/project-recordings-validation.json), [headless portability](../docs/validation/headless-project-recordings.json), [desktop portability](../docs/validation/desktop-project-recordings.json) and [record-only crash recovery](../docs/validation/record-only-crash-recovery.json). Participant usability, hardware/power-loss validation, full device-library breadth, accessibility and distribution qualification remain future gates.
 
 ## Next work queue
 
-1. Embed validated recorded results in native project save/open, including clear file-size/dirty/ownership rules.
-2. Explicit schematic junction/net-label primitives and supported topology expansion.
-3. Generic diode, switch and potentiometer models with electrical fixtures.
-4. Capacity/latency measurements, keyboard/screen-reader checks and distribution qualification.
+1. Explicit schematic junction/net-label primitives and supported topology expansion.
+2. Generic diode, switch and potentiometer models with electrical fixtures.
+3. Capacity/latency measurements, keyboard/screen-reader checks and distribution qualification.
 
 Every shipped user operation continues to require the same public agent command/state path. Each slice adds meaningful regression checks and records its actual limits. Participant usability and physical hardware validation remain future gates.

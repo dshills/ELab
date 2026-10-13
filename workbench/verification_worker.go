@@ -9,8 +9,9 @@ import (
 
 func (s *Service) runVerification(operation *verificationOperation, input verificationInput) {
 	defer operation.cancel()
+	defer close(operation.done)
 	s.mu.Lock()
-	if s.closed || operation.ctx.Err() != nil {
+	if s.closed || s.operations[operation.summary.ID] != operation || operation.ctx.Err() != nil {
 		s.finishVerificationLocked(operation, nil, operation.ctx.Err())
 		s.mu.Unlock()
 		return
@@ -22,7 +23,7 @@ func (s *Service) runVerification(operation *verificationOperation, input verifi
 	record, err := computeVerification(operation.ctx, input, func(step int, at float64) {
 		s.mu.Lock()
 		defer s.mu.Unlock()
-		if s.closed || operation.summary.Status == "canceling" {
+		if s.closed || s.operations[operation.summary.ID] != operation || operation.summary.Status == "canceling" {
 			return
 		}
 		operation.summary.CompletedSteps = step
@@ -39,7 +40,7 @@ func (s *Service) runVerification(operation *verificationOperation, input verifi
 	s.finishVerificationLocked(operation, record, err)
 }
 func (s *Service) finishVerificationLocked(operation *verificationOperation, record *verificationRecord, err error) {
-	if s.closed {
+	if s.closed || s.operations[operation.summary.ID] != operation {
 		return
 	}
 	switch {
@@ -53,6 +54,7 @@ func (s *Service) finishVerificationLocked(operation *verificationOperation, rec
 		operation.summary.Error = &Failure{Code: "solve-failed", Message: err.Error()}
 	default:
 		operation.record = record
+		operation.keep = true
 		operation.summary.Status = "completed"
 		operation.summary.Progress = 1
 		operation.summary.CompletedSteps = operation.summary.TotalSteps

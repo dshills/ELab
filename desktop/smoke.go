@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"os"
+	"path/filepath"
 	"reflect"
 	"time"
 
@@ -130,7 +132,10 @@ rendered:
 	if err := nativeRecoverySmoke(ctx, a, s); err != nil {
 		return err
 	}
-	return nativeRecordingSmoke(ctx, a, s)
+	if err := nativeRecordingSmoke(ctx, a, s); err != nil {
+		return err
+	}
+	return nativeProjectRecordingSmoke(ctx, a, s)
 }
 
 func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
@@ -666,9 +671,11 @@ func nativeRecordingSmoke(ctx context.Context, a *app.Application, s *screen) er
 		return err
 	}
 	if err := a.PostWait(ctx, func() {
-		if err := smokeUI(s, "simulation.pause", nil); err != nil {
-			ready <- err
-			return
+		if !s.service.Snapshot().Paused {
+			if err := smokeUI(s, "simulation.pause", nil); err != nil {
+				ready <- err
+				return
+			}
 		}
 		before := s.service.Snapshot()
 		for _, action := range []struct {
@@ -746,4 +753,43 @@ func findNode(n ui.Node, id string) (ui.Node, bool) {
 		}
 	}
 	return ui.Node{}, false
+}
+
+func nativeProjectRecordingSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	directory, err := os.MkdirTemp("", "elab-native-project-")
+	if err != nil {
+		return err
+	}
+	defer os.RemoveAll(directory)
+	path := filepath.Join(directory, "experiment.elab")
+	result := make(chan error, 1)
+	if err := a.PostWait(ctx, func() {
+		before := s.service.Snapshot()
+		if before.Recording == nil || !before.Paused {
+			result <- fmt.Errorf("native project smoke lacks paused recorded source")
+			return
+		}
+		if response := s.invoke("project.save", workbench.SaveParams{Path: path}); response.Error != nil {
+			result <- fmt.Errorf("native project save: %s", response.Error.Message)
+			return
+		}
+		if response := s.invoke("project.load", workbench.LoadParams{Path: path}); response.Error != nil {
+			result <- fmt.Errorf("native project reload: %s", response.Error.Message)
+			return
+		}
+		after := s.service.Snapshot()
+		if after.Document.Dirty || after.Document.RecordingCount != 1 || after.Recording == nil || after.Recording.OriginID != before.Recording.OriginID || after.Recording.Total != before.Recording.Total || !after.Recording.Viewing || after.Recording.Playing || !after.Paused || after.Transient.Sample.Time != 0 || after.Transient.Stale {
+			result <- fmt.Errorf("native project reload lost captured data or resumed physical history")
+			return
+		}
+		result <- nil
+	}); err != nil {
+		return err
+	}
+	select {
+	case err := <-result:
+		return err
+	case <-ctx.Done():
+		return ctx.Err()
+	}
 }

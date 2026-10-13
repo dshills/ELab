@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "date": "2026-10-13",
+  "version": "0.13.0",
+  "build": "27",
+  "project_version": 4,
+  "binary_sha256": "89f882404951eafe07a4dd4bbcdead6bb66fbf14e9d947991d4c7e01b9882b8e",
+  "packaged_binary_matches": true,
+  "capabilities": 77,
+  "headless_desktop_equivalence": true,
+  "checks": [
+    "pinned Staticcheck / import formatting",
+    "Go vet and root/native race tests",
+    "all supported analysis project record round-trips",
+    "complete embedded row/metadata and dependency hash validation",
+    "versions 1\u20133 readable",
+    "fresh paused DC/transient startup / recorded viewer restored",
+    "record-only dirty guards and restored membership save point",
+    "kept capacity protects recorded work",
+    "saving refuses active verification",
+    "project replacement cancels old workers / prevents late publication",
+    "recovery metadata and exact sample paging",
+    "actual record-only SIGKILL recovery preserves explicit saved file",
+    "native picker and include/exclude agent parity",
+    "native and packaged GPU/UI save/open smoke",
+    "headless and packaged desktop fresh-process portability"
+  ],
+  "limits": [
+    "8 MiB projects, eight kept recordings, existing graph and record bounds",
+    "kept recording membership is durable; physical state, playback clock and live history are not resumed",
+    "ideal model hashes identify immutable versioned dependencies; hashes are not producer authentication",
+    "recovery uses compact bounded capsules; power-loss and Windows qualification remain pending",
+    "educational generic models; hardware and participant usability validation remain future gates",
+    "private unsigned local app; distribution audit pending"
+  ]
+}

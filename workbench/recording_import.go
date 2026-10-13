@@ -272,6 +272,9 @@ func (s *Service) importRecordingLocked(p RecordingImportParams) error {
 	if err := s.checkDocumentGenerationLocked(p.ExpectedGeneration); err != nil {
 		return err
 	}
+	if err := s.requireRecordingSlotLocked(); err != nil {
+		return err
+	}
 	path, err := documentPath(p.Path)
 	if err != nil {
 		return err
@@ -288,7 +291,7 @@ func (s *Service) importRecordingLocked(p RecordingImportParams) error {
 	id := fmt.Sprintf("record-%d", s.operationSerial)
 	digest := sha256.Sum256(data)
 	summary := OperationSummary{ID: id, Kind: "record-import", Status: "completed", InputRevision: record.metadata.InputRevision, ElectricalRevision: record.metadata.ElectricalRevision, DocumentGeneration: record.metadata.DocumentGeneration, RequestedDuration: record.metadata.Duration, SimulatedTime: record.metadata.Duration, CompletedSteps: len(record.rows), TotalSteps: len(record.rows), Progress: 1, SourcePath: path, SourceSHA256: hex.EncodeToString(digest[:])}
-	operation := &verificationOperation{summary: summary, record: record, inputMetadata: cloneVerificationMetadata(record.metadata)}
+	operation := &verificationOperation{keep: true, summary: summary, record: record, inputMetadata: cloneVerificationMetadata(record.metadata)}
 	s.retainOperationLocked(operation)
 	s.selectRecordingLocked(id)
 	s.recording.viewing = true
@@ -301,7 +304,7 @@ func (s *Service) retainOperationLocked(operation *verificationOperation) {
 	}
 	if len(s.operationOrder) >= MaxVerificationOperations {
 		for i, id := range s.operationOrder {
-			if !operationActive(s.operations[id].summary.Status) {
+			if !s.operations[id].keep && !operationActive(s.operations[id].summary.Status) {
 				delete(s.operations, id)
 				s.operationOrder = append(s.operationOrder[:i], s.operationOrder[i+1:]...)
 				break

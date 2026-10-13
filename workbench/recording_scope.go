@@ -26,7 +26,7 @@ func (s *Service) recordingViewLocked() *RecordingView {
 	record := operation.record
 	m := record.metadata
 	index := min(max(s.recording.index, 0), len(record.rows)-1)
-	out := &RecordingView{ID: operation.summary.ID, OriginID: m.OperationID, Imported: operation.summary.Kind == "record-import", Viewing: s.recording.viewing, Playing: s.recording.playing, Speed: s.recording.speed, Index: index, Time: record.rows[index].Time, Duration: m.Duration, Step: m.Settings.StepSeconds, Total: len(record.rows), Readings: []VerificationReading{}}
+	out := &RecordingView{ID: operation.summary.ID, OriginID: m.OperationID, Imported: operation.summary.Kind != "verify", Viewing: s.recording.viewing, Playing: s.recording.playing, Speed: s.recording.speed, Index: index, Time: record.rows[index].Time, Duration: m.Duration, Step: m.Settings.StepSeconds, Total: len(record.rows), Readings: []VerificationReading{}}
 	scope := Scope{Window: ScopeWindow{Mode: "fixed", End: m.Duration}, WindowValid: true, Available: append([]Probe{}, m.Probes...), Selected: []string{}, Traces: []ScopeTrace{}, Statistics: []ScopeStatistics{}, Readings: []CursorReading{}, ActiveCursor: s.recording.activeCursor}
 	if scope.ActiveCursor == "" {
 		scope.ActiveCursor = "a"

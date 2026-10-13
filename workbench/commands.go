@@ -122,6 +122,7 @@ func queryCapability(id, description string, input, output reflect.Type) Capabil
 }
 func Catalog() []Capability {
 	return []Capability{
+		typedCapability("recording.keep.set", "Include/exclude a completed recording in project saves and recovery; exclusion keeps session replay/export; kept records are never silently evicted", reflect.TypeOf(RecordingKeepParams{})),
 		typedCapability("verification.import", "Validate and load a complete elab.verification v1 JSON record into an independent recorded viewer; never changes live circuit/state", reflect.TypeOf(RecordingImportParams{})),
 		typedCapability("recording.view.set", "Show live or recorded scope; recorded requires a selected completed operation", reflect.TypeOf(RecordingViewParams{})),
 		typedCapability("recording.seek", "Pause and seek exact sample index or nearest recorded time (exactly one); time ties select latest/right-hand edge sample", reflect.TypeOf(RecordingSeekParams{})),
@@ -140,7 +141,8 @@ func Catalog() []Capability {
 		typedCapability("recovery.select", "Select a listed recovery candidate; empty ID clears", reflect.TypeOf(IDParams{})),
 		typedCapability("recovery.restore", "Validate hash and complete snapshot, then restore as a dirty unassociated copy; protects unsaved work and document generation", reflect.TypeOf(RecoveryChoiceParams{})),
 		typedCapability("recovery.dismiss", "Remove exactly the hash-confirmed recovery snapshot; other active sessions are protected", reflect.TypeOf(RecoveryChoiceParams{})),
-		queryCapability("recovery.inspect", "Read a fully validated recovery candidate and its portable schematic without modifying the editor", reflect.TypeOf(RecoveryChoiceParams{}), reflect.TypeOf(RecoveryInspection{})),
+		queryCapability("recovery.samples", "Read exact embedded recovery-recording rows without restoring; hash-confirmed candidate and recording index, pages 1–200", reflect.TypeOf(RecoverySamplesParams{}), reflect.TypeOf(VerificationPage{})),
+		queryCapability("recovery.inspect", "Read fully validated recovery configuration and captured recording metadata; use recovery.samples for bounded exact rows", reflect.TypeOf(RecoveryChoiceParams{}), reflect.TypeOf(RecoveryInspection{})),
 		typedCapability("verification.export", "Atomically export a completed recorded verification as json (captured graph/models/settings/full data) or csv (SI units/input identity); never substitutes live data", reflect.TypeOf(VerificationExportParams{})),
 		typedCapability("simulation.verify", "Start an independent recorded verification from explicit/captured startup, returning last_operation ID; <=10 s and 1000 output steps; DC duration zero; one active operation", reflect.TypeOf(VerifyParams{})),
 		typedCapability("verification.settings.set", "Set session Verify duration, sample step (0 follows project), source mode and optional initial overrides without altering the schematic/live state", reflect.TypeOf(VerificationSettings{})),
@@ -163,7 +165,7 @@ func Catalog() []Capability {
 		capability("simulation.wait", "Wait for current DC calculation (at most 5 seconds), or read ready transient state; future transient time uses paused simulation.step", false, `{"type":"object","additionalProperties":false}`),
 		capability("parts.list", "List available kinds, terminals, models and default values", false, `{"type":"object","additionalProperties":false}`),
 		typedCapability("project.clear", "Start blank; unsaved changes require discard_changes; undo restores drawing", reflect.TypeOf(ReplaceParams{})),
-		typedCapability("project.save", "Atomically save a version-3 .elab file; omit path to save current file; captures selected probes; overwrite explicitly replaces another or externally changed file", reflect.TypeOf(SaveParams{})),
+		typedCapability("project.save", "Atomically save a version-4 .elab project with kept recordings, dependency hashes and paused preference; omit path to save current file; captures selected probes; overwrite explicitly replaces another or externally changed file", reflect.TypeOf(SaveParams{})),
 		typedCapability("project.load", "Validate and load a local .elab file, restore view, and resume simulation; unsaved changes require discard_changes", reflect.TypeOf(LoadParams{})),
 		typedCapability("component.place", "Place a library part on the 10-unit grid; optional ID must be unused; 50 component limit", reflect.TypeOf(PlaceParams{})),
 		typedCapability("component.move", "Move a part to a grid position within ±10000; preserve all wires and electrical results", reflect.TypeOf(MoveParams{})),

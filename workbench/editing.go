@@ -115,6 +115,12 @@ func (s *Service) connectLocked(p ConnectParams) error {
 }
 func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "recording.keep.set":
+		var p RecordingKeepParams
+		if err := params(raw, &p, "id", "keep"); err != nil {
+			return err
+		}
+		return s.setRecordingKeepLocked(p)
 	case "verification.import":
 		var p RecordingImportParams
 		if err := params(raw, &p, "path"); err != nil {

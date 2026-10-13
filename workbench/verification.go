@@ -43,6 +43,9 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 			return &actionError{"busy", "A verification is already active; inspect or cancel it first"}
 		}
 	}
+	if err := s.requireRecordingSlotLocked(); err != nil {
+		return err
+	}
 	settings := cloneVerificationSettings(s.verificationSettings)
 	if p.Duration != nil {
 		settings.Duration = *p.Duration
@@ -142,7 +145,7 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 	s.operationSerial++
 	id := fmt.Sprintf("verify-%d", s.operationSerial)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	operation := &verificationOperation{ctx: ctx, cancel: cancel, summary: OperationSummary{ID: id, Kind: "verify", Status: "queued", InputRevision: s.revision, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration, RequestedDuration: settings.Duration, TotalSteps: steps}}
+	operation := &verificationOperation{done: make(chan struct{}), ctx: ctx, cancel: cancel, summary: OperationSummary{ID: id, Kind: "verify", Status: "queued", InputRevision: s.revision, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration, RequestedDuration: settings.Duration, TotalSteps: steps}}
 	s.retainOperationLocked(operation)
 	s.selectRecordingLocked(id)
 	s.lastOperation = id
@@ -174,7 +177,8 @@ func operationActive(status string) bool {
 }
 func (s *Service) operationSummaryLocked(operation *verificationOperation) OperationSummary {
 	out := operation.summary
-	out.SourceUnchanged = out.Kind != "record-import" && out.ElectricalRevision == s.electrical && out.DocumentGeneration == s.documentGeneration
+	out.KeptInProject = operation.keep
+	out.SourceUnchanged = out.Kind == "verify" && out.ElectricalRevision == s.electrical && out.DocumentGeneration == s.documentGeneration
 	if out.Error != nil {
 		failure := *out.Error
 		out.Error = &failure
@@ -222,15 +226,18 @@ func (s *Service) verificationQueryLocked(command string, raw json.RawMessage) (
 	if operation.record == nil {
 		return nil, &actionError{"not-ready", "Only completed verification has recorded samples"}
 	}
-	if p.Limit == 0 {
-		p.Limit = 100
+	return recordedSamplePage(p.ID, operation.record.metadata.Probes, operation.record.rows, p.Offset, p.Limit)
+}
+func recordedSamplePage(id string, probes []Probe, rows []VerificationRow, offset, limit int) (VerificationPage, error) {
+	if limit == 0 {
+		limit = 100
 	}
-	if p.Offset < 0 || p.Offset > len(operation.record.rows) || p.Limit < 1 || p.Limit > 200 {
-		return nil, fmt.Errorf("sample pages require offset within the record and limit 1–200")
+	if offset < 0 || offset > len(rows) || limit < 1 || limit > 200 {
+		return VerificationPage{}, fmt.Errorf("sample pages require offset within the record and limit 1–200")
 	}
-	end := min(len(operation.record.rows), p.Offset+p.Limit)
-	page := VerificationPage{ID: p.ID, Offset: p.Offset, NextOffset: end, Total: len(operation.record.rows), Probes: append([]Probe{}, operation.record.metadata.Probes...), Rows: []VerificationRow{}}
-	for _, row := range operation.record.rows[p.Offset:end] {
+	end := min(len(rows), offset+limit)
+	page := VerificationPage{ID: id, Offset: offset, NextOffset: end, Total: len(rows), Probes: append([]Probe{}, probes...), Rows: []VerificationRow{}}
+	for _, row := range rows[offset:end] {
 		page.Rows = append(page.Rows, VerificationRow{Time: row.Time, Values: append([]float64{}, row.Values...)})
 	}
 	return page, nil

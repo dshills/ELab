@@ -4,7 +4,7 @@ import "encoding/json"
 
 const RecoveryFormat = "elab.recovery"
 const RecoveryVersion = 1
-const MaxRecoveryBytes = MaxDocumentBytes + 16*1024
+const MaxRecoveryBytes = MaxProjectBytes + 16*1024
 const MaxRecoveryEntries = 128
 
 type RecoveryConfigureParams struct {
@@ -26,6 +26,7 @@ type RecoveryCandidate struct {
 	SHA256         string `json:"sha256"`
 	CurrentSession bool   `json:"current_session"`
 	ActiveSession  bool   `json:"active_session"`
+	Recordings     int    `json:"recording_count"`
 	Components     int    `json:"components"`
 }
 type RecoveryProblem struct {
@@ -64,8 +65,8 @@ type recoveryCapture struct {
 	dirty                       bool
 }
 type RecoveryInspection struct {
-	Candidate RecoveryCandidate `json:"candidate"`
-	Document  Document          `json:"document"`
+	Candidate RecoveryCandidate  `json:"candidate"`
+	Document  DocumentInspection `json:"document"`
 }
 
 func cloneRecovery(in RecoveryState) RecoveryState {
@@ -73,4 +74,26 @@ func cloneRecovery(in RecoveryState) RecoveryState {
 	out.Candidates = append([]RecoveryCandidate{}, in.Candidates...)
 	out.Problems = append([]RecoveryProblem{}, in.Problems...)
 	return out
+}
+
+type DocumentInspection struct {
+	Format            string                 `json:"format"`
+	Version           int                    `json:"version"`
+	Graph             Graph                  `json:"graph"`
+	View              View                   `json:"view"`
+	ScopeProbes       *ProbeParams           `json:"scope_probes,omitempty"`
+	TransientSettings *TransientSettings     `json:"transient_settings,omitempty"`
+	LEDModel          LEDModel               `json:"led_model"`
+	NPNModel          *NPNModel              `json:"npn_model,omitempty"`
+	Paused            bool                   `json:"paused"`
+	Recordings        []VerificationMetadata `json:"recordings"`
+	SelectedRecording int                    `json:"selected_recording"`
+	ViewingRecording  bool                   `json:"viewing_recording"`
+}
+type RecoverySamplesParams struct {
+	ID        string `json:"id"`
+	SHA256    string `json:"sha256"`
+	Recording int    `json:"recording_index"`
+	Offset    int    `json:"offset,omitempty"`
+	Limit     int    `json:"limit,omitempty"`
 }

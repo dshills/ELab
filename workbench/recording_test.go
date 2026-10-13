@@ -39,7 +39,7 @@ func TestRecordingImportRoundTripAcrossSupportedAnalyses(t *testing.T) {
 			if record == nil || !record.Imported || !record.Viewing || record.OriginID != id || record.Index != 0 || record.Playing {
 				t.Fatal("imported viewer metadata missing")
 			}
-			if before.Document != imported.Document || before.Transient.Sample != imported.Transient.Sample || before.ElectricalRevision != imported.ElectricalRevision || before.RunID != imported.RunID || !reflect.DeepEqual(before.Components, imported.Components) || before.UndoName != imported.UndoName {
+			if schematicDocumentState(before.Document) != schematicDocumentState(imported.Document) || before.Transient.Sample != imported.Transient.Sample || before.ElectricalRevision != imported.ElectricalRevision || before.RunID != imported.RunID || !reflect.DeepEqual(before.Components, imported.Components) || before.UndoName != imported.UndoName {
 				t.Fatal("import changed live circuit/state")
 			}
 			view := inspectOperation(t, target, record.ID)

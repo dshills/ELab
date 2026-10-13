@@ -64,7 +64,7 @@ func TestNativeVerifyControlsMatchAgentScenarios(t *testing.T) {
 		t.Fatal("native/agent verification inputs or values differ")
 	}
 	after := user.service.Snapshot()
-	if after.Transient.Sample != before.Transient.Sample || after.ElectricalRevision != before.ElectricalRevision || after.Document != before.Document {
+	if after.Transient.Sample != before.Transient.Sample || after.ElectricalRevision != before.ElectricalRevision || schematicDocumentState(after.Document) != schematicDocumentState(before.Document) {
 		t.Fatal("native verify touched live state")
 	}
 	if after.Verification == nil || math.Abs(after.Verification.Readings[0].Value-2*math.Exp(-2)) > 1e-12 {

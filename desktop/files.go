@@ -48,11 +48,11 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 		var err error
 
 		if choose {
-			options := app.FileOptions{Mode: app.OpenFile, Title: "Open schematic", Extensions: []string{"elab"}}
+			options := app.FileOptions{Mode: app.OpenFile, Title: "Open project", Extensions: []string{"elab"}}
 			write := id == "project.save" || strings.HasPrefix(id, "export.") || id == "verification.export"
 			if write {
 				options.Mode = app.SaveFile
-				options.Title = "Save schematic"
+				options.Title = "Save project"
 				options.Filename = "Untitled.elab"
 			}
 			switch id {
@@ -182,14 +182,14 @@ func (s *screen) registerFileCommands() {
 	}
 }
 func (s *screen) filePrompt() ui.Node {
-	prompt := ui.Node{ID: "unsaved-prompt", Kind: ui.Dialog, Open: s.pendingCommand != "", Text: "Unsaved schematic", Dismiss: func() {
+	prompt := ui.Node{ID: "unsaved-prompt", Kind: ui.Dialog, Open: s.pendingCommand != "", Text: "Unsaved project", Dismiss: func() {
 		if s.fileBusy {
 			return
 		}
 		s.pendingCommand = ""
 		s.pendingParams = nil
 		s.app.Invalidate("main")
-	}, Children: []ui.Node{heading("unsaved-title", "Keep your changes?"), label("unsaved-description", "This schematic has unsaved changes. Save it before continuing, or discard the changes.")}}
+	}, Children: []ui.Node{heading("unsaved-title", "Keep your changes?"), label("unsaved-description", "This project has unsaved schematic or recorded-result changes. Save it before continuing, or discard the changes.")}}
 	if s.errorMessage != "" {
 		prompt.Children = append(prompt.Children, label("unsaved-error", s.errorMessage))
 	}

@@ -298,3 +298,10 @@ func TestRCDrawingScopeAndInputControlsMatchAgentCommands(t *testing.T) {
 		}
 	})
 }
+
+func schematicDocumentState(document workbench.DocumentState) workbench.DocumentState {
+	document.Dirty = document.SchematicDirty
+	document.RecordingsDirty = false
+	document.RecordingCount = 0
+	return document
+}

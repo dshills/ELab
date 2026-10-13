@@ -13,10 +13,12 @@ import (
 )
 
 const DocumentFormat = "elab.schematic"
-const DocumentVersion = 3
+const DocumentVersion = 4
 const MaxDocumentBytes = 256 * 1024
 
 type Document struct {
+	Recordings        *ProjectRecordings `json:"recordings,omitempty"`
+	Paused            *bool              `json:"paused,omitempty"`
 	ScopeProbes       *ProbeParams       `json:"scope_probes,omitempty"`
 	Format            string             `json:"format"`
 	Version           int                `json:"version"`
@@ -27,11 +29,14 @@ type Document struct {
 	TransientSettings *TransientSettings `json:"transient_settings,omitempty"`
 }
 type DocumentState struct {
-	RecoveredFrom string `json:"recovered_from,omitempty"`
-	Path          string `json:"path"`
-	Dirty         bool   `json:"dirty"`
-	FormatVersion int    `json:"format_version"`
-	Generation    uint64 `json:"generation"`
+	SchematicDirty  bool   `json:"schematic_dirty"`
+	RecordingsDirty bool   `json:"recordings_dirty"`
+	RecordingCount  int    `json:"recording_count"`
+	RecoveredFrom   string `json:"recovered_from,omitempty"`
+	Path            string `json:"path"`
+	Dirty           bool   `json:"dirty"`
+	FormatVersion   int    `json:"format_version"`
+	Generation      uint64 `json:"generation"`
 }
 type SaveParams struct {
 	ExpectedGeneration *uint64 `json:"expected_document_generation,omitempty"`
@@ -55,11 +60,11 @@ func contentHash(g Graph, settings TransientSettings) [32]byte {
 	return sha256.Sum256(data)
 }
 func (s *Service) dirtyLocked() bool {
-	return contentHash(s.graph, s.transientSettings) != s.savedGraph
+	return contentHash(s.graph, s.transientSettings) != s.savedGraph || s.recordingsDirtyLocked()
 }
 func (s *Service) requireCleanLocked(discard bool) error {
 	if s.dirtyLocked() && !discard {
-		return &actionError{"unsaved-changes", "Save your schematic first, or explicitly discard unsaved changes."}
+		return &actionError{"unsaved-changes", "Save your schematic and recorded results first, or explicitly discard unsaved changes."}
 	}
 	return nil
 }
@@ -67,6 +72,7 @@ func (s *Service) detachDocumentLocked() {
 	s.inputMode = "auto"
 	s.pendingInputMode = ""
 	s.documentGeneration++
+	s.clearProjectOperationsLocked()
 	s.recoveredFrom = ""
 	s.documentPath = ""
 	s.transientSettings = DefaultTransientSettings()
@@ -88,8 +94,8 @@ func readDocumentFile(path string) ([]byte, error) {
 	if !info.Mode().IsRegular() {
 		return nil, fileError(fmt.Errorf("choose a regular file; links and special files are not supported"))
 	}
-	if info.Size() > MaxDocumentBytes {
-		return nil, &actionError{"invalid-document", "schematic file exceeds 256 KiB"}
+	if info.Size() > MaxProjectBytes {
+		return nil, &actionError{"invalid-document", "project file exceeds 8 MiB"}
 	}
 	f, err := os.Open(path)
 	if err != nil {
@@ -103,17 +109,20 @@ func readDocumentFile(path string) ([]byte, error) {
 	if !actual.Mode().IsRegular() || !os.SameFile(info, actual) {
 		return nil, fileError(fmt.Errorf("file changed while opening; try again"))
 	}
-	data, err := io.ReadAll(io.LimitReader(f, MaxDocumentBytes+1))
+	data, err := io.ReadAll(io.LimitReader(f, MaxProjectBytes+1))
 	if err != nil {
 		return nil, fileError(err)
 	}
-	if len(data) > MaxDocumentBytes {
-		return nil, &actionError{"invalid-document", "schematic file exceeds 256 KiB"}
+	if len(data) > MaxProjectBytes {
+		return nil, &actionError{"invalid-document", "project file exceeds 8 MiB"}
 	}
 	return data, nil
 }
 func decodeDocument(data []byte) (Document, error) {
 	var d Document
+	if len(data) > MaxProjectBytes {
+		return d, fmt.Errorf("project exceeds 8 MiB")
+	}
 	if err := params(data, &d, "format", "version", "graph", "view", "led_model"); err != nil {
 		return d, fmt.Errorf("invalid schematic: %w", err)
 	}
@@ -152,6 +161,25 @@ func decodeDocument(data []byte) (Document, error) {
 	if d.Format != DocumentFormat || (d.Version < 1 || d.Version > DocumentVersion) {
 		return d, fmt.Errorf("unsupported schematic format/version; expected %s version %d", DocumentFormat, DocumentVersion)
 	}
+	if d.Version < 4 {
+		if len(data) > MaxDocumentBytes {
+			return d, fmt.Errorf("legacy schematic exceeds 256 KiB")
+		}
+		if d.Recordings != nil || d.Paused != nil {
+			return d, fmt.Errorf("recordings and paused preference require version 4")
+		}
+	} else {
+		var fields map[string]json.RawMessage
+		_ = json.Unmarshal(data, &fields)
+		if d.Paused == nil {
+			return d, fmt.Errorf("version 4 requires paused preference")
+		}
+		recordings, err := validateProjectRecordings(fields["recordings"])
+		if err != nil {
+			return d, err
+		}
+		d.Recordings = recordings
+	}
 	if d.Version >= 2 {
 		var fields map[string]json.RawMessage
 		_ = json.Unmarshal(data, &fields)
@@ -161,7 +189,7 @@ func decodeDocument(data []byte) (Document, error) {
 	}
 	if d.TransientSettings == nil {
 		if d.Version >= 2 {
-			return d, fmt.Errorf("version 2/3 requires transient settings")
+			return d, fmt.Errorf("version 2–4 requires transient settings")
 		}
 		settings := DefaultTransientSettings()
 		d.TransientSettings = &settings
@@ -169,8 +197,8 @@ func decodeDocument(data []byte) (Document, error) {
 	if err := d.TransientSettings.Validate(); err != nil {
 		return d, err
 	}
-	if d.Version == 3 && d.ScopeProbes == nil {
-		return d, fmt.Errorf("version 3 requires scope_probes")
+	if d.Version >= 3 && d.ScopeProbes == nil {
+		return d, fmt.Errorf("version 3/4 requires scope_probes")
 	}
 	if d.ScopeProbes != nil {
 		if d.Version < 3 {
@@ -268,6 +296,9 @@ func decodeDocument(data []byte) (Document, error) {
 func absOutOfBounds(p Point) bool { return p.X < -1e6 || p.X > 1e6 || p.Y < -1e6 || p.Y > 1e6 }
 
 func (s *Service) saveLocked(p SaveParams) error {
+	if s.verificationActiveLocked() {
+		return &actionError{"busy", "Finish or cancel the active verification before saving the project"}
+	}
 	if err := s.checkDocumentGenerationLocked(p.ExpectedGeneration); err != nil {
 		return err
 	}
@@ -308,8 +339,8 @@ func (s *Service) saveLocked(p SaveParams) error {
 		return err
 	}
 	data = append(data, '\n')
-	if len(data) > MaxDocumentBytes {
-		return &actionError{"invalid-document", "schematic file exceeds 256 KiB"}
+	if len(data) > MaxProjectBytes {
+		return &actionError{"invalid-document", "project file exceeds 8 MiB"}
 	}
 	f, err := os.CreateTemp(filepath.Dir(path), ".elab-save-*.tmp")
 	if err != nil {
@@ -348,6 +379,7 @@ func (s *Service) saveLocked(p SaveParams) error {
 	s.recoveredFrom = ""
 	s.documentPath = path
 	s.savedGraph = contentHash(s.graph, s.transientSettings)
+	s.savedRecordings = s.recordingMembershipHashLocked()
 	s.diskHash = sha256.Sum256(data)
 	if s.recoveryStore != nil {
 		capture := s.recoveryCaptureLocked()
@@ -385,6 +417,7 @@ func (s *Service) loadLocked(p LoadParams) error {
 	s.recoveredFrom = ""
 	s.documentPath = path
 	s.savedGraph = contentHash(s.graph, s.transientSettings)
+	s.savedRecordings = s.recordingMembershipHashLocked()
 	s.diskHash = sha256.Sum256(data)
 
 	return nil
@@ -403,7 +436,8 @@ func (s *Service) documentLocked() Document {
 	settings := s.transientSettings
 	compiled, _, _ := s.graph.Compile()
 	probes := ProbeParams{IDs: s.scopeLocked(compiled).Selected}
-	d := Document{ScopeProbes: &probes, Format: DocumentFormat, Version: DocumentVersion, Graph: s.graph.Clone(), View: s.view, LEDModel: Model(), TransientSettings: &settings}
+	paused := s.paused
+	d := Document{Recordings: s.projectRecordingsLocked(), Paused: &paused, ScopeProbes: &probes, Format: DocumentFormat, Version: DocumentVersion, Graph: s.graph.Clone(), View: s.view, LEDModel: Model(), TransientSettings: &settings}
 	for _, c := range s.graph.Components {
 		if c.Kind == "npn" {
 			m := TransistorModel()
@@ -415,6 +449,7 @@ func (s *Service) documentLocked() Document {
 }
 
 func (s *Service) installDocumentLocked(d Document) {
+	s.installProjectRecordingsLocked(d.Recordings)
 	s.inputMode = "auto"
 	s.pendingInputMode = ""
 	s.documentGeneration++
@@ -446,5 +481,6 @@ func (s *Service) installDocumentLocked(d Document) {
 	s.npn = nil
 	s.result = nil
 	s.transient = nil
-	s.paused = false
+	s.paused = d.Paused != nil && *d.Paused
+	s.restorePaused = s.paused
 }

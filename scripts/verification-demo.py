@@ -62,7 +62,9 @@ def main():
         assert len(rows) == 11 and abs(rows[-1]['values'][0] - 5*(1-math.exp(-1))) < 1e-12
         after = client.ask('project.inspect')
         assert after['transient']['sample'] == before['transient']['sample']
-        assert after['document'] == before['document'] and after['run_id'] == before['run_id']
+        assert after['document']['path'] == before['document']['path'] and after['document']['generation'] == before['document']['generation']
+        assert after['document']['schematic_dirty'] == before['document']['schematic_dirty'] and after['document']['recordings_dirty']
+        assert after['run_id'] == before['run_id']
         client.ask('component.set', {'id': 'R1', 'value': '20k'}, True)
         assert not client.ask('operation.inspect', {'id': operation_id})['operation']['source_unchanged']
         client.ask('simulation.verify', {'duration_s': 10}, True, expect='invalid-params')

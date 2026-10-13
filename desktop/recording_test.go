@@ -40,7 +40,7 @@ func TestNativeRecordingPickerAndControlsMatchAgentCommands(t *testing.T) {
 		t.Fatal(user.errorMessage)
 	}
 	agentAction(t, agent, "verification.import", workbench.RecordingImportParams{Path: path})
-	if user.service.Snapshot().Document != before.Document || len(user.service.Snapshot().Components) != 0 {
+	if schematicDocumentState(user.service.Snapshot().Document) != schematicDocumentState(before.Document) || len(user.service.Snapshot().Components) != 0 {
 		t.Fatal("native import changed blank live schematic")
 	}
 	uiAction(t, user, "recorded-index", &ui.ChangeEvent{Number: 4})

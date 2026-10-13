@@ -66,7 +66,7 @@ def main():
             saved = first.ask('project.save', {'path': path}, True)
             assert not saved['document']['dirty']
             document = json.loads(Path(path).read_text())
-            assert document['format'] == 'elab.schematic' and document['version'] == 3
+            assert document['format'] == 'elab.schematic' and document['version'] == 4
             first.ask('component.set', {'id': 'R1', 'value': '1k'}, True)
             first.ask('simulation.wait')
             first.ask('project.load', {'path': path}, True, 'unsaved-changes')
@@ -90,7 +90,7 @@ def main():
             else:
                 first.ask('project.clear', {}, True)
         report = dict(passed=True, transport='desktop-socket' if args.connect else 'headless-stdio',
-                      format='elab.schematic', version=3,
+                      format='elab.schematic', version=4,
                       checks=['exact graph/value/rotation round trip', 'saved viewport', 'live recomputation',
                               'new process reload', 'unsaved change protection', 'external file conflict',
                               'invalid file refusal', 'explicit overwrite'],

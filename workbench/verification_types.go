@@ -39,6 +39,7 @@ type VerifyParams struct {
 	ProbeIDs       []string           `json:"probe_ids,omitempty"`
 }
 type OperationSummary struct {
+	KeptInProject      bool     `json:"kept_in_project"`
 	SourcePath         string   `json:"source_path,omitempty"`
 	SourceSHA256       string   `json:"source_sha256,omitempty"`
 	ID                 string   `json:"id"`
@@ -119,6 +120,8 @@ type verificationRecord struct {
 	rows     []VerificationRow
 }
 type verificationOperation struct {
+	done          chan struct{}
+	keep          bool
 	inputMetadata VerificationMetadata
 	summary       OperationSummary
 	ctx           context.Context

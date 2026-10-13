@@ -84,7 +84,7 @@ func (s *screen) recoveryInspector(state workbench.Snapshot) []ui.Node {
 	}})
 	if chosen != nil {
 		choice := workbench.RecoveryChoiceParams{ID: chosen.ID, SHA256: chosen.SHA256, ExpectedGeneration: &state.Document.Generation}
-		nodes = append(nodes, quiet("recovery-summary", fmt.Sprintf("%d components · %s", chosen.Components, recoveryTime(chosen.SavedAt))), buttonStyle(ui.Node{ID: "recovery-restore", Kind: ui.Button, Text: "Restore as a new copy", Disabled: s.fileBusy || s.pendingCommand != "", Accessibility: ui.Accessibility{Name: "Restore recovery as a new copy"}, Activate: func() { s.requestReplace("recovery.restore", choice) }}, true))
+		nodes = append(nodes, quiet("recovery-summary", fmt.Sprintf("%d components · %d recordings · %s", chosen.Components, chosen.Recordings, recoveryTime(chosen.SavedAt))), buttonStyle(ui.Node{ID: "recovery-restore", Kind: ui.Button, Text: "Restore as a new copy", Disabled: s.fileBusy || s.pendingCommand != "", Accessibility: ui.Accessibility{Name: "Restore recovery as a new copy"}, Activate: func() { s.requestReplace("recovery.restore", choice) }}, true))
 		dismiss := s.action("recovery-dismiss", "Dismiss this snapshot", "recovery.dismiss", choice)
 		// Other live sessions keep their snapshots. The shared service enforces ownership.
 		dismiss.Disabled = chosen.ActiveSession && !chosen.CurrentSession

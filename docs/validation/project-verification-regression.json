@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "transport": "headless stdio",
+  "schema_version": 2,
+  "capabilities": 77,
+  "rc_voltage_10ms_v": 3.160602794142789,
+  "rc_samples": 11,
+  "flasher_samples": 21,
+  "cancellation": "canceled",
+  "checks": [
+    "local schema reference resolution",
+    "accepted operation ID and completion",
+    "RC analytical reference",
+    "paged SI samples",
+    "captured source survives edits",
+    "live time/state/history preserved",
+    "admission bounds",
+    "portable recorded JSON/CSV",
+    "mixed live/offline numerical parity",
+    "real cancellation with no partial recorded samples"
+  ]
+}

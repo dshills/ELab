@@ -60,7 +60,7 @@ func TestVerificationRCReferenceIndependentStateAndMetadata(t *testing.T) {
 		t.Fatalf("verify RC reference got %.15g", last.Values[0])
 	}
 	after := s.Snapshot()
-	if after.Transient.Sample != before.Transient.Sample || after.ElectricalRevision != before.ElectricalRevision || after.RunID != before.RunID || after.Document != before.Document || !reflect.DeepEqual(after.Components, before.Components) || after.CanUndo != before.CanUndo {
+	if after.Transient.Sample != before.Transient.Sample || after.ElectricalRevision != before.ElectricalRevision || after.RunID != before.RunID || schematicDocumentState(after.Document) != schematicDocumentState(before.Document) || !reflect.DeepEqual(after.Components, before.Components) || after.CanUndo != before.CanUndo {
 		t.Fatal("verify changed live/source state")
 	}
 	retry := call(t, s, "simulation.verify", VerifyParams{Duration: &duration}, "verify")
@@ -158,7 +158,7 @@ func TestVerificationCancellationFailureAndAdmissionBounds(t *testing.T) {
 	defer s.Close()
 	duration := .1
 	s.mu.Lock()
-	operation := &verificationOperation{summary: OperationSummary{ID: "queued-test", Status: "queued"}}
+	operation := &verificationOperation{done: make(chan struct{}), summary: OperationSummary{ID: "queued-test", Status: "queued"}}
 	operation.ctx, operation.cancel = context.WithCancel(context.Background())
 	s.operations = map[string]*verificationOperation{"queued-test": operation}
 	s.operationOrder = []string{"queued-test"}

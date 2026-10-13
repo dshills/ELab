@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "capabilities": 77,
+  "project_version": 4,
+  "embedded_samples": 21,
+  "live_restart_time_s": 0,
+  "saved_pause_restored": true,
+  "checks": [
+    "completed recording makes saved project dirty",
+    "record-only unsaved guard",
+    "embedded full captured metadata/rows",
+    "canonical dependency hashes",
+    "no portable host-path leakage",
+    "fresh-process record portability",
+    "fresh paused live startup",
+    "explicit recorded viewer",
+    "include/exclude membership restores clean save point",
+    "tampered dependency refused without replacing current work"
+  ]
+}

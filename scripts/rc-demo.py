@@ -61,7 +61,7 @@ def main():
             path = args.fixture.resolve() if args.fixture else Path(directory)/'RC.elab'
             client.ask('project.save', {'path': str(path), 'overwrite': True}, True)
             doc = json.loads(path.read_text())
-            assert doc['version'] == 3 and doc['transient_settings']['step_s'] == .001
+            assert doc['version'] == 4 and doc['transient_settings']['step_s'] == .001
             fresh = Client()
             restored = fresh.ask('project.load', {'path': str(path)}, True)
             assert restored['transient']['sample']['voltage_v'] == 0

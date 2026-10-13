@@ -135,10 +135,17 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 	if selected != nil {
 		operation := *selected
 		caption := fmt.Sprintf("%s · %.0f%% · %.4g / %.4g s", operation.Status, operation.Progress*100, operation.SimulatedTime, operation.RequestedDuration)
+		if operation.Status == "completed" {
+			keepLabel := "Include in project"
+			if operation.KeptInProject {
+				keepLabel = "Exclude from project"
+			}
+			nodes = append(nodes, s.action("recording-keep", keepLabel, "recording.keep.set", workbench.RecordingKeepParams{ID: operation.ID, Keep: !operation.KeptInProject}), quiet("recording-keep-help", "Kept recordings are saved with this project and protected from eviction."))
+		}
 		nodes = append(nodes, quiet("verify-progress", caption), quiet("verify-identity", fmt.Sprintf("Captured electrical revision %d · %s", operation.ElectricalRevision, operation.Actor)))
 		if !operation.SourceUnchanged {
 			message := "Recorded source differs from the current circuit."
-			if operation.Kind == "record-import" {
+			if operation.Kind != "verify" {
 				message = "Imported data has no association with the live circuit."
 			}
 			nodes = append(nodes, quiet("verify-source-changed", message))
