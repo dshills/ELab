@@ -43,13 +43,13 @@ type Capability struct {
 func capability(id, description string, mutates bool, schema string) Capability {
 	output := snapshotSchema
 	if id == "capabilities.list" {
-		output = json.RawMessage(`{"type":"object","required":["version","capabilities","retry_retention"],"properties":{"version":{"const":1},"capabilities":{"type":"array","items":{"type":"object"}},"retry_retention":{"type":"string"}}}`)
+		output = json.RawMessage(`{"type":"object","required":["version","schema_version","schemas","capabilities","retry_retention"],"properties":{"version":{"const":1},"schema_version":{"const":2},"schemas":{"type":"object","additionalProperties":{"type":"object"}},"capabilities":{"type":"array","items":{"type":"object"}},"retry_retention":{"type":"string"}}}`)
 	}
 	if id == "parts.list" {
 		data, _ := json.Marshal(typeSchema(reflect.TypeOf([]Part{})))
 		output = data
 	}
-	return Capability{id, description, mutates, json.RawMessage(schema), "Snapshot for mutations; structured query result otherwise", append(json.RawMessage(nil), output...)}
+	return Capability{id, description, mutates, json.RawMessage(schema), "Snapshot for mutations; structured query result otherwise; resolve schema refs through capabilities.list.schemas", append(json.RawMessage(nil), output...)}
 }
 
 func typedCapability(id, description string, t reflect.Type) Capability {
@@ -57,7 +57,22 @@ func typedCapability(id, description string, t reflect.Type) Capability {
 	return capability(id, description, true, string(data))
 }
 
-var snapshotSchema = func() json.RawMessage { data, _ := json.Marshal(typeSchema(reflect.TypeOf(Snapshot{}))); return data }()
+const SnapshotSchemaID = "urn:elab:snapshot:1"
+const DiscoverySchemaVersion = 2
+
+var snapshotSchema = json.RawMessage(`{"$ref":"urn:elab:snapshot:1"}`)
+var snapshotDefinition = func() json.RawMessage {
+	schema := typeSchema(reflect.TypeOf(Snapshot{}))
+	schema["$id"] = SnapshotSchemaID
+	data, _ := json.Marshal(schema)
+	return data
+}()
+
+// Schema references are local identifiers, never URLs to fetch. Returning a
+// fresh registry keeps in-process clients from changing future discovery data.
+func SchemaRegistry() map[string]json.RawMessage {
+	return map[string]json.RawMessage{SnapshotSchemaID: append(json.RawMessage(nil), snapshotDefinition...)}
+}
 
 func typeSchema(t reflect.Type) map[string]any {
 	if t == reflect.TypeOf(json.RawMessage{}) {
@@ -99,8 +114,21 @@ func typeSchema(t reflect.Type) map[string]any {
 		return map[string]any{"type": "number"}
 	}
 }
+func queryCapability(id, description string, input, output reflect.Type) Capability {
+	data, _ := json.Marshal(typeSchema(input))
+	cap := capability(id, description, false, string(data))
+	cap.OutputSchema, _ = json.Marshal(typeSchema(output))
+	return cap
+}
 func Catalog() []Capability {
 	return []Capability{
+		typedCapability("verification.export", "Atomically export a completed recorded verification as json (captured graph/models/settings/full data) or csv (SI units/input identity); never substitutes live data", reflect.TypeOf(VerificationExportParams{})),
+		typedCapability("simulation.verify", "Start an independent recorded verification from explicit/captured startup, returning last_operation ID; <=10 s and 1000 output steps; DC duration zero; one active operation", reflect.TypeOf(VerifyParams{})),
+		typedCapability("verification.settings.set", "Set session Verify duration, sample step (0 follows project), source mode and optional initial overrides without altering the schematic/live state", reflect.TypeOf(VerificationSettings{})),
+		typedCapability("operation.cancel", "Request cancellation of queued/running verification; inspect until canceled/failed/completed", reflect.TypeOf(IDParams{})),
+		typedCapability("operation.select", "Select a retained operation for its recorded preview; empty ID clears it; does not alter live simulation", reflect.TypeOf(IDParams{})),
+		queryCapability("operation.inspect", "Read progress/state/error and captured metadata/results of a retained verification", reflect.TypeOf(IDParams{}), reflect.TypeOf(OperationView{})),
+		queryCapability("operation.samples", "Read completed verification samples in pages, preserving duplicate edge timestamps; limit 1–200 (default 100)", reflect.TypeOf(VerificationPageParams{}), reflect.TypeOf(VerificationPage{})),
 		typedCapability("export.scope.csv", "Atomically export selected fresh scope-window samples with SI units, engine and run/revision identity; preserves schematic", reflect.TypeOf(ExportParams{})),
 		typedCapability("export.schematic.svg", "Atomically render the complete schematic as portable SVG using the shared wire routes; works headlessly without a solve", reflect.TypeOf(ExportParams{})),
 		capability("scope.window.set", "Set mode live or fixed with start_s/end_s inside fresh retained history; plot and interval statistics use only that window", true, `{"type":"object","required":["mode"],"properties":{"mode":{"enum":["live","fixed"]},"start_s":{"type":"number"},"end_s":{"type":"number"}},"allOf":[{"if":{"properties":{"mode":{"const":"fixed"}}},"then":{"required":["start_s","end_s"]}}],"additionalProperties":false}`),

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
+	"strings"
 
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/app"
@@ -45,22 +46,30 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 	go func() {
 		ctx := s.app.Context()
 		var err error
+
 		if choose {
 			options := app.FileOptions{Mode: app.OpenFile, Title: "Open schematic", Extensions: []string{"elab"}}
-			if id == "project.save" || id == "export.scope.csv" || id == "export.schematic.svg" {
+			write := id == "project.save" || strings.HasPrefix(id, "export.") || id == "verification.export"
+			if write {
 				options.Mode = app.SaveFile
 				options.Title = "Save schematic"
 				options.Filename = "Untitled.elab"
-				if id == "export.scope.csv" {
-					options.Title = "Export scope CSV"
-					options.Extensions = []string{"csv"}
-					options.Filename = "Waveforms.csv"
-				}
-				if id == "export.schematic.svg" {
-					options.Title = "Export schematic SVG"
-					options.Extensions = []string{"svg"}
-					options.Filename = "Schematic.svg"
-				}
+			}
+			switch id {
+			case "export.scope.csv":
+				options.Title = "Export scope CSV"
+				options.Extensions = []string{"csv"}
+				options.Filename = "Waveforms.csv"
+			case "export.schematic.svg":
+				options.Title = "Export schematic SVG"
+				options.Extensions = []string{"svg"}
+				options.Filename = "Schematic.svg"
+			case "verification.export":
+				var format string
+				_ = json.Unmarshal(fields["format"], &format)
+				options.Title = "Export recorded verification"
+				options.Extensions = []string{format}
+				options.Filename = "Verification." + format
 			}
 			if state.Document.Path != "" {
 				options.Directory = filepath.Dir(state.Document.Path)
@@ -79,11 +88,12 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 				}
 			}
 			if err == nil {
-				if id == "project.save" || id == "export.scope.csv" || id == "export.schematic.svg" {
-					raw, err = json.Marshal(workbench.SaveParams{Path: path, Overwrite: true, ExpectedGeneration: &generation})
-				} else {
-					raw, err = json.Marshal(workbench.LoadParams{Path: path, ExpectedGeneration: &generation})
+				// Preserve command-specific parameters and the original document generation.
+				fields["path"], _ = json.Marshal(path)
+				if write {
+					fields["overwrite"] = json.RawMessage("true")
 				}
+				raw, err = json.Marshal(fields)
 			}
 		}
 		var response workbench.Response
@@ -111,7 +121,7 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 				}
 			} else {
 				path := response.Result.(workbench.Snapshot).Document.Path
-				if response.Result.(workbench.Snapshot).LastExport != nil && (id == "export.scope.csv" || id == "export.schematic.svg") {
+				if response.Result.(workbench.Snapshot).LastExport != nil && (strings.HasPrefix(id, "export.") || id == "verification.export") {
 					s.fileMessage = "Exported " + filepath.Base(response.Result.(workbench.Snapshot).LastExport.Path)
 				} else if id == "project.save" {
 					s.fileMessage = "Saved " + filepath.Base(path)

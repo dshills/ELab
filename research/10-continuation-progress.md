@@ -19,14 +19,22 @@ The initial source review found and repaired:
 
 The older installed analyzers could not read the Go 1.27.2 export-data format. Compatible tools were built from existing cached modules and validated offline. No lint checks were suppressed to hide that incompatibility. A numerical race test hit the mixed engine's existing 100 ms guard while a heavy analyzer build ran concurrently; the serial quality gate passes with the guard unchanged. Heavy analysis/build tasks are kept separate from numerical acceptance tests.
 
+## Verify, operation lifecycle and recorded exports
+
+The next slice implements [bounded Verify](../docs/verification.md) with captured graph/startup/settings, independent kernels, operation IDs/progress/cancellation, retained immutable results and paged SI samples. Native settings/readouts and external agents use the same commands. JSON/CSV exports retain the captured source after editor changes. Live physical state, graph, undo and dirty state are preserved. Limits and failure semantics are explicit; partial failed/canceled computations are never published as recorded results.
+
+Discovery uses a complete local schema registry (`schema_version:2`) rather than repeating the full Snapshot definition per command. This preserves the existing 1 MiB response bound and keeps operation discovery scalable.
+
+Completed queue items: bounded Verify, operation lifecycle, and portable recorded exports. Dedicated record-file import/replay remains a follow-on item. Validation: [headless report](../docs/validation/headless-verification.json), [desktop report](../docs/validation/desktop-verification.json), core/native parity regressions and native GPU/UI smoke.
+
+Packaged slice: **0.10.0 / 24**, with [final validation](../docs/validation/verification-validation.json). The prior application bundle was preserved.
+
 ## Next work queue
 
-1. Bounded Verify experiments from explicit initial conditions, with independent recorded results.
-2. Observable operation IDs, progress, completion/error, cancellation and shared UI/agent access for verification.
-3. Portable recorded result exports with input/model/settings identity.
-4. Autosave/recovery that preserves explicitly saved files and validates recovery before replacement.
-5. Explicit schematic junction/net-label primitives and supported topology expansion.
-6. Generic diode, switch and potentiometer models with electrical fixtures.
-7. Capacity/latency measurements, keyboard/screen-reader checks and distribution qualification.
+1. Autosave/recovery that preserves explicitly saved files and validates recovery before replacement.
+2. Recorded result-file import and replay as explicitly recorded data.
+3. Explicit schematic junction/net-label primitives and supported topology expansion.
+4. Generic diode, switch and potentiometer models with electrical fixtures.
+5. Capacity/latency measurements, keyboard/screen-reader checks and distribution qualification.
 
 Every shipped user operation continues to require the same public agent command/state path. Each slice adds meaningful regression checks and records its actual limits. Participant usability and physical hardware validation remain future gates.

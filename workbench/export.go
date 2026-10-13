@@ -20,6 +20,7 @@ type ExportParams struct {
 }
 
 type Artifact struct {
+	OperationID        string `json:"operation_id,omitempty"`
 	Path               string `json:"path"`
 	Format             string `json:"format"`
 	RunID              uint64 `json:"run_id"`

@@ -19,7 +19,7 @@ type TransientSettings struct {
 }
 
 func DefaultTransientSettings() TransientSettings { return TransientSettings{.001, .05, .05, 0, .02} }
-func (c TransientSettings) Validate() error {
+func (c TransientSettings) validateNumerics() error {
 	if !finite(c.StepSeconds) || c.StepSeconds < 1e-6 || c.StepSeconds > 1 {
 		return fmt.Errorf("sample step must be 1 µs–1 s")
 	}
@@ -28,6 +28,12 @@ func (c TransientSettings) Validate() error {
 	}
 	if !finite(c.InitialVoltage) || c.InitialVoltage < 0 || c.InitialVoltage > 12 {
 		return fmt.Errorf("initial capacitor voltage must be 0–12 V")
+	}
+	return nil
+}
+func (c TransientSettings) Validate() error {
+	if err := c.validateNumerics(); err != nil {
+		return err
 	}
 	if !finite(c.PlaybackSpeed) || c.PlaybackSpeed < .001 || c.PlaybackSpeed > 1 || c.PlaybackSpeed/c.StepSeconds > 1000 {
 		return fmt.Errorf("playback must be 0.001–1 simulated s/wall s, at most 1000 samples/wall s")

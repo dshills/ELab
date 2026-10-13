@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "date": "2026-10-13",
+  "version": "0.10.0",
+  "build": "24",
+  "binary_sha256": "83056928eab7197f91052c23cc23c81bda33385b5f37c382289ba59aad4234e6",
+  "packaged_binary_matches": true,
+  "checks": [
+    "pinned Staticcheck and import formatting",
+    "Go vet and root/desktop race tests",
+    "native GPU/UI Verify smoke",
+    "packaged native smoke",
+    "headless and packaged desktop operation/export workflows",
+    "native/agent settings and result parity",
+    "real cancellation without partial recorded data",
+    "previous workflow regression"
+  ],
+  "headless_desktop_numerical_equivalence": true,
+  "capabilities": 56,
+  "schema_version": 2,
+  "rc_voltage_10ms_v": 3.160602794142789,
+  "limits": [
+    "bounded educational kernels; no hardware certification",
+    "one active verification, 1000 output steps, 4096 frames and eight retained operations",
+    "recorded-file import/replay and autosave/recovery remain next items",
+    "private unsigned local app; distribution audit pending"
+  ]
+}

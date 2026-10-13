@@ -49,3 +49,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Selectable probes and scope cursors](../docs/scope-probes.md): both flasher branches, retained signed measurements, sample-snapped timing, and shared native/agent commands. [Headless validation](../docs/validation/headless-probes.json) and [desktop validation](../docs/validation/desktop-probes.json).
 
 - [Next ten implemented workflow items](09-next-ten-implementation.md): search, duplication, named history, atomic edits, direct plotting, fixed intervals/statistics, saved probes, CSV and SVG exports, with headless/native validation.
+
+- [Continuing implementation and code quality](10-continuation-progress.md): local checkpoints, reviewed concurrency fixes, pinned lint tooling, bounded Verify operations and recorded exports.

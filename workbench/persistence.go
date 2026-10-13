@@ -381,6 +381,7 @@ func (s *Service) loadLocked(p LoadParams) error {
 	s.pendingInputMode = ""
 	s.documentGeneration++
 	s.transientSettings = *d.TransientSettings
+	s.verificationSettings = DefaultVerificationSettings()
 	s.scopeConfigured = d.ScopeProbes != nil
 	s.scopeProbes = nil
 	if d.ScopeProbes != nil {

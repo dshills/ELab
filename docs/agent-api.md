@@ -153,3 +153,9 @@ The scope snapshot exposes actual/requested A/B times, validity, signed `delta_s
 ## Pending file actions and document identity
 
 Save, Load, and both exports accept optional `expected_document_generation` in addition to ordinary revision/retry admission. Capture it from `snapshot.document.generation` when a file choice begins. A replacement project causes `conflict` before any read/write/publication; clock ticks and edits within the same document do not change the generation. Native file pickers preserve this guard through unsaved-change decisions. Omit it for ordinary immediate agent commands that already use the current revision.
+
+## Verify operations and schema registry
+
+`capabilities.list` now includes `schema_version:2` and `schemas`. Resolve output-schema references such as `urn:elab:snapshot:1` from that local registry; no network fetching is needed. Query output schemas stay explicit.
+
+`simulation.verify` accepts a bounded startup scenario and returns a Snapshot's `last_operation` immediately. Inspect status/captured input/results with `operation.inspect`, page completed SI samples with `operation.samples`, and cancel/select through `operation.cancel` / `operation.select`. `verification.settings.set` changes session defaults without changing live state. `verification.export` saves the completed captured record as JSON or CSV. Recorded data is separate from current live readings. See [Verify command/lifecycle/validation details](verification.md).

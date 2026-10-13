@@ -1,0 +1,304 @@
+package workbench
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"math"
+	"time"
+)
+
+const MaxVerificationSteps = 1000
+const MaxVerificationFrames = 4096
+const MaxVerificationOperations = 8
+
+func validateVerificationSettings(settings VerificationSettings, g Graph) error {
+	if !finite(settings.Duration) || settings.Duration < 0 || settings.Duration > 10 {
+		return fmt.Errorf("verify duration must be 0–10 seconds; DC uses zero")
+	}
+	if !finite(settings.Step) || settings.Step < 0 || settings.Step > 1 || settings.Step != 0 && settings.Step < 1e-6 {
+		return fmt.Errorf("verify sample step must be 0 (project default) or 1 µs–1 s")
+	}
+	switch settings.InputMode {
+	case "auto", "high", "low", "charge", "discharge":
+	default:
+		return fmt.Errorf("unknown verify input mode")
+	}
+	if settings.InitialVoltage != nil && (!finite(*settings.InitialVoltage) || *settings.InitialVoltage < 0 || *settings.InitialVoltage > 12) {
+		return fmt.Errorf("default verify initial voltage must be 0–12 V")
+	}
+	seen := map[string]bool{}
+	for _, initial := range settings.Capacitors {
+		p, ok := g.Component(initial.ID)
+		if !ok || p.Kind != "capacitor" || seen[initial.ID] || !finite(initial.Voltage) || math.Abs(initial.Voltage) > 12 {
+			return fmt.Errorf("invalid or duplicate capacitor initial condition %q", initial.ID)
+		}
+		seen[initial.ID] = true
+	}
+	return nil
+}
+func (s *Service) startVerificationLocked(p VerifyParams) error {
+	for _, id := range s.operationOrder {
+		if operationActive(s.operations[id].summary.Status) {
+			return &actionError{"busy", "A verification is already active; inspect or cancel it first"}
+		}
+	}
+	settings := cloneVerificationSettings(s.verificationSettings)
+	if p.Duration != nil {
+		settings.Duration = *p.Duration
+	}
+	if p.Step != nil {
+		settings.Step = *p.Step
+	}
+	if p.InputMode != "" {
+		settings.InputMode = p.InputMode
+	}
+	if p.InitialVoltage != nil {
+		settings.InitialVoltage = p.InitialVoltage
+	}
+	if p.Capacitors != nil {
+		settings.Capacitors = p.Capacitors
+	}
+	graph := s.graph.Clone()
+	if err := validateVerificationSettings(settings, graph); err != nil {
+		return err
+	}
+	cfg := s.transientSettings
+	if settings.Step != 0 {
+		cfg.StepSeconds = settings.Step
+	}
+	if settings.InitialVoltage != nil {
+		cfg.InitialVoltage = *settings.InitialVoltage
+	}
+	for _, initial := range settings.Capacitors {
+		for i := range graph.Components {
+			if graph.Components[i].ID == initial.ID {
+				v := initial.Voltage
+				graph.Components[i].InitialVoltage = &v
+			}
+		}
+	}
+	compiled, _, diagnostic := graph.Compile()
+	if diagnostic != nil {
+		return &actionError{"unavailable", "Complete a supported circuit before Verify: " + diagnostic.Message}
+	}
+	transient := IsTransientAnalysis(compiled.Analysis)
+	if transient {
+		if settings.Duration <= 0 {
+			return fmt.Errorf("transient Verify requires a positive duration")
+		}
+		if err := cfg.validateNumerics(); err != nil {
+			return err
+		}
+	} else {
+		if p.Duration == nil {
+			settings.Duration = 0
+		}
+		if settings.Duration != 0 {
+			return fmt.Errorf("DC Verify is an operating point: duration_s must be zero")
+		}
+		if settings.InitialVoltage != nil || len(settings.Capacitors) > 0 {
+			return fmt.Errorf("initial capacitor conditions require a transient circuit")
+		}
+	}
+	if !verificationInputModeValid(compiled.Analysis, settings.InputMode) {
+		return fmt.Errorf("verify input mode does not match the circuit analysis")
+	}
+	steps := 1
+	if transient {
+		steps = int(math.Ceil(settings.Duration / cfg.StepSeconds))
+		if steps > MaxVerificationSteps {
+			return fmt.Errorf("verify supports at most %d output steps; shorten duration or increase its sample step", MaxVerificationSteps)
+		}
+	}
+	ids := p.ProbeIDs
+	if ids == nil {
+		ids = s.scopeLocked(compiled).Selected
+		if len(ids) == 0 && !transient {
+			if compiled.Analysis == NPNAnalysis {
+				ids = []string{"i:" + compiled.Transistor.ID + ".collector", "v:" + compiled.Transistor.ID + ".collector", "i:" + compiled.Transistor.ID + ".base", "v:" + compiled.Transistor.ID + ".base"}
+			} else {
+				ids = []string{"i:" + compiled.LED.ID, "v:" + compiled.LED.ID, "v:" + compiled.Resistor.ID, "v:" + compiled.Source.ID}
+			}
+		}
+	}
+	if len(ids) > MaxScopeProbes {
+		return fmt.Errorf("verify supports at most six probes")
+	}
+	available := map[string]Probe{}
+	for _, probe := range probeInventory(graph) {
+		available[probe.ID] = probe
+	}
+	probes := []Probe{}
+	seen := map[string]bool{}
+	for _, id := range ids {
+		probe, ok := available[id]
+		if !ok || seen[id] {
+			return fmt.Errorf("unknown or duplicate verify probe %q", id)
+		}
+		seen[id] = true
+		probes = append(probes, probe)
+	}
+	s.operationSerial++
+	id := fmt.Sprintf("verify-%d", s.operationSerial)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	operation := &verificationOperation{ctx: ctx, cancel: cancel, summary: OperationSummary{ID: id, Kind: "verify", Status: "queued", InputRevision: s.revision, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration, RequestedDuration: settings.Duration, TotalSteps: steps}}
+	if s.operations == nil {
+		s.operations = map[string]*verificationOperation{}
+	}
+	if len(s.operationOrder) >= MaxVerificationOperations {
+		old := s.operationOrder[0]
+		delete(s.operations, old)
+		s.operationOrder = s.operationOrder[1:]
+	}
+	s.operations[id] = operation
+	s.operationOrder = append(s.operationOrder, id)
+	s.selectedOperation = id
+	s.lastOperation = id
+	metadata := VerificationMetadata{Format: "elab.verification", Version: 1, OperationID: id, CreatedAt: time.Now().UTC().Format(time.RFC3339Nano), InputRevision: s.revision, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration, Graph: graph.Clone(), Settings: cfg, InputMode: settings.InputMode, Analysis: compiled.Analysis, LEDModel: Model(), Probes: probes, Duration: settings.Duration, Statistics: []ScopeStatistics{}}
+	if compiled.Transistor.ID != "" {
+		model := TransistorModel()
+		metadata.NPNModel = &model
+	}
+	metadata.Engine = verificationEngineID(compiled.Analysis)
+	operation.inputMetadata = cloneVerificationMetadata(metadata)
+	input := verificationInput{compiled: compiled, settings: cfg, mode: settings.InputMode, probes: probes, duration: settings.Duration, steps: steps, serial: s.operationSerial, metadata: metadata}
+	go s.runVerification(operation, input)
+	return nil
+}
+func verificationInputModeValid(analysis, mode string) bool {
+	if mode == "auto" {
+		return true
+	}
+	if analysis == "RC transient" {
+		return mode == "charge" || mode == "discharge"
+	}
+	if IsNPNTransientAnalysis(analysis) {
+		return mode == "high" || mode == "low"
+	}
+	return false
+}
+func operationActive(status string) bool {
+	return status == "queued" || status == "running" || status == "canceling"
+}
+func (s *Service) operationSummaryLocked(operation *verificationOperation) OperationSummary {
+	out := operation.summary
+	out.SourceUnchanged = out.ElectricalRevision == s.electrical && out.DocumentGeneration == s.documentGeneration
+	if out.Error != nil {
+		failure := *out.Error
+		out.Error = &failure
+	}
+	return out
+}
+func (s *Service) cancelOperationLocked(id string) error {
+	operation, ok := s.operations[id]
+	if !ok {
+		return &actionError{"not-found", "Operation not found or no longer retained"}
+	}
+	if !operationActive(operation.summary.Status) {
+		return &actionError{"unavailable", "Operation already finished"}
+	}
+	operation.summary.Status = "canceling"
+	operation.cancel()
+	return nil
+}
+func (s *Service) verificationQueryLocked(command string, raw json.RawMessage) (any, error) {
+	if command == "operation.inspect" {
+		var p IDParams
+		if err := params(raw, &p, "id"); err != nil {
+			return nil, err
+		}
+		operation, ok := s.operations[p.ID]
+		if !ok {
+			return nil, &actionError{"not-found", "Operation not found or no longer retained"}
+		}
+		captured := cloneVerificationMetadata(operation.inputMetadata)
+		view := OperationView{Operation: s.operationSummaryLocked(operation), Metadata: &captured}
+		if operation.record != nil {
+			metadata := cloneVerificationMetadata(operation.record.metadata)
+			view.Metadata = &metadata
+		}
+		return view, nil
+	}
+	var p VerificationPageParams
+	if err := params(raw, &p, "id"); err != nil {
+		return nil, err
+	}
+	operation, ok := s.operations[p.ID]
+	if !ok {
+		return nil, &actionError{"not-found", "Operation not found or no longer retained"}
+	}
+	if operation.record == nil {
+		return nil, &actionError{"not-ready", "Only completed verification has recorded samples"}
+	}
+	if p.Limit == 0 {
+		p.Limit = 100
+	}
+	if p.Offset < 0 || p.Offset > len(operation.record.rows) || p.Limit < 1 || p.Limit > 200 {
+		return nil, fmt.Errorf("sample pages require offset within the record and limit 1–200")
+	}
+	end := min(len(operation.record.rows), p.Offset+p.Limit)
+	page := VerificationPage{ID: p.ID, Offset: p.Offset, NextOffset: end, Total: len(operation.record.rows), Probes: append([]Probe{}, operation.record.metadata.Probes...), Rows: []VerificationRow{}}
+	for _, row := range operation.record.rows[p.Offset:end] {
+		page.Rows = append(page.Rows, VerificationRow{Time: row.Time, Values: append([]float64{}, row.Values...)})
+	}
+	return page, nil
+}
+func cloneVerificationMetadata(in VerificationMetadata) VerificationMetadata {
+	out := in
+	out.Graph = in.Graph.Clone()
+	out.Probes = append([]Probe{}, in.Probes...)
+	out.Statistics = append([]ScopeStatistics{}, in.Statistics...)
+	out.NPN = cloneNPN(in.NPN)
+	out.Mixed = cloneMixed(in.Mixed)
+	if in.NPNModel != nil {
+		model := *in.NPNModel
+		out.NPNModel = &model
+	}
+	if in.LED != nil {
+		r := *in.LED
+		r.Nodes = map[string]float64{}
+		for k, v := range in.LED.Nodes {
+			r.Nodes[k] = v
+		}
+		out.LED = &r
+	}
+	return out
+}
+
+func validateCapacitorInitialFields(raw json.RawMessage) error {
+	var object map[string]json.RawMessage
+	_ = json.Unmarshal(raw, &object)
+	field, exists := object["capacitor_initials"]
+	if !exists {
+		return nil
+	}
+	var rows []json.RawMessage
+	if err := json.Unmarshal(field, &rows); err != nil {
+		return err
+	}
+	if rows == nil {
+		return fmt.Errorf("capacitor_initials must be an array")
+	}
+	for _, row := range rows {
+		if err := params(row, &CapacitorInitial{}, "id", "voltage_v"); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func verificationEngineID(analysis string) string {
+	switch analysis {
+	case MixedAnalysis:
+		return MixedEngineID
+	case "RC transient":
+		return RCEngineID
+	case NPNTransientAnalysis:
+		return NPNTransientEngineID
+	case NPNAnalysis:
+		return NPNEngineID
+	default:
+		return EngineID
+	}
+}

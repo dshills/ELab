@@ -12,52 +12,62 @@ import (
 )
 
 type Snapshot struct {
-	LastExport         *Artifact         `json:"last_export,omitempty"`
-	PartSearch         string            `json:"part_search"`
-	MatchingParts      []Part            `json:"matching_parts"`
-	UndoName           string            `json:"undo_name"`
-	RedoName           string            `json:"redo_name"`
-	Scope              Scope             `json:"scope"`
-	Mixed              *MixedResult      `json:"mixed,omitempty"`
-	NPN                *NPNResult        `json:"npn,omitempty"`
-	Transient          *Transient        `json:"transient,omitempty"`
-	TransientSettings  TransientSettings `json:"transient_settings"`
-	Document           DocumentState     `json:"document"`
-	CommandRevision    uint64            `json:"command_revision"`
-	Revision           uint64            `json:"revision"`
-	ElectricalRevision uint64            `json:"electrical_revision"`
-	Circuit            Circuit           `json:"circuit"`
-	Components         []Component       `json:"components"`
-	Wires              []Wire            `json:"wires"`
-	Nets               []Net             `json:"nets"`
-	Drawing            DrawingState      `json:"drawing"`
-	Model              LEDModel          `json:"model"`
-	Selected           string            `json:"selected"`
-	View               View              `json:"view"`
-	Status             string            `json:"status"`
-	Analysis           string            `json:"analysis"`
-	Paused             bool              `json:"paused"`
-	RunID              uint64            `json:"run_id"`
-	Result             *Result           `json:"result,omitempty"`
-	Diagnostics        []Diagnostic      `json:"diagnostics"`
-	CanUndo            bool              `json:"can_undo"`
-	CanRedo            bool              `json:"can_redo"`
-	LastActor          string            `json:"last_actor"`
-	Closed             bool              `json:"closed"`
+	VerificationSettings VerificationSettings `json:"verification_settings"`
+	Operations           []OperationSummary   `json:"operations"`
+	SelectedOperation    string               `json:"selected_operation"`
+	LastOperation        string               `json:"last_operation,omitempty"`
+	Verification         *VerificationPreview `json:"verification,omitempty"`
+	LastExport           *Artifact            `json:"last_export,omitempty"`
+	PartSearch           string               `json:"part_search"`
+	MatchingParts        []Part               `json:"matching_parts"`
+	UndoName             string               `json:"undo_name"`
+	RedoName             string               `json:"redo_name"`
+	Scope                Scope                `json:"scope"`
+	Mixed                *MixedResult         `json:"mixed,omitempty"`
+	NPN                  *NPNResult           `json:"npn,omitempty"`
+	Transient            *Transient           `json:"transient,omitempty"`
+	TransientSettings    TransientSettings    `json:"transient_settings"`
+	Document             DocumentState        `json:"document"`
+	CommandRevision      uint64               `json:"command_revision"`
+	Revision             uint64               `json:"revision"`
+	ElectricalRevision   uint64               `json:"electrical_revision"`
+	Circuit              Circuit              `json:"circuit"`
+	Components           []Component          `json:"components"`
+	Wires                []Wire               `json:"wires"`
+	Nets                 []Net                `json:"nets"`
+	Drawing              DrawingState         `json:"drawing"`
+	Model                LEDModel             `json:"model"`
+	Selected             string               `json:"selected"`
+	View                 View                 `json:"view"`
+	Status               string               `json:"status"`
+	Analysis             string               `json:"analysis"`
+	Paused               bool                 `json:"paused"`
+	RunID                uint64               `json:"run_id"`
+	Result               *Result              `json:"result,omitempty"`
+	Diagnostics          []Diagnostic         `json:"diagnostics"`
+	CanUndo              bool                 `json:"can_undo"`
+	CanRedo              bool                 `json:"can_redo"`
+	LastActor            string               `json:"last_actor"`
+	Closed               bool                 `json:"closed"`
 }
 type savedResponse struct {
 	fingerprint [32]byte
 	response    Response
 }
 type Service struct {
-	lastExport       *Artifact
-	scopeWindow      *ScopeWindow
-	partSearch       string
-	nextHistoryName  string
-	scopeProbes      []string
-	scopeConfigured  bool
-	cursorA, cursorB *float64
-	activeCursor     string
+	operations                       map[string]*verificationOperation
+	operationOrder                   []string
+	operationSerial                  uint64
+	selectedOperation, lastOperation string
+	verificationSettings             VerificationSettings
+	lastExport                       *Artifact
+	scopeWindow                      *ScopeWindow
+	partSearch                       string
+	nextHistoryName                  string
+	scopeProbes                      []string
+	scopeConfigured                  bool
+	cursorA, cursorB                 *float64
+	activeCursor                     string
 
 	mixed                       *MixedResult
 	mixedState                  *mixedState
@@ -107,6 +117,7 @@ func newGraphService(solver func(context.Context, Circuit) (Result, error), grap
 	s.commandRevision = 1
 	s.inputMode = "auto"
 	s.transientSettings = DefaultTransientSettings()
+	s.verificationSettings = DefaultVerificationSettings()
 	s.documentGeneration = 1
 	s.savedGraph = contentHash(EmptyGraph(), s.transientSettings)
 	s.startLocked()
@@ -121,7 +132,19 @@ func (s *Service) snapshotLocked() Snapshot {
 	if analysis == "" {
 		analysis = "DC operating point"
 	}
-	out := Snapshot{PartSearch: s.partSearch, MatchingParts: filteredParts(s.partSearch), Scope: s.scopeLocked(compiled), Mixed: cloneMixed(s.mixed), NPN: cloneNPN(s.npn), CommandRevision: s.commandRevision, Transient: cloneTransient(s.transient), TransientSettings: s.transientSettings, Document: DocumentState{s.documentPath, s.dirtyLocked(), DocumentVersion, s.documentGeneration}, Revision: s.revision, ElectricalRevision: s.electrical, Circuit: s.circuit, Components: graph.Components, Wires: graph.Wires, Nets: compiled.Nets, Drawing: s.drawing, Model: Model(), Selected: s.selected, View: s.view, Status: s.status, Analysis: analysis, Paused: s.paused, RunID: s.run, Diagnostics: append([]Diagnostic{}, s.diagnostics...), CanUndo: len(s.undo) > 0, CanRedo: len(s.redo) > 0, LastActor: s.actor, Closed: s.closed}
+	out := Snapshot{VerificationSettings: cloneVerificationSettings(s.verificationSettings), Operations: []OperationSummary{}, SelectedOperation: s.selectedOperation, LastOperation: s.lastOperation, PartSearch: s.partSearch, MatchingParts: filteredParts(s.partSearch), Scope: s.scopeLocked(compiled), Mixed: cloneMixed(s.mixed), NPN: cloneNPN(s.npn), CommandRevision: s.commandRevision, Transient: cloneTransient(s.transient), TransientSettings: s.transientSettings, Document: DocumentState{s.documentPath, s.dirtyLocked(), DocumentVersion, s.documentGeneration}, Revision: s.revision, ElectricalRevision: s.electrical, Circuit: s.circuit, Components: graph.Components, Wires: graph.Wires, Nets: compiled.Nets, Drawing: s.drawing, Model: Model(), Selected: s.selected, View: s.view, Status: s.status, Analysis: analysis, Paused: s.paused, RunID: s.run, Diagnostics: append([]Diagnostic{}, s.diagnostics...), CanUndo: len(s.undo) > 0, CanRedo: len(s.redo) > 0, LastActor: s.actor, Closed: s.closed}
+	for i := len(s.operationOrder) - 1; i >= 0; i-- {
+		out.Operations = append(out.Operations, s.operationSummaryLocked(s.operations[s.operationOrder[i]]))
+	}
+	if operation := s.operations[s.selectedOperation]; operation != nil && operation.record != nil {
+		record := operation.record
+		preview := &VerificationPreview{ID: operation.summary.ID, Engine: record.metadata.Engine, InputMode: record.metadata.InputMode, Duration: record.metadata.Duration, SampleCount: record.metadata.SampleCount, Readings: []VerificationReading{}}
+		for i, probe := range record.metadata.Probes {
+			stat := record.metadata.Statistics[i]
+			preview.Readings = append(preview.Readings, VerificationReading{Probe: probe, Value: record.rows[len(record.rows)-1].Values[i], Minimum: stat.Minimum, Maximum: stat.Maximum})
+		}
+		out.Verification = preview
+	}
 	if s.lastExport != nil {
 		artifact := *s.lastExport
 		out.LastExport = &artifact
@@ -240,6 +263,12 @@ func (s *Service) closeLocked() {
 		return
 	}
 	s.closed = true
+	for _, operation := range s.operations {
+		if operationActive(operation.summary.Status) {
+			operation.cancel()
+			operation.summary.Status = "canceled"
+		}
+	}
 	s.status = "closed"
 	if s.cancel != nil {
 		s.cancel()
@@ -297,11 +326,23 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 		return fail("unknown-command", "enumerate capabilities.list for supported commands")
 	}
 	if !cap.Mutation {
+		if r.Command == "operation.inspect" || r.Command == "operation.samples" {
+			result, err := s.verificationQueryLocked(r.Command, r.Params)
+			if err != nil {
+				var action *actionError
+				if errors.As(err, &action) {
+					return fail(action.code, action.message)
+				}
+				return fail("invalid-params", err.Error())
+			}
+			out.Result = result
+			return out
+		}
 		if err := params(r.Params, &struct{}{}); err != nil {
 			return fail("invalid-params", err.Error())
 		}
 		if r.Command == "capabilities.list" {
-			out.Result = map[string]any{"version": ProtocolVersion, "capabilities": Catalog(), "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee."}
+			out.Result = map[string]any{"version": ProtocolVersion, "schema_version": DiscoverySchemaVersion, "schemas": SchemaRegistry(), "capabilities": Catalog(), "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee."}
 		} else if r.Command == "parts.list" {
 			out.Result = Library()
 		} else {
@@ -377,11 +418,15 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 		s.startLocked()
 	}
 	if r.Command == "project.clear" || r.Command == "example.reset" || forceRestart && r.Command != "simulation.restart" && r.Command != "project.load" {
+		s.verificationSettings = DefaultVerificationSettings()
 		s.scopeConfigured = false
 		s.scopeProbes = nil
 		s.activeCursor = "a"
 		s.cursorA = nil
 		s.cursorB = nil
+	}
+	if r.Command == "simulation.verify" {
+		s.operations[s.lastOperation].summary.Actor = actor
 	}
 	s.actor = actor
 	s.commandRevision++
@@ -401,6 +446,19 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	state.VerificationSettings = cloneVerificationSettings(state.VerificationSettings)
+	state.Operations = append([]OperationSummary{}, state.Operations...)
+	for i := range state.Operations {
+		if state.Operations[i].Error != nil {
+			failure := *state.Operations[i].Error
+			state.Operations[i].Error = &failure
+		}
+	}
+	if state.Verification != nil {
+		preview := *state.Verification
+		preview.Readings = append([]VerificationReading{}, preview.Readings...)
+		state.Verification = &preview
+	}
 	if state.LastExport != nil {
 		artifact := *state.LastExport
 		state.LastExport = &artifact

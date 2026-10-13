@@ -240,6 +240,7 @@ func (s *screen) view() ui.Node {
 	if workbench.IsTransientAnalysis(state.Analysis) || state.Transient != nil {
 		inspector = append(inspector, s.transientInspector(state)...)
 	}
+	inspector = append(inspector, s.verificationInspector(state)...)
 	tools := ui.Node{ID: "tools", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 36}), Align: ui.Some(ui.AlignCenter), Gap: ui.Some(float32(6))}, Children: []ui.Node{}}
 	for _, tool := range []string{"select", "wire", "pan"} {
 		n := s.action("tool-"+tool, strings.ToUpper(tool[:1])+tool[1:], "drawing.tool.set", workbench.ToolParams{Tool: tool})

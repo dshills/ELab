@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "transport": "desktop socket",
+  "schema_version": 2,
+  "capabilities": 56,
+  "rc_voltage_10ms_v": 3.160602794142789,
+  "rc_samples": 11,
+  "flasher_samples": 21,
+  "cancellation": "canceled",
+  "checks": [
+    "local schema reference resolution",
+    "accepted operation ID and completion",
+    "RC analytical reference",
+    "paged SI samples",
+    "captured source survives edits",
+    "live time/state/history preserved",
+    "admission bounds",
+    "portable recorded JSON/CSV",
+    "mixed live/offline numerical parity",
+    "real cancellation with no partial recorded samples"
+  ],
+  "artifacts": [
+    "/Users/dshills/Development/projects/ELab/docs/validation/verification-artifacts/rc-record.json",
+    "/Users/dshills/Development/projects/ELab/docs/validation/verification-artifacts/rc-record.csv"
+  ]
+}

@@ -120,7 +120,10 @@ rendered:
 	if err := nativeMixedSmoke(ctx, a, s); err != nil {
 		return err
 	}
-	return nativeWorkflowSmoke(ctx, a, s)
+	if err := nativeWorkflowSmoke(ctx, a, s); err != nil {
+		return err
+	}
+	return nativeVerificationSmoke(ctx, a, s)
 }
 
 func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
@@ -571,4 +574,48 @@ func nativeWorkflowSmoke(ctx context.Context, a *app.Application, s *screen) err
 		return err
 	}
 	return <-result
+}
+
+func nativeVerificationSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	started := make(chan error, 1)
+	if err := a.PostWait(ctx, func() {
+		if err := smokeUI(s, "verify-duration", &ui.ChangeEvent{Number: 20}); err != nil {
+			started <- err
+			return
+		}
+		if err := smokeUI(s, "verify-start", nil); err != nil {
+			started <- err
+			return
+		}
+		started <- nil
+	}); err != nil {
+		return err
+	}
+	if err := <-started; err != nil {
+		return err
+	}
+	ticker := time.NewTicker(20 * time.Millisecond)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-ticker.C:
+		}
+		state := s.service.Snapshot()
+		for _, operation := range state.Operations {
+			if operation.ID != state.LastOperation {
+				continue
+			}
+			if operation.Status == "failed" || operation.Status == "canceled" {
+				return fmt.Errorf("native verification failed: %+v", operation)
+			}
+			if operation.Status == "completed" {
+				if state.Verification == nil || state.Verification.Engine != workbench.MixedEngineID || state.Verification.SampleCount < 5 || len(state.Verification.Readings) != 6 || state.Transient.Sample.Time < .299 || state.Transient.Sample.Time > .301 {
+					return fmt.Errorf("native recorded result or live-state isolation failed")
+				}
+				return nil
+			}
+		}
+	}
 }

@@ -32,7 +32,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.9.0 --build-version 23 --platform darwin
+  --version 0.10.0 --build-version 24 --platform darwin
 ```
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
@@ -62,6 +62,10 @@ The generic Ebers–Moll junction model remains instantaneous; physical transist
 The right inspector's **Scope probes** selectors choose up to six terminal voltages or branch currents, including both flasher collectors, both LEDs, and each capacitor. Newly selected traces include already retained history without restarting the circuit. Voltage/current axes show signed values in V/mA.
 
 Pause, select cursor **A** or **B**, then click/drag the scope or enter its requested time in ms. Cursors snap to recorded samples and show actual times, Δt, reciprocal Hz, and each trace's A/B/change readings. All selections, cursor gestures, and measurements are exposed through the same agent commands. Choose a fixed interval or follow live history; the inspector shows interval min/max/sample mean/RMS. Export scope CSV or schematic SVG through native file pickers or the same agent commands. Search the component tray, duplicate selected parts, and apply paired capacitor values as one named undoable transaction. See the [scope workflow](docs/scope-probes.md) and [ten-item implementation record](research/09-next-ten-implementation.md).
+
+## Verify a captured experiment
+
+The right inspector's **Verify from startup** panel runs the current circuit with explicit duration, sample step and startup conditions while preserving the live circuit/time. It returns an operation with progress and cancellation; completed readings are labeled as recorded. Export captured input/models/settings and samples as JSON or CSV. Users and agents share all settings, commands and results. See the [Verify workflow and limits](docs/verification.md).
 
 ## Keep your schematics
 
@@ -122,6 +126,8 @@ Run `python3 scripts/mixed-demo.py --output docs/validation/headless-mixed.json`
 Run `python3 scripts/probes-demo.py --output docs/validation/headless-probes.json` to select both flasher branches and measure a period with the shared scope cursors. Add `--connect` for an owned development desktop session.
 
 Run `python3 scripts/workflow-demo.py --output docs/validation/headless-workflow.json` to verify the next ten workflow improvements. Add `--artifacts PATH` to keep a probed flasher, CSV interval, and SVG schematic.
+
+Run `python3 scripts/verification-demo.py --output docs/validation/headless-verification.json` to exercise captured startup, analytical references, paging, exports, mixed parity, and cancellation.
 
 ## Scope and structure
 

@@ -103,18 +103,10 @@ func (s *Service) startNPNTransientLocked(c Compiled) {
 	// A memoryless device model only needs two solves per electrical run. Time
 	// stepping selects these immutable phase results without holding the service
 	// lock for a nonlinear solve on every live sample.
-	dc := c
-	dc.Analysis = NPNAnalysis
-	dc.Input.Kind = "dc-source"
-	high, err := SolveNPN(context.Background(), dc)
+	high, low, err := solveNPNPhases(context.Background(), c)
 	if err == nil {
-		dc.Input.Value = 0
-		var low NPNResult
-		low, err = SolveNPN(context.Background(), dc)
-		if err == nil {
-			s.npnHigh = &high
-			s.npnLow = &low
-		}
+		s.npnHigh = high
+		s.npnLow = low
 	}
 	if err != nil {
 		s.status = "error"

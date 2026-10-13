@@ -115,6 +115,47 @@ func (s *Service) connectLocked(p ConnectParams) error {
 }
 func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "verification.export":
+		var p VerificationExportParams
+		if err := params(raw, &p, "id", "path", "format"); err != nil {
+			return err
+		}
+		return s.exportVerificationLocked(p)
+	case "verification.settings.set":
+		var p VerificationSettings
+		if err := params(raw, &p, "duration_s", "sample_step_s", "input_mode", "capacitor_initials"); err != nil {
+			return err
+		}
+		if err := validateCapacitorInitialFields(raw); err != nil {
+			return err
+		}
+		if err := validateVerificationSettings(p, s.graph); err != nil {
+			return err
+		}
+		s.verificationSettings = cloneVerificationSettings(p)
+		return nil
+	case "simulation.verify":
+		var p VerifyParams
+		if err := params(raw, &p); err != nil {
+			return err
+		}
+		if err := validateCapacitorInitialFields(raw); err != nil {
+			return err
+		}
+		return s.startVerificationLocked(p)
+	case "operation.cancel", "operation.select":
+		var p IDParams
+		if err := params(raw, &p, "id"); err != nil {
+			return err
+		}
+		if command == "operation.cancel" {
+			return s.cancelOperationLocked(p.ID)
+		}
+		if p.ID != "" && s.operations[p.ID] == nil {
+			return &actionError{"not-found", "Operation not found or no longer retained"}
+		}
+		s.selectedOperation = p.ID
+		return nil
 	case "export.scope.csv", "export.schematic.svg":
 		var p ExportParams
 		if err := params(raw, &p, "path"); err != nil {
