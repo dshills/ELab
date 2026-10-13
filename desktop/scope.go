@@ -178,8 +178,8 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	if npn {
 		titleText = "Live NPN scope"
 	}
-	if t != nil && t.Engine == workbench.MixedEngineID {
-		titleText = "Live RC / NPN"
+	if t != nil && (t.Engine == workbench.MixedEngineID || t.Engine == workbench.NetworkEngineID) {
+		titleText = "Live circuit network"
 	}
 	title := section("scope-title", titleText)
 	title.MinWidth = 110
@@ -190,7 +190,7 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	if npn {
 		modes = []struct{ id, text string }{{"auto", "Auto"}, {"high", "High"}, {"low", "Low"}}
 	}
-	if t != nil && t.Engine == workbench.MixedEngineID {
+	if t != nil && (t.Engine == workbench.MixedEngineID || t.Engine == workbench.NetworkEngineID) {
 		for _, c := range state.Components {
 			if c.ID == t.SourceID && c.Kind == "dc-source" {
 				modes = []struct{ id, text string }{{"auto", "Auto"}, {"high", "Power on"}, {"low", "Power off"}}
@@ -227,9 +227,9 @@ func (s *screen) transientInspector(state workbench.Snapshot) []ui.Node {
 		title = "Pulse experiment"
 		help = "Instantaneous NPN response. Settings restart time; no device delay or storage."
 	}
-	mixed := state.Analysis == workbench.MixedAnalysis || state.Transient != nil && state.Transient.Engine == workbench.MixedEngineID
+	mixed := workbench.IsNetworkAnalysis(state.Analysis) || state.Transient != nil && state.Transient.Engine == workbench.NetworkEngineID
 	if mixed {
-		title = "Mixed experiment"
+		title = "Network experiment"
 		help = "Capacitor state evolves with the coupled circuit. Select each C to set signed startup voltage."
 	}
 	nodes := s.probeInspector(state)

@@ -102,7 +102,7 @@ func (s *screen) view() ui.Node {
 	statusNode.Style.Typography = ui.Some(ui.Typography{Size: 13, Weight: 600})
 
 	palette := []ui.Node{section("parts-title", "Components"), quiet("placement-help", "Choose a part, then click the sheet.")}
-	names := map[string]string{"dc-source": "+  DC source", "resistor": "∿  Resistor", "led": "▷  Red LED", "ground": "⊥  Ground", "capacitor": "Ⅱ  Capacitor", "pulse-source": "▥  Pulse source", "npn": "↗  NPN transistor", "junction": "●  Junction", "net-label": "→  Net label"}
+	names := map[string]string{"dc-source": "+  DC source", "resistor": "∿  Resistor", "led": "▷  Red LED", "ground": "⊥  Ground", "capacitor": "Ⅱ  Capacitor", "pulse-source": "▥  Pulse source", "npn": "↗  NPN transistor", "junction": "●  Junction", "net-label": "→  Net label", "switch": "/  SPST switch"}
 	palette = append(palette, ui.Node{ID: "part-search", Kind: ui.TextField, Text: state.PartSearch, Accessibility: ui.Accessibility{Name: "Search components"}, Change: func(e ui.ChangeEvent) { s.invoke("parts.search.set", workbench.SearchParams{Query: e.Text}) }})
 	for _, part := range state.MatchingParts {
 		n := s.action("part-"+part.Kind, names[part.Kind], "drawing.tool.set", workbench.ToolParams{Tool: "place", Kind: part.Kind})
@@ -169,8 +169,8 @@ func (s *screen) view() ui.Node {
 	}}}
 	inspector = append(inspector, placement...)
 	inspector = append(inspector, s.npnControls(state)...)
-	if state.Analysis == workbench.MixedAnalysis {
-		inspector = append(inspector, section("mixed-title", "RC / NPN experiment"), quiet("mixed-help", "R and C set the flasher timing. The example uses C1 = 0.1 V at startup to break ideal symmetry."))
+	if workbench.IsNetworkAnalysis(state.Analysis) {
+		inspector = append(inspector, section("mixed-title", "Circuit network"), quiet("mixed-help", "Bounded network simulation reports device currents, capacitor state and conservation residuals."))
 		if r := state.Mixed; r != nil {
 			for _, q := range r.Transistors {
 				inspector = append(inspector, quiet("mixed-"+q.TransistorID, fmt.Sprintf("%s · %s\nVBE %.3f V · VCE %.3f V", q.TransistorID, q.State, q.VBE, q.VCE)))
@@ -185,6 +185,23 @@ func (s *screen) view() ui.Node {
 	if hasPart {
 		inspector = append(inspector, s.partPlotControls(state, part)...)
 		inspector = append(inspector, heading("inspector", part.ID+" · "+part.Name), quiet("part-terminals", "Terminals: "+strings.Join(part.Terminals, ", ")))
+		if part.Kind == "switch" {
+			closed := part.SwitchClosed != nil && *part.SwitchClosed
+			text := "Close switch"
+			stateText := "Open"
+			if closed {
+				text = "Open switch"
+				stateText = "Closed"
+			}
+			inspector = append(inspector, section("switch-title", "SPST switch"), quiet("switch-state", stateText+" · 1 Ω on / 1 GΩ off"), s.action("switch-actuate", text, "switch.set", workbench.SwitchParams{ID: part.ID, Closed: !closed}), quiet("switch-limits", "Finite leakage, no bounce/arcing or physical rating. Live actuation preserves capacitor voltage and time."))
+			if state.Mixed != nil && !state.Mixed.Stale {
+				for _, branch := range state.Mixed.Switches {
+					if branch.ID == part.ID {
+						inspector = append(inspector, quiet("switch-reading", fmt.Sprintf("%.6g V · %.6g mA\n%.6g mW", branch.Voltage, branch.Current*1000, branch.Power*1000)))
+					}
+				}
+			}
+		}
 		if part.Kind == "net-label" {
 			inspector = append(inspector, section("label-title", "Net label · exact matching"), ui.Node{ID: "value-entry", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "Net label name"}, Change: func(e ui.ChangeEvent) { s.invoke("editor.value.set", workbench.DraftParams{Value: e.Text}) }}, s.action("apply-value", "Apply label", "component.set", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value}), quiet("label-connectivity-help", "Names are case-sensitive. GND is a name; connect it to a ground symbol to establish the reference."))
 		}
@@ -385,7 +402,23 @@ func (s *screen) view() ui.Node {
 			if len(r.Transistors) > 0 {
 				power = transistorStateLabel(r.Transistors[0].State)
 			}
-			readStatus = fmt.Sprintf("Mixed · t = %.4g s", r.Time)
+			readStatus = fmt.Sprintf("Network · t = %.4g s", r.Time)
+			if len(r.Transistors) == 0 {
+				powerTitle = "Power residual"
+				power = fmt.Sprintf("%.3g nW", r.PowerResidual*1e9)
+			}
+			if len(r.Capacitors) == 0 && len(r.LEDs) == 0 && len(r.Resistors) > 0 {
+				voltageTitle = r.Resistors[0].ID + " voltage"
+				voltage = fmt.Sprintf("%.5g V", r.Resistors[0].Voltage)
+			}
+			if len(r.Capacitors) == 0 && len(r.LEDs) > 0 {
+				voltageTitle = r.LEDs[0].ID + " voltage"
+				voltage = fmt.Sprintf("%.4g V", r.LEDs[0].Voltage)
+			}
+			if len(r.LEDs) == 0 && len(r.Resistors) > 0 {
+				currentTitle = r.Resistors[0].ID + " current"
+				current = fmt.Sprintf("%.5g mA", r.Resistors[0].Current*1000)
+			}
 			if r.Stale {
 				readStatus = "Previous result · stale"
 			} else if state.Paused {

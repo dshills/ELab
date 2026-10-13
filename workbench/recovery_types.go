@@ -77,6 +77,7 @@ func cloneRecovery(in RecoveryState) RecoveryState {
 }
 
 type DocumentInspection struct {
+	SwitchModel       *SwitchModel           `json:"switch_model,omitempty"`
 	Format            string                 `json:"format"`
 	Version           int                    `json:"version"`
 	Graph             Graph                  `json:"graph"`

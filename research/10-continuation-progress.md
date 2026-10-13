@@ -61,9 +61,18 @@ Implemented [junction/net-label workflows](../docs/schematic-primitives.md): sin
 
 Validation includes all supported circuit families, coupled transient numerical equivalence, named supply values, crossing/near-miss and orphan/reference cases, persistence/record hashes, native/agent parity and native drawing smoke. Packaged slice: **0.14.0 / 28**, with [final validation](../docs/validation/primitives-validation.json), [headless workflow](../docs/validation/headless-primitives.json) and [desktop workflow](../docs/validation/desktop-primitives.json). This advances EDIT-02 and the P0 primitive requirements without claiming broader physical topology support.
 
+## SPST switches and bounded passive networks
+
+Implemented [SPST controls and network simulation](../docs/switches.md): open/closed placement state, shared `switch.set`, finite on/off resistance, device probes/readouts, native symbols, SVG, project/model validation and embedded Verify recordings. Direct fresh transient actuation stages an algebraic solve before committing and preserves capacitor voltage, time, run identity and the live clock. No-op operations preserve physics. Ordinary schematic batch/history edits retain restart semantics.
+
+The existing bounded MNA kernel now accepts switched LED/RC/NPN circuits and passive resistor networks such as voltage dividers. Topology compilation was separated from numerical integration. Bounds and ideal-constraint restrictions remain explicit. New-network integration uses tighter local capacitor tolerances; existing mixed RC/NPN tolerances are unchanged. Review also corrected obsolete README statements about already implemented features.
+
+Packaged slice: **0.15.0 / 29**, with [final validation](../docs/validation/switch-validation.json), [headless workflow](../docs/validation/headless-switch.json) and [packaged desktop workflow](../docs/validation/desktop-switch.json). The switched RC reference differs by about 1.4 mV at 20 ms; headless and native numerical outputs match exactly. Root/desktop race tests, lint, vet, native control parity and packaged GPU/UI smoke pass. Prior bundles and user sessions were preserved.
+
 ## Next work queue
 
-1. Generic diode, switch and potentiometer models with electrical fixtures and supported topology expansion.
-2. Capacity/latency measurements, keyboard/screen-reader checks and distribution qualification.
+1. Generic diode and potentiometer models with electrical fixtures and supported topology expansion.
+2. Broader source waveforms and finite pulse transitions from the curated PRD.
+3. Capacity/latency measurements, keyboard/screen-reader checks and distribution qualification.
 
 Every shipped user operation continues to require the same public agent command/state path. Each slice adds meaningful regression checks and records its actual limits. Participant usability and physical hardware validation remain future gates.

@@ -62,6 +62,7 @@ type VerificationRow struct {
 	Values []float64 `json:"values"`
 }
 type VerificationMetadata struct {
+	SwitchModel        *SwitchModel      `json:"switch_model,omitempty"`
 	Format             string            `json:"format"`
 	Version            int               `json:"version"`
 	OperationID        string            `json:"operation_id"`

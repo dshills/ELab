@@ -252,7 +252,7 @@ func (s *Service) launchTransientLocked(c Compiled) {
 				budget += elapsed * s.transientSettings.PlaybackSpeed
 				steps := int((budget + 1e-12) / s.transientSettings.StepSeconds)
 				limit := 250
-				if c.Analysis == MixedAnalysis {
+				if IsNetworkAnalysis(c.Analysis) {
 					limit = 16
 				}
 				if steps > limit {
@@ -352,7 +352,7 @@ func (s *Service) transientCommandLocked(command string, raw []byte) error {
 		if end <= s.transient.Sample.Time {
 			return fmt.Errorf("duration is too small to advance the current floating-point time")
 		}
-		if c.Analysis == MixedAnalysis {
+		if IsNetworkAnalysis(c.Analysis) {
 			return s.stepMixedLocked(p.Duration)
 		}
 		if s.transient.PendingMode != "" {

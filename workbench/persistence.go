@@ -17,6 +17,7 @@ const DocumentVersion = 4
 const MaxDocumentBytes = 256 * 1024
 
 type Document struct {
+	SwitchModel       *SwitchModel       `json:"switch_model,omitempty"`
 	Recordings        *ProjectRecordings `json:"recordings,omitempty"`
 	Paused            *bool              `json:"paused,omitempty"`
 	ScopeProbes       *ProbeParams       `json:"scope_probes,omitempty"`
@@ -225,7 +226,13 @@ func decodeDocument(data []byte) (Document, error) {
 	if len(d.Graph.Components) > MaxComponents || len(d.Graph.Wires) > MaxWires {
 		return d, fmt.Errorf("schematic exceeds component/wire limits")
 	}
+	if d.SwitchModel != nil && *d.SwitchModel != SwitchDeviceModel() {
+		return d, fmt.Errorf("unsupported switch model parameters/version")
+	}
 	for _, c := range d.Graph.Components {
+		if c.Kind == "switch" && (d.SwitchModel == nil || *d.SwitchModel != SwitchDeviceModel()) {
+			return d, fmt.Errorf("switch schematics require supported switch_model parameters")
+		}
 		if c.Kind == "npn" && (d.NPNModel == nil || *d.NPNModel != TransistorModel()) {
 			return d, fmt.Errorf("NPN schematics require supported npn_model parameters")
 		}
@@ -257,6 +264,16 @@ func decodeDocument(data []byte) (Document, error) {
 			return d, fmt.Errorf("invalid rotation on %s", c.ID)
 		}
 		expected.Rotation = c.Rotation
+		if c.SwitchClosed != nil {
+			if c.Kind != "switch" {
+				return d, fmt.Errorf("switch state belongs only to a switch")
+			}
+			closed := *c.SwitchClosed
+			expected.SwitchClosed = &closed
+		}
+		if c.Kind == "switch" && c.SwitchClosed == nil {
+			return d, fmt.Errorf("switch requires an explicit boolean state")
+		}
 		if c.InitialVoltage != nil {
 			if c.Kind != "capacitor" || !finite(*c.InitialVoltage) || math.Abs(*c.InitialVoltage) > 12 {
 				return d, fmt.Errorf("invalid capacitor initial voltage on %s", c.ID)
@@ -441,6 +458,13 @@ func (s *Service) documentLocked() Document {
 	probes := ProbeParams{IDs: s.scopeLocked(compiled).Selected}
 	paused := s.paused
 	d := Document{Recordings: s.projectRecordingsLocked(), Paused: &paused, ScopeProbes: &probes, Format: DocumentFormat, Version: DocumentVersion, Graph: s.graph.Clone(), View: s.view, LEDModel: Model(), TransientSettings: &settings}
+	for _, c := range s.graph.Components {
+		if c.Kind == "switch" {
+			model := SwitchDeviceModel()
+			d.SwitchModel = &model
+			break
+		}
+	}
 	for _, c := range s.graph.Components {
 		if c.Kind == "npn" {
 			m := TransistorModel()

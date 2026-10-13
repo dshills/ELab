@@ -117,6 +117,12 @@ func (s *Service) connectLocked(p ConnectParams) error {
 }
 func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "switch.set":
+		var p SwitchParams
+		if err := params(raw, &p, "id", "closed"); err != nil {
+			return err
+		}
+		return s.setSwitchLocked(p)
 	case "wire.junction.insert":
 		var p JunctionInsertParams
 		if err := params(raw, &p, "wire_ids"); err != nil {
@@ -273,7 +279,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return fmt.Errorf("drawing supports at most %d components", MaxComponents)
 		}
 		if p.ID == "" {
-			prefix := map[string]string{"dc-source": "V", "resistor": "R", "led": "D", "ground": "GND", "capacitor": "C", "pulse-source": "V", "npn": "Q", "junction": "J", "net-label": "L"}[p.Kind]
+			prefix := map[string]string{"dc-source": "V", "resistor": "R", "led": "D", "ground": "GND", "capacitor": "C", "pulse-source": "V", "npn": "Q", "junction": "J", "net-label": "L", "switch": "S"}[p.Kind]
 			if prefix == "" {
 				return fmt.Errorf("unknown part kind")
 			}
@@ -678,7 +684,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if s.paused {
 			c, _, d := s.graph.Compile()
 			if d == nil && IsTransientAnalysis(c.Analysis) {
-				if c.Analysis == MixedAnalysis {
+				if IsNetworkAnalysis(c.Analysis) {
 					s.startMixedLocked(c)
 				} else if c.Analysis == NPNTransientAnalysis {
 					s.startNPNTransientLocked(c)

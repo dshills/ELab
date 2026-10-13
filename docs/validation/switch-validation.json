@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "date": "2026-10-13",
+  "version": "0.15.0",
+  "build": "29",
+  "binary_sha256": "4918e4974ba7def40a0d22ec529aaede4e00896f55d68809f0dddeebc70ebf58",
+  "packaged_binary_matches": true,
+  "capabilities": 79,
+  "library_kinds": 10,
+  "headless_desktop_numerical_equivalence": true,
+  "checks": [
+    "pinned Staticcheck/import formatting",
+    "Go vet and root/native race tests",
+    "manual solver/command/persistence review",
+    "running live clock continuity",
+    "native user/agent switch parity",
+    "native and packaged GPU/UI smoke",
+    "atomic switched LED construction",
+    "DC on/off finite leakage",
+    "power conservation",
+    "RC analytical reference",
+    "actuation preserves time/run/charge",
+    "finite off-state hold",
+    "independent Verify with switch probes/model",
+    "embedded recording/save/reopen",
+    "fresh paused startup",
+    "SVG switch symbol"
+  ],
+  "limits": [
+    "finite 1 ohm on / 1 Gohm off; no physical switch bounce/arcing/ratings",
+    "bounded MNA educational network; 12 non-ground nets and grounded sources/NPN emitters",
+    "adaptive backward Euler local tolerance is not a global accuracy guarantee",
+    "Verify captures switch startup; no live actuation history replay",
+    "private unsigned local app; hardware/usability/accessibility/distribution gates pending"
+  ]
+}

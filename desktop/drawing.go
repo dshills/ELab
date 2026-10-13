@@ -123,6 +123,14 @@ func schematic(state workbench.Snapshot, view canvas.Viewport) (*canvas.Mesh, er
 			stroke(ink, 3, canvas.Point{X: -24, Y: 9}, canvas.Point{X: 24, Y: 9})
 			stroke(wireColor, 2.5, canvas.Point{Y: -32}, canvas.Point{Y: -9})
 			stroke(wireColor, 2.5, canvas.Point{Y: 9}, canvas.Point{Y: 32})
+		case "switch":
+			stroke(wireColor, 2.5, canvas.Point{X: -55}, canvas.Point{X: -25})
+			stroke(wireColor, 2.5, canvas.Point{X: 25}, canvas.Point{X: 55})
+			end := canvas.Point{X: 25, Y: -22}
+			if part.SwitchClosed != nil && *part.SwitchClosed {
+				end.Y = 0
+			}
+			stroke(ink, 3, canvas.Point{X: -25}, end)
 		case "resistor":
 			stroke(ink, 2.5, canvas.Point{X: -55}, canvas.Point{X: -43}, canvas.Point{X: -35, Y: -15}, canvas.Point{X: -21, Y: 15}, canvas.Point{X: -7, Y: -15}, canvas.Point{X: 7, Y: 15}, canvas.Point{X: 21, Y: -15}, canvas.Point{X: 35, Y: 15}, canvas.Point{X: 43}, canvas.Point{X: 55})
 		case "led":

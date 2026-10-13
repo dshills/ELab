@@ -118,7 +118,9 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 	if ids == nil {
 		ids = s.scopeLocked(compiled).Selected
 		if len(ids) == 0 && !transient {
-			if compiled.Analysis == NPNAnalysis {
+			if IsNetworkAnalysis(compiled.Analysis) {
+				ids = defaultProbes(compiled)
+			} else if compiled.Analysis == NPNAnalysis {
 				ids = []string{"i:" + compiled.Transistor.ID + ".collector", "v:" + compiled.Transistor.ID + ".collector", "i:" + compiled.Transistor.ID + ".base", "v:" + compiled.Transistor.ID + ".base"}
 			} else {
 				ids = []string{"i:" + compiled.LED.ID, "v:" + compiled.LED.ID, "v:" + compiled.Resistor.ID, "v:" + compiled.Source.ID}
@@ -153,6 +155,13 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 	if compiled.Transistor.ID != "" {
 		model := TransistorModel()
 		metadata.NPNModel = &model
+	}
+	for _, part := range graph.Components {
+		if part.Kind == "switch" {
+			model := SwitchDeviceModel()
+			metadata.SwitchModel = &model
+			break
+		}
 	}
 	metadata.Engine = verificationEngineID(compiled.Analysis)
 	operation.inputMetadata = cloneVerificationMetadata(metadata)
@@ -247,6 +256,10 @@ func cloneVerificationMetadata(in VerificationMetadata) VerificationMetadata {
 	out.Graph = in.Graph.Clone()
 	out.Probes = append([]Probe{}, in.Probes...)
 	out.Statistics = append([]ScopeStatistics{}, in.Statistics...)
+	if in.SwitchModel != nil {
+		model := *in.SwitchModel
+		out.SwitchModel = &model
+	}
 	out.NPN = cloneNPN(in.NPN)
 	out.Mixed = cloneMixed(in.Mixed)
 	if in.NPNModel != nil {
@@ -288,8 +301,8 @@ func validateCapacitorInitialFields(raw json.RawMessage) error {
 
 func verificationEngineID(analysis string) string {
 	switch analysis {
-	case MixedAnalysis:
-		return MixedEngineID
+	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis:
+		return networkEngine(analysis)
 	case "RC transient":
 		return RCEngineID
 	case NPNTransientAnalysis:

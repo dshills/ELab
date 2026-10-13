@@ -23,6 +23,10 @@ func (g Graph) Clone() Graph {
 	out := Graph{append([]Component{}, g.Components...), append([]Wire{}, g.Wires...)}
 	for i := range out.Components {
 		out.Components[i].Terminals = append([]string{}, out.Components[i].Terminals...)
+		if state := out.Components[i].SwitchClosed; state != nil {
+			copy := *state
+			out.Components[i].SwitchClosed = &copy
+		}
 		if v := out.Components[i].InitialVoltage; v != nil {
 			copy := *v
 			out.Components[i].InitialVoltage = &copy
@@ -133,6 +137,7 @@ func Library() []Part {
 		{"ground", "Ground", []string{"reference"}, "", "", "ground.v1"},
 		{"junction", "Junction", []string{"node"}, "", "", "junction.v1"},
 		{"net-label", "Net label", []string{"node"}, "", "", "net-label.v1"},
+		{"switch", "SPST switch", []string{"1", "2"}, "", "", SwitchModelID},
 	}
 }
 func MakeComponent(id, kind string, p Point, value string) (Component, error) {
@@ -148,6 +153,10 @@ func MakeComponent(id, kind string, p Point, value string) (Component, error) {
 			continue
 		}
 		c := Component{ID: id, Kind: kind, Name: part.Name, Terminals: append([]string{}, part.Terminals...), Position: position, Unit: part.Unit, Model: part.Model}
+		if kind == "switch" {
+			closed := false
+			c.SwitchClosed = &closed
+		}
 		if kind == "net-label" {
 			if value == "" {
 				value = id
@@ -228,7 +237,7 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 		default:
 			found = false
 		}
-	case "resistor":
+	case "switch", "resistor":
 		switch name {
 		case "1":
 			p = Point{-55, 0}
@@ -312,6 +321,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		}
 		parent[b] = a
 	}
+	hasSwitch := false
 	sources, resistors, leds, grounds := []Component{}, []Component{}, []Component{}, []Component{}
 	capacitors := []Component{}
 	transistors := []Component{}
@@ -323,6 +333,8 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		switch c.Kind {
 		case "dc-source", "pulse-source":
 			sources = append(sources, c)
+		case "switch":
+			hasSwitch = true
 		case "resistor":
 			resistors = append(resistors, c)
 		case "npn":
@@ -406,8 +418,9 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 	incomplete := func(code, message, id string) (Compiled, string, *Diagnostic) {
 		return out, "incomplete", &Diagnostic{code, message, id}
 	}
-	if len(transistors) > 0 && len(capacitors) > 0 {
-		return compileMixed(out, g, groups, root)
+	networkTopology := len(transistors) == 0 && (len(sources) > 1 || len(resistors) > 1 || len(leds) > 1 || len(capacitors) > 1 || len(capacitors) == 0 && len(leds) == 0 && len(resistors) > 0)
+	if hasSwitch || networkTopology || len(transistors) > 0 && len(capacitors) > 0 {
+		return compileNetwork(out, g, groups, root)
 	}
 	if len(transistors) > 0 {
 		return compileNPN(out, g, sources, resistors, leds, transistors, capacitors, grounds, groups, root)

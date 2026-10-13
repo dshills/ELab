@@ -5,16 +5,37 @@ import (
 	"math"
 )
 
-func IsNPNTransientAnalysis(a string) bool { return a == NPNTransientAnalysis || a == MixedAnalysis }
-func IsNPNTransientEngine(e string) bool   { return e == NPNTransientEngineID || e == MixedEngineID }
+func IsNPNTransientAnalysis(a string) bool {
+	return a == NPNTransientAnalysis || a == MixedAnalysis || a == NetworkTransientAnalysis
+}
+func IsNPNTransientEngine(e string) bool {
+	return e == NPNTransientEngineID || e == MixedEngineID || e == NetworkEngineID
+}
 func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
-	q := r.Transistors[0]
-	current := q.CollectorCurrent
-	if len(r.LEDs) > 0 {
-		current = r.LEDs[0].Current
+	p := TraceSample{Time: r.Time, Input: input, Voltage: r.Nodes[compiled.Output], State: "network"}
+	if len(r.Transistors) > 0 {
+		q := r.Transistors[0]
+		p.Voltage = q.VCE
+		p.Current = q.CollectorCurrent
+		p.BaseCurrent = q.BaseCurrent
+		p.VBE = q.VBE
+		p.State = q.State
 	}
-	c := r.Capacitors[0]
-	p := TraceSample{Time: r.Time, Input: input, Voltage: q.VCE, Current: current, Energy: c.Energy, BaseCurrent: q.BaseCurrent, VBE: q.VBE, State: q.State, CapacitorVoltage: c.Voltage}
+	if len(r.LEDs) > 0 {
+		p.Current = r.LEDs[0].Current
+	} else if len(r.Resistors) > 0 {
+		p.Current = r.Resistors[0].Current
+	} else if len(r.Switches) > 0 {
+		p.Current = r.Switches[0].Current
+	}
+	if len(r.Capacitors) > 0 {
+		cap := r.Capacitors[0]
+		p.Energy = cap.Energy
+		p.CapacitorVoltage = cap.Voltage
+		if len(r.Transistors) == 0 {
+			p.Voltage = r.Nodes[compiled.Output]
+		}
+	}
 	currents := map[string]float64{}
 	for _, q := range r.Transistors {
 		currents[q.TransistorID+".base"] = q.BaseCurrent
@@ -24,7 +45,7 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 	for _, cap := range r.Capacitors {
 		currents[cap.ID] = cap.Current
 	}
-	for _, parts := range [][]BranchResult{r.LEDs, r.Resistors, r.Sources} {
+	for _, parts := range [][]BranchResult{r.LEDs, r.Resistors, r.Sources, r.Switches} {
 		for _, part := range parts {
 			currents[part.ID] = part.Current
 		}
@@ -47,7 +68,7 @@ func (s *Service) startMixedLocked(c Compiled) {
 	if mode != "auto" && mode != "high" && mode != "low" {
 		mode = "auto"
 	}
-	t := &Transient{Engine: MixedEngineID, RunID: s.run, ElectricalRevision: s.electrical, SourceID: c.Source.ID, TransistorID: c.Transistor.ID, LEDID: c.LED.ID, CapacitorID: c.Capacitor.ID, OutputNet: c.Output, Settings: s.transientSettings, Mode: mode, Samples: []TraceSample{}, Events: []InputEvent{{0, "restart"}}}
+	t := &Transient{Engine: networkEngine(c.Analysis), RunID: s.run, ElectricalRevision: s.electrical, SourceID: c.Source.ID, TransistorID: c.Transistor.ID, LEDID: c.LED.ID, CapacitorID: c.Capacitor.ID, OutputNet: c.Output, Settings: s.transientSettings, Mode: mode, Samples: []TraceSample{}, Events: []InputEvent{{0, "restart"}}}
 	st, err := n.solve(nil, old, 0, t, 0)
 	if err != nil {
 		s.status = "error"
@@ -61,6 +82,9 @@ func (s *Service) startMixedLocked(c Compiled) {
 	s.npnHigh = nil
 	s.npnLow = nil
 	s.transient = t
+	if c.Analysis == NetworkDCAnalysis {
+		s.transient = nil
+	}
 	s.mixedState = st
 	s.mixed = st.result
 	t.Sample = mixedSample(c, st.result, n.sourceVoltage(c.Source, t, 0))
@@ -69,7 +93,9 @@ func (s *Service) startMixedLocked(c Compiled) {
 		s.status = "paused"
 	} else {
 		s.status = "running"
-		s.launchTransientLocked(c)
+		if IsTransientAnalysis(c.Analysis) {
+			s.launchTransientLocked(c)
+		}
 	}
 }
 func autoMixedPulse(n *mixedNetwork, t *Transient) bool {

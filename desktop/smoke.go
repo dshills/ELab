@@ -138,7 +138,10 @@ rendered:
 	if err := nativeProjectRecordingSmoke(ctx, a, s); err != nil {
 		return err
 	}
-	return nativePrimitivesSmoke(ctx, a, s)
+	if err := nativePrimitivesSmoke(ctx, a, s); err != nil {
+		return err
+	}
+	return nativeSwitchSmoke(ctx, a, s)
 }
 
 func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
@@ -850,4 +853,62 @@ func nativePrimitivesSmoke(ctx context.Context, a *app.Application, s *screen) e
 		return err
 	}
 	return <-rendered
+}
+
+func nativeSwitchSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	checked := make(chan error, 1)
+	if err := a.PostWait(ctx, func() {
+		fail := func(err error) { checked <- err }
+		if err := smokeUI(s, "example.reset", nil); err != nil {
+			fail(err)
+			return
+		}
+		if s.pendingCommand != "" {
+			if err := smokeUI(s, "discard-continue", nil); err != nil {
+				fail(err)
+				return
+			}
+		}
+		for _, action := range []struct {
+			id    string
+			event *ui.ChangeEvent
+		}{
+			{"selection", &ui.ChangeEvent{SelectedID: "W1"}}, {"delete-object", nil},
+			{"part-switch", nil}, {"position-x", &ui.ChangeEvent{Number: -100}}, {"position-y", &ui.ChangeEvent{Number: -60}}, {"place-at-position", nil},
+			{"tool-wire", nil}, {"wire-from", &ui.ChangeEvent{SelectedID: "V1.positive"}}, {"wire-to", &ui.ChangeEvent{SelectedID: "S1.1"}}, {"connect-terminals", nil},
+			{"wire-from", &ui.ChangeEvent{SelectedID: "S1.2"}}, {"wire-to", &ui.ChangeEvent{SelectedID: "R1.1"}}, {"connect-terminals", nil},
+			{"switch-actuate", nil},
+		} {
+			if err := smokeUI(s, action.id, action.event); err != nil {
+				fail(err)
+				return
+			}
+		}
+		state := s.service.Snapshot()
+		if state.Mixed == nil || state.Mixed.LEDs[0].Current < .0028 {
+			fail(fmt.Errorf("native closed-switch LED failed"))
+			return
+		}
+		if _, ok := findNode(s.view(), "switch-reading"); !ok {
+			fail(fmt.Errorf("native switch reading absent"))
+			return
+		}
+		if _, err := s.mesh(*s.drawing.View); err != nil {
+			fail(err)
+			return
+		}
+		if err := smokeUI(s, "switch-actuate", nil); err != nil {
+			fail(err)
+			return
+		}
+		state = s.service.Snapshot()
+		if state.Mixed == nil || state.Mixed.LEDs[0].Current <= 0 || state.Mixed.LEDs[0].Current > 5e-9 {
+			fail(fmt.Errorf("native open-switch leakage failed"))
+			return
+		}
+		checked <- nil
+	}); err != nil {
+		return err
+	}
+	return <-checked
 }

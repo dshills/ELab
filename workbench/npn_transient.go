@@ -9,7 +9,7 @@ const NPNTransientAnalysis = "NPN transient"
 const NPNTransientEngineID = "elab.npn-switch-quasistatic.v1"
 
 func IsTransientAnalysis(analysis string) bool {
-	return analysis == "RC transient" || analysis == NPNTransientAnalysis || analysis == MixedAnalysis
+	return analysis == "RC transient" || analysis == NPNTransientAnalysis || analysis == MixedAnalysis || analysis == NetworkTransientAnalysis
 }
 func NPNPulseExampleGraph() Graph {
 	g := NPNExampleGraph()
@@ -138,7 +138,7 @@ func (s *Service) startNPNTransientLocked(c Compiled) {
 	}
 }
 func (s *Service) advanceTransientLocked(c Compiled, end float64) error {
-	if c.Analysis == MixedAnalysis {
+	if IsNetworkAnalysis(c.Analysis) {
 		st, t, err := advanceMixed(s.mixedState, s.transient, end)
 		if err != nil {
 			return err
@@ -157,7 +157,7 @@ func (s *Service) advanceTransientLocked(c Compiled, end float64) error {
 	return nil
 }
 func (s *Service) applyTransientInputLocked(c Compiled, mode string) error {
-	if c.Analysis == MixedAnalysis {
+	if IsNetworkAnalysis(c.Analysis) {
 		st, t, err := overrideMixed(s.mixedState, s.transient, mode)
 		if err != nil {
 			return &actionError{"solve-failed", err.Error()}

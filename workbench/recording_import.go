@@ -43,6 +43,9 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	}
 	_ = json.Unmarshal(data, &raw)
 	envelope := map[string]any{"format": DocumentFormat, "version": 1, "graph": raw.Metadata["graph"], "view": View{Zoom: 1}, "led_model": m.LEDModel}
+	if m.SwitchModel != nil {
+		envelope["switch_model"] = m.SwitchModel
+	}
 	if m.NPNModel != nil {
 		envelope["npn_model"] = m.NPNModel
 	}
@@ -152,9 +155,9 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		if r == nil || m.LED != nil || m.Mixed != nil || r.Stale || r.Engine != NPNEngineID || r.Model != TransistorModel() || r.TransistorID != c.Transistor.ID || r.SupplyID != c.Source.ID || r.InputID != c.Input.ID {
 			return fmt.Errorf("invalid recorded NPN final result")
 		}
-	case MixedAnalysis:
+	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis:
 		r := m.Mixed
-		if r == nil || m.LED != nil || m.NPN != nil || r.Stale || r.Engine != MixedEngineID || !recordingNear(r.Time, m.Duration) || len(r.Nodes) > MaxMixedNodes+1 {
+		if r == nil || m.LED != nil || m.NPN != nil || r.Stale || r.Engine != networkEngine(m.Analysis) || !recordingNear(r.Time, m.Duration) || len(r.Nodes) > MaxMixedNodes+1 {
 			return fmt.Errorf("invalid recorded mixed final result")
 		}
 		ids := []string{}
@@ -167,7 +170,7 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		for _, group := range []struct {
 			kind string
 			ids  []string
-		}{{"capacitor", nil}, {"led", nil}, {"resistor", nil}, {"source", nil}} {
+		}{{"capacitor", nil}, {"led", nil}, {"resistor", nil}, {"source", nil}, {"switch", nil}} {
 			switch group.kind {
 			case "capacitor":
 				for _, v := range r.Capacitors {
@@ -179,6 +182,10 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 				}
 			case "resistor":
 				for _, v := range r.Resistors {
+					group.ids = append(group.ids, v.ID)
+				}
+			case "switch":
+				for _, v := range r.Switches {
 					group.ids = append(group.ids, v.ID)
 				}
 			case "source":

@@ -35,6 +35,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	Switches           []BranchResult     `json:"switches,omitempty"`
 	Engine             string             `json:"engine"`
 	RunID              uint64             `json:"run_id"`
 	ElectricalRevision uint64             `json:"electrical_revision"`
@@ -66,144 +67,8 @@ func cloneMixed(r *MixedResult) *MixedResult {
 	o.LEDs = append([]BranchResult{}, r.LEDs...)
 	o.Resistors = append([]BranchResult{}, r.Resistors...)
 	o.Sources = append([]BranchResult{}, r.Sources...)
+	o.Switches = append([]BranchResult{}, r.Switches...)
 	return &o
-}
-func compileMixed(out Compiled, g Graph, groups map[string][]string, root func(string) string) (Compiled, string, *Diagnostic) {
-	out.Analysis = MixedAnalysis
-	fail := func(status, code, msg, id string) (Compiled, string, *Diagnostic) {
-		return out, status, &Diagnostic{code, msg, id}
-	}
-	sources, caps, qs, rs, leds, grounds := []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}
-	for _, p := range g.Components {
-		switch p.Kind {
-		case "dc-source", "pulse-source":
-			sources = append(sources, p)
-		case "capacitor":
-			caps = append(caps, p)
-		case "npn":
-			qs = append(qs, p)
-		case "resistor":
-			rs = append(rs, p)
-		case "led":
-			leds = append(leds, p)
-		case "junction", "net-label":
-			continue
-		case "ground":
-			grounds = append(grounds, p)
-		default:
-			return fail("unsupported", "unsupported-model", "This mixed solver supports sources, resistors, capacitors, red LEDs and grounded-emitter NPNs.", p.ID)
-		}
-	}
-	if len(sources) > 3 || len(caps) > 4 || len(qs) > 2 || len(rs) > 12 || len(leds) > 4 || len(out.Nets) > MaxMixedNodes+1 {
-		return fail("unsupported", "mixed-limit", "Mixed simulation supports at most 12 non-ground nets, 3 sources, 4 capacitors, 2 NPNs, 12 resistors and 4 LEDs.", "")
-	}
-	if len(grounds) == 0 || len(sources) == 0 || len(rs) == 0 {
-		return fail("incomplete", "missing-parts", "Add ground, a source and resistors to complete the mixed circuit.", "")
-	}
-	net := func(p Component, t string) string { return out.TerminalNet[p.ID+"."+t] }
-	out.Ground = net(grounds[0], "reference")
-	adjacency := map[string][]string{}
-	for _, p := range g.Components {
-		if p.Kind == "ground" || IsConnectivityPrimitive(p.Kind) {
-			continue
-		}
-		for i, a := range p.Terminals {
-			ref := p.ID + "." + a
-			if len(physicalTerminals(g, groups[root(ref)])) < 2 {
-				return fail("incomplete", "open-terminal", "Connect terminal "+ref+" to complete the circuit.", ref)
-			}
-			for _, b := range p.Terminals[i+1:] {
-				u, v := net(p, a), net(p, b)
-				if u == v {
-					return fail("error", "shorted-component", "Remove the short across component "+p.ID+".", p.ID)
-				}
-				adjacency[u] = append(adjacency[u], v)
-				adjacency[v] = append(adjacency[v], u)
-			}
-		}
-	}
-	for _, q := range qs {
-		if net(q, "emitter") != out.Ground {
-			return fail("unsupported", "unsupported-topology", "Mixed NPN emitters must connect directly to ground.", q.ID+".emitter")
-		}
-	}
-	for _, v := range sources {
-		if net(v, "negative") != out.Ground {
-			return fail("unsupported", "unsupported-topology", "Mixed sources must have their negative terminal grounded.", v.ID+".negative")
-		}
-		for _, c := range caps {
-			a, b := net(c, "1"), net(c, "2")
-			if a == net(v, "positive") && b == out.Ground || b == net(v, "positive") && a == out.Ground {
-				return fail("unsupported", "ideal-source-capacitor", "Insert resistance between an ideal source and capacitor; direct voltage jumps require an impulse model.", c.ID)
-			}
-		}
-	}
-
-	// Voltage-source and capacitor constraints must be independent at startup.
-	// Redundant ideal constraints have indeterminate branch currents; reject them
-	// explicitly rather than manufacturing a gmin or an initial current split.
-	constraint := map[string]string{}
-	for _, node := range out.Nets {
-		constraint[node.ID] = node.ID
-	}
-	var cr func(string) string
-	cr = func(id string) string {
-		if constraint[id] != id {
-			constraint[id] = cr(constraint[id])
-		}
-		return constraint[id]
-	}
-	join := func(a, b string) bool {
-		a, b = cr(a), cr(b)
-		if a == b {
-			return false
-		}
-		constraint[b] = a
-		return true
-	}
-	for _, p := range sources {
-		if !join(net(p, "positive"), out.Ground) {
-			return fail("unsupported", "ideal-constraint-loop", "Parallel ideal voltage sources have indeterminate currents; use one source or add series resistance.", p.ID)
-		}
-	}
-	for _, p := range caps {
-		if !join(net(p, "1"), net(p, "2")) {
-			return fail("unsupported", "ideal-constraint-loop", "A capacitor/source constraint loop has indeterminate startup currents; remove the redundant capacitor or add resistance.", p.ID)
-		}
-	}
-	seen := map[string]bool{out.Ground: true}
-	queue := []string{out.Ground}
-	for len(queue) > 0 {
-		n := queue[0]
-		queue = queue[1:]
-		for _, v := range adjacency[n] {
-			if !seen[v] {
-				seen[v] = true
-				queue = append(queue, v)
-			}
-		}
-	}
-	for _, n := range out.Nets {
-		if !seen[n.ID] {
-			return fail("incomplete", "floating-island", "Connect every circuit island to the ground reference.", n.ID)
-		}
-	}
-	out.MixedGraph = g.Clone()
-	out.Source = sources[0]
-	for _, v := range sources {
-		if v.Kind == "pulse-source" {
-			out.Source = v
-			break
-		}
-	}
-	out.Capacitor = caps[0]
-	out.Transistor = qs[0]
-	if len(leds) > 0 {
-		out.LED = leds[0]
-	}
-	out.Output = net(qs[0], "collector")
-	out.Circuit = Circuit{out.Source.Value, rs[0].Value, true}
-	return out, "", nil
 }
 
 type mixedNetwork struct {
@@ -328,9 +193,13 @@ func (n *mixedNetwork) equations(x, old []float64, dt float64, t *Transient, at 
 	}
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
-		case "resistor":
+		case "resistor", "switch":
 			u, v := n.pin(p, "1"), n.pin(p, "2")
-			g := 1 / p.Value
+			resistance := p.Value
+			if p.Kind == "switch" {
+				resistance = switchResistance(p)
+			}
+			g := 1 / resistance
 			flow(u, v, (voltage(x, u)-voltage(x, v))*g, g)
 		case "led":
 			u, v := n.pin(p, "anode"), n.pin(p, "cathode")
@@ -481,7 +350,7 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 	if dt > 0 {
 		stimAt = at - dt/2
 	}
-	r := &MixedResult{Engine: MixedEngineID, RunID: t.RunID, ElectricalRevision: t.ElectricalRevision, Time: at, Nodes: map[string]float64{n.c.Ground: 0}, Transistors: []MixedTransistor{}, Capacitors: []CapacitorResult{}, LEDs: []BranchResult{}, Resistors: []BranchResult{}, Sources: []BranchResult{}}
+	r := &MixedResult{Engine: networkEngine(n.c.Analysis), RunID: t.RunID, ElectricalRevision: t.ElectricalRevision, Time: at, Nodes: map[string]float64{n.c.Ground: 0}, Transistors: []MixedTransistor{}, Capacitors: []CapacitorResult{}, LEDs: []BranchResult{}, Resistors: []BranchResult{}, Sources: []BranchResult{}}
 	for i, id := range n.nodes {
 		r.Nodes[id] = x[i]
 	}
@@ -491,13 +360,17 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 	energyRate := 0.
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
-		case "resistor", "led":
+		case "resistor", "led", "switch":
 			a, b := "1", "2"
 			if p.Kind == "led" {
 				a, b = "anode", "cathode"
 			}
 			v := voltage(x, n.pin(p, a)) - voltage(x, n.pin(p, b))
-			i := v / p.Value
+			resistance := p.Value
+			if p.Kind == "switch" {
+				resistance = switchResistance(p)
+			}
+			i := v / resistance
 			if p.Kind == "led" {
 				i, _ = diodeCurrent(v)
 			}
@@ -505,6 +378,8 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			powers += br.Power
 			if p.Kind == "led" {
 				r.LEDs = append(r.LEDs, br)
+			} else if p.Kind == "switch" {
+				r.Switches = append(r.Switches, br)
 			} else {
 				r.Resistors = append(r.Resistors, br)
 			}
@@ -580,7 +455,11 @@ func (state *mixedState) advance(t *Transient, end float64) (*mixedState, error)
 		if e1 == nil && e2 == nil && e3 == nil {
 			errRatio = 0
 			for i, v := range refined.capV {
-				tol := 2e-6 + 2e-4*math.Max(math.Abs(v), math.Abs(cur.capV[i]))
+				absolute, relative := 2e-6, 2e-4
+				if cur.net.c.Analysis != MixedAnalysis {
+					absolute, relative = 5e-8, 5e-6
+				}
+				tol := absolute + relative*math.Max(math.Abs(v), math.Abs(cur.capV[i]))
 				errRatio = math.Max(errRatio, math.Abs(v-full.capV[i])/tol)
 			}
 		}

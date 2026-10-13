@@ -106,7 +106,7 @@ func hitComponent(state workbench.Snapshot, p workbench.Point) string {
 		part := state.Components[i]
 		local := workbench.RotateLocal(workbench.Point{X: p.X - part.Position.X, Y: p.Y - part.Position.Y}, (360-part.Rotation)%360)
 		width, height := 42., 42.
-		if part.Kind == "resistor" {
+		if part.Kind == "resistor" || part.Kind == "switch" {
 			width, height = 58, 24
 		}
 		if part.Kind == "junction" {

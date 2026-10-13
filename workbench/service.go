@@ -12,6 +12,7 @@ import (
 )
 
 type Snapshot struct {
+	SwitchModel          *SwitchModel         `json:"switch_model,omitempty"`
 	Recording            *RecordingView       `json:"recording,omitempty"`
 	Recovery             RecoveryState        `json:"recovery"`
 	VerificationSettings VerificationSettings `json:"verification_settings"`
@@ -57,6 +58,7 @@ type savedResponse struct {
 	response    Response
 }
 type Service struct {
+	pendingSwitch                    *switchTransition
 	savedRecordings                  [32]byte
 	restorePaused                    bool
 	recording                        recordingState
@@ -158,6 +160,13 @@ func (s *Service) snapshotLocked() Snapshot {
 		}
 		out.Verification = preview
 	}
+	for _, part := range graph.Components {
+		if part.Kind == "switch" {
+			model := SwitchDeviceModel()
+			out.SwitchModel = &model
+			break
+		}
+	}
 	if s.lastExport != nil {
 		artifact := *s.lastExport
 		out.LastExport = &artifact
@@ -223,7 +232,7 @@ func (s *Service) startLocked() {
 		s.status = "paused"
 		return
 	}
-	if compiled.Analysis == MixedAnalysis {
+	if IsNetworkAnalysis(compiled.Analysis) {
 		s.startMixedLocked(compiled)
 		return
 	}
@@ -431,6 +440,7 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 	if *r.ExpectedRevision != s.revision {
 		return fail("conflict", fmt.Sprintf("expected revision %d; current revision is %d", *r.ExpectedRevision, s.revision))
 	}
+	s.pendingSwitch = nil
 	before := s.historyLocked()
 	s.nextHistoryName = ""
 	if err := s.applyLocked(r.Command, r.Params); err != nil {
@@ -459,7 +469,14 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 		s.normalizeDrawingLocked()
 		if !ElectricalEqual(before.Graph, s.graph) || changedSettings || forceRestart {
 			s.electrical++
-			s.startLocked()
+			if s.pendingSwitch != nil && r.Command == "switch.set" {
+				s.mixedState = s.pendingSwitch.state
+				s.mixed = s.pendingSwitch.state.result
+				s.transient = s.pendingSwitch.trace
+				s.pendingSwitch = nil
+			} else {
+				s.startLocked()
+			}
 		}
 	}
 	if forceRestart && !changedDocument {
@@ -495,6 +512,10 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	if state.SwitchModel != nil {
+		model := *state.SwitchModel
+		state.SwitchModel = &model
+	}
 	state.Recording = cloneRecordingView(state.Recording)
 	state.Recovery = cloneRecovery(state.Recovery)
 	state.VerificationSettings = cloneVerificationSettings(state.VerificationSettings)
@@ -522,6 +543,10 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	state.Components = append([]Component(nil), state.Components...)
 	for i := range state.Components {
 		state.Components[i].Terminals = append([]string(nil), state.Components[i].Terminals...)
+		if state.Components[i].SwitchClosed != nil {
+			copy := *state.Components[i].SwitchClosed
+			state.Components[i].SwitchClosed = &copy
+		}
 		if v := state.Components[i].InitialVoltage; v != nil {
 			copy := *v
 			state.Components[i].InitialVoltage = &copy

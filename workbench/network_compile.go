@@ -1,0 +1,178 @@
+package workbench
+
+func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func(string) string) (Compiled, string, *Diagnostic) {
+	out.Analysis = MixedAnalysis
+	fail := func(status, code, msg, id string) (Compiled, string, *Diagnostic) {
+		return out, status, &Diagnostic{code, msg, id}
+	}
+	sources, caps, qs, rs, leds, grounds, switches := []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}
+	for _, p := range g.Components {
+		switch p.Kind {
+		case "dc-source", "pulse-source":
+			sources = append(sources, p)
+		case "capacitor":
+			caps = append(caps, p)
+		case "npn":
+			qs = append(qs, p)
+		case "switch":
+			switches = append(switches, p)
+		case "resistor":
+			rs = append(rs, p)
+		case "led":
+			leds = append(leds, p)
+		case "junction", "net-label":
+			continue
+		case "ground":
+			grounds = append(grounds, p)
+		default:
+			return fail("unsupported", "unsupported-model", "The network solver supports sources, resistors, SPST switches, capacitors, red LEDs and grounded-emitter NPNs.", p.ID)
+		}
+	}
+	if len(switches) > 0 || len(caps) == 0 || len(qs) == 0 {
+		out.Analysis = NetworkDCAnalysis
+		if len(caps) > 0 {
+			out.Analysis = NetworkTransientAnalysis
+		} else {
+			for _, source := range sources {
+				if source.Kind == "pulse-source" {
+					out.Analysis = NetworkTransientAnalysis
+				}
+			}
+		}
+	}
+	if len(switches) > 8 || len(sources) > 3 || len(caps) > 4 || len(qs) > 2 || len(rs) > 12 || len(leds) > 4 || len(out.Nets) > MaxMixedNodes+1 {
+		return fail("unsupported", "mixed-limit", "Network simulation supports at most 12 non-ground nets, 3 sources, 4 capacitors, 2 NPNs, 12 resistors, 8 switches and 4 LEDs.", "")
+	}
+	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches) == 0 {
+		return fail("incomplete", "missing-parts", "Add ground, a source and a resistor or switch to complete the network.", "")
+	}
+	net := func(p Component, t string) string { return out.TerminalNet[p.ID+"."+t] }
+	out.Ground = net(grounds[0], "reference")
+	adjacency := map[string][]string{}
+	for _, p := range g.Components {
+		if p.Kind == "ground" || IsConnectivityPrimitive(p.Kind) {
+			continue
+		}
+		for i, a := range p.Terminals {
+			ref := p.ID + "." + a
+			if len(physicalTerminals(g, groups[root(ref)])) < 2 {
+				return fail("incomplete", "open-terminal", "Connect terminal "+ref+" to complete the circuit.", ref)
+			}
+			for _, b := range p.Terminals[i+1:] {
+				u, v := net(p, a), net(p, b)
+				if u == v {
+					return fail("error", "shorted-component", "Remove the short across component "+p.ID+".", p.ID)
+				}
+				adjacency[u] = append(adjacency[u], v)
+				adjacency[v] = append(adjacency[v], u)
+			}
+		}
+	}
+	for _, q := range qs {
+		if net(q, "emitter") != out.Ground {
+			return fail("unsupported", "unsupported-topology", "Network NPN emitters must connect directly to ground.", q.ID+".emitter")
+		}
+	}
+	for _, v := range sources {
+		if net(v, "negative") != out.Ground {
+			return fail("unsupported", "unsupported-topology", "Network sources must have their negative terminal grounded.", v.ID+".negative")
+		}
+		for _, c := range caps {
+			a, b := net(c, "1"), net(c, "2")
+			if a == net(v, "positive") && b == out.Ground || b == net(v, "positive") && a == out.Ground {
+				return fail("unsupported", "ideal-source-capacitor", "Insert resistance between an ideal source and capacitor; direct voltage jumps require an impulse model.", c.ID)
+			}
+		}
+	}
+
+	// Voltage-source and capacitor constraints must be independent at startup.
+	// Redundant ideal constraints have indeterminate branch currents; reject them
+	// explicitly rather than manufacturing a gmin or an initial current split.
+	constraint := map[string]string{}
+	for _, node := range out.Nets {
+		constraint[node.ID] = node.ID
+	}
+	var cr func(string) string
+	cr = func(id string) string {
+		if constraint[id] != id {
+			constraint[id] = cr(constraint[id])
+		}
+		return constraint[id]
+	}
+	join := func(a, b string) bool {
+		a, b = cr(a), cr(b)
+		if a == b {
+			return false
+		}
+		constraint[b] = a
+		return true
+	}
+	for _, p := range sources {
+		if !join(net(p, "positive"), out.Ground) {
+			return fail("unsupported", "ideal-constraint-loop", "Parallel ideal voltage sources have indeterminate currents; use one source or add series resistance.", p.ID)
+		}
+	}
+	for _, p := range caps {
+		if !join(net(p, "1"), net(p, "2")) {
+			return fail("unsupported", "ideal-constraint-loop", "A capacitor/source constraint loop has indeterminate startup currents; remove the redundant capacitor or add resistance.", p.ID)
+		}
+	}
+	seen := map[string]bool{out.Ground: true}
+	queue := []string{out.Ground}
+	for len(queue) > 0 {
+		n := queue[0]
+		queue = queue[1:]
+		for _, v := range adjacency[n] {
+			if !seen[v] {
+				seen[v] = true
+				queue = append(queue, v)
+			}
+		}
+	}
+	for _, n := range out.Nets {
+		if !seen[n.ID] {
+			return fail("incomplete", "floating-island", "Connect every circuit island to the ground reference.", n.ID)
+		}
+	}
+	out.MixedGraph = g.Clone()
+	out.Source = sources[0]
+	for _, v := range sources {
+		if v.Kind == "pulse-source" {
+			out.Source = v
+			break
+		}
+	}
+	if len(caps) > 0 {
+		out.Capacitor = caps[0]
+	}
+	if len(qs) > 0 {
+		out.Transistor = qs[0]
+	}
+	if len(leds) > 0 {
+		out.LED = leds[0]
+	}
+	out.Output = out.Supply
+	if len(qs) > 0 {
+		out.Output = net(qs[0], "collector")
+	} else if len(caps) > 0 {
+		out.Output = net(caps[0], "1")
+		if out.Output == out.Ground {
+			out.Output = net(caps[0], "2")
+		}
+	} else if len(leds) > 0 {
+		out.Output = net(leds[0], "anode")
+	} else if len(rs) > 0 {
+		out.Output = net(rs[0], "2")
+	}
+	resistance := 1.
+	if len(rs) > 0 {
+		resistance = rs[0].Value
+		out.Resistor = rs[0]
+	}
+	out.Supply = net(out.Source, "positive")
+	if out.Output == "" {
+		out.Output = out.Supply
+	}
+	out.Circuit = Circuit{out.Source.Value, resistance, true}
+	return out, "", nil
+}
