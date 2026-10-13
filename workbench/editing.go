@@ -115,6 +115,14 @@ func (s *Service) connectLocked(p ConnectParams) error {
 }
 func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "verification.import":
+		var p RecordingImportParams
+		if err := params(raw, &p, "path"); err != nil {
+			return err
+		}
+		return s.importRecordingLocked(p)
+	case "recording.view.set", "recording.seek", "recording.step", "recording.play", "recording.speed.set", "recording.pause", "recording.window.set", "recording.probes.set", "recording.cursor.set", "recording.cursor.select", "recording.cursor.clear":
+		return s.recordingCommandLocked(command, raw)
 	case "recovery.configure", "recovery.scan", "recovery.checkpoint", "recovery.select", "recovery.restore", "recovery.dismiss":
 		return s.recoveryCommandLocked(command, raw)
 	case "verification.export":
@@ -144,6 +152,11 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if err := validateCapacitorInitialFields(raw); err != nil {
 			return err
 		}
+		var fields map[string]json.RawMessage
+		_ = json.Unmarshal(raw, &fields)
+		if _, present := fields["probe_ids"]; present && p.ProbeIDs == nil {
+			return fmt.Errorf("probe_ids must be an array; omit to inherit defaults")
+		}
 		return s.startVerificationLocked(p)
 	case "operation.cancel", "operation.select":
 		var p IDParams
@@ -156,7 +169,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if p.ID != "" && s.operations[p.ID] == nil {
 			return &actionError{"not-found", "Operation not found or no longer retained"}
 		}
-		s.selectedOperation = p.ID
+		s.selectRecordingLocked(p.ID)
 		return nil
 	case "export.scope.csv", "export.schematic.svg":
 		var p ExportParams

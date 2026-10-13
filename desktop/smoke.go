@@ -127,23 +127,14 @@ rendered:
 	if err := nativeVerificationSmoke(ctx, a, s); err != nil {
 		return err
 	}
-	return nativeRecoverySmoke(ctx, a, s)
+	if err := nativeRecoverySmoke(ctx, a, s); err != nil {
+		return err
+	}
+	return nativeRecordingSmoke(ctx, a, s)
 }
 
 func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
-	var find func(ui.Node) (ui.Node, bool)
-	find = func(n ui.Node) (ui.Node, bool) {
-		if n.ID == id {
-			return n, true
-		}
-		for _, child := range n.Children {
-			if target, ok := find(child); ok {
-				return target, true
-			}
-		}
-		return ui.Node{}, false
-	}
-	node, ok := find(s.view())
+	node, ok := findNode(s.view(), id)
 	if !ok || node.Disabled {
 		return fmt.Errorf("UI control %s is missing or disabled", id)
 	}
@@ -667,4 +658,92 @@ func nativeRecoverySmoke(ctx context.Context, a *app.Application, s *screen) err
 	case <-ctx.Done():
 		return ctx.Err()
 	}
+}
+
+func nativeRecordingSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	ready := make(chan error, 1)
+	if _, err := s.service.Wait(ctx); err != nil {
+		return err
+	}
+	if err := a.PostWait(ctx, func() {
+		if err := smokeUI(s, "simulation.pause", nil); err != nil {
+			ready <- err
+			return
+		}
+		before := s.service.Snapshot()
+		for _, action := range []struct {
+			id    string
+			event *ui.ChangeEvent
+		}{{"recording-show", nil}, {"recorded-index", &ui.ChangeEvent{Number: 1}}, {"recorded-cursor-a", &ui.ChangeEvent{Number: 1}}, {"recorded-cursor-b", &ui.ChangeEvent{Number: 11}}} {
+			if err := smokeUI(s, action.id, action.event); err != nil {
+				ready <- err
+				return
+			}
+		}
+		after := s.service.Snapshot()
+		if after.Recording == nil || !after.Recording.Viewing || after.Recording.Index != 1 || after.Transient.Sample != before.Transient.Sample || after.Document != before.Document || after.Recording.Scope.DeltaSeconds == nil {
+			ready <- fmt.Errorf("native recorded controls changed live state or lacked recorded measurements")
+			return
+		}
+		ready <- nil
+	}); err != nil {
+		return err
+	}
+	if err := <-ready; err != nil {
+		return err
+	}
+	ticker := time.NewTicker(25 * time.Millisecond)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-ticker.C:
+		}
+		rendered := make(chan error, 1)
+		if err := a.PostWait(ctx, func() {
+			if _, ok := findNode(s.view(), "recorded-scope-title"); !ok {
+				rendered <- fmt.Errorf("recorded plot is not in the native view")
+				return
+			}
+			pixels, err := s.scope.Snapshot()
+			if err != nil {
+				rendered <- err
+				return
+			}
+			colored := 0
+			for y := 0; y < pixels.Bounds().Dy(); y++ {
+				for x := 0; x < pixels.Bounds().Dx(); x++ {
+					p := pixels.NRGBAAt(x, y)
+					if p.A > 100 && p.R < 130 && p.G > 65 && p.B > 65 {
+						colored++
+					}
+				}
+			}
+			if colored < 20 {
+				rendered <- cogent.ErrFrameNotReady
+				return
+			}
+			rendered <- nil
+		}); err != nil {
+			return err
+		}
+		err := <-rendered
+		if errors.Is(err, cogent.ErrFrameNotReady) {
+			continue
+		}
+		return err
+	}
+}
+
+func findNode(n ui.Node, id string) (ui.Node, bool) {
+	if n.ID == id {
+		return n, true
+	}
+	for _, child := range n.Children {
+		if found, ok := findNode(child, id); ok {
+			return found, true
+		}
+	}
+	return ui.Node{}, false
 }

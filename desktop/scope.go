@@ -52,7 +52,19 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	b := &meshBuilder{}
 	state := s.service.Snapshot()
 	t := state.Transient
-	if t == nil || len(t.Samples) == 0 {
+	plot := state.Scope
+	step := state.TransientSettings.StepSeconds
+	stale := false
+	events := []workbench.InputEvent{}
+	recorded := state.Recording != nil && state.Recording.Viewing
+	if recorded {
+		plot = state.Recording.Scope
+		step = state.Recording.Step
+	} else if t != nil {
+		stale = t.Stale
+		events = t.Events
+	}
+	if !recorded && (t == nil || len(t.Samples) == 0) {
 		return canvas.NewMesh(nil, nil)
 	}
 	line := func(c color.NRGBA, width float64, points ...canvas.Point) {
@@ -70,10 +82,10 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	if right <= left || bottom <= top {
 		return canvas.NewMesh(nil, nil)
 	}
-	first, last := state.Scope.Window.Start, state.Scope.Window.End
-	span := math.Max(t.Settings.StepSeconds, last-first)
+	first, last := plot.Window.Start, plot.Window.End
+	span := math.Max(step, last-first)
 	vmin, vmax, imin, imax := 0., 1., 0., 1.
-	for _, trace := range state.Scope.Traces {
+	for _, trace := range plot.Traces {
 		for _, p := range trace.Points {
 			if trace.Probe.Unit == "A" {
 				imin = math.Min(imin, p.Value*1000)
@@ -97,7 +109,7 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 		text(right+6, py+4, fmt.Sprintf("%.2g mA", imin+(imax-imin)*fraction), muted)
 	}
 	x := func(at float64) float64 { return left + (right-left)*(at-first)/span }
-	for i, trace := range state.Scope.Traces {
+	for i, trace := range plot.Traces {
 		points := []canvas.Point{}
 		for _, p := range trace.Points {
 			fraction := (p.Value - vmin) / (vmax - vmin)
@@ -106,25 +118,32 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 			}
 			points = append(points, canvas.Point{X: x(p.Time), Y: bottom - (bottom-top)*fraction})
 		}
-		c := probeColor(scopeProbeColors(state.Scope.Traces)[i])
-		if t.Stale {
+		c := probeColor(scopeProbeColors(plot.Traces)[i])
+		if stale {
 			c = muted
 		}
 		if len(points) > 1 {
 			line(c, 2, points...)
+		} else if len(points) == 1 {
+			p := points[0]
+			line(c, 3, canvas.Point{X: p.X - 2, Y: p.Y}, canvas.Point{X: p.X + 2, Y: p.Y})
 		}
+	}
+	if recorded && state.Recording.Time >= first && state.Recording.Time <= last {
+		px := x(state.Recording.Time)
+		line(accent, 1.5, canvas.Point{X: px, Y: top}, canvas.Point{X: px, Y: bottom})
 	}
 	for _, cursor := range []struct {
 		label string
 		value *workbench.ScopeCursor
-	}{{"A", state.Scope.A}, {"B", state.Scope.B}} {
+	}{{"A", plot.A}, {"B", plot.B}} {
 		if cursor.value != nil && cursor.value.Valid && cursor.value.Time >= first && cursor.value.Time <= last {
 			px := x(cursor.value.Time)
 			line(ink, 1.5, canvas.Point{X: px, Y: top}, canvas.Point{X: px, Y: bottom})
 			text(px+3, top+10, cursor.label, ink)
 		}
 	}
-	for _, e := range t.Events {
+	for _, e := range events {
 		if e.Time >= first && e.Time <= last && e.Mode != "restart" {
 			px := x(e.Time)
 			line(color.NRGBA{R: 192, G: 208, B: 216, A: 255}, 1, canvas.Point{X: px, Y: top}, canvas.Point{X: px, Y: bottom})
@@ -138,6 +157,9 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	return canvas.NewMesh(b.vertices, b.indices)
 }
 func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
+	if state.Recording != nil && state.Recording.Viewing {
+		return s.recordingPanel(state)
+	}
 	t := state.Transient
 	npn := workbench.IsNPNTransientAnalysis(state.Analysis) || t != nil && workbench.IsNPNTransientEngine(t.Engine)
 	caption := "Transient · waiting for a valid run"

@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "capabilities": 75,
+  "schema_version": 2,
+  "record_sha256": "eb2f2de8c2ce021dda03850bd92f4de775c2ada584019af2f873c3fae1886862",
+  "rc_voltage_10ms_v": 3.160602794142789,
+  "delta_s": 0.009999999999999998,
+  "interval_hz": 100.00000000000001,
+  "interval_exact_samples": 11,
+  "record_exact_samples": 21,
+  "checks": [
+    "validated complete import",
+    "immutable captured input and provenance",
+    "RC analytical recorded measurement",
+    "exact cursor interval/readings",
+    "captured probe selection",
+    "playback completion",
+    "live state/undo/file point preserved",
+    "full paged rows",
+    "byte-identical portable reexport",
+    "invalid import preserves viewer"
+  ]
+}

@@ -39,9 +39,17 @@ Validation includes core/desktop race tests, Staticcheck/import formatting, Go v
 
 Packaged slice: **0.11.0 / 25**, with [final validation](../docs/validation/recovery-validation.json) and [desktop endpoint validation](../docs/validation/desktop-recovery.json). Recovery copies, leases, build artifacts and running older application sessions remain local; no user files or earlier bundles were removed. Recorded results/history are not recovery payloads; Windows liveness and public distribution remain unqualified.
 
+## Recorded-result import and replay
+
+Implemented [native record import and replay](../docs/recording.md), with strict whole-file validation, immutable original metadata/rows, local provenance and IDs, exact edge/index/time inspection, independent playback, probe selection, visible intervals, sample statistics, timing cursors and captured source inspection. Users and agents use the same commands; the live schematic/state/history/save point remain intact.
+
+Recorded plots preserve ordered bucket extrema and label reduction. Full data remains available for cursors, statistics, paged inspection and exports. Imported revision counters never claim association with a live source. Import retention preserves an active Verify job. Review repaired typed Go requests collapsing explicit empty lists into omission, rejected null probe lists, preserved valid DC metadata-only sample overrides, grouped private playback state and separated plotting from command/timer code. Queued ticks cannot rewind playback after a new position/rate. Import checks every interior output step as well as endpoints, and extremely close cursor timestamps cannot publish an infinite frequency. Native GPU smoke found and repaired a view-switch mount error by retaining the scope panel/canvas identity across live and recorded modes.
+
+Packaged slice: **0.12.0 / 26**, with [final validation](../docs/validation/recording-validation.json), [headless workflow](../docs/validation/headless-recording.json) and [desktop workflow](../docs/validation/desktop-recording.json). This slice reopens standalone recorded JSON. It does not yet fulfill project-embedded recorded-result portability; that P0 requirement is the immediate next slice.
+
 ## Next work queue
 
-1. Recorded result-file import and replay as explicitly recorded data.
+1. Embed validated recorded results in native project save/open, including clear file-size/dirty/ownership rules.
 2. Explicit schematic junction/net-label primitives and supported topology expansion.
 3. Generic diode, switch and potentiometer models with electrical fixtures.
 4. Capacity/latency measurements, keyboard/screen-reader checks and distribution qualification.

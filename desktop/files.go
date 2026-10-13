@@ -56,6 +56,9 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 				options.Filename = "Untitled.elab"
 			}
 			switch id {
+			case "verification.import":
+				options.Title = "Open recorded run"
+				options.Extensions = []string{"json"}
 			case "export.scope.csv":
 				options.Title = "Export scope CSV"
 				options.Extensions = []string{"csv"}
@@ -123,6 +126,10 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 				path := response.Result.(workbench.Snapshot).Document.Path
 				if response.Result.(workbench.Snapshot).LastExport != nil && (strings.HasPrefix(id, "export.") || id == "verification.export") {
 					s.fileMessage = "Exported " + filepath.Base(response.Result.(workbench.Snapshot).LastExport.Path)
+				} else if id == "verification.import" {
+					var opened string
+					_ = json.Unmarshal(fields["path"], &opened)
+					s.fileMessage = "Loaded recorded " + filepath.Base(opened)
 				} else if id == "project.save" {
 					s.fileMessage = "Saved " + filepath.Base(path)
 				} else {

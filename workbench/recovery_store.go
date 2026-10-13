@@ -213,7 +213,7 @@ func readRegularBounded(path string, limit int64) ([]byte, error) {
 		return nil, fileError(err)
 	}
 	if !info.Mode().IsRegular() || info.Size() > limit {
-		return nil, fileError(fmt.Errorf("recovery file must be regular and within its size bound"))
+		return nil, fileError(fmt.Errorf("file must be regular and within its size bound"))
 	}
 	file, err := os.Open(path)
 	if err != nil {
@@ -225,14 +225,14 @@ func readRegularBounded(path string, limit int64) ([]byte, error) {
 		return nil, fileError(err)
 	}
 	if !os.SameFile(info, actual) || !actual.Mode().IsRegular() {
-		return nil, fileError(fmt.Errorf("recovery file changed while opening"))
+		return nil, fileError(fmt.Errorf("file changed while opening"))
 	}
 	data, err := io.ReadAll(io.LimitReader(file, limit+1))
 	if err != nil {
 		return nil, fileError(err)
 	}
 	if int64(len(data)) > limit {
-		return nil, fileError(fmt.Errorf("recovery file exceeds size bound"))
+		return nil, fileError(fmt.Errorf("file exceeds size bound"))
 	}
 	return data, nil
 }

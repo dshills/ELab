@@ -153,18 +153,6 @@ func TestCanvasPlacementAndTerminalGestureUseSameCommands(t *testing.T) {
 		t.Fatal("wire cancel failed")
 	}
 }
-func findNode(n ui.Node, id string) (ui.Node, bool) {
-	if n.ID == id {
-		return n, true
-	}
-	for _, child := range n.Children {
-		if found, ok := findNode(child, id); ok {
-			return found, true
-		}
-	}
-	return ui.Node{}, false
-}
-
 func waitFileUI(t *testing.T, s *screen) {
 	t.Helper()
 	deadline := time.Now().Add(3 * time.Second)

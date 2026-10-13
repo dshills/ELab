@@ -161,6 +161,16 @@ func (c *scopeCanvas) placeCursor(px float64) {
 		return
 	}
 	state := c.screen.service.Snapshot()
+	if record := state.Recording; record != nil && record.Viewing {
+		left, right := 58., c.View.Width-78
+		if right <= left {
+			return
+		}
+		fraction := math.Max(0, math.Min(1, (px-left)/(right-left)))
+		at := record.Scope.Window.Start + fraction*(record.Scope.Window.End-record.Scope.Window.Start)
+		c.screen.invoke("recording.cursor.set", workbench.CursorParams{Cursor: record.Scope.ActiveCursor, Time: at})
+		return
+	}
 	t := state.Transient
 	if t == nil || t.Stale || len(t.Samples) == 0 {
 		return

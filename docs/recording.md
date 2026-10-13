@@ -1,0 +1,45 @@
+# Recorded-result import and replay
+
+Open a saved **recorded JSON** from the Verify inspector. ELab validates the complete `elab.verification` version 1 file, retains its captured input and samples, and opens a clearly labeled **Recorded scope**. The live schematic, readings, time, source mode, cursors, pause state, undo history and explicit save point are preserved. The source inspector lists captured components, connections, startup settings and engine identity through the same `operation.inspect` query agents use.
+
+The recorded panel offers Play/Pause, speed, previous/next sample, exact sample index, time seek, A/B cursors and a return to the live scope. The inspector offers captured probe selection, a visible interval, exact interval statistics and cursor voltage/current deltas. Changing the live circuit preserves the recording. Recorded playback never invokes a solver, synthesizes interpolated values or resumes saved physical state.
+
+A time seek/cursor snaps to the nearest saved sample, selecting the latest/right-hand row on equal-time edges or equal-distance ties. Index seek and row stepping expose each actual row, including both sides of ideal pulse edges at the same time. Playback displays the latest saved row at or before its wall-clock target, stops at the final row, and restarts at the beginning when Play is pressed at the end. It can skip display frames at high speed; exact inspection/export remains available. A queued old clock tick cannot rewind a newly positioned playhead.
+
+The plot retains first/last samples and each of 128 ordered buckets' minimum/maximum points (at most 258 points per trace). Reduction is visibly labeled. Cursor lookup, statistics, paged samples and JSON/CSV exports use all original data, including edge rows. Statistics are sample-based, not time-weighted. An interval with no exact samples is labeled unavailable instead of inventing values. A DC record is one point at time zero and has no playback duration.
+
+## Shared commands
+
+All mutations require the ordinary revision and retry key. Inspect `snapshot.recording` for current position, viewing/playback state, readings, scope, reduction policy and complete sample count.
+
+| Command | Parameters / behavior |
+| --- | --- |
+| `verification.import` | `path`, optional `expected_document_generation`; validate and load JSON, select a new local record ID, show Recorded scope |
+| `operation.select` | Existing `{id}`; select a retained operation, pause playback and reset recorded position/probes/window/cursors; empty ID closes the viewer |
+| `operation.inspect` | Existing `{id}`; captured metadata and final results; imports include local source path/hash in the operation summary |
+| `operation.samples` | Existing `{id,offset?,limit?}`; exact rows in pages, including imported records |
+| `recording.view.set` | `mode:"live"|"recorded"`; recorded requires a completed selection; returning live pauses recorded playback |
+| `recording.seek` | Exactly one of `index` or `time_s`; pause and seek |
+| `recording.step` | `direction:"previous"|"next"`; pause and move one actual row |
+| `recording.speed.set` | `seconds_per_wall_second` (.001–10); configure without starting playback |
+| `recording.play` | `seconds_per_wall_second` (.001–10); play from current row or restart at end |
+| `recording.pause` | Empty object; freeze recorded playback only |
+| `recording.window.set` | `start_s`, `end_s` inside the complete recording; positive ordered interval, or 0/0 for DC |
+| `recording.probes.set` | `ids` from captured probes only; `[]` hides traces |
+| `recording.cursor.set` | `cursor:"a"|"b"`, `time_s` inside the complete recording |
+| `recording.cursor.select` / `.clear` | `cursor:"a"|"b"`; choose click target or clear measurement |
+| `verification.export` | Existing `{id,path,format:"json"|"csv",overwrite?,expected_document_generation?}`; preserves original captured metadata/rows |
+
+An imported record receives a new local `record-N` ID; its original `metadata.operation_id` and creation time remain intact. Re-export preserves the original portable record and does not add host paths. Imported `source_unchanged` is always false: foreign revision counters cannot establish association with a live session, even when their numbers coincide. The UI states that imported data has no live source association. The file's SHA-256 identifies exactly what was loaded, not who produced it or whether the circuit is physically accurate.
+
+## Validation, bounds and current limits
+
+Import requires a regular local file at most 8 MiB; links, invalid UTF-8, duplicate/unknown/noncanonical fields, missing required fields and null fields refuse. The entire captured schematic, supported model parameters, analysis/engine identity, source mode and numeric settings are validated. Probe definitions must match the captured graph. Rows must cover every requested output sample and the complete interval, stay ordered, match the channel/sample count, contain finite bounded measurements and preserve at most three rows at one edge time. Reported statistics must match the full rows. Final-result identity and device lists must match the captured supported circuit. No imported data is re-solved or certified.
+
+Existing Verify bounds still apply: 10 seconds, 1000 output steps, 4096 rows and six captured channels. Offline sample overrides do not inherit irrelevant live playback-rate limits; DC step metadata is not a pulse-duration constraint. Explicit empty Verify probe/startup-override arrays are preserved by typed Go requests as well as raw JSON requests; nil/omission inherits defaults.
+
+The latest eight operations/records are retained. Import can coexist with one active verification and evicts a terminal operation, never the active job. Imports, selections and replay use immutable records, independent of graph history and live simulation. Session close cancels playback. Failed import/measurement validation leaves the editor/viewer intact.
+
+CSV is an export for external analysis; it lacks the full captured schematic and is not an import format. Arbitrary SPICE/other-app waveform formats are outside this native-record format. Version-3 `.elab` project files and recovery capsules still save schematic/configuration only. **Export recorded JSON** preserves a result for this viewer; embedding recorded results in project save/open is the next implementation slice for the PRD portability requirement.
+
+Core/native tests cover all five supported analyses, exact metadata/export round-trip, corrupt input refusal, empty captures, DC sampling overrides, pulse edge stepping, timing cursors, plot bounds/extrema and complete statistics, independent playback, snapshot cloning, native picker parameters and user/agent control parity. The native GPU/UI smoke opens the recorded plot and uses its seek/cursor controls. `scripts/recording-demo.py` provides a repeatable headless or owned-desktop integration workflow.

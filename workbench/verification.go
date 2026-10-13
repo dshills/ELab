@@ -143,17 +143,8 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 	id := fmt.Sprintf("verify-%d", s.operationSerial)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	operation := &verificationOperation{ctx: ctx, cancel: cancel, summary: OperationSummary{ID: id, Kind: "verify", Status: "queued", InputRevision: s.revision, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration, RequestedDuration: settings.Duration, TotalSteps: steps}}
-	if s.operations == nil {
-		s.operations = map[string]*verificationOperation{}
-	}
-	if len(s.operationOrder) >= MaxVerificationOperations {
-		old := s.operationOrder[0]
-		delete(s.operations, old)
-		s.operationOrder = s.operationOrder[1:]
-	}
-	s.operations[id] = operation
-	s.operationOrder = append(s.operationOrder, id)
-	s.selectedOperation = id
+	s.retainOperationLocked(operation)
+	s.selectRecordingLocked(id)
 	s.lastOperation = id
 	metadata := VerificationMetadata{Format: "elab.verification", Version: 1, OperationID: id, CreatedAt: time.Now().UTC().Format(time.RFC3339Nano), InputRevision: s.revision, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration, Graph: graph.Clone(), Settings: cfg, InputMode: settings.InputMode, Analysis: compiled.Analysis, LEDModel: Model(), Probes: probes, Duration: settings.Duration, Statistics: []ScopeStatistics{}}
 	if compiled.Transistor.ID != "" {
@@ -183,7 +174,7 @@ func operationActive(status string) bool {
 }
 func (s *Service) operationSummaryLocked(operation *verificationOperation) OperationSummary {
 	out := operation.summary
-	out.SourceUnchanged = out.ElectricalRevision == s.electrical && out.DocumentGeneration == s.documentGeneration
+	out.SourceUnchanged = out.Kind != "record-import" && out.ElectricalRevision == s.electrical && out.DocumentGeneration == s.documentGeneration
 	if out.Error != nil {
 		failure := *out.Error
 		out.Error = &failure

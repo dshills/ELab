@@ -122,6 +122,18 @@ func queryCapability(id, description string, input, output reflect.Type) Capabil
 }
 func Catalog() []Capability {
 	return []Capability{
+		typedCapability("verification.import", "Validate and load a complete elab.verification v1 JSON record into an independent recorded viewer; never changes live circuit/state", reflect.TypeOf(RecordingImportParams{})),
+		typedCapability("recording.view.set", "Show live or recorded scope; recorded requires a selected completed operation", reflect.TypeOf(RecordingViewParams{})),
+		typedCapability("recording.seek", "Pause and seek exact sample index or nearest recorded time (exactly one); time ties select latest/right-hand edge sample", reflect.TypeOf(RecordingSeekParams{})),
+		typedCapability("recording.step", "Pause and move one actual recorded row next/previous, preserving duplicate timestamps", reflect.TypeOf(RecordingStepParams{})),
+		typedCapability("recording.speed.set", "Set recorded playback speed .001–10 without starting playback", reflect.TypeOf(RecordingPlayParams{})),
+		typedCapability("recording.play", "Play selected complete recording at .001–10 simulated seconds per wall second, without interpolation or solver work", reflect.TypeOf(RecordingPlayParams{})),
+		capability("recording.pause", "Pause recorded playback without changing live pause/time", true, `{"type":"object","additionalProperties":false}`),
+		typedCapability("recording.window.set", "Set recorded plot/statistics interval inside complete recording; no reduction of exact data", reflect.TypeOf(RecordingWindowParams{})),
+		typedCapability("recording.probes.set", "Select up to six unique captured probes; [] hides traces", reflect.TypeOf(ProbeParams{})),
+		typedCapability("recording.cursor.set", "Set recorded a/b cursor inside complete recording; nearest sample/right-hand ties, independent of live cursors", reflect.TypeOf(CursorParams{})),
+		typedCapability("recording.cursor.select", "Choose recorded a/b cursor for plot clicks", reflect.TypeOf(CursorSelectParams{})),
+		typedCapability("recording.cursor.clear", "Clear recorded a/b cursor", reflect.TypeOf(CursorSelectParams{})),
 		typedCapability("recovery.configure", "Configure a private local recovery directory, automatic snapshots and 1–60 s interval; saved project files are never overwritten", reflect.TypeOf(RecoveryConfigureParams{})),
 		capability("recovery.scan", "Validate and list newest complete snapshots per document, with corrupt-file diagnostics", true, `{"type":"object","additionalProperties":false}`),
 		capability("recovery.checkpoint", "Write a complete recovery snapshot now (or retire owned snapshots when clean); does not save/associate the project", true, `{"type":"object","additionalProperties":false}`),

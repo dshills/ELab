@@ -18,6 +18,7 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 		}
 	}
 	nodes := []ui.Node{section("verification-title", "Verify from startup"), quiet("verification-help", "Records a separate run from captured startup conditions. Your live circuit and time stay unchanged.")}
+	nodes = append(nodes, ui.Node{ID: "recording-import", Kind: ui.Button, Text: "Open recorded run…", Accessibility: ui.Accessibility{Name: "Open recorded run"}, Disabled: s.fileBusy || s.pendingCommand != "", Activate: func() { s.beginFile("verification.import", true, workbench.RecordingImportParams{}, nil) }})
 	if transient {
 		for _, field := range []struct {
 			id, label  string
@@ -136,7 +137,11 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 		caption := fmt.Sprintf("%s · %.0f%% · %.4g / %.4g s", operation.Status, operation.Progress*100, operation.SimulatedTime, operation.RequestedDuration)
 		nodes = append(nodes, quiet("verify-progress", caption), quiet("verify-identity", fmt.Sprintf("Captured electrical revision %d · %s", operation.ElectricalRevision, operation.Actor)))
 		if !operation.SourceUnchanged {
-			nodes = append(nodes, quiet("verify-source-changed", "Recorded source differs from the current circuit."))
+			message := "Recorded source differs from the current circuit."
+			if operation.Kind == "record-import" {
+				message = "Imported data has no association with the live circuit."
+			}
+			nodes = append(nodes, quiet("verify-source-changed", message))
 		}
 		cancel := s.action("verify-cancel", "Cancel verification", "operation.cancel", workbench.IDParams{ID: operation.ID})
 		cancel.Disabled = operation.Status != "queued" && operation.Status != "running"
@@ -146,6 +151,9 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 		}
 	}
 	if preview := state.Verification; preview != nil {
+		nodes = append(nodes, s.action("recording-show", "View recorded plot", "recording.view.set", workbench.RecordingViewParams{Mode: "recorded"}))
+		nodes = append(nodes, s.recordingInspector(state)...)
+
 		for _, format := range []string{"json", "csv"} {
 			format := format
 			nodes = append(nodes, ui.Node{ID: "verify-export-" + format, Kind: ui.Button, Text: "Export recorded " + strings.ToUpper(format), Accessibility: ui.Accessibility{Name: "Export verification " + format}, Activate: func() {

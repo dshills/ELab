@@ -393,7 +393,7 @@ func (s *screen) view() ui.Node {
 		{ID: "footer-row", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 20})}, Children: []ui.Node{quiet("footer", fmt.Sprintf("%s · %d components · %d wires · last change: %s", filename, len(state.Components), len(state.Wires), state.LastActor)), {ID: "footer-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, quiet("grid-info", "10-unit snap · local workspace")}},
 		s.filePrompt(),
 	}}
-	if workbench.IsTransientAnalysis(state.Analysis) || state.Transient != nil {
+	if state.Recording != nil && state.Recording.Viewing || workbench.IsTransientAnalysis(state.Analysis) || state.Transient != nil {
 		index := len(root.Children) - 3
 		children := append([]ui.Node{}, root.Children[:index]...)
 		children = append(children, s.scopePanel(state))

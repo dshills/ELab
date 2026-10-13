@@ -1,6 +1,9 @@
 package workbench
 
-import "context"
+import (
+	"context"
+	"encoding/json"
+)
 
 type CapacitorInitial struct {
 	ID      string  `json:"id"`
@@ -36,6 +39,8 @@ type VerifyParams struct {
 	ProbeIDs       []string           `json:"probe_ids,omitempty"`
 }
 type OperationSummary struct {
+	SourcePath         string   `json:"source_path,omitempty"`
+	SourceSHA256       string   `json:"source_sha256,omitempty"`
 	ID                 string   `json:"id"`
 	Kind               string   `json:"kind"`
 	Status             string   `json:"status"`
@@ -129,4 +134,31 @@ type verificationInput struct {
 	steps    int
 	serial   uint64
 	metadata VerificationMetadata
+}
+
+// Empty arrays explicitly clear selections/overrides; nil inherits defaults.
+// encoding/json's slice omitempty otherwise collapses those distinct actions.
+func (p VerifyParams) MarshalJSON() ([]byte, error) {
+	type wire VerifyParams
+	data, err := json.Marshal(wire(p))
+	if err != nil {
+		return nil, err
+	}
+	var fields map[string]json.RawMessage
+	if err := json.Unmarshal(data, &fields); err != nil {
+		return nil, err
+	}
+	if p.ProbeIDs != nil {
+		fields["probe_ids"], err = json.Marshal(p.ProbeIDs)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if p.Capacitors != nil {
+		fields["capacitor_initials"], err = json.Marshal(p.Capacitors)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return json.Marshal(fields)
 }

@@ -32,7 +32,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.11.0 --build-version 25 --platform darwin
+  --version 0.12.0 --build-version 26 --platform darwin
 ```
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
@@ -142,3 +142,5 @@ The current engines support a series LED DC circuit, an ideal first-order RC tra
 Vellum's own code is MIT licensed; Cogent and other native dependencies retain their upstream licenses. No framework source is vendored here. Application licensing has not been selected.
 
 Autosave and crash recovery are available in the Inspector. Snapshots preserve dirty edits separately from saved files; restoring opens a new copy for Save As. See [recovery commands and limits](docs/recovery.md). Native startup enables autosave by default; headless sessions opt in with `--recovery-directory` or the shared configuration command.
+
+Open exported recorded JSON from the Verify inspector to inspect/play its captured samples in a separate Recorded scope. Live state remains independent. [Recorded viewer commands and limits](docs/recording.md) describe exact edge stepping, probes and timing measurements.

@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "date": "2026-10-13",
+  "version": "0.12.0",
+  "build": "26",
+  "binary_sha256": "46ef8e7c19011ed65ad65ce34bd4ef7bf7ca785eb4870f2f0aa08aa8f057e160",
+  "packaged_binary_matches": true,
+  "capabilities": 75,
+  "schema_version": 2,
+  "headless_desktop_numerical_equivalence": true,
+  "checks": [
+    "pinned Staticcheck and import formatting",
+    "Go vet and root/native race tests",
+    "all supported analysis record round-trips",
+    "complete interior-output coverage and malformed/null/missing-field refusal",
+    "exact pulse edge/index stepping and independent cursors/playback",
+    "bounded extrema-preserving plot and exact full-data statistics",
+    "finite tiny-interval cursor serialization",
+    "explicit empty typed Go Verify selections",
+    "captured-source inspection and native/agent control parity",
+    "native GPU/UI view switching with retained canvas identity",
+    "packaged native smoke",
+    "headless and packaged desktop import/replay/export workflows"
+  ],
+  "limits": [
+    "native elab.verification v1 JSON only; no arbitrary waveform/CSV import",
+    "eight retained operations, 4096 rows, six probes and 8 MiB file bound",
+    "plotted data reduced to ordered bucket extrema; exact data remains inspectable/exportable",
+    "project-embedded recorded-result portability is the immediate next slice",
+    "educational generic kernels; no imported data certification or hardware validation",
+    "private unsigned local app; distribution audit pending"
+  ]
+}
