@@ -1,0 +1,10 @@
+.title KiCad schematic
+.model __D1 D
++           is=1e-20
++           rs=1
++           n=2
+.op
+D1 /OUT 0 __D1
+R1 /IN /OUT 1k
+V1 /IN 0 DC 5 
+.end

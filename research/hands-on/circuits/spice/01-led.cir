@@ -1,0 +1,7 @@
+LED benchmark - educational generic diode model
+V1 IN 0 5
+R1 IN LED 1k
+D1 LED 0 DLED
+.model DLED D(Is=1e-20 N=2 Rs=1)
+.op
+.end

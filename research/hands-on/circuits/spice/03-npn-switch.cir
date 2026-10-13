@@ -1,0 +1,11 @@
+NPN switch benchmark - educational generic transistor
+VCC VCC 0 5
+VIN IN 0 PULSE(0 5 0 1u 1u 50m 100m)
+RB IN B 10k
+RC VCC C 1k
+Q1 C B 0 QGEN
+.model QGEN NPN(Is=1e-14 Bf=100)
+.tran 10u 200m
+.meas tran von FIND V(C) AT=25m
+.meas tran voff FIND V(C) AT=75m
+.end

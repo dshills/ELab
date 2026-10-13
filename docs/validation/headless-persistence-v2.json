@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "format": "elab.schematic",
+  "version": 2,
+  "checks": [
+    "exact graph/value/rotation round trip",
+    "saved viewport",
+    "live recomputation",
+    "new process reload",
+    "unsaved change protection",
+    "external file conflict",
+    "invalid file refusal",
+    "explicit overwrite"
+  ],
+  "resistance_ohm": 2200,
+  "current_a": 0.001344737452917332
+}

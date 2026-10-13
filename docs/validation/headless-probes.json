@@ -1,0 +1,60 @@
+{
+  "passed": true,
+  "transport": "headless stdio",
+  "capabilities": 49,
+  "run_id": 3,
+  "sample_step_s": 0.005,
+  "sample_count": 401,
+  "cursor_a_s": 1.2999999999999936,
+  "cursor_b_s": 1.7849999999999833,
+  "period_s": 0.48499999999998966,
+  "interval_hz": 2.0618556701031365,
+  "readings": [
+    {
+      "probe_id": "v:Q1.collector",
+      "a": 0.03454644035398556,
+      "b": 0.0309504810166397,
+      "delta": -0.0035959593373458623
+    },
+    {
+      "probe_id": "v:Q2.collector",
+      "a": 1.2868631072490777,
+      "b": 0.616125065506793,
+      "delta": -0.6707380417422847
+    },
+    {
+      "probe_id": "i:D1",
+      "a": 0.002882888925058574,
+      "b": 0.0028864180679089363,
+      "delta": 3.529142850362127e-06
+    },
+    {
+      "probe_id": "i:D2",
+      "a": 0.0016603378807792547,
+      "b": 0.002313267314278734,
+      "delta": 0.0006529294334994794
+    },
+    {
+      "probe_id": "v:C2",
+      "a": 0.5836634063605391,
+      "b": -0.09179487408167686,
+      "delta": -0.675458280442216
+    },
+    {
+      "probe_id": "i:C2",
+      "a": 0.0016603378807582266,
+      "b": 0.0023132673142656508,
+      "delta": 0.0006529294335074242
+    }
+  ],
+  "checks": [
+    "both collector voltages and LED currents",
+    "opposite LED phases",
+    "capacitor voltage and signed current",
+    "selection backfills retained history",
+    "selection preserves solver state",
+    "cursor timing and per-channel deltas",
+    "clear cursor removes measurement",
+    "invalid selection/time refuses mutation"
+  ]
+}

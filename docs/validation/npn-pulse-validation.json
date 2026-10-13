@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "version": "0.6.0",
+  "build": "20",
+  "packaged_binary_matches_tested_binary": true,
+  "checks": [
+    "root/desktop race tests and vet",
+    "native LED/RC/NPN DC/pulse smoke",
+    "voltage and current scope pixels",
+    "UI/agent construction and control equivalence",
+    "headless stdio workflow",
+    "packaged desktop socket workflow"
+  ],
+  "engine": "elab.npn-switch-quasistatic.v1",
+  "model_limit": "Instantaneous, memoryless Ebers\u2013Moll response; no physical switching delay or charge storage.",
+  "final_app_state": "Editable Blink example running in Auto",
+  "release_qualification": "Private local build; native distribution audit remains pending."
+}

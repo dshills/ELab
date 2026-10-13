@@ -1,0 +1,220 @@
+{
+  "passed": true,
+  "transport": "desktop-or-headless-socket",
+  "capability_count": 29,
+  "current_1k_a": 0.0029167965774405296,
+  "current_2k_a": 0.001476723549138745,
+  "checks": [
+    "build from blank",
+    "terminal-derived nets",
+    "move/rotate/undo without solver restart",
+    "live edit",
+    "retry deduplication",
+    "incomplete/stale feedback",
+    "undo recovery",
+    "paused edit",
+    "resume",
+    "invalid input refusal",
+    "selection/view without solver restart"
+  ],
+  "component_ids": {
+    "dc-source": "V2",
+    "resistor": "R2",
+    "led": "D2",
+    "ground": "GND2"
+  },
+  "final": {
+    "revision": 53,
+    "electrical_revision": 23,
+    "circuit": {
+      "voltage_v": 5,
+      "resistance_ohm": 1000,
+      "connected": true
+    },
+    "components": [
+      {
+        "id": "V2",
+        "kind": "dc-source",
+        "name": "DC source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-dc.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R2",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -110
+        },
+        "value": 1000,
+        "unit": "\u03a9",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "D2",
+        "kind": "led",
+        "name": "Red LED",
+        "terminals": [
+          "anode",
+          "cathode"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 0,
+        "model": "elab.generic-red-led.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND2",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 110
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W5",
+        "from": "V2.positive",
+        "to": "R2.1",
+        "connected": true
+      },
+      {
+        "id": "W6",
+        "from": "R2.2",
+        "to": "D2.anode",
+        "connected": true
+      },
+      {
+        "id": "W7",
+        "from": "D2.cathode",
+        "to": "GND2.reference",
+        "connected": true
+      },
+      {
+        "id": "W8",
+        "from": "GND2.reference",
+        "to": "V2.negative",
+        "connected": true
+      }
+    ],
+    "nets": [
+      {
+        "id": "net:D2.anode",
+        "terminals": [
+          "D2.anode",
+          "R2.2"
+        ]
+      },
+      {
+        "id": "net:D2.cathode",
+        "terminals": [
+          "D2.cathode",
+          "GND2.reference",
+          "V2.negative"
+        ]
+      },
+      {
+        "id": "net:R2.1",
+        "terminals": [
+          "R2.1",
+          "V2.positive"
+        ]
+      }
+    ],
+    "drawing": {
+      "tool": "select",
+      "kind": "dc-source",
+      "position": {
+        "x": -200,
+        "y": 0
+      },
+      "wire_start": "",
+      "from": "",
+      "to": "",
+      "value": ""
+    },
+    "model": {
+      "id": "elab.generic-red-led.v1",
+      "is_a": 1e-20,
+      "n": 2,
+      "rs_ohm": 1,
+      "temperature_c": 27,
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+    },
+    "selected": "D2",
+    "view": {
+      "center": {
+        "x": 0,
+        "y": 0
+      },
+      "zoom": 1
+    },
+    "status": "running",
+    "analysis": "DC operating point",
+    "paused": false,
+    "run_id": 24,
+    "result": {
+      "run_id": 24,
+      "electrical_revision": 23,
+      "engine": "elab.series-led-dc.v1",
+      "model": {
+        "id": "elab.generic-red-led.v1",
+        "is_a": 1e-20,
+        "n": 2,
+        "rs_ohm": 1,
+        "temperature_c": 27,
+        "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+      },
+      "current_a": 0.0029167965774405296,
+      "led_voltage_v": 2.083203422559471,
+      "resistor_voltage_v": 2.91679657744053,
+      "led_power_w": 0.006076280613033862,
+      "resistor_power_w": 0.008507702274168787,
+      "kvl_residual_v": -6.730727086790012e-16,
+      "node_voltage_v": {
+        "ground": 0,
+        "led-anode": 2.083203422559471,
+        "net:D2.anode": 2.083203422559471,
+        "net:D2.cathode": 0,
+        "net:R2.1": 5,
+        "supply": 5
+      },
+      "stale": false,
+      "source_id": "V2",
+      "resistor_id": "R2",
+      "led_id": "D2"
+    },
+    "diagnostics": [],
+    "can_undo": true,
+    "can_redo": true,
+    "last_actor": "agent.socket",
+    "closed": false
+  }
+}

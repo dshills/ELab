@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "version": "0.5.0",
+  "build": "18",
+  "packaged_binary_matches_tested_binary": true,
+  "native_smoke": {
+    "led": true,
+    "rc": true,
+    "npn": true
+  },
+  "native_ui_inspection": {
+    "base_drive_0_v": "Cutoff / 0.000 mA",
+    "base_drive_5_v": "Saturation / 2.860 mA / VCE 0.058 V"
+  },
+  "model": "elab.generic-npn.v1",
+  "engine": "elab.npn-switch-dc.v1",
+  "resistive_load_vce_v": 0.0703992191382,
+  "saved_ltspice_reference_vce_v": 0.070399299264,
+  "reference_tolerance_v": 0.001,
+  "release_qualification": "Private local build; native distribution audit remains pending."
+}

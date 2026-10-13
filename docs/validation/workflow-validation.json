@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "date": "2026-10-13",
+  "app": "/Users/dshills/Development/projects/ELab/build/ELab.app",
+  "version": "0.9.0",
+  "build": "23",
+  "binary_sha256": "1c319e5b5991d909632f3fa9ab801f57c05e6b7b2502b98a9e5d7a802fc797e6",
+  "packaged_binary_matches": true,
+  "checks": [
+    "root/desktop race tests and vet",
+    "native GPU/UI smoke",
+    "packaged native smoke",
+    "headless and packaged desktop command workflows",
+    "native/agent callback and export parity",
+    "v1/v2 compatibility and v3 saved probes",
+    "rendered SVG visual inspection"
+  ],
+  "capabilities": 49,
+  "headless_desktop_numerical_equivalence": true,
+  "flasher_period_s": 0.48499999999998966,
+  "document_version": 3,
+  "final_desktop": {
+    "paused": true,
+    "time_s": 2,
+    "selected_probes": [
+      "v:Q1.collector",
+      "v:Q2.collector",
+      "i:D1",
+      "i:D2",
+      "v:C1",
+      "v:C2"
+    ],
+    "window": {
+      "mode": "fixed",
+      "start_s": 0.5,
+      "end_s": 1.5
+    },
+    "cursor_a_s": 1,
+    "cursor_b_s": 1.3999999999999915,
+    "document_path": "/Users/dshills/Development/projects/ELab/docs/validation/workflow-artifacts/flasher-probed.elab",
+    "dirty": false
+  },
+  "limits": [
+    "private unsigned build; distribution audit pending",
+    "bounded educational solvers; no physical device/hardware timing validation",
+    "sample statistics and sample-snapped cursors, not sub-sample or time-weighted measurements",
+    "full MVP, recovery/Verify/jobs/accessibility/capacity and participant gates remain open"
+  ]
+}

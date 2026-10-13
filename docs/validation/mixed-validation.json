@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "version": "0.7.0",
+  "build": "21",
+  "packaged_binary_matches_tested_binary": true,
+  "engine": "elab.mixed-mna-be.v1",
+  "checks": [
+    "root/desktop race tests and vet",
+    "autonomous DC-powered oscillation",
+    "capacitance doubles measured period",
+    "analytical low-bias RC limiting case",
+    "capacitor continuity at pulse edges",
+    "KCL and energy/power balance with numerical damping",
+    "transactional failure handling",
+    "signed startup voltage and persistence",
+    "UI/agent construction and controls",
+    "body-avoiding wire routes",
+    "native capacitor/current scope pixels",
+    "headless and packaged desktop workflows"
+  ],
+  "model_limits": "Ideal capacitors and educational memoryless NPN/LED junction models; no intrinsic device timing, ESR, leakage or thermal/device calibration.",
+  "final_app_state": "Editable Flasher example running in Auto",
+  "release_qualification": "Private local build; native distribution audit remains pending."
+}

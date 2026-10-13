@@ -1,0 +1,6 @@
+.title KiCad schematic
+.tran 10u 200m
+C1 /OUT 0 1u
+R1 /IN /OUT 10k
+V1 /IN 0 PULSE( 0 5 0 1u 1u 50m 100m ) 
+.end

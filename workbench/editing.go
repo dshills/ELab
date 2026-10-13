@@ -1,0 +1,628 @@
+package workbench
+
+import (
+	"encoding/json"
+	"fmt"
+	"math"
+)
+
+type actionError struct{ code, message string }
+
+func (e *actionError) Error() string { return e.message }
+
+type FitParams struct {
+	Width  float64 `json:"width_px,omitempty"`
+	Height float64 `json:"height_px,omitempty"`
+}
+type PlaceParams struct {
+	ID       string `json:"id,omitempty"`
+	Kind     string `json:"kind"`
+	Position Point  `json:"position"`
+	Value    string `json:"value,omitempty"`
+}
+type MoveParams struct {
+	ID               string `json:"id"`
+	Position         Point  `json:"position"`
+	PreviousPosition *Point `json:"previous_position,omitempty"`
+}
+type IDParams struct {
+	ID string `json:"id"`
+}
+type ValueParams struct {
+	ID    string `json:"id"`
+	Value string `json:"value"`
+}
+type ConnectParams struct {
+	ID   string `json:"id,omitempty"`
+	From string `json:"from"`
+	To   string `json:"to"`
+}
+type ToolParams struct {
+	Tool string `json:"tool"`
+	Kind string `json:"kind,omitempty"`
+}
+type PositionParams struct {
+	Position Point `json:"position"`
+}
+type TerminalsParams struct {
+	From string `json:"from"`
+	To   string `json:"to"`
+}
+type DraftParams struct {
+	Value string `json:"value"`
+}
+
+func (s *Service) nextID(prefix string) string {
+	for i := 1; ; i++ {
+		id := fmt.Sprintf("%s%d", prefix, i)
+		if !s.usedIDs[id] && !s.graph.HasObject(id) {
+			return id
+		}
+	}
+}
+func validatePointParam(raw json.RawMessage, field string) error {
+	var object map[string]json.RawMessage
+	json.Unmarshal(raw, &object)
+	return params(object[field], &Point{}, "x", "y")
+}
+func (s *Service) normalizeDrawingLocked() {
+	if s.selected != "" && !s.graph.HasObject(s.selected) {
+		s.selected = ""
+	}
+	for _, ref := range []*string{&s.drawing.WireStart, &s.drawing.From, &s.drawing.To} {
+		if *ref != "" {
+			if _, _, ok := s.graph.Terminal(*ref); !ok {
+				*ref = ""
+			}
+		}
+	}
+	if c, ok := s.graph.Component(s.selected); ok && c.Unit != "" {
+		s.drawing.Value = fmt.Sprintf("%.12g %s", c.Value, c.Unit)
+	} else {
+		s.drawing.Value = ""
+	}
+}
+func (s *Service) connectLocked(p ConnectParams) error {
+	if len(s.graph.Wires) >= MaxWires {
+		return fmt.Errorf("drawing supports at most %d wires", MaxWires)
+	}
+	if _, _, ok := s.graph.Terminal(p.From); !ok {
+		return fmt.Errorf("unknown terminal %q", p.From)
+	}
+	if _, _, ok := s.graph.Terminal(p.To); !ok {
+		return fmt.Errorf("unknown terminal %q", p.To)
+	}
+	if p.From == p.To {
+		return fmt.Errorf("choose two different terminals")
+	}
+	for _, w := range s.graph.Wires {
+		if w.From == p.From && w.To == p.To || w.From == p.To && w.To == p.From {
+			return fmt.Errorf("these terminals are already connected")
+		}
+	}
+	if p.ID == "" {
+		p.ID = s.nextID("W")
+	}
+	if !ValidID(p.ID) || s.usedIDs[p.ID] || s.graph.HasObject(p.ID) {
+		return fmt.Errorf("wire ID is invalid or already used in this session")
+	}
+	s.graph.Wires = append(s.graph.Wires, Wire{ID: p.ID, From: p.From, To: p.To, Connected: true})
+	s.usedIDs[p.ID] = true
+	s.drawing.WireStart = ""
+	s.drawing.From = ""
+	s.drawing.To = ""
+	return nil
+}
+func (s *Service) applyLocked(command string, raw json.RawMessage) error {
+	switch command {
+	case "export.scope.csv", "export.schematic.svg":
+		var p ExportParams
+		if err := params(raw, &p, "path"); err != nil {
+			return err
+		}
+		return s.exportLocked(command, p)
+	case "scope.window.set":
+		var p ScopeWindow
+		if err := params(raw, &p, "mode"); err != nil {
+			return err
+		}
+		if p.Mode == "fixed" {
+			if err := params(raw, &p, "mode", "start_s", "end_s"); err != nil {
+				return err
+			}
+		}
+		return s.setScopeWindowLocked(p)
+	case "parts.search.set":
+		var p SearchParams
+		if err := params(raw, &p, "query"); err != nil {
+			return err
+		}
+		if len(p.Query) > 128 {
+			return fmt.Errorf("search is limited to 128 bytes")
+		}
+		s.partSearch = p.Query
+		return nil
+	case "component.duplicate":
+		var p DuplicateParams
+		if err := params(raw, &p, "id"); err != nil {
+			return err
+		}
+		if p.Position != nil {
+			if err := validatePointParam(raw, "position"); err != nil {
+				return err
+			}
+		}
+		return s.duplicateLocked(p)
+	case "edit.batch":
+		var p BatchParams
+		if err := params(raw, &p, "name", "edits"); err != nil {
+			return err
+		}
+		for _, edit := range p.Edits {
+			if edit.Command == "" || edit.Params == nil {
+				return fmt.Errorf("every batch edit needs command and params")
+			}
+		}
+		return s.batchLocked(p)
+	case "scope.probes.set", "scope.cursor.set", "scope.cursor.select", "scope.cursor.clear":
+		return s.scopeCommandLocked(command, raw)
+	case "capacitor.initial.set":
+		var p ValueParams
+		if err := params(raw, &p, "id", "value"); err != nil {
+			return err
+		}
+		return s.capacitorInitialLocked(p)
+	case "simulation.transient.set", "simulation.input.set", "simulation.step":
+		return s.transientCommandLocked(command, raw)
+	case "project.save":
+		var p SaveParams
+		if err := params(raw, &p); err != nil {
+			return err
+		}
+		return s.saveLocked(p)
+	case "project.load":
+		var p LoadParams
+		if err := params(raw, &p, "path"); err != nil {
+			return err
+		}
+		return s.loadLocked(p)
+	case "component.place":
+		var p PlaceParams
+		if err := params(raw, &p, "kind", "position"); err != nil {
+			return err
+		}
+		if err := validatePointParam(raw, "position"); err != nil {
+			return err
+		}
+		if len(s.graph.Components) >= MaxComponents {
+			return fmt.Errorf("drawing supports at most %d components", MaxComponents)
+		}
+		if p.ID == "" {
+			prefix := map[string]string{"dc-source": "V", "resistor": "R", "led": "D", "ground": "GND", "capacitor": "C", "pulse-source": "V", "npn": "Q"}[p.Kind]
+			if prefix == "" {
+				return fmt.Errorf("unknown part kind")
+			}
+			p.ID = s.nextID(prefix)
+		}
+		if s.usedIDs[p.ID] || s.graph.HasObject(p.ID) {
+			return fmt.Errorf("component ID is already used in this session")
+		}
+		c, err := MakeComponent(p.ID, p.Kind, p.Position, p.Value)
+		if err != nil {
+			return err
+		}
+		for _, other := range s.graph.Components {
+			if other.Position == c.Position {
+				return fmt.Errorf("this grid position is occupied; choose another")
+			}
+		}
+		s.graph.Components = append(s.graph.Components, c)
+		s.usedIDs[p.ID] = true
+		s.selected = c.ID
+		s.drawing.Tool = "select"
+		return nil
+	case "component.set":
+		var p ValueParams
+		if err := params(raw, &p, "id", "value"); err != nil {
+			return err
+		}
+		for i, c := range s.graph.Components {
+			if c.ID == p.ID {
+				next, err := SetValue(c, p.Value)
+				if err != nil {
+					return err
+				}
+				s.graph.Components[i] = next
+				return nil
+			}
+		}
+		return fmt.Errorf("unknown component ID")
+	case "component.move":
+		var p MoveParams
+		if err := params(raw, &p, "id", "position"); err != nil {
+			return err
+		}
+		if err := validatePointParam(raw, "position"); err != nil {
+			return err
+		}
+		position, err := snapPoint(p.Position)
+		if err != nil {
+			return err
+		}
+		for _, other := range s.graph.Components {
+			if other.ID != p.ID && other.Position == position {
+				return fmt.Errorf("this grid position is occupied")
+			}
+		}
+		for i, c := range s.graph.Components {
+			if c.ID == p.ID {
+				if p.PreviousPosition != nil && c.Position != *p.PreviousPosition {
+					return &actionError{"conflict", "component moved during this gesture; inspect its current position"}
+				}
+				s.graph.Components[i].Position = position
+				return nil
+			}
+		}
+		return fmt.Errorf("unknown component ID")
+	case "component.rotate":
+		var p IDParams
+		if err := params(raw, &p, "id"); err != nil {
+			return err
+		}
+		for i, c := range s.graph.Components {
+			if c.ID == p.ID {
+				s.graph.Components[i].Rotation = (c.Rotation + 90) % 360
+				return nil
+			}
+		}
+		return fmt.Errorf("unknown component ID")
+	case "object.delete":
+		var p IDParams
+		if err := params(raw, &p, "id"); err != nil {
+			return err
+		}
+		if !s.graph.HasObject(p.ID) {
+			return fmt.Errorf("unknown object ID")
+		}
+		graph := s.graph.Clone()
+		graph.Components = graph.Components[:0]
+		for _, c := range s.graph.Components {
+			if c.ID != p.ID {
+				graph.Components = append(graph.Components, c)
+			}
+		}
+		graph.Wires = graph.Wires[:0]
+		for _, w := range s.graph.Wires {
+			from, _, _ := s.graph.Terminal(w.From)
+			to, _, _ := s.graph.Terminal(w.To)
+			if w.ID != p.ID && from.ID != p.ID && to.ID != p.ID {
+				graph.Wires = append(graph.Wires, w)
+			}
+		}
+		s.graph = graph
+		return nil
+	case "component.select":
+		var p IDParams
+		if err := params(raw, &p, "id"); err != nil {
+			return err
+		}
+		if p.ID != "" && !s.graph.HasObject(p.ID) {
+			return fmt.Errorf("unknown object ID")
+		}
+		s.selected = p.ID
+		s.normalizeDrawingLocked()
+		return nil
+	case "wire.connect":
+		var p ConnectParams
+		if err := params(raw, &p, "from", "to"); err != nil {
+			return err
+		}
+		return s.connectLocked(p)
+	case "wire.begin":
+		var p struct {
+			Terminal string `json:"terminal"`
+		}
+		if err := params(raw, &p, "terminal"); err != nil {
+			return err
+		}
+		if _, _, ok := s.graph.Terminal(p.Terminal); !ok {
+			return fmt.Errorf("unknown terminal")
+		}
+		s.drawing.Tool = "wire"
+		s.drawing.WireStart = p.Terminal
+		return nil
+	case "drawing.tool.set":
+		var p ToolParams
+		if err := params(raw, &p, "tool"); err != nil {
+			return err
+		}
+		if p.Tool != "select" && p.Tool != "place" && p.Tool != "wire" && p.Tool != "pan" {
+			return fmt.Errorf("tool must be select, place, wire, or pan")
+		}
+		kind := s.drawing.Kind
+		if p.Kind != "" {
+			kind = p.Kind
+		}
+		valid := false
+		for _, part := range Library() {
+			if part.Kind == kind {
+				valid = true
+			}
+		}
+		if !valid {
+			return fmt.Errorf("unknown part kind")
+		}
+		s.drawing.Tool = p.Tool
+		s.drawing.Kind = kind
+		s.drawing.WireStart = ""
+		return nil
+	case "drawing.position.set":
+		var p PositionParams
+		if err := params(raw, &p, "position"); err != nil {
+			return err
+		}
+		if err := validatePointParam(raw, "position"); err != nil {
+			return err
+		}
+		position, err := snapPoint(p.Position)
+		if err != nil {
+			return err
+		}
+		s.drawing.Position = position
+		return nil
+	case "wire.terminals.set":
+		var p TerminalsParams
+		if err := params(raw, &p, "from", "to"); err != nil {
+			return err
+		}
+		for _, ref := range []string{p.From, p.To} {
+			if ref != "" {
+				if _, _, ok := s.graph.Terminal(ref); !ok {
+					return fmt.Errorf("unknown terminal %q", ref)
+				}
+			}
+		}
+		s.drawing.From = p.From
+		s.drawing.To = p.To
+		return nil
+	case "editor.value.set":
+		var p DraftParams
+		if err := params(raw, &p, "value"); err != nil {
+			return err
+		}
+		if len(p.Value) > 128 {
+			return fmt.Errorf("value entry is limited to 128 bytes")
+		}
+		s.drawing.Value = p.Value
+		return nil
+	case "circuit.connection.set":
+		// Compatibility for the original prepared fixture; new drawing uses wire.connect/object.delete.
+		var p struct {
+			Connected bool `json:"connected"`
+		}
+		if err := params(raw, &p, "connected"); err != nil {
+			return err
+		}
+		if _, _, ok := s.graph.Terminal("R1.2"); !ok {
+			return fmt.Errorf("legacy fixture terminal R1.2 is absent")
+		}
+		if _, _, ok := s.graph.Terminal("D1.anode"); !ok {
+			return fmt.Errorf("legacy fixture terminal D1.anode is absent")
+		}
+		for i, w := range s.graph.Wires {
+			if w.From == "R1.2" && w.To == "D1.anode" || w.From == "D1.anode" && w.To == "R1.2" {
+				if p.Connected {
+					return nil
+				}
+				s.graph.Wires = append(s.graph.Wires[:i], s.graph.Wires[i+1:]...)
+				return nil
+			}
+		}
+		if !p.Connected {
+			return nil
+		}
+		return s.connectLocked(ConnectParams{From: "R1.2", To: "D1.anode"})
+	case "view.fit":
+		p := FitParams{Width: 650, Height: 400}
+		if err := params(raw, &p); err != nil {
+			return err
+		}
+		if !finite(p.Width) || !finite(p.Height) || p.Width < 64 || p.Height < 64 || p.Width > 100000 || p.Height > 100000 {
+			return fmt.Errorf("fit dimensions must be 64–100000 pixels")
+		}
+		s.view = View{Zoom: 1}
+		if len(s.graph.Components) > 0 {
+			minX, maxX, minY, maxY := s.graph.Components[0].Position.X, s.graph.Components[0].Position.X, s.graph.Components[0].Position.Y, s.graph.Components[0].Position.Y
+			for _, c := range s.graph.Components {
+				minX = math.Min(minX, c.Position.X)
+				maxX = math.Max(maxX, c.Position.X)
+				minY = math.Min(minY, c.Position.Y)
+				maxY = math.Max(maxY, c.Position.Y)
+			}
+			s.view.Center = Point{(minX + maxX) / 2, (minY + maxY) / 2}
+			s.view.Zoom = math.Max(.01, math.Min(2, math.Min(p.Width/(maxX-minX+180), p.Height/(maxY-minY+180))))
+		}
+		return nil
+	case "view.pan":
+		var p struct {
+			DX float64 `json:"dx"`
+			DY float64 `json:"dy"`
+		}
+		if err := params(raw, &p, "dx", "dy"); err != nil {
+			return err
+		}
+		x, y := s.view.Center.X+p.DX, s.view.Center.Y+p.DY
+		if !finite(x) || !finite(y) || math.Abs(x) > 1e6 || math.Abs(y) > 1e6 {
+			return fmt.Errorf("view center exceeds ±1000000 units")
+		}
+		s.view.Center = Point{x, y}
+		return nil
+	case "view.zoom":
+		var p struct {
+			Factor float64 `json:"factor"`
+			Anchor *Point  `json:"anchor"`
+		}
+		if err := params(raw, &p, "factor"); err != nil {
+			return err
+		}
+		if p.Anchor != nil {
+			if err := validatePointParam(raw, "anchor"); err != nil {
+				return err
+			}
+		}
+		if !finite(p.Factor) || p.Factor < .25 || p.Factor > 4 {
+			return fmt.Errorf("zoom factor must be 0.25–4")
+		}
+		anchor := s.view.Center
+		if p.Anchor != nil {
+			anchor = *p.Anchor
+		}
+		if !finite(anchor.X) || !finite(anchor.Y) || math.Abs(anchor.X) > 1e6 || math.Abs(anchor.Y) > 1e6 {
+			return fmt.Errorf("invalid zoom anchor")
+		}
+		zoom := math.Max(.01, math.Min(4, s.view.Zoom*p.Factor))
+		factor := zoom / s.view.Zoom
+		center := Point{anchor.X + (s.view.Center.X-anchor.X)/factor, anchor.Y + (s.view.Center.Y-anchor.Y)/factor}
+		if math.Abs(center.X) > 1e6 || math.Abs(center.Y) > 1e6 {
+			return fmt.Errorf("zoom exceeds view bounds")
+		}
+		s.view = View{center, zoom}
+		return nil
+	}
+	if command != "project.clear" && command != "example.reset" && command != "example.rc" && command != "example.npn" && command != "example.npn-pulse" && command != "example.flasher" && command != "app.close" {
+		if err := params(raw, &struct{}{}); err != nil {
+			return err
+		}
+	}
+	switch command {
+	case "project.clear":
+		var p ReplaceParams
+		if err := params(raw, &p); err != nil {
+			return err
+		}
+		if err := s.requireCleanLocked(p.DiscardChanges); err != nil {
+			return err
+		}
+		s.detachDocumentLocked()
+		s.graph = EmptyGraph()
+		s.selected = ""
+		s.drawing = DefaultDrawing()
+		s.view = View{Zoom: 1}
+	case "example.reset", "example.rc", "example.npn", "example.npn-pulse", "example.flasher":
+		var p ReplaceParams
+		if err := params(raw, &p); err != nil {
+			return err
+		}
+		if err := s.requireCleanLocked(p.DiscardChanges); err != nil {
+			return err
+		}
+		s.detachDocumentLocked()
+		s.graph = ExampleGraph()
+		if command == "example.rc" {
+			s.paused = false
+			s.transient = nil
+			s.graph = RCExampleGraph()
+		}
+		if command == "example.npn" || command == "example.npn-pulse" {
+			s.paused = false
+			s.npn = nil
+			s.graph = NPNExampleGraph()
+			if command == "example.npn-pulse" {
+				s.graph = NPNPulseExampleGraph()
+				s.transientSettings.PlaybackSpeed = .1
+			}
+		}
+		if command == "example.flasher" {
+			s.graph = FlasherExampleGraph()
+			s.paused = false
+			s.transientSettings.StepSeconds = .005
+			s.transientSettings.PlaybackSpeed = .5
+		}
+		for _, c := range s.graph.Components {
+			s.usedIDs[c.ID] = true
+		}
+		for _, w := range s.graph.Wires {
+			s.usedIDs[w.ID] = true
+		}
+		s.drawing = DefaultDrawing()
+		s.selected = ""
+		s.view = View{Zoom: 1}
+		if command == "example.npn-pulse" {
+			s.view = View{Center: Point{Y: -30}, Zoom: .5}
+		}
+		if command == "example.flasher" {
+			s.view = View{Center: Point{Y: -10}, Zoom: .55}
+		}
+	case "edit.undo":
+		if len(s.undo) == 0 {
+			return &actionError{"unavailable", "nothing to undo"}
+		}
+		h := s.historyLocked()
+		h.Name = s.undo[len(s.undo)-1].Name
+		s.redo = append(s.redo, h)
+		s.restoreLocked(s.undo[len(s.undo)-1])
+		s.undo = s.undo[:len(s.undo)-1]
+	case "edit.redo":
+		if len(s.redo) == 0 {
+			return &actionError{"unavailable", "nothing to redo"}
+		}
+		h := s.historyLocked()
+		h.Name = s.redo[len(s.redo)-1].Name
+		s.undo = append(s.undo, h)
+		s.restoreLocked(s.redo[len(s.redo)-1])
+		s.redo = s.redo[:len(s.redo)-1]
+	case "simulation.pause":
+		s.paused = true
+		if s.cancel != nil {
+			s.cancel()
+			s.cancel = nil
+		}
+		s.status = "paused"
+	case "simulation.resume":
+		s.paused = false
+		if s.transient != nil && !s.transient.Stale {
+			c, _, d := s.graph.Compile()
+			if d == nil && IsTransientAnalysis(c.Analysis) {
+				if s.transient.PendingMode != "" {
+					if err := s.applyTransientInputLocked(c, s.transient.PendingMode); err != nil {
+						s.paused = true
+						return err
+					}
+				}
+				s.status = "running"
+				s.launchTransientLocked(c)
+				break
+			}
+		}
+		s.startLocked()
+	case "simulation.restart":
+		s.startLocked()
+		if s.paused {
+			c, _, d := s.graph.Compile()
+			if d == nil && IsTransientAnalysis(c.Analysis) {
+				if c.Analysis == MixedAnalysis {
+					s.startMixedLocked(c)
+				} else if c.Analysis == NPNTransientAnalysis {
+					s.startNPNTransientLocked(c)
+				} else {
+					s.startRCLocked(c)
+				}
+			}
+		}
+	case "drawing.cancel":
+		s.drawing.Tool = "select"
+		s.drawing.WireStart = ""
+	case "app.close":
+		var p ReplaceParams
+		if err := params(raw, &p); err != nil {
+			return err
+		}
+		if err := s.requireCleanLocked(p.DiscardChanges); err != nil {
+			return err
+		}
+		s.closeLocked()
+	default:
+		return fmt.Errorf("unknown command")
+	}
+	return nil
+}

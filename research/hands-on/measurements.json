@@ -1,0 +1,320 @@
+{
+  "test_date": "2026-10-12",
+  "method": "Agent-operated UI tests using prepared circuits; not human timing or hardware validation",
+  "versions": {
+    "iCircuit": "1.15.1 (11510277)",
+    "Falstad CircuitJS": "4.1.5js",
+    "LTspice": "26.0.2 for MacOS",
+    "KiCad": "10.0.3"
+  },
+  "analytical_references": {
+    "rc_tau_s": 0.01,
+    "ideal_step_voltage_at_tau_V": 3.1606027941427883,
+    "periodic_min_V": 0.033464254621424286,
+    "periodic_max_V": 4.966535745378576
+  },
+  "records": [
+    {
+      "application": "iCircuit",
+      "circuit": "LED",
+      "metric": "current",
+      "value": 3.271,
+      "unit": "mA",
+      "condition": "R=1k; supply=5V",
+      "evidence": "screenshots/icircuit-02-led-running.jpg",
+      "kind": "displayed",
+      "limitation": "Native models differ; LTspice and KiCad share specified diode parameters."
+    },
+    {
+      "application": "iCircuit",
+      "circuit": "LED",
+      "metric": "forward_voltage",
+      "value": 1.729,
+      "unit": "V",
+      "condition": "R=1k; supply=5V",
+      "evidence": "screenshots/icircuit-02-led-running.jpg",
+      "kind": "displayed",
+      "limitation": ""
+    },
+    {
+      "application": "iCircuit",
+      "circuit": "LED",
+      "metric": "current",
+      "value": 1.658,
+      "unit": "mA",
+      "condition": "R=2k; supply=5V",
+      "evidence": "screenshots/icircuit-03-led-2k.jpg",
+      "kind": "displayed",
+      "limitation": ""
+    },
+    {
+      "application": "Falstad",
+      "circuit": "LED",
+      "metric": "current",
+      "value": 3.195,
+      "unit": "mA",
+      "condition": "R=1k; supply=5V",
+      "evidence": "screenshots/falstad-02-led-running.jpg",
+      "kind": "displayed",
+      "limitation": "Native models differ; LTspice and KiCad share specified diode parameters."
+    },
+    {
+      "application": "Falstad",
+      "circuit": "LED",
+      "metric": "forward_voltage",
+      "value": 1.805,
+      "unit": "V",
+      "condition": "R=1k; supply=5V",
+      "evidence": "screenshots/falstad-02-led-running.jpg",
+      "kind": "displayed",
+      "limitation": ""
+    },
+    {
+      "application": "Falstad",
+      "circuit": "LED",
+      "metric": "current",
+      "value": 1.615,
+      "unit": "mA",
+      "condition": "R=2k; supply=5V",
+      "evidence": "screenshots/falstad-03-led-2k.jpg",
+      "kind": "displayed",
+      "limitation": ""
+    },
+    {
+      "application": "LTspice",
+      "circuit": "LED",
+      "metric": "current",
+      "value": 2.91679,
+      "unit": "mA",
+      "condition": "R=1k; supply=5V",
+      "evidence": "screenshots/ltspice-07-led-1k-readable.jpg",
+      "kind": "displayed",
+      "limitation": "Native models differ; LTspice and KiCad share specified diode parameters."
+    },
+    {
+      "application": "LTspice",
+      "circuit": "LED",
+      "metric": "forward_voltage",
+      "value": 2.08321,
+      "unit": "V",
+      "condition": "R=1k; supply=5V",
+      "evidence": "screenshots/ltspice-07-led-1k-readable.jpg",
+      "kind": "displayed",
+      "limitation": ""
+    },
+    {
+      "application": "LTspice",
+      "circuit": "LED",
+      "metric": "current",
+      "value": 1.47672,
+      "unit": "mA",
+      "condition": "R=2k; supply=5V",
+      "evidence": "screenshots/ltspice-06-led-2k-readable.jpg",
+      "kind": "displayed",
+      "limitation": ""
+    },
+    {
+      "application": "KiCad",
+      "circuit": "LED",
+      "metric": "current",
+      "value": 2.91678,
+      "unit": "mA",
+      "condition": "R=1k; supply=5V",
+      "evidence": "screenshots/kicad-05-led-op.jpg",
+      "kind": "displayed",
+      "limitation": "Native models differ; LTspice and KiCad share specified diode parameters."
+    },
+    {
+      "application": "KiCad",
+      "circuit": "LED",
+      "metric": "forward_voltage",
+      "value": 2.08322,
+      "unit": "V",
+      "condition": "R=1k; supply=5V",
+      "evidence": "screenshots/kicad-05-led-op.jpg",
+      "kind": "displayed",
+      "limitation": ""
+    },
+    {
+      "application": "LTspice",
+      "circuit": "RC",
+      "metric": "voltage_at_10ms",
+      "value": 3.16051094075,
+      "unit": "V",
+      "condition": "1us input rise; 10k; 1uF",
+      "evidence": "circuits/ltspice/02-rc.log",
+      "kind": "simulation_log",
+      "limitation": ""
+    },
+    {
+      "application": "KiCad",
+      "circuit": "RC",
+      "metric": "voltage_at_10ms",
+      "value": 3.16,
+      "unit": "V",
+      "condition": "1us input rise; 10k; 1uF",
+      "evidence": "screenshots/kicad-04-rc-cursor.jpg",
+      "kind": "displayed",
+      "limitation": ""
+    },
+    {
+      "application": "iCircuit",
+      "circuit": "RC",
+      "metric": "scope_minimum",
+      "value": 67.448208,
+      "unit": "mV",
+      "condition": "automatic bandwidth observed at 256Hz",
+      "evidence": "screenshots/icircuit-04-rc-scope.jpg",
+      "kind": "displayed",
+      "limitation": "Frequency is a scope estimate, not an independent source timing measurement."
+    },
+    {
+      "application": "iCircuit",
+      "circuit": "RC",
+      "metric": "scope_maximum",
+      "value": 4.932551791749527,
+      "unit": "V",
+      "condition": "automatic bandwidth observed at 256Hz",
+      "evidence": "screenshots/icircuit-04-rc-scope.jpg",
+      "kind": "displayed",
+      "limitation": "Frequency is a scope estimate, not an independent source timing measurement."
+    },
+    {
+      "application": "iCircuit",
+      "circuit": "RC",
+      "metric": "scope_frequency_estimate",
+      "value": 10.24,
+      "unit": "Hz",
+      "condition": "automatic bandwidth observed at 256Hz",
+      "evidence": "screenshots/icircuit-04-rc-scope.jpg",
+      "kind": "displayed",
+      "limitation": "Frequency is a scope estimate, not an independent source timing measurement."
+    },
+    {
+      "application": "iCircuit",
+      "circuit": "RC",
+      "metric": "scope_minimum",
+      "value": 33.55,
+      "unit": "mV",
+      "condition": "manual bandwidth 100kHz",
+      "evidence": "screenshots/icircuit-06-rc-fine-result.jpg",
+      "kind": "displayed",
+      "limitation": "Frequency is a scope estimate, not an independent source timing measurement."
+    },
+    {
+      "application": "iCircuit",
+      "circuit": "RC",
+      "metric": "scope_maximum",
+      "value": 4.97,
+      "unit": "V",
+      "condition": "manual bandwidth 100kHz",
+      "evidence": "screenshots/icircuit-06-rc-fine-result.jpg",
+      "kind": "displayed",
+      "limitation": "Frequency is a scope estimate, not an independent source timing measurement."
+    },
+    {
+      "application": "iCircuit",
+      "circuit": "RC",
+      "metric": "scope_frequency_estimate",
+      "value": 10.01,
+      "unit": "Hz",
+      "condition": "manual bandwidth 100kHz",
+      "evidence": "screenshots/icircuit-06-rc-fine-result.jpg",
+      "kind": "displayed",
+      "limitation": "Frequency is a scope estimate, not an independent source timing measurement."
+    },
+    {
+      "application": "Falstad",
+      "circuit": "RC",
+      "metric": "scope_minimum",
+      "value": 33.481,
+      "unit": "mV",
+      "condition": "10us timestep; steady operation",
+      "evidence": "screenshots/falstad-04-rc-scope.jpg",
+      "kind": "displayed",
+      "limitation": "Frequency is a scope estimate."
+    },
+    {
+      "application": "Falstad",
+      "circuit": "RC",
+      "metric": "scope_maximum",
+      "value": 4.967,
+      "unit": "V",
+      "condition": "10us timestep; steady operation",
+      "evidence": "screenshots/falstad-04-rc-scope.jpg",
+      "kind": "displayed",
+      "limitation": "Frequency is a scope estimate."
+    },
+    {
+      "application": "Falstad",
+      "circuit": "RC",
+      "metric": "scope_frequency_estimate",
+      "value": 9.952,
+      "unit": "Hz",
+      "condition": "10us timestep; steady operation",
+      "evidence": "screenshots/falstad-04-rc-scope.jpg",
+      "kind": "displayed",
+      "limitation": "Frequency is a scope estimate."
+    },
+    {
+      "application": "iCircuit",
+      "circuit": "NPN",
+      "metric": "scope_minimum_vce",
+      "value": 50.60886,
+      "unit": "mV",
+      "condition": "native beta100 model; automatic bandwidth",
+      "evidence": "screenshots/icircuit-08-npn-scope.jpg",
+      "kind": "displayed",
+      "limitation": ""
+    },
+    {
+      "application": "Falstad",
+      "circuit": "NPN",
+      "metric": "off_state_vce",
+      "value": 5,
+      "unit": "V",
+      "condition": "native beta100 model; cutoff",
+      "evidence": "screenshots/falstad-05-npn-scope.jpg",
+      "kind": "displayed",
+      "limitation": "Captured scope minimum of 0V is excluded as a saturation measurement because startup is included."
+    },
+    {
+      "application": "LTspice",
+      "circuit": "NPN",
+      "metric": "voltage_at_25ms",
+      "value": 70.399299264,
+      "unit": "mV",
+      "condition": "NPN(Is=1e-14 Bf=100)",
+      "evidence": "circuits/ltspice/03-npn-switch.log",
+      "kind": "simulation_log",
+      "limitation": ""
+    },
+    {
+      "application": "LTspice",
+      "circuit": "NPN",
+      "metric": "voltage_at_75ms",
+      "value": 5,
+      "unit": "V",
+      "condition": "NPN(Is=1e-14 Bf=100)",
+      "evidence": "circuits/ltspice/03-npn-switch.log",
+      "kind": "simulation_log",
+      "limitation": ""
+    },
+    {
+      "application": "KiCad",
+      "circuit": "NPN",
+      "metric": "voltage_at_25ms",
+      "value": 70.4,
+      "unit": "mV",
+      "condition": "NPN(Is=1e-14 Bf=100)",
+      "evidence": "screenshots/kicad-07-npn-cursor.jpg",
+      "kind": "displayed",
+      "limitation": ""
+    }
+  ],
+  "incomplete_tasks": [
+    "KiCad LED resistor edit through UI",
+    "Complete drawing from blank across all four apps",
+    "Controlled fault recovery comparison"
+  ]
+}

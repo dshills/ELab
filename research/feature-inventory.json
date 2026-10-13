@@ -1,0 +1,738 @@
+[
+  {
+    "id": "F01",
+    "area": "Experiment",
+    "feature": "Simulation responds during construction",
+    "evidence_status": "User + documented",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "iCircuit"
+    ],
+    "source_ids": [
+      "S01",
+      "S04"
+    ],
+    "design_implication": "Test the defining experience with incomplete as well as complete circuits."
+  },
+  {
+    "id": "F02",
+    "area": "Experiment",
+    "feature": "Adjust parameters while running",
+    "evidence_status": "User + documented",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "Falstad",
+      "EveryCircuit"
+    ],
+    "source_ids": [
+      "S10",
+      "S07"
+    ],
+    "design_implication": "Make value changes feel immediate and keep the result state clear."
+  },
+  {
+    "id": "F03",
+    "area": "Experiment",
+    "feature": "Animate current and encode voltage on the canvas",
+    "evidence_status": "User + documented",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "Falstad"
+    ],
+    "source_ids": [
+      "S12",
+      "S05"
+    ],
+    "design_implication": "Help users explain a circuit; retain numbers and an animation-off option."
+  },
+  {
+    "id": "F04",
+    "area": "Experiment",
+    "feature": "Show compact readings beside the circuit",
+    "evidence_status": "Documented",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "EveryCircuit"
+    ],
+    "source_ids": [
+      "S06"
+    ],
+    "design_implication": "Test whether inline information reduces attention switching without clutter."
+  },
+  {
+    "id": "F05",
+    "area": "Experiment",
+    "feature": "Probe a node or component directly",
+    "evidence_status": "Documented",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "LTspice",
+      "iCircuit"
+    ],
+    "source_ids": [
+      "S16",
+      "S02"
+    ],
+    "design_implication": "Make the first useful measurement easy to obtain."
+  },
+  {
+    "id": "F06",
+    "area": "Experiment",
+    "feature": "Move from a reading to a waveform",
+    "evidence_status": "Documented",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "iCircuit"
+    ],
+    "source_ids": [
+      "S02"
+    ],
+    "design_implication": "Avoid making users configure a separate instrument for every signal."
+  },
+  {
+    "id": "F07",
+    "area": "Experiment",
+    "feature": "Exact values alongside exploratory controls",
+    "evidence_status": "User + documented",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "EveryCircuit",
+      "iCircuit"
+    ],
+    "source_ids": [
+      "S54",
+      "S02"
+    ],
+    "design_implication": "Support both experimentation and reproduction."
+  },
+  {
+    "id": "F08",
+    "area": "Experiment",
+    "feature": "Pause, restart and inspect history",
+    "evidence_status": "Documented",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "EveryCircuit",
+      "iCircuit"
+    ],
+    "source_ids": [
+      "S07",
+      "S02"
+    ],
+    "design_implication": "Expose what continues and what resets after an edit."
+  },
+  {
+    "id": "F09",
+    "area": "Experiment",
+    "feature": "Virtual bench instruments",
+    "evidence_status": "Documented + limited user",
+    "proposed_stage": "Next",
+    "reference_products": [
+      "Multisim",
+      "Proteus"
+    ],
+    "source_ids": [
+      "S44",
+      "S47",
+      "S45"
+    ],
+    "design_implication": "Test whether familiar controls help or overwhelm new makers."
+  },
+  {
+    "id": "F10",
+    "area": "Experiment",
+    "feature": "Interactive switches and real inputs",
+    "evidence_status": "User + documented",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "Falstad",
+      "Proteus"
+    ],
+    "source_ids": [
+      "S10",
+      "S47"
+    ],
+    "design_implication": "Enable experiments that resemble manipulating a physical circuit."
+  },
+  {
+    "id": "F11",
+    "area": "Learning",
+    "feature": "Open and modify a working example",
+    "evidence_status": "Documented",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "Falstad",
+      "Tinkercad"
+    ],
+    "source_ids": [
+      "S05",
+      "S53"
+    ],
+    "design_implication": "Start from an understandable circuit with a specific question."
+  },
+  {
+    "id": "F12",
+    "area": "Learning",
+    "feature": "Restore an example after experimenting",
+    "evidence_status": "Documented",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "iCircuit"
+    ],
+    "source_ids": [
+      "S02"
+    ],
+    "design_implication": "Encourage exploration without fear of destroying the starting point."
+  },
+  {
+    "id": "F13",
+    "area": "Learning",
+    "feature": "Use physical component/breadboard views",
+    "evidence_status": "User",
+    "proposed_stage": "Research",
+    "reference_products": [
+      "Tinkercad",
+      "Fritzing"
+    ],
+    "source_ids": [
+      "S55",
+      "S58"
+    ],
+    "design_implication": "Measure transfer to a real build and wiring speed, not visual appeal alone."
+  },
+  {
+    "id": "F14",
+    "area": "Learning",
+    "feature": "Reusable subcircuits with visible I/O",
+    "evidence_status": "Documented",
+    "proposed_stage": "Next",
+    "reference_products": [
+      "SimulIDE",
+      "Logisim-evolution"
+    ],
+    "source_ids": [
+      "S59",
+      "S72"
+    ],
+    "design_implication": "Let a known-working block become a simpler building unit."
+  },
+  {
+    "id": "F15",
+    "area": "Learning",
+    "feature": "Guided experiments with questions and expected behavior",
+    "evidence_status": "Request + hypothesis",
+    "proposed_stage": "Research",
+    "reference_products": [
+      "CRUMB",
+      "CircuitLab"
+    ],
+    "source_ids": [
+      "S81",
+      "S14"
+    ],
+    "design_implication": "Validate learning and independence; do not assume a lesson catalog is sufficient."
+  },
+  {
+    "id": "F16",
+    "area": "Learning",
+    "feature": "Contextual explanation of a failing circuit",
+    "evidence_status": "Hypothesis from friction",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "Cross-product"
+    ],
+    "source_ids": [
+      "S24",
+      "S70"
+    ],
+    "design_implication": "Show the affected object, cause and a reversible next action."
+  },
+  {
+    "id": "F17",
+    "area": "Editing",
+    "feature": "Visible move, rotate, duplicate and delete",
+    "evidence_status": "User-derived hypothesis",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "iCircuit",
+      "LTspice"
+    ],
+    "source_ids": [
+      "S03",
+      "S17"
+    ],
+    "design_implication": "Test first-time discovery without requiring a tutorial."
+  },
+  {
+    "id": "F18",
+    "area": "Editing",
+    "feature": "Fast, configurable keyboard commands",
+    "evidence_status": "User",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "LTspice"
+    ],
+    "source_ids": [
+      "S18"
+    ],
+    "design_implication": "Support repeated expert work without making shortcuts mandatory."
+  },
+  {
+    "id": "F19",
+    "area": "Editing",
+    "feature": "Preserve intended connections while moving parts",
+    "evidence_status": "Documented",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "iCircuit"
+    ],
+    "source_ids": [
+      "S02"
+    ],
+    "design_implication": "Measure unintended disconnections and control over rerouted wires."
+  },
+  {
+    "id": "F20",
+    "area": "Editing",
+    "feature": "Clear selection, pan, zoom and properties",
+    "evidence_status": "User-derived hypothesis",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "LibrePCB",
+      "Flux"
+    ],
+    "source_ids": [
+      "S67",
+      "S70"
+    ],
+    "design_implication": "Keep navigation and editing predictable across views."
+  },
+  {
+    "id": "F21",
+    "area": "Editing",
+    "feature": "Granular undo and discoverable redo",
+    "evidence_status": "User-derived hypothesis",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "iCircuit"
+    ],
+    "source_ids": [
+      "S03"
+    ],
+    "design_implication": "Recovery is part of experimentation, not just file management."
+  },
+  {
+    "id": "F22",
+    "area": "Editing",
+    "feature": "Interactive routing that respects constraints",
+    "evidence_status": "User + documented",
+    "proposed_stage": "Later PCB",
+    "reference_products": [
+      "KiCad",
+      "Altium"
+    ],
+    "source_ids": [
+      "S27",
+      "S25",
+      "S36"
+    ],
+    "design_implication": "Assist placement while preserving explicit control and reversible outcomes."
+  },
+  {
+    "id": "F23",
+    "area": "Editing",
+    "feature": "Switch between assistance modes",
+    "evidence_status": "User",
+    "proposed_stage": "Later PCB",
+    "reference_products": [
+      "KiCad"
+    ],
+    "source_ids": [
+      "S27",
+      "S79"
+    ],
+    "design_implication": "Make it clear when the tool will move surrounding objects."
+  },
+  {
+    "id": "F24",
+    "area": "Parts",
+    "feature": "Find an actual usable device quickly",
+    "evidence_status": "User",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "EasyEDA"
+    ],
+    "source_ids": [
+      "S28"
+    ],
+    "design_implication": "Measure successful placement and simulation, not search-result volume."
+  },
+  {
+    "id": "F25",
+    "area": "Parts",
+    "feature": "Present symbol, model, footprint and physical identity together",
+    "evidence_status": "Documented + hypothesis",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "EasyEDA",
+      "LibrePCB"
+    ],
+    "source_ids": [
+      "S29",
+      "S64"
+    ],
+    "design_implication": "Extend unified part concepts with explicit simulation readiness."
+  },
+  {
+    "id": "F26",
+    "area": "Parts",
+    "feature": "Show model provenance, coverage and compatibility",
+    "evidence_status": "Hypothesis from documented limits",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "SPICE ecosystem"
+    ],
+    "source_ids": [
+      "S22",
+      "S24",
+      "S30"
+    ],
+    "design_implication": "Reveal unsupported behavior before the user relies on a result."
+  },
+  {
+    "id": "F27",
+    "area": "Parts",
+    "feature": "Guide importing a vendor model",
+    "evidence_status": "Hypothesis from friction",
+    "proposed_stage": "Next",
+    "reference_products": [
+      "LTspice",
+      "QSPICE"
+    ],
+    "source_ids": [
+      "S20",
+      "S22"
+    ],
+    "design_implication": "Provide pin mapping, validation and a small test circuit."
+  },
+  {
+    "id": "F28",
+    "area": "Parts",
+    "feature": "Install and update libraries in the application",
+    "evidence_status": "Documented",
+    "proposed_stage": "Next",
+    "reference_products": [
+      "LibrePCB"
+    ],
+    "source_ids": [
+      "S65"
+    ],
+    "design_implication": "Keep dependency management out of the first experiment."
+  },
+  {
+    "id": "F29",
+    "area": "Parts",
+    "feature": "Keep project references stable when parts are renamed",
+    "evidence_status": "Documented",
+    "proposed_stage": "Foundation",
+    "reference_products": [
+      "LibrePCB"
+    ],
+    "source_ids": [
+      "S64"
+    ],
+    "design_implication": "Avoid fragile file/name relationships; make changes explicit."
+  },
+  {
+    "id": "F30",
+    "area": "Parts",
+    "feature": "Preserve the project’s required library content",
+    "evidence_status": "Documented",
+    "proposed_stage": "Foundation",
+    "reference_products": [
+      "LibrePCB"
+    ],
+    "source_ids": [
+      "S66"
+    ],
+    "design_implication": "Make reopening independent of later library removal or updates."
+  },
+  {
+    "id": "F31",
+    "area": "Analysis",
+    "feature": "Time-domain, DC and frequency-domain analysis",
+    "evidence_status": "Documented + user",
+    "proposed_stage": "Next",
+    "reference_products": [
+      "CircuitLab",
+      "KiCad",
+      "TINA-TI"
+    ],
+    "source_ids": [
+      "S15",
+      "S24",
+      "S21"
+    ],
+    "design_implication": "Expose each analysis through a practical question and sensible starting values."
+  },
+  {
+    "id": "F32",
+    "area": "Analysis",
+    "feature": "Compare measurements and computed signals",
+    "evidence_status": "Documented",
+    "proposed_stage": "Next",
+    "reference_products": [
+      "CircuitLab"
+    ],
+    "source_ids": [
+      "S13"
+    ],
+    "design_implication": "Make gain, differential voltage and power easy to inspect with units."
+  },
+  {
+    "id": "F33",
+    "area": "Analysis",
+    "feature": "Sweeps, tolerances and stress checks",
+    "evidence_status": "Documented",
+    "proposed_stage": "Later analysis",
+    "reference_products": [
+      "PSpice"
+    ],
+    "source_ids": [
+      "S40",
+      "S41"
+    ],
+    "design_implication": "Turn a nominal example into an investigation of expected variation."
+  },
+  {
+    "id": "F34",
+    "area": "Analysis",
+    "feature": "Behavioral code blocks",
+    "evidence_status": "User + documented",
+    "proposed_stage": "Later analysis",
+    "reference_products": [
+      "QSPICE"
+    ],
+    "source_ids": [
+      "S19",
+      "S20"
+    ],
+    "design_implication": "Provide an advanced extension path with clear limits and inspectable code."
+  },
+  {
+    "id": "F35",
+    "area": "Analysis",
+    "feature": "Explicit valid, stale, incomplete and failed states",
+    "evidence_status": "Hypothesis from reliability concerns",
+    "proposed_stage": "Prototype",
+    "reference_products": [
+      "Cross-product"
+    ],
+    "source_ids": [
+      "S10",
+      "S70"
+    ],
+    "design_implication": "Prevent stale or missing results being interpreted as valid outputs."
+  },
+  {
+    "id": "F36",
+    "area": "Analysis",
+    "feature": "Saved reproducible experiments",
+    "evidence_status": "Hypothesis",
+    "proposed_stage": "Foundation",
+    "reference_products": [
+      "Cross-product"
+    ],
+    "source_ids": [
+      "S22",
+      "S66"
+    ],
+    "design_implication": "Bundle revision, models, stimuli, initial conditions and analysis settings."
+  },
+  {
+    "id": "F37",
+    "area": "Embedded",
+    "feature": "Run firmware with supported peripherals",
+    "evidence_status": "User + documented",
+    "proposed_stage": "Next",
+    "reference_products": [
+      "Proteus",
+      "Wokwi"
+    ],
+    "source_ids": [
+      "S49",
+      "S48",
+      "S50"
+    ],
+    "design_implication": "Start with a small validated hardware set relevant to maker projects."
+  },
+  {
+    "id": "F38",
+    "area": "Embedded",
+    "feature": "Debug code, serial traffic and digital signals",
+    "evidence_status": "Documented",
+    "proposed_stage": "Next",
+    "reference_products": [
+      "Wokwi",
+      "Proteus"
+    ],
+    "source_ids": [
+      "S50",
+      "S47"
+    ],
+    "design_implication": "Help separate firmware, wiring and protocol problems."
+  },
+  {
+    "id": "F39",
+    "area": "Embedded",
+    "feature": "State the boundary of digital/analog simulation",
+    "evidence_status": "Documented limit + hypothesis",
+    "proposed_stage": "Foundation",
+    "reference_products": [
+      "Wokwi"
+    ],
+    "source_ids": [
+      "S51"
+    ],
+    "design_implication": "Prevent an executing program from implying validated analog circuitry."
+  },
+  {
+    "id": "F40",
+    "area": "Build",
+    "feature": "Carry circuit identity into PCB layout",
+    "evidence_status": "Documented",
+    "proposed_stage": "Next integration",
+    "reference_products": [
+      "KiCad",
+      "DipTrace"
+    ],
+    "source_ids": [
+      "S25",
+      "S62"
+    ],
+    "design_implication": "Avoid redrawing while checking model-to-footprint mapping."
+  },
+  {
+    "id": "F41",
+    "area": "Build",
+    "feature": "Short path to fabrication and assembly",
+    "evidence_status": "User + documented",
+    "proposed_stage": "Later PCB",
+    "reference_products": [
+      "EasyEDA"
+    ],
+    "source_ids": [
+      "S28",
+      "S31"
+    ],
+    "design_implication": "Provide a preview and portable outputs as well as optional ordering."
+  },
+  {
+    "id": "F42",
+    "area": "Build",
+    "feature": "Connect board geometry with enclosure design",
+    "evidence_status": "User + documented",
+    "proposed_stage": "Later integration",
+    "reference_products": [
+      "Fusion"
+    ],
+    "source_ids": [
+      "S34",
+      "S32"
+    ],
+    "design_implication": "Make connector positions and fit visible during changes."
+  },
+  {
+    "id": "F43",
+    "area": "Build",
+    "feature": "Cross-probe among schematic, board and physical view",
+    "evidence_status": "User + documented",
+    "proposed_stage": "Later PCB",
+    "reference_products": [
+      "Altium",
+      "KiCad"
+    ],
+    "source_ids": [
+      "S39",
+      "S25"
+    ],
+    "design_implication": "Support debugging and assembly as well as design navigation."
+  },
+  {
+    "id": "F44",
+    "area": "Build",
+    "feature": "Assembly variants and consistent documentation",
+    "evidence_status": "Documented",
+    "proposed_stage": "Later professional",
+    "reference_products": [
+      "Altium"
+    ],
+    "source_ids": [
+      "S37"
+    ],
+    "design_implication": "Avoid manual divergence as a maker project becomes a product family."
+  },
+  {
+    "id": "F45",
+    "area": "Ownership",
+    "feature": "Local access and complete export",
+    "evidence_status": "User + documented",
+    "proposed_stage": "Foundation",
+    "reference_products": [
+      "KiCad",
+      "LibrePCB",
+      "SimulIDE"
+    ],
+    "source_ids": [
+      "S28",
+      "S66",
+      "S61"
+    ],
+    "design_implication": "Preserve continuity independent of network or service lifetime."
+  },
+  {
+    "id": "F46",
+    "area": "Collaboration",
+    "feature": "Share an executable experiment with controlled access",
+    "evidence_status": "Documented + hypothesis",
+    "proposed_stage": "Next",
+    "reference_products": [
+      "Wokwi",
+      "Flux"
+    ],
+    "source_ids": [
+      "S50",
+      "S69"
+    ],
+    "design_implication": "Test recipient success and setup cost, not merely link generation."
+  },
+  {
+    "id": "F47",
+    "area": "Collaboration",
+    "feature": "Review and manage changes across a team",
+    "evidence_status": "User",
+    "proposed_stage": "Later professional",
+    "reference_products": [
+      "Altium"
+    ],
+    "source_ids": [
+      "S38"
+    ],
+    "design_implication": "Keep small-project sharing simple; add governance only as required."
+  },
+  {
+    "id": "F48",
+    "area": "Assistance",
+    "feature": "Explain or suggest parts in project context",
+    "evidence_status": "Limited user + hypothesis",
+    "proposed_stage": "Research",
+    "reference_products": [
+      "Flux"
+    ],
+    "source_ids": [
+      "S70",
+      "S68"
+    ],
+    "design_implication": "Require inspectable evidence and reversible suggestions; preserve direct editing."
+  }
+]

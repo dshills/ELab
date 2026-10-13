@@ -1,0 +1,477 @@
+package workbench
+
+import (
+	"fmt"
+	"math"
+	"reflect"
+	"sort"
+	"strings"
+)
+
+const MaxComponents = 50
+const MaxWires = 150
+const GridSize = 10.
+
+type Graph struct {
+	Components []Component `json:"components"`
+	Wires      []Wire      `json:"wires"`
+}
+
+func EmptyGraph() Graph   { return Graph{Components: []Component{}, Wires: []Wire{}} }
+func ExampleGraph() Graph { c := DefaultCircuit(); return Graph{Components(c), Wires(c)} }
+func (g Graph) Clone() Graph {
+	out := Graph{append([]Component{}, g.Components...), append([]Wire{}, g.Wires...)}
+	for i := range out.Components {
+		out.Components[i].Terminals = append([]string{}, out.Components[i].Terminals...)
+		if v := out.Components[i].InitialVoltage; v != nil {
+			copy := *v
+			out.Components[i].InitialVoltage = &copy
+		}
+	}
+	return out
+}
+func (g Graph) Component(id string) (Component, bool) {
+	for _, c := range g.Components {
+		if c.ID == id {
+			return c, true
+		}
+	}
+	return Component{}, false
+}
+func (g Graph) HasObject(id string) bool {
+	if _, ok := g.Component(id); ok {
+		return true
+	}
+	for _, w := range g.Wires {
+		if w.ID == id {
+			return true
+		}
+	}
+	return false
+}
+func (g Graph) Terminal(ref string) (Component, string, bool) {
+	id, name, ok := strings.Cut(ref, ".")
+	if !ok {
+		return Component{}, "", false
+	}
+	c, ok := g.Component(id)
+	if !ok {
+		return Component{}, "", false
+	}
+	for _, t := range c.Terminals {
+		if name == t {
+			return c, name, true
+		}
+	}
+	return Component{}, "", false
+}
+func (g Graph) Summary() Circuit {
+	var c Circuit
+	for _, p := range g.Components {
+		if p.Kind == "dc-source" {
+			c.Voltage = p.Value
+		}
+		if p.Kind == "resistor" {
+			c.Resistance = p.Value
+		}
+	}
+	compiled, _, diagnostic := g.Compile()
+	c.Connected = diagnostic == nil
+	if diagnostic == nil {
+		return compiled.Circuit
+	}
+	return c
+}
+func ElectricalEqual(a, b Graph) bool {
+	a = a.Clone()
+	b = b.Clone()
+	for i := range a.Components {
+		a.Components[i].Position = Point{}
+		a.Components[i].Rotation = 0
+	}
+	for i := range b.Components {
+		b.Components[i].Position = Point{}
+		b.Components[i].Rotation = 0
+	}
+	return reflect.DeepEqual(a, b)
+}
+func snapPoint(p Point) (Point, error) {
+	if !finite(p.X) || !finite(p.Y) || math.Abs(p.X) > 10000 || math.Abs(p.Y) > 10000 {
+		return Point{}, fmt.Errorf("position must be finite and within ±10000 units")
+	}
+	return Point{math.Round(p.X/GridSize) * GridSize, math.Round(p.Y/GridSize) * GridSize}, nil
+}
+func ValidID(id string) bool {
+	if len(id) < 1 || len(id) > 64 {
+		return false
+	}
+	for i, c := range id {
+		if !(c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || i > 0 && (c >= '0' && c <= '9' || c == '_' || c == '-')) {
+			return false
+		}
+	}
+	return true
+}
+
+type Part struct {
+	Kind         string   `json:"kind"`
+	Name         string   `json:"name"`
+	Terminals    []string `json:"terminals"`
+	DefaultValue string   `json:"default_value,omitempty"`
+	Unit         string   `json:"unit,omitempty"`
+	Model        string   `json:"model"`
+}
+
+func Library() []Part {
+	return []Part{
+		{"dc-source", "DC source", []string{"positive", "negative"}, "5 V", "V", "ideal-dc.v1"},
+		{"resistor", "Resistor", []string{"1", "2"}, "1k", "Ω", "ideal-resistor.v1"},
+		{"led", "Red LED", []string{"anode", "cathode"}, "", "", ModelID},
+		{"capacitor", "Capacitor", []string{"1", "2"}, "1uF", "F", "ideal-capacitor.v1"},
+		{"pulse-source", "Pulse source", []string{"positive", "negative"}, "5 V", "V", "ideal-square.v1"},
+		{"npn", "NPN transistor", []string{"base", "collector", "emitter"}, "", "", NPNModelID},
+		{"ground", "Ground", []string{"reference"}, "", "", "ground.v1"},
+	}
+}
+func MakeComponent(id, kind string, p Point, value string) (Component, error) {
+	if !ValidID(id) {
+		return Component{}, fmt.Errorf("component ID must be 1–64 ASCII letters/digits/_/- and start with a letter")
+	}
+	position, err := snapPoint(p)
+	if err != nil {
+		return Component{}, err
+	}
+	for _, part := range Library() {
+		if part.Kind != kind {
+			continue
+		}
+		c := Component{ID: id, Kind: kind, Name: part.Name, Terminals: append([]string{}, part.Terminals...), Position: position, Unit: part.Unit, Model: part.Model}
+		if c.Unit != "" {
+			if value == "" {
+				value = part.DefaultValue
+			}
+			c, err = SetValue(c, value)
+			return c, err
+		}
+		if value != "" {
+			return Component{}, fmt.Errorf("%s has no editable value", part.Name)
+		}
+		return c, nil
+	}
+	return Component{}, fmt.Errorf("unknown part kind; use parts.list")
+}
+func SetValue(c Component, text string) (Component, error) {
+	if c.Kind != "dc-source" && c.Kind != "pulse-source" && c.Kind != "resistor" && c.Kind != "capacitor" {
+		return c, fmt.Errorf("this component has no editable value")
+	}
+	value, err := ParseValue(text, c.Unit)
+	if err != nil {
+		return c, err
+	}
+	if (c.Kind == "dc-source" || c.Kind == "pulse-source") && (!finite(value) || value < 0 || value > 12) {
+		return c, fmt.Errorf("source voltage must be 0–12 V")
+	}
+	if c.Kind == "resistor" && (!finite(value) || value < 10 || value > 100000) {
+		return c, fmt.Errorf("resistance must be 10–100000 Ω")
+	}
+	if c.Kind == "capacitor" && (!finite(value) || value < 1e-12 || value > 1) {
+		return c, fmt.Errorf("capacitance must be 1 pF–1 F")
+	}
+	c.Value = value
+	return c, nil
+}
+func RotateLocal(p Point, degrees int) Point {
+	switch degrees {
+	case 90:
+		return Point{-p.Y, p.X}
+	case 180:
+		return Point{-p.X, -p.Y}
+	case 270:
+		return Point{p.Y, -p.X}
+	}
+	return p
+}
+func TerminalPosition(c Component, name string) (Point, bool) {
+	p := Point{}
+	found := true
+	switch c.Kind {
+	case "dc-source", "pulse-source":
+		switch name {
+		case "positive":
+			p = Point{0, -34}
+		case "negative":
+			p = Point{0, 34}
+		default:
+			found = false
+		}
+	case "capacitor":
+		switch name {
+		case "1":
+			p = Point{0, -32}
+		case "2":
+			p = Point{0, 32}
+		default:
+			found = false
+		}
+	case "resistor":
+		switch name {
+		case "1":
+			p = Point{-55, 0}
+		case "2":
+			p = Point{55, 0}
+		default:
+			found = false
+		}
+	case "led":
+		switch name {
+		case "anode":
+			p = Point{0, -32}
+		case "cathode":
+			p = Point{0, 32}
+		default:
+			found = false
+		}
+	case "npn":
+		switch name {
+		case "base":
+			p = Point{-40, 0}
+		case "collector":
+			p = Point{25, -35}
+		case "emitter":
+			p = Point{25, 35}
+		default:
+			found = false
+		}
+	case "ground":
+		found = name == "reference"
+		p = Point{0, -20}
+	default:
+		found = false
+	}
+	p = RotateLocal(p, c.Rotation)
+	return Point{p.X + c.Position.X, p.Y + c.Position.Y}, found
+}
+func (g Graph) TerminalPoint(ref string) (Point, bool) {
+	c, name, ok := g.Terminal(ref)
+	if !ok {
+		return Point{}, false
+	}
+	return TerminalPosition(c, name)
+}
+
+type Net struct {
+	ID        string   `json:"id"`
+	Terminals []string `json:"terminals"`
+}
+type Compiled struct {
+	MixedGraph                       Graph
+	Circuit                          Circuit
+	Source, Resistor, LED, Capacitor Component
+	Transistor, Input, BaseResistor  Component
+	Base, Collector, InputNet        string
+	Analysis, Output                 string
+	TerminalNet                      map[string]string
+	Nets                             []Net
+	Ground, Supply, Anode, Cathode   string
+}
+
+// Compile derives nets solely from explicit terminal connections. Coordinates,
+// line crossings, drawing order, IDs, and symbol rotation never create a net.
+func (g Graph) Compile() (Compiled, string, *Diagnostic) {
+	out := Compiled{TerminalNet: map[string]string{}, Nets: []Net{}}
+	parent := map[string]string{}
+	var root func(string) string
+	root = func(s string) string {
+		if parent[s] != s {
+			parent[s] = root(parent[s])
+		}
+		return parent[s]
+	}
+	union := func(a, b string) {
+		a, b = root(a), root(b)
+		if a > b {
+			a, b = b, a
+		}
+		parent[b] = a
+	}
+	sources, resistors, leds, grounds := []Component{}, []Component{}, []Component{}, []Component{}
+	capacitors := []Component{}
+	transistors := []Component{}
+	for _, c := range g.Components {
+		for _, t := range c.Terminals {
+			ref := c.ID + "." + t
+			parent[ref] = ref
+		}
+		switch c.Kind {
+		case "dc-source", "pulse-source":
+			sources = append(sources, c)
+		case "resistor":
+			resistors = append(resistors, c)
+		case "npn":
+			transistors = append(transistors, c)
+		case "capacitor":
+			capacitors = append(capacitors, c)
+		case "led":
+			leds = append(leds, c)
+		case "ground":
+			grounds = append(grounds, c)
+		}
+	}
+	for _, w := range g.Wires {
+		if _, ok := parent[w.From]; !ok {
+			return out, "error", &Diagnostic{"invalid-terminal", "A wire references a missing terminal.", w.ID}
+		}
+		if _, ok := parent[w.To]; !ok {
+			return out, "error", &Diagnostic{"invalid-terminal", "A wire references a missing terminal.", w.ID}
+		}
+		if w.Connected {
+			union(w.From, w.To)
+		}
+	}
+	// Ground symbols share an explicit common reference, as in ordinary schematics.
+	for i := 1; i < len(grounds); i++ {
+		union(grounds[0].ID+".reference", grounds[i].ID+".reference")
+	}
+	groups := map[string][]string{}
+	for ref := range parent {
+		r := root(ref)
+		groups[r] = append(groups[r], ref)
+	}
+	keys := []string{}
+	for key := range groups {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		sort.Strings(groups[key])
+		id := "net:" + groups[key][0]
+		out.Nets = append(out.Nets, Net{id, groups[key]})
+		for _, t := range groups[key] {
+			out.TerminalNet[t] = id
+		}
+	}
+	incomplete := func(code, message, id string) (Compiled, string, *Diagnostic) {
+		return out, "incomplete", &Diagnostic{code, message, id}
+	}
+	if len(transistors) > 0 && len(capacitors) > 0 {
+		return compileMixed(out, g, groups, root)
+	}
+	if len(transistors) > 0 {
+		return compileNPN(out, sources, resistors, leds, transistors, capacitors, grounds, groups, root)
+	}
+	if len(capacitors) > 0 {
+		return compileRC(out, sources, resistors, capacitors, leds, grounds, groups, root)
+	}
+	if len(sources) == 0 || len(resistors) == 0 || len(leds) == 0 {
+		return incomplete("missing-parts", "Place a DC source, resistor, red LED, and ground to build the LED circuit.", "")
+	}
+	if len(grounds) == 0 {
+		return incomplete("missing-ground", "Place ground and connect it to the source's negative terminal.", sources[0].ID)
+	}
+	if len(sources) != 1 || len(resistors) != 1 || len(leds) != 1 {
+		return out, "unsupported", &Diagnostic{"unsupported-topology", "This live solver supports one source, one resistor, and one LED. Your drawing is retained.", ""}
+	}
+	if sources[0].Kind != "dc-source" {
+		return out, "unsupported", &Diagnostic{"unsupported-topology", "Pulse sources currently support the RC transient circuit. Use a DC source for the LED circuit.", sources[0].ID}
+	}
+	out.Analysis = "DC operating point"
+	out.Source, out.Resistor, out.LED = sources[0], resistors[0], leds[0]
+	out.Circuit = Circuit{out.Source.Value, out.Resistor.Value, true}
+	for _, c := range []Component{out.Source, out.Resistor, out.LED} {
+		for _, name := range c.Terminals {
+			ref := c.ID + "." + name
+			if len(groups[root(ref)]) < 2 {
+				return incomplete("open-terminal", "Connect terminal "+ref+" to complete the circuit.", ref)
+			}
+		}
+	}
+	net := func(c Component, t string) string { return out.TerminalNet[c.ID+"."+t] }
+	out.Ground = net(grounds[0], "reference")
+	out.Supply = net(out.Source, "positive")
+	out.Anode = net(out.LED, "anode")
+	out.Cathode = net(out.LED, "cathode")
+	if net(out.Source, "negative") != out.Ground {
+		return incomplete("reference-disconnected", "Connect the source's negative terminal to ground.", out.Source.ID+".negative")
+	}
+	r1, r2 := net(out.Resistor, "1"), net(out.Resistor, "2")
+	if out.Supply == out.Ground || r1 == r2 || out.Anode == out.Cathode {
+		return out, "error", &Diagnostic{"shorted-component", "A component's terminals are shorted together. Remove the unintended wire.", ""}
+	}
+	resistorBetween := func(a, b string) bool { return r1 == a && r2 == b || r1 == b && r2 == a }
+	if resistorBetween(out.Supply, out.Anode) && out.Cathode == out.Ground || out.Anode == out.Supply && resistorBetween(out.Cathode, out.Ground) {
+		return out, "", nil
+	}
+	return out, "unsupported", &Diagnostic{"unsupported-topology", "Connect a single forward LED and resistor in series from source positive to ground. Reversed LEDs and other topologies are not simulated yet.", out.LED.ID}
+}
+func (c Compiled) Annotate(r Result) Result {
+	r.SourceID, r.ResistorID, r.LEDID = c.Source.ID, c.Resistor.ID, c.LED.ID
+	r.Nodes = map[string]float64{c.Ground: 0, c.Supply: c.Circuit.Voltage, "ground": 0, "supply": c.Circuit.Voltage}
+	if c.Anode == c.Supply {
+		r.Nodes[c.Cathode] = c.Circuit.Voltage - r.LEDVoltage
+	} else {
+		r.Nodes[c.Anode] = r.LEDVoltage
+	}
+	r.Nodes["led-anode"] = r.Nodes[c.Anode]
+	return r
+}
+
+type DrawingState struct {
+	Tool      string `json:"tool"`
+	Kind      string `json:"kind"`
+	Position  Point  `json:"position"`
+	WireStart string `json:"wire_start"`
+	From      string `json:"from"`
+	To        string `json:"to"`
+	Value     string `json:"value"`
+}
+
+func DefaultDrawing() DrawingState {
+	return DrawingState{Tool: "select", Kind: "dc-source", Position: Point{-200, 0}}
+}
+
+func compileRC(out Compiled, sources, resistors, capacitors, leds, grounds []Component, groups map[string][]string, root func(string) string) (Compiled, string, *Diagnostic) {
+	out.Analysis = "RC transient"
+	fail := func(status, code, msg, id string) (Compiled, string, *Diagnostic) {
+		return out, status, &Diagnostic{code, msg, id}
+	}
+	if len(sources) == 0 || len(resistors) == 0 {
+		return fail("incomplete", "missing-parts", "Place one DC or pulse source, resistor, capacitor, and ground.", "")
+	}
+	if len(grounds) == 0 {
+		return fail("incomplete", "missing-ground", "Connect source negative and the capacitor return to ground.", "")
+	}
+	if len(sources) != 1 || len(resistors) != 1 || len(capacitors) != 1 || len(leds) != 0 {
+		return fail("unsupported", "unsupported-topology", "The RC solver supports one source, one resistor, and one capacitor; mixed LED/RC and other networks are not simulated yet.", "")
+	}
+	out.Source, out.Resistor, out.Capacitor = sources[0], resistors[0], capacitors[0]
+	out.Circuit = Circuit{out.Source.Value, out.Resistor.Value, true}
+	net := func(c Component, t string) string { return out.TerminalNet[c.ID+"."+t] }
+	out.Ground = net(grounds[0], "reference")
+	out.Supply = net(out.Source, "positive")
+	for _, c := range []Component{out.Source, out.Resistor, out.Capacitor} {
+		for _, t := range c.Terminals {
+			ref := c.ID + "." + t
+			if len(groups[root(ref)]) < 2 {
+				return fail("incomplete", "open-terminal", "Connect terminal "+ref+" to complete the RC circuit.", ref)
+			}
+		}
+	}
+	if net(out.Source, "negative") != out.Ground {
+		return fail("incomplete", "reference-disconnected", "Connect source negative to ground.", out.Source.ID+".negative")
+	}
+	r1, r2, c1, c2 := net(out.Resistor, "1"), net(out.Resistor, "2"), net(out.Capacitor, "1"), net(out.Capacitor, "2")
+	if out.Supply == out.Ground || r1 == r2 || c1 == c2 {
+		return fail("error", "shorted-component", "A component's terminals are shorted. Remove the unintended wire.", "")
+	}
+	if c1 == out.Ground {
+		out.Output = c2
+	} else if c2 == out.Ground {
+		out.Output = c1
+	} else {
+		return fail("unsupported", "unsupported-topology", "Connect the capacitor between the RC output and ground.", out.Capacitor.ID)
+	}
+	if out.Output == out.Supply || !(r1 == out.Supply && r2 == out.Output || r2 == out.Supply && r1 == out.Output) {
+		return fail("unsupported", "unsupported-topology", "Connect source positive through the resistor to the capacitor, with capacitor return grounded.", out.Capacitor.ID)
+	}
+	return out, "", nil
+}

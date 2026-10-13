@@ -1,0 +1,11 @@
+.title KiCad schematic
+.model __Q1 NPN
++           is=10f
++           bf=100
+.tran 10u 200m
+V2 Net-_RC1-Pad1_ 0 DC 5 
+RC1 Net-_RC1-Pad1_ /OUT 1k
+RB1 /IN /BASE 10k
+V1 /IN 0 PULSE( 0 5 0 1u 1u 50m 100m ) 
+Q1 /OUT /BASE 0 __Q1
+.end

@@ -1,0 +1,239 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "capability_count": 37,
+  "engine": "elab.npn-switch-quasistatic.v1",
+  "model_limit": "Memoryless junction response; no storage or switching delay.",
+  "on_current_a": 0.0028603304910690096,
+  "off_current_a": 2.0000000038662423e-14,
+  "checks": [
+    "construction from blank",
+    "DC phase reference",
+    "edges between samples",
+    "paused override and step",
+    "resume continues run",
+    "pause freezes time",
+    "geometry preserves time",
+    "amplitude edit stales and restarts",
+    "saved pulse settings and fresh Auto run"
+  ],
+  "first_period": {
+    "transistor_id": "Q1",
+    "led_id": "D1",
+    "supply_id": "V1",
+    "base_resistor_id": "R1",
+    "engine": "elab.npn-switch-quasistatic.v1",
+    "run_id": 18,
+    "electrical_revision": 17,
+    "source_id": "V2",
+    "resistor_id": "R2",
+    "capacitor_id": "",
+    "output_net": "net:D1.cathode",
+    "time_constant_s": 0,
+    "settings": {
+      "step_s": 0.007,
+      "high_s": 0.031,
+      "low_s": 0.047,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 0.1
+    },
+    "input_mode": "auto",
+    "sample": {
+      "base_current_a": 0.00043113965708351323,
+      "vbe_v": 0.6886034291648679,
+      "state": "saturation",
+      "time_s": 0.078,
+      "input_v": 5,
+      "voltage_v": 0.057533807794293346,
+      "current_a": 0.0028603304910690096,
+      "energy_j": 0
+    },
+    "samples": [
+      {
+        "base_current_a": 0.00043113965708351323,
+        "vbe_v": 0.6886034291648679,
+        "state": "saturation",
+        "time_s": 0,
+        "input_v": 5,
+        "voltage_v": 0.057533807794293346,
+        "current_a": 0.0028603304910690096,
+        "energy_j": 0
+      },
+      {
+        "base_current_a": 0.00043113965708351323,
+        "vbe_v": 0.6886034291648679,
+        "state": "saturation",
+        "time_s": 0.007,
+        "input_v": 5,
+        "voltage_v": 0.057533807794293346,
+        "current_a": 0.0028603304910690096,
+        "energy_j": 0
+      },
+      {
+        "base_current_a": 0.00043113965708351323,
+        "vbe_v": 0.6886034291648679,
+        "state": "saturation",
+        "time_s": 0.014,
+        "input_v": 5,
+        "voltage_v": 0.057533807794293346,
+        "current_a": 0.0028603304910690096,
+        "energy_j": 0
+      },
+      {
+        "base_current_a": 0.00043113965708351323,
+        "vbe_v": 0.6886034291648679,
+        "state": "saturation",
+        "time_s": 0.02,
+        "input_v": 5,
+        "voltage_v": 0.057533807794293346,
+        "current_a": 0.0028603304910690096,
+        "energy_j": 0
+      },
+      {
+        "base_current_a": 0.00043113965708351323,
+        "vbe_v": 0.6886034291648679,
+        "state": "saturation",
+        "time_s": 0.027,
+        "input_v": 5,
+        "voltage_v": 0.057533807794293346,
+        "current_a": 0.0028603304910690096,
+        "energy_j": 0
+      },
+      {
+        "base_current_a": 0.00043113965708351323,
+        "vbe_v": 0.6886034291648679,
+        "state": "saturation",
+        "time_s": 0.031,
+        "input_v": 5,
+        "voltage_v": 0.057533807794293346,
+        "current_a": 0.0028603304910690096,
+        "energy_j": 0
+      },
+      {
+        "base_current_a": -9.999999999613378e-15,
+        "vbe_v": 9.999999999613377e-11,
+        "state": "cutoff",
+        "time_s": 0.031,
+        "input_v": 0,
+        "voltage_v": 4.249469262682714,
+        "current_a": 2.0000000038662423e-14,
+        "energy_j": 0
+      },
+      {
+        "base_current_a": -9.999999999613378e-15,
+        "vbe_v": 9.999999999613377e-11,
+        "state": "cutoff",
+        "time_s": 0.031,
+        "input_v": 0,
+        "voltage_v": 4.249469262682714,
+        "current_a": 2.0000000038662423e-14,
+        "energy_j": 0
+      },
+      {
+        "base_current_a": -9.999999999613378e-15,
+        "vbe_v": 9.999999999613377e-11,
+        "state": "cutoff",
+        "time_s": 0.038,
+        "input_v": 0,
+        "voltage_v": 4.249469262682714,
+        "current_a": 2.0000000038662423e-14,
+        "energy_j": 0
+      },
+      {
+        "base_current_a": -9.999999999613378e-15,
+        "vbe_v": 9.999999999613377e-11,
+        "state": "cutoff",
+        "time_s": 0.045,
+        "input_v": 0,
+        "voltage_v": 4.249469262682714,
+        "current_a": 2.0000000038662423e-14,
+        "energy_j": 0
+      },
+      {
+        "base_current_a": -9.999999999613378e-15,
+        "vbe_v": 9.999999999613377e-11,
+        "state": "cutoff",
+        "time_s": 0.052,
+        "input_v": 0,
+        "voltage_v": 4.249469262682714,
+        "current_a": 2.0000000038662423e-14,
+        "energy_j": 0
+      },
+      {
+        "base_current_a": -9.999999999613378e-15,
+        "vbe_v": 9.999999999613377e-11,
+        "state": "cutoff",
+        "time_s": 0.059,
+        "input_v": 0,
+        "voltage_v": 4.249469262682714,
+        "current_a": 2.0000000038662423e-14,
+        "energy_j": 0
+      },
+      {
+        "base_current_a": -9.999999999613378e-15,
+        "vbe_v": 9.999999999613377e-11,
+        "state": "cutoff",
+        "time_s": 0.066,
+        "input_v": 0,
+        "voltage_v": 4.249469262682714,
+        "current_a": 2.0000000038662423e-14,
+        "energy_j": 0
+      },
+      {
+        "base_current_a": -9.999999999613378e-15,
+        "vbe_v": 9.999999999613377e-11,
+        "state": "cutoff",
+        "time_s": 0.07300000000000001,
+        "input_v": 0,
+        "voltage_v": 4.249469262682714,
+        "current_a": 2.0000000038662423e-14,
+        "energy_j": 0
+      },
+      {
+        "base_current_a": -9.999999999613378e-15,
+        "vbe_v": 9.999999999613377e-11,
+        "state": "cutoff",
+        "time_s": 0.078,
+        "input_v": 0,
+        "voltage_v": 4.249469262682714,
+        "current_a": 2.0000000038662423e-14,
+        "energy_j": 0
+      },
+      {
+        "base_current_a": 0.00043113965708351323,
+        "vbe_v": 0.6886034291648679,
+        "state": "saturation",
+        "time_s": 0.078,
+        "input_v": 5,
+        "voltage_v": 0.057533807794293346,
+        "current_a": 0.0028603304910690096,
+        "energy_j": 0
+      },
+      {
+        "base_current_a": 0.00043113965708351323,
+        "vbe_v": 0.6886034291648679,
+        "state": "saturation",
+        "time_s": 0.078,
+        "input_v": 5,
+        "voltage_v": 0.057533807794293346,
+        "current_a": 0.0028603304910690096,
+        "energy_j": 0
+      }
+    ],
+    "events": [
+      {
+        "time_s": 0,
+        "mode": "restart"
+      },
+      {
+        "time_s": 0.031,
+        "mode": "pulse-low"
+      },
+      {
+        "time_s": 0.078,
+        "mode": "pulse-high"
+      }
+    ],
+    "stale": false
+  }
+}

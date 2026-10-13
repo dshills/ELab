@@ -1,0 +1,82 @@
+{
+  "passed": true,
+  "transport": "desktop socket",
+  "capabilities": 49,
+  "document_version": 3,
+  "scope_window": {
+    "mode": "fixed",
+    "start_s": 0.5,
+    "end_s": 1.5
+  },
+  "statistics": [
+    {
+      "probe_id": "v:Q1.collector",
+      "count": 201,
+      "min": 0.03288276639360861,
+      "max": 3.269862953989188,
+      "sample_mean": 1.545679683789709,
+      "sample_rms": 2.1664628118996716
+    },
+    {
+      "probe_id": "v:Q2.collector",
+      "count": 201,
+      "min": 0.03207228800884267,
+      "max": 3.2698775883032516,
+      "sample_mean": 1.6281286235307677,
+      "sample_rms": 2.229863573969334
+    },
+    {
+      "probe_id": "i:D1",
+      "count": 201,
+      "min": 3.1531895803303382e-06,
+      "max": 0.0028845216768627604,
+      "sample_mean": 0.0015050710630306943,
+      "sample_rms": 0.002039141002690128
+    },
+    {
+      "probe_id": "i:D2",
+      "count": 201,
+      "min": 3.15234895055856e-06,
+      "max": 0.0028853170970480338,
+      "sample_mean": 0.00143155788208614,
+      "sample_rms": 0.0019880910637188275
+    },
+    {
+      "probe_id": "v:C1",
+      "count": 201,
+      "min": -0.4418861364895412,
+      "max": 2.586008815821014,
+      "sample_mean": 1.6110144160672812,
+      "sample_rms": 1.9071286442549815
+    },
+    {
+      "probe_id": "v:C2",
+      "count": 201,
+      "min": -0.4491720809854835,
+      "max": 2.586008185706163,
+      "sample_mean": 1.680549603604624,
+      "sample_rms": 1.9548493071090383
+    }
+  ],
+  "interval_rows": 201,
+  "cursor_interval_s": 0.3999999999999915,
+  "svg_bytes": 9832,
+  "checks": [
+    "component search",
+    "duplicate preserves value/rotation/startup without wires",
+    "named undo/redo",
+    "atomic edit commit/rollback and one undo",
+    "direct plot command path (native parity suite)",
+    "fixed scope interval",
+    "interval min/max/sample mean/RMS",
+    "probe selections reopen in v3 file",
+    "CSV interval units and run/engine identity",
+    "headless SVG using shared routes",
+    "exports preserve schematic and refuse unsafe destinations"
+  ],
+  "artifacts": [
+    "/Users/dshills/Development/projects/ELab/docs/validation/workflow-artifacts/flasher-probed.elab",
+    "/Users/dshills/Development/projects/ELab/docs/validation/workflow-artifacts/flasher-interval.csv",
+    "/Users/dshills/Development/projects/ELab/docs/validation/workflow-artifacts/flasher-schematic.svg"
+  ]
+}

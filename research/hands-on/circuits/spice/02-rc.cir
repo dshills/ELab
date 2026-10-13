@@ -1,0 +1,8 @@
+RC benchmark 10ms tau
+V1 IN 0 PULSE(0 5 0 1u 1u 50m 100m)
+R1 IN OUT 10k
+C1 OUT 0 1u
+.tran 10u 200m
+.meas tran v_tau FIND V(OUT) AT=10m
+.meas tran v_5tau FIND V(OUT) AT=50m
+.end
