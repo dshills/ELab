@@ -86,8 +86,10 @@ func schematic(state workbench.Snapshot, view canvas.Viewport) (*canvas.Mesh, er
 			width = 4
 		}
 		b.stroke(c, width, wirePath(graph, w)...)
-		connectionCount[w.From]++
-		connectionCount[w.To]++
+		if w.Connected {
+			connectionCount[w.From]++
+			connectionCount[w.To]++
+		}
 	}
 	for _, part := range state.Components {
 		point := func(x, y float64) canvas.Point {
@@ -164,6 +166,15 @@ func schematic(state workbench.Snapshot, view canvas.Viewport) (*canvas.Mesh, er
 				p := point(pin.x, pin.y)
 				b.text(p.X, p.Y, pin.name, muted)
 			}
+		case "junction":
+			if connectionCount[part.ID+".node"] > 0 {
+				center := point(0, 0)
+				b.quad(center.X-3, center.Y-3, 6, 6, wireColor)
+			}
+		case "net-label":
+			stroke(ink, 2, canvas.Point{}, canvas.Point{X: 10}, canvas.Point{X: 10, Y: -7}, canvas.Point{X: 18}, canvas.Point{X: 10, Y: 7}, canvas.Point{X: 10})
+			at := point(22, 4)
+			b.text(at.X, at.Y, part.Label, ink)
 		case "ground":
 			stroke(wireColor, 2.5, canvas.Point{Y: -20}, canvas.Point{})
 			for i := 0; i < 3; i++ {
@@ -220,6 +231,9 @@ func schematic(state workbench.Snapshot, view canvas.Viewport) (*canvas.Mesh, er
 			}
 		}
 		y := part.Position.Y - 55
+		if workbench.IsConnectivityPrimitive(part.Kind) {
+			y = part.Position.Y - 18
+		}
 		if part.Kind == "ground" {
 			y = part.Position.Y + 35
 		}

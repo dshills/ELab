@@ -109,6 +109,15 @@ func hitComponent(state workbench.Snapshot, p workbench.Point) string {
 		if part.Kind == "resistor" {
 			width, height = 58, 24
 		}
+		if part.Kind == "junction" {
+			width, height = 8, 8
+		}
+		if part.Kind == "net-label" {
+			if local.X >= -8 && local.X <= 22+float64(len(part.Label))*8 && math.Abs(local.Y) <= 14 {
+				return part.ID
+			}
+			continue
+		}
 		if part.Kind == "ground" {
 			width, height = 28, 28
 		}
@@ -156,7 +165,31 @@ func (s *screen) canvasClick(p workbench.Point) {
 	state := s.service.Snapshot()
 	switch state.Drawing.Tool {
 	case "place":
-		s.invoke("component.place", workbench.PlaceParams{Kind: state.Drawing.Kind, Position: p})
+		if state.Drawing.Kind == "junction" {
+			point := workbench.Point{X: math.Round(p.X/workbench.GridSize) * workbench.GridSize, Y: math.Round(p.Y/workbench.GridSize) * workbench.GridSize}
+			graph := workbench.Graph{Components: state.Components, Wires: state.Wires}
+			ids := []string{}
+			for _, wire := range state.Wires {
+				if wire.Connected && workbench.WireDistance(graph, wire, point) <= workbench.GridSize/2+1e-9 {
+					ids = append(ids, wire.ID)
+				}
+			}
+			if len(ids) > 1 {
+				s.invoke("drawing.position.set", workbench.PositionParams{Position: point})
+				s.errorMessage = "Several wires cross here. Use the X / Y junction controls to review and explicitly join the named routes."
+				s.app.Invalidate("main")
+				return
+			}
+			if len(ids) == 1 {
+				s.invoke("wire.junction.insert", workbench.JunctionInsertParams{WireIDs: ids, Position: &point})
+				return
+			}
+		}
+		value := ""
+		if state.Drawing.Kind == "net-label" {
+			value = state.Drawing.Value
+		}
+		s.invoke("component.place", workbench.PlaceParams{Kind: state.Drawing.Kind, Position: p, Value: value})
 	case "wire":
 		ref := terminalHit(state, p, math.Max(6, 10/state.View.Zoom))
 		if ref == "" {

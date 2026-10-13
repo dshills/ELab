@@ -131,6 +131,8 @@ func Library() []Part {
 		{"pulse-source", "Pulse source", []string{"positive", "negative"}, "5 V", "V", "ideal-square.v1"},
 		{"npn", "NPN transistor", []string{"base", "collector", "emitter"}, "", "", NPNModelID},
 		{"ground", "Ground", []string{"reference"}, "", "", "ground.v1"},
+		{"junction", "Junction", []string{"node"}, "", "", "junction.v1"},
+		{"net-label", "Net label", []string{"node"}, "", "", "net-label.v1"},
 	}
 }
 func MakeComponent(id, kind string, p Point, value string) (Component, error) {
@@ -146,6 +148,12 @@ func MakeComponent(id, kind string, p Point, value string) (Component, error) {
 			continue
 		}
 		c := Component{ID: id, Kind: kind, Name: part.Name, Terminals: append([]string{}, part.Terminals...), Position: position, Unit: part.Unit, Model: part.Model}
+		if kind == "net-label" {
+			if value == "" {
+				value = id
+			}
+			return SetValue(c, value)
+		}
 		if c.Unit != "" {
 			if value == "" {
 				value = part.DefaultValue
@@ -161,6 +169,13 @@ func MakeComponent(id, kind string, p Point, value string) (Component, error) {
 	return Component{}, fmt.Errorf("unknown part kind; use parts.list")
 }
 func SetValue(c Component, text string) (Component, error) {
+	if c.Kind == "net-label" {
+		if !validNetLabel(text) {
+			return c, fmt.Errorf("net label must be 1–32 ASCII letters/digits or _+-./, without spaces")
+		}
+		c.Label = text
+		return c, nil
+	}
 	if c.Kind != "dc-source" && c.Kind != "pulse-source" && c.Kind != "resistor" && c.Kind != "capacitor" {
 		return c, fmt.Errorf("this component has no editable value")
 	}
@@ -242,6 +257,8 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 		default:
 			found = false
 		}
+	case "junction", "net-label":
+		found = name == "node"
 	case "ground":
 		found = name == "reference"
 		p = Point{0, -20}
@@ -260,6 +277,7 @@ func (g Graph) TerminalPoint(ref string) (Point, bool) {
 }
 
 type Net struct {
+	Labels    []string `json:"labels,omitempty"`
 	ID        string   `json:"id"`
 	Terminals []string `json:"terminals"`
 }
@@ -275,7 +293,7 @@ type Compiled struct {
 	Ground, Supply, Anode, Cathode   string
 }
 
-// Compile derives nets solely from explicit terminal connections. Coordinates,
+// Compile derives nets from explicit terminal connections and matching named labels. Coordinates,
 // line crossings, drawing order, IDs, and symbol rotation never create a net.
 func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 	out := Compiled{TerminalNet: map[string]string{}, Nets: []Net{}}
@@ -332,6 +350,20 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 	for i := 1; i < len(grounds); i++ {
 		union(grounds[0].ID+".reference", grounds[i].ID+".reference")
 	}
+	labels := map[string]string{}
+	for _, part := range g.Components {
+		if part.Kind == "net-label" {
+			if !validNetLabel(part.Label) {
+				return out, "error", &Diagnostic{"invalid-net-label", "Choose a valid net label.", part.ID}
+			}
+			ref := part.ID + ".node"
+			if first, ok := labels[part.Label]; ok {
+				union(first, ref)
+			} else {
+				labels[part.Label] = ref
+			}
+		}
+	}
 	groups := map[string][]string{}
 	for ref := range parent {
 		r := root(ref)
@@ -344,10 +376,31 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 	sort.Strings(keys)
 	for _, key := range keys {
 		sort.Strings(groups[key])
-		id := "net:" + groups[key][0]
-		out.Nets = append(out.Nets, Net{id, groups[key]})
+		members := physicalTerminals(g, groups[key])
+		first := groups[key][0]
+		if len(members) > 0 {
+			first = members[0]
+		}
+		id := "net:" + first
+		names := []string{}
+		seenNames := map[string]bool{}
+		for _, ref := range groups[key] {
+			part, _, _ := g.Terminal(ref)
+			if part.Kind == "net-label" && !seenNames[part.Label] {
+				names = append(names, part.Label)
+				seenNames[part.Label] = true
+			}
+		}
+		sort.Strings(names)
+		out.Nets = append(out.Nets, Net{ID: id, Terminals: groups[key], Labels: names})
 		for _, t := range groups[key] {
 			out.TerminalNet[t] = id
+		}
+	}
+	sort.Slice(out.Nets, func(i, j int) bool { return out.Nets[i].ID < out.Nets[j].ID })
+	for _, part := range g.Components {
+		if IsConnectivityPrimitive(part.Kind) && len(physicalTerminals(g, groups[root(part.ID+".node")])) < 2 {
+			return out, "incomplete", &Diagnostic{"unconnected-primitive", "Connect this junction/label net to at least two circuit terminals.", part.ID + ".node"}
 		}
 	}
 	incomplete := func(code, message, id string) (Compiled, string, *Diagnostic) {
@@ -357,10 +410,10 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		return compileMixed(out, g, groups, root)
 	}
 	if len(transistors) > 0 {
-		return compileNPN(out, sources, resistors, leds, transistors, capacitors, grounds, groups, root)
+		return compileNPN(out, g, sources, resistors, leds, transistors, capacitors, grounds, groups, root)
 	}
 	if len(capacitors) > 0 {
-		return compileRC(out, sources, resistors, capacitors, leds, grounds, groups, root)
+		return compileRC(out, g, sources, resistors, capacitors, leds, grounds, groups, root)
 	}
 	if len(sources) == 0 || len(resistors) == 0 || len(leds) == 0 {
 		return incomplete("missing-parts", "Place a DC source, resistor, red LED, and ground to build the LED circuit.", "")
@@ -380,7 +433,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 	for _, c := range []Component{out.Source, out.Resistor, out.LED} {
 		for _, name := range c.Terminals {
 			ref := c.ID + "." + name
-			if len(groups[root(ref)]) < 2 {
+			if len(physicalTerminals(g, groups[root(ref)])) < 2 {
 				return incomplete("open-terminal", "Connect terminal "+ref+" to complete the circuit.", ref)
 			}
 		}
@@ -429,7 +482,7 @@ func DefaultDrawing() DrawingState {
 	return DrawingState{Tool: "select", Kind: "dc-source", Position: Point{-200, 0}}
 }
 
-func compileRC(out Compiled, sources, resistors, capacitors, leds, grounds []Component, groups map[string][]string, root func(string) string) (Compiled, string, *Diagnostic) {
+func compileRC(out Compiled, g Graph, sources, resistors, capacitors, leds, grounds []Component, groups map[string][]string, root func(string) string) (Compiled, string, *Diagnostic) {
 	out.Analysis = "RC transient"
 	fail := func(status, code, msg, id string) (Compiled, string, *Diagnostic) {
 		return out, status, &Diagnostic{code, msg, id}
@@ -451,7 +504,7 @@ func compileRC(out Compiled, sources, resistors, capacitors, leds, grounds []Com
 	for _, c := range []Component{out.Source, out.Resistor, out.Capacitor} {
 		for _, t := range c.Terminals {
 			ref := c.ID + "." + t
-			if len(groups[root(ref)]) < 2 {
+			if len(physicalTerminals(g, groups[root(ref)])) < 2 {
 				return fail("incomplete", "open-terminal", "Connect terminal "+ref+" to complete the RC circuit.", ref)
 			}
 		}

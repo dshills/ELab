@@ -135,7 +135,10 @@ rendered:
 	if err := nativeRecordingSmoke(ctx, a, s); err != nil {
 		return err
 	}
-	return nativeProjectRecordingSmoke(ctx, a, s)
+	if err := nativeProjectRecordingSmoke(ctx, a, s); err != nil {
+		return err
+	}
+	return nativePrimitivesSmoke(ctx, a, s)
 }
 
 func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
@@ -792,4 +795,59 @@ func nativeProjectRecordingSmoke(ctx context.Context, a *app.Application, s *scr
 	case <-ctx.Done():
 		return ctx.Err()
 	}
+}
+
+func nativePrimitivesSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	done := make(chan error, 1)
+	if err := a.PostWait(ctx, func() {
+		for _, action := range []struct {
+			id    string
+			event *ui.ChangeEvent
+		}{{"example.reset", nil}, {"selection", &ui.ChangeEvent{SelectedID: "W1"}}, {"wire-insert-junction", nil}, {"part-net-label", nil}, {"place-label", &ui.ChangeEvent{Text: "SUPPLY"}}, {"position-x", &ui.ChangeEvent{Number: 350}}, {"position-y", &ui.ChangeEvent{Number: -180}}, {"place-at-position", nil}} {
+			if err := smokeUI(s, action.id, action.event); err != nil {
+				done <- err
+				return
+			}
+			if action.id == "example.reset" && s.service.Snapshot().Paused {
+				if err := smokeUI(s, "simulation.resume", nil); err != nil {
+					done <- err
+					return
+				}
+			}
+		}
+		id := s.service.Snapshot().Selected
+		for _, action := range []struct {
+			id    string
+			event *ui.ChangeEvent
+		}{{"tool-wire", nil}, {"wire-from", &ui.ChangeEvent{SelectedID: "V1.positive"}}, {"wire-to", &ui.ChangeEvent{SelectedID: id + ".node"}}, {"connect-terminals", nil}} {
+			if err := smokeUI(s, action.id, action.event); err != nil {
+				done <- err
+				return
+			}
+		}
+		done <- nil
+	}); err != nil {
+		return err
+	}
+	if err := <-done; err != nil {
+		return err
+	}
+	state, err := s.service.Wait(ctx)
+	if err != nil {
+		return err
+	}
+	if state.Result == nil || state.Result.Stale || math.Abs(state.Result.Current-.00291679) > 2e-8 || len(state.Components) != 6 {
+		return fmt.Errorf("native primitive connectivity did not preserve LED result")
+	}
+	rendered := make(chan error, 1)
+	if err := a.PostWait(ctx, func() {
+		mesh, err := s.mesh(*s.drawing.View)
+		if err == nil && mesh == nil {
+			err = fmt.Errorf("native primitive mesh absent")
+		}
+		rendered <- err
+	}); err != nil {
+		return err
+	}
+	return <-rendered
 }

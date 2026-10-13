@@ -86,6 +86,8 @@ func compileMixed(out Compiled, g Graph, groups map[string][]string, root func(s
 			rs = append(rs, p)
 		case "led":
 			leds = append(leds, p)
+		case "junction", "net-label":
+			continue
 		case "ground":
 			grounds = append(grounds, p)
 		default:
@@ -102,12 +104,12 @@ func compileMixed(out Compiled, g Graph, groups map[string][]string, root func(s
 	out.Ground = net(grounds[0], "reference")
 	adjacency := map[string][]string{}
 	for _, p := range g.Components {
-		if p.Kind == "ground" {
+		if p.Kind == "ground" || IsConnectivityPrimitive(p.Kind) {
 			continue
 		}
 		for i, a := range p.Terminals {
 			ref := p.ID + "." + a
-			if len(groups[root(ref)]) < 2 {
+			if len(physicalTerminals(g, groups[root(ref)])) < 2 {
 				return fail("incomplete", "open-terminal", "Connect terminal "+ref+" to complete the circuit.", ref)
 			}
 			for _, b := range p.Terminals[i+1:] {

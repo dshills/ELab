@@ -144,8 +144,18 @@ func schematicSVG(g Graph, run, revision uint64) []byte {
 	for _, p := range g.Components {
 		minX = math.Min(minX, p.Position.X-90)
 		maxX = math.Max(maxX, p.Position.X+140)
+		if p.Kind == "net-label" {
+			maxX = math.Max(maxX, p.Position.X+50+float64(len(p.Label)+len(p.ID)+3)*7.5)
+		}
 		minY = math.Min(minY, p.Position.Y-80)
 		maxY = math.Max(maxY, p.Position.Y+95)
+	}
+	connected := map[string]bool{}
+	for _, wire := range g.Wires {
+		if wire.Connected {
+			connected[wire.From] = true
+			connected[wire.To] = true
+		}
 	}
 	paths := map[string][]Point{}
 	for _, w := range g.Wires {
@@ -193,13 +203,25 @@ func schematicSVG(g Graph, run, revision uint64) []byte {
 			if p.Kind == "pulse-source" {
 				b.WriteString(`<path d="M-15 5 V-3 H-5 V5 H5 V-3 H15"/>`)
 			}
+		case "junction":
+			fill := "none"
+			if connected[p.ID+".node"] {
+				fill = "#426574"
+			}
+			fmt.Fprintf(&b, `<circle r="4" fill="%s"/>`, fill)
+		case "net-label":
+			b.WriteString(`<path d="M0 0 H10 V-7 L18 0 L10 7 V0"/>`)
 		case "ground":
 			b.WriteString(`<path d="M0 -20 V0 M-20 0 H20 M-12 6 H12 M-5 12 H5"/>`)
 		}
 		b.WriteString(`</g>`)
 		for _, pin := range p.Terminals {
 			at, _ := TerminalPosition(p, pin)
-			fmt.Fprintf(&b, `<circle cx="%g" cy="%g" r="3" fill="#ffffff"><title>%s.%s</title></circle>`, at.X, at.Y, html.EscapeString(p.ID), html.EscapeString(pin))
+			fill := "#ffffff"
+			if p.Kind == "junction" && connected[p.ID+".node"] {
+				fill = "#426574"
+			}
+			fmt.Fprintf(&b, `<circle cx="%g" cy="%g" r="3" fill="%s"><title>%s.%s</title></circle>`, at.X, at.Y, fill, html.EscapeString(p.ID), html.EscapeString(pin))
 		}
 	}
 	b.WriteString(`</g><g fill="#1e2c3a" font-family="system-ui,sans-serif" font-size="14">`)
@@ -208,6 +230,9 @@ func schematicSVG(g Graph, run, revision uint64) []byte {
 	for _, p := range g.Components {
 		x, y := p.Position.X+31, p.Position.Y-3
 		text := p.ID
+		if p.Kind == "net-label" {
+			text = p.Label + " · " + p.ID
+		}
 		if p.Unit != "" {
 			text += " · " + displayPartValue(p)
 		}
@@ -226,6 +251,10 @@ func schematicSVG(g Graph, run, revision uint64) []byte {
 			}
 		case "dc-source", "pulse-source":
 			x, y = p.Position.X-88, p.Position.Y-2
+		case "junction":
+			x, y = p.Position.X+8, p.Position.Y-8
+		case "net-label":
+			x, y = p.Position.X+22, p.Position.Y+4
 		case "ground":
 			x, y = p.Position.X+29, p.Position.Y+5
 		}
@@ -237,6 +266,9 @@ func schematicSVG(g Graph, run, revision uint64) []byte {
 		x := minX + 15 + float64(i%2)*width/2
 		y := diagramBottom + 44 + float64(i/2)*24
 		text := p.ID + " · " + p.Name
+		if p.Kind == "net-label" {
+			text += " · " + p.Label
+		}
 		if p.Unit != "" {
 			text += " · " + displayPartValue(p)
 		}

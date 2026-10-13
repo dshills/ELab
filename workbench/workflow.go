@@ -66,6 +66,9 @@ func (s *Service) duplicateLocked(p DuplicateParams) error {
 		return fmt.Errorf("choose an unoccupied duplicate position")
 	}
 	value := ""
+	if part.Kind == "net-label" {
+		value = part.Label
+	}
 	if part.Unit != "" {
 		value = fmt.Sprintf("%.17g %s", part.Value, part.Unit)
 	}
@@ -95,7 +98,7 @@ func (s *Service) batchLocked(p BatchParams) error {
 	}
 	for i, edit := range p.Edits {
 		switch edit.Command {
-		case "component.place", "component.move", "component.rotate", "component.set", "component.duplicate", "capacitor.initial.set", "object.delete", "wire.connect":
+		case "component.place", "component.move", "component.rotate", "component.set", "component.duplicate", "capacitor.initial.set", "object.delete", "wire.connect", "wire.junction.insert":
 		default:
 			return fmt.Errorf("batch edit %d: command %q is not an atomic schematic edit", i+1, edit.Command)
 		}
@@ -111,7 +114,7 @@ func (s *Service) batchLocked(p BatchParams) error {
 	return nil
 }
 func historyName(command string) string {
-	names := map[string]string{"component.place": "Place component", "component.duplicate": "Duplicate component", "component.move": "Move component", "component.rotate": "Rotate component", "component.set": "Change value", "capacitor.initial.set": "Change capacitor startup", "wire.connect": "Connect wire", "object.delete": "Delete object", "simulation.transient.set": "Change experiment settings", "project.clear": "New schematic", "project.load": "Open schematic"}
+	names := map[string]string{"component.place": "Place component", "component.duplicate": "Duplicate component", "component.move": "Move component", "component.rotate": "Rotate component", "component.set": "Change value", "capacitor.initial.set": "Change capacitor startup", "wire.connect": "Connect wire", "wire.junction.insert": "Insert junction", "object.delete": "Delete object", "simulation.transient.set": "Change experiment settings", "project.clear": "New schematic", "project.load": "Open schematic"}
 	if name := names[command]; name != "" {
 		return name
 	}

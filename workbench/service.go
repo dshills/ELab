@@ -532,6 +532,7 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	state.Nets = append([]Net{}, state.Nets...)
 	for i := range state.Nets {
 		state.Nets[i].Terminals = append([]string{}, state.Nets[i].Terminals...)
+		state.Nets[i].Labels = append([]string{}, state.Nets[i].Labels...)
 	}
 	if state.Result != nil {
 		r := *state.Result

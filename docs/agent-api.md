@@ -165,3 +165,5 @@ Recovery is available through seven `recovery.*` commands and `snapshot.recovery
 Recorded JSON import, independent playback, index/time seeking, captured-probe selection, interval statistics and timing cursors are exposed through `verification.import` and `recording.*`. Full exact rows remain available through `operation.samples`; only plotted points are reduced. See [recorded-result import and replay](recording.md).
 
 Project save/open now embeds kept completed recordings. `recording.keep.set {id,keep}` controls inclusion and protects kept assets from eviction; `document` exposes separate schematic/recording dirty flags and recording count. `recovery.samples` pages embedded recovery data. See [project format and lifecycle](project-format.md).
+
+`junction` and `net-label` are single-node tray kinds. `wire.junction.insert` splits/joins explicitly named routes atomically; `component.place` / `.set` use `value` for a net label name. Net inspection includes sorted label names, and `v:<id>.node` probes read their actual nets. See [schematic primitive rules](schematic-primitives.md).

@@ -55,10 +55,15 @@ Completed Verify/import results become unsaved project assets; shared Include/Ex
 
 Packaged slice: **0.13.0 / 27**, with [final validation](../docs/validation/project-recordings-validation.json), [headless portability](../docs/validation/headless-project-recordings.json), [desktop portability](../docs/validation/desktop-project-recordings.json) and [record-only crash recovery](../docs/validation/record-only-crash-recovery.json). Participant usability, hardware/power-loss validation, full device-library breadth, accessibility and distribution qualification remain future gates.
 
+## Explicit schematic primitives
+
+Implemented [junction/net-label workflows](../docs/schematic-primitives.md): single-node tray objects, atomic named-route junction insertion, pointer crossing review plus X/Y explicit joins, case-sensitive remote labels, stable physical net identities/order, primitive voltage probes, editing/undo/batches, SVG and portable project/record validation. Helpers never hide open circuit pins or establish a ground reference by name alone, and are omitted from physical device stamping.
+
+Validation includes all supported circuit families, coupled transient numerical equivalence, named supply values, crossing/near-miss and orphan/reference cases, persistence/record hashes, native/agent parity and native drawing smoke. Packaged slice: **0.14.0 / 28**, with [final validation](../docs/validation/primitives-validation.json), [headless workflow](../docs/validation/headless-primitives.json) and [desktop workflow](../docs/validation/desktop-primitives.json). This advances EDIT-02 and the P0 primitive requirements without claiming broader physical topology support.
+
 ## Next work queue
 
-1. Explicit schematic junction/net-label primitives and supported topology expansion.
-2. Generic diode, switch and potentiometer models with electrical fixtures.
-3. Capacity/latency measurements, keyboard/screen-reader checks and distribution qualification.
+1. Generic diode, switch and potentiometer models with electrical fixtures and supported topology expansion.
+2. Capacity/latency measurements, keyboard/screen-reader checks and distribution qualification.
 
 Every shipped user operation continues to require the same public agent command/state path. Each slice adds meaningful regression checks and records its actual limits. Participant usability and physical hardware validation remain future gates.

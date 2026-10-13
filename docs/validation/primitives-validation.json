@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "date": "2026-10-13",
+  "version": "0.14.0",
+  "build": "28",
+  "binary_sha256": "a2347fe86a2dc0a430569bf0204b7e128a254970bcc2b0fc45cea6eb43e14714",
+  "packaged_binary_matches": true,
+  "capabilities": 78,
+  "library_kinds": 9,
+  "headless_desktop_numerical_equivalence": true,
+  "current_a": 0.0029167965774405296,
+  "checks": [
+    "pinned Staticcheck / import formatting",
+    "Go vet and root/native race tests",
+    "all supported circuit families accept equivalent junction paths",
+    "mixed transient numerical/probe equivalence and embedded-record validation",
+    "atomic named-route insertion and undo",
+    "crossings and near misses remain separate until explicit multi-wire join",
+    "native ambiguous-pointer crossing review",
+    "case-sensitive remote labels and rename/undo",
+    "orphan/open-pin diagnostics and explicit reference semantics",
+    "stable physical net IDs/order and presentation moves",
+    "native/agent insertion, placement and label edit parity",
+    "SVG labels/symbols and long-text bounds",
+    "hollow orphan junctions / filled connected junctions",
+    "native and packaged GPU/UI primitive smoke",
+    "headless and packaged desktop fresh-process persistence"
+  ],
+  "limits": [
+    "single-sheet exact label names; no hierarchy/global multi-sheet labels",
+    "1\u20138 explicitly named connected wire targets, existing object/wire bounds",
+    "coordinates/crossings do not establish electrical joins",
+    "existing bounded educational topology/model kernels; no general SPICE claim",
+    "private unsigned local app; hardware/usability/accessibility/distribution gates remain pending"
+  ]
+}

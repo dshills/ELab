@@ -43,6 +43,8 @@ func routeBody(p Component) routeRect {
 		w, h = 58, 24
 	case "led":
 		w = 56
+	case "junction", "net-label":
+		w, h = 4, 4
 	case "ground":
 		w, h = 28, 28
 	}
@@ -85,6 +87,9 @@ func computeWireRoute(g Graph, w Wire) []Point {
 	}
 	stub := func(ref string, p Point) Point {
 		c, _, _ := g.Terminal(ref)
+		if IsConnectivityPrimitive(c.Kind) {
+			return p
+		}
 		dx, dy := p.X-c.Position.X, p.Y-c.Position.Y
 		if math.Abs(dx) > math.Abs(dy) {
 			p.X += math.Copysign(24, dx)
@@ -98,9 +103,11 @@ func computeWireRoute(g Graph, w Wire) []Point {
 		return routeCell{int(math.Round(p.X / 10)), int(math.Round(p.Y / 10))}
 	}
 	start, end := cell(sa), cell(sb)
-	rects := make([]routeRect, len(g.Components))
-	for i, p := range g.Components {
-		rects[i] = routeBody(p)
+	rects := []routeRect{}
+	for _, p := range g.Components {
+		if !IsConnectivityPrimitive(p.Kind) {
+			rects = append(rects, routeBody(p))
+		}
 	}
 	blocked := func(c routeCell) bool {
 		x, y := float64(c.x*10), float64(c.y*10)

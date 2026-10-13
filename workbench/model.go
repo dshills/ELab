@@ -29,6 +29,7 @@ type View struct {
 	Zoom   float64 `json:"zoom"`
 }
 type Component struct {
+	Label          string   `json:"label,omitempty"`
 	InitialVoltage *float64 `json:"initial_voltage_v,omitempty"`
 	ID             string   `json:"id"`
 	Kind           string   `json:"kind"`

@@ -243,6 +243,9 @@ func decodeDocument(data []byte) (Document, error) {
 	positions := map[Point]bool{}
 	for _, c := range d.Graph.Components {
 		value := ""
+		if c.Kind == "net-label" {
+			value = c.Label
+		}
 		if c.Unit != "" {
 			value = fmt.Sprintf("%.17g %s", c.Value, c.Unit)
 		}

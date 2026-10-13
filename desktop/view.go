@@ -102,7 +102,7 @@ func (s *screen) view() ui.Node {
 	statusNode.Style.Typography = ui.Some(ui.Typography{Size: 13, Weight: 600})
 
 	palette := []ui.Node{section("parts-title", "Components"), quiet("placement-help", "Choose a part, then click the sheet.")}
-	names := map[string]string{"dc-source": "+  DC source", "resistor": "∿  Resistor", "led": "▷  Red LED", "ground": "⊥  Ground", "capacitor": "Ⅱ  Capacitor", "pulse-source": "▥  Pulse source", "npn": "↗  NPN transistor"}
+	names := map[string]string{"dc-source": "+  DC source", "resistor": "∿  Resistor", "led": "▷  Red LED", "ground": "⊥  Ground", "capacitor": "Ⅱ  Capacitor", "pulse-source": "▥  Pulse source", "npn": "↗  NPN transistor", "junction": "●  Junction", "net-label": "→  Net label"}
 	palette = append(palette, ui.Node{ID: "part-search", Kind: ui.TextField, Text: state.PartSearch, Accessibility: ui.Accessibility{Name: "Search components"}, Change: func(e ui.ChangeEvent) { s.invoke("parts.search.set", workbench.SearchParams{Query: e.Text}) }})
 	for _, part := range state.MatchingParts {
 		n := s.action("part-"+part.Kind, names[part.Kind], "drawing.tool.set", workbench.ToolParams{Tool: "place", Kind: part.Kind})
@@ -114,6 +114,9 @@ func (s *screen) view() ui.Node {
 	palette = append(palette, section("getting-started-title", "Your first circuit"), quiet("step-place", "1  Place parts and ground"), quiet("step-wire", "2  Wire the terminal dots"), quiet("step-observe", "3  Watch the live measurements"))
 	placement := []ui.Node{}
 	if state.Drawing.Tool == "place" {
+		if state.Drawing.Kind == "net-label" {
+			placement = append(placement, quiet("place-label-help", "Matching labels connect their attached nets. Leave blank for a unique name."), ui.Node{ID: "place-label", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "New net label"}, Change: func(e ui.ChangeEvent) { s.invoke("editor.value.set", workbench.DraftParams{Value: e.Text}) }})
+		}
 		position := state.Drawing.Position
 		placement = append(placement, section("position-title", "Exact placement"), quiet("position-labels", "X / Y · snaps to 10 units"), ui.Node{ID: "position-row", Kind: ui.Row, Children: []ui.Node{
 			{ID: "position-x", Kind: ui.NumberField, Number: float32(position.X), Numeric: ui.Numeric{Min: -10000, Max: 10000, Step: 10}, Accessibility: ui.Accessibility{Name: "Placement X"}, Change: func(e ui.ChangeEvent) {
@@ -122,7 +125,26 @@ func (s *screen) view() ui.Node {
 			{ID: "position-y", Kind: ui.NumberField, Number: float32(position.Y), Numeric: ui.Numeric{Min: -10000, Max: 10000, Step: 10}, Accessibility: ui.Accessibility{Name: "Placement Y"}, Change: func(e ui.ChangeEvent) {
 				s.invoke("drawing.position.set", workbench.PositionParams{Position: workbench.Point{X: position.X, Y: float64(e.Number)}})
 			}},
-		}}, s.action("place-at-position", "Place at X / Y", "component.place", workbench.PlaceParams{Kind: state.Drawing.Kind, Position: position}))
+		}}, s.action("place-at-position", "Place at X / Y", "component.place", workbench.PlaceParams{Kind: state.Drawing.Kind, Position: position, Value: func() string {
+			if state.Drawing.Kind == "net-label" {
+				return state.Drawing.Value
+			}
+			return ""
+		}()}))
+	}
+	if state.Drawing.Tool == "place" && state.Drawing.Kind == "junction" {
+		graph := workbench.Graph{Components: state.Components, Wires: state.Wires}
+		point := state.Drawing.Position
+		ids := []string{}
+		for _, wire := range state.Wires {
+			if wire.Connected && workbench.WireDistance(graph, wire, point) <= workbench.GridSize/2+1e-9 {
+				ids = append(ids, wire.ID)
+			}
+		}
+		placement = append(placement, quiet("junction-targets", "Explicit junction targets: "+strings.Join(ids, ", ")))
+		join := s.action("junction-join-routes", "Join named routes at X / Y", "wire.junction.insert", workbench.JunctionInsertParams{WireIDs: ids, Position: &point})
+		join.Disabled = len(ids) == 0 || len(ids) > 8
+		placement = append(placement, join, quiet("junction-help", "Crossings stay separate until this explicit join. Place an empty junction to connect terminal dots manually."))
 	}
 	palette = append(palette, quiet("undo-name", "Undo: "+state.UndoName), quiet("redo-name", "Redo: "+state.RedoName))
 	palette = append(palette, section("shortcuts-title", "Shortcuts"), quiet("shortcut-undo", "⌘ Z · Undo"), quiet("shortcut-delete", "Delete · Remove selection"))
@@ -163,6 +185,18 @@ func (s *screen) view() ui.Node {
 	if hasPart {
 		inspector = append(inspector, s.partPlotControls(state, part)...)
 		inspector = append(inspector, heading("inspector", part.ID+" · "+part.Name), quiet("part-terminals", "Terminals: "+strings.Join(part.Terminals, ", ")))
+		if part.Kind == "net-label" {
+			inspector = append(inspector, section("label-title", "Net label · exact matching"), ui.Node{ID: "value-entry", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "Net label name"}, Change: func(e ui.ChangeEvent) { s.invoke("editor.value.set", workbench.DraftParams{Value: e.Text}) }}, s.action("apply-value", "Apply label", "component.set", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value}), quiet("label-connectivity-help", "Names are case-sensitive. GND is a name; connect it to a ground symbol to establish the reference."))
+		}
+		if workbench.IsConnectivityPrimitive(part.Kind) {
+			for _, net := range state.Nets {
+				for _, ref := range net.Terminals {
+					if ref == part.ID+".node" {
+						inspector = append(inspector, quiet("primitive-net", net.ID+"\n"+strings.Join(net.Terminals, " · ")))
+					}
+				}
+			}
+		}
 		if part.Unit != "" {
 			inspector = append(inspector, section("value-title", "Value · "+part.Unit), ui.Node{ID: "value-entry", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "Component value", Help: "Use a value such as 1k, 2.2k ohm, or 5 V"}, Change: func(e ui.ChangeEvent) { s.invoke("editor.value.set", workbench.DraftParams{Value: e.Text}) }}, buttonStyle(s.action("apply-value", "Apply value", "component.set", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value}), true))
 			if part.Kind == "resistor" {
@@ -205,7 +239,7 @@ func (s *screen) view() ui.Node {
 	}
 	for _, w := range state.Wires {
 		if w.ID == state.Selected {
-			inspector = append(inspector, heading("wire-title", w.ID+" · Wire"), quiet("wire-inspector", w.From+" → "+w.To))
+			inspector = append(inspector, heading("wire-title", w.ID+" · Wire"), quiet("wire-inspector", w.From+" → "+w.To), s.action("wire-insert-junction", "Insert junction on this wire", "wire.junction.insert", workbench.JunctionInsertParams{WireIDs: []string{w.ID}}))
 		}
 	}
 	if state.Selected != "" {

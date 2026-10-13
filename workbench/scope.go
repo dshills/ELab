@@ -71,7 +71,11 @@ func probeInventory(g Graph) []Probe {
 	for _, p := range g.Components {
 		for _, pin := range p.Terminals {
 			ref := p.ID + "." + pin
-			out = append(out, Probe{"v:" + ref, ref + " / ground", "V", ref, "ground"})
+			name := ref + " / ground"
+			if p.Kind == "net-label" {
+				name = p.Label + " / ground"
+			}
+			out = append(out, Probe{"v:" + ref, name, "V", ref, "ground"})
 		}
 		if len(p.Terminals) == 2 {
 			out = append(out, Probe{"v:" + p.ID, p.ID + " voltage", "V", p.ID + "." + p.Terminals[0], p.ID + "." + p.Terminals[1]})

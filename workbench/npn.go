@@ -162,7 +162,7 @@ func SolveNPN(ctx context.Context, c Compiled) (NPNResult, error) {
 	return NPNResult{Engine: NPNEngineID, Model: TransistorModel(), TransistorID: c.Transistor.ID, SupplyID: c.Source.ID, InputID: c.Input.ID, BaseResistorID: c.BaseResistor.ID, LoadResistorID: c.Resistor.ID, LEDID: c.LED.ID, BaseCurrent: ib, CollectorCurrent: ic, EmitterCurrent: ib + ic, VBE: vb, VCE: vc, LEDVoltage: led, LEDPower: led * ic, TransistorPower: vb*ib + vc*ic, BaseResistorPower: ib * ib * c.BaseResistor.Value, LoadResistorPower: ic * ic * c.Resistor.Value, KCLResidual: residual, KVLResidual: c.Source.Value - vc - ic*c.Resistor.Value - led, State: state, Explanation: explanation, Nodes: nodes}, nil
 }
 
-func compileNPN(out Compiled, sources, resistors, leds, transistors, capacitors, grounds []Component, groups map[string][]string, root func(string) string) (Compiled, string, *Diagnostic) {
+func compileNPN(out Compiled, g Graph, sources, resistors, leds, transistors, capacitors, grounds []Component, groups map[string][]string, root func(string) string) (Compiled, string, *Diagnostic) {
 	out.Analysis = NPNAnalysis
 	fail := func(status, code, message, id string) (Compiled, string, *Diagnostic) {
 		return out, status, &Diagnostic{code, message, id}
@@ -182,7 +182,7 @@ func compileNPN(out Compiled, sources, resistors, leds, transistors, capacitors,
 	for _, c := range append(append(append([]Component{}, sources...), resistors...), append(leds, transistors...)...) {
 		for _, t := range c.Terminals {
 			ref := c.ID + "." + t
-			if len(groups[root(ref)]) < 2 {
+			if len(physicalTerminals(g, groups[root(ref)])) < 2 {
 				return fail("incomplete", "open-terminal", "Connect terminal "+ref+" to complete the circuit.", ref)
 			}
 		}

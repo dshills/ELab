@@ -78,6 +78,8 @@ func (s *Service) normalizeDrawingLocked() {
 	}
 	if c, ok := s.graph.Component(s.selected); ok && c.Unit != "" {
 		s.drawing.Value = fmt.Sprintf("%.12g %s", c.Value, c.Unit)
+	} else if c, ok := s.graph.Component(s.selected); ok && c.Kind == "net-label" {
+		s.drawing.Value = c.Label
 	} else {
 		s.drawing.Value = ""
 	}
@@ -115,6 +117,17 @@ func (s *Service) connectLocked(p ConnectParams) error {
 }
 func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "wire.junction.insert":
+		var p JunctionInsertParams
+		if err := params(raw, &p, "wire_ids"); err != nil {
+			return err
+		}
+		if p.Position != nil {
+			if err := validatePointParam(raw, "position"); err != nil {
+				return err
+			}
+		}
+		return s.insertJunctionLocked(p)
 	case "recording.keep.set":
 		var p RecordingKeepParams
 		if err := params(raw, &p, "id", "keep"); err != nil {
@@ -260,7 +273,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return fmt.Errorf("drawing supports at most %d components", MaxComponents)
 		}
 		if p.ID == "" {
-			prefix := map[string]string{"dc-source": "V", "resistor": "R", "led": "D", "ground": "GND", "capacitor": "C", "pulse-source": "V", "npn": "Q"}[p.Kind]
+			prefix := map[string]string{"dc-source": "V", "resistor": "R", "led": "D", "ground": "GND", "capacitor": "C", "pulse-source": "V", "npn": "Q", "junction": "J", "net-label": "L"}[p.Kind]
 			if prefix == "" {
 				return fmt.Errorf("unknown part kind")
 			}
@@ -413,6 +426,9 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		if !valid {
 			return fmt.Errorf("unknown part kind")
+		}
+		if p.Tool == "place" && kind == "net-label" {
+			s.drawing.Value = ""
 		}
 		s.drawing.Tool = p.Tool
 		s.drawing.Kind = kind
