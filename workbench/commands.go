@@ -79,12 +79,18 @@ var commonInputSchemas = []struct {
 	{reflect.TypeOf(ExportParams{}), "urn:elab:export-path:1"},
 	{reflect.TypeOf(PDFExportParams{}), "urn:elab:pdf-export:1"},
 	{reflect.TypeOf(PNGExportParams{}), "urn:elab:png-export:1"},
+	{reflect.TypeOf(PreviewParams{}), "urn:elab:preview-start:1"},
+	{reflect.TypeOf(PreviewImageParams{}), "urn:elab:preview-image:1"},
 	{reflect.TypeOf(ReplaceParams{}), "urn:elab:replace-document:1"},
 	{reflect.TypeOf(IDParams{}), ObjectIDSchemaID},
 	{reflect.TypeOf(CursorSelectParams{}), "urn:elab:cursor-select:1"},
 	{reflect.TypeOf(ProbeParams{}), "urn:elab:probe-selection:1"},
 	{reflect.TypeOf(RecordingPlayParams{}), "urn:elab:playback:1"},
 	{reflect.TypeOf(InputParams{}), "urn:elab:input-mode:1"},
+	{reflect.TypeOf(ValueParams{}), "urn:elab:component-value:1"},
+	{reflect.TypeOf(PrintPreview{}), "urn:elab:print-preview:1"},
+	{reflect.TypeOf(DisplayPreferences{}), "urn:elab:display-preferences:1"},
+	{reflect.TypeOf(VerificationPage{}), "urn:elab:verification-page:1"},
 }
 
 var snapshotSchema = json.RawMessage(`{"$ref":"urn:elab:snapshot:1"}`)
@@ -115,6 +121,9 @@ func SchemaRegistry() map[string]json.RawMessage {
 }
 
 func typeSchema(t reflect.Type) map[string]any {
+	if t == reflect.TypeOf([]byte{}) {
+		return map[string]any{"type": "string", "contentEncoding": "base64"}
+	}
 	for _, common := range commonInputSchemas {
 		if t == common.Type {
 			return map[string]any{"$ref": common.ID}
@@ -205,6 +214,10 @@ func Catalog() []Capability {
 		typedCapability("export.schematic.svg", "Atomically render the complete schematic and pinned reading cards/provenance as portable SVG using shared wire routes; works headlessly without a solve", reflect.TypeOf(ExportParams{})),
 		typedCapability("export.schematic.pdf", "Export captured complete schematic to printable A4/Letter PDF with page options; macOS CoreGraphics required; no printer submission or project/physics changes", reflect.TypeOf(PDFExportParams{})),
 		typedCapability("export.schematic.png", "Export complete schematic on white A4/Letter page as PNG; shared page options; dpi omitted/0=150 or 72–300; macOS CoreGraphics required; preserves source/physics", reflect.TypeOf(PNGExportParams{})),
+		typedCapability("print.preview.start", "Capture page/source and render preview in background; one worker; preserves circuit/physics; no printer submission", reflect.TypeOf(PreviewParams{})),
+		typedCapability("print.preview.cancel", "Cancel active preview preparation by exact ID", reflect.TypeOf(IDParams{})),
+		typedCapability("print.preview.close", "Close exact preview ID and release pixels; cancel active preparation", reflect.TypeOf(IDParams{})),
+		queryCapability("print.preview.image", "Read owned PNG chunks from visible completed preview; 1–65536 bytes; default 65536; base64 output; exact ID prevents stale image reads", reflect.TypeOf(PreviewImageParams{}), reflect.TypeOf(PreviewImageChunk{})),
 		typedCapability("export.page.set", "Set session PDF/PNG paper/orientation/margin/scale/color/measurement defaults; omitted fields reset; no circuit/history/physics changes", reflect.TypeOf(SchematicPage{})),
 		capability("scope.window.set", "Set mode live or fixed with start_s/end_s inside fresh retained history; plot and interval statistics use only that window", true, `{"type":"object","required":["mode"],"properties":{"mode":{"enum":["live","fixed"]},"start_s":{"type":"number"},"end_s":{"type":"number"}},"allOf":[{"if":{"properties":{"mode":{"const":"fixed"}}},"then":{"required":["start_s","end_s"]}}],"additionalProperties":false}`),
 		typedCapability("parts.search.set", "Filter components by case-insensitive words in names, hobbyist aliases, kind, pins, units, defaults or model IDs; session only", reflect.TypeOf(SearchParams{})),

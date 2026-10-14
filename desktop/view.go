@@ -74,7 +74,11 @@ func (s *screen) view() ui.Node {
 		s.requestHelp = nil
 		s.errorMessage = ""
 	}
-	s.drawing.pointer.setEnabled(!s.fileBusy && s.pendingCommand == "")
+	s.drawing.pointer.setEnabled(!s.fileBusy && s.pendingCommand == "" && !previewVisible(state))
+	if previewVisible(state) {
+		s.drawing.dragID = ""
+		s.drawing.dragging = false
+	}
 	s.drawing.View.Center = canvas.Point{X: state.View.Center.X, Y: state.View.Center.Y}
 	s.drawing.View.Zoom = state.View.Zoom
 	drawRevision := state.Revision
@@ -143,6 +147,9 @@ func (s *screen) view() ui.Node {
 		n.Style.MinSize = ui.Some(ui.Size{Width: 112, Height: 22})
 		palette = append(palette, n)
 	}
+	previewButton := s.action("print-preview", "Print preview", "print.preview.start", workbench.PreviewParams{})
+	previewButton.Disabled = state.PrintPreview != nil && previewActive(state.PrintPreview)
+	palette = append(palette, previewButton)
 	palette = append(palette, ui.Node{ID: "export-svg", Kind: ui.Button, Text: "Export SVG", Accessibility: ui.Accessibility{Name: "Export schematic SVG"}, Activate: func() { s.beginFile("export.schematic.svg", true, workbench.SaveParams{}, nil) }})
 	palette = append(palette, ui.Node{ID: "export-pdf", Kind: ui.Button, Text: "Export PDF", Accessibility: ui.Accessibility{Name: "Export printable schematic PDF"}, Activate: func() { s.beginFile("export.schematic.pdf", true, workbench.PDFExportParams{}, nil) }})
 	palette = append(palette, ui.Node{ID: "export-png", Kind: ui.Button, Text: "Export PNG", Accessibility: ui.Accessibility{Name: "Export schematic image PNG"}, Activate: func() { s.beginFile("export.schematic.png", true, workbench.PNGExportParams{}, nil) }})
@@ -362,7 +369,9 @@ func (s *screen) view() ui.Node {
 	inspector = append(inspector, s.pinnedReadingControls(state)...)
 	inspector = append(inspector, s.displayControls(state)...)
 	inspector = append(inspector, s.appearanceControls(state)...)
-	inspector = append(inspector, s.schematicPageControls(state)...)
+	if !previewVisible(state) {
+		inspector = append(inspector, s.schematicPageControls(state)...)
+	}
 	inspector = append(inspector, s.diagnosticControls(state)...)
 	inspector = append(inspector, s.projectWorkControls(state)...)
 	inspector = append(inspector, s.inputWorkControls(state)...)
@@ -553,6 +562,15 @@ func (s *screen) view() ui.Node {
 	}
 	// Native max sizes constrain content, while padding consumes extra space.
 	// Bound descendants too: a long selector or button must not widen the rail.
+	if previewVisible(state) {
+		exports := []ui.Node{}
+		for _, node := range palette {
+			if node.ID == "export-svg" || node.ID == "export-pdf" || node.ID == "export-png" {
+				exports = append(exports, node)
+			}
+		}
+		palette = append(s.schematicPageControls(state), exports...)
+	}
 	constrainRail(palette, 152)
 	constrainRail(inspector, 248)
 	filename := "Untitled"
@@ -562,18 +580,33 @@ func (s *screen) view() ui.Node {
 	if state.Document.Dirty {
 		filename += " · Unsaved"
 	}
+	schematicChildren := []ui.Node{tools, {ID: "schematic", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 80})}, Custom: s.drawing}, quiet("schematic-help", hints), messages}
+	if previewVisible(state) {
+		schematicChildren = append(s.printPreviewPanel(state), messages)
+	} else {
+		s.previewPixels = previewPixels{}
+	}
 	root := ui.Node{ID: "root", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(12)), Gap: ui.Some(float32(10)), Background: ui.Some(surface)}, Children: []ui.Node{
 		{ID: "header", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 60}), Padding: ui.Some(ui.UniformInsets(12)), Gap: ui.Some(float32(16)), Align: ui.Some(ui.AlignCenter), Background: ui.Some(paper)}, Children: []ui.Node{heading("title", "ELab"), toolbar, statusNode, s.button(pause, pauseText)}},
 		{ID: "workspace", Kind: ui.Row, Grow: true, Style: ui.Style{Gap: ui.Some(float32(10))}, Children: []ui.Node{
 			{ID: "parts-scroll", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 200}), MaxSize: ui.Some(ui.Size{Width: 200}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("palette", 152, palette...)}},
-			{ID: "schematic-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(12)), Gap: ui.Some(float32(8)), Background: ui.Some(paper)}, Children: []ui.Node{tools, {ID: "schematic", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 80})}, Custom: s.drawing}, quiet("schematic-help", hints), messages}},
+			{ID: "schematic-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(12)), Gap: ui.Some(float32(8)), Background: ui.Some(paper)}, Children: schematicChildren},
 			{ID: "sidebar", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 296}), MaxSize: ui.Some(ui.Size{Width: 296}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("sidebar-content", 248, inspector...)}},
 		}},
 		{ID: "readings", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 72}), Gap: ui.Some(float32(10)), Align: ui.Some(ui.AlignCenter)}, Children: []ui.Node{metric("current", currentTitle, current), metric("voltage", voltageTitle, voltage), metric("power", powerTitle, power), panel("simulation-info", 232, section("simulation-title", "Live simulation"), quiet("reading-status", readStatus))}},
 		{ID: "footer-row", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 20})}, Children: []ui.Node{quiet("footer", fmt.Sprintf("%s · %d components · %d wires · last change: %s", filename, len(state.Components), len(state.Wires), state.LastActor)), {ID: "footer-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, quiet("grid-info", "10-unit snap · local workspace")}},
 		s.filePrompt(),
 	}}
-	if scopeAvailable(state) {
+	if previewVisible(state) {
+		children := make([]ui.Node, 0, len(root.Children))
+		for _, child := range root.Children {
+			if child.ID != "readings" {
+				children = append(children, child)
+			}
+		}
+		root.Children = children
+	}
+	if scopeAvailable(state) && !previewVisible(state) {
 		index := len(root.Children) - 3
 		children := append([]ui.Node{}, root.Children[:index]...)
 		children = append(children, s.scopePanel(state))

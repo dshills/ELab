@@ -1,0 +1,50 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "app_version": "0.53.0",
+  "build_version": "68",
+  "binary_sha256": "9b1ee6cbc94a848a76fe4591d7e7061f748544239ca4b0b038af5edc6fd5b637",
+  "sdk_commit": "87e7de154b96732cad5dcb67703087115909c6f2",
+  "sdk_manifest_sha256": "0908b172d20cf5043cbdc3e54c907d79190e60d29e6a90b98e7b11e271480b67",
+  "checks": [
+    "Full lint/import/root/native race/vet pass on final source and current SDK",
+    "Portable non-cgo unsupported response and discovery checks pass",
+    "Final packaged native GPU/preview smoke pass; restored canvas waits for completed frame",
+    "Seven public preview checks each on headless stdio and native socket",
+    "Three native/headless PNG pairs byte-identical, including preview/export parity",
+    "Four previous electrical workflow adapters pass on exact final binary",
+    "Native CUA observed expanded page, unclipped Live readings label, full accessibility name, and Back restoration",
+    "Source inventory reviewed/fresh: 36 files, 282 sites, 120 public IDs, 99 routed IDs, 101 binding-review sites",
+    "Current SDK RGBA-upload four outputs and span-scratch three outputs match prepared hashes; sibling remains read-only/clean",
+    "Rebuild against final recorded SDK produces same binary SHA as visual/conformance-tested release"
+  ],
+  "evidence": [
+    "docs/print-preview.md",
+    "docs/validation/headless-print-preview-final.json",
+    "docs/validation/desktop-print-preview-final.json",
+    "docs/validation/print-preview-pixel-parity.json",
+    "docs/validation/print-preview-visual-review.json",
+    "docs/validation/print-preview-conformance.json",
+    "workbench/print_preview_test.go",
+    "desktop/print_preview_test.go",
+    "desktop/print_preview_smoke.go"
+  ],
+  "limitations": [
+    "Preview/PDF/PNG page backend is macOS cgo; unsupported builds reject clearly",
+    "One render worker, 8 MiB PNG, cooperative 30-second deadline; not preemptive within native calls",
+    "Snapshot metadata and bounded image chunks; no universal latency/capacity claim",
+    "Whole-page preview has no zoom; printer discovery/submission, tiling and physical printing pending",
+    "Captured schematic/live overlays only; no recorded-scene reconstruction",
+    "Arbitrary crowded-page readability, physical keyboard/IME/accessibility breadth and distribution gates remain open",
+    "Private unsigned app; previous 0.52.0/67 preserved at build/ELab-before-print-preview.app; initial candidates retained",
+    "Native screenshots are inline chat evidence; no repository screenshot files claimed",
+    "P0 audit counts unchanged: 17 implemented, 10 partial; continuing goal active"
+  ],
+  "qualification_repairs": [
+    "Shared step-schema deduplication removed to preserve unit-aware time inputs and existing catalog limits",
+    "Initial GPU smoke raced remount; first retry invalidated resources on each poll; now rebuild once and await frame",
+    "Drag assertion synchronized with rendered preview",
+    "Actual visual thumbnail led to hiding live scope/cards only in preview and moving settings left",
+    "Narrow checkbox shortened while preserving full accessibility name"
+  ]
+}

@@ -162,6 +162,7 @@ func main() {
 }
 
 type screen struct {
+	previewPixels                    previewPixels
 	requestHelp                      *workbench.DiagnosticHelp
 	requestHelpRevision              uint64
 	displayStarted                   time.Time

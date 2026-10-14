@@ -49,9 +49,13 @@ func (s *screen) schematicPageControls(state workbench.Snapshot) []ui.Node {
 	for _, toggle := range []struct {
 		id, label string
 		checked   bool
-	}{{"color", "Color output", page.Color}, {"measurements", "Include live measurement overlays", page.Measurements}} {
+	}{{"color", "Color output", page.Color}, {"measurements", "Live readings", page.Measurements}} {
 		toggle := toggle
-		nodes = append(nodes, ui.Node{ID: "pdf-" + toggle.id, Kind: ui.Checkbox, Text: toggle.label, Checked: toggle.checked, Accessibility: ui.Accessibility{Name: toggle.label}, Change: func(e ui.ChangeEvent) {
+		name := toggle.label
+		if toggle.id == "measurements" {
+			name = "Include live measurement overlays"
+		}
+		nodes = append(nodes, ui.Node{ID: "pdf-" + toggle.id, Kind: ui.Checkbox, Text: toggle.label, Checked: toggle.checked, Accessibility: ui.Accessibility{Name: name}, Change: func(e ui.ChangeEvent) {
 			next := page
 			if toggle.id == "color" {
 				next.Color = e.Checked

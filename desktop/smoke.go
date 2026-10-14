@@ -192,6 +192,9 @@ rendered:
 	if err := nativeFieldContextSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	if err := nativePrintPreviewSmoke(ctx, a, s); err != nil {
+		return fmt.Errorf("native print preview: %w", err)
+	}
 	return nativeLifecycleSmoke(ctx, a, s)
 }
 

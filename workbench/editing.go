@@ -228,6 +228,18 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		s.selectRecordingLocked(p.ID)
 		return nil
+	case "print.preview.start":
+		var p PreviewParams
+		if err := params(raw, &p); err != nil {
+			return err
+		}
+		return s.startPrintPreviewLocked(p)
+	case "print.preview.cancel", "print.preview.close":
+		var p IDParams
+		if err := params(raw, &p, "id"); err != nil {
+			return err
+		}
+		return s.cancelPrintPreviewLocked(p, command == "print.preview.close")
 	case "export.start":
 		var p ExportStartParams
 		if err := params(raw, &p, "kind", "path"); err != nil {

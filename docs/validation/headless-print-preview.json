@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "captured": {
+    "id": "preview-1",
+    "status": "completed",
+    "visible": true,
+    "source_current": true,
+    "page": {
+      "paper": "a4",
+      "orientation": "portrait",
+      "margin_mm": 12,
+      "color": true
+    },
+    "run_id": 2,
+    "electrical_revision": 2,
+    "document_generation": 2,
+    "actor": "agent.stdio",
+    "width_px": 1241,
+    "height_px": 1754,
+    "bytes": 85405,
+    "sha256": "ebf8e6b8608754ced15293ddcd6c2939190ecb45dc3d658893f31d7f9df21a08"
+  },
+  "refreshed": {
+    "id": "preview-2",
+    "status": "completed",
+    "visible": true,
+    "source_current": true,
+    "page": {
+      "paper": "a4",
+      "orientation": "portrait",
+      "margin_mm": 12,
+      "color": true
+    },
+    "run_id": 3,
+    "electrical_revision": 3,
+    "document_generation": 2,
+    "actor": "agent.stdio",
+    "width_px": 1241,
+    "height_px": 1754,
+    "bytes": 88147,
+    "sha256": "3830b10990986bfe283a79726d94bec5bad3b3d56bab1063f4888bead659419b"
+  },
+  "closed": {
+    "id": "preview-2",
+    "status": "completed",
+    "visible": false,
+    "source_current": true,
+    "page": {
+      "paper": "a4",
+      "orientation": "portrait",
+      "margin_mm": 12,
+      "color": true
+    },
+    "run_id": 3,
+    "electrical_revision": 3,
+    "document_generation": 2,
+    "actor": "agent.stdio",
+    "width_px": 1241,
+    "height_px": 1754,
+    "bytes": 0
+  },
+  "checks": [
+    "capture preserves source/physics/history",
+    "chunk checksum and ownership",
+    "preview equals PNG export bytes",
+    "later edits retain captured pixels and mark stale",
+    "refresh captures latest source",
+    "old preview ID cannot close new capture",
+    "close releases image"
+  ],
+  "limits": [
+    "macOS CoreGraphics page backend",
+    "preview only; no printer job or physical print proof"
+  ]
+}

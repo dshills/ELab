@@ -70,6 +70,10 @@ func (c *commandCanvas) Mount(parent tree.Node) core.Widget {
 		e.SetHandled()
 	})
 	w.OnFirst(events.KeyChord, func(e events.Event) {
+		if previewVisible(c.screen.service.Snapshot()) {
+			e.SetHandled()
+			return
+		}
 		chord := strings.ToLower(string(e.KeyChord()))
 		dx, dy := 0., 0.
 		switch chord {
@@ -270,7 +274,7 @@ func (s *screen) mesh(v canvas.Viewport) (*canvas.Mesh, error) {
 // pointer routes precise native packets through the same intent functions and
 // commands as the portable canvas handlers. It runs only on the Vellum owner.
 func (c *commandCanvas) routePointer(phase int, p, delta workbench.Point) {
-	if c.screen.fileBusy || c.screen.pendingCommand != "" {
+	if c.screen.fileBusy || c.screen.pendingCommand != "" || previewVisible(c.screen.service.Snapshot()) {
 		c.dragID = ""
 		c.dragging = false
 		return

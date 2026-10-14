@@ -172,22 +172,7 @@ func prepareProjectExport(ctx context.Context, capture exportCapture, progress f
 	var err error
 	switch capture.kind {
 	case "schematic-pdf", "schematic-png":
-		identity := map[string]any{"format": "elab.schematic." + capture.artifact.Format + ".v1", "run_id": capture.artifact.RunID, "electrical_revision": capture.artifact.ElectricalRevision, "document_generation": capture.artifact.DocumentGeneration, "page": capture.artifact.Page, "measurement_source": "captured-live-snapshot; unavailable/stale labels retained when overlays requested"}
-		identity["source_annotations"] = capture.annotations
-		identity["source_settings"] = capture.settings
-		sources := []Component{}
-		for _, p := range capture.graph.Components {
-			if p.Kind == "pulse-source" || IsWaveformSource(p.Kind) {
-				sources = append(sources, p)
-			}
-		}
-		identity["source_components"] = sources
-		if capture.artifact.DPI != 0 {
-			identity["dpi"] = capture.artifact.DPI
-		}
-		metadata, _ := json.Marshal(identity)
-		capture.page.Metadata = string(metadata)
-		data, err = schematicpdf.Render(ctx, schematicSVGWithAnnotations(capture.graph, capture.artifact.RunID, capture.artifact.ElectricalRevision, capture.display, capture.annotations, capture.settings, capture.readings...), capture.page)
+		data, err = renderSchematicPage(ctx, capture)
 	case "schematic-svg":
 		data = schematicSVGWithAnnotations(capture.graph, capture.artifact.RunID, capture.artifact.ElectricalRevision, capture.display, capture.annotations, capture.settings, capture.readings...)
 	case "scope-csv":
@@ -273,4 +258,23 @@ func (s *Service) runProjectExport(job *projectJob, prepare projectExportFunc, p
 	job.export.display = CircuitDisplay{}
 	s.finishProjectWorkLocked(job)
 	s.mu.Unlock()
+}
+
+func renderSchematicPage(ctx context.Context, capture exportCapture) ([]byte, error) {
+	identity := map[string]any{"format": "elab.schematic." + capture.artifact.Format + ".v1", "run_id": capture.artifact.RunID, "electrical_revision": capture.artifact.ElectricalRevision, "document_generation": capture.artifact.DocumentGeneration, "page": capture.artifact.Page, "measurement_source": "captured-live-snapshot; unavailable/stale labels retained when overlays requested"}
+	identity["source_annotations"] = capture.annotations
+	identity["source_settings"] = capture.settings
+	sources := []Component{}
+	for _, p := range capture.graph.Components {
+		if p.Kind == "pulse-source" || IsWaveformSource(p.Kind) {
+			sources = append(sources, p)
+		}
+	}
+	identity["source_components"] = sources
+	if capture.artifact.DPI != 0 {
+		identity["dpi"] = capture.artifact.DPI
+	}
+	metadata, _ := json.Marshal(identity)
+	capture.page.Metadata = string(metadata)
+	return schematicpdf.Render(ctx, schematicSVGWithAnnotations(capture.graph, capture.artifact.RunID, capture.artifact.ElectricalRevision, capture.display, capture.annotations, capture.settings, capture.readings...), capture.page)
 }

@@ -13,6 +13,7 @@ import (
 )
 
 type Snapshot struct {
+	PrintPreview           *PrintPreview          `json:"print_preview,omitempty"`
 	SourceAnnotations      []SourceAnnotation     `json:"source_annotations"`
 	ProjectWork            *ProjectWork           `json:"project_work,omitempty"`
 	InputWork              *InputWork             `json:"input_work,omitempty"`
@@ -84,6 +85,10 @@ type savedResponse struct {
 	project     *projectJob
 }
 type Service struct {
+	preview                          *previewJob
+	previewSerial                    uint64
+	previewWorkers                   int
+	previewRender                    func(context.Context, exportCapture) ([]byte, error)
 	projectJob                       *projectJob
 	projectWorkers                   int
 	projectJobs                      map[string]*projectJob
@@ -196,6 +201,7 @@ func newService(solver func(context.Context, Circuit) (Result, error)) *Service 
 func newGraphService(solver func(context.Context, Circuit) (Result, error), graph Graph) *Service {
 	s := &Service{
 		revision:          1,
+		previewRender:     renderSchematicPage,
 		electrical:        1,
 		graph:             graph.Clone(),
 		drawing:           DefaultDrawing(),
@@ -254,6 +260,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	}
 	out := Snapshot{
 		SourceAnnotations:      s.sourceAnnotationsLocked(),
+		PrintPreview:           s.printPreviewLocked(),
 		SchematicPage:          page,
 		ProjectWork:            s.projectWorkLocked(),
 		InputWork:              s.inputWorkLocked(),
@@ -485,6 +492,11 @@ func (s *Service) closeLocked() {
 			s.recoveryCancel()
 		}
 	}
+	if s.preview != nil {
+		s.preview.cancel()
+		s.preview.data = nil
+		s.preview.view.Visible = false
+	}
 	s.cancelProjectWorkLocked("canceled")
 	s.cancelInputWorkLocked("canceled")
 	s.cancelStepLocked("canceled")
@@ -590,6 +602,22 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 		return fail("unknown-command", "enumerate capabilities.list for supported commands")
 	}
 	if !cap.Mutation {
+		if r.Command == "print.preview.image" {
+			var p PreviewImageParams
+			if err := params(r.Params, &p, "id"); err != nil {
+				return fail("invalid-params", err.Error())
+			}
+			result, err := s.previewImageLocked(p)
+			if err != nil {
+				var action *actionError
+				if errors.As(err, &action) {
+					return fail(action.code, action.message)
+				}
+				return fail("invalid-params", err.Error())
+			}
+			out.Result = result
+			return out
+		}
 		if r.Command == "project.work.inspect" {
 			var p IDParams
 			if err := params(r.Params, &p, "id"); err != nil {
@@ -807,6 +835,9 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 		s.cursorA = nil
 		s.cursorB = nil
 	}
+	if r.Command == "print.preview.start" && s.preview != nil {
+		s.preview.view.Actor = actor
+	}
 	if r.Command == "simulation.verify" {
 		s.operations[s.lastOperation].summary.Actor = actor
 	}
@@ -855,6 +886,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 
 func cloneSnapshot(state Snapshot) Snapshot {
 	state.SourceAnnotations = cloneSourceAnnotations(state.SourceAnnotations)
+	state.PrintPreview = clonePrintPreview(state.PrintPreview)
 	state.SchematicPage = cloneSchematicPage(state.SchematicPage)
 	state.ProjectWork = cloneProjectWork(state.ProjectWork)
 	state.InputWork = cloneInputWork(state.InputWork)
