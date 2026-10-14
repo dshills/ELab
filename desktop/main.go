@@ -128,13 +128,9 @@ func (s *screen) invoke(id string, p any) workbench.Response {
 	s.fileMessage = ""
 	s.serial++
 	raw, _ := json.Marshal(p)
-	rev := s.service.Snapshot().Revision
-	request := workbench.Request{Version: 1, ID: fmt.Sprintf("ui-%d", s.serial), Command: id, Params: raw, ExpectedRevision: &rev, Key: fmt.Sprintf("ui-%d", s.serial)}
+	rev := s.service.Snapshot().CommandRevision
+	request := workbench.Request{Version: 1, ID: fmt.Sprintf("ui-%d", s.serial), Command: id, Params: raw, ExpectedCommandRevision: &rev, Key: fmt.Sprintf("ui-%d", s.serial)}
 	result := s.service.Dispatch(context.Background(), request, "user")
-	if result.Error != nil && result.Error.Code == "conflict" && result.Revision != rev {
-		rev = result.Revision
-		result = s.service.Dispatch(context.Background(), request, "user")
-	}
 	if result.Error != nil {
 		s.errorMessage = result.Error.Message
 	} else {

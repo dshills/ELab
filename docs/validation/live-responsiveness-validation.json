@@ -1,0 +1,53 @@
+{
+  "passed": true,
+  "date": "2026-10-13",
+  "version": "0.21.0",
+  "build": "35",
+  "binary_sha256": "006d66b17aa9509ca845686e54d5ef4adb1ba1a2b98e05b3c1006b9eaa0be4bf",
+  "packaged_binary_matches": true,
+  "audit_counts": {
+    "implemented": 10,
+    "partial": 17,
+    "pending": 0
+  },
+  "checks": [
+    "pinned Staticcheck/import formatting",
+    "Go vet and root/native race tests",
+    "manual capture/publication/clock lifecycle/precondition review",
+    "blocked numerical work does not hold the service mutex",
+    "pause/restart/close and input-change rejection of obsolete samples/failures",
+    "presentation edits survive current sample publication",
+    "one clock after repeated Resume",
+    "shutdown waits outside the service mutex",
+    "optional discovered command guard ignores actual clock publication",
+    "strict combined/full-state guards and intervening actor commands still refuse",
+    "retry deduplication retains original independently copied outcome",
+    "built and packaged GPU/UI smoke",
+    "107-call real flasher workload over stdio and packaged desktop socket",
+    "four traces and run/graph identity preserved",
+    "200ms independent Verify preserves paused live state",
+    "saved record reopens fresh/paused/clean"
+  ],
+  "measurements": {
+    "headless": {
+      "command_count": 107,
+      "backend_api_p95_ms": 11.442124960012734,
+      "backend_api_max_ms": 13.861457991879433,
+      "verify_200ms_wall_ms": 52.15641704853624
+    },
+    "desktop": {
+      "command_count": 107,
+      "backend_api_p95_ms": 10.81308297580108,
+      "backend_api_max_ms": 14.675291022285819,
+      "verify_200ms_wall_ms": 40.97391600953415
+    }
+  },
+  "limits": [
+    "general network startup, manual multi-sample Step, wiper/input algebraic solves and file operations still have synchronous work",
+    "supported physical capacity remains below the PRD target",
+    "controlled blocked-kernel race tests separately prove lock availability and obsolete result rejection",
+    "this fixture does not establish input-to-pixel p95 or all reference-circuit latency gates",
+    "native GPU smoke and socket timings do not establish visible-latency or clean distribution acceptance",
+    "private unsigned local bundle; 17 functional requirement rows remain partial"
+  ]
+}

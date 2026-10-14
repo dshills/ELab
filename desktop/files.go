@@ -101,13 +101,9 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 		}
 		var response workbench.Response
 		if err == nil {
-			revision := s.service.Snapshot().Revision
-			request := workbench.Request{Version: 1, ID: fmt.Sprintf("ui-%d", serial), Key: fmt.Sprintf("ui-%d", serial), Command: id, Params: raw, ExpectedRevision: &revision}
+			revision := s.service.Snapshot().CommandRevision
+			request := workbench.Request{Version: 1, ID: fmt.Sprintf("ui-%d", serial), Key: fmt.Sprintf("ui-%d", serial), Command: id, Params: raw, ExpectedCommandRevision: &revision}
 			response = s.service.Dispatch(ctx, request, "user")
-			if response.Error != nil && response.Error.Code == "conflict" && response.Revision != revision {
-				revision = response.Revision
-				response = s.service.Dispatch(ctx, request, "user")
-			}
 		}
 		_ = s.app.PostWindow("main", func() {
 			s.fileBusy = false

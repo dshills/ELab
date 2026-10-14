@@ -10,12 +10,14 @@ import time
 ROOT = Path(__file__).resolve().parents[1]
 
 class Client:
-    def __init__(self, endpoint=None):
+    def __init__(self, endpoint=None, command_preconditions=False):
         argv = [str(ROOT / 'build/elab-agent')]
         if endpoint:
             argv += ['--connect', endpoint]
         self.process = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True)
         self.revision = 0
+        self.command_revision = 0
+        self.command_preconditions = command_preconditions
         self.sequence = 0
         self.ask('project.inspect')
 
@@ -23,17 +25,21 @@ class Client:
         self.sequence += 1
         request = dict(version=1, id=f'persist-{self.sequence}', command=command, params=params or {})
         if mutate:
-            request.update(expected_revision=self.revision, key=f'persist-{time.time_ns()}')
+            guard = 'expected_command_revision' if self.command_preconditions else 'expected_revision'
+            request.update({guard: self.command_revision if self.command_preconditions else self.revision, 'key': f'persist-{time.time_ns()}'})
         self.process.stdin.write(json.dumps(request) + '\n')
         self.process.stdin.flush()
         response = json.loads(self.process.stdout.readline())
         self.revision = response['revision']
-        if mutate and response.get('error', {}).get('code') == 'conflict':
+        if mutate and not self.command_preconditions and response.get('error', {}).get('code') == 'conflict':
             request['expected_revision'] = self.revision
             self.process.stdin.write(json.dumps(request) + '\n')
             self.process.stdin.flush()
             response = json.loads(self.process.stdout.readline())
             self.revision = response['revision']
+        result = response.get('result')
+        if isinstance(result, dict) and 'command_revision' in result:
+            self.command_revision = result['command_revision']
         if expect:
             assert response.get('error', {}).get('code') == expect, response
         else:

@@ -15,11 +15,11 @@ func call(t *testing.T, s *Service, command string, p any, key string) Response 
 		t.Fatal(err)
 	}
 	rev := s.Snapshot().Revision
-	r := s.Dispatch(context.Background(), Request{1, key, command, raw, &rev, key}, "test")
+	r := s.Dispatch(context.Background(), Request{Version: 1, ID: key, Command: command, Params: raw, ExpectedRevision: &rev, Key: key}, "test")
 	// Resolve only a known admission conflict with an async result commit.
 	if r.Error != nil && r.Error.Code == "conflict" {
 		rev = r.Revision
-		r = s.Dispatch(context.Background(), Request{1, key, command, raw, &rev, key}, "test")
+		r = s.Dispatch(context.Background(), Request{Version: 1, ID: key, Command: command, Params: raw, ExpectedRevision: &rev, Key: key}, "test")
 	}
 	if r.Error != nil {
 		t.Fatalf("%s: %+v", command, r.Error)
@@ -109,7 +109,7 @@ func TestConflictRetryAndValidation(t *testing.T) {
 	defer s.Close()
 	state := settled(t, s)
 	rev := state.Revision
-	request := Request{1, "first", "component.set", json.RawMessage(`{"id":"R1","value":"2k"}`), &rev, "same"}
+	request := Request{Version: 1, ID: "first", Command: "component.set", Params: json.RawMessage(`{"id":"R1","value":"2k"}`), ExpectedRevision: &rev, Key: "same"}
 	first := s.Dispatch(context.Background(), request, "test")
 	if first.Error != nil {
 		t.Fatal(first.Error)
@@ -139,7 +139,7 @@ func TestConflictRetryAndValidation(t *testing.T) {
 		if i == 4 {
 			command = "circuit.connection.set"
 		}
-		r := s.Dispatch(context.Background(), Request{1, "invalid", command, json.RawMessage(p), &rev, "invalid"}, "test")
+		r := s.Dispatch(context.Background(), Request{Version: 1, ID: "invalid", Command: command, Params: json.RawMessage(p), ExpectedRevision: &rev, Key: "invalid"}, "test")
 		if r.Error == nil || s.Snapshot().Circuit != before.Circuit || s.Snapshot().Revision != before.Revision {
 			t.Fatalf("invalid request changed state: %s %+v", p, r)
 		}

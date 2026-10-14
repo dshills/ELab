@@ -1,0 +1,483 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "scope": "Backend API acknowledgment and actual solver work; no visible latency or full acceptance claim",
+  "reference_configuration": {
+    "os": "26.6.2",
+    "architecture": "arm64",
+    "hardware": {
+      "model": "Mac16,11",
+      "logical_cpus": 14,
+      "memory_bytes": 68719476736,
+      "cpu": "Apple M4 Pro"
+    },
+    "go": "go version go1.27.2 darwin/arm64",
+    "race_instrumented": false
+  },
+  "circuit": {
+    "example": "capacitor-timed flasher",
+    "objects": 12,
+    "nets": 8,
+    "engine": "elab.mixed-mna-be.v1",
+    "settings": {
+      "step_s": 0.005,
+      "high_s": 0.05,
+      "low_s": 0.05,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 0.5
+    },
+    "traces": 4
+  },
+  "command_count": 107,
+  "backend_api_p95_ms": 11.442124960012734,
+  "backend_api_max_ms": 13.861457991879433,
+  "live_accepted_time_s": 0.3500000000000002,
+  "verify_200ms_wall_ms": 52.15641704853624,
+  "observed_targets": {
+    "backend_api_p95_under_100ms": true,
+    "verify_200ms_under_2s": true
+  },
+  "checks": [
+    "pan/save/inspect and geometry undo during actual live nonlinear integration",
+    "run/electrical identity and graph preserved",
+    "four traces remain valid",
+    "paused live time unaffected by independent Verify",
+    "saved experiment reopens fresh and clean"
+  ],
+  "limitations": [
+    "general network startup, manual multi-sample Step, wiper/input algebraic solves and file operations still have synchronous work",
+    "supported physical capacity remains below the PRD target",
+    "controlled blocked-kernel race tests separately prove lock availability and obsolete result rejection",
+    "this fixture does not establish input-to-pixel p95 or all reference-circuit latency gates"
+  ],
+  "measurements": [
+    {
+      "command": "view.pan",
+      "wall_ms": 0.2328749978914857
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 11.442124960012734
+    },
+    {
+      "command": "project.inspect",
+      "wall_ms": 0.26125001022592187
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.34266599686816335
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.3535830182954669
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.30066596809774637
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.36933302180841565
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.7091669831424952
+    },
+    {
+      "command": "project.inspect",
+      "wall_ms": 0.29095803620293736
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.43349998304620385
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.3941659815609455
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.4359590238891542
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.46379101695492864
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.539334025233984
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 12.468957982491702
+    },
+    {
+      "command": "project.inspect",
+      "wall_ms": 0.3624170203693211
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.47620898112654686
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.417750037740916
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.5098329856991768
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.49954099813476205
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.7648749742656946
+    },
+    {
+      "command": "project.inspect",
+      "wall_ms": 0.4041659994982183
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.4657090175896883
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.5044169956818223
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.5720419576391578
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.6273339968174696
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.5288749816827476
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 11.311792011838406
+    },
+    {
+      "command": "project.inspect",
+      "wall_ms": 0.561791006475687
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.8312080171890557
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.6280410452745855
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.6312079494819045
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.8431670139543712
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.8652090327814221
+    },
+    {
+      "command": "project.inspect",
+      "wall_ms": 0.5026670405641198
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.9197919862344861
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.5252499831840396
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.5948329926468432
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.9382920106872916
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.7544999825768173
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 11.692583037074655
+    },
+    {
+      "command": "component.move",
+      "wall_ms": 0.5179590079933405
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 0.5119160050526261
+    },
+    {
+      "command": "project.inspect",
+      "wall_ms": 0.5829590372741222
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.8012079633772373
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.4650830524042249
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.48287498066201806
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.7232910138554871
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.5636250134557486
+    },
+    {
+      "command": "project.inspect",
+      "wall_ms": 0.5217500147409737
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.610999995842576
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.7619159878231585
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.5967089673504233
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.6280409870669246
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.6070410017855465
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 10.630416974890977
+    },
+    {
+      "command": "project.inspect",
+      "wall_ms": 0.6027500494383276
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.6831670179963112
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.7069580024108291
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.6804590229876339
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.0953749879263341
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.7861250196583569
+    },
+    {
+      "command": "project.inspect",
+      "wall_ms": 0.7016249583102763
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.8426670101471245
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.7900000200606883
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.8103750296868384
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.9032080415636301
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.2296669883653522
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 12.165124993771315
+    },
+    {
+      "command": "project.inspect",
+      "wall_ms": 0.971833011135459
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.0416250443086028
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.196000026538968
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.073958002962172
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.130332995671779
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.3535000034607947
+    },
+    {
+      "command": "project.inspect",
+      "wall_ms": 1.2210829881951213
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.3210829929448664
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.7749170074239373
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.2742920080199838
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.1524580186232924
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.4132910291664302
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 12.36095797503367
+    },
+    {
+      "command": "project.inspect",
+      "wall_ms": 1.3498750049620867
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.3548749848268926
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.6124999965541065
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.4651250094175339
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.4077500090934336
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 2.8118339832872152
+    },
+    {
+      "command": "project.inspect",
+      "wall_ms": 1.4863330288790166
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.4763330109417439
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.4659170410595834
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 2.5577080086804926
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.6050420235842466
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.5350839821621776
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 13.861457991879433
+    },
+    {
+      "command": "project.inspect",
+      "wall_ms": 1.580959011334926
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.3610420282930136
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.35366601170972
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.595916983205825
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.165499968919903
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.000791962724179
+    },
+    {
+      "command": "project.inspect",
+      "wall_ms": 0.9043750469572842
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.9562079794704914
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.371209044009447
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 0.9452910162508488
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.0339579894207418
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 1.1620000004768372
+    }
+  ]
+}

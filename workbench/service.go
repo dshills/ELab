@@ -97,6 +97,7 @@ type Service struct {
 	npnHigh, npnLow             *NPNResult
 	npn                         *NPNResult
 	mu                          sync.Mutex
+	liveWorkers                 sync.WaitGroup
 	documentPath                string
 	documentGeneration          uint64
 	savedGraph, diskHash        [32]byte
@@ -122,6 +123,7 @@ type Service struct {
 	changed                     chan struct{}
 	cancel                      context.CancelFunc
 	solver                      func(context.Context, Circuit) (Result, error)
+	networkAdvance              networkAdvanceFunc
 }
 
 func New() *Service        { return newGraphService(SolveLED, EmptyGraph()) }
@@ -130,7 +132,7 @@ func newService(solver func(context.Context, Circuit) (Result, error)) *Service 
 	return newGraphService(solver, ExampleGraph())
 }
 func newGraphService(solver func(context.Context, Circuit) (Result, error), graph Graph) *Service {
-	s := &Service{revision: 1, electrical: 1, graph: graph.Clone(), drawing: DefaultDrawing(), usedIDs: map[string]bool{}, view: View{Zoom: 1}, cache: map[string]savedResponse{}, changed: make(chan struct{}), solver: solver, actor: "system"}
+	s := &Service{revision: 1, electrical: 1, graph: graph.Clone(), drawing: DefaultDrawing(), usedIDs: map[string]bool{}, view: View{Zoom: 1}, cache: map[string]savedResponse{}, changed: make(chan struct{}), solver: solver, networkAdvance: advanceLiveNetwork, actor: "system"}
 	for _, c := range graph.Components {
 		s.usedIDs[c.ID] = true
 	}
@@ -318,7 +320,12 @@ func (s *Service) startLocked() {
 		s.signalLocked()
 	}()
 }
-func (s *Service) Close() { s.mu.Lock(); defer s.mu.Unlock(); s.closeLocked() }
+func (s *Service) Close() {
+	s.mu.Lock()
+	s.closeLocked()
+	s.mu.Unlock()
+	s.liveWorkers.Wait()
+}
 func (s *Service) closeLocked() {
 	if s.closed {
 		return
@@ -433,7 +440,7 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 			return fail("invalid-params", err.Error())
 		}
 		if r.Command == "capabilities.list" {
-			out.Result = map[string]any{"version": ProtocolVersion, "schema_version": DiscoverySchemaVersion, "schemas": SchemaRegistry(), "capabilities": Catalog(), "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee."}
+			out.Result = map[string]any{"version": ProtocolVersion, "schema_version": DiscoverySchemaVersion, "schemas": SchemaRegistry(), "capabilities": Catalog(), "mutation_preconditions": map[string]string{"expected_revision": "Guards all state publication, including live samples", "expected_command_revision": "Guards admitted commands, including other actors; live solver publication does not invalidate it", "combination": "At least one guard is required for mutations; when both are supplied both must match"}, "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee."}
 		} else if r.Command == "parts.list" {
 			out.Result = Library()
 		} else {
@@ -441,8 +448,8 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 		}
 		return out
 	}
-	if r.ExpectedRevision == nil || r.Key == "" || len(r.Key) > 128 {
-		return fail("invalid-request", "mutations require expected_revision and key (1–128 bytes)")
+	if (r.ExpectedRevision == nil && r.ExpectedCommandRevision == nil) || r.Key == "" || len(r.Key) > 128 {
+		return fail("invalid-request", "mutations require expected_revision or expected_command_revision and key (1–128 bytes)")
 	}
 	canonical := map[string]any{}
 	if err := DecodeStrict(r.Params, &canonical); err != nil {
@@ -470,8 +477,11 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 	if s.closed {
 		return fail("closed", "session is closed")
 	}
-	if *r.ExpectedRevision != s.revision {
+	if r.ExpectedRevision != nil && *r.ExpectedRevision != s.revision {
 		return fail("conflict", fmt.Sprintf("expected revision %d; current revision is %d", *r.ExpectedRevision, s.revision))
+	}
+	if r.ExpectedCommandRevision != nil && *r.ExpectedCommandRevision != s.commandRevision {
+		return fail("conflict", fmt.Sprintf("expected command revision %d; current command revision is %d", *r.ExpectedCommandRevision, s.commandRevision))
 	}
 	if r.Command == "edit.undo" || r.Command == "edit.redo" {
 		if err := s.checkHistoryTargetLocked(r.Command, r.Params, actor); err != nil {

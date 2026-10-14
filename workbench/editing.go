@@ -698,6 +698,9 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		s.status = "paused"
 	case "simulation.resume":
+		if !s.paused && s.status == "running" {
+			return nil // already running; preserve the existing clock and work
+		}
 		s.paused = false
 		if s.transient != nil && !s.transient.Stale {
 			c, _, d := s.graph.Compile()

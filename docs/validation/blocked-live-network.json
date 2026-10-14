@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "race_instrumented": true,
+  "scope": "Controlled blocked numerical boundary: API/lock availability and obsolete-work rejection; no visible p95 claim",
+  "tests": [
+    "TestBlockedLiveNetworkAllowsNavigationSaveUndoAndPause",
+    "TestLiveNetworkDiscardsObsoleteFailureAfterQueuedSwitch",
+    "TestLiveNetworkDiscardsWorkAfterRestartAndClose/simulation.restart",
+    "TestLiveNetworkDiscardsWorkAfterRestartAndClose/app.close",
+    "TestLiveNetworkDiscardsWorkAfterRestartAndClose",
+    "TestLiveNetworkAcceptsSampleAcrossPresentationEdits",
+    "TestRepeatedResumeKeepsOneLiveClock"
+  ],
+  "measurements": [
+    {
+      "test": "TestBlockedLiveNetworkAllowsNavigationSaveUndoAndPause",
+      "command": "view.pan",
+      "wall_ms": 1.409042
+    },
+    {
+      "test": "TestBlockedLiveNetworkAllowsNavigationSaveUndoAndPause",
+      "command": "drawing.cancel",
+      "wall_ms": 1.288084
+    },
+    {
+      "test": "TestBlockedLiveNetworkAllowsNavigationSaveUndoAndPause",
+      "command": "project.save",
+      "wall_ms": 18.573666
+    },
+    {
+      "test": "TestBlockedLiveNetworkAllowsNavigationSaveUndoAndPause",
+      "command": "edit.undo",
+      "wall_ms": 1.332416
+    },
+    {
+      "test": "TestBlockedLiveNetworkAllowsNavigationSaveUndoAndPause",
+      "command": "simulation.pause",
+      "wall_ms": 1.0625
+    },
+    {
+      "test": "TestLiveNetworkDiscardsObsoleteFailureAfterQueuedSwitch",
+      "command": "switch.set",
+      "wall_ms": 1.418584
+    },
+    {
+      "test": "TestLiveNetworkDiscardsWorkAfterRestartAndClose/simulation.restart",
+      "command": "simulation.restart",
+      "wall_ms": 1.299125
+    },
+    {
+      "test": "TestLiveNetworkDiscardsWorkAfterRestartAndClose/simulation.restart",
+      "command": "simulation.pause",
+      "wall_ms": 1.014708
+    },
+    {
+      "test": "TestLiveNetworkDiscardsWorkAfterRestartAndClose/app.close",
+      "command": "app.close",
+      "wall_ms": 1.431541
+    },
+    {
+      "test": "TestLiveNetworkAcceptsSampleAcrossPresentationEdits",
+      "command": "view.pan",
+      "wall_ms": 1.121
+    },
+    {
+      "test": "TestLiveNetworkAcceptsSampleAcrossPresentationEdits",
+      "command": "component.move",
+      "wall_ms": 1.439083
+    },
+    {
+      "test": "TestRepeatedResumeKeepsOneLiveClock",
+      "command": "simulation.resume",
+      "wall_ms": 0.740459
+    }
+  ]
+}

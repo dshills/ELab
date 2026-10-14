@@ -260,10 +260,15 @@ func (s *Service) startRCLocked(c Compiled) {
 	}
 }
 func (s *Service) launchTransientLocked(c Compiled) {
+	if s.cancel != nil {
+		s.cancel()
+	}
 	ctx, cancel := context.WithCancel(context.Background())
 	s.cancel = cancel
 	run := s.run
+	s.liveWorkers.Add(1)
 	go func() {
+		defer s.liveWorkers.Done()
 		ticker := time.NewTicker(50 * time.Millisecond)
 		defer ticker.Stop()
 		last := time.Now()
@@ -292,7 +297,18 @@ func (s *Service) launchTransientLocked(c Compiled) {
 				budget = math.Min(budget, .25*s.transientSettings.PlaybackSpeed)
 				budget -= float64(steps) * s.transientSettings.StepSeconds
 				for i := 0; i < steps; i++ {
-					if err := s.advanceTransientLocked(c, s.transient.Sample.Time+s.transientSettings.StepSeconds); err != nil {
+					end := s.transient.Sample.Time + s.transientSettings.StepSeconds
+					var err error
+					if IsNetworkAnalysis(c.Analysis) {
+						var current bool
+						current, err = s.liveNetworkSampleLocked(ctx, run, end)
+						if !current {
+							break // discarded work; capture current inputs on the next tick
+						}
+					} else {
+						err = s.advanceTransientLocked(c, end)
+					}
+					if err != nil {
 						s.status = "error"
 						s.transient.Stale = true
 						if s.mixed != nil {
@@ -306,7 +322,7 @@ func (s *Service) launchTransientLocked(c Compiled) {
 						return
 					}
 				}
-				if steps > 0 {
+				if steps > 0 && !IsNetworkAnalysis(c.Analysis) {
 					s.revision++
 					s.signalLocked()
 				}

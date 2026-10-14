@@ -113,7 +113,7 @@ func TestInvalidDrawCommandsPreserveGraphAndHistory(t *testing.T) {
 	} {
 		before := s.Snapshot()
 		revision := before.Revision
-		r := s.Dispatch(context.Background(), Request{1, "invalid", test.command, json.RawMessage(test.params), &revision, "invalid"}, "test")
+		r := s.Dispatch(context.Background(), Request{Version: 1, ID: "invalid", Command: test.command, Params: json.RawMessage(test.params), ExpectedRevision: &revision, Key: "invalid"}, "test")
 		if r.Error == nil || s.Snapshot().Revision != before.Revision || len(s.Snapshot().Components) != 4 || len(s.Snapshot().Wires) != 4 || s.Snapshot().CanUndo {
 			t.Fatalf("invalid draw command changed state: %s %+v", test.params, r)
 		}

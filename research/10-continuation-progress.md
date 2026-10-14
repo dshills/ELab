@@ -119,10 +119,20 @@ Shared undo/redo expose original actor/name/tip revision, guard a captured exact
 
 The audit now covers 27 P0 IDs with 10 implemented and 17 partial. This checkpoint satisfies the history guard row; it does not establish full MVP acceptance.
 
+## Live network lock availability and stable command admission
+
+Packaged **0.21.0 / 35** moves live network numerical work outside the shared service mutex, with independent physical capture and guarded per-sample publication. Old samples/failures cannot replace a changed input, paused/restarted/closed run. Presentation work survives valid publication. Workers are tracked; Close waits outside the mutex. Review repaired duplicate clocks from repeated Resume without changing numerical models/tolerances/work limits.
+
+The real flasher benchmark first exposed repeated conflicts from per-sample publication under the older one-retry helper. Added optional discovered `expected_command_revision`: it guards intervening admitted commands/actors while background publication continues. Strict `expected_revision` remains supported, and combined guards both must match. Native dispatch uses the stable command guard and refuses intervening command conflicts without blindly refreshing/resubmitting. Successful retries retain original outcomes. Go request tests now use keyed struct fields as the request grows; the shared Python client can opt into the new guard while retaining older-build compatibility.
+
+[Final validation](../docs/validation/live-responsiveness-validation.json), [blocked-kernel race evidence](../docs/validation/blocked-live-network.json), [headless workload](../docs/validation/headless-live-responsiveness.json) and [packaged desktop workload](../docs/validation/desktop-live-responsiveness.json) pass. Each real workload makes 107 calls with four live flasher traces; backend p95 is 11.44 ms headless / 10.81 ms desktop, and a 200 ms independent Verify takes 52.16 / 40.97 ms on the recorded M4 Pro configuration. These are API/solver measurements, not input-to-pixel evidence. The owned desktop ends paused and clean with a durable experiment. Lint/vet/root/native race gates and built/packaged GPU smoke pass; old bundles/sessions and user files remain preserved.
+
+[The measured envelope and remaining synchronous paths](../docs/live-responsiveness.md) explicitly leave initialization, manual multi-sample Step, algebraic input/wiper and file/recovery work open. Physical capacity remains below the original target. The audit stays at 10 implemented / 17 partial; no overall responsiveness or MVP acceptance gate is claimed.
+
 ## Next work queue
 
 1. Mounted driver gesture invalidation/focus conformance; control-level slider, switch pending and actor-history paths now pass.
-2. Physical circuit capacity and nonblocking difficult-work architecture, with measured latency fixtures.
+2. Finish nonblocking initialization/manual Step/input/file paths and physical circuit capacity; extend actual and visible latency fixtures.
 3. Voltage/current presentation preferences, pinned readings, trace/diagnostic highlights and concise example guidance.
 4. Complete agent conformance, keyboard/screen-reader scenarios and reproducible clean packaging evidence.
 5. Formative-test preparation; actual participant/hardware evidence remains a separate gate.

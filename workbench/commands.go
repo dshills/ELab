@@ -12,12 +12,13 @@ import (
 const ProtocolVersion = 1
 
 type Request struct {
-	Version          int             `json:"version"`
-	ID               string          `json:"id"`
-	Command          string          `json:"command"`
-	Params           json.RawMessage `json:"params"`
-	ExpectedRevision *uint64         `json:"expected_revision,omitempty"`
-	Key              string          `json:"key,omitempty"`
+	Version                 int             `json:"version"`
+	ID                      string          `json:"id"`
+	Command                 string          `json:"command"`
+	Params                  json.RawMessage `json:"params"`
+	ExpectedRevision        *uint64         `json:"expected_revision,omitempty"`
+	ExpectedCommandRevision *uint64         `json:"expected_command_revision,omitempty"`
+	Key                     string          `json:"key,omitempty"`
 }
 type Failure struct {
 	Code    string `json:"code"`
@@ -43,7 +44,7 @@ type Capability struct {
 func capability(id, description string, mutates bool, schema string) Capability {
 	output := snapshotSchema
 	if id == "capabilities.list" {
-		output = json.RawMessage(`{"type":"object","required":["version","schema_version","schemas","capabilities","retry_retention"],"properties":{"version":{"const":1},"schema_version":{"const":2},"schemas":{"type":"object","additionalProperties":{"type":"object"}},"capabilities":{"type":"array","items":{"type":"object"}},"retry_retention":{"type":"string"}}}`)
+		output = json.RawMessage(`{"type":"object","required":["version","schema_version","schemas","capabilities","retry_retention"],"properties":{"version":{"const":1},"schema_version":{"const":2},"schemas":{"type":"object","additionalProperties":{"type":"object"}},"capabilities":{"type":"array","items":{"type":"object"}},"retry_retention":{"type":"string"},"mutation_preconditions":{"type":"object"}}}`)
 	}
 	if id == "parts.list" {
 		data, _ := json.Marshal(typeSchema(reflect.TypeOf([]Part{})))
