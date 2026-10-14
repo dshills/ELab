@@ -17,10 +17,11 @@ import (
 )
 
 type adapterResult struct {
-	Name       string                        `json:"name"`
-	Equivalent bool                          `json:"equivalent_to_in_process"`
-	Workflows  []conformance.Result          `json:"workflows"`
-	Electrical *conformance.ElectricalResult `json:"electrical,omitempty"`
+	Name        string                         `json:"name"`
+	Equivalent  bool                           `json:"equivalent_to_in_process"`
+	Workflows   []conformance.Result           `json:"workflows"`
+	Electrical  *conformance.ElectricalResult  `json:"electrical,omitempty"`
+	Performance *conformance.PerformanceResult `json:"performance,omitempty"`
 }
 type report struct {
 	Passed      bool            `json:"passed"`
@@ -41,7 +42,12 @@ func run() error {
 	native := flag.String("native-binary", "", "optional native binary; creates/closes six owned temporary native sessions")
 	directory := flag.String("artifacts", "", "new empty output directory (required; never replaces existing data)")
 	electrical := flag.Bool("electrical-suite", false, "also run frozen independent electrical references and mixed flasher timestep refinement")
+	performance := flag.Bool("performance-suite", false, "also measure fresh/warm backend edit/result and Verify latency in owned sessions")
+	repetitions := flag.Int("repetitions", 20, "performance repetitions per circuit/condition (20–100)")
 	flag.Parse()
+	if *performance && (*repetitions < 20 || *repetitions > 100) {
+		return fmt.Errorf("--repetitions must be 20–100")
+	}
 	if *directory == "" {
 		return fmt.Errorf("--artifacts must name a new directory")
 	}
@@ -100,6 +106,20 @@ func run() error {
 			if qualificationErr != nil {
 				result.Adapters = append(result.Adapters, adapter)
 				return writeFailure(dir, result, fmt.Errorf("%s electrical suite: %w", mode.name, qualificationErr))
+			}
+		}
+		if *performance {
+			fmt.Fprintf(os.Stderr, "%s: measuring five circuits, fresh/warm, %d repetitions\n", mode.name, *repetitions)
+			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
+			measured, measurementErr := conformance.RunPerformance(ctx, mode.factory, filepath.Join(dir, mode.name, "performance"), *repetitions)
+			cancel()
+			adapter.Performance = &measured
+			if measurementErr == nil && !measured.TargetsPassed {
+				measurementErr = fmt.Errorf("backend performance target missed; inspect individual cases")
+			}
+			if measurementErr != nil {
+				result.Adapters = append(result.Adapters, adapter)
+				return writeFailure(dir, result, fmt.Errorf("%s performance: %w", mode.name, measurementErr))
 			}
 		}
 		result.Adapters = append(result.Adapters, adapter)

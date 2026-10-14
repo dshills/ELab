@@ -1,0 +1,75 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "runtime_version": "0.42.0",
+  "runtime_build": "57",
+  "runtime_source_checkpoint": "5b94ddd99d2fc6c99b41c0f0b0324f824bbecc27",
+  "hardware": {
+    "cpu": "Apple M4 Pro",
+    "logical_cpus": 14,
+    "memory_bytes": 68719476736,
+    "os": "macOS 26.6.2",
+    "os_build": "25G83",
+    "go": "go1.27.2"
+  },
+  "binary_sha256": {
+    "build/elab-conformance": "3c253e2a9a5eeebc2901fbdc5f12bdbf9854eeb2effcadf60c5ad98bc4fe4d14",
+    "build/elab-agent": "2459df4934194a4f69e8b707dabf9efac1f0e9dcbd7a1919714688e8d4c1769f",
+    "build/elab": "8dc04664a4061aa2852a98481fa343c8cbb557314d9909ab58403029b14eb1b0",
+    "build/ELab.app/Contents/MacOS/ELab": "8dc04664a4061aa2852a98481fa343c8cbb557314d9909ab58403029b14eb1b0"
+  },
+  "harness_source_sha256": {
+    "cmd/elab-conformance/main.go": "deda8c963191d6e8bf8b50c7ed4fd1d9686efcbe3f96a1a43b0865eebd5f7e2f",
+    "cmd/elab-conformance/process.go": "0a86f250edcd6aefe237a87bd0690730f2d8e28c6b27c2d6231f48e3beddf4be",
+    "internal/conformance/performance.go": "52b7d8f7ca5308ac92283c0662eb60f3c88f5c12c17f4ed01de793aabb7cdfb4",
+    "internal/conformance/performance_test.go": "85ae68b17ce7eb7eff3d688bd5050018e012b66dcbecd4eaa4c8e5f5473cf218",
+    "internal/conformance/electrical.go": "ab5d151d862950ba00a936c526a5e95b0ab5d58bd763f3085796ab0520497725",
+    "internal/conformance/fixtures.go": "6d1af00dea6c7dc786c5eb6c57147c689f71d43a064c4b2d9fb11dae2234e909"
+  },
+  "source_report": "build/backend-performance-final/report.json",
+  "source_report_sha256": "0345b923e6299739fe6d2f2b03f28cca2c21a89393b424759c9add0ada2fe43d",
+  "evidence": "docs/validation/backend-performance-conformance.json",
+  "evidence_sha256": "da1aeaf7bc71f33235dd1a101f2f8e87f64dc948995f6fbb5aab3869e1747931",
+  "measurement_count": 800,
+  "repetitions_per_circuit_condition_adapter": 20,
+  "condition_names": [
+    "fresh-session",
+    "warm-session"
+  ],
+  "checks": [
+    "All four adapters complete the three ordinary construction/fault/save/reopen workflows with semantic and numerical parity",
+    "Five circuits, two conditions and twenty measured edits/Verify calls per combination; four live and Verify probes",
+    "Fresh results require increased run and electrical revision with matching non-stale result identity",
+    "Every p95 backend edit-to-fresh-result is below 500 ms; every Verify maximum is below 2 s",
+    "Graph definitions, model IDs, engine versions, settings, probe IDs and verified horizons match across adapters",
+    "Verify preserves paused live physics; successful records are excluded from retention; all owned sessions close via public app.close",
+    "Complete root/native lint, race and vet checks pass after final harness edits; runtime sources and package are unchanged"
+  ],
+  "limits_of_evidence": [
+    "command start includes admission/transport/JSON overhead and is a conservative backend upper bound; it is not input-to-visible acknowledgment",
+    "fresh means a fresh owned session with the reference circuit prepared; OS/filesystem caches are not purged and process-launch time is excluded",
+    "warm means one owned session after an unmeasured edit/Verify; successful records are excluded from project retention between repetitions and may be evicted by the ordinary bounded store",
+    "the three reference families, DC/pulse NPN variants and a mixed flasher are tested on one recorded workstation; no universal hardware or UI performance claim",
+    "At least 20 observations supports the specified nearest-rank empirical percentiles, not a population confidence bound",
+    "Visible acknowledgment/frame timing, deliberately difficult solves, capacity/hardware generalization, accessibility, clean distribution and participant gates remain open",
+    "DC LED/NPN Verify is an operating point; only RC, pulse NPN and flasher Verify spans 200 ms at 1 ms sampling"
+  ],
+  "summary_by_adapter": {
+    "in-process": {
+      "maximum_case_fresh_p95_ms": 2.090833,
+      "maximum_verify_ms": 47.484167
+    },
+    "headless-stdio": {
+      "maximum_case_fresh_p95_ms": 4.564083,
+      "maximum_verify_ms": 49.294709
+    },
+    "headless-socket": {
+      "maximum_case_fresh_p95_ms": 4.792791,
+      "maximum_verify_ms": 53.597375
+    },
+    "native-socket": {
+      "maximum_case_fresh_p95_ms": 5.014625,
+      "maximum_verify_ms": 48.470041
+    }
+  }
+}

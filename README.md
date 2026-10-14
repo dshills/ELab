@@ -206,3 +206,5 @@ The header offers Light, Dark and System [themes saved on this device](docs/appe
 Use **Hide scope** in the scope toolbar to give the schematic more room. **Show scope** restores the live or recorded plot with its measurements intact. Agents use the same [scope visibility command](docs/scope-visibility.md).
 
 For frozen independent LED/RC/NPN references and flasher output-step refinement, run the [electrical qualification suite](docs/numerical-qualification.md) with `elab-conformance --electrical-suite`.
+
+For repeated fresh/warm backend edit/result and bounded Verify timings, run the [performance qualification suite](docs/performance-qualification.md) with `elab-conformance --performance-suite --repetitions 20`. Visible UI acknowledgment is measured separately.
