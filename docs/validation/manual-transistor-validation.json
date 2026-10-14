@@ -1,0 +1,50 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "version": "0.43.0",
+  "build": "58",
+  "binary_sha256": "0e1e35b1fc21e2c4f7582d0c7d704a1765a76c4a8fd654a8bb42c98b6aeada5a",
+  "packaged_binary_matches": true,
+  "vellum_baseline": {
+    "recorded": "2026-10-14",
+    "version": "checkout 4cf9e36",
+    "commit": "4cf9e3654206600885a86581b958bc388043e8af",
+    "local_checkout": "../../Vellum (relative to desktop/go.mod)",
+    "native_dependency_manifest": "drivers/cogent/native/dependencies.json",
+    "native_dependency_manifest_sha256": "15afab274c8337782f18dde74d5e1114d2fe088c1692db50776a0beb4a35bab0",
+    "go_directive": "1.25.6",
+    "tested_go": "go1.27.2 darwin/arm64",
+    "root_module": "github.com/dshills/elab",
+    "desktop_module": "github.com/dshills/elab/desktop",
+    "status": "Local checkout integration; relocatable SDK distribution remains a later gate"
+  },
+  "measurements_si": {
+    "closed_led_current_a": 0.0028599875703962333,
+    "open_led_current_a": 2.1243239596217384e-14,
+    "closed_base_current_a": 0.0004242213700440748
+  },
+  "checks": [
+    "Exact linear base network reduced to Thevenin source and compared with separate nested-bisection NPN solver using release tolerances; KCL/power and closed/open behavior",
+    "Six guided templates, immutable catalog, automatic S1 selection, corrected base-drive instructions, protected reset and undo",
+    "Native menu callbacks and agent general/named example loads and switch commands produce identical graphs and LED currents",
+    "All six template fixtures cover origin/reset, junction editing, kept Verify recordings and strict fresh save/reopen",
+    "Built headless and exact packaged public workflows cover switch current, undo, reset protection, SVG, fresh paused save/reopen and original-file byte preservation",
+    "Complete lint/import/root/native race tests and vet after final code edits; exact packaged actual native/GPU smoke including new controls passes",
+    "Original three reference workflows still match through all four public adapters; owned native apps close via public app.close",
+    "Separate app identity allowed read-only native accessibility-tree inspection without altering a pre-existing user window"
+  ],
+  "evidence": [
+    "docs/validation/headless-manual-transistor.json",
+    "docs/validation/desktop-manual-transistor.json",
+    "docs/validation/manual-transistor-guided-catalog.json",
+    "docs/validation/manual-transistor-conformance.json",
+    "docs/manual-transistor-example.md"
+  ],
+  "limits_of_evidence": [
+    "DC operating point; no modeled transistor charge storage, contact bounce, heating, physical calibration or rating certification",
+    "Near-cutoff LED-side voltage is ill-conditioned; release max(1 mV, 1%) voltage tolerance applies, without claiming microvolt precision",
+    "Native accessibility tree confirms selected S1/control presence; screenshot-based layout qualification was not completed after computer-use provider stalled",
+    "Updated Vellum checkout includes covered-clear GPU encoding and closable tabs; sibling repo was read-only and unchanged by this work",
+    "Private unsigned development bundle; previous runtime bundle and failed smoke candidate are retained; distribution/participant/full accessibility and visible feedback gates remain open"
+  ]
+}

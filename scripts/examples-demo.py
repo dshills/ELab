@@ -23,7 +23,7 @@ def main():
         client.ask('simulation.pause', {}, True)
         before = client.ask('project.inspect')
         catalog = client.ask('examples.list')
-        assert len(catalog) == 5 and client.ask('project.inspect') == before
+        assert len(catalog) == 6 and client.ask('project.inspect') == before
         tested = []
         for info in catalog:
             assert all(info[k] for k in ['question', 'expected', 'try', 'limitation'])
@@ -70,7 +70,7 @@ def main():
         final = client.ask('simulation.wait')
         assert final['paused'] and not final['document']['dirty'] and final['example']['info']['id'] == 'rc'
         report = dict(passed=True, transport='packaged-native-private-socket' if args.connect else 'headless-stdio',
-                      templates=tested, checks=['read-only immutable guidance catalog', 'all five examples open running',
+                      templates=tested, checks=['read-only immutable guidance catalog', 'all six examples open running',
                                               'edited circuit labeled against template expectation', 'unsaved reset refuses without mutation',
                                               'current reset restores exact template and fresh paused startup',
                                               'saved edited origin survives fresh reopen without trusted readings',

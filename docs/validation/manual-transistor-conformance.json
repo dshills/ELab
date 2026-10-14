@@ -1,0 +1,380 @@
+{
+  "passed": true,
+  "source_report_sha256": "544e518186f9c24103c8a9cd6d0c4116f34d9cf88a38e8d611c90f40df1168e7",
+  "go_version": "go1.27.2",
+  "platform": "darwin/arm64",
+  "adapters": [
+    {
+      "name": "in-process",
+      "equivalent": true,
+      "workflows": [
+        {
+          "name": "led",
+          "command_count": 36,
+          "measurements_si": {
+            "current_1k_a": 0.0029167965774405296,
+            "current_2k_a": 0.001476723549138745,
+            "inspect:i:Light": 0.001476723549138745,
+            "inspect:v:Light": 2.04655290172251,
+            "inspect:v:Light.anode": 2.04655290172251,
+            "inspect:v:Light.cathode": 0,
+            "verify-max:i:Light": 0.001476723549138745,
+            "verify-max:v:Light": 2.04655290172251,
+            "verify-max:v:Limit": 2.95344709827749,
+            "verify-max:v:Supply": 5,
+            "verify-min:i:Light": 0.001476723549138745,
+            "verify-min:v:Light": 2.04655290172251,
+            "verify-min:v:Limit": 2.95344709827749,
+            "verify-min:v:Supply": 5
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "project_sha256": "251059aa698902b5ca121927a6a892558f48bbfd093e1672a8d1b715f935a36b"
+        },
+        {
+          "name": "rc",
+          "command_count": 44,
+          "measurements_si": {
+            "cursor_interval_s": 0.01,
+            "inspect:i:Storage": 0.0005,
+            "inspect:v:Storage": 0,
+            "inspect:v:Storage.1": 0,
+            "inspect:v:Storage.2": 0,
+            "verify-max:i:Limit": 0.0005,
+            "verify-max:v:Storage.1": 4.966535735141783,
+            "verify-min:i:Limit": -0.0004966535735141783,
+            "verify-min:v:Storage.1": 0,
+            "voltage_10ms_v": 3.1606027941427883,
+            "voltage_20k_10ms_v": 1.9673467014368329
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "project_sha256": "2348bcf63127181c564a95233f239e1815aa0d69040b8001ebdf573bee9d0629"
+        },
+        {
+          "name": "npn",
+          "command_count": 46,
+          "measurements_si": {
+            "active_collector_a": 0.0013678075180062058,
+            "active_vce_v": 3.632192481993794,
+            "cutoff_collector_a": 2.000000165480742e-14,
+            "cutoff_vce_v": 4.99999999998,
+            "inspect:i:Transistor.base": 0.00042999736510602657,
+            "inspect:i:Transistor.collector": 0.004929600780861814,
+            "inspect:i:Transistor.emitter": 0.00535959814596784,
+            "inspect:v:Transistor.base": 0.700026348939734,
+            "inspect:v:Transistor.collector": 0.07039921913818598,
+            "inspect:v:Transistor.emitter": 0,
+            "saturation_collector_a": 0.004929600780861814,
+            "saturation_vce_v": 0.07039921913818598,
+            "verify-max:i:Transistor.base": 0.00042999736510602657,
+            "verify-max:i:Transistor.collector": 0.004929600780861814,
+            "verify-max:v:Transistor.base": 0.700026348939734,
+            "verify-max:v:Transistor.collector": 0.07039921913818598,
+            "verify-min:i:Transistor.base": 0.00042999736510602657,
+            "verify-min:i:Transistor.collector": 0.004929600780861814,
+            "verify-min:v:Transistor.base": 0.700026348939734,
+            "verify-min:v:Transistor.collector": 0.07039921913818598
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "project_sha256": "8c385c9a8054641258b813808cba46bbe5a781c66a91adfa2f8ec2e75ea5492b"
+        }
+      ]
+    },
+    {
+      "name": "headless-stdio",
+      "equivalent": true,
+      "workflows": [
+        {
+          "name": "led",
+          "command_count": 36,
+          "measurements_si": {
+            "current_1k_a": 0.0029167965774405296,
+            "current_2k_a": 0.001476723549138745,
+            "inspect:i:Light": 0.001476723549138745,
+            "inspect:v:Light": 2.04655290172251,
+            "inspect:v:Light.anode": 2.04655290172251,
+            "inspect:v:Light.cathode": 0,
+            "verify-max:i:Light": 0.001476723549138745,
+            "verify-max:v:Light": 2.04655290172251,
+            "verify-max:v:Limit": 2.95344709827749,
+            "verify-max:v:Supply": 5,
+            "verify-min:i:Light": 0.001476723549138745,
+            "verify-min:v:Light": 2.04655290172251,
+            "verify-min:v:Limit": 2.95344709827749,
+            "verify-min:v:Supply": 5
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "project_sha256": "977aa8b575ae42db67ed61730a6b421953b6f5de4f7c553e515997fa792db4b1"
+        },
+        {
+          "name": "rc",
+          "command_count": 43,
+          "measurements_si": {
+            "cursor_interval_s": 0.01,
+            "inspect:i:Storage": 0.0005,
+            "inspect:v:Storage": 0,
+            "inspect:v:Storage.1": 0,
+            "inspect:v:Storage.2": 0,
+            "verify-max:i:Limit": 0.0005,
+            "verify-max:v:Storage.1": 4.966535735141783,
+            "verify-min:i:Limit": -0.0004966535735141783,
+            "verify-min:v:Storage.1": 0,
+            "voltage_10ms_v": 3.1606027941427883,
+            "voltage_20k_10ms_v": 1.9673467014368329
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "project_sha256": "dfa4d79fe09c5d71642b98ee019079f3dfbf325192a91ea9c07b2febca5faefd"
+        },
+        {
+          "name": "npn",
+          "command_count": 45,
+          "measurements_si": {
+            "active_collector_a": 0.0013678075180062058,
+            "active_vce_v": 3.632192481993794,
+            "cutoff_collector_a": 2.000000165480742e-14,
+            "cutoff_vce_v": 4.99999999998,
+            "inspect:i:Transistor.base": 0.00042999736510602657,
+            "inspect:i:Transistor.collector": 0.004929600780861814,
+            "inspect:i:Transistor.emitter": 0.00535959814596784,
+            "inspect:v:Transistor.base": 0.700026348939734,
+            "inspect:v:Transistor.collector": 0.07039921913818598,
+            "inspect:v:Transistor.emitter": 0,
+            "saturation_collector_a": 0.004929600780861814,
+            "saturation_vce_v": 0.07039921913818598,
+            "verify-max:i:Transistor.base": 0.00042999736510602657,
+            "verify-max:i:Transistor.collector": 0.004929600780861814,
+            "verify-max:v:Transistor.base": 0.700026348939734,
+            "verify-max:v:Transistor.collector": 0.07039921913818598,
+            "verify-min:i:Transistor.base": 0.00042999736510602657,
+            "verify-min:i:Transistor.collector": 0.004929600780861814,
+            "verify-min:v:Transistor.base": 0.700026348939734,
+            "verify-min:v:Transistor.collector": 0.07039921913818598
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "project_sha256": "ce15c066d4d3988aeb2920f0d70f07bc67b637c735501662fc9f7e8f77a60ed9"
+        }
+      ]
+    },
+    {
+      "name": "headless-socket",
+      "equivalent": true,
+      "workflows": [
+        {
+          "name": "led",
+          "command_count": 36,
+          "measurements_si": {
+            "current_1k_a": 0.0029167965774405296,
+            "current_2k_a": 0.001476723549138745,
+            "inspect:i:Light": 0.001476723549138745,
+            "inspect:v:Light": 2.04655290172251,
+            "inspect:v:Light.anode": 2.04655290172251,
+            "inspect:v:Light.cathode": 0,
+            "verify-max:i:Light": 0.001476723549138745,
+            "verify-max:v:Light": 2.04655290172251,
+            "verify-max:v:Limit": 2.95344709827749,
+            "verify-max:v:Supply": 5,
+            "verify-min:i:Light": 0.001476723549138745,
+            "verify-min:v:Light": 2.04655290172251,
+            "verify-min:v:Limit": 2.95344709827749,
+            "verify-min:v:Supply": 5
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "project_sha256": "bb4f4349248a5160dd09d68730ea32fd912b6881d9cd33de32918e56535f5b45"
+        },
+        {
+          "name": "rc",
+          "command_count": 43,
+          "measurements_si": {
+            "cursor_interval_s": 0.01,
+            "inspect:i:Storage": 0.0005,
+            "inspect:v:Storage": 0,
+            "inspect:v:Storage.1": 0,
+            "inspect:v:Storage.2": 0,
+            "verify-max:i:Limit": 0.0005,
+            "verify-max:v:Storage.1": 4.966535735141783,
+            "verify-min:i:Limit": -0.0004966535735141783,
+            "verify-min:v:Storage.1": 0,
+            "voltage_10ms_v": 3.1606027941427883,
+            "voltage_20k_10ms_v": 1.9673467014368329
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "project_sha256": "3d29076171002acaed3e582d432364a43b7e50b1d3aa522561965f3f400eb3ed"
+        },
+        {
+          "name": "npn",
+          "command_count": 45,
+          "measurements_si": {
+            "active_collector_a": 0.0013678075180062058,
+            "active_vce_v": 3.632192481993794,
+            "cutoff_collector_a": 2.000000165480742e-14,
+            "cutoff_vce_v": 4.99999999998,
+            "inspect:i:Transistor.base": 0.00042999736510602657,
+            "inspect:i:Transistor.collector": 0.004929600780861814,
+            "inspect:i:Transistor.emitter": 0.00535959814596784,
+            "inspect:v:Transistor.base": 0.700026348939734,
+            "inspect:v:Transistor.collector": 0.07039921913818598,
+            "inspect:v:Transistor.emitter": 0,
+            "saturation_collector_a": 0.004929600780861814,
+            "saturation_vce_v": 0.07039921913818598,
+            "verify-max:i:Transistor.base": 0.00042999736510602657,
+            "verify-max:i:Transistor.collector": 0.004929600780861814,
+            "verify-max:v:Transistor.base": 0.700026348939734,
+            "verify-max:v:Transistor.collector": 0.07039921913818598,
+            "verify-min:i:Transistor.base": 0.00042999736510602657,
+            "verify-min:i:Transistor.collector": 0.004929600780861814,
+            "verify-min:v:Transistor.base": 0.700026348939734,
+            "verify-min:v:Transistor.collector": 0.07039921913818598
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "project_sha256": "e927d29f03b8a474706f2b28a4d1abdecae62e721d086ffafd8d20578093e4d4"
+        }
+      ]
+    },
+    {
+      "name": "native-socket",
+      "equivalent": true,
+      "workflows": [
+        {
+          "name": "led",
+          "command_count": 36,
+          "measurements_si": {
+            "current_1k_a": 0.0029167965774405296,
+            "current_2k_a": 0.001476723549138745,
+            "inspect:i:Light": 0.001476723549138745,
+            "inspect:v:Light": 2.04655290172251,
+            "inspect:v:Light.anode": 2.04655290172251,
+            "inspect:v:Light.cathode": 0,
+            "verify-max:i:Light": 0.001476723549138745,
+            "verify-max:v:Light": 2.04655290172251,
+            "verify-max:v:Limit": 2.95344709827749,
+            "verify-max:v:Supply": 5,
+            "verify-min:i:Light": 0.001476723549138745,
+            "verify-min:v:Light": 2.04655290172251,
+            "verify-min:v:Limit": 2.95344709827749,
+            "verify-min:v:Supply": 5
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "project_sha256": "923a0e6fec5721b359f8dda42c3ef5ac4414714149d0f480ab65d314efcd7dd4"
+        },
+        {
+          "name": "rc",
+          "command_count": 43,
+          "measurements_si": {
+            "cursor_interval_s": 0.01,
+            "inspect:i:Storage": 0.0005,
+            "inspect:v:Storage": 0,
+            "inspect:v:Storage.1": 0,
+            "inspect:v:Storage.2": 0,
+            "verify-max:i:Limit": 0.0005,
+            "verify-max:v:Storage.1": 4.966535735141783,
+            "verify-min:i:Limit": -0.0004966535735141783,
+            "verify-min:v:Storage.1": 0,
+            "voltage_10ms_v": 3.1606027941427883,
+            "voltage_20k_10ms_v": 1.9673467014368329
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "project_sha256": "a35bbe7c160f1ce5c8ffd48174f3d751e5d1573d6898f62266f0b37526b49b67"
+        },
+        {
+          "name": "npn",
+          "command_count": 45,
+          "measurements_si": {
+            "active_collector_a": 0.0013678075180062058,
+            "active_vce_v": 3.632192481993794,
+            "cutoff_collector_a": 2.000000165480742e-14,
+            "cutoff_vce_v": 4.99999999998,
+            "inspect:i:Transistor.base": 0.00042999736510602657,
+            "inspect:i:Transistor.collector": 0.004929600780861814,
+            "inspect:i:Transistor.emitter": 0.00535959814596784,
+            "inspect:v:Transistor.base": 0.700026348939734,
+            "inspect:v:Transistor.collector": 0.07039921913818598,
+            "inspect:v:Transistor.emitter": 0,
+            "saturation_collector_a": 0.004929600780861814,
+            "saturation_vce_v": 0.07039921913818598,
+            "verify-max:i:Transistor.base": 0.00042999736510602657,
+            "verify-max:i:Transistor.collector": 0.004929600780861814,
+            "verify-max:v:Transistor.base": 0.700026348939734,
+            "verify-max:v:Transistor.collector": 0.07039921913818598,
+            "verify-min:i:Transistor.base": 0.00042999736510602657,
+            "verify-min:i:Transistor.collector": 0.004929600780861814,
+            "verify-min:v:Transistor.base": 0.700026348939734,
+            "verify-min:v:Transistor.collector": 0.07039921913818598
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "project_sha256": "636ab2124869d11f913b99d6d4e74fd72132f628b9f605959f0b44e4708405ee"
+        }
+      ]
+    }
+  ]
+}

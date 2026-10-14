@@ -61,3 +61,32 @@ func TestNativeStaleExampleResetButtonRefusesReplacement(t *testing.T) {
 		t.Fatal("old reset button changes a replacement example")
 	}
 }
+
+func TestManualTransistorExampleMenuAndSwitchMatchAgent(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	agent := workbench.New()
+	defer agent.Close()
+	uiAction(t, s, "examples-menu", &ui.ChangeEvent{SelectedID: "example.switch-npn"})
+	agentAction(t, agent, "example.load", workbench.ExampleLoadParams{ID: "switch-npn"})
+	if s.service.Snapshot().Selected != "S1" {
+		t.Fatal("manual example does not expose its switch immediately")
+	}
+	for _, closed := range []bool{true, false} {
+		uiAction(t, s, "switch-actuate", nil)
+		agentAction(t, agent, "switch.set", workbench.SwitchParams{ID: "S1", Closed: closed})
+		u, a := s.service.Snapshot(), agent.Snapshot()
+		if !reflect.DeepEqual(u.Components, a.Components) || !reflect.DeepEqual(u.Wires, a.Wires) || u.Mixed.LEDs[0].Current != a.Mixed.LEDs[0].Current || u.SwitchStates[0].DesiredClosed != closed {
+			t.Fatal("manual transistor user/agent behavior differs")
+		}
+	}
+	uiAction(t, s, "switch-actuate", nil)
+	uiAction(t, s, "examples-menu", &ui.ChangeEvent{SelectedID: "example.rc"})
+	if s.pendingCommand != "example.rc" || s.service.Snapshot().Example.Info.ID != "switch-npn" {
+		t.Fatal("replacement loses unsaved manual-switch experiment")
+	}
+	uiAction(t, s, "cancel-file-action", nil)
+	if s.service.Snapshot().Mixed.LEDs[0].Current < .002 {
+		t.Fatal("cancel loses lit circuit")
+	}
+}

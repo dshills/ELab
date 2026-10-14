@@ -12,7 +12,7 @@ import (
 )
 
 func TestProjectRecordingsSaveReopenHashesAndFreshPausedRun(t *testing.T) {
-	for _, example := range []string{"example.reset", "example.rc", "example.npn", "example.npn-pulse", "example.flasher"} {
+	for _, example := range []string{"example.reset", "example.rc", "example.npn", "example.npn-pulse", "example.flasher", "example.switch-npn"} {
 		t.Run(example, func(t *testing.T) {
 			s := New()
 			defer s.Close()

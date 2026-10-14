@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "closed_led_current_a": 0.0028599875703962333,
+  "open_led_current_a": 2.1243239596217384e-14,
+  "closed_base_current_a": 0.0004242213700440748,
+  "checks": [
+    "catalog and named load",
+    "immediately selected switch",
+    "closed/open current and conservation",
+    "undo restores lit circuit",
+    "unsaved reset protection",
+    "SVG output",
+    "fresh paused save/reopen",
+    "reset preserves saved original bytes"
+  ],
+  "limitations": [
+    "educational models; no physical device or rating qualification",
+    "DC actuation recomputes the operating point; no transistor storage delay"
+  ]
+}

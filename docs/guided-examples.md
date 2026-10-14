@@ -1,6 +1,6 @@
 # Guided editable examples
 
-The component tray identifies the current example and shows its question, template expectation, a suggested experiment and one model limitation. LED, RC and NPN are the three core examples; Blink and Flasher extend their timing experiments. All guidance is available through the same immutable `examples.list` catalog to users and agents.
+The component tray identifies the current example and shows its question, template expectation, a suggested experiment and one model limitation. LED, RC and NPN are the three core examples; Blink and Flasher extend their timing experiments. Manual transistor switch adds an SPST base switch and pull-down, opening with S1 selected for immediate actuation. All guidance is available through the same immutable `examples.list` catalog to users and agents.
 
 Loading an example creates an editable copy and starts it running, including the LED template when the previous circuit was paused. This makes template loading consistent; earlier builds could preserve a paused LED load. Changing its circuit geometry, topology, values or experiment settings labels it **Based on this example · circuit/experiment edited**. Display settings, pins, live time and navigation do not pretend the template physics changed. The displayed expectation explicitly describes the template, not a guarantee about an edited circuit.
 
@@ -10,11 +10,11 @@ Loading an example creates an editable copy and starts it running, including the
 
 | Command | Parameters | Behavior |
 |---|---|---|
-| `examples.list` | `{}` | Read five immutable IDs, titles, questions, expectations, suggested experiments and limitations |
+| `examples.list` | `{}` | Read six immutable IDs, titles, questions, expectations, suggested experiments and limitations |
 | `example.load` | `{"id":"rc","discard_changes":true}` | Load a known template as a running editable copy; discard remains explicit |
 | `example.current.reset` | `{"expected_example_id":"rc","expected_document_generation":7,"discard_changes":true}` | Restore current template with optional identity/generation guards and unsaved protection |
 
-Legacy `example.reset` remains an alias for loading LED, while `example.rc`, `example.npn`, `example.npn-pulse` and `example.flasher` retain their named loads. All use the centralized definitions. `simulation.restart` still restarts current **edited** physics; it does not replace the graph with a template.
+Legacy `example.reset` remains an alias for loading LED, while `example.rc`, `example.npn`, `example.npn-pulse` and `example.flasher` retain their named loads. `example.switch-npn` loads the manual transistor circuit, also available as `example.load {"id":"switch-npn"}`. All use the centralized definitions. `simulation.restart` still restarts current **edited** physics; it does not replace the graph with a template.
 
 `snapshot.example` is absent for a blank/unassociated document; otherwise it contains `info` from the catalog and `modified`. This association follows new/load/undo/redo/reset. A native rendered reset button captures the displayed example ID and document generation, and pending Save/Discard retains those guards. An intervening user/agent document replacement refuses a stale reset rather than acting on the replacement. Reset without an association is unavailable; unknown IDs and extra input fields refuse.
 
@@ -38,4 +38,4 @@ python3 scripts/examples-demo.py --connect build/examples.endpoint.json \
   --artifacts docs/validation/desktop-example-artifacts
 ```
 
-Core/public checks cover all five running templates, immutable guidance, edited labeling, rejected reset purity, exact template restoration, fresh paused startup, undo identity, save/reopen and stale example/generation guards. Native tests and actual smoke cover guidance controls, reset/cancel/discard decisions and stale rendered-button refusal. Existing electrical reference tests remain authoritative for the templates' model accuracy. These checks establish engineering behavior, not novice comprehension, participant outcomes or complete keyboard/screen-reader qualification.
+Core/public checks cover all six running templates, immutable guidance, edited labeling, rejected reset purity, exact template restoration, fresh paused startup, undo identity, save/reopen and stale example/generation guards. Native tests and actual smoke cover guidance controls, reset/cancel/discard decisions and stale rendered-button refusal. Existing electrical reference tests remain authoritative for the templates' model accuracy. These checks establish engineering behavior, not novice comprehension, participant outcomes or complete keyboard/screen-reader qualification.
