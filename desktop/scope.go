@@ -51,6 +51,8 @@ func (c *scopeCanvas) Mount(parent tree.Node) core.Widget {
 func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	b := &meshBuilder{}
 	state := s.service.Snapshot()
+	palette := paletteForTheme(state.Theme)
+	muted := palette.Muted
 	t := state.Transient
 	plot := state.Scope
 	step := state.TransientSettings.StepSeconds
@@ -100,7 +102,7 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	vmax = math.Ceil(vmax)
 	imin = math.Floor(imin)
 	imax = math.Ceil(imax)
-	grid := color.NRGBA{R: 228, G: 235, B: 240, A: 255}
+	grid := palette.Grid
 	for i := 0; i <= 4; i++ {
 		fraction := float64(i) / 4
 		py := bottom - (bottom-top)*fraction
@@ -118,7 +120,7 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 			}
 			points = append(points, canvas.Point{X: x(p.Time), Y: bottom - (bottom-top)*fraction})
 		}
-		c := probeColor(scopeProbeColors(plot.Traces)[i])
+		c := traceColor(probeColor(scopeProbeColors(plot.Traces)[i]), palette)
 		if stale {
 			c = muted
 		}
@@ -146,7 +148,7 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	for _, e := range events {
 		if e.Time >= first && e.Time <= last && e.Mode != "restart" {
 			px := x(e.Time)
-			line(color.NRGBA{R: 192, G: 208, B: 216, A: 255}, 1, canvas.Point{X: px, Y: top}, canvas.Point{X: px, Y: bottom})
+			line(palette.Muted, 1, canvas.Point{X: px, Y: top}, canvas.Point{X: px, Y: bottom})
 		}
 	}
 	text(left, bottom+22, fmt.Sprintf("%.4g s", first), muted)
@@ -244,8 +246,8 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 		legend += " · pending: " + t.PendingMode
 	}
 	s.scope.Revision = state.Revision
-	return ui.Node{ID: "scope-panel", Kind: ui.Column, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 240}), Padding: ui.Some(ui.UniformInsets(10)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: []ui.Node{
-		{ID: "scope-toolbar", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 36}), Gap: ui.Some(float32(6)), Align: ui.Some(ui.AlignCenter)}, Children: controls},
+	return ui.Node{ID: "scope-panel", Kind: ui.Column, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 288}), Padding: ui.Some(ui.UniformInsets(10)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: []ui.Node{
+		{ID: "scope-toolbar", Kind: ui.Toolbar, Grow: true, Style: chromeStyle(), Children: controls},
 		{ID: "rc-scope", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 120}), MaxSize: ui.Some(ui.Size{Height: 120})}, Custom: s.scope}, {ID: "scope-trace-row", Kind: ui.Row, Style: ui.Style{Gap: ui.Some(float32(8))}, Children: []ui.Node{traceSelector, quiet("scope-legend", legend)}}, quiet("step-work-status", stepStatus), s.cursorControls(state),
 	}}
 }

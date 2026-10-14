@@ -160,7 +160,7 @@ func (s *Service) recoveryLoop(ctx context.Context, store *recoveryStore) {
 		if changed {
 			s.recoveryCatalogRevision++
 			s.revision++
-			s.signalLocked()
+			s.signalLocked("recovery")
 		}
 		s.mu.Unlock()
 	}

@@ -1,0 +1,40 @@
+package main
+
+import (
+	"testing"
+
+	"github.com/dshills/vellum/ui"
+)
+
+func TestNativeThemeMenuMatchesSharedStateAndColors(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	before := s.service.Snapshot()
+	uiAction(t, s, "theme-menu", &ui.ChangeEvent{SelectedID: "dark"})
+	after := s.service.Snapshot()
+	if after.Theme != "dark" || after.ElectricalRevision != before.ElectricalRevision || after.Document.Dirty != before.Document.Dirty {
+		t.Fatal("theme menu bypassed shared presentation command")
+	}
+	root := s.view()
+	dark := resolvePalette("dark", false)
+	for _, id := range []string{"part-search", "selection", "schematic", "rc-scope"} {
+		node, ok := findNode(root, id)
+		if !ok && id == "rc-scope" {
+			continue
+		}
+		if !ok {
+			t.Fatal("missing themed control", id)
+		}
+		if node.Style.Foreground.Value != dark.Ink || !node.Style.Background.Set || node.Style.Background.Value.R > 100 {
+			t.Fatal("dark theme failed", id)
+		}
+	}
+	uiAction(t, s, "theme-menu", &ui.ChangeEvent{SelectedID: "light"})
+	if resolvePalette("system", true) != dark || resolvePalette("system", false) != resolvePalette("light", false) {
+		t.Fatal("system appearance resolution")
+	}
+	// Ensure the driver receives an independently valid local theme.
+	if err := desktopTheme().Validate(); err != nil {
+		t.Fatal(err)
+	}
+}

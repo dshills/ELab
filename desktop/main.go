@@ -6,7 +6,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"image/color"
 	"log"
 	"os"
 	"time"
@@ -56,7 +55,13 @@ func main() {
 	screen.drawing.pointer = newPointerBridge(a, screen.drawing.routePointer)
 	defer screen.drawing.pointer.close()
 	screen.registerCommands()
-	err = a.Open(app.Window{ID: "main", Title: "ELab · Live electronics", Width: 1260, Height: 900, View: screen.view, CloseRequest: func() bool { screen.requestReplace("app.close", workbench.ReplaceParams{}); return false }})
+	width, height := float32(1040), float32(760)
+	if *smoke {
+		// The full pixel-inspection fixture includes two distant reading cards.
+		// Compact-window layout is inspected separately in the UI audit.
+		width, height = 1260, 1100
+	}
+	err = a.Open(app.Window{ID: "main", Title: "ELab · Live electronics", Width: width, Height: height, View: screen.view, CloseRequest: func() bool { screen.requestReplace("app.close", workbench.ReplaceParams{}); return false }})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -113,7 +118,7 @@ func main() {
 	if *smoke {
 		go func() { smokeResult <- nativeSmoke(a, screen, renderer); a.Close() }()
 	}
-	if err := a.Run(context.Background(), cogent.Driver{Commands: screen.commands, Theme: ui.Theme{Default: ui.Style{Typography: ui.Some(ui.Typography{Size: 13}), Foreground: ui.Some(ink)}, Kinds: map[ui.Kind]ui.Style{ui.Extension: {Background: ui.Some(color.NRGBA{R: 252, G: 253, B: 254, A: 255})}}}}); err != nil {
+	if err := a.Run(context.Background(), cogent.Driver{Commands: screen.commands, Theme: desktopTheme()}); err != nil {
 		log.Fatal(err)
 	}
 	if *smoke {
@@ -141,6 +146,8 @@ type screen struct {
 	errorMessage                     string
 	renderRevision, lastDrawRevision uint64
 	lastDrawAnalysis                 string
+	lastPalette                      appPalette
+	menuSerial                       uint64
 }
 
 func (s *screen) invoke(id string, p any) workbench.Response {
@@ -173,6 +180,7 @@ func (s *screen) invokeAtCommandRevision(id string, p any, rev uint64) workbench
 }
 func (s *screen) registerCommands() {
 	s.registerFileCommands()
+	s.registerAppearanceCommands()
 	for _, entry := range []struct{ id, label, shortcut string }{
 		{"edit.undo", "Undo", "Meta+Z"}, {"edit.redo", "Redo", "Meta+Shift+Z"},
 		{"project.clear", "New blank", ""}, {"drawing.cancel", "Cancel drawing", "Escape"},

@@ -38,8 +38,9 @@ class Client:
             response = json.loads(self.process.stdout.readline())
             self.revision = response['revision']
         result = response.get('result')
-        if isinstance(result, dict) and 'components' in result and 'document' in result and 'command_revision' in result:
-            self.command_revision = result['command_revision']
+        snapshot = result.get('snapshot') if command == 'events.poll' and isinstance(result, dict) else result
+        if isinstance(snapshot, dict) and 'components' in snapshot and 'document' in snapshot and 'command_revision' in snapshot:
+            self.command_revision = snapshot['command_revision']
         if expect:
             assert response.get('error', {}).get('code') == expect, response
         else:

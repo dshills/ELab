@@ -42,6 +42,7 @@ type Snapshot struct {
 	Verification           *VerificationPreview   `json:"verification,omitempty"`
 	LastExport             *Artifact              `json:"last_export,omitempty"`
 	PartSearch             string                 `json:"part_search"`
+	Theme                  string                 `json:"theme"`
 	MatchingParts          []Part                 `json:"matching_parts"`
 	UndoName               string                 `json:"undo_name"`
 	RedoName               string                 `json:"redo_name"`
@@ -161,6 +162,9 @@ type Service struct {
 	cache                       map[string]savedResponse
 	cacheOrder                  []string
 	changed                     chan struct{}
+	eventRevisions              map[string]uint64
+	eventWaiters                int
+	theme                       string
 	cancel                      context.CancelFunc
 	solver                      func(context.Context, Circuit) (Result, error)
 	networkAdvance              networkAdvanceFunc
@@ -187,6 +191,7 @@ func newGraphService(solver func(context.Context, Circuit) (Result, error), grap
 		view:            View{Zoom: 1},
 		cache:           map[string]savedResponse{},
 		changed:         make(chan struct{}),
+		eventRevisions:  map[string]uint64{"state": 1},
 		solver:          solver,
 		networkAdvance:  advanceLiveNetwork,
 		inputSolve:      solveInputWork,
@@ -201,6 +206,7 @@ func newGraphService(solver func(context.Context, Circuit) (Result, error), grap
 		initialSolver:   solveInitial,
 		initialTimeout:  5 * time.Second,
 		actor:           "system",
+		theme:           "light",
 	}
 	for _, c := range graph.Components {
 		s.usedIDs[c.ID] = true
@@ -221,7 +227,6 @@ func newGraphService(solver func(context.Context, Circuit) (Result, error), grap
 	s.startLocked()
 	return s
 }
-func (s *Service) signalLocked()      { close(s.changed); s.changed = make(chan struct{}) }
 func (s *Service) Snapshot() Snapshot { s.mu.Lock(); defer s.mu.Unlock(); return s.snapshotLocked() }
 func (s *Service) snapshotLocked() Snapshot {
 	graph := s.graph.Clone()
@@ -252,6 +257,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		SelectedOperation:      s.selectedOperation,
 		LastOperation:          s.lastOperation,
 		PartSearch:             s.partSearch,
+		Theme:                  s.theme,
 		MatchingParts:          filteredParts(s.partSearch),
 		Scope:                  s.scopeLocked(compiled),
 		Mixed:                  cloneMixed(s.mixed),
@@ -440,7 +446,7 @@ func (s *Service) startLocked() {
 			}
 		}
 		s.revision++
-		s.signalLocked()
+		s.signalLocked("simulation", "diagnostics")
 	}()
 }
 func (s *Service) Close() {
@@ -480,7 +486,7 @@ func (s *Service) closeLocked() {
 		s.cancel()
 	}
 	s.revision++
-	s.signalLocked()
+	s.signalLocked("lifecycle", "simulation", "jobs", "recordings", "recovery")
 }
 func (s *Service) Wait(ctx context.Context) (Snapshot, error) {
 	for {
@@ -517,6 +523,9 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 	return out
 }
 func (s *Service) dispatch(ctx context.Context, r Request, actor string) Response {
+	if r.Command == "events.poll" {
+		return s.pollEvents(ctx, r)
+	}
 	if r.Command == "simulation.wait" {
 		if r.Version != ProtocolVersion || r.ID == "" || len(r.ID) > 128 {
 			return s.failure(r, "invalid-request", "version 1 and a nonempty ID (max 128 bytes) required")
@@ -624,7 +633,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 			return fail("invalid-params", err.Error())
 		}
 		if r.Command == "capabilities.list" {
-			out.Result = map[string]any{"version": ProtocolVersion, "schema_version": DiscoverySchemaVersion, "schemas": SchemaRegistry(), "capabilities": Catalog(), "mutation_preconditions": map[string]string{"expected_revision": "Guards all state publication, including live samples", "expected_command_revision": "Guards admitted commands, including other actors; live solver publication does not invalidate it", "combination": "At least one guard is required for mutations; when both are supplied both must match"}, "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee."}
+			out.Result = map[string]any{"version": ProtocolVersion, "schema_version": DiscoverySchemaVersion, "schemas": SchemaRegistry(), "capabilities": Catalog(), "mutation_preconditions": map[string]string{"expected_revision": "Guards all state publication, including live samples", "expected_command_revision": "Guards admitted commands, including other actors; live solver publication does not invalidate it", "combination": "At least one guard is required for mutations; when both are supplied both must match"}, "events": map[string]any{"command": "events.poll", "mode": "coalesced-latest-state", "max_waiters": MaxEventWaiters, "max_timeout_ms": MaxEventWaitMS, "default_timeout_ms": 1000, "topics": append([]string{}, eventTopics...)}, "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee."}
 		} else if r.Command == "parts.list" {
 			out.Result = Library()
 		} else {
@@ -768,7 +777,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	s.actor = actor
 	s.commandRevision++
 	s.revision++
-	s.signalLocked()
+	s.signalLocked(commandEventTopics(r.Command, changedDocument)...)
 	out.Revision = s.revision
 	out.Result = s.snapshotLocked()
 	cached := out

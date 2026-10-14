@@ -45,7 +45,7 @@ type Capability struct {
 func capability(id, description string, mutates bool, schema string) Capability {
 	output := snapshotSchema
 	if id == "capabilities.list" {
-		output = json.RawMessage(`{"type":"object","required":["version","schema_version","schemas","capabilities","retry_retention"],"properties":{"version":{"const":1},"schema_version":{"const":2},"schemas":{"type":"object","additionalProperties":{"type":"object"}},"capabilities":{"type":"array","items":{"type":"object"}},"retry_retention":{"type":"string"},"mutation_preconditions":{"type":"object"}}}`)
+		output = json.RawMessage(`{"type":"object","required":["version","schema_version","schemas","capabilities","retry_retention"],"properties":{"version":{"const":1},"schema_version":{"const":2},"schemas":{"type":"object","additionalProperties":{"type":"object"}},"capabilities":{"type":"array","items":{"type":"object"}},"events":{"type":"object"},"retry_retention":{"type":"string"},"mutation_preconditions":{"type":"object"}}}`)
 	}
 	if id == "parts.list" {
 		data, _ := json.Marshal(typeSchema(reflect.TypeOf([]Part{})))
@@ -69,7 +69,7 @@ const DiscoverySchemaVersion = 2
 
 var snapshotSchema = json.RawMessage(`{"$ref":"urn:elab:snapshot:1"}`)
 var snapshotDefinition = func() json.RawMessage {
-	schema := typeSchema(reflect.TypeOf(Snapshot{}))
+	schema := structSchema(reflect.TypeOf(Snapshot{}))
 	schema["$id"] = SnapshotSchemaID
 	data, _ := json.Marshal(schema)
 	return data
@@ -81,10 +81,19 @@ func SchemaRegistry() map[string]json.RawMessage {
 	metadata := structSchema(reflect.TypeOf(VerificationMetadata{}))
 	metadata["$id"] = VerificationMetadataSchemaID
 	data, _ := json.Marshal(metadata)
-	return map[string]json.RawMessage{SnapshotSchemaID: append(json.RawMessage(nil), snapshotDefinition...), VerificationMetadataSchemaID: data, TimeInputSchemaID: json.RawMessage(`{"$id":"urn:elab:time:1","type":["number","string"],"maxLength":128,"description":"Seconds as a finite number or decimal/scientific text; bare text is seconds; case-sensitive s/ms/us/µs/μs/ns/ps. Command bounds still apply.","examples":[0.01,"10 ms","250 us"]}`)}
+	eventSchema := structSchema(reflect.TypeOf(EventPollResult{}))
+	eventSchema["$id"] = EventPollSchemaID
+	eventData, _ := json.Marshal(eventSchema)
+	return map[string]json.RawMessage{SnapshotSchemaID: append(json.RawMessage(nil), snapshotDefinition...), VerificationMetadataSchemaID: data, EventPollSchemaID: eventData, TimeInputSchemaID: json.RawMessage(`{"$id":"urn:elab:time:1","type":["number","string"],"maxLength":128,"description":"Seconds as a finite number or decimal/scientific text; bare text is seconds; case-sensitive s/ms/us/µs/μs/ns/ps. Command bounds still apply.","examples":[0.01,"10 ms","250 us"]}`)}
 }
 
 func typeSchema(t reflect.Type) map[string]any {
+	if t == reflect.TypeOf(EventPollResult{}) {
+		return map[string]any{"$ref": EventPollSchemaID}
+	}
+	if t == reflect.TypeOf(Snapshot{}) {
+		return map[string]any{"$ref": SnapshotSchemaID}
+	}
 	if t == reflect.TypeOf(VerificationMetadata{}) {
 		return map[string]any{"$ref": VerificationMetadataSchemaID}
 	}
@@ -112,7 +121,11 @@ func typeSchema(t reflect.Type) map[string]any {
 	}
 }
 func queryCapability(id, description string, input, output reflect.Type) Capability {
-	data, _ := json.Marshal(typeSchema(input))
+	inputSchema := typeSchema(input)
+	if id == "events.poll" {
+		inputSchema["properties"].(map[string]any)["timeout_ms"] = map[string]any{"type": []string{"integer", "null"}, "minimum": 0, "maximum": MaxEventWaitMS, "default": 1000}
+	}
+	data, _ := json.Marshal(inputSchema)
 	cap := capability(id, description, false, string(data))
 	cap.OutputSchema, _ = json.Marshal(typeSchema(output))
 	return cap
@@ -167,6 +180,7 @@ func Catalog() []Capability {
 		typedCapability("example.load", "Load a known example ID into a new editable document; protects unsaved work and optional document generation", reflect.TypeOf(ExampleLoadParams{})),
 		typedCapability("example.current.reset", "Restore the current example template, not another example; protects unsaved work and optional expected_example_id/document generation", reflect.TypeOf(ExampleResetParams{})),
 		typedCapability("diagnostics.details.set", "Show/hide technical diagnostic details; session-only presentation, no physics/history/dirty change; related targets are in diagnostic_presentation", reflect.TypeOf(DiagnosticDetailsParams{})),
+		capability("appearance.theme.set", "Session theme: light, dark, or system; preserves physics/files", true, `{"type":"object","required":["theme"],"properties":{"theme":{"type":"string","enum":["light","dark","system"]}},"additionalProperties":false}`),
 		typedCapability("display.preferences.set", "Set persisted voltage color/range, current cues/motion, reduced motion and conventional/electron visualization; signed values always use conventional current; preserves physics", reflect.TypeOf(DisplayPreferences{})),
 		typedCapability("measurement.select", "Select current object, terminal, anchored net or probe for live inspection; empty kind/ID returns to the editing selection; session only, preserves physics/history/dirty state", reflect.TypeOf(MeasurementSelectParams{})),
 		queryCapability("measurement.inspect", "Read the selected live measurement context, or a supplied current target, with references, signed values and accepted-result provenance; no mutation", reflect.TypeOf(MeasurementQueryParams{}), reflect.TypeOf(MeasurementInspection{})),
@@ -181,13 +195,14 @@ func Catalog() []Capability {
 		typedCapability("scope.cursor.clear", "Clear cursor a/b and its measurements", reflect.TypeOf(CursorSelectParams{})),
 		capability("capabilities.list", "Discover versioned commands and schemas", false, `{"type":"object","additionalProperties":false}`),
 		capability("project.inspect", "Read circuit, connectivity, selection, view, model, diagnostics and results", false, `{"type":"object","additionalProperties":false}`),
-		capability("simulation.wait", "Wait for current project work, initialization, manual step or applying-input work (at most 5 seconds); inspect project_work/step_work/input_work for outcomes; ready transients return immediately", false, `{"type":"object","additionalProperties":false}`),
+		capability("simulation.wait", "Wait up to 5 s for project/initialization/step/input work; inspect corresponding work state for outcomes; ready transients return immediately", false, `{"type":"object","additionalProperties":false}`),
 		capability("parts.list", "List available kinds, terminals, models and default values", false, `{"type":"object","additionalProperties":false}`),
 		typedCapability("project.clear", "Start blank; unsaved changes require discard_changes; undo restores drawing", reflect.TypeOf(ReplaceParams{})),
+		queryCapability("events.poll", "Coalesced same-process observation; timeout 0–5000 ms, default 1000; four waits; idle omits snapshot", reflect.TypeOf(EventPollParams{}), reflect.TypeOf(EventPollResult{})),
 		queryCapability("project.work.inspect", "Inspect an operation by stable ID; retain eight project jobs and preserve active operations", reflect.TypeOf(IDParams{}), reflect.TypeOf(ProjectWork{})),
 		typedCapability("export.start", "Capture schematic-svg, scope-csv or verification-json/csv export and return background admission; inspect/cancel via project.work commands", reflect.TypeOf(ExportStartParams{})),
 		typedCapability("project.save.start", "Capture a project and return background save admission; inspect project_work; cancellation is available before publishing", reflect.TypeOf(SaveParams{})),
-		typedCapability("project.save", "Wait for the same captured background save as project.save.start; preserves kept records/models/preferences; later edits remain dirty; omit path to save current file; overwrite explicitly replaces an existing file", reflect.TypeOf(SaveParams{})),
+		typedCapability("project.save", "Wait for project.save.start semantics; keeps records/models/preferences; later edits stay dirty; path defaults to current file; overwrite permits replacement", reflect.TypeOf(SaveParams{})),
 		typedCapability("project.load.start", "Start background bounded local project reading/validation; inspect project_work; replacement refuses intervening edits", reflect.TypeOf(LoadParams{})),
 		typedCapability("project.work.cancel", "Cancel exact current project work before publication; cancelable is false during atomic Save publication/cleanup; refusal code operation-committing", reflect.TypeOf(IDParams{})),
 		typedCapability("project.load", "Wait for the same background open job as project.load.start; restores saved pause/view with fresh physics; unsaved changes require discard_changes", reflect.TypeOf(LoadParams{})),
@@ -195,7 +210,7 @@ func Catalog() []Capability {
 		typedCapability("component.move", "Move a part to a grid position within ±10000; preserve all wires and electrical results", reflect.TypeOf(MoveParams{})),
 		typedCapability("component.rotate", "Rotate a part 90 degrees clockwise without changing its pin identities or connectivity", reflect.TypeOf(IDParams{})),
 		typedCapability("object.delete", "Delete a part and its incident wires, or one wire, as one undoable edit", reflect.TypeOf(IDParams{})),
-		typedCapability("wire.connect", "Join two existing named terminals explicitly; crossings never connect; 300 wire limit; crossings never connect", reflect.TypeOf(ConnectParams{})),
+		typedCapability("wire.connect", "Join named terminals explicitly; crossings never connect; 300 wires maximum", reflect.TypeOf(ConnectParams{})),
 		capability("wire.begin", "Begin a visible wire gesture from a named terminal", true, `{"type":"object","required":["terminal"],"properties":{"terminal":{"type":"string"}},"additionalProperties":false}`),
 		typedCapability("drawing.tool.set", "Select tool: select, place, wire, or pan; optionally choose a part kind", reflect.TypeOf(ToolParams{})),
 		typedCapability("drawing.position.set", "Set the keyboard placement position on the 10-unit grid within ±10000", reflect.TypeOf(PositionParams{})),

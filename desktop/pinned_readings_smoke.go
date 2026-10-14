@@ -47,7 +47,10 @@ func nativePinnedReadingsSmoke(ctx context.Context, a *app.Application, s *scree
 		return fmt.Errorf("native pinned RC readings fail: %v", err)
 	}
 	if err := a.PostWait(ctx, func() {
-		s.invoke("view.fit", workbench.FitParams{Width: 800, Height: 500})
+		if err := smokeUI(s, "view.fit", nil); err != nil {
+			ready <- err
+			return
+		}
 		s.view()
 		ready <- s.drawing.RebuildResources()
 	}); err != nil {
@@ -72,14 +75,16 @@ func nativePinnedReadingsSmoke(ctx context.Context, a *app.Application, s *scree
 			}
 			view := *s.drawing.View
 			sx, sy := float64(pixels.Bounds().Dx())/view.Width, float64(pixels.Bounds().Dy())/view.Height
-			for _, reading := range s.service.Snapshot().PinnedReadings {
+			state := s.service.Snapshot()
+			cardColor := paletteForTheme(state.Theme).Surface
+			for _, reading := range state.PinnedReadings {
 				min, max := workbench.PinnedReadingBounds(reading)
 				a, b := view.Screen(canvas.Point{X: min.X, Y: min.Y}), view.Screen(canvas.Point{X: max.X, Y: max.Y})
 				cards, text := 0, 0
 				for y := int(math.Max(0, a.Y*sy)); y < int(math.Min(float64(pixels.Bounds().Dy()), b.Y*sy)); y++ {
 					for x := int(math.Max(0, a.X*sx)); x < int(math.Min(float64(pixels.Bounds().Dx()), b.X*sx)); x++ {
 						p := pixels.NRGBAAt(x, y)
-						if p.A > 250 && p.R == 243 && p.G == 250 && p.B == 251 {
+						if p == cardColor {
 							cards++
 						}
 						if p.A > 250 && p.R == 39 && p.G == 110 && p.B == 126 {

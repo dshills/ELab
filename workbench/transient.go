@@ -327,7 +327,7 @@ func (s *Service) launchTransientLocked(c Compiled) {
 						}
 						s.diagnostics = []Diagnostic{{"mixed-integration-failed", err.Error(), ""}}
 						s.revision++
-						s.signalLocked()
+						s.signalLocked("simulation", "diagnostics")
 						s.mu.Unlock()
 						cancel()
 						return
@@ -335,7 +335,7 @@ func (s *Service) launchTransientLocked(c Compiled) {
 				}
 				if steps > 0 && !IsNetworkAnalysis(c.Analysis) {
 					s.revision++
-					s.signalLocked()
+					s.signalLocked("simulation", "diagnostics")
 				}
 				s.mu.Unlock()
 			}

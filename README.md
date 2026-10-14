@@ -23,7 +23,7 @@ From the ELab directory:
 
 The window starts with a blank schematic. Pick a DC, sine, finite pulse or ideal square source, resistor, potentiometer, capacitor, red LED, silicon diode, NPN, SPST switch, junction, net label, or ground from the left palette, then click the sheet. Use Wire to click pairs of terminal dots. Select a component to edit its value in the right inspector; inputs such as `2.2k ohm` are accepted. The inspector also offers exact X/Y placement while a part is selected for placement, and named terminal connections while Wire is active.
 
-Connect source positive → resistor → LED anode, LED cathode → ground, and ground → source negative. Completing the loop starts live simulation. The LED example button loads a ready-made 5 V / 1 kΩ circuit. The 1 kΩ and 2 kΩ presets produce approximately 2.9168 mA and 1.4767 mA.
+Connect source positive → resistor → LED anode, LED cathode → ground, and ground → source negative. Completing the loop starts live simulation. Examples → Load LED example loads a ready-made 5 V / 1 kΩ circuit. The 1 kΩ and 2 kΩ presets produce approximately 2.9168 mA and 1.4767 mA.
 
 Drag a selected part to move it with its wires. Pan drags the sheet; scroll zooms; Fit frames the components. Arrow keys move a selected part by one grid step, or pan when no part is selected. Delete removes a selected part and its wires, or a selected wire. Escape cancels placement/wiring. Cmd+Z and Cmd+Shift+Z use shared document history when a focused text control does not consume the shortcut.
 
@@ -32,14 +32,14 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.38.0 --build-version 53 --platform darwin
+  --version 0.39.0 --build-version 54 --platform darwin
 ```
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
 
 ## Watch an RC circuit charge and discharge
 
-Click **RC** to load the 5 V pulse / 10 kΩ / 1 µF example, or build it from blank. Connect source positive → resistor → capacitor, capacitor return → ground, and source negative → ground. Capacitors accept values such as `1uF`, `1 µF`, `100nF`, or `0.001 F`.
+Choose **Examples → Load RC example** to load the 5 V pulse / 10 kΩ / 1 µF example, or build it from blank. Connect source positive → resistor → capacitor, capacitor return → ground, and source negative → ground. Capacitors accept values such as `1uF`, `1 µF`, `100nF`, or `0.001 F`.
 
 A valid RC circuit automatically advances in simulated time. The docked scope plots capacitor voltage relative to ground and source voltage; meters show signed RC current, capacitor voltage, and stored energy. **Auto** repeats the pulse-source cycle, **Charge** holds the source high, and **Discharge** drives it to zero while preserving capacitor voltage. A DC source stays high in Auto and also supports Charge/Discharge.
 
@@ -49,11 +49,11 @@ The first transient engine supports one source, one resistor, and one ideal capa
 
 ## Switch an LED with a transistor
 
-Choose **NPN** for an editable low-side LED switch, or add **NPN transistor** from the component tray. Connect its base through a resistor to a DC input, its emitter to ground, and its collector to the LED/resistor load. Use the base-drive buttons to explore cutoff, active operation, and saturation. All edits and live readings use the same commands and structured results for users and agents.
+Choose **Examples → Load NPN LED example** for an editable low-side LED switch, or add **NPN transistor** from the component tray. Connect its base through a resistor to a DC input, its emitter to ground, and its collector to the LED/resistor load. Use the base-drive buttons to explore cutoff, active operation, and saturation. All edits and live readings use the same commands and structured results for users and agents.
 
-Choose **Blink** for a pulse-driven transistor LED with a live clock, voltage/current scope, and Auto / High / Low controls. Pause, Step, Resume, pulse settings, and all drawing operations use the same commands for agents. See the [NPN pulse workflow and validation](docs/npn-transient.md).
+Choose **Examples → Load blinking NPN LED** for a pulse-driven transistor LED with a live clock, voltage/current scope, and Auto / High / Low controls. Pause, Step, Resume, pulse settings, and all drawing operations use the same commands for agents. See the [NPN pulse workflow and validation](docs/npn-transient.md).
 
-Choose **Flasher** for a DC-powered, capacitor-timed two-NPN oscillator with alternating LEDs. Its coupled solver preserves charge, supports signed capacitor startup conditions, and exposes the same commands and measurements to agents. See the [mixed RC/NPN workflow and validation](docs/mixed-transient.md).
+Choose **Examples → Load capacitor-timed LED flasher** for a DC-powered, capacitor-timed two-NPN oscillator with alternating LEDs. Its coupled solver preserves charge, supports signed capacitor startup conditions, and exposes the same commands and measurements to agents. See the [mixed RC/NPN workflow and validation](docs/mixed-transient.md).
 
 The generic Ebers–Moll junction model remains instantaneous; physical transistor delay, internal charge storage, heating and breakdown remain unsupported. See the [NPN model](docs/npn-switch.md).
 
@@ -196,3 +196,7 @@ Recovery Restore validates files in the background and commits only if the origi
 The reference [agent conformance harness](docs/agent-conformance.md) builds LED, RC and NPN circuits from empty sessions through in-process, stdio and private sockets, including native app processes. It checks fault repair, measurements, exports, close/reopen and equivalent project/result state. The standard build produces `build/elab-conformance`.
 
 Time fields now accept values such as `10 ms` and `250 us` through the same native/agent commands. Numerical seconds, strict saved data and existing simulation bounds remain compatible. See [time entry](docs/time-entry.md).
+
+## Appearance and agent observation
+
+The header offers Light, Dark and System [session themes](docs/appearance.md), and File/Examples/Theme open native macOS menus. Agents use `appearance.theme.set` for the same preference. [Coalesced observation](docs/events.md) lets a separate `events.poll` connection wait for state/job changes without blocking commands. [UI audit screenshots](research/ui-audit/README.md) record the visible repairs and remaining limits.

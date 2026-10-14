@@ -216,7 +216,7 @@ func (s *Service) finishProjectWorkLocked(job *projectJob) {
 	job.work.Cancelable = false
 	job.cancel()
 	s.revision++
-	s.signalLocked()
+	s.signalLocked(projectEventTopics(job)...)
 	state := s.snapshotLocked()
 	state.ProjectWork = cloneProjectWork(&job.work)
 	job.final = Response{Version: ProtocolVersion, ID: job.requestID, Revision: s.revision, Result: state}
@@ -278,7 +278,7 @@ func (s *Service) projectProgress(job *projectJob, phase string, bytes int) {
 		job.work.Phase = phase
 		job.work.Bytes = bytes
 		s.revision++
-		s.signalLocked()
+		s.signalLocked("jobs")
 	}
 }
 func (s *Service) failProjectWorkLocked(job *projectJob, err error) {

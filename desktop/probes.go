@@ -161,7 +161,7 @@ func (s *screen) cursorControls(state workbench.Snapshot) ui.Node {
 	}
 	nodes = append(nodes, quiet("cursor-measurement", caption))
 	// The inspector contains per-trace readings; the scope toolbar stays compact.
-	return ui.Node{ID: "scope-cursors", Kind: ui.Row, Style: ui.Style{Gap: ui.Some(float32(6)), Align: ui.Some(ui.AlignCenter)}, Children: nodes}
+	return ui.Node{ID: "scope-cursors", Kind: ui.Toolbar, Style: chromeStyle(), Children: nodes}
 }
 func (c *scopeCanvas) placeCursor(px float64) {
 	if c.screen == nil || c.View == nil || c.screen.fileBusy || c.screen.pendingCommand != "" {

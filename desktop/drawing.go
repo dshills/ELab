@@ -61,9 +61,10 @@ func (b *meshBuilder) text(x, y float64, text string, c color.NRGBA) {
 }
 func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*canvas.Mesh, error) {
 	b := &meshBuilder{}
-	ink := color.NRGBA{R: 47, G: 65, B: 78, A: 255}
+	palette := paletteForTheme(state.Theme)
+	ink, muted, accent := palette.Ink, palette.Muted, palette.Accent
 	wireColor := color.NRGBA{R: 56, G: 125, B: 147, A: 255}
-	grid := color.NRGBA{R: 211, G: 222, B: 230, A: 255}
+	grid := palette.Grid
 	selectedColor := color.NRGBA{R: 40, G: 158, B: 180, A: 255}
 	pendingColor := color.NRGBA{R: 212, G: 138, B: 28, A: 255}
 	minPoint, maxPoint := view.World(canvas.Point{}), view.World(canvas.Point{X: view.Width, Y: view.Height})
@@ -350,7 +351,7 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 		if reading.State != "live" {
 			c = color.NRGBA{R: 151, G: 96, B: 43, A: 255}
 		}
-		b.quad(min.X, min.Y, max.X-min.X, max.Y-min.Y, color.NRGBA{R: 243, G: 250, B: 251, A: 255})
+		b.quad(min.X, min.Y, max.X-min.X, max.Y-min.Y, palette.Surface)
 		b.stroke(c, 1.5, canvas.Point{X: min.X, Y: min.Y}, canvas.Point{X: max.X, Y: min.Y}, canvas.Point{X: max.X, Y: max.Y}, canvas.Point{X: min.X, Y: max.Y}, canvas.Point{X: min.X, Y: min.Y})
 		b.text(min.X+12, min.Y+23, reading.Display, c)
 		b.text(min.X+12, min.Y+43, reading.ReferenceDisplay, c)

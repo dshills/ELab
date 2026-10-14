@@ -55,6 +55,7 @@ func (s *screen) action(id, text, command string, p any) ui.Node {
 }
 func (s *screen) view() ui.Node {
 	state := s.service.Snapshot()
+	colors := paletteForTheme(state.Theme)
 	if s.requestHelp != nil && state.CommandRevision != s.requestHelpRevision {
 		s.requestHelp = nil
 		s.errorMessage = ""
@@ -66,14 +67,18 @@ func (s *screen) view() ui.Node {
 	if state.Analysis == "RC transient" {
 		drawRevision = state.CommandRevision
 	}
-	if drawRevision != s.lastDrawRevision || state.Analysis != s.lastDrawAnalysis {
+	if drawRevision != s.lastDrawRevision || state.Analysis != s.lastDrawAnalysis || colors != s.lastPalette {
 		s.renderRevision++
 		s.lastDrawRevision = drawRevision
 		s.lastDrawAnalysis = state.Analysis
+		s.lastPalette = colors
 	}
 	s.drawing.Revision = s.renderRevision
-	toolbar := ui.Node{ID: "toolbar", Kind: ui.Row, Style: ui.Style{Gap: ui.Some(float32(6)), Align: ui.Some(ui.AlignCenter)}, Children: []ui.Node{
-		s.button("project.clear", "New"), s.button("file.open", "Open"), s.button("file.save", "Save"), s.button("file.save-as", "Save As"), s.button("example.reset", "LED"), s.button("example.rc", "RC"), s.button("example.npn", "NPN"), s.button("example.npn-pulse", "Blink"), s.button("example.flasher", "Flasher"), s.button("edit.undo", "Undo"), s.button("edit.redo", "Redo"),
+	toolbar := ui.Node{ID: "toolbar", Kind: ui.Toolbar, Style: chromeStyle(), Children: []ui.Node{
+		s.commandMenu("file-menu", "File", [][2]string{{"project.clear", "New schematic"}, {"file.open", "Open…"}, {"file.save", "Save"}, {"file.save-as", "Save as…"}}),
+		s.button("file.save", "Save"),
+		s.commandMenu("examples-menu", "Examples", [][2]string{{"example.reset", "LED circuit"}, {"example.rc", "RC charge / discharge"}, {"example.npn", "Transistor LED"}, {"example.npn-pulse", "Blinking LED"}, {"example.flasher", "Capacitor-timed flasher"}}),
+		s.button("edit.undo", "Undo"), s.button("edit.redo", "Redo"), s.themeMenu(state.Theme),
 	}}
 	pause, pauseText := "simulation.pause", "Pause"
 	if state.Paused {
@@ -110,8 +115,9 @@ func (s *screen) view() ui.Node {
 	statusNode := label("status", status)
 	statusNode.Style.Foreground = ui.Some(accent)
 	statusNode.Style.Typography = ui.Some(ui.Typography{Size: 13, Weight: 600})
+	statusNode.Style.MaxSize = ui.Some(ui.Size{Width: 180})
 
-	palette := []ui.Node{section("parts-title", "Components"), quiet("placement-help", "Choose a part, then click the sheet.")}
+	palette := []ui.Node{section("parts-title", "Components"), quiet("placement-help", "Pick a part to place.")}
 	names := map[string]string{"dc-source": "+  DC source", "resistor": "∿  Resistor", "led": "▷  Red LED", "ground": "⊥  Ground", "capacitor": "Ⅱ  Capacitor", "pulse-source": "▥  Ideal square", "finite-pulse-source": "▱  Finite pulse", "sine-source": "∿  Sine source", "npn": "↗  NPN transistor", "junction": "●  Junction", "net-label": "→  Net label", "switch": "/  SPST switch", "diode": "▷  Silicon diode", "potentiometer": "↗  Potentiometer"}
 	palette = append(palette, ui.Node{ID: "part-search", Kind: ui.TextField, Text: state.PartSearch, Accessibility: ui.Accessibility{Name: "Search components"}, Change: func(e ui.ChangeEvent) { s.invoke("parts.search.set", workbench.SearchParams{Query: e.Text}) }})
 	for _, part := range state.MatchingParts {
@@ -368,7 +374,7 @@ func (s *screen) view() ui.Node {
 	}
 	inspector = append(inspector, s.recoveryInspector(state)...)
 	inspector = append(inspector, s.verificationInspector(state)...)
-	tools := ui.Node{ID: "tools", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 36}), Align: ui.Some(ui.AlignCenter), Gap: ui.Some(float32(6))}, Children: []ui.Node{}}
+	tools := ui.Node{ID: "tools", Kind: ui.Toolbar, Grow: true, Style: chromeStyle(), Children: []ui.Node{}}
 	for _, tool := range []string{"select", "wire", "pan"} {
 		n := s.action("tool-"+tool, strings.ToUpper(tool[:1])+tool[1:], "drawing.tool.set", workbench.ToolParams{Tool: tool})
 		tools.Children = append(tools.Children, buttonStyle(n, state.Drawing.Tool == tool))
@@ -524,17 +530,10 @@ func (s *screen) view() ui.Node {
 		n.Style.Typography = ui.Some(ui.Typography{Size: 24, Weight: 500})
 		return ui.Node{ID: id, Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(14)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: []ui.Node{section(id+"-title", title), n}}
 	}
-	// Width constraints also limit text wrapping; both rails remain independently scrollable.
-	for i := range palette {
-		if palette[i].Kind == ui.Label {
-			palette[i].Style.MaxSize = ui.Some(ui.Size{Width: 152})
-		}
-	}
-	for i := range inspector {
-		if inspector[i].Kind == ui.Label {
-			inspector[i].Style.MaxSize = ui.Some(ui.Size{Width: 216})
-		}
-	}
+	// Native max sizes constrain content, while padding consumes extra space.
+	// Bound descendants too: a long selector or button must not widen the rail.
+	constrainRail(palette, 152)
+	constrainRail(inspector, 248)
 	filename := "Untitled"
 	if state.Document.Path != "" {
 		filename = filepath.Base(state.Document.Path)
@@ -543,11 +542,11 @@ func (s *screen) view() ui.Node {
 		filename += " · Unsaved"
 	}
 	root := ui.Node{ID: "root", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(12)), Gap: ui.Some(float32(10)), Background: ui.Some(surface)}, Children: []ui.Node{
-		{ID: "header", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 60}), Padding: ui.Some(ui.UniformInsets(12)), Gap: ui.Some(float32(16)), Align: ui.Some(ui.AlignCenter), Background: ui.Some(paper)}, Children: []ui.Node{heading("title", "ELab"), toolbar, {ID: "header-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, statusNode, s.button(pause, pauseText)}},
+		{ID: "header", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 60}), Padding: ui.Some(ui.UniformInsets(12)), Gap: ui.Some(float32(16)), Align: ui.Some(ui.AlignCenter), Background: ui.Some(paper)}, Children: []ui.Node{heading("title", "ELab"), toolbar, statusNode, s.button(pause, pauseText)}},
 		{ID: "workspace", Kind: ui.Row, Grow: true, Style: ui.Style{Gap: ui.Some(float32(10))}, Children: []ui.Node{
 			{ID: "parts-scroll", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 200}), MaxSize: ui.Some(ui.Size{Width: 200}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("palette", 152, palette...)}},
-			{ID: "schematic-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(12)), Gap: ui.Some(float32(8)), Background: ui.Some(paper)}, Children: []ui.Node{tools, {ID: "schematic", Kind: ui.Extension, Grow: true, Custom: s.drawing}, quiet("schematic-help", hints), messages}},
-			{ID: "sidebar", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 264}), MaxSize: ui.Some(ui.Size{Width: 264}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("sidebar-content", 216, inspector...)}},
+			{ID: "schematic-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(12)), Gap: ui.Some(float32(8)), Background: ui.Some(paper)}, Children: []ui.Node{tools, {ID: "schematic", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 80})}, Custom: s.drawing}, quiet("schematic-help", hints), messages}},
+			{ID: "sidebar", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 296}), MaxSize: ui.Some(ui.Size{Width: 296}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("sidebar-content", 248, inspector...)}},
 		}},
 		{ID: "readings", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 72}), Gap: ui.Some(float32(10)), Align: ui.Some(ui.AlignCenter)}, Children: []ui.Node{metric("current", currentTitle, current), metric("voltage", voltageTitle, voltage), metric("power", powerTitle, power), panel("simulation-info", 232, section("simulation-title", "Live simulation"), quiet("reading-status", readStatus))}},
 		{ID: "footer-row", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 20})}, Children: []ui.Node{quiet("footer", fmt.Sprintf("%s · %d components · %d wires · last change: %s", filename, len(state.Components), len(state.Wires), state.LastActor)), {ID: "footer-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, quiet("grid-info", "10-unit snap · local workspace")}},
@@ -560,6 +559,7 @@ func (s *screen) view() ui.Node {
 		children = append(children, root.Children[index:]...)
 		root.Children = children
 	}
+	applyPalette(&root, colors)
 	return root
 }
 

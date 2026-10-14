@@ -184,7 +184,7 @@ rendered:
 }
 
 func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
-	node, ok := findNode(s.view(), id)
+	node, ok := findAction(s.view(), id)
 	if !ok || node.Disabled {
 		return fmt.Errorf("UI control %s is missing or disabled", id)
 	}

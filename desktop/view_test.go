@@ -41,7 +41,7 @@ func uiAction(t *testing.T, s *screen, id string, event *ui.ChangeEvent) {
 		if err := ui.Validate(root); err != nil {
 			t.Fatal(err)
 		}
-		node, ok := findNode(root, id)
+		node, ok := findAction(root, id)
 		if !ok {
 			t.Fatalf("missing UI control %s", id)
 		}

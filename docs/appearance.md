@@ -1,0 +1,11 @@
+# Appearance and compact native controls
+
+Choose **Light**, **Dark**, or **System** in the header theme menu. `appearance.theme.set {"theme":"dark"}` changes the same preference through the agent API; `project.inspect.theme` reports it. The discovered input schema lists the three permitted values. Ordinary revision and retry guards apply.
+
+Appearance is currently a session preference, initially Light. It survives project replacement but is not embedded in circuit files or restored after quitting. System resolves the native backend's current appearance. Colors are resolved for each descriptor tree without changing macOS settings or mutating Vellum's startup theme. Panels, fields, labels, selected controls, schematic symbols/grid/pinned cards, and scope axes/traces use the selected palette. On macOS, File, Examples and Theme use real AppKit menus installed by Vellum’s native menu service. The same menus also appear in the macOS menu bar after opening a header menu. Other platforms retain Vellum MenuButton. An app-scoped native adapter styles scrollbar tracks/handles and diagnostic disclosure headings without changing the SDK checkout or system appearance.
+
+Theme commands do not restart simulation, change charge/time/run/electrical revision, alter document dirty state, or add history. Invalid values are refused before mutation. Core and native regressions cover these invariants and menu/agent parity.
+
+File actions and examples preserve existing command enablement and unsaved-change/generation protection. macOS popup presentation is asynchronous and uses Vellum’s existing registry callbacks; obsolete/shutdown callbacks retain the service’s validation. Drawing and live/recorded scope controls use Toolbar with explicit content height and horizontal overflow with room for their controls and any overflow bar rather than disappearing when compressed. Rails apply consistent descendant widths and text wrapping; inputs use readable local foreground/background colors. The initial window is 1040 × 760 device-independent units; rails scroll independently.
+
+See [the UI audit and screenshots](../research/ui-audit/README.md) for observed results and remaining limits. This does not establish full keyboard, IME, screen-reader, or clean-distribution qualification.

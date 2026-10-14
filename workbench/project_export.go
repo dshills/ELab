@@ -152,7 +152,7 @@ func (s *Service) runProjectExport(job *projectJob, prepare projectExportFunc, p
 		job.work.Status = "running"
 		job.work.Cancelable = false
 		s.revision++
-		s.signalLocked()
+		s.signalLocked("jobs")
 		s.mu.Unlock()
 		err = publish(prepared)
 		s.mu.Lock()
@@ -160,7 +160,7 @@ func (s *Service) runProjectExport(job *projectJob, prepare projectExportFunc, p
 	if prepared != nil {
 		job.work.Phase = "cleanup"
 		s.revision++
-		s.signalLocked()
+		s.signalLocked("jobs")
 		s.mu.Unlock()
 		removeErr := os.Remove(prepared.temp)
 		s.mu.Lock()

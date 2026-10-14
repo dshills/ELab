@@ -90,6 +90,6 @@ func (s *Service) startInitialLocked(c Compiled) {
 			}
 		}
 		s.revision++
-		s.signalLocked()
+		s.signalLocked("simulation", "diagnostics", "jobs")
 	}()
 }

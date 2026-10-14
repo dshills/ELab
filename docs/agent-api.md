@@ -234,3 +234,7 @@ Fresh network wiper and running input changes admit an atomic background calcula
 The [reference conformance harness](agent-conformance.md) runs all three PRD circuit workflows through the in-process API, external stdio and headless/native private sockets, including introduced faults, exports, close and fresh-session reopening. It compares exact command parameters, persisted semantic state and accepted numerical readings. This is workflow evidence; complete capability coverage remains a separate requirement.
 
 Time-valued command inputs also accept bounded decimal/scientific text with `s`, `ms`, `us`/`µs`/`μs`, `ns` or `ps`; bare text is seconds. Discovery resolves these through local `urn:elab:time:1`. Numeric SI outputs/files remain strict, and normal bounds/retry/revision rules apply. See [time input fields and validation](time-entry.md).
+
+## Appearance and observation
+
+[Session appearance](appearance.md) uses `appearance.theme.set` with `light`, `dark`, or `system`. [Coalesced observation](events.md) uses `events.poll` to wait for state/job changes without holding the editor lock; use a separate connection for commands during a waiting poll. Both are advertised by discovery.

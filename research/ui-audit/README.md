@@ -1,0 +1,48 @@
+# Native UI audit and repairs — October 14, 2026
+
+The original empty-workspace capture showed clipped Inspector copy, dark inputs with dark text, and an increasingly crowded header. Smaller-window testing exposed a second problem: an unnecessary growing spacer reduced the toolbar allocation, and its horizontal scrollbar cut into the buttons. The user also identified the custom popup menus as boxy and unlike macOS menus.
+
+The repaired app uses consistent content/padding widths, bounded controls, readable Light/Dark palettes, grouped actions, explicit toolbar height, and slim themed native scrollbar handles. File, Examples and Theme now open actual AppKit menus through Vellum’s native menu service. Native RC menu selection and keyboard activation were observed, with shared command tests preserving unsaved-change checks. The compact transient layout keeps the scope, cursors, metrics and footer visible; Fit reveals the complete circuit.
+
+## Capture ledger
+
+These are exact native screenshots, not mockups. Pixel dimensions describe the capture, not device-independent window units. The initial labels “final” in several filenames refer to intermediate candidates and do not certify the final release.
+
+| Step | Capture | Observed health |
+|---|---|---|
+| 1 | [Original empty workspace](01-before-empty.png), 1419 × 1076 | Problem: clipped Inspector text, dark fields, crowded header |
+| 2 | [First attempted Inspector scroll](02-before-inspector-bottom.png) | Inconclusive: viewport unchanged; filename does not prove bottom access |
+| 3 | [Second attempted scroll](03-before-inspector-scrolled.png) | Inconclusive: viewport unchanged; no claim of successful scrolling |
+| 4 | [First width/theme repair](04-after-empty.png) | Partial: copy/contrast improved; new toolbars collapsed because native overflow needed a minimum height |
+| 5 | [Inspector bottom reached](05-after-inspector-bottom.png) | Improved: actual scroll-area navigation reaches recovery/verification controls; toolbar still intermediate |
+| 6 | [Wide light candidate](06-final-light-wide.png), 1750 × 1207 | Improved: grouped controls visible; smaller size still required checking |
+| 7 | [Resized light candidate](07-final-light-resize.png), 1185 × 855 | Problem: horizontal header scrollbar and missing Theme action; user correctly rejected this candidate |
+| 8 | [System dark, wide](08-chrome-system-wide.png), 2389 × 1295 | Improved: themed slim scroll handles; no heavy black tracks |
+| 9 | [System dark, compact](09-chrome-system-small.png) | Improved: full header/theme controls; no horizontal header scrollbar |
+| 10 | [Light, compact](10-chrome-light-small.png) | Improved: same header and rails in Light |
+| 11 | [LED, compact](11-light-led-small.png) | Improved: full LED and live metrics; short palette copy still showed a wrapping artifact |
+| 12 | [Earlier RC, compact](12-light-rc-small.png) | Partial: scope controls visible, but global vertical overflow hid metrics/footer |
+| 13 | [First native-menu presentation attempt](13-native-examples-menu.png) | Inconclusive: menu bar installed, popup absent; fixed native window selection/focus |
+| 14 | [Actual AppKit Examples popup](14-native-menu-final.png) | Improved: native rounded/material popup, accessible native menu items, correct anchor |
+| 15 | [Native RC selection](15-native-rc-selected.png) | Improved: RC scope, cursors, metrics and footer visible; circuit needed Fit |
+| 16 | [Paused RC after Fit](16-native-rc-fit.png) | Improved: complete circuit and controls; low zoom makes labels small |
+| 17 | [Native Theme popup over dark RC](17-native-theme-menu-dark-rc.png) | Improved: actual AppKit theme choices; themed schematic, axes, traces, controls and scroll handles |
+
+## Repairs and their evidence
+
+- **High — unreadable inputs:** screenshot 1 combined a light product UI with inherited dark native field backgrounds. App-local foreground/background defaults and resolved descriptor palettes make inputs readable; screenshots 10 and 17 show both themes.
+- **High — clipped header actions:** screenshot 7 showed the scrollbar intersecting buttons. Removed the extra growing header spacer and allowed sufficient toolbar height. Screenshots 9, 10, 14 and 17 show full controls at the same 1185 × 855 capture size.
+- **Medium — clipped Inspector paragraphs:** the rails constrained some text/control content independently of their padding. Applied consistent descendant constraints, zero label padding and a wider Inspector content area. Screenshots 5, 10 and 17 show readable text and reachable lower controls.
+- **Medium — heavy scrollbars:** native dark tracks conflicted with Light. The local mounted-scene adapter styles native tracks/handles and uses 8-unit width while preserving native input/layout/accessibility. Screenshots 9, 10 and 17 show the result.
+- **Medium — custom popup appearance:** Vellum MenuButton painted its own popup. The macOS implementation now presents the AppKit menu installed by Vellum’s service; screenshots 14 and 17 are direct evidence. Native menus follow macOS appearance, so they can be dark while the circuit UI is Light.
+- **High — compact transient overflow:** screenshot 12 hid the bottom metrics/footer. The schematic canvas can now shrink below its backend default minimum while scope toolbar heights remain explicit. Screenshots 15–17 show the complete lower layout. Fit remains a shared command.
+
+The final package also shortens the palette instruction to “Pick a part to place.” to avoid the visible wrapping artifact in earlier captures. Those earlier screenshots are retained honestly; they were not edited to resemble the final copy.
+
+## Verification and remaining limits
+
+[Appearance/observation native receipt](../../docs/validation/desktop-appearance-events.json) and [headless receipt](../../docs/validation/headless-appearance-events.json) prove shared theme choices preserve paused RC charge, time, history and document state. Native menu/unsaved-edit tests, root/native race tests, lint, vet, actual packaged GPU smoke and four-adapter reference conformance are recorded in [the release receipt](../../docs/validation/ui-repair-validation.json).
+
+The full GPU pixel fixture runs at 1260 × 1100 device-independent units so its two deliberately distant pinned reading cards remain legible. Its old hard-coded Fit dimensions and old background-color expectation were corrected to the actual viewport and selected palette. Compact-window screenshots provide separate layout evidence; no small-zoom reading-card legibility qualification is claimed.
+
+Remaining work includes persistent/global theme preferences, automatic System-theme changes while idle, current-theme checkmarks in native menus, native selector popups, compact scope collapse/resizing, labels/cards at very small zoom, and full keyboard/IME/screen-reader testing. This audit is visual and command-level evidence, not a WCAG or accessibility-compliance certification. The original MVP acceptance gates remain open.

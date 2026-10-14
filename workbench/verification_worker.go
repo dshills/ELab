@@ -18,7 +18,7 @@ func (s *Service) runVerification(operation *verificationOperation, input verifi
 	}
 	operation.summary.Status = "running"
 	s.revision++
-	s.signalLocked()
+	s.signalLocked("jobs", "recordings")
 	s.mu.Unlock()
 	record, err := computeVerification(operation.ctx, input, func(step int, at float64) {
 		s.mu.Lock()
@@ -30,7 +30,7 @@ func (s *Service) runVerification(operation *verificationOperation, input verifi
 		operation.summary.SimulatedTime = at
 		operation.summary.Progress = float64(step) / float64(input.steps)
 		s.revision++
-		s.signalLocked()
+		s.signalLocked("jobs", "recordings")
 	})
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -61,7 +61,7 @@ func (s *Service) finishVerificationLocked(operation *verificationOperation, rec
 		operation.summary.SimulatedTime = inputDuration(record)
 	}
 	s.revision++
-	s.signalLocked()
+	s.signalLocked("jobs", "recordings")
 }
 func inputDuration(record *verificationRecord) float64 {
 	if record == nil {

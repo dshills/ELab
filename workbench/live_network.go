@@ -26,6 +26,6 @@ func (s *Service) liveNetworkSampleLocked(ctx context.Context, run uint64, end f
 	}
 	s.mixedState, s.mixed, s.transient = next, next.result, samples
 	s.revision++
-	s.signalLocked()
+	s.signalLocked("simulation")
 	return true, nil
 }

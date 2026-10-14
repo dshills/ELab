@@ -309,6 +309,18 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		s.diagnosticDetails = p.Visible
 		return nil
+	case "appearance.theme.set":
+		var p struct {
+			Theme string `json:"theme"`
+		}
+		if err := params(raw, &p, "theme"); err != nil {
+			return err
+		}
+		if p.Theme != "light" && p.Theme != "dark" && p.Theme != "system" {
+			return fmt.Errorf("theme must be light, dark, or system")
+		}
+		s.theme = p.Theme
+		return nil
 	case "display.preferences.set":
 		p, err := decodeDisplayPreferences(raw)
 		if err != nil {

@@ -99,7 +99,7 @@ func (s *Service) runRecoveryWork(job *projectJob, prepare recoveryPrepareFunc, 
 		}
 		job.work.Status = "running"
 		s.revision++
-		s.signalLocked()
+		s.signalLocked("jobs", "recovery")
 		s.mu.Unlock()
 		result, err = execute(*job.recoveryWork, data)
 		s.mu.Lock()

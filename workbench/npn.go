@@ -325,6 +325,6 @@ func (s *Service) startNPNLocked(c Compiled, allowPaused bool) {
 			}
 		}
 		s.revision++
-		s.signalLocked()
+		s.signalLocked("simulation", "diagnostics")
 	}()
 }

@@ -125,7 +125,7 @@ func (s *Service) runStep(job *stepJob) {
 	if job.ctx.Err() == nil {
 		job.work.Status = "running"
 		s.revision++
-		s.signalLocked()
+		s.signalLocked("simulation", "jobs", "diagnostics")
 	}
 	s.mu.Unlock()
 	input := job.input
@@ -154,7 +154,7 @@ func (s *Service) runStep(job *stepJob) {
 				job.work.CompletedSamples = completed
 				job.work.Progress = math.Min(1, (input.transient.Sample.Time-job.work.StartTime)/job.work.Duration)
 				s.revision++
-				s.signalLocked()
+				s.signalLocked("simulation", "jobs", "diagnostics")
 			}
 			s.mu.Unlock()
 			lastProgress = time.Now()
@@ -186,7 +186,7 @@ func (s *Service) runStep(job *stepJob) {
 	}
 	job.cancel()
 	s.revision++
-	s.signalLocked()
+	s.signalLocked("simulation", "jobs", "diagnostics")
 	job.final = Response{Version: ProtocolVersion, ID: job.requestID, Revision: s.revision, Result: s.snapshotLocked()}
 	if job.work.Error != nil {
 		failure := *job.work.Error

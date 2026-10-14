@@ -92,7 +92,7 @@ func (s *Service) runProjectSave(job *projectJob, prepare projectSaveFunc, publi
 		job.work.Status = "running"
 		job.work.Cancelable = false
 		s.revision++
-		s.signalLocked()
+		s.signalLocked("jobs", "project", "recovery")
 		s.mu.Unlock()
 		err = publish(prepared)
 		s.mu.Lock()
@@ -100,7 +100,7 @@ func (s *Service) runProjectSave(job *projectJob, prepare projectSaveFunc, publi
 	if prepared != nil {
 		job.work.Phase = "cleanup"
 		s.revision++
-		s.signalLocked()
+		s.signalLocked("jobs", "project", "recovery")
 		s.mu.Unlock()
 		removeErr := os.Remove(prepared.temp)
 		s.mu.Lock()
@@ -132,7 +132,7 @@ func (s *Service) runProjectSave(job *projectJob, prepare projectSaveFunc, publi
 		job.work.ArtifactSHA256 = hex.EncodeToString(digest[:])
 		if associated && s.recoveryStore != nil {
 			s.revision++
-			s.signalLocked()
+			s.signalLocked("jobs", "project", "recovery")
 			capture := s.recoveryCaptureLocked()
 			store := s.recoveryStore
 			job.work.Phase = "recovery-cleanup"

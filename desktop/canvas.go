@@ -36,6 +36,14 @@ func (c *commandCanvas) Mount(parent tree.Node) core.Widget {
 	}
 	w := widget.AsWidget()
 	c.widget = w
+	_ = c.Owner.Post(func() {
+		if w.Scene != nil {
+			w.Scene.Updater(func() { c.screen.styleNativeChrome(w.Scene) })
+			if c.screen.styleNativeChrome(w.Scene) {
+				w.Scene.Update()
+			}
+		}
+	})
 	w.OnFirst(events.Scroll, func(e events.Event) {
 		if scroll, ok := e.(*events.MouseScroll); ok {
 			c.Owner.Do(func() {
@@ -101,7 +109,12 @@ func (c *commandCanvas) Mount(parent tree.Node) core.Widget {
 	})
 	return widget
 }
-func (c *commandCanvas) Sync(w core.Widget) error { return c.MeshCanvas.Sync(w) }
+func (c *commandCanvas) Sync(w core.Widget) error {
+	if c.screen != nil && w != nil {
+		c.screen.styleNativeChrome(w.AsWidget().Scene)
+	}
+	return c.MeshCanvas.Sync(w)
+}
 func hitComponent(state workbench.Snapshot, p workbench.Point) string {
 	for i := len(state.Components) - 1; i >= 0; i-- {
 		part := state.Components[i]

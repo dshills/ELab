@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "version": "0.39.0",
+  "build": "54",
+  "binary_sha256": "bd20c6eea6b5c9df61caefae8c3fd42d45b2ff3071ec9cd284c008c63b39544d",
+  "packaged_binary_matches": true,
+  "checks": [
+    "full root/native goimports, Staticcheck, race tests and vet",
+    "standard build and actual built/packaged GPU/UI smoke at documented pixel-fixture size",
+    "unsaved example replacement and disabled/unknown menu action guards",
+    "native AppKit Examples popup, keyboard RC selection, theme popup, scoped scrollbar styling",
+    "compact Light/System/Dark/LED/RC screenshots with header/scope/cursors/metrics/footer checks",
+    "shared session themes preserve paused RC physics/history/document; invalid values refuse",
+    "bounded observation cancellation/quota/coalescing/cloned state/close and socket/stdio tests",
+    "native/headless separate observation-control connections; idle omits snapshot",
+    "LED/RC/NPN reference conformance through all four adapters"
+  ],
+  "evidence": [
+    "research/ui-audit/README.md",
+    "docs/validation/desktop-appearance-events.json",
+    "docs/validation/headless-appearance-events.json",
+    "docs/validation/ui-repair-conformance.json"
+  ],
+  "limits_of_evidence": [
+    "session theme initially Light, not persisted across launches; idle OS theme changes unqualified",
+    "menus use macOS appearance; other platforms retain Vellum MenuButton",
+    "small zoom labels/cards and compact scope resizing/collapse remain follow-ups",
+    "full keyboard/IME/focus/screen-reader and visible latency unqualified",
+    "native GPU distant-card fixture uses 1260x1100 units; compact screenshot checks are separate",
+    "private unsigned local development package; 16 implemented / 11 partial functional requirements"
+  ]
+}

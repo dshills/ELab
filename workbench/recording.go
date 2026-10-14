@@ -229,7 +229,7 @@ func (s *Service) startRecordingClockLocked() {
 				if index != s.recording.index || done {
 					s.recording.index = index
 					s.revision++
-					s.signalLocked()
+					s.signalLocked("recordings")
 				}
 				s.mu.Unlock()
 			}

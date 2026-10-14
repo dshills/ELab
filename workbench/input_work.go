@@ -113,7 +113,7 @@ func (s *Service) runInputWork(job *inputJob, solve inputSolveFunc) {
 	if job.ctx.Err() == nil {
 		job.work.Status = "running"
 		s.revision++
-		s.signalLocked()
+		s.signalLocked("simulation", "jobs", "editor", "diagnostics")
 	}
 	s.mu.Unlock()
 	next, trace, err := solve(job.ctx, job.state, job.trace, job.graph, job.work.Mode, job.event)
@@ -163,7 +163,7 @@ func (s *Service) runInputWork(job *inputJob, solve inputSolveFunc) {
 	job.cancel()
 	if s.inputJob == job {
 		s.revision++
-		s.signalLocked()
+		s.signalLocked("simulation", "jobs", "editor", "diagnostics")
 	}
 }
 
