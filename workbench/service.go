@@ -12,6 +12,7 @@ import (
 )
 
 type Snapshot struct {
+	Display               CircuitDisplay        `json:"display"`
 	MeasurementInspection MeasurementInspection `json:"measurement_inspection"`
 	PinnedReadings        []PinnedReading       `json:"pinned_readings"`
 	TraceFocus            *TraceFocus           `json:"trace_focus,omitempty"`
@@ -72,9 +73,10 @@ type savedResponse struct {
 	response    Response
 }
 type Service struct {
+	displayPreferences               DisplayPreferences
 	measurementTarget                *MeasurementTarget
 	pins                             []PinSpec
-	savedPins                        [32]byte
+	savedPreferences                 [32]byte
 	dcCompiled                       *Compiled
 	focusProbe                       string
 	stepSerial                       uint64
@@ -154,6 +156,7 @@ func newGraphService(solver func(context.Context, Circuit) (Result, error), grap
 	for _, w := range graph.Wires {
 		s.usedIDs[w.ID] = true
 	}
+	s.displayPreferences = DefaultDisplayPreferences()
 	s.commandRevision = 1
 	s.inputMode = "auto"
 	s.transientSettings = DefaultTransientSettings()
@@ -161,7 +164,7 @@ func newGraphService(solver func(context.Context, Circuit) (Result, error), grap
 	s.recovery = RecoveryState{Interval: 2, Candidates: []RecoveryCandidate{}, Problems: []RecoveryProblem{}}
 	s.documentGeneration = 1
 	s.savedGraph = contentHash(EmptyGraph(), s.transientSettings)
-	s.savedPins = pinHash(nil)
+	s.savedPreferences = preferencesHash(nil, DefaultDisplayPreferences())
 	s.savedRecordings = s.recordingMembershipHashLocked()
 	s.startLocked()
 	return s
@@ -175,7 +178,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	if analysis == "" {
 		analysis = "DC operating point"
 	}
-	out := Snapshot{MeasurementInspection: s.measurementInspectionLocked(compiled, s.currentMeasurementTargetLocked()), PinnedReadings: s.pinnedReadingsLocked(), TraceFocus: s.traceFocusLocked(compiled), Limits: Limits(), SimulatedComponents: SimulatedComponentCount(graph), StepWork: s.stepWorkLocked(), ActuationRevision: s.actuationRevision, SwitchStates: s.switchStatesLocked(), SourceWarnings: waveformSamplingWarnings(graph, s.transientSettings), Recording: s.recordingViewLocked(), Recovery: cloneRecovery(s.recovery), VerificationSettings: cloneVerificationSettings(s.verificationSettings), Operations: []OperationSummary{}, SelectedOperation: s.selectedOperation, LastOperation: s.lastOperation, PartSearch: s.partSearch, MatchingParts: filteredParts(s.partSearch), Scope: s.scopeLocked(compiled), Mixed: cloneMixed(s.mixed), NPN: cloneNPN(s.npn), CommandRevision: s.commandRevision, Transient: cloneTransient(s.transient), TransientSettings: s.transientSettings, Document: DocumentState{PreferencesDirty: pinHash(s.pins) != s.savedPins, SchematicDirty: contentHash(s.graph, s.transientSettings) != s.savedGraph, RecordingsDirty: s.recordingsDirtyLocked(), RecordingCount: s.recordingCountLocked(), Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: DocumentVersion, Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom}, Revision: s.revision, ElectricalRevision: s.electrical, Circuit: s.circuit, Components: graph.Components, Wires: graph.Wires, Nets: compiled.Nets, Drawing: s.drawing, Model: Model(), Selected: s.selected, View: s.view, Status: s.status, Analysis: analysis, Paused: s.paused, RunID: s.run, Diagnostics: append([]Diagnostic{}, s.diagnostics...), CanUndo: len(s.undo) > 0, CanRedo: len(s.redo) > 0, LastActor: s.actor, Closed: s.closed}
+	out := Snapshot{Display: s.circuitDisplayLocked(), MeasurementInspection: s.measurementInspectionLocked(compiled, s.currentMeasurementTargetLocked()), PinnedReadings: s.pinnedReadingsLocked(), TraceFocus: s.traceFocusLocked(compiled), Limits: Limits(), SimulatedComponents: SimulatedComponentCount(graph), StepWork: s.stepWorkLocked(), ActuationRevision: s.actuationRevision, SwitchStates: s.switchStatesLocked(), SourceWarnings: waveformSamplingWarnings(graph, s.transientSettings), Recording: s.recordingViewLocked(), Recovery: cloneRecovery(s.recovery), VerificationSettings: cloneVerificationSettings(s.verificationSettings), Operations: []OperationSummary{}, SelectedOperation: s.selectedOperation, LastOperation: s.lastOperation, PartSearch: s.partSearch, MatchingParts: filteredParts(s.partSearch), Scope: s.scopeLocked(compiled), Mixed: cloneMixed(s.mixed), NPN: cloneNPN(s.npn), CommandRevision: s.commandRevision, Transient: cloneTransient(s.transient), TransientSettings: s.transientSettings, Document: DocumentState{PreferencesDirty: preferencesHash(s.pins, s.displayPreferences) != s.savedPreferences, SchematicDirty: contentHash(s.graph, s.transientSettings) != s.savedGraph, RecordingsDirty: s.recordingsDirtyLocked(), RecordingCount: s.recordingCountLocked(), Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: DocumentVersion, Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom}, Revision: s.revision, ElectricalRevision: s.electrical, Circuit: s.circuit, Components: graph.Components, Wires: graph.Wires, Nets: compiled.Nets, Drawing: s.drawing, Model: Model(), Selected: s.selected, View: s.view, Status: s.status, Analysis: analysis, Paused: s.paused, RunID: s.run, Diagnostics: append([]Diagnostic{}, s.diagnostics...), CanUndo: len(s.undo) > 0, CanRedo: len(s.redo) > 0, LastActor: s.actor, Closed: s.closed}
 	for i := len(s.operationOrder) - 1; i >= 0; i-- {
 		out.Operations = append(out.Operations, s.operationSummaryLocked(s.operations[s.operationOrder[i]]))
 	}
@@ -437,6 +440,14 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 		return fail("unknown-command", "enumerate capabilities.list for supported commands")
 	}
 	if !cap.Mutation {
+		if r.Command == "display.inspect" {
+			frame, err := s.displayQueryLocked(r.Params)
+			if err != nil {
+				return fail("invalid-params", err.Error())
+			}
+			out.Result = frame
+			return out
+		}
 		if r.Command == "measurement.inspect" {
 			inspection, err := s.measurementQueryLocked(r.Params)
 			if err != nil {
@@ -549,7 +560,8 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	changedGraph := !reflect.DeepEqual(before.Graph, s.graph)
 	changedSettings := before.Settings != s.transientSettings
 	changedPins := !reflect.DeepEqual(clonePins(before.Pins), clonePins(s.pins))
-	changedDocument := changedGraph || changedSettings || changedPins
+	changedDisplay := before.Display != s.displayPreferences
+	changedDocument := changedGraph || changedSettings || changedPins || changedDisplay
 	forceRestart := r.Command == "project.load" || r.Command == "recovery.restore" || r.Command == "example.rc" || r.Command == "example.npn" || r.Command == "example.npn-pulse" || r.Command == "example.flasher"
 	if changedDocument {
 		if changedGraph {
@@ -627,6 +639,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	state.Display = cloneCircuitDisplay(state.Display)
 	state.MeasurementInspection = cloneMeasurementInspection(state.MeasurementInspection)
 	state.PinnedReadings = clonePinnedReadings(state.PinnedReadings)
 	state.TraceFocus = cloneTraceFocus(state.TraceFocus)

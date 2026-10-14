@@ -54,7 +54,7 @@ func (s *screen) measurementInspector(state workbench.Snapshot) []ui.Node {
 	}
 	nodes = append(nodes, selectTarget("terminal", "Inspect named terminal voltage", terminals), selectTarget("net", "Inspect named electrical net", nets), selectTarget("probe", "Inspect voltage or current probe", probes))
 	if inspection.Target == nil {
-		return append(nodes, quiet("measurement-empty", "Select a component, terminal or wire to inspect. Wires show their net voltage; ideal-wire current is not inferred."))
+		return append(nodes, quiet("measurement-empty", "Select a component, terminal or wire to inspect. Wires show their net voltage; current cues require a uniquely determined wire current."))
 	}
 	caption := inspection.Target.ID
 	if inspection.ResultKind == "dc" {

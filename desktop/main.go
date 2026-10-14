@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"image/color"
@@ -46,7 +47,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer a.Close()
-	screen := &screen{app: a, service: service, commands: command.New()}
+	screen := &screen{app: a, service: service, commands: command.New(), displayStarted: time.Now()}
 	view := canvas.Viewport{Width: 800, Height: 500, Zoom: 1}
 	renderer := &cogent.MeshCanvas{Owner: a, Window: "main", View: &view, Prepare: func(v canvas.Viewport) (*canvas.Mesh, error) { return screen.mesh(v) }, OnError: func(err error) { log.Print("schematic: ", err) }}
 	screen.drawing = &commandCanvas{MeshCanvas: renderer, screen: screen}
@@ -71,7 +72,7 @@ func main() {
 		ticker := time.NewTicker(33 * time.Millisecond)
 		defer ticker.Stop()
 		var last, lastCommand uint64
-		var lastFrame time.Time
+		var lastFrame, lastMotion time.Time
 		for {
 			select {
 			case <-a.Context().Done():
@@ -81,6 +82,21 @@ func main() {
 				if state.Closed {
 					a.Close()
 					return
+				}
+				if state.Display.Animate && time.Since(lastMotion) >= 125*time.Millisecond {
+					lastMotion = time.Now()
+					_ = a.Post(func() {
+						if !service.Snapshot().Display.Animate || screen.drawing.widget == nil {
+							return
+						}
+						screen.renderRevision++
+						screen.drawing.Revision = screen.renderRevision
+						// Sync requests a canvas repaint without rebuilding the form
+						// tree, preserving text focus while illustrative dots move.
+						if err := screen.drawing.Sync(screen.drawing.widget); err != nil && !errors.Is(err, cogent.ErrFrameNotReady) {
+							log.Printf("current animation: %v", err)
+						}
+					})
 				}
 				// Solver samples remain independent of presentation. Keep commands immediate
 				// while pacing autonomous trace repaints to four frames per second.
@@ -109,6 +125,7 @@ func main() {
 }
 
 type screen struct {
+	displayStarted                   time.Time
 	app                              *app.Application
 	service                          *workbench.Service
 	commands                         *command.Registry

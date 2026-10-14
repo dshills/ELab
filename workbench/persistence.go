@@ -17,6 +17,7 @@ const DocumentVersion = 4
 const MaxDocumentBytes = 256 * 1024
 
 type Document struct {
+	DisplayPreferences *DisplayPreferences `json:"display_preferences,omitempty"`
 	PinnedReadings     *PinPreferences     `json:"pinned_readings,omitempty"`
 	WaveformModel      *WaveformModel      `json:"waveform_model,omitempty"`
 	PotentiometerModel *PotentiometerModel `json:"potentiometer_model,omitempty"`
@@ -66,7 +67,7 @@ func contentHash(g Graph, settings TransientSettings) [32]byte {
 	return sha256.Sum256(data)
 }
 func (s *Service) dirtyLocked() bool {
-	return contentHash(s.graph, s.transientSettings) != s.savedGraph || pinHash(s.pins) != s.savedPins || s.recordingsDirtyLocked()
+	return contentHash(s.graph, s.transientSettings) != s.savedGraph || preferencesHash(s.pins, s.displayPreferences) != s.savedPreferences || s.recordingsDirtyLocked()
 }
 func (s *Service) requireCleanLocked(discard bool) error {
 	if s.dirtyLocked() && !discard {
@@ -75,9 +76,10 @@ func (s *Service) requireCleanLocked(discard bool) error {
 	return nil
 }
 func (s *Service) detachDocumentLocked() {
+	s.displayPreferences = DefaultDisplayPreferences()
 	s.measurementTarget = nil
 	s.pins = nil
-	s.savedPins = pinHash(nil)
+	s.savedPreferences = preferencesHash(nil, DefaultDisplayPreferences())
 	s.dcCompiled = nil
 	s.inputMode = "auto"
 	s.pendingInputMode = ""
@@ -216,6 +218,17 @@ func decodeDocument(data []byte) (Document, error) {
 			return d, err
 		}
 		d.PinnedReadings = preferences
+	}
+
+	if raw, exists := pinFields["display_preferences"]; exists {
+		if d.Version < 4 {
+			return d, fmt.Errorf("display preferences require version 4")
+		}
+		preferences, err := decodeDisplayPreferences(raw)
+		if err != nil {
+			return d, err
+		}
+		d.DisplayPreferences = &preferences
 	}
 
 	if d.Version >= 2 {
@@ -503,7 +516,7 @@ func (s *Service) saveLocked(p SaveParams) error {
 	s.recoveredFrom = ""
 	s.documentPath = path
 	s.savedGraph = contentHash(s.graph, s.transientSettings)
-	s.savedPins = pinHash(s.pins)
+	s.savedPreferences = preferencesHash(s.pins, s.displayPreferences)
 	s.savedRecordings = s.recordingMembershipHashLocked()
 	s.diskHash = sha256.Sum256(data)
 	if s.recoveryStore != nil {
@@ -542,7 +555,7 @@ func (s *Service) loadLocked(p LoadParams) error {
 	s.recoveredFrom = ""
 	s.documentPath = path
 	s.savedGraph = contentHash(s.graph, s.transientSettings)
-	s.savedPins = pinHash(s.pins)
+	s.savedPreferences = preferencesHash(s.pins, s.displayPreferences)
 	s.savedRecordings = s.recordingMembershipHashLocked()
 	s.diskHash = sha256.Sum256(data)
 
@@ -564,6 +577,10 @@ func (s *Service) documentLocked() Document {
 	probes := ProbeParams{IDs: s.scopeLocked(compiled).Selected}
 	paused := s.paused
 	d := Document{Recordings: s.projectRecordingsLocked(), Paused: &paused, ScopeProbes: &probes, Format: DocumentFormat, Version: DocumentVersion, Graph: s.graph.Clone(), View: s.view, LEDModel: Model(), TransientSettings: &settings}
+	if s.displayPreferences != DefaultDisplayPreferences() {
+		prefs := s.displayPreferences
+		d.DisplayPreferences = &prefs
+	}
 	if len(s.pins) > 0 {
 		d.PinnedReadings = &PinPreferences{Items: clonePins(s.pins)}
 	}
@@ -606,6 +623,10 @@ func (s *Service) documentLocked() Document {
 }
 
 func (s *Service) installDocumentLocked(d Document) {
+	s.displayPreferences = DefaultDisplayPreferences()
+	if d.DisplayPreferences != nil {
+		s.displayPreferences = *d.DisplayPreferences
+	}
 	s.measurementTarget = nil
 	s.pins = nil
 	s.dcCompiled = nil

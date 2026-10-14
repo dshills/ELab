@@ -32,7 +32,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.27.0 --build-version 41 --platform darwin
+  --version 0.28.0 --build-version 42 --platform darwin
 ```
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
@@ -62,6 +62,8 @@ The generic Ebers–Moll junction model remains instantaneous; physical transist
 The right inspector's **Scope probes** selectors choose up to six terminal voltages or branch currents, including both flasher collectors, both LEDs, and each capacitor. Newly selected traces include already retained history without restarting the circuit. Voltage/current axes show signed values in V/mA.
 
 Select a component, terminal dot or wire to see signed live readings and references. Named terminal/net/probe selectors offer the same inspection without a pointer; Plot and Pin sit beside each reading. See [measurement inspection](docs/measurement-inspection.md).
+
+Enable **Circuit display** voltage colors, static current arrows or illustrative moving dots in the Inspector. Reduced motion keeps static arrows; electron mode reverses visual cues while numerical amperes stay conventional. Settings are saved and use the same agent command. See [display behavior and limits](docs/circuit-display.md).
 
 Choose **Pin a reading…** in the inspector to keep a voltage or signed current on the sheet. Drag its card or edit X / Y; positions are saved, and each completed drag is one undoable presentation edit. The cards show units, reference direction and stale/unavailable status. See [pinned readings](docs/pinned-readings.md).
 

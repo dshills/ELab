@@ -1,7 +1,6 @@
 package workbench
 
 import (
-	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -32,10 +31,6 @@ type PinnedReading struct {
 }
 
 func clonePins(in []PinSpec) []PinSpec { return append([]PinSpec{}, in...) }
-func pinHash(in []PinSpec) [32]byte {
-	data, _ := json.Marshal(clonePins(in))
-	return sha256.Sum256(data)
-}
 func clonePinnedReadings(in []PinnedReading) []PinnedReading {
 	out := append([]PinnedReading{}, in...)
 	for i := range out {

@@ -3,8 +3,8 @@
   "scope": "Requirement coverage validation only; does not establish product acceptance",
   "requirements": 27,
   "counts": {
-    "implemented": 12,
-    "partial": 15,
+    "implemented": 13,
+    "partial": 14,
     "pending": 0
   },
   "rows": [
@@ -82,9 +82,9 @@
     },
     {
       "id": "VIEW-02",
-      "evidence": "Illustrative LED brightness, text readings",
-      "status": "partial",
-      "assessment": "Partial: wire color is currently static; no animation/reduced-motion preferences or current-direction animation"
+      "evidence": "Saved voltage-color/range, current cue/motion/direction and reduced-motion controls; unique accepted wire cut currents with numeric references, shared frame builder, canvas-only mounted GPU motion and stable reduced-motion proof",
+      "status": "implemented",
+      "assessment": "Implemented explanatory cues within supported accepted frames; dots/LED brightness are labeled illustrative; OS preference integration and complete accessibility remain unqualified"
     },
     {
       "id": "SCOPE-01",
@@ -124,9 +124,9 @@
     },
     {
       "id": "FILE-03",
-      "evidence": "Schematic SVG with pinned cards/reference labels and measurement provenance; SI CSV/source identity, guarded immutable exports, fresh-render visual QA",
+      "evidence": "Schematic SVG preserves pins, palette, static direction cues and accepted provenance; SI CSV/source identity, guarded immutable exports and rendered label-bound repair",
       "status": "implemented",
-      "assessment": "Implemented for existing visible schematic/pin output; future voltage/current display preferences must preserve export parity"
+      "assessment": "Implemented for current visible persistent schematic/display/pin output; animation is frozen to static cues in SVG"
     },
     {
       "id": "ACCESS-01",

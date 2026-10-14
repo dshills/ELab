@@ -3,6 +3,7 @@ package main
 import (
 	"math"
 	"strings"
+	"time"
 
 	"cogentcore.org/core/core"
 	"cogentcore.org/core/events"
@@ -243,7 +244,11 @@ func (s *screen) mesh(v canvas.Viewport) (*canvas.Mesh, error) {
 			}
 		}
 	}
-	return schematic(state, v)
+	phase := 0.
+	if state.Display.Animate && !s.displayStarted.IsZero() {
+		phase = math.Mod(time.Since(s.displayStarted).Seconds(), 1)
+	}
+	return schematic(state, v, phase)
 }
 
 // pointer routes precise native packets through the same intent functions and

@@ -165,7 +165,10 @@ rendered:
 	if err := nativePinnedReadingsSmoke(ctx, a, s); err != nil {
 		return err
 	}
-	return nativeMeasurementInspectionSmoke(ctx, a, s)
+	if err := nativeMeasurementInspectionSmoke(ctx, a, s); err != nil {
+		return err
+	}
+	return nativeDisplaySmoke(ctx, a, s)
 }
 
 func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {

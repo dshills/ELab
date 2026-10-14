@@ -308,6 +308,16 @@ func (s *screen) view() ui.Node {
 	for _, w := range state.Wires {
 		if w.ID == state.Selected {
 			inspector = append(inspector, heading("wire-title", w.ID+" · Wire"), quiet("wire-inspector", w.From+" → "+w.To), s.action("wire-insert-junction", "Insert junction on this wire", "wire.junction.insert", workbench.JunctionInsertParams{WireIDs: []string{w.ID}}))
+			for _, reading := range state.Display.Wires {
+				if reading.ID != w.ID {
+					continue
+				}
+				text := "Wire current unavailable · " + reading.CurrentReason
+				if reading.Current != nil {
+					text = fmt.Sprintf("Conventional %.6g mA · %s → %s\nDerived by current conservation; %s", *reading.Current*1000, reading.From, reading.To, reading.State)
+				}
+				inspector = append(inspector, quiet("wire-current-reading", text))
+			}
 		}
 	}
 	if state.Selected != "" {
@@ -317,6 +327,7 @@ func (s *screen) view() ui.Node {
 	}
 	inspector = append(inspector, s.measurementInspector(state)...)
 	inspector = append(inspector, s.pinnedReadingControls(state)...)
+	inspector = append(inspector, s.displayControls(state)...)
 	if state.Drawing.Tool == "wire" {
 		terminalOptions := []ui.Option{{ID: "__none", Label: "Choose a terminal…"}}
 		for _, c := range state.Components {

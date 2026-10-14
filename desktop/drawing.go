@@ -59,7 +59,7 @@ func (b *meshBuilder) text(x, y float64, text string, c color.NRGBA) {
 		x += float64(advance) / 64 * 1.25
 	}
 }
-func schematic(state workbench.Snapshot, view canvas.Viewport) (*canvas.Mesh, error) {
+func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*canvas.Mesh, error) {
 	b := &meshBuilder{}
 	ink := color.NRGBA{R: 47, G: 65, B: 78, A: 255}
 	wireColor := color.NRGBA{R: 56, G: 125, B: 147, A: 255}
@@ -96,9 +96,16 @@ func schematic(state workbench.Snapshot, view canvas.Viewport) (*canvas.Mesh, er
 	}
 	measurementColor := color.NRGBA{R: 80, G: 124, B: 64, A: 255}
 	focusColor := color.NRGBA{R: 153, G: 78, B: 191, A: 255}
+	wireDisplays := map[string]workbench.WireDisplay{}
+	for _, wire := range state.Display.Wires {
+		wireDisplays[wire.ID] = wire
+	}
 	connectionCount := map[string]int{}
 	for _, w := range state.Wires {
 		c := wireColor
+		if reading, ok := wireDisplays[w.ID]; ok {
+			c = displayColor(reading.Color)
+		}
 		width := 2.5
 		if measurementWires[w.ID] {
 			c, width = measurementColor, 3.5
@@ -306,6 +313,16 @@ func schematic(state workbench.Snapshot, view canvas.Viewport) (*canvas.Mesh, er
 			y = part.Position.Y - 75
 		}
 		b.text(part.Position.X-float64(len(title))*4.4, y, title, ink)
+	}
+	frame := workbench.MakeDisplayFrame(graph, state.Display, phase)
+	for _, marker := range frame.Markers {
+		at, dx, dy := marker.At, marker.DX, marker.DY
+		c := color.NRGBA{R: 118, G: 67, B: 158, A: 255}
+		if marker.Kind == "dot" {
+			b.quad(at.X-2.5, at.Y-2.5, 5, 5, c)
+			continue
+		}
+		b.stroke(c, 2, canvas.Point{X: at.X - 7*dx - 5*dy, Y: at.Y - 7*dy + 5*dx}, canvas.Point{X: at.X + 4*dx, Y: at.Y + 4*dy}, canvas.Point{X: at.X - 7*dx + 5*dy, Y: at.Y - 7*dy - 5*dx})
 	}
 	for _, reading := range state.PinnedReadings {
 		min, max := workbench.PinnedReadingBounds(reading)

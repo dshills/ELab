@@ -27,7 +27,7 @@ type readingContext struct {
 
 func (s *Service) readingContextLocked() readingContext {
 	sample, run, revision, stale := s.readingFrameLocked()
-	c := readingContext{available: map[string]Probe{}, sample: sample, run: run, revision: revision, stale: stale || run != s.run || revision != s.electrical}
+	c := readingContext{available: map[string]Probe{}, sample: sample, run: run, revision: revision, stale: stale || run != s.run || revision != s.electrical || s.status == "error"}
 	for _, p := range probeInventory(s.graph) {
 		c.available[p.ID] = p
 	}

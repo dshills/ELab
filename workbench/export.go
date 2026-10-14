@@ -85,7 +85,9 @@ func (s *Service) exportLocked(command string, p ExportParams) error {
 		data = b.Bytes()
 		run = t.RunID
 	} else {
-		data = schematicSVG(s.graph, s.run, s.electrical, s.pinnedReadingsLocked()...)
+		display := s.circuitDisplayLocked()
+		display.Animate = false // SVG freezes the current reading with static arrows.
+		data = schematicSVGWithDisplay(s.graph, s.run, s.electrical, display, s.pinnedReadingsLocked()...)
 	}
 	if len(data) > 8*1024*1024 {
 		return fmt.Errorf("export exceeds 8 MiB")
@@ -140,6 +142,9 @@ func publishExport(path string, data []byte, overwrite bool) error {
 	return nil
 }
 func schematicSVG(g Graph, run, revision uint64, readings ...PinnedReading) []byte {
+	return schematicSVGWithDisplay(g, run, revision, CircuitDisplay{Preferences: DefaultDisplayPreferences()}, readings...)
+}
+func schematicSVGWithDisplay(g Graph, run, revision uint64, display CircuitDisplay, readings ...PinnedReading) []byte {
 	minX, minY, maxX, maxY := -120., -100., 120., 100.
 	for _, p := range g.Components {
 		minX = math.Min(minX, p.Position.X-90)
@@ -147,6 +152,9 @@ func schematicSVG(g Graph, run, revision uint64, readings ...PinnedReading) []by
 		if p.Kind == "net-label" {
 			maxX = math.Max(maxX, p.Position.X+50+float64(len(p.Label)+len(p.ID)+3)*7.5)
 		}
+		x, y, text := schematicPartLabel(p)
+		minX, maxX = math.Min(minX, x-10), math.Max(maxX, x+schematicLabelWidth(text)+10)
+		minY, maxY = math.Min(minY, y-25), math.Max(maxY, y+10)
 		minY = math.Min(minY, p.Position.Y-80)
 		maxY = math.Max(maxY, p.Position.Y+95)
 	}
@@ -179,14 +187,22 @@ func schematicSVG(g Graph, run, revision uint64, readings ...PinnedReading) []by
 	width, height := maxX-minX, maxY-minY
 	var b strings.Builder
 	fmt.Fprintf(&b, `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="%g" viewBox="%g %g %g %g"><title>ELab schematic</title>`, 1200*height/width, minX, minY, width, height)
-	metadata, _ := json.Marshal(map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "switch_model": SwitchDeviceModel(), "diode_model": SiliconDiodeModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"})
+	metadata, _ := json.Marshal(map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "switch_model": SwitchDeviceModel(), "diode_model": SiliconDiodeModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"})
 	fmt.Fprintf(&b, "<metadata>%s</metadata>", html.EscapeString(string(metadata)))
 	fmt.Fprintf(&b, `<rect x="%g" y="%g" width="%g" height="%g" fill="#ffffff"/><g fill="none" stroke="#426574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">`, minX, minY, width, height)
+	wireDisplays := map[string]WireDisplay{}
+	for _, wire := range display.Wires {
+		wireDisplays[wire.ID] = wire
+	}
 	for _, w := range g.Wires {
 		if !w.Connected {
 			continue
 		}
-		fmt.Fprintf(&b, `<polyline id="%s" points="`, html.EscapeString(w.ID))
+		color := "#387d93"
+		if reading, ok := wireDisplays[w.ID]; ok {
+			color = reading.Color
+		}
+		fmt.Fprintf(&b, `<polyline id="%s" stroke="%s" points="`, html.EscapeString(w.ID), color)
 		for _, p := range paths[w.ID] {
 			fmt.Fprintf(&b, "%g,%g ", p.X, p.Y)
 		}
@@ -249,37 +265,8 @@ func schematicSVG(g Graph, run, revision uint64, readings ...PinnedReading) []by
 	fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="19">ELab · schematic · electrical revision %d</text>`, minX+15, minY+25, revision)
 
 	for _, p := range g.Components {
-		x, y := p.Position.X+31, p.Position.Y-3
-		text := p.ID
-		if p.Kind == "net-label" {
-			text = p.Label + " · " + p.ID
-		}
-		if p.Unit != "" {
-			text += " · " + displayPartValue(p)
-		}
-		switch p.Kind {
-		case "resistor":
-			if p.Rotation == 90 || p.Rotation == 270 {
-				x, y = p.Position.X+17, p.Position.Y-2
-			} else {
-				x, y = p.Position.X-30, p.Position.Y+23
-			}
-		case "capacitor":
-			if p.Rotation == 90 || p.Rotation == 270 {
-				x, y = p.Position.X-35, p.Position.Y-23
-			} else {
-				x, y = p.Position.X+27, p.Position.Y-3
-			}
-		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
-			x, y = p.Position.X-88, p.Position.Y-2
-		case "junction":
-			x, y = p.Position.X+8, p.Position.Y-8
-		case "net-label":
-			x, y = p.Position.X+22, p.Position.Y+4
-		case "ground":
-			x, y = p.Position.X+29, p.Position.Y+5
-		}
-		labelWidth := float64(len([]rune(text)))*7.5 + 8
+		x, y, text := schematicPartLabel(p)
+		labelWidth := schematicLabelWidth(text)
 		fmt.Fprintf(&b, `<rect x="%g" y="%g" width="%g" height="19" rx="3" fill="#ffffff"/><text x="%g" y="%g">%s</text>`, x-3, y-15, labelWidth, x, y, html.EscapeString(text))
 	}
 	fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="15">Components · generic educational models</text>`, minX+15, diagramBottom+19)
@@ -299,6 +286,10 @@ func schematicSVG(g Graph, run, revision uint64, readings ...PinnedReading) []by
 		fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="12">%s</text>`, x, y, html.EscapeString(text))
 	}
 	b.WriteString("</g>")
+	for _, marker := range MakeDisplayFrame(g, display, 0).Markers {
+		at, dx, dy := marker.At, marker.DX, marker.DY
+		fmt.Fprintf(&b, `<polyline data-current-wire="%s" fill="none" stroke="#76439e" stroke-width="2" points="%g,%g %g,%g %g,%g"><title>Illustrative %s direction; signed readings use conventional current</title></polyline>`, html.EscapeString(marker.WireID), at.X-7*dx-5*dy, at.Y-7*dy+5*dx, at.X+4*dx, at.Y+4*dy, at.X-7*dx+5*dy, at.Y-7*dy-5*dx, display.Preferences.Direction)
+	}
 	for _, reading := range readings {
 		min, max := PinnedReadingBounds(reading)
 		color := "#276e7e"
@@ -334,4 +325,41 @@ func displayPartValue(p Component) string {
 		}
 	}
 	return fmt.Sprintf("%.4g %s", value, suffix)
+}
+
+// A conservative one-em advance keeps arbitrary valid IDs inside the exported
+// bounds without depending on a particular workstation's system font metrics.
+func schematicLabelWidth(text string) float64 { return float64(len([]rune(text)))*14 + 8 }
+func schematicPartLabel(p Component) (float64, float64, string) {
+	x, y := p.Position.X+31, p.Position.Y-3
+	text := p.ID
+	if p.Kind == "net-label" {
+		text = p.Label + " · " + p.ID
+	}
+	if p.Unit != "" {
+		text += " · " + displayPartValue(p)
+	}
+	switch p.Kind {
+	case "resistor":
+		if p.Rotation == 90 || p.Rotation == 270 {
+			x, y = p.Position.X+17, p.Position.Y-2
+		} else {
+			x, y = p.Position.X-30, p.Position.Y+23
+		}
+	case "capacitor":
+		if p.Rotation == 90 || p.Rotation == 270 {
+			x, y = p.Position.X-35, p.Position.Y-23
+		} else {
+			x, y = p.Position.X+27, p.Position.Y-3
+		}
+	case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
+		x, y = p.Position.X-schematicLabelWidth(text)-32, p.Position.Y-2
+	case "junction":
+		x, y = p.Position.X+8, p.Position.Y-8
+	case "net-label":
+		x, y = p.Position.X+22, p.Position.Y+4
+	case "ground":
+		x, y = p.Position.X+29, p.Position.Y+5
+	}
+	return x, y, text
 }

@@ -77,6 +77,7 @@ func cloneRecovery(in RecoveryState) RecoveryState {
 }
 
 type DocumentInspection struct {
+	DisplayPreferences *DisplayPreferences    `json:"display_preferences,omitempty"`
 	PinnedReadings     *PinPreferences        `json:"pinned_readings,omitempty"`
 	WaveformModel      *WaveformModel         `json:"waveform_model,omitempty"`
 	PotentiometerModel *PotentiometerModel    `json:"potentiometer_model,omitempty"`

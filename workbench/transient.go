@@ -114,6 +114,7 @@ type StepParams struct {
 	Duration float64 `json:"duration_s"`
 }
 type historyEntry struct {
+	Display         DisplayPreferences
 	Pins            []PinSpec
 	Actor           string
 	CommandRevision uint64
@@ -123,9 +124,10 @@ type historyEntry struct {
 }
 
 func (s *Service) historyLocked() historyEntry {
-	return historyEntry{Pins: clonePins(s.pins), Graph: s.graph.Clone(), Settings: s.transientSettings}
+	return historyEntry{Display: s.displayPreferences, Pins: clonePins(s.pins), Graph: s.graph.Clone(), Settings: s.transientSettings}
 }
 func (s *Service) restoreLocked(h historyEntry) {
+	s.displayPreferences = h.Display
 	s.pins = clonePins(h.Pins)
 	s.graph = h.Graph.Clone()
 	s.transientSettings = h.Settings

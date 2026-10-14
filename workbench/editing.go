@@ -274,6 +274,13 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			}
 		}
 		return s.batchLocked(p)
+	case "display.preferences.set":
+		p, err := decodeDisplayPreferences(raw)
+		if err != nil {
+			return err
+		}
+		s.displayPreferences = p
+		return nil
 	case "measurement.select":
 		return s.selectMeasurementLocked(raw)
 	case "measurement.pin.add", "measurement.pin.move", "measurement.pin.remove":
