@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "version": "0.37.0",
+  "build": "52",
+  "binary_sha256": "e9b69b73c5789962c934381f1850230807f404e62681080a56f2c9da3a240f43",
+  "packaged_binary_matches": true,
+  "checks": [
+    "source review and whitespace check; dedicated recovery Restore worker",
+    "pinned Staticcheck/import formatting, complete root/native race tests and vet",
+    "background bounded read/hash/capsule/project validation; original generation and unsaved guards",
+    "blocked cancellation, edits and replacement preserve current state; navigation stays responsive",
+    "one complete dirty unassociated copy with original actor/revision history and source provenance",
+    "waiting disconnect/retry retains one independently copied terminal result",
+    "existing corruption/hash/recording/preference/ownership guards and native-agent parity remain active",
+    "actual built and packaged GPU smoke including Restore/discard callbacks",
+    "public headless and packaged socket workflows preserve original source bytes and save a separate copy"
+  ],
+  "limits_of_evidence": [
+    "backend timing excludes visible input-to-pixel latency",
+    "OS reads can outlast cooperative cancellation/deadline, but late results cannot install",
+    "project/capsule/model/numerical/device/work bounds unchanged",
+    "configuration/dismiss/inspection and some shutdown paths still include synchronous work",
+    "private unsigned local bundle; full events/agent conformance, accessibility, numerical/performance consolidation, distribution and participant gates remain open",
+    "functional audit remains 15 implemented / 12 partial"
+  ]
+}

@@ -141,6 +141,7 @@ func Catalog() []Capability {
 		capability("recovery.scan", "Validate and list newest complete snapshots per document, with corrupt-file diagnostics", true, `{"type":"object","additionalProperties":false}`),
 		capability("recovery.checkpoint", "Write a complete recovery snapshot now (or retire owned snapshots when clean); does not save/associate the project", true, `{"type":"object","additionalProperties":false}`),
 		typedCapability("recovery.select", "Select a listed recovery candidate; empty ID clears", reflect.TypeOf(IDParams{})),
+		typedCapability("recovery.restore.start", "Read/hash-validate a recovery copy in background; protects original generation/unsaved work and intervening edits", reflect.TypeOf(RecoveryChoiceParams{})),
 		typedCapability("recovery.restore", "Validate hash and complete snapshot, then restore as a dirty unassociated copy; protects unsaved work and document generation", reflect.TypeOf(RecoveryChoiceParams{})),
 		typedCapability("recovery.dismiss", "Remove exactly the hash-confirmed recovery snapshot; other active sessions are protected", reflect.TypeOf(RecoveryChoiceParams{})),
 		queryCapability("recovery.samples", "Read exact embedded recovery-recording rows without restoring; hash-confirmed candidate and recording index, pages 1–200", reflect.TypeOf(RecoverySamplesParams{}), reflect.TypeOf(VerificationPage{})),

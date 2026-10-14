@@ -1,0 +1,13 @@
+# Background recovery Restore
+
+`recovery.restore.start {id, sha256, discard_changes?, expected_document_generation?}` returns immediate queued admission. Native Restore and its unsaved-change continuation use this command. Existing `recovery.restore` waits for the same worker. Shared `project.work.inspect {id}`, `project.work.cancel {id}`, `simulation.wait`, actor attribution, retry ownership and eight-operation bounds apply.
+
+Admission checks current generation and unsaved changes, then captures the complete current document guard and recovery store. Bounded regular-file reading, capsule checksum validation and unchanged strict project/model/recording validation run outside the editor mutex. The chosen SHA-256 must match the actual file. Navigation remains responsive; edits to graph/settings/preferences/kept assets, input actuation, project replacement or recovery-store replacement supersede staged work. Cancellation or Close prevents installation. OS reads can outlast the cooperative 30-second deadline, but late results cannot commit.
+
+A successful worker installs the complete validated document atomically, increments generation and restarts live physics from zero using the captured pause setting. The restored document is dirty and has no saved path. `recovered_from` names the original source; explicit source files remain untouched. Results/history/jobs/runtime clocks from files are never trusted. Content changes create one undo entry attributed to the original admitting actor and command revision. The completed job reports capsule ID/time, source SHA-256 and resulting document generation/run.
+
+An admitted failure changes only job bookkeeping. Corrected requests require a new retry key. Immediate-start retries return original admission; waiting retries return the original terminal response. Other project file operations refuse while Restore is active. Save the completed recovery under a separate path before relying on it as a durable project.
+
+Blocked-worker race tests exercise navigation, cancellation, intervening edits/replacement and complete original-attribution commit. Existing corruption/hash/generation/unsaved guards, file preservation, kept-record/preference round trips and native/agent parity tests remain active. Native GPU smoke exercises the actual Restore/discard callbacks with assertion-only waits. Run `python3 scripts/project-restore-demo.py --output REPORT --artifacts DIRECTORY`; `--connect` targets only a designated owned development session.
+
+Recovery configuration/dismiss/inspection and shutdown still include synchronous work. Full event/conformance coverage, accessibility, numerical/performance consolidation, distribution and participant validation remain open.

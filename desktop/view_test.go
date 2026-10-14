@@ -57,7 +57,8 @@ func uiAction(t *testing.T, s *screen, id string, event *ui.ChangeEvent) {
 	if s.errorMessage != "" {
 		t.Fatalf("%s: %s", id, s.errorMessage)
 	}
-	if id == "transient-step" || id == "recovery-checkpoint" || id == "recovery-scan" || s.service.Snapshot().Status == "updating" || activeInputWork(s.service.Snapshot()) {
+	state := s.service.Snapshot()
+	if id == "transient-step" || id == "recovery-checkpoint" || id == "recovery-scan" || ((id == "recovery-restore" || id == "discard-continue") && activeProjectWork(state)) || state.Status == "updating" || activeInputWork(state) {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 		state, err := s.service.Wait(ctx)

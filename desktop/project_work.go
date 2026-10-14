@@ -8,6 +8,10 @@ import (
 	"github.com/dshills/vellum/ui"
 )
 
+func activeProjectWork(state workbench.Snapshot) bool {
+	return state.ProjectWork != nil && (state.ProjectWork.Status == "queued" || state.ProjectWork.Status == "running" || state.ProjectWork.Status == "canceling")
+}
+
 func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 	w := state.ProjectWork
 	if w == nil {
@@ -18,7 +22,7 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 		action = "save"
 	} else if w.Command == "verification.import" {
 		action = "record import"
-	} else if w.Command == "recovery.scan" || w.Command == "recovery.checkpoint" {
+	} else if w.Command == "recovery.scan" || w.Command == "recovery.checkpoint" || w.Command == "recovery.restore" {
 		action = "recovery"
 	} else if w.Command == "export.schematic.svg" || w.Command == "export.scope.csv" || w.Command == "verification.export" {
 		action = "export"
@@ -42,6 +46,9 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 		}
 		if action == "recovery" {
 			explanation = "Recovery work runs separately from editing. Checkpoint cancellation ends when publication begins. Saved project files are preserved."
+		}
+		if w.Command == "recovery.restore" {
+			explanation = "Validating a recovery copy. Edits supersede this restore request; saved project files are preserved."
 		}
 		cancel := s.action("project-work-cancel", "Cancel project "+action, "project.work.cancel", workbench.IDParams{ID: w.ID})
 		cancel.Disabled = !w.Cancelable

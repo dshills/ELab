@@ -88,6 +88,7 @@ type Service struct {
 	projectSave                      projectSaveFunc
 	projectExport                    projectExportFunc
 	projectImport                    projectImportFunc
+	recoveryRestore                  recoveryRestoreFunc
 	recoveryPrepare                  recoveryPrepareFunc
 	recoveryExecute                  recoveryExecuteFunc
 	recoveryCatalogRevision          uint64
@@ -194,6 +195,7 @@ func newGraphService(solver func(context.Context, Circuit) (Result, error), grap
 		projectExport:   prepareProjectExport,
 		projectImport:   prepareRecordingImport,
 		recoveryPrepare: prepareManualRecovery,
+		recoveryRestore: prepareRecoveryRestore,
 		recoveryExecute: executeManualRecovery,
 		projectPublish:  publishPreparedFile,
 		initialSolver:   solveInitial,
@@ -690,7 +692,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	changedDisplay := before.Display != s.displayPreferences
 	changedExample := before.ExampleID != s.exampleID
 	changedDocument := changedGraph || changedSettings || changedPins || changedDisplay || changedExample
-	forceRestart := r.Command == "example.load" || r.Command == "example.current.reset" || r.Command == "recovery.restore" || r.Command == "example.rc" || r.Command == "example.npn" || r.Command == "example.npn-pulse" || r.Command == "example.flasher"
+	forceRestart := r.Command == "example.load" || r.Command == "example.current.reset" || r.Command == "example.rc" || r.Command == "example.npn" || r.Command == "example.npn-pulse" || r.Command == "example.flasher"
 	if changedDocument {
 		if changedGraph {
 			s.retainInterruptedDefaultProbesLocked(before.Graph)

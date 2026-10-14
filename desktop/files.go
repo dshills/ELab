@@ -24,7 +24,11 @@ func (s *screen) requestReplace(id string, p any) {
 		}
 		raw, _ = json.Marshal(fields)
 	}
-	result := s.invoke(id, json.RawMessage(raw))
+	dispatchID := id
+	if id == "recovery.restore" {
+		dispatchID = "recovery.restore.start"
+	}
+	result := s.invoke(dispatchID, json.RawMessage(raw))
 	if result.Error != nil && result.Error.Code == "unsaved-changes" {
 		s.pendingCommand = id
 		s.pendingParams = append(json.RawMessage{}, raw...)

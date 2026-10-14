@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "restore_admission_ms": 0.22083299700170755,
+  "job_id": "project-3",
+  "source_sha256": "4a6198f69e85f159049373b10db10caeeba8724ba9d7cd3e50ea3e0ef508d1c4",
+  "checks": [
+    "dirty/generation protection before admission",
+    "immediate admission leaves original state intact",
+    "completed stable job/hash/capsule identity",
+    "fresh paused zero-time unassociated dirty copy",
+    "original admitted history attribution",
+    "separate durable saved copy; original file byte-preserved"
+  ],
+  "limitations": [
+    "blocked race tests separately exercise cancellation and intervening edits/replacement",
+    "OS reads may outlast cancellation/deadline; no stale result can commit",
+    "backend admission timing excludes visible latency",
+    "recovery configuration/dismiss/inspection and shutdown remain separate responsiveness work"
+  ]
+}

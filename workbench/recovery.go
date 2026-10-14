@@ -178,27 +178,6 @@ func (s *Service) recoveryReadLocked(p RecoveryChoiceParams) (recoveryCapsule, D
 	}
 	return capsule, document, hash, nil
 }
-func (s *Service) restoreRecoveryLocked(p RecoveryChoiceParams) error {
-	if err := s.checkDocumentGenerationLocked(p.ExpectedGeneration); err != nil {
-		return err
-	}
-	if err := s.requireCleanLocked(p.DiscardChanges); err != nil {
-		return err
-	}
-	capsule, document, _, err := s.recoveryReadLocked(p)
-	if err != nil {
-		return err
-	}
-	s.installDocumentLocked(document)
-	s.documentPath = ""
-	s.recoveredFrom = capsule.SourcePath
-	if s.recoveredFrom == "" {
-		s.recoveredFrom = "Unsaved schematic"
-	}
-	s.diskHash = [32]byte{}
-	s.savedGraph = [32]byte{}
-	return nil
-}
 func (s *Service) dismissRecoveryLocked(p RecoveryChoiceParams) error {
 	if s.recoveryStore == nil || !recoveryID(p.ID) {
 		return fmt.Errorf("choose a listed recovery snapshot")
@@ -265,13 +244,13 @@ func (s *Service) recoveryCommandLocked(command string, raw json.RawMessage) err
 		s.recovery.Selected = p.ID
 		s.recoverySelectionCleared = p.ID == ""
 		return nil
-	case "recovery.restore", "recovery.dismiss":
+	case "recovery.restore", "recovery.restore.start", "recovery.dismiss":
 		var p RecoveryChoiceParams
 		if err := params(raw, &p, "id", "sha256"); err != nil {
 			return err
 		}
-		if command == "recovery.restore" {
-			return s.restoreRecoveryLocked(p)
+		if command == "recovery.restore" || command == "recovery.restore.start" {
+			return s.startRecoveryRestoreLocked(p)
 		}
 		return s.dismissRecoveryLocked(p)
 	}
