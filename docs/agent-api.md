@@ -134,7 +134,7 @@ Transport failure after a mutation is not evidence that it was undone. Retry wit
 
 ## Remaining MVP contract
 
-The current catalog covers the implemented application slice. Automatic recovery, export, atomic batches, richer jobs/events, capability/schema version migration, atomic multi-edit transactions, and all future editing/analysis functions still need implementation and conformance tests. The PRD's complete user/agent parity remains the release requirement as those capabilities ship.
+The current catalog covers the implemented application slice. Recovery, export, atomic batches and observable Verify/numerical/file jobs are implemented in the documented slice. Complete action/preference coverage, semantic schema/bounds discovery, event subscriptions, capability/schema migration and future editing/analysis conformance remain open. The PRD's complete user/agent parity remains the release requirement as those capabilities ship.
 
 ## Selectable probes and scope cursors
 
@@ -230,3 +230,5 @@ Fresh network wiper and running input changes admit an atomic background calcula
 `verification.import.start` admits private recorded-file reading/validation; the existing import waits for the same work. Shared project job inspection/cancellation/wait apply. Completion exposes `result_operation_id`, `source_sha256`, and `viewer_selected`; later viewer commands are preserved and capacity is rechecked before complete kept attachment. Import changes no live physical/graph/history state. [Import contract](project-import.md).
 
 `recovery.work.start {kind:scan|checkpoint}` admits shared recovery jobs; existing scan/checkpoint wait for them. Completion reports recovery capsule ID/time and `recovery_catalog_applied`, preserving newer catalogs and selection. Checkpoint serialization is cancelable; publication/retirement is fenced. Captures preserve explicit saved files and later editing. [Recovery work](project-recovery-work.md).
+
+The [reference conformance harness](agent-conformance.md) runs all three PRD circuit workflows through the in-process API, external stdio and headless/native private sockets, including introduced faults, exports, close and fresh-session reopening. It compares exact command parameters, persisted semantic state and accepted numerical readings. This is workflow evidence; complete capability coverage remains a separate requirement.

@@ -192,3 +192,5 @@ Recorded-result import now validates in the background, preserves live editing a
 Manual recovery refresh and checkpoint now run as shared background jobs, preserving selection, current edits and newer recovery lists. See [recovery work](docs/project-recovery-work.md).
 
 Recovery Restore validates files in the background and commits only if the original document still matches. Native controls and agents share cancellation, unsaved protection and new-copy provenance. See [recovery Restore](docs/project-restore.md).
+
+The reference [agent conformance harness](docs/agent-conformance.md) builds LED, RC and NPN circuits from empty sessions through in-process, stdio and private sockets, including native app processes. It checks fault repair, measurements, exports, close/reopen and equivalent project/result state. The standard build produces `build/elab-conformance`.

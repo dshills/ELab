@@ -3,8 +3,8 @@
   "scope": "Requirement coverage validation only; does not establish product acceptance",
   "requirements": 27,
   "counts": {
-    "implemented": 15,
-    "partial": 12,
+    "implemented": 16,
+    "partial": 11,
     "pending": 0
   },
   "rows": [
@@ -36,7 +36,7 @@
       "id": "EDIT-04",
       "evidence": "Object/named terminal/net/probe selectors, pointer terminal inspection, named wiring, arrows/pan/zoom/fit/escape",
       "status": "partial",
-      "assessment": "Partial: semantic net selection now exists; complete end-to-end keyboard focus/navigation scenarios remain unqualified"
+      "assessment": "Partial: semantic net selection now exists; complete keyboard focus/navigation scenarios remain unqualified"
     },
     {
       "id": "SIM-01",
@@ -76,21 +76,21 @@
     },
     {
       "id": "VIEW-01",
-      "evidence": "Uniform selected component/terminal/net/probe readings with signed units, references and accepted-result provenance; stable net anchors, unavailable/stale states; eight persisted pins; native/agent and fresh GPU evidence",
+      "evidence": "Uniform selected component/terminal/net/probe readings with signed units/reference/provenance; stable net anchors, stale/unavailable states and eight persisted pins; native/agent/GPU evidence",
       "status": "implemented",
-      "assessment": "Implemented for supported current live probes and pins; full keyboard/screen-reader qualification remains in EDIT-04/ACCESS-01; captured-record schematic interaction is future work"
+      "assessment": "Implemented for supported live probes/pins; full keyboard/screen-reader qualification remains in EDIT-04/ACCESS-01; captured-schematic interaction is future work"
     },
     {
       "id": "VIEW-02",
-      "evidence": "Saved voltage-color/range, current cue/motion/direction and reduced-motion controls; unique accepted wire cut currents with numeric references, shared frame builder, canvas-only mounted GPU motion and stable reduced-motion proof",
+      "evidence": "Saved voltage/range/current cue/motion/direction/reduced-motion controls; unique accepted cut currents, numeric references, shared frames and mounted GPU changing/frozen proof",
       "status": "implemented",
-      "assessment": "Implemented explanatory cues within supported accepted frames; dots/LED brightness are labeled illustrative; OS preference integration and complete accessibility remain unqualified"
+      "assessment": "Implemented explanatory cues; dots/LED brightness labeled illustrative; OS integration and complete accessibility remain unqualified"
     },
     {
       "id": "SCOPE-01",
-      "evidence": "Up to six labeled traces and component plot actions; shared scope.trace.select exposes stable source objects/terminals/nets, missing-source/undo semantics and native GPU highlights",
+      "evidence": "Six labeled traces and component plot actions; shared source focus with object/terminal/net IDs, missing-source/undo and fresh native GPU evidence",
       "status": "implemented",
-      "assessment": "Implemented for selected current live sources; recorded view explicitly suppresses current-schematic association; captured recorded-schematic interactive highlighting is future work"
+      "assessment": "Implemented for selected live sources; recorded view suppresses current-schematic highlights; interactive captured-schematic highlighting is future work"
     },
     {
       "id": "SCOPE-02",
@@ -100,15 +100,15 @@
     },
     {
       "id": "HELP-01",
-      "evidence": "Structured readable/action/technical diagnostic presentation with actual known object/terminal/wire/net highlights, pure rejected-request context, session disclosure, preserved wire gestures and corrected-frame GPU evidence",
+      "evidence": "Structured summary/action/technical data with actual object/terminal/wire/net highlights; pure rejected-request context, preserved wire gestures and corrected-frame GPU proof",
       "status": "implemented",
-      "assessment": "Implemented known-cause recovery guidance within supported models; unknown causes have no fabricated location; discoverability and complete accessibility remain separate gates"
+      "assessment": "Implemented known-cause recovery guidance; unknown causes are not fabricated; accessibility/discoverability remain separate gates"
     },
     {
       "id": "HELP-02",
-      "evidence": "Central immutable LED/RC/NPN/Blink/Flasher definitions and guidance; current origin/edited status, known origin persistence, protected identity/generation-scoped reset, fresh paused startup, undo and native/public smoke",
+      "evidence": "Central five-template guidance/definitions, edited origin/save/recovery and protected current-template reset with fresh paused startup, undo, stale guards and native/public smoke",
       "status": "implemented",
-      "assessment": "Implemented five guided editable examples and current-template reset; novice comprehension, accessibility and participant results remain separate gates"
+      "assessment": "Implemented guided editable examples/current reset; novice comprehension, accessibility and participant evidence remain separate gates"
     },
     {
       "id": "FILE-01",
@@ -124,9 +124,9 @@
     },
     {
       "id": "FILE-03",
-      "evidence": "Schematic SVG preserves pins, palette, static direction cues and accepted provenance; SI CSV/source identity, guarded immutable exports and rendered label-bound repair",
+      "evidence": "Schematic SVG includes pins, palette, static direction cues and accepted provenance; SI CSV/source identity, guarded exports and visual label-bound repair",
       "status": "implemented",
-      "assessment": "Implemented for current visible persistent schematic/display/pin output; animation is frozen to static cues in SVG"
+      "assessment": "Implemented for current persistent schematic/display/pin output; SVG freezes animation to static cues"
     },
     {
       "id": "ACCESS-01",
@@ -148,9 +148,9 @@
     },
     {
       "id": "AGENT-03",
-      "evidence": "Headless and packaged-socket workflows, in-process/native parity tests",
-      "status": "partial",
-      "assessment": "Partial: consolidate all three empty-session workflows through one release conformance harness, including fault/close/reopen"
+      "evidence": "One Go conformance runner builds LED/RC/NPN from empty owned sessions through in-process, external stdio, headless socket and packaged native socket; exact commands/semantic projects/measurements and fault/export/close/fresh-reopen",
+      "status": "implemented",
+      "assessment": "Implemented: all four client paths pass the same three reference workflows on the recorded workstation; complete native action coverage and other release gates remain separate"
     },
     {
       "id": "AGENT-04",

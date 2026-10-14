@@ -1,0 +1,502 @@
+{
+  "recordings": {
+    "entries": [
+      {
+        "data": {
+          "metadata": {
+            "format": "elab.verification",
+            "version": 1,
+            "operation_id": "verify-1",
+            "created_at": "2026-10-14T09:38:35.708164Z",
+            "input_revision": 30,
+            "electrical_revision": 19,
+            "document_generation": 1,
+            "graph": {
+              "components": [
+                {
+                  "id": "Supply",
+                  "kind": "dc-source",
+                  "name": "DC source",
+                  "terminals": [
+                    "positive",
+                    "negative"
+                  ],
+                  "position": {
+                    "x": 260,
+                    "y": -100
+                  },
+                  "value": 5,
+                  "unit": "V",
+                  "model": "ideal-dc.v1",
+                  "rotation": 0
+                },
+                {
+                  "id": "Drive",
+                  "kind": "dc-source",
+                  "name": "DC source",
+                  "terminals": [
+                    "positive",
+                    "negative"
+                  ],
+                  "position": {
+                    "x": -260,
+                    "y": 60
+                  },
+                  "value": 5,
+                  "unit": "V",
+                  "model": "ideal-dc.v1",
+                  "rotation": 0
+                },
+                {
+                  "id": "BaseR",
+                  "kind": "resistor",
+                  "name": "Resistor",
+                  "terminals": [
+                    "1",
+                    "2"
+                  ],
+                  "position": {
+                    "x": -100,
+                    "y": 60
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "ideal-resistor.v1",
+                  "rotation": 0
+                },
+                {
+                  "id": "Limit",
+                  "kind": "resistor",
+                  "name": "Resistor",
+                  "terminals": [
+                    "1",
+                    "2"
+                  ],
+                  "position": {
+                    "x": 100,
+                    "y": -180
+                  },
+                  "value": 1000,
+                  "unit": "Ω",
+                  "model": "ideal-resistor.v1",
+                  "rotation": 0
+                },
+                {
+                  "id": "Transistor",
+                  "kind": "npn",
+                  "name": "NPN transistor",
+                  "terminals": [
+                    "base",
+                    "collector",
+                    "emitter"
+                  ],
+                  "position": {
+                    "x": 100,
+                    "y": 60
+                  },
+                  "value": 0,
+                  "model": "elab.generic-npn.v1",
+                  "rotation": 0
+                },
+                {
+                  "id": "Earth",
+                  "kind": "ground",
+                  "name": "Ground",
+                  "terminals": [
+                    "reference"
+                  ],
+                  "position": {
+                    "x": 100,
+                    "y": 180
+                  },
+                  "value": 0,
+                  "model": "ground.v1",
+                  "rotation": 0
+                }
+              ],
+              "wires": [
+                {
+                  "id": "W1",
+                  "from": "Supply.positive",
+                  "to": "Limit.1",
+                  "connected": true
+                },
+                {
+                  "id": "W2",
+                  "from": "Limit.2",
+                  "to": "Transistor.collector",
+                  "connected": true
+                },
+                {
+                  "id": "W3",
+                  "from": "Drive.positive",
+                  "to": "BaseR.1",
+                  "connected": true
+                },
+                {
+                  "id": "W4",
+                  "from": "BaseR.2",
+                  "to": "Transistor.base",
+                  "connected": true
+                },
+                {
+                  "id": "W5",
+                  "from": "Transistor.emitter",
+                  "to": "Earth.reference",
+                  "connected": true
+                },
+                {
+                  "id": "W6",
+                  "from": "Supply.negative",
+                  "to": "Earth.reference",
+                  "connected": true
+                },
+                {
+                  "id": "W7",
+                  "from": "Drive.negative",
+                  "to": "Earth.reference",
+                  "connected": true
+                }
+              ]
+            },
+            "settings": {
+              "step_s": 0.001,
+              "high_s": 0.05,
+              "low_s": 0.05,
+              "initial_voltage_v": 0,
+              "seconds_per_wall_second": 0.02
+            },
+            "input_mode": "auto",
+            "analysis": "NPN DC operating point",
+            "engine": "elab.npn-switch-dc.v1",
+            "led_model": {
+              "id": "elab.generic-red-led.v1",
+              "is_a": 1e-20,
+              "n": 2,
+              "rs_ohm": 1,
+              "temperature_c": 27,
+              "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+            },
+            "npn_model": {
+              "id": "elab.generic-npn.v1",
+              "saturation_current_a": 1e-14,
+              "forward_beta": 100,
+              "reverse_beta": 1,
+              "temperature_c": 27,
+              "limitations": "Educational Ebers–Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+            },
+            "probes": [
+              {
+                "id": "i:Transistor.collector",
+                "label": "Transistor.collector current",
+                "unit": "A",
+                "positive": "Transistor.collector",
+                "reference": "into device"
+              },
+              {
+                "id": "v:Transistor.collector",
+                "label": "Transistor.collector / ground",
+                "unit": "V",
+                "positive": "Transistor.collector",
+                "reference": "ground"
+              },
+              {
+                "id": "i:Transistor.base",
+                "label": "Transistor.base current",
+                "unit": "A",
+                "positive": "Transistor.base",
+                "reference": "into device"
+              },
+              {
+                "id": "v:Transistor.base",
+                "label": "Transistor.base / ground",
+                "unit": "V",
+                "positive": "Transistor.base",
+                "reference": "ground"
+              }
+            ],
+            "duration_s": 0,
+            "sample_count": 1,
+            "statistics": [
+              {
+                "probe_id": "i:Transistor.collector",
+                "count": 1,
+                "min": 0.004929600780861814,
+                "max": 0.004929600780861814,
+                "sample_mean": 0.004929600780861814,
+                "sample_rms": 0.004929600780861814
+              },
+              {
+                "probe_id": "v:Transistor.collector",
+                "count": 1,
+                "min": 0.07039921913818598,
+                "max": 0.07039921913818598,
+                "sample_mean": 0.07039921913818598,
+                "sample_rms": 0.07039921913818598
+              },
+              {
+                "probe_id": "i:Transistor.base",
+                "count": 1,
+                "min": 0.00042999736510602657,
+                "max": 0.00042999736510602657,
+                "sample_mean": 0.00042999736510602657,
+                "sample_rms": 0.00042999736510602657
+              },
+              {
+                "probe_id": "v:Transistor.base",
+                "count": 1,
+                "min": 0.700026348939734,
+                "max": 0.700026348939734,
+                "sample_mean": 0.700026348939734,
+                "sample_rms": 0.700026348939734
+              }
+            ],
+            "npn": {
+              "run_id": 1,
+              "electrical_revision": 19,
+              "engine": "elab.npn-switch-dc.v1",
+              "model": {
+                "id": "elab.generic-npn.v1",
+                "saturation_current_a": 1e-14,
+                "forward_beta": 100,
+                "reverse_beta": 1,
+                "temperature_c": 27,
+                "limitations": "Educational Ebers–Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+              },
+              "transistor_id": "Transistor",
+              "supply_id": "Supply",
+              "input_id": "Drive",
+              "base_resistor_id": "BaseR",
+              "load_resistor_id": "Limit",
+              "base_current_a": 0.00042999736510602657,
+              "collector_current_a": 0.004929600780861814,
+              "emitter_current_a": 0.00535959814596784,
+              "vbe_v": 0.700026348939734,
+              "vce_v": 0.07039921913818598,
+              "led_voltage_v": 0,
+              "led_power_w": 0,
+              "transistor_power_w": 0.0006480495311845411,
+              "base_resistor_power_w": 0.0018489773399812553,
+              "load_resistor_power_w": 0.024300963858673405,
+              "kcl_residual_a": 6.071532165918825e-18,
+              "kvl_residual_v": 3.7470027081099033e-16,
+              "state": "saturation",
+              "explanation": "Both junctions are forward biased; the collector load limits current and additional base drive has little effect on LED brightness.",
+              "nodes_v": {
+                "net:BaseR.1": 5,
+                "net:BaseR.2": 0.700026348939734,
+                "net:Drive.negative": 0,
+                "net:Limit.1": 5,
+                "net:Limit.2": 0.07039921913818598
+              },
+              "stale": false
+            }
+          },
+          "rows": [
+            {
+              "time_s": 0,
+              "values": [
+                0.004929600780861814,
+                0.07039921913818598,
+                0.00042999736510602657,
+                0.700026348939734
+              ]
+            }
+          ]
+        },
+        "model_sha256": {
+          "elab.generic-npn.v1": "5d204875b42b2627610e44683cc2cfb3e9296c4c0f338444d9133df9c7f81307",
+          "ground.v1": "b981a78784d6912d59e83a9e85420a718029deefbbafb1b8a8f292777bcf3240",
+          "ideal-dc.v1": "e55cf05c148010feee1e9a583a1670290dd6c78f5279e80fe289d5121e9f2d74",
+          "ideal-resistor.v1": "dd642b275801f7c71c0ebfa9f6f03bc44a8be35d97c7b04ab96bb4278908f4ee"
+        }
+      }
+    ],
+    "selected_index": 0,
+    "viewing": false
+  },
+  "paused": true,
+  "scope_probes": {
+    "ids": []
+  },
+  "format": "elab.schematic",
+  "version": 4,
+  "graph": {
+    "components": [
+      {
+        "id": "Supply",
+        "kind": "dc-source",
+        "name": "DC source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": 260,
+          "y": -100
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-dc.v1",
+        "rotation": 0
+      },
+      {
+        "id": "Drive",
+        "kind": "dc-source",
+        "name": "DC source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -260,
+          "y": 60
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-dc.v1",
+        "rotation": 0
+      },
+      {
+        "id": "BaseR",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -100,
+          "y": 60
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "Limit",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 100,
+          "y": -180
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "Transistor",
+        "kind": "npn",
+        "name": "NPN transistor",
+        "terminals": [
+          "base",
+          "collector",
+          "emitter"
+        ],
+        "position": {
+          "x": 100,
+          "y": 60
+        },
+        "value": 0,
+        "model": "elab.generic-npn.v1",
+        "rotation": 0
+      },
+      {
+        "id": "Earth",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 100,
+          "y": 180
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "Supply.positive",
+        "to": "Limit.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "Limit.2",
+        "to": "Transistor.collector",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "Drive.positive",
+        "to": "BaseR.1",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "BaseR.2",
+        "to": "Transistor.base",
+        "connected": true
+      },
+      {
+        "id": "W5",
+        "from": "Transistor.emitter",
+        "to": "Earth.reference",
+        "connected": true
+      },
+      {
+        "id": "W6",
+        "from": "Supply.negative",
+        "to": "Earth.reference",
+        "connected": true
+      },
+      {
+        "id": "W7",
+        "from": "Drive.negative",
+        "to": "Earth.reference",
+        "connected": true
+      }
+    ]
+  },
+  "view": {
+    "center": {
+      "x": 0,
+      "y": 0
+    },
+    "zoom": 1
+  },
+  "npn_model": {
+    "id": "elab.generic-npn.v1",
+    "saturation_current_a": 1e-14,
+    "forward_beta": 100,
+    "reverse_beta": 1,
+    "temperature_c": 27,
+    "limitations": "Educational Ebers–Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+  },
+  "led_model": {
+    "id": "elab.generic-red-led.v1",
+    "is_a": 1e-20,
+    "n": 2,
+    "rs_ohm": 1,
+    "temperature_c": 27,
+    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+  },
+  "transient_settings": {
+    "step_s": 0.001,
+    "high_s": 0.05,
+    "low_s": 0.05,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.02
+  }
+}

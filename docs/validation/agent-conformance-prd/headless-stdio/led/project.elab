@@ -1,0 +1,371 @@
+{
+  "recordings": {
+    "entries": [
+      {
+        "data": {
+          "metadata": {
+            "format": "elab.verification",
+            "version": 1,
+            "operation_id": "verify-1",
+            "created_at": "2026-10-14T09:38:35.784873Z",
+            "input_revision": 21,
+            "electrical_revision": 12,
+            "document_generation": 1,
+            "graph": {
+              "components": [
+                {
+                  "id": "Supply",
+                  "kind": "dc-source",
+                  "name": "DC source",
+                  "terminals": [
+                    "positive",
+                    "negative"
+                  ],
+                  "position": {
+                    "x": -200,
+                    "y": 0
+                  },
+                  "value": 5,
+                  "unit": "V",
+                  "model": "ideal-dc.v1",
+                  "rotation": 0
+                },
+                {
+                  "id": "Limit",
+                  "kind": "resistor",
+                  "name": "Resistor",
+                  "terminals": [
+                    "1",
+                    "2"
+                  ],
+                  "position": {
+                    "x": 0,
+                    "y": -110
+                  },
+                  "value": 2000,
+                  "unit": "Ω",
+                  "model": "ideal-resistor.v1",
+                  "rotation": 0
+                },
+                {
+                  "id": "Light",
+                  "kind": "led",
+                  "name": "Red LED",
+                  "terminals": [
+                    "anode",
+                    "cathode"
+                  ],
+                  "position": {
+                    "x": 200,
+                    "y": 0
+                  },
+                  "value": 0,
+                  "model": "elab.generic-red-led.v1",
+                  "rotation": 0
+                },
+                {
+                  "id": "Earth",
+                  "kind": "ground",
+                  "name": "Ground",
+                  "terminals": [
+                    "reference"
+                  ],
+                  "position": {
+                    "x": 0,
+                    "y": 110
+                  },
+                  "value": 0,
+                  "model": "ground.v1",
+                  "rotation": 0
+                }
+              ],
+              "wires": [
+                {
+                  "id": "W1",
+                  "from": "Supply.positive",
+                  "to": "Limit.1",
+                  "connected": true
+                },
+                {
+                  "id": "W2",
+                  "from": "Limit.2",
+                  "to": "Light.anode",
+                  "connected": true
+                },
+                {
+                  "id": "W3",
+                  "from": "Light.cathode",
+                  "to": "Earth.reference",
+                  "connected": true
+                },
+                {
+                  "id": "W4",
+                  "from": "Earth.reference",
+                  "to": "Supply.negative",
+                  "connected": true
+                }
+              ]
+            },
+            "settings": {
+              "step_s": 0.001,
+              "high_s": 0.05,
+              "low_s": 0.05,
+              "initial_voltage_v": 0,
+              "seconds_per_wall_second": 0.02
+            },
+            "input_mode": "auto",
+            "analysis": "DC operating point",
+            "engine": "elab.series-led-dc.v1",
+            "led_model": {
+              "id": "elab.generic-red-led.v1",
+              "is_a": 1e-20,
+              "n": 2,
+              "rs_ohm": 1,
+              "temperature_c": 27,
+              "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+            },
+            "probes": [
+              {
+                "id": "i:Light",
+                "label": "Light current",
+                "unit": "A",
+                "positive": "Light.anode",
+                "reference": "Light.cathode"
+              },
+              {
+                "id": "v:Light",
+                "label": "Light voltage",
+                "unit": "V",
+                "positive": "Light.anode",
+                "reference": "Light.cathode"
+              },
+              {
+                "id": "v:Limit",
+                "label": "Limit voltage",
+                "unit": "V",
+                "positive": "Limit.1",
+                "reference": "Limit.2"
+              },
+              {
+                "id": "v:Supply",
+                "label": "Supply voltage",
+                "unit": "V",
+                "positive": "Supply.positive",
+                "reference": "Supply.negative"
+              }
+            ],
+            "duration_s": 0,
+            "sample_count": 1,
+            "statistics": [
+              {
+                "probe_id": "i:Light",
+                "count": 1,
+                "min": 0.001476723549138745,
+                "max": 0.001476723549138745,
+                "sample_mean": 0.001476723549138745,
+                "sample_rms": 0.001476723549138745
+              },
+              {
+                "probe_id": "v:Light",
+                "count": 1,
+                "min": 2.04655290172251,
+                "max": 2.04655290172251,
+                "sample_mean": 2.04655290172251,
+                "sample_rms": 2.04655290172251
+              },
+              {
+                "probe_id": "v:Limit",
+                "count": 1,
+                "min": 2.95344709827749,
+                "max": 2.95344709827749,
+                "sample_mean": 2.95344709827749,
+                "sample_rms": 2.95344709827749
+              },
+              {
+                "probe_id": "v:Supply",
+                "count": 1,
+                "min": 5,
+                "max": 5,
+                "sample_mean": 5,
+                "sample_rms": 5
+              }
+            ],
+            "led": {
+              "run_id": 1,
+              "electrical_revision": 12,
+              "engine": "elab.series-led-dc.v1",
+              "model": {
+                "id": "elab.generic-red-led.v1",
+                "is_a": 1e-20,
+                "n": 2,
+                "rs_ohm": 1,
+                "temperature_c": 27,
+                "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+              },
+              "current_a": 0.001476723549138745,
+              "led_voltage_v": 2.04655290172251,
+              "resistor_voltage_v": 2.95344709827749,
+              "led_power_w": 0.0030221928645318623,
+              "resistor_power_w": 0.004361424881161862,
+              "kvl_residual_v": -1.249000902703301e-16,
+              "node_voltage_v": {
+                "ground": 0,
+                "led-anode": 2.04655290172251,
+                "net:Earth.reference": 0,
+                "net:Light.anode": 2.04655290172251,
+                "net:Limit.1": 5,
+                "supply": 5
+              },
+              "stale": false,
+              "source_id": "Supply",
+              "resistor_id": "Limit",
+              "led_id": "Light"
+            }
+          },
+          "rows": [
+            {
+              "time_s": 0,
+              "values": [
+                0.001476723549138745,
+                2.04655290172251,
+                2.95344709827749,
+                5
+              ]
+            }
+          ]
+        },
+        "model_sha256": {
+          "elab.generic-red-led.v1": "c6f2e595c1d7aaa1c798d162a4682042475b4c292de998186fa0c055b2b9aa6f",
+          "ground.v1": "b981a78784d6912d59e83a9e85420a718029deefbbafb1b8a8f292777bcf3240",
+          "ideal-dc.v1": "e55cf05c148010feee1e9a583a1670290dd6c78f5279e80fe289d5121e9f2d74",
+          "ideal-resistor.v1": "dd642b275801f7c71c0ebfa9f6f03bc44a8be35d97c7b04ab96bb4278908f4ee"
+        }
+      }
+    ],
+    "selected_index": 0,
+    "viewing": false
+  },
+  "paused": true,
+  "scope_probes": {
+    "ids": []
+  },
+  "format": "elab.schematic",
+  "version": 4,
+  "graph": {
+    "components": [
+      {
+        "id": "Supply",
+        "kind": "dc-source",
+        "name": "DC source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-dc.v1",
+        "rotation": 0
+      },
+      {
+        "id": "Limit",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -110
+        },
+        "value": 2000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "Light",
+        "kind": "led",
+        "name": "Red LED",
+        "terminals": [
+          "anode",
+          "cathode"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 0,
+        "model": "elab.generic-red-led.v1",
+        "rotation": 0
+      },
+      {
+        "id": "Earth",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 110
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "Supply.positive",
+        "to": "Limit.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "Limit.2",
+        "to": "Light.anode",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "Light.cathode",
+        "to": "Earth.reference",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "Earth.reference",
+        "to": "Supply.negative",
+        "connected": true
+      }
+    ]
+  },
+  "view": {
+    "center": {
+      "x": 0,
+      "y": 0
+    },
+    "zoom": 1
+  },
+  "led_model": {
+    "id": "elab.generic-red-led.v1",
+    "is_a": 1e-20,
+    "n": 2,
+    "rs_ohm": 1,
+    "temperature_c": 27,
+    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+  },
+  "transient_settings": {
+    "step_s": 0.001,
+    "high_s": 0.05,
+    "low_s": 0.05,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.02
+  }
+}
