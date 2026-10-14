@@ -50,11 +50,24 @@ func buttonStyle(n ui.Node, selected bool) ui.Node {
 	}
 	return n
 }
+
+type actionContext struct {
+	revision, generation uint64
+}
+
 func (s *screen) action(id, text, command string, p any) ui.Node {
-	return buttonStyle(ui.Node{ID: id, Kind: ui.Button, Text: text, Accessibility: ui.Accessibility{Name: text}, Activate: func() { s.invoke(command, p) }}, false)
+	context := s.actionContext
+	if context == nil {
+		state := s.service.Snapshot()
+		context = &actionContext{state.CommandRevision, state.Document.Generation}
+	}
+	return buttonStyle(ui.Node{ID: id, Kind: ui.Button, Text: text, Accessibility: ui.Accessibility{Name: text}, Activate: func() { s.invokeAtCommandRevision(command, p, context.revision, context.generation) }}, false)
 }
 func (s *screen) view() ui.Node {
 	state := s.service.Snapshot()
+	previousContext := s.actionContext
+	s.actionContext = &actionContext{state.CommandRevision, state.Document.Generation}
+	defer func() { s.actionContext = previousContext }()
 	colors := paletteForTheme(state.Theme)
 	s.nativePalette.Store(&colors)
 	if s.requestHelp != nil && state.CommandRevision != s.requestHelpRevision {

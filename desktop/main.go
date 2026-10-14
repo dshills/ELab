@@ -182,12 +182,13 @@ type screen struct {
 	nativePalette                    atomic.Pointer[appPalette]
 	menuSerial                       uint64
 	menuCommandRevision              *uint64
+	actionContext                    *actionContext
 }
 
 func (s *screen) invoke(id string, p any) workbench.Response {
 	return s.invokeAtCommandRevision(id, p, s.service.Snapshot().CommandRevision)
 }
-func (s *screen) invokeAtCommandRevision(id string, p any, rev uint64) workbench.Response {
+func (s *screen) invokeAtCommandRevision(id string, p any, rev uint64, generation ...uint64) workbench.Response {
 	if s.menuCommandRevision != nil {
 		rev = *s.menuCommandRevision
 	}
@@ -199,6 +200,9 @@ func (s *screen) invokeAtCommandRevision(id string, p any, rev uint64) workbench
 		s.errorMessage = ""
 	}
 	request := workbench.Request{Version: 1, ID: fmt.Sprintf("ui-%d", s.serial), Command: id, Params: raw, ExpectedCommandRevision: &rev, Key: fmt.Sprintf("ui-%d", s.serial)}
+	if len(generation) > 0 {
+		request.ExpectedDocumentGeneration = &generation[0]
+	}
 	result := s.service.Dispatch(context.Background(), request, "user")
 	if result.Error != nil {
 		s.errorMessage = result.Error.Message

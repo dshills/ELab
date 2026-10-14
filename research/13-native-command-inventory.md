@@ -1,0 +1,33 @@
+# Native control and command inventory
+
+The [source ledger](13-native-command-inventory.json) records **32 production native Go files, 259 source sites and 112 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 91 public commands. The remaining 21 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
+
+**92 sites require binding review.** The other categories are 143 literal routes, seven declared native-wrapper sites, 15 registry declarations and two menu sets. These are syntax sites, including overlapping factories and callbacks; they are not 259 unique visible controls or 91 runtime-qualified capabilities. No literal route names an unknown command.
+
+The ledger covers action/button/menu factories, package-level native menus, registry tables, callback fields/assignments, time-field factories, custom canvases, event routers, direct request command fields and shared dispatch bridges. Each entry retains its source, line, enclosing function and expression. File hashes and the public ID set make changes reproducible and reviewable. Both platform Go files are included; smoke/tests, framework internals and Objective-C event delivery are excluded and remain separate evidence scopes.
+
+The standard build creates `build/elab-ui-audit`. To check the current sources:
+
+```sh
+./build/elab-ui-audit --verify research/13-native-command-inventory.json
+```
+
+To review a change, create a candidate at a new path:
+
+```sh
+./build/elab-ui-audit --output build/native-inventory-candidate.json
+```
+
+The tool never overwrites an existing output. Compare the candidate's routes and source changes before updating the ledger; regeneration alone is not a review. Root tests verify ledger freshness and reject unknown literal routes. Deliberate fixture changes exercise dynamic callbacks, field assignments, menu routes, excluded smoke code and source digest changes.
+
+## Defect found during review
+
+Ordinary `screen.action` buttons previously captured targets/parameters from the rendered view but obtained a fresh mutation revision at activation. An old Apply button could overwrite an agent's newer resistance; an old Delete could act on an obsolete selection. Actions now capture the view's command revision and document generation. A single immutable context is shared while constructing the view, avoiding repeated full snapshot cloning per button.
+
+The optional public request `expected_document_generation` guard checks document identity atomically alongside the required revision guard. It also rejects an action rendered after background-open admission but before document publication, when command revision alone remains unchanged. Successful retry keys still return their original retained response; this guard is context, not part of command intent. Existing clients without it remain supported.
+
+Native regressions prove stale Apply/Delete refusal and normal fresh Apply. A controlled blocked-loader regression proves the publication-only case, and core tests cover optional/required guard behavior and retry preservation. [Release evidence](../docs/validation/native-inventory-validation.json) records the broader checks. This repair covers ordinary action-factory buttons; it does not establish every raw field, registry wrapper, native menu, pointer gesture or framework lifecycle path.
+
+## Remaining qualification
+
+Resolve the 92 dynamic/relay/custom sites against instantiated states and public parameters, and attach runtime evidence per user capability. Audit file Save/Discard/Cancel semantics, raw field commits/IME, full menu/keyboard/focus behavior, canvas gesture lifetimes and the framework's window lifecycle. Inspection/readout equivalence also needs explicit evidence where the UI consumes shared Go snapshots/functions directly. Full agent parity stays **partial** until those proofs exist; this inventory prevents source drift and makes the remaining work explicit.

@@ -8,5 +8,6 @@ export CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native'
 mkdir -p build
 go build -o build/elab-agent ./cmd/elab-agent
 go build -o build/elab-conformance ./cmd/elab-conformance
+go build -o build/elab-ui-audit ./cmd/elab-ui-audit
 cd desktop
 go build -o ../build/elab .

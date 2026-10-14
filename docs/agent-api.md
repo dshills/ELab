@@ -244,3 +244,5 @@ Time-valued command inputs also accept bounded decimal/scientific text with `s`,
 macOS menu and selector presentation uses AppKit while retaining original shared command callbacks. Native menus capture the descriptor’s command revision and carry it through shared-command admission, so an agent edit during menu tracking cannot apply a stale selection. Dismissal does not mutate state. See [native menu behavior and limits](native-menus.md).
 
 `capabilities.list` accepts an optional `command` filter for one expanded input schema. Five electrical/example commands additionally advertise bounds, normalized-SI relations and runnable parameter examples; {} retains full discovery. [Detailed discovery contract](capability-details.md). Stateful/error/native-action coverage remains incomplete.
+
+Mutations also accept optional top-level `expected_document_generation` from the observed snapshot; it supplements the required revision guard and is checked atomically. Successful retry lookup still precedes all guard checks. [Document context and rendered actions](document-context-guard.md).

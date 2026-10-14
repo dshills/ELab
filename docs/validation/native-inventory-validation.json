@@ -1,0 +1,55 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "version": "0.45.0",
+  "build": "60",
+  "binary_sha256": "ac46147e53d6e85448bad6d1ddb682e8660c560de0fc2d2e908df0f3a13cc4ab",
+  "packaged_binary_matches": true,
+  "vellum_baseline": {
+    "recorded": "2026-10-14",
+    "version": "checkout 68c3750",
+    "commit": "68c3750243326ce9120fd2d5ff5b0d610cc36d9e",
+    "local_checkout": "../../Vellum (relative to desktop/go.mod)",
+    "native_dependency_manifest": "drivers/cogent/native/dependencies.json",
+    "native_dependency_manifest_sha256": "5f618431228a80ea4a23db1e5ebc241ac3a8b702bcc1fc8c479cc84e77bbfa58",
+    "go_directive": "1.25.6",
+    "tested_go": "go1.27.2 darwin/arm64",
+    "root_module": "github.com/dshills/elab",
+    "desktop_module": "github.com/dshills/elab/desktop",
+    "status": "Local checkout integration; relocatable SDK distribution remains a later gate"
+  },
+  "inventory": {
+    "sources": 32,
+    "sites": 259,
+    "public_commands": 112,
+    "source_routes": 91,
+    "binding_review_sites": 92,
+    "sha256": "fd45944af5d4baa2a83141a0dd1339291e520b0e6e2459ed901300a8b04c95a4"
+  },
+  "checks": [
+    "Deterministic Go AST source ledger covers control factories, menu/registry declarations, callback fields/assignments, event/custom routers and request/dispatch ingress; no unknown literal routes",
+    "Freshness gate in root tests detects native source/public ID changes; synthetic regressions detect unknown routes, dynamic callbacks, excluded smoke code and source digest changes",
+    "Rendered Apply/Delete captured from an old view refuse intervening agent edits/selections and preserve state; fresh Apply succeeds",
+    "Single immutable context reused during view construction avoids cloning full snapshots per action button",
+    "Optional envelope document guard is checked atomically after successful retry lookup; legacy revision admission remains mandatory and supported",
+    "Controlled blocked-loader test rejects old document context after publication without another command revision; retry/source-state invariants pass",
+    "Headless and exact packaged public guard workflows pass; exact native/GPU smoke passes; all four original reference workflows agree",
+    "Full lint/import/root/native race and vet pass; final requalification against observed current Vellum rendering baseline passes; final build hash matches tested package"
+  ],
+  "evidence": [
+    "research/13-native-command-inventory.json",
+    "research/13-native-command-inventory.md",
+    "docs/document-context-guard.md",
+    "docs/validation/headless-document-guard.json",
+    "docs/validation/desktop-document-guard.json",
+    "docs/validation/native-inventory-conformance.json"
+  ],
+  "limits_of_evidence": [
+    "Source route references are not unique control counts or runtime execution coverage; declared native aliases are reviewed semantic mappings, not inferred call-graph proof",
+    "92 dynamic/relay/custom sites need binding/state/mounted-runtime qualification; framework internals and Objective-C event delivery are outside the source inventory",
+    "Ordinary action-factory buttons now capture both guards; complete raw-field/menu/registry/gesture/lifecycle coverage remains open",
+    "No mounted screenshot or human accessibility/participant outcome is claimed",
+    "Private unsigned development bundle; clean distribution and other PRD acceptance gates remain open",
+    "Previous bundle retained in build/ELab-before-native-inventory.app; owned native checks close through app.close; user files/sessions and sibling SDK preserved"
+  ]
+}

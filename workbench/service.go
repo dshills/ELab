@@ -685,7 +685,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 			return fail("invalid-params", err.Error())
 		}
 		if r.Command == "capabilities.list" {
-			out.Result = map[string]any{"version": ProtocolVersion, "schema_version": DiscoverySchemaVersion, "schemas": SchemaRegistry(), "capabilities": capabilities, "mutation_preconditions": map[string]string{"expected_revision": "Guards all state publication, including live samples", "expected_command_revision": "Guards admitted commands, including other actors; live solver publication does not invalidate it", "combination": "At least one guard is required for mutations; when both are supplied both must match"}, "events": map[string]any{"command": "events.poll", "mode": "coalesced-latest-state", "max_waiters": MaxEventWaiters, "max_timeout_ms": MaxEventWaitMS, "default_timeout_ms": 1000, "topics": append([]string{}, eventTopics...)}, "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee."}
+			out.Result = map[string]any{"version": ProtocolVersion, "schema_version": DiscoverySchemaVersion, "schemas": SchemaRegistry(), "capabilities": capabilities, "mutation_preconditions": map[string]string{"expected_revision": "Guards all state publication, including live samples", "expected_command_revision": "Guards admitted commands, including other actors; live solver publication does not invalidate it", "expected_document_generation": "Optional mutation context guard; prevents applying an old rendered action to a replacement document, including background publication", "combination": "A revision guard is required; all supplied revision/document guards must match"}, "events": map[string]any{"command": "events.poll", "mode": "coalesced-latest-state", "max_waiters": MaxEventWaiters, "max_timeout_ms": MaxEventWaitMS, "default_timeout_ms": 1000, "topics": append([]string{}, eventTopics...)}, "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee."}
 		} else if r.Command == "parts.list" {
 			out.Result = Library()
 		} else {
@@ -725,6 +725,9 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	}
 	if s.closed {
 		return fail("closed", "session is closed")
+	}
+	if r.ExpectedDocumentGeneration != nil && *r.ExpectedDocumentGeneration != s.documentGeneration {
+		return fail("conflict", "document changed before this action; inspect the current document and retry")
 	}
 	if r.ExpectedRevision != nil && *r.ExpectedRevision != s.revision {
 		return fail("conflict", fmt.Sprintf("expected revision %d; current revision is %d", *r.ExpectedRevision, s.revision))
