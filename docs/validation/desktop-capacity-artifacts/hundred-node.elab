@@ -1,0 +1,4160 @@
+{
+  "potentiometer_model": {
+    "id": "elab.linear-potentiometer.v1",
+    "end_resistance_ohm": 1,
+    "limitations": "Generic linear three-pin resistive track. Total resistance is split into two segments, each with 1 ohm endpoint resistance. Position 0 is toward pin 2; position 1 is toward pin 1. No contact noise, nonlinear taper, ratings, heating or physical part identity."
+  },
+  "recordings": {
+    "entries": [
+      {
+        "data": {
+          "metadata": {
+            "potentiometer_model": {
+              "id": "elab.linear-potentiometer.v1",
+              "end_resistance_ohm": 1,
+              "limitations": "Generic linear three-pin resistive track. Total resistance is split into two segments, each with 1 ohm endpoint resistance. Position 0 is toward pin 2; position 1 is toward pin 1. No contact noise, nonlinear taper, ratings, heating or physical part identity."
+            },
+            "format": "elab.verification",
+            "version": 1,
+            "operation_id": "verify-1",
+            "created_at": "2026-10-14T03:45:59.331561Z",
+            "input_revision": 15,
+            "electrical_revision": 3,
+            "document_generation": 2,
+            "graph": {
+              "components": [
+                {
+                  "id": "V1",
+                  "kind": "pulse-source",
+                  "name": "Pulse source",
+                  "terminals": [
+                    "positive",
+                    "negative"
+                  ],
+                  "position": {
+                    "x": -800,
+                    "y": 0
+                  },
+                  "value": 5,
+                  "unit": "V",
+                  "model": "ideal-square.v1",
+                  "rotation": 0
+                },
+                {
+                  "id": "GND1",
+                  "kind": "ground",
+                  "name": "Ground",
+                  "terminals": [
+                    "reference"
+                  ],
+                  "position": {
+                    "x": 800,
+                    "y": 0
+                  },
+                  "value": 0,
+                  "model": "ground.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P1",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -560,
+                    "y": -560
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P2",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -400,
+                    "y": -560
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P3",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -240,
+                    "y": -560
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P4",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -80,
+                    "y": -560
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P5",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 80,
+                    "y": -560
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P6",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 240,
+                    "y": -560
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P7",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 400,
+                    "y": -560
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P8",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 560,
+                    "y": -560
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P9",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -560,
+                    "y": -400
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P10",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -400,
+                    "y": -400
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P11",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -240,
+                    "y": -400
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P12",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -80,
+                    "y": -400
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P13",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 80,
+                    "y": -400
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P14",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 240,
+                    "y": -400
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P15",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 400,
+                    "y": -400
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P16",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 560,
+                    "y": -400
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P17",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -560,
+                    "y": -240
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P18",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -400,
+                    "y": -240
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P19",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -240,
+                    "y": -240
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P20",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -80,
+                    "y": -240
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P21",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 80,
+                    "y": -240
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P22",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 240,
+                    "y": -240
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P23",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 400,
+                    "y": -240
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P24",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 560,
+                    "y": -240
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P25",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -560,
+                    "y": -80
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P26",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -400,
+                    "y": -80
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P27",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -240,
+                    "y": -80
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P28",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -80,
+                    "y": -80
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P29",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 80,
+                    "y": -80
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P30",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 240,
+                    "y": -80
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P31",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 400,
+                    "y": -80
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P32",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 560,
+                    "y": -80
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P33",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -560,
+                    "y": 80
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P34",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -400,
+                    "y": 80
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P35",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -240,
+                    "y": 80
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P36",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -80,
+                    "y": 80
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P37",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 80,
+                    "y": 80
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P38",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 240,
+                    "y": 80
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P39",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 400,
+                    "y": 80
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P40",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 560,
+                    "y": 80
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P41",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -560,
+                    "y": 240
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P42",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -400,
+                    "y": 240
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P43",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -240,
+                    "y": 240
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P44",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -80,
+                    "y": 240
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P45",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 80,
+                    "y": 240
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P46",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 240,
+                    "y": 240
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P47",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 400,
+                    "y": 240
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P48",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": 560,
+                    "y": 240
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P49",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -560,
+                    "y": 400
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                },
+                {
+                  "wiper_position": 0.5,
+                  "id": "P50",
+                  "kind": "potentiometer",
+                  "name": "Potentiometer",
+                  "terminals": [
+                    "1",
+                    "2",
+                    "wiper"
+                  ],
+                  "position": {
+                    "x": -400,
+                    "y": 400
+                  },
+                  "value": 10000,
+                  "unit": "Ω",
+                  "model": "elab.linear-potentiometer.v1",
+                  "rotation": 0
+                }
+              ],
+              "wires": [
+                {
+                  "id": "W1",
+                  "from": "V1.positive",
+                  "to": "P1.1",
+                  "connected": true
+                },
+                {
+                  "id": "W2",
+                  "from": "P1.2",
+                  "to": "P2.1",
+                  "connected": true
+                },
+                {
+                  "id": "W3",
+                  "from": "P2.2",
+                  "to": "P3.1",
+                  "connected": true
+                },
+                {
+                  "id": "W4",
+                  "from": "P3.2",
+                  "to": "P4.1",
+                  "connected": true
+                },
+                {
+                  "id": "W5",
+                  "from": "P4.2",
+                  "to": "P5.1",
+                  "connected": true
+                },
+                {
+                  "id": "W6",
+                  "from": "P5.2",
+                  "to": "P6.1",
+                  "connected": true
+                },
+                {
+                  "id": "W7",
+                  "from": "P6.2",
+                  "to": "P7.1",
+                  "connected": true
+                },
+                {
+                  "id": "W8",
+                  "from": "P7.2",
+                  "to": "P8.1",
+                  "connected": true
+                },
+                {
+                  "id": "W9",
+                  "from": "P8.2",
+                  "to": "P9.1",
+                  "connected": true
+                },
+                {
+                  "id": "W10",
+                  "from": "P9.2",
+                  "to": "P10.1",
+                  "connected": true
+                },
+                {
+                  "id": "W11",
+                  "from": "P10.2",
+                  "to": "P11.1",
+                  "connected": true
+                },
+                {
+                  "id": "W12",
+                  "from": "P11.2",
+                  "to": "P12.1",
+                  "connected": true
+                },
+                {
+                  "id": "W13",
+                  "from": "P12.2",
+                  "to": "P13.1",
+                  "connected": true
+                },
+                {
+                  "id": "W14",
+                  "from": "P13.2",
+                  "to": "P14.1",
+                  "connected": true
+                },
+                {
+                  "id": "W15",
+                  "from": "P14.2",
+                  "to": "P15.1",
+                  "connected": true
+                },
+                {
+                  "id": "W16",
+                  "from": "P15.2",
+                  "to": "P16.1",
+                  "connected": true
+                },
+                {
+                  "id": "W17",
+                  "from": "P16.2",
+                  "to": "P17.1",
+                  "connected": true
+                },
+                {
+                  "id": "W18",
+                  "from": "P17.2",
+                  "to": "P18.1",
+                  "connected": true
+                },
+                {
+                  "id": "W19",
+                  "from": "P18.2",
+                  "to": "P19.1",
+                  "connected": true
+                },
+                {
+                  "id": "W20",
+                  "from": "P19.2",
+                  "to": "P20.1",
+                  "connected": true
+                },
+                {
+                  "id": "W21",
+                  "from": "P20.2",
+                  "to": "P21.1",
+                  "connected": true
+                },
+                {
+                  "id": "W22",
+                  "from": "P21.2",
+                  "to": "P22.1",
+                  "connected": true
+                },
+                {
+                  "id": "W23",
+                  "from": "P22.2",
+                  "to": "P23.1",
+                  "connected": true
+                },
+                {
+                  "id": "W24",
+                  "from": "P23.2",
+                  "to": "P24.1",
+                  "connected": true
+                },
+                {
+                  "id": "W25",
+                  "from": "P24.2",
+                  "to": "P25.1",
+                  "connected": true
+                },
+                {
+                  "id": "W26",
+                  "from": "P25.2",
+                  "to": "P26.1",
+                  "connected": true
+                },
+                {
+                  "id": "W27",
+                  "from": "P26.2",
+                  "to": "P27.1",
+                  "connected": true
+                },
+                {
+                  "id": "W28",
+                  "from": "P27.2",
+                  "to": "P28.1",
+                  "connected": true
+                },
+                {
+                  "id": "W29",
+                  "from": "P28.2",
+                  "to": "P29.1",
+                  "connected": true
+                },
+                {
+                  "id": "W30",
+                  "from": "P29.2",
+                  "to": "P30.1",
+                  "connected": true
+                },
+                {
+                  "id": "W31",
+                  "from": "P30.2",
+                  "to": "P31.1",
+                  "connected": true
+                },
+                {
+                  "id": "W32",
+                  "from": "P31.2",
+                  "to": "P32.1",
+                  "connected": true
+                },
+                {
+                  "id": "W33",
+                  "from": "P32.2",
+                  "to": "P33.1",
+                  "connected": true
+                },
+                {
+                  "id": "W34",
+                  "from": "P33.2",
+                  "to": "P34.1",
+                  "connected": true
+                },
+                {
+                  "id": "W35",
+                  "from": "P34.2",
+                  "to": "P35.1",
+                  "connected": true
+                },
+                {
+                  "id": "W36",
+                  "from": "P35.2",
+                  "to": "P36.1",
+                  "connected": true
+                },
+                {
+                  "id": "W37",
+                  "from": "P36.2",
+                  "to": "P37.1",
+                  "connected": true
+                },
+                {
+                  "id": "W38",
+                  "from": "P37.2",
+                  "to": "P38.1",
+                  "connected": true
+                },
+                {
+                  "id": "W39",
+                  "from": "P38.2",
+                  "to": "P39.1",
+                  "connected": true
+                },
+                {
+                  "id": "W40",
+                  "from": "P39.2",
+                  "to": "P40.1",
+                  "connected": true
+                },
+                {
+                  "id": "W41",
+                  "from": "P40.2",
+                  "to": "P41.1",
+                  "connected": true
+                },
+                {
+                  "id": "W42",
+                  "from": "P41.2",
+                  "to": "P42.1",
+                  "connected": true
+                },
+                {
+                  "id": "W43",
+                  "from": "P42.2",
+                  "to": "P43.1",
+                  "connected": true
+                },
+                {
+                  "id": "W44",
+                  "from": "P43.2",
+                  "to": "P44.1",
+                  "connected": true
+                },
+                {
+                  "id": "W45",
+                  "from": "P44.2",
+                  "to": "P45.1",
+                  "connected": true
+                },
+                {
+                  "id": "W46",
+                  "from": "P45.2",
+                  "to": "P46.1",
+                  "connected": true
+                },
+                {
+                  "id": "W47",
+                  "from": "P46.2",
+                  "to": "P47.1",
+                  "connected": true
+                },
+                {
+                  "id": "W48",
+                  "from": "P47.2",
+                  "to": "P48.1",
+                  "connected": true
+                },
+                {
+                  "id": "W49",
+                  "from": "P48.2",
+                  "to": "P49.1",
+                  "connected": true
+                },
+                {
+                  "id": "W50",
+                  "from": "P49.2",
+                  "to": "P50.1",
+                  "connected": true
+                },
+                {
+                  "id": "W51",
+                  "from": "P50.2",
+                  "to": "GND1.reference",
+                  "connected": true
+                },
+                {
+                  "id": "W52",
+                  "from": "V1.negative",
+                  "to": "GND1.reference",
+                  "connected": true
+                },
+                {
+                  "id": "W53",
+                  "from": "P50.wiper",
+                  "to": "P50.1",
+                  "connected": true
+                }
+              ]
+            },
+            "settings": {
+              "step_s": 0.001,
+              "high_s": 0.05,
+              "low_s": 0.05,
+              "initial_voltage_v": 0,
+              "seconds_per_wall_second": 0.02
+            },
+            "input_mode": "auto",
+            "analysis": "Network transient",
+            "engine": "elab.network-mna-be.v1",
+            "led_model": {
+              "id": "elab.generic-red-led.v1",
+              "is_a": 1e-20,
+              "n": 2,
+              "rs_ohm": 1,
+              "temperature_c": 27,
+              "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+            },
+            "probes": [
+              {
+                "id": "v:V1",
+                "label": "V1 voltage",
+                "unit": "V",
+                "positive": "V1.positive",
+                "reference": "V1.negative"
+              },
+              {
+                "id": "v:P1.wiper",
+                "label": "P1.wiper / ground",
+                "unit": "V",
+                "positive": "P1.wiper",
+                "reference": "ground"
+              },
+              {
+                "id": "v:P25.wiper",
+                "label": "P25.wiper / ground",
+                "unit": "V",
+                "positive": "P25.wiper",
+                "reference": "ground"
+              },
+              {
+                "id": "i:P49.1",
+                "label": "P49.1 current into device",
+                "unit": "A",
+                "positive": "P49.1",
+                "reference": "into device"
+              }
+            ],
+            "duration_s": 0.06,
+            "sample_count": 63,
+            "statistics": [
+              {
+                "probe_id": "v:V1",
+                "count": 63,
+                "min": 0,
+                "max": 5,
+                "sample_mean": 4.0476190476190474,
+                "sample_rms": 4.4986770542121866
+              },
+              {
+                "probe_id": "v:P1.wiper",
+                "count": 63,
+                "min": 3.0531133177191805e-16,
+                "max": 4.949494949494949,
+                "sample_mean": 4.006734006734006,
+                "sample_rms": 4.453235871846406
+              },
+              {
+                "probe_id": "v:P25.wiper",
+                "count": 63,
+                "min": 4.274358644806853e-15,
+                "max": 2.525252525252521,
+                "sample_mean": 2.044252044252042,
+                "sample_rms": 2.272059118288979
+              },
+              {
+                "probe_id": "i:P49.1",
+                "count": 63,
+                "min": 2.2204460492503132e-20,
+                "max": 0.000010101010101010078,
+                "sample_mean": 0.000008177008177008158,
+                "sample_rms": 0.000009088236473155915
+              }
+            ],
+            "mixed": {
+              "potentiometers": [
+                {
+                  "id": "P1",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 0,
+                  "terminal_2_voltage_v": 5.828670879282072e-16,
+                  "wiper_voltage_v": 3.0531133177191805e-16,
+                  "terminal_1_current_a": -6.106226635438361e-20,
+                  "terminal_2_current_a": 5.551115123125783e-20,
+                  "wiper_current_a": 5.551115123125785e-21,
+                  "power_w": 3.405044141676633e-35
+                },
+                {
+                  "id": "P2",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 5.828670879282072e-16,
+                  "terminal_2_voltage_v": 1.1657341758564144e-15,
+                  "wiper_voltage_v": 8.881784197001252e-16,
+                  "terminal_1_current_a": -6.106226635438361e-20,
+                  "terminal_2_current_a": 5.551115123125783e-20,
+                  "wiper_current_a": 5.551115123125785e-21,
+                  "power_w": 3.405044141676633e-35
+                },
+                {
+                  "id": "P3",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 1.1657341758564144e-15,
+                  "terminal_2_voltage_v": 1.6930901125533637e-15,
+                  "wiper_voltage_v": 1.4432899320127035e-15,
+                  "terminal_1_current_a": -5.551115123125783e-20,
+                  "terminal_2_current_a": 4.996003610813204e-20,
+                  "wiper_current_a": 5.551115123125785e-21,
+                  "power_w": 2.788746559472717e-35
+                },
+                {
+                  "id": "P4",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 1.6930901125533637e-15,
+                  "terminal_2_voltage_v": 2.1649348980190553e-15,
+                  "wiper_voltage_v": 1.942890293094024e-15,
+                  "terminal_1_current_a": -4.996003610813204e-20,
+                  "terminal_2_current_a": 4.4408920985006264e-20,
+                  "wiper_current_a": 5.551115123125779e-21,
+                  "power_w": 2.2340787354891937e-35
+                },
+                {
+                  "id": "P5",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 2.1649348980190553e-15,
+                  "terminal_2_voltage_v": 2.581268532253489e-15,
+                  "wiper_voltage_v": 2.3869795029440866e-15,
+                  "terminal_1_current_a": -4.4408920985006264e-20,
+                  "terminal_2_current_a": 3.885780586188048e-20,
+                  "wiper_current_a": 5.551115123125785e-21,
+                  "power_w": 1.7410406697260614e-35
+                },
+                {
+                  "id": "P6",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 2.581268532253489e-15,
+                  "terminal_2_voltage_v": 2.914335439641036e-15,
+                  "wiper_voltage_v": 2.7478019859472624e-15,
+                  "terminal_1_current_a": -3.3306690738754693e-20,
+                  "terminal_2_current_a": 3.3306690738754693e-20,
+                  "wiper_current_a": 0,
+                  "power_w": 1.1093356479670478e-35
+                },
+                {
+                  "id": "P7",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 2.914335439641036e-15,
+                  "terminal_2_voltage_v": 3.219646771412954e-15,
+                  "wiper_voltage_v": 3.0808688933348094e-15,
+                  "terminal_1_current_a": -3.3306690738754693e-20,
+                  "terminal_2_current_a": 2.7755575615628914e-20,
+                  "wiper_current_a": 5.551115123125779e-21,
+                  "power_w": 9.39853812860971e-36
+                },
+                {
+                  "id": "P8",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 3.219646771412954e-15,
+                  "terminal_2_voltage_v": 3.497202527569243e-15,
+                  "wiper_voltage_v": 3.3584246494910985e-15,
+                  "terminal_1_current_a": -2.7755575615628914e-20,
+                  "terminal_2_current_a": 2.7755575615628914e-20,
+                  "wiper_current_a": 0,
+                  "power_w": 7.703719777548944e-36
+                },
+                {
+                  "id": "P9",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 3.497202527569243e-15,
+                  "terminal_2_voltage_v": 3.6637359812630166e-15,
+                  "wiper_voltage_v": 3.608224830031759e-15,
+                  "terminal_1_current_a": -2.2204460492503132e-20,
+                  "terminal_2_current_a": 1.1102230246251566e-20,
+                  "wiper_current_a": 1.1102230246251566e-20,
+                  "power_w": 3.0814879110195774e-36
+                },
+                {
+                  "id": "P10",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 3.6637359812630166e-15,
+                  "terminal_2_voltage_v": 3.747002708109903e-15,
+                  "wiper_voltage_v": 3.7192471324942744e-15,
+                  "terminal_1_current_a": -1.1102230246251566e-20,
+                  "terminal_2_current_a": 5.551115123125783e-21,
+                  "wiper_current_a": 5.551115123125783e-21,
+                  "power_w": 7.703719777548944e-37
+                },
+                {
+                  "id": "P11",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 3.747002708109903e-15,
+                  "terminal_2_voltage_v": 3.858025010572419e-15,
+                  "wiper_voltage_v": 3.802513859341161e-15,
+                  "terminal_1_current_a": -1.1102230246251566e-20,
+                  "terminal_2_current_a": 1.1102230246251566e-20,
+                  "wiper_current_a": 0,
+                  "power_w": 1.232595164407831e-36
+                },
+                {
+                  "id": "P12",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 3.858025010572419e-15,
+                  "terminal_2_voltage_v": 3.913536161803677e-15,
+                  "wiper_voltage_v": 3.885780586188048e-15,
+                  "terminal_1_current_a": -5.551115123125783e-21,
+                  "terminal_2_current_a": 5.551115123125783e-21,
+                  "wiper_current_a": 0,
+                  "power_w": 3.0814879110195775e-37
+                },
+                {
+                  "id": "P13",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 3.913536161803677e-15,
+                  "terminal_2_voltage_v": 3.969047313034935e-15,
+                  "wiper_voltage_v": 3.941291737419306e-15,
+                  "terminal_1_current_a": -5.551115123125783e-21,
+                  "terminal_2_current_a": 5.551115123125783e-21,
+                  "wiper_current_a": 0,
+                  "power_w": 3.0814879110195775e-37
+                },
+                {
+                  "id": "P14",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 3.969047313034935e-15,
+                  "terminal_2_voltage_v": 4.08006961549745e-15,
+                  "wiper_voltage_v": 4.0245584642661925e-15,
+                  "terminal_1_current_a": -1.1102230246251566e-20,
+                  "terminal_2_current_a": 1.1102230246251566e-20,
+                  "wiper_current_a": 0,
+                  "power_w": 1.232595164407831e-36
+                },
+                {
+                  "id": "P15",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 4.08006961549745e-15,
+                  "terminal_2_voltage_v": 4.135580766728708e-15,
+                  "wiper_voltage_v": 4.107825191113079e-15,
+                  "terminal_1_current_a": -5.551115123125783e-21,
+                  "terminal_2_current_a": 5.551115123125783e-21,
+                  "wiper_current_a": 0,
+                  "power_w": 3.0814879110195775e-37
+                },
+                {
+                  "id": "P16",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 4.135580766728708e-15,
+                  "terminal_2_voltage_v": 4.218847493575595e-15,
+                  "wiper_voltage_v": 4.191091917959966e-15,
+                  "terminal_1_current_a": -1.1102230246251566e-20,
+                  "terminal_2_current_a": 5.551115123125783e-21,
+                  "wiper_current_a": 5.551115123125783e-21,
+                  "power_w": 7.703719777548944e-37
+                },
+                {
+                  "id": "P17",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 4.218847493575595e-15,
+                  "terminal_2_voltage_v": 4.274358644806853e-15,
+                  "wiper_voltage_v": 4.246603069191224e-15,
+                  "terminal_1_current_a": -5.551115123125783e-21,
+                  "terminal_2_current_a": 5.551115123125783e-21,
+                  "wiper_current_a": 0,
+                  "power_w": 3.0814879110195775e-37
+                },
+                {
+                  "id": "P18",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 4.274358644806853e-15,
+                  "terminal_2_voltage_v": 4.3298697960381105e-15,
+                  "wiper_voltage_v": 4.3021142204224816e-15,
+                  "terminal_1_current_a": -5.551115123125783e-21,
+                  "terminal_2_current_a": 5.551115123125783e-21,
+                  "wiper_current_a": 0,
+                  "power_w": 3.0814879110195775e-37
+                },
+                {
+                  "id": "P19",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 4.3298697960381105e-15,
+                  "terminal_2_voltage_v": 4.371503159461554e-15,
+                  "wiper_voltage_v": 4.3576253716537394e-15,
+                  "terminal_1_current_a": -5.551115123125783e-21,
+                  "terminal_2_current_a": 2.7755575615628915e-21,
+                  "wiper_current_a": 2.7755575615628915e-21,
+                  "power_w": 1.925929944387236e-37
+                },
+                {
+                  "id": "P20",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 4.371503159461554e-15,
+                  "terminal_2_voltage_v": 4.385380947269368e-15,
+                  "wiper_voltage_v": 4.385380947269368e-15,
+                  "terminal_1_current_a": -2.7755575615628915e-21,
+                  "terminal_2_current_a": 0,
+                  "wiper_current_a": 2.7755575615628915e-21,
+                  "power_w": 3.851859888774472e-38
+                },
+                {
+                  "id": "P21",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 4.385380947269368e-15,
+                  "terminal_2_voltage_v": 4.385380947269368e-15,
+                  "wiper_voltage_v": 4.385380947269368e-15,
+                  "terminal_1_current_a": 0,
+                  "terminal_2_current_a": 0,
+                  "wiper_current_a": -0,
+                  "power_w": 0
+                },
+                {
+                  "id": "P22",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 4.385380947269368e-15,
+                  "terminal_2_voltage_v": 4.3576253716537394e-15,
+                  "wiper_voltage_v": 4.371503159461554e-15,
+                  "terminal_1_current_a": 2.7755575615628915e-21,
+                  "terminal_2_current_a": -2.7755575615628915e-21,
+                  "wiper_current_a": 0,
+                  "power_w": 7.703719777548944e-38
+                },
+                {
+                  "id": "P23",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 4.3576253716537394e-15,
+                  "terminal_2_voltage_v": 4.343747583845925e-15,
+                  "wiper_voltage_v": 4.343747583845925e-15,
+                  "terminal_1_current_a": 2.7755575615628915e-21,
+                  "terminal_2_current_a": 0,
+                  "wiper_current_a": -2.7755575615628915e-21,
+                  "power_w": 3.851859888774472e-38
+                },
+                {
+                  "id": "P24",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 4.343747583845925e-15,
+                  "terminal_2_voltage_v": 4.288236432614667e-15,
+                  "wiper_voltage_v": 4.315992008230296e-15,
+                  "terminal_1_current_a": 5.551115123125783e-21,
+                  "terminal_2_current_a": -5.551115123125783e-21,
+                  "wiper_current_a": 0,
+                  "power_w": 3.0814879110195775e-37
+                },
+                {
+                  "id": "P25",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 4.288236432614667e-15,
+                  "terminal_2_voltage_v": 4.232725281383409e-15,
+                  "wiper_voltage_v": 4.274358644806853e-15,
+                  "terminal_1_current_a": 2.7755575615628915e-21,
+                  "terminal_2_current_a": -8.326672684688673e-21,
+                  "wiper_current_a": 5.551115123125782e-21,
+                  "power_w": 3.851859888774472e-37
+                },
+                {
+                  "id": "P26",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 4.232725281383409e-15,
+                  "terminal_2_voltage_v": 4.163336342344337e-15,
+                  "wiper_voltage_v": 4.2049697057677804e-15,
+                  "terminal_1_current_a": 5.551115123125783e-21,
+                  "terminal_2_current_a": -8.326672684688673e-21,
+                  "wiper_current_a": 2.7755575615628904e-21,
+                  "power_w": 5.007417855406813e-37
+                },
+                {
+                  "id": "P27",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 4.163336342344337e-15,
+                  "terminal_2_voltage_v": 4.08006961549745e-15,
+                  "wiper_voltage_v": 4.121702978920894e-15,
+                  "terminal_1_current_a": 8.326672684688673e-21,
+                  "terminal_2_current_a": -8.326672684688673e-21,
+                  "wiper_current_a": 0,
+                  "power_w": 6.933347799794049e-37
+                },
+                {
+                  "id": "P28",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 4.08006961549745e-15,
+                  "terminal_2_voltage_v": 3.982925100842749e-15,
+                  "wiper_voltage_v": 4.038436252074007e-15,
+                  "terminal_1_current_a": 8.326672684688673e-21,
+                  "terminal_2_current_a": -1.1102230246251566e-20,
+                  "wiper_current_a": 2.7755575615628926e-21,
+                  "power_w": 9.62964972193618e-37
+                },
+                {
+                  "id": "P29",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 3.982925100842749e-15,
+                  "terminal_2_voltage_v": 3.8719027983802334e-15,
+                  "wiper_voltage_v": 3.941291737419306e-15,
+                  "terminal_1_current_a": 8.326672684688673e-21,
+                  "terminal_2_current_a": -1.3877787807814457e-20,
+                  "wiper_current_a": 5.551115123125784e-21,
+                  "power_w": 1.3096323621833203e-36
+                },
+                {
+                  "id": "P30",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 3.8719027983802334e-15,
+                  "terminal_2_voltage_v": 3.747002708109903e-15,
+                  "wiper_voltage_v": 3.816391647148976e-15,
+                  "terminal_1_current_a": 1.1102230246251566e-20,
+                  "terminal_2_current_a": -1.3877787807814457e-20,
+                  "wiper_current_a": 2.775557561562891e-21,
+                  "power_w": 1.5792625543975335e-36
+                },
+                {
+                  "id": "P31",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 3.747002708109903e-15,
+                  "terminal_2_voltage_v": 3.622102617839573e-15,
+                  "wiper_voltage_v": 3.6914915568786455e-15,
+                  "terminal_1_current_a": 1.1102230246251566e-20,
+                  "terminal_2_current_a": -1.3877787807814457e-20,
+                  "wiper_current_a": 2.775557561562891e-21,
+                  "power_w": 1.5792625543975335e-36
+                },
+                {
+                  "id": "P32",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 3.622102617839573e-15,
+                  "terminal_2_voltage_v": 3.4833247397614286e-15,
+                  "wiper_voltage_v": 3.552713678800501e-15,
+                  "terminal_1_current_a": 1.3877787807814457e-20,
+                  "terminal_2_current_a": -1.3877787807814457e-20,
+                  "wiper_current_a": 0,
+                  "power_w": 1.925929944387236e-36
+                },
+                {
+                  "id": "P33",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 3.4833247397614286e-15,
+                  "terminal_2_voltage_v": 3.344546861683284e-15,
+                  "wiper_voltage_v": 3.4139358007223564e-15,
+                  "terminal_1_current_a": 1.3877787807814457e-20,
+                  "terminal_2_current_a": -1.3877787807814457e-20,
+                  "wiper_current_a": 0,
+                  "power_w": 1.925929944387236e-36
+                },
+                {
+                  "id": "P34",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 3.344546861683284e-15,
+                  "terminal_2_voltage_v": 3.1780134079895106e-15,
+                  "wiper_voltage_v": 3.2612801348363973e-15,
+                  "terminal_1_current_a": 1.6653345369377347e-20,
+                  "terminal_2_current_a": -1.6653345369377347e-20,
+                  "wiper_current_a": 0,
+                  "power_w": 2.7733391199176196e-36
+                },
+                {
+                  "id": "P35",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 3.1780134079895106e-15,
+                  "terminal_2_voltage_v": 3.011479954295737e-15,
+                  "wiper_voltage_v": 3.094746681142624e-15,
+                  "terminal_1_current_a": 1.6653345369377347e-20,
+                  "terminal_2_current_a": -1.6653345369377347e-20,
+                  "wiper_current_a": 0,
+                  "power_w": 2.7733391199176196e-36
+                },
+                {
+                  "id": "P36",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 3.011479954295737e-15,
+                  "terminal_2_voltage_v": 2.8380076066980564e-15,
+                  "wiper_voltage_v": 2.9282132274488504e-15,
+                  "terminal_1_current_a": 1.6653345369377347e-20,
+                  "terminal_2_current_a": -1.8041124150158793e-20,
+                  "wiper_current_a": 1.3877787807814463e-21,
+                  "power_w": 3.0140803629660236e-36
+                },
+                {
+                  "id": "P37",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 2.8380076066980564e-15,
+                  "terminal_2_voltage_v": 2.6367796834847468e-15,
+                  "wiper_voltage_v": 2.733924198139448e-15,
+                  "terminal_1_current_a": 2.0816681711721686e-20,
+                  "terminal_2_current_a": -1.942890293094024e-20,
+                  "wiper_current_a": -1.3877787807814463e-21,
+                  "power_w": 4.054082532935131e-36
+                },
+                {
+                  "id": "P38",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 2.6367796834847468e-15,
+                  "terminal_2_voltage_v": 2.4424906541753444e-15,
+                  "wiper_voltage_v": 2.5396351688300456e-15,
+                  "terminal_1_current_a": 1.942890293094024e-20,
+                  "terminal_2_current_a": -1.942890293094024e-20,
+                  "wiper_current_a": 0,
+                  "power_w": 3.774822690998982e-36
+                },
+                {
+                  "id": "P39",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 2.4424906541753444e-15,
+                  "terminal_2_voltage_v": 2.2343238370581275e-15,
+                  "wiper_voltage_v": 2.338407245616736e-15,
+                  "terminal_1_current_a": 2.0816681711721686e-20,
+                  "terminal_2_current_a": -2.0816681711721686e-20,
+                  "wiper_current_a": 0,
+                  "power_w": 4.3333423748712805e-36
+                },
+                {
+                  "id": "P40",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 2.2343238370581275e-15,
+                  "terminal_2_voltage_v": 2.033095913844818e-15,
+                  "wiper_voltage_v": 2.1371793224034263e-15,
+                  "terminal_1_current_a": 1.942890293094024e-20,
+                  "terminal_2_current_a": -2.0816681711721686e-20,
+                  "wiper_current_a": 1.3877787807814463e-21,
+                  "power_w": 4.054082532935131e-36
+                },
+                {
+                  "id": "P41",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 2.033095913844818e-15,
+                  "terminal_2_voltage_v": 1.824929096727601e-15,
+                  "wiper_voltage_v": 1.9290125052862095e-15,
+                  "terminal_1_current_a": 2.0816681711721686e-20,
+                  "terminal_2_current_a": -2.0816681711721686e-20,
+                  "wiper_current_a": 0,
+                  "power_w": 4.3333423748712805e-36
+                },
+                {
+                  "id": "P42",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 1.824929096727601e-15,
+                  "terminal_2_voltage_v": 1.6132928326584306e-15,
+                  "wiper_voltage_v": 1.7208456881689926e-15,
+                  "terminal_1_current_a": 2.0816681711721686e-20,
+                  "terminal_2_current_a": -2.1510571102112407e-20,
+                  "wiper_current_a": 6.9388939039072165e-22,
+                  "power_w": 4.480194533130807e-36
+                },
+                {
+                  "id": "P43",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 1.6132928326584306e-15,
+                  "terminal_2_voltage_v": 1.4085954624931674e-15,
+                  "wiper_voltage_v": 1.5126788710517758e-15,
+                  "terminal_1_current_a": 2.012279232133096e-20,
+                  "terminal_2_current_a": -2.0816681711721686e-20,
+                  "wiper_current_a": 6.938893903907247e-22,
+                  "power_w": 4.1913050414727215e-36
+                },
+                {
+                  "id": "P44",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 1.4085954624931674e-15,
+                  "terminal_2_voltage_v": 1.1969591984239969e-15,
+                  "wiper_voltage_v": 1.304512053934559e-15,
+                  "terminal_1_current_a": 2.0816681711721686e-20,
+                  "terminal_2_current_a": -2.1510571102112407e-20,
+                  "wiper_current_a": 6.9388939039072165e-22,
+                  "power_w": 4.480194533130807e-36
+                },
+                {
+                  "id": "P45",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 1.1969591984239969e-15,
+                  "terminal_2_voltage_v": 9.853229343548264e-16,
+                  "wiper_voltage_v": 1.0928757898653885e-15,
+                  "terminal_1_current_a": 2.0816681711721686e-20,
+                  "terminal_2_current_a": -2.1510571102112407e-20,
+                  "wiper_current_a": 6.9388939039072165e-22,
+                  "power_w": 4.480194533130807e-36
+                },
+                {
+                  "id": "P46",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 9.853229343548264e-16,
+                  "terminal_2_voltage_v": 7.7021722333370235e-16,
+                  "wiper_voltage_v": 8.777700788442644e-16,
+                  "terminal_1_current_a": 2.1510571102112407e-20,
+                  "terminal_2_current_a": -2.1510571102112407e-20,
+                  "wiper_current_a": 0,
+                  "power_w": 4.627046691390334e-36
+                },
+                {
+                  "id": "P47",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 7.7021722333370235e-16,
+                  "terminal_2_voltage_v": 5.499073418846478e-16,
+                  "wiper_voltage_v": 6.609296443471635e-16,
+                  "terminal_1_current_a": 2.185751579730777e-20,
+                  "terminal_2_current_a": -2.2204460492503132e-20,
+                  "wiper_current_a": 3.4694469519536233e-22,
+                  "power_w": 4.853945312963455e-36
+                },
+                {
+                  "id": "P48",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 5.499073418846478e-16,
+                  "terminal_2_voltage_v": 3.3219954564955856e-16,
+                  "wiper_voltage_v": 4.423544863740858e-16,
+                  "terminal_1_current_a": 2.1510571102112407e-20,
+                  "terminal_2_current_a": -2.203098814490545e-20,
+                  "wiper_current_a": 5.20417042793042e-22,
+                  "power_w": 4.7403455388999896e-36
+                },
+                {
+                  "id": "P49",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 3.3219954564955856e-16,
+                  "terminal_2_voltage_v": 1.1102230246251565e-16,
+                  "wiper_voltage_v": 2.211772431870429e-16,
+                  "terminal_1_current_a": 2.2204460492503132e-20,
+                  "terminal_2_current_a": -2.203098814490545e-20,
+                  "wiper_current_a": -1.7347234759768267e-22,
+                  "power_w": 4.8920125220204844e-36
+                },
+                {
+                  "id": "P50",
+                  "resistance_ohm": 10000,
+                  "wiper_position": 0.5,
+                  "upper_resistance_ohm": 5000,
+                  "lower_resistance_ohm": 5000,
+                  "terminal_1_voltage_v": 1.1102230246251565e-16,
+                  "terminal_2_voltage_v": 0,
+                  "wiper_voltage_v": 1.1102230246251565e-16,
+                  "terminal_1_current_a": 0,
+                  "terminal_2_current_a": -2.2204460492503132e-20,
+                  "wiper_current_a": 2.2204460492503132e-20,
+                  "power_w": 2.465190328815662e-36
+                }
+              ],
+              "engine": "elab.network-mna-be.v1",
+              "run_id": 1,
+              "electrical_revision": 3,
+              "time_s": 0.06,
+              "nodes_v": {
+                "net:GND1.reference": 0,
+                "net:P1.1": 0,
+                "net:P1.2": 5.828670879282072e-16,
+                "net:P1.wiper": 3.0531133177191805e-16,
+                "net:P10.1": 3.6637359812630166e-15,
+                "net:P10.2": 3.747002708109903e-15,
+                "net:P10.wiper": 3.7192471324942744e-15,
+                "net:P11.2": 3.858025010572419e-15,
+                "net:P11.wiper": 3.802513859341161e-15,
+                "net:P12.2": 3.913536161803677e-15,
+                "net:P12.wiper": 3.885780586188048e-15,
+                "net:P13.2": 3.969047313034935e-15,
+                "net:P13.wiper": 3.941291737419306e-15,
+                "net:P14.2": 4.08006961549745e-15,
+                "net:P14.wiper": 4.0245584642661925e-15,
+                "net:P15.2": 4.135580766728708e-15,
+                "net:P15.wiper": 4.107825191113079e-15,
+                "net:P16.2": 4.218847493575595e-15,
+                "net:P16.wiper": 4.191091917959966e-15,
+                "net:P17.2": 4.274358644806853e-15,
+                "net:P17.wiper": 4.246603069191224e-15,
+                "net:P18.2": 4.3298697960381105e-15,
+                "net:P18.wiper": 4.3021142204224816e-15,
+                "net:P19.2": 4.371503159461554e-15,
+                "net:P19.wiper": 4.3576253716537394e-15,
+                "net:P2.2": 1.1657341758564144e-15,
+                "net:P2.wiper": 8.881784197001252e-16,
+                "net:P20.2": 4.385380947269368e-15,
+                "net:P20.wiper": 4.385380947269368e-15,
+                "net:P21.2": 4.385380947269368e-15,
+                "net:P21.wiper": 4.385380947269368e-15,
+                "net:P22.2": 4.3576253716537394e-15,
+                "net:P22.wiper": 4.371503159461554e-15,
+                "net:P23.2": 4.343747583845925e-15,
+                "net:P23.wiper": 4.343747583845925e-15,
+                "net:P24.2": 4.288236432614667e-15,
+                "net:P24.wiper": 4.315992008230296e-15,
+                "net:P25.2": 4.232725281383409e-15,
+                "net:P25.wiper": 4.274358644806853e-15,
+                "net:P26.2": 4.163336342344337e-15,
+                "net:P26.wiper": 4.2049697057677804e-15,
+                "net:P27.2": 4.08006961549745e-15,
+                "net:P27.wiper": 4.121702978920894e-15,
+                "net:P28.2": 3.982925100842749e-15,
+                "net:P28.wiper": 4.038436252074007e-15,
+                "net:P29.2": 3.8719027983802334e-15,
+                "net:P29.wiper": 3.941291737419306e-15,
+                "net:P3.2": 1.6930901125533637e-15,
+                "net:P3.wiper": 1.4432899320127035e-15,
+                "net:P30.2": 3.747002708109903e-15,
+                "net:P30.wiper": 3.816391647148976e-15,
+                "net:P31.2": 3.622102617839573e-15,
+                "net:P31.wiper": 3.6914915568786455e-15,
+                "net:P32.2": 3.4833247397614286e-15,
+                "net:P32.wiper": 3.552713678800501e-15,
+                "net:P33.2": 3.344546861683284e-15,
+                "net:P33.wiper": 3.4139358007223564e-15,
+                "net:P34.2": 3.1780134079895106e-15,
+                "net:P34.wiper": 3.2612801348363973e-15,
+                "net:P35.2": 3.011479954295737e-15,
+                "net:P35.wiper": 3.094746681142624e-15,
+                "net:P36.2": 2.8380076066980564e-15,
+                "net:P36.wiper": 2.9282132274488504e-15,
+                "net:P37.2": 2.6367796834847468e-15,
+                "net:P37.wiper": 2.733924198139448e-15,
+                "net:P38.2": 2.4424906541753444e-15,
+                "net:P38.wiper": 2.5396351688300456e-15,
+                "net:P39.2": 2.2343238370581275e-15,
+                "net:P39.wiper": 2.338407245616736e-15,
+                "net:P4.2": 2.1649348980190553e-15,
+                "net:P4.wiper": 1.942890293094024e-15,
+                "net:P40.2": 2.033095913844818e-15,
+                "net:P40.wiper": 2.1371793224034263e-15,
+                "net:P41.2": 1.824929096727601e-15,
+                "net:P41.wiper": 1.9290125052862095e-15,
+                "net:P42.2": 1.6132928326584306e-15,
+                "net:P42.wiper": 1.7208456881689926e-15,
+                "net:P43.2": 1.4085954624931674e-15,
+                "net:P43.wiper": 1.5126788710517758e-15,
+                "net:P44.2": 1.1969591984239969e-15,
+                "net:P44.wiper": 1.304512053934559e-15,
+                "net:P45.2": 9.853229343548264e-16,
+                "net:P45.wiper": 1.0928757898653885e-15,
+                "net:P46.2": 7.7021722333370235e-16,
+                "net:P46.wiper": 8.777700788442644e-16,
+                "net:P47.2": 5.499073418846478e-16,
+                "net:P47.wiper": 6.609296443471635e-16,
+                "net:P48.2": 3.3219954564955856e-16,
+                "net:P48.wiper": 4.423544863740858e-16,
+                "net:P49.2": 1.1102230246251565e-16,
+                "net:P49.wiper": 2.211772431870429e-16,
+                "net:P5.2": 2.581268532253489e-15,
+                "net:P5.wiper": 2.3869795029440866e-15,
+                "net:P6.2": 2.914335439641036e-15,
+                "net:P6.wiper": 2.7478019859472624e-15,
+                "net:P7.2": 3.219646771412954e-15,
+                "net:P7.wiper": 3.0808688933348094e-15,
+                "net:P8.2": 3.497202527569243e-15,
+                "net:P8.wiper": 3.3584246494910985e-15,
+                "net:P9.wiper": 3.608224830031759e-15
+              },
+              "transistors": [],
+              "capacitors": [],
+              "leds": [],
+              "resistors": [],
+              "sources": [
+                {
+                  "id": "V1",
+                  "current_a": -6.294513589283519e-20,
+                  "voltage_v": 0,
+                  "power_w": -0
+                }
+              ],
+              "kcl_residual_a": 1.1102230246251566e-20,
+              "power_residual_w": -2.524012442289001e-34,
+              "numerical_damping_w": 0,
+              "stale": false
+            }
+          },
+          "rows": [
+            {
+              "time_s": 0,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.001,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.002,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.003,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.004,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.005,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.006,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.007,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.008,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.009000000000000001,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.01,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.011,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.012,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.013000000000000001,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.014,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.015,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.016,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.017,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.018000000000000002,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.019,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.02,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.021,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.022,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.023,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.024,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.025,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.026000000000000002,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.027,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.028,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.029,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.03,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.031,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.032,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.033,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.034,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.035,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.036000000000000004,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.037,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.038,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.039,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.04,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.041,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.042,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.043000000000000003,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.044,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.045,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.046,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.047,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.048,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.049,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.05,
+              "values": [
+                5,
+                4.949494949494949,
+                2.525252525252521,
+                0.000010101010101010078
+              ]
+            },
+            {
+              "time_s": 0.05,
+              "values": [
+                0,
+                3.0531133177191805e-16,
+                4.274358644806853e-15,
+                2.2204460492503132e-20
+              ]
+            },
+            {
+              "time_s": 0.05,
+              "values": [
+                0,
+                3.0531133177191805e-16,
+                4.274358644806853e-15,
+                2.2204460492503132e-20
+              ]
+            },
+            {
+              "time_s": 0.051000000000000004,
+              "values": [
+                0,
+                3.0531133177191805e-16,
+                4.274358644806853e-15,
+                2.2204460492503132e-20
+              ]
+            },
+            {
+              "time_s": 0.052000000000000005,
+              "values": [
+                0,
+                3.0531133177191805e-16,
+                4.274358644806853e-15,
+                2.2204460492503132e-20
+              ]
+            },
+            {
+              "time_s": 0.053,
+              "values": [
+                0,
+                3.0531133177191805e-16,
+                4.274358644806853e-15,
+                2.2204460492503132e-20
+              ]
+            },
+            {
+              "time_s": 0.054,
+              "values": [
+                0,
+                3.0531133177191805e-16,
+                4.274358644806853e-15,
+                2.2204460492503132e-20
+              ]
+            },
+            {
+              "time_s": 0.055,
+              "values": [
+                0,
+                3.0531133177191805e-16,
+                4.274358644806853e-15,
+                2.2204460492503132e-20
+              ]
+            },
+            {
+              "time_s": 0.056,
+              "values": [
+                0,
+                3.0531133177191805e-16,
+                4.274358644806853e-15,
+                2.2204460492503132e-20
+              ]
+            },
+            {
+              "time_s": 0.057,
+              "values": [
+                0,
+                3.0531133177191805e-16,
+                4.274358644806853e-15,
+                2.2204460492503132e-20
+              ]
+            },
+            {
+              "time_s": 0.058,
+              "values": [
+                0,
+                3.0531133177191805e-16,
+                4.274358644806853e-15,
+                2.2204460492503132e-20
+              ]
+            },
+            {
+              "time_s": 0.059000000000000004,
+              "values": [
+                0,
+                3.0531133177191805e-16,
+                4.274358644806853e-15,
+                2.2204460492503132e-20
+              ]
+            },
+            {
+              "time_s": 0.06,
+              "values": [
+                0,
+                3.0531133177191805e-16,
+                4.274358644806853e-15,
+                2.2204460492503132e-20
+              ]
+            }
+          ]
+        },
+        "model_sha256": {
+          "elab.linear-potentiometer.v1": "0481e774aa96bc6f4d15d8ba416ca82517394217f6f2ef27268feea248e4d149",
+          "ground.v1": "b981a78784d6912d59e83a9e85420a718029deefbbafb1b8a8f292777bcf3240",
+          "ideal-square.v1": "4e30a80d683445211763f380b9d6ddfa60dfc3f52d7fd1c341341b7be9fcf76a"
+        }
+      }
+    ],
+    "selected_index": 0,
+    "viewing": false
+  },
+  "paused": true,
+  "scope_probes": {
+    "ids": [
+      "v:V1",
+      "v:P1.wiper",
+      "v:P25.wiper",
+      "i:P49.1"
+    ]
+  },
+  "format": "elab.schematic",
+  "version": 4,
+  "graph": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "pulse-source",
+        "name": "Pulse source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -800,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-square.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND1",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 800,
+          "y": 0
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P1",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -560,
+          "y": -560
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P2",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -400,
+          "y": -560
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P3",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -240,
+          "y": -560
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P4",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -80,
+          "y": -560
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P5",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 80,
+          "y": -560
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P6",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 240,
+          "y": -560
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P7",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 400,
+          "y": -560
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P8",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 560,
+          "y": -560
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P9",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -560,
+          "y": -400
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P10",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -400,
+          "y": -400
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P11",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -240,
+          "y": -400
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P12",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -80,
+          "y": -400
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P13",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 80,
+          "y": -400
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P14",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 240,
+          "y": -400
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P15",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 400,
+          "y": -400
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P16",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 560,
+          "y": -400
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P17",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -560,
+          "y": -240
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P18",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -400,
+          "y": -240
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P19",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -240,
+          "y": -240
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P20",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -80,
+          "y": -240
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P21",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 80,
+          "y": -240
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P22",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 240,
+          "y": -240
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P23",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 400,
+          "y": -240
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P24",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 560,
+          "y": -240
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P25",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -560,
+          "y": -80
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P26",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -400,
+          "y": -80
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P27",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -240,
+          "y": -80
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P28",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -80,
+          "y": -80
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P29",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 80,
+          "y": -80
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P30",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 240,
+          "y": -80
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P31",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 400,
+          "y": -80
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P32",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 560,
+          "y": -80
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P33",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -560,
+          "y": 80
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P34",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -400,
+          "y": 80
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P35",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -240,
+          "y": 80
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P36",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -80,
+          "y": 80
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P37",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 80,
+          "y": 80
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P38",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 240,
+          "y": 80
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P39",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 400,
+          "y": 80
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P40",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 560,
+          "y": 80
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P41",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -560,
+          "y": 240
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P42",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -400,
+          "y": 240
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P43",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -240,
+          "y": 240
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P44",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -80,
+          "y": 240
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P45",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 80,
+          "y": 240
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P46",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 240,
+          "y": 240
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P47",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 400,
+          "y": 240
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P48",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 560,
+          "y": 240
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P49",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -560,
+          "y": 400
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "P50",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": -400,
+          "y": 400
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "P1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "P1.2",
+        "to": "P2.1",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "P2.2",
+        "to": "P3.1",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "P3.2",
+        "to": "P4.1",
+        "connected": true
+      },
+      {
+        "id": "W5",
+        "from": "P4.2",
+        "to": "P5.1",
+        "connected": true
+      },
+      {
+        "id": "W6",
+        "from": "P5.2",
+        "to": "P6.1",
+        "connected": true
+      },
+      {
+        "id": "W7",
+        "from": "P6.2",
+        "to": "P7.1",
+        "connected": true
+      },
+      {
+        "id": "W8",
+        "from": "P7.2",
+        "to": "P8.1",
+        "connected": true
+      },
+      {
+        "id": "W9",
+        "from": "P8.2",
+        "to": "P9.1",
+        "connected": true
+      },
+      {
+        "id": "W10",
+        "from": "P9.2",
+        "to": "P10.1",
+        "connected": true
+      },
+      {
+        "id": "W11",
+        "from": "P10.2",
+        "to": "P11.1",
+        "connected": true
+      },
+      {
+        "id": "W12",
+        "from": "P11.2",
+        "to": "P12.1",
+        "connected": true
+      },
+      {
+        "id": "W13",
+        "from": "P12.2",
+        "to": "P13.1",
+        "connected": true
+      },
+      {
+        "id": "W14",
+        "from": "P13.2",
+        "to": "P14.1",
+        "connected": true
+      },
+      {
+        "id": "W15",
+        "from": "P14.2",
+        "to": "P15.1",
+        "connected": true
+      },
+      {
+        "id": "W16",
+        "from": "P15.2",
+        "to": "P16.1",
+        "connected": true
+      },
+      {
+        "id": "W17",
+        "from": "P16.2",
+        "to": "P17.1",
+        "connected": true
+      },
+      {
+        "id": "W18",
+        "from": "P17.2",
+        "to": "P18.1",
+        "connected": true
+      },
+      {
+        "id": "W19",
+        "from": "P18.2",
+        "to": "P19.1",
+        "connected": true
+      },
+      {
+        "id": "W20",
+        "from": "P19.2",
+        "to": "P20.1",
+        "connected": true
+      },
+      {
+        "id": "W21",
+        "from": "P20.2",
+        "to": "P21.1",
+        "connected": true
+      },
+      {
+        "id": "W22",
+        "from": "P21.2",
+        "to": "P22.1",
+        "connected": true
+      },
+      {
+        "id": "W23",
+        "from": "P22.2",
+        "to": "P23.1",
+        "connected": true
+      },
+      {
+        "id": "W24",
+        "from": "P23.2",
+        "to": "P24.1",
+        "connected": true
+      },
+      {
+        "id": "W25",
+        "from": "P24.2",
+        "to": "P25.1",
+        "connected": true
+      },
+      {
+        "id": "W26",
+        "from": "P25.2",
+        "to": "P26.1",
+        "connected": true
+      },
+      {
+        "id": "W27",
+        "from": "P26.2",
+        "to": "P27.1",
+        "connected": true
+      },
+      {
+        "id": "W28",
+        "from": "P27.2",
+        "to": "P28.1",
+        "connected": true
+      },
+      {
+        "id": "W29",
+        "from": "P28.2",
+        "to": "P29.1",
+        "connected": true
+      },
+      {
+        "id": "W30",
+        "from": "P29.2",
+        "to": "P30.1",
+        "connected": true
+      },
+      {
+        "id": "W31",
+        "from": "P30.2",
+        "to": "P31.1",
+        "connected": true
+      },
+      {
+        "id": "W32",
+        "from": "P31.2",
+        "to": "P32.1",
+        "connected": true
+      },
+      {
+        "id": "W33",
+        "from": "P32.2",
+        "to": "P33.1",
+        "connected": true
+      },
+      {
+        "id": "W34",
+        "from": "P33.2",
+        "to": "P34.1",
+        "connected": true
+      },
+      {
+        "id": "W35",
+        "from": "P34.2",
+        "to": "P35.1",
+        "connected": true
+      },
+      {
+        "id": "W36",
+        "from": "P35.2",
+        "to": "P36.1",
+        "connected": true
+      },
+      {
+        "id": "W37",
+        "from": "P36.2",
+        "to": "P37.1",
+        "connected": true
+      },
+      {
+        "id": "W38",
+        "from": "P37.2",
+        "to": "P38.1",
+        "connected": true
+      },
+      {
+        "id": "W39",
+        "from": "P38.2",
+        "to": "P39.1",
+        "connected": true
+      },
+      {
+        "id": "W40",
+        "from": "P39.2",
+        "to": "P40.1",
+        "connected": true
+      },
+      {
+        "id": "W41",
+        "from": "P40.2",
+        "to": "P41.1",
+        "connected": true
+      },
+      {
+        "id": "W42",
+        "from": "P41.2",
+        "to": "P42.1",
+        "connected": true
+      },
+      {
+        "id": "W43",
+        "from": "P42.2",
+        "to": "P43.1",
+        "connected": true
+      },
+      {
+        "id": "W44",
+        "from": "P43.2",
+        "to": "P44.1",
+        "connected": true
+      },
+      {
+        "id": "W45",
+        "from": "P44.2",
+        "to": "P45.1",
+        "connected": true
+      },
+      {
+        "id": "W46",
+        "from": "P45.2",
+        "to": "P46.1",
+        "connected": true
+      },
+      {
+        "id": "W47",
+        "from": "P46.2",
+        "to": "P47.1",
+        "connected": true
+      },
+      {
+        "id": "W48",
+        "from": "P47.2",
+        "to": "P48.1",
+        "connected": true
+      },
+      {
+        "id": "W49",
+        "from": "P48.2",
+        "to": "P49.1",
+        "connected": true
+      },
+      {
+        "id": "W50",
+        "from": "P49.2",
+        "to": "P50.1",
+        "connected": true
+      },
+      {
+        "id": "W51",
+        "from": "P50.2",
+        "to": "GND1.reference",
+        "connected": true
+      },
+      {
+        "id": "W52",
+        "from": "V1.negative",
+        "to": "GND1.reference",
+        "connected": true
+      },
+      {
+        "id": "W53",
+        "from": "P50.wiper",
+        "to": "P50.1",
+        "connected": true
+      }
+    ]
+  },
+  "view": {
+    "center": {
+      "x": 0,
+      "y": 0
+    },
+    "zoom": 1
+  },
+  "led_model": {
+    "id": "elab.generic-red-led.v1",
+    "is_a": 1e-20,
+    "n": 2,
+    "rs_ohm": 1,
+    "temperature_c": 27,
+    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+  },
+  "transient_settings": {
+    "step_s": 0.001,
+    "high_s": 0.05,
+    "low_s": 0.05,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.02
+  }
+}

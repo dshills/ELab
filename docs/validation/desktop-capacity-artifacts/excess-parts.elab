@@ -1,0 +1,1557 @@
+{
+  "recordings": {
+    "entries": [],
+    "selected_index": -1,
+    "viewing": false
+  },
+  "paused": false,
+  "scope_probes": {
+    "ids": []
+  },
+  "format": "elab.schematic",
+  "version": 4,
+  "graph": {
+    "components": [
+      {
+        "id": "V3",
+        "kind": "dc-source",
+        "name": "DC source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -800,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-dc.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND3",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 800,
+          "y": 0
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R64",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -560,
+          "y": -560
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R65",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -400,
+          "y": -560
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R66",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -240,
+          "y": -560
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R67",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -80,
+          "y": -560
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R68",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 80,
+          "y": -560
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R69",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 240,
+          "y": -560
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R70",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 400,
+          "y": -560
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R71",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 560,
+          "y": -560
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R72",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -560,
+          "y": -400
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R73",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -400,
+          "y": -400
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R74",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -240,
+          "y": -400
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R75",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -80,
+          "y": -400
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R76",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 80,
+          "y": -400
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R77",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 240,
+          "y": -400
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R78",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 400,
+          "y": -400
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R79",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 560,
+          "y": -400
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R80",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -560,
+          "y": -240
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R81",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -400,
+          "y": -240
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R82",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -240,
+          "y": -240
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R83",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -80,
+          "y": -240
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R84",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 80,
+          "y": -240
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R85",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 240,
+          "y": -240
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R86",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 400,
+          "y": -240
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R87",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 560,
+          "y": -240
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R88",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -560,
+          "y": -80
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R89",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -400,
+          "y": -80
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R90",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -240,
+          "y": -80
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R91",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -80,
+          "y": -80
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R92",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 80,
+          "y": -80
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R93",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 240,
+          "y": -80
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R94",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 400,
+          "y": -80
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R95",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 560,
+          "y": -80
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R96",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -560,
+          "y": 80
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R97",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -400,
+          "y": 80
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R98",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -240,
+          "y": 80
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R99",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -80,
+          "y": 80
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R100",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 80,
+          "y": 80
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R101",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 240,
+          "y": 80
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R102",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 400,
+          "y": 80
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R103",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 560,
+          "y": 80
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R104",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -560,
+          "y": 240
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R105",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -400,
+          "y": 240
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R106",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -240,
+          "y": 240
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R107",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -80,
+          "y": 240
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R108",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 80,
+          "y": 240
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R109",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 240,
+          "y": 240
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R110",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 400,
+          "y": 240
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R111",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 560,
+          "y": 240
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R112",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -560,
+          "y": 400
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R113",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -400,
+          "y": 400
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R114",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -240,
+          "y": 400
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R115",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -80,
+          "y": 400
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R116",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 80,
+          "y": 400
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R117",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 240,
+          "y": 400
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R118",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 400,
+          "y": 400
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R119",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 560,
+          "y": 400
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R120",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -560,
+          "y": 560
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R121",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -400,
+          "y": 560
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R122",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -240,
+          "y": 560
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R123",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -80,
+          "y": 560
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R124",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 80,
+          "y": 560
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R125",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 240,
+          "y": 560
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R126",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 400,
+          "y": 560
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R127",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 560,
+          "y": 560
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W119",
+        "from": "V3.positive",
+        "to": "R64.1",
+        "connected": true
+      },
+      {
+        "id": "W120",
+        "from": "R64.2",
+        "to": "R65.1",
+        "connected": true
+      },
+      {
+        "id": "W121",
+        "from": "R65.2",
+        "to": "R66.1",
+        "connected": true
+      },
+      {
+        "id": "W122",
+        "from": "R66.2",
+        "to": "R67.1",
+        "connected": true
+      },
+      {
+        "id": "W123",
+        "from": "R67.2",
+        "to": "R68.1",
+        "connected": true
+      },
+      {
+        "id": "W124",
+        "from": "R68.2",
+        "to": "R69.1",
+        "connected": true
+      },
+      {
+        "id": "W125",
+        "from": "R69.2",
+        "to": "R70.1",
+        "connected": true
+      },
+      {
+        "id": "W126",
+        "from": "R70.2",
+        "to": "R71.1",
+        "connected": true
+      },
+      {
+        "id": "W127",
+        "from": "R71.2",
+        "to": "R72.1",
+        "connected": true
+      },
+      {
+        "id": "W128",
+        "from": "R72.2",
+        "to": "R73.1",
+        "connected": true
+      },
+      {
+        "id": "W129",
+        "from": "R73.2",
+        "to": "R74.1",
+        "connected": true
+      },
+      {
+        "id": "W130",
+        "from": "R74.2",
+        "to": "R75.1",
+        "connected": true
+      },
+      {
+        "id": "W131",
+        "from": "R75.2",
+        "to": "R76.1",
+        "connected": true
+      },
+      {
+        "id": "W132",
+        "from": "R76.2",
+        "to": "R77.1",
+        "connected": true
+      },
+      {
+        "id": "W133",
+        "from": "R77.2",
+        "to": "R78.1",
+        "connected": true
+      },
+      {
+        "id": "W134",
+        "from": "R78.2",
+        "to": "R79.1",
+        "connected": true
+      },
+      {
+        "id": "W135",
+        "from": "R79.2",
+        "to": "R80.1",
+        "connected": true
+      },
+      {
+        "id": "W136",
+        "from": "R80.2",
+        "to": "R81.1",
+        "connected": true
+      },
+      {
+        "id": "W137",
+        "from": "R81.2",
+        "to": "R82.1",
+        "connected": true
+      },
+      {
+        "id": "W138",
+        "from": "R82.2",
+        "to": "R83.1",
+        "connected": true
+      },
+      {
+        "id": "W139",
+        "from": "R83.2",
+        "to": "R84.1",
+        "connected": true
+      },
+      {
+        "id": "W140",
+        "from": "R84.2",
+        "to": "R85.1",
+        "connected": true
+      },
+      {
+        "id": "W141",
+        "from": "R85.2",
+        "to": "R86.1",
+        "connected": true
+      },
+      {
+        "id": "W142",
+        "from": "R86.2",
+        "to": "R87.1",
+        "connected": true
+      },
+      {
+        "id": "W143",
+        "from": "R87.2",
+        "to": "R88.1",
+        "connected": true
+      },
+      {
+        "id": "W144",
+        "from": "R88.2",
+        "to": "R89.1",
+        "connected": true
+      },
+      {
+        "id": "W145",
+        "from": "R89.2",
+        "to": "R90.1",
+        "connected": true
+      },
+      {
+        "id": "W146",
+        "from": "R90.2",
+        "to": "R91.1",
+        "connected": true
+      },
+      {
+        "id": "W147",
+        "from": "R91.2",
+        "to": "R92.1",
+        "connected": true
+      },
+      {
+        "id": "W148",
+        "from": "R92.2",
+        "to": "R93.1",
+        "connected": true
+      },
+      {
+        "id": "W149",
+        "from": "R93.2",
+        "to": "R94.1",
+        "connected": true
+      },
+      {
+        "id": "W150",
+        "from": "R94.2",
+        "to": "R95.1",
+        "connected": true
+      },
+      {
+        "id": "W151",
+        "from": "R95.2",
+        "to": "R96.1",
+        "connected": true
+      },
+      {
+        "id": "W152",
+        "from": "R96.2",
+        "to": "R97.1",
+        "connected": true
+      },
+      {
+        "id": "W153",
+        "from": "R97.2",
+        "to": "R98.1",
+        "connected": true
+      },
+      {
+        "id": "W154",
+        "from": "R98.2",
+        "to": "R99.1",
+        "connected": true
+      },
+      {
+        "id": "W155",
+        "from": "R99.2",
+        "to": "R100.1",
+        "connected": true
+      },
+      {
+        "id": "W156",
+        "from": "R100.2",
+        "to": "R101.1",
+        "connected": true
+      },
+      {
+        "id": "W157",
+        "from": "R101.2",
+        "to": "R102.1",
+        "connected": true
+      },
+      {
+        "id": "W158",
+        "from": "R102.2",
+        "to": "R103.1",
+        "connected": true
+      },
+      {
+        "id": "W159",
+        "from": "R103.2",
+        "to": "R104.1",
+        "connected": true
+      },
+      {
+        "id": "W160",
+        "from": "R104.2",
+        "to": "R105.1",
+        "connected": true
+      },
+      {
+        "id": "W161",
+        "from": "R105.2",
+        "to": "R106.1",
+        "connected": true
+      },
+      {
+        "id": "W162",
+        "from": "R106.2",
+        "to": "R107.1",
+        "connected": true
+      },
+      {
+        "id": "W163",
+        "from": "R107.2",
+        "to": "R108.1",
+        "connected": true
+      },
+      {
+        "id": "W164",
+        "from": "R108.2",
+        "to": "R109.1",
+        "connected": true
+      },
+      {
+        "id": "W165",
+        "from": "R109.2",
+        "to": "R110.1",
+        "connected": true
+      },
+      {
+        "id": "W166",
+        "from": "R110.2",
+        "to": "R111.1",
+        "connected": true
+      },
+      {
+        "id": "W167",
+        "from": "R111.2",
+        "to": "R112.1",
+        "connected": true
+      },
+      {
+        "id": "W168",
+        "from": "R112.2",
+        "to": "R113.1",
+        "connected": true
+      },
+      {
+        "id": "W169",
+        "from": "R113.2",
+        "to": "R114.1",
+        "connected": true
+      },
+      {
+        "id": "W170",
+        "from": "R114.2",
+        "to": "R115.1",
+        "connected": true
+      },
+      {
+        "id": "W171",
+        "from": "R115.2",
+        "to": "R116.1",
+        "connected": true
+      },
+      {
+        "id": "W172",
+        "from": "R116.2",
+        "to": "R117.1",
+        "connected": true
+      },
+      {
+        "id": "W173",
+        "from": "R117.2",
+        "to": "R118.1",
+        "connected": true
+      },
+      {
+        "id": "W174",
+        "from": "R118.2",
+        "to": "R119.1",
+        "connected": true
+      },
+      {
+        "id": "W175",
+        "from": "R119.2",
+        "to": "R120.1",
+        "connected": true
+      },
+      {
+        "id": "W176",
+        "from": "R120.2",
+        "to": "R121.1",
+        "connected": true
+      },
+      {
+        "id": "W177",
+        "from": "R121.2",
+        "to": "R122.1",
+        "connected": true
+      },
+      {
+        "id": "W178",
+        "from": "R122.2",
+        "to": "R123.1",
+        "connected": true
+      },
+      {
+        "id": "W179",
+        "from": "R123.2",
+        "to": "R124.1",
+        "connected": true
+      },
+      {
+        "id": "W180",
+        "from": "R124.2",
+        "to": "R125.1",
+        "connected": true
+      },
+      {
+        "id": "W181",
+        "from": "R125.2",
+        "to": "R126.1",
+        "connected": true
+      },
+      {
+        "id": "W182",
+        "from": "R126.2",
+        "to": "R127.1",
+        "connected": true
+      },
+      {
+        "id": "W183",
+        "from": "R127.2",
+        "to": "GND3.reference",
+        "connected": true
+      },
+      {
+        "id": "W184",
+        "from": "V3.negative",
+        "to": "GND3.reference",
+        "connected": true
+      }
+    ]
+  },
+  "view": {
+    "center": {
+      "x": 0,
+      "y": 0
+    },
+    "zoom": 1
+  },
+  "led_model": {
+    "id": "elab.generic-red-led.v1",
+    "is_a": 1e-20,
+    "n": 2,
+    "rs_ohm": 1,
+    "temperature_c": 27,
+    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+  },
+  "transient_settings": {
+    "step_s": 0.001,
+    "high_s": 0.05,
+    "low_s": 0.05,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.02
+  }
+}

@@ -51,8 +51,8 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		}
 	}
 
-	if len(pots) > 4 || len(diodes) > 8 || len(switches) > 8 || len(sources) > 3 || len(caps) > 4 || len(qs) > 2 || len(rs) > 12 || len(leds) > 4 || len(out.Nets) > MaxMixedNodes+1 {
-		return fail("unsupported", "mixed-limit", "Network simulation supports at most 12 non-ground nets, 3 sources, 4 capacitors, 2 NPNs, 12 resistors, 8 switches, 8 diodes, 4 potentiometers and 4 LEDs.", "")
+	if SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
+		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
 	}
 	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots) == 0 {
 		return fail("incomplete", "missing-parts", "Add ground, a source and a resistor, switch, diode or potentiometer to complete the network.", "")

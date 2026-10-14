@@ -55,7 +55,7 @@ Audited October 13, 2026 against [PRD draft 0.3](07-product-requirements.md), so
 
 | Target/gate | Authoritative current state | Evidence needed next |
 |---|---|---|
-| 50 simulated parts / 100 nodes / four traces | Drawing bound is 50 total objects, including helpers; network bound is 12 non-ground nets and per-device limits. Six traces exist | Target is unmet. Expand supported physical capacity and validate real fixtures; do not relabel drawing capacity as simulated capacity |
+| 50 simulated parts / 100 nodes / four traces | 64 simulated parts / 100 electrical nodes including ground, within 100 drawing objects / 300 wires; 51-part/100-node and separate 64-part fixtures, four live traces, Verify, save/reopen and fresh GPU readback | Supported size demonstrated in representative valid fixtures; per-device/model/convergence bounds remain explicit and visible latency is a separate gate |
 | Visible edit acknowledgment p95 ≤100 ms | Native controls tested for behavior; no input-to-visible timestamp series | Recorded hardware/build and repeated native timing measurements |
 | First updated result p95 ≤500 ms | No consolidated repeated benchmark | Separate cold/warm edit-to-result measurements on the three circuits |
 | 200 ms Verify ≤2 s | Bounded Verify workflows pass; no locked performance report | Hardware/OS/model/circuit hashes, repetitions and timings |

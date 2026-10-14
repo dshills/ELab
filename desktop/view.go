@@ -166,7 +166,7 @@ func (s *screen) view() ui.Node {
 	if selected == "" {
 		selected = "__none"
 	}
-	inspector := []ui.Node{section("inspector-title", "Inspector"), {ID: "selection", Kind: ui.Selector, Options: objectOptions, SelectedID: selected, Accessibility: ui.Accessibility{Name: "Selected object"}, Change: func(e ui.ChangeEvent) {
+	inspector := []ui.Node{section("inspector-title", "Inspector"), quiet("circuit-capacity", fmt.Sprintf("%d/%d simulated parts · %d/%d drawing objects\n%d/%d nodes (including ground)", state.SimulatedComponents, state.Limits.SimulatedComponents, len(state.Components), state.Limits.DrawingObjects, len(state.Nets), state.Limits.ElectricalNodes)), {ID: "selection", Kind: ui.Selector, Options: objectOptions, SelectedID: selected, Accessibility: ui.Accessibility{Name: "Selected object"}, Change: func(e ui.ChangeEvent) {
 		id := e.SelectedID
 		if id == "__none" {
 			id = ""

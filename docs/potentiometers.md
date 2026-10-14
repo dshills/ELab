@@ -27,7 +27,7 @@ Verify captures the chosen wiper as startup and does not replay live movement hi
 
 ## Scope and evidence
 
-Up to four potentiometers fit within the existing [bounded network](switches.md) device, node and work limits. Dividers, LED loads, capacitor loads and supported NPN/diode/switch networks use the same solver.
+Up to 64 potentiometers fit within the existing [bounded network](switches.md) device, node and work limits. Dividers, LED loads, capacitor loads and supported NPN/diode/switch networks use the same solver.
 
 Core tests compare loaded/unloaded divider and rheostat values against independent resistor equations, and capacitor charging against the Thevenin RC solution before and after wiper movement. They cover endpoint sums, conservation, running-clock continuity, no-op/range checks, independent snapshots/duplicates, batch/history semantics, strict imports and kept recordings. Native tray construction, slider/exact percentage fields, resistance editing and agent parity are exercised in the native suite and smoke.
 

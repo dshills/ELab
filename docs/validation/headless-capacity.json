@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "simulated_part_boundary": 64,
+  "hundred_node_parts": 51,
+  "hundred_node_drawing_objects": 52,
+  "electrical_nodes_including_ground": 100,
+  "traces": 4,
+  "startup_wall_ms": 8.28049995470792,
+  "step_60ms_wall_ms": 13.933708018157631,
+  "divider_current_a": 1.0101010101010101e-05,
+  "checks": [
+    "public atomic placement/connection batches",
+    "independent divider references",
+    "64-part resistor reference",
+    "100 nodes and four live traces",
+    "pulse edge/high-low behavior",
+    "100-node Verify and embedded record import",
+    "save/reopen with fresh paused startup",
+    "SVG at capacity",
+    "excess physical parts diagnosed but saved",
+    "final owned project clean and paused"
+  ],
+  "limitations": [
+    "per-device source/nonlinear/capacitor bounds still apply",
+    "capacity fixtures do not prove convergence for every topology or input-to-pixel latency",
+    "private unsigned local build"
+  ]
+}

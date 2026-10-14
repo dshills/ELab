@@ -153,7 +153,10 @@ rendered:
 	if err := nativeWaveformSmoke(ctx, a, s); err != nil {
 		return err
 	}
-	return nativeAuditSmoke(ctx, a, s)
+	if err := nativeAuditSmoke(ctx, a, s); err != nil {
+		return err
+	}
+	return nativeCapacitySmoke(ctx, a, s)
 }
 
 func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {

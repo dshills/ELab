@@ -1,0 +1,45 @@
+{
+  "passed": true,
+  "date": "2026-10-13",
+  "version": "0.24.0",
+  "build": "38",
+  "binary_sha256": "5041329b3b8aede64ec55b6625d2db2fa43ab5e4430e1e28f3640eaa94ad1b55",
+  "packaged_binary_matches": true,
+  "limits": {
+    "simulated_parts": 64,
+    "electrical_nodes_including_ground": 100,
+    "drawing_objects": 100,
+    "wires": 300
+  },
+  "checks": [
+    "pinned Staticcheck/import formatting",
+    "Go vet and root/native race tests",
+    "centralized limits and explicit helper/physical classification",
+    "exact 100-node divider/rheostat reference and conservation",
+    "64-part resistor boundary reference",
+    "100-node pulse edge and four live traces",
+    "Verify/import/project/save/reopen/SVG at capacity",
+    "excess part/node complexity diagnosed and still editable/savable",
+    "native shared batch construction and count visibility",
+    "built and packaged fresh GPU schematic/scope readback"
+  ],
+  "measurements": {
+    "headless": {
+      "startup_wall_ms": 8.28049995470792,
+      "step_60ms_wall_ms": 13.933708018157631,
+      "divider_current_a": 1.0101010101010101e-05
+    },
+    "desktop": {
+      "startup_wall_ms": 9.181750006973743,
+      "step_60ms_wall_ms": 17.509749974124134,
+      "divider_current_a": 1.0101010101010101e-05
+    }
+  },
+  "limits_of_evidence": [
+    "initial 49-pot hypothesis produced 99 nodes; corrected 51-part fixture explicitly has 100",
+    "per-device bounds/model topology/convergence/work limits remain explicit",
+    "representative capacity proof is not universal topology convergence or visible-latency evidence",
+    "input/file/recovery, interaction/presentation/accessibility/distribution/participant gaps remain",
+    "private unsigned local bundle; functional audit remains 10 implemented / 17 partial"
+  ]
+}

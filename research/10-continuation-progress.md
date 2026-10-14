@@ -149,10 +149,20 @@ Review also repaired paused DC Restart: it now explicitly computes fresh LED/NPN
 
 [The contract](../docs/initialization.md) leaves input/file/recovery work and physical capacity open. The audit remains 10 implemented / 17 partial. Next, validate the proposed 50-part / 100-node potentiometer-chain envelope and centralize explicit limits before raising them.
 
+## Published physical capacity and boundary fixtures
+
+Packaged **0.24.0 / 38** publishes centralized limits: 64 simulated parts / 100 electrical nodes including ground, within 100 drawing objects / 300 wires and the documented per-device ceilings. Ground/junction/label helpers do not consume the physical-part budget; ideal-source current unknowns are not counted as nodes. Snapshots expose limits and physical counts, and the Inspector shows the same numbers. Excess simulation complexity remains editable and savable inside drawing bounds. Device models/versions/tolerances/work bounds are unchanged.
+
+The proposed 49-track chain actually had 99 nodes; corrected fixtures explicitly count the target. A source plus 50 series potentiometers, with the final wiper tied to pin 1, has 51 physical parts / 52 objects / exactly 100 nodes and 495 kΩ effective resistance. Independent equations validate all wipers, branch currents and conservation. DC/pulse variants, four live traces, Verify, embedded recording validation, fresh paused reopen and SVG pass. A separate source/63-resistor chain validates the 64-part boundary; 101-node and 65-part drawings are diagnosed and saved. The PRD asks for minimum capacity, so the published 64-part envelope preserves and exceeds the original 50-part target.
+
+[Final validation](../docs/validation/capacity-validation.json), [boundary race regressions](../docs/validation/capacity-regressions.json), [headless public workflow](../docs/validation/headless-capacity.json) and [packaged workflow](../docs/validation/desktop-capacity.json) pass. Desktop 100-node startup plus transport is about 9.18 ms; a 60 ms physical Step takes 17.51 ms. These are point backend measurements, not visible p95. Source review tightened GPU proof: the capacity smoke updates the view and rebuilds resources so prior smoke pixels cannot satisfy readback. Corrected built/packaged actual schematic and four-trace scope readback pass, alongside native construction, lint/vet/root/native race gates. The owned desktop ends paused/clean at its durable 100-node project; previous bundles/sessions and user work are preserved.
+
+[Capacity definitions and limitations](../docs/circuit-capacity.md) describe representative supported-size proof rather than universal topology or hardware claims. The audit size row now records the achieved minimum-size fixtures, while functional totals remain 10 implemented / 17 partial. Remaining input/file/recovery responsiveness, interaction/presentation, agent conformance, accessibility/distribution and participant gates are still open.
+
 ## Next work queue
 
 1. Mounted driver gesture invalidation/focus conformance; control-level slider, switch pending and actor-history paths now pass.
-2. Validate/expand physical circuit capacity; finish nonblocking input/file/recovery paths. Initialization and manual Step are now background work. Extend actual and visible latency fixtures.
+2. Finish nonblocking input/file/recovery paths and extend actual/visible latency fixtures. The published capacity boundary now has representative proof.
 3. Voltage/current presentation preferences, pinned readings, trace/diagnostic highlights and concise example guidance.
 4. Complete agent conformance, keyboard/screen-reader scenarios and reproducible clean packaging evidence.
 5. Formative-test preparation; actual participant/hardware evidence remains a separate gate.

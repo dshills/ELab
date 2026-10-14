@@ -8,8 +8,6 @@ import (
 	"strings"
 )
 
-const MaxComponents = 50
-const MaxWires = 150
 const GridSize = 10.
 
 type Graph struct {

@@ -8,7 +8,6 @@ import (
 
 const MixedAnalysis = "RC/NPN transient"
 const MixedEngineID = "elab.mixed-mna-be.v1"
-const MaxMixedNodes = 12
 
 type CapacitorResult struct {
 	ID      string  `json:"id"`
