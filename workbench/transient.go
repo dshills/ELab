@@ -291,6 +291,11 @@ func (s *Service) launchTransientLocked(c Compiled) {
 					s.mu.Unlock()
 					return
 				}
+				if s.activeInputWorkLocked() {
+					budget = 0
+					s.mu.Unlock()
+					continue
+				}
 				budget += elapsed * s.transientSettings.PlaybackSpeed
 				steps := int((budget + 1e-12) / s.transientSettings.StepSeconds)
 				limit := 250
@@ -382,10 +387,14 @@ func (s *Service) transientCommandLocked(command string, raw []byte) error {
 		}
 
 		s.cancelStepLocked("superseded")
+		s.cancelInputWorkLocked("superseded")
 		if s.paused {
 			s.pendingInputMode = p.Mode
 			s.transient.PendingMode = p.Mode
 		} else {
+			if IsNetworkAnalysis(c.Analysis) {
+				return s.startInputWorkLocked(p.Mode, nil, s.graph, "")
+			}
 			if err := s.applyTransientInputLocked(c, p.Mode); err != nil {
 				return err
 			}

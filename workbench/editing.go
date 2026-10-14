@@ -678,6 +678,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if len(s.undo) == 0 {
 			return &actionError{"unavailable", "nothing to undo"}
 		}
+		s.cancelInputWorkLocked("superseded")
 		h := s.historyLocked()
 		tip := s.undo[len(s.undo)-1]
 		h.Name = tip.Name
@@ -690,6 +691,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if len(s.redo) == 0 {
 			return &actionError{"unavailable", "nothing to redo"}
 		}
+		s.cancelInputWorkLocked("superseded")
 		h := s.historyLocked()
 		tip := s.redo[len(s.redo)-1]
 		h.Name = tip.Name
@@ -699,6 +701,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		s.restoreLocked(s.redo[len(s.redo)-1])
 		s.redo = s.redo[:len(s.redo)-1]
 	case "simulation.pause":
+		s.cancelInputWorkLocked("canceled")
 		s.cancelStepLocked("canceled")
 		s.paused = true
 		if s.cancel != nil {
@@ -716,7 +719,13 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			c, _, d := s.graph.Compile()
 			if d == nil && IsTransientAnalysis(c.Analysis) {
 				if s.transient.PendingMode != "" {
-					if err := s.applyTransientInputLocked(c, s.transient.PendingMode); err != nil {
+					var err error
+					if IsNetworkAnalysis(c.Analysis) {
+						err = s.startInputWorkLocked(s.transient.PendingMode, nil, s.graph, "")
+					} else {
+						err = s.applyTransientInputLocked(c, s.transient.PendingMode)
+					}
+					if err != nil {
 						s.paused = true
 						return err
 					}

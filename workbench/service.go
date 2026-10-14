@@ -12,6 +12,7 @@ import (
 )
 
 type Snapshot struct {
+	InputWork              *InputWork             `json:"input_work,omitempty"`
 	Example                *ExampleContext        `json:"example,omitempty"`
 	DiagnosticPresentation DiagnosticPresentation `json:"diagnostic_presentation"`
 	Display                CircuitDisplay         `json:"display"`
@@ -75,6 +76,9 @@ type savedResponse struct {
 	response    Response
 }
 type Service struct {
+	inputJob                         *inputJob
+	inputSerial                      uint64
+	inputSolve                       inputSolveFunc
 	exampleID                        string
 	diagnosticDetails                bool
 	displayPreferences               DisplayPreferences
@@ -87,7 +91,6 @@ type Service struct {
 	stepJob                          *stepJob
 	actuationRevision                uint64
 	liveSwitchEdit                   bool
-	pendingNetwork                   *networkTransition
 	savedRecordings                  [32]byte
 	restorePaused                    bool
 	recording                        recordingState
@@ -157,7 +160,7 @@ func newService(solver func(context.Context, Circuit) (Result, error)) *Service 
 	return s
 }
 func newGraphService(solver func(context.Context, Circuit) (Result, error), graph Graph) *Service {
-	s := &Service{revision: 1, electrical: 1, graph: graph.Clone(), drawing: DefaultDrawing(), usedIDs: map[string]bool{}, view: View{Zoom: 1}, cache: map[string]savedResponse{}, changed: make(chan struct{}), solver: solver, networkAdvance: advanceLiveNetwork, initialSolver: solveInitial, initialTimeout: 5 * time.Second, actor: "system"}
+	s := &Service{revision: 1, electrical: 1, graph: graph.Clone(), drawing: DefaultDrawing(), usedIDs: map[string]bool{}, view: View{Zoom: 1}, cache: map[string]savedResponse{}, changed: make(chan struct{}), solver: solver, networkAdvance: advanceLiveNetwork, inputSolve: solveInputWork, initialSolver: solveInitial, initialTimeout: 5 * time.Second, actor: "system"}
 	for _, c := range graph.Components {
 		s.usedIDs[c.ID] = true
 	}
@@ -186,7 +189,55 @@ func (s *Service) snapshotLocked() Snapshot {
 	if analysis == "" {
 		analysis = "DC operating point"
 	}
-	out := Snapshot{Example: s.exampleContextLocked(), DiagnosticPresentation: s.diagnosticPresentationLocked(compiled), Display: s.circuitDisplayLocked(), MeasurementInspection: s.measurementInspectionLocked(compiled, s.currentMeasurementTargetLocked()), PinnedReadings: s.pinnedReadingsLocked(), TraceFocus: s.traceFocusLocked(compiled), Limits: Limits(), SimulatedComponents: SimulatedComponentCount(graph), StepWork: s.stepWorkLocked(), ActuationRevision: s.actuationRevision, SwitchStates: s.switchStatesLocked(), SourceWarnings: waveformSamplingWarnings(graph, s.transientSettings), Recording: s.recordingViewLocked(), Recovery: cloneRecovery(s.recovery), VerificationSettings: cloneVerificationSettings(s.verificationSettings), Operations: []OperationSummary{}, SelectedOperation: s.selectedOperation, LastOperation: s.lastOperation, PartSearch: s.partSearch, MatchingParts: filteredParts(s.partSearch), Scope: s.scopeLocked(compiled), Mixed: cloneMixed(s.mixed), NPN: cloneNPN(s.npn), CommandRevision: s.commandRevision, Transient: cloneTransient(s.transient), TransientSettings: s.transientSettings, Document: DocumentState{PreferencesDirty: preferencesHash(s.pins, s.displayPreferences, s.exampleID) != s.savedPreferences, SchematicDirty: contentHash(s.graph, s.transientSettings) != s.savedGraph, RecordingsDirty: s.recordingsDirtyLocked(), RecordingCount: s.recordingCountLocked(), Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: DocumentVersion, Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom}, Revision: s.revision, ElectricalRevision: s.electrical, Circuit: s.circuit, Components: graph.Components, Wires: graph.Wires, Nets: compiled.Nets, Drawing: s.drawing, Model: Model(), Selected: s.selected, View: s.view, Status: s.status, Analysis: analysis, Paused: s.paused, RunID: s.run, Diagnostics: append([]Diagnostic{}, s.diagnostics...), CanUndo: len(s.undo) > 0, CanRedo: len(s.redo) > 0, LastActor: s.actor, Closed: s.closed}
+	out := Snapshot{
+		InputWork:              s.inputWorkLocked(),
+		Example:                s.exampleContextLocked(),
+		DiagnosticPresentation: s.diagnosticPresentationLocked(compiled),
+		Display:                s.circuitDisplayLocked(),
+		MeasurementInspection:  s.measurementInspectionLocked(compiled, s.currentMeasurementTargetLocked()),
+		PinnedReadings:         s.pinnedReadingsLocked(),
+		TraceFocus:             s.traceFocusLocked(compiled),
+		Limits:                 Limits(),
+		SimulatedComponents:    SimulatedComponentCount(graph),
+		StepWork:               s.stepWorkLocked(),
+		ActuationRevision:      s.actuationRevision,
+		SwitchStates:           s.switchStatesLocked(),
+		SourceWarnings:         waveformSamplingWarnings(graph, s.transientSettings),
+		Recording:              s.recordingViewLocked(),
+		Recovery:               cloneRecovery(s.recovery),
+		VerificationSettings:   cloneVerificationSettings(s.verificationSettings),
+		Operations:             []OperationSummary{},
+		SelectedOperation:      s.selectedOperation,
+		LastOperation:          s.lastOperation,
+		PartSearch:             s.partSearch,
+		MatchingParts:          filteredParts(s.partSearch),
+		Scope:                  s.scopeLocked(compiled),
+		Mixed:                  cloneMixed(s.mixed),
+		NPN:                    cloneNPN(s.npn),
+		CommandRevision:        s.commandRevision,
+		Transient:              cloneTransient(s.transient),
+		TransientSettings:      s.transientSettings,
+		Document:               DocumentState{PreferencesDirty: preferencesHash(s.pins, s.displayPreferences, s.exampleID) != s.savedPreferences, SchematicDirty: contentHash(s.graph, s.transientSettings) != s.savedGraph, RecordingsDirty: s.recordingsDirtyLocked(), RecordingCount: s.recordingCountLocked(), Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: DocumentVersion, Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom},
+		Revision:               s.revision,
+		ElectricalRevision:     s.electrical,
+		Circuit:                s.circuit,
+		Components:             graph.Components,
+		Wires:                  graph.Wires,
+		Nets:                   compiled.Nets,
+		Drawing:                s.drawing,
+		Model:                  Model(),
+		Selected:               s.selected,
+		View:                   s.view,
+		Status:                 s.status,
+		Analysis:               analysis,
+		Paused:                 s.paused,
+		RunID:                  s.run,
+		Diagnostics:            append([]Diagnostic{}, s.diagnostics...),
+		CanUndo:                len(s.undo) > 0,
+		CanRedo:                len(s.redo) > 0,
+		LastActor:              s.actor,
+		Closed:                 s.closed,
+	}
 	for i := len(s.operationOrder) - 1; i >= 0; i-- {
 		out.Operations = append(out.Operations, s.operationSummaryLocked(s.operations[s.operationOrder[i]]))
 	}
@@ -256,6 +307,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	return out
 }
 func (s *Service) startLocked() {
+	s.cancelInputWorkLocked("superseded")
 	s.cancelStepLocked("superseded")
 	allowPaused := s.restorePaused
 	s.restorePaused = false
@@ -367,6 +419,7 @@ func (s *Service) closeLocked() {
 			s.recoveryCancel()
 		}
 	}
+	s.cancelInputWorkLocked("canceled")
 	s.cancelStepLocked("canceled")
 	s.closed = true
 	if s.recording.cancel != nil {
@@ -392,7 +445,7 @@ func (s *Service) Wait(ctx context.Context) (Snapshot, error) {
 		state := s.snapshotLocked()
 		changed := s.changed
 		s.mu.Unlock()
-		if state.Status != "updating" && (state.StepWork == nil || !operationActive(state.StepWork.Status)) {
+		if state.Status != "updating" && (state.StepWork == nil || !operationActive(state.StepWork.Status)) && (state.InputWork == nil || !operationActive(state.InputWork.Status)) {
 			return state, nil
 		}
 		select {
@@ -565,7 +618,6 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 		}
 	}
 
-	s.pendingNetwork = nil
 	s.liveSwitchEdit = false
 	before := s.historyLocked()
 	s.nextHistoryName = ""
@@ -605,13 +657,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 			if s.liveSwitchEdit {
 				s.cancelStepLocked("superseded")
 				s.actuationRevision++
-			} else if s.pendingNetwork != nil {
-				s.cancelStepLocked("superseded")
-				s.actuationRevision++
-				s.mixedState = s.pendingNetwork.state
-				s.mixed = s.pendingNetwork.state.result
-				s.transient = s.pendingNetwork.trace
-				s.pendingNetwork = nil
+				s.cancelInputWorkLocked("superseded")
 			} else {
 				s.electrical++
 				s.startLocked()
@@ -633,6 +679,9 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	}
 	if r.Command == "simulation.verify" || r.Command == "verification.import" {
 		s.operations[s.lastOperation].summary.Actor = actor
+	}
+	if s.inputJob != nil && s.inputJob.work.CommandRevision == s.commandRevision+1 {
+		s.inputJob.work.Actor = actor
 	}
 	if r.Command == "simulation.step" || r.Command == "simulation.step.start" {
 		s.stepJob.work.Actor = actor
@@ -659,6 +708,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	state.InputWork = cloneInputWork(state.InputWork)
 	state.Example = cloneExampleContext(state.Example)
 	state.DiagnosticPresentation = cloneDiagnosticPresentation(state.DiagnosticPresentation)
 	state.Display = cloneCircuitDisplay(state.Display)

@@ -57,7 +57,7 @@ func uiAction(t *testing.T, s *screen, id string, event *ui.ChangeEvent) {
 	if s.errorMessage != "" {
 		t.Fatalf("%s: %s", id, s.errorMessage)
 	}
-	if id == "transient-step" || s.service.Snapshot().Status == "updating" {
+	if id == "transient-step" || s.service.Snapshot().Status == "updating" || activeInputWork(s.service.Snapshot()) {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 		state, err := s.service.Wait(ctx)
@@ -79,7 +79,7 @@ func agentAction(t *testing.T, service *workbench.Service, id string, p any) {
 	if response.Error != nil {
 		t.Fatal(response.Error)
 	}
-	if s := service.Snapshot(); s.Status == "updating" {
+	if s := service.Snapshot(); s.Status == "updating" || activeInputWork(s) {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
 		if _, err := service.Wait(ctx); err != nil {

@@ -95,7 +95,7 @@ def main():
                 'new work ID and atomic successful publication','four traces and independent Verify parity',
                 'legacy wait-for-result compatibility','save/reopen keeps experiment and recording; physical/job state restarts'],
             limitations=['backend admission timing is not visible input-to-pixel latency',
-                'some input/file/recovery work remains synchronous','private unsigned local build'])
+                'some file/recovery work remains synchronous','private unsigned local build'])
         if args.output:
             args.output.parent.mkdir(parents=True,exist_ok=True)
             args.output.write_text(json.dumps(report,indent=2)+'\n')

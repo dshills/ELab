@@ -40,15 +40,15 @@
     },
     {
       "id": "SIM-01",
-      "evidence": "Automatic restart after valid electrical edits; asynchronous specialized LED/NPN solves, live kernels",
+      "evidence": "Automatic restarts; initialization, live network samples, manual Step and algebraic input/wiper work outside the service lock",
       "status": "partial",
-      "assessment": "Partial: bounded general MNA/step work still occurs under the service lock; responsiveness to difficult solves is unmeasured"
+      "assessment": "Partial: controlled blocked-kernel and backend API evidence exists; difficult-solve and visible-latency qualification remains open"
     },
     {
       "id": "SIM-02",
-      "evidence": "Fresh/stale flags, electrical/run identities, pause/edit/restart regressions, input-event traces",
+      "evidence": "Fresh/stale identities; queued switches and atomic background input/wiper publication with charge/time continuity",
       "status": "partial",
-      "assessment": "Partial: switches now queue until the next accepted step, with paused pending/coalescing/atomicity evidence and separate actuation provenance. Wiper events remain immediate; complete mounted gesture invalidation and state-table qualification remain open"
+      "assessment": "Partial: pending/coalescing/cancellation/provenance evidence exists; complete mounted gesture invalidation and state-table qualification remain open"
     },
     {
       "id": "SIM-03",
@@ -154,9 +154,9 @@
     },
     {
       "id": "AGENT-04",
-      "evidence": "Verify operation IDs/progress/cancel, captured input versions, bounded sample paging",
+      "evidence": "Observable Verify, manual Step and input jobs with IDs/status/cancellation; captured revisions and bounded sample paging",
       "status": "partial",
-      "assessment": "Partial: synchronous file/step/general solve paths are not all observable asynchronous jobs; state events are snapshot polling rather than a documented subscription"
+      "assessment": "Partial: some file/recovery operations remain synchronous; documented state event subscriptions and complete job coverage remain open"
     },
     {
       "id": "AGENT-05",

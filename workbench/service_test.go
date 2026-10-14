@@ -28,6 +28,15 @@ func call(t *testing.T, s *Service, command string, p any, key string) Response 
 	if state, ok := r.Result.(Snapshot); ok && state.Status == "updating" && (IsNetworkAnalysis(state.Analysis) || state.Analysis == NPNTransientAnalysis) {
 		r.Result = awaitTestInitialization(t, s)
 	}
+	if state, ok := r.Result.(Snapshot); ok && state.InputWork != nil && operationActive(state.InputWork.Status) && (command == "potentiometer.wiper.set" || command == "simulation.input.set" || command == "simulation.resume") {
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		state, err := s.Wait(ctx)
+		if err != nil || state.InputWork.Status != "completed" {
+			t.Fatalf("input work: %+v, %v", state.InputWork, err)
+		}
+		r.Result = state
+	}
 	return r
 }
 func settled(t *testing.T, s *Service) Snapshot {

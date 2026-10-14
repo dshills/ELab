@@ -27,7 +27,7 @@ The fixture has 12 drawing objects, eight nets, 5 ms output steps and 0.5 simula
 
 ## Remaining work
 
-Network and NPN phase initialization now run outside the lock; input/wiper algebraic solves and some file/recovery work remain synchronous. This release does not satisfy the whole slow-work/nonblocking requirement. The expanded [capacity envelope](circuit-capacity.md) supports 64 simulated parts and 100 nodes including ground; visible-latency validation remains separate. Mounted-driver gesture invalidation, complete reference-circuit visible p95, screen-reader, clean-installation and participant gates remain open.
+Network and NPN phase initialization now run outside the lock; input/wiper algebraic solves now use [background input work](input-work.md), while some file/recovery work remains synchronous. This release does not satisfy the whole slow-work/nonblocking requirement. The expanded [capacity envelope](circuit-capacity.md) supports 64 simulated parts and 100 nodes including ground; visible-latency validation remains separate. Mounted-driver gesture invalidation, complete reference-circuit visible p95, screen-reader, clean-installation and participant gates remain open.
 
 Run `python3 scripts/live-responsiveness-demo.py --output REPORT --artifacts DIRECTORY` after building. Use `--connect` only for an owned development endpoint: it replaces that session's project. The packaged development launch uses absolute endpoint/recovery paths.
 

@@ -143,6 +143,15 @@ func (s *Service) diagnosticPresentationLocked(c Compiled) DiagnosticPresentatio
 	for _, d := range waveformSamplingWarnings(s.graph, s.transientSettings) {
 		out.Items = append(out.Items, makeDiagnosticHelp(s.graph, c, d, "sampling", nil))
 	}
+	if s.inputJob != nil && s.inputJob.work.Status == "failed" && s.inputJob.work.Error != nil {
+		work := s.inputJob.work
+		help := makeDiagnosticHelp(s.graph, c, Diagnostic{Code: "solve-failed", Message: work.Error.Message}, "input", nil)
+		help.Summary = "Input calculation failed; committed circuit, time and charge were preserved."
+		if work.RunID != s.run || work.ElectricalRevision != s.electrical || work.ActuationRevision != s.actuationRevision {
+			help.Summary = "A previous input calculation failed; its committed state was preserved."
+		}
+		out.Items = append(out.Items, help)
+	}
 	return out
 }
 func (s *Service) requestDiagnosticLocked(r Request, code, message string) *DiagnosticHelp {

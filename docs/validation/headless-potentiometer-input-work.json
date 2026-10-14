@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "capabilities": 98,
+  "library_kinds": 14,
+  "unloaded_voltage_v": 2.5,
+  "loaded_voltage_v": 2,
+  "endpoint_voltages_v": [
+    0.0005,
+    4.9995
+  ],
+  "capacitor_voltage_v": 2.160985395290107,
+  "analytical_voltage_v": 2.161661791908468,
+  "changed_capacitor_voltage_v": 3.6386571502722167,
+  "changed_analytical_voltage_v": 3.6393179034750407,
+  "checks": [
+    "blank unloaded divider construction",
+    "finite endpoints preserve total resistance",
+    "loaded divider/conservation",
+    "invalid wiper refused",
+    "Thevenin RC references before/after movement",
+    "charge/time/run continuity and event",
+    "Verify model and pin probes",
+    "JSON import and CSV attribution",
+    "two embedded records and saved wiper round trip",
+    "schematic SVG"
+  ]
+}

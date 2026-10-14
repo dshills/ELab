@@ -190,7 +190,7 @@ func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
 	if s.errorMessage != "" {
 		return fmt.Errorf("%s: %s", id, s.errorMessage)
 	}
-	if id == "transient-step" || s.service.Snapshot().Status == "updating" {
+	if id == "transient-step" || s.service.Snapshot().Status == "updating" || activeInputWork(s.service.Snapshot()) {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 		state, err := s.service.Wait(ctx)
@@ -1078,12 +1078,70 @@ func nativePotentiometerSmoke(ctx context.Context, a *app.Application, s *screen
 			checked <- fmt.Errorf("native pot readout absent")
 			return
 		}
+		if err := smokeConstructPotRC(s); err != nil {
+			checked <- err
+			return
+		}
+		before = s.service.Snapshot()
+		if err := smokeUI(s, "pot-wiper", &ui.ChangeEvent{Number: 75}); err != nil {
+			checked <- err
+			return
+		}
+		after = s.service.Snapshot()
+		if after.InputWork == nil || after.InputWork.Status != "completed" || after.Transient.Sample.Time != before.Transient.Sample.Time || math.Abs(after.Mixed.Capacitors[0].Voltage-before.Mixed.Capacitors[0].Voltage) > 1e-10 || after.RunID != before.RunID {
+			checked <- fmt.Errorf("native transient wiper did not commit atomically at preserved time/charge")
+			return
+		}
+		if _, ok := findNode(s.view(), "input-work-status"); !ok {
+			checked <- fmt.Errorf("native applying-input status absent")
+			return
+		}
 		_, err := s.mesh(*s.drawing.View)
 		checked <- err
 	}); err != nil {
 		return err
 	}
 	return <-checked
+}
+
+func smokeConstructPotRC(s *screen) error {
+	if err := smokeUI(s, "example.rc", nil); err != nil {
+		return err
+	}
+	if s.pendingCommand != "" {
+		if err := smokeUI(s, "discard-continue", nil); err != nil {
+			return err
+		}
+	}
+	for _, action := range []struct {
+		id    string
+		event *ui.ChangeEvent
+	}{
+		{"simulation.pause", nil}, {"selection", &ui.ChangeEvent{SelectedID: "R1"}},
+		{"delete-object", nil}, {"part-potentiometer", nil},
+		{"position-x", &ui.ChangeEvent{Number: 0}}, {"position-y", &ui.ChangeEvent{Number: -110}}, {"place-at-position", nil},
+	} {
+		if err := smokeUI(s, action.id, action.event); err != nil {
+			return err
+		}
+	}
+	id := s.service.Snapshot().Selected
+	for _, pair := range [][2]string{{"V1.positive", id + ".1"}, {id + ".2", "GND.reference"}, {id + ".wiper", "C1.1"}} {
+		for _, action := range []struct {
+			id    string
+			event *ui.ChangeEvent
+		}{
+			{"tool-wire", nil}, {"wire-from", &ui.ChangeEvent{SelectedID: pair[0]}}, {"wire-to", &ui.ChangeEvent{SelectedID: pair[1]}}, {"connect-terminals", nil},
+		} {
+			if err := smokeUI(s, action.id, action.event); err != nil {
+				return err
+			}
+		}
+	}
+	if err := smokeUI(s, "simulation.restart", nil); err != nil {
+		return err
+	}
+	return smokeUI(s, "transient-step", nil)
 }
 
 func smokeConstructWaveform(s *screen, kind string) error {

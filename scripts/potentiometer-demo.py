@@ -69,7 +69,7 @@ def main():
         ref = 2.5*(1-math.exp(-.005/.0025))
         assert abs(voltage-ref) < .002
         client.ask('potentiometer.wiper.set', {'id': 'Timing', 'position': .75}, True)
-        moved = client.ask('project.inspect')
+        moved = client.ask('simulation.wait')
         assert moved['run_id'] == before['run_id']
         assert moved['transient']['sample']['time_s'] == before['transient']['sample']['time_s']
         assert abs(moved['mixed']['capacitors'][0]['voltage_v']-voltage) < 1e-10

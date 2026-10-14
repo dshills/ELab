@@ -50,6 +50,9 @@ func (s *Service) setWiperLocked(p WiperParams) error {
 		return fmt.Errorf("choose a potentiometer")
 	}
 	if part.WiperPosition != nil && *part.WiperPosition == p.Position {
+		if s.activeInputWorkLocked() && s.inputJob.work.Wiper != nil && s.inputJob.work.Wiper.ID == p.ID {
+			s.cancelInputWorkLocked("superseded")
+		}
 		return nil
 	}
 	graph := s.graph.Clone()
@@ -59,5 +62,9 @@ func (s *Service) setWiperLocked(p WiperParams) error {
 			graph.Components[i].WiperPosition = &v
 		}
 	}
-	return s.applyNetworkEditLocked(graph, fmt.Sprintf("wiper:%s:%.17g", p.ID, p.Position))
+	if s.transient != nil && !s.transient.Stale && s.mixedState != nil && IsNetworkAnalysis(s.mixedState.net.c.Analysis) {
+		return s.startInputWorkLocked("", &p, graph, fmt.Sprintf("wiper:%s:%.17g", p.ID, p.Position))
+	}
+	s.graph = graph
+	return nil
 }

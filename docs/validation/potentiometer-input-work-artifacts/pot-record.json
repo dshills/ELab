@@ -1,0 +1,330 @@
+{
+  "metadata": {
+    "actuation_revision": 2,
+    "potentiometer_model": {
+      "id": "elab.linear-potentiometer.v1",
+      "end_resistance_ohm": 1,
+      "limitations": "Generic linear three-pin resistive track. Total resistance is split into two segments, each with 1 ohm endpoint resistance. Position 0 is toward pin 2; position 1 is toward pin 1. No contact noise, nonlinear taper, ratings, heating or physical part identity."
+    },
+    "format": "elab.verification",
+    "version": 1,
+    "operation_id": "verify-1",
+    "created_at": "2026-10-14T06:53:32.792748Z",
+    "input_revision": 29,
+    "electrical_revision": 8,
+    "document_generation": 3,
+    "graph": {
+      "components": [
+        {
+          "id": "V1",
+          "kind": "pulse-source",
+          "name": "Pulse source",
+          "terminals": [
+            "positive",
+            "negative"
+          ],
+          "position": {
+            "x": -200,
+            "y": 0
+          },
+          "value": 5,
+          "unit": "V",
+          "model": "ideal-square.v1",
+          "rotation": 0
+        },
+        {
+          "id": "C1",
+          "kind": "capacitor",
+          "name": "Capacitor",
+          "terminals": [
+            "1",
+            "2"
+          ],
+          "position": {
+            "x": 200,
+            "y": 0
+          },
+          "value": 0.000001,
+          "unit": "F",
+          "model": "ideal-capacitor.v1",
+          "rotation": 0
+        },
+        {
+          "id": "GND",
+          "kind": "ground",
+          "name": "Ground",
+          "terminals": [
+            "reference"
+          ],
+          "position": {
+            "x": 0,
+            "y": 110
+          },
+          "value": 0,
+          "model": "ground.v1",
+          "rotation": 0
+        },
+        {
+          "wiper_position": 0.75,
+          "id": "Timing",
+          "kind": "potentiometer",
+          "name": "Potentiometer",
+          "terminals": [
+            "1",
+            "2",
+            "wiper"
+          ],
+          "position": {
+            "x": 0,
+            "y": -110
+          },
+          "value": 10000,
+          "unit": "Ω",
+          "model": "elab.linear-potentiometer.v1",
+          "rotation": 0
+        }
+      ],
+      "wires": [
+        {
+          "id": "W3",
+          "from": "C1.2",
+          "to": "GND.reference",
+          "connected": true
+        },
+        {
+          "id": "W4",
+          "from": "GND.reference",
+          "to": "V1.negative",
+          "connected": true
+        },
+        {
+          "id": "W6",
+          "from": "V1.positive",
+          "to": "Timing.1",
+          "connected": true
+        },
+        {
+          "id": "W7",
+          "from": "Timing.2",
+          "to": "GND.reference",
+          "connected": true
+        },
+        {
+          "id": "W8",
+          "from": "Timing.wiper",
+          "to": "C1.1",
+          "connected": true
+        }
+      ]
+    },
+    "settings": {
+      "step_s": 0.001,
+      "high_s": 0.05,
+      "low_s": 0.05,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 0.02
+    },
+    "input_mode": "auto",
+    "analysis": "Network transient",
+    "engine": "elab.network-mna-be.v1",
+    "led_model": {
+      "id": "elab.generic-red-led.v1",
+      "is_a": 1e-20,
+      "n": 2,
+      "rs_ohm": 1,
+      "temperature_c": 27,
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+    },
+    "probes": [
+      {
+        "id": "v:Timing.wiper",
+        "label": "Timing.wiper / ground",
+        "unit": "V",
+        "positive": "Timing.wiper",
+        "reference": "ground"
+      },
+      {
+        "id": "i:Timing.wiper",
+        "label": "Timing.wiper current into device",
+        "unit": "A",
+        "positive": "Timing.wiper",
+        "reference": "into device"
+      },
+      {
+        "id": "v:Timing",
+        "label": "Timing track voltage",
+        "unit": "V",
+        "positive": "Timing.1",
+        "reference": "Timing.2"
+      }
+    ],
+    "duration_s": 0.01,
+    "sample_count": 11,
+    "statistics": [
+      {
+        "probe_id": "v:Timing.wiper",
+        "count": 11,
+        "min": 0,
+        "max": 3.7312984245053,
+        "sample_mean": 2.926696363381936,
+        "sample_rms": 3.136547380880132
+      },
+      {
+        "probe_id": "i:Timing.wiper",
+        "count": 11,
+        "min": -0.001999600079984003,
+        "max": -0.000009839528457906,
+        "sample_mean": -0.0004389034249250233,
+        "sample_rms": 0.0007446210776170208
+      },
+      {
+        "probe_id": "v:Timing",
+        "count": 11,
+        "min": 5,
+        "max": 5,
+        "sample_mean": 5,
+        "sample_rms": 5
+      }
+    ],
+    "mixed": {
+      "potentiometers": [
+        {
+          "id": "Timing",
+          "resistance_ohm": 10000,
+          "wiper_position": 0.75,
+          "upper_resistance_ohm": 2500.5,
+          "lower_resistance_ohm": 7499.5,
+          "terminal_1_voltage_v": 5,
+          "terminal_2_voltage_v": 0,
+          "wiper_voltage_v": 3.7312984245053,
+          "terminal_1_current_a": 0.0005073791543670066,
+          "terminal_2_current_a": -0.0004975396259091006,
+          "wiper_current_a": -0.000009839528457906,
+          "power_w": 0.002500181554802173
+        }
+      ],
+      "engine": "elab.network-mna-be.v1",
+      "run_id": 1,
+      "electrical_revision": 8,
+      "time_s": 0.01,
+      "nodes_v": {
+        "net:C1.1": 3.7312984245053,
+        "net:C1.2": 0,
+        "net:Timing.1": 5
+      },
+      "transistors": [],
+      "capacitors": [
+        {
+          "id": "C1",
+          "voltage_v": 3.7312984245053,
+          "current_a": 0.000009839528457902967,
+          "energy_j": 0.000006961293966357867
+        }
+      ],
+      "leds": [],
+      "resistors": [],
+      "sources": [
+        {
+          "id": "V1",
+          "current_a": 0.0005073791543670066,
+          "voltage_v": 5,
+          "power_w": 0.002536895771835033
+        }
+      ],
+      "kcl_residual_a": 3.033804517606579e-18,
+      "power_residual_w": 1.3502927545383748e-17,
+      "numerical_damping_w": 1.5127550042793708e-9,
+      "stale": false
+    }
+  },
+  "rows": [
+    {
+      "time_s": 0,
+      "values": [
+        0,
+        -0.001999600079984003,
+        5
+      ]
+    },
+    {
+      "time_s": 0.001,
+      "values": [
+        1.54936338683528,
+        -0.0011733830915874135,
+        5
+      ]
+    },
+    {
+      "time_s": 0.002,
+      "values": [
+        2.4582277591325163,
+        -0.0006887200416400398,
+        5
+      ]
+    },
+    {
+      "time_s": 0.003,
+      "values": [
+        2.9916091154513347,
+        -0.00040428790542906964,
+        5
+      ]
+    },
+    {
+      "time_s": 0.004,
+      "values": [
+        3.3044649083591704,
+        -0.00023745372487784172,
+        5
+      ]
+    },
+    {
+      "time_s": 0.005,
+      "values": [
+        3.488217062153466,
+        -0.00013946563995903208,
+        5
+      ]
+    },
+    {
+      "time_s": 0.006,
+      "values": [
+        3.5960517949153177,
+        -0.00008196144894479055,
+        5
+      ]
+    },
+    {
+      "time_s": 0.007,
+      "values": [
+        3.6593776733599888,
+        -0.00004819214923067059,
+        5
+      ]
+    },
+    {
+      "time_s": 0.008,
+      "values": [
+        3.696612376058137,
+        -0.00002833628830836959,
+        5
+      ]
+    },
+    {
+      "time_s": 0.009000000000000001,
+      "values": [
+        3.7184374964307816,
+        -0.00001669777575611937,
+        5
+      ]
+    },
+    {
+      "time_s": 0.01,
+      "values": [
+        3.7312984245053,
+        -0.000009839528457906,
+        5
+      ]
+    }
+  ]
+}

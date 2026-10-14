@@ -1,0 +1,34 @@
+{
+  "passed": true,
+  "transport": "packaged-native-private-socket",
+  "wiper_admission_ms": 0.40629098657518625,
+  "work": {
+    "id": "input-1",
+    "command": "potentiometer.wiper.set",
+    "status": "queued",
+    "actor": "agent.socket",
+    "run_id": 4,
+    "electrical_revision": 3,
+    "actuation_revision": 1,
+    "command_revision": 8,
+    "time_s": 0.005,
+    "requested_wiper": {
+      "id": "Timing",
+      "position": 0.75
+    }
+  },
+  "capacitor_voltage_v": 2.160985395290107,
+  "checks": [
+    "queued admission preserves committed graph/physics/history",
+    "worker publishes one actor-owned wiper edit",
+    "charge/time/run/electrical identity retained",
+    "admission and publication have distinct actuation revisions",
+    "queued Resume and running input changes use worker",
+    "saved paused circuit reopens fresh without job state"
+  ],
+  "limitations": [
+    "blocked-worker cancellation, failure and responsiveness are separately covered by controlled race tests",
+    "backend timing excludes input-to-pixel latency",
+    "some file/recovery work remains synchronous"
+  ]
+}

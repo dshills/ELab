@@ -205,6 +205,9 @@ func (s *screen) view() ui.Node {
 		inspector = append(inspector, s.waveformControls(state, part)...)
 		if part.Kind == "potentiometer" {
 			position := *part.WiperPosition
+			if activeInputWork(state) && state.InputWork.Wiper != nil && state.InputWork.Wiper.ID == part.ID {
+				position = state.InputWork.Wiper.Position
+			}
 			change := func(e ui.ChangeEvent) {
 				s.invoke("potentiometer.wiper.set", workbench.WiperParams{ID: part.ID, Position: float64(e.Number) / 100})
 			}
@@ -334,6 +337,7 @@ func (s *screen) view() ui.Node {
 	inspector = append(inspector, s.pinnedReadingControls(state)...)
 	inspector = append(inspector, s.displayControls(state)...)
 	inspector = append(inspector, s.diagnosticControls(state)...)
+	inspector = append(inspector, s.inputWorkControls(state)...)
 	if state.Drawing.Tool == "wire" {
 		terminalOptions := []ui.Option{{ID: "__none", Label: "Choose a terminal…"}}
 		for _, c := range state.Components {

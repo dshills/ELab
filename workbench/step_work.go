@@ -58,6 +58,9 @@ func cloneMixedState(state *mixedState) *mixedState {
 	return &mixedState{net: state.net, x: append([]float64{}, state.x...), capV: append([]float64{}, state.capV...), result: cloneMixed(state.result)}
 }
 func (s *Service) startStepLocked(p StepParams) error {
+	if s.activeInputWorkLocked() {
+		return &actionError{"busy", "finish or cancel applying the current input before stepping"}
+	}
 	if s.stepJob != nil && operationActive(s.stepJob.work.Status) {
 		return &actionError{"busy", "finish or cancel the current manual step"}
 	}
@@ -103,8 +106,12 @@ func (s *Service) cancelStepLocked(reason string) {
 	}
 }
 func (s *Service) cancelStepCommandLocked(p IDParams) error {
+	if s.inputJob != nil && s.inputJob.work.ID == p.ID && s.activeInputWorkLocked() {
+		s.cancelInputWorkLocked("canceled")
+		return nil
+	}
 	if s.stepJob == nil || s.stepJob.work.ID != p.ID || !operationActive(s.stepJob.work.Status) {
-		return &actionError{"operation-unavailable", "choose the active manual step to cancel"}
+		return &actionError{"operation-unavailable", "choose the active manual step or input work to cancel"}
 	}
 	s.cancelStepLocked("canceled")
 	return nil

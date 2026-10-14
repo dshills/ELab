@@ -1,6 +1,7 @@
 package workbench
 
 import (
+	"context"
 	"fmt"
 	"math"
 )
@@ -122,10 +123,13 @@ func advanceMixedBudget(state *mixedState, t *Transient, end float64, budget *in
 	return cur, trace, nil
 }
 func overrideMixed(state *mixedState, t *Transient, mode string) (*mixedState, *Transient, error) {
+	return overrideMixedContext(context.Background(), state, t, mode)
+}
+func overrideMixedContext(ctx context.Context, state *mixedState, t *Transient, mode string) (*mixedState, *Transient, error) {
 	trace := cloneTransient(t)
 	trace.Mode = mode
 	trace.PendingMode = ""
-	next, err := state.net.solve(state.x, state.capV, 0, trace, state.result.Time)
+	next, err := state.net.solveContext(ctx, state.x, state.capV, 0, trace, state.result.Time)
 	if err != nil {
 		return nil, nil, err
 	}

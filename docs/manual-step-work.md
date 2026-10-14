@@ -34,4 +34,6 @@ Native tests prove immediate shared admission and matching completed RC data wit
 
 `scripts/step-work-demo.py` starts a 1,000-sample flasher advance, observes staged progress with unchanged committed readings, pans/saves/moves/undoes, then cancels all staged samples. A second advance completes atomically and matches independent Verify capacitor readings. The waiting command remains compatible, and a saved experiment reopens paused/clean with its recording and fresh physics. Use `--connect` only for an owned endpoint; the demo replaces that project. Use `--output REPORT --artifacts DIRECTORY` to retain evidence.
 
-The complete PRD acceptance matrix remains [partial](../research/11-prd-implementation-audit.md): physical capacity, input/file responsiveness, mounted gestures, visible latency, accessibility, clean installation and participant gates are still open.
+The complete PRD acceptance matrix remains [partial](../research/11-prd-implementation-audit.md): topology/performance qualification, file responsiveness, mounted gestures, visible latency, accessibility, clean installation and participant gates are still open.
+
+Fresh network input/wiper operations use [background input work](input-work.md); manual Step refuses while that work is active.

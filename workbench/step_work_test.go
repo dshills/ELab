@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"sync"
 	"testing"
+	"time"
 )
 
 func TestAsyncStepAllowsEditingSaveAndCancellationWithoutPartialPhysics(t *testing.T) {
@@ -177,6 +178,13 @@ func TestWiperEventSupersedesStagedStepWithoutBeingOverwritten(t *testing.T) {
 	call(t, s, "simulation.step.start", StepParams{Duration: .01}, "start")
 	awaitLiveSampleBlock(t, entered)
 	promptLiveCommand(t, s, "potentiometer.wiper.set", WiperParams{ID: "P1", Position: .75})
+	deadline := time.Now().Add(time.Second)
+	for s.Snapshot().InputWork.Status != "completed" {
+		if time.Now().After(deadline) {
+			t.Fatal("staged wiper did not complete while the obsolete manual step remained blocked")
+		}
+		time.Sleep(time.Millisecond)
+	}
 	before := s.Snapshot()
 	release()
 	s.liveWorkers.Wait()

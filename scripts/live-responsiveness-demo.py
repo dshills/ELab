@@ -106,8 +106,8 @@ def main():
                           checks=['pan/save/inspect and geometry undo during actual live nonlinear integration',
                               'run/electrical identity and graph preserved', 'four traces remain valid',
                               'paused live time unaffected by independent Verify', 'saved experiment reopens fresh and clean'],
-                          limitations=['wiper/input algebraic solves and some file/recovery operations still have synchronous work',
-                              'supported physical capacity remains below the PRD target',
+                          limitations=['some file/recovery operations still have synchronous work',
+                              'physical capacity is bounded and topology-specific',
                               'controlled blocked-kernel race tests separately prove lock availability and obsolete result rejection',
                               'this fixture does not establish input-to-pixel p95 or all reference-circuit latency gates'],
                           measurements=measurements)

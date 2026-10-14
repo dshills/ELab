@@ -119,7 +119,7 @@ func (s *Service) circuitDisplayLocked() CircuitDisplay {
 			v.CurrentReason = "Current direction requires a fresh accepted circuit"
 		}
 		v.Color = voltageColor(v.Voltage, v.State, p)
-		if p.CurrentCues && p.CurrentMotion && !p.ReducedMotion && !s.paused && s.status == "running" && v.Current != nil && math.Abs(*v.Current) > 1e-12 {
+		if p.CurrentCues && p.CurrentMotion && !p.ReducedMotion && !s.paused && !s.activeInputWorkLocked() && s.status == "running" && v.Current != nil && math.Abs(*v.Current) > 1e-12 {
 			out.Animate = true
 		}
 		out.Wires = append(out.Wires, v)
