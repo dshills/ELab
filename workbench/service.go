@@ -127,6 +127,8 @@ type Service struct {
 	cancel                      context.CancelFunc
 	solver                      func(context.Context, Circuit) (Result, error)
 	networkAdvance              networkAdvanceFunc
+	initialSolver               initialSolverFunc
+	initialTimeout              time.Duration
 }
 
 func New() *Service        { return newGraphService(SolveLED, EmptyGraph()) }
@@ -135,7 +137,7 @@ func newService(solver func(context.Context, Circuit) (Result, error)) *Service 
 	return newGraphService(solver, ExampleGraph())
 }
 func newGraphService(solver func(context.Context, Circuit) (Result, error), graph Graph) *Service {
-	s := &Service{revision: 1, electrical: 1, graph: graph.Clone(), drawing: DefaultDrawing(), usedIDs: map[string]bool{}, view: View{Zoom: 1}, cache: map[string]savedResponse{}, changed: make(chan struct{}), solver: solver, networkAdvance: advanceLiveNetwork, actor: "system"}
+	s := &Service{revision: 1, electrical: 1, graph: graph.Clone(), drawing: DefaultDrawing(), usedIDs: map[string]bool{}, view: View{Zoom: 1}, cache: map[string]savedResponse{}, changed: make(chan struct{}), solver: solver, networkAdvance: advanceLiveNetwork, initialSolver: solveInitial, initialTimeout: 5 * time.Second, actor: "system"}
 	for _, c := range graph.Components {
 		s.usedIDs[c.ID] = true
 	}
@@ -381,6 +383,11 @@ func (s *Service) Wait(ctx context.Context) (Snapshot, error) {
 // Dispatch is the sole semantic entry point used by widgets and agent clients.
 // Mutation preconditions and retry keys apply identically to both.
 func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Response {
+	if r.Command == "simulation.step" && s.legacyStepNeedsInitialization(r, actor) {
+		if _, err := s.Wait(ctx); err != nil {
+			return s.failure(r, "canceled", err.Error())
+		}
+	}
 	out := s.dispatch(ctx, r, actor)
 	if r.Command == "simulation.step" {
 		return s.awaitStep(ctx, r, actor, out)
@@ -700,4 +707,23 @@ func cloneMutationResponse(out Response) Response {
 		out.Error = &failure
 	}
 	return out
+}
+
+// Invalid legacy step requests must not wait behind an unrelated initializer.
+func legacyStepMayWait(r Request) bool {
+	if r.Version != ProtocolVersion || r.ID == "" || len(r.ID) > 128 || r.Key == "" || len(r.Key) > 128 || r.ExpectedRevision == nil && r.ExpectedCommandRevision == nil {
+		return false
+	}
+	var p StepParams
+	return params(r.Params, &p, "duration_s") == nil && finite(p.Duration) && p.Duration > 0 && p.Duration <= 1
+}
+
+func (s *Service) legacyStepNeedsInitialization(r Request, actor string) bool {
+	if !legacyStepMayWait(r) {
+		return false
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	_, cached := s.cache[actor+"\x00"+r.Key]
+	return !cached && s.status == "updating"
 }

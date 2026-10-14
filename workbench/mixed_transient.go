@@ -61,52 +61,7 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 	}
 	return captureFrame(compiled, p, r.Nodes, currents)
 }
-func (s *Service) startMixedLocked(c Compiled) {
-	n := newMixedNetwork(c)
-	old := make([]float64, len(n.caps))
-	for i, p := range n.caps {
-		old[i] = s.transientSettings.InitialVoltage
-		if p.InitialVoltage != nil {
-			old[i] = *p.InitialVoltage
-		}
-	}
-	mode := s.inputMode
-	if s.pendingInputMode != "" {
-		mode = s.pendingInputMode
-	}
-	if mode != "auto" && mode != "high" && mode != "low" {
-		mode = "auto"
-	}
-	t := &Transient{Engine: networkEngine(c.Analysis), RunID: s.run, ElectricalRevision: s.electrical, SourceID: c.Source.ID, TransistorID: c.Transistor.ID, LEDID: c.LED.ID, CapacitorID: c.Capacitor.ID, OutputNet: c.Output, Settings: s.transientSettings, Mode: mode, Samples: []TraceSample{}, Events: []InputEvent{{0, "restart"}}}
-	st, err := n.solve(nil, old, 0, t, 0)
-	if err != nil {
-		s.status = "error"
-		s.diagnostics = []Diagnostic{{"mixed-initialize-failed", err.Error(), ""}}
-		return
-	}
-	s.inputMode = mode
-	s.pendingInputMode = ""
-	s.result = nil
-	s.npn = nil
-	s.npnHigh = nil
-	s.npnLow = nil
-	s.transient = t
-	if c.Analysis == NetworkDCAnalysis {
-		s.transient = nil
-	}
-	s.mixedState = st
-	s.mixed = st.result
-	t.Sample = mixedSample(c, st.result, n.sourceVoltage(c.Source, t, 0))
-	appendTrace(t, t.Sample)
-	if s.paused {
-		s.status = "paused"
-	} else {
-		s.status = "running"
-		if IsTransientAnalysis(c.Analysis) {
-			s.launchTransientLocked(c)
-		}
-	}
-}
+func (s *Service) startMixedLocked(c Compiled) { s.startInitialLocked(c) }
 
 // Stage a whole requested output sample with one shared work budget across all
 // per-source corners. A failure never publishes partial capacitor memory/time.

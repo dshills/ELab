@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "date": "2026-10-13",
+  "version": "0.23.0",
+  "build": "37",
+  "binary_sha256": "8348ebc8711ad37968dae0caa90359798b365f7c62fd968f52b4662851e526ee",
+  "packaged_binary_matches": true,
+  "checks": [
+    "pinned Staticcheck/import formatting",
+    "Go vet and root/native race tests",
+    "shared compact private simulation kernel/plan for initialization and Verify",
+    "network/NPN phase numerical work outside service mutex",
+    "immediate Updating admission",
+    "blocked navigation/save/pause/undo/source/close availability",
+    "obsolete results/failures discarded",
+    "presentation changes survive valid publication",
+    "current timeout reports failure rather than stuck Updating",
+    "context checks in Newton/seed loops",
+    "repeated Resume keeps current worker",
+    "fresh paused LED/NPN DC and transient Restart",
+    "malformed and cached legacy requests bypass unrelated initialization",
+    "native immediate admission and built/final packaged GPU/UI smoke",
+    "stdio/native three-circuit startup/restart/reopen parity",
+    "manual-work/live-work demos updated with explicit readiness waits"
+  ],
+  "admission_cases": {
+    "headless": [
+      {
+        "example": "example.npn",
+        "admission_ms": 0.42116601252928376,
+        "source_id": "VCC",
+        "restored_source_v": 3
+      },
+      {
+        "example": "example.npn-pulse",
+        "admission_ms": 0.9470409713685513,
+        "source_id": "VCC",
+        "restored_source_v": 3
+      },
+      {
+        "example": "example.flasher",
+        "admission_ms": 1.0929999989457428,
+        "source_id": "V1",
+        "restored_source_v": 3
+      }
+    ],
+    "desktop": [
+      {
+        "example": "example.npn",
+        "admission_ms": 0.5403750110417604,
+        "source_id": "VCC",
+        "restored_source_v": 3
+      },
+      {
+        "example": "example.npn-pulse",
+        "admission_ms": 0.46958401799201965,
+        "source_id": "VCC",
+        "restored_source_v": 3
+      },
+      {
+        "example": "example.flasher",
+        "admission_ms": 0.6748340092599392,
+        "source_id": "V1",
+        "restored_source_v": 3
+      }
+    ]
+  },
+  "limits": [
+    "input/wiper algebraic solves and some file/recovery work remain synchronous",
+    "50 total objects / 12 non-ground network nodes remain below original capacity target",
+    "backend admission is not input-to-pixel latency",
+    "initial native smoke fixture read an uninitialized transient and panicked; fixed with explicit readiness wait and nil guard; corrected built/final packaged smoke pass",
+    "no overall MVP/accessibility/clean-installation/participant gate claimed; 17 functional rows remain partial",
+    "private unsigned local app"
+  ]
+}

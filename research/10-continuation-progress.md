@@ -139,10 +139,20 @@ Captured mutable state is independent, and compiled networks/retained frames rem
 
 [The contract](../docs/manual-step-work.md) leaves initialization, some input/file/recovery paths and physical capacity open. The audit remains 10 implemented / 17 partial. A promising capacity fixture is one source plus 49 series potentiometers with unloaded wipers: 50 simulated parts and 100 electrical nodes including ground. This is an unvalidated design candidate for the remaining size target, after initialization responsiveness is addressed; current limits still refuse it.
 
+## Background initialization and fresh paused Restart
+
+Packaged **0.23.0 / 37** moves general-network startup and NPN pulse phase initialization outside the shared service mutex. Live initialization and Verify reuse a compact private `kernelPlan` / `simulationKernel`; recording metadata is no longer required by the numerical constructor. Previous readings remain stale and commands return Updating until guarded publication. Current-run deadlines report diagnostics, with cancellation checked inside Newton/seed iteration. Presentation edits survive; pause, undo, source/project/run replacement and close discard obsolete work. Repeated Resume does not replace an already updating worker.
+
+Review also repaired paused DC Restart: it now explicitly computes fresh LED/NPN DC or transient startup while respecting pause, through the existing restore-pause path. Malformed and cached legacy Step requests bypass unrelated initialization. Test/smoke numerical fixtures await readiness only for final-data assertions; actual user callbacks remain immediate. Public manual/live demo helpers now wait after Restart and Load rather than assuming fresh data in the admission reply.
+
+[Final validation](../docs/validation/initialization-validation.json), [blocked-startup evidence](../docs/validation/blocked-initialization.json), [headless workflow](../docs/validation/headless-initialization.json) and [desktop workflow](../docs/validation/desktop-initialization.json) pass. Desktop admission for NPN DC / NPN pulse / flasher is about 0.54 / 0.47 / 0.67 ms. Paused electrical edits, fresh Restart, legacy Step and paused fresh-process reopen pass, alongside lint/vet/root/native race gates and native admission parity. An initial GPU smoke exposed a reload-fixture nil dereference before transient initialization; the fixture now awaits readiness and guards nil. Corrected built/final packaged GPU smoke passes. Only the owned failed smoke process and blank validation session were closed; prior bundles/sessions and user files are preserved. The final owned desktop stays clean and paused at its durable flasher project.
+
+[The contract](../docs/initialization.md) leaves input/file/recovery work and physical capacity open. The audit remains 10 implemented / 17 partial. Next, validate the proposed 50-part / 100-node potentiometer-chain envelope and centralize explicit limits before raising them.
+
 ## Next work queue
 
 1. Mounted driver gesture invalidation/focus conformance; control-level slider, switch pending and actor-history paths now pass.
-2. Finish nonblocking initialization/input/file paths and physical circuit capacity; manual Step is now background/atomic. Extend actual and visible latency fixtures.
+2. Validate/expand physical circuit capacity; finish nonblocking input/file/recovery paths. Initialization and manual Step are now background work. Extend actual and visible latency fixtures.
 3. Voltage/current presentation preferences, pinned readings, trace/diagnostic highlights and concise example guidance.
 4. Complete agent conformance, keyboard/screen-reader scenarios and reproducible clean packaging evidence.
 5. Formative-test preparation; actual participant/hardware evidence remains a separate gate.

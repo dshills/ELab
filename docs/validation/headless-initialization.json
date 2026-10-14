@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "cases": [
+    {
+      "example": "example.npn",
+      "admission_ms": 0.42116601252928376,
+      "source_id": "VCC",
+      "restored_source_v": 3
+    },
+    {
+      "example": "example.npn-pulse",
+      "admission_ms": 0.9470409713685513,
+      "source_id": "VCC",
+      "restored_source_v": 3
+    },
+    {
+      "example": "example.flasher",
+      "admission_ms": 1.0929999989457428,
+      "source_id": "V1",
+      "restored_source_v": 3
+    }
+  ],
+  "checks": [
+    "immediate Updating admission",
+    "explicit readiness wait",
+    "paused electrical edit keeps previous result stale",
+    "paused Restart computes fresh DC/transient startup",
+    "legacy Step waits for initialized transient",
+    "saved paused projects initialize fresh on reopen"
+  ],
+  "limitations": [
+    "backend admission measurements are not visible latency",
+    "input/wiper and some file/recovery work remain synchronous",
+    "circuit capacity remains below the original target"
+  ]
+}

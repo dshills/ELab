@@ -68,7 +68,7 @@ func TestStepSupersededByRunInputOrProjectReplacement(t *testing.T) {
 			if command == "simulation.resume" || command == "example.rc" {
 				promptLiveCommand(t, s, "simulation.pause", struct{}{})
 			}
-			before := s.Snapshot()
+			before := awaitTestInitialization(t, s)
 			release()
 			s.liveWorkers.Wait()
 			after := s.Snapshot()

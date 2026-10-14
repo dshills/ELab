@@ -10,6 +10,7 @@ import (
 
 func call(t *testing.T, s *Service, command string, p any, key string) Response {
 	t.Helper()
+	awaitTestInitialization(t, s)
 	raw, err := json.Marshal(p)
 	if err != nil {
 		t.Fatal(err)
@@ -23,6 +24,9 @@ func call(t *testing.T, s *Service, command string, p any, key string) Response 
 	}
 	if r.Error != nil {
 		t.Fatalf("%s: %+v", command, r.Error)
+	}
+	if state, ok := r.Result.(Snapshot); ok && state.Status == "updating" && (IsNetworkAnalysis(state.Analysis) || state.Analysis == NPNTransientAnalysis) {
+		r.Result = awaitTestInitialization(t, s)
 	}
 	return r
 }
@@ -175,5 +179,22 @@ func TestSnapshotIsDetached(t *testing.T) {
 	b := s.Snapshot()
 	if b.Result.Nodes["supply"] != 5 || b.Components[0].Terminals[0] != "positive" {
 		t.Fatal("snapshot leaked mutable state")
+	}
+}
+
+// Numerical fixtures await the new background startup; admission and blocking
+// tests use Dispatch directly to inspect the immediate Updating response.
+func awaitTestInitialization(t *testing.T, s *Service) Snapshot {
+	t.Helper()
+	deadline := time.Now().Add(time.Second)
+	for {
+		state := s.Snapshot()
+		if state.Status != "updating" || !IsNetworkAnalysis(state.Analysis) && state.Analysis != NPNTransientAnalysis {
+			return state
+		}
+		if time.Now().After(deadline) {
+			t.Fatal("initializer did not finish")
+		}
+		time.Sleep(time.Millisecond)
 	}
 }

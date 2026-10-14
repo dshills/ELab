@@ -70,7 +70,7 @@ func inputDuration(record *verificationRecord) float64 {
 	return record.metadata.Duration
 }
 func computeVerification(ctx context.Context, input verificationInput, progress func(int, float64)) (*verificationRecord, error) {
-	kernel, err := newVerificationKernel(ctx, input)
+	kernel, err := newSimulationKernel(ctx, kernelPlan{compiled: input.compiled, settings: input.settings, mode: input.mode, run: input.serial, revision: input.metadata.ElectricalRevision})
 	if err != nil {
 		return nil, err
 	}

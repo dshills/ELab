@@ -32,7 +32,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.22.0 --build-version 36 --platform darwin
+  --version 0.23.0 --build-version 37 --platform darwin
 ```
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
@@ -162,3 +162,5 @@ The [PRD conformance audit](research/11-prd-implementation-audit.md) records eve
 Live general-network samples compute outside the shared service lock, with guarded publication and tracked clock shutdown. [Responsiveness evidence and remaining synchronous paths](docs/live-responsiveness.md).
 
 Manual Step uses a cancellable background worker and publishes the whole requested advance atomically. [Progress, cancellation, compatibility and validation](docs/manual-step-work.md).
+
+Network and NPN pulse initialization computes in the background. Paused Restart refreshes all supported DC/transient paths. [Initialization contract and evidence](docs/initialization.md).

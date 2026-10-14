@@ -16,7 +16,7 @@ Only a fully successful job publishes its entire requested advance, including pe
 
 Statuses are queued, running, canceling, completed, failed, canceled and superseded. Progress represents staged computation, not committed time. Notifications are coalesced at roughly 50 ms, with initial and terminal publication. Final counts/progress remain consistent even on cancellation. Job IDs are never reused during a process; only the latest manual job is shown. A prior-run job is labeled Previous in the scope. No manual job is a kept recording or schematic history action.
 
-Electrical/model/settings edits, switch/wiper/input changes, Restart, Resume and project replacement supersede the captured work. Pause and Close cancel it. Resume proceeds from the last committed sample. The worker checks cancellation between output samples and after numerical work; existing bounded kernel work remains in effect. A 30-second wall budget bounds the job. Startup and some algebraic input/file/recovery work remain synchronous and are separate work items.
+Electrical/model/settings edits, switch/wiper/input changes, Restart, Resume and project replacement supersede the captured work. Pause and Close cancel it. Resume proceeds from the last committed sample. The worker checks cancellation between output samples and after numerical work; existing bounded kernel work remains in effect. A 30-second wall budget bounds the job. Network/NPN pulse startup is now background work. Some algebraic input/file/recovery work remains synchronous and is a separate work item.
 
 ## Waiting, retries and ownership
 
@@ -34,4 +34,4 @@ Native tests prove immediate shared admission and matching completed RC data wit
 
 `scripts/step-work-demo.py` starts a 1,000-sample flasher advance, observes staged progress with unchanged committed readings, pans/saves/moves/undoes, then cancels all staged samples. A second advance completes atomically and matches independent Verify capacitor readings. The waiting command remains compatible, and a saved experiment reopens paused/clean with its recording and fresh physics. Use `--connect` only for an owned endpoint; the demo replaces that project. Use `--output REPORT --artifacts DIRECTORY` to retain evidence.
 
-The complete PRD acceptance matrix remains [partial](../research/11-prd-implementation-audit.md): physical capacity, initialization/input/file responsiveness, mounted gestures, visible latency, accessibility, clean installation and participant gates are still open.
+The complete PRD acceptance matrix remains [partial](../research/11-prd-implementation-audit.md): physical capacity, input/file responsiveness, mounted gestures, visible latency, accessibility, clean installation and participant gates are still open.

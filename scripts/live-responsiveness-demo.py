@@ -37,6 +37,7 @@ def main():
         client.ask('example.flasher', {'discard_changes': True}, True)
         client.ask('simulation.pause', {}, True)
         client.ask('simulation.restart', {}, True)
+        client.ask('simulation.wait')
         client.ask('scope.probes.set', {'ids': ['i:D1', 'i:D2', 'v:C1', 'v:C2']}, True)
         initial = client.ask('project.inspect')
         resistor = next(p for p in initial['components'] if p['kind'] == 'resistor')
@@ -87,7 +88,8 @@ def main():
             assert client.ask('project.inspect')['transient']['sample'] == final['transient']['sample']
             client.ask('project.save', {'path': path, 'overwrite': True}, True)
             fresh = helper.Client(command_preconditions=True)
-            restored = fresh.ask('project.load', {'path': path}, True)
+            fresh.ask('project.load', {'path': path}, True)
+            restored = fresh.ask('simulation.wait')
             assert restored['paused'] and not restored['document']['dirty']
             assert restored['document']['recording_count'] == 1 and restored['transient']['sample']['time_s'] == 0
             ordered = sorted(m['wall_ms'] for m in measurements)
@@ -104,7 +106,7 @@ def main():
                           checks=['pan/save/inspect and geometry undo during actual live nonlinear integration',
                               'run/electrical identity and graph preserved', 'four traces remain valid',
                               'paused live time unaffected by independent Verify', 'saved experiment reopens fresh and clean'],
-                          limitations=['general network startup, manual multi-sample Step, wiper/input algebraic solves and file operations still have synchronous work',
+                          limitations=['wiper/input algebraic solves and some file/recovery operations still have synchronous work',
                               'supported physical capacity remains below the PRD target',
                               'controlled blocked-kernel race tests separately prove lock availability and obsolete result rejection',
                               'this fixture does not establish input-to-pixel p95 or all reference-circuit latency gates'],

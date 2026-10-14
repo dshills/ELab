@@ -1,0 +1,129 @@
+{
+  "passed": true,
+  "race_instrumented": true,
+  "scope": "Controlled startup boundary: lock availability, cancellation/supersession, timeout and retry responsiveness; no visible p95 claim",
+  "tests": [
+    "TestBlockedInitializationAllowsNavigationSaveAndPause/example.flasher",
+    "TestBlockedInitializationAllowsNavigationSaveAndPause/example.npn-pulse",
+    "TestBlockedInitializationAllowsNavigationSaveAndPause",
+    "TestInitializationSupersededByUndoNewSourceAndClose/edit.undo",
+    "TestInitializationSupersededByUndoNewSourceAndClose/component.set",
+    "TestInitializationSupersededByUndoNewSourceAndClose/app.close",
+    "TestInitializationSupersededByUndoNewSourceAndClose",
+    "TestInitializationPublishesAcrossPresentationEditsAndAvoidsRepeatedResume",
+    "TestInitializationDeadlinePublishesErrorInsteadOfStayingUpdating",
+    "TestNetworkNewtonObservesCanceledContext",
+    "TestPausedRestartRefreshesBothDCPaths/example.reset",
+    "TestPausedRestartRefreshesBothDCPaths/example.npn",
+    "TestPausedRestartRefreshesBothDCPaths",
+    "TestMalformedLegacyStepDoesNotWaitForInitialization",
+    "TestCachedLegacyStepDoesNotWaitForUnrelatedInitialization"
+  ],
+  "measurements": [
+    {
+      "test": "TestBlockedInitializationAllowsNavigationSaveAndPause/example.flasher",
+      "command": "example.flasher",
+      "wall_ms": 2.351333
+    },
+    {
+      "test": "TestBlockedInitializationAllowsNavigationSaveAndPause/example.flasher",
+      "command": "view.pan",
+      "wall_ms": 2.126333
+    },
+    {
+      "test": "TestBlockedInitializationAllowsNavigationSaveAndPause/example.flasher",
+      "command": "project.save",
+      "wall_ms": 19.8835
+    },
+    {
+      "test": "TestBlockedInitializationAllowsNavigationSaveAndPause/example.flasher",
+      "command": "simulation.pause",
+      "wall_ms": 2.182375
+    },
+    {
+      "test": "TestBlockedInitializationAllowsNavigationSaveAndPause/example.npn-pulse",
+      "command": "example.npn-pulse",
+      "wall_ms": 1.016833
+    },
+    {
+      "test": "TestBlockedInitializationAllowsNavigationSaveAndPause/example.npn-pulse",
+      "command": "view.pan",
+      "wall_ms": 1.24375
+    },
+    {
+      "test": "TestBlockedInitializationAllowsNavigationSaveAndPause/example.npn-pulse",
+      "command": "project.save",
+      "wall_ms": 18.757084
+    },
+    {
+      "test": "TestBlockedInitializationAllowsNavigationSaveAndPause/example.npn-pulse",
+      "command": "simulation.pause",
+      "wall_ms": 1.182667
+    },
+    {
+      "test": "TestInitializationSupersededByUndoNewSourceAndClose/edit.undo",
+      "command": "example.flasher",
+      "wall_ms": 1.301916
+    },
+    {
+      "test": "TestInitializationSupersededByUndoNewSourceAndClose/edit.undo",
+      "command": "edit.undo",
+      "wall_ms": 1.0145
+    },
+    {
+      "test": "TestInitializationSupersededByUndoNewSourceAndClose/component.set",
+      "command": "example.flasher",
+      "wall_ms": 1.224334
+    },
+    {
+      "test": "TestInitializationSupersededByUndoNewSourceAndClose/component.set",
+      "command": "component.set",
+      "wall_ms": 1.743292
+    },
+    {
+      "test": "TestInitializationSupersededByUndoNewSourceAndClose/component.set",
+      "command": "simulation.pause",
+      "wall_ms": 1.537958
+    },
+    {
+      "test": "TestInitializationSupersededByUndoNewSourceAndClose/app.close",
+      "command": "example.flasher",
+      "wall_ms": 1.15775
+    },
+    {
+      "test": "TestInitializationSupersededByUndoNewSourceAndClose/app.close",
+      "command": "app.close",
+      "wall_ms": 1.644917
+    },
+    {
+      "test": "TestInitializationPublishesAcrossPresentationEditsAndAvoidsRepeatedResume",
+      "command": "example.flasher",
+      "wall_ms": 1.38425
+    },
+    {
+      "test": "TestInitializationPublishesAcrossPresentationEditsAndAvoidsRepeatedResume",
+      "command": "component.move",
+      "wall_ms": 1.657625
+    },
+    {
+      "test": "TestInitializationPublishesAcrossPresentationEditsAndAvoidsRepeatedResume",
+      "command": "simulation.resume",
+      "wall_ms": 1.355542
+    },
+    {
+      "test": "TestInitializationDeadlinePublishesErrorInsteadOfStayingUpdating",
+      "command": "example.flasher",
+      "wall_ms": 1.055834
+    },
+    {
+      "test": "TestMalformedLegacyStepDoesNotWaitForInitialization",
+      "command": "example.flasher",
+      "wall_ms": 1.036333
+    },
+    {
+      "test": "TestCachedLegacyStepDoesNotWaitForUnrelatedInitialization",
+      "command": "example.flasher",
+      "wall_ms": 1.351166
+    }
+  ]
+}

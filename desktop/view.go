@@ -93,6 +93,9 @@ func (s *screen) view() ui.Node {
 	}
 	if state.Paused {
 		status = "Ⅱ Paused"
+		if state.Status == "updating" {
+			status = "Initializing · paused"
+		}
 	}
 	if state.StepWork != nil && (state.StepWork.Status == "queued" || state.StepWork.Status == "running" || state.StepWork.Status == "canceling") {
 		status = fmt.Sprintf("Stepping · %.0f%% · committed readings paused", 100*state.StepWork.Progress)

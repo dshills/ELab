@@ -700,7 +700,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		s.status = "paused"
 	case "simulation.resume":
 		s.cancelStepLocked("superseded")
-		if !s.paused && s.status == "running" {
+		if !s.paused && (s.status == "running" || s.status == "updating") {
 			return nil // already running; preserve the existing clock and work
 		}
 		s.paused = false
@@ -720,19 +720,8 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		s.startLocked()
 	case "simulation.restart":
+		s.restorePaused = s.paused
 		s.startLocked()
-		if s.paused {
-			c, _, d := s.graph.Compile()
-			if d == nil && IsTransientAnalysis(c.Analysis) {
-				if IsNetworkAnalysis(c.Analysis) {
-					s.startMixedLocked(c)
-				} else if c.Analysis == NPNTransientAnalysis {
-					s.startNPNTransientLocked(c)
-				} else {
-					s.startRCLocked(c)
-				}
-			}
-		}
 	case "drawing.cancel":
 		s.drawing.Tool = "select"
 		s.drawing.WireStart = ""

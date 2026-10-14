@@ -98,7 +98,7 @@ Electrical edits invalidate the prior trace and start a new run from configured 
 
 ## Save and load schematics
 
-The catalog now has 35 commands. `project.save` and `project.load` are mutations and require the observed revision and a retry key, including operations that write a file without changing the graph.
+Discover the current versioned catalog through `capabilities.list`. `project.save` and `project.load` are mutations and require the observed revision and a retry key, including operations that write a file without changing the graph.
 
 | Command | Parameters | Behavior |
 |---|---|---|
@@ -186,7 +186,7 @@ Per-source `sine-source` and `finite-pulse-source` configuration uses `source.si
 `switch.set` queues desired state during a fresh transient. Inspect `switch_states` for desired/applied/pending, then Step or Resume to apply at the next accepted sample. Paused toggles leave physics/events unchanged; repeated toggles coalesce. Live inputs advance `actuation_revision` while retaining the circuit's electrical revision and run. Wiper events remain immediate algebraic events at the current time and preserve pending switch state. Saving captures desired startup, not pending electrical memory. See [switch behavior](switches.md).
 
 
-Live network sample work computes from independent captured physical data outside the service lock. Accepted samples publish with a new session revision; obsolete work/failures never replace an intervening run or input state. Navigation, save, presentation undo and pause remain callable during this work. Repeated Resume on an already running simulation preserves the existing clock. Startup remains synchronous; manual Step now has a shared background worker; see [the measured envelope](live-responsiveness.md).
+Live network sample work computes from independent captured physical data outside the service lock. Accepted samples publish with a new session revision; obsolete work/failures never replace an intervening run or input state. Navigation, save, presentation undo and pause remain callable during this work. Repeated Resume on an already running simulation preserves the existing clock. Network/NPN pulse startup and manual Step use shared background workers; see [the measured envelope](live-responsiveness.md).
 
 
 ## Background manual Step
@@ -196,3 +196,10 @@ Live network sample work computes from independent captured physical data outsid
 `simulation.work.cancel {id}` targets the exact active ID. At most one manual step is active; another start returns `busy`. A failed/canceled/superseded step commits no partial time, capacitor memory, input event or queued-mode consumption. Pan, save and presentation undo remain available. Electrical edits, switch/wiper/input changes, Restart, Resume or project replacement supersede the captured work; Pause and Close cancel it. Source changes cannot be overwritten by a late numerical result or failure.
 
 `simulation.step {duration_s}` remains a wait-for-terminal-result compatibility command backed by the same worker. Its successful response describes the completed advance; accepted numerical failure/cancellation returns structured error plus terminal snapshot. Its retry key preserves that terminal outcome. Canceling the request's wait or disconnecting does not cancel the admitted operation: re-inspect or retry the original key. Immediate-start retries instead preserve the original queued admission snapshot; query current progress separately. IDs are never reused in a process. Both forms retain the one-second/1,000-output-sample bound and a 30-second job wall budget, plus existing kernel work limits. Native Step uses `simulation.step.start` and offers the same exact-ID Cancel command. See [manual-step contract](manual-step-work.md).
+
+
+## Background initialization
+
+Supported general-network and NPN pulse edits/restarts return `status:"updating"` immediately. `simulation.wait` observes completion; input controls and immediate Step require fresh initialized data. The waiting Step compatibility command can await an initializer, but admission preconditions still apply after publication; prefer the advertised command guard to avoid publication-only conflicts. Malformed requests do not wait behind startup.
+
+Pause cancels a pending initializer without publishing its partial result. Restart while paused explicitly computes fresh DC/transient startup and remains paused at time zero. Resume on an already running/updating session preserves the existing worker. Presentation edits survive publication; electrical edits, project replacement, undo and close prevent an obsolete result/failure from replacing the current run. Startup uses a five-second wall budget, with context checks inside network Newton/seed iteration. A current timeout produces a diagnostic rather than staying Updating. See [initialization semantics](initialization.md).

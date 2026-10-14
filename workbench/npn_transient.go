@@ -1,7 +1,6 @@
 package workbench
 
 import (
-	"context"
 	"math"
 )
 
@@ -99,44 +98,7 @@ func (s *Service) publishNPNTransientLocked() {
 	}
 	s.npn = cloneNPN(r)
 }
-func (s *Service) startNPNTransientLocked(c Compiled) {
-	// A memoryless device model only needs two solves per electrical run. Time
-	// stepping selects these immutable phase results without holding the service
-	// lock for a nonlinear solve on every live sample.
-	high, low, err := solveNPNPhases(context.Background(), c)
-	if err == nil {
-		s.npnHigh = high
-		s.npnLow = low
-	}
-	if err != nil {
-		s.status = "error"
-		s.diagnostics = []Diagnostic{{"solve-failed", err.Error(), c.Transistor.ID}}
-		return
-	}
-	for _, r := range []*NPNResult{s.npnHigh, s.npnLow} {
-		r.RunID = s.run
-		r.ElectricalRevision = s.electrical
-	}
-	if s.pendingInputMode != "" {
-		s.inputMode = s.pendingInputMode
-		s.pendingInputMode = ""
-	}
-	if s.inputMode != "auto" && s.inputMode != "high" && s.inputMode != "low" {
-		s.inputMode = "auto"
-	}
-	t := &Transient{Engine: NPNTransientEngineID, RunID: s.run, ElectricalRevision: s.electrical, SourceID: c.Input.ID, SupplyID: c.Source.ID, ResistorID: c.Resistor.ID, BaseResistorID: c.BaseResistor.ID, TransistorID: c.Transistor.ID, LEDID: c.LED.ID, OutputNet: c.Collector, Settings: s.transientSettings, Mode: s.inputMode, Samples: []TraceSample{}, Events: []InputEvent{{0, "restart"}}}
-	t.Sample = npnTraceSample(c, s.npnHigh, s.npnLow, 0, npnPulseInput(c, t, 0))
-	appendTrace(t, t.Sample)
-	s.result = nil
-	s.transient = t
-	s.publishNPNTransientLocked()
-	if s.paused {
-		s.status = "paused"
-	} else {
-		s.status = "running"
-		s.launchTransientLocked(c)
-	}
-}
+func (s *Service) startNPNTransientLocked(c Compiled) { s.startInitialLocked(c) }
 func (s *Service) advanceTransientLocked(c Compiled, end float64) error {
 	if IsNetworkAnalysis(c.Analysis) {
 		st, t, err := s.networkAdvance(s.mixedState, s.transient, end, s.graph)

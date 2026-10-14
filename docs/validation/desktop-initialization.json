@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "transport": "packaged-native-private-socket",
+  "cases": [
+    {
+      "example": "example.npn",
+      "admission_ms": 0.5403750110417604,
+      "source_id": "VCC",
+      "restored_source_v": 3
+    },
+    {
+      "example": "example.npn-pulse",
+      "admission_ms": 0.46958401799201965,
+      "source_id": "VCC",
+      "restored_source_v": 3
+    },
+    {
+      "example": "example.flasher",
+      "admission_ms": 0.6748340092599392,
+      "source_id": "V1",
+      "restored_source_v": 3
+    }
+  ],
+  "checks": [
+    "immediate Updating admission",
+    "explicit readiness wait",
+    "paused electrical edit keeps previous result stale",
+    "paused Restart computes fresh DC/transient startup",
+    "legacy Step waits for initialized transient",
+    "saved paused projects initialize fresh on reopen"
+  ],
+  "limitations": [
+    "backend admission measurements are not visible latency",
+    "input/wiper and some file/recovery work remain synchronous",
+    "circuit capacity remains below the original target"
+  ]
+}

@@ -5,9 +5,16 @@ import (
 	"fmt"
 )
 
-// Verification reuses the same numerical kernels with private circuit state.
+// Live initialization and verification reuse numerical kernels with private circuit state.
 // It never creates a live clock or installs its readings into the editor.
-type verificationKernel struct {
+type kernelPlan struct {
+	compiled      Compiled
+	settings      TransientSettings
+	mode          string
+	run, revision uint64
+}
+
+type simulationKernel struct {
 	compiled  Compiled
 	trace     *Transient
 	mixed     *mixedState
@@ -16,9 +23,9 @@ type verificationKernel struct {
 	npn       *NPNResult
 }
 
-func newVerificationKernel(ctx context.Context, input verificationInput) (*verificationKernel, error) {
+func newSimulationKernel(ctx context.Context, input kernelPlan) (*simulationKernel, error) {
 	c := input.compiled
-	k := &verificationKernel{compiled: c, trace: &Transient{RunID: input.serial, ElectricalRevision: input.metadata.ElectricalRevision, Settings: input.settings, Mode: input.mode, Samples: []TraceSample{}, Events: []InputEvent{}}}
+	k := &simulationKernel{compiled: c, trace: &Transient{RunID: input.run, ElectricalRevision: input.revision, Settings: input.settings, Mode: input.mode, Samples: []TraceSample{}, Events: []InputEvent{}}}
 	t := k.trace
 	switch c.Analysis {
 	case "RC transient":
@@ -39,8 +46,8 @@ func newVerificationKernel(ctx context.Context, input verificationInput) (*verif
 		}
 		k.high, k.low = high, low
 		for _, r := range []*NPNResult{high, low} {
-			r.RunID = input.serial
-			r.ElectricalRevision = input.metadata.ElectricalRevision
+			r.RunID = input.run
+			r.ElectricalRevision = input.revision
 		}
 		t.Engine = NPNTransientEngineID
 		t.Sample = npnTraceSample(c, high, low, 0, npnPulseInput(c, t, 0))
@@ -55,7 +62,7 @@ func newVerificationKernel(ctx context.Context, input verificationInput) (*verif
 			}
 		}
 		t.Engine = networkEngine(c.Analysis)
-		state, err := n.solve(nil, old, 0, t, 0)
+		state, err := n.solveContext(ctx, nil, old, 0, t, 0)
 		if err != nil {
 			return nil, err
 		}
@@ -66,8 +73,8 @@ func newVerificationKernel(ctx context.Context, input verificationInput) (*verif
 		if err != nil {
 			return nil, err
 		}
-		r.RunID = input.serial
-		r.ElectricalRevision = input.metadata.ElectricalRevision
+		r.RunID = input.run
+		r.ElectricalRevision = input.revision
 		k.npn = &r
 		t.Engine = NPNEngineID
 		t.Sample = npnTraceSample(c, &r, &r, 0, c.Input.Value)
@@ -77,8 +84,8 @@ func newVerificationKernel(ctx context.Context, input verificationInput) (*verif
 			return nil, err
 		}
 		r = c.Annotate(r)
-		r.RunID = input.serial
-		r.ElectricalRevision = input.metadata.ElectricalRevision
+		r.RunID = input.run
+		r.ElectricalRevision = input.revision
 		k.led = &r
 		t.Engine = EngineID
 		currents := map[string]float64{c.Source.ID: r.Current, c.LED.ID: r.Current, c.Resistor.ID: (r.Nodes[c.TerminalNet[c.Resistor.ID+".1"]] - r.Nodes[c.TerminalNet[c.Resistor.ID+".2"]]) / c.Resistor.Value}
@@ -90,14 +97,14 @@ func newVerificationKernel(ctx context.Context, input verificationInput) (*verif
 	appendTrace(t, t.Sample)
 	return k, nil
 }
-func (k *verificationKernel) updateNPN() {
+func (k *simulationKernel) updateNPN() {
 	r := k.low
 	if k.trace.Sample.Input > 0 {
 		r = k.high
 	}
 	k.npn = cloneNPN(r)
 }
-func (k *verificationKernel) advance(ctx context.Context, end float64) error {
+func (k *simulationKernel) advance(ctx context.Context, end float64) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}

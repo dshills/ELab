@@ -169,14 +169,14 @@ func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
 	if s.errorMessage != "" {
 		return fmt.Errorf("%s: %s", id, s.errorMessage)
 	}
-	if id == "transient-step" {
+	if id == "transient-step" || s.service.Snapshot().Status == "updating" {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 		state, err := s.service.Wait(ctx)
 		if err != nil {
 			return err
 		}
-		if state.StepWork == nil || state.StepWork.Status != "completed" {
+		if id == "transient-step" && (state.StepWork == nil || state.StepWork.Status != "completed") {
 			return fmt.Errorf("native manual step failed: %+v", state.StepWork)
 		}
 	}
@@ -806,8 +806,12 @@ func nativeProjectRecordingSmoke(ctx context.Context, a *app.Application, s *scr
 			result <- fmt.Errorf("native project reload: %s", response.Error.Message)
 			return
 		}
-		after := s.service.Snapshot()
-		if after.Document.Dirty || after.Document.RecordingCount != 1 || after.Recording == nil || after.Recording.OriginID != before.Recording.OriginID || after.Recording.Total != before.Recording.Total || !after.Recording.Viewing || after.Recording.Playing || !after.Paused || after.Transient.Sample.Time != 0 || after.Transient.Stale {
+		after, err := s.service.Wait(ctx)
+		if err != nil {
+			result <- err
+			return
+		}
+		if after.Document.Dirty || after.Document.RecordingCount != 1 || after.Recording == nil || after.Recording.OriginID != before.Recording.OriginID || after.Recording.Total != before.Recording.Total || !after.Recording.Viewing || after.Recording.Playing || !after.Paused || after.Transient == nil || after.Transient.Sample.Time != 0 || after.Transient.Stale {
 			result <- fmt.Errorf("native project reload lost captured data or resumed physical history")
 			return
 		}

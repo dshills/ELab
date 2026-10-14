@@ -29,6 +29,7 @@ def main():
         settings['step_s']=.001
         client.ask('simulation.transient.set',settings,True)
         client.ask('simulation.restart',{},True)
+        client.ask('simulation.wait')
         client.ask('scope.probes.set',{'ids':['i:D1','i:D2','v:C1','v:C2']},True)
         before=client.ask('project.inspect')
         started=time.perf_counter()
@@ -80,7 +81,8 @@ def main():
         assert legacy['step_work']['status']=='completed' and abs(legacy['transient']['sample']['time_s']-.031)<1e-12
         client.ask('project.save',{'path':path,'overwrite':True},True)
         fresh=helper.Client(command_preconditions=True)
-        reopened=fresh.ask('project.load',{'path':path},True)
+        fresh.ask('project.load',{'path':path},True)
+        reopened=fresh.ask('simulation.wait')
         assert reopened['paused'] and not reopened['document']['dirty']
         assert reopened['document']['recording_count']==1 and reopened['transient']['sample']['time_s']==0
         assert 'step_work' not in reopened
@@ -93,7 +95,7 @@ def main():
                 'new work ID and atomic successful publication','four traces and independent Verify parity',
                 'legacy wait-for-result compatibility','save/reopen keeps experiment and recording; physical/job state restarts'],
             limitations=['backend admission timing is not visible input-to-pixel latency',
-                'general initialization and some input/file work remain synchronous','private unsigned local build'])
+                'some input/file/recovery work remains synchronous','private unsigned local build'])
         if args.output:
             args.output.parent.mkdir(parents=True,exist_ok=True)
             args.output.write_text(json.dumps(report,indent=2)+'\n')

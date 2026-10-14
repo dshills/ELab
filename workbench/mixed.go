@@ -1,6 +1,7 @@
 package workbench
 
 import (
+	"context"
 	"fmt"
 	"math"
 )
@@ -275,7 +276,10 @@ func linearSolve(a [][]float64, b []float64) ([]float64, error) {
 	return x, nil
 }
 func (n *mixedNetwork) solve(guess, old []float64, dt float64, t *Transient, at float64) (*mixedState, error) {
-	result, err := n.newton(guess, old, dt, t, at)
+	return n.solveContext(context.Background(), guess, old, dt, t, at)
+}
+func (n *mixedNetwork) solveContext(ctx context.Context, guess, old []float64, dt float64, t *Transient, at float64) (*mixedState, error) {
+	result, err := n.newton(ctx, guess, old, dt, t, at)
 	if err == nil {
 		return result, nil
 	}
@@ -286,6 +290,9 @@ func (n *mixedNetwork) solve(guess, old []float64, dt float64, t *Transient, at 
 		}
 	}
 	for choice := 0; choice < len(qs); choice++ {
+		if err := ctx.Err(); err != nil {
+			return nil, err
+		}
 		seed := make([]float64, len(n.nodes)+len(n.sources)+len(n.caps))
 		copy(seed, guess)
 		for i, q := range qs {
@@ -298,13 +305,13 @@ func (n *mixedNetwork) solve(guess, old []float64, dt float64, t *Transient, at 
 				seed[c] = 3
 			}
 		}
-		if result, e := n.newton(seed, old, dt, t, at); e == nil {
+		if result, e := n.newton(ctx, seed, old, dt, t, at); e == nil {
 			return result, nil
 		}
 	}
 	return nil, err
 }
-func (n *mixedNetwork) newton(guess, old []float64, dt float64, t *Transient, at float64) (*mixedState, error) {
+func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt float64, t *Transient, at float64) (*mixedState, error) {
 	size := len(n.nodes) + len(n.sources)
 	if dt == 0 {
 		size += len(n.caps)
@@ -312,6 +319,9 @@ func (n *mixedNetwork) newton(guess, old []float64, dt float64, t *Transient, at
 	x := make([]float64, size)
 	copy(x, guess)
 	for iter := 0; iter < 100; iter++ {
+		if err := ctx.Err(); err != nil {
+			return nil, err
+		}
 		a, f := n.equations(x, old, dt, t, at)
 		good := true
 		for i, v := range f {

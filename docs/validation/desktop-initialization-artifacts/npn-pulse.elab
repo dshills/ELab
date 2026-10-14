@@ -1,0 +1,217 @@
+{
+  "recordings": {
+    "entries": [],
+    "selected_index": -1,
+    "viewing": false
+  },
+  "paused": true,
+  "scope_probes": {
+    "ids": [
+      "v:Q1.collector",
+      "v:VIN.positive",
+      "i:Q1.collector"
+    ]
+  },
+  "format": "elab.schematic",
+  "version": 4,
+  "graph": {
+    "components": [
+      {
+        "id": "VCC",
+        "kind": "dc-source",
+        "name": "DC source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": 260,
+          "y": -100
+        },
+        "value": 3,
+        "unit": "V",
+        "model": "ideal-dc.v1",
+        "rotation": 0
+      },
+      {
+        "id": "VIN",
+        "kind": "pulse-source",
+        "name": "Pulse source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -260,
+          "y": 60
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-square.v1",
+        "rotation": 0
+      },
+      {
+        "id": "RB",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -100,
+          "y": 60
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "RL",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 100,
+          "y": -180
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 90
+      },
+      {
+        "id": "D1",
+        "kind": "led",
+        "name": "Red LED",
+        "terminals": [
+          "anode",
+          "cathode"
+        ],
+        "position": {
+          "x": 100,
+          "y": -80
+        },
+        "value": 0,
+        "model": "elab.generic-red-led.v1",
+        "rotation": 0
+      },
+      {
+        "id": "Q1",
+        "kind": "npn",
+        "name": "NPN transistor",
+        "terminals": [
+          "base",
+          "collector",
+          "emitter"
+        ],
+        "position": {
+          "x": 100,
+          "y": 60
+        },
+        "value": 0,
+        "model": "elab.generic-npn.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND1",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 100,
+          "y": 180
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "VCC.positive",
+        "to": "RL.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "RL.2",
+        "to": "D1.anode",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "D1.cathode",
+        "to": "Q1.collector",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "VIN.positive",
+        "to": "RB.1",
+        "connected": true
+      },
+      {
+        "id": "W5",
+        "from": "RB.2",
+        "to": "Q1.base",
+        "connected": true
+      },
+      {
+        "id": "W6",
+        "from": "Q1.emitter",
+        "to": "GND1.reference",
+        "connected": true
+      },
+      {
+        "id": "W7",
+        "from": "VCC.negative",
+        "to": "GND1.reference",
+        "connected": true
+      },
+      {
+        "id": "W8",
+        "from": "VIN.negative",
+        "to": "GND1.reference",
+        "connected": true
+      }
+    ]
+  },
+  "view": {
+    "center": {
+      "x": 0,
+      "y": -30
+    },
+    "zoom": 0.5
+  },
+  "npn_model": {
+    "id": "elab.generic-npn.v1",
+    "saturation_current_a": 1e-14,
+    "forward_beta": 100,
+    "reverse_beta": 1,
+    "temperature_c": 27,
+    "limitations": "Educational Ebers–Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+  },
+  "led_model": {
+    "id": "elab.generic-red-led.v1",
+    "is_a": 1e-20,
+    "n": 2,
+    "rs_ohm": 1,
+    "temperature_c": 27,
+    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+  },
+  "transient_settings": {
+    "step_s": 0.001,
+    "high_s": 0.05,
+    "low_s": 0.05,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.1
+  }
+}
