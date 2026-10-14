@@ -274,6 +274,8 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			}
 		}
 		return s.batchLocked(p)
+	case "measurement.pin.add", "measurement.pin.move", "measurement.pin.remove":
+		return s.pinCommandLocked(command, raw)
 	case "scope.trace.select", "scope.probe.remove", "scope.probes.set", "scope.cursor.set", "scope.cursor.select", "scope.cursor.clear":
 		return s.scopeCommandLocked(command, raw)
 	case "capacitor.initial.set":
@@ -544,13 +546,22 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return fmt.Errorf("fit dimensions must be 64–100000 pixels")
 		}
 		s.view = View{Zoom: 1}
-		if len(s.graph.Components) > 0 {
-			minX, maxX, minY, maxY := s.graph.Components[0].Position.X, s.graph.Components[0].Position.X, s.graph.Components[0].Position.Y, s.graph.Components[0].Position.Y
+		if len(s.graph.Components) > 0 || len(s.pins) > 0 {
+			minX, maxX, minY, maxY := 0., 0., 0., 0.
+			if len(s.graph.Components) > 0 {
+				p := s.graph.Components[0].Position
+				minX, maxX, minY, maxY = p.X, p.X, p.Y, p.Y
+			}
 			for _, c := range s.graph.Components {
 				minX = math.Min(minX, c.Position.X)
 				maxX = math.Max(maxX, c.Position.X)
 				minY = math.Min(minY, c.Position.Y)
 				maxY = math.Max(maxY, c.Position.Y)
+			}
+			for _, reading := range s.pinnedReadingsLocked() {
+				min, max := PinnedReadingBounds(reading)
+				minX, minY = math.Min(minX, min.X), math.Min(minY, min.Y)
+				maxX, maxY = math.Max(maxX, max.X), math.Max(maxY, max.Y)
 			}
 			s.view.Center = Point{(minX + maxX) / 2, (minY + maxY) / 2}
 			s.view.Zoom = math.Max(.01, math.Min(2, math.Min(p.Width/(maxX-minX+180), p.Height/(maxY-minY+180))))

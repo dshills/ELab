@@ -206,6 +206,9 @@ func (s *screen) canvasClick(p workbench.Point) {
 			s.invoke("wire.connect", workbench.ConnectParams{From: state.Drawing.WireStart, To: ref})
 		}
 	case "select":
+		if hitPinnedReading(state, p) != "" {
+			return
+		}
 		id := hitComponent(state, p)
 		if id == "" {
 			id = hitWire(state, p, 6/state.View.Zoom)
@@ -225,6 +228,11 @@ func (s *screen) mesh(v canvas.Viewport) (*canvas.Mesh, error) {
 		s.drawing.pointer.publish(float64(origin.X), float64(origin.Y), v)
 	}
 	if s.drawing != nil && s.drawing.dragging && s.drawing.dragGeneration == state.Document.Generation {
+		for i, reading := range state.PinnedReadings {
+			if "pin|"+reading.Definition.ID == s.drawing.dragID {
+				state.PinnedReadings[i].Definition.Position = workbench.Point{X: math.Round((s.drawing.dragOrigin.X+s.drawing.dragDelta.X)/10) * 10, Y: math.Round((s.drawing.dragOrigin.Y+s.drawing.dragDelta.Y)/10) * 10}
+			}
+		}
 		for i, part := range state.Components {
 			if part.ID == s.drawing.dragID {
 				state.Components[i].Position = workbench.Point{X: math.Round((s.drawing.dragOrigin.X+s.drawing.dragDelta.X)/10) * 10, Y: math.Round((s.drawing.dragOrigin.Y+s.drawing.dragDelta.Y)/10) * 10}
@@ -262,7 +270,14 @@ func (c *commandCanvas) routePointer(phase int, p, delta workbench.Point) {
 		c.dragging = false
 		c.dragDelta = workbench.Point{}
 		if c.activeTool == "select" {
-			if id := hitComponent(state, p); id != "" {
+			if id := hitPinnedReading(state, p); id != "" {
+				for _, reading := range state.PinnedReadings {
+					if reading.Definition.ID == id {
+						c.dragID = "pin|" + id
+						c.dragOrigin = reading.Definition.Position
+					}
+				}
+			} else if id := hitComponent(state, p); id != "" {
 				part, _ := (workbench.Graph{Components: state.Components, Wires: state.Wires}).Component(id)
 				c.dragID = id
 				c.dragOrigin = part.Position
@@ -291,7 +306,11 @@ func (c *commandCanvas) routePointer(phase int, p, delta workbench.Point) {
 			c.dragDelta.X += delta.X
 			c.dragDelta.Y += delta.Y
 			position := workbench.Point{X: c.dragOrigin.X + c.dragDelta.X, Y: c.dragOrigin.Y + c.dragDelta.Y}
-			c.screen.invoke("component.move", workbench.MoveParams{ID: c.dragID, Position: position, PreviousPosition: &c.dragOrigin})
+			if strings.HasPrefix(c.dragID, "pin|") {
+				c.screen.invoke("measurement.pin.move", workbench.MoveParams{ID: strings.TrimPrefix(c.dragID, "pin|"), Position: position, PreviousPosition: &c.dragOrigin})
+			} else {
+				c.screen.invoke("component.move", workbench.MoveParams{ID: c.dragID, Position: position, PreviousPosition: &c.dragOrigin})
+			}
 		}
 		c.dragID = ""
 		c.dragging = false

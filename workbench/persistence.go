@@ -17,6 +17,7 @@ const DocumentVersion = 4
 const MaxDocumentBytes = 256 * 1024
 
 type Document struct {
+	PinnedReadings     *PinPreferences     `json:"pinned_readings,omitempty"`
 	WaveformModel      *WaveformModel      `json:"waveform_model,omitempty"`
 	PotentiometerModel *PotentiometerModel `json:"potentiometer_model,omitempty"`
 	DiodeModel         *DiodeModel         `json:"diode_model,omitempty"`
@@ -33,14 +34,15 @@ type Document struct {
 	TransientSettings  *TransientSettings  `json:"transient_settings,omitempty"`
 }
 type DocumentState struct {
-	SchematicDirty  bool   `json:"schematic_dirty"`
-	RecordingsDirty bool   `json:"recordings_dirty"`
-	RecordingCount  int    `json:"recording_count"`
-	RecoveredFrom   string `json:"recovered_from,omitempty"`
-	Path            string `json:"path"`
-	Dirty           bool   `json:"dirty"`
-	FormatVersion   int    `json:"format_version"`
-	Generation      uint64 `json:"generation"`
+	PreferencesDirty bool   `json:"preferences_dirty"`
+	SchematicDirty   bool   `json:"schematic_dirty"`
+	RecordingsDirty  bool   `json:"recordings_dirty"`
+	RecordingCount   int    `json:"recording_count"`
+	RecoveredFrom    string `json:"recovered_from,omitempty"`
+	Path             string `json:"path"`
+	Dirty            bool   `json:"dirty"`
+	FormatVersion    int    `json:"format_version"`
+	Generation       uint64 `json:"generation"`
 }
 type SaveParams struct {
 	ExpectedGeneration *uint64 `json:"expected_document_generation,omitempty"`
@@ -64,15 +66,18 @@ func contentHash(g Graph, settings TransientSettings) [32]byte {
 	return sha256.Sum256(data)
 }
 func (s *Service) dirtyLocked() bool {
-	return contentHash(s.graph, s.transientSettings) != s.savedGraph || s.recordingsDirtyLocked()
+	return contentHash(s.graph, s.transientSettings) != s.savedGraph || pinHash(s.pins) != s.savedPins || s.recordingsDirtyLocked()
 }
 func (s *Service) requireCleanLocked(discard bool) error {
 	if s.dirtyLocked() && !discard {
-		return &actionError{"unsaved-changes", "Save your schematic and recorded results first, or explicitly discard unsaved changes."}
+		return &actionError{"unsaved-changes", "Save your schematic, pinned readings and recorded results first, or explicitly discard unsaved changes."}
 	}
 	return nil
 }
 func (s *Service) detachDocumentLocked() {
+	s.pins = nil
+	s.savedPins = pinHash(nil)
+	s.dcCompiled = nil
 	s.inputMode = "auto"
 	s.pendingInputMode = ""
 	s.documentGeneration++
@@ -199,6 +204,19 @@ func decodeDocument(data []byte) (Document, error) {
 		}
 		d.Recordings = recordings
 	}
+	var pinFields map[string]json.RawMessage
+	_ = json.Unmarshal(data, &pinFields)
+	if raw, exists := pinFields["pinned_readings"]; exists {
+		if d.Version < 4 {
+			return d, fmt.Errorf("pinned readings require version 4")
+		}
+		preferences, err := validatePinPreferences(raw, d.Graph)
+		if err != nil {
+			return d, err
+		}
+		d.PinnedReadings = preferences
+	}
+
 	if d.Version >= 2 {
 		var fields map[string]json.RawMessage
 		_ = json.Unmarshal(data, &fields)
@@ -484,6 +502,7 @@ func (s *Service) saveLocked(p SaveParams) error {
 	s.recoveredFrom = ""
 	s.documentPath = path
 	s.savedGraph = contentHash(s.graph, s.transientSettings)
+	s.savedPins = pinHash(s.pins)
 	s.savedRecordings = s.recordingMembershipHashLocked()
 	s.diskHash = sha256.Sum256(data)
 	if s.recoveryStore != nil {
@@ -522,6 +541,7 @@ func (s *Service) loadLocked(p LoadParams) error {
 	s.recoveredFrom = ""
 	s.documentPath = path
 	s.savedGraph = contentHash(s.graph, s.transientSettings)
+	s.savedPins = pinHash(s.pins)
 	s.savedRecordings = s.recordingMembershipHashLocked()
 	s.diskHash = sha256.Sum256(data)
 
@@ -543,6 +563,9 @@ func (s *Service) documentLocked() Document {
 	probes := ProbeParams{IDs: s.scopeLocked(compiled).Selected}
 	paused := s.paused
 	d := Document{Recordings: s.projectRecordingsLocked(), Paused: &paused, ScopeProbes: &probes, Format: DocumentFormat, Version: DocumentVersion, Graph: s.graph.Clone(), View: s.view, LEDModel: Model(), TransientSettings: &settings}
+	if len(s.pins) > 0 {
+		d.PinnedReadings = &PinPreferences{Items: clonePins(s.pins)}
+	}
 	for _, part := range s.graph.Components {
 		if IsWaveformSource(part.Kind) {
 			m := SourceWaveformModel()
@@ -582,6 +605,11 @@ func (s *Service) documentLocked() Document {
 }
 
 func (s *Service) installDocumentLocked(d Document) {
+	s.pins = nil
+	s.dcCompiled = nil
+	if d.PinnedReadings != nil {
+		s.pins = clonePins(d.PinnedReadings.Items)
+	}
 	s.installProjectRecordingsLocked(d.Recordings)
 	s.inputMode = "auto"
 	s.pendingInputMode = ""

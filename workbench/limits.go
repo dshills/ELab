@@ -19,6 +19,7 @@ const (
 )
 
 type CircuitLimits struct {
+	PinnedReadings      int `json:"pinned_readings"`
 	DrawingObjects      int `json:"drawing_objects"`
 	Wires               int `json:"wires"`
 	SimulatedComponents int `json:"simulated_components"`
@@ -35,7 +36,7 @@ type CircuitLimits struct {
 }
 
 func Limits() CircuitLimits {
-	return CircuitLimits{DrawingObjects: MaxComponents, Wires: MaxWires, SimulatedComponents: MaxSimulatedComponents, ElectricalNodes: MaxElectricalNodes, Sources: MaxNetworkSources, Capacitors: MaxNetworkCapacitors, Transistors: MaxNetworkTransistors, Resistors: MaxNetworkResistors, Switches: MaxNetworkSwitches, Diodes: MaxNetworkDiodes, Potentiometers: MaxNetworkPotentiometers, LEDs: MaxNetworkLEDs, ScopeTraces: MaxScopeProbes}
+	return CircuitLimits{PinnedReadings: MaxPinnedReadings, DrawingObjects: MaxComponents, Wires: MaxWires, SimulatedComponents: MaxSimulatedComponents, ElectricalNodes: MaxElectricalNodes, Sources: MaxNetworkSources, Capacitors: MaxNetworkCapacitors, Transistors: MaxNetworkTransistors, Resistors: MaxNetworkResistors, Switches: MaxNetworkSwitches, Diodes: MaxNetworkDiodes, Potentiometers: MaxNetworkPotentiometers, LEDs: MaxNetworkLEDs, ScopeTraces: MaxScopeProbes}
 }
 func SimulatedComponentCount(g Graph) int {
 	count := 0

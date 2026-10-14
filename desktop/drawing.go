@@ -41,6 +41,7 @@ func (b *meshBuilder) text(x, y float64, text string, c color.NRGBA) {
 	// Tessellate the bundled bitmap font into retained geometry. Labels follow the
 	// same world transform as symbols and need no per-frame CPU image readback.
 	text = strings.ReplaceAll(text, "Ω", "ohm")
+	text = strings.ReplaceAll(text, "·", "|")
 	for _, r := range text {
 		rect, mask, origin, advance, ok := basicfont.Face7x13.Glyph(fixed.P(0, 0), r)
 		if !ok {
@@ -291,6 +292,17 @@ func schematic(state workbench.Snapshot, view canvas.Viewport) (*canvas.Mesh, er
 			y = part.Position.Y - 75
 		}
 		b.text(part.Position.X-float64(len(title))*4.4, y, title, ink)
+	}
+	for _, reading := range state.PinnedReadings {
+		min, max := workbench.PinnedReadingBounds(reading)
+		c := color.NRGBA{R: 39, G: 110, B: 126, A: 255}
+		if reading.State != "live" {
+			c = color.NRGBA{R: 151, G: 96, B: 43, A: 255}
+		}
+		b.quad(min.X, min.Y, max.X-min.X, max.Y-min.Y, color.NRGBA{R: 243, G: 250, B: 251, A: 255})
+		b.stroke(c, 1.5, canvas.Point{X: min.X, Y: min.Y}, canvas.Point{X: max.X, Y: min.Y}, canvas.Point{X: max.X, Y: max.Y}, canvas.Point{X: min.X, Y: max.Y}, canvas.Point{X: min.X, Y: min.Y})
+		b.text(min.X+12, min.Y+23, reading.Display, c)
+		b.text(min.X+12, min.Y+43, reading.ReferenceDisplay, c)
 	}
 	if len(state.Components) == 0 {
 		b.text(view.Center.X-150, view.Center.Y, "Choose a part and click to place it", ink)

@@ -102,6 +102,7 @@ func (s *screen) probeInspector(state workbench.Snapshot) []ui.Node {
 		p := trace.Probe
 		nodes = append(nodes, s.action("inspect-trace-"+p.ID, "Inspect "+p.Label, "scope.trace.select", workbench.IDParams{ID: p.ID}), quiet("probe-direction-"+p.ID, scopeProbeColors(state.Scope.Traces)[i]+" · "+p.Positive+" → "+p.Reference))
 	}
+	nodes = append(nodes, s.pinnedReadingControls(state)...)
 	if state.TraceFocus != nil {
 		text := "Inspecting " + state.TraceFocus.ProbeID
 		if state.TraceFocus.Unavailable {

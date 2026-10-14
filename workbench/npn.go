@@ -317,6 +317,7 @@ func (s *Service) startNPNLocked(c Compiled, allowPaused bool) {
 			r.RunID = run
 			r.ElectricalRevision = revision
 			s.npn = &r
+			s.dcCompiled = &c
 			if s.paused {
 				s.status = "paused"
 			} else {

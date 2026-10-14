@@ -140,7 +140,7 @@ func (s *Service) batchLocked(p BatchParams) error {
 	return nil
 }
 func historyName(command string) string {
-	names := map[string]string{"component.place": "Place component", "component.duplicate": "Duplicate component", "component.move": "Move component", "component.rotate": "Rotate component", "component.set": "Change value", "capacitor.initial.set": "Change capacitor startup", "wire.connect": "Connect wire", "wire.junction.insert": "Insert junction", "object.delete": "Delete object", "simulation.transient.set": "Change experiment settings", "project.clear": "New schematic", "project.load": "Open schematic"}
+	names := map[string]string{"measurement.pin.add": "Pin reading", "measurement.pin.move": "Move pinned reading", "measurement.pin.remove": "Remove pinned reading", "component.place": "Place component", "component.duplicate": "Duplicate component", "component.move": "Move component", "component.rotate": "Rotate component", "component.set": "Change value", "capacitor.initial.set": "Change capacitor startup", "wire.connect": "Connect wire", "wire.junction.insert": "Insert junction", "object.delete": "Delete object", "simulation.transient.set": "Change experiment settings", "project.clear": "New schematic", "project.load": "Open schematic"}
 	if name := names[command]; name != "" {
 		return name
 	}

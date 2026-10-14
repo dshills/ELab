@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "charge_voltage_v": 3.1606027941427883,
+  "discharge_voltage_v": 2.8598316716894003,
+  "discharge_current_a": -0.00028598316716894006,
+  "checks": [
+    "pin preferences alone mark document dirty",
+    "pins preserve initial physics",
+    "independent exact RC charge/discharge reference",
+    "signed current and units",
+    "stale gesture refusal and move undo/redo",
+    "SVG retains cards and measurement provenance",
+    "recorded plot leaves explicitly live pins unchanged",
+    "saved pins contain no trusted measurements",
+    "removed source remains unavailable across save/reopen",
+    "fresh paused startup with positions and kept record",
+    "owned project ends clean and paused"
+  ],
+  "limitations": [
+    "eight pins and grid positions inside \u00b110000 units",
+    "version-4 optional pinned_readings extension: older builds reject it rather than discard it",
+    "no power/derived-expression pins or recorded-reading pin mode",
+    "mounted event tests/GPU readback do not establish complete keyboard or screen-reader qualification"
+  ]
+}

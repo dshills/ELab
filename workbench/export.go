@@ -85,7 +85,7 @@ func (s *Service) exportLocked(command string, p ExportParams) error {
 		data = b.Bytes()
 		run = t.RunID
 	} else {
-		data = schematicSVG(s.graph, s.run, s.electrical)
+		data = schematicSVG(s.graph, s.run, s.electrical, s.pinnedReadingsLocked()...)
 	}
 	if len(data) > 8*1024*1024 {
 		return fmt.Errorf("export exceeds 8 MiB")
@@ -139,7 +139,7 @@ func publishExport(path string, data []byte, overwrite bool) error {
 	}
 	return nil
 }
-func schematicSVG(g Graph, run, revision uint64) []byte {
+func schematicSVG(g Graph, run, revision uint64, readings ...PinnedReading) []byte {
 	minX, minY, maxX, maxY := -120., -100., 120., 100.
 	for _, p := range g.Components {
 		minX = math.Min(minX, p.Position.X-90)
@@ -168,13 +168,18 @@ func schematicSVG(g Graph, run, revision uint64) []byte {
 			maxY = math.Max(maxY, p.Y+25)
 		}
 	}
+	for _, reading := range readings {
+		min, max := PinnedReadingBounds(reading)
+		minX, minY = math.Min(minX, min.X-25), math.Min(minY, min.Y-25)
+		maxX, maxY = math.Max(maxX, max.X+25), math.Max(maxY, max.Y+25)
+	}
 	diagramBottom := maxY
 	maxY += 55 + float64((len(g.Components)+1)/2)*24
 	minY -= 50
 	width, height := maxX-minX, maxY-minY
 	var b strings.Builder
 	fmt.Fprintf(&b, `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="%g" viewBox="%g %g %g %g"><title>ELab schematic</title>`, 1200*height/width, minX, minY, width, height)
-	metadata, _ := json.Marshal(map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "switch_model": SwitchDeviceModel(), "diode_model": SiliconDiodeModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "note": "Generic educational models; schematic rendering, not physical build certification"})
+	metadata, _ := json.Marshal(map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "switch_model": SwitchDeviceModel(), "diode_model": SiliconDiodeModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"})
 	fmt.Fprintf(&b, "<metadata>%s</metadata>", html.EscapeString(string(metadata)))
 	fmt.Fprintf(&b, `<rect x="%g" y="%g" width="%g" height="%g" fill="#ffffff"/><g fill="none" stroke="#426574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">`, minX, minY, width, height)
 	for _, w := range g.Wires {
@@ -293,7 +298,16 @@ func schematicSVG(g Graph, run, revision uint64) []byte {
 		}
 		fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="12">%s</text>`, x, y, html.EscapeString(text))
 	}
-	b.WriteString("</g></svg>\n")
+	b.WriteString("</g>")
+	for _, reading := range readings {
+		min, max := PinnedReadingBounds(reading)
+		color := "#276e7e"
+		if reading.State != "live" {
+			color = "#97602b"
+		}
+		fmt.Fprintf(&b, `<g id="pin-%s"><title>%s; %s → %s; %s</title><rect x="%g" y="%g" width="%g" height="%g" fill="#f3fafb" stroke="%s"/><text x="%g" y="%g" font-family="monospace" font-size="14" fill="%s">%s</text><text x="%g" y="%g" font-family="monospace" font-size="14" fill="%s">%s</text></g>`, html.EscapeString(reading.Definition.ID), html.EscapeString(reading.Probe.Label), html.EscapeString(reading.Probe.Positive), html.EscapeString(reading.Probe.Reference), html.EscapeString(reading.Reason), min.X, min.Y, max.X-min.X, max.Y-min.Y, color, min.X+12, min.Y+23, color, html.EscapeString(reading.Display), min.X+12, min.Y+43, color, html.EscapeString(reading.ReferenceDisplay))
+	}
+	b.WriteString("</svg>\n")
 	return []byte(b.String())
 }
 

@@ -88,8 +88,7 @@ func newSimulationKernel(ctx context.Context, input kernelPlan) (*simulationKern
 		r.ElectricalRevision = input.revision
 		k.led = &r
 		t.Engine = EngineID
-		currents := map[string]float64{c.Source.ID: r.Current, c.LED.ID: r.Current, c.Resistor.ID: (r.Nodes[c.TerminalNet[c.Resistor.ID+".1"]] - r.Nodes[c.TerminalNet[c.Resistor.ID+".2"]]) / c.Resistor.Value}
-		t.Sample = captureFrame(c, TraceSample{Time: 0, Input: c.Source.Value, Voltage: r.LEDVoltage, Current: r.Current}, r.Nodes, currents)
+		t.Sample = ledTraceSample(c, r)
 	}
 	if err := ctx.Err(); err != nil {
 		return nil, err

@@ -76,9 +76,9 @@
     },
     {
       "id": "VIEW-01",
-      "evidence": "Selected component readouts, structured node maps/probes, current directions for probes/potentiometer",
+      "evidence": "Selected component readouts and full probe descriptors; eight persisted live voltage/current cards with signed units/reference lines, stale/unavailable states, shared commands, undoable positioning, solver-frame provenance and GPU evidence",
       "status": "partial",
-      "assessment": "Partial: arbitrary pinned schematic readings and consistent selected pin/net measurement/sign/reference presentation remain absent"
+      "assessment": "Partial: pinned-reading behavior is implemented; consistent direct selected pin/net inspection and complete keyboard selection remain open"
     },
     {
       "id": "VIEW-02",
@@ -124,9 +124,9 @@
     },
     {
       "id": "FILE-03",
-      "evidence": "Schematic SVG, SI CSV, source identity, guarded immutable exports",
+      "evidence": "Schematic SVG with pinned cards/reference labels and measurement provenance; SI CSV/source identity, guarded immutable exports, fresh-render visual QA",
       "status": "implemented",
-      "assessment": "Implemented tested outputs; pinned readings/visible preference parity need future renderer work"
+      "assessment": "Implemented for existing visible schematic/pin output; future voltage/current display preferences must preserve export parity"
     },
     {
       "id": "ACCESS-01",

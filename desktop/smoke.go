@@ -159,7 +159,10 @@ rendered:
 	if err := nativeCapacitySmoke(ctx, a, s); err != nil {
 		return err
 	}
-	return nativeTraceFocusSmoke(ctx, a, s)
+	if err := nativeTraceFocusSmoke(ctx, a, s); err != nil {
+		return err
+	}
+	return nativePinnedReadingsSmoke(ctx, a, s)
 }
 
 func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {

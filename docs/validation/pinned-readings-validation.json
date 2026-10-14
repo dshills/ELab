@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "date": "2026-10-13",
+  "version": "0.26.0",
+  "build": "40",
+  "binary_sha256": "7b07b2e10e42a57fd11d2266264729ffcfce23ac18bbe22e11b8613b829b4789",
+  "packaged_binary_matches": true,
+  "checks": [
+    "source review and whitespace diff check",
+    "pinned Staticcheck/import formatting",
+    "Go vet and full root/native race gates",
+    "immutable accepted solver frames across LED/NPN/network DC and transient modes",
+    "original compiled graph retained for stale DC result associations",
+    "signed independent RC charge/discharge equations",
+    "eight-pin/strict parameter and document validation",
+    "presentation history, dirty/undo and successful-request retry isolation",
+    "source deletion/undo and missing-source portable preferences",
+    "fresh paused reopen with kept recording and fresh pin values",
+    "preference-only recovery checkpoint/restore",
+    "recorded scope retains explicitly live pin measurements",
+    "native selector/numeric/pointer command parity",
+    "one commit/undo per complete drag; intervening agent/project changes refused",
+    "Fit and SVG include both card lines and full bounds",
+    "built and packaged fresh GPU background/text readback per pin",
+    "headless and final packaged private-socket public workflows",
+    "correct-aspect Sharp SVG render visually inspected"
+  ],
+  "measurements": {
+    "headless": {
+      "charge_voltage_v": 3.1606027941427883,
+      "discharge_voltage_v": 2.8598316716894003,
+      "discharge_current_a": -0.00028598316716894006
+    },
+    "desktop": {
+      "charge_voltage_v": 3.1606027941427883,
+      "discharge_voltage_v": 2.8598316716894003,
+      "discharge_current_a": -0.00028598316716894006
+    }
+  },
+  "limits_of_evidence": [
+    "eight current live voltage/current pins; no derived-expression or recorded-reading pin mode",
+    "optional strict version-4 extension: older builds refuse pinned_readings rather than silently drop it",
+    "native control/gesture/GPU evidence does not establish all keyboard, screen-reader, participant or visible-latency gates",
+    "selected pin/net direct inspection, display preferences, remaining synchronous work and distribution remain open",
+    "private unsigned local bundle; functional audit remains 11 implemented / 16 partial"
+  ]
+}
