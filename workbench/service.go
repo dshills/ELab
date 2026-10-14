@@ -635,6 +635,11 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	if (r.ExpectedRevision == nil && r.ExpectedCommandRevision == nil) || r.Key == "" || len(r.Key) > 128 {
 		return fail("invalid-request", "mutations require expected_revision or expected_command_revision and key (1–128 bytes)")
 	}
+	normalized, err := normalizeTimeInput(r.Command, r.Params)
+	if err != nil {
+		return fail("invalid-params", err.Error())
+	}
+	r.Params = normalized
 	canonical := map[string]any{}
 	if err := DecodeStrict(r.Params, &canonical); err != nil {
 		return fail("invalid-params", err.Error())

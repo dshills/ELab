@@ -133,20 +133,16 @@ func (s *screen) cursorControls(state workbench.Snapshot) ui.Node {
 		cursor := cursor
 		button := s.action("cursor-select-"+cursor.id, strings.ToUpper(cursor.id), "scope.cursor.select", workbench.CursorSelectParams{Cursor: cursor.id})
 		nodes = append(nodes, buttonStyle(button, state.Scope.ActiveCursor == cursor.id))
-		value, lo, hi := 0., 0., 0.
+		value := 0.
 		if t != nil && len(t.Samples) > 0 {
-			lo = t.Samples[0].Time * 1000
-			hi = t.Sample.Time * 1000
-			value = lo
+			value = t.Samples[0].Time
 		}
 		if cursor.value != nil {
-			value = cursor.value.Requested * 1000
+			value = cursor.value.Requested
 		}
-		nodes = append(nodes, ui.Node{ID: "cursor-time-" + cursor.id, Kind: ui.NumberField, Number: float32(value), MinWidth: 90, Disabled: t == nil || t.Stale, Numeric: ui.Numeric{Min: 0, Max: float32(math.Max(hi, state.TransientSettings.StepSeconds*1000)), Step: float32(state.TransientSettings.StepSeconds * 1000)}, Accessibility: ui.Accessibility{Name: "Cursor " + strings.ToUpper(cursor.id) + " time in ms"}, Change: func(e ui.ChangeEvent) {
-			at := float64(e.Number) / 1000
-			at = math.Max(lo/1000, math.Min(hi/1000, at))
-			s.invoke("scope.cursor.set", workbench.CursorParams{Cursor: cursor.id, Time: at})
-		}})
+		nodes = append(nodes, timeField("cursor-time-"+cursor.id, "Cursor "+strings.ToUpper(cursor.id)+" time", value, t == nil || t.Stale, func(text string) {
+			s.invokeAtCommandRevision("scope.cursor.set", map[string]any{"cursor": cursor.id, "time_s": text}, state.CommandRevision)
+		}))
 		clear := s.action("cursor-clear-"+cursor.id, "×", "scope.cursor.clear", workbench.CursorSelectParams{Cursor: cursor.id})
 		clear.Disabled = cursor.value == nil
 		nodes = append(nodes, clear)

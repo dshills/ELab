@@ -32,7 +32,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.37.0 --build-version 52 --platform darwin
+  --version 0.38.0 --build-version 53 --platform darwin
 ```
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
@@ -194,3 +194,5 @@ Manual recovery refresh and checkpoint now run as shared background jobs, preser
 Recovery Restore validates files in the background and commits only if the original document still matches. Native controls and agents share cancellation, unsaved protection and new-copy provenance. See [recovery Restore](docs/project-restore.md).
 
 The reference [agent conformance harness](docs/agent-conformance.md) builds LED, RC and NPN circuits from empty sessions through in-process, stdio and private sockets, including native app processes. It checks fault repair, measurements, exports, close/reopen and equivalent project/result state. The standard build produces `build/elab-conformance`.
+
+Time fields now accept values such as `10 ms` and `250 us` through the same native/agent commands. Numerical seconds, strict saved data and existing simulation bounds remain compatible. See [time entry](docs/time-entry.md).

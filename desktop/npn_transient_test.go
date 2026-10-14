@@ -56,7 +56,7 @@ func TestNPNPulseDrawingAndControlsMatchAgents(t *testing.T) {
 	uiAction(t, user, "simulation.restart", nil)
 	agentAction(t, agent, "simulation.restart", struct{}{})
 	// Changing durations uses the same saved/undoable settings command.
-	uiAction(t, user, "setting-high", &ui.ChangeEvent{Number: 30})
+	uiAction(t, user, "setting-high", &ui.ChangeEvent{Text: "30 ms"})
 	cfg := agent.Snapshot().TransientSettings
 	cfg.HighSeconds = .03
 	agentAction(t, agent, "simulation.transient.set", cfg)

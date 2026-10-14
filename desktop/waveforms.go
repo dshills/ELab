@@ -40,12 +40,19 @@ func (s *screen) waveformControls(state workbench.Snapshot, p workbench.Componen
 		}{
 			{"low-v", "Low level · V", cfg.LowVoltage, 1, -12, 12, .01, func(w *workbench.PulseWaveform, v float64) { w.LowVoltage = v }},
 			{"high-v", "High level · V", cfg.HighVoltage, 1, -12, 12, .01, func(w *workbench.PulseWaveform, v float64) { w.HighVoltage = v }},
-			{"high", "High phase · ms", cfg.HighSeconds, 1000, .001, 10000, .001, func(w *workbench.PulseWaveform, v float64) { w.HighSeconds = v }},
-			{"low", "Low phase · ms", cfg.LowSeconds, 1000, .001, 10000, .001, func(w *workbench.PulseWaveform, v float64) { w.LowSeconds = v }},
-			{"rise", "Rise · ms", cfg.RiseSeconds, 1000, .001, 10000, .001, func(w *workbench.PulseWaveform, v float64) { w.RiseSeconds = v }},
-			{"fall", "Fall · ms", cfg.FallSeconds, 1000, .001, 10000, .001, func(w *workbench.PulseWaveform, v float64) { w.FallSeconds = v }},
+			{"high", "High phase", cfg.HighSeconds, 1000, .001, 10000, .001, func(w *workbench.PulseWaveform, v float64) { w.HighSeconds = v }},
+			{"low", "Low phase", cfg.LowSeconds, 1000, .001, 10000, .001, func(w *workbench.PulseWaveform, v float64) { w.LowSeconds = v }},
+			{"rise", "Rise time", cfg.RiseSeconds, 1000, .001, 10000, .001, func(w *workbench.PulseWaveform, v float64) { w.RiseSeconds = v }},
+			{"fall", "Fall time", cfg.FallSeconds, 1000, .001, 10000, .001, func(w *workbench.PulseWaveform, v float64) { w.FallSeconds = v }},
 		} {
 			field := field
+			if field.scale == 1000 {
+				name := field.id + "_s"
+				nodes = append(nodes, quiet("pulse-label-"+field.id, field.label), timeField("pulse-"+field.id, field.label, field.value, false, func(text string) {
+					s.invokeAtCommandRevision("source.pulse.set", map[string]any{"id": p.ID, "waveform": timeParams(cfg, name, text)}, state.CommandRevision)
+				}))
+				continue
+			}
 			nodes = append(nodes, quiet("pulse-label-"+field.id, field.label), ui.Node{ID: "pulse-" + field.id, Kind: ui.NumberField, Number: float32(field.value * field.scale), Numeric: ui.Numeric{Min: float32(field.min), Max: float32(field.max), Step: float32(field.step)}, Accessibility: ui.Accessibility{Name: field.label}, Change: func(e ui.ChangeEvent) {
 				next := cfg
 				field.set(&next, float64(e.Number)/field.scale)

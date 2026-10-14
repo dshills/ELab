@@ -51,7 +51,10 @@ func capability(id, description string, mutates bool, schema string) Capability 
 		data, _ := json.Marshal(typeSchema(reflect.TypeOf([]Part{})))
 		output = data
 	}
-	return Capability{id, description, mutates, json.RawMessage(schema), "Snapshot mutations; query data otherwise; local schemas", append(json.RawMessage(nil), output...)}
+	var input map[string]any
+	_ = json.Unmarshal([]byte(schema), &input)
+	encoded, _ := json.Marshal(timeInputSchema(id, input))
+	return Capability{id, description, mutates, encoded, "Snapshot mutations; query data otherwise; local schemas", append(json.RawMessage(nil), output...)}
 }
 
 func typedCapability(id, description string, t reflect.Type) Capability {
@@ -78,7 +81,7 @@ func SchemaRegistry() map[string]json.RawMessage {
 	metadata := structSchema(reflect.TypeOf(VerificationMetadata{}))
 	metadata["$id"] = VerificationMetadataSchemaID
 	data, _ := json.Marshal(metadata)
-	return map[string]json.RawMessage{SnapshotSchemaID: append(json.RawMessage(nil), snapshotDefinition...), VerificationMetadataSchemaID: data}
+	return map[string]json.RawMessage{SnapshotSchemaID: append(json.RawMessage(nil), snapshotDefinition...), VerificationMetadataSchemaID: data, TimeInputSchemaID: json.RawMessage(`{"$id":"urn:elab:time:1","type":["number","string"],"maxLength":128,"description":"Seconds as a finite number or decimal/scientific text; bare text is seconds; case-sensitive s/ms/us/µs/μs/ns/ps. Command bounds still apply.","examples":[0.01,"10 ms","250 us"]}`)}
 }
 
 func typeSchema(t reflect.Type) map[string]any {

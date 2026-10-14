@@ -272,9 +272,9 @@ func (s *screen) transientInspector(state workbench.Snapshot) []ui.Node {
 		value, scale, min, max float64
 		set                    func(*workbench.TransientSettings, float64)
 	}{
-		{"step", "Sample step · ms", cfg.StepSeconds, 1000, .001, 1000, func(c *workbench.TransientSettings, v float64) { c.StepSeconds = v }},
-		{"high", "Pulse high · ms", cfg.HighSeconds, 1000, .001, 10000, func(c *workbench.TransientSettings, v float64) { c.HighSeconds = v }},
-		{"low", "Pulse low · ms", cfg.LowSeconds, 1000, .001, 10000, func(c *workbench.TransientSettings, v float64) { c.LowSeconds = v }},
+		{"step", "Sample step", cfg.StepSeconds, 1000, .001, 1000, func(c *workbench.TransientSettings, v float64) { c.StepSeconds = v }},
+		{"high", "Pulse high", cfg.HighSeconds, 1000, .001, 10000, func(c *workbench.TransientSettings, v float64) { c.HighSeconds = v }},
+		{"low", "Pulse low", cfg.LowSeconds, 1000, .001, 10000, func(c *workbench.TransientSettings, v float64) { c.LowSeconds = v }},
 		{"initial", "Initial voltage · V", cfg.InitialVoltage, 1, 0, 12, func(c *workbench.TransientSettings, v float64) { c.InitialVoltage = v }},
 		{"speed", "Playback · sim s / wall s", cfg.PlaybackSpeed, 1, .001, 1, func(c *workbench.TransientSettings, v float64) { c.PlaybackSpeed = v }},
 	} {
@@ -291,6 +291,13 @@ func (s *screen) transientInspector(state workbench.Snapshot) []ui.Node {
 			}
 		}
 		if npn && !mixed && setting.id == "initial" {
+			continue
+		}
+		if setting.scale == 1000 {
+			field := map[string]string{"step": "step_s", "high": "high_s", "low": "low_s"}[setting.id]
+			nodes = append(nodes, quiet("setting-label-"+setting.id, setting.text), timeField("setting-"+setting.id, setting.text, setting.value, false, func(text string) {
+				s.invokeAtCommandRevision("simulation.transient.set", timeParams(cfg, field, text), state.CommandRevision)
+			}))
 			continue
 		}
 		nodes = append(nodes, quiet("setting-label-"+setting.id, setting.text), ui.Node{ID: "setting-" + setting.id, Kind: ui.NumberField, Number: float32(setting.value * setting.scale), Numeric: ui.Numeric{Min: float32(setting.min), Max: float32(setting.max), Step: float32(.001)}, Accessibility: ui.Accessibility{Name: setting.text}, Change: func(e ui.ChangeEvent) {

@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "transport": "packaged-native-private-socket",
+  "ideal_rc_10ms_v": 3.1606027941427883,
+  "checks": [
+    "local schema advertises finite SI numbers or bounded unit strings",
+    "ideal RC 10 ms sample and live cursor/window units",
+    "invalid units/range/overflow/underflow preserve the complete paused snapshot",
+    "Verify/recorded seek/cursors/window use the same grammar; live time/charge preserved",
+    "saved numeric SI settings and recorded data reopen with fresh paused physics",
+    "nested finite pulse units; immediate Step work accepts text",
+    "recovery interval units; final project clean/paused; original RC bytes preserved"
+  ],
+  "limitations": [
+    "native GPU smoke uses real mounted callbacks; keyboard/IME/focus/screen-reader qualification remains separate",
+    "bare time text is seconds; no unitless millisecond inference or silent native clamping",
+    "model/numerical/device/work/file bounds unchanged"
+  ]
+}

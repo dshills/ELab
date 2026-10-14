@@ -144,10 +144,12 @@ type screen struct {
 }
 
 func (s *screen) invoke(id string, p any) workbench.Response {
+	return s.invokeAtCommandRevision(id, p, s.service.Snapshot().CommandRevision)
+}
+func (s *screen) invokeAtCommandRevision(id string, p any, rev uint64) workbench.Response {
 	s.fileMessage = ""
 	s.serial++
 	raw, _ := json.Marshal(p)
-	rev := s.service.Snapshot().CommandRevision
 	if s.requestHelp != nil && rev != s.requestHelpRevision {
 		s.requestHelp = nil
 		s.errorMessage = ""

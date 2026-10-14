@@ -19,7 +19,7 @@ func TestNativeRecordedExportRetainsSelectedOperationParameters(t *testing.T) {
 	uiAction(t, user, "example.rc", nil)
 	uiAction(t, user, "simulation.pause", nil)
 	uiAction(t, user, "simulation.restart", nil)
-	uiAction(t, user, "verify-duration", &ui.ChangeEvent{Number: 10})
+	uiAction(t, user, "verify-duration", &ui.ChangeEvent{Text: "10 ms"})
 	uiAction(t, user, "verify-start", nil)
 	view := completedVerification(t, user.service, user.service.Snapshot().LastOperation)
 	for _, format := range []string{"json", "csv"} {

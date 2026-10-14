@@ -27,7 +27,7 @@ func TestNativeRecoveryControlsRestoreSameCopyAsAgents(t *testing.T) {
 		t.Fatal(err)
 	}
 	agentAction(t, agent, "recovery.configure", workbench.RecoveryConfigureParams{Directory: directory, Enabled: true, Interval: 2})
-	uiAction(t, user, "recovery-interval", &ui.ChangeEvent{Number: 1})
+	uiAction(t, user, "recovery-interval", &ui.ChangeEvent{Text: "1 s"})
 	agentAction(t, agent, "recovery.configure", workbench.RecoveryConfigureParams{Directory: directory, Enabled: true, Interval: 1})
 	uiAction(t, user, "recovery-toggle", nil)
 	agentAction(t, agent, "recovery.configure", workbench.RecoveryConfigureParams{Directory: directory, Enabled: false, Interval: 1})

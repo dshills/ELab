@@ -30,7 +30,7 @@ func TestProbeControlsAndCursorPointerAgentParity(t *testing.T) {
 	ids := append([]string{}, agent.Snapshot().Scope.Selected...)
 	ids[5] = "i:C2"
 	agentAction(t, agent, "scope.probes.set", workbench.ProbeParams{IDs: ids})
-	uiAction(t, user, "cursor-time-a", &ui.ChangeEvent{Number: 100})
+	uiAction(t, user, "cursor-time-a", &ui.ChangeEvent{Text: "100 ms"})
 	agentAction(t, agent, "scope.cursor.set", workbench.CursorParams{Cursor: "a", Time: .1})
 	uiAction(t, user, "cursor-select-b", nil)
 	agentAction(t, agent, "scope.cursor.select", workbench.CursorSelectParams{Cursor: "b"})

@@ -62,16 +62,11 @@ func (s *screen) scopeWindowControls(state workbench.Snapshot) []ui.Node {
 		if side == "end" {
 			value = sc.Window.End
 		}
-		nodes = append(nodes, quiet("window-label-"+side, side+" · ms"), ui.Node{ID: "window-" + side, Kind: ui.NumberField, Number: float32(value * 1000), Disabled: t == nil || t.Stale, Numeric: ui.Numeric{Min: 0, Max: float32(math.Max(hi, state.TransientSettings.StepSeconds) * 1000), Step: float32(state.TransientSettings.StepSeconds * 1000)}, Accessibility: ui.Accessibility{Name: "Scope interval " + side + " in ms"}, Change: func(e ui.ChangeEvent) {
+		nodes = append(nodes, quiet("window-label-"+side, side+" · time"), timeField("window-"+side, "Scope interval "+side, value, t == nil || t.Stale, func(text string) {
 			p := sc.Window
 			p.Mode = "fixed"
-			if side == "start" {
-				p.Start = float64(e.Number) / 1000
-			} else {
-				p.End = math.Min(hi, float64(e.Number)/1000)
-			}
-			s.invoke("scope.window.set", p)
-		}})
+			s.invokeAtCommandRevision("scope.window.set", timeParams(p, side+"_s", text), state.CommandRevision)
+		}))
 	}
 	if !sc.WindowValid {
 		nodes = append(nodes, quiet("window-warning", sc.WindowReason))

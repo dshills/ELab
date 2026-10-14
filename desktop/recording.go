@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"math"
 	"strings"
 
 	"github.com/dshills/elab/workbench"
@@ -64,15 +63,10 @@ func (s *screen) recordingInspector(state workbench.Snapshot) []ui.Node {
 		if side == "end" {
 			value = r.Scope.Window.End
 		}
-		nodes = append(nodes, quiet("recorded-window-label-"+side, "Recorded "+side+" · ms"), ui.Node{ID: "recorded-window-" + side, Kind: ui.NumberField, Number: float32(value * 1000), Disabled: r.Duration == 0, Numeric: ui.Numeric{Min: 0, Max: float32(r.Duration * 1000), Step: float32(r.Step * 1000)}, Accessibility: ui.Accessibility{Name: "Recorded interval " + side + " in ms"}, Change: func(e ui.ChangeEvent) {
+		nodes = append(nodes, quiet("recorded-window-label-"+side, "Recorded "+side+" · time"), timeField("recorded-window-"+side, "Recorded interval "+side, value, r.Duration == 0, func(text string) {
 			p := workbench.RecordingWindowParams{Start: r.Scope.Window.Start, End: r.Scope.Window.End}
-			if side == "start" {
-				p.Start = float64(e.Number) / 1000
-			} else {
-				p.End = float64(e.Number) / 1000
-			}
-			s.invoke("recording.window.set", p)
-		}})
+			s.invokeAtCommandRevision("recording.window.set", timeParams(p, side+"_s", text), state.CommandRevision)
+		}))
 	}
 
 	if !r.Scope.WindowValid {
@@ -148,10 +142,9 @@ func (s *screen) recordingPanel(state workbench.Snapshot) ui.Node {
 	position := []ui.Node{quiet("recorded-status", status), {ID: "recorded-index", Kind: ui.NumberField, Number: float32(r.Index), MinWidth: 90, Numeric: ui.Numeric{Min: 0, Max: float32(r.Total - 1), Step: 1}, Accessibility: ui.Accessibility{Name: "Recorded sample index"}, Change: func(e ui.ChangeEvent) {
 		index := int(e.Number)
 		s.invoke("recording.seek", workbench.RecordingSeekParams{Index: &index})
-	}}, {ID: "recorded-time", Kind: ui.NumberField, Number: float32(r.Time * 1000), MinWidth: 90, Numeric: ui.Numeric{Min: 0, Max: float32(r.Duration * 1000), Step: float32(r.Step * 1000)}, Accessibility: ui.Accessibility{Name: "Recorded seek time in ms"}, Change: func(e ui.ChangeEvent) {
-		at := float64(e.Number) / 1000
-		s.invoke("recording.seek", workbench.RecordingSeekParams{Time: &at})
-	}}, quiet("recorded-speed-label", "sim s / wall s"), {ID: "recorded-speed", Kind: ui.NumberField, Number: float32(speed), MinWidth: 80, Numeric: ui.Numeric{Min: .001, Max: 10, Step: .001}, Accessibility: ui.Accessibility{Name: "Recorded playback speed"}, Change: func(e ui.ChangeEvent) {
+	}}, timeField("recorded-time", "Recorded seek time", r.Time, false, func(text string) {
+		s.invokeAtCommandRevision("recording.seek", map[string]any{"time_s": text}, state.CommandRevision)
+	}), quiet("recorded-speed-label", "sim s / wall s"), {ID: "recorded-speed", Kind: ui.NumberField, Number: float32(speed), MinWidth: 80, Numeric: ui.Numeric{Min: .001, Max: 10, Step: .001}, Accessibility: ui.Accessibility{Name: "Recorded playback speed"}, Change: func(e ui.ChangeEvent) {
 		s.invoke("recording.speed.set", workbench.RecordingPlayParams{Speed: float64(e.Number)})
 	}}}
 	legend := []string{}
@@ -179,10 +172,9 @@ func (s *screen) recordingCursors(state workbench.Snapshot) ui.Node {
 		if c.value != nil {
 			at = c.value.Requested
 		}
-		nodes = append(nodes, ui.Node{ID: "recorded-cursor-" + c.id, Kind: ui.NumberField, Number: float32(at * 1000), MinWidth: 90, Numeric: ui.Numeric{Min: 0, Max: float32(r.Duration * 1000), Step: float32(r.Step * 1000)}, Accessibility: ui.Accessibility{Name: "Recorded cursor " + strings.ToUpper(c.id) + " in ms"}, Change: func(e ui.ChangeEvent) {
-			at := math.Min(r.Duration, math.Max(0, float64(e.Number)/1000))
-			s.invoke("recording.cursor.set", workbench.CursorParams{Cursor: c.id, Time: at})
-		}})
+		nodes = append(nodes, timeField("recorded-cursor-"+c.id, "Recorded cursor "+strings.ToUpper(c.id), at, false, func(text string) {
+			s.invokeAtCommandRevision("recording.cursor.set", map[string]any{"cursor": c.id, "time_s": text}, state.CommandRevision)
+		}))
 		clear := s.action("recorded-cursor-clear-"+c.id, "×", "recording.cursor.clear", workbench.CursorSelectParams{Cursor: c.id})
 		clear.Disabled = c.value == nil
 		nodes = append(nodes, clear)

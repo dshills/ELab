@@ -21,19 +21,17 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 	nodes = append(nodes, ui.Node{ID: "recording-import", Kind: ui.Button, Text: "Open recorded run…", Accessibility: ui.Accessibility{Name: "Open recorded run"}, Disabled: s.fileBusy || s.pendingCommand != "", Activate: func() { s.beginFile("verification.import", true, workbench.RecordingImportParams{}, nil) }})
 	if transient {
 		for _, field := range []struct {
-			id, label  string
-			value, max float64
-		}{{"duration", "Duration · ms", cfg.Duration, 10}, {"step", "Sample step · ms (0 = project)", cfg.Step, 1}} {
+			id, label string
+			value     float64
+		}{{"duration", "Duration", cfg.Duration}, {"step", "Sample step (0 = project)", cfg.Step}} {
 			field := field
-			nodes = append(nodes, quiet("verify-label-"+field.id, field.label), ui.Node{ID: "verify-" + field.id, Kind: ui.NumberField, Number: float32(field.value * 1000), Numeric: ui.Numeric{Min: 0, Max: float32(field.max * 1000), Step: .001}, Accessibility: ui.Accessibility{Name: field.label}, Change: func(e ui.ChangeEvent) {
-				next := cfg
-				if field.id == "duration" {
-					next.Duration = float64(e.Number) / 1000
-				} else {
-					next.Step = float64(e.Number) / 1000
-				}
-				s.invoke("verification.settings.set", next)
-			}})
+			name := "duration_s"
+			if field.id == "step" {
+				name = "sample_step_s"
+			}
+			nodes = append(nodes, quiet("verify-label-"+field.id, field.label), timeField("verify-"+field.id, field.label, field.value, false, func(text string) {
+				s.invokeAtCommandRevision("verification.settings.set", timeParams(cfg, name, text), state.CommandRevision)
+			}))
 		}
 		modes := []ui.Option{{ID: "auto", Label: "Auto"}, {ID: "charge", Label: "RC · Charge"}, {ID: "discharge", Label: "RC · Discharge"}, {ID: "high", Label: "NPN / mixed · High"}, {ID: "low", Label: "NPN / mixed · Low"}}
 		nodes = append(nodes, ui.Node{ID: "verify-mode", Kind: ui.Selector, Options: modes, SelectedID: cfg.InputMode, Accessibility: ui.Accessibility{Name: "Verification input mode"}, Change: func(e ui.ChangeEvent) {

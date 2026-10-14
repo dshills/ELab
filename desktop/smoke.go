@@ -501,7 +501,7 @@ func nativeMixedSmoke(ctx context.Context, a *app.Application, s *screen) error 
 			result <- err
 			return
 		}
-		if err := smokeUI(s, "cursor-time-a", &ui.ChangeEvent{Number: 100}); err != nil {
+		if err := smokeUI(s, "cursor-time-a", &ui.ChangeEvent{Text: "100 ms"}); err != nil {
 			result <- err
 			return
 		}
@@ -636,7 +636,7 @@ func nativeWorkflowSmoke(ctx context.Context, a *app.Application, s *screen) err
 func nativeVerificationSmoke(ctx context.Context, a *app.Application, s *screen) error {
 	started := make(chan error, 1)
 	if err := a.PostWait(ctx, func() {
-		if err := smokeUI(s, "verify-duration", &ui.ChangeEvent{Number: 20}); err != nil {
+		if err := smokeUI(s, "verify-duration", &ui.ChangeEvent{Text: "20 ms"}); err != nil {
 			started <- err
 			return
 		}
@@ -748,7 +748,7 @@ func nativeRecordingSmoke(ctx context.Context, a *app.Application, s *screen) er
 		for _, action := range []struct {
 			id    string
 			event *ui.ChangeEvent
-		}{{"recording-show", nil}, {"recorded-index", &ui.ChangeEvent{Number: 1}}, {"recorded-cursor-a", &ui.ChangeEvent{Number: 1}}, {"recorded-cursor-b", &ui.ChangeEvent{Number: 11}}} {
+		}{{"recording-show", nil}, {"recorded-index", &ui.ChangeEvent{Number: 1}}, {"recorded-cursor-a", &ui.ChangeEvent{Text: "1 ms"}}, {"recorded-cursor-b", &ui.ChangeEvent{Text: "11 ms"}}} {
 			if err := smokeUI(s, action.id, action.event); err != nil {
 				ready <- err
 				return

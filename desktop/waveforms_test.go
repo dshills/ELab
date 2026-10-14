@@ -38,7 +38,7 @@ func TestNativeWaveformControlsAndAgentParity(t *testing.T) {
 				cfg := workbench.SineWaveform{Amplitude: 2, Offset: 1, Phase: 30, Frequency: 50}
 				agentAction(t, agent, "source.sine.set", workbench.SineParams{ID: id, Waveform: cfg})
 			} else {
-				uiAction(t, user, "pulse-rise", &ui.ChangeEvent{Number: 2})
+				uiAction(t, user, "pulse-rise", &ui.ChangeEvent{Text: "2 ms"})
 				cfg := workbench.DefaultPulseWaveform()
 				cfg.RiseSeconds = .002
 				agentAction(t, agent, "source.pulse.set", workbench.PulseParams{ID: id, Waveform: cfg})

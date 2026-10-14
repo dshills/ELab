@@ -44,7 +44,7 @@ func TestNativeVerifyControlsMatchAgentScenarios(t *testing.T) {
 		uiAction(t, user, command, nil)
 		agentAction(t, agent, command, struct{}{})
 	}
-	uiAction(t, user, "verify-duration", &ui.ChangeEvent{Number: 20})
+	uiAction(t, user, "verify-duration", &ui.ChangeEvent{Text: "20 ms"})
 	settings := agent.Snapshot().VerificationSettings
 	settings.Duration = .02
 	agentAction(t, agent, "verification.settings.set", settings)

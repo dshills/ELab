@@ -28,9 +28,9 @@
     },
     {
       "id": "EDIT-03",
-      "evidence": "Resistance/capacitance parser, invalid-value preservation, named batches/history; potentiometer slider",
+      "evidence": "Resistance/capacitance and shared command time parser; native unit-aware time fields, strict files, invalid-value preservation, named batches/history; potentiometer slider",
       "status": "partial",
-      "assessment": "Partial: no common text time-value parser; native slider control events prove one commit/undo per drag; mounted-driver invalidation/focus conformance remains open"
+      "assessment": "Partial: time units now work through shared commands/native committed fields; native slider events prove one commit/undo per drag; mounted-driver typing/IME/invalidation/focus conformance remains open"
     },
     {
       "id": "EDIT-04",
@@ -96,7 +96,7 @@
       "id": "SCOPE-02",
       "evidence": "Retained/fixed intervals, exact sample cursors, deltas/extrema, CSV; finite frequency guards",
       "status": "implemented",
-      "assessment": "Implemented sampled measurement behavior; general text time entry remains in EDIT-03"
+      "assessment": "Implemented sampled measurement behavior and shared unit-text time entry; full mounted interaction qualification remains in EDIT-03"
     },
     {
       "id": "HELP-01",

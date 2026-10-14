@@ -62,7 +62,7 @@ func TestFlasherDrawingInitialConditionsAndAgentParity(t *testing.T) {
 	agentAction(t, agent, "simulation.restart", struct{}{})
 	cfg := agent.Snapshot().TransientSettings
 	cfg.StepSeconds = .005
-	uiAction(t, user, "setting-step", &ui.ChangeEvent{Number: 5})
+	uiAction(t, user, "setting-step", &ui.ChangeEvent{Text: "5 ms"})
 	agentAction(t, agent, "simulation.transient.set", cfg)
 	uiAction(t, user, "simulation.restart", nil)
 	agentAction(t, agent, "simulation.restart", struct{}{})

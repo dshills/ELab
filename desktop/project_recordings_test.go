@@ -21,7 +21,7 @@ func TestNativeProjectPickerKeepsRecordedAssetsAndFreshStartup(t *testing.T) {
 	uiAction(t, user, "simulation.pause", nil)
 	uiAction(t, user, "simulation.restart", nil)
 	agentAction(t, user.service, "simulation.step", workbench.StepParams{Duration: .015})
-	uiAction(t, user, "verify-duration", &ui.ChangeEvent{Number: 10})
+	uiAction(t, user, "verify-duration", &ui.ChangeEvent{Text: "10 ms"})
 	uiAction(t, user, "verify-start", nil)
 	original := completedVerification(t, user.service, user.service.Snapshot().LastOperation)
 	uiAction(t, user, "recording-show", nil)
