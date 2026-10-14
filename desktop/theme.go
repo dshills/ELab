@@ -77,8 +77,8 @@ func (s *screen) themeMenu(mode string) ui.Node {
 	case "system":
 		text = "System"
 	}
-	node := buttonStyle(ui.Node{ID: "theme-menu", Kind: ui.MenuButton, Text: text, Accessibility: ui.Accessibility{Name: "Appearance theme"}, Options: []ui.Option{{ID: "light", Label: "Light"}, {ID: "dark", Label: "Dark"}, {ID: "system", Label: "System"}}, Change: func(e ui.ChangeEvent) { s.invoke("appearance.theme.set", map[string]string{"theme": e.SelectedID}) }}, false)
-	return s.platformMenu(node, "Appearance")
+	node := buttonStyle(ui.Node{ID: "theme-menu", Kind: ui.MenuButton, Text: text, Accessibility: ui.Accessibility{Name: "Appearance theme"}, Options: []ui.Option{{ID: "light", Label: "Light", Checkable: true, Checked: mode == "light"}, {ID: "dark", Label: "Dark", Checkable: true, Checked: mode == "dark"}, {ID: "system", Label: "System", Checkable: true, Checked: mode == "system"}}, Change: func(e ui.ChangeEvent) { s.invoke("appearance.theme.set", map[string]string{"theme": e.SelectedID}) }}, false)
+	return node
 }
 
 func traceColor(c color.NRGBA, palette appPalette) color.NRGBA {

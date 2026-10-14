@@ -81,6 +81,9 @@ func (s *screen) view() ui.Node {
 		s.commandMenu("examples-menu", "Examples", [][2]string{{"example.reset", "LED circuit"}, {"example.rc", "RC charge / discharge"}, {"example.npn", "Transistor LED"}, {"example.npn-pulse", "Blinking LED"}, {"example.flasher", "Capacitor-timed flasher"}}),
 		s.button("edit.undo", "Undo"), s.button("edit.redo", "Redo"), s.themeMenu(state.Theme),
 	}}
+	for i := range toolbar.Children {
+		toolbar.Children[i].Style.Padding = ui.Some(ui.Insets{Top: 7, Bottom: 7, Left: 9, Right: 9})
+	}
 	pause, pauseText := "simulation.pause", "Pause"
 	if state.Paused {
 		pause, pauseText = "simulation.resume", "Resume"
@@ -554,13 +557,14 @@ func (s *screen) view() ui.Node {
 		{ID: "footer-row", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 20})}, Children: []ui.Node{quiet("footer", fmt.Sprintf("%s · %d components · %d wires · last change: %s", filename, len(state.Components), len(state.Wires), state.LastActor)), {ID: "footer-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, quiet("grid-info", "10-unit snap · local workspace")}},
 		s.filePrompt(),
 	}}
-	if state.Recording != nil && state.Recording.Viewing || workbench.IsTransientAnalysis(state.Analysis) || state.Transient != nil {
+	if scopeAvailable(state) {
 		index := len(root.Children) - 3
 		children := append([]ui.Node{}, root.Children[:index]...)
 		children = append(children, s.scopePanel(state))
 		children = append(children, root.Children[index:]...)
 		root.Children = children
 	}
+	s.platformSelectors(&root, state.CommandRevision)
 	applyPalette(&root, colors)
 	return root
 }

@@ -69,6 +69,17 @@ const VerificationMetadataSchemaID = "urn:elab:verification-metadata:1"
 const SnapshotSchemaID = "urn:elab:snapshot:1"
 const DiscoverySchemaVersion = 2
 
+var commonInputSchemas = []struct {
+	Type reflect.Type
+	ID   string
+}{
+	{reflect.TypeOf(IDParams{}), ObjectIDSchemaID},
+	{reflect.TypeOf(CursorSelectParams{}), "urn:elab:cursor-select:1"},
+	{reflect.TypeOf(ProbeParams{}), "urn:elab:probe-selection:1"},
+	{reflect.TypeOf(RecordingPlayParams{}), "urn:elab:playback:1"},
+	{reflect.TypeOf(InputParams{}), "urn:elab:input-mode:1"},
+}
+
 var snapshotSchema = json.RawMessage(`{"$ref":"urn:elab:snapshot:1"}`)
 var snapshotDefinition = func() json.RawMessage {
 	schema := structSchema(reflect.TypeOf(Snapshot{}))
@@ -86,15 +97,21 @@ func SchemaRegistry() map[string]json.RawMessage {
 	eventSchema := structSchema(reflect.TypeOf(EventPollResult{}))
 	eventSchema["$id"] = EventPollSchemaID
 	eventData, _ := json.Marshal(eventSchema)
-	idSchema := structSchema(reflect.TypeOf(IDParams{}))
-	idSchema["$id"] = ObjectIDSchemaID
-	idData, _ := json.Marshal(idSchema)
-	return map[string]json.RawMessage{ObjectIDSchemaID: idData, SnapshotSchemaID: append(json.RawMessage(nil), snapshotDefinition...), VerificationMetadataSchemaID: data, EventPollSchemaID: eventData, TimeInputSchemaID: json.RawMessage(`{"$id":"urn:elab:time:1","type":["number","string"],"maxLength":128,"description":"Seconds as a finite number or decimal/scientific text; bare text is seconds; case-sensitive s/ms/us/µs/μs/ns/ps. Command bounds still apply.","examples":[0.01,"10 ms","250 us"]}`)}
+	registry := map[string]json.RawMessage{SnapshotSchemaID: append(json.RawMessage(nil), snapshotDefinition...), VerificationMetadataSchemaID: data, EventPollSchemaID: eventData, TimeInputSchemaID: json.RawMessage(`{"$id":"urn:elab:time:1","type":["number","string"],"maxLength":128,"description":"Seconds as a finite number or decimal/scientific text; bare text is seconds; case-sensitive s/ms/us/µs/μs/ns/ps. Command bounds still apply.","examples":[0.01,"10 ms","250 us"]}`)}
+	for _, common := range commonInputSchemas {
+		schema := structSchema(common.Type)
+		schema["$id"] = common.ID
+		encoded, _ := json.Marshal(schema)
+		registry[common.ID] = encoded
+	}
+	return registry
 }
 
 func typeSchema(t reflect.Type) map[string]any {
-	if t == reflect.TypeOf(IDParams{}) {
-		return map[string]any{"$ref": ObjectIDSchemaID}
+	for _, common := range commonInputSchemas {
+		if t == common.Type {
+			return map[string]any{"$ref": common.ID}
+		}
 	}
 	if t == reflect.TypeOf(EventPollResult{}) {
 		return map[string]any{"$ref": EventPollSchemaID}
@@ -187,6 +204,7 @@ func Catalog() []Capability {
 		queryCapability("examples.list", "Discover immutable example questions, expected template behavior, experiments and model limitations", reflect.TypeOf(struct{}{}), reflect.TypeOf([]ExampleInfo{})),
 		typedCapability("example.load", "Load a known example ID into a new editable document; protects unsaved work and optional document generation", reflect.TypeOf(ExampleLoadParams{})),
 		typedCapability("example.current.reset", "Restore the current example template, not another example; protects unsaved work and optional expected_example_id/document generation", reflect.TypeOf(ExampleResetParams{})),
+		typedCapability("scope.visibility.set", "Show/hide the scope dock for this session; preserves acquisition, recorded playback and measurements", reflect.TypeOf(ScopeVisibilityParams{})),
 		typedCapability("diagnostics.details.set", "Show/hide technical diagnostic details; session-only presentation, no physics/history/dirty change; related targets are in diagnostic_presentation", reflect.TypeOf(DiagnosticDetailsParams{})),
 		typedCapability("appearance.configure", "Load and autosave bounded app theme preferences in background; empty path disables; inspect appearance", reflect.TypeOf(AppearanceConfigureParams{})),
 		capability("appearance.wait", "Wait up to 5 s for theme preference loading/saving; inspect appearance status/error", false, `{"type":"object","additionalProperties":false}`),

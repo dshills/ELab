@@ -302,6 +302,13 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return err
 		}
 		return s.resetCurrentExampleLocked(p)
+	case "scope.visibility.set":
+		var p ScopeVisibilityParams
+		if err := params(raw, &p, "visible"); err != nil {
+			return err
+		}
+		s.scopeVisible = p.Visible
+		return nil
 	case "diagnostics.details.set":
 		var p DiagnosticDetailsParams
 		if err := params(raw, &p, "visible"); err != nil {

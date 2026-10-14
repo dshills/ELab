@@ -20,7 +20,8 @@ import (
 // are swallowed here so every exposed interaction remains a shared command.
 type scopeCanvas struct {
 	*cogent.MeshCanvas
-	screen *screen
+	screen     *screen
+	mountEpoch uint64
 }
 
 func (c *scopeCanvas) Mount(parent tree.Node) core.Widget {
@@ -28,13 +29,19 @@ func (c *scopeCanvas) Mount(parent tree.Node) core.Widget {
 	if widget == nil {
 		return nil
 	}
+	c.mountEpoch++
+	epoch := c.mountEpoch
 	w := widget.AsWidget()
 	w.OnFirst(events.Scroll, func(e events.Event) { e.SetHandled() })
 	for _, kind := range []events.Types{events.MouseDown, events.SlideMove} {
 		w.OnFirst(kind, func(e events.Event) {
 			if c.screen != nil {
 				pos := e.Pos().Sub(w.Geom.Pos.Content.ToPoint())
-				c.Owner.Do(func() { c.placeCursor(float64(pos.X)) })
+				c.Owner.Do(func() {
+					if c.mountEpoch == epoch {
+						c.placeCursor(float64(pos.X))
+					}
+				})
 			}
 			e.SetHandled()
 		})
@@ -159,6 +166,9 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	return canvas.NewMesh(b.vertices, b.indices)
 }
 func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
+	if !state.ScopeVisible {
+		return s.collapsedScope(state)
+	}
 	if state.Recording != nil && state.Recording.Viewing {
 		return s.recordingPanel(state)
 	}
@@ -186,8 +196,8 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	title := section("scope-title", titleText)
 	title.MinWidth = 110
 	captionNode := quiet("scope-caption", caption)
-	captionNode.MinWidth = 300
-	controls := []ui.Node{title, captionNode}
+	captionNode.Style.MaxSize = ui.Some(ui.Size{Width: 240})
+	controls := []ui.Node{s.scopeVisibilityButton(state), title, captionNode}
 	modes := []struct{ id, text string }{{"auto", "Auto"}, {"charge", "Charge"}, {"discharge", "Discharge"}}
 	if npn {
 		modes = []struct{ id, text string }{{"auto", "Auto"}, {"high", "High"}, {"low", "Low"}}
@@ -245,10 +255,14 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	if t != nil && t.PendingMode != "" {
 		legend += " · pending: " + t.PendingMode
 	}
+	traceStyle := chromeStyle()
+	traceStyle.MinSize = ui.Some(ui.Size{Width: 320, Height: 32})
+	traceStyle.MaxSize = ui.Some(ui.Size{Height: 32})
+	traceSelector.Style.Padding = ui.Some(ui.Insets{Top: 4, Bottom: 4, Left: 10, Right: 10})
 	s.scope.Revision = state.Revision
 	return ui.Node{ID: "scope-panel", Kind: ui.Column, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 288}), Padding: ui.Some(ui.UniformInsets(10)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: []ui.Node{
 		{ID: "scope-toolbar", Kind: ui.Toolbar, Grow: true, Style: chromeStyle(), Children: controls},
-		{ID: "rc-scope", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 120}), MaxSize: ui.Some(ui.Size{Height: 120})}, Custom: s.scope}, {ID: "scope-trace-row", Kind: ui.Row, Style: ui.Style{Gap: ui.Some(float32(8))}, Children: []ui.Node{traceSelector, quiet("scope-legend", legend)}}, quiet("step-work-status", stepStatus), s.cursorControls(state),
+		{ID: "rc-scope", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 120}), MaxSize: ui.Some(ui.Size{Height: 120})}, Custom: s.scope}, {ID: "scope-trace-row", Kind: ui.Toolbar, Style: traceStyle, Children: []ui.Node{traceSelector, quiet("scope-legend", legend)}}, quiet("step-work-status", stepStatus), s.cursorControls(state),
 	}}
 }
 func (s *screen) transientInspector(state workbench.Snapshot) []ui.Node {

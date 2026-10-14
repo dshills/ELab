@@ -123,7 +123,7 @@ func (s *screen) recordingPanel(state workbench.Snapshot) ui.Node {
 		status = "playing"
 	}
 	caption := fmt.Sprintf("%s · sample %d / %d · t %.5g s", r.ID, r.Index, r.Total-1, r.Time)
-	controls := []ui.Node{section("recorded-scope-title", "Recorded scope"), quiet("recorded-scope-caption", caption), s.action("recorded-back-live", "View live", "recording.view.set", workbench.RecordingViewParams{Mode: "live"})}
+	controls := []ui.Node{s.scopeVisibilityButton(state), section("recorded-scope-title", "Recorded scope"), quiet("recorded-scope-caption", caption), s.action("recorded-back-live", "View live", "recording.view.set", workbench.RecordingViewParams{Mode: "live"})}
 	for _, direction := range []string{"previous", "next"} {
 		direction := direction
 		n := s.action("recorded-"+direction, map[string]string{"previous": "Previous", "next": "Next"}[direction], "recording.step", workbench.RecordingStepParams{Direction: direction})

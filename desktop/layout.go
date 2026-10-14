@@ -30,7 +30,7 @@ func (s *screen) commandMenu(id, text string, entries [][2]string) ui.Node {
 			action.Activate()
 		}
 	}}, false)
-	return s.platformMenu(node, text)
+	return node
 }
 
 func constrainRail(nodes []ui.Node, width float32) {

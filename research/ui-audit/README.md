@@ -46,3 +46,9 @@ The final package also shortens the palette instruction to “Pick a part to pla
 The full GPU pixel fixture runs at 1260 × 1100 device-independent units so its two deliberately distant pinned reading cards remain legible. Its old hard-coded Fit dimensions and old background-color expectation were corrected to the actual viewport and selected palette. Compact-window screenshots provide separate layout evidence; no small-zoom reading-card legibility qualification is claimed.
 
 Remaining work includes persistent/global theme preferences, automatic System-theme changes while idle, current-theme checkmarks in native menus, native selector popups, compact scope collapse/resizing, labels/cards at very small zoom, and full keyboard/IME/screen-reader testing. This audit is visual and command-level evidence, not a WCAG or accessibility-compliance certification. The original MVP acceptance gates remain open.
+
+## Subsequent native dropdown and scope checkpoint
+
+Version 0.41.0 / 56 extends the initial menu repair to every macOS selector. [The native dropdown ledger](native-choices/README.md) shows direct AppKit File/Examples/Theme and object popups, selected-choice checkmarks, complete compact header actions and observed mouse/keyboard selection. Original Vellum callbacks remain shared command paths, with command-admission guards against interleaved agent edits. Vellum installs the native application menu bar independently of popup presentation.
+
+[The scope ledger](scope-collapse/README.md) retains the rejected header-control candidate and shows corrected compact expansion, collapse and restoration at unchanged center/zoom. Version 0.40 already added independent persistent appearance profiles. These checkpoints improve the open items recorded above without claiming full keyboard/IME/screen-reader, distribution, performance or participant acceptance.

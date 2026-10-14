@@ -168,6 +168,9 @@ func (c *scopeCanvas) placeCursor(px float64) {
 		return
 	}
 	state := c.screen.service.Snapshot()
+	if !state.ScopeVisible {
+		return
+	}
 	if record := state.Recording; record != nil && record.Viewing {
 		left, right := 58., c.View.Width-78
 		if right <= left {

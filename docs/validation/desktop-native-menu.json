@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "transport": "native-private-socket",
+  "version": "0.41.0",
+  "build": "56",
+  "theme": "dark",
+  "selected": "R1",
+  "paused": true,
+  "scope_visible": false,
+  "checks": [
+    "actual native checked Theme selection",
+    "actual native object popup selects R1",
+    "theme/view/collapse/selection preserve paused physical state, history and view",
+    "recorded sample position retained",
+    "durable saved RC with kept recording"
+  ],
+  "fixture": "docs/validation/native-menu-artifacts/menu-rc-qualified.elab",
+  "fixture_sha256": "44868fa4bc5b9b43f6e5eca7f1c37fd9025244b15e0d5bd79998c7a5d08cf0d4"
+}

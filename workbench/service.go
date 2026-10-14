@@ -48,6 +48,7 @@ type Snapshot struct {
 	UndoName               string                 `json:"undo_name"`
 	RedoName               string                 `json:"redo_name"`
 	Scope                  Scope                  `json:"scope"`
+	ScopeVisible           bool                   `json:"scope_visible"`
 	Mixed                  *MixedResult           `json:"mixed,omitempty"`
 	NPN                    *NPNResult             `json:"npn,omitempty"`
 	Transient              *Transient             `json:"transient,omitempty"`
@@ -165,6 +166,7 @@ type Service struct {
 	changed                     chan struct{}
 	eventRevisions              map[string]uint64
 	eventWaiters                int
+	scopeVisible                bool
 	theme                       string
 	themeRevision               uint64
 	appearance                  AppearanceState
@@ -213,6 +215,7 @@ func newGraphService(solver func(context.Context, Circuit) (Result, error), grap
 		initialSolver:     solveInitial,
 		initialTimeout:    5 * time.Second,
 		actor:             "system",
+		scopeVisible:      true,
 		theme:             "light",
 		appearance:        AppearanceState{Status: "disabled"},
 		appearanceRead:    readAppearance,
@@ -271,6 +274,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		Appearance:             s.appearance,
 		MatchingParts:          filteredParts(s.partSearch),
 		Scope:                  s.scopeLocked(compiled),
+		ScopeVisible:           s.scopeVisible,
 		Mixed:                  cloneMixed(s.mixed),
 		NPN:                    cloneNPN(s.npn),
 		CommandRevision:        s.commandRevision,

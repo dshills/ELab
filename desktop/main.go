@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync/atomic"
 	"time"
 
@@ -98,6 +99,7 @@ func main() {
 	go func() {
 		ticker := time.NewTicker(33 * time.Millisecond)
 		defer ticker.Stop()
+		var menusInstalled bool
 		var last, lastCommand uint64
 		var lastFrame, lastMotion time.Time
 		for {
@@ -105,6 +107,14 @@ func main() {
 			case <-a.Context().Done():
 				return
 			case <-ticker.C:
+				if !menusInstalled {
+					if services, err := a.Services(); err == nil {
+						menusInstalled = true
+						if err := services.SetMenu(a.Context(), applicationMenus); err != nil {
+							log.Printf("Application menus unavailable: %v", err)
+						}
+					}
+				}
 				state := service.Snapshot()
 				if state.Closed {
 					a.Close()
@@ -171,12 +181,16 @@ type screen struct {
 	lastPalette                      appPalette
 	nativePalette                    atomic.Pointer[appPalette]
 	menuSerial                       uint64
+	menuCommandRevision              *uint64
 }
 
 func (s *screen) invoke(id string, p any) workbench.Response {
 	return s.invokeAtCommandRevision(id, p, s.service.Snapshot().CommandRevision)
 }
 func (s *screen) invokeAtCommandRevision(id string, p any, rev uint64) workbench.Response {
+	if s.menuCommandRevision != nil {
+		rev = *s.menuCommandRevision
+	}
 	s.fileMessage = ""
 	s.serial++
 	raw, _ := json.Marshal(p)
@@ -284,7 +298,11 @@ func (s *screen) button(id, text string) ui.Node {
 	if (id == "edit.undo" || id == "edit.redo") && tip != nil {
 		help = tip.Name + " · by " + tip.Actor
 		if tip.Actor != "user" && tip.Actor != "" {
-			text += " " + tip.Actor
+			if strings.HasPrefix(tip.Actor, "agent") {
+				text += " agent"
+			} else {
+				text += " other"
+			}
 		}
 	}
 

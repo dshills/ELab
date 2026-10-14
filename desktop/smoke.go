@@ -114,6 +114,9 @@ rendered:
 	if err := nativeRCSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	if err := nativeScopeVisibilitySmoke(ctx, s); err != nil {
+		return err
+	}
 	if err := nativeNPNSmoke(ctx, a, s); err != nil {
 		return err
 	}

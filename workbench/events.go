@@ -46,6 +46,8 @@ func commandEventTopics(command string, documentChanged bool) []string {
 		topics = append(topics, "view")
 	case strings.HasPrefix(command, "simulation."):
 		topics = append(topics, "simulation", "jobs")
+	case command == "scope.visibility.set":
+		topics = append(topics, "view", "preferences")
 	case strings.HasPrefix(command, "scope."), strings.HasPrefix(command, "measurement."):
 		topics = append(topics, "measurements")
 	case strings.HasPrefix(command, "diagnostics."):

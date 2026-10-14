@@ -102,6 +102,7 @@ Wire, junction, and net labels are schematic primitives. Probes are measurement 
 
 | Priority | Capability | Reason for deferral |
 |---|---|---|
+| P1 | Schematic output and printing | Extend existing SVG output with PDF/image output and native printing; share paper, scale, margin and content settings with agents |
 | P1 | Validated KiCad schematic handoff for a supported subset | Preserve a path to hardware after the core workflow is proven; mapping and round-trip expectations need their own specification |
 | P1 | Vendor SPICE model import with guided pin mapping | Important for real devices, but broad compatibility would expand the MVP substantially |
 | P1 | AC analysis, DC sweeps, reusable subcircuits, run comparisons | Useful growth tools after the first measurement workflow is reliable |
@@ -340,3 +341,11 @@ Draft 0.2 adds AGENT-01 through AGENT-06 from the product owner's explicit requi
 Draft 0.3 records the product owner's Vellum selection, adds UI-01, selects native desktop delivery, and updates the implementation gates. The [integration decision](08-vellum-integration.md) separates verified framework interfaces from proposed ELab work. This choice does not add PCB, 3D, cloud, or other scope merely because the framework supports related UI features.
 
 Use [hands-on design opportunities](hands-on/design-opportunities.md) for the reasoning behind later candidates. A scope change must state which user job it serves, what existing requirement it displaces or extends, and how it will be validated. Adding a competitor feature by itself is not sufficient justification. A new user capability cannot ship without corresponding agent access and conformance coverage.
+
+## Owner addition — schematic output and printing (October 14, 2026)
+
+After the current UI testing round, resume electronics-focused work. Add schematic output and printing to the next-release backlog, extending FILE-03 without displacing the existing P0 acceptance gates. SVG output already exists; PDF/image output and native printing remain planned.
+
+The job is to share, document or print the circuit a hobbyist has drawn. Output must include the complete schematic, readable component IDs/values, terminals and wire routes. Support portrait/landscape, A4/Letter, margins, fit-to-page and explicit scale, plus a print preview. Default output should remain legible on white paper and in grayscale regardless of the app theme. Optional measurement overlays must be explicit and labeled as live or recorded. Export and printing must preserve the source project, simulation and dirty state, and work for incomplete schematics.
+
+Users and agents must share document preparation, output settings, printer discovery, destination selection and print submission, including inspectable success/cancellation/failure outcomes. Saving a PDF and submitting a printer job are distinct operations. Validate representative LED, RC and transistor/flasher schematics through rendered PDF/image inspection, complete-bounds/label checks, matching user/agent output, and native print-preview/cancellation tests. Actual printer output requires a separate device test; a generated PDF does not prove physical printing. PCB/EDA handoff remains a separate candidate.

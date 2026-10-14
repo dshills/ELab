@@ -238,3 +238,7 @@ Time-valued command inputs also accept bounded decimal/scientific text with `s`,
 ## Appearance and observation
 
 [Appearance](appearance.md) uses `appearance.theme.set` with `light`, `dark`, or `system`. [Coalesced observation](events.md) uses `events.poll` to wait for state/job changes without holding the editor lock; use a separate connection for commands during a waiting poll. Both are advertised by discovery. `appearance.configure` selects or disables an independent preference file; `appearance.wait` awaits loading/saving, and snapshot `appearance` exposes outcomes.
+
+`scope.visibility.set {"visible":false}` collapses the live/recorded dock while acquisition/playback continue. Snapshot `scope_visible` reports the session-only preference; measurement configuration and export remain available. See [the scope presentation contract](scope-visibility.md).
+
+macOS menu and selector presentation uses AppKit while retaining original shared command callbacks. Native menus capture the descriptor’s command revision and carry it through shared-command admission, so an agent edit during menu tracking cannot apply a stale selection. Dismissal does not mutate state. See [native menu behavior and limits](native-menus.md).

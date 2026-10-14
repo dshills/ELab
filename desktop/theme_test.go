@@ -38,3 +38,29 @@ func TestNativeThemeMenuMatchesSharedStateAndColors(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestThemeMenuUsesValidCheckedActionContract(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	for _, mode := range []string{"light", "dark", "system"} {
+		node := s.themeMenu(mode)
+		if err := ui.Validate(node); err != nil {
+			t.Fatal("portable theme menu invalid", err)
+		}
+		checked := 0
+		for _, option := range node.Options {
+			if !option.Checkable {
+				t.Fatal("theme is not a controlled check action")
+			}
+			if option.Checked {
+				checked++
+				if option.ID != mode {
+					t.Fatal("wrong theme checked")
+				}
+			}
+		}
+		if checked != 1 || node.SelectedID != "" {
+			t.Fatal("theme used selector semantics")
+		}
+	}
+}
