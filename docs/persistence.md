@@ -40,3 +40,5 @@ The optional version-4 `display_preferences` extension stores voltage color/rang
 The optional version-4 `example_id` extension is known immutable-template origin metadata. It is validated and retained through save/recovery/reopen, but never substitutes a template or trusts numerical data when loading the actual graph. New/clear removes association; undo and current-example reset track it. Complete preference/provenance dirty comparisons include origin. [Guided examples](guided-examples.md).
 
 Open now performs file reading and strict validation outside the editor lock. Immediate admission/status/cancellation, publication guards and waiting-command retry semantics are described in [project work](project-work.md). Saved file and model formats are unchanged.
+
+Save/Save As now serialize and write a committed capture outside the editor lock. Later edits remain dirty and publication has an explicit cancellation boundary. External changes during preparation are rechecked before replacement. [Captured saves and recovery ordering](project-save.md).

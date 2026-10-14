@@ -325,14 +325,17 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if !s.activeProjectWorkLocked() || s.projectJob.work.ID != p.ID {
 			return &actionError{"operation-unavailable", "Choose the active project work to cancel"}
 		}
+		if s.projectJob.publishing {
+			return &actionError{"operation-committing", "The save is publishing atomically and can no longer be canceled"}
+		}
 		s.cancelProjectWorkLocked("canceled")
 		return nil
-	case "project.save":
+	case "project.save", "project.save.start":
 		var p SaveParams
 		if err := params(raw, &p); err != nil {
 			return err
 		}
-		return s.saveLocked(p)
+		return s.startProjectSaveLocked(p)
 	case "project.load", "project.load.start":
 		var p LoadParams
 		if err := params(raw, &p, "path"); err != nil {
@@ -666,6 +669,9 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if err := params(raw, &p); err != nil {
 			return err
 		}
+		if err := s.checkDocumentGenerationLocked(p.ExpectedGeneration); err != nil {
+			return err
+		}
 		if err := s.requireCleanLocked(p.DiscardChanges); err != nil {
 			return err
 		}
@@ -677,6 +683,9 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	case "example.reset", "example.rc", "example.npn", "example.npn-pulse", "example.flasher":
 		var p ReplaceParams
 		if err := params(raw, &p); err != nil {
+			return err
+		}
+		if err := s.checkDocumentGenerationLocked(p.ExpectedGeneration); err != nil {
 			return err
 		}
 		if err := s.requireCleanLocked(p.DiscardChanges); err != nil {
@@ -755,6 +764,9 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	case "app.close":
 		var p ReplaceParams
 		if err := params(raw, &p); err != nil {
+			return err
+		}
+		if err := s.checkDocumentGenerationLocked(p.ExpectedGeneration); err != nil {
 			return err
 		}
 		if err := s.requireCleanLocked(p.DiscardChanges); err != nil {

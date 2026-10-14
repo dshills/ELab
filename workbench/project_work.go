@@ -8,9 +8,15 @@ import (
 	"time"
 )
 
+const MaxProjectOperations = 8
+
 // ProjectWork reports file preparation separately from replacing the document.
 // Progress is a named phase; file validation has no trustworthy percentage.
 type ProjectWork struct {
+	Cancelable         bool     `json:"cancelable"`
+	Associated         *bool    `json:"associated_with_current_document,omitempty"`
+	CleanupWarning     string   `json:"cleanup_warning,omitempty"`
+	ArtifactSHA256     string   `json:"artifact_sha256,omitempty"`
 	ID                 string   `json:"id"`
 	Command            string   `json:"command"`
 	Status             string   `json:"status"`
@@ -31,6 +37,10 @@ func cloneProjectWork(in *ProjectWork) *ProjectWork {
 		return nil
 	}
 	out := *in
+	if in.Associated != nil {
+		v := *in.Associated
+		out.Associated = &v
+	}
 	if in.Error != nil {
 		v := *in.Error
 		out.Error = &v
@@ -76,6 +86,8 @@ type projectJob struct {
 	guard                        loadGuard
 	reason, legacyKey, requestID string
 	final                        Response
+	save                         *saveCapture
+	publishing                   bool
 }
 
 func prepareProjectLoad(ctx context.Context, path string, progress func(string, int)) (Document, [32]byte, error) {
@@ -101,6 +113,9 @@ func (s *Service) activeProjectWorkLocked() bool {
 	return s.projectJob != nil && operationActive(s.projectJob.work.Status)
 }
 func (s *Service) startProjectLoadLocked(p LoadParams) error {
+	if s.projectWorkers >= MaxProjectOperations {
+		return &actionError{"busy", "Wait for pending filesystem workers to finish"}
+	}
 	if s.activeProjectWorkLocked() {
 		return &actionError{"busy", "Finish or cancel the active project operation first"}
 	}
@@ -116,36 +131,27 @@ func (s *Service) startProjectLoadLocked(p LoadParams) error {
 	}
 	s.projectSerial++
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	job := &projectJob{ctx: ctx, cancel: cancel, done: make(chan struct{}), guard: s.loadGuardLocked(), work: ProjectWork{ID: fmt.Sprintf("project-%d", s.projectSerial), Command: "project.load", Status: "queued", Phase: "queued", Path: path, InputRevision: s.revision, CommandRevision: s.commandRevision + 1, DocumentGeneration: s.documentGeneration}}
-	s.projectJob = job
+	job := &projectJob{ctx: ctx, cancel: cancel, done: make(chan struct{}), guard: s.loadGuardLocked(), work: ProjectWork{ID: fmt.Sprintf("project-%d", s.projectSerial), Command: "project.load", Status: "queued", Phase: "queued", Cancelable: true, Path: path, InputRevision: s.revision, CommandRevision: s.commandRevision + 1, DocumentGeneration: s.documentGeneration}}
+	s.retainProjectJobLocked(job)
 	load := s.projectLoad
+	s.projectWorkers++
 	s.liveWorkers.Add(1)
 	go s.runProjectLoad(job, load)
 	return nil
 }
 func (s *Service) cancelProjectWorkLocked(reason string) {
-	if s.activeProjectWorkLocked() {
+	if s.activeProjectWorkLocked() && !s.projectJob.publishing {
 		if s.projectJob.reason == "" {
 			s.projectJob.reason = reason
 		}
 		s.projectJob.work.Status = "canceling"
+		s.projectJob.work.Cancelable = false
 		s.projectJob.cancel()
 	}
 }
 func (s *Service) runProjectLoad(job *projectJob, load projectLoadFunc) {
-	defer s.liveWorkers.Done()
-	progress := func(phase string, bytes int) {
-		s.mu.Lock()
-		defer s.mu.Unlock()
-		if s.projectJob == job && job.ctx.Err() == nil {
-			job.work.Status = "running"
-			job.work.Phase = phase
-			job.work.Bytes = bytes
-			s.revision++
-			s.signalLocked()
-		}
-	}
-	document, digest, err := load(job.ctx, job.work.Path, progress)
+	defer s.projectWorkerDone()
+	document, digest, err := load(job.ctx, job.work.Path, func(phase string, bytes int) { s.projectProgress(job, phase, bytes) })
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if (s.closed || s.projectJob != job || s.loadGuardLocked() != job.guard) && job.reason == "" {
@@ -158,16 +164,7 @@ func (s *Service) runProjectLoad(job *projectJob, load projectLoadFunc) {
 		if err == nil {
 			err = job.ctx.Err()
 		}
-		code := "file-error"
-		var action *actionError
-		if errors.As(err, &action) {
-			code = action.code
-		}
-		if errors.Is(err, context.DeadlineExceeded) {
-			code = "timeout"
-		}
-		job.work.Status = "failed"
-		job.work.Error = &Failure{code, err.Error()}
+		s.failProjectWorkLocked(job, err)
 	} else {
 		before := s.historyLocked()
 		before.Actor = job.work.Actor
@@ -194,29 +191,41 @@ func (s *Service) runProjectLoad(job *projectJob, load projectLoadFunc) {
 		job.work.ResultGeneration = s.documentGeneration
 		job.work.ResultRun = s.run
 	}
+	s.finishProjectWorkLocked(job)
+}
+
+func (s *Service) finishProjectWorkLocked(job *projectJob) {
+	job.work.Cancelable = false
 	job.cancel()
 	s.revision++
 	s.signalLocked()
-	job.final = Response{Version: ProtocolVersion, ID: job.requestID, Revision: s.revision, Result: s.snapshotLocked()}
+	state := s.snapshotLocked()
+	state.ProjectWork = cloneProjectWork(&job.work)
+	job.final = Response{Version: ProtocolVersion, ID: job.requestID, Revision: s.revision, Result: state}
 	if job.work.Error != nil {
 		v := *job.work.Error
 		job.final.Error = &v
-		job.final.Help = s.requestDiagnosticLocked(Request{Command: "project.load"}, v.Code, v.Message)
+		job.final.Help = s.requestDiagnosticLocked(Request{Command: job.work.Command}, v.Code, v.Message)
 	}
 	if old, ok := s.cache[job.legacyKey]; ok && job.legacyKey != "" {
 		old.response = cloneMutationResponse(job.final)
+		old.project = nil
 		s.cache[job.legacyKey] = old
 	}
 	close(job.done)
 }
-func (s *Service) awaitProjectLoad(ctx context.Context, r Request, actor string, accepted Response) Response {
+func (s *Service) awaitProjectWork(ctx context.Context, r Request, actor string, accepted Response) Response {
 	if accepted.Error != nil {
 		return accepted
 	}
 	s.mu.Lock()
 	key := actor + "\x00" + r.Key
+	job := s.projectJob
 	if cached, ok := s.cache[key]; ok {
 		state := cached.response.Result.(Snapshot)
+		if cached.project != nil {
+			job = cached.project
+		}
 		if state.ProjectWork != nil && !operationActive(state.ProjectWork.Status) {
 			out := cloneMutationResponse(cached.response)
 			out.ID = r.ID
@@ -225,7 +234,6 @@ func (s *Service) awaitProjectLoad(ctx context.Context, r Request, actor string,
 			return out
 		}
 	}
-	job := s.projectJob
 	if job == nil || job.work.ID != accepted.Result.(Snapshot).ProjectWork.ID {
 		s.mu.Unlock()
 		return s.failure(r, "operation-unavailable", "Original project operation has expired; inspect current state")
@@ -233,7 +241,7 @@ func (s *Service) awaitProjectLoad(ctx context.Context, r Request, actor string,
 	s.mu.Unlock()
 	select {
 	case <-ctx.Done():
-		return s.failure(r, "canceled", "Request wait ended; admitted project open continues. Inspect state or retry the original key")
+		return s.failure(r, "canceled", "Request wait ended; admitted project work continues. Inspect state or retry the original key")
 	case <-job.done:
 	}
 	s.mu.Lock()
@@ -242,4 +250,54 @@ func (s *Service) awaitProjectLoad(ctx context.Context, r Request, actor string,
 	out.ID = r.ID
 	out.Duplicate = accepted.Duplicate
 	return out
+}
+
+func (s *Service) projectProgress(job *projectJob, phase string, bytes int) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if s.projectJob == job && job.ctx.Err() == nil {
+		job.work.Status = "running"
+		job.work.Phase = phase
+		job.work.Bytes = bytes
+		s.revision++
+		s.signalLocked()
+	}
+}
+func (s *Service) failProjectWorkLocked(job *projectJob, err error) {
+	code := "file-error"
+	var action *actionError
+	if errors.As(err, &action) {
+		code = action.code
+	}
+	if errors.Is(err, context.DeadlineExceeded) {
+		code = "timeout"
+	}
+	job.work.Status = "failed"
+	job.work.Error = &Failure{code, err.Error()}
+}
+
+func (s *Service) projectWorkerDone() {
+	s.mu.Lock()
+	s.projectWorkers--
+	s.mu.Unlock()
+	s.liveWorkers.Done()
+}
+
+// Keep the latest eight operations, never evicting a still-active worker.
+func (s *Service) retainProjectJobLocked(job *projectJob) {
+	if s.projectJobs == nil {
+		s.projectJobs = map[string]*projectJob{}
+	}
+	s.projectJob = job
+	s.projectJobs[job.work.ID] = job
+	s.projectOrder = append(s.projectOrder, job.work.ID)
+	for len(s.projectOrder) > MaxProjectOperations {
+		for i, id := range s.projectOrder {
+			if !operationActive(s.projectJobs[id].work.Status) {
+				delete(s.projectJobs, id)
+				s.projectOrder = append(s.projectOrder[:i], s.projectOrder[i+1:]...)
+				break
+			}
+		}
+	}
 }

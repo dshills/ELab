@@ -2,7 +2,7 @@
 
 `project.load.start {path, discard_changes?, expected_document_generation?}` admits background file reading and validation and immediately returns `snapshot.project_work`. The existing `project.load` waits for the same job and returns its terminal outcome. Native Open uses that waiting adapter on a worker; the Inspector exposes the shared phase/status and **Cancel opening project** command. Drawing/navigation and other clients can continue using the dispatcher.
 
-A job has a stable `project-N` ID, actor, original session/command revision, source document generation, path, phase, bytes read and terminal error. Successful publication adds the new document generation and run ID. Phases are `queued`, `reading`, `validating` and `completed`; they are named stages, not invented percentages. Status is `queued`, `running`, `canceling`, `completed`, `failed`, `canceled` or `superseded`. Only the latest project job is retained.
+A job has a stable `project-N` ID, actor, original session/command revision, source document generation, path, phase, bytes read and terminal error. Successful publication adds the new document generation and run ID. Phases are `queued`, `reading`, `validating` and `completed`; they are named stages, not invented percentages. Status is `queued`, `running`, `canceling`, `completed`, `failed`, `canceled` or `superseded`. The snapshot shows the latest job; `project.work.inspect {id}` reads up to eight retained jobs, preserving active work.
 
 ## Admission and publication
 
@@ -14,7 +14,7 @@ A successful current open installs the complete validated document atomically un
 
 ## Cancellation, failures and retries
 
-`project.work.cancel {id}` targets the exact active project ID. A second open while that job is active returns `busy`; unknown/old cancellation IDs return `operation-unavailable`. Close cancels work. Canceled or superseded preparation cannot install a document or reset newer physics/history. Save remains callable but changes the baseline/association and supersedes a pending open when it changes the captured guard.
+`project.work.cancel {id}` targets the exact active project ID. A second open while that job is active returns `busy`; unknown/old cancellation IDs return `operation-unavailable`. Close cancels work. Canceled or superseded preparation cannot install a document or reset newer physics/history. An admitted Save supersedes a pending Open, with the original Open still inspectable.
 
 The worker uses a 30-second cancellation context. Cancellation prevents publication, but a stalled operating-system filesystem call cannot always be interrupted immediately; status stays `canceling` until it returns. Request disconnection only ends the waiting adapter, leaving the admitted job observable/cancelable. Shutdown waits for workers outside the editor mutex.
 
@@ -24,4 +24,4 @@ An admitted validation/read failure records only operation bookkeeping, admissio
 
 Controlled blocked-reader race tests cover responsive navigation/save, exact cancellation, failed read purity, content/preference/replacement/recording supersession, original actor/history, disconnected wait and retry ownership. Native file-control tests preserve Save/Discard/Cancel and picker-generation protections while checking shared job status. Actual GPU smoke uses native Save As/Open with an owned temporary picker adapter. Public headless and packaged workflows exercise immediate admission, invalid-file preservation, saved fresh startup and waiting compatibility.
 
-Run `python3 scripts/project-work-demo.py --output REPORT --artifacts DIRECTORY`; `--connect` replaces only a designated owned session. Admission timings exclude visible input-to-pixel latency. Save/export/manual recovery still contain synchronous work; full job/event conformance, accessibility, distribution and participant gates remain open.
+Run `python3 scripts/project-work-demo.py --output REPORT --artifacts DIRECTORY`; `--connect` replaces only a designated owned session. Admission timings exclude visible input-to-pixel latency. Save now uses [background captured work](project-save.md); export/manual recovery still contain synchronous work; full job/event conformance, accessibility, distribution and participant gates remain open.

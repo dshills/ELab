@@ -32,7 +32,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.32.0 --build-version 46 --platform darwin
+  --version 0.33.0 --build-version 47 --platform darwin
 ```
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
@@ -182,3 +182,5 @@ The tested envelope supports 64 simulated parts and 100 electrical nodes includi
 Fresh network wiper and running input changes now return background work immediately; the Inspector exposes status and cancellation. Agents inspect `input_work` or wait before dependent commands. See [input work](docs/input-work.md).
 
 Project Open reads and validates files in the background with shared phase/status and exact-ID cancellation. Agents can use immediate `project.load.start` or the existing waiting `project.load`. See [project work](docs/project-work.md).
+
+Save now captures the committed project and writes in the background; later edits stay unsaved. Users and agents share preparation cancellation, an explicit publication boundary and bounded project-job inspection. See [captured saves](docs/project-save.md).

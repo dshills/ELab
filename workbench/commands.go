@@ -51,7 +51,7 @@ func capability(id, description string, mutates bool, schema string) Capability 
 		data, _ := json.Marshal(typeSchema(reflect.TypeOf([]Part{})))
 		output = data
 	}
-	return Capability{id, description, mutates, json.RawMessage(schema), "Snapshot for mutations; structured query result otherwise; resolve schema refs through capabilities.list.schemas", append(json.RawMessage(nil), output...)}
+	return Capability{id, description, mutates, json.RawMessage(schema), "Snapshot for mutations; query result otherwise; schemas resolve locally", append(json.RawMessage(nil), output...)}
 }
 
 func typedCapability(id, description string, t reflect.Type) Capability {
@@ -175,12 +175,14 @@ func Catalog() []Capability {
 		typedCapability("scope.cursor.clear", "Clear cursor a/b and its measurements", reflect.TypeOf(CursorSelectParams{})),
 		capability("capabilities.list", "Discover versioned commands and schemas", false, `{"type":"object","additionalProperties":false}`),
 		capability("project.inspect", "Read circuit, connectivity, selection, view, model, diagnostics and results", false, `{"type":"object","additionalProperties":false}`),
-		capability("simulation.wait", "Wait for current project open, initialization, manual step or applying-input work (at most 5 seconds); inspect project_work/step_work/input_work for outcomes; ready transients return immediately", false, `{"type":"object","additionalProperties":false}`),
+		capability("simulation.wait", "Wait for current project work, initialization, manual step or applying-input work (at most 5 seconds); inspect project_work/step_work/input_work for outcomes; ready transients return immediately", false, `{"type":"object","additionalProperties":false}`),
 		capability("parts.list", "List available kinds, terminals, models and default values", false, `{"type":"object","additionalProperties":false}`),
 		typedCapability("project.clear", "Start blank; unsaved changes require discard_changes; undo restores drawing", reflect.TypeOf(ReplaceParams{})),
-		typedCapability("project.save", "Atomically save a version-4 .elab project with kept recordings, dependency hashes and paused preference; omit path to save current file; captures selected probes and pinned reading IDs/positions; overwrite explicitly replaces another or externally changed file", reflect.TypeOf(SaveParams{})),
+		queryCapability("project.work.inspect", "Inspect an operation by stable ID; retain eight project jobs and preserve active operations", reflect.TypeOf(IDParams{}), reflect.TypeOf(ProjectWork{})),
+		typedCapability("project.save.start", "Capture a project and return background save admission; inspect project_work; cancellation is available before publishing", reflect.TypeOf(SaveParams{})),
+		typedCapability("project.save", "Wait for the same captured background save as project.save.start; preserves kept records/models/preferences; later edits remain dirty; omit path to save current file; overwrite explicitly replaces an existing file", reflect.TypeOf(SaveParams{})),
 		typedCapability("project.load.start", "Start background bounded local project reading/validation; inspect project_work; replacement refuses intervening edits", reflect.TypeOf(LoadParams{})),
-		typedCapability("project.work.cancel", "Cancel the exact active project work ID; no staged document is installed", reflect.TypeOf(IDParams{})),
+		typedCapability("project.work.cancel", "Cancel exact current project work before publication; cancelable is false during atomic Save publication/cleanup; refusal code operation-committing", reflect.TypeOf(IDParams{})),
 		typedCapability("project.load", "Wait for the same background open job as project.load.start; restores saved pause/view with fresh physics; unsaved changes require discard_changes", reflect.TypeOf(LoadParams{})),
 		typedCapability("component.place", "Place a library part on the 10-unit grid; optional ID must be unused; 100 drawing-object limit including helpers; simulation envelope in snapshot.limits", reflect.TypeOf(PlaceParams{})),
 		typedCapability("component.move", "Move a part to a grid position within ±10000; preserve all wires and electrical results", reflect.TypeOf(MoveParams{})),

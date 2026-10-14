@@ -34,3 +34,5 @@ Run `python3 scripts/live-responsiveness-demo.py --output REPORT --artifacts DIR
 Manual multi-sample Step is now addressed separately by [background manual work](manual-step-work.md); the broader responsiveness gate remains partial.
 
 Project Open now also reads/validates outside the lock with [observable project work](project-work.md). Save/export/manual recovery are separate remaining paths.
+
+Save serialization, destination checks, disk publication and recovery cleanup now also run outside the lock via [captured save work](project-save.md). Export/manual recovery remain separate paths.

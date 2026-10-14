@@ -105,6 +105,9 @@ func TestProjectLoadSupersededByEditsReplacementSaveAndNewRecording(t *testing.T
 			defer release()
 			promptLiveCommand(t, s, "project.load.start", LoadParams{Path: path, DiscardChanges: true})
 			awaitLiveSampleBlock(t, entered)
+			s.mu.Lock()
+			job := s.projectJob
+			s.mu.Unlock()
 			var p any
 			switch command {
 			case "component.move":
@@ -126,8 +129,16 @@ func TestProjectLoadSupersededByEditsReplacementSaveAndNewRecording(t *testing.T
 			promptLiveCommand(t, s, command, p)
 			before := s.Snapshot()
 			release()
-			after := awaitProjectStatus(t, s, "superseded")
-			if after.Document.Generation != before.Document.Generation || !reflect.DeepEqual(after.Components, before.Components) || after.Document.Path != before.Document.Path || after.ProjectWork.Error.Code != "superseded" {
+			select {
+			case <-job.done:
+			case <-time.After(5 * time.Second):
+				t.Fatal("old open did not settle")
+			}
+			s.mu.Lock()
+			oldWork := cloneProjectWork(&job.work)
+			s.mu.Unlock()
+			after := s.Snapshot()
+			if after.Document.Generation != before.Document.Generation || !reflect.DeepEqual(after.Components, before.Components) || after.Document.Path != before.Document.Path || oldWork.Status != "superseded" || oldWork.Error.Code != "superseded" {
 				t.Fatal("late open/failure overwrites intervening work")
 			}
 		})

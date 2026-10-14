@@ -46,3 +46,26 @@ func TestPickerRefusesAnInterveningProjectReplacement(t *testing.T) {
 		})
 	}
 }
+
+func TestPendingDiscardRefusesAnInterveningReplacement(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	uiAction(t, s, "example.reset", nil)
+	uiAction(t, s, "project.clear", nil)
+	if s.pendingCommand != "project.clear" {
+		t.Fatal("fixture lacks protected pending action")
+	}
+	agentAction(t, s.service, "project.clear", workbench.ReplaceParams{DiscardChanges: true})
+	before := s.service.Snapshot()
+	s.app.Do(func() {
+		node, ok := findNode(s.view(), "discard-continue")
+		if !ok {
+			t.Fatal("pending discard absent")
+		}
+		node.Activate()
+	})
+	after := s.service.Snapshot()
+	if !strings.Contains(s.errorMessage, "Schematic changed") || after.Document.Generation != before.Document.Generation || after.CommandRevision != before.CommandRevision {
+		t.Fatal("stale dialog replaces the newer project")
+	}
+}

@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "save_admission_ms": 0.2942499704658985,
+  "admission": {
+    "cancelable": true,
+    "id": "project-1",
+    "command": "project.save",
+    "status": "queued",
+    "phase": "queued",
+    "actor": "agent.stdio",
+    "path": "/Users/dshills/Development/projects/ELab/docs/validation/project-save-artifacts/captured-led.elab",
+    "input_revision": 6,
+    "command_revision": 5,
+    "document_generation": 2,
+    "bytes": 0
+  },
+  "captured_artifact_sha256": "a11a6d7d0cb43713e0fc1aefbd223729c5a1b82664b72e851ee00e93fe251688",
+  "restored_current_a": 0.001476723549138745,
+  "checks": [
+    "immediate queued captured save leaves current association unchanged",
+    "file contains admission graph while later value edits remain dirty",
+    "stable operation ID/byte count/captured generation/exact artifact hash",
+    "operation inspection does not regress current command preconditions",
+    "legacy waiting save marks the newly captured project clean",
+    "earlier operation remains inspectable after a newer save",
+    "external conflict preserves outside file; explicit overwrite succeeds",
+    "fresh paused offline reopening with exact graph/view/reading",
+    "temporary files removed"
+  ],
+  "limitations": [
+    "controlled race tests separately cover blocked preparation/publication, cancellation and replacement",
+    "publishing saves cannot be canceled; replacement/close never associates their file with a new document",
+    "OS calls can outlast cancellation/deadline",
+    "portable final-check/rename has no universal cross-process compare-and-swap guarantee",
+    "backend timing excludes visible latency",
+    "export/manual recovery still have synchronous paths"
+  ]
+}

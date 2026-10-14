@@ -61,6 +61,7 @@ type recoveryCapsule struct {
 type recoveryCapture struct {
 	document                    Document
 	generation, commandRevision uint64
+	stateRevision               uint64
 	sourcePath                  string
 	dirty                       bool
 }

@@ -20,7 +20,7 @@ func DefaultRecoveryDirectory() (string, error) {
 	return filepath.Join(directory, "ELab", "recovery"), nil
 }
 func (s *Service) recoveryCaptureLocked() recoveryCapture {
-	return recoveryCapture{document: s.documentLocked(), generation: s.documentGeneration, commandRevision: s.commandRevision, sourcePath: s.documentPath, dirty: s.dirtyLocked()}
+	return recoveryCapture{stateRevision: s.revision, document: s.documentLocked(), generation: s.documentGeneration, commandRevision: s.commandRevision, sourcePath: s.documentPath, dirty: s.dirtyLocked()}
 }
 func (s *Service) configureRecoveryLocked(p RecoveryConfigureParams) error {
 	if !finite(p.Interval) || p.Interval < 1 || p.Interval > 60 {

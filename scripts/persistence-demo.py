@@ -38,7 +38,7 @@ class Client:
             response = json.loads(self.process.stdout.readline())
             self.revision = response['revision']
         result = response.get('result')
-        if isinstance(result, dict) and 'command_revision' in result:
+        if isinstance(result, dict) and 'components' in result and 'document' in result and 'command_revision' in result:
             self.command_revision = result['command_revision']
         if expect:
             assert response.get('error', {}).get('code') == expect, response

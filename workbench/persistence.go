@@ -57,7 +57,8 @@ type LoadParams struct {
 	DiscardChanges     bool    `json:"discard_changes,omitempty"`
 }
 type ReplaceParams struct {
-	DiscardChanges bool `json:"discard_changes,omitempty"`
+	ExpectedGeneration *uint64 `json:"expected_document_generation,omitempty"`
+	DiscardChanges     bool    `json:"discard_changes,omitempty"`
 }
 
 func contentHash(g Graph, settings TransientSettings) [32]byte {
@@ -445,107 +446,6 @@ func decodeDocument(data []byte) (Document, error) {
 	return d, nil
 }
 func absOutOfBounds(p Point) bool { return p.X < -1e6 || p.X > 1e6 || p.Y < -1e6 || p.Y > 1e6 }
-
-func (s *Service) saveLocked(p SaveParams) error {
-	if s.verificationActiveLocked() {
-		return &actionError{"busy", "Finish or cancel the active verification before saving the project"}
-	}
-	if err := s.checkDocumentGenerationLocked(p.ExpectedGeneration); err != nil {
-		return err
-	}
-	path := p.Path
-	if path == "" {
-		path = s.documentPath
-	}
-	if path == "" {
-		return &actionError{"unavailable", "Choose a destination for this schematic."}
-	}
-	path, err := documentPath(path)
-	if err != nil {
-		return err
-	}
-	replace := false
-	if info, err := os.Lstat(path); err == nil {
-		if !info.Mode().IsRegular() {
-			return fileError(fmt.Errorf("save destination must be a regular file, not a link or directory"))
-		}
-		if path == s.documentPath && !p.Overwrite {
-			data, err := readDocumentFile(path)
-			if err != nil {
-				return err
-			}
-			if sha256.Sum256(data) != s.diskHash {
-				return &actionError{"file-conflict", "The file changed outside ELab. Save As, or explicitly overwrite it."}
-			}
-		} else if !p.Overwrite {
-			return &actionError{"file-exists", "Destination exists. Choose another path or explicitly allow overwrite."}
-		}
-		replace = true
-	} else if !os.IsNotExist(err) {
-		return fileError(err)
-	}
-	d := s.documentLocked()
-	data, err := json.MarshalIndent(d, "", "  ")
-	if err != nil {
-		return err
-	}
-	data = append(data, '\n')
-	if len(data) > MaxProjectBytes {
-		return &actionError{"invalid-document", "project file exceeds 8 MiB"}
-	}
-	f, err := os.CreateTemp(filepath.Dir(path), ".elab-save-*.tmp")
-	if err != nil {
-		return fileError(err)
-	}
-	temp := f.Name()
-	defer os.Remove(temp)
-	if _, err = f.Write(data); err != nil {
-		f.Close()
-		return fileError(err)
-	}
-	if err = f.Sync(); err != nil {
-		f.Close()
-		return fileError(err)
-	}
-	if err = f.Close(); err != nil {
-		return fileError(err)
-	}
-	if replace {
-		err = os.Rename(temp, path)
-	} else {
-		err = os.Link(temp, path)
-	}
-	if err != nil {
-		if os.IsExist(err) {
-			return &actionError{"file-exists", "Destination was created while saving; choose another path."}
-		}
-		return fileError(err)
-	}
-	// Flush directory metadata where supported. A completed atomic publication is
-	// considered saved even on filesystems that cannot sync their directory handle.
-	if dir, err := os.Open(filepath.Dir(path)); err == nil {
-		_ = dir.Sync()
-		_ = dir.Close()
-	}
-	s.recoveredFrom = ""
-	s.documentPath = path
-	s.savedGraph = contentHash(s.graph, s.transientSettings)
-	s.savedPreferences = preferencesHash(s.pins, s.displayPreferences, s.exampleID)
-	s.savedRecordings = s.recordingMembershipHashLocked()
-	s.diskHash = sha256.Sum256(data)
-	if s.recoveryStore != nil {
-		capture := s.recoveryCaptureLocked()
-		capture.commandRevision++ // Blocks dirty captures made before this save.
-		if _, _, err := s.recoveryStore.checkpoint(capture); err != nil {
-			s.recovery.Error = err.Error()
-		}
-		// A saved file remains successful if recovery cleanup fails.
-		if err := s.scanRecoveryLocked(); err != nil {
-			s.recovery.Error = err.Error()
-		}
-	}
-	return nil
-}
 
 // File choices may outlive the project they were made for. A generation guard
 // survives harmless clock ticks but refuses to act on a replacement project.

@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "version": "0.33.0",
+  "build": "47",
+  "binary_sha256": "c0fca1995392f1c0817e843931d54075dab3fd57a21d82caace262cf0056e63e",
+  "packaged_binary_matches": true,
+  "checks": [
+    "source review and whitespace diff check; independent root/native modules remain intact",
+    "pinned Staticcheck/import formatting, complete root/native race tests and vet",
+    "captured project serialization, destination check, temporary write/sync, atomic publication and cleanup outside editor mutex",
+    "blocked durable preparation permits navigation/editing and exact pre-publication cancellation",
+    "cancellation preserves old destination and removes temporary file; successful captures leave later edits dirty",
+    "external destination identity/content rechecked immediately before replacement",
+    "publication fence disables cancellation and returns operation-committing",
+    "replacement before publication discards file; replacement during publication/recovery cleanup preserves current project",
+    "separate captured artifact hash/generation and current-document association",
+    "bounded stable-ID job inspection and retained original superseded/waiting outcomes",
+    "disconnected waiting save continues; original successful retry does not rewrite file",
+    "recovery capture-state ordering prevents late clean retirement erasing a newer same-command wiper commit",
+    "native lifecycle generation guards preserve pending choices and refuse stale discard",
+    "reference client distinguishes captured job revision from current snapshot mutation precondition",
+    "existing 64 KiB catalog bound preserved by concise repeated output text",
+    "built/packaged actual native Save As/Open and GPU smoke",
+    "public headless/packaged captured save workflows and legacy persistence regression"
+  ],
+  "limits_of_evidence": [
+    "publishing saves cannot honestly promise cancellation/rollback; OS calls can outlast cancellation/deadline",
+    "portable final destination check plus rename is not universal cross-process compare-and-swap",
+    "regular bounded destinations are required; existing project/model/device/tolerance/work limits unchanged",
+    "association reports terminal captured outcome; later replacements do not rewrite historical outcomes",
+    "backend admission timing excludes visible input-to-pixel latency",
+    "export/manual recovery and some shutdown work remain synchronous; job/event coverage is not complete",
+    "private unsigned local bundle; accessibility, numerical/performance consolidation, distribution and participant gates remain open",
+    "functional audit remains 15 implemented / 12 partial"
+  ]
+}

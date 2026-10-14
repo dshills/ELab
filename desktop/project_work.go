@@ -13,17 +13,33 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 	if w == nil {
 		return nil
 	}
-	title := "Project open"
-	if w.ResultGeneration != 0 && w.ResultGeneration != state.Document.Generation || w.ResultGeneration == 0 && w.DocumentGeneration != state.Document.Generation {
-		title = "Previous project open"
+	action := "open"
+	if w.Command == "project.save" {
+		action = "save"
 	}
-	text := fmt.Sprintf("%s · %s · %s\n%d bytes read", filepath.Base(w.Path), w.Status, w.Phase, w.Bytes)
+	title := "Project " + action
+	if w.ResultGeneration != 0 && w.ResultGeneration != state.Document.Generation || w.ResultGeneration == 0 && w.DocumentGeneration != state.Document.Generation {
+		title = "Previous project " + action
+	}
+	text := fmt.Sprintf("%s · %s · %s\n%d bytes prepared", filepath.Base(w.Path), w.Status, w.Phase, w.Bytes)
 	nodes := []ui.Node{section("project-work-title", title), quiet("project-work-status", text)}
 	if w.Status == "queued" || w.Status == "running" || w.Status == "canceling" {
-		nodes = append(nodes, quiet("project-work-explanation", "The current circuit stays editable until the file is validated. Edits supersede this open request."), s.action("project-work-cancel", "Cancel opening project", "project.work.cancel", workbench.IDParams{ID: w.ID}))
+		explanation := "The current circuit stays editable until the file is validated. Edits supersede this open request."
+		if action == "save" {
+			explanation = "Saving the captured circuit. Later edits remain unsaved. Cancellation is available before publication."
+		}
+		cancel := s.action("project-work-cancel", "Cancel project "+action, "project.work.cancel", workbench.IDParams{ID: w.ID})
+		cancel.Disabled = !w.Cancelable
+		nodes = append(nodes, quiet("project-work-explanation", explanation), cancel)
 	}
 	if w.Error != nil {
 		nodes = append(nodes, quiet("project-work-error", w.Error.Message))
+	}
+	if w.CleanupWarning != "" {
+		nodes = append(nodes, quiet("project-work-cleanup-warning", w.CleanupWarning))
+	}
+	if w.Associated != nil && !*w.Associated {
+		nodes = append(nodes, quiet("project-work-unassociated", "Saved the captured file; the current project was preserved."))
 	}
 	return nodes
 }

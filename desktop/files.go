@@ -15,10 +15,19 @@ import (
 )
 
 func (s *screen) requestReplace(id string, p any) {
-	result := s.invoke(id, p)
+	raw, _ := json.Marshal(p)
+	var fields map[string]json.RawMessage
+	_ = json.Unmarshal(raw, &fields)
+	if fields != nil {
+		if _, ok := fields["expected_document_generation"]; !ok {
+			fields["expected_document_generation"], _ = json.Marshal(s.service.Snapshot().Document.Generation)
+		}
+		raw, _ = json.Marshal(fields)
+	}
+	result := s.invoke(id, json.RawMessage(raw))
 	if result.Error != nil && result.Error.Code == "unsaved-changes" {
 		s.pendingCommand = id
-		s.pendingParams, _ = json.Marshal(p)
+		s.pendingParams = append(json.RawMessage{}, raw...)
 		s.errorMessage = ""
 	}
 	s.app.Invalidate("main")
@@ -112,8 +121,8 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 					s.errorMessage = err.Error()
 				}
 			} else if response.Error != nil {
-				if id == "project.load" && (response.Error.Code == "canceled" || response.Error.Code == "superseded") {
-					s.fileMessage = "Open " + response.Error.Code + "; current project preserved"
+				if (id == "project.load" || id == "project.save") && (response.Error.Code == "canceled" || response.Error.Code == "superseded") {
+					s.fileMessage = "Project " + response.Error.Code + "; current project preserved"
 				} else if response.Error.Code == "unsaved-changes" {
 					s.pendingCommand = id
 					s.pendingParams = append(json.RawMessage{}, raw...)
@@ -121,7 +130,10 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 					s.errorMessage = response.Error.Message
 				}
 			} else {
-				path := response.Result.(workbench.Snapshot).Document.Path
+				state := response.Result.(workbench.Snapshot)
+				path := state.Document.Path
+				continueAction := true
+				saveAssociated := true
 				if response.Result.(workbench.Snapshot).LastExport != nil && (strings.HasPrefix(id, "export.") || id == "verification.export") {
 					s.fileMessage = "Exported " + filepath.Base(response.Result.(workbench.Snapshot).LastExport.Path)
 				} else if id == "verification.import" {
@@ -129,11 +141,28 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 					_ = json.Unmarshal(fields["path"], &opened)
 					s.fileMessage = "Loaded recorded " + filepath.Base(opened)
 				} else if id == "project.save" {
+					if state.ProjectWork != nil {
+						path = state.ProjectWork.Path
+						current := s.service.Snapshot()
+						sameGeneration := current.Document.Generation == state.ProjectWork.ResultGeneration
+						saveAssociated = state.ProjectWork.Associated != nil && *state.ProjectWork.Associated && sameGeneration
+						continueAction = saveAssociated && !current.Document.Dirty
+						state.Document = current.Document
+						if !sameGeneration && after != nil {
+							s.pendingCommand = ""
+							s.pendingParams = nil
+						}
+					}
 					s.fileMessage = "Saved " + filepath.Base(path)
+					if !saveAssociated {
+						s.fileMessage += "; current project preserved"
+					} else if state.Document.Dirty {
+						s.fileMessage += "; later edits remain unsaved"
+					}
 				} else {
 					s.fileMessage = "Opened " + filepath.Base(path)
 				}
-				if after != nil {
+				if after != nil && continueAction {
 					after()
 				}
 			}

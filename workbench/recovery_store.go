@@ -26,6 +26,7 @@ type recoveryStore struct {
 	sequence           uint64
 	closed             bool
 	lastRevision       map[string]uint64
+	lastStateRevision  map[string]uint64
 	lastHash           map[string][32]byte
 	owned              map[string][]string
 }
@@ -52,7 +53,7 @@ func newRecoveryStore(directory string) (*recoveryStore, error) {
 	if _, err := rand.Read(nonce[:]); err != nil {
 		return nil, err
 	}
-	store := &recoveryStore{directory: path, session: hex.EncodeToString(nonce[:]), lastRevision: map[string]uint64{}, lastHash: map[string][32]byte{}, owned: map[string][]string{}}
+	store := &recoveryStore{directory: path, session: hex.EncodeToString(nonce[:]), lastRevision: map[string]uint64{}, lastStateRevision: map[string]uint64{}, lastHash: map[string][32]byte{}, owned: map[string][]string{}}
 	lease, _ := json.Marshal(recoveryLease{Session: store.session, PID: os.Getpid()})
 	if err := publishExport(store.leasePath(), lease, false); err != nil {
 		return nil, err
@@ -76,6 +77,13 @@ func (store *recoveryStore) checkpointLocked(capture recoveryCapture) (string, s
 		return "", "", nil
 	}
 	key := store.documentKey(capture.generation)
+	// Compare both command admission and capture order before even a clean
+	// retirement. Delayed cleanup must not delete a newer dirty snapshot.
+	if capture.commandRevision < store.lastRevision[key] || capture.stateRevision != 0 && capture.stateRevision < store.lastStateRevision[key] {
+		return "", "", nil
+	}
+	store.lastRevision[key] = max(store.lastRevision[key], capture.commandRevision)
+	store.lastStateRevision[key] = max(store.lastStateRevision[key], capture.stateRevision)
 	if !capture.dirty {
 		store.lastRevision[key] = max(store.lastRevision[key], capture.commandRevision)
 		return "", "", store.retireLocked(key)
