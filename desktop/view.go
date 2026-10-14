@@ -315,6 +315,8 @@ func (s *screen) view() ui.Node {
 		n.Style.Foreground = ui.Some(color.NRGBA{R: 168, G: 65, B: 68, A: 255})
 		inspector = append(inspector, n)
 	}
+	inspector = append(inspector, s.measurementInspector(state)...)
+	inspector = append(inspector, s.pinnedReadingControls(state)...)
 	if state.Drawing.Tool == "wire" {
 		terminalOptions := []ui.Option{{ID: "__none", Label: "Choose a terminal…"}}
 		for _, c := range state.Components {
@@ -350,7 +352,7 @@ func (s *screen) view() ui.Node {
 		tools.Children = append(tools.Children, buttonStyle(n, state.Drawing.Tool == tool))
 	}
 	tools.Children = append(tools.Children, s.button("drawing.cancel", "Esc"), ui.Node{ID: "tool-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, s.button("view.fit", "Fit"), label("zoom", fmt.Sprintf("%.0f%%", state.View.Zoom*100)))
-	hints := "Click to inspect · drag to move · scroll to zoom"
+	hints := "Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom"
 	switch state.Drawing.Tool {
 	case "wire":
 		hints = "Click two terminal dots to connect them · Esc cancels"

@@ -113,87 +113,14 @@ func (s *Service) pinCommandLocked(command string, raw json.RawMessage) error {
 	return &actionError{"not-found", "Choose a current probe from scope.available"}
 }
 
-// The compiled graph paired with a DC result owns its node associations. Never
-// interpret old node voltages using a new/incomplete graph after an edit.
-func (s *Service) readingFrameLocked() (TraceSample, uint64, uint64, bool) {
-	if s.transient != nil {
-		t := s.transient
-		return t.Sample, t.RunID, t.ElectricalRevision, t.Stale
-	}
-	if s.mixed != nil && s.mixedState != nil {
-		r := s.mixed
-		return mixedSample(s.mixedState.net.c, r, 0), r.RunID, r.ElectricalRevision, r.Stale
-	}
-	if s.dcCompiled != nil {
-		c := *s.dcCompiled
-		if s.npn != nil {
-			r := s.npn
-			return npnTraceSample(c, r, r, 0, c.Input.Value), r.RunID, r.ElectricalRevision, r.Stale
-		}
-		if s.result != nil {
-			r := s.result
-			return ledTraceSample(c, *r), r.RunID, r.ElectricalRevision, r.Stale
-		}
-	}
-	return TraceSample{}, 0, 0, true
-}
-func ledTraceSample(c Compiled, r Result) TraceSample {
-	currents := map[string]float64{c.Source.ID: r.Current, c.LED.ID: r.Current, c.Resistor.ID: (r.Nodes[c.TerminalNet[c.Resistor.ID+".1"]] - r.Nodes[c.TerminalNet[c.Resistor.ID+".2"]]) / c.Resistor.Value}
-	return captureFrame(c, TraceSample{Input: c.Source.Value, Voltage: r.LEDVoltage, Current: r.Current}, r.Nodes, currents)
-}
 func (s *Service) pinnedReadingsLocked() []PinnedReading {
 	out := []PinnedReading{}
 	if len(s.pins) == 0 {
 		return out
 	}
-	available := map[string]Probe{}
-	for _, p := range probeInventory(s.graph) {
-		available[p.ID] = p
-	}
-	sample, run, revision, stale := s.readingFrameLocked()
-	stale = stale || run != s.run || revision != s.electrical
+	context := s.readingContextLocked()
 	for _, pin := range s.pins {
-		r := PinnedReading{Definition: pin, Time: sample.Time, RunID: run, ElectricalRevision: revision, State: "unavailable"}
-		p, exists := available[pin.ID]
-		if !exists {
-			r.Probe = Probe{ID: pin.ID, Label: pin.ID, Unit: "V"}
-			if strings.HasPrefix(pin.ID, "i:") {
-				r.Probe.Unit = "A"
-			}
-			r.Reason = "Source removed; undo restores it or remove this pin"
-		} else {
-			r.Probe = p
-			if v, ok := frameValue(sample, p); ok {
-				r.Value = &v
-				r.State = "live"
-				if stale {
-					r.State = "stale"
-					r.Reason = "Previous accepted live result; resume or restart a valid circuit"
-				}
-			} else {
-				r.Reason = "No accepted live result for this probe"
-			}
-		}
-		r.ReferenceDisplay = "Source unavailable"
-		if exists {
-			r.ReferenceDisplay = "Voltage: " + p.Positive + " - " + p.Reference
-			if p.Unit == "A" {
-				r.ReferenceDisplay = "Current: " + p.Positive + " -> " + p.Reference
-			}
-		}
-		r.Display = "Live " + pin.ID + " · unavailable"
-		if r.Value != nil {
-			value, unit := *r.Value, p.Unit
-			if unit == "A" {
-				value *= 1000
-				unit = "mA"
-			}
-			r.Display = fmt.Sprintf("Live %s · %.5g %s", pin.ID, value, unit)
-			if r.State == "stale" {
-				r.Display += " · stale"
-			}
-		}
-		out = append(out, r)
+		out = append(out, context.reading(pin.ID).pinned(pin))
 	}
 	return out
 }

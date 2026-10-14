@@ -155,6 +155,8 @@ func Catalog() []Capability {
 		typedCapability("parts.search.set", "Filter components by case-insensitive words in names, hobbyist aliases, kind, pins, units, defaults or model IDs; session only", reflect.TypeOf(SearchParams{})),
 		typedCapability("component.duplicate", "Copy one component's value, orientation and startup voltage into an unconnected new component; optional exact position", reflect.TypeOf(DuplicateParams{})),
 		typedCapability("edit.batch", "Atomically apply 1–100 supported schematic edits as one named undo action; no file, simulation or nested batch commands", reflect.TypeOf(BatchParams{})),
+		typedCapability("measurement.select", "Select current object, terminal, anchored net or probe for live inspection; empty kind/ID returns to the editing selection; session only, preserves physics/history/dirty state", reflect.TypeOf(MeasurementSelectParams{})),
+		queryCapability("measurement.inspect", "Read the selected live measurement context, or a supplied current target, with references, signed values and accepted-result provenance; no mutation", reflect.TypeOf(MeasurementQueryParams{}), reflect.TypeOf(MeasurementInspection{})),
 		typedCapability("measurement.pin.add", "Pin a current voltage/current probe at a grid position; at most eight; persisted undoable presentation edit, no simulation restart", reflect.TypeOf(PinSpec{})),
 		typedCapability("measurement.pin.move", "Move a pinned reading to a grid position without changing physics; previous_position refuses stale gestures", reflect.TypeOf(MoveParams{})),
 		typedCapability("measurement.pin.remove", "Remove a pinned reading including missing sources; undoable presentation edit", reflect.TypeOf(IDParams{})),

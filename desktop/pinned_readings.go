@@ -19,22 +19,12 @@ func (s *screen) pinnedReadingControls(state workbench.Snapshot) []ui.Node {
 			options = append(options, ui.Option{ID: probe.ID, Label: probe.Label})
 		}
 	}
-	nodes := []ui.Node{section("pinned-readings-title", "Pinned live readings"), quiet("pinned-readings-help", "Pin a voltage or current, then drag its card on the sheet or edit X / Y. Readings always follow the live circuit."),
+	nodes := []ui.Node{section("pinned-readings-title", "Pinned live readings"), quiet("pinned-readings-help", "Pin up to eight voltage/current readings, then drag a card on the sheet or edit X / Y. Readings always follow the live circuit."),
 		{ID: "pin-reading-probe", Kind: ui.Selector, Options: options, SelectedID: "__none", Disabled: len(state.PinnedReadings) >= workbench.MaxPinnedReadings, Accessibility: ui.Accessibility{Name: "Pin a live voltage or current reading"}, Change: func(e ui.ChangeEvent) {
 			if e.SelectedID == "__none" {
 				return
 			}
-			position := workbench.Point{X: state.View.Center.X, Y: state.View.Center.Y}
-			graph := workbench.Graph{Components: state.Components, Wires: state.Wires}
-			for _, probe := range state.Scope.Available {
-				if probe.ID == e.SelectedID {
-					if part, _, ok := graph.Terminal(probe.Positive); ok {
-						position = workbench.Point{X: part.Position.X + 80, Y: part.Position.Y + 80}
-					}
-				}
-			}
-			position.X = math.Max(-10000, math.Min(10000, position.X))
-			position.Y = math.Max(-10000, math.Min(10000, position.Y))
+			position := defaultPinPosition(state, e.SelectedID)
 			s.invoke("measurement.pin.add", workbench.PinSpec{ID: e.SelectedID, Position: position})
 		}}}
 	for _, reading := range state.PinnedReadings {
@@ -72,4 +62,19 @@ func hitPinnedReading(state workbench.Snapshot, at workbench.Point) string {
 		}
 	}
 	return ""
+}
+
+func defaultPinPosition(state workbench.Snapshot, id string) workbench.Point {
+	position := workbench.Point{X: state.View.Center.X, Y: state.View.Center.Y}
+	graph := workbench.Graph{Components: state.Components, Wires: state.Wires}
+	for _, probe := range state.Scope.Available {
+		if probe.ID == id {
+			if part, _, ok := graph.Terminal(probe.Positive); ok {
+				position = workbench.Point{X: part.Position.X + 80, Y: part.Position.Y + 80}
+			}
+		}
+	}
+	position.X = math.Max(-10000, math.Min(10000, position.X))
+	position.Y = math.Max(-10000, math.Min(10000, position.Y))
+	return position
 }

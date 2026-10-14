@@ -3,8 +3,8 @@
   "scope": "Requirement coverage validation only; does not establish product acceptance",
   "requirements": 27,
   "counts": {
-    "implemented": 11,
-    "partial": 16,
+    "implemented": 12,
+    "partial": 15,
     "pending": 0
   },
   "rows": [
@@ -34,9 +34,9 @@
     },
     {
       "id": "EDIT-04",
-      "evidence": "Object selector, named terminal controls, pointer canvas, arrows/pan/zoom/fit/escape",
+      "evidence": "Object/named terminal/net/probe selectors, pointer terminal inspection, named wiring, arrows/pan/zoom/fit/escape",
       "status": "partial",
-      "assessment": "Partial: keyboard net selection and complete focus/navigation scenarios need implementation/evidence"
+      "assessment": "Partial: semantic net selection now exists; complete end-to-end keyboard focus/navigation scenarios remain unqualified"
     },
     {
       "id": "SIM-01",
@@ -76,9 +76,9 @@
     },
     {
       "id": "VIEW-01",
-      "evidence": "Selected component readouts and full probe descriptors; eight persisted live voltage/current cards with signed units/reference lines, stale/unavailable states, shared commands, undoable positioning, solver-frame provenance and GPU evidence",
-      "status": "partial",
-      "assessment": "Partial: pinned-reading behavior is implemented; consistent direct selected pin/net inspection and complete keyboard selection remain open"
+      "evidence": "Uniform selected component/terminal/net/probe readings with signed units, references and accepted-result provenance; stable net anchors, unavailable/stale states; eight persisted pins; native/agent and fresh GPU evidence",
+      "status": "implemented",
+      "assessment": "Implemented for supported current live probes and pins; full keyboard/screen-reader qualification remains in EDIT-04/ACCESS-01; captured-record schematic interaction is future work"
     },
     {
       "id": "VIEW-02",

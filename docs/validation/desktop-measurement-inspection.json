@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "transport": "packaged-native-private-socket",
+  "rc_10ms_voltage_v": 3.1606027941427883,
+  "checks": [
+    "read-only DC Ohm/reference-ground query",
+    "accepted DC pin value",
+    "independent RC terminal voltage",
+    "selection preserves physics/history/document",
+    "wire voltage without invented ideal-wire current",
+    "signed current and named references",
+    "same inspection probe IDs plot and pin",
+    "recorded view does not replace live inspection",
+    "net selection follows stable anchor through rename/split",
+    "deleted anchor unavailable and undo restores it",
+    "fresh paused reopen clears ephemeral inspection and restores pin/record",
+    "owned project ends clean and paused"
+  ],
+  "limitations": [
+    "net selection follows its captured terminal; removing the anchor requires undo or reselection",
+    "inspection is live, not a captured-record circuit selection mode",
+    "semantic controls and pointer tests do not qualify complete keyboard focus or screen-reader behavior"
+  ]
+}

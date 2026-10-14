@@ -209,6 +209,10 @@ func (s *screen) canvasClick(p workbench.Point) {
 		if hitPinnedReading(state, p) != "" {
 			return
 		}
+		if ref := terminalHit(state, p, math.Max(6, 10/state.View.Zoom)); ref != "" {
+			s.invoke("measurement.select", workbench.MeasurementSelectParams{Kind: "terminal", ID: ref})
+			return
+		}
 		id := hitComponent(state, p)
 		if id == "" {
 			id = hitWire(state, p, 6/state.View.Zoom)
@@ -277,6 +281,8 @@ func (c *commandCanvas) routePointer(phase int, p, delta workbench.Point) {
 						c.dragOrigin = reading.Definition.Position
 					}
 				}
+			} else if terminalHit(state, p, math.Max(6, 10/state.View.Zoom)) != "" {
+				c.activeTool = "inspect"
 			} else if id := hitComponent(state, p); id != "" {
 				part, _ := (workbench.Graph{Components: state.Components, Wires: state.Wires}).Component(id)
 				c.dragID = id
@@ -285,7 +291,7 @@ func (c *commandCanvas) routePointer(phase int, p, delta workbench.Point) {
 		}
 		c.screen.canvasClick(p)
 	case 1:
-		if c.activeTool == "place" || c.activeTool == "wire" {
+		if c.activeTool == "place" || c.activeTool == "wire" || c.activeTool == "inspect" {
 			return
 		}
 		if c.dragID != "" {

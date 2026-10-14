@@ -274,6 +274,8 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			}
 		}
 		return s.batchLocked(p)
+	case "measurement.select":
+		return s.selectMeasurementLocked(raw)
 	case "measurement.pin.add", "measurement.pin.move", "measurement.pin.remove":
 		return s.pinCommandLocked(command, raw)
 	case "scope.trace.select", "scope.probe.remove", "scope.probes.set", "scope.cursor.set", "scope.cursor.select", "scope.cursor.clear":
@@ -422,6 +424,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return fmt.Errorf("unknown object ID")
 		}
 		s.selected = p.ID
+		s.measurementTarget = nil
 		s.normalizeDrawingLocked()
 		return nil
 	case "wire.connect":

@@ -87,11 +87,22 @@ func schematic(state workbench.Snapshot, view canvas.Viewport) (*canvas.Mesh, er
 			focusTerminals[ref] = true
 		}
 	}
+	measurementTerminals, measurementWires := map[string]bool{}, map[string]bool{}
+	for _, ref := range state.MeasurementInspection.Terminals {
+		measurementTerminals[ref] = true
+	}
+	for _, id := range state.MeasurementInspection.Wires {
+		measurementWires[id] = true
+	}
+	measurementColor := color.NRGBA{R: 80, G: 124, B: 64, A: 255}
 	focusColor := color.NRGBA{R: 153, G: 78, B: 191, A: 255}
 	connectionCount := map[string]int{}
 	for _, w := range state.Wires {
 		c := wireColor
 		width := 2.5
+		if measurementWires[w.ID] {
+			c, width = measurementColor, 3.5
+		}
 		if w.ID == state.Selected {
 			c = selectedColor
 			width = 4
@@ -238,6 +249,9 @@ func schematic(state workbench.Snapshot, view canvas.Viewport) (*canvas.Mesh, er
 			position, _ := workbench.TerminalPosition(part, terminal)
 			c := wireColor
 			radius := 4.
+			if measurementTerminals[ref] {
+				c, radius = measurementColor, 7
+			}
 			if focusTerminals[ref] {
 				c = focusColor
 				radius = 8

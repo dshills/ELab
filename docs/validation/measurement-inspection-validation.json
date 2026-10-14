@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "version": "0.27.0",
+  "build": "41",
+  "binary_sha256": "3f4386a9611d1d6359fb1f390c58fdb58cec70b0b511db9d69d8dbc4d4dd6c5a",
+  "packaged_binary_matches": true,
+  "checks": [
+    "source review and whitespace diff check",
+    "pinned Staticcheck/import formatting",
+    "Go vet and full root/native race tests",
+    "shared live measurement formatter for inspection and pins",
+    "read-only query preserves editor/physics/actor state",
+    "selected DC resistor Ohm/reference equation and accepted ground zero",
+    "independent RC voltage at 10 ms and signed discharge/NPN current",
+    "object/terminal/net/wire/probe selection preserves physical state/history/dirty state",
+    "wire voltage without inferred ideal-wire current; disconnected wire explicitly unavailable",
+    "stable captured net anchor follows merge/rename/split; deleted anchor unavailable/undo",
+    "strict nested query validation and cache ownership",
+    "recorded plot never replaces live inspection readings",
+    "native named selectors, pointer gesture and shared Plot/Pin actions",
+    "native DC pin controls always available in general Inspector",
+    "fresh built/packaged GPU selected-net wire/terminal highlights",
+    "final headless and packaged private-socket public workflows",
+    "fresh paused reopen clears ephemeral inspection and restores saved pin/record"
+  ],
+  "measurements": {
+    "rc_10ms_voltage_v": 3.1606027941427883,
+    "desktop_rc_10ms_voltage_v": 3.1606027941427883
+  },
+  "limits_of_evidence": [
+    "initial native fixture tried to pause an already-paused LED example; corrected to explicitly resume/settle before testing",
+    "net selection follows its captured terminal; deleted anchors require undo or reselection",
+    "measurement focus and readings remain live during recorded view; captured-schematic interaction is future work",
+    "semantic selectors/pointer/GPU evidence do not establish full keyboard focus or screen-reader qualification",
+    "visible latency, display preferences, remaining synchronous paths, distribution and participant gates remain open",
+    "private unsigned local bundle; functional audit now 12 implemented / 15 partial"
+  ]
+}

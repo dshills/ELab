@@ -75,6 +75,7 @@ func (s *Service) requireCleanLocked(discard bool) error {
 	return nil
 }
 func (s *Service) detachDocumentLocked() {
+	s.measurementTarget = nil
 	s.pins = nil
 	s.savedPins = pinHash(nil)
 	s.dcCompiled = nil
@@ -605,6 +606,7 @@ func (s *Service) documentLocked() Document {
 }
 
 func (s *Service) installDocumentLocked(d Document) {
+	s.measurementTarget = nil
 	s.pins = nil
 	s.dcCompiled = nil
 	if d.PinnedReadings != nil {
