@@ -64,6 +64,10 @@ func probeColor(name string) color.NRGBA {
 }
 func (s *screen) probeInspector(state workbench.Snapshot) []ui.Node {
 	nodes := []ui.Node{section("probes-title", "Scope probes"), quiet("probes-help", "Choose up to six traces. Voltages reference ground or the named second pin; currents follow the named direction.")}
+	for _, missing := range state.Scope.Unavailable {
+		nodes = append(nodes, quiet("probe-unavailable-"+missing.ID, missing.ID+" · "+missing.Unit+" · unavailable\n"+missing.Reason), s.action("remove-probe-"+missing.ID, "Remove "+missing.ID, "scope.probe.remove", workbench.IDParams{ID: missing.ID}))
+	}
+
 	options := []ui.Option{{ID: "__none", Label: "Hidden"}}
 	for _, p := range state.Scope.Available {
 		options = append(options, ui.Option{ID: p.ID, Label: p.Label + " · " + p.Unit})

@@ -183,9 +183,15 @@ func (s *screen) view() ui.Node {
 	graph := workbench.Graph{Components: state.Components, Wires: state.Wires}
 	part, hasPart := graph.Component(state.Selected)
 	if hasPart {
+		inspector = append(inspector, heading("inspector", part.ID+" · "+part.Name), quiet("part-terminals", "Terminals: "+strings.Join(part.Terminals, ", ")), quiet("part-model-id", "Model: "+part.Model))
+		for _, entry := range workbench.Library() {
+			if entry.Kind == part.Kind {
+				inspector = append(inspector, quiet("part-assumptions", entry.Limitations))
+				break
+			}
+		}
 		inspector = append(inspector, s.partPlotControls(state, part)...)
 		inspector = append(inspector, s.waveformControls(state, part)...)
-		inspector = append(inspector, heading("inspector", part.ID+" · "+part.Name), quiet("part-terminals", "Terminals: "+strings.Join(part.Terminals, ", ")))
 		if part.Kind == "potentiometer" {
 			position := *part.WiperPosition
 			change := func(e ui.ChangeEvent) {

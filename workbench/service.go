@@ -480,6 +480,9 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 	changedDocument := changedGraph || changedSettings
 	forceRestart := r.Command == "project.load" || r.Command == "recovery.restore" || r.Command == "example.rc" || r.Command == "example.npn" || r.Command == "example.npn-pulse" || r.Command == "example.flasher"
 	if changedDocument {
+		if changedGraph {
+			s.retainInterruptedDefaultProbesLocked(before.Graph)
+		}
 		if r.Command != "edit.undo" && r.Command != "edit.redo" {
 			before.Name = historyName(r.Command)
 			if s.nextHistoryName != "" {

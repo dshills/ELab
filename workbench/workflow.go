@@ -25,12 +25,21 @@ type BatchParams struct {
 func filteredParts(query string) []Part {
 	out := []Part{}
 	query = strings.ToLower(strings.TrimSpace(query))
+	tokens := strings.Fields(query)
 	for _, part := range Library() {
-		data, _ := json.Marshal(part)
-		if strings.Contains(strings.ToLower(string(data)), query) {
+		searchable := strings.ToLower(strings.Join(append([]string{part.Kind, part.Name, part.Model, part.Unit, part.DefaultValue, strings.Join(part.Terminals, " ")}, part.Aliases...), " "))
+		matches := true
+		for _, token := range tokens {
+			if !strings.Contains(searchable, token) {
+				matches = false
+				break
+			}
+		}
+		if matches {
 			out = append(out, part)
 		}
 	}
+
 	return out
 }
 func (s *Service) duplicateLocked(p DuplicateParams) error {
@@ -69,7 +78,7 @@ func (s *Service) duplicateLocked(p DuplicateParams) error {
 	if part.Kind == "net-label" {
 		value = part.Label
 	}
-	if part.Unit != "" {
+	if part.Unit != "" && !IsWaveformSource(part.Kind) {
 		value = fmt.Sprintf("%.17g %s", part.Value, part.Unit)
 	}
 	raw, _ := json.Marshal(PlaceParams{Kind: part.Kind, Position: *position, Value: value})
@@ -79,6 +88,7 @@ func (s *Service) duplicateLocked(p DuplicateParams) error {
 	for i := range s.graph.Components {
 		if s.graph.Components[i].ID == s.selected {
 			s.graph.Components[i].Rotation = part.Rotation
+			s.graph.Components[i].Value = part.Value
 			if part.Sine != nil {
 				w := *part.Sine
 				s.graph.Components[i].Sine = &w

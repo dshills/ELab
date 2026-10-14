@@ -150,7 +150,10 @@ rendered:
 	if err := nativePotentiometerSmoke(ctx, a, s); err != nil {
 		return err
 	}
-	return nativeWaveformSmoke(ctx, a, s)
+	if err := nativeWaveformSmoke(ctx, a, s); err != nil {
+		return err
+	}
+	return nativeAuditSmoke(ctx, a, s)
 }
 
 func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
@@ -1121,6 +1124,71 @@ func nativeWaveformSmoke(ctx context.Context, a *app.Application, s *screen) err
 		}
 		_, err := s.mesh(*s.drawing.View)
 		checked <- err
+	}); err != nil {
+		return err
+	}
+	return <-checked
+}
+
+func nativeAuditSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	checked := make(chan error, 1)
+	if err := a.PostWait(ctx, func() {
+		if err := smokeUI(s, "part-search", &ui.ChangeEvent{Text: "battery"}); err != nil {
+			checked <- err
+			return
+		}
+		if _, ok := findNode(s.view(), "part-dc-source"); !ok {
+			checked <- fmt.Errorf("native battery alias absent")
+			return
+		}
+		if err := smokeUI(s, "part-search", &ui.ChangeEvent{Text: ""}); err != nil {
+			checked <- err
+			return
+		}
+		if err := smokeUI(s, "example.rc", nil); err != nil {
+			checked <- err
+			return
+		}
+		if s.pendingCommand != "" {
+			if err := smokeUI(s, "discard-continue", nil); err != nil {
+				checked <- err
+				return
+			}
+		}
+		for _, action := range []struct {
+			id    string
+			event *ui.ChangeEvent
+		}{
+			{"simulation.pause", nil}, {"selection", &ui.ChangeEvent{SelectedID: "C1"}},
+		} {
+			if err := smokeUI(s, action.id, action.event); err != nil {
+				checked <- err
+				return
+			}
+		}
+		if _, ok := findNode(s.view(), "part-assumptions"); !ok {
+			checked <- fmt.Errorf("native model assumptions absent")
+			return
+		}
+		if err := smokeUI(s, "delete-object", nil); err != nil {
+			checked <- err
+			return
+		}
+		state := s.service.Snapshot()
+		if len(state.Scope.Unavailable) != 1 {
+			checked <- fmt.Errorf("native removed default source not marked unavailable")
+			return
+		}
+		missing := state.Scope.Unavailable[0].ID
+		if err := smokeUI(s, "remove-probe-"+missing, nil); err != nil {
+			checked <- err
+			return
+		}
+		if len(s.service.Snapshot().Scope.Unavailable) != 0 {
+			checked <- fmt.Errorf("native unavailable-probe removal failed")
+			return
+		}
+		checked <- nil
 	}); err != nil {
 		return err
 	}

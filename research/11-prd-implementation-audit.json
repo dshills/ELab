@@ -1,0 +1,174 @@
+{
+  "passed": true,
+  "scope": "Requirement coverage validation only; does not establish product acceptance",
+  "requirements": 27,
+  "counts": {
+    "implemented": 9,
+    "partial": 18,
+    "pending": 0
+  },
+  "rows": [
+    {
+      "id": "UI-01",
+      "evidence": "Independent root/native modules, Vellum baseline, shared dispatcher; build and packaged GPU smoke",
+      "status": "partial",
+      "assessment": "Partial: current workstation builds; clean SDK/dependency bootstrap and supported distribution remain unqualified"
+    },
+    {
+      "id": "EDIT-01",
+      "evidence": "Native `smokeConstruct`, drawing regressions, headless/desktop drawing fixtures",
+      "status": "implemented",
+      "assessment": "Implemented visible blank LED construction; novice discoverability still requires Gate D"
+    },
+    {
+      "id": "EDIT-02",
+      "evidence": "Named terminals, explicit junction tests, crossings/near misses, geometry-only moves, pointer-generation guards",
+      "status": "implemented",
+      "assessment": "Implemented within one sheet and existing bounds"
+    },
+    {
+      "id": "EDIT-03",
+      "evidence": "Resistance/capacitance parser, invalid-value preservation, named batches/history; potentiometer slider",
+      "status": "partial",
+      "assessment": "Partial: no common text time-value parser; slider gesture coalescing/one-undo-per-complete-drag needs native driver event evidence and conformance"
+    },
+    {
+      "id": "EDIT-04",
+      "evidence": "Object selector, named terminal controls, pointer canvas, arrows/pan/zoom/fit/escape",
+      "status": "partial",
+      "assessment": "Partial: keyboard net selection and complete focus/navigation scenarios need implementation/evidence"
+    },
+    {
+      "id": "SIM-01",
+      "evidence": "Automatic restart after valid electrical edits; asynchronous specialized LED/NPN solves, live kernels",
+      "status": "partial",
+      "assessment": "Partial: bounded general MNA/step work still occurs under the service lock; responsiveness to difficult solves is unmeasured"
+    },
+    {
+      "id": "SIM-02",
+      "evidence": "Fresh/stale flags, electrical/run identities, pause/edit/restart regressions, input-event traces",
+      "status": "partial",
+      "assessment": "Partial: direct switch/wiper actuation currently applies immediately, including while paused; PRD switch pending/next-step contract is not met. Cross-revision live-input trace attribution needs review"
+    },
+    {
+      "id": "SIM-03",
+      "evidence": "Text status, paused/stale readouts, simulated time/playback controls, explicit failures",
+      "status": "implemented",
+      "assessment": "Implemented behavior in tested families; interpretation with people remains pending"
+    },
+    {
+      "id": "SIM-04",
+      "evidence": "Independent electrical fixtures, exact RC/DC kernels, adaptive kernels with explicit work limits; sampling warnings/fit",
+      "status": "partial",
+      "assessment": "Partial: release reference grid and timestep-refinement evidence must be consolidated across all curated families, including fast transitions"
+    },
+    {
+      "id": "SIM-05",
+      "evidence": "Independent bounded Verify, captured models/settings, operations, kept results, native controls",
+      "status": "implemented",
+      "assessment": "Implemented within declared duration/step/storage envelope"
+    },
+    {
+      "id": "PART-01",
+      "evidence": "Versioned curated models/pins and fixtures; per-part assumptions/IDs now visible; hobbyist aliases added",
+      "status": "implemented",
+      "assessment": "Implemented generic/ideal inventory; no physical parts/ratings claim"
+    },
+    {
+      "id": "VIEW-01",
+      "evidence": "Selected component readouts, structured node maps/probes, current directions for probes/potentiometer",
+      "status": "partial",
+      "assessment": "Partial: arbitrary pinned schematic readings and consistent selected pin/net measurement/sign/reference presentation remain absent"
+    },
+    {
+      "id": "VIEW-02",
+      "evidence": "Illustrative LED brightness, text readings",
+      "status": "partial",
+      "assessment": "Partial: wire color is currently static; no animation/reduced-motion preferences or current-direction animation"
+    },
+    {
+      "id": "SCOPE-01",
+      "evidence": "Up to six labeled traces, component plot actions, source IDs; removed-source unavailable markers/removal/undo added",
+      "status": "partial",
+      "assessment": "Partial: selecting a trace does not yet highlight its schematic source"
+    },
+    {
+      "id": "SCOPE-02",
+      "evidence": "Retained/fixed intervals, exact sample cursors, deltas/extrema, CSV; finite frequency guards",
+      "status": "implemented",
+      "assessment": "Implemented sampled measurement behavior; general text time entry remains in EDIT-03"
+    },
+    {
+      "id": "HELP-01",
+      "evidence": "Structured missing/open/model/unsupported/solve diagnostics and quiet error text; retained editable graph",
+      "status": "partial",
+      "assessment": "Partial: known diagnostic objects are not consistently highlighted on the schematic; separate technical-detail disclosure needs review"
+    },
+    {
+      "id": "HELP-02",
+      "evidence": "LED/RC/NPN/Blink/Flasher templates, reset, visible model limitations",
+      "status": "partial",
+      "assessment": "Partial: each of the three core examples still needs its concise question and expected qualitative behavior, with reset tracked to the current example"
+    },
+    {
+      "id": "FILE-01",
+      "evidence": "Format 4 full models/records, older versions readable, strict unsupported-format refusal, fresh-process offline tests",
+      "status": "partial",
+      "assessment": "Partial: fresh process on this workstation is proven; clean supported installation remains unqualified"
+    },
+    {
+      "id": "FILE-02",
+      "evidence": "Atomic manual saves, conflict guards, private immutable recovery snapshots, process-crash and fault tests",
+      "status": "implemented",
+      "assessment": "Implemented tested process/filesystem behavior; no power-loss qualification claimed"
+    },
+    {
+      "id": "FILE-03",
+      "evidence": "Schematic SVG, SI CSV, source identity, guarded immutable exports",
+      "status": "implemented",
+      "assessment": "Implemented tested outputs; pinned readings/visible preference parity need future renderer work"
+    },
+    {
+      "id": "ACCESS-01",
+      "evidence": "Named semantic controls, native focusable fields/selectors/buttons, keyboard shortcuts",
+      "status": "partial",
+      "assessment": "Partial: full keyboard path and actual pilot-platform screen-reader checks are pending; labels alone do not prove access"
+    },
+    {
+      "id": "AGENT-01",
+      "evidence": "Public versioned catalog, same dispatcher, stdio/private socket, native parity regressions and scripts",
+      "status": "partial",
+      "assessment": "Partial: many workflows proven; exhaustive registered-action/function/preference coverage manifest is not yet established"
+    },
+    {
+      "id": "AGENT-02",
+      "evidence": "Typed schemas/local registry, structured snapshots, units, part defaults/models/aliases/limits",
+      "status": "partial",
+      "assessment": "Partial: command examples, semantic bounds/preconditions/error-code discovery need a complete machine-readable coverage audit"
+    },
+    {
+      "id": "AGENT-03",
+      "evidence": "Headless and packaged-socket workflows, in-process/native parity tests",
+      "status": "partial",
+      "assessment": "Partial: consolidate all three empty-session workflows through one release conformance harness, including fault/close/reopen"
+    },
+    {
+      "id": "AGENT-04",
+      "evidence": "Verify operation IDs/progress/cancel, captured input versions, bounded sample paging",
+      "status": "partial",
+      "assessment": "Partial: synchronous file/step/general solve paths are not all observable asynchronous jobs; state events are snapshot polling rather than a documented subscription"
+    },
+    {
+      "id": "AGENT-05",
+      "evidence": "Revision preconditions, retry cache, atomic batches, shared named history",
+      "status": "partial",
+      "assessment": "Partial: add actor-aware undo guards so a grouped undo cannot silently reverse intervening work by another actor"
+    },
+    {
+      "id": "AGENT-06",
+      "evidence": "Shared validation/model limits, actor attribution, common undo/recovery and private authorized transport",
+      "status": "implemented",
+      "assessment": "Implemented in tested paths; inherits unresolved behavior/coverage requirements above"
+    }
+  ]
+}

@@ -210,6 +210,9 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	for i, trace := range state.Scope.Traces {
 		legendParts = append(legendParts, scopeProbeColors(state.Scope.Traces)[i]+": "+trace.Probe.Label)
 	}
+	for _, missing := range state.Scope.Unavailable {
+		legendParts = append(legendParts, missing.ID+" unavailable")
+	}
 	legend := strings.Join(legendParts, " · ")
 	if t != nil && t.PendingMode != "" {
 		legend += " · pending: " + t.PendingMode

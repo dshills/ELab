@@ -274,7 +274,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			}
 		}
 		return s.batchLocked(p)
-	case "scope.probes.set", "scope.cursor.set", "scope.cursor.select", "scope.cursor.clear":
+	case "scope.probe.remove", "scope.probes.set", "scope.cursor.set", "scope.cursor.select", "scope.cursor.clear":
 		return s.scopeCommandLocked(command, raw)
 	case "capacitor.initial.set":
 		var p ValueParams

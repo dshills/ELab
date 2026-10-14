@@ -101,10 +101,20 @@ Packaged slice: **0.18.0 / 32**, with [final validation](../docs/validation/wave
 
 All curated component families now have implementations, but this does not establish full MVP acceptance. Remaining product, interaction, accessibility, capacity and distribution requirements need a current-state audit and their own evidence.
 
+## PRD conformance audit and immediate repairs
+
+Saved the [complete requirement/state/quality audit](11-prd-implementation-audit.md) and its [machine-readable matrix](11-prd-implementation-audit.json). The coverage checker verifies all 27 P0 functional IDs: 9 implemented within their tested envelope and 18 partial/unverified. It preserves original targets and does not infer clean-installation, participant, screen-reader or visible-latency evidence. Physical capacity, nonblocking general work, state/gesture contracts, pinned readings/presentation, guidance and complete agent conformance remain open.
+
+Implemented [audit repairs](../docs/prd-hardening.md): multiword hobbyist aliases, fresh inspectable library assumptions, selected model identity/limits, negative finite-pulse duplication with independent parameters/value, unavailable deleted probes, explicit single-probe removal/reassignment and undo restoration. Default scope associations also survive incomplete wire edits. Live reciprocal-frequency overflow no longer poisons JSON snapshots; the exact RC update retains representable tiny voltage changes using `expm1`. Library construction now uses keyed fields as metadata grows.
+
+Packaged slice: **0.19.0 / 33**, with [final validation](../docs/validation/hardening-validation.json), [headless workflow](../docs/validation/headless-hardening.json) and [packaged desktop workflow](../docs/validation/desktop-hardening.json). Root/native regressions, lint, vet and packaged GPU/UI smoke pass. One existing flasher race test hit its wall-time work guard during concurrent work; the serial rerun passes with the guard/model unchanged. The repeated desktop fixture ends in a clean paused RC project at a durable repository-local path. Earlier bundles, sessions and user files are preserved.
+
 ## Next work queue
 
-1. Audit current implementation against every PRD requirement and acceptance gate; repair remaining workflow/agent/model gaps.
-2. Capacity/latency measurements and repository structure/quality review.
-3. Keyboard/screen-reader checks and local distribution qualification.
+1. Pending/next-step switch actuation, slider gesture evidence/coalescing and actor-aware history.
+2. Physical circuit capacity and nonblocking difficult-work architecture, with measured latency fixtures.
+3. Voltage/current presentation preferences, pinned readings, trace/diagnostic highlights and concise example guidance.
+4. Complete agent conformance, keyboard/screen-reader scenarios and reproducible clean packaging evidence.
+5. Formative-test preparation; actual participant/hardware evidence remains a separate gate.
 
-Every shipped user operation continues to require the same public agent command/state path. Each slice adds meaningful regression checks and records its actual limits. Participant usability and physical hardware validation remain future gates.
+Every shipped user operation continues to require the same public agent command/state path. Each slice adds meaningful regression checks and records its actual limits. The full [audit](11-prd-implementation-audit.md) is authoritative for remaining acceptance work; a green checkpoint is not MVP completion.

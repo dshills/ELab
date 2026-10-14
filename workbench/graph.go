@@ -130,6 +130,8 @@ func ValidID(id string) bool {
 }
 
 type Part struct {
+	Aliases      []string `json:"aliases"`
+	Limitations  string   `json:"limitations"`
 	Kind         string   `json:"kind"`
 	Name         string   `json:"name"`
 	Terminals    []string `json:"terminals"`
@@ -139,22 +141,27 @@ type Part struct {
 }
 
 func Library() []Part {
-	return []Part{
-		{"dc-source", "DC source", []string{"positive", "negative"}, "5 V", "V", "ideal-dc.v1"},
-		{"resistor", "Resistor", []string{"1", "2"}, "1k", "Ω", "ideal-resistor.v1"},
-		{"led", "Red LED", []string{"anode", "cathode"}, "", "", ModelID},
-		{"capacitor", "Capacitor", []string{"1", "2"}, "1uF", "F", "ideal-capacitor.v1"},
-		{"sine-source", "Sine source", []string{"positive", "negative"}, "2.5 V", "V", SineSourceModelID},
-		{"finite-pulse-source", "Finite pulse source", []string{"positive", "negative"}, "5 V", "V", FinitePulseModelID},
-		{"pulse-source", "Pulse source", []string{"positive", "negative"}, "5 V", "V", "ideal-square.v1"},
-		{"npn", "NPN transistor", []string{"base", "collector", "emitter"}, "", "", NPNModelID},
-		{"ground", "Ground", []string{"reference"}, "", "", "ground.v1"},
-		{"junction", "Junction", []string{"node"}, "", "", "junction.v1"},
-		{"net-label", "Net label", []string{"node"}, "", "", "net-label.v1"},
-		{"potentiometer", "Potentiometer", []string{"1", "2", "wiper"}, "10k Ω", "Ω", PotentiometerModelID},
-		{"diode", "Silicon diode", []string{"anode", "cathode"}, "", "", DiodeModelID},
-		{"switch", "SPST switch", []string{"1", "2"}, "", "", SwitchModelID},
+	parts := []Part{
+		{Kind: "dc-source", Name: "DC source", Terminals: []string{"positive", "negative"}, DefaultValue: "5 V", Unit: "V", Model: "ideal-dc.v1"},
+		{Kind: "resistor", Name: "Resistor", Terminals: []string{"1", "2"}, DefaultValue: "1k", Unit: "Ω", Model: "ideal-resistor.v1"},
+		{Kind: "led", Name: "Red LED", Terminals: []string{"anode", "cathode"}, DefaultValue: "", Unit: "", Model: ModelID},
+		{Kind: "capacitor", Name: "Capacitor", Terminals: []string{"1", "2"}, DefaultValue: "1uF", Unit: "F", Model: "ideal-capacitor.v1"},
+		{Kind: "sine-source", Name: "Sine source", Terminals: []string{"positive", "negative"}, DefaultValue: "2.5 V", Unit: "V", Model: SineSourceModelID},
+		{Kind: "finite-pulse-source", Name: "Finite pulse source", Terminals: []string{"positive", "negative"}, DefaultValue: "5 V", Unit: "V", Model: FinitePulseModelID},
+		{Kind: "pulse-source", Name: "Pulse source", Terminals: []string{"positive", "negative"}, DefaultValue: "5 V", Unit: "V", Model: "ideal-square.v1"},
+		{Kind: "npn", Name: "NPN transistor", Terminals: []string{"base", "collector", "emitter"}, DefaultValue: "", Unit: "", Model: NPNModelID},
+		{Kind: "ground", Name: "Ground", Terminals: []string{"reference"}, DefaultValue: "", Unit: "", Model: "ground.v1"},
+		{Kind: "junction", Name: "Junction", Terminals: []string{"node"}, DefaultValue: "", Unit: "", Model: "junction.v1"},
+		{Kind: "net-label", Name: "Net label", Terminals: []string{"node"}, DefaultValue: "", Unit: "", Model: "net-label.v1"},
+		{Kind: "potentiometer", Name: "Potentiometer", Terminals: []string{"1", "2", "wiper"}, DefaultValue: "10k Ω", Unit: "Ω", Model: PotentiometerModelID},
+		{Kind: "diode", Name: "Silicon diode", Terminals: []string{"anode", "cathode"}, DefaultValue: "", Unit: "", Model: DiodeModelID},
+		{Kind: "switch", Name: "SPST switch", Terminals: []string{"1", "2"}, DefaultValue: "", Unit: "", Model: SwitchModelID},
 	}
+	for i := range parts {
+		parts[i].Aliases = partAliases(parts[i].Kind)
+		parts[i].Limitations = partLimitations(parts[i].Kind)
+	}
+	return parts
 }
 func MakeComponent(id, kind string, p Point, value string) (Component, error) {
 	if !ValidID(id) {

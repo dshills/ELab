@@ -207,7 +207,7 @@ func advanceRCSample(c Compiled, t *Transient, end float64) {
 				edgeHit = true
 			}
 		}
-		v = input + (v-input)*math.Exp(-(stop-at)/t.TimeConstant)
+		v += (input - v) * (-math.Expm1(-(stop - at) / t.TimeConstant))
 		at = stop
 		if edgeHit {
 			nextInput := rcInput(c, t, at)

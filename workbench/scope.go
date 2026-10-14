@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"strings"
 )
 
 const MaxScopeProbes = 6
@@ -38,22 +39,29 @@ type CursorReading struct {
 	B       float64 `json:"b"`
 	Delta   float64 `json:"delta"`
 }
+type UnavailableProbe struct {
+	ID     string `json:"id"`
+	Unit   string `json:"unit"`
+	Reason string `json:"reason"`
+}
+
 type Scope struct {
-	Window       ScopeWindow       `json:"window"`
-	WindowValid  bool              `json:"window_valid"`
-	WindowReason string            `json:"window_reason,omitempty"`
-	Statistics   []ScopeStatistics `json:"statistics"`
-	Available    []Probe           `json:"available"`
-	Selected     []string          `json:"selected"`
-	Traces       []ScopeTrace      `json:"traces"`
-	RunID        uint64            `json:"run_id"`
-	Stale        bool              `json:"stale"`
-	ActiveCursor string            `json:"active_cursor"`
-	A            *ScopeCursor      `json:"a,omitempty"`
-	B            *ScopeCursor      `json:"b,omitempty"`
-	DeltaSeconds *float64          `json:"delta_s,omitempty"`
-	Frequency    *float64          `json:"interval_hz,omitempty"`
-	Readings     []CursorReading   `json:"readings"`
+	Unavailable  []UnavailableProbe `json:"unavailable,omitempty"`
+	Window       ScopeWindow        `json:"window"`
+	WindowValid  bool               `json:"window_valid"`
+	WindowReason string             `json:"window_reason,omitempty"`
+	Statistics   []ScopeStatistics  `json:"statistics"`
+	Available    []Probe            `json:"available"`
+	Selected     []string           `json:"selected"`
+	Traces       []ScopeTrace       `json:"traces"`
+	RunID        uint64             `json:"run_id"`
+	Stale        bool               `json:"stale"`
+	ActiveCursor string             `json:"active_cursor"`
+	A            *ScopeCursor       `json:"a,omitempty"`
+	B            *ScopeCursor       `json:"b,omitempty"`
+	DeltaSeconds *float64           `json:"delta_s,omitempty"`
+	Frequency    *float64           `json:"interval_hz,omitempty"`
+	Readings     []CursorReading    `json:"readings"`
 }
 type ProbeParams struct {
 	IDs []string `json:"ids"`
@@ -197,6 +205,12 @@ func (s *Service) scopeLocked(c Compiled) Scope {
 		if p, ok := byID[id]; ok {
 			out.Selected = append(out.Selected, id)
 			out.Traces = append(out.Traces, ScopeTrace{Probe: p, Points: []ScopePoint{}})
+		} else if s.scopeConfigured {
+			unit := "V"
+			if strings.HasPrefix(id, "i:") {
+				unit = "A"
+			}
+			out.Unavailable = append(out.Unavailable, UnavailableProbe{ID: id, Unit: unit, Reason: "Source removed; undo can restore it, or remove/reassign this probe."})
 		}
 	}
 	t := s.transient
@@ -258,7 +272,9 @@ func (s *Service) scopeLocked(c Compiled) Scope {
 		out.DeltaSeconds = &delta
 		if delta != 0 {
 			f := 1 / math.Abs(delta)
-			out.Frequency = &f
+			if finite(f) {
+				out.Frequency = &f
+			}
 		}
 		ai, bi := nearestSample(t.Samples, out.A.Time), nearestSample(t.Samples, out.B.Time)
 		for _, trace := range out.Traces {
@@ -287,6 +303,24 @@ func nearestSample(samples []TraceSample, at float64) int {
 }
 func (s *Service) scopeCommandLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "scope.probe.remove":
+		var p IDParams
+		if err := params(raw, &p, "id"); err != nil {
+			return err
+		}
+		ids := s.scopeProbes
+		if !s.scopeConfigured {
+			c, _, _ := s.graph.Compile()
+			ids = defaultProbes(c)
+		}
+		for i, id := range ids {
+			if id == p.ID {
+				s.scopeProbes = append(append([]string{}, ids[:i]...), ids[i+1:]...)
+				s.scopeConfigured = true
+				return nil
+			}
+		}
+		return &actionError{"not-found", "Probe is not selected"}
 	case "scope.probes.set":
 		var p ProbeParams
 		if err := params(raw, &p, "ids"); err != nil {
@@ -344,6 +378,9 @@ func (s *Service) scopeCommandLocked(command string, raw json.RawMessage) error 
 }
 func cloneScope(in Scope) Scope {
 	out := in
+	if in.Unavailable != nil {
+		out.Unavailable = append([]UnavailableProbe{}, in.Unavailable...)
+	}
 	out.Statistics = append([]ScopeStatistics{}, in.Statistics...)
 	out.Available = append([]Probe{}, in.Available...)
 	out.Selected = append([]string{}, in.Selected...)
@@ -369,4 +406,32 @@ func cloneScope(in Scope) Scope {
 		out.Frequency = &v
 	}
 	return out
+}
+
+// Keep the traces that were already visible when a drawing becomes incomplete
+// or loses a plotted source. Undo can restore their stable associations.
+func (s *Service) retainInterruptedDefaultProbesLocked(before Graph) {
+	if s.scopeConfigured || s.transient == nil {
+		return
+	}
+	previous, _, diagnostic := before.Compile()
+	if diagnostic != nil {
+		return
+	}
+	ids := defaultProbes(previous)
+	available := map[string]bool{}
+	for _, p := range probeInventory(s.graph) {
+		available[p.ID] = true
+	}
+	_, _, diagnostic = s.graph.Compile()
+	interrupted := diagnostic != nil
+	for _, id := range ids {
+		if !available[id] {
+			interrupted = true
+		}
+	}
+	if interrupted {
+		s.scopeProbes = append([]string{}, ids...)
+		s.scopeConfigured = true
+	}
 }

@@ -175,3 +175,5 @@ Project save/open now embeds kept completed recordings. `recording.keep.set {id,
 `potentiometer.wiper.set {"id":"P1","position":0.75}` controls the three-pin linear track. Use `component.set` for its total resistance, and ordinary wire/probe commands for `1`, `2`, `wiper`. [Potentiometer defaults, current directions and transient semantics](potentiometers.md). Snapshots/records include `potentiometer_model` and `mixed.potentiometers`.
 
 Per-source `sine-source` and `finite-pulse-source` configuration uses `source.sine.set`, `source.pulse.set` and `simulation.sampling.fit`. [Complete fields, waveform definitions, primary-source behavior and limits](waveforms.md). Projects/snapshots/records include `waveform_model`; per-component `sine`/`pulse` parameters are required for their respective kinds. The original `pulse-source` remains compatible.
+
+`parts.list` exposes aliases and model limitations. `scope.unavailable` identifies removed-source requests, and `scope.probe.remove {"id":"v:C1"}` removes one without changing the circuit or other requested probes. [Hardening semantics and evidence](prd-hardening.md).

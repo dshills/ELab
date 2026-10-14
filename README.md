@@ -32,7 +32,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.18.0 --build-version 32 --platform darwin
+  --version 0.19.0 --build-version 33 --platform darwin
 ```
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
@@ -156,3 +156,5 @@ The silicon diode adds nonlinear forward conduction and signed reverse leakage t
 Linear potentiometers provide editable total resistance, bounded slider/exact wiper controls, divider/rheostat simulation and charge-preserving live adjustments. [Shared commands, pin map, model and evidence](docs/potentiometers.md).
 
 Sine and finite pulse sources have independent amplitude/levels, offset/phase and timing controls, with shared sampling-fit guidance. Existing ideal-square examples retain their behavior. [Waveform commands, solver limits and evidence](docs/waveforms.md).
+
+The [PRD conformance audit](research/11-prd-implementation-audit.md) records every P0 requirement and remaining acceptance gaps. [Audit repairs](docs/prd-hardening.md) add hobbyist search terms, model assumptions for every part, explicit unavailable probes, and robust duplication/cursor handling.
