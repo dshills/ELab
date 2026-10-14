@@ -20,14 +20,35 @@ type ExportParams struct {
 }
 
 type Artifact struct {
-	DocumentGeneration uint64 `json:"document_generation,omitempty"`
-	SHA256             string `json:"sha256,omitempty"`
-	OperationID        string `json:"operation_id,omitempty"`
-	Path               string `json:"path"`
-	Format             string `json:"format"`
-	RunID              uint64 `json:"run_id"`
-	ElectricalRevision uint64 `json:"electrical_revision"`
-	Bytes              int    `json:"bytes"`
+	Page               *SchematicPage `json:"page,omitempty"`
+	DocumentGeneration uint64         `json:"document_generation,omitempty"`
+	SHA256             string         `json:"sha256,omitempty"`
+	OperationID        string         `json:"operation_id,omitempty"`
+	Path               string         `json:"path"`
+	Format             string         `json:"format"`
+	RunID              uint64         `json:"run_id"`
+	ElectricalRevision uint64         `json:"electrical_revision"`
+	Bytes              int            `json:"bytes"`
+}
+
+func cloneArtifact(in *Artifact) *Artifact {
+	if in == nil {
+		return nil
+	}
+	out := *in
+	if in.Page != nil {
+		page := *in.Page
+		if page.MarginMM != nil {
+			v := *page.MarginMM
+			page.MarginMM = &v
+		}
+		if page.Scale != nil {
+			v := *page.Scale
+			page.Scale = &v
+		}
+		out.Page = &page
+	}
+	return &out
 }
 
 func number(v float64) string { return strconv.FormatFloat(v, 'g', 17, 64) }

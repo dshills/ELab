@@ -74,6 +74,10 @@ var commonInputSchemas = []struct {
 	Type reflect.Type
 	ID   string
 }{
+	{reflect.TypeOf(ExportStartParams{}), "urn:elab:export-start:1"},
+	{reflect.TypeOf(SchematicPage{}), "urn:elab:schematic-page:1"},
+	{reflect.TypeOf(ExportParams{}), "urn:elab:export-path:1"},
+	{reflect.TypeOf(PDFExportParams{}), "urn:elab:pdf-export:1"},
 	{reflect.TypeOf(IDParams{}), ObjectIDSchemaID},
 	{reflect.TypeOf(CursorSelectParams{}), "urn:elab:cursor-select:1"},
 	{reflect.TypeOf(ProbeParams{}), "urn:elab:probe-selection:1"},
@@ -197,6 +201,8 @@ func Catalog() []Capability {
 		queryCapability("operation.samples", "Read completed verification samples in pages, preserving duplicate edge timestamps; limit 1–200 (default 100)", reflect.TypeOf(VerificationPageParams{}), reflect.TypeOf(VerificationPage{})),
 		typedCapability("export.scope.csv", "Atomically export selected fresh scope-window samples with SI units, engine and run/revision identity; preserves schematic", reflect.TypeOf(ExportParams{})),
 		typedCapability("export.schematic.svg", "Atomically render the complete schematic and pinned reading cards/provenance as portable SVG using shared wire routes; works headlessly without a solve", reflect.TypeOf(ExportParams{})),
+		typedCapability("export.schematic.pdf", "Export captured complete schematic to printable A4/Letter PDF with page options; macOS CoreGraphics required; no printer submission or project/physics changes", reflect.TypeOf(PDFExportParams{})),
+		typedCapability("export.page.set", "Set session PDF paper/orientation/margin/scale/color/measurement defaults; omitted fields reset; no circuit/history/physics changes", reflect.TypeOf(SchematicPage{})),
 		capability("scope.window.set", "Set mode live or fixed with start_s/end_s inside fresh retained history; plot and interval statistics use only that window", true, `{"type":"object","required":["mode"],"properties":{"mode":{"enum":["live","fixed"]},"start_s":{"type":"number"},"end_s":{"type":"number"}},"allOf":[{"if":{"properties":{"mode":{"const":"fixed"}}},"then":{"required":["start_s","end_s"]}}],"additionalProperties":false}`),
 		typedCapability("parts.search.set", "Filter components by case-insensitive words in names, hobbyist aliases, kind, pins, units, defaults or model IDs; session only", reflect.TypeOf(SearchParams{})),
 		typedCapability("component.duplicate", "Copy one component's value, orientation and startup voltage into an unconnected new component; optional exact position", reflect.TypeOf(DuplicateParams{})),
@@ -229,7 +235,7 @@ func Catalog() []Capability {
 		typedCapability("project.clear", "Start blank; unsaved changes require discard_changes; undo restores drawing", reflect.TypeOf(ReplaceParams{})),
 		queryCapability("events.poll", "Coalesced same-process observation; timeout 0–5000 ms, default 1000; four waits; idle omits snapshot", reflect.TypeOf(EventPollParams{}), reflect.TypeOf(EventPollResult{})),
 		queryCapability("project.work.inspect", "Inspect an operation by stable ID; retain eight project jobs and preserve active operations", reflect.TypeOf(IDParams{}), reflect.TypeOf(ProjectWork{})),
-		typedCapability("export.start", "Capture schematic-svg, scope-csv or verification-json/csv export and return background admission; inspect/cancel via project.work commands", reflect.TypeOf(ExportStartParams{})),
+		typedCapability("export.start", "Capture schematic-svg/pdf, scope-csv or verification-json/csv export and return background admission; inspect/cancel via project.work commands", reflect.TypeOf(ExportStartParams{})),
 		typedCapability("project.save.start", "Capture a project and return background save admission; inspect project_work; cancellation is available before publishing", reflect.TypeOf(SaveParams{})),
 		typedCapability("project.save", "Wait for project.save.start semantics; keeps records/models/preferences; later edits stay dirty; path defaults to current file; overwrite permits replacement", reflect.TypeOf(SaveParams{})),
 		typedCapability("project.load.start", "Start background bounded local project reading/validation; inspect project_work; replacement refuses intervening edits", reflect.TypeOf(LoadParams{})),

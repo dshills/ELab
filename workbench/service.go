@@ -41,6 +41,7 @@ type Snapshot struct {
 	LastOperation          string                 `json:"last_operation,omitempty"`
 	Verification           *VerificationPreview   `json:"verification,omitempty"`
 	LastExport             *Artifact              `json:"last_export,omitempty"`
+	SchematicPage          SchematicPage          `json:"schematic_page"`
 	PartSearch             string                 `json:"part_search"`
 	Theme                  string                 `json:"theme"`
 	Appearance             AppearanceState        `json:"appearance"`
@@ -127,6 +128,7 @@ type Service struct {
 	selectedOperation, lastOperation string
 	verificationSettings             VerificationSettings
 	lastExport                       *Artifact
+	exportPage                       SchematicPage
 	scopeWindow                      *ScopeWindow
 	partSearch                       string
 	nextHistoryName                  string
@@ -242,6 +244,7 @@ func newGraphService(solver func(context.Context, Circuit) (Result, error), grap
 }
 func (s *Service) Snapshot() Snapshot { s.mu.Lock(); defer s.mu.Unlock(); return s.snapshotLocked() }
 func (s *Service) snapshotLocked() Snapshot {
+	page, _, _ := normalizeSchematicPage(&s.exportPage)
 	graph := s.graph.Clone()
 	compiled, _, _ := graph.Compile()
 	analysis := compiled.Analysis
@@ -249,6 +252,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		analysis = "DC operating point"
 	}
 	out := Snapshot{
+		SchematicPage:          page,
 		ProjectWork:            s.projectWorkLocked(),
 		InputWork:              s.inputWorkLocked(),
 		Example:                s.exampleContextLocked(),
@@ -341,10 +345,7 @@ func (s *Service) snapshotLocked() Snapshot {
 			break
 		}
 	}
-	if s.lastExport != nil {
-		artifact := *s.lastExport
-		out.LastExport = &artifact
-	}
+	out.LastExport = cloneArtifact(s.lastExport)
 	if len(s.undo) > 0 {
 		out.UndoName = s.undo[len(s.undo)-1].Name
 		out.UndoEntry = historyTip(s.undo[len(s.undo)-1])
@@ -851,6 +852,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	state.SchematicPage = cloneSchematicPage(state.SchematicPage)
 	state.ProjectWork = cloneProjectWork(state.ProjectWork)
 	state.InputWork = cloneInputWork(state.InputWork)
 	state.Example = cloneExampleContext(state.Example)
@@ -901,10 +903,7 @@ func cloneSnapshot(state Snapshot) Snapshot {
 		preview.Readings = append([]VerificationReading{}, preview.Readings...)
 		state.Verification = &preview
 	}
-	if state.LastExport != nil {
-		artifact := *state.LastExport
-		state.LastExport = &artifact
-	}
+	state.LastExport = cloneArtifact(state.LastExport)
 	state.MatchingParts = filteredParts(state.PartSearch)
 	state.Scope = cloneScope(state.Scope)
 	state.Mixed = cloneMixed(state.Mixed)

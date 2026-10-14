@@ -234,6 +234,23 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return err
 		}
 		return s.startExportLocked(p)
+	case "export.page.set":
+		var p SchematicPage
+		if err := params(raw, &p); err != nil {
+			return err
+		}
+		page, _, err := normalizeSchematicPage(&p)
+		if err != nil {
+			return err
+		}
+		s.exportPage = page
+		return nil
+	case "export.schematic.pdf":
+		var p PDFExportParams
+		if err := params(raw, &p, "path"); err != nil {
+			return err
+		}
+		return s.startExportLocked(ExportStartParams{Kind: "schematic-pdf", Path: p.Path, Overwrite: p.Overwrite, ExpectedGeneration: p.ExpectedGeneration, Page: p.Page})
 	case "export.scope.csv", "export.schematic.svg":
 		var p ExportParams
 		if err := params(raw, &p, "path"); err != nil {

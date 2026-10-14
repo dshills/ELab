@@ -4,20 +4,25 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"os"
 	"time"
+
+	"github.com/dshills/elab/internal/schematicpdf"
 )
 
 // ExportStartParams selects the same capture/encoding used by native exports.
 type ExportStartParams struct {
-	Kind               string  `json:"kind"`
-	ID                 string  `json:"id,omitempty"`
-	Path               string  `json:"path"`
-	Overwrite          bool    `json:"overwrite,omitempty"`
-	ExpectedGeneration *uint64 `json:"expected_document_generation,omitempty"`
+	Page               *SchematicPage `json:"page,omitempty"`
+	Kind               string         `json:"kind"`
+	ID                 string         `json:"id,omitempty"`
+	Path               string         `json:"path"`
+	Overwrite          bool           `json:"overwrite,omitempty"`
+	ExpectedGeneration *uint64        `json:"expected_document_generation,omitempty"`
 }
 type exportCapture struct {
+	page       schematicpdf.Page
 	kind       string
 	generation uint64
 	overwrite  bool
@@ -47,7 +52,36 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 	}
 	capture := exportCapture{kind: p.Kind, generation: s.documentGeneration, overwrite: p.Overwrite, artifact: Artifact{Path: path, RunID: s.run, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration}}
 	command := ""
+	if p.Page != nil && p.Kind != "schematic-pdf" {
+		return fmt.Errorf("page settings apply only to schematic PDF")
+	}
 	switch p.Kind {
+	case "schematic-pdf":
+		if !schematicpdf.Supported() {
+			return &actionError{"unsupported", "schematic PDF requires the macOS CoreGraphics build"}
+		}
+		if p.ID != "" {
+			return fmt.Errorf("schematic PDF does not use a recording ID")
+		}
+		settings := p.Page
+		if settings == nil {
+			settings = &s.exportPage
+		}
+		page, layout, err := normalizeSchematicPage(settings)
+		if err != nil {
+			return err
+		}
+		command = "export.schematic.pdf"
+		capture.artifact.Format = "pdf"
+		capture.artifact.Page = &page
+		capture.page = layout
+		capture.graph = s.graph.Clone()
+		capture.display = CircuitDisplay{Preferences: DefaultDisplayPreferences()}
+		if page.Measurements {
+			capture.display = cloneCircuitDisplay(s.circuitDisplayLocked())
+			capture.display.Animate = false
+			capture.readings = clonePinnedReadings(s.pinnedReadingsLocked())
+		}
 	case "schematic-svg":
 		if p.ID != "" {
 			return fmt.Errorf("schematic export does not use a recording ID")
@@ -114,6 +148,10 @@ func prepareProjectExport(ctx context.Context, capture exportCapture, progress f
 	var data []byte
 	var err error
 	switch capture.kind {
+	case "schematic-pdf":
+		metadata, _ := json.Marshal(map[string]any{"format": "elab.schematic.pdf.v1", "run_id": capture.artifact.RunID, "electrical_revision": capture.artifact.ElectricalRevision, "document_generation": capture.artifact.DocumentGeneration, "page": capture.artifact.Page, "measurement_source": "captured-live-snapshot; unavailable/stale labels retained when overlays requested"})
+		capture.page.Metadata = string(metadata)
+		data, err = schematicpdf.Render(ctx, schematicSVGWithDisplay(capture.graph, capture.artifact.RunID, capture.artifact.ElectricalRevision, capture.display, capture.readings...), capture.page)
 	case "schematic-svg":
 		data = schematicSVGWithDisplay(capture.graph, capture.artifact.RunID, capture.artifact.ElectricalRevision, capture.display, capture.readings...)
 	case "scope-csv":

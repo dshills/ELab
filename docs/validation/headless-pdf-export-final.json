@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "exports": [
+    {
+      "id": "led",
+      "page": {
+        "paper": "letter",
+        "orientation": "landscape",
+        "margin_mm": 10
+      },
+      "bytes": 19459,
+      "sha256": "b46d1feae38b898d48ead75b6f92e2445d27f376a6c3da86a3129a7b29425a93"
+    },
+    {
+      "id": "rc",
+      "page": {
+        "paper": "a4",
+        "orientation": "portrait",
+        "margin_mm": 10
+      },
+      "bytes": 20172,
+      "sha256": "be06855903ff1b2c317fbbae85d5afe4114cfe1a73affe62fc38b22becabd763"
+    },
+    {
+      "id": "npn",
+      "page": {
+        "paper": "letter",
+        "orientation": "landscape",
+        "margin_mm": 10
+      },
+      "bytes": 21315,
+      "sha256": "efdc18c278ecb5186576fa4a30b1a48223f6ec7213b788de465a727d83051cb6"
+    },
+    {
+      "id": "switch-npn",
+      "page": {
+        "paper": "letter",
+        "orientation": "landscape",
+        "margin_mm": 10
+      },
+      "bytes": 22465,
+      "sha256": "7f1509a417215667a8e2591b4da1ace2ea754cae5c3b4f3a6d47e2e48267fc12"
+    },
+    {
+      "id": "blink",
+      "page": {
+        "paper": "letter",
+        "orientation": "landscape",
+        "margin_mm": 10
+      },
+      "bytes": 21485,
+      "sha256": "2f7cabc6655436206967fbb8ab9c5d153ccd330930fb78709429c286334b5dae"
+    },
+    {
+      "id": "flasher",
+      "page": {
+        "paper": "letter",
+        "orientation": "landscape",
+        "margin_mm": 10
+      },
+      "bytes": 23317,
+      "sha256": "67958fd26b5941158a50e0befc28aeafe2feeecde559ce210a3548dc1f870c24"
+    }
+  ],
+  "checks": [
+    "six reference schematics",
+    "shared session page settings",
+    "paper/orientation capture",
+    "source/history/physics preservation"
+  ],
+  "limits": [
+    "PDF document generation; no printer job or physical printing qualification",
+    "rendered inspection is recorded separately"
+  ]
+}

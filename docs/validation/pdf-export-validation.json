@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "version": "0.48.0",
+  "build": "63",
+  "binary_sha256": "2eb92f89272cb0f480850a13b9b390c927aa7dc8acbde8bb5647bcc8d8eb276d",
+  "packaged_binary_matches": true,
+  "source_checkpoint": "27f4e08",
+  "vellum_baseline": {
+    "recorded": "2026-10-14",
+    "version": "checkout 68c3750",
+    "commit": "68c3750243326ce9120fd2d5ff5b0d610cc36d9e",
+    "local_checkout": "../../Vellum (relative to desktop/go.mod)",
+    "native_dependency_manifest": "drivers/cogent/native/dependencies.json",
+    "native_dependency_manifest_sha256": "5f618431228a80ea4a23db1e5ebc241ac3a8b702bcc1fc8c479cc84e77bbfa58",
+    "go_directive": "1.25.6",
+    "tested_go": "go1.27.2 darwin/arm64",
+    "root_module": "github.com/dshills/elab",
+    "desktop_module": "github.com/dshills/elab/desktop",
+    "status": "Local checkout integration; relocatable SDK distribution remains a later gate"
+  },
+  "checks": [
+    "Complete schematic uses existing SVG capture/symbol/wire/label primitives with macOS CoreGraphics/CoreText PDF drawing; no imported SVG interpreter or printer job",
+    "Shared session page command/native controls cover A4/Letter, portrait/landscape, 0\u201340 mm margins, fit/explicit scale, color and optional captured live overlays",
+    "Six reference/incomplete-drawing PDF unit exports preserve source/project/history/paused physics and artifact page ownership; explicit clipping scale fails without output publication",
+    "Native PDF settings match agent values; picker selects PDF extension and shared export captures session defaults",
+    "Six final headless/native PDFs have equal page dimensions/text and pixel-identical Poppler renders; all extracted text bounds lie within pages; Greek units retained; grayscale text and captured Subject metadata verified",
+    "Visual inspection of all six initial renders and final flasher confirms readable symbols/labels/component list on white paper; reference minimum text 7.4957 pt",
+    "Complete lint/import/root/native race/vet and exact packaged GPU smoke pass; all four prior reference workflows remain equivalent",
+    "Non-cgo build compiles page/cancellation checks and uses explicit unsupported backend; no unsupported-platform PDF claim",
+    "Existing catalog/transport/output-size limits preserved via shared export/page input schemas; source inventory refresh passes"
+  ],
+  "evidence": [
+    "docs/schematic-pdf.md",
+    "docs/validation/headless-pdf-export-final.json",
+    "docs/validation/desktop-pdf-export.json",
+    "docs/validation/pdf-render-inspection.json",
+    "docs/validation/pdf-export-conformance.json",
+    "research/13-native-command-inventory.json"
+  ],
+  "limits_of_evidence": [
+    "macOS cgo/CoreGraphics PDF backend; SVG/CSV stay portable; no clean distribution qualification",
+    "Native print preview, printer discovery/submission, image output, tiled pages and physical-device printing remain pending",
+    "Fit may make unusually large/spread-out drawings small; no universal minimum-font/readability guarantee",
+    "Optional overlay provenance is a captured live snapshot, not recorded scene output or physical model certification",
+    "Source inventory route references are not complete mounted-runtime/accessibility/participant evidence",
+    "Private unsigned development bundle; prior bundle retained in build/ELab-before-pdf-export.app; user sessions/research/files and sibling SDK preserved"
+  ]
+}
