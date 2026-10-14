@@ -375,6 +375,7 @@ func (s *Service) transientCommandLocked(command string, raw []byte) error {
 			return fmt.Errorf("RC input modes: auto/charge/discharge; NPN input modes: auto/high/low")
 		}
 
+		s.cancelStepLocked("superseded")
 		if s.paused {
 			s.pendingInputMode = p.Mode
 			s.transient.PendingMode = p.Mode
@@ -383,39 +384,18 @@ func (s *Service) transientCommandLocked(command string, raw []byte) error {
 				return err
 			}
 		}
-	case "simulation.step":
+	case "simulation.step", "simulation.step.start":
 		var p StepParams
 		if err := params(raw, &p, "duration_s"); err != nil {
 			return err
 		}
-		c, _, d := s.graph.Compile()
-		if !s.paused || d != nil || !IsTransientAnalysis(c.Analysis) || s.transient == nil || s.transient.Stale {
-			return &actionError{"unavailable", "pause a valid transient run before stepping"}
+		return s.startStepLocked(p)
+	case "simulation.work.cancel":
+		var p IDParams
+		if err := params(raw, &p, "id"); err != nil {
+			return err
 		}
-		if !finite(p.Duration) || p.Duration <= 0 || p.Duration > 1 || math.Ceil(p.Duration/s.transientSettings.StepSeconds) > 1000 {
-			return fmt.Errorf("step duration must be positive, at most 1 s and 1000 sample steps")
-		}
-		end := s.transient.Sample.Time + p.Duration
-		if end <= s.transient.Sample.Time {
-			return fmt.Errorf("duration is too small to advance the current floating-point time")
-		}
-		if IsNetworkAnalysis(c.Analysis) {
-			return s.stepMixedLocked(p.Duration)
-		}
-		if s.transient.PendingMode != "" {
-			if err := s.applyTransientInputLocked(c, s.transient.PendingMode); err != nil {
-				return err
-			}
-		}
-		for s.transient.Sample.Time < end {
-			next := math.Min(end, s.transient.Sample.Time+s.transientSettings.StepSeconds)
-			if end-next < 1e-12 {
-				next = end
-			}
-			if err := s.advanceTransientLocked(c, next); err != nil {
-				return err
-			}
-		}
+		return s.cancelStepCommandLocked(p)
 	}
 	return nil
 }

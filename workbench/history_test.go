@@ -13,8 +13,8 @@ func actorCommand(t *testing.T, s *Service, actor, command string, p any) Respon
 	if err != nil {
 		t.Fatal(err)
 	}
-	rev := s.Snapshot().Revision
-	return s.Dispatch(context.Background(), Request{Version: 1, ID: actor + command, Command: command, Params: raw, ExpectedRevision: &rev, Key: actor + command + string(raw)}, actor)
+	rev := s.Snapshot().CommandRevision
+	return s.Dispatch(context.Background(), Request{Version: 1, ID: actor + command, Command: command, Params: raw, ExpectedCommandRevision: &rev, Key: actor + command + string(raw)}, actor)
 }
 func TestHistoryExactTipAndActorAcknowledgment(t *testing.T) {
 	s := NewExample()

@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "transport": "packaged-native-private-socket",
+  "capabilities": 86,
+  "step_start_admission_ms": 0.4889169940724969,
+  "canceled_staged_samples": 97,
+  "committed_time_after_cancel_s": 0,
+  "completed_time_s": 0.03,
+  "legacy_time_s": 0.031,
+  "checks": [
+    "immediate queued ID/actor/provenance",
+    "inspect staged progress with unchanged committed physics",
+    "pan/save/geometry undo while background work runs",
+    "exact-ID cancellation discards all staged samples",
+    "new work ID and atomic successful publication",
+    "four traces and independent Verify parity",
+    "legacy wait-for-result compatibility",
+    "save/reopen keeps experiment and recording; physical/job state restarts"
+  ],
+  "limitations": [
+    "backend admission timing is not visible input-to-pixel latency",
+    "general initialization and some input/file work remain synchronous",
+    "private unsigned local build"
+  ]
+}

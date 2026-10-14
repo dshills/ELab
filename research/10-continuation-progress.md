@@ -129,10 +129,20 @@ The real flasher benchmark first exposed repeated conflicts from per-sample publ
 
 [The measured envelope and remaining synchronous paths](../docs/live-responsiveness.md) explicitly leave initialization, manual multi-sample Step, algebraic input/wiper and file/recovery work open. Physical capacity remains below the original target. The audit stays at 10 implemented / 17 partial; no overall responsiveness or MVP acceptance gate is claimed.
 
+## Cancellable atomic manual work
+
+Packaged **0.22.0 / 36** moves manual Step into a shared background worker. Native Step calls immediate `simulation.step.start`; `step_work` exposes queued ID, actor, originating revisions and staged progress, with exact-ID cancellation. The waiting `simulation.step` compatibility command uses the same worker and returns completed data. `simulation.wait` covers current manual work. Success publishes the complete physical advance once; cancellation/failure/supersession consumes no pending input and commits no partial time, charge, events or trace.
+
+Captured mutable state is independent, and compiled networks/retained frames remain immutable. Pan, save and geometry undo survive work. Source/run/input/wiper changes, project replacement and close cannot be overwritten by old numerical work. Request-wait cancellation/disconnect leaves admitted work alive and reconnect retry resolves its original outcome. Review repaired terminal error pointer ownership, ensured terminal progress/count consistency, and switched an actor-history helper to command preconditions after a full run exposed a DC-publication conflict. Controlled fixtures also corrected their release cleanup and avoided a wait-for-settlement helper while deliberately blocking an active job.
+
+[Final validation](../docs/validation/step-work-validation.json), [blocked-work race evidence](../docs/validation/blocked-step-work.json), [headless workflow](../docs/validation/headless-step-work.json) and [packaged desktop workflow](../docs/validation/desktop-step-work.json) pass. Start admission measures about 0.56 ms / 0.49 ms; cancel discards 93 / 97 staged samples with committed time still zero. A later 30 ms advance matches independent Verify, and legacy stepping returns the 31 ms state. Four probes, kept recordings and fresh paused/clean reopen pass. Native admission parity, lint/vet/root/native race tests and built/final packaged GPU smoke pass. The owned desktop remains clean and paused at its durable flasher file. Prior bundles/sessions and user files are preserved.
+
+[The contract](../docs/manual-step-work.md) leaves initialization, some input/file/recovery paths and physical capacity open. The audit remains 10 implemented / 17 partial. A promising capacity fixture is one source plus 49 series potentiometers with unloaded wipers: 50 simulated parts and 100 electrical nodes including ground. This is an unvalidated design candidate for the remaining size target, after initialization responsiveness is addressed; current limits still refuse it.
+
 ## Next work queue
 
 1. Mounted driver gesture invalidation/focus conformance; control-level slider, switch pending and actor-history paths now pass.
-2. Finish nonblocking initialization/manual Step/input/file paths and physical circuit capacity; extend actual and visible latency fixtures.
+2. Finish nonblocking initialization/input/file paths and physical circuit capacity; manual Step is now background/atomic. Extend actual and visible latency fixtures.
 3. Voltage/current presentation preferences, pinned readings, trace/diagnostic highlights and concise example guidance.
 4. Complete agent conformance, keyboard/screen-reader scenarios and reproducible clean packaging evidence.
 5. Formative-test preparation; actual participant/hardware evidence remains a separate gate.

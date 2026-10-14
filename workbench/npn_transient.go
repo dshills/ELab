@@ -139,7 +139,7 @@ func (s *Service) startNPNTransientLocked(c Compiled) {
 }
 func (s *Service) advanceTransientLocked(c Compiled, end float64) error {
 	if IsNetworkAnalysis(c.Analysis) {
-		st, t, err := advanceLiveNetwork(s.mixedState, s.transient, end, s.graph)
+		st, t, err := s.networkAdvance(s.mixedState, s.transient, end, s.graph)
 		if err != nil {
 			return err
 		}

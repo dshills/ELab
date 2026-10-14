@@ -203,9 +203,20 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 		n = buttonStyle(n, t != nil && t.Mode == mode.id && t.PendingMode == "")
 		controls = append(controls, n)
 	}
-	step := s.action("transient-step", "Step +1 sample", "simulation.step", workbench.StepParams{Duration: state.TransientSettings.StepSeconds})
-	step.Disabled = !state.Paused || t == nil || t.Stale
+	step := s.action("transient-step", "Step +1 sample", "simulation.step.start", workbench.StepParams{Duration: state.TransientSettings.StepSeconds})
+	step.Disabled = !state.Paused || t == nil || t.Stale || state.StepWork != nil && (state.StepWork.Status == "queued" || state.StepWork.Status == "running" || state.StepWork.Status == "canceling")
 	controls = append(controls, step, s.button("simulation.restart", "Restart"))
+	stepStatus := ""
+	if state.StepWork != nil {
+		work := state.StepWork
+		stepStatus = fmt.Sprintf("Step %s · %d/%d staged samples", work.Status, work.CompletedSamples, work.TotalSamples)
+		if work.RunID != state.RunID {
+			stepStatus = "Previous " + stepStatus
+		}
+		if work.Status == "queued" || work.Status == "running" {
+			controls = append(controls, s.action("step-work-cancel", "Cancel step", "simulation.work.cancel", workbench.IDParams{ID: work.ID}))
+		}
+	}
 	legendParts := []string{}
 	for i, trace := range state.Scope.Traces {
 		legendParts = append(legendParts, scopeProbeColors(state.Scope.Traces)[i]+": "+trace.Probe.Label)
@@ -220,7 +231,7 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	s.scope.Revision = state.Revision
 	return ui.Node{ID: "scope-panel", Kind: ui.Column, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 240}), Padding: ui.Some(ui.UniformInsets(10)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: []ui.Node{
 		{ID: "scope-toolbar", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 36}), Gap: ui.Some(float32(6)), Align: ui.Some(ui.AlignCenter)}, Children: controls},
-		{ID: "rc-scope", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 120}), MaxSize: ui.Some(ui.Size{Height: 120})}, Custom: s.scope}, quiet("scope-legend", legend), s.cursorControls(state),
+		{ID: "rc-scope", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 120}), MaxSize: ui.Some(ui.Size{Height: 120})}, Custom: s.scope}, quiet("scope-legend", legend), quiet("step-work-status", stepStatus), s.cursorControls(state),
 	}}
 }
 func (s *screen) transientInspector(state workbench.Snapshot) []ui.Node {
@@ -237,6 +248,9 @@ func (s *screen) transientInspector(state workbench.Snapshot) []ui.Node {
 	}
 	nodes := s.probeInspector(state)
 	nodes = append(nodes, section("transient-title", title), quiet("transient-help", help))
+	if state.StepWork != nil && state.StepWork.Error != nil {
+		nodes = append(nodes, quiet("step-work-error", state.StepWork.Error.Message))
+	}
 	cfg := state.TransientSettings
 	for _, setting := range []struct {
 		id, text               string

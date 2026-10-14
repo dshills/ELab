@@ -32,7 +32,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.21.0 --build-version 35 --platform darwin
+  --version 0.22.0 --build-version 36 --platform darwin
 ```
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
@@ -160,3 +160,5 @@ Sine and finite pulse sources have independent amplitude/levels, offset/phase an
 The [PRD conformance audit](research/11-prd-implementation-audit.md) records every P0 requirement and remaining acceptance gaps. [Audit repairs](docs/prd-hardening.md) add hobbyist search terms, model assumptions for every part, explicit unavailable probes, and robust duplication/cursor handling.
 
 Live general-network samples compute outside the shared service lock, with guarded publication and tracked clock shutdown. [Responsiveness evidence and remaining synchronous paths](docs/live-responsiveness.md).
+
+Manual Step uses a cancellable background worker and publishes the whole requested advance atomically. [Progress, cancellation, compatibility and validation](docs/manual-step-work.md).

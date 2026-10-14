@@ -179,36 +179,6 @@ func overrideMixed(state *mixedState, t *Transient, mode string) (*mixedState, *
 	appendInputEvent(trace, InputEvent{next.result.Time, mode})
 	return next, trace, nil
 }
-func (s *Service) stepMixedLocked(duration float64) error {
-	cur, t := s.mixedState, s.transient
-	mode := t.Mode
-	if t.PendingMode != "" {
-		var err error
-		mode = t.PendingMode
-		cur, t, err = overrideMixed(cur, t, mode)
-		if err != nil {
-			return &actionError{"solve-failed", err.Error()}
-		}
-	}
-	end := t.Sample.Time + duration
-	for t.Sample.Time < end {
-		next := math.Min(end, t.Sample.Time+s.transientSettings.StepSeconds)
-		if end-next < 1e-12 {
-			next = end
-		}
-		var err error
-		cur, t, err = advanceLiveNetwork(cur, t, next, s.graph)
-		if err != nil {
-			return &actionError{"solve-failed", err.Error()}
-		}
-	}
-	s.mixedState = cur
-	s.mixed = cur.result
-	s.transient = t
-	s.inputMode = mode
-	s.pendingInputMode = ""
-	return nil
-}
 func (s *Service) capacitorInitialLocked(p ValueParams) error {
 	c, ok := s.graph.Component(p.ID)
 	if !ok || c.Kind != "capacitor" {

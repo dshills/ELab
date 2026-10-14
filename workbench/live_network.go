@@ -11,10 +11,7 @@ type networkAdvanceFunc func(*mixedState, *Transient, float64, Graph) (*mixedSta
 // Presentation edits can proceed without invalidating an otherwise valid sample.
 func (s *Service) liveNetworkSampleLocked(ctx context.Context, run uint64, end float64) (bool, error) {
 	applied, trace, actuation := s.mixedState, s.transient, s.actuationRevision
-	captured := &mixedState{
-		net: applied.net, x: append([]float64{}, applied.x...),
-		capV: append([]float64{}, applied.capV...), result: cloneMixed(applied.result),
-	}
+	captured := cloneMixedState(applied)
 	input := cloneTransient(trace)
 	desired := s.graph.Clone()
 	advance := s.networkAdvance

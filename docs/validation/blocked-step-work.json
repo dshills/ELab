@@ -1,0 +1,101 @@
+{
+  "passed": true,
+  "race_instrumented": true,
+  "scope": "Controlled numerical boundary: manual-work lock availability, atomicity, supersession and retry ownership; no visible p95 claim",
+  "tests": [
+    "TestAsyncStepAllowsEditingSaveAndCancellationWithoutPartialPhysics",
+    "TestStepSupersededByRunInputOrProjectReplacement/simulation.restart",
+    "TestStepSupersededByRunInputOrProjectReplacement/simulation.resume",
+    "TestStepSupersededByRunInputOrProjectReplacement/simulation.input.set",
+    "TestStepSupersededByRunInputOrProjectReplacement/switch.set",
+    "TestStepSupersededByRunInputOrProjectReplacement/component.set",
+    "TestStepSupersededByRunInputOrProjectReplacement/example.rc",
+    "TestStepSupersededByRunInputOrProjectReplacement/app.close",
+    "TestStepSupersededByRunInputOrProjectReplacement",
+    "TestLegacyStepLateFailureIsAtomicAndRetryReturnsItsOriginalOutcome",
+    "TestLegacyWaitCancellationLeavesAdmittedStepAndRetryIntact",
+    "TestWiperEventSupersedesStagedStepWithoutBeingOverwritten"
+  ],
+  "measurements": [
+    {
+      "test": "TestAsyncStepAllowsEditingSaveAndCancellationWithoutPartialPhysics",
+      "command": "simulation.step.start",
+      "wall_ms": 1.110292
+    },
+    {
+      "test": "TestAsyncStepAllowsEditingSaveAndCancellationWithoutPartialPhysics",
+      "command": "view.pan",
+      "wall_ms": 1.30575
+    },
+    {
+      "test": "TestAsyncStepAllowsEditingSaveAndCancellationWithoutPartialPhysics",
+      "command": "project.save",
+      "wall_ms": 14.589458
+    },
+    {
+      "test": "TestAsyncStepAllowsEditingSaveAndCancellationWithoutPartialPhysics",
+      "command": "edit.undo",
+      "wall_ms": 0.940416
+    },
+    {
+      "test": "TestAsyncStepAllowsEditingSaveAndCancellationWithoutPartialPhysics",
+      "command": "simulation.work.cancel",
+      "wall_ms": 0.952375
+    },
+    {
+      "test": "TestStepSupersededByRunInputOrProjectReplacement/simulation.restart",
+      "command": "simulation.restart",
+      "wall_ms": 1.07925
+    },
+    {
+      "test": "TestStepSupersededByRunInputOrProjectReplacement/simulation.resume",
+      "command": "simulation.resume",
+      "wall_ms": 0.998125
+    },
+    {
+      "test": "TestStepSupersededByRunInputOrProjectReplacement/simulation.resume",
+      "command": "simulation.pause",
+      "wall_ms": 0.830208
+    },
+    {
+      "test": "TestStepSupersededByRunInputOrProjectReplacement/simulation.input.set",
+      "command": "simulation.input.set",
+      "wall_ms": 0.957958
+    },
+    {
+      "test": "TestStepSupersededByRunInputOrProjectReplacement/switch.set",
+      "command": "switch.set",
+      "wall_ms": 0.9581670000000001
+    },
+    {
+      "test": "TestStepSupersededByRunInputOrProjectReplacement/component.set",
+      "command": "component.set",
+      "wall_ms": 0.958208
+    },
+    {
+      "test": "TestStepSupersededByRunInputOrProjectReplacement/example.rc",
+      "command": "example.rc",
+      "wall_ms": 1.021542
+    },
+    {
+      "test": "TestStepSupersededByRunInputOrProjectReplacement/example.rc",
+      "command": "simulation.pause",
+      "wall_ms": 0.6679170000000001
+    },
+    {
+      "test": "TestStepSupersededByRunInputOrProjectReplacement/app.close",
+      "command": "app.close",
+      "wall_ms": 0.827667
+    },
+    {
+      "test": "TestLegacyStepLateFailureIsAtomicAndRetryReturnsItsOriginalOutcome",
+      "command": "view.pan",
+      "wall_ms": 0.728375
+    },
+    {
+      "test": "TestWiperEventSupersedesStagedStepWithoutBeingOverwritten",
+      "command": "potentiometer.wiper.set",
+      "wall_ms": 0.799083
+    }
+  ]
+}

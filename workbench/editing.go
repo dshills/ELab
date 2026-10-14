@@ -282,7 +282,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return err
 		}
 		return s.capacitorInitialLocked(p)
-	case "simulation.transient.set", "simulation.input.set", "simulation.step":
+	case "simulation.transient.set", "simulation.input.set", "simulation.step", "simulation.step.start", "simulation.work.cancel":
 		return s.transientCommandLocked(command, raw)
 	case "project.save":
 		var p SaveParams
@@ -691,6 +691,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		s.restoreLocked(s.redo[len(s.redo)-1])
 		s.redo = s.redo[:len(s.redo)-1]
 	case "simulation.pause":
+		s.cancelStepLocked("canceled")
 		s.paused = true
 		if s.cancel != nil {
 			s.cancel()
@@ -698,6 +699,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		s.status = "paused"
 	case "simulation.resume":
+		s.cancelStepLocked("superseded")
 		if !s.paused && s.status == "running" {
 			return nil // already running; preserve the existing clock and work
 		}

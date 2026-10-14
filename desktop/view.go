@@ -94,6 +94,9 @@ func (s *screen) view() ui.Node {
 	if state.Paused {
 		status = "Ⅱ Paused"
 	}
+	if state.StepWork != nil && (state.StepWork.Status == "queued" || state.StepWork.Status == "running" || state.StepWork.Status == "canceling") {
+		status = fmt.Sprintf("Stepping · %.0f%% · committed readings paused", 100*state.StepWork.Progress)
+	}
 	if state.Result != nil && state.Result.Stale || state.NPN != nil && state.NPN.Stale || state.Mixed != nil && state.Mixed.Stale {
 		status += " · stale reading"
 	}

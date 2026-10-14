@@ -169,6 +169,17 @@ func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
 	if s.errorMessage != "" {
 		return fmt.Errorf("%s: %s", id, s.errorMessage)
 	}
+	if id == "transient-step" {
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		state, err := s.service.Wait(ctx)
+		if err != nil {
+			return err
+		}
+		if state.StepWork == nil || state.StepWork.Status != "completed" {
+			return fmt.Errorf("native manual step failed: %+v", state.StepWork)
+		}
+	}
 	return nil
 }
 func smokeConstruct(s *screen) error {

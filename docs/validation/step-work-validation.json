@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "date": "2026-10-13",
+  "version": "0.22.0",
+  "build": "36",
+  "binary_sha256": "927fb7baf436bd4a592a8039386b3a7a97a29598c45c8675ce74be63f7d0f12c",
+  "packaged_binary_matches": true,
+  "capabilities": 86,
+  "checks": [
+    "pinned Staticcheck/import formatting",
+    "Go vet and root/native race tests",
+    "manual worker/capture/cancellation/publication/cache ownership review",
+    "immediate shared admission and originating actor/revisions",
+    "bounded/coalesced staged progress; terminal count consistency",
+    "editing/save/presentation undo during controlled blocked work",
+    "no partial state or pending-mode consumption after cancel/failure",
+    "late source/input/wiper/project/run/close supersession",
+    "wait cancellation leaves admitted work alive; reconnect retry preserves outcome",
+    "terminal snapshot/error mutation cannot poison legacy retries",
+    "native immediate admission/agent data parity",
+    "real 1000-sample flasher work/cancel through stdio and packaged socket",
+    "atomic 30ms advance matches independent Verify",
+    "legacy 31ms final state compatibility",
+    "four probes and portable recording/fresh paused reopen",
+    "built and final packaged GPU/UI smoke"
+  ],
+  "measurements": {
+    "headless": {
+      "step_start_admission_ms": 0.5552920047193766,
+      "canceled_staged_samples": 93,
+      "committed_time_after_cancel_s": 0,
+      "completed_time_s": 0.03,
+      "legacy_time_s": 0.031
+    },
+    "desktop": {
+      "step_start_admission_ms": 0.4889169940724969,
+      "canceled_staged_samples": 97,
+      "committed_time_after_cancel_s": 0,
+      "completed_time_s": 0.03,
+      "legacy_time_s": 0.031
+    }
+  },
+  "limits": [
+    "capacity remains 50 total objects / 12 non-ground network nodes, below original target",
+    "general and NPN initialization plus some input/file/recovery work remain synchronous",
+    "cancellation is checked between output samples; existing bounded kernel work may finish before observing it",
+    "only latest manual work metadata is shown; jobs are session state, not project recordings",
+    "17 functional requirements remain partial; no overall MVP/visible latency/accessibility/clean installation gate claimed",
+    "private unsigned local app"
+  ]
+}

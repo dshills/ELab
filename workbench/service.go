@@ -12,6 +12,7 @@ import (
 )
 
 type Snapshot struct {
+	StepWork             *StepWork            `json:"step_work,omitempty"`
 	UndoEntry            *HistoryTip          `json:"undo_entry,omitempty"`
 	RedoEntry            *HistoryTip          `json:"redo_entry,omitempty"`
 	ActuationRevision    uint64               `json:"actuation_revision"`
@@ -66,6 +67,8 @@ type savedResponse struct {
 	response    Response
 }
 type Service struct {
+	stepSerial                       uint64
+	stepJob                          *stepJob
 	actuationRevision                uint64
 	liveSwitchEdit                   bool
 	pendingNetwork                   *networkTransition
@@ -159,7 +162,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	if analysis == "" {
 		analysis = "DC operating point"
 	}
-	out := Snapshot{ActuationRevision: s.actuationRevision, SwitchStates: s.switchStatesLocked(), SourceWarnings: waveformSamplingWarnings(graph, s.transientSettings), Recording: s.recordingViewLocked(), Recovery: cloneRecovery(s.recovery), VerificationSettings: cloneVerificationSettings(s.verificationSettings), Operations: []OperationSummary{}, SelectedOperation: s.selectedOperation, LastOperation: s.lastOperation, PartSearch: s.partSearch, MatchingParts: filteredParts(s.partSearch), Scope: s.scopeLocked(compiled), Mixed: cloneMixed(s.mixed), NPN: cloneNPN(s.npn), CommandRevision: s.commandRevision, Transient: cloneTransient(s.transient), TransientSettings: s.transientSettings, Document: DocumentState{SchematicDirty: contentHash(s.graph, s.transientSettings) != s.savedGraph, RecordingsDirty: s.recordingsDirtyLocked(), RecordingCount: s.recordingCountLocked(), Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: DocumentVersion, Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom}, Revision: s.revision, ElectricalRevision: s.electrical, Circuit: s.circuit, Components: graph.Components, Wires: graph.Wires, Nets: compiled.Nets, Drawing: s.drawing, Model: Model(), Selected: s.selected, View: s.view, Status: s.status, Analysis: analysis, Paused: s.paused, RunID: s.run, Diagnostics: append([]Diagnostic{}, s.diagnostics...), CanUndo: len(s.undo) > 0, CanRedo: len(s.redo) > 0, LastActor: s.actor, Closed: s.closed}
+	out := Snapshot{StepWork: s.stepWorkLocked(), ActuationRevision: s.actuationRevision, SwitchStates: s.switchStatesLocked(), SourceWarnings: waveformSamplingWarnings(graph, s.transientSettings), Recording: s.recordingViewLocked(), Recovery: cloneRecovery(s.recovery), VerificationSettings: cloneVerificationSettings(s.verificationSettings), Operations: []OperationSummary{}, SelectedOperation: s.selectedOperation, LastOperation: s.lastOperation, PartSearch: s.partSearch, MatchingParts: filteredParts(s.partSearch), Scope: s.scopeLocked(compiled), Mixed: cloneMixed(s.mixed), NPN: cloneNPN(s.npn), CommandRevision: s.commandRevision, Transient: cloneTransient(s.transient), TransientSettings: s.transientSettings, Document: DocumentState{SchematicDirty: contentHash(s.graph, s.transientSettings) != s.savedGraph, RecordingsDirty: s.recordingsDirtyLocked(), RecordingCount: s.recordingCountLocked(), Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: DocumentVersion, Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom}, Revision: s.revision, ElectricalRevision: s.electrical, Circuit: s.circuit, Components: graph.Components, Wires: graph.Wires, Nets: compiled.Nets, Drawing: s.drawing, Model: Model(), Selected: s.selected, View: s.view, Status: s.status, Analysis: analysis, Paused: s.paused, RunID: s.run, Diagnostics: append([]Diagnostic{}, s.diagnostics...), CanUndo: len(s.undo) > 0, CanRedo: len(s.redo) > 0, LastActor: s.actor, Closed: s.closed}
 	for i := len(s.operationOrder) - 1; i >= 0; i-- {
 		out.Operations = append(out.Operations, s.operationSummaryLocked(s.operations[s.operationOrder[i]]))
 	}
@@ -229,6 +232,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	return out
 }
 func (s *Service) startLocked() {
+	s.cancelStepLocked("superseded")
 	allowPaused := s.restorePaused
 	s.restorePaused = false
 	s.cursorA = nil
@@ -338,6 +342,7 @@ func (s *Service) closeLocked() {
 			s.recoveryCancel()
 		}
 	}
+	s.cancelStepLocked("canceled")
 	s.closed = true
 	if s.recording.cancel != nil {
 		s.recording.cancel()
@@ -362,7 +367,7 @@ func (s *Service) Wait(ctx context.Context) (Snapshot, error) {
 		state := s.snapshotLocked()
 		changed := s.changed
 		s.mu.Unlock()
-		if state.Status != "updating" {
+		if state.Status != "updating" && (state.StepWork == nil || !operationActive(state.StepWork.Status)) {
 			return state, nil
 		}
 		select {
@@ -376,6 +381,13 @@ func (s *Service) Wait(ctx context.Context) (Snapshot, error) {
 // Dispatch is the sole semantic entry point used by widgets and agent clients.
 // Mutation preconditions and retry keys apply identically to both.
 func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Response {
+	out := s.dispatch(ctx, r, actor)
+	if r.Command == "simulation.step" {
+		return s.awaitStep(ctx, r, actor, out)
+	}
+	return out
+}
+func (s *Service) dispatch(ctx context.Context, r Request, actor string) Response {
 	if r.Command == "simulation.wait" {
 		if r.Version != ProtocolVersion || r.ID == "" || len(r.ID) > 128 {
 			return s.failure(r, "invalid-request", "version 1 and a nonempty ID (max 128 bytes) required")
@@ -468,8 +480,7 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 		if old.fingerprint != fingerprint {
 			return fail("key-reused", "retry key already belongs to a different command")
 		}
-		out = old.response
-		out.Result = cloneSnapshot(old.response.Result.(Snapshot))
+		out = cloneMutationResponse(old.response)
 		out.ID = r.ID
 		out.Duplicate = true
 		return out
@@ -528,8 +539,10 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 		s.normalizeDrawingLocked()
 		if !ElectricalEqual(before.Graph, s.graph) || changedSettings || forceRestart {
 			if s.liveSwitchEdit {
+				s.cancelStepLocked("superseded")
 				s.actuationRevision++
 			} else if s.pendingNetwork != nil {
+				s.cancelStepLocked("superseded")
 				s.actuationRevision++
 				s.mixedState = s.pendingNetwork.state
 				s.mixed = s.pendingNetwork.state.result
@@ -556,6 +569,13 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 	if r.Command == "simulation.verify" || r.Command == "verification.import" {
 		s.operations[s.lastOperation].summary.Actor = actor
 	}
+	if r.Command == "simulation.step" || r.Command == "simulation.step.start" {
+		s.stepJob.work.Actor = actor
+		s.stepJob.requestID = r.ID
+		if r.Command == "simulation.step" {
+			s.stepJob.legacyKey = key
+		}
+	}
 	s.actor = actor
 	s.commandRevision++
 	s.revision++
@@ -574,6 +594,7 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	state.StepWork = cloneStepWork(state.StepWork)
 	if state.UndoEntry != nil {
 		tip := *state.UndoEntry
 		state.UndoEntry = &tip
@@ -667,4 +688,16 @@ func cloneSnapshot(state Snapshot) Snapshot {
 }
 func (s *Service) failure(r Request, code, message string) Response {
 	return Response{Version: 1, ID: r.ID, Revision: s.Snapshot().Revision, Error: &Failure{code, message}}
+}
+
+// Cached mutation replies own their snapshot and failure independently of callers.
+func cloneMutationResponse(out Response) Response {
+	if out.Result != nil {
+		out.Result = cloneSnapshot(out.Result.(Snapshot))
+	}
+	if out.Error != nil {
+		failure := *out.Error
+		out.Error = &failure
+	}
+	return out
 }
