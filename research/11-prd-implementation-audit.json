@@ -154,9 +154,9 @@
     },
     {
       "id": "AGENT-04",
-      "evidence": "Observable Verify, manual Step and input jobs with IDs/status/cancellation; captured revisions and bounded sample paging",
+      "evidence": "Observable Verify, manual Step, input and project-open jobs with IDs/status/cancellation; captured revisions, result identities and bounded sample paging",
       "status": "partial",
-      "assessment": "Partial: some file/recovery operations remain synchronous; documented state event subscriptions and complete job coverage remain open"
+      "assessment": "Partial: save/export/manual recovery still include synchronous work; documented state event subscriptions and complete job coverage remain open"
     },
     {
       "id": "AGENT-05",

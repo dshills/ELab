@@ -12,6 +12,7 @@ import (
 )
 
 type Snapshot struct {
+	ProjectWork            *ProjectWork           `json:"project_work,omitempty"`
 	InputWork              *InputWork             `json:"input_work,omitempty"`
 	Example                *ExampleContext        `json:"example,omitempty"`
 	DiagnosticPresentation DiagnosticPresentation `json:"diagnostic_presentation"`
@@ -76,6 +77,9 @@ type savedResponse struct {
 	response    Response
 }
 type Service struct {
+	projectJob                       *projectJob
+	projectSerial                    uint64
+	projectLoad                      projectLoadFunc
 	inputJob                         *inputJob
 	inputSerial                      uint64
 	inputSolve                       inputSolveFunc
@@ -160,7 +164,7 @@ func newService(solver func(context.Context, Circuit) (Result, error)) *Service 
 	return s
 }
 func newGraphService(solver func(context.Context, Circuit) (Result, error), graph Graph) *Service {
-	s := &Service{revision: 1, electrical: 1, graph: graph.Clone(), drawing: DefaultDrawing(), usedIDs: map[string]bool{}, view: View{Zoom: 1}, cache: map[string]savedResponse{}, changed: make(chan struct{}), solver: solver, networkAdvance: advanceLiveNetwork, inputSolve: solveInputWork, initialSolver: solveInitial, initialTimeout: 5 * time.Second, actor: "system"}
+	s := &Service{revision: 1, electrical: 1, graph: graph.Clone(), drawing: DefaultDrawing(), usedIDs: map[string]bool{}, view: View{Zoom: 1}, cache: map[string]savedResponse{}, changed: make(chan struct{}), solver: solver, networkAdvance: advanceLiveNetwork, inputSolve: solveInputWork, projectLoad: prepareProjectLoad, initialSolver: solveInitial, initialTimeout: 5 * time.Second, actor: "system"}
 	for _, c := range graph.Components {
 		s.usedIDs[c.ID] = true
 	}
@@ -190,6 +194,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		analysis = "DC operating point"
 	}
 	out := Snapshot{
+		ProjectWork:            s.projectWorkLocked(),
 		InputWork:              s.inputWorkLocked(),
 		Example:                s.exampleContextLocked(),
 		DiagnosticPresentation: s.diagnosticPresentationLocked(compiled),
@@ -419,6 +424,7 @@ func (s *Service) closeLocked() {
 			s.recoveryCancel()
 		}
 	}
+	s.cancelProjectWorkLocked("canceled")
 	s.cancelInputWorkLocked("canceled")
 	s.cancelStepLocked("canceled")
 	s.closed = true
@@ -445,7 +451,7 @@ func (s *Service) Wait(ctx context.Context) (Snapshot, error) {
 		state := s.snapshotLocked()
 		changed := s.changed
 		s.mu.Unlock()
-		if state.Status != "updating" && (state.StepWork == nil || !operationActive(state.StepWork.Status)) && (state.InputWork == nil || !operationActive(state.InputWork.Status)) {
+		if state.Status != "updating" && (state.StepWork == nil || !operationActive(state.StepWork.Status)) && (state.InputWork == nil || !operationActive(state.InputWork.Status)) && (state.ProjectWork == nil || !operationActive(state.ProjectWork.Status)) {
 			return state, nil
 		}
 		select {
@@ -467,6 +473,9 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 	out := s.dispatch(ctx, r, actor)
 	if r.Command == "simulation.step" {
 		return s.awaitStep(ctx, r, actor, out)
+	}
+	if r.Command == "project.load" {
+		return s.awaitProjectLoad(ctx, r, actor, out)
 	}
 	return out
 }
@@ -634,7 +643,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	changedDisplay := before.Display != s.displayPreferences
 	changedExample := before.ExampleID != s.exampleID
 	changedDocument := changedGraph || changedSettings || changedPins || changedDisplay || changedExample
-	forceRestart := r.Command == "example.load" || r.Command == "example.current.reset" || r.Command == "project.load" || r.Command == "recovery.restore" || r.Command == "example.rc" || r.Command == "example.npn" || r.Command == "example.npn-pulse" || r.Command == "example.flasher"
+	forceRestart := r.Command == "example.load" || r.Command == "example.current.reset" || r.Command == "recovery.restore" || r.Command == "example.rc" || r.Command == "example.npn" || r.Command == "example.npn-pulse" || r.Command == "example.flasher"
 	if changedDocument {
 		if changedGraph {
 			s.retainInterruptedDefaultProbesLocked(before.Graph)
@@ -680,6 +689,15 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	if r.Command == "simulation.verify" || r.Command == "verification.import" {
 		s.operations[s.lastOperation].summary.Actor = actor
 	}
+	if s.projectJob != nil && s.projectJob.work.CommandRevision == s.commandRevision+1 {
+		s.projectJob.work.Actor = actor
+		s.projectJob.requestID = r.ID
+		if r.Command == "project.load" {
+			s.projectJob.legacyKey = key
+		}
+	} else if s.activeProjectWorkLocked() && s.loadGuardLocked() != s.projectJob.guard {
+		s.cancelProjectWorkLocked("superseded")
+	}
 	if s.inputJob != nil && s.inputJob.work.CommandRevision == s.commandRevision+1 {
 		s.inputJob.work.Actor = actor
 	}
@@ -708,6 +726,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	state.ProjectWork = cloneProjectWork(state.ProjectWork)
 	state.InputWork = cloneInputWork(state.InputWork)
 	state.Example = cloneExampleContext(state.Example)
 	state.DiagnosticPresentation = cloneDiagnosticPresentation(state.DiagnosticPresentation)

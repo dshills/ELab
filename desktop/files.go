@@ -112,7 +112,9 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 					s.errorMessage = err.Error()
 				}
 			} else if response.Error != nil {
-				if response.Error.Code == "unsaved-changes" {
+				if id == "project.load" && (response.Error.Code == "canceled" || response.Error.Code == "superseded") {
+					s.fileMessage = "Open " + response.Error.Code + "; current project preserved"
+				} else if response.Error.Code == "unsaved-changes" {
 					s.pendingCommand = id
 					s.pendingParams = append(json.RawMessage{}, raw...)
 				} else {

@@ -317,18 +317,28 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		return s.capacitorInitialLocked(p)
 	case "simulation.transient.set", "simulation.input.set", "simulation.step", "simulation.step.start", "simulation.work.cancel":
 		return s.transientCommandLocked(command, raw)
+	case "project.work.cancel":
+		var p IDParams
+		if err := params(raw, &p, "id"); err != nil {
+			return err
+		}
+		if !s.activeProjectWorkLocked() || s.projectJob.work.ID != p.ID {
+			return &actionError{"operation-unavailable", "Choose the active project work to cancel"}
+		}
+		s.cancelProjectWorkLocked("canceled")
+		return nil
 	case "project.save":
 		var p SaveParams
 		if err := params(raw, &p); err != nil {
 			return err
 		}
 		return s.saveLocked(p)
-	case "project.load":
+	case "project.load", "project.load.start":
 		var p LoadParams
 		if err := params(raw, &p, "path"); err != nil {
 			return err
 		}
-		return s.loadLocked(p)
+		return s.startProjectLoadLocked(p)
 	case "component.place":
 		var p PlaceParams
 		if err := params(raw, &p, "kind", "position"); err != nil {

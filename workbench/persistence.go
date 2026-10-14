@@ -546,35 +546,6 @@ func (s *Service) saveLocked(p SaveParams) error {
 	}
 	return nil
 }
-func (s *Service) loadLocked(p LoadParams) error {
-	if err := s.checkDocumentGenerationLocked(p.ExpectedGeneration); err != nil {
-		return err
-	}
-	if err := s.requireCleanLocked(p.DiscardChanges); err != nil {
-		return err
-	}
-	path, err := documentPath(p.Path)
-	if err != nil {
-		return err
-	}
-	data, err := readDocumentFile(path)
-	if err != nil {
-		return err
-	}
-	d, err := decodeDocument(data)
-	if err != nil {
-		return &actionError{"invalid-document", err.Error()}
-	}
-	s.installDocumentLocked(d)
-	s.recoveredFrom = ""
-	s.documentPath = path
-	s.savedGraph = contentHash(s.graph, s.transientSettings)
-	s.savedPreferences = preferencesHash(s.pins, s.displayPreferences, s.exampleID)
-	s.savedRecordings = s.recordingMembershipHashLocked()
-	s.diskHash = sha256.Sum256(data)
-
-	return nil
-}
 
 // File choices may outlive the project they were made for. A generation guard
 // survives harmless clock ticks but refuses to act on a replacement project.

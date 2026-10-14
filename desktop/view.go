@@ -337,6 +337,7 @@ func (s *screen) view() ui.Node {
 	inspector = append(inspector, s.pinnedReadingControls(state)...)
 	inspector = append(inspector, s.displayControls(state)...)
 	inspector = append(inspector, s.diagnosticControls(state)...)
+	inspector = append(inspector, s.projectWorkControls(state)...)
 	inspector = append(inspector, s.inputWorkControls(state)...)
 	if state.Drawing.Tool == "wire" {
 		terminalOptions := []ui.Option{{ID: "__none", Label: "Choose a terminal…"}}

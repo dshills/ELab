@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "open_admission_ms": 2.960124984383583,
+  "work": {
+    "id": "project-1",
+    "command": "project.load",
+    "status": "queued",
+    "phase": "queued",
+    "actor": "agent.stdio",
+    "path": "/Users/dshills/Development/projects/ELab/docs/validation/project-work-artifacts/opened-led.elab",
+    "input_revision": 10,
+    "command_revision": 8,
+    "document_generation": 2,
+    "bytes": 0
+  },
+  "bytes": 2549,
+  "checks": [
+    "unsaved-change preflight refusal",
+    "queued admission preserves current project",
+    "bounded background reading/validation with bytes and source/result identities",
+    "atomic clean fresh paused publication and original actor undo",
+    "invalid file terminal outcome preserves drawing/history/readings/save association",
+    "legacy waiting command and fresh-process portability"
+  ],
+  "limitations": [
+    "blocked-reader navigation/save/cancel/supersession are separately proven by controlled race tests",
+    "OS filesystem calls may finish after cancellation; canceled work cannot install a document",
+    "backend admission timing excludes visible latency",
+    "save/export/manual recovery still include synchronous work"
+  ]
+}

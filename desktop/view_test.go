@@ -216,6 +216,14 @@ func TestFileControlsUseSharedPersistenceAndProtectUnsavedChanges(t *testing.T) 
 	if s.service.Snapshot().Circuit.Resistance != saved.Circuit.Resistance || s.service.Snapshot().Document.Dirty {
 		t.Fatal("open did not restore saved file")
 	}
+	if work := s.service.Snapshot().ProjectWork; work == nil || work.Status != "completed" || work.Actor != "user" || work.ResultGeneration != s.service.Snapshot().Document.Generation {
+		t.Fatal("native open did not expose its shared completed job")
+	}
+	s.app.Do(func() {
+		if _, ok := findNode(s.view(), "project-work-status"); !ok {
+			t.Fatal("native open job status is missing")
+		}
+	})
 	uiAction(t, s, "selection", &ui.ChangeEvent{SelectedID: "R1"})
 	uiAction(t, s, "value-entry", &ui.ChangeEvent{Text: "2.2k"})
 	uiAction(t, s, "apply-value", nil)

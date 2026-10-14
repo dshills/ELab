@@ -32,3 +32,5 @@ Network and NPN phase initialization now run outside the lock; input/wiper algeb
 Run `python3 scripts/live-responsiveness-demo.py --output REPORT --artifacts DIRECTORY` after building. Use `--connect` only for an owned development endpoint: it replaces that session's project. The packaged development launch uses absolute endpoint/recovery paths.
 
 Manual multi-sample Step is now addressed separately by [background manual work](manual-step-work.md); the broader responsiveness gate remains partial.
+
+Project Open now also reads/validates outside the lock with [observable project work](project-work.md). Save/export/manual recovery are separate remaining paths.

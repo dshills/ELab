@@ -150,6 +150,9 @@ rendered:
 	if err := nativePotentiometerSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	if err := nativeProjectOpenSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	if err := nativeWaveformSmoke(ctx, a, s); err != nil {
 		return err
 	}

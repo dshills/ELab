@@ -3,6 +3,7 @@ package workbench
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -15,11 +16,21 @@ func refuse(t *testing.T, s *Service, id string, p any, code string) {
 	before := settled(t, s)
 	raw, _ := json.Marshal(p)
 	rev := before.Revision
-	r := s.Dispatch(context.Background(), Request{Version: 1, ID: "refuse", Command: id, Params: raw, ExpectedRevision: &rev, Key: "refuse"}, "test")
+	r := s.Dispatch(context.Background(), Request{Version: 1, ID: "refuse", Command: id, Params: raw, ExpectedRevision: &rev, Key: fmt.Sprintf("refuse-%d", before.CommandRevision)}, "test")
 	if r.Error == nil || r.Error.Code != code {
 		t.Fatalf("%s: want %s, got %+v", id, code, r.Error)
 	}
 	after := s.Snapshot()
+	if id == "project.load" && after.CommandRevision == before.CommandRevision+1 {
+		if after.ProjectWork == nil || after.ProjectWork.Status != "failed" || after.ProjectWork.Error == nil || after.ProjectWork.Error.Code != code || after.ProjectWork.Actor != "test" {
+			t.Fatal("admitted failed open lacks its terminal job outcome")
+		}
+		// Accepted asynchronous work may publish only operation bookkeeping.
+		// Everything describing the existing project, physics and history is
+		// still compared exactly against the state before admission.
+		after.ProjectWork = before.ProjectWork
+		after.Revision, after.CommandRevision, after.LastActor = before.Revision, before.CommandRevision, before.LastActor
+	}
 	if !reflect.DeepEqual(before, after) {
 		t.Fatalf("failed %s changed session", id)
 	}
