@@ -36,7 +36,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.50.0 --build-version 65 --platform darwin
+  --version 0.51.0 --build-version 66 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).
@@ -222,3 +222,5 @@ Use **Hide scope** in the scope toolbar to give the schematic more room. **Show 
 For frozen independent LED/RC/NPN references and flasher output-step refinement, run the [electrical qualification suite](docs/numerical-qualification.md) with `elab-conformance --electrical-suite`.
 
 For repeated fresh/warm backend edit/result and bounded Verify timings, run the [performance qualification suite](docs/performance-qualification.md) with `elab-conformance --performance-suite --repetitions 20`. Visible UI acknowledgment is measured separately.
+
+Transient failures now expose [distinct integration-limit causes and recovery](docs/integration-limits.md) through shared native/agent guidance. The original 512-attempt and 100 ms limits remain unchanged.

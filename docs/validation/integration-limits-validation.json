@@ -1,0 +1,59 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "version": "0.51.0",
+  "build": "66",
+  "binary_sha256": "d217f6736a266d8209f87980b2ddbaf428e785be33d5685360fe75c71b67156e",
+  "packaged_binary_matches": true,
+  "source_checkpoint": "b14d326",
+  "vellum_baseline": {
+    "recorded": "2026-10-14",
+    "version": "checkout e7f8e30",
+    "commit": "e7f8e306f56c3c237ad41985da4a407d62f2d87d",
+    "local_checkout": "../../Vellum (relative to desktop/go.mod)",
+    "native_dependency_manifest": "drivers/cogent/native/dependencies.json",
+    "native_dependency_manifest_sha256": "6bea72b8096bc7c0ff1cfffbfde830217f794877db7a303819cba84b1aea86f1",
+    "go_directive": "1.25.6",
+    "tested_go": "go1.27.2 darwin/arm64",
+    "root_module": "github.com/dshills/elab",
+    "desktop_module": "github.com/dshills/elab/desktop",
+    "status": "Local checkout integration; relocatable SDK distribution remains a later gate"
+  },
+  "checks": [
+    "Original 512-attempt / 100 ms integration caps remain unchanged; public snapshot limits expose both maxima",
+    "Typed wrapped integration errors preserve distinct attempt/time codes through live, waiting/background Step and recorded Verify; unrelated generic solver errors unchanged",
+    "Deterministic counter/clock tests isolate both limits without scheduling flakiness or changed production monotonic clock; counts include rejected admission",
+    "Live and Step failures preserve last committed state; failed Verify retains captured metadata but has no result rows or kept partial asset",
+    "Readable shared guidance names cause/action without inventing a failing component; smaller native sample recovers and clears obsolete failure",
+    "Public headless/native outcomes match, including real coarse-waveform attempt rejection, physics/history preservation, kept-record refusal and original failed retry-key outcome after successful recovery",
+    "Opt-in one-CPU pressure audit: idle doubled-capacitance flasher completes six simulated seconds at 0.98 s final sampled period; pressure hits elapsed limit at 45 attempts/212.097 ms with last accepted time 0.18 s and exact solver memory/canonical physical results unchanged; burners joined",
+    "Final full lint/import/root/native race/vet, non-cgo targeted checks, exact packaged GPU smoke with actual budget rejection/disclosure/recovery, and four prior workflow adapters pass",
+    "Native source ledger remains fresh at 35 production files/276 sites/116 public IDs, 95 source-route references and 100 binding-review sites; no new native production route or command",
+    "Clean SDK RGBA upload fix integrated; four prepared patch output hashes verified read-only; later e7f8e30 adds only checks/docs and no imported production source change"
+  ],
+  "evidence": [
+    "docs/integration-limits.md",
+    "docs/validation/headless-integration-limits.json",
+    "docs/validation/desktop-integration-limits.json",
+    "docs/validation/integration-budget-pressure.json",
+    "docs/validation/integration-limits-conformance.json",
+    "workbench/integration_budget_test.go",
+    "workbench/integration_audit_test.go",
+    "desktop/integration_limit_test.go",
+    "desktop/integration_limit_smoke.go"
+  ],
+  "validation_notes": [
+    "The first audit state comparison normalized omitted nil slices through cloneMixed; canonical physical JSON plus exact solver vectors now tests actual state preservation",
+    "Failed-job observability and retained input metadata are intentional; tests preserve source/physics/history while inspecting those outcomes",
+    "No test/cap/tolerance relaxation or automatic retries conceal the earlier unclassified flasher race failure"
+  ],
+  "limits_of_evidence": [
+    "Elapsed cap is cooperative between attempts; running solve or scheduler suspension can make detected elapsed time exceed 100 ms",
+    "Synthetic one-CPU pressure is confined to an owned test process and does not establish visible/p95/general capacity performance",
+    "Reproduced time-limit failure does not identify the cause of the earlier unclassified race-run failure",
+    "One-millisecond recovery still aliases the deliberate 1 kHz fixture; sampling warnings remain separate",
+    "Native callbacks/GPU smoke are not full physical menu/keyboard/IME/accessibility evidence; source inventory remains source-only coverage",
+    "Private unsigned local-checkout app; printing/preview, clean distribution, broad physical-device and participant gates remain pending",
+    "Previous .50/65 bundle preserved at build/ELab-before-integration-limits.app; user work/research and sibling SDK preserved"
+  ]
+}

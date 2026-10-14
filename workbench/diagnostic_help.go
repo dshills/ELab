@@ -65,6 +65,14 @@ func makeDiagnosticHelp(g Graph, c Compiled, d Diagnostic, source string, refs [
 	case "source-sampling":
 		out.Severity = "warning"
 		out.Action = "Use Fit waveform resolution or reduce the output sample interval."
+	case "integration-attempt-limit":
+		out.Severity = "error"
+		out.Summary = "This sample needed more calculation attempts than allowed."
+		out.Action = "Reduce the output sample interval. Restart a stopped live run, or retry a paused Step; committed time and charge were preserved."
+	case "integration-time-limit":
+		out.Severity = "error"
+		out.Summary = "This sample took longer than the calculation time limit."
+		out.Action = "Reduce the output sample interval or retry when the computer is less busy. Restart a stopped live run; committed time and charge were preserved."
 	case "solve-failed", "mixed-initialize-failed":
 		out.Severity = "error"
 		out.Summary = "Simulation could not complete this calculation."
@@ -132,9 +140,13 @@ func (s *Service) diagnosticPresentationLocked(c Compiled) DiagnosticPresentatio
 	}
 	if s.stepJob != nil && s.stepJob.work.Status == "failed" && s.stepJob.work.Error != nil {
 		work := s.stepJob.work
-		d := Diagnostic{Code: "solve-failed", Message: work.Error.Message}
+		d := Diagnostic{Code: work.Error.Code, Message: work.Error.Message}
 		help := makeDiagnosticHelp(s.graph, c, d, "step", nil)
-		help.Summary = "Manual step failed; committed time and charge were preserved."
+		if work.Error.Code == "integration-attempt-limit" || work.Error.Code == "integration-time-limit" {
+			help.Summary = "Manual step could not finish. " + help.Summary
+		} else {
+			help.Summary = "Manual step failed; committed time and charge were preserved."
+		}
 		if work.RunID != s.run || work.ElectricalRevision != s.electrical || work.ActuationRevision != s.actuationRevision {
 			help.Summary = "A previous manual step failed; its committed state was preserved."
 		}

@@ -31,3 +31,5 @@ python3 scripts/diagnostics-demo.py --connect build/diagnostics.endpoint.json \
 ```
 
 These engineering checks do not establish novice discoverability, complete keyboard/focus or screen-reader qualification. No unsupported topology is made solvable by diagnostic presentation; existing models and numerical/work limits remain unchanged.
+
+General transient work limits now distinguish attempt exhaustion from elapsed-time exhaustion, with safe recovery actions and unchanged caps. See [integration limits](integration-limits.md).

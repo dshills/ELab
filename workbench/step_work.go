@@ -173,7 +173,7 @@ func (s *Service) runStep(job *stepJob) {
 			err = job.ctx.Err()
 		}
 		job.work.Status = "failed"
-		job.work.Error = &Failure{"solve-failed", err.Error()}
+		job.work.Error = &Failure{Code: simulationFailureCode(err, "solve-failed"), Message: err.Error()}
 	} else {
 		s.transient, s.mixedState, s.mixed, s.npn = input.transient, input.mixedState, input.mixed, input.npn
 		s.inputMode, s.pendingInputMode = input.inputMode, input.pendingInputMode

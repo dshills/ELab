@@ -314,7 +314,7 @@ func (s *Service) launchTransientLocked(c Compiled) {
 						if s.mixed != nil {
 							s.mixed.Stale = true
 						}
-						s.diagnostics = []Diagnostic{{"mixed-integration-failed", err.Error(), ""}}
+						s.diagnostics = []Diagnostic{{simulationFailureCode(err, "mixed-integration-failed"), err.Error(), ""}}
 						s.revision++
 						s.signalLocked("simulation", "diagnostics")
 						s.mu.Unlock()

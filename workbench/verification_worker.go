@@ -51,7 +51,7 @@ func (s *Service) finishVerificationLocked(operation *verificationOperation, rec
 		operation.summary.Error = &Failure{Code: "timeout", Message: "Verification exceeded its 30 second wall-clock budget"}
 	case err != nil:
 		operation.summary.Status = "failed"
-		operation.summary.Error = &Failure{Code: "solve-failed", Message: err.Error()}
+		operation.summary.Error = &Failure{Code: simulationFailureCode(err, "solve-failed"), Message: err.Error()}
 	default:
 		operation.record = record
 		operation.keep = true

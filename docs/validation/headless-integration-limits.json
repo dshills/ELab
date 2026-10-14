@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "limits": {
+    "attempts_per_sample": 512,
+    "wall_ms_per_sample": 100
+  },
+  "step_failure_code": "integration-attempt-limit",
+  "step_details": "mixed integration exceeded its work budget: attempt limit (513 attempted, maximum 512; 1.468 ms elapsed, maximum 100 ms); reduce sample step",
+  "recorded_failure_code": "integration-attempt-limit",
+  "recovered_time_s": 0.001,
+  "checks": [
+    "machine-readable limit discovery",
+    "real coarse-sample attempt rejection",
+    "source/history/physics preservation",
+    "readable shared guidance without guessed part",
+    "failed Verify retains input metadata but no partial rows/kept asset",
+    "smaller sample recovers and clears old failure",
+    "failed retry key preserves original outcome without reapplication"
+  ],
+  "limits_of_evidence": [
+    "One millisecond recovers the work budget but still aliases this 1 kHz source; sampling warnings remain separate",
+    "Time-limit pressure evidence is in the isolated Go audit; this public workflow checks attempt limits"
+  ]
+}

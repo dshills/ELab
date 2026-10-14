@@ -1,0 +1,48 @@
+{
+  "go_version": "go1.27.2",
+  "gomaxprocs": 1,
+  "graph_sha256": "b4b8a93d4e2045f6fd21b9e967be6938d2e081c5ce0ef02886db5e822b8bfe3e",
+  "limits": [
+    "owned one-CPU test process; synthetic scheduler pressure is not participant/visible latency evidence",
+    "limit checks happen between integration attempts, not preemptively inside an ongoing solve",
+    "a reproduced time-limit failure does not establish the cause of the previous unclassified race-run failure"
+  ],
+  "maximum_attempts": 512,
+  "maximum_wall_ms": 100,
+  "passed": true,
+  "platform": "darwin/arm64",
+  "requested_duration_s": 6,
+  "results": [
+    {
+      "cpu_burners": 0,
+      "outcome": "completed",
+      "last_accepted_time_s": 6,
+      "rising_edges_s": [
+        1.62,
+        2.6,
+        3.5700000000000003,
+        4.55,
+        5.53
+      ],
+      "last_period_s": 0.9800000000000004,
+      "run_wall_ms": 1313.164458,
+      "max_kcl_residual_a": 9.178917512551294e-11,
+      "max_power_residual_w": 1.4689044205776603e-10
+    },
+    {
+      "cpu_burners": 8,
+      "outcome": "bounded-failure",
+      "code": "integration-time-limit",
+      "rejected_sample_attempts": 45,
+      "rejected_sample_elapsed_ms": 212.09725,
+      "last_accepted_time_s": 0.18,
+      "rejected_sample_end_s": 0.19,
+      "rising_edges_s": [],
+      "run_wall_ms": 228.910709,
+      "max_kcl_residual_a": 1.0756261387132818e-12,
+      "max_power_residual_w": 2.221572643092468e-12,
+      "failed_sample_state_preserved": true
+    }
+  ],
+  "sample_step_s": 0.01
+}

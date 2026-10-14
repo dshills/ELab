@@ -186,6 +186,9 @@ rendered:
 	if err := nativeExamplesSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	if err := nativeIntegrationLimitSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	if err := nativeFieldContextSmoke(ctx, a, s); err != nil {
 		return err
 	}

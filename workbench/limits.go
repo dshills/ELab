@@ -1,6 +1,9 @@
 package workbench
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 const (
 	MaxComponents            = 100 // Drawing objects, including reference/connectivity helpers.
@@ -19,6 +22,8 @@ const (
 )
 
 type CircuitLimits struct {
+	IntegrationAttempts int `json:"integration_attempts_per_sample"`
+	IntegrationWallMS   int `json:"integration_wall_ms_per_sample"`
 	PinnedReadings      int `json:"pinned_readings"`
 	DrawingObjects      int `json:"drawing_objects"`
 	Wires               int `json:"wires"`
@@ -36,7 +41,7 @@ type CircuitLimits struct {
 }
 
 func Limits() CircuitLimits {
-	return CircuitLimits{PinnedReadings: MaxPinnedReadings, DrawingObjects: MaxComponents, Wires: MaxWires, SimulatedComponents: MaxSimulatedComponents, ElectricalNodes: MaxElectricalNodes, Sources: MaxNetworkSources, Capacitors: MaxNetworkCapacitors, Transistors: MaxNetworkTransistors, Resistors: MaxNetworkResistors, Switches: MaxNetworkSwitches, Diodes: MaxNetworkDiodes, Potentiometers: MaxNetworkPotentiometers, LEDs: MaxNetworkLEDs, ScopeTraces: MaxScopeProbes}
+	return CircuitLimits{IntegrationAttempts: MaxIntegrationAttempts, IntegrationWallMS: int(MaxIntegrationWallTime / time.Millisecond), PinnedReadings: MaxPinnedReadings, DrawingObjects: MaxComponents, Wires: MaxWires, SimulatedComponents: MaxSimulatedComponents, ElectricalNodes: MaxElectricalNodes, Sources: MaxNetworkSources, Capacitors: MaxNetworkCapacitors, Transistors: MaxNetworkTransistors, Resistors: MaxNetworkResistors, Switches: MaxNetworkSwitches, Diodes: MaxNetworkDiodes, Potentiometers: MaxNetworkPotentiometers, LEDs: MaxNetworkLEDs, ScopeTraces: MaxScopeProbes}
 }
 func SimulatedComponentCount(g Graph) int {
 	count := 0
