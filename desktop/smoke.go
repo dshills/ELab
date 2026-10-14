@@ -192,6 +192,9 @@ rendered:
 	if err := nativeFieldContextSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	if err := nativeDCSweepSmoke(ctx, a, s); err != nil {
+		return fmt.Errorf("native DC sweep: %w", err)
+	}
 	if err := nativePrintPreviewSmoke(ctx, a, s); err != nil {
 		return fmt.Errorf("native print preview: %w", err)
 	}

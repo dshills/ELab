@@ -62,7 +62,7 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 
 		if choose {
 			options := app.FileOptions{Mode: app.OpenFile, Title: "Open project", Extensions: []string{"elab"}}
-			write := id == "project.save" || strings.HasPrefix(id, "export.") || id == "verification.export"
+			write := id == "project.save" || strings.HasPrefix(id, "export.") || (id == "verification.export" || id == "sweep.export")
 			if write {
 				options.Mode = app.SaveFile
 				options.Title = "Save project"
@@ -88,12 +88,16 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 				options.Title = "Export schematic image PNG"
 				options.Extensions = []string{"png"}
 				options.Filename = "Schematic.png"
-			case "verification.export":
+			case "verification.export", "sweep.export":
 				var format string
 				_ = json.Unmarshal(fields["format"], &format)
 				options.Title = "Export recorded verification"
 				options.Extensions = []string{format}
 				options.Filename = "Verification." + format
+				if id == "sweep.export" {
+					options.Title = "Export DC sweep"
+					options.Filename = "DCSweep." + format
+				}
 			}
 			if state.Document.Path != "" {
 				options.Directory = filepath.Dir(state.Document.Path)
@@ -133,7 +137,7 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 					s.errorMessage = err.Error()
 				}
 			} else if response.Error != nil {
-				if (id == "project.load" || id == "project.save" || strings.HasPrefix(id, "export.") || id == "verification.export" || id == "verification.import") && (response.Error.Code == "canceled" || response.Error.Code == "superseded") {
+				if (id == "project.load" || id == "project.save" || strings.HasPrefix(id, "export.") || (id == "verification.export" || id == "sweep.export") || id == "verification.import") && (response.Error.Code == "canceled" || response.Error.Code == "superseded") {
 					s.fileMessage = "File operation " + response.Error.Code + "; current project preserved"
 				} else if response.Error.Code == "unsaved-changes" {
 					s.pendingCommand = id
@@ -146,7 +150,7 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 				path := state.Document.Path
 				continueAction := true
 				saveAssociated := true
-				if response.Result.(workbench.Snapshot).LastExport != nil && (strings.HasPrefix(id, "export.") || id == "verification.export") {
+				if response.Result.(workbench.Snapshot).LastExport != nil && (strings.HasPrefix(id, "export.") || (id == "verification.export" || id == "sweep.export")) {
 					s.fileMessage = "Exported " + filepath.Base(response.Result.(workbench.Snapshot).LastExport.Path)
 				} else if id == "verification.import" {
 					var opened string

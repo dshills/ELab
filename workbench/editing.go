@@ -179,6 +179,15 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		return s.recordingCommandLocked(command, raw)
 	case "recovery.work.start", "recovery.configure", "recovery.scan", "recovery.checkpoint", "recovery.select", "recovery.restore", "recovery.restore.start", "recovery.dismiss":
 		return s.recoveryCommandLocked(command, raw)
+	case "sweep.export":
+		var p VerificationExportParams
+		if err := params(raw, &p, "id", "path", "format"); err != nil {
+			return err
+		}
+		if p.Format != "json" && p.Format != "csv" {
+			return fmt.Errorf("sweep export format must be json or csv")
+		}
+		return s.startExportLocked(ExportStartParams{Kind: "sweep-" + p.Format, ID: p.ID, Path: p.Path, Overwrite: p.Overwrite, ExpectedGeneration: p.ExpectedGeneration})
 	case "verification.export":
 		var p VerificationExportParams
 		if err := params(raw, &p, "id", "path", "format"); err != nil {
@@ -227,6 +236,110 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return &actionError{"not-found", "Operation not found or no longer retained"}
 		}
 		s.selectRecordingLocked(p.ID)
+		return nil
+	case "sweep.settings.set":
+		var p SweepSettings
+		if err := params(raw, &p, "component_id", "parameter", "start", "stop", "points"); err != nil {
+			return err
+		}
+		if _, err := buildSweepPlan(s.graph, p, false); err != nil {
+			return err
+		}
+		store := s.ensureSweepsLocked()
+		cfg := cloneSweepSettings(p)
+		store.settings = &cfg
+		return nil
+	case "sweep.start":
+		var p SweepStartParams
+		if err := params(raw, &p); err != nil {
+			return err
+		}
+		return s.startDCSweepLocked(p)
+	case "sweep.cancel":
+		var p IDParams
+		if err := params(raw, &p, "id"); err != nil {
+			return err
+		}
+		return s.cancelSweepLocked(p.ID)
+	case "sweep.select":
+		var p IDParams
+		if err := params(raw, &p, "id"); err != nil {
+			return err
+		}
+		if s.sweeps == nil || s.sweeps.operations[p.ID] == nil {
+			return &actionError{"not-found", "Choose a retained sweep"}
+		}
+		store := s.sweeps
+		store.selected = p.ID
+		store.cursor = nil
+		if record := store.operations[p.ID].record; record != nil {
+			store.traceID = record.Result.Probes[0].ID
+		}
+		return nil
+	case "sweep.visibility.set":
+		var p SweepVisibilityParams
+		if err := params(raw, &p, "visible"); err != nil {
+			return err
+		}
+		store := s.ensureSweepsLocked()
+
+		store.visible = p.Visible
+		if p.Visible {
+			s.dismissPrintPreviewLocked()
+		}
+		return nil
+	case "sweep.trace.select":
+		var p IDParams
+		if err := params(raw, &p, "id"); err != nil {
+			return err
+		}
+		if s.sweeps == nil {
+			return &actionError{"unavailable", "Complete a sweep first"}
+		}
+		job := s.sweeps.operations[s.sweeps.selected]
+		if job == nil || job.record == nil {
+			return &actionError{"not-ready", "Complete a sweep first"}
+		}
+		for _, probe := range job.record.Result.Probes {
+			if probe.ID == p.ID {
+				s.sweeps.traceID = p.ID
+				return nil
+			}
+		}
+		return fmt.Errorf("choose a captured sweep probe")
+	case "sweep.cursor.set":
+		var p SweepCursorParams
+		if err := params(raw, &p, "index"); err != nil {
+			return err
+		}
+		if s.sweeps == nil {
+			return &actionError{"not-ready", "Complete a sweep first"}
+		}
+		if p.OperationID != "" && p.OperationID != s.sweeps.selected {
+			return &actionError{"conflict", "Sweep selection changed; inspect before setting a cursor"}
+		}
+		job := s.sweeps.operations[s.sweeps.selected]
+		if job == nil || job.record == nil {
+			return &actionError{"not-ready", "Complete a sweep first"}
+		}
+		if p.Index != nil && (*p.Index < 0 || *p.Index >= len(job.record.Result.Points)) {
+			return fmt.Errorf("cursor index is outside sweep points")
+		}
+		s.sweeps.cursor = nil
+		if p.Index != nil {
+			v := *p.Index
+			s.sweeps.cursor = &v
+		}
+		return nil
+	case "sweep.keep.set":
+		var p RecordingKeepParams
+		if err := params(raw, &p, "id", "keep"); err != nil {
+			return err
+		}
+		if s.sweeps == nil || s.sweeps.operations[p.ID] == nil || s.sweeps.operations[p.ID].record == nil {
+			return &actionError{"not-ready", "Choose a completed sweep"}
+		}
+		s.sweeps.operations[p.ID].keep = p.Keep
 		return nil
 	case "print.preview.start":
 		var p PreviewParams

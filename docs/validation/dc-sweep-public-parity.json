@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "scope": "Exact numerical curve/source-baseline equality over three public transport workflows; metadata timestamps/actor identity differ intentionally",
+  "cases": [
+    {
+      "case": "led-voltage",
+      "points": 11,
+      "probes": [
+        "i:D1",
+        "v:D1"
+      ],
+      "result_equal": true,
+      "dc_sources_equal": true
+    },
+    {
+      "case": "rc-steady-state",
+      "points": 11,
+      "probes": [
+        "v:C1",
+        "i:C1"
+      ],
+      "result_equal": true,
+      "dc_sources_equal": true
+    },
+    {
+      "case": "npn-drive",
+      "points": 11,
+      "probes": [
+        "i:Q1.base",
+        "i:Q1.collector",
+        "v:Q1.collector"
+      ],
+      "result_equal": true,
+      "dc_sources_equal": true
+    }
+  ]
+}

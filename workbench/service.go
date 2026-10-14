@@ -13,6 +13,7 @@ import (
 )
 
 type Snapshot struct {
+	DCSweep                *SweepState            `json:"dc_sweep,omitempty"`
 	PrintPreview           *PrintPreview          `json:"print_preview,omitempty"`
 	SourceAnnotations      []SourceAnnotation     `json:"source_annotations"`
 	ProjectWork            *ProjectWork           `json:"project_work,omitempty"`
@@ -85,6 +86,10 @@ type savedResponse struct {
 	project     *projectJob
 }
 type Service struct {
+	sweeps                           *sweepStore
+	sweepSerial                      uint64
+	sweepWorkers                     int
+	sweepCompute                     func(context.Context, sweepPlan, func(int)) (*SweepResult, error)
 	preview                          *previewJob
 	previewSerial                    uint64
 	previewWorkers                   int
@@ -200,8 +205,8 @@ func newService(solver func(context.Context, Circuit) (Result, error)) *Service 
 }
 func newGraphService(solver func(context.Context, Circuit) (Result, error), graph Graph) *Service {
 	s := &Service{
-		revision:          1,
-		previewRender:     renderSchematicPage,
+		revision:     1,
+		sweepCompute: computeDCSweep, previewRender: renderSchematicPage,
 		electrical:        1,
 		graph:             graph.Clone(),
 		drawing:           DefaultDrawing(),
@@ -261,6 +266,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	out := Snapshot{
 		SourceAnnotations:      s.sourceAnnotationsLocked(),
 		PrintPreview:           s.printPreviewLocked(),
+		DCSweep:                s.sweepStateLocked(),
 		SchematicPage:          page,
 		ProjectWork:            s.projectWorkLocked(),
 		InputWork:              s.inputWorkLocked(),
@@ -293,7 +299,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		CommandRevision:        s.commandRevision,
 		Transient:              cloneTransient(s.transient),
 		TransientSettings:      s.transientSettings,
-		Document:               DocumentState{PreferencesDirty: preferencesHash(s.pins, s.displayPreferences, s.exampleID) != s.savedPreferences, SchematicDirty: contentHash(s.graph, s.transientSettings) != s.savedGraph, RecordingsDirty: s.recordingsDirtyLocked(), RecordingCount: s.recordingCountLocked(), Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: DocumentVersion, Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom},
+		Document:               DocumentState{PreferencesDirty: preferencesHash(s.pins, s.displayPreferences, s.exampleID) != s.savedPreferences, SchematicDirty: contentHash(s.graph, s.transientSettings) != s.savedGraph, RecordingsDirty: s.recordingsDirtyLocked(), RecordingCount: s.recordingCountLocked(), Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: s.currentDocumentVersionLocked(), Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom},
 		Revision:               s.revision,
 		ElectricalRevision:     s.electrical,
 		Circuit:                s.circuit,
@@ -492,6 +498,13 @@ func (s *Service) closeLocked() {
 			s.recoveryCancel()
 		}
 	}
+	if s.sweeps != nil {
+		for _, job := range s.sweeps.operations {
+			if operationActive(job.summary.Status) {
+				job.cancel()
+			}
+		}
+	}
 	if s.preview != nil {
 		s.preview.cancel()
 		s.preview.data = nil
@@ -602,6 +615,18 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 		return fail("unknown-command", "enumerate capabilities.list for supported commands")
 	}
 	if !cap.Mutation {
+		if r.Command == "sweep.inspect" {
+			var p IDParams
+			if err := params(r.Params, &p, "id"); err != nil {
+				return fail("invalid-params", err.Error())
+			}
+			result, err := s.inspectSweepLocked(p.ID)
+			if err != nil {
+				return fail("not-found", err.Error())
+			}
+			out.Result = result
+			return out
+		}
 		if r.Command == "print.preview.image" {
 			var p PreviewImageParams
 			if err := params(r.Params, &p, "id"); err != nil {
@@ -835,6 +860,9 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 		s.cursorA = nil
 		s.cursorB = nil
 	}
+	if r.Command == "sweep.start" && s.sweeps != nil {
+		s.sweeps.operations[s.sweeps.selected].summary.Actor = actor
+	}
 	if r.Command == "print.preview.start" && s.preview != nil {
 		s.preview.view.Actor = actor
 	}
@@ -887,6 +915,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 func cloneSnapshot(state Snapshot) Snapshot {
 	state.SourceAnnotations = cloneSourceAnnotations(state.SourceAnnotations)
 	state.PrintPreview = clonePrintPreview(state.PrintPreview)
+	state.DCSweep = cloneSweepState(state.DCSweep)
 	state.SchematicPage = cloneSchematicPage(state.SchematicPage)
 	state.ProjectWork = cloneProjectWork(state.ProjectWork)
 	state.InputWork = cloneInputWork(state.InputWork)

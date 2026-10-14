@@ -1,0 +1,52 @@
+{
+  "passed": true,
+  "scope": "CUA coordinate click on owned native GPU curve, followed by public state verification",
+  "cursor_index": 25,
+  "input_v": 2.5,
+  "actor": "user",
+  "captured_values": [
+    0.0005094661757522341,
+    2.5
+  ],
+  "live_result": {
+    "run_id": 2,
+    "electrical_revision": 2,
+    "engine": "elab.series-led-dc.v1",
+    "model": {
+      "id": "elab.generic-red-led.v1",
+      "is_a": 1e-20,
+      "n": 2,
+      "rs_ohm": 1,
+      "temperature_c": 27,
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+    },
+    "current_a": 0.0029167965774405296,
+    "led_voltage_v": 2.083203422559471,
+    "resistor_voltage_v": 2.91679657744053,
+    "led_power_w": 0.006076280613033862,
+    "resistor_power_w": 0.008507702274168787,
+    "kvl_residual_v": -6.730727086790012e-16,
+    "node_voltage_v": {
+      "ground": 0,
+      "led-anode": 2.083203422559471,
+      "net:D1.anode": 2.083203422559471,
+      "net:D1.cathode": 0,
+      "net:R1.1": 5,
+      "supply": 5
+    },
+    "stale": false,
+    "source_id": "V1",
+    "resistor_id": "R1",
+    "led_id": "D1"
+  },
+  "observations": [
+    "Initial ordinary widget event path did not receive GPU-overlay click",
+    "Repaired native pointer bridge selects an actual recorded point",
+    "Separate native readouts show signed SI values; graph explicitly labels current display in mA",
+    "Short settings/help labels fit left rail; moving entry to drawing toolbar removes header horizontal scrollbar"
+  ],
+  "limits": [
+    "Screenshots are inline chat evidence; no repository screenshot paths claimed",
+    "One coordinate-click scenario; not exhaustive drag/resize/keyboard/accessibility proof"
+  ]
+}

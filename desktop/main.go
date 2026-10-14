@@ -75,7 +75,7 @@ func main() {
 	screen.drawing = &commandCanvas{MeshCanvas: renderer, screen: screen}
 	scopeView := canvas.Viewport{Width: 800, Height: 120, Zoom: 1}
 	screen.scope = &scopeCanvas{MeshCanvas: &cogent.MeshCanvas{Owner: a, Window: "main", View: &scopeView, Prepare: screen.scopeMesh, OnError: func(err error) { log.Print("scope: ", err) }}, screen: screen}
-	screen.drawing.pointer = newPointerBridge(a, screen.drawing.routePointer)
+	screen.drawing.pointer = newPointerBridge(a, screen.routeNativePointer)
 	defer screen.drawing.pointer.close()
 	screen.registerCommands()
 	width, height := float32(1040), float32(760)
@@ -162,6 +162,8 @@ func main() {
 }
 
 type screen struct {
+	nativePointerPane                string
+	sweepDrawing                     *sweepCanvas
 	previewPixels                    previewPixels
 	requestHelp                      *workbench.DiagnosticHelp
 	requestHelpRevision              uint64

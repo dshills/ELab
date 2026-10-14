@@ -70,7 +70,7 @@ func (c *commandCanvas) Mount(parent tree.Node) core.Widget {
 		e.SetHandled()
 	})
 	w.OnFirst(events.KeyChord, func(e events.Event) {
-		if previewVisible(c.screen.service.Snapshot()) {
+		if sourcePaneHidden(c.screen.service.Snapshot()) {
 			e.SetHandled()
 			return
 		}
@@ -240,7 +240,7 @@ func (s *screen) canvasClick(p workbench.Point) {
 }
 func (s *screen) mesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	state := s.service.Snapshot()
-	if s.drawing != nil && s.drawing.widget != nil && s.drawing.pointer != nil {
+	if s.drawing != nil && s.drawing.widget != nil && s.drawing.pointer != nil && !sourcePaneHidden(state) {
 		w := s.drawing.widget
 		origin := w.Geom.Pos.Content
 		if w.Scene != nil {
@@ -274,7 +274,7 @@ func (s *screen) mesh(v canvas.Viewport) (*canvas.Mesh, error) {
 // pointer routes precise native packets through the same intent functions and
 // commands as the portable canvas handlers. It runs only on the Vellum owner.
 func (c *commandCanvas) routePointer(phase int, p, delta workbench.Point) {
-	if c.screen.fileBusy || c.screen.pendingCommand != "" || previewVisible(c.screen.service.Snapshot()) {
+	if c.screen.fileBusy || c.screen.pendingCommand != "" || sourcePaneHidden(c.screen.service.Snapshot()) {
 		c.dragID = ""
 		c.dragging = false
 		return
@@ -348,5 +348,28 @@ func (c *commandCanvas) routePointer(phase int, p, delta workbench.Point) {
 		c.screen.renderRevision++
 		c.Revision = c.screen.renderRevision
 		c.Owner.Invalidate(c.Window)
+	}
+}
+
+// The native GPU overlay consumes pointer packets before ordinary widget events.
+// Select the rendered pane, then submit its same public semantic command.
+func (s *screen) routeNativePointer(pane string, phase int, p, delta workbench.Point) {
+	state := s.service.Snapshot()
+	if s.fileBusy || s.pendingCommand != "" || previewVisible(state) {
+		return
+	}
+	switch pane {
+	case "sweep":
+		if !sweepVisible(state) || s.sweepDrawing == nil {
+			return
+		}
+		if phase == 0 || phase == 1 {
+			screenPoint := s.sweepDrawing.View.Screen(canvas.Point{X: p.X, Y: p.Y})
+			s.sweepDrawing.placeCursor(screenPoint.X)
+		}
+	case "schematic":
+		if !sourcePaneHidden(state) {
+			s.drawing.routePointer(phase, p, delta)
+		}
 	}
 }

@@ -17,6 +17,7 @@ const DocumentVersion = 4
 const MaxDocumentBytes = 256 * 1024
 
 type Document struct {
+	Sweeps             *ProjectSweeps      `json:"dc_sweeps,omitempty"`
 	ExampleID          string              `json:"example_id,omitempty"`
 	DisplayPreferences *DisplayPreferences `json:"display_preferences,omitempty"`
 	PinnedReadings     *PinPreferences     `json:"pinned_readings,omitempty"`
@@ -189,8 +190,23 @@ func decodeDocument(data []byte) (Document, error) {
 	if err := validatePointParam(raw.View, "center"); err != nil {
 		return d, err
 	}
-	if d.Format != DocumentFormat || (d.Version < 1 || d.Version > DocumentVersion) {
-		return d, fmt.Errorf("unsupported schematic format/version; expected %s version %d", DocumentFormat, DocumentVersion)
+	if d.Format != DocumentFormat || (d.Version < 1 || d.Version > SweepDocumentVersion) {
+		return d, fmt.Errorf("unsupported schematic format/version; expected %s versions 1–%d", DocumentFormat, SweepDocumentVersion)
+	}
+	var sweepFields map[string]json.RawMessage
+	_ = json.Unmarshal(data, &sweepFields)
+	_, hasSweepField := sweepFields["dc_sweeps"]
+	if d.Version < SweepDocumentVersion && hasSweepField {
+		return d, fmt.Errorf("DC sweeps require version 5")
+	}
+	if d.Version == SweepDocumentVersion {
+		var fields map[string]json.RawMessage
+		_ = json.Unmarshal(data, &fields)
+		sweeps, err := validateProjectSweeps(fields["dc_sweeps"])
+		if err != nil {
+			return d, err
+		}
+		d.Sweeps = sweeps
 	}
 	if d.Version < 4 {
 		if len(data) > MaxDocumentBytes {
@@ -461,7 +477,7 @@ func (s *Service) documentLocked() Document {
 	compiled, _, _ := s.graph.Compile()
 	probes := ProbeParams{IDs: s.scopeLocked(compiled).Selected}
 	paused := s.paused
-	d := Document{ExampleID: s.exampleID, Recordings: s.projectRecordingsLocked(), Paused: &paused, ScopeProbes: &probes, Format: DocumentFormat, Version: DocumentVersion, Graph: s.graph.Clone(), View: s.view, LEDModel: Model(), TransientSettings: &settings}
+	d := Document{Sweeps: s.projectSweepsLocked(), ExampleID: s.exampleID, Recordings: s.projectRecordingsLocked(), Paused: &paused, ScopeProbes: &probes, Format: DocumentFormat, Version: s.currentDocumentVersionLocked(), Graph: s.graph.Clone(), View: s.view, LEDModel: Model(), TransientSettings: &settings}
 	if s.displayPreferences != DefaultDisplayPreferences() {
 		prefs := s.displayPreferences
 		d.DisplayPreferences = &prefs
@@ -521,6 +537,7 @@ func (s *Service) installDocumentLocked(d Document) {
 		s.pins = clonePins(d.PinnedReadings.Items)
 	}
 	s.installProjectRecordingsLocked(d.Recordings)
+	s.installProjectSweepsLocked(d.Sweeps)
 	s.inputMode = "auto"
 	s.pendingInputMode = ""
 	s.documentGeneration++

@@ -110,7 +110,7 @@ func (s *Service) recordingCountLocked() int {
 			count++
 		}
 	}
-	return count
+	return count + s.keptSweepCountLocked()
 }
 func (s *Service) setRecordingKeepLocked(p RecordingKeepParams) error {
 	operation := s.operations[p.ID]
@@ -126,6 +126,7 @@ func (s *Service) clearProjectOperationsLocked() {
 			operation.cancel()
 		}
 	}
+	s.clearSweepsLocked()
 	s.operations = map[string]*verificationOperation{}
 	s.operationOrder = nil
 	s.lastOperation = ""
@@ -164,6 +165,9 @@ func (s *Service) requireRecordingSlotLocked() error {
 	return &actionError{"record-limit", "The project keeps eight recordings. Exclude one from the project before creating or importing another."}
 }
 func (s *Service) verificationActiveLocked() bool {
+	if s.sweepWorkers != 0 {
+		return true
+	}
 	for _, operation := range s.operations {
 		if operationActive(operation.summary.Status) {
 			return true
@@ -178,6 +182,14 @@ func (s *Service) recordingMembershipHashLocked() [32]byte {
 		operation := s.operations[id]
 		if operation.keep && operation.record != nil {
 			ids = append(ids, id)
+		}
+	}
+	if s.sweeps != nil {
+		for _, id := range s.sweeps.order {
+			job := s.sweeps.operations[id]
+			if job.keep && job.record != nil {
+				ids = append(ids, id)
+			}
 		}
 	}
 	data, _ := json.Marshal(ids)

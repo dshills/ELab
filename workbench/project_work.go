@@ -70,9 +70,9 @@ func (s *Service) projectWorkLocked() *ProjectWork {
 }
 
 type loadGuard struct {
-	generation, electrical, actuation, operationSerial uint64
-	graph, preferences, recordings, disk               [32]byte
-	path, mode, pending                                string
+	generation, electrical, actuation, operationSerial, sweepSerial uint64
+	graph, preferences, recordings, disk                            [32]byte
+	path, mode, pending                                             string
 }
 
 func (s *Service) loadGuardLocked() loadGuard {
@@ -81,6 +81,7 @@ func (s *Service) loadGuardLocked() loadGuard {
 		electrical:      s.electrical,
 		actuation:       s.actuationRevision,
 		operationSerial: s.operationSerial,
+		sweepSerial:     s.sweepSerial,
 		graph:           contentHash(s.graph, s.transientSettings),
 		preferences:     preferencesHash(s.pins, s.displayPreferences, s.exampleID),
 		recordings:      s.recordingMembershipHashLocked(),
@@ -321,7 +322,7 @@ func (s *Service) retainProjectJobLocked(job *projectJob) {
 }
 
 func waitingProjectCommand(command string) bool {
-	return command == "project.save" || command == "project.load" || command == "export.schematic.svg" || command == "export.schematic.pdf" || command == "export.schematic.png" || command == "export.scope.csv" || command == "verification.export" || command == "verification.import" || command == "recovery.scan" || command == "recovery.checkpoint" || command == "recovery.restore"
+	return command == "project.save" || command == "project.load" || command == "export.schematic.svg" || command == "export.schematic.pdf" || command == "export.schematic.png" || command == "export.scope.csv" || command == "verification.export" || command == "sweep.export" || command == "verification.import" || command == "recovery.scan" || command == "recovery.checkpoint" || command == "recovery.restore"
 }
 func (s *Service) projectWorkSupersededLocked(job *projectJob) bool {
 	if job.publishing {

@@ -27,7 +27,7 @@ func (s *Service) startProjectSaveLocked(p SaveParams) error {
 		return &actionError{"busy", "Finish or cancel the active project file operation first"}
 	}
 	if s.verificationActiveLocked() {
-		return &actionError{"busy", "Finish or cancel the active verification before saving the project"}
+		return &actionError{"busy", "Finish or cancel the active analysis before saving the project"}
 	}
 	if err := s.checkDocumentGenerationLocked(p.ExpectedGeneration); err != nil {
 		return err

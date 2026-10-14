@@ -19,14 +19,15 @@ import (
 )
 
 type pointerFrame struct {
-	x, y  float64
-	view  canvas.Viewport
-	ready bool
+	x, y        float64
+	view        canvas.Viewport
+	ready       bool
+	pane, token string
 }
 type pointerBridge struct {
 	enabled      atomic.Bool
 	owner        *app.Application
-	route        func(int, workbench.Point, workbench.Point)
+	route        func(string, int, workbench.Point, workbench.Point)
 	mu           sync.Mutex
 	frame        pointerFrame
 	active       bool
@@ -35,7 +36,7 @@ type pointerBridge struct {
 
 var activePointer atomic.Pointer[pointerBridge]
 
-func newPointerBridge(owner *app.Application, route func(int, workbench.Point, workbench.Point)) *pointerBridge {
+func newPointerBridge(owner *app.Application, route func(string, int, workbench.Point, workbench.Point)) *pointerBridge {
 	b := &pointerBridge{owner: owner, route: route}
 	b.enabled.Store(true)
 	activePointer.Store(b)
@@ -47,12 +48,28 @@ func (b *pointerBridge) setEnabled(enabled bool) {
 		b.enabled.Store(enabled)
 	}
 }
-func (b *pointerBridge) publish(x, y float64, view canvas.Viewport) {
+func (b *pointerBridge) invalidateFrame() {
 	if b == nil {
 		return
 	}
 	b.mu.Lock()
-	b.frame = pointerFrame{x, y, view, true}
+	b.frame.ready = false
+	b.active = false
+	b.mu.Unlock()
+}
+func (b *pointerBridge) publish(x, y float64, view canvas.Viewport, pane ...string) {
+	if b == nil {
+		return
+	}
+	b.mu.Lock()
+	kind, token := "schematic", ""
+	if len(pane) > 0 {
+		kind = pane[0]
+	}
+	if len(pane) > 1 {
+		token = pane[1]
+	}
+	b.frame = pointerFrame{x: x, y: y, view: view, ready: true, pane: kind, token: token}
 	b.mu.Unlock()
 }
 func (b *pointerBridge) close() {
@@ -109,7 +126,13 @@ func goELabPointer(phase C.int, x, y, scroll C.double) C.int {
 		if !b.enabled.Load() {
 			return
 		}
-		b.route(int(phase), workbench.Point{X: point.X, Y: point.Y}, delta)
+		b.mu.Lock()
+		current := b.frame
+		b.mu.Unlock()
+		if current != frame {
+			return
+		}
+		b.route(frame.pane, int(phase), workbench.Point{X: point.X, Y: point.Y}, delta)
 	})
 	if err != nil {
 		b.mu.Lock()

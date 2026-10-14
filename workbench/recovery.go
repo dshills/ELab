@@ -270,10 +270,14 @@ func (s *Service) recoveryInspectionLocked(raw json.RawMessage) (RecoveryInspect
 }
 
 func documentRecordingCount(d Document) int {
-	if d.Recordings == nil {
-		return 0
+	count := 0
+	if d.Recordings != nil {
+		count += len(d.Recordings.Entries)
 	}
-	return len(d.Recordings.Entries)
+	if d.Sweeps != nil {
+		count += len(d.Sweeps.Entries)
+	}
+	return count
 }
 func inspectDocument(d Document) DocumentInspection {
 	out := DocumentInspection{ExampleID: d.ExampleID, DisplayPreferences: d.DisplayPreferences, PinnedReadings: d.PinnedReadings, WaveformModel: d.WaveformModel, PotentiometerModel: d.PotentiometerModel, DiodeModel: d.DiodeModel, SwitchModel: d.SwitchModel, Format: d.Format, Version: d.Version, Graph: d.Graph.Clone(), View: d.View, ScopeProbes: d.ScopeProbes, TransientSettings: d.TransientSettings, LEDModel: d.LEDModel, NPNModel: d.NPNModel, Paused: d.Paused != nil && *d.Paused, Recordings: []VerificationMetadata{}, SelectedRecording: -1}

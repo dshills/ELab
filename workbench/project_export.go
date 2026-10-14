@@ -35,6 +35,7 @@ type exportCapture struct {
 	trace       *Transient
 	scope       Scope
 	record      *verificationRecord
+	sweep       *SweepRecord
 	artifact    Artifact
 }
 type projectExportFunc func(context.Context, exportCapture, func(string, int)) (*preparedFile, error)
@@ -131,6 +132,23 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 		capture.scope = cloneScope(scope)
 		capture.artifact.RunID = t.RunID
 		capture.artifact.ElectricalRevision = t.ElectricalRevision
+	case "sweep-json", "sweep-csv":
+		command = "sweep.export"
+		if s.sweeps == nil || s.sweeps.operations[p.ID] == nil {
+			return &actionError{"not-found", "Choose a retained sweep"}
+		}
+		job := s.sweeps.operations[p.ID]
+		if job.record == nil {
+			return &actionError{"not-ready", "Export requires a completed sweep"}
+		}
+		capture.sweep = cloneSweepRecord(job.record)
+		capture.artifact.Format = "dc-sweep.json"
+		if p.Kind == "sweep-csv" {
+			capture.artifact.Format = "dc-sweep.csv"
+		}
+		capture.artifact.OperationID = p.ID
+		capture.artifact.RunID = 0
+		capture.artifact.ElectricalRevision = job.metadata.ElectricalRevision
 	case "verification-json", "verification-csv":
 		command = "verification.export"
 		capture.artifact.Format = "verification.json"
@@ -151,7 +169,7 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 		capture.artifact.RunID = 0
 		capture.artifact.ElectricalRevision = operation.record.metadata.ElectricalRevision
 	default:
-		return fmt.Errorf("export kind must be schematic-svg, schematic-pdf, schematic-png, scope-csv, verification-json or verification-csv")
+		return fmt.Errorf("export kind must be schematic-svg, schematic-pdf, schematic-png, scope-csv, verification-json, verification-csv, sweep-json or sweep-csv")
 	}
 	s.projectSerial++
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -173,6 +191,10 @@ func prepareProjectExport(ctx context.Context, capture exportCapture, progress f
 	switch capture.kind {
 	case "schematic-pdf", "schematic-png":
 		data, err = renderSchematicPage(ctx, capture)
+	case "sweep-json":
+		data, err = encodeSweepExport(capture.sweep, "json")
+	case "sweep-csv":
+		data, err = encodeSweepExport(capture.sweep, "csv")
 	case "schematic-svg":
 		data = schematicSVGWithAnnotations(capture.graph, capture.artifact.RunID, capture.artifact.ElectricalRevision, capture.display, capture.annotations, capture.settings, capture.readings...)
 	case "scope-csv":
@@ -252,6 +274,7 @@ func (s *Service) runProjectExport(job *projectJob, prepare projectExportFunc, p
 	job.export.graph = Graph{}
 	job.export.trace = nil
 	job.export.record = nil
+	job.export.sweep = nil
 	job.export.scope = Scope{}
 	job.export.readings = nil
 	job.export.annotations = nil

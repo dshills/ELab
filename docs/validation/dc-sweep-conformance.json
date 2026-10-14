@@ -1,0 +1,165 @@
+{
+  "passed": true,
+  "source_report": "build/dc-sweep-conformance/report.json",
+  "source_report_sha256": "20626255ef706915ba67dacad8b46d7059c65e52d2a8dcbbb8416adfeb69d88b",
+  "go_version": "go1.27.2",
+  "platform": "darwin/arm64",
+  "adapters": [
+    {
+      "name": "in-process",
+      "equivalent": true,
+      "workflows": [
+        {
+          "name": "led",
+          "command_count": 36,
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ]
+        },
+        {
+          "name": "rc",
+          "command_count": 44,
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ]
+        },
+        {
+          "name": "npn",
+          "command_count": 46,
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "headless-stdio",
+      "equivalent": true,
+      "workflows": [
+        {
+          "name": "led",
+          "command_count": 36,
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ]
+        },
+        {
+          "name": "rc",
+          "command_count": 43,
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ]
+        },
+        {
+          "name": "npn",
+          "command_count": 45,
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "headless-socket",
+      "equivalent": true,
+      "workflows": [
+        {
+          "name": "led",
+          "command_count": 36,
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ]
+        },
+        {
+          "name": "rc",
+          "command_count": 43,
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ]
+        },
+        {
+          "name": "npn",
+          "command_count": 45,
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "native-socket",
+      "equivalent": true,
+      "workflows": [
+        {
+          "name": "led",
+          "command_count": 36,
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ]
+        },
+        {
+          "name": "rc",
+          "command_count": 43,
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ]
+        },
+        {
+          "name": "npn",
+          "command_count": 45,
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ]
+        }
+      ]
+    }
+  ]
+}

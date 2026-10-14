@@ -74,8 +74,22 @@ func (s *screen) view() ui.Node {
 		s.requestHelp = nil
 		s.errorMessage = ""
 	}
-	s.drawing.pointer.setEnabled(!s.fileBusy && s.pendingCommand == "" && !previewVisible(state))
-	if previewVisible(state) {
+	pane := "schematic"
+	if sweepVisible(state) {
+		pane = ""
+		if state.DCSweep.Result != nil {
+			pane = "sweep"
+		}
+	}
+	if previewVisible(state) || s.fileBusy || s.pendingCommand != "" {
+		pane = ""
+	}
+	if pane != s.nativePointerPane {
+		s.drawing.pointer.invalidateFrame()
+		s.nativePointerPane = pane
+	}
+	s.drawing.pointer.setEnabled(pane != "")
+	if sourcePaneHidden(state) {
 		s.drawing.dragID = ""
 		s.drawing.dragging = false
 	}
@@ -404,12 +418,15 @@ func (s *screen) view() ui.Node {
 	}
 	inspector = append(inspector, s.recoveryInspector(state)...)
 	inspector = append(inspector, s.verificationInspector(state)...)
+	if !sweepVisible(state) {
+		inspector = append(inspector, s.sweepInspector(state)...)
+	}
 	tools := ui.Node{ID: "tools", Kind: ui.Toolbar, Grow: true, Style: chromeStyle(), Children: []ui.Node{}}
 	for _, tool := range []string{"select", "wire", "pan"} {
 		n := s.action("tool-"+tool, strings.ToUpper(tool[:1])+tool[1:], "drawing.tool.set", workbench.ToolParams{Tool: tool})
 		tools.Children = append(tools.Children, buttonStyle(n, state.Drawing.Tool == tool))
 	}
-	tools.Children = append(tools.Children, s.button("drawing.cancel", "Esc"), ui.Node{ID: "tool-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, s.button("view.fit", "Fit"), label("zoom", fmt.Sprintf("%.0f%%", state.View.Zoom*100)))
+	tools.Children = append(tools.Children, s.button("drawing.cancel", "Esc"), ui.Node{ID: "tool-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, s.action("sweep-open", "DC sweep", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: true}), s.button("view.fit", "Fit"), label("zoom", fmt.Sprintf("%.0f%%", state.View.Zoom*100)))
 	hints := "Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom"
 	switch state.Drawing.Tool {
 	case "wire":
@@ -570,6 +587,8 @@ func (s *screen) view() ui.Node {
 			}
 		}
 		palette = append(s.schematicPageControls(state), exports...)
+	} else if sweepVisible(state) {
+		palette = s.sweepInspector(state)
 	}
 	constrainRail(palette, 152)
 	constrainRail(inspector, 248)
@@ -583,6 +602,9 @@ func (s *screen) view() ui.Node {
 	schematicChildren := []ui.Node{tools, {ID: "schematic", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 80})}, Custom: s.drawing}, quiet("schematic-help", hints), messages}
 	if previewVisible(state) {
 		schematicChildren = append(s.printPreviewPanel(state), messages)
+	} else if sweepVisible(state) {
+		schematicChildren = append(s.sweepPanel(state), messages)
+		s.previewPixels = previewPixels{}
 	} else {
 		s.previewPixels = previewPixels{}
 	}
@@ -597,7 +619,7 @@ func (s *screen) view() ui.Node {
 		{ID: "footer-row", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 20})}, Children: []ui.Node{quiet("footer", fmt.Sprintf("%s · %d components · %d wires · last change: %s", filename, len(state.Components), len(state.Wires), state.LastActor)), {ID: "footer-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, quiet("grid-info", "10-unit snap · local workspace")}},
 		s.filePrompt(),
 	}}
-	if previewVisible(state) {
+	if sourcePaneHidden(state) {
 		children := make([]ui.Node, 0, len(root.Children))
 		for _, child := range root.Children {
 			if child.ID != "readings" {
@@ -606,7 +628,7 @@ func (s *screen) view() ui.Node {
 		}
 		root.Children = children
 	}
-	if scopeAvailable(state) && !previewVisible(state) {
+	if scopeAvailable(state) && !sourcePaneHidden(state) {
 		index := len(root.Children) - 3
 		children := append([]ui.Node{}, root.Children[:index]...)
 		children = append(children, s.scopePanel(state))
