@@ -1,0 +1,442 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "commands": 112,
+  "catalog_bytes": 65315,
+  "checks": [
+    "ordinary catalog compatibility",
+    "filtered identity/expanded root input",
+    "paused graph/history/physics query purity",
+    "unknown/null/oversized refusal purity",
+    "finite-pulse SI range and coupled constraints",
+    "runnable sine/pulse examples",
+    "unit-text pulse entry and invalid coupled value preserve state"
+  ],
+  "detailed_capabilities": [
+    {
+      "id": "source.sine.set",
+      "description": "Set per-source sine amplitude, offset, frequency and phase; ordinary schematic restart semantics",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "examples": [
+          {
+            "id": "V1",
+            "waveform": {
+              "amplitude_v": 2.5,
+              "offset_v": 0,
+              "frequency_hz": 10,
+              "phase_degrees": 0
+            }
+          }
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "waveform": {
+            "additionalProperties": false,
+            "properties": {
+              "amplitude_v": {
+                "maximum": 12,
+                "minimum": 0,
+                "type": "number",
+                "x-unit": "V"
+              },
+              "frequency_hz": {
+                "maximum": 1000,
+                "minimum": 0.1,
+                "type": "number",
+                "x-unit": "Hz"
+              },
+              "offset_v": {
+                "maximum": 12,
+                "minimum": -12,
+                "type": "number",
+                "x-unit": "V"
+              },
+              "phase_degrees": {
+                "maximum": 360,
+                "minimum": -360,
+                "type": "number",
+                "x-unit": "degrees"
+              }
+            },
+            "required": [
+              "amplitude_v",
+              "offset_v",
+              "frequency_hz",
+              "phase_degrees"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "waveform"
+        ],
+        "type": "object",
+        "x-details-scope": "parameter-bounds-and-examples; stateful-preconditions-and-errors-not-exhaustive",
+        "x-normalized-si-relations": [
+          {
+            "operator": "sum_absolute_maximum",
+            "fields": [
+              "waveform.offset_v",
+              "waveform.amplitude_v"
+            ],
+            "limit": 12
+          }
+        ]
+      },
+      "output": "Snapshot mutations; query data otherwise; local schemas",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    {
+      "id": "source.pulse.set",
+      "description": "Set per-source finite pulse levels, phase lengths and linear rise/fall; ordinary schematic restart semantics",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "examples": [
+          {
+            "id": "V1",
+            "waveform": {
+              "high_v": 5,
+              "low_v": 0,
+              "high_s": 0.05,
+              "low_s": 0.05,
+              "rise_s": 0.001,
+              "fall_s": 0.001
+            }
+          }
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "waveform": {
+            "additionalProperties": false,
+            "properties": {
+              "fall_s": {
+                "$ref": "urn:elab:time:1",
+                "maximum": 10,
+                "minimum": 1e-06,
+                "x-normalized-si-range": {
+                  "maximum": 10,
+                  "minimum": 1e-06
+                },
+                "x-unit": "s"
+              },
+              "high_s": {
+                "$ref": "urn:elab:time:1",
+                "maximum": 10,
+                "minimum": 1e-06,
+                "x-normalized-si-range": {
+                  "maximum": 10,
+                  "minimum": 1e-06
+                },
+                "x-unit": "s"
+              },
+              "high_v": {
+                "maximum": 12,
+                "minimum": -12,
+                "type": "number",
+                "x-unit": "V"
+              },
+              "low_s": {
+                "$ref": "urn:elab:time:1",
+                "maximum": 10,
+                "minimum": 1e-06,
+                "x-normalized-si-range": {
+                  "maximum": 10,
+                  "minimum": 1e-06
+                },
+                "x-unit": "s"
+              },
+              "low_v": {
+                "maximum": 12,
+                "minimum": -12,
+                "type": "number",
+                "x-unit": "V"
+              },
+              "rise_s": {
+                "$ref": "urn:elab:time:1",
+                "maximum": 10,
+                "minimum": 1e-06,
+                "x-normalized-si-range": {
+                  "maximum": 10,
+                  "minimum": 1e-06
+                },
+                "x-unit": "s"
+              }
+            },
+            "required": [
+              "high_v",
+              "low_v",
+              "high_s",
+              "low_s",
+              "rise_s",
+              "fall_s"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "waveform"
+        ],
+        "type": "object",
+        "x-details-scope": "parameter-bounds-and-examples; stateful-preconditions-and-errors-not-exhaustive",
+        "x-normalized-si-relations": [
+          {
+            "operator": "less_or_equal",
+            "fields": [
+              "waveform.low_v",
+              "waveform.high_v"
+            ]
+          },
+          {
+            "operator": "less_or_equal",
+            "fields": [
+              "waveform.rise_s",
+              "waveform.high_s"
+            ]
+          },
+          {
+            "operator": "less_or_equal",
+            "fields": [
+              "waveform.fall_s",
+              "waveform.low_s"
+            ]
+          },
+          {
+            "operator": "sum_minimum",
+            "fields": [
+              "waveform.high_s",
+              "waveform.low_s"
+            ],
+            "limit": 0.001
+          }
+        ]
+      },
+      "output": "Snapshot mutations; query data otherwise; local schemas",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    {
+      "id": "simulation.transient.set",
+      "description": "Set transient sampling, pulse durations and playback speed (initial_voltage_v supplies default capacitor startup voltages); undoable and restarts from initial conditions",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "examples": [
+          {
+            "step_s": 0.001,
+            "high_s": 0.05,
+            "low_s": 0.05,
+            "initial_voltage_v": 0,
+            "seconds_per_wall_second": 0.02
+          }
+        ],
+        "properties": {
+          "high_s": {
+            "$ref": "urn:elab:time:1",
+            "maximum": 10,
+            "minimum": 1e-06,
+            "x-normalized-si-range": {
+              "maximum": 10,
+              "minimum": 1e-06
+            },
+            "x-unit": "s"
+          },
+          "initial_voltage_v": {
+            "maximum": 12,
+            "minimum": 0,
+            "type": "number",
+            "x-unit": "V"
+          },
+          "low_s": {
+            "$ref": "urn:elab:time:1",
+            "maximum": 10,
+            "minimum": 1e-06,
+            "x-normalized-si-range": {
+              "maximum": 10,
+              "minimum": 1e-06
+            },
+            "x-unit": "s"
+          },
+          "seconds_per_wall_second": {
+            "maximum": 1,
+            "minimum": 0.001,
+            "type": "number",
+            "x-unit": "simulated_s/wall_s"
+          },
+          "step_s": {
+            "$ref": "urn:elab:time:1",
+            "maximum": 1,
+            "minimum": 1e-06,
+            "x-normalized-si-range": {
+              "maximum": 1,
+              "minimum": 1e-06
+            },
+            "x-unit": "s"
+          }
+        },
+        "required": [
+          "step_s",
+          "high_s",
+          "low_s",
+          "initial_voltage_v",
+          "seconds_per_wall_second"
+        ],
+        "type": "object",
+        "x-details-scope": "parameter-bounds-and-examples; stateful-preconditions-and-errors-not-exhaustive",
+        "x-normalized-si-relations": [
+          {
+            "operator": "ratio_maximum",
+            "fields": [
+              "seconds_per_wall_second",
+              "step_s"
+            ],
+            "limit": 1000
+          },
+          {
+            "operator": "less_or_equal",
+            "fields": [
+              "step_s",
+              "high_s"
+            ],
+            "when_component_kind": "pulse-source"
+          },
+          {
+            "operator": "less_or_equal",
+            "fields": [
+              "step_s",
+              "low_s"
+            ],
+            "when_component_kind": "pulse-source"
+          }
+        ]
+      },
+      "output": "Snapshot mutations; query data otherwise; local schemas",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    {
+      "id": "potentiometer.wiper.set",
+      "description": "Set a linear potentiometer wiper position 0\u20131; fresh transient algebraic work is staged outside the editor lock; inspect input_work/wait; preserves charge/time/run on success",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "examples": [
+          {
+            "id": "P1",
+            "position": 0.5
+          }
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "position": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number",
+            "x-unit": "fraction"
+          }
+        },
+        "required": [
+          "id",
+          "position"
+        ],
+        "type": "object",
+        "x-details-scope": "parameter-bounds-and-examples; stateful-preconditions-and-errors-not-exhaustive"
+      },
+      "output": "Snapshot mutations; query data otherwise; local schemas",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    {
+      "id": "example.load",
+      "description": "Load a known example ID into a new editable document; protects unsaved work and optional document generation",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "examples": [
+          {
+            "id": "switch-npn"
+          }
+        ],
+        "properties": {
+          "discard_changes": {
+            "type": "boolean"
+          },
+          "expected_document_generation": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "id": {
+            "enum": [
+              "led",
+              "rc",
+              "npn",
+              "switch-npn",
+              "blink",
+              "flasher"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "x-details-scope": "parameter-bounds-and-examples; stateful-preconditions-and-errors-not-exhaustive"
+      },
+      "output": "Snapshot mutations; query data otherwise; local schemas",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    {
+      "id": "scope.cursor.set",
+      "description": "Set a/b time inside retained fresh history; snap to nearest sample, ties choose latest/right-hand; inspect scope for timing and trace deltas",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string"
+          },
+          "time_s": {
+            "$ref": "urn:elab:time:1"
+          }
+        },
+        "required": [
+          "cursor",
+          "time_s"
+        ],
+        "type": "object"
+      },
+      "output": "Snapshot mutations; query data otherwise; local schemas",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    }
+  ],
+  "limitations": [
+    "five commands have additional bounds/examples; other filtered inputs expose their existing type schemas",
+    "stateful preconditions/error discovery and exhaustive native capability coverage remain incomplete"
+  ]
+}

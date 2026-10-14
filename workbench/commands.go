@@ -221,7 +221,7 @@ func Catalog() []Capability {
 		typedCapability("scope.cursor.set", "Set a/b time inside retained fresh history; snap to nearest sample, ties choose latest/right-hand; inspect scope for timing and trace deltas", reflect.TypeOf(CursorParams{})),
 		typedCapability("scope.cursor.select", "Select a/b for plot click/drag placement", reflect.TypeOf(CursorSelectParams{})),
 		typedCapability("scope.cursor.clear", "Clear cursor a/b and its measurements", reflect.TypeOf(CursorSelectParams{})),
-		capability("capabilities.list", "Discover versioned commands and schemas", false, `{"type":"object","additionalProperties":false}`),
+		capability("capabilities.list", "List commands; optional command returns one detailed input schema", false, `{"type":"object","properties":{"command":{"type":"string","maxLength":128}},"additionalProperties":false}`),
 		capability("project.inspect", "Read circuit, connectivity, selection, view, model, diagnostics and results", false, `{"type":"object","additionalProperties":false}`),
 		capability("simulation.wait", "Wait up to 5 s for project/initialization/step/input work; inspect corresponding work state for outcomes; ready transients return immediately", false, `{"type":"object","additionalProperties":false}`),
 		capability("parts.list", "List available kinds, terminals, models and default values", false, `{"type":"object","additionalProperties":false}`),

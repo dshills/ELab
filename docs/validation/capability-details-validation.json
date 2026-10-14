@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "version": "0.44.0",
+  "build": "59",
+  "binary_sha256": "d92a8a0f1c5069bac2fd550c9fdb6a89745d1ad25aa8b5f9e41c238e2fc68d22",
+  "packaged_binary_matches": true,
+  "catalog_commands": 112,
+  "catalog_bytes": 65315,
+  "catalog_limit_bytes": 65536,
+  "detailed_bounds_commands": [
+    "source.sine.set",
+    "source.pulse.set",
+    "simulation.transient.set",
+    "potentiometer.wiper.set",
+    "example.load"
+  ],
+  "source_checkpoint": "83c74b8",
+  "modified_source_sha256": {
+    "workbench/commands.go": "171c616367b355da5e344611af4282c6145019b718b212eb9209f99b6ac0f32a",
+    "workbench/service.go": "e094592791e1034b9322afe81c621db38f1d5ff6ca327e6e8d4f847313a1922f",
+    "workbench/capability_details.go": "681bbbf14d7a2457eac79a60d83e0cf7b140fe95ada187c3fef1bb826bedb8d7",
+    "workbench/capability_details_test.go": "d7ee72927657f12ecf751e0cb8ab4beb97dd560a5da9fc8f3b08d44ffa9e4ef0",
+    "scripts/capability-details-demo.py": "116dc9c2852d8315a98d0349ba9363804d5121c22d4ebf0b51b15a5643077e53"
+  },
+  "checks": [
+    "All 112 filters produce one input schema with expanded root reference and preserved output/mutation identity",
+    "Queries and unknown/malformed/duplicate/null/oversized refusals preserve paused state; callers cannot mutate later discovery",
+    "Published sine/pulse numeric bounds checked against validator endpoints and outside values; coupled restrictions and examples exercised",
+    "Extra electrical annotations stay on demand; old {} enumeration, catalog/transport limits and numeric SI outputs remain unchanged",
+    "Public headless/native filtered schemas match; discovered sine/pulse examples execute; unit-text pulse values work; invalid rise/phase relation preserves state",
+    "Complete root/native lint, race tests and vet; additional boundary race checks after test-only additions; exact packaged actual GPU smoke passes",
+    "Existing reference workflows still match through all four adapters; owned validation apps close through public app.close"
+  ],
+  "evidence": [
+    "docs/validation/headless-capability-details.json",
+    "docs/validation/desktop-capability-details.json",
+    "docs/validation/capability-details-conformance.json",
+    "docs/capability-details.md"
+  ],
+  "limits_of_evidence": [
+    "Only five commands have extra bounds/examples; all other filters expose their existing type schema",
+    "Stateful admission preconditions, complete error-code discovery, all remaining semantic bounds and exhaustive native capability mapping remain incomplete",
+    "Normalized-SI extensions require client evaluation after unit parsing; server validation remains authoritative",
+    "Private unsigned development bundle; accessibility, visible feedback, clean distribution and participant gates remain open",
+    "Prior bundle retained in build/ELab-before-capability-details.app; user sessions, project files, research and sibling Vellum checkout preserved"
+  ]
+}

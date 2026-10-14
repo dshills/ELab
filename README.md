@@ -34,7 +34,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.43.0 --build-version 58 --platform darwin
+  --version 0.44.0 --build-version 59 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).
@@ -198,6 +198,8 @@ Manual recovery refresh and checkpoint now run as shared background jobs, preser
 Recovery Restore validates files in the background and commits only if the original document still matches. Native controls and agents share cancellation, unsaved protection and new-copy provenance. See [recovery Restore](docs/project-restore.md).
 
 The reference [agent conformance harness](docs/agent-conformance.md) builds LED, RC and NPN circuits from empty sessions through in-process, stdio and private sockets, including native app processes. It checks fault repair, measurements, exports, close/reopen and equivalent project/result state. The standard build produces `build/elab-conformance`.
+
+Use `capabilities.list {"command":"source.pulse.set"}` for [detailed electrical parameter discovery](docs/capability-details.md), including normalized time bounds, coupled limits and examples. The ordinary catalog query remains available.
 
 Time fields now accept values such as `10 ms` and `250 us` through the same native/agent commands. Numerical seconds, strict saved data and existing simulation bounds remain compatible. See [time entry](docs/time-entry.md).
 

@@ -656,11 +656,36 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 			out.Result = result
 			return out
 		}
-		if err := params(r.Params, &struct{}{}); err != nil {
+		var capabilities []Capability
+		if r.Command == "capabilities.list" {
+			var p CapabilityQuery
+			if err := params(r.Params, &p); err != nil {
+				return fail("invalid-params", err.Error())
+			}
+			var fields map[string]json.RawMessage
+			_ = json.Unmarshal(r.Params, &fields)
+			if _, present := fields["command"]; present {
+				if err := params(r.Params, &p, "command"); err != nil {
+					return fail("invalid-params", err.Error())
+				}
+			}
+			capabilities = Catalog()
+			if p.Command != "" {
+				var err error
+				capabilities, err = detailedCapabilities(p.Command)
+				if err != nil {
+					var action *actionError
+					if errors.As(err, &action) {
+						return fail(action.code, action.message)
+					}
+					return fail("invalid-params", err.Error())
+				}
+			}
+		} else if err := params(r.Params, &struct{}{}); err != nil {
 			return fail("invalid-params", err.Error())
 		}
 		if r.Command == "capabilities.list" {
-			out.Result = map[string]any{"version": ProtocolVersion, "schema_version": DiscoverySchemaVersion, "schemas": SchemaRegistry(), "capabilities": Catalog(), "mutation_preconditions": map[string]string{"expected_revision": "Guards all state publication, including live samples", "expected_command_revision": "Guards admitted commands, including other actors; live solver publication does not invalidate it", "combination": "At least one guard is required for mutations; when both are supplied both must match"}, "events": map[string]any{"command": "events.poll", "mode": "coalesced-latest-state", "max_waiters": MaxEventWaiters, "max_timeout_ms": MaxEventWaitMS, "default_timeout_ms": 1000, "topics": append([]string{}, eventTopics...)}, "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee."}
+			out.Result = map[string]any{"version": ProtocolVersion, "schema_version": DiscoverySchemaVersion, "schemas": SchemaRegistry(), "capabilities": capabilities, "mutation_preconditions": map[string]string{"expected_revision": "Guards all state publication, including live samples", "expected_command_revision": "Guards admitted commands, including other actors; live solver publication does not invalidate it", "combination": "At least one guard is required for mutations; when both are supplied both must match"}, "events": map[string]any{"command": "events.poll", "mode": "coalesced-latest-state", "max_waiters": MaxEventWaiters, "max_timeout_ms": MaxEventWaitMS, "default_timeout_ms": 1000, "topics": append([]string{}, eventTopics...)}, "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee."}
 		} else if r.Command == "parts.list" {
 			out.Result = Library()
 		} else {
