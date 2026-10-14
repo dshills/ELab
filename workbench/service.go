@@ -88,6 +88,9 @@ type Service struct {
 	projectSave                      projectSaveFunc
 	projectExport                    projectExportFunc
 	projectImport                    projectImportFunc
+	recoveryPrepare                  recoveryPrepareFunc
+	recoveryExecute                  recoveryExecuteFunc
+	recoveryCatalogRevision          uint64
 	viewerRevision                   uint64
 	projectPublish                   projectPublishFunc
 	inputJob                         *inputJob
@@ -175,25 +178,27 @@ func newService(solver func(context.Context, Circuit) (Result, error)) *Service 
 }
 func newGraphService(solver func(context.Context, Circuit) (Result, error), graph Graph) *Service {
 	s := &Service{
-		revision:       1,
-		electrical:     1,
-		graph:          graph.Clone(),
-		drawing:        DefaultDrawing(),
-		usedIDs:        map[string]bool{},
-		view:           View{Zoom: 1},
-		cache:          map[string]savedResponse{},
-		changed:        make(chan struct{}),
-		solver:         solver,
-		networkAdvance: advanceLiveNetwork,
-		inputSolve:     solveInputWork,
-		projectLoad:    prepareProjectLoad,
-		projectSave:    prepareProjectSave,
-		projectExport:  prepareProjectExport,
-		projectImport:  prepareRecordingImport,
-		projectPublish: publishPreparedFile,
-		initialSolver:  solveInitial,
-		initialTimeout: 5 * time.Second,
-		actor:          "system",
+		revision:        1,
+		electrical:      1,
+		graph:           graph.Clone(),
+		drawing:         DefaultDrawing(),
+		usedIDs:         map[string]bool{},
+		view:            View{Zoom: 1},
+		cache:           map[string]savedResponse{},
+		changed:         make(chan struct{}),
+		solver:          solver,
+		networkAdvance:  advanceLiveNetwork,
+		inputSolve:      solveInputWork,
+		projectLoad:     prepareProjectLoad,
+		projectSave:     prepareProjectSave,
+		projectExport:   prepareProjectExport,
+		projectImport:   prepareRecordingImport,
+		recoveryPrepare: prepareManualRecovery,
+		recoveryExecute: executeManualRecovery,
+		projectPublish:  publishPreparedFile,
+		initialSolver:   solveInitial,
+		initialTimeout:  5 * time.Second,
+		actor:           "system",
 	}
 	for _, c := range graph.Components {
 		s.usedIDs[c.ID] = true

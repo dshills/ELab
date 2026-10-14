@@ -13,6 +13,9 @@ const MaxProjectOperations = 8
 // ProjectWork reports file preparation separately from replacing the document.
 // Progress is a named phase; file validation has no trustworthy percentage.
 type ProjectWork struct {
+	CatalogApplied     *bool    `json:"recovery_catalog_applied,omitempty"`
+	RecoveryID         string   `json:"result_recovery_id,omitempty"`
+	RecoverySavedAt    string   `json:"result_recovery_saved_at,omitempty"`
 	ResultOperationID  string   `json:"result_operation_id,omitempty"`
 	SourceSHA256       string   `json:"source_sha256,omitempty"`
 	ViewerSelected     *bool    `json:"viewer_selected,omitempty"`
@@ -40,6 +43,10 @@ func cloneProjectWork(in *ProjectWork) *ProjectWork {
 		return nil
 	}
 	out := *in
+	if in.CatalogApplied != nil {
+		v := *in.CatalogApplied
+		out.CatalogApplied = &v
+	}
 	if in.ViewerSelected != nil {
 		v := *in.ViewerSelected
 		out.ViewerSelected = &v
@@ -96,6 +103,7 @@ type projectJob struct {
 	save                         *saveCapture
 	export                       *exportCapture
 	importing                    *recordingImportCapture
+	recoveryWork                 *manualRecoveryCapture
 	publishing                   bool
 }
 
@@ -312,7 +320,7 @@ func (s *Service) retainProjectJobLocked(job *projectJob) {
 }
 
 func waitingProjectCommand(command string) bool {
-	return command == "project.save" || command == "project.load" || command == "export.schematic.svg" || command == "export.scope.csv" || command == "verification.export" || command == "verification.import"
+	return command == "project.save" || command == "project.load" || command == "export.schematic.svg" || command == "export.scope.csv" || command == "verification.export" || command == "verification.import" || command == "recovery.scan" || command == "recovery.checkpoint"
 }
 func (s *Service) projectWorkSupersededLocked(job *projectJob) bool {
 	if job.publishing {
@@ -326,6 +334,9 @@ func (s *Service) projectWorkSupersededLocked(job *projectJob) bool {
 	}
 	if job.importing != nil {
 		return !s.importCurrentLocked(job)
+	}
+	if job.recoveryWork != nil {
+		return !s.recoveryWorkCurrentLocked(job)
 	}
 	return s.loadGuardLocked() != job.guard
 }

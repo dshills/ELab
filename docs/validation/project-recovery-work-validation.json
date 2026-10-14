@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "version": "0.36.0",
+  "build": "51",
+  "binary_sha256": "109291c29e23a0417a9f7988f9a32302f33ad7c01ce5f2661151e205897e4fdf",
+  "packaged_binary_matches": true,
+  "checks": [
+    "source review and whitespace check; recovery encoding separated from store publication",
+    "pinned Staticcheck/import formatting, complete root/native race tests and vet",
+    "background manual scan/checkpoint with shared immediate admission and legacy waiting commands",
+    "blocked checkpoint retains original document while navigation/editing/stepping continue",
+    "pre-publication cancellation/replacement preserve existing recovery data and current project",
+    "checkpoint publication/retirement fences cancellation and preserves replacement metadata",
+    "scan honors explicit cleared selection and does not overwrite newer recovery catalogs",
+    "honest recovery_catalog_applied and captured capsule ID/time outcomes",
+    "existing store ownership, retention, size, crash and command/state-order protections remain active",
+    "native callbacks return admission; helpers wait only for final assertions",
+    "built/packaged actual recovery/GPU smoke and public headless/desktop capsule/value/file preservation workflows",
+    "64 KiB catalog bound retained after reducing repeated output text; initial six-byte excess corrected"
+  ],
+  "limits_of_evidence": [
+    "backend timing excludes visible input-to-pixel latency",
+    "OS calls can outlast cooperative cancellation/deadline; publishing checkpoint cannot honestly promise cancellation/rollback",
+    "captured old checkpoint may complete after replacement but does not overwrite current metadata or explicit saved files",
+    "capsule/project/model/numerical/device/work limits unchanged",
+    "configuration, restore, dismiss, inspection/sample queries and some shutdown work remain synchronous",
+    "private unsigned local bundle; full events/agent conformance, accessibility, numerical/performance consolidation, distribution and participant gates remain open",
+    "functional audit remains 15 implemented / 12 partial"
+  ]
+}

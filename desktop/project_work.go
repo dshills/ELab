@@ -18,6 +18,8 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 		action = "save"
 	} else if w.Command == "verification.import" {
 		action = "record import"
+	} else if w.Command == "recovery.scan" || w.Command == "recovery.checkpoint" {
+		action = "recovery"
 	} else if w.Command == "export.schematic.svg" || w.Command == "export.scope.csv" || w.Command == "verification.export" {
 		action = "export"
 	}
@@ -38,6 +40,9 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 		if action == "record import" {
 			explanation = "Validating recorded data. Live simulation stays separate; later viewer choices are preserved."
 		}
+		if action == "recovery" {
+			explanation = "Recovery work runs separately from editing. Checkpoint cancellation ends when publication begins. Saved project files are preserved."
+		}
 		cancel := s.action("project-work-cancel", "Cancel project "+action, "project.work.cancel", workbench.IDParams{ID: w.ID})
 		cancel.Disabled = !w.Cancelable
 		nodes = append(nodes, quiet("project-work-explanation", explanation), cancel)
@@ -53,6 +58,9 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 	}
 	if w.ViewerSelected != nil && !*w.ViewerSelected {
 		nodes = append(nodes, quiet("project-work-viewer-preserved", "Imported and kept the recording without switching to its view."))
+	}
+	if w.CatalogApplied != nil && !*w.CatalogApplied {
+		nodes = append(nodes, quiet("project-work-catalog-preserved", "Recovery work completed; newer recovery state was preserved."))
 	}
 	return nodes
 }

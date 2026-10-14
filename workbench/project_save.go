@@ -145,6 +145,7 @@ func (s *Service) runProjectSave(job *projectJob, prepare projectSaveFunc, publi
 			s.mu.Lock()
 			if !s.closed && s.recoveryStore == store && s.documentGeneration == capture.generation && s.revision == capture.stateRevision {
 				if scanErr == nil {
+					s.recoveryCatalogRevision++
 					s.recovery.Candidates = candidates
 					s.recovery.Problems = problems
 					s.normalizeRecoverySelectionLocked()

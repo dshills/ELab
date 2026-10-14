@@ -55,6 +55,7 @@ func (s *Service) configureRecoveryLocked(p RecoveryConfigureParams) error {
 	}
 	s.recoverySelectionCleared = false
 	s.recoveryStore = store
+	s.recoveryCatalogRevision++
 	s.recovery = RecoveryState{Directory: directory, Enabled: p.Enabled, Interval: p.Interval, Candidates: candidates, Problems: problems}
 	if len(candidates) > 0 {
 		s.recovery.Selected = candidates[0].ID
@@ -72,6 +73,7 @@ func (s *Service) scanRecoveryLocked() error {
 	if err != nil {
 		return err
 	}
+	s.recoveryCatalogRevision++
 	s.recovery.Candidates = candidates
 	s.recovery.Problems = problems
 	s.normalizeRecoverySelectionLocked()
@@ -93,24 +95,6 @@ func (s *Service) normalizeRecoverySelectionLocked() {
 			s.recovery.Selected = s.recovery.Candidates[0].ID
 		}
 	}
-}
-func (s *Service) checkpointRecoveryLocked() error {
-	if s.recoveryStore == nil {
-		return &actionError{"unavailable", "Configure a recovery directory first"}
-	}
-	id, savedAt, err := s.recoveryStore.checkpoint(s.recoveryCaptureLocked())
-	if err != nil {
-		return err
-	}
-	if id != "" {
-		s.recovery.LastSnapshot = id
-		s.recovery.LastSavedAt = savedAt
-	}
-	s.recovery.Error = ""
-	if err := s.scanRecoveryLocked(); err != nil {
-		s.recovery.Error = err.Error()
-	}
-	return nil
 }
 func (s *Service) recoveryLoop(ctx context.Context, store *recoveryStore) {
 	ticker := time.NewTicker(500 * time.Millisecond)
@@ -174,6 +158,7 @@ func (s *Service) recoveryLoop(ctx context.Context, store *recoveryStore) {
 			}
 		}
 		if changed {
+			s.recoveryCatalogRevision++
 			s.revision++
 			s.signalLocked()
 		}
@@ -239,6 +224,12 @@ func (s *Service) dismissRecoveryLocked(p RecoveryChoiceParams) error {
 }
 func (s *Service) recoveryCommandLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "recovery.work.start":
+		var p RecoveryWorkParams
+		if err := params(raw, &p, "kind"); err != nil {
+			return err
+		}
+		return s.startRecoveryWorkLocked(p)
 	case "recovery.configure":
 		var p RecoveryConfigureParams
 		if err := params(raw, &p, "directory", "enabled", "interval_s"); err != nil {
@@ -249,12 +240,12 @@ func (s *Service) recoveryCommandLocked(command string, raw json.RawMessage) err
 		if err := params(raw, &struct{}{}); err != nil {
 			return err
 		}
-		return s.scanRecoveryLocked()
+		return s.startRecoveryWorkLocked(RecoveryWorkParams{Kind: "scan"})
 	case "recovery.checkpoint":
 		if err := params(raw, &struct{}{}); err != nil {
 			return err
 		}
-		return s.checkpointRecoveryLocked()
+		return s.startRecoveryWorkLocked(RecoveryWorkParams{Kind: "checkpoint"})
 	case "recovery.select":
 		var p IDParams
 		if err := params(raw, &p, "id"); err != nil {

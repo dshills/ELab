@@ -51,7 +51,7 @@ func capability(id, description string, mutates bool, schema string) Capability 
 		data, _ := json.Marshal(typeSchema(reflect.TypeOf([]Part{})))
 		output = data
 	}
-	return Capability{id, description, mutates, json.RawMessage(schema), "Snapshot for mutations; query result otherwise; schemas resolve locally", append(json.RawMessage(nil), output...)}
+	return Capability{id, description, mutates, json.RawMessage(schema), "Snapshot mutations; query data otherwise; local schemas", append(json.RawMessage(nil), output...)}
 }
 
 func typedCapability(id, description string, t reflect.Type) Capability {
@@ -137,6 +137,7 @@ func Catalog() []Capability {
 		typedCapability("recording.cursor.select", "Choose recorded a/b cursor for plot clicks", reflect.TypeOf(CursorSelectParams{})),
 		typedCapability("recording.cursor.clear", "Clear recorded a/b cursor", reflect.TypeOf(CursorSelectParams{})),
 		typedCapability("recovery.configure", "Configure a private local recovery directory, automatic snapshots and 1–60 s interval; saved project files are never overwritten", reflect.TypeOf(RecoveryConfigureParams{})),
+		typedCapability("recovery.work.start", "Start background scan or checkpoint with shared project job inspection/cancellation; checkpoint publication is irreversible", reflect.TypeOf(RecoveryWorkParams{})),
 		capability("recovery.scan", "Validate and list newest complete snapshots per document, with corrupt-file diagnostics", true, `{"type":"object","additionalProperties":false}`),
 		capability("recovery.checkpoint", "Write a complete recovery snapshot now (or retire owned snapshots when clean); does not save/associate the project", true, `{"type":"object","additionalProperties":false}`),
 		typedCapability("recovery.select", "Select a listed recovery candidate; empty ID clears", reflect.TypeOf(IDParams{})),

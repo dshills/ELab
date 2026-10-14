@@ -44,7 +44,7 @@ func (s *screen) recoveryInspector(state workbench.Snapshot) []ui.Node {
 	}
 	nodes = append(nodes, s.action("recovery-toggle", text, "recovery.configure", workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: !recovery.Enabled, Interval: recovery.Interval}), quiet("recovery-interval-label", "Autosave interval · seconds"), ui.Node{ID: "recovery-interval", Kind: ui.NumberField, Number: float32(recovery.Interval), Numeric: ui.Numeric{Min: 1, Max: 60, Step: 1}, Accessibility: ui.Accessibility{Name: "Autosave interval in seconds"}, Change: func(e ui.ChangeEvent) {
 		s.invoke("recovery.configure", workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: recovery.Enabled, Interval: float64(e.Number)})
-	}}, s.action("recovery-checkpoint", "Save recovery snapshot now", "recovery.checkpoint", struct{}{}), s.action("recovery-scan", "Refresh recovery list", "recovery.scan", struct{}{}))
+	}}, s.action("recovery-checkpoint", "Save recovery snapshot now", "recovery.work.start", workbench.RecoveryWorkParams{Kind: "checkpoint"}), s.action("recovery-scan", "Refresh recovery list", "recovery.work.start", workbench.RecoveryWorkParams{Kind: "scan"}))
 	if recovery.LastSavedAt != "" {
 		nodes = append(nodes, quiet("recovery-last-saved", "Last snapshot · "+recoveryTime(recovery.LastSavedAt)))
 	}

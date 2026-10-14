@@ -35,3 +35,5 @@ Validation: core race tests cover automatic capture, retention, copy restoration
 Pinned-reading presentation edits participate in document dirty state and recovery captures, including a document whose graph and recordings are otherwise clean. Capsules retain IDs/positions, never trusted measurement values; recovery reconstructs fresh physics and remains an unsaved copy.
 
 Save cleanup now runs outside the editor lock. Captures carry a private state-order stamp in addition to admitted command revision, preventing late clean retirement from erasing newer dirty background commits at the same command revision. On-disk recovery format is unchanged. [Captured Save behavior](project-save.md).
+
+Manual Refresh/Checkpoint now use [background recovery work](project-recovery-work.md). Native callbacks return admission; existing agent commands retain waiting behavior. Captured source/capsule identity, cancellation and newer catalog/selection protections are observable through the shared project-job interface. Configuration/restore/dismiss/inspection/shutdown remain separate paths.

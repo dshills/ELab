@@ -67,12 +67,39 @@ func (store *recoveryStore) documentKey(generation uint64) string {
 	hash := sha256.Sum256([]byte(fmt.Sprintf("%s:%d", store.session, generation)))
 	return hex.EncodeToString(hash[:12])
 }
+func encodeRecoveryCapture(capture recoveryCapture) ([]byte, error) {
+	if !capture.dirty {
+		return nil, nil
+	}
+	data, err := json.Marshal(capture.document)
+	if err != nil {
+		return nil, err
+	}
+	if len(data) > MaxProjectBytes {
+		return nil, fmt.Errorf("recovery document exceeds 8 MiB")
+	}
+	return data, nil
+}
 func (store *recoveryStore) checkpoint(capture recoveryCapture) (string, string, error) {
+	data, err := encodeRecoveryCapture(capture)
+	if err != nil {
+		return "", "", err
+	}
+	return store.checkpointEncoded(capture, data)
+}
+func (store *recoveryStore) checkpointEncoded(capture recoveryCapture, data []byte) (string, string, error) {
 	store.mu.Lock()
 	defer store.mu.Unlock()
-	return store.checkpointLocked(capture)
+	return store.checkpointEncodedLocked(capture, data)
 }
 func (store *recoveryStore) checkpointLocked(capture recoveryCapture) (string, string, error) {
+	data, err := encodeRecoveryCapture(capture)
+	if err != nil {
+		return "", "", err
+	}
+	return store.checkpointEncodedLocked(capture, data)
+}
+func (store *recoveryStore) checkpointEncodedLocked(capture recoveryCapture, data []byte) (string, string, error) {
 	if store.closed {
 		return "", "", nil
 	}
@@ -85,15 +112,10 @@ func (store *recoveryStore) checkpointLocked(capture recoveryCapture) (string, s
 	store.lastRevision[key] = max(store.lastRevision[key], capture.commandRevision)
 	store.lastStateRevision[key] = max(store.lastStateRevision[key], capture.stateRevision)
 	if !capture.dirty {
-		store.lastRevision[key] = max(store.lastRevision[key], capture.commandRevision)
 		return "", "", store.retireLocked(key)
 	}
-	data, err := json.Marshal(capture.document)
-	if err != nil {
-		return "", "", err
-	}
 	digest := sha256.Sum256(data)
-	if capture.commandRevision < store.lastRevision[key] || digest == store.lastHash[key] {
+	if digest == store.lastHash[key] {
 		return "", "", nil
 	}
 	// Directory admission is bounded; retention can replace one of our two

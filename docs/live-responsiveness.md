@@ -40,3 +40,5 @@ Save serialization, destination checks, disk publication and recovery cleanup no
 SVG/live CSV/recorded JSON+CSV export encoding and disk work now run outside the lock via [captured exports](project-export.md). Manual recovery/import/shutdown remain separate paths.
 
 Recorded import now also uses [background project work](project-import.md). Manual recovery and some shutdown calls remain separate paths.
+
+Manual recovery scan/checkpoint now also run outside the lock through [shared jobs](project-recovery-work.md). Other recovery/shutdown paths remain explicit remaining work.

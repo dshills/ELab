@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "transport": "packaged-native-private-socket",
+  "checkpoint_admission_ms": 0.3809999907389283,
+  "captured_recovery_id": "rec-663309b67b014579df84d2af-0000000001",
+  "checks": [
+    "immediate checkpoint admission preserves editor",
+    "original captured value versus later editable value",
+    "explicit saved file never overwritten",
+    "shared stable job inspection and capsule identity",
+    "background scan preserves explicit cleared selection",
+    "legacy scan/checkpoint complete through same workers",
+    "current capture includes later edits; final project is durable/clean/paused"
+  ],
+  "limitations": [
+    "blocked race tests separately prove cancellation, publication fencing and newer-list preservation",
+    "OS calls can outlast cooperative cancellation/deadline",
+    "backend timing excludes visible latency",
+    "recovery configuration/restore/dismiss/inspection and some shutdown paths remain synchronous"
+  ]
+}
