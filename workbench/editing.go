@@ -274,6 +274,21 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			}
 		}
 		return s.batchLocked(p)
+	case "example.load":
+		var p ExampleLoadParams
+		if err := params(raw, &p, "id"); err != nil {
+			return err
+		}
+		if err := s.checkDocumentGenerationLocked(p.ExpectedGeneration); err != nil {
+			return err
+		}
+		return s.loadExampleLocked(p.ID, p.DiscardChanges)
+	case "example.current.reset":
+		var p ExampleResetParams
+		if err := params(raw, &p); err != nil {
+			return err
+		}
+		return s.resetCurrentExampleLocked(p)
 	case "diagnostics.details.set":
 		var p DiagnosticDetailsParams
 		if err := params(raw, &p, "visible"); err != nil {
@@ -657,43 +672,8 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if err := s.requireCleanLocked(p.DiscardChanges); err != nil {
 			return err
 		}
-		s.detachDocumentLocked()
-		s.graph = ExampleGraph()
-		if command == "example.rc" {
-			s.paused = false
-			s.transient = nil
-			s.graph = RCExampleGraph()
-		}
-		if command == "example.npn" || command == "example.npn-pulse" {
-			s.paused = false
-			s.npn = nil
-			s.graph = NPNExampleGraph()
-			if command == "example.npn-pulse" {
-				s.graph = NPNPulseExampleGraph()
-				s.transientSettings.PlaybackSpeed = .1
-			}
-		}
-		if command == "example.flasher" {
-			s.graph = FlasherExampleGraph()
-			s.paused = false
-			s.transientSettings.StepSeconds = .005
-			s.transientSettings.PlaybackSpeed = .5
-		}
-		for _, c := range s.graph.Components {
-			s.usedIDs[c.ID] = true
-		}
-		for _, w := range s.graph.Wires {
-			s.usedIDs[w.ID] = true
-		}
-		s.drawing = DefaultDrawing()
-		s.selected = ""
-		s.view = View{Zoom: 1}
-		if command == "example.npn-pulse" {
-			s.view = View{Center: Point{Y: -30}, Zoom: .5}
-		}
-		if command == "example.flasher" {
-			s.view = View{Center: Point{Y: -10}, Zoom: .55}
-		}
+		ids := map[string]string{"example.reset": "led", "example.rc": "rc", "example.npn": "npn", "example.npn-pulse": "blink", "example.flasher": "flasher"}
+		return s.loadExampleLocked(ids[command], p.DiscardChanges)
 	case "edit.undo":
 		if len(s.undo) == 0 {
 			return &actionError{"unavailable", "nothing to undo"}

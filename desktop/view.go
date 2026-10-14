@@ -121,6 +121,7 @@ func (s *screen) view() ui.Node {
 		palette = append(palette, n)
 	}
 	palette = append(palette, ui.Node{ID: "export-svg", Kind: ui.Button, Text: "Export SVG", Accessibility: ui.Accessibility{Name: "Export schematic SVG"}, Activate: func() { s.beginFile("export.schematic.svg", true, workbench.SaveParams{}, nil) }})
+	palette = append(palette, s.exampleGuidance(state)...)
 	palette = append(palette, section("getting-started-title", "Your first circuit"), quiet("step-place", "1  Place parts and ground"), quiet("step-wire", "2  Wire the terminal dots"), quiet("step-observe", "3  Watch the live measurements"))
 	placement := []ui.Node{}
 	if state.Drawing.Tool == "place" {

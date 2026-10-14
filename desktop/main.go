@@ -174,7 +174,7 @@ func (s *screen) registerCommands() {
 	for _, entry := range []struct{ id, label, shortcut string }{
 		{"edit.undo", "Undo", "Meta+Z"}, {"edit.redo", "Redo", "Meta+Shift+Z"},
 		{"project.clear", "New blank", ""}, {"drawing.cancel", "Cancel drawing", "Escape"},
-		{"example.reset", "Load LED example", ""}, {"example.rc", "Load RC example", ""}, {"example.npn", "Load NPN LED example", ""}, {"example.npn-pulse", "Load blinking NPN LED", ""}, {"example.flasher", "Load capacitor-timed LED flasher", ""},
+		{"example.current.reset", "Reset current example", ""}, {"example.reset", "Load LED example", ""}, {"example.rc", "Load RC example", ""}, {"example.npn", "Load NPN LED example", ""}, {"example.npn-pulse", "Load blinking NPN LED", ""}, {"example.flasher", "Load capacitor-timed LED flasher", ""},
 		{"simulation.pause", "Pause", ""}, {"simulation.resume", "Resume", ""}, {"simulation.restart", "Restart", ""}, {"view.fit", "Fit circuit", ""},
 	} {
 		entry := entry
@@ -184,6 +184,9 @@ func (s *screen) registerCommands() {
 					return fmt.Errorf("finish the current file operation first")
 				}
 				state := s.service.Snapshot()
+				if entry.id == "example.current.reset" && state.Example == nil {
+					return fmt.Errorf("load an example before resetting it")
+				}
 				if entry.id == "edit.undo" && !state.CanUndo {
 					return fmt.Errorf("nothing to undo")
 				}
@@ -192,6 +195,15 @@ func (s *screen) registerCommands() {
 				}
 				return nil
 			}, Execute: func(context.Context) error {
+				if entry.id == "example.current.reset" {
+					state := s.service.Snapshot()
+					if state.Example == nil {
+						return fmt.Errorf("load an example before resetting it")
+					}
+					generation := state.Document.Generation
+					s.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: &generation})
+					return nil
+				}
 				if entry.id == "project.clear" || entry.id == "example.reset" || entry.id == "example.rc" || entry.id == "example.npn" || entry.id == "example.npn-pulse" || entry.id == "example.flasher" {
 					s.requestReplace(entry.id, workbench.ReplaceParams{})
 					return nil

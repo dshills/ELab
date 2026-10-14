@@ -127,6 +127,7 @@ func TestScopeFixedStatisticsExportsAndSavedProbes(t *testing.T) {
 	json.Unmarshal(data, &doc)
 	delete(doc, "scope_probes")
 	delete(doc, "recordings")
+	delete(doc, "example_id")
 	delete(doc, "paused")
 	doc["version"] = 2
 	old, _ := json.Marshal(doc)

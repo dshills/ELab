@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "version": "0.30.0",
+  "build": "44",
+  "binary_sha256": "7e7a3faebc762447a2cca18beb8e902b20b0c36e4b2ebdc6c8910f83941b1c98",
+  "packaged_binary_matches": true,
+  "templates": [
+    "led",
+    "rc",
+    "npn",
+    "blink",
+    "flasher"
+  ],
+  "checks": [
+    "source review and whitespace diff check",
+    "pinned Staticcheck/import formatting",
+    "Go vet and root/native race gates",
+    "centralized immutable graph/settings/view and guidance catalog",
+    "all five examples load as running editable copies",
+    "template question/expectation/experiment/model limitation exposed to users and agents",
+    "edited graph/settings labels against actual template; display/navigation/pins do not change claim",
+    "protected current reset preserves pause and fresh time-zero startup",
+    "rejected reset preserves state; undo restores prior graph/origin",
+    "strict known origin metadata and genuine older-format compatibility",
+    "edited origin save/reopen and recovery with fresh physics",
+    "current identity/generation guards and stale rendered reset button refusal",
+    "catalog IDs do not fabricate schematic request targets",
+    "native guide/reset/cancel/discard controls and actual built/packaged smoke",
+    "all-five headless and packaged private-socket public workflows"
+  ],
+  "limits_of_evidence": [
+    "template expectations describe templates rather than promising behavior of an edited circuit",
+    "loading templates now consistently starts running; current reset preserves the user pause state",
+    "origin is optional version-4 metadata; older readers lacking it refuse it rather than drop it",
+    "legacy downgrade tests remove new origin metadata; validation was not relaxed",
+    "engine/model/work/tolerance limits remain unchanged",
+    "guide/reset control and smoke evidence do not establish novice comprehension, complete keyboard/focus/screen-reader or participant gates",
+    "private unsigned local bundle; functional audit now 15 implemented / 12 partial; remaining quality/release gates stay open"
+  ]
+}

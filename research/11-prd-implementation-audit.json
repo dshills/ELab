@@ -3,8 +3,8 @@
   "scope": "Requirement coverage validation only; does not establish product acceptance",
   "requirements": 27,
   "counts": {
-    "implemented": 14,
-    "partial": 13,
+    "implemented": 15,
+    "partial": 12,
     "pending": 0
   },
   "rows": [
@@ -106,9 +106,9 @@
     },
     {
       "id": "HELP-02",
-      "evidence": "LED/RC/NPN/Blink/Flasher templates, reset, visible model limitations",
-      "status": "partial",
-      "assessment": "Partial: each of the three core examples still needs its concise question and expected qualitative behavior, with reset tracked to the current example"
+      "evidence": "Central immutable LED/RC/NPN/Blink/Flasher definitions and guidance; current origin/edited status, known origin persistence, protected identity/generation-scoped reset, fresh paused startup, undo and native/public smoke",
+      "status": "implemented",
+      "assessment": "Implemented five guided editable examples and current-template reset; novice comprehension, accessibility and participant results remain separate gates"
     },
     {
       "id": "FILE-01",

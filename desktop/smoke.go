@@ -171,7 +171,10 @@ rendered:
 	if err := nativeDisplaySmoke(ctx, a, s); err != nil {
 		return err
 	}
-	return nativeDiagnosticSmoke(ctx, a, s)
+	if err := nativeDiagnosticSmoke(ctx, a, s); err != nil {
+		return err
+	}
+	return nativeExamplesSmoke(ctx, a, s)
 }
 
 func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {

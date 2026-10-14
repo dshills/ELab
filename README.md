@@ -32,7 +32,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.29.0 --build-version 43 --platform darwin
+  --version 0.30.0 --build-version 44 --platform darwin
 ```
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
@@ -62,6 +62,8 @@ The generic Ebers–Moll junction model remains instantaneous; physical transist
 The right inspector's **Scope probes** selectors choose up to six terminal voltages or branch currents, including both flasher collectors, both LEDs, and each capacitor. Newly selected traces include already retained history without restarting the circuit. Voltage/current axes show signed values in V/mA.
 
 Select a component, terminal dot or wire to see signed live readings and references. Named terminal/net/probe selectors offer the same inspection without a pointer; Plot and Pin sit beside each reading. See [measurement inspection](docs/measurement-inspection.md).
+
+The tray shows the current example’s question, expected template behavior, experiment and limitation. **Reset [example title]** restores that example with unsaved-change protection, while Restart reruns your edited circuit. Saved projects retain example origin. See [guided examples](docs/guided-examples.md).
 
 Known circuit problems highlight their component, terminal or wire. The Inspector gives a next action and an optional **Technical details** disclosure; correcting the circuit removes the marker. Users and agents share the same diagnostic state and disclosure command. See [diagnostic guidance](docs/diagnostic-guidance.md).
 

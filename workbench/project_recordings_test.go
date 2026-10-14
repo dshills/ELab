@@ -169,6 +169,7 @@ func TestProjectLegacySchematicsRemainReadable(t *testing.T) {
 		_ = json.Unmarshal(original, &document)
 		document["version"] = version
 		delete(document, "recordings")
+		delete(document, "example_id")
 		delete(document, "paused")
 		if version < 3 {
 			delete(document, "scope_probes")

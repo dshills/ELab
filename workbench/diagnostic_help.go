@@ -153,7 +153,8 @@ func (s *Service) requestDiagnosticLocked(r Request, code, message string) *Diag
 	// Related request targets are context, never guessed solver causes. Parsing
 	// known intent fields cannot change state or make an unknown ID a marker.
 	var fields map[string]json.RawMessage
-	if json.Unmarshal(r.Params, &fields) == nil {
+	targeted := strings.HasPrefix(r.Command, "component.") || strings.HasPrefix(r.Command, "wire.") || strings.HasPrefix(r.Command, "source.") || strings.HasPrefix(r.Command, "capacitor.") || strings.HasPrefix(r.Command, "potentiometer.") || r.Command == "switch.set" || r.Command == "object.delete"
+	if targeted && json.Unmarshal(r.Params, &fields) == nil {
 		for _, key := range []string{"id", "from", "to", "terminal"} {
 			var ref string
 			if json.Unmarshal(fields[key], &ref) == nil {
