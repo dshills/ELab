@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "example_id": "rectifier",
+  "output_200ms_v": 2.1289827079686607,
+  "constructed_200ms_v": 2.1289827079686607,
+  "negative_peak": {
+    "time_s": 0.075,
+    "values": [
+      2.7330825898809548,
+      -5,
+      -1e-09
+    ]
+  },
+  "ripple_after_2s": [
+    {
+      "capacitance": "10u",
+      "minimum_v": 1.9657954615485704,
+      "maximum_v": 4.356553884366929,
+      "ripple_v": 2.3907584228183585
+    },
+    {
+      "capacitance": "47u",
+      "minimum_v": 3.4879704477804148,
+      "maximum_v": 4.174132380535191,
+      "ripple_v": 0.6861619327547763
+    }
+  ],
+  "checks": [
+    "default input/output/diode probes",
+    "live/Verify equality and source preservation",
+    "negative-half reverse isolation",
+    "larger-capacitor ripple reduction",
+    "source/template/model persistence",
+    "blank-sheet component/wire reconstruction"
+  ],
+  "limits": [
+    "Pinned educational equations; no physical supply/diode rating or mains qualification",
+    "Independent RK4 error bounds are in Go tests; this demo checks public workflow parity"
+  ]
+}

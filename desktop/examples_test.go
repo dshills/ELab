@@ -90,3 +90,39 @@ func TestManualTransistorExampleMenuAndSwitchMatchAgent(t *testing.T) {
 		t.Fatal("cancel loses lit circuit")
 	}
 }
+
+func TestRectifierExampleMenuValueAndScopeMatchAgent(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	agent := workbench.New()
+	defer agent.Close()
+	uiAction(t, s, "examples-menu", &ui.ChangeEvent{SelectedID: "example.rectifier"})
+	agentAction(t, agent, "example.load", workbench.ExampleLoadParams{ID: "rectifier"})
+	uiAction(t, s, "simulation.pause", nil)
+	agentAction(t, agent, "simulation.pause", struct{}{})
+	uiAction(t, s, "simulation.restart", nil)
+	agentAction(t, agent, "simulation.restart", struct{}{})
+	if state := s.service.Snapshot(); state.Selected != "C1" || state.Example.Info.ID != "rectifier" || len(state.Scope.Traces) != 3 {
+		t.Fatal("rectifier does not expose capacitor/input/output")
+	}
+	for i := 0; i < 20; i++ {
+		uiAction(t, s, "transient-step", nil)
+		agentAction(t, agent, "simulation.step", workbench.StepParams{Duration: .001})
+	}
+	u, a := s.service.Snapshot(), agent.Snapshot()
+	if !reflect.DeepEqual(u.Components, a.Components) || !reflect.DeepEqual(u.Wires, a.Wires) || !reflect.DeepEqual(u.Mixed, a.Mixed) || !reflect.DeepEqual(u.Scope.Traces, a.Scope.Traces) || u.Mixed.Capacitors[0].Voltage < 3 {
+		t.Fatal("rectifier user/agent transient behavior differs")
+	}
+	uiAction(t, s, "value-entry", &ui.ChangeEvent{Text: "47u"})
+	uiAction(t, s, "apply-value", nil)
+	agentAction(t, agent, "component.set", workbench.ValueParams{ID: "C1", Value: "47u"})
+	if !s.service.Snapshot().Transient.Stale {
+		t.Fatal("paused capacitor edit mislabeled fresh")
+	}
+	uiAction(t, s, "simulation.restart", nil)
+	agentAction(t, agent, "simulation.restart", struct{}{})
+	u, a = s.service.Snapshot(), agent.Snapshot()
+	if !reflect.DeepEqual(u.Components, a.Components) || !reflect.DeepEqual(u.Mixed, a.Mixed) || u.Transient.Sample.Time != 0 || !u.Example.Modified {
+		t.Fatal("rectifier capacitance edit/restart differs")
+	}
+}

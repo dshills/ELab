@@ -231,7 +231,7 @@ func (s *screen) registerCommands() {
 		{"edit.undo", "Undo", "Meta+Z"}, {"edit.redo", "Redo", "Meta+Shift+Z"},
 		{"project.clear", "New blank", ""}, {"drawing.cancel", "Cancel drawing", "Escape"},
 		{"app.close", "Close window", "Meta+W"},
-		{"example.current.reset", "Reset current example", ""}, {"example.reset", "Load LED example", ""}, {"example.rc", "Load RC example", ""}, {"example.npn", "Load NPN LED example", ""}, {"example.switch-npn", "Load manual transistor LED switch", ""}, {"example.npn-pulse", "Load blinking NPN LED", ""}, {"example.flasher", "Load capacitor-timed LED flasher", ""},
+		{"example.current.reset", "Reset current example", ""}, {"example.reset", "Load LED example", ""}, {"example.rc", "Load RC example", ""}, {"example.npn", "Load NPN LED example", ""}, {"example.switch-npn", "Load manual transistor LED switch", ""}, {"example.npn-pulse", "Load blinking NPN LED", ""}, {"example.flasher", "Load capacitor-timed LED flasher", ""}, {"example.rectifier", "Load diode rectifier and smoothing", ""},
 		{"simulation.pause", "Pause", ""}, {"simulation.resume", "Resume", ""}, {"simulation.restart", "Restart", ""}, {"view.fit", "Fit circuit", ""},
 	} {
 		entry := entry
@@ -265,7 +265,7 @@ func (s *screen) registerCommands() {
 					s.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: &generation})
 					return nil
 				}
-				if entry.id == "project.clear" || entry.id == "example.reset" || entry.id == "example.rc" || entry.id == "example.npn" || entry.id == "example.npn-pulse" || entry.id == "example.flasher" || entry.id == "example.switch-npn" {
+				if entry.id == "project.clear" || entry.id == "example.reset" || entry.id == "example.rc" || entry.id == "example.npn" || entry.id == "example.npn-pulse" || entry.id == "example.flasher" || entry.id == "example.switch-npn" || entry.id == "example.rectifier" {
 					s.requestReplace(entry.id, workbench.ReplaceParams{})
 					return nil
 				}

@@ -23,7 +23,7 @@ def main():
         client.ask('simulation.pause', {}, True)
         before = client.ask('project.inspect')
         catalog = client.ask('examples.list')
-        assert len(catalog) == 6 and client.ask('project.inspect') == before
+        assert len(catalog) == 7 and client.ask('project.inspect') == before
         tested = []
         for info in catalog:
             assert all(info[k] for k in ['question', 'expected', 'try', 'limitation'])

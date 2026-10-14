@@ -263,6 +263,7 @@ func Catalog() []Capability {
 		typedCapability("example.npn-pulse", "Load a blinking NPN LED switch with 5 V pulse base drive; instantaneous junction response, no device delay; unsaved changes require discard_changes", reflect.TypeOf(ReplaceParams{})),
 		typedCapability("example.npn", "Load a generic NPN low-side LED switch (5 V supply / 5 V base drive / 10 kΩ base / 1 kΩ load); unsaved changes require discard_changes", reflect.TypeOf(ReplaceParams{})),
 		typedCapability("example.switch-npn", "Load a manual SPST-controlled transistor LED with a 100 kΩ base pull-down; finite switch resistance; protects unsaved work", reflect.TypeOf(ReplaceParams{})),
+		typedCapability("example.rectifier", "Load a 5 V peak/10 Hz half-wave silicon-diode rectifier with 100 Ω series resistance, 10 µF smoothing and 10 kΩ load; protects unsaved work", reflect.TypeOf(ReplaceParams{})),
 		typedCapability("example.rc", "Load a 5 V pulse / 10 kΩ / 1 µF RC example; unsaved changes require discard_changes", reflect.TypeOf(ReplaceParams{})),
 		typedCapability("simulation.transient.set", "Set transient sampling, pulse durations and playback speed (initial_voltage_v supplies default capacitor startup voltages); undoable and restarts from initial conditions", reflect.TypeOf(TransientSettings{})),
 		typedCapability("simulation.input.set", "Actuate RC input (auto/charge/discharge) NPN base input, or selected mixed source (auto/high/low); queue input while paused", reflect.TypeOf(InputParams{})),

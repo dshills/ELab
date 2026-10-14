@@ -1,0 +1,83 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "version": "0.50.0",
+  "build": "65",
+  "binary_sha256": "362a86e3fd3355788e0c509e056d5c45cad5a67a557b6c6b740285f9ad8bfe1a",
+  "packaged_binary_matches": true,
+  "source_checkpoint": "0868b40",
+  "vellum_baseline": {
+    "recorded": "2026-10-14",
+    "version": "checkout 3a8bd26",
+    "commit": "3a8bd26fd87f63cfe2c5a80f8624939ff48b46e2",
+    "local_checkout": "../../Vellum (relative to desktop/go.mod)",
+    "native_dependency_manifest": "drivers/cogent/native/dependencies.json",
+    "native_dependency_manifest_sha256": "5f618431228a80ea4a23db1e5ebc241ac3a8b702bcc1fc8c479cc84e77bbfa58",
+    "go_directive": "1.25.6",
+    "tested_go": "go1.27.2 darwin/arm64",
+    "root_module": "github.com/dshills/elab",
+    "desktop_module": "github.com/dshills/elab/desktop",
+    "status": "Local checkout integration; relocatable SDK distribution remains a later gate"
+  },
+  "electrical_evidence": {
+    "reference": "Separate inverse current-domain diode equation + scalar RK4; no nodal Newton/backward-Euler calls",
+    "reference_step_s": 5e-06,
+    "checked_output_interval_s": 0.001,
+    "checked_duration_s": 0.2,
+    "voltage_tolerance_v": 0.003,
+    "observed_maximum_error_v": 0.000979039052,
+    "kcl_tolerance_a": 1e-09,
+    "power_tolerance_w": 1e-08,
+    "settled_window_s": [
+      1.9,
+      2.0
+    ],
+    "ripple_10u_v": 2.3907584228183585,
+    "ripple_47u_v": 0.6861619327547763
+  },
+  "checks": [
+    "Seventh immutable guided example exposes a 5 V peak/10 Hz half-wave rectifier with 100 \u03a9 charging, 10 \u00b5F smoothing and 10 k\u03a9 load; C1 selected and input/output/diode scope traces visible",
+    "Protected example.load and example.rectifier alias share native registry/menu, unsaved work policy, startup/restart, history and exact source/model persistence",
+    "Independent transient voltage reference, reverse leakage, KCL/power and larger-capacitor settled-ripple tests pass; integration/model/transport limits unchanged",
+    "Live/Verify equality and source physics/history preservation; completed Verify adds the expected kept recording asset",
+    "Native menu/Step/value/restart/scope results equal an agent session; actual packaged GPU smoke opens the new example and renders schematic/scope meshes",
+    "Public headless/native scenarios reconstruct the same circuit from blank components/wires, save/reopen and produce identical numerical results and PNG bytes",
+    "Visual inspection found/fixed conservative label masks erasing a nearby resistor; layer-order pixel regression fails against prior renderer at 1245,486 and passes after repair; SVG/PDF/PNG share fix",
+    "Final full lint/import/root/native race/vet pass; isolated flasher/rectifier/export race regressions pass; non-cgo rectifier/catalog checks pass; four prior workflow adapters pass",
+    "Reviewed native ledger remains fresh: 35 production Go files/276 sites/116 public IDs, 95 source-route references and 100 binding-review sites",
+    "Current clean Vellum 3a8bd26 progress-controls baseline inspected and integration requalified; no sibling edits"
+  ],
+  "validation_attempts": [
+    {
+      "result": "One full race run hit TestMixedCapacitanceSetsFlasherPeriod integration work limit at 5.03691406 simulated seconds",
+      "resolution": "Exact case passed in isolation (0.485/0.97 s periods), then final full check passed; no quota/tolerance/kernel change",
+      "remaining": "Cause not established; distinguish iteration/wall-clock limits and qualify under load in follow-up"
+    },
+    {
+      "result": "Initial public demo required whole document equality across Verify",
+      "resolution": "Test now verifies unchanged source/history/physics plus intended added kept recording asset"
+    }
+  ],
+  "evidence": [
+    "docs/rectifier-example.md",
+    "docs/validation/headless-rectifier.json",
+    "docs/validation/desktop-rectifier.json",
+    "docs/validation/rectifier-render-inspection.json",
+    "docs/validation/rectifier-schematic-output.png",
+    "docs/validation/rectifier-example-conformance.json",
+    "research/13-native-command-inventory.json",
+    "workbench/rectifier_example_test.go",
+    "workbench/export_label_test.go",
+    "desktop/examples_test.go",
+    "desktop/examples_smoke.go"
+  ],
+  "limits_of_evidence": [
+    "Pinned educational source/diode/capacitor equations; no physical ratings, temperature/device/SPICE qualification or general waveform accuracy guarantee",
+    "Independent transient reference covers first 200 ms; settled ripple covers this template after two seconds at 1 ms output interval",
+    "Native callback/GPU evidence does not establish all physical typing/menu/focus/IME/screen-reader interaction coverage",
+    "Source waveform frequency/offset/phase labels and arbitrary true text/symbol overlaps remain follow-ups; full waveform data stays in source properties and captured JSON",
+    "One race-run flasher budget failure remains recorded; final/isolated passes do not establish its cause or universal load performance",
+    "Private unsigned local checkout app; native printing/preview, clean SDK distribution, capacity/visible-latency and participant gates remain pending",
+    "Previous .49/64 bundle preserved at build/ELab-before-rectifier.app; initial candidate and user work/research/files retained"
+  ]
+}

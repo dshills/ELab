@@ -27,6 +27,8 @@ Connect source positive → resistor → LED anode, LED cathode → ground, and 
 
 **Examples → Manual transistor switch** opens a transistor-driven LED with its SPST control already selected. Close/open the switch in the Inspector and inspect base/collector currents. See the [manual transistor experiment](docs/manual-transistor-example.md).
 
+**Examples → Rectifier / smoothing** opens a sine-driven diode/capacitor supply. Compare input/output voltage and reduce ripple by increasing C1. See the [rectifier experiment](docs/rectifier-example.md).
+
 Drag a selected part to move it with its wires. Pan drags the sheet; scroll zooms; Fit frames the components. Arrow keys move a selected part by one grid step, or pan when no part is selected. Delete removes a selected part and its wires, or a selected wire. Escape cancels placement/wiring. Cmd+Z and Cmd+Shift+Z use shared document history when a focused text control does not consume the shortcut.
 
 For a local double-clickable development bundle, after building:
@@ -34,7 +36,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.49.0 --build-version 64 --platform darwin
+  --version 0.50.0 --build-version 65 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).

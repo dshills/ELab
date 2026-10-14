@@ -722,7 +722,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		s.view = View{center, zoom}
 		return nil
 	}
-	if command != "project.clear" && command != "example.reset" && command != "example.rc" && command != "example.npn" && command != "example.npn-pulse" && command != "example.flasher" && command != "example.switch-npn" && command != "app.close" && command != "edit.undo" && command != "edit.redo" {
+	if command != "project.clear" && command != "example.reset" && command != "example.rc" && command != "example.npn" && command != "example.npn-pulse" && command != "example.flasher" && command != "example.switch-npn" && command != "example.rectifier" && command != "app.close" && command != "edit.undo" && command != "edit.redo" {
 		if err := params(raw, &struct{}{}); err != nil {
 			return err
 		}
@@ -744,7 +744,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		s.selected = ""
 		s.drawing = DefaultDrawing()
 		s.view = View{Zoom: 1}
-	case "example.reset", "example.rc", "example.npn", "example.npn-pulse", "example.flasher", "example.switch-npn":
+	case "example.reset", "example.rc", "example.npn", "example.npn-pulse", "example.flasher", "example.switch-npn", "example.rectifier":
 		var p ReplaceParams
 		if err := params(raw, &p); err != nil {
 			return err
@@ -755,7 +755,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if err := s.requireCleanLocked(p.DiscardChanges); err != nil {
 			return err
 		}
-		ids := map[string]string{"example.reset": "led", "example.rc": "rc", "example.npn": "npn", "example.npn-pulse": "blink", "example.flasher": "flasher", "example.switch-npn": "switch-npn"}
+		ids := map[string]string{"example.reset": "led", "example.rc": "rc", "example.npn": "npn", "example.npn-pulse": "blink", "example.flasher": "flasher", "example.switch-npn": "switch-npn", "example.rectifier": "rectifier"}
 		return s.loadExampleLocked(ids[command], p.DiscardChanges)
 	case "edit.undo":
 		if len(s.undo) == 0 {

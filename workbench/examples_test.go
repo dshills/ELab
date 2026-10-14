@@ -109,7 +109,7 @@ func TestExampleCatalogIsReadOnlyAndPreferenceEditsDoNotChangeTemplateClaim(t *t
 	defer s.Close()
 	before := s.Snapshot()
 	r := s.Dispatch(context.Background(), Request{Version: 1, ID: "list", Command: "examples.list", Params: json.RawMessage(`{}`)}, "reader")
-	if r.Error != nil || len(r.Result.([]ExampleInfo)) != 6 || !reflect.DeepEqual(before, s.Snapshot()) {
+	if r.Error != nil || len(r.Result.([]ExampleInfo)) != 7 || !reflect.DeepEqual(before, s.Snapshot()) {
 		t.Fatal("catalog mutates state or omits templates")
 	}
 	list := r.Result.([]ExampleInfo)

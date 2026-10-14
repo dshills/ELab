@@ -197,6 +197,13 @@ func schematicSVGWithDisplay(g Graph, run, revision uint64, display CircuitDispl
 		}
 		fmt.Fprintf(&b, `"><title>%s → %s</title></polyline>`, html.EscapeString(w.From), html.EscapeString(w.To))
 	}
+	// Label backgrounds hide passing wires, but must stay below symbols/pins.
+	// Conservative text bounds can reach a nearby component even when the
+	// actual label does not; drawing masks last erased parts of its symbol.
+	for _, p := range g.Components {
+		x, y, text := schematicPartLabel(p)
+		fmt.Fprintf(&b, `<rect x="%g" y="%g" width="%g" height="19" rx="3" fill="#ffffff" stroke="none"/>`, x-3, y-15, schematicLabelWidth(text))
+	}
 	for _, p := range g.Components {
 		fmt.Fprintf(&b, `<g id="%s" transform="translate(%g %g) rotate(%d)"><title>%s · %s</title>`, html.EscapeString(p.ID), p.Position.X, p.Position.Y, p.Rotation, html.EscapeString(p.ID), html.EscapeString(p.Name))
 		switch p.Kind {
@@ -255,8 +262,7 @@ func schematicSVGWithDisplay(g Graph, run, revision uint64, display CircuitDispl
 
 	for _, p := range g.Components {
 		x, y, text := schematicPartLabel(p)
-		labelWidth := schematicLabelWidth(text)
-		fmt.Fprintf(&b, `<rect x="%g" y="%g" width="%g" height="19" rx="3" fill="#ffffff"/><text x="%g" y="%g">%s</text>`, x-3, y-15, labelWidth, x, y, html.EscapeString(text))
+		fmt.Fprintf(&b, `<text x="%g" y="%g">%s</text>`, x, y, html.EscapeString(text))
 	}
 	fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="15">Components · generic educational models</text>`, minX+15, diagramBottom+19)
 	for i, p := range g.Components {

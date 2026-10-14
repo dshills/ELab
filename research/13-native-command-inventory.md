@@ -1,8 +1,8 @@
 # Native control and command inventory
 
-The [source ledger](13-native-command-inventory.json) records **35 production native Go files, 275 source sites and 115 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 94 public commands. The remaining 21 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
+The [source ledger](13-native-command-inventory.json) records **35 production native Go files, 276 source sites and 116 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 95 public commands. The remaining 21 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
 
-**100 sites require binding review.** The other categories are 150 literal routes, seven declared native-wrapper sites, 16 registry declarations and two menu sets. These are syntax sites, including overlapping factories and callbacks; they are not 275 unique visible controls or 94 runtime-qualified capabilities. No literal route names an unknown command.
+**100 sites require binding review.** The other categories are 150 literal routes, seven declared native-wrapper sites, 17 registry declarations and two menu sets. These are syntax sites, including overlapping factories and callbacks; they are not 276 unique visible controls or 95 runtime-qualified capabilities. No literal route names an unknown command.
 
 The ledger covers action/button/menu factories, package-level native menus, registry tables, callback fields/assignments, time-field factories, custom canvases, event routers, direct request command fields and shared dispatch bridges. Each entry retains its source, line, enclosing function and expression. File hashes and the public ID set make changes reproducible and reviewable. Both platform Go files are included; smoke/tests, framework internals and Objective-C event delivery are excluded and remain separate evidence scopes.
 
@@ -39,3 +39,5 @@ The 0.47.0 field-context checkpoint binds assembled Change callbacks before nati
 The 0.48.0 PDF-output checkpoint adds shared page settings and export routes; source references are still distinct from mounted runtime qualification. [PDF output and remaining printing scope](../docs/schematic-pdf.md).
 
 The 0.49.0 PNG checkpoint adds one public image export route through the existing guarded picker/worker bridge; the shared Output page controls retain PDF settings. This ledger still measures source routes, not universal interaction coverage.
+
+The 0.50.0 rectifier checkpoint adds a protected example alias through the registry and both Examples menus. The menu/value/scope paths are tested against an agent; source counts alone remain insufficient for full parity qualification.

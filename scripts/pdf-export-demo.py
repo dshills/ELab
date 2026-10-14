@@ -37,7 +37,7 @@ def main():
             exported.append({'id':info['id'],'dpi':after['last_export'].get('dpi'),'page':after['last_export']['page'],'bytes':path.stat().st_size,'sha256':after['last_export']['sha256']})
         client.ask('project.clear',{'discard_changes':True},True)
         report={'passed':True,'format':args.format,'transport':'native-socket' if args.connect else 'headless-stdio','exports':exported,
-                'checks':['six reference schematics','shared session page settings','paper/orientation capture','source/history/physics preservation'],
+                'checks':[str(len(exported))+' reference schematics','shared session page settings','paper/orientation capture','source/history/physics preservation'],
                 'limits':['Document/image generation; no printer job or physical printing qualification','rendered inspection is recorded separately']}
         args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(report,indent=2)+'\n')
         print(json.dumps(report))

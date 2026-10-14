@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "pixels": [
+    1650,
+    1275
+  ],
+  "png_sha256": "0b2598ec4707b1e9363e02605e8259af55c4826c75c39c95ba4bfabdcf0d9116",
+  "metadata": {
+    "document_generation": 2,
+    "dpi": 150,
+    "electrical_revision": 3,
+    "format": "elab.schematic.png.v1",
+    "measurement_source": "captured-live-snapshot; unavailable/stale labels retained when overlays requested",
+    "page": {
+      "paper": "letter",
+      "orientation": "landscape",
+      "margin_mm": 10
+    },
+    "run_id": 6
+  },
+  "native_headless_bytes_equal": true,
+  "visual_review": [
+    "Full diagram after symbol-layer repair: diode points toward capacitor/load; source/resistor/capacitor/load/ground and complete component list remain legible and within white page",
+    "Load resistor zigzag no longer erased by conservative neighboring capacitor label background"
+  ],
+  "limits": [
+    "Actual text overlaps in arbitrarily crowded layouts remain possible",
+    "Waveform frequency/offset/phase are currently inspected in source properties or captured JSON; schematic label annotations remain a follow-up",
+    "No physical printer or device qualification"
+  ]
+}

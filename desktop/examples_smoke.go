@@ -80,7 +80,64 @@ func nativeExamplesSmoke(ctx context.Context, a *app.Application, s *screen) err
 	if err := <-ready; err != nil {
 		return err
 	}
-	return nativeManualTransistorSmoke(ctx, a, s)
+	if err := nativeManualTransistorSmoke(ctx, a, s); err != nil {
+		return err
+	}
+	return nativeRectifierSmoke(ctx, a, s)
+}
+
+func nativeRectifierSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	ready := make(chan error, 1)
+	if err := a.PostWait(ctx, func() {
+		err := smokeUI(s, "examples-menu", &ui.ChangeEvent{SelectedID: "example.rectifier"})
+		if err == nil && s.pendingCommand == "example.rectifier" {
+			err = smokeUI(s, "discard-continue", nil)
+		}
+		ready <- err
+	}); err != nil {
+		return err
+	}
+	if err := <-ready; err != nil {
+		return err
+	}
+	if _, err := s.service.Wait(ctx); err != nil {
+		return err
+	}
+	for _, id := range []string{"simulation.pause", "simulation.restart"} {
+		if err := a.PostWait(ctx, func() { ready <- smokeUI(s, id, nil) }); err != nil {
+			return err
+		}
+		if err := <-ready; err != nil {
+			return err
+		}
+	}
+	for i := 0; i < 20; i++ {
+		if err := a.PostWait(ctx, func() { ready <- smokeUI(s, "transient-step", nil) }); err != nil {
+			return err
+		}
+		if err := <-ready; err != nil {
+			return err
+		}
+	}
+	if err := a.PostWait(ctx, func() {
+		state := s.service.Snapshot()
+		if state.Example == nil || state.Example.Info.ID != "rectifier" || state.Selected != "C1" || state.Mixed == nil || state.Mixed.Stale || state.Mixed.Capacitors[0].Voltage < 3 || len(state.Scope.Traces) != 3 {
+			ready <- fmt.Errorf("native rectifier output/scope unavailable")
+			return
+		}
+		root := s.view()
+		err := ui.Validate(root)
+		if err == nil {
+			_, err = s.mesh(*s.drawing.View)
+		}
+		if err == nil {
+			_, err = s.scopeMesh(*s.scope.View)
+		}
+		ready <- err
+	}); err != nil {
+		return err
+	}
+	return <-ready
 }
 
 func nativeManualTransistorSmoke(ctx context.Context, a *app.Application, s *screen) error {
