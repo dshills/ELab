@@ -183,12 +183,17 @@ type screen struct {
 	menuSerial                       uint64
 	menuCommandRevision              *uint64
 	actionContext                    *actionContext
+	fieldContext                     *actionContext
 }
 
 func (s *screen) invoke(id string, p any) workbench.Response {
 	return s.invokeAtCommandRevision(id, p, s.service.Snapshot().CommandRevision)
 }
 func (s *screen) invokeAtCommandRevision(id string, p any, rev uint64, generation ...uint64) workbench.Response {
+	if s.fieldContext != nil {
+		rev = s.fieldContext.revision
+		generation = []uint64{s.fieldContext.generation}
+	}
 	if s.menuCommandRevision != nil {
 		rev = *s.menuCommandRevision
 	}

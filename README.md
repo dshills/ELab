@@ -34,7 +34,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.46.0 --build-version 61 --platform darwin
+  --version 0.47.0 --build-version 62 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).
@@ -204,6 +204,8 @@ The reference [agent conformance harness](docs/agent-conformance.md) builds LED,
 Use `capabilities.list {"command":"source.pulse.set"}` for [detailed electrical parameter discovery](docs/capability-details.md), including normalized time bounds, coupled limits and examples. The ordinary catalog query remains available.
 
 The [native source inventory](research/13-native-command-inventory.md) checks literal routes and tracks dynamic binding gaps. Rendered actions can use the shared [document-context guard](docs/document-context-guard.md) to refuse stale edits after background document replacement.
+
+[Committed native fields](docs/rendered-fields.md) retain their rendered command/document context, so old waveform or selector callbacks cannot overwrite newer agent work.
 
 Time fields now accept values such as `10 ms` and `250 us` through the same native/agent commands. Numerical seconds, strict saved data and existing simulation bounds remain compatible. See [time entry](docs/time-entry.md).
 

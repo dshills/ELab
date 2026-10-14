@@ -577,6 +577,7 @@ func (s *screen) view() ui.Node {
 		children = append(children, root.Children[index:]...)
 		root.Children = children
 	}
+	s.bindFieldContext(&root, actionContext{state.CommandRevision, state.Document.Generation})
 	s.platformSelectors(&root, state.CommandRevision)
 	applyPalette(&root, colors)
 	return root

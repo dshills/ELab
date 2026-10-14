@@ -8,11 +8,12 @@
     "desktop/display_preferences.go": "f54283db2acec7240b861f415ce0855fbb7dc3349785883f2095002833bb9e13",
     "desktop/drawing.go": "dcfed587008f2326c68488a64c18dc1300d49e8bd5c57e8e135911feee8e639a",
     "desktop/examples.go": "13136f78517a201f806ebe369a8820e8c7de0fe1cc666a27adb0363a8bd7b937",
+    "desktop/field_context.go": "b8a1d409aa71c75cf14289a4e9e39cdea3ce52f1ba9f53c79916b6593074a087",
     "desktop/files.go": "a257b4d14508b4ae00d3fe5e88e124421e3efbc369a0660220c5e25077d2b3aa",
     "desktop/input_work.go": "63b1644f065e82f1deaedc018bcfa5b855af2b885ac96dc3d68b2d4971f701bc",
     "desktop/layout.go": "342ac81780e410c345b903d982ccae20228e7eff26ce476f4a828c7c3737c958",
     "desktop/lifecycle.go": "d87fd1ed23873b666001ed60eab1d2abb23759e6b91a510c299de2a121ca8949",
-    "desktop/main.go": "e3587fdfd45c0cbac9d75088e4f161d0b9b0cec4180780d28a380696d79cfac5",
+    "desktop/main.go": "f612d3dd13884954d2f9d3296e5bdfe3bad028750c2f44adede6e35d4da8f9d9",
     "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
     "desktop/menus.go": "c568303cd8631db0e96cd5314b8f771cd4d6774af22f861b2b786720c971b92f",
     "desktop/menus_darwin.go": "8ecb12641ae79b167999a2bb2bb8e32b198177fa9b718a11472ceebf4d37e6fe",
@@ -32,7 +33,7 @@
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
     "desktop/time_fields.go": "a20e6b2fc6fc368fabb7fd4defae5fc3083987f94a2beabd1780e7ae9a9264b8",
     "desktop/verification.go": "d7707b47258e728430a22fa7152afabf7e2e853e64afceb9c4cb7664419f4e04",
-    "desktop/view.go": "e938fed7d2345a958516710337e0732b5e6b2981b0b5e990a3f9ae328a470b3d",
+    "desktop/view.go": "389aa13b7d7ec37a5c45b648999984b10be528acf13896ed6d378345e804bf07",
     "desktop/waveforms.go": "0c4a197175f5736621127540e652b6535fd3cb1ff4ab3f7bf3653eb433a9c6c9",
     "desktop/workflow.go": "9a3d8316eea46adf551ca0f00201807c7e491d74fd5884326e5c9be645d4167e"
   },
@@ -541,6 +542,14 @@
       "status": "literal-public-route"
     },
     {
+      "file": "desktop/field_context.go",
+      "line": 10,
+      "function": "*screen.bindFieldContext",
+      "kind": "callback-assignment",
+      "expression": "node.Change = func(event ui.ChangeEvent) {\n\tprevious := s.fieldContext\n\ts.fieldContext = \u0026context\n\tdefer func() { s.fieldContext = previous }()\n\tchange(event)\n}",
+      "status": "requires-binding-review"
+    },
+    {
       "file": "desktop/files.go",
       "line": 31,
       "function": "*screen.requestReplace",
@@ -764,7 +773,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 189,
+      "line": 190,
       "function": "*screen.invoke",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(id, p, s.service.Snapshot().CommandRevision)",
@@ -772,7 +781,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 202,
+      "line": 207,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "request-command-field",
       "expression": "Command: id",
@@ -780,7 +789,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 206,
+      "line": 211,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "event-or-dispatch-router",
       "expression": "s.service.Dispatch(context.Background(), request, \"user\")",
@@ -788,7 +797,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 226,
+      "line": 231,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.undo\", \"Undo\", \"Meta+Z\"}",
@@ -799,7 +808,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 226,
+      "line": 231,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.redo\", \"Redo\", \"Meta+Shift+Z\"}",
@@ -810,7 +819,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 227,
+      "line": 232,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"project.clear\", \"New blank\", \"\"}",
@@ -821,7 +830,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 227,
+      "line": 232,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"drawing.cancel\", \"Cancel drawing\", \"Escape\"}",
@@ -832,7 +841,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 228,
+      "line": 233,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"app.close\", \"Close window\", \"Meta+W\"}",
@@ -843,7 +852,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 229,
+      "line": 234,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.current.reset\", \"Reset current example\", \"\"}",
@@ -854,7 +863,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 229,
+      "line": 234,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.reset\", \"Load LED example\", \"\"}",
@@ -865,7 +874,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 229,
+      "line": 234,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.rc\", \"Load RC example\", \"\"}",
@@ -876,7 +885,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 229,
+      "line": 234,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn\", \"Load NPN LED example\", \"\"}",
@@ -887,7 +896,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 229,
+      "line": 234,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.switch-npn\", \"Load manual transistor LED switch\", \"\"}",
@@ -898,7 +907,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 229,
+      "line": 234,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn-pulse\", \"Load blinking NPN LED\", \"\"}",
@@ -909,7 +918,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 229,
+      "line": 234,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.flasher\", \"Load capacitor-timed LED flasher\", \"\"}",
@@ -920,7 +929,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 230,
+      "line": 235,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.pause\", \"Pause\", \"\"}",
@@ -931,7 +940,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 230,
+      "line": 235,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.resume\", \"Resume\", \"\"}",
@@ -942,7 +951,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 230,
+      "line": 235,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.restart\", \"Restart\", \"\"}",
@@ -953,7 +962,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 230,
+      "line": 235,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"view.fit\", \"Fit circuit\", \"\"}",
@@ -964,7 +973,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 233,
+      "line": 238,
       "function": "*screen.registerCommands",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Register(command.Command{ID: entry.id, Label: entry.label, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts,\n\tAvailable: func() error {\n\t\tif s.fileBusy || s.pendingCommand != \"\" {\n\t\t\treturn fmt.Errorf(\"finish the current file operation first\")\n\t\t}\n\t\tstate := s.service.Snapshot()\n\t\tif entry.id == \"example.current.reset\" \u0026\u0026 state.Example == nil {\n\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t}\n\t\tif entry.id == \"edit.undo\" \u0026\u0026 !state.CanUndo {\n\t\t\treturn fmt.Errorf(\"nothing to undo\")\n\t\t}\n\t\tif entry.id == \"edit.redo\" \u0026\u0026 !state.CanRedo {\n\t\t\treturn fmt.Errorf(\"nothing to redo\")\n\t\t}\n\t\treturn nil\n\t}, Execute: func(context.Context) error {\n\t\tif entry.id == \"app.close\" {\n\t\t\ts.requestClose()\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"example.current.reset\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\tif state.Example == nil {\n\t\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t\t}\n\t\t\tgeneration := state.Document.Generation\n\t\t\ts.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"project.clear\" || entry.id == \"example.reset\" || entry.id == \"example.rc\" || entry.id == \"example.npn\" || entry.id == \"example.npn-pulse\" || entry.id == \"example.flasher\" || entry.id == \"example.switch-npn\" {\n\t\t\ts.requestReplace(entry.id, workbench.ReplaceParams{})\n\t\t\treturn nil\n\t\t}\n\t\tvar p any = struct{}{}\n\t\tif entry.id == \"edit.undo\" || entry.id == \"edit.redo\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\ttip := state.UndoEntry\n\t\t\tif entry.id == \"edit.redo\" {\n\t\t\t\ttip = state.RedoEntry\n\t\t\t}\n\t\t\tif tip != nil {\n\t\t\t\trevision := tip.CommandRevision\n\t\t\t\tp = workbench.HistoryParams{ExpectedEntryRevision: \u0026revision, AllowOtherActor: tip.Actor != \"user\"}\n\t\t\t}\n\t\t}\n\t\tif entry.id == \"view.fit\" {\n\t\t\tp = workbench.FitParams{Width: s.drawing.View.Width, Height: s.drawing.View.Height}\n\t\t}\n\t\tr := s.invoke(entry.id, p)\n\t\tif r.Error != nil {\n\t\t\treturn fmt.Errorf(\"%s\", r.Error.Message)\n\t\t}\n\t\treturn nil\n\t},\n})",
@@ -972,7 +981,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 260,
+      "line": 265,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})",
@@ -980,7 +989,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 264,
+      "line": 269,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ReplaceParams{})",
@@ -988,7 +997,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 282,
+      "line": 287,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.invoke(entry.id, p)",
@@ -996,7 +1005,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 318,
+      "line": 323,
       "function": "*screen.button",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Invoke(context.Background(), id)",
@@ -1004,7 +1013,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 327,
+      "line": 332,
       "function": "*screen.button",
       "kind": "domain-ingress",
       "expression": "s.invoke(id, target)",
@@ -1012,7 +1021,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 330,
+      "line": 335,
       "function": "*screen.button",
       "kind": "node-Activate",
       "expression": "Activate: activate",
