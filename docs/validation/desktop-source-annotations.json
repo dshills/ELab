@@ -1,0 +1,151 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "exports": [
+    {
+      "case": "legacy-pulse",
+      "annotations": [
+        {
+          "id": "V1",
+          "position": {
+            "x": -696,
+            "y": -13
+          },
+          "lines": [
+            "V1 | pulse (ideal edges)",
+            "low 0 V | high 5 V",
+            "high 123.456 ms | low 234.567 ms"
+          ],
+          "state": "current",
+          "input_mode": "auto"
+        }
+      ],
+      "view_after_fit": {
+        "center": {
+          "x": -249.5,
+          "y": 0
+        },
+        "zoom": 0.5560704355885079
+      }
+    },
+    {
+      "case": "sine",
+      "annotations": [
+        {
+          "id": "V1",
+          "position": {
+            "x": -726,
+            "y": 7
+          },
+          "lines": [
+            "V1 | sine",
+            "2.5 Vpk | 123.456 Hz",
+            "offset -1 V | phase -90 deg"
+          ],
+          "state": "current",
+          "input_mode": "auto"
+        }
+      ],
+      "view_after_fit": {
+        "center": {
+          "x": -194.5,
+          "y": 40
+        },
+        "zoom": 0.4803843074459568
+      }
+    },
+    {
+      "case": "finite-pulse",
+      "annotations": [
+        {
+          "id": "RampWave",
+          "position": {
+            "x": -598,
+            "y": -22
+          },
+          "lines": [
+            "RampWave | pulse",
+            "low -1 V | high 4 V",
+            "high 20 ms | low 30 ms",
+            "rise 200 us | fall 500 us"
+          ],
+          "state": "current",
+          "input_mode": "auto"
+        }
+      ],
+      "view_after_fit": {
+        "center": {
+          "x": -200.5,
+          "y": 0
+        },
+        "zoom": 0.6116207951070336
+      }
+    },
+    {
+      "case": "held-and-pending",
+      "annotations": [
+        {
+          "id": "V1",
+          "position": {
+            "x": -684,
+            "y": -11
+          },
+          "lines": [
+            "V1 | sine",
+            "5 Vpk | 10 Hz",
+            "offset 0 V | phase 0 deg",
+            "input held: high",
+            "pending input: low"
+          ],
+          "state": "current",
+          "input_mode": "high",
+          "pending_input_mode": "low"
+        }
+      ],
+      "view_after_fit": {
+        "center": {
+          "x": -173.5,
+          "y": 40
+        },
+        "zoom": 0.4971002485501243
+      }
+    },
+    {
+      "case": "stale-sine",
+      "annotations": [
+        {
+          "id": "V1",
+          "position": {
+            "x": -698,
+            "y": -2
+          },
+          "lines": [
+            "V1 | sine",
+            "3 Vpk | 50 Hz",
+            "offset 1 V | phase 30 deg",
+            "configured | live stale"
+          ],
+          "state": "stale"
+        }
+      ],
+      "view_after_fit": {
+        "center": {
+          "x": -180.5,
+          "y": 40
+        },
+        "zoom": 0.4914004914004914
+      }
+    }
+  ],
+  "checks": [
+    "same annotation lines in snapshot and SVG/PDF/PNG layout",
+    "global/per-source timings",
+    "configured versus applied/pending/stale provenance",
+    "source/history/physics preservation",
+    "shared Fit"
+  ],
+  "limits": [
+    "Six significant display digits; SVG metadata and normal project snapshots retain exact settings",
+    "Visual/PDF bounds inspection recorded separately; no printer submission"
+  ]
+}

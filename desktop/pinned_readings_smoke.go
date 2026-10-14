@@ -4,7 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"image/color"
+	"image/png"
 	"math"
+	"os"
 	"time"
 
 	"github.com/dshills/elab/workbench"
@@ -80,20 +83,40 @@ func nativePinnedReadingsSmoke(ctx context.Context, a *app.Application, s *scree
 			for _, reading := range state.PinnedReadings {
 				min, max := workbench.PinnedReadingBounds(reading)
 				a, b := view.Screen(canvas.Point{X: min.X, Y: min.Y}), view.Screen(canvas.Point{X: max.X, Y: max.Y})
-				cards, text := 0, 0
+				cards := 0
+				textCoverage := 0.
+				// Fit now includes source annotations. At smaller zoom glyphs are
+				// antialiased, so count equivalent ink coverage inside the card,
+				// excluding its border; exact-color pixels are not text coverage.
+				textA := view.Screen(canvas.Point{X: min.X + 8, Y: min.Y + 7})
+				textB := view.Screen(canvas.Point{X: max.X - 8, Y: max.Y - 7})
 				for y := int(math.Max(0, a.Y*sy)); y < int(math.Min(float64(pixels.Bounds().Dy()), b.Y*sy)); y++ {
 					for x := int(math.Max(0, a.X*sx)); x < int(math.Min(float64(pixels.Bounds().Dx()), b.X*sx)); x++ {
 						p := pixels.NRGBAAt(x, y)
 						if p == cardColor {
 							cards++
 						}
-						if p.A > 250 && p.R == 39 && p.G == 110 && p.B == 126 {
-							text++
+						if p.A > 250 && float64(x) >= textA.X*sx && float64(x) < textB.X*sx && float64(y) >= textA.Y*sy && float64(y) < textB.Y*sy {
+							textCoverage += readingTextCoverage(p, cardColor, color.NRGBA{R: 39, G: 110, B: 126, A: 255})
 						}
 					}
 				}
-				if cards < 100 || text < 20 {
-					ready <- fmt.Errorf("fresh %s reading card/text absent: %d/%d pixels", reading.Definition.ID, cards, text)
+				if cards < 100 || textCoverage < 20 {
+					if path := os.Getenv("ELAB_SMOKE_PIN_IMAGE"); path != "" {
+						file, saveErr := os.OpenFile(path, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0600)
+						if saveErr == nil {
+							saveErr = png.Encode(file, pixels)
+							closeErr := file.Close()
+							if saveErr == nil {
+								saveErr = closeErr
+							}
+						}
+						if saveErr != nil {
+							ready <- saveErr
+							return
+						}
+					}
+					ready <- fmt.Errorf("fresh %s reading card/text absent: %d card pixels / %.1f equivalent text pixels", reading.Definition.ID, cards, textCoverage)
 					return
 				}
 			}
@@ -107,4 +130,31 @@ func nativePinnedReadingsSmoke(ctx context.Context, a *app.Application, s *scree
 		}
 		return err
 	}
+}
+
+// GPU multisample resolution blends in linear light; decoded sRGB pixels are
+// not a straight interpolation of byte values. Reject unrelated colors and
+// measure glyph coverage rather than only fully covered samples.
+func readingTextCoverage(pixel, background, ink color.NRGBA) float64 {
+	linear := func(v uint8) float64 {
+		c := float64(v) / 255
+		if c <= .04045 {
+			return c / 12.92
+		}
+		return math.Pow((c+.055)/1.055, 2.4)
+	}
+	if pixel.A < 251 || background.R == ink.R {
+		return 0
+	}
+	coverage := (linear(background.R) - linear(pixel.R)) / (linear(background.R) - linear(ink.R))
+	if coverage <= 0 || coverage > 1.001 {
+		return 0
+	}
+	for _, channels := range [][3]uint8{{pixel.G, background.G, ink.G}, {pixel.B, background.B, ink.B}} {
+		expected := linear(channels[1]) + coverage*(linear(channels[2])-linear(channels[1]))
+		if math.Abs(linear(channels[0])-expected) > .01 {
+			return 0
+		}
+	}
+	return math.Min(1, coverage)
 }

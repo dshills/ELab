@@ -45,7 +45,7 @@ static int elab_png_finish(CGContextRef context, CFMutableDataRef data, int dpi,
  CFRelease(destination); CGImageRelease(image);
  return ok;
 }
-static int elab_pdf_text(CGContextRef context, const char *text, double size, double x, double y) {
+static int elab_pdf_text(CGContextRef context, const char *text, double size, double x, double y, int alignEnd) {
  CFStringRef value = CFStringCreateWithCString(NULL, text, kCFStringEncodingUTF8);
  if (!value) return 0;
  CTFontRef font = CTFontCreateWithName(CFSTR("Helvetica"), size, NULL);
@@ -54,6 +54,7 @@ static int elab_pdf_text(CGContextRef context, const char *text, double size, do
  CFDictionaryRef attributes = CFDictionaryCreate(NULL, keys, values, 2, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
  CFAttributedStringRef attributed = CFAttributedStringCreate(NULL, value, attributes);
  CTLineRef line = CTLineCreateWithAttributedString(attributed);
+ if (alignEnd) x -= CTLineGetTypographicBounds(line, NULL, NULL, NULL);
  CGContextSaveGState(context);
  CGContextSetTextMatrix(context, CGAffineTransformMakeScale(1, -1));
  CGContextSetTextPosition(context, x, y);
@@ -230,7 +231,11 @@ func (p *quartz) path(data string) error {
 func (p *quartz) text(x, y, size float64, text string) error {
 	value := C.CString(text)
 	defer C.free(unsafe.Pointer(value))
-	if C.elab_pdf_text(p.ctx, value, C.double(size), C.double(x), C.double(y)) == 0 {
+	alignEnd := 0
+	if p.current.anchor == "end" {
+		alignEnd = 1
+	}
+	if C.elab_pdf_text(p.ctx, value, C.double(size), C.double(x), C.double(y), C.int(alignEnd)) == 0 {
 		return fmt.Errorf("cannot encode schematic label")
 	}
 	return nil

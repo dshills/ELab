@@ -134,6 +134,14 @@ func schematicSVG(g Graph, run, revision uint64, readings ...PinnedReading) []by
 	return schematicSVGWithDisplay(g, run, revision, CircuitDisplay{Preferences: DefaultDisplayPreferences()}, readings...)
 }
 func schematicSVGWithDisplay(g Graph, run, revision uint64, display CircuitDisplay, readings ...PinnedReading) []byte {
+	settings := DefaultTransientSettings()
+	return schematicSVGWithAnnotations(g, run, revision, display, configuredSourceAnnotations(g, settings), settings, readings...)
+}
+func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitDisplay, annotations []SourceAnnotation, settings TransientSettings, readings ...PinnedReading) []byte {
+	annotated := map[string]bool{}
+	for _, a := range annotations {
+		annotated[a.ID] = true
+	}
 	minX, minY, maxX, maxY := -120., -100., 120., 100.
 	for _, p := range g.Components {
 		minX = math.Min(minX, p.Position.X-90)
@@ -141,11 +149,18 @@ func schematicSVGWithDisplay(g Graph, run, revision uint64, display CircuitDispl
 		if p.Kind == "net-label" {
 			maxX = math.Max(maxX, p.Position.X+50+float64(len(p.Label)+len(p.ID)+3)*7.5)
 		}
-		x, y, text := schematicPartLabel(p)
-		minX, maxX = math.Min(minX, x-10), math.Max(maxX, x+schematicLabelWidth(text)+10)
-		minY, maxY = math.Min(minY, y-25), math.Max(maxY, y+10)
+		if !annotated[p.ID] {
+			x, y, text := schematicPartLabel(p)
+			minX, maxX = math.Min(minX, x-10), math.Max(maxX, x+schematicLabelWidth(text)+10)
+			minY, maxY = math.Min(minY, y-25), math.Max(maxY, y+10)
+		}
 		minY = math.Min(minY, p.Position.Y-80)
 		maxY = math.Max(maxY, p.Position.Y+95)
+	}
+	for _, a := range annotations {
+		min, max := SourceAnnotationBounds(a)
+		minX, minY = math.Min(minX, min.X-10), math.Min(minY, min.Y-10)
+		maxX, maxY = math.Max(maxX, max.X+10), math.Max(maxY, max.Y+10)
 	}
 	connected := map[string]bool{}
 	for _, wire := range g.Wires {
@@ -176,7 +191,13 @@ func schematicSVGWithDisplay(g Graph, run, revision uint64, display CircuitDispl
 	width, height := maxX-minX, maxY-minY
 	var b strings.Builder
 	fmt.Fprintf(&b, `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="%g" viewBox="%g %g %g %g"><title>ELab schematic</title>`, 1200*height/width, minX, minY, width, height)
-	metadata, _ := json.Marshal(map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "switch_model": SwitchDeviceModel(), "diode_model": SiliconDiodeModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"})
+	sources := []Component{}
+	for _, p := range g.Components {
+		if annotated[p.ID] {
+			sources = append(sources, p)
+		}
+	}
+	metadata, _ := json.Marshal(map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "switch_model": SwitchDeviceModel(), "diode_model": SiliconDiodeModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "source_annotations": annotations, "source_components": sources, "source_settings": settings, "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"})
 	fmt.Fprintf(&b, "<metadata>%s</metadata>", html.EscapeString(string(metadata)))
 	fmt.Fprintf(&b, `<rect x="%g" y="%g" width="%g" height="%g" fill="#ffffff"/><g fill="none" stroke="#426574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">`, minX, minY, width, height)
 	wireDisplays := map[string]WireDisplay{}
@@ -201,8 +222,15 @@ func schematicSVGWithDisplay(g Graph, run, revision uint64, display CircuitDispl
 	// Conservative text bounds can reach a nearby component even when the
 	// actual label does not; drawing masks last erased parts of its symbol.
 	for _, p := range g.Components {
+		if annotated[p.ID] {
+			continue
+		}
 		x, y, text := schematicPartLabel(p)
 		fmt.Fprintf(&b, `<rect x="%g" y="%g" width="%g" height="19" rx="3" fill="#ffffff" stroke="none"/>`, x-3, y-15, schematicLabelWidth(text))
+	}
+	for _, a := range annotations {
+		min, max := SourceAnnotationBounds(a)
+		fmt.Fprintf(&b, `<rect x="%g" y="%g" width="%g" height="%g" rx="3" fill="#ffffff" stroke="none"/>`, min.X, min.Y, max.X-min.X, max.Y-min.Y)
 	}
 	for _, p := range g.Components {
 		fmt.Fprintf(&b, `<g id="%s" transform="translate(%g %g) rotate(%d)"><title>%s · %s</title>`, html.EscapeString(p.ID), p.Position.X, p.Position.Y, p.Rotation, html.EscapeString(p.ID), html.EscapeString(p.Name))
@@ -261,8 +289,17 @@ func schematicSVGWithDisplay(g Graph, run, revision uint64, display CircuitDispl
 	fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="19">ELab · schematic · electrical revision %d</text>`, minX+15, minY+25, revision)
 
 	for _, p := range g.Components {
+		if annotated[p.ID] {
+			continue
+		}
 		x, y, text := schematicPartLabel(p)
 		fmt.Fprintf(&b, `<text x="%g" y="%g">%s</text>`, x, y, html.EscapeString(text))
+	}
+	for _, a := range annotations {
+		_, max := SourceAnnotationBounds(a)
+		for i, line := range a.Lines {
+			fmt.Fprintf(&b, `<text x="%g" y="%g" text-anchor="end">%s</text>`, max.X, a.Position.Y+float64(i)*SourceAnnotationLineHeight, html.EscapeString(line))
+		}
 	}
 	fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="15">Components · generic educational models</text>`, minX+15, diagramBottom+19)
 	for i, p := range g.Components {

@@ -61,6 +61,10 @@ func (b *meshBuilder) text(x, y float64, text string, c color.NRGBA) {
 }
 func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*canvas.Mesh, error) {
 	b := &meshBuilder{}
+	annotated := map[string]bool{}
+	for _, a := range state.SourceAnnotations {
+		annotated[a.ID] = true
+	}
 	palette := paletteForTheme(state.Theme)
 	ink, muted, accent := palette.Ink, palette.Muted, palette.Accent
 	wireColor := color.NRGBA{R: 56, G: 125, B: 147, A: 255}
@@ -301,6 +305,9 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 				b.quad(position.X-2, position.Y-2, 4, 4, c)
 			}
 		}
+		if annotated[part.ID] {
+			continue
+		}
 		title := part.ID
 		if part.Unit != "" {
 			if part.Unit == "F" {
@@ -334,6 +341,12 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 			y = part.Position.Y - 75
 		}
 		b.text(part.Position.X-float64(len(title))*4.4, y, title, ink)
+	}
+	for _, a := range state.SourceAnnotations {
+		_, max := workbench.SourceAnnotationBounds(a)
+		for i, line := range a.Lines {
+			b.text(max.X-float64(len([]rune(line)))*8.75, a.Position.Y+float64(i)*workbench.SourceAnnotationLineHeight, line, ink)
+		}
 	}
 	frame := workbench.MakeDisplayFrame(graph, state.Display, phase)
 	for _, marker := range frame.Markers {

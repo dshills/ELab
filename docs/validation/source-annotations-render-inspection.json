@@ -1,0 +1,217 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "case": "legacy-pulse",
+      "native_headless_svg_png_bytes_equal": true,
+      "pdf_render_pixels_equal": true,
+      "annotation_lines_present": true,
+      "all_text_inside_page": true,
+      "minimum_text_points": 8.170078799999999,
+      "source_settings": {
+        "step_s": 0.001,
+        "high_s": 0.123456,
+        "low_s": 0.234567,
+        "initial_voltage_v": 0,
+        "seconds_per_wall_second": 0.02
+      },
+      "source_components": [
+        {
+          "id": "V1",
+          "kind": "pulse-source",
+          "name": "Pulse source",
+          "terminals": [
+            "positive",
+            "negative"
+          ],
+          "position": {
+            "x": -200,
+            "y": 0
+          },
+          "value": 5,
+          "unit": "V",
+          "model": "ideal-square.v1",
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "case": "sine",
+      "native_headless_svg_png_bytes_equal": true,
+      "pdf_render_pixels_equal": true,
+      "annotation_lines_present": true,
+      "all_text_inside_page": true,
+      "minimum_text_points": 7.036431600000014,
+      "source_settings": {
+        "step_s": 0.001,
+        "high_s": 0.05,
+        "low_s": 0.05,
+        "initial_voltage_v": 0,
+        "seconds_per_wall_second": 0.1
+      },
+      "source_components": [
+        {
+          "sine": {
+            "amplitude_v": 2.5,
+            "offset_v": -1,
+            "frequency_hz": 123.456,
+            "phase_degrees": -90
+          },
+          "id": "V1",
+          "kind": "sine-source",
+          "name": "Sine source",
+          "terminals": [
+            "positive",
+            "negative"
+          ],
+          "position": {
+            "x": -300,
+            "y": 20
+          },
+          "value": 2.5,
+          "unit": "V",
+          "model": "elab.ideal-sine-source.v1",
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "case": "finite-pulse",
+      "native_headless_svg_png_bytes_equal": true,
+      "pdf_render_pixels_equal": true,
+      "annotation_lines_present": true,
+      "all_text_inside_page": true,
+      "minimum_text_points": 8.841367200000008,
+      "source_settings": {
+        "step_s": 0.001,
+        "high_s": 0.05,
+        "low_s": 0.05,
+        "initial_voltage_v": 0,
+        "seconds_per_wall_second": 0.02
+      },
+      "source_components": [
+        {
+          "pulse": {
+            "high_v": 4,
+            "low_v": -1,
+            "high_s": 0.02,
+            "low_s": 0.03,
+            "rise_s": 0.0002,
+            "fall_s": 0.0005
+          },
+          "id": "RampWave",
+          "kind": "finite-pulse-source",
+          "name": "Finite pulse source",
+          "terminals": [
+            "positive",
+            "negative"
+          ],
+          "position": {
+            "x": -200,
+            "y": 0
+          },
+          "value": 4,
+          "unit": "V",
+          "model": "elab.finite-pulse-source.v1",
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "case": "held-and-pending",
+      "native_headless_svg_png_bytes_equal": true,
+      "pdf_render_pixels_equal": true,
+      "annotation_lines_present": true,
+      "all_text_inside_page": true,
+      "minimum_text_points": 7.280268000000007,
+      "source_settings": {
+        "step_s": 0.001,
+        "high_s": 0.05,
+        "low_s": 0.05,
+        "initial_voltage_v": 0,
+        "seconds_per_wall_second": 0.1
+      },
+      "source_components": [
+        {
+          "sine": {
+            "amplitude_v": 5,
+            "offset_v": 0,
+            "frequency_hz": 10,
+            "phase_degrees": 0
+          },
+          "id": "V1",
+          "kind": "sine-source",
+          "name": "Sine source",
+          "terminals": [
+            "positive",
+            "negative"
+          ],
+          "position": {
+            "x": -300,
+            "y": 20
+          },
+          "value": 5,
+          "unit": "V",
+          "model": "elab.ideal-sine-source.v1",
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "case": "stale-sine",
+      "native_headless_svg_png_bytes_equal": true,
+      "pdf_render_pixels_equal": true,
+      "annotation_lines_present": true,
+      "all_text_inside_page": true,
+      "minimum_text_points": 7.197133199999996,
+      "source_settings": {
+        "step_s": 0.001,
+        "high_s": 0.05,
+        "low_s": 0.05,
+        "initial_voltage_v": 0,
+        "seconds_per_wall_second": 0.1
+      },
+      "source_components": [
+        {
+          "sine": {
+            "amplitude_v": 3,
+            "offset_v": 1,
+            "frequency_hz": 50,
+            "phase_degrees": 30
+          },
+          "id": "V1",
+          "kind": "sine-source",
+          "name": "Sine source",
+          "terminals": [
+            "positive",
+            "negative"
+          ],
+          "position": {
+            "x": -300,
+            "y": 20
+          },
+          "value": 3,
+          "unit": "V",
+          "model": "elab.ideal-sine-source.v1",
+          "rotation": 0
+        }
+      ]
+    }
+  ],
+  "visual_review": {
+    "passed": true,
+    "reviewed": [
+      "five-case PDF contact sheet",
+      "full-resolution sine PDF render"
+    ],
+    "findings": [
+      "Complete right-aligned waveform labels remain readable and within page",
+      "Held/pending and stale labels remain explicit",
+      "Symbols/terminals and component lists remain visible"
+    ],
+    "limits": [
+      "No universal crowded-layout/readability guarantee",
+      "No physical printer submission"
+    ]
+  }
+}

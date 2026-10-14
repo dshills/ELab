@@ -23,17 +23,19 @@ type ExportStartParams struct {
 	ExpectedGeneration *uint64        `json:"expected_document_generation,omitempty"`
 }
 type exportCapture struct {
-	page       schematicpdf.Page
-	kind       string
-	generation uint64
-	overwrite  bool
-	graph      Graph
-	display    CircuitDisplay
-	readings   []PinnedReading
-	trace      *Transient
-	scope      Scope
-	record     *verificationRecord
-	artifact   Artifact
+	annotations []SourceAnnotation
+	settings    TransientSettings
+	page        schematicpdf.Page
+	kind        string
+	generation  uint64
+	overwrite   bool
+	graph       Graph
+	display     CircuitDisplay
+	readings    []PinnedReading
+	trace       *Transient
+	scope       Scope
+	record      *verificationRecord
+	artifact    Artifact
 }
 type projectExportFunc func(context.Context, exportCapture, func(string, int)) (*preparedFile, error)
 
@@ -52,6 +54,10 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 		return fmt.Errorf("export must use a different path from the schematic")
 	}
 	capture := exportCapture{kind: p.Kind, generation: s.documentGeneration, overwrite: p.Overwrite, artifact: Artifact{Path: path, RunID: s.run, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration}}
+	if p.Kind == "schematic-svg" || p.Kind == "schematic-pdf" || p.Kind == "schematic-png" {
+		capture.annotations = s.sourceAnnotationsLocked()
+		capture.settings = s.transientSettings
+	}
 	command := ""
 	if p.Page != nil && p.Kind != "schematic-pdf" && p.Kind != "schematic-png" {
 		return fmt.Errorf("page settings apply only to schematic PDF/PNG")
@@ -167,14 +173,23 @@ func prepareProjectExport(ctx context.Context, capture exportCapture, progress f
 	switch capture.kind {
 	case "schematic-pdf", "schematic-png":
 		identity := map[string]any{"format": "elab.schematic." + capture.artifact.Format + ".v1", "run_id": capture.artifact.RunID, "electrical_revision": capture.artifact.ElectricalRevision, "document_generation": capture.artifact.DocumentGeneration, "page": capture.artifact.Page, "measurement_source": "captured-live-snapshot; unavailable/stale labels retained when overlays requested"}
+		identity["source_annotations"] = capture.annotations
+		identity["source_settings"] = capture.settings
+		sources := []Component{}
+		for _, p := range capture.graph.Components {
+			if p.Kind == "pulse-source" || IsWaveformSource(p.Kind) {
+				sources = append(sources, p)
+			}
+		}
+		identity["source_components"] = sources
 		if capture.artifact.DPI != 0 {
 			identity["dpi"] = capture.artifact.DPI
 		}
 		metadata, _ := json.Marshal(identity)
 		capture.page.Metadata = string(metadata)
-		data, err = schematicpdf.Render(ctx, schematicSVGWithDisplay(capture.graph, capture.artifact.RunID, capture.artifact.ElectricalRevision, capture.display, capture.readings...), capture.page)
+		data, err = schematicpdf.Render(ctx, schematicSVGWithAnnotations(capture.graph, capture.artifact.RunID, capture.artifact.ElectricalRevision, capture.display, capture.annotations, capture.settings, capture.readings...), capture.page)
 	case "schematic-svg":
-		data = schematicSVGWithDisplay(capture.graph, capture.artifact.RunID, capture.artifact.ElectricalRevision, capture.display, capture.readings...)
+		data = schematicSVGWithAnnotations(capture.graph, capture.artifact.RunID, capture.artifact.ElectricalRevision, capture.display, capture.annotations, capture.settings, capture.readings...)
 	case "scope-csv":
 		data, err = encodeScopeCSV(capture.trace, capture.scope)
 	case "verification-json":
@@ -254,6 +269,7 @@ func (s *Service) runProjectExport(job *projectJob, prepare projectExportFunc, p
 	job.export.record = nil
 	job.export.scope = Scope{}
 	job.export.readings = nil
+	job.export.annotations = nil
 	job.export.display = CircuitDisplay{}
 	s.finishProjectWorkLocked(job)
 	s.mu.Unlock()

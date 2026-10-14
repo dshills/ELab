@@ -35,6 +35,7 @@ type painter interface {
 }
 type style struct {
 	fill, stroke string
+	anchor       string
 	width, font  float64
 }
 
@@ -112,6 +113,12 @@ func Render(ctx context.Context, svg []byte, page Page) ([]byte, error) {
 				if err != nil {
 					return nil, err
 				}
+			}
+			if v, ok := a["text-anchor"]; ok {
+				if v != "start" && v != "end" {
+					return nil, fmt.Errorf("unsupported generated text anchor")
+				}
+				current.anchor = v
 			}
 			out.style(current)
 			get := func(key string) float64 { v, _ := strconv.ParseFloat(a[key], 64); return v }

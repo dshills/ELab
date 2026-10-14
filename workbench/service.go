@@ -13,6 +13,7 @@ import (
 )
 
 type Snapshot struct {
+	SourceAnnotations      []SourceAnnotation     `json:"source_annotations"`
 	ProjectWork            *ProjectWork           `json:"project_work,omitempty"`
 	InputWork              *InputWork             `json:"input_work,omitempty"`
 	Example                *ExampleContext        `json:"example,omitempty"`
@@ -252,6 +253,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		analysis = "DC operating point"
 	}
 	out := Snapshot{
+		SourceAnnotations:      s.sourceAnnotationsLocked(),
 		SchematicPage:          page,
 		ProjectWork:            s.projectWorkLocked(),
 		InputWork:              s.inputWorkLocked(),
@@ -852,6 +854,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	state.SourceAnnotations = cloneSourceAnnotations(state.SourceAnnotations)
 	state.SchematicPage = cloneSchematicPage(state.SchematicPage)
 	state.ProjectWork = cloneProjectWork(state.ProjectWork)
 	state.InputWork = cloneInputWork(state.InputWork)

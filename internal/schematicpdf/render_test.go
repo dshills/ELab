@@ -52,3 +52,32 @@ func TestRasterOrientationColorAndOpaquePaper(t *testing.T) {
 		}
 	}
 }
+
+func TestRasterTextEndAnchorUsesGlyphAdvance(t *testing.T) {
+	if !Supported() {
+		t.Skip("macOS raster backend")
+	}
+	svg := []byte(`<svg viewBox="0 0 200 100"><text x="50" y="40" font-size="20">WAVE</text><text x="150" y="80" font-size="20" text-anchor="end">WAVE</text></svg>`)
+	data, err := Render(context.Background(), svg, Page{Width: 200, Height: 100, RasterDPI: 72})
+	if err != nil {
+		t.Fatal(err)
+	}
+	im, err := png.Decode(bytes.NewReader(data))
+	if err != nil {
+		t.Fatal(err)
+	}
+	for index, band := range [][2]int{{15, 45}, {55, 85}} {
+		left, right := 200, -1
+		for y := band[0]; y < band[1]; y++ {
+			for x := 0; x < 200; x++ {
+				r, _, _, _ := im.At(x, y).RGBA()
+				if r < 50000 {
+					left, right = min(left, x), max(right, x)
+				}
+			}
+		}
+		if right-left < 40 || index == 0 && (left < 49 || left > 51) || index == 1 && (right > 150 || right < 147 || left < 70) {
+			t.Fatal("text start/end anchor ignored or clipped", index, left, right)
+		}
+	}
+}

@@ -41,3 +41,5 @@ The 0.48.0 PDF-output checkpoint adds shared page settings and export routes; so
 The 0.49.0 PNG checkpoint adds one public image export route through the existing guarded picker/worker bridge; the shared Output page controls retain PDF settings. This ledger still measures source routes, not universal interaction coverage.
 
 The 0.50.0 rectifier checkpoint adds a protected example alias through the registry and both Examples menus. The menu/value/scope paths are tested against an agent; source counts alone remain insufficient for full parity qualification.
+
+The 0.52.0 annotation checkpoint changes the schematic mesh consumer without adding a semantic ingress: native rendering reads the same owned source lines available to agents and exports. The source hash was reviewed/refreshed; route and binding-review counts are unchanged.

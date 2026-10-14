@@ -1,0 +1,59 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "version": "0.52.0",
+  "build": "67",
+  "binary_sha256": "c279c34b0d5536d2c302a08394ef5cd37a2350e05df4d93706b9df6b98907eea",
+  "packaged_binary_matches": true,
+  "source_checkpoint": "7d13fd3",
+  "vellum_baseline": {
+    "recorded": "2026-10-14",
+    "version": "checkout e7f8e30",
+    "commit": "e7f8e306f56c3c237ad41985da4a407d62f2d87d",
+    "local_checkout": "../../Vellum (relative to desktop/go.mod)",
+    "native_dependency_manifest": "drivers/cogent/native/dependencies.json",
+    "native_dependency_manifest_sha256": "6bea72b8096bc7c0ff1cfffbfde830217f794877db7a303819cba84b1aea86f1",
+    "go_directive": "1.25.6",
+    "tested_go": "go1.27.2 darwin/arm64",
+    "root_module": "github.com/dshills/elab",
+    "desktop_module": "github.com/dshills/elab/desktop",
+    "status": "Local checkout integration; relocatable SDK distribution remains a later gate"
+  },
+  "checks": [
+    "Shared owned source_annotations expose sine peak/frequency/offset/phase, finite pulse levels/phase/rise/fall and ideal-pulse global timing using six display digits",
+    "Configured/current/stale and primary applied/pending input state are distinguished; queued holds apply only at next accepted sample; old held data never relabeled fresh after paused source edits",
+    "Native mesh consumes the same annotation lines as agents; CoreText/bitmap end alignment keeps labels beside sources; actual raster glyph-position and native field/Fit/mesh tests pass",
+    "Fit includes source annotation bounds while preserving physical state/history/dirty flags; initial RC/rectifier view framing adjusted",
+    "Background SVG/PDF/PNG captures graph, owned annotation lines and exact source settings at admission; later global timing/source changes do not change captured output",
+    "Five public cases across native/headless have equal annotation/Fit outcomes and byte-identical SVG/PNG; PDF pixels identical after Poppler rendering",
+    "Extracted native/headless PDF text contains every annotation line within page bounds; exact source metadata matches snapshots; smallest reference text 7.0364 pt; five-case contact sheet and full sine page visually reviewed",
+    "Final lint/import/root/native race/vet, portable annotation/capture checks, exact packaged GPU smoke and all four previous workflow adapters pass",
+    "Reading-card smoke retains original 20-equivalent-pixel threshold, counts actual linear-light multisample glyph coverage inside card excluding border; actual snapshot quarter/half/three-quarter/full samples tested; background/unrelated colors reject",
+    "Native source ledger drawing.go hash refreshed after review: route counts remain 35 production files/276 sites/116 IDs, 95 source-route references and 100 binding-review sites"
+  ],
+  "evidence": [
+    "docs/source-annotations.md",
+    "docs/validation/headless-source-annotations.json",
+    "docs/validation/desktop-source-annotations.json",
+    "docs/validation/source-annotations-render-inspection.json",
+    "docs/validation/source-annotations-contact.png",
+    "docs/validation/source-annotations-conformance.json",
+    "workbench/source_annotations_test.go",
+    "internal/schematicpdf/render_test.go",
+    "desktop/source_annotations_test.go",
+    "desktop/pinned_readings_pixel_test.go"
+  ],
+  "validation_notes": [
+    "Initial demo tried setting input while paused source configuration was stale; it now follows explicit Restart/readiness before input/restart, retaining existing policy",
+    "Expanded Fit reduced zoom in reading-card smoke. Exact-color counting and then sRGB-byte interpolation missed antialiased glyphs; captured owned frame proved text present. Linear-light coverage corrected evidence without lowering threshold or changing production drawing"
+  ],
+  "limits_of_evidence": [
+    "Six significant label digits; exact parameters remain in snapshots/files/metadata",
+    "Conservative source bounds can reduce Fit scale; no universal minimum-font or arbitrary crowded-layout guarantee",
+    "Native semantic field/mesh tests and existing GPU paths do not establish all physical typing/IME/focus/accessibility behavior",
+    "PDF/PNG backend remains macOS cgo; SVG and core annotations portable; no printer preview/submission or physical printing claim",
+    "Live/configured schematic output, not interactive recorded-scene reconstruction",
+    "Numerical models/quotas/tolerances unchanged; previous unclassified flasher failure cause remains unproven; wider capacity/visible-latency/physical/participant/distribution gates remain pending",
+    "Private unsigned app; previous .51/66 retained at build/ELab-before-source-annotations.app; user work/research and sibling SDK preserved"
+  ]
+}

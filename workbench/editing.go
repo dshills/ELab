@@ -672,6 +672,11 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 				minX, minY = math.Min(minX, min.X), math.Min(minY, min.Y)
 				maxX, maxY = math.Max(maxX, max.X), math.Max(maxY, max.Y)
 			}
+			for _, annotation := range s.sourceAnnotationsLocked() {
+				min, max := SourceAnnotationBounds(annotation)
+				minX, minY = math.Min(minX, min.X), math.Min(minY, min.Y)
+				maxX, maxY = math.Max(maxX, max.X), math.Max(maxY, max.Y)
+			}
 			s.view.Center = Point{(minX + maxX) / 2, (minY + maxY) / 2}
 			s.view.Zoom = math.Max(.01, math.Min(2, math.Min(p.Width/(maxX-minX+180), p.Height/(maxY-minY+180))))
 		}

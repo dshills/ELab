@@ -63,6 +63,7 @@ func findExample(id string) (exampleDefinition, bool) {
 		d.graph = ExampleGraph()
 	case "rc":
 		d.graph = RCExampleGraph()
+		d.view = View{Center: Point{X: -130, Y: 20}, Zoom: .7}
 	case "npn":
 		d.graph = NPNExampleGraph()
 	case "switch-npn":
@@ -82,7 +83,7 @@ func findExample(id string) (exampleDefinition, bool) {
 		d.graph = RectifierExampleGraph()
 		d.settings.StepSeconds = .001
 		d.settings.PlaybackSpeed = .1
-		d.view = View{Center: Point{X: 20, Y: 30}, Zoom: .75}
+		d.view = View{Center: Point{X: -180, Y: 30}, Zoom: .55}
 		d.selected = "C1"
 	}
 	return d, true

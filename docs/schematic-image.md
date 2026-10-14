@@ -20,3 +20,5 @@ Tests cover asymmetric orientation/color, opaque page corners, allocation/resolu
 PNG output is a file export. In-app print preview, printer discovery/submission, tiled pages and physical-device printing remain pending. Large fitted diagrams can have small labels; PNG does not add a universal readability guarantee.
 
 The rectifier checkpoint repairs label-background layering: conservative masks now sit below component symbols/pins, so a nearby long label no longer erases a resistor. This repair also applies to SVG and PDF through their shared layout.
+
+Waveform excitation now appears in [shared source annotations](source-annotations.md), with exact captured component/settings metadata and explicit applied/pending/stale state.
