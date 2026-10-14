@@ -100,7 +100,14 @@ func (s *screen) probeInspector(state workbench.Snapshot) []ui.Node {
 	}
 	for i, trace := range state.Scope.Traces {
 		p := trace.Probe
-		nodes = append(nodes, quiet("probe-direction-"+p.ID, scopeProbeColors(state.Scope.Traces)[i]+" · "+p.Positive+" → "+p.Reference))
+		nodes = append(nodes, s.action("inspect-trace-"+p.ID, "Inspect "+p.Label, "scope.trace.select", workbench.IDParams{ID: p.ID}), quiet("probe-direction-"+p.ID, scopeProbeColors(state.Scope.Traces)[i]+" · "+p.Positive+" → "+p.Reference))
+	}
+	if state.TraceFocus != nil {
+		text := "Inspecting " + state.TraceFocus.ProbeID
+		if state.TraceFocus.Unavailable {
+			text += " · " + state.TraceFocus.Reason
+		}
+		nodes = append(nodes, quiet("trace-focus-status", text), s.action("trace-focus-clear", "Clear trace highlight", "scope.trace.select", workbench.IDParams{}))
 	}
 	for _, r := range state.Scope.Readings {
 		unit := "V"

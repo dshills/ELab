@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "transport": "packaged-native-private-socket",
+  "checks": [
+    "exact component/terminal/net associations",
+    "simulation/history/document preserved by focus",
+    "unselected trace refused",
+    "removed source unavailable and undo restores it",
+    "recorded plot never highlights current live schematic",
+    "trace removal and explicit clear",
+    "fresh paused reopen clears ephemeral focus",
+    "owned session ends clean and paused"
+  ],
+  "limitations": [
+    "focus is session inspection state, not a saved preference",
+    "recorded schematic interactive association is not implemented",
+    "GPU and mounted control coverage are separate checks"
+  ]
+}

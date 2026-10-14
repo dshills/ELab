@@ -32,7 +32,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.24.0 --build-version 38 --platform darwin
+  --version 0.25.0 --build-version 39 --platform darwin
 ```
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
@@ -60,6 +60,8 @@ The generic Ebers–Moll junction model remains instantaneous; physical transist
 ## Inspect both sides and measure timing
 
 The right inspector's **Scope probes** selectors choose up to six terminal voltages or branch currents, including both flasher collectors, both LEDs, and each capacitor. Newly selected traces include already retained history without restarting the circuit. Voltage/current axes show signed values in V/mA.
+
+Choose **Inspect trace…** below the scope to highlight the trace’s component and terminals without changing the simulation. Agents use `scope.trace.select` and receive the same source associations.
 
 Pause, select cursor **A** or **B**, then click/drag the scope or enter its requested time in ms. Cursors snap to recorded samples and show actual times, Δt, reciprocal Hz, and each trace's A/B/change readings. All selections, cursor gestures, and measurements are exposed through the same agent commands. Choose a fixed interval or follow live history; the inspector shows interval min/max/sample mean/RMS. Export scope CSV or schematic SVG through native file pickers or the same agent commands. Search the component tray, duplicate selected parts, and apply paired capacitor values as one named undoable transaction. See the [scope workflow](docs/scope-probes.md) and [ten-item implementation record](research/09-next-ten-implementation.md).
 

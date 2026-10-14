@@ -21,7 +21,7 @@ Audited October 13, 2026 against [PRD draft 0.3](07-product-requirements.md), so
 | PART-01 | Versioned curated models/pins and fixtures; per-part assumptions/IDs now visible; hobbyist aliases added | Implemented generic/ideal inventory; no physical parts/ratings claim |
 | VIEW-01 | Selected component readouts, structured node maps/probes, current directions for probes/potentiometer | Partial: arbitrary pinned schematic readings and consistent selected pin/net measurement/sign/reference presentation remain absent |
 | VIEW-02 | Illustrative LED brightness, text readings | Partial: wire color is currently static; no animation/reduced-motion preferences or current-direction animation |
-| SCOPE-01 | Up to six labeled traces, component plot actions, source IDs; removed-source unavailable markers/removal/undo added | Partial: selecting a trace does not yet highlight its schematic source |
+| SCOPE-01 | Six labeled traces and component plot actions; shared source focus with object/terminal/net IDs, missing-source/undo and fresh native GPU evidence | Implemented for selected live sources; recorded view suppresses current-schematic highlights; interactive captured-schematic highlighting is future work |
 | SCOPE-02 | Retained/fixed intervals, exact sample cursors, deltas/extrema, CSV; finite frequency guards | Implemented sampled measurement behavior; general text time entry remains in EDIT-03 |
 | HELP-01 | Structured missing/open/model/unsupported/solve diagnostics and quiet error text; retained editable graph | Partial: known diagnostic objects are not consistently highlighted on the schematic; separate technical-detail disclosure needs review |
 | HELP-02 | LED/RC/NPN/Blink/Flasher templates, reset, visible model limitations | Partial: each of the three core examples still needs its concise question and expected qualitative behavior, with reset tracked to the current example |
@@ -48,7 +48,7 @@ Audited October 13, 2026 against [PRD draft 0.3](07-product-requirements.md), so
 | Paused switch stays pending until resume/next step | Desired/applied/pending state exposed; no physics/event update until Step/Resume accepts a sample | Supported |
 | Resume unchanged / Restart from startup | Existing clock and explicit fresh-start tests | Supported |
 | Undo/redo follow electrical/presentation rules | Shared history; paused edits stay stale | Supported semantics with actor identity, exact-tip guards and explicit cross-actor acknowledgment |
-| Remove plotted source | Kept records retained; hardening now exposes unavailable requests and shared removal | Supported hardening behavior; trace-source highlighting still open |
+| Remove plotted source | Kept records retained; hardening now exposes unavailable requests and shared removal | Supported: unavailable trace marker, source focus suppression, and undo restoration |
 | Reopen starts fresh and restores kept records/pause | Project/recovery fixtures | Supported same-workstation behavior; clean installation open |
 
 ## Quality and release gates
@@ -87,3 +87,5 @@ Audited October 13, 2026 against [PRD draft 0.3](07-product-requirements.md), so
 5. Prepare formative-test materials. Actual participant/hardware validation remains a separate evidence gate.
 
 This queue advances the original requirements; it does not replace them with the subset currently implemented or claim targets met because tests are green.
+
+The trace-source checkpoint (0.25.0 / 39) closes the live source-association gap with [core/native/public/GPU validation](../docs/validation/trace-focus-validation.json). Functional coverage is now 11 implemented / 16 partial. This does not establish MVP completion or any pending release/user-study gate.

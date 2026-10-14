@@ -3,8 +3,8 @@
   "scope": "Requirement coverage validation only; does not establish product acceptance",
   "requirements": 27,
   "counts": {
-    "implemented": 10,
-    "partial": 17,
+    "implemented": 11,
+    "partial": 16,
     "pending": 0
   },
   "rows": [
@@ -88,9 +88,9 @@
     },
     {
       "id": "SCOPE-01",
-      "evidence": "Up to six labeled traces, component plot actions, source IDs; removed-source unavailable markers/removal/undo added",
-      "status": "partial",
-      "assessment": "Partial: selecting a trace does not yet highlight its schematic source"
+      "evidence": "Up to six labeled traces and component plot actions; shared scope.trace.select exposes stable source objects/terminals/nets, missing-source/undo semantics and native GPU highlights",
+      "status": "implemented",
+      "assessment": "Implemented for selected current live sources; recorded view explicitly suppresses current-schematic association; captured recorded-schematic interactive highlighting is future work"
     },
     {
       "id": "SCOPE-02",

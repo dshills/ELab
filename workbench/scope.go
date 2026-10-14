@@ -303,6 +303,12 @@ func nearestSample(samples []TraceSample, at float64) int {
 }
 func (s *Service) scopeCommandLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "scope.trace.select":
+		var p IDParams
+		if err := params(raw, &p, "id"); err != nil {
+			return err
+		}
+		return s.focusTraceLocked(p)
 	case "scope.probe.remove":
 		var p IDParams
 		if err := params(raw, &p, "id"); err != nil {
@@ -317,6 +323,9 @@ func (s *Service) scopeCommandLocked(command string, raw json.RawMessage) error 
 			if id == p.ID {
 				s.scopeProbes = append(append([]string{}, ids[:i]...), ids[i+1:]...)
 				s.scopeConfigured = true
+				if s.focusProbe == p.ID {
+					s.focusProbe = ""
+				}
 				return nil
 			}
 		}
@@ -342,6 +351,9 @@ func (s *Service) scopeCommandLocked(command string, raw json.RawMessage) error 
 		}
 		s.scopeProbes = append([]string{}, p.IDs...)
 		s.scopeConfigured = true
+		if !seen[s.focusProbe] {
+			s.focusProbe = ""
+		}
 	case "scope.cursor.select", "scope.cursor.clear":
 		var p CursorSelectParams
 		if err := params(raw, &p, "cursor"); err != nil {

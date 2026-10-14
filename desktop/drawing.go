@@ -77,6 +77,16 @@ func schematic(state workbench.Snapshot, view canvas.Viewport) (*canvas.Mesh, er
 		}
 	}
 	graph := workbench.Graph{Components: state.Components, Wires: state.Wires}
+	focusObjects, focusTerminals := map[string]bool{}, map[string]bool{}
+	if state.TraceFocus != nil && !state.TraceFocus.Unavailable {
+		for _, id := range state.TraceFocus.Objects {
+			focusObjects[id] = true
+		}
+		for _, ref := range state.TraceFocus.Terminals {
+			focusTerminals[ref] = true
+		}
+	}
+	focusColor := color.NRGBA{R: 153, G: 78, B: 191, A: 255}
 	connectionCount := map[string]int{}
 	for _, w := range state.Wires {
 		c := wireColor
@@ -216,6 +226,9 @@ func schematic(state workbench.Snapshot, view canvas.Viewport) (*canvas.Mesh, er
 				stroke(ink, 2.5, canvas.Point{X: -width, Y: y}, canvas.Point{X: width, Y: y})
 			}
 		}
+		if focusObjects[part.ID] {
+			stroke(focusColor, 3, canvas.Point{X: -70, Y: -52}, canvas.Point{X: 70, Y: -52}, canvas.Point{X: 70, Y: 52}, canvas.Point{X: -70, Y: 52}, canvas.Point{X: -70, Y: -52})
+		}
 		if part.ID == state.Selected {
 			stroke(selectedColor, 1.8, canvas.Point{X: -64, Y: -46}, canvas.Point{X: 64, Y: -46}, canvas.Point{X: 64, Y: 46}, canvas.Point{X: -64, Y: 46}, canvas.Point{X: -64, Y: -46})
 		}
@@ -224,6 +237,10 @@ func schematic(state workbench.Snapshot, view canvas.Viewport) (*canvas.Mesh, er
 			position, _ := workbench.TerminalPosition(part, terminal)
 			c := wireColor
 			radius := 4.
+			if focusTerminals[ref] {
+				c = focusColor
+				radius = 8
+			}
 			if ref == state.Drawing.WireStart {
 				c = pendingColor
 				radius = 7

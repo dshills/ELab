@@ -588,6 +588,7 @@ func (s *Service) installDocumentLocked(d Document) {
 	s.documentGeneration++
 	s.transientSettings = *d.TransientSettings
 	s.verificationSettings = DefaultVerificationSettings()
+	s.focusProbe = ""
 	s.scopeConfigured = d.ScopeProbes != nil
 	s.scopeProbes = nil
 	if d.ScopeProbes != nil {

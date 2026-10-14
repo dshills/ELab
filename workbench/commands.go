@@ -155,6 +155,7 @@ func Catalog() []Capability {
 		typedCapability("parts.search.set", "Filter components by case-insensitive words in names, hobbyist aliases, kind, pins, units, defaults or model IDs; session only", reflect.TypeOf(SearchParams{})),
 		typedCapability("component.duplicate", "Copy one component's value, orientation and startup voltage into an unconnected new component; optional exact position", reflect.TypeOf(DuplicateParams{})),
 		typedCapability("edit.batch", "Atomically apply 1–100 supported schematic edits as one named undo action; no file, simulation or nested batch commands", reflect.TypeOf(BatchParams{})),
+		typedCapability("scope.trace.select", "Inspect a selected live trace's current schematic source; empty ID clears focus; source associations are in snapshot.trace_focus and preserve physics", reflect.TypeOf(IDParams{})),
 		typedCapability("scope.probe.remove", "Remove one selected probe, including an unavailable removed-source probe; preserves other requested probes, graph and simulation", reflect.TypeOf(IDParams{})),
 		typedCapability("scope.probes.set", "Choose up to six unique IDs from snapshot.scope.available; [] hides all; session only, no simulation restart", reflect.TypeOf(ProbeParams{})),
 		typedCapability("scope.cursor.set", "Set a/b time inside retained fresh history; snap to nearest sample, ties choose latest/right-hand; inspect scope for timing and trace deltas", reflect.TypeOf(CursorParams{})),

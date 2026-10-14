@@ -1,0 +1,890 @@
+{
+  "recordings": {
+    "entries": [
+      {
+        "data": {
+          "metadata": {
+            "format": "elab.verification",
+            "version": 1,
+            "operation_id": "verify-1",
+            "created_at": "2026-10-14T04:16:28.54027Z",
+            "input_revision": 15,
+            "electrical_revision": 4,
+            "document_generation": 2,
+            "graph": {
+              "components": [
+                {
+                  "id": "V1",
+                  "kind": "dc-source",
+                  "name": "DC source",
+                  "terminals": [
+                    "positive",
+                    "negative"
+                  ],
+                  "position": {
+                    "x": -300,
+                    "y": 0
+                  },
+                  "value": 5,
+                  "unit": "V",
+                  "model": "ideal-dc.v1",
+                  "rotation": 0
+                },
+                {
+                  "id": "RL1",
+                  "kind": "resistor",
+                  "name": "Resistor",
+                  "terminals": [
+                    "1",
+                    "2"
+                  ],
+                  "position": {
+                    "x": -140,
+                    "y": -200
+                  },
+                  "value": 1000,
+                  "unit": "Ω",
+                  "model": "ideal-resistor.v1",
+                  "rotation": 90
+                },
+                {
+                  "id": "RL2",
+                  "kind": "resistor",
+                  "name": "Resistor",
+                  "terminals": [
+                    "1",
+                    "2"
+                  ],
+                  "position": {
+                    "x": 140,
+                    "y": -200
+                  },
+                  "value": 1000,
+                  "unit": "Ω",
+                  "model": "ideal-resistor.v1",
+                  "rotation": 90
+                },
+                {
+                  "id": "RB1",
+                  "kind": "resistor",
+                  "name": "Resistor",
+                  "terminals": [
+                    "1",
+                    "2"
+                  ],
+                  "position": {
+                    "x": -220,
+                    "y": -100
+                  },
+                  "value": 47000,
+                  "unit": "Ω",
+                  "model": "ideal-resistor.v1",
+                  "rotation": 90
+                },
+                {
+                  "id": "RB2",
+                  "kind": "resistor",
+                  "name": "Resistor",
+                  "terminals": [
+                    "1",
+                    "2"
+                  ],
+                  "position": {
+                    "x": 60,
+                    "y": -100
+                  },
+                  "value": 47000,
+                  "unit": "Ω",
+                  "model": "ideal-resistor.v1",
+                  "rotation": 90
+                },
+                {
+                  "id": "D1",
+                  "kind": "led",
+                  "name": "Red LED",
+                  "terminals": [
+                    "anode",
+                    "cathode"
+                  ],
+                  "position": {
+                    "x": -140,
+                    "y": -70
+                  },
+                  "value": 0,
+                  "model": "elab.generic-red-led.v1",
+                  "rotation": 0
+                },
+                {
+                  "id": "D2",
+                  "kind": "led",
+                  "name": "Red LED",
+                  "terminals": [
+                    "anode",
+                    "cathode"
+                  ],
+                  "position": {
+                    "x": 140,
+                    "y": -70
+                  },
+                  "value": 0,
+                  "model": "elab.generic-red-led.v1",
+                  "rotation": 0
+                },
+                {
+                  "id": "Q1",
+                  "kind": "npn",
+                  "name": "NPN transistor",
+                  "terminals": [
+                    "base",
+                    "collector",
+                    "emitter"
+                  ],
+                  "position": {
+                    "x": -140,
+                    "y": 70
+                  },
+                  "value": 0,
+                  "model": "elab.generic-npn.v1",
+                  "rotation": 0
+                },
+                {
+                  "id": "Q2",
+                  "kind": "npn",
+                  "name": "NPN transistor",
+                  "terminals": [
+                    "base",
+                    "collector",
+                    "emitter"
+                  ],
+                  "position": {
+                    "x": 140,
+                    "y": 70
+                  },
+                  "value": 0,
+                  "model": "elab.generic-npn.v1",
+                  "rotation": 0
+                },
+                {
+                  "initial_voltage_v": 0.1,
+                  "id": "C1",
+                  "kind": "capacitor",
+                  "name": "Capacitor",
+                  "terminals": [
+                    "1",
+                    "2"
+                  ],
+                  "position": {
+                    "x": -20,
+                    "y": 10
+                  },
+                  "value": 0.000009999999999999999,
+                  "unit": "F",
+                  "model": "ideal-capacitor.v1",
+                  "rotation": 270
+                },
+                {
+                  "id": "C2",
+                  "kind": "capacitor",
+                  "name": "Capacitor",
+                  "terminals": [
+                    "1",
+                    "2"
+                  ],
+                  "position": {
+                    "x": 20,
+                    "y": 160
+                  },
+                  "value": 0.000009999999999999999,
+                  "unit": "F",
+                  "model": "ideal-capacitor.v1",
+                  "rotation": 90
+                },
+                {
+                  "id": "GND1",
+                  "kind": "ground",
+                  "name": "Ground",
+                  "terminals": [
+                    "reference"
+                  ],
+                  "position": {
+                    "x": 0,
+                    "y": 240
+                  },
+                  "value": 0,
+                  "model": "ground.v1",
+                  "rotation": 0
+                }
+              ],
+              "wires": [
+                {
+                  "id": "W1",
+                  "from": "V1.positive",
+                  "to": "RL1.1",
+                  "connected": true
+                },
+                {
+                  "id": "W2",
+                  "from": "V1.positive",
+                  "to": "RL2.1",
+                  "connected": true
+                },
+                {
+                  "id": "W3",
+                  "from": "V1.positive",
+                  "to": "RB1.1",
+                  "connected": true
+                },
+                {
+                  "id": "W4",
+                  "from": "V1.positive",
+                  "to": "RB2.1",
+                  "connected": true
+                },
+                {
+                  "id": "W5",
+                  "from": "RL1.2",
+                  "to": "D1.anode",
+                  "connected": true
+                },
+                {
+                  "id": "W6",
+                  "from": "RL2.2",
+                  "to": "D2.anode",
+                  "connected": true
+                },
+                {
+                  "id": "W7",
+                  "from": "D1.cathode",
+                  "to": "Q1.collector",
+                  "connected": true
+                },
+                {
+                  "id": "W8",
+                  "from": "D2.cathode",
+                  "to": "Q2.collector",
+                  "connected": true
+                },
+                {
+                  "id": "W9",
+                  "from": "RB1.2",
+                  "to": "Q1.base",
+                  "connected": true
+                },
+                {
+                  "id": "W10",
+                  "from": "RB2.2",
+                  "to": "Q2.base",
+                  "connected": true
+                },
+                {
+                  "id": "W11",
+                  "from": "Q1.collector",
+                  "to": "C1.1",
+                  "connected": true
+                },
+                {
+                  "id": "W12",
+                  "from": "C1.2",
+                  "to": "Q2.base",
+                  "connected": true
+                },
+                {
+                  "id": "W13",
+                  "from": "Q2.collector",
+                  "to": "C2.1",
+                  "connected": true
+                },
+                {
+                  "id": "W14",
+                  "from": "C2.2",
+                  "to": "Q1.base",
+                  "connected": true
+                },
+                {
+                  "id": "W15",
+                  "from": "Q1.emitter",
+                  "to": "GND1.reference",
+                  "connected": true
+                },
+                {
+                  "id": "W16",
+                  "from": "Q2.emitter",
+                  "to": "GND1.reference",
+                  "connected": true
+                },
+                {
+                  "id": "W17",
+                  "from": "V1.negative",
+                  "to": "GND1.reference",
+                  "connected": true
+                }
+              ]
+            },
+            "settings": {
+              "step_s": 0.005,
+              "high_s": 0.05,
+              "low_s": 0.05,
+              "initial_voltage_v": 0,
+              "seconds_per_wall_second": 0.5
+            },
+            "input_mode": "auto",
+            "analysis": "RC/NPN transient",
+            "engine": "elab.mixed-mna-be.v1",
+            "led_model": {
+              "id": "elab.generic-red-led.v1",
+              "is_a": 1e-20,
+              "n": 2,
+              "rs_ohm": 1,
+              "temperature_c": 27,
+              "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+            },
+            "npn_model": {
+              "id": "elab.generic-npn.v1",
+              "saturation_current_a": 1e-14,
+              "forward_beta": 100,
+              "reverse_beta": 1,
+              "temperature_c": 27,
+              "limitations": "Educational Ebers–Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+            },
+            "probes": [
+              {
+                "id": "i:D1",
+                "label": "D1 current",
+                "unit": "A",
+                "positive": "D1.anode",
+                "reference": "D1.cathode"
+              },
+              {
+                "id": "v:C1",
+                "label": "C1 voltage",
+                "unit": "V",
+                "positive": "C1.1",
+                "reference": "C1.2"
+              }
+            ],
+            "duration_s": 0.01,
+            "sample_count": 3,
+            "statistics": [
+              {
+                "probe_id": "i:D1",
+                "count": 3,
+                "min": 0.002156247781082531,
+                "max": 0.0022222544829711196,
+                "sample_mean": 0.0021892774508271424,
+                "sample_rms": 0.0021894432866677743
+              },
+              {
+                "probe_id": "v:C1",
+                "count": 3,
+                "min": 0.03163922304790601,
+                "max": 0.09999999999999998,
+                "sample_mean": 0.06578954905446326,
+                "sample_rms": 0.07146420462867706
+              }
+            ],
+            "mixed": {
+              "engine": "elab.mixed-mna-be.v1",
+              "run_id": 1,
+              "electrical_revision": 4,
+              "time_s": 0.01,
+              "nodes_v": {
+                "net:C1.1": 0.709305280411907,
+                "net:C1.2": 0.677666057364001,
+                "net:C2.1": 0.6071641524571033,
+                "net:C2.2": 0.6765520271849619,
+                "net:D1.anode": 2.7777455170720136,
+                "net:D2.anode": 2.6779759793028286,
+                "net:GND1.reference": 0,
+                "net:RB1.1": 5
+              },
+              "transistors": [
+                {
+                  "transistor_id": "Q1",
+                  "model": {
+                    "id": "elab.generic-npn.v1",
+                    "saturation_current_a": 1e-14,
+                    "forward_beta": 100,
+                    "reverse_beta": 1,
+                    "temperature_c": 27,
+                    "limitations": "Educational Ebers–Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+                  },
+                  "base_current_a": 0.000022903079421036368,
+                  "collector_current_a": 0.002290307942836132,
+                  "emitter_current_a": 0.0023132110222571687,
+                  "vbe_v": 0.6765520271849619,
+                  "vce_v": 0.709305280411907,
+                  "power_w": 0.001640022642434081,
+                  "state": "active"
+                },
+                {
+                  "transistor_id": "Q2",
+                  "model": {
+                    "id": "elab.generic-npn.v1",
+                    "saturation_current_a": 1e-14,
+                    "forward_beta": 100,
+                    "reverse_beta": 1,
+                    "temperature_c": 27,
+                    "limitations": "Educational Ebers–Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+                  },
+                  "base_current_a": 0.000023911092106111046,
+                  "collector_current_a": 0.0023911091960575354,
+                  "emitter_current_a": 0.0024150202881636465,
+                  "vbe_v": 0.677666057364001,
+                  "vce_v": 0.6071641524571033,
+                  "power_w": 0.001467999523971475,
+                  "state": "saturation"
+                }
+              ],
+              "capacitors": [
+                {
+                  "id": "C1",
+                  "voltage_v": 0.03163922304790601,
+                  "current_a": -0.00006805345986527022,
+                  "energy_j": 5.005202175375733e-9
+                },
+                {
+                  "id": "C2",
+                  "voltage_v": -0.06938787472785857,
+                  "current_a": -0.00006908517532013824,
+                  "energy_j": 2.4073385796244964e-8
+                }
+              ],
+              "leds": [
+                {
+                  "id": "D1",
+                  "current_a": 0.0022222544829711196,
+                  "voltage_v": 2.0684402366601065,
+                  "power_w": 0.004596600588675765
+                },
+                {
+                  "id": "D2",
+                  "current_a": 0.002322024020737278,
+                  "voltage_v": 2.070811826845725,
+                  "power_w": 0.004808474804362619
+                }
+              ],
+              "resistors": [
+                {
+                  "id": "RL1",
+                  "current_a": 0.0022222544829279866,
+                  "voltage_v": 2.2222544829279864,
+                  "power_w": 0.0049384149868935325
+                },
+                {
+                  "id": "RL2",
+                  "current_a": 0.002322024020697171,
+                  "voltage_v": 2.3220240206971714,
+                  "power_w": 0.005391795552694657
+                },
+                {
+                  "id": "RB1",
+                  "current_a": 0.0000919882547407455,
+                  "voltage_v": 4.323447972815038,
+                  "power_w": 0.0003977064334816694
+                },
+                {
+                  "id": "RB2",
+                  "current_a": 0.0000919645519709787,
+                  "voltage_v": 4.322333942635999,
+                  "power_w": 0.00039750150450347364
+                }
+              ],
+              "sources": [
+                {
+                  "id": "V1",
+                  "current_a": 0.004728231310336883,
+                  "voltage_v": 5,
+                  "power_w": 0.023641156551684417
+                }
+              ],
+              "kcl_residual_a": 4.313303186842532e-14,
+              "power_residual_w": -2.2765952111084313e-13,
+              "numerical_damping_w": 5.877521780405115e-7,
+              "stale": false
+            }
+          },
+          "rows": [
+            {
+              "time_s": 0,
+              "values": [
+                0.002156247781082531,
+                0.09999999999999998
+              ]
+            },
+            {
+              "time_s": 0.005,
+              "values": [
+                0.002189330088427777,
+                0.06572942411548377
+              ]
+            },
+            {
+              "time_s": 0.01,
+              "values": [
+                0.0022222544829711196,
+                0.03163922304790601
+              ]
+            }
+          ]
+        },
+        "model_sha256": {
+          "elab.generic-npn.v1": "5d204875b42b2627610e44683cc2cfb3e9296c4c0f338444d9133df9c7f81307",
+          "elab.generic-red-led.v1": "c6f2e595c1d7aaa1c798d162a4682042475b4c292de998186fa0c055b2b9aa6f",
+          "ground.v1": "b981a78784d6912d59e83a9e85420a718029deefbbafb1b8a8f292777bcf3240",
+          "ideal-capacitor.v1": "4e694c5f98f8b027977e80b20a1e971775b442bac1c199b499c71dc80474562e",
+          "ideal-dc.v1": "e55cf05c148010feee1e9a583a1670290dd6c78f5279e80fe289d5121e9f2d74",
+          "ideal-resistor.v1": "dd642b275801f7c71c0ebfa9f6f03bc44a8be35d97c7b04ab96bb4278908f4ee"
+        }
+      }
+    ],
+    "selected_index": 0,
+    "viewing": false
+  },
+  "paused": true,
+  "scope_probes": {
+    "ids": [
+      "v:C1"
+    ]
+  },
+  "format": "elab.schematic",
+  "version": 4,
+  "graph": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "dc-source",
+        "name": "DC source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -300,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-dc.v1",
+        "rotation": 0
+      },
+      {
+        "id": "RL1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -140,
+          "y": -200
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 90
+      },
+      {
+        "id": "RL2",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 140,
+          "y": -200
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 90
+      },
+      {
+        "id": "RB1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -220,
+          "y": -100
+        },
+        "value": 47000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 90
+      },
+      {
+        "id": "RB2",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 60,
+          "y": -100
+        },
+        "value": 47000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 90
+      },
+      {
+        "id": "D1",
+        "kind": "led",
+        "name": "Red LED",
+        "terminals": [
+          "anode",
+          "cathode"
+        ],
+        "position": {
+          "x": -140,
+          "y": -70
+        },
+        "value": 0,
+        "model": "elab.generic-red-led.v1",
+        "rotation": 0
+      },
+      {
+        "id": "D2",
+        "kind": "led",
+        "name": "Red LED",
+        "terminals": [
+          "anode",
+          "cathode"
+        ],
+        "position": {
+          "x": 140,
+          "y": -70
+        },
+        "value": 0,
+        "model": "elab.generic-red-led.v1",
+        "rotation": 0
+      },
+      {
+        "id": "Q1",
+        "kind": "npn",
+        "name": "NPN transistor",
+        "terminals": [
+          "base",
+          "collector",
+          "emitter"
+        ],
+        "position": {
+          "x": -140,
+          "y": 70
+        },
+        "value": 0,
+        "model": "elab.generic-npn.v1",
+        "rotation": 0
+      },
+      {
+        "id": "Q2",
+        "kind": "npn",
+        "name": "NPN transistor",
+        "terminals": [
+          "base",
+          "collector",
+          "emitter"
+        ],
+        "position": {
+          "x": 140,
+          "y": 70
+        },
+        "value": 0,
+        "model": "elab.generic-npn.v1",
+        "rotation": 0
+      },
+      {
+        "initial_voltage_v": 0.1,
+        "id": "C1",
+        "kind": "capacitor",
+        "name": "Capacitor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -20,
+          "y": 10
+        },
+        "value": 0.000009999999999999999,
+        "unit": "F",
+        "model": "ideal-capacitor.v1",
+        "rotation": 270
+      },
+      {
+        "id": "C2",
+        "kind": "capacitor",
+        "name": "Capacitor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 20,
+          "y": 160
+        },
+        "value": 0.000009999999999999999,
+        "unit": "F",
+        "model": "ideal-capacitor.v1",
+        "rotation": 90
+      },
+      {
+        "id": "GND1",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 240
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "RL1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "V1.positive",
+        "to": "RL2.1",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "V1.positive",
+        "to": "RB1.1",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "V1.positive",
+        "to": "RB2.1",
+        "connected": true
+      },
+      {
+        "id": "W5",
+        "from": "RL1.2",
+        "to": "D1.anode",
+        "connected": true
+      },
+      {
+        "id": "W6",
+        "from": "RL2.2",
+        "to": "D2.anode",
+        "connected": true
+      },
+      {
+        "id": "W7",
+        "from": "D1.cathode",
+        "to": "Q1.collector",
+        "connected": true
+      },
+      {
+        "id": "W8",
+        "from": "D2.cathode",
+        "to": "Q2.collector",
+        "connected": true
+      },
+      {
+        "id": "W9",
+        "from": "RB1.2",
+        "to": "Q1.base",
+        "connected": true
+      },
+      {
+        "id": "W10",
+        "from": "RB2.2",
+        "to": "Q2.base",
+        "connected": true
+      },
+      {
+        "id": "W11",
+        "from": "Q1.collector",
+        "to": "C1.1",
+        "connected": true
+      },
+      {
+        "id": "W12",
+        "from": "C1.2",
+        "to": "Q2.base",
+        "connected": true
+      },
+      {
+        "id": "W13",
+        "from": "Q2.collector",
+        "to": "C2.1",
+        "connected": true
+      },
+      {
+        "id": "W14",
+        "from": "C2.2",
+        "to": "Q1.base",
+        "connected": true
+      },
+      {
+        "id": "W15",
+        "from": "Q1.emitter",
+        "to": "GND1.reference",
+        "connected": true
+      },
+      {
+        "id": "W16",
+        "from": "Q2.emitter",
+        "to": "GND1.reference",
+        "connected": true
+      },
+      {
+        "id": "W17",
+        "from": "V1.negative",
+        "to": "GND1.reference",
+        "connected": true
+      }
+    ]
+  },
+  "view": {
+    "center": {
+      "x": 0,
+      "y": -10
+    },
+    "zoom": 0.55
+  },
+  "npn_model": {
+    "id": "elab.generic-npn.v1",
+    "saturation_current_a": 1e-14,
+    "forward_beta": 100,
+    "reverse_beta": 1,
+    "temperature_c": 27,
+    "limitations": "Educational Ebers–Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+  },
+  "led_model": {
+    "id": "elab.generic-red-led.v1",
+    "is_a": 1e-20,
+    "n": 2,
+    "rs_ohm": 1,
+    "temperature_c": 27,
+    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+  },
+  "transient_settings": {
+    "step_s": 0.005,
+    "high_s": 0.05,
+    "low_s": 0.05,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.5
+  }
+}

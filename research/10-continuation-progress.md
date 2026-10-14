@@ -168,3 +168,11 @@ The proposed 49-track chain actually had 99 nodes; corrected fixtures explicitly
 5. Formative-test preparation; actual participant/hardware evidence remains a separate gate.
 
 Every shipped user operation continues to require the same public agent command/state path. Each slice adds meaningful regression checks and records its actual limits. The full [audit](11-prd-implementation-audit.md) is authoritative for remaining acceptance work; a green checkpoint is not MVP completion.
+
+## Trace inspection source associations
+
+Packaged **0.25.0 / 39** adds `scope.trace.select` for the same native and agent flow. Choosing a selected live trace outlines its component and marks its referenced terminals; snapshots expose object IDs, terminal refs and compiled net IDs. Focus is separate from edit selection and does not mutate time, charge, run/electrical revision, history or dirty state. Moves retain it, deleted sources become unavailable, undo restores association, hiding/removing the trace clears it, and project replacement clears ephemeral focus. Recorded view never projects captured-source identity onto the current live schematic.
+
+[Final validation](../docs/validation/trace-focus-validation.json), [headless public workflow](../docs/validation/headless-trace-focus.json) and [packaged workflow](../docs/validation/desktop-trace-focus.json) pass. Native callbacks exercise the same command and mesh changes; actual built/packaged smoke rebuilds resources then reads distinctive source highlight pixels from the GPU. Source review avoids constructing trace history merely to admit a focus selection. Lint/import/vet/root/native race checks pass. One earlier flasher race test reached the existing wall-clock solver guard; two subsequent serial gates passed, without relaxing the guard. Previous bundles/sessions and user files are preserved; the owned desktop ends clean and paused at its durable flasher with one kept record.
+
+The live SCOPE-01 association gap is now implemented, bringing functional coverage to 11 implemented / 16 partial. Recorded-schematic interactive association, pinned readings, presentation preferences, visible latency, accessibility/distribution and participant evidence remain open. Next: pinned measurements through shared commands and a persisted, bounded document preference.

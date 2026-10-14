@@ -2,7 +2,13 @@
 
 The scope records supported terminal voltages and branch currents during RC, pulse NPN, and mixed RC/NPN runs. Choose up to six traces in **Scope probes** in the right inspector. Flasher starts with both collector voltages, both LED currents, C1 voltage, and source voltage. Change a selector to inspect C2 voltage/current, either transistor's base or emitter current, or any other supported pin/branch. **Hidden** removes that channel. Every selection uses `scope.probes.set`.
 
-Selection immediately fills a newly chosen trace from retained history. It preserves simulation time, capacitor memory, run ID, electrical revision, undo history, and document dirty state. Recording covers all supported probes even while hidden; only selected trace arrays are exported. Histories remain bounded to 512 samples, including duplicate-time samples around ideal source edges. Probe selection is presentation state and explicit Save captures it in version-3 `.elab` files without marking the drawing dirty solely for a selection change. Reopen restores probes and starts fresh simulation. Cursors and fixed windows are session-only. New/examples and older files restore defaults. Electrical restarts keep valid probe choices and clear cursors; geometry edits preserve everything. Removing a component removes its channels from the visible scope. A fixed window plots only its requested retained interval and reports min/max/sample mean/sample RMS per selected trace; expired windows report no statistics. See the [next-ten implementation record](../research/09-next-ten-implementation.md).
+Selection immediately fills a newly chosen trace from retained history. It preserves simulation time, capacitor memory, run ID, electrical revision, undo history, and document dirty state. Recording covers all supported probes even while hidden; only selected trace arrays are exported. Histories remain bounded to 512 samples, including duplicate-time samples around ideal source edges. Probe selection is presentation state and explicit Save captures it in version-4 `.elab` files without marking the drawing dirty solely for a selection change. Reopen restores probes and starts fresh simulation. Cursors and fixed windows are session-only. New/examples and older files restore defaults. Electrical restarts keep valid probe choices and clear cursors; geometry edits preserve everything. Removing a component removes its channels from the visible scope. A fixed window plots only its requested retained interval and reports min/max/sample mean/sample RMS per selected trace; expired windows report no statistics. See the [next-ten implementation record](../research/09-next-ten-implementation.md).
+
+## Inspect a trace source
+
+Choose **Inspect trace…** below the plot or an **Inspect** button in Scope probes. The shared `scope.trace.select {"id":"i:D1"}` command outlines its component and marks the relevant terminals in purple. `snapshot.trace_focus` exposes the same stable object IDs, terminal references and current compiled net IDs to agents. This is independent of editing selection; it preserves time, charge, run/electrical revision, undo history and document dirty state. Move/rotate preserves the association. Removing its source reports an unavailable reason; undo restores it. Removing/hiding the trace clears focus. An empty ID clears focus explicitly. Only a selected, currently available live probe can be focused.
+
+Focus is ephemeral inspection state, cleared on new/load/example replacement. Recorded plots expose an unavailable explanation and suppress highlights on the current live schematic; interactive captured-schematic highlighting remains future work. Returning to live restores a valid focus. Voltage pin probes mark that pin; branch/differential probes mark their descriptor’s terminal references. Ground and current-direction text remain in the descriptor; they are not invented terminal references.
 
 ## Read the scope
 
@@ -32,6 +38,7 @@ Read `project.inspect.scope` to discover `available` probe descriptors (`id`, `l
 | Command | Parameters | Behavior |
 |---|---|---|
 | `scope.probes.set` | `{"ids":["v:Q1.collector","v:Q2.collector","i:D1","i:D2"]}` | Replace selection with 0–6 unique IDs from available; unknown/duplicate IDs refuse |
+| `scope.trace.select` | `{"id":"i:D1"}` or `{"id":""}` | Focus a selected live trace source or clear ephemeral focus |
 | `scope.cursor.select` | `{"cursor":"a"}` | Select a/b for subsequent plot gestures |
 | `scope.cursor.set` | `{"cursor":"a","time_s":0.245}` | Place a/b inside fresh retained history; return snapped sample and measurements |
 | `scope.cursor.clear` | `{"cursor":"b"}` | Clear a/b and paired measurements |
@@ -51,3 +58,5 @@ python3 scripts/probes-demo.py --connect build/probes.endpoint.json \
 ```
 
 Checks cover newly selected history, both flasher phases, individual device/node results, negative RC discharge current, right-hand pulse-edge measurements, rolling expiration, stale readings, zero separation, restart, clean-document presentation edits, mutation refusals, retry snapshot isolation, and native callback/pointer equivalence to agents. Native smoke checks real UI controls and GPU traces/cursor strokes. The default 10 µF flasher's successive LED-current rising samples measure approximately 0.485 s at 5 ms sample resolution; this validates scope measurements against the application's solver, not physical hardware.
+
+Trace association validation uses `python3 scripts/trace-focus-demo.py --output docs/validation/headless-trace-focus.json --artifacts docs/validation/trace-focus-artifacts`. Core/native tests cover source lifecycle and unchanged physics. Built and packaged smoke reads a freshly rebuilt GPU frame and verifies the distinctive source-highlight pixels.

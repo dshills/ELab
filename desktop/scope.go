@@ -203,6 +203,21 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 		n = buttonStyle(n, t != nil && t.Mode == mode.id && t.PendingMode == "")
 		controls = append(controls, n)
 	}
+	traceOptions := []ui.Option{{ID: "__none", Label: "Inspect trace…"}}
+	for _, trace := range state.Scope.Traces {
+		traceOptions = append(traceOptions, ui.Option{ID: trace.Probe.ID, Label: trace.Probe.Label})
+	}
+	focused := "__none"
+	if state.TraceFocus != nil {
+		focused = state.TraceFocus.ProbeID
+	}
+	traceSelector := ui.Node{ID: "scope-trace-focus", Kind: ui.Selector, Options: traceOptions, SelectedID: focused, Accessibility: ui.Accessibility{Name: "Inspect trace source"}, Change: func(e ui.ChangeEvent) {
+		id := e.SelectedID
+		if id == "__none" {
+			id = ""
+		}
+		s.invoke("scope.trace.select", workbench.IDParams{ID: id})
+	}}
 	step := s.action("transient-step", "Step +1 sample", "simulation.step.start", workbench.StepParams{Duration: state.TransientSettings.StepSeconds})
 	step.Disabled = !state.Paused || t == nil || t.Stale || state.StepWork != nil && (state.StepWork.Status == "queued" || state.StepWork.Status == "running" || state.StepWork.Status == "canceling")
 	controls = append(controls, step, s.button("simulation.restart", "Restart"))
@@ -231,7 +246,7 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	s.scope.Revision = state.Revision
 	return ui.Node{ID: "scope-panel", Kind: ui.Column, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 240}), Padding: ui.Some(ui.UniformInsets(10)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: []ui.Node{
 		{ID: "scope-toolbar", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 36}), Gap: ui.Some(float32(6)), Align: ui.Some(ui.AlignCenter)}, Children: controls},
-		{ID: "rc-scope", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 120}), MaxSize: ui.Some(ui.Size{Height: 120})}, Custom: s.scope}, quiet("scope-legend", legend), quiet("step-work-status", stepStatus), s.cursorControls(state),
+		{ID: "rc-scope", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 120}), MaxSize: ui.Some(ui.Size{Height: 120})}, Custom: s.scope}, {ID: "scope-trace-row", Kind: ui.Row, Style: ui.Style{Gap: ui.Some(float32(8))}, Children: []ui.Node{traceSelector, quiet("scope-legend", legend)}}, quiet("step-work-status", stepStatus), s.cursorControls(state),
 	}}
 }
 func (s *screen) transientInspector(state workbench.Snapshot) []ui.Node {
