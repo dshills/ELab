@@ -14,6 +14,7 @@ import (
 
 // ExportStartParams selects the same capture/encoding used by native exports.
 type ExportStartParams struct {
+	DPI                int            `json:"dpi,omitempty"`
 	Page               *SchematicPage `json:"page,omitempty"`
 	Kind               string         `json:"kind"`
 	ID                 string         `json:"id,omitempty"`
@@ -52,16 +53,19 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 	}
 	capture := exportCapture{kind: p.Kind, generation: s.documentGeneration, overwrite: p.Overwrite, artifact: Artifact{Path: path, RunID: s.run, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration}}
 	command := ""
-	if p.Page != nil && p.Kind != "schematic-pdf" {
-		return fmt.Errorf("page settings apply only to schematic PDF")
+	if p.Page != nil && p.Kind != "schematic-pdf" && p.Kind != "schematic-png" {
+		return fmt.Errorf("page settings apply only to schematic PDF/PNG")
+	}
+	if p.DPI != 0 && p.Kind != "schematic-png" {
+		return fmt.Errorf("dpi applies only to schematic PNG")
 	}
 	switch p.Kind {
-	case "schematic-pdf":
+	case "schematic-pdf", "schematic-png":
 		if !schematicpdf.Supported() {
-			return &actionError{"unsupported", "schematic PDF requires the macOS CoreGraphics build"}
+			return &actionError{"unsupported", "schematic PDF/PNG requires the macOS CoreGraphics build"}
 		}
 		if p.ID != "" {
-			return fmt.Errorf("schematic PDF does not use a recording ID")
+			return fmt.Errorf("schematic PDF/PNG does not use a recording ID")
 		}
 		settings := p.Page
 		if settings == nil {
@@ -73,6 +77,19 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 		}
 		command = "export.schematic.pdf"
 		capture.artifact.Format = "pdf"
+		if p.Kind == "schematic-png" {
+			dpi := p.DPI
+			if dpi == 0 {
+				dpi = 150
+			}
+			if dpi < 72 || dpi > 300 {
+				return fmt.Errorf("dpi must be 72–300, or omitted for 150")
+			}
+			layout.RasterDPI = dpi
+			capture.artifact.DPI = dpi
+			command = "export.schematic.png"
+			capture.artifact.Format = "png"
+		}
 		capture.artifact.Page = &page
 		capture.page = layout
 		capture.graph = s.graph.Clone()
@@ -128,7 +145,7 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 		capture.artifact.RunID = 0
 		capture.artifact.ElectricalRevision = operation.record.metadata.ElectricalRevision
 	default:
-		return fmt.Errorf("export kind must be schematic-svg, scope-csv, verification-json or verification-csv")
+		return fmt.Errorf("export kind must be schematic-svg, schematic-pdf, schematic-png, scope-csv, verification-json or verification-csv")
 	}
 	s.projectSerial++
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -148,8 +165,12 @@ func prepareProjectExport(ctx context.Context, capture exportCapture, progress f
 	var data []byte
 	var err error
 	switch capture.kind {
-	case "schematic-pdf":
-		metadata, _ := json.Marshal(map[string]any{"format": "elab.schematic.pdf.v1", "run_id": capture.artifact.RunID, "electrical_revision": capture.artifact.ElectricalRevision, "document_generation": capture.artifact.DocumentGeneration, "page": capture.artifact.Page, "measurement_source": "captured-live-snapshot; unavailable/stale labels retained when overlays requested"})
+	case "schematic-pdf", "schematic-png":
+		identity := map[string]any{"format": "elab.schematic." + capture.artifact.Format + ".v1", "run_id": capture.artifact.RunID, "electrical_revision": capture.artifact.ElectricalRevision, "document_generation": capture.artifact.DocumentGeneration, "page": capture.artifact.Page, "measurement_source": "captured-live-snapshot; unavailable/stale labels retained when overlays requested"}
+		if capture.artifact.DPI != 0 {
+			identity["dpi"] = capture.artifact.DPI
+		}
+		metadata, _ := json.Marshal(identity)
 		capture.page.Metadata = string(metadata)
 		data, err = schematicpdf.Render(ctx, schematicSVGWithDisplay(capture.graph, capture.artifact.RunID, capture.artifact.ElectricalRevision, capture.display, capture.readings...), capture.page)
 	case "schematic-svg":

@@ -76,6 +76,11 @@ func addCapabilityDetails(id string, schema map[string]any) {
 	}
 	rules := []inputRelation{}
 	switch id {
+	case "export.schematic.png":
+		p := inputProperty(schema, "dpi")
+		p["anyOf"] = []any{map[string]any{"const": 0}, map[string]any{"minimum": 72, "maximum": 300}}
+		p["default"], p["x-unit"] = 150, "pixels/inch"
+		schema["examples"] = []any{PNGExportParams{Path: "/absolute/path/schematic.png", DPI: 150}}
 	case "source.sine.set":
 		rangeSI("waveform.amplitude_v", "V", 0, 12)
 		rangeSI("waveform.offset_v", "V", -12, 12)

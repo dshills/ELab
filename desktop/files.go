@@ -84,6 +84,10 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 				options.Title = "Export printable schematic PDF"
 				options.Extensions = []string{"pdf"}
 				options.Filename = "Schematic.pdf"
+			case "export.schematic.png":
+				options.Title = "Export schematic image PNG"
+				options.Extensions = []string{"png"}
+				options.Filename = "Schematic.png"
 			case "verification.export":
 				var format string
 				_ = json.Unmarshal(fields["format"], &format)

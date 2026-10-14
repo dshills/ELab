@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"context"
+	"image/png"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -53,5 +55,25 @@ func TestNativePDFPageControlsMatchAgentAndPreserveCircuit(t *testing.T) {
 	}
 	if s.service.Snapshot().LastExport.Page.Paper != "a4" {
 		t.Fatal("native export lost shared page defaults")
+	}
+	path = filepath.Join(t.TempDir(), "page.png")
+	s.chooseFile = func(_ context.Context, options app.FileOptions) (string, error) {
+		if len(options.Extensions) != 1 || options.Extensions[0] != "png" {
+			t.Error("PNG picker format")
+		}
+		return path, nil
+	}
+	uiAction(t, s, "export-png", nil)
+	waitFileUI(t, s)
+	data, err = os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	im, err := png.Decode(bytes.NewReader(data))
+	if err != nil || im.Bounds().Dx() != 1241 || im.Bounds().Dy() != 1754 || s.errorMessage != "" {
+		t.Fatal("native shared PNG export", err, s.errorMessage)
+	}
+	if s.service.Snapshot().LastExport.Page.Paper != "a4" || s.service.Snapshot().LastExport.DPI != 150 {
+		t.Fatal("native PNG lost shared page/default DPI")
 	}
 }

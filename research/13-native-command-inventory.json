@@ -9,7 +9,7 @@
     "desktop/drawing.go": "dcfed587008f2326c68488a64c18dc1300d49e8bd5c57e8e135911feee8e639a",
     "desktop/examples.go": "13136f78517a201f806ebe369a8820e8c7de0fe1cc666a27adb0363a8bd7b937",
     "desktop/field_context.go": "b8a1d409aa71c75cf14289a4e9e39cdea3ce52f1ba9f53c79916b6593074a087",
-    "desktop/files.go": "36ca979d220499d68356b7211ee991d6106d8de0d10d2fc2c13ce093b43db057",
+    "desktop/files.go": "57e87c2d7c4582aa4ca62cd871b8c52e5593c3cba5077dd0cce53fe7b177c83b",
     "desktop/input_work.go": "63b1644f065e82f1deaedc018bcfa5b855af2b885ac96dc3d68b2d4971f701bc",
     "desktop/layout.go": "342ac81780e410c345b903d982ccae20228e7eff26ce476f4a828c7c3737c958",
     "desktop/lifecycle.go": "d87fd1ed23873b666001ed60eab1d2abb23759e6b91a510c299de2a121ca8949",
@@ -23,7 +23,7 @@
     "desktop/pinned_readings.go": "40fc42f6d46c79f97a303b6a8fa660c6a47702c5bf36cf835a1d21e62009a251",
     "desktop/pointer_darwin.go": "08dccdb1a1cb14b2e34a4174b6190925162a3375f295a54e90fbe4b549d6f29a",
     "desktop/pointer_other.go": "f8e770908adf6e6aa372623ec346fc80cac4e2b0a9a32485a822bb534839d5b7",
-    "desktop/print_page.go": "7401fea3d4aa593c3757f33d1c702689c25e68f3fc942fd15e4bfd92affc5710",
+    "desktop/print_page.go": "c9852c4c9150fe2ab25297b4ec75745a6741b459b71b1697c21beb50fe64e339",
     "desktop/probes.go": "3f3ce8e64c6aaba57439b63542f95eed784604bbe555b18a0f303e791c0e9e01",
     "desktop/project_work.go": "1a90c15502552617bc73de527c9a071f45c0e04b7a7b136fd97392f7058068c8",
     "desktop/recording.go": "2d104abf028fe82a22888ff757668680fc28432f07a49b548025bb06ada38945",
@@ -34,7 +34,7 @@
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
     "desktop/time_fields.go": "a20e6b2fc6fc368fabb7fd4defae5fc3083987f94a2beabd1780e7ae9a9264b8",
     "desktop/verification.go": "d7707b47258e728430a22fa7152afabf7e2e853e64afceb9c4cb7664419f4e04",
-    "desktop/view.go": "0144ad91c927e24a18d8134727847e2e11cc4c52dd9e45b8fa1f0a06013c15ab",
+    "desktop/view.go": "9ecc210fd6dc927b7046ba30eae536d24f4b8f5aeddf74363a52d2c8fd8248ad",
     "desktop/waveforms.go": "0c4a197175f5736621127540e652b6535fd3cb1ff4ab3f7bf3653eb433a9c6c9",
     "desktop/workflow.go": "9a3d8316eea46adf551ca0f00201807c7e491d74fd5884326e5c9be645d4167e"
   },
@@ -74,6 +74,7 @@
     "examples.list",
     "export.page.set",
     "export.schematic.pdf",
+    "export.schematic.png",
     "export.schematic.svg",
     "export.scope.csv",
     "export.start",
@@ -562,7 +563,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 122,
+      "line": 126,
       "function": "*screen.beginFile",
       "kind": "request-command-field",
       "expression": "Command: id",
@@ -570,7 +571,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 123,
+      "line": 127,
       "function": "*screen.beginFile",
       "kind": "event-or-dispatch-router",
       "expression": "s.service.Dispatch(ctx, request, \"user\")",
@@ -578,7 +579,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 195,
+      "line": 199,
       "function": "*screen.continuePending",
       "kind": "domain-ingress",
       "expression": "s.beginFile(id, false, raw, nil)",
@@ -586,7 +587,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 197,
+      "line": 201,
       "function": "*screen.continuePending",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(id, raw)",
@@ -594,7 +595,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 205,
+      "line": 209,
       "function": "*screen.registerFileCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"file.open\", \"Open…\", \"Meta+O\", func() { s.beginFile(\"project.load\", true, workbench.LoadParams{}, nil) }}",
@@ -606,7 +607,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 206,
+      "line": 210,
       "function": "*screen.registerFileCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"file.save\", \"Save\", \"Meta+S\", func() {\n\ts.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, nil)\n}}",
@@ -618,7 +619,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 209,
+      "line": 213,
       "function": "*screen.registerFileCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"file.save-as\", \"Save As…\", \"Meta+Shift+S\", func() { s.beginFile(\"project.save\", true, workbench.SaveParams{}, nil) }}",
@@ -630,7 +631,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 205,
+      "line": 209,
       "function": "*screen.registerFileCommands",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"project.load\", true, workbench.LoadParams{}, nil)",
@@ -641,7 +642,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 207,
+      "line": 211,
       "function": "*screen.registerFileCommands",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, nil)",
@@ -652,7 +653,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 209,
+      "line": 213,
       "function": "*screen.registerFileCommands",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"project.save\", true, workbench.SaveParams{}, nil)",
@@ -663,7 +664,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 212,
+      "line": 216,
       "function": "*screen.registerFileCommands",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Register(command.Command{ID: entry.id, Label: entry.text, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts, Available: func() error {\n\tif s.fileBusy || s.pendingCommand != \"\" {\n\t\treturn fmt.Errorf(\"finish the current file operation first\")\n\t}\n\treturn nil\n}, Execute:\tfunc(context.Context) error { entry.action(); return nil }})",
@@ -671,7 +672,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 223,
+      "line": 227,
       "function": "*screen.filePrompt",
       "kind": "node-Dismiss",
       "expression": "Dismiss: func() {\n\tif s.fileBusy {\n\t\treturn\n\t}\n\ts.pendingCommand = \"\"\n\ts.pendingParams = nil\n\ts.app.Invalidate(\"main\")\n}",
@@ -679,7 +680,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 235,
+      "line": 239,
       "function": "*screen.filePrompt",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\ts.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, func() { s.continuePending(false) })\n}",
@@ -687,7 +688,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 236,
+      "line": 240,
       "function": "*screen.filePrompt",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, func() { s.continuePending(false) })",
@@ -698,7 +699,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 238,
+      "line": 242,
       "function": "*screen.filePrompt",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.continuePending(true) }",
@@ -706,7 +707,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 239,
+      "line": 243,
       "function": "*screen.filePrompt",
       "kind": "node-Activate",
       "expression": "Activate: prompt.Dismiss",
@@ -2351,7 +2352,26 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 153,
+      "line": 148,
+      "function": "*screen.view",
+      "kind": "node-Activate",
+      "expression": "Activate: func() { s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{}, nil) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 148,
+      "function": "*screen.view",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{}, nil)",
+      "public_commands": [
+        "export.schematic.png"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 154,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text}) }",
@@ -2359,7 +2379,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 153,
+      "line": 154,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
@@ -2370,7 +2390,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 157,
+      "line": 158,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"drawing.position.set\", workbench.PositionParams{Position: workbench.Point{X: float64(e.Number), Y: position.Y}})\n}",
@@ -2378,7 +2398,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 158,
+      "line": 159,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"drawing.position.set\", workbench.PositionParams{Position: workbench.Point{X: float64(e.Number), Y: position.Y}})",
@@ -2389,7 +2409,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 160,
+      "line": 161,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"drawing.position.set\", workbench.PositionParams{Position: workbench.Point{X: position.X, Y: float64(e.Number)}})\n}",
@@ -2397,7 +2417,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 161,
+      "line": 162,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"drawing.position.set\", workbench.PositionParams{Position: workbench.Point{X: position.X, Y: float64(e.Number)}})",
@@ -2408,7 +2428,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 163,
+      "line": 164,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"place-at-position\", \"Place at X / Y\", \"component.place\", workbench.PlaceParams{Kind: state.Drawing.Kind, Position: position, Value: func() string {\n\tif state.Drawing.Kind == \"net-label\" {\n\t\treturn state.Drawing.Value\n\t}\n\treturn \"\"\n}()})",
@@ -2419,7 +2439,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 180,
+      "line": 181,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"junction-join-routes\", \"Join named routes at X / Y\", \"wire.junction.insert\", workbench.JunctionInsertParams{WireIDs: ids, Position: \u0026point})",
@@ -2430,7 +2450,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 198,
+      "line": 199,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"component.select\", workbench.IDParams{ID: id})\n}",
@@ -2438,7 +2458,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 203,
+      "line": 204,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"component.select\", workbench.IDParams{ID: id})",
@@ -2449,7 +2469,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 236,
+      "line": 237,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"potentiometer.wiper.set\", workbench.WiperParams{ID: part.ID, Position: float64(e.Number) / 100})",
@@ -2460,7 +2480,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 238,
+      "line": 239,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: change",
@@ -2468,7 +2488,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 238,
+      "line": 239,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: change",
@@ -2476,7 +2496,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 277,
+      "line": 278,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"switch-actuate\", text, \"switch.set\", workbench.SwitchParams{ID: part.ID, Closed: !closed})",
@@ -2487,7 +2507,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 287,
+      "line": 288,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text}) }",
@@ -2495,7 +2515,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 287,
+      "line": 288,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
@@ -2506,7 +2526,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 287,
+      "line": 288,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"apply-value\", \"Apply label\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value})",
@@ -2517,7 +2537,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 299,
+      "line": 300,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text}) }",
@@ -2525,7 +2545,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 299,
+      "line": 300,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
@@ -2536,7 +2556,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 299,
+      "line": 300,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"apply-value\", \"Apply value\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value})",
@@ -2547,7 +2567,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 301,
+      "line": 302,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"r-1k\", \"1 kΩ\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"1k\"})",
@@ -2558,7 +2578,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 301,
+      "line": 302,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"r-2k\", \"2 kΩ\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"2k\"})",
@@ -2569,7 +2589,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 311,
+      "line": 312,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: fmt.Sprintf(\"%.9g V\", e.Number)})\n}",
@@ -2577,7 +2597,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 312,
+      "line": 313,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: fmt.Sprintf(\"%.9g V\", e.Number)})",
@@ -2588,7 +2608,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 313,
+      "line": 314,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"cap-initial-default\", \"Use experiment initial voltage\", \"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: \"default\"})",
@@ -2599,7 +2619,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 314,
+      "line": 315,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"c-1u\", \"1 µF\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"1uF\"})",
@@ -2610,7 +2630,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 314,
+      "line": 315,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"c-100u\", \"100 µF\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"100uF\"})",
@@ -2621,7 +2641,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 336,
+      "line": 337,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"rotate-part\", \"Rotate 90°\", \"component.rotate\", workbench.IDParams{ID: part.ID})",
@@ -2632,7 +2652,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 336,
+      "line": 337,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"duplicate-part\", \"Duplicate\", \"component.duplicate\", workbench.DuplicateParams{ID: part.ID})",
@@ -2643,7 +2663,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 342,
+      "line": 343,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"wire-insert-junction\", \"Insert junction on this wire\", \"wire.junction.insert\", workbench.JunctionInsertParams{WireIDs: []string{w.ID}})",
@@ -2654,7 +2674,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 356,
+      "line": 357,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"delete-object\", \"Delete selected\", \"object.delete\", workbench.IDParams{ID: state.Selected})",
@@ -2665,7 +2685,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 381,
+      "line": 382,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tv := e.SelectedID\n\tif v == \"__none\" {\n\t\tv = \"\"\n\t}\n\tchange(v)\n}",
@@ -2673,7 +2693,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 389,
+      "line": 390,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"wire.terminals.set\", workbench.TerminalsParams{From: v, To: to})",
@@ -2684,7 +2704,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 389,
+      "line": 390,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"wire.terminals.set\", workbench.TerminalsParams{From: from, To: v})",
@@ -2695,7 +2715,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 389,
+      "line": 390,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"connect-terminals\", \"Connect wire\", \"wire.connect\", workbench.ConnectParams{From: from, To: to})",
@@ -2706,7 +2726,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 399,
+      "line": 400,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"tool-\"+tool, strings.ToUpper(tool[:1])+tool[1:], \"drawing.tool.set\", workbench.ToolParams{Tool: tool})",
@@ -2717,7 +2737,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 402,
+      "line": 403,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"drawing.cancel\", \"Esc\")",
@@ -2728,7 +2748,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 402,
+      "line": 403,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"view.fit\", \"Fit\")",
@@ -2739,7 +2759,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 565,
+      "line": 566,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(pause, pauseText)",
@@ -2747,7 +2767,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 568,
+      "line": 569,
       "function": "*screen.view",
       "kind": "node-Custom",
       "expression": "Custom: s.drawing",
@@ -2944,6 +2964,7 @@
     "example.switch-npn",
     "export.page.set",
     "export.schematic.pdf",
+    "export.schematic.png",
     "export.schematic.svg",
     "export.scope.csv",
     "measurement.pin.add",

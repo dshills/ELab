@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "version": "0.49.0",
+  "build": "64",
+  "binary_sha256": "4d466a2dfc8dba8b0d9ecbcd2184496500d9d77f56ad5a53bae215551962ea23",
+  "packaged_binary_matches": true,
+  "source_checkpoint": "8934891",
+  "vellum_baseline": {
+    "recorded": "2026-10-14",
+    "version": "checkout 68c3750",
+    "commit": "68c3750243326ce9120fd2d5ff5b0d610cc36d9e",
+    "local_checkout": "../../Vellum (relative to desktop/go.mod)",
+    "native_dependency_manifest": "drivers/cogent/native/dependencies.json",
+    "native_dependency_manifest_sha256": "5f618431228a80ea4a23db1e5ebc241ac3a8b702bcc1fc8c479cc84e77bbfa58",
+    "go_directive": "1.25.6",
+    "tested_go": "go1.27.2 darwin/arm64",
+    "root_module": "github.com/dshills/elab",
+    "desktop_module": "github.com/dshills/elab/desktop",
+    "status": "Local checkout integration; relocatable SDK distribution remains a later gate"
+  },
+  "checks": [
+    "Shared export.schematic.png / asynchronous schematic-png route uses immutable captured graph/page/live-overlay settings and existing guarded publication",
+    "Native Export PNG picker uses shared command; shared Output page controls retain PDF behavior and user/agent settings",
+    "Renderer rejects nonfinite geometry, invalid DPI and >12 million raster pixels before bitmap creation; 72\u2013300 dpi, default 150; 8 MiB encoded limit unchanged",
+    "Asymmetric independent shape tests prove top/bottom orientation, RGB/grayscale and opaque white paper",
+    "All six reference PNG unit exports preserve source/history/paused physics; blocked job retains original page/pixels after later settings/component edits; canceled export preserves destination and leaves no temporary",
+    "Six public native/headless exports are byte-identical; metadata, page pixel dimensions, resolution quantization, opaque white corners and grayscale checked",
+    "Visual contact sheet review of all six and full-resolution flasher finds complete symbols/labels/component list inside page with legible reference units",
+    "Full lint/import/root/native race/vet pass; non-cgo targeted compilation/tests pass with explicit unsupported backend",
+    "Exact packaged native GPU smoke and prior four-adapter LED/RC/NPN workflow regressions pass; owned native processes terminate normally",
+    "Catalog budget retained by local shared replacement-input schema; native source ledger refreshed and reviewed: 35 files/275 sites/115 IDs, 94 source-route refs, 100 binding-review sites"
+  ],
+  "validation_attempts": [
+    {
+      "result": "catalog limit exceeded on first full check",
+      "resolution": "Deduplicate repeated ReplaceParams through local schema registry; original 65536-byte limit retained; complete recheck passed"
+    },
+    {
+      "result": "first smoke lacked required recovery control",
+      "resolution": "Rerun same binary with smoke-owned temporary recovery/appearance state; full smoke passed; no production repair required"
+    },
+    {
+      "result": "PIL Description-key lookup absent",
+      "resolution": "Inspect ImageIO XMP dc:description property; source metadata and quantized PNG resolution verified"
+    }
+  ],
+  "evidence": [
+    "docs/schematic-image.md",
+    "docs/validation/headless-png-export.json",
+    "docs/validation/desktop-png-export.json",
+    "docs/validation/png-render-inspection.json",
+    "docs/validation/png-export-contact.png",
+    "docs/validation/png-export-conformance.json",
+    "research/13-native-command-inventory.json"
+  ],
+  "limits_of_evidence": [
+    "macOS cgo/CoreGraphics/ImageIO backend; no other platform PNG claim or clean distribution qualification",
+    "PNG output is not in-app print preview or printer submission; discovery, tiling and physical printer qualification remain pending",
+    "Reference visual review does not guarantee readability for all large/spread-out drawings",
+    "Native picker/unit callbacks and GPU smoke are separate from physical picker clicks or full keyboard/IME/accessibility qualification",
+    "Source route inventory is not exhaustive mounted user/agent interaction proof",
+    "Private unsigned development bundle; previous .48/63 preserved; user sessions/files and sibling SDK unchanged"
+  ]
+}

@@ -3,9 +3,10 @@
 package schematicpdf
 
 /*
-#cgo LDFLAGS: -framework CoreGraphics -framework CoreText -framework CoreFoundation
+#cgo LDFLAGS: -framework CoreGraphics -framework CoreText -framework CoreFoundation -framework ImageIO
 #include <CoreGraphics/CoreGraphics.h>
 #include <CoreText/CoreText.h>
+#include <ImageIO/ImageIO.h>
 #include <stdlib.h>
 
 static CGContextRef elab_pdf_create(CFMutableDataRef data, double width, double height, const char *metadata) {
@@ -18,6 +19,31 @@ static CGContextRef elab_pdf_create(CFMutableDataRef data, double width, double 
  CGContextRef context = CGPDFContextCreate(consumer, &box, info);
  CFRelease(info); CFRelease(subject); CGDataConsumerRelease(consumer);
  return context;
+}
+static CGContextRef elab_png_create(size_t width, size_t height) {
+ CGColorSpaceRef space = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
+ CGContextRef context = CGBitmapContextCreate(NULL, width, height, 8, width * 4, space, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+ CGColorSpaceRelease(space);
+ return context;
+}
+static int elab_png_finish(CGContextRef context, CFMutableDataRef data, int dpi, const char *metadata) {
+ CGImageRef image = CGBitmapContextCreateImage(context);
+ if (!image) return 0;
+ CGImageDestinationRef destination = CGImageDestinationCreateWithData(data, CFSTR("public.png"), 1, NULL);
+ if (!destination) { CGImageRelease(image); return 0; }
+ CFNumberRef resolution = CFNumberCreate(NULL, kCFNumberIntType, &dpi);
+ CFStringRef description = CFStringCreateWithCString(NULL, metadata, kCFStringEncodingUTF8);
+ const void *pngKeys[] = {kCGImagePropertyPNGDescription};
+ const void *pngValues[] = {description};
+ CFDictionaryRef png = CFDictionaryCreate(NULL, pngKeys, pngValues, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+ const void *keys[] = {kCGImagePropertyDPIWidth, kCGImagePropertyDPIHeight, kCGImagePropertyPNGDictionary};
+ const void *values[] = {resolution, resolution, png};
+ CFDictionaryRef properties = CFDictionaryCreate(NULL, keys, values, 3, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+ CGImageDestinationAddImage(destination, image, properties);
+ int ok = CGImageDestinationFinalize(destination);
+ CFRelease(properties); CFRelease(png); CFRelease(description); CFRelease(resolution);
+ CFRelease(destination); CGImageRelease(image);
+ return ok;
 }
 static int elab_pdf_text(CGContextRef context, const char *text, double size, double x, double y) {
  CFStringRef value = CFStringCreateWithCString(NULL, text, kCFStringEncodingUTF8);
@@ -53,26 +79,43 @@ type quartz struct {
 	current   style
 	grayscale bool
 	finished  bool
+	dpi       int
+	metadata  string
 }
 
 func Supported() bool { return true }
 func newPainter(page Page, scale, x, y float64) (painter, error) {
 	data := C.CFDataCreateMutable(C.CFAllocatorRef(0), 0)
+	if data == 0 {
+		return nil, fmt.Errorf("cannot allocate schematic output data")
+	}
 	metadata := C.CString(page.Metadata)
 	defer C.free(unsafe.Pointer(metadata))
-	ctx := C.elab_pdf_create(data, C.double(page.Width), C.double(page.Height), metadata)
+	var ctx C.CGContextRef
+	if page.RasterDPI == 0 {
+		ctx = C.elab_pdf_create(data, C.double(page.Width), C.double(page.Height), metadata)
+	} else {
+		w, h := rasterDimensions(page)
+		ctx = C.elab_png_create(C.size_t(w), C.size_t(h))
+	}
 	if ctx == 0 {
 		C.CFRelease(C.CFTypeRef(data))
-		return nil, fmt.Errorf("cannot create PDF context")
+		return nil, fmt.Errorf("cannot create schematic drawing context")
 	}
-	C.CGPDFContextBeginPage(ctx, C.CFDictionaryRef(0))
+	if page.RasterDPI == 0 {
+		C.CGPDFContextBeginPage(ctx, C.CFDictionaryRef(0))
+	} else {
+		w, h := rasterDimensions(page)
+		// Rounded pixel dimensions preserve the full page, with no transparent rim.
+		C.CGContextScaleCTM(ctx, C.double(w/page.Width), C.double(h/page.Height))
+	}
 	C.CGContextSetRGBFillColor(ctx, 1, 1, 1, 1)
 	C.CGContextFillRect(ctx, C.CGRectMake(0, 0, C.double(page.Width), C.double(page.Height)))
 	C.CGContextTranslateCTM(ctx, C.double(x), C.double(page.Height-y))
 	C.CGContextScaleCTM(ctx, C.double(scale), C.double(-scale))
 	C.CGContextSetLineCap(ctx, C.kCGLineCapRound)
 	C.CGContextSetLineJoin(ctx, C.kCGLineJoinRound)
-	return &quartz{ctx: ctx, data: data, grayscale: page.Grayscale}, nil
+	return &quartz{ctx: ctx, data: data, grayscale: page.Grayscale, dpi: page.RasterDPI, metadata: page.Metadata}, nil
 }
 func (p *quartz) push() { C.CGContextSaveGState(p.ctx) }
 func (p *quartz) pop()  { C.CGContextRestoreGState(p.ctx) }
@@ -188,22 +231,30 @@ func (p *quartz) text(x, y, size float64, text string) error {
 	value := C.CString(text)
 	defer C.free(unsafe.Pointer(value))
 	if C.elab_pdf_text(p.ctx, value, C.double(size), C.double(x), C.double(y)) == 0 {
-		return fmt.Errorf("cannot encode PDF label")
+		return fmt.Errorf("cannot encode schematic label")
 	}
 	return nil
 }
 func (p *quartz) finish() ([]byte, error) {
-	C.CGPDFContextEndPage(p.ctx)
-	C.CGPDFContextClose(p.ctx)
+	if p.dpi == 0 {
+		C.CGPDFContextEndPage(p.ctx)
+		C.CGPDFContextClose(p.ctx)
+	} else {
+		metadata := C.CString(p.metadata)
+		defer C.free(unsafe.Pointer(metadata))
+		if C.elab_png_finish(p.ctx, p.data, C.int(p.dpi), metadata) == 0 {
+			return nil, fmt.Errorf("cannot encode schematic PNG")
+		}
+	}
 	p.finished = true
 	length := C.CFDataGetLength(C.CFDataRef(p.data))
 	if length <= 0 || length > 8*1024*1024 {
-		return nil, fmt.Errorf("PDF exceeds export bounds")
+		return nil, fmt.Errorf("schematic output exceeds export bounds")
 	}
 	return C.GoBytes(unsafe.Pointer(C.CFDataGetBytePtr(C.CFDataRef(p.data))), C.int(length)), nil
 }
 func (p *quartz) close() {
-	if !p.finished {
+	if !p.finished && p.dpi == 0 {
 		C.CGPDFContextEndPage(p.ctx)
 		C.CGPDFContextClose(p.ctx)
 	}

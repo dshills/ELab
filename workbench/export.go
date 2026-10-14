@@ -20,6 +20,7 @@ type ExportParams struct {
 }
 
 type Artifact struct {
+	DPI                int            `json:"dpi,omitempty"`
 	Page               *SchematicPage `json:"page,omitempty"`
 	DocumentGeneration uint64         `json:"document_generation,omitempty"`
 	SHA256             string         `json:"sha256,omitempty"`

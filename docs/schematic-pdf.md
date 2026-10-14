@@ -1,6 +1,6 @@
 # Printable schematic PDF
 
-Choose **Export PDF** in the component rail. The Inspector's **PDF page** section shares paper, orientation, margin, fit/explicit scale, color and live-overlay settings with agents. Defaults are Letter landscape, 10 mm margins, fit the complete schematic, grayscale on white paper, and no measurement overlays. The source circuit need not be complete or solved.
+Choose **Export PDF** in the component rail. The Inspector's **Output page** section shares paper, orientation, margin, fit/explicit scale, color and live-overlay settings with agents. Defaults are Letter landscape, 10 mm margins, fit the complete schematic, grayscale on white paper, and no measurement overlays. The source circuit need not be complete or solved.
 
 PDF export captures the same complete symbol/terminal/wire/label layout as SVG. It uses the macOS CoreGraphics/CoreText backend in both native and headless builds, without opening a window or contacting a printer. CoreGraphics supplies a PDF drawing context rather than a screenshot ([Apple context documentation](https://developer.apple.com/documentation/coregraphics/cgcontext/init%28consumer%3Amediabox%3A_%3A%29?language=objc)). Other platform/non-cgo builds return an explicit unsupported result; their existing SVG/CSV workflows remain available.
 
@@ -23,4 +23,6 @@ Page settings are session output choices, not saved circuit preferences. Output 
 
 The [validation receipt](validation/pdf-export-validation.json), [headless exports](validation/headless-pdf-export-final.json) and [native exports](validation/desktop-pdf-export.json) record six reference circuits and shared settings. Rendered checks cover page dimensions, all text within bounds, Greek units, grayscale and representative legibility. The smallest reference text was about 7.5 pt in the flasher. This is not a universal readability guarantee for arbitrary capacity/layout.
 
-This implements PDF output and shared page preparation. **Native print preview, printer discovery/submission, image output, tiled pages and physical printer qualification remain pending.** Saving a PDF does not prove printing. No printer job is submitted by these commands.
+This implements PDF output and shared page preparation. **Native print preview, printer discovery/submission, tiled pages and physical printer qualification remain pending.** Saving a PDF does not prove printing. No printer job is submitted by these commands.
+
+[PNG image export](schematic-image.md) now shares this page preparation and drawing path.

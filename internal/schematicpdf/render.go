@@ -1,4 +1,4 @@
-// Package schematicpdf renders ELab's own generated SVG primitives into PDF.
+// Package schematicpdf renders ELab's own generated SVG primitives into PDF or PNG.
 // It does not accept arbitrary imported SVG or execute embedded content.
 package schematicpdf
 
@@ -18,6 +18,7 @@ type Page struct {
 	Scale                 float64 // 0 fits the full schematic
 	Grayscale             bool
 	Metadata              string
+	RasterDPI             int // 0 for vector PDF; 72–300 for PNG
 }
 type painter interface {
 	push()
@@ -38,6 +39,9 @@ type style struct {
 }
 
 func Render(ctx context.Context, svg []byte, page Page) ([]byte, error) {
+	if !validPage(page) {
+		return nil, fmt.Errorf("invalid schematic page geometry or raster resolution")
+	}
 	decoder := xml.NewDecoder(strings.NewReader(string(svg)))
 	var out painter
 	defer func() {
@@ -164,7 +168,30 @@ func Render(ctx context.Context, svg []byte, page Page) ([]byte, error) {
 	if out == nil || len(styles) != 0 {
 		return nil, fmt.Errorf("incomplete generated SVG")
 	}
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
 	return out.finish()
+}
+
+func validPage(page Page) bool {
+	for _, v := range []float64{page.Width, page.Height, page.Margin, page.Scale} {
+		if math.IsNaN(v) || math.IsInf(v, 0) {
+			return false
+		}
+	}
+	if page.Width <= 0 || page.Height <= 0 || page.Margin < 0 || page.Margin*2 >= math.Min(page.Width, page.Height) || page.Scale < 0 {
+		return false
+	}
+	if page.RasterDPI == 0 {
+		return true
+	}
+	w, h := rasterDimensions(page)
+	return page.RasterDPI >= 72 && page.RasterDPI <= 300 && w > 0 && h > 0 && w*h <= 12_000_000
+}
+
+func rasterDimensions(page Page) (float64, float64) {
+	return math.Ceil(page.Width * float64(page.RasterDPI) / 72), math.Ceil(page.Height * float64(page.RasterDPI) / 72)
 }
 
 func numbers(text string) ([]float64, error) {

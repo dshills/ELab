@@ -21,6 +21,13 @@ type PDFExportParams struct {
 	ExpectedGeneration *uint64        `json:"expected_document_generation,omitempty"`
 	Page               *SchematicPage `json:"page,omitempty"`
 }
+type PNGExportParams struct {
+	Path               string         `json:"path"`
+	Overwrite          bool           `json:"overwrite,omitempty"`
+	ExpectedGeneration *uint64        `json:"expected_document_generation,omitempty"`
+	Page               *SchematicPage `json:"page,omitempty"`
+	DPI                int            `json:"dpi,omitempty"` // 0 defaults to 150; otherwise 72–300
+}
 
 func cloneSchematicPage(in SchematicPage) SchematicPage {
 	if in.MarginMM != nil {

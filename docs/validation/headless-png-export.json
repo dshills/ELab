@@ -1,0 +1,83 @@
+{
+  "passed": true,
+  "format": "png",
+  "transport": "headless-stdio",
+  "exports": [
+    {
+      "id": "led",
+      "dpi": 150,
+      "page": {
+        "paper": "letter",
+        "orientation": "landscape",
+        "margin_mm": 10
+      },
+      "bytes": 95474,
+      "sha256": "1e7c7b25b5a19c2c84f57c89f1eab4b01f0d40af825bd53b9f04d2d1f350929a"
+    },
+    {
+      "id": "rc",
+      "dpi": 150,
+      "page": {
+        "paper": "a4",
+        "orientation": "portrait",
+        "margin_mm": 10
+      },
+      "bytes": 85138,
+      "sha256": "5daee6827dc190ea8938f7ed961a5bcec932da6461bf7473695640565cfcf934"
+    },
+    {
+      "id": "npn",
+      "dpi": 150,
+      "page": {
+        "paper": "letter",
+        "orientation": "landscape",
+        "margin_mm": 10
+      },
+      "bytes": 110747,
+      "sha256": "56bd3a01815740e1124c0cd8a2bebc9bafbf46b1b3efda01a59b6df5b49c066b"
+    },
+    {
+      "id": "switch-npn",
+      "dpi": 150,
+      "page": {
+        "paper": "letter",
+        "orientation": "landscape",
+        "margin_mm": 10
+      },
+      "bytes": 118722,
+      "sha256": "5d7f02b7676c1490d54fb5131e1ba33c443afdd241b6afce8fc796c3251e291d"
+    },
+    {
+      "id": "blink",
+      "dpi": 150,
+      "page": {
+        "paper": "letter",
+        "orientation": "landscape",
+        "margin_mm": 10
+      },
+      "bytes": 111477,
+      "sha256": "953d5fc64a8d82a311d40a2d2f1d988a8ed2e4b903f4c53bdf81fa61fb223ae2"
+    },
+    {
+      "id": "flasher",
+      "dpi": 150,
+      "page": {
+        "paper": "letter",
+        "orientation": "landscape",
+        "margin_mm": 10
+      },
+      "bytes": 130132,
+      "sha256": "539c6f29ccde67765cd1702c30293f894b3e8494aee74edad394a50788d8a067"
+    }
+  ],
+  "checks": [
+    "six reference schematics",
+    "shared session page settings",
+    "paper/orientation capture",
+    "source/history/physics preservation"
+  ],
+  "limits": [
+    "Document/image generation; no printer job or physical printing qualification",
+    "rendered inspection is recorded separately"
+  ]
+}
