@@ -59,6 +59,10 @@ func (s *Service) exportVerificationLocked(p VerificationExportParams) error {
 			header = append(header, "switch_model")
 			modelIDs = append(modelIDs, m.SwitchModel.ID)
 		}
+		if m.WaveformModel != nil {
+			header = append(header, "waveform_model")
+			modelIDs = append(modelIDs, m.WaveformModel.ID)
+		}
 		if m.PotentiometerModel != nil {
 			header = append(header, "potentiometer_model")
 			modelIDs = append(modelIDs, m.PotentiometerModel.ID)

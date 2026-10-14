@@ -19,15 +19,47 @@ type TransientSettings struct {
 }
 
 func DefaultTransientSettings() TransientSettings { return TransientSettings{.001, .05, .05, 0, .02} }
-func (c TransientSettings) validateNumerics() error {
+func (c TransientSettings) validateRanges() error {
 	if !finite(c.StepSeconds) || c.StepSeconds < 1e-6 || c.StepSeconds > 1 {
 		return fmt.Errorf("sample step must be 1 µs–1 s")
 	}
-	if !finite(c.HighSeconds) || !finite(c.LowSeconds) || c.HighSeconds < c.StepSeconds || c.LowSeconds < c.StepSeconds || c.HighSeconds > 10 || c.LowSeconds > 10 {
-		return fmt.Errorf("pulse high/low durations must be at least one sample step and at most 10 s")
+	if !finite(c.HighSeconds) || !finite(c.LowSeconds) || c.HighSeconds < 1e-6 || c.LowSeconds < 1e-6 || c.HighSeconds > 10 || c.LowSeconds > 10 {
+		return fmt.Errorf("legacy pulse phase lengths must be 1 µs–10 s")
 	}
 	if !finite(c.InitialVoltage) || c.InitialVoltage < 0 || c.InitialVoltage > 12 {
 		return fmt.Errorf("initial capacitor voltage must be 0–12 V")
+	}
+	return nil
+}
+func (c TransientSettings) validateNumerics() error {
+	if err := c.validateRanges(); err != nil {
+		return err
+	}
+	if c.HighSeconds < c.StepSeconds || c.LowSeconds < c.StepSeconds {
+		return fmt.Errorf("legacy pulse phases must be at least one sample step")
+	}
+	return nil
+}
+func (c TransientSettings) validateForGraph(g Graph, playback bool) error {
+	if err := c.validateRanges(); err != nil {
+		return err
+	}
+	for _, p := range g.Components {
+		if p.Kind == "pulse-source" {
+			if err := c.validateNumerics(); err != nil {
+				return err
+			}
+			break
+		}
+	}
+	if playback {
+		return c.validatePlayback()
+	}
+	return nil
+}
+func (c TransientSettings) validatePlayback() error {
+	if !finite(c.PlaybackSpeed) || c.PlaybackSpeed < .001 || c.PlaybackSpeed > 1 || c.PlaybackSpeed/c.StepSeconds > 1000 {
+		return fmt.Errorf("playback must be 0.001–1 simulated s/wall s, at most 1000 samples/wall s")
 	}
 	return nil
 }
@@ -35,10 +67,7 @@ func (c TransientSettings) Validate() error {
 	if err := c.validateNumerics(); err != nil {
 		return err
 	}
-	if !finite(c.PlaybackSpeed) || c.PlaybackSpeed < .001 || c.PlaybackSpeed > 1 || c.PlaybackSpeed/c.StepSeconds > 1000 {
-		return fmt.Errorf("playback must be 0.001–1 simulated s/wall s, at most 1000 samples/wall s")
-	}
-	return nil
+	return c.validatePlayback()
 }
 
 type TraceSample struct {
@@ -310,7 +339,7 @@ func (s *Service) transientCommandLocked(command string, raw []byte) error {
 		if err := params(raw, &p, "step_s", "high_s", "low_s", "initial_voltage_v", "seconds_per_wall_second"); err != nil {
 			return err
 		}
-		if err := p.Validate(); err != nil {
+		if err := p.validateForGraph(s.graph, true); err != nil {
 			return err
 		}
 		s.transientSettings = p

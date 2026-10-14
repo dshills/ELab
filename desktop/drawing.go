@@ -104,14 +104,23 @@ func schematic(state workbench.Snapshot, view canvas.Viewport) (*canvas.Mesh, er
 			b.stroke(c, width, transformed...)
 		}
 		switch part.Kind {
-		case "dc-source", "pulse-source":
+		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			p := make([]canvas.Point, 49)
 			for i := range p {
 				angle := float64(i) * 2 * math.Pi / 48
 				p[i] = canvas.Point{X: 34 * math.Cos(angle), Y: 34 * math.Sin(angle)}
 			}
 			stroke(ink, 2.5, p...)
-			if part.Kind == "pulse-source" {
+			if part.Kind == "sine-source" {
+				wave := make([]canvas.Point, 33)
+				for i := range wave {
+					x := -22 + 44*float64(i)/32
+					wave[i] = canvas.Point{X: x, Y: -10 * math.Sin(2*math.Pi*float64(i)/32)}
+				}
+				stroke(ink, 2, wave...)
+			} else if part.Kind == "finite-pulse-source" {
+				stroke(ink, 2, canvas.Point{X: -20, Y: 10}, canvas.Point{X: -14, Y: -10}, canvas.Point{X: -4, Y: -10}, canvas.Point{X: 4, Y: 10}, canvas.Point{X: 14, Y: 10}, canvas.Point{X: 20, Y: -10})
+			} else if part.Kind == "pulse-source" {
 				stroke(ink, 2, canvas.Point{X: -20, Y: 10}, canvas.Point{X: -12, Y: 10}, canvas.Point{X: -12, Y: -10}, canvas.Point{X: 0, Y: -10}, canvas.Point{X: 0, Y: 10}, canvas.Point{X: 12, Y: 10}, canvas.Point{X: 12, Y: -10}, canvas.Point{X: 20, Y: -10})
 			} else {
 				stroke(ink, 2, canvas.Point{X: -9, Y: -13}, canvas.Point{X: 9, Y: -13})

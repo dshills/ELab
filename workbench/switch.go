@@ -25,9 +25,12 @@ func switchResistance(p Component) float64 {
 	return model.OffResistance
 }
 func IsNetworkAnalysis(analysis string) bool {
-	return analysis == MixedAnalysis || analysis == NetworkDCAnalysis || analysis == NetworkTransientAnalysis
+	return analysis == WaveformAnalysis || analysis == MixedAnalysis || analysis == NetworkDCAnalysis || analysis == NetworkTransientAnalysis
 }
 func networkEngine(analysis string) string {
+	if analysis == WaveformAnalysis {
+		return WaveformEngineID
+	}
 	if analysis == MixedAnalysis {
 		return MixedEngineID
 	}

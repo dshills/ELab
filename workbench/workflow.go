@@ -79,6 +79,14 @@ func (s *Service) duplicateLocked(p DuplicateParams) error {
 	for i := range s.graph.Components {
 		if s.graph.Components[i].ID == s.selected {
 			s.graph.Components[i].Rotation = part.Rotation
+			if part.Sine != nil {
+				w := *part.Sine
+				s.graph.Components[i].Sine = &w
+			}
+			if part.Pulse != nil {
+				w := *part.Pulse
+				s.graph.Components[i].Pulse = &w
+			}
 			if part.WiperPosition != nil {
 				v := *part.WiperPosition
 				s.graph.Components[i].WiperPosition = &v
@@ -106,7 +114,7 @@ func (s *Service) batchLocked(p BatchParams) error {
 	}
 	for i, edit := range p.Edits {
 		switch edit.Command {
-		case "component.place", "component.move", "component.rotate", "component.set", "component.duplicate", "capacitor.initial.set", "object.delete", "wire.connect", "wire.junction.insert", "switch.set", "potentiometer.wiper.set":
+		case "component.place", "component.move", "component.rotate", "component.set", "component.duplicate", "capacitor.initial.set", "object.delete", "wire.connect", "wire.junction.insert", "switch.set", "potentiometer.wiper.set", "source.sine.set", "source.pulse.set":
 		default:
 			return fmt.Errorf("batch edit %d: command %q is not an atomic schematic edit", i+1, edit.Command)
 		}

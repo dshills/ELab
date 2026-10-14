@@ -174,7 +174,7 @@ func schematicSVG(g Graph, run, revision uint64) []byte {
 	width, height := maxX-minX, maxY-minY
 	var b strings.Builder
 	fmt.Fprintf(&b, `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="%g" viewBox="%g %g %g %g"><title>ELab schematic</title>`, 1200*height/width, minX, minY, width, height)
-	metadata, _ := json.Marshal(map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "switch_model": SwitchDeviceModel(), "diode_model": SiliconDiodeModel(), "potentiometer_model": LinearPotentiometerModel(), "note": "Generic educational models; schematic rendering, not physical build certification"})
+	metadata, _ := json.Marshal(map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "switch_model": SwitchDeviceModel(), "diode_model": SiliconDiodeModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "note": "Generic educational models; schematic rendering, not physical build certification"})
 	fmt.Fprintf(&b, "<metadata>%s</metadata>", html.EscapeString(string(metadata)))
 	fmt.Fprintf(&b, `<rect x="%g" y="%g" width="%g" height="%g" fill="#ffffff"/><g fill="none" stroke="#426574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">`, minX, minY, width, height)
 	for _, w := range g.Wires {
@@ -210,9 +210,13 @@ func schematicSVG(g Graph, run, revision uint64) []byte {
 			b.WriteString(`<path d="M0 -32 V-12 M-12 -12 H12 L0 10 Z M-12 11 H12 M0 11 V32 M18 -5 L28 -15 M22 7 L32 -3 M23 -15 H28 V-10 M27 -3 H32 V2"/>`)
 		case "npn":
 			b.WriteString(`<circle r="25"/><path d="M-40 0 H-10 M-10 -14 V14 M-10 -10 L25 -35 M-10 10 L25 35 M15 31 L25 35 L21 25"/>`)
-		case "dc-source", "pulse-source":
+		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			b.WriteString(`<circle r="22"/><path d="M0 -34 V-22 M0 22 V34 M-6 -9 H6 M0 -15 V-3 M-6 10 H6"/>`)
-			if p.Kind == "pulse-source" {
+			if p.Kind == "sine-source" {
+				b.WriteString(`<path d="M-15 0 Q-7 -16 0 0 Q7 16 15 0"/>`)
+			} else if p.Kind == "finite-pulse-source" {
+				b.WriteString(`<path d="M-15 5 L-10 -5 H-3 L3 5 H10 L15 -5"/>`)
+			} else if p.Kind == "pulse-source" {
 				b.WriteString(`<path d="M-15 5 V-3 H-5 V5 H5 V-3 H15"/>`)
 			}
 		case "junction":
@@ -261,7 +265,7 @@ func schematicSVG(g Graph, run, revision uint64) []byte {
 			} else {
 				x, y = p.Position.X+27, p.Position.Y-3
 			}
-		case "dc-source", "pulse-source":
+		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			x, y = p.Position.X-88, p.Position.Y-2
 		case "junction":
 			x, y = p.Position.X+8, p.Position.Y-8

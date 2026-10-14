@@ -62,6 +62,7 @@ type VerificationRow struct {
 	Values []float64 `json:"values"`
 }
 type VerificationMetadata struct {
+	WaveformModel      *WaveformModel      `json:"waveform_model,omitempty"`
 	PotentiometerModel *PotentiometerModel `json:"potentiometer_model,omitempty"`
 	DiodeModel         *DiodeModel         `json:"diode_model,omitempty"`
 	SwitchModel        *SwitchModel        `json:"switch_model,omitempty"`

@@ -102,7 +102,7 @@ func (s *screen) view() ui.Node {
 	statusNode.Style.Typography = ui.Some(ui.Typography{Size: 13, Weight: 600})
 
 	palette := []ui.Node{section("parts-title", "Components"), quiet("placement-help", "Choose a part, then click the sheet.")}
-	names := map[string]string{"dc-source": "+  DC source", "resistor": "∿  Resistor", "led": "▷  Red LED", "ground": "⊥  Ground", "capacitor": "Ⅱ  Capacitor", "pulse-source": "▥  Pulse source", "npn": "↗  NPN transistor", "junction": "●  Junction", "net-label": "→  Net label", "switch": "/  SPST switch", "diode": "▷  Silicon diode", "potentiometer": "↗  Potentiometer"}
+	names := map[string]string{"dc-source": "+  DC source", "resistor": "∿  Resistor", "led": "▷  Red LED", "ground": "⊥  Ground", "capacitor": "Ⅱ  Capacitor", "pulse-source": "▥  Ideal square", "finite-pulse-source": "▱  Finite pulse", "sine-source": "∿  Sine source", "npn": "↗  NPN transistor", "junction": "●  Junction", "net-label": "→  Net label", "switch": "/  SPST switch", "diode": "▷  Silicon diode", "potentiometer": "↗  Potentiometer"}
 	palette = append(palette, ui.Node{ID: "part-search", Kind: ui.TextField, Text: state.PartSearch, Accessibility: ui.Accessibility{Name: "Search components"}, Change: func(e ui.ChangeEvent) { s.invoke("parts.search.set", workbench.SearchParams{Query: e.Text}) }})
 	for _, part := range state.MatchingParts {
 		n := s.action("part-"+part.Kind, names[part.Kind], "drawing.tool.set", workbench.ToolParams{Tool: "place", Kind: part.Kind})
@@ -184,6 +184,7 @@ func (s *screen) view() ui.Node {
 	part, hasPart := graph.Component(state.Selected)
 	if hasPart {
 		inspector = append(inspector, s.partPlotControls(state, part)...)
+		inspector = append(inspector, s.waveformControls(state, part)...)
 		inspector = append(inspector, heading("inspector", part.ID+" · "+part.Name), quiet("part-terminals", "Terminals: "+strings.Join(part.Terminals, ", ")))
 		if part.Kind == "potentiometer" {
 			position := *part.WiperPosition

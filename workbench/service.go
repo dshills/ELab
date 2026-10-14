@@ -12,6 +12,8 @@ import (
 )
 
 type Snapshot struct {
+	SourceWarnings       []Diagnostic         `json:"source_warnings,omitempty"`
+	WaveformModel        *WaveformModel       `json:"waveform_model,omitempty"`
 	PotentiometerModel   *PotentiometerModel  `json:"potentiometer_model,omitempty"`
 	DiodeModel           *DiodeModel          `json:"diode_model,omitempty"`
 	SwitchModel          *SwitchModel         `json:"switch_model,omitempty"`
@@ -149,7 +151,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	if analysis == "" {
 		analysis = "DC operating point"
 	}
-	out := Snapshot{Recording: s.recordingViewLocked(), Recovery: cloneRecovery(s.recovery), VerificationSettings: cloneVerificationSettings(s.verificationSettings), Operations: []OperationSummary{}, SelectedOperation: s.selectedOperation, LastOperation: s.lastOperation, PartSearch: s.partSearch, MatchingParts: filteredParts(s.partSearch), Scope: s.scopeLocked(compiled), Mixed: cloneMixed(s.mixed), NPN: cloneNPN(s.npn), CommandRevision: s.commandRevision, Transient: cloneTransient(s.transient), TransientSettings: s.transientSettings, Document: DocumentState{SchematicDirty: contentHash(s.graph, s.transientSettings) != s.savedGraph, RecordingsDirty: s.recordingsDirtyLocked(), RecordingCount: s.recordingCountLocked(), Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: DocumentVersion, Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom}, Revision: s.revision, ElectricalRevision: s.electrical, Circuit: s.circuit, Components: graph.Components, Wires: graph.Wires, Nets: compiled.Nets, Drawing: s.drawing, Model: Model(), Selected: s.selected, View: s.view, Status: s.status, Analysis: analysis, Paused: s.paused, RunID: s.run, Diagnostics: append([]Diagnostic{}, s.diagnostics...), CanUndo: len(s.undo) > 0, CanRedo: len(s.redo) > 0, LastActor: s.actor, Closed: s.closed}
+	out := Snapshot{SourceWarnings: waveformSamplingWarnings(graph, s.transientSettings), Recording: s.recordingViewLocked(), Recovery: cloneRecovery(s.recovery), VerificationSettings: cloneVerificationSettings(s.verificationSettings), Operations: []OperationSummary{}, SelectedOperation: s.selectedOperation, LastOperation: s.lastOperation, PartSearch: s.partSearch, MatchingParts: filteredParts(s.partSearch), Scope: s.scopeLocked(compiled), Mixed: cloneMixed(s.mixed), NPN: cloneNPN(s.npn), CommandRevision: s.commandRevision, Transient: cloneTransient(s.transient), TransientSettings: s.transientSettings, Document: DocumentState{SchematicDirty: contentHash(s.graph, s.transientSettings) != s.savedGraph, RecordingsDirty: s.recordingsDirtyLocked(), RecordingCount: s.recordingCountLocked(), Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: DocumentVersion, Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom}, Revision: s.revision, ElectricalRevision: s.electrical, Circuit: s.circuit, Components: graph.Components, Wires: graph.Wires, Nets: compiled.Nets, Drawing: s.drawing, Model: Model(), Selected: s.selected, View: s.view, Status: s.status, Analysis: analysis, Paused: s.paused, RunID: s.run, Diagnostics: append([]Diagnostic{}, s.diagnostics...), CanUndo: len(s.undo) > 0, CanRedo: len(s.redo) > 0, LastActor: s.actor, Closed: s.closed}
 	for i := len(s.operationOrder) - 1; i >= 0; i-- {
 		out.Operations = append(out.Operations, s.operationSummaryLocked(s.operations[s.operationOrder[i]]))
 	}
@@ -161,6 +163,13 @@ func (s *Service) snapshotLocked() Snapshot {
 			preview.Readings = append(preview.Readings, VerificationReading{Probe: probe, Value: record.rows[len(record.rows)-1].Values[i], Minimum: stat.Minimum, Maximum: stat.Maximum})
 		}
 		out.Verification = preview
+	}
+	for _, part := range graph.Components {
+		if IsWaveformSource(part.Kind) {
+			m := SourceWaveformModel()
+			out.WaveformModel = &m
+			break
+		}
 	}
 	for _, part := range graph.Components {
 		if part.Kind == "potentiometer" {
@@ -528,6 +537,11 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	state.SourceWarnings = append([]Diagnostic{}, state.SourceWarnings...)
+	if state.WaveformModel != nil {
+		m := *state.WaveformModel
+		state.WaveformModel = &m
+	}
 	if state.PotentiometerModel != nil {
 		model := *state.PotentiometerModel
 		state.PotentiometerModel = &model
@@ -567,6 +581,14 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	state.Components = append([]Component(nil), state.Components...)
 	for i := range state.Components {
 		state.Components[i].Terminals = append([]string(nil), state.Components[i].Terminals...)
+		if state.Components[i].Sine != nil {
+			w := *state.Components[i].Sine
+			state.Components[i].Sine = &w
+		}
+		if state.Components[i].Pulse != nil {
+			w := *state.Components[i].Pulse
+			state.Components[i].Pulse = &w
+		}
 		if state.Components[i].WiperPosition != nil {
 			v := *state.Components[i].WiperPosition
 			state.Components[i].WiperPosition = &v

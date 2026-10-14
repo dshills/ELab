@@ -17,6 +17,7 @@ const DocumentVersion = 4
 const MaxDocumentBytes = 256 * 1024
 
 type Document struct {
+	WaveformModel      *WaveformModel      `json:"waveform_model,omitempty"`
 	PotentiometerModel *PotentiometerModel `json:"potentiometer_model,omitempty"`
 	DiodeModel         *DiodeModel         `json:"diode_model,omitempty"`
 	SwitchModel        *SwitchModel        `json:"switch_model,omitempty"`
@@ -146,6 +147,21 @@ func decodeDocument(data []byte) (Document, error) {
 		if err := params(component, &Component{}, "id", "kind", "name", "terminals", "position", "value", "rotation"); err != nil {
 			return d, err
 		}
+		var p Component
+		if err := json.Unmarshal(component, &p); err != nil {
+			return d, err
+		}
+		if p.Sine != nil {
+			if err := paramsNested(component, "sine", &SineWaveform{}, "amplitude_v", "offset_v", "frequency_hz", "phase_degrees"); err != nil {
+				return d, err
+			}
+		}
+		if p.Pulse != nil {
+			if err := paramsNested(component, "pulse", &PulseWaveform{}, "high_v", "low_v", "high_s", "low_s", "rise_s", "fall_s"); err != nil {
+				return d, err
+			}
+		}
+
 		if err := validatePointParam(component, "position"); err != nil {
 			return d, err
 		}
@@ -197,7 +213,7 @@ func decodeDocument(data []byte) (Document, error) {
 		settings := DefaultTransientSettings()
 		d.TransientSettings = &settings
 	}
-	if err := d.TransientSettings.Validate(); err != nil {
+	if err := d.TransientSettings.validateForGraph(d.Graph, true); err != nil {
 		return d, err
 	}
 	if d.Version >= 3 && d.ScopeProbes == nil {
@@ -228,6 +244,15 @@ func decodeDocument(data []byte) (Document, error) {
 	if len(d.Graph.Components) > MaxComponents || len(d.Graph.Wires) > MaxWires {
 		return d, fmt.Errorf("schematic exceeds component/wire limits")
 	}
+	if d.WaveformModel != nil && *d.WaveformModel != SourceWaveformModel() {
+		return d, fmt.Errorf("unsupported source waveform model")
+	}
+	for _, p := range d.Graph.Components {
+		if IsWaveformSource(p.Kind) && (d.WaveformModel == nil || *d.WaveformModel != SourceWaveformModel()) {
+			return d, fmt.Errorf("waveform sources require supported waveform_model parameters")
+		}
+	}
+
 	if d.PotentiometerModel != nil && *d.PotentiometerModel != LinearPotentiometerModel() {
 		return d, fmt.Errorf("unsupported potentiometer model parameters/version")
 	}
@@ -276,6 +301,9 @@ func decodeDocument(data []byte) (Document, error) {
 		if c.Unit != "" {
 			value = fmt.Sprintf("%.17g %s", c.Value, c.Unit)
 		}
+		if IsWaveformSource(c.Kind) {
+			value = ""
+		}
 		expected, err := MakeComponent(c.ID, c.Kind, c.Position, value)
 		if err != nil {
 			return d, err
@@ -284,6 +312,32 @@ func decodeDocument(data []byte) (Document, error) {
 			return d, fmt.Errorf("invalid rotation on %s", c.ID)
 		}
 		expected.Rotation = c.Rotation
+		if c.Sine != nil {
+			if c.Kind != "sine-source" {
+				return d, fmt.Errorf("sine parameters belong only to a sine source")
+			}
+			if err := c.Sine.Validate(); err != nil {
+				return d, err
+			}
+			w := *c.Sine
+			expected.Sine = &w
+			expected.Value = w.Amplitude
+		}
+		if c.Pulse != nil {
+			if c.Kind != "finite-pulse-source" {
+				return d, fmt.Errorf("pulse parameters belong only to a finite pulse source")
+			}
+			if err := c.Pulse.Validate(); err != nil {
+				return d, err
+			}
+			w := *c.Pulse
+			expected.Pulse = &w
+			expected.Value = w.HighVoltage
+		}
+		if c.Kind == "sine-source" && c.Sine == nil || c.Kind == "finite-pulse-source" && c.Pulse == nil {
+			return d, fmt.Errorf("waveform source requires complete per-source parameters")
+		}
+
 		if c.WiperPosition != nil {
 			if c.Kind != "potentiometer" || !finite(*c.WiperPosition) || *c.WiperPosition < 0 || *c.WiperPosition > 1 {
 				return d, fmt.Errorf("invalid potentiometer wiper on %s", c.ID)
@@ -489,6 +543,13 @@ func (s *Service) documentLocked() Document {
 	probes := ProbeParams{IDs: s.scopeLocked(compiled).Selected}
 	paused := s.paused
 	d := Document{Recordings: s.projectRecordingsLocked(), Paused: &paused, ScopeProbes: &probes, Format: DocumentFormat, Version: DocumentVersion, Graph: s.graph.Clone(), View: s.view, LEDModel: Model(), TransientSettings: &settings}
+	for _, part := range s.graph.Components {
+		if IsWaveformSource(part.Kind) {
+			m := SourceWaveformModel()
+			d.WaveformModel = &m
+			break
+		}
+	}
 	for _, part := range s.graph.Components {
 		if part.Kind == "potentiometer" {
 			model := LinearPotentiometerModel()

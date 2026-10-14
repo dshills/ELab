@@ -147,7 +147,10 @@ rendered:
 	if err := nativeDiodeSmoke(ctx, a, s); err != nil {
 		return err
 	}
-	return nativePotentiometerSmoke(ctx, a, s)
+	if err := nativePotentiometerSmoke(ctx, a, s); err != nil {
+		return err
+	}
+	return nativeWaveformSmoke(ctx, a, s)
 }
 
 func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
@@ -1034,6 +1037,86 @@ func nativePotentiometerSmoke(ctx context.Context, a *app.Application, s *screen
 		}
 		if _, ok := findNode(s.view(), "pot-reading"); !ok {
 			checked <- fmt.Errorf("native pot readout absent")
+			return
+		}
+		_, err := s.mesh(*s.drawing.View)
+		checked <- err
+	}); err != nil {
+		return err
+	}
+	return <-checked
+}
+
+func smokeConstructWaveform(s *screen, kind string) error {
+	if err := smokeUI(s, "example.rc", nil); err != nil {
+		return err
+	}
+	if s.pendingCommand != "" {
+		if err := smokeUI(s, "discard-continue", nil); err != nil {
+			return err
+		}
+	}
+	for _, action := range []struct {
+		id    string
+		event *ui.ChangeEvent
+	}{
+		{"selection", &ui.ChangeEvent{SelectedID: "V1"}}, {"delete-object", nil}, {"part-" + kind, nil},
+		{"position-x", &ui.ChangeEvent{Number: -200}}, {"position-y", &ui.ChangeEvent{Number: 0}}, {"place-at-position", nil},
+	} {
+		if err := smokeUI(s, action.id, action.event); err != nil {
+			return err
+		}
+	}
+	id := s.service.Snapshot().Selected
+	for _, pair := range [][2]string{{id + ".positive", "R1.1"}, {id + ".negative", "GND.reference"}} {
+		for _, action := range []struct {
+			id    string
+			event *ui.ChangeEvent
+		}{
+			{"tool-wire", nil}, {"wire-from", &ui.ChangeEvent{SelectedID: pair[0]}}, {"wire-to", &ui.ChangeEvent{SelectedID: pair[1]}}, {"connect-terminals", nil},
+		} {
+			if err := smokeUI(s, action.id, action.event); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+func nativeWaveformSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	checked := make(chan error, 1)
+	if err := a.PostWait(ctx, func() {
+		if err := smokeConstructWaveform(s, "finite-pulse-source"); err != nil {
+			checked <- err
+			return
+		}
+		for _, id := range []string{"fit-waveform-sampling", "simulation.pause", "simulation.restart", "transient-step"} {
+			if err := smokeUI(s, id, nil); err != nil {
+				checked <- err
+				return
+			}
+		}
+		state := s.service.Snapshot()
+		if state.Transient == nil || state.Transient.Engine != workbench.WaveformEngineID || state.Transient.Sample.Input <= 0 || state.Mixed.Capacitors[0].Voltage <= 0 {
+			checked <- fmt.Errorf("native finite ramp/RC failed")
+			return
+		}
+		if err := smokeConstructWaveform(s, "sine-source"); err != nil {
+			checked <- err
+			return
+		}
+		if err := smokeUI(s, "sine-frequency", &ui.ChangeEvent{Number: 20}); err != nil {
+			checked <- err
+			return
+		}
+		for _, id := range []string{"simulation.pause", "simulation.restart", "transient-step"} {
+			if err := smokeUI(s, id, nil); err != nil {
+				checked <- err
+				return
+			}
+		}
+		state = s.service.Snapshot()
+		if state.Transient == nil || state.Transient.Engine != workbench.WaveformEngineID || state.Transient.Sample.Input <= 0 {
+			checked <- fmt.Errorf("native sine/RC failed")
 			return
 		}
 		_, err := s.mesh(*s.drawing.View)

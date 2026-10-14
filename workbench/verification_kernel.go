@@ -45,7 +45,7 @@ func newVerificationKernel(ctx context.Context, input verificationInput) (*verif
 		t.Engine = NPNTransientEngineID
 		t.Sample = npnTraceSample(c, high, low, 0, npnPulseInput(c, t, 0))
 		k.updateNPN()
-	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis:
+	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis:
 		n := newMixedNetwork(c)
 		old := make([]float64, len(n.caps))
 		for i, p := range n.caps {
@@ -102,7 +102,7 @@ func (k *verificationKernel) advance(ctx context.Context, end float64) error {
 		return err
 	}
 	switch k.compiled.Analysis {
-	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis:
+	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis:
 		state, trace, err := advanceMixed(k.mixed, k.trace, end)
 		if err != nil {
 			return err

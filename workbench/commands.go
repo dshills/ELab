@@ -114,6 +114,9 @@ func queryCapability(id, description string, input, output reflect.Type) Capabil
 }
 func Catalog() []Capability {
 	return []Capability{
+		typedCapability("simulation.sampling.fit", "Reduce output step to recommended waveform resolution (at least 1 µs), reducing playback speed if needed for the 1000 samples/wall-second bound; ordinary settings restart semantics", reflect.TypeOf(struct{}{})),
+		typedCapability("source.sine.set", "Set per-source sine amplitude, offset, frequency and phase; ordinary schematic restart semantics", reflect.TypeOf(SineParams{})),
+		typedCapability("source.pulse.set", "Set per-source finite pulse levels, phase lengths and linear rise/fall; ordinary schematic restart semantics", reflect.TypeOf(PulseParams{})),
 		typedCapability("potentiometer.wiper.set", "Set a linear potentiometer wiper position 0–1; direct fresh transient changes preserve capacitor charge, time and run", reflect.TypeOf(WiperParams{})),
 		typedCapability("switch.set", "Set a generic SPST open/closed state; fresh network transient actuation preserves capacitor voltage, time and run, and records an input event", reflect.TypeOf(SwitchParams{})),
 		typedCapability("wire.junction.insert", "Atomically insert one explicit junction into 1–8 named connected wire routes; position required for multi-wire joins, single wire defaults to a free interior point", reflect.TypeOf(JunctionInsertParams{})),
@@ -363,4 +366,12 @@ func structSchema(t reflect.Type) map[string]any {
 		properties[name] = typeSchema(field.Type)
 	}
 	return map[string]any{"type": "object", "properties": properties, "required": required, "additionalProperties": false}
+}
+
+func paramsNested(raw json.RawMessage, field string, dst any, required ...string) error {
+	var object map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &object); err != nil {
+		return err
+	}
+	return params(object[field], dst, required...)
 }

@@ -77,6 +77,7 @@ func cloneRecovery(in RecoveryState) RecoveryState {
 }
 
 type DocumentInspection struct {
+	WaveformModel      *WaveformModel         `json:"waveform_model,omitempty"`
 	PotentiometerModel *PotentiometerModel    `json:"potentiometer_model,omitempty"`
 	DiodeModel         *DiodeModel            `json:"diode_model,omitempty"`
 	SwitchModel        *SwitchModel           `json:"switch_model,omitempty"`

@@ -89,9 +89,22 @@ Packaged slice: **0.17.0 / 31**, with [final validation](../docs/validation/pote
 
 One full race run hit the existing flasher's 100 ms integration guard during heavy host indexing activity. The isolated flasher test and subsequent full serial gate pass; the guard was not changed. Prior bundles/sessions remain preserved.
 
+## Per-source sine and finite pulse waveforms
+
+Implemented [sine/finite pulse sources](../docs/waveforms.md): distinct ready-to-simulate parts, amplitude/offset/frequency/phase or level/phase/ramp controls, shared typed commands, per-component timing, exact source-corner retention, native/SVG symbols, probes and complete model/project/recovery/record ownership. Legacy ideal square sources and examples retain their identities and behavior.
+
+The new waveform engine stamps smooth sources at endpoints, bounds internal steps by waveform features, and uses explicitly documented local capacitor tolerances. One work budget now spans the complete output sample and all source corners; failures cannot publish partial time/charge/history. Review repaired near-zero residual timesteps at floating-point corner boundaries and avoided artificial work for constant waveforms. Shared sampling-fit guidance reduces output step and, when necessary, playback speed. Legacy global phase/sample coupling applies only to graphs using that legacy source.
+
+Independent exact sine/linear-ramp RC references, NPN held-phase comparison to the DC engine, independent source periods, conservation, negative levels, parameter cloning, custom sine persistence, strict imports and whole-sample refusal atomicity pass. Native smoke initially found a fixture attempting Step after loading a running second example; the fixture now explicitly pauses, preserving the correct disabled-control behavior.
+
+Packaged slice: **0.18.0 / 32**, with [final validation](../docs/validation/waveforms-validation.json), [headless workflow](../docs/validation/headless-waveforms.json) and [packaged desktop workflow](../docs/validation/desktop-waveforms.json). Headless/native outputs match exactly; sine RC differs by under 1.5 mV at 30 ms and finite-ramp RC by under 0.4 mV at 5 ms. Native controls, sampling fit, JSON/CSV, two embedded recordings and source settings reopening pass, alongside lint, vet, race tests and packaged GPU/UI smoke. Prior bundles/sessions are preserved.
+
+All curated component families now have implementations, but this does not establish full MVP acceptance. Remaining product, interaction, accessibility, capacity and distribution requirements need a current-state audit and their own evidence.
+
 ## Next work queue
 
-1. Sine sources and finite pulse transitions from the curated PRD, with inspectable per-source settings and numerical fixtures.
-2. Capacity/latency measurements, keyboard/screen-reader checks and distribution qualification.
+1. Audit current implementation against every PRD requirement and acceptance gate; repair remaining workflow/agent/model gaps.
+2. Capacity/latency measurements and repository structure/quality review.
+3. Keyboard/screen-reader checks and local distribution qualification.
 
 Every shipped user operation continues to require the same public agent command/state path. Each slice adds meaningful regression checks and records its actual limits. Participant usability and physical hardware validation remain future gates.

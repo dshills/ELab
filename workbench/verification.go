@@ -90,7 +90,7 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 		if settings.Duration <= 0 {
 			return fmt.Errorf("transient Verify requires a positive duration")
 		}
-		if err := cfg.validateNumerics(); err != nil {
+		if err := cfg.validateForGraph(graph, false); err != nil {
 			return err
 		}
 	} else {
@@ -155,6 +155,13 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 	if compiled.Transistor.ID != "" {
 		model := TransistorModel()
 		metadata.NPNModel = &model
+	}
+	for _, part := range graph.Components {
+		if IsWaveformSource(part.Kind) {
+			m := SourceWaveformModel()
+			metadata.WaveformModel = &m
+			break
+		}
 	}
 	for _, part := range graph.Components {
 		if part.Kind == "potentiometer" {
@@ -270,6 +277,10 @@ func cloneVerificationMetadata(in VerificationMetadata) VerificationMetadata {
 	out.Graph = in.Graph.Clone()
 	out.Probes = append([]Probe{}, in.Probes...)
 	out.Statistics = append([]ScopeStatistics{}, in.Statistics...)
+	if in.WaveformModel != nil {
+		m := *in.WaveformModel
+		out.WaveformModel = &m
+	}
 	if in.PotentiometerModel != nil {
 		model := *in.PotentiometerModel
 		out.PotentiometerModel = &model
@@ -323,7 +334,7 @@ func validateCapacitorInitialFields(raw json.RawMessage) error {
 
 func verificationEngineID(analysis string) string {
 	switch analysis {
-	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis:
+	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis:
 		return networkEngine(analysis)
 	case "RC transient":
 		return RCEngineID

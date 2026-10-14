@@ -117,6 +117,29 @@ func (s *Service) connectLocked(p ConnectParams) error {
 }
 func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "simulation.sampling.fit":
+		if err := params(raw, &struct{}{}); err != nil {
+			return err
+		}
+		return s.fitWaveformSamplingLocked()
+	case "source.sine.set":
+		var p SineParams
+		if err := params(raw, &p, "id", "waveform"); err != nil {
+			return err
+		}
+		if err := paramsNested(raw, "waveform", &SineWaveform{}, "amplitude_v", "offset_v", "frequency_hz", "phase_degrees"); err != nil {
+			return err
+		}
+		return s.setSineLocked(p)
+	case "source.pulse.set":
+		var p PulseParams
+		if err := params(raw, &p, "id", "waveform"); err != nil {
+			return err
+		}
+		if err := paramsNested(raw, "waveform", &PulseWaveform{}, "high_v", "low_v", "high_s", "low_s", "rise_s", "fall_s"); err != nil {
+			return err
+		}
+		return s.setPulseLocked(p)
 	case "potentiometer.wiper.set":
 		var p WiperParams
 		if err := params(raw, &p, "id", "position"); err != nil {
@@ -285,7 +308,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return fmt.Errorf("drawing supports at most %d components", MaxComponents)
 		}
 		if p.ID == "" {
-			prefix := map[string]string{"dc-source": "V", "resistor": "R", "led": "D", "diode": "D", "potentiometer": "P", "ground": "GND", "capacitor": "C", "pulse-source": "V", "npn": "Q", "junction": "J", "net-label": "L", "switch": "S"}[p.Kind]
+			prefix := map[string]string{"dc-source": "V", "resistor": "R", "led": "D", "diode": "D", "potentiometer": "P", "ground": "GND", "capacitor": "C", "pulse-source": "V", "sine-source": "V", "finite-pulse-source": "V", "npn": "Q", "junction": "J", "net-label": "L", "switch": "S"}[p.Kind]
 			if prefix == "" {
 				return fmt.Errorf("unknown part kind")
 			}

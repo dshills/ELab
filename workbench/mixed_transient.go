@@ -6,10 +6,10 @@ import (
 )
 
 func IsNPNTransientAnalysis(a string) bool {
-	return a == NPNTransientAnalysis || a == MixedAnalysis || a == NetworkTransientAnalysis
+	return a == WaveformAnalysis || a == NPNTransientAnalysis || a == MixedAnalysis || a == NetworkTransientAnalysis
 }
 func IsNPNTransientEngine(e string) bool {
-	return e == NPNTransientEngineID || e == MixedEngineID || e == NetworkEngineID
+	return e == WaveformEngineID || e == NPNTransientEngineID || e == MixedEngineID || e == NetworkEngineID
 }
 func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 	p := TraceSample{Time: r.Time, Input: input, Voltage: r.Nodes[compiled.Output], State: "network"}
@@ -107,56 +107,59 @@ func (s *Service) startMixedLocked(c Compiled) {
 		}
 	}
 }
-func autoMixedPulse(n *mixedNetwork, t *Transient) bool {
-	for _, p := range n.sources {
-		if p.Kind == "pulse-source" && (p.ID != n.c.Source.ID || t.Mode == "auto") {
-			return true
-		}
-	}
-	return false
-}
 
-// Stage a whole requested output sample. A convergence failure cannot publish
-// partially advanced capacitor memory, device results, events or time.
+// Stage a whole requested output sample with one shared work budget across all
+// per-source corners. A failure never publishes partial capacitor memory/time.
 func advanceMixed(state *mixedState, t *Transient, end float64) (*mixedState, *Transient, error) {
 	trace := cloneTransient(t)
 	cur := state
-	at := cur.result.Time
-	for at < end {
-		stop := end
-		edgeHit := false
-		if autoMixedPulse(cur.net, trace) {
-			edge := nextPulseEdge(trace.Settings, at)
-			if edge > at && edge <= stop {
-				stop = edge
-				edgeHit = true
-			}
+	budget := newIntegrationBudget()
+	for cur.result.Time < end {
+		at := cur.result.Time
+		corner := cur.net.nextSourceCorner(trace, at)
+		stop := math.Min(end, corner)
+		if end-stop < 1e-13 {
+			stop = end
 		}
-		next, err := cur.advance(trace, stop)
+		next, err := cur.advanceBudget(trace, stop, budget)
 		if err != nil {
 			return nil, nil, err
 		}
 		cur = next
-		at = stop
-		if edgeHit {
-			// The dynamic step used the source's left-hand value. Preserve capacitor
-			// voltages while solving the algebraic right-hand state at the exact edge.
-			left := mixedSample(cur.net.c, cur.result, cur.net.sourceVoltage(cur.net.c.Source, trace, math.Max(0, at-(trace.Settings.HighSeconds+trace.Settings.LowSeconds)*1e-9)))
-			appendTrace(trace, left)
-			right, err := cur.net.solve(cur.x, cur.capV, 0, trace, at)
+		if corner <= end {
+			legacy := false
+			for _, p := range cur.net.sources {
+				if nextSourceCorner(p, trace, at, p.ID == cur.net.c.Source.ID) == corner && p.Kind == "pulse-source" {
+					legacy = true
+				}
+			}
+			if legacy {
+				appendTrace(trace, mixedSample(cur.net.c, cur.result, cur.result.Nodes[cur.net.c.Supply]))
+			}
+			if err := budget.take(); err != nil {
+				return nil, nil, err
+			}
+			right, err := cur.net.solve(cur.x, cur.capV, 0, trace, stop)
 			if err != nil {
 				return nil, nil, err
 			}
 			cur = right
-			appendTrace(trace, mixedSample(cur.net.c, cur.result, cur.net.sourceVoltage(cur.net.c.Source, trace, at)))
-			mode := "pulse-low"
-			if pulseHigh(trace.Settings, at) {
-				mode = "pulse-high"
+			appendTrace(trace, mixedSample(cur.net.c, cur.result, cur.result.Nodes[cur.net.c.Supply]))
+			for _, p := range cur.net.sources {
+				if nextSourceCorner(p, trace, at, p.ID == cur.net.c.Source.ID) == corner {
+					mode := "pulse:" + p.ID + ":corner"
+					if p.Kind == "pulse-source" {
+						mode = "pulse-low"
+						if pulseHigh(trace.Settings, stop) {
+							mode = "pulse-high"
+						}
+					}
+					appendInputEvent(trace, InputEvent{Time: stop, Mode: mode})
+				}
 			}
-			appendInputEvent(trace, InputEvent{at, mode})
 		}
 	}
-	trace.Sample = mixedSample(cur.net.c, cur.result, cur.net.sourceVoltage(cur.net.c.Source, trace, end))
+	trace.Sample = mixedSample(cur.net.c, cur.result, cur.result.Nodes[cur.net.c.Supply])
 	appendTrace(trace, trace.Sample)
 	return cur, trace, nil
 }

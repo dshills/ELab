@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "transport": "packaged-native-private-socket",
+  "capabilities": 83,
+  "library_kinds": 14,
+  "sine_capacitor_voltage_v": 0.6594489214527234,
+  "sine_reference_v": 0.6608630887037612,
+  "sine_source_voltage_v": -0.827090915285202,
+  "ramp_capacitor_voltage_v": 1.6424482734086807,
+  "ramp_reference_v": 1.6428109757728886,
+  "fitted_step_s": 0.0005,
+  "checks": [
+    "sine offset/amplitude/phase exact RC reference",
+    "endpoint source readings",
+    "sine live/Verify equivalence",
+    "per-source finite ramp exact RC reference",
+    "sampling warning/fit command",
+    "three exact continuous corners",
+    "pulse live/Verify equivalence",
+    "CSV model attribution and JSON import",
+    "two embedded records/source settings reopen",
+    "SVG waveform symbol"
+  ]
+}

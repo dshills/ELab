@@ -23,6 +23,14 @@ func (g Graph) Clone() Graph {
 	out := Graph{append([]Component{}, g.Components...), append([]Wire{}, g.Wires...)}
 	for i := range out.Components {
 		out.Components[i].Terminals = append([]string{}, out.Components[i].Terminals...)
+		if w := out.Components[i].Sine; w != nil {
+			v := *w
+			out.Components[i].Sine = &v
+		}
+		if w := out.Components[i].Pulse; w != nil {
+			v := *w
+			out.Components[i].Pulse = &v
+		}
 		if v := out.Components[i].WiperPosition; v != nil {
 			copy := *v
 			out.Components[i].WiperPosition = &copy
@@ -136,6 +144,8 @@ func Library() []Part {
 		{"resistor", "Resistor", []string{"1", "2"}, "1k", "Ω", "ideal-resistor.v1"},
 		{"led", "Red LED", []string{"anode", "cathode"}, "", "", ModelID},
 		{"capacitor", "Capacitor", []string{"1", "2"}, "1uF", "F", "ideal-capacitor.v1"},
+		{"sine-source", "Sine source", []string{"positive", "negative"}, "2.5 V", "V", SineSourceModelID},
+		{"finite-pulse-source", "Finite pulse source", []string{"positive", "negative"}, "5 V", "V", FinitePulseModelID},
 		{"pulse-source", "Pulse source", []string{"positive", "negative"}, "5 V", "V", "ideal-square.v1"},
 		{"npn", "NPN transistor", []string{"base", "collector", "emitter"}, "", "", NPNModelID},
 		{"ground", "Ground", []string{"reference"}, "", "", "ground.v1"},
@@ -159,6 +169,14 @@ func MakeComponent(id, kind string, p Point, value string) (Component, error) {
 			continue
 		}
 		c := Component{ID: id, Kind: kind, Name: part.Name, Terminals: append([]string{}, part.Terminals...), Position: position, Unit: part.Unit, Model: part.Model}
+		if kind == "sine-source" {
+			w := DefaultSineWaveform()
+			c.Sine = &w
+		}
+		if kind == "finite-pulse-source" {
+			w := DefaultPulseWaveform()
+			c.Pulse = &w
+		}
 		if kind == "potentiometer" {
 			w := .5
 			c.WiperPosition = &w
@@ -195,13 +213,30 @@ func SetValue(c Component, text string) (Component, error) {
 		c.Label = text
 		return c, nil
 	}
-	if c.Kind != "dc-source" && c.Kind != "pulse-source" && c.Kind != "resistor" && c.Kind != "capacitor" && c.Kind != "potentiometer" {
+	if c.Kind != "dc-source" && c.Kind != "pulse-source" && c.Kind != "resistor" && c.Kind != "capacitor" && c.Kind != "potentiometer" && !IsWaveformSource(c.Kind) {
 		return c, fmt.Errorf("this component has no editable value")
 	}
 	value, err := ParseValue(text, c.Unit)
 	if err != nil {
 		return c, err
 	}
+	if c.Kind == "sine-source" {
+		w := *c.Sine
+		w.Amplitude = value
+		if err := w.Validate(); err != nil {
+			return c, err
+		}
+		c.Sine = &w
+	}
+	if c.Kind == "finite-pulse-source" {
+		w := *c.Pulse
+		w.HighVoltage = value
+		if err := w.Validate(); err != nil {
+			return c, err
+		}
+		c.Pulse = &w
+	}
+
 	if (c.Kind == "dc-source" || c.Kind == "pulse-source") && (!finite(value) || value < 0 || value > 12) {
 		return c, fmt.Errorf("source voltage must be 0–12 V")
 	}
@@ -229,7 +264,7 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 	p := Point{}
 	found := true
 	switch c.Kind {
-	case "dc-source", "pulse-source":
+	case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 		switch name {
 		case "positive":
 			p = Point{0, -34}
@@ -345,16 +380,20 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 	hasSwitch := false
 	hasDiode := false
 	hasPot := false
+	hasWaveforms := false
 	sources, resistors, leds, grounds := []Component{}, []Component{}, []Component{}, []Component{}
 	capacitors := []Component{}
 	transistors := []Component{}
 	for _, c := range g.Components {
+		if IsWaveformSource(c.Kind) {
+			hasWaveforms = true
+		}
 		for _, t := range c.Terminals {
 			ref := c.ID + "." + t
 			parent[ref] = ref
 		}
 		switch c.Kind {
-		case "dc-source", "pulse-source":
+		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			sources = append(sources, c)
 		case "switch":
 			hasSwitch = true
@@ -446,7 +485,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		return out, "incomplete", &Diagnostic{code, message, id}
 	}
 	networkTopology := len(transistors) == 0 && (len(sources) > 1 || len(resistors) > 1 || len(leds) > 1 || len(capacitors) > 1 || len(capacitors) == 0 && len(leds) == 0 && len(resistors) > 0)
-	if hasSwitch || hasDiode || hasPot || networkTopology || len(transistors) > 0 && len(capacitors) > 0 {
+	if hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || len(transistors) > 0 && len(capacitors) > 0 {
 		return compileNetwork(out, g, groups, root)
 	}
 	if len(transistors) > 0 {

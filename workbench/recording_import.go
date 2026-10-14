@@ -43,6 +43,9 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	}
 	_ = json.Unmarshal(data, &raw)
 	envelope := map[string]any{"format": DocumentFormat, "version": 1, "graph": raw.Metadata["graph"], "view": View{Zoom: 1}, "led_model": m.LEDModel}
+	if m.WaveformModel != nil {
+		envelope["waveform_model"] = m.WaveformModel
+	}
 	if m.PotentiometerModel != nil {
 		envelope["potentiometer_model"] = m.PotentiometerModel
 	}
@@ -66,6 +69,10 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	if err := validateRecordingSettings(m.Settings, IsTransientAnalysis(m.Analysis)); err != nil {
 		return nil, err
 	}
+	if err := m.Settings.validateForGraph(m.Graph, false); err != nil {
+		return nil, err
+	}
+
 	if !verificationInputModeValid(m.Analysis, m.InputMode) || !finite(m.Duration) || m.Duration < 0 || m.Duration > 10 {
 		return nil, fmt.Errorf("invalid recorded mode or duration")
 	}
@@ -161,7 +168,7 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		if r == nil || m.LED != nil || m.Mixed != nil || r.Stale || r.Engine != NPNEngineID || r.Model != TransistorModel() || r.TransistorID != c.Transistor.ID || r.SupplyID != c.Source.ID || r.InputID != c.Input.ID {
 			return fmt.Errorf("invalid recorded NPN final result")
 		}
-	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis:
+	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis:
 		r := m.Mixed
 		if r == nil || m.LED != nil || m.NPN != nil || r.Stale || r.Engine != networkEngine(m.Analysis) || !recordingNear(r.Time, m.Duration) || len(r.Nodes) > MaxMixedNodes+1 {
 			return fmt.Errorf("invalid recorded mixed final result")
@@ -339,7 +346,7 @@ func (s *Service) retainOperationLocked(operation *verificationOperation) {
 func recordedObjectIDs(graph Graph, kind string, ids []string) error {
 	expected := map[string]bool{}
 	for _, part := range graph.Components {
-		if part.Kind == kind || kind == "source" && (part.Kind == "dc-source" || part.Kind == "pulse-source") {
+		if part.Kind == kind || kind == "source" && IsVoltageSource(part.Kind) {
 			expected[part.ID] = true
 		}
 	}
@@ -367,5 +374,5 @@ func validateRecordingSettings(settings TransientSettings, transient bool) error
 		}
 		return nil
 	}
-	return settings.validateNumerics()
+	return settings.validateRanges()
 }

@@ -3,7 +3,6 @@ package workbench
 import (
 	"fmt"
 	"math"
-	"time"
 )
 
 const MixedAnalysis = "RC/NPN transient"
@@ -96,7 +95,7 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 		}
 	}
 	for _, p := range c.MixedGraph.Components {
-		if p.Kind == "dc-source" || p.Kind == "pulse-source" {
+		if IsVoltageSource(p.Kind) {
 			n.sources = append(n.sources, p)
 		}
 		if p.Kind == "capacitor" {
@@ -113,18 +112,14 @@ func voltage(x []float64, i int) float64 {
 	return x[i]
 }
 func (n *mixedNetwork) sourceVoltage(p Component, t *Transient, at float64) float64 {
-	if p.ID == n.c.Source.ID {
-		if t.Mode == "low" {
-			return 0
-		}
-		if t.Mode == "high" {
-			return p.Value
-		}
+	return sourceVoltageAt(p, t, at, p.ID == n.c.Source.ID)
+}
+func (n *mixedNetwork) sourceStimulus(p Component, t *Transient, at, dt float64) float64 {
+	// Legacy squares retain left-hand phase integration at discontinuities.
+	if dt > 0 && p.Kind == "pulse-source" {
+		at -= dt / 2
 	}
-	if p.Kind == "pulse-source" && !pulseHigh(t.Settings, at) {
-		return 0
-	}
-	return p.Value
+	return n.sourceVoltage(p, t, at)
 }
 func diodeCurrent(v float64) (i, g float64) {
 	if v <= 0 {
@@ -231,7 +226,7 @@ func (n *mixedNetwork) equations(x, old []float64, dt float64, t *Transient, at 
 		}
 	}
 	for k, p := range n.sources {
-		branch(n.pin(p, "positive"), n.pin(p, "negative"), len(n.nodes)+k, n.sourceVoltage(p, t, at))
+		branch(n.pin(p, "positive"), n.pin(p, "negative"), len(n.nodes)+k, n.sourceStimulus(p, t, at, dt))
 	}
 	for k, p := range n.caps {
 		u, v := n.pin(p, "1"), n.pin(p, "2")
@@ -317,11 +312,7 @@ func (n *mixedNetwork) newton(guess, old []float64, dt float64, t *Transient, at
 	x := make([]float64, size)
 	copy(x, guess)
 	for iter := 0; iter < 100; iter++ {
-		stimAt := at
-		if dt > 0 {
-			stimAt = at - dt/2
-		}
-		a, f := n.equations(x, old, dt, t, stimAt)
+		a, f := n.equations(x, old, dt, t, at)
 		good := true
 		for i, v := range f {
 			tol := 1e-10
@@ -360,10 +351,6 @@ func (n *mixedNetwork) newton(guess, old []float64, dt float64, t *Transient, at
 	return nil, fmt.Errorf("mixed Newton solver did not converge; reduce sample step or check initial conditions")
 }
 func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at float64) *mixedState {
-	stimAt := at
-	if dt > 0 {
-		stimAt = at - dt/2
-	}
 	r := &MixedResult{Engine: networkEngine(n.c.Analysis), RunID: t.RunID, ElectricalRevision: t.ElectricalRevision, Time: at, Nodes: map[string]float64{n.c.Ground: 0}, Transistors: []MixedTransistor{}, Capacitors: []CapacitorResult{}, LEDs: []BranchResult{}, Resistors: []BranchResult{}, Sources: []BranchResult{}}
 	for i, id := range n.nodes {
 		r.Nodes[id] = x[i]
@@ -427,7 +414,7 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 		}
 	}
 	for k, p := range n.sources {
-		v := n.sourceVoltage(p, t, stimAt)
+		v := n.sourceStimulus(p, t, at, dt)
 		i := -x[len(n.nodes)+k]
 		br := BranchResult{p.ID, i, v, v * i}
 		r.Sources = append(r.Sources, br)
@@ -447,7 +434,7 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 		}
 		r.Capacitors = append(r.Capacitors, CapacitorResult{p.ID, v, i, .5 * p.Value * v * v})
 	}
-	_, f := n.equations(x, old, dt, t, stimAt)
+	_, f := n.equations(x, old, dt, t, at)
 	for i := range n.nodes {
 		r.KCLResidual = math.Max(r.KCLResidual, math.Abs(f[i]))
 	}
@@ -458,18 +445,27 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 // Adaptive backward Euler: compare one full step with two half steps. Accept
 // the latter, retaining stable integration through rapid transistor transitions.
 func (state *mixedState) advance(t *Transient, end float64) (*mixedState, error) {
+	return state.advanceBudget(t, end, newIntegrationBudget())
+}
+func (state *mixedState) advanceBudget(t *Transient, end float64, budget *integrationBudget) (*mixedState, error) {
 	cur := state
 	at := state.result.Time
 	h := end - at
-	started := time.Now()
-	attempts := 0
+	if len(state.net.caps) == 0 {
+		if err := budget.take(); err != nil {
+			return nil, err
+		}
+		return state.net.solve(state.x, state.capV, end-at, t, end)
+	}
 	var failure string
 	for at < end {
-		attempts++
-		if attempts > 512 || time.Since(started) > 100*time.Millisecond {
-			return nil, fmt.Errorf("mixed integration exceeded its work budget; reduce sample step")
+		if err := budget.take(); err != nil {
+			return nil, fmt.Errorf("%w at %.9g s, step %.3g: %s", err, at, h, failure)
 		}
 		h = math.Min(h, end-at)
+		if state.net.c.Analysis == WaveformAnalysis {
+			h = math.Min(h, cur.net.maximumWaveformStep(t, at))
+		}
 		if h < 1e-10 {
 			return nil, fmt.Errorf("mixed timestep too small at %.9g, h %.3g: %s", at, h, failure)
 		}
@@ -487,6 +483,9 @@ func (state *mixedState) advance(t *Transient, end float64) (*mixedState, error)
 				absolute, relative := 2e-6, 2e-4
 				if cur.net.c.Analysis != MixedAnalysis {
 					absolute, relative = 5e-8, 5e-6
+					if cur.net.c.Analysis == WaveformAnalysis {
+						absolute, relative = 5e-7, 2e-5
+					}
 				}
 				tol := absolute + relative*math.Max(math.Abs(v), math.Abs(cur.capV[i]))
 				errRatio = math.Max(errRatio, math.Abs(v-full.capV[i])/tol)

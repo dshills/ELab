@@ -1,0 +1,460 @@
+{
+  "metadata": {
+    "waveform_model": {
+      "id": "elab.source-waveforms.v1",
+      "sine_model_id": "elab.ideal-sine-source.v1",
+      "pulse_model_id": "elab.finite-pulse-source.v1",
+      "minimum_transition_s": 0.000001,
+      "maximum_frequency_hz": 1000,
+      "maximum_magnitude_v": 12,
+      "limitations": "Ideal grounded voltage sources with per-component periodic sine or linear pulse ramps. No output resistance, current limit, battery discharge, noise or physical generator identity. Finite pulse high/low phase lengths include rise/fall respectively. Output sampling can alias; internal integration resolves waveform features within its work budget."
+    },
+    "format": "elab.verification",
+    "version": 1,
+    "operation_id": "verify-2",
+    "created_at": "2026-10-14T00:43:13.427684Z",
+    "input_revision": 20,
+    "electrical_revision": 8,
+    "document_generation": 3,
+    "graph": {
+      "components": [
+        {
+          "id": "R1",
+          "kind": "resistor",
+          "name": "Resistor",
+          "terminals": [
+            "1",
+            "2"
+          ],
+          "position": {
+            "x": 0,
+            "y": -110
+          },
+          "value": 10000,
+          "unit": "Ω",
+          "model": "ideal-resistor.v1",
+          "rotation": 0
+        },
+        {
+          "id": "C1",
+          "kind": "capacitor",
+          "name": "Capacitor",
+          "terminals": [
+            "1",
+            "2"
+          ],
+          "position": {
+            "x": 200,
+            "y": 0
+          },
+          "value": 0.000001,
+          "unit": "F",
+          "model": "ideal-capacitor.v1",
+          "rotation": 0
+        },
+        {
+          "id": "GND",
+          "kind": "ground",
+          "name": "Ground",
+          "terminals": [
+            "reference"
+          ],
+          "position": {
+            "x": 0,
+            "y": 110
+          },
+          "value": 0,
+          "model": "ground.v1",
+          "rotation": 0
+        },
+        {
+          "pulse": {
+            "high_v": 5,
+            "low_v": 0,
+            "high_s": 0.007,
+            "low_s": 0.013,
+            "rise_s": 0.002,
+            "fall_s": 0.003
+          },
+          "id": "Ramp",
+          "kind": "finite-pulse-source",
+          "name": "Finite pulse source",
+          "terminals": [
+            "positive",
+            "negative"
+          ],
+          "position": {
+            "x": -200,
+            "y": 0
+          },
+          "value": 5,
+          "unit": "V",
+          "model": "elab.finite-pulse-source.v1",
+          "rotation": 0
+        }
+      ],
+      "wires": [
+        {
+          "id": "W2",
+          "from": "R1.2",
+          "to": "C1.1",
+          "connected": true
+        },
+        {
+          "id": "W3",
+          "from": "C1.2",
+          "to": "GND.reference",
+          "connected": true
+        },
+        {
+          "id": "W7",
+          "from": "Ramp.positive",
+          "to": "R1.1",
+          "connected": true
+        },
+        {
+          "id": "W8",
+          "from": "Ramp.negative",
+          "to": "GND.reference",
+          "connected": true
+        }
+      ]
+    },
+    "settings": {
+      "step_s": 0.0005,
+      "high_s": 0.05,
+      "low_s": 0.05,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 0.02
+    },
+    "input_mode": "auto",
+    "analysis": "Waveform network transient",
+    "engine": "elab.network-waveforms-mna-be.v1",
+    "led_model": {
+      "id": "elab.generic-red-led.v1",
+      "is_a": 1e-20,
+      "n": 2,
+      "rs_ohm": 1,
+      "temperature_c": 27,
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+    },
+    "probes": [
+      {
+        "id": "v:Ramp.positive",
+        "label": "Ramp.positive / ground",
+        "unit": "V",
+        "positive": "Ramp.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:C1",
+        "label": "C1 voltage",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      },
+      {
+        "id": "i:R1",
+        "label": "R1 current",
+        "unit": "A",
+        "positive": "R1.1",
+        "reference": "R1.2"
+      }
+    ],
+    "duration_s": 0.012,
+    "sample_count": 28,
+    "statistics": [
+      {
+        "probe_id": "v:Ramp.positive",
+        "count": 28,
+        "min": 0,
+        "max": 5,
+        "sample_mean": 3.0357142857142856,
+        "sample_rms": 3.708433653003672
+      },
+      {
+        "probe_id": "v:C1",
+        "count": 28,
+        "min": 0,
+        "max": 2.453316600822107,
+        "sample_mean": 1.5538213332301585,
+        "sample_rms": 1.7628547598388016
+      },
+      {
+        "probe_id": "i:R1",
+        "count": 28,
+        "min": -0.00022801027070057435,
+        "max": 0.0004531231554186128,
+        "sample_mean": 0.00014818929524841278,
+        "sample_rms": 0.0002835301913666357
+      }
+    ],
+    "mixed": {
+      "engine": "elab.network-waveforms-mna-be.v1",
+      "run_id": 2,
+      "electrical_revision": 8,
+      "time_s": 0.012,
+      "nodes_v": {
+        "net:C1.1": 1.8673724566074283,
+        "net:C1.2": 0,
+        "net:R1.1": 0
+      },
+      "transistors": [],
+      "capacitors": [
+        {
+          "id": "C1",
+          "voltage_v": 1.8673724566074283,
+          "current_a": -0.00018673724566074394,
+          "energy_j": 0.0000017435399458480308
+        }
+      ],
+      "leds": [],
+      "resistors": [
+        {
+          "id": "R1",
+          "current_a": -0.00018673724566074283,
+          "voltage_v": -1.8673724566074283,
+          "power_w": 0.00034870798916960616
+        }
+      ],
+      "sources": [
+        {
+          "id": "Ramp",
+          "current_a": -0.00018673724566074286,
+          "voltage_v": 0,
+          "power_w": -0
+        }
+      ],
+      "kcl_residual_a": 1.1332032952934086e-18,
+      "power_residual_w": 1.063026348804147e-18,
+      "numerical_damping_w": 5.448562330775167e-7,
+      "stale": false
+    }
+  },
+  "rows": [
+    {
+      "time_s": 0,
+      "values": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "time_s": 0.0005,
+      "values": [
+        1.25,
+        0.030793667245697858,
+        0.00012192063327543021
+      ]
+    },
+    {
+      "time_s": 0.001,
+      "values": [
+        2.5,
+        0.12110111421003733,
+        0.00023788988857899627
+      ]
+    },
+    {
+      "time_s": 0.0015,
+      "values": [
+        3.75,
+        0.2680145623183402,
+        0.000348198543768166
+      ]
+    },
+    {
+      "time_s": 0.002,
+      "values": [
+        5,
+        0.4687684458138716,
+        0.0004531231554186128
+      ]
+    },
+    {
+      "time_s": 0.002,
+      "values": [
+        5,
+        0.4687684458138716,
+        0.0004531231554186128
+      ]
+    },
+    {
+      "time_s": 0.0025,
+      "values": [
+        5,
+        0.6896593147609199,
+        0.00043103406852390796
+      ]
+    },
+    {
+      "time_s": 0.003,
+      "values": [
+        5,
+        0.8997171130451305,
+        0.00041002828869548695
+      ]
+    },
+    {
+      "time_s": 0.0035,
+      "values": [
+        5,
+        1.0995380688516412,
+        0.0003900461931148359
+      ]
+    },
+    {
+      "time_s": 0.004,
+      "values": [
+        5,
+        1.2896210588932877,
+        0.0003710378941106712
+      ]
+    },
+    {
+      "time_s": 0.0045000000000000005,
+      "values": [
+        5,
+        1.4704406478965522,
+        0.0003529559352103448
+      ]
+    },
+    {
+      "time_s": 0.005,
+      "values": [
+        5,
+        1.6424482734086807,
+        0.000335755172659132
+      ]
+    },
+    {
+      "time_s": 0.0055,
+      "values": [
+        5,
+        1.8059489965049296,
+        0.00031940510034950706
+      ]
+    },
+    {
+      "time_s": 0.006,
+      "values": [
+        5,
+        1.9614878209828253,
+        0.00030385121790171745
+      ]
+    },
+    {
+      "time_s": 0.006500000000000001,
+      "values": [
+        5,
+        2.10945246273994,
+        0.000289054753726006
+      ]
+    },
+    {
+      "time_s": 0.007,
+      "values": [
+        5,
+        2.250211757300653,
+        0.0002749788242699347
+      ]
+    },
+    {
+      "time_s": 0.007,
+      "values": [
+        5,
+        2.250211757300653,
+        0.0002749788242699347
+      ]
+    },
+    {
+      "time_s": 0.0075,
+      "values": [
+        4.166666666666668,
+        2.3632950505171824,
+        0.00018033716161494856
+      ]
+    },
+    {
+      "time_s": 0.008,
+      "values": [
+        3.333333333333333,
+        2.4302471403193366,
+        0.00009030861930139964
+      ]
+    },
+    {
+      "time_s": 0.0085,
+      "values": [
+        2.499999999999999,
+        2.453316600822107,
+        0.000004668339917789233
+      ]
+    },
+    {
+      "time_s": 0.009000000000000001,
+      "values": [
+        1.6666666666666647,
+        2.4346424038501397,
+        -0.0000767975737183475
+      ]
+    },
+    {
+      "time_s": 0.0095,
+      "values": [
+        0.8333333333333339,
+        2.376259261284233,
+        -0.00015429259279508992
+      ]
+    },
+    {
+      "time_s": 0.01,
+      "values": [
+        0,
+        2.2801027070057436,
+        -0.00022801027070057435
+      ]
+    },
+    {
+      "time_s": 0.01,
+      "values": [
+        0,
+        2.2801027070057436,
+        -0.00022801027070057435
+      ]
+    },
+    {
+      "time_s": 0.0105,
+      "values": [
+        0,
+        2.1690698855672386,
+        -0.00021690698855672387
+      ]
+    },
+    {
+      "time_s": 0.011,
+      "values": [
+        0,
+        2.0634439641770164,
+        -0.00020634439641770163
+      ]
+    },
+    {
+      "time_s": 0.0115,
+      "values": [
+        0,
+        1.962961646201221,
+        -0.0001962961646201221
+      ]
+    },
+    {
+      "time_s": 0.012,
+      "values": [
+        0,
+        1.8673724566074283,
+        -0.00018673724566074283
+      ]
+    }
+  ]
+}

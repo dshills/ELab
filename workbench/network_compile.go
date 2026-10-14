@@ -8,7 +8,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	sources, caps, qs, rs, leds, grounds, switches, diodes, pots := []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}
 	for _, p := range g.Components {
 		switch p.Kind {
-		case "dc-source", "pulse-source":
+		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			sources = append(sources, p)
 		case "capacitor":
 			caps = append(caps, p)
@@ -38,12 +38,19 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			out.Analysis = NetworkTransientAnalysis
 		} else {
 			for _, source := range sources {
-				if source.Kind == "pulse-source" {
+				if source.Kind == "pulse-source" || IsWaveformSource(source.Kind) {
 					out.Analysis = NetworkTransientAnalysis
 				}
 			}
 		}
 	}
+	for _, source := range sources {
+		if IsWaveformSource(source.Kind) {
+			out.Analysis = WaveformAnalysis
+			break
+		}
+	}
+
 	if len(pots) > 4 || len(diodes) > 8 || len(switches) > 8 || len(sources) > 3 || len(caps) > 4 || len(qs) > 2 || len(rs) > 12 || len(leds) > 4 || len(out.Nets) > MaxMixedNodes+1 {
 		return fail("unsupported", "mixed-limit", "Network simulation supports at most 12 non-ground nets, 3 sources, 4 capacitors, 2 NPNs, 12 resistors, 8 switches, 8 diodes, 4 potentiometers and 4 LEDs.", "")
 	}
@@ -163,6 +170,13 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			break
 		}
 	}
+	for _, v := range sources {
+		if IsWaveformSource(v.Kind) {
+			out.Source = v
+			break
+		}
+	}
+
 	if len(caps) > 0 {
 		out.Capacitor = caps[0]
 	}
