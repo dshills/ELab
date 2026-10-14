@@ -136,7 +136,13 @@ func schematic(state workbench.Snapshot, view canvas.Viewport) (*canvas.Mesh, er
 			stroke(wireColor, 2.5, canvas.Point{X: -55}, canvas.Point{X: -25})
 			stroke(wireColor, 2.5, canvas.Point{X: 25}, canvas.Point{X: 55})
 			end := canvas.Point{X: 25, Y: -22}
-			if part.SwitchClosed != nil && *part.SwitchClosed {
+			closed := part.SwitchClosed != nil && *part.SwitchClosed
+			for _, input := range state.SwitchStates {
+				if input.ID == part.ID && input.AppliedClosed != nil {
+					closed = *input.AppliedClosed
+				}
+			}
+			if closed {
 				end.Y = 0
 			}
 			stroke(ink, 3, canvas.Point{X: -25}, end)

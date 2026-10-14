@@ -219,7 +219,24 @@ func (s *screen) view() ui.Node {
 				text = "Open switch"
 				stateText = "Closed"
 			}
-			inspector = append(inspector, section("switch-title", "SPST switch"), quiet("switch-state", stateText+" · 1 Ω on / 1 GΩ off"), s.action("switch-actuate", text, "switch.set", workbench.SwitchParams{ID: part.ID, Closed: !closed}), quiet("switch-limits", "Finite leakage, no bounce/arcing or physical rating. Live actuation preserves capacitor voltage and time."))
+			for _, input := range state.SwitchStates {
+				if input.ID == part.ID {
+					if input.AppliedClosed == nil {
+						stateText += " · startup; no fresh applied reading"
+					} else {
+						applied := "open"
+						if *input.AppliedClosed {
+							applied = "closed"
+						}
+						stateText += " · applied " + applied
+						if input.Pending {
+							stateText += " · pending next step"
+						}
+					}
+				}
+			}
+
+			inspector = append(inspector, section("switch-title", "SPST switch"), quiet("switch-state", stateText+" · 1 Ω on / 1 GΩ off"), s.action("switch-actuate", text, "switch.set", workbench.SwitchParams{ID: part.ID, Closed: !closed}), quiet("switch-limits", "Finite leakage, no bounce/arcing or physical rating. Transient actuation applies at the next accepted step; paused changes remain pending."))
 			if state.Mixed != nil && !state.Mixed.Stale {
 				for _, branch := range state.Mixed.Switches {
 					if branch.ID == part.ID {

@@ -91,33 +91,46 @@ func TestSwitchRCActuationPreservesCapacitorTimeRunAndHistory(t *testing.T) {
 	call(t, s, "simulation.step", StepParams{Duration: .02}, "charge")
 	before := s.Snapshot()
 	voltage := before.Mixed.Capacitors[0].Voltage
-	want := 5 * (1 - math.Exp(-.02/((10000+1)*1e-6)))
-	// The bounded network solver is adaptive backward Euler, not the exact RC kernel.
+	want := 5 * (1 - math.Exp(-.02/(10001*1e-6)))
 	if math.Abs(voltage-want) > .003 {
-		t.Fatalf("switched RC reference got %g want %g", voltage, want)
+		t.Fatalf("switched RC got %g want %g", voltage, want)
 	}
 	call(t, s, "switch.set", SwitchParams{ID: "S1", Closed: false}, "open")
-	opened := s.Snapshot()
-	if opened.RunID != before.RunID || opened.Transient.Sample.Time != before.Transient.Sample.Time || math.Abs(opened.Mixed.Capacitors[0].Voltage-voltage) > 1e-10 || opened.Transient.Stale || opened.ElectricalRevision != before.ElectricalRevision+1 || opened.Transient.Events[len(opened.Transient.Events)-1].Mode != "switch:S1:open" {
-		t.Fatal("live actuation restarted/lost charge/time/event")
+	queued := s.Snapshot()
+	if queued.RunID != before.RunID || queued.Transient.Sample.Time != before.Transient.Sample.Time || !reflect.DeepEqual(queued.Mixed, before.Mixed) || queued.ElectricalRevision != before.ElectricalRevision || queued.ActuationRevision != before.ActuationRevision+1 || !queued.SwitchStates[0].Pending || queued.SwitchStates[0].AppliedClosed == nil || !*queued.SwitchStates[0].AppliedClosed {
+		t.Fatal("paused switch changed physics or failed to expose pending state")
 	}
-	call(t, s, "simulation.step", StepParams{Duration: .02}, "off-step")
+	call(t, s, "simulation.step", StepParams{Duration: .001}, "accept-open")
+	opened := s.Snapshot()
+	appliedVoltage := opened.Mixed.Capacitors[0].Voltage
+	event := opened.Transient.Events[len(opened.Transient.Events)-1]
+	if opened.SwitchStates[0].Pending || *opened.SwitchStates[0].AppliedClosed || event.Mode != "switch:S1:open" || event.Time != .021 || opened.RunID != before.RunID || appliedVoltage <= voltage {
+		t.Fatal("switch did not apply after one old-state accepted step")
+	}
+	samples := opened.Transient.Samples
+	right := samples[len(samples)-1]
+	left := samples[len(samples)-2]
+	if left.Time != right.Time || math.Abs(left.CapacitorVoltage-right.CapacitorVoltage) > 1e-10 {
+		t.Fatal("event lost left/right capacitor continuity")
+	}
+	call(t, s, "simulation.step", StepParams{Duration: .019}, "off-hold")
 	retained := s.Snapshot()
-	hold := 5 + (voltage-5)*math.Exp(-.02/((1e9+10000)*1e-6))
+	hold := 5 + (appliedVoltage-5)*math.Exp(-.019/((1e9+10000)*1e-6))
 	if math.Abs(retained.Mixed.Capacitors[0].Voltage-hold) > 2e-8 {
-		t.Fatal("finite off-state capacitor hold was not modeled")
+		t.Fatal("off leakage hold failed")
 	}
 	call(t, s, "switch.set", SwitchParams{ID: "S1", Closed: true}, "close")
-	if state := s.Snapshot(); state.Transient.Sample.Time != .04 || state.RunID != before.RunID || math.Abs(state.Mixed.Capacitors[0].Voltage-retained.Mixed.Capacitors[0].Voltage) > 1e-10 {
-		t.Fatal("closing switch reset physical state")
+	if !s.Snapshot().SwitchStates[0].Pending {
+		t.Fatal("closing switch was not pending")
 	}
 	call(t, s, "simulation.step", StepParams{Duration: .01}, "charge-again")
-	if s.Snapshot().Mixed.Capacitors[0].Voltage <= voltage {
-		t.Fatal("closed switch did not resume charge")
+	if s.Snapshot().Mixed.Capacitors[0].Voltage <= appliedVoltage {
+		t.Fatal("accepted close did not charge")
 	}
-	_, record := verify(t, s, VerifyParams{Duration: func() *float64 { v := .01; return &v }(), ProbeIDs: []string{"i:S1", "v:C1"}}, "verify")
-	if record.Metadata.Analysis != NetworkTransientAnalysis || record.Metadata.SwitchModel == nil {
-		t.Fatal("network transient record missing")
+	duration := .01
+	_, record := verify(t, s, VerifyParams{Duration: &duration, ProbeIDs: []string{"i:S1", "v:C1"}}, "verify")
+	if record.Metadata.Analysis != NetworkTransientAnalysis || record.Metadata.SwitchModel == nil || record.Metadata.ActuationRevision != s.Snapshot().ActuationRevision {
+		t.Fatal("record lost actuation provenance")
 	}
 }
 func TestSwitchValidationNoOpAndSnapshotCopy(t *testing.T) {

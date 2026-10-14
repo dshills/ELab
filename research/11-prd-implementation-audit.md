@@ -11,10 +11,10 @@ Audited October 13, 2026 against [PRD draft 0.3](07-product-requirements.md), so
 | UI-01 | Independent root/native modules, Vellum baseline, shared dispatcher; build and packaged GPU smoke | Partial: current workstation builds; clean SDK/dependency bootstrap and supported distribution remain unqualified |
 | EDIT-01 | Native `smokeConstruct`, drawing regressions, headless/desktop drawing fixtures | Implemented visible blank LED construction; novice discoverability still requires Gate D |
 | EDIT-02 | Named terminals, explicit junction tests, crossings/near misses, geometry-only moves, pointer-generation guards | Implemented within one sheet and existing bounds |
-| EDIT-03 | Resistance/capacitance parser, invalid-value preservation, named batches/history; potentiometer slider | Partial: no common text time-value parser; slider gesture coalescing/one-undo-per-complete-drag needs native driver event evidence and conformance |
+| EDIT-03 | Resistance/capacitance parser, invalid-value preservation, named batches/history; potentiometer slider | Partial: no common text time-value parser; native slider control events prove one commit/undo per drag; mounted-driver invalidation/focus conformance remains open |
 | EDIT-04 | Object selector, named terminal controls, pointer canvas, arrows/pan/zoom/fit/escape | Partial: keyboard net selection and complete focus/navigation scenarios need implementation/evidence |
 | SIM-01 | Automatic restart after valid electrical edits; asynchronous specialized LED/NPN solves, live kernels | Partial: bounded general MNA/step work still occurs under the service lock; responsiveness to difficult solves is unmeasured |
-| SIM-02 | Fresh/stale flags, electrical/run identities, pause/edit/restart regressions, input-event traces | Partial: direct switch/wiper actuation currently applies immediately, including while paused; PRD switch pending/next-step contract is not met. Cross-revision live-input trace attribution needs review |
+| SIM-02 | Fresh/stale flags, electrical/run identities, pause/edit/restart regressions, input-event traces | Partial: switches now queue until the next accepted step, with paused pending/coalescing/atomicity evidence and separate actuation provenance. Wiper events remain immediate; complete mounted gesture invalidation and state-table qualification remain open |
 | SIM-03 | Text status, paused/stale readouts, simulated time/playback controls, explicit failures | Implemented behavior in tested families; interpretation with people remains pending |
 | SIM-04 | Independent electrical fixtures, exact RC/DC kernels, adaptive kernels with explicit work limits; sampling warnings/fit | Partial: release reference grid and timestep-refinement evidence must be consolidated across all curated families, including fast transitions |
 | SIM-05 | Independent bounded Verify, captured models/settings, operations, kept results, native controls | Implemented within declared duration/step/storage envelope |
@@ -33,7 +33,7 @@ Audited October 13, 2026 against [PRD draft 0.3](07-product-requirements.md), so
 | AGENT-02 | Typed schemas/local registry, structured snapshots, units, part defaults/models/aliases/limits | Partial: command examples, semantic bounds/preconditions/error-code discovery need a complete machine-readable coverage audit |
 | AGENT-03 | Headless and packaged-socket workflows, in-process/native parity tests | Partial: consolidate all three empty-session workflows through one release conformance harness, including fault/close/reopen |
 | AGENT-04 | Verify operation IDs/progress/cancel, captured input versions, bounded sample paging | Partial: synchronous file/step/general solve paths are not all observable asynchronous jobs; state events are snapshot polling rather than a documented subscription |
-| AGENT-05 | Revision preconditions, retry cache, atomic batches, shared named history | Partial: add actor-aware undo guards so a grouped undo cannot silently reverse intervening work by another actor |
+| AGENT-05 | Revision preconditions, retry cache, atomic batches, shared named history | Implemented: exact history-tip guards, original actor identity and explicit cross-actor acknowledgment prevent silent reversal of intervening work |
 | AGENT-06 | Shared validation/model limits, actor attribution, common undo/recovery and private authorized transport | Implemented in tested paths; inherits unresolved behavior/coverage requirements above |
 
 ## State-contract audit
@@ -42,12 +42,12 @@ Audited October 13, 2026 against [PRD draft 0.3](07-product-requirements.md), so
 |---|---|---|
 | Move/rotate/pan/zoom preserve physics | Geometry stripped by electrical equality; regressions | Supported |
 | Running topology/model/value/source edits restart | New run from configured startup, old result stale during invalid/async states | Supported; visible acknowledgment/completion latency unmeasured |
-| Complete value-slider drag previews/coalesces/final-solves as one undo | Potentiometer callback reaches shared command; native gesture boundary not yet qualified | Open |
-| Live switch event at next accepted step | Current staged algebraic solve at existing time, capacitor continuity preserved | Contract mismatch; implement pending actuation semantics |
+| Complete value-slider drag previews/coalesces/final-solves as one undo | Native control drag previews and one final command/undo pass; mounted driver redraw/focus still unqualified | Partial |
+| Live switch event at next accepted step | Final desired switch group applies after the next accepted output sample; both event sides retain charge | Supported in core/native callback paths |
 | Paused parameter edits stay stale until resume/restart | Core/native regressions | Supported |
-| Paused switch stays pending until resume/next step | Current direct actuation updates physics at unchanged time | Contract mismatch |
+| Paused switch stays pending until resume/next step | Desired/applied/pending state exposed; no physics/event update until Step/Resume accepts a sample | Supported |
 | Resume unchanged / Restart from startup | Existing clock and explicit fresh-start tests | Supported |
-| Undo/redo follow electrical/presentation rules | Shared history; paused edits stay stale | Supported semantics; actor-aware grouped undo remains open |
+| Undo/redo follow electrical/presentation rules | Shared history; paused edits stay stale | Supported semantics with actor identity, exact-tip guards and explicit cross-actor acknowledgment |
 | Remove plotted source | Kept records retained; hardening now exposes unavailable requests and shared removal | Supported hardening behavior; trace-source highlighting still open |
 | Reopen starts fresh and restores kept records/pause | Project/recovery fixtures | Supported same-workstation behavior; clean installation open |
 

@@ -6,15 +6,16 @@ type networkTransition struct {
 }
 
 func (s *Service) applyNetworkEditLocked(graph Graph, event string) error {
-	// A switch/wiper actuation changes branch parameters on an unchanged topology. Stage the
+	// Wiper actuation changes branch parameters on an unchanged topology. Stage the
 	// algebraic right-hand solve before committing graph, events or physical state.
 	if s.transient != nil && !s.transient.Stale && s.mixedState != nil && IsNetworkAnalysis(s.mixedState.net.c.Analysis) {
-		compiled, _, diagnostic := graph.Compile()
+		physical := graphWithAppliedSwitches(graph, s.mixedState.net.c.MixedGraph)
+		compiled, _, diagnostic := physical.Compile()
 		if diagnostic != nil {
 			return &actionError{"unavailable", diagnostic.Message}
 		}
 		trace := cloneTransient(s.transient)
-		trace.ElectricalRevision = s.electrical + 1
+		trace.ElectricalRevision = s.electrical
 		net := newMixedNetwork(compiled)
 		state, err := net.solve(s.mixedState.x, s.mixedState.capV, 0, trace, trace.Sample.Time)
 		if err != nil {

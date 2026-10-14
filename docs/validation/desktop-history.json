@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "transport": "packaged-native-private-socket",
+  "actor": "agent.socket",
+  "checks": [
+    "named atomic batch exposes actor/tip",
+    "obsolete tip refuses without changing graph/command revision",
+    "guarded undo restores prior value",
+    "redo preserves original actor/tip identity"
+  ],
+  "limitations": [
+    "cross-actor refusal/acknowledgment is exercised by core/native tests; this transport uses one actor"
+  ]
+}

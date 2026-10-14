@@ -171,6 +171,17 @@ func (s *screen) registerCommands() {
 					return nil
 				}
 				var p any = struct{}{}
+				if entry.id == "edit.undo" || entry.id == "edit.redo" {
+					state := s.service.Snapshot()
+					tip := state.UndoEntry
+					if entry.id == "edit.redo" {
+						tip = state.RedoEntry
+					}
+					if tip != nil {
+						revision := tip.CommandRevision
+						p = workbench.HistoryParams{ExpectedEntryRevision: &revision, AllowOtherActor: tip.Actor != "user"}
+					}
+				}
 				if entry.id == "view.fit" {
 					p = workbench.FitParams{Width: s.drawing.View.Width, Height: s.drawing.View.Height}
 				}
@@ -195,5 +206,28 @@ func (s *screen) button(id, text string) ui.Node {
 	if id == "edit.redo" {
 		help = state.RedoName
 	}
-	return buttonStyle(ui.Node{ID: id, Kind: ui.Button, Text: text, Disabled: s.commands.Enabled(id) != nil, Accessibility: ui.Accessibility{Name: text, Help: help}, Activate: func() { s.commands.Invoke(context.Background(), id) }}, false)
+	tip := state.UndoEntry
+	if id == "edit.redo" {
+		tip = state.RedoEntry
+	}
+	if (id == "edit.undo" || id == "edit.redo") && tip != nil {
+		help = tip.Name + " · by " + tip.Actor
+		if tip.Actor != "user" && tip.Actor != "" {
+			text += " " + tip.Actor
+		}
+	}
+
+	activate := func() { s.commands.Invoke(context.Background(), id) }
+	if (id == "edit.undo" || id == "edit.redo") && tip != nil {
+		revision := tip.CommandRevision
+		target := workbench.HistoryParams{ExpectedEntryRevision: &revision, AllowOtherActor: tip.Actor != "user"}
+		activate = func() {
+			if err := s.commands.Enabled(id); err != nil {
+				s.errorMessage = err.Error()
+				return
+			}
+			s.invoke(id, target)
+		}
+	}
+	return buttonStyle(ui.Node{ID: id, Kind: ui.Button, Text: text, Disabled: s.commands.Enabled(id) != nil, Accessibility: ui.Accessibility{Name: text, Help: help}, Activate: activate}, false)
 }

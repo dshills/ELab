@@ -109,9 +109,19 @@ Implemented [audit repairs](../docs/prd-hardening.md): multiword hobbyist aliase
 
 Packaged slice: **0.19.0 / 33**, with [final validation](../docs/validation/hardening-validation.json), [headless workflow](../docs/validation/headless-hardening.json) and [packaged desktop workflow](../docs/validation/desktop-hardening.json). Root/native regressions, lint, vet and packaged GPU/UI smoke pass. One existing flasher race test hit its wall-time work guard during concurrent work; the serial rerun passes with the guard/model unchanged. The repeated desktop fixture ends in a clean paused RC project at a durable repository-local path. Earlier bundles, sessions and user files are preserved.
 
+## Pending live actuation and actor-aware history
+
+Packaged **0.20.0 / 34** implements switch desired/applied/pending states and final-state coalescing. Paused toggles preserve readings/events; the next accepted sample stages the entire switch group after advancing the old circuit. Restart uses saved desired startup. Wiper events preserve pending switches. Live switch/wiper edits now retain electrical/run identity and use a separate actuation revision for Verify provenance. The pending event shares the sample work budget; failure publishes no partial charge/time/history.
+
+Shared undo/redo expose original actor/name/tip revision, guard a captured exact tip and require explicit acknowledgment for another actor. Native buttons label the actor and guard the displayed tip. Stale button/core/public command regressions pass. Native slider mouse events now prove preview-only drag movement, one release command and one complete undo; mounted Vellum driver invalidation/focus is still unqualified. Test review corrected missing scene-local mouse coordinates and compared normalized independent result clones when checking failure atomicity.
+
+[Final validation](../docs/validation/actuation-validation.json), [headless switch](../docs/validation/headless-actuation.json), [desktop switch](../docs/validation/desktop-actuation.json), [headless history](../docs/validation/headless-history.json) and [desktop history](../docs/validation/desktop-history.json) pass. Numerical outputs match exactly. Root/native lint/vet/race checks, built and packaged GPU/UI smoke, embedded records and fresh paused reopen pass. The new owned desktop ends clean at its durable switched RC project; old bundles/sessions and user files remain preserved. The launch was corrected to absolute endpoint/recovery paths after native packaging resolved relative paths inside Resources; the generated owned bundle cache was removed.
+
+The audit now covers 27 P0 IDs with 10 implemented and 17 partial. This checkpoint satisfies the history guard row; it does not establish full MVP acceptance.
+
 ## Next work queue
 
-1. Pending/next-step switch actuation, slider gesture evidence/coalescing and actor-aware history.
+1. Mounted driver gesture invalidation/focus conformance; control-level slider, switch pending and actor-history paths now pass.
 2. Physical circuit capacity and nonblocking difficult-work architecture, with measured latency fixtures.
 3. Voltage/current presentation preferences, pinned readings, trace/diagnostic highlights and concise example guidance.
 4. Complete agent conformance, keyboard/screen-reader scenarios and reproducible clean packaging evidence.

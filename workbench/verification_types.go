@@ -62,6 +62,7 @@ type VerificationRow struct {
 	Values []float64 `json:"values"`
 }
 type VerificationMetadata struct {
+	ActuationRevision  uint64              `json:"actuation_revision,omitempty"`
 	WaveformModel      *WaveformModel      `json:"waveform_model,omitempty"`
 	PotentiometerModel *PotentiometerModel `json:"potentiometer_model,omitempty"`
 	DiodeModel         *DiodeModel         `json:"diode_model,omitempty"`
@@ -124,13 +125,14 @@ type verificationRecord struct {
 	rows     []VerificationRow
 }
 type verificationOperation struct {
-	done          chan struct{}
-	keep          bool
-	inputMetadata VerificationMetadata
-	summary       OperationSummary
-	ctx           context.Context
-	cancel        context.CancelFunc
-	record        *verificationRecord
+	sourceActuationRevision uint64
+	done                    chan struct{}
+	keep                    bool
+	inputMetadata           VerificationMetadata
+	summary                 OperationSummary
+	ctx                     context.Context
+	cancel                  context.CancelFunc
+	record                  *verificationRecord
 }
 type verificationInput struct {
 	compiled Compiled

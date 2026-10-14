@@ -114,9 +114,11 @@ type StepParams struct {
 	Duration float64 `json:"duration_s"`
 }
 type historyEntry struct {
-	Name     string
-	Graph    Graph
-	Settings TransientSettings
+	Actor           string
+	CommandRevision uint64
+	Name            string
+	Graph           Graph
+	Settings        TransientSettings
 }
 
 func (s *Service) historyLocked() historyEntry {

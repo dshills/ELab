@@ -147,11 +147,11 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 	s.operationSerial++
 	id := fmt.Sprintf("verify-%d", s.operationSerial)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	operation := &verificationOperation{done: make(chan struct{}), ctx: ctx, cancel: cancel, summary: OperationSummary{ID: id, Kind: "verify", Status: "queued", InputRevision: s.revision, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration, RequestedDuration: settings.Duration, TotalSteps: steps}}
+	operation := &verificationOperation{sourceActuationRevision: s.actuationRevision, done: make(chan struct{}), ctx: ctx, cancel: cancel, summary: OperationSummary{ID: id, Kind: "verify", Status: "queued", InputRevision: s.revision, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration, RequestedDuration: settings.Duration, TotalSteps: steps}}
 	s.retainOperationLocked(operation)
 	s.selectRecordingLocked(id)
 	s.lastOperation = id
-	metadata := VerificationMetadata{Format: "elab.verification", Version: 1, OperationID: id, CreatedAt: time.Now().UTC().Format(time.RFC3339Nano), InputRevision: s.revision, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration, Graph: graph.Clone(), Settings: cfg, InputMode: settings.InputMode, Analysis: compiled.Analysis, LEDModel: Model(), Probes: probes, Duration: settings.Duration, Statistics: []ScopeStatistics{}}
+	metadata := VerificationMetadata{ActuationRevision: s.actuationRevision, Format: "elab.verification", Version: 1, OperationID: id, CreatedAt: time.Now().UTC().Format(time.RFC3339Nano), InputRevision: s.revision, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration, Graph: graph.Clone(), Settings: cfg, InputMode: settings.InputMode, Analysis: compiled.Analysis, LEDModel: Model(), Probes: probes, Duration: settings.Duration, Statistics: []ScopeStatistics{}}
 	if compiled.Transistor.ID != "" {
 		model := TransistorModel()
 		metadata.NPNModel = &model
@@ -208,7 +208,7 @@ func operationActive(status string) bool {
 func (s *Service) operationSummaryLocked(operation *verificationOperation) OperationSummary {
 	out := operation.summary
 	out.KeptInProject = operation.keep
-	out.SourceUnchanged = out.Kind == "verify" && out.ElectricalRevision == s.electrical && out.DocumentGeneration == s.documentGeneration
+	out.SourceUnchanged = out.Kind == "verify" && out.ElectricalRevision == s.electrical && out.DocumentGeneration == s.documentGeneration && operation.sourceActuationRevision == s.actuationRevision
 	if out.Error != nil {
 		failure := *out.Error
 		out.Error = &failure

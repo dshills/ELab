@@ -14,7 +14,7 @@ Responses include `version`, the request `id`, the session `revision`, and eithe
 
 Socket responses are bounded to 1 MiB; an oversized result returns `response-too-large` explicitly.
 
-Revision is a session admission version and changes on accepted mutations and solver result publication. `electrical_revision` changes only on electrical edits. `run_id` identifies calculation attempts. A selection or view change preserves the electrical revision and run. Live transient samples also change the session revision; `command_revision` changes only for admitted commands, allowing clients to distinguish edits from clock updates. Transient mutations still require the latest session revision and the same explicit conflict/retry rules. A `conflict` response is an explicit refusal; re-inspect before deciding how to proceed.
+Revision is a session admission version and changes on accepted mutations and solver result publication. `electrical_revision` changes on circuit configuration edits. Live switch/wiper input events preserve it and advance `actuation_revision`; that revision also guards Verify source association. `run_id` identifies calculation attempts. A selection or view change preserves the electrical revision and run. Live transient samples also change the session revision; `command_revision` changes only for admitted commands, allowing clients to distinguish edits from clock updates. Transient mutations still require the latest session revision and the same explicit conflict/retry rules. A `conflict` response is an explicit refusal; re-inspect before deciding how to proceed.
 
 ## Draw an LED circuit from blank
 
@@ -177,3 +177,10 @@ Project save/open now embeds kept completed recordings. `recording.keep.set {id,
 Per-source `sine-source` and `finite-pulse-source` configuration uses `source.sine.set`, `source.pulse.set` and `simulation.sampling.fit`. [Complete fields, waveform definitions, primary-source behavior and limits](waveforms.md). Projects/snapshots/records include `waveform_model`; per-component `sine`/`pulse` parameters are required for their respective kinds. The original `pulse-source` remains compatible.
 
 `parts.list` exposes aliases and model limitations. `scope.unavailable` identifies removed-source requests, and `scope.probe.remove {"id":"v:C1"}` removes one without changing the circuit or other requested probes. [Hardening semantics and evidence](prd-hardening.md).
+
+
+## Guarded history and live switch inputs
+
+`undo_entry` / `redo_entry` expose the tip's name, actor and original `command_revision`. `edit.undo` / `edit.redo` accept optional `expected_entry_revision` and `allow_other_actor`. Capture the tip revision before planning a reversal. A changed tip returns `history-conflict`; another actor's tip also refuses unless explicitly acknowledged with `allow_other_actor:true`. The ordinary session revision precondition still applies. Identity and original actor survive undo/redo. Native buttons name the actor, acknowledge that displayed actor explicitly and guard the rendered tip.
+
+`switch.set` queues desired state during a fresh transient. Inspect `switch_states` for desired/applied/pending, then Step or Resume to apply at the next accepted sample. Paused toggles leave physics/events unchanged; repeated toggles coalesce. Live inputs advance `actuation_revision` while retaining the circuit's electrical revision and run. Wiper events remain immediate algebraic events at the current time and preserve pending switch state. Saving captures desired startup, not pending electrical memory. See [switch behavior](switches.md).

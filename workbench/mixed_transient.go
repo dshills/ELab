@@ -111,9 +111,12 @@ func (s *Service) startMixedLocked(c Compiled) {
 // Stage a whole requested output sample with one shared work budget across all
 // per-source corners. A failure never publishes partial capacitor memory/time.
 func advanceMixed(state *mixedState, t *Transient, end float64) (*mixedState, *Transient, error) {
+	return advanceMixedBudget(state, t, end, newIntegrationBudget())
+}
+
+func advanceMixedBudget(state *mixedState, t *Transient, end float64, budget *integrationBudget) (*mixedState, *Transient, error) {
 	trace := cloneTransient(t)
 	cur := state
-	budget := newIntegrationBudget()
 	for cur.result.Time < end {
 		at := cur.result.Time
 		corner := cur.net.nextSourceCorner(trace, at)
@@ -194,7 +197,7 @@ func (s *Service) stepMixedLocked(duration float64) error {
 			next = end
 		}
 		var err error
-		cur, t, err = advanceMixed(cur, t, next)
+		cur, t, err = advanceLiveNetwork(cur, t, next, s.graph)
 		if err != nil {
 			return &actionError{"solve-failed", err.Error()}
 		}

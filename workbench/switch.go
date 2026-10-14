@@ -57,9 +57,14 @@ func (s *Service) setSwitchLocked(p SwitchParams) error {
 			graph.Components[i].SwitchClosed = &closed
 		}
 	}
-	mode := "open"
-	if p.Closed {
-		mode = "closed"
+
+	if s.transient != nil && !s.transient.Stale && s.mixedState != nil && IsNetworkAnalysis(s.mixedState.net.c.Analysis) {
+		// Desired startup state is saved immediately; applied state stays in the
+		// private kernel until the next successfully accepted output step.
+		s.graph = graph
+		s.liveSwitchEdit = true
+		return nil
 	}
-	return s.applyNetworkEditLocked(graph, "switch:"+p.ID+":"+mode)
+	s.graph = graph
+	return nil
 }

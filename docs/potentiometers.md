@@ -19,7 +19,7 @@ Structured `mixed.potentiometers` results include both segment resistances, each
 
 ## Live behavior and ownership
 
-Direct wiper movement during a fresh network transient stages a solve at the existing time with existing capacitor voltages. Success commits the new parameter/electrical revision and both sides of a `wiper:P1:<fraction>` event. Charge, simulated time, run identity and running clock remain continuous. A no-op preserves physics. Failed staging cannot commit the graph or a partial physical update.
+Direct wiper movement during a fresh network transient stages a solve at the existing time with existing capacitor voltages. Success commits the new parameter/actuation revision and both sides of a `wiper:P1:<fraction>` event. Electrical revision, charge, simulated time, run identity and running clock remain continuous. A no-op preserves physics. Failed staging cannot commit the graph or a partial physical update. A pending switch retains its previously applied state during a wiper event. The native slider previews movement locally and commits one shared command on release; one undo restores the complete drag. This is tested at native control-event level; mounted-driver invalidation/focus behavior remains an acceptance gate.
 
 Resistance edits, batches and undo/redo follow ordinary schematic-edit behavior. Running edits restart from configured startup. Paused edits mark the previous result stale until explicit restart/resume. A batch creates one named undo entry. Wiper and resistance values participate in dirty state; duplication retains independent wiper storage.
 

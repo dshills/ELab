@@ -32,7 +32,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.19.0 --build-version 33 --platform darwin
+  --version 0.20.0 --build-version 34 --platform darwin
 ```
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
@@ -149,7 +149,7 @@ Projects now save kept recorded results with their complete inputs/data, and reo
 
 Junctions and net labels now support explicit branched/named connectivity. Select a wire to insert a junction, or review crossing routes in the X/Y controls. Matching label names join attached nets; crossings remain separate. [Shared primitive commands and rules](docs/schematic-primitives.md).
 
-SPST switches preserve capacitor charge and simulation time during live actuation. The bounded network solver also supports resistor dividers. [Shared switch commands, model parameters and network limits](docs/switches.md).
+SPST switches queue live changes until the next accepted simulation step, with desired/applied/pending states and preserved capacitor charge. Undo/redo expose actor ownership and refuse stale targets or unacknowledged cross-actor reversals. The bounded network solver also supports resistor dividers. [Shared switch commands, model parameters and network limits](docs/switches.md).
 
 The silicon diode adds nonlinear forward conduction and signed reverse leakage to bounded networks. [Model parameters, shared workflow and evidence](docs/diodes.md).
 

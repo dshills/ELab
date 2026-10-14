@@ -4,6 +4,7 @@ import (
 	"context"
 	"math"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 
@@ -45,6 +46,17 @@ func TestNativeSwitchControlPreservesPhysicalStateLikeAgent(t *testing.T) {
 	if _, ok := findNode(user.view(), "switch-reading"); !ok {
 		t.Fatal("switch voltage/current/power readout absent")
 	}
+	stateNode, ok := findNode(user.view(), "switch-state")
+	if !ok || !strings.Contains(stateNode.Text, "pending") || !u.SwitchStates[0].Pending || !*u.SwitchStates[0].AppliedClosed || u.ElectricalRevision != before.ElectricalRevision || !reflect.DeepEqual(u.Mixed, before.Mixed) {
+		t.Fatal("native paused switch did not expose unchanged applied physics and pending state")
+	}
+	for _, service := range []*workbench.Service{user.service, agent} {
+		agentAction(t, service, "simulation.step", workbench.StepParams{Duration: .001})
+	}
+	u, a = user.service.Snapshot(), agent.Snapshot()
+	if u.SwitchStates[0].Pending || *u.SwitchStates[0].AppliedClosed || !reflect.DeepEqual(u.Mixed, a.Mixed) || u.Transient.Events[len(u.Transient.Events)-1].Mode != "switch:S1:open" {
+		t.Fatal("native/agent next-step switch application differs")
+	}
 	root := user.view()
 	if err := ui.Validate(root); err != nil {
 		t.Fatal(err)
@@ -76,5 +88,30 @@ func TestNativeSwitchFromScratchDrawsAndRunsLED(t *testing.T) {
 	mesh, err := user.mesh(*user.drawing.View)
 	if err != nil || mesh == nil {
 		t.Fatal("native switch symbol did not render")
+	}
+}
+
+func TestNativeUndoButtonRefusesAnInterveningActorTip(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	uiAction(t, s, "example.reset", nil)
+	button, ok := findNode(s.view(), "edit.undo")
+	if !ok || button.Disabled {
+		t.Fatal("undo missing")
+	}
+	agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "2k"})
+	before := s.service.Snapshot()
+	s.app.Do(button.Activate)
+	if !strings.Contains(s.errorMessage, "history tip changed") || !reflect.DeepEqual(before.Components, s.service.Snapshot().Components) {
+		t.Fatal("stale native button reversed intervening agent work")
+	}
+	s.errorMessage = ""
+	fresh, ok := findNode(s.view(), "edit.undo")
+	if !ok || !strings.Contains(fresh.Text, "agent") || !strings.Contains(fresh.Accessibility.Help, "agent") {
+		t.Fatal("history actor hidden")
+	}
+	s.app.Do(fresh.Activate)
+	if s.errorMessage != "" || s.service.Snapshot().RedoEntry.Actor != "agent" {
+		t.Fatal("explicitly labeled actor undo failed")
 	}
 }

@@ -12,6 +12,10 @@ import (
 )
 
 type Snapshot struct {
+	UndoEntry            *HistoryTip          `json:"undo_entry,omitempty"`
+	RedoEntry            *HistoryTip          `json:"redo_entry,omitempty"`
+	ActuationRevision    uint64               `json:"actuation_revision"`
+	SwitchStates         []SwitchState        `json:"switch_states,omitempty"`
 	SourceWarnings       []Diagnostic         `json:"source_warnings,omitempty"`
 	WaveformModel        *WaveformModel       `json:"waveform_model,omitempty"`
 	PotentiometerModel   *PotentiometerModel  `json:"potentiometer_model,omitempty"`
@@ -62,6 +66,8 @@ type savedResponse struct {
 	response    Response
 }
 type Service struct {
+	actuationRevision                uint64
+	liveSwitchEdit                   bool
 	pendingNetwork                   *networkTransition
 	savedRecordings                  [32]byte
 	restorePaused                    bool
@@ -151,7 +157,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	if analysis == "" {
 		analysis = "DC operating point"
 	}
-	out := Snapshot{SourceWarnings: waveformSamplingWarnings(graph, s.transientSettings), Recording: s.recordingViewLocked(), Recovery: cloneRecovery(s.recovery), VerificationSettings: cloneVerificationSettings(s.verificationSettings), Operations: []OperationSummary{}, SelectedOperation: s.selectedOperation, LastOperation: s.lastOperation, PartSearch: s.partSearch, MatchingParts: filteredParts(s.partSearch), Scope: s.scopeLocked(compiled), Mixed: cloneMixed(s.mixed), NPN: cloneNPN(s.npn), CommandRevision: s.commandRevision, Transient: cloneTransient(s.transient), TransientSettings: s.transientSettings, Document: DocumentState{SchematicDirty: contentHash(s.graph, s.transientSettings) != s.savedGraph, RecordingsDirty: s.recordingsDirtyLocked(), RecordingCount: s.recordingCountLocked(), Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: DocumentVersion, Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom}, Revision: s.revision, ElectricalRevision: s.electrical, Circuit: s.circuit, Components: graph.Components, Wires: graph.Wires, Nets: compiled.Nets, Drawing: s.drawing, Model: Model(), Selected: s.selected, View: s.view, Status: s.status, Analysis: analysis, Paused: s.paused, RunID: s.run, Diagnostics: append([]Diagnostic{}, s.diagnostics...), CanUndo: len(s.undo) > 0, CanRedo: len(s.redo) > 0, LastActor: s.actor, Closed: s.closed}
+	out := Snapshot{ActuationRevision: s.actuationRevision, SwitchStates: s.switchStatesLocked(), SourceWarnings: waveformSamplingWarnings(graph, s.transientSettings), Recording: s.recordingViewLocked(), Recovery: cloneRecovery(s.recovery), VerificationSettings: cloneVerificationSettings(s.verificationSettings), Operations: []OperationSummary{}, SelectedOperation: s.selectedOperation, LastOperation: s.lastOperation, PartSearch: s.partSearch, MatchingParts: filteredParts(s.partSearch), Scope: s.scopeLocked(compiled), Mixed: cloneMixed(s.mixed), NPN: cloneNPN(s.npn), CommandRevision: s.commandRevision, Transient: cloneTransient(s.transient), TransientSettings: s.transientSettings, Document: DocumentState{SchematicDirty: contentHash(s.graph, s.transientSettings) != s.savedGraph, RecordingsDirty: s.recordingsDirtyLocked(), RecordingCount: s.recordingCountLocked(), Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: DocumentVersion, Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom}, Revision: s.revision, ElectricalRevision: s.electrical, Circuit: s.circuit, Components: graph.Components, Wires: graph.Wires, Nets: compiled.Nets, Drawing: s.drawing, Model: Model(), Selected: s.selected, View: s.view, Status: s.status, Analysis: analysis, Paused: s.paused, RunID: s.run, Diagnostics: append([]Diagnostic{}, s.diagnostics...), CanUndo: len(s.undo) > 0, CanRedo: len(s.redo) > 0, LastActor: s.actor, Closed: s.closed}
 	for i := len(s.operationOrder) - 1; i >= 0; i-- {
 		out.Operations = append(out.Operations, s.operationSummaryLocked(s.operations[s.operationOrder[i]]))
 	}
@@ -198,9 +204,11 @@ func (s *Service) snapshotLocked() Snapshot {
 	}
 	if len(s.undo) > 0 {
 		out.UndoName = s.undo[len(s.undo)-1].Name
+		out.UndoEntry = historyTip(s.undo[len(s.undo)-1])
 	}
 	if len(s.redo) > 0 {
 		out.RedoName = s.redo[len(s.redo)-1].Name
+		out.RedoEntry = historyTip(s.redo[len(s.redo)-1])
 	}
 	if out.Transient != nil {
 		out.Transient.Sample.frame = nil
@@ -465,7 +473,18 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 	if *r.ExpectedRevision != s.revision {
 		return fail("conflict", fmt.Sprintf("expected revision %d; current revision is %d", *r.ExpectedRevision, s.revision))
 	}
+	if r.Command == "edit.undo" || r.Command == "edit.redo" {
+		if err := s.checkHistoryTargetLocked(r.Command, r.Params, actor); err != nil {
+			var action *actionError
+			if errors.As(err, &action) {
+				return fail(action.code, action.message)
+			}
+			return fail("invalid-params", err.Error())
+		}
+	}
+
 	s.pendingNetwork = nil
+	s.liveSwitchEdit = false
 	before := s.historyLocked()
 	s.nextHistoryName = ""
 	if err := s.applyLocked(r.Command, r.Params); err != nil {
@@ -484,6 +503,8 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 			s.retainInterruptedDefaultProbesLocked(before.Graph)
 		}
 		if r.Command != "edit.undo" && r.Command != "edit.redo" {
+			before.Actor = actor
+			before.CommandRevision = s.commandRevision + 1
 			before.Name = historyName(r.Command)
 			if s.nextHistoryName != "" {
 				before.Name = s.nextHistoryName
@@ -496,13 +517,16 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 		}
 		s.normalizeDrawingLocked()
 		if !ElectricalEqual(before.Graph, s.graph) || changedSettings || forceRestart {
-			s.electrical++
-			if s.pendingNetwork != nil {
+			if s.liveSwitchEdit {
+				s.actuationRevision++
+			} else if s.pendingNetwork != nil {
+				s.actuationRevision++
 				s.mixedState = s.pendingNetwork.state
 				s.mixed = s.pendingNetwork.state.result
 				s.transient = s.pendingNetwork.trace
 				s.pendingNetwork = nil
 			} else {
+				s.electrical++
 				s.startLocked()
 			}
 		}
@@ -540,6 +564,15 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	if state.UndoEntry != nil {
+		tip := *state.UndoEntry
+		state.UndoEntry = &tip
+	}
+	if state.RedoEntry != nil {
+		tip := *state.RedoEntry
+		state.RedoEntry = &tip
+	}
+	state.SwitchStates = cloneSwitchStates(state.SwitchStates)
 	state.SourceWarnings = append([]Diagnostic{}, state.SourceWarnings...)
 	if state.WaveformModel != nil {
 		m := *state.WaveformModel

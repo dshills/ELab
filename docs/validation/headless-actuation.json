@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "capabilities": 84,
+  "library_kinds": 14,
+  "on_current_a": 0.0029139362546784613,
+  "off_leakage_a": 3.6231127418560884e-09,
+  "capacitor_voltage_v": 4.321783048070299,
+  "analytical_reference_v": 4.3231882485341515,
+  "checks": [
+    "atomic switched LED construction",
+    "DC on/off finite leakage",
+    "power conservation",
+    "RC analytical reference",
+    "paused actuation queues without changing physics or electrical revision",
+    "next accepted step applies the final desired switch state",
+    "actuation revision captures Verify provenance",
+    "finite off-state hold",
+    "independent Verify with switch probes/model",
+    "embedded recording/save/reopen",
+    "fresh paused startup",
+    "SVG switch symbol"
+  ]
+}

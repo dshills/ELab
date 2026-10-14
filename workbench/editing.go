@@ -602,7 +602,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		s.view = View{center, zoom}
 		return nil
 	}
-	if command != "project.clear" && command != "example.reset" && command != "example.rc" && command != "example.npn" && command != "example.npn-pulse" && command != "example.flasher" && command != "app.close" {
+	if command != "project.clear" && command != "example.reset" && command != "example.rc" && command != "example.npn" && command != "example.npn-pulse" && command != "example.flasher" && command != "app.close" && command != "edit.undo" && command != "edit.redo" {
 		if err := params(raw, &struct{}{}); err != nil {
 			return err
 		}
@@ -671,7 +671,10 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return &actionError{"unavailable", "nothing to undo"}
 		}
 		h := s.historyLocked()
-		h.Name = s.undo[len(s.undo)-1].Name
+		tip := s.undo[len(s.undo)-1]
+		h.Name = tip.Name
+		h.Actor = tip.Actor
+		h.CommandRevision = tip.CommandRevision
 		s.redo = append(s.redo, h)
 		s.restoreLocked(s.undo[len(s.undo)-1])
 		s.undo = s.undo[:len(s.undo)-1]
@@ -680,7 +683,10 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return &actionError{"unavailable", "nothing to redo"}
 		}
 		h := s.historyLocked()
-		h.Name = s.redo[len(s.redo)-1].Name
+		tip := s.redo[len(s.redo)-1]
+		h.Name = tip.Name
+		h.Actor = tip.Actor
+		h.CommandRevision = tip.CommandRevision
 		s.undo = append(s.undo, h)
 		s.restoreLocked(s.redo[len(s.redo)-1])
 		s.redo = s.redo[:len(s.redo)-1]

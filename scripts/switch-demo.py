@@ -61,10 +61,20 @@ def main():
         assert opened['run_id'] == before['run_id']
         assert opened['transient']['sample']['time_s'] == before['transient']['sample']['time_s']
         assert abs(opened['mixed']['capacitors'][0]['voltage_v']-voltage) < 1e-10
-        assert opened['transient']['events'][-1]['mode'] == 'switch:S2:open'
-        client.ask('simulation.step', {'duration_s': .02}, True)
+        assert opened['electrical_revision'] == before['electrical_revision']
+        assert opened['actuation_revision'] == before['actuation_revision']+1
+        assert opened['switch_states'][0]['pending']
+        assert opened['transient']['events'] == before['transient']['events']
+        client.ask('simulation.step', {'duration_s': .001}, True)
+        applied = client.ask('project.inspect')
+        assert not applied['switch_states'][0]['pending']
+        assert not applied['switch_states'][0]['applied_closed']
+        assert applied['transient']['events'][-1]['mode'] == 'switch:S2:open'
+        assert abs(applied['transient']['events'][-1]['time_s']-.021) < 1e-12
+        applied_voltage = applied['mixed']['capacitors'][0]['voltage_v']
+        client.ask('simulation.step', {'duration_s': .019}, True)
         held = client.ask('project.inspect')['mixed']['capacitors'][0]['voltage_v']
-        expected_hold = 5+(voltage-5)*math.exp(-.02/((1e9+10000)*1e-6))
+        expected_hold = 5+(applied_voltage-5)*math.exp(-.019/((1e9+10000)*1e-6))
         assert abs(held-expected_hold) < 2e-8
         client.ask('switch.set', {'id': 'S2', 'closed': True}, True)
         accepted = client.ask('simulation.verify', {'duration_s': .01, 'probe_ids': ['i:S2', 'v:C1']}, True)
@@ -95,7 +105,9 @@ def main():
                           on_current_a=on['mixed']['leds'][0]['current_a'], off_leakage_a=leakage,
                           capacitor_voltage_v=voltage, analytical_reference_v=reference,
                           checks=['atomic switched LED construction', 'DC on/off finite leakage', 'power conservation',
-                                  'RC analytical reference', 'actuation preserves time/run/charge', 'finite off-state hold',
+                                  'RC analytical reference', 'paused actuation queues without changing physics or electrical revision',
+                                  'next accepted step applies the final desired switch state',
+                                  'actuation revision captures Verify provenance', 'finite off-state hold',
                                   'independent Verify with switch probes/model', 'embedded recording/save/reopen',
                                   'fresh paused startup', 'SVG switch symbol'])
             if args.output:
