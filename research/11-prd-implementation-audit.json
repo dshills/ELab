@@ -3,8 +3,8 @@
   "scope": "Requirement coverage validation only; does not establish product acceptance",
   "requirements": 27,
   "counts": {
-    "implemented": 16,
-    "partial": 11,
+    "implemented": 17,
+    "partial": 10,
     "pending": 0
   },
   "rows": [
@@ -58,9 +58,9 @@
     },
     {
       "id": "SIM-04",
-      "evidence": "Independent electrical fixtures, exact RC/DC kernels, adaptive kernels with explicit work limits; sampling warnings/fit",
-      "status": "partial",
-      "assessment": "Partial: release reference grid and timestep-refinement evidence must be consolidated across all curated families, including fast transitions"
+      "evidence": "Frozen independent 70-digit pinned-model references; public 294-check suite through four adapters; ideal/finite RC and NPN fast-edge/default-half sampling, periodic extrema, flasher three-level refinement, strict limits and repaired default accuracy",
+      "status": "implemented",
+      "assessment": "Implemented for the curated release reference suite on this workstation; broader PVT/waveform/device/SPICE qualification and other release gates remain separate"
     },
     {
       "id": "SIM-05",

@@ -17,9 +17,10 @@ import (
 )
 
 type adapterResult struct {
-	Name       string               `json:"name"`
-	Equivalent bool                 `json:"equivalent_to_in_process"`
-	Workflows  []conformance.Result `json:"workflows"`
+	Name       string                        `json:"name"`
+	Equivalent bool                          `json:"equivalent_to_in_process"`
+	Workflows  []conformance.Result          `json:"workflows"`
+	Electrical *conformance.ElectricalResult `json:"electrical,omitempty"`
 }
 type report struct {
 	Passed      bool            `json:"passed"`
@@ -39,6 +40,7 @@ func run() error {
 	binary := flag.String("agent-binary", "build/elab-agent", "built external reference client/server binary")
 	native := flag.String("native-binary", "", "optional native binary; creates/closes six owned temporary native sessions")
 	directory := flag.String("artifacts", "", "new empty output directory (required; never replaces existing data)")
+	electrical := flag.Bool("electrical-suite", false, "also run frozen independent electrical references and mixed flasher timestep refinement")
 	flag.Parse()
 	if *directory == "" {
 		return fmt.Errorf("--artifacts must name a new directory")
@@ -68,8 +70,9 @@ func run() error {
 			factory conformance.Factory
 		}{"native-socket", processFactory(path, "native")})
 	}
-	result := report{GoVersion: runtime.Version(), Platform: runtime.GOOS + "/" + runtime.GOARCH, Limitations: []string{"engineering workflow parity on this workstation; not complete native action coverage or participant acceptance", "numerical parity uses shared pinned kernels; independent model/reference and refinement qualification remain separate", "native socket path verifies semantic operations in real app processes; keyboard/focus/screen-reader and visible latency are separate", "all sessions are newly created and owned; pre-existing applications/endpoints are untouched"}}
+	result := report{GoVersion: runtime.Version(), Platform: runtime.GOOS + "/" + runtime.GOARCH, Limitations: []string{"engineering workflow parity on this workstation; not complete native action coverage or participant acceptance", "workflow parity uses shared pinned kernels; optional electrical suite adds independent frozen educational-model references and same-kernel flasher refinement, not real-device/SPICE qualification", "native socket path verifies semantic operations in real app processes; keyboard/focus/screen-reader and visible latency are separate", "all sessions are newly created and owned; pre-existing applications/endpoints are untouched"}}
 	var reference []conformance.Result
+	var electricalReference *conformance.ElectricalResult
 	for _, mode := range modes {
 		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 		workflows, runErr := conformance.Run(ctx, mode.factory, filepath.Join(dir, mode.name))
@@ -82,7 +85,24 @@ func run() error {
 		} else if err = conformance.Compare(reference, workflows); err != nil {
 			return writeFailure(dir, result, fmt.Errorf("%s: %w", mode.name, err))
 		}
-		result.Adapters = append(result.Adapters, adapterResult{mode.name, true, workflows})
+		adapter := adapterResult{Name: mode.name, Equivalent: true, Workflows: workflows}
+		if *electrical {
+			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
+			qualified, qualificationErr := conformance.RunElectrical(ctx, mode.factory, filepath.Join(dir, mode.name, "electrical"))
+			cancel()
+			adapter.Electrical = &qualified
+			if qualificationErr == nil {
+				if electricalReference == nil {
+					electricalReference = &qualified
+				}
+				qualificationErr = conformance.CompareElectrical(*electricalReference, qualified)
+			}
+			if qualificationErr != nil {
+				result.Adapters = append(result.Adapters, adapter)
+				return writeFailure(dir, result, fmt.Errorf("%s electrical suite: %w", mode.name, qualificationErr))
+			}
+		}
+		result.Adapters = append(result.Adapters, adapter)
 		fmt.Fprintf(os.Stderr, "%s: three workflows passed\n", mode.name)
 	}
 	result.Passed = true

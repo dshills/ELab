@@ -85,7 +85,7 @@ func advanceMixedBudget(state *mixedState, t *Transient, end float64, budget *in
 			return nil, nil, err
 		}
 		cur = next
-		if corner <= end {
+		if sourceCornerReached(corner, end) {
 			legacy := false
 			for _, p := range cur.net.sources {
 				if nextSourceCorner(p, trace, at, p.ID == cur.net.c.Source.ID) == corner && p.Kind == "pulse-source" {

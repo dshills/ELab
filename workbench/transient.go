@@ -164,13 +164,7 @@ func rcInput(c Compiled, t *Transient, at float64) float64 {
 	if t.Mode == "charge" || c.Source.Kind == "dc-source" {
 		return c.Source.Value
 	}
-	period := t.Settings.HighSeconds + t.Settings.LowSeconds
-	phase := math.Mod(at, period)
-	epsilon := period * 1e-10
-	if phase >= period-epsilon {
-		phase = 0
-	}
-	if phase < t.Settings.HighSeconds-epsilon {
+	if pulseHigh(t.Settings, at) {
 		return c.Source.Value
 	}
 	return 0
@@ -204,14 +198,9 @@ func advanceRCSample(c Compiled, t *Transient, end float64) {
 		input := rcInput(c, t, at)
 		edgeHit := false
 		if t.Mode == "auto" && c.Source.Kind == "pulse-source" {
-			period := t.Settings.HighSeconds + t.Settings.LowSeconds
-			cycle := math.Floor((at + period*1e-10) / period)
-			edge := cycle*period + t.Settings.HighSeconds
-			if edge <= at+period*1e-10 {
-				edge = (cycle + 1) * period
-			}
-			if edge > at && edge <= stop {
-				stop = edge
+			edge := nextPulseEdge(t.Settings, at)
+			if edge > at && sourceCornerReached(edge, stop) {
+				stop = math.Min(edge, stop)
 				edgeHit = true
 			}
 		}

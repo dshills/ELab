@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "version": "0.42.0",
+  "build": "57",
+  "binary_sha256": "8dc04664a4061aa2852a98481fa343c8cbb557314d9909ab58403029b14eb1b0",
+  "packaged_binary_matches": true,
+  "reference_sha256": "c4a131bd9de758d295add56ecec5c9bec6d23078c8bc5877034757c500d750b7",
+  "hardware": {
+    "cpu": "Apple M4 Pro",
+    "logical_cpus": 14,
+    "memory_bytes": 68719476736,
+    "os": "macOS 26.6.2",
+    "go": "go1.27.2"
+  },
+  "checks": [
+    "frozen independent 70-digit LED/NPN equations and ideal/finite-rise RC convolution",
+    "exact model/stimulus matching and 294 checks through all four adapters",
+    "LED public branch-current KCL and independent KVL",
+    "NPN off/active/on reference values and sampled ideal-pulse timing at default/half intervals",
+    "RC predefined samples, both corner sides, capacitor continuity and steady periodic extrema",
+    "flasher 2 s at 1 ms / 0.5 ms / 0.25 ms; 2001 / 4001 / 8001 aligned public samples; period 0.488 s",
+    "source-corner rounding repaired across RC/NPN/mixed and genuinely earlier samples retain their input",
+    "waveform relative tolerance tightened 4x with error-based next-step controller; original absolute bound and 512-attempt/100 ms quota preserved",
+    "Verify leaves paused live physics unchanged; owned session cleanup uses public app.close",
+    "complete root/native formatting, Staticcheck, race tests and vet; actual exact packaged GPU smoke"
+  ],
+  "evidence": [
+    "docs/validation/electrical-qualification-conformance.json",
+    "internal/conformance/testdata/electrical-reference.json",
+    "scripts/freeze-electrical-reference.py",
+    "docs/numerical-qualification.md"
+  ],
+  "limits_of_evidence": [
+    "educational-model agreement is not physical-device or independent SPICE qualification",
+    "flasher refinement uses the same adaptive kernel, not independent flasher equations",
+    "single backend Verify observations are not p95 visible acknowledgment/edit-to-result or a locked performance study",
+    "broader PVT/waveform/circuit qualification, clean distribution and participant/accessibility gates remain open",
+    "private unsigned development bundle; previous bundle/research/user files preserved"
+  ]
+}

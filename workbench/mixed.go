@@ -493,7 +493,7 @@ func (state *mixedState) advanceBudget(t *Transient, end float64, budget *integr
 				if cur.net.c.Analysis != MixedAnalysis {
 					absolute, relative = 5e-8, 5e-6
 					if cur.net.c.Analysis == WaveformAnalysis {
-						absolute, relative = 5e-7, 2e-5
+						absolute, relative = 5e-7, 5e-6
 					}
 				}
 				tol := absolute + relative*math.Max(math.Abs(v), math.Abs(cur.capV[i]))
@@ -508,7 +508,17 @@ func (state *mixedState) advanceBudget(t *Transient, end float64, budget *integr
 				at = end
 			}
 			cur.result.Time = at
-			if errRatio < .2 {
+			if cur.net.c.Analysis == WaveformAnalysis {
+				// Full-vs-two-half backward-Euler error scales with h².
+				// Target three quarters of the existing acceptance bound instead of holding
+				// a halved step until a binary doubling becomes admissible.
+				// Every proposed next step is still independently checked.
+				if errRatio == 0 {
+					h *= 2
+				} else {
+					h *= math.Min(2, math.Sqrt(.75/errRatio))
+				}
+			} else if errRatio < .2 {
 				h *= 2
 			}
 		} else {

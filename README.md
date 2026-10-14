@@ -32,7 +32,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.41.0 --build-version 56 --platform darwin
+  --version 0.42.0 --build-version 57 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).
@@ -204,3 +204,5 @@ Time fields now accept values such as `10 ms` and `250 us` through the same nati
 The header offers Light, Dark and System [themes saved on this device](docs/appearance.md), and File/Examples/Theme open native macOS menus. Agents use `appearance.theme.set` for the same preference. [Coalesced observation](docs/events.md) lets a separate `events.poll` connection wait for state/job changes without blocking commands. [UI audit screenshots](research/ui-audit/README.md) record the visible repairs and remaining limits.
 
 Use **Hide scope** in the scope toolbar to give the schematic more room. **Show scope** restores the live or recorded plot with its measurements intact. Agents use the same [scope visibility command](docs/scope-visibility.md).
+
+For frozen independent LED/RC/NPN references and flasher output-step refinement, run the [electrical qualification suite](docs/numerical-qualification.md) with `elab-conformance --electrical-suite`.

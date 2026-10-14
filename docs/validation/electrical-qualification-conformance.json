@@ -1,0 +1,2844 @@
+{
+  "passed": true,
+  "source_report_sha256": "b6ad0b2f7daf5b7052d76e0073b698febf5996d60672851f178f11d6fd88fd36",
+  "reference_sha256": "c4a131bd9de758d295add56ecec5c9bec6d23078c8bc5877034757c500d750b7",
+  "reference_method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+  "checks": [
+    {
+      "name": "LED current R=1000",
+      "actual": 0.0029167965774405296,
+      "reference": 0.002916796577440529,
+      "absolute_error": 4.336808689942018e-19,
+      "tolerance": 2.9167965774405293e-05,
+      "passed": true
+    },
+    {
+      "name": "LED voltage R=1000",
+      "actual": 2.083203422559471,
+      "reference": 2.083203422559471,
+      "absolute_error": 0,
+      "tolerance": 0.020832034225594712,
+      "passed": true
+    },
+    {
+      "name": "LED independent KVL R=1000",
+      "actual": -8.881784197001252e-16,
+      "reference": 0,
+      "absolute_error": 8.881784197001252e-16,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "LED supply KCL R=1000",
+      "actual": 8.673617379884035e-19,
+      "reference": 0,
+      "absolute_error": 8.673617379884035e-19,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "LED junction KCL R=1000",
+      "actual": -8.673617379884035e-19,
+      "reference": 0,
+      "absolute_error": 8.673617379884035e-19,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "LED current R=2000",
+      "actual": 0.001476723549138745,
+      "reference": 0.001476723549138745,
+      "absolute_error": 0,
+      "tolerance": 1.476723549138745e-05,
+      "passed": true
+    },
+    {
+      "name": "LED voltage R=2000",
+      "actual": 2.04655290172251,
+      "reference": 2.04655290172251,
+      "absolute_error": 0,
+      "tolerance": 0.020465529017225103,
+      "passed": true
+    },
+    {
+      "name": "LED independent KVL R=2000",
+      "actual": 0,
+      "reference": 0,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "LED supply KCL R=2000",
+      "actual": 0,
+      "reference": 0,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "LED junction KCL R=2000",
+      "actual": 0,
+      "reference": 0,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "NPN VCE drive=0",
+      "actual": 4.99999999998,
+      "reference": 4.99999999998,
+      "absolute_error": 0,
+      "tolerance": 0.0499999999998,
+      "passed": true
+    },
+    {
+      "name": "NPN VBE drive=0",
+      "actual": 9.999999999613377e-11,
+      "reference": 9.999999999613376e-11,
+      "absolute_error": 1.2924697071141057e-26,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN IB drive=0",
+      "actual": -9.999999999613378e-15,
+      "reference": -9.999999999613376e-15,
+      "absolute_error": 1.5777218104420236e-30,
+      "tolerance": 1e-09,
+      "passed": true
+    },
+    {
+      "name": "NPN IC drive=0",
+      "actual": 2.000000165480742e-14,
+      "reference": 2.0000000038662395e-14,
+      "absolute_error": 1.6161450257911353e-21,
+      "tolerance": 1e-09,
+      "passed": true
+    },
+    {
+      "name": "NPN KCL drive=0",
+      "actual": 1.6161450257911353e-21,
+      "reference": 0,
+      "absolute_error": 1.6161450257911353e-21,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "NPN independent load KVL drive=0",
+      "actual": -6.058451752097371e-28,
+      "reference": 0,
+      "absolute_error": 6.058451752097371e-28,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "NPN VCE drive=0.8",
+      "actual": 3.632192481993794,
+      "reference": 3.6321924819937923,
+      "absolute_error": 1.7763568394002505e-15,
+      "tolerance": 0.03632192481993792,
+      "passed": true
+    },
+    {
+      "name": "NPN VBE drive=0.8",
+      "actual": 0.6632192483013792,
+      "reference": 0.6632192483013792,
+      "absolute_error": 0,
+      "tolerance": 0.0066321924830137925,
+      "passed": true
+    },
+    {
+      "name": "NPN IB drive=0.8",
+      "actual": 1.367807516986208e-05,
+      "reference": 1.3678075169862078e-05,
+      "absolute_error": 1.6940658945086007e-21,
+      "tolerance": 1.367807516986208e-07,
+      "passed": true
+    },
+    {
+      "name": "NPN IC drive=0.8",
+      "actual": 0.0013678075180062058,
+      "reference": 0.0013678075180062078,
+      "absolute_error": 1.951563910473908e-18,
+      "tolerance": 1.3678075180062078e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN KCL drive=0.8",
+      "actual": 4.336808689942018e-19,
+      "reference": 0,
+      "absolute_error": 4.336808689942018e-19,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "NPN independent load KVL drive=0.8",
+      "actual": 1.0581813203458523e-16,
+      "reference": 0,
+      "absolute_error": 1.0581813203458523e-16,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "NPN VCE drive=5",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN VBE drive=5",
+      "actual": 0.700026348939734,
+      "reference": 0.7000263489397339,
+      "absolute_error": 1.1102230246251565e-16,
+      "tolerance": 0.007000263489397339,
+      "passed": true
+    },
+    {
+      "name": "NPN IB drive=5",
+      "actual": 0.00042999736510602657,
+      "reference": 0.0004299973651060266,
+      "absolute_error": 5.421010862427522e-20,
+      "tolerance": 4.299973651060266e-06,
+      "passed": true
+    },
+    {
+      "name": "NPN IC drive=5",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN KCL drive=5",
+      "actual": 6.071532165918825e-18,
+      "reference": 0,
+      "absolute_error": 6.071532165918825e-18,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "NPN independent load KVL drive=5",
+      "actual": 3.7470027081099033e-16,
+      "reference": 0,
+      "absolute_error": 3.7470027081099033e-16,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0 input=5 voltage",
+      "actual": 0,
+      "reference": 0,
+      "absolute_error": 0,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0 input=5 current",
+      "actual": 0.0005,
+      "reference": 0.0005,
+      "absolute_error": 0,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.001 input=5 voltage",
+      "actual": 0.47581290982020213,
+      "reference": 0.47581290982020213,
+      "absolute_error": 0,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.001 input=5 current",
+      "actual": 0.0004524187090179798,
+      "reference": 0.0004524187090179798,
+      "absolute_error": 0,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.005 input=5 voltage",
+      "actual": 1.9673467014368329,
+      "reference": 1.9673467014368329,
+      "absolute_error": 0,
+      "tolerance": 0.001967346701436833,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.005 input=5 current",
+      "actual": 0.0003032653298563167,
+      "reference": 0.0003032653298563167,
+      "absolute_error": 0,
+      "tolerance": 1.967346701436833e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.01 input=5 voltage",
+      "actual": 3.1606027941427883,
+      "reference": 3.1606027941427883,
+      "absolute_error": 0,
+      "tolerance": 0.003160602794142788,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.01 input=5 current",
+      "actual": 0.00018393972058572118,
+      "reference": 0.00018393972058572118,
+      "absolute_error": 0,
+      "tolerance": 3.1606027941427883e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.025 input=5 voltage",
+      "actual": 4.589575006880506,
+      "reference": 4.589575006880506,
+      "absolute_error": 0,
+      "tolerance": 0.004589575006880506,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.025 input=5 current",
+      "actual": 4.104249931194941e-05,
+      "reference": 4.104249931194941e-05,
+      "absolute_error": 0,
+      "tolerance": 4.589575006880506e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.049 input=5 voltage",
+      "actual": 4.96276708464538,
+      "reference": 4.962767084645378,
+      "absolute_error": 1.7763568394002505e-15,
+      "tolerance": 0.004962767084645378,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.049 input=5 current",
+      "actual": 3.7232915354620034e-06,
+      "reference": 3.723291535462181e-06,
+      "absolute_error": 1.7745340244977592e-19,
+      "tolerance": 4.962767084645379e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.05 input=5 voltage",
+      "actual": 4.966310265004574,
+      "reference": 4.966310265004573,
+      "absolute_error": 8.881784197001252e-16,
+      "tolerance": 0.004966310265004573,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.05 input=5 current",
+      "actual": 3.3689734995426156e-06,
+      "reference": 3.3689734995427046e-06,
+      "absolute_error": 8.893845946170154e-20,
+      "tolerance": 4.966310265004573e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.05 input=0 voltage",
+      "actual": 4.966310265004574,
+      "reference": 4.966310265004573,
+      "absolute_error": 8.881784197001252e-16,
+      "tolerance": 0.004966310265004573,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.05 input=0 current",
+      "actual": -0.0004966310265004574,
+      "reference": -0.0004966310265004573,
+      "absolute_error": 1.0842021724855044e-19,
+      "tolerance": 4.966310265004573e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.051 input=0 voltage",
+      "actual": 4.493703357352221,
+      "reference": 4.49370335735222,
+      "absolute_error": 8.881784197001252e-16,
+      "tolerance": 0.00449370335735222,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.051 input=0 current",
+      "actual": -0.00044937033573522206,
+      "reference": -0.000449370335735222,
+      "absolute_error": 5.421010862427522e-20,
+      "tolerance": 4.4937033573522196e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.075 input=0 voltage",
+      "actual": 0.40765957126875507,
+      "reference": 0.4076595712687548,
+      "absolute_error": 2.7755575615628914e-16,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.075 input=0 current",
+      "actual": -4.0765957126875505e-05,
+      "reference": -4.076595712687548e-05,
+      "absolute_error": 2.710505431213761e-20,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.1 input=0 voltage",
+      "actual": 0.0334627353466149,
+      "reference": 0.03346273534661491,
+      "absolute_error": 1.3877787807814457e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.1 input=0 current",
+      "actual": -3.3462735346614895e-06,
+      "reference": -3.346273534661491e-06,
+      "absolute_error": 1.6940658945086007e-21,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.1 input=5 voltage",
+      "actual": 0.0334627353466149,
+      "reference": 0.03346273534661491,
+      "absolute_error": 1.3877787807814457e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.1 input=5 current",
+      "actual": 0.0004966537264653385,
+      "reference": 0.0004966537264653385,
+      "absolute_error": 0,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.15 input=5 voltage",
+      "actual": 4.966535735141783,
+      "reference": 4.9665357351417825,
+      "absolute_error": 8.881784197001252e-16,
+      "tolerance": 0.004966535735141783,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.15 input=5 current",
+      "actual": 3.346426485821663e-06,
+      "reference": 3.3464264858217517e-06,
+      "absolute_error": 8.851494298807439e-20,
+      "tolerance": 4.966535735141783e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.15 input=0 voltage",
+      "actual": 4.966535735141783,
+      "reference": 4.9665357351417825,
+      "absolute_error": 8.881784197001252e-16,
+      "tolerance": 0.004966535735141783,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.15 input=0 current",
+      "actual": -0.0004966535735141783,
+      "reference": -0.0004966535735141782,
+      "absolute_error": 1.0842021724855044e-19,
+      "tolerance": 4.966535735141783e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.2 input=0 voltage",
+      "actual": 0.03346425455244925,
+      "reference": 0.03346425455244931,
+      "absolute_error": 5.551115123125783e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.2 input=0 current",
+      "actual": -3.346425455244925e-06,
+      "reference": -3.3464254552449305e-06,
+      "absolute_error": 5.505714157152952e-21,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.2 input=5 voltage",
+      "actual": 0.03346425455244925,
+      "reference": 0.03346425455244931,
+      "absolute_error": 5.551115123125783e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.2 input=5 current",
+      "actual": 0.0004966535745447551,
+      "reference": 0.000496653574544755,
+      "absolute_error": 1.0842021724855044e-19,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.3 input=0 voltage",
+      "actual": 0.03346425462142117,
+      "reference": 0.03346425462142115,
+      "absolute_error": 2.0816681711721685e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.3 input=0 current",
+      "actual": -3.346425462142117e-06,
+      "reference": -3.346425462142115e-06,
+      "absolute_error": 2.117582368135751e-21,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.3 input=5 voltage",
+      "actual": 0.03346425462142117,
+      "reference": 0.03346425462142115,
+      "absolute_error": 2.0816681711721685e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.3 input=5 current",
+      "actual": 0.0004966535745378578,
+      "reference": 0.0004966535745378578,
+      "absolute_error": 0,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.35 input=5 voltage",
+      "actual": 4.966535745378576,
+      "reference": 4.966535745378576,
+      "absolute_error": 0,
+      "tolerance": 0.004966535745378576,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.35 input=5 current",
+      "actual": 3.3464254621423884e-06,
+      "reference": 3.3464254621423884e-06,
+      "absolute_error": 0,
+      "tolerance": 4.966535745378575e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.35 input=0 voltage",
+      "actual": 4.966535745378576,
+      "reference": 4.966535745378576,
+      "absolute_error": 0,
+      "tolerance": 0.004966535745378576,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.35 input=0 current",
+      "actual": -0.0004966535745378576,
+      "reference": -0.0004966535745378576,
+      "absolute_error": 0,
+      "tolerance": 4.966535745378575e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.4 input=0 voltage",
+      "actual": 0.033464254621424334,
+      "reference": 0.03346425462142428,
+      "absolute_error": 5.551115123125783e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.4 input=0 current",
+      "actual": -3.3464254621424333e-06,
+      "reference": -3.346425462142428e-06,
+      "absolute_error": 5.505714157152952e-21,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.4 input=5 voltage",
+      "actual": 0.033464254621424334,
+      "reference": 0.03346425462142428,
+      "absolute_error": 5.551115123125783e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.001 t=0.4 input=5 current",
+      "actual": 0.0004966535745378575,
+      "reference": 0.0004966535745378576,
+      "absolute_error": 1.0842021724855044e-19,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 4.966310265004574,
+      "reference": 4.966310265004574,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 4.966310265004574,
+      "reference": 4.966310265004574,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 0.0334627353466149,
+      "reference": 0.0334627353466149,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 0.0334627353466149,
+      "reference": 0.0334627353466149,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 4.966535735141783,
+      "reference": 4.966535735141783,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 4.966535735141783,
+      "reference": 4.966535735141783,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 0.03346425455244925,
+      "reference": 0.03346425455244925,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 0.03346425455244925,
+      "reference": 0.03346425455244925,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 4.966535745378112,
+      "reference": 4.966535745378112,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 4.966535745378112,
+      "reference": 4.966535745378112,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 0.03346425462142117,
+      "reference": 0.03346425462142117,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 0.03346425462142117,
+      "reference": 0.03346425462142117,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 4.966535745378576,
+      "reference": 4.966535745378576,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 4.966535745378576,
+      "reference": 4.966535745378576,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 0.033464254621424334,
+      "reference": 0.033464254621424334,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 0.033464254621424334,
+      "reference": 0.033464254621424334,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC settled periodic minimum",
+      "actual": 0.03346425462142117,
+      "reference": 0.03346425462142428,
+      "absolute_error": 3.1086244689504383e-15,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "RC settled periodic maximum",
+      "actual": 4.966535745378576,
+      "reference": 4.966535745378576,
+      "absolute_error": 0,
+      "tolerance": 0.004966535745378576,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0 input=5 voltage",
+      "actual": 0,
+      "reference": 0,
+      "absolute_error": 0,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0 input=5 current",
+      "actual": 0.0005,
+      "reference": 0.0005,
+      "absolute_error": 0,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.001 input=5 voltage",
+      "actual": 0.47581290982020213,
+      "reference": 0.47581290982020213,
+      "absolute_error": 0,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.001 input=5 current",
+      "actual": 0.0004524187090179798,
+      "reference": 0.0004524187090179798,
+      "absolute_error": 0,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.005 input=5 voltage",
+      "actual": 1.9673467014368329,
+      "reference": 1.9673467014368329,
+      "absolute_error": 0,
+      "tolerance": 0.001967346701436833,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.005 input=5 current",
+      "actual": 0.0003032653298563167,
+      "reference": 0.0003032653298563167,
+      "absolute_error": 0,
+      "tolerance": 1.967346701436833e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.01 input=5 voltage",
+      "actual": 3.1606027941427883,
+      "reference": 3.1606027941427883,
+      "absolute_error": 0,
+      "tolerance": 0.003160602794142788,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.01 input=5 current",
+      "actual": 0.00018393972058572118,
+      "reference": 0.00018393972058572118,
+      "absolute_error": 0,
+      "tolerance": 3.1606027941427883e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.025 input=5 voltage",
+      "actual": 4.589575006880505,
+      "reference": 4.589575006880506,
+      "absolute_error": 8.881784197001252e-16,
+      "tolerance": 0.004589575006880506,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.025 input=5 current",
+      "actual": 4.10424993119495e-05,
+      "reference": 4.104249931194941e-05,
+      "absolute_error": 8.809142651444724e-20,
+      "tolerance": 4.589575006880506e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.049 input=5 voltage",
+      "actual": 4.962767084645379,
+      "reference": 4.962767084645378,
+      "absolute_error": 8.881784197001252e-16,
+      "tolerance": 0.004962767084645378,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.049 input=5 current",
+      "actual": 3.723291535462092e-06,
+      "reference": 3.723291535462181e-06,
+      "absolute_error": 8.893845946170154e-20,
+      "tolerance": 4.962767084645379e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.05 input=5 voltage",
+      "actual": 4.966310265004574,
+      "reference": 4.966310265004573,
+      "absolute_error": 8.881784197001252e-16,
+      "tolerance": 0.004966310265004573,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.05 input=5 current",
+      "actual": 3.3689734995426156e-06,
+      "reference": 3.3689734995427046e-06,
+      "absolute_error": 8.893845946170154e-20,
+      "tolerance": 4.966310265004573e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.05 input=0 voltage",
+      "actual": 4.966310265004574,
+      "reference": 4.966310265004573,
+      "absolute_error": 8.881784197001252e-16,
+      "tolerance": 0.004966310265004573,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.05 input=0 current",
+      "actual": -0.0004966310265004574,
+      "reference": -0.0004966310265004573,
+      "absolute_error": 1.0842021724855044e-19,
+      "tolerance": 4.966310265004573e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.051 input=0 voltage",
+      "actual": 4.493703357352221,
+      "reference": 4.49370335735222,
+      "absolute_error": 8.881784197001252e-16,
+      "tolerance": 0.00449370335735222,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.051 input=0 current",
+      "actual": -0.00044937033573522206,
+      "reference": -0.000449370335735222,
+      "absolute_error": 5.421010862427522e-20,
+      "tolerance": 4.4937033573522196e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.075 input=0 voltage",
+      "actual": 0.4076595712687553,
+      "reference": 0.4076595712687548,
+      "absolute_error": 4.996003610813204e-16,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.075 input=0 current",
+      "actual": -4.076595712687553e-05,
+      "reference": -4.076595712687548e-05,
+      "absolute_error": 5.421010862427522e-20,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.1 input=0 voltage",
+      "actual": 0.033462735346614925,
+      "reference": 0.03346273534661491,
+      "absolute_error": 1.3877787807814457e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.1 input=0 current",
+      "actual": -3.3462735346614925e-06,
+      "reference": -3.346273534661491e-06,
+      "absolute_error": 1.2705494208814505e-21,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.1 input=5 voltage",
+      "actual": 0.033462735346614925,
+      "reference": 0.03346273534661491,
+      "absolute_error": 1.3877787807814457e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.1 input=5 current",
+      "actual": 0.0004966537264653385,
+      "reference": 0.0004966537264653385,
+      "absolute_error": 0,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.15 input=5 voltage",
+      "actual": 4.9665357351417825,
+      "reference": 4.9665357351417825,
+      "absolute_error": 0,
+      "tolerance": 0.004966535735141783,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.15 input=5 current",
+      "actual": 3.3464264858217517e-06,
+      "reference": 3.3464264858217517e-06,
+      "absolute_error": 0,
+      "tolerance": 4.966535735141783e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.15 input=0 voltage",
+      "actual": 4.9665357351417825,
+      "reference": 4.9665357351417825,
+      "absolute_error": 0,
+      "tolerance": 0.004966535735141783,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.15 input=0 current",
+      "actual": -0.0004966535735141782,
+      "reference": -0.0004966535735141782,
+      "absolute_error": 0,
+      "tolerance": 4.966535735141783e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.2 input=0 voltage",
+      "actual": 0.03346425455244925,
+      "reference": 0.03346425455244931,
+      "absolute_error": 5.551115123125783e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.2 input=0 current",
+      "actual": -3.346425455244925e-06,
+      "reference": -3.3464254552449305e-06,
+      "absolute_error": 5.505714157152952e-21,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.2 input=5 voltage",
+      "actual": 0.03346425455244925,
+      "reference": 0.03346425455244931,
+      "absolute_error": 5.551115123125783e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.2 input=5 current",
+      "actual": 0.0004966535745447551,
+      "reference": 0.000496653574544755,
+      "absolute_error": 1.0842021724855044e-19,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.3 input=0 voltage",
+      "actual": 0.03346425462142118,
+      "reference": 0.03346425462142115,
+      "absolute_error": 2.7755575615628914e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.3 input=0 current",
+      "actual": -3.346425462142118e-06,
+      "reference": -3.346425462142115e-06,
+      "absolute_error": 2.964615315390051e-21,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.3 input=5 voltage",
+      "actual": 0.03346425462142118,
+      "reference": 0.03346425462142115,
+      "absolute_error": 2.7755575615628914e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.3 input=5 current",
+      "actual": 0.0004966535745378578,
+      "reference": 0.0004966535745378578,
+      "absolute_error": 0,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.35 input=5 voltage",
+      "actual": 4.966535745378575,
+      "reference": 4.966535745378576,
+      "absolute_error": 8.881784197001252e-16,
+      "tolerance": 0.004966535745378576,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.35 input=5 current",
+      "actual": 3.346425462142477e-06,
+      "reference": 3.3464254621423884e-06,
+      "absolute_error": 8.851494298807439e-20,
+      "tolerance": 4.966535745378575e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.35 input=0 voltage",
+      "actual": 4.966535745378575,
+      "reference": 4.966535745378576,
+      "absolute_error": 8.881784197001252e-16,
+      "tolerance": 0.004966535745378576,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.35 input=0 current",
+      "actual": -0.0004966535745378575,
+      "reference": -0.0004966535745378576,
+      "absolute_error": 1.0842021724855044e-19,
+      "tolerance": 4.966535745378575e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.4 input=0 voltage",
+      "actual": 0.03346425462142432,
+      "reference": 0.03346425462142428,
+      "absolute_error": 4.163336342344337e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.4 input=0 current",
+      "actual": -3.346425462142432e-06,
+      "reference": -3.346425462142428e-06,
+      "absolute_error": 4.235164736271502e-21,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.4 input=5 voltage",
+      "actual": 0.03346425462142432,
+      "reference": 0.03346425462142428,
+      "absolute_error": 4.163336342344337e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-ideal step=0.0005 t=0.4 input=5 current",
+      "actual": 0.0004966535745378576,
+      "reference": 0.0004966535745378576,
+      "absolute_error": 0,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 4.966310265004574,
+      "reference": 4.966310265004574,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 4.966310265004574,
+      "reference": 4.966310265004574,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 0.033462735346614925,
+      "reference": 0.033462735346614925,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 0.033462735346614925,
+      "reference": 0.033462735346614925,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 4.9665357351417825,
+      "reference": 4.9665357351417825,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 4.9665357351417825,
+      "reference": 4.9665357351417825,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 0.03346425455244925,
+      "reference": 0.03346425455244925,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 0.03346425455244925,
+      "reference": 0.03346425455244925,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 4.966535745378112,
+      "reference": 4.966535745378112,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 4.966535745378112,
+      "reference": 4.966535745378112,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 0.03346425462142118,
+      "reference": 0.03346425462142118,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 0.03346425462142118,
+      "reference": 0.03346425462142118,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 4.966535745378575,
+      "reference": 4.966535745378575,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 4.966535745378575,
+      "reference": 4.966535745378575,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 0.03346425462142432,
+      "reference": 0.03346425462142432,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC pulse capacitor continuity",
+      "actual": 0.03346425462142432,
+      "reference": 0.03346425462142432,
+      "absolute_error": 0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    {
+      "name": "RC settled periodic minimum",
+      "actual": 0.03346425462142118,
+      "reference": 0.03346425462142428,
+      "absolute_error": 3.101685575046531e-15,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "RC settled periodic maximum",
+      "actual": 4.966535745378575,
+      "reference": 4.966535745378576,
+      "absolute_error": 8.881784197001252e-16,
+      "tolerance": 0.004966535745378576,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0 input=0 voltage",
+      "actual": 0,
+      "reference": 0,
+      "absolute_error": 0,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0 input=0 current",
+      "actual": 0,
+      "reference": 0,
+      "absolute_error": 0,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.001 input=5 voltage",
+      "actual": 0.24213685207582689,
+      "reference": 0.24187090179797865,
+      "absolute_error": 0.00026595027784823144,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.001 input=5 current",
+      "actual": 0.0004757863147924173,
+      "reference": 0.0004758129098202021,
+      "absolute_error": 2.65950277847783e-08,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.005 input=5 voltage",
+      "actual": 1.8100424840798002,
+      "reference": 1.8105306838497062,
+      "absolute_error": 0.0004881997699059948,
+      "tolerance": 0.0018105306838497061,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.005 input=5 current",
+      "actual": 0.00031899575159201993,
+      "reference": 0.0003189469316150294,
+      "absolute_error": 4.881997699054648e-08,
+      "tolerance": 1.810530683849706e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.01 input=5 voltage",
+      "actual": 3.064245272651543,
+      "reference": 3.0654890715421605,
+      "absolute_error": 0.0012437988906177644,
+      "tolerance": 0.0030654890715421605,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.01 input=5 current",
+      "actual": 0.0001935754727348457,
+      "reference": 0.00019345109284578393,
+      "absolute_error": 1.2437988906177774e-07,
+      "tolerance": 3.0654890715421607e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.025 input=5 voltage",
+      "actual": 4.566730979470819,
+      "reference": 4.568352266724315,
+      "absolute_error": 0.0016212872534957512,
+      "tolerance": 0.004568352266724315,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.025 input=5 current",
+      "actual": 4.332690205291812e-05,
+      "reference": 4.316477332756854e-05,
+      "absolute_error": 1.6212872534957602e-07,
+      "tolerance": 4.568352266724315e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.049 input=5 voltage",
+      "actual": 4.960139798288215,
+      "reference": 4.960841801095215,
+      "absolute_error": 0.0007020028070003903,
+      "tolerance": 0.004960841801095215,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.049 input=5 current",
+      "actual": 3.986020171178506e-06,
+      "reference": 3.915819890478467e-06,
+      "absolute_error": 7.020028070003963e-08,
+      "tolerance": 4.960841801095215e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.05 input=5 voltage",
+      "actual": 4.963891982420479,
+      "reference": 4.964568196408056,
+      "absolute_error": 0.0006762139875773343,
+      "tolerance": 0.004964568196408056,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.05 input=5 current",
+      "actual": 3.6108017579521423e-06,
+      "reference": 3.5431803591944087e-06,
+      "absolute_error": 6.762139875773355e-08,
+      "tolerance": 4.964568196408056e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.051 input=0 voltage",
+      "actual": 4.724043959494528,
+      "reference": 4.72606907652353,
+      "absolute_error": 0.002025117029001322,
+      "tolerance": 0.00472606907652353,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.051 input=0 current",
+      "actual": -0.0004724043959494528,
+      "reference": -0.00047260690765235294,
+      "absolute_error": 2.025117029001407e-07,
+      "tolerance": 4.72606907652353e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.075 input=0 voltage",
+      "actual": 0.4295825916882278,
+      "reference": 0.42873931372659846,
+      "absolute_error": 0.0008432779616293629,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.075 input=0 current",
+      "actual": -4.295825916882278e-05,
+      "reference": -4.2873931372659844e-05,
+      "absolute_error": 8.43277961629359e-08,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.1 input=0 voltage",
+      "actual": 0.03538106596487428,
+      "reference": 0.03519306597725915,
+      "absolute_error": 0.00018799998761512976,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.1 input=0 current",
+      "actual": -3.538106596487428e-06,
+      "reference": -3.5193065977259153e-06,
+      "absolute_error": 1.8799998761512612e-08,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.15 input=5 voltage",
+      "actual": 4.964132817877788,
+      "reference": 4.964805325421346,
+      "absolute_error": 0.0006725075435580763,
+      "tolerance": 0.004964805325421346,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.15 input=5 current",
+      "actual": 3.586718212221207e-06,
+      "reference": 3.5194674578653995e-06,
+      "absolute_error": 6.725075435580768e-08,
+      "tolerance": 4.964805325421346e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.2 input=0 voltage",
+      "actual": 0.035382696153553134,
+      "reference": 0.035194663739982646,
+      "absolute_error": 0.00018803241357048806,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.2 input=0 current",
+      "actual": -3.5382696153553135e-06,
+      "reference": -3.5194663739982646e-06,
+      "absolute_error": 1.8803241357048885e-08,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.3 input=0 voltage",
+      "actual": 0.035382696228700834,
+      "reference": 0.03519466381252096,
+      "absolute_error": 0.00018803241617987299,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.3 input=0 current",
+      "actual": -3.5382696228700835e-06,
+      "reference": -3.5194663812520963e-06,
+      "absolute_error": 1.8803241617987126e-08,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.35 input=5 voltage",
+      "actual": 4.964132828980697,
+      "reference": 4.964805336187475,
+      "absolute_error": 0.0006725072067785831,
+      "tolerance": 0.0049648053361874755,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.35 input=5 current",
+      "actual": 3.586717101923398e-06,
+      "reference": 3.5194663812524673e-06,
+      "absolute_error": 6.725072067093071e-08,
+      "tolerance": 4.964805336187475e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.4 input=0 voltage",
+      "actual": 0.035382696228705164,
+      "reference": 0.03519466381252425,
+      "absolute_error": 0.00018803241618091382,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.001 t=0.4 input=0 current",
+      "actual": -3.5382696228705163e-06,
+      "reference": -3.519466381252425e-06,
+      "absolute_error": 1.880324161809131e-08,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0 input=0 voltage",
+      "actual": 0,
+      "reference": 0,
+      "absolute_error": 0,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0 input=0 current",
+      "actual": 0,
+      "reference": 0,
+      "absolute_error": 0,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.001 input=5 voltage",
+      "actual": 0.24213645744946924,
+      "reference": 0.24187090179797865,
+      "absolute_error": 0.00026555565149058435,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.001 input=5 current",
+      "actual": 0.0004757863542550531,
+      "reference": 0.0004758129098202021,
+      "absolute_error": 2.6555565148982455e-08,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.005 input=5 voltage",
+      "actual": 1.810043370641411,
+      "reference": 1.8105306838497062,
+      "absolute_error": 0.00048731320829520364,
+      "tolerance": 0.0018105306838497061,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.005 input=5 current",
+      "actual": 0.00031899566293585885,
+      "reference": 0.0003189469316150294,
+      "absolute_error": 4.87313208294665e-08,
+      "tolerance": 1.810530683849706e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.01 input=5 voltage",
+      "actual": 3.06425787066058,
+      "reference": 3.0654890715421605,
+      "absolute_error": 0.0012312008815804631,
+      "tolerance": 0.0030654890715421605,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.01 input=5 current",
+      "actual": 0.000193574212933942,
+      "reference": 0.00019345109284578393,
+      "absolute_error": 1.2312008815807134e-07,
+      "tolerance": 3.0654890715421607e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.025 input=5 voltage",
+      "actual": 4.566764990870591,
+      "reference": 4.568352266724315,
+      "absolute_error": 0.0015872758537236464,
+      "tolerance": 0.004568352266724315,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.025 input=5 current",
+      "actual": 4.3323500912940906e-05,
+      "reference": 4.316477332756854e-05,
+      "absolute_error": 1.587275853723636e-07,
+      "tolerance": 4.568352266724315e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.049 input=5 voltage",
+      "actual": 4.960187615367193,
+      "reference": 4.960841801095215,
+      "absolute_error": 0.0006541857280222274,
+      "tolerance": 0.004960841801095215,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.049 input=5 current",
+      "actual": 3.981238463280689e-06,
+      "reference": 3.915819890478467e-06,
+      "absolute_error": 6.541857280222265e-08,
+      "tolerance": 4.960841801095215e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.05 input=5 voltage",
+      "actual": 4.963931944470893,
+      "reference": 4.964568196408056,
+      "absolute_error": 0.0006362519371627684,
+      "tolerance": 0.004964568196408056,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.05 input=5 current",
+      "actual": 3.6068055529106855e-06,
+      "reference": 3.5431803591944087e-06,
+      "absolute_error": 6.362519371627682e-08,
+      "tolerance": 4.964568196408056e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.051 input=0 voltage",
+      "actual": 4.724087390006212,
+      "reference": 4.72606907652353,
+      "absolute_error": 0.001981686517317449,
+      "tolerance": 0.00472606907652353,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.051 input=0 current",
+      "actual": -0.00047240873900062123,
+      "reference": -0.00047260690765235294,
+      "absolute_error": 1.981686517317136e-07,
+      "tolerance": 4.72606907652353e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.075 input=0 voltage",
+      "actual": 0.4295732025545917,
+      "reference": 0.42873931372659846,
+      "absolute_error": 0.0008338888279932344,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.075 input=0 current",
+      "actual": -4.295732025545917e-05,
+      "reference": -4.2873931372659844e-05,
+      "absolute_error": 8.338888279932723e-08,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.1 input=0 voltage",
+      "actual": 0.03537850941861991,
+      "reference": 0.03519306597725915,
+      "absolute_error": 0.00018544344136076085,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.1 input=0 current",
+      "actual": -3.5378509418619914e-06,
+      "reference": -3.5193065977259153e-06,
+      "absolute_error": 1.8544344136076095e-08,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.15 input=5 voltage",
+      "actual": 4.9641735317657165,
+      "reference": 4.964805325421346,
+      "absolute_error": 0.0006317936556294868,
+      "tolerance": 0.004964805325421346,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.15 input=5 current",
+      "actual": 3.5826468234283483e-06,
+      "reference": 3.5194674578653995e-06,
+      "absolute_error": 6.317936556294878e-08,
+      "tolerance": 4.964805325421346e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.2 input=0 voltage",
+      "actual": 0.035380145142805415,
+      "reference": 0.035194663739982646,
+      "absolute_error": 0.00018548140282276943,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.2 input=0 current",
+      "actual": -3.5380145142805413e-06,
+      "reference": -3.5194663739982646e-06,
+      "absolute_error": 1.854814028227674e-08,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.3 input=0 voltage",
+      "actual": 0.03538014521850375,
+      "reference": 0.03519466381252096,
+      "absolute_error": 0.00018548140598279028,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.3 input=0 current",
+      "actual": -3.5380145218503752e-06,
+      "reference": -3.5194663812520963e-06,
+      "absolute_error": 1.85481405982789e-08,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.35 input=5 voltage",
+      "actual": 4.964173542947114,
+      "reference": 4.964805336187475,
+      "absolute_error": 0.0006317932403616666,
+      "tolerance": 0.0049648053361874755,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.35 input=5 current",
+      "actual": 3.582645705281706e-06,
+      "reference": 3.5194663812524673e-06,
+      "absolute_error": 6.317932402923878e-08,
+      "tolerance": 4.964805336187475e-07,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.4 input=0 voltage",
+      "actual": 0.035380145218506416,
+      "reference": 0.03519466381252425,
+      "absolute_error": 0.00018548140598216578,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "rc-finite step=0.0005 t=0.4 input=0 current",
+      "actual": -3.5380145218506416e-06,
+      "reference": -3.519466381252425e-06,
+      "absolute_error": 1.8548140598216642e-08,
+      "tolerance": 1e-07,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.001 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.001 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.005 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.005 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.01 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.01 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.025 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.025 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.049 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.049 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.05 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.05 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.05 input=0 VCE",
+      "actual": 4.99999999998,
+      "reference": 4.99999999998,
+      "absolute_error": 0,
+      "tolerance": 0.0499999999998,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.05 input=0 IC",
+      "actual": 2.000000165480742e-14,
+      "reference": 2.0000000038662395e-14,
+      "absolute_error": 1.6161450257911353e-21,
+      "tolerance": 1e-09,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.051 input=0 VCE",
+      "actual": 4.99999999998,
+      "reference": 4.99999999998,
+      "absolute_error": 0,
+      "tolerance": 0.0499999999998,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.051 input=0 IC",
+      "actual": 2.000000165480742e-14,
+      "reference": 2.0000000038662395e-14,
+      "absolute_error": 1.6161450257911353e-21,
+      "tolerance": 1e-09,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.075 input=0 VCE",
+      "actual": 4.99999999998,
+      "reference": 4.99999999998,
+      "absolute_error": 0,
+      "tolerance": 0.0499999999998,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.075 input=0 IC",
+      "actual": 2.000000165480742e-14,
+      "reference": 2.0000000038662395e-14,
+      "absolute_error": 1.6161450257911353e-21,
+      "tolerance": 1e-09,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.1 input=0 VCE",
+      "actual": 4.99999999998,
+      "reference": 4.99999999998,
+      "absolute_error": 0,
+      "tolerance": 0.0499999999998,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.1 input=0 IC",
+      "actual": 2.000000165480742e-14,
+      "reference": 2.0000000038662395e-14,
+      "absolute_error": 1.6161450257911353e-21,
+      "tolerance": 1e-09,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.1 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.1 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.15 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.15 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.15 input=0 VCE",
+      "actual": 4.99999999998,
+      "reference": 4.99999999998,
+      "absolute_error": 0,
+      "tolerance": 0.0499999999998,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.15 input=0 IC",
+      "actual": 2.000000165480742e-14,
+      "reference": 2.0000000038662395e-14,
+      "absolute_error": 1.6161450257911353e-21,
+      "tolerance": 1e-09,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.2 input=0 VCE",
+      "actual": 4.99999999998,
+      "reference": 4.99999999998,
+      "absolute_error": 0,
+      "tolerance": 0.0499999999998,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.2 input=0 IC",
+      "actual": 2.000000165480742e-14,
+      "reference": 2.0000000038662395e-14,
+      "absolute_error": 1.6161450257911353e-21,
+      "tolerance": 1e-09,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.2 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.001 t=0.2 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.001 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.001 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.005 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.005 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.01 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.01 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.025 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.025 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.049 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.049 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.05 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.05 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.05 input=0 VCE",
+      "actual": 4.99999999998,
+      "reference": 4.99999999998,
+      "absolute_error": 0,
+      "tolerance": 0.0499999999998,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.05 input=0 IC",
+      "actual": 2.000000165480742e-14,
+      "reference": 2.0000000038662395e-14,
+      "absolute_error": 1.6161450257911353e-21,
+      "tolerance": 1e-09,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.051 input=0 VCE",
+      "actual": 4.99999999998,
+      "reference": 4.99999999998,
+      "absolute_error": 0,
+      "tolerance": 0.0499999999998,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.051 input=0 IC",
+      "actual": 2.000000165480742e-14,
+      "reference": 2.0000000038662395e-14,
+      "absolute_error": 1.6161450257911353e-21,
+      "tolerance": 1e-09,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.075 input=0 VCE",
+      "actual": 4.99999999998,
+      "reference": 4.99999999998,
+      "absolute_error": 0,
+      "tolerance": 0.0499999999998,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.075 input=0 IC",
+      "actual": 2.000000165480742e-14,
+      "reference": 2.0000000038662395e-14,
+      "absolute_error": 1.6161450257911353e-21,
+      "tolerance": 1e-09,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.1 input=0 VCE",
+      "actual": 4.99999999998,
+      "reference": 4.99999999998,
+      "absolute_error": 0,
+      "tolerance": 0.0499999999998,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.1 input=0 IC",
+      "actual": 2.000000165480742e-14,
+      "reference": 2.0000000038662395e-14,
+      "absolute_error": 1.6161450257911353e-21,
+      "tolerance": 1e-09,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.1 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.1 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.15 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.15 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.15 input=0 VCE",
+      "actual": 4.99999999998,
+      "reference": 4.99999999998,
+      "absolute_error": 0,
+      "tolerance": 0.0499999999998,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.15 input=0 IC",
+      "actual": 2.000000165480742e-14,
+      "reference": 2.0000000038662395e-14,
+      "absolute_error": 1.6161450257911353e-21,
+      "tolerance": 1e-09,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.2 input=0 VCE",
+      "actual": 4.99999999998,
+      "reference": 4.99999999998,
+      "absolute_error": 0,
+      "tolerance": 0.0499999999998,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.2 input=0 IC",
+      "actual": 2.000000165480742e-14,
+      "reference": 2.0000000038662395e-14,
+      "absolute_error": 1.6161450257911353e-21,
+      "tolerance": 1e-09,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.2 input=5 VCE",
+      "actual": 0.07039921913818598,
+      "reference": 0.07039921913818606,
+      "absolute_error": 8.326672684688674e-17,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "name": "NPN pulse step=0.0005 t=0.2 input=5 IC",
+      "actual": 0.004929600780861814,
+      "reference": 0.004929600780861814,
+      "absolute_error": 0,
+      "tolerance": 4.9296007808618136e-05,
+      "passed": true
+    },
+    {
+      "name": "flasher period refinement 0.001/0.0005",
+      "actual": 0.4879999999999956,
+      "reference": 0.4879999999999959,
+      "absolute_error": 2.7755575615628914e-16,
+      "tolerance": 0.004879999999999959,
+      "passed": true
+    },
+    {
+      "name": "flasher max i:D1",
+      "actual": 0.0028880562546655967,
+      "reference": 0.0028880434748617557,
+      "absolute_error": 1.2779803841046766e-08,
+      "tolerance": 2.8880434748617556e-05,
+      "passed": true
+    },
+    {
+      "name": "flasher min i:D1",
+      "actual": 3.1161620792292953e-06,
+      "reference": 3.105475726952766e-06,
+      "absolute_error": 1.0686352276529364e-08,
+      "tolerance": 2.8880434748617556e-05,
+      "passed": true
+    },
+    {
+      "name": "flasher max i:D2",
+      "actual": 0.002887197891928917,
+      "reference": 0.002888023486100912,
+      "absolute_error": 8.255941719948964e-07,
+      "tolerance": 2.888023486100912e-05,
+      "passed": true
+    },
+    {
+      "name": "flasher min i:D2",
+      "actual": 3.116127697718731e-06,
+      "reference": 3.1055333767516123e-06,
+      "absolute_error": 1.05943209671186e-08,
+      "tolerance": 2.888023486100912e-05,
+      "passed": true
+    },
+    {
+      "name": "flasher max v:C1",
+      "actual": 2.586654619522574,
+      "reference": 2.5868494222571066,
+      "absolute_error": 0.00019480273453265085,
+      "tolerance": 0.025868494222571065,
+      "passed": true
+    },
+    {
+      "name": "flasher min v:C1",
+      "actual": -0.5452046981164604,
+      "reference": -0.5415035701396093,
+      "absolute_error": 0.0037011279768511818,
+      "tolerance": 0.025868494222571065,
+      "passed": true
+    },
+    {
+      "name": "flasher max v:C2",
+      "actual": 2.5866565935361585,
+      "reference": 2.5868501090781804,
+      "absolute_error": 0.00019351554202184928,
+      "tolerance": 0.025868501090781804,
+      "passed": true
+    },
+    {
+      "name": "flasher min v:C2",
+      "actual": -0.622129714314395,
+      "reference": -0.6258117988741961,
+      "absolute_error": 0.0036820845598011243,
+      "tolerance": 0.025868501090781804,
+      "passed": true
+    },
+    {
+      "name": "flasher period refinement 0.0005/0.00025",
+      "actual": 0.4879999999999959,
+      "reference": 0.4880000000000143,
+      "absolute_error": 1.84297022087776e-14,
+      "tolerance": 0.004880000000000143,
+      "passed": true
+    },
+    {
+      "name": "flasher max i:D1",
+      "actual": 0.0028880434748617557,
+      "reference": 0.0028882555709925928,
+      "absolute_error": 2.120961308371e-07,
+      "tolerance": 2.8882555709925927e-05,
+      "passed": true
+    },
+    {
+      "name": "flasher min i:D1",
+      "actual": 3.105475726952766e-06,
+      "reference": 3.098967581180042e-06,
+      "absolute_error": 6.508145772724088e-09,
+      "tolerance": 2.8882555709925927e-05,
+      "passed": true
+    },
+    {
+      "name": "flasher max i:D2",
+      "actual": 0.002888023486100912,
+      "reference": 0.002888023731023803,
+      "absolute_error": 2.44922890996202e-10,
+      "tolerance": 2.888023731023803e-05,
+      "passed": true
+    },
+    {
+      "name": "flasher min i:D2",
+      "actual": 3.1055333767516123e-06,
+      "reference": 3.0989700883628475e-06,
+      "absolute_error": 6.563288388764713e-09,
+      "tolerance": 2.888023731023803e-05,
+      "passed": true
+    },
+    {
+      "name": "flasher max v:C1",
+      "actual": 2.5868494222571066,
+      "reference": 2.586965424355074,
+      "absolute_error": 0.00011600209796736038,
+      "tolerance": 0.02586965424355074,
+      "passed": true
+    },
+    {
+      "name": "flasher min v:C1",
+      "actual": -0.5415035701396093,
+      "reference": -0.5438907655951807,
+      "absolute_error": 0.0023871954555714225,
+      "tolerance": 0.02586965424355074,
+      "passed": true
+    },
+    {
+      "name": "flasher max v:C2",
+      "actual": 2.5868501090781804,
+      "reference": 2.586965379288118,
+      "absolute_error": 0.00011527020993762349,
+      "tolerance": 0.02586965379288118,
+      "passed": true
+    },
+    {
+      "name": "flasher min v:C2",
+      "actual": -0.6258117988741961,
+      "reference": -0.6258388887524958,
+      "absolute_error": 2.7089878299690895e-05,
+      "tolerance": 0.02586965379288118,
+      "passed": true
+    }
+  ],
+  "adapters": [
+    {
+      "name": "in-process",
+      "electrical_equivalent_to_in_process": true,
+      "electrical_checks": 294,
+      "workflow_commands": {
+        "led": 37,
+        "rc": 44,
+        "npn": 46
+      },
+      "worst_finite_rc_voltage_check": {
+        "name": "rc-finite step=0.001 t=0.075 input=0 voltage",
+        "actual": 0.4295825916882278,
+        "reference": 0.42873931372659846,
+        "absolute_error": 0.0008432779616293629,
+        "tolerance": 0.001,
+        "passed": true
+      },
+      "flasher_refinement": [
+        {
+          "output_step_s": 0.001,
+          "samples": 2001,
+          "rising_edge_brackets_s": [
+            [
+              0.8059999999999999,
+              0.8069999999999999
+            ],
+            [
+              1.2939999999999896,
+              1.2949999999999895
+            ],
+            [
+              1.7819999999999914,
+              1.7829999999999913
+            ]
+          ],
+          "median_period_s": 0.4879999999999956,
+          "minimum_si": {
+            "i:D1": 3.1161620792292953e-06,
+            "i:D2": 3.116127697718731e-06,
+            "v:C1": -0.5452046981164604,
+            "v:C2": -0.622129714314395
+          },
+          "maximum_si": {
+            "i:D1": 0.0028880562546655967,
+            "i:D2": 0.002887197891928917,
+            "v:C1": 2.586654619522574,
+            "v:C2": 2.5866565935361585
+          },
+          "verify_200ms_wall_s": 0.042894541,
+          "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+        },
+        {
+          "output_step_s": 0.0005,
+          "samples": 4001,
+          "rising_edge_brackets_s": [
+            [
+              0.8054999999999993,
+              0.8059999999999993
+            ],
+            [
+              1.2934999999999897,
+              1.2939999999999896
+            ],
+            [
+              1.7814999999999914,
+              1.7819999999999914
+            ]
+          ],
+          "median_period_s": 0.4879999999999959,
+          "minimum_si": {
+            "i:D1": 3.105475726952766e-06,
+            "i:D2": 3.1055333767516123e-06,
+            "v:C1": -0.5415035701396093,
+            "v:C2": -0.6258117988741961
+          },
+          "maximum_si": {
+            "i:D1": 0.0028880434748617557,
+            "i:D2": 0.002888023486100912,
+            "v:C1": 2.5868494222571066,
+            "v:C2": 2.5868501090781804
+          },
+          "verify_200ms_wall_s": 0.051280416,
+          "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+        },
+        {
+          "output_step_s": 0.00025,
+          "samples": 8001,
+          "rising_edge_brackets_s": [
+            [
+              0.8057499999999993,
+              0.8059999999999993
+            ],
+            [
+              1.2937500000000313,
+              1.2940000000000313
+            ],
+            [
+              1.7817500000000277,
+              1.7820000000000278
+            ]
+          ],
+          "median_period_s": 0.4880000000000143,
+          "minimum_si": {
+            "i:D1": 3.098967581180042e-06,
+            "i:D2": 3.0989700883628475e-06,
+            "v:C1": -0.5438907655951807,
+            "v:C2": -0.6258388887524958
+          },
+          "maximum_si": {
+            "i:D1": 0.0028882555709925928,
+            "i:D2": 0.002888023731023803,
+            "v:C1": 2.586965424355074,
+            "v:C2": 2.586965379288118
+          },
+          "verify_200ms_wall_s": 0.066058125,
+          "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+        }
+      ]
+    },
+    {
+      "name": "headless-stdio",
+      "electrical_equivalent_to_in_process": true,
+      "electrical_checks": 294,
+      "workflow_commands": {
+        "led": 36,
+        "rc": 43,
+        "npn": 45
+      },
+      "worst_finite_rc_voltage_check": {
+        "name": "rc-finite step=0.001 t=0.075 input=0 voltage",
+        "actual": 0.4295825916882278,
+        "reference": 0.42873931372659846,
+        "absolute_error": 0.0008432779616293629,
+        "tolerance": 0.001,
+        "passed": true
+      },
+      "flasher_refinement": [
+        {
+          "output_step_s": 0.001,
+          "samples": 2001,
+          "rising_edge_brackets_s": [
+            [
+              0.8059999999999999,
+              0.8069999999999999
+            ],
+            [
+              1.2939999999999896,
+              1.2949999999999895
+            ],
+            [
+              1.7819999999999914,
+              1.7829999999999913
+            ]
+          ],
+          "median_period_s": 0.4879999999999956,
+          "minimum_si": {
+            "i:D1": 3.1161620792292953e-06,
+            "i:D2": 3.116127697718731e-06,
+            "v:C1": -0.5452046981164604,
+            "v:C2": -0.622129714314395
+          },
+          "maximum_si": {
+            "i:D1": 0.0028880562546655967,
+            "i:D2": 0.002887197891928917,
+            "v:C1": 2.586654619522574,
+            "v:C2": 2.5866565935361585
+          },
+          "verify_200ms_wall_s": 0.04405225,
+          "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+        },
+        {
+          "output_step_s": 0.0005,
+          "samples": 4001,
+          "rising_edge_brackets_s": [
+            [
+              0.8054999999999993,
+              0.8059999999999993
+            ],
+            [
+              1.2934999999999897,
+              1.2939999999999896
+            ],
+            [
+              1.7814999999999914,
+              1.7819999999999914
+            ]
+          ],
+          "median_period_s": 0.4879999999999959,
+          "minimum_si": {
+            "i:D1": 3.105475726952766e-06,
+            "i:D2": 3.1055333767516123e-06,
+            "v:C1": -0.5415035701396093,
+            "v:C2": -0.6258117988741961
+          },
+          "maximum_si": {
+            "i:D1": 0.0028880434748617557,
+            "i:D2": 0.002888023486100912,
+            "v:C1": 2.5868494222571066,
+            "v:C2": 2.5868501090781804
+          },
+          "verify_200ms_wall_s": 0.053498709,
+          "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+        },
+        {
+          "output_step_s": 0.00025,
+          "samples": 8001,
+          "rising_edge_brackets_s": [
+            [
+              0.8057499999999993,
+              0.8059999999999993
+            ],
+            [
+              1.2937500000000313,
+              1.2940000000000313
+            ],
+            [
+              1.7817500000000277,
+              1.7820000000000278
+            ]
+          ],
+          "median_period_s": 0.4880000000000143,
+          "minimum_si": {
+            "i:D1": 3.098967581180042e-06,
+            "i:D2": 3.0989700883628475e-06,
+            "v:C1": -0.5438907655951807,
+            "v:C2": -0.6258388887524958
+          },
+          "maximum_si": {
+            "i:D1": 0.0028882555709925928,
+            "i:D2": 0.002888023731023803,
+            "v:C1": 2.586965424355074,
+            "v:C2": 2.586965379288118
+          },
+          "verify_200ms_wall_s": 0.070487083,
+          "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+        }
+      ]
+    },
+    {
+      "name": "headless-socket",
+      "electrical_equivalent_to_in_process": true,
+      "electrical_checks": 294,
+      "workflow_commands": {
+        "led": 36,
+        "rc": 43,
+        "npn": 45
+      },
+      "worst_finite_rc_voltage_check": {
+        "name": "rc-finite step=0.001 t=0.075 input=0 voltage",
+        "actual": 0.4295825916882278,
+        "reference": 0.42873931372659846,
+        "absolute_error": 0.0008432779616293629,
+        "tolerance": 0.001,
+        "passed": true
+      },
+      "flasher_refinement": [
+        {
+          "output_step_s": 0.001,
+          "samples": 2001,
+          "rising_edge_brackets_s": [
+            [
+              0.8059999999999999,
+              0.8069999999999999
+            ],
+            [
+              1.2939999999999896,
+              1.2949999999999895
+            ],
+            [
+              1.7819999999999914,
+              1.7829999999999913
+            ]
+          ],
+          "median_period_s": 0.4879999999999956,
+          "minimum_si": {
+            "i:D1": 3.1161620792292953e-06,
+            "i:D2": 3.116127697718731e-06,
+            "v:C1": -0.5452046981164604,
+            "v:C2": -0.622129714314395
+          },
+          "maximum_si": {
+            "i:D1": 0.0028880562546655967,
+            "i:D2": 0.002887197891928917,
+            "v:C1": 2.586654619522574,
+            "v:C2": 2.5866565935361585
+          },
+          "verify_200ms_wall_s": 0.043296667,
+          "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+        },
+        {
+          "output_step_s": 0.0005,
+          "samples": 4001,
+          "rising_edge_brackets_s": [
+            [
+              0.8054999999999993,
+              0.8059999999999993
+            ],
+            [
+              1.2934999999999897,
+              1.2939999999999896
+            ],
+            [
+              1.7814999999999914,
+              1.7819999999999914
+            ]
+          ],
+          "median_period_s": 0.4879999999999959,
+          "minimum_si": {
+            "i:D1": 3.105475726952766e-06,
+            "i:D2": 3.1055333767516123e-06,
+            "v:C1": -0.5415035701396093,
+            "v:C2": -0.6258117988741961
+          },
+          "maximum_si": {
+            "i:D1": 0.0028880434748617557,
+            "i:D2": 0.002888023486100912,
+            "v:C1": 2.5868494222571066,
+            "v:C2": 2.5868501090781804
+          },
+          "verify_200ms_wall_s": 0.052984458,
+          "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+        },
+        {
+          "output_step_s": 0.00025,
+          "samples": 8001,
+          "rising_edge_brackets_s": [
+            [
+              0.8057499999999993,
+              0.8059999999999993
+            ],
+            [
+              1.2937500000000313,
+              1.2940000000000313
+            ],
+            [
+              1.7817500000000277,
+              1.7820000000000278
+            ]
+          ],
+          "median_period_s": 0.4880000000000143,
+          "minimum_si": {
+            "i:D1": 3.098967581180042e-06,
+            "i:D2": 3.0989700883628475e-06,
+            "v:C1": -0.5438907655951807,
+            "v:C2": -0.6258388887524958
+          },
+          "maximum_si": {
+            "i:D1": 0.0028882555709925928,
+            "i:D2": 0.002888023731023803,
+            "v:C1": 2.586965424355074,
+            "v:C2": 2.586965379288118
+          },
+          "verify_200ms_wall_s": 0.066497625,
+          "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+        }
+      ]
+    },
+    {
+      "name": "native-socket",
+      "electrical_equivalent_to_in_process": true,
+      "electrical_checks": 294,
+      "workflow_commands": {
+        "led": 36,
+        "rc": 43,
+        "npn": 45
+      },
+      "worst_finite_rc_voltage_check": {
+        "name": "rc-finite step=0.001 t=0.075 input=0 voltage",
+        "actual": 0.4295825916882278,
+        "reference": 0.42873931372659846,
+        "absolute_error": 0.0008432779616293629,
+        "tolerance": 0.001,
+        "passed": true
+      },
+      "flasher_refinement": [
+        {
+          "output_step_s": 0.001,
+          "samples": 2001,
+          "rising_edge_brackets_s": [
+            [
+              0.8059999999999999,
+              0.8069999999999999
+            ],
+            [
+              1.2939999999999896,
+              1.2949999999999895
+            ],
+            [
+              1.7819999999999914,
+              1.7829999999999913
+            ]
+          ],
+          "median_period_s": 0.4879999999999956,
+          "minimum_si": {
+            "i:D1": 3.1161620792292953e-06,
+            "i:D2": 3.116127697718731e-06,
+            "v:C1": -0.5452046981164604,
+            "v:C2": -0.622129714314395
+          },
+          "maximum_si": {
+            "i:D1": 0.0028880562546655967,
+            "i:D2": 0.002887197891928917,
+            "v:C1": 2.586654619522574,
+            "v:C2": 2.5866565935361585
+          },
+          "verify_200ms_wall_s": 0.047093333,
+          "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+        },
+        {
+          "output_step_s": 0.0005,
+          "samples": 4001,
+          "rising_edge_brackets_s": [
+            [
+              0.8054999999999993,
+              0.8059999999999993
+            ],
+            [
+              1.2934999999999897,
+              1.2939999999999896
+            ],
+            [
+              1.7814999999999914,
+              1.7819999999999914
+            ]
+          ],
+          "median_period_s": 0.4879999999999959,
+          "minimum_si": {
+            "i:D1": 3.105475726952766e-06,
+            "i:D2": 3.1055333767516123e-06,
+            "v:C1": -0.5415035701396093,
+            "v:C2": -0.6258117988741961
+          },
+          "maximum_si": {
+            "i:D1": 0.0028880434748617557,
+            "i:D2": 0.002888023486100912,
+            "v:C1": 2.5868494222571066,
+            "v:C2": 2.5868501090781804
+          },
+          "verify_200ms_wall_s": 0.053963333,
+          "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+        },
+        {
+          "output_step_s": 0.00025,
+          "samples": 8001,
+          "rising_edge_brackets_s": [
+            [
+              0.8057499999999993,
+              0.8059999999999993
+            ],
+            [
+              1.2937500000000313,
+              1.2940000000000313
+            ],
+            [
+              1.7817500000000277,
+              1.7820000000000278
+            ]
+          ],
+          "median_period_s": 0.4880000000000143,
+          "minimum_si": {
+            "i:D1": 3.098967581180042e-06,
+            "i:D2": 3.0989700883628475e-06,
+            "v:C1": -0.5438907655951807,
+            "v:C2": -0.6258388887524958
+          },
+          "maximum_si": {
+            "i:D1": 0.0028882555709925928,
+            "i:D2": 0.002888023731023803,
+            "v:C1": 2.586965424355074,
+            "v:C2": 2.586965379288118
+          },
+          "verify_200ms_wall_s": 0.067351458,
+          "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+        }
+      ]
+    }
+  ],
+  "limits_of_evidence": [
+    "independent high-precision implementations of pinned educational equations; no physical-device or independently configured SPICE qualification",
+    "flasher refinement compares the same adaptive kernel at three output steps; it is not an independent flasher reference",
+    "timings are backend Verify completion on this run, not p95 input-to-visible or edit-to-result qualification",
+    "existing model, 1000-step, rolling-history and integration work limits remain enforced"
+  ]
+}

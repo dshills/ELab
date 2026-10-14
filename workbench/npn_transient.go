@@ -1,9 +1,5 @@
 package workbench
 
-import (
-	"math"
-)
-
 const NPNTransientAnalysis = "NPN transient"
 const NPNTransientEngineID = "elab.npn-switch-quasistatic.v1"
 
@@ -19,24 +15,6 @@ func NPNPulseExampleGraph() Graph {
 		}
 	}
 	return g
-}
-func pulseHigh(cfg TransientSettings, at float64) bool {
-	period := cfg.HighSeconds + cfg.LowSeconds
-	phase := math.Mod(at, period)
-	epsilon := period * 1e-10
-	if phase >= period-epsilon {
-		phase = 0
-	}
-	return phase < cfg.HighSeconds-epsilon
-}
-func nextPulseEdge(cfg TransientSettings, at float64) float64 {
-	period := cfg.HighSeconds + cfg.LowSeconds
-	cycle := math.Floor((at + period*1e-10) / period)
-	edge := cycle*period + cfg.HighSeconds
-	if edge <= at+period*1e-10 {
-		edge = (cycle + 1) * period
-	}
-	return edge
 }
 func npnPulseInput(c Compiled, t *Transient, at float64) float64 {
 	if t.Mode == "low" {
@@ -73,8 +51,11 @@ func advanceNPNSample(c Compiled, t *Transient, high, low *NPNResult, end float6
 	if t.Mode == "auto" {
 		for {
 			edge := nextPulseEdge(t.Settings, at)
-			if edge > end || edge <= at {
+			if !sourceCornerReached(edge, end) || edge <= at {
 				break
+			}
+			if edge > end {
+				edge = end
 			}
 			// Explicit left/right samples at the same time retain the discontinuity,
 			// even when a pulse edge falls between requested sampling times.
