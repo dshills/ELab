@@ -274,6 +274,13 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			}
 		}
 		return s.batchLocked(p)
+	case "diagnostics.details.set":
+		var p DiagnosticDetailsParams
+		if err := params(raw, &p, "visible"); err != nil {
+			return err
+		}
+		s.diagnosticDetails = p.Visible
+		return nil
 	case "display.preferences.set":
 		p, err := decodeDisplayPreferences(raw)
 		if err != nil {

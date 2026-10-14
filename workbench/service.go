@@ -12,67 +12,69 @@ import (
 )
 
 type Snapshot struct {
-	Display               CircuitDisplay        `json:"display"`
-	MeasurementInspection MeasurementInspection `json:"measurement_inspection"`
-	PinnedReadings        []PinnedReading       `json:"pinned_readings"`
-	TraceFocus            *TraceFocus           `json:"trace_focus,omitempty"`
-	Limits                CircuitLimits         `json:"limits"`
-	SimulatedComponents   int                   `json:"simulated_component_count"`
-	StepWork              *StepWork             `json:"step_work,omitempty"`
-	UndoEntry             *HistoryTip           `json:"undo_entry,omitempty"`
-	RedoEntry             *HistoryTip           `json:"redo_entry,omitempty"`
-	ActuationRevision     uint64                `json:"actuation_revision"`
-	SwitchStates          []SwitchState         `json:"switch_states,omitempty"`
-	SourceWarnings        []Diagnostic          `json:"source_warnings,omitempty"`
-	WaveformModel         *WaveformModel        `json:"waveform_model,omitempty"`
-	PotentiometerModel    *PotentiometerModel   `json:"potentiometer_model,omitempty"`
-	DiodeModel            *DiodeModel           `json:"diode_model,omitempty"`
-	SwitchModel           *SwitchModel          `json:"switch_model,omitempty"`
-	Recording             *RecordingView        `json:"recording,omitempty"`
-	Recovery              RecoveryState         `json:"recovery"`
-	VerificationSettings  VerificationSettings  `json:"verification_settings"`
-	Operations            []OperationSummary    `json:"operations"`
-	SelectedOperation     string                `json:"selected_operation"`
-	LastOperation         string                `json:"last_operation,omitempty"`
-	Verification          *VerificationPreview  `json:"verification,omitempty"`
-	LastExport            *Artifact             `json:"last_export,omitempty"`
-	PartSearch            string                `json:"part_search"`
-	MatchingParts         []Part                `json:"matching_parts"`
-	UndoName              string                `json:"undo_name"`
-	RedoName              string                `json:"redo_name"`
-	Scope                 Scope                 `json:"scope"`
-	Mixed                 *MixedResult          `json:"mixed,omitempty"`
-	NPN                   *NPNResult            `json:"npn,omitempty"`
-	Transient             *Transient            `json:"transient,omitempty"`
-	TransientSettings     TransientSettings     `json:"transient_settings"`
-	Document              DocumentState         `json:"document"`
-	CommandRevision       uint64                `json:"command_revision"`
-	Revision              uint64                `json:"revision"`
-	ElectricalRevision    uint64                `json:"electrical_revision"`
-	Circuit               Circuit               `json:"circuit"`
-	Components            []Component           `json:"components"`
-	Wires                 []Wire                `json:"wires"`
-	Nets                  []Net                 `json:"nets"`
-	Drawing               DrawingState          `json:"drawing"`
-	Model                 LEDModel              `json:"model"`
-	Selected              string                `json:"selected"`
-	View                  View                  `json:"view"`
-	Status                string                `json:"status"`
-	Analysis              string                `json:"analysis"`
-	Paused                bool                  `json:"paused"`
-	RunID                 uint64                `json:"run_id"`
-	Result                *Result               `json:"result,omitempty"`
-	Diagnostics           []Diagnostic          `json:"diagnostics"`
-	CanUndo               bool                  `json:"can_undo"`
-	CanRedo               bool                  `json:"can_redo"`
-	LastActor             string                `json:"last_actor"`
-	Closed                bool                  `json:"closed"`
+	DiagnosticPresentation DiagnosticPresentation `json:"diagnostic_presentation"`
+	Display                CircuitDisplay         `json:"display"`
+	MeasurementInspection  MeasurementInspection  `json:"measurement_inspection"`
+	PinnedReadings         []PinnedReading        `json:"pinned_readings"`
+	TraceFocus             *TraceFocus            `json:"trace_focus,omitempty"`
+	Limits                 CircuitLimits          `json:"limits"`
+	SimulatedComponents    int                    `json:"simulated_component_count"`
+	StepWork               *StepWork              `json:"step_work,omitempty"`
+	UndoEntry              *HistoryTip            `json:"undo_entry,omitempty"`
+	RedoEntry              *HistoryTip            `json:"redo_entry,omitempty"`
+	ActuationRevision      uint64                 `json:"actuation_revision"`
+	SwitchStates           []SwitchState          `json:"switch_states,omitempty"`
+	SourceWarnings         []Diagnostic           `json:"source_warnings,omitempty"`
+	WaveformModel          *WaveformModel         `json:"waveform_model,omitempty"`
+	PotentiometerModel     *PotentiometerModel    `json:"potentiometer_model,omitempty"`
+	DiodeModel             *DiodeModel            `json:"diode_model,omitempty"`
+	SwitchModel            *SwitchModel           `json:"switch_model,omitempty"`
+	Recording              *RecordingView         `json:"recording,omitempty"`
+	Recovery               RecoveryState          `json:"recovery"`
+	VerificationSettings   VerificationSettings   `json:"verification_settings"`
+	Operations             []OperationSummary     `json:"operations"`
+	SelectedOperation      string                 `json:"selected_operation"`
+	LastOperation          string                 `json:"last_operation,omitempty"`
+	Verification           *VerificationPreview   `json:"verification,omitempty"`
+	LastExport             *Artifact              `json:"last_export,omitempty"`
+	PartSearch             string                 `json:"part_search"`
+	MatchingParts          []Part                 `json:"matching_parts"`
+	UndoName               string                 `json:"undo_name"`
+	RedoName               string                 `json:"redo_name"`
+	Scope                  Scope                  `json:"scope"`
+	Mixed                  *MixedResult           `json:"mixed,omitempty"`
+	NPN                    *NPNResult             `json:"npn,omitempty"`
+	Transient              *Transient             `json:"transient,omitempty"`
+	TransientSettings      TransientSettings      `json:"transient_settings"`
+	Document               DocumentState          `json:"document"`
+	CommandRevision        uint64                 `json:"command_revision"`
+	Revision               uint64                 `json:"revision"`
+	ElectricalRevision     uint64                 `json:"electrical_revision"`
+	Circuit                Circuit                `json:"circuit"`
+	Components             []Component            `json:"components"`
+	Wires                  []Wire                 `json:"wires"`
+	Nets                   []Net                  `json:"nets"`
+	Drawing                DrawingState           `json:"drawing"`
+	Model                  LEDModel               `json:"model"`
+	Selected               string                 `json:"selected"`
+	View                   View                   `json:"view"`
+	Status                 string                 `json:"status"`
+	Analysis               string                 `json:"analysis"`
+	Paused                 bool                   `json:"paused"`
+	RunID                  uint64                 `json:"run_id"`
+	Result                 *Result                `json:"result,omitempty"`
+	Diagnostics            []Diagnostic           `json:"diagnostics"`
+	CanUndo                bool                   `json:"can_undo"`
+	CanRedo                bool                   `json:"can_redo"`
+	LastActor              string                 `json:"last_actor"`
+	Closed                 bool                   `json:"closed"`
 }
 type savedResponse struct {
 	fingerprint [32]byte
 	response    Response
 }
 type Service struct {
+	diagnosticDetails                bool
 	displayPreferences               DisplayPreferences
 	measurementTarget                *MeasurementTarget
 	pins                             []PinSpec
@@ -178,7 +180,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	if analysis == "" {
 		analysis = "DC operating point"
 	}
-	out := Snapshot{Display: s.circuitDisplayLocked(), MeasurementInspection: s.measurementInspectionLocked(compiled, s.currentMeasurementTargetLocked()), PinnedReadings: s.pinnedReadingsLocked(), TraceFocus: s.traceFocusLocked(compiled), Limits: Limits(), SimulatedComponents: SimulatedComponentCount(graph), StepWork: s.stepWorkLocked(), ActuationRevision: s.actuationRevision, SwitchStates: s.switchStatesLocked(), SourceWarnings: waveformSamplingWarnings(graph, s.transientSettings), Recording: s.recordingViewLocked(), Recovery: cloneRecovery(s.recovery), VerificationSettings: cloneVerificationSettings(s.verificationSettings), Operations: []OperationSummary{}, SelectedOperation: s.selectedOperation, LastOperation: s.lastOperation, PartSearch: s.partSearch, MatchingParts: filteredParts(s.partSearch), Scope: s.scopeLocked(compiled), Mixed: cloneMixed(s.mixed), NPN: cloneNPN(s.npn), CommandRevision: s.commandRevision, Transient: cloneTransient(s.transient), TransientSettings: s.transientSettings, Document: DocumentState{PreferencesDirty: preferencesHash(s.pins, s.displayPreferences) != s.savedPreferences, SchematicDirty: contentHash(s.graph, s.transientSettings) != s.savedGraph, RecordingsDirty: s.recordingsDirtyLocked(), RecordingCount: s.recordingCountLocked(), Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: DocumentVersion, Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom}, Revision: s.revision, ElectricalRevision: s.electrical, Circuit: s.circuit, Components: graph.Components, Wires: graph.Wires, Nets: compiled.Nets, Drawing: s.drawing, Model: Model(), Selected: s.selected, View: s.view, Status: s.status, Analysis: analysis, Paused: s.paused, RunID: s.run, Diagnostics: append([]Diagnostic{}, s.diagnostics...), CanUndo: len(s.undo) > 0, CanRedo: len(s.redo) > 0, LastActor: s.actor, Closed: s.closed}
+	out := Snapshot{DiagnosticPresentation: s.diagnosticPresentationLocked(compiled), Display: s.circuitDisplayLocked(), MeasurementInspection: s.measurementInspectionLocked(compiled, s.currentMeasurementTargetLocked()), PinnedReadings: s.pinnedReadingsLocked(), TraceFocus: s.traceFocusLocked(compiled), Limits: Limits(), SimulatedComponents: SimulatedComponentCount(graph), StepWork: s.stepWorkLocked(), ActuationRevision: s.actuationRevision, SwitchStates: s.switchStatesLocked(), SourceWarnings: waveformSamplingWarnings(graph, s.transientSettings), Recording: s.recordingViewLocked(), Recovery: cloneRecovery(s.recovery), VerificationSettings: cloneVerificationSettings(s.verificationSettings), Operations: []OperationSummary{}, SelectedOperation: s.selectedOperation, LastOperation: s.lastOperation, PartSearch: s.partSearch, MatchingParts: filteredParts(s.partSearch), Scope: s.scopeLocked(compiled), Mixed: cloneMixed(s.mixed), NPN: cloneNPN(s.npn), CommandRevision: s.commandRevision, Transient: cloneTransient(s.transient), TransientSettings: s.transientSettings, Document: DocumentState{PreferencesDirty: preferencesHash(s.pins, s.displayPreferences) != s.savedPreferences, SchematicDirty: contentHash(s.graph, s.transientSettings) != s.savedGraph, RecordingsDirty: s.recordingsDirtyLocked(), RecordingCount: s.recordingCountLocked(), Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: DocumentVersion, Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom}, Revision: s.revision, ElectricalRevision: s.electrical, Circuit: s.circuit, Components: graph.Components, Wires: graph.Wires, Nets: compiled.Nets, Drawing: s.drawing, Model: Model(), Selected: s.selected, View: s.view, Status: s.status, Analysis: analysis, Paused: s.paused, RunID: s.run, Diagnostics: append([]Diagnostic{}, s.diagnostics...), CanUndo: len(s.undo) > 0, CanRedo: len(s.redo) > 0, LastActor: s.actor, Closed: s.closed}
 	for i := len(s.operationOrder) - 1; i >= 0; i-- {
 		out.Operations = append(out.Operations, s.operationSummaryLocked(s.operations[s.operationOrder[i]]))
 	}
@@ -325,7 +327,7 @@ func (s *Service) startLocked() {
 		cancel()
 		if err != nil {
 			s.status = "error"
-			s.diagnostics = []Diagnostic{{"solve-failed", err.Error(), "D1"}}
+			s.diagnostics = []Diagnostic{{"solve-failed", err.Error(), compiled.LED.ID}}
 		} else {
 			result.RunID = run
 			result.ElectricalRevision = revision
@@ -428,7 +430,11 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	out := Response{Version: ProtocolVersion, ID: r.ID, Revision: s.revision}
-	fail := func(code, message string) Response { out.Error = &Failure{code, message}; return out }
+	fail := func(code, message string) Response {
+		out.Error = &Failure{code, message}
+		out.Help = s.requestDiagnosticLocked(r, code, message)
+		return out
+	}
 	if err := ctx.Err(); err != nil {
 		return fail("canceled", err.Error())
 	}
@@ -639,6 +645,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	state.DiagnosticPresentation = cloneDiagnosticPresentation(state.DiagnosticPresentation)
 	state.Display = cloneCircuitDisplay(state.Display)
 	state.MeasurementInspection = cloneMeasurementInspection(state.MeasurementInspection)
 	state.PinnedReadings = clonePinnedReadings(state.PinnedReadings)
@@ -741,6 +748,7 @@ func (s *Service) failure(r Request, code, message string) Response {
 
 // Cached mutation replies own their snapshot and failure independently of callers.
 func cloneMutationResponse(out Response) Response {
+	out.Help = cloneDiagnosticHelp(out.Help)
 	if out.Result != nil {
 		out.Result = cloneSnapshot(out.Result.(Snapshot))
 	}

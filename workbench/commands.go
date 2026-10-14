@@ -25,12 +25,13 @@ type Failure struct {
 	Message string `json:"message"`
 }
 type Response struct {
-	Version   int      `json:"version"`
-	ID        string   `json:"id"`
-	Revision  uint64   `json:"revision"`
-	Duplicate bool     `json:"duplicate,omitempty"`
-	Result    any      `json:"result,omitempty"`
-	Error     *Failure `json:"error,omitempty"`
+	Help      *DiagnosticHelp `json:"help,omitempty"`
+	Version   int             `json:"version"`
+	ID        string          `json:"id"`
+	Revision  uint64          `json:"revision"`
+	Duplicate bool            `json:"duplicate,omitempty"`
+	Result    any             `json:"result,omitempty"`
+	Error     *Failure        `json:"error,omitempty"`
 }
 type Capability struct {
 	ID           string          `json:"id"`
@@ -156,6 +157,7 @@ func Catalog() []Capability {
 		typedCapability("component.duplicate", "Copy one component's value, orientation and startup voltage into an unconnected new component; optional exact position", reflect.TypeOf(DuplicateParams{})),
 		typedCapability("edit.batch", "Atomically apply 1–100 supported schematic edits as one named undo action; no file, simulation or nested batch commands", reflect.TypeOf(BatchParams{})),
 		queryCapability("display.inspect", "Read exact wire voltages, unique conventional wire currents, palette and illustrative marker geometry at phase 0–1; no mutation or physics advancement", reflect.TypeOf(DisplayFrameParams{}), reflect.TypeOf(DisplayFrame{})),
+		typedCapability("diagnostics.details.set", "Show/hide technical diagnostic details; session-only presentation, no physics/history/dirty change; related targets are in diagnostic_presentation", reflect.TypeOf(DiagnosticDetailsParams{})),
 		typedCapability("display.preferences.set", "Set persisted voltage color/range, current cues/motion, reduced motion and conventional/electron visualization; signed values always use conventional current; preserves physics", reflect.TypeOf(DisplayPreferences{})),
 		typedCapability("measurement.select", "Select current object, terminal, anchored net or probe for live inspection; empty kind/ID returns to the editing selection; session only, preserves physics/history/dirty state", reflect.TypeOf(MeasurementSelectParams{})),
 		queryCapability("measurement.inspect", "Read the selected live measurement context, or a supplied current target, with references, signed values and accepted-result provenance; no mutation", reflect.TypeOf(MeasurementQueryParams{}), reflect.TypeOf(MeasurementInspection{})),

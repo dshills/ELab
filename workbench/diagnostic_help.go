@@ -1,0 +1,167 @@
+package workbench
+
+import (
+	"encoding/json"
+	"strings"
+)
+
+type DiagnosticHelp struct {
+	Source    string   `json:"source"`
+	Code      string   `json:"code"`
+	Severity  string   `json:"severity"`
+	Summary   string   `json:"summary"`
+	Action    string   `json:"action"`
+	Details   string   `json:"details"`
+	Objects   []string `json:"object_ids"`
+	Terminals []string `json:"terminal_refs"`
+	Wires     []string `json:"wire_ids"`
+}
+type DiagnosticPresentation struct {
+	DetailsVisible bool             `json:"details_visible"`
+	Items          []DiagnosticHelp `json:"items"`
+}
+type DiagnosticDetailsParams struct {
+	Visible bool `json:"visible"`
+}
+
+func cloneDiagnosticHelp(in *DiagnosticHelp) *DiagnosticHelp {
+	if in == nil {
+		return nil
+	}
+	out := *in
+	out.Objects = append([]string{}, in.Objects...)
+	out.Terminals = append([]string{}, in.Terminals...)
+	out.Wires = append([]string{}, in.Wires...)
+	return &out
+}
+func cloneDiagnosticPresentation(in DiagnosticPresentation) DiagnosticPresentation {
+	out := in
+	out.Items = append([]DiagnosticHelp{}, in.Items...)
+	for i := range out.Items {
+		out.Items[i] = *cloneDiagnosticHelp(&out.Items[i])
+	}
+	return out
+}
+func makeDiagnosticHelp(g Graph, c Compiled, d Diagnostic, source string, refs []string) DiagnosticHelp {
+	out := DiagnosticHelp{Source: source, Code: d.Code, Severity: "note", Summary: d.Message, Details: d.Message, Objects: []string{}, Terminals: []string{}, Wires: []string{}}
+	switch d.Code {
+	case "missing-ground", "reference-disconnected":
+		out.Action = "Add ground and connect the source's negative terminal to it."
+	case "missing-parts":
+		out.Action = "Place the missing parts and connect their named terminals; the drawing stays editable."
+	case "open-terminal", "unconnected-primitive":
+		out.Action = "Connect the highlighted terminal, or undo an accidental deletion."
+	case "shorted-component":
+		out.Severity = "error"
+		out.Action = "Remove the unintended connection across the highlighted component."
+	case "invalid-terminal", "invalid-net-label":
+		out.Severity = "error"
+		out.Action = "Repair the highlighted wire/label using existing named terminals and valid labels."
+	case "floating-island":
+		out.Action = "Connect the highlighted island to the circuit's ground reference."
+	case "unsupported-model", "unsupported-topology", "mixed-limit", "ideal-source-capacitor", "ideal-constraint-loop":
+		out.Severity = "warning"
+		out.Action = "Use the supported topology/model limits described in the details; your drawing is retained."
+	case "source-sampling":
+		out.Severity = "warning"
+		out.Action = "Use Fit waveform resolution or reduce the output sample interval."
+	case "solve-failed", "mixed-initialize-failed":
+		out.Severity = "error"
+		out.Summary = "Simulation could not complete this calculation."
+		out.Action = "Check connections, supported model limits and startup conditions, then restart. The technical reason is available below."
+	case "mixed-integration-failed":
+		out.Severity = "error"
+		out.Summary = "Simulation stopped at the last accepted sample."
+		out.Action = "Reduce the sample interval or review the circuit/startup conditions, then restart. Previous readings stay identified as stale."
+	default:
+		out.Action = "Review the explanation and supported values; the circuit remains editable."
+	}
+	if source == "request" {
+		out.Severity = "warning"
+		out.Summary = "That request could not be applied."
+		out.Action = "Check the requested values and related highlighted parts/terminals. Existing circuit state was preserved."
+		if d.Code == "file-error" || d.Code == "invalid-document" || d.Code == "unsupported-format" {
+			out.Action = "Choose a valid readable local schematic or save to a writable location. Existing circuit state was preserved."
+		}
+	}
+	appendRef := func(ref string) {
+		if part, _, ok := g.Terminal(ref); ok {
+			out.Objects = appendUnique(out.Objects, part.ID)
+			out.Terminals = appendUnique(out.Terminals, ref)
+			return
+		}
+		if _, ok := g.Component(ref); ok {
+			out.Objects = appendUnique(out.Objects, ref)
+			return
+		}
+		for _, wire := range g.Wires {
+			if wire.ID == ref {
+				out.Wires = appendUnique(out.Wires, ref)
+				return
+			}
+		}
+	}
+	refs = append(append([]string{}, refs...), d.ObjectID)
+	for _, ref := range refs {
+		if ref == "" {
+			continue
+		}
+		if strings.HasPrefix(ref, "net:") {
+			for _, net := range c.Nets {
+				if net.ID == ref {
+					for _, terminal := range net.Terminals {
+						appendRef(terminal)
+					}
+					for _, wire := range g.Wires {
+						if wire.Connected && c.TerminalNet[wire.From] == ref && c.TerminalNet[wire.To] == ref {
+							appendRef(wire.ID)
+						}
+					}
+				}
+			}
+		} else {
+			appendRef(ref)
+		}
+	}
+	return out
+}
+func (s *Service) diagnosticPresentationLocked(c Compiled) DiagnosticPresentation {
+	out := DiagnosticPresentation{DetailsVisible: s.diagnosticDetails, Items: []DiagnosticHelp{}}
+	for _, d := range s.diagnostics {
+		out.Items = append(out.Items, makeDiagnosticHelp(s.graph, c, d, "simulation", nil))
+	}
+	if s.stepJob != nil && s.stepJob.work.Status == "failed" && s.stepJob.work.Error != nil {
+		work := s.stepJob.work
+		d := Diagnostic{Code: "solve-failed", Message: work.Error.Message}
+		help := makeDiagnosticHelp(s.graph, c, d, "step", nil)
+		help.Summary = "Manual step failed; committed time and charge were preserved."
+		if work.RunID != s.run || work.ElectricalRevision != s.electrical || work.ActuationRevision != s.actuationRevision {
+			help.Summary = "A previous manual step failed; its committed state was preserved."
+		}
+		out.Items = append(out.Items, help)
+	}
+	for _, d := range waveformSamplingWarnings(s.graph, s.transientSettings) {
+		out.Items = append(out.Items, makeDiagnosticHelp(s.graph, c, d, "sampling", nil))
+	}
+	return out
+}
+func (s *Service) requestDiagnosticLocked(r Request, code, message string) *DiagnosticHelp {
+	if code != "invalid-params" && code != "not-found" && code != "file-error" && code != "invalid-document" {
+		return nil
+	}
+	refs := []string{}
+	// Related request targets are context, never guessed solver causes. Parsing
+	// known intent fields cannot change state or make an unknown ID a marker.
+	var fields map[string]json.RawMessage
+	if json.Unmarshal(r.Params, &fields) == nil {
+		for _, key := range []string{"id", "from", "to", "terminal"} {
+			var ref string
+			if json.Unmarshal(fields[key], &ref) == nil {
+				refs = append(refs, ref)
+			}
+		}
+	}
+	c, _, _ := s.graph.Compile()
+	help := makeDiagnosticHelp(s.graph, c, Diagnostic{Code: code, Message: message}, "request", refs)
+	return &help
+}

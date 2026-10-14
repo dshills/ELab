@@ -94,6 +94,19 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 	for _, id := range state.MeasurementInspection.Wires {
 		measurementWires[id] = true
 	}
+	diagnosticObjects, diagnosticTerminals, diagnosticWires := map[string]bool{}, map[string]bool{}, map[string]bool{}
+	for _, help := range state.DiagnosticPresentation.Items {
+		for _, id := range help.Objects {
+			diagnosticObjects[id] = true
+		}
+		for _, ref := range help.Terminals {
+			diagnosticTerminals[ref] = true
+		}
+		for _, id := range help.Wires {
+			diagnosticWires[id] = true
+		}
+	}
+	diagnosticColor := color.NRGBA{R: 192, G: 73, B: 50, A: 255}
 	measurementColor := color.NRGBA{R: 80, G: 124, B: 64, A: 255}
 	focusColor := color.NRGBA{R: 153, G: 78, B: 191, A: 255}
 	wireDisplays := map[string]workbench.WireDisplay{}
@@ -113,6 +126,9 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 		if w.ID == state.Selected {
 			c = selectedColor
 			width = 4
+		}
+		if diagnosticWires[w.ID] {
+			c, width = diagnosticColor, 5
 		}
 		b.stroke(c, width, wirePath(graph, w)...)
 		if w.Connected {
@@ -245,6 +261,10 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 				stroke(ink, 2.5, canvas.Point{X: -width, Y: y}, canvas.Point{X: width, Y: y})
 			}
 		}
+		if diagnosticObjects[part.ID] {
+			stroke(diagnosticColor, 2.5, canvas.Point{X: -76, Y: -58}, canvas.Point{X: 76, Y: -58}, canvas.Point{X: 76, Y: 58}, canvas.Point{X: -76, Y: 58}, canvas.Point{X: -76, Y: -58})
+			b.text(part.Position.X+82, part.Position.Y-50, "!", diagnosticColor)
+		}
 		if focusObjects[part.ID] {
 			stroke(focusColor, 3, canvas.Point{X: -70, Y: -52}, canvas.Point{X: 70, Y: -52}, canvas.Point{X: 70, Y: 52}, canvas.Point{X: -70, Y: 52}, canvas.Point{X: -70, Y: -52})
 		}
@@ -267,8 +287,8 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 				c = pendingColor
 				radius = 7
 			}
-			if len(state.Diagnostics) > 0 && state.Diagnostics[0].ObjectID == ref {
-				c = pendingColor
+			if diagnosticTerminals[ref] {
+				c, radius = diagnosticColor, 10
 			}
 			p := make([]canvas.Point, 17)
 			for i := range p {

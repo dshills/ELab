@@ -248,6 +248,9 @@ func (s *screen) mesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	if state.Display.Animate && !s.displayStarted.IsZero() {
 		phase = math.Mod(time.Since(s.displayStarted).Seconds(), 1)
 	}
+	if s.requestHelp != nil && s.requestHelp.Details == s.errorMessage && s.requestHelpRevision == state.CommandRevision {
+		state.DiagnosticPresentation.Items = append(state.DiagnosticPresentation.Items, *s.requestHelp)
+	}
 	return schematic(state, v, phase)
 }
 

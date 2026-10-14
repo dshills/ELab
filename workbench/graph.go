@@ -531,8 +531,10 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		return incomplete("reference-disconnected", "Connect the source's negative terminal to ground.", out.Source.ID+".negative")
 	}
 	r1, r2 := net(out.Resistor, "1"), net(out.Resistor, "2")
-	if out.Supply == out.Ground || r1 == r2 || out.Anode == out.Cathode {
-		return out, "error", &Diagnostic{"shorted-component", "A component's terminals are shorted together. Remove the unintended wire.", ""}
+	for _, part := range []Component{out.Source, out.Resistor, out.LED} {
+		if net(part, part.Terminals[0]) == net(part, part.Terminals[1]) {
+			return out, "error", &Diagnostic{"shorted-component", "A component's terminals are shorted together. Remove the unintended wire.", part.ID}
+		}
 	}
 	resistorBetween := func(a, b string) bool { return r1 == a && r2 == b || r1 == b && r2 == a }
 	if resistorBetween(out.Supply, out.Anode) && out.Cathode == out.Ground || out.Anode == out.Supply && resistorBetween(out.Cathode, out.Ground) {

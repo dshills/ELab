@@ -125,6 +125,8 @@ func main() {
 }
 
 type screen struct {
+	requestHelp                      *workbench.DiagnosticHelp
+	requestHelpRevision              uint64
 	displayStarted                   time.Time
 	app                              *app.Application
 	service                          *workbench.Service
@@ -146,12 +148,23 @@ func (s *screen) invoke(id string, p any) workbench.Response {
 	s.serial++
 	raw, _ := json.Marshal(p)
 	rev := s.service.Snapshot().CommandRevision
+	if s.requestHelp != nil && rev != s.requestHelpRevision {
+		s.requestHelp = nil
+		s.errorMessage = ""
+	}
 	request := workbench.Request{Version: 1, ID: fmt.Sprintf("ui-%d", s.serial), Command: id, Params: raw, ExpectedCommandRevision: &rev, Key: fmt.Sprintf("ui-%d", s.serial)}
 	result := s.service.Dispatch(context.Background(), request, "user")
 	if result.Error != nil {
 		s.errorMessage = result.Error.Message
-	} else {
+		s.requestHelp = result.Help
+		s.requestHelpRevision = rev
+	} else if id == "diagnostics.details.set" && s.requestHelp != nil {
+		if state, ok := result.Result.(workbench.Snapshot); ok {
+			s.requestHelpRevision = state.CommandRevision
+		}
+	} else if id != "diagnostics.details.set" {
 		s.errorMessage = ""
+		s.requestHelp = nil
 	}
 	s.app.Invalidate("main")
 	return result

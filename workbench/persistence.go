@@ -76,6 +76,7 @@ func (s *Service) requireCleanLocked(discard bool) error {
 	return nil
 }
 func (s *Service) detachDocumentLocked() {
+	s.diagnosticDetails = false
 	s.displayPreferences = DefaultDisplayPreferences()
 	s.measurementTarget = nil
 	s.pins = nil
@@ -623,6 +624,7 @@ func (s *Service) documentLocked() Document {
 }
 
 func (s *Service) installDocumentLocked(d Document) {
+	s.diagnosticDetails = false
 	s.displayPreferences = DefaultDisplayPreferences()
 	if d.DisplayPreferences != nil {
 		s.displayPreferences = *d.DisplayPreferences

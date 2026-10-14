@@ -55,6 +55,10 @@ func (s *screen) action(id, text, command string, p any) ui.Node {
 }
 func (s *screen) view() ui.Node {
 	state := s.service.Snapshot()
+	if s.requestHelp != nil && state.CommandRevision != s.requestHelpRevision {
+		s.requestHelp = nil
+		s.errorMessage = ""
+	}
 	s.drawing.pointer.setEnabled(!s.fileBusy && s.pendingCommand == "")
 	s.drawing.View.Center = canvas.Point{X: state.View.Center.X, Y: state.View.Center.Y}
 	s.drawing.View.Zoom = state.View.Zoom
@@ -328,6 +332,7 @@ func (s *screen) view() ui.Node {
 	inspector = append(inspector, s.measurementInspector(state)...)
 	inspector = append(inspector, s.pinnedReadingControls(state)...)
 	inspector = append(inspector, s.displayControls(state)...)
+	inspector = append(inspector, s.diagnosticControls(state)...)
 	if state.Drawing.Tool == "wire" {
 		terminalOptions := []ui.Option{{ID: "__none", Label: "Choose a terminal…"}}
 		for _, c := range state.Components {
@@ -391,11 +396,14 @@ func (s *screen) view() ui.Node {
 	if s.fileBusy {
 		message = "Working on your schematic file…"
 	}
-	if len(state.Diagnostics) > 0 {
-		message = state.Diagnostics[0].Message
+	if len(state.DiagnosticPresentation.Items) > 0 {
+		message = state.DiagnosticPresentation.Items[0].Summary
 	}
 	if s.errorMessage != "" {
 		message = s.errorMessage
+		if s.requestHelp != nil && s.requestHelp.Details == s.errorMessage {
+			message = s.requestHelp.Summary
+		}
 	}
 	messages := quiet("messages", message)
 	messages.Style.MinSize = ui.Some(ui.Size{Height: 40})
