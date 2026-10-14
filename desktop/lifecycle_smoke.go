@@ -1,0 +1,60 @@
+package main
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"reflect"
+
+	"github.com/dshills/vellum/app"
+	"github.com/dshills/vellum/ui"
+)
+
+// Run last: the explicit Discard decision closes this owned smoke session.
+func nativeLifecycleSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	done := make(chan error, 1)
+	if err := a.PostWait(ctx, func() {
+		before := s.service.Snapshot()
+		if !before.Document.Dirty {
+			done <- fmt.Errorf("close smoke requires the unsaved manual circuit")
+			return
+		}
+		if err := a.CheckCloseWindow("main"); !errors.Is(err, app.ErrCloseRefused) || s.pendingCommand != "app.close" || s.service.Snapshot().Closed {
+			done <- fmt.Errorf("native close bypassed protected service admission: %v", err)
+			return
+		}
+		if err := smokeUI(s, "cancel-file-action", nil); err != nil {
+			done <- err
+			return
+		}
+		if !reflect.DeepEqual(before, s.service.Snapshot()) {
+			done <- fmt.Errorf("canceled close changed circuit/history/physics")
+			return
+		}
+		if err := smokeUI(s, "file-menu", &ui.ChangeEvent{SelectedID: "app.close"}); err != nil {
+			done <- err
+			return
+		}
+		if s.pendingCommand != "app.close" {
+			done <- fmt.Errorf("file Close did not share the window-close decision")
+			return
+		}
+		if err := smokeUI(s, "discard-continue", nil); err != nil {
+			done <- err
+			return
+		}
+		if !s.service.Snapshot().Closed {
+			done <- fmt.Errorf("explicit discard did not close owned service")
+			return
+		}
+		done <- nil
+	}); err != nil {
+		return err
+	}
+	select {
+	case err := <-done:
+		return err
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+}

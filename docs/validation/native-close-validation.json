@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "version": "0.46.0",
+  "build": "61",
+  "binary_sha256": "42074e7594ed425e630bf6ad759d452991872d221ef94897ca82a0533199cad9",
+  "packaged_binary_matches": true,
+  "source_checkpoint": "558c5b0",
+  "vellum_baseline": {
+    "recorded": "2026-10-14",
+    "version": "checkout 68c3750",
+    "commit": "68c3750243326ce9120fd2d5ff5b0d610cc36d9e",
+    "local_checkout": "../../Vellum (relative to desktop/go.mod)",
+    "native_dependency_manifest": "drivers/cogent/native/dependencies.json",
+    "native_dependency_manifest_sha256": "5f618431228a80ea4a23db1e5ebc241ac3a8b702bcc1fc8c479cc84e77bbfa58",
+    "go_directive": "1.25.6",
+    "tested_go": "go1.27.2 darwin/arm64",
+    "root_module": "github.com/dshills/elab",
+    "desktop_module": "github.com/dshills/elab/desktop",
+    "status": "Local checkout integration; relocatable SDK distribution remains a later gate"
+  },
+  "inventory_sha256": "1bf9d3872940423ad2edf07a90e6c13cd57a844e38f00a1aea832e5f4879f0ec",
+  "checks": [
+    "Native window CloseRequest and File Close/Cmd+W registration route through one owner policy and the public app.close command",
+    "Existing pending choice or active native file operation is preserved on repeated close; no new semantic mutation or replacement decision",
+    "Native policy tests cover dirty Cancel/Discard, clean admission, Save-before-close, picker/decision preservation and stale Save/Discard after agent document replacement",
+    "Controlled stale Save picker test proves no file publication and no closure of the replacement document; blocked test pickers always release during failures",
+    "Exact packaged native/GPU smoke reaches the owner window close policy, cancels without state change, invokes File Close and explicitly discards only its owned circuit",
+    "Public headless and packaged close refusal, generation conflict, state preservation and explicit discard agree; owned process exits gracefully",
+    "Full root/native lint/import/race/vet passes; source ledger now includes CloseRequest and verifies 33 files/261 sites; all four reference workflows pass"
+  ],
+  "evidence": [
+    "docs/native-close.md",
+    "docs/validation/headless-close.json",
+    "docs/validation/desktop-close.json",
+    "docs/validation/native-close-conformance.json",
+    "research/13-native-command-inventory.json"
+  ],
+  "limits_of_evidence": [
+    "Smoke uses the real owner policy and descriptor/menu callbacks, not a physical title-bar click or OS Cmd+Q automation",
+    "Prepared framework Scene close gate and multi-window quit veto path were inspected read-only; complete OS/platform lifecycle qualification remains open",
+    "93 dynamic/relay/custom source sites, full field/menu/gesture/accessibility and participant acceptance remain unqualified",
+    "No solver/model/work-limit changes; private unsigned development bundle, not a distribution qualification",
+    "Prior bundle preserved in build/ELab-before-native-close.app; user windows/files and sibling SDK left intact"
+  ]
+}

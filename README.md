@@ -34,10 +34,12 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.45.0 --build-version 60 --platform darwin
+  --version 0.46.0 --build-version 61 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).
+
+**File → Close window** / **Cmd+W** use shared [unsaved-work close protection](docs/native-close.md), preserving active file operations and pending choices.
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
 

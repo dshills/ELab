@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "checks": [
+    "dirty close refuses without circuit/history/physics change",
+    "stale close generation cannot close replacement",
+    "explicit discard admits semantic close"
+  ],
+  "limits": [
+    "public semantic command workflow; physical OS close-button/Cmd+Q delivery remains a separate check"
+  ]
+}

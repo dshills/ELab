@@ -46,6 +46,7 @@ var callbackFields = map[string]bool{
 	"Activate": true, "Change": true, "Dismiss": true, "FileDrop": true,
 	"GridChange": true, "GridCommit": true, "TreeChange": true,
 	"TreeDisclosure": true, "TabClose": true,
+	"CloseRequest": true,
 }
 
 // These are reviewed semantic wrapper targets, not executable alias expansion.

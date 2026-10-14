@@ -84,7 +84,7 @@ func main() {
 		// Compact-window layout is inspected separately in the UI audit.
 		width, height = 1260, 1100
 	}
-	err = a.Open(app.Window{ID: "main", Title: "ELab · Live electronics", Width: width, Height: height, View: screen.view, CloseRequest: func() bool { screen.requestReplace("app.close", workbench.ReplaceParams{}); return false }})
+	err = a.Open(app.Window{ID: "main", Title: "ELab · Live electronics", Width: width, Height: height, View: screen.view, CloseRequest: screen.requestClose})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -225,6 +225,7 @@ func (s *screen) registerCommands() {
 	for _, entry := range []struct{ id, label, shortcut string }{
 		{"edit.undo", "Undo", "Meta+Z"}, {"edit.redo", "Redo", "Meta+Shift+Z"},
 		{"project.clear", "New blank", ""}, {"drawing.cancel", "Cancel drawing", "Escape"},
+		{"app.close", "Close window", "Meta+W"},
 		{"example.current.reset", "Reset current example", ""}, {"example.reset", "Load LED example", ""}, {"example.rc", "Load RC example", ""}, {"example.npn", "Load NPN LED example", ""}, {"example.switch-npn", "Load manual transistor LED switch", ""}, {"example.npn-pulse", "Load blinking NPN LED", ""}, {"example.flasher", "Load capacitor-timed LED flasher", ""},
 		{"simulation.pause", "Pause", ""}, {"simulation.resume", "Resume", ""}, {"simulation.restart", "Restart", ""}, {"view.fit", "Fit circuit", ""},
 	} {
@@ -246,6 +247,10 @@ func (s *screen) registerCommands() {
 				}
 				return nil
 			}, Execute: func(context.Context) error {
+				if entry.id == "app.close" {
+					s.requestClose()
+					return nil
+				}
 				if entry.id == "example.current.reset" {
 					state := s.service.Snapshot()
 					if state.Example == nil {

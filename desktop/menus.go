@@ -16,7 +16,7 @@ type menuChoices struct {
 }
 
 var applicationMenus = []app.MenuGroup{
-	{Label: "File", Commands: []string{"project.clear", "file.open", "file.save", "file.save-as"}},
+	{Label: "File", Commands: []string{"project.clear", "file.open", "file.save", "file.save-as", "app.close"}},
 	{Label: "Examples", Commands: []string{"example.reset", "example.rc", "example.npn", "example.switch-npn", "example.npn-pulse", "example.flasher"}},
 	{Label: "Appearance", Commands: []string{"appearance.light", "appearance.dark", "appearance.system"}},
 }
