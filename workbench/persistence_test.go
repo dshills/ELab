@@ -21,7 +21,7 @@ func refuse(t *testing.T, s *Service, id string, p any, code string) {
 		t.Fatalf("%s: want %s, got %+v", id, code, r.Error)
 	}
 	after := s.Snapshot()
-	if (id == "project.load" || id == "project.save") && after.CommandRevision == before.CommandRevision+1 {
+	if waitingProjectCommand(id) && after.CommandRevision == before.CommandRevision+1 {
 		if after.ProjectWork == nil || after.ProjectWork.Status != "failed" || after.ProjectWork.Error == nil || after.ProjectWork.Error.Code != code || after.ProjectWork.Actor != "test" {
 			t.Fatal("admitted failed file operation lacks its terminal job outcome")
 		}

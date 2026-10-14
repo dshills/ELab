@@ -85,6 +85,7 @@ type Service struct {
 	projectSerial                    uint64
 	projectLoad                      projectLoadFunc
 	projectSave                      projectSaveFunc
+	projectExport                    projectExportFunc
 	projectPublish                   projectPublishFunc
 	inputJob                         *inputJob
 	inputSerial                      uint64
@@ -170,7 +171,7 @@ func newService(solver func(context.Context, Circuit) (Result, error)) *Service 
 	return s
 }
 func newGraphService(solver func(context.Context, Circuit) (Result, error), graph Graph) *Service {
-	s := &Service{revision: 1, electrical: 1, graph: graph.Clone(), drawing: DefaultDrawing(), usedIDs: map[string]bool{}, view: View{Zoom: 1}, cache: map[string]savedResponse{}, changed: make(chan struct{}), solver: solver, networkAdvance: advanceLiveNetwork, inputSolve: solveInputWork, projectLoad: prepareProjectLoad, projectSave: prepareProjectSave, projectPublish: publishProjectSave, initialSolver: solveInitial, initialTimeout: 5 * time.Second, actor: "system"}
+	s := &Service{revision: 1, electrical: 1, graph: graph.Clone(), drawing: DefaultDrawing(), usedIDs: map[string]bool{}, view: View{Zoom: 1}, cache: map[string]savedResponse{}, changed: make(chan struct{}), solver: solver, networkAdvance: advanceLiveNetwork, inputSolve: solveInputWork, projectLoad: prepareProjectLoad, projectSave: prepareProjectSave, projectExport: prepareProjectExport, projectPublish: publishPreparedFile, initialSolver: solveInitial, initialTimeout: 5 * time.Second, actor: "system"}
 	for _, c := range graph.Components {
 		s.usedIDs[c.ID] = true
 	}
@@ -480,7 +481,7 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 	if r.Command == "simulation.step" {
 		return s.awaitStep(ctx, r, actor, out)
 	}
-	if r.Command == "project.load" || r.Command == "project.save" {
+	if waitingProjectCommand(r.Command) {
 		return s.awaitProjectWork(ctx, r, actor, out)
 	}
 	return out
@@ -710,10 +711,10 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	if s.projectJob != nil && s.projectJob.work.CommandRevision == s.commandRevision+1 {
 		s.projectJob.work.Actor = actor
 		s.projectJob.requestID = r.ID
-		if r.Command == "project.load" || r.Command == "project.save" {
+		if waitingProjectCommand(r.Command) {
 			s.projectJob.legacyKey = key
 		}
-	} else if s.activeProjectWorkLocked() && (s.projectJob.save == nil && s.loadGuardLocked() != s.projectJob.guard || s.projectJob.save != nil && !s.projectJob.publishing && !s.saveCurrentLocked(s.projectJob)) {
+	} else if s.activeProjectWorkLocked() && s.projectWorkSupersededLocked(s.projectJob) {
 		s.cancelProjectWorkLocked("superseded")
 	}
 	if s.inputJob != nil && s.inputJob.work.CommandRevision == s.commandRevision+1 {
@@ -735,7 +736,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	cached := out
 	cached.Result = cloneSnapshot(out.Result.(Snapshot))
 	entry := savedResponse{fingerprint: fingerprint, response: cached}
-	if (r.Command == "project.save" || r.Command == "project.load") && s.projectJob.work.CommandRevision == s.commandRevision {
+	if waitingProjectCommand(r.Command) && s.projectJob.work.CommandRevision == s.commandRevision {
 		entry.project = s.projectJob
 	}
 	s.cache[key] = entry

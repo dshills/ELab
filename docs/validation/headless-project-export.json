@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "admissions": [
+    {
+      "kind": "schematic-svg",
+      "wall_ms": 0.4675410455092788
+    },
+    {
+      "kind": "scope-csv",
+      "wall_ms": 0.7340000011026859
+    },
+    {
+      "kind": "verification-json",
+      "wall_ms": 0.5003330297768116
+    },
+    {
+      "kind": "verification-csv",
+      "wall_ms": 0.3535000141710043
+    }
+  ],
+  "checks": [
+    "all four immediate-start export kinds and stable inspection",
+    "admission captures source before later geometry/probe/value/keep edits",
+    "current project/physics/history/scope preserved after publication",
+    "captured scope window/units/samples",
+    "record JSON retains original metadata/rows",
+    "record CSV retains operation identity",
+    "exact hashes/byte counts/captured generation",
+    "legacy recorded export bytes match immediate-start output",
+    "temporary cleanup and durable clean source"
+  ],
+  "limitations": [
+    "blocked-worker tests separately prove lock responsiveness, actual record eviction and publication fencing",
+    "OS calls may outlast cancellation/deadline; publishing cannot be canceled",
+    "portable final check/rename has no universal cross-process compare-and-swap guarantee",
+    "backend timing excludes input-to-pixel latency",
+    "manual recovery/import/shutdown still have synchronous paths"
+  ]
+}

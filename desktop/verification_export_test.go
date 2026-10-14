@@ -39,6 +39,10 @@ func TestNativeRecordedExportRetainsSelectedOperationParameters(t *testing.T) {
 		if artifact == nil || artifact.OperationID != view.Operation.ID || artifact.Format != "verification."+format {
 			t.Fatal("native picker dropped record ID/format")
 		}
+		work := user.service.Snapshot().ProjectWork
+		if work == nil || work.Status != "completed" || work.Command != "verification.export" || work.Actor != "user" || work.ArtifactSHA256 != artifact.SHA256 || artifact.SHA256 == "" {
+			t.Fatal("native recorded export lacks its shared completed job/artifact identity")
+		}
 		data, err := os.ReadFile(path)
 		if err != nil || len(data) == 0 {
 			t.Fatal("record export missing")

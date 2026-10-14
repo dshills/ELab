@@ -87,6 +87,7 @@ type projectJob struct {
 	reason, legacyKey, requestID string
 	final                        Response
 	save                         *saveCapture
+	export                       *exportCapture
 	publishing                   bool
 }
 

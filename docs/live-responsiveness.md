@@ -36,3 +36,5 @@ Manual multi-sample Step is now addressed separately by [background manual work]
 Project Open now also reads/validates outside the lock with [observable project work](project-work.md). Save/export/manual recovery are separate remaining paths.
 
 Save serialization, destination checks, disk publication and recovery cleanup now also run outside the lock via [captured save work](project-save.md). Export/manual recovery remain separate paths.
+
+SVG/live CSV/recorded JSON+CSV export encoding and disk work now run outside the lock via [captured exports](project-export.md). Manual recovery/import/shutdown remain separate paths.

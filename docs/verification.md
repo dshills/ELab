@@ -49,3 +49,5 @@ python3 scripts/verification-demo.py --output docs/validation/headless-verificat
 python3 scripts/verification-demo.py --connect build/verify.endpoint.json \
   --output docs/validation/desktop-verification.json
 ```
+
+Recorded JSON/CSV exports now retain their immutable captured asset in [background export work](project-export.md), including when the original session record is later evicted. Format/model metadata is unchanged.

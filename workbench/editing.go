@@ -184,7 +184,10 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if err := params(raw, &p, "id", "path", "format"); err != nil {
 			return err
 		}
-		return s.exportVerificationLocked(p)
+		if p.Format != "json" && p.Format != "csv" {
+			return fmt.Errorf("verification format must be json or csv")
+		}
+		return s.startExportLocked(ExportStartParams{Kind: "verification-" + p.Format, ID: p.ID, Path: p.Path, Overwrite: p.Overwrite, ExpectedGeneration: p.ExpectedGeneration})
 	case "verification.settings.set":
 		var p VerificationSettings
 		if err := params(raw, &p, "duration_s", "sample_step_s", "input_mode", "capacitor_initials"); err != nil {
@@ -225,12 +228,22 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		s.selectRecordingLocked(p.ID)
 		return nil
+	case "export.start":
+		var p ExportStartParams
+		if err := params(raw, &p, "kind", "path"); err != nil {
+			return err
+		}
+		return s.startExportLocked(p)
 	case "export.scope.csv", "export.schematic.svg":
 		var p ExportParams
 		if err := params(raw, &p, "path"); err != nil {
 			return err
 		}
-		return s.exportLocked(command, p)
+		kind := "schematic-svg"
+		if command == "export.scope.csv" {
+			kind = "scope-csv"
+		}
+		return s.startExportLocked(ExportStartParams{Kind: kind, Path: p.Path, Overwrite: p.Overwrite, ExpectedGeneration: p.ExpectedGeneration})
 	case "scope.window.set":
 		var p ScopeWindow
 		if err := params(raw, &p, "mode"); err != nil {
@@ -326,7 +339,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return &actionError{"operation-unavailable", "Choose the active project work to cancel"}
 		}
 		if s.projectJob.publishing {
-			return &actionError{"operation-committing", "The save is publishing atomically and can no longer be canceled"}
+			return &actionError{"operation-committing", "The file operation is publishing atomically and can no longer be canceled"}
 		}
 		s.cancelProjectWorkLocked("canceled")
 		return nil

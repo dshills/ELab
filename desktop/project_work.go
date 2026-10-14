@@ -16,6 +16,8 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 	action := "open"
 	if w.Command == "project.save" {
 		action = "save"
+	} else if w.Command == "export.schematic.svg" || w.Command == "export.scope.csv" || w.Command == "verification.export" {
+		action = "export"
 	}
 	title := "Project " + action
 	if w.ResultGeneration != 0 && w.ResultGeneration != state.Document.Generation || w.ResultGeneration == 0 && w.DocumentGeneration != state.Document.Generation {
@@ -28,6 +30,9 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 		if action == "save" {
 			explanation = "Saving the captured circuit. Later edits remain unsaved. Cancellation is available before publication."
 		}
+		if action == "export" {
+			explanation = "Exporting captured drawing or readings. Editing stays available; cancellation ends when publication begins."
+		}
 		cancel := s.action("project-work-cancel", "Cancel project "+action, "project.work.cancel", workbench.IDParams{ID: w.ID})
 		cancel.Disabled = !w.Cancelable
 		nodes = append(nodes, quiet("project-work-explanation", explanation), cancel)
@@ -39,7 +44,7 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 		nodes = append(nodes, quiet("project-work-cleanup-warning", w.CleanupWarning))
 	}
 	if w.Associated != nil && !*w.Associated {
-		nodes = append(nodes, quiet("project-work-unassociated", "Saved the captured file; the current project was preserved."))
+		nodes = append(nodes, quiet("project-work-unassociated", "Published the captured file; the current project was preserved."))
 	}
 	return nodes
 }

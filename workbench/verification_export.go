@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/csv"
 	"encoding/json"
-	"fmt"
 	"strconv"
 )
 
@@ -20,33 +19,13 @@ type VerificationDocument struct {
 	Rows     []VerificationRow    `json:"rows"`
 }
 
-func (s *Service) exportVerificationLocked(p VerificationExportParams) error {
-	if err := s.checkDocumentGenerationLocked(p.ExpectedGeneration); err != nil {
-		return err
-	}
-	operation, ok := s.operations[p.ID]
-	if !ok {
-		return &actionError{"not-found", "Operation not found or no longer retained"}
-	}
-	if operation.record == nil {
-		return &actionError{"not-ready", "Export requires a completed verification"}
-	}
-	if p.Format != "json" && p.Format != "csv" {
-		return fmt.Errorf("verification format must be json or csv")
-	}
-	path, err := documentPath(p.Path)
-	if err != nil {
-		return err
-	}
-	if path == s.documentPath {
-		return fmt.Errorf("verification export must not replace the schematic")
-	}
-	record := operation.record
+func encodeVerificationExport(record *verificationRecord, format string) ([]byte, error) {
+	var err error
 	var data []byte
-	if p.Format == "json" {
+	if format == "json" {
 		data, err = json.MarshalIndent(VerificationDocument{Metadata: record.metadata, Rows: record.rows}, "", "  ")
 		if err != nil {
-			return fileError(err)
+			return nil, fileError(err)
 		}
 		data = append(data, '\n')
 	} else {
@@ -76,7 +55,7 @@ func (s *Service) exportVerificationLocked(p VerificationExportParams) error {
 			header = append(header, probe.ID+" ["+probe.Unit+"]")
 		}
 		if err := writer.Write(header); err != nil {
-			return fileError(err)
+			return nil, fileError(err)
 		}
 		npnModel := ""
 		if m.NPNModel != nil {
@@ -90,21 +69,14 @@ func (s *Service) exportVerificationLocked(p VerificationExportParams) error {
 				row = append(row, number(value))
 			}
 			if err := writer.Write(row); err != nil {
-				return fileError(err)
+				return nil, fileError(err)
 			}
 		}
 		writer.Flush()
 		if err := writer.Error(); err != nil {
-			return fileError(err)
+			return nil, fileError(err)
 		}
 		data = b.Bytes()
 	}
-	if len(data) > 8*1024*1024 {
-		return fmt.Errorf("verification export exceeds 8 MiB")
-	}
-	if err := publishExport(path, data, p.Overwrite); err != nil {
-		return err
-	}
-	s.lastExport = &Artifact{Path: path, Format: "verification." + p.Format, OperationID: p.ID, ElectricalRevision: record.metadata.ElectricalRevision, Bytes: len(data)}
-	return nil
+	return data, nil
 }

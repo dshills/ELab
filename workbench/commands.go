@@ -179,6 +179,7 @@ func Catalog() []Capability {
 		capability("parts.list", "List available kinds, terminals, models and default values", false, `{"type":"object","additionalProperties":false}`),
 		typedCapability("project.clear", "Start blank; unsaved changes require discard_changes; undo restores drawing", reflect.TypeOf(ReplaceParams{})),
 		queryCapability("project.work.inspect", "Inspect an operation by stable ID; retain eight project jobs and preserve active operations", reflect.TypeOf(IDParams{}), reflect.TypeOf(ProjectWork{})),
+		typedCapability("export.start", "Capture schematic-svg, scope-csv or verification-json/csv export and return background admission; inspect/cancel via project.work commands", reflect.TypeOf(ExportStartParams{})),
 		typedCapability("project.save.start", "Capture a project and return background save admission; inspect project_work; cancellation is available before publishing", reflect.TypeOf(SaveParams{})),
 		typedCapability("project.save", "Wait for the same captured background save as project.save.start; preserves kept records/models/preferences; later edits remain dirty; omit path to save current file; overwrite explicitly replaces an existing file", reflect.TypeOf(SaveParams{})),
 		typedCapability("project.load.start", "Start background bounded local project reading/validation; inspect project_work; replacement refuses intervening edits", reflect.TypeOf(LoadParams{})),

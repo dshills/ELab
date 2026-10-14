@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "date": "2026-10-14",
+  "version": "0.34.0",
+  "build": "48",
+  "binary_sha256": "91e565819b4d163bd6a7a7b7c3c1c60769f1a84bd6e3774448086681a6a26f6f",
+  "packaged_binary_matches": true,
+  "checks": [
+    "source review and whitespace check; shared file-publication module used by Save and Export",
+    "pinned Staticcheck/import formatting; complete root/native race tests and vet",
+    "background captured SVG/live scope CSV/recorded JSON+CSV encoding and disk work",
+    "existing export commands retain wait-for-result behavior and unchanged file formats",
+    "blocked SVG capture preserves original geometry/value/display/readings while editing continues",
+    "blocked scope CSV retains window/probes/samples while stepping and plot controls change",
+    "recorded exports retain immutable asset through actual unkept-record eviction and live edits",
+    "exact pre-publication cancellation preserves destination/current artifact and project state",
+    "external destination changes refused after durable preparation; temporary cleanup",
+    "publication fencing refuses cancellation and preserves replacement project with original provenance",
+    "captured generation, exact artifact SHA-256 and byte count exposed to users/agents",
+    "native export controls retain record ID/format, completed job and artifact identity",
+    "built/packaged actual GPU smoke invokes all four native export controls",
+    "public headless/packaged all-format workflow and shared Save regression"
+  ],
+  "limits_of_evidence": [
+    "backend admission timings exclude visible input-to-pixel latency",
+    "OS calls may outlast cancellation/deadline; publishing cannot honestly promise cancellation",
+    "portable final-check/rename is not universal compare-and-swap across unrelated writers",
+    "formats/models/device/numerical/work limits unchanged; regular bounded targets required",
+    "manual recovery, recorded import and some shutdown paths still contain synchronous work",
+    "private unsigned local bundle; full events/agent coverage, accessibility, numerical/performance consolidation, distribution and participant gates remain open",
+    "functional audit remains 15 implemented / 12 partial"
+  ]
+}

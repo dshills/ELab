@@ -153,6 +153,9 @@ rendered:
 	if err := nativeProjectOpenSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	if err := nativeExportSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	if err := nativeWaveformSmoke(ctx, a, s); err != nil {
 		return err
 	}

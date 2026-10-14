@@ -20,6 +20,8 @@ type ExportParams struct {
 }
 
 type Artifact struct {
+	DocumentGeneration uint64 `json:"document_generation,omitempty"`
+	SHA256             string `json:"sha256,omitempty"`
 	OperationID        string `json:"operation_id,omitempty"`
 	Path               string `json:"path"`
 	Format             string `json:"format"`
@@ -29,74 +31,39 @@ type Artifact struct {
 }
 
 func number(v float64) string { return strconv.FormatFloat(v, 'g', 17, 64) }
-func (s *Service) exportLocked(command string, p ExportParams) error {
-	if err := s.checkDocumentGenerationLocked(p.ExpectedGeneration); err != nil {
-		return err
+func encodeScopeCSV(t *Transient, scope Scope) ([]byte, error) {
+	var b bytes.Buffer
+	writer := csv.NewWriter(&b)
+	// Identity accompanies every row so extracted rows remain attributable.
+	header := []string{"run_id", "electrical_revision", "engine", "window_start_s", "window_end_s", "sample_step_s", "time_s"}
+	for _, trace := range scope.Traces {
+		header = append(header, trace.Probe.ID+" ["+trace.Probe.Unit+"]")
 	}
-	path, err := documentPath(p.Path)
-	if err != nil {
-		return err
+	if err := writer.Write(header); err != nil {
+		return nil, fileError(err)
 	}
-	if path == s.documentPath {
-		return fmt.Errorf("export must use a different path from the schematic")
-	}
-	var data []byte
-	format := "svg"
-	run := s.run
-	if command == "export.scope.csv" {
-		format = "csv"
-		compiled, _, _ := s.graph.Compile()
-		scope := s.scopeLocked(compiled)
-		t := s.transient
-		if t == nil || t.Stale || !scope.WindowValid || len(scope.Traces) == 0 || len(scope.Traces[0].Points) == 0 {
-			return &actionError{"unavailable", "CSV needs selected traces in a fresh retained scope interval"}
+	for _, sample := range t.Samples {
+		if !scopeTimeInside(sample.Time, scope.Window.Start, scope.Window.End) {
+			continue
 		}
-		var b bytes.Buffer
-		writer := csv.NewWriter(&b)
-		// Identity accompanies every row so extracted rows remain attributable.
-		header := []string{"run_id", "electrical_revision", "engine", "window_start_s", "window_end_s", "sample_step_s", "time_s"}
+		row := []string{strconv.FormatUint(t.RunID, 10), strconv.FormatUint(t.ElectricalRevision, 10), t.Engine, number(scope.Window.Start), number(scope.Window.End), number(t.Settings.StepSeconds), number(sample.Time)}
 		for _, trace := range scope.Traces {
-			header = append(header, trace.Probe.ID+" ["+trace.Probe.Unit+"]")
-		}
-		if err := writer.Write(header); err != nil {
-			return fileError(err)
-		}
-		for _, sample := range t.Samples {
-			if !scopeTimeInside(sample.Time, scope.Window.Start, scope.Window.End) {
-				continue
+			value, ok := frameValue(sample, trace.Probe)
+			text := ""
+			if ok {
+				text = number(value)
 			}
-			row := []string{strconv.FormatUint(t.RunID, 10), strconv.FormatUint(t.ElectricalRevision, 10), t.Engine, number(scope.Window.Start), number(scope.Window.End), number(t.Settings.StepSeconds), number(sample.Time)}
-			for _, trace := range scope.Traces {
-				value, ok := frameValue(sample, trace.Probe)
-				text := ""
-				if ok {
-					text = number(value)
-				}
-				row = append(row, text)
-			}
-			if err := writer.Write(row); err != nil {
-				return fileError(err)
-			}
+			row = append(row, text)
 		}
-		writer.Flush()
-		if err := writer.Error(); err != nil {
-			return fileError(err)
+		if err := writer.Write(row); err != nil {
+			return nil, fileError(err)
 		}
-		data = b.Bytes()
-		run = t.RunID
-	} else {
-		display := s.circuitDisplayLocked()
-		display.Animate = false // SVG freezes the current reading with static arrows.
-		data = schematicSVGWithDisplay(s.graph, s.run, s.electrical, display, s.pinnedReadingsLocked()...)
 	}
-	if len(data) > 8*1024*1024 {
-		return fmt.Errorf("export exceeds 8 MiB")
+	writer.Flush()
+	if err := writer.Error(); err != nil {
+		return nil, fileError(err)
 	}
-	if err := publishExport(path, data, p.Overwrite); err != nil {
-		return err
-	}
-	s.lastExport = &Artifact{Path: path, Format: format, RunID: run, ElectricalRevision: s.electrical, Bytes: len(data)}
-	return nil
+	return b.Bytes(), nil
 }
 func publishExport(path string, data []byte, overwrite bool) error {
 	replace := false

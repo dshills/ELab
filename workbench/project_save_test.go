@@ -18,7 +18,7 @@ func blockSavePreparation(t *testing.T, s *Service) (<-chan struct{}, func()) {
 	entered, release := make(chan struct{}), make(chan struct{})
 	var once sync.Once
 	s.mu.Lock()
-	s.projectSave = func(ctx context.Context, capture saveCapture, path string, progress func(string, int)) (*preparedSave, error) {
+	s.projectSave = func(ctx context.Context, capture saveCapture, path string, progress func(string, int)) (*preparedFile, error) {
 		prepared, err := prepareProjectSave(ctx, capture, path, progress)
 		close(entered)
 		<-release
@@ -32,7 +32,7 @@ func blockSavePublication(t *testing.T, s *Service) (<-chan struct{}, func()) {
 	entered, release := make(chan struct{}), make(chan struct{})
 	var once sync.Once
 	s.mu.Lock()
-	s.projectPublish = func(prepared *preparedSave) error { close(entered); <-release; return publishProjectSave(prepared) }
+	s.projectPublish = func(prepared *preparedFile) error { close(entered); <-release; return publishPreparedFile(prepared) }
 	s.mu.Unlock()
 	return entered, func() { once.Do(func() { close(release) }) }
 }

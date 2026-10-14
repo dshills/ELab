@@ -121,8 +121,8 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 					s.errorMessage = err.Error()
 				}
 			} else if response.Error != nil {
-				if (id == "project.load" || id == "project.save") && (response.Error.Code == "canceled" || response.Error.Code == "superseded") {
-					s.fileMessage = "Project " + response.Error.Code + "; current project preserved"
+				if (id == "project.load" || id == "project.save" || strings.HasPrefix(id, "export.") || id == "verification.export") && (response.Error.Code == "canceled" || response.Error.Code == "superseded") {
+					s.fileMessage = "File operation " + response.Error.Code + "; current project preserved"
 				} else if response.Error.Code == "unsaved-changes" {
 					s.pendingCommand = id
 					s.pendingParams = append(json.RawMessage{}, raw...)

@@ -95,6 +95,10 @@ func TestNextWorkflowControlsUseAgentCommands(t *testing.T) {
 		if user.errorMessage != "" {
 			t.Fatal(user.errorMessage)
 		}
+		work := user.service.Snapshot().ProjectWork
+		if work == nil || work.Status != "completed" || work.Command != command || work.Actor != "user" || work.ArtifactSHA256 == "" {
+			t.Fatal("native export lacks its shared completed job identity")
+		}
 		agentAction(t, agent, command, workbench.SaveParams{Path: other, Overwrite: true})
 		left, _ := os.ReadFile(path)
 		right, _ := os.ReadFile(other)

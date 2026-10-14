@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"time"
 
 	"github.com/dshills/vellum/app"
 )
@@ -33,19 +32,8 @@ func nativeProjectOpenSmoke(ctx context.Context, a *app.Application, s *screen) 
 		if err := <-action; err != nil {
 			return err
 		}
-		for {
-			completed := make(chan bool, 1)
-			if err := a.PostWait(ctx, func() { completed <- !s.fileBusy }); err != nil {
-				return err
-			}
-			if <-completed {
-				break
-			}
-			select {
-			case <-ctx.Done():
-				return ctx.Err()
-			case <-time.After(10 * time.Millisecond):
-			}
+		if err := waitNativeFile(ctx, a, s); err != nil {
+			return err
 		}
 	}
 	checked := make(chan error, 1)

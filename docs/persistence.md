@@ -42,3 +42,5 @@ The optional version-4 `example_id` extension is known immutable-template origin
 Open now performs file reading and strict validation outside the editor lock. Immediate admission/status/cancellation, publication guards and waiting-command retry semantics are described in [project work](project-work.md). Saved file and model formats are unchanged.
 
 Save/Save As now serialize and write a committed capture outside the editor lock. Later edits remain dirty and publication has an explicit cancellation boundary. External changes during preparation are rechecked before replacement. [Captured saves and recovery ordering](project-save.md).
+
+Save/Export share the file-publication implementation; SVG/scope/record encoding is also background work. [Export capture and artifact identity](project-export.md).
