@@ -16,8 +16,8 @@ import (
 	"github.com/dshills/vellum/ui"
 )
 
-func nativeSmoke(a *app.Application, s *screen, g *cogent.MeshCanvas) error {
-	ctx, cancel := context.WithTimeout(a.Context(), 20*time.Second)
+func nativeSmoke(a *app.Application, s *screen, g *cogent.MeshCanvas, timeout time.Duration) error {
+	ctx, cancel := context.WithTimeout(a.Context(), timeout)
 	defer cancel()
 	constructed := make(chan error, 1)
 	if err := a.PostWait(ctx, func() { constructed <- smokeConstruct(s) }); err != nil {

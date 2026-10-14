@@ -32,7 +32,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.39.0 --build-version 54 --platform darwin
+  --version 0.40.0 --build-version 55 --platform darwin
 ```
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
@@ -199,4 +199,4 @@ Time fields now accept values such as `10 ms` and `250 us` through the same nati
 
 ## Appearance and agent observation
 
-The header offers Light, Dark and System [session themes](docs/appearance.md), and File/Examples/Theme open native macOS menus. Agents use `appearance.theme.set` for the same preference. [Coalesced observation](docs/events.md) lets a separate `events.poll` connection wait for state/job changes without blocking commands. [UI audit screenshots](research/ui-audit/README.md) record the visible repairs and remaining limits.
+The header offers Light, Dark and System [themes saved on this device](docs/appearance.md), and File/Examples/Theme open native macOS menus. Agents use `appearance.theme.set` for the same preference. [Coalesced observation](docs/events.md) lets a separate `events.poll` connection wait for state/job changes without blocking commands. [UI audit screenshots](research/ui-audit/README.md) record the visible repairs and remaining limits.

@@ -82,6 +82,9 @@ func (s *screen) themeMenu(mode string) ui.Node {
 }
 
 func traceColor(c color.NRGBA, palette appPalette) color.NRGBA {
+	if c == accent {
+		return palette.Accent
+	}
 	if palette.Paper.R < 100 {
 		c.R = uint8((int(c.R)*4 + 255) / 5)
 		c.G = uint8((int(c.G)*4 + 255) / 5)

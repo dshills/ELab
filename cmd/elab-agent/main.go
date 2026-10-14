@@ -25,6 +25,7 @@ func main() {
 func run() error {
 	connect := flag.String("connect", "", "forward JSON commands to an existing endpoint descriptor")
 	listen := flag.String("listen", "", "run a headless socket session; write a private endpoint descriptor here")
+	appearanceFile := flag.String("appearance-file", "", "opt into persistent theme preferences using this file")
 	recoveryDirectory := flag.String("recovery-directory", "", "opt into autosave using this private directory")
 	flag.Parse()
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
@@ -36,6 +37,14 @@ func run() error {
 	} else {
 		s := workbench.New()
 		defer s.Close()
+		if *appearanceFile != "" {
+			raw, _ := json.Marshal(workbench.AppearanceConfigureParams{Path: *appearanceFile})
+			revision := s.Snapshot().CommandRevision
+			response := s.Dispatch(ctx, workbench.Request{Version: 1, ID: "startup-appearance", Command: "appearance.configure", Params: raw, ExpectedCommandRevision: &revision, Key: "startup-appearance"}, "agent")
+			if response.Error != nil {
+				return fmt.Errorf("configure appearance: %s", response.Error.Message)
+			}
+		}
 		if *recoveryDirectory != "" {
 			raw, _ := json.Marshal(workbench.RecoveryConfigureParams{Directory: *recoveryDirectory, Enabled: true, Interval: 2})
 			revision := s.Snapshot().Revision

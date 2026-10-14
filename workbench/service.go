@@ -43,6 +43,7 @@ type Snapshot struct {
 	LastExport             *Artifact              `json:"last_export,omitempty"`
 	PartSearch             string                 `json:"part_search"`
 	Theme                  string                 `json:"theme"`
+	Appearance             AppearanceState        `json:"appearance"`
 	MatchingParts          []Part                 `json:"matching_parts"`
 	UndoName               string                 `json:"undo_name"`
 	RedoName               string                 `json:"redo_name"`
@@ -165,6 +166,12 @@ type Service struct {
 	eventRevisions              map[string]uint64
 	eventWaiters                int
 	theme                       string
+	themeRevision               uint64
+	appearance                  AppearanceState
+	appearanceStore             *appearanceStore
+	appearanceWorkers           int
+	appearanceRead              appearanceReadFunc
+	appearancePublish           projectPublishFunc
 	cancel                      context.CancelFunc
 	solver                      func(context.Context, Circuit) (Result, error)
 	networkAdvance              networkAdvanceFunc
@@ -183,30 +190,33 @@ func newService(solver func(context.Context, Circuit) (Result, error)) *Service 
 }
 func newGraphService(solver func(context.Context, Circuit) (Result, error), graph Graph) *Service {
 	s := &Service{
-		revision:        1,
-		electrical:      1,
-		graph:           graph.Clone(),
-		drawing:         DefaultDrawing(),
-		usedIDs:         map[string]bool{},
-		view:            View{Zoom: 1},
-		cache:           map[string]savedResponse{},
-		changed:         make(chan struct{}),
-		eventRevisions:  map[string]uint64{"state": 1},
-		solver:          solver,
-		networkAdvance:  advanceLiveNetwork,
-		inputSolve:      solveInputWork,
-		projectLoad:     prepareProjectLoad,
-		projectSave:     prepareProjectSave,
-		projectExport:   prepareProjectExport,
-		projectImport:   prepareRecordingImport,
-		recoveryPrepare: prepareManualRecovery,
-		recoveryRestore: prepareRecoveryRestore,
-		recoveryExecute: executeManualRecovery,
-		projectPublish:  publishPreparedFile,
-		initialSolver:   solveInitial,
-		initialTimeout:  5 * time.Second,
-		actor:           "system",
-		theme:           "light",
+		revision:          1,
+		electrical:        1,
+		graph:             graph.Clone(),
+		drawing:           DefaultDrawing(),
+		usedIDs:           map[string]bool{},
+		view:              View{Zoom: 1},
+		cache:             map[string]savedResponse{},
+		changed:           make(chan struct{}),
+		eventRevisions:    map[string]uint64{"state": 1},
+		solver:            solver,
+		networkAdvance:    advanceLiveNetwork,
+		inputSolve:        solveInputWork,
+		projectLoad:       prepareProjectLoad,
+		projectSave:       prepareProjectSave,
+		projectExport:     prepareProjectExport,
+		projectImport:     prepareRecordingImport,
+		recoveryPrepare:   prepareManualRecovery,
+		recoveryRestore:   prepareRecoveryRestore,
+		recoveryExecute:   executeManualRecovery,
+		projectPublish:    publishPreparedFile,
+		initialSolver:     solveInitial,
+		initialTimeout:    5 * time.Second,
+		actor:             "system",
+		theme:             "light",
+		appearance:        AppearanceState{Status: "disabled"},
+		appearanceRead:    readAppearance,
+		appearancePublish: publishPreparedFile,
 	}
 	for _, c := range graph.Components {
 		s.usedIDs[c.ID] = true
@@ -258,6 +268,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		LastOperation:          s.lastOperation,
 		PartSearch:             s.partSearch,
 		Theme:                  s.theme,
+		Appearance:             s.appearance,
 		MatchingParts:          filteredParts(s.partSearch),
 		Scope:                  s.scopeLocked(compiled),
 		Mixed:                  cloneMixed(s.mixed),
@@ -471,6 +482,12 @@ func (s *Service) closeLocked() {
 	s.cancelInputWorkLocked("canceled")
 	s.cancelStepLocked("canceled")
 	s.closed = true
+	if s.appearanceStore != nil {
+		select {
+		case s.appearanceStore.wake <- struct{}{}:
+		default:
+		}
+	}
 	if s.recording.cancel != nil {
 		s.recording.cancel()
 	}
@@ -526,7 +543,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	if r.Command == "events.poll" {
 		return s.pollEvents(ctx, r)
 	}
-	if r.Command == "simulation.wait" {
+	if r.Command == "simulation.wait" || r.Command == "appearance.wait" {
 		if r.Version != ProtocolVersion || r.ID == "" || len(r.ID) > 128 {
 			return s.failure(r, "invalid-request", "version 1 and a nonempty ID (max 128 bytes) required")
 		}
@@ -535,7 +552,13 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 		}
 		bounded, cancel := context.WithTimeout(ctx, 5*time.Second)
 		defer cancel()
-		state, err := s.Wait(bounded)
+		var state Snapshot
+		var err error
+		if r.Command == "appearance.wait" {
+			state, err = s.waitAppearance(bounded)
+		} else {
+			state, err = s.Wait(bounded)
+		}
 		if err != nil {
 			return Response{Version: 1, ID: r.ID, Revision: state.Revision, Error: &Failure{"timeout", err.Error()}}
 		}

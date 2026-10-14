@@ -56,6 +56,7 @@ func (s *screen) action(id, text, command string, p any) ui.Node {
 func (s *screen) view() ui.Node {
 	state := s.service.Snapshot()
 	colors := paletteForTheme(state.Theme)
+	s.nativePalette.Store(&colors)
 	if s.requestHelp != nil && state.CommandRevision != s.requestHelpRevision {
 		s.requestHelp = nil
 		s.errorMessage = ""
@@ -342,6 +343,7 @@ func (s *screen) view() ui.Node {
 	inspector = append(inspector, s.measurementInspector(state)...)
 	inspector = append(inspector, s.pinnedReadingControls(state)...)
 	inspector = append(inspector, s.displayControls(state)...)
+	inspector = append(inspector, s.appearanceControls(state)...)
 	inspector = append(inspector, s.diagnosticControls(state)...)
 	inspector = append(inspector, s.projectWorkControls(state)...)
 	inspector = append(inspector, s.inputWorkControls(state)...)

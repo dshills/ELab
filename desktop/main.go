@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
+	"sync/atomic"
 	"time"
 
 	"github.com/dshills/elab/transport"
@@ -23,8 +25,14 @@ func main() {
 	endpoint := flag.String("agent-endpoint", "", "enable local agent access and write a private descriptor to this new file")
 	recoveryDirectory := flag.String("recovery-directory", "", "private autosave directory (default: user configuration directory)")
 	noRecovery := flag.Bool("no-recovery", false, "skip automatic recovery setup")
+	appearanceFile := flag.String("appearance-file", "", "theme preference file (default: user configuration directory)")
+	noAppearance := flag.Bool("no-appearance", false, "use theme for this session only")
 	smoke := flag.Bool("smoke", false, "verify native drawing and UI command results, then close")
+	smokeTimeout := flag.Duration("smoke-timeout", 20*time.Second, "native smoke harness deadline (up to 2 minutes; does not alter solver work limits)")
 	flag.Parse()
+	if *smokeTimeout <= 0 || *smokeTimeout > 2*time.Minute {
+		log.Fatal("smoke-timeout must be positive and at most 2 minutes")
+	}
 	service := workbench.New()
 	defer service.Close()
 	if !*noRecovery {
@@ -39,6 +47,20 @@ func main() {
 		}
 		if err := setupRecovery(service, directory); err != nil {
 			log.Print("Recovery unavailable: ", err)
+		}
+	}
+	if !*noAppearance {
+		path := *appearanceFile
+		if *smoke && path == "" {
+			directory, err := os.MkdirTemp("", "elab-smoke-appearance-")
+			if err != nil {
+				log.Fatal(err)
+			}
+			path = filepath.Join(directory, "appearance.json")
+			defer func() { service.Close(); _ = os.RemoveAll(directory) }()
+		}
+		if err := setupAppearance(service, path); err != nil {
+			log.Printf("Appearance unavailable: %v", err)
 		}
 	}
 	a, err := app.New(app.Config{})
@@ -116,7 +138,7 @@ func main() {
 	}()
 	smokeResult := make(chan error, 1)
 	if *smoke {
-		go func() { smokeResult <- nativeSmoke(a, screen, renderer); a.Close() }()
+		go func() { smokeResult <- nativeSmoke(a, screen, renderer, *smokeTimeout); a.Close() }()
 	}
 	if err := a.Run(context.Background(), cogent.Driver{Commands: screen.commands, Theme: desktopTheme()}); err != nil {
 		log.Fatal(err)
@@ -147,6 +169,7 @@ type screen struct {
 	renderRevision, lastDrawRevision uint64
 	lastDrawAnalysis                 string
 	lastPalette                      appPalette
+	nativePalette                    atomic.Pointer[appPalette]
 	menuSerial                       uint64
 }
 

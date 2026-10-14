@@ -309,6 +309,12 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		s.diagnosticDetails = p.Visible
 		return nil
+	case "appearance.configure":
+		var p AppearanceConfigureParams
+		if err := params(raw, &p, "path"); err != nil {
+			return err
+		}
+		return s.configureAppearanceLocked(p)
 	case "appearance.theme.set":
 		var p struct {
 			Theme string `json:"theme"`
@@ -316,10 +322,13 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if err := params(raw, &p, "theme"); err != nil {
 			return err
 		}
-		if p.Theme != "light" && p.Theme != "dark" && p.Theme != "system" {
+		if !validTheme(p.Theme) {
 			return fmt.Errorf("theme must be light, dark, or system")
 		}
+		// An explicit choice, including the current value, supersedes a pending
+		// profile load. Retried commands are deduplicated before reaching here.
 		s.theme = p.Theme
+		s.appearanceChangedLocked()
 		return nil
 	case "display.preferences.set":
 		p, err := decodeDisplayPreferences(raw)

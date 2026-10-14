@@ -237,4 +237,4 @@ Time-valued command inputs also accept bounded decimal/scientific text with `s`,
 
 ## Appearance and observation
 
-[Session appearance](appearance.md) uses `appearance.theme.set` with `light`, `dark`, or `system`. [Coalesced observation](events.md) uses `events.poll` to wait for state/job changes without holding the editor lock; use a separate connection for commands during a waiting poll. Both are advertised by discovery.
+[Appearance](appearance.md) uses `appearance.theme.set` with `light`, `dark`, or `system`. [Coalesced observation](events.md) uses `events.poll` to wait for state/job changes without holding the editor lock; use a separate connection for commands during a waiting poll. Both are advertised by discovery. `appearance.configure` selects or disables an independent preference file; `appearance.wait` awaits loading/saving, and snapshot `appearance` exposes outcomes.

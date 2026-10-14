@@ -62,6 +62,8 @@ func typedCapability(id, description string, t reflect.Type) Capability {
 	return capability(id, description, true, string(data))
 }
 
+const ObjectIDSchemaID = "urn:elab:object-id:1"
+
 const VerificationMetadataSchemaID = "urn:elab:verification-metadata:1"
 
 const SnapshotSchemaID = "urn:elab:snapshot:1"
@@ -84,10 +86,16 @@ func SchemaRegistry() map[string]json.RawMessage {
 	eventSchema := structSchema(reflect.TypeOf(EventPollResult{}))
 	eventSchema["$id"] = EventPollSchemaID
 	eventData, _ := json.Marshal(eventSchema)
-	return map[string]json.RawMessage{SnapshotSchemaID: append(json.RawMessage(nil), snapshotDefinition...), VerificationMetadataSchemaID: data, EventPollSchemaID: eventData, TimeInputSchemaID: json.RawMessage(`{"$id":"urn:elab:time:1","type":["number","string"],"maxLength":128,"description":"Seconds as a finite number or decimal/scientific text; bare text is seconds; case-sensitive s/ms/us/µs/μs/ns/ps. Command bounds still apply.","examples":[0.01,"10 ms","250 us"]}`)}
+	idSchema := structSchema(reflect.TypeOf(IDParams{}))
+	idSchema["$id"] = ObjectIDSchemaID
+	idData, _ := json.Marshal(idSchema)
+	return map[string]json.RawMessage{ObjectIDSchemaID: idData, SnapshotSchemaID: append(json.RawMessage(nil), snapshotDefinition...), VerificationMetadataSchemaID: data, EventPollSchemaID: eventData, TimeInputSchemaID: json.RawMessage(`{"$id":"urn:elab:time:1","type":["number","string"],"maxLength":128,"description":"Seconds as a finite number or decimal/scientific text; bare text is seconds; case-sensitive s/ms/us/µs/μs/ns/ps. Command bounds still apply.","examples":[0.01,"10 ms","250 us"]}`)}
 }
 
 func typeSchema(t reflect.Type) map[string]any {
+	if t == reflect.TypeOf(IDParams{}) {
+		return map[string]any{"$ref": ObjectIDSchemaID}
+	}
 	if t == reflect.TypeOf(EventPollResult{}) {
 		return map[string]any{"$ref": EventPollSchemaID}
 	}
@@ -180,7 +188,9 @@ func Catalog() []Capability {
 		typedCapability("example.load", "Load a known example ID into a new editable document; protects unsaved work and optional document generation", reflect.TypeOf(ExampleLoadParams{})),
 		typedCapability("example.current.reset", "Restore the current example template, not another example; protects unsaved work and optional expected_example_id/document generation", reflect.TypeOf(ExampleResetParams{})),
 		typedCapability("diagnostics.details.set", "Show/hide technical diagnostic details; session-only presentation, no physics/history/dirty change; related targets are in diagnostic_presentation", reflect.TypeOf(DiagnosticDetailsParams{})),
-		capability("appearance.theme.set", "Session theme: light, dark, or system; preserves physics/files", true, `{"type":"object","required":["theme"],"properties":{"theme":{"type":"string","enum":["light","dark","system"]}},"additionalProperties":false}`),
+		typedCapability("appearance.configure", "Load and autosave bounded app theme preferences in background; empty path disables; inspect appearance", reflect.TypeOf(AppearanceConfigureParams{})),
+		capability("appearance.wait", "Wait up to 5 s for theme preference loading/saving; inspect appearance status/error", false, `{"type":"object","additionalProperties":false}`),
+		capability("appearance.theme.set", "Theme: light, dark, system; autosaves if configured; preserves circuit/history", true, `{"type":"object","required":["theme"],"properties":{"theme":{"type":"string","enum":["light","dark","system"]}},"additionalProperties":false}`),
 		typedCapability("display.preferences.set", "Set persisted voltage color/range, current cues/motion, reduced motion and conventional/electron visualization; signed values always use conventional current; preserves physics", reflect.TypeOf(DisplayPreferences{})),
 		typedCapability("measurement.select", "Select current object, terminal, anchored net or probe for live inspection; empty kind/ID returns to the editing selection; session only, preserves physics/history/dirty state", reflect.TypeOf(MeasurementSelectParams{})),
 		queryCapability("measurement.inspect", "Read the selected live measurement context, or a supplied current target, with references, signed values and accepted-result provenance; no mutation", reflect.TypeOf(MeasurementQueryParams{}), reflect.TypeOf(MeasurementInspection{})),

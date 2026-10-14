@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "transport": "headless-socket",
+  "checks": [
+    "startup config and private preference file",
+    "theme save preserves paused RC state/history/document",
+    "two fresh process sessions restore theme independently of circuit files",
+    "project loading preserves application preference",
+    "session-only choice preserves stored file",
+    "explicit reconfiguration reloads preference",
+    "immediate shutdown flushes final choice",
+    "owned process/endpoints/temp files cleaned"
+  ],
+  "rc_10ms_v": 3.1606027941427883
+}

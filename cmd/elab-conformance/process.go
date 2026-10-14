@@ -50,7 +50,7 @@ func processFactory(binary, mode string) conformance.Factory {
 			}
 			args = []string{flag, client.endpoint}
 			if mode == "native" {
-				args = append(args, "--recovery-directory", filepath.Join(dir, "recovery"))
+				args = append(args, "--no-appearance", "--recovery-directory", filepath.Join(dir, "recovery"))
 			}
 		}
 		client.command = exec.CommandContext(processCtx, binary, args...)

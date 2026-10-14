@@ -351,6 +351,12 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 		if reading.State != "live" {
 			c = color.NRGBA{R: 151, G: 96, B: 43, A: 255}
 		}
+		if palette.Paper.R < 100 {
+			c = palette.Accent
+			if reading.State != "live" {
+				c = palette.Danger
+			}
+		}
 		b.quad(min.X, min.Y, max.X-min.X, max.Y-min.Y, palette.Surface)
 		b.stroke(c, 1.5, canvas.Point{X: min.X, Y: min.Y}, canvas.Point{X: max.X, Y: min.Y}, canvas.Point{X: max.X, Y: max.Y}, canvas.Point{X: min.X, Y: max.Y}, canvas.Point{X: min.X, Y: min.Y})
 		b.text(min.X+12, min.Y+23, reading.Display, c)

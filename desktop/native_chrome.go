@@ -32,7 +32,7 @@ func (s *screen) styleNativeChrome(scene *core.Scene) bool {
 					continue
 				}
 				install(scrollbar.AsWidget(), func(style *styles.Style) {
-					p := s.lastPalette
+					p := s.nativeColors()
 					style.Background = image.NewUniform(p.Paper)
 					style.Color = image.NewUniform(p.Muted)
 					style.StateLayer = 0
@@ -44,11 +44,18 @@ func (s *screen) styleNativeChrome(scene *core.Scene) bool {
 		}
 		if w.Name == "vellum-disclosure-heading" {
 			install(w, func(style *styles.Style) {
-				style.Color = image.NewUniform(s.lastPalette.Accent)
-				style.Background = image.NewUniform(s.lastPalette.Paper)
+				style.Color = image.NewUniform(s.nativeColors().Accent)
+				style.Background = image.NewUniform(s.nativeColors().Paper)
 			})
 		}
 		return true
 	})
 	return changed
+}
+
+func (s *screen) nativeColors() appPalette {
+	if palette := s.nativePalette.Load(); palette != nil {
+		return *palette
+	}
+	return resolvePalette("light", false)
 }
