@@ -51,3 +51,5 @@ python3 scripts/verification-demo.py --connect build/verify.endpoint.json \
 ```
 
 Recorded JSON/CSV exports now retain their immutable captured asset in [background export work](project-export.md), including when the original session record is later evicted. Format/model metadata is unchanged.
+
+Recorded import now reads/validates outside the editor lock and preserves later viewer choices; kept capacity is rechecked at attachment. See [background import](project-import.md).

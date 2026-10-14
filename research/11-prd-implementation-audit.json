@@ -154,9 +154,9 @@
     },
     {
       "id": "AGENT-04",
-      "evidence": "Observable Verify, Step, input, project-open/save and all-format export jobs; bounded stable-ID inspection, cancellation/publication boundaries, captured revisions and artifact hashes",
+      "evidence": "Observable Verify, Step, input, project-open/save, all-format export and recorded-import jobs; stable inspection/cancellation, captured revisions, hashes and source/result identities",
       "status": "partial",
-      "assessment": "Partial: manual recovery/import/shutdown still include synchronous work; documented event subscriptions and complete job coverage remain open"
+      "assessment": "Partial: manual recovery and some shutdown paths still include synchronous work; documented event subscriptions and complete job coverage remain open"
     },
     {
       "id": "AGENT-05",

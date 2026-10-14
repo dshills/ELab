@@ -27,3 +27,5 @@ Controlled blocked-reader race tests cover responsive navigation/save, exact can
 Run `python3 scripts/project-work-demo.py --output REPORT --artifacts DIRECTORY`; `--connect` replaces only a designated owned session. Admission timings exclude visible input-to-pixel latency. Save now uses [background captured work](project-save.md); export/manual recovery still contain synchronous work; full job/event conformance, accessibility, distribution and participant gates remain open.
 
 SVG/live CSV/recorded JSON+CSV export encoding and disk work now run outside the lock via [captured exports](project-export.md). Manual recovery/import/shutdown remain separate paths.
+
+Recorded import now also uses [background project work](project-import.md). Manual recovery and some shutdown calls remain separate paths.

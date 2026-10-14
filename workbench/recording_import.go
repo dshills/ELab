@@ -1,8 +1,6 @@
 package workbench
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"math"
@@ -294,36 +292,6 @@ func recordingFields(raw json.RawMessage, t reflect.Type) error {
 			}
 		}
 	}
-	return nil
-}
-func (s *Service) importRecordingLocked(p RecordingImportParams) error {
-	if err := s.checkDocumentGenerationLocked(p.ExpectedGeneration); err != nil {
-		return err
-	}
-	if err := s.requireRecordingSlotLocked(); err != nil {
-		return err
-	}
-	path, err := documentPath(p.Path)
-	if err != nil {
-		return err
-	}
-	data, err := readRegularBounded(path, MaxRecordingBytes)
-	if err != nil {
-		return err
-	}
-	record, err := decodeRecording(data)
-	if err != nil {
-		return &actionError{"invalid-recording", recoveryMessage(err)}
-	}
-	s.operationSerial++
-	id := fmt.Sprintf("record-%d", s.operationSerial)
-	digest := sha256.Sum256(data)
-	summary := OperationSummary{ID: id, Kind: "record-import", Status: "completed", InputRevision: record.metadata.InputRevision, ElectricalRevision: record.metadata.ElectricalRevision, DocumentGeneration: record.metadata.DocumentGeneration, RequestedDuration: record.metadata.Duration, SimulatedTime: record.metadata.Duration, CompletedSteps: len(record.rows), TotalSteps: len(record.rows), Progress: 1, SourcePath: path, SourceSHA256: hex.EncodeToString(digest[:])}
-	operation := &verificationOperation{keep: true, summary: summary, record: record, inputMetadata: cloneVerificationMetadata(record.metadata)}
-	s.retainOperationLocked(operation)
-	s.selectRecordingLocked(id)
-	s.recording.viewing = true
-	s.lastOperation = id
 	return nil
 }
 func (s *Service) retainOperationLocked(operation *verificationOperation) {

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strings"
 	"sync"
 	"time"
 )
@@ -86,6 +87,8 @@ type Service struct {
 	projectLoad                      projectLoadFunc
 	projectSave                      projectSaveFunc
 	projectExport                    projectExportFunc
+	projectImport                    projectImportFunc
+	viewerRevision                   uint64
 	projectPublish                   projectPublishFunc
 	inputJob                         *inputJob
 	inputSerial                      uint64
@@ -171,7 +174,27 @@ func newService(solver func(context.Context, Circuit) (Result, error)) *Service 
 	return s
 }
 func newGraphService(solver func(context.Context, Circuit) (Result, error), graph Graph) *Service {
-	s := &Service{revision: 1, electrical: 1, graph: graph.Clone(), drawing: DefaultDrawing(), usedIDs: map[string]bool{}, view: View{Zoom: 1}, cache: map[string]savedResponse{}, changed: make(chan struct{}), solver: solver, networkAdvance: advanceLiveNetwork, inputSolve: solveInputWork, projectLoad: prepareProjectLoad, projectSave: prepareProjectSave, projectExport: prepareProjectExport, projectPublish: publishPreparedFile, initialSolver: solveInitial, initialTimeout: 5 * time.Second, actor: "system"}
+	s := &Service{
+		revision:       1,
+		electrical:     1,
+		graph:          graph.Clone(),
+		drawing:        DefaultDrawing(),
+		usedIDs:        map[string]bool{},
+		view:           View{Zoom: 1},
+		cache:          map[string]savedResponse{},
+		changed:        make(chan struct{}),
+		solver:         solver,
+		networkAdvance: advanceLiveNetwork,
+		inputSolve:     solveInputWork,
+		projectLoad:    prepareProjectLoad,
+		projectSave:    prepareProjectSave,
+		projectExport:  prepareProjectExport,
+		projectImport:  prepareRecordingImport,
+		projectPublish: publishPreparedFile,
+		initialSolver:  solveInitial,
+		initialTimeout: 5 * time.Second,
+		actor:          "system",
+	}
 	for _, c := range graph.Components {
 		s.usedIDs[c.ID] = true
 	}
@@ -705,7 +728,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 		s.cursorA = nil
 		s.cursorB = nil
 	}
-	if r.Command == "simulation.verify" || r.Command == "verification.import" {
+	if r.Command == "simulation.verify" {
 		s.operations[s.lastOperation].summary.Actor = actor
 	}
 	if s.projectJob != nil && s.projectJob.work.CommandRevision == s.commandRevision+1 {
@@ -726,6 +749,9 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 		if r.Command == "simulation.step" {
 			s.stepJob.legacyKey = key
 		}
+	}
+	if strings.HasPrefix(r.Command, "recording.") && r.Command != "recording.keep.set" {
+		s.viewerRevision++
 	}
 	s.actor = actor
 	s.commandRevision++

@@ -38,3 +38,5 @@ Project Open now also reads/validates outside the lock with [observable project 
 Save serialization, destination checks, disk publication and recovery cleanup now also run outside the lock via [captured save work](project-save.md). Export/manual recovery remain separate paths.
 
 SVG/live CSV/recorded JSON+CSV export encoding and disk work now run outside the lock via [captured exports](project-export.md). Manual recovery/import/shutdown remain separate paths.
+
+Recorded import now also uses [background project work](project-import.md). Manual recovery and some shutdown calls remain separate paths.

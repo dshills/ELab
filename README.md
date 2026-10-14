@@ -32,7 +32,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.34.0 --build-version 48 --platform darwin
+  --version 0.35.0 --build-version 50 --platform darwin
 ```
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
@@ -186,3 +186,5 @@ Project Open reads and validates files in the background with shared phase/statu
 Save now captures the committed project and writes in the background; later edits stay unsaved. Users and agents share preparation cancellation, an explicit publication boundary and bounded project-job inspection. See [captured saves](docs/project-save.md).
 
 Schematic SVG, live scope CSV and recorded JSON/CSV exports now encode/write a captured source in the background. Native controls and agents share job inspection and preparation cancellation. See [captured exports](docs/project-export.md).
+
+Recorded-result import now validates in the background, preserves live editing and later viewer choices, and rechecks kept-record capacity before attachment. Users and agents share jobs/provenance/cancellation. See [record import](docs/project-import.md).

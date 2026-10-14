@@ -39,6 +39,10 @@ func TestNativeRecordingPickerAndControlsMatchAgentCommands(t *testing.T) {
 	if user.errorMessage != "" {
 		t.Fatal(user.errorMessage)
 	}
+	work := user.service.Snapshot().ProjectWork
+	if work == nil || work.Status != "completed" || work.Command != "verification.import" || work.Actor != "user" || work.SourceSHA256 == "" || work.ResultOperationID != user.service.Snapshot().Recording.ID {
+		t.Fatal("native import lacks its completed shared job/provenance")
+	}
 	agentAction(t, agent, "verification.import", workbench.RecordingImportParams{Path: path})
 	if schematicDocumentState(user.service.Snapshot().Document) != schematicDocumentState(before.Document) || len(user.service.Snapshot().Components) != 0 {
 		t.Fatal("native import changed blank live schematic")

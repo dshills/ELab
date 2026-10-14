@@ -199,18 +199,3 @@ func (s *Service) runProjectExport(job *projectJob, prepare projectExportFunc, p
 	s.finishProjectWorkLocked(job)
 	s.mu.Unlock()
 }
-func waitingProjectCommand(command string) bool {
-	return command == "project.save" || command == "project.load" || command == "export.schematic.svg" || command == "export.scope.csv" || command == "verification.export"
-}
-func (s *Service) projectWorkSupersededLocked(job *projectJob) bool {
-	if job.publishing {
-		return false
-	}
-	if job.save != nil {
-		return !s.saveCurrentLocked(job)
-	}
-	if job.export != nil {
-		return !s.exportCurrentLocked(job)
-	}
-	return s.loadGuardLocked() != job.guard
-}

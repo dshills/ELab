@@ -102,5 +102,35 @@ func nativeExportSmoke(ctx context.Context, a *app.Application, s *screen) error
 			return fmt.Errorf("native export file missing: %v", err)
 		}
 	}
-	return nil
+	return nativeImportedExportSmoke(ctx, a, s, filepath.Join(directory, "verify-export-json"))
+}
+
+func nativeImportedExportSmoke(ctx context.Context, a *app.Application, s *screen, path string) error {
+	before := s.service.Snapshot()
+	action := make(chan error, 1)
+	if err := a.PostWait(ctx, func() {
+		s.chooseFile = func(context.Context, app.FileOptions) (string, error) { return path, nil }
+		action <- smokeUI(s, "recording-import", nil)
+	}); err != nil {
+		return err
+	}
+	if err := <-action; err != nil {
+		return err
+	}
+	if err := waitNativeFile(ctx, a, s); err != nil {
+		return err
+	}
+	checked := make(chan error, 1)
+	if err := a.PostWait(ctx, func() {
+		state := s.service.Snapshot()
+		if s.errorMessage != "" || state.ProjectWork == nil || state.ProjectWork.Status != "completed" || state.ProjectWork.Command != "verification.import" || state.ProjectWork.Actor != "user" || state.ProjectWork.SourceSHA256 == "" || state.Recording == nil || !state.Recording.Imported || state.Recording.ID != state.ProjectWork.ResultOperationID || state.Transient.Sample != before.Transient.Sample || state.RunID != before.RunID {
+			checked <- fmt.Errorf("native recording import failed: %s / %+v", s.errorMessage, state.ProjectWork)
+			return
+		}
+		_, err := s.mesh(*s.drawing.View)
+		checked <- err
+	}); err != nil {
+		return err
+	}
+	return <-checked
 }

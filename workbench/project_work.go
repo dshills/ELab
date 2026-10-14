@@ -13,6 +13,9 @@ const MaxProjectOperations = 8
 // ProjectWork reports file preparation separately from replacing the document.
 // Progress is a named phase; file validation has no trustworthy percentage.
 type ProjectWork struct {
+	ResultOperationID  string   `json:"result_operation_id,omitempty"`
+	SourceSHA256       string   `json:"source_sha256,omitempty"`
+	ViewerSelected     *bool    `json:"viewer_selected,omitempty"`
 	Cancelable         bool     `json:"cancelable"`
 	Associated         *bool    `json:"associated_with_current_document,omitempty"`
 	CleanupWarning     string   `json:"cleanup_warning,omitempty"`
@@ -37,6 +40,10 @@ func cloneProjectWork(in *ProjectWork) *ProjectWork {
 		return nil
 	}
 	out := *in
+	if in.ViewerSelected != nil {
+		v := *in.ViewerSelected
+		out.ViewerSelected = &v
+	}
 	if in.Associated != nil {
 		v := *in.Associated
 		out.Associated = &v
@@ -88,6 +95,7 @@ type projectJob struct {
 	final                        Response
 	save                         *saveCapture
 	export                       *exportCapture
+	importing                    *recordingImportCapture
 	publishing                   bool
 }
 
@@ -301,4 +309,23 @@ func (s *Service) retainProjectJobLocked(job *projectJob) {
 			}
 		}
 	}
+}
+
+func waitingProjectCommand(command string) bool {
+	return command == "project.save" || command == "project.load" || command == "export.schematic.svg" || command == "export.scope.csv" || command == "verification.export" || command == "verification.import"
+}
+func (s *Service) projectWorkSupersededLocked(job *projectJob) bool {
+	if job.publishing {
+		return false
+	}
+	if job.save != nil {
+		return !s.saveCurrentLocked(job)
+	}
+	if job.export != nil {
+		return !s.exportCurrentLocked(job)
+	}
+	if job.importing != nil {
+		return !s.importCurrentLocked(job)
+	}
+	return s.loadGuardLocked() != job.guard
 }

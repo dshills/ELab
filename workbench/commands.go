@@ -123,6 +123,7 @@ func Catalog() []Capability {
 		typedCapability("switch.set", "Set desired SPST startup state; fresh transients queue/coalesce actuation for the next accepted step, exposing desired/applied/pending state and preserving charge/run; DC/config edits restart", reflect.TypeOf(SwitchParams{})),
 		typedCapability("wire.junction.insert", "Atomically insert one explicit junction into 1–8 named connected wire routes; position required for multi-wire joins, single wire defaults to a free interior point", reflect.TypeOf(JunctionInsertParams{})),
 		typedCapability("recording.keep.set", "Include/exclude a completed recording in project saves and recovery; exclusion keeps session replay/export; kept records are never silently evicted", reflect.TypeOf(RecordingKeepParams{})),
+		typedCapability("verification.import.start", "Read/validate a recorded JSON asset in background; inspect project_work; keeps live circuit/state and later viewer choice", reflect.TypeOf(RecordingImportParams{})),
 		typedCapability("verification.import", "Validate and load a complete elab.verification v1 JSON record into an independent recorded viewer; never changes live circuit/state", reflect.TypeOf(RecordingImportParams{})),
 		typedCapability("recording.view.set", "Show live or recorded scope; recorded requires a selected completed operation", reflect.TypeOf(RecordingViewParams{})),
 		typedCapability("recording.seek", "Pause and seek exact sample index or nearest recorded time (exactly one); time ties select latest/right-hand edge sample", reflect.TypeOf(RecordingSeekParams{})),

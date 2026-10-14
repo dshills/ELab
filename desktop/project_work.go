@@ -16,6 +16,8 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 	action := "open"
 	if w.Command == "project.save" {
 		action = "save"
+	} else if w.Command == "verification.import" {
+		action = "record import"
 	} else if w.Command == "export.schematic.svg" || w.Command == "export.scope.csv" || w.Command == "verification.export" {
 		action = "export"
 	}
@@ -33,6 +35,9 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 		if action == "export" {
 			explanation = "Exporting captured drawing or readings. Editing stays available; cancellation ends when publication begins."
 		}
+		if action == "record import" {
+			explanation = "Validating recorded data. Live simulation stays separate; later viewer choices are preserved."
+		}
 		cancel := s.action("project-work-cancel", "Cancel project "+action, "project.work.cancel", workbench.IDParams{ID: w.ID})
 		cancel.Disabled = !w.Cancelable
 		nodes = append(nodes, quiet("project-work-explanation", explanation), cancel)
@@ -45,6 +50,9 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 	}
 	if w.Associated != nil && !*w.Associated {
 		nodes = append(nodes, quiet("project-work-unassociated", "Published the captured file; the current project was preserved."))
+	}
+	if w.ViewerSelected != nil && !*w.ViewerSelected {
+		nodes = append(nodes, quiet("project-work-viewer-preserved", "Imported and kept the recording without switching to its view."))
 	}
 	return nodes
 }

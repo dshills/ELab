@@ -121,7 +121,7 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 					s.errorMessage = err.Error()
 				}
 			} else if response.Error != nil {
-				if (id == "project.load" || id == "project.save" || strings.HasPrefix(id, "export.") || id == "verification.export") && (response.Error.Code == "canceled" || response.Error.Code == "superseded") {
+				if (id == "project.load" || id == "project.save" || strings.HasPrefix(id, "export.") || id == "verification.export" || id == "verification.import") && (response.Error.Code == "canceled" || response.Error.Code == "superseded") {
 					s.fileMessage = "File operation " + response.Error.Code + "; current project preserved"
 				} else if response.Error.Code == "unsaved-changes" {
 					s.pendingCommand = id
@@ -140,6 +140,9 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 					var opened string
 					_ = json.Unmarshal(fields["path"], &opened)
 					s.fileMessage = "Loaded recorded " + filepath.Base(opened)
+					if state.ProjectWork != nil && state.ProjectWork.ViewerSelected != nil && !*state.ProjectWork.ViewerSelected {
+						s.fileMessage += "; kept without switching to its view"
+					}
 				} else if id == "project.save" {
 					if state.ProjectWork != nil {
 						path = state.ProjectWork.Path
