@@ -38,10 +38,6 @@ type SwitchParams struct {
 	ID     string `json:"id"`
 	Closed bool   `json:"closed"`
 }
-type switchTransition struct {
-	state *mixedState
-	trace *Transient
-}
 
 func (s *Service) setSwitchLocked(p SwitchParams) error {
 	part, ok := s.graph.Component(p.ID)
@@ -58,30 +54,9 @@ func (s *Service) setSwitchLocked(p SwitchParams) error {
 			graph.Components[i].SwitchClosed = &closed
 		}
 	}
-	// Live actuation is a source event on an unchanged topology. Stage the
-	// algebraic right-hand solve before committing graph, events or physical state.
-	if s.transient != nil && !s.transient.Stale && s.mixedState != nil && IsNetworkAnalysis(s.mixedState.net.c.Analysis) {
-		compiled, _, diagnostic := graph.Compile()
-		if diagnostic != nil {
-			return &actionError{"unavailable", diagnostic.Message}
-		}
-		trace := cloneTransient(s.transient)
-		trace.ElectricalRevision = s.electrical + 1
-		net := newMixedNetwork(compiled)
-		state, err := net.solve(s.mixedState.x, s.mixedState.capV, 0, trace, trace.Sample.Time)
-		if err != nil {
-			return &actionError{"solve-failed", err.Error()}
-		}
-		appendTrace(trace, trace.Sample)
-		trace.Sample = mixedSample(compiled, state.result, net.sourceVoltage(compiled.Source, trace, trace.Sample.Time))
-		appendTrace(trace, trace.Sample)
-		mode := "open"
-		if p.Closed {
-			mode = "closed"
-		}
-		appendInputEvent(trace, InputEvent{Time: trace.Sample.Time, Mode: "switch:" + p.ID + ":" + mode})
-		s.pendingSwitch = &switchTransition{state: state, trace: trace}
+	mode := "open"
+	if p.Closed {
+		mode = "closed"
 	}
-	s.graph = graph
-	return nil
+	return s.applyNetworkEditLocked(graph, "switch:"+p.ID+":"+mode)
 }

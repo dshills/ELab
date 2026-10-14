@@ -62,29 +62,30 @@ type VerificationRow struct {
 	Values []float64 `json:"values"`
 }
 type VerificationMetadata struct {
-	DiodeModel         *DiodeModel       `json:"diode_model,omitempty"`
-	SwitchModel        *SwitchModel      `json:"switch_model,omitempty"`
-	Format             string            `json:"format"`
-	Version            int               `json:"version"`
-	OperationID        string            `json:"operation_id"`
-	CreatedAt          string            `json:"created_at"`
-	InputRevision      uint64            `json:"input_revision"`
-	ElectricalRevision uint64            `json:"electrical_revision"`
-	DocumentGeneration uint64            `json:"document_generation"`
-	Graph              Graph             `json:"graph"`
-	Settings           TransientSettings `json:"settings"`
-	InputMode          string            `json:"input_mode"`
-	Analysis           string            `json:"analysis"`
-	Engine             string            `json:"engine"`
-	LEDModel           LEDModel          `json:"led_model"`
-	NPNModel           *NPNModel         `json:"npn_model,omitempty"`
-	Probes             []Probe           `json:"probes"`
-	Duration           float64           `json:"duration_s"`
-	SampleCount        int               `json:"sample_count"`
-	Statistics         []ScopeStatistics `json:"statistics"`
-	LED                *Result           `json:"led,omitempty"`
-	NPN                *NPNResult        `json:"npn,omitempty"`
-	Mixed              *MixedResult      `json:"mixed,omitempty"`
+	PotentiometerModel *PotentiometerModel `json:"potentiometer_model,omitempty"`
+	DiodeModel         *DiodeModel         `json:"diode_model,omitempty"`
+	SwitchModel        *SwitchModel        `json:"switch_model,omitempty"`
+	Format             string              `json:"format"`
+	Version            int                 `json:"version"`
+	OperationID        string              `json:"operation_id"`
+	CreatedAt          string              `json:"created_at"`
+	InputRevision      uint64              `json:"input_revision"`
+	ElectricalRevision uint64              `json:"electrical_revision"`
+	DocumentGeneration uint64              `json:"document_generation"`
+	Graph              Graph               `json:"graph"`
+	Settings           TransientSettings   `json:"settings"`
+	InputMode          string              `json:"input_mode"`
+	Analysis           string              `json:"analysis"`
+	Engine             string              `json:"engine"`
+	LEDModel           LEDModel            `json:"led_model"`
+	NPNModel           *NPNModel           `json:"npn_model,omitempty"`
+	Probes             []Probe             `json:"probes"`
+	Duration           float64             `json:"duration_s"`
+	SampleCount        int                 `json:"sample_count"`
+	Statistics         []ScopeStatistics   `json:"statistics"`
+	LED                *Result             `json:"led,omitempty"`
+	NPN                *NPNResult          `json:"npn,omitempty"`
+	Mixed              *MixedResult        `json:"mixed,omitempty"`
 }
 type VerificationReading struct {
 	Probe   Probe   `json:"probe"`

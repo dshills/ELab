@@ -157,6 +157,13 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 		metadata.NPNModel = &model
 	}
 	for _, part := range graph.Components {
+		if part.Kind == "potentiometer" {
+			model := LinearPotentiometerModel()
+			metadata.PotentiometerModel = &model
+			break
+		}
+	}
+	for _, part := range graph.Components {
 		if part.Kind == "diode" {
 			model := SiliconDiodeModel()
 			metadata.DiodeModel = &model
@@ -263,6 +270,10 @@ func cloneVerificationMetadata(in VerificationMetadata) VerificationMetadata {
 	out.Graph = in.Graph.Clone()
 	out.Probes = append([]Probe{}, in.Probes...)
 	out.Statistics = append([]ScopeStatistics{}, in.Statistics...)
+	if in.PotentiometerModel != nil {
+		model := *in.PotentiometerModel
+		out.PotentiometerModel = &model
+	}
 	if in.DiodeModel != nil {
 		model := *in.DiodeModel
 		out.DiodeModel = &model

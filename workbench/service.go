@@ -12,6 +12,7 @@ import (
 )
 
 type Snapshot struct {
+	PotentiometerModel   *PotentiometerModel  `json:"potentiometer_model,omitempty"`
 	DiodeModel           *DiodeModel          `json:"diode_model,omitempty"`
 	SwitchModel          *SwitchModel         `json:"switch_model,omitempty"`
 	Recording            *RecordingView       `json:"recording,omitempty"`
@@ -59,7 +60,7 @@ type savedResponse struct {
 	response    Response
 }
 type Service struct {
-	pendingSwitch                    *switchTransition
+	pendingNetwork                   *networkTransition
 	savedRecordings                  [32]byte
 	restorePaused                    bool
 	recording                        recordingState
@@ -160,6 +161,13 @@ func (s *Service) snapshotLocked() Snapshot {
 			preview.Readings = append(preview.Readings, VerificationReading{Probe: probe, Value: record.rows[len(record.rows)-1].Values[i], Minimum: stat.Minimum, Maximum: stat.Maximum})
 		}
 		out.Verification = preview
+	}
+	for _, part := range graph.Components {
+		if part.Kind == "potentiometer" {
+			model := LinearPotentiometerModel()
+			out.PotentiometerModel = &model
+			break
+		}
 	}
 	for _, part := range graph.Components {
 		if part.Kind == "diode" {
@@ -448,7 +456,7 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 	if *r.ExpectedRevision != s.revision {
 		return fail("conflict", fmt.Sprintf("expected revision %d; current revision is %d", *r.ExpectedRevision, s.revision))
 	}
-	s.pendingSwitch = nil
+	s.pendingNetwork = nil
 	before := s.historyLocked()
 	s.nextHistoryName = ""
 	if err := s.applyLocked(r.Command, r.Params); err != nil {
@@ -477,11 +485,11 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 		s.normalizeDrawingLocked()
 		if !ElectricalEqual(before.Graph, s.graph) || changedSettings || forceRestart {
 			s.electrical++
-			if s.pendingSwitch != nil && r.Command == "switch.set" {
-				s.mixedState = s.pendingSwitch.state
-				s.mixed = s.pendingSwitch.state.result
-				s.transient = s.pendingSwitch.trace
-				s.pendingSwitch = nil
+			if s.pendingNetwork != nil {
+				s.mixedState = s.pendingNetwork.state
+				s.mixed = s.pendingNetwork.state.result
+				s.transient = s.pendingNetwork.trace
+				s.pendingNetwork = nil
 			} else {
 				s.startLocked()
 			}
@@ -520,6 +528,10 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	if state.PotentiometerModel != nil {
+		model := *state.PotentiometerModel
+		state.PotentiometerModel = &model
+	}
 	if state.DiodeModel != nil {
 		model := *state.DiodeModel
 		state.DiodeModel = &model
@@ -555,6 +567,10 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	state.Components = append([]Component(nil), state.Components...)
 	for i := range state.Components {
 		state.Components[i].Terminals = append([]string(nil), state.Components[i].Terminals...)
+		if state.Components[i].WiperPosition != nil {
+			v := *state.Components[i].WiperPosition
+			state.Components[i].WiperPosition = &v
+		}
 		if state.Components[i].SwitchClosed != nil {
 			copy := *state.Components[i].SwitchClosed
 			state.Components[i].SwitchClosed = &copy

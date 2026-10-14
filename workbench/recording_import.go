@@ -43,6 +43,9 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	}
 	_ = json.Unmarshal(data, &raw)
 	envelope := map[string]any{"format": DocumentFormat, "version": 1, "graph": raw.Metadata["graph"], "view": View{Zoom: 1}, "led_model": m.LEDModel}
+	if m.PotentiometerModel != nil {
+		envelope["potentiometer_model"] = m.PotentiometerModel
+	}
 	if m.DiodeModel != nil {
 		envelope["diode_model"] = m.DiodeModel
 	}
@@ -173,7 +176,7 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		for _, group := range []struct {
 			kind string
 			ids  []string
-		}{{"capacitor", nil}, {"led", nil}, {"resistor", nil}, {"source", nil}, {"switch", nil}, {"diode", nil}} {
+		}{{"capacitor", nil}, {"led", nil}, {"resistor", nil}, {"source", nil}, {"switch", nil}, {"diode", nil}, {"potentiometer", nil}} {
 			switch group.kind {
 			case "capacitor":
 				for _, v := range r.Capacitors {
@@ -185,6 +188,10 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 				}
 			case "resistor":
 				for _, v := range r.Resistors {
+					group.ids = append(group.ids, v.ID)
+				}
+			case "potentiometer":
+				for _, v := range r.Potentiometers {
 					group.ids = append(group.ids, v.ID)
 				}
 			case "diode":

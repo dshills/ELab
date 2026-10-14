@@ -79,10 +79,19 @@ Captured metadata schemas now share a local registry definition, keeping the ori
 
 Packaged slice: **0.16.0 / 30**, with [final validation](../docs/validation/diode-validation.json), [headless fixture](../docs/validation/headless-diode.json) and [packaged desktop fixture](../docs/validation/desktop-diode.json). Headless/native numerical outputs match exactly; nonlinear RC charging differs from the independent reference by under 1 mV at 10 ms. Automatic pulse rectification, source edge events, independent Verify, standalone record import, two embedded recordings and project reopening pass, alongside root/desktop race tests, lint, vet and packaged GPU/UI smoke. Prior bundles/sessions remain preserved.
 
+## Linear potentiometer and live wiper controls
+
+Implemented the [three-pin linear potentiometer](../docs/potentiometers.md): editable total resistance, bounded slider/exact percentage field, shared `potentiometer.wiper.set`, finite endpoint resistance, unloaded divider and rheostat wiring, pin voltage/current/power readings, probes, native/SVG symbols and complete model/record/project ownership. Direct fresh transient wiper updates preserve charge/time/run and the clock; no-op updates preserve physics.
+
+Switch and wiper updates now share one staged network-edit helper. Normal paused schematic edits retain stale results until restart/resume; batches create one named history entry. Review added useful primary readings for pot-only/diode-only networks. Independent divider/Thevenin fixtures cover loaded outputs and RC charging before/after movement, with conservation, endpoint totals, unused/tied pins, strict imports, snapshot/duplicate independence, batch undo and running-clock checks.
+
+Packaged slice: **0.17.0 / 31**, with [final validation](../docs/validation/potentiometer-validation.json), [headless fixture](../docs/validation/headless-potentiometer.json) and [packaged desktop fixture](../docs/validation/desktop-potentiometer.json). Headless/native numbers match exactly. Divider midpoint is 2.5 V unloaded and 2 V with a 10 kΩ load; RC references differ by under 0.7 mV. Native controls/agent parity, standalone JSON/CSV, two embedded records, saved wiper reopening, lint/vet/race tests and packaged GPU/UI smoke pass.
+
+One full race run hit the existing flasher's 100 ms integration guard during heavy host indexing activity. The isolated flasher test and subsequent full serial gate pass; the guard was not changed. Prior bundles/sessions remain preserved.
+
 ## Next work queue
 
-1. Potentiometer model, bounded wiper controls and electrical fixtures.
-2. Broader source waveforms and finite pulse transitions from the curated PRD.
-3. Capacity/latency measurements, keyboard/screen-reader checks and distribution qualification.
+1. Sine sources and finite pulse transitions from the curated PRD, with inspectable per-source settings and numerical fixtures.
+2. Capacity/latency measurements, keyboard/screen-reader checks and distribution qualification.
 
 Every shipped user operation continues to require the same public agent command/state path. Each slice adds meaningful regression checks and records its actual limits. Participant usability and physical hardware validation remain future gates.

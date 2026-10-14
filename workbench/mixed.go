@@ -35,22 +35,23 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
-	Diodes             []BranchResult     `json:"diodes,omitempty"`
-	Switches           []BranchResult     `json:"switches,omitempty"`
-	Engine             string             `json:"engine"`
-	RunID              uint64             `json:"run_id"`
-	ElectricalRevision uint64             `json:"electrical_revision"`
-	Time               float64            `json:"time_s"`
-	Nodes              map[string]float64 `json:"nodes_v"`
-	Transistors        []MixedTransistor  `json:"transistors"`
-	Capacitors         []CapacitorResult  `json:"capacitors"`
-	LEDs               []BranchResult     `json:"leds"`
-	Resistors          []BranchResult     `json:"resistors"`
-	Sources            []BranchResult     `json:"sources"`
-	KCLResidual        float64            `json:"kcl_residual_a"`
-	PowerResidual      float64            `json:"power_residual_w"`
-	NumericalDamping   float64            `json:"numerical_damping_w"`
-	Stale              bool               `json:"stale"`
+	Potentiometers     []PotentiometerResult `json:"potentiometers,omitempty"`
+	Diodes             []BranchResult        `json:"diodes,omitempty"`
+	Switches           []BranchResult        `json:"switches,omitempty"`
+	Engine             string                `json:"engine"`
+	RunID              uint64                `json:"run_id"`
+	ElectricalRevision uint64                `json:"electrical_revision"`
+	Time               float64               `json:"time_s"`
+	Nodes              map[string]float64    `json:"nodes_v"`
+	Transistors        []MixedTransistor     `json:"transistors"`
+	Capacitors         []CapacitorResult     `json:"capacitors"`
+	LEDs               []BranchResult        `json:"leds"`
+	Resistors          []BranchResult        `json:"resistors"`
+	Sources            []BranchResult        `json:"sources"`
+	KCLResidual        float64               `json:"kcl_residual_a"`
+	PowerResidual      float64               `json:"power_residual_w"`
+	NumericalDamping   float64               `json:"numerical_damping_w"`
+	Stale              bool                  `json:"stale"`
 }
 
 func cloneMixed(r *MixedResult) *MixedResult {
@@ -68,6 +69,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 	o.LEDs = append([]BranchResult{}, r.LEDs...)
 	o.Resistors = append([]BranchResult{}, r.Resistors...)
 	o.Sources = append([]BranchResult{}, r.Sources...)
+	o.Potentiometers = append([]PotentiometerResult{}, r.Potentiometers...)
 	o.Diodes = append([]BranchResult{}, r.Diodes...)
 	o.Switches = append([]BranchResult{}, r.Switches...)
 	return &o
@@ -203,6 +205,12 @@ func (n *mixedNetwork) equations(x, old []float64, dt float64, t *Transient, at 
 			}
 			g := 1 / resistance
 			flow(u, v, (voltage(x, u)-voltage(x, v))*g, g)
+		case "potentiometer":
+			upper, lower := potentiometerSegments(p)
+			one, two, w := n.pin(p, "1"), n.pin(p, "2"), n.pin(p, "wiper")
+			flow(one, w, (voltage(x, one)-voltage(x, w))/upper, 1/upper)
+			flow(two, w, (voltage(x, two)-voltage(x, w))/lower, 1/lower)
+
 		case "diode":
 			u, v := n.pin(p, "anode"), n.pin(p, "cathode")
 			i, g := siliconDiodeCurrent(voltage(x, u) - voltage(x, v))
@@ -396,6 +404,14 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			} else {
 				r.Resistors = append(r.Resistors, br)
 			}
+		case "potentiometer":
+			upper, lower := potentiometerSegments(p)
+			v1, v2, vw := voltage(x, n.pin(p, "1")), voltage(x, n.pin(p, "2")), voltage(x, n.pin(p, "wiper"))
+			i1, i2 := (v1-vw)/upper, (v2-vw)/lower
+			power := (v1-vw)*i1 + (v2-vw)*i2
+			powers += power
+			r.Potentiometers = append(r.Potentiometers, PotentiometerResult{ID: p.ID, Resistance: p.Value, WiperPosition: *p.WiperPosition, UpperResistance: upper, LowerResistance: lower, Terminal1Voltage: v1, Terminal2Voltage: v2, WiperVoltage: vw, Terminal1Current: i1, Terminal2Current: i2, WiperCurrent: -i1 - i2, Power: power})
+
 		case "npn":
 			vb, vc := voltage(x, n.pin(p, "base")), voltage(x, n.pin(p, "collector"))
 			ib, ic, _, _, _, _ := npnLinear(vb, vc)

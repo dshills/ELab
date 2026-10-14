@@ -29,6 +29,8 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		p.Current = r.Resistors[0].Current
 	} else if len(r.Switches) > 0 {
 		p.Current = r.Switches[0].Current
+	} else if len(r.Potentiometers) > 0 {
+		p.Current = r.Potentiometers[0].Terminal1Current
 	}
 	if len(r.Capacitors) > 0 {
 		cap := r.Capacitors[0]
@@ -39,6 +41,11 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		}
 	}
 	currents := map[string]float64{}
+	for _, p := range r.Potentiometers {
+		currents[p.ID+".1"] = p.Terminal1Current
+		currents[p.ID+".2"] = p.Terminal2Current
+		currents[p.ID+".wiper"] = p.WiperCurrent
+	}
 	for _, q := range r.Transistors {
 		currents[q.TransistorID+".base"] = q.BaseCurrent
 		currents[q.TransistorID+".collector"] = q.CollectorCurrent

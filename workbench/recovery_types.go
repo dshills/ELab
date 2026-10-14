@@ -77,20 +77,21 @@ func cloneRecovery(in RecoveryState) RecoveryState {
 }
 
 type DocumentInspection struct {
-	DiodeModel        *DiodeModel            `json:"diode_model,omitempty"`
-	SwitchModel       *SwitchModel           `json:"switch_model,omitempty"`
-	Format            string                 `json:"format"`
-	Version           int                    `json:"version"`
-	Graph             Graph                  `json:"graph"`
-	View              View                   `json:"view"`
-	ScopeProbes       *ProbeParams           `json:"scope_probes,omitempty"`
-	TransientSettings *TransientSettings     `json:"transient_settings,omitempty"`
-	LEDModel          LEDModel               `json:"led_model"`
-	NPNModel          *NPNModel              `json:"npn_model,omitempty"`
-	Paused            bool                   `json:"paused"`
-	Recordings        []VerificationMetadata `json:"recordings"`
-	SelectedRecording int                    `json:"selected_recording"`
-	ViewingRecording  bool                   `json:"viewing_recording"`
+	PotentiometerModel *PotentiometerModel    `json:"potentiometer_model,omitempty"`
+	DiodeModel         *DiodeModel            `json:"diode_model,omitempty"`
+	SwitchModel        *SwitchModel           `json:"switch_model,omitempty"`
+	Format             string                 `json:"format"`
+	Version            int                    `json:"version"`
+	Graph              Graph                  `json:"graph"`
+	View               View                   `json:"view"`
+	ScopeProbes        *ProbeParams           `json:"scope_probes,omitempty"`
+	TransientSettings  *TransientSettings     `json:"transient_settings,omitempty"`
+	LEDModel           LEDModel               `json:"led_model"`
+	NPNModel           *NPNModel              `json:"npn_model,omitempty"`
+	Paused             bool                   `json:"paused"`
+	Recordings         []VerificationMetadata `json:"recordings"`
+	SelectedRecording  int                    `json:"selected_recording"`
+	ViewingRecording   bool                   `json:"viewing_recording"`
 }
 type RecoverySamplesParams struct {
 	ID        string `json:"id"`

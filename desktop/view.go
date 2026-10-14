@@ -102,7 +102,7 @@ func (s *screen) view() ui.Node {
 	statusNode.Style.Typography = ui.Some(ui.Typography{Size: 13, Weight: 600})
 
 	palette := []ui.Node{section("parts-title", "Components"), quiet("placement-help", "Choose a part, then click the sheet.")}
-	names := map[string]string{"dc-source": "+  DC source", "resistor": "∿  Resistor", "led": "▷  Red LED", "ground": "⊥  Ground", "capacitor": "Ⅱ  Capacitor", "pulse-source": "▥  Pulse source", "npn": "↗  NPN transistor", "junction": "●  Junction", "net-label": "→  Net label", "switch": "/  SPST switch", "diode": "▷  Silicon diode"}
+	names := map[string]string{"dc-source": "+  DC source", "resistor": "∿  Resistor", "led": "▷  Red LED", "ground": "⊥  Ground", "capacitor": "Ⅱ  Capacitor", "pulse-source": "▥  Pulse source", "npn": "↗  NPN transistor", "junction": "●  Junction", "net-label": "→  Net label", "switch": "/  SPST switch", "diode": "▷  Silicon diode", "potentiometer": "↗  Potentiometer"}
 	palette = append(palette, ui.Node{ID: "part-search", Kind: ui.TextField, Text: state.PartSearch, Accessibility: ui.Accessibility{Name: "Search components"}, Change: func(e ui.ChangeEvent) { s.invoke("parts.search.set", workbench.SearchParams{Query: e.Text}) }})
 	for _, part := range state.MatchingParts {
 		n := s.action("part-"+part.Kind, names[part.Kind], "drawing.tool.set", workbench.ToolParams{Tool: "place", Kind: part.Kind})
@@ -185,6 +185,25 @@ func (s *screen) view() ui.Node {
 	if hasPart {
 		inspector = append(inspector, s.partPlotControls(state, part)...)
 		inspector = append(inspector, heading("inspector", part.ID+" · "+part.Name), quiet("part-terminals", "Terminals: "+strings.Join(part.Terminals, ", ")))
+		if part.Kind == "potentiometer" {
+			position := *part.WiperPosition
+			change := func(e ui.ChangeEvent) {
+				s.invoke("potentiometer.wiper.set", workbench.WiperParams{ID: part.ID, Position: float64(e.Number) / 100})
+			}
+			inspector = append(inspector, section("potentiometer-title", "Linear potentiometer"), quiet("wiper-label", fmt.Sprintf("Wiper %.4g%% · 0 toward pin 2 / 100 toward pin 1", position*100)), ui.Node{ID: "pot-wiper", Kind: ui.Slider, Number: float32(position * 100), Numeric: ui.Numeric{Min: 0, Max: 100, Step: 1}, Accessibility: ui.Accessibility{Name: "Potentiometer wiper percent"}, Change: change}, ui.Node{ID: "pot-wiper-exact", Kind: ui.NumberField, Number: float32(position * 100), Numeric: ui.Numeric{Min: 0, Max: 100, Step: .1}, Accessibility: ui.Accessibility{Name: "Exact potentiometer wiper percent"}, Change: change}, quiet("pot-model", "Two linear track segments; 1 Ω minimum each. Total resistance is preserved. No contact noise, taper, heating or ratings."))
+			if state.Mixed != nil {
+				for _, r := range state.Mixed.Potentiometers {
+					if r.ID == part.ID {
+						status := "Live"
+						if state.Mixed.Stale {
+							status = "Stale"
+						}
+						inspector = append(inspector, quiet("pot-reading", fmt.Sprintf("%s · wiper %.6g V / ground\nPin 1 %.6g mA · pin 2 %.6g mA\nWiper %.6g mA into track · %.6g mW", status, r.WiperVoltage, r.Terminal1Current*1000, r.Terminal2Current*1000, r.WiperCurrent*1000, r.Power*1000)))
+					}
+				}
+			}
+		}
+
 		if part.Kind == "switch" {
 			closed := part.SwitchClosed != nil && *part.SwitchClosed
 			text := "Close switch"
@@ -421,6 +440,21 @@ func (s *screen) view() ui.Node {
 				currentTitle = r.Resistors[0].ID + " current"
 				current = fmt.Sprintf("%.5g mA", r.Resistors[0].Current*1000)
 			}
+			if len(r.Capacitors) == 0 && len(r.LEDs) == 0 && len(r.Potentiometers) > 0 {
+				p := r.Potentiometers[0]
+				voltageTitle = p.ID + " wiper / ground"
+				voltage = fmt.Sprintf("%.6g V", p.WiperVoltage)
+				currentTitle = p.ID + " pin 1 current"
+				current = fmt.Sprintf("%.6g mA", p.Terminal1Current*1000)
+			}
+			if len(r.Capacitors) == 0 && len(r.LEDs) == 0 && len(r.Resistors) == 0 && len(r.Potentiometers) == 0 && len(r.Diodes) > 0 {
+				d := r.Diodes[0]
+				voltageTitle = d.ID + " voltage"
+				voltage = fmt.Sprintf("%.6g V", d.Voltage)
+				currentTitle = d.ID + " current"
+				current = fmt.Sprintf("%.6g mA", d.Current*1000)
+			}
+
 			if r.Stale {
 				readStatus = "Previous result · stale"
 			} else if state.Paused {

@@ -5,7 +5,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	fail := func(status, code, msg, id string) (Compiled, string, *Diagnostic) {
 		return out, status, &Diagnostic{code, msg, id}
 	}
-	sources, caps, qs, rs, leds, grounds, switches, diodes := []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}
+	sources, caps, qs, rs, leds, grounds, switches, diodes, pots := []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}
 	for _, p := range g.Components {
 		switch p.Kind {
 		case "dc-source", "pulse-source":
@@ -22,15 +22,17 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			leds = append(leds, p)
 		case "diode":
 			diodes = append(diodes, p)
+		case "potentiometer":
+			pots = append(pots, p)
 		case "junction", "net-label":
 			continue
 		case "ground":
 			grounds = append(grounds, p)
 		default:
-			return fail("unsupported", "unsupported-model", "The network solver supports sources, resistors, SPST switches, capacitors, diodes, red LEDs and grounded-emitter NPNs.", p.ID)
+			return fail("unsupported", "unsupported-model", "The network solver supports sources, resistors, SPST switches, potentiometers, capacitors, diodes, red LEDs and grounded-emitter NPNs.", p.ID)
 		}
 	}
-	if len(diodes) > 0 || len(switches) > 0 || len(caps) == 0 || len(qs) == 0 {
+	if len(pots) > 0 || len(diodes) > 0 || len(switches) > 0 || len(caps) == 0 || len(qs) == 0 {
 		out.Analysis = NetworkDCAnalysis
 		if len(caps) > 0 {
 			out.Analysis = NetworkTransientAnalysis
@@ -42,11 +44,11 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			}
 		}
 	}
-	if len(diodes) > 8 || len(switches) > 8 || len(sources) > 3 || len(caps) > 4 || len(qs) > 2 || len(rs) > 12 || len(leds) > 4 || len(out.Nets) > MaxMixedNodes+1 {
-		return fail("unsupported", "mixed-limit", "Network simulation supports at most 12 non-ground nets, 3 sources, 4 capacitors, 2 NPNs, 12 resistors, 8 switches, 8 diodes and 4 LEDs.", "")
+	if len(pots) > 4 || len(diodes) > 8 || len(switches) > 8 || len(sources) > 3 || len(caps) > 4 || len(qs) > 2 || len(rs) > 12 || len(leds) > 4 || len(out.Nets) > MaxMixedNodes+1 {
+		return fail("unsupported", "mixed-limit", "Network simulation supports at most 12 non-ground nets, 3 sources, 4 capacitors, 2 NPNs, 12 resistors, 8 switches, 8 diodes, 4 potentiometers and 4 LEDs.", "")
 	}
-	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes) == 0 {
-		return fail("incomplete", "missing-parts", "Add ground, a source and a resistor, switch or diode to complete the network.", "")
+	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots) == 0 {
+		return fail("incomplete", "missing-parts", "Add ground, a source and a resistor, switch, diode or potentiometer to complete the network.", "")
 	}
 	net := func(p Component, t string) string { return out.TerminalNet[p.ID+"."+t] }
 	out.Ground = net(grounds[0], "reference")
@@ -55,14 +57,31 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		if p.Kind == "ground" || IsConnectivityPrimitive(p.Kind) {
 			continue
 		}
+		if p.Kind == "potentiometer" {
+			connected := 0
+			unique := map[string]bool{}
+			for _, pin := range p.Terminals {
+				if len(physicalTerminals(g, groups[root(p.ID+"."+pin)])) >= 2 {
+					connected++
+				}
+				unique[net(p, pin)] = true
+			}
+			if connected < 2 {
+				return fail("incomplete", "open-terminal", "Connect at least two potentiometer pins for a divider or rheostat.", p.ID)
+			}
+			if len(unique) < 2 {
+				return fail("error", "shorted-component", "Remove the short across all potentiometer pins.", p.ID)
+			}
+		}
+
 		for i, a := range p.Terminals {
 			ref := p.ID + "." + a
-			if len(physicalTerminals(g, groups[root(ref)])) < 2 {
+			if p.Kind != "potentiometer" && len(physicalTerminals(g, groups[root(ref)])) < 2 {
 				return fail("incomplete", "open-terminal", "Connect terminal "+ref+" to complete the circuit.", ref)
 			}
 			for _, b := range p.Terminals[i+1:] {
 				u, v := net(p, a), net(p, b)
-				if u == v {
+				if u == v && p.Kind != "potentiometer" {
 					return fail("error", "shorted-component", "Remove the short across component "+p.ID+".", p.ID)
 				}
 				adjacency[u] = append(adjacency[u], v)
@@ -163,6 +182,8 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		}
 	} else if len(leds) > 0 {
 		out.Output = net(leds[0], "anode")
+	} else if len(pots) > 0 {
+		out.Output = net(pots[0], "wiper")
 	} else if len(diodes) > 0 {
 		out.Output = net(diodes[0], "anode")
 	} else if len(rs) > 0 {

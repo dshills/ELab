@@ -17,18 +17,19 @@ const DocumentVersion = 4
 const MaxDocumentBytes = 256 * 1024
 
 type Document struct {
-	DiodeModel        *DiodeModel        `json:"diode_model,omitempty"`
-	SwitchModel       *SwitchModel       `json:"switch_model,omitempty"`
-	Recordings        *ProjectRecordings `json:"recordings,omitempty"`
-	Paused            *bool              `json:"paused,omitempty"`
-	ScopeProbes       *ProbeParams       `json:"scope_probes,omitempty"`
-	Format            string             `json:"format"`
-	Version           int                `json:"version"`
-	Graph             Graph              `json:"graph"`
-	View              View               `json:"view"`
-	NPNModel          *NPNModel          `json:"npn_model,omitempty"`
-	LEDModel          LEDModel           `json:"led_model"`
-	TransientSettings *TransientSettings `json:"transient_settings,omitempty"`
+	PotentiometerModel *PotentiometerModel `json:"potentiometer_model,omitempty"`
+	DiodeModel         *DiodeModel         `json:"diode_model,omitempty"`
+	SwitchModel        *SwitchModel        `json:"switch_model,omitempty"`
+	Recordings         *ProjectRecordings  `json:"recordings,omitempty"`
+	Paused             *bool               `json:"paused,omitempty"`
+	ScopeProbes        *ProbeParams        `json:"scope_probes,omitempty"`
+	Format             string              `json:"format"`
+	Version            int                 `json:"version"`
+	Graph              Graph               `json:"graph"`
+	View               View                `json:"view"`
+	NPNModel           *NPNModel           `json:"npn_model,omitempty"`
+	LEDModel           LEDModel            `json:"led_model"`
+	TransientSettings  *TransientSettings  `json:"transient_settings,omitempty"`
 }
 type DocumentState struct {
 	SchematicDirty  bool   `json:"schematic_dirty"`
@@ -227,6 +228,15 @@ func decodeDocument(data []byte) (Document, error) {
 	if len(d.Graph.Components) > MaxComponents || len(d.Graph.Wires) > MaxWires {
 		return d, fmt.Errorf("schematic exceeds component/wire limits")
 	}
+	if d.PotentiometerModel != nil && *d.PotentiometerModel != LinearPotentiometerModel() {
+		return d, fmt.Errorf("unsupported potentiometer model parameters/version")
+	}
+	for _, part := range d.Graph.Components {
+		if part.Kind == "potentiometer" && (d.PotentiometerModel == nil || *d.PotentiometerModel != LinearPotentiometerModel()) {
+			return d, fmt.Errorf("potentiometers require supported potentiometer_model parameters")
+		}
+	}
+
 	if d.DiodeModel != nil && *d.DiodeModel != SiliconDiodeModel() {
 		return d, fmt.Errorf("unsupported diode model parameters/version")
 	}
@@ -274,6 +284,17 @@ func decodeDocument(data []byte) (Document, error) {
 			return d, fmt.Errorf("invalid rotation on %s", c.ID)
 		}
 		expected.Rotation = c.Rotation
+		if c.WiperPosition != nil {
+			if c.Kind != "potentiometer" || !finite(*c.WiperPosition) || *c.WiperPosition < 0 || *c.WiperPosition > 1 {
+				return d, fmt.Errorf("invalid potentiometer wiper on %s", c.ID)
+			}
+			v := *c.WiperPosition
+			expected.WiperPosition = &v
+		}
+		if c.Kind == "potentiometer" && c.WiperPosition == nil {
+			return d, fmt.Errorf("potentiometer requires explicit wiper_position")
+		}
+
 		if c.SwitchClosed != nil {
 			if c.Kind != "switch" {
 				return d, fmt.Errorf("switch state belongs only to a switch")
@@ -468,6 +489,13 @@ func (s *Service) documentLocked() Document {
 	probes := ProbeParams{IDs: s.scopeLocked(compiled).Selected}
 	paused := s.paused
 	d := Document{Recordings: s.projectRecordingsLocked(), Paused: &paused, ScopeProbes: &probes, Format: DocumentFormat, Version: DocumentVersion, Graph: s.graph.Clone(), View: s.view, LEDModel: Model(), TransientSettings: &settings}
+	for _, part := range s.graph.Components {
+		if part.Kind == "potentiometer" {
+			model := LinearPotentiometerModel()
+			d.PotentiometerModel = &model
+			break
+		}
+	}
 	for _, part := range s.graph.Components {
 		if part.Kind == "diode" {
 			model := SiliconDiodeModel()

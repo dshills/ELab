@@ -23,6 +23,10 @@ func (g Graph) Clone() Graph {
 	out := Graph{append([]Component{}, g.Components...), append([]Wire{}, g.Wires...)}
 	for i := range out.Components {
 		out.Components[i].Terminals = append([]string{}, out.Components[i].Terminals...)
+		if v := out.Components[i].WiperPosition; v != nil {
+			copy := *v
+			out.Components[i].WiperPosition = &copy
+		}
 		if state := out.Components[i].SwitchClosed; state != nil {
 			copy := *state
 			out.Components[i].SwitchClosed = &copy
@@ -137,6 +141,7 @@ func Library() []Part {
 		{"ground", "Ground", []string{"reference"}, "", "", "ground.v1"},
 		{"junction", "Junction", []string{"node"}, "", "", "junction.v1"},
 		{"net-label", "Net label", []string{"node"}, "", "", "net-label.v1"},
+		{"potentiometer", "Potentiometer", []string{"1", "2", "wiper"}, "10k Ω", "Ω", PotentiometerModelID},
 		{"diode", "Silicon diode", []string{"anode", "cathode"}, "", "", DiodeModelID},
 		{"switch", "SPST switch", []string{"1", "2"}, "", "", SwitchModelID},
 	}
@@ -154,6 +159,10 @@ func MakeComponent(id, kind string, p Point, value string) (Component, error) {
 			continue
 		}
 		c := Component{ID: id, Kind: kind, Name: part.Name, Terminals: append([]string{}, part.Terminals...), Position: position, Unit: part.Unit, Model: part.Model}
+		if kind == "potentiometer" {
+			w := .5
+			c.WiperPosition = &w
+		}
 		if kind == "switch" {
 			closed := false
 			c.SwitchClosed = &closed
@@ -186,7 +195,7 @@ func SetValue(c Component, text string) (Component, error) {
 		c.Label = text
 		return c, nil
 	}
-	if c.Kind != "dc-source" && c.Kind != "pulse-source" && c.Kind != "resistor" && c.Kind != "capacitor" {
+	if c.Kind != "dc-source" && c.Kind != "pulse-source" && c.Kind != "resistor" && c.Kind != "capacitor" && c.Kind != "potentiometer" {
 		return c, fmt.Errorf("this component has no editable value")
 	}
 	value, err := ParseValue(text, c.Unit)
@@ -196,7 +205,7 @@ func SetValue(c Component, text string) (Component, error) {
 	if (c.Kind == "dc-source" || c.Kind == "pulse-source") && (!finite(value) || value < 0 || value > 12) {
 		return c, fmt.Errorf("source voltage must be 0–12 V")
 	}
-	if c.Kind == "resistor" && (!finite(value) || value < 10 || value > 100000) {
+	if (c.Kind == "resistor" || c.Kind == "potentiometer") && (!finite(value) || value < 10 || value > 100000) {
 		return c, fmt.Errorf("resistance must be 10–100000 Ω")
 	}
 	if c.Kind == "capacitor" && (!finite(value) || value < 1e-12 || value > 1) {
@@ -235,6 +244,17 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 			p = Point{0, -32}
 		case "2":
 			p = Point{0, 32}
+		default:
+			found = false
+		}
+	case "potentiometer":
+		switch name {
+		case "1":
+			p = Point{-55, 0}
+		case "2":
+			p = Point{55, 0}
+		case "wiper":
+			p = Point{0, -45}
 		default:
 			found = false
 		}
@@ -324,6 +344,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 	}
 	hasSwitch := false
 	hasDiode := false
+	hasPot := false
 	sources, resistors, leds, grounds := []Component{}, []Component{}, []Component{}, []Component{}
 	capacitors := []Component{}
 	transistors := []Component{}
@@ -339,6 +360,8 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 			hasSwitch = true
 		case "diode":
 			hasDiode = true
+		case "potentiometer":
+			hasPot = true
 		case "resistor":
 			resistors = append(resistors, c)
 		case "npn":
@@ -423,7 +446,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		return out, "incomplete", &Diagnostic{code, message, id}
 	}
 	networkTopology := len(transistors) == 0 && (len(sources) > 1 || len(resistors) > 1 || len(leds) > 1 || len(capacitors) > 1 || len(capacitors) == 0 && len(leds) == 0 && len(resistors) > 0)
-	if hasSwitch || hasDiode || networkTopology || len(transistors) > 0 && len(capacitors) > 0 {
+	if hasSwitch || hasDiode || hasPot || networkTopology || len(transistors) > 0 && len(capacitors) > 0 {
 		return compileNetwork(out, g, groups, root)
 	}
 	if len(transistors) > 0 {

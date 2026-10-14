@@ -131,6 +131,11 @@ func schematic(state workbench.Snapshot, view canvas.Viewport) (*canvas.Mesh, er
 				end.Y = 0
 			}
 			stroke(ink, 3, canvas.Point{X: -25}, end)
+		case "potentiometer":
+			stroke(ink, 2.5, canvas.Point{X: -55}, canvas.Point{X: -43}, canvas.Point{X: -35, Y: -15}, canvas.Point{X: -21, Y: 15}, canvas.Point{X: -7, Y: -15}, canvas.Point{X: 7, Y: 15}, canvas.Point{X: 21, Y: -15}, canvas.Point{X: 35, Y: 15}, canvas.Point{X: 43}, canvas.Point{X: 55})
+			contact := 35 * (1 - 2*(*part.WiperPosition))
+			stroke(ink, 2.5, canvas.Point{Y: -45}, canvas.Point{X: contact, Y: -17}, canvas.Point{X: contact - 5, Y: -25})
+			stroke(ink, 2.5, canvas.Point{X: contact, Y: -17}, canvas.Point{X: contact + 5, Y: -25})
 		case "resistor":
 			stroke(ink, 2.5, canvas.Point{X: -55}, canvas.Point{X: -43}, canvas.Point{X: -35, Y: -15}, canvas.Point{X: -21, Y: 15}, canvas.Point{X: -7, Y: -15}, canvas.Point{X: 7, Y: 15}, canvas.Point{X: 21, Y: -15}, canvas.Point{X: 35, Y: 15}, canvas.Point{X: 43}, canvas.Point{X: 55})
 		case "diode":

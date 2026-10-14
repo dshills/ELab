@@ -117,6 +117,12 @@ func (s *Service) connectLocked(p ConnectParams) error {
 }
 func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "potentiometer.wiper.set":
+		var p WiperParams
+		if err := params(raw, &p, "id", "position"); err != nil {
+			return err
+		}
+		return s.setWiperLocked(p)
 	case "switch.set":
 		var p SwitchParams
 		if err := params(raw, &p, "id", "closed"); err != nil {
@@ -279,7 +285,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return fmt.Errorf("drawing supports at most %d components", MaxComponents)
 		}
 		if p.ID == "" {
-			prefix := map[string]string{"dc-source": "V", "resistor": "R", "led": "D", "diode": "D", "ground": "GND", "capacitor": "C", "pulse-source": "V", "npn": "Q", "junction": "J", "net-label": "L", "switch": "S"}[p.Kind]
+			prefix := map[string]string{"dc-source": "V", "resistor": "R", "led": "D", "diode": "D", "potentiometer": "P", "ground": "GND", "capacitor": "C", "pulse-source": "V", "npn": "Q", "junction": "J", "net-label": "L", "switch": "S"}[p.Kind]
 			if prefix == "" {
 				return fmt.Errorf("unknown part kind")
 			}

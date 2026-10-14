@@ -174,7 +174,7 @@ func schematicSVG(g Graph, run, revision uint64) []byte {
 	width, height := maxX-minX, maxY-minY
 	var b strings.Builder
 	fmt.Fprintf(&b, `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="%g" viewBox="%g %g %g %g"><title>ELab schematic</title>`, 1200*height/width, minX, minY, width, height)
-	metadata, _ := json.Marshal(map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "switch_model": SwitchDeviceModel(), "diode_model": SiliconDiodeModel(), "note": "Generic educational models; schematic rendering, not physical build certification"})
+	metadata, _ := json.Marshal(map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "switch_model": SwitchDeviceModel(), "diode_model": SiliconDiodeModel(), "potentiometer_model": LinearPotentiometerModel(), "note": "Generic educational models; schematic rendering, not physical build certification"})
 	fmt.Fprintf(&b, "<metadata>%s</metadata>", html.EscapeString(string(metadata)))
 	fmt.Fprintf(&b, `<rect x="%g" y="%g" width="%g" height="%g" fill="#ffffff"/><g fill="none" stroke="#426574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">`, minX, minY, width, height)
 	for _, w := range g.Wires {
@@ -196,6 +196,10 @@ func schematicSVG(g Graph, run, revision uint64) []byte {
 				endY = 0
 			}
 			fmt.Fprintf(&b, `<path d="M-55 0 H-25 M25 0 H55 M-25 0 L25 %g"/>`, endY)
+		case "potentiometer":
+			b.WriteString(`<path d="M-55 0 H-34 L-28 -10 L-17 10 L-6 -10 L6 10 L17 -10 L28 10 L34 0 H55"/>`)
+			contact := 28 * (1 - 2*(*p.WiperPosition))
+			fmt.Fprintf(&b, `<path d="M0 -45 L%g -12 L%g -20 M%g -12 L%g -20"/>`, contact, contact-5, contact, contact+5)
 		case "resistor":
 			b.WriteString(`<path d="M-55 0 H-34 L-28 -10 L-17 10 L-6 -10 L6 10 L17 -10 L28 10 L34 0 H55"/>`)
 		case "capacitor":

@@ -171,3 +171,5 @@ Project save/open now embeds kept completed recordings. `recording.keep.set {id,
 ## Curated switch and diode devices
 
 [SPST model and live actuation](switches.md) use `component.place` and `switch.set`. [Silicon diode defaults and probes](diodes.md) use `component.place` with `kind:"diode"`, named `anode`/`cathode` wires and ordinary scope/Verify commands. Snapshots, saved projects and records carry optional `switch_model` and `diode_model` parameters; network branch results include `mixed.switches` and `mixed.diodes`. Discovery is authoritative for the complete schemas.
+
+`potentiometer.wiper.set {"id":"P1","position":0.75}` controls the three-pin linear track. Use `component.set` for its total resistance, and ordinary wire/probe commands for `1`, `2`, `wiper`. [Potentiometer defaults, current directions and transient semantics](potentiometers.md). Snapshots/records include `potentiometer_model` and `mixed.potentiometers`.

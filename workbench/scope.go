@@ -85,6 +85,12 @@ func probeInventory(g Graph) []Probe {
 			out = append(out, Probe{"i:" + p.ID, p.ID + " current", "A", p.ID + "." + p.Terminals[0], p.ID + "." + p.Terminals[1]})
 		case "dc-source", "pulse-source":
 			out = append(out, Probe{"i:" + p.ID, p.ID + " delivered current", "A", p.ID + ".positive", "out of positive"})
+		case "potentiometer":
+			out = append(out, Probe{"v:" + p.ID, p.ID + " track voltage", "V", p.ID + ".1", p.ID + ".2"})
+			for _, pin := range p.Terminals {
+				ref := p.ID + "." + pin
+				out = append(out, Probe{"i:" + ref, ref + " current into device", "A", ref, "into device"})
+			}
 		case "npn":
 			for _, pin := range p.Terminals {
 				ref := p.ID + "." + pin
@@ -141,6 +147,11 @@ func defaultProbes(c Compiled) []string {
 		for _, p := range c.MixedGraph.Components {
 			if p.Kind == "led" || p.Kind == "diode" {
 				out = append(out, "i:"+p.ID)
+			}
+		}
+		for _, p := range c.MixedGraph.Components {
+			if p.Kind == "potentiometer" {
+				out = append(out, "v:"+p.ID+".wiper", "i:"+p.ID+".wiper")
 			}
 		}
 		if c.Capacitor.ID != "" {

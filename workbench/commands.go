@@ -114,6 +114,7 @@ func queryCapability(id, description string, input, output reflect.Type) Capabil
 }
 func Catalog() []Capability {
 	return []Capability{
+		typedCapability("potentiometer.wiper.set", "Set a linear potentiometer wiper position 0–1; direct fresh transient changes preserve capacitor charge, time and run", reflect.TypeOf(WiperParams{})),
 		typedCapability("switch.set", "Set a generic SPST open/closed state; fresh network transient actuation preserves capacitor voltage, time and run, and records an input event", reflect.TypeOf(SwitchParams{})),
 		typedCapability("wire.junction.insert", "Atomically insert one explicit junction into 1–8 named connected wire routes; position required for multi-wire joins, single wire defaults to a free interior point", reflect.TypeOf(JunctionInsertParams{})),
 		typedCapability("recording.keep.set", "Include/exclude a completed recording in project saves and recovery; exclusion keeps session replay/export; kept records are never silently evicted", reflect.TypeOf(RecordingKeepParams{})),

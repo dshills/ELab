@@ -144,7 +144,10 @@ rendered:
 	if err := nativeSwitchSmoke(ctx, a, s); err != nil {
 		return err
 	}
-	return nativeDiodeSmoke(ctx, a, s)
+	if err := nativeDiodeSmoke(ctx, a, s); err != nil {
+		return err
+	}
+	return nativePotentiometerSmoke(ctx, a, s)
 }
 
 func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
@@ -967,6 +970,70 @@ func nativeDiodeSmoke(ctx context.Context, a *app.Application, s *screen) error 
 		}
 		if _, ok := findNode(s.view(), "diode-model"); !ok {
 			checked <- fmt.Errorf("native diode model absent")
+			return
+		}
+		_, err := s.mesh(*s.drawing.View)
+		checked <- err
+	}); err != nil {
+		return err
+	}
+	return <-checked
+}
+
+func smokeConstructPotentiometer(s *screen) error {
+	if err := smokeUI(s, "example.reset", nil); err != nil {
+		return err
+	}
+	if s.pendingCommand != "" {
+		if err := smokeUI(s, "discard-continue", nil); err != nil {
+			return err
+		}
+	}
+	for _, action := range []struct {
+		id    string
+		event *ui.ChangeEvent
+	}{
+		{"selection", &ui.ChangeEvent{SelectedID: "R1"}}, {"delete-object", nil}, {"part-potentiometer", nil},
+		{"position-x", &ui.ChangeEvent{Number: 0}}, {"position-y", &ui.ChangeEvent{Number: -110}}, {"place-at-position", nil},
+	} {
+		if err := smokeUI(s, action.id, action.event); err != nil {
+			return err
+		}
+	}
+	id := s.service.Snapshot().Selected
+	for _, pair := range [][2]string{{"V1.positive", id + ".1"}, {id + ".2", "GND.reference"}, {id + ".wiper", "D1.anode"}} {
+		for _, action := range []struct {
+			id    string
+			event *ui.ChangeEvent
+		}{
+			{"tool-wire", nil}, {"wire-from", &ui.ChangeEvent{SelectedID: pair[0]}}, {"wire-to", &ui.ChangeEvent{SelectedID: pair[1]}}, {"connect-terminals", nil},
+		} {
+			if err := smokeUI(s, action.id, action.event); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+func nativePotentiometerSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	checked := make(chan error, 1)
+	if err := a.PostWait(ctx, func() {
+		if err := smokeConstructPotentiometer(s); err != nil {
+			checked <- err
+			return
+		}
+		before := s.service.Snapshot()
+		if err := smokeUI(s, "pot-wiper", &ui.ChangeEvent{Number: 75}); err != nil {
+			checked <- err
+			return
+		}
+		after := s.service.Snapshot()
+		if before.Mixed == nil || after.Mixed == nil || len(after.Mixed.Potentiometers) != 1 || after.Mixed.LEDs[0].Current <= before.Mixed.LEDs[0].Current {
+			checked <- fmt.Errorf("native pot slider did not increase LED current")
+			return
+		}
+		if _, ok := findNode(s.view(), "pot-reading"); !ok {
+			checked <- fmt.Errorf("native pot readout absent")
 			return
 		}
 		_, err := s.mesh(*s.drawing.View)
