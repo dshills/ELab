@@ -29,6 +29,8 @@ Connect source positive → resistor → LED anode, LED cathode → ground, and 
 
 Captured runs now offer [time-weighted interval measurements](docs/interval-measurements.md): average, RMS, AC ripple RMS and peak-to-peak for voltage/current, through the same user and agent commands.
 
+**Examples → LED fade** shows stored capacitor charge extending an LED pulse. Single-capacitor LED networks and series-capacitor RC high-pass circuits now use the existing network solver. See [RC/LED and high-pass experiments](docs/rc-led-networks.md).
+
 **Examples → Rectifier / smoothing** opens a sine-driven diode/capacitor supply. Compare input/output voltage and reduce ripple by increasing C1. See the [rectifier experiment](docs/rectifier-example.md).
 
 Select a **Finite pulse** source to enter its frequency, period or high-phase percentage directly. The same [pulse clock command](docs/source-pulse-clock.md) is available to agents and preserves configured voltage/ramp values.
@@ -42,7 +44,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.85.0 --build-version 100 --platform darwin
+  --version 0.86.0 --build-version 101 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).

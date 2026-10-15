@@ -245,6 +245,7 @@ func (s *screen) invokeAtCommandRevision(id string, p any, rev uint64, generatio
 func (s *screen) registerCommands() {
 	s.registerFileCommands()
 	s.registerAppearanceCommands()
+	s.registerExampleLoadCommands()
 	for _, entry := range []struct{ id, label, shortcut string }{
 		{"edit.undo", "Undo", "Meta+Z"}, {"edit.redo", "Redo", "Meta+Shift+Z"},
 		{"project.clear", "New blank", ""}, {"drawing.cancel", "Cancel drawing", "Escape"},

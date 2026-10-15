@@ -497,7 +497,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 	incomplete := func(code, message, id string) (Compiled, string, *Diagnostic) {
 		return out, "incomplete", &Diagnostic{code, message, id}
 	}
-	networkTopology := len(transistors) == 0 && (len(sources) > 1 || len(resistors) > 1 || len(leds) > 1 || len(capacitors) > 1 || len(capacitors) == 0 && len(leds) == 0 && len(resistors) > 0)
+	networkTopology := len(transistors) == 0 && (len(sources) > 1 || len(resistors) > 1 || len(leds) > 1 || len(capacitors) > 1 || len(capacitors) > 0 && len(leds) > 0 || len(capacitors) == 0 && len(leds) == 0 && len(resistors) > 0)
 	if hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || len(transistors) > 0 && len(capacitors) > 0 {
 		return compileNetwork(out, g, groups, root)
 	}
@@ -505,7 +505,14 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		return compileNPN(out, g, sources, resistors, leds, transistors, capacitors, grounds, groups, root)
 	}
 	if len(capacitors) > 0 {
-		return compileRC(out, g, sources, resistors, capacitors, leds, grounds, groups, root)
+		compiled, status, diagnostic := compileRC(out, g, sources, resistors, capacitors, leds, grounds, groups, root)
+		// Keep the exact one-pole low-pass path. Other RC arrangements, such as
+		// a series-capacitor high-pass, still belong to the supported network
+		// family; let its compiler validate topology and ideal constraints.
+		if status == "unsupported" && diagnostic != nil && diagnostic.Code == "unsupported-topology" {
+			return compileNetwork(out, g, groups, root)
+		}
+		return compiled, status, diagnostic
 	}
 	if len(sources) == 0 || len(resistors) == 0 || len(leds) == 0 {
 		return incomplete("missing-parts", "Place a DC source, resistor, red LED, and ground to build the LED circuit.", "")

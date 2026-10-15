@@ -185,8 +185,8 @@ func TestRCInvalidNetworkStopsAndVersionTwoRequiresCompleteSettings(t *testing.T
 	call(t, s, "simulation.step", StepParams{.01}, "reference")
 	old := s.Snapshot().Transient.Sample
 	call(t, s, "component.place", PlaceParams{Kind: "led", Position: Point{300, 100}}, "mixed")
-	if state := s.Snapshot(); !state.Transient.Stale || state.Transient.Sample != old || len(state.Diagnostics) == 0 || state.Diagnostics[0].Code != "unsupported-topology" {
-		t.Fatal("mixed network produced valid transient output")
+	if state := s.Snapshot(); !state.Transient.Stale || state.Transient.Sample != old || len(state.Diagnostics) == 0 || state.Diagnostics[0].Code != "open-terminal" {
+		t.Fatal("unconnected LED produced valid transient output")
 	}
 	refuse(t, s, "simulation.step", StepParams{.001}, "unavailable")
 	call(t, s, "edit.undo", struct{}{}, "undo-mixed")

@@ -33,6 +33,7 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "switch-npn", Title: "Manual transistor LED switch", Question: "How can a switch control an LED through a transistor?", Expected: "Closing S1 supplies base current and lights the LED. Opening S1 lets RPD hold the base near ground; the LED turns off.", Try: "Select S1 and choose Close switch / Open switch. Inspect Q1 base and collector currents, then increase RB.", Limitation: "Finite 1 Ω on / 1 GΩ off switch; educational NPN and illustrative LED brightness. No contact bounce, heating or physical ratings."},
 		{ID: "blink", Title: "Pulse-controlled LED", Question: "What happens when transistor base drive alternates?", Expected: "The LED follows the high/low base-drive phases; the scope separates signed base and collector behavior.", Try: "Change pulse high/low durations, then pause and measure matching edges.", Limitation: "Instantaneous junction response; no physical switching delay or stored transistor charge."},
 		{ID: "flasher", Title: "Capacitor-timed LED flasher", Question: "How can two RC stages make alternating light?", Expected: "The LEDs alternate as capacitor voltages drive the two transistor bases; larger timing capacitors generally lengthen the period.", Try: "Plot both LED currents and collector voltages; double both capacitors and compare measured periods.", Limitation: "Generic grounded-emitter NPN/LED models, ideal capacitors and an explicit asymmetric startup; hardware tolerances are not modeled."},
+		{ID: "led-fade", Title: "Capacitor-buffered LED fade", Question: "How does stored capacitor charge change an LED pulse?", Expected: "C1 charges across D1 while the input is high; after the input falls, stored charge keeps LED current flowing briefly as voltage decays.", Try: "Compare input voltage, C1 voltage and D1 current. Change C1 from 100 µF to 220 µF and compare the falling-edge tail.", Limitation: "Ideal capacitor and generic red LED; source low discharges through R1 as well as D1. Brightness is illustrative; no physical LED rating, ESR or heating."},
 		{ID: "rectifier", Title: "Diode rectifier and smoothing", Question: "How does a diode and capacitor turn AC into a rippling DC voltage?", Expected: "D1 charges C1 during positive peaks. Between peaks the diode blocks and RL drains C1; a larger capacitor reduces ripple.", Try: "Compare input and C1 voltage on the scope. Change C1 from 10 µF to 47 µF, then compare settled ripple after 2 simulated seconds.", Limitation: "A 5 V peak, 10 Hz educational source; no mains, transformer or physical power-supply ratings. Ideal capacitor and generic diode omit ESR, breakdown, reverse recovery and heating."},
 	}
 }
@@ -79,6 +80,13 @@ func findExample(id string) (exampleDefinition, bool) {
 		d.settings.StepSeconds = .005
 		d.settings.PlaybackSpeed = .5
 		d.view = View{Center: Point{Y: -10}, Zoom: .55}
+	case "led-fade":
+		d.graph = LEDFadeExampleGraph()
+		d.settings.HighSeconds = .2
+		d.settings.LowSeconds = .3
+		d.settings.PlaybackSpeed = .1
+		d.view = View{Center: Point{X: 40}, Zoom: .65}
+		d.selected = "C1"
 	case "rectifier":
 		d.graph = RectifierExampleGraph()
 		d.settings.StepSeconds = .001

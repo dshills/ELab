@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "scope": "Complete load contract, example guidance, observations and checks match except transport",
+  "reports": [
+    "headless-rc-network.json",
+    "desktop-rc-network.json"
+  ],
+  "observations": {
+    "manual_matches_template": true,
+    "capacitor_edge_continuity": true,
+    "led_current_100uf_10ms_after_edge_a": 2.9190358901934858e-05,
+    "led_current_220uf_10ms_after_edge_a": 0.00023679876605455183,
+    "tail_statistics": {
+      "settings": {
+        "id": "verify-1",
+        "probe_id": "i:D1",
+        "start_s": 0.2,
+        "end_s": 0.21
+      },
+      "origin_id": "verify-1",
+      "engine": "elab.network-mna-be.v1",
+      "method": "piecewise-linear.v1",
+      "probe": {
+        "id": "i:D1",
+        "label": "D1 current",
+        "unit": "A",
+        "positive": "D1.anode",
+        "reference": "D1.cathode"
+      },
+      "sample_count": 213,
+      "segment_count": 10,
+      "duration_s": 0.009999999999999981,
+      "minimum": 2.9190358901935478e-05,
+      "maximum": 0.0029167964805435756,
+      "peak_to_peak": 0.00288760612164164,
+      "time_mean": 0.0004902395679043785,
+      "time_rms": 0.0008141745669313018,
+      "ac_rms": 0.0006500349155996938
+    },
+    "high_pass_output_10ms_v": 1.840488470465463,
+    "high_pass_reference_10ms_v": 1.8393972058572117
+  }
+}

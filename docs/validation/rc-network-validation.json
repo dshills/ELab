@@ -1,0 +1,139 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.86.0",
+  "build_version": "101",
+  "binary_sha256": "75b6f8397e277a7e577931b509d57e8f35bf4d966eae48557a1b4d09288c6f49",
+  "agent_binary_sha256": "9b13e6052230691657c7f79b3dbb672ef90f87e305f41eea55ff50596f412be1",
+  "sdk": {
+    "commit": "621aca2da91836631fc05b2a7b97f124d53518dd",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "desktop/examples_smoke.go": "481d500a9dd460dabbe345d1afe78b00a268dd5802dd2dc13543d264ed92e8a6",
+    "desktop/main.go": "55d6739bf11c4de4fed6bcd6afe55680f0be9fa178811bd4d84f41c241278d29",
+    "desktop/menus.go": "e3d0a06b1137d237487811874fefc8fc33286125e08cb255c5586b31d1012c81",
+    "desktop/view.go": "e7918542ee55f5d3b5d95b50b6fe2f2fcd322f017e2d351d1777257080c59506",
+    "internal/uiaudit/audit.go": "9804fe80c40f5237b07710077cebf5abffcc7b113fa4c9f66fc4bdad8c977be0",
+    "scripts/examples-demo.py": "1e7f1427a38f94b4bd23b3819a5cfa9196acb80428cbd5bd5d74c9299d8bedff",
+    "workbench/examples.go": "d9da12a5b0c4d6d0db7347f8403fad64095e8e85959a43bc6e836660f1050bd0",
+    "workbench/examples_test.go": "7897737e966a2a9e1703fcec86f3550b6f999977a724f2d10949d946e8299e2a",
+    "workbench/graph.go": "9510e0ee2c7213b9256243a99bc97c7f48e8eb07489a64a9735e3b6f9696b890",
+    "workbench/transient_test.go": "b0992d8b444f708e6c8d83c2760b4ad6dc8bb31b4cb143f264e48a7e1724aaa3",
+    "workbench/led_fade_example.go": "fa84e0708cbb8d859ef4e615d9ae1ff7378f10015496069fe57206e89141e555",
+    "workbench/rc_network_routing_test.go": "cb39854cf7415d3095c7d9612f30703023a5d2bf7a859b0042a9827c165d4e74",
+    "desktop/example_load.go": "7a2ab1c317cfb9278248a93592c25a0f39a2b0735f15c29250ff5e0d8eb2cffd",
+    "desktop/led_fade_smoke.go": "15426e767fb27261f4c918aa53be8fd1e8fbb49ca531fa7f8b0c22ec8717d94b",
+    "desktop/led_fade_test.go": "c762fcedf541b3741f6160c1b21b9d377cb23e620592ba1f2a2a908061f05f49",
+    "scripts/rc-network-demo.py": "32d26b9b1369d9b6ba0d45fca337eb07a92221841d8019e62751dde890a95f08"
+  },
+  "source_inventory": {
+    "sources": 49,
+    "sites": 380,
+    "public_commands": 159,
+    "source_routes": 129,
+    "binding_review_sites": 142,
+    "literal_routes": 212,
+    "declared_wrapper_or_menu_sites": 9
+  },
+  "checks": [
+    "Before-change regression demonstrates both connected RC/LED and series-capacitor high-pass rejected by legacy dispatch; final dispatch accepts both and preserves exact low-pass path",
+    "Independent scalar RK4/inverse-current LED capacitor reference within 3 mV, LED current consistency and KCL/power conservation",
+    "Analytic high-pass exponential within 3 mV, correct zero-voltage capacitor startup, pulse-edge capacitor continuity and saved fresh charge/time",
+    "Native generic example.load alias matches agent physics and preserves paused stale state and protected Save/Discard/Cancel replacement",
+    "Full serialized lint/import/root/native race/vet pass; final focused numerical/template/native race and lint/Staticcheck pass after presentation-only LED orientation correction",
+    "Final public native/headless complete load contracts, example guidance and observations match except transport; blank graph equals guided template",
+    "Public 100/220 µF tails, Verify/interval measurements, saved origin/kept recording/reopen and high-pass SVG/PNG output pass",
+    "Final packaged GPU/UI/protected-close smoke exercises new native menu,205 one-sample steps, LED tail and circuit/scope meshes",
+    "Four adapters pass complete LED/RC/NPN reference workflows; final native source ledger verifies",
+    "Candidate/canonical bytes and metadata match; previous .85/100 preserved; SDK/prepared hashes verified read-only; owned sessions terminal"
+  ],
+  "observations": {
+    "manual_matches_template": true,
+    "capacitor_edge_continuity": true,
+    "led_current_100uf_10ms_after_edge_a": 2.9190358901934858e-05,
+    "led_current_220uf_10ms_after_edge_a": 0.00023679876605455183,
+    "tail_statistics": {
+      "settings": {
+        "id": "verify-1",
+        "probe_id": "i:D1",
+        "start_s": 0.2,
+        "end_s": 0.21
+      },
+      "origin_id": "verify-1",
+      "engine": "elab.network-mna-be.v1",
+      "method": "piecewise-linear.v1",
+      "probe": {
+        "id": "i:D1",
+        "label": "D1 current",
+        "unit": "A",
+        "positive": "D1.anode",
+        "reference": "D1.cathode"
+      },
+      "sample_count": 213,
+      "segment_count": 10,
+      "duration_s": 0.009999999999999981,
+      "minimum": 2.9190358901935478e-05,
+      "maximum": 0.0029167964805435756,
+      "peak_to_peak": 0.00288760612164164,
+      "time_mean": 0.0004902395679043785,
+      "time_rms": 0.0008141745669313018,
+      "ac_rms": 0.0006500349155996938
+    },
+    "high_pass_output_10ms_v": 1.840488470465463,
+    "high_pass_reference_10ms_v": 1.8393972058572117
+  },
+  "evidence": [
+    "docs/rc-led-networks.md",
+    "scripts/rc-network-demo.py",
+    "docs/validation/headless-rc-network.json",
+    "docs/validation/desktop-rc-network.json",
+    "docs/validation/rc-network-public-parity.json",
+    "docs/validation/rc-network-output-review.json",
+    "docs/validation/rc-network-conformance.json"
+  ],
+  "logs_sha256": {
+    "build/rc-network-086/audit-verify.log": "efdf2ad5fa531cc0b22513c7ba947610bc8e9fa11e20d749e9878c4ca0ab4fd7",
+    "build/rc-network-086/audit.log": "efdf2ad5fa531cc0b22513c7ba947610bc8e9fa11e20d749e9878c4ca0ab4fd7",
+    "build/rc-network-086/before-routing.log": "37168e339a2ff0b56211132452a2ab53ffb7caffb9c6a2a67fa5772da19bba55",
+    "build/rc-network-086/build-final.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/rc-network-086/build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/rc-network-086/check-final.log": "73321d08cc1ba75b137e8272aab7c3739a29c90c44e014ac9720e8f75add01bf",
+    "build/rc-network-086/check.log": "cc64d7503534f7ecf35b90c06608d38348bb852f5add84231021a051d2bbc150",
+    "build/rc-network-086/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/rc-network-086/core-final.log": "e86887a12300e969719c8c49509b0728a5eb7a773ba1e706a3b42523e9e2b8c0",
+    "build/rc-network-086/headless-final.log": "0ba76ba85c71fcb2b297e029843d28c41e6d2d479ce43e73eb0ba7aa13151885",
+    "build/rc-network-086/headless.log": "0ba76ba85c71fcb2b297e029843d28c41e6d2d479ce43e73eb0ba7aa13151885",
+    "build/rc-network-086/layout-final-core.log": "0698a5ec7e405384802c11984ad82d77850dee42549ec0e52d1949c217ad56bc",
+    "build/rc-network-086/layout-final-native.log": "89a69256a63b98708b6e1375cfa8520d34affa7c5be8028c8a090e66d607cda0",
+    "build/rc-network-086/lint-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "build/rc-network-086/native-demo.log": "5a41b1e828b6bda6c9abeca4491a094e3b0ce5fe7486e0acfcc76dd9c02f81de",
+    "build/rc-network-086/native-final.log": "117da1ccf969113a8abde510c246b1ebab74965d8d3d996939a8c036af7b4c6a",
+    "build/rc-network-086/native-focused.log": "0a009fcb9332da9603b76fc174e22fb8762f15f92cb5e9e66d3c79f10ece9419",
+    "build/rc-network-086/native-host.log": "271280dcddfb684254e132b82cc5c7e124d804a56ebf079c61901fed75883b4b",
+    "build/rc-network-086/package-canonical.log": "3f73e3fcf6b17654520ada232a96d744c909959f47a71fe47761ddf4871e7dc6",
+    "build/rc-network-086/package-final.log": "bb111f00e2689b285fcc7d727127d332a63fe6e54529d2d15f0bedd29188057c",
+    "build/rc-network-086/package.log": "bb111f00e2689b285fcc7d727127d332a63fe6e54529d2d15f0bedd29188057c",
+    "build/rc-network-086/physics-final.log": "e7f0859599031fa8ec9015a8b7e6125d73d6bd92eb159170835167dbef53c814",
+    "build/rc-network-086/physics-focused.log": "b96ef06ca7f2418d97f694971013a52f76ed2b84c6d3dacda7c46a9caef763c1",
+    "build/rc-network-086/routing-focused.log": "d82df887a66b29b91cdf7e2496c114dbd14ec96adf0eaad713882a4685a60f7f",
+    "build/rc-network-086/smoke.log": "33056b6c035851719d1734ff67314d500cd43794b8a7d0528ff0f7ce8e73bff1"
+  },
+  "notes": [
+    "Initial independent test loop reused a retry key and native loop assumed 5 ms instead of actual 1 ms; final tests use unique keys, advancing time checks and 205 native 1 ms steps",
+    "Older RC invalid-network test expected unsupported-topology for an unconnected LED; final open-terminal expectation retains stale previous sample, refused Step, undo, short and file-settings assertions",
+    "Full suite precedes one presentation-only orientation removal; final focused core/native race, lint, build, public pair, packaged smoke and four-adapter conformance use final sources",
+    "SDK advanced c078eb8 to 621aca2 only in benchmark scripts/reports/docs; ordinary imported production paths and prepared manifest unchanged"
+  ],
+  "limits": [
+    "Generic pinned models and illustrative LED brightness; no physical device/ESR/heating/ratings or steady-state certification",
+    "Existing network bounds, source grounding and independent ideal startup constraints remain; no kernel/model/sample schedule/file-version changes",
+    "Broader raw input/IME/accessibility, visible latency, distribution, participant, physical-printer and arbitrary symbol/label layout qualification remain open",
+    "P0 remains 17 implemented /10 partial; continuing electronics/repository-quality goal stays active"
+  ]
+}
