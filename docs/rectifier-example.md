@@ -32,3 +32,5 @@ python3 scripts/rectifier-demo.py --output build/rectifier-check.json --artifact
 The artifact directory must be new. Use `--connect` only for an owned development session because the demo replaces its schematic. The demo saves the modified circuit, captured verification and a PNG; it never submits a printer job. Completed Verify adds a kept recording asset while preserving source history and live physics.
 
 Image review exposed a general export defect: conservative label backgrounds could erase a nearby symbol. SVG/PDF/PNG now draw those backgrounds below symbols and pins. A pixel regression fails with the prior renderer and passes with the repaired layer order. Genuine text/symbol overlap in arbitrary crowded drawings still needs layout attention.
+
+For a captured waveform, **Interval measurements** reports time-weighted average/RMS, AC ripple RMS and peak-to-peak over an explicit interval. Compare the same late-cycle interval and sample step for 10 µF and 47 µF. Linear reconstruction between saved rows does not certify steady state or unseen peaks. See [measurement semantics](interval-measurements.md).

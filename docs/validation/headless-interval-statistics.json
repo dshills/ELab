@@ -1,0 +1,397 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "schemas": {
+    "recording.statistics": {
+      "id": "recording.statistics",
+      "description": "Time-weighted mean, RMS, AC ripple RMS and extrema of saved linear segments",
+      "mutation": false,
+      "input_schema": {
+        "additionalProperties": false,
+        "examples": [
+          {
+            "id": "verify-1",
+            "probe_id": "v:C1",
+            "start_s": 0.01,
+            "end_s": 0.02
+          }
+        ],
+        "properties": {
+          "end_s": {
+            "$ref": "urn:elab:time:1",
+            "x-normalized-si-range": {
+              "maximum": 10,
+              "minimum": 0
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "probe_id": {
+            "description": "Exact captured probe ID; set-only empty ID clears with zero start/end.",
+            "type": "string"
+          },
+          "start_s": {
+            "$ref": "urn:elab:time:1",
+            "x-normalized-si-range": {
+              "maximum": 10,
+              "minimum": 0
+            }
+          }
+        },
+        "required": [
+          "id",
+          "probe_id",
+          "start_s",
+          "end_s"
+        ],
+        "type": "object",
+        "x-command-contract": {
+          "version": 1,
+          "scope": "captured-interval-statistics",
+          "preconditions": [
+            "Retained completed recording, captured probe, positive interval within duration; a DC point cannot define a time average",
+            "Set ID must match selected capture; empty probe with zero interval clears"
+          ],
+          "effects": [
+            "Piecewise-linear reconstruction of adjacent saved rows, clipped by interpolation at interval boundaries; zero-duration duplicate edge segments contribute no area",
+            "Time mean is integral(v)/duration; RMS is sqrt(integral(v\u00b2)/duration); AC RMS integrates deviations from the interval time mean; SI unit follows captured probe",
+            "Extrema and peak-to-peak include limits of positive-duration clipped segments; isolated zero-duration excursions do not contribute",
+            "No assertion of periodicity, steady state, unseen peaks or exact analog waveform between saved samples; plot decimation and sample statistics are independent",
+            "Query is pure. Set caches owned session/view results; selection/reopen clears; preserves live circuit/time/charge, history, document and saved recordings"
+          ],
+          "errors": [
+            {
+              "code": "invalid-params",
+              "phase": "admission",
+              "when": "Malformed/missing input, invalid interval/clear request, or result outside finite range"
+            },
+            {
+              "code": "not-ready",
+              "phase": "admission",
+              "when": "Capture absent or incomplete"
+            },
+            {
+              "code": "not-found",
+              "phase": "admission",
+              "when": "Probe not captured"
+            },
+            {
+              "code": "unavailable",
+              "phase": "admission",
+              "when": "No positive-duration saved segments"
+            },
+            {
+              "code": "conflict",
+              "phase": "admission",
+              "when": "Set names a changed selected capture"
+            }
+          ],
+          "completion": {
+            "mode": "bounded in-memory integration of at most 4096 saved rows; no worker or file IO",
+            "observe": [
+              "recording.statistics",
+              "project.inspect"
+            ],
+            "cancel": "",
+            "cooperative_deadline_s": 0
+          }
+        },
+        "x-inventory": {
+          "ids": "snapshot.operations with completed status",
+          "probe_ids": "operation.inspect metadata.probes; captured units and references"
+        },
+        "x-max-recorded-frames": 4096,
+        "x-relations": [
+          {
+            "except": "set-only empty probe with zero interval clears",
+            "fields": [
+              "id",
+              "start_s",
+              "end_s"
+            ],
+            "operator": "0<=start_s<end_s<=captured duration"
+          }
+        ]
+      },
+      "output": "Query result",
+      "output_schema": {
+        "$ref": "urn:elab:recording-statistics:1"
+      }
+    },
+    "recording.statistics.set": {
+      "id": "recording.statistics.set",
+      "description": "Measure selected capture interval; empty probe clears; session only",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "examples": [
+          {
+            "id": "verify-1",
+            "probe_id": "v:C1",
+            "start_s": 0.01,
+            "end_s": 0.02
+          }
+        ],
+        "properties": {
+          "end_s": {
+            "$ref": "urn:elab:time:1",
+            "x-normalized-si-range": {
+              "maximum": 10,
+              "minimum": 0
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "probe_id": {
+            "description": "Exact captured probe ID; set-only empty ID clears with zero start/end.",
+            "type": "string"
+          },
+          "start_s": {
+            "$ref": "urn:elab:time:1",
+            "x-normalized-si-range": {
+              "maximum": 10,
+              "minimum": 0
+            }
+          }
+        },
+        "required": [
+          "id",
+          "probe_id",
+          "start_s",
+          "end_s"
+        ],
+        "type": "object",
+        "x-command-contract": {
+          "version": 1,
+          "scope": "captured-interval-statistics",
+          "preconditions": [
+            "Retained completed recording, captured probe, positive interval within duration; a DC point cannot define a time average",
+            "Set ID must match selected capture; empty probe with zero interval clears"
+          ],
+          "effects": [
+            "Piecewise-linear reconstruction of adjacent saved rows, clipped by interpolation at interval boundaries; zero-duration duplicate edge segments contribute no area",
+            "Time mean is integral(v)/duration; RMS is sqrt(integral(v\u00b2)/duration); AC RMS integrates deviations from the interval time mean; SI unit follows captured probe",
+            "Extrema and peak-to-peak include limits of positive-duration clipped segments; isolated zero-duration excursions do not contribute",
+            "No assertion of periodicity, steady state, unseen peaks or exact analog waveform between saved samples; plot decimation and sample statistics are independent",
+            "Query is pure. Set caches owned session/view results; selection/reopen clears; preserves live circuit/time/charge, history, document and saved recordings"
+          ],
+          "errors": [
+            {
+              "code": "invalid-params",
+              "phase": "admission",
+              "when": "Malformed/missing input, invalid interval/clear request, or result outside finite range"
+            },
+            {
+              "code": "not-ready",
+              "phase": "admission",
+              "when": "Capture absent or incomplete"
+            },
+            {
+              "code": "not-found",
+              "phase": "admission",
+              "when": "Probe not captured"
+            },
+            {
+              "code": "unavailable",
+              "phase": "admission",
+              "when": "No positive-duration saved segments"
+            },
+            {
+              "code": "conflict",
+              "phase": "admission",
+              "when": "Set names a changed selected capture"
+            }
+          ],
+          "completion": {
+            "mode": "bounded in-memory integration of at most 4096 saved rows; no worker or file IO",
+            "observe": [
+              "recording.statistics",
+              "project.inspect"
+            ],
+            "cancel": "",
+            "cooperative_deadline_s": 0
+          }
+        },
+        "x-inventory": {
+          "ids": "snapshot.operations with completed status",
+          "probe_ids": "operation.inspect metadata.probes; captured units and references"
+        },
+        "x-max-recorded-frames": 4096,
+        "x-relations": [
+          {
+            "except": "set-only empty probe with zero interval clears",
+            "fields": [
+              "id",
+              "start_s",
+              "end_s"
+            ],
+            "operator": "0<=start_s<end_s<=captured duration"
+          }
+        ]
+      },
+      "output": "Snapshot",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    }
+  },
+  "rc": {
+    "settings": {
+      "id": "verify-1",
+      "probe_id": "v:C1",
+      "start_s": 0.0015,
+      "end_s": 0.0205
+    },
+    "origin_id": "verify-1",
+    "engine": "elab.ideal-rc-exact.v1",
+    "method": "piecewise-linear.v1",
+    "probe": {
+      "id": "v:C1",
+      "label": "C1 voltage",
+      "unit": "V",
+      "positive": "C1.1",
+      "reference": "C1.2"
+    },
+    "sample_count": 22,
+    "segment_count": 20,
+    "duration_s": 0.019,
+    "minimum": 0.6910795722151465,
+    "maximum": 4.356325482060979,
+    "peak_to_peak": 3.665245909845832,
+    "time_mean": 3.072159218922955,
+    "time_rms": 3.2394920617322915,
+    "ac_rms": 1.0276899102420116
+  },
+  "rc_mean_reference": 3.073755071480911,
+  "rc_rms_reference": 3.2407289363690013,
+  "current": {
+    "settings": {
+      "id": "verify-1",
+      "probe_id": "i:R1",
+      "start_s": 0.0015,
+      "end_s": 0.0205
+    },
+    "origin_id": "verify-1",
+    "engine": "elab.ideal-rc-exact.v1",
+    "method": "piecewise-linear.v1",
+    "probe": {
+      "id": "i:R1",
+      "label": "R1 current",
+      "unit": "A",
+      "positive": "R1.1",
+      "reference": "R1.2"
+    },
+    "sample_count": 22,
+    "segment_count": 20,
+    "duration_s": 0.019,
+    "minimum": 6.436745179390214e-05,
+    "maximum": 0.0004308920427784854,
+    "peak_to_peak": 0.00036652459098458323,
+    "time_mean": 0.0001927840781077045,
+    "time_rms": 0.00021846548076977711,
+    "ac_rms": 0.00010276899102420115
+  },
+  "pulse": {
+    "settings": {
+      "id": "verify-3",
+      "probe_id": "v:VIN.positive",
+      "start_s": 0,
+      "end_s": 0.1
+    },
+    "origin_id": "verify-3",
+    "engine": "elab.npn-switch-quasistatic.v1",
+    "method": "piecewise-linear.v1",
+    "probe": {
+      "id": "v:VIN.positive",
+      "label": "VIN.positive / ground",
+      "unit": "V",
+      "positive": "VIN.positive",
+      "reference": "ground"
+    },
+    "sample_count": 105,
+    "segment_count": 100,
+    "duration_s": 0.1,
+    "minimum": 0,
+    "maximum": 5,
+    "peak_to_peak": 5,
+    "time_mean": 2.5,
+    "time_rms": 3.5355339059327378,
+    "ac_rms": 2.5
+  },
+  "rectifier": [
+    {
+      "capacitance": "10uF",
+      "measurements": {
+        "settings": {
+          "id": "verify-4",
+          "probe_id": "v:C1",
+          "start_s": 1.9,
+          "end_s": 2
+        },
+        "origin_id": "verify-4",
+        "engine": "elab.network-waveforms-mna-be.v1",
+        "method": "piecewise-linear.v1",
+        "probe": {
+          "id": "v:C1",
+          "label": "C1 voltage",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        "sample_count": 1001,
+        "segment_count": 51,
+        "duration_s": 0.10000000000000009,
+        "minimum": 1.9659598992351797,
+        "maximum": 4.353969436148402,
+        "peak_to_peak": 2.3880095369132226,
+        "time_mean": 3.0995351530164448,
+        "time_rms": 3.18643434178609,
+        "ac_rms": 0.7390843319466835
+      }
+    },
+    {
+      "capacitance": "47uF",
+      "measurements": {
+        "settings": {
+          "id": "verify-5",
+          "probe_id": "v:C1",
+          "start_s": 1.9,
+          "end_s": 2
+        },
+        "origin_id": "verify-5",
+        "engine": "elab.network-waveforms-mna-be.v1",
+        "method": "piecewise-linear.v1",
+        "probe": {
+          "id": "v:C1",
+          "label": "C1 voltage",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        "sample_count": 1001,
+        "segment_count": 51,
+        "duration_s": 0.10000000000000009,
+        "minimum": 3.494217249118424,
+        "maximum": 4.174130711451012,
+        "peak_to_peak": 0.6799134623325878,
+        "time_mean": 3.82756547464306,
+        "time_rms": 3.833147633157244,
+        "ac_rms": 0.206792927585608
+      }
+    }
+  ],
+  "checks": [
+    "RC analytic interval references within 3 mV linear-reconstruction envelope",
+    "Query purity, shared set result, independent plot interval and invalid-input refusal",
+    "Captured measurements survive later live edits and recompute after save/reopen; session setting clears",
+    "Ideal pulse duplicate edge rows yield exact configured mean/RMS/AC RMS",
+    "Rectifier last-cycle metrics agree with independent saved-segment Simpson integration",
+    "47 uF reduces captured last-cycle ripple RMS and peak-to-peak versus 10 uF"
+  ],
+  "limits": [
+    "Linear reconstruction of retained samples, not continuous waveform or unseen-peak certification",
+    "No period/steady-state detection or physical device validation; no model/kernel/sampling changes"
+  ]
+}

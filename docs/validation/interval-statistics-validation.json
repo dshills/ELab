@@ -1,0 +1,104 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.85.0",
+  "build_version": "100",
+  "binary_sha256": "6c13b7e7e324af2b9d2204d9d15536bf5f62c57ac79a0d93278bea93e30af24b",
+  "agent_binary_sha256": "8b19cc6ac20f72e1115a7cd55c6198dd59e331ef76a52c73e001b18522d09ea4",
+  "sdk": {
+    "commit": "c078eb8e20f0e493ee063949f5fe7ee85e51bbe4",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "desktop/recording.go": "7bf3fafefb079de4cb5d8f03ff092b4ae5a5481913dd6c9aa51f9299377d948e",
+    "desktop/recording_compare_smoke.go": "53228574a122fd843f7fbaa8c806d8b443287f19c729a3188579dfb9deb4c88a",
+    "workbench/capability_details.go": "2f5567996341a5dd44a6374584abfb167b4ac87f62720ba57c15127c6c8e5164",
+    "workbench/commands.go": "04ec2112138786995c608db7ded0c4fdf54fafb1ef2b444a26bcdf3f31217e2e",
+    "workbench/editing.go": "1034745c75a18ae88372e244611898021fff8b68bbc6c132fd2cfcfb6eca2292",
+    "workbench/recording.go": "ac22bf4df22c79c984e6d0a20c43900735755353abd8e1b1477797d2bf7520bc",
+    "workbench/recording_scope.go": "b414c980f0ff6223081a78265b44c97ce0d00edbec842e9f3c4dc7cd376aca72",
+    "workbench/recording_types.go": "560d0f47da84d756585d9d95ff97520b95709153909db7c6b2bf8b4a7fd60772",
+    "workbench/service.go": "87e5e0362443e5b345fc92f930b82c85dc0032e55bc078f3126c28b5d50c6f6e",
+    "workbench/time_input.go": "91c5fd986e898cfae424ee6792a22e136a0e69c14842b9b9906e9f0db34b9ffa",
+    "workbench/recording_statistics.go": "916ae67d2c33217e071d6fd6df6ebe923f305241db642db915ab88996b4db0f4",
+    "workbench/recording_statistics_capabilities.go": "bfaa8f533012af1a5ca79b5774ec9b81657ebd63e466e65d9edb7dfd45acfa43",
+    "workbench/recording_statistics_test.go": "425971c37def8879011552a954b2bb13a186be4f5e8b11461848305d414e0f6a",
+    "desktop/recording_statistics.go": "161cc2eb9e62f089a91eb1967b9d6ed8a9a30dd914af3b7705ad3584bee2caec",
+    "desktop/recording_statistics_test.go": "29a14ec444a55dfa1762603bddd28ecc3175a3b7c6177e8d73f5463f1b7d5c57",
+    "desktop/recording_statistics_smoke.go": "f832077d45f0243e6dd438bf5aff838ec1d867df065f8fbd40c96319144adc97",
+    "scripts/interval-statistics-demo.py": "fcdcac906fa1e8cfda9ff1b480a50e2d39002290e76da0173d48eb9f9e4a2f5a"
+  },
+  "checks": [
+    "Analytic clipped nonuniform linear ramps, zero-time edge jumps, large magnitudes, small ripple on DC, exponential RC references and exact ideal-pulse time weighting",
+    "Pure queries, owned snapshots/results, invalid input/units/probes, selected-capture guards, retries, independent plot interval, later live edits and saved recomputation",
+    "Native committed unit-time fields and captured probe selector share agent results; stale fields refuse after newer agent interval; probe changes preserve measurement interval",
+    "Full serialized lint/import/root/native race/vet pass on final production source",
+    "Final packaged GPU/UI/protected-close smoke includes interval measurement fields and readout",
+    "Public headless/native detailed schemas and complete workflow observations match exactly except transport",
+    "Rectifier 10/47 uF last-cycle statistics match independent Python Simpson integration within 1e-12 V; larger capacitor reduces AC RMS and peak-to-peak",
+    "All four adapters pass LED/RC/NPN construction/measurement/export/save/reopen workflows",
+    "Final native source inventory verified; canonical/candidate bytes/metadata match; prior .84/99 preserved; SDK/prepared hashes verified read-only; owned sessions terminal"
+  ],
+  "evidence": [
+    "docs/interval-measurements.md",
+    "scripts/interval-statistics-demo.py",
+    "docs/validation/headless-interval-statistics.json",
+    "docs/validation/desktop-interval-statistics.json",
+    "docs/validation/interval-statistics-public-parity.json",
+    "docs/validation/interval-statistics-conformance.json"
+  ],
+  "measurements": {
+    "rc_time_mean_v": 3.072159218922955,
+    "rectifier_ac_rms_v": [
+      0.7390843319466835,
+      0.206792927585608
+    ],
+    "rectifier_peak_to_peak_v": [
+      2.3880095369132226,
+      0.6799134623325878
+    ]
+  },
+  "logs_sha256": {
+    "build/interval-statistics-085/audit-final.log": "1dcf03cdd0220a6f31294e361bdf7a81c02345d36e8bec65e58ce2fa3e622ba5",
+    "build/interval-statistics-085/audit-verify.log": "1dcf03cdd0220a6f31294e361bdf7a81c02345d36e8bec65e58ce2fa3e622ba5",
+    "build/interval-statistics-085/audit.log": "1dcf03cdd0220a6f31294e361bdf7a81c02345d36e8bec65e58ce2fa3e622ba5",
+    "build/interval-statistics-085/build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/interval-statistics-085/check-final.log": "91324da3600e0619e9c6965e927e2f16e90b30cc7f3d3a5882161a93f6aba7d4",
+    "build/interval-statistics-085/check-qualified.log": "241efde8c068d58822bb5418707ebdc5e58497cc3dfe869629cfda7fbb81911b",
+    "build/interval-statistics-085/check.log": "c54314d61025234557cbdbb6e55726f29721aca04147e43ffad9f6325898dd3c",
+    "build/interval-statistics-085/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/interval-statistics-085/core-focused.log": "c963a4f32ca7befef41588842327503981c84ae175e302971703e661f80ea3f0",
+    "build/interval-statistics-085/discovery-final.log": "a65253fbb2bb1c15d1041db7e7159047eb431cf54600073f57e3a4e062725c15",
+    "build/interval-statistics-085/headless.log": "a079b513a8fb95aff013ccf858ef3e4cadc2991025101a4bb88663af82012ddb",
+    "build/interval-statistics-085/native-demo.log": "0310a32870dd6fb6d7404614fc3b9ee4835e68ce3ffa9213d60d2dfa8fbbaa8a",
+    "build/interval-statistics-085/native-focused.log": "28d66430cead1701b52cc3b4ab0c8f10837dee742f562c67a2a95508b8c7e0a4",
+    "build/interval-statistics-085/native-host.log": "ae0659c709a0bde25cd2149659c54ad55c5f0d91a9dd0e8620bb1d8dcf4780b8",
+    "build/interval-statistics-085/package-canonical.log": "3f73e3fcf6b17654520ada232a96d744c909959f47a71fe47761ddf4871e7dc6",
+    "build/interval-statistics-085/package.log": "e9e6d37ca08217f45a21f089dc575e1228e4edc81b5a135b820c1390185bc2b2",
+    "build/interval-statistics-085/smoke.log": "6c570802a13f2c257b6dea445363883ab53149b97f6ae0a720cc36d21728d5fc"
+  },
+  "source_inventory": {
+    "sources": 48,
+    "sites": 378,
+    "public_commands": 159,
+    "source_routes": 128,
+    "binding_review_sites": 141,
+    "literal_routes": 211
+  },
+  "notes": [
+    "Initial default discovery66063 bytes; an insufficient first summary reduction65568 bytes; concise directory summaries preserve existing64KiB bound and detailed contracts; final discovery tests pass",
+    "Final selector review preserves measurement interval on probe changes; source ledger review accounts for callback expression and source-line changes, with route counts unchanged",
+    "No model/kernel, sample schedule or saved file version changed; interval measurements are derived session view state"
+  ],
+  "limits": [
+    "Piecewise-linear reconstruction of saved samples; no true continuous waveform, unseen peaks, period/steady-state or physical device certification",
+    "Positive measurement duration required; no time RMS for DC operating point; isolated zero-duration excursions do not change extrema/area",
+    "Full mounted typing/IME/accessibility, visible latency, clean distribution, participant and physical-printer gates remain open",
+    "P0 remains17 implemented /10 partial; continuing electronics/repository-quality goal active"
+  ]
+}

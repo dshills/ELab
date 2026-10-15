@@ -95,6 +95,9 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(CursorSelectParams{}), "urn:elab:cursor-select:1"},
 	{reflect.TypeOf(ProbeParams{}), "urn:elab:probe-selection:1"},
 	{reflect.TypeOf(ComponentValueDomain{}), "urn:elab:component-value-domain:1"},
+	{reflect.TypeOf(RecordingStatisticsParams{}), "urn:elab:recording-statistics-input:1"},
+	{reflect.TypeOf(RecordingStatisticsSettings{}), "urn:elab:recording-statistics-settings:1"},
+	{reflect.TypeOf(RecordingStatistics{}), "urn:elab:recording-statistics:1"},
 	{reflect.TypeOf(RecordingTimingParams{}), "urn:elab:recording-timing-input:1"},
 	{reflect.TypeOf(RecordingTimingSettings{}), "urn:elab:recording-timing-settings:1"},
 	{reflect.TypeOf(RecordingTiming{}), "urn:elab:recording-timing:1"},
@@ -179,6 +182,9 @@ func SchemaRegistry() map[string]json.RawMessage {
 		if common.Type == reflect.TypeOf(RecordingCompareParams{}) {
 			schema = timeInputSchema("recording.compare", schema)
 		}
+		if common.Type == reflect.TypeOf(RecordingStatisticsParams{}) {
+			schema = timeInputSchema("recording.statistics", schema)
+		}
 		if common.Type == reflect.TypeOf(RecordingTimingParams{}) {
 			schema = timeInputSchema("recording.timing", schema)
 		}
@@ -254,21 +260,23 @@ func queryCapability(id, description string, input, output reflect.Type) Capabil
 }
 func Catalog() []Capability {
 	return []Capability{
-		typedCapability("simulation.sampling.fit", "Reduce output step to recommended waveform resolution (at least 1 µs), reducing playback speed if needed for the 1000 samples/wall-second bound; ordinary settings restart semantics", reflect.TypeOf(struct{}{})),
+		typedCapability("simulation.sampling.fit", "Fit waveform sample step (at least 1 µs); cap playback at 1000 samples/wall-second. Ordinary settings restart rules apply.", reflect.TypeOf(struct{}{})),
 		typedCapability("source.sine.set", "Set per-source sine amplitude, offset, frequency and phase; ordinary schematic restart semantics", reflect.TypeOf(SineParams{})),
 		typedCapability("source.pulse.set", "Set per-source finite pulse levels, phase lengths and linear rise/fall; ordinary schematic restart semantics", reflect.TypeOf(PulseParams{})),
-		typedCapability("source.pulse.timing.set", "Set finite-pulse frequency or period and high-phase duty; preserve levels/rise/fall; ordinary undoable electrical edit", reflect.TypeOf(PulseTimingParams{})),
-		typedCapability("simulation.pulse.timing.set", "Set the shared ideal-square frequency or period and high duty; preserve sampling/playback and source levels; affects all ideal squares", reflect.TypeOf(IdealPulseTimingParams{})),
-		typedCapability("potentiometer.wiper.set", "Set a linear potentiometer wiper position 0–1; fresh transient algebraic work is staged outside the editor lock; inspect input_work/wait; preserves charge/time/run on success", reflect.TypeOf(WiperParams{})),
-		typedCapability("switch.set", "Set desired SPST startup state; fresh transients queue/coalesce actuation for the next accepted step, exposing desired/applied/pending state and preserving charge/run; DC/config edits restart", reflect.TypeOf(SwitchParams{})),
+		typedCapability("source.pulse.timing.set", "Set finite-pulse frequency/period and duty; preserve voltage/ramp settings. Undoable electrical edit.", reflect.TypeOf(PulseTimingParams{})),
+		typedCapability("simulation.pulse.timing.set", "Set frequency/period and duty for all ideal squares; preserve sampling/playback and voltage levels.", reflect.TypeOf(IdealPulseTimingParams{})),
+		typedCapability("potentiometer.wiper.set", "Set wiper 0–1 through staged input_work; inspect/wait for completion. Preserves fresh transient charge/time/run.", reflect.TypeOf(WiperParams{})),
+		typedCapability("switch.set", "Set desired SPST state; queue/coalesce fresh transient actuation without losing charge/run. Inspect desired/applied/pending state.", reflect.TypeOf(SwitchParams{})),
 		typedCapability("wire.junction.insert", "Atomically insert one explicit junction into 1–8 named connected wire routes; position required for multi-wire joins, single wire defaults to a free interior point", reflect.TypeOf(JunctionInsertParams{})),
 		typedCapability("recording.keep.set", "Include/exclude a completed recording in project saves and recovery; exclusion keeps session replay/export; kept records are never silently evicted", reflect.TypeOf(RecordingKeepParams{})),
 		typedCapability("verification.import.start", "Read/validate a recorded JSON asset in background; inspect project_work; keeps live circuit/state and later viewer choice", reflect.TypeOf(RecordingImportParams{})),
 		typedCapability("verification.import", "Validate and load a complete elab.verification v1 JSON record into an independent recorded viewer; never changes live circuit/state", reflect.TypeOf(RecordingImportParams{})),
+		typedCapability("recording.statistics.set", "Measure selected capture interval; empty probe clears; session only", reflect.TypeOf(RecordingStatisticsParams{})),
+		queryCapability("recording.statistics", "Time-weighted mean, RMS, AC ripple RMS and extrema of saved linear segments", reflect.TypeOf(RecordingStatisticsParams{}), reflect.TypeOf(RecordingStatistics{})),
 		typedCapability("recording.timing.set", "Configure selected capture threshold timing; empty probe clears; session only", reflect.TypeOf(RecordingTimingParams{})),
 		queryCapability("recording.timing", "Read threshold brackets, pulse/cycle bounds and high fraction; pages 1–100", reflect.TypeOf(RecordingTimingParams{}), reflect.TypeOf(RecordingTiming{})),
-		typedCapability("recording.compare.set", "Configure selected captured A and reference B at time_s; empty reference clears; exact nearest saved samples, no interpolation/live mutation", reflect.TypeOf(RecordingCompareParams{})),
-		queryCapability("recording.compare", "Pure comparison of two retained captures at time_s; matching probe IDs/units/terminals, exact sample times, B minus A and whole-record statistics", reflect.TypeOf(RecordingCompareParams{}), reflect.TypeOf(RecordingComparison{})),
+		typedCapability("recording.compare.set", "Configure selected/reference capture comparison at time_s; empty reference clears. Exact nearest samples; preserves live state.", reflect.TypeOf(RecordingCompareParams{})),
+		queryCapability("recording.compare", "Compare retained captures at time_s: matched probes, exact saved times, B minus A and whole-record statistics.", reflect.TypeOf(RecordingCompareParams{}), reflect.TypeOf(RecordingComparison{})),
 		typedCapability("recording.view.set", "Show live or recorded scope; recorded requires a selected completed operation", reflect.TypeOf(RecordingViewParams{})),
 		typedCapability("recording.seek", "Pause and seek exact sample index or nearest recorded time (exactly one); time ties select latest/right-hand edge sample", reflect.TypeOf(RecordingSeekParams{})),
 		typedCapability("recording.step", "Pause and move one actual recorded row next/previous, preserving duplicate timestamps", reflect.TypeOf(RecordingStepParams{})),
@@ -297,8 +305,8 @@ func Catalog() []Capability {
 		queryCapability("recovery.read.result", "Read owned completed inspection/sample result without disk IO", reflect.TypeOf(IDParams{}), reflect.TypeOf(RecoveryReadResult{})),
 		queryCapability("recovery.samples", "Pure recovery read outside editor lock; exact embedded rows, hash/index confirmed, pages 1–200; max four reads, 30 s cooperative budget", reflect.TypeOf(RecoverySamplesParams{}), reflect.TypeOf(VerificationPage{})),
 		queryCapability("recovery.inspect", "Pure recovery read outside editor lock; validated captured directory/configuration/recording metadata; max four reads, 30 s cooperative budget", reflect.TypeOf(RecoveryChoiceParams{}), reflect.TypeOf(RecoveryInspection{})),
-		typedCapability("verification.export", "Atomically export a completed recorded verification as json (captured graph/models/settings/full data) or csv (SI units/input identity); never substitutes live data", reflect.TypeOf(VerificationExportParams{})),
-		typedCapability("simulation.verify", "Start an independent recorded verification from explicit/captured startup, returning last_operation ID; <=10 s and 1000 output steps; DC duration zero; one active operation", reflect.TypeOf(VerifyParams{})),
+		typedCapability("verification.export", "Atomically export a completed capture as full JSON or SI CSV with input identity; never substitutes live data.", reflect.TypeOf(VerificationExportParams{})),
+		typedCapability("simulation.verify", "Admit independent captured verification; returns last_operation. Up to 10 s, 1000 output steps, one active job; DC duration zero.", reflect.TypeOf(VerifyParams{})),
 		typedCapability("verification.settings.set", "Set session Verify duration, sample step (0 follows project), source mode and optional initial overrides without altering the schematic/live state", reflect.TypeOf(VerificationSettings{})),
 		typedCapability("operation.cancel", "Request cancellation of queued/running verification; inspect until canceled/failed/completed", reflect.TypeOf(IDParams{})),
 		typedCapability("operation.select", "Select a retained operation for its recorded preview; empty ID clears it; does not alter live simulation", reflect.TypeOf(IDParams{})),
@@ -307,7 +315,7 @@ func Catalog() []Capability {
 		typedCapability("export.scope.csv", "Atomically export selected fresh scope-window samples with SI units, engine and run/revision identity; preserves schematic", reflect.TypeOf(ExportParams{})),
 		typedCapability("export.schematic.svg", "Atomically render the complete schematic and pinned reading cards/provenance as portable SVG using shared wire routes; works headlessly without a solve", reflect.TypeOf(ExportParams{})),
 		typedCapability("export.schematic.pdf", "Export captured complete schematic to printable A4/Letter PDF with page options; macOS CoreGraphics required; no printer submission or project/physics changes", reflect.TypeOf(PDFExportParams{})),
-		typedCapability("export.schematic.png", "Export complete schematic on white A4/Letter page as PNG; shared page options; dpi omitted/0=150 or 72–300; macOS CoreGraphics required; preserves source/physics", reflect.TypeOf(PNGExportParams{})),
+		typedCapability("export.schematic.png", "Export full schematic PNG on white A4/Letter; shared page options; dpi omitted/0=150 or 72–300; macOS. Preserves physics.", reflect.TypeOf(PNGExportParams{})),
 		typedCapability("sweep.settings.set", "Configure linear/logarithmic DC bias, resistance or wiper range, 2–201 inclusive points and 1–6 probes; no live mutation", reflect.TypeOf(SweepSettings{})),
 		typedCapability("sweep.start", "Capture an independent DC sweep; optional settings override; inspect dc_sweep/jobs; one worker, 30 s cooperative deadline", reflect.TypeOf(SweepStartParams{})),
 		typedCapability("sweep.cancel", "Cancel exact active sweep ID; no partial points are published", reflect.TypeOf(IDParams{})),
@@ -345,8 +353,8 @@ func Catalog() []Capability {
 		typedCapability("appearance.configure", "Load and autosave bounded app theme preferences in background; empty path disables; inspect appearance", reflect.TypeOf(AppearanceConfigureParams{})),
 		capability("appearance.wait", "Wait up to 5 s for theme preference loading/saving; inspect appearance status/error", false, `{"type":"object","additionalProperties":false}`),
 		capability("appearance.theme.set", "Theme: light, dark, system; autosaves if configured; preserves circuit/history", true, `{"type":"object","required":["theme"],"properties":{"theme":{"type":"string","enum":["light","dark","system"]}},"additionalProperties":false}`),
-		typedCapability("display.preferences.set", "Set persisted voltage color/range, current cues/motion, reduced motion and conventional/electron visualization; signed values always use conventional current; preserves physics", reflect.TypeOf(DisplayPreferences{})),
-		typedCapability("measurement.select", "Select current object, terminal, anchored net or probe for live inspection; empty kind/ID returns to the editing selection; session only, preserves physics/history/dirty state", reflect.TypeOf(MeasurementSelectParams{})),
+		typedCapability("display.preferences.set", "Set persisted voltage/current/motion/direction cues; signed current stays conventional. Preserves physics.", reflect.TypeOf(DisplayPreferences{})),
+		typedCapability("measurement.select", "Focus live object, terminal, anchored net or probe; empty kind/ID follows editing selection. Session only; preserves physics/history.", reflect.TypeOf(MeasurementSelectParams{})),
 		queryCapability("measurement.inspect", "Read the selected live measurement context, or a supplied current target, with references, signed values and accepted-result provenance; no mutation", reflect.TypeOf(MeasurementQueryParams{}), reflect.TypeOf(MeasurementInspection{})),
 		typedCapability("measurement.pin.add", "Pin a current voltage/current probe at a grid position; at most eight; persisted undoable presentation edit, no simulation restart", reflect.TypeOf(PinSpec{})),
 		typedCapability("measurement.pin.move", "Move a pinned reading to a grid position without changing physics; previous_position refuses stale gestures", reflect.TypeOf(MoveParams{})),
@@ -364,7 +372,7 @@ func Catalog() []Capability {
 		typedCapability("project.clear", "Start blank; unsaved changes require discard_changes; undo restores drawing", reflect.TypeOf(ReplaceParams{})),
 		queryCapability("events.poll", "Coalesced same-process observation; timeout 0–5000 ms, default 1000; four waits; idle omits snapshot", reflect.TypeOf(EventPollParams{}), reflect.TypeOf(EventPollResult{})),
 		queryCapability("project.work.inspect", "Inspect an operation by stable ID; retain eight project jobs and preserve active operations", reflect.TypeOf(IDParams{}), reflect.TypeOf(ProjectWork{})),
-		typedCapability("export.start", "Capture schematic-svg/pdf/png, scope-csv, verification-json/csv or sweep-json/csv export and return background admission; inspect/cancel via project.work commands", reflect.TypeOf(ExportStartParams{})),
+		typedCapability("export.start", "Admit captured schematic SVG/PDF/PNG, scope CSV or recorded/sweep JSON/CSV export; inspect/cancel via project.work.", reflect.TypeOf(ExportStartParams{})),
 		typedCapability("project.save.start", "Capture a project and return background save admission; inspect project_work; cancellation is available before publishing", reflect.TypeOf(SaveParams{})),
 		typedCapability("project.save", "Wait for project.save.start semantics; keeps records/models/preferences; later edits stay dirty; path defaults to current file; overwrite permits replacement", reflect.TypeOf(SaveParams{})),
 		typedCapability("project.load.start", "Start background bounded local project reading/validation; inspect project_work; replacement refuses intervening edits", reflect.TypeOf(LoadParams{})),
@@ -393,7 +401,7 @@ func Catalog() []Capability {
 		typedCapability("example.switch-npn", "Load a manual SPST-controlled transistor LED with a 100 kΩ base pull-down; finite switch resistance; protects unsaved work", reflect.TypeOf(ReplaceParams{})),
 		typedCapability("example.rectifier", "Load a 5 V peak/10 Hz half-wave silicon-diode rectifier with 100 Ω series resistance, 10 µF smoothing and 10 kΩ load; protects unsaved work", reflect.TypeOf(ReplaceParams{})),
 		typedCapability("example.rc", "Load a 5 V pulse / 10 kΩ / 1 µF RC example; unsaved changes require discard_changes", reflect.TypeOf(ReplaceParams{})),
-		typedCapability("simulation.transient.set", "Set transient sampling, pulse durations and playback speed (initial_voltage_v supplies default capacitor startup voltages); undoable and restarts from initial conditions", reflect.TypeOf(TransientSettings{})),
+		typedCapability("simulation.transient.set", "Set sample/pulse timing, playback and default capacitor startup. Undoable; restarts from configured initial conditions.", reflect.TypeOf(TransientSettings{})),
 		typedCapability("simulation.input.set", "Actuate RC input (auto/charge/discharge) NPN base input, or selected mixed source (auto/high/low); queue input while paused", reflect.TypeOf(InputParams{})),
 		typedCapability("simulation.step", "Advance a paused transient atomically using a cancellable background worker and wait for its terminal result; at most 1 s / 1000 samples", reflect.TypeOf(StepParams{})),
 		typedCapability("simulation.step.start", "Start a cancellable atomic manual advance and return immediately; inspect snapshot.step_work or simulation.wait; at most 1 s / 1000 samples", reflect.TypeOf(StepParams{})),

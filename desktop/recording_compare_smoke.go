@@ -77,6 +77,9 @@ func nativeRecordingComparisonSmoke(ctx context.Context, a *app.Application, s *
 	if err := nativeRecordingOverlaySmoke(ctx, a, s, reference); err != nil {
 		return err
 	}
+	if err := nativeRecordingStatisticsSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	if err := a.PostWait(ctx, func() {
 		state := s.service.Snapshot()
 		beforeTiming := s.service.Snapshot()

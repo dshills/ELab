@@ -32,8 +32,9 @@
     "desktop/printing.go": "5c404d079910b3b0db27f81ec8f4ff721cb561bcacadbe2b6878701bfd360b6b",
     "desktop/probes.go": "c7df3b57a47b8a77661fd4809c7036fb10642a9429448dd46e633ee57805efdc",
     "desktop/project_work.go": "4d80b2c111c1d6778844570344479c35d3bfd641840aba0ebbe8f81083c961e1",
-    "desktop/recording.go": "e302eb7a193f013afe7f292a476c9cf073c25f0506529fadb4e7eb2da46e9b2c",
+    "desktop/recording.go": "7bf3fafefb079de4cb5d8f03ff092b4ae5a5481913dd6c9aa51f9299377d948e",
     "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
+    "desktop/recording_statistics.go": "161cc2eb9e62f089a91eb1967b9d6ed8a9a30dd914af3b7705ad3584bee2caec",
     "desktop/recording_timing.go": "f2eb9e3fd241a81ee0aef093d74309da4527dea39ba955a66642f4b6a2bdf6e2",
     "desktop/recovery.go": "7dee5ddf2c722f09d875b92dca638c4e03506b05932b271bbd61cb1d6a7d2195",
     "desktop/recovery_read.go": "664831bba332df59b002a1e2a18fcb4a932a4478bc461daae2f8f77c79536114",
@@ -137,6 +138,8 @@
     "recording.probes.set",
     "recording.seek",
     "recording.speed.set",
+    "recording.statistics",
+    "recording.statistics.set",
     "recording.step",
     "recording.timing",
     "recording.timing.set",
@@ -2285,7 +2288,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 94,
+      "line": 95,
       "function": "*screen.recordingInspector",
       "kind": "event-or-dispatch-router",
       "expression": "s.service.Dispatch(context.Background(), workbench.Request{Version: 1, ID: \"ui-recorded-source\", Command: \"operation.inspect\", Params: raw}, \"user\")",
@@ -2293,7 +2296,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 94,
+      "line": 95,
       "function": "*screen.recordingInspector",
       "kind": "request-command-field",
       "expression": "Command: \"operation.inspect\"",
@@ -2304,7 +2307,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 129,
+      "line": 130,
       "function": "*screen.recordingPanel",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-back-live\", \"View live\", \"recording.view.set\", workbench.RecordingViewParams{Mode: \"live\"})",
@@ -2315,7 +2318,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 132,
+      "line": 133,
       "function": "*screen.recordingPanel",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-\"+direction, map[string]string{\"previous\": \"Previous\", \"next\": \"Next\"}[direction], \"recording.step\", workbench.RecordingStepParams{Direction: direction})",
@@ -2326,7 +2329,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 140,
+      "line": 141,
       "function": "*screen.recordingPanel",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-play\", \"Play\", \"recording.play\", workbench.RecordingPlayParams{Speed: speed})",
@@ -2337,7 +2340,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 142,
+      "line": 143,
       "function": "*screen.recordingPanel",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-pause\", \"Pause\", \"recording.pause\", struct{}{})",
@@ -2348,7 +2351,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 145,
+      "line": 146,
       "function": "*screen.recordingPanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tindex := int(e.Number)\n\ts.invoke(\"recording.seek\", workbench.RecordingSeekParams{Index: \u0026index})\n}",
@@ -2356,7 +2359,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 147,
+      "line": 148,
       "function": "*screen.recordingPanel",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"recording.seek\", workbench.RecordingSeekParams{Index: \u0026index})",
@@ -2367,7 +2370,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 148,
+      "line": 149,
       "function": "*screen.recordingPanel",
       "kind": "callback-factory",
       "expression": "timeField(\"recorded-time\", \"Recorded seek time\", r.Time, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.seek\", map[string]any{\"time_s\": text}, state.CommandRevision)\n})",
@@ -2375,7 +2378,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 149,
+      "line": 150,
       "function": "*screen.recordingPanel",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.seek\", map[string]any{\"time_s\": text}, state.CommandRevision)",
@@ -2386,7 +2389,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 150,
+      "line": 151,
       "function": "*screen.recordingPanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"recording.speed.set\", workbench.RecordingPlayParams{Speed: float64(e.Number)})\n}",
@@ -2394,7 +2397,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 151,
+      "line": 152,
       "function": "*screen.recordingPanel",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"recording.speed.set\", workbench.RecordingPlayParams{Speed: float64(e.Number)})",
@@ -2405,7 +2408,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 166,
+      "line": 167,
       "function": "*screen.recordingPanel",
       "kind": "node-Custom",
       "expression": "Custom: s.scope",
@@ -2413,7 +2416,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 176,
+      "line": 177,
       "function": "*screen.recordingCursors",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-cursor-select-\"+c.id, strings.ToUpper(c.id), \"recording.cursor.select\", workbench.CursorSelectParams{Cursor: c.id})",
@@ -2424,7 +2427,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 181,
+      "line": 182,
       "function": "*screen.recordingCursors",
       "kind": "callback-factory",
       "expression": "timeField(\"recorded-cursor-\"+c.id, \"Recorded cursor \"+strings.ToUpper(c.id), at, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.cursor.set\", map[string]any{\"operation_id\": r.ID, \"cursor\": c.id, \"time_s\": text}, state.CommandRevision)\n})",
@@ -2432,7 +2435,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 182,
+      "line": 183,
       "function": "*screen.recordingCursors",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.cursor.set\", map[string]any{\"operation_id\": r.ID, \"cursor\": c.id, \"time_s\": text}, state.CommandRevision)",
@@ -2443,7 +2446,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 184,
+      "line": 185,
       "function": "*screen.recordingCursors",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-cursor-clear-\"+c.id, \"×\", \"recording.cursor.clear\", workbench.CursorSelectParams{Cursor: c.id})",
@@ -2525,6 +2528,44 @@
       "expression": "s.invoke(\"recording.compare.set\", next)",
       "public_commands": [
         "recording.compare.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_statistics.go",
+      "line": 20,
+      "function": "*screen.recordingStatisticsControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tp := workbench.RecordingStatisticsParams{ID: r.ID}\n\tif e.SelectedID != \"__none\" {\n\t\tp.ProbeID, p.End = e.SelectedID, r.Duration\n\t\tif r.Statistics != nil {\n\t\t\tp.Start, p.End = r.Statistics.Settings.Start, r.Statistics.Settings.End\n\t\t}\n\t}\n\ts.invoke(\"recording.statistics.set\", p)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_statistics.go",
+      "line": 28,
+      "function": "*screen.recordingStatisticsControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"recording.statistics.set\", p)",
+      "public_commands": [
+        "recording.statistics.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_statistics.go",
+      "line": 44,
+      "function": "*screen.recordingStatisticsControls",
+      "kind": "callback-factory",
+      "expression": "timeField(\"recorded-statistics-\"+field.name, \"Measurement interval \"+field.name, field.value, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.statistics.set\", textFieldParams(cfg, field.name+\"_s\", text), state.CommandRevision)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_statistics.go",
+      "line": 45,
+      "function": "*screen.recordingStatisticsControls",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"recording.statistics.set\", textFieldParams(cfg, field.name+\"_s\", text), state.CommandRevision)",
+      "public_commands": [
+        "recording.statistics.set"
       ],
       "status": "literal-public-route"
     },
@@ -4034,6 +4075,7 @@
     "recording.probes.set",
     "recording.seek",
     "recording.speed.set",
+    "recording.statistics.set",
     "recording.step",
     "recording.timing.set",
     "recording.view.set",
@@ -4109,6 +4151,7 @@
     "project.inspect",
     "project.work.inspect",
     "recording.compare",
+    "recording.statistics",
     "recording.timing",
     "recovery.checkpoint",
     "recovery.dismiss",

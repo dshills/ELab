@@ -101,6 +101,9 @@ func addCapabilityDetails(id string, schema map[string]any) {
 	if addValueCapabilityDetails(id, schema) {
 		return
 	}
+	if addRecordingStatisticsDetails(id, schema) {
+		return
+	}
 	if addRecordingTimingDetails(id, schema) {
 		return
 	}
