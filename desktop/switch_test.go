@@ -68,7 +68,7 @@ func TestNativeSwitchFromScratchDrawsAndRunsLED(t *testing.T) {
 	uiAction(t, user, "example.reset", nil)
 	uiAction(t, user, "selection", &ui.ChangeEvent{SelectedID: "W1"})
 	uiAction(t, user, "delete-object", nil)
-	uiAction(t, user, "part-switch", nil)
+	uiAction(t, user, "part-list", &ui.ChangeEvent{SelectedID: "switch"})
 	uiAction(t, user, "position-x", &ui.ChangeEvent{Number: -100})
 	uiAction(t, user, "position-y", &ui.ChangeEvent{Number: -60})
 	uiAction(t, user, "place-at-position", nil)

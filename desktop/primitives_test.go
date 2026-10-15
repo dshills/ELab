@@ -32,7 +32,7 @@ func TestNativeJunctionAndNetLabelControlsMatchAgentCommands(t *testing.T) {
 	uiAction(t, user, "delete-object", nil)
 	agentAction(t, agent, "object.delete", workbench.IDParams{ID: "W1"})
 	for i, position := range []workbench.Point{{X: -300, Y: -100}, {X: 300, Y: -100}} {
-		uiAction(t, user, "part-net-label", nil)
+		uiAction(t, user, "part-list", &ui.ChangeEvent{SelectedID: "net-label"})
 		uiAction(t, user, "place-label", &ui.ChangeEvent{Text: "VCC"})
 		uiAction(t, user, "position-x", &ui.ChangeEvent{Number: float32(position.X)})
 		uiAction(t, user, "position-y", &ui.ChangeEvent{Number: float32(position.Y)})
@@ -81,7 +81,7 @@ func TestNativeCrossingPlacementRequiresExplicitReviewedJoin(t *testing.T) {
 	}
 	agentAction(t, user.service, "wire.connect", workbench.ConnectParams{ID: "Horizontal", From: "Left.node", To: "Right.node"})
 	agentAction(t, user.service, "wire.connect", workbench.ConnectParams{ID: "Vertical", From: "Top.node", To: "Bottom.node"})
-	uiAction(t, user, "part-junction", nil)
+	uiAction(t, user, "part-list", &ui.ChangeEvent{SelectedID: "junction"})
 	user.app.Do(func() { user.canvasClick(workbench.Point{}) })
 	state := user.service.Snapshot()
 	if len(state.Components) != 4 || len(state.Wires) != 2 || state.Drawing.Position != (workbench.Point{}) || user.errorMessage == "" {

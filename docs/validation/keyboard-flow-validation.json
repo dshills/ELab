@@ -1,0 +1,95 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.84.0",
+  "build_version": "99",
+  "binary_sha256": "b404b8d8d25826641f5c558a650a4b62b57fe00637fa97c184bea135510eb13b",
+  "agent_binary_sha256": "4189da33569ebe8794dd3d455af768f26b92b62175afd8827945b6d456378ae0",
+  "mounted_probe_binary_sha256": "bc8798a71335bd69fd1fcbed9d7d259fb8bb31e8d8bd221db7e8cb3ed503e79e",
+  "sdk": {
+    "commit": "c078eb8e20f0e493ee063949f5fe7ee85e51bbe4",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "desktop/audit_regression_test.go": "7199c3811e6e5d4cfcdf470eda53d01a3e702a0007a4b6582c4eda350d40b0d8",
+    "desktop/main.go": "d251b0682e198d87d394bc16ea0b14e15be596ef8b4f95924cb79bd7c83cc7c6",
+    "desktop/mixed_test.go": "726debae492e83fb9b2d99cfb92926d649def5f936454ee60a30b1bd21041905",
+    "desktop/npn_test.go": "a004a90459d8f634846c10194fc1662fe749aa41242f6d0e042d55b52ea2a54c",
+    "desktop/npn_transient_test.go": "b8c42d9593427d1446ba1b59a7919fcff486eba7b20d7f7afd4532f8810fac96",
+    "desktop/primitives_test.go": "bc38daaf84f8256eee4c8be2d6e95c394401752fb7ec0ca90910ec40b3ec2634",
+    "desktop/smoke.go": "54092bb14e1df67f65bb5f3a646ff463070eb7ca29e8276a1eb7bf719fc56f0f",
+    "desktop/switch_test.go": "5a081aba8f818deeaa89d6ce4c8afd6327cc5d7388f7f14efce7d935887ad509",
+    "desktop/view.go": "2ad5dcdf507fdc022527fec45c6d57facf65997f7124cf6e66f0a4120757de70",
+    "desktop/view_test.go": "c523dc161869a7d07a146ba202e02dbfa270f285bdc03b846928f9a610bef146",
+    "desktop/component_palette.go": "5d7b83aba4bd8202b899f0168848226f8217a8dd3dbd73d2ff6c8d99b752d3ab",
+    "desktop/keyboard_workflow.go": "42fa8031620577bff9c73eba71954730a71765328b219ab96911ffdbe7a5c883",
+    "desktop/component_palette_test.go": "0a22cc4c612449c3744a443e6f9aa39a1e31d600344907b6518f8259e85a9d90"
+  },
+  "source_inventory": {
+    "sources": 47,
+    "sites": 374,
+    "public_commands": 157,
+    "source_routes": 127,
+    "binding_review_sites": 139,
+    "literal_routes": 209
+  },
+  "checks": [
+    "Full serialized lint/import/root/native race/vet pass",
+    "Final focused keyboard, stale/invalid, construction and LED/RC shared-command race tests pass after a help-text correction",
+    "Final source ledger verification passes with unchanged 157 public commands",
+    "Packaged final GPU/UI/protected-close smoke passes with ListBox part selection",
+    "Four adapters pass three LED/RC/NPN construction, measurement, export, save/reopen workflows",
+    "Mounted keyboard-only blank LED placement, four named connections, value change, live reading and native save observed",
+    "Headless agent reconstruction exactly matches mounted saved graph and current/voltage/power",
+    "Candidate and canonical metadata/native bytes match; previous .83/98 app preserved; owned sessions terminal"
+  ],
+  "evidence": [
+    "docs/keyboard-construction.md",
+    "docs/validation/keyboard-mounted-observations.json",
+    "docs/validation/keyboard-led.elab",
+    "docs/validation/keyboard-agent-parity.json",
+    "docs/validation/keyboard-flow-conformance.json"
+  ],
+  "logs_sha256": {
+    "build/keyboard-flow-084/audit-final.log": "b400f3321865f5ba54d7d8e712207aee5eb7b577081b2e32b9eafff36e6cab6a",
+    "build/keyboard-flow-084/audit-verify.log": "b400f3321865f5ba54d7d8e712207aee5eb7b577081b2e32b9eafff36e6cab6a",
+    "build/keyboard-flow-084/audit.log": "b400f3321865f5ba54d7d8e712207aee5eb7b577081b2e32b9eafff36e6cab6a",
+    "build/keyboard-flow-084/build-final.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/keyboard-flow-084/build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/keyboard-flow-084/check.log": "f023ed0defd475b422dca07c83159da0d9367f9554795583f1983fe8da840132",
+    "build/keyboard-flow-084/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/keyboard-flow-084/native-final.log": "efedd21770d20b29b30834094048a2d7fab4c05be13aa9b52c342120b92e5a5c",
+    "build/keyboard-flow-084/native-focused.log": "aa71c7656bee6de4aa952daa644f34da34df07329670a5b92d256505f5d8d818",
+    "build/keyboard-flow-084/native-host.log": "c87ca9382a9a7bf761ca2240270d7addd8233e49cfdd56d8a81b008f8bb88bdc",
+    "build/keyboard-flow-084/native-workflow-final.log": "8f7c23dbe603f787c221822bc8c419f69bceeb65dd8f1d3f8d53b0489522264e",
+    "build/keyboard-flow-084/native-workflow.log": "c84907710099500db20e48afc81e05a348798c37fcadb5d51237598c6d9bc16b",
+    "build/keyboard-flow-084/package-canonical.log": "3f73e3fcf6b17654520ada232a96d744c909959f47a71fe47761ddf4871e7dc6",
+    "build/keyboard-flow-084/package.log": "c2781b7a45ebb3582b92acf75efa2ab901ea35e75c1fb5eb186877caa910c1ad",
+    "build/keyboard-flow-084/probe-build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/keyboard-flow-084/probe-host.log": "a141687841f9ac7cf674f8bc15ed811c3ab3161029745cd18b5be463ad41fae5",
+    "build/keyboard-flow-084/probe-package.log": "9e9503e45550c6b03ccd71a5d2ab39b54a7af15ef01001b8e3f865c6971451f6",
+    "build/keyboard-flow-084/probe-v2-build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/keyboard-flow-084/probe-v2-host.log": "08e0dd51d2ce0cb52d5116af36b524274fb1d2d2e156096c44abe998542e516e",
+    "build/keyboard-flow-084/probe-v2-package.log": "c1152a1cbfd8aa3ae0cc0e084f19078b52212c654a835cb337a9f573a17149e4",
+    "build/keyboard-flow-084/probe-v3-build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/keyboard-flow-084/probe-v3-host.log": "b0c9e4098060d7437077639165fd19f6b732169cccba9a59208d0e1afe3a27e0",
+    "build/keyboard-flow-084/probe-v3-package.log": "242de062e436c9f047c3d41adaa9c27711aa330e8bfbfe9366cf6e8f6b92bf85",
+    "build/keyboard-flow-084/smoke.log": "3b177fd37ad847278b171474a306d87b21553cacf9014a722933d3b0580c44ff"
+  },
+  "notes": [
+    "Full suite precedes a final accessibility help-text-only correction; final focused race tests, audit verification, build, packaged smoke and four-adapter workflows use final source",
+    "Mounted probe-v3 differs from final source only by accessibility help text; SDK advanced through composed-test/check reports, with no ordinary imported production-path change",
+    "No electrical kernel, model, sampling schedule, public command or saved-file-version change"
+  ],
+  "remaining_work": [
+    "Native save dialog produced doubled .elab extension; post-dialog focus restoration requires follow-up",
+    "Complete keyboard RC plotting/recovery, IME, screen-reader, visible latency and participant qualification remain open",
+    "Physical printer/media/margin/scale/cancellation acceptance remains open",
+    "P0 remains 17 implemented /10 partial; continuing electronics/repository goal stays active"
+  ]
+}

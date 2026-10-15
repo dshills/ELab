@@ -22,7 +22,7 @@ func TestFlasherDrawingInitialConditionsAndAgentParity(t *testing.T) {
 	uiAction(t, user, "simulation.pause", nil)
 	agentAction(t, agent, "simulation.pause", struct{}{})
 	for _, p := range fixture.Components {
-		uiAction(t, user, "part-"+p.Kind, nil)
+		uiAction(t, user, "part-list", &ui.ChangeEvent{SelectedID: p.Kind})
 		user.app.Do(func() { user.canvasClick(p.Position) })
 		id := user.service.Snapshot().Selected
 		ids[p.ID] = id

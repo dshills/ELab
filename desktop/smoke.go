@@ -319,7 +319,7 @@ func smokeConstruct(s *screen) error {
 		kind     string
 		position workbench.Point
 	}{{"dc-source", workbench.Point{X: -200}}, {"resistor", workbench.Point{Y: -110}}, {"led", workbench.Point{X: 200}}, {"ground", workbench.Point{Y: 110}}} {
-		if err := smokeUI(s, "part-"+p.kind, nil); err != nil {
+		if err := smokeUI(s, "part-list", &ui.ChangeEvent{SelectedID: p.kind}); err != nil {
 			return err
 		}
 		if err := smokeUI(s, "position-x", &ui.ChangeEvent{Number: float32(p.position.X)}); err != nil {
@@ -987,7 +987,7 @@ func nativePrimitivesSmoke(ctx context.Context, a *app.Application, s *screen) e
 		for _, action := range []struct {
 			id    string
 			event *ui.ChangeEvent
-		}{{"example.reset", nil}, {"selection", &ui.ChangeEvent{SelectedID: "W1"}}, {"wire-insert-junction", nil}, {"part-net-label", nil}, {"place-label", &ui.ChangeEvent{Text: "SUPPLY"}}, {"position-x", &ui.ChangeEvent{Number: 350}}, {"position-y", &ui.ChangeEvent{Number: -180}}, {"place-at-position", nil}} {
+		}{{"example.reset", nil}, {"selection", &ui.ChangeEvent{SelectedID: "W1"}}, {"wire-insert-junction", nil}, {"part-list", &ui.ChangeEvent{SelectedID: "net-label"}}, {"place-label", &ui.ChangeEvent{Text: "SUPPLY"}}, {"position-x", &ui.ChangeEvent{Number: 350}}, {"position-y", &ui.ChangeEvent{Number: -180}}, {"place-at-position", nil}} {
 			if err := smokeUI(s, action.id, action.event); err != nil {
 				done <- err
 				return
@@ -1055,7 +1055,7 @@ func nativeSwitchSmoke(ctx context.Context, a *app.Application, s *screen) error
 			event *ui.ChangeEvent
 		}{
 			{"selection", &ui.ChangeEvent{SelectedID: "W1"}}, {"delete-object", nil},
-			{"part-switch", nil}, {"position-x", &ui.ChangeEvent{Number: -100}}, {"position-y", &ui.ChangeEvent{Number: -60}}, {"place-at-position", nil},
+			{"part-list", &ui.ChangeEvent{SelectedID: "switch"}}, {"position-x", &ui.ChangeEvent{Number: -100}}, {"position-y", &ui.ChangeEvent{Number: -60}}, {"place-at-position", nil},
 			{"tool-wire", nil}, {"wire-from", &ui.ChangeEvent{SelectedID: "V1.positive"}}, {"wire-to", &ui.ChangeEvent{SelectedID: "S1.1"}}, {"connect-terminals", nil},
 			{"wire-from", &ui.ChangeEvent{SelectedID: "S1.2"}}, {"wire-to", &ui.ChangeEvent{SelectedID: "R1.1"}}, {"connect-terminals", nil},
 			{"switch-actuate", nil},
@@ -1110,7 +1110,7 @@ func smokeConstructDiode(s *screen) error {
 		event *ui.ChangeEvent
 	}{
 		{"selection", &ui.ChangeEvent{SelectedID: "D1"}}, {"delete-object", nil},
-		{"part-diode", nil}, {"position-x", &ui.ChangeEvent{Number: 200}}, {"position-y", &ui.ChangeEvent{Number: 0}}, {"place-at-position", nil},
+		{"part-list", &ui.ChangeEvent{SelectedID: "diode"}}, {"position-x", &ui.ChangeEvent{Number: 200}}, {"position-y", &ui.ChangeEvent{Number: 0}}, {"place-at-position", nil},
 	} {
 		if err := smokeUI(s, action.id, action.event); err != nil {
 			return err
@@ -1168,7 +1168,7 @@ func smokeConstructPotentiometer(s *screen) error {
 		id    string
 		event *ui.ChangeEvent
 	}{
-		{"selection", &ui.ChangeEvent{SelectedID: "R1"}}, {"delete-object", nil}, {"part-potentiometer", nil},
+		{"selection", &ui.ChangeEvent{SelectedID: "R1"}}, {"delete-object", nil}, {"part-list", &ui.ChangeEvent{SelectedID: "potentiometer"}},
 		{"position-x", &ui.ChangeEvent{Number: 0}}, {"position-y", &ui.ChangeEvent{Number: -110}}, {"place-at-position", nil},
 	} {
 		if err := smokeUI(s, action.id, action.event); err != nil {
@@ -1251,7 +1251,7 @@ func smokeConstructPotRC(s *screen) error {
 		event *ui.ChangeEvent
 	}{
 		{"simulation.pause", nil}, {"selection", &ui.ChangeEvent{SelectedID: "R1"}},
-		{"delete-object", nil}, {"part-potentiometer", nil},
+		{"delete-object", nil}, {"part-list", &ui.ChangeEvent{SelectedID: "potentiometer"}},
 		{"position-x", &ui.ChangeEvent{Number: 0}}, {"position-y", &ui.ChangeEvent{Number: -110}}, {"place-at-position", nil},
 	} {
 		if err := smokeUI(s, action.id, action.event); err != nil {
@@ -1290,7 +1290,7 @@ func smokeConstructWaveform(s *screen, kind string) error {
 		id    string
 		event *ui.ChangeEvent
 	}{
-		{"selection", &ui.ChangeEvent{SelectedID: "V1"}}, {"delete-object", nil}, {"part-" + kind, nil},
+		{"selection", &ui.ChangeEvent{SelectedID: "V1"}}, {"delete-object", nil}, {"part-list", &ui.ChangeEvent{SelectedID: kind}},
 		{"position-x", &ui.ChangeEvent{Number: -200}}, {"position-y", &ui.ChangeEvent{Number: 0}}, {"place-at-position", nil},
 	} {
 		if err := smokeUI(s, action.id, action.event); err != nil {
@@ -1383,7 +1383,7 @@ func nativeAuditSmoke(ctx context.Context, a *app.Application, s *screen) error 
 			checked <- err
 			return
 		}
-		if _, ok := findNode(s.view(), "part-dc-source"); !ok {
+		if !matchingPart(s.view(), "dc-source") {
 			checked <- fmt.Errorf("native battery alias absent")
 			return
 		}
@@ -1439,4 +1439,18 @@ func nativeAuditSmoke(ctx context.Context, a *app.Application, s *screen) error 
 		return err
 	}
 	return <-checked
+}
+
+// Matching-part choices are one managed list, rather than a tab stop per part.
+func matchingPart(root ui.Node, kind string) bool {
+	node, ok := findNode(root, "part-list")
+	if !ok {
+		return false
+	}
+	for _, option := range node.Options {
+		if option.ID == kind && !option.Disabled {
+			return true
+		}
+	}
+	return false
 }

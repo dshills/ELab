@@ -19,7 +19,7 @@ func TestNPNPulseDrawingAndControlsMatchAgents(t *testing.T) {
 	fixture := workbench.NPNPulseExampleGraph()
 	ids := map[string]string{}
 	for _, part := range fixture.Components {
-		uiAction(t, user, "part-"+part.Kind, nil)
+		uiAction(t, user, "part-list", &ui.ChangeEvent{SelectedID: part.Kind})
 		user.app.Do(func() { user.canvasClick(part.Position) })
 		id := user.service.Snapshot().Selected
 		ids[part.ID] = id

@@ -12,7 +12,7 @@ func TestNativeSearchModelAssumptionsAndUnavailableProbeRecovery(t *testing.T) {
 	s, cleanup := testScreen(t)
 	defer cleanup()
 	uiAction(t, s, "part-search", &ui.ChangeEvent{Text: "BATTERY"})
-	if _, ok := findNode(s.view(), "part-dc-source"); !ok {
+	if !matchingPart(s.view(), "dc-source") {
 		t.Fatal("native hobbyist alias search failed")
 	}
 	uiAction(t, s, "part-search", &ui.ChangeEvent{Text: ""})

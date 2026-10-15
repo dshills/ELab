@@ -102,7 +102,7 @@ Wire, junction, and net labels are schematic primitives. Probes are measurement 
 
 | Priority | Capability | Reason for deferral |
 |---|---|---|
-| P1 | Schematic output and printing | Extend existing SVG output with PDF/image output and native printing; share paper, scale, margin and content settings with agents |
+| P1 | Schematic output and printing | SVG/PDF/PNG, captured preview, fixed-scale tiling and local print jobs are implemented through shared user/agent commands; physical printer/media/scale acceptance remains open. See the owner addition below |
 | P1 | Validated KiCad schematic handoff for a supported subset | Preserve a path to hardware after the core workflow is proven; mapping and round-trip expectations need their own specification |
 | P1 | Vendor SPICE model import with guided pin mapping | Important for real devices, but broad compatibility would expand the MVP substantially |
 | P1 | AC analysis, DC sweeps, reusable subcircuits, run comparisons | DC sweep work now provides captured linear/logarithmic bias/resistance/wiper operating points, curves, exact cursors and saved results; captured-run numerical comparison now provides nearest stored readings and whole-run statistics with explicit sample times; threshold timing adds sampled arrival/spacing, high/low pulse, first-cycle duty and optional two-threshold rise/fall bounds for captured runs; optional captured reference overlays now share the selected interval and voltage/current axes without alignment or extrapolation; broader analyses and time alignment remain deferred. See [contract](../docs/dc-sweeps.md). |

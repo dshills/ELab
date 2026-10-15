@@ -1,0 +1,148 @@
+{
+  "version": "0.84.0 probe-v3",
+  "native_inputs": "CUA keyboard only through construction, named wiring, resistor value edit and Cmd+S save",
+  "graph": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "dc-source",
+        "name": "DC source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-dc.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -110
+        },
+        "value": 2200,
+        "unit": "\u03a9",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "D1",
+        "kind": "led",
+        "name": "Red LED",
+        "terminals": [
+          "anode",
+          "cathode"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 0,
+        "model": "elab.generic-red-led.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND1",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 110
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "D1.anode",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "D1.cathode",
+        "to": "GND1.reference",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "GND1.reference",
+        "to": "V1.negative",
+        "connected": true
+      }
+    ]
+  },
+  "saved_filename": "Untitled.elab.elab",
+  "saved_sha256": "928892a973133ca172fb2e48bcc1ee4ef60fde7fb48c6eba76ef32431f6ac33d",
+  "result": {
+    "run_id": 10,
+    "electrical_revision": 10,
+    "engine": "elab.series-led-dc.v1",
+    "model": {
+      "id": "elab.generic-red-led.v1",
+      "is_a": 1e-20,
+      "n": 2,
+      "rs_ohm": 1,
+      "temperature_c": 27,
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+    },
+    "current_a": 0.001344737452917332,
+    "led_voltage_v": 2.04157760358187,
+    "resistor_voltage_v": 2.9584223964181304,
+    "led_power_w": 0.0027453858665737545,
+    "resistor_power_w": 0.0039783013980129065,
+    "kvl_residual_v": -5.030698080332741e-16,
+    "node_voltage_v": {
+      "ground": 0,
+      "led-anode": 2.04157760358187,
+      "net:D1.anode": 2.04157760358187,
+      "net:D1.cathode": 0,
+      "net:R1.1": 5,
+      "supply": 5
+    },
+    "stale": false,
+    "source_id": "V1",
+    "resistor_id": "R1",
+    "led_id": "D1"
+  },
+  "last_actor": "user",
+  "observations": [
+    "DC source, resistor, LED and ground placed from blank with component search/list and committed X/Y fields",
+    "Four named-terminal connections completed without mouse or agent mutations",
+    "R1 changed from 1 k\u03a9 to 2.2k using object selector and committed value field; current changed from 2.917 mA to 1.345 mA",
+    "Native save dialog completed with keyboard in isolated build directory; exact four-part/four-wire graph and 2200-ohm value read back",
+    "Native selectors opened with Space, navigated with arrows/End and committed with Return",
+    "Stacked X/Y and adjacent wiring controls visually inspected without clipped buttons"
+  ],
+  "limits": [
+    "This is one mounted LED workflow, not full keyboard, IME, screen-reader, latency or participant qualification",
+    "Automation needed state observations between dependent selection/focus events; fast batched text and menu input were inconclusive",
+    "The native save dialog produced Untitled.elab.elab from suggested Untitled.elab; follow-up filename handling remains open",
+    "After native save the app window was visible but subsequent key events did not yield an exposed focused element; focus restoration needs follow-up",
+    "No mounted RC plotting or recovery keyboard claim"
+  ]
+}

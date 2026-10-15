@@ -1,0 +1,24 @@
+# Building a circuit with the keyboard
+
+Search by component name or a hobbyist alias such as `battery`. Commit with Return to focus the matching list. Up/Down, Home/End, page keys and initial letters navigate the Vellum ListBox; Return or Space chooses its focused row. Tab reaches the stacked X and Y fields, then **Place at X / Y**. Commit each coordinate before continuing. A successful placement returns to search, so the next part starts nearby. No-match search keeps search focus; invalid/occupied placement preserves the drawing and does not request a success focus change.
+
+**Connect by name** opens the From/To terminal selectors together in the left rail. Space opens each native menu, arrows choose and Return commits. Tab reaches **Connect wire** once both ends are selected. Success resets both ends and returns to From. Escape cancels the drawing tool and requests search focus. Canvas wiring remains available.
+
+| UI operation | Shared command |
+| --- | --- |
+| Component search | `parts.search.set` |
+| Choose part / Connect by name | `drawing.tool.set` |
+| Commit X / Y | `drawing.position.set` |
+| Place | `component.place` |
+| Choose wire ends / Connect | `wire.terminals.set` / `wire.connect` |
+| Escape | `drawing.cancel` |
+| Select / draft / apply value | `component.select` / `editor.value.set` / `component.set` |
+| Save | `project.save.start` through the existing file worker |
+
+Every domain edit retains the ordinary command revision and document guards. Focus continuation is native presentation following success; repeated redraws reuse the request sequence and do not continually redirect focus. A stale callback refuses after a newer agent command. All agent adapters use the same operations directly without simulating input.
+
+## Mounted evidence and remaining work
+
+A fresh owned macOS app was operated through CUA keyboard input: search/select/place DC source at (-200,0), resistor at (0,-110), LED at (200,0), ground at (0,110); connect V1.positive → R1.1, R1.2 → D1.anode, D1.cathode → GND1.reference, and GND1.reference → V1.negative. The completed 1 kΩ circuit showed 2.917 mA. The Selected object menu and value field changed R1 to `2.2k`; the updated display showed 1.345 mA. Cmd+S and the native directory chooser saved the four-part/four-wire graph with exactly 2200 Ω. Read-only inspection verified the saved graph and user attribution. The left rail and live result were visually inspected.
+
+This establishes one LED workflow. Automation required observations between dependent focus, text-selection and menu events; fast batched input was inconclusive. The native dialog produced `Untitled.elab.elab` from the suggested filename, and after it closed subsequent keys did not yield an exposed focused element. Filename handling and native-dialog focus restoration remain follow-ups. RC plotting, recovery, IME, screen-reader use, visible input latency and participant testing remain open. The broader automated smoke is callback/semantic evidence, not proof of those interactions.

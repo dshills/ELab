@@ -97,7 +97,7 @@ func TestBuildFromBlankThroughUIAndAgent(t *testing.T) {
 		kind string
 		x, y float32
 	}{{"dc-source", -200, 0}, {"resistor", 0, -110}, {"led", 200, 0}, {"ground", 0, 110}} {
-		uiAction(t, user, "part-"+p.kind, nil)
+		uiAction(t, user, "part-list", &ui.ChangeEvent{SelectedID: p.kind})
 		uiAction(t, user, "position-x", &ui.ChangeEvent{Number: p.x})
 		uiAction(t, user, "position-y", &ui.ChangeEvent{Number: p.y})
 		uiAction(t, user, "place-at-position", nil)
@@ -147,12 +147,12 @@ func TestBuildFromBlankThroughUIAndAgent(t *testing.T) {
 func TestCanvasPlacementAndTerminalGestureUseSameCommands(t *testing.T) {
 	s, close := testScreen(t)
 	defer close()
-	uiAction(t, s, "part-dc-source", nil)
+	uiAction(t, s, "part-list", &ui.ChangeEvent{SelectedID: "dc-source"})
 	s.app.Do(func() { s.canvasClick(workbench.Point{X: -198, Y: 3}) })
 	if part := s.service.Snapshot().Components[0]; part.Position != (workbench.Point{X: -200, Y: 0}) {
 		t.Fatal("canvas placement not snapped")
 	}
-	uiAction(t, s, "part-resistor", nil)
+	uiAction(t, s, "part-list", &ui.ChangeEvent{SelectedID: "resistor"})
 	s.app.Do(func() { s.canvasClick(workbench.Point{X: 0, Y: -110}) })
 	uiAction(t, s, "tool-wire", nil)
 	s.app.Do(func() {
@@ -276,7 +276,7 @@ func TestRCDrawingScopeAndInputControlsMatchAgentCommands(t *testing.T) {
 		kind string
 		x, y float32
 	}{{"pulse-source", -200, 0}, {"resistor", 0, -110}, {"capacitor", 200, 0}, {"ground", 0, 110}} {
-		uiAction(t, s, "part-"+p.kind, nil)
+		uiAction(t, s, "part-list", &ui.ChangeEvent{SelectedID: p.kind})
 		uiAction(t, s, "position-x", &ui.ChangeEvent{Number: p.x})
 		uiAction(t, s, "position-y", &ui.ChangeEvent{Number: p.y})
 		uiAction(t, s, "place-at-position", nil)

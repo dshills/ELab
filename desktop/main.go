@@ -175,6 +175,7 @@ func runNative() (runErr error) {
 }
 
 type screen struct {
+	keyboardFocus                       ui.FocusRequest
 	recoveryInspection, recoverySamples recoveryReadCache
 	nativePointerPane                   string
 	sweepDrawing                        *sweepCanvas
@@ -307,6 +308,9 @@ func (s *screen) registerCommands() {
 				r := s.invoke(entry.id, p)
 				if r.Error != nil {
 					return fmt.Errorf("%s", r.Error.Message)
+				}
+				if entry.id == "drawing.cancel" {
+					s.requestKeyboardFocus("part-search")
 				}
 				return nil
 			},

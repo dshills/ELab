@@ -160,15 +160,9 @@ func (s *screen) view() ui.Node {
 	statusNode.Style.Typography = ui.Some(ui.Typography{Size: 13, Weight: 600})
 	statusNode.Style.MaxSize = ui.Some(ui.Size{Width: 180})
 
-	palette := []ui.Node{section("parts-title", "Components"), quiet("placement-help", "Pick a part to place.")}
-	names := map[string]string{"dc-source": "+  DC source", "resistor": "∿  Resistor", "led": "▷  Red LED", "ground": "⊥  Ground", "capacitor": "Ⅱ  Capacitor", "pulse-source": "▥  Ideal square", "finite-pulse-source": "▱  Finite pulse", "sine-source": "∿  Sine source", "npn": "↗  NPN transistor", "junction": "●  Junction", "net-label": "→  Net label", "switch": "/  SPST switch", "diode": "▷  Silicon diode", "potentiometer": "↗  Potentiometer"}
-	palette = append(palette, ui.Node{ID: "part-search", Kind: ui.TextField, Text: state.PartSearch, Accessibility: ui.Accessibility{Name: "Search components"}, Change: func(e ui.ChangeEvent) { s.invoke("parts.search.set", workbench.SearchParams{Query: e.Text}) }})
-	for _, part := range state.MatchingParts {
-		n := s.action("part-"+part.Kind, names[part.Kind], "drawing.tool.set", workbench.ToolParams{Tool: "place", Kind: part.Kind})
-		n = buttonStyle(n, state.Drawing.Tool == "place" && state.Drawing.Kind == part.Kind)
-		n.Style.MinSize = ui.Some(ui.Size{Width: 112, Height: 22})
-		palette = append(palette, n)
-	}
+	palette := s.componentPalette(state)
+	palette = append(palette, s.placementControls(state)...)
+	palette = append(palette, s.namedWireControls(state)...)
 	previewButton := s.action("print-preview", "Print preview", "print.preview.start", workbench.PreviewParams{})
 	previewButton.Disabled = state.PrintPreview != nil && previewActive(state.PrintPreview)
 	palette = append(palette, previewButton)
@@ -177,40 +171,6 @@ func (s *screen) view() ui.Node {
 	palette = append(palette, ui.Node{ID: "export-png", Kind: ui.Button, Text: "Export PNG", Accessibility: ui.Accessibility{Name: "Export schematic image PNG"}, Activate: func() { s.beginFile("export.schematic.png", true, workbench.PNGExportParams{}, nil) }})
 	palette = append(palette, s.exampleGuidance(state)...)
 	palette = append(palette, section("getting-started-title", "Your first circuit"), quiet("step-place", "1  Place parts and ground"), quiet("step-wire", "2  Wire the terminal dots"), quiet("step-observe", "3  Watch the live measurements"))
-	placement := []ui.Node{}
-	if state.Drawing.Tool == "place" {
-		if state.Drawing.Kind == "net-label" {
-			placement = append(placement, quiet("place-label-help", "Matching labels connect their attached nets. Leave blank for a unique name."), ui.Node{ID: "place-label", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "New net label"}, Change: func(e ui.ChangeEvent) { s.invoke("editor.value.set", workbench.DraftParams{Value: e.Text}) }})
-		}
-		position := state.Drawing.Position
-		placement = append(placement, section("position-title", "Exact placement"), quiet("position-labels", "X / Y · snaps to 10 units"), ui.Node{ID: "position-row", Kind: ui.Row, Children: []ui.Node{
-			{ID: "position-x", Kind: ui.NumberField, Number: float32(position.X), Numeric: ui.Numeric{Min: -10000, Max: 10000, Step: 10}, Accessibility: ui.Accessibility{Name: "Placement X"}, Change: func(e ui.ChangeEvent) {
-				s.invoke("drawing.position.set", workbench.PositionParams{Position: workbench.Point{X: float64(e.Number), Y: position.Y}})
-			}},
-			{ID: "position-y", Kind: ui.NumberField, Number: float32(position.Y), Numeric: ui.Numeric{Min: -10000, Max: 10000, Step: 10}, Accessibility: ui.Accessibility{Name: "Placement Y"}, Change: func(e ui.ChangeEvent) {
-				s.invoke("drawing.position.set", workbench.PositionParams{Position: workbench.Point{X: position.X, Y: float64(e.Number)}})
-			}},
-		}}, s.action("place-at-position", "Place at X / Y", "component.place", workbench.PlaceParams{Kind: state.Drawing.Kind, Position: position, Value: func() string {
-			if state.Drawing.Kind == "net-label" {
-				return state.Drawing.Value
-			}
-			return ""
-		}()}))
-	}
-	if state.Drawing.Tool == "place" && state.Drawing.Kind == "junction" {
-		graph := workbench.Graph{Components: state.Components, Wires: state.Wires}
-		point := state.Drawing.Position
-		ids := []string{}
-		for _, wire := range state.Wires {
-			if wire.Connected && workbench.WireDistance(graph, wire, point) <= workbench.GridSize/2+1e-9 {
-				ids = append(ids, wire.ID)
-			}
-		}
-		placement = append(placement, quiet("junction-targets", "Explicit junction targets: "+strings.Join(ids, ", ")))
-		join := s.action("junction-join-routes", "Join named routes at X / Y", "wire.junction.insert", workbench.JunctionInsertParams{WireIDs: ids, Position: &point})
-		join.Disabled = len(ids) == 0 || len(ids) > 8
-		placement = append(placement, join, quiet("junction-help", "Crossings stay separate until this explicit join. Place an empty junction to connect terminal dots manually."))
-	}
 	palette = append(palette, quiet("undo-name", "Undo: "+state.UndoName), quiet("redo-name", "Redo: "+state.RedoName))
 	palette = append(palette, section("shortcuts-title", "Shortcuts"), quiet("shortcut-undo", "⌘ Z · Undo"), quiet("shortcut-delete", "Delete · Remove selection"))
 
@@ -240,7 +200,6 @@ func (s *screen) view() ui.Node {
 	center := s.action("selection-center", "Center selection", "view.selection.center", workbench.CenterSelectionParams{ID: state.Selected})
 	center.Disabled = state.Selected == ""
 	inspector = append(inspector, ui.Node{ID: "selection-navigation", Kind: ui.Row, Children: []ui.Node{previous, next}}, center, quiet("selection-navigation-help", "Canvas: Option + ← / →\nHome / End with Option: first / last"))
-	inspector = append(inspector, placement...)
 	inspector = append(inspector, s.npnControls(state)...)
 	if workbench.IsNetworkAnalysis(state.Analysis) {
 		inspector = append(inspector, section("mixed-title", "Circuit network"), quiet("mixed-help", "Bounded network simulation reports device currents, capacitor state and conservation residuals."))
@@ -412,30 +371,7 @@ func (s *screen) view() ui.Node {
 	inspector = append(inspector, s.diagnosticControls(state)...)
 	inspector = append(inspector, s.projectWorkControls(state)...)
 	inspector = append(inspector, s.inputWorkControls(state)...)
-	if state.Drawing.Tool == "wire" {
-		terminalOptions := []ui.Option{{ID: "__none", Label: "Choose a terminal…"}}
-		for _, c := range state.Components {
-			for _, t := range c.Terminals {
-				ref := c.ID + "." + t
-				terminalOptions = append(terminalOptions, ui.Option{ID: ref, Label: ref})
-			}
-		}
-		from, to := state.Drawing.From, state.Drawing.To
-		selector := func(id, name, value string, change func(string)) ui.Node {
-			if value == "" {
-				value = "__none"
-			}
-			return ui.Node{ID: id, Kind: ui.Selector, Options: terminalOptions, SelectedID: value, Accessibility: ui.Accessibility{Name: name}, Change: func(e ui.ChangeEvent) {
-				v := e.SelectedID
-				if v == "__none" {
-					v = ""
-				}
-				change(v)
-			}}
-		}
-		inspector = append(inspector, section("wires-title", "Connect by name"), quiet("wire-help", "Click two terminal dots on the sheet, or choose them here."), selector("wire-from", "Wire from terminal", from, func(v string) { s.invoke("wire.terminals.set", workbench.TerminalsParams{From: v, To: to}) }), selector("wire-to", "Wire to terminal", to, func(v string) { s.invoke("wire.terminals.set", workbench.TerminalsParams{From: from, To: v}) }), s.action("connect-terminals", "Connect wire", "wire.connect", workbench.ConnectParams{From: from, To: to}))
-		inspector[len(inspector)-1].Disabled = from == "" || to == ""
-	}
+
 	if workbench.IsTransientAnalysis(state.Analysis) || state.Transient != nil {
 		inspector = append(inspector, s.transientInspector(state)...)
 	}
@@ -658,6 +594,11 @@ func (s *screen) view() ui.Node {
 		children = append(children, s.scopePanel(state))
 		children = append(children, root.Children[index:]...)
 		root.Children = children
+	}
+	if s.keyboardFocus.ID != "" {
+		if _, ok := ui.FocusTarget(root, s.keyboardFocus.ID); ok {
+			root.Focus = s.keyboardFocus
+		}
 	}
 	s.bindFieldContext(&root, actionContext{state.CommandRevision, state.Document.Generation})
 	s.platformSelectors(&root, state.CommandRevision)
