@@ -141,6 +141,9 @@ rendered:
 	if err := nativeProjectRecordingSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	if err := nativeRecordingComparisonSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	if err := nativePrimitivesSmoke(ctx, a, s); err != nil {
 		return err
 	}

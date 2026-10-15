@@ -1,0 +1,101 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "comparison": {
+    "settings": {
+      "time_s": 0.0114
+    },
+    "available": true,
+    "a": {
+      "analysis": "RC transient",
+      "engine": "elab.ideal-rc-exact.v1",
+      "duration_s": 0.02,
+      "sample_step_s": 0.002,
+      "sample_count": 11,
+      "sample_index": 6,
+      "time_s": 0.012,
+      "offset_from_requested_s": 0.0005999999999999998
+    },
+    "b": {
+      "analysis": "RC transient",
+      "engine": "elab.ideal-rc-exact.v1",
+      "duration_s": 0.02,
+      "sample_step_s": 0.001,
+      "sample_count": 21,
+      "sample_index": 11,
+      "time_s": 0.011,
+      "offset_from_requested_s": -0.00040000000000000105
+    },
+    "readings": [
+      {
+        "probe": {
+          "id": "v:C1",
+          "label": "C1 voltage",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        "a": 2.255941819529868,
+        "b": 3.335644581509602,
+        "b_minus_a": 1.0797027619797341,
+        "whole_record_a": {
+          "probe_id": "v:C1",
+          "count": 11,
+          "min": 0,
+          "max": 3.1606027941427883,
+          "sample_mean": 1.8134490443369862,
+          "sample_rms": 2.069567643080484
+        },
+        "whole_record_b": {
+          "probe_id": "v:C1",
+          "count": 21,
+          "min": 0,
+          "max": 4.323323583816936,
+          "sample_mean": 2.8044002028759087,
+          "sample_rms": 3.084309724030771
+        }
+      },
+      {
+        "probe": {
+          "id": "i:R1",
+          "label": "R1 current",
+          "unit": "A",
+          "positive": "R1.1",
+          "reference": "R1.2"
+        },
+        "a": 0.0001372029090235066,
+        "b": 0.0001664355418490398,
+        "b_minus_a": 2.9232632825533207e-05,
+        "whole_record_a": {
+          "probe_id": "i:R1",
+          "count": 11,
+          "min": 9.196986029286059e-05,
+          "max": 0.00025,
+          "sample_mean": 0.0001593275477831507,
+          "sample_rms": 0.00016694774471309767
+        },
+        "whole_record_b": {
+          "probe_id": "i:R1",
+          "count": 21,
+          "min": 6.766764161830636e-05,
+          "max": 0.0005,
+          "sample_mean": 0.00021955997971240924,
+          "sample_rms": 0.00025434159009080076
+        }
+      }
+    ],
+    "unmatched_a": [],
+    "unmatched_b": []
+  },
+  "checks": [
+    "Analytic RC results at exact independent sample times",
+    "Pure query and rejected requests preserve all public state",
+    "Configured view equals pure query without live/history/dirty changes",
+    "Later live edits do not change captured readings",
+    "Imported and reopened captures compare identically"
+  ],
+  "limits": [
+    "No interpolation, waveform overlay or time alignment",
+    "Sample statistics cover whole captures and depend on resolution"
+  ]
+}

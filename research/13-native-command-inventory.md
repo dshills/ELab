@@ -1,8 +1,8 @@
 # Native control and command inventory
 
-The [source ledger](13-native-command-inventory.json) records **38 production native Go files, 315 source sites and 134 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 110 public commands. The remaining 24 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
+The [source ledger](13-native-command-inventory.json) records **39 production native Go files, 321 source sites and 136 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 111 public commands. The remaining 25 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
 
-**116 sites require binding review.** The other categories are 173 literal routes, seven declared native-wrapper sites, 17 registry declarations and two menu sets. These are syntax sites, including overlapping factories and callbacks; they are not 315 unique visible controls or 110 runtime-qualified capabilities. No literal route names an unknown command.
+**119 sites require binding review.** The other categories are 176 literal routes, seven declared native-wrapper sites, 17 registry declarations and two menu sets. These are syntax sites, including overlapping factories and callbacks; they are not 321 unique visible controls or 111 runtime-qualified capabilities. No literal route names an unknown command.
 
 The ledger covers action/button/menu factories, package-level native menus, registry tables, callback fields/assignments, time-field factories, custom canvases, event routers, direct request command fields and shared dispatch bridges. Each entry retains its source, line, enclosing function and expression. File hashes and the public ID set make changes reproducible and reviewable. Both platform Go files are included; smoke/tests, framework internals and Objective-C event delivery are excluded and remain separate evidence scopes.
 
@@ -55,3 +55,5 @@ Recovery setup controls now submit `recovery.configure.start`, with shared progr
 Native snapshot dismissal now routes to `recovery.dismiss.start`; its waiting compatibility ID remains available to agents. The source-routed set changes from the waiting ID to the immediate ID without changing site or routed-ID counts. The visible removal outcome uses shared project-work state. See [dismissal contract](../docs/recovery.md#background-recovery-dismissal).
 
 The logarithmic-sweep checkpoint adds one shared spacing selector and its `sweep.settings.set` route. The mesh and cursor now share normalized display positions for either axis; source references remain distinct from mounted/physical-input evidence.
+
+The captured-run comparison adds a reference selector, unit-time entry and shared statistics-display toggle through `recording.compare.set`. The pure `recording.compare` query remains available independently of the current viewer selection. New source routes and callback contexts were reviewed; complete physical interaction/accessibility qualification remains separate.

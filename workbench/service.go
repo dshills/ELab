@@ -718,6 +718,18 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 			out.Result = result
 			return out
 		}
+		if r.Command == "recording.compare" {
+			result, err := s.recordingComparisonQueryLocked(r.Params)
+			if err != nil {
+				var action *actionError
+				if errors.As(err, &action) {
+					return fail(action.code, action.message)
+				}
+				return fail("invalid-params", err.Error())
+			}
+			out.Result = result
+			return out
+		}
 		if r.Command == "operation.inspect" || r.Command == "operation.samples" {
 			result, err := s.verificationQueryLocked(r.Command, r.Params)
 			if err != nil {

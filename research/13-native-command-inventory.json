@@ -29,7 +29,8 @@
     "desktop/print_preview.go": "905caa8284e1bfd16d6812e15061e36485f83f6ddd3ae06f248181e571101ebe",
     "desktop/probes.go": "3f3ce8e64c6aaba57439b63542f95eed784604bbe555b18a0f303e791c0e9e01",
     "desktop/project_work.go": "4d80b2c111c1d6778844570344479c35d3bfd641840aba0ebbe8f81083c961e1",
-    "desktop/recording.go": "2d104abf028fe82a22888ff757668680fc28432f07a49b548025bb06ada38945",
+    "desktop/recording.go": "b30d8a29d0d8f8112952231fbd2104741e344b07c4b3ca485c6e3a3ff019319c",
+    "desktop/recording_compare.go": "a355d7f0afb9233edc0edbd5f6f2cfa22d0cfa8be2bf004cd486fb87274d6726",
     "desktop/recovery.go": "1416354a0acb99a61be3d5cdd8838256e5bcd879d116a51a7a507fa271209a8f",
     "desktop/routing.go": "4898c4c1de9d7de3c5f8ad751b15d7c0f199234243f62ec6ea949ee8d9ad2c1c",
     "desktop/scope.go": "7e77b694cbb2b1e759b5cbffb2c983c6ddd901fcc9780ac499ddd542cebf7b7d",
@@ -107,6 +108,8 @@
     "project.save.start",
     "project.work.cancel",
     "project.work.inspect",
+    "recording.compare",
+    "recording.compare.set",
     "recording.cursor.clear",
     "recording.cursor.select",
     "recording.cursor.set",
@@ -1904,7 +1907,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 91,
+      "line": 93,
       "function": "*screen.recordingInspector",
       "kind": "event-or-dispatch-router",
       "expression": "s.service.Dispatch(context.Background(), workbench.Request{Version: 1, ID: \"ui-recorded-source\", Command: \"operation.inspect\", Params: raw}, \"user\")",
@@ -1912,7 +1915,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 91,
+      "line": 93,
       "function": "*screen.recordingInspector",
       "kind": "request-command-field",
       "expression": "Command: \"operation.inspect\"",
@@ -1923,7 +1926,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 126,
+      "line": 128,
       "function": "*screen.recordingPanel",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-back-live\", \"View live\", \"recording.view.set\", workbench.RecordingViewParams{Mode: \"live\"})",
@@ -1934,7 +1937,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 129,
+      "line": 131,
       "function": "*screen.recordingPanel",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-\"+direction, map[string]string{\"previous\": \"Previous\", \"next\": \"Next\"}[direction], \"recording.step\", workbench.RecordingStepParams{Direction: direction})",
@@ -1945,7 +1948,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 137,
+      "line": 139,
       "function": "*screen.recordingPanel",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-play\", \"Play\", \"recording.play\", workbench.RecordingPlayParams{Speed: speed})",
@@ -1956,7 +1959,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 139,
+      "line": 141,
       "function": "*screen.recordingPanel",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-pause\", \"Pause\", \"recording.pause\", struct{}{})",
@@ -1967,7 +1970,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 142,
+      "line": 144,
       "function": "*screen.recordingPanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tindex := int(e.Number)\n\ts.invoke(\"recording.seek\", workbench.RecordingSeekParams{Index: \u0026index})\n}",
@@ -1975,7 +1978,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 144,
+      "line": 146,
       "function": "*screen.recordingPanel",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"recording.seek\", workbench.RecordingSeekParams{Index: \u0026index})",
@@ -1986,7 +1989,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 145,
+      "line": 147,
       "function": "*screen.recordingPanel",
       "kind": "callback-factory",
       "expression": "timeField(\"recorded-time\", \"Recorded seek time\", r.Time, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.seek\", map[string]any{\"time_s\": text}, state.CommandRevision)\n})",
@@ -1994,7 +1997,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 146,
+      "line": 148,
       "function": "*screen.recordingPanel",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.seek\", map[string]any{\"time_s\": text}, state.CommandRevision)",
@@ -2005,7 +2008,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 147,
+      "line": 149,
       "function": "*screen.recordingPanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"recording.speed.set\", workbench.RecordingPlayParams{Speed: float64(e.Number)})\n}",
@@ -2013,7 +2016,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 148,
+      "line": 150,
       "function": "*screen.recordingPanel",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"recording.speed.set\", workbench.RecordingPlayParams{Speed: float64(e.Number)})",
@@ -2024,7 +2027,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 160,
+      "line": 162,
       "function": "*screen.recordingPanel",
       "kind": "node-Custom",
       "expression": "Custom: s.scope",
@@ -2032,7 +2035,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 170,
+      "line": 172,
       "function": "*screen.recordingCursors",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-cursor-select-\"+c.id, strings.ToUpper(c.id), \"recording.cursor.select\", workbench.CursorSelectParams{Cursor: c.id})",
@@ -2043,7 +2046,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 175,
+      "line": 177,
       "function": "*screen.recordingCursors",
       "kind": "callback-factory",
       "expression": "timeField(\"recorded-cursor-\"+c.id, \"Recorded cursor \"+strings.ToUpper(c.id), at, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.cursor.set\", map[string]any{\"cursor\": c.id, \"time_s\": text}, state.CommandRevision)\n})",
@@ -2051,7 +2054,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 176,
+      "line": 178,
       "function": "*screen.recordingCursors",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.cursor.set\", map[string]any{\"cursor\": c.id, \"time_s\": text}, state.CommandRevision)",
@@ -2062,12 +2065,69 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 178,
+      "line": 180,
       "function": "*screen.recordingCursors",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-cursor-clear-\"+c.id, \"×\", \"recording.cursor.clear\", workbench.CursorSelectParams{Cursor: c.id})",
       "public_commands": [
         "recording.cursor.clear"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_compare.go",
+      "line": 31,
+      "function": "*screen.recordingComparisonControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\treference := e.SelectedID\n\tif reference == \"__none\" {\n\t\treference = \"\"\n\t}\n\n\ts.invoke(\"recording.compare.set\", workbench.RecordingCompareParams{ID: r.ID, ReferenceID: reference, Time: 0})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_compare.go",
+      "line": 38,
+      "function": "*screen.recordingComparisonControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"recording.compare.set\", workbench.RecordingCompareParams{ID: r.ID, ReferenceID: reference, Time: 0})",
+      "public_commands": [
+        "recording.compare.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_compare.go",
+      "line": 44,
+      "function": "*screen.recordingComparisonControls",
+      "kind": "callback-factory",
+      "expression": "timeField(\"recorded-compare-time\", \"Requested comparison time\", at, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.compare.set\", map[string]any{\"id\": r.ID, \"reference_id\": comparison.Settings.ReferenceID, \"time_s\": text, \"show_statistics\": comparison.Settings.ShowStatistics}, state.CommandRevision)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_compare.go",
+      "line": 45,
+      "function": "*screen.recordingComparisonControls",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"recording.compare.set\", map[string]any{\"id\": r.ID, \"reference_id\": comparison.Settings.ReferenceID, \"time_s\": text, \"show_statistics\": comparison.Settings.ShowStatistics}, state.CommandRevision)",
+      "public_commands": [
+        "recording.compare.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_compare.go",
+      "line": 50,
+      "function": "*screen.recordingComparisonControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := workbench.RecordingCompareParams(comparison.Settings)\n\tnext.ShowStatistics = e.Checked\n\ts.invoke(\"recording.compare.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_compare.go",
+      "line": 53,
+      "function": "*screen.recordingComparisonControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"recording.compare.set\", next)",
+      "public_commands": [
+        "recording.compare.set"
       ],
       "status": "literal-public-route"
     },
@@ -3404,6 +3464,7 @@
     "project.save",
     "project.save.start",
     "project.work.cancel",
+    "recording.compare.set",
     "recording.cursor.clear",
     "recording.cursor.select",
     "recording.cursor.set",
@@ -3477,6 +3538,7 @@
     "parts.list",
     "project.inspect",
     "project.work.inspect",
+    "recording.compare",
     "recovery.checkpoint",
     "recovery.dismiss",
     "recovery.inspect",

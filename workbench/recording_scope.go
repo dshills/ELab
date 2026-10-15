@@ -105,6 +105,7 @@ func (s *Service) recordingViewLocked() *RecordingView {
 		}
 	}
 	out.Scope = scope
+	out.Comparison = s.recordingComparisonViewLocked()
 	return out
 }
 
@@ -146,6 +147,7 @@ func cloneRecordingView(view *RecordingView) *RecordingView {
 	}
 	out := *view
 	out.Scope = cloneScope(view.Scope)
+	out.Comparison = cloneRecordingComparison(view.Comparison)
 	out.Readings = append([]VerificationReading{}, view.Readings...)
 	return &out
 }

@@ -25,6 +25,7 @@ type RecordingWindowParams struct {
 	End   float64 `json:"end_s"`
 }
 type RecordingView struct {
+	Comparison    *RecordingComparison  `json:"comparison,omitempty"`
 	ID            string                `json:"id"`
 	OriginID      string                `json:"origin_id"`
 	Imported      bool                  `json:"imported"`
@@ -43,6 +44,7 @@ type RecordingView struct {
 }
 
 type recordingState struct {
+	comparison       *RecordingCompareParams
 	viewing, playing bool
 	index            int
 	speed            float64

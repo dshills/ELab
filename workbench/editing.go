@@ -163,6 +163,8 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			}
 		}
 		return s.insertJunctionLocked(p)
+	case "recording.compare.set":
+		return s.setRecordingComparisonLocked(raw)
 	case "recording.keep.set":
 		var p RecordingKeepParams
 		if err := params(raw, &p, "id", "keep"); err != nil {

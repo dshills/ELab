@@ -65,6 +65,9 @@ type inputRelation struct {
 }
 
 func addCapabilityDetails(id string, schema map[string]any) {
+	if addRecordingComparisonDetails(id, schema) {
+		return
+	}
 	if addSweepCapabilityDetails(id, schema) {
 		return
 	}

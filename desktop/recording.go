@@ -86,6 +86,8 @@ func (s *screen) recordingInspector(state workbench.Snapshot) []ui.Node {
 		nodes = append(nodes, quiet("recorded-cursor-reading-"+reading.ProbeID, fmt.Sprintf("%s · A %.5g · B %.5g\nΔ %.5g %s", reading.ProbeID, reading.A, reading.B, reading.Delta, units[reading.ProbeID])))
 	}
 
+	nodes = append(nodes, s.recordingComparisonControls(state)...)
+
 	// Source inspection uses the same read-only metadata command as agents.
 	raw, _ := json.Marshal(workbench.IDParams{ID: r.ID})
 	response := s.service.Dispatch(context.Background(), workbench.Request{Version: 1, ID: "ui-recorded-source", Command: "operation.inspect", Params: raw}, "user")

@@ -55,7 +55,7 @@ func capability(id, description string, mutates bool, schema string) Capability 
 	var input map[string]any
 	_ = json.Unmarshal([]byte(schema), &input)
 	encoded, _ := json.Marshal(timeInputSchema(id, input))
-	return Capability{id, description, mutates, encoded, "Snapshot mutations; query data otherwise; local schemas", append(json.RawMessage(nil), output...)}
+	return Capability{id, description, mutates, encoded, "Snapshot for mutations; query data otherwise", append(json.RawMessage(nil), output...)}
 }
 
 func typedCapability(id, description string, t reflect.Type) Capability {
@@ -85,6 +85,11 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(IDParams{}), ObjectIDSchemaID},
 	{reflect.TypeOf(CursorSelectParams{}), "urn:elab:cursor-select:1"},
 	{reflect.TypeOf(ProbeParams{}), "urn:elab:probe-selection:1"},
+	{reflect.TypeOf(ScopeStatistics{}), "urn:elab:scope-statistics:1"},
+	{reflect.TypeOf(ComparisonSample{}), "urn:elab:comparison-sample:1"},
+	{reflect.TypeOf(RecordingComparison{}), "urn:elab:recording-comparison:1"},
+	{reflect.TypeOf(RecordingCompareSettings{}), "urn:elab:recording-compare-settings:1"},
+	{reflect.TypeOf(RecordingCompareParams{}), "urn:elab:recording-compare-input:1"},
 	{reflect.TypeOf(RecordingPlayParams{}), "urn:elab:playback:1"},
 	{reflect.TypeOf(InputParams{}), "urn:elab:input-mode:1"},
 	{reflect.TypeOf(ValueParams{}), "urn:elab:component-value:1"},
@@ -131,6 +136,9 @@ func SchemaRegistry() map[string]json.RawMessage {
 		// definition, without widening numeric RecoveryState output fields.
 		if common.Type == reflect.TypeOf(RecoveryConfigureParams{}) {
 			schema = timeInputSchema("recovery.configure", schema)
+		}
+		if common.Type == reflect.TypeOf(RecordingCompareParams{}) {
+			schema = timeInputSchema("recording.compare", schema)
 		}
 		schema["$id"] = common.ID
 		encoded, _ := json.Marshal(schema)
@@ -201,6 +209,8 @@ func Catalog() []Capability {
 		typedCapability("recording.keep.set", "Include/exclude a completed recording in project saves and recovery; exclusion keeps session replay/export; kept records are never silently evicted", reflect.TypeOf(RecordingKeepParams{})),
 		typedCapability("verification.import.start", "Read/validate a recorded JSON asset in background; inspect project_work; keeps live circuit/state and later viewer choice", reflect.TypeOf(RecordingImportParams{})),
 		typedCapability("verification.import", "Validate and load a complete elab.verification v1 JSON record into an independent recorded viewer; never changes live circuit/state", reflect.TypeOf(RecordingImportParams{})),
+		typedCapability("recording.compare.set", "Configure selected captured A and reference B at time_s; empty reference clears; exact nearest saved samples, no interpolation/live mutation", reflect.TypeOf(RecordingCompareParams{})),
+		queryCapability("recording.compare", "Pure comparison of two retained captures at time_s; matching probe IDs/units/terminals, exact sample times, B minus A and whole-record statistics", reflect.TypeOf(RecordingCompareParams{}), reflect.TypeOf(RecordingComparison{})),
 		typedCapability("recording.view.set", "Show live or recorded scope; recorded requires a selected completed operation", reflect.TypeOf(RecordingViewParams{})),
 		typedCapability("recording.seek", "Pause and seek exact sample index or nearest recorded time (exactly one); time ties select latest/right-hand edge sample", reflect.TypeOf(RecordingSeekParams{})),
 		typedCapability("recording.step", "Pause and move one actual recorded row next/previous, preserving duplicate timestamps", reflect.TypeOf(RecordingStepParams{})),

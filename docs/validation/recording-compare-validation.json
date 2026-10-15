@@ -1,0 +1,58 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.61.0",
+  "build_version": "76",
+  "binary_sha256": "47360a70ccf3c49a904ad4a3124862e1251604155807b30594feb7cfe2e6f5e2",
+  "agent_binary_sha256": "bf9a0bb6991953ec3805683107efec5d3b03f83c66f01b03041850c8d6fcfbbd",
+  "sdk_commit": "60eaad15165b75ac5b596e5583c9718342dfc552",
+  "sdk_manifest_sha256": "40854a9f90bc16df45d1025eb904e2cc0d403e0c6c445faf5798d200eb75d2e6",
+  "prepared_sdk_outputs_verified": 16,
+  "checks": [
+    "Pure recording.compare query and recording.compare.set viewer command share exact retained data; time inputs accept numbers/unit text with numeric-only output",
+    "Nearest actual rows and later/right-hand ties; independent sample times/indices/offsets/rates/durations; no interpolation, extrapolation or clamping",
+    "Probe matching requires ID, units and terminal references; labels may differ; unmatched/unavailable sources explicit",
+    "B minus A and separate whole-record sample extrema/mean/RMS/count; optional shared statistics display",
+    "Analytic 10k/20k RC charge comparison; DC, changed live source, owned snapshots/results, invalid-request purity and selection guards",
+    "Comparison resets on operation selection/reopen; underlying imported/reopened records compare identically; reference eviction explicit; later comparison survives pending import completion",
+    "Headless/native public results match exactly, including samples/statistics and imported/reopened data",
+    "Native controls match pure query; packaged native smoke exercises reference/time/statistics/clear and restores original saved membership",
+    "Full serialized root/native lint/import/race/vet, portable comparison/discovery tests, exact packaged GPU/UI smoke and all four existing adapters pass"
+  ],
+  "evidence": [
+    "docs/recording-comparison.md",
+    "workbench/recording_compare_test.go",
+    "desktop/recording_compare_test.go",
+    "desktop/recording_compare_smoke.go",
+    "scripts/recording-compare-demo.py",
+    "docs/validation/headless-recording-compare.json",
+    "docs/validation/desktop-recording-compare.json",
+    "docs/validation/recording-compare-conformance.json"
+  ],
+  "quality_log_sha256": "52e330f8962eedcda6d619902a724b5522433411b32dc147711b856a65c091bd",
+  "smoke_log_sha256": "5431abf7d749dcbcca3679d807be414e0073ae221e434d38acfdb82be4b7ba80",
+  "inventory": {
+    "sources": 39,
+    "sites": 321,
+    "public_commands": 136,
+    "source_routes": 111,
+    "binding_review_sites": 119
+  },
+  "qualification_repairs": [
+    "Ordinary catalog initially exceeded unchanged 64 KiB budget; shared repeated schemas and shorter repetitive output prose preserve that budget",
+    "Input-only time grammar separated from numeric comparison settings/output schema; regression verifies numeric output",
+    "Controlled eviction fixture repaired to remove both operation map and order entry, preserving real lifecycle invariants"
+  ],
+  "notes": [
+    "SDK 60eaad1 adds tagged native-check lifecycle diagnostics/fixture work; ordinary runtime path unchanged; delta inspected read-only, manifest/16 prepared outputs verified",
+    "Canonical/candidate/build binary hashes equal; previous .60/75 preserved at build/ELab-before-recording-compare.app; owned sessions exited"
+  ],
+  "limits": [
+    "Numerical comparison table only; plot overlays, time alignment, threshold extraction and formal equivalence remain separate",
+    "Matched probe identities do not prove same wiring/models/input assumptions; inspect each captured source",
+    "Whole-record sample mean/RMS depend on resolution and duration, not time-weighted integration or current scope window",
+    "No new complete physical-input/accessibility, visible-latency, distribution or participant acceptance claim",
+    "P0 counts remain 17 implemented / 10 partial; printer submission/physical printing remain open",
+    "Private unsigned development app; no solver/model/work/retention limits or project format changed"
+  ]
+}
