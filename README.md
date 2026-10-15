@@ -242,3 +242,5 @@ Choose **Show recorded → Compare captures** to compare two saved experiments a
 Captured runs now offer **Threshold timing**: choose a saved probe, level, direction and interval to inspect exact threshold-arrival brackets and the first same-direction spacing bounds. Users and agents share the same measurement and result pages. See [timing workflow](docs/recording-timing.md).
 
 Component values accept engineering voltage units such as **500 mV**, with visible ranges/coupled waveform limits and the same discoverable domains for agents. Nonzero inputs that underflow to zero are refused. See [component value contract](docs/component-values.md).
+
+The Inspector now publishes exact editable value text. Reapplying an untouched value preserves its stored bits, live state, clean-save status and undo/redo history; common values use compact forms such as **1 µF** and **1 kΩ**. See [unchanged value handling](docs/component-values.md#reapplying-an-unchanged-value).

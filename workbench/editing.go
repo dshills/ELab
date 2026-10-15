@@ -77,7 +77,7 @@ func (s *Service) normalizeDrawingLocked() {
 		}
 	}
 	if c, ok := s.graph.Component(s.selected); ok && c.Unit != "" {
-		s.drawing.Value = fmt.Sprintf("%.12g %s", c.Value, c.Unit)
+		s.drawing.Value = FormatValue(c.Value, c.Unit)
 	} else if c, ok := s.graph.Component(s.selected); ok && c.Kind == "net-label" {
 		s.drawing.Value = c.Label
 	} else {

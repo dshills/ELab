@@ -147,6 +147,20 @@ type valuePrefix struct {
 	scale  float64
 }
 
+func valuePrefixes(unit string) []valuePrefix {
+	prefixes := []valuePrefix{}
+	switch unit {
+	case "Ω":
+		prefixes = []valuePrefix{{"k", 1e3}, {"K", 1e3}, {"M", 1e6}}
+	case "F":
+		prefixes = []valuePrefix{{"p", 1e-12}, {"n", 1e-9}}
+	}
+	if unit == "V" || unit == "F" {
+		prefixes = append(prefixes, valuePrefix{"u", 1e-6}, valuePrefix{"µ", 1e-6}, valuePrefix{"μ", 1e-6}, valuePrefix{"m", 1e-3})
+	}
+	return prefixes
+}
+
 // ParseValue accepts explicit units and maker prefixes while preserving the
 // original parse-then-scale rounding of already-supported values.
 func ParseValue(text, unit string) (float64, error) {
@@ -163,16 +177,7 @@ func ParseValue(text, unit string) (float64, error) {
 	default:
 		return 0, fmt.Errorf("unsupported value unit %q", unit)
 	}
-	prefixes := []valuePrefix{}
-	switch unit {
-	case "Ω":
-		prefixes = []valuePrefix{{"k", 1e3}, {"K", 1e3}, {"M", 1e6}}
-	case "F":
-		prefixes = []valuePrefix{{"p", 1e-12}, {"n", 1e-9}}
-	}
-	if unit == "V" || unit == "F" {
-		prefixes = append(prefixes, valuePrefix{"u", 1e-6}, valuePrefix{"µ", 1e-6}, valuePrefix{"μ", 1e-6}, valuePrefix{"m", 1e-3})
-	}
+	prefixes := valuePrefixes(unit)
 	scale := 1.
 	for _, prefix := range prefixes {
 		if strings.HasSuffix(s, prefix.suffix) {

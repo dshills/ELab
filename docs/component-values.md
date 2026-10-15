@@ -37,3 +37,9 @@ Existing forms retain their original parse-then-scale floating-point rounding. T
 The 100 drawing-object limit includes helpers. Simulation capacity and topology/model restrictions remain separately inspectable in the existing snapshot/library data. Placement or a valid value does not imply the unfinished circuit is complete or supported.
 
 These three command details now expose normalized value domains, source relations and observation behavior. Other command-family semantics, full native interaction/accessibility and broader release gates remain separate. There is no expanded device/solver range, custom-model support or physical rating claim.
+
+## Reapplying an unchanged value
+
+The selected component's `snapshot.drawing.value` is also the native Inspector text. It now preserves the exact stored floating-point value. The formatter tries compact engineering-unit spellings, verifies each by parsing it, and falls back to a shortest round-trip SI decimal. Shorter exact spellings win; ties prefer a normalized engineering magnitude. Examples include `1 µF` and `1 kΩ`. A high-precision value keeps enough digits rather than silently rounding on the next Apply. Net-label text retains its existing case-sensitive semantics.
+
+Applying that untouched text preserves the graph, run/electrical identity, simulated time, dirty state and undo/redo entries. It is still an admitted command, so command/event revisions and actor information may advance. Saving/reopening retains numeric SI and reconstructs an exact editable draft. Plot/schematic captions and measurement readouts may still use display precision; they are not used as editable source values.

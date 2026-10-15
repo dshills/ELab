@@ -68,6 +68,25 @@ func nativeValueDomainsSmoke(ctx context.Context, a *app.Application, s *screen)
 			result <- fmt.Errorf("native value correction failed")
 			return
 		}
+		for _, action := range []struct {
+			id    string
+			event *ui.ChangeEvent
+		}{{"selection", &ui.ChangeEvent{SelectedID: "C1"}}, {"value-entry", &ui.ChangeEvent{Text: "1.234567890123456 µF"}}, {"apply-value", nil}} {
+			if err := smokeUI(s, action.id, action.event); err != nil {
+				result <- err
+				return
+			}
+		}
+		preciseBefore := s.service.Snapshot()
+		if err := smokeUI(s, "apply-value", nil); err != nil {
+			result <- err
+			return
+		}
+		preciseAfter := s.service.Snapshot()
+		if !reflect.DeepEqual(preciseBefore.Components, preciseAfter.Components) || preciseBefore.ElectricalRevision != preciseAfter.ElectricalRevision || preciseBefore.RunID != preciseAfter.RunID || preciseBefore.Document != preciseAfter.Document || !reflect.DeepEqual(preciseBefore.UndoEntry, preciseAfter.UndoEntry) {
+			result <- fmt.Errorf("untouched native value Apply changed stored circuit")
+			return
+		}
 		result <- nil
 	}); err != nil {
 		return err

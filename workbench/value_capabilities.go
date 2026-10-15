@@ -56,6 +56,7 @@ func addValueCapabilityDetails(id string, schema map[string]any) bool {
 			schema["examples"] = []any{PlaceParams{Kind: "dc-source", Position: Point{X: 100, Y: 0}, Value: "500 mV"}}
 		} else {
 			contract.Preconditions = []string{"id names an existing numeric-value component or net label", "Sine amplitude plus absolute current offset ≤12 V; finite-pulse high value ≥current low; other waveform fields unchanged"}
+			contract.Effects = append(contract.Effects, "Selected snapshot.drawing.value is round-trip safe editable text; reapplying it preserves numeric bits, physical state, dirty state and undo/redo, while ordinary command/actor revisions can advance")
 			contract.Effects = append(contract.Effects, "Net label changes follow ordinary connectivity/restart rules; fixed-model symbols do not acquire editable numeric parameters")
 			schema["examples"] = []any{ValueParams{ID: "R1", Value: "2.2k Ω"}, ValueParams{ID: "V1", Value: "500 mV"}}
 		}

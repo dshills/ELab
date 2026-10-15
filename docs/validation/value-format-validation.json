@@ -1,0 +1,55 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.64.0",
+  "build_version": "79",
+  "binary_sha256": "91b3b44e97ec605fff498246c76006531fe0df7cab22a089c31989ebfbfbabbd",
+  "agent_binary_sha256": "9bcf802c4100e19e9e5a75f636c8e3370a22bb0d2116222a2674bf5167db79d0",
+  "sdk_commit": "c4981ccadbfe59115814664c76b4440c45a8a7a9",
+  "sdk_manifest_sha256": "2350790e5e9aa333f7ffc3c45a512972ea3be95125465dcb2da0f2b62c155bfe",
+  "prepared_sdk_outputs_verified": 21,
+  "checks": [
+    "Regression fails on isolated committed parent e4ecae7: Inspector 12-significant-digit text loses stored capacitor precision",
+    "Shared FormatValue verifies candidate engineering spellings by exact parser bit comparison; shortest round-trip SI fallback preserves valid finite V/F/\u03a9 values",
+    "Seeded domain samples, boundaries, signed zero and tiny finite voltages round-trip exactly and format stably; common \u00b5F/k\u03a9 forms remain readable",
+    "Untouched Apply preserves graph, electrical/run identity, transient/time, dirty state and undo/redo while command/actor publication may advance",
+    "Native Inspector field matches stored bits; untouched native and agent Apply preserve saved state; exact packaged GPU/UI smoke exercises precise Apply",
+    "Public workflows verify five unchanged Applies, usable retained redo, clean restored graph, reopen plus three more Applies, and unchanged file bytes",
+    "Native/headless complete reports match exactly except transport label",
+    "Full serialized root/native lint/import/race/vet, portable formatting/value/discovery tests and all four existing reference adapters pass"
+  ],
+  "evidence": [
+    "docs/component-values.md#reapplying-an-unchanged-value",
+    "workbench/value_format_test.go",
+    "desktop/value_format_test.go",
+    "desktop/value_domains_smoke.go",
+    "scripts/value-format-demo.py",
+    "docs/validation/headless-value-format.json",
+    "docs/validation/desktop-value-format.json",
+    "docs/validation/value-format-conformance.json"
+  ],
+  "parent_regression_commit": "e4ecae7",
+  "parent_regression_log_sha256": "3127f3c59aada06ecadae55707fc7054bea8215b1433c1d54ee23174c77d8e22",
+  "quality_log_sha256": "e8fc32dda31481b17f2aa0ea90a4661a0fd5aedd7df7f36827ac28933137cd96",
+  "smoke_log_sha256": "5431abf7d749dcbcca3679d807be414e0073ae221e434d38acfdb82be4b7ba80",
+  "inventory": {
+    "sources": 40,
+    "sites": 331,
+    "public_commands": 138,
+    "source_routes": 112,
+    "binding_review_sites": 123
+  },
+  "notes": [
+    "Parser prefix definitions are shared without changing existing parse-then-scale arithmetic",
+    "No native production ingress changed; checked source inventory remains current",
+    "SDK unchanged, manifest and 21 prepared hashes verified read-only; final canonical/candidate/build hashes equal",
+    "Prior .63/78 preserved at build/ELab-before-value-format.app; owned native sessions exited"
+  ],
+  "limits": [
+    "Editable drafts only; schematic/plot/measurement captions retain ordinary display precision",
+    "Admitted no-op mutations still publish command revisions/actor information; no claim of entire snapshot equality",
+    "No full physical typing/IME/focus/accessibility, general visible-latency, distribution, participant or physical printing acceptance claim",
+    "P0 counts remain 17 implemented / 10 partial; broader goal stays active",
+    "Private unsigned app; no solver/model/numeric/work/transport limits or file format changed"
+  ]
+}

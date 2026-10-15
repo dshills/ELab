@@ -1,0 +1,125 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "exact_value_hex": "0x1.4b66dc01ec6f7p-20",
+  "editable_text": "1.234567890123456 \u00b5F",
+  "readable": {
+    "capacitor": "1 \u00b5F",
+    "resistor": "1 k\u03a9"
+  },
+  "source_graph": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "pulse-source",
+        "name": "Pulse source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-square.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -110
+        },
+        "value": 10000,
+        "unit": "\u03a9",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "C1",
+        "kind": "capacitor",
+        "name": "Capacitor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 1.2345678901234559e-06,
+        "unit": "F",
+        "model": "ideal-capacitor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 110
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "C1.1",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "C1.2",
+        "to": "GND.reference",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "GND.reference",
+        "to": "V1.negative",
+        "connected": true
+      }
+    ]
+  },
+  "sample": {
+    "time_s": 0.001,
+    "input_v": 5,
+    "voltage_v": 0.3890315461383559,
+    "current_a": 0.0004610968453861644,
+    "energy_j": 9.342317440042576e-08
+  },
+  "checks": [
+    "Published editable text preserves stored float bits",
+    "Five untouched applies preserve graph/physics/save/undo/redo while command revisions advance",
+    "Redo remains usable and returns to the clean saved graph",
+    "Reopened project survives three untouched applies",
+    "Saved file bytes unchanged",
+    "Common values retain compact engineering units"
+  ],
+  "limits": [
+    "Editable draft formatting only; plot/measurement captions retain their display precision",
+    "No new solver/model/transport or project-format claim"
+  ]
+}
