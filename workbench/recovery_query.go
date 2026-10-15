@@ -49,14 +49,26 @@ func (s *Service) recoveryQueryLocked(ctx context.Context, command string, raw j
 	defer func() { delete(s.recoveryReaders, id); cancel(); s.liveWorkers.Done() }()
 	s.mu.Unlock()
 	defer s.mu.Lock()
-	capsule, document, hash, err := read(bounded, store, choice, func(string, int) {})
+	var page *RecoverySamplesParams
+	if command == "recovery.samples" {
+		page = &samples
+	}
+	return projectRecoveryRead(bounded, store, choice, page, read, func(string, int) {})
+}
+
+// Shared immutable file projection for pure queries and observable reads.
+func projectRecoveryRead(bounded context.Context, store *recoveryStore, choice RecoveryChoiceParams, samples *RecoverySamplesParams, read recoveryRestoreFunc, progress func(string, int)) (any, error) {
+	if err := bounded.Err(); err != nil {
+		return nil, err
+	}
+	capsule, document, hash, err := read(bounded, store, choice, progress)
 	if bounded.Err() != nil {
 		return nil, bounded.Err()
 	}
 	if err != nil {
 		return nil, err
 	}
-	if command == "recovery.samples" {
+	if samples != nil {
 		if document.Recordings == nil || samples.Recording < 0 || samples.Recording >= len(document.Recordings.Entries) {
 			return nil, fmt.Errorf("choose an embedded recovery recording index")
 		}

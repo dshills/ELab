@@ -94,6 +94,7 @@ func (s *screen) recoveryInspector(state workbench.Snapshot) []ui.Node {
 		// Other live sessions keep their snapshots. The shared service enforces ownership.
 		dismiss.Disabled = dismiss.Disabled || busy || chosen.ActiveSession && !chosen.CurrentSession
 		nodes = append(nodes, dismiss)
+		nodes = append(nodes, s.recoveryReadControls(state, *chosen)...)
 	}
 	for _, problem := range recovery.Problems {
 		nodes = append(nodes, quiet("recovery-problem-"+problem.ID, "Snapshot could not be validated · "+problem.Message))

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"math"
 	"os"
 	"path/filepath"
@@ -16,9 +17,20 @@ import (
 	"github.com/dshills/vellum/ui"
 )
 
-func nativeSmoke(a *app.Application, s *screen, g *cogent.MeshCanvas, timeout time.Duration) error {
+func nativeSmoke(a *app.Application, s *screen, g *cogent.MeshCanvas, timeout time.Duration) (err error) {
 	ctx, cancel := context.WithTimeout(a.Context(), timeout)
 	defer cancel()
+	stage := "construction and first GPU frame"
+	defer func() {
+		if err != nil {
+			err = fmt.Errorf("%s: %w", stage, err)
+		}
+	}()
+	setStage := func(value string) {
+		stage = value
+		log.Printf("smoke: %s", stage)
+	}
+	setStage(stage)
 	constructed := make(chan error, 1)
 	if err := a.PostWait(ctx, func() { constructed <- smokeConstruct(s) }); err != nil {
 		return err
@@ -111,102 +123,135 @@ rendered:
 	if state.Circuit.Resistance != 2000 || state.Result == nil || math.Abs(state.Result.Current-0.0014767) > 0.000002 {
 		return fmt.Errorf("UI edit did not update live result")
 	}
+	setStage("nativeRCSmoke")
 	if err := nativeRCSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeScopeVisibilitySmoke")
 	if err := nativeScopeVisibilitySmoke(ctx, s); err != nil {
 		return err
 	}
+	setStage("nativeNPNSmoke")
 	if err := nativeNPNSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeNPNPulseSmoke")
 	if err := nativeNPNPulseSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeMixedSmoke")
 	if err := nativeMixedSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeWorkflowSmoke")
 	if err := nativeWorkflowSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeVerificationSmoke")
 	if err := nativeVerificationSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeRecoverySmoke")
 	if err := nativeRecoverySmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeRecordingSmoke")
 	if err := nativeRecordingSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeProjectRecordingSmoke")
 	if err := nativeProjectRecordingSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeRecordingComparisonSmoke")
 	if err := nativeRecordingComparisonSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativePrimitivesSmoke")
 	if err := nativePrimitivesSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeSwitchSmoke")
 	if err := nativeSwitchSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeDiodeSmoke")
 	if err := nativeDiodeSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativePotentiometerSmoke")
 	if err := nativePotentiometerSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeProjectOpenSmoke")
 	if err := nativeProjectOpenSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeExportSmoke")
 	if err := nativeExportSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeWaveformSmoke")
 	if err := nativeWaveformSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeAuditSmoke")
 	if err := nativeAuditSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeCapacitySmoke")
 	if err := nativeCapacitySmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeTraceFocusSmoke")
 	if err := nativeTraceFocusSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativePinnedReadingsSmoke")
 	if err := nativePinnedReadingsSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeMeasurementInspectionSmoke")
 	if err := nativeMeasurementInspectionSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeDisplaySmoke")
 	if err := nativeDisplaySmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeDiagnosticSmoke")
 	if err := nativeDiagnosticSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeExamplesSmoke")
 	if err := nativeExamplesSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeIntegrationLimitSmoke")
 	if err := nativeIntegrationLimitSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeFieldContextSmoke")
 	if err := nativeFieldContextSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeDCSweepSmoke")
 	if err := nativeDCSweepSmoke(ctx, a, s); err != nil {
 		return fmt.Errorf("native DC sweep: %w", err)
 	}
+	setStage("nativePrintPreviewSmoke")
 	if err := nativePrintPreviewSmoke(ctx, a, s); err != nil {
 		return fmt.Errorf("native print preview: %w", err)
 	}
+	setStage("nativeValueDomainsSmoke")
 	if err := nativeValueDomainsSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeVerificationContractsSmoke")
 	if err := nativeVerificationContractsSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeScopeContextSmoke")
 	if err := nativeScopeContextSmoke(ctx, a, s); err != nil {
 		return err
 	}

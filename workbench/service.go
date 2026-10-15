@@ -117,6 +117,8 @@ type Service struct {
 	projectImport                    projectImportFunc
 	recoveryQueryRead                recoveryRestoreFunc
 	recoveryReadSerial               uint64
+	recoveryReadJobs                 map[string]*recoveryReadJob
+	recoveryReadOrder                []string
 	recoveryReaders                  map[uint64]context.CancelFunc
 	recoveryDismissPrepare           recoveryDismissPrepareFunc
 	recoveryDismissExecute           recoveryDismissExecuteFunc
@@ -310,7 +312,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		SwitchStates:           s.switchStatesLocked(),
 		SourceWarnings:         waveformSamplingWarnings(graph, s.transientSettings),
 		Recording:              s.recordingViewLocked(),
-		Recovery:               cloneRecovery(s.recovery),
+		Recovery:               s.recoveryStateLocked(),
 		VerificationSettings:   cloneVerificationSettings(s.verificationSettings),
 		VerificationInputModes: VerificationInputModes(analysis),
 		Operations:             []OperationSummary{},
@@ -716,8 +718,14 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 			out.Result = inspection
 			return out
 		}
-		if r.Command == "recovery.inspect" || r.Command == "recovery.samples" {
-			result, err := s.recoveryQueryLocked(ctx, r.Command, r.Params)
+		if r.Command == "recovery.inspect" || r.Command == "recovery.samples" || r.Command == "recovery.read.inspect" || r.Command == "recovery.read.result" || r.Command == "recovery.read.chunk" {
+			var result any
+			var err error
+			if r.Command == "recovery.read.inspect" || r.Command == "recovery.read.result" || r.Command == "recovery.read.chunk" {
+				result, err = s.recoveryReadQueryLocked(ctx, r.Command, r.Params)
+			} else {
+				result, err = s.recoveryQueryLocked(ctx, r.Command, r.Params)
+			}
 			out.Revision = s.revision
 			if err != nil {
 				var action *actionError
@@ -924,6 +932,9 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	}
 	if r.Command == "print.preview.start" && s.preview != nil {
 		s.preview.view.Actor = actor
+	}
+	if r.Command == "recovery.read.start" && len(s.recoveryReadOrder) > 0 {
+		s.recoveryReadJobs[s.recoveryReadOrder[len(s.recoveryReadOrder)-1]].work.Actor = actor
 	}
 	if r.Command == "simulation.verify" {
 		s.operations[s.lastOperation].summary.Actor = actor

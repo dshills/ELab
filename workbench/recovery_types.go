@@ -35,6 +35,7 @@ type RecoveryProblem struct {
 	Message string `json:"message"`
 }
 type RecoveryState struct {
+	Reads        []RecoveryReadWork  `json:"reads,omitempty"`
 	Directory    string              `json:"directory,omitempty"`
 	Enabled      bool                `json:"enabled"`
 	Interval     float64             `json:"interval_s"`
@@ -73,6 +74,10 @@ type RecoveryInspection struct {
 
 func cloneRecovery(in RecoveryState) RecoveryState {
 	out := in
+	out.Reads = append([]RecoveryReadWork(nil), in.Reads...)
+	for i := range out.Reads {
+		out.Reads[i] = cloneRecoveryReadWork(out.Reads[i])
+	}
 	out.Candidates = append([]RecoveryCandidate{}, in.Candidates...)
 	out.Problems = append([]RecoveryProblem{}, in.Problems...)
 	return out

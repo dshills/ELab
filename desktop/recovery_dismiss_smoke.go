@@ -41,6 +41,9 @@ func nativeRecoveryDismissSmoke(ctx context.Context, a *app.Application, s *scre
 	if err := <-action; err != nil {
 		return err
 	}
+	if err := nativeRecoveryReadSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	before := s.service.Snapshot()
 	if err := a.PostWait(ctx, func() { action <- smokeUI(s, "recovery-dismiss", nil) }); err != nil {
 		return err

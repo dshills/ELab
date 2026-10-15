@@ -1,0 +1,62 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.69.0",
+  "build_version": "84",
+  "binary_sha256": "d6f19613a294e7b6322f94bd4e7c63f75fa415a9eef19f05dd05b7834f92afb0",
+  "agent_binary_sha256": "3397d44ec85671a5c51f78cef61d9de0a7f7564a76147a94a5b57bb04c6de011",
+  "sdk_commit": "600f6c2f45680ef6b3dae943e47879ab0cd4f95f",
+  "sdk_manifest_sha256": "1030a5f8d640b04fa24966157b93ed82ecfd728dabe1711d1507e85e5ba54b37",
+  "prepared_sdk_outputs_verified": 26,
+  "checks": [
+    "Five shared commands admit, inspect, cancel and deliver captured recovery inspection/sample jobs; independent of project Save/Open work, with four readers shared with pure compatibility queries",
+    "Captured directory/ID/hash, actor, input revisions/generation, phase/status/errors and result size/digest remain observable; no partial failed/canceled result",
+    "Immutable result JSON encoded outside editor lock, capped at 16 MiB; owned typed response capped below 1 MiB, or owned <=65536-byte digest-identified chunks; snapshots contain metadata only",
+    "Core regressions cover edits/Save during blocked reads, shared capacity, cooperative cancellation/deadline/Close joining, in-flight reconfiguration, eight-job eviction, retries, ownership and query/refusal purity",
+    "Native explicit Inspect saved copy and recorded-row paging use the same start/chunk commands; decode off owner and show only matching latest captured results; switching selection cannot strand loading cache",
+    "New smoke helper initially confused PostWait queue admission with callback completion; terminal cache evidence localized it; channel-based owner observation is covered by native race regression",
+    "Final serialized lint/import/root/native race/vet, portable recovery/discovery tests, exact packaged GPU/UI smoke and all four existing LED/RC/NPN adapters pass",
+    "Public native/headless reports match exactly except transport, including detailed schemas, exact old RC graph/Verify rows, digest-checked 512-byte chunks, failures, reconfiguration and saved/capsule-byte preservation"
+  ],
+  "evidence": [
+    "docs/recovery.md#observable-recovery-inspection-and-recording-pages",
+    "workbench/recovery_read_work_test.go",
+    "desktop/recovery_read_test.go",
+    "desktop/recovery_read_smoke.go",
+    "scripts/recovery-read-demo.py",
+    "docs/validation/headless-recovery-read.json",
+    "docs/validation/desktop-recovery-read.json",
+    "docs/validation/recovery-read-public-parity.json",
+    "docs/validation/recovery-read-conformance.json"
+  ],
+  "logs": {
+    "full_quality": "667e2866c86e3a48826f9766e1f9260f529880e17ab7e377ae2e224df4f1a467",
+    "portable": "8c54ecebb8e8191531763e83437b999946c86e00e33bcc44179c059695022695",
+    "native_callback_regression": "2c19a2b7aa84c8b4b48c60e2595dd7c7fb9d3a9f1702140ef21840c8ae1d6e01",
+    "packaged_gpu_smoke": "55a3eeae3d72360fc112b3a5318c49a830567891c34e739ab3532c1d37b1bf16",
+    "initial_unlocalized_smoke_timeout": "2d6657c38f4d33f373a878bc85f2c5a9f6f823745f0a439a35c9de849dddcc18",
+    "stage_localized_timeout": "cb83859bc25cd69f0d8726f0b48081700b3384b373ea67b768af85da6263a1e3",
+    "bounded_callback_observation": "ecb194771119811c51084bc3e5332e374bb0b80cf7ddb1896bb0794c825168da"
+  },
+  "inventory": {
+    "sources": 44,
+    "sites": 349,
+    "public_commands": 149,
+    "source_routes": 121,
+    "binding_review_sites": 129
+  },
+  "notes": [
+    "Legacy pure recovery.inspect/recovery.samples response shapes and query purity preserved; admitted job reads survive caller disconnect, edits, New and directory changes",
+    "Native inspector bounds its summary to 40 components and pages to 20 rows; public result retains full validated captured graph and exact sample values",
+    "Large-result chunk ownership/budget stress test uses synthetic retained bytes to isolate transport; no claim that synthetic bytes are a validated schematic",
+    "Vellum placement/pointer-capture additions and shared button/accessibility routing delta inspected read-only; ELab does not adopt new placement API in this slice; manifest and 26 prepared outputs verified; sibling remains clean",
+    "Prior .68/83 preserved at build/ELab-before-recovery-read.app; final candidate/build/canonical binary hashes equal; all newly owned smoke/native/conformance sessions exited"
+  ],
+  "limits": [
+    "Cancellation/deadline is cooperative and does not forcibly interrupt OS reads; reader slot stays occupied until worker returns",
+    "Serialized final recovery shutdown and broader job/semantic-contract/runtime coverage remain open under AGENT-04/AGENT-02/AGENT-01",
+    "No complete physical pointer/display timing, typing/IME/focus/accessibility, general visible-latency, distribution or participant acceptance claim",
+    "Schematic SVG/PDF/PNG, captured preview and local printer submission exist; physical-printer/media/scale/device cancellation acceptance remains open",
+    "P0 remains 17 implemented /10 partial; private unsigned development app; continuing goal stays active"
+  ]
+}

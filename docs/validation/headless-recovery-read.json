@@ -1,0 +1,501 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "detailed_schemas": {
+    "start": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string",
+          "x-max-utf8-bytes": 128
+        },
+        "kind": {
+          "enum": [
+            "inspection",
+            "samples"
+          ],
+          "type": "string"
+        },
+        "limit": {
+          "default": 100,
+          "description": "Sample rows per page: omitted/zero uses 100; otherwise 1\u2013200. Offset may equal total.",
+          "maximum": 200,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "offset": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "recording_index": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "minimum": 0
+        },
+        "sha256": {
+          "description": "Exact advertised candidate SHA-256; case-sensitive comparison to the captured bytes.",
+          "pattern": "^[0-9a-fA-F]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "sha256"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-recovery-read",
+        "preconditions": [
+          "Recovery directory configured; exact candidate ID/hash is validated by worker",
+          "Fewer than four active recovery reads, shared with legacy recovery.inspect/recovery.samples"
+        ],
+        "effects": [
+          "Preserves live circuit, simulation/time, project/history/dirty state and recovery catalog/selection",
+          "Results stay tied to the captured directory and ID/hash across edits, New and recovery reconfiguration; only job metadata appears in snapshots",
+          "Reads/validates/projects/encodes outside editor lock, independently of project Save/Open work; no partial result",
+          "Caller disconnect does not cancel admitted work; explicit cancel or Close does; Close joins workers",
+          "Eight retained jobs; oldest terminal job is evicted on admission; active/canceling jobs keep their reader slot until worker returns"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed parameters"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "Four shared readers active"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Recovery not configured"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "work",
+            "when": "Recording index or page invalid"
+          },
+          {
+            "code": "invalid-recovery",
+            "phase": "work",
+            "when": "File missing, inaccessible or invalid"
+          },
+          {
+            "code": "file-conflict",
+            "phase": "work",
+            "when": "Candidate hash no longer matches"
+          },
+          {
+            "code": "result-limit",
+            "phase": "work",
+            "when": "Encoded result exceeds 16 MiB"
+          },
+          {
+            "code": "canceled",
+            "phase": "work",
+            "when": "Read canceled; no result published"
+          },
+          {
+            "code": "timeout",
+            "phase": "work",
+            "when": "Cooperative deadline exceeded; no result published"
+          }
+        ],
+        "completion": {
+          "mode": "immediate admission; inspect exact returned recovery.reads job until terminal",
+          "observe": [
+            "recovery.read.inspect",
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "recovery.read.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-inventory": "snapshot.recovery.candidates (exact id/sha256), snapshot.recovery.reads (retained job IDs)",
+      "x-kind-fields": {
+        "inspection": {
+          "forbidden": [
+            "recording_index",
+            "offset",
+            "limit"
+          ]
+        },
+        "samples": {
+          "optional": [
+            "offset",
+            "limit"
+          ],
+          "required": [
+            "recording_index"
+          ]
+        }
+      },
+      "x-max-concurrent-reads": 4,
+      "x-max-result-bytes": 16777216,
+      "x-max-retained-jobs": 8
+    },
+    "cancel": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-recovery-read",
+        "preconditions": null,
+        "effects": [
+          "Preserves live circuit, simulation/time, project/history/dirty state and recovery catalog/selection",
+          "Results stay tied to the captured directory and ID/hash across edits, New and recovery reconfiguration; only job metadata appears in snapshots"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed parameters"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Unknown or evicted read job"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Job is already terminal"
+          }
+        ],
+        "completion": {
+          "mode": "cancellation request; inspect exact job until terminal",
+          "observe": [
+            "recovery.read.inspect",
+            "project.inspect"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-inventory": "snapshot.recovery.candidates (exact id/sha256), snapshot.recovery.reads (retained job IDs)",
+      "x-max-retained-jobs": 8
+    },
+    "inspect": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-recovery-read",
+        "preconditions": null,
+        "effects": [
+          "Preserves live circuit, simulation/time, project/history/dirty state and recovery catalog/selection",
+          "Results stay tied to the captured directory and ID/hash across edits, New and recovery reconfiguration; only job metadata appears in snapshots"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed parameters"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Unknown or evicted read job"
+          }
+        ],
+        "completion": {
+          "mode": "immediate owned in-memory query; no disk IO",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-inventory": "snapshot.recovery.candidates (exact id/sha256), snapshot.recovery.reads (retained job IDs)",
+      "x-max-retained-jobs": 8
+    },
+    "result": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-recovery-read",
+        "preconditions": [
+          "Retained job completed successfully"
+        ],
+        "effects": [
+          "Preserves live circuit, simulation/time, project/history/dirty state and recovery catalog/selection",
+          "Results stay tied to the captured directory and ID/hash across edits, New and recovery reconfiguration; only job metadata appears in snapshots",
+          "Decodes immutable retained JSON outside editor lock into independently owned typed result"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed parameters"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Unknown or evicted read job"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "No complete successful result"
+          },
+          {
+            "code": "result-too-large",
+            "phase": "admission",
+            "when": "Use recovery.read.chunk for a larger complete result"
+          }
+        ],
+        "completion": {
+          "mode": "immediate owned in-memory query; no disk IO",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-inventory": "snapshot.recovery.candidates (exact id/sha256), snapshot.recovery.reads (retained job IDs)",
+      "x-max-result-bytes": 1047552,
+      "x-max-retained-jobs": 8
+    },
+    "chunk": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "limit": {
+          "default": 65536,
+          "maximum": 65536,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "offset": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-recovery-read",
+        "preconditions": [
+          "Retained job completed successfully"
+        ],
+        "effects": [
+          "Preserves live circuit, simulation/time, project/history/dirty state and recovery catalog/selection",
+          "Results stay tied to the captured directory and ID/hash across edits, New and recovery reconfiguration; only job metadata appears in snapshots",
+          "Returns an owned base64 JSON byte slice with offset/next/total and whole-result SHA-256; omitted/zero limit uses 65536"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed parameters"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Unknown or evicted read job"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "No complete successful result"
+          }
+        ],
+        "completion": {
+          "mode": "immediate owned in-memory query; no disk IO",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-inventory": "snapshot.recovery.candidates (exact id/sha256), snapshot.recovery.reads (retained job IDs)",
+      "x-max-retained-jobs": 8,
+      "x-offset-range": "0 through result_bytes inclusive; end returns empty bytes"
+    }
+  },
+  "captured_graph": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "pulse-source",
+        "name": "Pulse source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-square.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -110
+        },
+        "value": 10000,
+        "unit": "\u03a9",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "C1",
+        "kind": "capacitor",
+        "name": "Capacitor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 1e-06,
+        "unit": "F",
+        "model": "ideal-capacitor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 110
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "C1.1",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "C1.2",
+        "to": "GND.reference",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "GND.reference",
+        "to": "V1.negative",
+        "connected": true
+      }
+    ]
+  },
+  "sample_page": {
+    "rows": [
+      {
+        "time_s": 0.01,
+        "values": [
+          3.1606027941427883,
+          5
+        ]
+      },
+      {
+        "time_s": 0.011,
+        "values": [
+          3.335644581509602,
+          5
+        ]
+      }
+    ],
+    "probes": [
+      {
+        "id": "v:C1.1",
+        "label": "C1.1 / ground",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      }
+    ],
+    "offset": 10,
+    "next_offset": 12,
+    "total": 21
+  },
+  "checks": [
+    "stable captured read IDs and progress/terminal metadata",
+    "exact pure-query inspection and original Verify sample parity",
+    "digest-checked 512-byte result chunks equal structured result",
+    "no partial result on hash failure",
+    "query/refusal/live/history/selection/file purity",
+    "retained result survives directory reconfiguration"
+  ],
+  "limits": [
+    "Controlled tests qualify blocked reads, cancellation, four-reader capacity, eviction and Close joining",
+    "No complete physical typing/accessibility or general latency qualification"
+  ]
+}

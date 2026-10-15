@@ -162,31 +162,32 @@ func main() {
 }
 
 type screen struct {
-	nativePointerPane                string
-	sweepDrawing                     *sweepCanvas
-	previewPixels                    previewPixels
-	requestHelp                      *workbench.DiagnosticHelp
-	requestHelpRevision              uint64
-	displayStarted                   time.Time
-	app                              *app.Application
-	service                          *workbench.Service
-	commands                         *command.Registry
-	drawing                          *commandCanvas
-	scope                            *scopeCanvas
-	fileBusy                         bool
-	fileMessage, pendingCommand      string
-	pendingParams                    json.RawMessage
-	chooseFile                       func(context.Context, app.FileOptions) (string, error)
-	serial                           uint64
-	errorMessage                     string
-	renderRevision, lastDrawRevision uint64
-	lastDrawAnalysis                 string
-	lastPalette                      appPalette
-	nativePalette                    atomic.Pointer[appPalette]
-	menuSerial                       uint64
-	menuCommandRevision              *uint64
-	actionContext                    *actionContext
-	fieldContext                     *actionContext
+	recoveryInspection, recoverySamples recoveryReadCache
+	nativePointerPane                   string
+	sweepDrawing                        *sweepCanvas
+	previewPixels                       previewPixels
+	requestHelp                         *workbench.DiagnosticHelp
+	requestHelpRevision                 uint64
+	displayStarted                      time.Time
+	app                                 *app.Application
+	service                             *workbench.Service
+	commands                            *command.Registry
+	drawing                             *commandCanvas
+	scope                               *scopeCanvas
+	fileBusy                            bool
+	fileMessage, pendingCommand         string
+	pendingParams                       json.RawMessage
+	chooseFile                          func(context.Context, app.FileOptions) (string, error)
+	serial                              uint64
+	errorMessage                        string
+	renderRevision, lastDrawRevision    uint64
+	lastDrawAnalysis                    string
+	lastPalette                         appPalette
+	nativePalette                       atomic.Pointer[appPalette]
+	menuSerial                          uint64
+	menuCommandRevision                 *uint64
+	actionContext                       *actionContext
+	fieldContext                        *actionContext
 }
 
 func (s *screen) invoke(id string, p any) workbench.Response {
