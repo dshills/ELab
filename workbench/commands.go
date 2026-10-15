@@ -55,7 +55,11 @@ func capability(id, description string, mutates bool, schema string) Capability 
 	var input map[string]any
 	_ = json.Unmarshal([]byte(schema), &input)
 	encoded, _ := json.Marshal(timeInputSchema(id, input))
-	return Capability{id, description, mutates, encoded, "Snapshot for mutations; query data otherwise", append(json.RawMessage(nil), output...)}
+	outputLabel := "Query result"
+	if mutates {
+		outputLabel = "Snapshot"
+	}
+	return Capability{id, description, mutates, encoded, outputLabel, append(json.RawMessage(nil), output...)}
 }
 
 func typedCapability(id, description string, t reflect.Type) Capability {
@@ -99,6 +103,7 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(RecordingPlayParams{}), "urn:elab:playback:1"},
 	{reflect.TypeOf(InputParams{}), "urn:elab:input-mode:1"},
 	{reflect.TypeOf(ValueParams{}), "urn:elab:component-value:1"},
+	{reflect.TypeOf(PrintState{}), "urn:elab:printing:1"},
 	{reflect.TypeOf(PrintPreview{}), "urn:elab:print-preview:1"},
 	{reflect.TypeOf(DisplayPreferences{}), "urn:elab:display-preferences:1"},
 	{reflect.TypeOf(VerificationPage{}), "urn:elab:verification-page:1"},
@@ -268,6 +273,12 @@ func Catalog() []Capability {
 		typedCapability("sweep.import", "Wait for captured sweep import; kept recorded data, not a live solve; preserves graph/physics and later view choices", reflect.TypeOf(RecordingImportParams{})),
 		typedCapability("sweep.export", "Export complete captured DC curve as json or SI csv; atomic file guards; no live mutation", reflect.TypeOf(VerificationExportParams{})),
 		typedCapability("sweep.keep.set", "Include/exclude a completed sweep in project storage", reflect.TypeOf(RecordingKeepParams{})),
+		capability("print.printers.refresh", "Refresh local system printers in background; inspect printing.work; never submits a job", true, `{"type":"object","additionalProperties":false}`),
+		typedCapability("print.destination.set", "Choose listed printer and 1–10 copies; session only", reflect.TypeOf(PrintDestinationParams{})),
+		typedCapability("print.submit", "Submit exact visible completed preview to listed printer in background; captures PDF/page/source; acknowledgment is not physical completion", reflect.TypeOf(PrintSubmitParams{})),
+		typedCapability("print.job.refresh", "Refresh a retained acknowledged system job state in background", reflect.TypeOf(IDParams{})),
+		typedCapability("print.job.cancel", "Request cancellation of a retained acknowledged system job; refresh observes terminal state", reflect.TypeOf(IDParams{})),
+		typedCapability("print.work.cancel", "Cancel exact active print preparation/discovery/control work; acknowledged submissions stay submitted", reflect.TypeOf(IDParams{})),
 		typedCapability("print.preview.start", "Capture page/source and render preview in background; one worker; preserves circuit/physics; no printer submission", reflect.TypeOf(PreviewParams{})),
 		typedCapability("print.preview.cancel", "Cancel active preview preparation by exact ID", reflect.TypeOf(IDParams{})),
 		typedCapability("print.preview.close", "Close exact preview ID and release pixels; cancel active preparation", reflect.TypeOf(IDParams{})),

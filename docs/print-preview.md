@@ -2,7 +2,7 @@
 
 Use **Print preview** in the component rail. It replaces the drawing pane with a captured white-paper page. Preview puts page settings in the left rail and temporarily hides the live scope and summary cards to leave room for the page; returning restores those panels without changing acquisition or visibility preferences. The Output page controls supply A4/Letter, orientation, margin, grayscale/color, fit or explicit scale, and optional live overlays. **Refresh preview** captures current settings and source; **Back to circuit** releases the image. Editing remains available in the Inspector and through agent commands. A source/settings change shows “source changed; refresh to update” while preserving captured pixels.
 
-The preview and PNG/PDF file output use the same captured schematic renderer. Preview pixels are a 150 DPI PNG; the native image uses Vellum's immutable tiled image and contain fit. PDF remains vector output. Existing **Export PDF** exports the current editor source; it does not export an older preview. This release does not submit a printer job.
+The preview and PNG/PDF file output use the same captured schematic renderer. Preview pixels are a 150 DPI PNG; the native image uses Vellum's immutable tiled image and contain fit. PDF remains vector output. Existing **Export PDF** exports the current editor source; it does not export an older preview. Use **Print captured page** to submit the shown capture; see [printer jobs](printing.md).
 
 ## Shared commands
 
@@ -18,6 +18,6 @@ Mutation revision/document guards and retry semantics are unchanged. Preview com
 
 `source_current` compares document generation, graph/experiment settings and source annotation content; default-page captures also compare current page settings. Explicit page overrides are independent of later default-page edits. Opt-in live overlays additionally compare captured display/readings, so live numeric changes can stale that preview. View pan/zoom and theme changes do not alter a captured page. Snapshot/event payloads contain metadata only, never the image. Native decoding verifies chunk identity, size, digest and dimensions off the UI owner thread, then publishes only if the same preview is still open.
 
-The macOS cgo page renderer is required; unsupported builds return `unsupported`. Incomplete drawings are allowed. Existing explicit-scale fit errors remain explicit. No printer discovery/submission, printer selection, tiling, physical output or universal crowded-page readability claim is made.
+The macOS cgo page renderer is required; unsupported builds return `unsupported`. Incomplete drawings are allowed. Existing explicit-scale fit errors remain explicit. Printer discovery, explicit selection and submission are covered by the separate [printing contract](printing.md). Tiling, physical output and universal crowded-page readability remain unqualified.
 
 Validation includes captured PNG/export byte parity, edits during blocked rendering, owned chunks/pages, stale IDs, cancellation and close joining, timeout classification, bounded discovery, shared native controls, hidden-canvas gesture refusal and an actual packaged native smoke. The public [demo](../scripts/print-preview-demo.py) exercises both stdio and native socket transports. Visual evidence and exact release checks are recorded separately.

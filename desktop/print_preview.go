@@ -120,5 +120,5 @@ func (s *screen) printPreviewPanel(state workbench.Snapshot) []ui.Node {
 		}
 	}
 	body.Grow = true
-	return []ui.Node{toolbar, quiet("preview-caption", text), body, quiet("preview-help", "Page preview only. Export PDF to create a printable file.")}
+	return []ui.Node{toolbar, quiet("preview-caption", text), body, quiet("preview-help", "Print captured page submits this page. Export PDF creates a printable file from the current circuit.")}
 }

@@ -10,9 +10,12 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/dshills/elab/internal/printspool"
 )
 
 type Snapshot struct {
+	Printing               *PrintState            `json:"printing,omitempty"`
 	VerificationInputModes []string               `json:"verification_input_modes"`
 	DCSweep                *SweepState            `json:"dc_sweep,omitempty"`
 	PrintPreview           *PrintPreview          `json:"print_preview,omitempty"`
@@ -87,6 +90,12 @@ type savedResponse struct {
 	project     *projectJob
 }
 type Service struct {
+	printState                       *PrintState
+	printWork                        *printWork
+	printJobs                        []*PrintJob
+	printSerial, printJobSerial      uint64
+	printBackend                     printspool.Backend
+	printRender                      func(context.Context, exportCapture) ([]byte, error)
 	sweeps                           *sweepStore
 	sweepSerial                      uint64
 	sweepViewerRevision              uint64
@@ -218,6 +227,8 @@ func newGraphService(solver func(context.Context, Circuit) (Result, error), grap
 		sweepImport:            prepareSweepImport,
 		sweepCompute:           computeDCSweep,
 		previewRender:          renderSchematicPage,
+		printRender:            renderSchematicPage,
+		printBackend:           printspool.System(),
 		electrical:             1,
 		graph:                  graph.Clone(),
 		drawing:                DefaultDrawing(),
@@ -280,6 +291,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	}
 	out := Snapshot{
 		SourceAnnotations:      s.sourceAnnotationsLocked(),
+		Printing:               s.printingStateLocked(),
 		PrintPreview:           s.printPreviewLocked(),
 		DCSweep:                s.sweepStateLocked(),
 		SchematicPage:          page,
@@ -528,6 +540,9 @@ func (s *Service) closeLocked() {
 		s.preview.cancel()
 		s.preview.data = nil
 		s.preview.view.Visible = false
+	}
+	if s.printWork != nil {
+		s.printWork.cancel()
 	}
 	s.cancelProjectWorkLocked("canceled")
 	s.cancelInputWorkLocked("canceled")
@@ -901,6 +916,12 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	if r.Command == "sweep.start" && s.sweeps != nil {
 		s.sweeps.operations[s.sweeps.selected].summary.Actor = actor
 	}
+	if s.printWork != nil && s.printWork.view.Kind == r.Command && s.printWork.view.Status == "queued" {
+		s.printWork.view.Actor = actor
+		if s.printWork.view.Kind == "print.submit" {
+			s.printWork.job.Actor = actor
+		}
+	}
 	if r.Command == "print.preview.start" && s.preview != nil {
 		s.preview.view.Actor = actor
 	}
@@ -953,6 +974,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 func cloneSnapshot(state Snapshot) Snapshot {
 	state.SourceAnnotations = cloneSourceAnnotations(state.SourceAnnotations)
 	state.PrintPreview = clonePrintPreview(state.PrintPreview)
+	state.Printing = clonePrintState(state.Printing)
 	state.DCSweep = cloneSweepState(state.DCSweep)
 	state.SchematicPage = cloneSchematicPage(state.SchematicPage)
 	state.ProjectWork = cloneProjectWork(state.ProjectWork)

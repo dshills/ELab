@@ -1,0 +1,67 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.66.0",
+  "build_version": "81",
+  "binary_sha256": "6ffc62ba8e352d101bddc80ff93155142f3622ad9c0559a06311e23c1d5f9768",
+  "agent_binary_sha256": "00713abe88920ed20ae5d92e1ad2991102701e7100bb00bfde1092a39d5aeaf4",
+  "sdk_commit": "8101822c3a4935080e9b25b591f899cdd88d6768",
+  "sdk_manifest_sha256": "2350790e5e9aa333f7ffc3c45a512972ea3be95125465dcb2da0f2b62c155bfe",
+  "prepared_sdk_outputs_verified": 21,
+  "checks": [
+    "Six shared printing commands expose discovery, explicit destination/copies, exact captured-preview submission, owned spool refresh/cancel and cooperative work cancellation",
+    "Printing preserves live graph/time/charge/history/dirty state; captured source/page remain pinned through later edits; private PDF is removed after spool call",
+    "Actual libcups against an isolated Unix-socket IPP fixture validates destination attributes, exact PDF delivery, media/orientation/copies/no-scaling/one-sided options, job acknowledgment, state and cancellation",
+    "Service fakes cover retries/ownership, preparation cancellation, acknowledgment during local cancellation, unknown submission, blocked-submit responsiveness, Close joining, failures/stale IDs and protected eight-job retention",
+    "Real preview to vector-PDF path succeeds for a fake destination after a source edit; no physical printing is performed",
+    "Native committed controls match shared copy commands, reject fractional copies and disable submission without an accepting destination; exact packaged native/GPU smoke passes",
+    "Final headless/native no-paper workflows match detailed schemas, real discovery summary, captured preview digest and refusal outcomes exactly except transport label",
+    "Full serialized root/native lint/import/race/vet pass; final lint, native printing race, real-render/retention race, discovery and portable tests cover subsequent bounded refinements",
+    "Final binary passes all four existing LED/RC/NPN reference adapters"
+  ],
+  "evidence": [
+    "docs/printing.md",
+    "workbench/printing_test.go",
+    "desktop/printing_test.go",
+    "internal/printspool/system_darwin_test.go",
+    "scripts/printing-demo.py",
+    "docs/validation/headless-printing.json",
+    "docs/validation/desktop-printing.json",
+    "docs/validation/printing-public-parity.json",
+    "docs/validation/printing-conformance.json"
+  ],
+  "logs": {
+    "full_quality": "391b2104debd438b01a57bee24a7d827ecf37ffaeafa4612a6b22fd78d2fb126",
+    "final_lint": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "final_native_race": "e2647f414d8a973d5afa4d87f00aa3774e497385efce1f66ef3a33cd46972a06",
+    "render_retention_race": "0dfed94e47868ee9529c1450f2835b19798cce66ab1fc575807dc672bc4dbad2",
+    "final_discovery": "f9878f19395798b92361cda22ea0416e024ca70dfe2f2536daaf8c77bee1e19d",
+    "portable": "5cbd307a9589cfa8aed63cdac122cd5b4913465bbf264430295693e7ac65b89e",
+    "libcups_fixture": "cc823f7b2fda56025d18621229a18798f27160d323bdd34b3bd6f543744ba063",
+    "final_gpu_smoke": "5431abf7d749dcbcca3679d807be414e0073ae221e434d38acfdb82be4b7ba80"
+  },
+  "inventory": {
+    "sources": 41,
+    "sites": 340,
+    "public_commands": 144,
+    "source_routes": 118,
+    "binding_review_sites": 125
+  },
+  "physical_jobs_submitted": 0,
+  "notes": [
+    "Original ordinary catalog budget preserved by shorter descriptive output labels; structured output schemas remain authoritative",
+    "Actual libcups discovery can merge remembered user destinations; validation submits only to the isolated fixture destination, never a configured physical queue",
+    "SDK managed-workbench replay/input routing delta inspected read-only; common driver traversal requalified; manifest and 21 prepared hashes unchanged",
+    "Final build/candidate/canonical binary hashes equal; prior .65/80 preserved at build/ELab-before-printing.app and intermediate evidence retained",
+    "All newly owned native sessions exited via public close; no system queue configuration or physical print job changed"
+  ],
+  "limits": [
+    "macOS cgo/local CUPS only; no arbitrary remote scheduler or interactive credential prompt",
+    "No physical paper, printer imageable-margin/scale/media/color or actual-device cancellation acceptance; tiling remains future work",
+    "Submitted means spooler acknowledgment, not physical completion; unknown acknowledgment never automatically resubmits",
+    "System I/O timeouts and cancellation are cooperative, not a preemptive total-time guarantee; submitted system jobs continue after app Close unless explicitly canceled",
+    "Print job records are session-only, not saved project assets; unresolved/unknown jobs protected from automatic eviction",
+    "No complete physical typing/IME/focus/accessibility, broader visible-latency/distribution/participant or all-command runtime coverage claim",
+    "Private unsigned app; P0 remains 17 implemented /10 partial; broad continuing goal stays active"
+  ]
+}

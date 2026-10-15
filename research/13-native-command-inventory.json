@@ -26,7 +26,8 @@
     "desktop/pointer_darwin.go": "dcba0a5dd410e19898356d6b698117f00a5c3c570adc1c78b489031a127bc031",
     "desktop/pointer_other.go": "b7e07c52104aec22b4c4b8e30319774481f1cff5fbc0d5e1da947d2da20905c5",
     "desktop/print_page.go": "f06fef8a9db0e31cdf512c16c3b8155004c17964897b61e723b6cb0cdc796bf6",
-    "desktop/print_preview.go": "905caa8284e1bfd16d6812e15061e36485f83f6ddd3ae06f248181e571101ebe",
+    "desktop/print_preview.go": "4d7f6c538c1feaec47d4161dc0652387d8a0d4701d203b927588e5eaeda8c5aa",
+    "desktop/printing.go": "00358432a4a2b4e512b24cc0d1d0130060a14097b6050ecf02aed41360ff419f",
     "desktop/probes.go": "3f3ce8e64c6aaba57439b63542f95eed784604bbe555b18a0f303e791c0e9e01",
     "desktop/project_work.go": "4d80b2c111c1d6778844570344479c35d3bfd641840aba0ebbe8f81083c961e1",
     "desktop/recording.go": "7b217db046d8fbab154974a3bd98dad19af771c9fee565b34c7dc06d9da63156",
@@ -39,7 +40,7 @@
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
     "desktop/time_fields.go": "a20e6b2fc6fc368fabb7fd4defae5fc3083987f94a2beabd1780e7ae9a9264b8",
     "desktop/verification.go": "28887f81058b20942201feb1f8d833fd245f7f198604d9d4dcd67d28263ce0c5",
-    "desktop/view.go": "071d569eca58531ef977b058dd897dfb26af234653c9a4e726953b0e31e1f889",
+    "desktop/view.go": "0d9558cb324587c3a50e0deb03bc36f7651e154ba9de4b8cc4451ecb7c2dfd7e",
     "desktop/waveforms.go": "0c4a197175f5736621127540e652b6535fd3cb1ff4ab3f7bf3653eb433a9c6c9",
     "desktop/workflow.go": "9a3d8316eea46adf551ca0f00201807c7e491d74fd5884326e5c9be645d4167e"
   },
@@ -97,10 +98,16 @@
     "parts.list",
     "parts.search.set",
     "potentiometer.wiper.set",
+    "print.destination.set",
+    "print.job.cancel",
+    "print.job.refresh",
     "print.preview.cancel",
     "print.preview.close",
     "print.preview.image",
     "print.preview.start",
+    "print.printers.refresh",
+    "print.submit",
+    "print.work.cancel",
     "project.clear",
     "project.inspect",
     "project.load",
@@ -1734,6 +1741,99 @@
       "status": "literal-public-route"
     },
     {
+      "file": "desktop/printing.go",
+      "line": 14,
+      "function": "*screen.printingControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"printers-refresh\", \"Refresh printers\", \"print.printers.refresh\", struct{}{})",
+      "public_commands": [
+        "print.printers.refresh"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/printing.go",
+      "line": 33,
+      "function": "*screen.printingControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"print.destination.set\", workbench.PrintDestinationParams{PrinterID: e.SelectedID, Copies: printing.Copies})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/printing.go",
+      "line": 34,
+      "function": "*screen.printingControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"print.destination.set\", workbench.PrintDestinationParams{PrinterID: e.SelectedID, Copies: printing.Copies})",
+      "public_commands": [
+        "print.destination.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/printing.go",
+      "line": 35,
+      "function": "*screen.printingControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"print.destination.set\", map[string]any{\"printer_id\": printing.PrinterID, \"copies\": e.Number})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/printing.go",
+      "line": 36,
+      "function": "*screen.printingControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"print.destination.set\", map[string]any{\"printer_id\": printing.PrinterID, \"copies\": e.Number})",
+      "public_commands": [
+        "print.destination.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/printing.go",
+      "line": 43,
+      "function": "*screen.printingControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"printer-submit\", \"Print captured page\", \"print.submit\", workbench.PrintSubmitParams{PreviewID: p.ID, PrinterID: printing.PrinterID, Copies: printing.Copies})",
+      "public_commands": [
+        "print.submit"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/printing.go",
+      "line": 54,
+      "function": "*screen.printingControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"printer-work-cancel\", \"Cancel preparation\", \"print.work.cancel\", workbench.IDParams{ID: w.ID})",
+      "public_commands": [
+        "print.work.cancel"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/printing.go",
+      "line": 65,
+      "function": "*screen.printingControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"printer-refresh-\"+job.ID, \"Refresh job\", \"print.job.refresh\", workbench.IDParams{ID: job.ID})",
+      "public_commands": [
+        "print.job.refresh"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/printing.go",
+      "line": 67,
+      "function": "*screen.printingControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"printer-cancel-\"+job.ID, \"Cancel print job\", \"print.job.cancel\", workbench.IDParams{ID: job.ID})",
+      "public_commands": [
+        "print.job.cancel"
+      ],
+      "status": "literal-public-route"
+    },
+    {
       "file": "desktop/probes.go",
       "line": 68,
       "function": "*screen.probeInspector",
@@ -3336,7 +3436,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 609,
+      "line": 610,
       "function": "*screen.view",
       "kind": "node-Custom",
       "expression": "Custom: s.drawing",
@@ -3344,7 +3444,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 619,
+      "line": 620,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(pause, pauseText)",
@@ -3555,10 +3655,16 @@
     "operation.select",
     "parts.search.set",
     "potentiometer.wiper.set",
+    "print.destination.set",
+    "print.job.cancel",
+    "print.job.refresh",
     "print.preview.cancel",
     "print.preview.close",
     "print.preview.image",
     "print.preview.start",
+    "print.printers.refresh",
+    "print.submit",
+    "print.work.cancel",
     "project.clear",
     "project.load",
     "project.load.start",

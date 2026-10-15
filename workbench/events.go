@@ -35,7 +35,7 @@ type EventPollResult struct {
 	Snapshot        *Snapshot          `json:"snapshot,omitempty"`
 }
 
-var eventTopics = []string{"state", "project", "editor", "view", "simulation", "diagnostics", "jobs", "measurements", "recordings", "recovery", "preferences", "lifecycle", "library", "preview", "sweeps"}
+var eventTopics = []string{"state", "project", "editor", "view", "simulation", "diagnostics", "jobs", "measurements", "recordings", "recovery", "preferences", "lifecycle", "library", "preview", "sweeps", "printing"}
 
 func commandEventTopics(command string, documentChanged bool) []string {
 	topics := []string{}
@@ -60,6 +60,8 @@ func commandEventTopics(command string, documentChanged bool) []string {
 		topics = append(topics, "sweeps", "jobs", "recordings")
 	case strings.HasPrefix(command, "print.preview."):
 		topics = append(topics, "preview")
+	case strings.HasPrefix(command, "print."):
+		topics = append(topics, "printing", "jobs")
 	case strings.HasPrefix(command, "project."), strings.HasPrefix(command, "export."):
 		topics = append(topics, "project", "jobs")
 	case strings.HasPrefix(command, "example."):

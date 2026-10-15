@@ -593,7 +593,8 @@ func (s *screen) view() ui.Node {
 				exports = append(exports, node)
 			}
 		}
-		palette = append(s.schematicPageControls(state), exports...)
+		palette = append(s.printingControls(state), s.schematicPageControls(state)...)
+		palette = append(palette, exports...)
 	} else if sweepVisible(state) {
 		palette = s.sweepInspector(state)
 	}

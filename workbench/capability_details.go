@@ -65,6 +65,9 @@ type inputRelation struct {
 }
 
 func addCapabilityDetails(id string, schema map[string]any) {
+	if addPrintingCapabilityDetails(id, schema) {
+		return
+	}
 	if addVerificationCapabilityDetails(id, schema) {
 		return
 	}

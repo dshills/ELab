@@ -364,6 +364,8 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		s.sweeps.operations[p.ID].keep = p.Keep
 		return nil
+	case "print.printers.refresh", "print.destination.set", "print.submit", "print.job.refresh", "print.job.cancel", "print.work.cancel":
+		return s.printCommandLocked(command, raw)
 	case "print.preview.start":
 		var p PreviewParams
 		if err := params(raw, &p); err != nil {

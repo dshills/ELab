@@ -23,6 +23,6 @@ Page settings are session output choices, not saved circuit preferences. Output 
 
 The [validation receipt](validation/pdf-export-validation.json), [headless exports](validation/headless-pdf-export-final.json) and [native exports](validation/desktop-pdf-export.json) record six reference circuits and shared settings. Rendered checks cover page dimensions, all text within bounds, Greek units, grayscale and representative legibility. The smallest reference text was about 7.5 pt in the flasher. This is not a universal readability guarantee for arbitrary capacity/layout.
 
-This implements PDF output and shared page preparation. **Native print preview, printer discovery/submission, tiled pages and physical printer qualification remain pending.** Saving a PDF does not prove printing. No printer job is submitted by these commands.
+This implements PDF output and shared page preparation. [Print preview](print-preview.md) and [local printer discovery/submission](printing.md) are implemented separately. Tiled pages and physical printer qualification remain pending. Saving a PDF does not prove printing. No printer job is submitted by these commands.
 
 [PNG image export](schematic-image.md) now shares this page preparation and drawing path.

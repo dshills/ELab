@@ -92,6 +92,28 @@ func nativePrintPreviewSmoke(ctx context.Context, a *app.Application, s *screen)
 	if err := <-action; err != nil {
 		return err
 	}
+	if err := a.PostWait(ctx, func() {
+		if r := s.invoke("print.destination.set", workbench.PrintDestinationParams{Copies: 1}); r.Error != nil {
+			action <- fmt.Errorf("print settings: %s", r.Error.Message)
+			return
+		}
+		if err := smokeUI(s, "printer-copies", &ui.ChangeEvent{Number: 2}); err != nil {
+			action <- err
+			return
+		}
+		state := s.service.Snapshot()
+		submit, ok := findAction(s.view(), "printer-submit")
+		if state.Printing.Copies != 2 || state.Printing.PrinterID != "" || len(state.Printing.Jobs) != 0 || !ok || !submit.Disabled {
+			action <- fmt.Errorf("native shared print controls or no-destination protection failed")
+			return
+		}
+		action <- nil
+	}); err != nil {
+		return err
+	}
+	if err := <-action; err != nil {
+		return err
+	}
 	if err := activate("preview-close"); err != nil {
 		return err
 	}

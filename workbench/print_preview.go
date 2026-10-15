@@ -175,7 +175,9 @@ func (s *Service) runPrintPreview(job *previewJob, render func(context.Context, 
 		job.view.Bytes = len(data)
 		job.view.SHA256 = hex.EncodeToString(sum[:])
 	}
-	job.capture = exportCapture{}
+	if job.view.Status != "completed" || !job.view.Visible {
+		job.capture = exportCapture{}
+	}
 	job.cancel()
 	s.revision++
 	s.signalLocked("preview")
@@ -194,6 +196,9 @@ func (s *Service) cancelPrintPreviewLocked(p IDParams, close bool) error {
 	if close {
 		s.preview.view.Visible = false
 		s.preview.data = nil
+		if !operationActive(s.preview.view.Status) {
+			s.preview.capture = exportCapture{}
+		}
 		s.preview.view.Bytes = 0
 		s.preview.view.SHA256 = ""
 	}

@@ -1,0 +1,455 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "detailed_schemas": {
+    "print.printers.refresh": {
+      "additionalProperties": false,
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "local-macOS-spooler",
+        "preconditions": [],
+        "effects": [
+          "Preserves source circuit, live simulation/time, dirty state and history",
+          "Refreshes listed destinations/default/accepting/state without submitting; failed/canceled refresh preserves prior inventory; removed selected destination clears selection"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed or out-of-range parameters"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "Print discovery/preparation/control work is already active"
+          },
+          {
+            "code": "print-failed",
+            "phase": "work",
+            "when": "Rendering/local spooler rejects or fails"
+          },
+          {
+            "code": "timeout",
+            "phase": "work",
+            "when": "Cooperative context deadline"
+          },
+          {
+            "code": "canceled",
+            "phase": "work",
+            "when": "Local work canceled before acknowledgment"
+          },
+          {
+            "code": "unsupported",
+            "phase": "work",
+            "when": "Platform backend unavailable"
+          }
+        ],
+        "completion": {
+          "mode": "immediate work admission; inspect printing.work until terminal",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "print.work.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-inventory": "snapshot.printing.destinations, snapshot.printing.jobs, snapshot.printing.work and snapshot.print_preview",
+      "x-max-retained-jobs": 8,
+      "x-platform": "macOS cgo; local CUPS socket; no interactive authentication or arbitrary remote scheduler"
+    },
+    "print.destination.set": {
+      "additionalProperties": false,
+      "properties": {
+        "copies": {
+          "maximum": 10,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "printer_id": {
+          "description": "Exact discovered destination ID. Submit requires accepting_jobs; no automatic destination selection. Empty ID clears session selection only in destination.set.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "printer_id",
+        "copies"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "local-macOS-spooler",
+        "preconditions": [],
+        "effects": [
+          "Preserves source circuit, live simulation/time, dirty state and history",
+          "Changes only session printer/copy controls; does not submit"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed or out-of-range parameters"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "Print discovery/preparation/control work is already active"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Nonempty printer ID absent from discovery"
+          }
+        ],
+        "completion": {
+          "mode": "immediate session setting",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-inventory": "snapshot.printing.destinations, snapshot.printing.jobs, snapshot.printing.work and snapshot.print_preview",
+      "x-max-retained-jobs": 8,
+      "x-platform": "macOS cgo; local CUPS socket; no interactive authentication or arbitrary remote scheduler"
+    },
+    "print.submit": {
+      "additionalProperties": false,
+      "properties": {
+        "copies": {
+          "maximum": 10,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "preview_id": {
+          "description": "Exact visible completed preview ID; prints this captured source/page even if editor/default page changed later. Refresh preview first to print edits.",
+          "type": "string"
+        },
+        "printer_id": {
+          "description": "Exact discovered destination ID. Submit requires accepting_jobs; no automatic destination selection. Empty ID clears session selection only in destination.set.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "preview_id",
+        "printer_id",
+        "copies"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "local-macOS-spooler",
+        "preconditions": [
+          "Exact visible completed preview; listed accepting printer; copies 1\u201310",
+          "Fewer than eight unresolved jobs, or a terminal job is evictable"
+        ],
+        "effects": [
+          "Preserves source circuit, live simulation/time, dirty state and history",
+          "Captures preview source/page/provenance, renders a private PDF \u22648 MiB and submits one-sided with selected paper/orientation/copies; temporary file removed after spool call",
+          "Acknowledged spool ID is retained even if preparation cancellation/Close arrived while submitting; submitted is not physical completion",
+          "Missing submission acknowledgment produces unknown/submission-unknown and never automatically resubmits; inspect system queue before retrying"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed or out-of-range parameters"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "Print discovery/preparation/control work is already active"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "Preview absent/hidden/incomplete or ID stale"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Printer absent or not accepting jobs"
+          },
+          {
+            "code": "record-limit",
+            "phase": "admission",
+            "when": "Eight unresolved retained jobs"
+          },
+          {
+            "code": "print-failed",
+            "phase": "work",
+            "when": "Rendering/local spooler rejects or fails"
+          },
+          {
+            "code": "timeout",
+            "phase": "work",
+            "when": "Cooperative context deadline"
+          },
+          {
+            "code": "canceled",
+            "phase": "work",
+            "when": "Local work canceled before acknowledgment"
+          },
+          {
+            "code": "unsupported",
+            "phase": "work",
+            "when": "Platform backend unavailable"
+          },
+          {
+            "code": "submission-unknown",
+            "phase": "work",
+            "when": "Spool call acknowledgment missing; job may exist"
+          }
+        ],
+        "completion": {
+          "mode": "immediate work admission; inspect printing.work until terminal",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "print.work.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-inventory": "snapshot.printing.destinations, snapshot.printing.jobs, snapshot.printing.work and snapshot.print_preview",
+      "x-max-retained-jobs": 8,
+      "x-platform": "macOS cgo; local CUPS socket; no interactive authentication or arbitrary remote scheduler"
+    },
+    "print.job.refresh": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "local-macOS-spooler",
+        "preconditions": [
+          "ELab-retained job with an acknowledged spool ID; no arbitrary system job IDs"
+        ],
+        "effects": [
+          "Preserves source circuit, live simulation/time, dirty state and history",
+          "Refresh reads spooler job-state; absent/expired system job is an error and never assumed printed",
+          "Cancel requests exact owned spool job, records acknowledgment and reads state; failure retains last known status. Cancellation cannot retract pages already printed"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed or out-of-range parameters"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "Print discovery/preparation/control work is already active"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "ELab job unknown/evicted"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "No spool ID, or cancel requested for a terminal job"
+          },
+          {
+            "code": "print-failed",
+            "phase": "work",
+            "when": "Rendering/local spooler rejects or fails"
+          },
+          {
+            "code": "timeout",
+            "phase": "work",
+            "when": "Cooperative context deadline"
+          },
+          {
+            "code": "canceled",
+            "phase": "work",
+            "when": "Local work canceled before acknowledgment"
+          },
+          {
+            "code": "unsupported",
+            "phase": "work",
+            "when": "Platform backend unavailable"
+          },
+          {
+            "code": "spool-job-unavailable",
+            "phase": "work",
+            "when": "Spooler no longer retains job"
+          }
+        ],
+        "completion": {
+          "mode": "immediate work admission; inspect printing.work until terminal",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "print.work.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-inventory": "snapshot.printing.destinations, snapshot.printing.jobs, snapshot.printing.work and snapshot.print_preview",
+      "x-max-retained-jobs": 8,
+      "x-platform": "macOS cgo; local CUPS socket; no interactive authentication or arbitrary remote scheduler"
+    },
+    "print.job.cancel": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "local-macOS-spooler",
+        "preconditions": [
+          "ELab-retained job with an acknowledged spool ID; no arbitrary system job IDs"
+        ],
+        "effects": [
+          "Preserves source circuit, live simulation/time, dirty state and history",
+          "Refresh reads spooler job-state; absent/expired system job is an error and never assumed printed",
+          "Cancel requests exact owned spool job, records acknowledgment and reads state; failure retains last known status. Cancellation cannot retract pages already printed"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed or out-of-range parameters"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "Print discovery/preparation/control work is already active"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "ELab job unknown/evicted"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "No spool ID, or cancel requested for a terminal job"
+          },
+          {
+            "code": "print-failed",
+            "phase": "work",
+            "when": "Rendering/local spooler rejects or fails"
+          },
+          {
+            "code": "timeout",
+            "phase": "work",
+            "when": "Cooperative context deadline"
+          },
+          {
+            "code": "canceled",
+            "phase": "work",
+            "when": "Local work canceled before acknowledgment"
+          },
+          {
+            "code": "unsupported",
+            "phase": "work",
+            "when": "Platform backend unavailable"
+          },
+          {
+            "code": "spool-job-unavailable",
+            "phase": "work",
+            "when": "Spooler no longer retains job"
+          }
+        ],
+        "completion": {
+          "mode": "immediate work admission; inspect printing.work until terminal",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "print.work.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-inventory": "snapshot.printing.destinations, snapshot.printing.jobs, snapshot.printing.work and snapshot.print_preview",
+      "x-max-retained-jobs": 8,
+      "x-platform": "macOS cgo; local CUPS socket; no interactive authentication or arbitrary remote scheduler"
+    },
+    "print.work.cancel": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "local-macOS-spooler",
+        "preconditions": [
+          "Exact current queued/running/canceling work ID"
+        ],
+        "effects": [
+          "Preserves source circuit, live simulation/time, dirty state and history",
+          "Cooperatively cancels preparation/discovery/control; cannot revoke an acknowledged spool submission; use print.job.cancel for that job"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed or out-of-range parameters"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Work ID no longer current"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Work already terminal"
+          }
+        ],
+        "completion": {
+          "mode": "cancellation request; inspect printing.work until terminal",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-inventory": "snapshot.printing.destinations, snapshot.printing.jobs, snapshot.printing.work and snapshot.print_preview",
+      "x-max-retained-jobs": 8,
+      "x-platform": "macOS cgo; local CUPS socket; no interactive authentication or arbitrary remote scheduler"
+    }
+  },
+  "discovery": {
+    "status": "completed",
+    "destination_count": 1,
+    "error_code": null
+  },
+  "preview_digest": "3069108987d00105cc76058b012ba05181e6599eacb3df43f2a88f0d1d340eca",
+  "checks": [
+    "six detailed printing contracts",
+    "discovery and session copy settings",
+    "no automatic printer selection",
+    "missing queue, copy and foreign job refusals preserve state",
+    "captured preview remains intact during source edits",
+    "no spool submissions in this public workflow"
+  ],
+  "limits": [
+    "Positive submit/refresh/cancel use service fakes and actual libcups against an isolated IPP fixture",
+    "No physical print, printer setup, device margins/scaling or actual-device cancellation acceptance"
+  ]
+}

@@ -43,7 +43,7 @@ On macOS, File, Examples, Theme and Inspector dropdowns use native menus with ch
 
 **File → Close window** / **Cmd+W** use shared [unsaved-work close protection](docs/native-close.md), preserving active file operations and pending choices.
 
-**Export PDF** creates a [printable schematic](docs/schematic-pdf.md) with shared A4/Letter page settings. **Export PNG** creates a [schematic image](docs/schematic-image.md) from the same Output page settings. Printer submission remains a separate backlog item.
+**Export PDF** creates a [printable schematic](docs/schematic-pdf.md) with shared A4/Letter page settings. **Export PNG** creates a [schematic image](docs/schematic-image.md) from the same Output page settings. [Print captured page](docs/printing.md) submits the preview to a chosen macOS printer through shared commands, with observable spool jobs and cancellation. Physical-device qualification remains pending.
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
 
@@ -227,7 +227,7 @@ Transient failures now expose [distinct integration-limit causes and recovery](d
 
 Waveform sources now show [shared schematic/export annotations](docs/source-annotations.md) for sine parameters, pulse timing and applied/pending/stale input state. Fit includes the annotation block.
 
-[Captured DC sweeps](docs/dc-sweeps.md) plot source bias, resistance or wiper position without changing live physics. **DC sweep → Open sweep JSON…** reopens shared curves, including on a blank sheet. Users and agents share import, trace/cursor, keep, export and project-save commands. [Schematic PDF/PNG output](docs/schematic-pdf.md) and [print preview](docs/print-preview.md) are available; native printer discovery/submission remains planned.
+[Captured DC sweeps](docs/dc-sweeps.md) plot source bias, resistance or wiper position without changing live physics. **DC sweep → Open sweep JSON…** reopens shared curves, including on a blank sheet. Users and agents share import, trace/cursor, keep, export and project-save commands. [Schematic PDF/PNG output](docs/schematic-pdf.md), [print preview](docs/print-preview.md) and [local printer submission](docs/printing.md) are available; physical printer qualification remains pending.
 
 Agents can inspect [sweep command contracts](docs/capability-details.md#sweep-command-contracts) for normalized parameter bounds, state/error conditions and completion behavior. Native **Clear point** and `sweep.cursor.set {"index":null}` share the same clearing behavior; omitting the index remains invalid.
 
