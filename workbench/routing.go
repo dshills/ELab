@@ -78,14 +78,14 @@ func WirePath(g Graph, w Wire) []Point {
 	routeCache.Unlock()
 	return append([]Point{}, path...)
 }
-func computeWireRoute(g Graph, w Wire) []Point {
-	a, ok := g.TerminalPoint(w.From)
+func wireRouteEndpoints(g Graph, w Wire) (a, b, sa, sb Point, ok bool) {
+	a, ok = g.TerminalPoint(w.From)
 	if !ok {
-		return nil
+		return a, b, sa, sb, false
 	}
-	b, ok := g.TerminalPoint(w.To)
+	b, ok = g.TerminalPoint(w.To)
 	if !ok {
-		return nil
+		return a, b, sa, sb, false
 	}
 	stub := func(ref string, p Point) Point {
 		c, _, _ := g.Terminal(ref)
@@ -100,11 +100,34 @@ func computeWireRoute(g Graph, w Wire) []Point {
 		}
 		return p
 	}
-	sa, sb := stub(w.From, a), stub(w.To, b)
-	cell := func(p Point) routeCell {
-		return routeCell{int(math.Round(p.X / 10)), int(math.Round(p.Y / 10))}
+	sa, sb = stub(w.From, a), stub(w.To, b)
+	return a, b, sa, sb, true
+}
+
+func routeSearchBounds(sa, sb Point) (start, end routeCell, minX, maxX, minY, maxY int) {
+	cell := func(p Point) routeCell { return routeCell{int(math.Round(p.X / 10)), int(math.Round(p.Y / 10))} }
+	start, end = cell(sa), cell(sb)
+	minX, maxX = min(start.x, end.x)-12, max(start.x, end.x)+12
+	minY, maxY = min(start.y, end.y)-12, max(start.y, end.y)+12
+	return
+}
+
+// WireRoutingBounds encloses all possible routes without running the path finder.
+func WireRoutingBounds(g Graph, w Wire) (Point, Point, bool) {
+	a, b, sa, sb, ok := wireRouteEndpoints(g, w)
+	if !ok {
+		return Point{}, Point{}, false
 	}
-	start, end := cell(sa), cell(sb)
+	_, _, x0, x1, y0, y1 := routeSearchBounds(sa, sb)
+	return Point{min(float64(x0*10), a.X, b.X), min(float64(y0*10), a.Y, b.Y)}, Point{max(float64(x1*10), a.X, b.X), max(float64(y1*10), a.Y, b.Y)}, true
+}
+
+func computeWireRoute(g Graph, w Wire) []Point {
+	a, b, sa, sb, ok := wireRouteEndpoints(g, w)
+	if !ok {
+		return nil
+	}
+	start, end, minX, maxX, minY, maxY := routeSearchBounds(sa, sb)
 	rects := []routeRect{}
 	for _, p := range g.Components {
 		if !IsConnectivityPrimitive(p.Kind) {
@@ -121,8 +144,6 @@ func computeWireRoute(g Graph, w Wire) []Point {
 		return false
 	}
 	distance := func(c routeCell) int { return int(math.Abs(float64(c.x-end.x)) + math.Abs(float64(c.y-end.y))) }
-	minX, maxX := int(math.Min(float64(start.x), float64(end.x)))-12, int(math.Max(float64(start.x), float64(end.x)))+12
-	minY, maxY := int(math.Min(float64(start.y), float64(end.y)))-12, int(math.Max(float64(start.y), float64(end.y)))+12
 	open := &routeQueue{{start, 0, distance(start)}}
 	heap.Init(open)
 	best := map[routeCell]int{start: 0}

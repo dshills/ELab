@@ -78,6 +78,9 @@ var commonSchemas = []struct {
 	Type reflect.Type
 	ID   string
 }{
+	{reflect.TypeOf(NavigateParams{}), "urn:elab:object-navigation:1"},
+	{reflect.TypeOf(CenterSelectionParams{}), "urn:elab:selection-center:1"},
+	{reflect.TypeOf(FitParams{}), "urn:elab:view-fit:1"},
 	{reflect.TypeOf(ExportStartParams{}), "urn:elab:export-start:1"},
 	{reflect.TypeOf(SchematicPage{}), "urn:elab:schematic-page:1"},
 	{reflect.TypeOf(ExportParams{}), "urn:elab:export-path:1"},
@@ -156,6 +159,18 @@ func SchemaRegistry() map[string]json.RawMessage {
 		}
 		if common.Type == reflect.TypeOf(RecordingTimingParams{}) {
 			schema = timeInputSchema("recording.timing", schema)
+		}
+		if common.Type == reflect.TypeOf(NavigateParams{}) {
+			inputProperty(schema, "direction")["enum"] = []string{"next", "previous", "first", "last"}
+			inputProperty(schema, "kind")["enum"] = []string{"", "all", "components", "wires"}
+			inputProperty(schema, "kind")["default"] = "all"
+		}
+		if common.Type == reflect.TypeOf(FitParams{}) {
+			for _, field := range []string{"width_px", "height_px"} {
+				prop := inputProperty(schema, field)
+				prop["minimum"] = 64
+				prop["maximum"] = 100000
+			}
 		}
 		schema["$id"] = common.ID
 		encoded, _ := json.Marshal(schema)
@@ -343,6 +358,8 @@ func Catalog() []Capability {
 		capability("drawing.cancel", "Cancel an unfinished placement or wire gesture and return to selection", true, `{"type":"object","additionalProperties":false}`),
 		typedCapability("component.set", "Edit a numeric component value or net label; parts.list and command details expose per-kind bounds and waveform coupling", reflect.TypeOf(ValueParams{})),
 		capability("circuit.connection.set", "Legacy fixture alias for R1.2 to D1.anode; new drawings use wire.connect/object.delete", true, `{"type":"object","required":["connected"],"properties":{"connected":{"type":"boolean"}},"additionalProperties":false}`),
+		typedCapability("selection.navigate", "Select next/previous/first/last object in component-then-wire order; kind all/components/wires; wraps; optional center preserves zoom; cancels unfinished drawing", reflect.TypeOf(NavigateParams{})),
+		typedCapability("view.selection.center", "Center selected object without changing zoom; optional id guards selection; wire center uses routed half length", reflect.TypeOf(CenterSelectionParams{})),
 		typedCapability("component.select", "Select any component or wire by stable ID; empty ID clears selection", reflect.TypeOf(IDParams{})),
 		typedCapability("capacitor.initial.set", "Set a capacitor voltage at time zero (pin 1 minus pin 2), within ±12 V; value default uses experiment initial_voltage_v; saved and undoable", reflect.TypeOf(ValueParams{})),
 		typedCapability("example.flasher", "Load a DC-powered two-NPN / two-capacitor astable LED flasher with an explicit 0.1 V C1 startup condition; protects unsaved work", reflect.TypeOf(ReplaceParams{})),
@@ -364,7 +381,7 @@ func Catalog() []Capability {
 		capability("simulation.restart", "Restart transient time at zero or recalculate DC; retain paused state and current input mode", true, `{"type":"object","additionalProperties":false}`),
 		capability("view.pan", "Pan by world-coordinate delta without restarting simulation", true, `{"type":"object","required":["dx","dy"],"properties":{"dx":{"type":"number"},"dy":{"type":"number"}},"additionalProperties":false}`),
 		capability("view.zoom", "Zoom by 0.25–4 around an optional world point; final zoom clamped to 0.01–4", true, `{"type":"object","required":["factor"],"properties":{"factor":{"type":"number","minimum":0.25,"maximum":4},"anchor":{"type":"object","required":["x","y"],"properties":{"x":{"type":"number"},"y":{"type":"number"}},"additionalProperties":false}},"additionalProperties":false}`),
-		typedCapability("view.fit", "Fit component bounds into width_px/height_px (64–100000); defaults 650 × 400", reflect.TypeOf(FitParams{})),
+		typedCapability("view.fit", "Fit schematic bodies, labels, routing envelopes and annotations into width_px/height_px (64–100000); defaults 650 × 400", reflect.TypeOf(FitParams{})),
 		typedCapability("app.close", "Admit protected close and wait for cleanup; inspect shutdown outcome", reflect.TypeOf(ReplaceParams{})),
 		typedCapability("app.close.start", "Admit protected irreversible close; background cleanup/join; inspect shutdown", reflect.TypeOf(ReplaceParams{})),
 		queryCapability("app.close.inspect", "Read retained shutdown progress/outcome; no IO", reflect.TypeOf(IDParams{}), reflect.TypeOf(ShutdownWork{})),

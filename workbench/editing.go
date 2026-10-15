@@ -810,32 +810,31 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if !finite(p.Width) || !finite(p.Height) || p.Width < 64 || p.Height < 64 || p.Width > 100000 || p.Height > 100000 {
 			return fmt.Errorf("fit dimensions must be 64–100000 pixels")
 		}
-		s.view = View{Zoom: 1}
-		if len(s.graph.Components) > 0 || len(s.pins) > 0 {
-			minX, maxX, minY, maxY := 0., 0., 0., 0.
-			if len(s.graph.Components) > 0 {
-				p := s.graph.Components[0].Position
-				minX, maxX, minY, maxY = p.X, p.X, p.Y, p.Y
-			}
-			for _, c := range s.graph.Components {
-				minX = math.Min(minX, c.Position.X)
-				maxX = math.Max(maxX, c.Position.X)
-				minY = math.Min(minY, c.Position.Y)
-				maxY = math.Max(maxY, c.Position.Y)
-			}
-			for _, reading := range s.pinnedReadingsLocked() {
-				min, max := PinnedReadingBounds(reading)
-				minX, minY = math.Min(minX, min.X), math.Min(minY, min.Y)
-				maxX, maxY = math.Max(maxX, max.X), math.Max(maxY, max.Y)
-			}
-			for _, annotation := range s.sourceAnnotationsLocked() {
-				min, max := SourceAnnotationBounds(annotation)
-				minX, minY = math.Min(minX, min.X), math.Min(minY, min.Y)
-				maxX, maxY = math.Max(maxX, max.X), math.Max(maxY, max.Y)
-			}
-			s.view.Center = Point{(minX + maxX) / 2, (minY + maxY) / 2}
-			s.view.Zoom = math.Max(.01, math.Min(2, math.Min(p.Width/(maxX-minX+180), p.Height/(maxY-minY+180))))
+		view, err := s.fitViewLocked(p)
+		if err != nil {
+			return err
 		}
+		s.view = view
+		return nil
+	case "selection.navigate":
+		var p NavigateParams
+		if err := params(raw, &p, "direction"); err != nil {
+			return err
+		}
+		return s.navigateLocked(p)
+	case "view.selection.center":
+		var p CenterSelectionParams
+		if err := params(raw, &p); err != nil {
+			return err
+		}
+		if p.ID != "" && p.ID != s.selected {
+			return &actionError{"conflict", "Selected object changed"}
+		}
+		center, err := s.objectCenterLocked(s.selected)
+		if err != nil {
+			return err
+		}
+		s.view.Center = center
 		return nil
 	case "view.pan":
 		var p struct {

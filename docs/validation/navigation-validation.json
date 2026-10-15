@@ -1,0 +1,63 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.72.0",
+  "build_version": "87",
+  "binary_sha256": "777881eff2c1425cf112c907e6e9d721f321231499e61e5dd1a30df27a90a00c",
+  "agent_binary_sha256": "de503592363a60969014a76a3eeb87608691de0180c52c4662fa03fac644fb69",
+  "sdk": {
+    "commit": "cc95afa66ce491fe1f0d9f70fbb126c0e6fb230a",
+    "clean": true,
+    "manifest_sha256": "3e09e1baac4b24ad38a0a97812275151a00f6ae24e5fcf2d17a42c30bc313c51",
+    "final_prepared_output_counts": {
+      "upstream": 226,
+      "typesetting": 5
+    }
+  },
+  "checks": [
+    "Long net-label Fit regression fails before and passes after; Fit includes conservative component/label/terminal/source annotation/pinned-card/routing envelope bounds",
+    "Routing envelope shares unchanged router endpoints/search bounds and encloses actual flasher routes without fitting through an all-wire path search",
+    "Shared selection.navigate and view.selection.center cover stable order, filters, wrapping, centered wire half length, preserved zoom/source/physics/history/dirty state and atomic invalid/unavailable/conflict/view-limit refusals",
+    "Native short Inspector controls and focused canvas Option chords use shared commands; captured command/document guards refuse delayed input; busy/hidden/drag/closed admission checks remain",
+    "Compact Catalog exceeded 64 KiB with initial inline schemas; navigation/Fit inputs now use existing registry with detailed root expansion, direction/kind enums and dimension bounds; original budget tests pass",
+    "Full serialized root/native lint/import/race/vet suite passes; final default-schema metadata correction has focused discovery/navigation/Fit regression pass",
+    "Exact final packaged GPU/UI smoke exercises navigation controls and protected close; all four adapters pass three existing LED/RC/NPN workflows",
+    "Public native/headless navigation results match exactly except transport, including long-label view, filters/wrapping/centering and preserved source/physics/history",
+    "Read-only native accessibility inspection exposes named Previous schematic object, Next schematic object and Center selection controls; no physical keyboard, screenshot or screen-reader acceptance inferred",
+    "Canonical app is byte-identical to qualified final candidate; earlier .71/86 preserved at build/ELab-before-navigation.app; owned test hosts terminal; sibling Vellum clean"
+  ],
+  "evidence": [
+    "docs/schematic-navigation.md",
+    "workbench/navigation_test.go",
+    "desktop/navigation_test.go",
+    "desktop/navigation_smoke.go",
+    "scripts/navigation-demo.py",
+    "docs/validation/headless-navigation.json",
+    "docs/validation/desktop-navigation.json",
+    "docs/validation/navigation-public-parity.json",
+    "docs/validation/navigation-conformance.json"
+  ],
+  "logs_sha256": {
+    "navigation-before.log": "5344d4b3eed2792b913da8606b41d4e6c175b73f00c1b774e3b18a9e08f2f8be",
+    "navigation-check-3.log": "4dcf16b929cae4e2efa913febee98a5c5c8a0c11d91f858aec10de484cd527dc",
+    "navigation-schema-final.log": "f6697ec2efadbd7d517587b3dba96d2c6b27ac8a514de4b0a709edd469d94c06",
+    "navigation-build-final.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "navigation-smoke-final.log": "a61e530eeef1415a0c98f18b9cbb6fd43b64f12eeeb58c19ba8ac4f0bfb54176",
+    "navigation-headless-final.log": "8b43bb6ffc289ec14ddbf9863935028f2c23207884b5c780111f86484c6ee115",
+    "navigation-native-demo.log": "e67767a51e780cc015a4031cba4017cf336c31cef06020f806e8e1847d3aca4c",
+    "navigation-conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d"
+  },
+  "source_inventory": {
+    "sources": 45,
+    "sites": 355,
+    "public_commands": 154,
+    "source_routes": 124,
+    "binding_review_sites": 129
+  },
+  "limitations": [
+    "Fit uses conservative envelopes and can leave extra whitespace; below minimum zoom it refuses instead of silently clipping",
+    "No complete mounted typing/focus/IME, native physical keyboard, custom MeshCanvas accessibility, screen-reader or visible-latency acceptance established",
+    "Schematic SVG/PDF/PNG/preview and local printer commands already exist; physical printer/tiling acceptance remains open",
+    "P0 remains 17 implemented /10 partial; development app is unsigned; continuing goal remains active"
+  ]
+}

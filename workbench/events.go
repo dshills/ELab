@@ -40,6 +40,8 @@ var eventTopics = []string{"state", "project", "editor", "view", "simulation", "
 func commandEventTopics(command string, documentChanged bool) []string {
 	topics := []string{}
 	switch {
+	case strings.HasPrefix(command, "selection."):
+		topics = append(topics, "editor", "view")
 	case strings.HasPrefix(command, "component."), strings.HasPrefix(command, "wire."), strings.HasPrefix(command, "drawing."), strings.HasPrefix(command, "editor."), strings.HasPrefix(command, "edit."), strings.HasPrefix(command, "capacitor."), strings.HasPrefix(command, "source."), strings.HasPrefix(command, "switch."), strings.HasPrefix(command, "potentiometer."):
 		topics = append(topics, "editor")
 	case strings.HasPrefix(command, "view."):

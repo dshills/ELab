@@ -75,6 +75,12 @@ func (c *commandCanvas) Mount(parent tree.Node) core.Widget {
 			return
 		}
 		chord := strings.ToLower(string(e.KeyChord()))
+		if direction := navigationDirection(chord); direction != "" {
+			captured := c.screen.service.Snapshot()
+			c.Owner.Do(func() { c.navigateObject(direction, captured.CommandRevision, captured.Document.Generation) })
+			e.SetHandled()
+			return
+		}
 		dx, dy := 0., 0.
 		switch chord {
 		case "leftarrow":
@@ -372,4 +378,28 @@ func (s *screen) routeNativePointer(pane string, phase int, p, delta workbench.P
 			s.drawing.routePointer(phase, p, delta)
 		}
 	}
+}
+
+// Only the focused schematic receives these chords; text-entry arrows remain local.
+func navigationDirection(chord string) string {
+	switch chord {
+	case "alt+leftarrow":
+		return "previous"
+	case "alt+rightarrow":
+		return "next"
+	case "alt+home":
+		return "first"
+	case "alt+end":
+		return "last"
+	}
+	return ""
+}
+
+// Runs on the application owner, with the event's original document/command guard.
+func (c *commandCanvas) navigateObject(direction string, revision, generation uint64) {
+	state := c.screen.service.Snapshot()
+	if c.dragging || state.Closed || c.screen.fileBusy || c.screen.pendingCommand != "" || sourcePaneHidden(state) {
+		return
+	}
+	c.screen.invokeAtCommandRevision("selection.navigate", workbench.NavigateParams{Direction: direction, Center: true}, revision, generation)
 }

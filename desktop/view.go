@@ -232,6 +232,14 @@ func (s *screen) view() ui.Node {
 		}
 		s.invoke("component.select", workbench.IDParams{ID: id})
 	}}}
+	previous := s.action("selection-previous", "Previous", "selection.navigate", workbench.NavigateParams{Direction: "previous", Center: true})
+	previous.Accessibility.Name = "Previous schematic object"
+	next := s.action("selection-next", "Next", "selection.navigate", workbench.NavigateParams{Direction: "next", Center: true})
+	next.Accessibility.Name = "Next schematic object"
+	previous.Disabled, next.Disabled = len(objectOptions) == 1, len(objectOptions) == 1
+	center := s.action("selection-center", "Center selection", "view.selection.center", workbench.CenterSelectionParams{ID: state.Selected})
+	center.Disabled = state.Selected == ""
+	inspector = append(inspector, ui.Node{ID: "selection-navigation", Kind: ui.Row, Children: []ui.Node{previous, next}}, center, quiet("selection-navigation-help", "Canvas: Option + ← / →\nHome / End with Option: first / last"))
 	inspector = append(inspector, placement...)
 	inspector = append(inspector, s.npnControls(state)...)
 	if workbench.IsNetworkAnalysis(state.Analysis) {
