@@ -3,7 +3,6 @@ package workbench
 import (
 	"context"
 	"fmt"
-	"time"
 )
 
 type InputWork struct {
@@ -83,7 +82,7 @@ func (s *Service) startInputWorkLocked(mode string, wiper *WiperParams, graph Gr
 	s.cancelInputWorkLocked("superseded")
 	s.actuationRevision++
 	s.inputSerial++
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), InputWorkDeadline)
 	command := "simulation.input.set"
 	if wiper != nil {
 		command = "potentiometer.wiper.set"

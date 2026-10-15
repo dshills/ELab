@@ -18,6 +18,7 @@ type Snapshot struct {
 	Shutdown               *ShutdownWork          `json:"shutdown,omitempty"`
 	Printing               *PrintState            `json:"printing,omitempty"`
 	VerificationInputModes []string               `json:"verification_input_modes"`
+	LiveInputModes         []string               `json:"live_input_modes"`
 	DCSweep                *SweepState            `json:"dc_sweep,omitempty"`
 	PrintPreview           *PrintPreview          `json:"print_preview,omitempty"`
 	SourceAnnotations      []SourceAnnotation     `json:"source_annotations"`
@@ -288,7 +289,11 @@ func (s *Service) Snapshot() Snapshot { s.mu.Lock(); defer s.mu.Unlock(); return
 func (s *Service) snapshotLocked() Snapshot {
 	page, _, _ := normalizeSchematicPage(&s.exportPage)
 	graph := s.graph.Clone()
-	compiled, _, _ := graph.Compile()
+	compiled, _, diagnostic := graph.Compile()
+	liveModes := []string{}
+	if diagnostic == nil {
+		liveModes = LiveInputModes(compiled.Analysis)
+	}
 	analysis := compiled.Analysis
 	if analysis == "" {
 		analysis = "DC operating point"
@@ -318,6 +323,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		Recovery:               s.recoveryStateLocked(),
 		VerificationSettings:   cloneVerificationSettings(s.verificationSettings),
 		VerificationInputModes: VerificationInputModes(analysis),
+		LiveInputModes:         liveModes,
 		Operations:             []OperationSummary{},
 		SelectedOperation:      s.selectedOperation,
 		LastOperation:          s.lastOperation,
@@ -635,7 +641,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 		if err := params(r.Params, &struct{}{}); err != nil {
 			return s.failure(r, "invalid-params", err.Error())
 		}
-		bounded, cancel := context.WithTimeout(ctx, 5*time.Second)
+		bounded, cancel := context.WithTimeout(ctx, SimulationWaitTimeout)
 		defer cancel()
 		var state Snapshot
 		var err error
@@ -1061,6 +1067,7 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	state.Recovery = cloneRecovery(state.Recovery)
 	state.VerificationSettings = cloneVerificationSettings(state.VerificationSettings)
 	state.VerificationInputModes = append([]string{}, state.VerificationInputModes...)
+	state.LiveInputModes = append([]string{}, state.LiveInputModes...)
 	state.Operations = append([]OperationSummary{}, state.Operations...)
 	for i := range state.Operations {
 		if state.Operations[i].Error != nil {
@@ -1143,7 +1150,7 @@ func legacyStepMayWait(r Request) bool {
 		return false
 	}
 	var p StepParams
-	return params(r.Params, &p, "duration_s") == nil && finite(p.Duration) && p.Duration > 0 && p.Duration <= 1
+	return params(r.Params, &p, "duration_s") == nil && finite(p.Duration) && p.Duration > 0 && p.Duration <= MaxManualStepSeconds
 }
 
 func (s *Service) legacyStepNeedsInitialization(r Request, actor string) bool {

@@ -238,21 +238,18 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	captionNode := quiet("scope-caption", caption)
 	captionNode.Style.MaxSize = ui.Some(ui.Size{Width: 240})
 	controls := []ui.Node{s.scopeVisibilityButton(state), title, captionNode}
-	modes := []struct{ id, text string }{{"auto", "Auto"}, {"charge", "Charge"}, {"discharge", "Discharge"}}
-	if npn {
-		modes = []struct{ id, text string }{{"auto", "Auto"}, {"high", "High"}, {"low", "Low"}}
-	}
-	if t != nil && (t.Engine == workbench.MixedEngineID || t.Engine == workbench.NetworkEngineID || t.Engine == workbench.WaveformEngineID) {
+	modeLabels := map[string]string{"auto": "Auto", "charge": "Charge", "discharge": "Discharge", "high": "High", "low": "Low"}
+	if t != nil && workbench.IsNetworkAnalysis(state.Analysis) {
 		for _, c := range state.Components {
 			if c.ID == t.SourceID && c.Kind == "dc-source" {
-				modes = []struct{ id, text string }{{"auto", "Auto"}, {"high", "Power on"}, {"low", "Power off"}}
+				modeLabels["high"], modeLabels["low"] = "Power on", "Power off"
 			}
 		}
 	}
-	for _, mode := range modes {
-		n := s.action("input-"+mode.id, mode.text, "simulation.input.set", workbench.InputParams{Mode: mode.id})
+	for _, mode := range state.LiveInputModes {
+		n := s.action("input-"+mode, modeLabels[mode], "simulation.input.set", workbench.InputParams{Mode: mode})
 		n.Disabled = t == nil || t.Stale
-		n = buttonStyle(n, t != nil && t.Mode == mode.id && t.PendingMode == "")
+		n = buttonStyle(n, t != nil && t.Mode == mode && t.PendingMode == "")
 		controls = append(controls, n)
 	}
 	traceOptions := []ui.Option{{ID: "__none", Label: "Inspect trace…"}}
@@ -358,7 +355,17 @@ func (s *screen) transientInspector(state workbench.Snapshot) []ui.Node {
 		}
 		nodes = append(nodes, quiet("setting-label-"+setting.id, setting.text), ui.Node{ID: "setting-" + setting.id, Kind: ui.NumberField, Number: float32(setting.value * setting.scale), Numeric: ui.Numeric{Min: float32(setting.min), Max: float32(setting.max), Step: float32(.001)}, Accessibility: ui.Accessibility{Name: setting.text}, Change: func(e ui.ChangeEvent) {
 			next := cfg
-			setting.set(&next, float64(e.Number)/setting.scale)
+			// Vellum number events are float32. Map displayed range endpoints
+			// back to their declared float64 values, so 0.001 is not above
+			// the exact minimum playback/step boundary after widening.
+			value := float64(e.Number)
+			if e.Number == float32(setting.min) {
+				value = setting.min
+			}
+			if e.Number == float32(setting.max) {
+				value = setting.max
+			}
+			setting.set(&next, value/setting.scale)
 			s.invoke("simulation.transient.set", next)
 		}})
 	}

@@ -1,0 +1,816 @@
+{
+  "passed": true,
+  "source_report": "build/live-contracts-electrical-conformance/report.json",
+  "source_report_sha256": "fdd37dd2924b9a8102c3ce8e27f274e249eda046261f0f1fb3017e6cac438b69",
+  "reproduce": "build/elab-conformance --agent-binary build/elab-agent --native-binary build/ELab-live-controls-final.app/Contents/MacOS/ELab --electrical-suite --artifacts NEW_EMPTY_DIRECTORY",
+  "platform": "darwin/arm64",
+  "go_version": "go1.27.2",
+  "adapters": [
+    {
+      "name": "in-process",
+      "equivalent_to_in_process": true,
+      "workflows": [
+        {
+          "name": "led",
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "measurements_si": {
+            "current_1k_a": 0.0029167965774405296,
+            "current_2k_a": 0.001476723549138745,
+            "inspect:i:Light": 0.001476723549138745,
+            "inspect:v:Light": 2.04655290172251,
+            "inspect:v:Light.anode": 2.04655290172251,
+            "inspect:v:Light.cathode": 0,
+            "verify-max:i:Light": 0.001476723549138745,
+            "verify-max:v:Light": 2.04655290172251,
+            "verify-max:v:Limit": 2.95344709827749,
+            "verify-max:v:Supply": 5,
+            "verify-min:i:Light": 0.001476723549138745,
+            "verify-min:v:Light": 2.04655290172251,
+            "verify-min:v:Limit": 2.95344709827749,
+            "verify-min:v:Supply": 5
+          }
+        },
+        {
+          "name": "rc",
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "measurements_si": {
+            "cursor_interval_s": 0.01,
+            "inspect:i:Storage": 0.0005,
+            "inspect:v:Storage": 0,
+            "inspect:v:Storage.1": 0,
+            "inspect:v:Storage.2": 0,
+            "verify-max:i:Limit": 0.0005,
+            "verify-max:v:Storage.1": 4.966535735141783,
+            "verify-min:i:Limit": -0.0004966535735141783,
+            "verify-min:v:Storage.1": 0,
+            "voltage_10ms_v": 3.1606027941427883,
+            "voltage_20k_10ms_v": 1.9673467014368329
+          }
+        },
+        {
+          "name": "npn",
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "measurements_si": {
+            "active_collector_a": 0.0013678075180062058,
+            "active_vce_v": 3.632192481993794,
+            "cutoff_collector_a": 2.000000165480742e-14,
+            "cutoff_vce_v": 4.99999999998,
+            "inspect:i:Transistor.base": 0.00042999736510602657,
+            "inspect:i:Transistor.collector": 0.004929600780861814,
+            "inspect:i:Transistor.emitter": 0.00535959814596784,
+            "inspect:v:Transistor.base": 0.700026348939734,
+            "inspect:v:Transistor.collector": 0.07039921913818598,
+            "inspect:v:Transistor.emitter": 0,
+            "saturation_collector_a": 0.004929600780861814,
+            "saturation_vce_v": 0.07039921913818598,
+            "verify-max:i:Transistor.base": 0.00042999736510602657,
+            "verify-max:i:Transistor.collector": 0.004929600780861814,
+            "verify-max:v:Transistor.base": 0.700026348939734,
+            "verify-max:v:Transistor.collector": 0.07039921913818598,
+            "verify-min:i:Transistor.base": 0.00042999736510602657,
+            "verify-min:i:Transistor.collector": 0.004929600780861814,
+            "verify-min:v:Transistor.base": 0.700026348939734,
+            "verify-min:v:Transistor.collector": 0.07039921913818598
+          }
+        }
+      ],
+      "electrical": {
+        "reference_sha256": "c4a131bd9de758d295add56ecec5c9bec6d23078c8bc5877034757c500d750b7",
+        "reference_method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "checks_count": 294,
+        "checks_sha256": "3fc06e1cebc677425bf0ee3eb3a44f8f8dba3f8ac9d57680cf693ddef8ad78b4",
+        "flasher_refinement": [
+          {
+            "output_step_s": 0.001,
+            "samples": 2001,
+            "rising_edge_brackets_s": [
+              [
+                0.8059999999999999,
+                0.8069999999999999
+              ],
+              [
+                1.294,
+                1.295
+              ],
+              [
+                1.7820000000000005,
+                1.7830000000000004
+              ]
+            ],
+            "median_period_s": 0.4880000000000002,
+            "minimum_si": {
+              "i:D1": 3.116162079229247e-06,
+              "i:D2": 3.1161276977188765e-06,
+              "v:C1": -0.5452046981164742,
+              "v:C2": -0.6221297143143942
+            },
+            "maximum_si": {
+              "i:D1": 0.0028880562546656375,
+              "i:D2": 0.002887197891928938,
+              "v:C1": 2.5866546195225757,
+              "v:C2": 2.586656593536156
+            },
+            "verify_200ms_wall_s": 0.044859917,
+            "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+          },
+          {
+            "output_step_s": 0.0005,
+            "samples": 4001,
+            "rising_edge_brackets_s": [
+              [
+                0.8054999999999999,
+                0.8059999999999999
+              ],
+              [
+                1.2934999999999999,
+                1.294
+              ],
+              [
+                1.7815000000000003,
+                1.7820000000000005
+              ]
+            ],
+            "median_period_s": 0.4880000000000002,
+            "minimum_si": {
+              "i:D1": 3.105475726953055e-06,
+              "i:D2": 3.1055333767517075e-06,
+              "v:C1": -0.5415035701396174,
+              "v:C2": -0.6258117988741956
+            },
+            "maximum_si": {
+              "i:D1": 0.002888043474861735,
+              "i:D2": 0.002888023486100953,
+              "v:C1": 2.5868494222571017,
+              "v:C2": 2.5868501090781812
+            },
+            "verify_200ms_wall_s": 0.053873958,
+            "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+          },
+          {
+            "output_step_s": 0.00025,
+            "samples": 8001,
+            "rising_edge_brackets_s": [
+              [
+                0.80575,
+                0.8059999999999999
+              ],
+              [
+                1.29375,
+                1.294
+              ],
+              [
+                1.7817500000000004,
+                1.7820000000000005
+              ]
+            ],
+            "median_period_s": 0.4880000000000001,
+            "minimum_si": {
+              "i:D1": 3.098967581180042e-06,
+              "i:D2": 3.0989700883626553e-06,
+              "v:C1": -0.5438907655952019,
+              "v:C2": -0.6258388887524938
+            },
+            "maximum_si": {
+              "i:D1": 0.0028882555709925945,
+              "i:D2": 0.002888023731023803,
+              "v:C1": 2.586965424355074,
+              "v:C2": 2.5869653792881206
+            },
+            "verify_200ms_wall_s": 0.067037875,
+            "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+          }
+        ],
+        "limitations": [
+          "independent high-precision implementations of pinned educational equations; no physical-device or independently configured SPICE qualification",
+          "flasher refinement compares the same adaptive kernel at three output steps; it is not an independent flasher reference",
+          "timings are backend Verify completion on this run, not p95 input-to-visible or edit-to-result qualification",
+          "existing model, 1000-step, rolling-history and integration work limits remain enforced"
+        ]
+      }
+    },
+    {
+      "name": "headless-stdio",
+      "equivalent_to_in_process": true,
+      "workflows": [
+        {
+          "name": "led",
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "measurements_si": {
+            "current_1k_a": 0.0029167965774405296,
+            "current_2k_a": 0.001476723549138745,
+            "inspect:i:Light": 0.001476723549138745,
+            "inspect:v:Light": 2.04655290172251,
+            "inspect:v:Light.anode": 2.04655290172251,
+            "inspect:v:Light.cathode": 0,
+            "verify-max:i:Light": 0.001476723549138745,
+            "verify-max:v:Light": 2.04655290172251,
+            "verify-max:v:Limit": 2.95344709827749,
+            "verify-max:v:Supply": 5,
+            "verify-min:i:Light": 0.001476723549138745,
+            "verify-min:v:Light": 2.04655290172251,
+            "verify-min:v:Limit": 2.95344709827749,
+            "verify-min:v:Supply": 5
+          }
+        },
+        {
+          "name": "rc",
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "measurements_si": {
+            "cursor_interval_s": 0.01,
+            "inspect:i:Storage": 0.0005,
+            "inspect:v:Storage": 0,
+            "inspect:v:Storage.1": 0,
+            "inspect:v:Storage.2": 0,
+            "verify-max:i:Limit": 0.0005,
+            "verify-max:v:Storage.1": 4.966535735141783,
+            "verify-min:i:Limit": -0.0004966535735141783,
+            "verify-min:v:Storage.1": 0,
+            "voltage_10ms_v": 3.1606027941427883,
+            "voltage_20k_10ms_v": 1.9673467014368329
+          }
+        },
+        {
+          "name": "npn",
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "measurements_si": {
+            "active_collector_a": 0.0013678075180062058,
+            "active_vce_v": 3.632192481993794,
+            "cutoff_collector_a": 2.000000165480742e-14,
+            "cutoff_vce_v": 4.99999999998,
+            "inspect:i:Transistor.base": 0.00042999736510602657,
+            "inspect:i:Transistor.collector": 0.004929600780861814,
+            "inspect:i:Transistor.emitter": 0.00535959814596784,
+            "inspect:v:Transistor.base": 0.700026348939734,
+            "inspect:v:Transistor.collector": 0.07039921913818598,
+            "inspect:v:Transistor.emitter": 0,
+            "saturation_collector_a": 0.004929600780861814,
+            "saturation_vce_v": 0.07039921913818598,
+            "verify-max:i:Transistor.base": 0.00042999736510602657,
+            "verify-max:i:Transistor.collector": 0.004929600780861814,
+            "verify-max:v:Transistor.base": 0.700026348939734,
+            "verify-max:v:Transistor.collector": 0.07039921913818598,
+            "verify-min:i:Transistor.base": 0.00042999736510602657,
+            "verify-min:i:Transistor.collector": 0.004929600780861814,
+            "verify-min:v:Transistor.base": 0.700026348939734,
+            "verify-min:v:Transistor.collector": 0.07039921913818598
+          }
+        }
+      ],
+      "electrical": {
+        "reference_sha256": "c4a131bd9de758d295add56ecec5c9bec6d23078c8bc5877034757c500d750b7",
+        "reference_method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "checks_count": 294,
+        "checks_sha256": "3fc06e1cebc677425bf0ee3eb3a44f8f8dba3f8ac9d57680cf693ddef8ad78b4",
+        "flasher_refinement": [
+          {
+            "output_step_s": 0.001,
+            "samples": 2001,
+            "rising_edge_brackets_s": [
+              [
+                0.8059999999999999,
+                0.8069999999999999
+              ],
+              [
+                1.294,
+                1.295
+              ],
+              [
+                1.7820000000000005,
+                1.7830000000000004
+              ]
+            ],
+            "median_period_s": 0.4880000000000002,
+            "minimum_si": {
+              "i:D1": 3.116162079229247e-06,
+              "i:D2": 3.1161276977188765e-06,
+              "v:C1": -0.5452046981164742,
+              "v:C2": -0.6221297143143942
+            },
+            "maximum_si": {
+              "i:D1": 0.0028880562546656375,
+              "i:D2": 0.002887197891928938,
+              "v:C1": 2.5866546195225757,
+              "v:C2": 2.586656593536156
+            },
+            "verify_200ms_wall_s": 0.044861708,
+            "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+          },
+          {
+            "output_step_s": 0.0005,
+            "samples": 4001,
+            "rising_edge_brackets_s": [
+              [
+                0.8054999999999999,
+                0.8059999999999999
+              ],
+              [
+                1.2934999999999999,
+                1.294
+              ],
+              [
+                1.7815000000000003,
+                1.7820000000000005
+              ]
+            ],
+            "median_period_s": 0.4880000000000002,
+            "minimum_si": {
+              "i:D1": 3.105475726953055e-06,
+              "i:D2": 3.1055333767517075e-06,
+              "v:C1": -0.5415035701396174,
+              "v:C2": -0.6258117988741956
+            },
+            "maximum_si": {
+              "i:D1": 0.002888043474861735,
+              "i:D2": 0.002888023486100953,
+              "v:C1": 2.5868494222571017,
+              "v:C2": 2.5868501090781812
+            },
+            "verify_200ms_wall_s": 0.054412667,
+            "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+          },
+          {
+            "output_step_s": 0.00025,
+            "samples": 8001,
+            "rising_edge_brackets_s": [
+              [
+                0.80575,
+                0.8059999999999999
+              ],
+              [
+                1.29375,
+                1.294
+              ],
+              [
+                1.7817500000000004,
+                1.7820000000000005
+              ]
+            ],
+            "median_period_s": 0.4880000000000001,
+            "minimum_si": {
+              "i:D1": 3.098967581180042e-06,
+              "i:D2": 3.0989700883626553e-06,
+              "v:C1": -0.5438907655952019,
+              "v:C2": -0.6258388887524938
+            },
+            "maximum_si": {
+              "i:D1": 0.0028882555709925945,
+              "i:D2": 0.002888023731023803,
+              "v:C1": 2.586965424355074,
+              "v:C2": 2.5869653792881206
+            },
+            "verify_200ms_wall_s": 0.068820458,
+            "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+          }
+        ],
+        "limitations": [
+          "independent high-precision implementations of pinned educational equations; no physical-device or independently configured SPICE qualification",
+          "flasher refinement compares the same adaptive kernel at three output steps; it is not an independent flasher reference",
+          "timings are backend Verify completion on this run, not p95 input-to-visible or edit-to-result qualification",
+          "existing model, 1000-step, rolling-history and integration work limits remain enforced"
+        ]
+      }
+    },
+    {
+      "name": "headless-socket",
+      "equivalent_to_in_process": true,
+      "workflows": [
+        {
+          "name": "led",
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "measurements_si": {
+            "current_1k_a": 0.0029167965774405296,
+            "current_2k_a": 0.001476723549138745,
+            "inspect:i:Light": 0.001476723549138745,
+            "inspect:v:Light": 2.04655290172251,
+            "inspect:v:Light.anode": 2.04655290172251,
+            "inspect:v:Light.cathode": 0,
+            "verify-max:i:Light": 0.001476723549138745,
+            "verify-max:v:Light": 2.04655290172251,
+            "verify-max:v:Limit": 2.95344709827749,
+            "verify-max:v:Supply": 5,
+            "verify-min:i:Light": 0.001476723549138745,
+            "verify-min:v:Light": 2.04655290172251,
+            "verify-min:v:Limit": 2.95344709827749,
+            "verify-min:v:Supply": 5
+          }
+        },
+        {
+          "name": "rc",
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "measurements_si": {
+            "cursor_interval_s": 0.01,
+            "inspect:i:Storage": 0.0005,
+            "inspect:v:Storage": 0,
+            "inspect:v:Storage.1": 0,
+            "inspect:v:Storage.2": 0,
+            "verify-max:i:Limit": 0.0005,
+            "verify-max:v:Storage.1": 4.966535735141783,
+            "verify-min:i:Limit": -0.0004966535735141783,
+            "verify-min:v:Storage.1": 0,
+            "voltage_10ms_v": 3.1606027941427883,
+            "voltage_20k_10ms_v": 1.9673467014368329
+          }
+        },
+        {
+          "name": "npn",
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "measurements_si": {
+            "active_collector_a": 0.0013678075180062058,
+            "active_vce_v": 3.632192481993794,
+            "cutoff_collector_a": 2.000000165480742e-14,
+            "cutoff_vce_v": 4.99999999998,
+            "inspect:i:Transistor.base": 0.00042999736510602657,
+            "inspect:i:Transistor.collector": 0.004929600780861814,
+            "inspect:i:Transistor.emitter": 0.00535959814596784,
+            "inspect:v:Transistor.base": 0.700026348939734,
+            "inspect:v:Transistor.collector": 0.07039921913818598,
+            "inspect:v:Transistor.emitter": 0,
+            "saturation_collector_a": 0.004929600780861814,
+            "saturation_vce_v": 0.07039921913818598,
+            "verify-max:i:Transistor.base": 0.00042999736510602657,
+            "verify-max:i:Transistor.collector": 0.004929600780861814,
+            "verify-max:v:Transistor.base": 0.700026348939734,
+            "verify-max:v:Transistor.collector": 0.07039921913818598,
+            "verify-min:i:Transistor.base": 0.00042999736510602657,
+            "verify-min:i:Transistor.collector": 0.004929600780861814,
+            "verify-min:v:Transistor.base": 0.700026348939734,
+            "verify-min:v:Transistor.collector": 0.07039921913818598
+          }
+        }
+      ],
+      "electrical": {
+        "reference_sha256": "c4a131bd9de758d295add56ecec5c9bec6d23078c8bc5877034757c500d750b7",
+        "reference_method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "checks_count": 294,
+        "checks_sha256": "3fc06e1cebc677425bf0ee3eb3a44f8f8dba3f8ac9d57680cf693ddef8ad78b4",
+        "flasher_refinement": [
+          {
+            "output_step_s": 0.001,
+            "samples": 2001,
+            "rising_edge_brackets_s": [
+              [
+                0.8059999999999999,
+                0.8069999999999999
+              ],
+              [
+                1.294,
+                1.295
+              ],
+              [
+                1.7820000000000005,
+                1.7830000000000004
+              ]
+            ],
+            "median_period_s": 0.4880000000000002,
+            "minimum_si": {
+              "i:D1": 3.116162079229247e-06,
+              "i:D2": 3.1161276977188765e-06,
+              "v:C1": -0.5452046981164742,
+              "v:C2": -0.6221297143143942
+            },
+            "maximum_si": {
+              "i:D1": 0.0028880562546656375,
+              "i:D2": 0.002887197891928938,
+              "v:C1": 2.5866546195225757,
+              "v:C2": 2.586656593536156
+            },
+            "verify_200ms_wall_s": 0.044226667,
+            "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+          },
+          {
+            "output_step_s": 0.0005,
+            "samples": 4001,
+            "rising_edge_brackets_s": [
+              [
+                0.8054999999999999,
+                0.8059999999999999
+              ],
+              [
+                1.2934999999999999,
+                1.294
+              ],
+              [
+                1.7815000000000003,
+                1.7820000000000005
+              ]
+            ],
+            "median_period_s": 0.4880000000000002,
+            "minimum_si": {
+              "i:D1": 3.105475726953055e-06,
+              "i:D2": 3.1055333767517075e-06,
+              "v:C1": -0.5415035701396174,
+              "v:C2": -0.6258117988741956
+            },
+            "maximum_si": {
+              "i:D1": 0.002888043474861735,
+              "i:D2": 0.002888023486100953,
+              "v:C1": 2.5868494222571017,
+              "v:C2": 2.5868501090781812
+            },
+            "verify_200ms_wall_s": 0.051513584,
+            "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+          },
+          {
+            "output_step_s": 0.00025,
+            "samples": 8001,
+            "rising_edge_brackets_s": [
+              [
+                0.80575,
+                0.8059999999999999
+              ],
+              [
+                1.29375,
+                1.294
+              ],
+              [
+                1.7817500000000004,
+                1.7820000000000005
+              ]
+            ],
+            "median_period_s": 0.4880000000000001,
+            "minimum_si": {
+              "i:D1": 3.098967581180042e-06,
+              "i:D2": 3.0989700883626553e-06,
+              "v:C1": -0.5438907655952019,
+              "v:C2": -0.6258388887524938
+            },
+            "maximum_si": {
+              "i:D1": 0.0028882555709925945,
+              "i:D2": 0.002888023731023803,
+              "v:C1": 2.586965424355074,
+              "v:C2": 2.5869653792881206
+            },
+            "verify_200ms_wall_s": 0.069340167,
+            "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+          }
+        ],
+        "limitations": [
+          "independent high-precision implementations of pinned educational equations; no physical-device or independently configured SPICE qualification",
+          "flasher refinement compares the same adaptive kernel at three output steps; it is not an independent flasher reference",
+          "timings are backend Verify completion on this run, not p95 input-to-visible or edit-to-result qualification",
+          "existing model, 1000-step, rolling-history and integration work limits remain enforced"
+        ]
+      }
+    },
+    {
+      "name": "native-socket",
+      "equivalent_to_in_process": true,
+      "workflows": [
+        {
+          "name": "led",
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "measurements_si": {
+            "current_1k_a": 0.0029167965774405296,
+            "current_2k_a": 0.001476723549138745,
+            "inspect:i:Light": 0.001476723549138745,
+            "inspect:v:Light": 2.04655290172251,
+            "inspect:v:Light.anode": 2.04655290172251,
+            "inspect:v:Light.cathode": 0,
+            "verify-max:i:Light": 0.001476723549138745,
+            "verify-max:v:Light": 2.04655290172251,
+            "verify-max:v:Limit": 2.95344709827749,
+            "verify-max:v:Supply": 5,
+            "verify-min:i:Light": 0.001476723549138745,
+            "verify-min:v:Light": 2.04655290172251,
+            "verify-min:v:Limit": 2.95344709827749,
+            "verify-min:v:Supply": 5
+          }
+        },
+        {
+          "name": "rc",
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "measurements_si": {
+            "cursor_interval_s": 0.01,
+            "inspect:i:Storage": 0.0005,
+            "inspect:v:Storage": 0,
+            "inspect:v:Storage.1": 0,
+            "inspect:v:Storage.2": 0,
+            "verify-max:i:Limit": 0.0005,
+            "verify-max:v:Storage.1": 4.966535735141783,
+            "verify-min:i:Limit": -0.0004966535735141783,
+            "verify-min:v:Storage.1": 0,
+            "voltage_10ms_v": 3.1606027941427883,
+            "voltage_20k_10ms_v": 1.9673467014368329
+          }
+        },
+        {
+          "name": "npn",
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "measurements_si": {
+            "active_collector_a": 0.0013678075180062058,
+            "active_vce_v": 3.632192481993794,
+            "cutoff_collector_a": 2.000000165480742e-14,
+            "cutoff_vce_v": 4.99999999998,
+            "inspect:i:Transistor.base": 0.00042999736510602657,
+            "inspect:i:Transistor.collector": 0.004929600780861814,
+            "inspect:i:Transistor.emitter": 0.00535959814596784,
+            "inspect:v:Transistor.base": 0.700026348939734,
+            "inspect:v:Transistor.collector": 0.07039921913818598,
+            "inspect:v:Transistor.emitter": 0,
+            "saturation_collector_a": 0.004929600780861814,
+            "saturation_vce_v": 0.07039921913818598,
+            "verify-max:i:Transistor.base": 0.00042999736510602657,
+            "verify-max:i:Transistor.collector": 0.004929600780861814,
+            "verify-max:v:Transistor.base": 0.700026348939734,
+            "verify-max:v:Transistor.collector": 0.07039921913818598,
+            "verify-min:i:Transistor.base": 0.00042999736510602657,
+            "verify-min:i:Transistor.collector": 0.004929600780861814,
+            "verify-min:v:Transistor.base": 0.700026348939734,
+            "verify-min:v:Transistor.collector": 0.07039921913818598
+          }
+        }
+      ],
+      "electrical": {
+        "reference_sha256": "c4a131bd9de758d295add56ecec5c9bec6d23078c8bc5877034757c500d750b7",
+        "reference_method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "checks_count": 294,
+        "checks_sha256": "3fc06e1cebc677425bf0ee3eb3a44f8f8dba3f8ac9d57680cf693ddef8ad78b4",
+        "flasher_refinement": [
+          {
+            "output_step_s": 0.001,
+            "samples": 2001,
+            "rising_edge_brackets_s": [
+              [
+                0.8059999999999999,
+                0.8069999999999999
+              ],
+              [
+                1.294,
+                1.295
+              ],
+              [
+                1.7820000000000005,
+                1.7830000000000004
+              ]
+            ],
+            "median_period_s": 0.4880000000000002,
+            "minimum_si": {
+              "i:D1": 3.116162079229247e-06,
+              "i:D2": 3.1161276977188765e-06,
+              "v:C1": -0.5452046981164742,
+              "v:C2": -0.6221297143143942
+            },
+            "maximum_si": {
+              "i:D1": 0.0028880562546656375,
+              "i:D2": 0.002887197891928938,
+              "v:C1": 2.5866546195225757,
+              "v:C2": 2.586656593536156
+            },
+            "verify_200ms_wall_s": 0.045700291,
+            "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+          },
+          {
+            "output_step_s": 0.0005,
+            "samples": 4001,
+            "rising_edge_brackets_s": [
+              [
+                0.8054999999999999,
+                0.8059999999999999
+              ],
+              [
+                1.2934999999999999,
+                1.294
+              ],
+              [
+                1.7815000000000003,
+                1.7820000000000005
+              ]
+            ],
+            "median_period_s": 0.4880000000000002,
+            "minimum_si": {
+              "i:D1": 3.105475726953055e-06,
+              "i:D2": 3.1055333767517075e-06,
+              "v:C1": -0.5415035701396174,
+              "v:C2": -0.6258117988741956
+            },
+            "maximum_si": {
+              "i:D1": 0.002888043474861735,
+              "i:D2": 0.002888023486100953,
+              "v:C1": 2.5868494222571017,
+              "v:C2": 2.5868501090781812
+            },
+            "verify_200ms_wall_s": 0.054295166,
+            "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+          },
+          {
+            "output_step_s": 0.00025,
+            "samples": 8001,
+            "rising_edge_brackets_s": [
+              [
+                0.80575,
+                0.8059999999999999
+              ],
+              [
+                1.29375,
+                1.294
+              ],
+              [
+                1.7817500000000004,
+                1.7820000000000005
+              ]
+            ],
+            "median_period_s": 0.4880000000000001,
+            "minimum_si": {
+              "i:D1": 3.098967581180042e-06,
+              "i:D2": 3.0989700883626553e-06,
+              "v:C1": -0.5438907655952019,
+              "v:C2": -0.6258388887524938
+            },
+            "maximum_si": {
+              "i:D1": 0.0028882555709925945,
+              "i:D2": 0.002888023731023803,
+              "v:C1": 2.586965424355074,
+              "v:C2": 2.5869653792881206
+            },
+            "verify_200ms_wall_s": 0.067910083,
+            "graph_sha256": "f16a36459f76dfae75a44ab34dd1ef8e2fad43df0f49b32892d61e2738b061e4"
+          }
+        ],
+        "limitations": [
+          "independent high-precision implementations of pinned educational equations; no physical-device or independently configured SPICE qualification",
+          "flasher refinement compares the same adaptive kernel at three output steps; it is not an independent flasher reference",
+          "timings are backend Verify completion on this run, not p95 input-to-visible or edit-to-result qualification",
+          "existing model, 1000-step, rolling-history and integration work limits remain enforced"
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "engineering workflow parity on this workstation; not complete native action coverage or participant acceptance",
+    "workflow parity uses shared pinned kernels; optional electrical suite adds independent frozen educational-model references and same-kernel flasher refinement, not real-device/SPICE qualification",
+    "native socket path verifies semantic operations in real app processes; keyboard/focus/screen-reader and visible latency are separate",
+    "all sessions are newly created and owned; pre-existing applications/endpoints are untouched"
+  ]
+}

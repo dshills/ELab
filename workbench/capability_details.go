@@ -65,6 +65,9 @@ type inputRelation struct {
 }
 
 func addCapabilityDetails(id string, schema map[string]any) {
+	if addLiveControlDetails(id, schema) {
+		return
+	}
 	if addShutdownDetails(id, schema) {
 		return
 	}
@@ -134,17 +137,6 @@ func addCapabilityDetails(id string, schema map[string]any) {
 			inputRelation{Operator: "less_or_equal", Fields: []string{"waveform.fall_s", "waveform.low_s"}},
 			inputRelation{Operator: "sum_minimum", Fields: []string{"waveform.high_s", "waveform.low_s"}, Limit: .001})
 		schema["examples"] = []any{PulseParams{ID: "V1", Waveform: DefaultPulseWaveform()}}
-	case "simulation.transient.set":
-		rangeSI("step_s", "s", 1e-6, 1)
-		rangeSI("high_s", "s", 1e-6, 10)
-		rangeSI("low_s", "s", 1e-6, 10)
-		rangeSI("initial_voltage_v", "V", 0, 12)
-		rangeSI("seconds_per_wall_second", "simulated_s/wall_s", .001, 1)
-		rules = append(rules,
-			inputRelation{Operator: "ratio_maximum", Fields: []string{"seconds_per_wall_second", "step_s"}, Limit: 1000},
-			inputRelation{Operator: "less_or_equal", Fields: []string{"step_s", "high_s"}, WhenKind: "pulse-source"},
-			inputRelation{Operator: "less_or_equal", Fields: []string{"step_s", "low_s"}, WhenKind: "pulse-source"})
-		schema["examples"] = []any{DefaultTransientSettings()}
 	case "potentiometer.wiper.set":
 		rangeSI("position", "fraction", 0, 1)
 		schema["examples"] = []any{WiperParams{ID: "P1", Position: .5}}

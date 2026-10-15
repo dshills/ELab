@@ -1,0 +1,77 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.74.0",
+  "build_version": "89",
+  "binary_sha256": "3effac73b7023c6991a66f2a7e27ac0eb28c022e9a7eb0942efdeb1124a548d7",
+  "agent_binary_sha256": "4531269f5ba53012b7f91d8b4b9596cb6c376e0729a96d2471d02e7ee686824e",
+  "sdk": {
+    "commit": "4db5835dc633150ac9e7d55e5dd78f67351bb830",
+    "clean": true,
+    "manifest_sha256": "50a0e6e486151c1770abda850e948cacdcf29c92e64625d5ba9271230241abf5",
+    "final_prepared_output_counts": {
+      "upstream": 228,
+      "typesetting": 5
+    }
+  },
+  "checks": [
+    "Nine live-simulation commands now publish detailed state requirements, effects, staged known errors, input inventories and observation/cancellation/completion contracts without inflating ordinary discovery",
+    "Snapshot live_input_modes is owned and shared with native buttons/admission; complete RC supports auto/charge/discharge, other supported transients auto/high/low, and DC/incomplete/unsupported graphs expose no live choices",
+    "An incomplete RC can retain its analysis label while exposing no available live modes; exact undo restores choices; complete but stale results retain choices while input admission still refuses until fresh",
+    "Reproduced 1 us /0.001 playback rejection and 1 ms /1000-sample Step rejection from quotient rounding; compare rounded binary64 products and clamp ceil estimate at the same original cap; next larger representable values still refuse",
+    "Native float32 number-field range endpoints map back to declared float64 values, preserving the exact displayed minimum needed by the microsecond setting",
+    "Controlled 1000-second-origin regression reproduces 1001 completed output samples for a nominal 1000-sample advance; captured-origin indexed timestamps restore the actual cap and exact final time",
+    "Shared constants retain original rate/duration/sample/deadline/minimum capacitor-step bounds; no device equations/model versions or saved formats changed",
+    "Full serialized lint/import/root/native race/vet passes after anchored timestamp and complete-graph repairs; final discovery metadata, corrected smoke setup/owner workflow and native minimum callbacks have focused checks plus final lint/native vet",
+    "Final exact packaged GPU/UI smoke exercises shared mode choices, native 0.001 endpoint, 1 us text, queued Charge, completed 1000-sample advance and protected shutdown",
+    "Native/headless nine schemas and eight public cases match exactly except transport; analytic RC at 1 ms/2 ms, queue/stale/incomplete/undo behavior, terminal cancel refusal, strict adjacent-float refusals and source/history/file preservation pass",
+    "Four adapters each pass three LED/RC/NPN workflows and 294 independent pinned-model electrical checks plus flasher timestep refinement on final artifact bytes",
+    "Canonical app matches qualified final candidate; prior .73/88 preserved at build/ELab-before-live-controls.app; all owned processes terminal; sibling SDK clean"
+  ],
+  "evidence": [
+    "docs/live-simulation-controls.md",
+    "workbench/live_control_capabilities_test.go",
+    "desktop/live_controls_test.go",
+    "desktop/live_controls_smoke.go",
+    "scripts/live-control-contracts-demo.py",
+    "docs/validation/headless-live-control-contracts.json",
+    "docs/validation/desktop-live-control-contracts.json",
+    "docs/validation/live-control-contracts-public-parity.json",
+    "docs/validation/live-control-contracts-conformance.json"
+  ],
+  "logs_sha256": {
+    "live-contracts-boundary-before.log": "92d7e2d0726da2fd7b3ea9611777c9ee4e6e57a6e586922eeaf97acb9630a1c2",
+    "live-contracts-step-boundary-before.log": "2d59dfdc566d2b980e640c790b6e7cb93b11f081009c36cfa3b04cec4b47994d",
+    "live-contracts-time-origin-before.log": "cff0a56f85c52dc7221efd3d9bb07b41d4a35b3bd64c164166e7817e1b12f4a3",
+    "live-contracts-check-anchored.log": "7880de016a3413dcb3740441415b287c1cdc6ac1dd12b4fac63d8a05d86993b5",
+    "live-contracts-final-discovery.log": "aca271f27eea2864b1bb9890527ac29f57d7fa2e2dddeac2321603f2f397d795",
+    "live-contracts-smoke.log": "c31a18d0ce3a5410ab6a68252208cf10dcbac627750bd5dde5314e3eb63b81cd",
+    "live-contracts-smoke-focus.log": "61162367be47942d86fa5600d948f91e28266dc447d96b0920c373202cb0c6f6",
+    "live-contracts-smoke-focus-final.log": "45b443277974f8505359fefa59d8e771f701eb31dcd5b880d9e9d532b84de4a5",
+    "live-contracts-final-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "live-contracts-final-native-vet.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "live-contracts-build-smoke-final.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "live-contracts-headless-final.log": "f4caf4a7467214dc1e56d02f0528244f4482b1d52d1730d62d60b4fe61aa1e46",
+    "live-contracts-smoke-final.log": "e0ea28838983f6cfacba215c43694289be17b6022191f75a3e777160579bd4ed",
+    "live-contracts-electrical-conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "live-contracts-native-demo.log": "d6fb077bd1984bc88708a9c87de2487e9c6866f47b48d5cd1b7a988707f9e2f0"
+  },
+  "source_inventory": {
+    "sources": 45,
+    "sites": 357,
+    "public_commands": 154,
+    "source_routes": 124,
+    "binding_review_sites": 130
+  },
+  "harness_notes": [
+    "First smoke attempted the state-dependent Pause button after a prior stage left a dirty paused document; setup now explicitly replaces its owned fixture with discard and uses the shared idempotent Pause command",
+    "The initial helper unit test did not drain Vellum owner callbacks; final test runs helper separately and drains owner, with a completion channel",
+    "Headless agent binary remains byte-identical across native smoke-helper rebuild, retaining exact eight-case evidence; final native workflow/electrical/smoke use the rebuilt bytes"
+  ],
+  "limits": [
+    "Mode inventory is not a fresh-result or solve-success guarantee; inspect actual job outcomes",
+    "Cooperative deadlines and unchanged integration budgets remain; backend/callback/GPU evidence does not establish complete physical typing/focus/IME/accessibility or visible latency acceptance",
+    "Later-time arithmetic regression uses a controlled clock origin, not a certified 1000-second physical history",
+    "P0 remains 17 implemented /10 partial; unsigned development app; continuing goal stays active"
+  ]
+}

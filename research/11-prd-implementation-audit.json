@@ -94,7 +94,7 @@
     },
     {
       "id": "SCOPE-02",
-      "evidence": "Retained/fixed intervals, exact sample cursors, deltas/extrema, CSV; sampled threshold brackets, high/low pulse and first-cycle duty bounds; finite frequency guards",
+      "evidence": "Retained/fixed intervals, exact sample cursors, deltas/extrema, CSV; sampled threshold brackets, high/low pulse, first-cycle duty and two-threshold rise/fall bounds; finite frequency guards",
       "status": "implemented",
       "assessment": "Implemented sampled measurement behavior, shared unit-text time entry and optional captured-reference overlays with common axes; narrow-window endpoint cursor geometry repaired; full mounted interaction qualification remains in EDIT-03"
     },
@@ -142,9 +142,9 @@
     },
     {
       "id": "AGENT-02",
-      "evidence": "Typed schemas/local registry, structured snapshots, units, part defaults/models/aliases/limits; on-demand root schema expansion and extra parameter bounds/normalized-SI relations/examples for electrical/example, PNG, sweep, captured measurement, component value/placement, six Verify/retained-operation, six local printing and five observable recovery-read commands; command-specific state preconditions, staged errors, completion/cancellation and dynamic inventories/bounds",
+      "evidence": "Typed schemas/local registry, structured snapshots, units, part defaults/models/aliases/limits; on-demand root schema expansion and extra parameter bounds/normalized-SI relations/examples for electrical/example, PNG, sweep, captured measurement, component value/placement, six Verify/retained-operation, six local printing, five observable recovery-read commands and nine live-simulation controls; command-specific state preconditions, staged errors, completion/cancellation and dynamic inventories/bounds",
       "status": "partial",
-      "assessment": "Partial: sweep, captured measurement, component value, Verify/retained-operation, local printing and recovery-read contracts are inspectable/tested; other command families still need semantic bounds, stateful preconditions/error discovery and exhaustive coverage audit"
+      "assessment": "Partial: live controls, sweep, captured measurement, component value, Verify/retained-operation, local printing and recovery-read contracts are inspectable/tested; other command families still need semantic bounds, stateful preconditions/error discovery and exhaustive coverage audit"
     },
     {
       "id": "AGENT-03",

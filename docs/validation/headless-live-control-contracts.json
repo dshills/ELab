@@ -1,0 +1,687 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "detailed_schemas": {
+    "simulation.transient.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "step_s": 0.001,
+          "high_s": 0.05,
+          "low_s": 0.05,
+          "initial_voltage_v": 0,
+          "seconds_per_wall_second": 0.02
+        }
+      ],
+      "properties": {
+        "high_s": {
+          "$ref": "urn:elab:time:1",
+          "maximum": 10,
+          "minimum": 1e-06,
+          "x-normalized-si-range": {
+            "maximum": 10,
+            "minimum": 1e-06
+          },
+          "x-unit": "s"
+        },
+        "initial_voltage_v": {
+          "maximum": 12,
+          "minimum": 0,
+          "type": "number",
+          "x-unit": "V"
+        },
+        "low_s": {
+          "$ref": "urn:elab:time:1",
+          "maximum": 10,
+          "minimum": 1e-06,
+          "x-normalized-si-range": {
+            "maximum": 10,
+            "minimum": 1e-06
+          },
+          "x-unit": "s"
+        },
+        "seconds_per_wall_second": {
+          "maximum": 1,
+          "minimum": 0.001,
+          "type": "number",
+          "x-unit": "simulated_s/wall_s"
+        },
+        "step_s": {
+          "$ref": "urn:elab:time:1",
+          "maximum": 1,
+          "minimum": 1e-06,
+          "x-normalized-si-range": {
+            "maximum": 1,
+            "minimum": 1e-06
+          },
+          "x-unit": "s"
+        }
+      },
+      "required": [
+        "step_s",
+        "high_s",
+        "low_s",
+        "initial_voltage_v",
+        "seconds_per_wall_second"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-simulation-controls",
+        "preconditions": [
+          "All five settings required; incomplete graphs may be configured",
+          "Live playback speed/step <=1000 samples per wall second; ideal pulse-source high/low phases must each cover one step, even if graph is incomplete"
+        ],
+        "effects": [
+          "Changed settings form one undoable schematic edit and invalidate/restart the live run from configured startup; identical settings preserve physical state/history",
+          "While paused, changed settings leave results stale until Resume or explicit Restart; per-capacitor signed startup overrides take precedence over the 0\u201312 V global fallback",
+          "Per-source finite pulse/sine waveforms keep their separate settings; phase/step restriction here applies to legacy ideal pulse-source"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed or missing input, invalid values or relationships"
+          }
+        ],
+        "completion": {
+          "mode": "settings commit immediately; fresh initialization may be asynchronous or deferred while paused",
+          "observe": [
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "simulation.pause",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-normalized-si-relations": [
+        {
+          "operator": "ratio_maximum",
+          "fields": [
+            "seconds_per_wall_second",
+            "step_s"
+          ],
+          "limit": 1000
+        },
+        {
+          "operator": "less_or_equal",
+          "fields": [
+            "step_s",
+            "high_s"
+          ],
+          "when_component_kind": "pulse-source"
+        },
+        {
+          "operator": "less_or_equal",
+          "fields": [
+            "step_s",
+            "low_s"
+          ],
+          "when_component_kind": "pulse-source"
+        }
+      ],
+      "x-rounding-policy": "Playback limit compares speed <= rounded(1000*step_s), avoiding quotient-rounding rejection at the exact boundary; next larger representable speed refuses."
+    },
+    "simulation.input.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "mode": "auto"
+        }
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "auto",
+            "charge",
+            "discharge",
+            "high",
+            "low"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-simulation-controls",
+        "preconditions": [
+          "Complete supported transient graph and a fresh initialized transient result",
+          "mode belongs to snapshot.live_input_modes: RC auto/charge/discharge; NPN, mixed, waveform and network transients auto/high/low; DC/unsupported analyses have no live modes"
+        ],
+        "effects": [
+          "Paused input queues pending_input_mode without changing applied input, simulated time or capacitor charge; Step or Resume applies it",
+          "Running exact RC/specialized NPN input is applied immediately; running network input uses atomic background input_work while the live clock waits",
+          "New input supersedes active input/manual-step work; no partial physical publication, source edit, dirty membership or undo entry for mode actuation",
+          "Auto follows configured waveforms at current simulated time; high/low override the primary source rather than all supplies"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed or missing input, invalid values or relationships"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Circuit is incomplete, DC/unsupported, uninitialized or stale"
+          },
+          {
+            "code": "solve-failed",
+            "phase": "input_work",
+            "when": "Background algebraic input application fails or its cooperative deadline expires; committed time/charge/input remain"
+          },
+          {
+            "code": "canceled",
+            "phase": "input_work",
+            "when": "Explicit/Pause cancellation preserves committed physical state"
+          },
+          {
+            "code": "superseded",
+            "phase": "input_work",
+            "when": "Newer input/source/run/document operation makes the captured input obsolete"
+          }
+        ],
+        "completion": {
+          "mode": "paused queue, immediate exact-kernel application, or background network input_work according to current state; inspect actual outcome",
+          "observe": [
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "simulation.work.cancel",
+          "cooperative_deadline_s": 5
+        }
+      },
+      "x-input-mode-inventory": "snapshot.live_input_modes for a complete supported graph; membership does not imply fresh-result readiness",
+      "x-target-source": "snapshot.transient.source_id; network override affects only the compiled primary source"
+    },
+    "simulation.pause": {
+      "additionalProperties": false,
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-simulation-controls",
+        "preconditions": [],
+        "effects": [
+          "Set paused immediately; cancel automatic initialization/clock and active manual-step/input work",
+          "Preserve committed source/results/time/charge and queued input; do not wait for worker termination or mark source/history dirty"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed or missing input, invalid values or relationships"
+          }
+        ],
+        "completion": {
+          "mode": "pause admission immediately; previously active jobs may still be canceling",
+          "observe": [
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      }
+    },
+    "simulation.resume": {
+      "additionalProperties": false,
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-simulation-controls",
+        "preconditions": [],
+        "effects": [
+          "Already running/updating is idempotent without restarting the clock",
+          "Fresh transient continues current charge/time; queued input is applied before progression, using background input_work for a network",
+          "Stale/uninitialized/DC results recalculate through the existing initializer; incomplete graphs retain diagnostics rather than inventing a fresh result"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed or missing input, invalid values or relationships"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Queued network input cannot capture fresh network state"
+          },
+          {
+            "code": "solve-failed",
+            "phase": "input_work",
+            "when": "Background queued-input application fails; inspect retained job outcome"
+          }
+        ],
+        "completion": {
+          "mode": "immediate running/initializing admission; inspect readiness and any input work before depending on readings",
+          "observe": [
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "simulation.pause",
+          "cooperative_deadline_s": 0
+        }
+      }
+    },
+    "simulation.restart": {
+      "additionalProperties": false,
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-simulation-controls",
+        "preconditions": [],
+        "effects": [
+          "Start a new live run at configured startup/time zero, retaining pause state; supersede active input/step work and clear live cursors/window",
+          "Consume compatible queued mode according to existing engine startup policy; incompatible analysis modes fall back to Auto",
+          "Preserve graph/settings/edit history/dirty membership and independent retained recordings; incomplete graphs report diagnostics"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed or missing input, invalid values or relationships"
+          }
+        ],
+        "completion": {
+          "mode": "new-run admission; fresh initialization can be asynchronous, including a paused Restart",
+          "observe": [
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "simulation.pause",
+          "cooperative_deadline_s": 0
+        }
+      }
+    },
+    "simulation.step": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "duration_s": 0.001
+        }
+      ],
+      "properties": {
+        "duration_s": {
+          "$ref": "urn:elab:time:1",
+          "x-normalized-si-range": {
+            "exclusiveMinimum": 0,
+            "maximum": 1
+          },
+          "x-unit": "s"
+        }
+      },
+      "required": [
+        "duration_s"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-simulation-controls",
+        "preconditions": [
+          "Paused, complete supported transient with fresh physical state; network analysis also needs a fresh network state",
+          "No active input_work or step_work, including canceling; duration is positive, <=1 s, and <= the rounded product of 1000 and step",
+          "Duration advances floating-point time; networks containing capacitors require at least 1e-10 s"
+        ],
+        "effects": [
+          "Capture graph/settings/current charge/time and queued input into isolated work; apply queued input before advancing",
+          "Publish the complete requested advance atomically on success; progress reports attempted output samples without exposing partial physics",
+          "Failure/cancel/supersession preserves committed physical state and pending input; one latest step_work is retained; it is not a kept recording or saved project data"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed or missing input, invalid values or relationships"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Not paused, incomplete/DC/unsupported, stale or network state not ready"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "Active input or manual step, including canceling"
+          },
+          {
+            "code": "solve-failed",
+            "phase": "admission-or-step_work",
+            "when": "Network capacitor step below 1e-10 s, solver failure or cooperative worker deadline"
+          },
+          {
+            "code": "integration-attempt-limit",
+            "phase": "step_work",
+            "when": "Per-output-sample mixed integration attempts exceed the unchanged kernel budget"
+          },
+          {
+            "code": "integration-time-limit",
+            "phase": "step_work",
+            "when": "Per-output-sample mixed integration wall time exceeds the unchanged kernel budget"
+          },
+          {
+            "code": "canceled",
+            "phase": "step_work-or-wait",
+            "when": "Explicit/Pause cancellation; waiting caller disconnect stops only the wait after admission"
+          },
+          {
+            "code": "superseded",
+            "phase": "step_work",
+            "when": "A newer source/input/run/document operation makes the captured work obsolete"
+          },
+          {
+            "code": "operation-unavailable",
+            "phase": "wait",
+            "when": "Original job expired before its waiting response could be joined"
+          }
+        ],
+        "completion": {
+          "mode": "compatibility waiting alias: may wait for pending initialization before admission, then waits for its same job's final response; retry observes original result",
+          "observe": [
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "simulation.work.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-max-output-steps": 1000,
+      "x-normalized-si-relations": [
+        {
+          "limit": 1000,
+          "operator": "duration_s<=binary64_product(limit,snapshot.transient_settings.step_s)"
+        },
+        {
+          "operator": "snapshot.transient.sample.time_s + duration_s > snapshot.transient.sample.time_s"
+        },
+        {
+          "minimum": 1e-10,
+          "operator": "duration_s>=minimum for network analyses with capacitors"
+        }
+      ],
+      "x-rounding-policy": "Duration compares against rounded(1000*step_s); next larger representable duration refuses. The ceil-derived total-sample estimate is capped at 1000 at that boundary."
+    },
+    "simulation.step.start": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "duration_s": 0.001
+        }
+      ],
+      "properties": {
+        "duration_s": {
+          "$ref": "urn:elab:time:1",
+          "x-normalized-si-range": {
+            "exclusiveMinimum": 0,
+            "maximum": 1
+          },
+          "x-unit": "s"
+        }
+      },
+      "required": [
+        "duration_s"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-simulation-controls",
+        "preconditions": [
+          "Paused, complete supported transient with fresh physical state; network analysis also needs a fresh network state",
+          "No active input_work or step_work, including canceling; duration is positive, <=1 s, and <= the rounded product of 1000 and step",
+          "Duration advances floating-point time; networks containing capacitors require at least 1e-10 s"
+        ],
+        "effects": [
+          "Capture graph/settings/current charge/time and queued input into isolated work; apply queued input before advancing",
+          "Publish the complete requested advance atomically on success; progress reports attempted output samples without exposing partial physics",
+          "Failure/cancel/supersession preserves committed physical state and pending input; one latest step_work is retained; it is not a kept recording or saved project data"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed or missing input, invalid values or relationships"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Not paused, incomplete/DC/unsupported, stale or network state not ready"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "Active input or manual step, including canceling"
+          },
+          {
+            "code": "solve-failed",
+            "phase": "admission-or-step_work",
+            "when": "Network capacitor step below 1e-10 s, solver failure or cooperative worker deadline"
+          },
+          {
+            "code": "integration-attempt-limit",
+            "phase": "step_work",
+            "when": "Per-output-sample mixed integration attempts exceed the unchanged kernel budget"
+          },
+          {
+            "code": "integration-time-limit",
+            "phase": "step_work",
+            "when": "Per-output-sample mixed integration wall time exceeds the unchanged kernel budget"
+          },
+          {
+            "code": "canceled",
+            "phase": "step_work-or-wait",
+            "when": "Explicit/Pause cancellation; waiting caller disconnect stops only the wait after admission"
+          },
+          {
+            "code": "superseded",
+            "phase": "step_work",
+            "when": "A newer source/input/run/document operation makes the captured work obsolete"
+          }
+        ],
+        "completion": {
+          "mode": "immediate admission; retry returns owned original admission; inspect step_work until terminal",
+          "observe": [
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "simulation.work.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-max-output-steps": 1000,
+      "x-normalized-si-relations": [
+        {
+          "limit": 1000,
+          "operator": "duration_s<=binary64_product(limit,snapshot.transient_settings.step_s)"
+        },
+        {
+          "operator": "snapshot.transient.sample.time_s + duration_s > snapshot.transient.sample.time_s"
+        },
+        {
+          "minimum": 1e-10,
+          "operator": "duration_s>=minimum for network analyses with capacitors"
+        }
+      ],
+      "x-rounding-policy": "Duration compares against rounded(1000*step_s); next larger representable duration refuses. The ceil-derived total-sample estimate is capped at 1000 at that boundary."
+    },
+    "simulation.work.cancel": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-simulation-controls",
+        "preconditions": [
+          "Exact ID of the current active input or manual-step job"
+        ],
+        "effects": [
+          "Request cooperative cancellation and expose canceling; inspect until terminal",
+          "No partial physical publication or automatic reversal of completed work; terminal/old/unknown IDs refuse"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed or missing input, invalid values or relationships"
+          },
+          {
+            "code": "operation-unavailable",
+            "phase": "admission",
+            "when": "ID is unknown, replaced or terminal"
+          }
+        ],
+        "completion": {
+          "mode": "immediate cancellation request; actual completion is asynchronous",
+          "observe": [
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-id-inventory": "snapshot.input_work.id or snapshot.step_work.id with queued/running/canceling status; exact current ID required"
+    },
+    "simulation.wait": {
+      "additionalProperties": false,
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-simulation-controls",
+        "preconditions": [],
+        "effects": [
+          "Wait for status updating plus active project, manual-step and input work to settle, then return an owned current snapshot",
+          "Ready live transients return immediately without waiting for a future sample; does not wait for Verify, independent recovery-read, sweep, printer, appearance or shutdown jobs; recovery work represented by project_work is included",
+          "No computation is launched or canceled by this query; inspect each job/result outcome because settled does not imply success"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed or missing input, invalid values or relationships"
+          },
+          {
+            "code": "timeout",
+            "phase": "wait",
+            "when": "Five-second bound or earlier caller cancellation ends observation; admitted work continues"
+          }
+        ],
+        "completion": {
+          "mode": "bounded query; re-inspect/re-wait after timeout",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 5
+        }
+      }
+    }
+  },
+  "cases": [
+    {
+      "case": "example.reset",
+      "analysis": "DC operating point",
+      "live_input_modes": [],
+      "paused_input_check": "unavailable refused"
+    },
+    {
+      "case": "example.rc",
+      "analysis": "RC transient",
+      "live_input_modes": [
+        "auto",
+        "charge",
+        "discharge"
+      ],
+      "paused_input_check": "queues without physical change"
+    },
+    {
+      "case": "example.npn-pulse",
+      "analysis": "NPN transient",
+      "live_input_modes": [
+        "auto",
+        "high",
+        "low"
+      ],
+      "paused_input_check": "queues without physical change"
+    },
+    {
+      "case": "example.flasher",
+      "analysis": "RC/NPN transient",
+      "live_input_modes": [
+        "auto",
+        "high",
+        "low"
+      ],
+      "paused_input_check": "queues without physical change"
+    },
+    {
+      "case": "example.rectifier",
+      "analysis": "Waveform network transient",
+      "live_input_modes": [
+        "auto",
+        "high",
+        "low"
+      ],
+      "paused_input_check": "queues without physical change"
+    },
+    {
+      "case": "recognized-incomplete-rc-and-undo",
+      "unavailable_modes": [],
+      "restored_modes": [
+        "auto",
+        "charge",
+        "discharge"
+      ]
+    },
+    {
+      "case": "microsecond-boundaries-and-waiting-alias",
+      "step_s": 1e-06,
+      "playback": 0.001,
+      "duration_s": 0.001,
+      "samples": 1000,
+      "voltage_after_first_step_v": 0.47581290982020236,
+      "voltage_after_second_step_v": 0.9063462346100902,
+      "next_float_refusals_preserve_state": true
+    },
+    {
+      "case": "network-capacitor-minimum-step",
+      "analysis": "Waveform network transient",
+      "rejected_duration_s": 5e-11,
+      "error": "solve-failed"
+    }
+  ],
+  "checks": [
+    "Shared live-mode inventory across DC/RC/NPN/mixed/waveform circuits",
+    "Paused mode queue and stale-result refusal",
+    "Exact 1 us /0.001 playback and 1000-output-step boundaries",
+    "Adjacent larger float refusal purity",
+    "Immediate Step admission versus completed waiting alias",
+    "Analytic RC charge at 1 ms and 2 ms",
+    "Terminal cancel refusal and Resume idempotence",
+    "No source/history/dirty/file mutation from actuation/Step",
+    "Published minimum network capacitor step refuses before work"
+  ],
+  "limits": [
+    "Cooperative worker deadlines and unchanged integration budgets; admission/settled states do not imply success",
+    "Mode inventory does not replace freshness/readiness or lifecycle guards",
+    "Backend/native callback evidence does not establish physical keyboard/focus/IME/accessibility or visible latency"
+  ]
+}

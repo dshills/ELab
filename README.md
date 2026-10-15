@@ -36,7 +36,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.73.0 --build-version 88 --platform darwin
+  --version 0.74.0 --build-version 89 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).
@@ -246,3 +246,5 @@ Component values accept engineering voltage units such as **500 mV**, with visib
 The Inspector now publishes exact editable value text. Reapplying an untouched value preserves its stored bits, live state, clean-save status and undo/redo history; common values use compact forms such as **1 µF** and **1 kΩ**. See [unchanged value handling](docs/component-values.md#reapplying-an-unchanged-value).
 
 Captured recordings also support [two-threshold rise/fall timing](docs/recording-timing.md#two-threshold-rise-and-fall-timing): for a 5 V RC charge, use 500 mV and 4.5 V to inspect 10–90% duration bounds through the same commands as an agent.
+
+Live controls expose a [shared input-mode inventory and state/completion contracts](docs/live-simulation-controls.md). A 1 µs sample step now works at 0.001 playback, and exact 1,000-sample manual advances no longer refuse from quotient rounding; larger values still respect the original limits.

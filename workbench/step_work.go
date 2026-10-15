@@ -68,8 +68,8 @@ func (s *Service) startStepLocked(p StepParams) error {
 	if !s.paused || d != nil || !IsTransientAnalysis(c.Analysis) || s.transient == nil || s.transient.Stale {
 		return &actionError{"unavailable", "pause a valid transient run before stepping"}
 	}
-	if !finite(p.Duration) || p.Duration <= 0 || p.Duration > 1 || math.Ceil(p.Duration/s.transientSettings.StepSeconds) > 1000 {
-		return fmt.Errorf("step duration must be positive, at most 1 s and 1000 sample steps")
+	if !finite(p.Duration) || p.Duration <= 0 || p.Duration > MaxManualStepSeconds || p.Duration > float64(MaxManualStepSamples)*s.transientSettings.StepSeconds {
+		return fmt.Errorf("step duration must be positive, at most %g s and %d sample steps", MaxManualStepSeconds, MaxManualStepSamples)
 	}
 	end := s.transient.Sample.Time + p.Duration
 	if end <= s.transient.Sample.Time {
@@ -78,7 +78,7 @@ func (s *Service) startStepLocked(p StepParams) error {
 	if IsNetworkAnalysis(c.Analysis) && s.mixedState == nil {
 		return &actionError{"unavailable", "wait for a fresh network result before stepping"}
 	}
-	if IsNetworkAnalysis(c.Analysis) && len(s.mixedState.net.caps) > 0 && p.Duration < 1e-10 {
+	if IsNetworkAnalysis(c.Analysis) && len(s.mixedState.net.caps) > 0 && p.Duration < MinCapacitorStepSeconds {
 		return &actionError{"solve-failed", "mixed timestep too small; manual step must advance at least 1e-10 s"}
 	}
 	// This isolated state holder only runs time/input helpers under one worker.
@@ -86,9 +86,9 @@ func (s *Service) startStepLocked(p StepParams) error {
 	input := &Service{graph: s.graph.Clone(), transient: cloneTransient(s.transient), transientSettings: s.transientSettings,
 		mixedState: cloneMixedState(s.mixedState), mixed: cloneMixed(s.mixed), npn: cloneNPN(s.npn), npnHigh: cloneNPN(s.npnHigh), npnLow: cloneNPN(s.npnLow),
 		inputMode: s.inputMode, pendingInputMode: s.pendingInputMode, networkAdvance: s.networkAdvance}
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), ManualStepDeadline)
 	s.stepSerial++
-	job := &stepJob{work: StepWork{ID: fmt.Sprintf("step-%d", s.stepSerial), Status: "queued", RunID: s.run, ElectricalRevision: s.electrical, ActuationRevision: s.actuationRevision, CommandRevision: s.commandRevision + 1, StartTime: s.transient.Sample.Time, Duration: p.Duration, TotalSamples: int(math.Ceil(p.Duration / s.transientSettings.StepSeconds))},
+	job := &stepJob{work: StepWork{ID: fmt.Sprintf("step-%d", s.stepSerial), Status: "queued", RunID: s.run, ElectricalRevision: s.electrical, ActuationRevision: s.actuationRevision, CommandRevision: s.commandRevision + 1, StartTime: s.transient.Sample.Time, Duration: p.Duration, TotalSamples: min(MaxManualStepSamples, int(math.Ceil(p.Duration/s.transientSettings.StepSeconds)))},
 		ctx: ctx, cancel: cancel, done: make(chan struct{}), input: input, compiled: c, originalTrace: s.transient, originalState: s.mixedState, actuation: s.actuationRevision,
 		mode: s.transient.Mode, pending: s.transient.PendingMode, end: end}
 	s.stepJob = job
@@ -139,7 +139,9 @@ func (s *Service) runStep(job *stepJob) {
 		if err = job.ctx.Err(); err != nil {
 			break
 		}
-		next := math.Min(job.end, input.transient.Sample.Time+input.transientSettings.StepSeconds)
+		// Anchor every requested output to the captured origin. Repeated
+		// addition can drift far enough to require a 1001st final sample.
+		next := math.Min(job.end, job.work.StartTime+float64(completed+1)*input.transientSettings.StepSeconds)
 		if job.end-next < 1e-12 {
 			next = job.end
 		}

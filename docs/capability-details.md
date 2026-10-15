@@ -72,3 +72,7 @@ Six printing commands publish current inventories, copy/retention/PDF bounds, ca
 ## Recorded cursor targets
 
 Filtered `recording.cursor.set` discovery now exposes the optional selected-capture `operation_id`, cursor choices, normalized time/duration restrictions, state requirements, effects and known errors. Nonempty mismatched targets refuse even with a current mutation revision. Native fields and plot pointers use that same guard; omitted/empty ID remains compatible with existing clients. See [scope input context](scope-input-context.md).
+
+## Live simulation controls
+
+Nine live controls now publish state/effect/error/completion contracts and unchanged bounds; `snapshot.live_input_modes` is shared with admission and native buttons. The exact microsecond playback/Step boundaries now avoid quotient-rounding rejection while next larger floats still refuse. See [live control contracts](live-simulation-controls.md).

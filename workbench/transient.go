@@ -58,7 +58,7 @@ func (c TransientSettings) validateForGraph(g Graph, playback bool) error {
 	return nil
 }
 func (c TransientSettings) validatePlayback() error {
-	if !finite(c.PlaybackSpeed) || c.PlaybackSpeed < .001 || c.PlaybackSpeed > 1 || c.PlaybackSpeed/c.StepSeconds > 1000 {
+	if !finite(c.PlaybackSpeed) || c.PlaybackSpeed < .001 || c.PlaybackSpeed > 1 || c.PlaybackSpeed > MaxLiveSamplesPerWallSecond*c.StepSeconds {
 		return fmt.Errorf("playback must be 0.001–1 simulated s/wall s, at most 1000 samples/wall s")
 	}
 	return nil
@@ -370,9 +370,8 @@ func (s *Service) transientCommandLocked(command string, raw []byte) error {
 		if d != nil || !IsTransientAnalysis(c.Analysis) || s.transient == nil || s.transient.Stale {
 			return &actionError{"unavailable", "complete and simulate a supported transient circuit before changing its input"}
 		}
-		valid := p.Mode == "auto" || IsNPNTransientAnalysis(c.Analysis) && (p.Mode == "high" || p.Mode == "low") || c.Analysis == "RC transient" && (p.Mode == "charge" || p.Mode == "discharge")
-		if !valid {
-			return fmt.Errorf("RC input modes: auto/charge/discharge; NPN input modes: auto/high/low")
+		if !liveInputModeValid(c.Analysis, p.Mode) {
+			return fmt.Errorf("input mode must be one of %v for %s", LiveInputModes(c.Analysis), c.Analysis)
 		}
 
 		s.cancelStepLocked("superseded")
