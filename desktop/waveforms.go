@@ -33,21 +33,7 @@ func (s *screen) waveformControls(state workbench.Snapshot, p workbench.Componen
 	if p.Pulse != nil {
 		cfg := *p.Pulse
 		nodes = append(nodes, section("pulse-title", "Finite pulse waveform"), quiet("pulse-period", fmt.Sprintf("%.5g Hz · %.4g%% high phase", 1/(cfg.HighSeconds+cfg.LowSeconds), 100*cfg.HighSeconds/(cfg.HighSeconds+cfg.LowSeconds))), quiet("pulse-phase-help", "Rise is included in the high phase; fall is included in the low phase. Each source has its own timing."))
-		for _, clock := range state.PulseTimings {
-			if clock.ID != p.ID {
-				continue
-			}
-			nodes = append(nodes, quiet("pulse-frequency-label", "Frequency · Hz"), ui.Node{ID: "pulse-frequency", Kind: ui.TextField, Text: clock.FrequencyText, MinWidth: 90, Accessibility: ui.Accessibility{Name: "Finite pulse frequency", Help: "Enter Hz, kHz or mHz; rise/fall times stay fixed and must fit."}, Change: func(e ui.ChangeEvent) {
-				s.invokeAtCommandRevision("source.pulse.timing.set", workbench.PulseTimingParams{ID: p.ID, Frequency: e.Text, Duty: clock.DutyText}, state.CommandRevision)
-			}})
-			nodes = append(nodes, quiet("pulse-period-time-label", "Period"), timeField("pulse-period-time", "Finite pulse period", clock.Period, false, func(text string) {
-				s.invokeAtCommandRevision("source.pulse.timing.set", map[string]any{"id": p.ID, "period_s": text, "duty_percent": clock.DutyText}, state.CommandRevision)
-			}))
-			nodes = append(nodes, quiet("pulse-duty-label", "High phase · %"), ui.Node{ID: "pulse-duty", Kind: ui.TextField, Text: clock.DutyText, MinWidth: 90, Accessibility: ui.Accessibility{Name: "Finite pulse high phase percentage", Help: "Enter a percentage between 0 and 100; rise is included in the high phase."}, Change: func(e ui.ChangeEvent) {
-				s.invokeAtCommandRevision("source.pulse.timing.set", workbench.PulseTimingParams{ID: p.ID, Period: clock.Period, Duty: e.Text}, state.CommandRevision)
-			}})
-			break
-		}
+		nodes = append(nodes, s.pulseClockControls(state, p)...)
 		for _, field := range []struct {
 			id, label                    string
 			value, scale, min, max, step float64
@@ -84,7 +70,36 @@ func (s *screen) waveformControls(state workbench.Snapshot, p workbench.Componen
 		}
 	}
 	if p.Kind == "pulse-source" {
-		nodes = append(nodes, quiet("legacy-pulse-model", "Ideal square: instantaneous edges and shared experiment timing. Finite pulse sources have independent rise/fall settings."))
+		nodes = append(nodes, section("pulse-title", "Shared ideal-square clock"), quiet("legacy-pulse-model", "Instantaneous edges. Timing changes affect every ideal-square source; sample step and playback stay fixed."))
+		nodes = append(nodes, s.pulseClockControls(state, p)...)
 	}
 	return nodes
+}
+
+func (s *screen) pulseClockControls(state workbench.Snapshot, p workbench.Component) []ui.Node {
+	nodes := []ui.Node{}
+	for _, clock := range state.PulseTimings {
+		if clock.ID != p.ID {
+			continue
+		}
+		nodes = append(nodes, quiet("pulse-frequency-label", "Frequency · Hz"), ui.Node{ID: "pulse-frequency", Kind: ui.TextField, Text: clock.FrequencyText, MinWidth: 90, Accessibility: ui.Accessibility{Name: "Pulse source frequency", Help: "Enter Hz, kHz or mHz; retained transition or shared sampling limits must fit."}, Change: func(e ui.ChangeEvent) {
+			s.invokePulseClockAtRevision(clock.Shared, workbench.PulseTimingParams{ID: p.ID, Frequency: e.Text, Duty: clock.DutyText}, state.CommandRevision)
+		}})
+		nodes = append(nodes, quiet("pulse-period-time-label", "Period"), timeField("pulse-period-time", "Pulse source period", clock.Period, false, func(text string) {
+			s.invokePulseClockAtRevision(clock.Shared, map[string]any{"id": p.ID, "period_s": text, "duty_percent": clock.DutyText}, state.CommandRevision)
+		}))
+		nodes = append(nodes, quiet("pulse-duty-label", "High phase · %"), ui.Node{ID: "pulse-duty", Kind: ui.TextField, Text: clock.DutyText, MinWidth: 90, Accessibility: ui.Accessibility{Name: "Pulse source high phase percentage", Help: "Enter a percentage between 0 and 100; the high phase includes any finite rise."}, Change: func(e ui.ChangeEvent) {
+			s.invokePulseClockAtRevision(clock.Shared, workbench.PulseTimingParams{ID: p.ID, Period: clock.Period, Duty: e.Text}, state.CommandRevision)
+		}})
+		break
+	}
+	return nodes
+}
+
+func (s *screen) invokePulseClockAtRevision(shared bool, params any, revision uint64) {
+	if shared {
+		s.invokeAtCommandRevision("simulation.pulse.timing.set", params, revision)
+	} else {
+		s.invokeAtCommandRevision("source.pulse.timing.set", params, revision)
+	}
 }

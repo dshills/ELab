@@ -1,0 +1,169 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "detailed_schema": {
+    "additionalProperties": false,
+    "examples": [
+      {
+        "id": "VIN",
+        "frequency_hz": "20 Hz",
+        "duty_percent": "25 %"
+      },
+      {
+        "duty_percent": "50 %",
+        "id": "V1",
+        "period_s": "100 ms"
+      }
+    ],
+    "oneOf": [
+      {
+        "not": {
+          "required": [
+            "period_s"
+          ]
+        },
+        "required": [
+          "frequency_hz"
+        ]
+      },
+      {
+        "not": {
+          "required": [
+            "frequency_hz"
+          ]
+        },
+        "required": [
+          "period_s"
+        ]
+      }
+    ],
+    "properties": {
+      "duty_percent": {
+        "description": "Quantity text strictly between 0 and 100 percent, optional %; instantaneous high phase has no finite rise/fall.",
+        "maxLength": 128,
+        "minLength": 1,
+        "type": "string",
+        "x-max-utf8-bytes": 128,
+        "x-parsed-percent-range": {
+          "exclusiveMaximum": 100,
+          "exclusiveMinimum": 0
+        }
+      },
+      "frequency_hz": {
+        "description": "Quantity text in Hz/kHz/mHz, bare text Hz; 0.05\u2013500000 Hz before current sample-step and phase constraints. No sampling/playback adjustment is implicit.",
+        "maxLength": 128,
+        "minLength": 1,
+        "type": "string",
+        "x-max-utf8-bytes": 128,
+        "x-parsed-si-range": {
+          "maximum": 500000,
+          "minimum": 0.05
+        }
+      },
+      "id": {
+        "type": "string"
+      },
+      "period_s": {
+        "$ref": "urn:elab:time:1",
+        "x-normalized-si-range": {
+          "maximum": 20,
+          "minimum": 2e-06
+        }
+      }
+    },
+    "required": [
+      "id",
+      "duty_percent"
+    ],
+    "type": "object",
+    "x-command-contract": {
+      "version": 1,
+      "scope": "ideal-square-shared-clock",
+      "preconditions": [
+        "ID names a current pulse-source, even in an incomplete drawing",
+        "Proposed shared high/low phases satisfy current sample step and all experiment constraints"
+      ],
+      "effects": [
+        "Updates experiment high_s/low_s for every ideal-square pulse-source; choosing one source ID does not make its timing independent",
+        "Preserves source voltage values, finite/sine definitions, sample step, playback speed and startup voltage",
+        "Ordinary undoable electrical/settings edit: running restarts from configured startup, paused stays stale; supports atomic edit.batch",
+        "Re-entering displayed timing preserves phase bits and history; normal command/actor revisions may advance",
+        "Equivalent quantity/time aliases normalize before retry matching; snapshots expose configured timing, not measured oscillation",
+        "Never shortens sample step or changes playback to make a frequency fit; invalid requests preserve all prior state"
+      ],
+      "errors": [
+        {
+          "code": "invalid-params",
+          "phase": "admission",
+          "when": "Malformed/missing/extra/null fields, both/neither timing forms, invalid quantity/range, wrong kind or shared phases too short for current sampling"
+        },
+        {
+          "code": "not-found",
+          "phase": "admission",
+          "when": "Source ID does not exist after parameter validation"
+        }
+      ],
+      "completion": {
+        "mode": "immediate validated settings edit; ordinary initialization observed separately",
+        "observe": [
+          "project.inspect",
+          "simulation.wait",
+          "events.poll"
+        ],
+        "cancel": "",
+        "cooperative_deadline_s": 0
+      }
+    },
+    "x-source-inventory": "snapshot.pulse_timings entries with shared true/source_kind pulse-source; all such entries share snapshot.transient_settings high_s/low_s",
+    "x-timing-relations": [
+      "Exactly one frequency_hz or period_s plus duty_percent",
+      "high_s = period*duty_percent/100; low_s = period-high_s",
+      "Both phases 1 \u00b5s\u201310 s and >= current transient_settings.step_s",
+      "For fraction=duty_percent/100, frequency <= minimum(fraction,1-fraction)/step_s; other setting bounds remain authoritative"
+    ]
+  },
+  "observations": {
+    "configured_clock": {
+      "source_kind": "pulse-source",
+      "shared": true,
+      "id": "VIN",
+      "frequency_hz": 20,
+      "period_s": 0.05,
+      "duty_percent": 25,
+      "frequency_text": "20 Hz",
+      "duty_text": "25 %"
+    },
+    "source_samples_checked": 109,
+    "interior_samples_checked": 98,
+    "high_width_bounds_s": [
+      0.012499999999999997,
+      0.012499999999999997
+    ],
+    "affected_shared_ids": [
+      "S0",
+      "S1"
+    ],
+    "reopened_settings": {
+      "step_s": 0.001,
+      "high_s": 0.025,
+      "low_s": 0.07500000000000001,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 0.1
+    }
+  },
+  "checks": [
+    "Shared clock discovery and direct frequency/period/percent input preserve sampling, playback and component definitions",
+    "Displayed timing reentry preserves phase bits, history and live state",
+    "Sampling/type/alternative/underflow/wrong-kind/missing-source refusals preserve state",
+    "Live NPN LED switches off at 12.5 ms and on at 50 ms for a 20 Hz/25-percent clock",
+    "Captured source and LED current agree with each interior phase and retain both sides of exact edges",
+    "Threshold measurement resolves a 12.5 ms high pulse; settings and recording save/reopen",
+    "Both ideal-square IDs share one clock in an incomplete drawing while finite-pulse definition remains unchanged"
+  ],
+  "limits": [
+    "Ideal-square timing is global; selecting one source does not give it independent timing",
+    "Configured duty and measured threshold timing remain separate",
+    "Existing models, kernels, output sampling, work limits and project format remain unchanged",
+    "No physical device or complete physical typing/focus/accessibility/visible-latency qualification"
+  ]
+}

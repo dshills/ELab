@@ -1,0 +1,93 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.81.0",
+  "build_version": "96",
+  "binary_sha256": "39f9b7692fca65ae1e061900566b2fbda5566693d312a0bba6bc400d2c7d6c1f",
+  "agent_binary_sha256": "ddcd651157d451b288b71449c13c92b854475c9fffc1dc3923751981252e7887",
+  "sdk": {
+    "commit": "ea0032a9b43acd27e9732810272b324213087ad3",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "desktop/smoke.go": "af66e1b098f1e3475808c9d71f6823fea0368cc217a389b6dde2d7872b0df684",
+    "desktop/waveforms.go": "3b4d9330d03d2bf3a1d756fadf26ec482ac76cf33748f49d0a95ca8437e5e657",
+    "workbench/capability_details.go": "7a3133b37432107ecbbecc99b3b8c839211a7bb104a66a5b56619fc5a819e204",
+    "workbench/commands.go": "f0ecd505fedbf62b937790b9eb8a5bab22808061b2f1638eaec4657a12e0edd8",
+    "workbench/diagnostic_help.go": "bebc00ca57b23f2bbfca550dabb60596d40c79a6bd999a34c1546ac724ba0218",
+    "workbench/editing.go": "ee29c0e8b1afc2fde7f75e5617d34a0190baed6fa7a6c746c50ee5bfffd4a0cd",
+    "workbench/source_pulse_timing.go": "7d1a8f835478c16d77ec74d54a43f5a7cb1cf52825d2935125b7a7c7c1f837a8",
+    "workbench/source_pulse_timing_capabilities.go": "32d6b77ad7dccac60e48f643afd7e94c0fa04005e848e1bee962f5e59c7c265b",
+    "workbench/time_input.go": "d635fb9fe951db0691345d671145500db10c214248c27015d3246d90d18015d8",
+    "workbench/workflow.go": "c009b0dc7cf18d9a835adb32352aa419522462a5fdef557159d980d52f66e4b8",
+    "workbench/shared_pulse_timing_test.go": "f095e60012cd47d253ecc88b4923ca0cba92050d93853668e1b77f5729de1d7a",
+    "desktop/shared_pulse_timing_test.go": "21d351207c7765aff02833f1ec6d96831892face35bcb74f8bc72babfb5477c9",
+    "desktop/shared_pulse_timing_smoke.go": "5339ac045f6f6637958f549cd7e861925937061d59f56d7e16cc3560e8d92c72",
+    "scripts/shared-pulse-clock-demo.py": "48d5e2d70201150f0266bed3f4dd7dbaeb8fddaa2aaf52a4a2111da0ba144259"
+  },
+  "checks": [
+    "Shared ideal-square frequency or period and duty controls use simulation.pulse.timing.set; native fields expose global effect and retain exact quantity text",
+    "Configured pulse_timings source_kind/shared distinguish global ideal squares from independent finite pulse definitions",
+    "Only experiment high/low phases change; source definitions, sampling, playback and startup remain fixed; current-step/model violations refuse purely",
+    "Displayed timing reentry preserves valid phase bits/history/physics; inherited invalid sampling is still checked; quantity aliases replay original admission",
+    "Atomic edit.batch commits staged settings with graph or rolls back both; one named undo restores settings",
+    "Public native/headless schema and observations match: 20 Hz/25-percent LED off at 12.5 ms and on at 50 ms, 98 interior samples checked among 109 rows, four corners retain both sides, measured high pulse resolves 12.5 ms",
+    "Save/open restores existing experiment phase fields and kept recording; incomplete drawing proves all ideal squares share timing while finite definition remains unchanged",
+    "Full serialized lint/import/root/native race/vet pass; final focused core tests follow redundant assertion removal; native stale field and existing finite field tests pass",
+    "Exact packaged general GPU/UI smoke invokes new shared fields with isolated owned recovery/theme files; all four adapters pass existing three LED/RC/NPN reference workflows",
+    "Canonical/candidate bytes and 0.81.0/96 metadata match; prior app preserved; SDK unchanged throughout validation, prepared hashes verified read-only; owned sessions terminal"
+  ],
+  "evidence": [
+    "docs/shared-pulse-clock.md",
+    "scripts/shared-pulse-clock-demo.py",
+    "docs/validation/headless-shared-pulse-clock.json",
+    "docs/validation/desktop-shared-pulse-clock.json",
+    "docs/validation/shared-pulse-clock-public-parity.json",
+    "docs/validation/shared-pulse-clock-conformance.json"
+  ],
+  "logs_sha256": {
+    "build/shared-pulse-clock-081/audit.log": "a703d62f58722da848ddfc00e81903c4014f1244361dc52d6d3830d3e6b0f380",
+    "build/shared-pulse-clock-081/build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/shared-pulse-clock-081/check.log": "ff926bef991d5a0ffa598d9d9528cc40682829585720d7655ae8521dbeae58fe",
+    "build/shared-pulse-clock-081/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/shared-pulse-clock-081/core-cleanup.log": "8020f17742ff43de5c053df837820ae8e891aa432fe7fb0a87a7a00bfbd76091",
+    "build/shared-pulse-clock-081/core-focused-final.log": "5368cf3627274be3e93ab6fcc670dacb4229018a46d4e95672260191a1b44fe2",
+    "build/shared-pulse-clock-081/core-focused.log": "cba3696a7105846753ac91bce08b201e0ab340eac12eae51b5c0ce3e81e11fe0",
+    "build/shared-pulse-clock-081/headless-final.log": "5a85033dacf541b31b23c18a7d30f2ef8c4a0029e17359709891d42c4594c8d3",
+    "build/shared-pulse-clock-081/headless.log": "9af629a85d855f2560a2c82a21554d7134663a13fca7b4dfbaddef6384fe67ac",
+    "build/shared-pulse-clock-081/native-demo.log": "f3bc6f5a2f5a939dfdd093f2f70a03a54e51f418ba2a1e6d9525940688be6e6f",
+    "build/shared-pulse-clock-081/native-focused.log": "45857f29f5338b2f2602e63cbefe301c02bf620383777b687d5e11219e388ebf",
+    "build/shared-pulse-clock-081/native-host.log": "e11806bd7fc58b1e575b9a3c545803338f3892772ac965288c80679bbc3fda0f",
+    "build/shared-pulse-clock-081/package-canonical.log": "3f73e3fcf6b17654520ada232a96d744c909959f47a71fe47761ddf4871e7dc6",
+    "build/shared-pulse-clock-081/package.log": "9730f05cf248304dd88f36c88958598a6c529c8d17a13e619875ad4920aaab15",
+    "build/shared-pulse-clock-081/smoke-final.log": "28fbc2bb8d244432d29d413180d975c44f543989ef2a58886f16dde22c253ea3",
+    "build/shared-pulse-clock-081/smoke.log": "1cc400f9eee248eb3c60d93ebb1cb5c20dfb74371896bbfc5dd3f4c0360ae347"
+  },
+  "source_inventory": {
+    "sources": 45,
+    "sites": 364,
+    "public_commands": 156,
+    "source_routes": 126,
+    "binding_review_sites": 134,
+    "literal_routes": 204
+  },
+  "notes": [
+    "Initial core test reused a fixture retry key for restart, replaying its old admission; unique key fixes the test without production changes",
+    "Initial public workflow inspected restart admission before asynchronous result completion; final workflow waits for completion",
+    "Initial full smoke disabled recovery controls that the existing harness requires; final smoke uses isolated owned recovery/theme files",
+    "Full suite preceded removal of one redundant JSON encoding assertion; final focused core race run covers the remaining clock tests"
+  ],
+  "limits": [
+    "Ideal-square clock is global; selecting one source does not make its timing independent. Finite sources retain separate per-source clock command",
+    "Configured frequency/duty is not a measured oscillation; existing phases are authoritative and arithmetic retains binary64 roundoff",
+    "Broad frequency/period ranges are constrained by current step and both phase limits; no implicit sampling/playback changes",
+    "No new physical model, numerical kernel, sample schedule or persisted fields/file version",
+    "Four-adapter LED/RC/NPN regressions and new native/headless blink workflow have distinct scopes; no exhaustive native command/input claim",
+    "Full physical text/IME/focus/accessibility/visible latency, clean distribution, participants and physical-printer/tiling gates remain open; P0 17 implemented /10 partial; continuing goal active"
+  ]
+}

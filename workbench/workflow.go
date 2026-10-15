@@ -124,7 +124,7 @@ func (s *Service) batchLocked(p BatchParams) error {
 	}
 	for i, edit := range p.Edits {
 		switch edit.Command {
-		case "component.place", "component.move", "component.rotate", "component.set", "component.duplicate", "capacitor.initial.set", "object.delete", "wire.connect", "wire.junction.insert", "switch.set", "potentiometer.wiper.set", "source.sine.set", "source.pulse.set", "source.pulse.timing.set":
+		case "component.place", "component.move", "component.rotate", "component.set", "component.duplicate", "capacitor.initial.set", "object.delete", "wire.connect", "wire.junction.insert", "switch.set", "potentiometer.wiper.set", "source.sine.set", "source.pulse.set", "source.pulse.timing.set", "simulation.pulse.timing.set":
 		default:
 			return fmt.Errorf("batch edit %d: command %q is not an atomic schematic edit", i+1, edit.Command)
 		}
@@ -133,6 +133,7 @@ func (s *Service) batchLocked(p BatchParams) error {
 		}
 	}
 	s.graph = staged.graph
+	s.transientSettings = staged.transientSettings
 	s.usedIDs = staged.usedIDs
 	s.selected = staged.selected
 	s.drawing = staged.drawing
@@ -140,6 +141,9 @@ func (s *Service) batchLocked(p BatchParams) error {
 	return nil
 }
 func historyName(command string) string {
+	if command == "simulation.pulse.timing.set" {
+		return "Change shared pulse timing"
+	}
 	if command == "source.pulse.timing.set" {
 		return "Change pulse timing"
 	}

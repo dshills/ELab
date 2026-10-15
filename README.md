@@ -38,7 +38,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.80.0 --build-version 95 --platform darwin
+  --version 0.81.0 --build-version 96 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).
@@ -63,7 +63,7 @@ The exact RC engine handles one source, one resistor, and one ideal capacitor to
 
 Choose **Examples → Load NPN LED example** for an editable low-side LED switch, or add **NPN transistor** from the component tray. Connect its base through a resistor to a DC input, its emitter to ground, and its collector to the LED/resistor load. Use the base-drive buttons to explore cutoff, active operation, and saturation. All edits and live readings use the same commands and structured results for users and agents.
 
-Choose **Examples → Load blinking NPN LED** for a pulse-driven transistor LED with a live clock, voltage/current scope, and Auto / High / Low controls. Pause, Step, Resume, pulse settings, and all drawing operations use the same commands for agents. See the [NPN pulse workflow and validation](docs/npn-transient.md).
+Choose **Examples → Load blinking NPN LED** for a pulse-driven transistor LED with a live clock, voltage/current scope, and Auto / High / Low controls. Select its ideal-square source to set frequency, period or high-phase percentage; the inspector makes the shared-clock scope explicit. Pause, Step, Resume, pulse settings, and all drawing operations use the same commands for agents. See the [shared clock controls](docs/shared-pulse-clock.md). See the [NPN pulse workflow and validation](docs/npn-transient.md).
 
 Choose **Examples → Load capacitor-timed LED flasher** for a DC-powered, capacitor-timed two-NPN oscillator with alternating LEDs. Its coupled solver preserves charge, supports signed capacitor startup conditions, and exposes the same commands and measurements to agents. See the [mixed RC/NPN workflow and validation](docs/mixed-transient.md).
 

@@ -131,6 +131,7 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(DiagnosticHelp{}), "urn:elab:diagnostic-help:1"},
 	{reflect.TypeOf(OperationSummary{}), "urn:elab:verification-operation:1"},
 	{reflect.TypeOf(PulseTimingParams{}), "urn:elab:pulse-timing-input:1"},
+	{reflect.TypeOf(IdealPulseTimingParams{}), "urn:elab:ideal-pulse-timing-input:1"},
 }
 
 var snapshotSchema = json.RawMessage(`{"$ref":"urn:elab:snapshot:1"}`)
@@ -156,6 +157,10 @@ func SchemaRegistry() map[string]json.RawMessage {
 		if common.Type == reflect.TypeOf(PulseTimingParams{}) {
 			schema = timeInputSchema("source.pulse.timing.set", schema)
 			addPulseTimingDetails("source.pulse.timing.set", schema)
+		}
+		if common.Type == reflect.TypeOf(IdealPulseTimingParams{}) {
+			schema = timeInputSchema("simulation.pulse.timing.set", schema)
+			addIdealPulseTimingDetails("simulation.pulse.timing.set", schema)
 		}
 		// Input-only shared definitions retain command unit text without
 		// widening numeric output/settings schemas.
@@ -244,6 +249,7 @@ func Catalog() []Capability {
 		typedCapability("source.sine.set", "Set per-source sine amplitude, offset, frequency and phase; ordinary schematic restart semantics", reflect.TypeOf(SineParams{})),
 		typedCapability("source.pulse.set", "Set per-source finite pulse levels, phase lengths and linear rise/fall; ordinary schematic restart semantics", reflect.TypeOf(PulseParams{})),
 		typedCapability("source.pulse.timing.set", "Set finite-pulse frequency or period and high-phase duty; preserve levels/rise/fall; ordinary undoable electrical edit", reflect.TypeOf(PulseTimingParams{})),
+		typedCapability("simulation.pulse.timing.set", "Set the shared ideal-square frequency or period and high duty; preserve sampling/playback and source levels; affects all ideal squares", reflect.TypeOf(IdealPulseTimingParams{})),
 		typedCapability("potentiometer.wiper.set", "Set a linear potentiometer wiper position 0–1; fresh transient algebraic work is staged outside the editor lock; inspect input_work/wait; preserves charge/time/run on success", reflect.TypeOf(WiperParams{})),
 		typedCapability("switch.set", "Set desired SPST startup state; fresh transients queue/coalesce actuation for the next accepted step, exposing desired/applied/pending state and preserving charge/run; DC/config edits restart", reflect.TypeOf(SwitchParams{})),
 		typedCapability("wire.junction.insert", "Atomically insert one explicit junction into 1–8 named connected wire routes; position required for multi-wire joins, single wire defaults to a free interior point", reflect.TypeOf(JunctionInsertParams{})),

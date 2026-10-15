@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "scope": "Public shared-clock workflow: identical schema, configured observations, captured phases and persistence checks; only transport excluded",
+  "reports": {
+    "docs/validation/headless-shared-pulse-clock.json": "ab1b75fa9f68db91178cf7b88104c0025b09f039cdf4bbcee09232bf8c5865f3",
+    "docs/validation/desktop-shared-pulse-clock.json": "4d5cbfeb295860d6ce186327132c62562b810f3517846e8c14d44e40e8aee84c"
+  },
+  "observations": {
+    "configured_clock": {
+      "source_kind": "pulse-source",
+      "shared": true,
+      "id": "VIN",
+      "frequency_hz": 20,
+      "period_s": 0.05,
+      "duty_percent": 25,
+      "frequency_text": "20 Hz",
+      "duty_text": "25 %"
+    },
+    "source_samples_checked": 109,
+    "interior_samples_checked": 98,
+    "high_width_bounds_s": [
+      0.012499999999999997,
+      0.012499999999999997
+    ],
+    "affected_shared_ids": [
+      "S0",
+      "S1"
+    ],
+    "reopened_settings": {
+      "step_s": 0.001,
+      "high_s": 0.025,
+      "low_s": 0.07500000000000001,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 0.1
+    }
+  }
+}

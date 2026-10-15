@@ -45,7 +45,7 @@
     "desktop/time_fields.go": "a20e6b2fc6fc368fabb7fd4defae5fc3083987f94a2beabd1780e7ae9a9264b8",
     "desktop/verification.go": "a69a0a61a0e0bd72340e2907ab90f0def54586ee7fe98684fe3008c3c84868f7",
     "desktop/view.go": "f488fedddfa2ca8edb47cdffb880c7e32d3f11a90530ca078d0c3cce783fe5d0",
-    "desktop/waveforms.go": "95d17119e8ca3d54e7e0fa15522407dc3f9a2d33ea6ce2d1c0adc8801a637c1f",
+    "desktop/waveforms.go": "3b4d9330d03d2bf3a1d756fadf26ec482ac76cf33748f49d0a95ca8437e5e657",
     "desktop/workflow.go": "9a3d8316eea46adf551ca0f00201807c7e491d74fd5884326e5c9be645d4167e"
   },
   "public_commands": [
@@ -167,6 +167,7 @@
     "selection.navigate",
     "simulation.input.set",
     "simulation.pause",
+    "simulation.pulse.timing.set",
     "simulation.restart",
     "simulation.resume",
     "simulation.sampling.fit",
@@ -3677,64 +3678,7 @@
     },
     {
       "file": "desktop/waveforms.go",
-      "line": 40,
-      "function": "*screen.waveformControls",
-      "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invokeAtCommandRevision(\"source.pulse.timing.set\", workbench.PulseTimingParams{ID: p.ID, Frequency: e.Text, Duty: clock.DutyText}, state.CommandRevision)\n}",
-      "status": "requires-binding-review"
-    },
-    {
-      "file": "desktop/waveforms.go",
-      "line": 41,
-      "function": "*screen.waveformControls",
-      "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"source.pulse.timing.set\", workbench.PulseTimingParams{ID: p.ID, Frequency: e.Text, Duty: clock.DutyText}, state.CommandRevision)",
-      "public_commands": [
-        "source.pulse.timing.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/waveforms.go",
-      "line": 43,
-      "function": "*screen.waveformControls",
-      "kind": "callback-factory",
-      "expression": "timeField(\"pulse-period-time\", \"Finite pulse period\", clock.Period, false, func(text string) {\n\ts.invokeAtCommandRevision(\"source.pulse.timing.set\", map[string]any{\"id\": p.ID, \"period_s\": text, \"duty_percent\": clock.DutyText}, state.CommandRevision)\n})",
-      "status": "requires-binding-review"
-    },
-    {
-      "file": "desktop/waveforms.go",
-      "line": 44,
-      "function": "*screen.waveformControls",
-      "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"source.pulse.timing.set\", map[string]any{\"id\": p.ID, \"period_s\": text, \"duty_percent\": clock.DutyText}, state.CommandRevision)",
-      "public_commands": [
-        "source.pulse.timing.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/waveforms.go",
-      "line": 46,
-      "function": "*screen.waveformControls",
-      "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invokeAtCommandRevision(\"source.pulse.timing.set\", workbench.PulseTimingParams{ID: p.ID, Period: clock.Period, Duty: e.Text}, state.CommandRevision)\n}",
-      "status": "requires-binding-review"
-    },
-    {
-      "file": "desktop/waveforms.go",
-      "line": 47,
-      "function": "*screen.waveformControls",
-      "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"source.pulse.timing.set\", workbench.PulseTimingParams{ID: p.ID, Period: clock.Period, Duty: e.Text}, state.CommandRevision)",
-      "public_commands": [
-        "source.pulse.timing.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/waveforms.go",
-      "line": 66,
+      "line": 52,
       "function": "*screen.waveformControls",
       "kind": "callback-factory",
       "expression": "timeField(\"pulse-\"+field.id, field.label, field.value, false, func(text string) {\n\ts.invokeAtCommandRevision(\"source.pulse.set\", map[string]any{\"id\": p.ID, \"waveform\": timeParams(cfg, name, text)}, state.CommandRevision)\n})",
@@ -3742,7 +3686,7 @@
     },
     {
       "file": "desktop/waveforms.go",
-      "line": 67,
+      "line": 53,
       "function": "*screen.waveformControls",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"source.pulse.set\", map[string]any{\"id\": p.ID, \"waveform\": timeParams(cfg, name, text)}, state.CommandRevision)",
@@ -3753,7 +3697,7 @@
     },
     {
       "file": "desktop/waveforms.go",
-      "line": 71,
+      "line": 57,
       "function": "*screen.waveformControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tfield.set(\u0026next, float64(e.Number)/field.scale)\n\ts.invoke(\"source.pulse.set\", workbench.PulseParams{ID: p.ID, Waveform: next})\n}",
@@ -3761,7 +3705,7 @@
     },
     {
       "file": "desktop/waveforms.go",
-      "line": 74,
+      "line": 60,
       "function": "*screen.waveformControls",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"source.pulse.set\", workbench.PulseParams{ID: p.ID, Waveform: next})",
@@ -3772,12 +3716,58 @@
     },
     {
       "file": "desktop/waveforms.go",
-      "line": 82,
+      "line": 68,
       "function": "*screen.waveformControls",
       "kind": "action-factory",
       "expression": "s.action(\"fit-waveform-sampling\", \"Fit waveform sampling\", \"simulation.sampling.fit\", struct{}{})",
       "public_commands": [
         "simulation.sampling.fit"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/waveforms.go",
+      "line": 85,
+      "function": "*screen.pulseClockControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invokePulseClockAtRevision(clock.Shared, workbench.PulseTimingParams{ID: p.ID, Frequency: e.Text, Duty: clock.DutyText}, state.CommandRevision)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/waveforms.go",
+      "line": 88,
+      "function": "*screen.pulseClockControls",
+      "kind": "callback-factory",
+      "expression": "timeField(\"pulse-period-time\", \"Pulse source period\", clock.Period, false, func(text string) {\n\ts.invokePulseClockAtRevision(clock.Shared, map[string]any{\"id\": p.ID, \"period_s\": text, \"duty_percent\": clock.DutyText}, state.CommandRevision)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/waveforms.go",
+      "line": 91,
+      "function": "*screen.pulseClockControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invokePulseClockAtRevision(clock.Shared, workbench.PulseTimingParams{ID: p.ID, Period: clock.Period, Duty: e.Text}, state.CommandRevision)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/waveforms.go",
+      "line": 101,
+      "function": "*screen.invokePulseClockAtRevision",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"simulation.pulse.timing.set\", params, revision)",
+      "public_commands": [
+        "simulation.pulse.timing.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/waveforms.go",
+      "line": 103,
+      "function": "*screen.invokePulseClockAtRevision",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"source.pulse.timing.set\", params, revision)",
+      "public_commands": [
+        "source.pulse.timing.set"
       ],
       "status": "literal-public-route"
     },
@@ -3969,6 +3959,7 @@
     "selection.navigate",
     "simulation.input.set",
     "simulation.pause",
+    "simulation.pulse.timing.set",
     "simulation.restart",
     "simulation.resume",
     "simulation.sampling.fit",

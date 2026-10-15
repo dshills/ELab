@@ -61,11 +61,12 @@ var timeCommandFields = map[string][]string{
 	"recording.seek": {"time_s"}, "recording.cursor.set": {"time_s"},
 	"recording.timing": {"start_s", "end_s"}, "recording.timing.set": {"start_s", "end_s"},
 	"recording.compare": {"time_s"}, "recording.compare.set": {"time_s"},
-	"recording.window.set":     {"start_s", "end_s"},
-	"source.pulse.set":         {"waveform.high_s", "waveform.low_s", "waveform.rise_s", "waveform.fall_s"},
-	"source.pulse.timing.set":  {"period_s"},
-	"recovery.configure":       {"interval_s"},
-	"recovery.configure.start": {"interval_s"},
+	"recording.window.set":        {"start_s", "end_s"},
+	"source.pulse.set":            {"waveform.high_s", "waveform.low_s", "waveform.rise_s", "waveform.fall_s"},
+	"source.pulse.timing.set":     {"period_s"},
+	"simulation.pulse.timing.set": {"period_s"},
+	"recovery.configure":          {"interval_s"},
+	"recovery.configure.start":    {"interval_s"},
 }
 
 func normalizeTimeInput(command string, raw json.RawMessage) (json.RawMessage, error) {
@@ -117,7 +118,7 @@ func normalizeTimeInput(command string, raw json.RawMessage) (json.RawMessage, e
 			}
 		}
 	}
-	if command == "source.pulse.timing.set" {
+	if command == "source.pulse.timing.set" || command == "simulation.pulse.timing.set" {
 		if err := normalizePulseTimingQuantities(object); err != nil {
 			return nil, err
 		}

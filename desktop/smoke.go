@@ -195,6 +195,10 @@ rendered:
 	if err := nativeWaveformSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeSharedPulseClockSmoke")
+	if err := nativeSharedPulseClockSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	setStage("nativeAuditSmoke")
 	if err := nativeAuditSmoke(ctx, a, s); err != nil {
 		return err
