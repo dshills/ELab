@@ -190,18 +190,28 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 	go s.runVerification(operation, input)
 	return nil
 }
-func verificationInputModeValid(analysis, mode string) bool {
-	if mode == "auto" {
-		return true
-	}
+
+// VerificationInputModes returns an owned list for the current analysis. Stored
+// defaults may be configured earlier, but admission requires a compatible mode.
+func VerificationInputModes(analysis string) []string {
+	modes := []string{"auto"}
 	if analysis == "RC transient" {
-		return mode == "charge" || mode == "discharge"
+		return append(modes, "charge", "discharge")
 	}
 	if IsNPNTransientAnalysis(analysis) {
-		return mode == "high" || mode == "low"
+		return append(modes, "high", "low")
+	}
+	return modes
+}
+func verificationInputModeValid(analysis, mode string) bool {
+	for _, allowed := range VerificationInputModes(analysis) {
+		if mode == allowed {
+			return true
+		}
 	}
 	return false
 }
+
 func operationActive(status string) bool {
 	return status == "queued" || status == "running" || status == "canceling"
 }

@@ -13,6 +13,7 @@ import (
 )
 
 type Snapshot struct {
+	VerificationInputModes []string               `json:"verification_input_modes"`
 	DCSweep                *SweepState            `json:"dc_sweep,omitempty"`
 	PrintPreview           *PrintPreview          `json:"print_preview,omitempty"`
 	SourceAnnotations      []SourceAnnotation     `json:"source_annotations"`
@@ -299,6 +300,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		Recording:              s.recordingViewLocked(),
 		Recovery:               cloneRecovery(s.recovery),
 		VerificationSettings:   cloneVerificationSettings(s.verificationSettings),
+		VerificationInputModes: VerificationInputModes(analysis),
 		Operations:             []OperationSummary{},
 		SelectedOperation:      s.selectedOperation,
 		LastOperation:          s.lastOperation,
@@ -991,6 +993,7 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	state.Recording = cloneRecordingView(state.Recording)
 	state.Recovery = cloneRecovery(state.Recovery)
 	state.VerificationSettings = cloneVerificationSettings(state.VerificationSettings)
+	state.VerificationInputModes = append([]string{}, state.VerificationInputModes...)
 	state.Operations = append([]OperationSummary{}, state.Operations...)
 	for i := range state.Operations {
 		if state.Operations[i].Error != nil {

@@ -33,7 +33,21 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 				s.invokeAtCommandRevision("verification.settings.set", timeParams(cfg, name, text), state.CommandRevision)
 			}))
 		}
-		modes := []ui.Option{{ID: "auto", Label: "Auto"}, {ID: "charge", Label: "RC · Charge"}, {ID: "discharge", Label: "RC · Discharge"}, {ID: "high", Label: "NPN / mixed · High"}, {ID: "low", Label: "NPN / mixed · Low"}}
+		modes := []ui.Option{}
+		labels := map[string]string{"auto": "Auto", "charge": "Charge", "discharge": "Discharge", "high": "High", "low": "Low"}
+		allowed := state.VerificationInputModes
+		if len(allowed) == 0 {
+			allowed = workbench.VerificationInputModes(state.Analysis)
+		}
+		found := false
+		for _, mode := range allowed {
+			modes = append(modes, ui.Option{ID: mode, Label: labels[mode]})
+			found = found || mode == cfg.InputMode
+		}
+		if !found {
+			modes = append(modes, ui.Option{ID: cfg.InputMode, Label: "Unavailable: " + cfg.InputMode, Disabled: true})
+		}
+
 		nodes = append(nodes, ui.Node{ID: "verify-mode", Kind: ui.Selector, Options: modes, SelectedID: cfg.InputMode, Accessibility: ui.Accessibility{Name: "Verification input mode"}, Change: func(e ui.ChangeEvent) {
 			next := cfg
 			next.InputMode = e.SelectedID
@@ -90,13 +104,17 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 				s.invoke("verification.settings.set", next)
 			}})
 		}
-		reset := cfg
-		reset.InitialVoltage = nil
-		reset.Capacitors = []workbench.CapacitorInitial{}
-		reset.InputMode = "auto"
-		reset.Step = 0
-		nodes = append(nodes, s.action("verify-project-startup", "Use project startup / sampling", "verification.settings.set", reset))
 	}
+	reset := cfg
+	reset.InitialVoltage = nil
+	reset.Capacitors = []workbench.CapacitorInitial{}
+	reset.InputMode = "auto"
+	reset.Step = 0
+	resetButton := s.action("verify-project-startup", "Use project startup", "verification.settings.set", reset)
+	resetButton.Accessibility.Name = "Use project startup and sampling"
+	resetButton.Accessibility.Help = "Clear verification input mode, sampling and startup overrides; preserve duration and the live circuit."
+	nodes = append(nodes, resetButton)
+
 	duration := cfg.Duration
 	if !transient {
 		duration = 0
@@ -107,7 +125,7 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 	button.Disabled = active || diagnostic != nil
 	nodes = append(nodes, button)
 	if !transient {
-		nodes = append(nodes, quiet("verify-dc-help", "DC verification records one operating point."))
+		nodes = append(nodes, quiet("verify-dc-help", "DC records one operating point. Use project startup to clear transient overrides."))
 	}
 	options := []ui.Option{{ID: "__none", Label: "Choose a recorded run…"}}
 	var selected *workbench.OperationSummary

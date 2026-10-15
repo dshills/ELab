@@ -1,0 +1,1436 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "detailed_schemas": {
+    "verification.settings.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "duration_s": 0.1,
+          "sample_step_s": 0,
+          "input_mode": "auto",
+          "capacitor_initials": []
+        }
+      ],
+      "properties": {
+        "capacitor_initials": {
+          "description": "Unique current capacitor IDs. Scenario voltages are pin 1 minus pin 2, signed \u00b112 V. Empty array clears the list; null is refused. Start omission inherits stored list; full settings requires an array.",
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "description": "Current snapshot.components entry with kind capacitor.",
+                "type": "string"
+              },
+              "voltage_v": {
+                "maximum": 12,
+                "minimum": -12,
+                "type": "number",
+                "x-unit": "V"
+              }
+            },
+            "required": [
+              "id",
+              "voltage_v"
+            ],
+            "type": "object"
+          },
+          "maxItems": 100,
+          "minItems": 0,
+          "type": "array",
+          "x-unique-by": "id"
+        },
+        "duration_s": {
+          "$ref": "urn:elab:time:1",
+          "x-normalized-si-range": {
+            "maximum": 10,
+            "minimum": 0
+          },
+          "x-unit": "s"
+        },
+        "initial_voltage_v": {
+          "anyOf": [
+            {
+              "maximum": 12,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Global startup default 0\u201312 V; graph per-capacitor settings and scenario overrides take precedence. Start omitted/null inherits defaults; full settings omitted/null clears this override.",
+          "x-unit": "V"
+        },
+        "input_mode": {
+          "enum": [
+            "auto",
+            "charge",
+            "discharge",
+            "high",
+            "low"
+          ],
+          "type": "string"
+        },
+        "sample_step_s": {
+          "$ref": "urn:elab:time:1",
+          "description": "Omitted/null start override inherits stored defaults; effective zero follows current project step. Nonzero step 1 \u00b5s\u20131 s. Offline Verify does not impose playback-rate bounds.",
+          "x-normalized-si-alternatives": [
+            {
+              "const": 0
+            },
+            {
+              "maximum": 1,
+              "minimum": 1e-06
+            }
+          ],
+          "x-unit": "s"
+        }
+      },
+      "required": [
+        "duration_s",
+        "sample_step_s",
+        "input_mode",
+        "capacitor_initials"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "verification-and-retained-operation-commands",
+        "preconditions": [
+          "Ranges and current capacitor identities are valid; incomplete graphs and mode/analysis combinations may be configured before running"
+        ],
+        "effects": [
+          "Preserves live graph, physics/time, pause/held inputs, simulation settings and edit history",
+          "Replaces session-only defaults; does not start work or mark the document dirty; omission/null global startup clears it"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or an invalid parameter/relationship"
+          }
+        ],
+        "completion": {
+          "mode": "immediate in-memory result",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-input-mode-inventory": "snapshot.verification_input_modes for current analysis; stored defaults may be configured in advance",
+      "x-max-retained-operations": 8,
+      "x-operation-inventory": "snapshot.operations (time/DC verification and imported/project recordings; not DC sweeps)",
+      "x-startup-precedence": [
+        "scenario capacitor_initials",
+        "saved component initial_voltage_v",
+        "scenario/stored global initial_voltage_v",
+        "project experiment initial_voltage_v"
+      ]
+    },
+    "simulation.verify": {
+      "additionalProperties": false,
+      "examples": [
+        {}
+      ],
+      "properties": {
+        "capacitor_initials": {
+          "description": "Unique current capacitor IDs. Scenario voltages are pin 1 minus pin 2, signed \u00b112 V. Empty array clears the list; null is refused. Start omission inherits stored list; full settings requires an array.",
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "description": "Current snapshot.components entry with kind capacitor.",
+                "type": "string"
+              },
+              "voltage_v": {
+                "maximum": 12,
+                "minimum": -12,
+                "type": "number",
+                "x-unit": "V"
+              }
+            },
+            "required": [
+              "id",
+              "voltage_v"
+            ],
+            "type": "object"
+          },
+          "maxItems": 100,
+          "minItems": 0,
+          "type": "array",
+          "x-unique-by": "id"
+        },
+        "duration_s": {
+          "anyOf": [
+            {
+              "$ref": "urn:elab:time:1"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "x-normalized-si-range": {
+            "maximum": 10,
+            "minimum": 0
+          },
+          "x-unit": "s"
+        },
+        "initial_voltage_v": {
+          "anyOf": [
+            {
+              "maximum": 12,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Global startup default 0\u201312 V; graph per-capacitor settings and scenario overrides take precedence. Start omitted/null inherits defaults; full settings omitted/null clears this override.",
+          "x-unit": "V"
+        },
+        "input_mode": {
+          "description": "Omitted, null or empty inherits stored input mode. Admission requires membership in snapshot.verification_input_modes; auto uses configured source waveforms, not live elapsed phase.",
+          "enum": [
+            "",
+            null,
+            "auto",
+            "charge",
+            "discharge",
+            "high",
+            "low"
+          ],
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "probe_ids": {
+          "description": "Omit for current selected live probes (with DC fallback channels). Explicit [] captures no channels; null is refused. IDs must be unique current probe inventory entries.",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 6,
+          "minItems": 0,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "sample_step_s": {
+          "anyOf": [
+            {
+              "$ref": "urn:elab:time:1"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Omitted/null start override inherits stored defaults; effective zero follows current project step. Nonzero step 1 \u00b5s\u20131 s. Offline Verify does not impose playback-rate bounds.",
+          "x-normalized-si-alternatives": [
+            {
+              "const": 0
+            },
+            {
+              "maximum": 1,
+              "minimum": 1e-06
+            }
+          ],
+          "x-unit": "s"
+        }
+      },
+      "required": [],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "verification-and-retained-operation-commands",
+        "preconditions": [
+          "Complete supported current graph; stored defaults plus non-null overrides satisfy analysis/startup/mode rules",
+          "At most one active verification, including canceling; a recording slot is free or an excluded terminal operation is evictable",
+          "Transient duration positive and \u226410 s; ceil(duration/effective step) \u22641000; DC is one operating point at zero",
+          "Current mode inventory: RC auto/charge/discharge; other supported transient families auto/high/low; DC auto only"
+        ],
+        "effects": [
+          "Preserves live graph, physics/time, pause/held inputs, simulation settings and edit history",
+          "Captures graph/models/startup/settings/probes and clears prior recorded comparison/timing selection; publishes only a complete successful recording, kept by default",
+          "Later source edits do not alter the captured input; admission does not imply solve success or frame-budget completion"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or an invalid parameter/relationship"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "A verification is queued/running/canceling"
+          },
+          {
+            "code": "record-limit",
+            "phase": "admission",
+            "when": "Eight retained operations are kept or active"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Current circuit is incomplete or unsupported"
+          },
+          {
+            "code": "timeout",
+            "phase": "operation",
+            "when": "Cooperative 30-second wall deadline expires"
+          },
+          {
+            "code": "solve-failed",
+            "phase": "operation",
+            "when": "Kernel or recorded-frame bound fails; typed integration errors can report their existing specific codes"
+          }
+        ],
+        "completion": {
+          "mode": "immediate operation admission; inspect until terminal",
+          "observe": [
+            "operation.inspect",
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "operation.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-input-mode-inventory": "snapshot.verification_input_modes for current analysis; stored defaults may be configured in advance",
+      "x-max-output-steps": 1000,
+      "x-max-recorded-frames": 4096,
+      "x-max-retained-operations": 8,
+      "x-normalized-si-relations": [
+        {
+          "limit": 1000,
+          "operator": "ceil(duration_s/effective_sample_step_s)<=limit"
+        },
+        {
+          "omitted_dc_duration": "zero even if stored duration is positive",
+          "operator": "duration_s>0 for transient; explicit duration_s==0 for DC"
+        },
+        {
+          "operator": "effective step <= project high_s and low_s when graph includes ideal pulse-source"
+        },
+        {
+          "operator": "no global/per-capacitor startup overrides for DC"
+        }
+      ],
+      "x-operation-inventory": "snapshot.operations (time/DC verification and imported/project recordings; not DC sweeps)",
+      "x-probe-inventory": "snapshot.scope.available; captured order is retained in metadata and row values",
+      "x-startup-precedence": [
+        "scenario capacitor_initials",
+        "saved component initial_voltage_v",
+        "scenario/stored global initial_voltage_v",
+        "project experiment initial_voltage_v"
+      ]
+    },
+    "operation.inspect": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "verification-and-retained-operation-commands",
+        "preconditions": [
+          "id names a retained operation in any status"
+        ],
+        "effects": [
+          "Pure owned summary and captured metadata; completed records include final solver/statistical results; no live or view mutation"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or an invalid parameter/relationship"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "ID unknown or evicted"
+          }
+        ],
+        "completion": {
+          "mode": "immediate in-memory result",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-max-retained-operations": 8,
+      "x-operation-inventory": "snapshot.operations (time/DC verification and imported/project recordings; not DC sweeps)"
+    },
+    "operation.samples": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "limit": {
+          "default": 100,
+          "description": "Omitted or zero defaults to 100; otherwise 1\u2013200. Offset may equal total for an empty last page.",
+          "maximum": 200,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "offset": {
+          "minimum": 0,
+          "type": "integer",
+          "x-maximum-inclusive": "record sample count"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "verification-and-retained-operation-commands",
+        "preconditions": [
+          "id names a retained completed recording"
+        ],
+        "effects": [
+          "Pure owned exact rows and probe descriptors; preserve duplicate edge timestamps and probe order; next_offset/total describe captured rows"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or an invalid parameter/relationship"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "ID unknown or evicted"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "Operation has no completed record"
+          }
+        ],
+        "completion": {
+          "mode": "immediate in-memory result",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-max-retained-operations": 8,
+      "x-operation-inventory": "snapshot.operations (time/DC verification and imported/project recordings; not DC sweeps)"
+    },
+    "operation.select": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "verification-and-retained-operation-commands",
+        "preconditions": [
+          "Retained ID in any status, or empty to clear"
+        ],
+        "effects": [
+          "Changes selected recorded operation and resets replay/cursors/comparison/timing; empty ID hides recorded view; no live/source/history changes"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or an invalid parameter/relationship"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Nonempty ID unknown or evicted"
+          }
+        ],
+        "completion": {
+          "mode": "immediate in-memory result",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-max-retained-operations": 8,
+      "x-operation-inventory": "snapshot.operations (time/DC verification and imported/project recordings; not DC sweeps)"
+    },
+    "operation.cancel": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "verification-and-retained-operation-commands",
+        "preconditions": [
+          "Retained queued/running/canceling verification"
+        ],
+        "effects": [
+          "Requests cooperative cancellation; no partial rows published; inspect terminal status rather than treating request as completion"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or an invalid parameter/relationship"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "ID unknown or evicted"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Operation is already terminal"
+          }
+        ],
+        "completion": {
+          "mode": "cancellation request; inspect until terminal",
+          "observe": [
+            "operation.inspect",
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-max-retained-operations": 8,
+      "x-operation-inventory": "snapshot.operations (time/DC verification and imported/project recordings; not DC sweeps)"
+    }
+  },
+  "rc_rows": [
+    {
+      "time_s": 0,
+      "values": [
+        2,
+        -0.0002
+      ]
+    },
+    {
+      "time_s": 0.001,
+      "values": [
+        1.809674836071919,
+        -0.0001809674836071919
+      ]
+    },
+    {
+      "time_s": 0.002,
+      "values": [
+        1.6374615061559636,
+        -0.00016374615061559637
+      ]
+    },
+    {
+      "time_s": 0.003,
+      "values": [
+        1.4816364413634358,
+        -0.00014816364413634359
+      ]
+    },
+    {
+      "time_s": 0.004,
+      "values": [
+        1.3406400920712787,
+        -0.00013406400920712785
+      ]
+    },
+    {
+      "time_s": 0.005,
+      "values": [
+        1.2130613194252668,
+        -0.00012130613194252668
+      ]
+    },
+    {
+      "time_s": 0.006,
+      "values": [
+        1.0976232721880528,
+        -0.00010976232721880527
+      ]
+    },
+    {
+      "time_s": 0.007,
+      "values": [
+        0.9931706075828189,
+        -9.93170607582819e-05
+      ]
+    },
+    {
+      "time_s": 0.008,
+      "values": [
+        0.8986579282344431,
+        -8.986579282344431e-05
+      ]
+    },
+    {
+      "time_s": 0.009000000000000001,
+      "values": [
+        0.8131393194811981,
+        -8.131393194811982e-05
+      ]
+    },
+    {
+      "time_s": 0.01,
+      "values": [
+        0.7357588823428846,
+        -7.357588823428846e-05
+      ]
+    },
+    {
+      "time_s": 0.011,
+      "values": [
+        0.6657421673961591,
+        -6.657421673961591e-05
+      ]
+    },
+    {
+      "time_s": 0.012,
+      "values": [
+        0.6023884238244042,
+        -6.0238842382440415e-05
+      ]
+    },
+    {
+      "time_s": 0.013000000000000001,
+      "values": [
+        0.5450635860680251,
+        -5.4506358606802507e-05
+      ]
+    },
+    {
+      "time_s": 0.014,
+      "values": [
+        0.49319392788321287,
+        -4.9319392788321284e-05
+      ]
+    },
+    {
+      "time_s": 0.015,
+      "values": [
+        0.44626032029685964,
+        -4.462603202968596e-05
+      ]
+    },
+    {
+      "time_s": 0.016,
+      "values": [
+        0.40379303598931077,
+        -4.037930359893108e-05
+      ]
+    },
+    {
+      "time_s": 0.017,
+      "values": [
+        0.3653670481054692,
+        -3.6536704810546925e-05
+      ]
+    },
+    {
+      "time_s": 0.018000000000000002,
+      "values": [
+        0.33059777644317295,
+        -3.30597776443173e-05
+      ]
+    },
+    {
+      "time_s": 0.019,
+      "values": [
+        0.29913723844527007,
+        -2.9913723844527008e-05
+      ]
+    },
+    {
+      "time_s": 0.02,
+      "values": [
+        0.27067056647322535,
+        -2.7067056647322534e-05
+      ]
+    }
+  ],
+  "dc_rows": [
+    {
+      "time_s": 0,
+      "values": [
+        0.0029167965774405296,
+        2.083203422559471,
+        2.916796577440529,
+        5
+      ]
+    }
+  ],
+  "pulse_rows": [
+    {
+      "time_s": 0,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.001,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.002,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.003,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.004,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.005,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.006,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.007,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.008,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.009000000000000001,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.01,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.011,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.012,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.013000000000000001,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.014,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.015,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.016,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.017,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.018000000000000002,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.019,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.02,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.021,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.022,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.023,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.024,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.025,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.026000000000000002,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.027,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.028,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.029,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.03,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.031,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.032,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.033,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.034,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.035,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.036000000000000004,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.037,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.038,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.039,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.04,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.041,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.042,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.043000000000000003,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.044,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.045,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.046,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.047,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.048,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.049,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.05,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.05,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.05,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.051000000000000004,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.052000000000000005,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.053,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.054,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.055,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.056,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.057,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.058,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.059000000000000004,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.06,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.061,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.062,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.063,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.064,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.065,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.066,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.067,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.068,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.069,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.07,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.07100000000000001,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.07200000000000001,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.073,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.074,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.075,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.076,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.077,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.078,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.079,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.08,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.081,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.082,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.083,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.084,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.085,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.08600000000000001,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.08700000000000001,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.088,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.089,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.09,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.091,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.092,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.093,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.094,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.095,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.096,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.097,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.098,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.099,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.1,
+      "values": [
+        0,
+        2.0000000038662423e-14
+      ]
+    },
+    {
+      "time_s": 0.1,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    },
+    {
+      "time_s": 0.1,
+      "values": [
+        5,
+        0.0028603304910690096
+      ]
+    }
+  ],
+  "checks": [
+    "discovery purity and unchanged output schemas",
+    "current analysis mode inventory",
+    "unit time inputs and admission/refusal purity",
+    "null inheritance and explicit empty arrays",
+    "RC discharge analytic endpoint",
+    "DC inherited-startup refusal and settings reset recovery",
+    "exact sample paging, inclusive end and duplicate pulse edges",
+    "terminal cancel refusal and clear selection",
+    "live graph, physics/time and history preserved"
+  ],
+  "limits": [
+    "Six command contracts; no complete command/native interaction coverage claim",
+    "Pinned educational-model workflows; physical device and printing acceptance remain separate"
+  ]
+}

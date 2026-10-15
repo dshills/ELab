@@ -204,6 +204,9 @@ rendered:
 	if err := nativeValueDomainsSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	if err := nativeVerificationContractsSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	return nativeLifecycleSmoke(ctx, a, s)
 }
 

@@ -64,7 +64,7 @@
     },
     {
       "id": "SIM-05",
-      "evidence": "Independent bounded Verify, captured models/settings, operations, kept results, native controls",
+      "evidence": "Independent bounded Verify, captured models/settings, operations, kept results, native controls; shared current-mode inventory and DC-compatible startup reset with regression/public/GPU evidence",
       "status": "implemented",
       "assessment": "Implemented within declared duration/step/storage envelope"
     },
@@ -142,9 +142,9 @@
     },
     {
       "id": "AGENT-02",
-      "evidence": "Typed schemas/local registry, structured snapshots, units, part defaults/models/aliases/limits; on-demand root schema expansion and extra parameter bounds/normalized-SI relations/examples for five electrical/example commands, PNG resolution, all sweep commands, captured comparison/timing, and component placement/value/initial-voltage commands; sweep-specific state preconditions, staged errors, completion/cancellation and dynamic cursor bounds",
+      "evidence": "Typed schemas/local registry, structured snapshots, units, part defaults/models/aliases/limits; on-demand root schema expansion and extra parameter bounds/normalized-SI relations/examples for electrical/example, PNG, sweep, captured measurement, component value/placement and six Verify/retained-operation commands; command-specific state preconditions, staged errors, completion/cancellation and dynamic inventories/bounds",
       "status": "partial",
-      "assessment": "Partial: sweep, captured measurement and component value contracts are inspectable/tested; other command families still need semantic bounds, stateful preconditions/error discovery and exhaustive coverage audit"
+      "assessment": "Partial: sweep, captured measurement, component value and six Verify/retained-operation contracts are inspectable/tested; other command families still need semantic bounds, stateful preconditions/error discovery and exhaustive coverage audit"
     },
     {
       "id": "AGENT-03",

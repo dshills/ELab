@@ -38,7 +38,7 @@
     "desktop/scope_visibility.go": "9594a6afdb06c2d612c4a507ac90b9443651d38c4c88005e2af65ff2d3d6c686",
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
     "desktop/time_fields.go": "a20e6b2fc6fc368fabb7fd4defae5fc3083987f94a2beabd1780e7ae9a9264b8",
-    "desktop/verification.go": "d7707b47258e728430a22fa7152afabf7e2e853e64afceb9c4cb7664419f4e04",
+    "desktop/verification.go": "28887f81058b20942201feb1f8d833fd245f7f198604d9d4dcd67d28263ce0c5",
     "desktop/view.go": "071d569eca58531ef977b058dd897dfb26af234653c9a4e726953b0e31e1f889",
     "desktop/waveforms.go": "0c4a197175f5736621127540e652b6535fd3cb1ff4ab3f7bf3653eb433a9c6c9",
     "desktop/workflow.go": "9a3d8316eea46adf551ca0f00201807c7e491d74fd5884326e5c9be645d4167e"
@@ -2604,7 +2604,7 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 37,
+      "line": 51,
       "function": "*screen.verificationInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.InputMode = e.SelectedID\n\ts.invoke(\"verification.settings.set\", next)\n}",
@@ -2612,7 +2612,7 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 40,
+      "line": 54,
       "function": "*screen.verificationInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"verification.settings.set\", next)",
@@ -2623,7 +2623,7 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 46,
+      "line": 60,
       "function": "*screen.verificationInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tv := float64(e.Number)\n\tnext.InitialVoltage = \u0026v\n\ts.invoke(\"verification.settings.set\", next)\n}",
@@ -2631,7 +2631,7 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 50,
+      "line": 64,
       "function": "*screen.verificationInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"verification.settings.set\", next)",
@@ -2642,7 +2642,7 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 77,
+      "line": 91,
       "function": "*screen.verificationInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.Capacitors = append([]workbench.CapacitorInitial{}, cfg.Capacitors...)\n\tfound := false\n\tfor i := range next.Capacitors {\n\t\tif next.Capacitors[i].ID == part.ID {\n\t\t\tnext.Capacitors[i].Voltage = float64(e.Number)\n\t\t\tfound = true\n\t\t}\n\t}\n\tif !found {\n\t\tnext.Capacitors = append(next.Capacitors, workbench.CapacitorInitial{ID: part.ID, Voltage: float64(e.Number)})\n\t}\n\ts.invoke(\"verification.settings.set\", next)\n}",
@@ -2650,7 +2650,7 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 90,
+      "line": 104,
       "function": "*screen.verificationInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"verification.settings.set\", next)",
@@ -2661,10 +2661,10 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 98,
+      "line": 113,
       "function": "*screen.verificationInspector",
       "kind": "action-factory",
-      "expression": "s.action(\"verify-project-startup\", \"Use project startup / sampling\", \"verification.settings.set\", reset)",
+      "expression": "s.action(\"verify-project-startup\", \"Use project startup\", \"verification.settings.set\", reset)",
       "public_commands": [
         "verification.settings.set"
       ],
@@ -2672,7 +2672,7 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 104,
+      "line": 122,
       "function": "*screen.verificationInspector",
       "kind": "action-factory",
       "expression": "s.action(\"verify-start\", \"Verify\", \"simulation.verify\", workbench.VerifyParams{Duration: \u0026duration})",
@@ -2683,7 +2683,7 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 126,
+      "line": 144,
       "function": "*screen.verificationInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"operation.select\", workbench.IDParams{ID: id})\n}",
@@ -2691,7 +2691,7 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 131,
+      "line": 149,
       "function": "*screen.verificationInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"operation.select\", workbench.IDParams{ID: id})",
@@ -2702,7 +2702,7 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 141,
+      "line": 159,
       "function": "*screen.verificationInspector",
       "kind": "action-factory",
       "expression": "s.action(\"recording-keep\", keepLabel, \"recording.keep.set\", workbench.RecordingKeepParams{ID: operation.ID, Keep: !operation.KeptInProject})",
@@ -2713,7 +2713,7 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 151,
+      "line": 169,
       "function": "*screen.verificationInspector",
       "kind": "action-factory",
       "expression": "s.action(\"verify-cancel\", \"Cancel verification\", \"operation.cancel\", workbench.IDParams{ID: operation.ID})",
@@ -2724,7 +2724,7 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 159,
+      "line": 177,
       "function": "*screen.verificationInspector",
       "kind": "action-factory",
       "expression": "s.action(\"recording-show\", \"View recorded plot\", \"recording.view.set\", workbench.RecordingViewParams{Mode: \"recorded\"})",
@@ -2735,7 +2735,7 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 164,
+      "line": 182,
       "function": "*screen.verificationInspector",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\ts.beginFile(\"verification.export\", true, workbench.VerificationExportParams{ID: preview.ID, Format: format}, nil)\n}",
@@ -2743,7 +2743,7 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 165,
+      "line": 183,
       "function": "*screen.verificationInspector",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"verification.export\", true, workbench.VerificationExportParams{ID: preview.ID, Format: format}, nil)",

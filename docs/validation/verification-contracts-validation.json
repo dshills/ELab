@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.65.0",
+  "build_version": "80",
+  "binary_sha256": "274e44d1ad150d8470013bf1b35513e0d196ad42333598a990dd7f6b1b04ea5f",
+  "agent_binary_sha256": "7dad190a9da92e479271a3ca54f27db3dc250ed17786f6a3b3a89e7dd284c8ab",
+  "sdk_commit": "c4981ccadbfe59115814664c76b4440c45a8a7a9",
+  "sdk_manifest_sha256": "2350790e5e9aa333f7ffc3c45a512972ea3be95125465dcb2da0f2b62c155bfe",
+  "prepared_sdk_outputs_verified": 21,
+  "checks": [
+    "Regression reproduces DC Verify blocked by inherited transient startup while native reset is hidden; reset now available for every analysis",
+    "Native modes derive from owned current-analysis inventory shared with runtime admission; incompatible stored mode stays visible and disabled",
+    "Six on-demand command contracts expose normalized ranges, startup precedence, null/empty semantics, inventories, retained/compute limits and completion/error behavior",
+    "Current mode lists, cached snapshot ownership, numeric output isolation, global/capacitor boundaries, sample-step limits, null inheritance, explicit empty lists and inclusive paging regressions pass",
+    "Native DC reset preserves live graph/result/run/history and captures one operating point; native RC/NPN/waveform selectors match public inventories",
+    "Public workflows discover all six contracts, execute RC analytic discharge, recover DC defaults, page NPN pulse edge sides and check refusal/live-state preservation",
+    "Headless/native detailed schemas and exact captured RC/DC/NPN rows match except transport label",
+    "Full serialized root/native lint/import/race/vet, portable Verify/discovery tests, exact packaged GPU smoke and all four three-circuit reference adapters pass"
+  ],
+  "evidence": [
+    "docs/capability-details.md#verification-and-retained-operation-contracts",
+    "docs/verification.md",
+    "workbench/verification_capabilities_test.go",
+    "desktop/verification_contracts_test.go",
+    "desktop/verification_contracts_smoke.go",
+    "scripts/verification-contracts-demo.py",
+    "docs/validation/headless-verification-contracts.json",
+    "docs/validation/desktop-verification-contracts.json",
+    "docs/validation/verification-contracts-public-parity.json",
+    "docs/validation/verification-contracts-conformance.json"
+  ],
+  "regression_baseline_commit": "8018cff",
+  "regression_log_sha256": "2af3c27bc980192f946735d699b59152d35046d6d724018d0b77235f2301a81d",
+  "quality_log_sha256": "a2ec279fac7ca4710d2f223a4f4093277449910468a1e95c9179189ab68ddd88",
+  "smoke_log_sha256": "5431abf7d749dcbcca3679d807be414e0073ae221e434d38acfdb82be4b7ba80",
+  "inventory": {
+    "sources": 40,
+    "sites": 331,
+    "public_commands": 138,
+    "source_routes": 112,
+    "binding_review_sites": 123
+  },
+  "notes": [
+    "Initial broad check identified the deliberately stale source ledger and sandbox refusal of Unix socket binds; reviewed ledger refreshed and complete authorized rerun passes",
+    "SDK unchanged and all 21 prepared hashes verified read-only; candidate/build/canonical binary hashes equal",
+    "Previous 0.64.0 /79 preserved at build/ELab-before-verification-contracts.app; owned native sessions exited through public close",
+    "Owner schematic output/printing addition remains in PRD; SVG/PDF/PNG and captured preview exist; printer discovery/submission/device qualification remain pending"
+  ],
+  "limits": [
+    "Six command contracts only; full command-family semantics/native mounted interaction coverage remain open",
+    "Native smoke exercises real callbacks/GPU rendering; no complete physical typing/IME/focus/accessibility or visible-latency acceptance claim",
+    "Pinned educational models; no real-device/SPICE validation or physical printing claim",
+    "Private unsigned app; numerical kernels, work/transport limits and saved file format unchanged",
+    "P0 remains 17 implemented /10 partial; continuing goal stays active"
+  ]
+}
