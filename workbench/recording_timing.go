@@ -54,6 +54,9 @@ type RecordingTiming struct {
 	Crossings      []ThresholdCrossing     `json:"crossings"`
 	RisingSpacing  *TimingSpacing          `json:"first_rising_spacing,omitempty"`
 	FallingSpacing *TimingSpacing          `json:"first_falling_spacing,omitempty"`
+	HighPulse      *TimingSpacing          `json:"first_high_pulse,omitempty"`
+	LowPulse       *TimingSpacing          `json:"first_low_pulse,omitempty"`
+	Cycle          *TimingCycle            `json:"first_cycle,omitempty"`
 }
 
 func parseThresholdLevel(text, unit string) (float64, error) {
@@ -121,6 +124,7 @@ func (s *Service) measureRecordingTimingLocked(p RecordingTimingParams) (*Record
 	}
 	out := &RecordingTiming{Settings: RecordingTimingSettings(p), OriginID: record.metadata.OperationID, Engine: record.metadata.Engine, Probe: probe, Level: level, Duration: record.metadata.Duration, SampleCount: len(record.rows), Crossings: []ThresholdCrossing{}}
 	first := map[string]ThresholdCrossing{}
+	var pulses timingPulseCollector
 	for i, row := range record.rows {
 		// Strict interval membership: include only brackets whose two stored rows
 		// are inside the requested interval; never fabricate a boundary sample.
@@ -141,10 +145,16 @@ func (s *Service) measureRecordingTimingLocked(p RecordingTimingParams) (*Record
 		} else if a > level && b <= level {
 			direction = "falling"
 		}
-		if direction == "" || p.Direction != "both" && p.Direction != direction {
+		if direction == "" {
 			continue
 		}
 		crossing := ThresholdCrossing{Direction: direction, Before: TimingSample{Index: i - 1, Time: previous.Time, Value: a}, After: TimingSample{Index: i, Time: row.Time, Value: b}}
+		// Pulse/cycle summaries use both directions across the whole interval;
+		// direction and paging continue to filter the arrival list and spacing.
+		pulses.observe(out, crossing)
+		if p.Direction != "both" && p.Direction != direction {
+			continue
+		}
 		if old, exists := first[direction]; !exists {
 			first[direction] = crossing
 		} else {
@@ -210,14 +220,11 @@ func cloneRecordingTiming(in *RecordingTiming) *RecordingTiming {
 	}
 	out := *in
 	out.Crossings = append([]ThresholdCrossing{}, in.Crossings...)
-	if in.RisingSpacing != nil {
-		v := *in.RisingSpacing
-		out.RisingSpacing = &v
-	}
-	if in.FallingSpacing != nil {
-		v := *in.FallingSpacing
-		out.FallingSpacing = &v
-	}
+	out.RisingSpacing = cloneTimingSpacing(in.RisingSpacing)
+	out.FallingSpacing = cloneTimingSpacing(in.FallingSpacing)
+	out.HighPulse = cloneTimingSpacing(in.HighPulse)
+	out.LowPulse = cloneTimingSpacing(in.LowPulse)
+	out.Cycle = cloneTimingCycle(in.Cycle)
 	return &out
 }
 
@@ -237,7 +244,7 @@ func addRecordingTimingDetails(id string, schema map[string]any) bool {
 	}
 	schema["x-relations"] = []map[string]any{{"operator": "0<=start_s<=end_s<=captured duration", "fields": []string{"start_s", "end_s", "id"}}, {"operator": "offset<=total sampled arrivals", "fields": []string{"offset"}}}
 	schema["x-inventory"] = map[string]string{"ids": "snapshot.operations with completed status", "probe_ids": "operation.inspect metadata.probes (captured, not live)"}
-	schema["x-command-contract"] = commandContractDetail{Version: 1, Scope: "sampled-threshold-timing", Preconditions: []string{"Retained completed capture and a captured probe; DC/empty intervals can yield zero arrivals", "Set ID must match selected recording; empty probe clears only with level 0, both directions and zero interval/page fields"}, Effects: []string{"Rising: before < level and after >= level; falling: before > level and after <= level; equal plateaus do not repeatedly trigger", "Only adjacent exact saved rows wholly inside strict interval; duplicates retain edge order; no interpolation, resampling or hidden-transition guarantee", "First same-direction spacing bounds subtract observed sample brackets; not a certification of periodic behavior", "Query is pure; set caches a bounded derived page as session/view state; selection/reopen clears; no live/history/project/solver changes"}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Invalid level/unit/direction/interval/page or missing required fields"}, {"not-ready", "admission", "Capture missing or incomplete"}, {"not-found", "admission", "Probe not captured"}, {"conflict", "admission", "Set ID differs from selected capture"}}, Completion: &commandCompletionDetail{Mode: "bounded in-memory scan of at most 4096 saved rows; no worker/file IO", Observe: []string{"recording.timing", "project.inspect"}}}
+	schema["x-command-contract"] = commandContractDetail{Version: 1, Scope: "sampled-threshold-timing", Preconditions: []string{"Retained completed capture and a captured probe; DC/empty intervals can yield zero arrivals", "Set ID must match selected recording; empty probe clears only with level 0, both directions and zero interval/page fields"}, Effects: []string{"Rising: before < level and after >= level; falling: before > level and after <= level; equal plateaus do not repeatedly trigger", "Only adjacent exact saved rows wholly inside strict interval; duplicates retain edge order; no interpolation, resampling or hidden-transition guarantee", "First same-direction spacing bounds subtract observed sample brackets; not a certification of periodic behavior", "First high/low widths use consecutive opposite observed arrivals; first cycle requires consecutive rising/falling/rising. Pulse/cycle summaries use both directions regardless of list filter/page", "Cycle high_fraction bounds retain the shared rising-time dependence: (fall.before-rise.after)/(next.after-rise.after) through (fall.after-rise.before)/(next.before-rise.before). Omitted if minimum cycle duration is not positive; reason explains why", "Query is pure; set caches a bounded derived page as session/view state; selection/reopen clears; no live/history/project/solver changes"}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Invalid level/unit/direction/interval/page or missing required fields"}, {"not-ready", "admission", "Capture missing or incomplete"}, {"not-found", "admission", "Probe not captured"}, {"conflict", "admission", "Set ID differs from selected capture"}}, Completion: &commandCompletionDetail{Mode: "bounded in-memory scan of at most 4096 saved rows; no worker/file IO", Observe: []string{"recording.timing", "project.inspect"}}}
 	schema["examples"] = []any{RecordingTimingParams{ID: "verify-1", ProbeID: "v:C1", Level: "2.5 V", Direction: "rising", End: .02}}
 	if id == "recording.timing.set" {
 		schema["examples"] = append(schema["examples"].([]any), RecordingTimingParams{ID: "verify-1", Level: "0", Direction: "both"})

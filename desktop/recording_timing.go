@@ -61,6 +61,7 @@ func (s *screen) recordingTimingControls(state workbench.Snapshot) []ui.Node {
 			nodes = append(nodes, quiet("recorded-timing-spacing-"+spacing.name, fmt.Sprintf("First %s spacing\n%.6g → %.6g ms", spacing.name, spacing.value.Minimum*1000, spacing.value.Maximum*1000)))
 		}
 	}
+	nodes = append(nodes, recordingPulseReadouts(result)...)
 	if result.Total == 0 {
 		nodes = append(nodes, quiet("recorded-timing-none", "No sampled threshold arrival.\nCheck level, direction and interval."))
 	}
@@ -76,6 +77,32 @@ func (s *screen) recordingTimingControls(state workbench.Snapshot) []ui.Node {
 		next := cfg
 		next.Offset = result.NextOffset
 		nodes = append(nodes, s.action("recorded-timing-next", "Next arrivals", "recording.timing.set", next))
+	}
+	return nodes
+}
+
+func recordingPulseReadouts(result *workbench.RecordingTiming) []ui.Node {
+	if result.HighPulse == nil && result.LowPulse == nil && result.Cycle == nil {
+		return nil
+	}
+	nodes := []ui.Node{quiet("recorded-pulse-help", "High time spans rising → falling arrivals. Summaries use both directions across the timing interval, regardless of the arrival filter.")}
+	for _, pulse := range []struct {
+		id, label string
+		value     *workbench.TimingSpacing
+	}{{"high", "First high time", result.HighPulse}, {"low", "First low time", result.LowPulse}} {
+		if pulse.value != nil {
+			nodes = append(nodes, quiet("recorded-pulse-"+pulse.id, fmt.Sprintf("%s\n%.6g → %.6g ms", pulse.label, pulse.value.Minimum*1000, pulse.value.Maximum*1000)))
+		}
+	}
+	cycle := result.Cycle
+	if cycle == nil {
+		return append(nodes, quiet("recorded-pulse-cycle-missing", "Duty cycle needs three consecutive rising → falling → rising arrivals."))
+	}
+	nodes = append(nodes, quiet("recorded-pulse-period", fmt.Sprintf("First rising cycle\n%.6g → %.6g ms", cycle.Period.Minimum*1000, cycle.Period.Maximum*1000)))
+	if cycle.Duty == nil {
+		nodes = append(nodes, quiet("recorded-pulse-duty-unavailable", cycle.Reason))
+	} else {
+		nodes = append(nodes, quiet("recorded-pulse-duty", fmt.Sprintf("Duty cycle · first rising cycle\n%.6g → %.6g %% high\nSample bounds; periodicity is not verified.", cycle.Duty.Minimum*100, cycle.Duty.Maximum*100)))
 	}
 	return nodes
 }

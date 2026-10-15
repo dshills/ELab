@@ -251,6 +251,10 @@ rendered:
 	if err := nativeVerificationContractsSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeRecordingPulsesSmoke")
+	if err := nativeRecordingPulsesSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	setStage("nativeScopeContextSmoke")
 	if err := nativeScopeContextSmoke(ctx, a, s); err != nil {
 		return err

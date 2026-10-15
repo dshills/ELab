@@ -246,6 +246,10 @@ func TestRecordingTimingBothFlasherSides(t *testing.T) {
 		if result.RisingSpacing == nil || result.RisingSpacing.Minimum < .47 || result.RisingSpacing.Maximum > .51 {
 			t.Fatal("flasher repeat spacing outside existing reference envelope", probe, result)
 		}
+		c := result.Cycle
+		if c == nil || c.Duty == nil || c.High.Minimum <= 0 || c.Low.Minimum <= 0 || c.Period.Minimum < .47 || c.Period.Maximum > .51 || c.Duty.Minimum <= 0 || c.Duty.Maximum >= 1 || c.Duty.Minimum > c.Duty.Maximum {
+			t.Fatal("flasher pulse/cycle summary missing or invalid", probe)
+		}
 	}
 }
 func TestRecordingTimingLaterSelectionSurvivesImport(t *testing.T) {

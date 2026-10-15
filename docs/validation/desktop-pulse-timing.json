@@ -1,0 +1,1374 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "detailed_schemas": {
+    "recording.timing": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "id": "verify-1",
+          "probe_id": "v:C1",
+          "level": "2.5 V",
+          "direction": "rising",
+          "start_s": 0,
+          "end_s": 0.02
+        }
+      ],
+      "properties": {
+        "direction": {
+          "enum": [
+            "both",
+            "rising",
+            "falling"
+          ],
+          "type": "string"
+        },
+        "end_s": {
+          "$ref": "urn:elab:time:1",
+          "x-normalized-si-range": {
+            "maximum": 10,
+            "minimum": 0
+          }
+        },
+        "id": {
+          "type": "string"
+        },
+        "level": {
+          "description": "Signed SI text matching captured probe units, optionally m/u/\u00b5/\u03bc prefix with explicit unit (for example 2.5 V or 1 mA); finite magnitude at most 1e12.",
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string",
+          "x-max-utf8-bytes": 128
+        },
+        "limit": {
+          "default": 8,
+          "description": "Omit or zero for eight arrivals; otherwise 1\u2013100.",
+          "maximum": 100,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "offset": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "probe_id": {
+          "type": "string"
+        },
+        "start_s": {
+          "$ref": "urn:elab:time:1",
+          "x-normalized-si-range": {
+            "maximum": 10,
+            "minimum": 0
+          }
+        }
+      },
+      "required": [
+        "id",
+        "probe_id",
+        "level",
+        "direction",
+        "start_s",
+        "end_s"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "sampled-threshold-timing",
+        "preconditions": [
+          "Retained completed capture and a captured probe; DC/empty intervals can yield zero arrivals",
+          "Set ID must match selected recording; empty probe clears only with level 0, both directions and zero interval/page fields"
+        ],
+        "effects": [
+          "Rising: before < level and after >= level; falling: before > level and after <= level; equal plateaus do not repeatedly trigger",
+          "Only adjacent exact saved rows wholly inside strict interval; duplicates retain edge order; no interpolation, resampling or hidden-transition guarantee",
+          "First same-direction spacing bounds subtract observed sample brackets; not a certification of periodic behavior",
+          "First high/low widths use consecutive opposite observed arrivals; first cycle requires consecutive rising/falling/rising. Pulse/cycle summaries use both directions regardless of list filter/page",
+          "Cycle high_fraction bounds retain the shared rising-time dependence: (fall.before-rise.after)/(next.after-rise.after) through (fall.after-rise.before)/(next.before-rise.before). Omitted if minimum cycle duration is not positive; reason explains why",
+          "Query is pure; set caches a bounded derived page as session/view state; selection/reopen clears; no live/history/project/solver changes"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Invalid level/unit/direction/interval/page or missing required fields"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "Capture missing or incomplete"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Probe not captured"
+          },
+          {
+            "code": "conflict",
+            "phase": "admission",
+            "when": "Set ID differs from selected capture"
+          }
+        ],
+        "completion": {
+          "mode": "bounded in-memory scan of at most 4096 saved rows; no worker/file IO",
+          "observe": [
+            "recording.timing",
+            "project.inspect"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-inventory": {
+        "ids": "snapshot.operations with completed status",
+        "probe_ids": "operation.inspect metadata.probes (captured, not live)"
+      },
+      "x-relations": [
+        {
+          "fields": [
+            "start_s",
+            "end_s",
+            "id"
+          ],
+          "operator": "0<=start_s<=end_s<=captured duration"
+        },
+        {
+          "fields": [
+            "offset"
+          ],
+          "operator": "offset<=total sampled arrivals"
+        }
+      ]
+    },
+    "recording.timing.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "id": "verify-1",
+          "probe_id": "v:C1",
+          "level": "2.5 V",
+          "direction": "rising",
+          "start_s": 0,
+          "end_s": 0.02
+        },
+        {
+          "id": "verify-1",
+          "probe_id": "",
+          "level": "0",
+          "direction": "both",
+          "start_s": 0,
+          "end_s": 0
+        }
+      ],
+      "properties": {
+        "direction": {
+          "enum": [
+            "both",
+            "rising",
+            "falling"
+          ],
+          "type": "string"
+        },
+        "end_s": {
+          "$ref": "urn:elab:time:1",
+          "x-normalized-si-range": {
+            "maximum": 10,
+            "minimum": 0
+          }
+        },
+        "id": {
+          "type": "string"
+        },
+        "level": {
+          "description": "Signed SI text matching captured probe units, optionally m/u/\u00b5/\u03bc prefix with explicit unit (for example 2.5 V or 1 mA); finite magnitude at most 1e12.",
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string",
+          "x-max-utf8-bytes": 128
+        },
+        "limit": {
+          "default": 8,
+          "description": "Omit or zero for eight arrivals; otherwise 1\u2013100.",
+          "maximum": 100,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "offset": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "probe_id": {
+          "type": "string"
+        },
+        "start_s": {
+          "$ref": "urn:elab:time:1",
+          "x-normalized-si-range": {
+            "maximum": 10,
+            "minimum": 0
+          }
+        }
+      },
+      "required": [
+        "id",
+        "probe_id",
+        "level",
+        "direction",
+        "start_s",
+        "end_s"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "sampled-threshold-timing",
+        "preconditions": [
+          "Retained completed capture and a captured probe; DC/empty intervals can yield zero arrivals",
+          "Set ID must match selected recording; empty probe clears only with level 0, both directions and zero interval/page fields"
+        ],
+        "effects": [
+          "Rising: before < level and after >= level; falling: before > level and after <= level; equal plateaus do not repeatedly trigger",
+          "Only adjacent exact saved rows wholly inside strict interval; duplicates retain edge order; no interpolation, resampling or hidden-transition guarantee",
+          "First same-direction spacing bounds subtract observed sample brackets; not a certification of periodic behavior",
+          "First high/low widths use consecutive opposite observed arrivals; first cycle requires consecutive rising/falling/rising. Pulse/cycle summaries use both directions regardless of list filter/page",
+          "Cycle high_fraction bounds retain the shared rising-time dependence: (fall.before-rise.after)/(next.after-rise.after) through (fall.after-rise.before)/(next.before-rise.before). Omitted if minimum cycle duration is not positive; reason explains why",
+          "Query is pure; set caches a bounded derived page as session/view state; selection/reopen clears; no live/history/project/solver changes"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Invalid level/unit/direction/interval/page or missing required fields"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "Capture missing or incomplete"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Probe not captured"
+          },
+          {
+            "code": "conflict",
+            "phase": "admission",
+            "when": "Set ID differs from selected capture"
+          }
+        ],
+        "completion": {
+          "mode": "bounded in-memory scan of at most 4096 saved rows; no worker/file IO",
+          "observe": [
+            "recording.timing",
+            "project.inspect"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-inventory": {
+        "ids": "snapshot.operations with completed status",
+        "probe_ids": "operation.inspect metadata.probes (captured, not live)"
+      },
+      "x-relations": [
+        {
+          "fields": [
+            "start_s",
+            "end_s",
+            "id"
+          ],
+          "operator": "0<=start_s<=end_s<=captured duration"
+        },
+        {
+          "fields": [
+            "offset"
+          ],
+          "operator": "offset<=total sampled arrivals"
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "case": "ideal-npn-50-percent",
+      "result": {
+        "settings": {
+          "probe_id": "v:VIN.positive",
+          "level": "2.5 V",
+          "direction": "both",
+          "start_s": 0,
+          "end_s": 0.25,
+          "limit": 8
+        },
+        "engine": "elab.npn-switch-quasistatic.v1",
+        "probe": {
+          "id": "v:VIN.positive",
+          "label": "VIN.positive / ground",
+          "unit": "V",
+          "positive": "VIN.positive",
+          "reference": "ground"
+        },
+        "level_si": 2.5,
+        "duration_s": 0.25,
+        "sample_count": 261,
+        "window_sample_count": 261,
+        "total_crossings": 5,
+        "next_offset": 5,
+        "crossings": [
+          {
+            "direction": "falling",
+            "before": {
+              "index": 50,
+              "time_s": 0.05,
+              "value": 5
+            },
+            "after": {
+              "index": 51,
+              "time_s": 0.05,
+              "value": 0
+            }
+          },
+          {
+            "direction": "rising",
+            "before": {
+              "index": 102,
+              "time_s": 0.1,
+              "value": 0
+            },
+            "after": {
+              "index": 103,
+              "time_s": 0.1,
+              "value": 5
+            }
+          },
+          {
+            "direction": "falling",
+            "before": {
+              "index": 154,
+              "time_s": 0.15,
+              "value": 5
+            },
+            "after": {
+              "index": 155,
+              "time_s": 0.15,
+              "value": 0
+            }
+          },
+          {
+            "direction": "rising",
+            "before": {
+              "index": 206,
+              "time_s": 0.2,
+              "value": 0
+            },
+            "after": {
+              "index": 207,
+              "time_s": 0.2,
+              "value": 5
+            }
+          },
+          {
+            "direction": "falling",
+            "before": {
+              "index": 258,
+              "time_s": 0.25,
+              "value": 5
+            },
+            "after": {
+              "index": 259,
+              "time_s": 0.25,
+              "value": 0
+            }
+          }
+        ],
+        "first_rising_spacing": {
+          "first": {
+            "direction": "rising",
+            "before": {
+              "index": 102,
+              "time_s": 0.1,
+              "value": 0
+            },
+            "after": {
+              "index": 103,
+              "time_s": 0.1,
+              "value": 5
+            }
+          },
+          "second": {
+            "direction": "rising",
+            "before": {
+              "index": 206,
+              "time_s": 0.2,
+              "value": 0
+            },
+            "after": {
+              "index": 207,
+              "time_s": 0.2,
+              "value": 5
+            }
+          },
+          "minimum_s": 0.1,
+          "maximum_s": 0.1
+        },
+        "first_falling_spacing": {
+          "first": {
+            "direction": "falling",
+            "before": {
+              "index": 50,
+              "time_s": 0.05,
+              "value": 5
+            },
+            "after": {
+              "index": 51,
+              "time_s": 0.05,
+              "value": 0
+            }
+          },
+          "second": {
+            "direction": "falling",
+            "before": {
+              "index": 154,
+              "time_s": 0.15,
+              "value": 5
+            },
+            "after": {
+              "index": 155,
+              "time_s": 0.15,
+              "value": 0
+            }
+          },
+          "minimum_s": 0.09999999999999999,
+          "maximum_s": 0.09999999999999999
+        },
+        "first_high_pulse": {
+          "first": {
+            "direction": "rising",
+            "before": {
+              "index": 102,
+              "time_s": 0.1,
+              "value": 0
+            },
+            "after": {
+              "index": 103,
+              "time_s": 0.1,
+              "value": 5
+            }
+          },
+          "second": {
+            "direction": "falling",
+            "before": {
+              "index": 154,
+              "time_s": 0.15,
+              "value": 5
+            },
+            "after": {
+              "index": 155,
+              "time_s": 0.15,
+              "value": 0
+            }
+          },
+          "minimum_s": 0.04999999999999999,
+          "maximum_s": 0.04999999999999999
+        },
+        "first_low_pulse": {
+          "first": {
+            "direction": "falling",
+            "before": {
+              "index": 50,
+              "time_s": 0.05,
+              "value": 5
+            },
+            "after": {
+              "index": 51,
+              "time_s": 0.05,
+              "value": 0
+            }
+          },
+          "second": {
+            "direction": "rising",
+            "before": {
+              "index": 102,
+              "time_s": 0.1,
+              "value": 0
+            },
+            "after": {
+              "index": 103,
+              "time_s": 0.1,
+              "value": 5
+            }
+          },
+          "minimum_s": 0.05,
+          "maximum_s": 0.05
+        },
+        "first_cycle": {
+          "rising": {
+            "direction": "rising",
+            "before": {
+              "index": 102,
+              "time_s": 0.1,
+              "value": 0
+            },
+            "after": {
+              "index": 103,
+              "time_s": 0.1,
+              "value": 5
+            }
+          },
+          "falling": {
+            "direction": "falling",
+            "before": {
+              "index": 154,
+              "time_s": 0.15,
+              "value": 5
+            },
+            "after": {
+              "index": 155,
+              "time_s": 0.15,
+              "value": 0
+            }
+          },
+          "next_rising": {
+            "direction": "rising",
+            "before": {
+              "index": 206,
+              "time_s": 0.2,
+              "value": 0
+            },
+            "after": {
+              "index": 207,
+              "time_s": 0.2,
+              "value": 5
+            }
+          },
+          "high": {
+            "minimum_s": 0.04999999999999999,
+            "maximum_s": 0.04999999999999999
+          },
+          "low": {
+            "minimum_s": 0.05000000000000002,
+            "maximum_s": 0.05000000000000002
+          },
+          "period": {
+            "minimum_s": 0.1,
+            "maximum_s": 0.1
+          },
+          "high_fraction": {
+            "minimum": 0.4999999999999999,
+            "maximum": 0.4999999999999999
+          }
+        }
+      }
+    },
+    {
+      "case": "finite-ramp-analytic-37.5-percent",
+      "result": {
+        "settings": {
+          "probe_id": "v:Ramp.positive",
+          "level": "2.5 V",
+          "direction": "both",
+          "start_s": 0,
+          "end_s": 0.05,
+          "limit": 8
+        },
+        "engine": "elab.network-waveforms-mna-be.v1",
+        "probe": {
+          "id": "v:Ramp.positive",
+          "label": "Ramp.positive / ground",
+          "unit": "V",
+          "positive": "Ramp.positive",
+          "reference": "ground"
+        },
+        "level_si": 2.5,
+        "duration_s": 0.05,
+        "sample_count": 512,
+        "window_sample_count": 512,
+        "total_crossings": 6,
+        "next_offset": 6,
+        "crossings": [
+          {
+            "direction": "rising",
+            "before": {
+              "index": 9,
+              "time_s": 0.0009000000000000001,
+              "value": 2.25
+            },
+            "after": {
+              "index": 10,
+              "time_s": 0.001,
+              "value": 2.5
+            }
+          },
+          {
+            "direction": "falling",
+            "before": {
+              "index": 86,
+              "time_s": 0.008400000000000001,
+              "value": 2.6666666666666647
+            },
+            "after": {
+              "index": 87,
+              "time_s": 0.0085,
+              "value": 2.499999999999999
+            }
+          },
+          {
+            "direction": "rising",
+            "before": {
+              "index": 213,
+              "time_s": 0.020900000000000002,
+              "value": 2.2500000000000036
+            },
+            "after": {
+              "index": 214,
+              "time_s": 0.021,
+              "value": 2.500000000000002
+            }
+          },
+          {
+            "direction": "falling",
+            "before": {
+              "index": 290,
+              "time_s": 0.0284,
+              "value": 2.6666666666666647
+            },
+            "after": {
+              "index": 291,
+              "time_s": 0.0285,
+              "value": 2.499999999999999
+            }
+          },
+          {
+            "direction": "rising",
+            "before": {
+              "index": 417,
+              "time_s": 0.0409,
+              "value": 2.249999999999995
+            },
+            "after": {
+              "index": 418,
+              "time_s": 0.041,
+              "value": 2.500000000000002
+            }
+          },
+          {
+            "direction": "falling",
+            "before": {
+              "index": 494,
+              "time_s": 0.048400000000000006,
+              "value": 2.666666666666659
+            },
+            "after": {
+              "index": 495,
+              "time_s": 0.0485,
+              "value": 2.499999999999999
+            }
+          }
+        ],
+        "first_rising_spacing": {
+          "first": {
+            "direction": "rising",
+            "before": {
+              "index": 9,
+              "time_s": 0.0009000000000000001,
+              "value": 2.25
+            },
+            "after": {
+              "index": 10,
+              "time_s": 0.001,
+              "value": 2.5
+            }
+          },
+          "second": {
+            "direction": "rising",
+            "before": {
+              "index": 213,
+              "time_s": 0.020900000000000002,
+              "value": 2.2500000000000036
+            },
+            "after": {
+              "index": 214,
+              "time_s": 0.021,
+              "value": 2.500000000000002
+            }
+          },
+          "minimum_s": 0.0199,
+          "maximum_s": 0.0201
+        },
+        "first_falling_spacing": {
+          "first": {
+            "direction": "falling",
+            "before": {
+              "index": 86,
+              "time_s": 0.008400000000000001,
+              "value": 2.6666666666666647
+            },
+            "after": {
+              "index": 87,
+              "time_s": 0.0085,
+              "value": 2.499999999999999
+            }
+          },
+          "second": {
+            "direction": "falling",
+            "before": {
+              "index": 290,
+              "time_s": 0.0284,
+              "value": 2.6666666666666647
+            },
+            "after": {
+              "index": 291,
+              "time_s": 0.0285,
+              "value": 2.499999999999999
+            }
+          },
+          "minimum_s": 0.0199,
+          "maximum_s": 0.0201
+        },
+        "first_high_pulse": {
+          "first": {
+            "direction": "rising",
+            "before": {
+              "index": 9,
+              "time_s": 0.0009000000000000001,
+              "value": 2.25
+            },
+            "after": {
+              "index": 10,
+              "time_s": 0.001,
+              "value": 2.5
+            }
+          },
+          "second": {
+            "direction": "falling",
+            "before": {
+              "index": 86,
+              "time_s": 0.008400000000000001,
+              "value": 2.6666666666666647
+            },
+            "after": {
+              "index": 87,
+              "time_s": 0.0085,
+              "value": 2.499999999999999
+            }
+          },
+          "minimum_s": 0.007400000000000001,
+          "maximum_s": 0.007600000000000001
+        },
+        "first_low_pulse": {
+          "first": {
+            "direction": "falling",
+            "before": {
+              "index": 86,
+              "time_s": 0.008400000000000001,
+              "value": 2.6666666666666647
+            },
+            "after": {
+              "index": 87,
+              "time_s": 0.0085,
+              "value": 2.499999999999999
+            }
+          },
+          "second": {
+            "direction": "rising",
+            "before": {
+              "index": 213,
+              "time_s": 0.020900000000000002,
+              "value": 2.2500000000000036
+            },
+            "after": {
+              "index": 214,
+              "time_s": 0.021,
+              "value": 2.500000000000002
+            }
+          },
+          "minimum_s": 0.012400000000000001,
+          "maximum_s": 0.0126
+        },
+        "first_cycle": {
+          "rising": {
+            "direction": "rising",
+            "before": {
+              "index": 9,
+              "time_s": 0.0009000000000000001,
+              "value": 2.25
+            },
+            "after": {
+              "index": 10,
+              "time_s": 0.001,
+              "value": 2.5
+            }
+          },
+          "falling": {
+            "direction": "falling",
+            "before": {
+              "index": 86,
+              "time_s": 0.008400000000000001,
+              "value": 2.6666666666666647
+            },
+            "after": {
+              "index": 87,
+              "time_s": 0.0085,
+              "value": 2.499999999999999
+            }
+          },
+          "next_rising": {
+            "direction": "rising",
+            "before": {
+              "index": 213,
+              "time_s": 0.020900000000000002,
+              "value": 2.2500000000000036
+            },
+            "after": {
+              "index": 214,
+              "time_s": 0.021,
+              "value": 2.500000000000002
+            }
+          },
+          "high": {
+            "minimum_s": 0.007400000000000001,
+            "maximum_s": 0.007600000000000001
+          },
+          "low": {
+            "minimum_s": 0.012400000000000001,
+            "maximum_s": 0.0126
+          },
+          "period": {
+            "minimum_s": 0.0199,
+            "maximum_s": 0.0201
+          },
+          "high_fraction": {
+            "minimum": 0.37000000000000005,
+            "maximum": 0.38000000000000006
+          }
+        }
+      }
+    },
+    {
+      "case": "flasher-i:D1",
+      "result": {
+        "settings": {
+          "probe_id": "i:D1",
+          "level": "1 mA",
+          "direction": "both",
+          "start_s": 0.3,
+          "end_s": 1.2,
+          "limit": 8
+        },
+        "engine": "elab.mixed-mna-be.v1",
+        "probe": {
+          "id": "i:D1",
+          "label": "D1 current",
+          "unit": "A",
+          "positive": "D1.anode",
+          "reference": "D1.cathode"
+        },
+        "level_si": 0.001,
+        "duration_s": 1.2,
+        "sample_count": 241,
+        "window_sample_count": 181,
+        "total_crossings": 4,
+        "next_offset": 4,
+        "crossings": [
+          {
+            "direction": "rising",
+            "before": {
+              "index": 63,
+              "time_s": 0.315,
+              "value": 4.085665893187066e-06
+            },
+            "after": {
+              "index": 64,
+              "time_s": 0.32,
+              "value": 0.0028868948455683203
+            }
+          },
+          {
+            "direction": "falling",
+            "before": {
+              "index": 114,
+              "time_s": 0.5700000000000001,
+              "value": 0.0012840370396899367
+            },
+            "after": {
+              "index": 115,
+              "time_s": 0.5750000000000001,
+              "value": 0.0008037977761633402
+            }
+          },
+          {
+            "direction": "rising",
+            "before": {
+              "index": 161,
+              "time_s": 0.805,
+              "value": 3.235784903007057e-06
+            },
+            "after": {
+              "index": 162,
+              "time_s": 0.81,
+              "value": 0.0028845216768627396
+            }
+          },
+          {
+            "direction": "falling",
+            "before": {
+              "index": 212,
+              "time_s": 1.06,
+              "value": 0.0011075817899002713
+            },
+            "after": {
+              "index": 213,
+              "time_s": 1.065,
+              "value": 0.0006967451310140103
+            }
+          }
+        ],
+        "first_rising_spacing": {
+          "first": {
+            "direction": "rising",
+            "before": {
+              "index": 63,
+              "time_s": 0.315,
+              "value": 4.085665893187066e-06
+            },
+            "after": {
+              "index": 64,
+              "time_s": 0.32,
+              "value": 0.0028868948455683203
+            }
+          },
+          "second": {
+            "direction": "rising",
+            "before": {
+              "index": 161,
+              "time_s": 0.805,
+              "value": 3.235784903007057e-06
+            },
+            "after": {
+              "index": 162,
+              "time_s": 0.81,
+              "value": 0.0028845216768627396
+            }
+          },
+          "minimum_s": 0.48500000000000004,
+          "maximum_s": 0.49500000000000005
+        },
+        "first_falling_spacing": {
+          "first": {
+            "direction": "falling",
+            "before": {
+              "index": 114,
+              "time_s": 0.5700000000000001,
+              "value": 0.0012840370396899367
+            },
+            "after": {
+              "index": 115,
+              "time_s": 0.5750000000000001,
+              "value": 0.0008037977761633402
+            }
+          },
+          "second": {
+            "direction": "falling",
+            "before": {
+              "index": 212,
+              "time_s": 1.06,
+              "value": 0.0011075817899002713
+            },
+            "after": {
+              "index": 213,
+              "time_s": 1.065,
+              "value": 0.0006967451310140103
+            }
+          },
+          "minimum_s": 0.485,
+          "maximum_s": 0.4949999999999999
+        },
+        "first_high_pulse": {
+          "first": {
+            "direction": "rising",
+            "before": {
+              "index": 63,
+              "time_s": 0.315,
+              "value": 4.085665893187066e-06
+            },
+            "after": {
+              "index": 64,
+              "time_s": 0.32,
+              "value": 0.0028868948455683203
+            }
+          },
+          "second": {
+            "direction": "falling",
+            "before": {
+              "index": 114,
+              "time_s": 0.5700000000000001,
+              "value": 0.0012840370396899367
+            },
+            "after": {
+              "index": 115,
+              "time_s": 0.5750000000000001,
+              "value": 0.0008037977761633402
+            }
+          },
+          "minimum_s": 0.25000000000000006,
+          "maximum_s": 0.26000000000000006
+        },
+        "first_low_pulse": {
+          "first": {
+            "direction": "falling",
+            "before": {
+              "index": 114,
+              "time_s": 0.5700000000000001,
+              "value": 0.0012840370396899367
+            },
+            "after": {
+              "index": 115,
+              "time_s": 0.5750000000000001,
+              "value": 0.0008037977761633402
+            }
+          },
+          "second": {
+            "direction": "rising",
+            "before": {
+              "index": 161,
+              "time_s": 0.805,
+              "value": 3.235784903007057e-06
+            },
+            "after": {
+              "index": 162,
+              "time_s": 0.81,
+              "value": 0.0028845216768627396
+            }
+          },
+          "minimum_s": 0.22999999999999998,
+          "maximum_s": 0.24
+        },
+        "first_cycle": {
+          "rising": {
+            "direction": "rising",
+            "before": {
+              "index": 63,
+              "time_s": 0.315,
+              "value": 4.085665893187066e-06
+            },
+            "after": {
+              "index": 64,
+              "time_s": 0.32,
+              "value": 0.0028868948455683203
+            }
+          },
+          "falling": {
+            "direction": "falling",
+            "before": {
+              "index": 114,
+              "time_s": 0.5700000000000001,
+              "value": 0.0012840370396899367
+            },
+            "after": {
+              "index": 115,
+              "time_s": 0.5750000000000001,
+              "value": 0.0008037977761633402
+            }
+          },
+          "next_rising": {
+            "direction": "rising",
+            "before": {
+              "index": 161,
+              "time_s": 0.805,
+              "value": 3.235784903007057e-06
+            },
+            "after": {
+              "index": 162,
+              "time_s": 0.81,
+              "value": 0.0028845216768627396
+            }
+          },
+          "high": {
+            "minimum_s": 0.25000000000000006,
+            "maximum_s": 0.26000000000000006
+          },
+          "low": {
+            "minimum_s": 0.22999999999999998,
+            "maximum_s": 0.24
+          },
+          "period": {
+            "minimum_s": 0.48500000000000004,
+            "maximum_s": 0.49500000000000005
+          },
+          "high_fraction": {
+            "minimum": 0.5102040816326531,
+            "maximum": 0.5306122448979592
+          }
+        }
+      }
+    },
+    {
+      "case": "flasher-i:D2",
+      "result": {
+        "settings": {
+          "probe_id": "i:D2",
+          "level": "1 mA",
+          "direction": "both",
+          "start_s": 0.3,
+          "end_s": 1.2,
+          "limit": 8
+        },
+        "engine": "elab.mixed-mna-be.v1",
+        "probe": {
+          "id": "i:D2",
+          "label": "D2 current",
+          "unit": "A",
+          "positive": "D2.anode",
+          "reference": "D2.cathode"
+        },
+        "level_si": 0.001,
+        "duration_s": 1.2,
+        "sample_count": 241,
+        "window_sample_count": 181,
+        "total_crossings": 4,
+        "next_offset": 4,
+        "crossings": [
+          {
+            "direction": "falling",
+            "before": {
+              "index": 65,
+              "time_s": 0.325,
+              "value": 0.0015013524775462066
+            },
+            "after": {
+              "index": 66,
+              "time_s": 0.33,
+              "value": 0.0009360307364560544
+            }
+          },
+          {
+            "direction": "rising",
+            "before": {
+              "index": 112,
+              "time_s": 0.56,
+              "value": 3.2206535452013112e-06
+            },
+            "after": {
+              "index": 113,
+              "time_s": 0.5650000000000001,
+              "value": 0.0028853170970480338
+            }
+          },
+          {
+            "direction": "falling",
+            "before": {
+              "index": 163,
+              "time_s": 0.8150000000000001,
+              "value": 0.0011924039357305493
+            },
+            "after": {
+              "index": 164,
+              "time_s": 0.8200000000000001,
+              "value": 0.0007480354350501014
+            }
+          },
+          {
+            "direction": "rising",
+            "before": {
+              "index": 210,
+              "time_s": 1.05,
+              "value": 3.300367834453827e-06
+            },
+            "after": {
+              "index": 211,
+              "time_s": 1.055,
+              "value": 0.0028836971133965744
+            }
+          }
+        ],
+        "first_rising_spacing": {
+          "first": {
+            "direction": "rising",
+            "before": {
+              "index": 112,
+              "time_s": 0.56,
+              "value": 3.2206535452013112e-06
+            },
+            "after": {
+              "index": 113,
+              "time_s": 0.5650000000000001,
+              "value": 0.0028853170970480338
+            }
+          },
+          "second": {
+            "direction": "rising",
+            "before": {
+              "index": 210,
+              "time_s": 1.05,
+              "value": 3.300367834453827e-06
+            },
+            "after": {
+              "index": 211,
+              "time_s": 1.055,
+              "value": 0.0028836971133965744
+            }
+          },
+          "minimum_s": 0.485,
+          "maximum_s": 0.4949999999999999
+        },
+        "first_falling_spacing": {
+          "first": {
+            "direction": "falling",
+            "before": {
+              "index": 65,
+              "time_s": 0.325,
+              "value": 0.0015013524775462066
+            },
+            "after": {
+              "index": 66,
+              "time_s": 0.33,
+              "value": 0.0009360307364560544
+            }
+          },
+          "second": {
+            "direction": "falling",
+            "before": {
+              "index": 163,
+              "time_s": 0.8150000000000001,
+              "value": 0.0011924039357305493
+            },
+            "after": {
+              "index": 164,
+              "time_s": 0.8200000000000001,
+              "value": 0.0007480354350501014
+            }
+          },
+          "minimum_s": 0.48500000000000004,
+          "maximum_s": 0.49500000000000005
+        },
+        "first_high_pulse": {
+          "first": {
+            "direction": "rising",
+            "before": {
+              "index": 112,
+              "time_s": 0.56,
+              "value": 3.2206535452013112e-06
+            },
+            "after": {
+              "index": 113,
+              "time_s": 0.5650000000000001,
+              "value": 0.0028853170970480338
+            }
+          },
+          "second": {
+            "direction": "falling",
+            "before": {
+              "index": 163,
+              "time_s": 0.8150000000000001,
+              "value": 0.0011924039357305493
+            },
+            "after": {
+              "index": 164,
+              "time_s": 0.8200000000000001,
+              "value": 0.0007480354350501014
+            }
+          },
+          "minimum_s": 0.25,
+          "maximum_s": 0.26
+        },
+        "first_low_pulse": {
+          "first": {
+            "direction": "falling",
+            "before": {
+              "index": 65,
+              "time_s": 0.325,
+              "value": 0.0015013524775462066
+            },
+            "after": {
+              "index": 66,
+              "time_s": 0.33,
+              "value": 0.0009360307364560544
+            }
+          },
+          "second": {
+            "direction": "rising",
+            "before": {
+              "index": 112,
+              "time_s": 0.56,
+              "value": 3.2206535452013112e-06
+            },
+            "after": {
+              "index": 113,
+              "time_s": 0.5650000000000001,
+              "value": 0.0028853170970480338
+            }
+          },
+          "minimum_s": 0.23000000000000004,
+          "maximum_s": 0.24000000000000005
+        },
+        "first_cycle": {
+          "rising": {
+            "direction": "rising",
+            "before": {
+              "index": 112,
+              "time_s": 0.56,
+              "value": 3.2206535452013112e-06
+            },
+            "after": {
+              "index": 113,
+              "time_s": 0.5650000000000001,
+              "value": 0.0028853170970480338
+            }
+          },
+          "falling": {
+            "direction": "falling",
+            "before": {
+              "index": 163,
+              "time_s": 0.8150000000000001,
+              "value": 0.0011924039357305493
+            },
+            "after": {
+              "index": 164,
+              "time_s": 0.8200000000000001,
+              "value": 0.0007480354350501014
+            }
+          },
+          "next_rising": {
+            "direction": "rising",
+            "before": {
+              "index": 210,
+              "time_s": 1.05,
+              "value": 3.300367834453827e-06
+            },
+            "after": {
+              "index": 211,
+              "time_s": 1.055,
+              "value": 0.0028836971133965744
+            }
+          },
+          "high": {
+            "minimum_s": 0.25,
+            "maximum_s": 0.26
+          },
+          "low": {
+            "minimum_s": 0.22999999999999998,
+            "maximum_s": 0.23999999999999988
+          },
+          "period": {
+            "minimum_s": 0.485,
+            "maximum_s": 0.4949999999999999
+          },
+          "high_fraction": {
+            "minimum": 0.5102040816326532,
+            "maximum": 0.5306122448979592
+          }
+        }
+      }
+    }
+  ],
+  "checks": [
+    "Known ideal NPN high/low/period and 50% duty",
+    "Analytic finite-ramp 37.5% threshold duty differs from programmed 35%",
+    "Both flasher sides measured after startup",
+    "Exact rational corner enumeration checks shared-edge fraction bounds",
+    "Arrival direction/page leaves interval summaries unchanged",
+    "Query/set/live/history/file purity and identical import/reopen measurements"
+  ],
+  "limits": [
+    "Observed saved brackets only; hidden transitions may be missed",
+    "First complete rising cycle is not a periodicity or steady-state certification",
+    "Zero minimum period omits duty fraction; no edge interpolation or device qualification"
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.70.0",
+  "build_version": "85",
+  "binary_sha256": "621ce23fe6ced9e5c8f9ba274be23e6868f78cad3d3f19ab8eae8016f306991f",
+  "agent_binary_sha256": "78b788f6853047cb22df597d34139754e20e3b36f4003b88a40bf96d07815ac0",
+  "sdk_commit": "81b33aa32c4fc9a147e6ce57dac8001003396168",
+  "sdk_manifest_sha256": "1030a5f8d640b04fa24966157b93ed82ecfd728dabe1711d1507e85e5ba54b37",
+  "prepared_sdk_outputs_verified": 26,
+  "checks": [
+    "Existing recording.timing query/set expose optional first high/low observed pulse widths and first consecutive rising/falling/rising cycle with original saved row brackets",
+    "Cycle high/low/period bounds use captured endpoints; high-fraction extrema preserve shared rising-time dependence; zero minimum period omits fraction with reason; valid zero fraction remains numeric",
+    "Pulse/cycle summaries use both directions over full timing interval independently of arrival filter/page; repeated same-direction touches break alternation; clipped intervals invent no edge",
+    "Controlled core tests cover wide brackets and feasible endpoint combinations, plateaus, exact/uncertain zero periods, strict windows, cloning and later live edits",
+    "Ideal NPN source yields 50 ms high/50 ms low/100 ms cycle/50% duty; finite-ramp analytic 7.5 ms high and 37.5% threshold duty fall within sample bounds",
+    "Both flasher LED currents expose post-startup positive high/low/cycle bounds and 51\u201353% first-cycle high fractions at the chosen interval/level/resolution",
+    "Native controls/readouts and pure query agree; direction filters preserve summaries; missing/unresolved cycles explain absence; no pulse controls clutter a single-edge RC measurement",
+    "Public headless/native schemas and complete four-case reports match exactly except transport; exact rational corner enumeration validates fraction extrema; pure/set/live/history/file and import/reopen checks pass",
+    "Full serialized root/native lint/import/race/vet, final native asynchronous smoke-helper regression and lint/vet, portable timing/discovery, exact packaged GPU/UI smoke and all four existing circuit adapters pass"
+  ],
+  "evidence": [
+    "docs/recording-timing.md#pulse-widths-and-duty-cycle",
+    "workbench/recording_pulses_test.go",
+    "workbench/recording_timing_test.go",
+    "desktop/recording_pulses_test.go",
+    "desktop/recording_pulses_smoke.go",
+    "scripts/pulse-timing-demo.py",
+    "docs/validation/headless-pulse-timing.json",
+    "docs/validation/desktop-pulse-timing.json",
+    "docs/validation/pulse-timing-public-parity.json",
+    "docs/validation/pulse-timing-conformance.json"
+  ],
+  "logs": {
+    "full_quality": "6f5307f293b56b3f3ce62f82f4a5aca4f7a35da196ee645e56238eb85323451c",
+    "final_lint": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "final_native_vet": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "native_focus_including_async_smoke_helper": "c8d95d9c13cc109b4f8dd8b8989103b691c14a26773dd9ed59e5c5e7a75fb237",
+    "portable": "4765d1784accc452c987fc85e7201b8a25578fc5bc7f3a70c418e023de2973eb",
+    "packaged_gpu_smoke": "48d7d2e7242c56145d8245ccf0686fa403b8dfe817c4b338838a5b80e5ddf392",
+    "initial_public_fixture_failure": "620b39d6cbd35996fe30823b85029af0fd047a8a18a790de074c385a9a080fbd"
+  },
+  "inventory": {
+    "sources": 44,
+    "sites": 349,
+    "public_commands": 149,
+    "source_routes": 121,
+    "binding_review_sites": 129
+  },
+  "notes": [
+    "No new command IDs, model/kernel changes, edge interpolation or project-format change; derived session measurement is recomputed from immutable raw saved rows",
+    "Native fixture captures its preservation baseline after creation of the kept recording, since capture itself legitimately changes recording membership; asynchronous owner workflow is exercised under race testing",
+    "Initial public purity check ran a live flasher; final client explicitly pauses/settles each example before comparing full snapshots. Initial failure log retained; no production invariant weakened",
+    "Finite-ramp public fixture uses 100 us sampling and reports 37\u201338% duty, separating analytic 37.5% from programmed 35% without an estimated edge time",
+    "Vellum delta adds manual replay readiness, scroll records and workspace examples; inspected read-only, no direct adoption. Clean sibling/manifest/26 prepared outputs verified",
+    "Prior .69/84 preserved at build/ELab-before-pulse-timing.app; candidate/build/canonical binary hashes equal; owned native/smoke/conformance sessions exited"
+  ],
+  "limits": [
+    "Observed saved-bracket arithmetic only; hidden transitions, nonmonotonic motion, chatter and plateau departures can be unresolved; no hysteresis/debounce",
+    "First complete observed rising cycle is not proof of periodicity, steady state or real-device duty; no frequency certification or interpolation",
+    "Full physical input/display/focus/IME/accessibility, general latency, distribution and participant acceptance remain open",
+    "Schematic output/preview/local printer submission exist; physical-printer qualification remains open",
+    "P0 remains 17 implemented /10 partial; private unsigned app; continuing goal stays active"
+  ]
+}

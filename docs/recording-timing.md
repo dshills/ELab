@@ -29,3 +29,25 @@ Direction is `rising`, `falling` or `both`. The interval requires `0 ≤ start_s
 To clear using `recording.timing.set`, supply the selected ID, empty `probe_id`, `level:"0"`, `direction:"both"`, zero start/end, and omitted/zero offset/limit. The UI's Timing off selector sends exactly that command. Selecting any operation, starting a new capture or reopening a project clears the session measurement. Projects/record exports keep underlying captured data, which can be measured again after import/reopen. Later timing choices survive an import finishing in the background. No project-format change is needed.
 
 The computation scans at most 4096 retained rows, has no filesystem/solver work and returns a bounded page. Configured results are cached as owned derived data, so playback and ordinary snapshots do not repeat the scan. There is no long-running timing job, automatic edge-time estimation, time alignment, hidden-transition recovery or device certification.
+
+
+## Pulse widths and duty cycle
+
+The same timing query and configured UI now include first observed high/low pulse widths and the first complete rising cycle. **First high time** spans consecutive rising → falling arrivals; **First low time** spans falling → rising. Each contains both original crossing brackets and minimum/maximum duration. A cycle needs three consecutive observed rising → falling → rising arrivals. Repeated same-direction threshold touches break that sequence; the code does not skip them to invent a cycle. Starting high does not invent its initial rising edge.
+
+These summaries use both arrival directions over the complete timing interval, independently of arrival direction filtering and paging. The existing filtered crossing counts, first same-direction spacings and page behavior remain unchanged. A simple one-edge RC charge or a DC record produces no pulse summary. Where an observed pulse has no complete rising cycle, the UI explains the missing sequence. Imported/reopened raw recordings yield the same derived measurements; the session timing choice still clears on selection/reopen.
+
+`first_high_pulse`, `first_low_pulse` and `first_cycle` are optional additions to `recording.timing` and `snapshot.recording.timing`. Cycle fields `rising`, `falling` and `next_rising` retain the exact saved rows. Its `high`, `low` and `period` contain numeric `minimum_s`/`maximum_s`. `high_fraction` contains numeric `minimum`/`maximum` fractions (0–1); the UI displays percentages. An unresolved positive period omits that fraction and supplies `reason`. Absence is distinct from a valid zero-width sampled high pulse with a zero fraction.
+
+For rising bracket `[r0,r1]`, falling `[f0,f1]` and next rising `[n0,n1]`, the sampled high duration is bounded by `max(0,f0−r1)` through `f1−r0`; low uses `max(0,n0−f1)` through `n1−f0`. The cycle duration is bounded by `max(0,n0−r1)` through `n1−r0`. If its minimum is positive, high-fraction bounds are:
+
+```
+minimum = (f0 − r1) / (n1 − r1)
+maximum = (f1 − r0) / (n0 − r0)
+```
+
+Those expressions retain the shared rising time in numerator/denominator; separately dividing unrelated high/period extremes loses that dependence. If the cycle's minimum duration is zero, saved brackets cannot resolve a strictly positive denominator and no fraction is reported. Durations and fractions use ordinary floating-point arithmetic from captured SI timestamps. They are bounds based on observed sample brackets, not certified real-device bounds.
+
+The default ideal NPN source yields 50 ms high, 50 ms low, 100 ms cycle and 50% high fraction. For a finite pulse rising from 0 to 5 V in 2 ms, with programmed high duration 7 ms, 3 ms fall and 20 ms period, the 2.5 V arrivals are analytically 1 ms, 8.5 ms and 21 ms. Threshold high time is therefore 7.5 ms and duty 37.5%, rather than programmed `7/20 = 35%`. The captured sample brackets contain those values. Both flasher LED currents can be measured at 1 mA in a post-startup interval with the same commands.
+
+Pulse widths and the first complete cycle do not establish steady state, periodicity, continuous above/below-threshold behavior or absence of hidden transitions between saved rows. Plateaus use the original arrival rules, without interpolation, hysteresis or debounce. A partial interval never synthesizes a starting/ending edge. The [public pulse workflow](../scripts/pulse-timing-demo.py) compares exact user/agent results, analytic ideal/finite-pulse references and both flasher sides, verifies fraction extrema by exact rational corner enumeration, and preserves raw records across import/save/reopen. Controlled core/native regressions cover broad brackets, repeated touches, zero/unresolved cycle durations, filters/pages, ownership and explanatory UI states.

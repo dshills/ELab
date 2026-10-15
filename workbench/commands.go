@@ -226,7 +226,7 @@ func Catalog() []Capability {
 		typedCapability("verification.import.start", "Read/validate a recorded JSON asset in background; inspect project_work; keeps live circuit/state and later viewer choice", reflect.TypeOf(RecordingImportParams{})),
 		typedCapability("verification.import", "Validate and load a complete elab.verification v1 JSON record into an independent recorded viewer; never changes live circuit/state", reflect.TypeOf(RecordingImportParams{})),
 		typedCapability("recording.timing.set", "Configure selected capture threshold timing; empty probe clears; session only", reflect.TypeOf(RecordingTimingParams{})),
-		queryCapability("recording.timing", "Read sampled threshold brackets and first same-direction spacing; pages 1–100", reflect.TypeOf(RecordingTimingParams{}), reflect.TypeOf(RecordingTiming{})),
+		queryCapability("recording.timing", "Read threshold brackets, pulse/cycle bounds and high fraction; pages 1–100", reflect.TypeOf(RecordingTimingParams{}), reflect.TypeOf(RecordingTiming{})),
 		typedCapability("recording.compare.set", "Configure selected captured A and reference B at time_s; empty reference clears; exact nearest saved samples, no interpolation/live mutation", reflect.TypeOf(RecordingCompareParams{})),
 		queryCapability("recording.compare", "Pure comparison of two retained captures at time_s; matching probe IDs/units/terminals, exact sample times, B minus A and whole-record statistics", reflect.TypeOf(RecordingCompareParams{}), reflect.TypeOf(RecordingComparison{})),
 		typedCapability("recording.view.set", "Show live or recorded scope; recorded requires a selected completed operation", reflect.TypeOf(RecordingViewParams{})),

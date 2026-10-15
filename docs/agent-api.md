@@ -162,7 +162,7 @@ Save, Load, and both exports accept optional `expected_document_generation` in a
 
 Recovery is available through seven `recovery.*` commands and `snapshot.recovery`. Native startup configures it through the shared dispatcher; headless startup is opt-in using `--recovery-directory` or `recovery.configure`. Restores require a freshly listed file SHA-256 and create a dirty unassociated copy. See [autosave and recovery](recovery.md) for ownership, integrity, bounds and command parameters.
 
-Recorded JSON import, independent playback, index/time seeking, captured-probe selection, interval statistics and timing cursors are exposed through `verification.import` and `recording.*`. Full exact rows remain available through `operation.samples`; only plotted points are reduced. See [recorded-result import and replay](recording.md).
+Recorded JSON import, independent playback, index/time seeking, captured-probe selection, interval statistics and timing cursors are exposed through `verification.import` and `recording.*`. Full exact rows remain available through `operation.samples`; only plotted points are reduced. See [recorded-result import and replay](recording.md). `recording.timing` and `recording.timing.set` expose saved threshold brackets, high/low pulse widths and first-cycle duty bounds through the same measurement used by native readouts. See [sampled pulse timing](recording-timing.md#pulse-widths-and-duty-cycle).
 
 Project save/open now embeds kept completed recordings. `recording.keep.set {id,keep}` controls inclusion and protects kept assets from eviction; `document` exposes separate schematic/recording dirty flags and recording count. `recovery.samples` pages embedded recovery data. See [project format and lifecycle](project-format.md).
 
