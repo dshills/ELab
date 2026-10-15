@@ -105,6 +105,9 @@ func (s *screen) printPreviewPanel(state workbench.Snapshot) []ui.Node {
 	if !p.Current {
 		text += " · source changed; refresh to update"
 	}
+	if p.PageCount > 0 {
+		text += fmt.Sprintf(" · page %d/%d", p.PageIndex+1, p.PageCount)
+	}
 	body := quiet("preview-progress", "Preparing page…")
 	if p.Error != nil {
 		body = quiet("preview-error", p.Error.Message)
@@ -120,5 +123,14 @@ func (s *screen) printPreviewPanel(state workbench.Snapshot) []ui.Node {
 		}
 	}
 	body.Grow = true
-	return []ui.Node{toolbar, quiet("preview-caption", text), body, quiet("preview-help", "Print captured page submits this page. Export PDF creates a printable file from the current circuit.")}
+	nodes := []ui.Node{toolbar, quiet("preview-caption", text)}
+	if p.Status == "completed" {
+		previous := s.action("preview-previous", "Previous page", "print.preview.page.set", workbench.PreviewPageParams{ID: p.ID, Index: p.PageIndex - 1})
+		previous.Disabled = p.PageIndex == 0
+		next := s.action("preview-next", "Next page", "print.preview.page.set", workbench.PreviewPageParams{ID: p.ID, Index: p.PageIndex + 1})
+		next.Disabled = p.PageIndex+1 >= p.PageCount
+		save := buttonStyle(ui.Node{ID: "preview-export-png", Kind: ui.Button, Text: "Save shown PNG", Accessibility: ui.Accessibility{Name: "Export exact shown preview page PNG"}, Disabled: s.fileBusy, Activate: func() { s.beginFile("export.schematic.png", true, workbench.PNGExportParams{PreviewID: p.ID}, nil) }}, false)
+		nodes = append(nodes, ui.Node{ID: "preview-page-tools", Kind: ui.Toolbar, Style: chromeStyle(), Children: []ui.Node{previous, next, save}})
+	}
+	return append(nodes, body, quiet("preview-help", "Print submits all captured pages. Save shown PNG saves this exact page. Export PDF uses the current circuit."))
 }

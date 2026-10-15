@@ -14,6 +14,8 @@ import (
 
 // ExportStartParams selects the same capture/encoding used by native exports.
 type ExportStartParams struct {
+	PageIndex          *int           `json:"page_index,omitempty"`
+	PreviewID          string         `json:"preview_id,omitempty"`
 	DPI                int            `json:"dpi,omitempty"`
 	Page               *SchematicPage `json:"page,omitempty"`
 	Kind               string         `json:"kind"`
@@ -23,6 +25,7 @@ type ExportStartParams struct {
 	ExpectedGeneration *uint64        `json:"expected_document_generation,omitempty"`
 }
 type exportCapture struct {
+	previewData []byte
 	annotations []SourceAnnotation
 	settings    TransientSettings
 	page        schematicpdf.Page
@@ -66,110 +69,137 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 	if p.DPI != 0 && p.Kind != "schematic-png" {
 		return fmt.Errorf("dpi applies only to schematic PNG")
 	}
-	switch p.Kind {
-	case "schematic-pdf", "schematic-png":
-		if !schematicpdf.Supported() {
-			return &actionError{"unsupported", "schematic PDF/PNG requires the macOS CoreGraphics build"}
+	if p.PageIndex != nil && (p.Kind != "schematic-png" || *p.PageIndex < 0) {
+		return fmt.Errorf("page_index is a nonnegative PNG page selection")
+	}
+	if p.PreviewID != "" && (p.Kind != "schematic-png" || p.Page != nil || p.PageIndex != nil || p.DPI != 0) {
+		return fmt.Errorf("preview_id exports an exact captured PNG; no page/index/dpi override")
+	}
+	if p.PreviewID != "" {
+		if s.preview == nil || s.preview.view.ID != p.PreviewID || !s.preview.view.Visible || s.preview.view.Status != "completed" || len(s.preview.data) == 0 {
+			return &actionError{"not-ready", "Choose the exact visible completed preview page"}
 		}
 		if p.ID != "" {
-			return fmt.Errorf("schematic PDF/PNG does not use a recording ID")
+			return fmt.Errorf("preview PNG does not use a recording ID")
 		}
-		settings := p.Page
-		if settings == nil {
-			settings = &s.exportPage
-		}
-		page, layout, err := normalizeSchematicPage(settings)
-		if err != nil {
-			return err
-		}
-		command = "export.schematic.pdf"
-		capture.artifact.Format = "pdf"
-		if p.Kind == "schematic-png" {
-			dpi := p.DPI
-			if dpi == 0 {
-				dpi = 150
+		capture = s.preview.capture
+		capture.generation = s.documentGeneration
+		capture.overwrite = p.Overwrite
+		capture.artifact.Path = path
+		capture.artifact.OperationID = p.PreviewID
+		capture.previewData = s.preview.data // Immutable owned bytes, retained even if preview closes.
+		command = "export.schematic.png"
+	} else {
+		switch p.Kind {
+		case "schematic-pdf", "schematic-png":
+			if !schematicpdf.Supported() {
+				return &actionError{"unsupported", "schematic PDF/PNG requires the macOS CoreGraphics build"}
 			}
-			if dpi < 72 || dpi > 300 {
-				return fmt.Errorf("dpi must be 72–300, or omitted for 150")
+			if p.ID != "" {
+				return fmt.Errorf("schematic PDF/PNG does not use a recording ID")
 			}
-			layout.RasterDPI = dpi
-			capture.artifact.DPI = dpi
-			command = "export.schematic.png"
-			capture.artifact.Format = "png"
-		}
-		capture.artifact.Page = &page
-		capture.page = layout
-		capture.graph = s.graph.Clone()
-		capture.display = CircuitDisplay{Preferences: DefaultDisplayPreferences()}
-		if page.Measurements {
+			settings := p.Page
+			if settings == nil {
+				settings = &s.exportPage
+			}
+			page, layout, err := normalizeSchematicPage(settings)
+			if err != nil {
+				return err
+			}
+			command = "export.schematic.pdf"
+			capture.artifact.Format = "pdf"
+			if p.Kind == "schematic-png" {
+				dpi := p.DPI
+				if dpi == 0 {
+					dpi = 150
+				}
+				if dpi < 72 || dpi > 300 {
+					return fmt.Errorf("dpi must be 72–300, or omitted for 150")
+				}
+				if p.PageIndex != nil {
+					index := *p.PageIndex
+					layout.PageIndex = &index
+					capture.artifact.PageIndex = &index
+				}
+				layout.RasterDPI = dpi
+				capture.artifact.DPI = dpi
+				command = "export.schematic.png"
+				capture.artifact.Format = "png"
+			}
+			capture.artifact.Page = &page
+			capture.page = layout
+			capture.graph = s.graph.Clone()
+			capture.display = CircuitDisplay{Preferences: DefaultDisplayPreferences()}
+			if page.Measurements {
+				capture.display = cloneCircuitDisplay(s.circuitDisplayLocked())
+				capture.display.Animate = false
+				capture.readings = clonePinnedReadings(s.pinnedReadingsLocked())
+			}
+		case "schematic-svg":
+			if p.ID != "" {
+				return fmt.Errorf("schematic export does not use a recording ID")
+			}
+			command = "export.schematic.svg"
+			capture.artifact.Format = "svg"
+			capture.graph = s.graph.Clone()
 			capture.display = cloneCircuitDisplay(s.circuitDisplayLocked())
 			capture.display.Animate = false
 			capture.readings = clonePinnedReadings(s.pinnedReadingsLocked())
+		case "scope-csv":
+			if p.ID != "" {
+				return fmt.Errorf("live scope export does not use a recording ID")
+			}
+			command = "export.scope.csv"
+			capture.artifact.Format = "csv"
+			compiled, _, _ := s.graph.Compile()
+			scope := s.scopeLocked(compiled)
+			t := s.transient
+			if t == nil || t.Stale || !scope.WindowValid || len(scope.Traces) == 0 || len(scope.Traces[0].Points) == 0 {
+				return &actionError{"unavailable", "CSV needs selected traces in a fresh retained scope interval"}
+			}
+			capture.trace = cloneTransient(t)
+			capture.scope = cloneScope(scope)
+			capture.artifact.RunID = t.RunID
+			capture.artifact.ElectricalRevision = t.ElectricalRevision
+		case "sweep-json", "sweep-csv":
+			command = "sweep.export"
+			if s.sweeps == nil || s.sweeps.operations[p.ID] == nil {
+				return &actionError{"not-found", "Choose a retained sweep"}
+			}
+			job := s.sweeps.operations[p.ID]
+			if job.record == nil {
+				return &actionError{"not-ready", "Export requires a completed sweep"}
+			}
+			capture.sweep = cloneSweepRecord(job.record)
+			capture.artifact.Format = "dc-sweep.json"
+			if p.Kind == "sweep-csv" {
+				capture.artifact.Format = "dc-sweep.csv"
+			}
+			capture.artifact.OperationID = p.ID
+			capture.artifact.RunID = 0
+			capture.artifact.ElectricalRevision = job.metadata.ElectricalRevision
+		case "verification-json", "verification-csv":
+			command = "verification.export"
+			capture.artifact.Format = "verification.json"
+			if p.Kind == "verification-csv" {
+				capture.artifact.Format = "verification.csv"
+			}
+			operation, ok := s.operations[p.ID]
+			if !ok {
+				return &actionError{"not-found", "Operation not found or no longer retained"}
+			}
+			if operation.record == nil {
+				return &actionError{"not-ready", "Export requires a completed verification"}
+			}
+			// Record rows are immutable. Copy metadata and retain that independent asset
+			// even if its live session entry is subsequently removed/replaced.
+			capture.record = &verificationRecord{metadata: cloneVerificationMetadata(operation.record.metadata), rows: operation.record.rows}
+			capture.artifact.OperationID = p.ID
+			capture.artifact.RunID = 0
+			capture.artifact.ElectricalRevision = operation.record.metadata.ElectricalRevision
+		default:
+			return fmt.Errorf("export kind must be schematic-svg, schematic-pdf, schematic-png, scope-csv, verification-json, verification-csv, sweep-json or sweep-csv")
 		}
-	case "schematic-svg":
-		if p.ID != "" {
-			return fmt.Errorf("schematic export does not use a recording ID")
-		}
-		command = "export.schematic.svg"
-		capture.artifact.Format = "svg"
-		capture.graph = s.graph.Clone()
-		capture.display = cloneCircuitDisplay(s.circuitDisplayLocked())
-		capture.display.Animate = false
-		capture.readings = clonePinnedReadings(s.pinnedReadingsLocked())
-	case "scope-csv":
-		if p.ID != "" {
-			return fmt.Errorf("live scope export does not use a recording ID")
-		}
-		command = "export.scope.csv"
-		capture.artifact.Format = "csv"
-		compiled, _, _ := s.graph.Compile()
-		scope := s.scopeLocked(compiled)
-		t := s.transient
-		if t == nil || t.Stale || !scope.WindowValid || len(scope.Traces) == 0 || len(scope.Traces[0].Points) == 0 {
-			return &actionError{"unavailable", "CSV needs selected traces in a fresh retained scope interval"}
-		}
-		capture.trace = cloneTransient(t)
-		capture.scope = cloneScope(scope)
-		capture.artifact.RunID = t.RunID
-		capture.artifact.ElectricalRevision = t.ElectricalRevision
-	case "sweep-json", "sweep-csv":
-		command = "sweep.export"
-		if s.sweeps == nil || s.sweeps.operations[p.ID] == nil {
-			return &actionError{"not-found", "Choose a retained sweep"}
-		}
-		job := s.sweeps.operations[p.ID]
-		if job.record == nil {
-			return &actionError{"not-ready", "Export requires a completed sweep"}
-		}
-		capture.sweep = cloneSweepRecord(job.record)
-		capture.artifact.Format = "dc-sweep.json"
-		if p.Kind == "sweep-csv" {
-			capture.artifact.Format = "dc-sweep.csv"
-		}
-		capture.artifact.OperationID = p.ID
-		capture.artifact.RunID = 0
-		capture.artifact.ElectricalRevision = job.metadata.ElectricalRevision
-	case "verification-json", "verification-csv":
-		command = "verification.export"
-		capture.artifact.Format = "verification.json"
-		if p.Kind == "verification-csv" {
-			capture.artifact.Format = "verification.csv"
-		}
-		operation, ok := s.operations[p.ID]
-		if !ok {
-			return &actionError{"not-found", "Operation not found or no longer retained"}
-		}
-		if operation.record == nil {
-			return &actionError{"not-ready", "Export requires a completed verification"}
-		}
-		// Record rows are immutable. Copy metadata and retain that independent asset
-		// even if its live session entry is subsequently removed/replaced.
-		capture.record = &verificationRecord{metadata: cloneVerificationMetadata(operation.record.metadata), rows: operation.record.rows}
-		capture.artifact.OperationID = p.ID
-		capture.artifact.RunID = 0
-		capture.artifact.ElectricalRevision = operation.record.metadata.ElectricalRevision
-	default:
-		return fmt.Errorf("export kind must be schematic-svg, schematic-pdf, schematic-png, scope-csv, verification-json, verification-csv, sweep-json or sweep-csv")
 	}
 	s.projectSerial++
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -190,7 +220,11 @@ func prepareProjectExport(ctx context.Context, capture exportCapture, progress f
 	var err error
 	switch capture.kind {
 	case "schematic-pdf", "schematic-png":
-		data, err = renderSchematicPage(ctx, capture)
+		if capture.previewData != nil {
+			data = capture.previewData
+		} else {
+			data, err = renderSchematicPage(ctx, capture)
+		}
 	case "sweep-json":
 		data, err = encodeSweepExport(capture.sweep, "json")
 	case "sweep-csv":
@@ -271,6 +305,7 @@ func (s *Service) runProjectExport(job *projectJob, prepare projectExportFunc, p
 		job.work.Status = "completed"
 		job.work.Phase = "completed"
 	}
+	job.export.previewData = nil
 	job.export.graph = Graph{}
 	job.export.trace = nil
 	job.export.record = nil
@@ -285,6 +320,9 @@ func (s *Service) runProjectExport(job *projectJob, prepare projectExportFunc, p
 
 func renderSchematicPage(ctx context.Context, capture exportCapture) ([]byte, error) {
 	identity := map[string]any{"format": "elab.schematic." + capture.artifact.Format + ".v1", "run_id": capture.artifact.RunID, "electrical_revision": capture.artifact.ElectricalRevision, "document_generation": capture.artifact.DocumentGeneration, "page": capture.artifact.Page, "measurement_source": "captured-live-snapshot; unavailable/stale labels retained when overlays requested"}
+	if capture.artifact.PageIndex != nil {
+		identity["page_index"] = *capture.artifact.PageIndex
+	}
 	identity["source_annotations"] = capture.annotations
 	identity["source_settings"] = capture.settings
 	sources := []Component{}
@@ -299,5 +337,9 @@ func renderSchematicPage(ctx context.Context, capture exportCapture) ([]byte, er
 	}
 	metadata, _ := json.Marshal(identity)
 	capture.page.Metadata = string(metadata)
-	return schematicpdf.Render(ctx, schematicSVGWithAnnotations(capture.graph, capture.artifact.RunID, capture.artifact.ElectricalRevision, capture.display, capture.annotations, capture.settings, capture.readings...), capture.page)
+	return schematicpdf.Render(ctx, schematicPageSVG(capture), capture.page)
+}
+
+func schematicPageSVG(c exportCapture) []byte {
+	return schematicSVGWithAnnotations(c.graph, c.artifact.RunID, c.artifact.ElectricalRevision, c.display, c.annotations, c.settings, c.readings...)
 }

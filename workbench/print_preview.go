@@ -14,10 +14,19 @@ import (
 	"github.com/dshills/elab/internal/schematicpdf"
 )
 
+type PreviewPageParams struct {
+	ID    string `json:"id"`
+	Index int    `json:"index"`
+}
 type PreviewParams struct {
-	Page *SchematicPage `json:"page,omitempty"`
+	PageIndex int            `json:"page_index,omitempty"`
+	Page      *SchematicPage `json:"page,omitempty"`
 }
 type PrintPreview struct {
+	PageIndex          int           `json:"page_index"`
+	PageCount          int           `json:"page_count"`
+	Rows               int           `json:"rows"`
+	Columns            int           `json:"columns"`
 	ID                 string        `json:"id"`
 	Status             string        `json:"status"`
 	Visible            bool          `json:"visible"`
@@ -99,6 +108,9 @@ func (s *Service) printPreviewLocked() *PrintPreview {
 	return out
 }
 func (s *Service) startPrintPreviewLocked(p PreviewParams) error {
+	if p.PageIndex < 0 {
+		return fmt.Errorf("page_index must be nonnegative")
+	}
 	if s.previewWorkers != 0 {
 		return &actionError{"busy", "Finish or cancel the active preview before refreshing"}
 	}
@@ -120,9 +132,17 @@ func (s *Service) startPrintPreviewLocked(p PreviewParams) error {
 		capture.display.Animate = false
 		capture.readings = clonePinnedReadings(s.pinnedReadingsLocked())
 	}
+	return s.startPreviewJobLocked(capture, page, p.Page == nil, s.previewSourceHashLocked(page), p.PageIndex)
+}
+func (s *Service) startPreviewJobLocked(capture exportCapture, page SchematicPage, defaultPage bool, sourceHash [32]byte, index int) error {
+	if page.Tile || index != 0 {
+		i := index
+		capture.page.PageIndex = &i
+		capture.artifact.PageIndex = &i
+	}
 	s.previewSerial++
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	job := &previewJob{ctx: ctx, cancel: cancel, capture: capture, defaultPage: p.Page == nil, sourceHash: s.previewSourceHashLocked(page), view: PrintPreview{ID: fmt.Sprintf("preview-%d", s.previewSerial), Status: "queued", Visible: true, Page: page, RunID: s.run, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration}}
+	job := &previewJob{ctx: ctx, cancel: cancel, capture: capture, defaultPage: defaultPage, sourceHash: sourceHash, view: PrintPreview{ID: fmt.Sprintf("preview-%d", s.previewSerial), Status: "queued", Visible: true, Page: cloneSchematicPage(page), PageIndex: index, RunID: capture.artifact.RunID, ElectricalRevision: capture.artifact.ElectricalRevision, DocumentGeneration: capture.artifact.DocumentGeneration}}
 	s.preview = job
 	s.sweepViewerRevision++
 	if s.sweeps != nil {
@@ -134,6 +154,26 @@ func (s *Service) startPrintPreviewLocked(p PreviewParams) error {
 	go s.runPrintPreview(job, render)
 	return nil
 }
+func (s *Service) selectPrintPreviewPageLocked(p PreviewPageParams) error {
+	if s.previewWorkers != 0 {
+		return &actionError{"busy", "Finish or cancel active page rendering first"}
+	}
+	if s.preview == nil || s.preview.view.ID != p.ID {
+		return &actionError{"not-found", "Preview was replaced or closed"}
+	}
+	j := s.preview
+	if !j.view.Visible || j.view.Status != "completed" || len(j.data) == 0 {
+		return &actionError{"not-ready", "Choose a visible completed preview"}
+	}
+	if p.Index < 0 || p.Index >= j.view.PageCount {
+		return fmt.Errorf("index must be within captured page_count")
+	}
+	if p.Index == j.view.PageIndex {
+		return nil
+	}
+	return s.startPreviewJobLocked(j.capture, j.view.Page, j.defaultPage, j.sourceHash, p.Index)
+}
+
 func (s *Service) runPrintPreview(job *previewJob, render func(context.Context, exportCapture) ([]byte, error)) {
 	defer s.liveWorkers.Done()
 	s.mu.Lock()
@@ -143,7 +183,16 @@ func (s *Service) runPrintPreview(job *previewJob, render func(context.Context, 
 		s.signalLocked("preview")
 	}
 	s.mu.Unlock()
-	data, err := render(job.ctx, job.capture)
+	plan, err := schematicpdf.Plan(schematicPageSVG(job.capture), job.capture.page)
+	var data []byte
+	if err == nil && (job.view.PageIndex < 0 || job.view.PageIndex >= len(plan.Pages)) {
+		err = fmt.Errorf("page_index is outside the captured page count")
+	}
+	if err == nil {
+		if err = job.ctx.Err(); err == nil {
+			data, err = render(job.ctx, job.capture)
+		}
+	}
 	var width, height int
 	if err == nil {
 		if len(data) > MaxProjectBytes {
@@ -157,6 +206,9 @@ func (s *Service) runPrintPreview(job *previewJob, render func(context.Context, 
 	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
+	job.view.PageCount = len(plan.Pages)
+	job.view.Rows = plan.Rows
+	job.view.Columns = plan.Columns
 	s.previewWorkers--
 	if s.preview != job || s.closed || errors.Is(job.ctx.Err(), context.Canceled) || job.view.Status == "canceling" {
 		job.view.Status = "canceled"

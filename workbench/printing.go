@@ -34,6 +34,7 @@ type PrintWork struct {
 	Error  *Failure `json:"error,omitempty"`
 }
 type PrintJob struct {
+	PageCount          int           `json:"page_count"`
 	ID                 string        `json:"id"`
 	PreviewID          string        `json:"preview_id"`
 	PrinterID          string        `json:"printer_id"`
@@ -192,10 +193,12 @@ func (s *Service) printCommandLocked(command string, raw json.RawMessage) error 
 			s.printJobs = append(s.printJobs[:index], s.printJobs[index+1:]...)
 		}
 		capture = s.preview.capture
+		capture.page.PageIndex = nil
+		capture.artifact.PageIndex = nil
 		capture.kind, capture.page.RasterDPI, capture.artifact.Format, capture.artifact.DPI = "schematic-pdf", 0, "pdf", 0
 		s.printJobSerial++
 		pview := s.preview.view
-		target = &PrintJob{ID: fmt.Sprintf("print-%d", s.printJobSerial), PreviewID: p.PreviewID, PrinterID: p.PrinterID, Copies: p.Copies, Status: "preparing", Page: cloneSchematicPage(pview.Page), RunID: pview.RunID, ElectricalRevision: pview.ElectricalRevision, DocumentGeneration: pview.DocumentGeneration}
+		target = &PrintJob{PageCount: pview.PageCount, ID: fmt.Sprintf("print-%d", s.printJobSerial), PreviewID: p.PreviewID, PrinterID: p.PrinterID, Copies: p.Copies, Status: "preparing", Page: cloneSchematicPage(pview.Page), RunID: pview.RunID, ElectricalRevision: pview.ElectricalRevision, DocumentGeneration: pview.DocumentGeneration}
 		s.printJobs = append(s.printJobs, target)
 	case "print.job.refresh", "print.job.cancel":
 		var p IDParams

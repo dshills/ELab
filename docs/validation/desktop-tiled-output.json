@@ -1,0 +1,116 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "page_command_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "index": {
+        "minimum": 0,
+        "type": "integer"
+      }
+    },
+    "required": [
+      "id",
+      "index"
+    ],
+    "type": "object",
+    "x-command-contract": {
+      "version": 1,
+      "scope": "captured-preview-page",
+      "preconditions": [
+        "Exact visible completed preview ID; no active preview renderer",
+        "index is zero-based and smaller than snapshot.print_preview.page_count"
+      ],
+      "effects": [
+        "Same index preserves preview; another index admits rendering under a new preview ID",
+        "Preserves immutable captured graph/settings/overlays, source hash and source identity, including after editor changes",
+        "Only one page PNG is rendered/retained at a time; original chunk IDs become unavailable on replacement",
+        "Never submits printer work or changes circuit/history/dirty/physics",
+        "Print submission always includes all captured pages; page selection only changes the shown PNG"
+      ],
+      "errors": [
+        {
+          "code": "not-found",
+          "phase": "admission",
+          "when": "Preview ID replaced/closed"
+        },
+        {
+          "code": "not-ready",
+          "phase": "admission",
+          "when": "Preview hidden or not completed"
+        },
+        {
+          "code": "busy",
+          "phase": "admission",
+          "when": "Active preview rendering"
+        },
+        {
+          "code": "invalid-params",
+          "phase": "admission",
+          "when": "Malformed input or index outside known page count"
+        },
+        {
+          "code": "preview-failed",
+          "phase": "work",
+          "when": "Captured page renderer failed"
+        },
+        {
+          "code": "preview-timeout",
+          "phase": "work",
+          "when": "30-second rendering deadline"
+        }
+      ],
+      "completion": {
+        "mode": "new preview ID admits rendering; inspect print_preview.status until completed/failed/canceled",
+        "observe": [
+          "project.inspect",
+          "events.poll"
+        ],
+        "cancel": "print.preview.cancel",
+        "cooperative_deadline_s": 30
+      }
+    }
+  },
+  "observations": [
+    {
+      "paper": "letter",
+      "orientation": "landscape",
+      "rows": 2,
+      "columns": 3,
+      "page_count": 6,
+      "scale": 1,
+      "overlap_mm": 5,
+      "width": 1650,
+      "height": 1275
+    },
+    {
+      "paper": "a4",
+      "orientation": "portrait",
+      "rows": 2,
+      "columns": 3,
+      "page_count": 6,
+      "scale": 1,
+      "overlap_mm": 5,
+      "width": 1241,
+      "height": 1754
+    }
+  ],
+  "checks": [
+    "Large connected RC schematic retains graph/physics/history while output settings and previews change",
+    "Letter landscape and A4 portrait PDFs cover complete fixed-scale row-major grids with 5 mm overlap",
+    "Every page navigates under a new preview ID; stale chunk ID and out-of-range page refuse",
+    "Exact shown-page PNG export and explicit current-source PNG page export match captured bytes for every tile",
+    "Multi-page PNG without page_index refuses without partial output",
+    "Later electrical edit does not recapture earlier page; stale captured PNG remains byte-identical",
+    "Closed preview cannot be exported; no physical printer submission"
+  ],
+  "limits": [
+    "At most 16 pages and 8 MiB per output; one preview page retained/rendered at a time",
+    "PDF and print submission include all pages; PNG selects one page",
+    "Rendered PDF page-count/text/pixel review is recorded separately",
+    "Physical printer output, keyboard/IME/accessibility and visible latency remain separate gates"
+  ]
+}

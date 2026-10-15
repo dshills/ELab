@@ -103,21 +103,53 @@ func newPainter(page Page, scale, x, y float64) (painter, error) {
 		C.CFRelease(C.CFTypeRef(data))
 		return nil, fmt.Errorf("cannot create schematic drawing context")
 	}
-	if page.RasterDPI == 0 {
-		C.CGPDFContextBeginPage(ctx, C.CFDictionaryRef(0))
-	} else {
-		w, h := rasterDimensions(page)
-		// Rounded pixel dimensions preserve the full page, with no transparent rim.
-		C.CGContextScaleCTM(ctx, C.double(w/page.Width), C.double(h/page.Height))
+	q := &quartz{ctx: ctx, data: data, grayscale: page.Grayscale, dpi: page.RasterDPI, metadata: page.Metadata}
+	if err := q.beginPage(page, scale, x, y); err != nil {
+		q.close()
+		return nil, err
 	}
-	C.CGContextSetRGBFillColor(ctx, 1, 1, 1, 1)
-	C.CGContextFillRect(ctx, C.CGRectMake(0, 0, C.double(page.Width), C.double(page.Height)))
-	C.CGContextTranslateCTM(ctx, C.double(x), C.double(page.Height-y))
-	C.CGContextScaleCTM(ctx, C.double(scale), C.double(-scale))
-	C.CGContextSetLineCap(ctx, C.kCGLineCapRound)
-	C.CGContextSetLineJoin(ctx, C.kCGLineJoinRound)
-	return &quartz{ctx: ctx, data: data, grayscale: page.Grayscale, dpi: page.RasterDPI, metadata: page.Metadata}, nil
+	return q, nil
 }
+func (p *quartz) beginPage(page Page, scale, x, y float64) error {
+	if p.dpi == 0 {
+		C.CGPDFContextBeginPage(p.ctx, C.CFDictionaryRef(0))
+	}
+	C.CGContextSaveGState(p.ctx)
+	if p.dpi != 0 {
+		w, h := rasterDimensions(page)
+		C.CGContextScaleCTM(p.ctx, C.double(w/page.Width), C.double(h/page.Height))
+	}
+	C.CGContextSetRGBFillColor(p.ctx, 1, 1, 1, 1)
+	C.CGContextFillRect(p.ctx, C.CGRectMake(0, 0, C.double(page.Width), C.double(page.Height)))
+	if page.Tile {
+		C.CGContextSaveGState(p.ctx)
+		C.CGContextTranslateCTM(p.ctx, 0, C.double(page.Height))
+		C.CGContextScaleCTM(p.ctx, 1, -1)
+		C.CGContextSetRGBFillColor(p.ctx, 0, 0, 0, 1)
+		label := C.CString(page.Footer)
+		ok := C.elab_pdf_text(p.ctx, label, 8.5, C.double(page.Margin), C.double(page.Height-page.Margin-5), 0)
+		C.free(unsafe.Pointer(label))
+		C.CGContextRestoreGState(p.ctx)
+		if ok == 0 {
+			return fmt.Errorf("cannot encode page label")
+		}
+		C.CGContextClipToRect(p.ctx, C.CGRectMake(C.double(page.Margin), C.double(page.Margin+tileFooterHeight), C.double(page.Width-2*page.Margin), C.double(page.Height-2*page.Margin-tileFooterHeight)))
+	}
+	C.CGContextTranslateCTM(p.ctx, C.double(x), C.double(page.Height-y))
+	C.CGContextScaleCTM(p.ctx, C.double(scale), C.double(-scale))
+	C.CGContextSetLineCap(p.ctx, C.kCGLineCapRound)
+	C.CGContextSetLineJoin(p.ctx, C.kCGLineJoinRound)
+	return nil
+}
+func (p *quartz) nextPage(page Page, scale, x, y float64) error {
+	if p.dpi != 0 {
+		return fmt.Errorf("PNG contains exactly one selected page")
+	}
+	C.CGContextRestoreGState(p.ctx)
+	C.CGPDFContextEndPage(p.ctx)
+	return p.beginPage(page, scale, x, y)
+}
+
 func (p *quartz) push() { C.CGContextSaveGState(p.ctx) }
 func (p *quartz) pop()  { C.CGContextRestoreGState(p.ctx) }
 func (p *quartz) transform(x, y, rotation float64) {
@@ -241,6 +273,8 @@ func (p *quartz) text(x, y, size float64, text string) error {
 	return nil
 }
 func (p *quartz) finish() ([]byte, error) {
+	C.CGContextRestoreGState(p.ctx)
+	p.finished = true
 	if p.dpi == 0 {
 		C.CGPDFContextEndPage(p.ctx)
 		C.CGPDFContextClose(p.ctx)
@@ -251,7 +285,6 @@ func (p *quartz) finish() ([]byte, error) {
 			return nil, fmt.Errorf("cannot encode schematic PNG")
 		}
 	}
-	p.finished = true
 	length := C.CFDataGetLength(C.CFDataRef(p.data))
 	if length <= 0 || length > 8*1024*1024 {
 		return nil, fmt.Errorf("schematic output exceeds export bounds")
@@ -259,6 +292,9 @@ func (p *quartz) finish() ([]byte, error) {
 	return C.GoBytes(unsafe.Pointer(C.CFDataGetBytePtr(C.CFDataRef(p.data))), C.int(length)), nil
 }
 func (p *quartz) close() {
+	if !p.finished {
+		C.CGContextRestoreGState(p.ctx)
+	}
 	if !p.finished && p.dpi == 0 {
 		C.CGPDFContextEndPage(p.ctx)
 		C.CGPDFContextClose(p.ctx)

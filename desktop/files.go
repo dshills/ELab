@@ -54,6 +54,13 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 	raw, _ := json.Marshal(p)
 	var fields map[string]json.RawMessage
 	_ = json.Unmarshal(raw, &fields)
+	if id == "export.schematic.png" && state.SchematicPage.Tile {
+		if _, captured := fields["preview_id"]; !captured {
+			if _, explicit := fields["page_index"]; !explicit {
+				fields["page_index"] = json.RawMessage("0")
+			}
+		}
+	}
 	generation := state.Document.Generation
 	// Preserve the original generation through a later unsaved-changes decision.
 	if _, present := fields["expected_document_generation"]; !present {
@@ -94,6 +101,9 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 				options.Filename = "Schematic.pdf"
 			case "export.schematic.png":
 				options.Title = "Export schematic image PNG"
+				if state.SchematicPage.Tile {
+					options.Title = "Export tiled schematic page PNG"
+				}
 				options.Extensions = []string{"png"}
 				options.Filename = "Schematic.png"
 			case "verification.export", "sweep.export":

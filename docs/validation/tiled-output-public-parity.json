@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "scope": "Detailed page command schema, complete public observations and checks match except transport; rendered PDFs checked separately",
+  "reports": {
+    "docs/validation/headless-tiled-output.json": "8c9426ac771df952df3541f65de85ef0459453333506f7b83c14d7e6f052ae5b",
+    "docs/validation/desktop-tiled-output.json": "ff363382dd0ee522998d3c0fef2fc8a2efa5845919bb89a4f9c59884d24436f9"
+  },
+  "observations": [
+    {
+      "paper": "letter",
+      "orientation": "landscape",
+      "rows": 2,
+      "columns": 3,
+      "page_count": 6,
+      "scale": 1,
+      "overlap_mm": 5,
+      "width": 1650,
+      "height": 1275
+    },
+    {
+      "paper": "a4",
+      "orientation": "portrait",
+      "rows": 2,
+      "columns": 3,
+      "page_count": 6,
+      "scale": 1,
+      "overlap_mm": 5,
+      "width": 1241,
+      "height": 1754
+    }
+  ]
+}

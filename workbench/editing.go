@@ -382,6 +382,12 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return err
 		}
 		return s.startPrintPreviewLocked(p)
+	case "print.preview.page.set":
+		var p PreviewPageParams
+		if err := params(raw, &p, "id", "index"); err != nil {
+			return err
+		}
+		return s.selectPrintPreviewPageLocked(p)
 	case "print.preview.cancel", "print.preview.close":
 		var p IDParams
 		if err := params(raw, &p, "id"); err != nil {
@@ -416,7 +422,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if err := params(raw, &p, "path"); err != nil {
 			return err
 		}
-		return s.startExportLocked(ExportStartParams{Kind: "schematic-png", Path: p.Path, Overwrite: p.Overwrite, ExpectedGeneration: p.ExpectedGeneration, Page: p.Page, DPI: p.DPI})
+		return s.startExportLocked(ExportStartParams{Kind: "schematic-png", Path: p.Path, Overwrite: p.Overwrite, ExpectedGeneration: p.ExpectedGeneration, Page: p.Page, DPI: p.DPI, PageIndex: p.PageIndex, PreviewID: p.PreviewID})
 	case "export.scope.csv", "export.schematic.svg":
 		var p ExportParams
 		if err := params(raw, &p, "path"); err != nil {

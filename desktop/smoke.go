@@ -247,6 +247,10 @@ rendered:
 	if err := nativePrintPreviewSmoke(ctx, a, s); err != nil {
 		return fmt.Errorf("native print preview: %w", err)
 	}
+	setStage("nativeTiledPrintingSmoke")
+	if err := nativeTiledPrintingSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	setStage("nativeValueDomainsSmoke")
 	if err := nativeValueDomainsSmoke(ctx, a, s); err != nil {
 		return err

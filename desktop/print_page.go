@@ -40,12 +40,32 @@ func (s *screen) schematicPageControls(state workbench.Snapshot) []ui.Node {
 		scale = *page.Scale
 		label = fmt.Sprintf("Explicit scale · %.0f%%", scale*100)
 	}
-	nodes = append(nodes, quiet("pdf-scale-mode", label), s.action("pdf-fit", "Fit to page", "export.page.set", func() workbench.SchematicPage { p := page; p.Scale = nil; return p }()), ui.Node{ID: "pdf-scale", Kind: ui.NumberField, Number: float32(scale * 100), Numeric: ui.Numeric{Min: 10, Max: 400, Step: 5}, Accessibility: ui.Accessibility{Name: "Output explicit scale percent"}, Change: func(e ui.ChangeEvent) {
+	nodes = append(nodes, quiet("pdf-scale-mode", label), s.action("pdf-fit", "Fit to page", "export.page.set", func() workbench.SchematicPage { p := page; p.Scale = nil; p.Tile = false; p.OverlapMM = nil; return p }()), ui.Node{ID: "pdf-scale", Kind: ui.NumberField, Number: float32(scale * 100), Numeric: ui.Numeric{Min: 10, Max: 400, Step: 5}, Accessibility: ui.Accessibility{Name: "Output explicit scale percent"}, Change: func(e ui.ChangeEvent) {
 		next := page
 		v := float64(e.Number) / 100
 		next.Scale = &v
 		s.invoke("export.page.set", next)
 	}})
+	nodes = append(nodes, ui.Node{ID: "pdf-tile", Kind: ui.Checkbox, Text: "Tile across pages", Checked: page.Tile, Accessibility: ui.Accessibility{Name: "Tile schematic at explicit scale"}, Change: func(e ui.ChangeEvent) {
+		next := page
+		next.Tile = e.Checked
+		if next.Tile && next.Scale == nil {
+			v := 1.
+			next.Scale = &v
+		}
+		if !next.Tile {
+			next.OverlapMM = nil
+		}
+		s.invoke("export.page.set", next)
+	}})
+	if page.Tile {
+		nodes = append(nodes, quiet("pdf-tile-help", "Up to 16 pages at this scale. PNG exports the first page; preview lets you save each page."), quiet("pdf-overlap-label", "Tile overlap · mm"), ui.Node{ID: "pdf-overlap", Kind: ui.NumberField, Number: float32(*page.OverlapMM), Numeric: ui.Numeric{Min: 0, Max: 20, Step: 1}, Accessibility: ui.Accessibility{Name: "Tile overlap millimeters"}, Change: func(e ui.ChangeEvent) {
+			next := page
+			v := float64(e.Number)
+			next.OverlapMM = &v
+			s.invoke("export.page.set", next)
+		}})
+	}
 	for _, toggle := range []struct {
 		id, label string
 		checked   bool

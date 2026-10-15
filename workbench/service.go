@@ -957,7 +957,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 			s.printWork.job.Actor = actor
 		}
 	}
-	if r.Command == "print.preview.start" && s.preview != nil {
+	if (r.Command == "print.preview.start" || r.Command == "print.preview.page.set") && s.preview != nil && s.preview.view.Actor == "" {
 		s.preview.view.Actor = actor
 	}
 	if r.Command == "recovery.read.start" && len(s.recoveryReadOrder) > 0 {

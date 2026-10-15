@@ -86,6 +86,8 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(ExportParams{}), "urn:elab:export-path:1"},
 	{reflect.TypeOf(PDFExportParams{}), "urn:elab:pdf-export:1"},
 	{reflect.TypeOf(PNGExportParams{}), "urn:elab:png-export:1"},
+	{reflect.TypeOf(PreviewPageParams{}), "urn:elab:preview-page:1"},
+	{reflect.TypeOf(PrintSubmitParams{}), "urn:elab:print-submit:1"},
 	{reflect.TypeOf(PreviewParams{}), "urn:elab:preview-start:1"},
 	{reflect.TypeOf(PreviewImageParams{}), "urn:elab:preview-image:1"},
 	{reflect.TypeOf(ReplaceParams{}), "urn:elab:replace-document:1"},
@@ -158,6 +160,9 @@ func SchemaRegistry() map[string]json.RawMessage {
 	}
 	for _, common := range commonSchemas {
 		schema := structSchema(common.Type)
+		if common.Type == reflect.TypeOf(SchematicPage{}) {
+			addTiledPageDefinition(schema)
+		}
 		if common.Type == reflect.TypeOf(PulseTimingParams{}) {
 			schema = timeInputSchema("source.pulse.timing.set", schema)
 			addPulseTimingDetails("source.pulse.timing.set", schema)
@@ -317,11 +322,12 @@ func Catalog() []Capability {
 		typedCapability("sweep.keep.set", "Include/exclude a completed sweep in project storage", reflect.TypeOf(RecordingKeepParams{})),
 		capability("print.printers.refresh", "Refresh local system printers in background; inspect printing.work; never submits a job", true, `{"type":"object","additionalProperties":false}`),
 		typedCapability("print.destination.set", "Choose listed printer and 1–10 copies; session only", reflect.TypeOf(PrintDestinationParams{})),
-		typedCapability("print.submit", "Submit exact visible completed preview to listed printer in background; captures PDF/page/source; acknowledgment is not physical completion", reflect.TypeOf(PrintSubmitParams{})),
+		typedCapability("print.submit", "Submit all pages of exact completed preview capture; selected preview page does not restrict printing; acknowledgment is not physical completion", reflect.TypeOf(PrintSubmitParams{})),
 		typedCapability("print.job.refresh", "Refresh a retained acknowledged system job state in background", reflect.TypeOf(IDParams{})),
 		typedCapability("print.job.cancel", "Request cancellation of a retained acknowledged system job; refresh observes terminal state", reflect.TypeOf(IDParams{})),
 		typedCapability("print.work.cancel", "Cancel exact active print preparation/discovery/control work; acknowledged submissions stay submitted", reflect.TypeOf(IDParams{})),
 		typedCapability("print.preview.start", "Capture page/source and render preview in background; one worker; preserves circuit/physics; no printer submission", reflect.TypeOf(PreviewParams{})),
+		typedCapability("print.preview.page.set", "Render another zero-based page of the exact visible completed capture; new preview ID; preserves captured source/settings and never submits", reflect.TypeOf(PreviewPageParams{})),
 		typedCapability("print.preview.cancel", "Cancel active preview preparation by exact ID", reflect.TypeOf(IDParams{})),
 		typedCapability("print.preview.close", "Close exact preview ID and release pixels; cancel active preparation", reflect.TypeOf(IDParams{})),
 		queryCapability("print.preview.image", "Read owned PNG chunks from visible completed preview; 1–65536 bytes; default 65536; base64 output; exact ID prevents stale image reads", reflect.TypeOf(PreviewImageParams{}), reflect.TypeOf(PreviewImageChunk{})),

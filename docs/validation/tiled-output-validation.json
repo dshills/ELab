@@ -1,0 +1,112 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.83.0",
+  "build_version": "98",
+  "binary_sha256": "83aaa301a7d7fa64e0d931a83edb8b1212c2917765565e27a8b0f541dca548f0",
+  "agent_binary_sha256": "f1e23a3d43055a63293c841b40b4b1f5cd8f5df716bf02483da0ed6a3cc03483",
+  "sdk": {
+    "commit": "3b680ecf05fad5e0ff7e563baa76d667a9d507b2",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "desktop/files.go": "913fe6f40d68a56989f2192d11dc6e9c829844c64fa07e9052a7e77b43a05db5",
+    "desktop/print_page.go": "96cb763e746bbc8d055fa7a78bc4cb6b47e3230308713e1d1cb0a8a5f06daf14",
+    "desktop/print_preview.go": "a76dba8cb012558cc53470642274bd4ba10a29b21c9a0fc3927b02b2c0d07fa5",
+    "desktop/printing.go": "5c404d079910b3b0db27f81ec8f4ff721cb561bcacadbe2b6878701bfd360b6b",
+    "desktop/smoke.go": "cb2131a8565bb89c53a9cbaf32724f31507431f36316cf3c2e0dd94027ea1452",
+    "internal/schematicpdf/render.go": "42d5a807e7d049412cf1968383e8311c0a7f12eac04b4fab227d6571f8ebbb2d",
+    "internal/schematicpdf/render_darwin.go": "803705278235787b36c6e9fb5fa042471d1869e7ce83f23303614566046384b8",
+    "workbench/capability_details.go": "1a0a7e4fd70c02c9a930f9d4039835e0e88ee227e6746fd976aa98739a125df9",
+    "workbench/commands.go": "8804c1dace6bc55259dc9ce3aae19ae653591892d0eb63c58b2ac510576ccf47",
+    "workbench/editing.go": "4e3256d165be2dc654bac0493b0b75db344b251bd15b2930dea0f94af870ae33",
+    "workbench/export.go": "cf3091ff4d8a3cd618b19d65b364be80aea5635dda679182cc26accf03237737",
+    "workbench/print_preview.go": "72d5ddccca4cf1fbf58b8fc66a5a2f539b5f372d67d0064153eca8ae555025ff",
+    "workbench/printing.go": "4f835bf13d88419e415faca5c6414c595302b431cc88c72810e2cf6da00b4eed",
+    "workbench/printing_capabilities.go": "f262ac0c8e7115396e38115e858edb45792944b0f0fbd66f59b34a87f9cd9dc3",
+    "workbench/project_export.go": "83d8512e729d4972fd95d0ab4a0e75e6e0b5d46b000e2b4c750bfe3e89d70275",
+    "workbench/schematic_page.go": "73d0e2fdbbb68984a3717a46c6d5e620e42b8fc6b2832d932649b3856a35a1f6",
+    "workbench/service.go": "277375014a682698a3df56ce364a15f449756784d94415c3495eda7ade9082cb",
+    "internal/schematicpdf/layout.go": "995b7c06ef0ddd472cd520fd3b65e700f435a3f53e3309dc320cf563f28c2999",
+    "internal/schematicpdf/layout_test.go": "9b656de55f5e8e686200f1c2da71a6a19b1ed62bd3b60beb05023cafd84e02e7",
+    "workbench/tiled_page_capabilities.go": "ee589b951897d3968e97734bb34311ccd9830fbd1237e584815f8de591072b6a",
+    "workbench/tiled_printing_test.go": "57c1e5ced99317846d76b0fbb89ef46181f9fc322e7af35a75c29c16f8554b03",
+    "desktop/tiled_printing_test.go": "49ce9ddf89837ad01237a758fde2bf13aba631e23a831ce06704b15e58c6e94e",
+    "desktop/tiled_printing_smoke.go": "db57b01c9e0d5b46281af849cedd78456e8ba1b69165aa559d498ef29dcfa426",
+    "scripts/tiled-output-demo.py": "bfc4150ce663343941949638640fdaa552692c01c414a31327c6a781c9be7132",
+    "scripts/check-tiled-pdfs.py": "41cdc0b1aa46adae1034a89b65c64163f6506f4e58bd6155348c0da26ba15fc4"
+  },
+  "checks": [
+    "Fixed-scale complete row-major PDF tiles with 0\u201320 mm overlap, numbered/grid/scale footer, explicit scale and 16-page bound; no implicit shrinking or partial oversized publication",
+    "Independent geometric coverage/overlap and raster margin clipping/page-selection tests; default single-page raster/printable regressions pass",
+    "New print.preview.page.set navigates immutable capture under new IDs; same-index no-op preserves capture actor/identity; stale and invalid IDs refuse",
+    "One PNG retained at a time; exact preview_id PNG export preserves bytes/provenance and can finish after preview closure; explicit current-source PNG page matches each preview",
+    "Print submission renders all captured pages with raster-page selection cleared, retains page_count and uses existing isolated spool lifecycle fixture; no real printer submitted",
+    "Native settings/navigation/exact shown-page picker/Fit tests pass; exact packaged GPU/UI/close smoke loads and navigates pages",
+    "Public native/headless complete command schema and observations match: six Letter and six A4 pages, two rows/three columns, 100-percent scale and 5 mm overlap",
+    "Independent PDF parsers/Poppler check all12 actual pages, paper/footer/font/margin properties; direct visual inspection covers every page; final PDF copies match inspected bytes",
+    "Full serialized lint/import/root/native race/vet pass; final targeted core race and lint/staticcheck/root vet follow no-op actor correction",
+    "Four adapters pass existing three LED/RC/NPN construction/measurement/export/save/reopen workflows; canonical/candidate metadata and bytes match; SDK prepared hashes verify read-only; owned sessions terminal"
+  ],
+  "evidence": [
+    "docs/tiled-output.md",
+    "scripts/tiled-output-demo.py",
+    "scripts/check-tiled-pdfs.py",
+    "docs/validation/headless-tiled-output.json",
+    "docs/validation/desktop-tiled-output.json",
+    "docs/validation/tiled-output-public-parity.json",
+    "docs/validation/tiled-output-visual-review.json",
+    "docs/validation/tiled-output-conformance.json"
+  ],
+  "logs_sha256": {
+    "build/tiled-printing-083/audit.log": "84594f39d12989f61b62fae85c5f9eef428780944e2c985d60a31e3956e77a40",
+    "build/tiled-printing-083/build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/tiled-printing-083/check.log": "363b9c3192d5603e698fa67bbe23cd31bb6c40bf265da98d5a946fca07d1f617",
+    "build/tiled-printing-083/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/tiled-printing-083/core-extra.log": "efe1fe23721c8d20093ba08ce65a28c469f601ccee98714700a1dff80490d46e",
+    "build/tiled-printing-083/core-final.log": "64d3293e57cf8eb91ffea5317a02af12e1e93fb1c28d9483858bceff765d0e85",
+    "build/tiled-printing-083/core-focused-final.log": "c0068a999efc780acfd4c254ad18e9c26a1d4a8c5042b98daed873076e758b85",
+    "build/tiled-printing-083/core-focused.log": "f2dcb9f9f4fc2ec18af54079d994188bb70e34751887f6163aa932dfa86db326",
+    "build/tiled-printing-083/focused-initial.log": "dcb27e9b95e6e5a23c20983b9a312db53cb41aa5d745af0c034b21ae1084a246",
+    "build/tiled-printing-083/headless.log": "ea251c6318ef68e5fec0b960428c1797c2cad7ec304641f38e91859f09ccb601",
+    "build/tiled-printing-083/lint-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "build/tiled-printing-083/native-demo.log": "c969897d275f9e491155f9fba606b8838605f7c1cc84b44e744611a9a810377a",
+    "build/tiled-printing-083/native-focused.log": "3bb08f63df08b8410e7a30917829d428b8ecf04013425ae04069dd86044814a0",
+    "build/tiled-printing-083/native-host.log": "87814294871a9f052be5597adbbaecb3ad53c8bc816c4246d801ca7fa5698706",
+    "build/tiled-printing-083/package-canonical.log": "3f73e3fcf6b17654520ada232a96d744c909959f47a71fe47761ddf4871e7dc6",
+    "build/tiled-printing-083/package.log": "1527c114314d22d70f4dcd3c734c7ce37c09e56a35bfb45ceaecda68db7663ea",
+    "build/tiled-printing-083/pdf-check.log": "4910b7ade5c1a7dd9838a176ffa9684761535f5a666b92bba79335adfcb9561f",
+    "build/tiled-printing-083/smoke.log": "d534524a883ff7c24489915c8745115e2e442599419ffb7d61e5b4e8d00b3e64",
+    "build/tiled-printing-083/vet-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "source_inventory": {
+    "sources": 45,
+    "sites": 371,
+    "public_commands": 157,
+    "source_routes": 127,
+    "binding_review_sites": 137,
+    "literal_routes": 208
+  },
+  "pdfs_sha256": {
+    "output/pdf/tiled-printing-083/tiled-a4.pdf": "383434b06d5b73e81cd9bedd56123a1af552dd36adfe8ab4340898ec8f95cb53",
+    "output/pdf/tiled-printing-083/tiled-letter.pdf": "e8c43a3bb0d004be7740c6e48c468868213ad0fea0c08a64df049c9f84c75876"
+  },
+  "notes": [
+    "Initial catalog65775-byte failure retained64KiB guard; common preview-page and print-submit input definitions restore compact discovery",
+    "Initial output invariant compared against state preceding an intentional edit; final comparison isolates output/navigation effects",
+    "Full suite precedes final same-index actor fix; final targeted preview/printing core race, lint/staticcheck/root vet, final candidate smoke/public/four-adapter runs cover stated paths"
+  ],
+  "limits": [
+    "Fixed rectangular tiling can include blank/mostly empty pages and splits/repeats artwork or labels at seams; inspect preview/choose smaller scale to reduce paper",
+    "PDF and print.submit include all captured pages; PNG contains one explicit page. No page-range or automatic blank-tile omission",
+    "Paper/scale/overlap are session output choices; no saved project fields/model/kernel/sample schedule changed",
+    "One active preview renderer and one page retained; 16-page/8-MiB/cooperative-deadline bounds remain; native encoding is not preemptive",
+    "No real printer test or physical paper acceptance; isolated print preparation and CUPS option fixtures do not establish hardware output",
+    "Full mounted typing/IME/focus/accessibility, visible latency, clean distribution and participant gates remain open; P0 17 implemented /10 partial; continuing goal active"
+  ]
+}

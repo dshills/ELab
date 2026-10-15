@@ -20,6 +20,7 @@ type ExportParams struct {
 }
 
 type Artifact struct {
+	PageIndex          *int           `json:"page_index,omitempty"`
 	DPI                int            `json:"dpi,omitempty"`
 	Page               *SchematicPage `json:"page,omitempty"`
 	DocumentGeneration uint64         `json:"document_generation,omitempty"`
@@ -38,16 +39,12 @@ func cloneArtifact(in *Artifact) *Artifact {
 	}
 	out := *in
 	if in.Page != nil {
-		page := *in.Page
-		if page.MarginMM != nil {
-			v := *page.MarginMM
-			page.MarginMM = &v
-		}
-		if page.Scale != nil {
-			v := *page.Scale
-			page.Scale = &v
-		}
+		page := cloneSchematicPage(*in.Page)
 		out.Page = &page
+	}
+	if in.PageIndex != nil {
+		v := *in.PageIndex
+		out.PageIndex = &v
 	}
 	return &out
 }

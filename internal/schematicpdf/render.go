@@ -19,8 +19,13 @@ type Page struct {
 	Grayscale             bool
 	Metadata              string
 	RasterDPI             int // 0 for vector PDF; 72–300 for PNG
+	Tile                  bool
+	Overlap               float64 // PDF points
+	PageIndex             *int    // PNG selection; nil means whole document, which must have one page
+	Footer                string  // generated placement label
 }
 type painter interface {
+	nextPage(Page, float64, float64, float64) error
 	push()
 	pop()
 	transform(float64, float64, float64)
@@ -40,16 +45,60 @@ type style struct {
 }
 
 func Render(ctx context.Context, svg []byte, page Page) ([]byte, error) {
-	if !validPage(page) {
-		return nil, fmt.Errorf("invalid schematic page geometry or raster resolution")
+	if err := ctx.Err(); err != nil {
+		return nil, err
 	}
-	decoder := xml.NewDecoder(strings.NewReader(string(svg)))
+	plan, err := Plan(svg, page)
+	if err != nil {
+		return nil, err
+	}
+	pages := plan.Pages
+	if page.RasterDPI != 0 {
+		if page.PageIndex == nil && len(pages) > 1 {
+			return nil, fmt.Errorf("multi-page PNG requires explicit page_index; export PDF for all pages")
+		}
+		index := 0
+		if page.PageIndex != nil {
+			index = *page.PageIndex
+		}
+		if index < 0 || index >= len(pages) {
+			return nil, fmt.Errorf("page_index is outside the captured page count")
+		}
+		pages = pages[index : index+1]
+	} else if page.PageIndex != nil {
+		return nil, fmt.Errorf("page_index applies only to PNG output")
+	}
 	var out painter
 	defer func() {
 		if out != nil {
 			out.close()
 		}
 	}()
+	for _, tile := range pages {
+		if err := ctx.Err(); err != nil {
+			return nil, err
+		}
+		page.Footer = tile.Footer
+		if out == nil {
+			out, err = newPainter(page, tile.Scale, tile.X, tile.Y)
+		} else {
+			err = out.nextPage(page, tile.Scale, tile.X, tile.Y)
+		}
+		if err != nil {
+			return nil, err
+		}
+		if err = renderSVG(ctx, svg, out); err != nil {
+			return nil, err
+		}
+	}
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	return out.finish()
+}
+
+func renderSVG(ctx context.Context, svg []byte, out painter) error {
+	decoder := xml.NewDecoder(strings.NewReader(string(svg)))
 	current := style{fill: "#000000", stroke: "none", width: 1, font: 14}
 	var styles []style
 	var text strings.Builder
@@ -57,14 +106,14 @@ func Render(ctx context.Context, svg []byte, page Page) ([]byte, error) {
 	insideText := false
 	for {
 		if err := ctx.Err(); err != nil {
-			return nil, err
+			return err
 		}
 		token, err := decoder.Token()
 		if err == io.EOF {
 			break
 		}
 		if err != nil {
-			return nil, err
+			return err
 		}
 		switch t := token.(type) {
 		case xml.StartElement:
@@ -72,28 +121,7 @@ func Render(ctx context.Context, svg []byte, page Page) ([]byte, error) {
 			for _, attr := range t.Attr {
 				a[attr.Name.Local] = attr.Value
 			}
-			if t.Name.Local == "svg" {
-				bounds, err := numbers(a["viewBox"])
-				if err != nil || len(bounds) != 4 || bounds[2] <= 0 || bounds[3] <= 0 {
-					return nil, fmt.Errorf("invalid generated schematic bounds")
-				}
-				scale := page.Scale
-				if scale == 0 {
-					scale = math.Min((page.Width-2*page.Margin)/bounds[2], (page.Height-2*page.Margin)/bounds[3])
-				}
-				if scale <= 0 || bounds[2]*scale > page.Width-2*page.Margin+1e-7 || bounds[3]*scale > page.Height-2*page.Margin+1e-7 {
-					return nil, fmt.Errorf("schematic exceeds printable page at this scale; use fit or a smaller scale")
-				}
-				x := (page.Width-bounds[2]*scale)/2 - bounds[0]*scale
-				y := (page.Height-bounds[3]*scale)/2 - bounds[1]*scale
-				out, err = newPainter(page, scale, x, y)
-				if err != nil {
-					return nil, err
-				}
-			}
-			if out == nil {
-				return nil, fmt.Errorf("missing generated SVG root")
-			}
+
 			out.push()
 			styles = append(styles, current)
 			if v, ok := a["fill"]; ok {
@@ -105,18 +133,18 @@ func Render(ctx context.Context, svg []byte, page Page) ([]byte, error) {
 			if v, ok := a["stroke-width"]; ok {
 				current.width, err = strconv.ParseFloat(v, 64)
 				if err != nil {
-					return nil, err
+					return err
 				}
 			}
 			if v, ok := a["font-size"]; ok {
 				current.font, err = strconv.ParseFloat(v, 64)
 				if err != nil {
-					return nil, err
+					return err
 				}
 			}
 			if v, ok := a["text-anchor"]; ok {
 				if v != "start" && v != "end" {
-					return nil, fmt.Errorf("unsupported generated text anchor")
+					return fmt.Errorf("unsupported generated text anchor")
 				}
 				current.anchor = v
 			}
@@ -127,7 +155,7 @@ func Render(ctx context.Context, svg []byte, page Page) ([]byte, error) {
 				if transform := a["transform"]; transform != "" {
 					var x, y, rotation float64
 					if _, err := fmt.Sscanf(transform, "translate(%g %g) rotate(%g)", &x, &y, &rotation); err != nil {
-						return nil, fmt.Errorf("unsupported generated transform: %w", err)
+						return fmt.Errorf("unsupported generated transform: %w", err)
 					}
 					out.transform(x, y, rotation)
 				}
@@ -138,12 +166,12 @@ func Render(ctx context.Context, svg []byte, page Page) ([]byte, error) {
 			case "polyline":
 				points, err := numbers(a["points"])
 				if err != nil || len(points)%2 != 0 {
-					return nil, fmt.Errorf("invalid generated polyline")
+					return fmt.Errorf("invalid generated polyline")
 				}
 				out.polyline(points)
 			case "path":
 				if err := out.path(a["d"]); err != nil {
-					return nil, err
+					return err
 				}
 			case "text":
 				text.Reset()
@@ -151,7 +179,7 @@ func Render(ctx context.Context, svg []byte, page Page) ([]byte, error) {
 				insideText = true
 			case "svg", "metadata", "title":
 			default:
-				return nil, fmt.Errorf("unsupported generated SVG element %q", t.Name.Local)
+				return fmt.Errorf("unsupported generated SVG element %q", t.Name.Local)
 			}
 		case xml.CharData:
 			if insideText {
@@ -160,12 +188,12 @@ func Render(ctx context.Context, svg []byte, page Page) ([]byte, error) {
 		case xml.EndElement:
 			if t.Name.Local == "text" {
 				if err := out.text(textX, textY, current.font, text.String()); err != nil {
-					return nil, err
+					return err
 				}
 				insideText = false
 			}
 			if len(styles) == 0 {
-				return nil, fmt.Errorf("unbalanced generated SVG")
+				return fmt.Errorf("unbalanced generated SVG")
 			}
 			current = styles[len(styles)-1]
 			styles = styles[:len(styles)-1]
@@ -173,19 +201,22 @@ func Render(ctx context.Context, svg []byte, page Page) ([]byte, error) {
 		}
 	}
 	if out == nil || len(styles) != 0 {
-		return nil, fmt.Errorf("incomplete generated SVG")
+		return fmt.Errorf("incomplete generated SVG")
 	}
 	if err := ctx.Err(); err != nil {
-		return nil, err
+		return err
 	}
-	return out.finish()
+	return nil
 }
 
 func validPage(page Page) bool {
-	for _, v := range []float64{page.Width, page.Height, page.Margin, page.Scale} {
+	for _, v := range []float64{page.Width, page.Height, page.Margin, page.Scale, page.Overlap} {
 		if math.IsNaN(v) || math.IsInf(v, 0) {
 			return false
 		}
+	}
+	if page.Overlap < 0 || page.Overlap > 20*72/25.4 {
+		return false
 	}
 	if page.Width <= 0 || page.Height <= 0 || page.Margin < 0 || page.Margin*2 >= math.Min(page.Width, page.Height) || page.Scale < 0 {
 		return false

@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "reviewed": true,
+  "review_scope": "Direct visual inspection of all 12 Poppler-rendered pages at 100 DPI plus independent PDF parser and outer-margin pixel checks",
+  "source_check": "build/tiled-printing-083/pdf-check.json",
+  "source_check_sha256": "9a93161a9403d3a5b1878fcfc886cd946f95e7f946ffe4cb2383deb64933b4ff",
+  "deliverables_sha256": {
+    "output/pdf/tiled-printing-083/tiled-letter.pdf": "e8c43a3bb0d004be7740c6e48c468868213ad0fea0c08a64df049c9f84c75876",
+    "output/pdf/tiled-printing-083/tiled-a4.pdf": "383434b06d5b73e81cd9bedd56123a1af552dd36adfe8ab4340898ec8f95cb53"
+  },
+  "observations": [
+    "Letter landscape and A4 portrait each contain six pages in two rows/three columns at 100 percent scale and 5 mm overlap",
+    "Footer page/grid order, fixed scale, whitespace separation and outer margins are correct; component/terminal/legend text remains readable at retained size",
+    "Artwork and labels deliberately cross tile seams; overlap retains assembly context. Letter page 3 contains only its footer because this stretched test circuit has sparse rectangular bounds",
+    "No unexpected ink outside printable margins, missing glyphs, footer collisions or distorted schematic symbols observed"
+  ],
+  "limits": [
+    "This is a fixed rectangular grid; sparse diagrams can produce blank or mostly empty tiles. Preview or smaller explicit scale can reduce paper use",
+    "No physical printer or universal readability/keyboard/accessibility qualification"
+  ]
+}

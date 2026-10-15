@@ -8,7 +8,7 @@ import (
 )
 
 func (s *screen) printingControls(state workbench.Snapshot) []ui.Node {
-	nodes := []ui.Node{section("printer-title", "Print captured page")}
+	nodes := []ui.Node{section("printer-title", "Print captured pages")}
 	printing := state.Printing
 	busy := printing != nil && printing.Work != nil && (printing.Work.Status == "queued" || printing.Work.Status == "running" || printing.Work.Status == "canceling")
 	refresh := s.action("printers-refresh", "Refresh printers", "print.printers.refresh", struct{}{})
@@ -40,11 +40,15 @@ func (s *screen) printingControls(state workbench.Snapshot) []ui.Node {
 	}
 	p := state.PrintPreview
 	if p != nil {
-		submit := s.action("printer-submit", "Print captured page", "print.submit", workbench.PrintSubmitParams{PreviewID: p.ID, PrinterID: printing.PrinterID, Copies: printing.Copies})
+		label := "Print captured pages"
+		if p.PageCount > 0 {
+			label = fmt.Sprintf("Print all %d pages", p.PageCount)
+		}
+		submit := s.action("printer-submit", label, "print.submit", workbench.PrintSubmitParams{PreviewID: p.ID, PrinterID: printing.PrinterID, Copies: printing.Copies})
 		submit.Disabled = busy || p.Status != "completed" || !p.Visible || !accepting
 		nodes = append(nodes, submit)
 		if !p.Current {
-			nodes = append(nodes, quiet("printer-old-source", "Print uses the captured page shown. Refresh preview to use your edits."))
+			nodes = append(nodes, quiet("printer-old-source", "Print uses all pages of the captured circuit. Refresh preview to use your edits."))
 		}
 	}
 	if printing.Work != nil {
