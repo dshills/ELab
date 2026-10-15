@@ -30,7 +30,7 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 				name = "sample_step_s"
 			}
 			nodes = append(nodes, quiet("verify-label-"+field.id, field.label), timeField("verify-"+field.id, field.label, field.value, false, func(text string) {
-				s.invokeAtCommandRevision("verification.settings.set", timeParams(cfg, name, text), state.CommandRevision)
+				s.invokeAtCommandRevision("verification.settings.set", textFieldParams(cfg, name, text), state.CommandRevision)
 			}))
 		}
 		modes := []ui.Option{}

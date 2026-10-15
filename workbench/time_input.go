@@ -71,7 +71,7 @@ var timeCommandFields = map[string][]string{
 
 func normalizeTimeInput(command string, raw json.RawMessage) (json.RawMessage, error) {
 	fields := timeCommandFields[command]
-	if len(fields) == 0 && command != "edit.batch" {
+	if len(fields) == 0 && len(waveformQuantityFields[command]) == 0 && command != "edit.batch" {
 		return raw, nil
 	}
 	var object map[string]json.RawMessage
@@ -118,6 +118,9 @@ func normalizeTimeInput(command string, raw json.RawMessage) (json.RawMessage, e
 			}
 		}
 	}
+	if err := normalizeWaveformQuantities(command, object); err != nil {
+		return nil, err
+	}
 	if command == "source.pulse.timing.set" || command == "simulation.pulse.timing.set" {
 		if err := normalizePulseTimingQuantities(object); err != nil {
 			return nil, err
@@ -148,6 +151,7 @@ func normalizeTimeInput(command string, raw json.RawMessage) (json.RawMessage, e
 	return json.Marshal(object)
 }
 func timeInputSchema(command string, schema map[string]any) map[string]any {
+	waveformQuantitySchema(command, schema)
 	for _, path := range timeCommandFields[command] {
 		parts := strings.Split(path, ".")
 		properties, ok := schema["properties"].(map[string]any)

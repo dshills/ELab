@@ -111,7 +111,7 @@ func addCapabilityDetails(id string, schema map[string]any) {
 		p := inputProperty(schema, path)
 		if p != nil {
 			p["minimum"], p["maximum"], p["x-unit"] = min, max, unit
-			if strings.HasSuffix(path, "_s") {
+			if strings.HasSuffix(path, "_s") || len(waveformQuantityFields[id]) > 0 {
 				p["x-normalized-si-range"] = map[string]float64{"minimum": min, "maximum": max}
 			}
 		}

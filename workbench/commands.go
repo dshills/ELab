@@ -152,6 +152,10 @@ func SchemaRegistry() map[string]json.RawMessage {
 	eventSchema["$id"] = EventPollSchemaID
 	eventData, _ := json.Marshal(eventSchema)
 	registry := map[string]json.RawMessage{SnapshotSchemaID: append(json.RawMessage(nil), snapshotDefinition...), VerificationMetadataSchemaID: data, EventPollSchemaID: eventData, TimeInputSchemaID: json.RawMessage(`{"$id":"urn:elab:time:1","type":["number","string"],"maxLength":128,"description":"Seconds as a finite number or decimal/scientific text; bare text is seconds; case-sensitive s/ms/us/µs/μs/ns/ps. Command bounds still apply.","examples":[0.01,"10 ms","250 us"]}`)}
+	for _, unit := range []string{"V", "Hz", "deg"} {
+		encoded, _ := json.Marshal(waveformQuantityDefinition(unit))
+		registry[waveformQuantitySchemaID(unit)] = encoded
+	}
 	for _, common := range commonSchemas {
 		schema := structSchema(common.Type)
 		if common.Type == reflect.TypeOf(PulseTimingParams{}) {

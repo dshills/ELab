@@ -1,0 +1,326 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "detailed_schemas": {
+    "source.sine.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "id": "V1",
+          "waveform": {
+            "amplitude_v": 2.5,
+            "offset_v": 0,
+            "frequency_hz": 10,
+            "phase_degrees": 0
+          }
+        }
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "waveform": {
+          "additionalProperties": false,
+          "properties": {
+            "amplitude_v": {
+              "$ref": "urn:elab:waveform-quantity-V:1",
+              "maximum": 12,
+              "minimum": 0,
+              "x-normalized-si-range": {
+                "maximum": 12,
+                "minimum": 0
+              },
+              "x-unit": "V"
+            },
+            "frequency_hz": {
+              "$ref": "urn:elab:waveform-quantity-Hz:1",
+              "maximum": 1000,
+              "minimum": 0.1,
+              "x-normalized-si-range": {
+                "maximum": 1000,
+                "minimum": 0.1
+              },
+              "x-unit": "Hz"
+            },
+            "offset_v": {
+              "$ref": "urn:elab:waveform-quantity-V:1",
+              "maximum": 12,
+              "minimum": -12,
+              "x-normalized-si-range": {
+                "maximum": 12,
+                "minimum": -12
+              },
+              "x-unit": "V"
+            },
+            "phase_degrees": {
+              "$ref": "urn:elab:waveform-quantity-deg:1",
+              "maximum": 360,
+              "minimum": -360,
+              "x-normalized-si-range": {
+                "maximum": 360,
+                "minimum": -360
+              },
+              "x-unit": "degrees"
+            }
+          },
+          "required": [
+            "amplitude_v",
+            "offset_v",
+            "frequency_hz",
+            "phase_degrees"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "waveform"
+      ],
+      "type": "object",
+      "x-details-scope": "parameter-bounds-and-examples; stateful-preconditions-and-errors-not-exhaustive",
+      "x-normalized-si-relations": [
+        {
+          "operator": "sum_absolute_maximum",
+          "fields": [
+            "waveform.offset_v",
+            "waveform.amplitude_v"
+          ],
+          "limit": 12
+        }
+      ]
+    },
+    "source.pulse.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "id": "V1",
+          "waveform": {
+            "high_v": 5,
+            "low_v": 0,
+            "high_s": 0.05,
+            "low_s": 0.05,
+            "rise_s": 0.001,
+            "fall_s": 0.001
+          }
+        }
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "waveform": {
+          "additionalProperties": false,
+          "properties": {
+            "fall_s": {
+              "$ref": "urn:elab:time:1",
+              "maximum": 10,
+              "minimum": 1e-06,
+              "x-normalized-si-range": {
+                "maximum": 10,
+                "minimum": 1e-06
+              },
+              "x-unit": "s"
+            },
+            "high_s": {
+              "$ref": "urn:elab:time:1",
+              "maximum": 10,
+              "minimum": 1e-06,
+              "x-normalized-si-range": {
+                "maximum": 10,
+                "minimum": 1e-06
+              },
+              "x-unit": "s"
+            },
+            "high_v": {
+              "$ref": "urn:elab:waveform-quantity-V:1",
+              "maximum": 12,
+              "minimum": -12,
+              "x-normalized-si-range": {
+                "maximum": 12,
+                "minimum": -12
+              },
+              "x-unit": "V"
+            },
+            "low_s": {
+              "$ref": "urn:elab:time:1",
+              "maximum": 10,
+              "minimum": 1e-06,
+              "x-normalized-si-range": {
+                "maximum": 10,
+                "minimum": 1e-06
+              },
+              "x-unit": "s"
+            },
+            "low_v": {
+              "$ref": "urn:elab:waveform-quantity-V:1",
+              "maximum": 12,
+              "minimum": -12,
+              "x-normalized-si-range": {
+                "maximum": 12,
+                "minimum": -12
+              },
+              "x-unit": "V"
+            },
+            "rise_s": {
+              "$ref": "urn:elab:time:1",
+              "maximum": 10,
+              "minimum": 1e-06,
+              "x-normalized-si-range": {
+                "maximum": 10,
+                "minimum": 1e-06
+              },
+              "x-unit": "s"
+            }
+          },
+          "required": [
+            "high_v",
+            "low_v",
+            "high_s",
+            "low_s",
+            "rise_s",
+            "fall_s"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "waveform"
+      ],
+      "type": "object",
+      "x-details-scope": "parameter-bounds-and-examples; stateful-preconditions-and-errors-not-exhaustive",
+      "x-normalized-si-relations": [
+        {
+          "operator": "less_or_equal",
+          "fields": [
+            "waveform.low_v",
+            "waveform.high_v"
+          ]
+        },
+        {
+          "operator": "less_or_equal",
+          "fields": [
+            "waveform.rise_s",
+            "waveform.high_s"
+          ]
+        },
+        {
+          "operator": "less_or_equal",
+          "fields": [
+            "waveform.fall_s",
+            "waveform.low_s"
+          ]
+        },
+        {
+          "operator": "sum_minimum",
+          "fields": [
+            "waveform.high_s",
+            "waveform.low_s"
+          ],
+          "limit": 0.001
+        }
+      ]
+    }
+  },
+  "quantity_schemas": {
+    "urn:elab:waveform-quantity-Hz:1": {
+      "$id": "urn:elab:waveform-quantity-Hz:1",
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        }
+      ],
+      "description": "Finite numeric value or decimal/scientific quantity text; bare text uses Hz. Model/coupled bounds apply after conversion. No hexadecimal, NaN, Inf or nonzero underflow.",
+      "x-max-utf8-bytes": 128,
+      "x-text-units": [
+        "Hz",
+        "kHz",
+        "mHz"
+      ],
+      "x-unit": "Hz"
+    },
+    "urn:elab:waveform-quantity-V:1": {
+      "$id": "urn:elab:waveform-quantity-V:1",
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        }
+      ],
+      "description": "Finite numeric value or decimal/scientific quantity text; bare text uses V. Model/coupled bounds apply after conversion. No hexadecimal, NaN, Inf or nonzero underflow.",
+      "x-max-utf8-bytes": 128,
+      "x-text-units": [
+        "V",
+        "mV",
+        "uV",
+        "\u00b5V",
+        "\u03bcV"
+      ],
+      "x-unit": "V"
+    },
+    "urn:elab:waveform-quantity-deg:1": {
+      "$id": "urn:elab:waveform-quantity-deg:1",
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        }
+      ],
+      "description": "Finite numeric value or decimal/scientific quantity text; bare text uses deg. Model/coupled bounds apply after conversion. No hexadecimal, NaN, Inf or nonzero underflow.",
+      "x-max-utf8-bytes": 128,
+      "x-text-units": [
+        "deg",
+        "\u00b0"
+      ],
+      "x-unit": "deg"
+    }
+  },
+  "observations": {
+    "exact_sine": {
+      "amplitude_v": 1.23456789012345,
+      "offset_v": -0.123456789012345,
+      "frequency_hz": 123.456789012345,
+      "phase_degrees": -123.456789012345
+    },
+    "exact_pulse": {
+      "high_v": 4.123456789012345,
+      "low_v": -0.123456789012345,
+      "high_s": 0.007,
+      "low_s": 0.013,
+      "rise_s": 0.002,
+      "fall_s": 0.003
+    },
+    "sine_capacitor_at_30ms_v": 0.6599154400851737,
+    "sine_reference_v": 0.6608630887037612,
+    "sine_source_samples": 61,
+    "ramp_capacitor_at_5ms_v": 1.346623734907251,
+    "ramp_reference_v": 1.3467987865008904,
+    "ramp_source_samples": 28
+  },
+  "checks": [
+    "Exact decimal waveform quantities retain binary64 values; numeric re-entry preserves history/physics",
+    "Voltage, frequency, phase and time input share public commands; numeric compatibility and typed local references retained",
+    "Wrong units, underflow, null and coupled model violations refuse without mutation",
+    "Sine and finite-ramp RC transients agree with independent first-order references within existing 3 mV envelope",
+    "Every captured sine/ramp source sample agrees with independent analytic waveform",
+    "Saved waveform fields stay numeric SI and save/reopen preserves exact configured values and bytes"
+  ],
+  "limits": [
+    "No device/model/kernel/sampling/file-version changes",
+    "Quantity text is command-only; persisted data and outputs stay numeric SI",
+    "Existing model and integration/work limits still apply; no physical device or complete mounted typing/IME/accessibility/latency qualification"
+  ]
+}

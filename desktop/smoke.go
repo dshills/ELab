@@ -1321,6 +1321,12 @@ func nativeWaveformSmoke(ctx context.Context, a *app.Application, s *screen) err
 				return
 			}
 		}
+		for _, field := range []struct{ id, text string }{{"pulse-high-v", "4750 mV"}, {"pulse-low-v", "-250 mV"}} {
+			if err := smokeUI(s, field.id, &ui.ChangeEvent{Text: field.text}); err != nil {
+				checked <- err
+				return
+			}
+		}
 		clock := s.service.Snapshot().PulseTimings[0]
 		if clock.Frequency != 10 || clock.Duty != 25 {
 			checked <- fmt.Errorf("native pulse timing fields disagree with shared configured timing")
@@ -1341,9 +1347,11 @@ func nativeWaveformSmoke(ctx context.Context, a *app.Application, s *screen) err
 			checked <- err
 			return
 		}
-		if err := smokeUI(s, "sine-frequency", &ui.ChangeEvent{Number: 20}); err != nil {
-			checked <- err
-			return
+		for _, field := range []struct{ id, text string }{{"sine-amplitude", "2123.456789 mV"}, {"sine-offset", "1234.56789 mV"}, {"sine-frequency", ".02 kHz"}, {"sine-phase", "30.123456789 deg"}} {
+			if err := smokeUI(s, field.id, &ui.ChangeEvent{Text: field.text}); err != nil {
+				checked <- err
+				return
+			}
 		}
 		for _, id := range []string{"simulation.pause", "simulation.restart", "transient-step"} {
 			if err := smokeUI(s, id, nil); err != nil {

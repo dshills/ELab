@@ -31,9 +31,9 @@ func TestNativeWaveformControlsAndAgentParity(t *testing.T) {
 			if kind == "sine-source" {
 				for _, field := range []struct {
 					id    string
-					value float32
-				}{{"sine-amplitude", 2}, {"sine-offset", 1}, {"sine-phase", 30}, {"sine-frequency", 50}} {
-					uiAction(t, user, field.id, &ui.ChangeEvent{Number: field.value})
+					value string
+				}{{"sine-amplitude", "2 V"}, {"sine-offset", "1 V"}, {"sine-phase", "30 deg"}, {"sine-frequency", "50 Hz"}} {
+					uiAction(t, user, field.id, &ui.ChangeEvent{Text: field.value})
 				}
 				cfg := workbench.SineWaveform{Amplitude: 2, Offset: 1, Phase: 30, Frequency: 50}
 				agentAction(t, agent, "source.sine.set", workbench.SineParams{ID: id, Waveform: cfg})

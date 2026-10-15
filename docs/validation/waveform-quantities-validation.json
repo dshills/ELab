@@ -1,0 +1,94 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.82.0",
+  "build_version": "97",
+  "binary_sha256": "4f96e36aafa721a897bed329145ba062c43737af6a54f50c1e97113111d46ba2",
+  "agent_binary_sha256": "e8d93159c2077444de2828e446660b7ba890593f67fb81e038a0ce16898c68c7",
+  "sdk": {
+    "commit": "ea0032a9b43acd27e9732810272b324213087ad3",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "desktop/field_context_smoke.go": "67dab65bcdeae1b2ef33cf3d6440f3dd635a772624468f2836a5c1ed9755ed97",
+    "desktop/field_context_test.go": "c78fdf3ac0491924039f99f29a863320c3c791038c3bce35b4736107164e1915",
+    "desktop/recording.go": "e302eb7a193f013afe7f292a476c9cf073c25f0506529fadb4e7eb2da46e9b2c",
+    "desktop/recovery.go": "7dee5ddf2c722f09d875b92dca638c4e03506b05932b271bbd61cb1d6a7d2195",
+    "desktop/scope.go": "ea75d4501fd5bddfcf09bbd6eba9afac68ade038a8ce9a1ac5bb903d45e08a5b",
+    "desktop/smoke.go": "ebaf6337debfa5f962ac3acb95b9fdeb2922de8199580012e93e4d138e23bb00",
+    "desktop/source_annotations_test.go": "50a75ebaaea7caab19b1ba2642a21b90e48e506a26e494095916505f60532abf",
+    "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
+    "desktop/verification.go": "550f32b3d90b99269bce6777233b68e9329b2ae704b5b2fca60a1a368fbab406",
+    "desktop/waveforms.go": "73b1b24045b550ac31b25871c5194738a45ea4b6169ff9dd23e14b37467dd85e",
+    "desktop/waveforms_test.go": "de74efef5485e541f53def73dda58a8f06484d50002ac9ad8686cab76fde2954",
+    "desktop/workflow.go": "21267216596c6dd7bcb35f2762df20be8fc5621e8bf0b410b771115934b37732",
+    "workbench/capability_details.go": "8e82db4501cc36bab679b275d11b67bbdb98e3fe4fd50ef58521a3cdf1b573d8",
+    "workbench/commands.go": "0819232389c85657014910cd504801e4e754bc78b0e12ca8a3c6df6a6844d937",
+    "workbench/time_input.go": "e3142fe9e7bd110f61ee47d7e2fe91ed150bc953f436ed4c447009a2d5f1963e",
+    "workbench/waveform_quantities.go": "fc0a9a49df846cf6b2a03d3db55f9906868f7cba792d6eef72325a7e9df9f7df",
+    "workbench/waveform_quantities_test.go": "9176cb9eacc180213a8334ff81227f686aa53e7b33c5468d807212343e062001",
+    "desktop/waveform_quantities_test.go": "8b6c5c89123bc4be6287017d75c7886eaaf533ebcfc56e780318699445ea60ae",
+    "scripts/waveform-quantities-demo.py": "52ee00c12c9ecc4532c8e87cd73ff7a89e1fd636339098a8bd5cda3962f86979"
+  },
+  "checks": [
+    "Six waveform parameter fields commit exact text through existing shared source commands, preserving binary64 decimals without float32 conversion",
+    "Numeric SI requests remain compatible; quantity inputs support dimension-specific V/mV/uV/\u00b5V/\u03bcV, Hz/kHz/mHz and deg/\u00b0; pulse time fields retain existing grammar",
+    "One decimal conversion folds unit exponents before retry intent and batch staging; equivalent numeric/quantity requests replay original admission",
+    "Invalid unit/type/range/underflow/coupled-model requests preserve state; no-op displayed reentry preserves graph/history/physics; atomic batches undo or roll back",
+    "Three input-only local quantity schemas keep catalog within existing 64 KiB budget; detailed fields expose normalized bounds, stored/output numeric schemas unchanged",
+    "Core race tests and all six native precision/no-op/refusal/stale-field cases pass; prior waveform, source-annotation and guard tests remain passing",
+    "Public native/headless complete schemas/local definitions and observations match; exact configured values restore through numeric saved waveform fields without altering file bytes",
+    "Sine RC at30ms and signed finite-ramp RC at5ms agree with independent first-order references within existing 3 mV envelope; all61 sine and28 ramp source rows match waveform equations",
+    "Full serialized lint/import/root/native race/vet pass; exact packaged GPU/UI smoke invokes all six fields; four adapters pass LED/RC/NPN regressions",
+    "Canonical/candidate bytes and version metadata match; prior app preserved; SDK unchanged/clean and final prepared hashes verified read-only; owned sessions terminal"
+  ],
+  "evidence": [
+    "docs/waveforms.md",
+    "scripts/waveform-quantities-demo.py",
+    "docs/validation/headless-waveform-quantities.json",
+    "docs/validation/desktop-waveform-quantities.json",
+    "docs/validation/waveform-quantities-public-parity.json",
+    "docs/validation/waveform-quantities-conformance.json"
+  ],
+  "logs_sha256": {
+    "build/waveform-quantities-082/audit.log": "00d9304731319d0f16473638805aea11951bcaf339fcb8a3cff3b78852b5e293",
+    "build/waveform-quantities-082/build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/waveform-quantities-082/check.log": "c4f9a94ce9cef961e494b54ba57ca5b34e344a1650b5e09ead52525f4161d33d",
+    "build/waveform-quantities-082/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/waveform-quantities-082/core-focused-final.log": "1bc9e7b34e8bfc6ed091dfca5dbfc61655a760ccb18011fa1813964c62a9a560",
+    "build/waveform-quantities-082/core-focused.log": "947d510d67451ee2624fbf013b129df7464c22f6a665141e95867905c67ed738",
+    "build/waveform-quantities-082/headless.log": "53257c1b3eac615b2b5d1ab30185b48eab789aaec97cd6004743242b26a90ad3",
+    "build/waveform-quantities-082/native-demo.log": "0f30d2f71831b5318bbffc995b899c348182b96b13c8276a0f5e9f2996efc736",
+    "build/waveform-quantities-082/native-focused-final.log": "98e78950b3dbf397323d4147cbdede4a13896e6551fc440043980e4215e5bdd1",
+    "build/waveform-quantities-082/native-focused.log": "cdfd01510aa467314a50e681d497c597ba920bb19cb32a7454004457d98b4b2c",
+    "build/waveform-quantities-082/native-host.log": "5ba28efebabcd2282f042e71ee34cdee7b268ebf24a6926ef3032cfc74eac269",
+    "build/waveform-quantities-082/package-canonical.log": "3f73e3fcf6b17654520ada232a96d744c909959f47a71fe47761ddf4871e7dc6",
+    "build/waveform-quantities-082/package.log": "79ea292c6dc047c271eefd7fd4e3d658ebbb4eb3fc4011bc1c9bf39d2139981b",
+    "build/waveform-quantities-082/smoke.log": "2860fb373b7ee24b1e31587aa5fd120693f8181336c26be52014f01e7b24d3d4"
+  },
+  "source_inventory": {
+    "sources": 45,
+    "sites": 363,
+    "public_commands": 156,
+    "source_routes": 126,
+    "binding_review_sites": 134,
+    "literal_routes": 203
+  },
+  "notes": [
+    "Initial inline quantity schemas inflated catalog to67148 bytes; final local definitions restore the existing budget without loosening its test",
+    "Initial native deliberate-error test used a helper that fails on any UI error; final direct callback checks expected refusal and unchanged snapshot",
+    "Existing numeric field smoke/tests updated to committed text contract; generic timeParams helper renamed textFieldParams across callers"
+  ],
+  "limits": [
+    "Quantity strings are command input only; saved graphs/models/results remain numeric in their canonical units",
+    "New text grammar is decimal/scientific with explicit dimension-specific suffixes; no hexadecimal/radians/bare engineering prefixes or case aliases",
+    "All prior coupled model, sampling/playback and solver/work bounds remain; no device model, numerical kernel, sample schedule or file version changes",
+    "Four-adapter regressions and new native/headless waveform electrical workflow have distinct scopes; no exhaustive all-command/native input claim",
+    "Full physical typing/IME/focus/accessibility, visible latency, clean distribution, participants and physical-printer/tiling gates remain open; P0 17 implemented /10 partial; continuing goal active"
+  ]
+}

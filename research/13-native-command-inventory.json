@@ -30,23 +30,23 @@
     "desktop/printing.go": "00358432a4a2b4e512b24cc0d1d0130060a14097b6050ecf02aed41360ff419f",
     "desktop/probes.go": "c7df3b57a47b8a77661fd4809c7036fb10642a9429448dd46e633ee57805efdc",
     "desktop/project_work.go": "4d80b2c111c1d6778844570344479c35d3bfd641840aba0ebbe8f81083c961e1",
-    "desktop/recording.go": "0df344fbda787a0d184b26c308a8ddd6c89fad2e074ccb4c920d7711ee5514f0",
+    "desktop/recording.go": "e302eb7a193f013afe7f292a476c9cf073c25f0506529fadb4e7eb2da46e9b2c",
     "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
     "desktop/recording_timing.go": "f2eb9e3fd241a81ee0aef093d74309da4527dea39ba955a66642f4b6a2bdf6e2",
-    "desktop/recovery.go": "f2d6cf775875333f0b855498329aaa1bd065fdafca99edc48ffcf430e31dd9f3",
+    "desktop/recovery.go": "7dee5ddf2c722f09d875b92dca638c4e03506b05932b271bbd61cb1d6a7d2195",
     "desktop/recovery_read.go": "664831bba332df59b002a1e2a18fcb4a932a4478bc461daae2f8f77c79536114",
     "desktop/routing.go": "4898c4c1de9d7de3c5f8ad751b15d7c0f199234243f62ec6ea949ee8d9ad2c1c",
-    "desktop/scope.go": "7f02c171d97bb594129943f411079683fdd7515e4e459dc11f3e5c92fb091763",
+    "desktop/scope.go": "ea75d4501fd5bddfcf09bbd6eba9afac68ade038a8ce9a1ac5bb903d45e08a5b",
     "desktop/scope_context.go": "6a67324480a62c368711ea81d438b1b2bf93ea011d5d8a458325b3163482c46f",
     "desktop/scope_overlay.go": "90c6ebc19d47b237257d1358c77f6ccd9ba7ac7910cff5d54504ad74c0ea1f38",
     "desktop/scope_visibility.go": "9594a6afdb06c2d612c4a507ac90b9443651d38c4c88005e2af65ff2d3d6c686",
     "desktop/shutdown.go": "39e6d600f9edf67e2fe6a09e6b2b5ada051e67c1cf3fac2e3efe3ec4fe631a26",
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
-    "desktop/time_fields.go": "a20e6b2fc6fc368fabb7fd4defae5fc3083987f94a2beabd1780e7ae9a9264b8",
-    "desktop/verification.go": "a69a0a61a0e0bd72340e2907ab90f0def54586ee7fe98684fe3008c3c84868f7",
+    "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
+    "desktop/verification.go": "550f32b3d90b99269bce6777233b68e9329b2ae704b5b2fca60a1a368fbab406",
     "desktop/view.go": "f488fedddfa2ca8edb47cdffb880c7e32d3f11a90530ca078d0c3cce783fe5d0",
-    "desktop/waveforms.go": "3b4d9330d03d2bf3a1d756fadf26ec482ac76cf33748f49d0a95ca8437e5e657",
-    "desktop/workflow.go": "9a3d8316eea46adf551ca0f00201807c7e491d74fd5884326e5c9be645d4167e"
+    "desktop/waveforms.go": "73b1b24045b550ac31b25871c5194738a45ea4b6169ff9dd23e14b37467dd85e",
+    "desktop/workflow.go": "21267216596c6dd7bcb35f2762df20be8fc5621e8bf0b410b771115934b37732"
   },
   "public_commands": [
     "app.close",
@@ -2010,7 +2010,7 @@
       "line": 66,
       "function": "*screen.recordingInspector",
       "kind": "callback-factory",
-      "expression": "timeField(\"recorded-window-\"+side, \"Recorded interval \"+side, value, r.Duration == 0, func(text string) {\n\tp := workbench.RecordingWindowParams{Start: r.Scope.Window.Start, End: r.Scope.Window.End}\n\ts.invokeAtCommandRevision(\"recording.window.set\", timeParams(p, side+\"_s\", text), state.CommandRevision)\n})",
+      "expression": "timeField(\"recorded-window-\"+side, \"Recorded interval \"+side, value, r.Duration == 0, func(text string) {\n\tp := workbench.RecordingWindowParams{Start: r.Scope.Window.Start, End: r.Scope.Window.End}\n\ts.invokeAtCommandRevision(\"recording.window.set\", textFieldParams(p, side+\"_s\", text), state.CommandRevision)\n})",
       "status": "requires-binding-review"
     },
     {
@@ -2018,7 +2018,7 @@
       "line": 68,
       "function": "*screen.recordingInspector",
       "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"recording.window.set\", timeParams(p, side+\"_s\", text), state.CommandRevision)",
+      "expression": "s.invokeAtCommandRevision(\"recording.window.set\", textFieldParams(p, side+\"_s\", text), state.CommandRevision)",
       "public_commands": [
         "recording.window.set"
       ],
@@ -2432,7 +2432,7 @@
       "line": 50,
       "function": "*screen.recoveryInspector",
       "kind": "callback-factory",
-      "expression": "timeField(\"recovery-interval\", \"Autosave interval\", recovery.Interval, busy, func(text string) {\n\ts.invokeAtCommandRevision(\"recovery.configure.start\", timeParams(workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: recovery.Enabled, Interval: recovery.Interval}, \"interval_s\", text), state.CommandRevision)\n})",
+      "expression": "timeField(\"recovery-interval\", \"Autosave interval\", recovery.Interval, busy, func(text string) {\n\ts.invokeAtCommandRevision(\"recovery.configure.start\", textFieldParams(workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: recovery.Enabled, Interval: recovery.Interval}, \"interval_s\", text), state.CommandRevision)\n})",
       "status": "requires-binding-review"
     },
     {
@@ -2440,7 +2440,7 @@
       "line": 51,
       "function": "*screen.recoveryInspector",
       "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"recovery.configure.start\", timeParams(workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: recovery.Enabled, Interval: recovery.Interval}, \"interval_s\", text), state.CommandRevision)",
+      "expression": "s.invokeAtCommandRevision(\"recovery.configure.start\", textFieldParams(workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: recovery.Enabled, Interval: recovery.Interval}, \"interval_s\", text), state.CommandRevision)",
       "public_commands": [
         "recovery.configure.start"
       ],
@@ -2718,7 +2718,7 @@
       "line": 351,
       "function": "*screen.transientInspector",
       "kind": "callback-factory",
-      "expression": "timeField(\"setting-\"+setting.id, setting.text, setting.value, false, func(text string) {\n\ts.invokeAtCommandRevision(\"simulation.transient.set\", timeParams(cfg, field, text), state.CommandRevision)\n})",
+      "expression": "timeField(\"setting-\"+setting.id, setting.text, setting.value, false, func(text string) {\n\ts.invokeAtCommandRevision(\"simulation.transient.set\", textFieldParams(cfg, field, text), state.CommandRevision)\n})",
       "status": "requires-binding-review"
     },
     {
@@ -2726,7 +2726,7 @@
       "line": 352,
       "function": "*screen.transientInspector",
       "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"simulation.transient.set\", timeParams(cfg, field, text), state.CommandRevision)",
+      "expression": "s.invokeAtCommandRevision(\"simulation.transient.set\", textFieldParams(cfg, field, text), state.CommandRevision)",
       "public_commands": [
         "simulation.transient.set"
       ],
@@ -2843,7 +2843,7 @@
       "line": 32,
       "function": "*screen.verificationInspector",
       "kind": "callback-factory",
-      "expression": "timeField(\"verify-\"+field.id, field.label, field.value, false, func(text string) {\n\ts.invokeAtCommandRevision(\"verification.settings.set\", timeParams(cfg, name, text), state.CommandRevision)\n})",
+      "expression": "timeField(\"verify-\"+field.id, field.label, field.value, false, func(text string) {\n\ts.invokeAtCommandRevision(\"verification.settings.set\", textFieldParams(cfg, name, text), state.CommandRevision)\n})",
       "status": "requires-binding-review"
     },
     {
@@ -2851,7 +2851,7 @@
       "line": 33,
       "function": "*screen.verificationInspector",
       "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"verification.settings.set\", timeParams(cfg, name, text), state.CommandRevision)",
+      "expression": "s.invokeAtCommandRevision(\"verification.settings.set\", textFieldParams(cfg, name, text), state.CommandRevision)",
       "public_commands": [
         "verification.settings.set"
       ],
@@ -3659,18 +3659,18 @@
     },
     {
       "file": "desktop/waveforms.go",
-      "line": 26,
+      "line": 25,
       "function": "*screen.waveformControls",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tfield.set(\u0026next, float64(e.Number))\n\ts.invoke(\"source.sine.set\", workbench.SineParams{ID: p.ID, Waveform: next})\n}",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invokeAtCommandRevision(\"source.sine.set\", map[string]any{\"id\": p.ID, \"waveform\": textFieldParams(cfg, field.name, e.Text)}, state.CommandRevision)\n}",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/waveforms.go",
-      "line": 29,
+      "line": 26,
       "function": "*screen.waveformControls",
       "kind": "domain-ingress",
-      "expression": "s.invoke(\"source.sine.set\", workbench.SineParams{ID: p.ID, Waveform: next})",
+      "expression": "s.invokeAtCommandRevision(\"source.sine.set\", map[string]any{\"id\": p.ID, \"waveform\": textFieldParams(cfg, field.name, e.Text)}, state.CommandRevision)",
       "public_commands": [
         "source.sine.set"
       ],
@@ -3678,18 +3678,10 @@
     },
     {
       "file": "desktop/waveforms.go",
-      "line": 52,
-      "function": "*screen.waveformControls",
-      "kind": "callback-factory",
-      "expression": "timeField(\"pulse-\"+field.id, field.label, field.value, false, func(text string) {\n\ts.invokeAtCommandRevision(\"source.pulse.set\", map[string]any{\"id\": p.ID, \"waveform\": timeParams(cfg, name, text)}, state.CommandRevision)\n})",
-      "status": "requires-binding-review"
-    },
-    {
-      "file": "desktop/waveforms.go",
-      "line": 53,
+      "line": 47,
       "function": "*screen.waveformControls",
       "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"source.pulse.set\", map[string]any{\"id\": p.ID, \"waveform\": timeParams(cfg, name, text)}, state.CommandRevision)",
+      "expression": "s.invokeAtCommandRevision(\"source.pulse.set\", map[string]any{\"id\": p.ID, \"waveform\": textFieldParams(cfg, field.name, text)}, state.CommandRevision)",
       "public_commands": [
         "source.pulse.set"
       ],
@@ -3697,26 +3689,23 @@
     },
     {
       "file": "desktop/waveforms.go",
-      "line": 57,
+      "line": 49,
       "function": "*screen.waveformControls",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tfield.set(\u0026next, float64(e.Number)/field.scale)\n\ts.invoke(\"source.pulse.set\", workbench.PulseParams{ID: p.ID, Waveform: next})\n}",
+      "expression": "Change: func(e ui.ChangeEvent) { commit(e.Text) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/waveforms.go",
+      "line": 51,
+      "function": "*screen.waveformControls",
+      "kind": "callback-factory",
+      "expression": "timeField(\"pulse-\"+field.id, field.label, field.value, false, commit)",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/waveforms.go",
       "line": 60,
-      "function": "*screen.waveformControls",
-      "kind": "domain-ingress",
-      "expression": "s.invoke(\"source.pulse.set\", workbench.PulseParams{ID: p.ID, Waveform: next})",
-      "public_commands": [
-        "source.pulse.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/waveforms.go",
-      "line": 68,
       "function": "*screen.waveformControls",
       "kind": "action-factory",
       "expression": "s.action(\"fit-waveform-sampling\", \"Fit waveform sampling\", \"simulation.sampling.fit\", struct{}{})",
@@ -3727,7 +3716,7 @@
     },
     {
       "file": "desktop/waveforms.go",
-      "line": 85,
+      "line": 77,
       "function": "*screen.pulseClockControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invokePulseClockAtRevision(clock.Shared, workbench.PulseTimingParams{ID: p.ID, Frequency: e.Text, Duty: clock.DutyText}, state.CommandRevision)\n}",
@@ -3735,7 +3724,7 @@
     },
     {
       "file": "desktop/waveforms.go",
-      "line": 88,
+      "line": 80,
       "function": "*screen.pulseClockControls",
       "kind": "callback-factory",
       "expression": "timeField(\"pulse-period-time\", \"Pulse source period\", clock.Period, false, func(text string) {\n\ts.invokePulseClockAtRevision(clock.Shared, map[string]any{\"id\": p.ID, \"period_s\": text, \"duty_percent\": clock.DutyText}, state.CommandRevision)\n})",
@@ -3743,7 +3732,7 @@
     },
     {
       "file": "desktop/waveforms.go",
-      "line": 91,
+      "line": 83,
       "function": "*screen.pulseClockControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invokePulseClockAtRevision(clock.Shared, workbench.PulseTimingParams{ID: p.ID, Period: clock.Period, Duty: e.Text}, state.CommandRevision)\n}",
@@ -3751,7 +3740,7 @@
     },
     {
       "file": "desktop/waveforms.go",
-      "line": 101,
+      "line": 93,
       "function": "*screen.invokePulseClockAtRevision",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"simulation.pulse.timing.set\", params, revision)",
@@ -3762,7 +3751,7 @@
     },
     {
       "file": "desktop/waveforms.go",
-      "line": 103,
+      "line": 95,
       "function": "*screen.invokePulseClockAtRevision",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"source.pulse.timing.set\", params, revision)",
@@ -3828,7 +3817,7 @@
       "line": 65,
       "function": "*screen.scopeWindowControls",
       "kind": "callback-factory",
-      "expression": "timeField(\"window-\"+side, \"Scope interval \"+side, value, t == nil || t.Stale, func(text string) {\n\tp := sc.Window\n\tp.Mode = \"fixed\"\n\ts.invokeAtCommandRevision(\"scope.window.set\", timeParams(p, side+\"_s\", text), state.CommandRevision)\n})",
+      "expression": "timeField(\"window-\"+side, \"Scope interval \"+side, value, t == nil || t.Stale, func(text string) {\n\tp := sc.Window\n\tp.Mode = \"fixed\"\n\ts.invokeAtCommandRevision(\"scope.window.set\", textFieldParams(p, side+\"_s\", text), state.CommandRevision)\n})",
       "status": "requires-binding-review"
     },
     {
@@ -3836,7 +3825,7 @@
       "line": 68,
       "function": "*screen.scopeWindowControls",
       "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"scope.window.set\", timeParams(p, side+\"_s\", text), state.CommandRevision)",
+      "expression": "s.invokeAtCommandRevision(\"scope.window.set\", textFieldParams(p, side+\"_s\", text), state.CommandRevision)",
       "public_commands": [
         "scope.window.set"
       ],

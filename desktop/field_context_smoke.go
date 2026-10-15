@@ -41,12 +41,12 @@ func nativeFieldContextSmoke(ctx context.Context, a *app.Application, s *screen)
 			return
 		}
 		before := s.service.Snapshot()
-		captured.Change(ui.ChangeEvent{Number: 20})
+		captured.Change(ui.ChangeEvent{Text: "20"})
 		if s.errorMessage == "" || !reflect.DeepEqual(before, s.service.Snapshot()) || s.fieldContext != nil {
 			done <- fmt.Errorf("native stale field changed newer agent values")
 			return
 		}
-		if err := smokeUI(s, "sine-frequency", &ui.ChangeEvent{Number: 20}); err != nil {
+		if err := smokeUI(s, "sine-frequency", &ui.ChangeEvent{Text: "20"}); err != nil {
 			done <- err
 			return
 		}

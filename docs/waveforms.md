@@ -1,6 +1,6 @@
 # Per-source sine and finite pulse waveforms
 
-Choose **Sine source** or **Finite pulse** from Components, wire `positive` and `negative`, and select the source to edit its waveform. Negative terminals must be grounded. Native number fields and external agents share `source.sine.set` and `source.pulse.set`.
+Choose **Sine source** or **Finite pulse** from Components, wire `positive` and `negative`, and select the source to edit its waveform. Negative terminals must be grounded. Native exact text fields and external agents share `source.sine.set` and `source.pulse.set`.
 
 The existing `pulse-source` appears as **Ideal square** in the native tray. It keeps instantaneous edges and shared experiment timing, including existing RC/NPN examples, old projects and recordings. New waveforms use distinct component/model identities; their parameters belong to each source and survive duplication/save/reopen.
 
@@ -42,3 +42,11 @@ Fixtures compare sine RC response to the exact sinusoidal first-order solution, 
 Run `python3 scripts/waveforms-demo.py --output docs/validation/headless-waveforms.json` after building. `--artifacts PATH` retains a project, SVG and JSON/CSV records. `--connect` is only for an owned development session: this fixture replaces its schematic.
 
 Ideal-square sources expose the same three timing fields through `simulation.pulse.timing.set`. Their entries in `snapshot.pulse_timings` have `source_kind: "pulse-source"` and `shared: true`; changing any one changes the experiment clock for all ideal-square sources. Finite entries have `shared: false`. The shared command retains sample step and playback and rejects phases shorter than the current step. See [shared clock controls](shared-pulse-clock.md).
+
+## Exact parameter entry
+
+Sine **Amplitude / Offset / Frequency / Phase** and finite-pulse **Low / High level** now use exact committed text fields. Enter `1234.56789012345 mV`, `.02 kHz` or `30 °` without a float32 conversion. Existing `source.sine.set` and `source.pulse.set` accept numeric values or decimal/scientific quantity text in those waveform fields. Voltage units are V/mV/uV/µV/μV; frequency units Hz/kHz/mHz; phase units deg/°. Bare text uses V/Hz/degrees respectively. Pulse phase/ramp fields retain their existing time-text units.
+
+Unit suffixes are case-sensitive and dimension-specific. Invalid units, nonfinite/hexadecimal text and nonzero underflow refuse without changing the source. Each text quantity is at most 128 UTF-8 bytes; parsed values still obey all existing coupled model bounds. These new waveform quantity strings use one decimal conversion with the unit exponent included. Numeric SI inputs remain compatible. Equivalent quantity/numeric intent normalizes before retry matching, including in atomic batches; existing displayed values round-trip without creating an electrical/history edit. Native callbacks retain command/document guards against intervening edits.
+
+This is command-input convenience: saved waveforms, embedded models, numerical results and output schemas remain numeric SI with the existing file/model versions. Output sampling/playback do not change automatically. `capabilities.list` returns three local waveform-quantity schema definitions; detailed command queries attach normalized SI bounds and relationships. [Public validation workflow](../scripts/waveform-quantities-demo.py) checks precision, refusal, persistence, sine and signed finite-ramp RC references, and captured source samples through both transports. Physical typing/IME/focus/accessibility and visible latency remain separate qualification gates.

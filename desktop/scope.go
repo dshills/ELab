@@ -349,7 +349,7 @@ func (s *screen) transientInspector(state workbench.Snapshot) []ui.Node {
 		if setting.scale == 1000 {
 			field := map[string]string{"step": "step_s", "high": "high_s", "low": "low_s"}[setting.id]
 			nodes = append(nodes, quiet("setting-label-"+setting.id, setting.text), timeField("setting-"+setting.id, setting.text, setting.value, false, func(text string) {
-				s.invokeAtCommandRevision("simulation.transient.set", timeParams(cfg, field, text), state.CommandRevision)
+				s.invokeAtCommandRevision("simulation.transient.set", textFieldParams(cfg, field, text), state.CommandRevision)
 			}))
 			continue
 		}

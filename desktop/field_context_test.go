@@ -25,11 +25,11 @@ func TestRenderedSineFieldCannotOverwriteInterveningAgentWaveform(t *testing.T) 
 	waveform.Amplitude = 1
 	agentAction(t, s.service, "source.sine.set", workbench.SineParams{ID: "V1", Waveform: waveform})
 	before := s.service.Snapshot()
-	s.app.Do(func() { captured.Change(ui.ChangeEvent{Number: 20}) })
+	s.app.Do(func() { captured.Change(ui.ChangeEvent{Text: "20"}) })
 	if s.errorMessage == "" || !reflect.DeepEqual(before, s.service.Snapshot()) {
 		t.Fatal("old frequency field replaced newer amplitude")
 	}
-	uiAction(t, s, "sine-frequency", &ui.ChangeEvent{Number: 20})
+	uiAction(t, s, "sine-frequency", &ui.ChangeEvent{Text: "20"})
 	state := s.service.Snapshot()
 	if state.Components[0].Sine.Amplitude != 1 || state.Components[0].Sine.Frequency != 20 || s.fieldContext != nil {
 		t.Fatal("fresh field lost agent values or leaked callback context")

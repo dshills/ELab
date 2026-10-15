@@ -28,7 +28,10 @@ func timeText(seconds float64) string {
 	}
 	return strconv.FormatFloat(seconds, 'g', -1, 64) + " s"
 }
-func timeParams(base any, field, text string) map[string]any {
+
+// textFieldParams replaces one captured numeric field with committed quantity
+// text; the shared command parser validates units and all coupled fields.
+func textFieldParams(base any, field, text string) map[string]any {
 	raw, _ := json.Marshal(base)
 	var out map[string]any
 	_ = json.Unmarshal(raw, &out)

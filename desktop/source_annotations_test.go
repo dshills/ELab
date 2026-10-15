@@ -16,9 +16,9 @@ func TestNativeSourceEditsAndFitUseSharedAnnotations(t *testing.T) {
 	uiAction(t, s, "simulation.pause", nil)
 	uiAction(t, s, "simulation.restart", nil)
 	uiAction(t, s, "selection", &ui.ChangeEvent{SelectedID: "V1"})
-	uiAction(t, s, "sine-frequency", &ui.ChangeEvent{Number: 25})
-	uiAction(t, s, "sine-offset", &ui.ChangeEvent{Number: 1})
-	uiAction(t, s, "sine-phase", &ui.ChangeEvent{Number: 45})
+	uiAction(t, s, "sine-frequency", &ui.ChangeEvent{Text: "25"})
+	uiAction(t, s, "sine-offset", &ui.ChangeEvent{Text: "1"})
+	uiAction(t, s, "sine-phase", &ui.ChangeEvent{Text: "45"})
 	uiAction(t, s, "simulation.restart", nil)
 	before := s.service.Snapshot()
 	a := before.SourceAnnotations[0]

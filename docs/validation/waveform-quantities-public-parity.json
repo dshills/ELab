@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "scope": "Public exact waveform quantity workflow; detailed schemas, local quantity definitions, observations and checks match except transport",
+  "reports": {
+    "docs/validation/headless-waveform-quantities.json": "f0219feb90a3eebb495c249631a22adfc6a678751a73d685d26e443bcdec1f3e",
+    "docs/validation/desktop-waveform-quantities.json": "b7f5bf2c3bd975cf31b4832dfda3faedb960ed6f0b26818131d408592053ab9b"
+  },
+  "observations": {
+    "exact_sine": {
+      "amplitude_v": 1.23456789012345,
+      "offset_v": -0.123456789012345,
+      "frequency_hz": 123.456789012345,
+      "phase_degrees": -123.456789012345
+    },
+    "exact_pulse": {
+      "high_v": 4.123456789012345,
+      "low_v": -0.123456789012345,
+      "high_s": 0.007,
+      "low_s": 0.013,
+      "rise_s": 0.002,
+      "fall_s": 0.003
+    },
+    "sine_capacitor_at_30ms_v": 0.6599154400851737,
+    "sine_reference_v": 0.6608630887037612,
+    "sine_source_samples": 61,
+    "ramp_capacitor_at_5ms_v": 1.346623734907251,
+    "ramp_reference_v": 1.3467987865008904,
+    "ramp_source_samples": 28
+  }
+}

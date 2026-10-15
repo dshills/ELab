@@ -65,7 +65,7 @@ func (s *screen) recordingInspector(state workbench.Snapshot) []ui.Node {
 		}
 		nodes = append(nodes, quiet("recorded-window-label-"+side, "Recorded "+side+" · time"), timeField("recorded-window-"+side, "Recorded interval "+side, value, r.Duration == 0, func(text string) {
 			p := workbench.RecordingWindowParams{Start: r.Scope.Window.Start, End: r.Scope.Window.End}
-			s.invokeAtCommandRevision("recording.window.set", timeParams(p, side+"_s", text), state.CommandRevision)
+			s.invokeAtCommandRevision("recording.window.set", textFieldParams(p, side+"_s", text), state.CommandRevision)
 		}))
 	}
 

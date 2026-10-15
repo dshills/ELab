@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/ui"
@@ -13,20 +14,16 @@ func (s *screen) waveformControls(state workbench.Snapshot, p workbench.Componen
 		cfg := *p.Sine
 		nodes = append(nodes, section("sine-title", "Sine waveform"), quiet("sine-range", fmt.Sprintf("%.5g to %.5g V · %.5g Hz", cfg.Offset-cfg.Amplitude, cfg.Offset+cfg.Amplitude, cfg.Frequency)))
 		for _, field := range []struct {
-			id, label             string
-			value, min, max, step float64
-			set                   func(*workbench.SineWaveform, float64)
+			id, label, name, unit, help string
+			value                       float64
 		}{
-			{"amplitude", "Amplitude · V", cfg.Amplitude, 0, 12, .01, func(w *workbench.SineWaveform, v float64) { w.Amplitude = v }},
-			{"offset", "Offset · V", cfg.Offset, -12, 12, .01, func(w *workbench.SineWaveform, v float64) { w.Offset = v }},
-			{"frequency", "Frequency · Hz", cfg.Frequency, .1, 1000, .1, func(w *workbench.SineWaveform, v float64) { w.Frequency = v }},
-			{"phase", "Phase · degrees", cfg.Phase, -360, 360, 1, func(w *workbench.SineWaveform, v float64) { w.Phase = v }},
+			{"amplitude", "Amplitude · V", "amplitude_v", "V", "Enter V, mV or uV. Amplitude plus absolute offset must stay within 12 V.", cfg.Amplitude},
+			{"offset", "Offset · V", "offset_v", "V", "Enter V, mV or uV. Offset plus/minus amplitude must stay within ±12 V.", cfg.Offset},
+			{"frequency", "Frequency · Hz", "frequency_hz", "Hz", "Enter Hz, kHz or mHz; 0.1–1000 Hz. Output sampling stays fixed.", cfg.Frequency},
+			{"phase", "Phase · degrees", "phase_degrees", "deg", "Enter degrees using deg or °; −360 to 360.", cfg.Phase},
 		} {
-			field := field
-			nodes = append(nodes, quiet("sine-label-"+field.id, field.label), ui.Node{ID: "sine-" + field.id, Kind: ui.NumberField, Number: float32(field.value), Numeric: ui.Numeric{Min: float32(field.min), Max: float32(field.max), Step: float32(field.step)}, Accessibility: ui.Accessibility{Name: field.label}, Change: func(e ui.ChangeEvent) {
-				next := cfg
-				field.set(&next, float64(e.Number))
-				s.invoke("source.sine.set", workbench.SineParams{ID: p.ID, Waveform: next})
+			nodes = append(nodes, quiet("sine-label-"+field.id, field.label), ui.Node{ID: "sine-" + field.id, Kind: ui.TextField, Text: strconv.FormatFloat(field.value, 'g', -1, 64) + " " + field.unit, MinWidth: 90, Accessibility: ui.Accessibility{Name: field.label, Help: field.help}, Change: func(e ui.ChangeEvent) {
+				s.invokeAtCommandRevision("source.sine.set", map[string]any{"id": p.ID, "waveform": textFieldParams(cfg, field.name, e.Text)}, state.CommandRevision)
 			}})
 		}
 	}
@@ -35,30 +32,25 @@ func (s *screen) waveformControls(state workbench.Snapshot, p workbench.Componen
 		nodes = append(nodes, section("pulse-title", "Finite pulse waveform"), quiet("pulse-period", fmt.Sprintf("%.5g Hz · %.4g%% high phase", 1/(cfg.HighSeconds+cfg.LowSeconds), 100*cfg.HighSeconds/(cfg.HighSeconds+cfg.LowSeconds))), quiet("pulse-phase-help", "Rise is included in the high phase; fall is included in the low phase. Each source has its own timing."))
 		nodes = append(nodes, s.pulseClockControls(state, p)...)
 		for _, field := range []struct {
-			id, label                    string
-			value, scale, min, max, step float64
-			set                          func(*workbench.PulseWaveform, float64)
+			id, label, name string
+			value           float64
+			time            bool
 		}{
-			{"low-v", "Low level · V", cfg.LowVoltage, 1, -12, 12, .01, func(w *workbench.PulseWaveform, v float64) { w.LowVoltage = v }},
-			{"high-v", "High level · V", cfg.HighVoltage, 1, -12, 12, .01, func(w *workbench.PulseWaveform, v float64) { w.HighVoltage = v }},
-			{"high", "High phase", cfg.HighSeconds, 1000, .001, 10000, .001, func(w *workbench.PulseWaveform, v float64) { w.HighSeconds = v }},
-			{"low", "Low phase", cfg.LowSeconds, 1000, .001, 10000, .001, func(w *workbench.PulseWaveform, v float64) { w.LowSeconds = v }},
-			{"rise", "Rise time", cfg.RiseSeconds, 1000, .001, 10000, .001, func(w *workbench.PulseWaveform, v float64) { w.RiseSeconds = v }},
-			{"fall", "Fall time", cfg.FallSeconds, 1000, .001, 10000, .001, func(w *workbench.PulseWaveform, v float64) { w.FallSeconds = v }},
+			{"low-v", "Low level · V", "low_v", cfg.LowVoltage, false},
+			{"high-v", "High level · V", "high_v", cfg.HighVoltage, false},
+			{"high", "High phase", "high_s", cfg.HighSeconds, true},
+			{"low", "Low phase", "low_s", cfg.LowSeconds, true},
+			{"rise", "Rise time", "rise_s", cfg.RiseSeconds, true},
+			{"fall", "Fall time", "fall_s", cfg.FallSeconds, true},
 		} {
-			field := field
-			if field.scale == 1000 {
-				name := field.id + "_s"
-				nodes = append(nodes, quiet("pulse-label-"+field.id, field.label), timeField("pulse-"+field.id, field.label, field.value, false, func(text string) {
-					s.invokeAtCommandRevision("source.pulse.set", map[string]any{"id": p.ID, "waveform": timeParams(cfg, name, text)}, state.CommandRevision)
-				}))
-				continue
+			commit := func(text string) {
+				s.invokeAtCommandRevision("source.pulse.set", map[string]any{"id": p.ID, "waveform": textFieldParams(cfg, field.name, text)}, state.CommandRevision)
 			}
-			nodes = append(nodes, quiet("pulse-label-"+field.id, field.label), ui.Node{ID: "pulse-" + field.id, Kind: ui.NumberField, Number: float32(field.value * field.scale), Numeric: ui.Numeric{Min: float32(field.min), Max: float32(field.max), Step: float32(field.step)}, Accessibility: ui.Accessibility{Name: field.label}, Change: func(e ui.ChangeEvent) {
-				next := cfg
-				field.set(&next, float64(e.Number)/field.scale)
-				s.invoke("source.pulse.set", workbench.PulseParams{ID: p.ID, Waveform: next})
-			}})
+			node := ui.Node{ID: "pulse-" + field.id, Kind: ui.TextField, Text: strconv.FormatFloat(field.value, 'g', -1, 64) + " V", MinWidth: 90, Accessibility: ui.Accessibility{Name: field.label, Help: "Enter V, mV or uV. Levels must be ordered low ≤ high within ±12 V."}, Change: func(e ui.ChangeEvent) { commit(e.Text) }}
+			if field.time {
+				node = timeField("pulse-"+field.id, field.label, field.value, false, commit)
+			}
+			nodes = append(nodes, quiet("pulse-label-"+field.id, field.label), node)
 		}
 	}
 	if workbench.IsWaveformSource(p.Kind) {

@@ -65,7 +65,7 @@ func (s *screen) scopeWindowControls(state workbench.Snapshot) []ui.Node {
 		nodes = append(nodes, quiet("window-label-"+side, side+" · time"), timeField("window-"+side, "Scope interval "+side, value, t == nil || t.Stale, func(text string) {
 			p := sc.Window
 			p.Mode = "fixed"
-			s.invokeAtCommandRevision("scope.window.set", timeParams(p, side+"_s", text), state.CommandRevision)
+			s.invokeAtCommandRevision("scope.window.set", textFieldParams(p, side+"_s", text), state.CommandRevision)
 		}))
 	}
 	if !sc.WindowValid {
