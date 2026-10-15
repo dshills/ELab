@@ -72,7 +72,8 @@ func addLiveControlDetails(id string, schema map[string]any) bool {
 		failure("superseded", "step_work", "A newer source/input/run/document operation makes the captured work obsolete")
 		mode := "immediate admission; retry returns owned original admission; inspect step_work until terminal"
 		if id == "simulation.step" {
-			mode = "compatibility waiting alias: may wait for pending initialization before admission, then waits for its same job's final response; retry observes original result"
+			mode = "compatibility waiting alias: equivalent numeric/unit-text durations can wait for pending initialization before admission, then wait for the same job's final response; retry observes original result"
+			contract.Effects = append(contract.Effects, "Malformed duration/JSON, known-stale guards and existing retry keys do not wait behind initialization. Common guards are checked again after waiting; no step/key is admitted or reserved during that wait")
 			failure("operation-unavailable", "wait", "Original job expired before its waiting response could be joined")
 		}
 		contract.Completion = &commandCompletionDetail{Mode: mode, Observe: observe, Cancel: "simulation.work.cancel", CooperativeDeadlineSeconds: int(ManualStepDeadline.Seconds())}

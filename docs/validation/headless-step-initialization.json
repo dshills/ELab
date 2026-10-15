@@ -1,0 +1,132 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "detailed_schema": {
+    "additionalProperties": false,
+    "examples": [
+      {
+        "duration_s": 0.001
+      }
+    ],
+    "properties": {
+      "duration_s": {
+        "$ref": "urn:elab:time:1",
+        "x-normalized-si-range": {
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "x-unit": "s"
+      }
+    },
+    "required": [
+      "duration_s"
+    ],
+    "type": "object",
+    "x-command-contract": {
+      "version": 1,
+      "scope": "live-simulation-controls",
+      "preconditions": [
+        "Paused, complete supported transient with fresh physical state; network analysis also needs a fresh network state",
+        "No active input_work or step_work, including canceling; duration is positive, <=1 s, and <= the rounded product of 1000 and step",
+        "Duration advances floating-point time; networks containing capacitors require at least 1e-10 s"
+      ],
+      "effects": [
+        "Capture graph/settings/current charge/time and queued input into isolated work; apply queued input before advancing",
+        "Publish the complete requested advance atomically on success; progress reports attempted output samples without exposing partial physics",
+        "Failure/cancel/supersession preserves committed physical state and pending input; one latest step_work is retained; it is not a kept recording or saved project data",
+        "Malformed duration/JSON, known-stale guards and existing retry keys do not wait behind initialization. Common guards are checked again after waiting; no step/key is admitted or reserved during that wait"
+      ],
+      "errors": [
+        {
+          "code": "invalid-params",
+          "phase": "admission",
+          "when": "Malformed or missing input, invalid values or relationships"
+        },
+        {
+          "code": "unavailable",
+          "phase": "admission",
+          "when": "Not paused, incomplete/DC/unsupported, stale or network state not ready"
+        },
+        {
+          "code": "busy",
+          "phase": "admission",
+          "when": "Active input or manual step, including canceling"
+        },
+        {
+          "code": "solve-failed",
+          "phase": "admission-or-step_work",
+          "when": "Network capacitor step below 1e-10 s, solver failure or cooperative worker deadline"
+        },
+        {
+          "code": "integration-attempt-limit",
+          "phase": "step_work",
+          "when": "Per-output-sample mixed integration attempts exceed the unchanged kernel budget"
+        },
+        {
+          "code": "integration-time-limit",
+          "phase": "step_work",
+          "when": "Per-output-sample mixed integration wall time exceeds the unchanged kernel budget"
+        },
+        {
+          "code": "canceled",
+          "phase": "step_work-or-wait",
+          "when": "Explicit/Pause cancellation; waiting caller disconnect stops only the wait after admission"
+        },
+        {
+          "code": "superseded",
+          "phase": "step_work",
+          "when": "A newer source/input/run/document operation makes the captured work obsolete"
+        },
+        {
+          "code": "operation-unavailable",
+          "phase": "wait",
+          "when": "Original job expired before its waiting response could be joined"
+        }
+      ],
+      "completion": {
+        "mode": "compatibility waiting alias: equivalent numeric/unit-text durations can wait for pending initialization before admission, then wait for the same job's final response; retry observes original result",
+        "observe": [
+          "project.inspect",
+          "simulation.wait",
+          "events.poll"
+        ],
+        "cancel": "simulation.work.cancel",
+        "cooperative_deadline_s": 30
+      }
+    },
+    "x-max-output-steps": 1000,
+    "x-normalized-si-relations": [
+      {
+        "limit": 1000,
+        "operator": "duration_s<=binary64_product(limit,snapshot.transient_settings.step_s)"
+      },
+      {
+        "operator": "snapshot.transient.sample.time_s + duration_s > snapshot.transient.sample.time_s"
+      },
+      {
+        "minimum": 1e-10,
+        "operator": "duration_s>=minimum for network analyses with capacitors"
+      }
+    ],
+    "x-rounding-policy": "Duration compares against rounded(1000*step_s); next larger representable duration refuses. The ceil-derived total-sample estimate is capped at 1000 at that boundary."
+  },
+  "result": {
+    "analysis": "NPN transient",
+    "step_status": "completed",
+    "completed_samples": 1,
+    "time_s": 0.001
+  },
+  "checks": [
+    "Unit-text Step completes once",
+    "Numeric/us/ns equivalents replay the original result",
+    "Replay precedes newer context guards and preserves an unrelated saved document",
+    "Changed duration retains key-reused error",
+    "Duplicate JSON fields remain invalid",
+    "Revision/command/document conflicts preserve state",
+    "Source/history/saved bytes preserved"
+  ],
+  "limits": [
+    "Held-initializer wait, cancellation and post-wait guard behavior are covered by controlled core tests, not an artificial public delay API",
+    "This workflow does not establish complete mounted physical input, accessibility or visible-latency acceptance"
+  ]
+}

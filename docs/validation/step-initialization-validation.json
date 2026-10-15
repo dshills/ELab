@@ -1,0 +1,77 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.75.0",
+  "build_version": "90",
+  "binary_sha256": "292edc76256a3dca3e7422caf66f7ae98a80c945458e929a246f2daf9e306437",
+  "agent_binary_sha256": "04b6a74624d5b73702811abb7c935905542f7d54142b41a109abffbafe4bc83f",
+  "sdk": {
+    "commit": "138519a115c6ed17f3ca2fbc93c814463ed17dfc",
+    "clean": true,
+    "manifest_sha256": "50a0e6e486151c1770abda850e948cacdcf29c92e64625d5ba9271230241abf5",
+    "final_prepared_output_counts": {
+      "upstream": 228,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "workbench/service.go": "7facd0d20eae3eebc4e62b87c8166a61eac49a6bf662a92818a6c71fd89092f5",
+    "workbench/command_context.go": "1177add14e91fe9740dc507d1598ff0c9afecb58e84741c0dd178597defe317d",
+    "workbench/live_control_capabilities.go": "7203e2cd50beb38f865c3b70258f4be7d7e63701e9175889039d958da9a1e0ef",
+    "workbench/step_initialization_test.go": "8e4e6ac361dd07584880000d522cf8d05e9937231676682d41509b9aeef56aa2"
+  },
+  "checks": [
+    "Controlled held initializer reproduces unit-text Step returning unavailable while numeric equivalent waits; normalized preflight now gives numeric/ms/us forms identical observation behavior",
+    "Controlled stale all-state/command/document guards previously waited to caller timeout; common lifecycle/context helper now prevents that wait and is reused by ordinary mutation dispatch",
+    "Common guard order/error messages, closed acknowledgement exception and cached-reply precedence remain unchanged; all supplied guards are still rechecked after observation",
+    "Strict unit/JSON validation precedes waiting; duplicate fields, unknown/case-alias fields, null/missing values, malformed units and overlong text refuse promptly without mutation",
+    "Successful held-initializer release admits exactly one Step; equivalent unit retries replay its original terminal result across unrelated initialization and mismatched newer context; changed duration still returns key-reused",
+    "Intervening command or initializer publication invalidates the original corresponding guard after waiting, without a Step or physical advance; cancellation before admission reserves no key and leaves initializer/retry usable",
+    "Existing after-admission waiting cancellation still leaves the accepted job running; existing retry/initializer tests pass alongside the new cases",
+    "Full serialized lint/import/root/native race/vet passes; source inventory and PRD audit remain current",
+    "Exact packaged GPU/UI/protected-shutdown smoke and three LED/RC/NPN workflows across four adapters pass",
+    "Native/headless detailed contract and complete public unit/replay/context results match except transport; cached original reply preserves an unrelated saved document and its bytes",
+    "Canonical app is identical to qualified candidate; previous .74/89 preserved at build/ELab-before-step-initialization.app; owned sessions terminal; sibling SDK clean"
+  ],
+  "evidence": [
+    "docs/live-simulation-controls.md#waiting-for-initialization",
+    "workbench/step_initialization_test.go",
+    "workbench/initialization_test.go",
+    "workbench/step_work_test.go",
+    "scripts/step-initialization-demo.py",
+    "docs/validation/headless-step-initialization.json",
+    "docs/validation/desktop-step-initialization.json",
+    "docs/validation/step-initialization-public-parity.json",
+    "docs/validation/step-initialization-conformance.json"
+  ],
+  "logs_sha256": {
+    "step-initialization-before.log": "5218b258c59dc6180f0e1f6fcdc3ae1779996bcd550117738fd637cc9545a683",
+    "step-initialization-race.log": "20817d925fa245f980d59bbcc210a5fcbb74ebb3b2946f477ce63757bc22198b",
+    "step-initialization-race-final.log": "d5ba0233b9aa0a4c15f3f3d7aac9fd1f74172c0dc41ffa1fb1922e48fce70aa8",
+    "step-initialization-check.log": "56ce07f86272cdad5c88f00a9c0c7429d9ef10555c91073ccbe91a3c455349c2",
+    "step-initialization-build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "step-initialization-headless.log": "a814a52ae88ca2f1085d2bc5b0f7034f01b4f34a73ef8ca260303483c265cd08",
+    "step-initialization-headless-final.log": "8c7b26e7258ae22890a91d7a529b8bc1f93dc25394b99ddc821b5b4f15b468d8",
+    "step-initialization-smoke.log": "588d99f5f5f747bac17cc6d5cd4c4a7d1bf84bc561b12f3a7f440dd7c8b85261",
+    "step-initialization-conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "step-initialization-native-demo.log": "a2bc17e4825245df76a2172449d03d4bd6b2f2625790a7ac79ced145e8c9dba7"
+  },
+  "source_inventory": {
+    "sources": 45,
+    "sites": 357,
+    "public_commands": 154,
+    "source_routes": 124,
+    "binding_review_sites": 130
+  },
+  "notes": [
+    "Initial guard-recheck test assumed an R1 ID in the NPN fixture; it now uses an actual fixture component identity",
+    "Initial public duplicate-field assertion expected service-layer invalid-params; the real wire decoder returns invalid-json before Request construction; corrected workflow checks that exact boundary",
+    "SDK advanced to 138519a with owned build/linker-map tooling; read-only review found no runtime/dependency-manifest change from 4db5835, and all 228 upstream plus 5 typesetting final prepared hashes verify"
+  ],
+  "limits": [
+    "Controlled core tests qualify held-initializer scheduling; public workflow uses no private delay knobs and does not claim an artificially held native initializer",
+    "Observation before admission reserves no operation; freshness/state/work limits still apply after waiting; expected_revision can conflict solely on solver publication",
+    "No device equations, numerical kernels, sample schedule, command IDs or saved formats changed",
+    "Complete all-command/physical-input/accessibility/visible-latency/distribution/participant/physical-printer gates remain open; P0 stays 17 implemented /10 partial; continuing goal remains active"
+  ]
+}

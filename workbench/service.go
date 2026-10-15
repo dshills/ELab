@@ -5,7 +5,6 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"reflect"
 	"strings"
 	"sync"
@@ -875,17 +874,8 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 		out.Duplicate = true
 		return out
 	}
-	if s.closed && r.Command != "app.close.acknowledge" {
-		return fail("closed", "session is closed")
-	}
-	if r.ExpectedDocumentGeneration != nil && *r.ExpectedDocumentGeneration != s.documentGeneration {
-		return fail("conflict", "document changed before this action; inspect the current document and retry")
-	}
-	if r.ExpectedRevision != nil && *r.ExpectedRevision != s.revision {
-		return fail("conflict", fmt.Sprintf("expected revision %d; current revision is %d", *r.ExpectedRevision, s.revision))
-	}
-	if r.ExpectedCommandRevision != nil && *r.ExpectedCommandRevision != s.commandRevision {
-		return fail("conflict", fmt.Sprintf("expected command revision %d; current command revision is %d", *r.ExpectedCommandRevision, s.commandRevision))
+	if err := s.mutationContextFailureLocked(r); err != nil {
+		return fail(err.code, err.message)
 	}
 	if r.Command == "edit.undo" || r.Command == "edit.redo" {
 		if err := s.checkHistoryTargetLocked(r.Command, r.Params, actor); err != nil {
@@ -1149,8 +1139,12 @@ func legacyStepMayWait(r Request) bool {
 	if r.Version != ProtocolVersion || r.ID == "" || len(r.ID) > 128 || r.Key == "" || len(r.Key) > 128 || r.ExpectedRevision == nil && r.ExpectedCommandRevision == nil {
 		return false
 	}
+	normalized, err := normalizeTimeInput("simulation.step", r.Params)
+	if err != nil {
+		return false
+	}
 	var p StepParams
-	return params(r.Params, &p, "duration_s") == nil && finite(p.Duration) && p.Duration > 0 && p.Duration <= MaxManualStepSeconds
+	return params(normalized, &p, "duration_s") == nil && finite(p.Duration) && p.Duration > 0 && p.Duration <= MaxManualStepSeconds
 }
 
 func (s *Service) legacyStepNeedsInitialization(r Request, actor string) bool {
@@ -1160,5 +1154,5 @@ func (s *Service) legacyStepNeedsInitialization(r Request, actor string) bool {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	_, cached := s.cache[actor+"\x00"+r.Key]
-	return !cached && s.status == "updating"
+	return !cached && s.mutationContextFailureLocked(r) == nil && s.status == "updating"
 }
