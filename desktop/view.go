@@ -117,7 +117,7 @@ func (s *screen) view() ui.Node {
 	toolbar := ui.Node{ID: "toolbar", Kind: ui.Toolbar, Style: chromeStyle(), Children: []ui.Node{
 		s.commandMenu("file-menu", "File", [][2]string{{"project.clear", "New schematic"}, {"file.open", "Open…"}, {"file.save", "Save"}, {"file.save-as", "Save as…"}, {"app.close", "Close window"}}),
 		s.button("file.save", "Save"),
-		s.commandMenu("examples-menu", "Examples", [][2]string{{"example.reset", "LED circuit"}, {"example.rc", "RC charge / discharge"}, {"example.npn", "Transistor LED"}, {"example.switch-npn", "Manual transistor switch"}, {"example.npn-pulse", "Blinking LED"}, {"example.flasher", "Capacitor-timed flasher"}, {"example.led-fade", "LED fade"}, {"example.rectifier", "Rectifier / smoothing"}}),
+		s.commandMenu("examples-menu", "Examples", [][2]string{{"example.reset", "LED circuit"}, {"example.rc", "RC charge / discharge"}, {"example.npn", "Transistor LED"}, {"example.switch-npn", "Manual transistor switch"}, {"example.npn-pulse", "Blinking LED"}, {"example.flasher", "Capacitor-timed flasher"}, {"example.led-fade", "LED fade"}, {"example.nmos", "MOSFET LED switch"}, {"example.rectifier", "Rectifier / smoothing"}}),
 		s.button("edit.undo", "Undo"), s.button("edit.redo", "Redo"), s.themeMenu(state.Theme),
 	}}
 	for i := range toolbar.Children {
@@ -204,6 +204,9 @@ func (s *screen) view() ui.Node {
 	if workbench.IsNetworkAnalysis(state.Analysis) {
 		inspector = append(inspector, section("mixed-title", "Circuit network"), quiet("mixed-help", "Bounded network simulation reports device currents, capacitor state and conservation residuals."))
 		if r := state.Mixed; r != nil {
+			for _, m := range r.MOSFETs {
+				inspector = append(inspector, quiet("mixed-"+m.ID, fmt.Sprintf("%s · %s\nVGS %.3f V · VDS %.3f V\nID %.4g mA · IG %.3g A", m.ID, m.State, m.VGS, m.VDS, m.DrainCurrent*1000, m.GateCurrent)))
+			}
 			for _, q := range r.Transistors {
 				inspector = append(inspector, quiet("mixed-"+q.TransistorID, fmt.Sprintf("%s · %s\nVBE %.3f V · VCE %.3f V", q.TransistorID, q.State, q.VBE, q.VCE)))
 			}
@@ -493,7 +496,11 @@ func (s *screen) view() ui.Node {
 				power = transistorStateLabel(r.Transistors[0].State)
 			}
 			readStatus = fmt.Sprintf("Network · t = %.4g s", r.Time)
-			if len(r.Transistors) == 0 {
+			if len(r.MOSFETs) > 0 {
+				powerTitle = "MOSFET region"
+				power = r.MOSFETs[0].State
+			}
+			if len(r.Transistors) == 0 && len(r.MOSFETs) == 0 {
 				powerTitle = "Power residual"
 				power = fmt.Sprintf("%.3g nW", r.PowerResidual*1e9)
 			}

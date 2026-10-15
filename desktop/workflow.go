@@ -26,11 +26,21 @@ func withProbe(ids []string, id string) []string {
 func (s *screen) partPlotControls(state workbench.Snapshot, p workbench.Component) []ui.Node {
 	nodes := []ui.Node{}
 	for _, probe := range state.Scope.Available {
-		match := p.Kind == "potentiometer" && (probe.ID == "v:"+p.ID+".wiper" || probe.ID == "i:"+p.ID+".wiper") || probe.ID == "v:"+p.ID || probe.ID == "i:"+p.ID || p.Kind == "npn" && (probe.ID == "v:"+p.ID+".collector" || probe.ID == "i:"+p.ID+".collector") || workbench.IsConnectivityPrimitive(p.Kind) && probe.ID == "v:"+p.ID+".node" || p.Kind == "ground" && probe.ID == "v:"+p.ID+".reference"
+		match := p.Kind == "nmos" && (probe.ID == "v:"+p.ID+".gate-source" || probe.ID == "i:"+p.ID+".drain") || p.Kind == "potentiometer" && (probe.ID == "v:"+p.ID+".wiper" || probe.ID == "i:"+p.ID+".wiper") || probe.ID == "v:"+p.ID || probe.ID == "i:"+p.ID || p.Kind == "npn" && (probe.ID == "v:"+p.ID+".collector" || probe.ID == "i:"+p.ID+".collector") || workbench.IsConnectivityPrimitive(p.Kind) && probe.ID == "v:"+p.ID+".node" || p.Kind == "ground" && probe.ID == "v:"+p.ID+".reference"
 		if match {
 			text := "Plot voltage"
 			if probe.Unit == "A" {
 				text = "Plot current"
+			}
+			if p.Kind == "nmos" {
+				switch probe.ID {
+				case "v:" + p.ID:
+					text = "Plot drain-source voltage"
+				case "v:" + p.ID + ".gate-source":
+					text = "Plot gate-source voltage"
+				default:
+					text = "Plot drain current"
+				}
 			}
 			n := s.action("plot-"+probe.ID, text, "scope.probes.set", workbench.ProbeParams{IDs: withProbe(state.Scope.Selected, probe.ID)})
 			n.Disabled = state.Transient == nil

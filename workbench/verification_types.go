@@ -68,6 +68,7 @@ type VerificationMetadata struct {
 	PotentiometerModel *PotentiometerModel `json:"potentiometer_model,omitempty"`
 	DiodeModel         *DiodeModel         `json:"diode_model,omitempty"`
 	SwitchModel        *SwitchModel        `json:"switch_model,omitempty"`
+	NMOSModel          *NMOSModel          `json:"nmos_model,omitempty"`
 	Format             string              `json:"format"`
 	Version            int                 `json:"version"`
 	OperationID        string              `json:"operation_id"`

@@ -184,6 +184,13 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 			break
 		}
 	}
+	for _, part := range graph.Components {
+		if part.Kind == "nmos" {
+			model := NMOSDeviceModel()
+			metadata.NMOSModel = &model
+			break
+		}
+	}
 	metadata.Engine = verificationEngineID(compiled.Analysis)
 	operation.inputMetadata = cloneVerificationMetadata(metadata)
 	input := verificationInput{compiled: compiled, settings: cfg, mode: settings.InputMode, probes: probes, duration: settings.Duration, steps: steps, serial: s.operationSerial, metadata: metadata}
@@ -300,6 +307,10 @@ func cloneVerificationMetadata(in VerificationMetadata) VerificationMetadata {
 	if in.DiodeModel != nil {
 		model := *in.DiodeModel
 		out.DiodeModel = &model
+	}
+	if in.NMOSModel != nil {
+		model := *in.NMOSModel
+		out.NMOSModel = &model
 	}
 	if in.SwitchModel != nil {
 		model := *in.SwitchModel

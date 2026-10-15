@@ -14,6 +14,10 @@ func IsNPNTransientEngine(e string) bool {
 }
 func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 	p := TraceSample{Time: r.Time, Input: input, Voltage: r.Nodes[compiled.Output], State: "network"}
+	if len(r.MOSFETs) > 0 {
+		m := r.MOSFETs[0]
+		p.Voltage, p.Current, p.State = m.VDS, m.DrainCurrent, m.State
+	}
 	if len(r.Transistors) > 0 {
 		q := r.Transistors[0]
 		p.Voltage = q.VCE
@@ -37,7 +41,7 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		cap := r.Capacitors[0]
 		p.Energy = cap.Energy
 		p.CapacitorVoltage = cap.Voltage
-		if len(r.Transistors) == 0 {
+		if len(r.Transistors) == 0 && len(r.MOSFETs) == 0 {
 			p.Voltage = r.Nodes[compiled.Output]
 		}
 	}
@@ -46,6 +50,11 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		currents[p.ID+".1"] = p.Terminal1Current
 		currents[p.ID+".2"] = p.Terminal2Current
 		currents[p.ID+".wiper"] = p.WiperCurrent
+	}
+	for _, m := range r.MOSFETs {
+		currents[m.ID+".gate"] = m.GateCurrent
+		currents[m.ID+".drain"] = m.DrainCurrent
+		currents[m.ID+".source"] = m.SourceCurrent
 	}
 	for _, q := range r.Transistors {
 		currents[q.TransistorID+".base"] = q.BaseCurrent

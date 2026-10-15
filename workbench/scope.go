@@ -99,6 +99,16 @@ func probeInventory(g Graph) []Probe {
 				ref := p.ID + "." + pin
 				out = append(out, Probe{"i:" + ref, ref + " current into device", "A", ref, "into device"})
 			}
+		case "nmos":
+			out = append(out, Probe{"v:" + p.ID, p.ID + " drain-source voltage", "V", p.ID + ".drain", p.ID + ".source"}, Probe{"v:" + p.ID + ".gate-source", p.ID + " gate-source voltage", "V", p.ID + ".gate", p.ID + ".source"})
+			for _, pin := range p.Terminals {
+				ref := p.ID + "." + pin
+				direction := "into device"
+				if pin == "source" {
+					direction = "out of device"
+				}
+				out = append(out, Probe{"i:" + ref, ref + " current", "A", ref, direction})
+			}
 		case "npn":
 			for _, pin := range p.Terminals {
 				ref := p.ID + "." + pin
@@ -148,6 +158,9 @@ func defaultProbes(c Compiled) []string {
 	if IsNetworkAnalysis(c.Analysis) {
 		out := []string{}
 		for _, p := range c.MixedGraph.Components {
+			if p.Kind == "nmos" {
+				out = append(out, "v:"+p.ID, "v:"+p.ID+".gate-source", "i:"+p.ID+".drain")
+			}
 			if p.Kind == "npn" {
 				out = append(out, "v:"+p.ID+".collector")
 			}

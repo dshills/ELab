@@ -28,6 +28,10 @@ func uniqueWireCurrents(g Graph, c readingContext) map[string]float64 {
 		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			set("positive", p.ID, -1)
 			set("negative", p.ID, 1)
+		case "nmos":
+			set("gate", p.ID+".gate", 1)
+			set("drain", p.ID+".drain", 1)
+			set("source", p.ID+".source", -1)
 		case "npn":
 			set("base", p.ID+".base", 1)
 			set("collector", p.ID+".collector", 1)

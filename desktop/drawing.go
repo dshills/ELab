@@ -236,6 +236,23 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 				stroke(led, 2, canvas.Point{X: 30, Y: y}, canvas.Point{X: 50, Y: y - 20}, canvas.Point{X: 44, Y: y - 20})
 				stroke(led, 2, canvas.Point{X: 50, Y: y - 20}, canvas.Point{X: 50, Y: y - 14})
 			}
+		case "nmos":
+			stroke(wireColor, 2.5, canvas.Point{X: -40}, canvas.Point{X: -16})
+			stroke(ink, 3, canvas.Point{X: -16, Y: -20}, canvas.Point{X: -16, Y: 20})
+			for _, y := range []float64{-16, 0, 16} {
+				stroke(ink, 3, canvas.Point{X: -7, Y: y - 4}, canvas.Point{X: -7, Y: y + 4})
+			}
+			stroke(ink, 2.5, canvas.Point{X: -7, Y: -16}, canvas.Point{X: 25, Y: -16}, canvas.Point{X: 25, Y: -35})
+			stroke(ink, 2.5, canvas.Point{X: -7, Y: 16}, canvas.Point{X: 25, Y: 16}, canvas.Point{X: 25, Y: 35})
+			stroke(ink, 2.5, canvas.Point{X: -7}, canvas.Point{X: 25}, canvas.Point{X: 25, Y: 16})
+			stroke(accent, 2.5, canvas.Point{X: 4, Y: -5}, canvas.Point{X: -5}, canvas.Point{X: 4, Y: 5})
+			for _, pin := range []struct {
+				x, y float64
+				name string
+			}{{-46, -20, "G"}, {32, -36, "D"}, {32, 18, "S"}} {
+				at := point(pin.x, pin.y)
+				b.text(at.X, at.Y, pin.name, muted)
+			}
 		case "npn":
 			stroke(ink, 3, canvas.Point{X: -12, Y: -20}, canvas.Point{X: -12, Y: 20})
 			stroke(wireColor, 2.5, canvas.Point{X: -40}, canvas.Point{X: -12})

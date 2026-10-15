@@ -31,6 +31,7 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "rc", Title: "RC charge and discharge", Question: "How quickly does a capacitor charge and discharge?", Expected: "Capacitor voltage changes smoothly; switching from charge to discharge reverses current while preserving voltage at the switching instant.", Try: "Pause, step 10 ms, then choose Discharge. Increase R1 or C1 to slow the response.", Limitation: "Ideal capacitor/resistor with zero ESR and leakage; this example uses an ideal source edge."},
 		{ID: "npn", Title: "Transistor LED switch", Question: "How does a small base current control the LED?", Expected: "Low base drive turns the LED off; higher drive increases collector current until the transistor approaches saturation.", Try: "Choose base 0 V, 0.8 V and 5 V, then change RB and compare base/collector currents.", Limitation: "Educational Ebers–Moll NPN; no physical transistor identity, heating, breakdown or internal charge storage."},
 		{ID: "switch-npn", Title: "Manual transistor LED switch", Question: "How can a switch control an LED through a transistor?", Expected: "Closing S1 supplies base current and lights the LED. Opening S1 lets RPD hold the base near ground; the LED turns off.", Try: "Select S1 and choose Close switch / Open switch. Inspect Q1 base and collector currents, then increase RB.", Limitation: "Finite 1 Ω on / 1 GΩ off switch; educational NPN and illustrative LED brightness. No contact bounce, heating or physical ratings."},
+		{ID: "nmos", Title: "MOSFET LED switch", Question: "How does gate voltage switch an LED without base current?", Expected: "A high gate voltage makes M1 conduct in its low-resistance triode region; a low gate turns the LED off. Gate current is zero in this model.", Try: "Pause and step across a pulse edge. Compare M1 gate-source voltage, drain-source voltage and drain current; change RG or add an external gate capacitor.", Limitation: NMOSDeviceModel().Limitations},
 		{ID: "blink", Title: "Pulse-controlled LED", Question: "What happens when transistor base drive alternates?", Expected: "The LED follows the high/low base-drive phases; the scope separates signed base and collector behavior.", Try: "Change pulse high/low durations, then pause and measure matching edges.", Limitation: "Instantaneous junction response; no physical switching delay or stored transistor charge."},
 		{ID: "flasher", Title: "Capacitor-timed LED flasher", Question: "How can two RC stages make alternating light?", Expected: "The LEDs alternate as capacitor voltages drive the two transistor bases; larger timing capacitors generally lengthen the period.", Try: "Plot both LED currents and collector voltages; double both capacitors and compare measured periods.", Limitation: "Generic grounded-emitter NPN/LED models, ideal capacitors and an explicit asymmetric startup; hardware tolerances are not modeled."},
 		{ID: "led-fade", Title: "Capacitor-buffered LED fade", Question: "How does stored capacitor charge change an LED pulse?", Expected: "C1 charges across D1 while the input is high; after the input falls, stored charge keeps LED current flowing briefly as voltage decays.", Try: "Compare input voltage, C1 voltage and D1 current. Change C1 from 100 µF to 220 µF and compare the falling-edge tail.", Limitation: "Ideal capacitor and generic red LED; source low discharges through R1 as well as D1. Brightness is illustrative; no physical LED rating, ESR or heating."},
@@ -71,6 +72,12 @@ func findExample(id string) (exampleDefinition, bool) {
 		d.graph = SwitchedNPNExampleGraph()
 		d.view = View{Center: Point{X: -40, Y: 20}, Zoom: .7}
 		d.selected = "S1"
+	case "nmos":
+		d.graph = NMOSExampleGraph()
+		d.settings.HighSeconds, d.settings.LowSeconds = .2, .3
+		d.settings.PlaybackSpeed = .1
+		d.view = View{Center: Point{Y: 20}, Zoom: .65}
+		d.selected = "M1"
 	case "blink":
 		d.graph = NPNPulseExampleGraph()
 		d.settings.PlaybackSpeed = .1

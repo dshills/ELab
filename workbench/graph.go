@@ -149,6 +149,7 @@ func libraryParts() []Part {
 		{Kind: "sine-source", Name: "Sine source", Terminals: []string{"positive", "negative"}, DefaultValue: "2.5 V", Unit: "V", Model: SineSourceModelID},
 		{Kind: "finite-pulse-source", Name: "Finite pulse source", Terminals: []string{"positive", "negative"}, DefaultValue: "5 V", Unit: "V", Model: FinitePulseModelID},
 		{Kind: "pulse-source", Name: "Pulse source", Terminals: []string{"positive", "negative"}, DefaultValue: "5 V", Unit: "V", Model: "ideal-square.v1"},
+		{Kind: "nmos", Name: "N-channel MOSFET", Terminals: []string{"gate", "drain", "source"}, Model: NMOSModelID},
 		{Kind: "npn", Name: "NPN transistor", Terminals: []string{"base", "collector", "emitter"}, DefaultValue: "", Unit: "", Model: NPNModelID},
 		{Kind: "ground", Name: "Ground", Terminals: []string{"reference"}, DefaultValue: "", Unit: "", Model: "ground.v1"},
 		{Kind: "junction", Name: "Junction", Terminals: []string{"node"}, DefaultValue: "", Unit: "", Model: "junction.v1"},
@@ -324,6 +325,17 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 		default:
 			found = false
 		}
+	case "nmos":
+		switch name {
+		case "gate":
+			p = Point{-40, 0}
+		case "drain":
+			p = Point{25, -35}
+		case "source":
+			p = Point{25, 35}
+		default:
+			found = false
+		}
 	case "npn":
 		switch name {
 		case "base":
@@ -390,6 +402,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		}
 		parent[b] = a
 	}
+	hasNMOS := false
 	hasSwitch := false
 	hasDiode := false
 	hasPot := false
@@ -416,6 +429,8 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 			hasPot = true
 		case "resistor":
 			resistors = append(resistors, c)
+		case "nmos":
+			hasNMOS = true
 		case "npn":
 			transistors = append(transistors, c)
 		case "capacitor":
@@ -498,7 +513,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		return out, "incomplete", &Diagnostic{code, message, id}
 	}
 	networkTopology := len(transistors) == 0 && (len(sources) > 1 || len(resistors) > 1 || len(leds) > 1 || len(capacitors) > 1 || len(capacitors) > 0 && len(leds) > 0 || len(capacitors) == 0 && len(leds) == 0 && len(resistors) > 0)
-	if hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || len(transistors) > 0 && len(capacitors) > 0 {
+	if hasNMOS || hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || len(transistors) > 0 && len(capacitors) > 0 {
 		return compileNetwork(out, g, groups, root)
 	}
 	if len(transistors) > 0 {

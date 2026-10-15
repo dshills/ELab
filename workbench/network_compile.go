@@ -5,6 +5,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	fail := func(status, code, msg, id string) (Compiled, string, *Diagnostic) {
 		return out, status, &Diagnostic{code, msg, id}
 	}
+	mos := []Component{}
 	sources, caps, qs, rs, leds, grounds, switches, diodes, pots := []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}
 	for _, p := range g.Components {
 		switch p.Kind {
@@ -12,6 +13,8 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			sources = append(sources, p)
 		case "capacitor":
 			caps = append(caps, p)
+		case "nmos":
+			mos = append(mos, p)
 		case "npn":
 			qs = append(qs, p)
 		case "switch":
@@ -29,10 +32,10 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		case "ground":
 			grounds = append(grounds, p)
 		default:
-			return fail("unsupported", "unsupported-model", "The network solver supports sources, resistors, SPST switches, potentiometers, capacitors, diodes, red LEDs and grounded-emitter NPNs.", p.ID)
+			return fail("unsupported", "unsupported-model", "The network solver supports sources, resistors, SPST switches, potentiometers, capacitors, diodes, red LEDs, grounded-emitter NPNs and NMOS MOSFETs.", p.ID)
 		}
 	}
-	if len(pots) > 0 || len(diodes) > 0 || len(switches) > 0 || len(caps) == 0 || len(qs) == 0 {
+	if len(mos) > 0 || len(pots) > 0 || len(diodes) > 0 || len(switches) > 0 || len(caps) == 0 || len(qs) == 0 {
 		out.Analysis = NetworkDCAnalysis
 		if len(caps) > 0 {
 			out.Analysis = NetworkTransientAnalysis
@@ -51,7 +54,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		}
 	}
 
-	if SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
+	if len(mos) > MaxNetworkMOSFETs || SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
 		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
 	}
 	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots) == 0 {
@@ -88,7 +91,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			}
 			for _, b := range p.Terminals[i+1:] {
 				u, v := net(p, a), net(p, b)
-				if u == v && p.Kind != "potentiometer" {
+				if u == v && p.Kind != "potentiometer" && !(p.Kind == "nmos" && (a == "gate" || b == "gate")) {
 					return fail("error", "shorted-component", "Remove the short across component "+p.ID+".", p.ID)
 				}
 				adjacency[u] = append(adjacency[u], v)
@@ -189,6 +192,8 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	out.Output = out.Supply
 	if len(qs) > 0 {
 		out.Output = net(qs[0], "collector")
+	} else if len(mos) > 0 {
+		out.Output = net(mos[0], "drain")
 	} else if len(caps) > 0 {
 		out.Output = net(caps[0], "1")
 		if out.Output == out.Ground {

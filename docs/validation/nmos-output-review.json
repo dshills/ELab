@@ -1,0 +1,18 @@
+{
+  "reviewed": true,
+  "scope": "Direct inspection of final generated schematic PNG plus owned native CUA observations; no general mounted input/accessibility acceptance",
+  "exports": {
+    "build/nmos-088/headless-qualified-assets/nmos.png": "9ec6541201dbd6bc56568e5a182cb913b412f815d28878f73ba3e968d4c1f35d",
+    "build/nmos-088/native-final-assets/nmos.png": "9ec6541201dbd6bc56568e5a182cb913b412f815d28878f73ba3e968d4c1f35d"
+  },
+  "observations": [
+    "Final horizontal RL and shifted D1/M1/RPD layout leaves all wire paths visible around resistor-label backgrounds.",
+    "NMOS insulated-gate symbol and component legend are complete; D1 label remains close to light arrows, part of the existing broader label-layout follow-up.",
+    "At the default 1040x760 native window with expanded scope, the 65% template opening view clips parts of the circuit/annotation. Fit produces about 18.27%; Hide scope then Fit produces about 51% and shows the complete circuit with native inspector readings.",
+    "Native inspector showed M1 triode, VGS 4.995 V, VDS 0.008 V, ID 2.909 mA and IG 0 A; generic model and gate/drain/source names were present."
+  ],
+  "followups": [
+    "Adaptive example opening fit for the actual mounted viewport while preserving user viewport/scope preferences",
+    "Improved small-canvas text readability and complete symbol/label/crossing qualification"
+  ]
+}

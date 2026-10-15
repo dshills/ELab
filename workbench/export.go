@@ -194,7 +194,7 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			sources = append(sources, p)
 		}
 	}
-	metadata, _ := json.Marshal(map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "switch_model": SwitchDeviceModel(), "diode_model": SiliconDiodeModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "source_annotations": annotations, "source_components": sources, "source_settings": settings, "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"})
+	metadata, _ := json.Marshal(map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "switch_model": SwitchDeviceModel(), "nmos_model": NMOSDeviceModel(), "diode_model": SiliconDiodeModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "source_annotations": annotations, "source_components": sources, "source_settings": settings, "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"})
 	fmt.Fprintf(&b, "<metadata>%s</metadata>", html.EscapeString(string(metadata)))
 	fmt.Fprintf(&b, `<rect x="%g" y="%g" width="%g" height="%g" fill="#ffffff"/><g fill="none" stroke="#426574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">`, minX, minY, width, height)
 	wireDisplays := map[string]WireDisplay{}
@@ -250,6 +250,8 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			b.WriteString(`<path d="M0 -32 V-12 M-12 -12 H12 L0 10 Z M-12 11 H12 M0 11 V32"/>`)
 		case "led":
 			b.WriteString(`<path d="M0 -32 V-12 M-12 -12 H12 L0 10 Z M-12 11 H12 M0 11 V32 M18 -5 L28 -15 M22 7 L32 -3 M23 -15 H28 V-10 M27 -3 H32 V2"/>`)
+		case "nmos":
+			b.WriteString(`<path d="M-40 0 H-16 M-16 -20 V20 M-7 -20 V-12 M-7 -4 V4 M-7 12 V20 M-7 -16 H25 V-35 M-7 16 H25 V35 M-7 0 H25 V16 M4 -5 L-5 0 L4 5"/>`)
 		case "npn":
 			b.WriteString(`<circle r="25"/><path d="M-40 0 H-10 M-10 -14 V14 M-10 -10 L25 -35 M-10 10 L25 35 M15 31 L25 35 L21 25"/>`)
 		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":

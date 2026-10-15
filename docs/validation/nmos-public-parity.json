@@ -1,0 +1,69 @@
+{
+  "passed": true,
+  "scope": "Public part metadata, complete place contract/discovery digests and all MOSFET workflow observations match except transport",
+  "reports": [
+    "headless-nmos.json",
+    "desktop-nmos.json"
+  ],
+  "shared_discovery_witness": "nmos-place-discovery.json",
+  "witness_sha256": "98a0a82d694423759ad222706d4b980da9b1ca045d3be333b10a295d3fe40b71",
+  "observations": {
+    "manual_matches_template": true,
+    "on": {
+      "id": "M1",
+      "model": {
+        "id": "elab.generic-nmos.v1",
+        "threshold_v": 1.5,
+        "beta_a_per_v2": 0.1,
+        "lambda_per_v": 0.02,
+        "body_diode": {
+          "id": "elab.generic-silicon-diode.v1",
+          "is_a": 1e-09,
+          "n": 1.7,
+          "rs_ohm": 1,
+          "temperature_c": 27,
+          "limitations": "Generic silicon junction with Shockley forward/reverse leakage and finite series resistance; no reverse breakdown, capacitance, charge storage, thermal dynamics, ratings or physical part identity."
+        },
+        "limitations": "Generic enhancement NMOS with square-law channel, channel-length modulation and source-to-drain body diode. Body tied to source; zero gate current. No subthreshold conduction, body effect, gate/junction capacitance, charge storage, switching loss, breakdown, heating, ratings or named device identity. External capacitors provide circuit timing."
+      },
+      "gate_current_a": 0,
+      "drain_current_a": 0.0029086192256459645,
+      "source_current_a": 0.0029086192256459645,
+      "vgs_v": 4.995004995004995,
+      "vds_v": 0.00833075945666667,
+      "power_w": 2.4231007119892606e-05,
+      "state": "triode"
+    },
+    "off": {
+      "id": "M1",
+      "model": {
+        "id": "elab.generic-nmos.v1",
+        "threshold_v": 1.5,
+        "beta_a_per_v2": 0.1,
+        "lambda_per_v": 0.02,
+        "body_diode": {
+          "id": "elab.generic-silicon-diode.v1",
+          "is_a": 1e-09,
+          "n": 1.7,
+          "rs_ohm": 1,
+          "temperature_c": 27,
+          "limitations": "Generic silicon junction with Shockley forward/reverse leakage and finite series resistance; no reverse breakdown, capacitance, charge storage, thermal dynamics, ratings or physical part identity."
+        },
+        "limitations": "Generic enhancement NMOS with square-law channel, channel-length modulation and source-to-drain body diode. Body tied to source; zero gate current. No subthreshold conduction, body effect, gate/junction capacitance, charge storage, switching loss, breakdown, heating, ratings or named device identity. External capacitors provide circuit timing."
+      },
+      "gate_current_a": 0,
+      "drain_current_a": 1e-09,
+      "source_current_a": 1e-09,
+      "vgs_v": 0,
+      "vds_v": 3.6889980183573723,
+      "power_w": 3.6889980183573726e-09,
+      "state": "cutoff"
+    },
+    "charge_10ms_v": 3.0313945782161418,
+    "charge_reference_v": 3.03240416500873,
+    "discharge_10ms_v": 1.514479426992923,
+    "discharge_reference_v": 1.5130503800237558,
+    "gate_rc_tau_s": 0.00909090909090909,
+    "kept_recordings": 1
+  }
+}

@@ -50,6 +50,9 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	if m.DiodeModel != nil {
 		envelope["diode_model"] = m.DiodeModel
 	}
+	if m.NMOSModel != nil {
+		envelope["nmos_model"] = m.NMOSModel
+	}
 	if m.SwitchModel != nil {
 		envelope["switch_model"] = m.SwitchModel
 	}
@@ -194,6 +197,16 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		r := m.Mixed
 		if r == nil || m.LED != nil || m.NPN != nil || r.Stale || r.Engine != networkEngine(m.Analysis) || !recordingNear(r.Time, m.Duration) || len(r.Nodes) > MaxMixedNodes+1 {
 			return fmt.Errorf("invalid recorded mixed final result")
+		}
+		mosIDs := []string{}
+		for _, mos := range r.MOSFETs {
+			mosIDs = append(mosIDs, mos.ID)
+			if mos.Model != NMOSDeviceModel() {
+				return fmt.Errorf("invalid recorded NMOS model")
+			}
+		}
+		if err := recordedObjectIDs(m.Graph, "nmos", mosIDs); err != nil {
+			return err
 		}
 		ids := []string{}
 		for _, q := range r.Transistors {

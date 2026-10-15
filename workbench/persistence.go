@@ -25,6 +25,7 @@ type Document struct {
 	PotentiometerModel *PotentiometerModel `json:"potentiometer_model,omitempty"`
 	DiodeModel         *DiodeModel         `json:"diode_model,omitempty"`
 	SwitchModel        *SwitchModel        `json:"switch_model,omitempty"`
+	NMOSModel          *NMOSModel          `json:"nmos_model,omitempty"`
 	Recordings         *ProjectRecordings  `json:"recordings,omitempty"`
 	Paused             *bool               `json:"paused,omitempty"`
 	ScopeProbes        *ProbeParams        `json:"scope_probes,omitempty"`
@@ -334,6 +335,14 @@ func decodeDocument(data []byte) (Document, error) {
 		}
 	}
 
+	if d.NMOSModel != nil && *d.NMOSModel != NMOSDeviceModel() {
+		return d, fmt.Errorf("unsupported NMOS model parameters/version")
+	}
+	for _, part := range d.Graph.Components {
+		if part.Kind == "nmos" && (d.NMOSModel == nil || *d.NMOSModel != NMOSDeviceModel()) {
+			return d, fmt.Errorf("NMOS schematics require supported nmos_model parameters")
+		}
+	}
 	if d.SwitchModel != nil && *d.SwitchModel != SwitchDeviceModel() {
 		return d, fmt.Errorf("unsupported switch model parameters/version")
 	}
@@ -510,6 +519,13 @@ func (s *Service) documentLocked() Document {
 		if c.Kind == "switch" {
 			model := SwitchDeviceModel()
 			d.SwitchModel = &model
+			break
+		}
+	}
+	for _, part := range s.graph.Components {
+		if part.Kind == "nmos" {
+			model := NMOSDeviceModel()
+			d.NMOSModel = &model
 			break
 		}
 	}
