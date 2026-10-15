@@ -26,8 +26,8 @@ func (s *Service) recordingViewLocked() *RecordingView {
 	record := operation.record
 	m := record.metadata
 	index := min(max(s.recording.index, 0), len(record.rows)-1)
-	out := &RecordingView{ID: operation.summary.ID, OriginID: m.OperationID, Imported: operation.summary.Kind != "verify", Viewing: s.recording.viewing, Playing: s.recording.playing, Speed: s.recording.speed, Index: index, Time: record.rows[index].Time, Duration: m.Duration, Step: m.Settings.StepSeconds, Total: len(record.rows), Readings: []VerificationReading{}}
-	scope := Scope{Window: ScopeWindow{Mode: "fixed", End: m.Duration}, WindowValid: true, Available: append([]Probe{}, m.Probes...), Selected: []string{}, Traces: []ScopeTrace{}, Statistics: []ScopeStatistics{}, Readings: []CursorReading{}, ActiveCursor: s.recording.activeCursor}
+	out := &RecordingView{LastSampleTime: record.rows[len(record.rows)-1].Time, ID: operation.summary.ID, OriginID: m.OperationID, Imported: operation.summary.Kind != "verify", Viewing: s.recording.viewing, Playing: s.recording.playing, Speed: s.recording.speed, Index: index, Time: record.rows[index].Time, Duration: m.Duration, Step: m.Settings.StepSeconds, Total: len(record.rows), Readings: []VerificationReading{}}
+	scope := Scope{Window: ScopeWindow{Mode: "fixed", End: record.rows[len(record.rows)-1].Time}, WindowValid: true, Available: append([]Probe{}, m.Probes...), Selected: []string{}, Traces: []ScopeTrace{}, Statistics: []ScopeStatistics{}, Readings: []CursorReading{}, ActiveCursor: s.recording.activeCursor}
 	if scope.ActiveCursor == "" {
 		scope.ActiveCursor = "a"
 	}
@@ -44,7 +44,7 @@ func (s *Service) recordingViewLocked() *RecordingView {
 	}
 	scope.Selected = append([]string{}, ids...)
 	for _, row := range record.rows {
-		if scopeTimeInside(row.Time, scope.Window.Start, scope.Window.End) {
+		if scopeWindowTimeInside(row.Time, scope.Window.Start, scope.Window.End) {
 			out.WindowSamples++
 		}
 	}
@@ -59,18 +59,22 @@ func (s *Service) recordingViewLocked() *RecordingView {
 			}
 			points := []ScopePoint{}
 			for _, row := range record.rows {
-				if scopeTimeInside(row.Time, scope.Window.Start, scope.Window.End) {
+				if scopeWindowTimeInside(row.Time, scope.Window.Start, scope.Window.End) {
 					points = append(points, ScopePoint{Time: row.Time, Value: row.Values[i]})
 				}
 			}
 			stat := scopeStatistics(points, id)
-			scope.Statistics = append(scope.Statistics, stat)
+			if len(points) > 0 {
+				scope.Statistics = append(scope.Statistics, stat)
+			}
 			reduced := reduceRecordedPoints(points)
 			if len(reduced) < len(points) {
 				out.PlotReduced = true
 			}
 			scope.Traces = append(scope.Traces, ScopeTrace{Probe: probe, Points: reduced})
-			out.Readings = append(out.Readings, VerificationReading{Probe: probe, Value: record.rows[index].Values[i], Minimum: stat.Minimum, Maximum: stat.Maximum})
+			if len(points) > 0 {
+				out.Readings = append(out.Readings, VerificationReading{Probe: probe, Value: record.rows[index].Values[i], Minimum: stat.Minimum, Maximum: stat.Maximum})
+			}
 		}
 	}
 	cursor := func(requested *float64) *ScopeCursor {
@@ -78,7 +82,7 @@ func (s *Service) recordingViewLocked() *RecordingView {
 			return nil
 		}
 		at := record.rows[nearestRecordingIndex(record.rows, *requested)].Time
-		c := &ScopeCursor{Requested: *requested, Time: at, Valid: scopeTimeInside(at, scope.Window.Start, scope.Window.End)}
+		c := &ScopeCursor{Requested: *requested, Time: at, Valid: scopeWindowTimeInside(at, scope.Window.Start, scope.Window.End)}
 		if !c.Valid {
 			c.Reason = "Recorded cursor is outside the visible interval"
 		}

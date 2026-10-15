@@ -1,0 +1,578 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "detailed_schemas": {
+    "scope.visibility.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "visible": false
+        }
+      ],
+      "properties": {
+        "visible": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "visible"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-scope-controls-and-csv",
+        "preconditions": [],
+        "effects": [
+          "Preserves graph, device state/time, run/electrical revision, edit history and source dirty membership",
+          "Show/hide the dock without pausing acquisition, changing selections/cursors/windows, or stopping independent recorded playback; session only"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/missing parameters or an invalid command-specific value"
+          }
+        ],
+        "completion": {
+          "mode": "immediate session/view update",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-max-live-history-samples": 512,
+      "x-max-selected-probes": 6,
+      "x-target-scope": "snapshot.scope (live); captured recording.scope uses recording.* commands"
+    },
+    "scope.probes.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "ids": []
+        }
+      ],
+      "properties": {
+        "ids": {
+          "description": "Required non-null array of unique current snapshot.scope.available IDs; [] hides all. Inventory is based on drawing parts and does not imply fresh simulated values.",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 6,
+          "minItems": 0,
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "ids"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-scope-controls-and-csv",
+        "preconditions": [
+          "Every requested ID belongs to current scope.available, with no duplicates; 0\u20136 IDs"
+        ],
+        "effects": [
+          "Preserves graph, device state/time, run/electrical revision, edit history and source dirty membership",
+          "Replace selection in supplied order and fill available traces from retained history without a new solve; hidden channels remain in private bounded frames",
+          "Clear source focus if its trace is no longer selected; explicit Save captures valid probe choices without selection alone marking the document dirty"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/missing parameters or an invalid command-specific value"
+          }
+        ],
+        "completion": {
+          "mode": "immediate session/view update",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-max-live-history-samples": 512,
+      "x-max-selected-probes": 6,
+      "x-probe-inventory": "snapshot.scope.available descriptors, including signed positive/reference and SI unit",
+      "x-target-scope": "snapshot.scope (live); captured recording.scope uses recording.* commands"
+    },
+    "scope.probe.remove": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-scope-controls-and-csv",
+        "preconditions": [
+          "ID is requested by the current selection, including retained unavailable IDs whose source was removed"
+        ],
+        "effects": [
+          "Preserves graph, device state/time, run/electrical revision, edit history and source dirty membership",
+          "Remove only that requested channel, retaining other unavailable channels for undo; clear matching source focus"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/missing parameters or an invalid command-specific value"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "ID is not requested; empty ID does not mean clear all"
+          }
+        ],
+        "completion": {
+          "mode": "immediate session/view update",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-max-live-history-samples": 512,
+      "x-max-selected-probes": 6,
+      "x-probe-inventory": "Requested IDs: union of snapshot.scope.selected and snapshot.scope.unavailable[].id",
+      "x-target-scope": "snapshot.scope (live); captured recording.scope uses recording.* commands"
+    },
+    "scope.trace.select": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "id": ""
+        }
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-scope-controls-and-csv",
+        "preconditions": [
+          "A selected available live probe, or empty ID to clear; fresh numerical samples are not required for schematic association"
+        ],
+        "effects": [
+          "Preserves graph, device state/time, run/electrical revision, edit history and source dirty membership",
+          "Publish trace_focus with stable object/terminal/current-net associations, separately from editing selection",
+          "Move/rotate preserves association; removed source reports unavailable and undo can restore it; recorded viewing suppresses current-schematic highlights with an explanation"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/missing parameters or an invalid command-specific value"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Nonempty ID is not a selected available live probe"
+          }
+        ],
+        "completion": {
+          "mode": "immediate session/view update",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-max-live-history-samples": 512,
+      "x-max-selected-probes": 6,
+      "x-probe-inventory": "Nonempty ID must be both selected and currently available; empty ID clears source focus",
+      "x-target-scope": "snapshot.scope (live); captured recording.scope uses recording.* commands"
+    },
+    "scope.window.set": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "fixed"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "start_s",
+              "end_s"
+            ]
+          }
+        }
+      ],
+      "examples": [
+        {
+          "mode": "live"
+        }
+      ],
+      "properties": {
+        "end_s": {
+          "$ref": "urn:elab:time:1"
+        },
+        "mode": {
+          "enum": [
+            "live",
+            "fixed"
+          ]
+        },
+        "start_s": {
+          "$ref": "urn:elab:time:1"
+        }
+      },
+      "required": [
+        "mode"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-scope-controls-and-csv",
+        "preconditions": [
+          "mode live, or fixed with both finite start_s/end_s inside fresh retained history and start_s<end_s"
+        ],
+        "effects": [
+          "Preserves graph, device state/time, run/electrical revision, edit history and source dirty membership",
+          "Live clears the fixed interval and follows rolling history; supplied optional times still undergo normal type/time-text validation",
+          "Fixed filters actual saved rows and computes per-selected-trace sample min/max/mean/RMS; expiration or no saved rows makes window_valid false with a reason and no statistics/paired measurements",
+          "Window and cursor positions are session only; electrical restarts clear them, geometry preserves them, and hidden acquisition continues"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/missing parameters or an invalid command-specific value"
+          }
+        ],
+        "completion": {
+          "mode": "immediate session/view update",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-max-live-history-samples": 512,
+      "x-max-selected-probes": 6,
+      "x-normalized-si-relations": [
+        {
+          "operator": "start_s<end_s for fixed mode"
+        },
+        {
+          "operator": "fixed start/end inside retained history with existing boundary roundoff tolerance"
+        }
+      ],
+      "x-target-scope": "snapshot.scope (live); captured recording.scope uses recording.* commands",
+      "x-time-inventory": "Fresh retained transient sample bounds for fixed mode; live mode follows retained history",
+      "x-visible-window-roundoff": {
+        "description": "Visible row membership caps legacy boundary tolerance to this fraction of the window span; it must not borrow nearby outside rows. File-grid validation and requested-time admission retain their prior tolerance.",
+        "maximum_fraction_of_span": 1e-09
+      }
+    },
+    "scope.cursor.set": {
+      "additionalProperties": false,
+      "properties": {
+        "cursor": {
+          "enum": [
+            "a",
+            "b"
+          ],
+          "type": "string"
+        },
+        "time_s": {
+          "$ref": "urn:elab:time:1",
+          "x-unit": "s"
+        }
+      },
+      "required": [
+        "cursor",
+        "time_s"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-scope-controls-and-csv",
+        "preconditions": [
+          "Fresh retained live transient history and finite requested time inside its bounds (using existing boundary-roundoff tolerance)",
+          "cursor is a or b; the requested time need not be an actual saved row"
+        ],
+        "effects": [
+          "Preserves graph, device state/time, run/electrical revision, edit history and source dirty membership",
+          "Store requested_s, then snap to nearest retained row; equal-distance/duplicate-time ties choose the latest/right-hand sample; no interpolation",
+          "Successful placement can still be invalid for a fixed visible interval; inspect a/b.valid and reason, not admission alone",
+          "Both valid cursors publish signed B\u2212A time, finite reciprocal 1/abs(delta) only when nonzero, and selected-channel A/B/delta in descriptor SI units; equal times have zero delta and no frequency"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/missing parameters or an invalid command-specific value"
+          }
+        ],
+        "completion": {
+          "mode": "immediate session/view update",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-max-live-history-samples": 512,
+      "x-max-selected-probes": 6,
+      "x-target-scope": "snapshot.scope (live); captured recording.scope uses recording.* commands",
+      "x-time-inventory": "Fresh snapshot.transient.samples[0].time_s through snapshot.transient.sample.time_s, with legacy decimal boundary roundoff tolerance",
+      "x-visible-window-roundoff": {
+        "description": "Visible row membership caps legacy boundary tolerance to this fraction of the window span; it must not borrow nearby outside rows. File-grid validation and requested-time admission retain their prior tolerance.",
+        "maximum_fraction_of_span": 1e-09
+      }
+    },
+    "scope.cursor.select": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "cursor": "a"
+        }
+      ],
+      "properties": {
+        "cursor": {
+          "enum": [
+            "a",
+            "b"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "cursor"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-scope-controls-and-csv",
+        "preconditions": [
+          "cursor is a or b; no fresh history is required"
+        ],
+        "effects": [
+          "Preserves graph, device state/time, run/electrical revision, edit history and source dirty membership",
+          "Choose which live cursor a subsequent plot gesture moves; does not place a cursor"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/missing parameters or an invalid command-specific value"
+          }
+        ],
+        "completion": {
+          "mode": "immediate session/view update",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-max-live-history-samples": 512,
+      "x-max-selected-probes": 6,
+      "x-target-scope": "snapshot.scope (live); captured recording.scope uses recording.* commands"
+    },
+    "scope.cursor.clear": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "cursor": "a"
+        }
+      ],
+      "properties": {
+        "cursor": {
+          "enum": [
+            "a",
+            "b"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "cursor"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-scope-controls-and-csv",
+        "preconditions": [
+          "cursor is a or b; no fresh history is required"
+        ],
+        "effects": [
+          "Preserves graph, device state/time, run/electrical revision, edit history and source dirty membership",
+          "Clear only the named position and paired deltas/readings; clearing an unset position is allowed; active gesture cursor is unchanged"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/missing parameters or an invalid command-specific value"
+          }
+        ],
+        "completion": {
+          "mode": "immediate session/view update",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-max-live-history-samples": 512,
+      "x-max-selected-probes": 6,
+      "x-target-scope": "snapshot.scope (live); captured recording.scope uses recording.* commands"
+    },
+    "export.scope.csv": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_document_generation": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "overwrite": {
+          "type": "boolean"
+        },
+        "path": {
+          "description": "Nonblank local path without NUL; relative paths resolve against the process working directory; destination must differ from the open schematic path.",
+          "maxLength": 4096,
+          "minLength": 1,
+          "type": "string",
+          "x-max-utf8-bytes": 4096
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-scope-controls-and-csv",
+        "preconditions": [
+          "Fresh live transient, valid visible interval and at least one selected trace with actual rows",
+          "No active project work and filesystem worker capacity available; optional parameter expected_document_generation also matches current document"
+        ],
+        "effects": [
+          "Preserves graph, device state/time, run/electrical revision, edit history and source dirty membership",
+          "Capture selected live channels/window/rows and signed SI descriptors at admission; recorded viewing does not redirect this export",
+          "Encode captured samples outside editor lock; each row carries run/electrical revision, engine, interval, sample step and timestamp; later live changes cannot substitute data",
+          "Atomic destination publication; explicit overwrite is required for an existing regular file; failure/cancellation does not publish partial CSV or modify source"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/missing parameters or an invalid command-specific value"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "An active project operation or worker capacity prevents export admission"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "No fresh selected rows in the visible interval"
+          },
+          {
+            "code": "conflict",
+            "phase": "admission",
+            "when": "Parameter document-generation target changed"
+          },
+          {
+            "code": "file-exists",
+            "phase": "project_work",
+            "when": "Destination exists without explicit overwrite"
+          },
+          {
+            "code": "file-conflict",
+            "phase": "publication",
+            "when": "Captured destination identity/content changed before publication"
+          },
+          {
+            "code": "file-error",
+            "phase": "project_work",
+            "when": "Local file encoding/preparation/publication error; arbitrary OS causes are not exhaustive"
+          },
+          {
+            "code": "canceled",
+            "phase": "wait-or-project_work",
+            "when": "Caller wait ended without canceling admitted work, or exact work cancellation was requested"
+          }
+        ],
+        "completion": {
+          "mode": "waiting alias for captured background scope-csv export; inspect terminal project_work/artifact outcome",
+          "observe": [
+            "project.work.inspect",
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "project.work.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-max-live-history-samples": 512,
+      "x-max-selected-probes": 6,
+      "x-project-work-inventory": "snapshot.project_work; project.work.inspect retains eight jobs; cancel by exact current ID while cancelable",
+      "x-target-scope": "snapshot.scope (live); captured recording.scope uses recording.* commands",
+      "x-visible-window-roundoff": {
+        "description": "Visible row membership caps legacy boundary tolerance to this fraction of the window span; it must not borrow nearby outside rows. File-grid validation and requested-time admission retain their prior tolerance.",
+        "maximum_fraction_of_span": 1e-09
+      }
+    }
+  },
+  "observations": {
+    "empty_interval_s": [
+      4e-13,
+      6e-13
+    ],
+    "outside_saved_times_s": [
+      0,
+      1e-12
+    ],
+    "empty_rows": 0,
+    "one_row_interval_s": [
+      7.5e-13,
+      1e-12
+    ],
+    "csv_times_s": [
+      1e-12
+    ],
+    "voltage_v": 4.999999999749999e-10,
+    "signed_cursor_delta_s": -1e-12,
+    "reciprocal_interval_hz": 1000000000000,
+    "captured_rows": 2,
+    "captured_last_sample_time_s": 1e-12
+  },
+  "checks": [
+    "Nine scope/CSV commands have discoverable shared contracts",
+    "Narrow windows cannot borrow outside rows or report fake statistics",
+    "Empty CSV refusal preserves destination bytes",
+    "CSV and scope contain the same one saved row with signed SI columns",
+    "Cursor/window validity, signed delta, zero interval and clear/select behavior",
+    "Visibility/probe/window/cursor/export preserve live source/history",
+    "Recorded and reference windows remain empty between samples",
+    "Whole captured range restores both saved rows",
+    "Export/import preserves raw captured samples",
+    "Requested unavailable source can be discovered and removed"
+  ],
+  "limits": [
+    "Window membership uses bounded roundoff, no interpolation; file validation/requested-time tolerance retains prior compatibility",
+    "Tiny-time RC check is a software/model regression, not physical device qualification",
+    "No complete physical focus/typing/IME/screen-reader/visible-latency acceptance established"
+  ]
+}

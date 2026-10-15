@@ -56,7 +56,7 @@ func (s *screen) recordingInspector(state workbench.Snapshot) []ui.Node {
 			s.invoke("recording.probes.set", workbench.ProbeParams{IDs: ids})
 		}})
 	}
-	nodes = append(nodes, s.action("recorded-whole-window", "Show complete recording", "recording.window.set", workbench.RecordingWindowParams{End: r.Duration}))
+	nodes = append(nodes, s.action("recorded-whole-window", "Show complete recording", "recording.window.set", workbench.RecordingWindowParams{End: r.LastSampleTime}))
 	for _, side := range []string{"start", "end"} {
 		side := side
 		value := r.Scope.Window.Start

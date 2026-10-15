@@ -1,0 +1,81 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.76.0",
+  "build_version": "91",
+  "binary_sha256": "c6e8a2ec197e2374959c1187e63ee48325b4e5f54f782e77b97ca76c538f0147",
+  "agent_binary_sha256": "9e4e00aa08dc61b25f3a99e39e9d488cc2150e46165dc5bde66bbc4af94a537d",
+  "sdk": {
+    "commit": "5e7c14e3d95370cada1cd372b8d5eeaa5c207c46",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "workbench/scope_capabilities.go": "5696c68b47de8e95222264d8edcbbf1ba48e57660c2d1c04d049ee4099c157db",
+    "workbench/scope_window.go": "43cbafe640a7f330f7893d7299b6e5b2c677c3f5e3d79daee0f2c73cff19e6cd",
+    "workbench/scope.go": "3f3e9edd44ec34d89e2a39d22d219a1ff03dbab085f241784b103d960c242991",
+    "workbench/recording_scope.go": "cebe06fbacf0b7362d4a67f5b774c45d8ad0f7e2ec42bed3c0a21d53d73a1a5b",
+    "workbench/recording_overlay.go": "fb9b75bb2fdc13db7dafa5756addea6fff771bf5041ed3c24f1d344b277f4a51",
+    "workbench/recording_types.go": "bfae618d9185360571d8a3c330003817331bb54f7f3c80fe8d738ba579447196",
+    "workbench/export.go": "b8acd3b9b8801f48d6d624373c9dee13bdcde602fe93e6acd5f355863f556e30",
+    "desktop/recording.go": "0df344fbda787a0d184b26c308a8ddd6c89fad2e074ccb4c920d7711ee5514f0",
+    "desktop/scope_precision_smoke.go": "35a03a5f2bcfb8f6beae14ebe5e9e53b005907d891ddf4ba4d63da045409806a",
+    "workbench/scope_precision_test.go": "6c3a07983a7fec16ce42014e6d7b0810fc00161f583ab03318b87216c64d3e9a",
+    "workbench/scope_capabilities_test.go": "7a39614aba98eadd9d7b3b8294bc8c67cc93db76737864a349d79be94789c4ff",
+    "desktop/scope_precision_test.go": "bf889efd513b7c02a6c83394976eb632a8242f89dae96d69c4ff33829f438b75",
+    "scripts/scope-contracts-demo.py": "682b00f32c049a275f600435d125e313829798194fcf8465ded0bd1febc5f211"
+  },
+  "checks": [
+    "Failing-before regression proves a 0.4\u20130.6 ps interval borrowed rows at 0 and 1 ps; span-relative visible tolerance repairs live/captured/reference/cursor/CSV membership",
+    "Empty intervals have no statistics or paired readings and CSV refusal preserves destination bytes; 0.75\u20131 ps yields exactly one retained row and one CSV data row",
+    "Legacy rounded metadata endpoint remains accepted by unchanged file-grid tolerance; complete captured bounds and UI action use actual last_sample_time_s",
+    "Nine public scope/CSV contracts are owned, discoverable and match native/headless; selection/null/duplicate limits, source removal/focus and cursor signed/zero deltas covered",
+    "Full serialized lint/import/root/native race/vet and packaged GPU/UI/protected-close smoke pass; rendered empty/one-row scope pixels differ",
+    "Four command adapters pass the three LED/RC/NPN workflows; public native/headless schema and complete observations match except transport",
+    "Raw captures survive export/import without numerical changes; owned sessions terminal and SDK/prepared hashes verified read-only",
+    "Canonical package byte-identical to qualified candidate; prior .75/90 preserved"
+  ],
+  "evidence": [
+    "docs/scope-probes.md",
+    "scripts/scope-contracts-demo.py",
+    "docs/validation/headless-scope-contracts.json",
+    "docs/validation/desktop-scope-contracts.json",
+    "docs/validation/scope-contracts-public-parity.json",
+    "docs/validation/scope-contracts-conformance.json"
+  ],
+  "logs_sha256": {
+    "scope-contracts-build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "scope-contracts-check.log": "a3d1fd3e4960cca6539d6d65fca5daaf33b3e35d62b89a493cd1d8fe49547cd2",
+    "scope-contracts-conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "scope-contracts-core.log": "30d22634c5cdf0cd1d78af006edb122e3145ef4548f5f134a58531bc8bb74124",
+    "scope-contracts-focused-race.log": "83ce6815d48836551d1fdde85faf7349b389fb00aafd09eca99da27a33e2df4e",
+    "scope-contracts-headless.log": "7be02fbbae2fe0b7580b51f41c881798ba66c777fdfe5a86dd4d0ba63d7c5f50",
+    "scope-contracts-native-demo.log": "d973ed0606ee7fb15d93379cdd8eadadbd15063def9c455f93e8cdf7f376717b",
+    "scope-contracts-native-host.log": "dea41ba64dfb6efb3944c07e1b1eed99fa616a54627621d1356d49bc0dbdb306",
+    "scope-contracts-native.log": "d8cd7914f64de5f2d61de662b1c5337cdab9f34a343f6ec8628b34fa569ec436",
+    "scope-contracts-precision-before.log": "77e833cdb1cbca4a1208ee8c716359863b5ea0495b31f18406bcd328e659769a",
+    "scope-contracts-precision-final.log": "b643d094462e09ecd4b47aa08e850639fc9c38ada9b58caf1dfeeb8f408ef72a",
+    "scope-contracts-precision-fixed.log": "ad468eb872a016eec41cb7a3da712107ebfcf53ddbf4772521df7404f14a53bf",
+    "scope-contracts-smoke.log": "936a60e815427fc6877475721a4cf965014a15869354cea9f10f15d399b3ee2a"
+  },
+  "source_inventory": {
+    "sources": 45,
+    "sites": 357,
+    "public_commands": 154,
+    "source_routes": 124,
+    "binding_review_sites": 130
+  },
+  "notes": [
+    "Initial reference-overlay fixture omitted recording.view.set recorded; fixture corrected before successful focused/full tests",
+    "SDK glyph-cache validation/hashing delta reviewed without sibling mutation; all final prepared output hashes verify"
+  ],
+  "limits": [
+    "No device equations, numerical kernels, sample schedule, public command IDs, raw saved rows or saved formats changed; RecordingView gains last_sample_time_s",
+    "Native tests cover mounted callbacks/render output; physical typing/focus/IME/accessibility/visible latency are separate",
+    "Complete all-command, distribution, participant and physical-printer/tiling gates remain open; P0 remains 17 implemented /10 partial; continuing goal active"
+  ]
+}

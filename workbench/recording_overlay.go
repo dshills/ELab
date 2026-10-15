@@ -28,7 +28,7 @@ func (s *Service) recordingOverlayLocked(view *RecordingView) *RecordingOverlay 
 	out.OriginID, out.Analysis, out.Engine, out.Duration, out.Step = m.OperationID, m.Analysis, m.Engine, m.Duration, m.Settings.StepSeconds
 	out.Scope.Available = append([]Probe{}, m.Probes...)
 	for _, row := range record.rows {
-		if scopeTimeInside(row.Time, out.Scope.Window.Start, out.Scope.Window.End) {
+		if scopeWindowTimeInside(row.Time, out.Scope.Window.Start, out.Scope.Window.End) {
 			out.WindowSamples++
 		}
 	}
@@ -42,7 +42,7 @@ func (s *Service) recordingOverlayLocked(view *RecordingView) *RecordingOverlay 
 			}
 			points := []ScopePoint{}
 			for _, row := range record.rows {
-				if scopeTimeInside(row.Time, out.Scope.Window.Start, out.Scope.Window.End) {
+				if scopeWindowTimeInside(row.Time, out.Scope.Window.Start, out.Scope.Window.End) {
 					points = append(points, ScopePoint{Time: row.Time, Value: row.Values[i]})
 				}
 			}

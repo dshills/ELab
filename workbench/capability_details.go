@@ -65,6 +65,9 @@ type inputRelation struct {
 }
 
 func addCapabilityDetails(id string, schema map[string]any) {
+	if addScopeCapabilityDetails(id, schema) {
+		return
+	}
 	if addLiveControlDetails(id, schema) {
 		return
 	}

@@ -231,9 +231,23 @@ func (s *Service) scopeLocked(c Compiled) Scope {
 		}
 	}
 
+	if out.WindowValid && s.scopeWindow != nil {
+		found := false
+		for _, sample := range t.Samples {
+			if scopeWindowTimeInside(sample.Time, out.Window.Start, out.Window.End) {
+				found = true
+				break
+			}
+		}
+		if !found {
+			out.WindowValid = false
+			out.WindowReason = "No exact saved samples in this interval"
+		}
+	}
+
 	for i := range out.Traces {
 		for _, sample := range t.Samples {
-			if value, ok := frameValue(sample, out.Traces[i].Probe); ok && out.WindowValid && scopeTimeInside(sample.Time, out.Window.Start, out.Window.End) {
+			if value, ok := frameValue(sample, out.Traces[i].Probe); ok && out.WindowValid && scopeWindowTimeInside(sample.Time, out.Window.Start, out.Window.End) {
 				out.Traces[i].Points = append(out.Traces[i].Points, ScopePoint{sample.Time, value})
 			}
 		}
@@ -254,7 +268,7 @@ func (s *Service) scopeLocked(c Compiled) Scope {
 		index := nearestSample(t.Samples, *request)
 		r.Time = t.Samples[index].Time
 		r.Valid = !t.Stale
-		if s.scopeWindow != nil && (!out.WindowValid || !scopeTimeInside(r.Time, out.Window.Start, out.Window.End)) {
+		if s.scopeWindow != nil && (!out.WindowValid || !scopeWindowTimeInside(r.Time, out.Window.Start, out.Window.End)) {
 			r.Valid = false
 			r.Reason = "outside visible window"
 			return r

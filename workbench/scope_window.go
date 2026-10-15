@@ -55,3 +55,13 @@ func scopeTimeInside(at, start, end float64) bool {
 	epsilon := 1e-12 * math.Max(1, math.Max(math.Abs(start), math.Abs(end)))
 	return at >= start-epsilon && at <= end+epsilon
 }
+
+// Visible windows must not borrow nearby rows when the legacy timestamp
+// tolerance exceeds the selected span. Keep the existing boundary tolerance for
+// ordinary windows, but cap it to a billionth of the visible interval.
+const maxScopeWindowRoundoffFraction = 1e-9
+
+func scopeWindowTimeInside(at, start, end float64) bool {
+	epsilon := math.Min(1e-12*math.Max(1, math.Max(math.Abs(start), math.Abs(end))), math.Max(0, end-start)*maxScopeWindowRoundoffFraction)
+	return at >= start-epsilon && at <= end+epsilon
+}

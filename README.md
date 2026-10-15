@@ -36,7 +36,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.75.0 --build-version 90 --platform darwin
+  --version 0.76.0 --build-version 91 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).
@@ -250,3 +250,5 @@ Captured recordings also support [two-threshold rise/fall timing](docs/recording
 Live controls expose a [shared input-mode inventory and state/completion contracts](docs/live-simulation-controls.md). A 1 µs sample step now works at 0.001 playback, and exact 1,000-sample manual advances no longer refuse from quotient rounding; larger values still respect the original limits.
 
 The waiting Step alias now handles [unit text during initialization](docs/live-simulation-controls.md#waiting-for-initialization) consistently with numeric seconds, rejects already-stale context promptly, and preserves original retry/guard behavior.
+
+Scopes now have [discoverable control contracts and bounded narrow-window clipping](docs/scope-probes.md#discoverable-control-contracts). Empty intervals report no data, CSV agrees with plotted rows, and captured/reference views preserve exact saved timestamps.

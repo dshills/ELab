@@ -30,7 +30,7 @@
     "desktop/printing.go": "00358432a4a2b4e512b24cc0d1d0130060a14097b6050ecf02aed41360ff419f",
     "desktop/probes.go": "c7df3b57a47b8a77661fd4809c7036fb10642a9429448dd46e633ee57805efdc",
     "desktop/project_work.go": "4d80b2c111c1d6778844570344479c35d3bfd641840aba0ebbe8f81083c961e1",
-    "desktop/recording.go": "dfb9b77df7bbaf27885ff443e8da2d10bb3aeff11f615d189f6b9189e675787f",
+    "desktop/recording.go": "0df344fbda787a0d184b26c308a8ddd6c89fad2e074ccb4c920d7711ee5514f0",
     "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
     "desktop/recording_timing.go": "f2eb9e3fd241a81ee0aef093d74309da4527dea39ba955a66642f4b6a2bdf6e2",
     "desktop/recovery.go": "f2d6cf775875333f0b855498329aaa1bd065fdafca99edc48ffcf430e31dd9f3",
@@ -1997,7 +1997,7 @@
       "line": 59,
       "function": "*screen.recordingInspector",
       "kind": "action-factory",
-      "expression": "s.action(\"recorded-whole-window\", \"Show complete recording\", \"recording.window.set\", workbench.RecordingWindowParams{End: r.Duration})",
+      "expression": "s.action(\"recorded-whole-window\", \"Show complete recording\", \"recording.window.set\", workbench.RecordingWindowParams{End: r.LastSampleTime})",
       "public_commands": [
         "recording.window.set"
       ],

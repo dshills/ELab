@@ -76,3 +76,7 @@ Filtered `recording.cursor.set` discovery now exposes the optional selected-capt
 ## Live simulation controls
 
 Nine live controls now publish state/effect/error/completion contracts and unchanged bounds; `snapshot.live_input_modes` is shared with admission and native buttons. The exact microsecond playback/Step boundaries now avoid quotient-rounding rejection while next larger floats still refuse. See [live control contracts](live-simulation-controls.md).
+
+## Scope and CSV controls
+
+Nine live scope/CSV controls now expose dynamic probe inventories, cursor/window state requirements, six-channel bounds, no-data semantics, signed sample measurements and file-work observation/cancellation. Recorded controls remain a distinct command family. See [scope contracts](scope-probes.md#discoverable-control-contracts) and [narrow intervals](scope-probes.md#very-narrow-intervals).

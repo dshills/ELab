@@ -65,7 +65,7 @@ func encodeScopeCSV(t *Transient, scope Scope) ([]byte, error) {
 		return nil, fileError(err)
 	}
 	for _, sample := range t.Samples {
-		if !scopeTimeInside(sample.Time, scope.Window.Start, scope.Window.End) {
+		if !scopeWindowTimeInside(sample.Time, scope.Window.Start, scope.Window.End) {
 			continue
 		}
 		row := []string{strconv.FormatUint(t.RunID, 10), strconv.FormatUint(t.ElectricalRevision, 10), t.Engine, number(scope.Window.Start), number(scope.Window.End), number(t.Settings.StepSeconds), number(sample.Time)}
