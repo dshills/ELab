@@ -4,8 +4,8 @@
   "source_sha256": {
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
     "desktop/canvas.go": "e815672e01d8377fab46a5840eb76b9e486b47fadb12897ccc5358699a9d50b5",
-    "desktop/dc_sweep.go": "dc7f7d873b72dcb56499c1e7e33b68f9e27ef6ddcd33ffb4a60beace8fd61519",
-    "desktop/dc_sweep_canvas.go": "8ad7b243abff5b30b01e149a67783a64aa91146b12a19e31ad80964ef1754f23",
+    "desktop/dc_sweep.go": "6714f9c257faaf1e230e51dbc2c8b31a0d83ad9613eaa47d2de9bf8db495600f",
+    "desktop/dc_sweep_canvas.go": "7679c9968c64ec16612baf21c8b31b1b66ac751373eea23f26dc7c81effe3e26",
     "desktop/diagnostic_help.go": "822fcdf9c5904570b42bf1b98322de00ed9fdbd17299584cefedcfeb8098f171",
     "desktop/display_preferences.go": "f54283db2acec7240b861f415ce0855fbb7dc3349785883f2095002833bb9e13",
     "desktop/drawing.go": "6b06b8e9b5b5755772ca0d8acfbaa35463f3947219b7d2ce5f4c4d616e676d71",
@@ -493,12 +493,12 @@
       "line": 61,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\tpieces := strings.SplitN(e.SelectedID, \":\", 2)\n\tif len(pieces) != 2 {\n\t\treturn\n\t}\n\tnext := cfg\n\tnext.ComponentID, next.Parameter = pieces[0], pieces[1]\n\tnext.ProbeIDs = nil\n\tswitch next.Parameter {\n\tcase \"resistance\":\n\t\tnext.Start, next.Stop = \"100 Ω\", \"10k Ω\"\n\tcase \"wiper\":\n\t\tnext.Start, next.Stop = \"0\", \"1\"\n\tdefault:\n\t\tnext.Start, next.Stop = \"0 V\", \"5 V\"\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tpieces := strings.SplitN(e.SelectedID, \":\", 2)\n\tif len(pieces) != 2 {\n\t\treturn\n\t}\n\tnext := cfg\n\tnext.ComponentID, next.Parameter = pieces[0], pieces[1]\n\tnext.ProbeIDs = nil\n\tnext.Spacing = \"\"\n\tswitch next.Parameter {\n\tcase \"resistance\":\n\t\tnext.Start, next.Stop = \"100 Ω\", \"10k Ω\"\n\tcase \"wiper\":\n\t\tnext.Start, next.Stop = \"0\", \"1\"\n\tdefault:\n\t\tnext.Start, next.Stop = \"0 V\", \"5 V\"\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 77,
+      "line": 78,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.settings.set\", next)",
@@ -509,15 +509,15 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 81,
+      "line": 84,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tif field.id == \"start\" {\n\t\tnext.Start = e.Text\n\t} else {\n\t\tnext.Stop = e.Text\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.Spacing = e.SelectedID\n\ts.invoke(\"sweep.settings.set\", next)\n}",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 88,
+      "line": 87,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.settings.set\", next)",
@@ -531,12 +531,12 @@
       "line": 91,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\tcount, err := strconv.Atoi(strings.TrimSpace(e.Text))\n\tif err != nil {\n\t\ts.errorMessage = \"Enter a whole sweep point count\"\n\t\ts.app.Invalidate(\"main\")\n\t\treturn\n\t}\n\tnext := cfg\n\tnext.Points = count\n\ts.invoke(\"sweep.settings.set\", next)\n}",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tif field.id == \"start\" {\n\t\tnext.Start = e.Text\n\t} else {\n\t\tnext.Stop = e.Text\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 100,
+      "line": 98,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.settings.set\", next)",
@@ -547,7 +547,26 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 119,
+      "line": 101,
+      "function": "*screen.sweepInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tcount, err := strconv.Atoi(strings.TrimSpace(e.Text))\n\tif err != nil {\n\t\ts.errorMessage = \"Enter a whole sweep point count\"\n\t\ts.app.Invalidate(\"main\")\n\t\treturn\n\t}\n\tnext := cfg\n\tnext.Points = count\n\ts.invoke(\"sweep.settings.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 110,
+      "function": "*screen.sweepInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"sweep.settings.set\", next)",
+      "public_commands": [
+        "sweep.settings.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 129,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.ProbeIDs = nil\n\tif e.SelectedID != \"__auto\" {\n\t\tnext.ProbeIDs = append([]string{}, cfg.ProbeIDs...)\n\t\tfor _, id := range next.ProbeIDs {\n\t\t\tif id == e.SelectedID {\n\t\t\t\treturn\n\t\t\t}\n\t\t}\n\t\tif len(next.ProbeIDs) \u003e= workbench.MaxScopeProbes {\n\t\t\ts.errorMessage = \"Remove a sweep reading before adding another\"\n\t\t\ts.app.Invalidate(\"main\")\n\t\t\treturn\n\t\t}\n\t\tnext.ProbeIDs = append(next.ProbeIDs, e.SelectedID)\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
@@ -555,7 +574,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 136,
+      "line": 146,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.settings.set\", next)",
@@ -566,7 +585,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 151,
+      "line": 161,
       "function": "*screen.sweepInspector",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-probe-remove-\"+id, \"Remove \"+id, \"sweep.settings.set\", next)",
@@ -577,7 +596,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 159,
+      "line": 169,
       "function": "*screen.sweepInspector",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-cancel-\"+op.ID, \"Cancel sweep\", \"sweep.cancel\", workbench.IDParams{ID: op.ID})",
@@ -588,7 +607,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 164,
+      "line": 174,
       "function": "*screen.sweepInspector",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-start\", \"Run DC sweep\", \"sweep.start\", workbench.SweepStartParams{})",
@@ -599,7 +618,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 173,
+      "line": 183,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"sweep.select\", workbench.IDParams{ID: e.SelectedID}) }",
@@ -607,7 +626,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 173,
+      "line": 183,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.select\", workbench.IDParams{ID: e.SelectedID})",
@@ -618,7 +637,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 174,
+      "line": 184,
       "function": "*screen.sweepInspector",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-show\", \"View sweep\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
@@ -629,7 +648,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 180,
+      "line": 190,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"sweep.keep.set\", workbench.RecordingKeepParams{ID: op.ID, Keep: e.Checked})\n}",
@@ -637,7 +656,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 181,
+      "line": 191,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.keep.set\", workbench.RecordingKeepParams{ID: op.ID, Keep: e.Checked})",
@@ -648,7 +667,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 185,
+      "line": 195,
       "function": "*screen.sweepInspector",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\ts.beginFile(\"sweep.export\", true, workbench.VerificationExportParams{ID: op.ID, Format: format}, nil)\n}",
@@ -656,7 +675,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 186,
+      "line": 196,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"sweep.export\", true, workbench.VerificationExportParams{ID: op.ID, Format: format}, nil)",
@@ -667,7 +686,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 198,
+      "line": 208,
       "function": "*screen.sweepPanel",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-back\", \"Back to circuit\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: false})",
@@ -678,7 +697,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 235,
+      "line": 245,
       "function": "*screen.sweepPanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"sweep.trace.select\", workbench.IDParams{ID: e.SelectedID}) }",
@@ -686,7 +705,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 235,
+      "line": 245,
       "function": "*screen.sweepPanel",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.trace.select\", workbench.IDParams{ID: e.SelectedID})",
@@ -697,7 +716,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 235,
+      "line": 245,
       "function": "*screen.sweepPanel",
       "kind": "node-Custom",
       "expression": "Custom: s.sweepDrawing",
@@ -705,7 +724,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 245,
+      "line": 255,
       "function": "*screen.sweepPanel",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-cursor-clear\", \"Clear point\", \"sweep.cursor.set\", workbench.SweepCursorParams{OperationID: sweep.Selected})",

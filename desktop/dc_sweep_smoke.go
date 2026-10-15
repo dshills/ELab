@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -37,7 +38,7 @@ func nativeDCSweepSmoke(ctx context.Context, a *app.Application, s *screen) erro
 		for _, action := range []struct {
 			id    string
 			event *ui.ChangeEvent
-		}{{"sweep-probe", &ui.ChangeEvent{SelectedID: "i:D1"}}, {"sweep-points", &ui.ChangeEvent{Text: "11"}}, {"sweep-start", nil}} {
+		}{{"sweep-probe", &ui.ChangeEvent{SelectedID: "i:D1"}}, {"sweep-points", &ui.ChangeEvent{Text: "11"}}, {"sweep-range-start", &ui.ChangeEvent{Text: "0.05 V"}}, {"sweep-spacing", &ui.ChangeEvent{SelectedID: "logarithmic"}}, {"sweep-start", nil}} {
 			if err := smokeUI(s, action.id, action.event); err != nil {
 				result <- err
 				return
@@ -98,7 +99,7 @@ func nativeDCSweepSmoke(ctx context.Context, a *app.Application, s *screen) erro
 				return
 			}
 			s.sweepDrawing.placeCursor(frame.left + (frame.right-frame.left)/2)
-			if current := s.service.Snapshot(); current.DCSweep.Cursor == nil || *current.DCSweep.Cursor != 5 {
+			if current := s.service.Snapshot(); current.DCSweep.Cursor == nil || *current.DCSweep.Cursor != 5 || current.DCSweep.Result.Spacing != "logarithmic" || math.Abs(current.DCSweep.Result.Points[5].Input-.5) > 1e-14 {
 				result <- fmt.Errorf("native sweep measured cursor failed")
 				return
 			}
@@ -166,7 +167,7 @@ func nativeSweepImportSmoke(ctx context.Context, a *app.Application, s *screen) 
 		}
 		frame := s.sweepDrawing.frame.Load()
 		s.sweepDrawing.placeCursor(frame.left + (frame.right-frame.left)/2)
-		if current := s.service.Snapshot(); current.DCSweep.Cursor == nil || *current.DCSweep.Cursor != 5 {
+		if current := s.service.Snapshot(); current.DCSweep.Cursor == nil || *current.DCSweep.Cursor != 5 || current.DCSweep.Result.Spacing != "logarithmic" || math.Abs(current.DCSweep.Result.Points[5].Input-.5) > 1e-14 {
 			action <- fmt.Errorf("imported sweep measured cursor failed")
 			return
 		}

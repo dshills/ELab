@@ -34,6 +34,8 @@ func sweepSettingsInputSchema() map[string]any {
 		parameters = append(parameters, domain.Parameter)
 	}
 	inputProperty(schema, "parameter")["enum"] = parameters
+	inputProperty(schema, "spacing")["enum"] = []string{"", "linear", "logarithmic"}
+	inputProperty(schema, "spacing")["description"] = "Omitted or empty defaults to linear. Logarithmic uses equal ratios and requires strictly positive endpoints; plotted on a logarithmic parameter axis. Total point count includes both endpoints."
 	inputProperty(schema, "points")["minimum"], inputProperty(schema, "points")["maximum"] = 2, MaxDCSweepPoints
 	for _, name := range []string{"start", "stop"} {
 		p := inputProperty(schema, name)
@@ -46,8 +48,9 @@ func sweepSettingsInputSchema() map[string]any {
 	probes["description"] = "Omit or null for automatic target readings. Explicit arrays require 1–6 distinct IDs from snapshot.dc_sweep.available_probes; empty arrays are refused."
 	schema["x-parameter-domains"] = sweepDomains()
 	schema["x-relations"] = []map[string]any{
+		{"operator": "positive-if-logarithmic", "fields": []string{"start", "stop"}, "when": "spacing=logarithmic", "after": "parameter-unit-normalization"},
 		{"operator": "different", "fields": []string{"start", "stop"}, "after": "parameter-unit-normalization"},
-		{"operator": "distinct-representable-linear-axis", "fields": []string{"start", "stop", "points"}, "endpoints": "inclusive", "descending": true},
+		{"operator": "distinct-representable-axis", "fields": []string{"start", "stop", "points"}, "endpoints": "inclusive", "descending": true},
 	}
 	schema["x-inventory"] = map[string]string{"targets": "snapshot.dc_sweep.targets", "probes": "snapshot.dc_sweep.available_probes"}
 	return schema

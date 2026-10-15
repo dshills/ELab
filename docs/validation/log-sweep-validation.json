@@ -1,0 +1,53 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.60.0",
+  "build_version": "75",
+  "binary_sha256": "fc565e4b3265fd33468f188b61cf1b02773826e4f08959bc281366878b08cd91",
+  "agent_binary_sha256": "bd8ff25312198e16a1600ba5724e41f763d9fe1bbc6b2c48f026da77cbbd2377",
+  "sdk_commit": "dc33d64fd11fcacda7b789f10c81001c5b9cba28",
+  "sdk_manifest_sha256": "40854a9f90bc16df45d1025eb904e2cc0d403e0c6c445faf5798d200eb75d2e6",
+  "prepared_sdk_outputs_verified": 16,
+  "checks": [
+    "Optional shared linear/logarithmic spacing; logarithmic endpoints strictly positive, total point count includes endpoints, descending supported",
+    "Overflow-safe geometric interpolation, nearby endpoints and exact historic linear point arithmetic tested",
+    "Loaded divider analytic results and independent existing LED/NPN kernels match logarithmic sweep points with original tolerances",
+    "Settings/result spacing and geometric axes validated strictly; JSON/import/project preserve exact curves",
+    "Native selector and agent produce identical curves; measured cursor uses painted log positions; GPU smoke checks midpoint and imported capture",
+    "Public headless/native resistance/bias/descending experiments produce identical full curves, with saved/imported results and zero-bias refusal purity",
+    "Full lint/import/root/native race/vet passes with packages serialized; additional independent LED/NPN logarithmic test passes race; portable sweep/discovery tests pass",
+    "All four existing reference adapters pass; native source ledger refreshed and verifies"
+  ],
+  "evidence": [
+    "workbench/dc_sweep_log_test.go",
+    "desktop/dc_sweep_test.go",
+    "desktop/dc_sweep_smoke.go",
+    "scripts/log-sweep-demo.py",
+    "docs/validation/headless-log-sweep-final.json",
+    "docs/validation/desktop-log-sweep-final.json",
+    "docs/validation/log-sweep-conformance.json"
+  ],
+  "quality_log_sha256": "dfd9f9c42fbb4b867fb45194ec4f21b697ae812482056253b494c4d0d8d2bb1e",
+  "initial_quality_log_sha256": "9cac38060247eb5952fa018381e5fd62676efbc6c04f23a36f445e2791d109c3",
+  "smoke_log_sha256": "5431abf7d749dcbcca3679d807be414e0073ae221e434d38acfdb82be4b7ba80",
+  "inventory": {
+    "sources": 38,
+    "sites": 315,
+    "public_commands": 134,
+    "source_routes": 110,
+    "binding_review_sites": 116
+  },
+  "qualification_repairs": [
+    "Independent axis reference caught descending log1p precision loss near -1; use nearby log1p and finite ratio/log-difference paths",
+    "Preserve original linear multiply-then-divide arithmetic because stored axis validation is exact",
+    "Initial parallel-package full gate hit existing flasher 100 ms elapsed-work budget; serialized full gate passes without changing solver limits/tolerances"
+  ],
+  "limits": [
+    "Positive parameter spacing only; no AC analysis, reading-axis logarithm, nested sweeps or warm-start branch continuation",
+    "Older strict ELab versions reject records containing spacing; old linear records without it remain readable",
+    "Curated model/solver/work/retention limits unchanged; recorded imported data structurally validated rather than replay-certified",
+    "Native unit/GPU evidence does not establish complete physical-input/accessibility or visual/latency qualification",
+    "P0 counts remain 17 implemented / 10 partial; physical printing/distribution/participant gates open",
+    "Private unsigned development build; previous .59/74 preserved at build/ELab-before-log-sweep.app; owned runtime sessions exited"
+  ]
+}

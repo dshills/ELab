@@ -234,3 +234,5 @@ Agents can inspect [sweep command contracts](docs/capability-details.md#sweep-co
 [Recovery setup](docs/recovery.md#background-recovery-setup) now prepares and scans in the background. Users and agents share immediate admission, cancellation and an explicit installed-configuration outcome; the previous configuration stays active until the new one is ready.
 
 [Recovery dismissal](docs/recovery.md#background-recovery-dismissal) now validates and removes a confirmed snapshot in the background, with shared cancellation and an explicit removal outcome. Changed files and other active sessions remain protected; live circuits and saved schematics stay unchanged.
+
+DC sweeps support linear and positive logarithmic spacing, including descending ranges. Select **DC sweep**, choose a target and range, then choose the spacing before running. Captured curves preserve spacing through JSON/project saves and imports; cursors select exact measured points. See the [resistance experiment](docs/dc-sweeps.md#logarithmic-resistance-experiment).

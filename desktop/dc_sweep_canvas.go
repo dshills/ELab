@@ -16,7 +16,7 @@ type sweepPlotFrame struct {
 	id                    string
 	revision, generation  uint64
 	left, right, min, max float64
-	inputs                []float64
+	inputs                []float64 // ascending-axis fractions in stored point order
 }
 type sweepCanvas struct {
 	*cogent.MeshCanvas
@@ -61,7 +61,7 @@ func (c *sweepCanvas) placeCursor(x float64) {
 	if frame == nil || len(frame.inputs) == 0 || x < frame.left || x > frame.right {
 		return
 	}
-	value := frame.min + (x-frame.left)/(frame.right-frame.left)*(frame.max-frame.min)
+	value := (x - frame.left) / (frame.right - frame.left)
 	best, distance := 0, math.Inf(1)
 	for i, input := range frame.inputs {
 		d := math.Abs(input - value)

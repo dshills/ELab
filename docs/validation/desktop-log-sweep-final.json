@@ -1,0 +1,371 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "curves": [
+    {
+      "target": {
+        "component_id": "R1",
+        "parameter": "resistance",
+        "label": "R1 \u00b7 Resistance",
+        "unit": "\u03a9",
+        "minimum": 10,
+        "maximum": 100000
+      },
+      "spacing": "logarithmic",
+      "start_si": 100,
+      "stop_si": 100000,
+      "probes": [
+        {
+          "id": "i:D1",
+          "label": "D1 current",
+          "unit": "A",
+          "positive": "D1.anode",
+          "reference": "D1.cathode"
+        },
+        {
+          "id": "v:D1",
+          "label": "D1 voltage",
+          "unit": "V",
+          "positive": "D1.anode",
+          "reference": "D1.cathode"
+        }
+      ],
+      "points": [
+        {
+          "input": 100,
+          "values": [
+            0.027754170133898602,
+            2.224582986610261
+          ],
+          "kcl_residual_a": 1.2108369862318114e-15,
+          "power_residual_w": -2.6922908347160046e-15
+        },
+        {
+          "input": 316.2277660168379,
+          "values": [
+            0.009019746333023493,
+            2.1477057670701196
+          ],
+          "kcl_residual_a": 2.2273849431542203e-15,
+          "power_residual_w": -4.78089789979208e-15
+        },
+        {
+          "input": 999.9999999999995,
+          "values": [
+            0.00291679657744158,
+            2.0832034225594906
+          ],
+          "kcl_residual_a": 1.0694570229397016e-15,
+          "power_residual_w": -2.2273849431542203e-15
+        },
+        {
+          "input": 3162.27766016838,
+          "values": [
+            0.0009414943633352694,
+            2.0227334076516374
+          ],
+          "kcl_residual_a": 3.8315704775637727e-16,
+          "power_residual_w": -7.745540320236444e-16
+        },
+        {
+          "input": 9999.999999999998,
+          "values": [
+            0.000303644254059511,
+            1.9635574594061957
+          ],
+          "kcl_residual_a": 1.3048373145863046e-16,
+          "power_residual_w": -2.5652223401007035e-16
+        },
+        {
+          "input": 31622.776601683807,
+          "values": [
+            9.787930794198687e-05,
+            1.9047872105167876
+          ],
+          "kcl_residual_a": 8.536548475480271e-11,
+          "power_residual_w": -1.6260308345009827e-10
+        },
+        {
+          "input": 100000,
+          "values": [
+            3.1538667690748484e-05,
+            1.8461357354726675
+          ],
+          "kcl_residual_a": 2.5045475154255366e-11,
+          "power_residual_w": -4.623734671505529e-11
+        }
+      ],
+      "statistics": [
+        {
+          "probe_id": "i:D1",
+          "minimum": 3.1538667690748484e-05,
+          "maximum": 0.027754170133898602
+        },
+        {
+          "probe_id": "v:D1",
+          "minimum": 1.8461357354726675,
+          "maximum": 2.224582986610261
+        }
+      ]
+    },
+    {
+      "target": {
+        "component_id": "V1",
+        "parameter": "voltage",
+        "label": "V1 \u00b7 DC bias",
+        "unit": "V",
+        "minimum": -12,
+        "maximum": 12
+      },
+      "spacing": "logarithmic",
+      "start_si": 0.05,
+      "stop_si": 5,
+      "probes": [
+        {
+          "id": "i:D1",
+          "label": "D1 current",
+          "unit": "A",
+          "positive": "D1.anode",
+          "reference": "D1.cathode"
+        },
+        {
+          "id": "v:D1",
+          "label": "D1 voltage",
+          "unit": "V",
+          "positive": "D1.anode",
+          "reference": "D1.cathode"
+        }
+      ],
+      "points": [
+        {
+          "input": 0.05,
+          "values": [
+            1.694065894508601e-20,
+            0.05
+          ],
+          "kcl_residual_a": 1.694065894508601e-20,
+          "power_residual_w": -8.470329472543005e-22
+        },
+        {
+          "input": 0.07924465962305563,
+          "values": [
+            3.544085824999139e-20,
+            0.07924465962305563
+          ],
+          "kcl_residual_a": 3.544085824999139e-20,
+          "power_residual_w": -2.808498748769531e-21
+        },
+        {
+          "input": 0.12559432157547892,
+          "values": [
+            1.0382934768178271e-19,
+            0.12559432157547892
+          ],
+          "kcl_residual_a": 1.0382934768178271e-19,
+          "power_residual_w": -1.3040376481718024e-20
+        },
+        {
+          "input": 0.19905358527674863,
+          "values": [
+            4.613031295158949e-19,
+            0.19905358527674863
+          ],
+          "kcl_residual_a": 4.613031295158949e-19,
+          "power_residual_w": -9.182404182952322e-20
+        },
+        {
+          "input": 0.31547867224009657,
+          "values": [
+            4.4422790703295e-18,
+            0.315478672240095
+          ],
+          "kcl_residual_a": 2.8879668358542807e-18,
+          "power_residual_w": -9.137594148314062e-19
+        },
+        {
+          "input": 0.4999999999999999,
+          "values": [
+            1.5764977214294923e-16,
+            0.499999999999933
+          ],
+          "kcl_residual_a": 9.075883490928354e-17,
+          "power_residual_w": -4.5367209338178144e-17
+        },
+        {
+          "input": 0.7924465962305565,
+          "values": [
+            4.497093725208427e-14,
+            0.7924465962254135
+          ],
+          "kcl_residual_a": 3.982794011281069e-14,
+          "power_residual_w": -3.1561486427204674e-14
+        },
+        {
+          "input": 1.2559432157547898,
+          "values": [
+            3.500931923231281e-10,
+            1.2559428656615974
+          ],
+          "kcl_residual_a": 1.1293476223671173e-19,
+          "power_residual_w": 7.998267836716647e-21
+        },
+        {
+          "input": 1.9905358527674866,
+          "values": [
+            9.006218369646756e-05,
+            1.9004736692135247
+          ],
+          "kcl_residual_a": 1.4250566330274717e-13,
+          "power_residual_w": -2.7082825457096227e-13
+        },
+        {
+          "input": 3.1547867224009662,
+          "values": [
+            0.001122763456705839,
+            2.0320232657096757
+          ],
+          "kcl_residual_a": 1.454847527171399e-14,
+          "power_residual_w": -2.956359115846574e-14
+        },
+        {
+          "input": 5,
+          "values": [
+            0.00291679657744158,
+            2.0832034225594906
+          ],
+          "kcl_residual_a": 1.07032438467769e-15,
+          "power_residual_w": -2.230854390106174e-15
+        }
+      ],
+      "statistics": [
+        {
+          "probe_id": "i:D1",
+          "minimum": 1.694065894508601e-20,
+          "maximum": 0.00291679657744158
+        },
+        {
+          "probe_id": "v:D1",
+          "minimum": 0.05,
+          "maximum": 2.0832034225594906
+        }
+      ]
+    },
+    {
+      "target": {
+        "component_id": "R1",
+        "parameter": "resistance",
+        "label": "R1 \u00b7 Resistance",
+        "unit": "\u03a9",
+        "minimum": 10,
+        "maximum": 100000
+      },
+      "spacing": "logarithmic",
+      "start_si": 100000,
+      "stop_si": 100,
+      "probes": [
+        {
+          "id": "i:D1",
+          "label": "D1 current",
+          "unit": "A",
+          "positive": "D1.anode",
+          "reference": "D1.cathode"
+        },
+        {
+          "id": "v:D1",
+          "label": "D1 voltage",
+          "unit": "V",
+          "positive": "D1.anode",
+          "reference": "D1.cathode"
+        }
+      ],
+      "points": [
+        {
+          "input": 100000,
+          "values": [
+            3.1538667690748484e-05,
+            1.8461357354726675
+          ],
+          "kcl_residual_a": 2.5045475154255366e-11,
+          "power_residual_w": -4.623734671505529e-11
+        },
+        {
+          "input": 31622.7766016838,
+          "values": [
+            9.787930794198687e-05,
+            1.9047872105167876
+          ],
+          "kcl_residual_a": 8.536548474125018e-11,
+          "power_residual_w": -1.6260308345009827e-10
+        },
+        {
+          "input": 10000.000000000002,
+          "values": [
+            0.000303644254059511,
+            1.9635574594061957
+          ],
+          "kcl_residual_a": 1.3064636178450328e-16,
+          "power_residual_w": -2.5673907444456745e-16
+        },
+        {
+          "input": 3162.27766016838,
+          "values": [
+            0.0009414943633352694,
+            2.0227334076516374
+          ],
+          "kcl_residual_a": 3.8315704775637727e-16,
+          "power_residual_w": -7.745540320236444e-16
+        },
+        {
+          "input": 1000.0000000000006,
+          "values": [
+            0.00291679657744158,
+            2.0832034225594906
+          ],
+          "kcl_residual_a": 1.072492789022661e-15,
+          "power_residual_w": -2.2343238370581275e-15
+        },
+        {
+          "input": 316.2277660168379,
+          "values": [
+            0.009019746333023493,
+            2.1477057670701196
+          ],
+          "kcl_residual_a": 2.2273849431542203e-15,
+          "power_residual_w": -4.78089789979208e-15
+        },
+        {
+          "input": 100,
+          "values": [
+            0.027754170133898602,
+            2.224582986610261
+          ],
+          "kcl_residual_a": 1.2108369862318114e-15,
+          "power_residual_w": -2.6922908347160046e-15
+        }
+      ],
+      "statistics": [
+        {
+          "probe_id": "i:D1",
+          "minimum": 3.1538667690748484e-05,
+          "maximum": 0.027754170133898602
+        },
+        {
+          "probe_id": "v:D1",
+          "minimum": 1.8461357354726675,
+          "maximum": 2.224582986610261
+        }
+      ]
+    }
+  ],
+  "checks": [
+    "exact geometric axes including descending",
+    "live source and physics unchanged",
+    "captured spacing and measured cursor available through shared commands",
+    "JSON/import/project round trips preserve exact curves",
+    "invalid settings preserve all public state"
+  ],
+  "limits": [
+    "Generic DC models and solver tolerances unchanged",
+    "Not AC analysis or real-device certification"
+  ]
+}

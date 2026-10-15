@@ -14,6 +14,7 @@ const MaxDCSweepPoints = 201
 type SweepSettings struct {
 	ComponentID string   `json:"component_id"`
 	Parameter   string   `json:"parameter"`
+	Spacing     string   `json:"spacing,omitempty"`
 	Start       string   `json:"start"`
 	Stop        string   `json:"stop"`
 	Points      int      `json:"points"`
@@ -46,6 +47,7 @@ type SweepStatistics struct {
 }
 type SweepResult struct {
 	Target     SweepTarget       `json:"target"`
+	Spacing    string            `json:"spacing,omitempty"`
 	Start      float64           `json:"start_si"`
 	Stop       float64           `json:"stop_si"`
 	Probes     []Probe           `json:"probes"`
@@ -169,13 +171,16 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 	if plan.start == plan.stop {
 		return plan, fmt.Errorf("sweep endpoints must differ")
 	}
+	if settings.Spacing != "" && settings.Spacing != "linear" && settings.Spacing != "logarithmic" {
+		return plan, fmt.Errorf("sweep spacing must be linear or logarithmic")
+	}
+	if settings.Spacing == "logarithmic" && (plan.start <= 0 || plan.stop <= 0) {
+		return plan, fmt.Errorf("logarithmic sweep endpoints must both be positive; use linear spacing for zero or negative values")
+	}
 	previous := plan.start
 	for i := 1; i < settings.Points; i++ {
-		value := plan.start + (plan.stop-plan.start)*float64(i)/float64(settings.Points-1)
-		if i == settings.Points-1 {
-			value = plan.stop
-		}
-		if value == previous || (plan.stop > plan.start && value < previous) || (plan.stop < plan.start && value > previous) {
+		value := sweepAxisPoint(plan.start, plan.stop, settings.Points, i, settings.Spacing)
+		if !finite(value) || value == previous || (plan.stop > plan.start && value < previous) || (plan.stop < plan.start && value > previous) {
 			return plan, fmt.Errorf("range is too small to represent distinct sweep points; expand it or reduce points")
 		}
 		previous = value
@@ -278,18 +283,12 @@ func solveDCOperatingPoint(ctx context.Context, g Graph, levels []SweepSource) (
 	return result, mixedSample(compiled, result, 0), nil
 }
 func computeDCSweep(ctx context.Context, plan sweepPlan, progress func(int)) (*SweepResult, error) {
-	out := &SweepResult{Target: plan.target, Start: plan.start, Stop: plan.stop, Probes: append([]Probe{}, plan.probes...), Points: []SweepPoint{}, Statistics: []SweepStatistics{}}
+	out := &SweepResult{Target: plan.target, Spacing: plan.settings.Spacing, Start: plan.start, Stop: plan.stop, Probes: append([]Probe{}, plan.probes...), Points: []SweepPoint{}, Statistics: []SweepStatistics{}}
 	for index := 0; index < plan.settings.Points; index++ {
 		if err := ctx.Err(); err != nil {
 			return nil, err
 		}
-		value := plan.start + (plan.stop-plan.start)*float64(index)/float64(plan.settings.Points-1)
-		if index == 0 {
-			value = plan.start
-		}
-		if index == plan.settings.Points-1 {
-			value = plan.stop
-		}
+		value := sweepAxisPoint(plan.start, plan.stop, plan.settings.Points, index, plan.settings.Spacing)
 		graph := plan.graph.Clone()
 		levels := append([]SweepSource{}, plan.sources...)
 		if plan.target.Parameter == "voltage" {

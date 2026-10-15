@@ -66,6 +66,7 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 		next := cfg
 		next.ComponentID, next.Parameter = pieces[0], pieces[1]
 		next.ProbeIDs = nil
+		next.Spacing = ""
 		switch next.Parameter {
 		case "resistance":
 			next.Start, next.Stop = "100 Ω", "10k Ω"
@@ -74,6 +75,15 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 		default:
 			next.Start, next.Stop = "0 V", "5 V"
 		}
+		s.invoke("sweep.settings.set", next)
+	}})
+	spacing := cfg.Spacing
+	if spacing == "" {
+		spacing = "linear"
+	}
+	nodes = append(nodes, ui.Node{ID: "sweep-spacing", Kind: ui.Selector, Options: []ui.Option{{ID: "linear", Label: "Linear spacing"}, {ID: "logarithmic", Label: "Logarithmic spacing"}}, SelectedID: spacing, Accessibility: ui.Accessibility{Name: "Sweep point spacing"}, Change: func(e ui.ChangeEvent) {
+		next := cfg
+		next.Spacing = e.SelectedID
 		s.invoke("sweep.settings.set", next)
 	}})
 	for _, field := range []struct{ id, label, value string }{{"start", "Start", cfg.Start}, {"stop", "Stop", cfg.Stop}} {
@@ -232,7 +242,7 @@ func (s *screen) sweepPanel(state workbench.Snapshot) []ui.Node {
 	for _, p := range result.Probes {
 		options = append(options, ui.Option{ID: p.ID, Label: p.Label + " · " + p.Unit})
 	}
-	nodes = append(nodes, ui.Node{ID: "sweep-trace", Kind: ui.Selector, Options: options, SelectedID: sweep.TraceID, Accessibility: ui.Accessibility{Name: "Sweep plotted reading"}, Change: func(e ui.ChangeEvent) { s.invoke("sweep.trace.select", workbench.IDParams{ID: e.SelectedID}) }}, quiet("sweep-axis", fmt.Sprintf("%s · %s · %.9g → %.9g %s", result.Target.ComponentID, result.Target.Parameter, result.Start, result.Stop, result.Target.Unit)+" · "+yLabel), ui.Node{ID: "sweep-plot", Kind: ui.Extension, Grow: true, Custom: s.sweepDrawing, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 200})}})
+	nodes = append(nodes, ui.Node{ID: "sweep-trace", Kind: ui.Selector, Options: options, SelectedID: sweep.TraceID, Accessibility: ui.Accessibility{Name: "Sweep plotted reading"}, Change: func(e ui.ChangeEvent) { s.invoke("sweep.trace.select", workbench.IDParams{ID: e.SelectedID}) }}, quiet("sweep-axis", fmt.Sprintf("%s · %s · %.9g → %.9g %s", result.Target.ComponentID, result.Target.Parameter, result.Start, result.Stop, result.Target.Unit)+" · "+sweepSpacingLabel(result.Spacing)+" · "+yLabel), ui.Node{ID: "sweep-plot", Kind: ui.Extension, Grow: true, Custom: s.sweepDrawing, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 200})}})
 	if sweep.Cursor != nil && *sweep.Cursor < len(result.Points) {
 		p := result.Points[*sweep.Cursor]
 		nodes = append(nodes, quiet("sweep-readout", fmt.Sprintf("Point %d · %.9g %s", *sweep.Cursor+1, p.Input, result.Target.Unit)))
@@ -310,14 +320,14 @@ func (s *screen) sweepMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 		y := bottom - (bottom-top)*f
 		line(palette.Grid, 1, canvas.Point{X: left, Y: y}, canvas.Point{X: right, Y: y})
 		text(2, y-5, fmt.Sprintf("%.4g", ymin+(ymax-ymin)*f))
-		text(x-14, bottom+12, fmt.Sprintf("%.4g", xmin+(xmax-xmin)*f))
+		text(x-14, bottom+12, fmt.Sprintf("%.4g", result.AxisValue(f)))
 	}
 	text(left, bottom+27, result.Target.Unit)
 	points := make([]canvas.Point, len(result.Points))
 	inputs := make([]float64, len(result.Points))
 	for i, p := range result.Points {
-		inputs[i] = p.Input
-		points[i] = canvas.Point{X: left + (p.Input-xmin)/(xmax-xmin)*(right-left), Y: bottom - (p.Values[index]*factor-ymin)/(ymax-ymin)*(bottom-top)}
+		inputs[i] = result.AxisFraction(p.Input)
+		points[i] = canvas.Point{X: left + inputs[i]*(right-left), Y: bottom - (p.Values[index]*factor-ymin)/(ymax-ymin)*(bottom-top)}
 	}
 	line(palette.Accent, 2, points...)
 	if sweep.Cursor != nil && *sweep.Cursor < len(points) {
@@ -336,4 +346,11 @@ func (s *screen) sweepMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	}
 	s.sweepDrawing.frame.Store(&sweepPlotFrame{id: sweep.Selected, revision: state.CommandRevision, generation: state.Document.Generation, left: left, right: right, min: xmin, max: xmax, inputs: inputs})
 	return canvas.NewMesh(b.vertices, b.indices)
+}
+
+func sweepSpacingLabel(spacing string) string {
+	if spacing == "logarithmic" {
+		return "log axis"
+	}
+	return "linear axis"
 }

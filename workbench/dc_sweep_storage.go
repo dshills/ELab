@@ -54,7 +54,7 @@ func validateSweepRecord(data []byte) (*SweepRecord, error) {
 		return nil, err
 	}
 	r := &record.Result
-	if !reflect.DeepEqual(m.Sources, plan.sources) || r.Target != plan.target || r.Start != plan.start || r.Stop != plan.stop || !reflect.DeepEqual(r.Probes, plan.probes) || len(r.Points) != m.Settings.Points || len(r.Statistics) != len(r.Probes) {
+	if !reflect.DeepEqual(m.Sources, plan.sources) || r.Target != plan.target || r.Spacing != m.Settings.Spacing || r.Start != plan.start || r.Stop != plan.stop || !reflect.DeepEqual(r.Probes, plan.probes) || len(r.Points) != m.Settings.Points || len(r.Statistics) != len(r.Probes) {
 		return nil, fmt.Errorf("sweep metadata, probes or point count do not match its source/settings")
 	}
 	stats := make([]SweepStatistics, len(r.Probes))
@@ -62,13 +62,7 @@ func validateSweepRecord(data []byte) (*SweepRecord, error) {
 		stats[i] = SweepStatistics{p.ID, math.Inf(1), math.Inf(-1)}
 	}
 	for i, point := range r.Points {
-		expected := plan.start + (plan.stop-plan.start)*float64(i)/float64(len(r.Points)-1)
-		if i == 0 {
-			expected = plan.start
-		}
-		if i == len(r.Points)-1 {
-			expected = plan.stop
-		}
+		expected := sweepAxisPoint(plan.start, plan.stop, len(r.Points), i, m.Settings.Spacing)
 		if point.Input != expected || len(point.Values) != len(r.Probes) || !finite(point.KCLResidual) || point.KCLResidual < 0 || !finite(point.PowerResidual) {
 			return nil, fmt.Errorf("invalid sweep point %d", i)
 		}

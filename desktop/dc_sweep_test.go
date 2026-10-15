@@ -243,3 +243,57 @@ func TestNativeSweepImportOnBlankMatchesAgent(t *testing.T) {
 		t.Fatal("import back loses live circuit")
 	}
 }
+
+func TestNativeLogSweepSpacingAndMeasuredCursor(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	if err := s.app.Open(app.Window{ID: "main", Title: "Owned logarithmic sweep test", Width: 1140, Height: 860, View: s.view}); err != nil {
+		t.Fatal(err)
+	}
+	uiAction(t, s, "example.reset", nil)
+	uiAction(t, s, "simulation.pause", nil)
+	uiAction(t, s, "sweep-target", &ui.ChangeEvent{SelectedID: "R1:resistance"})
+	uiAction(t, s, "sweep-range-start", &ui.ChangeEvent{Text: "100 ohm"})
+	uiAction(t, s, "sweep-range-stop", &ui.ChangeEvent{Text: "100k ohm"})
+	uiAction(t, s, "sweep-points", &ui.ChangeEvent{Text: "7"})
+	uiAction(t, s, "sweep-spacing", &ui.ChangeEvent{SelectedID: "logarithmic"})
+	before := s.service.Snapshot()
+	if before.DCSweep.Settings.Spacing != "logarithmic" {
+		t.Fatal("native spacing did not use shared command")
+	}
+	uiAction(t, s, "sweep-start", nil)
+	state := awaitNativeSweep(t, s)
+	if state.DCSweep.Result.Spacing != "logarithmic" || state.RunID != before.RunID || state.ElectricalRevision != before.ElectricalRevision {
+		t.Fatal("native log sweep identity")
+	}
+	agent := workbench.NewExample()
+	defer agent.Close()
+	cfg := before.DCSweep.Settings
+	agentAction(t, agent, "sweep.start", workbench.SweepStartParams{Settings: &cfg})
+	deadline := time.Now().Add(3 * time.Second)
+	for agent.Snapshot().DCSweep.Result == nil && time.Now().Before(deadline) {
+		time.Sleep(time.Millisecond)
+	}
+	if !reflect.DeepEqual(state.DCSweep.Result, agent.Snapshot().DCSweep.Result) {
+		t.Fatal("log native/agent mismatch")
+	}
+	s.app.Do(func() {
+		s.view()
+		if _, err := s.sweepMesh(*s.sweepDrawing.View); err != nil {
+			t.Fatal(err)
+		}
+		frame := s.sweepDrawing.frame.Load()
+		if frame == nil || math.Abs(frame.inputs[3]-.5) > 1e-14 {
+			t.Fatal("log midpoint drawn on linear axis")
+		}
+		s.sweepDrawing.placeCursor(frame.left + (frame.right-frame.left)*.5)
+	})
+	got := s.service.Snapshot().DCSweep
+	if got.Cursor == nil || *got.Cursor != 3 || math.Abs(got.Result.Points[3].Input-math.Sqrt(100*100000)) > 1e-9 {
+		t.Fatal("log cursor did not select geometric midpoint")
+	}
+	uiAction(t, s, "sweep-cursor-clear", nil)
+	if s.service.Snapshot().DCSweep.Cursor != nil {
+		t.Fatal("log cursor failed clear")
+	}
+}
