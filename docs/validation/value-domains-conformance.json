@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "report_sha256": "2f949be70ce923379e4f1bb3348a6f9dca85a5f37d87ae43283408d0eb68da07",
+  "adapters": [
+    {
+      "name": "in-process",
+      "equivalent_to_in_process": true,
+      "workflow_count": 3,
+      "electrical_checks": 294,
+      "electrical_passed": 294,
+      "reference_sha256": "c4a131bd9de758d295add56ecec5c9bec6d23078c8bc5877034757c500d750b7",
+      "flasher_refinement_levels": 3
+    },
+    {
+      "name": "headless-stdio",
+      "equivalent_to_in_process": true,
+      "workflow_count": 3,
+      "electrical_checks": 294,
+      "electrical_passed": 294,
+      "reference_sha256": "c4a131bd9de758d295add56ecec5c9bec6d23078c8bc5877034757c500d750b7",
+      "flasher_refinement_levels": 3
+    },
+    {
+      "name": "headless-socket",
+      "equivalent_to_in_process": true,
+      "workflow_count": 3,
+      "electrical_checks": 294,
+      "electrical_passed": 294,
+      "reference_sha256": "c4a131bd9de758d295add56ecec5c9bec6d23078c8bc5877034757c500d750b7",
+      "flasher_refinement_levels": 3
+    },
+    {
+      "name": "native-socket",
+      "equivalent_to_in_process": true,
+      "workflow_count": 3,
+      "electrical_checks": 294,
+      "electrical_passed": 294,
+      "reference_sha256": "c4a131bd9de758d295add56ecec5c9bec6d23078c8bc5877034757c500d750b7",
+      "flasher_refinement_levels": 3
+    }
+  ],
+  "limitations": [
+    "engineering workflow parity on this workstation; not complete native action coverage or participant acceptance",
+    "workflow parity uses shared pinned kernels; optional electrical suite adds independent frozen educational-model references and same-kernel flasher refinement, not real-device/SPICE qualification",
+    "native socket path verifies semantic operations in real app processes; keyboard/focus/screen-reader and visible latency are separate",
+    "all sessions are newly created and owned; pre-existing applications/endpoints are untouched"
+  ]
+}

@@ -128,18 +128,20 @@ func ValidID(id string) bool {
 }
 
 type Part struct {
-	Aliases      []string `json:"aliases"`
-	Limitations  string   `json:"limitations"`
-	Kind         string   `json:"kind"`
-	Name         string   `json:"name"`
-	Terminals    []string `json:"terminals"`
-	DefaultValue string   `json:"default_value,omitempty"`
-	Unit         string   `json:"unit,omitempty"`
-	Model        string   `json:"model"`
+	ValueType    string                `json:"value_type"`
+	ValueDomain  *ComponentValueDomain `json:"value_domain,omitempty"`
+	Aliases      []string              `json:"aliases"`
+	Limitations  string                `json:"limitations"`
+	Kind         string                `json:"kind"`
+	Name         string                `json:"name"`
+	Terminals    []string              `json:"terminals"`
+	DefaultValue string                `json:"default_value,omitempty"`
+	Unit         string                `json:"unit,omitempty"`
+	Model        string                `json:"model"`
 }
 
-func Library() []Part {
-	parts := []Part{
+func libraryParts() []Part {
+	return []Part{
 		{Kind: "dc-source", Name: "DC source", Terminals: []string{"positive", "negative"}, DefaultValue: "5 V", Unit: "V", Model: "ideal-dc.v1"},
 		{Kind: "resistor", Name: "Resistor", Terminals: []string{"1", "2"}, DefaultValue: "1k", Unit: "Ω", Model: "ideal-resistor.v1"},
 		{Kind: "led", Name: "Red LED", Terminals: []string{"anode", "cathode"}, DefaultValue: "", Unit: "", Model: ModelID},
@@ -155,7 +157,19 @@ func Library() []Part {
 		{Kind: "diode", Name: "Silicon diode", Terminals: []string{"anode", "cathode"}, DefaultValue: "", Unit: "", Model: DiodeModelID},
 		{Kind: "switch", Name: "SPST switch", Terminals: []string{"1", "2"}, DefaultValue: "", Unit: "", Model: SwitchModelID},
 	}
+}
+
+func Library() []Part {
+	parts := libraryParts()
 	for i := range parts {
+		parts[i].ValueType = "none"
+		if parts[i].Kind == "net-label" {
+			parts[i].ValueType = "label"
+		}
+		if domain, ok := ValueDomainForKind(parts[i].Kind); ok {
+			parts[i].ValueType = "number"
+			parts[i].ValueDomain = &domain
+		}
 		parts[i].Aliases = partAliases(parts[i].Kind)
 		parts[i].Limitations = partLimitations(parts[i].Kind)
 	}
@@ -169,7 +183,7 @@ func MakeComponent(id, kind string, p Point, value string) (Component, error) {
 	if err != nil {
 		return Component{}, err
 	}
-	for _, part := range Library() {
+	for _, part := range libraryParts() {
 		if part.Kind != kind {
 			continue
 		}
@@ -225,6 +239,9 @@ func SetValue(c Component, text string) (Component, error) {
 	if err != nil {
 		return c, err
 	}
+	if err := validateComponentValue(c.Kind, value); err != nil {
+		return c, err
+	}
 	if c.Kind == "sine-source" {
 		w := *c.Sine
 		w.Amplitude = value
@@ -242,15 +259,6 @@ func SetValue(c Component, text string) (Component, error) {
 		c.Pulse = &w
 	}
 
-	if (c.Kind == "dc-source" || c.Kind == "pulse-source") && (!finite(value) || value < 0 || value > 12) {
-		return c, fmt.Errorf("source voltage must be 0–12 V")
-	}
-	if (c.Kind == "resistor" || c.Kind == "potentiometer") && (!finite(value) || value < 10 || value > 100000) {
-		return c, fmt.Errorf("resistance must be 10–100000 Ω")
-	}
-	if c.Kind == "capacitor" && (!finite(value) || value < 1e-12 || value > 1) {
-		return c, fmt.Errorf("capacitance must be 1 pF–1 F")
-	}
 	c.Value = value
 	return c, nil
 }

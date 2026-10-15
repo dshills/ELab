@@ -142,39 +142,69 @@ func validateCircuit(c Circuit) error {
 }
 func finite(x float64) bool { return !math.IsNaN(x) && !math.IsInf(x, 0) }
 
-// ParseValue accepts explicit units and common maker resistance suffixes.
+type valuePrefix struct {
+	suffix string
+	scale  float64
+}
+
+// ParseValue accepts explicit units and maker prefixes while preserving the
+// original parse-then-scale rounding of already-supported values.
 func ParseValue(text, unit string) (float64, error) {
+	if len(text) == 0 || len(text) > 128 {
+		return 0, fmt.Errorf("value requires 1–128 UTF-8 bytes")
+	}
 	s := strings.TrimSpace(text)
-	if unit == "V" {
-		s = strings.TrimSpace(strings.TrimSuffix(s, "V"))
-	} else if unit == "F" {
-		s = strings.TrimSpace(strings.TrimSuffix(s, "F"))
-	} else {
+	switch unit {
+	case "V", "F":
+		s = strings.TrimSpace(strings.TrimSuffix(s, unit))
+	case "":
+	case "Ω":
 		s = strings.TrimSpace(strings.TrimSuffix(strings.TrimSuffix(s, "Ω"), "ohm"))
+	default:
+		return 0, fmt.Errorf("unsupported value unit %q", unit)
+	}
+	prefixes := []valuePrefix{}
+	switch unit {
+	case "Ω":
+		prefixes = []valuePrefix{{"k", 1e3}, {"K", 1e3}, {"M", 1e6}}
+	case "F":
+		prefixes = []valuePrefix{{"p", 1e-12}, {"n", 1e-9}}
+	}
+	if unit == "V" || unit == "F" {
+		prefixes = append(prefixes, valuePrefix{"u", 1e-6}, valuePrefix{"µ", 1e-6}, valuePrefix{"μ", 1e-6}, valuePrefix{"m", 1e-3})
 	}
 	scale := 1.
-	if unit == "Ω" && len(s) > 0 {
-		switch s[len(s)-1] {
-		case 'k', 'K':
-			scale = 1e3
-			s = s[:len(s)-1]
-		case 'M':
-			scale = 1e6
-			s = s[:len(s)-1]
+	for _, prefix := range prefixes {
+		if strings.HasSuffix(s, prefix.suffix) {
+			s = strings.TrimSpace(strings.TrimSuffix(s, prefix.suffix))
+			scale = prefix.scale
+			break
 		}
 	}
-	if unit == "F" {
-		for suffix, factor := range map[string]float64{"p": 1e-12, "n": 1e-9, "u": 1e-6, "µ": 1e-6, "μ": 1e-6, "m": 1e-3} {
-			if strings.HasSuffix(s, suffix) {
-				s = strings.TrimSpace(strings.TrimSuffix(s, suffix))
-				scale = factor
-				break
-			}
-		}
-	}
-	n, err := strconv.ParseFloat(strings.TrimSpace(s), 64)
+	n, err := strconv.ParseFloat(s, 64)
 	if err != nil || !finite(n) {
 		return 0, fmt.Errorf("enter a finite value in %s", unit)
 	}
-	return n * scale, nil
+	scaled := n * scale
+	if !finite(scaled) || scaled == 0 && (n != 0 || nonzeroValueMantissa(s)) {
+		return 0, fmt.Errorf("value is outside the finite representable range in %s; nonzero values cannot round to zero", unit)
+	}
+	return scaled, nil
+}
+
+// strconv permits scientific and hexadecimal float text. Ignore the respective
+// exponent when distinguishing a genuine zero from a nonzero underflow.
+func nonzeroValueMantissa(text string) bool {
+	s := strings.TrimLeft(strings.ToLower(text), "+-")
+	digits := "123456789"
+	exponent := "e"
+	if strings.HasPrefix(s, "0x") {
+		s = s[2:]
+		digits += "abcdef"
+		exponent = "p"
+	}
+	if i := strings.Index(s, exponent); i >= 0 {
+		s = s[:i]
+	}
+	return strings.ContainsAny(s, digits)
 }

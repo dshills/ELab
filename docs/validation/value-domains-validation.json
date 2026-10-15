@@ -1,0 +1,54 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.63.0",
+  "build_version": "78",
+  "binary_sha256": "a55a1eca3078e7fefba488502fd19484f3f34bec1d0eb57aec059c4896eb0324",
+  "agent_binary_sha256": "ac48979e0eb06104a35f92c4f3445bd873abce3f143b8581baad52ef04c2a02f",
+  "sdk_commit": "c4981ccadbfe59115814664c76b4440c45a8a7a9",
+  "sdk_manifest_sha256": "2350790e5e9aa333f7ffc3c45a512972ea3be95125465dcb2da0f2b62c155bfe",
+  "prepared_sdk_outputs_verified": 21,
+  "checks": [
+    "Original-code regression reproduces silent voltage/capacitance underflow and post-prefix overflow; parser now returns an error instead of zero/infinity",
+    "Voltage m/u/\u00b5/\u03bc prefixes support ordinary component values and signed capacitor startup; explicit zero and representable tiny values retained",
+    "Frozen IEEE-754 parse-then-scale results for existing capacitor/resistor forms unchanged",
+    "Numeric component bounds shared by runtime validation, owned parts.list metadata and Inspector hints; labels/fixed models remain distinct",
+    "Filtered component.place/component.set/capacitor.initial.set details expose normalized domains, current/factory waveform relations, label syntax, text bounds, IDs, grid/capacity, preconditions/errors/observation",
+    "Published boundaries and next representable refusals tested; sine offset/high-low coupling preserved; invalid command state/physics/history unchanged",
+    "Native draft/apply/millivolt/refusal/correction and range labels pass; exact packaged native GPU/UI smoke passes on updated renderer",
+    "Public native/headless parts, detailed schemas, graphs, RC analytical result, saved SI and coupled waveform data match exactly",
+    "Full serialized lint/import/root/native race/vet, portable contracts and 294 frozen electrical checks per adapter plus flasher refinement and three reference workflows pass across all four adapters"
+  ],
+  "evidence": [
+    "docs/component-values.md",
+    "workbench/value_domains_test.go",
+    "desktop/value_domains_test.go",
+    "desktop/value_domains_smoke.go",
+    "scripts/value-domains-demo.py",
+    "docs/validation/headless-value-domains.json",
+    "docs/validation/desktop-value-domains.json",
+    "docs/validation/value-domains-conformance.json"
+  ],
+  "red_regression_log_sha256": "9972523e7382c59f31b5263e29db480457be5a8b852f7b16b52859f1dfdf3b6b",
+  "quality_log_sha256": "ee8e4381969b1c827e21ba079816d254124ba275ac17716e07032ecd2260e605",
+  "smoke_log_sha256": "5431abf7d749dcbcca3679d807be414e0073ae221e434d38acfdb82be4b7ba80",
+  "inventory": {
+    "sources": 40,
+    "sites": 331,
+    "public_commands": 138,
+    "source_routes": 112,
+    "binding_review_sites": 123
+  },
+  "notes": [
+    "Private raw library definitions are shared with public enrichment; factories avoid constructing added query metadata",
+    "SDK c4981cc adds CPU uniform-background crop optimization; implementation/delta inspected read-only, updated manifest and 21 prepared outputs verified; consumer requalified",
+    "Final canonical/candidate/build binary hashes equal; previous .62/77 preserved at build/ELab-before-value-domains.app; owned sessions exited"
+  ],
+  "limits": [
+    "Three component command contracts advance AGENT-02; complete discovery/state/error coverage across other families remains open",
+    "No expanded numerical/model/work limits, custom models, physical ratings, project format or transport budgets",
+    "No complete physical typing/IME/keyboard/accessibility, general visible-latency, clean distribution or participant acceptance claim",
+    "P0 counts remain 17 implemented / 10 partial; printer submission/physical printing remain open",
+    "Private unsigned development app; consumer smoke does not qualify every upstream renderer or platform scenario"
+  ]
+}

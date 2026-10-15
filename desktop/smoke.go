@@ -201,6 +201,9 @@ rendered:
 	if err := nativePrintPreviewSmoke(ctx, a, s); err != nil {
 		return fmt.Errorf("native print preview: %w", err)
 	}
+	if err := nativeValueDomainsSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	return nativeLifecycleSmoke(ctx, a, s)
 }
 

@@ -240,3 +240,5 @@ DC sweeps support linear and positive logarithmic spacing, including descending 
 Choose **Show recorded → Compare captures** to compare two saved experiments at a requested time. The Inspector and agents share exact saved-sample readings, B − A and optional whole-run statistics, with both actual sample times shown. See [captured comparisons](docs/recording-comparison.md).
 
 Captured runs now offer **Threshold timing**: choose a saved probe, level, direction and interval to inspect exact threshold-arrival brackets and the first same-direction spacing bounds. Users and agents share the same measurement and result pages. See [timing workflow](docs/recording-timing.md).
+
+Component values accept engineering voltage units such as **500 mV**, with visible ranges/coupled waveform limits and the same discoverable domains for agents. Nonzero inputs that underflow to zero are refused. See [component value contract](docs/component-values.md).
