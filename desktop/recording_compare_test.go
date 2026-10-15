@@ -32,9 +32,12 @@ func TestNativeRecordedComparisonMatchesQueryAndPreservesPhysics(t *testing.T) {
 	uiAction(t, s, "recorded-compare-reference", &ui.ChangeEvent{SelectedID: first})
 	uiAction(t, s, "recorded-compare-time", &ui.ChangeEvent{Text: "10 ms"})
 	uiAction(t, s, "recorded-compare-statistics", &ui.ChangeEvent{Checked: true})
+	uiAction(t, s, "recorded-compare-overlay", &ui.ChangeEvent{Checked: true})
+	// Editing the numeric comparison time must preserve the independent plot flag.
+	uiAction(t, s, "recorded-compare-time", &ui.ChangeEvent{Text: "10 ms"})
 	state := s.service.Snapshot()
 	comparison := state.Recording.Comparison
-	if comparison == nil || !comparison.Available || !comparison.Settings.ShowStatistics || comparison.A.ID != second || comparison.B.ID != first || comparison.Settings.Time != .01 {
+	if comparison == nil || !comparison.Available || !comparison.Settings.ShowStatistics || !comparison.Settings.ShowOverlay || comparison.A.ID != second || comparison.B.ID != first || comparison.Settings.Time != .01 || state.Recording.ReferenceOverlay == nil || !state.Recording.ReferenceOverlay.Scope.WindowValid {
 		t.Fatal("native comparison not configured")
 	}
 	raw, _ := json.Marshal(workbench.RecordingCompareParams(comparison.Settings))
@@ -53,9 +56,12 @@ func TestNativeRecordedComparisonMatchesQueryAndPreservesPhysics(t *testing.T) {
 		if _, ok := findNode(root, "recorded-compare-reading-v:C1"); !ok {
 			t.Fatal("comparison readings absent")
 		}
+		if _, ok := findNode(root, "recorded-reference-identity"); !ok {
+			t.Fatal("reference identity/style not shown")
+		}
 	})
 	uiAction(t, s, "recorded-compare-reference", &ui.ChangeEvent{SelectedID: "__none"})
-	if s.service.Snapshot().Recording.Comparison != nil {
+	if s.service.Snapshot().Recording.Comparison != nil || s.service.Snapshot().Recording.ReferenceOverlay != nil {
 		t.Fatal("native clear comparison failed")
 	}
 }

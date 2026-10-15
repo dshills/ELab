@@ -1,0 +1,820 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "contract": {
+    "additionalProperties": false,
+    "examples": [
+      {
+        "id": "verify-2",
+        "reference_id": "verify-1",
+        "time_s": 0.01
+      }
+    ],
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "reference_id": {
+        "type": "string"
+      },
+      "show_overlay": {
+        "description": "Set-only viewer preference: plot matched reference channels on the selected recording's visible interval, at original absolute captured times. No alignment/extrapolation. Read snapshot.recording.reference_overlay while viewing recorded data. Query echoes the preference without changing a viewer.",
+        "type": "boolean"
+      },
+      "show_statistics": {
+        "type": "boolean"
+      },
+      "time_s": {
+        "$ref": "urn:elab:time:1",
+        "maximum": 10,
+        "minimum": 0,
+        "x-normalized-si-range": {
+          "maximum": 10,
+          "minimum": 0
+        }
+      }
+    },
+    "required": [
+      "id",
+      "reference_id",
+      "time_s"
+    ],
+    "type": "object",
+    "x-command-contract": {
+      "version": 1,
+      "scope": "captured-record-comparison",
+      "preconditions": [
+        "Distinct retained completed IDs; exact probe IDs, units and terminal references establish matching readings, not circuit/model equivalence",
+        "time_s within both durations; no clamping or extrapolation",
+        "Set command ID must match current selection; empty reference clears; selecting any operation clears comparison"
+      ],
+      "effects": [
+        "Exact nearest stored rows; later/right-hand ties; no interpolation, solver work or live/history/project changes",
+        "B minus A uses independently selected actual sample times; whole-record sample statistics retain each capture's resolution and duration",
+        "Query is pure; set updates only session viewer configuration, including optional statistics display",
+        "Optional show_overlay publishes bounded matching B traces on A visible absolute time interval; no alignment or extrapolation; plot cursors remain on A"
+      ],
+      "errors": [
+        {
+          "code": "invalid-params",
+          "phase": "admission",
+          "when": "Malformed input, same IDs or time outside either duration"
+        },
+        {
+          "code": "not-ready",
+          "phase": "admission",
+          "when": "Either capture is unavailable or incomplete"
+        },
+        {
+          "code": "conflict",
+          "phase": "admission",
+          "when": "Set command names a changed selected recording"
+        }
+      ],
+      "completion": {
+        "mode": "bounded immediate in-memory comparison; no worker or file IO",
+        "observe": [
+          "recording.compare",
+          "project.inspect"
+        ],
+        "cancel": "",
+        "cooperative_deadline_s": 0
+      }
+    },
+    "x-inventory": {
+      "ids": "snapshot.operations with status completed"
+    },
+    "x-max-reference-points-per-trace": 258,
+    "x-relations": [
+      {
+        "except": "empty reference clears set command",
+        "fields": [
+          "id",
+          "reference_id",
+          "time_s"
+        ],
+        "operator": "within-both-captured-durations"
+      }
+    ]
+  },
+  "rc_overlay": {
+    "analysis": "RC transient",
+    "engine": "elab.ideal-rc-exact.v1",
+    "time_basis": "captured-seconds-from-startup",
+    "duration_s": 0.02,
+    "sample_step_s": 0.001,
+    "window_sample_count": 21,
+    "plot_reduced": false,
+    "scope": {
+      "window": {
+        "mode": "fixed",
+        "start_s": 0,
+        "end_s": 0.03
+      },
+      "window_valid": true,
+      "statistics": [],
+      "available": [
+        {
+          "id": "v:C1",
+          "label": "C1 voltage",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        {
+          "id": "i:R1",
+          "label": "R1 current",
+          "unit": "A",
+          "positive": "R1.1",
+          "reference": "R1.2"
+        }
+      ],
+      "selected": [
+        "v:C1",
+        "i:R1"
+      ],
+      "traces": [
+        {
+          "probe": {
+            "id": "v:C1",
+            "label": "C1 voltage",
+            "unit": "V",
+            "positive": "C1.1",
+            "reference": "C1.2"
+          },
+          "points": [
+            {
+              "time_s": 0,
+              "value": 0
+            },
+            {
+              "time_s": 0.001,
+              "value": 0.47581290982020213
+            },
+            {
+              "time_s": 0.002,
+              "value": 0.9063462346100908
+            },
+            {
+              "time_s": 0.003,
+              "value": 1.2959088965914107
+            },
+            {
+              "time_s": 0.004,
+              "value": 1.6483997698218036
+            },
+            {
+              "time_s": 0.005,
+              "value": 1.9673467014368329
+            },
+            {
+              "time_s": 0.006,
+              "value": 2.255941819529868
+            },
+            {
+              "time_s": 0.007,
+              "value": 2.5170734810429525
+            },
+            {
+              "time_s": 0.008,
+              "value": 2.753355179413892
+            },
+            {
+              "time_s": 0.009000000000000001,
+              "value": 2.967151701297005
+            },
+            {
+              "time_s": 0.01,
+              "value": 3.1606027941427883
+            },
+            {
+              "time_s": 0.011,
+              "value": 3.335644581509602
+            },
+            {
+              "time_s": 0.012,
+              "value": 3.4940289404389895
+            },
+            {
+              "time_s": 0.013000000000000001,
+              "value": 3.637341034829937
+            },
+            {
+              "time_s": 0.014,
+              "value": 3.7670151802919674
+            },
+            {
+              "time_s": 0.015,
+              "value": 3.8843491992578505
+            },
+            {
+              "time_s": 0.016,
+              "value": 3.990517410026723
+            },
+            {
+              "time_s": 0.017,
+              "value": 4.086582379736327
+            },
+            {
+              "time_s": 0.018000000000000002,
+              "value": 4.173505558892067
+            },
+            {
+              "time_s": 0.019,
+              "value": 4.252156903886824
+            },
+            {
+              "time_s": 0.02,
+              "value": 4.323323583816936
+            }
+          ]
+        },
+        {
+          "probe": {
+            "id": "i:R1",
+            "label": "R1 current",
+            "unit": "A",
+            "positive": "R1.1",
+            "reference": "R1.2"
+          },
+          "points": [
+            {
+              "time_s": 0,
+              "value": 0.0005
+            },
+            {
+              "time_s": 0.001,
+              "value": 0.0004524187090179798
+            },
+            {
+              "time_s": 0.002,
+              "value": 0.0004093653765389909
+            },
+            {
+              "time_s": 0.003,
+              "value": 0.00037040911034085894
+            },
+            {
+              "time_s": 0.004,
+              "value": 0.0003351600230178196
+            },
+            {
+              "time_s": 0.005,
+              "value": 0.0003032653298563167
+            },
+            {
+              "time_s": 0.006,
+              "value": 0.0002744058180470132
+            },
+            {
+              "time_s": 0.007,
+              "value": 0.00024829265189570474
+            },
+            {
+              "time_s": 0.008,
+              "value": 0.0002246644820586108
+            },
+            {
+              "time_s": 0.009000000000000001,
+              "value": 0.00020328482987029951
+            },
+            {
+              "time_s": 0.01,
+              "value": 0.00018393972058572118
+            },
+            {
+              "time_s": 0.011,
+              "value": 0.0001664355418490398
+            },
+            {
+              "time_s": 0.012,
+              "value": 0.00015059710595610105
+            },
+            {
+              "time_s": 0.013000000000000001,
+              "value": 0.0001362658965170063
+            },
+            {
+              "time_s": 0.014,
+              "value": 0.00012329848197080326
+            },
+            {
+              "time_s": 0.015,
+              "value": 0.00011156508007421495
+            },
+            {
+              "time_s": 0.016,
+              "value": 0.00010094825899732772
+            },
+            {
+              "time_s": 0.017,
+              "value": 9.134176202636732e-05
+            },
+            {
+              "time_s": 0.018000000000000002,
+              "value": 8.264944411079327e-05
+            },
+            {
+              "time_s": 0.019,
+              "value": 7.478430961131756e-05
+            },
+            {
+              "time_s": 0.02,
+              "value": 6.766764161830636e-05
+            }
+          ]
+        }
+      ],
+      "run_id": 0,
+      "stale": false,
+      "active_cursor": "",
+      "readings": []
+    }
+  },
+  "pulse_overlay": {
+    "analysis": "NPN transient",
+    "engine": "elab.npn-switch-quasistatic.v1",
+    "time_basis": "captured-seconds-from-startup",
+    "duration_s": 0.1,
+    "sample_step_s": 0.001,
+    "window_sample_count": 105,
+    "plot_reduced": false,
+    "scope": {
+      "window": {
+        "mode": "fixed",
+        "start_s": 0,
+        "end_s": 0.1
+      },
+      "window_valid": true,
+      "statistics": [],
+      "available": [
+        {
+          "id": "v:VIN.positive",
+          "label": "VIN.positive / ground",
+          "unit": "V",
+          "positive": "VIN.positive",
+          "reference": "ground"
+        }
+      ],
+      "selected": [
+        "v:VIN.positive"
+      ],
+      "traces": [
+        {
+          "probe": {
+            "id": "v:VIN.positive",
+            "label": "VIN.positive / ground",
+            "unit": "V",
+            "positive": "VIN.positive",
+            "reference": "ground"
+          },
+          "points": [
+            {
+              "time_s": 0,
+              "value": 5
+            },
+            {
+              "time_s": 0.001,
+              "value": 5
+            },
+            {
+              "time_s": 0.002,
+              "value": 5
+            },
+            {
+              "time_s": 0.003,
+              "value": 5
+            },
+            {
+              "time_s": 0.004,
+              "value": 5
+            },
+            {
+              "time_s": 0.005,
+              "value": 5
+            },
+            {
+              "time_s": 0.006,
+              "value": 5
+            },
+            {
+              "time_s": 0.007,
+              "value": 5
+            },
+            {
+              "time_s": 0.008,
+              "value": 5
+            },
+            {
+              "time_s": 0.009000000000000001,
+              "value": 5
+            },
+            {
+              "time_s": 0.01,
+              "value": 5
+            },
+            {
+              "time_s": 0.011,
+              "value": 5
+            },
+            {
+              "time_s": 0.012,
+              "value": 5
+            },
+            {
+              "time_s": 0.013000000000000001,
+              "value": 5
+            },
+            {
+              "time_s": 0.014,
+              "value": 5
+            },
+            {
+              "time_s": 0.015,
+              "value": 5
+            },
+            {
+              "time_s": 0.016,
+              "value": 5
+            },
+            {
+              "time_s": 0.017,
+              "value": 5
+            },
+            {
+              "time_s": 0.018000000000000002,
+              "value": 5
+            },
+            {
+              "time_s": 0.019,
+              "value": 5
+            },
+            {
+              "time_s": 0.02,
+              "value": 5
+            },
+            {
+              "time_s": 0.021,
+              "value": 5
+            },
+            {
+              "time_s": 0.022,
+              "value": 5
+            },
+            {
+              "time_s": 0.023,
+              "value": 5
+            },
+            {
+              "time_s": 0.024,
+              "value": 5
+            },
+            {
+              "time_s": 0.025,
+              "value": 5
+            },
+            {
+              "time_s": 0.026000000000000002,
+              "value": 5
+            },
+            {
+              "time_s": 0.027,
+              "value": 5
+            },
+            {
+              "time_s": 0.028,
+              "value": 5
+            },
+            {
+              "time_s": 0.029,
+              "value": 5
+            },
+            {
+              "time_s": 0.03,
+              "value": 5
+            },
+            {
+              "time_s": 0.031,
+              "value": 5
+            },
+            {
+              "time_s": 0.032,
+              "value": 5
+            },
+            {
+              "time_s": 0.033,
+              "value": 5
+            },
+            {
+              "time_s": 0.034,
+              "value": 5
+            },
+            {
+              "time_s": 0.035,
+              "value": 5
+            },
+            {
+              "time_s": 0.036000000000000004,
+              "value": 5
+            },
+            {
+              "time_s": 0.037,
+              "value": 5
+            },
+            {
+              "time_s": 0.038,
+              "value": 5
+            },
+            {
+              "time_s": 0.039,
+              "value": 5
+            },
+            {
+              "time_s": 0.04,
+              "value": 5
+            },
+            {
+              "time_s": 0.041,
+              "value": 5
+            },
+            {
+              "time_s": 0.042,
+              "value": 5
+            },
+            {
+              "time_s": 0.043000000000000003,
+              "value": 5
+            },
+            {
+              "time_s": 0.044,
+              "value": 5
+            },
+            {
+              "time_s": 0.045,
+              "value": 5
+            },
+            {
+              "time_s": 0.046,
+              "value": 5
+            },
+            {
+              "time_s": 0.047,
+              "value": 5
+            },
+            {
+              "time_s": 0.048,
+              "value": 5
+            },
+            {
+              "time_s": 0.049,
+              "value": 5
+            },
+            {
+              "time_s": 0.05,
+              "value": 5
+            },
+            {
+              "time_s": 0.05,
+              "value": 0
+            },
+            {
+              "time_s": 0.05,
+              "value": 0
+            },
+            {
+              "time_s": 0.051000000000000004,
+              "value": 0
+            },
+            {
+              "time_s": 0.052000000000000005,
+              "value": 0
+            },
+            {
+              "time_s": 0.053,
+              "value": 0
+            },
+            {
+              "time_s": 0.054,
+              "value": 0
+            },
+            {
+              "time_s": 0.055,
+              "value": 0
+            },
+            {
+              "time_s": 0.056,
+              "value": 0
+            },
+            {
+              "time_s": 0.057,
+              "value": 0
+            },
+            {
+              "time_s": 0.058,
+              "value": 0
+            },
+            {
+              "time_s": 0.059000000000000004,
+              "value": 0
+            },
+            {
+              "time_s": 0.06,
+              "value": 0
+            },
+            {
+              "time_s": 0.061,
+              "value": 0
+            },
+            {
+              "time_s": 0.062,
+              "value": 0
+            },
+            {
+              "time_s": 0.063,
+              "value": 0
+            },
+            {
+              "time_s": 0.064,
+              "value": 0
+            },
+            {
+              "time_s": 0.065,
+              "value": 0
+            },
+            {
+              "time_s": 0.066,
+              "value": 0
+            },
+            {
+              "time_s": 0.067,
+              "value": 0
+            },
+            {
+              "time_s": 0.068,
+              "value": 0
+            },
+            {
+              "time_s": 0.069,
+              "value": 0
+            },
+            {
+              "time_s": 0.07,
+              "value": 0
+            },
+            {
+              "time_s": 0.07100000000000001,
+              "value": 0
+            },
+            {
+              "time_s": 0.07200000000000001,
+              "value": 0
+            },
+            {
+              "time_s": 0.073,
+              "value": 0
+            },
+            {
+              "time_s": 0.074,
+              "value": 0
+            },
+            {
+              "time_s": 0.075,
+              "value": 0
+            },
+            {
+              "time_s": 0.076,
+              "value": 0
+            },
+            {
+              "time_s": 0.077,
+              "value": 0
+            },
+            {
+              "time_s": 0.078,
+              "value": 0
+            },
+            {
+              "time_s": 0.079,
+              "value": 0
+            },
+            {
+              "time_s": 0.08,
+              "value": 0
+            },
+            {
+              "time_s": 0.081,
+              "value": 0
+            },
+            {
+              "time_s": 0.082,
+              "value": 0
+            },
+            {
+              "time_s": 0.083,
+              "value": 0
+            },
+            {
+              "time_s": 0.084,
+              "value": 0
+            },
+            {
+              "time_s": 0.085,
+              "value": 0
+            },
+            {
+              "time_s": 0.08600000000000001,
+              "value": 0
+            },
+            {
+              "time_s": 0.08700000000000001,
+              "value": 0
+            },
+            {
+              "time_s": 0.088,
+              "value": 0
+            },
+            {
+              "time_s": 0.089,
+              "value": 0
+            },
+            {
+              "time_s": 0.09,
+              "value": 0
+            },
+            {
+              "time_s": 0.091,
+              "value": 0
+            },
+            {
+              "time_s": 0.092,
+              "value": 0
+            },
+            {
+              "time_s": 0.093,
+              "value": 0
+            },
+            {
+              "time_s": 0.094,
+              "value": 0
+            },
+            {
+              "time_s": 0.095,
+              "value": 0
+            },
+            {
+              "time_s": 0.096,
+              "value": 0
+            },
+            {
+              "time_s": 0.097,
+              "value": 0
+            },
+            {
+              "time_s": 0.098,
+              "value": 0
+            },
+            {
+              "time_s": 0.099,
+              "value": 0
+            },
+            {
+              "time_s": 0.1,
+              "value": 0
+            },
+            {
+              "time_s": 0.1,
+              "value": 5
+            },
+            {
+              "time_s": 0.1,
+              "value": 5
+            }
+          ]
+        }
+      ],
+      "run_id": 0,
+      "stale": false,
+      "active_cursor": "",
+      "readings": []
+    }
+  },
+  "narrow_reference_points": [
+    {
+      "time_s": 0.002,
+      "value": 0.9063462346100908
+    }
+  ],
+  "checks": [
+    "exact analytic RC reference, channel order and independent sample times",
+    "shorter reference ends naturally; empty overlap publishes no fabricated values",
+    "sub-step interval and exact selected cursor",
+    "query purity and live/history/dirty preservation",
+    "reopened captures rebuild identical overlay without changing saved bytes",
+    "reference absent from live view",
+    "both stored NPN ideal-edge sides retained"
+  ],
+  "limits": [
+    "plot reduction preserves bucket extrema; exact full rows remain in operation.samples",
+    "no time alignment/extrapolation, cross-run cursor inference or physical device validation"
+  ]
+}

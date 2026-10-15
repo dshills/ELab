@@ -96,7 +96,7 @@ def main():
                       comparison=semantic(result), checks=['Analytic RC results at exact independent sample times',
                       'Pure query and rejected requests preserve all public state', 'Configured view equals pure query without live/history/dirty changes',
                       'Later live edits do not change captured readings', 'Imported and reopened captures compare identically'],
-                      limits=['No interpolation, waveform overlay or time alignment', 'Sample statistics cover whole captures and depend on resolution'])
+                      limits=['This table workflow does not test overlay or time alignment', 'Sample statistics cover whole captures and depend on resolution'])
         with args.output.open('x') as output:
             output.write(json.dumps(report, indent=2) + '\n')
         print(json.dumps(dict(passed=True, transport=report['transport'])))

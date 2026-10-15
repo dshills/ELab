@@ -19,13 +19,25 @@ DC operating-point captures compare at time zero. Transient times must be within
 | Command | Inputs and result |
 | --- | --- |
 | `recording.compare` | Pure query. Required `id` (A), `reference_id` (B), `time_s` (finite numeric seconds or unit text). IDs must name distinct retained completed time/DC recordings. Returns exact sample provenance, matched readings/deltas, separate whole-record statistics and unmatched probes. No key/revision guard needed. |
-| `recording.compare.set` | Same required fields and ordinary mutation key/revision guard. `id` must be the selected capture. Configures the shared Inspector comparison; optional `show_statistics` controls the statistics display. Empty `reference_id` clears it. Returns the normal snapshot with `recording.comparison`. |
+| `recording.compare.set` | Same required fields and ordinary mutation key/revision guard. `id` must be the selected capture. Configures the shared Inspector comparison; optional `show_statistics` controls the statistics display and `show_overlay` plots reference B. Empty `reference_id` clears it. Returns the normal snapshot with `recording.comparison`. |
 | `capabilities.list` | Filter either command to discover time bounds, inventory, state/identity rules and known refusals. |
 
 Selection starts a fresh comparison session: selecting any operation clears the comparison. Changing the reference through the UI starts at zero, which exists in every complete capture. A reference that is later evicted remains explicitly unavailable; its old values are never silently reused. Import completion preserves a later comparison configuration through the existing viewer revision guard.
 
 The configuration is session/view state, without undo/history, dirty membership or physics changes. Projects retain the underlying kept captures; reopening resets comparison settings and assigns fresh local IDs. Select those reopened captures to compare their unchanged data again. Exported/imported recordings use the same validated captured data. There is no project-format change.
 
-This addition is a numerical comparison table. Plot overlays, time alignment, relative-error percentages and formal equivalence testing remain separate features. It does not certify a circuit or prove real-device behavior.
+The comparison includes a numerical table and optional reference overlay. Time alignment, relative-error percentages and formal equivalence testing remain separate features. It does not certify a circuit or prove real-device behavior.
 
 [Threshold timing](recording-timing.md) separately measures sampled arrival brackets and first same-direction spacing bounds. It does not convert comparison tables into aligned or interpolated waveforms.
+
+## Overlay the reference
+
+Enable **Overlay reference** after choosing B. Selected capture A is solid and reference B is dashed, using the same trace colors and shared voltage/current axes. Reference identity, duration, sample step and unavailable/reduced states are shown in the Inspector. Plot cursors and cursor deltas still measure selected A; the numeric comparison table independently identifies the two actual rows it uses. Matching terminal identities can come from differently wired or configured circuits.
+
+Both curves use their original captured seconds from startup. There is no phase shift, time alignment, resampling, extrapolation or new solver work. Only B probes matching A's selected probe ID, units and signed terminal references are plotted, following A's channel order. B is clipped to A's visible interval and ends naturally when the shorter capture ends. An interval with no reference samples reports that explicitly; no endpoint or held value is invented.
+
+Agents set the same `recording.compare.set` input with `show_overlay:true`, then inspect `snapshot.recording.reference_overlay` while recorded view is active. It identifies the reference capture/origin, analysis/engine, time basis, duration, step, interval sample count and a bounded `scope` containing matched trace points. Each trace uses the existing 128-bucket extrema reduction (at most 258 original points). No new sample values are calculated; unreduced duplicate edge timestamps retain both sides in order. Full exact rows remain available through `operation.samples`. Reference points and primary points both contribute to the native axis range. Dashed screen geometry is bounded independently of sample count.
+
+The preference remains independent of comparison time/statistics, and editing that time preserves it. Hiding selected channels hides their reference channels too. Switching to live view hides the overlay; selecting any operation clears comparison configuration. Saving retains captures, not overlay preferences; reopening and reconfiguring produces the same reference data. The [public workflow](../scripts/recording-overlay-demo.py) checks RC analytic values, different sampling/durations, exact narrow intervals, pulse edges, query purity and reopened captures through either transport.
+
+The scope also now maps any positive visible interval across its full axis width, even when shorter than one sample step. Previously such intervals used the sample step as their width, disagreeing with axis labels and cursor click mapping. A native geometry regression reproduces the misplaced endpoint cursor before the repair. Zero-duration DC plots retain their existing point behavior.

@@ -35,15 +35,33 @@ func (s *screen) recordingComparisonControls(state workbench.Snapshot) []ui.Node
 		}
 		// Start at a time every completed capture contains. Different durations
 		// must not make selecting a shorter reference impossible.
-		s.invoke("recording.compare.set", workbench.RecordingCompareParams{ID: r.ID, ReferenceID: reference, Time: 0})
+		next := workbench.RecordingCompareParams{ID: r.ID, ReferenceID: reference}
+		if r.Comparison != nil {
+			next.ShowStatistics = r.Comparison.Settings.ShowStatistics
+			next.ShowOverlay = r.Comparison.Settings.ShowOverlay
+		}
+		s.invoke("recording.compare.set", next)
 	}}}
 	if r.Comparison == nil {
 		return nodes
 	}
 	comparison := r.Comparison
 	nodes = append(nodes, quiet("recorded-compare-time-label", "Compare at · time"), timeField("recorded-compare-time", "Requested comparison time", at, false, func(text string) {
-		s.invokeAtCommandRevision("recording.compare.set", map[string]any{"id": r.ID, "reference_id": comparison.Settings.ReferenceID, "time_s": text, "show_statistics": comparison.Settings.ShowStatistics}, state.CommandRevision)
+		s.invokeAtCommandRevision("recording.compare.set", map[string]any{"id": r.ID, "reference_id": comparison.Settings.ReferenceID, "time_s": text, "show_statistics": comparison.Settings.ShowStatistics, "show_overlay": comparison.Settings.ShowOverlay}, state.CommandRevision)
 	}))
+	nodes = append(nodes, ui.Node{ID: "recorded-compare-overlay", Kind: ui.Checkbox, Text: "Overlay reference", Checked: comparison.Settings.ShowOverlay, Accessibility: ui.Accessibility{Name: "Overlay captured reference B", Help: "A solid, B dashed; original captured seconds with shared voltage/current axes. No alignment or extrapolation. Plot cursors stay on selected A."}, Change: func(e ui.ChangeEvent) {
+		next := workbench.RecordingCompareParams(comparison.Settings)
+		next.ShowOverlay = e.Checked
+		s.invoke("recording.compare.set", next)
+	}})
+	if overlay := r.ReferenceOverlay; overlay != nil {
+		nodes = append(nodes, quiet("recorded-reference-identity", fmt.Sprintf("A solid · %s\nB dashed · %s\nCaptured seconds from startup\nB %.5g s · step %.5g ms", r.ID, overlay.ID, overlay.Duration, overlay.Step*1000)))
+		if !overlay.Scope.WindowValid {
+			nodes = append(nodes, quiet("recorded-reference-unavailable", overlay.Scope.WindowReason))
+		} else if overlay.PlotReduced {
+			nodes = append(nodes, quiet("recorded-reference-reduction", "Reference plot uses bucket extrema.\nExact captured rows stay unchanged."))
+		}
+	}
 	if !comparison.Available {
 		return append(nodes, quiet("recorded-compare-unavailable", comparison.Reason))
 	}

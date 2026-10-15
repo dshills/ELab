@@ -25,23 +25,24 @@ type RecordingWindowParams struct {
 	End   float64 `json:"end_s"`
 }
 type RecordingView struct {
-	Timing        *RecordingTiming      `json:"timing,omitempty"`
-	Comparison    *RecordingComparison  `json:"comparison,omitempty"`
-	ID            string                `json:"id"`
-	OriginID      string                `json:"origin_id"`
-	Imported      bool                  `json:"imported"`
-	Viewing       bool                  `json:"viewing"`
-	Playing       bool                  `json:"playing"`
-	Speed         float64               `json:"seconds_per_wall_second"`
-	Index         int                   `json:"sample_index"`
-	Time          float64               `json:"time_s"`
-	Duration      float64               `json:"duration_s"`
-	Step          float64               `json:"sample_step_s"`
-	Total         int                   `json:"sample_count"`
-	WindowSamples int                   `json:"window_sample_count"`
-	PlotReduced   bool                  `json:"plot_reduced"`
-	Scope         Scope                 `json:"scope"`
-	Readings      []VerificationReading `json:"readings"`
+	ReferenceOverlay *RecordingOverlay     `json:"reference_overlay,omitempty"`
+	Timing           *RecordingTiming      `json:"timing,omitempty"`
+	Comparison       *RecordingComparison  `json:"comparison,omitempty"`
+	ID               string                `json:"id"`
+	OriginID         string                `json:"origin_id"`
+	Imported         bool                  `json:"imported"`
+	Viewing          bool                  `json:"viewing"`
+	Playing          bool                  `json:"playing"`
+	Speed            float64               `json:"seconds_per_wall_second"`
+	Index            int                   `json:"sample_index"`
+	Time             float64               `json:"time_s"`
+	Duration         float64               `json:"duration_s"`
+	Step             float64               `json:"sample_step_s"`
+	Total            int                   `json:"sample_count"`
+	WindowSamples    int                   `json:"window_sample_count"`
+	PlotReduced      bool                  `json:"plot_reduced"`
+	Scope            Scope                 `json:"scope"`
+	Readings         []VerificationReading `json:"readings"`
 }
 
 type recordingState struct {

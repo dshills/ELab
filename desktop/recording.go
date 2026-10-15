@@ -151,6 +151,9 @@ func (s *screen) recordingPanel(state workbench.Snapshot) ui.Node {
 		s.invoke("recording.speed.set", workbench.RecordingPlayParams{Speed: float64(e.Number)})
 	}}}
 	legend := []string{}
+	if r.ReferenceOverlay != nil {
+		legend = append(legend, "A solid · B dashed")
+	}
 	for i, trace := range r.Scope.Traces {
 		legend = append(legend, scopeProbeColors(r.Scope.Traces)[i]+": "+trace.Probe.Label)
 	}

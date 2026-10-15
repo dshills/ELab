@@ -1,0 +1,61 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.67.0",
+  "build_version": "82",
+  "binary_sha256": "5e449fa35431be19ab5a7cdb7d142398b659e34b1b3cb71bdc45d976b2c3e0ba",
+  "agent_binary_sha256": "9e8b353cdedf8711af686997bc99d827eeabc16291c2ff6978b34df91babf754",
+  "sdk_commit": "8101822c3a4935080e9b25b591f899cdd88d6768",
+  "sdk_manifest_sha256": "2350790e5e9aa333f7ffc3c45a512972ea3be95125465dcb2da0f2b62c155bfe",
+  "prepared_sdk_outputs_verified": 21,
+  "checks": [
+    "Optional shared show_overlay preference publishes exact bounded captured B traces while viewing recorded A; no new command or file format",
+    "Matching IDs/units/signed terminal references, A channel order/window, original sample times, shorter references, empty intervals and unreduced ideal edge sides are preserved",
+    "Independent 128-bucket extrema reduction bounds each reference trace to 258 original points; exact full rows stay available; snapshot/retry copies are owned",
+    "Native reference uses a dashed style and shared V/A axes; dash tessellation bounded under oscillatory paths; cursor measurements remain on selected A",
+    "Preexisting max(step,interval) scaling reproduces misplaced endpoint cursor on a sub-step visible interval; positive intervals now span the labeled axis width",
+    "Native settings/time/statistics and reference identity use the same commands/data as agents; actual packaged GPU scope readback changes after overlay callback",
+    "Public headless/native reports match except transport: analytic RC, independent rates/durations, narrow/empty intervals, pulse edges, query/live/history/dirty purity and rebuilt reopened data",
+    "Full serialized root/native lint/import/race/vet, portable overlay/comparison/discovery tests, exact packaged GPU smoke and all four existing reference adapters pass"
+  ],
+  "evidence": [
+    "docs/recording-comparison.md#overlay-the-reference",
+    "workbench/recording_overlay_test.go",
+    "desktop/scope_overlay_test.go",
+    "desktop/recording_compare_test.go",
+    "desktop/recording_overlay_smoke.go",
+    "scripts/recording-overlay-demo.py",
+    "docs/validation/headless-recording-overlay.json",
+    "docs/validation/desktop-recording-overlay.json",
+    "docs/validation/recording-overlay-public-parity.json",
+    "docs/validation/recording-overlay-conformance.json"
+  ],
+  "logs": {
+    "narrow_window_regression_before_repair": "5c3440ea1ba79d939e02d61e326603ab5684cbc5b814c490199306fa7577e41a",
+    "full_quality": "8d841d9593cddcad8bb1e3bcbfe98e52e89da2bf581490414b22af686a4c7b03",
+    "portable": "7400520215ff49bb0190afaf04e9311ffbc13e74eac09361e1ffc3d4410b7d68",
+    "native_focus": "6926ccd4dd5a5c8bc9bc1b89aaf6e8138308fb2adddb7d323d5ea06ff87b8218",
+    "packaged_gpu_smoke": "5431abf7d749dcbcca3679d807be414e0073ae221e434d38acfdb82be4b7ba80"
+  },
+  "inventory": {
+    "sources": 42,
+    "sites": 342,
+    "public_commands": 144,
+    "source_routes": 118,
+    "binding_review_sites": 126
+  },
+  "notes": [
+    "Same plot data exposed in shared state; pure comparison query echoes viewer preferences without changing any viewer",
+    "No extrapolated/interpolated sample values, time alignment or numerical-kernel changes; dashed connecting geometry is presentation only",
+    "Comparison preferences are session-only; saved underlying captures reopen unchanged and rebuild identical reference data",
+    "SDK unchanged/clean, manifest and 21 prepared hashes verified read-only; candidate/build/canonical hashes equal",
+    "Prior .66/81 preserved at build/ELab-before-recording-overlay.app; all owned native sessions exited"
+  ],
+  "limits": [
+    "Fresh GPU frame difference is a rendering check, not a complete human visual/accessibility or mounted physical-input audit",
+    "Plot reduction may omit individual samples/edges; exact full captured rows/cursors and table readings retain their existing contracts",
+    "Probe correspondence does not establish equal wiring/models/startup; no cross-run cursor or hardware equivalence claim",
+    "Full painted-gesture/focus/IME/accessibility, broader visible latency/distribution/participant and physical printing/device acceptance remain open",
+    "Private unsigned app; P0 remains 17 implemented /10 partial and continuing goal stays active"
+  ]
+}

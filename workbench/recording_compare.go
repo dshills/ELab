@@ -8,6 +8,7 @@ import (
 // Comparison is session/view state; its inputs always name retained captures.
 // An empty reference clears the configured comparison (set command only).
 type RecordingCompareParams struct {
+	ShowOverlay    bool    `json:"show_overlay,omitempty"`
 	ShowStatistics bool    `json:"show_statistics,omitempty"`
 	ID             string  `json:"id"`
 	ReferenceID    string  `json:"reference_id"`
@@ -78,7 +79,7 @@ func (s *Service) compareRecordingsLocked(p RecordingCompareParams) (*RecordingC
 		for j, b := range records[1].metadata.Probes {
 			// Labels are presentation. Polarity/reference and units are electrical
 			// identity; equal display names alone never establish a comparable reading.
-			if a.ID == b.ID && a.Unit == b.Unit && a.Positive == b.Positive && a.Reference == b.Reference {
+			if sameComparisonProbe(a, b) {
 				found = j
 				break
 			}
@@ -101,6 +102,10 @@ func (s *Service) compareRecordingsLocked(p RecordingCompareParams) (*RecordingC
 		out.Reason = "No captured probes share the same ID, units and terminal references"
 	}
 	return out, nil
+}
+
+func sameComparisonProbe(a, b Probe) bool {
+	return a.ID == b.ID && a.Unit == b.Unit && a.Positive == b.Positive && a.Reference == b.Reference
 }
 func (s *Service) setRecordingComparisonLocked(raw json.RawMessage) error {
 	var p RecordingCompareParams
@@ -168,7 +173,9 @@ func addRecordingComparisonDetails(id string, schema map[string]any) bool {
 	time["x-normalized-si-range"] = map[string]float64{"minimum": 0, "maximum": 10}
 	schema["x-relations"] = []map[string]any{{"operator": "within-both-captured-durations", "fields": []string{"id", "reference_id", "time_s"}, "except": "empty reference clears set command"}}
 	schema["x-inventory"] = map[string]string{"ids": "snapshot.operations with status completed"}
-	schema["x-command-contract"] = commandContractDetail{Version: 1, Scope: "captured-record-comparison", Preconditions: []string{"Distinct retained completed IDs; exact probe IDs, units and terminal references establish matching readings, not circuit/model equivalence", "time_s within both durations; no clamping or extrapolation", "Set command ID must match current selection; empty reference clears; selecting any operation clears comparison"}, Effects: []string{"Exact nearest stored rows; later/right-hand ties; no interpolation, solver work or live/history/project changes", "B minus A uses independently selected actual sample times; whole-record sample statistics retain each capture's resolution and duration", "Query is pure; set updates only session viewer configuration, including optional statistics display"}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Malformed input, same IDs or time outside either duration"}, {"not-ready", "admission", "Either capture is unavailable or incomplete"}, {"conflict", "admission", "Set command names a changed selected recording"}}, Completion: &commandCompletionDetail{Mode: "bounded immediate in-memory comparison; no worker or file IO", Observe: []string{"recording.compare", "project.inspect"}}}
+	inputProperty(schema, "show_overlay")["description"] = "Set-only viewer preference: plot matched reference channels on the selected recording's visible interval, at original absolute captured times. No alignment/extrapolation. Read snapshot.recording.reference_overlay while viewing recorded data. Query echoes the preference without changing a viewer."
+	schema["x-max-reference-points-per-trace"] = 2*RecordingPlotBuckets + 2
+	schema["x-command-contract"] = commandContractDetail{Version: 1, Scope: "captured-record-comparison", Preconditions: []string{"Distinct retained completed IDs; exact probe IDs, units and terminal references establish matching readings, not circuit/model equivalence", "time_s within both durations; no clamping or extrapolation", "Set command ID must match current selection; empty reference clears; selecting any operation clears comparison"}, Effects: []string{"Exact nearest stored rows; later/right-hand ties; no interpolation, solver work or live/history/project changes", "B minus A uses independently selected actual sample times; whole-record sample statistics retain each capture's resolution and duration", "Query is pure; set updates only session viewer configuration, including optional statistics display", "Optional show_overlay publishes bounded matching B traces on A visible absolute time interval; no alignment or extrapolation; plot cursors remain on A"}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Malformed input, same IDs or time outside either duration"}, {"not-ready", "admission", "Either capture is unavailable or incomplete"}, {"conflict", "admission", "Set command names a changed selected recording"}}, Completion: &commandCompletionDetail{Mode: "bounded immediate in-memory comparison; no worker or file IO", Observe: []string{"recording.compare", "project.inspect"}}}
 	schema["examples"] = []any{RecordingCompareParams{ID: "verify-2", ReferenceID: "verify-1", Time: .01}}
 	return true
 }

@@ -67,6 +67,18 @@ func nativeRecordingComparisonSmoke(ctx context.Context, a *app.Application, s *
 			result <- fmt.Errorf("comparison time labels absent")
 			return
 		}
+		result <- nil
+	}); err != nil {
+		return err
+	}
+	if err := <-result; err != nil {
+		return err
+	}
+	if err := nativeRecordingOverlaySmoke(ctx, a, s, reference); err != nil {
+		return err
+	}
+	if err := a.PostWait(ctx, func() {
+		state := s.service.Snapshot()
 		beforeTiming := s.service.Snapshot()
 		probe := beforeTiming.Recording.Scope.Available[0].ID
 		for _, action := range []struct {

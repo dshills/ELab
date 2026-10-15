@@ -106,6 +106,9 @@ func (s *Service) recordingViewLocked() *RecordingView {
 	}
 	out.Scope = scope
 	out.Comparison = s.recordingComparisonViewLocked()
+	if out.Viewing && out.Comparison != nil && out.Comparison.Settings.ShowOverlay {
+		out.ReferenceOverlay = s.recordingOverlayLocked(out)
+	}
 	out.Timing = cloneRecordingTiming(s.recording.timing)
 	return out
 }
@@ -149,6 +152,7 @@ func cloneRecordingView(view *RecordingView) *RecordingView {
 	out := *view
 	out.Scope = cloneScope(view.Scope)
 	out.Comparison = cloneRecordingComparison(view.Comparison)
+	out.ReferenceOverlay = cloneRecordingOverlay(view.ReferenceOverlay)
 	out.Timing = cloneRecordingTiming(view.Timing)
 	out.Readings = append([]VerificationReading{}, view.Readings...)
 	return &out

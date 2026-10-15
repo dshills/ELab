@@ -66,9 +66,13 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	stale := false
 	events := []workbench.InputEvent{}
 	recorded := state.Recording != nil && state.Recording.Viewing
+	var reference []workbench.ScopeTrace
 	if recorded {
 		plot = state.Recording.Scope
 		step = state.Recording.Step
+		if overlay := state.Recording.ReferenceOverlay; overlay != nil && overlay.Scope.WindowValid {
+			reference = overlay.Scope.Traces
+		}
 	} else if t != nil {
 		stale = t.Stale
 		events = t.Events
@@ -92,23 +96,11 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 		return canvas.NewMesh(nil, nil)
 	}
 	first, last := plot.Window.Start, plot.Window.End
-	span := math.Max(step, last-first)
-	vmin, vmax, imin, imax := 0., 1., 0., 1.
-	for _, trace := range plot.Traces {
-		for _, p := range trace.Points {
-			if trace.Probe.Unit == "A" {
-				imin = math.Min(imin, p.Value*1000)
-				imax = math.Max(imax, p.Value*1000)
-			} else {
-				vmin = math.Min(vmin, p.Value)
-				vmax = math.Max(vmax, p.Value)
-			}
-		}
+	span := last - first
+	if span <= 0 {
+		span = step // A DC operating point has no time extent.
 	}
-	vmin = math.Floor(vmin)
-	vmax = math.Ceil(vmax)
-	imin = math.Floor(imin)
-	imax = math.Ceil(imax)
+	vmin, vmax, imin, imax := scopeRanges(plot.Traces, reference)
 	grid := palette.Grid
 	for i := 0; i <= 4; i++ {
 		fraction := float64(i) / 4
@@ -136,6 +128,30 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 		} else if len(points) == 1 {
 			p := points[0]
 			line(c, 3, canvas.Point{X: p.X - 2, Y: p.Y}, canvas.Point{X: p.X + 2, Y: p.Y})
+		}
+	}
+	for _, trace := range reference {
+		points := []canvas.Point{}
+		for _, p := range trace.Points {
+			fraction := (p.Value - vmin) / (vmax - vmin)
+			if trace.Probe.Unit == "A" {
+				fraction = (p.Value*1000 - imin) / (imax - imin)
+			}
+			points = append(points, canvas.Point{X: x(p.Time), Y: bottom - (bottom-top)*fraction})
+		}
+		for i, a := range plot.Traces {
+			if a.Probe.ID != trace.Probe.ID {
+				continue
+			}
+			c := traceColor(probeColor(scopeProbeColors(plot.Traces)[i]), palette)
+			if len(points) == 1 {
+				p := points[0]
+				line(c, 2, canvas.Point{X: p.X - 3, Y: p.Y - 3}, canvas.Point{X: p.X + 3, Y: p.Y + 3})
+				line(c, 2, canvas.Point{X: p.X - 3, Y: p.Y + 3}, canvas.Point{X: p.X + 3, Y: p.Y - 3})
+			} else {
+				dashedScopeLine(points, func(points ...canvas.Point) { line(c, 3, points...) })
+			}
+			break
 		}
 	}
 	if recorded && state.Recording.Time >= first && state.Recording.Time <= last {

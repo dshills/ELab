@@ -30,12 +30,13 @@
     "desktop/printing.go": "00358432a4a2b4e512b24cc0d1d0130060a14097b6050ecf02aed41360ff419f",
     "desktop/probes.go": "3f3ce8e64c6aaba57439b63542f95eed784604bbe555b18a0f303e791c0e9e01",
     "desktop/project_work.go": "4d80b2c111c1d6778844570344479c35d3bfd641840aba0ebbe8f81083c961e1",
-    "desktop/recording.go": "7b217db046d8fbab154974a3bd98dad19af771c9fee565b34c7dc06d9da63156",
-    "desktop/recording_compare.go": "a355d7f0afb9233edc0edbd5f6f2cfa22d0cfa8be2bf004cd486fb87274d6726",
+    "desktop/recording.go": "38ff0d0c3fb240b6187867004a541de04c1c4f3f4797831644b1085e7482f6c8",
+    "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
     "desktop/recording_timing.go": "ea430d33756542c0858afec3272b6b505bfce83a47843f1b64bae365cd717b86",
     "desktop/recovery.go": "1416354a0acb99a61be3d5cdd8838256e5bcd879d116a51a7a507fa271209a8f",
     "desktop/routing.go": "4898c4c1de9d7de3c5f8ad751b15d7c0f199234243f62ec6ea949ee8d9ad2c1c",
-    "desktop/scope.go": "7e77b694cbb2b1e759b5cbffb2c983c6ddd901fcc9780ac499ddd542cebf7b7d",
+    "desktop/scope.go": "a337fdaa91536674b27410e7961ec05067c960e152fdf9e56f7f06a79bfea9f2",
+    "desktop/scope_overlay.go": "90c6ebc19d47b237257d1358c77f6ccd9ba7ac7910cff5d54504ad74c0ea1f38",
     "desktop/scope_visibility.go": "9594a6afdb06c2d612c4a507ac90b9443651d38c4c88005e2af65ff2d3d6c686",
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
     "desktop/time_fields.go": "a20e6b2fc6fc368fabb7fd4defae5fc3083987f94a2beabd1780e7ae9a9264b8",
@@ -2130,7 +2131,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 163,
+      "line": 166,
       "function": "*screen.recordingPanel",
       "kind": "node-Custom",
       "expression": "Custom: s.scope",
@@ -2138,7 +2139,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 173,
+      "line": 176,
       "function": "*screen.recordingCursors",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-cursor-select-\"+c.id, strings.ToUpper(c.id), \"recording.cursor.select\", workbench.CursorSelectParams{Cursor: c.id})",
@@ -2149,7 +2150,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 178,
+      "line": 181,
       "function": "*screen.recordingCursors",
       "kind": "callback-factory",
       "expression": "timeField(\"recorded-cursor-\"+c.id, \"Recorded cursor \"+strings.ToUpper(c.id), at, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.cursor.set\", map[string]any{\"cursor\": c.id, \"time_s\": text}, state.CommandRevision)\n})",
@@ -2157,7 +2158,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 179,
+      "line": 182,
       "function": "*screen.recordingCursors",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.cursor.set\", map[string]any{\"cursor\": c.id, \"time_s\": text}, state.CommandRevision)",
@@ -2168,7 +2169,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 181,
+      "line": 184,
       "function": "*screen.recordingCursors",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-cursor-clear-\"+c.id, \"×\", \"recording.cursor.clear\", workbench.CursorSelectParams{Cursor: c.id})",
@@ -2182,15 +2183,15 @@
       "line": 31,
       "function": "*screen.recordingComparisonControls",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\treference := e.SelectedID\n\tif reference == \"__none\" {\n\t\treference = \"\"\n\t}\n\n\ts.invoke(\"recording.compare.set\", workbench.RecordingCompareParams{ID: r.ID, ReferenceID: reference, Time: 0})\n}",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\treference := e.SelectedID\n\tif reference == \"__none\" {\n\t\treference = \"\"\n\t}\n\n\tnext := workbench.RecordingCompareParams{ID: r.ID, ReferenceID: reference}\n\tif r.Comparison != nil {\n\t\tnext.ShowStatistics = r.Comparison.Settings.ShowStatistics\n\t\tnext.ShowOverlay = r.Comparison.Settings.ShowOverlay\n\t}\n\ts.invoke(\"recording.compare.set\", next)\n}",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/recording_compare.go",
-      "line": 38,
+      "line": 43,
       "function": "*screen.recordingComparisonControls",
       "kind": "domain-ingress",
-      "expression": "s.invoke(\"recording.compare.set\", workbench.RecordingCompareParams{ID: r.ID, ReferenceID: reference, Time: 0})",
+      "expression": "s.invoke(\"recording.compare.set\", next)",
       "public_commands": [
         "recording.compare.set"
       ],
@@ -2198,26 +2199,45 @@
     },
     {
       "file": "desktop/recording_compare.go",
-      "line": 44,
+      "line": 49,
       "function": "*screen.recordingComparisonControls",
       "kind": "callback-factory",
-      "expression": "timeField(\"recorded-compare-time\", \"Requested comparison time\", at, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.compare.set\", map[string]any{\"id\": r.ID, \"reference_id\": comparison.Settings.ReferenceID, \"time_s\": text, \"show_statistics\": comparison.Settings.ShowStatistics}, state.CommandRevision)\n})",
+      "expression": "timeField(\"recorded-compare-time\", \"Requested comparison time\", at, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.compare.set\", map[string]any{\"id\": r.ID, \"reference_id\": comparison.Settings.ReferenceID, \"time_s\": text, \"show_statistics\": comparison.Settings.ShowStatistics, \"show_overlay\": comparison.Settings.ShowOverlay}, state.CommandRevision)\n})",
       "status": "requires-binding-review"
-    },
-    {
-      "file": "desktop/recording_compare.go",
-      "line": 45,
-      "function": "*screen.recordingComparisonControls",
-      "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"recording.compare.set\", map[string]any{\"id\": r.ID, \"reference_id\": comparison.Settings.ReferenceID, \"time_s\": text, \"show_statistics\": comparison.Settings.ShowStatistics}, state.CommandRevision)",
-      "public_commands": [
-        "recording.compare.set"
-      ],
-      "status": "literal-public-route"
     },
     {
       "file": "desktop/recording_compare.go",
       "line": 50,
+      "function": "*screen.recordingComparisonControls",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"recording.compare.set\", map[string]any{\"id\": r.ID, \"reference_id\": comparison.Settings.ReferenceID, \"time_s\": text, \"show_statistics\": comparison.Settings.ShowStatistics, \"show_overlay\": comparison.Settings.ShowOverlay}, state.CommandRevision)",
+      "public_commands": [
+        "recording.compare.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_compare.go",
+      "line": 52,
+      "function": "*screen.recordingComparisonControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := workbench.RecordingCompareParams(comparison.Settings)\n\tnext.ShowOverlay = e.Checked\n\ts.invoke(\"recording.compare.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_compare.go",
+      "line": 55,
+      "function": "*screen.recordingComparisonControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"recording.compare.set\", next)",
+      "public_commands": [
+        "recording.compare.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_compare.go",
+      "line": 68,
       "function": "*screen.recordingComparisonControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := workbench.RecordingCompareParams(comparison.Settings)\n\tnext.ShowStatistics = e.Checked\n\ts.invoke(\"recording.compare.set\", next)\n}",
@@ -2225,7 +2245,7 @@
     },
     {
       "file": "desktop/recording_compare.go",
-      "line": 53,
+      "line": 71,
       "function": "*screen.recordingComparisonControls",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"recording.compare.set\", next)",
@@ -2508,7 +2528,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 213,
+      "line": 229,
       "function": "*screen.scopePanel",
       "kind": "action-factory",
       "expression": "s.action(\"input-\"+mode.id, mode.text, \"simulation.input.set\", workbench.InputParams{Mode: mode.id})",
@@ -2519,7 +2539,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 226,
+      "line": 242,
       "function": "*screen.scopePanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"scope.trace.select\", workbench.IDParams{ID: id})\n}",
@@ -2527,7 +2547,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 231,
+      "line": 247,
       "function": "*screen.scopePanel",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"scope.trace.select\", workbench.IDParams{ID: id})",
@@ -2538,7 +2558,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 233,
+      "line": 249,
       "function": "*screen.scopePanel",
       "kind": "action-factory",
       "expression": "s.action(\"transient-step\", \"Step +1 sample\", \"simulation.step.start\", workbench.StepParams{Duration: state.TransientSettings.StepSeconds})",
@@ -2549,7 +2569,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 235,
+      "line": 251,
       "function": "*screen.scopePanel",
       "kind": "registry-button",
       "expression": "s.button(\"simulation.restart\", \"Restart\")",
@@ -2560,7 +2580,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 244,
+      "line": 260,
       "function": "*screen.scopePanel",
       "kind": "action-factory",
       "expression": "s.action(\"step-work-cancel\", \"Cancel step\", \"simulation.work.cancel\", workbench.IDParams{ID: work.ID})",
@@ -2571,7 +2591,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 265,
+      "line": 281,
       "function": "*screen.scopePanel",
       "kind": "node-Custom",
       "expression": "Custom: s.scope",
@@ -2579,7 +2599,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 314,
+      "line": 330,
       "function": "*screen.transientInspector",
       "kind": "callback-factory",
       "expression": "timeField(\"setting-\"+setting.id, setting.text, setting.value, false, func(text string) {\n\ts.invokeAtCommandRevision(\"simulation.transient.set\", timeParams(cfg, field, text), state.CommandRevision)\n})",
@@ -2587,7 +2607,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 315,
+      "line": 331,
       "function": "*screen.transientInspector",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"simulation.transient.set\", timeParams(cfg, field, text), state.CommandRevision)",
@@ -2598,7 +2618,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 319,
+      "line": 335,
       "function": "*screen.transientInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tsetting.set(\u0026next, float64(e.Number)/setting.scale)\n\ts.invoke(\"simulation.transient.set\", next)\n}",
@@ -2606,7 +2626,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 322,
+      "line": 338,
       "function": "*screen.transientInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"simulation.transient.set\", next)",
