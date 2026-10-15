@@ -21,6 +21,7 @@ type DCCircuit struct {
 	DiodeModel         *DiodeModel         `json:"diode_model,omitempty"`
 	SwitchModel        *SwitchModel        `json:"switch_model,omitempty"`
 	NMOSModel          *NMOSModel          `json:"nmos_model,omitempty"`
+	PMOSModel          *PMOSModel          `json:"pmos_model,omitempty"`
 	PotentiometerModel *PotentiometerModel `json:"potentiometer_model,omitempty"`
 	WaveformModel      *WaveformModel      `json:"waveform_model,omitempty"`
 }
@@ -29,6 +30,9 @@ func dcCircuitSnapshot(g Graph, cfg TransientSettings) DCCircuit {
 	out := DCCircuit{Graph: g.Clone(), Settings: cfg, LEDModel: Model()}
 	for _, p := range g.Components {
 		switch p.Kind {
+		case "pmos":
+			m := PMOSDeviceModel()
+			out.PMOSModel = &m
 		case "nmos":
 			m := NMOSDeviceModel()
 			out.NMOSModel = &m
@@ -54,7 +58,7 @@ func dcCircuitSnapshot(g Graph, cfg TransientSettings) DCCircuit {
 func (c DCCircuit) document() Document {
 	paused := true
 	cfg := c.Settings
-	return Document{Format: DocumentFormat, Version: DocumentVersion, Graph: c.Graph.Clone(), View: View{Zoom: 1}, Paused: &paused, ScopeProbes: &ProbeParams{IDs: []string{}}, TransientSettings: &cfg, LEDModel: c.LEDModel, NPNModel: c.NPNModel, DiodeModel: c.DiodeModel, SwitchModel: c.SwitchModel, NMOSModel: c.NMOSModel, PotentiometerModel: c.PotentiometerModel, WaveformModel: c.WaveformModel, Recordings: &ProjectRecordings{Entries: []ProjectRecording{}, Selected: -1}}
+	return Document{Format: DocumentFormat, Version: DocumentVersion, Graph: c.Graph.Clone(), View: View{Zoom: 1}, Paused: &paused, ScopeProbes: &ProbeParams{IDs: []string{}}, TransientSettings: &cfg, LEDModel: c.LEDModel, NPNModel: c.NPNModel, DiodeModel: c.DiodeModel, SwitchModel: c.SwitchModel, NMOSModel: c.NMOSModel, PMOSModel: c.PMOSModel, PotentiometerModel: c.PotentiometerModel, WaveformModel: c.WaveformModel, Recordings: &ProjectRecordings{Entries: []ProjectRecording{}, Selected: -1}}
 }
 
 type SweepMetadata struct {

@@ -78,6 +78,7 @@ var commonSchemas = []struct {
 	Type reflect.Type
 	ID   string
 }{
+	{reflect.TypeOf(MOSFETModel{}), "urn:elab:mosfet-model:1"},
 	{reflect.TypeOf(NavigateParams{}), "urn:elab:object-navigation:1"},
 	{reflect.TypeOf(CenterSelectionParams{}), "urn:elab:selection-center:1"},
 	{reflect.TypeOf(FitParams{}), "urn:elab:view-fit:1"},

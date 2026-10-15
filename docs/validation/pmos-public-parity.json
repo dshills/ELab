@@ -1,0 +1,89 @@
+{
+  "passed": true,
+  "scope": "Complete PMOS part metadata, place discovery contract/digests and all observations match except transport",
+  "reports": [
+    "headless-pmos.json",
+    "desktop-pmos.json"
+  ],
+  "shared_discovery_witness": "pmos-place-discovery.json",
+  "witness_sha256": "fea127648b6897f6a02f8fbe65df743f7b0cd05dfa58a498d81d7fa688c609ca",
+  "observations": {
+    "manual_matches_template": true,
+    "on": {
+      "id": "M1",
+      "model": {
+        "id": "elab.generic-pmos.v1",
+        "threshold_v": -1.5,
+        "beta_a_per_v2": 0.1,
+        "lambda_per_v": 0.02,
+        "body_diode": {
+          "id": "elab.generic-silicon-diode.v1",
+          "is_a": 1e-09,
+          "n": 1.7,
+          "rs_ohm": 1,
+          "temperature_c": 27,
+          "limitations": "Generic silicon junction with Shockley forward/reverse leakage and finite series resistance; no reverse breakdown, capacitance, charge storage, thermal dynamics, ratings or physical part identity."
+        },
+        "limitations": "Generic enhancement PMOS with square-law channel, channel-length modulation and drain-to-source body diode. Body tied to source; zero gate current. No subthreshold conduction, body effect, gate/junction capacitance, charge storage, switching loss, breakdown, heating, ratings or named device identity. External capacitors provide circuit timing. Same illustrative beta magnitude as the generic NMOS, not a physical matched pair."
+      },
+      "gate_current_a": 0,
+      "drain_current_a": -0.002908619225645868,
+      "source_current_a": -0.002908619225645868,
+      "vgs_v": -4.995004995004995,
+      "vds_v": -0.008330759456666392,
+      "power_w": 2.4231007119890996e-05,
+      "state": "triode"
+    },
+    "off": {
+      "id": "M1",
+      "model": {
+        "id": "elab.generic-pmos.v1",
+        "threshold_v": -1.5,
+        "beta_a_per_v2": 0.1,
+        "lambda_per_v": 0.02,
+        "body_diode": {
+          "id": "elab.generic-silicon-diode.v1",
+          "is_a": 1e-09,
+          "n": 1.7,
+          "rs_ohm": 1,
+          "temperature_c": 27,
+          "limitations": "Generic silicon junction with Shockley forward/reverse leakage and finite series resistance; no reverse breakdown, capacitance, charge storage, thermal dynamics, ratings or physical part identity."
+        },
+        "limitations": "Generic enhancement PMOS with square-law channel, channel-length modulation and drain-to-source body diode. Body tied to source; zero gate current. No subthreshold conduction, body effect, gate/junction capacitance, charge storage, switching loss, breakdown, heating, ratings or named device identity. External capacitors provide circuit timing. Same illustrative beta magnitude as the generic NMOS, not a physical matched pair."
+      },
+      "gate_current_a": 0,
+      "drain_current_a": -1e-09,
+      "source_current_a": -1e-09,
+      "vgs_v": 0,
+      "vds_v": -3.6865451827086986,
+      "power_w": 3.6865451827086988e-09,
+      "state": "cutoff"
+    },
+    "charge_10ms_v": -3.0313945782157403,
+    "charge_reference_v": -3.03240416500873,
+    "discharge_10ms_v": -1.5144794269943551,
+    "discharge_reference_v": -1.513050380445809,
+    "gate_rc_tau_s": 0.00909090909090909,
+    "inverter": [
+      {
+        "input_v": 0,
+        "output_v": 4.998571583241784,
+        "p_drain_a": -0.0004998581583243253,
+        "n_drain_a": 1e-09
+      },
+      {
+        "input_v": 2.5,
+        "output_v": 2.380952380952378,
+        "p_drain_a": -0.05261904861904762,
+        "n_drain_a": 0.052380953380952375
+      },
+      {
+        "input_v": 5,
+        "output_v": 2.856326578355343e-09,
+        "p_drain_a": -1e-09,
+        "n_drain_a": 9.99714367033799e-10
+      }
+    ],
+    "kept_recordings": 1
+  }
+}

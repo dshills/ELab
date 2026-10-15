@@ -13,7 +13,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			sources = append(sources, p)
 		case "capacitor":
 			caps = append(caps, p)
-		case "nmos":
+		case "nmos", "pmos":
 			mos = append(mos, p)
 		case "npn":
 			qs = append(qs, p)
@@ -32,7 +32,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		case "ground":
 			grounds = append(grounds, p)
 		default:
-			return fail("unsupported", "unsupported-model", "The network solver supports sources, resistors, SPST switches, potentiometers, capacitors, diodes, red LEDs, grounded-emitter NPNs and NMOS MOSFETs.", p.ID)
+			return fail("unsupported", "unsupported-model", "The network solver supports sources, resistors, SPST switches, potentiometers, capacitors, diodes, red LEDs, grounded-emitter NPNs and N/P-channel MOSFETs.", p.ID)
 		}
 	}
 	if len(mos) > 0 || len(pots) > 0 || len(diodes) > 0 || len(switches) > 0 || len(caps) == 0 || len(qs) == 0 {
@@ -91,7 +91,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			}
 			for _, b := range p.Terminals[i+1:] {
 				u, v := net(p, a), net(p, b)
-				if u == v && p.Kind != "potentiometer" && !(p.Kind == "nmos" && (a == "gate" || b == "gate")) {
+				if u == v && p.Kind != "potentiometer" && !(IsMOSFETKind(p.Kind) && (a == "gate" || b == "gate")) {
 					return fail("error", "shorted-component", "Remove the short across component "+p.ID+".", p.ID)
 				}
 				adjacency[u] = append(adjacency[u], v)

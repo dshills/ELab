@@ -16,6 +16,8 @@ func partAliases(kind string) []string {
 		return []string{"ideal square wave", "clock"}
 	case "led":
 		return []string{"LED", "light emitting diode", "indicator"}
+	case "pmos":
+		return []string{"MOSFET", "PMOS", "P-channel", "FET", "field effect transistor", "high-side switch"}
 	case "nmos":
 		return []string{"MOSFET", "NMOS", "N-channel", "FET", "field effect transistor", "low-side switch"}
 	case "npn":
@@ -51,6 +53,8 @@ func partLimitations(kind string) string {
 		return SourceWaveformModel().Limitations
 	case "led":
 		return Model().Limitations
+	case "pmos":
+		return PMOSDeviceModel().Limitations
 	case "nmos":
 		return NMOSDeviceModel().Limitations
 	case "npn":

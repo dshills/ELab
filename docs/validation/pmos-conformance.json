@@ -1,0 +1,4558 @@
+{
+  "passed": true,
+  "go_version": "go1.27.2",
+  "platform": "darwin/arm64",
+  "limitations": [
+    "engineering workflow parity on this workstation; not complete native action coverage or participant acceptance",
+    "workflow parity uses shared pinned kernels; optional electrical suite adds independent frozen educational-model references and same-kernel flasher refinement, not real-device/SPICE qualification",
+    "native socket path verifies semantic operations in real app processes; keyboard/focus/screen-reader and visible latency are separate",
+    "all sessions are newly created and owned; pre-existing applications/endpoints are untouched"
+  ],
+  "format": "elab.conformance-summary",
+  "format_version": 1,
+  "raw_report": {
+    "path": "build/pmos-089/conformance/report.json",
+    "sha256": "ff91ee71f5f26d6d12e69b83f50fa43a4ff202d70cc490fa807083608a3c3896"
+  },
+  "reference_workflows": [
+    {
+      "calls": [
+        {
+          "command": "project.inspect",
+          "params": {}
+        },
+        {
+          "command": "capabilities.list",
+          "params": {}
+        },
+        {
+          "command": "parts.list",
+          "params": {}
+        },
+        {
+          "command": "component.place",
+          "params": {
+            "id": "Supply",
+            "kind": "dc-source",
+            "position": {
+              "x": -200,
+              "y": 0
+            },
+            "value": "5 V"
+          }
+        },
+        {
+          "command": "component.place",
+          "params": {
+            "id": "Limit",
+            "kind": "resistor",
+            "position": {
+              "x": 0,
+              "y": -110
+            },
+            "value": "1k"
+          }
+        },
+        {
+          "command": "component.place",
+          "params": {
+            "id": "Light",
+            "kind": "led",
+            "position": {
+              "x": 200,
+              "y": 0
+            }
+          }
+        },
+        {
+          "command": "component.place",
+          "params": {
+            "id": "Earth",
+            "kind": "ground",
+            "position": {
+              "x": 0,
+              "y": 110
+            }
+          }
+        },
+        {
+          "command": "simulation.pause",
+          "params": {}
+        },
+        {
+          "command": "wire.connect",
+          "params": {
+            "from": "Supply.positive",
+            "to": "Limit.1"
+          }
+        },
+        {
+          "command": "wire.connect",
+          "params": {
+            "from": "Limit.2",
+            "to": "Light.anode"
+          }
+        },
+        {
+          "command": "wire.connect",
+          "params": {
+            "from": "Light.cathode",
+            "to": "Earth.reference"
+          }
+        },
+        {
+          "command": "wire.connect",
+          "params": {
+            "from": "Earth.reference",
+            "to": "Supply.negative"
+          }
+        },
+        {
+          "command": "simulation.restart",
+          "params": {}
+        },
+        {
+          "command": "simulation.wait",
+          "params": {}
+        },
+        {
+          "command": "project.inspect",
+          "params": {}
+        },
+        {
+          "command": "simulation.resume",
+          "params": {}
+        },
+        {
+          "command": "component.set",
+          "params": {
+            "id": "Limit",
+            "value": "2k"
+          }
+        },
+        {
+          "command": "simulation.wait",
+          "params": {}
+        },
+        {
+          "command": "simulation.pause",
+          "params": {}
+        },
+        {
+          "command": "project.inspect",
+          "params": {}
+        },
+        {
+          "command": "object.delete",
+          "params": {
+            "id": "W1"
+          }
+        },
+        {
+          "command": "edit.undo",
+          "params": {}
+        },
+        {
+          "command": "simulation.restart",
+          "params": {}
+        },
+        {
+          "command": "simulation.wait",
+          "params": {}
+        },
+        {
+          "command": "measurement.inspect",
+          "params": {
+            "target": {
+              "id": "Light",
+              "kind": "object"
+            }
+          }
+        },
+        {
+          "command": "simulation.verify",
+          "params": {
+            "duration_s": 0
+          }
+        },
+        {
+          "command": "operation.inspect",
+          "params": {
+            "id": "verify-1"
+          }
+        },
+        {
+          "command": "verification.export",
+          "params": {
+            "format": "csv",
+            "id": "verify-1",
+            "path": "<artifacts>/verification.csv"
+          }
+        },
+        {
+          "command": "export.schematic.svg",
+          "params": {
+            "path": "<artifacts>/schematic.svg"
+          }
+        },
+        {
+          "command": "project.save",
+          "params": {
+            "path": "<artifacts>/project.elab"
+          }
+        },
+        {
+          "command": "app.close",
+          "params": {}
+        },
+        {
+          "command": "project.inspect",
+          "params": {}
+        },
+        {
+          "command": "project.load",
+          "params": {
+            "path": "<artifacts>/project.elab"
+          }
+        },
+        {
+          "command": "simulation.wait",
+          "params": {}
+        },
+        {
+          "command": "project.save",
+          "params": {
+            "path": "<artifacts>/reopened.elab"
+          }
+        },
+        {
+          "command": "app.close",
+          "params": {}
+        }
+      ],
+      "name": "led",
+      "commands": [
+        "project.inspect",
+        "capabilities.list",
+        "parts.list",
+        "component.place",
+        "component.place",
+        "component.place",
+        "component.place",
+        "simulation.pause",
+        "wire.connect",
+        "wire.connect",
+        "wire.connect",
+        "wire.connect",
+        "simulation.restart",
+        "simulation.wait",
+        "project.inspect",
+        "simulation.resume",
+        "component.set",
+        "simulation.wait",
+        "simulation.pause",
+        "project.inspect",
+        "object.delete",
+        "edit.undo",
+        "simulation.restart",
+        "simulation.wait",
+        "measurement.inspect",
+        "simulation.verify",
+        "operation.inspect",
+        "verification.export",
+        "export.schematic.svg",
+        "project.save",
+        "app.close",
+        "project.inspect",
+        "project.load",
+        "simulation.wait",
+        "project.save",
+        "app.close"
+      ],
+      "project": {
+        "recordings": {
+          "entries": [
+            {
+              "data": {
+                "metadata": {
+                  "format": "elab.verification",
+                  "version": 1,
+                  "operation_id": "verify-1",
+                  "created_at": "2026-10-15T23:30:58.286897Z",
+                  "input_revision": 21,
+                  "electrical_revision": 12,
+                  "document_generation": 1,
+                  "graph": {
+                    "components": [
+                      {
+                        "id": "Supply",
+                        "kind": "dc-source",
+                        "name": "DC source",
+                        "terminals": [
+                          "positive",
+                          "negative"
+                        ],
+                        "position": {
+                          "x": -200,
+                          "y": 0
+                        },
+                        "value": 5,
+                        "unit": "V",
+                        "model": "ideal-dc.v1",
+                        "rotation": 0
+                      },
+                      {
+                        "id": "Limit",
+                        "kind": "resistor",
+                        "name": "Resistor",
+                        "terminals": [
+                          "1",
+                          "2"
+                        ],
+                        "position": {
+                          "x": 0,
+                          "y": -110
+                        },
+                        "value": 2000,
+                        "unit": "\u03a9",
+                        "model": "ideal-resistor.v1",
+                        "rotation": 0
+                      },
+                      {
+                        "id": "Light",
+                        "kind": "led",
+                        "name": "Red LED",
+                        "terminals": [
+                          "anode",
+                          "cathode"
+                        ],
+                        "position": {
+                          "x": 200,
+                          "y": 0
+                        },
+                        "value": 0,
+                        "model": "elab.generic-red-led.v1",
+                        "rotation": 0
+                      },
+                      {
+                        "id": "Earth",
+                        "kind": "ground",
+                        "name": "Ground",
+                        "terminals": [
+                          "reference"
+                        ],
+                        "position": {
+                          "x": 0,
+                          "y": 110
+                        },
+                        "value": 0,
+                        "model": "ground.v1",
+                        "rotation": 0
+                      }
+                    ],
+                    "wires": [
+                      {
+                        "id": "W1",
+                        "from": "Supply.positive",
+                        "to": "Limit.1",
+                        "connected": true
+                      },
+                      {
+                        "id": "W2",
+                        "from": "Limit.2",
+                        "to": "Light.anode",
+                        "connected": true
+                      },
+                      {
+                        "id": "W3",
+                        "from": "Light.cathode",
+                        "to": "Earth.reference",
+                        "connected": true
+                      },
+                      {
+                        "id": "W4",
+                        "from": "Earth.reference",
+                        "to": "Supply.negative",
+                        "connected": true
+                      }
+                    ]
+                  },
+                  "settings": {
+                    "step_s": 0.001,
+                    "high_s": 0.05,
+                    "low_s": 0.05,
+                    "initial_voltage_v": 0,
+                    "seconds_per_wall_second": 0.02
+                  },
+                  "input_mode": "auto",
+                  "analysis": "DC operating point",
+                  "engine": "elab.series-led-dc.v1",
+                  "led_model": {
+                    "id": "elab.generic-red-led.v1",
+                    "is_a": 1e-20,
+                    "n": 2,
+                    "rs_ohm": 1,
+                    "temperature_c": 27,
+                    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+                  },
+                  "probes": [
+                    {
+                      "id": "i:Light",
+                      "label": "Light current",
+                      "unit": "A",
+                      "positive": "Light.anode",
+                      "reference": "Light.cathode"
+                    },
+                    {
+                      "id": "v:Light",
+                      "label": "Light voltage",
+                      "unit": "V",
+                      "positive": "Light.anode",
+                      "reference": "Light.cathode"
+                    },
+                    {
+                      "id": "v:Limit",
+                      "label": "Limit voltage",
+                      "unit": "V",
+                      "positive": "Limit.1",
+                      "reference": "Limit.2"
+                    },
+                    {
+                      "id": "v:Supply",
+                      "label": "Supply voltage",
+                      "unit": "V",
+                      "positive": "Supply.positive",
+                      "reference": "Supply.negative"
+                    }
+                  ],
+                  "duration_s": 0,
+                  "sample_count": 1,
+                  "statistics": [
+                    {
+                      "probe_id": "i:Light",
+                      "count": 1,
+                      "min": 0.001476723549138745,
+                      "max": 0.001476723549138745,
+                      "sample_mean": 0.001476723549138745,
+                      "sample_rms": 0.001476723549138745
+                    },
+                    {
+                      "probe_id": "v:Light",
+                      "count": 1,
+                      "min": 2.04655290172251,
+                      "max": 2.04655290172251,
+                      "sample_mean": 2.04655290172251,
+                      "sample_rms": 2.04655290172251
+                    },
+                    {
+                      "probe_id": "v:Limit",
+                      "count": 1,
+                      "min": 2.95344709827749,
+                      "max": 2.95344709827749,
+                      "sample_mean": 2.95344709827749,
+                      "sample_rms": 2.95344709827749
+                    },
+                    {
+                      "probe_id": "v:Supply",
+                      "count": 1,
+                      "min": 5,
+                      "max": 5,
+                      "sample_mean": 5,
+                      "sample_rms": 5
+                    }
+                  ],
+                  "led": {
+                    "run_id": 1,
+                    "electrical_revision": 12,
+                    "engine": "elab.series-led-dc.v1",
+                    "model": {
+                      "id": "elab.generic-red-led.v1",
+                      "is_a": 1e-20,
+                      "n": 2,
+                      "rs_ohm": 1,
+                      "temperature_c": 27,
+                      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+                    },
+                    "current_a": 0.001476723549138745,
+                    "led_voltage_v": 2.04655290172251,
+                    "resistor_voltage_v": 2.95344709827749,
+                    "led_power_w": 0.0030221928645318623,
+                    "resistor_power_w": 0.004361424881161862,
+                    "kvl_residual_v": -1.249000902703301e-16,
+                    "node_voltage_v": {
+                      "ground": 0,
+                      "led-anode": 2.04655290172251,
+                      "net:Earth.reference": 0,
+                      "net:Light.anode": 2.04655290172251,
+                      "net:Limit.1": 5,
+                      "supply": 5
+                    },
+                    "stale": false,
+                    "source_id": "Supply",
+                    "resistor_id": "Limit",
+                    "led_id": "Light"
+                  }
+                },
+                "rows": [
+                  {
+                    "time_s": 0,
+                    "values": [
+                      0.001476723549138745,
+                      2.04655290172251,
+                      2.95344709827749,
+                      5
+                    ]
+                  }
+                ]
+              },
+              "model_sha256": {
+                "elab.generic-red-led.v1": "c6f2e595c1d7aaa1c798d162a4682042475b4c292de998186fa0c055b2b9aa6f",
+                "ground.v1": "b981a78784d6912d59e83a9e85420a718029deefbbafb1b8a8f292777bcf3240",
+                "ideal-dc.v1": "e55cf05c148010feee1e9a583a1670290dd6c78f5279e80fe289d5121e9f2d74",
+                "ideal-resistor.v1": "dd642b275801f7c71c0ebfa9f6f03bc44a8be35d97c7b04ab96bb4278908f4ee"
+              }
+            }
+          ],
+          "selected_index": 0,
+          "viewing": false
+        },
+        "paused": true,
+        "scope_probes": {
+          "ids": []
+        },
+        "format": "elab.schematic",
+        "version": 4,
+        "graph": {
+          "components": [
+            {
+              "id": "Supply",
+              "kind": "dc-source",
+              "name": "DC source",
+              "terminals": [
+                "positive",
+                "negative"
+              ],
+              "position": {
+                "x": -200,
+                "y": 0
+              },
+              "value": 5,
+              "unit": "V",
+              "model": "ideal-dc.v1",
+              "rotation": 0
+            },
+            {
+              "id": "Limit",
+              "kind": "resistor",
+              "name": "Resistor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 0,
+                "y": -110
+              },
+              "value": 2000,
+              "unit": "\u03a9",
+              "model": "ideal-resistor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "Light",
+              "kind": "led",
+              "name": "Red LED",
+              "terminals": [
+                "anode",
+                "cathode"
+              ],
+              "position": {
+                "x": 200,
+                "y": 0
+              },
+              "value": 0,
+              "model": "elab.generic-red-led.v1",
+              "rotation": 0
+            },
+            {
+              "id": "Earth",
+              "kind": "ground",
+              "name": "Ground",
+              "terminals": [
+                "reference"
+              ],
+              "position": {
+                "x": 0,
+                "y": 110
+              },
+              "value": 0,
+              "model": "ground.v1",
+              "rotation": 0
+            }
+          ],
+          "wires": [
+            {
+              "id": "W1",
+              "from": "Supply.positive",
+              "to": "Limit.1",
+              "connected": true
+            },
+            {
+              "id": "W2",
+              "from": "Limit.2",
+              "to": "Light.anode",
+              "connected": true
+            },
+            {
+              "id": "W3",
+              "from": "Light.cathode",
+              "to": "Earth.reference",
+              "connected": true
+            },
+            {
+              "id": "W4",
+              "from": "Earth.reference",
+              "to": "Supply.negative",
+              "connected": true
+            }
+          ]
+        },
+        "view": {
+          "center": {
+            "x": 0,
+            "y": 0
+          },
+          "zoom": 1
+        },
+        "led_model": {
+          "id": "elab.generic-red-led.v1",
+          "is_a": 1e-20,
+          "n": 2,
+          "rs_ohm": 1,
+          "temperature_c": 27,
+          "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+        },
+        "transient_settings": {
+          "step_s": 0.001,
+          "high_s": 0.05,
+          "low_s": 0.05,
+          "initial_voltage_v": 0,
+          "seconds_per_wall_second": 0.02
+        }
+      },
+      "measurements_si": {
+        "current_1k_a": 0.0029167965774405296,
+        "current_2k_a": 0.001476723549138745,
+        "inspect:i:Light": 0.001476723549138745,
+        "inspect:v:Light": 2.04655290172251,
+        "inspect:v:Light.anode": 2.04655290172251,
+        "inspect:v:Light.cathode": 0,
+        "verify-max:i:Light": 0.001476723549138745,
+        "verify-max:v:Light": 2.04655290172251,
+        "verify-max:v:Limit": 2.95344709827749,
+        "verify-max:v:Supply": 5,
+        "verify-min:i:Light": 0.001476723549138745,
+        "verify-min:v:Light": 2.04655290172251,
+        "verify-min:v:Limit": 2.95344709827749,
+        "verify-min:v:Supply": 5
+      },
+      "checks": [
+        "empty owned session; discovered models/pins/connectivity",
+        "value experiment and accepted SI measurements",
+        "introduced disconnected wire; stale diagnostics; undo repair",
+        "bounded recorded verification and SVG/CSV exports",
+        "save; structured close; fresh session reopen; semantic document equality"
+      ]
+    },
+    {
+      "calls": [
+        {
+          "command": "project.inspect",
+          "params": {}
+        },
+        {
+          "command": "capabilities.list",
+          "params": {}
+        },
+        {
+          "command": "parts.list",
+          "params": {}
+        },
+        {
+          "command": "component.place",
+          "params": {
+            "id": "Supply",
+            "kind": "pulse-source",
+            "position": {
+              "x": -200,
+              "y": 0
+            },
+            "value": "5 V"
+          }
+        },
+        {
+          "command": "component.place",
+          "params": {
+            "id": "Limit",
+            "kind": "resistor",
+            "position": {
+              "x": 0,
+              "y": -110
+            },
+            "value": "10k"
+          }
+        },
+        {
+          "command": "component.place",
+          "params": {
+            "id": "Storage",
+            "kind": "capacitor",
+            "position": {
+              "x": 200,
+              "y": 0
+            },
+            "value": "1uF"
+          }
+        },
+        {
+          "command": "component.place",
+          "params": {
+            "id": "Earth",
+            "kind": "ground",
+            "position": {
+              "x": 0,
+              "y": 110
+            }
+          }
+        },
+        {
+          "command": "simulation.pause",
+          "params": {}
+        },
+        {
+          "command": "wire.connect",
+          "params": {
+            "from": "Supply.positive",
+            "to": "Limit.1"
+          }
+        },
+        {
+          "command": "wire.connect",
+          "params": {
+            "from": "Limit.2",
+            "to": "Storage.1"
+          }
+        },
+        {
+          "command": "wire.connect",
+          "params": {
+            "from": "Storage.2",
+            "to": "Earth.reference"
+          }
+        },
+        {
+          "command": "wire.connect",
+          "params": {
+            "from": "Earth.reference",
+            "to": "Supply.negative"
+          }
+        },
+        {
+          "command": "simulation.restart",
+          "params": {}
+        },
+        {
+          "command": "simulation.wait",
+          "params": {}
+        },
+        {
+          "command": "simulation.step",
+          "params": {
+            "duration_s": 0.01
+          }
+        },
+        {
+          "command": "component.set",
+          "params": {
+            "id": "Limit",
+            "value": "20k"
+          }
+        },
+        {
+          "command": "simulation.restart",
+          "params": {}
+        },
+        {
+          "command": "simulation.wait",
+          "params": {}
+        },
+        {
+          "command": "simulation.step",
+          "params": {
+            "duration_s": 0.01
+          }
+        },
+        {
+          "command": "component.set",
+          "params": {
+            "id": "Limit",
+            "value": "10k"
+          }
+        },
+        {
+          "command": "project.inspect",
+          "params": {}
+        },
+        {
+          "command": "object.delete",
+          "params": {
+            "id": "W1"
+          }
+        },
+        {
+          "command": "edit.undo",
+          "params": {}
+        },
+        {
+          "command": "simulation.restart",
+          "params": {}
+        },
+        {
+          "command": "simulation.wait",
+          "params": {}
+        },
+        {
+          "command": "measurement.inspect",
+          "params": {
+            "target": {
+              "id": "Storage",
+              "kind": "object"
+            }
+          }
+        },
+        {
+          "command": "scope.probes.set",
+          "params": {
+            "ids": [
+              "v:Storage.1",
+              "i:Limit"
+            ]
+          }
+        },
+        {
+          "command": "simulation.step",
+          "params": {
+            "duration_s": 0.01
+          }
+        },
+        {
+          "command": "scope.cursor.set",
+          "params": {
+            "cursor": "a",
+            "time_s": 0
+          }
+        },
+        {
+          "command": "scope.cursor.set",
+          "params": {
+            "cursor": "b",
+            "time_s": 0.01
+          }
+        },
+        {
+          "command": "project.inspect",
+          "params": {}
+        },
+        {
+          "command": "export.scope.csv",
+          "params": {
+            "path": "<artifacts>/scope.csv"
+          }
+        },
+        {
+          "command": "simulation.verify",
+          "params": {
+            "duration_s": 0.2
+          }
+        },
+        {
+          "command": "operation.inspect",
+          "params": {
+            "id": "verify-1"
+          }
+        },
+        {
+          "command": "operation.inspect",
+          "params": {
+            "id": "verify-1"
+          }
+        },
+        {
+          "command": "verification.export",
+          "params": {
+            "format": "csv",
+            "id": "verify-1",
+            "path": "<artifacts>/verification.csv"
+          }
+        },
+        {
+          "command": "export.schematic.svg",
+          "params": {
+            "path": "<artifacts>/schematic.svg"
+          }
+        },
+        {
+          "command": "project.save",
+          "params": {
+            "path": "<artifacts>/project.elab"
+          }
+        },
+        {
+          "command": "app.close",
+          "params": {}
+        },
+        {
+          "command": "project.inspect",
+          "params": {}
+        },
+        {
+          "command": "project.load",
+          "params": {
+            "path": "<artifacts>/project.elab"
+          }
+        },
+        {
+          "command": "simulation.wait",
+          "params": {}
+        },
+        {
+          "command": "project.save",
+          "params": {
+            "path": "<artifacts>/reopened.elab"
+          }
+        },
+        {
+          "command": "app.close",
+          "params": {}
+        }
+      ],
+      "name": "rc",
+      "commands": [
+        "project.inspect",
+        "capabilities.list",
+        "parts.list",
+        "component.place",
+        "component.place",
+        "component.place",
+        "component.place",
+        "simulation.pause",
+        "wire.connect",
+        "wire.connect",
+        "wire.connect",
+        "wire.connect",
+        "simulation.restart",
+        "simulation.wait",
+        "simulation.step",
+        "component.set",
+        "simulation.restart",
+        "simulation.wait",
+        "simulation.step",
+        "component.set",
+        "project.inspect",
+        "object.delete",
+        "edit.undo",
+        "simulation.restart",
+        "simulation.wait",
+        "measurement.inspect",
+        "scope.probes.set",
+        "simulation.step",
+        "scope.cursor.set",
+        "scope.cursor.set",
+        "project.inspect",
+        "export.scope.csv",
+        "simulation.verify",
+        "operation.inspect",
+        "operation.inspect",
+        "verification.export",
+        "export.schematic.svg",
+        "project.save",
+        "app.close",
+        "project.inspect",
+        "project.load",
+        "simulation.wait",
+        "project.save",
+        "app.close"
+      ],
+      "project": {
+        "recordings": {
+          "entries": [
+            {
+              "data": {
+                "metadata": {
+                  "format": "elab.verification",
+                  "version": 1,
+                  "operation_id": "verify-1",
+                  "created_at": "2026-10-15T23:30:58.351365Z",
+                  "input_revision": 39,
+                  "electrical_revision": 13,
+                  "document_generation": 1,
+                  "graph": {
+                    "components": [
+                      {
+                        "id": "Supply",
+                        "kind": "pulse-source",
+                        "name": "Pulse source",
+                        "terminals": [
+                          "positive",
+                          "negative"
+                        ],
+                        "position": {
+                          "x": -200,
+                          "y": 0
+                        },
+                        "value": 5,
+                        "unit": "V",
+                        "model": "ideal-square.v1",
+                        "rotation": 0
+                      },
+                      {
+                        "id": "Limit",
+                        "kind": "resistor",
+                        "name": "Resistor",
+                        "terminals": [
+                          "1",
+                          "2"
+                        ],
+                        "position": {
+                          "x": 0,
+                          "y": -110
+                        },
+                        "value": 10000,
+                        "unit": "\u03a9",
+                        "model": "ideal-resistor.v1",
+                        "rotation": 0
+                      },
+                      {
+                        "id": "Storage",
+                        "kind": "capacitor",
+                        "name": "Capacitor",
+                        "terminals": [
+                          "1",
+                          "2"
+                        ],
+                        "position": {
+                          "x": 200,
+                          "y": 0
+                        },
+                        "value": 1e-06,
+                        "unit": "F",
+                        "model": "ideal-capacitor.v1",
+                        "rotation": 0
+                      },
+                      {
+                        "id": "Earth",
+                        "kind": "ground",
+                        "name": "Ground",
+                        "terminals": [
+                          "reference"
+                        ],
+                        "position": {
+                          "x": 0,
+                          "y": 110
+                        },
+                        "value": 0,
+                        "model": "ground.v1",
+                        "rotation": 0
+                      }
+                    ],
+                    "wires": [
+                      {
+                        "id": "W1",
+                        "from": "Supply.positive",
+                        "to": "Limit.1",
+                        "connected": true
+                      },
+                      {
+                        "id": "W2",
+                        "from": "Limit.2",
+                        "to": "Storage.1",
+                        "connected": true
+                      },
+                      {
+                        "id": "W3",
+                        "from": "Storage.2",
+                        "to": "Earth.reference",
+                        "connected": true
+                      },
+                      {
+                        "id": "W4",
+                        "from": "Earth.reference",
+                        "to": "Supply.negative",
+                        "connected": true
+                      }
+                    ]
+                  },
+                  "settings": {
+                    "step_s": 0.001,
+                    "high_s": 0.05,
+                    "low_s": 0.05,
+                    "initial_voltage_v": 0,
+                    "seconds_per_wall_second": 0.02
+                  },
+                  "input_mode": "auto",
+                  "analysis": "RC transient",
+                  "engine": "elab.ideal-rc-exact.v1",
+                  "led_model": {
+                    "id": "elab.generic-red-led.v1",
+                    "is_a": 1e-20,
+                    "n": 2,
+                    "rs_ohm": 1,
+                    "temperature_c": 27,
+                    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+                  },
+                  "probes": [
+                    {
+                      "id": "v:Storage.1",
+                      "label": "Storage.1 / ground",
+                      "unit": "V",
+                      "positive": "Storage.1",
+                      "reference": "ground"
+                    },
+                    {
+                      "id": "i:Limit",
+                      "label": "Limit current",
+                      "unit": "A",
+                      "positive": "Limit.1",
+                      "reference": "Limit.2"
+                    }
+                  ],
+                  "duration_s": 0.2,
+                  "sample_count": 209,
+                  "statistics": [
+                    {
+                      "probe_id": "v:Storage.1",
+                      "count": 209,
+                      "min": 0,
+                      "max": 4.966535735141783,
+                      "sample_mean": 2.486513668610153,
+                      "sample_rms": 3.173240140582658
+                    },
+                    {
+                      "probe_id": "i:Limit",
+                      "count": 209,
+                      "min": -0.0004966535735141783,
+                      "max": 0.0005,
+                      "sample_mean": 2.5448053877886575e-06,
+                      "sample_rms": 0.00017897145750544693
+                    }
+                  ]
+                },
+                "rows": [
+                  {
+                    "time_s": 0,
+                    "values": [
+                      0,
+                      0.0005
+                    ]
+                  },
+                  {
+                    "time_s": 0.001,
+                    "values": [
+                      0.47581290982020213,
+                      0.0004524187090179798
+                    ]
+                  },
+                  {
+                    "time_s": 0.002,
+                    "values": [
+                      0.9063462346100908,
+                      0.0004093653765389909
+                    ]
+                  },
+                  {
+                    "time_s": 0.003,
+                    "values": [
+                      1.2959088965914107,
+                      0.00037040911034085894
+                    ]
+                  },
+                  {
+                    "time_s": 0.004,
+                    "values": [
+                      1.6483997698218036,
+                      0.0003351600230178196
+                    ]
+                  },
+                  {
+                    "time_s": 0.005,
+                    "values": [
+                      1.9673467014368329,
+                      0.0003032653298563167
+                    ]
+                  },
+                  {
+                    "time_s": 0.006,
+                    "values": [
+                      2.255941819529868,
+                      0.0002744058180470132
+                    ]
+                  },
+                  {
+                    "time_s": 0.007,
+                    "values": [
+                      2.5170734810429525,
+                      0.00024829265189570474
+                    ]
+                  },
+                  {
+                    "time_s": 0.008,
+                    "values": [
+                      2.753355179413892,
+                      0.0002246644820586108
+                    ]
+                  },
+                  {
+                    "time_s": 0.009000000000000001,
+                    "values": [
+                      2.967151701297005,
+                      0.00020328482987029951
+                    ]
+                  },
+                  {
+                    "time_s": 0.01,
+                    "values": [
+                      3.1606027941427883,
+                      0.00018393972058572118
+                    ]
+                  },
+                  {
+                    "time_s": 0.011,
+                    "values": [
+                      3.335644581509602,
+                      0.0001664355418490398
+                    ]
+                  },
+                  {
+                    "time_s": 0.012,
+                    "values": [
+                      3.4940289404389895,
+                      0.00015059710595610105
+                    ]
+                  },
+                  {
+                    "time_s": 0.013000000000000001,
+                    "values": [
+                      3.637341034829937,
+                      0.0001362658965170063
+                    ]
+                  },
+                  {
+                    "time_s": 0.014,
+                    "values": [
+                      3.7670151802919674,
+                      0.00012329848197080326
+                    ]
+                  },
+                  {
+                    "time_s": 0.015,
+                    "values": [
+                      3.8843491992578505,
+                      0.00011156508007421495
+                    ]
+                  },
+                  {
+                    "time_s": 0.016,
+                    "values": [
+                      3.990517410026723,
+                      0.00010094825899732772
+                    ]
+                  },
+                  {
+                    "time_s": 0.017,
+                    "values": [
+                      4.086582379736327,
+                      9.134176202636732e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.018000000000000002,
+                    "values": [
+                      4.173505558892067,
+                      8.264944411079327e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.019,
+                    "values": [
+                      4.252156903886824,
+                      7.478430961131756e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.02,
+                    "values": [
+                      4.323323583816936,
+                      6.766764161830636e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.021,
+                    "values": [
+                      4.3877178587350905,
+                      6.122821412649096e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.022,
+                    "values": [
+                      4.445984208188331,
+                      5.540157918116693e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.023,
+                    "values": [
+                      4.498705781385982,
+                      5.012942186140181e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.024,
+                    "values": [
+                      4.546410233552938,
+                      4.535897664470623e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.025,
+                    "values": [
+                      4.589575006880506,
+                      4.104249931194941e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.026000000000000002,
+                    "values": [
+                      4.628632108928331,
+                      3.713678910716691e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.027,
+                    "values": [
+                      4.663972436301251,
+                      3.360275636987486e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.028,
+                    "values": [
+                      4.69594968687391,
+                      3.0405031312608967e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.029,
+                    "values": [
+                      4.724883899717964,
+                      2.751161002820357e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.03,
+                    "values": [
+                      4.751064658160681,
+                      2.4893534183931898e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.031,
+                    "values": [
+                      4.774753988032212,
+                      2.2524601196778792e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.032,
+                    "values": [
+                      4.79618898010817,
+                      2.0381101989183036e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.033,
+                    "values": [
+                      4.815584162993801,
+                      1.84415837006199e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.034,
+                    "values": [
+                      4.833133650198371,
+                      1.6686634980162918e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.035,
+                    "values": [
+                      4.849013082888408,
+                      1.5098691711159163e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.036000000000000004,
+                    "values": [
+                      4.863381387763538,
+                      1.3661861223646187e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.037,
+                    "values": [
+                      4.876382367648304,
+                      1.2361763235169577e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.038,
+                    "values": [
+                      4.888146140719173,
+                      1.1185385928082691e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.039,
+                    "values": [
+                      4.898790442770979,
+                      1.0120955722902102e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.04,
+                    "values": [
+                      4.90842180555633,
+                      9.15781944436702e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.041,
+                    "values": [
+                      4.917136622991195,
+                      8.28633770088052e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.042,
+                    "values": [
+                      4.925022115897613,
+                      7.497788410238737e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.043000000000000003,
+                    "values": [
+                      4.932157204938997,
+                      6.784279506100343e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.044,
+                    "values": [
+                      4.938613300484659,
+                      6.138669951534137e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.045,
+                    "values": [
+                      4.94445501730879,
+                      5.554498269121044e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.046,
+                    "values": [
+                      4.9497408212768335,
+                      5.025917872316654e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.047,
+                    "values": [
+                      4.954523614491523,
+                      4.547638550847743e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.048,
+                    "values": [
+                      4.958851264754902,
+                      4.114873524509832e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.049,
+                    "values": [
+                      4.96276708464538,
+                      3.7232915354620034e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.05,
+                    "values": [
+                      4.966310265004574,
+                      3.3689734995426156e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.05,
+                    "values": [
+                      4.966310265004574,
+                      -0.0004966310265004574
+                    ]
+                  },
+                  {
+                    "time_s": 0.05,
+                    "values": [
+                      4.966310265004574,
+                      -0.0004966310265004574
+                    ]
+                  },
+                  {
+                    "time_s": 0.051000000000000004,
+                    "values": [
+                      4.493703357352221,
+                      -0.00044937033573522206
+                    ]
+                  },
+                  {
+                    "time_s": 0.052000000000000005,
+                    "values": [
+                      4.066070943286106,
+                      -0.0004066070943286106
+                    ]
+                  },
+                  {
+                    "time_s": 0.053,
+                    "values": [
+                      3.679133133874041,
+                      -0.0003679133133874041
+                    ]
+                  },
+                  {
+                    "time_s": 0.054,
+                    "values": [
+                      3.329017325465135,
+                      -0.0003329017325465135
+                    ]
+                  },
+                  {
+                    "time_s": 0.055,
+                    "values": [
+                      3.0122194413708483,
+                      -0.0003012219441370848
+                    ]
+                  },
+                  {
+                    "time_s": 0.056,
+                    "values": [
+                      2.7255688618877185,
+                      -0.00027255688618877186
+                    ]
+                  },
+                  {
+                    "time_s": 0.057,
+                    "values": [
+                      2.466196691669692,
+                      -0.0002466196691669692
+                    ]
+                  },
+                  {
+                    "time_s": 0.058,
+                    "values": [
+                      2.231507046859229,
+                      -0.0002231507046859229
+                    ]
+                  },
+                  {
+                    "time_s": 0.059000000000000004,
+                    "values": [
+                      2.019151074609154,
+                      -0.00020191510746091538
+                    ]
+                  },
+                  {
+                    "time_s": 0.06,
+                    "values": [
+                      1.827003444973881,
+                      -0.0001827003444973881
+                    ]
+                  },
+                  {
+                    "time_s": 0.061,
+                    "values": [
+                      1.6531410798929698,
+                      -0.00016531410798929699
+                    ]
+                  },
+                  {
+                    "time_s": 0.062,
+                    "values": [
+                      1.4958239063795327,
+                      -0.00014958239063795326
+                    ]
+                  },
+                  {
+                    "time_s": 0.063,
+                    "values": [
+                      1.353477441284919,
+                      -0.00013534774412849192
+                    ]
+                  },
+                  {
+                    "time_s": 0.064,
+                    "values": [
+                      1.224677033342163,
+                      -0.0001224677033342163
+                    ]
+                  },
+                  {
+                    "time_s": 0.065,
+                    "values": [
+                      1.1081336047772614,
+                      -0.00011081336047772614
+                    ]
+                  },
+                  {
+                    "time_s": 0.066,
+                    "values": [
+                      1.0026807497855377,
+                      -0.00010026807497855377
+                    ]
+                  },
+                  {
+                    "time_s": 0.067,
+                    "values": [
+                      0.9072630607503058,
+                      -9.072630607503058e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.068,
+                    "values": [
+                      0.8209255653687085,
+                      -8.209255653687085e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.069,
+                    "values": [
+                      0.7428041689679326,
+                      -7.428041689679325e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.07,
+                    "values": [
+                      0.6721170063552907,
+                      -6.721170063552908e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.07100000000000001,
+                    "values": [
+                      0.6081566166485798,
+                      -6.081566166485798e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.07200000000000001,
+                    "values": [
+                      0.5502828627697858,
+                      -5.502828627697858e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.073,
+                    "values": [
+                      0.49791652473804987,
+                      -4.9791652473804984e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.074,
+                    "values": [
+                      0.450533502641415,
+                      -4.50533502641415e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.075,
+                    "values": [
+                      0.40765957126875507,
+                      -4.0765957126875505e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.076,
+                    "values": [
+                      0.36886563390446653,
+                      -3.688656339044665e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.077,
+                    "values": [
+                      0.33376342778431495,
+                      -3.3376342778431494e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.078,
+                    "values": [
+                      0.30200163823119097,
+                      -3.0200163823119098e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.079,
+                    "values": [
+                      0.2732623825797407,
+                      -2.7326238257974072e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.08,
+                    "values": [
+                      0.24725802869980715,
+                      -2.4725802869980715e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.081,
+                    "values": [
+                      0.22372831627739467,
+                      -2.2372831627739467e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.082,
+                    "values": [
+                      0.20243775204197031,
+                      -2.024377520419703e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.083,
+                    "values": [
+                      0.18317325287066022,
+                      -1.8317325287066022e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.084,
+                    "values": [
+                      0.1657420131807361,
+                      -1.657420131807361e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.085,
+                    "values": [
+                      0.1499695752665392,
+                      -1.499695752665392e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.08600000000000001,
+                    "values": [
+                      0.13569808326812483,
+                      -1.3569808326812482e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.08700000000000001,
+                    "values": [
+                      0.1227847032967587,
+                      -1.227847032967587e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.088,
+                    "values": [
+                      0.11110019390535066,
+                      -1.1110019390535066e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.089,
+                    "values": [
+                      0.10052761259661193,
+                      -1.0052761259661192e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.09,
+                    "values": [
+                      0.09096114542323754,
+                      -9.096114542323753e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.091,
+                    "values": [
+                      0.08230504796635568,
+                      -8.230504796635569e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.092,
+                    "values": [
+                      0.07447268709320308,
+                      -7.447268709320308e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.093,
+                    "values": [
+                      0.0673856739036138,
+                      -6.7385673903613805e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.094,
+                    "values": [
+                      0.06097307918755905,
+                      -6.097307918755905e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.095,
+                    "values": [
+                      0.05517072354177303,
+                      -5.517072354177303e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.096,
+                    "values": [
+                      0.04992053504071363,
+                      -4.992053504071363e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.097,
+                    "values": [
+                      0.045169968033212965,
+                      -4.516996803321296e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.098,
+                    "values": [
+                      0.04087147724793925,
+                      -4.087147724793925e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.099,
+                    "values": [
+                      0.036982041944340814,
+                      -3.6982041944340813e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.1,
+                    "values": [
+                      0.0334627353466149,
+                      -3.3462735346614895e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.1,
+                    "values": [
+                      0.0334627353466149,
+                      0.0004966537264653385
+                    ]
+                  },
+                  {
+                    "time_s": 0.1,
+                    "values": [
+                      0.0334627353466149,
+                      0.0004966537264653385
+                    ]
+                  },
+                  {
+                    "time_s": 0.101,
+                    "values": [
+                      0.5060912448716542,
+                      0.00044939087551283457
+                    ]
+                  },
+                  {
+                    "time_s": 0.10200000000000001,
+                    "values": [
+                      0.9337432051204747,
+                      0.0004066256794879525
+                    ]
+                  },
+                  {
+                    "time_s": 0.10300000000000001,
+                    "values": [
+                      1.3206987006500341,
+                      0.0003679301299349966
+                    ]
+                  },
+                  {
+                    "time_s": 0.10400000000000001,
+                    "values": [
+                      1.670830512119826,
+                      0.0003329169487880174
+                    ]
+                  },
+                  {
+                    "time_s": 0.105,
+                    "values": [
+                      1.9876428763824014,
+                      0.00030123571236175987
+                    ]
+                  },
+                  {
+                    "time_s": 0.106,
+                    "values": [
+                      2.2743065580636226,
+                      0.00027256934419363774
+                    ]
+                  },
+                  {
+                    "time_s": 0.107,
+                    "values": [
+                      2.5336905836407406,
+                      0.00024663094163592593
+                    ]
+                  },
+                  {
+                    "time_s": 0.108,
+                    "values": [
+                      2.7683909556237136,
+                      0.00022316090443762863
+                    ]
+                  },
+                  {
+                    "time_s": 0.109,
+                    "values": [
+                      2.980756634220866,
+                      0.0002019243365779134
+                    ]
+                  },
+                  {
+                    "time_s": 0.11,
+                    "values": [
+                      3.1729130465221678,
+                      0.00018270869534778322
+                    ]
+                  },
+                  {
+                    "time_s": 0.111,
+                    "values": [
+                      3.346783358487931,
+                      0.0001653216641512069
+                    ]
+                  },
+                  {
+                    "time_s": 0.112,
+                    "values": [
+                      3.504107722640139,
+                      0.0001495892277359861
+                    ]
+                  },
+                  {
+                    "time_s": 0.113,
+                    "values": [
+                      3.646460694093772,
+                      0.0001353539305906228
+                    ]
+                  },
+                  {
+                    "time_s": 0.114,
+                    "values": [
+                      3.775266989233624,
+                      0.00012247330107663758
+                    ]
+                  },
+                  {
+                    "time_s": 0.115,
+                    "values": [
+                      3.8918157447547457,
+                      0.00011081842552452543
+                    ]
+                  },
+                  {
+                    "time_s": 0.116,
+                    "values": [
+                      3.9972734197757815,
+                      0.00010027265802242185
+                    ]
+                  },
+                  {
+                    "time_s": 0.117,
+                    "values": [
+                      4.092695470153891,
+                      9.073045298461092e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.11800000000000001,
+                    "values": [
+                      4.179036911841717,
+                      8.209630881582832e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.11900000000000001,
+                    "values": [
+                      4.257161879008031,
+                      7.428381209919692e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.12,
+                    "values": [
+                      4.327852272582942,
+                      6.72147727417058e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.121,
+                    "values": [
+                      4.391815585785212,
+                      6.081844142147883e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.122,
+                    "values": [
+                      4.449691984952178,
+                      5.503080150478219e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.123,
+                    "values": [
+                      4.502060716539635,
+                      4.979392834603651e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.124,
+                    "values": [
+                      4.549445904415047,
+                      4.5055409558495274e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.125,
+                    "values": [
+                      4.592321795465384,
+                      4.076782045346157e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.126,
+                    "values": [
+                      4.631117506019363,
+                      3.68882493980637e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.127,
+                    "values": [
+                      4.666221316587895,
+                      3.337786834121052e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.128,
+                    "values": [
+                      4.697984557905949,
+                      3.0201544209405107e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.129,
+                    "values": [
+                      4.72672512716863,
+                      2.7327487283136965e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.13,
+                    "values": [
+                      4.752730669653158,
+                      2.4726933034684162e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.131,
+                    "values": [
+                      4.7762614575694835,
+                      2.237385424305165e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.132,
+                    "values": [
+                      4.797552994952042,
+                      2.0244700504795786e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.133,
+                    "values": [
+                      4.816818374663293,
+                      1.8318162533670713e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.134,
+                    "values": [
+                      4.8342504110987035,
+                      1.6574958890129653e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.135,
+                    "values": [
+                      4.850023569938029,
+                      1.4997643006197059e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.136,
+                    "values": [
+                      4.8642957142564756,
+                      1.3570428574352445e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.137,
+                    "values": [
+                      4.877209684471415,
+                      1.2279031552858478e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.138,
+                    "values": [
+                      4.888894727937295,
+                      1.1110527206270504e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.139,
+                    "values": [
+                      4.8994677924965995,
+                      1.0053220750340052e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.14,
+                    "values": [
+                      4.909034696933168,
+                      9.096530306683182e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.14100000000000001,
+                    "values": [
+                      4.91769119004215,
+                      8.23088099578504e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.14200000000000002,
+                    "values": [
+                      4.9255239089161265,
+                      7.447609108387354e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.14300000000000002,
+                    "values": [
+                      4.932611246038257,
+                      6.738875396174304e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.14400000000000002,
+                    "values": [
+                      4.939024133860596,
+                      6.0975866139403755e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.145,
+                    "values": [
+                      4.944826754719916,
+                      5.517324528008416e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.146,
+                    "values": [
+                      4.950077183196104,
+                      4.99228168038961e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.147,
+                    "values": [
+                      4.95482796734208,
+                      4.517203265791991e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.148,
+                    "values": [
+                      4.959126654602372,
+                      4.087334539762822e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.149,
+                    "values": [
+                      4.963016267683918,
+                      3.6983732316081764e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.15,
+                    "values": [
+                      4.966535735141783,
+                      3.346426485821663e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.15,
+                    "values": [
+                      4.966535735141783,
+                      -0.0004966535735141783
+                    ]
+                  },
+                  {
+                    "time_s": 0.15,
+                    "values": [
+                      4.966535735141783,
+                      -0.0004966535735141783
+                    ]
+                  },
+                  {
+                    "time_s": 0.151,
+                    "values": [
+                      4.493907371169017,
+                      -0.00044939073711690173
+                    ]
+                  },
+                  {
+                    "time_s": 0.152,
+                    "values": [
+                      4.06625554262134,
+                      -0.000406625554262134
+                    ]
+                  },
+                  {
+                    "time_s": 0.153,
+                    "values": [
+                      3.6793001662599027,
+                      -0.0003679300166259903
+                    ]
+                  },
+                  {
+                    "time_s": 0.154,
+                    "values": [
+                      3.329168462617887,
+                      -0.00033291684626178867
+                    ]
+                  },
+                  {
+                    "time_s": 0.155,
+                    "values": [
+                      3.0123561959219134,
+                      -0.0003012356195921913
+                    ]
+                  },
+                  {
+                    "time_s": 0.156,
+                    "values": [
+                      2.725692602522609,
+                      -0.0002725692602522609
+                    ]
+                  },
+                  {
+                    "time_s": 0.157,
+                    "values": [
+                      2.4663086568262726,
+                      -0.00024663086568262727
+                    ]
+                  },
+                  {
+                    "time_s": 0.158,
+                    "values": [
+                      2.2316083571224197,
+                      -0.00022316083571224197
+                    ]
+                  },
+                  {
+                    "time_s": 0.159,
+                    "values": [
+                      2.0192427439261196,
+                      -0.00020192427439261196
+                    ]
+                  },
+                  {
+                    "time_s": 0.16,
+                    "values": [
+                      1.8270863908019561,
+                      -0.00018270863908019562
+                    ]
+                  },
+                  {
+                    "time_s": 0.161,
+                    "values": [
+                      1.653216132381882,
+                      -0.0001653216132381882
+                    ]
+                  },
+                  {
+                    "time_s": 0.162,
+                    "values": [
+                      1.495891816679817,
+                      -0.0001495891816679817
+                    ]
+                  },
+                  {
+                    "time_s": 0.163,
+                    "values": [
+                      1.3535388890656863,
+                      -0.00013535388890656864
+                    ]
+                  },
+                  {
+                    "time_s": 0.164,
+                    "values": [
+                      1.2247326335934565,
+                      -0.00012247326335934565
+                    ]
+                  },
+                  {
+                    "time_s": 0.165,
+                    "values": [
+                      1.108183913965084,
+                      -0.00011081839139650839
+                    ]
+                  },
+                  {
+                    "time_s": 0.166,
+                    "values": [
+                      1.0027262714211505,
+                      -0.00010027262714211505
+                    ]
+                  },
+                  {
+                    "time_s": 0.167,
+                    "values": [
+                      0.9073042504295384,
+                      -9.073042504295384e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.168,
+                    "values": [
+                      0.8209628353317151,
+                      -8.20962835331715e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.169,
+                    "values": [
+                      0.7428378922250297,
+                      -7.428378922250298e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.17,
+                    "values": [
+                      0.6721475204201702,
+                      -6.721475204201702e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.171,
+                    "values": [
+                      0.6081842269162592,
+                      -6.0818422691625916e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.17200000000000001,
+                    "values": [
+                      0.5503078455731041,
+                      -5.503078455731041e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.17300000000000001,
+                    "values": [
+                      0.49793913011329904,
+                      -4.9793913011329906e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.17400000000000002,
+                    "values": [
+                      0.4505539568307892,
+                      -4.505539568307892e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.17500000000000002,
+                    "values": [
+                      0.40767807898465647,
+                      -4.076780789846565e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.176,
+                    "values": [
+                      0.36888238037833754,
+                      -3.688823803783375e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.177,
+                    "values": [
+                      0.33377858062049365,
+                      -3.337785806204937e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.178,
+                    "values": [
+                      0.30201534908435484,
+                      -3.0201534908435485e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.179,
+                    "values": [
+                      0.2732747886727166,
+                      -2.732747886727166e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.18,
+                    "values": [
+                      0.24726925419694334,
+                      -2.4726925419694333e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.181,
+                    "values": [
+                      0.22373847352723955,
+                      -2.2373847352723955e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.182,
+                    "values": [
+                      0.2024469427016943,
+                      -2.0244694270169432e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.183,
+                    "values": [
+                      0.1831815689234749,
+                      -1.831815689234749e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.184,
+                    "values": [
+                      0.16574953785649318,
+                      -1.6574953785649318e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.185,
+                    "values": [
+                      0.1499763838747228,
+                      -1.4997638387472282e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.186,
+                    "values": [
+                      0.1357042439515741,
+                      -1.357042439515741e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.187,
+                    "values": [
+                      0.12279027771366428,
+                      -1.2279027771366428e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.188,
+                    "values": [
+                      0.11110523784635042,
+                      -1.1110523784635041e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.189,
+                    "values": [
+                      0.10053217654316288,
+                      -1.0053217654316288e-05
+                    ]
+                  },
+                  {
+                    "time_s": 0.19,
+                    "values": [
+                      0.09096527505285075,
+                      -9.096527505285074e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.191,
+                    "values": [
+                      0.08230878460975236,
+                      -8.230878460975236e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.192,
+                    "values": [
+                      0.07447606814796624,
+                      -7.447606814796624e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.193,
+                    "values": [
+                      0.06738873320847594,
+                      -6.7388733208475934e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.194,
+                    "values": [
+                      0.060975847361071485,
+                      -6.097584736107148e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.195,
+                    "values": [
+                      0.0551732282887467,
+                      -5.51732282887467e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.196,
+                    "values": [
+                      0.04992280142949812,
+                      -4.992280142949812e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.197,
+                    "values": [
+                      0.045172018746588986,
+                      -4.517201874658899e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.198,
+                    "values": [
+                      0.04087333281013554,
+                      -4.087333281013554e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.199,
+                    "values": [
+                      0.036983720926447514,
+                      -3.6983720926447513e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.2,
+                    "values": [
+                      0.03346425455244925,
+                      -3.346425455244925e-06
+                    ]
+                  },
+                  {
+                    "time_s": 0.2,
+                    "values": [
+                      0.03346425455244925,
+                      0.0004966535745447551
+                    ]
+                  },
+                  {
+                    "time_s": 0.2,
+                    "values": [
+                      0.03346425455244925,
+                      0.0004966535745447551
+                    ]
+                  }
+                ]
+              },
+              "model_sha256": {
+                "ground.v1": "b981a78784d6912d59e83a9e85420a718029deefbbafb1b8a8f292777bcf3240",
+                "ideal-capacitor.v1": "4e694c5f98f8b027977e80b20a1e971775b442bac1c199b499c71dc80474562e",
+                "ideal-resistor.v1": "dd642b275801f7c71c0ebfa9f6f03bc44a8be35d97c7b04ab96bb4278908f4ee",
+                "ideal-square.v1": "4e30a80d683445211763f380b9d6ddfa60dfc3f52d7fd1c341341b7be9fcf76a"
+              }
+            }
+          ],
+          "selected_index": 0,
+          "viewing": false
+        },
+        "paused": true,
+        "scope_probes": {
+          "ids": [
+            "v:Storage.1",
+            "i:Limit"
+          ]
+        },
+        "format": "elab.schematic",
+        "version": 4,
+        "graph": {
+          "components": [
+            {
+              "id": "Supply",
+              "kind": "pulse-source",
+              "name": "Pulse source",
+              "terminals": [
+                "positive",
+                "negative"
+              ],
+              "position": {
+                "x": -200,
+                "y": 0
+              },
+              "value": 5,
+              "unit": "V",
+              "model": "ideal-square.v1",
+              "rotation": 0
+            },
+            {
+              "id": "Limit",
+              "kind": "resistor",
+              "name": "Resistor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 0,
+                "y": -110
+              },
+              "value": 10000,
+              "unit": "\u03a9",
+              "model": "ideal-resistor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "Storage",
+              "kind": "capacitor",
+              "name": "Capacitor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 200,
+                "y": 0
+              },
+              "value": 1e-06,
+              "unit": "F",
+              "model": "ideal-capacitor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "Earth",
+              "kind": "ground",
+              "name": "Ground",
+              "terminals": [
+                "reference"
+              ],
+              "position": {
+                "x": 0,
+                "y": 110
+              },
+              "value": 0,
+              "model": "ground.v1",
+              "rotation": 0
+            }
+          ],
+          "wires": [
+            {
+              "id": "W1",
+              "from": "Supply.positive",
+              "to": "Limit.1",
+              "connected": true
+            },
+            {
+              "id": "W2",
+              "from": "Limit.2",
+              "to": "Storage.1",
+              "connected": true
+            },
+            {
+              "id": "W3",
+              "from": "Storage.2",
+              "to": "Earth.reference",
+              "connected": true
+            },
+            {
+              "id": "W4",
+              "from": "Earth.reference",
+              "to": "Supply.negative",
+              "connected": true
+            }
+          ]
+        },
+        "view": {
+          "center": {
+            "x": 0,
+            "y": 0
+          },
+          "zoom": 1
+        },
+        "led_model": {
+          "id": "elab.generic-red-led.v1",
+          "is_a": 1e-20,
+          "n": 2,
+          "rs_ohm": 1,
+          "temperature_c": 27,
+          "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+        },
+        "transient_settings": {
+          "step_s": 0.001,
+          "high_s": 0.05,
+          "low_s": 0.05,
+          "initial_voltage_v": 0,
+          "seconds_per_wall_second": 0.02
+        }
+      },
+      "measurements_si": {
+        "cursor_interval_s": 0.01,
+        "inspect:i:Storage": 0.0005,
+        "inspect:v:Storage": 0,
+        "inspect:v:Storage.1": 0,
+        "inspect:v:Storage.2": 0,
+        "verify-max:i:Limit": 0.0005,
+        "verify-max:v:Storage.1": 4.966535735141783,
+        "verify-min:i:Limit": -0.0004966535735141783,
+        "verify-min:v:Storage.1": 0,
+        "voltage_10ms_v": 3.1606027941427883,
+        "voltage_20k_10ms_v": 1.9673467014368329
+      },
+      "checks": [
+        "empty owned session; discovered models/pins/connectivity",
+        "value experiment and accepted SI measurements",
+        "introduced disconnected wire; stale diagnostics; undo repair",
+        "bounded recorded verification and SVG/CSV exports",
+        "save; structured close; fresh session reopen; semantic document equality"
+      ]
+    },
+    {
+      "calls": [
+        {
+          "command": "project.inspect",
+          "params": {}
+        },
+        {
+          "command": "capabilities.list",
+          "params": {}
+        },
+        {
+          "command": "parts.list",
+          "params": {}
+        },
+        {
+          "command": "component.place",
+          "params": {
+            "id": "Supply",
+            "kind": "dc-source",
+            "position": {
+              "x": 260,
+              "y": -100
+            },
+            "value": "5 V"
+          }
+        },
+        {
+          "command": "component.place",
+          "params": {
+            "id": "Drive",
+            "kind": "dc-source",
+            "position": {
+              "x": -260,
+              "y": 60
+            },
+            "value": "5 V"
+          }
+        },
+        {
+          "command": "component.place",
+          "params": {
+            "id": "BaseR",
+            "kind": "resistor",
+            "position": {
+              "x": -100,
+              "y": 60
+            },
+            "value": "10k"
+          }
+        },
+        {
+          "command": "component.place",
+          "params": {
+            "id": "Limit",
+            "kind": "resistor",
+            "position": {
+              "x": 100,
+              "y": -180
+            },
+            "value": "1k"
+          }
+        },
+        {
+          "command": "component.place",
+          "params": {
+            "id": "Transistor",
+            "kind": "npn",
+            "position": {
+              "x": 100,
+              "y": 60
+            }
+          }
+        },
+        {
+          "command": "component.place",
+          "params": {
+            "id": "Earth",
+            "kind": "ground",
+            "position": {
+              "x": 100,
+              "y": 180
+            }
+          }
+        },
+        {
+          "command": "simulation.pause",
+          "params": {}
+        },
+        {
+          "command": "wire.connect",
+          "params": {
+            "from": "Supply.positive",
+            "to": "Limit.1"
+          }
+        },
+        {
+          "command": "wire.connect",
+          "params": {
+            "from": "Limit.2",
+            "to": "Transistor.collector"
+          }
+        },
+        {
+          "command": "wire.connect",
+          "params": {
+            "from": "Drive.positive",
+            "to": "BaseR.1"
+          }
+        },
+        {
+          "command": "wire.connect",
+          "params": {
+            "from": "BaseR.2",
+            "to": "Transistor.base"
+          }
+        },
+        {
+          "command": "wire.connect",
+          "params": {
+            "from": "Transistor.emitter",
+            "to": "Earth.reference"
+          }
+        },
+        {
+          "command": "wire.connect",
+          "params": {
+            "from": "Supply.negative",
+            "to": "Earth.reference"
+          }
+        },
+        {
+          "command": "wire.connect",
+          "params": {
+            "from": "Drive.negative",
+            "to": "Earth.reference"
+          }
+        },
+        {
+          "command": "simulation.restart",
+          "params": {}
+        },
+        {
+          "command": "simulation.wait",
+          "params": {}
+        },
+        {
+          "command": "component.set",
+          "params": {
+            "id": "Drive",
+            "value": "0 V"
+          }
+        },
+        {
+          "command": "simulation.restart",
+          "params": {}
+        },
+        {
+          "command": "simulation.wait",
+          "params": {}
+        },
+        {
+          "command": "component.set",
+          "params": {
+            "id": "Drive",
+            "value": "0.8 V"
+          }
+        },
+        {
+          "command": "simulation.restart",
+          "params": {}
+        },
+        {
+          "command": "simulation.wait",
+          "params": {}
+        },
+        {
+          "command": "component.set",
+          "params": {
+            "id": "Drive",
+            "value": "5 V"
+          }
+        },
+        {
+          "command": "simulation.restart",
+          "params": {}
+        },
+        {
+          "command": "simulation.wait",
+          "params": {}
+        },
+        {
+          "command": "project.inspect",
+          "params": {}
+        },
+        {
+          "command": "object.delete",
+          "params": {
+            "id": "W1"
+          }
+        },
+        {
+          "command": "edit.undo",
+          "params": {}
+        },
+        {
+          "command": "simulation.restart",
+          "params": {}
+        },
+        {
+          "command": "simulation.wait",
+          "params": {}
+        },
+        {
+          "command": "measurement.inspect",
+          "params": {
+            "target": {
+              "id": "Transistor",
+              "kind": "object"
+            }
+          }
+        },
+        {
+          "command": "simulation.verify",
+          "params": {
+            "duration_s": 0
+          }
+        },
+        {
+          "command": "operation.inspect",
+          "params": {
+            "id": "verify-1"
+          }
+        },
+        {
+          "command": "operation.inspect",
+          "params": {
+            "id": "verify-1"
+          }
+        },
+        {
+          "command": "verification.export",
+          "params": {
+            "format": "csv",
+            "id": "verify-1",
+            "path": "<artifacts>/verification.csv"
+          }
+        },
+        {
+          "command": "export.schematic.svg",
+          "params": {
+            "path": "<artifacts>/schematic.svg"
+          }
+        },
+        {
+          "command": "project.save",
+          "params": {
+            "path": "<artifacts>/project.elab"
+          }
+        },
+        {
+          "command": "app.close",
+          "params": {}
+        },
+        {
+          "command": "project.inspect",
+          "params": {}
+        },
+        {
+          "command": "project.load",
+          "params": {
+            "path": "<artifacts>/project.elab"
+          }
+        },
+        {
+          "command": "simulation.wait",
+          "params": {}
+        },
+        {
+          "command": "project.save",
+          "params": {
+            "path": "<artifacts>/reopened.elab"
+          }
+        },
+        {
+          "command": "app.close",
+          "params": {}
+        }
+      ],
+      "name": "npn",
+      "commands": [
+        "project.inspect",
+        "capabilities.list",
+        "parts.list",
+        "component.place",
+        "component.place",
+        "component.place",
+        "component.place",
+        "component.place",
+        "component.place",
+        "simulation.pause",
+        "wire.connect",
+        "wire.connect",
+        "wire.connect",
+        "wire.connect",
+        "wire.connect",
+        "wire.connect",
+        "wire.connect",
+        "simulation.restart",
+        "simulation.wait",
+        "component.set",
+        "simulation.restart",
+        "simulation.wait",
+        "component.set",
+        "simulation.restart",
+        "simulation.wait",
+        "component.set",
+        "simulation.restart",
+        "simulation.wait",
+        "project.inspect",
+        "object.delete",
+        "edit.undo",
+        "simulation.restart",
+        "simulation.wait",
+        "measurement.inspect",
+        "simulation.verify",
+        "operation.inspect",
+        "operation.inspect",
+        "verification.export",
+        "export.schematic.svg",
+        "project.save",
+        "app.close",
+        "project.inspect",
+        "project.load",
+        "simulation.wait",
+        "project.save",
+        "app.close"
+      ],
+      "project": {
+        "recordings": {
+          "entries": [
+            {
+              "data": {
+                "metadata": {
+                  "format": "elab.verification",
+                  "version": 1,
+                  "operation_id": "verify-1",
+                  "created_at": "2026-10-15T23:30:58.417097Z",
+                  "input_revision": 30,
+                  "electrical_revision": 19,
+                  "document_generation": 1,
+                  "graph": {
+                    "components": [
+                      {
+                        "id": "Supply",
+                        "kind": "dc-source",
+                        "name": "DC source",
+                        "terminals": [
+                          "positive",
+                          "negative"
+                        ],
+                        "position": {
+                          "x": 260,
+                          "y": -100
+                        },
+                        "value": 5,
+                        "unit": "V",
+                        "model": "ideal-dc.v1",
+                        "rotation": 0
+                      },
+                      {
+                        "id": "Drive",
+                        "kind": "dc-source",
+                        "name": "DC source",
+                        "terminals": [
+                          "positive",
+                          "negative"
+                        ],
+                        "position": {
+                          "x": -260,
+                          "y": 60
+                        },
+                        "value": 5,
+                        "unit": "V",
+                        "model": "ideal-dc.v1",
+                        "rotation": 0
+                      },
+                      {
+                        "id": "BaseR",
+                        "kind": "resistor",
+                        "name": "Resistor",
+                        "terminals": [
+                          "1",
+                          "2"
+                        ],
+                        "position": {
+                          "x": -100,
+                          "y": 60
+                        },
+                        "value": 10000,
+                        "unit": "\u03a9",
+                        "model": "ideal-resistor.v1",
+                        "rotation": 0
+                      },
+                      {
+                        "id": "Limit",
+                        "kind": "resistor",
+                        "name": "Resistor",
+                        "terminals": [
+                          "1",
+                          "2"
+                        ],
+                        "position": {
+                          "x": 100,
+                          "y": -180
+                        },
+                        "value": 1000,
+                        "unit": "\u03a9",
+                        "model": "ideal-resistor.v1",
+                        "rotation": 0
+                      },
+                      {
+                        "id": "Transistor",
+                        "kind": "npn",
+                        "name": "NPN transistor",
+                        "terminals": [
+                          "base",
+                          "collector",
+                          "emitter"
+                        ],
+                        "position": {
+                          "x": 100,
+                          "y": 60
+                        },
+                        "value": 0,
+                        "model": "elab.generic-npn.v1",
+                        "rotation": 0
+                      },
+                      {
+                        "id": "Earth",
+                        "kind": "ground",
+                        "name": "Ground",
+                        "terminals": [
+                          "reference"
+                        ],
+                        "position": {
+                          "x": 100,
+                          "y": 180
+                        },
+                        "value": 0,
+                        "model": "ground.v1",
+                        "rotation": 0
+                      }
+                    ],
+                    "wires": [
+                      {
+                        "id": "W1",
+                        "from": "Supply.positive",
+                        "to": "Limit.1",
+                        "connected": true
+                      },
+                      {
+                        "id": "W2",
+                        "from": "Limit.2",
+                        "to": "Transistor.collector",
+                        "connected": true
+                      },
+                      {
+                        "id": "W3",
+                        "from": "Drive.positive",
+                        "to": "BaseR.1",
+                        "connected": true
+                      },
+                      {
+                        "id": "W4",
+                        "from": "BaseR.2",
+                        "to": "Transistor.base",
+                        "connected": true
+                      },
+                      {
+                        "id": "W5",
+                        "from": "Transistor.emitter",
+                        "to": "Earth.reference",
+                        "connected": true
+                      },
+                      {
+                        "id": "W6",
+                        "from": "Supply.negative",
+                        "to": "Earth.reference",
+                        "connected": true
+                      },
+                      {
+                        "id": "W7",
+                        "from": "Drive.negative",
+                        "to": "Earth.reference",
+                        "connected": true
+                      }
+                    ]
+                  },
+                  "settings": {
+                    "step_s": 0.001,
+                    "high_s": 0.05,
+                    "low_s": 0.05,
+                    "initial_voltage_v": 0,
+                    "seconds_per_wall_second": 0.02
+                  },
+                  "input_mode": "auto",
+                  "analysis": "NPN DC operating point",
+                  "engine": "elab.npn-switch-dc.v1",
+                  "led_model": {
+                    "id": "elab.generic-red-led.v1",
+                    "is_a": 1e-20,
+                    "n": 2,
+                    "rs_ohm": 1,
+                    "temperature_c": 27,
+                    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+                  },
+                  "npn_model": {
+                    "id": "elab.generic-npn.v1",
+                    "saturation_current_a": 1e-14,
+                    "forward_beta": 100,
+                    "reverse_beta": 1,
+                    "temperature_c": 27,
+                    "limitations": "Educational Ebers\u2013Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+                  },
+                  "probes": [
+                    {
+                      "id": "i:Transistor.collector",
+                      "label": "Transistor.collector current",
+                      "unit": "A",
+                      "positive": "Transistor.collector",
+                      "reference": "into device"
+                    },
+                    {
+                      "id": "v:Transistor.collector",
+                      "label": "Transistor.collector / ground",
+                      "unit": "V",
+                      "positive": "Transistor.collector",
+                      "reference": "ground"
+                    },
+                    {
+                      "id": "i:Transistor.base",
+                      "label": "Transistor.base current",
+                      "unit": "A",
+                      "positive": "Transistor.base",
+                      "reference": "into device"
+                    },
+                    {
+                      "id": "v:Transistor.base",
+                      "label": "Transistor.base / ground",
+                      "unit": "V",
+                      "positive": "Transistor.base",
+                      "reference": "ground"
+                    }
+                  ],
+                  "duration_s": 0,
+                  "sample_count": 1,
+                  "statistics": [
+                    {
+                      "probe_id": "i:Transistor.collector",
+                      "count": 1,
+                      "min": 0.004929600780861814,
+                      "max": 0.004929600780861814,
+                      "sample_mean": 0.004929600780861814,
+                      "sample_rms": 0.004929600780861814
+                    },
+                    {
+                      "probe_id": "v:Transistor.collector",
+                      "count": 1,
+                      "min": 0.07039921913818598,
+                      "max": 0.07039921913818598,
+                      "sample_mean": 0.07039921913818598,
+                      "sample_rms": 0.07039921913818598
+                    },
+                    {
+                      "probe_id": "i:Transistor.base",
+                      "count": 1,
+                      "min": 0.00042999736510602657,
+                      "max": 0.00042999736510602657,
+                      "sample_mean": 0.00042999736510602657,
+                      "sample_rms": 0.00042999736510602657
+                    },
+                    {
+                      "probe_id": "v:Transistor.base",
+                      "count": 1,
+                      "min": 0.700026348939734,
+                      "max": 0.700026348939734,
+                      "sample_mean": 0.700026348939734,
+                      "sample_rms": 0.700026348939734
+                    }
+                  ],
+                  "npn": {
+                    "run_id": 1,
+                    "electrical_revision": 19,
+                    "engine": "elab.npn-switch-dc.v1",
+                    "model": {
+                      "id": "elab.generic-npn.v1",
+                      "saturation_current_a": 1e-14,
+                      "forward_beta": 100,
+                      "reverse_beta": 1,
+                      "temperature_c": 27,
+                      "limitations": "Educational Ebers\u2013Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+                    },
+                    "transistor_id": "Transistor",
+                    "supply_id": "Supply",
+                    "input_id": "Drive",
+                    "base_resistor_id": "BaseR",
+                    "load_resistor_id": "Limit",
+                    "base_current_a": 0.00042999736510602657,
+                    "collector_current_a": 0.004929600780861814,
+                    "emitter_current_a": 0.00535959814596784,
+                    "vbe_v": 0.700026348939734,
+                    "vce_v": 0.07039921913818598,
+                    "led_voltage_v": 0,
+                    "led_power_w": 0,
+                    "transistor_power_w": 0.0006480495311845411,
+                    "base_resistor_power_w": 0.0018489773399812553,
+                    "load_resistor_power_w": 0.024300963858673405,
+                    "kcl_residual_a": 6.071532165918825e-18,
+                    "kvl_residual_v": 3.7470027081099033e-16,
+                    "state": "saturation",
+                    "explanation": "Both junctions are forward biased; the collector load limits current and additional base drive has little effect on LED brightness.",
+                    "nodes_v": {
+                      "net:BaseR.1": 5,
+                      "net:BaseR.2": 0.700026348939734,
+                      "net:Drive.negative": 0,
+                      "net:Limit.1": 5,
+                      "net:Limit.2": 0.07039921913818598
+                    },
+                    "stale": false
+                  }
+                },
+                "rows": [
+                  {
+                    "time_s": 0,
+                    "values": [
+                      0.004929600780861814,
+                      0.07039921913818598,
+                      0.00042999736510602657,
+                      0.700026348939734
+                    ]
+                  }
+                ]
+              },
+              "model_sha256": {
+                "elab.generic-npn.v1": "5d204875b42b2627610e44683cc2cfb3e9296c4c0f338444d9133df9c7f81307",
+                "ground.v1": "b981a78784d6912d59e83a9e85420a718029deefbbafb1b8a8f292777bcf3240",
+                "ideal-dc.v1": "e55cf05c148010feee1e9a583a1670290dd6c78f5279e80fe289d5121e9f2d74",
+                "ideal-resistor.v1": "dd642b275801f7c71c0ebfa9f6f03bc44a8be35d97c7b04ab96bb4278908f4ee"
+              }
+            }
+          ],
+          "selected_index": 0,
+          "viewing": false
+        },
+        "paused": true,
+        "scope_probes": {
+          "ids": []
+        },
+        "format": "elab.schematic",
+        "version": 4,
+        "graph": {
+          "components": [
+            {
+              "id": "Supply",
+              "kind": "dc-source",
+              "name": "DC source",
+              "terminals": [
+                "positive",
+                "negative"
+              ],
+              "position": {
+                "x": 260,
+                "y": -100
+              },
+              "value": 5,
+              "unit": "V",
+              "model": "ideal-dc.v1",
+              "rotation": 0
+            },
+            {
+              "id": "Drive",
+              "kind": "dc-source",
+              "name": "DC source",
+              "terminals": [
+                "positive",
+                "negative"
+              ],
+              "position": {
+                "x": -260,
+                "y": 60
+              },
+              "value": 5,
+              "unit": "V",
+              "model": "ideal-dc.v1",
+              "rotation": 0
+            },
+            {
+              "id": "BaseR",
+              "kind": "resistor",
+              "name": "Resistor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": -100,
+                "y": 60
+              },
+              "value": 10000,
+              "unit": "\u03a9",
+              "model": "ideal-resistor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "Limit",
+              "kind": "resistor",
+              "name": "Resistor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 100,
+                "y": -180
+              },
+              "value": 1000,
+              "unit": "\u03a9",
+              "model": "ideal-resistor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "Transistor",
+              "kind": "npn",
+              "name": "NPN transistor",
+              "terminals": [
+                "base",
+                "collector",
+                "emitter"
+              ],
+              "position": {
+                "x": 100,
+                "y": 60
+              },
+              "value": 0,
+              "model": "elab.generic-npn.v1",
+              "rotation": 0
+            },
+            {
+              "id": "Earth",
+              "kind": "ground",
+              "name": "Ground",
+              "terminals": [
+                "reference"
+              ],
+              "position": {
+                "x": 100,
+                "y": 180
+              },
+              "value": 0,
+              "model": "ground.v1",
+              "rotation": 0
+            }
+          ],
+          "wires": [
+            {
+              "id": "W1",
+              "from": "Supply.positive",
+              "to": "Limit.1",
+              "connected": true
+            },
+            {
+              "id": "W2",
+              "from": "Limit.2",
+              "to": "Transistor.collector",
+              "connected": true
+            },
+            {
+              "id": "W3",
+              "from": "Drive.positive",
+              "to": "BaseR.1",
+              "connected": true
+            },
+            {
+              "id": "W4",
+              "from": "BaseR.2",
+              "to": "Transistor.base",
+              "connected": true
+            },
+            {
+              "id": "W5",
+              "from": "Transistor.emitter",
+              "to": "Earth.reference",
+              "connected": true
+            },
+            {
+              "id": "W6",
+              "from": "Supply.negative",
+              "to": "Earth.reference",
+              "connected": true
+            },
+            {
+              "id": "W7",
+              "from": "Drive.negative",
+              "to": "Earth.reference",
+              "connected": true
+            }
+          ]
+        },
+        "view": {
+          "center": {
+            "x": 0,
+            "y": 0
+          },
+          "zoom": 1
+        },
+        "npn_model": {
+          "id": "elab.generic-npn.v1",
+          "saturation_current_a": 1e-14,
+          "forward_beta": 100,
+          "reverse_beta": 1,
+          "temperature_c": 27,
+          "limitations": "Educational Ebers\u2013Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+        },
+        "led_model": {
+          "id": "elab.generic-red-led.v1",
+          "is_a": 1e-20,
+          "n": 2,
+          "rs_ohm": 1,
+          "temperature_c": 27,
+          "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+        },
+        "transient_settings": {
+          "step_s": 0.001,
+          "high_s": 0.05,
+          "low_s": 0.05,
+          "initial_voltage_v": 0,
+          "seconds_per_wall_second": 0.02
+        }
+      },
+      "measurements_si": {
+        "active_collector_a": 0.0013678075180062058,
+        "active_vce_v": 3.632192481993794,
+        "cutoff_collector_a": 2.000000165480742e-14,
+        "cutoff_vce_v": 4.99999999998,
+        "inspect:i:Transistor.base": 0.00042999736510602657,
+        "inspect:i:Transistor.collector": 0.004929600780861814,
+        "inspect:i:Transistor.emitter": 0.00535959814596784,
+        "inspect:v:Transistor.base": 0.700026348939734,
+        "inspect:v:Transistor.collector": 0.07039921913818598,
+        "inspect:v:Transistor.emitter": 0,
+        "saturation_collector_a": 0.004929600780861814,
+        "saturation_vce_v": 0.07039921913818598,
+        "verify-max:i:Transistor.base": 0.00042999736510602657,
+        "verify-max:i:Transistor.collector": 0.004929600780861814,
+        "verify-max:v:Transistor.base": 0.700026348939734,
+        "verify-max:v:Transistor.collector": 0.07039921913818598,
+        "verify-min:i:Transistor.base": 0.00042999736510602657,
+        "verify-min:i:Transistor.collector": 0.004929600780861814,
+        "verify-min:v:Transistor.base": 0.700026348939734,
+        "verify-min:v:Transistor.collector": 0.07039921913818598
+      },
+      "checks": [
+        "empty owned session; discovered models/pins/connectivity",
+        "value experiment and accepted SI measurements",
+        "introduced disconnected wire; stale diagnostics; undo repair",
+        "bounded recorded verification and SVG/CSV exports",
+        "save; structured close; fresh session reopen; semantic document equality"
+      ]
+    }
+  ],
+  "adapters": [
+    {
+      "name": "in-process",
+      "equivalent_to_in_process": true,
+      "workflows": [
+        {
+          "name": "led",
+          "commands": [
+            "project.inspect",
+            "capabilities.list",
+            "parts.list",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "simulation.pause",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "simulation.restart",
+            "simulation.wait",
+            "project.inspect",
+            "simulation.resume",
+            "component.set",
+            "simulation.wait",
+            "simulation.pause",
+            "project.inspect",
+            "object.delete",
+            "edit.undo",
+            "simulation.restart",
+            "simulation.wait",
+            "measurement.inspect",
+            "simulation.verify",
+            "operation.inspect",
+            "verification.export",
+            "export.schematic.svg",
+            "project.save",
+            "app.close",
+            "project.inspect",
+            "project.load",
+            "simulation.wait",
+            "project.save",
+            "app.close"
+          ],
+          "measurements_si": {
+            "current_1k_a": 0.0029167965774405296,
+            "current_2k_a": 0.001476723549138745,
+            "inspect:i:Light": 0.001476723549138745,
+            "inspect:v:Light": 2.04655290172251,
+            "inspect:v:Light.anode": 2.04655290172251,
+            "inspect:v:Light.cathode": 0,
+            "verify-max:i:Light": 0.001476723549138745,
+            "verify-max:v:Light": 2.04655290172251,
+            "verify-max:v:Limit": 2.95344709827749,
+            "verify-max:v:Supply": 5,
+            "verify-min:i:Light": 0.001476723549138745,
+            "verify-min:v:Light": 2.04655290172251,
+            "verify-min:v:Limit": 2.95344709827749,
+            "verify-min:v:Supply": 5
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "calls_count": 36,
+          "calls_sha256": "47bdd9556e6271eae577d16d77d3ae4eaf1502ae027eeacb92635b331d6e65a3",
+          "project_sha256": "3c614aa784ca4c90a0a150a1472d1e3a9335b0e88cd5d3fe6e5949b82ed55db5"
+        },
+        {
+          "name": "rc",
+          "commands": [
+            "project.inspect",
+            "capabilities.list",
+            "parts.list",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "simulation.pause",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "simulation.restart",
+            "simulation.wait",
+            "simulation.step",
+            "component.set",
+            "simulation.restart",
+            "simulation.wait",
+            "simulation.step",
+            "component.set",
+            "project.inspect",
+            "object.delete",
+            "edit.undo",
+            "simulation.restart",
+            "simulation.wait",
+            "measurement.inspect",
+            "scope.probes.set",
+            "simulation.step",
+            "scope.cursor.set",
+            "scope.cursor.set",
+            "project.inspect",
+            "export.scope.csv",
+            "simulation.verify",
+            "operation.inspect",
+            "operation.inspect",
+            "verification.export",
+            "export.schematic.svg",
+            "project.save",
+            "app.close",
+            "project.inspect",
+            "project.load",
+            "simulation.wait",
+            "project.save",
+            "app.close"
+          ],
+          "measurements_si": {
+            "cursor_interval_s": 0.01,
+            "inspect:i:Storage": 0.0005,
+            "inspect:v:Storage": 0,
+            "inspect:v:Storage.1": 0,
+            "inspect:v:Storage.2": 0,
+            "verify-max:i:Limit": 0.0005,
+            "verify-max:v:Storage.1": 4.966535735141783,
+            "verify-min:i:Limit": -0.0004966535735141783,
+            "verify-min:v:Storage.1": 0,
+            "voltage_10ms_v": 3.1606027941427883,
+            "voltage_20k_10ms_v": 1.9673467014368329
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "calls_count": 44,
+          "calls_sha256": "101d3b1c1a004390d57b2580b2e4784603f3074a6dc023c3a510ef233eb5094b",
+          "project_sha256": "cdebcf128d616534812bd41f20745031d7856a07e2d7bad08c7992b068f984b6"
+        },
+        {
+          "name": "npn",
+          "commands": [
+            "project.inspect",
+            "capabilities.list",
+            "parts.list",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "simulation.pause",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "simulation.restart",
+            "simulation.wait",
+            "component.set",
+            "simulation.restart",
+            "simulation.wait",
+            "component.set",
+            "simulation.restart",
+            "simulation.wait",
+            "component.set",
+            "simulation.restart",
+            "simulation.wait",
+            "project.inspect",
+            "object.delete",
+            "edit.undo",
+            "simulation.restart",
+            "simulation.wait",
+            "measurement.inspect",
+            "simulation.verify",
+            "operation.inspect",
+            "operation.inspect",
+            "verification.export",
+            "export.schematic.svg",
+            "project.save",
+            "app.close",
+            "project.inspect",
+            "project.load",
+            "simulation.wait",
+            "project.save",
+            "app.close"
+          ],
+          "measurements_si": {
+            "active_collector_a": 0.0013678075180062058,
+            "active_vce_v": 3.632192481993794,
+            "cutoff_collector_a": 2.000000165480742e-14,
+            "cutoff_vce_v": 4.99999999998,
+            "inspect:i:Transistor.base": 0.00042999736510602657,
+            "inspect:i:Transistor.collector": 0.004929600780861814,
+            "inspect:i:Transistor.emitter": 0.00535959814596784,
+            "inspect:v:Transistor.base": 0.700026348939734,
+            "inspect:v:Transistor.collector": 0.07039921913818598,
+            "inspect:v:Transistor.emitter": 0,
+            "saturation_collector_a": 0.004929600780861814,
+            "saturation_vce_v": 0.07039921913818598,
+            "verify-max:i:Transistor.base": 0.00042999736510602657,
+            "verify-max:i:Transistor.collector": 0.004929600780861814,
+            "verify-max:v:Transistor.base": 0.700026348939734,
+            "verify-max:v:Transistor.collector": 0.07039921913818598,
+            "verify-min:i:Transistor.base": 0.00042999736510602657,
+            "verify-min:i:Transistor.collector": 0.004929600780861814,
+            "verify-min:v:Transistor.base": 0.700026348939734,
+            "verify-min:v:Transistor.collector": 0.07039921913818598
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "calls_count": 46,
+          "calls_sha256": "7ce8cfd8e9d8e3dc82cf3e6efd7eb778173a2d113bbe99adee8de62615b3126e",
+          "project_sha256": "4e5cd1b61d9b53972bd1ef2c530f8cfbd7cc2689c09f33a0efccb81a0419577c"
+        }
+      ]
+    },
+    {
+      "name": "headless-stdio",
+      "equivalent_to_in_process": true,
+      "workflows": [
+        {
+          "name": "led",
+          "commands": [
+            "project.inspect",
+            "capabilities.list",
+            "parts.list",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "simulation.pause",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "simulation.restart",
+            "simulation.wait",
+            "project.inspect",
+            "simulation.resume",
+            "component.set",
+            "simulation.wait",
+            "simulation.pause",
+            "project.inspect",
+            "object.delete",
+            "edit.undo",
+            "simulation.restart",
+            "simulation.wait",
+            "measurement.inspect",
+            "simulation.verify",
+            "operation.inspect",
+            "verification.export",
+            "export.schematic.svg",
+            "project.save",
+            "app.close",
+            "project.inspect",
+            "project.load",
+            "simulation.wait",
+            "project.save",
+            "app.close"
+          ],
+          "measurements_si": {
+            "current_1k_a": 0.0029167965774405296,
+            "current_2k_a": 0.001476723549138745,
+            "inspect:i:Light": 0.001476723549138745,
+            "inspect:v:Light": 2.04655290172251,
+            "inspect:v:Light.anode": 2.04655290172251,
+            "inspect:v:Light.cathode": 0,
+            "verify-max:i:Light": 0.001476723549138745,
+            "verify-max:v:Light": 2.04655290172251,
+            "verify-max:v:Limit": 2.95344709827749,
+            "verify-max:v:Supply": 5,
+            "verify-min:i:Light": 0.001476723549138745,
+            "verify-min:v:Light": 2.04655290172251,
+            "verify-min:v:Limit": 2.95344709827749,
+            "verify-min:v:Supply": 5
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "calls_count": 36,
+          "calls_sha256": "47bdd9556e6271eae577d16d77d3ae4eaf1502ae027eeacb92635b331d6e65a3",
+          "project_sha256": "e9736717cef4f66bb9744369c6fcf7f4eab55deaa2741ae185c86015ba845f59"
+        },
+        {
+          "name": "rc",
+          "commands": [
+            "project.inspect",
+            "capabilities.list",
+            "parts.list",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "simulation.pause",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "simulation.restart",
+            "simulation.wait",
+            "simulation.step",
+            "component.set",
+            "simulation.restart",
+            "simulation.wait",
+            "simulation.step",
+            "component.set",
+            "project.inspect",
+            "object.delete",
+            "edit.undo",
+            "simulation.restart",
+            "simulation.wait",
+            "measurement.inspect",
+            "scope.probes.set",
+            "simulation.step",
+            "scope.cursor.set",
+            "scope.cursor.set",
+            "project.inspect",
+            "export.scope.csv",
+            "simulation.verify",
+            "operation.inspect",
+            "verification.export",
+            "export.schematic.svg",
+            "project.save",
+            "app.close",
+            "project.inspect",
+            "project.load",
+            "simulation.wait",
+            "project.save",
+            "app.close"
+          ],
+          "measurements_si": {
+            "cursor_interval_s": 0.01,
+            "inspect:i:Storage": 0.0005,
+            "inspect:v:Storage": 0,
+            "inspect:v:Storage.1": 0,
+            "inspect:v:Storage.2": 0,
+            "verify-max:i:Limit": 0.0005,
+            "verify-max:v:Storage.1": 4.966535735141783,
+            "verify-min:i:Limit": -0.0004966535735141783,
+            "verify-min:v:Storage.1": 0,
+            "voltage_10ms_v": 3.1606027941427883,
+            "voltage_20k_10ms_v": 1.9673467014368329
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "calls_count": 43,
+          "calls_sha256": "cb609cb9a08ec67f1f9855d2fa10630e6aef2f9be2816815b64c57d939c9f431",
+          "project_sha256": "b98a78a328dd1667c37290d090a175e2628f6323b4583b4d4958f576e9e21f30"
+        },
+        {
+          "name": "npn",
+          "commands": [
+            "project.inspect",
+            "capabilities.list",
+            "parts.list",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "simulation.pause",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "simulation.restart",
+            "simulation.wait",
+            "component.set",
+            "simulation.restart",
+            "simulation.wait",
+            "component.set",
+            "simulation.restart",
+            "simulation.wait",
+            "component.set",
+            "simulation.restart",
+            "simulation.wait",
+            "project.inspect",
+            "object.delete",
+            "edit.undo",
+            "simulation.restart",
+            "simulation.wait",
+            "measurement.inspect",
+            "simulation.verify",
+            "operation.inspect",
+            "verification.export",
+            "export.schematic.svg",
+            "project.save",
+            "app.close",
+            "project.inspect",
+            "project.load",
+            "simulation.wait",
+            "project.save",
+            "app.close"
+          ],
+          "measurements_si": {
+            "active_collector_a": 0.0013678075180062058,
+            "active_vce_v": 3.632192481993794,
+            "cutoff_collector_a": 2.000000165480742e-14,
+            "cutoff_vce_v": 4.99999999998,
+            "inspect:i:Transistor.base": 0.00042999736510602657,
+            "inspect:i:Transistor.collector": 0.004929600780861814,
+            "inspect:i:Transistor.emitter": 0.00535959814596784,
+            "inspect:v:Transistor.base": 0.700026348939734,
+            "inspect:v:Transistor.collector": 0.07039921913818598,
+            "inspect:v:Transistor.emitter": 0,
+            "saturation_collector_a": 0.004929600780861814,
+            "saturation_vce_v": 0.07039921913818598,
+            "verify-max:i:Transistor.base": 0.00042999736510602657,
+            "verify-max:i:Transistor.collector": 0.004929600780861814,
+            "verify-max:v:Transistor.base": 0.700026348939734,
+            "verify-max:v:Transistor.collector": 0.07039921913818598,
+            "verify-min:i:Transistor.base": 0.00042999736510602657,
+            "verify-min:i:Transistor.collector": 0.004929600780861814,
+            "verify-min:v:Transistor.base": 0.700026348939734,
+            "verify-min:v:Transistor.collector": 0.07039921913818598
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "calls_count": 45,
+          "calls_sha256": "d8ebc0c4e611535a581616edbc281a8af29bc01c3f31c501ef74dcf51f474d4e",
+          "project_sha256": "f49df1d2e1fb6ccdbaadd72e92ed01afb39ac2543985f7c6664c61b7b7813ff9"
+        }
+      ]
+    },
+    {
+      "name": "headless-socket",
+      "equivalent_to_in_process": true,
+      "workflows": [
+        {
+          "name": "led",
+          "commands": [
+            "project.inspect",
+            "capabilities.list",
+            "parts.list",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "simulation.pause",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "simulation.restart",
+            "simulation.wait",
+            "project.inspect",
+            "simulation.resume",
+            "component.set",
+            "simulation.wait",
+            "simulation.pause",
+            "project.inspect",
+            "object.delete",
+            "edit.undo",
+            "simulation.restart",
+            "simulation.wait",
+            "measurement.inspect",
+            "simulation.verify",
+            "operation.inspect",
+            "verification.export",
+            "export.schematic.svg",
+            "project.save",
+            "app.close",
+            "project.inspect",
+            "project.load",
+            "simulation.wait",
+            "project.save",
+            "app.close"
+          ],
+          "measurements_si": {
+            "current_1k_a": 0.0029167965774405296,
+            "current_2k_a": 0.001476723549138745,
+            "inspect:i:Light": 0.001476723549138745,
+            "inspect:v:Light": 2.04655290172251,
+            "inspect:v:Light.anode": 2.04655290172251,
+            "inspect:v:Light.cathode": 0,
+            "verify-max:i:Light": 0.001476723549138745,
+            "verify-max:v:Light": 2.04655290172251,
+            "verify-max:v:Limit": 2.95344709827749,
+            "verify-max:v:Supply": 5,
+            "verify-min:i:Light": 0.001476723549138745,
+            "verify-min:v:Light": 2.04655290172251,
+            "verify-min:v:Limit": 2.95344709827749,
+            "verify-min:v:Supply": 5
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "calls_count": 36,
+          "calls_sha256": "47bdd9556e6271eae577d16d77d3ae4eaf1502ae027eeacb92635b331d6e65a3",
+          "project_sha256": "e754ae284097163805583d856735ef3f20bd5c7541e3e2ee790f8e068209e38c"
+        },
+        {
+          "name": "rc",
+          "commands": [
+            "project.inspect",
+            "capabilities.list",
+            "parts.list",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "simulation.pause",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "simulation.restart",
+            "simulation.wait",
+            "simulation.step",
+            "component.set",
+            "simulation.restart",
+            "simulation.wait",
+            "simulation.step",
+            "component.set",
+            "project.inspect",
+            "object.delete",
+            "edit.undo",
+            "simulation.restart",
+            "simulation.wait",
+            "measurement.inspect",
+            "scope.probes.set",
+            "simulation.step",
+            "scope.cursor.set",
+            "scope.cursor.set",
+            "project.inspect",
+            "export.scope.csv",
+            "simulation.verify",
+            "operation.inspect",
+            "verification.export",
+            "export.schematic.svg",
+            "project.save",
+            "app.close",
+            "project.inspect",
+            "project.load",
+            "simulation.wait",
+            "project.save",
+            "app.close"
+          ],
+          "measurements_si": {
+            "cursor_interval_s": 0.01,
+            "inspect:i:Storage": 0.0005,
+            "inspect:v:Storage": 0,
+            "inspect:v:Storage.1": 0,
+            "inspect:v:Storage.2": 0,
+            "verify-max:i:Limit": 0.0005,
+            "verify-max:v:Storage.1": 4.966535735141783,
+            "verify-min:i:Limit": -0.0004966535735141783,
+            "verify-min:v:Storage.1": 0,
+            "voltage_10ms_v": 3.1606027941427883,
+            "voltage_20k_10ms_v": 1.9673467014368329
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "calls_count": 43,
+          "calls_sha256": "cb609cb9a08ec67f1f9855d2fa10630e6aef2f9be2816815b64c57d939c9f431",
+          "project_sha256": "d7c5daa4dd6e84c0a0457deb93d959d57f561e2e0e5e9e338e89c706531ec3f6"
+        },
+        {
+          "name": "npn",
+          "commands": [
+            "project.inspect",
+            "capabilities.list",
+            "parts.list",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "simulation.pause",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "simulation.restart",
+            "simulation.wait",
+            "component.set",
+            "simulation.restart",
+            "simulation.wait",
+            "component.set",
+            "simulation.restart",
+            "simulation.wait",
+            "component.set",
+            "simulation.restart",
+            "simulation.wait",
+            "project.inspect",
+            "object.delete",
+            "edit.undo",
+            "simulation.restart",
+            "simulation.wait",
+            "measurement.inspect",
+            "simulation.verify",
+            "operation.inspect",
+            "verification.export",
+            "export.schematic.svg",
+            "project.save",
+            "app.close",
+            "project.inspect",
+            "project.load",
+            "simulation.wait",
+            "project.save",
+            "app.close"
+          ],
+          "measurements_si": {
+            "active_collector_a": 0.0013678075180062058,
+            "active_vce_v": 3.632192481993794,
+            "cutoff_collector_a": 2.000000165480742e-14,
+            "cutoff_vce_v": 4.99999999998,
+            "inspect:i:Transistor.base": 0.00042999736510602657,
+            "inspect:i:Transistor.collector": 0.004929600780861814,
+            "inspect:i:Transistor.emitter": 0.00535959814596784,
+            "inspect:v:Transistor.base": 0.700026348939734,
+            "inspect:v:Transistor.collector": 0.07039921913818598,
+            "inspect:v:Transistor.emitter": 0,
+            "saturation_collector_a": 0.004929600780861814,
+            "saturation_vce_v": 0.07039921913818598,
+            "verify-max:i:Transistor.base": 0.00042999736510602657,
+            "verify-max:i:Transistor.collector": 0.004929600780861814,
+            "verify-max:v:Transistor.base": 0.700026348939734,
+            "verify-max:v:Transistor.collector": 0.07039921913818598,
+            "verify-min:i:Transistor.base": 0.00042999736510602657,
+            "verify-min:i:Transistor.collector": 0.004929600780861814,
+            "verify-min:v:Transistor.base": 0.700026348939734,
+            "verify-min:v:Transistor.collector": 0.07039921913818598
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "calls_count": 45,
+          "calls_sha256": "d8ebc0c4e611535a581616edbc281a8af29bc01c3f31c501ef74dcf51f474d4e",
+          "project_sha256": "f86bb57e0e475e76090540bd3c557306bdcebb6af50c412752694abea01c4247"
+        }
+      ]
+    },
+    {
+      "name": "native-socket",
+      "equivalent_to_in_process": true,
+      "workflows": [
+        {
+          "name": "led",
+          "commands": [
+            "project.inspect",
+            "capabilities.list",
+            "parts.list",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "simulation.pause",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "simulation.restart",
+            "simulation.wait",
+            "project.inspect",
+            "simulation.resume",
+            "component.set",
+            "simulation.wait",
+            "simulation.pause",
+            "project.inspect",
+            "object.delete",
+            "edit.undo",
+            "simulation.restart",
+            "simulation.wait",
+            "measurement.inspect",
+            "simulation.verify",
+            "operation.inspect",
+            "verification.export",
+            "export.schematic.svg",
+            "project.save",
+            "app.close",
+            "project.inspect",
+            "project.load",
+            "simulation.wait",
+            "project.save",
+            "app.close"
+          ],
+          "measurements_si": {
+            "current_1k_a": 0.0029167965774405296,
+            "current_2k_a": 0.001476723549138745,
+            "inspect:i:Light": 0.001476723549138745,
+            "inspect:v:Light": 2.04655290172251,
+            "inspect:v:Light.anode": 2.04655290172251,
+            "inspect:v:Light.cathode": 0,
+            "verify-max:i:Light": 0.001476723549138745,
+            "verify-max:v:Light": 2.04655290172251,
+            "verify-max:v:Limit": 2.95344709827749,
+            "verify-max:v:Supply": 5,
+            "verify-min:i:Light": 0.001476723549138745,
+            "verify-min:v:Light": 2.04655290172251,
+            "verify-min:v:Limit": 2.95344709827749,
+            "verify-min:v:Supply": 5
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "calls_count": 36,
+          "calls_sha256": "47bdd9556e6271eae577d16d77d3ae4eaf1502ae027eeacb92635b331d6e65a3",
+          "project_sha256": "3afde0f3999fc0791eb340366a55bb0982ff5765f9fe0a4de47a5ee992f9a42e"
+        },
+        {
+          "name": "rc",
+          "commands": [
+            "project.inspect",
+            "capabilities.list",
+            "parts.list",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "simulation.pause",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "simulation.restart",
+            "simulation.wait",
+            "simulation.step",
+            "component.set",
+            "simulation.restart",
+            "simulation.wait",
+            "simulation.step",
+            "component.set",
+            "project.inspect",
+            "object.delete",
+            "edit.undo",
+            "simulation.restart",
+            "simulation.wait",
+            "measurement.inspect",
+            "scope.probes.set",
+            "simulation.step",
+            "scope.cursor.set",
+            "scope.cursor.set",
+            "project.inspect",
+            "export.scope.csv",
+            "simulation.verify",
+            "operation.inspect",
+            "verification.export",
+            "export.schematic.svg",
+            "project.save",
+            "app.close",
+            "project.inspect",
+            "project.load",
+            "simulation.wait",
+            "project.save",
+            "app.close"
+          ],
+          "measurements_si": {
+            "cursor_interval_s": 0.01,
+            "inspect:i:Storage": 0.0005,
+            "inspect:v:Storage": 0,
+            "inspect:v:Storage.1": 0,
+            "inspect:v:Storage.2": 0,
+            "verify-max:i:Limit": 0.0005,
+            "verify-max:v:Storage.1": 4.966535735141783,
+            "verify-min:i:Limit": -0.0004966535735141783,
+            "verify-min:v:Storage.1": 0,
+            "voltage_10ms_v": 3.1606027941427883,
+            "voltage_20k_10ms_v": 1.9673467014368329
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "calls_count": 43,
+          "calls_sha256": "cb609cb9a08ec67f1f9855d2fa10630e6aef2f9be2816815b64c57d939c9f431",
+          "project_sha256": "a1adf6b8828a1389c3a6a5fa4c88229508e74af5322c3ed08f6c87f1715ee119"
+        },
+        {
+          "name": "npn",
+          "commands": [
+            "project.inspect",
+            "capabilities.list",
+            "parts.list",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "component.place",
+            "simulation.pause",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "wire.connect",
+            "simulation.restart",
+            "simulation.wait",
+            "component.set",
+            "simulation.restart",
+            "simulation.wait",
+            "component.set",
+            "simulation.restart",
+            "simulation.wait",
+            "component.set",
+            "simulation.restart",
+            "simulation.wait",
+            "project.inspect",
+            "object.delete",
+            "edit.undo",
+            "simulation.restart",
+            "simulation.wait",
+            "measurement.inspect",
+            "simulation.verify",
+            "operation.inspect",
+            "verification.export",
+            "export.schematic.svg",
+            "project.save",
+            "app.close",
+            "project.inspect",
+            "project.load",
+            "simulation.wait",
+            "project.save",
+            "app.close"
+          ],
+          "measurements_si": {
+            "active_collector_a": 0.0013678075180062058,
+            "active_vce_v": 3.632192481993794,
+            "cutoff_collector_a": 2.000000165480742e-14,
+            "cutoff_vce_v": 4.99999999998,
+            "inspect:i:Transistor.base": 0.00042999736510602657,
+            "inspect:i:Transistor.collector": 0.004929600780861814,
+            "inspect:i:Transistor.emitter": 0.00535959814596784,
+            "inspect:v:Transistor.base": 0.700026348939734,
+            "inspect:v:Transistor.collector": 0.07039921913818598,
+            "inspect:v:Transistor.emitter": 0,
+            "saturation_collector_a": 0.004929600780861814,
+            "saturation_vce_v": 0.07039921913818598,
+            "verify-max:i:Transistor.base": 0.00042999736510602657,
+            "verify-max:i:Transistor.collector": 0.004929600780861814,
+            "verify-max:v:Transistor.base": 0.700026348939734,
+            "verify-max:v:Transistor.collector": 0.07039921913818598,
+            "verify-min:i:Transistor.base": 0.00042999736510602657,
+            "verify-min:i:Transistor.collector": 0.004929600780861814,
+            "verify-min:v:Transistor.base": 0.700026348939734,
+            "verify-min:v:Transistor.collector": 0.07039921913818598
+          },
+          "checks": [
+            "empty owned session; discovered models/pins/connectivity",
+            "value experiment and accepted SI measurements",
+            "introduced disconnected wire; stale diagnostics; undo repair",
+            "bounded recorded verification and SVG/CSV exports",
+            "save; structured close; fresh session reopen; semantic document equality"
+          ],
+          "calls_count": 45,
+          "calls_sha256": "d8ebc0c4e611535a581616edbc281a8af29bc01c3f31c501ef74dcf51f474d4e",
+          "project_sha256": "294274204f41fc6b6130b8e7d69b063f15102d427eddbd883b80212002aad632"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Complete reference workflow evidence is retained once; each adapter retains measurements/checks and exact call/project digests. Raw report remains in build evidence.",
+    "These reference workflows cover LED/RC/NPN. PMOS/RC/complementary inverter and NMOS compatibility have separate public/native/core evidence."
+  ]
+}

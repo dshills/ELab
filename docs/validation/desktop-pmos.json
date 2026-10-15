@@ -1,0 +1,434 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "report_version": 1,
+  "part": {
+    "value_type": "none",
+    "aliases": [
+      "MOSFET",
+      "PMOS",
+      "P-channel",
+      "FET",
+      "field effect transistor",
+      "high-side switch"
+    ],
+    "limitations": "Generic enhancement PMOS with square-law channel, channel-length modulation and drain-to-source body diode. Body tied to source; zero gate current. No subthreshold conduction, body effect, gate/junction capacitance, charge storage, switching loss, breakdown, heating, ratings or named device identity. External capacitors provide circuit timing. Same illustrative beta magnitude as the generic NMOS, not a physical matched pair.",
+    "kind": "pmos",
+    "name": "P-channel MOSFET",
+    "terminals": [
+      "gate",
+      "drain",
+      "source"
+    ],
+    "model": "elab.generic-pmos.v1"
+  },
+  "place_contract": {
+    "capabilities": [
+      {
+        "id": "component.place",
+        "description": "Place a library part on the 10-unit grid; unused optional ID; bounds in snapshot.limits",
+        "mutation": true,
+        "input_schema": {
+          "additionalProperties": false,
+          "examples": [
+            {
+              "kind": "dc-source",
+              "position": {
+                "x": 100,
+                "y": 0
+              },
+              "value": "500 mV"
+            }
+          ],
+          "properties": {
+            "id": {
+              "description": "Omitted/empty allocates an unused designator; explicit ID cannot have been used earlier in this session, including after delete.",
+              "maxLength": 64,
+              "pattern": "^(?:[A-Za-z][A-Za-z0-9_-]{0,63})?$",
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "dc-source",
+                "resistor",
+                "led",
+                "capacitor",
+                "sine-source",
+                "finite-pulse-source",
+                "pulse-source",
+                "pmos",
+                "nmos",
+                "npn",
+                "ground",
+                "junction",
+                "net-label",
+                "potentiometer",
+                "diode",
+                "switch"
+              ],
+              "type": "string"
+            },
+            "position": {
+              "additionalProperties": false,
+              "properties": {
+                "x": {
+                  "maximum": 10000,
+                  "minimum": -10000,
+                  "type": "number"
+                },
+                "y": {
+                  "maximum": 10000,
+                  "minimum": -10000,
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y"
+              ],
+              "type": "object"
+            },
+            "value": {
+              "description": "Omitted/empty uses factory value; net-label uses new ID as name; non-value symbols require omitted/empty value. Supplied numeric values use the per-kind domains; new waveforms use factory offset/low level.",
+              "maxLength": 128,
+              "minLength": 0,
+              "type": "string",
+              "x-max-utf8-bytes": 128
+            }
+          },
+          "required": [
+            "kind",
+            "position"
+          ],
+          "type": "object",
+          "x-command-contract": {
+            "version": 1,
+            "scope": "component-values-and-placement",
+            "preconditions": [
+              "A drawing slot is free; explicit ID unused in this session",
+              "Finite position within \u00b110000 units; coordinates snap to nearest 10-unit grid and snapped position must be unoccupied"
+            ],
+            "effects": [
+              "Commits through ordinary electrical edit/restart/paused-stale and undo rules; invalid input preserves previous graph/physics/history",
+              "Selects placed part and returns drawing tool to select; net helpers count toward drawing-object bound, not simulated-part capacity"
+            ],
+            "errors": [
+              {
+                "code": "invalid-params",
+                "phase": "admission",
+                "when": "Unknown target/kind, malformed value or value outside domain/coupled waveform constraints"
+              }
+            ],
+            "completion": {
+              "mode": "immediate edit admission; any asynchronous live recomputation remains observable on existing simulation state",
+              "observe": [
+                "project.inspect",
+                "events.poll",
+                "simulation.wait"
+              ],
+              "cancel": "",
+              "cooperative_deadline_s": 0
+            }
+          },
+          "x-factory-waveform-baselines": {
+            "pulse_low_v": 0,
+            "sine_offset_v": 0
+          },
+          "x-inventory": {
+            "current_id_kind_waveforms": "snapshot.components",
+            "part_definitions": "parts.list"
+          },
+          "x-kind-value-domains": [
+            {
+              "default_value": "5 V",
+              "kind": "dc-source",
+              "numeric": {
+                "parameter": "voltage",
+                "unit": "V",
+                "minimum": 0,
+                "maximum": 12,
+                "range_text": "0\u201312 V",
+                "syntax": "Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V"
+              },
+              "value_type": "number"
+            },
+            {
+              "default_value": "1k",
+              "kind": "resistor",
+              "numeric": {
+                "parameter": "resistance",
+                "unit": "\u03a9",
+                "minimum": 10,
+                "maximum": 100000,
+                "range_text": "10\u2013100000 \u03a9",
+                "syntax": "Bare SI or \u03a9/ohm; k/K/M prefixes, for example 2.2k or 0.1M \u03a9"
+              },
+              "value_type": "number"
+            },
+            {
+              "kind": "led",
+              "value_type": "none"
+            },
+            {
+              "default_value": "1uF",
+              "kind": "capacitor",
+              "numeric": {
+                "parameter": "capacitance",
+                "unit": "F",
+                "minimum": 1e-12,
+                "maximum": 1,
+                "range_text": "1 pF\u20131 F",
+                "syntax": "Bare SI or F; p/n/u/\u00b5/\u03bc/m prefixes, for example 1 \u00b5F or 100nF"
+              },
+              "value_type": "number"
+            },
+            {
+              "default_value": "2.5 V",
+              "kind": "sine-source",
+              "numeric": {
+                "parameter": "amplitude",
+                "unit": "V",
+                "minimum": 0,
+                "maximum": 12,
+                "range_text": "0\u201312 V",
+                "syntax": "Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V",
+                "relation": "Amplitude plus the absolute offset must be \u226412 V."
+              },
+              "value_type": "number"
+            },
+            {
+              "default_value": "5 V",
+              "kind": "finite-pulse-source",
+              "numeric": {
+                "parameter": "high_voltage",
+                "unit": "V",
+                "minimum": -12,
+                "maximum": 12,
+                "range_text": "\u221212\u201312 V",
+                "syntax": "Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V",
+                "relation": "High level must be at least the current low level (factory: 0 V)."
+              },
+              "value_type": "number"
+            },
+            {
+              "default_value": "5 V",
+              "kind": "pulse-source",
+              "numeric": {
+                "parameter": "voltage",
+                "unit": "V",
+                "minimum": 0,
+                "maximum": 12,
+                "range_text": "0\u201312 V",
+                "syntax": "Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V"
+              },
+              "value_type": "number"
+            },
+            {
+              "kind": "pmos",
+              "value_type": "none"
+            },
+            {
+              "kind": "nmos",
+              "value_type": "none"
+            },
+            {
+              "kind": "npn",
+              "value_type": "none"
+            },
+            {
+              "kind": "ground",
+              "value_type": "none"
+            },
+            {
+              "kind": "junction",
+              "value_type": "none"
+            },
+            {
+              "kind": "net-label",
+              "label": {
+                "case_sensitive": true,
+                "maxLength": 32,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9_+./-]{1,32}$"
+              },
+              "value_type": "label"
+            },
+            {
+              "default_value": "10k \u03a9",
+              "kind": "potentiometer",
+              "numeric": {
+                "parameter": "resistance",
+                "unit": "\u03a9",
+                "minimum": 10,
+                "maximum": 100000,
+                "range_text": "10\u2013100000 \u03a9",
+                "syntax": "Bare SI or \u03a9/ohm; k/K/M prefixes, for example 2.2k or 0.1M \u03a9"
+              },
+              "value_type": "number"
+            },
+            {
+              "kind": "diode",
+              "value_type": "none"
+            },
+            {
+              "kind": "switch",
+              "value_type": "none"
+            }
+          ],
+          "x-max-drawing-components": 100,
+          "x-normalized-si-relations": [
+            {
+              "operator": "sum_absolute_maximum",
+              "fields": [
+                "value",
+                "x-factory-waveform-baselines.sine_offset_v"
+              ],
+              "limit": 12,
+              "when_component_kind": "sine-source"
+            },
+            {
+              "operator": "greater_or_equal",
+              "fields": [
+                "value",
+                "x-factory-waveform-baselines.pulse_low_v"
+              ],
+              "when_component_kind": "finite-pulse-source"
+            }
+          ],
+          "x-position-snap-grid": 10
+        },
+        "output": "Snapshot",
+        "output_schema": {
+          "$ref": "urn:elab:snapshot:1"
+        }
+      }
+    ],
+    "events": {
+      "command": "events.poll",
+      "default_timeout_ms": 1000,
+      "max_timeout_ms": 5000,
+      "max_waiters": 4,
+      "mode": "coalesced-latest-state",
+      "topics": [
+        "state",
+        "project",
+        "editor",
+        "view",
+        "simulation",
+        "diagnostics",
+        "jobs",
+        "measurements",
+        "recordings",
+        "recovery",
+        "preferences",
+        "lifecycle",
+        "library",
+        "preview",
+        "sweeps",
+        "printing"
+      ]
+    },
+    "mutation_preconditions": {
+      "combination": "A revision guard is required; all supplied revision/document guards must match",
+      "expected_command_revision": "Guards admitted commands, including other actors; live solver publication does not invalidate it",
+      "expected_document_generation": "Optional mutation context guard; prevents applying an old rendered action to a replacement document, including background publication",
+      "expected_revision": "Guards all state publication, including live samples"
+    },
+    "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee.",
+    "schema_version": 2,
+    "version": 1,
+    "schema_registry_count": 67,
+    "schema_registry_sha256": "1bee930426b5e5653554e8898ad1f2ff4aca69a16e96a29561e15d6f211cd926",
+    "full_response_sha256": "fea127648b6897f6a02f8fbe65df743f7b0cd05dfa58a498d81d7fa688c609ca"
+  },
+  "observations": {
+    "manual_matches_template": true,
+    "on": {
+      "id": "M1",
+      "model": {
+        "id": "elab.generic-pmos.v1",
+        "threshold_v": -1.5,
+        "beta_a_per_v2": 0.1,
+        "lambda_per_v": 0.02,
+        "body_diode": {
+          "id": "elab.generic-silicon-diode.v1",
+          "is_a": 1e-09,
+          "n": 1.7,
+          "rs_ohm": 1,
+          "temperature_c": 27,
+          "limitations": "Generic silicon junction with Shockley forward/reverse leakage and finite series resistance; no reverse breakdown, capacitance, charge storage, thermal dynamics, ratings or physical part identity."
+        },
+        "limitations": "Generic enhancement PMOS with square-law channel, channel-length modulation and drain-to-source body diode. Body tied to source; zero gate current. No subthreshold conduction, body effect, gate/junction capacitance, charge storage, switching loss, breakdown, heating, ratings or named device identity. External capacitors provide circuit timing. Same illustrative beta magnitude as the generic NMOS, not a physical matched pair."
+      },
+      "gate_current_a": 0,
+      "drain_current_a": -0.002908619225645868,
+      "source_current_a": -0.002908619225645868,
+      "vgs_v": -4.995004995004995,
+      "vds_v": -0.008330759456666392,
+      "power_w": 2.4231007119890996e-05,
+      "state": "triode"
+    },
+    "off": {
+      "id": "M1",
+      "model": {
+        "id": "elab.generic-pmos.v1",
+        "threshold_v": -1.5,
+        "beta_a_per_v2": 0.1,
+        "lambda_per_v": 0.02,
+        "body_diode": {
+          "id": "elab.generic-silicon-diode.v1",
+          "is_a": 1e-09,
+          "n": 1.7,
+          "rs_ohm": 1,
+          "temperature_c": 27,
+          "limitations": "Generic silicon junction with Shockley forward/reverse leakage and finite series resistance; no reverse breakdown, capacitance, charge storage, thermal dynamics, ratings or physical part identity."
+        },
+        "limitations": "Generic enhancement PMOS with square-law channel, channel-length modulation and drain-to-source body diode. Body tied to source; zero gate current. No subthreshold conduction, body effect, gate/junction capacitance, charge storage, switching loss, breakdown, heating, ratings or named device identity. External capacitors provide circuit timing. Same illustrative beta magnitude as the generic NMOS, not a physical matched pair."
+      },
+      "gate_current_a": 0,
+      "drain_current_a": -1e-09,
+      "source_current_a": -1e-09,
+      "vgs_v": 0,
+      "vds_v": -3.6865451827086986,
+      "power_w": 3.6865451827086988e-09,
+      "state": "cutoff"
+    },
+    "charge_10ms_v": -3.0313945782157403,
+    "charge_reference_v": -3.03240416500873,
+    "discharge_10ms_v": -1.5144794269943551,
+    "discharge_reference_v": -1.513050380445809,
+    "gate_rc_tau_s": 0.00909090909090909,
+    "inverter": [
+      {
+        "input_v": 0,
+        "output_v": 4.998571583241784,
+        "p_drain_a": -0.0004998581583243253,
+        "n_drain_a": 1e-09
+      },
+      {
+        "input_v": 2.5,
+        "output_v": 2.380952380952378,
+        "p_drain_a": -0.05261904861904762,
+        "n_drain_a": 0.052380953380952375
+      },
+      {
+        "input_v": 5,
+        "output_v": 2.856326578355343e-09,
+        "p_drain_a": -1e-09,
+        "n_drain_a": 9.99714367033799e-10
+      }
+    ],
+    "kept_recordings": 1
+  },
+  "checks": [
+    "Blank PMOS placement/named wiring matches guided example",
+    "Low gate turns the high-side LED on with negative signed drain/source currents and zero gate current",
+    "Pulse edge has both sides; external gate RC retains charge and matches analytic charge/discharge within 3 mV",
+    "Verification CSV/JSON and save/reopen preserve PMOS parameters; wrong threshold polarity refuses",
+    "Complementary NMOS/PMOS inverter switches across both rails with conservation and both captured model dependencies"
+  ],
+  "limits": [
+    "Fixed generic square-law models; no physical matched-pair, intrinsic gate charge, breakdown, heating or ratings claim",
+    "Two MOSFETs total across both polarities; existing solver/global limits remain"
+  ]
+}

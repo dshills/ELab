@@ -172,7 +172,7 @@ func documentRecordingCount(d Document) int {
 	return count
 }
 func inspectDocument(d Document) DocumentInspection {
-	out := DocumentInspection{ExampleID: d.ExampleID, DisplayPreferences: d.DisplayPreferences, PinnedReadings: d.PinnedReadings, WaveformModel: d.WaveformModel, PotentiometerModel: d.PotentiometerModel, DiodeModel: d.DiodeModel, SwitchModel: d.SwitchModel, NMOSModel: d.NMOSModel, Format: d.Format, Version: d.Version, Graph: d.Graph.Clone(), View: d.View, ScopeProbes: d.ScopeProbes, TransientSettings: d.TransientSettings, LEDModel: d.LEDModel, NPNModel: d.NPNModel, Paused: d.Paused != nil && *d.Paused, Recordings: []VerificationMetadata{}, SelectedRecording: -1}
+	out := DocumentInspection{ExampleID: d.ExampleID, DisplayPreferences: d.DisplayPreferences, PinnedReadings: d.PinnedReadings, WaveformModel: d.WaveformModel, PotentiometerModel: d.PotentiometerModel, DiodeModel: d.DiodeModel, SwitchModel: d.SwitchModel, NMOSModel: d.NMOSModel, PMOSModel: d.PMOSModel, Format: d.Format, Version: d.Version, Graph: d.Graph.Clone(), View: d.View, ScopeProbes: d.ScopeProbes, TransientSettings: d.TransientSettings, LEDModel: d.LEDModel, NPNModel: d.NPNModel, Paused: d.Paused != nil && *d.Paused, Recordings: []VerificationMetadata{}, SelectedRecording: -1}
 	if d.Recordings != nil {
 		out.SelectedRecording = d.Recordings.Selected
 		out.ViewingRecording = d.Recordings.Viewing

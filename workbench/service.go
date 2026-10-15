@@ -43,6 +43,7 @@ type Snapshot struct {
 	DiodeModel             *DiodeModel            `json:"diode_model,omitempty"`
 	SwitchModel            *SwitchModel           `json:"switch_model,omitempty"`
 	NMOSModel              *NMOSModel             `json:"nmos_model,omitempty"`
+	PMOSModel              *PMOSModel             `json:"pmos_model,omitempty"`
 	Recording              *RecordingView         `json:"recording,omitempty"`
 	Recovery               RecoveryState          `json:"recovery"`
 	VerificationSettings   VerificationSettings   `json:"verification_settings"`
@@ -405,6 +406,13 @@ func (s *Service) snapshotLocked() Snapshot {
 		if part.Kind == "nmos" {
 			model := NMOSDeviceModel()
 			out.NMOSModel = &model
+			break
+		}
+	}
+	for _, part := range graph.Components {
+		if part.Kind == "pmos" {
+			model := PMOSDeviceModel()
+			out.PMOSModel = &model
 			break
 		}
 	}
@@ -1064,6 +1072,10 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	if state.NMOSModel != nil {
 		model := *state.NMOSModel
 		state.NMOSModel = &model
+	}
+	if state.PMOSModel != nil {
+		model := *state.PMOSModel
+		state.PMOSModel = &model
 	}
 	if state.SwitchModel != nil {
 		model := *state.SwitchModel

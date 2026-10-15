@@ -1,8 +1,8 @@
 # ELab
 
-ELab is a hobbyist electronics workbench built with Vellum. The current slice lets you draw LED, RC, NPN and N-channel MOSFET switch, and mixed transistor/RC circuits from blank: place components, connect named terminals, move and rotate parts, and edit exact values while simulation updates live. Users and agents invoke the same validated application commands.
+ELab is a hobbyist electronics workbench built with Vellum. The current slice lets you draw LED, RC, NPN and N/P-channel MOSFET switch, and mixed transistor/RC circuits from blank: place components, connect named terminals, move and rotate parts, and edit exact values while simulation updates live. Users and agents invoke the same validated application commands.
 
-Choose **Examples → MOSFET LED switch** for pulse-driven NMOS/LED simulation, gate/drain/source probes and an external gate-RC experiment. See [MOSFET behavior and model](docs/nmos.md).
+Choose **Examples → MOSFET LED switch** for pulse-driven NMOS/LED simulation, gate/drain/source probes and an external gate-RC experiment. See [MOSFET behavior and model](docs/nmos.md). **Examples → High-side MOSFET LED** adds the complementary [PMOS workflow](docs/pmos.md).
 
 ## Run the desktop app
 
@@ -48,7 +48,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.88.0 --build-version 103 --platform darwin
+  --version 0.89.0 --build-version 104 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).

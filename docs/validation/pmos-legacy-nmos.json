@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "origin_app": "0.88.0/103",
+  "original_file": "/Users/dshills/Development/projects/ELab/build/nmos-088/headless-qualified-assets/nmos.elab",
+  "original_sha256": "1700db1304e0e01d00cbd798a32f8b1d3f198405fe133a684b61067605d35621",
+  "checks": [
+    "Original schematic and saved recording reopen with fresh live time and unchanged model/current",
+    "Original asset bytes unchanged"
+  ],
+  "model": {
+    "id": "elab.generic-nmos.v1",
+    "threshold_v": 1.5,
+    "beta_a_per_v2": 0.1,
+    "lambda_per_v": 0.02,
+    "body_diode": {
+      "id": "elab.generic-silicon-diode.v1",
+      "is_a": 1e-09,
+      "n": 1.7,
+      "rs_ohm": 1,
+      "temperature_c": 27,
+      "limitations": "Generic silicon junction with Shockley forward/reverse leakage and finite series resistance; no reverse breakdown, capacitance, charge storage, thermal dynamics, ratings or physical part identity."
+    },
+    "limitations": "Generic enhancement NMOS with square-law channel, channel-length modulation and source-to-drain body diode. Body tied to source; zero gate current. No subthreshold conduction, body effect, gate/junction capacitance, charge storage, switching loss, breakdown, heating, ratings or named device identity. External capacitors provide circuit timing."
+  },
+  "model_sha256": "7d0606fec7e453a3dde0026b6fca0e4d6f5794bb774e008e1e3ee046d2626331",
+  "drain_current_a": 0.0029086192256459645
+}

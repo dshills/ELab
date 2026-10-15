@@ -13,11 +13,15 @@ import (
 )
 
 func TestNMOSBlankConstructionUIAgentParity(t *testing.T) {
+	testMOSFETBlankConstruction(t, workbench.NMOSExampleGraph())
+}
+
+func testMOSFETBlankConstruction(t *testing.T, fixture workbench.Graph) {
+	t.Helper()
 	user, cleanup := testScreen(t)
 	defer cleanup()
 	agent := workbench.New()
 	defer agent.Close()
-	fixture := workbench.NMOSExampleGraph()
 	ids := map[string]string{}
 	for _, part := range fixture.Components {
 		uiAction(t, user, "part-list", &ui.ChangeEvent{SelectedID: part.Kind})
@@ -70,12 +74,17 @@ func TestNMOSBlankConstructionUIAgentParity(t *testing.T) {
 }
 
 func TestNMOSExampleSharedLoadPulseAndProtection(t *testing.T) {
+	testMOSFETExample(t, "nmos", "cutoff")
+}
+
+func testMOSFETExample(t *testing.T, example, edgeRegion string) {
+	t.Helper()
 	user, cleanup := testScreen(t)
 	defer cleanup()
 	agent := workbench.New()
 	defer agent.Close()
-	uiAction(t, user, "examples-menu", &ui.ChangeEvent{SelectedID: "example.nmos"})
-	agentAction(t, agent, "example.load", workbench.ExampleLoadParams{ID: "nmos"})
+	uiAction(t, user, "examples-menu", &ui.ChangeEvent{SelectedID: "example." + example})
+	agentAction(t, agent, "example.load", workbench.ExampleLoadParams{ID: example})
 	ctxReady, cancelReady := context.WithTimeout(context.Background(), time.Second)
 	defer cancelReady()
 	if _, err := user.service.Wait(ctxReady); err != nil {
@@ -101,7 +110,7 @@ func TestNMOSExampleSharedLoadPulseAndProtection(t *testing.T) {
 		agentAction(t, agent, "simulation.step", workbench.StepParams{Duration: .001})
 	}
 	u, a := user.service.Snapshot(), agent.Snapshot()
-	if u.Example == nil || u.Example.Info.ID != "nmos" || u.Mixed == nil || u.Mixed.Stale || u.Mixed.MOSFETs[0].State != "cutoff" || u.Mixed.MOSFETs[0].GateCurrent != 0 || !reflect.DeepEqual(u.Mixed.MOSFETs, a.Mixed.MOSFETs) || math.Abs(u.Transient.Sample.Time-.2) > 1e-12 {
+	if u.Example == nil || u.Example.Info.ID != example || u.Mixed == nil || u.Mixed.Stale || u.Mixed.MOSFETs[0].State != edgeRegion || u.Mixed.MOSFETs[0].GateCurrent != 0 || !reflect.DeepEqual(u.Mixed.MOSFETs, a.Mixed.MOSFETs) || math.Abs(u.Transient.Sample.Time-.2) > 1e-12 {
 		t.Fatal("MOSFET example pulse parity", u.Diagnostics, a.Diagnostics)
 	}
 	uiAction(t, user, "selection", &ui.ChangeEvent{SelectedID: "RL"})
@@ -110,7 +119,7 @@ func TestNMOSExampleSharedLoadPulseAndProtection(t *testing.T) {
 	if !user.service.Snapshot().Mixed.Stale {
 		t.Fatal("paused edit failed to mark stale")
 	}
-	uiAction(t, user, "examples-menu", &ui.ChangeEvent{SelectedID: "example.nmos"})
+	uiAction(t, user, "examples-menu", &ui.ChangeEvent{SelectedID: "example." + example})
 	if user.pendingCommand != "example.load" {
 		t.Fatal("MOSFET load bypassed replacement protection")
 	}

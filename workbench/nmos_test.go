@@ -232,7 +232,7 @@ func TestNMOSCapturePersistenceSweepAndModelGuards(t *testing.T) {
 func TestNMOSConstructionAndCapacity(t *testing.T) {
 	s := New()
 	defer s.Close()
-	call(t, s, "parts.search.set", SearchParams{Query: "MOSFET"}, "search")
+	call(t, s, "parts.search.set", SearchParams{Query: "NMOS"}, "search")
 	if p := s.Snapshot().MatchingParts; len(p) != 1 || p[0].Kind != "nmos" {
 		t.Fatal("search discoverability", p)
 	}

@@ -14,6 +14,7 @@ func (s *screen) registerExampleLoadCommands() {
 	for _, template := range []struct{ command, label, id string }{
 		{"example.led-fade", "Load capacitor-buffered LED fade", "led-fade"},
 		{"example.nmos", "Load MOSFET LED switch", "nmos"},
+		{"example.pmos", "Load high-side MOSFET LED switch", "pmos"},
 	} {
 		if err := s.commands.Register(command.Command{ID: template.command, Label: template.label, Available: func() error {
 			if s.fileBusy || s.pendingCommand != "" || s.service.Snapshot().Closed {

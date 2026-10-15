@@ -50,6 +50,9 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	if m.DiodeModel != nil {
 		envelope["diode_model"] = m.DiodeModel
 	}
+	if m.PMOSModel != nil {
+		envelope["pmos_model"] = m.PMOSModel
+	}
 	if m.NMOSModel != nil {
 		envelope["nmos_model"] = m.NMOSModel
 	}
@@ -198,16 +201,20 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		if r == nil || m.LED != nil || m.NPN != nil || r.Stale || r.Engine != networkEngine(m.Analysis) || !recordingNear(r.Time, m.Duration) || len(r.Nodes) > MaxMixedNodes+1 {
 			return fmt.Errorf("invalid recorded mixed final result")
 		}
-		mosIDs := []string{}
+		mosIDs := map[string][]string{"nmos": {}, "pmos": {}}
 		for _, mos := range r.MOSFETs {
-			mosIDs = append(mosIDs, mos.ID)
-			if mos.Model != NMOSDeviceModel() {
-				return fmt.Errorf("invalid recorded NMOS model")
+			part, ok := m.Graph.Component(mos.ID)
+			if !ok || !IsMOSFETKind(part.Kind) || mos.Model != mosfetModel(part.Kind) {
+				return fmt.Errorf("invalid recorded MOSFET identity/model")
+			}
+			mosIDs[part.Kind] = append(mosIDs[part.Kind], mos.ID)
+		}
+		for _, kind := range []string{"nmos", "pmos"} {
+			if err := recordedObjectIDs(m.Graph, kind, mosIDs[kind]); err != nil {
+				return err
 			}
 		}
-		if err := recordedObjectIDs(m.Graph, "nmos", mosIDs); err != nil {
-			return err
-		}
+
 		ids := []string{}
 		for _, q := range r.Transistors {
 			ids = append(ids, q.TransistorID)

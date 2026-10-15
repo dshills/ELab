@@ -1,0 +1,207 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.89.0",
+  "build_version": "104",
+  "binary_sha256": "628d7b48d6ebac25401c3a5305a7d8e4e1c2c588460ca84d98caf64b2302b4be",
+  "agent_binary_sha256": "a4ae9aa289cfb502e0e49b0b99c1af5dc7c8a591782f5e6ac8ba36d674f1876e",
+  "bundle_files_compared": 3,
+  "bundle_manifest_sha256": "8adafbd3a42af1d9d833206a2dc08d6a875babd2be68c2bbaa7501c924bf707b",
+  "sdk": {
+    "commit": "621aca2da91836631fc05b2a7b97f124d53518dd",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "desktop/drawing.go": "7e1bc458c40bc2d2fad314542b097104f2bc34bfa46b1b3b0935e2f7dc6a8e2a",
+    "desktop/example_load.go": "c3d73f7771b13e8f328957f1335a4093d9ad8141dd7ec06b947057208031d0b8",
+    "desktop/examples_smoke.go": "c6e21dcaea627ae4d8a8354f711f09ad1a68a729960b97ca3856d31a67dfcb13",
+    "desktop/menus.go": "ae51f2bdc479ffd60ba8991741d50cca9f819c5dcf7349071e8a0e38305c90c9",
+    "desktop/nmos_smoke.go": "3e429fae62b3d0231540824062c19fbc851c0c4055d6b5300f08a074ec58417e",
+    "desktop/nmos_test.go": "10ea93f51d85410769a9feb7f03b21e29d273db2832d9955b469102f55ddebaa",
+    "desktop/pmos_test.go": "7dcebbc06e9f50c3aa02b6410fd36b69ae9e0a134fc07df5507c29f968ed985f",
+    "desktop/view.go": "f83d88abadba742c8943491f0673f6548bd78c334c0b41edb01bdb56629a1a8d",
+    "desktop/workflow.go": "7e39308677a6eec92663759ffbd61a568e1b87215d6453a31e8eae2bd11a6af0",
+    "internal/uiaudit/audit.go": "a4898325a815ed38876e910e52a2a3e6d4ccc03517549364fe35d07a84d4a5b4",
+    "scripts/pmos-demo.py": "e28ad0df92a0ece3fa1c1524d59e907179d0652296aa4bcc670411ffc9019c30",
+    "workbench/commands.go": "b18d86aef05f283c27bc4993b22275102408aaccb7014a79a35a761f05fe1345",
+    "workbench/dc_sweep_worker.go": "83f3550e437989a13af657c86ec6ddf3f16651e4d93984609be0fc540c1ae9f5",
+    "workbench/editing.go": "6f5a24b5c0f696f1de88db0c26a8613942a6fa0c83761cc5b81b540f456a6738",
+    "workbench/examples.go": "8c2d6c9cd872e2d0a0e895d32e6c5e84e945c351f01a2ba5c0a1b1e413e20c8c",
+    "workbench/export.go": "8c7a1b8e44077f1fd0eafc14a17ee9e907e674d2355694be07874a9464faf547",
+    "workbench/graph.go": "589d640b46d23fada3be68a962add613760580c3c66d160defda78f74ee3e5f3",
+    "workbench/library.go": "f319d1eff07195c62902d0ac05eaea7c733fa290f0b5ebcfeb7e0a37afe02e9a",
+    "workbench/limits.go": "df2c15078c085ed94d9683638d54f63c162a258b3d2fe119c292bcf86ddefb98",
+    "workbench/mixed.go": "0f1c70814dfb1ae35cf77b12dfc4eec31315d9d9a2303ff1b3974bab7754e853",
+    "workbench/mosfet.go": "8b148228be5379b5e09bfa6de6671927f502f549f91ed2ed2e5dffc0775ae2be",
+    "workbench/network_compile.go": "8d3d1fd493a59ae09770d618291c90ed0eefa7dd3f153c4044bbf602eec6326f",
+    "workbench/nmos.go": "269230d78eeb3198e97f7f46e3c13b98a2f6d73d9718acfa23fba663f1d92357",
+    "workbench/nmos_test.go": "3d9cd802727b0b2734a29eec543ab2fb1336d4cbe8f75a249656edec93f61233",
+    "workbench/persistence.go": "0ce935a3ad683ba8e66bc58d2439253a5976afbe99f22fc057c3497d15448d73",
+    "workbench/pmos.go": "14ffbfe53776e88a4c0f57e397b905da393f6ca473a817156792b43ac538e108",
+    "workbench/pmos_example.go": "0ad11e866801736bc080ef5aec67d85652132efe62fefeecf2671bd3b2cfbf93",
+    "workbench/pmos_test.go": "68e3b99887be7b88ab1818fdc19cf458d037c959bb5715c5ffcefe25417d42c2",
+    "workbench/project_recordings.go": "308ab64805d75030355a3b04057059e0ccb197568a08975977a80dfb4c243aca",
+    "workbench/recording_import.go": "e55f065103c9e5f7a27d06d69f0713317f48c70a9b78aa6788225e7bd5b4225b",
+    "workbench/recovery.go": "10dc2a29664a429abefddfc93967da0305c5a327e952e3835b3cd61058c4fdbe",
+    "workbench/recovery_types.go": "c6ab981d09f05315de09a8a34ab7bb542be8d9655e50e46f85162b04ffc1023c",
+    "workbench/scope.go": "fe2b36632629a00190ecaa38c4d4170f902d707dfbde527516f4ec8457c82e0a",
+    "workbench/service.go": "e7bde05c1327faa794b0285ec87c3956911c517ea18f7c528d091d5d418a32f6",
+    "workbench/verification.go": "fd2da6e4ead8f359be92c11dd9ec6c36a73b62e10030a1c7e0a70211b9823450",
+    "workbench/verification_export.go": "52ff4ced84e6eae42a4609564cce364e56de2579523e71e09919f9b8bc1ff1fc",
+    "workbench/verification_types.go": "664dac823e6fab9b9e4b2ca167ee6b15905651f16abf638171e9e02b114df0f4",
+    "workbench/wire_currents.go": "1bebc648b8cd9eb90a3264abecbef8cc06a1c09f0df8820591dbfc96450a97ff"
+  },
+  "source_inventory": {
+    "sources": 49,
+    "sites": 380,
+    "public_commands": 159,
+    "source_routes": 129,
+    "binding_review_sites": 142,
+    "literal_routes": 212,
+    "declared_wrapper_or_menu_sites": 9,
+    "registry_declarations": 17
+  },
+  "observations": {
+    "manual_matches_template": true,
+    "on": {
+      "id": "M1",
+      "model": {
+        "id": "elab.generic-pmos.v1",
+        "threshold_v": -1.5,
+        "beta_a_per_v2": 0.1,
+        "lambda_per_v": 0.02,
+        "body_diode": {
+          "id": "elab.generic-silicon-diode.v1",
+          "is_a": 1e-09,
+          "n": 1.7,
+          "rs_ohm": 1,
+          "temperature_c": 27,
+          "limitations": "Generic silicon junction with Shockley forward/reverse leakage and finite series resistance; no reverse breakdown, capacitance, charge storage, thermal dynamics, ratings or physical part identity."
+        },
+        "limitations": "Generic enhancement PMOS with square-law channel, channel-length modulation and drain-to-source body diode. Body tied to source; zero gate current. No subthreshold conduction, body effect, gate/junction capacitance, charge storage, switching loss, breakdown, heating, ratings or named device identity. External capacitors provide circuit timing. Same illustrative beta magnitude as the generic NMOS, not a physical matched pair."
+      },
+      "gate_current_a": 0,
+      "drain_current_a": -0.002908619225645868,
+      "source_current_a": -0.002908619225645868,
+      "vgs_v": -4.995004995004995,
+      "vds_v": -0.008330759456666392,
+      "power_w": 2.4231007119890996e-05,
+      "state": "triode"
+    },
+    "off": {
+      "id": "M1",
+      "model": {
+        "id": "elab.generic-pmos.v1",
+        "threshold_v": -1.5,
+        "beta_a_per_v2": 0.1,
+        "lambda_per_v": 0.02,
+        "body_diode": {
+          "id": "elab.generic-silicon-diode.v1",
+          "is_a": 1e-09,
+          "n": 1.7,
+          "rs_ohm": 1,
+          "temperature_c": 27,
+          "limitations": "Generic silicon junction with Shockley forward/reverse leakage and finite series resistance; no reverse breakdown, capacitance, charge storage, thermal dynamics, ratings or physical part identity."
+        },
+        "limitations": "Generic enhancement PMOS with square-law channel, channel-length modulation and drain-to-source body diode. Body tied to source; zero gate current. No subthreshold conduction, body effect, gate/junction capacitance, charge storage, switching loss, breakdown, heating, ratings or named device identity. External capacitors provide circuit timing. Same illustrative beta magnitude as the generic NMOS, not a physical matched pair."
+      },
+      "gate_current_a": 0,
+      "drain_current_a": -1e-09,
+      "source_current_a": -1e-09,
+      "vgs_v": 0,
+      "vds_v": -3.6865451827086986,
+      "power_w": 3.6865451827086988e-09,
+      "state": "cutoff"
+    },
+    "charge_10ms_v": -3.0313945782157403,
+    "charge_reference_v": -3.03240416500873,
+    "discharge_10ms_v": -1.5144794269943551,
+    "discharge_reference_v": -1.513050380445809,
+    "gate_rc_tau_s": 0.00909090909090909,
+    "inverter": [
+      {
+        "input_v": 0,
+        "output_v": 4.998571583241784,
+        "p_drain_a": -0.0004998581583243253,
+        "n_drain_a": 1e-09
+      },
+      {
+        "input_v": 2.5,
+        "output_v": 2.380952380952378,
+        "p_drain_a": -0.05261904861904762,
+        "n_drain_a": 0.052380953380952375
+      },
+      {
+        "input_v": 5,
+        "output_v": 2.856326578355343e-09,
+        "p_drain_a": -1e-09,
+        "n_drain_a": 9.99714367033799e-10
+      }
+    ],
+    "kept_recordings": 1
+  },
+  "checks": [
+    "PMOS independent channel/load references, finite-difference derivatives, body-diode direction, passive power and signed drain/source/gate probes pass",
+    "Pulse/RC startup and edge continuity match analytic references within 3 mV; complementary NMOS/PMOS inverter conserves current/power",
+    "Captures, legacy NMOS model hash, save/reopen, corruption refusal, snapshot ownership, shared M IDs, bias sweeps and combined capacity pass",
+    "Native blank construction and protected template/menu/pulse parity pass for both polarities using shared test/smoke helpers",
+    "Rotated export label regression covers NPN/NMOS/PMOS at all four rotations; final SVG has no wire/label-mask intersections",
+    "Final serialized lint/import/root/native race/vet pass; final public PMOS metadata/contracts/observations and SVG/PNG bytes match native/headless",
+    "Public NMOS workflow passes; actual 0.88.0/103 project/capture reopens with fresh live time and unchanged original bytes/current/model hash",
+    "Final packaged GPU/UI/protected-close smoke exercises both MOSFET polarities; four adapters pass existing LED/RC/NPN regressions",
+    "Source ledger and SDK/prepared hashes verify; qualified/canonical package bytes/modes/metadata match; prior .88/103 preserved; all owned sessions terminal"
+  ],
+  "evidence": [
+    "docs/pmos.md",
+    "scripts/pmos-demo.py",
+    "docs/validation/headless-pmos.json",
+    "docs/validation/desktop-pmos.json",
+    "docs/validation/pmos-place-discovery.json",
+    "docs/validation/pmos-public-parity.json",
+    "docs/validation/pmos-legacy-nmos.json",
+    "docs/validation/pmos-output-review.json",
+    "docs/validation/pmos-conformance.json"
+  ],
+  "logs_sha256": {
+    "build/pmos-089/audit-final.log": "efdf2ad5fa531cc0b22513c7ba947610bc8e9fa11e20d749e9878c4ca0ab4fd7",
+    "build/pmos-089/audit-generate.log": "efdf2ad5fa531cc0b22513c7ba947610bc8e9fa11e20d749e9878c4ca0ab4fd7",
+    "build/pmos-089/audit-verify.log": "efdf2ad5fa531cc0b22513c7ba947610bc8e9fa11e20d749e9878c4ca0ab4fd7",
+    "build/pmos-089/build-final.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/pmos-089/build-layout.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/pmos-089/build-preview.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/pmos-089/build-routed.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/pmos-089/check.log": "84ecbd58b9523cb1af65ea3f80289c10135b843f5f5e230912cfa0444b387563",
+    "build/pmos-089/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/pmos-089/core-focused-final.log": "f241fd76b430136ef393bb19f7697293c60bbe3f72a595b95b158434a1d32807",
+    "build/pmos-089/core-focused.log": "152695368fea9b98479d6e4e955a3024641167c2119b036aa69aa5730095383c",
+    "build/pmos-089/headless-final.log": "c186756c6b249311fc10e8fbd844df35c52c337a9fde63aaff1c627a39ca07d8",
+    "build/pmos-089/headless-layout.log": "c186756c6b249311fc10e8fbd844df35c52c337a9fde63aaff1c627a39ca07d8",
+    "build/pmos-089/headless-preview.log": "c186756c6b249311fc10e8fbd844df35c52c337a9fde63aaff1c627a39ca07d8",
+    "build/pmos-089/headless-routed.log": "c186756c6b249311fc10e8fbd844df35c52c337a9fde63aaff1c627a39ca07d8",
+    "build/pmos-089/native-final.log": "9134307a2bfacc97ef9ddcd17aace13d2d5eae3b7f58c64edb7ab068dd119c75",
+    "build/pmos-089/native-focused.log": "d3d2f52ec9d1a39b2a2767cea1ae24e8791d4d2ba8222fc5eea04f3a01544817",
+    "build/pmos-089/native-host.log": "af0baf29b8daed5cc378d694b52a83d035795e203a4ad372bede105ed125ad2b",
+    "build/pmos-089/nmos-public-regression.log": "3f3cac98f569577c947abdc4542b0161fd24a12b6bdfc95fc8c41382bace3850",
+    "build/pmos-089/nmos-regression-final.log": "b9fc66056ea1989e1b04d59bc26e3b5088eddd0a4283baf076f5b0b6566c7fef",
+    "build/pmos-089/nmos-regression.log": "d0064a1b58c26f893c444454912d5ce8eebaa851d79d70bde2cc02152f6b9569",
+    "build/pmos-089/package.log": "00721e2afb7782e20d7b5451884c96c7895890dd3693439955dc812a5edda8b1",
+    "build/pmos-089/smoke.log": "5d04eac4f26413a1e61be061efddba8bd37e4176c712ad8ab74530ee99e16947"
+  },
+  "notes": [
+    "Initial PMOS channel reference rounded reverse body leakage to exactly 1 nA at 0.5 V; corrected reference includes the independent reverse Shockley exponential, preserving tight tolerance.",
+    "Generic MOSFET search now returns both kinds; the existing single-kind NMOS test now searches its specific alias, with a separate two-kind search regression.",
+    "Shared model/result Go types retain exported NMOS aliases and identical serialized parameters. One local model schema adds definition 67 while keeping the 64 KiB default catalog guard; no description trimming or new public command IDs.",
+    "Initial output inspection exposed label/annotation masking. Rotated transistor labels avoid their gate/base pin, the pulse source moves left, and explicit J1 keeps the gate input route clear. Final full checks/build/public/smoke/conformance use final sources/layout."
+  ],
+  "limits": [
+    "Fixed generic models share illustrative beta; no physical matched-pair, intrinsic gate charge, body effect, subthreshold channel, breakdown, heating or rating claim.",
+    "Two MOSFETs total across N/P kinds; no existing work/source/global bounds or document versions raised. Configurable/named models remain open.",
+    "Adaptive opening fit, small-canvas text/label/crossing readability, broader input/IME/accessibility, visible latency, distribution, participants and physical printers remain open.",
+    "P0 remains 17 implemented /10 partial; continuing electronics/repository-quality goal remains active."
+  ]
+}

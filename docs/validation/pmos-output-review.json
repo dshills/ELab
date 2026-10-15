@@ -1,0 +1,38 @@
+{
+  "reviewed": true,
+  "scope": "Final generated PMOS schematic PNG inspection and world-coordinate SVG wire/mask intersection check; no general layout or mounted-input certification",
+  "before_junction_intersections": [
+    {
+      "wire": "W5",
+      "segment": [
+        [
+          340.0,
+          -70.0
+        ],
+        [
+          340.0,
+          -130.0
+        ]
+      ],
+      "mask": [
+        227.0,
+        -122.0,
+        148.0,
+        19.0
+      ]
+    }
+  ],
+  "final_intersections": [],
+  "files_sha256": {
+    "build/pmos-089/headless-final-assets/pmos.svg": "1a7c24c7b9cf0390ddea94437d6367fb26fadf6659b763b544d3187ce64ee304",
+    "build/pmos-089/headless-final-assets/pmos.png": "eb54c3e1cfb6bb0af065d5925ded1ed5d55fc92cb378257d2cde2cc608f49793",
+    "build/pmos-089/native-final-assets/pmos.svg": "1a7c24c7b9cf0390ddea94437d6367fb26fadf6659b763b544d3187ce64ee304",
+    "build/pmos-089/native-final-assets/pmos.png": "eb54c3e1cfb6bb0af065d5925ded1ed5d55fc92cb378257d2cde2cc608f49793"
+  },
+  "observations": [
+    "Final source/control layout and explicit J1 routing junction keep wires clear of annotation/label backgrounds.",
+    "Rotated transistor label is on the side opposite its gate/base, protecting the named terminal. Root regression covers NPN/NMOS/PMOS at all four rotations.",
+    "Source is above drain in the rotated PMOS symbol; arrow distinguishes P type; legend lists all nine objects.",
+    "D1 label remains close to light arrows; broader label/crossing readability and adaptive small-window opening fit remain tracked."
+  ]
+}

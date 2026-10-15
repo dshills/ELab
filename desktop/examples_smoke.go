@@ -89,6 +89,9 @@ func nativeExamplesSmoke(ctx context.Context, a *app.Application, s *screen) err
 	if err := nativeNMOSSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	if err := nativePMOSSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	return nativeRectifierSmoke(ctx, a, s)
 }
 

@@ -34,6 +34,8 @@ type CircuitLimits struct {
 	Capacitors          int `json:"capacitors"`
 	Transistors         int `json:"npn_transistors"`
 	MOSFETs             int `json:"nmos_transistors"`
+	PMOS                int `json:"pmos_transistors"`
+	CombinedMOSFETs     int `json:"mosfets_total"`
 	Resistors           int `json:"resistors"`
 	Switches            int `json:"switches"`
 	Diodes              int `json:"silicon_diodes"`
@@ -43,7 +45,7 @@ type CircuitLimits struct {
 }
 
 func Limits() CircuitLimits {
-	return CircuitLimits{IntegrationAttempts: MaxIntegrationAttempts, IntegrationWallMS: int(MaxIntegrationWallTime / time.Millisecond), PinnedReadings: MaxPinnedReadings, DrawingObjects: MaxComponents, Wires: MaxWires, SimulatedComponents: MaxSimulatedComponents, ElectricalNodes: MaxElectricalNodes, Sources: MaxNetworkSources, Capacitors: MaxNetworkCapacitors, Transistors: MaxNetworkTransistors, MOSFETs: MaxNetworkMOSFETs, Resistors: MaxNetworkResistors, Switches: MaxNetworkSwitches, Diodes: MaxNetworkDiodes, Potentiometers: MaxNetworkPotentiometers, LEDs: MaxNetworkLEDs, ScopeTraces: MaxScopeProbes}
+	return CircuitLimits{IntegrationAttempts: MaxIntegrationAttempts, IntegrationWallMS: int(MaxIntegrationWallTime / time.Millisecond), PinnedReadings: MaxPinnedReadings, DrawingObjects: MaxComponents, Wires: MaxWires, SimulatedComponents: MaxSimulatedComponents, ElectricalNodes: MaxElectricalNodes, Sources: MaxNetworkSources, Capacitors: MaxNetworkCapacitors, Transistors: MaxNetworkTransistors, MOSFETs: MaxNetworkMOSFETs, PMOS: MaxNetworkMOSFETs, CombinedMOSFETs: MaxNetworkMOSFETs, Resistors: MaxNetworkResistors, Switches: MaxNetworkSwitches, Diodes: MaxNetworkDiodes, Potentiometers: MaxNetworkPotentiometers, LEDs: MaxNetworkLEDs, ScopeTraces: MaxScopeProbes}
 }
 func SimulatedComponentCount(g Graph) int {
 	count := 0
@@ -55,5 +57,5 @@ func SimulatedComponentCount(g Graph) int {
 	return count
 }
 func networkLimitMessage() string {
-	return fmt.Sprintf("Network simulation supports at most %d simulated parts and %d electrical nodes including ground: %d sources, %d capacitors, %d NPNs, %d NMOS, %d resistors, %d switches, %d diodes, %d potentiometers and %d LEDs. Excess drawings remain editable and savable.", MaxSimulatedComponents, MaxElectricalNodes, MaxNetworkSources, MaxNetworkCapacitors, MaxNetworkTransistors, MaxNetworkMOSFETs, MaxNetworkResistors, MaxNetworkSwitches, MaxNetworkDiodes, MaxNetworkPotentiometers, MaxNetworkLEDs)
+	return fmt.Sprintf("Network simulation supports at most %d simulated parts and %d electrical nodes including ground: %d sources, %d capacitors, %d NPNs, %d total N/P-channel MOSFETs, %d resistors, %d switches, %d diodes, %d potentiometers and %d LEDs. Excess drawings remain editable and savable.", MaxSimulatedComponents, MaxElectricalNodes, MaxNetworkSources, MaxNetworkCapacitors, MaxNetworkTransistors, MaxNetworkMOSFETs, MaxNetworkResistors, MaxNetworkSwitches, MaxNetworkDiodes, MaxNetworkPotentiometers, MaxNetworkLEDs)
 }

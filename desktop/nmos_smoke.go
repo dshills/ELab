@@ -10,6 +10,13 @@ import (
 )
 
 func nativeNMOSSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	return nativeMOSFETSmoke(ctx, a, s, "nmos", "triode", "cutoff")
+}
+func nativePMOSSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	return nativeMOSFETSmoke(ctx, a, s, "pmos", "cutoff", "triode")
+}
+
+func nativeMOSFETSmoke(ctx context.Context, a *app.Application, s *screen, example, initial, final string) error {
 	owner := func(run func() error) error {
 		done := make(chan error, 1)
 		if err := a.PostWait(ctx, func() { done <- run() }); err != nil {
@@ -23,7 +30,7 @@ func nativeNMOSSmoke(ctx context.Context, a *app.Application, s *screen) error {
 		}
 	}
 	if err := owner(func() error {
-		if err := smokeUI(s, "examples-menu", &ui.ChangeEvent{SelectedID: "example.nmos"}); err != nil {
+		if err := smokeUI(s, "examples-menu", &ui.ChangeEvent{SelectedID: "example." + example}); err != nil {
 			return err
 		}
 		if s.pendingCommand == "example.load" {
@@ -47,7 +54,7 @@ func nativeNMOSSmoke(ctx context.Context, a *app.Application, s *screen) error {
 	check := func(region string) error {
 		return owner(func() error {
 			state := s.service.Snapshot()
-			if state.Example == nil || state.Example.Info.ID != "nmos" || state.Mixed == nil || state.Mixed.Stale || len(state.Mixed.MOSFETs) != 1 || state.Mixed.MOSFETs[0].State != region || state.Mixed.MOSFETs[0].GateCurrent != 0 || state.Mixed.KCLResidual > 1e-9 || math.Abs(state.Mixed.PowerResidual) > 1e-8 {
+			if state.Example == nil || state.Example.Info.ID != example || state.Mixed == nil || state.Mixed.Stale || len(state.Mixed.MOSFETs) != 1 || state.Mixed.MOSFETs[0].State != region || state.Mixed.MOSFETs[0].GateCurrent != 0 || state.Mixed.KCLResidual > 1e-9 || math.Abs(state.Mixed.PowerResidual) > 1e-8 {
 				return fmt.Errorf("native MOSFET %s result missing", region)
 			}
 			if err := ui.Validate(s.view()); err != nil {
@@ -65,7 +72,7 @@ func nativeNMOSSmoke(ctx context.Context, a *app.Application, s *screen) error {
 			return err
 		})
 	}
-	if err := check("triode"); err != nil {
+	if err := check(initial); err != nil {
 		return err
 	}
 	for i := 0; i < 200; i++ {
@@ -73,5 +80,5 @@ func nativeNMOSSmoke(ctx context.Context, a *app.Application, s *screen) error {
 			return err
 		}
 	}
-	return check("cutoff")
+	return check(final)
 }

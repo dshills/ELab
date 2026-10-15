@@ -34,7 +34,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
-	MOSFETs            []NMOSResult          `json:"mosfets,omitempty"`
+	MOSFETs            []MOSFETResult        `json:"mosfets,omitempty"`
 	Potentiometers     []PotentiometerResult `json:"potentiometers,omitempty"`
 	Diodes             []BranchResult        `json:"diodes,omitempty"`
 	Switches           []BranchResult        `json:"switches,omitempty"`
@@ -63,7 +63,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 	for k, v := range r.Nodes {
 		o.Nodes[k] = v
 	}
-	o.MOSFETs = append([]NMOSResult(nil), r.MOSFETs...)
+	o.MOSFETs = append([]MOSFETResult(nil), r.MOSFETs...)
 	o.Transistors = append([]MixedTransistor{}, r.Transistors...)
 
 	o.Capacitors = append([]CapacitorResult{}, r.Capacitors...)
@@ -216,9 +216,9 @@ func (n *mixedNetwork) equations(x, old []float64, dt float64, t *Transient, at 
 			u, v := n.pin(p, "anode"), n.pin(p, "cathode")
 			i, g := diodeCurrent(voltage(x, u) - voltage(x, v))
 			flow(u, v, i, g)
-		case "nmos":
+		case "nmos", "pmos":
 			g, d, s := n.pin(p, "gate"), n.pin(p, "drain"), n.pin(p, "source")
-			id, gm, gd := nmosLinear(voltage(x, g)-voltage(x, s), voltage(x, d)-voltage(x, s))
+			id, gm, gd := mosfetLinear(p.Kind, voltage(x, g)-voltage(x, s), voltage(x, d)-voltage(x, s))
 			if d >= 0 {
 				f[d] += id
 			}
@@ -425,13 +425,13 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			powers += power
 			r.Potentiometers = append(r.Potentiometers, PotentiometerResult{ID: p.ID, Resistance: p.Value, WiperPosition: *p.WiperPosition, UpperResistance: upper, LowerResistance: lower, Terminal1Voltage: v1, Terminal2Voltage: v2, WiperVoltage: vw, Terminal1Current: i1, Terminal2Current: i2, WiperCurrent: -i1 - i2, Power: power})
 
-		case "nmos":
+		case "nmos", "pmos":
 			vgs := voltage(x, n.pin(p, "gate")) - voltage(x, n.pin(p, "source"))
 			vds := voltage(x, n.pin(p, "drain")) - voltage(x, n.pin(p, "source"))
-			id, _, _ := nmosLinear(vgs, vds)
+			id, _, _ := mosfetLinear(p.Kind, vgs, vds)
 			power := vds * id
 			powers += power
-			r.MOSFETs = append(r.MOSFETs, NMOSResult{ID: p.ID, Model: NMOSDeviceModel(), DrainCurrent: id, SourceCurrent: id, VGS: vgs, VDS: vds, Power: power, State: nmosState(vgs, vds)})
+			r.MOSFETs = append(r.MOSFETs, MOSFETResult{ID: p.ID, Model: mosfetModel(p.Kind), DrainCurrent: id, SourceCurrent: id, VGS: vgs, VDS: vds, Power: power, State: mosfetState(p.Kind, vgs, vds)})
 		case "npn":
 			vb, vc := voltage(x, n.pin(p, "base")), voltage(x, n.pin(p, "collector"))
 			ib, ic, _, _, _, _ := npnLinear(vb, vc)
