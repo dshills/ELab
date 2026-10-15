@@ -1,0 +1,993 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "cases": [
+    {
+      "example": "led",
+      "result": {
+        "target": {
+          "component_id": "V1",
+          "parameter": "voltage",
+          "label": "V1 \u00b7 DC bias",
+          "unit": "V",
+          "minimum": -12,
+          "maximum": 12
+        },
+        "start_si": 0,
+        "stop_si": 5,
+        "probes": [
+          {
+            "id": "i:D1",
+            "label": "D1 current",
+            "unit": "A",
+            "positive": "D1.anode",
+            "reference": "D1.cathode"
+          },
+          {
+            "id": "v:D1",
+            "label": "D1 voltage",
+            "unit": "V",
+            "positive": "D1.anode",
+            "reference": "D1.cathode"
+          }
+        ],
+        "points": [
+          {
+            "input": 0,
+            "values": [
+              0,
+              0
+            ],
+            "kcl_residual_a": 0,
+            "power_residual_w": 0
+          },
+          {
+            "input": 0.5,
+            "values": [
+              1.5764977214294928e-16,
+              0.49999999999993305
+            ],
+            "kcl_residual_a": 9.070332375805234e-17,
+            "power_residual_w": -4.536720933817815e-17
+          },
+          {
+            "input": 1,
+            "values": [
+              2.485607706984787e-12,
+              0.9999999997467558
+            ],
+            "kcl_residual_a": 2.232363503599437e-12,
+            "power_residual_w": -2.232363498311446e-12
+          },
+          {
+            "input": 1.5,
+            "values": [
+              3.9157937813552576e-08,
+              1.4999608420659007
+            ],
+            "kcl_residual_a": 3.714298296177827e-15,
+            "power_residual_w": -5.571430394419954e-15
+          },
+          {
+            "input": 2,
+            "values": [
+              9.614131938215343e-05,
+              1.9038586814306717
+            ],
+            "kcl_residual_a": 8.128251489849386e-13,
+            "power_residual_w": -1.5475040953533137e-12
+          },
+          {
+            "input": 2.5,
+            "values": [
+              0.0005094661757536543,
+              1.990533824247766
+            ],
+            "kcl_residual_a": 1.4203048459560108e-15,
+            "power_residual_w": -2.8269487445387043e-15
+          },
+          {
+            "input": 3,
+            "values": [
+              0.0009754023927182366,
+              2.0245976075889995
+            ],
+            "kcl_residual_a": 3.0723611588873156e-13,
+            "power_residual_w": -6.220293377601216e-13
+          },
+          {
+            "input": 3.5,
+            "values": [
+              0.0014542624213068163,
+              2.0457375786932683
+            ],
+            "kcl_residual_a": 8.456776945386935e-17,
+            "power_residual_w": -1.726049858596923e-16
+          },
+          {
+            "input": 4,
+            "values": [
+              0.0019388991656982412,
+              2.0611008343127426
+            ],
+            "kcl_residual_a": 1.0983618528581651e-14,
+            "power_residual_w": -2.263900872323532e-14
+          },
+          {
+            "input": 4.5,
+            "values": [
+              0.0024268003295996017,
+              2.0731996704004048
+            ],
+            "kcl_residual_a": 6.5052130349130266e-18,
+            "power_residual_w": -1.0408340855860843e-17
+          },
+          {
+            "input": 5,
+            "values": [
+              0.00291679657744158,
+              2.0832034225594906
+            ],
+            "kcl_residual_a": 1.07032438467769e-15,
+            "power_residual_w": -2.230854390106174e-15
+          }
+        ],
+        "statistics": [
+          {
+            "probe_id": "i:D1",
+            "minimum": 0,
+            "maximum": 0.00291679657744158
+          },
+          {
+            "probe_id": "v:D1",
+            "minimum": 0,
+            "maximum": 2.0832034225594906
+          }
+        ]
+      },
+      "metadata": {
+        "format": "elab.dc-sweep",
+        "version": 1,
+        "engine": "elab.network-mna-dc.v1",
+        "operation_id": "sweep-1",
+        "created_at": "2026-10-15T10:24:04.275354Z",
+        "document_generation": 2,
+        "electrical_revision": 2,
+        "actuation_revision": 0,
+        "source": {
+          "graph": {
+            "components": [
+              {
+                "id": "V1",
+                "kind": "dc-source",
+                "name": "DC source",
+                "terminals": [
+                  "positive",
+                  "negative"
+                ],
+                "position": {
+                  "x": -200,
+                  "y": 0
+                },
+                "value": 5,
+                "unit": "V",
+                "model": "ideal-dc.v1",
+                "rotation": 0
+              },
+              {
+                "id": "R1",
+                "kind": "resistor",
+                "name": "Resistor",
+                "terminals": [
+                  "1",
+                  "2"
+                ],
+                "position": {
+                  "x": 0,
+                  "y": -110
+                },
+                "value": 1000,
+                "unit": "\u03a9",
+                "model": "ideal-resistor.v1",
+                "rotation": 0
+              },
+              {
+                "id": "D1",
+                "kind": "led",
+                "name": "Red LED",
+                "terminals": [
+                  "anode",
+                  "cathode"
+                ],
+                "position": {
+                  "x": 200,
+                  "y": 0
+                },
+                "value": 0,
+                "model": "elab.generic-red-led.v1",
+                "rotation": 0
+              },
+              {
+                "id": "GND",
+                "kind": "ground",
+                "name": "Ground",
+                "terminals": [
+                  "reference"
+                ],
+                "position": {
+                  "x": 0,
+                  "y": 110
+                },
+                "value": 0,
+                "model": "ground.v1",
+                "rotation": 0
+              }
+            ],
+            "wires": [
+              {
+                "id": "W1",
+                "from": "V1.positive",
+                "to": "R1.1",
+                "connected": true
+              },
+              {
+                "id": "W2",
+                "from": "R1.2",
+                "to": "D1.anode",
+                "connected": true
+              },
+              {
+                "id": "W3",
+                "from": "D1.cathode",
+                "to": "GND.reference",
+                "connected": true
+              },
+              {
+                "id": "W4",
+                "from": "GND.reference",
+                "to": "V1.negative",
+                "connected": true
+              }
+            ]
+          },
+          "transient_settings": {
+            "step_s": 0.001,
+            "high_s": 0.05,
+            "low_s": 0.05,
+            "initial_voltage_v": 0,
+            "seconds_per_wall_second": 0.02
+          },
+          "led_model": {
+            "id": "elab.generic-red-led.v1",
+            "is_a": 1e-20,
+            "n": 2,
+            "rs_ohm": 1,
+            "temperature_c": 27,
+            "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+          }
+        },
+        "settings": {
+          "component_id": "V1",
+          "parameter": "voltage",
+          "start": "0 V",
+          "stop": "5 V",
+          "points": 11,
+          "probe_ids": [
+            "i:D1",
+            "v:D1"
+          ]
+        },
+        "dc_sources": [
+          {
+            "id": "V1",
+            "kind": "dc-source",
+            "dc_level_v": 5,
+            "origin": "configured DC value"
+          }
+        ],
+        "assumptions": [
+          "Independent DC operating points; no time advancement or hysteresis continuation",
+          "Capacitors open; startup voltages ignored",
+          "Sine sources use offset; finite pulses use low level; ideal pulses use zero; swept source uses the requested DC bias",
+          "Configured switch states and accepted wiper positions; live held inputs and pending actuation are not applied",
+          "Existing generic device assumptions and limits remain in force"
+        ]
+      },
+      "digest": "271e0c2b3eaa6c120bd1b6115f137062ecd4d4c2a58ce868d3f03428a6743727",
+      "cursor_index": 5,
+      "source_unchanged": false,
+      "kept_round_trip": true
+    },
+    {
+      "example": "rc",
+      "result": {
+        "target": {
+          "component_id": "V1",
+          "parameter": "voltage",
+          "label": "V1 \u00b7 DC bias",
+          "unit": "V",
+          "minimum": -12,
+          "maximum": 12
+        },
+        "start_si": 0,
+        "stop_si": 5,
+        "probes": [
+          {
+            "id": "v:C1",
+            "label": "C1 voltage",
+            "unit": "V",
+            "positive": "C1.1",
+            "reference": "C1.2"
+          },
+          {
+            "id": "i:C1",
+            "label": "C1 current",
+            "unit": "A",
+            "positive": "C1.1",
+            "reference": "C1.2"
+          }
+        ],
+        "points": [
+          {
+            "input": 0,
+            "values": [
+              0,
+              0
+            ],
+            "kcl_residual_a": 0,
+            "power_residual_w": 0
+          },
+          {
+            "input": 0.5,
+            "values": [
+              0.5,
+              0
+            ],
+            "kcl_residual_a": 0,
+            "power_residual_w": 0
+          },
+          {
+            "input": 1,
+            "values": [
+              1,
+              0
+            ],
+            "kcl_residual_a": 0,
+            "power_residual_w": 0
+          },
+          {
+            "input": 1.5,
+            "values": [
+              1.5,
+              0
+            ],
+            "kcl_residual_a": 0,
+            "power_residual_w": 0
+          },
+          {
+            "input": 2,
+            "values": [
+              2,
+              0
+            ],
+            "kcl_residual_a": 0,
+            "power_residual_w": 0
+          },
+          {
+            "input": 2.5,
+            "values": [
+              2.5,
+              0
+            ],
+            "kcl_residual_a": 0,
+            "power_residual_w": 0
+          },
+          {
+            "input": 3,
+            "values": [
+              3,
+              0
+            ],
+            "kcl_residual_a": 0,
+            "power_residual_w": 0
+          },
+          {
+            "input": 3.5,
+            "values": [
+              3.5,
+              0
+            ],
+            "kcl_residual_a": 0,
+            "power_residual_w": 0
+          },
+          {
+            "input": 4,
+            "values": [
+              4,
+              0
+            ],
+            "kcl_residual_a": 0,
+            "power_residual_w": 0
+          },
+          {
+            "input": 4.5,
+            "values": [
+              4.5,
+              0
+            ],
+            "kcl_residual_a": 0,
+            "power_residual_w": 0
+          },
+          {
+            "input": 5,
+            "values": [
+              5,
+              0
+            ],
+            "kcl_residual_a": 0,
+            "power_residual_w": 0
+          }
+        ],
+        "statistics": [
+          {
+            "probe_id": "v:C1",
+            "minimum": 0,
+            "maximum": 5
+          },
+          {
+            "probe_id": "i:C1",
+            "minimum": 0,
+            "maximum": 0
+          }
+        ]
+      },
+      "metadata": {
+        "format": "elab.dc-sweep",
+        "version": 1,
+        "engine": "elab.network-mna-dc.v1",
+        "operation_id": "sweep-4",
+        "created_at": "2026-10-15T10:24:04.337298Z",
+        "document_generation": 6,
+        "electrical_revision": 5,
+        "actuation_revision": 0,
+        "source": {
+          "graph": {
+            "components": [
+              {
+                "id": "V1",
+                "kind": "pulse-source",
+                "name": "Pulse source",
+                "terminals": [
+                  "positive",
+                  "negative"
+                ],
+                "position": {
+                  "x": -200,
+                  "y": 0
+                },
+                "value": 5,
+                "unit": "V",
+                "model": "ideal-square.v1",
+                "rotation": 0
+              },
+              {
+                "id": "R1",
+                "kind": "resistor",
+                "name": "Resistor",
+                "terminals": [
+                  "1",
+                  "2"
+                ],
+                "position": {
+                  "x": 0,
+                  "y": -110
+                },
+                "value": 10000,
+                "unit": "\u03a9",
+                "model": "ideal-resistor.v1",
+                "rotation": 0
+              },
+              {
+                "id": "C1",
+                "kind": "capacitor",
+                "name": "Capacitor",
+                "terminals": [
+                  "1",
+                  "2"
+                ],
+                "position": {
+                  "x": 200,
+                  "y": 0
+                },
+                "value": 1e-06,
+                "unit": "F",
+                "model": "ideal-capacitor.v1",
+                "rotation": 0
+              },
+              {
+                "id": "GND",
+                "kind": "ground",
+                "name": "Ground",
+                "terminals": [
+                  "reference"
+                ],
+                "position": {
+                  "x": 0,
+                  "y": 110
+                },
+                "value": 0,
+                "model": "ground.v1",
+                "rotation": 0
+              }
+            ],
+            "wires": [
+              {
+                "id": "W1",
+                "from": "V1.positive",
+                "to": "R1.1",
+                "connected": true
+              },
+              {
+                "id": "W2",
+                "from": "R1.2",
+                "to": "C1.1",
+                "connected": true
+              },
+              {
+                "id": "W3",
+                "from": "C1.2",
+                "to": "GND.reference",
+                "connected": true
+              },
+              {
+                "id": "W4",
+                "from": "GND.reference",
+                "to": "V1.negative",
+                "connected": true
+              }
+            ]
+          },
+          "transient_settings": {
+            "step_s": 0.001,
+            "high_s": 0.05,
+            "low_s": 0.05,
+            "initial_voltage_v": 0,
+            "seconds_per_wall_second": 0.02
+          },
+          "led_model": {
+            "id": "elab.generic-red-led.v1",
+            "is_a": 1e-20,
+            "n": 2,
+            "rs_ohm": 1,
+            "temperature_c": 27,
+            "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+          }
+        },
+        "settings": {
+          "component_id": "V1",
+          "parameter": "voltage",
+          "start": "0 V",
+          "stop": "5 V",
+          "points": 11,
+          "probe_ids": [
+            "v:C1",
+            "i:C1"
+          ]
+        },
+        "dc_sources": [
+          {
+            "id": "V1",
+            "kind": "pulse-source",
+            "dc_level_v": 0,
+            "origin": "ideal pulse low level"
+          }
+        ],
+        "assumptions": [
+          "Independent DC operating points; no time advancement or hysteresis continuation",
+          "Capacitors open; startup voltages ignored",
+          "Sine sources use offset; finite pulses use low level; ideal pulses use zero; swept source uses the requested DC bias",
+          "Configured switch states and accepted wiper positions; live held inputs and pending actuation are not applied",
+          "Existing generic device assumptions and limits remain in force"
+        ]
+      },
+      "digest": "93ca8a7f31b4efc8c1c26b5e796d3ee5713872fd96e8a014d5bc36eb33e44bf4",
+      "cursor_index": 5,
+      "source_unchanged": false,
+      "kept_round_trip": true
+    },
+    {
+      "example": "npn",
+      "result": {
+        "target": {
+          "component_id": "VIN",
+          "parameter": "voltage",
+          "label": "VIN \u00b7 DC bias",
+          "unit": "V",
+          "minimum": -12,
+          "maximum": 12
+        },
+        "start_si": 0,
+        "stop_si": 5,
+        "probes": [
+          {
+            "id": "i:Q1.base",
+            "label": "Q1.base current",
+            "unit": "A",
+            "positive": "Q1.base",
+            "reference": "into device"
+          },
+          {
+            "id": "i:Q1.collector",
+            "label": "Q1.collector current",
+            "unit": "A",
+            "positive": "Q1.collector",
+            "reference": "into device"
+          }
+        ],
+        "points": [
+          {
+            "input": 0,
+            "values": [
+              -9.999999999613376e-15,
+              2.0000000038662395e-14
+            ],
+            "kcl_residual_a": 1.0579787774461055e-15,
+            "power_residual_w": -7.969246638442536e-16
+          },
+          {
+            "input": 0.5,
+            "values": [
+              2.4620587435385112e-08,
+              2.4620597635385113e-06
+            ],
+            "kcl_residual_a": 3.5386490118075997e-12,
+            "power_residual_w": -1.77835243818196e-11
+          },
+          {
+            "input": 1,
+            "values": [
+              3.1861399398125994e-05,
+              0.0027524595299614437
+            ],
+            "kcl_residual_a": 3.7035348746106145e-13,
+            "power_residual_w": -8.596769129898263e-14
+          },
+          {
+            "input": 1.5,
+            "values": [
+              8.171668018898227e-05,
+              0.002814811117555718
+            ],
+            "kcl_residual_a": 1.6263032587282567e-15,
+            "power_residual_w": -3.6637359812630166e-15
+          },
+          {
+            "input": 2,
+            "values": [
+              0.00013161826584888534,
+              0.00283051167383988
+            ],
+            "kcl_residual_a": 1.4263763781219296e-15,
+            "power_residual_w": -3.1797481314654874e-15
+          },
+          {
+            "input": 2.5,
+            "values": [
+              0.00018152876319279854,
+              0.002839620207320904
+            ],
+            "kcl_residual_a": 2.0621538331100364e-12,
+            "power_residual_w": -4.515722865083838e-12
+          },
+          {
+            "input": 3,
+            "values": [
+              0.00023144442272762951,
+              0.002845944883081301
+            ],
+            "kcl_residual_a": 3.9879698068151503e-11,
+            "power_residual_w": -8.746388335811872e-11
+          },
+          {
+            "input": 3.5,
+            "values": [
+              0.0002813639037123815,
+              0.0028507302423474512
+            ],
+            "kcl_residual_a": 2.4993028480135848e-14,
+            "power_residual_w": -6.9284855630513675e-15
+          },
+          {
+            "input": 4,
+            "values": [
+              0.00033128652920666544,
+              0.002854540710461488
+            ],
+            "kcl_residual_a": 9.410874857174178e-16,
+            "power_residual_w": -2.1510571102112408e-15
+          },
+          {
+            "input": 4.5,
+            "values": [
+              0.00038121187786549184,
+              0.002857680039791905
+            ],
+            "kcl_residual_a": 1.0798653637955624e-16,
+            "power_residual_w": -2.393918396847994e-16
+          },
+          {
+            "input": 5,
+            "values": [
+              0.0004311396570835208,
+              0.0028603304910697633
+            ],
+            "kcl_residual_a": 5.030698080332741e-16,
+            "power_residual_w": -1.0928757898653885e-15
+          }
+        ],
+        "statistics": [
+          {
+            "probe_id": "i:Q1.base",
+            "minimum": -9.999999999613376e-15,
+            "maximum": 0.0004311396570835208
+          },
+          {
+            "probe_id": "i:Q1.collector",
+            "minimum": 2.0000000038662395e-14,
+            "maximum": 0.0028603304910697633
+          }
+        ]
+      },
+      "metadata": {
+        "format": "elab.dc-sweep",
+        "version": 1,
+        "engine": "elab.network-mna-dc.v1",
+        "operation_id": "sweep-7",
+        "created_at": "2026-10-15T10:24:04.38225Z",
+        "document_generation": 10,
+        "electrical_revision": 8,
+        "actuation_revision": 0,
+        "source": {
+          "graph": {
+            "components": [
+              {
+                "id": "VCC",
+                "kind": "dc-source",
+                "name": "DC source",
+                "terminals": [
+                  "positive",
+                  "negative"
+                ],
+                "position": {
+                  "x": 260,
+                  "y": -100
+                },
+                "value": 5,
+                "unit": "V",
+                "model": "ideal-dc.v1",
+                "rotation": 0
+              },
+              {
+                "id": "VIN",
+                "kind": "dc-source",
+                "name": "DC source",
+                "terminals": [
+                  "positive",
+                  "negative"
+                ],
+                "position": {
+                  "x": -260,
+                  "y": 60
+                },
+                "value": 5,
+                "unit": "V",
+                "model": "ideal-dc.v1",
+                "rotation": 0
+              },
+              {
+                "id": "RB",
+                "kind": "resistor",
+                "name": "Resistor",
+                "terminals": [
+                  "1",
+                  "2"
+                ],
+                "position": {
+                  "x": -100,
+                  "y": 60
+                },
+                "value": 10000,
+                "unit": "\u03a9",
+                "model": "ideal-resistor.v1",
+                "rotation": 0
+              },
+              {
+                "id": "RL",
+                "kind": "resistor",
+                "name": "Resistor",
+                "terminals": [
+                  "1",
+                  "2"
+                ],
+                "position": {
+                  "x": 100,
+                  "y": -180
+                },
+                "value": 1000,
+                "unit": "\u03a9",
+                "model": "ideal-resistor.v1",
+                "rotation": 90
+              },
+              {
+                "id": "D1",
+                "kind": "led",
+                "name": "Red LED",
+                "terminals": [
+                  "anode",
+                  "cathode"
+                ],
+                "position": {
+                  "x": 100,
+                  "y": -80
+                },
+                "value": 0,
+                "model": "elab.generic-red-led.v1",
+                "rotation": 0
+              },
+              {
+                "id": "Q1",
+                "kind": "npn",
+                "name": "NPN transistor",
+                "terminals": [
+                  "base",
+                  "collector",
+                  "emitter"
+                ],
+                "position": {
+                  "x": 100,
+                  "y": 60
+                },
+                "value": 0,
+                "model": "elab.generic-npn.v1",
+                "rotation": 0
+              },
+              {
+                "id": "GND1",
+                "kind": "ground",
+                "name": "Ground",
+                "terminals": [
+                  "reference"
+                ],
+                "position": {
+                  "x": 100,
+                  "y": 180
+                },
+                "value": 0,
+                "model": "ground.v1",
+                "rotation": 0
+              }
+            ],
+            "wires": [
+              {
+                "id": "W1",
+                "from": "VCC.positive",
+                "to": "RL.1",
+                "connected": true
+              },
+              {
+                "id": "W2",
+                "from": "RL.2",
+                "to": "D1.anode",
+                "connected": true
+              },
+              {
+                "id": "W3",
+                "from": "D1.cathode",
+                "to": "Q1.collector",
+                "connected": true
+              },
+              {
+                "id": "W4",
+                "from": "VIN.positive",
+                "to": "RB.1",
+                "connected": true
+              },
+              {
+                "id": "W5",
+                "from": "RB.2",
+                "to": "Q1.base",
+                "connected": true
+              },
+              {
+                "id": "W6",
+                "from": "Q1.emitter",
+                "to": "GND1.reference",
+                "connected": true
+              },
+              {
+                "id": "W7",
+                "from": "VCC.negative",
+                "to": "GND1.reference",
+                "connected": true
+              },
+              {
+                "id": "W8",
+                "from": "VIN.negative",
+                "to": "GND1.reference",
+                "connected": true
+              }
+            ]
+          },
+          "transient_settings": {
+            "step_s": 0.001,
+            "high_s": 0.05,
+            "low_s": 0.05,
+            "initial_voltage_v": 0,
+            "seconds_per_wall_second": 0.02
+          },
+          "led_model": {
+            "id": "elab.generic-red-led.v1",
+            "is_a": 1e-20,
+            "n": 2,
+            "rs_ohm": 1,
+            "temperature_c": 27,
+            "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+          },
+          "npn_model": {
+            "id": "elab.generic-npn.v1",
+            "saturation_current_a": 1e-14,
+            "forward_beta": 100,
+            "reverse_beta": 1,
+            "temperature_c": 27,
+            "limitations": "Educational Ebers\u2013Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+          }
+        },
+        "settings": {
+          "component_id": "VIN",
+          "parameter": "voltage",
+          "start": "0 V",
+          "stop": "5 V",
+          "points": 11,
+          "probe_ids": [
+            "i:Q1.base",
+            "i:Q1.collector"
+          ]
+        },
+        "dc_sources": [
+          {
+            "id": "VCC",
+            "kind": "dc-source",
+            "dc_level_v": 5,
+            "origin": "configured DC value"
+          },
+          {
+            "id": "VIN",
+            "kind": "dc-source",
+            "dc_level_v": 5,
+            "origin": "configured DC value"
+          }
+        ],
+        "assumptions": [
+          "Independent DC operating points; no time advancement or hysteresis continuation",
+          "Capacitors open; startup voltages ignored",
+          "Sine sources use offset; finite pulses use low level; ideal pulses use zero; swept source uses the requested DC bias",
+          "Configured switch states and accepted wiper positions; live held inputs and pending actuation are not applied",
+          "Existing generic device assumptions and limits remain in force"
+        ]
+      },
+      "digest": "c9f283202da89bbb26d283c7afacf5c1dc10bb921ba2e6587e02d233e5990232",
+      "cursor_index": 5,
+      "source_unchanged": false,
+      "kept_round_trip": true
+    }
+  ],
+  "checks": [
+    "exact imported metadata/results",
+    "unchanged blank live circuit/history",
+    "file digest",
+    "recorded provenance",
+    "exact reexport",
+    "trace/cursor save and reopen",
+    "DC data refused by time-recording importer"
+  ]
+}

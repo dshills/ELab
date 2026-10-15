@@ -322,7 +322,7 @@ func (s *Service) retainProjectJobLocked(job *projectJob) {
 }
 
 func waitingProjectCommand(command string) bool {
-	return command == "project.save" || command == "project.load" || command == "export.schematic.svg" || command == "export.schematic.pdf" || command == "export.schematic.png" || command == "export.scope.csv" || command == "verification.export" || command == "sweep.export" || command == "verification.import" || command == "recovery.scan" || command == "recovery.checkpoint" || command == "recovery.restore"
+	return command == "project.save" || command == "project.load" || command == "export.schematic.svg" || command == "export.schematic.pdf" || command == "export.schematic.png" || command == "export.scope.csv" || command == "verification.export" || command == "sweep.export" || command == "verification.import" || command == "sweep.import" || command == "recovery.scan" || command == "recovery.checkpoint" || command == "recovery.restore"
 }
 func (s *Service) projectWorkSupersededLocked(job *projectJob) bool {
 	if job.publishing {

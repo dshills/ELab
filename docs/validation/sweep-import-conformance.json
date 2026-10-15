@@ -1,0 +1,101 @@
+{
+  "passed": true,
+  "go_version": "go1.27.2",
+  "platform": "darwin/arm64",
+  "raw_report": "build/sweep-import-conformance/report.json",
+  "raw_report_sha256": "0bcf8ebee8b8f576e1661e248477945dde7ebe14d4289b5b9c4cb39b63921d92",
+  "binary_sha256": "e60c1392897e8dce3745e7acd225eb0ff38d47eb945e3b3c058a0e615e7497c2",
+  "scope": "Final import logic before two native selector label shortenings; label-only follow-up has separate native checks",
+  "adapters": [
+    {
+      "name": "in-process",
+      "equivalent_to_in_process": true,
+      "workflows": [
+        {
+          "name": "led",
+          "calls_count": 36,
+          "checks_count": 5
+        },
+        {
+          "name": "rc",
+          "calls_count": 44,
+          "checks_count": 5
+        },
+        {
+          "name": "npn",
+          "calls_count": 46,
+          "checks_count": 5
+        }
+      ]
+    },
+    {
+      "name": "headless-stdio",
+      "equivalent_to_in_process": true,
+      "workflows": [
+        {
+          "name": "led",
+          "calls_count": 36,
+          "checks_count": 5
+        },
+        {
+          "name": "rc",
+          "calls_count": 43,
+          "checks_count": 5
+        },
+        {
+          "name": "npn",
+          "calls_count": 45,
+          "checks_count": 5
+        }
+      ]
+    },
+    {
+      "name": "headless-socket",
+      "equivalent_to_in_process": true,
+      "workflows": [
+        {
+          "name": "led",
+          "calls_count": 36,
+          "checks_count": 5
+        },
+        {
+          "name": "rc",
+          "calls_count": 43,
+          "checks_count": 5
+        },
+        {
+          "name": "npn",
+          "calls_count": 45,
+          "checks_count": 5
+        }
+      ]
+    },
+    {
+      "name": "native-socket",
+      "equivalent_to_in_process": true,
+      "workflows": [
+        {
+          "name": "led",
+          "calls_count": 36,
+          "checks_count": 5
+        },
+        {
+          "name": "rc",
+          "calls_count": 43,
+          "checks_count": 5
+        },
+        {
+          "name": "npn",
+          "calls_count": 45,
+          "checks_count": 5
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "engineering workflow parity on this workstation; not complete native action coverage or participant acceptance",
+    "workflow parity uses shared pinned kernels; optional electrical suite adds independent frozen educational-model references and same-kernel flasher refinement, not real-device/SPICE qualification",
+    "native socket path verifies semantic operations in real app processes; keyboard/focus/screen-reader and visible latency are separate",
+    "all sessions are newly created and owned; pre-existing applications/endpoints are untouched"
+  ]
+}

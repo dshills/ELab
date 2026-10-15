@@ -4,14 +4,14 @@
   "source_sha256": {
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
     "desktop/canvas.go": "e815672e01d8377fab46a5840eb76b9e486b47fadb12897ccc5358699a9d50b5",
-    "desktop/dc_sweep.go": "d71941be7c0818d0440326d91edc6e3250d6f77f0f798298207c5344bf49a985",
+    "desktop/dc_sweep.go": "dc7f7d873b72dcb56499c1e7e33b68f9e27ef6ddcd33ffb4a60beace8fd61519",
     "desktop/dc_sweep_canvas.go": "8ad7b243abff5b30b01e149a67783a64aa91146b12a19e31ad80964ef1754f23",
     "desktop/diagnostic_help.go": "822fcdf9c5904570b42bf1b98322de00ed9fdbd17299584cefedcfeb8098f171",
     "desktop/display_preferences.go": "f54283db2acec7240b861f415ce0855fbb7dc3349785883f2095002833bb9e13",
     "desktop/drawing.go": "6b06b8e9b5b5755772ca0d8acfbaa35463f3947219b7d2ce5f4c4d616e676d71",
     "desktop/examples.go": "13136f78517a201f806ebe369a8820e8c7de0fe1cc666a27adb0363a8bd7b937",
     "desktop/field_context.go": "b8a1d409aa71c75cf14289a4e9e39cdea3ce52f1ba9f53c79916b6593074a087",
-    "desktop/files.go": "1813af7316a4e14c00889deb6de20c5b4fc99e33cae8bd3d0166445e1627805b",
+    "desktop/files.go": "5bef0ca7c68d420c5a503b0900c6627b323963a5adf2c76b72ce4be7e1ba2442",
     "desktop/input_work.go": "63b1644f065e82f1deaedc018bcfa5b855af2b885ac96dc3d68b2d4971f701bc",
     "desktop/layout.go": "342ac81780e410c345b903d982ccae20228e7eff26ce476f4a828c7c3737c958",
     "desktop/lifecycle.go": "d87fd1ed23873b666001ed60eab1d2abb23759e6b91a510c299de2a121ca8949",
@@ -28,7 +28,7 @@
     "desktop/print_page.go": "f06fef8a9db0e31cdf512c16c3b8155004c17964897b61e723b6cb0cdc796bf6",
     "desktop/print_preview.go": "905caa8284e1bfd16d6812e15061e36485f83f6ddd3ae06f248181e571101ebe",
     "desktop/probes.go": "3f3ce8e64c6aaba57439b63542f95eed784604bbe555b18a0f303e791c0e9e01",
-    "desktop/project_work.go": "1a90c15502552617bc73de527c9a071f45c0e04b7a7b136fd97392f7058068c8",
+    "desktop/project_work.go": "1fd9fbe6f75189b4603ec27d1cb381235e10487cf1727fe622a675af0bbc44e0",
     "desktop/recording.go": "2d104abf028fe82a22888ff757668680fc28432f07a49b548025bb06ada38945",
     "desktop/recovery.go": "00ec9ac869c77195d5a3c3e061196ff9fcc2047d23062379d86f14e62f9eee87",
     "desktop/routing.go": "4898c4c1de9d7de3c5f8ad751b15d7c0f199234243f62ec6ea949ee8d9ad2c1c",
@@ -153,6 +153,8 @@
     "sweep.cancel",
     "sweep.cursor.set",
     "sweep.export",
+    "sweep.import",
+    "sweep.import.start",
     "sweep.inspect",
     "sweep.keep.set",
     "sweep.select",
@@ -467,7 +469,26 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 60,
+      "line": 47,
+      "function": "*screen.sweepInspector",
+      "kind": "node-Activate",
+      "expression": "Activate: func() { s.beginFile(\"sweep.import\", true, workbench.RecordingImportParams{}, nil) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 47,
+      "function": "*screen.sweepInspector",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(\"sweep.import\", true, workbench.RecordingImportParams{}, nil)",
+      "public_commands": [
+        "sweep.import"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 61,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tpieces := strings.SplitN(e.SelectedID, \":\", 2)\n\tif len(pieces) != 2 {\n\t\treturn\n\t}\n\tnext := cfg\n\tnext.ComponentID, next.Parameter = pieces[0], pieces[1]\n\tnext.ProbeIDs = nil\n\tswitch next.Parameter {\n\tcase \"resistance\":\n\t\tnext.Start, next.Stop = \"100 Ω\", \"10k Ω\"\n\tcase \"wiper\":\n\t\tnext.Start, next.Stop = \"0\", \"1\"\n\tdefault:\n\t\tnext.Start, next.Stop = \"0 V\", \"5 V\"\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
@@ -475,7 +496,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 76,
+      "line": 77,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.settings.set\", next)",
@@ -486,7 +507,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 80,
+      "line": 81,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tif field.id == \"start\" {\n\t\tnext.Start = e.Text\n\t} else {\n\t\tnext.Stop = e.Text\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
@@ -494,7 +515,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 87,
+      "line": 88,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.settings.set\", next)",
@@ -505,7 +526,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 90,
+      "line": 91,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tcount, err := strconv.Atoi(strings.TrimSpace(e.Text))\n\tif err != nil {\n\t\ts.errorMessage = \"Enter a whole sweep point count\"\n\t\ts.app.Invalidate(\"main\")\n\t\treturn\n\t}\n\tnext := cfg\n\tnext.Points = count\n\ts.invoke(\"sweep.settings.set\", next)\n}",
@@ -513,7 +534,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 99,
+      "line": 100,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.settings.set\", next)",
@@ -524,7 +545,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 118,
+      "line": 119,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.ProbeIDs = nil\n\tif e.SelectedID != \"__auto\" {\n\t\tnext.ProbeIDs = append([]string{}, cfg.ProbeIDs...)\n\t\tfor _, id := range next.ProbeIDs {\n\t\t\tif id == e.SelectedID {\n\t\t\t\treturn\n\t\t\t}\n\t\t}\n\t\tif len(next.ProbeIDs) \u003e= workbench.MaxScopeProbes {\n\t\t\ts.errorMessage = \"Remove a sweep reading before adding another\"\n\t\t\ts.app.Invalidate(\"main\")\n\t\t\treturn\n\t\t}\n\t\tnext.ProbeIDs = append(next.ProbeIDs, e.SelectedID)\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
@@ -532,7 +553,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 135,
+      "line": 136,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.settings.set\", next)",
@@ -543,7 +564,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 150,
+      "line": 151,
       "function": "*screen.sweepInspector",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-probe-remove-\"+id, \"Remove \"+id, \"sweep.settings.set\", next)",
@@ -554,7 +575,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 158,
+      "line": 159,
       "function": "*screen.sweepInspector",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-cancel-\"+op.ID, \"Cancel sweep\", \"sweep.cancel\", workbench.IDParams{ID: op.ID})",
@@ -565,7 +586,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 163,
+      "line": 164,
       "function": "*screen.sweepInspector",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-start\", \"Run DC sweep\", \"sweep.start\", workbench.SweepStartParams{})",
@@ -576,7 +597,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 172,
+      "line": 173,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"sweep.select\", workbench.IDParams{ID: e.SelectedID}) }",
@@ -584,7 +605,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 172,
+      "line": 173,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.select\", workbench.IDParams{ID: e.SelectedID})",
@@ -595,7 +616,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 173,
+      "line": 174,
       "function": "*screen.sweepInspector",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-show\", \"View sweep\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
@@ -606,7 +627,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 179,
+      "line": 180,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"sweep.keep.set\", workbench.RecordingKeepParams{ID: op.ID, Keep: e.Checked})\n}",
@@ -614,7 +635,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 180,
+      "line": 181,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.keep.set\", workbench.RecordingKeepParams{ID: op.ID, Keep: e.Checked})",
@@ -625,7 +646,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 184,
+      "line": 185,
       "function": "*screen.sweepInspector",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\ts.beginFile(\"sweep.export\", true, workbench.VerificationExportParams{ID: op.ID, Format: format}, nil)\n}",
@@ -633,7 +654,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 185,
+      "line": 186,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"sweep.export\", true, workbench.VerificationExportParams{ID: op.ID, Format: format}, nil)",
@@ -644,7 +665,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 197,
+      "line": 198,
       "function": "*screen.sweepPanel",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-back\", \"Back to circuit\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: false})",
@@ -655,7 +676,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 231,
+      "line": 235,
       "function": "*screen.sweepPanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"sweep.trace.select\", workbench.IDParams{ID: e.SelectedID}) }",
@@ -663,7 +684,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 231,
+      "line": 235,
       "function": "*screen.sweepPanel",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.trace.select\", workbench.IDParams{ID: e.SelectedID})",
@@ -674,7 +695,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 231,
+      "line": 235,
       "function": "*screen.sweepPanel",
       "kind": "node-Custom",
       "expression": "Custom: s.sweepDrawing",
@@ -682,7 +703,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 241,
+      "line": 245,
       "function": "*screen.sweepPanel",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-cursor-clear\", \"Clear point\", \"sweep.cursor.set\", workbench.SweepCursorParams{OperationID: sweep.Selected})",
@@ -850,7 +871,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 130,
+      "line": 133,
       "function": "*screen.beginFile",
       "kind": "request-command-field",
       "expression": "Command: id",
@@ -858,7 +879,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 131,
+      "line": 134,
       "function": "*screen.beginFile",
       "kind": "event-or-dispatch-router",
       "expression": "s.service.Dispatch(ctx, request, \"user\")",
@@ -866,7 +887,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 203,
+      "line": 209,
       "function": "*screen.continuePending",
       "kind": "domain-ingress",
       "expression": "s.beginFile(id, false, raw, nil)",
@@ -874,7 +895,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 205,
+      "line": 211,
       "function": "*screen.continuePending",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(id, raw)",
@@ -882,7 +903,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 213,
+      "line": 219,
       "function": "*screen.registerFileCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"file.open\", \"Open…\", \"Meta+O\", func() { s.beginFile(\"project.load\", true, workbench.LoadParams{}, nil) }}",
@@ -894,7 +915,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 214,
+      "line": 220,
       "function": "*screen.registerFileCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"file.save\", \"Save\", \"Meta+S\", func() {\n\ts.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, nil)\n}}",
@@ -906,7 +927,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 217,
+      "line": 223,
       "function": "*screen.registerFileCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"file.save-as\", \"Save As…\", \"Meta+Shift+S\", func() { s.beginFile(\"project.save\", true, workbench.SaveParams{}, nil) }}",
@@ -918,7 +939,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 213,
+      "line": 219,
       "function": "*screen.registerFileCommands",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"project.load\", true, workbench.LoadParams{}, nil)",
@@ -929,7 +950,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 215,
+      "line": 221,
       "function": "*screen.registerFileCommands",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, nil)",
@@ -940,7 +961,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 217,
+      "line": 223,
       "function": "*screen.registerFileCommands",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"project.save\", true, workbench.SaveParams{}, nil)",
@@ -951,7 +972,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 220,
+      "line": 226,
       "function": "*screen.registerFileCommands",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Register(command.Command{ID: entry.id, Label: entry.text, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts, Available: func() error {\n\tif s.fileBusy || s.pendingCommand != \"\" {\n\t\treturn fmt.Errorf(\"finish the current file operation first\")\n\t}\n\treturn nil\n}, Execute:\tfunc(context.Context) error { entry.action(); return nil }})",
@@ -959,7 +980,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 231,
+      "line": 237,
       "function": "*screen.filePrompt",
       "kind": "node-Dismiss",
       "expression": "Dismiss: func() {\n\tif s.fileBusy {\n\t\treturn\n\t}\n\ts.pendingCommand = \"\"\n\ts.pendingParams = nil\n\ts.app.Invalidate(\"main\")\n}",
@@ -967,7 +988,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 243,
+      "line": 249,
       "function": "*screen.filePrompt",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\ts.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, func() { s.continuePending(false) })\n}",
@@ -975,7 +996,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 244,
+      "line": 250,
       "function": "*screen.filePrompt",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, func() { s.continuePending(false) })",
@@ -986,7 +1007,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 246,
+      "line": 252,
       "function": "*screen.filePrompt",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.continuePending(true) }",
@@ -994,7 +1015,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 247,
+      "line": 253,
       "function": "*screen.filePrompt",
       "kind": "node-Activate",
       "expression": "Activate: prompt.Dismiss",
@@ -3401,6 +3422,7 @@
     "sweep.cancel",
     "sweep.cursor.set",
     "sweep.export",
+    "sweep.import",
     "sweep.keep.set",
     "sweep.select",
     "sweep.settings.set",
@@ -3440,6 +3462,7 @@
     "recovery.scan",
     "simulation.step",
     "simulation.wait",
+    "sweep.import.start",
     "sweep.inspect",
     "verification.import.start"
   ],

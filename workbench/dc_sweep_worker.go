@@ -72,6 +72,9 @@ type SweepRecord struct {
 	Result   SweepResult   `json:"result"`
 }
 type SweepSummary struct {
+	Kind            string   `json:"kind"`
+	SourcePath      string   `json:"source_path,omitempty"`
+	SourceSHA256    string   `json:"source_sha256,omitempty"`
 	ID              string   `json:"id"`
 	Status          string   `json:"status"`
 	Actor           string   `json:"actor"`
@@ -169,7 +172,7 @@ func sweepGraphHash(g Graph) [32]byte { data, _ := json.Marshal(g); return sha25
 func (s *Service) sweepSummaryLocked(job *sweepJob) SweepSummary {
 	out := job.summary
 	out.Kept = job.keep
-	out.SourceUnchanged = job.metadata.DocumentGeneration == s.documentGeneration && job.sourceHash == sweepGraphHash(s.graph)
+	out.SourceUnchanged = job.summary.Kind == "dc-sweep" && job.metadata.DocumentGeneration == s.documentGeneration && job.sourceHash == sweepGraphHash(s.graph)
 	if out.Error != nil {
 		e := *out.Error
 		out.Error = &e
@@ -232,36 +235,20 @@ func (s *Service) startDCSweepLocked(p SweepStartParams) error {
 	if err != nil {
 		return err
 	}
-	store := s.ensureSweepsLocked()
-	if len(store.order) >= MaxDCSweepOperations {
-		evict := ""
-		for _, id := range store.order {
-			j := store.operations[id]
-			if !j.keep && !operationActive(j.summary.Status) {
-				evict = id
-				break
-			}
-		}
-		if evict == "" {
-			return &actionError{"record-limit", "Eight sweeps are kept; exclude one before creating another"}
-		}
-		delete(store.operations, evict)
-		for i, id := range store.order {
-			if id == evict {
-				store.order = append(store.order[:i], store.order[i+1:]...)
-				break
-			}
-		}
+	if err := s.requireSweepSlotLocked(); err != nil {
+		return err
 	}
+	store := s.ensureSweepsLocked()
+
 	s.sweepSerial++
 	id := fmt.Sprintf("sweep-%d", s.sweepSerial)
 	source := dcCircuitSnapshot(s.graph, s.transientSettings)
 	// This capture is a source document, not a recursive collection of other runs.
 	metadata := SweepMetadata{Format: "elab.dc-sweep", Version: 1, Engine: DCSweepEngineID, OperationID: id, CreatedAt: time.Now().UTC().Format(time.RFC3339Nano), DocumentGeneration: s.documentGeneration, ElectricalRevision: s.electrical, ActuationRevision: s.actuationRevision, Source: source, Settings: cloneSweepSettings(plan.settings), Sources: append([]SweepSource{}, plan.sources...), Assumptions: []string{"Independent DC operating points; no time advancement or hysteresis continuation", "Capacitors open; startup voltages ignored", "Sine sources use offset; finite pulses use low level; ideal pulses use zero; swept source uses the requested DC bias", "Configured switch states and accepted wiper positions; live held inputs and pending actuation are not applied", "Existing generic device assumptions and limits remain in force"}}
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	job := &sweepJob{summary: SweepSummary{ID: id, Status: "queued", Total: cfg.Points}, metadata: metadata, sourceHash: sweepGraphHash(s.graph), ctx: ctx, cancel: cancel}
-	store.operations[id] = job
-	store.order = append(store.order, id)
+	job := &sweepJob{summary: SweepSummary{ID: id, Kind: "dc-sweep", Status: "queued", Total: cfg.Points}, metadata: metadata, sourceHash: sweepGraphHash(s.graph), ctx: ctx, cancel: cancel}
+	s.retainSweepJobLocked(job)
+	s.sweepViewerRevision++
 	store.selected, store.visible, store.traceID, store.cursor = id, true, plan.probes[0].ID, nil
 	s.dismissPrintPreviewLocked()
 	s.sweepWorkers++
@@ -351,6 +338,7 @@ func (s *Service) cancelSweepLocked(id string) error {
 	return nil
 }
 func (s *Service) clearSweepsLocked() {
+	s.sweepViewerRevision++
 	if s.sweeps != nil {
 		for _, job := range s.sweeps.operations {
 			if operationActive(job.summary.Status) {
@@ -359,4 +347,39 @@ func (s *Service) clearSweepsLocked() {
 		}
 	}
 	s.sweeps = nil
+}
+
+func (s *Service) requireSweepSlotLocked() error {
+	if s.sweeps == nil || len(s.sweeps.order) < MaxDCSweepOperations {
+		return nil
+	}
+	for _, id := range s.sweeps.order {
+		job := s.sweeps.operations[id]
+		if !job.keep && !operationActive(job.summary.Status) {
+			return nil
+		}
+	}
+	return &actionError{"record-limit", "Eight sweeps are kept; exclude one before creating or importing another"}
+}
+
+// Admission/publication check capacity first. Eviction never removes kept or
+// active work; an expired selection cannot keep pointing at a removed asset.
+func (s *Service) retainSweepJobLocked(job *sweepJob) {
+	store := s.ensureSweepsLocked()
+	if len(store.order) >= MaxDCSweepOperations {
+		for i, id := range store.order {
+			old := store.operations[id]
+			if old.keep || operationActive(old.summary.Status) {
+				continue
+			}
+			delete(store.operations, id)
+			store.order = append(store.order[:i], store.order[i+1:]...)
+			if store.selected == id {
+				store.selected, store.traceID, store.visible, store.cursor = "", "", false, nil
+			}
+			break
+		}
+	}
+	store.operations[job.summary.ID] = job
+	store.order = append(store.order, job.summary.ID)
 }

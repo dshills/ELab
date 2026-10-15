@@ -26,3 +26,13 @@ These are unedited native screenshots at 1184 × 854 pixels. The early candidate
 Keyboard type-ahead selected R1, and Return committed it; an additional observation/Return was needed during automation. This proves the observed scenario, not exhaustive keyboard or assistive-technology acceptance. The [scope layout ledger](../scope-collapse/README.md) records compact expanded/collapsed/restored views. The [validation receipt](../../../docs/validation/native-menu-validation.json) records tests and package evidence.
 
 The header now uses tighter horizontal action padding and short actor captions. Theme stays visible after agent edits. Small-zoom schematic labels/cards, long-menu navigation, all controls with screen readers/IME, and non-macOS appearance remain separate qualification work. Native menus follow the OS appearance independently of the circuit palette.
+
+## October 15 final menu spot check
+
+An isolated 0.54.0 / 69 app (`org.dshills.elab.menufinalaudit`) was inspected through native CUA. Fresh inline screenshots at 1184 × 854 showed:
+
+1. File: rounded AppKit menu, all five labels fit; Escape dismissed without opening a dialog.
+2. Examples: all seven examples fit, including Rectifier / smoothing; Escape dismissed.
+3. Theme: Light/Dark/System fit, Light carries a checkmark; Escape dismissed.
+
+Visible header controls fit without clipping. Native menu material follows OS appearance independently of the circuit theme. These are current visual observations, not a complete keyboard/screen-reader/resize audit. The screenshot API displayed the captures inline but provided no documented local-save operation, so no new screenshot files or full screenshot audit are claimed. The earlier saved capture ledger above remains historical evidence. The owned session was closed through `app.close`; existing user windows were preserved. Electronics-focused implementation resumed after this check. Schematic output/printing requirements are in the PRD's owner addition; printer discovery/submission and actual device tests remain pending.

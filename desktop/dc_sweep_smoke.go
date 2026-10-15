@@ -4,6 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
+	"path/filepath"
+	"reflect"
 	"time"
 
 	"github.com/dshills/elab/workbench"
@@ -107,6 +110,61 @@ func nativeDCSweepSmoke(ctx context.Context, a *app.Application, s *screen) erro
 		if errors.Is(err, cogent.ErrFrameNotReady) {
 			continue
 		}
+		if err != nil {
+			return err
+		}
+		return nativeSweepImportSmoke(ctx, a, s)
+	}
+}
+
+// File work stays outside the owner; the owned picker selects a temporary
+// curve exported by the same shared commands available to an agent.
+func nativeSweepImportSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	directory, err := os.MkdirTemp("", "elab-sweep-import-smoke-")
+	if err != nil {
 		return err
 	}
+	defer os.RemoveAll(directory)
+	path := filepath.Join(directory, "curve.json")
+	before := s.service.Snapshot()
+	action := make(chan error, 1)
+	defer func() { _ = a.PostWait(ctx, func() { s.chooseFile = nil }) }()
+	for _, control := range []string{"sweep-export-json", "sweep-import"} {
+		if err := a.PostWait(ctx, func() {
+			s.chooseFile = func(context.Context, app.FileOptions) (string, error) { return path, nil }
+			action <- smokeUI(s, control, nil)
+		}); err != nil {
+			return err
+		}
+		if err := <-action; err != nil {
+			return err
+		}
+		if err := waitNativeFile(ctx, a, s); err != nil {
+			return err
+		}
+	}
+	if err := a.PostWait(ctx, func() {
+		state := s.service.Snapshot()
+		op := selectedSweep(state.DCSweep)
+		if s.errorMessage != "" || state.ProjectWork == nil || state.ProjectWork.Status != "completed" || state.ProjectWork.Command != "sweep.import" || state.ProjectWork.Actor != "user" || op == nil || op.Kind != "sweep-import" || op.SourceUnchanged || !reflect.DeepEqual(state.DCSweep.Result, before.DCSweep.Result) || state.RunID != before.RunID || !reflect.DeepEqual(state.Result, before.Result) {
+			action <- fmt.Errorf("native sweep import capture/source identity: %s", s.errorMessage)
+			return
+		}
+		s.view()
+		_, err := s.sweepMesh(*s.sweepDrawing.View)
+		if err != nil {
+			action <- err
+			return
+		}
+		frame := s.sweepDrawing.frame.Load()
+		s.sweepDrawing.placeCursor(frame.left + (frame.right-frame.left)/2)
+		if current := s.service.Snapshot(); current.DCSweep.Cursor == nil || *current.DCSweep.Cursor != 5 {
+			action <- fmt.Errorf("imported sweep measured cursor failed")
+			return
+		}
+		action <- smokeUI(s, "sweep-back", nil)
+	}); err != nil {
+		return err
+	}
+	return <-action
 }

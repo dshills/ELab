@@ -124,6 +124,7 @@ func (s *Service) startPrintPreviewLocked(p PreviewParams) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	job := &previewJob{ctx: ctx, cancel: cancel, capture: capture, defaultPage: p.Page == nil, sourceHash: s.previewSourceHashLocked(page), view: PrintPreview{ID: fmt.Sprintf("preview-%d", s.previewSerial), Status: "queued", Visible: true, Page: page, RunID: s.run, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration}}
 	s.preview = job
+	s.sweepViewerRevision++
 	if s.sweeps != nil {
 		s.sweeps.visible = false
 	}

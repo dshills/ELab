@@ -31,6 +31,11 @@ func validateSweepRecord(data []byte) (*SweepRecord, error) {
 	if err := params(data, &record, "metadata", "result"); err != nil {
 		return nil, err
 	}
+	// Required numeric zeros must be present, rather than silently supplied by
+	// Go's decoder. The remaining checks validate their semantic relationships.
+	if err := validateSweepFields(data); err != nil {
+		return nil, err
+	}
 	m := record.Metadata
 	if m.Format != "elab.dc-sweep" || m.Version != 1 || m.Engine != DCSweepEngineID || m.OperationID == "" {
 		return nil, fmt.Errorf("unsupported sweep format, version or engine")
@@ -80,6 +85,52 @@ func validateSweepRecord(data []byte) (*SweepRecord, error) {
 	}
 	return &record, nil
 }
+func validateSweepFields(data []byte) error {
+	var raw struct {
+		Metadata json.RawMessage `json:"metadata"`
+		Result   json.RawMessage `json:"result"`
+	}
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+	var metadata SweepMetadata
+	if err := params(raw.Metadata, &metadata, "format", "version", "engine", "operation_id", "created_at", "document_generation", "electrical_revision", "actuation_revision", "source", "settings", "dc_sources"); err != nil {
+		return err
+	}
+	var source DCCircuit
+	if err := paramsNested(raw.Metadata, "source", &source, "graph", "transient_settings", "led_model"); err != nil {
+		return err
+	}
+	var settings SweepSettings
+	if err := paramsNested(raw.Metadata, "settings", &settings, "component_id", "parameter", "start", "stop", "points"); err != nil {
+		return err
+	}
+	var result SweepResult
+	if err := params(raw.Result, &result, "target", "start_si", "stop_si", "probes", "points", "statistics"); err != nil {
+		return err
+	}
+	var arrays struct {
+		Points     []json.RawMessage `json:"points"`
+		Statistics []json.RawMessage `json:"statistics"`
+	}
+	if err := json.Unmarshal(raw.Result, &arrays); err != nil {
+		return err
+	}
+	for i, point := range arrays.Points {
+		var out SweepPoint
+		if err := params(point, &out, "input", "values", "kcl_residual_a", "power_residual_w"); err != nil {
+			return fmt.Errorf("sweep point %d: %w", i, err)
+		}
+	}
+	for i, statistic := range arrays.Statistics {
+		var out SweepStatistics
+		if err := params(statistic, &out, "probe_id", "minimum", "maximum"); err != nil {
+			return fmt.Errorf("sweep statistic %d: %w", i, err)
+		}
+	}
+	return nil
+}
+
 func (s *Service) projectSweepsLocked() *ProjectSweeps {
 	if s.sweeps == nil {
 		return nil
@@ -114,11 +165,15 @@ func validateProjectSweeps(raw json.RawMessage) (*ProjectSweeps, error) {
 	if len(out.Entries) < 1 || len(out.Entries) > MaxDCSweepOperations || out.Selected < -1 || out.Selected >= len(out.Entries) || out.Viewing && out.Selected < 0 {
 		return nil, fmt.Errorf("invalid saved sweep count/selection")
 	}
-	for i := range out.Entries {
-		data, err := json.Marshal(out.Entries[i])
-		if err != nil {
-			return nil, err
-		}
+	// Preserve original field presence through validation. Re-marshaling typed
+	// entries here would silently fill omitted zero-valued measurements.
+	var original struct {
+		Entries []json.RawMessage `json:"entries"`
+	}
+	if err := json.Unmarshal(raw, &original); err != nil {
+		return nil, err
+	}
+	for i, data := range original.Entries {
 		record, err := validateSweepRecord(data)
 		if err != nil {
 			return nil, fmt.Errorf("sweep %d: %w", i, err)
@@ -153,7 +208,7 @@ func (s *Service) installProjectSweepsLocked(project *ProjectSweeps) {
 		record := cloneSweepRecord(&entry)
 		s.sweepSerial++
 		id := fmt.Sprintf("saved-sweep-%d", s.sweepSerial)
-		job := &sweepJob{keep: true, record: record, metadata: record.Metadata, sourceHash: sweepGraphHash(record.Metadata.Source.Graph), summary: SweepSummary{ID: id, Status: "completed", Actor: "project", Completed: len(record.Result.Points), Total: len(record.Result.Points)}}
+		job := &sweepJob{keep: true, record: record, metadata: record.Metadata, sourceHash: sweepGraphHash(record.Metadata.Source.Graph), summary: SweepSummary{ID: id, Kind: "project-sweep", Status: "completed", Actor: "project", Completed: len(record.Result.Points), Total: len(record.Result.Points)}}
 		store.operations[id] = job
 		store.order = append(store.order, id)
 		if project.Selected == i {

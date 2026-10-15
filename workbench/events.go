@@ -57,7 +57,7 @@ func commandEventTopics(command string, documentChanged bool) []string {
 	case strings.HasPrefix(command, "recovery."):
 		topics = append(topics, "recovery", "jobs")
 	case strings.HasPrefix(command, "sweep."):
-		topics = append(topics, "sweeps", "jobs")
+		topics = append(topics, "sweeps", "jobs", "recordings")
 	case strings.HasPrefix(command, "print.preview."):
 		topics = append(topics, "preview")
 	case strings.HasPrefix(command, "project."), strings.HasPrefix(command, "export."):
@@ -87,7 +87,7 @@ func projectEventTopics(job *projectJob) []string {
 	case job.export != nil:
 		topics = append(topics, "project")
 	case job.importing != nil:
-		topics = append(topics, "project", "recordings")
+		topics = append(topics, "project", "recordings", "sweeps")
 	case job.recoveryWork != nil:
 		topics = append(topics, "recovery")
 	default:

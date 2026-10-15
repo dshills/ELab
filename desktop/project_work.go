@@ -20,7 +20,7 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 	action := "open"
 	if w.Command == "project.save" {
 		action = "save"
-	} else if w.Command == "verification.import" {
+	} else if w.Command == "verification.import" || w.Command == "sweep.import" {
 		action = "record import"
 	} else if w.Command == "recovery.scan" || w.Command == "recovery.checkpoint" || w.Command == "recovery.restore" {
 		action = "recovery"

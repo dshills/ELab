@@ -88,6 +88,8 @@ type savedResponse struct {
 type Service struct {
 	sweeps                           *sweepStore
 	sweepSerial                      uint64
+	sweepViewerRevision              uint64
+	sweepImport                      sweepImportFunc
 	sweepWorkers                     int
 	sweepCompute                     func(context.Context, sweepPlan, func(int)) (*SweepResult, error)
 	preview                          *previewJob
@@ -205,8 +207,10 @@ func newService(solver func(context.Context, Circuit) (Result, error)) *Service 
 }
 func newGraphService(solver func(context.Context, Circuit) (Result, error), graph Graph) *Service {
 	s := &Service{
-		revision:     1,
-		sweepCompute: computeDCSweep, previewRender: renderSchematicPage,
+		revision:          1,
+		sweepImport:       prepareSweepImport,
+		sweepCompute:      computeDCSweep,
+		previewRender:     renderSchematicPage,
 		electrical:        1,
 		graph:             graph.Clone(),
 		drawing:           DefaultDrawing(),
@@ -973,7 +977,7 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	state.Mixed = cloneMixed(state.Mixed)
 	state.NPN = cloneNPN(state.NPN)
 	state.Transient = cloneTransient(state.Transient)
-	state.Components = append([]Component(nil), state.Components...)
+	state.Components = append([]Component{}, state.Components...)
 	for i := range state.Components {
 		state.Components[i].Terminals = append([]string(nil), state.Components[i].Terminals...)
 		if state.Components[i].Sine != nil {
@@ -997,7 +1001,7 @@ func cloneSnapshot(state Snapshot) Snapshot {
 			state.Components[i].InitialVoltage = &copy
 		}
 	}
-	state.Wires = append([]Wire(nil), state.Wires...)
+	state.Wires = append([]Wire{}, state.Wires...)
 	state.Diagnostics = append([]Diagnostic{}, state.Diagnostics...)
 	state.Nets = append([]Net{}, state.Nets...)
 	for i := range state.Nets {

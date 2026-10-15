@@ -69,8 +69,11 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 				options.Filename = "Untitled.elab"
 			}
 			switch id {
-			case "verification.import":
+			case "verification.import", "sweep.import":
 				options.Title = "Open recorded run"
+				if id == "sweep.import" {
+					options.Title = "Open captured DC sweep"
+				}
 				options.Extensions = []string{"json"}
 			case "export.scope.csv":
 				options.Title = "Export scope CSV"
@@ -137,7 +140,7 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 					s.errorMessage = err.Error()
 				}
 			} else if response.Error != nil {
-				if (id == "project.load" || id == "project.save" || strings.HasPrefix(id, "export.") || (id == "verification.export" || id == "sweep.export") || id == "verification.import") && (response.Error.Code == "canceled" || response.Error.Code == "superseded") {
+				if (id == "project.load" || id == "project.save" || strings.HasPrefix(id, "export.") || (id == "verification.export" || id == "sweep.export") || id == "verification.import" || id == "sweep.import") && (response.Error.Code == "canceled" || response.Error.Code == "superseded") {
 					s.fileMessage = "File operation " + response.Error.Code + "; current project preserved"
 				} else if response.Error.Code == "unsaved-changes" {
 					s.pendingCommand = id
@@ -152,10 +155,13 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 				saveAssociated := true
 				if response.Result.(workbench.Snapshot).LastExport != nil && (strings.HasPrefix(id, "export.") || (id == "verification.export" || id == "sweep.export")) {
 					s.fileMessage = "Exported " + filepath.Base(response.Result.(workbench.Snapshot).LastExport.Path)
-				} else if id == "verification.import" {
+				} else if id == "verification.import" || id == "sweep.import" {
 					var opened string
 					_ = json.Unmarshal(fields["path"], &opened)
 					s.fileMessage = "Loaded recorded " + filepath.Base(opened)
+					if id == "sweep.import" {
+						s.fileMessage = "Loaded captured sweep " + filepath.Base(opened)
+					}
 					if state.ProjectWork != nil && state.ProjectWork.ViewerSelected != nil && !*state.ProjectWork.ViewerSelected {
 						s.fileMessage += "; kept without switching to its view"
 					}

@@ -179,6 +179,12 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		return s.recordingCommandLocked(command, raw)
 	case "recovery.work.start", "recovery.configure", "recovery.scan", "recovery.checkpoint", "recovery.select", "recovery.restore", "recovery.restore.start", "recovery.dismiss":
 		return s.recoveryCommandLocked(command, raw)
+	case "sweep.import", "sweep.import.start":
+		var p RecordingImportParams
+		if err := params(raw, &p, "path"); err != nil {
+			return err
+		}
+		return s.startSweepImportLocked(p)
 	case "sweep.export":
 		var p VerificationExportParams
 		if err := params(raw, &p, "id", "path", "format"); err != nil {
@@ -270,6 +276,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return &actionError{"not-found", "Choose a retained sweep"}
 		}
 		store := s.sweeps
+		s.sweepViewerRevision++
 		store.selected = p.ID
 		store.cursor = nil
 		if record := store.operations[p.ID].record; record != nil {
@@ -283,6 +290,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		store := s.ensureSweepsLocked()
 
+		s.sweepViewerRevision++
 		store.visible = p.Visible
 		if p.Visible {
 			s.dismissPrintPreviewLocked()
@@ -302,6 +310,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		for _, probe := range job.record.Result.Probes {
 			if probe.ID == p.ID {
+				s.sweepViewerRevision++
 				s.sweeps.traceID = p.ID
 				return nil
 			}
@@ -325,6 +334,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if p.Index != nil && (*p.Index < 0 || *p.Index >= len(job.record.Result.Points)) {
 			return fmt.Errorf("cursor index is outside sweep points")
 		}
+		s.sweepViewerRevision++
 		s.sweeps.cursor = nil
 		if p.Index != nil {
 			v := *p.Index

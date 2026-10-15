@@ -70,7 +70,7 @@ const VerificationMetadataSchemaID = "urn:elab:verification-metadata:1"
 const SnapshotSchemaID = "urn:elab:snapshot:1"
 const DiscoverySchemaVersion = 2
 
-var commonInputSchemas = []struct {
+var commonSchemas = []struct {
 	Type reflect.Type
 	ID   string
 }{
@@ -101,6 +101,8 @@ var commonInputSchemas = []struct {
 	{reflect.TypeOf(Graph{}), "urn:elab:graph:1"},
 	{reflect.TypeOf(CircuitDisplay{}), "urn:elab:circuit-display:1"},
 	{reflect.TypeOf(VerificationExportParams{}), "urn:elab:record-export:1"},
+	{reflect.TypeOf(RecordingImportParams{}), "urn:elab:record-import:1"},
+	{reflect.TypeOf(SweepSummary{}), "urn:elab:sweep-summary:1"},
 }
 
 var snapshotSchema = json.RawMessage(`{"$ref":"urn:elab:snapshot:1"}`)
@@ -121,7 +123,7 @@ func SchemaRegistry() map[string]json.RawMessage {
 	eventSchema["$id"] = EventPollSchemaID
 	eventData, _ := json.Marshal(eventSchema)
 	registry := map[string]json.RawMessage{SnapshotSchemaID: append(json.RawMessage(nil), snapshotDefinition...), VerificationMetadataSchemaID: data, EventPollSchemaID: eventData, TimeInputSchemaID: json.RawMessage(`{"$id":"urn:elab:time:1","type":["number","string"],"maxLength":128,"description":"Seconds as a finite number or decimal/scientific text; bare text is seconds; case-sensitive s/ms/us/µs/μs/ns/ps. Command bounds still apply.","examples":[0.01,"10 ms","250 us"]}`)}
-	for _, common := range commonInputSchemas {
+	for _, common := range commonSchemas {
 		schema := structSchema(common.Type)
 		schema["$id"] = common.ID
 		encoded, _ := json.Marshal(schema)
@@ -134,7 +136,7 @@ func typeSchema(t reflect.Type) map[string]any {
 	if t == reflect.TypeOf([]byte{}) {
 		return map[string]any{"type": "string", "contentEncoding": "base64"}
 	}
-	for _, common := range commonInputSchemas {
+	for _, common := range commonSchemas {
 		if t == common.Type {
 			return map[string]any{"$ref": common.ID}
 		}
@@ -232,6 +234,8 @@ func Catalog() []Capability {
 		typedCapability("sweep.visibility.set", "Show/hide sweep plot; preserves live acquisition and printing captures", reflect.TypeOf(SweepVisibilityParams{})),
 		typedCapability("sweep.trace.select", "Choose one captured probe for the sweep plot; signed SI values", reflect.TypeOf(IDParams{})),
 		typedCapability("sweep.cursor.set", "Select exact sweep point index; null clears; no interpolation", reflect.TypeOf(SweepCursorParams{})),
+		typedCapability("sweep.import.start", "Read/validate captured sweep JSON in background; project_work inspection/cancellation; preserves live circuit and later viewer choices", reflect.TypeOf(RecordingImportParams{})),
+		typedCapability("sweep.import", "Wait for captured sweep import; kept recorded data, not a live solve; preserves graph/physics and later view choices", reflect.TypeOf(RecordingImportParams{})),
 		typedCapability("sweep.export", "Export complete captured DC curve as json or SI csv; atomic file guards; no live mutation", reflect.TypeOf(VerificationExportParams{})),
 		typedCapability("sweep.keep.set", "Include/exclude a completed sweep in project storage", reflect.TypeOf(RecordingKeepParams{})),
 		typedCapability("print.preview.start", "Capture page/source and render preview in background; one worker; preserves circuit/physics; no printer submission", reflect.TypeOf(PreviewParams{})),

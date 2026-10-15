@@ -44,6 +44,7 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 	}
 	cfg := sweep.Settings
 	nodes := []ui.Node{section("sweep-settings-title", "DC parameter sweep"), quiet("sweep-settings-help", "Independent DC points."), quiet("sweep-live-help", "Live circuit unchanged.")}
+	nodes = append(nodes, buttonStyle(ui.Node{ID: "sweep-import", Kind: ui.Button, Text: "Open sweep JSON…", Accessibility: ui.Accessibility{Name: "Open captured DC sweep JSON"}, Disabled: s.fileBusy || s.pendingCommand != "", Activate: func() { s.beginFile("sweep.import", true, workbench.RecordingImportParams{}, nil) }}, false))
 	options := []ui.Option{}
 	selected := cfg.ComponentID + ":" + cfg.Parameter
 	valid := false
@@ -55,7 +56,7 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 		}
 	}
 	if !valid {
-		options = append(options, ui.Option{ID: selected, Label: "Choose a current target", Disabled: true})
+		options = append(options, ui.Option{ID: selected, Label: "Choose target", Disabled: true})
 	}
 	nodes = append(nodes, ui.Node{ID: "sweep-target", Kind: ui.Selector, Options: options, SelectedID: selected, Accessibility: ui.Accessibility{Name: "Sweep parameter"}, Change: func(e ui.ChangeEvent) {
 		pieces := strings.SplitN(e.SelectedID, ":", 2)
@@ -98,7 +99,7 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 		next.Points = count
 		s.invoke("sweep.settings.set", next)
 	}})
-	probeOptions := []ui.Option{{ID: "__auto", Label: "Target readings (automatic)"}}
+	probeOptions := []ui.Option{{ID: "__auto", Label: "Auto readings"}}
 	for _, p := range sweep.Available {
 		probeOptions = append(probeOptions, ui.Option{ID: p.ID, Label: p.Label + " · " + p.Unit})
 	}
@@ -201,8 +202,11 @@ func (s *screen) sweepPanel(state workbench.Snapshot) []ui.Node {
 		return append(nodes, quiet("sweep-no-record", "Build a supported circuit, choose a range, then run a sweep."))
 	}
 	caption := op.ID + " · " + op.Status + " · independent DC points"
+	if op.Kind == "sweep-import" {
+		caption += " · imported recorded data"
+	}
 	if !op.SourceUnchanged {
-		caption += " · captured source differs from current document"
+		caption += " · captured result; current-source association unavailable"
 	}
 	nodes = append(nodes, quiet("sweep-caption", caption))
 	if sweep.Result == nil {

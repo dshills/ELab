@@ -226,3 +226,5 @@ For repeated fresh/warm backend edit/result and bounded Verify timings, run the 
 Transient failures now expose [distinct integration-limit causes and recovery](docs/integration-limits.md) through shared native/agent guidance. The original 512-attempt and 100 ms limits remain unchanged.
 
 Waveform sources now show [shared schematic/export annotations](docs/source-annotations.md) for sine parameters, pulse timing and applied/pending/stale input state. Fit includes the annotation block.
+
+[Captured DC sweeps](docs/dc-sweeps.md) plot source bias, resistance or wiper position without changing live physics. **DC sweep → Open sweep JSON…** reopens shared curves, including on a blank sheet. Users and agents share import, trace/cursor, keep, export and project-save commands. [Schematic PDF/PNG output](docs/schematic-pdf.md) and [print preview](docs/print-preview.md) are available; native printer discovery/submission remains planned.

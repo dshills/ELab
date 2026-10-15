@@ -171,3 +171,64 @@ func TestNativePointerRoutesSweepAndPreservesDrawing(t *testing.T) {
 		}
 	})
 }
+
+func TestNativeSweepImportOnBlankMatchesAgent(t *testing.T) {
+	source := workbench.NewExample()
+	defer source.Close()
+	cfg := workbench.SweepSettings{ComponentID: "V1", Parameter: "voltage", Start: "0 V", Stop: "5 V", Points: 11, ProbeIDs: []string{"i:D1", "v:D1"}}
+	agentAction(t, source, "sweep.start", workbench.SweepStartParams{Settings: &cfg})
+	deadline := time.Now().Add(3 * time.Second)
+	for source.Snapshot().DCSweep.Result == nil && time.Now().Before(deadline) {
+		time.Sleep(time.Millisecond)
+	}
+	curve := source.Snapshot().DCSweep
+	if curve.Result == nil {
+		t.Fatal("fixture sweep not ready")
+	}
+	path := filepath.Join(t.TempDir(), "curve.json")
+	agentAction(t, source, "sweep.export", workbench.VerificationExportParams{ID: curve.Selected, Path: path, Format: "json"})
+	user, cleanup := testScreen(t)
+	defer cleanup()
+	if err := user.app.Open(app.Window{ID: "main", Title: "Owned sweep import", Width: 1260, Height: 900, View: user.view}); err != nil {
+		t.Fatal(err)
+	}
+	uiAction(t, user, "sweep-open", nil)
+	user.chooseFile = func(_ context.Context, options app.FileOptions) (string, error) {
+		if options.Mode != app.OpenFile || len(options.Extensions) != 1 || options.Extensions[0] != "json" {
+			t.Errorf("wrong sweep picker %+v", options)
+		}
+		return path, nil
+	}
+	before := user.service.Snapshot()
+	uiAction(t, user, "sweep-import", nil)
+	waitFileUI(t, user)
+	if user.errorMessage != "" {
+		t.Fatal(user.errorMessage)
+	}
+	state := user.service.Snapshot()
+	if len(state.Components) != 0 || state.RunID != before.RunID || !state.DCSweep.Visible || !reflect.DeepEqual(state.DCSweep.Result, curve.Result) || state.ProjectWork.Command != "sweep.import" || state.ProjectWork.Actor != "user" || state.DCSweep.Operations[0].SourceUnchanged {
+		t.Fatal("native import replaces source or loses capture/provenance")
+	}
+	agent := workbench.New()
+	defer agent.Close()
+	agentAction(t, agent, "sweep.import", workbench.RecordingImportParams{Path: path})
+	if !reflect.DeepEqual(state.DCSweep.Result, agent.Snapshot().DCSweep.Result) {
+		t.Fatal("native/agent imported curve differs")
+	}
+	user.app.Do(func() {
+		user.view()
+		_, err := user.sweepMesh(*user.sweepDrawing.View)
+		if err != nil {
+			t.Fatal(err)
+		}
+		frame := user.sweepDrawing.frame.Load()
+		user.sweepDrawing.placeCursor(frame.left + (frame.right-frame.left)/2)
+	})
+	if *user.service.Snapshot().DCSweep.Cursor != 5 {
+		t.Fatal("import cursor does not use captured axis")
+	}
+	uiAction(t, user, "sweep-back", nil)
+	if user.service.Snapshot().DCSweep.Visible || len(user.service.Snapshot().Components) != 0 {
+		t.Fatal("import back loses live circuit")
+	}
+}
