@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "scope": "Validation reporting only; app/core/solver/binaries and public schemas unchanged",
+  "app_version": "0.86.0",
+  "native_binary_sha256": "75b6f8397e277a7e577931b509d57e8f35bf4d966eae48557a1b4d09288c6f49",
+  "generator_sha256": "6d695409bd758254bb759cc9046f0abe4c8beb90322eae8ed30d15a9c3d89d01",
+  "previous_feature_validation": "rc-network-validation.json",
+  "full_discovery": "rc-network-load-discovery.json",
+  "full_discovery_sha256": "f8e6a4d30e2814ceff97c46cc84eac5a68da24c3a55915ce5149bea247e3f1a8",
+  "original_reports_sha256": {
+    "headless-rc-network-original.json": "2796422ded0d11b881ca2f08a563d8d37b2f200f1e90e9b54695350aa0885800",
+    "desktop-rc-network-original.json": "7eba240e891c8d190d5e89bdbd494f24b7a307ca71e0925d2c4bf6d43518dac2"
+  },
+  "original_reports_bytes": 517621,
+  "new_reports_and_full_discovery_bytes": 249761,
+  "bytes_saved": 267860,
+  "checks": [
+    "Full discovery from previously committed native/headless reports matches exactly and is retained once",
+    "Generator reruns on the same qualified headless/native binaries pass the complete construction/physics/measurements/persistence/export workflow",
+    "Both compact reports carry matching full-response/registry digests and all detailed command fields; full witness contains all66 definitions",
+    "All electrical observations, guidance and checks match the original reports exactly",
+    "Python compilation passes; owned native session exits through shared app.close"
+  ],
+  "limits": [
+    "This change reduces repeated validation JSON; no new product or release acceptance claim",
+    "Prior feature receipt retains the original generator hash; this receipt records the reporting-only rerun"
+  ]
+}

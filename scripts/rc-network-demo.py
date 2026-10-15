@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Reconstruct RC/LED and high-pass circuits; --connect requires an owned blank session."""
 import argparse
+import hashlib
 import importlib.util
 import json
 import math
@@ -17,6 +18,8 @@ def main():
     parser.add_argument('--connect')
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--artifacts', type=Path, required=True)
+    parser.add_argument('--discovery-output', type=Path,
+                        help='new full discovery artifact (default: inside --artifacts)')
     args = parser.parse_args()
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
@@ -45,6 +48,21 @@ def main():
         catalog = client.ask('examples.list')
         info = next(e for e in catalog if e['id'] == 'led-fade')
         schemas = client.ask('capabilities.list', {'command': 'example.load'})
+        full_discovery = (json.dumps(schemas, sort_keys=True, indent=2, allow_nan=False)+'\n').encode()
+        discovery_path = args.discovery_output or assets/'example-load-discovery.json'
+        discovery_path.parent.mkdir(parents=True, exist_ok=True)
+        with discovery_path.open('xb') as discovery_file:
+            discovery_file.write(full_discovery)
+        registry = schemas['schemas']
+        assert isinstance(registry, dict) and registry
+        registry_bytes = (json.dumps(registry, sort_keys=True, indent=2, allow_nan=False)+'\n').encode()
+        # Retain the complete returned contract as a separate witness. Reports
+        # compare its digest and the full registry digest without duplicating
+        # every shared schema in both transport reports.
+        contract = {key: value for key, value in schemas.items() if key != 'schemas'}
+        contract['schema_registry_count'] = len(registry)
+        contract['schema_registry_sha256'] = hashlib.sha256(registry_bytes).hexdigest()
+        contract['full_response_sha256'] = hashlib.sha256(full_discovery).hexdigest()
         ask('simulation.pause')
         for identity, kind, x, y, value in [
             ('V1', 'pulse-source', -230, 20, '5 V'), ('R1', 'resistor', 0, -110, '1k'),
@@ -120,7 +138,7 @@ def main():
         ask('export.schematic.svg', {'path': str(assets/'high-pass.svg')})
         ask('export.schematic.png', {'path': str(assets/'high-pass.png')})
         report = dict(passed=True, transport='native-socket' if args.connect else 'headless-stdio',
-                      example=info, load_contract=schemas,
+                      report_version=2, example=info, load_contract=contract,
                       observations=dict(manual_matches_template=True, capacitor_edge_continuity=True,
                                         led_current_100uf_10ms_after_edge_a=tail_current,
                                         led_current_220uf_10ms_after_edge_a=larger_current,

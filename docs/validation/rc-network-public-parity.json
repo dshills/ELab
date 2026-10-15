@@ -1,10 +1,14 @@
 {
   "passed": true,
-  "scope": "Complete load contract, example guidance, observations and checks match except transport",
+  "scope": "Complete native/headless contract fields, full-response/registry digests and electrical observations match except transport; one full discovery witness retained",
+  "report_version": 2,
   "reports": [
     "headless-rc-network.json",
     "desktop-rc-network.json"
   ],
+  "full_discovery": "rc-network-load-discovery.json",
+  "full_response_sha256": "f8e6a4d30e2814ceff97c46cc84eac5a68da24c3a55915ce5149bea247e3f1a8",
+  "schema_registry_sha256": "6eae12ddad8040987bba291abd3fde9c46f7c20efb6ebef9f5ae10c52cc411ea",
   "observations": {
     "manual_matches_template": true,
     "capacitor_edge_continuity": true,
