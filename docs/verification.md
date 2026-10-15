@@ -6,6 +6,10 @@ The right inspector exposes duration, optional sample step (0 follows the projec
 
 **Verify** returns an operation ID immediately. The selector shows retained operations and progress; **Cancel verification** requests cancellation. Completed records show final selected readings and their whole-run min/max, engine identity, duration and sample count. Source changes are labeled; a record stays valid for its captured input and never becomes a live result. DC verification records one operating point at time zero. It defaults to useful voltage/current channels where there is no live DC scope.
 
+Failed operations show a captured-experiment explanation and next action before **Technical details**. Agents receive the same `operation.failure_help` in `operation.inspect` and `snapshot.operations[]`: source/code/severity, summary, action, original technical reason and empty object/terminal/wire lists when no cause location is known. The original error code/message and captured input metadata remain intact. Work-attempt, per-sample time and overall timeout failures give corresponding Verify-specific recovery suggestions. Other numerical causes receive conservative guidance without guessing a faulty component. No partial result is published; live state and kept recordings remain independent.
+
+`source_unchanged:false` labels the failure as an earlier captured experiment. Its message and captured input are not replaced by later edits; no marker is placed on an unrelated current schematic. Select a completed record to view that result instead. **Technical details** uses the existing shared `diagnostics.details.set` session preference, preserving physics, history and document state. It does not restart or rerun the live circuit.
+
 ## Bounds and lifecycle
 
 - At most one active verification, 10 simulated seconds, 1000 output steps and 4096 retained recorded frames. Shorten duration or increase Verify's sample step if admission exceeds the bound.

@@ -267,6 +267,10 @@ rendered:
 	if err := nativeScopePrecisionSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeVerificationFailureSmoke")
+	if err := nativeVerificationFailureSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	setStage("nativeNavigationSmoke")
 	if err := nativeNavigationSmoke(ctx, a, s); err != nil {
 		return err

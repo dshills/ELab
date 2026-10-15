@@ -36,7 +36,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.78.0 --build-version 93 --platform darwin
+  --version 0.79.0 --build-version 94 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).
@@ -55,7 +55,7 @@ A valid RC circuit automatically advances in simulated time. The docked scope pl
 
 Pause freezes time; **Step +1 sample** advances it deliberately. Resume preserves time and energy unless an electrical edit invalidated the run. Changing R, C, wiring, or experiment settings restarts from the configured initial voltage. Restart starts a new run even while paused. Pulse timings, sample interval, initial voltage, and playback speed are editable in the inspector and available to agents. Defaults are 1 ms samples, 50 ms high/low, 0 V initial voltage, and 0.02 simulated seconds per wall second. Playback is paced for observation; it is not a wall-clock real-time claim.
 
-The first transient engine supports one source, one resistor, and one ideal capacitor to ground. It uses the exact exponential RC response and splits at pulse edges. The 10 kΩ / 1 µF example reaches 3.160602794 V after 10 ms. This is a bounded ideal RC engine, with no ESR/leakage or finite pulse rise time. General networks and mixed LED/capacitor circuits remain unsupported. See the [RC implementation and validation record](docs/rc-transient.md).
+The exact RC engine handles one source, one resistor, and one ideal capacitor to ground. It uses the exponential RC response and splits at pulse edges. The 10 kΩ / 1 µF example reaches 3.160602794 V after 10 ms. This engine has no ESR/leakage or finite pulse rise time. Other supported LED/capacitor and multi-part circuits use the bounded network/mixed engine; inspect diagnostics and `snapshot.limits` for supported topology/capacity. See the [RC implementation](docs/rc-transient.md) and [mixed transient limits](docs/mixed-transient.md).
 
 ## Switch an LED with a transistor
 

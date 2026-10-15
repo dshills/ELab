@@ -160,7 +160,7 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 		}
 		nodes = append(nodes, quiet("verify-progress", caption), quiet("verify-identity", fmt.Sprintf("Captured electrical revision %d · %s", operation.ElectricalRevision, operation.Actor)))
 		if !operation.SourceUnchanged {
-			message := "Recorded source differs from the current circuit."
+			message := "Captured experiment differs from the current circuit."
 			if operation.Kind != "verify" {
 				message = "Imported data has no association with the live circuit."
 			}
@@ -170,7 +170,13 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 		cancel.Disabled = operation.Status != "queued" && operation.Status != "running"
 		nodes = append(nodes, cancel)
 		if operation.Error != nil {
-			nodes = append(nodes, quiet("verify-error", operation.Error.Message))
+			if help := operation.FailureHelp; help != nil {
+				nodes = append(nodes, quiet("verify-failure-summary", help.Summary), quiet("verify-failure-action", help.Action), ui.Node{ID: "verify-failure-details", Kind: ui.Disclosure, Text: "Technical details", Checked: state.DiagnosticPresentation.DetailsVisible, Accessibility: ui.Accessibility{Name: "Show verification failure technical details"}, Children: []ui.Node{quiet("verify-error", help.Code+"\n"+help.Details)}, Change: func(e ui.ChangeEvent) {
+					s.invoke("diagnostics.details.set", workbench.DiagnosticDetailsParams{Visible: e.Checked})
+				}})
+			} else {
+				nodes = append(nodes, quiet("verify-error", operation.Error.Message))
+			}
 		}
 	}
 	if preview := state.Verification; preview != nil {

@@ -43,7 +43,7 @@
     "desktop/shutdown.go": "39e6d600f9edf67e2fe6a09e6b2b5ada051e67c1cf3fac2e3efe3ec4fe631a26",
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
     "desktop/time_fields.go": "a20e6b2fc6fc368fabb7fd4defae5fc3083987f94a2beabd1780e7ae9a9264b8",
-    "desktop/verification.go": "28887f81058b20942201feb1f8d833fd245f7f198604d9d4dcd67d28263ce0c5",
+    "desktop/verification.go": "a69a0a61a0e0bd72340e2907ab90f0def54586ee7fe98684fe3008c3c84868f7",
     "desktop/view.go": "f488fedddfa2ca8edb47cdffb880c7e32d3f11a90530ca078d0c3cce783fe5d0",
     "desktop/waveforms.go": "0c4a197175f5736621127540e652b6535fd3cb1ff4ab3f7bf3653eb433a9c6c9",
     "desktop/workflow.go": "9a3d8316eea46adf551ca0f00201807c7e491d74fd5884326e5c9be645d4167e"
@@ -2977,7 +2977,26 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 177,
+      "line": 174,
+      "function": "*screen.verificationInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"diagnostics.details.set\", workbench.DiagnosticDetailsParams{Visible: e.Checked})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 175,
+      "function": "*screen.verificationInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"diagnostics.details.set\", workbench.DiagnosticDetailsParams{Visible: e.Checked})",
+      "public_commands": [
+        "diagnostics.details.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 183,
       "function": "*screen.verificationInspector",
       "kind": "action-factory",
       "expression": "s.action(\"recording-show\", \"View recorded plot\", \"recording.view.set\", workbench.RecordingViewParams{Mode: \"recorded\"})",
@@ -2988,7 +3007,7 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 182,
+      "line": 188,
       "function": "*screen.verificationInspector",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\ts.beginFile(\"verification.export\", true, workbench.VerificationExportParams{ID: preview.ID, Format: format}, nil)\n}",
@@ -2996,7 +3015,7 @@
     },
     {
       "file": "desktop/verification.go",
-      "line": 183,
+      "line": 189,
       "function": "*screen.verificationInspector",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"verification.export\", true, workbench.VerificationExportParams{ID: preview.ID, Format: format}, nil)",

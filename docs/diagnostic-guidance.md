@@ -33,3 +33,5 @@ python3 scripts/diagnostics-demo.py --connect build/diagnostics.endpoint.json \
 These engineering checks do not establish novice discoverability, complete keyboard/focus or screen-reader qualification. No unsupported topology is made solvable by diagnostic presentation; existing models and numerical/work limits remain unchanged.
 
 General transient work limits now distinguish attempt exhaustion from elapsed-time exhaustion, with safe recovery actions and unchanged caps. See [integration limits](integration-limits.md).
+
+Failed captured Verify operations now expose the same explanation/action/technical structure through `operation.failure_help`, including in snapshot operation summaries. The Verify inspector displays it with the existing shared technical disclosure. These failures describe the captured input; they do not add guessed current-object markers or replace live diagnostics. Later source changes are labeled as an earlier captured experiment. See [Verify failure guidance](verification.md).

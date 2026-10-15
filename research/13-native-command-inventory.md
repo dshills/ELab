@@ -1,8 +1,8 @@
 # Native control and command inventory
 
-The [source ledger](13-native-command-inventory.json) records **45 production native Go files, 357 source sites and 154 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 124 public commands. The remaining 30 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
+The [source ledger](13-native-command-inventory.json) records **45 production native Go files, 359 source sites and 154 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 124 public commands. The remaining 30 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
 
-**130 sites require binding review.** The other categories are 201 literal routes, seven declared native-wrapper sites, 17 registry declarations and two menu sets. These are syntax sites, including overlapping factories and callbacks; they are not 357 unique visible controls or 124 runtime-qualified capabilities. No literal route names an unknown command.
+**131 sites require binding review.** The other categories are 202 literal routes, seven declared native-wrapper sites, 17 registry declarations and two menu sets. These are syntax sites, including overlapping factories and callbacks; they are not 359 unique visible controls or 124 runtime-qualified capabilities. No literal route names an unknown command.
 
 The ledger covers action/button/menu factories, package-level native menus, registry tables, callback fields/assignments, time-field factories, custom canvases, event routers, direct request command fields and shared dispatch bridges. Each entry retains its source, line, enclosing function and expression. File hashes and the public ID set make changes reproducible and reviewable. Both platform Go files are included; smoke/tests, framework internals and Objective-C event delivery are excluded and remain separate evidence scopes.
 
@@ -30,7 +30,7 @@ Native regressions prove stale Apply/Delete refusal and normal fresh Apply. A co
 
 ## Remaining qualification
 
-Resolve the 129 dynamic/relay/custom sites against instantiated states and public parameters, and attach runtime evidence per user capability. Audit file Save/Discard/Cancel semantics, raw field commits/IME, full menu/keyboard/focus behavior, canvas gesture lifetimes and the framework's window lifecycle. Inspection/readout equivalence also needs explicit evidence where the UI consumes shared Go snapshots/functions directly. Full agent parity stays **partial** until those proofs exist; this inventory prevents source drift and makes the remaining work explicit.
+Resolve the 131 dynamic/relay/custom sites against instantiated states and public parameters, and attach runtime evidence per user capability. Audit file Save/Discard/Cancel semantics, raw field commits/IME, full menu/keyboard/focus behavior, canvas gesture lifetimes and the framework's window lifecycle. Inspection/readout equivalence also needs explicit evidence where the UI consumes shared Go snapshots/functions directly. Full agent parity stays **partial** until those proofs exist; this inventory prevents source drift and makes the remaining work explicit.
 
 The 0.46.0 lifecycle checkpoint explicitly inventories `Window.CloseRequest`, preserves active file operations/decisions on repeated close, and adds File Close / Cmd+W through `app.close`. See [close evidence and remaining OS/runtime limits](../docs/native-close.md).
 
@@ -43,6 +43,8 @@ The 0.49.0 PNG checkpoint adds one public image export route through the existin
 The 0.50.0 rectifier checkpoint adds a protected example alias through the registry and both Examples menus. The menu/value/scope paths are tested against an agent; source counts alone remain insufficient for full parity qualification.
 
 The 0.52.0 annotation checkpoint changes the schematic mesh consumer without adding a semantic ingress: native rendering reads the same owned source lines available to agents and exports. The source hash was reviewed/refreshed; route and binding-review counts are unchanged.
+
+
 
 The print-preview checkpoint adds guarded start/refresh/cancel/close controls and an exact-ID read-only image query. Native decoding uses the same public chunk command as an external agent; source mapping remains separate from mounted image/pointer/OS evidence. See [preview contract](../docs/print-preview.md).
 
@@ -69,3 +71,5 @@ Captured-reference overlays add a checkbox through the existing `recording.compa
 Scope pointers now retain prepared interval/run/capture/cursor/revision context before owner dispatch. Recorded pointer/time-field requests optionally pin the selected capture through the shared cursor command; drags bridge only their own successful writes. The conditional bridge remains a reviewed dynamic site, with native/public/GPU evidence scoped in [scope input context](../docs/scope-input-context.md); OS presentation and complete physical gesture qualification remain separate.
 
 Native protected Close conditionally maps `app.close` to `app.close.start` in `requestReplace`, preserving the existing pending Save/Discard/Cancel identity. That dispatch-variable path remains a binding-review site; the literal-source list is not an inferred proof of the final alias target. Shared shutdown acknowledgement has two native literal ingress sites.
+
+The 0.79.0 captured-verification guidance checkpoint adds a disclosure Change callback and its literal `diagnostics.details.set` route. The ledger now has 359 syntax sites: 202 literal routes and 131 binding-review sites, with other categories and 124 referenced public IDs unchanged. Native unit and owned packaged callback smoke qualify this specific disclosure; complete mounted keyboard/IME/accessibility and other dynamic paths remain separate. Failure explanations come from the same operation summaries agents inspect and do not invent current-object markers.

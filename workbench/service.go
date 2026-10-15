@@ -1060,6 +1060,7 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	state.LiveInputModes = append([]string{}, state.LiveInputModes...)
 	state.Operations = append([]OperationSummary{}, state.Operations...)
 	for i := range state.Operations {
+		state.Operations[i].FailureHelp = cloneDiagnosticHelp(state.Operations[i].FailureHelp)
 		if state.Operations[i].Error != nil {
 			failure := *state.Operations[i].Error
 			state.Operations[i].Error = &failure

@@ -1,0 +1,247 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "observations": {
+    "error_code": "solve-failed",
+    "requested_duration_s": 0.0010000000000000002,
+    "help": {
+      "source": "verification",
+      "code": "solve-failed",
+      "severity": "error",
+      "summary": "Captured verification failed. The calculation could not complete.",
+      "action": "Review the captured connections, model limits, startup conditions and technical reason; adjust the experiment before verifying again. No partial recording was published; live time/charge and kept recordings were preserved.",
+      "details": "mixed timestep too small at 0.001, h 2.17e-19: ",
+      "object_ids": [],
+      "terminal_refs": [],
+      "wire_ids": []
+    },
+    "changed_source_help": {
+      "source": "verification",
+      "code": "solve-failed",
+      "severity": "error",
+      "summary": "An earlier captured verification failed. The calculation could not complete.",
+      "action": "Review the captured connections, model limits, startup conditions and technical reason; adjust the experiment before verifying again. No partial recording was published; live time/charge and kept recordings were preserved.",
+      "details": "mixed timestep too small at 0.001, h 2.17e-19: ",
+      "object_ids": [],
+      "terminal_refs": [],
+      "wire_ids": []
+    },
+    "kept_sample_count": 2
+  },
+  "schemas": {
+    "operation": {
+      "$id": "urn:elab:verification-operation:1",
+      "additionalProperties": false,
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "completed_steps": {
+          "type": "integer"
+        },
+        "document_generation": {
+          "type": "integer"
+        },
+        "electrical_revision": {
+          "type": "integer"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "failure_help": {
+          "anyOf": [
+            {
+              "$ref": "urn:elab:diagnostic-help:1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "input_revision": {
+          "type": "integer"
+        },
+        "kept_in_project": {
+          "type": "boolean"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "progress": {
+          "type": "number"
+        },
+        "requested_duration_s": {
+          "type": "number"
+        },
+        "simulated_time_s": {
+          "type": "number"
+        },
+        "source_path": {
+          "type": "string"
+        },
+        "source_sha256": {
+          "type": "string"
+        },
+        "source_unchanged": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "string"
+        },
+        "total_steps": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kept_in_project",
+        "id",
+        "kind",
+        "status",
+        "actor",
+        "input_revision",
+        "electrical_revision",
+        "document_generation",
+        "requested_duration_s",
+        "simulated_time_s",
+        "completed_steps",
+        "total_steps",
+        "progress",
+        "source_unchanged"
+      ],
+      "type": "object"
+    },
+    "diagnostic_help": {
+      "$id": "urn:elab:diagnostic-help:1",
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "details": {
+          "type": "string"
+        },
+        "object_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "severity": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "terminal_refs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "wire_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "source",
+        "code",
+        "severity",
+        "summary",
+        "action",
+        "details",
+        "object_ids",
+        "terminal_refs",
+        "wire_ids"
+      ],
+      "type": "object"
+    },
+    "inspect_input": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "verification-and-retained-operation-commands",
+        "preconditions": [
+          "id names a retained operation in any status"
+        ],
+        "effects": [
+          "Pure owned summary and captured metadata; completed records include final solver/statistical results; no live or view mutation",
+          "Failed captured Verify operations include failure_help: explanation/action/technical reason, preserving the original error code/message. Source association is reported separately; no current-object cause is guessed. No partial samples are available on failure."
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or an invalid parameter/relationship"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "ID unknown or evicted"
+          }
+        ],
+        "completion": {
+          "mode": "immediate in-memory result",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-max-retained-operations": 8,
+      "x-operation-inventory": "snapshot.operations (time/DC verification and imported/project recordings; not DC sweeps)"
+    }
+  },
+  "checks": [
+    "Real captured numerical failure supplies summary/action/technical reason without changing error identity",
+    "Local registry exposes typed failure guidance and ordinary catalog remains available",
+    "No partial samples, live/source/history change or kept recording loss",
+    "Read-only failure inspection is pure; technical disclosure uses the existing shared command",
+    "Later circuit edits retain original captured input/error and label the earlier experiment without guessed markers",
+    "Prior kept recording remains selectable and byte-identical on export"
+  ],
+  "limits": [
+    "Real failure exercises existing rectifier minimum integration-step refusal; equations/limits are unchanged",
+    "Work-attempt/time/overall-timeout help branches use controlled core tests, not artificially delayed native jobs",
+    "No complete physical keyboard/focus/accessibility/visible-latency or device qualification"
+  ]
+}

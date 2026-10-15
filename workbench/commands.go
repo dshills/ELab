@@ -128,6 +128,8 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(RecoveryConfigureParams{}), "urn:elab:recovery-configure:1"},
 	{reflect.TypeOf(RecoveryChoiceParams{}), "urn:elab:recovery-choice:1"},
 	{reflect.TypeOf(SweepSummary{}), "urn:elab:sweep-summary:1"},
+	{reflect.TypeOf(DiagnosticHelp{}), "urn:elab:diagnostic-help:1"},
+	{reflect.TypeOf(OperationSummary{}), "urn:elab:verification-operation:1"},
 }
 
 var snapshotSchema = json.RawMessage(`{"$ref":"urn:elab:snapshot:1"}`)

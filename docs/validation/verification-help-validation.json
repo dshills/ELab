@@ -1,0 +1,88 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.79.0",
+  "build_version": "94",
+  "binary_sha256": "b58d18d499a3c8c8a2af8b77f796878ff08eef4d60c25f9c37f21b8d9ea2dacf",
+  "agent_binary_sha256": "f3e70827c625703b651225158b2dbe728519c59f64a5c0e5d55e3d98bb9d6600",
+  "sdk": {
+    "commit": "5e7c14e3d95370cada1cd372b8d5eeaa5c207c46",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "workbench/commands.go": "bd8482af5972e1265bafa8465210c17ce50db48994e584955fc6f0a41198e5cc",
+    "workbench/service.go": "c1c906826eafee922fc09fc5ce0579f0b8c7f79febce3b3abab3d49e302b7cc3",
+    "workbench/verification.go": "9f41e42f381c6d0fde13e6ced24e37274e04add4d16161647d5e33ad90d48f40",
+    "workbench/verification_types.go": "fb90d2cc54ea22fa3cb57bfde90470f941b12f3533b8eddca2ac251ad1bd0e7f",
+    "workbench/verification_help.go": "a324336baa61c96eec34f4af4b99c60b397bd8c16fe640b5bd0b763dc9f5404b",
+    "workbench/verification_help_test.go": "8a027ab8389b2105155e9afb8e6d60eee68775f86ed0e2c03247bf354b7891e2",
+    "workbench/verification_capabilities.go": "267bf9fa3c8a8aed4025a02cadab6f7ebf1778e7b395db21543d7cf9bf688d4e",
+    "desktop/verification.go": "a69a0a61a0e0bd72340e2907ab90f0def54586ee7fe98684fe3008c3c84868f7",
+    "desktop/verification_help_test.go": "9996b5bbd17ecf59849fa4336b9bcba08f871f69907c1dda39945846140eaf4d",
+    "desktop/verification_help_smoke.go": "488727700de1328c03e70ecaf20825125b6b8c8bbb1fa1a718db45f5a3f8d161",
+    "desktop/smoke.go": "4cd9e1d84a5d5465f5b3ab668b4bea4d2e5e80ecd9772bb707de5121f2efa5e8",
+    "scripts/verification-help-demo.py": "0da22d82cbabd182e8125f4fe423406e10c1419dbfc3442a5bf5dcd1fea4f8be"
+  },
+  "checks": [
+    "Failed Verify summaries/inspection expose optional owned failure_help with unchanged error identity, captured source context and conservative summary/action/technical explanation",
+    "Known attempt/time/overall-timeout codes receive Verify-specific advice; no unknown current-object/terminal/wire cause is invented",
+    "Real rectifier one-ULP-after-1-ms numerical failure preserves live/source/history/document and kept results, publishes no partial samples and retains captured input metadata",
+    "Read-only help inspection and cached mutation snapshots are isolated from caller mutation; later source edits retain original captured metadata/error and identify earlier work",
+    "Native real-failure summary/disclosure, changed-source caption, kept-result selection and owner-callback helper tests pass; disclosure uses existing shared diagnostics.details.set",
+    "Common diagnostic-help and verification-operation schemas restore the original 64 KiB catalog budget; all local references resolve offline and catalog ownership remains tested",
+    "Full serialized lint/import/root/native race/vet passes; exact packaged general GPU/UI/close smoke includes a real failure/disclosure callback stage",
+    "Public native/headless typed schemas and complete results match except transport; kept export remains byte-identical after failure and later source edits",
+    "All four adapters pass LED/RC/NPN workflows; canonical/candidate native bytes match; SDK/prepared hashes verify read-only and owned sessions terminal"
+  ],
+  "evidence": [
+    "docs/verification.md",
+    "docs/diagnostic-guidance.md",
+    "scripts/verification-help-demo.py",
+    "docs/validation/headless-verification-help.json",
+    "docs/validation/desktop-verification-help.json",
+    "docs/validation/verification-help-public-parity.json",
+    "docs/validation/verification-help-conformance.json"
+  ],
+  "logs_sha256": {
+    "verification-help-build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "verification-help-check.log": "412c54f7a32722d5513dafb95a69757e036fc6f0c17231056efe89ffdbf30e89",
+    "verification-help-conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "verification-help-final-host.log": "1120a368e0d813a3e1a4399af4ea01ea61add6ac53e66c778ad53749e4a3f6b5",
+    "verification-help-focused-final.log": "a7728a172481e3a14f8e65e3e32a041bcaadbc87309148df3465f3d7803384e8",
+    "verification-help-focused-registry.log": "0c84b4d9a5e5a4d6be072391a419de4936bd40bf72d631df86c030481ee8e954",
+    "verification-help-focused.log": "766c27bd9c9edd36fca5ad02937accf4385abd4fa15917075386e23a3c7784a9",
+    "verification-help-headless-final.log": "180725c1e9ec01765c572152a454d1764d6edd9faad14e75890fa207ad325668",
+    "verification-help-headless.log": "180725c1e9ec01765c572152a454d1764d6edd9faad14e75890fa207ad325668",
+    "verification-help-native-demo.log": "41c320812b3f75733256a85453d6a7c079913cc2b283eef28150b970875d1737",
+    "verification-help-native-final.log": "41c320812b3f75733256a85453d6a7c079913cc2b283eef28150b970875d1737",
+    "verification-help-native-focused.log": "5ccbf6e1b06badf6e2fdfdab6cdcdfbd8f0f1c740c7715fa4940b0375f25618e",
+    "verification-help-native-host.log": "114cf2d8f012b87f9b6389d2f08b787833eaac126399a9bf1e5327adfc89f7de",
+    "verification-help-smoke.log": "75740e66996cc3b7139a58a2e51f5f612af456f2837f110ca3bc790daa650edf"
+  },
+  "source_inventory": {
+    "sources": 45,
+    "sites": 359,
+    "public_commands": 154,
+    "source_routes": 124,
+    "binding_review_sites": 131,
+    "literal_routes": 202
+  },
+  "notes": [
+    "Initial guidance schema increased catalog to 66071 bytes, or 65605 after sharing only DiagnosticHelp. Sharing OperationSummary too restores the unchanged 65536-byte budget; failing logs retained",
+    "Public workflow tests required command membership rather than a brittle hard-coded catalog count; final workflow rerun through both transports",
+    "Source audit reviewed two added syntax sites: one disclosure Change binding and one existing diagnostics.details.set literal ingress; 124 referenced public IDs unchanged",
+    "Stale README/API limits and unsupported-mixed-network/example claims corrected against current Limits and example definitions"
+  ],
+  "limits": [
+    "Original numerical error codes/messages, device equations, kernels, integration/work limits, saved formats and public command IDs are unchanged",
+    "Kept recordings are preserved; excluded records remain subject to existing admission eviction rules",
+    "Real public/native failure qualifies a minimum-step refusal; other guidance branches use controlled core tests and do not claim native artificial timeout/attempt exhaustion",
+    "General packaged GPU smoke and mounted callbacks do not establish failure-text pixel-specific, physical typing/keyboard/focus/IME/accessibility or visible-latency acceptance",
+    "Complete command/binding, clean distribution, participant and physical-printer gates remain open; P0 stays 17 implemented /10 partial; continuing goal active"
+  ]
+}

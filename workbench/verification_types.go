@@ -39,23 +39,24 @@ type VerifyParams struct {
 	ProbeIDs       []string           `json:"probe_ids,omitempty"`
 }
 type OperationSummary struct {
-	KeptInProject      bool     `json:"kept_in_project"`
-	SourcePath         string   `json:"source_path,omitempty"`
-	SourceSHA256       string   `json:"source_sha256,omitempty"`
-	ID                 string   `json:"id"`
-	Kind               string   `json:"kind"`
-	Status             string   `json:"status"`
-	Actor              string   `json:"actor"`
-	InputRevision      uint64   `json:"input_revision"`
-	ElectricalRevision uint64   `json:"electrical_revision"`
-	DocumentGeneration uint64   `json:"document_generation"`
-	RequestedDuration  float64  `json:"requested_duration_s"`
-	SimulatedTime      float64  `json:"simulated_time_s"`
-	CompletedSteps     int      `json:"completed_steps"`
-	TotalSteps         int      `json:"total_steps"`
-	Progress           float64  `json:"progress"`
-	SourceUnchanged    bool     `json:"source_unchanged"`
-	Error              *Failure `json:"error,omitempty"`
+	FailureHelp        *DiagnosticHelp `json:"failure_help,omitempty"`
+	KeptInProject      bool            `json:"kept_in_project"`
+	SourcePath         string          `json:"source_path,omitempty"`
+	SourceSHA256       string          `json:"source_sha256,omitempty"`
+	ID                 string          `json:"id"`
+	Kind               string          `json:"kind"`
+	Status             string          `json:"status"`
+	Actor              string          `json:"actor"`
+	InputRevision      uint64          `json:"input_revision"`
+	ElectricalRevision uint64          `json:"electrical_revision"`
+	DocumentGeneration uint64          `json:"document_generation"`
+	RequestedDuration  float64         `json:"requested_duration_s"`
+	SimulatedTime      float64         `json:"simulated_time_s"`
+	CompletedSteps     int             `json:"completed_steps"`
+	TotalSteps         int             `json:"total_steps"`
+	Progress           float64         `json:"progress"`
+	SourceUnchanged    bool            `json:"source_unchanged"`
+	Error              *Failure        `json:"error,omitempty"`
 }
 type VerificationRow struct {
 	Time   float64   `json:"time_s"`

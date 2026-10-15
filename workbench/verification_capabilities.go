@@ -68,7 +68,7 @@ func addVerificationCapabilityDetails(id string, schema map[string]any) bool {
 		}
 	case "operation.inspect":
 		contract.Preconditions = []string{"id names a retained operation in any status"}
-		contract.Effects = []string{"Pure owned summary and captured metadata; completed records include final solver/statistical results; no live or view mutation"}
+		contract.Effects = []string{"Pure owned summary and captured metadata; completed records include final solver/statistical results; no live or view mutation", "Failed captured Verify operations include failure_help: explanation/action/technical reason, preserving the original error code/message. Source association is reported separately; no current-object cause is guessed. No partial samples are available on failure."}
 		failure("not-found", "admission", "ID unknown or evicted")
 	case "operation.samples":
 		inputProperty(schema, "offset")["minimum"] = 0

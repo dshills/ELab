@@ -224,6 +224,7 @@ func (s *Service) operationSummaryLocked(operation *verificationOperation) Opera
 		failure := *out.Error
 		out.Error = &failure
 	}
+	out.FailureHelp = verificationFailureHelp(out)
 	return out
 }
 func (s *Service) cancelOperationLocked(id string) error {
