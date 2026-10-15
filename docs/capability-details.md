@@ -10,6 +10,8 @@ The response keeps the ordinary discovery envelope, schema registry, protocol/sc
 
 Detailed bounds/examples currently cover `source.sine.set`, `source.pulse.set`, `simulation.transient.set`, `potentiometer.wiper.set` and `example.load`, plus PNG resolution, recovery setup aliases and the command families described below. Other commands return their existing type schemas with the root local reference expanded. Outputs and saved files remain numeric SI; command-only time text is not added to output schemas. The ordinary catalog remains within its original 65536-byte limit.
 
+`source.pulse.timing.set` adds a fully described finite-pulse frequency/period/duty control. Frequency and percentage use exact quantity strings; period accepts shared time units. The schema declares exactly-one timing alternatives and coupled retained-transition/model bounds. `snapshot.pulse_timings` remains numeric configuration data with additional editable text. See [pulse clock contract](source-pulse-clock.md).
+
 Numeric bounds use JSON Schema `minimum` / `maximum` with `x-unit`. For time fields, the existing local time-grammar reference still accepts numbers or unit text. `x-normalized-si-range` applies the same inclusive limits **after** the text is converted to seconds. Standard JSON Schema numeric keywords do not validate the magnitude of a string such as `"60 ms"`; clients must normalize it before checking this extension. Schema-only numeric checks on time references require a dialect supporting `$ref` siblings (2019-09 or later), or explicit evaluation of the normalized-SI range. Server validation remains authoritative.
 
 `x-normalized-si-relations` is an array of structured relationships, evaluated after normalization. Fields are dot paths into the input:

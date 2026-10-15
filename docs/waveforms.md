@@ -17,6 +17,8 @@ Finite pulses begin at the low level at time zero, rise linearly, hold high, fal
 
 The complete pulse command is `{"id":"V1","waveform":{"high_v":5,"low_v":0,"high_s":0.05,"low_s":0.05,"rise_s":0.001,"fall_s":0.001}}`. Invalid commands refuse before changing any parameter. Required nested fields cannot be omitted or null.
 
+Finite sources also offer direct **Frequency / Period / High phase %** controls through `source.pulse.timing.set`. They retain voltage levels and rise/fall times, and expose derived configured values and exact editable text in `snapshot.pulse_timings`. See [pulse clock controls](source-pulse-clock.md) for quantity syntax, coupled bounds, retry/no-op behavior and the separate ideal-square timing path.
+
 All sources are ideal; there is no output resistance, current limit, battery discharge, noise, thermal model, rating or physical generator identity. They are educational waveform definitions, with complete immutable `waveform_model` metadata (`elab.source-waveforms.v1`) accompanying projects and records.
 
 ## Sampling and numerical behavior

@@ -1,0 +1,93 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.80.0",
+  "build_version": "95",
+  "binary_sha256": "43a99633e76977835d74f54f8869d5eaf7955c90a69f9efacfb4a497b002db6f",
+  "agent_binary_sha256": "bd44755b32a1580f74fd93b09a3604618d0ea48dee60e30b7ef309ce3a46e817",
+  "sdk": {
+    "commit": "5e7c14e3d95370cada1cd372b8d5eeaa5c207c46",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "workbench/source_pulse_timing.go": "21d39d2020e6cecdfa55d34c7a7623db5b9e310be2a4800272386be02f13838b",
+    "workbench/source_pulse_timing_input.go": "4c303edd42b4c26df796a1db93acd05eb72063035139b7891df41ea046dfbb90",
+    "workbench/source_pulse_timing_capabilities.go": "d0b38c4977318aab9406bedf091be144821eeaf64b21ddcd8ec10d7575921da4",
+    "workbench/source_pulse_timing_test.go": "6acccb585063959801da05a1d87bd733e2f414c870fe3b4c3a81d35c09479801",
+    "workbench/commands.go": "f58e5189f62e0728323a44791d26529805ef92d549fce704fad4c446cdd370cd",
+    "workbench/editing.go": "51e64fc7b2b2dbb915ff9d018c1bd9487cacdae49d45ec9c1109a26c99990b99",
+    "workbench/service.go": "87b9a2a4c031ca63e41803375117a9855812fb7f1f6f645ccc92363fb170a5b5",
+    "workbench/time_input.go": "d8f5800b222c0f8821225d536d8b62d43b9eb709314c63673c6a62b1c537b1f2",
+    "workbench/workflow.go": "4b15c411e87c351a5f0beb5432f8f1c6bfaeb1792624a4134561157db260178b",
+    "workbench/capability_details.go": "4b4fa0b0e0656e3f6dde492db2aa73074bf486a2b790143bd5399bb71d3bbdc1",
+    "desktop/waveforms.go": "95d17119e8ca3d54e7e0fa15522407dc3f9a2d33ea6ce2d1c0adc8801a637c1f",
+    "desktop/source_pulse_timing_test.go": "ececc45b932c4fba37ee3c2c7e5ab9838bd1cfeda899bc4a2d8e62f8fc9c6050",
+    "desktop/smoke.go": "934c090b0a7dea7c495fd7d53c56f0b6e338ef495ccbe7591a89f87f18094e97",
+    "scripts/source-pulse-clock-demo.py": "2677f426391af4f56f9614223117bfcadab3edbd2bceea25f29ad817e0b53b65"
+  },
+  "checks": [
+    "New source.pulse.timing.set command and native exact text fields set finite-pulse frequency or period plus high-phase percentage, retaining levels/rise/fall and experiment settings",
+    "Derived configured pulse_timings remains numeric with round-trip editable text; incomplete sources are configurable without inventing measured values",
+    "Strict quantity/unit/alternative/coupled model validation preserves prior state; retained transitions are never silently rescaled",
+    "Displayed timing reentry preserves phase bits/history/physics across reciprocal rounding; equivalent quantity aliases normalize before retries and batch staging",
+    "Core tests qualify limits, named whole-pair undo/redo, atomic batch rollback, cache/snapshot ownership and existing-field save/load",
+    "Public blank-sheet RC build agrees with independent finite-ramp RC solution within existing 3 mV envelope; 105 captured source values match independent piecewise waveform and measured high-width bounds contain 12.5 ms",
+    "Late unit-equivalent replay after save/reopen returns historical admission without overwriting the current source or file bytes",
+    "Native/headless schema and complete public observations match except transport; each native field rejects intervening agent edits",
+    "Full serialized lint/import/root/native race/vet and extra focused native guards pass; exact packaged general GPU/UI/close smoke invokes all three fields",
+    "Four adapters pass existing three LED/RC/NPN reference workflows; canonical/candidate bytes match; SDK prepared hashes verify read-only and owned sessions terminal"
+  ],
+  "evidence": [
+    "docs/source-pulse-clock.md",
+    "docs/waveforms.md",
+    "scripts/source-pulse-clock-demo.py",
+    "docs/validation/headless-source-pulse-clock.json",
+    "docs/validation/desktop-source-pulse-clock.json",
+    "docs/validation/source-pulse-clock-public-parity.json",
+    "docs/validation/source-pulse-clock-conformance.json"
+  ],
+  "logs_sha256": {
+    "build/source-pulse-clock-080/audit-final.log": "f2ed678d593a2bb386bc2c69c8c32db7e8417a93183b71f8f1d742c99dfb26d4",
+    "build/source-pulse-clock-080/audit.log": "3c5037c5e7e6c479112a7baaddf26897baaf149d8a60eb862230d023f5e3bfc8",
+    "build/source-pulse-clock-080/build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/source-pulse-clock-080/check.log": "b9af3b67f877c0c30d2118bf9913f0d3250c0e1c4e3dac239fa9f09e7432f3c5",
+    "build/source-pulse-clock-080/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/source-pulse-clock-080/core-final.log": "b003aed7cec91f91122f5d9f63ffcbf6e00eff9937e20af24b9b033e3b5ed139",
+    "build/source-pulse-clock-080/core-numeric.log": "f6934b4ea591041eb2ebf723d14dcd85b6bf73b5e5ae4ffb4a34e3d035982548",
+    "build/source-pulse-clock-080/focused-final.log": "f3e5d9eeb32af68a603346a84ba2c09a55addb96be590246a95f2de14ed8e4f1",
+    "build/source-pulse-clock-080/focused.log": "77abd6d5eeef548fccb0afc9afb8e9fd6702ba7e29a51675169a21767523a6d7",
+    "build/source-pulse-clock-080/headless.log": "3b074335076d1c2437b90e5c9e307d7241932f4c3eca911097cb456211a220a0",
+    "build/source-pulse-clock-080/native-demo.log": "85e293ab176a6a5a955b66843b976e072b281ad656ab6046e7eb16925bd1693a",
+    "build/source-pulse-clock-080/native-final.log": "10a978885cf84df3c227de81866ed8245e9b59d5c360545130749e6c40d563c3",
+    "build/source-pulse-clock-080/native-focused.log": "9499c83d17d1ec9b439bc89bdd3a238d2216aed6727f7fdbb98267c2f486a3e6",
+    "build/source-pulse-clock-080/native-host.log": "a3faf268cbf07cec1587a33997ba71cbb8623faa739284be4693eacadb95cb6c",
+    "build/source-pulse-clock-080/smoke.log": "ae788bff2d6ff812a7d4b36ef0d598d3867e9ffe68c96ea0d2521b9320c9c2bf"
+  },
+  "source_inventory": {
+    "sources": 45,
+    "sites": 365,
+    "public_commands": 155,
+    "source_routes": 125,
+    "binding_review_sites": 134,
+    "literal_routes": 205
+  },
+  "notes": [
+    "Initial phase/percentage test assumptions treated derived binary64 values as exact decimal literals; final checks retain strict model bounds and exact source-bit/no-op invariants while allowing ordinary derived roundoff",
+    "Existing older build/pulse-timing-inventory.json was preserved by audit overwrite refusal; corrected feature output goes to the isolated source-pulse-clock-080 directory",
+    "Full suite preceded the added per-field intervening-agent cases; the final focused native race run covers all new guard cases and existing new-field behavior"
+  ],
+  "limits": [
+    "New control targets finite-pulse-source only; older ideal-square pulse-source retains shared experiment high/low timing",
+    "Configured high-phase duty includes rise and is not a measured above-threshold duty; component phase seconds remain authoritative",
+    "Frequency/duty inputs require quantity strings; period accepts numeric seconds or shared time text; outputs remain numeric configuration plus explicit editable text",
+    "Output sampling does not change automatically; existing warnings/fit action and solver/work/model bounds still apply",
+    "No new device models, equations, numerical kernels, sample schedules or persisted file fields/versions",
+    "Four-adapter LED/RC/NPN regressions and new native/headless clock workflow have distinct scopes; no exhaustive all-command/native input claim",
+    "Physical typing/IME/focus/accessibility/visible latency, clean distribution, participants and physical-printer gates remain open; P0 stays 17 implemented /10 partial; continuing goal active"
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "detailed_schema": {
+    "additionalProperties": false,
+    "examples": [
+      {
+        "id": "V1",
+        "frequency_hz": "20 Hz",
+        "duty_percent": "25 %"
+      },
+      {
+        "duty_percent": "50 %",
+        "id": "V1",
+        "period_s": "100 ms"
+      }
+    ],
+    "oneOf": [
+      {
+        "not": {
+          "required": [
+            "period_s"
+          ]
+        },
+        "required": [
+          "frequency_hz"
+        ]
+      },
+      {
+        "not": {
+          "required": [
+            "frequency_hz"
+          ]
+        },
+        "required": [
+          "period_s"
+        ]
+      }
+    ],
+    "properties": {
+      "duty_percent": {
+        "description": "Quantity text strictly between 0 and 100 percent, optional % suffix; bare 25 means 25%. Rise belongs to the high phase and fall to the low phase.",
+        "maxLength": 128,
+        "minLength": 1,
+        "type": "string",
+        "x-max-utf8-bytes": 128,
+        "x-parsed-percent-range": {
+          "exclusiveMaximum": 100,
+          "exclusiveMinimum": 0
+        }
+      },
+      "frequency_hz": {
+        "description": "Quantity text: decimal/scientific Hz, kHz or mHz; bare text is Hz. Parsed inclusive range 0.05\u20131000 Hz, further constrained by phase/rise/fall limits.",
+        "maxLength": 128,
+        "minLength": 1,
+        "type": "string",
+        "x-max-utf8-bytes": 128,
+        "x-parsed-si-range": {
+          "maximum": 1000,
+          "minimum": 0.05
+        }
+      },
+      "id": {
+        "type": "string"
+      },
+      "period_s": {
+        "$ref": "urn:elab:time:1",
+        "x-normalized-si-range": {
+          "maximum": 20,
+          "minimum": 0.001
+        }
+      }
+    },
+    "required": [
+      "id",
+      "duty_percent"
+    ],
+    "type": "object",
+    "x-command-contract": {
+      "version": 1,
+      "scope": "finite-pulse-frequency-period-duty",
+      "preconditions": [
+        "Existing finite pulse source; parsed frequency/period/duty and coupled waveform limits all hold",
+        "The ideal square pulse-source retains its separate shared experiment timing"
+      ],
+      "effects": [
+        "Changes only selected source high/low phase lengths; voltage levels, rise/fall, other sources and experiment settings are unchanged",
+        "Ordinary undoable electrical edit: running restarts from configured startup; paused stays stale until restart/resume",
+        "Returned pulse_timings gives derived configured frequency/period/duty and round-trip quantity text; component.pulse remains authoritative saved seconds",
+        "Reapplying current displayed timing preserves waveform bits/history/physics, including reciprocal-rounding cases; ordinary successful command/actor revisions may advance",
+        "Equivalent quantity unit text normalizes before retry fingerprinting; frequency versus period alternatives remain different request forms",
+        "Allowed in atomic edit.batch; failure preserves the entire prior state"
+      ],
+      "errors": [
+        {
+          "code": "invalid-params",
+          "phase": "admission",
+          "when": "Malformed/missing/extra/null fields, both/neither timing alternatives, invalid quantity/unit/range or derived phases failing retained transition/model limits"
+        },
+        {
+          "code": "not-found",
+          "phase": "admission",
+          "when": "Source ID does not exist after parameter validation"
+        }
+      ],
+      "completion": {
+        "mode": "immediate validated graph edit; ordinary live initialization is observed separately",
+        "observe": [
+          "project.inspect",
+          "simulation.wait",
+          "events.poll"
+        ],
+        "cancel": "",
+        "cooperative_deadline_s": 0
+      }
+    },
+    "x-source-inventory": "snapshot.pulse_timings; current finite-pulse-source components only, independently of circuit completeness or accepted simulation",
+    "x-timing-relations": [
+      "Exactly one frequency_hz or period_s plus duty_percent",
+      "high_s = period * duty_percent/100; low_s = period-high_s",
+      "Both derived phases 1 \u00b5s\u201310 s; period at least 1 ms",
+      "Existing rise_s <= derived high_s and fall_s <= derived low_s; transitions and levels are never shortened or rescaled"
+    ]
+  },
+  "observations": {
+    "configured_clock": {
+      "id": "Clock",
+      "frequency_hz": 10,
+      "period_s": 0.1,
+      "duty_percent": 25,
+      "frequency_text": "10 Hz",
+      "duty_text": "25 %"
+    },
+    "capacitor_at_5ms_v": 1.8100424840798002,
+    "independent_reference_v": 1.8105306838497048,
+    "source_samples_checked": 105,
+    "high_width_bounds_s": [
+      0.012,
+      0.013000000000000001
+    ]
+  },
+  "checks": [
+    "Constructed pulse-driven RC circuit from blank through public placement/named wiring commands",
+    "Configured incomplete source, frequency or unit-period plus percent duty, retaining ramps/levels/settings",
+    "Equivalent unit-text retries replay original admission; changed intent refuses; late replay cannot overwrite reopened source",
+    "Displayed timing reentry preserves source bits, physical state and history",
+    "Incompatible ramps, alternative/type/range/underflow and missing-source requests refuse without state change",
+    "Live finite-ramp RC agrees with independent first-order solution within existing 3 mV envelope",
+    "Captured source rows follow independent 20 Hz/25-percent piecewise ramp; measured high-width brackets contain 12.5 ms",
+    "Ordinary saved phase fields restore derived timing; no new persisted field or file version"
+  ],
+  "limits": [
+    "Configured high-phase percent includes rise, not a measured threshold duty; accepted source phase lengths are authoritative",
+    "Ideal square pulse-source retains separate shared experiment timing",
+    "Rise/fall are never silently scaled, output sampling is not automatically changed, and ordinary model/step/work limits still apply",
+    "No physical device, complete physical typing/focus/accessibility or visible-latency qualification"
+  ]
+}

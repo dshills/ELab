@@ -124,7 +124,7 @@ func (s *Service) batchLocked(p BatchParams) error {
 	}
 	for i, edit := range p.Edits {
 		switch edit.Command {
-		case "component.place", "component.move", "component.rotate", "component.set", "component.duplicate", "capacitor.initial.set", "object.delete", "wire.connect", "wire.junction.insert", "switch.set", "potentiometer.wiper.set", "source.sine.set", "source.pulse.set":
+		case "component.place", "component.move", "component.rotate", "component.set", "component.duplicate", "capacitor.initial.set", "object.delete", "wire.connect", "wire.junction.insert", "switch.set", "potentiometer.wiper.set", "source.sine.set", "source.pulse.set", "source.pulse.timing.set":
 		default:
 			return fmt.Errorf("batch edit %d: command %q is not an atomic schematic edit", i+1, edit.Command)
 		}
@@ -140,6 +140,9 @@ func (s *Service) batchLocked(p BatchParams) error {
 	return nil
 }
 func historyName(command string) string {
+	if command == "source.pulse.timing.set" {
+		return "Change pulse timing"
+	}
 	names := map[string]string{"example.load": "Load example", "example.current.reset": "Reset current example", "display.preferences.set": "Change display preferences", "measurement.pin.add": "Pin reading", "measurement.pin.move": "Move pinned reading", "measurement.pin.remove": "Remove pinned reading", "component.place": "Place component", "component.duplicate": "Duplicate component", "component.move": "Move component", "component.rotate": "Rotate component", "component.set": "Change value", "capacitor.initial.set": "Change capacitor startup", "wire.connect": "Connect wire", "wire.junction.insert": "Insert junction", "object.delete": "Delete object", "simulation.transient.set": "Change experiment settings", "project.clear": "New schematic", "project.load": "Open schematic"}
 	if name := names[command]; name != "" {
 		return name

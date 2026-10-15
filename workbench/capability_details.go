@@ -65,6 +65,9 @@ type inputRelation struct {
 }
 
 func addCapabilityDetails(id string, schema map[string]any) {
+	if addPulseTimingDetails(id, schema) {
+		return
+	}
 	if addMeasurementCapabilityDetails(id, schema) {
 		return
 	}

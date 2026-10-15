@@ -140,6 +140,8 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return err
 		}
 		return s.setPulseLocked(p)
+	case "source.pulse.timing.set":
+		return s.setPulseTimingLocked(raw)
 	case "potentiometer.wiper.set":
 		var p WiperParams
 		if err := params(raw, &p, "id", "position"); err != nil {

@@ -14,6 +14,7 @@ import (
 )
 
 type Snapshot struct {
+	PulseTimings           []PulseTiming          `json:"pulse_timings"`
 	Shutdown               *ShutdownWork          `json:"shutdown,omitempty"`
 	Printing               *PrintState            `json:"printing,omitempty"`
 	VerificationInputModes []string               `json:"verification_input_modes"`
@@ -298,6 +299,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		analysis = "DC operating point"
 	}
 	out := Snapshot{
+		PulseTimings:           s.pulseTimingsLocked(),
 		Shutdown:               s.shutdownViewLocked(),
 		SourceAnnotations:      s.sourceAnnotationsLocked(),
 		Printing:               s.printingStateLocked(),
@@ -1059,6 +1061,7 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	state.VerificationInputModes = append([]string{}, state.VerificationInputModes...)
 	state.LiveInputModes = append([]string{}, state.LiveInputModes...)
 	state.Operations = append([]OperationSummary{}, state.Operations...)
+	state.PulseTimings = append([]PulseTiming{}, state.PulseTimings...)
 	for i := range state.Operations {
 		state.Operations[i].FailureHelp = cloneDiagnosticHelp(state.Operations[i].FailureHelp)
 		if state.Operations[i].Error != nil {
