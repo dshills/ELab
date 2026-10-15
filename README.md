@@ -228,3 +228,5 @@ Transient failures now expose [distinct integration-limit causes and recovery](d
 Waveform sources now show [shared schematic/export annotations](docs/source-annotations.md) for sine parameters, pulse timing and applied/pending/stale input state. Fit includes the annotation block.
 
 [Captured DC sweeps](docs/dc-sweeps.md) plot source bias, resistance or wiper position without changing live physics. **DC sweep → Open sweep JSON…** reopens shared curves, including on a blank sheet. Users and agents share import, trace/cursor, keep, export and project-save commands. [Schematic PDF/PNG output](docs/schematic-pdf.md) and [print preview](docs/print-preview.md) are available; native printer discovery/submission remains planned.
+
+Agents can inspect [sweep command contracts](docs/capability-details.md#sweep-command-contracts) for normalized parameter bounds, state/error conditions and completion behavior. Native **Clear point** and `sweep.cursor.set {"index":null}` share the same clearing behavior; omitting the index remains invalid.

@@ -231,7 +231,7 @@ func Catalog() []Capability {
 		typedCapability("sweep.cancel", "Cancel exact active sweep ID; no partial points are published", reflect.TypeOf(IDParams{})),
 		queryCapability("sweep.inspect", "Read retained sweep capture and complete result; copied data; no live mutation", reflect.TypeOf(IDParams{}), reflect.TypeOf(SweepInspection{})),
 		typedCapability("sweep.select", "Select a retained sweep ID without stopping current work", reflect.TypeOf(IDParams{})),
-		typedCapability("sweep.visibility.set", "Show/hide sweep plot; preserves live acquisition and printing captures", reflect.TypeOf(SweepVisibilityParams{})),
+		typedCapability("sweep.visibility.set", "Show/hide sweep plot; preserves live acquisition; showing closes print preview", reflect.TypeOf(SweepVisibilityParams{})),
 		typedCapability("sweep.trace.select", "Choose one captured probe for the sweep plot; signed SI values", reflect.TypeOf(IDParams{})),
 		typedCapability("sweep.cursor.set", "Select exact sweep point index; null clears; no interpolation", reflect.TypeOf(SweepCursorParams{})),
 		typedCapability("sweep.import.start", "Read/validate captured sweep JSON in background; project_work inspection/cancellation; preserves live circuit and later viewer choices", reflect.TypeOf(RecordingImportParams{})),

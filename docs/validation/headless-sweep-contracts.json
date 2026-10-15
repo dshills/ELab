@@ -1,0 +1,1111 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "sweep_commands": [
+    "sweep.settings.set",
+    "sweep.start",
+    "sweep.cancel",
+    "sweep.inspect",
+    "sweep.select",
+    "sweep.visibility.set",
+    "sweep.trace.select",
+    "sweep.cursor.set",
+    "sweep.import.start",
+    "sweep.import",
+    "sweep.export",
+    "sweep.keep.set"
+  ],
+  "detailed_schemas": {
+    "sweep.settings.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "component_id": "V1",
+          "parameter": "voltage",
+          "start": "0 V",
+          "stop": "5 V",
+          "points": 11,
+          "probe_ids": [
+            "i:D1",
+            "v:D1"
+          ]
+        }
+      ],
+      "properties": {
+        "component_id": {
+          "type": "string"
+        },
+        "parameter": {
+          "enum": [
+            "voltage",
+            "resistance",
+            "wiper"
+          ],
+          "type": "string"
+        },
+        "points": {
+          "maximum": 201,
+          "minimum": 2,
+          "type": "integer"
+        },
+        "probe_ids": {
+          "description": "Omit or null for automatic target readings. Explicit arrays require 1\u20136 distinct IDs from snapshot.dc_sweep.available_probes; empty arrays are refused.",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 6,
+          "minItems": 1,
+          "type": [
+            "array",
+            "null"
+          ],
+          "uniqueItems": true
+        },
+        "start": {
+          "description": "Finite floating point text; optional V for voltage, \u03a9/ohm with k/K/M resistance prefixes; wiper is a unitless fraction. Bounds apply after parsing.",
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string",
+          "x-max-utf8-bytes": 128
+        },
+        "stop": {
+          "description": "Finite floating point text; optional V for voltage, \u03a9/ohm with k/K/M resistance prefixes; wiper is a unitless fraction. Bounds apply after parsing.",
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string",
+          "x-max-utf8-bytes": 128
+        }
+      },
+      "required": [
+        "component_id",
+        "parameter",
+        "start",
+        "stop",
+        "points"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+        "preconditions": [
+          "Target and explicit probe IDs exist in the current graph; an incomplete circuit may be configured"
+        ],
+        "effects": [
+          "Preserves live schematic, physics/time and edit history",
+          "Replaces next-sweep settings; does not start work or modify captured curves"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or a command parameter/relationship is invalid"
+          }
+        ]
+      },
+      "x-details-scope": "sweep-parameter-bounds-and-command-contract; common protocol and filesystem errors are separate",
+      "x-inventory": {
+        "probes": "snapshot.dc_sweep.available_probes",
+        "targets": "snapshot.dc_sweep.targets"
+      },
+      "x-max-retained-operations": 8,
+      "x-parameter-domains": [
+        {
+          "parameter": "voltage",
+          "unit": "V",
+          "minimum": -12,
+          "maximum": 12
+        },
+        {
+          "parameter": "resistance",
+          "unit": "\u03a9",
+          "minimum": 10,
+          "maximum": 100000
+        },
+        {
+          "parameter": "wiper",
+          "unit": "ratio",
+          "minimum": 0,
+          "maximum": 1
+        }
+      ],
+      "x-relations": [
+        {
+          "after": "parameter-unit-normalization",
+          "fields": [
+            "start",
+            "stop"
+          ],
+          "operator": "different"
+        },
+        {
+          "descending": true,
+          "endpoints": "inclusive",
+          "fields": [
+            "start",
+            "stop",
+            "points"
+          ],
+          "operator": "distinct-representable-linear-axis"
+        }
+      ]
+    },
+    "sweep.start": {
+      "additionalProperties": false,
+      "examples": [
+        {}
+      ],
+      "properties": {
+        "settings": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "component_id": {
+                  "type": "string"
+                },
+                "parameter": {
+                  "enum": [
+                    "voltage",
+                    "resistance",
+                    "wiper"
+                  ],
+                  "type": "string"
+                },
+                "points": {
+                  "maximum": 201,
+                  "minimum": 2,
+                  "type": "integer"
+                },
+                "probe_ids": {
+                  "description": "Omit or null for automatic target readings. Explicit arrays require 1\u20136 distinct IDs from snapshot.dc_sweep.available_probes; empty arrays are refused.",
+                  "items": {
+                    "type": "string"
+                  },
+                  "maxItems": 6,
+                  "minItems": 1,
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "uniqueItems": true
+                },
+                "start": {
+                  "description": "Finite floating point text; optional V for voltage, \u03a9/ohm with k/K/M resistance prefixes; wiper is a unitless fraction. Bounds apply after parsing.",
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string",
+                  "x-max-utf8-bytes": 128
+                },
+                "stop": {
+                  "description": "Finite floating point text; optional V for voltage, \u03a9/ohm with k/K/M resistance prefixes; wiper is a unitless fraction. Bounds apply after parsing.",
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string",
+                  "x-max-utf8-bytes": 128
+                }
+              },
+              "required": [
+                "component_id",
+                "parameter",
+                "start",
+                "stop",
+                "points"
+              ],
+              "type": "object",
+              "x-inventory": {
+                "probes": "snapshot.dc_sweep.available_probes",
+                "targets": "snapshot.dc_sweep.targets"
+              },
+              "x-parameter-domains": [
+                {
+                  "parameter": "voltage",
+                  "unit": "V",
+                  "minimum": -12,
+                  "maximum": 12
+                },
+                {
+                  "parameter": "resistance",
+                  "unit": "\u03a9",
+                  "minimum": 10,
+                  "maximum": 100000
+                },
+                {
+                  "parameter": "wiper",
+                  "unit": "ratio",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              ],
+              "x-relations": [
+                {
+                  "after": "parameter-unit-normalization",
+                  "fields": [
+                    "start",
+                    "stop"
+                  ],
+                  "operator": "different"
+                },
+                {
+                  "descending": true,
+                  "endpoints": "inclusive",
+                  "fields": [
+                    "start",
+                    "stop",
+                    "points"
+                  ],
+                  "operator": "distinct-representable-linear-axis"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+        "preconditions": [
+          "A complete supported circuit and valid current target/probes; omitted or null settings uses the next-sweep draft",
+          "No existing sweep worker, including a canceled worker still unwinding",
+          "A retained slot is free or an excluded terminal operation can be evicted"
+        ],
+        "effects": [
+          "Preserves live schematic, physics/time and edit history",
+          "Captures source/models/settings; opens its curve view and closes preview; publishes only a complete successful curve, kept by default"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or a command parameter/relationship is invalid"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "A sweep worker is still active"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Current circuit is incomplete or unsupported"
+          },
+          {
+            "code": "record-limit",
+            "phase": "admission",
+            "when": "Eight retained operations are kept or active"
+          },
+          {
+            "code": "timeout",
+            "phase": "operation",
+            "when": "Cooperative computation deadline expires"
+          },
+          {
+            "code": "sweep-failed",
+            "phase": "operation",
+            "when": "A DC solve fails, including a singular system"
+          }
+        ],
+        "completion": {
+          "mode": "immediate-admission; inspect operation status",
+          "observe": [
+            "sweep.inspect",
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "sweep.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-details-scope": "sweep-parameter-bounds-and-command-contract; common protocol and filesystem errors are separate",
+      "x-max-retained-operations": 8
+    },
+    "sweep.cancel": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+        "preconditions": [
+          "id names an operation retained in snapshot.dc_sweep.operations",
+          "Operation is active"
+        ],
+        "effects": [
+          "Preserves live schematic, physics/time and edit history",
+          "Requests cancellation; inspect until terminal; no partial result is published"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or a command parameter/relationship is invalid"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Operation is unknown or evicted"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Only an active sweep can be canceled"
+          }
+        ]
+      },
+      "x-details-scope": "sweep-parameter-bounds-and-command-contract; common protocol and filesystem errors are separate",
+      "x-max-retained-operations": 8
+    },
+    "sweep.inspect": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+        "preconditions": [
+          "id names an operation retained in snapshot.dc_sweep.operations"
+        ],
+        "effects": [
+          "Read-only owned capture/result/failure metadata; does not advance or mutate live or recorded state"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or a command parameter/relationship is invalid"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Operation is unknown or evicted"
+          }
+        ]
+      },
+      "x-details-scope": "sweep-parameter-bounds-and-command-contract; common protocol and filesystem errors are separate",
+      "x-max-retained-operations": 8
+    },
+    "sweep.select": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+        "preconditions": [
+          "id names an operation retained in snapshot.dc_sweep.operations"
+        ],
+        "effects": [
+          "Preserves live schematic, physics/time and edit history",
+          "Selects retained operation and resets its cursor; does not implicitly show the workspace"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or a command parameter/relationship is invalid"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Operation is unknown or evicted"
+          }
+        ]
+      },
+      "x-details-scope": "sweep-parameter-bounds-and-command-contract; common protocol and filesystem errors are separate",
+      "x-max-retained-operations": 8
+    },
+    "sweep.visibility.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "visible": true
+        }
+      ],
+      "properties": {
+        "visible": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "visible"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+        "preconditions": [],
+        "effects": [
+          "Preserves live schematic, physics/time and edit history",
+          "Shows/hides sweep workspace, including on a blank sheet; showing closes print preview; preserves captured curves"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or a command parameter/relationship is invalid"
+          }
+        ]
+      },
+      "x-details-scope": "sweep-parameter-bounds-and-command-contract; common protocol and filesystem errors are separate",
+      "x-max-retained-operations": 8
+    },
+    "sweep.trace.select": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Probe ID from the selected captured result.probes, which may differ from the current graph inventory.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+        "preconditions": [
+          "The selected operation has a complete result"
+        ],
+        "effects": [
+          "Preserves live schematic, physics/time and edit history",
+          "Changes plotted captured reading; measurements remain signed SI"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or a command parameter/relationship is invalid"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "Selected operation has no complete result"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "No sweep store exists"
+          }
+        ]
+      },
+      "x-details-scope": "sweep-parameter-bounds-and-command-contract; common protocol and filesystem errors are separate",
+      "x-max-retained-operations": 8
+    },
+    "sweep.cursor.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "index": 0
+        },
+        {
+          "index": null
+        }
+      ],
+      "properties": {
+        "index": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer",
+              "x-maximum-exclusive": "selected result.points length"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "operation_id": {
+          "description": "Optional exact selected operation guard; mismatch refuses even a clear.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "index"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+        "preconditions": [
+          "The selected operation has a complete result"
+        ],
+        "effects": [
+          "Preserves live schematic, physics/time and edit history",
+          "Required index selects an exact stored point; explicit null clears; omission is invalid; never interpolates"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or a command parameter/relationship is invalid"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "Selected operation has no complete result"
+          },
+          {
+            "code": "conflict",
+            "phase": "admission",
+            "when": "operation_id differs from the selected operation"
+          }
+        ]
+      },
+      "x-details-scope": "sweep-parameter-bounds-and-command-contract; common protocol and filesystem errors are separate",
+      "x-max-retained-operations": 8
+    },
+    "sweep.import.start": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_document_generation": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "path": {
+          "description": "Nonblank local path, without NUL; relative paths resolve against the process working directory.",
+          "maxLength": 4096,
+          "minLength": 1,
+          "type": "string",
+          "x-max-utf8-bytes": 4096
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+        "preconditions": [
+          "No active project file operation; optional expected_document_generation matches the current document",
+          "Source is a regular file, not a symlink/special file, up to 8 MiB",
+          "A retained curve slot is available at admission and publication"
+        ],
+        "effects": [
+          "Preserves live schematic, physics/time and edit history",
+          "Retains the entire imported curve, kept by default, without changing next-sweep settings; preserves later viewer choices",
+          "Imported data never claims current-source freshness; source path/SHA are session provenance"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or a command parameter/relationship is invalid"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "A project file operation is active or file worker capacity is occupied"
+          },
+          {
+            "code": "conflict",
+            "phase": "admission",
+            "when": "Expected document generation differs"
+          },
+          {
+            "code": "file-error",
+            "phase": "work",
+            "when": "Regular-file access, preparation or publication fails"
+          },
+          {
+            "code": "timeout",
+            "phase": "work",
+            "when": "Cooperative file operation deadline expires"
+          },
+          {
+            "code": "canceled",
+            "phase": "work",
+            "when": "Operation canceled before attachment/publication"
+          },
+          {
+            "code": "superseded",
+            "phase": "work",
+            "when": "Document replacement makes the captured file operation obsolete"
+          },
+          {
+            "code": "invalid-sweep",
+            "phase": "work",
+            "when": "Captured JSON fails strict format/model/source/axis/probe/count/extrema validation"
+          },
+          {
+            "code": "record-limit",
+            "phase": "admission-or-publication",
+            "when": "Kept/active curves consume all eight retained slots"
+          }
+        ],
+        "completion": {
+          "mode": "immediate-project-work-admission",
+          "observe": [
+            "project.work.inspect",
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "project.work.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-details-scope": "sweep-parameter-bounds-and-command-contract; common protocol and filesystem errors are separate",
+      "x-file-format": {
+        "engine": "elab.network-mna-dc.v1",
+        "format": "elab.dc-sweep",
+        "version": 1
+      },
+      "x-max-file-bytes": 8388608,
+      "x-max-retained-operations": 8
+    },
+    "sweep.import": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_document_generation": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "path": {
+          "description": "Nonblank local path, without NUL; relative paths resolve against the process working directory.",
+          "maxLength": 4096,
+          "minLength": 1,
+          "type": "string",
+          "x-max-utf8-bytes": 4096
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+        "preconditions": [
+          "No active project file operation; optional expected_document_generation matches the current document",
+          "Source is a regular file, not a symlink/special file, up to 8 MiB",
+          "A retained curve slot is available at admission and publication"
+        ],
+        "effects": [
+          "Preserves live schematic, physics/time and edit history",
+          "Retains the entire imported curve, kept by default, without changing next-sweep settings; preserves later viewer choices",
+          "Imported data never claims current-source freshness; source path/SHA are session provenance"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or a command parameter/relationship is invalid"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "A project file operation is active or file worker capacity is occupied"
+          },
+          {
+            "code": "conflict",
+            "phase": "admission",
+            "when": "Expected document generation differs"
+          },
+          {
+            "code": "file-error",
+            "phase": "work",
+            "when": "Regular-file access, preparation or publication fails"
+          },
+          {
+            "code": "timeout",
+            "phase": "work",
+            "when": "Cooperative file operation deadline expires"
+          },
+          {
+            "code": "canceled",
+            "phase": "work",
+            "when": "Operation canceled before attachment/publication"
+          },
+          {
+            "code": "superseded",
+            "phase": "work",
+            "when": "Document replacement makes the captured file operation obsolete"
+          },
+          {
+            "code": "invalid-sweep",
+            "phase": "work",
+            "when": "Captured JSON fails strict format/model/source/axis/probe/count/extrema validation"
+          },
+          {
+            "code": "record-limit",
+            "phase": "admission-or-publication",
+            "when": "Kept/active curves consume all eight retained slots"
+          }
+        ],
+        "completion": {
+          "mode": "wait-for-project-work",
+          "observe": [
+            "project.work.inspect",
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "project.work.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-details-scope": "sweep-parameter-bounds-and-command-contract; common protocol and filesystem errors are separate",
+      "x-file-format": {
+        "engine": "elab.network-mna-dc.v1",
+        "format": "elab.dc-sweep",
+        "version": 1
+      },
+      "x-max-file-bytes": 8388608,
+      "x-max-retained-operations": 8
+    },
+    "sweep.export": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_document_generation": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "format": {
+          "enum": [
+            "json",
+            "csv"
+          ],
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "overwrite": {
+          "type": "boolean"
+        },
+        "path": {
+          "description": "Nonblank local path, without NUL; relative paths resolve against the process working directory.",
+          "maxLength": 4096,
+          "minLength": 1,
+          "type": "string",
+          "x-max-utf8-bytes": 4096
+        }
+      },
+      "required": [
+        "id",
+        "path",
+        "format"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+        "preconditions": [
+          "No active project file operation; optional expected_document_generation matches the current document",
+          "id names an operation retained in snapshot.dc_sweep.operations",
+          "id has a complete result; destination differs from the current project path; overwrite is explicit"
+        ],
+        "effects": [
+          "Preserves live schematic, physics/time and edit history",
+          "Atomically exports captured data; never substitutes current editor state; does not associate destination as the project file"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or a command parameter/relationship is invalid"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "A project file operation is active or file worker capacity is occupied"
+          },
+          {
+            "code": "conflict",
+            "phase": "admission",
+            "when": "Expected document generation differs"
+          },
+          {
+            "code": "file-error",
+            "phase": "work",
+            "when": "Regular-file access, preparation or publication fails"
+          },
+          {
+            "code": "timeout",
+            "phase": "work",
+            "when": "Cooperative file operation deadline expires"
+          },
+          {
+            "code": "canceled",
+            "phase": "work",
+            "when": "Operation canceled before attachment/publication"
+          },
+          {
+            "code": "superseded",
+            "phase": "work",
+            "when": "Document replacement makes the captured file operation obsolete"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Operation is unknown or evicted"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "Export requires a complete curve"
+          },
+          {
+            "code": "file-exists",
+            "phase": "work",
+            "when": "Destination already exists and overwrite is false"
+          }
+        ],
+        "completion": {
+          "mode": "wait-for-project-work",
+          "observe": [
+            "project.work.inspect",
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "project.work.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-details-scope": "sweep-parameter-bounds-and-command-contract; common protocol and filesystem errors are separate",
+      "x-max-retained-operations": 8
+    },
+    "sweep.keep.set": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "keep": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "keep"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+        "preconditions": [
+          "id names a retained completed curve"
+        ],
+        "effects": [
+          "Preserves live schematic, physics/time and edit history",
+          "Changes project/recovery membership; excluding makes a terminal curve evictable and can mark recording membership dirty"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or a command parameter/relationship is invalid"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "Operation is unknown, evicted or lacks a complete curve"
+          }
+        ]
+      },
+      "x-details-scope": "sweep-parameter-bounds-and-command-contract; common protocol and filesystem errors are separate",
+      "x-max-retained-operations": 8
+    }
+  },
+  "captured_curve": {
+    "target": {
+      "component_id": "V1",
+      "parameter": "voltage",
+      "label": "V1 \u00b7 DC bias",
+      "unit": "V",
+      "minimum": -12,
+      "maximum": 12
+    },
+    "start_si": 0,
+    "stop_si": 5,
+    "probes": [
+      {
+        "id": "i:D1",
+        "label": "D1 current",
+        "unit": "A",
+        "positive": "D1.anode",
+        "reference": "D1.cathode"
+      },
+      {
+        "id": "v:D1",
+        "label": "D1 voltage",
+        "unit": "V",
+        "positive": "D1.anode",
+        "reference": "D1.cathode"
+      }
+    ],
+    "points": [
+      {
+        "input": 0,
+        "values": [
+          0,
+          0
+        ],
+        "kcl_residual_a": 0,
+        "power_residual_w": 0
+      },
+      {
+        "input": 0.5,
+        "values": [
+          1.5764977214294928e-16,
+          0.49999999999993305
+        ],
+        "kcl_residual_a": 9.070332375805234e-17,
+        "power_residual_w": -4.536720933817815e-17
+      },
+      {
+        "input": 1,
+        "values": [
+          2.485607706984787e-12,
+          0.9999999997467558
+        ],
+        "kcl_residual_a": 2.232363503599437e-12,
+        "power_residual_w": -2.232363498311446e-12
+      },
+      {
+        "input": 1.5,
+        "values": [
+          3.9157937813552576e-08,
+          1.4999608420659007
+        ],
+        "kcl_residual_a": 3.714298296177827e-15,
+        "power_residual_w": -5.571430394419954e-15
+      },
+      {
+        "input": 2,
+        "values": [
+          9.614131938215343e-05,
+          1.9038586814306717
+        ],
+        "kcl_residual_a": 8.128251489849386e-13,
+        "power_residual_w": -1.5475040953533137e-12
+      },
+      {
+        "input": 2.5,
+        "values": [
+          0.0005094661757536543,
+          1.990533824247766
+        ],
+        "kcl_residual_a": 1.4203048459560108e-15,
+        "power_residual_w": -2.8269487445387043e-15
+      },
+      {
+        "input": 3,
+        "values": [
+          0.0009754023927182366,
+          2.0245976075889995
+        ],
+        "kcl_residual_a": 3.0723611588873156e-13,
+        "power_residual_w": -6.220293377601216e-13
+      },
+      {
+        "input": 3.5,
+        "values": [
+          0.0014542624213068163,
+          2.0457375786932683
+        ],
+        "kcl_residual_a": 8.456776945386935e-17,
+        "power_residual_w": -1.726049858596923e-16
+      },
+      {
+        "input": 4,
+        "values": [
+          0.0019388991656982412,
+          2.0611008343127426
+        ],
+        "kcl_residual_a": 1.0983618528581651e-14,
+        "power_residual_w": -2.263900872323532e-14
+      },
+      {
+        "input": 4.5,
+        "values": [
+          0.0024268003295996017,
+          2.0731996704004048
+        ],
+        "kcl_residual_a": 6.5052130349130266e-18,
+        "power_residual_w": -1.0408340855860843e-17
+      },
+      {
+        "input": 5,
+        "values": [
+          0.00291679657744158,
+          2.0832034225594906
+        ],
+        "kcl_residual_a": 1.07032438467769e-15,
+        "power_residual_w": -2.230854390106174e-15
+      }
+    ],
+    "statistics": [
+      {
+        "probe_id": "i:D1",
+        "minimum": 0,
+        "maximum": 0.00291679657744158
+      },
+      {
+        "probe_id": "v:D1",
+        "minimum": 0,
+        "maximum": 2.0832034225594906
+      }
+    ]
+  },
+  "clear_result": {
+    "cursor_index": null,
+    "captured_data_preserved": true
+  },
+  "checks": [
+    "paused discovery purity and unchanged output schemas",
+    "complete sweep family annotations",
+    "nested start settings match standalone schema",
+    "discover-and-execute settings/start/cursor examples",
+    "published limits and invalid-request purity",
+    "explicit-null clear, omitted-index refusal and stale-ID guard",
+    "live circuit/time/history and captured data preserved"
+  ],
+  "limits": [
+    "Sweep-specific contract coverage; other command semantic details remain incomplete",
+    "Common protocol errors and filesystem/OS outcomes remain separate; no full native action-coverage claim"
+  ]
+}

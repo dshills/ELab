@@ -89,6 +89,10 @@ func TestNativeDCSweepMatchesAgentAndUsesParameterAxis(t *testing.T) {
 	if state.DCSweep.Cursor == nil || *state.DCSweep.Cursor != 5 || math.Abs(state.DCSweep.Result.Points[5].Input-2.5) > 1e-15 {
 		t.Fatal("measured point cursor failed")
 	}
+	uiAction(t, s, "sweep-cursor-clear", nil)
+	if s.service.Snapshot().DCSweep.Cursor != nil {
+		t.Fatal("native Clear point failed")
+	}
 	dir := t.TempDir()
 	path := filepath.Join(dir, "sweep.csv")
 	s.chooseFile = func(context.Context, app.FileOptions) (string, error) { return path, nil }
@@ -226,6 +230,13 @@ func TestNativeSweepImportOnBlankMatchesAgent(t *testing.T) {
 	})
 	if *user.service.Snapshot().DCSweep.Cursor != 5 {
 		t.Fatal("import cursor does not use captured axis")
+	}
+	five := 5
+	agentAction(t, agent, "sweep.cursor.set", workbench.SweepCursorParams{Index: &five})
+	uiAction(t, user, "sweep-cursor-clear", nil)
+	agentAction(t, agent, "sweep.cursor.set", workbench.SweepCursorParams{})
+	if user.service.Snapshot().DCSweep.Cursor != nil || agent.Snapshot().DCSweep.Cursor != nil {
+		t.Fatal("native/agent clear differs")
 	}
 	uiAction(t, user, "sweep-back", nil)
 	if user.service.Snapshot().DCSweep.Visible || len(user.service.Snapshot().Components) != 0 {

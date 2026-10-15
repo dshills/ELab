@@ -61,17 +61,41 @@ type sweepPlan struct {
 	sources     []SweepSource
 }
 
+// Shared by target inventory and on-demand agent discovery.
+type sweepDomain struct {
+	Parameter string  `json:"parameter"`
+	Unit      string  `json:"unit"`
+	Minimum   float64 `json:"minimum"`
+	Maximum   float64 `json:"maximum"`
+}
+
+func sweepDomains() []sweepDomain {
+	return []sweepDomain{{"voltage", "V", -12, 12}, {"resistance", "Ω", 10, 100000}, {"wiper", "ratio", 0, 1}}
+}
+
 func sweepTargets(g Graph) []SweepTarget {
 	out := []SweepTarget{}
+	domains := sweepDomains()
 	for _, p := range g.Components {
-		if IsVoltageSource(p.Kind) {
-			out = append(out, SweepTarget{p.ID, "voltage", p.ID + " · DC bias", "V", -12, 12})
-		}
-		if p.Kind == "resistor" || p.Kind == "potentiometer" {
-			out = append(out, SweepTarget{p.ID, "resistance", p.ID + " · Resistance", "Ω", 10, 100000})
-		}
-		if p.Kind == "potentiometer" {
-			out = append(out, SweepTarget{p.ID, "wiper", p.ID + " · Wiper position", "ratio", 0, 1})
+		for _, d := range domains {
+			label := ""
+			switch d.Parameter {
+			case "voltage":
+				if IsVoltageSource(p.Kind) {
+					label = "DC bias"
+				}
+			case "resistance":
+				if p.Kind == "resistor" || p.Kind == "potentiometer" {
+					label = "Resistance"
+				}
+			case "wiper":
+				if p.Kind == "potentiometer" {
+					label = "Wiper position"
+				}
+			}
+			if label != "" {
+				out = append(out, SweepTarget{p.ID, d.Parameter, p.ID + " · " + label, d.Unit, d.Minimum, d.Maximum})
+			}
 		}
 	}
 	return out

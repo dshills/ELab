@@ -318,8 +318,17 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		return fmt.Errorf("choose a captured sweep probe")
 	case "sweep.cursor.set":
 		var p SweepCursorParams
-		if err := params(raw, &p, "index"); err != nil {
+		if err := params(raw, &p); err != nil {
 			return err
+		}
+		// The index is required, but explicit null means clear. The ordinary
+		// required-field decoder deliberately refuses null for other commands.
+		var fields map[string]json.RawMessage
+		if err := json.Unmarshal(raw, &fields); err != nil {
+			return err
+		}
+		if _, present := fields["index"]; !present {
+			return fmt.Errorf("required field %q is missing", "index")
 		}
 		if s.sweeps == nil {
 			return &actionError{"not-ready", "Complete a sweep first"}

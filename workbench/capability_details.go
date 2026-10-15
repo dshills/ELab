@@ -65,6 +65,9 @@ type inputRelation struct {
 }
 
 func addCapabilityDetails(id string, schema map[string]any) {
+	if addSweepCapabilityDetails(id, schema) {
+		return
+	}
 	rangeSI := func(path, unit string, min, max float64) {
 		p := inputProperty(schema, path)
 		if p != nil {

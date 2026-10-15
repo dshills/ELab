@@ -102,6 +102,14 @@ func nativeDCSweepSmoke(ctx context.Context, a *app.Application, s *screen) erro
 				result <- fmt.Errorf("native sweep measured cursor failed")
 				return
 			}
+			if err := smokeUI(s, "sweep-cursor-clear", nil); err != nil {
+				result <- err
+				return
+			}
+			if s.service.Snapshot().DCSweep.Cursor != nil {
+				result <- fmt.Errorf("native sweep clear point failed")
+				return
+			}
 			result <- smokeUI(s, "sweep-back", nil)
 		}); err != nil {
 			return err
