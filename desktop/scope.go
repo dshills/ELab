@@ -5,6 +5,7 @@ import (
 	"image/color"
 	"math"
 	"strings"
+	"sync/atomic"
 
 	"cogentcore.org/core/core"
 	"cogentcore.org/core/events"
@@ -22,6 +23,8 @@ type scopeCanvas struct {
 	*cogent.MeshCanvas
 	screen     *screen
 	mountEpoch uint64
+	frame      atomic.Pointer[scopePlotFrame]
+	gesture    *scopeGesture // Owner-held; only accepted cursor commands advance it.
 }
 
 func (c *scopeCanvas) Mount(parent tree.Node) core.Widget {
@@ -30,23 +33,33 @@ func (c *scopeCanvas) Mount(parent tree.Node) core.Widget {
 		return nil
 	}
 	c.mountEpoch++
+	c.frame.Store(nil)
+	c.gesture = nil
 	epoch := c.mountEpoch
 	w := widget.AsWidget()
 	w.OnFirst(events.Scroll, func(e events.Event) { e.SetHandled() })
 	for _, kind := range []events.Types{events.MouseDown, events.SlideMove} {
 		w.OnFirst(kind, func(e events.Event) {
 			if c.screen != nil {
+				frame := c.frame.Load()
 				pos := e.Pos().Sub(w.Geom.Pos.Content.ToPoint())
 				c.Owner.Do(func() {
 					if c.mountEpoch == epoch {
-						c.placeCursor(float64(pos.X))
+						c.cursorGesture(frame, float64(pos.X), kind == events.MouseDown)
 					}
 				})
 			}
 			e.SetHandled()
 		})
 	}
-	w.OnFirst(events.SlideStop, func(e events.Event) { e.SetHandled() })
+	w.OnFirst(events.SlideStop, func(e events.Event) {
+		c.Owner.Do(func() {
+			if c.mountEpoch == epoch {
+				c.gesture = nil
+			}
+		})
+		e.SetHandled()
+	})
 	w.OnFirst(events.KeyChord, func(e events.Event) {
 		switch strings.ToLower(string(e.KeyChord())) {
 		case "leftarrow", "rightarrow", "uparrow", "downarrow":
@@ -56,6 +69,7 @@ func (c *scopeCanvas) Mount(parent tree.Node) core.Widget {
 	return widget
 }
 func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
+	s.scope.frame.Store(nil)
 	b := &meshBuilder{}
 	state := s.service.Snapshot()
 	palette := paletteForTheme(state.Theme)
@@ -179,7 +193,17 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	if b.err != nil {
 		return nil, b.err
 	}
-	return canvas.NewMesh(b.vertices, b.indices)
+	mesh, err := canvas.NewMesh(b.vertices, b.indices)
+	if err == nil && state.ScopeVisible && !sourcePaneHidden(state) && plot.WindowValid && !stale {
+		frame := &scopePlotFrame{revision: state.CommandRevision, generation: state.Document.Generation, left: left, right: right, start: first, end: last, cursor: plot.ActiveCursor}
+		if recorded {
+			frame.recordingID = state.Recording.ID
+		} else if t != nil {
+			frame.runID = t.RunID
+		}
+		s.scope.frame.Store(frame)
+	}
+	return mesh, err
 }
 func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	if !state.ScopeVisible {

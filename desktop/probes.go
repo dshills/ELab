@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"image/color"
-	"math"
 	"strings"
 
 	"github.com/dshills/elab/workbench"
@@ -162,35 +161,4 @@ func (s *screen) cursorControls(state workbench.Snapshot) ui.Node {
 	nodes = append(nodes, quiet("cursor-measurement", caption))
 	// The inspector contains per-trace readings; the scope toolbar stays compact.
 	return ui.Node{ID: "scope-cursors", Kind: ui.Toolbar, Style: chromeStyle(), Children: nodes}
-}
-func (c *scopeCanvas) placeCursor(px float64) {
-	if c.screen == nil || c.View == nil || c.screen.fileBusy || c.screen.pendingCommand != "" {
-		return
-	}
-	state := c.screen.service.Snapshot()
-	if !state.ScopeVisible {
-		return
-	}
-	if record := state.Recording; record != nil && record.Viewing {
-		left, right := 58., c.View.Width-78
-		if right <= left {
-			return
-		}
-		fraction := math.Max(0, math.Min(1, (px-left)/(right-left)))
-		at := record.Scope.Window.Start + fraction*(record.Scope.Window.End-record.Scope.Window.Start)
-		c.screen.invoke("recording.cursor.set", workbench.CursorParams{Cursor: record.Scope.ActiveCursor, Time: at})
-		return
-	}
-	t := state.Transient
-	if t == nil || t.Stale || len(t.Samples) == 0 {
-		return
-	}
-	left, right := 58., c.View.Width-78
-	if right <= left {
-		return
-	}
-	fraction := math.Max(0, math.Min(1, (px-left)/(right-left)))
-	first := state.Scope.Window.Start
-	at := first + fraction*(state.Scope.Window.End-first)
-	c.screen.invoke("scope.cursor.set", workbench.CursorParams{Cursor: state.Scope.ActiveCursor, Time: at})
 }

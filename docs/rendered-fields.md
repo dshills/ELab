@@ -11,3 +11,5 @@ The dispatcher evaluates guards atomically. A stale commit returns the existing 
 The [release receipt](validation/field-context-validation.json) records stale waveform/draft refusal, fresh value preservation, document guard isolation, native selector retention and owner-context cleanup. Existing unit-text and native slider-gesture regressions still pass. Exact packaged smoke executes stale and fresh waveform callbacks in a real app owner alongside the established GPU checks.
 
 Full mounted typing/IME/focus behavior, every raw Activate/dialog/gesture path, OS lifecycle interaction and accessibility remain separate gates. The [source inventory](../research/13-native-command-inventory.md) records the guard-binding site and unresolved source routes; it is not runtime coverage proof for every generated control.
+
+Scope plot input is now separately bound to [prepared scope context](scope-input-context.md), including interval/cursor identity and optional recorded capture guards. This does not turn field/callback tests into complete physical gesture or OS display-completion qualification.

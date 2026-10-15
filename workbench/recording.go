@@ -162,9 +162,12 @@ func (s *Service) recordingCommandLocked(command string, raw json.RawMessage) er
 		}
 		s.recording.probes = append([]string{}, p.IDs...)
 	case "recording.cursor.set":
-		var p CursorParams
+		var p RecordingCursorParams
 		if err := params(raw, &p, "cursor", "time_s"); err != nil {
 			return err
+		}
+		if p.OperationID != "" && p.OperationID != s.selectedOperation {
+			return &actionError{"conflict", "Selected recording changed; refresh before placing a cursor"}
 		}
 		if (p.Cursor != "a" && p.Cursor != "b") || !finite(p.Time) || !scopeTimeInside(p.Time, 0, record.metadata.Duration) {
 			return fmt.Errorf("recorded cursor must be a/b with time inside the recording")

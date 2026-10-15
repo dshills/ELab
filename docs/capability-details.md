@@ -68,3 +68,7 @@ The [public workflow](../scripts/verification-contracts-demo.py) discovers all s
 ## Local printing contracts
 
 Six printing commands publish current inventories, copy/retention/PDF bounds, captured-preview requirements, job identity, state/effects, known errors and asynchronous observation/cancellation. Work cancellation remains available during active work. Shorter human-readable `output` labels keep the ordinary catalog within its original budget; structured output schemas remain authoritative and unchanged for existing commands. See the [printing contract](printing.md), including uncertain acknowledgment and physical-device limits.
+
+## Recorded cursor targets
+
+Filtered `recording.cursor.set` discovery now exposes the optional selected-capture `operation_id`, cursor choices, normalized time/duration restrictions, state requirements, effects and known errors. Nonempty mismatched targets refuse even with a current mutation revision. Native fields and plot pointers use that same guard; omitted/empty ID remains compatible with existing clients. See [scope input context](scope-input-context.md).

@@ -47,3 +47,5 @@ Core/native tests cover all five supported analyses, exact metadata/export round
 Captured runs can also be compared numerically at a requested time, retaining each actual saved sample time and separate whole-run statistics. See [Compare captured experiments](recording-comparison.md).
 
 For RC delays and flasher edges, [threshold timing](recording-timing.md) reports saved-row brackets and same-direction spacing bounds without interpolating event times.
+
+Recorded cursor time fields and native plot input now pass an optional exact `operation_id` to `recording.cursor.set`. A changed selected capture refuses atomically; clients omitting the field keep current-selection behavior. See [scope input context](scope-input-context.md) for prepared geometry, revision/document guards, drag continuity and remaining OS presentation/input limits.

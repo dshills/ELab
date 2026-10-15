@@ -235,7 +235,7 @@ func Catalog() []Capability {
 		capability("recording.pause", "Pause recorded playback without changing live pause/time", true, `{"type":"object","additionalProperties":false}`),
 		typedCapability("recording.window.set", "Set recorded plot/statistics interval inside complete recording; no reduction of exact data", reflect.TypeOf(RecordingWindowParams{})),
 		typedCapability("recording.probes.set", "Select up to six unique captured probes; [] hides traces", reflect.TypeOf(ProbeParams{})),
-		typedCapability("recording.cursor.set", "Set recorded a/b cursor inside complete recording; nearest sample/right-hand ties, independent of live cursors", reflect.TypeOf(CursorParams{})),
+		typedCapability("recording.cursor.set", "Set recorded a/b cursor inside complete recording; optional operation_id pins selected capture; nearest/right-hand ties", reflect.TypeOf(RecordingCursorParams{})),
 		typedCapability("recording.cursor.select", "Choose recorded a/b cursor for plot clicks", reflect.TypeOf(CursorSelectParams{})),
 		typedCapability("recording.cursor.clear", "Clear recorded a/b cursor", reflect.TypeOf(CursorSelectParams{})),
 		typedCapability("recovery.configure", "Wait for recovery setup; private local directory, automatic snapshots and 1–60 s interval; existing recovery stays active until ready", reflect.TypeOf(RecoveryConfigureParams{})),

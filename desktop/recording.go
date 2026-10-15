@@ -179,7 +179,7 @@ func (s *screen) recordingCursors(state workbench.Snapshot) ui.Node {
 			at = c.value.Requested
 		}
 		nodes = append(nodes, timeField("recorded-cursor-"+c.id, "Recorded cursor "+strings.ToUpper(c.id), at, false, func(text string) {
-			s.invokeAtCommandRevision("recording.cursor.set", map[string]any{"cursor": c.id, "time_s": text}, state.CommandRevision)
+			s.invokeAtCommandRevision("recording.cursor.set", map[string]any{"operation_id": r.ID, "cursor": c.id, "time_s": text}, state.CommandRevision)
 		}))
 		clear := s.action("recorded-cursor-clear-"+c.id, "×", "recording.cursor.clear", workbench.CursorSelectParams{Cursor: c.id})
 		clear.Disabled = c.value == nil

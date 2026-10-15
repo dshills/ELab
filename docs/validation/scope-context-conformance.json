@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "report_sha256": "8e37cadd291fbf7ced40f716683eff420afa9fb495064208d35d95ce816f867b",
+  "adapters": [
+    {
+      "name": "in-process",
+      "equivalent_to_in_process": true,
+      "workflow_count": 3
+    },
+    {
+      "name": "headless-stdio",
+      "equivalent_to_in_process": true,
+      "workflow_count": 3
+    },
+    {
+      "name": "headless-socket",
+      "equivalent_to_in_process": true,
+      "workflow_count": 3
+    },
+    {
+      "name": "native-socket",
+      "equivalent_to_in_process": true,
+      "workflow_count": 3
+    }
+  ],
+  "limitations": [
+    "engineering workflow parity on this workstation; not complete native action coverage or participant acceptance",
+    "workflow parity uses shared pinned kernels; optional electrical suite adds independent frozen educational-model references and same-kernel flasher refinement, not real-device/SPICE qualification",
+    "native socket path verifies semantic operations in real app processes; keyboard/focus/screen-reader and visible latency are separate",
+    "all sessions are newly created and owned; pre-existing applications/endpoints are untouched"
+  ]
+}

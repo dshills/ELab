@@ -34,7 +34,12 @@ func TestProbeControlsAndCursorPointerAgentParity(t *testing.T) {
 	agentAction(t, agent, "scope.cursor.set", workbench.CursorParams{Cursor: "a", Time: .1})
 	uiAction(t, user, "cursor-select-b", nil)
 	agentAction(t, agent, "scope.cursor.select", workbench.CursorSelectParams{Cursor: "b"})
-	user.app.Do(func() { user.scope.placeCursor(58 + (800-78-58)*.75) })
+	user.app.Do(func() {
+		if _, err := user.scopeMesh(*user.scope.View); err != nil {
+			t.Fatal(err)
+		}
+		user.scope.placeCursor(58 + (800-78-58)*.75)
+	})
 	agentAction(t, agent, "scope.cursor.set", workbench.CursorParams{Cursor: "b", Time: agent.Snapshot().Transient.Sample.Time * .75})
 	u, a := user.service.Snapshot(), agent.Snapshot()
 	if !reflect.DeepEqual(u.Scope, a.Scope) {

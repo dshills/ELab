@@ -1,0 +1,60 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.68.0",
+  "build_version": "83",
+  "binary_sha256": "e20dd8fe70b795ed92998de5764d8935eef496f337db2bd164a6192cc3ce17a7",
+  "agent_binary_sha256": "9d53bfbf282a3b758e3e60651904f9ac5b82af50a3fe139b6787485db22956b9",
+  "sdk_commit": "8101822c3a4935080e9b25b591f899cdd88d6768",
+  "sdk_manifest_sha256": "1030a5f8d640b04fa24966157b93ed82ecfd728dabe1711d1507e85e5ba54b37",
+  "prepared_sdk_outputs_verified": 21,
+  "checks": [
+    "Native regression reproduces an old scope click mutating the newly selected recording before redraw",
+    "Prepared immutable interval/run/capture/cursor/bounds/revision/document context is captured before owner dispatch; remount epoch and context invalidation prevent old queued work",
+    "Native mutations use shared command/document guards; recorded pointers/time fields pin operation_id, atomically refused on changed selected completed capture",
+    "Drag chain advances only its own accepted cursor revisions, preserving continuity before repaint while refusing intervening actors/context changes",
+    "Core/native tests cover pinned and legacy inputs, stale capture/window refusal, fresh interval mapping, own-drag continuation, interruption, invalidation and live/history/dirty preservation",
+    "Packaged smoke observes fresh GPU scope readback, rejects old interval context and accepts fresh multi-move cursor gesture without changing RC live state",
+    "Public native/headless reports match except transport, including detailed schema, current-revision wrong-ID refusal, units, interval validity, reopened local IDs and file-byte preservation",
+    "Full serialized root/native lint/import/race/vet, portable recorded-cursor/discovery tests, exact packaged native/GPU smoke and all four existing reference adapters pass"
+  ],
+  "evidence": [
+    "docs/scope-input-context.md",
+    "desktop/scope_context_test.go",
+    "workbench/recording_cursor_test.go",
+    "desktop/scope_context_smoke.go",
+    "scripts/scope-context-demo.py",
+    "docs/validation/headless-scope-context.json",
+    "docs/validation/desktop-scope-context.json",
+    "docs/validation/scope-context-public-parity.json",
+    "docs/validation/scope-context-conformance.json"
+  ],
+  "logs": {
+    "regression_before_repair": "95f1221d81487f6cc28f8be92b591b38b2bf76aeff4e5e8d96f5a5d0b5d9a752",
+    "full_quality": "2d4af9902555b9a18d2fd0ebe2c2d99cbeec05f86dbefec7dadfdc67a216d43a",
+    "portable": "90d59f28dd3bc3d50b719045e8f06ce41806c1f98cba6b01764afb3e3a4b5895",
+    "native_focus": "ea70202c9445c8fd268ec2bdc49af86e9ff8e88c1408a50ce4db21df937dfb07",
+    "packaged_gpu_smoke": "5431abf7d749dcbcca3679d807be414e0073ae221e434d38acfdb82be4b7ba80"
+  },
+  "inventory": {
+    "sources": 43,
+    "sites": 341,
+    "public_commands": 144,
+    "source_routes": 118,
+    "binding_review_sites": 127
+  },
+  "notes": [
+    "Optional recorded operation_id is additive; missing/empty retains prior current-selection behavior",
+    "Native live run checks plus shared revision/document guards retain existing live cursor semantics; numeric kernels and saved format unchanged",
+    "Source inventory maps two former literal pointer ingresses to one conditional guarded bridge; syntax classification remains separate from complete runtime coverage",
+    "SDK unchanged/clean, manifest and 21 prepared hashes verified read-only; candidate/build/canonical binary hashes equal",
+    "Prior .67/82 preserved at build/ELab-before-scope-context.app; all newly owned native sessions exited"
+  ],
+  "limits": [
+    "Context binds successful geometry preparation before GPU submission; SDK exposes no OS present-completion callback",
+    "Fresh GPU readback and native callback/gesture tests do not prove complete physical pointer/display timing, keyboard/focus/IME/accessibility or OS lifecycle behavior",
+    "Generic command/document guards plus explicit recorded capture guard cover the tested paths; broad runtime capability qualification remains partial",
+    "Private unsigned app; broader latency/distribution/participant and physical printing/device acceptance remain open",
+    "P0 remains 17 implemented /10 partial; continuing goal stays active"
+  ]
+}

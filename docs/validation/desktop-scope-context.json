@@ -1,0 +1,113 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "detailed_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "cursor": {
+        "enum": [
+          "a",
+          "b"
+        ],
+        "type": "string"
+      },
+      "operation_id": {
+        "description": "Optional exact selected completed recording ID; nonempty mismatches refuse atomically with conflict. Omitted/empty retains current-selection behavior.",
+        "type": "string"
+      },
+      "time_s": {
+        "$ref": "urn:elab:time:1",
+        "x-normalized-si-range": {
+          "maximum": 10,
+          "minimum": 0
+        }
+      }
+    },
+    "required": [
+      "cursor",
+      "time_s"
+    ],
+    "type": "object",
+    "x-command-contract": {
+      "version": 1,
+      "scope": "recorded-cursor-set",
+      "preconditions": [
+        "A retained completed recording is selected; time is within its complete captured duration",
+        "Optional nonempty operation_id matches selected capture; cursor is a or b"
+      ],
+      "effects": [
+        "Sets only requested recorded cursor time; nearest stored sample with later/right-hand ties; does not select another capture",
+        "No live cursor/physics/history/project/dirty change; cursor validity also reports its relation to visible interval"
+      ],
+      "errors": [
+        {
+          "code": "invalid-params",
+          "phase": "admission",
+          "when": "Malformed cursor/time or time outside complete recording"
+        },
+        {
+          "code": "not-ready",
+          "phase": "admission",
+          "when": "No completed selected recording"
+        },
+        {
+          "code": "conflict",
+          "phase": "admission",
+          "when": "Explicit capture ID differs from selected capture"
+        }
+      ],
+      "completion": {
+        "mode": "immediate session view mutation",
+        "observe": null,
+        "cancel": "",
+        "cooperative_deadline_s": 0
+      }
+    },
+    "x-inventory": "snapshot.recording.id, duration_s, scope.active_cursor and scope.window",
+    "x-relations": [
+      {
+        "field": "time_s",
+        "operator": "within-selected-captured-duration"
+      }
+    ]
+  },
+  "pinned_cursor": {
+    "requested_s": 0.012,
+    "time_s": 0.012,
+    "valid": true
+  },
+  "legacy_cursor": {
+    "requested_s": 0.02,
+    "time_s": 0.02,
+    "valid": true
+  },
+  "interval_cursors": {
+    "a": {
+      "requested_s": 0.012,
+      "time_s": 0.012,
+      "valid": true
+    },
+    "b": {
+      "requested_s": 0.02,
+      "time_s": 0.02,
+      "valid": false,
+      "reason": "Recorded cursor is outside the visible interval"
+    }
+  },
+  "reopened_cursor": {
+    "requested_s": 0.01,
+    "time_s": 0.01,
+    "valid": true
+  },
+  "checks": [
+    "explicit capture target refused with a current revision after selection change",
+    "pinned and legacy unit-time cursor inputs",
+    "full-duration admission and visible-interval validity stay distinct",
+    "reopened local identities require fresh pinned IDs",
+    "refusal/query/live/history/dirty/file-byte preservation"
+  ],
+  "limits": [
+    "Public command contract; native queued-frame/drag and GPU behavior are qualified separately",
+    "No OS display-completion, complete physical gesture/focus/accessibility or hardware qualification claim"
+  ]
+}

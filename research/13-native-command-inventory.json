@@ -28,14 +28,15 @@
     "desktop/print_page.go": "f06fef8a9db0e31cdf512c16c3b8155004c17964897b61e723b6cb0cdc796bf6",
     "desktop/print_preview.go": "4d7f6c538c1feaec47d4161dc0652387d8a0d4701d203b927588e5eaeda8c5aa",
     "desktop/printing.go": "00358432a4a2b4e512b24cc0d1d0130060a14097b6050ecf02aed41360ff419f",
-    "desktop/probes.go": "3f3ce8e64c6aaba57439b63542f95eed784604bbe555b18a0f303e791c0e9e01",
+    "desktop/probes.go": "c7df3b57a47b8a77661fd4809c7036fb10642a9429448dd46e633ee57805efdc",
     "desktop/project_work.go": "4d80b2c111c1d6778844570344479c35d3bfd641840aba0ebbe8f81083c961e1",
-    "desktop/recording.go": "38ff0d0c3fb240b6187867004a541de04c1c4f3f4797831644b1085e7482f6c8",
+    "desktop/recording.go": "dfb9b77df7bbaf27885ff443e8da2d10bb3aeff11f615d189f6b9189e675787f",
     "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
     "desktop/recording_timing.go": "ea430d33756542c0858afec3272b6b505bfce83a47843f1b64bae365cd717b86",
     "desktop/recovery.go": "1416354a0acb99a61be3d5cdd8838256e5bcd879d116a51a7a507fa271209a8f",
     "desktop/routing.go": "4898c4c1de9d7de3c5f8ad751b15d7c0f199234243f62ec6ea949ee8d9ad2c1c",
-    "desktop/scope.go": "a337fdaa91536674b27410e7961ec05067c960e152fdf9e56f7f06a79bfea9f2",
+    "desktop/scope.go": "303c4b5e31d997d506405c9679582ecf2d8bdb23500bdfb19d12cc09cec4d5d5",
+    "desktop/scope_context.go": "6a67324480a62c368711ea81d438b1b2bf93ea011d5d8a458325b3163482c46f",
     "desktop/scope_overlay.go": "90c6ebc19d47b237257d1358c77f6ccd9ba7ac7910cff5d54504ad74c0ea1f38",
     "desktop/scope_visibility.go": "9594a6afdb06c2d612c4a507ac90b9443651d38c4c88005e2af65ff2d3d6c686",
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
@@ -1836,7 +1837,7 @@
     },
     {
       "file": "desktop/probes.go",
-      "line": 68,
+      "line": 67,
       "function": "*screen.probeInspector",
       "kind": "action-factory",
       "expression": "s.action(\"remove-probe-\"+missing.ID, \"Remove \"+missing.ID, \"scope.probe.remove\", workbench.IDParams{ID: missing.ID})",
@@ -1847,7 +1848,7 @@
     },
     {
       "file": "desktop/probes.go",
-      "line": 82,
+      "line": 81,
       "function": "*screen.probeInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tids := append([]string{}, state.Scope.Selected...)\n\tif i \u003c len(ids) {\n\t\tids = append(ids[:i], ids[i+1:]...)\n\t}\n\tif e.SelectedID != \"__none\" {\n\t\tfor _, id := range ids {\n\t\t\tif id == e.SelectedID {\n\t\t\t\treturn\n\t\t\t}\n\t\t}\n\t\tat := min(i, len(ids))\n\t\tids = append(ids, \"\")\n\t\tcopy(ids[at+1:], ids[at:])\n\t\tids[at] = e.SelectedID\n\t}\n\ts.invoke(\"scope.probes.set\", workbench.ProbeParams{IDs: ids})\n}",
@@ -1855,7 +1856,7 @@
     },
     {
       "file": "desktop/probes.go",
-      "line": 98,
+      "line": 97,
       "function": "*screen.probeInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"scope.probes.set\", workbench.ProbeParams{IDs: ids})",
@@ -1866,7 +1867,7 @@
     },
     {
       "file": "desktop/probes.go",
-      "line": 103,
+      "line": 102,
       "function": "*screen.probeInspector",
       "kind": "action-factory",
       "expression": "s.action(\"inspect-trace-\"+p.ID, \"Inspect \"+p.Label, \"scope.trace.select\", workbench.IDParams{ID: p.ID})",
@@ -1877,7 +1878,7 @@
     },
     {
       "file": "desktop/probes.go",
-      "line": 110,
+      "line": 109,
       "function": "*screen.probeInspector",
       "kind": "action-factory",
       "expression": "s.action(\"trace-focus-clear\", \"Clear trace highlight\", \"scope.trace.select\", workbench.IDParams{})",
@@ -1888,7 +1889,7 @@
     },
     {
       "file": "desktop/probes.go",
-      "line": 134,
+      "line": 133,
       "function": "*screen.cursorControls",
       "kind": "action-factory",
       "expression": "s.action(\"cursor-select-\"+cursor.id, strings.ToUpper(cursor.id), \"scope.cursor.select\", workbench.CursorSelectParams{Cursor: cursor.id})",
@@ -1899,7 +1900,7 @@
     },
     {
       "file": "desktop/probes.go",
-      "line": 143,
+      "line": 142,
       "function": "*screen.cursorControls",
       "kind": "callback-factory",
       "expression": "timeField(\"cursor-time-\"+cursor.id, \"Cursor \"+strings.ToUpper(cursor.id)+\" time\", value, t == nil || t.Stale, func(text string) {\n\ts.invokeAtCommandRevision(\"scope.cursor.set\", map[string]any{\"cursor\": cursor.id, \"time_s\": text}, state.CommandRevision)\n})",
@@ -1907,7 +1908,7 @@
     },
     {
       "file": "desktop/probes.go",
-      "line": 144,
+      "line": 143,
       "function": "*screen.cursorControls",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"scope.cursor.set\", map[string]any{\"cursor\": cursor.id, \"time_s\": text}, state.CommandRevision)",
@@ -1918,34 +1919,12 @@
     },
     {
       "file": "desktop/probes.go",
-      "line": 146,
+      "line": 145,
       "function": "*screen.cursorControls",
       "kind": "action-factory",
       "expression": "s.action(\"cursor-clear-\"+cursor.id, \"×\", \"scope.cursor.clear\", workbench.CursorSelectParams{Cursor: cursor.id})",
       "public_commands": [
         "scope.cursor.clear"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/probes.go",
-      "line": 181,
-      "function": "*scopeCanvas.placeCursor",
-      "kind": "domain-ingress",
-      "expression": "c.screen.invoke(\"recording.cursor.set\", workbench.CursorParams{Cursor: record.Scope.ActiveCursor, Time: at})",
-      "public_commands": [
-        "recording.cursor.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/probes.go",
-      "line": 195,
-      "function": "*scopeCanvas.placeCursor",
-      "kind": "domain-ingress",
-      "expression": "c.screen.invoke(\"scope.cursor.set\", workbench.CursorParams{Cursor: state.Scope.ActiveCursor, Time: at})",
-      "public_commands": [
-        "scope.cursor.set"
       ],
       "status": "literal-public-route"
     },
@@ -2153,7 +2132,7 @@
       "line": 181,
       "function": "*screen.recordingCursors",
       "kind": "callback-factory",
-      "expression": "timeField(\"recorded-cursor-\"+c.id, \"Recorded cursor \"+strings.ToUpper(c.id), at, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.cursor.set\", map[string]any{\"cursor\": c.id, \"time_s\": text}, state.CommandRevision)\n})",
+      "expression": "timeField(\"recorded-cursor-\"+c.id, \"Recorded cursor \"+strings.ToUpper(c.id), at, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.cursor.set\", map[string]any{\"operation_id\": r.ID, \"cursor\": c.id, \"time_s\": text}, state.CommandRevision)\n})",
       "status": "requires-binding-review"
     },
     {
@@ -2161,7 +2140,7 @@
       "line": 182,
       "function": "*screen.recordingCursors",
       "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"recording.cursor.set\", map[string]any{\"cursor\": c.id, \"time_s\": text}, state.CommandRevision)",
+      "expression": "s.invokeAtCommandRevision(\"recording.cursor.set\", map[string]any{\"operation_id\": r.ID, \"cursor\": c.id, \"time_s\": text}, state.CommandRevision)",
       "public_commands": [
         "recording.cursor.set"
       ],
@@ -2496,7 +2475,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 35,
+      "line": 40,
       "function": "*scopeCanvas.Mount",
       "kind": "event-or-dispatch-router",
       "expression": "w.OnFirst(events.Scroll, func(e events.Event) { e.SetHandled() })",
@@ -2504,23 +2483,23 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 37,
+      "line": 42,
       "function": "*scopeCanvas.Mount",
       "kind": "event-or-dispatch-router",
-      "expression": "w.OnFirst(kind, func(e events.Event) {\n\tif c.screen != nil {\n\t\tpos := e.Pos().Sub(w.Geom.Pos.Content.ToPoint())\n\t\tc.Owner.Do(func() {\n\t\t\tif c.mountEpoch == epoch {\n\t\t\t\tc.placeCursor(float64(pos.X))\n\t\t\t}\n\t\t})\n\t}\n\te.SetHandled()\n})",
+      "expression": "w.OnFirst(kind, func(e events.Event) {\n\tif c.screen != nil {\n\t\tframe := c.frame.Load()\n\t\tpos := e.Pos().Sub(w.Geom.Pos.Content.ToPoint())\n\t\tc.Owner.Do(func() {\n\t\t\tif c.mountEpoch == epoch {\n\t\t\t\tc.cursorGesture(frame, float64(pos.X), kind == events.MouseDown)\n\t\t\t}\n\t\t})\n\t}\n\te.SetHandled()\n})",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/scope.go",
-      "line": 49,
+      "line": 55,
       "function": "*scopeCanvas.Mount",
       "kind": "event-or-dispatch-router",
-      "expression": "w.OnFirst(events.SlideStop, func(e events.Event) { e.SetHandled() })",
+      "expression": "w.OnFirst(events.SlideStop, func(e events.Event) {\n\tc.Owner.Do(func() {\n\t\tif c.mountEpoch == epoch {\n\t\t\tc.gesture = nil\n\t\t}\n\t})\n\te.SetHandled()\n})",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/scope.go",
-      "line": 50,
+      "line": 63,
       "function": "*scopeCanvas.Mount",
       "kind": "event-or-dispatch-router",
       "expression": "w.OnFirst(events.KeyChord, func(e events.Event) {\n\tswitch strings.ToLower(string(e.KeyChord())) {\n\tcase \"leftarrow\", \"rightarrow\", \"uparrow\", \"downarrow\":\n\t\te.SetHandled()\n\t}\n})",
@@ -2528,7 +2507,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 229,
+      "line": 253,
       "function": "*screen.scopePanel",
       "kind": "action-factory",
       "expression": "s.action(\"input-\"+mode.id, mode.text, \"simulation.input.set\", workbench.InputParams{Mode: mode.id})",
@@ -2539,7 +2518,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 242,
+      "line": 266,
       "function": "*screen.scopePanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"scope.trace.select\", workbench.IDParams{ID: id})\n}",
@@ -2547,7 +2526,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 247,
+      "line": 271,
       "function": "*screen.scopePanel",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"scope.trace.select\", workbench.IDParams{ID: id})",
@@ -2558,7 +2537,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 249,
+      "line": 273,
       "function": "*screen.scopePanel",
       "kind": "action-factory",
       "expression": "s.action(\"transient-step\", \"Step +1 sample\", \"simulation.step.start\", workbench.StepParams{Duration: state.TransientSettings.StepSeconds})",
@@ -2569,7 +2548,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 251,
+      "line": 275,
       "function": "*screen.scopePanel",
       "kind": "registry-button",
       "expression": "s.button(\"simulation.restart\", \"Restart\")",
@@ -2580,7 +2559,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 260,
+      "line": 284,
       "function": "*screen.scopePanel",
       "kind": "action-factory",
       "expression": "s.action(\"step-work-cancel\", \"Cancel step\", \"simulation.work.cancel\", workbench.IDParams{ID: work.ID})",
@@ -2591,7 +2570,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 281,
+      "line": 305,
       "function": "*screen.scopePanel",
       "kind": "node-Custom",
       "expression": "Custom: s.scope",
@@ -2599,7 +2578,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 330,
+      "line": 354,
       "function": "*screen.transientInspector",
       "kind": "callback-factory",
       "expression": "timeField(\"setting-\"+setting.id, setting.text, setting.value, false, func(text string) {\n\ts.invokeAtCommandRevision(\"simulation.transient.set\", timeParams(cfg, field, text), state.CommandRevision)\n})",
@@ -2607,7 +2586,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 331,
+      "line": 355,
       "function": "*screen.transientInspector",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"simulation.transient.set\", timeParams(cfg, field, text), state.CommandRevision)",
@@ -2618,7 +2597,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 335,
+      "line": 359,
       "function": "*screen.transientInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tsetting.set(\u0026next, float64(e.Number)/setting.scale)\n\ts.invoke(\"simulation.transient.set\", next)\n}",
@@ -2626,7 +2605,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 338,
+      "line": 362,
       "function": "*screen.transientInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"simulation.transient.set\", next)",
@@ -2634,6 +2613,14 @@
         "simulation.transient.set"
       ],
       "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/scope_context.go",
+      "line": 41,
+      "function": "*scopeCanvas.applyCursorFrame",
+      "kind": "domain-ingress",
+      "expression": "c.screen.invokeAtCommandRevision(command, params, revision, frame.generation)",
+      "status": "requires-binding-review"
     },
     {
       "file": "desktop/scope_visibility.go",

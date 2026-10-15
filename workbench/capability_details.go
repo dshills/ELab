@@ -65,6 +65,9 @@ type inputRelation struct {
 }
 
 func addCapabilityDetails(id string, schema map[string]any) {
+	if addRecordingCursorDetails(id, schema) {
+		return
+	}
 	if addPrintingCapabilityDetails(id, schema) {
 		return
 	}

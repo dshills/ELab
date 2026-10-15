@@ -207,6 +207,9 @@ rendered:
 	if err := nativeVerificationContractsSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	if err := nativeScopeContextSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	return nativeLifecycleSmoke(ctx, a, s)
 }
 
@@ -533,6 +536,10 @@ func nativeMixedSmoke(ctx context.Context, a *app.Application, s *screen) error 
 			return
 		}
 		if err := smokeUI(s, "cursor-select-b", nil); err != nil {
+			result <- err
+			return
+		}
+		if _, err := s.scopeMesh(*s.scope.View); err != nil {
 			result <- err
 			return
 		}
