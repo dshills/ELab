@@ -103,6 +103,7 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(VerificationExportParams{}), "urn:elab:record-export:1"},
 	{reflect.TypeOf(RecordingImportParams{}), "urn:elab:record-import:1"},
 	{reflect.TypeOf(RecoveryConfigureParams{}), "urn:elab:recovery-configure:1"},
+	{reflect.TypeOf(RecoveryChoiceParams{}), "urn:elab:recovery-choice:1"},
 	{reflect.TypeOf(SweepSummary{}), "urn:elab:sweep-summary:1"},
 }
 
@@ -219,7 +220,8 @@ func Catalog() []Capability {
 		typedCapability("recovery.select", "Select a listed recovery candidate; empty ID clears", reflect.TypeOf(IDParams{})),
 		typedCapability("recovery.restore.start", "Read/hash-validate a recovery copy in background; protects original generation/unsaved work and intervening edits", reflect.TypeOf(RecoveryChoiceParams{})),
 		typedCapability("recovery.restore", "Validate hash and complete snapshot, then restore as a dirty unassociated copy; protects unsaved work and document generation", reflect.TypeOf(RecoveryChoiceParams{})),
-		typedCapability("recovery.dismiss", "Remove exactly the hash-confirmed recovery snapshot; other active sessions are protected", reflect.TypeOf(RecoveryChoiceParams{})),
+		typedCapability("recovery.dismiss", "Wait for guarded recovery dismissal; exact ID/SHA; inspect removal outcome; other active sessions are protected", reflect.TypeOf(RecoveryChoiceParams{})),
+		typedCapability("recovery.dismiss.start", "Validate and dismiss exact recovery ID/SHA in background; inspect/cancel project_work before removal; preserves other active sessions", reflect.TypeOf(RecoveryChoiceParams{})),
 		queryCapability("recovery.samples", "Read exact embedded recovery-recording rows without restoring; hash-confirmed candidate and recording index, pages 1–200", reflect.TypeOf(RecoverySamplesParams{}), reflect.TypeOf(VerificationPage{})),
 		queryCapability("recovery.inspect", "Read fully validated recovery configuration and captured recording metadata; use recovery.samples for bounded exact rows", reflect.TypeOf(RecoveryChoiceParams{}), reflect.TypeOf(RecoveryInspection{})),
 		typedCapability("verification.export", "Atomically export a completed recorded verification as json (captured graph/models/settings/full data) or csv (SI units/input identity); never substitutes live data", reflect.TypeOf(VerificationExportParams{})),

@@ -232,3 +232,5 @@ Waveform sources now show [shared schematic/export annotations](docs/source-anno
 Agents can inspect [sweep command contracts](docs/capability-details.md#sweep-command-contracts) for normalized parameter bounds, state/error conditions and completion behavior. Native **Clear point** and `sweep.cursor.set {"index":null}` share the same clearing behavior; omitting the index remains invalid.
 
 [Recovery setup](docs/recovery.md#background-recovery-setup) now prepares and scans in the background. Users and agents share immediate admission, cancellation and an explicit installed-configuration outcome; the previous configuration stays active until the new one is ready.
+
+[Recovery dismissal](docs/recovery.md#background-recovery-dismissal) now validates and removes a confirmed snapshot in the background, with shared cancellation and an explicit removal outcome. Changed files and other active sessions remain protected; live circuits and saved schematics stay unchanged.

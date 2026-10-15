@@ -105,6 +105,8 @@ type Service struct {
 	projectSave                      projectSaveFunc
 	projectExport                    projectExportFunc
 	projectImport                    projectImportFunc
+	recoveryDismissPrepare           recoveryDismissPrepareFunc
+	recoveryDismissExecute           recoveryDismissExecuteFunc
 	recoveryConfigure                recoveryConfigurationPrepareFunc
 	recoveryRestore                  recoveryRestoreFunc
 	recoveryPrepare                  recoveryPrepareFunc
@@ -208,38 +210,40 @@ func newService(solver func(context.Context, Circuit) (Result, error)) *Service 
 }
 func newGraphService(solver func(context.Context, Circuit) (Result, error), graph Graph) *Service {
 	s := &Service{
-		revision:          1,
-		sweepImport:       prepareSweepImport,
-		sweepCompute:      computeDCSweep,
-		previewRender:     renderSchematicPage,
-		electrical:        1,
-		graph:             graph.Clone(),
-		drawing:           DefaultDrawing(),
-		usedIDs:           map[string]bool{},
-		view:              View{Zoom: 1},
-		cache:             map[string]savedResponse{},
-		changed:           make(chan struct{}),
-		eventRevisions:    map[string]uint64{"state": 1},
-		solver:            solver,
-		networkAdvance:    advanceLiveNetwork,
-		inputSolve:        solveInputWork,
-		projectLoad:       prepareProjectLoad,
-		projectSave:       prepareProjectSave,
-		projectExport:     prepareProjectExport,
-		projectImport:     prepareRecordingImport,
-		recoveryPrepare:   prepareManualRecovery,
-		recoveryConfigure: prepareRecoveryConfiguration,
-		recoveryRestore:   prepareRecoveryRestore,
-		recoveryExecute:   executeManualRecovery,
-		projectPublish:    publishPreparedFile,
-		initialSolver:     solveInitial,
-		initialTimeout:    5 * time.Second,
-		actor:             "system",
-		scopeVisible:      true,
-		theme:             "light",
-		appearance:        AppearanceState{Status: "disabled"},
-		appearanceRead:    readAppearance,
-		appearancePublish: publishPreparedFile,
+		revision:               1,
+		sweepImport:            prepareSweepImport,
+		sweepCompute:           computeDCSweep,
+		previewRender:          renderSchematicPage,
+		electrical:             1,
+		graph:                  graph.Clone(),
+		drawing:                DefaultDrawing(),
+		usedIDs:                map[string]bool{},
+		view:                   View{Zoom: 1},
+		cache:                  map[string]savedResponse{},
+		changed:                make(chan struct{}),
+		eventRevisions:         map[string]uint64{"state": 1},
+		solver:                 solver,
+		networkAdvance:         advanceLiveNetwork,
+		inputSolve:             solveInputWork,
+		projectLoad:            prepareProjectLoad,
+		projectSave:            prepareProjectSave,
+		projectExport:          prepareProjectExport,
+		projectImport:          prepareRecordingImport,
+		recoveryPrepare:        prepareManualRecovery,
+		recoveryDismissPrepare: prepareRecoveryDismiss,
+		recoveryDismissExecute: executeRecoveryDismiss,
+		recoveryConfigure:      prepareRecoveryConfiguration,
+		recoveryRestore:        prepareRecoveryRestore,
+		recoveryExecute:        executeManualRecovery,
+		projectPublish:         publishPreparedFile,
+		initialSolver:          solveInitial,
+		initialTimeout:         5 * time.Second,
+		actor:                  "system",
+		scopeVisible:           true,
+		theme:                  "light",
+		appearance:             AppearanceState{Status: "disabled"},
+		appearanceRead:         readAppearance,
+		appearancePublish:      publishPreparedFile,
 	}
 	for _, c := range graph.Components {
 		s.usedIDs[c.ID] = true

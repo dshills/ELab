@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"os"
+	"path/filepath"
 	"reflect"
 	"testing"
 	"time"
@@ -61,6 +63,23 @@ func TestNativeRecoveryControlsRestoreSameCopyAsAgents(t *testing.T) {
 		t.Fatal("native/agent restored copy differs")
 	}
 	uiAction(t, user, "recovery-scan", nil)
+	beforeDismiss := user.service.Snapshot()
+	uiAction(t, user, "recovery-dismiss", nil)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	removed, err := user.service.Wait(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if removed.ProjectWork.Command != "recovery.dismiss" || removed.ProjectWork.Actor != "user" || removed.ProjectWork.RecoveryDismissed == nil || !*removed.ProjectWork.RecoveryDismissed || removed.ProjectWork.SourceSHA256 != choice.SHA256 {
+		t.Fatal("native dismissal lost shared result")
+	}
+	if _, err := os.Stat(filepath.Join(directory, choice.ID+".elab-recovery")); !os.IsNotExist(err) {
+		t.Fatal("native dismissal left confirmed file", err)
+	}
+	if !reflect.DeepEqual(beforeDismiss.Components, removed.Components) || beforeDismiss.Document != removed.Document || !reflect.DeepEqual(beforeDismiss.Result, removed.Result) || !reflect.DeepEqual(beforeDismiss.Transient, removed.Transient) {
+		t.Fatal("native dismissal changes live circuit")
+	}
 	if err := ui.Validate(user.view()); err != nil {
 		t.Fatal(err)
 	}

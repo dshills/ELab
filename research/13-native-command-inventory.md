@@ -1,6 +1,6 @@
 # Native control and command inventory
 
-The [source ledger](13-native-command-inventory.json) records **38 production native Go files, 313 source sites and 133 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 110 public commands. The remaining 23 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
+The [source ledger](13-native-command-inventory.json) records **38 production native Go files, 313 source sites and 134 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 110 public commands. The remaining 24 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
 
 **115 sites require binding review.** The other categories are 172 literal routes, seven declared native-wrapper sites, 17 registry declarations and two menu sets. These are syntax sites, including overlapping factories and callbacks; they are not 313 unique visible controls or 110 runtime-qualified capabilities. No literal route names an unknown command.
 
@@ -51,3 +51,5 @@ The DC sweep checkpoint adds parameter/range/multi-probe controls, a separate pa
 The standalone sweep-import checkpoint adds one guarded picker route plus a waiting/background command pair. Native import/point/save behavior is compared with agent commands; imports retain source identity without claiming current-source freshness. See the [DC sweep contract](../docs/dc-sweeps.md).
 
 Recovery setup controls now submit `recovery.configure.start`, with shared progress/cancellation and installation outcome. Existing waiting `recovery.configure` remains source-routed at startup; setup directory/scan/lease cleanup run outside the editor mutex. Site counts are unchanged, with one more public/routed ID; syntax counts remain separate from runtime proofs. See [setup contract](../docs/recovery.md#background-recovery-setup).
+
+Native snapshot dismissal now routes to `recovery.dismiss.start`; its waiting compatibility ID remains available to agents. The source-routed set changes from the waiting ID to the immediate ID without changing site or routed-ID counts. The visible removal outcome uses shared project-work state. See [dismissal contract](../docs/recovery.md#background-recovery-dismissal).

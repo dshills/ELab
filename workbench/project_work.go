@@ -13,6 +13,7 @@ const MaxProjectOperations = 8
 // ProjectWork reports file preparation separately from replacing the document.
 // Progress is a named phase; file validation has no trustworthy percentage.
 type ProjectWork struct {
+	RecoveryDismissed  *bool    `json:"recovery_snapshot_removed,omitempty"`
 	RecoveryConfigured *bool    `json:"recovery_configuration_applied,omitempty"`
 	CatalogApplied     *bool    `json:"recovery_catalog_applied,omitempty"`
 	RecoveryID         string   `json:"result_recovery_id,omitempty"`
@@ -44,6 +45,10 @@ func cloneProjectWork(in *ProjectWork) *ProjectWork {
 		return nil
 	}
 	out := *in
+	if in.RecoveryDismissed != nil {
+		v := *in.RecoveryDismissed
+		out.RecoveryDismissed = &v
+	}
 	if in.RecoveryConfigured != nil {
 		v := *in.RecoveryConfigured
 		out.RecoveryConfigured = &v
@@ -109,6 +114,7 @@ type projectJob struct {
 	save                         *saveCapture
 	export                       *exportCapture
 	importing                    *recordingImportCapture
+	recoveryDismiss              *recoveryDismissCapture
 	recoveryConfigure            *recoveryConfigurationCapture
 	recoveryWork                 *manualRecoveryCapture
 	restoring                    *recoveryRestoreCapture
@@ -328,7 +334,7 @@ func (s *Service) retainProjectJobLocked(job *projectJob) {
 }
 
 func waitingProjectCommand(command string) bool {
-	return command == "project.save" || command == "project.load" || command == "export.schematic.svg" || command == "export.schematic.pdf" || command == "export.schematic.png" || command == "export.scope.csv" || command == "verification.export" || command == "sweep.export" || command == "verification.import" || command == "sweep.import" || command == "recovery.configure" || command == "recovery.scan" || command == "recovery.checkpoint" || command == "recovery.restore"
+	return command == "project.save" || command == "project.load" || command == "export.schematic.svg" || command == "export.schematic.pdf" || command == "export.schematic.png" || command == "export.scope.csv" || command == "verification.export" || command == "sweep.export" || command == "verification.import" || command == "sweep.import" || command == "recovery.dismiss" || command == "recovery.configure" || command == "recovery.scan" || command == "recovery.checkpoint" || command == "recovery.restore"
 }
 func (s *Service) projectWorkSupersededLocked(job *projectJob) bool {
 	if job.publishing {
@@ -342,6 +348,9 @@ func (s *Service) projectWorkSupersededLocked(job *projectJob) bool {
 	}
 	if job.importing != nil {
 		return !s.importCurrentLocked(job)
+	}
+	if job.recoveryDismiss != nil {
+		return !s.recoveryDismissCurrentLocked(job)
 	}
 	if job.recoveryConfigure != nil {
 		return !s.recoveryConfigurationCurrentLocked(job)

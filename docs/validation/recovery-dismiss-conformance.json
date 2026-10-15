@@ -1,0 +1,98 @@
+{
+  "passed": true,
+  "binary_sha256": "ab5a751b26340af33e2b93faf544c7c4ddb6e69dcd6848f372764ab32b7b7574",
+  "raw_report": "build/recovery-dismiss-conformance/report.json",
+  "raw_report_sha256": "81bfc45a1f8f9f37566892d9840e7da4740dc8bd4c12f22f4e4ea30222ff17fa",
+  "adapters": [
+    {
+      "name": "in-process",
+      "equivalent_to_in_process": true,
+      "workflows": [
+        {
+          "name": "led",
+          "calls_count": 36,
+          "checks_count": 5
+        },
+        {
+          "name": "rc",
+          "calls_count": 44,
+          "checks_count": 5
+        },
+        {
+          "name": "npn",
+          "calls_count": 46,
+          "checks_count": 5
+        }
+      ]
+    },
+    {
+      "name": "headless-stdio",
+      "equivalent_to_in_process": true,
+      "workflows": [
+        {
+          "name": "led",
+          "calls_count": 36,
+          "checks_count": 5
+        },
+        {
+          "name": "rc",
+          "calls_count": 43,
+          "checks_count": 5
+        },
+        {
+          "name": "npn",
+          "calls_count": 45,
+          "checks_count": 5
+        }
+      ]
+    },
+    {
+      "name": "headless-socket",
+      "equivalent_to_in_process": true,
+      "workflows": [
+        {
+          "name": "led",
+          "calls_count": 36,
+          "checks_count": 5
+        },
+        {
+          "name": "rc",
+          "calls_count": 43,
+          "checks_count": 5
+        },
+        {
+          "name": "npn",
+          "calls_count": 45,
+          "checks_count": 5
+        }
+      ]
+    },
+    {
+      "name": "native-socket",
+      "equivalent_to_in_process": true,
+      "workflows": [
+        {
+          "name": "led",
+          "calls_count": 36,
+          "checks_count": 5
+        },
+        {
+          "name": "rc",
+          "calls_count": 43,
+          "checks_count": 5
+        },
+        {
+          "name": "npn",
+          "calls_count": 45,
+          "checks_count": 5
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "engineering workflow parity on this workstation; not complete native action coverage or participant acceptance",
+    "workflow parity uses shared pinned kernels; optional electrical suite adds independent frozen educational-model references and same-kernel flasher refinement, not real-device/SPICE qualification",
+    "native socket path verifies semantic operations in real app processes; keyboard/focus/screen-reader and visible latency are separate",
+    "all sessions are newly created and owned; pre-existing applications/endpoints are untouched"
+  ]
+}

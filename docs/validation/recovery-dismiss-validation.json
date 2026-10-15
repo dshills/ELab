@@ -1,0 +1,54 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.58.0",
+  "build_version": "73",
+  "binary_sha256": "ab5a751b26340af33e2b93faf544c7c4ddb6e69dcd6848f372764ab32b7b7574",
+  "agent_binary_sha256": "d4b512605f5e7766bd8ada135aef57685a429e4172cec944fee72b2261d27e8f",
+  "sdk_commit": "c11858e4598362fae8b6e7e2a6c3e5f4e8245dee",
+  "sdk_manifest_sha256": "40854a9f90bc16df45d1025eb904e2cc0d403e0c6c445faf5798d200eb75d2e6",
+  "prepared_sdk_outputs_verified": 16,
+  "checks": [
+    "Immediate recovery.dismiss.start and waiting recovery.dismiss share project work and an explicit removal outcome",
+    "Preparation and guarded commit/scan execute outside editor mutex; blocked commit still allows edits and steps",
+    "Exact requested hash, regular-file identity and active ownership are checked at preparation and rechecked before removal",
+    "Cancel/Close before commit preserve chosen file; Close joins worker; committing cancel refuses explicitly",
+    "Changed bytes, replaced inode, symlink and newly active owner refuse without removing changed path",
+    "Newer catalog/cleared selection preserved while removed ID is filtered; follow-up scan failure reports warning after successful deletion",
+    "Waiting disconnection/retry preserves one operation and admitting actor; New preserves directory-scoped work without altering replacement",
+    "Missing preparation/removal results fail instead of claiming success; inspection flags own their values",
+    "Real separate-process active owner protected in headless/native public workflows; inactive and damaged snapshots dismissed by exact ID/hash",
+    "Both public interfaces preserve exactly equal paused RC state, history/dirty state and explicit saved-file bytes",
+    "Root/native lint/import/race/vet; portable non-cgo recovery/discovery suite",
+    "Native valid/damaged controls route immediate command; native unit and exact packaged GPU smoke exercise dismissal",
+    "Existing reference workflows pass through all four adapters; source inventory freshness passes"
+  ],
+  "evidence": [
+    "docs/validation/headless-recovery-dismiss.json",
+    "docs/validation/desktop-recovery-dismiss.json",
+    "docs/validation/recovery-dismiss-conformance.json"
+  ],
+  "quality_log_sha256": "eb4d02780af562a37f02d55b2998465ca5f1eb33cd9a39a19f0120886bf741f8",
+  "smoke_log_sha256": "5431abf7d749dcbcca3679d807be414e0073ae221e434d38acfdb82be4b7ba80",
+  "inventory": {
+    "sources": 38,
+    "sites": 313,
+    "public_commands": 134,
+    "source_routes": 110,
+    "binding_review_sites": 115
+  },
+  "notes": [
+    "Ownership and requested hash are validated from the same bytes instead of separate file reads",
+    "The waiting dismissal source route becomes the immediate alias; syntax site/routed-ID counts remain unchanged",
+    "SDK c11858e restores a Noto font notice; updated manifest plus 16 prepared output hashes verified read-only, including unchanged font bytes/embed declaration",
+    "All owned native sessions exited; .57/72 preserved at build/ELab-before-recovery-dismiss.app"
+  ],
+  "limits": [
+    "Final OS unlink is guarded for cooperating app/filesystem use; no hostile-process atomic conditional-unlink guarantee",
+    "Cooperative deadline does not interrupt OS calls or committed removal/scan",
+    "Recovery inspection/sample queries and serialized final shutdown remain responsiveness work",
+    "Controlled/native callbacks do not establish complete physical keyboard, screen-reader or general visible-latency qualification",
+    "P0 counts remain 17 implemented / 10 partial; physical printing, distribution, power-loss and participant gates remain open",
+    "Private unsigned development app; no solver/model, numerical limits, file formats or transport limits changed"
+  ]
+}

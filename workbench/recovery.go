@@ -2,8 +2,6 @@ package workbench
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -21,20 +19,6 @@ func DefaultRecoveryDirectory() (string, error) {
 }
 func (s *Service) recoveryCaptureLocked() recoveryCapture {
 	return recoveryCapture{stateRevision: s.revision, document: s.documentLocked(), generation: s.documentGeneration, commandRevision: s.commandRevision, sourcePath: s.documentPath, dirty: s.dirtyLocked()}
-}
-func (s *Service) scanRecoveryLocked() error {
-	if s.recoveryStore == nil {
-		return &actionError{"unavailable", "Configure a recovery directory first"}
-	}
-	candidates, problems, err := s.recoveryStore.scan()
-	if err != nil {
-		return err
-	}
-	s.recoveryCatalogRevision++
-	s.recovery.Candidates = candidates
-	s.recovery.Problems = problems
-	s.normalizeRecoverySelectionLocked()
-	return nil
 }
 func (s *Service) normalizeRecoverySelectionLocked() {
 	if s.recoverySelectionCleared && s.recovery.Selected == "" {
@@ -135,29 +119,6 @@ func (s *Service) recoveryReadLocked(p RecoveryChoiceParams) (recoveryCapsule, D
 	}
 	return capsule, document, hash, nil
 }
-func (s *Service) dismissRecoveryLocked(p RecoveryChoiceParams) error {
-	if s.recoveryStore == nil || !recoveryID(p.ID) {
-		return fmt.Errorf("choose a listed recovery snapshot")
-	}
-	path := s.recoveryStore.candidatePath(p.ID)
-	data, err := readRegularBounded(path, MaxRecoveryBytes)
-	if err != nil {
-		return err
-	}
-	digest := sha256.Sum256(data)
-	if p.SHA256 == "" || hex.EncodeToString(digest[:]) != p.SHA256 {
-		return &actionError{"file-conflict", "Recovery snapshot changed; scan again"}
-	}
-	capsule, _, _, _ := s.recoveryStore.read(p.ID)
-	_, sessionErr := hex.DecodeString(capsule.Session)
-	if sessionErr == nil && len(capsule.Session) == 24 && capsule.Session != s.recoveryStore.session && s.recoveryStore.sessionActive(capsule.Session) {
-		return &actionError{"unavailable", "Another active session owns this snapshot; its recovery data is preserved"}
-	}
-	if err := os.Remove(path); err != nil {
-		return fileError(err)
-	}
-	return s.scanRecoveryLocked()
-}
 func (s *Service) recoveryCommandLocked(command string, raw json.RawMessage) error {
 	switch command {
 	case "recovery.work.start":
@@ -201,7 +162,7 @@ func (s *Service) recoveryCommandLocked(command string, raw json.RawMessage) err
 		s.recovery.Selected = p.ID
 		s.recoverySelectionCleared = p.ID == ""
 		return nil
-	case "recovery.restore", "recovery.restore.start", "recovery.dismiss":
+	case "recovery.restore", "recovery.restore.start", "recovery.dismiss", "recovery.dismiss.start":
 		var p RecoveryChoiceParams
 		if err := params(raw, &p, "id", "sha256"); err != nil {
 			return err
@@ -209,7 +170,7 @@ func (s *Service) recoveryCommandLocked(command string, raw json.RawMessage) err
 		if command == "recovery.restore" || command == "recovery.restore.start" {
 			return s.startRecoveryRestoreLocked(p)
 		}
-		return s.dismissRecoveryLocked(p)
+		return s.startRecoveryDismissLocked(p)
 	}
 	return fmt.Errorf("unknown recovery command")
 }

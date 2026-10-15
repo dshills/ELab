@@ -28,9 +28,9 @@
     "desktop/print_page.go": "f06fef8a9db0e31cdf512c16c3b8155004c17964897b61e723b6cb0cdc796bf6",
     "desktop/print_preview.go": "905caa8284e1bfd16d6812e15061e36485f83f6ddd3ae06f248181e571101ebe",
     "desktop/probes.go": "3f3ce8e64c6aaba57439b63542f95eed784604bbe555b18a0f303e791c0e9e01",
-    "desktop/project_work.go": "e29ee042c4eead98a48d52ea4c605865102bd9c1dc74f57433634527d9a4ffcb",
+    "desktop/project_work.go": "4d80b2c111c1d6778844570344479c35d3bfd641840aba0ebbe8f81083c961e1",
     "desktop/recording.go": "2d104abf028fe82a22888ff757668680fc28432f07a49b548025bb06ada38945",
-    "desktop/recovery.go": "cb7bf42f195b6ffb8bfff511d46bab877856820e9b03b52c65eef393692206dc",
+    "desktop/recovery.go": "1416354a0acb99a61be3d5cdd8838256e5bcd879d116a51a7a507fa271209a8f",
     "desktop/routing.go": "4898c4c1de9d7de3c5f8ad751b15d7c0f199234243f62ec6ea949ee8d9ad2c1c",
     "desktop/scope.go": "7e77b694cbb2b1e759b5cbffb2c983c6ddd901fcc9780ac499ddd542cebf7b7d",
     "desktop/scope_visibility.go": "9594a6afdb06c2d612c4a507ac90b9443651d38c4c88005e2af65ff2d3d6c686",
@@ -123,6 +123,7 @@
     "recovery.configure",
     "recovery.configure.start",
     "recovery.dismiss",
+    "recovery.dismiss.start",
     "recovery.inspect",
     "recovery.restore",
     "recovery.restore.start",
@@ -1824,7 +1825,7 @@
     },
     {
       "file": "desktop/project_work.go",
-      "line": 58,
+      "line": 60,
       "function": "*screen.projectWorkControls",
       "kind": "action-factory",
       "expression": "s.action(\"project-work-cancel\", \"Cancel project \"+action, \"project.work.cancel\", workbench.IDParams{ID: w.ID})",
@@ -2176,9 +2177,9 @@
       "line": 93,
       "function": "*screen.recoveryInspector",
       "kind": "action-factory",
-      "expression": "s.action(\"recovery-dismiss\", \"Dismiss this snapshot\", \"recovery.dismiss\", choice)",
+      "expression": "s.action(\"recovery-dismiss\", \"Dismiss this snapshot\", \"recovery.dismiss.start\", choice)",
       "public_commands": [
-        "recovery.dismiss"
+        "recovery.dismiss.start"
       ],
       "status": "literal-public-route"
     },
@@ -2187,9 +2188,9 @@
       "line": 101,
       "function": "*screen.recoveryInspector",
       "kind": "action-factory",
-      "expression": "s.action(\"recovery-dismiss-\"+problem.ID, \"Dismiss damaged snapshot\", \"recovery.dismiss\", workbench.RecoveryChoiceParams{ID: problem.ID, SHA256: problem.SHA256})",
+      "expression": "s.action(\"recovery-dismiss-\"+problem.ID, \"Dismiss damaged snapshot\", \"recovery.dismiss.start\", workbench.RecoveryChoiceParams{ID: problem.ID, SHA256: problem.SHA256})",
       "public_commands": [
-        "recovery.dismiss"
+        "recovery.dismiss.start"
       ],
       "status": "literal-public-route"
     },
@@ -3398,7 +3399,7 @@
     "recording.window.set",
     "recovery.configure",
     "recovery.configure.start",
-    "recovery.dismiss",
+    "recovery.dismiss.start",
     "recovery.restore",
     "recovery.select",
     "recovery.work.start",
@@ -3458,6 +3459,7 @@
     "project.inspect",
     "project.work.inspect",
     "recovery.checkpoint",
+    "recovery.dismiss",
     "recovery.inspect",
     "recovery.restore.start",
     "recovery.samples",

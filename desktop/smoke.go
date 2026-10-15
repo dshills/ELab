@@ -749,7 +749,10 @@ func nativeRecoverySmoke(ctx context.Context, a *app.Application, s *screen) err
 	}
 	select {
 	case err := <-completed:
-		return err
+		if err != nil {
+			return err
+		}
+		return nativeRecoveryDismissSmoke(ctx, a, s)
 	case <-ctx.Done():
 		return ctx.Err()
 	}

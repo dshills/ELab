@@ -1,0 +1,175 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "live_semantic": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "pulse-source",
+        "name": "Pulse source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-square.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -110
+        },
+        "value": 10000,
+        "unit": "\u03a9",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "C1",
+        "kind": "capacitor",
+        "name": "Capacitor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 1e-06,
+        "unit": "F",
+        "model": "ideal-capacitor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 110
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "C1.1",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "C1.2",
+        "to": "GND.reference",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "GND.reference",
+        "to": "V1.negative",
+        "connected": true
+      }
+    ],
+    "run_id": 2,
+    "electrical_revision": 2,
+    "result": null,
+    "transient": {
+      "engine": "elab.ideal-rc-exact.v1",
+      "run_id": 2,
+      "electrical_revision": 2,
+      "source_id": "V1",
+      "resistor_id": "R1",
+      "capacitor_id": "C1",
+      "output_net": "net:C1.1",
+      "time_constant_s": 0.01,
+      "settings": {
+        "step_s": 0.001,
+        "high_s": 0.05,
+        "low_s": 0.05,
+        "initial_voltage_v": 0,
+        "seconds_per_wall_second": 0.02
+      },
+      "input_mode": "auto",
+      "sample": {
+        "time_s": 0.001,
+        "input_v": 5,
+        "voltage_v": 0.47581290982020213,
+        "current_a": 0.0004524187090179798,
+        "energy_j": 1.131989625757839e-07
+      },
+      "samples": [
+        {
+          "time_s": 0,
+          "input_v": 5,
+          "voltage_v": 0,
+          "current_a": 0.0005,
+          "energy_j": 0
+        },
+        {
+          "time_s": 0.001,
+          "input_v": 5,
+          "voltage_v": 0.47581290982020213,
+          "current_a": 0.0004524187090179798,
+          "energy_j": 1.131989625757839e-07
+        }
+      ],
+      "events": [
+        {
+          "time_s": 0,
+          "mode": "restart"
+        }
+      ],
+      "stale": false
+    },
+    "mixed": null,
+    "npn": null,
+    "view": {
+      "center": {
+        "x": -130,
+        "y": 20
+      },
+      "zoom": 0.7
+    }
+  },
+  "checks": [
+    "real separate-process active owner protected",
+    "waiting refusal exposes false removal outcome",
+    "exact inactive capsule removed through immediate background command",
+    "admission differs from removal",
+    "result ID and digest identify removed snapshot",
+    "stale hash preserves damaged capsule",
+    "waiting damaged-snapshot dismissal succeeds",
+    "live RC circuit/physics/history/dirty state preserved",
+    "explicit saved schematic bytes unchanged"
+  ],
+  "limits": [
+    "Controlled core tests cover cancellation, changed identity/ownership, retries and blocked commit/catalog interleavings",
+    "No hostile-filesystem atomic-unlink, power-loss, full accessibility or general latency qualification"
+  ]
+}

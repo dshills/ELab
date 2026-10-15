@@ -22,7 +22,7 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 		action = "save"
 	} else if w.Command == "verification.import" || w.Command == "sweep.import" {
 		action = "record import"
-	} else if w.Command == "recovery.configure" || w.Command == "recovery.scan" || w.Command == "recovery.checkpoint" || w.Command == "recovery.restore" {
+	} else if w.Command == "recovery.dismiss" || w.Command == "recovery.configure" || w.Command == "recovery.scan" || w.Command == "recovery.checkpoint" || w.Command == "recovery.restore" {
 		action = "recovery"
 	} else if w.Command == "export.schematic.svg" || w.Command == "export.scope.csv" || w.Command == "verification.export" {
 		action = "export"
@@ -49,6 +49,8 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 		}
 		if w.Command == "recovery.configure" {
 			explanation = "Preparing recovery settings. Existing recovery stays active until ready; drawing and simulation stay available."
+		} else if w.Command == "recovery.dismiss" {
+			explanation = "Validating the exact recovery snapshot. Cancellation is available until removal starts; saved schematics stay unchanged."
 		} else if action == "recovery" {
 			explanation = "Recovery work runs separately from editing. Checkpoint cancellation ends when publication begins. Saved project files are preserved."
 		}
@@ -70,6 +72,9 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 	}
 	if w.ViewerSelected != nil && !*w.ViewerSelected {
 		nodes = append(nodes, quiet("project-work-viewer-preserved", "Imported and kept the recording without switching to its view."))
+	}
+	if w.RecoveryDismissed != nil && *w.RecoveryDismissed {
+		nodes = append(nodes, quiet("project-work-recovery-dismissed", "Removed the confirmed recovery snapshot."))
 	}
 	if w.CatalogApplied != nil && !*w.CatalogApplied {
 		nodes = append(nodes, quiet("project-work-catalog-preserved", "Recovery work completed; newer recovery state was preserved."))

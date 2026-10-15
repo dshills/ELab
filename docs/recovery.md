@@ -20,7 +20,7 @@ Public commands (also listed with schemas by `capabilities.list`):
 | `recovery.select` | `id`; empty string clears selection |
 | `recovery.inspect` | `id`, `sha256`; query returns validated candidate, schematic configuration and recording metadata |
 | `recovery.restore` | `id`, `sha256`, optional `discard_changes`, `expected_document_generation` |
-| `recovery.dismiss` | `id`, `sha256`; removes exactly that confirmed snapshot |
+| `recovery.dismiss` / `recovery.dismiss.start` | Wait for dismissal / return immediate admission. Exact `id`, `sha256`, optional `expected_document_generation`; observe/cancel through project work before removal begins. |
 
 `recovery.samples {id,sha256,recording_index,offset?,limit?}` reads embedded exact rows in bounded pages (default 100, max 200).
 
@@ -36,7 +36,7 @@ Pinned-reading presentation edits participate in document dirty state and recove
 
 Save cleanup now runs outside the editor lock. Captures carry a private state-order stamp in addition to admitted command revision, preventing late clean retirement from erasing newer dirty background commits at the same command revision. On-disk recovery format is unchanged. [Captured Save behavior](project-save.md).
 
-Manual Refresh/Checkpoint now use [background recovery work](project-recovery-work.md). Native callbacks return admission; existing agent commands retain waiting behavior. Captured source/capsule identity, cancellation and newer catalog/selection protections are observable through the shared project-job interface. Configuration now also uses the shared background worker; Restore has its own background path. Dismiss/inspection and serialized shutdown remain separate work.
+Manual Refresh/Checkpoint now use [background recovery work](project-recovery-work.md). Native callbacks return admission; existing agent commands retain waiting behavior. Captured source/capsule identity, cancellation and newer catalog/selection protections are observable through the shared project-job interface. Configuration now also uses the shared background worker; Restore has its own background path. Inspection and serialized shutdown remain separate work.
 
 
 ## Background recovery setup
@@ -47,6 +47,19 @@ The shared `project_work` reports queued admission, phases, actor/input identity
 
 On success, a same-directory setup reuses its lease and preserves newer catalog/selection state. A different directory replaces the active recovery store only when validated; the old loop is canceled and its lease is closed outside the editor lock. The `closing-previous-recovery` phase is non-cancelable (`operation-committing`): installation has already happened. A lease-cleanup failure is a `cleanup_warning`, not an undo of installed settings. `recovery_catalog_applied` reports list publication separately from configuration installation. The result reports the document generation present at installation; recovery is session state, so editing or New does not invalidate preparation for the same previous store.
 
-Setup shares the eight file-worker/retained-job bounds and excludes other file operations until completion/cancellation. A waiting request may disconnect while accepted work continues; retrying its original key returns that operation's outcome. Immediate-start retries retain original admission, so inspect the operation for current status. The cooperative 30-second budget applies before installation; OS calls and committed lease cleanup can finish later. Service Close joins setup workers and cleanup. Existing dismiss/inspection and final shutdown filesystem paths remain separate responsiveness work.
+Setup shares the eight file-worker/retained-job bounds and excludes other file operations until completion/cancellation. A waiting request may disconnect while accepted work continues; retrying its original key returns that operation's outcome. Immediate-start retries retain original admission, so inspect the operation for current status. The cooperative 30-second budget applies before installation; OS calls and committed lease cleanup can finish later. Service Close joins setup workers and cleanup. Existing inspection and final shutdown filesystem paths remain separate responsiveness work.
 
 The [public setup workflow](../scripts/recovery-configuration-demo.py) runs through stdio or an owned native endpoint. Controlled tests hold setup and old-lease cleanup while edits/steps proceed, and cover staged-lease cancellation/Close, cleanup warnings, retry/disconnect, document replacement and newer catalog preservation. Directory privacy/entry limits, snapshot formats, retention and model validation are unchanged.
+
+
+## Background recovery dismissal
+
+Native valid/damaged snapshot buttons use `recovery.dismiss.start`; the existing `recovery.dismiss` command waits for the same worker. Reading, hash/ownership validation, commit checks, removal and follow-up scanning run outside the editor mutex. Preparation remains cancellable through `project.work.cancel`. The `dismissing-recovery` phase fences removal with `cancelable:false`; a later cancel returns `operation-committing`. The shared 30-second context is cooperative before that boundary; OS calls and committed work can complete later.
+
+`project_work.result_recovery_id` identifies the requested snapshot. `recovery_snapshot_removed` starts false and becomes true only when removal actually succeeds; `source_sha256` reports its confirmed digest on success. Waiting disconnection/retry and immediate-start admission retention follow existing file-job rules. A successful removal followed by a scan error stays completed with a warning/recovery error, so it cannot be mistaken for a preserved file. An error before removal leaves the removal flag false.
+
+The worker validates the requested hash and active owner using the same captured bytes, then rechecks content, regular-file identity and active-session ownership before unlinking. This store's checkpoint/pruning paths are serialized with commit; the editor lock remains free. Symlinks, replaced/changed files and newly active other-session ownership refuse. Damaged capsules may still be explicitly dismissed by their listed hash. These checks protect ordinary cooperating application/filesystem use; they do not claim an atomic conditional unlink against a hostile process changing paths during the final OS call.
+
+A later recovery publication or explicit cleared selection is preserved. A removed ID is filtered out of a newer list without replacing its other entries. Dismissal is directory-scoped: editing/New does not invalidate accepted work for the same store. An optional input document-generation guard applies at admission; project state, live physics/history, other snapshots and explicit saved schematics are preserved. Close before commit cancels the dismissal; serialized shutdown work remains a separate responsiveness task.
+
+The [public dismissal client](../scripts/recovery-dismiss-demo.py) uses isolated fixtures and a real separate-process lease owner. It proves active-owner refusal, inactive/damaged removal, exact result ID/digest and unchanged saved/live state through headless or native endpoints. Controlled tests cover preparation/Close cancellation, changed bytes/inode/symlink and late owner guards, blocked commit responsiveness, late catalog/scan failure, missing worker results and retry/New interleavings. Native callback tests and packaged GPU smoke activate the same Dismiss control.
