@@ -718,8 +718,14 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 			out.Result = result
 			return out
 		}
-		if r.Command == "recording.compare" {
-			result, err := s.recordingComparisonQueryLocked(r.Params)
+		if r.Command == "recording.compare" || r.Command == "recording.timing" {
+			var result any
+			var err error
+			if r.Command == "recording.timing" {
+				result, err = s.recordingTimingQueryLocked(r.Params)
+			} else {
+				result, err = s.recordingComparisonQueryLocked(r.Params)
+			}
 			if err != nil {
 				var action *actionError
 				if errors.As(err, &action) {

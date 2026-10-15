@@ -1,0 +1,385 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "cases": [
+    {
+      "case": "rc-half-charge",
+      "result": {
+        "settings": {
+          "probe_id": "v:C1",
+          "level": "2.5 V",
+          "direction": "rising",
+          "start_s": 0,
+          "end_s": 0.02,
+          "limit": 100
+        },
+        "engine": "elab.ideal-rc-exact.v1",
+        "probe": {
+          "id": "v:C1",
+          "label": "C1 voltage",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        "level_si": 2.5,
+        "duration_s": 0.02,
+        "sample_count": 21,
+        "window_sample_count": 21,
+        "total_crossings": 1,
+        "next_offset": 1,
+        "crossings": [
+          {
+            "direction": "rising",
+            "before": {
+              "index": 6,
+              "time_s": 0.006,
+              "value": 2.255941819529868
+            },
+            "after": {
+              "index": 7,
+              "time_s": 0.007,
+              "value": 2.5170734810429525
+            }
+          }
+        ]
+      }
+    },
+    {
+      "case": "ideal-npn-pulse",
+      "result": {
+        "settings": {
+          "probe_id": "v:VIN.positive",
+          "level": "2.5 V",
+          "direction": "both",
+          "start_s": 0,
+          "end_s": 0.25,
+          "limit": 100
+        },
+        "engine": "elab.npn-switch-quasistatic.v1",
+        "probe": {
+          "id": "v:VIN.positive",
+          "label": "VIN.positive / ground",
+          "unit": "V",
+          "positive": "VIN.positive",
+          "reference": "ground"
+        },
+        "level_si": 2.5,
+        "duration_s": 0.25,
+        "sample_count": 261,
+        "window_sample_count": 261,
+        "total_crossings": 5,
+        "next_offset": 5,
+        "crossings": [
+          {
+            "direction": "falling",
+            "before": {
+              "index": 50,
+              "time_s": 0.05,
+              "value": 5
+            },
+            "after": {
+              "index": 51,
+              "time_s": 0.05,
+              "value": 0
+            }
+          },
+          {
+            "direction": "rising",
+            "before": {
+              "index": 102,
+              "time_s": 0.1,
+              "value": 0
+            },
+            "after": {
+              "index": 103,
+              "time_s": 0.1,
+              "value": 5
+            }
+          },
+          {
+            "direction": "falling",
+            "before": {
+              "index": 154,
+              "time_s": 0.15,
+              "value": 5
+            },
+            "after": {
+              "index": 155,
+              "time_s": 0.15,
+              "value": 0
+            }
+          },
+          {
+            "direction": "rising",
+            "before": {
+              "index": 206,
+              "time_s": 0.2,
+              "value": 0
+            },
+            "after": {
+              "index": 207,
+              "time_s": 0.2,
+              "value": 5
+            }
+          },
+          {
+            "direction": "falling",
+            "before": {
+              "index": 258,
+              "time_s": 0.25,
+              "value": 5
+            },
+            "after": {
+              "index": 259,
+              "time_s": 0.25,
+              "value": 0
+            }
+          }
+        ],
+        "first_rising_spacing": {
+          "first": {
+            "direction": "rising",
+            "before": {
+              "index": 102,
+              "time_s": 0.1,
+              "value": 0
+            },
+            "after": {
+              "index": 103,
+              "time_s": 0.1,
+              "value": 5
+            }
+          },
+          "second": {
+            "direction": "rising",
+            "before": {
+              "index": 206,
+              "time_s": 0.2,
+              "value": 0
+            },
+            "after": {
+              "index": 207,
+              "time_s": 0.2,
+              "value": 5
+            }
+          },
+          "minimum_s": 0.1,
+          "maximum_s": 0.1
+        },
+        "first_falling_spacing": {
+          "first": {
+            "direction": "falling",
+            "before": {
+              "index": 50,
+              "time_s": 0.05,
+              "value": 5
+            },
+            "after": {
+              "index": 51,
+              "time_s": 0.05,
+              "value": 0
+            }
+          },
+          "second": {
+            "direction": "falling",
+            "before": {
+              "index": 154,
+              "time_s": 0.15,
+              "value": 5
+            },
+            "after": {
+              "index": 155,
+              "time_s": 0.15,
+              "value": 0
+            }
+          },
+          "minimum_s": 0.09999999999999999,
+          "maximum_s": 0.09999999999999999
+        }
+      }
+    },
+    {
+      "case": "flasher-i:D1",
+      "result": {
+        "settings": {
+          "probe_id": "i:D1",
+          "level": "1 mA",
+          "direction": "rising",
+          "start_s": 0.3,
+          "end_s": 1.2,
+          "limit": 100
+        },
+        "engine": "elab.mixed-mna-be.v1",
+        "probe": {
+          "id": "i:D1",
+          "label": "D1 current",
+          "unit": "A",
+          "positive": "D1.anode",
+          "reference": "D1.cathode"
+        },
+        "level_si": 0.001,
+        "duration_s": 1.2,
+        "sample_count": 241,
+        "window_sample_count": 181,
+        "total_crossings": 2,
+        "next_offset": 2,
+        "crossings": [
+          {
+            "direction": "rising",
+            "before": {
+              "index": 63,
+              "time_s": 0.315,
+              "value": 4.085665893187066e-06
+            },
+            "after": {
+              "index": 64,
+              "time_s": 0.32,
+              "value": 0.0028868948455683203
+            }
+          },
+          {
+            "direction": "rising",
+            "before": {
+              "index": 161,
+              "time_s": 0.805,
+              "value": 3.235784903007057e-06
+            },
+            "after": {
+              "index": 162,
+              "time_s": 0.81,
+              "value": 0.0028845216768627396
+            }
+          }
+        ],
+        "first_rising_spacing": {
+          "first": {
+            "direction": "rising",
+            "before": {
+              "index": 63,
+              "time_s": 0.315,
+              "value": 4.085665893187066e-06
+            },
+            "after": {
+              "index": 64,
+              "time_s": 0.32,
+              "value": 0.0028868948455683203
+            }
+          },
+          "second": {
+            "direction": "rising",
+            "before": {
+              "index": 161,
+              "time_s": 0.805,
+              "value": 3.235784903007057e-06
+            },
+            "after": {
+              "index": 162,
+              "time_s": 0.81,
+              "value": 0.0028845216768627396
+            }
+          },
+          "minimum_s": 0.48500000000000004,
+          "maximum_s": 0.49500000000000005
+        }
+      }
+    },
+    {
+      "case": "flasher-i:D2",
+      "result": {
+        "settings": {
+          "probe_id": "i:D2",
+          "level": "1 mA",
+          "direction": "rising",
+          "start_s": 0.3,
+          "end_s": 1.2,
+          "limit": 100
+        },
+        "engine": "elab.mixed-mna-be.v1",
+        "probe": {
+          "id": "i:D2",
+          "label": "D2 current",
+          "unit": "A",
+          "positive": "D2.anode",
+          "reference": "D2.cathode"
+        },
+        "level_si": 0.001,
+        "duration_s": 1.2,
+        "sample_count": 241,
+        "window_sample_count": 181,
+        "total_crossings": 2,
+        "next_offset": 2,
+        "crossings": [
+          {
+            "direction": "rising",
+            "before": {
+              "index": 112,
+              "time_s": 0.56,
+              "value": 3.2206535452013112e-06
+            },
+            "after": {
+              "index": 113,
+              "time_s": 0.5650000000000001,
+              "value": 0.0028853170970480338
+            }
+          },
+          {
+            "direction": "rising",
+            "before": {
+              "index": 210,
+              "time_s": 1.05,
+              "value": 3.300367834453827e-06
+            },
+            "after": {
+              "index": 211,
+              "time_s": 1.055,
+              "value": 0.0028836971133965744
+            }
+          }
+        ],
+        "first_rising_spacing": {
+          "first": {
+            "direction": "rising",
+            "before": {
+              "index": 112,
+              "time_s": 0.56,
+              "value": 3.2206535452013112e-06
+            },
+            "after": {
+              "index": 113,
+              "time_s": 0.5650000000000001,
+              "value": 0.0028853170970480338
+            }
+          },
+          "second": {
+            "direction": "rising",
+            "before": {
+              "index": 210,
+              "time_s": 1.05,
+              "value": 3.300367834453827e-06
+            },
+            "after": {
+              "index": 211,
+              "time_s": 1.055,
+              "value": 0.0028836971133965744
+            }
+          },
+          "minimum_s": 0.485,
+          "maximum_s": 0.4949999999999999
+        }
+      }
+    }
+  ],
+  "checks": [
+    "Analytic RC half-charge bracket",
+    "Ideal pulse duplicate edge brackets and 100 ms spacing",
+    "Both flasher sides measured after startup",
+    "Paged arrivals equal whole-window data",
+    "Pure/refused queries preserve state; configuration preserves live/history/dirty state",
+    "Imported/reopened saved data yields identical timing"
+  ],
+  "limits": [
+    "Sampled brackets only; hidden transitions may be missed",
+    "Startup spacing is not a steady period",
+    "No interpolation, time alignment or real-device certification"
+  ]
+}

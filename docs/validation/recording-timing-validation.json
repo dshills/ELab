@@ -1,0 +1,60 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.62.0",
+  "build_version": "77",
+  "binary_sha256": "53d5a4c03e10717d369087c4d33f7ee190ad0047e18bb29c0ba73d2bb2e5ab17",
+  "agent_binary_sha256": "0dd90be301072e2eb6062c7ea5f732f86ceb4b62920a60b41c573c5e1f9b24dd",
+  "sdk_commit": "60eaad15165b75ac5b596e5583c9718342dfc552",
+  "sdk_manifest_sha256": "40854a9f90bc16df45d1025eb904e2cc0d403e0c6c445faf5798d200eb75d2e6",
+  "prepared_sdk_outputs_verified": 16,
+  "checks": [
+    "Pure recording.timing and configured recording.timing.set use exact captured rows, signed SI levels, strict adjacent brackets and explicit direction/interval/page fields",
+    "Analytic RC half-charge/half-discharge times lie in observed brackets; ideal NPN pulse duplicate-time edges and known 100 ms spacing retained",
+    "Both flasher sides measured after startup; first rising spacing brackets approximately 485\u2013495 ms at the captured resolution",
+    "Plateau arrival semantics, strict interval boundaries, whole-window summaries across pages, DC/empty results, refusal purity and canonical clearing",
+    "Owned cached pages/spacing pointers preserve live physics/history/dirty membership; selection/reopen clears; later timing choice survives pending import",
+    "Imported/reopened captured data produces identical timing; pure queries never substitute later live inputs",
+    "Native probe/level/direction/unit-time/off controls match pure query; native race tests exercise next/previous pages and filter reset",
+    "Headless/native four-case public outputs match exactly, including discovery, paging and persistence; exact final packaged GPU/UI smoke exercises timing labels/controls",
+    "Full serialized root/native lint/import/race/vet, explicit native timing race tests, portable timing/discovery tests and all four existing adapters pass"
+  ],
+  "evidence": [
+    "docs/recording-timing.md",
+    "workbench/recording_timing_test.go",
+    "desktop/recording_timing_test.go",
+    "desktop/recording_compare_smoke.go",
+    "scripts/recording-timing-demo.py",
+    "docs/validation/headless-recording-timing-final.json",
+    "docs/validation/desktop-recording-timing-final.json",
+    "docs/validation/recording-timing-conformance.json"
+  ],
+  "quality_log_sha256": "4ca153a2dc46705045b842640a32b7702c0bb350fb760d2461fbc4d9287d1ae5",
+  "smoke_log_sha256": "5431abf7d749dcbcca3679d807be414e0073ae221e434d38acfdb82be4b7ba80",
+  "native_timing_race_log_sha256": "3b0f405f8054fee149b1c2814d1e85fd8946e1888eeddf51e2f00cf62cce7de5",
+  "inventory": {
+    "sources": 40,
+    "sites": 331,
+    "public_commands": 138,
+    "source_routes": 112,
+    "binding_review_sites": 123
+  },
+  "qualification_repairs": [
+    "A test initially treated representable 1e-320 mA as underflow; corrected test distinguishes tiny nonzero values from true zero underflow, including parse underflow",
+    "First flasher startup spacing differs from later repeat interval; steady-repeat test now selects a post-startup window without changing solver/model limits",
+    "Discovery corrected to admit explicit limit zero as the default, with a canonical clear example; final source rebuilt and requalified"
+  ],
+  "notes": [
+    "SDK baseline unchanged; manifest and 16 prepared output hashes verified read-only",
+    "Final canonical/candidate/build binary hashes equal; prior .61/76 preserved at build/ELab-before-recording-timing.app; owned sessions exited",
+    "Initial pre-discovery-fix candidate and headless observations retained separately as historical artifacts"
+  ],
+  "limits": [
+    "Sampled arrival brackets and first spacing bounds only; hidden transitions, noise/hysteresis, periodicity, interpolation and edge-time estimation are not supplied",
+    "Timing interval is independent of current plot/cursors and uses exact stored numeric timestamps",
+    "Underlying captures persist; timing choices are derived session state and reset on selection/reopen",
+    "No new complete physical-input/accessibility, visible-latency, distribution, participant or physical-device acceptance claim",
+    "P0 counts remain 17 implemented / 10 partial; printer submission/physical printing remain open",
+    "Private unsigned app; no solver/model/work/retention limits or project format changed"
+  ]
+}

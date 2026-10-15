@@ -26,4 +26,6 @@ Selection starts a fresh comparison session: selecting any operation clears the 
 
 The configuration is session/view state, without undo/history, dirty membership or physics changes. Projects retain the underlying kept captures; reopening resets comparison settings and assigns fresh local IDs. Select those reopened captures to compare their unchanged data again. Exported/imported recordings use the same validated captured data. There is no project-format change.
 
-This addition is a numerical comparison table. Plot overlays, time alignment, threshold/period extraction, relative-error percentages and formal equivalence testing remain separate features. It does not certify a circuit or prove real-device behavior.
+This addition is a numerical comparison table. Plot overlays, time alignment, relative-error percentages and formal equivalence testing remain separate features. It does not certify a circuit or prove real-device behavior.
+
+[Threshold timing](recording-timing.md) separately measures sampled arrival brackets and first same-direction spacing bounds. It does not convert comparison tables into aligned or interpolated waveforms.

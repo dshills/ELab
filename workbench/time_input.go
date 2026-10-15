@@ -59,6 +59,7 @@ var timeCommandFields = map[string][]string{
 	"simulation.verify":         {"duration_s", "sample_step_s"},
 	"scope.cursor.set":          {"time_s"}, "scope.window.set": {"start_s", "end_s"},
 	"recording.seek": {"time_s"}, "recording.cursor.set": {"time_s"},
+	"recording.timing": {"start_s", "end_s"}, "recording.timing.set": {"start_s", "end_s"},
 	"recording.compare": {"time_s"}, "recording.compare.set": {"time_s"},
 	"recording.window.set":     {"start_s", "end_s"},
 	"source.pulse.set":         {"waveform.high_s", "waveform.low_s", "waveform.rise_s", "waveform.fall_s"},

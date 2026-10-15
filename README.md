@@ -238,3 +238,5 @@ Agents can inspect [sweep command contracts](docs/capability-details.md#sweep-co
 DC sweeps support linear and positive logarithmic spacing, including descending ranges. Select **DC sweep**, choose a target and range, then choose the spacing before running. Captured curves preserve spacing through JSON/project saves and imports; cursors select exact measured points. See the [resistance experiment](docs/dc-sweeps.md#logarithmic-resistance-experiment).
 
 Choose **Show recorded → Compare captures** to compare two saved experiments at a requested time. The Inspector and agents share exact saved-sample readings, B − A and optional whole-run statistics, with both actual sample times shown. See [captured comparisons](docs/recording-comparison.md).
+
+Captured runs now offer **Threshold timing**: choose a saved probe, level, direction and interval to inspect exact threshold-arrival brackets and the first same-direction spacing bounds. Users and agents share the same measurement and result pages. See [timing workflow](docs/recording-timing.md).

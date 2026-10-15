@@ -85,6 +85,11 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(IDParams{}), ObjectIDSchemaID},
 	{reflect.TypeOf(CursorSelectParams{}), "urn:elab:cursor-select:1"},
 	{reflect.TypeOf(ProbeParams{}), "urn:elab:probe-selection:1"},
+	{reflect.TypeOf(RecordingTimingParams{}), "urn:elab:recording-timing-input:1"},
+	{reflect.TypeOf(RecordingTimingSettings{}), "urn:elab:recording-timing-settings:1"},
+	{reflect.TypeOf(RecordingTiming{}), "urn:elab:recording-timing:1"},
+	{reflect.TypeOf(TimingSample{}), "urn:elab:timing-sample:1"},
+	{reflect.TypeOf(ThresholdCrossing{}), "urn:elab:threshold-crossing:1"},
 	{reflect.TypeOf(ScopeStatistics{}), "urn:elab:scope-statistics:1"},
 	{reflect.TypeOf(ComparisonSample{}), "urn:elab:comparison-sample:1"},
 	{reflect.TypeOf(RecordingComparison{}), "urn:elab:recording-comparison:1"},
@@ -132,13 +137,16 @@ func SchemaRegistry() map[string]json.RawMessage {
 	registry := map[string]json.RawMessage{SnapshotSchemaID: append(json.RawMessage(nil), snapshotDefinition...), VerificationMetadataSchemaID: data, EventPollSchemaID: eventData, TimeInputSchemaID: json.RawMessage(`{"$id":"urn:elab:time:1","type":["number","string"],"maxLength":128,"description":"Seconds as a finite number or decimal/scientific text; bare text is seconds; case-sensitive s/ms/us/µs/μs/ns/ps. Command bounds still apply.","examples":[0.01,"10 ms","250 us"]}`)}
 	for _, common := range commonSchemas {
 		schema := structSchema(common.Type)
-		// This is an input-only type. Preserve unit-text support once in its shared
-		// definition, without widening numeric RecoveryState output fields.
+		// Input-only shared definitions retain command unit text without
+		// widening numeric output/settings schemas.
 		if common.Type == reflect.TypeOf(RecoveryConfigureParams{}) {
 			schema = timeInputSchema("recovery.configure", schema)
 		}
 		if common.Type == reflect.TypeOf(RecordingCompareParams{}) {
 			schema = timeInputSchema("recording.compare", schema)
+		}
+		if common.Type == reflect.TypeOf(RecordingTimingParams{}) {
+			schema = timeInputSchema("recording.timing", schema)
 		}
 		schema["$id"] = common.ID
 		encoded, _ := json.Marshal(schema)
@@ -209,6 +217,8 @@ func Catalog() []Capability {
 		typedCapability("recording.keep.set", "Include/exclude a completed recording in project saves and recovery; exclusion keeps session replay/export; kept records are never silently evicted", reflect.TypeOf(RecordingKeepParams{})),
 		typedCapability("verification.import.start", "Read/validate a recorded JSON asset in background; inspect project_work; keeps live circuit/state and later viewer choice", reflect.TypeOf(RecordingImportParams{})),
 		typedCapability("verification.import", "Validate and load a complete elab.verification v1 JSON record into an independent recorded viewer; never changes live circuit/state", reflect.TypeOf(RecordingImportParams{})),
+		typedCapability("recording.timing.set", "Configure selected capture threshold timing; empty probe clears; session only", reflect.TypeOf(RecordingTimingParams{})),
+		queryCapability("recording.timing", "Read sampled threshold brackets and first same-direction spacing; pages 1–100", reflect.TypeOf(RecordingTimingParams{}), reflect.TypeOf(RecordingTiming{})),
 		typedCapability("recording.compare.set", "Configure selected captured A and reference B at time_s; empty reference clears; exact nearest saved samples, no interpolation/live mutation", reflect.TypeOf(RecordingCompareParams{})),
 		queryCapability("recording.compare", "Pure comparison of two retained captures at time_s; matching probe IDs/units/terminals, exact sample times, B minus A and whole-record statistics", reflect.TypeOf(RecordingCompareParams{}), reflect.TypeOf(RecordingComparison{})),
 		typedCapability("recording.view.set", "Show live or recorded scope; recorded requires a selected completed operation", reflect.TypeOf(RecordingViewParams{})),

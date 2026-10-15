@@ -67,6 +67,30 @@ func nativeRecordingComparisonSmoke(ctx context.Context, a *app.Application, s *
 			result <- fmt.Errorf("comparison time labels absent")
 			return
 		}
+		beforeTiming := s.service.Snapshot()
+		probe := beforeTiming.Recording.Scope.Available[0].ID
+		for _, action := range []struct {
+			id    string
+			event *ui.ChangeEvent
+		}{{"recorded-timing-probe", &ui.ChangeEvent{SelectedID: probe}}, {"recorded-timing-level", &ui.ChangeEvent{Text: "0"}}, {"recorded-timing-direction", &ui.ChangeEvent{SelectedID: "rising"}}, {"recorded-timing-end", &ui.ChangeEvent{Text: "20 ms"}}} {
+			if err := smokeUI(s, action.id, action.event); err != nil {
+				result <- err
+				return
+			}
+		}
+		timed := s.service.Snapshot()
+		if timed.Recording.Timing == nil || timed.Recording.Timing.Settings.ProbeID != probe || timed.Recording.Timing.Level != 0 || timed.Document != beforeTiming.Document || timed.Transient.Sample != beforeTiming.Transient.Sample {
+			result <- fmt.Errorf("native threshold timing state")
+			return
+		}
+		if _, ok := findNode(s.view(), "recorded-timing-count"); !ok {
+			result <- fmt.Errorf("native threshold timing labels absent")
+			return
+		}
+		if err := smokeUI(s, "recorded-timing-probe", &ui.ChangeEvent{SelectedID: "__none"}); err != nil {
+			result <- err
+			return
+		}
 		if err := smokeUI(s, "recorded-compare-reference", &ui.ChangeEvent{SelectedID: "__none"}); err != nil {
 			result <- err
 			return

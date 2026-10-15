@@ -45,3 +45,5 @@ CSV is an export for external analysis; it lacks the full captured schematic and
 Core/native tests cover all five supported analyses, exact metadata/export round-trip, corrupt input refusal, empty captures, DC sampling overrides, pulse edge stepping, timing cursors, plot bounds/extrema and complete statistics, independent playback, snapshot cloning, native picker parameters and user/agent control parity. The native GPU/UI smoke opens the recorded plot and uses its seek/cursor controls. `scripts/recording-demo.py` provides a repeatable headless or owned-desktop integration workflow.
 
 Captured runs can also be compared numerically at a requested time, retaining each actual saved sample time and separate whole-run statistics. See [Compare captured experiments](recording-comparison.md).
+
+For RC delays and flasher edges, [threshold timing](recording-timing.md) reports saved-row brackets and same-direction spacing bounds without interpolating event times.

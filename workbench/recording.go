@@ -12,6 +12,7 @@ import (
 func (s *Service) selectRecordingLocked(id string) {
 	s.viewerRevision++
 	s.recording.comparison = nil
+	s.recording.timing = nil
 	s.selectedOperation = id
 	s.recording.playing = false
 	s.recording.index = 0
