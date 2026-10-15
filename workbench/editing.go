@@ -633,6 +633,11 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if err := validatePointParam(raw, "position"); err != nil {
 			return err
 		}
+		if p.PreviousPosition != nil {
+			if err := validatePointParam(raw, "previous_position"); err != nil {
+				return err
+			}
+		}
 		position, err := snapPoint(p.Position)
 		if err != nil {
 			return err

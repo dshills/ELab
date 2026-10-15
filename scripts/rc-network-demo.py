@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Reconstruct RC/LED and high-pass circuits; --connect requires an owned blank session."""
 import argparse
-import hashlib
 import importlib.util
 import json
 import math
 from pathlib import Path
 import time
+
+from validation_artifacts import discovery_summary
 
 spec = importlib.util.spec_from_file_location('helper', Path(__file__).with_name('persistence-demo.py'))
 helper = importlib.util.module_from_spec(spec)
@@ -48,21 +49,8 @@ def main():
         catalog = client.ask('examples.list')
         info = next(e for e in catalog if e['id'] == 'led-fade')
         schemas = client.ask('capabilities.list', {'command': 'example.load'})
-        full_discovery = (json.dumps(schemas, sort_keys=True, indent=2, allow_nan=False)+'\n').encode()
         discovery_path = args.discovery_output or assets/'example-load-discovery.json'
-        discovery_path.parent.mkdir(parents=True, exist_ok=True)
-        with discovery_path.open('xb') as discovery_file:
-            discovery_file.write(full_discovery)
-        registry = schemas['schemas']
-        assert isinstance(registry, dict) and registry
-        registry_bytes = (json.dumps(registry, sort_keys=True, indent=2, allow_nan=False)+'\n').encode()
-        # Retain the complete returned contract as a separate witness. Reports
-        # compare its digest and the full registry digest without duplicating
-        # every shared schema in both transport reports.
-        contract = {key: value for key, value in schemas.items() if key != 'schemas'}
-        contract['schema_registry_count'] = len(registry)
-        contract['schema_registry_sha256'] = hashlib.sha256(registry_bytes).hexdigest()
-        contract['full_response_sha256'] = hashlib.sha256(full_discovery).hexdigest()
+        contract = discovery_summary(schemas, discovery_path)
         ask('simulation.pause')
         for identity, kind, x, y, value in [
             ('V1', 'pulse-source', -230, 20, '5 V'), ('R1', 'resistor', 0, -110, '1k'),

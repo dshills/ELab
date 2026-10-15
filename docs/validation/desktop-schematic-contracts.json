@@ -1,0 +1,1093 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "contracts": {
+    "parts.search.set": {
+      "id": "parts.search.set",
+      "description": "Filter components by case-insensitive words in names, hobbyist aliases, kind, pins, units, defaults or model IDs; session only",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "examples": [
+          {
+            "query": "red led"
+          }
+        ],
+        "properties": {
+          "query": {
+            "maxLength": 128,
+            "type": "string",
+            "x-max-utf8-bytes": 128
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object",
+        "x-command-contract": {
+          "version": 1,
+          "scope": "schematic-editing",
+          "preconditions": [],
+          "effects": [
+            "Ordinary revision/document guards and retry retention apply; invalid admission preserves graph, live state, history and view",
+            "Stores raw text as session state; preserves graph, physics, history and document dirty state",
+            "Matching is case-insensitive with trimmed whitespace-separated tokens; every token must occur in name/kind/pins/units/default/model/aliases; empty matches all; does not change the chosen drawing kind"
+          ],
+          "errors": [
+            {
+              "code": "invalid-params",
+              "phase": "admission",
+              "when": "Malformed input or command-specific target/domain/capacity violation"
+            }
+          ],
+          "completion": {
+            "mode": "immediate command admission; electrical edits use existing asynchronous simulation state",
+            "observe": [
+              "project.inspect",
+              "events.poll",
+              "simulation.wait"
+            ],
+            "cancel": "",
+            "cooperative_deadline_s": 0
+          }
+        },
+        "x-inventory": {
+          "components": "snapshot.components",
+          "objects": "snapshot.components and snapshot.wires",
+          "parts": "parts.list",
+          "terminals": "component.id + '.' + each snapshot.components[].terminals entry; exact case"
+        }
+      },
+      "output": "Snapshot",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    "component.duplicate": {
+      "id": "component.duplicate",
+      "description": "Copy one component's value, orientation and startup voltage into an unconnected new component; optional exact position",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "type": "string"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "x": {
+                    "maximum": 10000,
+                    "minimum": -10000,
+                    "type": "number"
+                  },
+                  "y": {
+                    "maximum": 10000,
+                    "minimum": -10000,
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "x",
+                  "y"
+                ],
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "x-command-contract": {
+          "version": 1,
+          "scope": "schematic-editing",
+          "preconditions": [
+            "Existing component and a free drawing slot",
+            "Optional position is finite within \u00b110000 and snaps to an unoccupied center; omitted/null searches free offsets 40\u2013400 units in bounded 20-unit increments"
+          ],
+          "effects": [
+            "Ordinary revision/document guards and retry retention apply; invalid admission preserves graph, live state, history and view",
+            "Allocates/selects a new component; copies value, orientation, waveform, wiper/switch state and configured capacitor startup, but not live state or wires",
+            "Net labels retain their name and therefore their named-net association; ordinary new electrical parts are initially unconnected and can make live results incomplete/stale",
+            "An actual content change is one ordinary undoable document edit; graph normalization refreshes selected committed drafts. Electrical changes use ordinary running restart / paused-stale rules; geometry alone preserves physics"
+          ],
+          "errors": [
+            {
+              "code": "invalid-params",
+              "phase": "admission",
+              "when": "Malformed input or command-specific target/domain/capacity violation"
+            }
+          ],
+          "completion": {
+            "mode": "immediate command admission; electrical edits use existing asynchronous simulation state",
+            "observe": [
+              "project.inspect",
+              "events.poll",
+              "simulation.wait"
+            ],
+            "cancel": "",
+            "cooperative_deadline_s": 0
+          }
+        },
+        "x-inventory": {
+          "components": "snapshot.components",
+          "objects": "snapshot.components and snapshot.wires",
+          "parts": "parts.list",
+          "terminals": "component.id + '.' + each snapshot.components[].terminals entry; exact case"
+        },
+        "x-max-drawing-components": 100,
+        "x-position-rounding": "nearest grid; halfway values round away from zero; bounds apply before snapping",
+        "x-position-snap-grid": 10
+      },
+      "output": "Snapshot",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    "component.move": {
+      "id": "component.move",
+      "description": "Move a part to a grid position within \u00b110000; preserve all wires and electrical results",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "examples": [
+          {
+            "id": "R1",
+            "position": {
+              "x": 15,
+              "y": -15
+            }
+          }
+        ],
+        "properties": {
+          "id": {
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "type": "string"
+          },
+          "position": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "maximum": 10000,
+                "minimum": -10000,
+                "type": "number"
+              },
+              "y": {
+                "maximum": 10000,
+                "minimum": -10000,
+                "type": "number"
+              }
+            },
+            "required": [
+              "x",
+              "y"
+            ],
+            "type": "object"
+          },
+          "previous_position": {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "x",
+                  "y"
+                ],
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Omitted/null disables this extra gesture guard. A supplied object requires both numeric x/y and must exactly equal the current stored position, without snapping; mismatch is conflict."
+          }
+        },
+        "required": [
+          "id",
+          "position"
+        ],
+        "type": "object",
+        "x-command-contract": {
+          "version": 1,
+          "scope": "schematic-editing",
+          "preconditions": [
+            "Existing component ID, finite destination within \u00b110000, and snapped center not occupied by another component",
+            "Optional non-null previous_position has both numeric coordinates and exactly matches current position"
+          ],
+          "effects": [
+            "Ordinary revision/document guards and retry retention apply; invalid admission preserves graph, live state, history and view",
+            "Moves only component position; wires follow routing; terminals, topology, accepted live samples, run and electrical revision stay unchanged",
+            "An actual content change is one ordinary undoable document edit; graph normalization refreshes selected committed drafts. Electrical changes use ordinary running restart / paused-stale rules; geometry alone preserves physics"
+          ],
+          "errors": [
+            {
+              "code": "invalid-params",
+              "phase": "admission",
+              "when": "Malformed input or command-specific target/domain/capacity violation"
+            },
+            {
+              "code": "conflict",
+              "phase": "admission",
+              "when": "Exact previous_position differs from current component position"
+            }
+          ],
+          "completion": {
+            "mode": "immediate command admission; electrical edits use existing asynchronous simulation state",
+            "observe": [
+              "project.inspect",
+              "events.poll",
+              "simulation.wait"
+            ],
+            "cancel": "",
+            "cooperative_deadline_s": 0
+          }
+        },
+        "x-inventory": {
+          "components": "snapshot.components",
+          "objects": "snapshot.components and snapshot.wires",
+          "parts": "parts.list",
+          "terminals": "component.id + '.' + each snapshot.components[].terminals entry; exact case"
+        },
+        "x-position-rounding": "nearest grid; halfway values round away from zero; bounds apply before snapping",
+        "x-position-snap-grid": 10
+      },
+      "output": "Snapshot",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    "component.rotate": {
+      "id": "component.rotate",
+      "description": "Rotate a part 90 degrees clockwise without changing its pin identities or connectivity",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "x-command-contract": {
+          "version": 1,
+          "scope": "schematic-editing",
+          "preconditions": [
+            "ID names an existing component, not a wire"
+          ],
+          "effects": [
+            "Ordinary revision/document guards and retry retention apply; invalid admission preserves graph, live state, history and view",
+            "Adds 90 degrees clockwise modulo 360; preserves terminal identities, connectivity, accepted live samples, run and electrical revision",
+            "An actual content change is one ordinary undoable document edit; graph normalization refreshes selected committed drafts. Electrical changes use ordinary running restart / paused-stale rules; geometry alone preserves physics"
+          ],
+          "errors": [
+            {
+              "code": "invalid-params",
+              "phase": "admission",
+              "when": "Malformed input or command-specific target/domain/capacity violation"
+            }
+          ],
+          "completion": {
+            "mode": "immediate command admission; electrical edits use existing asynchronous simulation state",
+            "observe": [
+              "project.inspect",
+              "events.poll",
+              "simulation.wait"
+            ],
+            "cancel": "",
+            "cooperative_deadline_s": 0
+          }
+        },
+        "x-inventory": {
+          "components": "snapshot.components",
+          "objects": "snapshot.components and snapshot.wires",
+          "parts": "parts.list",
+          "terminals": "component.id + '.' + each snapshot.components[].terminals entry; exact case"
+        }
+      },
+      "output": "Snapshot",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    "component.select": {
+      "id": "component.select",
+      "description": "Select any component or wire by stable ID; empty ID clears selection",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "maxLength": 64,
+            "minLength": 0,
+            "pattern": "^(?:[A-Za-z][A-Za-z0-9_-]{0,63})?$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "x-command-contract": {
+          "version": 1,
+          "scope": "schematic-editing",
+          "preconditions": [
+            "ID names any current component or wire; empty string clears selection"
+          ],
+          "effects": [
+            "Ordinary revision/document guards and retry retention apply; invalid admission preserves graph, live state, history and view",
+            "Sets editing selection, clears explicit measurement focus and refreshes the selected committed value draft; preserves graph, physics, history and dirty state"
+          ],
+          "errors": [
+            {
+              "code": "invalid-params",
+              "phase": "admission",
+              "when": "Malformed input or command-specific target/domain/capacity violation"
+            }
+          ],
+          "completion": {
+            "mode": "immediate command admission; electrical edits use existing asynchronous simulation state",
+            "observe": [
+              "project.inspect",
+              "events.poll",
+              "simulation.wait"
+            ],
+            "cancel": "",
+            "cooperative_deadline_s": 0
+          }
+        },
+        "x-inventory": {
+          "components": "snapshot.components",
+          "objects": "snapshot.components and snapshot.wires",
+          "parts": "parts.list",
+          "terminals": "component.id + '.' + each snapshot.components[].terminals entry; exact case"
+        }
+      },
+      "output": "Snapshot",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    "object.delete": {
+      "id": "object.delete",
+      "description": "Delete a part and its incident wires, or one wire, as one undoable edit",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "x-command-contract": {
+          "version": 1,
+          "scope": "schematic-editing",
+          "preconditions": [
+            "ID names a current component or wire"
+          ],
+          "effects": [
+            "Ordinary revision/document guards and retry retention apply; invalid admission preserves graph, live state, history and view",
+            "Deletes the object; deleting a component also removes every incident wire atomically. Invalid selection/wire references are cleaned; retained captures keep their original sources",
+            "An actual content change is one ordinary undoable document edit; graph normalization refreshes selected committed drafts. Electrical changes use ordinary running restart / paused-stale rules; geometry alone preserves physics"
+          ],
+          "errors": [
+            {
+              "code": "invalid-params",
+              "phase": "admission",
+              "when": "Malformed input or command-specific target/domain/capacity violation"
+            }
+          ],
+          "completion": {
+            "mode": "immediate command admission; electrical edits use existing asynchronous simulation state",
+            "observe": [
+              "project.inspect",
+              "events.poll",
+              "simulation.wait"
+            ],
+            "cancel": "",
+            "cooperative_deadline_s": 0
+          }
+        },
+        "x-inventory": {
+          "components": "snapshot.components",
+          "objects": "snapshot.components and snapshot.wires",
+          "parts": "parts.list",
+          "terminals": "component.id + '.' + each snapshot.components[].terminals entry; exact case"
+        }
+      },
+      "output": "Snapshot",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    "drawing.tool.set": {
+      "id": "drawing.tool.set",
+      "description": "Select tool: select, place, wire, or pan; optionally choose a part kind",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "",
+              null,
+              "dc-source",
+              "resistor",
+              "led",
+              "capacitor",
+              "sine-source",
+              "finite-pulse-source",
+              "pulse-source",
+              "npn",
+              "ground",
+              "junction",
+              "net-label",
+              "potentiometer",
+              "diode",
+              "switch"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tool": {
+            "enum": [
+              "select",
+              "place",
+              "wire",
+              "pan"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "tool"
+        ],
+        "type": "object",
+        "x-command-contract": {
+          "version": 1,
+          "scope": "schematic-editing",
+          "preconditions": [
+            "Tool is select/place/wire/pan; supplied nonempty kind exists in parts.list; omitted/empty/null retains current kind"
+          ],
+          "effects": [
+            "Ordinary revision/document guards and retry retention apply; invalid admission preserves graph, live state, history and view",
+            "Sets tool/kind and clears wire_start; choosing place + net-label clears the label draft. Preserves named From/To choices, position, graph, physics, history and dirty state"
+          ],
+          "errors": [
+            {
+              "code": "invalid-params",
+              "phase": "admission",
+              "when": "Malformed input or command-specific target/domain/capacity violation"
+            }
+          ],
+          "completion": {
+            "mode": "immediate command admission; electrical edits use existing asynchronous simulation state",
+            "observe": [
+              "project.inspect",
+              "events.poll",
+              "simulation.wait"
+            ],
+            "cancel": "",
+            "cooperative_deadline_s": 0
+          }
+        },
+        "x-inventory": {
+          "components": "snapshot.components",
+          "objects": "snapshot.components and snapshot.wires",
+          "parts": "parts.list",
+          "terminals": "component.id + '.' + each snapshot.components[].terminals entry; exact case"
+        }
+      },
+      "output": "Snapshot",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    "drawing.position.set": {
+      "id": "drawing.position.set",
+      "description": "Set the keyboard placement position on the 10-unit grid within \u00b110000",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "position": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "maximum": 10000,
+                "minimum": -10000,
+                "type": "number"
+              },
+              "y": {
+                "maximum": 10000,
+                "minimum": -10000,
+                "type": "number"
+              }
+            },
+            "required": [
+              "x",
+              "y"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "position"
+        ],
+        "type": "object",
+        "x-command-contract": {
+          "version": 1,
+          "scope": "schematic-editing",
+          "preconditions": [],
+          "effects": [
+            "Ordinary revision/document guards and retry retention apply; invalid admission preserves graph, live state, history and view",
+            "Sets snapped placement draft only; an occupied position is permitted here and is validated on later component.place. Preserves graph, physics, history and dirty state"
+          ],
+          "errors": [
+            {
+              "code": "invalid-params",
+              "phase": "admission",
+              "when": "Malformed input or command-specific target/domain/capacity violation"
+            }
+          ],
+          "completion": {
+            "mode": "immediate command admission; electrical edits use existing asynchronous simulation state",
+            "observe": [
+              "project.inspect",
+              "events.poll",
+              "simulation.wait"
+            ],
+            "cancel": "",
+            "cooperative_deadline_s": 0
+          }
+        },
+        "x-inventory": {
+          "components": "snapshot.components",
+          "objects": "snapshot.components and snapshot.wires",
+          "parts": "parts.list",
+          "terminals": "component.id + '.' + each snapshot.components[].terminals entry; exact case"
+        },
+        "x-position-rounding": "nearest grid; halfway values round away from zero; bounds apply before snapping",
+        "x-position-snap-grid": 10
+      },
+      "output": "Snapshot",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    "drawing.cancel": {
+      "id": "drawing.cancel",
+      "description": "Cancel an unfinished placement or wire gesture and return to selection",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "type": "object",
+        "x-command-contract": {
+          "version": 1,
+          "scope": "schematic-editing",
+          "preconditions": [],
+          "effects": [
+            "Ordinary revision/document guards and retry retention apply; invalid admission preserves graph, live state, history and view",
+            "Returns tool to select and clears wire_start; keeps named From/To choices, placement position, selection and value draft. Preserves graph, physics, history and dirty state"
+          ],
+          "errors": [
+            {
+              "code": "invalid-params",
+              "phase": "admission",
+              "when": "Malformed input or command-specific target/domain/capacity violation"
+            }
+          ],
+          "completion": {
+            "mode": "immediate command admission; electrical edits use existing asynchronous simulation state",
+            "observe": [
+              "project.inspect",
+              "events.poll",
+              "simulation.wait"
+            ],
+            "cancel": "",
+            "cooperative_deadline_s": 0
+          }
+        },
+        "x-inventory": {
+          "components": "snapshot.components",
+          "objects": "snapshot.components and snapshot.wires",
+          "parts": "parts.list",
+          "terminals": "component.id + '.' + each snapshot.components[].terminals entry; exact case"
+        }
+      },
+      "output": "Snapshot",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    "wire.connect": {
+      "id": "wire.connect",
+      "description": "Join named terminals explicitly; crossings never connect; 300 wires maximum",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "from": {
+            "description": "Exact current terminal reference from the snapshot inventory; geometry/proximity does not create a connection.",
+            "maxLength": 74,
+            "minLength": 3,
+            "type": "string",
+            "x-max-utf8-bytes": 74
+          },
+          "id": {
+            "maxLength": 64,
+            "minLength": 0,
+            "pattern": "^(?:[A-Za-z][A-Za-z0-9_-]{0,63})?$",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "description": "Exact current terminal reference from the snapshot inventory; geometry/proximity does not create a connection.",
+            "maxLength": 74,
+            "minLength": 3,
+            "type": "string",
+            "x-max-utf8-bytes": 74
+          }
+        },
+        "required": [
+          "from",
+          "to"
+        ],
+        "type": "object",
+        "x-command-contract": {
+          "version": 1,
+          "scope": "schematic-editing",
+          "preconditions": [
+            "Two distinct existing terminal references; direct duplicate pair in either order is refused",
+            "A wire slot is free; omitted/empty/null ID allocates an unused W designator; explicit ID valid and never used earlier in this session"
+          ],
+          "effects": [
+            "Ordinary revision/document guards and retry retention apply; invalid admission preserves graph, live state, history and view",
+            "Adds an explicit connected wire and clears wire_start/From/To; keeps tool and editing selection",
+            "Different terminals on the same existing net may be joined; geometry/crossings never connect by themselves. Resulting shorts/unsupported circuit topology remain visible diagnostics rather than guessed physics",
+            "An actual content change is one ordinary undoable document edit; graph normalization refreshes selected committed drafts. Electrical changes use ordinary running restart / paused-stale rules; geometry alone preserves physics"
+          ],
+          "errors": [
+            {
+              "code": "invalid-params",
+              "phase": "admission",
+              "when": "Malformed input or command-specific target/domain/capacity violation"
+            }
+          ],
+          "completion": {
+            "mode": "immediate command admission; electrical edits use existing asynchronous simulation state",
+            "observe": [
+              "project.inspect",
+              "events.poll",
+              "simulation.wait"
+            ],
+            "cancel": "",
+            "cooperative_deadline_s": 0
+          }
+        },
+        "x-inventory": {
+          "components": "snapshot.components",
+          "objects": "snapshot.components and snapshot.wires",
+          "parts": "parts.list",
+          "terminals": "component.id + '.' + each snapshot.components[].terminals entry; exact case"
+        },
+        "x-max-wires": 300
+      },
+      "output": "Snapshot",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    "wire.begin": {
+      "id": "wire.begin",
+      "description": "Begin a visible wire gesture from a named terminal",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "terminal": {
+            "description": "Exact current terminal reference from the snapshot inventory; geometry/proximity does not create a connection.",
+            "maxLength": 74,
+            "minLength": 3,
+            "type": "string",
+            "x-max-utf8-bytes": 74
+          }
+        },
+        "required": [
+          "terminal"
+        ],
+        "type": "object",
+        "x-command-contract": {
+          "version": 1,
+          "scope": "schematic-editing",
+          "preconditions": [
+            "Exact terminal exists in current graph"
+          ],
+          "effects": [
+            "Ordinary revision/document guards and retry retention apply; invalid admission preserves graph, live state, history and view",
+            "Sets tool=wire and wire_start; does not create a wire or clear named From/To choices. Preserves graph, physics, history and dirty state"
+          ],
+          "errors": [
+            {
+              "code": "invalid-params",
+              "phase": "admission",
+              "when": "Malformed input or command-specific target/domain/capacity violation"
+            }
+          ],
+          "completion": {
+            "mode": "immediate command admission; electrical edits use existing asynchronous simulation state",
+            "observe": [
+              "project.inspect",
+              "events.poll",
+              "simulation.wait"
+            ],
+            "cancel": "",
+            "cooperative_deadline_s": 0
+          }
+        },
+        "x-inventory": {
+          "components": "snapshot.components",
+          "objects": "snapshot.components and snapshot.wires",
+          "parts": "parts.list",
+          "terminals": "component.id + '.' + each snapshot.components[].terminals entry; exact case"
+        }
+      },
+      "output": "Snapshot",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    "wire.terminals.set": {
+      "id": "wire.terminals.set",
+      "description": "Set the named From/To choices without connecting yet; empty string clears a choice",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "from": {
+            "description": "Exact current terminal reference from the snapshot inventory; geometry/proximity does not create a connection.",
+            "maxLength": 74,
+            "minLength": 0,
+            "type": "string",
+            "x-max-utf8-bytes": 74
+          },
+          "to": {
+            "description": "Exact current terminal reference from the snapshot inventory; geometry/proximity does not create a connection.",
+            "maxLength": 74,
+            "minLength": 0,
+            "type": "string",
+            "x-max-utf8-bytes": 74
+          }
+        },
+        "required": [
+          "from",
+          "to"
+        ],
+        "type": "object",
+        "x-command-contract": {
+          "version": 1,
+          "scope": "schematic-editing",
+          "preconditions": [
+            "Both fields required; each is empty to clear or names an existing terminal; choices may be equal until wire.connect validates the pair"
+          ],
+          "effects": [
+            "Ordinary revision/document guards and retry retention apply; invalid admission preserves graph, live state, history and view",
+            "Changes named From/To choices only; does not change tool/wire_start or connect anything. Preserves graph, physics, history and dirty state"
+          ],
+          "errors": [
+            {
+              "code": "invalid-params",
+              "phase": "admission",
+              "when": "Malformed input or command-specific target/domain/capacity violation"
+            }
+          ],
+          "completion": {
+            "mode": "immediate command admission; electrical edits use existing asynchronous simulation state",
+            "observe": [
+              "project.inspect",
+              "events.poll",
+              "simulation.wait"
+            ],
+            "cancel": "",
+            "cooperative_deadline_s": 0
+          }
+        },
+        "x-inventory": {
+          "components": "snapshot.components",
+          "objects": "snapshot.components and snapshot.wires",
+          "parts": "parts.list",
+          "terminals": "component.id + '.' + each snapshot.components[].terminals entry; exact case"
+        }
+      },
+      "output": "Snapshot",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    "wire.junction.insert": {
+      "id": "wire.junction.insert",
+      "description": "Atomically insert one explicit junction into 1\u20138 named connected wire routes; position required for multi-wire joins, single wire defaults to a free interior point",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "maxLength": 64,
+            "minLength": 0,
+            "pattern": "^(?:[A-Za-z][A-Za-z0-9_-]{0,63})?$",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "x": {
+                    "maximum": 10000,
+                    "minimum": -10000,
+                    "type": "number"
+                  },
+                  "y": {
+                    "maximum": 10000,
+                    "minimum": -10000,
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "x",
+                  "y"
+                ],
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "wire_ids": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 8,
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "wire_ids"
+        ],
+        "type": "object",
+        "x-command-contract": {
+          "version": 1,
+          "scope": "schematic-editing",
+          "preconditions": [
+            "1\u20138 unique current connected wire IDs; enough capacity for one component and one additional wire per named route",
+            "Multiple routes require explicit position; omitted/null single-route position searches bounded free interior candidates",
+            "Snapped center is unoccupied, within half-grid plus 1e-9 of every named route, and at least one grid step from each named endpoint",
+            "Omitted/empty/null ID allocates unused J designator; explicit valid ID has never been used in session"
+          ],
+          "effects": [
+            "Ordinary revision/document guards and retry retention apply; invalid admission preserves graph, live state, history and view",
+            "Atomically adds/selects a junction and splits every named wire; original IDs stay on first legs, new W IDs on second legs. Only explicitly named routes join; unrelated crossings remain separate",
+            "Returns drawing tool to select; electrical nets may change, with ordinary diagnostic/stale/restart rules",
+            "An actual content change is one ordinary undoable document edit; graph normalization refreshes selected committed drafts. Electrical changes use ordinary running restart / paused-stale rules; geometry alone preserves physics"
+          ],
+          "errors": [
+            {
+              "code": "invalid-params",
+              "phase": "admission",
+              "when": "Malformed input or command-specific target/domain/capacity violation"
+            }
+          ],
+          "completion": {
+            "mode": "immediate command admission; electrical edits use existing asynchronous simulation state",
+            "observe": [
+              "project.inspect",
+              "events.poll",
+              "simulation.wait"
+            ],
+            "cancel": "",
+            "cooperative_deadline_s": 0
+          }
+        },
+        "x-endpoint-clearance": 10,
+        "x-inventory": {
+          "components": "snapshot.components",
+          "objects": "snapshot.components and snapshot.wires",
+          "parts": "parts.list",
+          "terminals": "component.id + '.' + each snapshot.components[].terminals entry; exact case"
+        },
+        "x-max-drawing-components": 100,
+        "x-max-wires": 300,
+        "x-position-rounding": "nearest grid; halfway values round away from zero; bounds apply before snapping",
+        "x-position-snap-grid": 10,
+        "x-route-distance-tolerance": 5.000000001
+      },
+      "output": "Snapshot",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    },
+    "editor.value.set": {
+      "id": "editor.value.set",
+      "description": "Set the inspector value draft (up to 128 bytes); does not change the circuit until component.set",
+      "mutation": true,
+      "input_schema": {
+        "additionalProperties": false,
+        "examples": [
+          {
+            "value": "2.2k"
+          }
+        ],
+        "properties": {
+          "value": {
+            "maxLength": 128,
+            "type": "string",
+            "x-max-utf8-bytes": 128
+          }
+        },
+        "required": [
+          "value"
+        ],
+        "type": "object",
+        "x-command-contract": {
+          "version": 1,
+          "scope": "schematic-editing",
+          "preconditions": [],
+          "effects": [
+            "Ordinary revision/document guards and retry retention apply; invalid admission preserves graph, live state, history and view",
+            "Stores raw text as session state; preserves graph, physics, history and document dirty state",
+            "Does not parse or apply a numeric value; component.set performs validation/commit. Selection or graph normalization may replace the draft with the selected committed value"
+          ],
+          "errors": [
+            {
+              "code": "invalid-params",
+              "phase": "admission",
+              "when": "Malformed input or command-specific target/domain/capacity violation"
+            }
+          ],
+          "completion": {
+            "mode": "immediate command admission; electrical edits use existing asynchronous simulation state",
+            "observe": [
+              "project.inspect",
+              "events.poll",
+              "simulation.wait"
+            ],
+            "cancel": "",
+            "cooperative_deadline_s": 0
+          }
+        },
+        "x-inventory": {
+          "components": "snapshot.components",
+          "objects": "snapshot.components and snapshot.wires",
+          "parts": "parts.list",
+          "terminals": "component.id + '.' + each snapshot.components[].terminals entry; exact case"
+        }
+      },
+      "output": "Snapshot",
+      "output_schema": {
+        "$ref": "urn:elab:snapshot:1"
+      }
+    }
+  },
+  "discovery": {
+    "events": {
+      "command": "events.poll",
+      "default_timeout_ms": 1000,
+      "max_timeout_ms": 5000,
+      "max_waiters": 4,
+      "mode": "coalesced-latest-state",
+      "topics": [
+        "state",
+        "project",
+        "editor",
+        "view",
+        "simulation",
+        "diagnostics",
+        "jobs",
+        "measurements",
+        "recordings",
+        "recovery",
+        "preferences",
+        "lifecycle",
+        "library",
+        "preview",
+        "sweeps",
+        "printing"
+      ]
+    },
+    "mutation_preconditions": {
+      "combination": "A revision guard is required; all supplied revision/document guards must match",
+      "expected_command_revision": "Guards admitted commands, including other actors; live solver publication does not invalidate it",
+      "expected_document_generation": "Optional mutation context guard; prevents applying an old rendered action to a replacement document, including background publication",
+      "expected_revision": "Guards all state publication, including live samples"
+    },
+    "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee.",
+    "schema_version": 2,
+    "version": 1,
+    "schema_registry_count": 66,
+    "schema_registry_sha256": "6eae12ddad8040987bba291abd3fde9c46f7c20efb6ebef9f5ae10c52cc411ea",
+    "full_response_sha256": "1400116ac900d155a44bfc7037222d6e7e1424b0cfa63ed770c929072346019f"
+  },
+  "observations": {
+    "contracts": 14,
+    "snapped_position": {
+      "x": 20,
+      "y": -20
+    },
+    "current_a": 0.0029167965774405296,
+    "junction_id": "J1",
+    "explicit_wire_count": 6,
+    "planning_preserved_named_choices": true,
+    "malformed_previous_positions_refused": 4
+  },
+  "checks": [
+    "All 14 detailed contracts are pure and share the same full schema registry",
+    "Incomplete move preimages refuse without state changes; null/complete guards and signed snapping match discovery",
+    "Drawing/wire/draft planning and cancel preserve graph and documented choices",
+    "Blank LED construction, geometry-only preservation, duplication/delete recovery and atomic junction",
+    "Direct duplicate wire pair refuses; explicit same-net copper cycle retains electrical readings"
+  ],
+  "limits": [
+    "Detailed schematic family coverage only; other contract/native input/release gates remain open"
+  ]
+}

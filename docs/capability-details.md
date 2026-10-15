@@ -98,3 +98,7 @@ Pins are saved, undoable presentation definitions; changed positions/membership 
 `source.sine.set` and `source.pulse.set` now refer to local waveform voltage/frequency/phase quantity schemas for command input. Numeric SI and dimension-specific decimal unit strings share normalized model/coupled bounds. The registry definitions describe units, text limits and grammar; detailed fields expose `x-normalized-si-range`. Stored/output schemas remain numeric. [Waveform quantity contract](waveforms.md#exact-parameter-entry).
 
 Page schemas now describe fixed-scale tiling, overlap, footer reservation and the 16-page bound. `print.preview.page.set` adds an explicit captured-page state/error/completion contract; PNG schema details distinguish current-source page selection from exact `preview_id` export. Print-submit discovery states that all captured pages are submitted. [Tiled output](tiled-output.md).
+
+## Schematic editing contracts
+
+Fourteen schematic commands now expose snapping/occupancy, exact optional move preimages, configured-field duplication, named-net labels, selection/drafts, terminal planning, explicit connections/junctions and ordinary state/history effects. Incomplete component-move preimages now refuse rather than coercing missing coordinates to zero. See [complete family details and validation](schematic-command-contracts.md). Other family and native runtime acceptance remains separate.

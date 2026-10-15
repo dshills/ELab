@@ -1,0 +1,82 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.87.0",
+  "build_version": "102",
+  "binary_sha256": "3a7beadeca3ff1b63572d102539607d98f263f3e882c7983817efdd4585c5072",
+  "agent_binary_sha256": "363ba9d39d3a57df8d9058513414a221fa0bd8f93750521de496ee4f4a677ce1",
+  "sdk": {
+    "commit": "621aca2da91836631fc05b2a7b97f124d53518dd",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "workbench/editing.go": "a0bc2ef1106255887ea53d7822a010511701a2dedd1c86a7c9576101a113d3fc",
+    "workbench/capability_details.go": "1c545895065e12e05ce34b9f99ff903d0dd90f46c6938aa0b74ad8fdd4450a5e",
+    "workbench/schematic_capabilities.go": "4e22a120dbdd125239a3e7648ef84aac0d5a0ddc699b7e77ea6dec405004df97",
+    "workbench/schematic_capabilities_test.go": "66ecf02c96f5cf8c02c3755f0e24e462dc10ca448493e32425e5cec5b9110d22",
+    "scripts/schematic-contracts-demo.py": "12ca614f6b09aac101e16462177bf3340f4b13eaa0e3ee8bd14ffd54276536c8",
+    "scripts/validation_artifacts.py": "03d3056e9f39676935d9ef48144584e168f2e0481f6418e5aff05a59f19dc900",
+    "scripts/rc-network-demo.py": "a1db7969abfde4e1c69d3c7e1e6d7d97db6f960cf2fcb91bc3ceda1dc95b615f"
+  },
+  "source_inventory": {
+    "sources": 49,
+    "sites": 380,
+    "public_commands": 159,
+    "source_routes": 129,
+    "binding_review_sites": 142,
+    "literal_routes": 212,
+    "declared_wrapper_or_menu_sites": 9,
+    "registry_declarations": 17
+  },
+  "checks": [
+    "Four failing-before move regressions reproduce missing/null previous-position coordinates becoming zero; final runtime refuses without mutation",
+    "Fourteen pure owned detailed schematic contracts; point bounds, snapping, nullable inheritance, planning, wire cycles, label duplication and atomic batch rollback regressions pass",
+    "Final serialized lint/import/root/native race/vet pass",
+    "Final headless/native public contracts, discovery context/digests and observations match except transport",
+    "Shared discovery helper preserves prior RC summaries/digests and refuses overwrite",
+    "Final packaged GPU/UI/protected-close smoke passes",
+    "Four adapters pass LED/RC/NPN construction, measurements, export, save/close/reopen workflows",
+    "Unchanged native source ledger verifies; canonical/candidate/build bytes and package metadata match",
+    "Previous .86/101 preserved; SDK/prepared hashes verified read-only before/after; owned sessions terminal"
+  ],
+  "evidence": [
+    "docs/schematic-command-contracts.md",
+    "scripts/schematic-contracts-demo.py",
+    "docs/validation/headless-schematic-contracts.json",
+    "docs/validation/desktop-schematic-contracts.json",
+    "docs/validation/schematic-contracts-public-parity.json",
+    "docs/validation/schematic-contracts-conformance.json",
+    "docs/validation/rc-network-load-discovery.json"
+  ],
+  "logs_sha256": {
+    "build/schematic-contracts-087/audit-verify.log": "efdf2ad5fa531cc0b22513c7ba947610bc8e9fa11e20d749e9878c4ca0ab4fd7",
+    "build/schematic-contracts-087/before-cancel.log": "b3f21dd49675f33863d987a5553c119f16132fc4c82ae2f9aaeb0b694596bfb8",
+    "build/schematic-contracts-087/before-guard.log": "68171ee4c93b35b0f6a85ae73bfff25ccb54f3ac2d55978e7990f80478c571fc",
+    "build/schematic-contracts-087/build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/schematic-contracts-087/check.log": "b9d7e306c956a82521687a058b9c9b57c84f39280fcf3bb22372081f3eb0cbb3",
+    "build/schematic-contracts-087/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/schematic-contracts-087/contracts-focused.log": "dd9ef7b5733ede7ae2288e57cc60f0e3c261111fdf2f422a23834deb716ca9a6",
+    "build/schematic-contracts-087/focused.log": "624c472dc379165522439a761cac8265406a6bea25a10109f994aafe6f4b627d",
+    "build/schematic-contracts-087/headless.log": "9bacb8592b63c71834e0f91b7f40a8e86b3ddf484bc4ee750155e91d5bf3730f",
+    "build/schematic-contracts-087/native-demo.log": "9bacb8592b63c71834e0f91b7f40a8e86b3ddf484bc4ee750155e91d5bf3730f",
+    "build/schematic-contracts-087/native-host.log": "3204bcc246ae64767eb8f3678fdfd77cfbad78c27119c20ef05e2a4ca91cce8f",
+    "build/schematic-contracts-087/package-canonical.log": "3f73e3fcf6b17654520ada232a96d744c909959f47a71fe47761ddf4871e7dc6",
+    "build/schematic-contracts-087/package.log": "e588c5dd81f159029deb07afca75bc35f559a4808ad12c78ff26889bb238c698",
+    "build/schematic-contracts-087/smoke.log": "e4f34c0158e1b6c1ab6ac41374fe864c7acd915f59ef69c694926607c5d312c1"
+  },
+  "notes": [
+    "before-guard.log is the intentionally failing pre-fix regression; before-cancel.log disproves a suspected gap and no cancellation behavior changed.",
+    "No native production source changes. No public command IDs, electrical models, solver, sampling schedule or saved format changed.",
+    "Conformance report keeps complete reference workflows once, plus each adapter measurement/check/digest; original raw report remains unchanged in build evidence."
+  ],
+  "limits": [
+    "Remaining command contract families and exhaustive native input/IME/accessibility, visible latency, distribution, participant and physical printer qualification remain open.",
+    "P0 remains 17 implemented /10 partial; continuing electronics/repository-quality goal remains active.",
+    "MOSFETs remain unimplemented in the expansion backlog; current transistor support is NPN."
+  ]
+}

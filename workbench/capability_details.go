@@ -65,6 +65,9 @@ type inputRelation struct {
 }
 
 func addCapabilityDetails(id string, schema map[string]any) {
+	if addSchematicCapabilityDetails(id, schema) {
+		return
+	}
 	if addTiledPageDetails(id, schema) {
 		return
 	}

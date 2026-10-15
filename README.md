@@ -35,6 +35,8 @@ Captured runs now offer [time-weighted interval measurements](docs/interval-meas
 
 Select a **Finite pulse** source to enter its frequency, period or high-phase percentage directly. The same [pulse clock command](docs/source-pulse-clock.md) is available to agents and preserves configured voltage/ramp values.
 
+Agents can discover [schematic command rules](docs/schematic-command-contracts.md), including snapping, exact move guards, terminal planning and explicit junctions. Malformed move preimages now refuse without changing the circuit.
+
 Search components by name or hobbyist alias, press Return, and choose a matching part with the keyboard. Placement X/Y and named-terminal wiring sit together in the left rail. Successful placement returns focus to search; successful connection returns to the first terminal. See the [keyboard construction workflow](docs/keyboard-construction.md).
 
 Drag a selected part to move it with its wires. Pan drags the sheet; scroll zooms; Fit frames bodies, labels, wires and annotations. The Inspector has Previous/Next and Center selection controls; with canvas focus, Option + Left/Right navigates objects and Option + Home/End chooses first/last. See [schematic navigation](docs/schematic-navigation.md). Arrow keys move a selected part by one grid step, or pan when no part is selected. Delete removes a selected part and its wires, or a selected wire. Escape cancels placement/wiring. Cmd+Z and Cmd+Shift+Z use shared document history when a focused text control does not consume the shortcut.
@@ -44,7 +46,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.86.0 --build-version 101 --platform darwin
+  --version 0.87.0 --build-version 102 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).
