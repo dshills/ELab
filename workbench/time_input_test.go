@@ -112,13 +112,21 @@ func TestTimeDiscoveryChangesOnlyCommandInputs(t *testing.T) {
 		}
 		var schema map[string]any
 		_ = json.Unmarshal(cap.Input, &schema)
-		for _, path := range paths {
-			properties := schema["properties"].(map[string]any)
-			names := strings.Split(path, ".")
-			if len(names) == 2 {
-				properties = properties[names[0]].(map[string]any)["properties"].(map[string]any)
+		if ref, ok := schema["$ref"].(string); ok {
+			definition, exists := SchemaRegistry()[ref]
+			if !exists {
+				t.Fatalf("unresolved input schema %s", ref)
 			}
-			field := properties[names[len(names)-1]].(map[string]any)
+			schema = nil
+			if err := json.Unmarshal(definition, &schema); err != nil {
+				t.Fatal(err)
+			}
+		}
+		for _, path := range paths {
+			field := inputProperty(schema, path)
+			if field == nil {
+				t.Fatalf("missing time input %s.%s", command, path)
+			}
 			encoded, _ := json.Marshal(field)
 			if !strings.Contains(string(encoded), TimeInputSchemaID) {
 				t.Fatalf("%s.%s does not discover unit text", command, path)

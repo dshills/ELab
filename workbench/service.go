@@ -105,6 +105,7 @@ type Service struct {
 	projectSave                      projectSaveFunc
 	projectExport                    projectExportFunc
 	projectImport                    projectImportFunc
+	recoveryConfigure                recoveryConfigurationPrepareFunc
 	recoveryRestore                  recoveryRestoreFunc
 	recoveryPrepare                  recoveryPrepareFunc
 	recoveryExecute                  recoveryExecuteFunc
@@ -227,6 +228,7 @@ func newGraphService(solver func(context.Context, Circuit) (Result, error), grap
 		projectExport:     prepareProjectExport,
 		projectImport:     prepareRecordingImport,
 		recoveryPrepare:   prepareManualRecovery,
+		recoveryConfigure: prepareRecoveryConfiguration,
 		recoveryRestore:   prepareRecoveryRestore,
 		recoveryExecute:   executeManualRecovery,
 		projectPublish:    publishPreparedFile,

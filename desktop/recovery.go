@@ -30,11 +30,14 @@ func setupRecovery(service *workbench.Service, directory string) error {
 }
 func (s *screen) recoveryInspector(state workbench.Snapshot) []ui.Node {
 	recovery := state.Recovery
+	busy := activeProjectWork(state)
 	nodes := []ui.Node{section("recovery-title", "Autosave & recovery"), quiet("recovery-help", "Recovery snapshots preserve your edits separately from saved projects. Restoring opens a copy for Save As.")}
 	if recovery.Directory == "" {
 		directory, err := workbench.DefaultRecoveryDirectory()
 		if err == nil {
-			nodes = append(nodes, s.action("recovery-enable", "Enable autosave", "recovery.configure", workbench.RecoveryConfigureParams{Directory: directory, Enabled: true, Interval: 2}))
+			enable := s.action("recovery-enable", "Enable autosave", "recovery.configure.start", workbench.RecoveryConfigureParams{Directory: directory, Enabled: true, Interval: 2})
+			enable.Disabled = enable.Disabled || busy
+			nodes = append(nodes, enable)
 		}
 		return nodes
 	}
@@ -42,8 +45,10 @@ func (s *screen) recoveryInspector(state workbench.Snapshot) []ui.Node {
 	if recovery.Enabled {
 		text = "Disable autosave"
 	}
-	nodes = append(nodes, s.action("recovery-toggle", text, "recovery.configure", workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: !recovery.Enabled, Interval: recovery.Interval}), quiet("recovery-interval-label", "Autosave interval · 1–60 s"), timeField("recovery-interval", "Autosave interval", recovery.Interval, false, func(text string) {
-		s.invokeAtCommandRevision("recovery.configure", timeParams(workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: recovery.Enabled, Interval: recovery.Interval}, "interval_s", text), state.CommandRevision)
+	toggle := s.action("recovery-toggle", text, "recovery.configure.start", workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: !recovery.Enabled, Interval: recovery.Interval})
+	toggle.Disabled = toggle.Disabled || busy
+	nodes = append(nodes, toggle, quiet("recovery-interval-label", "Autosave interval · 1–60 s"), timeField("recovery-interval", "Autosave interval", recovery.Interval, busy, func(text string) {
+		s.invokeAtCommandRevision("recovery.configure.start", timeParams(workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: recovery.Enabled, Interval: recovery.Interval}, "interval_s", text), state.CommandRevision)
 	}), s.action("recovery-checkpoint", "Save recovery snapshot now", "recovery.work.start", workbench.RecoveryWorkParams{Kind: "checkpoint"}), s.action("recovery-scan", "Refresh recovery list", "recovery.work.start", workbench.RecoveryWorkParams{Kind: "scan"}))
 	if recovery.LastSavedAt != "" {
 		nodes = append(nodes, quiet("recovery-last-saved", "Last snapshot · "+recoveryTime(recovery.LastSavedAt)))

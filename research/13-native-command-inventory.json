@@ -28,9 +28,9 @@
     "desktop/print_page.go": "f06fef8a9db0e31cdf512c16c3b8155004c17964897b61e723b6cb0cdc796bf6",
     "desktop/print_preview.go": "905caa8284e1bfd16d6812e15061e36485f83f6ddd3ae06f248181e571101ebe",
     "desktop/probes.go": "3f3ce8e64c6aaba57439b63542f95eed784604bbe555b18a0f303e791c0e9e01",
-    "desktop/project_work.go": "1fd9fbe6f75189b4603ec27d1cb381235e10487cf1727fe622a675af0bbc44e0",
+    "desktop/project_work.go": "e29ee042c4eead98a48d52ea4c605865102bd9c1dc74f57433634527d9a4ffcb",
     "desktop/recording.go": "2d104abf028fe82a22888ff757668680fc28432f07a49b548025bb06ada38945",
-    "desktop/recovery.go": "00ec9ac869c77195d5a3c3e061196ff9fcc2047d23062379d86f14e62f9eee87",
+    "desktop/recovery.go": "cb7bf42f195b6ffb8bfff511d46bab877856820e9b03b52c65eef393692206dc",
     "desktop/routing.go": "4898c4c1de9d7de3c5f8ad751b15d7c0f199234243f62ec6ea949ee8d9ad2c1c",
     "desktop/scope.go": "7e77b694cbb2b1e759b5cbffb2c983c6ddd901fcc9780ac499ddd542cebf7b7d",
     "desktop/scope_visibility.go": "9594a6afdb06c2d612c4a507ac90b9443651d38c4c88005e2af65ff2d3d6c686",
@@ -121,6 +121,7 @@
     "recording.window.set",
     "recovery.checkpoint",
     "recovery.configure",
+    "recovery.configure.start",
     "recovery.dismiss",
     "recovery.inspect",
     "recovery.restore",
@@ -1823,7 +1824,7 @@
     },
     {
       "file": "desktop/project_work.go",
-      "line": 53,
+      "line": 58,
       "function": "*screen.projectWorkControls",
       "kind": "action-factory",
       "expression": "s.action(\"project-work-cancel\", \"Cancel project \"+action, \"project.work.cancel\", workbench.IDParams{ID: w.ID})",
@@ -2071,48 +2072,48 @@
     },
     {
       "file": "desktop/recovery.go",
-      "line": 37,
+      "line": 38,
       "function": "*screen.recoveryInspector",
       "kind": "action-factory",
-      "expression": "s.action(\"recovery-enable\", \"Enable autosave\", \"recovery.configure\", workbench.RecoveryConfigureParams{Directory: directory, Enabled: true, Interval: 2})",
+      "expression": "s.action(\"recovery-enable\", \"Enable autosave\", \"recovery.configure.start\", workbench.RecoveryConfigureParams{Directory: directory, Enabled: true, Interval: 2})",
       "public_commands": [
-        "recovery.configure"
+        "recovery.configure.start"
       ],
       "status": "literal-public-route"
     },
     {
       "file": "desktop/recovery.go",
-      "line": 45,
+      "line": 48,
       "function": "*screen.recoveryInspector",
       "kind": "action-factory",
-      "expression": "s.action(\"recovery-toggle\", text, \"recovery.configure\", workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: !recovery.Enabled, Interval: recovery.Interval})",
+      "expression": "s.action(\"recovery-toggle\", text, \"recovery.configure.start\", workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: !recovery.Enabled, Interval: recovery.Interval})",
       "public_commands": [
-        "recovery.configure"
+        "recovery.configure.start"
       ],
       "status": "literal-public-route"
     },
     {
       "file": "desktop/recovery.go",
-      "line": 45,
+      "line": 50,
       "function": "*screen.recoveryInspector",
       "kind": "callback-factory",
-      "expression": "timeField(\"recovery-interval\", \"Autosave interval\", recovery.Interval, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recovery.configure\", timeParams(workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: recovery.Enabled, Interval: recovery.Interval}, \"interval_s\", text), state.CommandRevision)\n})",
+      "expression": "timeField(\"recovery-interval\", \"Autosave interval\", recovery.Interval, busy, func(text string) {\n\ts.invokeAtCommandRevision(\"recovery.configure.start\", timeParams(workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: recovery.Enabled, Interval: recovery.Interval}, \"interval_s\", text), state.CommandRevision)\n})",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/recovery.go",
-      "line": 46,
+      "line": 51,
       "function": "*screen.recoveryInspector",
       "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"recovery.configure\", timeParams(workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: recovery.Enabled, Interval: recovery.Interval}, \"interval_s\", text), state.CommandRevision)",
+      "expression": "s.invokeAtCommandRevision(\"recovery.configure.start\", timeParams(workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: recovery.Enabled, Interval: recovery.Interval}, \"interval_s\", text), state.CommandRevision)",
       "public_commands": [
-        "recovery.configure"
+        "recovery.configure.start"
       ],
       "status": "literal-public-route"
     },
     {
       "file": "desktop/recovery.go",
-      "line": 47,
+      "line": 52,
       "function": "*screen.recoveryInspector",
       "kind": "action-factory",
       "expression": "s.action(\"recovery-checkpoint\", \"Save recovery snapshot now\", \"recovery.work.start\", workbench.RecoveryWorkParams{Kind: \"checkpoint\"})",
@@ -2123,7 +2124,7 @@
     },
     {
       "file": "desktop/recovery.go",
-      "line": 47,
+      "line": 52,
       "function": "*screen.recoveryInspector",
       "kind": "action-factory",
       "expression": "s.action(\"recovery-scan\", \"Refresh recovery list\", \"recovery.work.start\", workbench.RecoveryWorkParams{Kind: \"scan\"})",
@@ -2134,7 +2135,7 @@
     },
     {
       "file": "desktop/recovery.go",
-      "line": 78,
+      "line": 83,
       "function": "*screen.recoveryInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"recovery.select\", workbench.IDParams{ID: id})\n}",
@@ -2142,7 +2143,7 @@
     },
     {
       "file": "desktop/recovery.go",
-      "line": 83,
+      "line": 88,
       "function": "*screen.recoveryInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"recovery.select\", workbench.IDParams{ID: id})",
@@ -2153,7 +2154,7 @@
     },
     {
       "file": "desktop/recovery.go",
-      "line": 87,
+      "line": 92,
       "function": "*screen.recoveryInspector",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.requestReplace(\"recovery.restore\", choice) }",
@@ -2161,7 +2162,7 @@
     },
     {
       "file": "desktop/recovery.go",
-      "line": 87,
+      "line": 92,
       "function": "*screen.recoveryInspector",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(\"recovery.restore\", choice)",
@@ -2172,7 +2173,7 @@
     },
     {
       "file": "desktop/recovery.go",
-      "line": 88,
+      "line": 93,
       "function": "*screen.recoveryInspector",
       "kind": "action-factory",
       "expression": "s.action(\"recovery-dismiss\", \"Dismiss this snapshot\", \"recovery.dismiss\", choice)",
@@ -2183,7 +2184,7 @@
     },
     {
       "file": "desktop/recovery.go",
-      "line": 96,
+      "line": 101,
       "function": "*screen.recoveryInspector",
       "kind": "action-factory",
       "expression": "s.action(\"recovery-dismiss-\"+problem.ID, \"Dismiss damaged snapshot\", \"recovery.dismiss\", workbench.RecoveryChoiceParams{ID: problem.ID, SHA256: problem.SHA256})",
@@ -3396,6 +3397,7 @@
     "recording.view.set",
     "recording.window.set",
     "recovery.configure",
+    "recovery.configure.start",
     "recovery.dismiss",
     "recovery.restore",
     "recovery.select",

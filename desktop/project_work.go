@@ -22,7 +22,7 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 		action = "save"
 	} else if w.Command == "verification.import" || w.Command == "sweep.import" {
 		action = "record import"
-	} else if w.Command == "recovery.scan" || w.Command == "recovery.checkpoint" || w.Command == "recovery.restore" {
+	} else if w.Command == "recovery.configure" || w.Command == "recovery.scan" || w.Command == "recovery.checkpoint" || w.Command == "recovery.restore" {
 		action = "recovery"
 	} else if w.Command == "export.schematic.svg" || w.Command == "export.scope.csv" || w.Command == "verification.export" {
 		action = "export"
@@ -30,6 +30,9 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 	title := "Project " + action
 	if w.ResultGeneration != 0 && w.ResultGeneration != state.Document.Generation || w.ResultGeneration == 0 && w.DocumentGeneration != state.Document.Generation {
 		title = "Previous project " + action
+	}
+	if w.Command == "recovery.configure" {
+		title = "Recovery setup"
 	}
 	text := fmt.Sprintf("%s · %s · %s\n%d bytes prepared", filepath.Base(w.Path), w.Status, w.Phase, w.Bytes)
 	nodes := []ui.Node{section("project-work-title", title), quiet("project-work-status", text)}
@@ -44,7 +47,9 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 		if action == "record import" {
 			explanation = "Validating recorded data. Live simulation stays separate; later viewer choices are preserved."
 		}
-		if action == "recovery" {
+		if w.Command == "recovery.configure" {
+			explanation = "Preparing recovery settings. Existing recovery stays active until ready; drawing and simulation stay available."
+		} else if action == "recovery" {
 			explanation = "Recovery work runs separately from editing. Checkpoint cancellation ends when publication begins. Saved project files are preserved."
 		}
 		if w.Command == "recovery.restore" {

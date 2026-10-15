@@ -102,6 +102,7 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(CircuitDisplay{}), "urn:elab:circuit-display:1"},
 	{reflect.TypeOf(VerificationExportParams{}), "urn:elab:record-export:1"},
 	{reflect.TypeOf(RecordingImportParams{}), "urn:elab:record-import:1"},
+	{reflect.TypeOf(RecoveryConfigureParams{}), "urn:elab:recovery-configure:1"},
 	{reflect.TypeOf(SweepSummary{}), "urn:elab:sweep-summary:1"},
 }
 
@@ -125,6 +126,11 @@ func SchemaRegistry() map[string]json.RawMessage {
 	registry := map[string]json.RawMessage{SnapshotSchemaID: append(json.RawMessage(nil), snapshotDefinition...), VerificationMetadataSchemaID: data, EventPollSchemaID: eventData, TimeInputSchemaID: json.RawMessage(`{"$id":"urn:elab:time:1","type":["number","string"],"maxLength":128,"description":"Seconds as a finite number or decimal/scientific text; bare text is seconds; case-sensitive s/ms/us/µs/μs/ns/ps. Command bounds still apply.","examples":[0.01,"10 ms","250 us"]}`)}
 	for _, common := range commonSchemas {
 		schema := structSchema(common.Type)
+		// This is an input-only type. Preserve unit-text support once in its shared
+		// definition, without widening numeric RecoveryState output fields.
+		if common.Type == reflect.TypeOf(RecoveryConfigureParams{}) {
+			schema = timeInputSchema("recovery.configure", schema)
+		}
 		schema["$id"] = common.ID
 		encoded, _ := json.Marshal(schema)
 		registry[common.ID] = encoded
@@ -205,7 +211,8 @@ func Catalog() []Capability {
 		typedCapability("recording.cursor.set", "Set recorded a/b cursor inside complete recording; nearest sample/right-hand ties, independent of live cursors", reflect.TypeOf(CursorParams{})),
 		typedCapability("recording.cursor.select", "Choose recorded a/b cursor for plot clicks", reflect.TypeOf(CursorSelectParams{})),
 		typedCapability("recording.cursor.clear", "Clear recorded a/b cursor", reflect.TypeOf(CursorSelectParams{})),
-		typedCapability("recovery.configure", "Configure a private local recovery directory, automatic snapshots and 1–60 s interval; saved project files are never overwritten", reflect.TypeOf(RecoveryConfigureParams{})),
+		typedCapability("recovery.configure", "Wait for recovery setup; private local directory, automatic snapshots and 1–60 s interval; existing recovery stays active until ready", reflect.TypeOf(RecoveryConfigureParams{})),
+		typedCapability("recovery.configure.start", "Prepare recovery setup in background; inspect/cancel project_work; preserves current recovery on failure/cancel; no editor-lock filesystem work", reflect.TypeOf(RecoveryConfigureParams{})),
 		typedCapability("recovery.work.start", "Start background scan or checkpoint with shared project job inspection/cancellation; checkpoint publication is irreversible", reflect.TypeOf(RecoveryWorkParams{})),
 		capability("recovery.scan", "Validate and list newest complete snapshots per document, with corrupt-file diagnostics", true, `{"type":"object","additionalProperties":false}`),
 		capability("recovery.checkpoint", "Write a complete recovery snapshot now (or retire owned snapshots when clean); does not save/associate the project", true, `{"type":"object","additionalProperties":false}`),

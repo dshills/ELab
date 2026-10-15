@@ -697,17 +697,22 @@ func nativeVerificationSmoke(ctx context.Context, a *app.Application, s *screen)
 
 func nativeRecoverySmoke(ctx context.Context, a *app.Application, s *screen) error {
 	completed := make(chan error, 1)
-	if err := a.PostWait(ctx, func() {
-		recovery := s.service.Snapshot().Recovery
-		// This fixture chooses a specific manual checkpoint. Stop automatic
-		// captures so a historical LastSnapshot cannot be pruned/replaced
-		// between the selector event and restore control lookup.
-		if recovery.Enabled {
-			if response := s.invoke("recovery.configure", workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: false, Interval: recovery.Interval}); response.Error != nil {
-				completed <- fmt.Errorf("native recovery fixture: %s", response.Error.Message)
-				return
-			}
+	// Configure on the owner, then wait off it before choosing a manual snapshot.
+	if recovery := s.service.Snapshot().Recovery; recovery.Enabled {
+		if err := a.PostWait(ctx, func() {
+			completed <- smokeUI(s, "recovery-toggle", nil)
+		}); err != nil {
+			return err
 		}
+		if err := <-completed; err != nil {
+			return err
+		}
+		if _, err := s.service.Wait(ctx); err != nil {
+			return err
+		}
+	}
+
+	if err := a.PostWait(ctx, func() {
 		before := s.service.Snapshot()
 		if err := smokeUI(s, "recovery-checkpoint", nil); err != nil {
 			completed <- err

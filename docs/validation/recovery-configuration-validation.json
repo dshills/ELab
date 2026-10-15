@@ -1,0 +1,58 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.57.0",
+  "build_version": "72",
+  "binary_sha256": "843e5fa7653c6846289a1e30fe192a15bfbdfff7c9893966b83c0f42844d9b6b",
+  "agent_binary_sha256": "d74b77879b6e863c1dd48ecaec8e8d149befc2c430ee31e516633c8df6a4e05b",
+  "sdk_commit": "eba38f14a96fb7b8e44612dc922a07793d3a5724",
+  "sdk_manifest_sha256": "0908b172d20cf5043cbdc3e54c907d79190e60d29e6a90b98e7b11e271480b67",
+  "prepared_sdk_outputs_verified": 7,
+  "checks": [
+    "Directory/store preparation, scanning and old/staged lease cleanup occur outside editor mutex",
+    "Immediate recovery.configure.start and waiting recovery.configure share project-work observation/cancellation and explicit installation outcome",
+    "Blocked preparation and old-lease cleanup allow editing/stepping; atomic installation precedes noncancelable cleanup",
+    "Cancel/Close preserve previous settings, clean staged lease and join worker lifecycle",
+    "Failure/timeout/nil result preserve previous configuration; overfull directory retains legacy invalid-params error and all preexisting files",
+    "Cleanup warning reports successful installation separately and preserves old capsule",
+    "Same-store reuse preserves cleared selection/newer catalog; editing/New do not invalidate session setup",
+    "Waiting request cancellation and same-key retry preserve one operation and actor identity",
+    "Shared input-only schema retains unit-time grammar and bounds; numeric outputs and ordinary catalog limit preserved",
+    "Native interval/toggle callbacks use immediate admission; UI controls match agent outcomes",
+    "Root/native lint, import formatting, race and vet; non-cgo recovery/discovery suite",
+    "Exact packaged GPU smoke executes native autosave toggle then waits off owner",
+    "Headless/native public workflows preserve exactly equal paused RC state and saved/recovery files",
+    "Existing four adapters pass all three reference circuit workflows; native inventory freshness passes"
+  ],
+  "evidence": [
+    "docs/validation/headless-recovery-configuration.json",
+    "docs/validation/desktop-recovery-configuration.json",
+    "docs/validation/recovery-configuration-conformance.json"
+  ],
+  "quality_log_sha256": "19ca0bf8e71680c0a308639697d99a9fe0faba86cc0b23714eac353f908568e2",
+  "smoke_log_sha256": "5431abf7d749dcbcca3679d807be414e0073ae221e434d38acfdb82be4b7ba80",
+  "inventory": {
+    "sources": 38,
+    "sites": 313,
+    "public_commands": 133,
+    "source_routes": 110,
+    "binding_review_sites": 115
+  },
+  "qualification_repairs": [
+    "Catalog growth was repaired by sharing recovery setup input schemas without removing time-text support or raising budgets",
+    "An old time-input regression assumed inline schemas; it now resolves local input references while retaining grammar/output assertions",
+    "Overfull-directory worker classification preserves the legacy error code"
+  ],
+  "notes": [
+    "SDK eba38f1 adds stored-grid replay tests/docs rather than imported runtime changes; reviewed read-only and consumer requalified",
+    "All newly owned native sessions exited; previous .56/71 app preserved at build/ELab-before-recovery-configuration.app"
+  ],
+  "limits": [
+    "Cooperative preparation deadline does not interrupt OS calls or committed lease cleanup",
+    "Startup convenience helpers may still wait before opening a native window",
+    "Recovery dismiss/inspection and serialized final shutdown remain responsiveness work",
+    "Controlled tests/native callbacks do not establish complete physical keyboard, accessibility or visible-latency qualification",
+    "P0 counts remain 17 implemented / 10 partial; no distribution, physical printing, power-loss or participant-study acceptance inferred",
+    "Private unsigned development app; no solver/model, numerical limits, file formats or transport limits changed"
+  ]
+}

@@ -79,6 +79,13 @@ func addCapabilityDetails(id string, schema map[string]any) {
 	}
 	rules := []inputRelation{}
 	switch id {
+	case "recovery.configure", "recovery.configure.start":
+		rangeSI("interval_s", "s", 1, 60)
+		inputProperty(schema, "directory")["minLength"] = 1
+		inputProperty(schema, "directory")["maxLength"] = 4096
+		inputProperty(schema, "directory")["x-max-utf8-bytes"] = 4096
+		inputProperty(schema, "directory")["description"] = "Nonblank local path without NUL; existing directories must be private (0700) and not symlinks. Relative paths resolve against the process working directory."
+		schema["examples"] = []any{RecoveryConfigureParams{Directory: "/absolute/path/recovery", Enabled: false, Interval: 2}}
 	case "export.schematic.png":
 		p := inputProperty(schema, "dpi")
 		p["anyOf"] = []any{map[string]any{"const": 0}, map[string]any{"minimum": 72, "maximum": 300}}

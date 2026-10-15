@@ -183,11 +183,14 @@ func (store *recoveryStore) finish(capture recoveryCapture, discard, checkpoint 
 	}
 	return err
 }
-func (store *recoveryStore) closeLease() {
+func (store *recoveryStore) closeLease() error {
 	store.mu.Lock()
 	defer store.mu.Unlock()
 	store.closed = true
-	_ = os.Remove(store.leasePath())
+	if err := os.Remove(store.leasePath()); err != nil && !os.IsNotExist(err) {
+		return fileError(err)
+	}
+	return nil
 }
 func (store *recoveryStore) candidatePath(id string) string {
 	return filepath.Join(store.directory, id+".elab-recovery")

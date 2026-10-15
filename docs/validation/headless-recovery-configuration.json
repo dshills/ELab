@@ -1,0 +1,177 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "commands": 133,
+  "live_semantic": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "pulse-source",
+        "name": "Pulse source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-square.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -110
+        },
+        "value": 20000,
+        "unit": "\u03a9",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "C1",
+        "kind": "capacitor",
+        "name": "Capacitor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 1e-06,
+        "unit": "F",
+        "model": "ideal-capacitor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 110
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "C1.1",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "C1.2",
+        "to": "GND.reference",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "GND.reference",
+        "to": "V1.negative",
+        "connected": true
+      }
+    ],
+    "run_id": 4,
+    "electrical_revision": 3,
+    "result": null,
+    "transient": {
+      "engine": "elab.ideal-rc-exact.v1",
+      "run_id": 4,
+      "electrical_revision": 3,
+      "source_id": "V1",
+      "resistor_id": "R1",
+      "capacitor_id": "C1",
+      "output_net": "net:C1.1",
+      "time_constant_s": 0.02,
+      "settings": {
+        "step_s": 0.001,
+        "high_s": 0.05,
+        "low_s": 0.05,
+        "initial_voltage_v": 0,
+        "seconds_per_wall_second": 0.02
+      },
+      "input_mode": "auto",
+      "sample": {
+        "time_s": 0.001,
+        "input_v": 5,
+        "voltage_v": 0.24385287749642995,
+        "current_a": 0.0002378073561251785,
+        "energy_j": 2.9732112931644432e-08
+      },
+      "samples": [
+        {
+          "time_s": 0,
+          "input_v": 5,
+          "voltage_v": 0,
+          "current_a": 0.00025,
+          "energy_j": 0
+        },
+        {
+          "time_s": 0.001,
+          "input_v": 5,
+          "voltage_v": 0.24385287749642995,
+          "current_a": 0.0002378073561251785,
+          "energy_j": 2.9732112931644432e-08
+        }
+      ],
+      "events": [
+        {
+          "time_s": 0,
+          "mode": "restart"
+        }
+      ],
+      "stale": false
+    },
+    "mixed": null,
+    "npn": null,
+    "view": {
+      "center": {
+        "x": -130,
+        "y": 20
+      },
+      "zoom": 0.7
+    }
+  },
+  "checks": [
+    "waiting and immediate setup through shared project work",
+    "admission differs from installed configuration",
+    "unit-time detailed schemas and query purity",
+    "unchanged paused RC graph/physics/history/dirty state",
+    "old lease released; same-store lease reused",
+    "older capsule and explicit saved file preserved",
+    "failed private-directory/overflow setup preserves previous configuration and cleans staged lease",
+    "invalid interval refuses before admission",
+    "explicit cleared selection preserved",
+    "previous recovery directory/capsule can be selected again"
+  ],
+  "limits": [
+    "Blocked filesystem responsiveness, cancellation/cleanup and retry interleavings are covered by controlled core tests",
+    "Dismiss/inspection and serialized shutdown remain separate work; no power-loss or full accessibility claim"
+  ]
+}

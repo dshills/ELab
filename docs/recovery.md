@@ -14,7 +14,7 @@ Public commands (also listed with schemas by `capabilities.list`):
 
 | Command | Parameters / behavior |
 | --- | --- |
-| `recovery.configure` | `directory`, `enabled`, `interval_s` (1–60); directory must be a real private directory (0700) |
+| `recovery.configure` / `recovery.configure.start` | Wait for setup / return immediate admission. `directory`, `enabled`, `interval_s` (1–60 s, unit text accepted); directory must be real/private (0700). Inspect/cancel through shared project-work commands. |
 | `recovery.scan` | Empty object; refresh validated candidates and problems |
 | `recovery.checkpoint` | Empty object; capture now even if automatic snapshots are disabled; clean projects retire owned snapshots |
 | `recovery.select` | `id`; empty string clears selection |
@@ -36,4 +36,17 @@ Pinned-reading presentation edits participate in document dirty state and recove
 
 Save cleanup now runs outside the editor lock. Captures carry a private state-order stamp in addition to admitted command revision, preventing late clean retirement from erasing newer dirty background commits at the same command revision. On-disk recovery format is unchanged. [Captured Save behavior](project-save.md).
 
-Manual Refresh/Checkpoint now use [background recovery work](project-recovery-work.md). Native callbacks return admission; existing agent commands retain waiting behavior. Captured source/capsule identity, cancellation and newer catalog/selection protections are observable through the shared project-job interface. Configuration/restore/dismiss/inspection/shutdown remain separate paths.
+Manual Refresh/Checkpoint now use [background recovery work](project-recovery-work.md). Native callbacks return admission; existing agent commands retain waiting behavior. Captured source/capsule identity, cancellation and newer catalog/selection protections are observable through the shared project-job interface. Configuration now also uses the shared background worker; Restore has its own background path. Dismiss/inspection and serialized shutdown remain separate work.
+
+
+## Background recovery setup
+
+Native enable/disable and interval controls submit `recovery.configure.start`. Directory creation, private lease creation, scanning and old-lease cleanup run outside the editor mutex and native owner callback. `recovery.configure` remains the waiting compatibility command; startup helpers may use it before opening the window. Directory text is nonblank/no NUL and at most 4096 UTF-8 bytes. Both command inputs share a local schema with the time-text grammar; recovery state and saved output remain numeric seconds. Filter `capabilities.list` by either command for bounds/examples.
+
+The shared `project_work` reports queued admission, phases, actor/input identity, cancellation and terminal errors. `recovery_configuration_applied` is initially false and becomes true only after atomic installation. Existing recovery remains active during preparation. Failure, cancellation or Close before installation preserves the previous configuration and cleans only a newly staged lease; a newly created empty directory may remain. A new setup does not delete older recovery capsules or explicit saved files.
+
+On success, a same-directory setup reuses its lease and preserves newer catalog/selection state. A different directory replaces the active recovery store only when validated; the old loop is canceled and its lease is closed outside the editor lock. The `closing-previous-recovery` phase is non-cancelable (`operation-committing`): installation has already happened. A lease-cleanup failure is a `cleanup_warning`, not an undo of installed settings. `recovery_catalog_applied` reports list publication separately from configuration installation. The result reports the document generation present at installation; recovery is session state, so editing or New does not invalidate preparation for the same previous store.
+
+Setup shares the eight file-worker/retained-job bounds and excludes other file operations until completion/cancellation. A waiting request may disconnect while accepted work continues; retrying its original key returns that operation's outcome. Immediate-start retries retain original admission, so inspect the operation for current status. The cooperative 30-second budget applies before installation; OS calls and committed lease cleanup can finish later. Service Close joins setup workers and cleanup. Existing dismiss/inspection and final shutdown filesystem paths remain separate responsiveness work.
+
+The [public setup workflow](../scripts/recovery-configuration-demo.py) runs through stdio or an owned native endpoint. Controlled tests hold setup and old-lease cleanup while edits/steps proceed, and cover staged-lease cancellation/Close, cleanup warnings, retry/disconnect, document replacement and newer catalog preservation. Directory privacy/entry limits, snapshot formats, retention and model validation are unchanged.

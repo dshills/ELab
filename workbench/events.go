@@ -88,7 +88,7 @@ func projectEventTopics(job *projectJob) []string {
 		topics = append(topics, "project")
 	case job.importing != nil:
 		topics = append(topics, "project", "recordings", "sweeps")
-	case job.recoveryWork != nil:
+	case job.recoveryWork != nil || job.recoveryConfigure != nil:
 		topics = append(topics, "recovery")
 	default:
 		topics = append(topics, "project", "editor", "simulation", "diagnostics", "recordings")

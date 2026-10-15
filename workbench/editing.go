@@ -177,7 +177,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		return s.startRecordingImportLocked(p)
 	case "recording.view.set", "recording.seek", "recording.step", "recording.play", "recording.speed.set", "recording.pause", "recording.window.set", "recording.probes.set", "recording.cursor.set", "recording.cursor.select", "recording.cursor.clear":
 		return s.recordingCommandLocked(command, raw)
-	case "recovery.work.start", "recovery.configure", "recovery.scan", "recovery.checkpoint", "recovery.select", "recovery.restore", "recovery.restore.start", "recovery.dismiss":
+	case "recovery.work.start", "recovery.configure", "recovery.configure.start", "recovery.scan", "recovery.checkpoint", "recovery.select", "recovery.restore", "recovery.restore.start", "recovery.dismiss":
 		return s.recoveryCommandLocked(command, raw)
 	case "sweep.import", "sweep.import.start":
 		var p RecordingImportParams

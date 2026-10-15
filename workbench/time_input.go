@@ -59,9 +59,10 @@ var timeCommandFields = map[string][]string{
 	"simulation.verify":         {"duration_s", "sample_step_s"},
 	"scope.cursor.set":          {"time_s"}, "scope.window.set": {"start_s", "end_s"},
 	"recording.seek": {"time_s"}, "recording.cursor.set": {"time_s"},
-	"recording.window.set": {"start_s", "end_s"},
-	"source.pulse.set":     {"waveform.high_s", "waveform.low_s", "waveform.rise_s", "waveform.fall_s"},
-	"recovery.configure":   {"interval_s"},
+	"recording.window.set":     {"start_s", "end_s"},
+	"source.pulse.set":         {"waveform.high_s", "waveform.low_s", "waveform.rise_s", "waveform.fall_s"},
+	"recovery.configure":       {"interval_s"},
+	"recovery.configure.start": {"interval_s"},
 }
 
 func normalizeTimeInput(command string, raw json.RawMessage) (json.RawMessage, error) {

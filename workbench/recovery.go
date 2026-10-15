@@ -22,49 +22,6 @@ func DefaultRecoveryDirectory() (string, error) {
 func (s *Service) recoveryCaptureLocked() recoveryCapture {
 	return recoveryCapture{stateRevision: s.revision, document: s.documentLocked(), generation: s.documentGeneration, commandRevision: s.commandRevision, sourcePath: s.documentPath, dirty: s.dirtyLocked()}
 }
-func (s *Service) configureRecoveryLocked(p RecoveryConfigureParams) error {
-	if !finite(p.Interval) || p.Interval < 1 || p.Interval > 60 {
-		return fmt.Errorf("autosave interval must be 1–60 seconds")
-	}
-	directory, err := documentPath(p.Directory)
-	if err != nil {
-		return err
-	}
-	if s.recoveryStore != nil && s.recoveryStore.directory == directory {
-		if err := s.scanRecoveryLocked(); err != nil {
-			return err
-		}
-		s.recovery.Enabled = p.Enabled
-		s.recovery.Interval = p.Interval
-		return nil
-	}
-	store, err := newRecoveryStore(directory)
-	if err != nil {
-		return err
-	}
-	candidates, problems, err := store.scan()
-	if err != nil {
-		store.closeLease()
-		return err
-	}
-	if s.recoveryCancel != nil {
-		s.recoveryCancel()
-	}
-	if s.recoveryStore != nil {
-		s.recoveryStore.closeLease()
-	}
-	s.recoverySelectionCleared = false
-	s.recoveryStore = store
-	s.recoveryCatalogRevision++
-	s.recovery = RecoveryState{Directory: directory, Enabled: p.Enabled, Interval: p.Interval, Candidates: candidates, Problems: problems}
-	if len(candidates) > 0 {
-		s.recovery.Selected = candidates[0].ID
-	}
-	ctx, cancel := context.WithCancel(context.Background())
-	s.recoveryCancel = cancel
-	go s.recoveryLoop(ctx, store)
-	return nil
-}
 func (s *Service) scanRecoveryLocked() error {
 	if s.recoveryStore == nil {
 		return &actionError{"unavailable", "Configure a recovery directory first"}
@@ -209,12 +166,12 @@ func (s *Service) recoveryCommandLocked(command string, raw json.RawMessage) err
 			return err
 		}
 		return s.startRecoveryWorkLocked(p)
-	case "recovery.configure":
+	case "recovery.configure", "recovery.configure.start":
 		var p RecoveryConfigureParams
 		if err := params(raw, &p, "directory", "enabled", "interval_s"); err != nil {
 			return err
 		}
-		return s.configureRecoveryLocked(p)
+		return s.startRecoveryConfigurationLocked(p)
 	case "recovery.scan":
 		if err := params(raw, &struct{}{}); err != nil {
 			return err
