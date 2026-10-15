@@ -77,7 +77,7 @@ func addScopeCapabilityDetails(id string, schema map[string]any) bool {
 		contract.Completion = &commandCompletionDetail{Mode: "waiting alias for captured background scope-csv export; inspect terminal project_work/artifact outcome", Observe: []string{"project.work.inspect", "project.inspect", "simulation.wait", "events.poll"}, Cancel: "project.work.cancel", CooperativeDeadlineSeconds: 30}
 	}
 	if id == "scope.window.set" || id == "scope.cursor.set" || id == "export.scope.csv" {
-		schema["x-visible-window-roundoff"] = map[string]any{"maximum_fraction_of_span": maxScopeWindowRoundoffFraction, "description": "Visible row membership caps legacy boundary tolerance to this fraction of the window span; it must not borrow nearby outside rows. File-grid validation and requested-time admission retain their prior tolerance."}
+		schema["x-visible-window-roundoff"] = map[string]any{"maximum_fraction_of_span": maxScopeWindowRoundoffFraction, "description": "Visible row membership caps legacy boundary tolerance to this fraction of the window span; it must not borrow nearby outside rows. Requested-time admission retains its prior tolerance; recording-file grid validation separately caps roundoff by required output spacing."}
 	}
 	schema["x-command-contract"] = contract
 	return true

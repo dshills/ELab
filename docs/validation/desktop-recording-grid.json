@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "observations": [
+    {
+      "duration_s": 1e-20,
+      "complete_times_s": [
+        0,
+        1e-20
+      ],
+      "incomplete_times_s": [
+        0
+      ]
+    },
+    {
+      "duration_s": 1e-12,
+      "complete_times_s": [
+        0,
+        1e-12
+      ],
+      "incomplete_times_s": [
+        0
+      ]
+    },
+    {
+      "duration_s": 0.0010000000005,
+      "complete_times_s": [
+        0,
+        0.001,
+        0.0010000000005
+      ],
+      "incomplete_times_s": [
+        0,
+        0.001
+      ]
+    },
+    {
+      "duration_s": 0.0010000000000000002,
+      "complete_times_s": [
+        0,
+        0.001,
+        0.0010000000000000002
+      ],
+      "incomplete_times_s": [
+        0,
+        0.001
+      ]
+    },
+    {
+      "duration_s": 0.002,
+      "complete_times_s": [
+        0,
+        0.001,
+        0.002
+      ],
+      "incomplete_times_s": [
+        0,
+        0.001
+      ]
+    }
+  ],
+  "rounded_endpoint_s": 0.0019999999995,
+  "checks": [
+    "Complete generated tiny/final-partial grids import successfully",
+    "Missing final row refuses despite consistent reduced count/statistics",
+    "One-ULP final partial step remains distinct from preceding sample",
+    "Both standalone recording import and embedded project load use the same validation",
+    "Ordinary rounded timestamps import/re-export unchanged and complete-window controls retain every row",
+    "Failed loads preserve source, viewer, retained operations and file bytes"
+  ],
+  "limits": [
+    "Recorded-file structure/grid validation does not establish physical accuracy",
+    "Ordinary decimal timestamp tolerance is retained subject to local grid spacing",
+    "No interpolation, re-solve, saved format or numerical kernel change"
+  ]
+}

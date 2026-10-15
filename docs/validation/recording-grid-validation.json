@@ -1,0 +1,85 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.77.0",
+  "build_version": "92",
+  "binary_sha256": "09680caaaac6568628be1f001982573fdd9702d3a3efd4be1877a17bde2f7630",
+  "agent_binary_sha256": "76938788287b6738dd6b2b820089904ae5f85ec3d58119c21d7c3ab91b3d8f70",
+  "sdk": {
+    "commit": "5e7c14e3d95370cada1cd372b8d5eeaa5c207c46",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "workbench/recording_import.go": "3febc06124612187f91a627c63d11abbad7936d06c877b9a775478692d05fbad",
+    "workbench/scope_capabilities.go": "3a2bd22cea1b328fe0121552094e1805239d8721533f47131c0bc80226183b01",
+    "workbench/recording_grid_precision_test.go": "dc8eba62155faa94b4984a8abd368539b22735ef64ef6eac3e5fb3e82ad766ce",
+    "workbench/scope_precision_test.go": "798c15f466ec9191e9c4273682f4ca7855b1d569dd8222a3708f89b972f85d0d",
+    "scripts/recording-grid-demo.py": "a94da16bf37e02cc60e4ca5741aa81ed318a66a8406414a7ae5eb8efb5f72ac2"
+  },
+  "checks": [
+    "Failing-before decoder regression accepted a 1 ps capture missing its final row despite consistent reduced count/statistics",
+    "Grid matching caps legacy decimal roundoff by nearest distinct planned output spacing, including final partial steps; no one-row substitution across adjacent targets",
+    "Complete 1e-20 s, 1 ps, 1 ms +0.5 ps, one-ULP-after-1-ms and ordinary 2 ms RC exports import; missing final samples refuse with the exact output-step error",
+    "Standalone recording import and embedded project loads use the same validator; public failures preserve source, transient, document, viewer, retained operations and file bytes",
+    "Ordinary rounded timestamp decodes, imports/re-exports unchanged and complete-window controls retain every row; prior scope fixture strengthened to prove actual file admissibility",
+    "Cross-engine tests qualify successful RC, pulse NPN, flasher and supported rectifier partial-step export/import; existing rectifier integration-floor failure retains captured inputs but publishes no partial/kept record or live/history change",
+    "Final serialized lint/import/root/native race/vet and current-source focused race tests pass",
+    "Exact final packaged GPU/UI/close smoke and all four adapters three LED/RC/NPN workflows pass; native/headless public results match except transport",
+    "Canonical package matches qualified candidate; prior .76/91 preserved; SDK/prepared hashes verified read-only and owned sessions terminal"
+  ],
+  "evidence": [
+    "docs/recording.md",
+    "docs/scope-probes.md",
+    "scripts/recording-grid-demo.py",
+    "docs/validation/headless-recording-grid.json",
+    "docs/validation/desktop-recording-grid.json",
+    "docs/validation/recording-grid-public-parity.json",
+    "docs/validation/recording-grid-conformance.json"
+  ],
+  "logs_sha256": {
+    "recording-grid-before.log": "74848dead6eff2329d8606cd34a90666b8dca7d98bd74035fabc508027ccc95c",
+    "recording-grid-boundaries.log": "0832beb2574faa56cceb7f00897d9091e1ee2ab4c0b4af66604868cbe0442333",
+    "recording-grid-boundary-race-current.log": "fbfc02663342eaadb8b55f0e5b1053acf728e018f83b2ae0bd0b5d776c2fd199",
+    "recording-grid-boundary-race-final.log": "cdb47f97b1499716a66cb845cf545276eb5539cbbce1957e61c11961ba787f37",
+    "recording-grid-boundary-race.log": "527b7719ec27a59fcb3e658f7d24ebc1d73bddff6d011e16401eccb4ab7e29a5",
+    "recording-grid-build-final.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "recording-grid-build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "recording-grid-check-final.log": "3aa11a5ddc90d8d82fe50ac7d36fe3f65e34fac660c8a955610a5455a8e3290e",
+    "recording-grid-check.log": "c7659853ddaa06928e6f3cc618e58e2406d440a4f7bfd4871d8c146bb87266bb",
+    "recording-grid-conformance-final.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "recording-grid-conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "recording-grid-final-host.log": "90307cf1c4016cf284da179e315a24469293c639a656a811d69ef14ec5e4867a",
+    "recording-grid-focused.log": "f9d6645f08c408380d07115dcdbc7346dfea2e2d05287c779165ad8c4a12338f",
+    "recording-grid-headless-final.log": "57a7c5724dafa926d6f946c9a50b0f9edbd1c2512f339cb3a3fdd727053713c8",
+    "recording-grid-headless.log": "57a7c5724dafa926d6f946c9a50b0f9edbd1c2512f339cb3a3fdd727053713c8",
+    "recording-grid-native-demo.log": "e8014cfef4f8ecab1012b6f37282ca27350ed806c05f509246a801befef43423",
+    "recording-grid-native-final.log": "e8014cfef4f8ecab1012b6f37282ca27350ed806c05f509246a801befef43423",
+    "recording-grid-native-host.log": "870d9f6de4ffcd57a871248348418a262e9ca2dfd89a2890b9156989f0c32f55",
+    "recording-grid-smoke-final.log": "0d55eec99265bfd603c6f227772eb89bdda94b34c4ddbfee0d6e87456243bfd1",
+    "recording-grid-smoke.log": "7046cb2d61d20042717e373406f8ade9bfb55106ca8cdc71c3cd17fcbf0f0f0e"
+  },
+  "source_inventory": {
+    "sources": 45,
+    "sites": 357,
+    "public_commands": 154,
+    "source_routes": 124,
+    "binding_review_sites": 130
+  },
+  "notes": [
+    "Initial cross-engine test wrongly required a rectifier one-ULP final step to solve; existing adaptive integrator refuses h below 1e-10 s. Corrected test preserves and qualifies that explicit boundary, plus a supported rectifier partial step",
+    "Initial failure assertion confused captured input metadata with completed sample records; corrected assertion inspects record absence and kept membership",
+    "Prior rounded-endpoint test lowered metadata duration below a row, which actual row validation rejects; strengthened fixture perturbs the final timestamp within duration and actually decodes its export",
+    "Final schema description separates requested-time admission from tightened recording-grid validation; final public workflow checks this discovery text"
+  ],
+  "limits": [
+    "Incomplete formerly accepted files now refuse; this deliberately tightens validation without changing file versions or rewriting stored data",
+    "No device equations, numerical kernels, integration limits, output schedules or public command IDs changed; no re-solve or interpolation of imported data",
+    "Existing rectifier integration floor is explicit and unchanged; tiny-time RC tests do not imply physical-device accuracy or support in every engine",
+    "Complete command/binding, physical input/accessibility/visible latency, clean distribution, participant and physical-printer gates remain open; P0 stays 17 implemented /10 partial; continuing goal active"
+  ]
+}

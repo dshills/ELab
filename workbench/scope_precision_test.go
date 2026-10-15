@@ -90,12 +90,17 @@ func TestFullRecordedViewKeepsLegacyRoundedEndpoint(t *testing.T) {
 	defer s.Close()
 	s.mu.Lock()
 	record := s.operations[p.ID].record
+	record.rows[len(record.rows)-1].Time -= 5e-13
 	actualEnd := record.rows[len(record.rows)-1].Time
-	record.metadata.Duration = actualEnd - 5e-13
+	encoded, err := encodeVerificationExport(record, "json")
 	s.mu.Unlock()
-	// The unchanged file-grid tolerance accepts this legacy endpoint roundoff.
-	if !scopeTimeInside(actualEnd, actualEnd-5e-13, actualEnd-5e-13) {
-		t.Fatal("legacy grid validation tolerance changed")
+	// Qualify an actually importable rounded timestamp, rather than modifying
+	// duration below a row (which the row-order validator correctly refuses).
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := decodeRecording(encoded); err != nil {
+		t.Fatal("ordinary rounded timestamp compatibility changed", err)
 	}
 	view := s.Snapshot().Recording
 	if view.Scope.Window.End != actualEnd || view.WindowSamples != view.Total || len(view.Scope.Traces[0].Points) != view.Total {

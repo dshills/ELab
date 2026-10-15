@@ -119,7 +119,7 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 		}
 		previous = row.Time
 	}
-	if d.Rows[0].Time != 0 || !scopeTimeInside(d.Rows[len(d.Rows)-1].Time, m.Duration, m.Duration) {
+	if d.Rows[0].Time != 0 {
 		return nil, fmt.Errorf("recording does not cover its complete interval")
 	}
 	if IsTransientAnalysis(m.Analysis) {
@@ -128,10 +128,23 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 		index := 0
 		for step := 0; step <= steps; step++ {
 			target := math.Min(m.Duration, float64(step)*m.Settings.StepSeconds)
-			for index < len(d.Rows) && d.Rows[index].Time < target && !scopeTimeInside(d.Rows[index].Time, target, target) {
+			spacing := m.Settings.StepSeconds
+			if step > 0 {
+				previous := math.Min(m.Duration, float64(step-1)*m.Settings.StepSeconds)
+				if target > previous {
+					spacing = math.Min(spacing, target-previous)
+				}
+			}
+			if step < steps {
+				next := math.Min(m.Duration, float64(step+1)*m.Settings.StepSeconds)
+				if next > target {
+					spacing = math.Min(spacing, next-target)
+				}
+			}
+			for index < len(d.Rows) && d.Rows[index].Time < target && !recordingGridTimeMatches(d.Rows[index].Time, target, spacing) {
 				index++
 			}
-			if index == len(d.Rows) || !scopeTimeInside(d.Rows[index].Time, target, target) {
+			if index == len(d.Rows) || !recordingGridTimeMatches(d.Rows[index].Time, target, spacing) {
 				return nil, fmt.Errorf("recording is missing a requested output step")
 			}
 		}
@@ -152,6 +165,17 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	}
 	return &verificationRecord{metadata: cloneVerificationMetadata(m), rows: d.Rows}, nil
 }
+
+// Roundoff must not let one saved row stand in for distinct requested times,
+// including a very short final partial step. Ordinary grids retain the legacy
+// decimal tolerance, capped by the distance to the nearest planned neighbor.
+const maxRecordingGridRoundoffFraction = 1e-9
+
+func recordingGridTimeMatches(at, target, spacing float64) bool {
+	epsilon := math.Min(1e-12*math.Max(1, math.Abs(target)), spacing*maxRecordingGridRoundoffFraction)
+	return math.Abs(at-target) <= epsilon
+}
+
 func recordingNear(a, b float64) bool {
 	return finite(a) && math.Abs(a-b) <= 1e-12*math.Max(1, math.Abs(b))
 }
