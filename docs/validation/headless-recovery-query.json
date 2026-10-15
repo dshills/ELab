@@ -1,0 +1,305 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "captured_graph": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "pulse-source",
+        "name": "Pulse source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-square.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -110
+        },
+        "value": 10000,
+        "unit": "\u03a9",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "C1",
+        "kind": "capacitor",
+        "name": "Capacitor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 1e-06,
+        "unit": "F",
+        "model": "ideal-capacitor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 110
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "C1.1",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "C1.2",
+        "to": "GND.reference",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "GND.reference",
+        "to": "V1.negative",
+        "connected": true
+      }
+    ]
+  },
+  "sample_page": {
+    "rows": [
+      {
+        "time_s": 0.01,
+        "values": [
+          3.1606027941427883,
+          5
+        ]
+      },
+      {
+        "time_s": 0.011,
+        "values": [
+          3.335644581509602,
+          5
+        ]
+      }
+    ],
+    "probes": [
+      {
+        "id": "v:C1.1",
+        "label": "C1.1 / ground",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      }
+    ],
+    "offset": 10,
+    "next_offset": 12,
+    "total": 21
+  },
+  "live_semantic": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "pulse-source",
+        "name": "Pulse source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-square.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -110
+        },
+        "value": 20000,
+        "unit": "\u03a9",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "C1",
+        "kind": "capacitor",
+        "name": "Capacitor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 1e-06,
+        "unit": "F",
+        "model": "ideal-capacitor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 110
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "C1.1",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "C1.2",
+        "to": "GND.reference",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "GND.reference",
+        "to": "V1.negative",
+        "connected": true
+      }
+    ],
+    "run_id": 4,
+    "electrical_revision": 3,
+    "result": null,
+    "transient": {
+      "engine": "elab.ideal-rc-exact.v1",
+      "run_id": 4,
+      "electrical_revision": 3,
+      "source_id": "V1",
+      "resistor_id": "R1",
+      "capacitor_id": "C1",
+      "output_net": "net:C1.1",
+      "time_constant_s": 0.02,
+      "settings": {
+        "step_s": 0.001,
+        "high_s": 0.05,
+        "low_s": 0.05,
+        "initial_voltage_v": 0,
+        "seconds_per_wall_second": 0.02
+      },
+      "input_mode": "auto",
+      "sample": {
+        "time_s": 0.001,
+        "input_v": 5,
+        "voltage_v": 0.24385287749642995,
+        "current_a": 0.0002378073561251785,
+        "energy_j": 2.9732112931644432e-08
+      },
+      "samples": [
+        {
+          "time_s": 0,
+          "input_v": 5,
+          "voltage_v": 0,
+          "current_a": 0.00025,
+          "energy_j": 0
+        },
+        {
+          "time_s": 0.001,
+          "input_v": 5,
+          "voltage_v": 0.24385287749642995,
+          "current_a": 0.0002378073561251785,
+          "energy_j": 2.9732112931644432e-08
+        }
+      ],
+      "events": [
+        {
+          "time_s": 0,
+          "mode": "restart"
+        }
+      ],
+      "stale": false
+    },
+    "mixed": null,
+    "npn": null,
+    "view": {
+      "center": {
+        "x": -130,
+        "y": 20
+      },
+      "zoom": 0.7
+    }
+  },
+  "checks": [
+    "captured directory/hash identified",
+    "inspection contains original graph and exact recorded metadata",
+    "sample rows/units match retained verification, not later live inputs",
+    "successful and rejected reads preserve all public state and revisions",
+    "saved schematic and capsule bytes unchanged"
+  ],
+  "limits": [
+    "Blocked-read edit/step, pool saturation, cancellation/Close and reconfiguration are covered by controlled core tests",
+    "Legacy queries remain request-scoped and pure; explicit observable read-job aliases remain an async-coverage task",
+    "No complete physical-input/accessibility or general latency claim"
+  ]
+}

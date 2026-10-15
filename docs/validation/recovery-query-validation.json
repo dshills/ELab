@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.59.0",
+  "build_version": "74",
+  "binary_sha256": "2635d4fa37240bebb2737044c3759e20cc62285b626f91cb3c18448a405a8ddc",
+  "agent_binary_sha256": "7b833e7029ef667a13cdaa2d17a778651c76747ae851e19daf167e4b4df375d2",
+  "sdk_commit": "dc33d64fd11fcacda7b789f10c81001c5b9cba28",
+  "sdk_manifest_sha256": "40854a9f90bc16df45d1025eb904e2cc0d403e0c6c445faf5798d200eb75d2e6",
+  "prepared_sdk_outputs_verified": 16,
+  "checks": [
+    "Recovery inspection/sample IO, validation, lease checks and response construction execute outside editor mutex",
+    "At most four readers; caller cancellation and cooperative 30-second deadline; Close cancels/joins readers and refuses later reads",
+    "Held reads allow editor edits and simulation steps; reconfiguration preserves captured store/directory identity",
+    "Successful/refused reads preserve public state/revisions and saved/capsule bytes; sample pages retain exact recorded rows and units",
+    "Public headless/native captured graphs, sample pages and paused RC semantics match exactly",
+    "Root/native lint/import/race/vet, portable recovery/discovery suite, exact packaged GPU smoke and four existing circuit adapters pass"
+  ],
+  "evidence": [
+    "workbench/recovery_query_test.go",
+    "scripts/recovery-query-demo.py",
+    "docs/validation/headless-recovery-query.json",
+    "docs/validation/desktop-recovery-query.json",
+    "docs/validation/recovery-query-conformance.json"
+  ],
+  "quality_log_sha256": "9afcc9a0b4b727335fb4b690caf515211ad81b80a05d1023a18a73eb6caf48e4",
+  "smoke_log_sha256": "5431abf7d749dcbcca3679d807be414e0073ae221e434d38acfdb82be4b7ba80",
+  "inventory": {
+    "sources": 38,
+    "sites": 313,
+    "public_commands": 134,
+    "source_routes": 110,
+    "binding_review_sites": 115
+  },
+  "notes": [
+    "SDK delta reuses identical completed accessibility cache only for immutable values, refreshing owner handlers; inspected read-only and consumer requalified",
+    "Manifest and 16 prepared output hashes verified unchanged",
+    "Previous .58/73 preserved at build/ELab-before-recovery-query.app; owned sessions exited"
+  ],
+  "limits": [
+    "Legacy pure queries remain request-scoped without observable job IDs/progress; read-job aliases and serialized final shutdown remain AGENT-04 work",
+    "Cooperative cancellation does not forcibly interrupt filesystem calls",
+    "No new complete physical-input/accessibility, visible-latency, distribution or participant acceptance claim",
+    "Schematic SVG/PDF/PNG and print preview exist; printer discovery/submission and physical-device testing remain open",
+    "P0 counts remain 17 implemented / 10 partial; private unsigned development app"
+  ]
+}

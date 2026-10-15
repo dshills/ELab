@@ -106,19 +106,6 @@ func (s *Service) recoveryLoop(ctx context.Context, store *recoveryStore) {
 		s.mu.Unlock()
 	}
 }
-func (s *Service) recoveryReadLocked(p RecoveryChoiceParams) (recoveryCapsule, Document, string, error) {
-	if s.recoveryStore == nil {
-		return recoveryCapsule{}, Document{}, "", &actionError{"unavailable", "Configure recovery first"}
-	}
-	capsule, document, hash, err := s.recoveryStore.read(p.ID)
-	if err != nil {
-		return capsule, document, hash, &actionError{"invalid-recovery", err.Error()}
-	}
-	if p.SHA256 == "" || hash != p.SHA256 {
-		return capsule, document, hash, &actionError{"file-conflict", "Recovery snapshot changed; scan again before choosing it"}
-	}
-	return capsule, document, hash, nil
-}
 func (s *Service) recoveryCommandLocked(command string, raw json.RawMessage) error {
 	switch command {
 	case "recovery.work.start":
@@ -174,19 +161,6 @@ func (s *Service) recoveryCommandLocked(command string, raw json.RawMessage) err
 	}
 	return fmt.Errorf("unknown recovery command")
 }
-func (s *Service) recoveryInspectionLocked(raw json.RawMessage) (RecoveryInspection, error) {
-	var p RecoveryChoiceParams
-	if err := params(raw, &p, "id", "sha256"); err != nil {
-		return RecoveryInspection{}, err
-	}
-	capsule, document, hash, err := s.recoveryReadLocked(p)
-	if err != nil {
-		return RecoveryInspection{}, err
-	}
-	candidate := RecoveryCandidate{ID: capsule.ID, DocumentKey: capsule.DocumentKey, SavedAt: capsule.SavedAt, SourcePath: capsule.SourcePath, SHA256: hash, CurrentSession: capsule.Session == s.recoveryStore.session, ActiveSession: s.recoveryStore.sessionActive(capsule.Session), Recordings: documentRecordingCount(document), Components: len(document.Graph.Components)}
-	return RecoveryInspection{Candidate: candidate, Document: inspectDocument(document)}, nil
-}
-
 func documentRecordingCount(d Document) int {
 	count := 0
 	if d.Recordings != nil {
@@ -207,19 +181,4 @@ func inspectDocument(d Document) DocumentInspection {
 		}
 	}
 	return out
-}
-func (s *Service) recoverySamplesLocked(raw json.RawMessage) (VerificationPage, error) {
-	var p RecoverySamplesParams
-	if err := params(raw, &p, "id", "sha256", "recording_index"); err != nil {
-		return VerificationPage{}, err
-	}
-	_, document, _, err := s.recoveryReadLocked(RecoveryChoiceParams{ID: p.ID, SHA256: p.SHA256})
-	if err != nil {
-		return VerificationPage{}, err
-	}
-	if document.Recordings == nil || p.Recording < 0 || p.Recording >= len(document.Recordings.Entries) {
-		return VerificationPage{}, fmt.Errorf("choose an embedded recovery recording index")
-	}
-	data := document.Recordings.Entries[p.Recording].Data
-	return recordedSamplePage(p.ID, data.Metadata.Probes, data.Rows, p.Offset, p.Limit)
 }

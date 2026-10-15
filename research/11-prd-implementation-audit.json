@@ -156,7 +156,7 @@
       "id": "AGENT-04",
       "evidence": "Observable Verify, Step, input, file/open/save/export/import and manual recovery scan/checkpoint/Restore, configuration and dismissal jobs; stable inspection/cancellation, captured identity and publication/catalog outcomes",
       "status": "partial",
-      "assessment": "Partial: recovery inspection and some shutdown paths still include synchronous work; event subscriptions and complete job coverage remain open"
+      "assessment": "Partial: recovery inspection/sample queries now execute outside the editor lock but remain pure request-scoped APIs without observable operation IDs; serialized shutdown and complete job coverage remain open"
     },
     {
       "id": "AGENT-05",

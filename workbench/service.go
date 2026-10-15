@@ -105,6 +105,9 @@ type Service struct {
 	projectSave                      projectSaveFunc
 	projectExport                    projectExportFunc
 	projectImport                    projectImportFunc
+	recoveryQueryRead                recoveryRestoreFunc
+	recoveryReadSerial               uint64
+	recoveryReaders                  map[uint64]context.CancelFunc
 	recoveryDismissPrepare           recoveryDismissPrepareFunc
 	recoveryDismissExecute           recoveryDismissExecuteFunc
 	recoveryConfigure                recoveryConfigurationPrepareFunc
@@ -230,6 +233,7 @@ func newGraphService(solver func(context.Context, Circuit) (Result, error), grap
 		projectExport:          prepareProjectExport,
 		projectImport:          prepareRecordingImport,
 		recoveryPrepare:        prepareManualRecovery,
+		recoveryQueryRead:      prepareRecoveryRestore,
 		recoveryDismissPrepare: prepareRecoveryDismiss,
 		recoveryDismissExecute: executeRecoveryDismiss,
 		recoveryConfigure:      prepareRecoveryConfiguration,
@@ -500,6 +504,9 @@ func (s *Service) closeLocked() {
 	if s.closed {
 		return
 	}
+	for _, cancel := range s.recoveryReaders {
+		cancel()
+	}
 	if s.recoveryStore != nil {
 		if err := s.recoveryStore.finish(s.recoveryCaptureLocked(), s.discardRecoveryOnClose, s.recovery.Enabled); err != nil {
 			s.recovery.Error = err.Error()
@@ -693,21 +700,22 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 			return out
 		}
 		if r.Command == "recovery.inspect" || r.Command == "recovery.samples" {
-			var inspection any
-			var err error
-			if r.Command == "recovery.samples" {
-				inspection, err = s.recoverySamplesLocked(r.Params)
-			} else {
-				inspection, err = s.recoveryInspectionLocked(r.Params)
-			}
+			result, err := s.recoveryQueryLocked(ctx, r.Command, r.Params)
+			out.Revision = s.revision
 			if err != nil {
 				var action *actionError
-				if errors.As(err, &action) {
+				switch {
+				case errors.As(err, &action):
 					return fail(action.code, action.message)
+				case errors.Is(err, context.Canceled):
+					return fail("canceled", "Recovery query canceled")
+				case errors.Is(err, context.DeadlineExceeded):
+					return fail("timeout", "Recovery query exceeded its cooperative read budget")
+				default:
+					return fail("invalid-params", err.Error())
 				}
-				return fail("invalid-params", err.Error())
 			}
-			out.Result = inspection
+			out.Result = result
 			return out
 		}
 		if r.Command == "operation.inspect" || r.Command == "operation.samples" {

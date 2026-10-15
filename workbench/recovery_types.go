@@ -66,6 +66,7 @@ type recoveryCapture struct {
 	dirty                       bool
 }
 type RecoveryInspection struct {
+	Directory string             `json:"directory"`
 	Candidate RecoveryCandidate  `json:"candidate"`
 	Document  DocumentInspection `json:"document"`
 }
