@@ -36,7 +36,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.77.0 --build-version 92 --platform darwin
+  --version 0.78.0 --build-version 93 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).

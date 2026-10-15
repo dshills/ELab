@@ -1,0 +1,68 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.78.0",
+  "build_version": "93",
+  "binary_sha256": "4fe2142dfd6ebebf3ec220f0bbcc0a29e50732464e1a81754bbc4b10500a0caf",
+  "agent_binary_sha256": "5d6e019aa454389ef0c86d54f686edadbd675a6b087a9ce3ef0521c249a93749",
+  "sdk": {
+    "commit": "5e7c14e3d95370cada1cd372b8d5eeaa5c207c46",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "workbench/capability_details.go": "0733b3fb9602bab9a62d80057cec09f9d80df01fac22dc98c7d01988109e4516",
+    "workbench/measurement_capabilities.go": "a841504a7940d318bb8c4240fcefea58549d82f33f3d0eeefc18c125685a6e01",
+    "workbench/measurement_capabilities_test.go": "a3d429b460bbb41e6de5b66a15923689eb8d7be1820f843614a326edda4fbd23",
+    "workbench/scope_capabilities_test.go": "0d82a39aa65833b8a33e034eba66907cfec52b1adeb44c5c870deac60094cc7f",
+    "scripts/measurement-contracts-demo.py": "3c04937a167b4dd5d054c49eca7a8786a70cdad9326dcd62dfc88354d2fd9d2e"
+  },
+  "checks": [
+    "Five live inspection/pin commands publish current selector/probe/pin inventories, signed accepted-frame provenance, three reading states, preconditions/effects/errors and immediate completion",
+    "Query omitted/null target reads current focus; explicit empty query reads no target without mutation; empty selection clears focus and returns to editing selection",
+    "Pin details match eight-definition capacity, finite +/-10000 input position bounds, nearest 10-unit snapping with half steps away from zero and exact unsnapped previous-position comparison",
+    "Focused race tests qualify boundary/refusal purity, query/selection distinction, previous-position conflict and same-snapped-position no-op history; existing all-command discovery tests retain caller ownership and original catalog budget",
+    "Public workflow proves ground zero versus missing value, unplotted pins, independent RC charge/discharge equations and signed negative current",
+    "Live pins/inspection remain live during captured replay; paused value edits mark readings stale and deleted sources become unavailable without numeric values",
+    "Missing pins remain movable/removable/undoable and portable through save/load; new current probe without accepted data can be pinned explicitly unavailable",
+    "Native/headless detailed schemas and complete observations match except transport; full serialized lint/import/root/native race/vet and exact packaged GPU/UI/close smoke pass",
+    "All four command adapters pass three LED/RC/NPN workflows; canonical/candidate native bytes match; SDK/prepared hashes verified read-only and owned sessions terminal"
+  ],
+  "evidence": [
+    "docs/capability-details.md#live-inspection-and-pinned-measurement-contracts",
+    "docs/measurement-inspection.md",
+    "docs/pinned-readings.md",
+    "scripts/measurement-contracts-demo.py",
+    "docs/validation/headless-measurement-contracts.json",
+    "docs/validation/desktop-measurement-contracts.json",
+    "docs/validation/measurement-contracts-public-parity.json",
+    "docs/validation/measurement-contracts-conformance.json"
+  ],
+  "logs_sha256": {
+    "measurement-contracts-build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "measurement-contracts-check.log": "db2eb3b8160fb0423e9d2113931cdc4cb66e5367ed68e5b4a61c538af91c366c",
+    "measurement-contracts-conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "measurement-contracts-focused.log": "7009afe259a6799e70430e484080536bc2acea478f6baa8e9375fb367adc34c6",
+    "measurement-contracts-headless.log": "84aacc73b3b4b234388f19abc50c078275565aadca57233c8688e386d4c52a01",
+    "measurement-contracts-native-demo.log": "80d82765f2e733e0022bd1ef2c151a70a53a18fa5056528acede1e211758e596",
+    "measurement-contracts-native-host.log": "93ef1038138288d92d3a7e8f8b318cd51259b0ec074d2a4cb79e41d3268c1835",
+    "measurement-contracts-smoke.log": "b8f7a7e00cf86d49303a4efd31ff82f8af9eb9d102e4e1af409a7636d6d3e449"
+  },
+  "source_inventory": {
+    "sources": 45,
+    "sites": 357,
+    "public_commands": 154,
+    "source_routes": 124,
+    "binding_review_sites": 130
+  },
+  "limits": [
+    "This exposes existing live measurement/pin behavior; no device equations, numerical kernels, saved formats, public command IDs or production native routes changed",
+    "No accepted data is required for source association or pin creation; available does not imply fresh value, and file definitions do not certify stored physics",
+    "Five-family discovery and semantic endpoint parity are not exhaustive all-command/dynamic binding/native physical-input conformance",
+    "Keyboard/focus/IME/accessibility/visible latency, clean distribution, participant and physical-printer gates remain open; P0 remains 17 implemented /10 partial; continuing goal active"
+  ]
+}

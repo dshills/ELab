@@ -1,0 +1,495 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "detailed_schemas": {
+    "measurement.inspect": {
+      "additionalProperties": false,
+      "examples": [
+        {},
+        {
+          "target": {
+            "kind": "terminal",
+            "id": "C1.1"
+          }
+        }
+      ],
+      "properties": {
+        "target": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "description": "Current object ID (component or wire), named terminal ref, canonical net ID or probe ID according to kind. Empty kind requires empty ID.",
+                  "type": "string"
+                },
+                "kind": {
+                  "enum": [
+                    "",
+                    "object",
+                    "terminal",
+                    "net",
+                    "probe"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "id"
+              ],
+              "type": "object",
+              "x-relations": [
+                {
+                  "operator": "empty-kind-requires-empty-id"
+                },
+                {
+                  "operator": "nonempty-kind-requires-current-inventory-id"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Omitted/null inspects current explicit measurement focus or editing selection. A supplied target is resolved for this query only; empty kind/ID explicitly queries no target."
+        }
+      },
+      "required": [],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-measurement-inspection-and-pins",
+        "preconditions": [
+          "A current object, terminal, net or probe exists, or both kind and ID are empty",
+          "No accepted/fresh numerical result is required to inspect a source association"
+        ],
+        "effects": [
+          "Preserves graph, live time/charge, run/electrical revision and editing selection; recorded viewing does not substitute captured values",
+          "Available means the source association exists; inspect each reading's state/reason/value separately",
+          "Net selection follows its captured physical terminal through merge/split/renaming; removal of that anchor reports unavailable until undo/reselection",
+          "Source removal suppresses missing numerical values; paused electrical edits keep previous accepted values explicitly stale",
+          "Preserves document dirty membership and undo/redo history",
+          "Pure owned result; supplied target changes no editor focus, actor or revision. Empty explicit target returns no target rather than falling back to the editing selection"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or invalid command-specific parameter/relationship"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Nonempty selector does not exist in its current kind-specific inventory"
+          }
+        ],
+        "completion": {
+          "mode": "immediate live inspection or presentation update; no solve or file work",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-probe-inventory": "snapshot.scope.available descriptors: stable ID, label, signed positive/reference direction and SI unit; inventory alone does not imply a fresh accepted value",
+      "x-reading-provenance": "Optional value is in descriptor SI units; time_s, run_id and electrical_revision identify the accepted live frame. A valid zero has a value; unavailable has none. Current topology associations and old accepted-frame identity remain distinct.",
+      "x-reading-states": [
+        "live",
+        "stale",
+        "unavailable"
+      ],
+      "x-target-inventories": {
+        "net": "snapshot.nets[].id; canonical terminal anchor is captured at selection",
+        "object": "snapshot.components[].id and snapshot.wires[].id",
+        "probe": "snapshot.scope.available[].id",
+        "terminal": "component ID + '.' + its named terminal"
+      },
+      "x-target-scope": "Live schematic and accepted live/DC frames, including while viewing recorded data; pins are saved definitions, never saved trusted values"
+    },
+    "measurement.select": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "kind": "probe",
+          "id": "i:C1"
+        },
+        {
+          "kind": "",
+          "id": ""
+        }
+      ],
+      "properties": {
+        "id": {
+          "description": "Current object ID (component or wire), named terminal ref, canonical net ID or probe ID according to kind. Empty kind requires empty ID.",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "",
+            "object",
+            "terminal",
+            "net",
+            "probe"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-measurement-inspection-and-pins",
+        "preconditions": [
+          "A current object, terminal, net or probe exists, or both kind and ID are empty",
+          "No accepted/fresh numerical result is required to inspect a source association"
+        ],
+        "effects": [
+          "Preserves graph, live time/charge, run/electrical revision and editing selection; recorded viewing does not substitute captured values",
+          "Available means the source association exists; inspect each reading's state/reason/value separately",
+          "Net selection follows its captured physical terminal through merge/split/renaming; removal of that anchor reports unavailable until undo/reselection",
+          "Source removal suppresses missing numerical values; paused electrical edits keep previous accepted values explicitly stale",
+          "Preserves document dirty membership and undo/redo history",
+          "Sets session-only explicit measurement focus; empty kind/ID clears it and returns inspection to the editing selection",
+          "Ordinary component.select clears explicit measurement focus; project replacement clears it"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or invalid command-specific parameter/relationship"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Nonempty selector does not exist in its current kind-specific inventory"
+          }
+        ],
+        "completion": {
+          "mode": "immediate live inspection or presentation update; no solve or file work",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-probe-inventory": "snapshot.scope.available descriptors: stable ID, label, signed positive/reference direction and SI unit; inventory alone does not imply a fresh accepted value",
+      "x-reading-provenance": "Optional value is in descriptor SI units; time_s, run_id and electrical_revision identify the accepted live frame. A valid zero has a value; unavailable has none. Current topology associations and old accepted-frame identity remain distinct.",
+      "x-reading-states": [
+        "live",
+        "stale",
+        "unavailable"
+      ],
+      "x-relations": [
+        {
+          "operator": "empty-kind-requires-empty-id"
+        },
+        {
+          "operator": "nonempty-kind-requires-current-inventory-id"
+        }
+      ],
+      "x-target-inventories": {
+        "net": "snapshot.nets[].id; canonical terminal anchor is captured at selection",
+        "object": "snapshot.components[].id and snapshot.wires[].id",
+        "probe": "snapshot.scope.available[].id",
+        "terminal": "component ID + '.' + its named terminal"
+      },
+      "x-target-scope": "Live schematic and accepted live/DC frames, including while viewing recorded data; pins are saved definitions, never saved trusted values"
+    },
+    "measurement.pin.add": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "id": "v:C1",
+          "position": {
+            "x": 350,
+            "y": 250
+          }
+        }
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "position": {
+          "additionalProperties": false,
+          "description": "Finite world coordinates inside \u00b110000 before snapping to nearest 10-unit grid; half steps round away from zero. Cards may overlap.",
+          "properties": {
+            "x": {
+              "maximum": 10000,
+              "minimum": -10000,
+              "type": "number"
+            },
+            "y": {
+              "maximum": 10000,
+              "minimum": -10000,
+              "type": "number"
+            }
+          },
+          "required": [
+            "x",
+            "y"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "position"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-measurement-inspection-and-pins",
+        "preconditions": [
+          "ID is in current scope.available and is not already pinned; fewer than eight definitions exist",
+          "No plotted trace or accepted/fresh numerical value is required"
+        ],
+        "effects": [
+          "Preserves graph, live time/charge, run/electrical revision and editing selection; recorded viewing does not substitute captured values",
+          "Undoable saved presentation definitions; changed membership/positions mark preferences_dirty and participate in unsaved-work protection",
+          "Moving an existing pin to the same snapped position creates no history entry or preference change; ordinary successful command/actor revisions may advance",
+          "Cards retain missing-source IDs without inventing voltage/current or reference terminals; missing-source pins remain portable"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or invalid command-specific parameter/relationship"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "ID is already pinned or eight definitions already exist"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Probe ID is absent from current scope.available (after parameter/capacity checks)"
+          }
+        ],
+        "completion": {
+          "mode": "immediate live inspection or presentation update; no solve or file work",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-max-pinned-readings": 8,
+      "x-pin-inventory": "snapshot.pinned_readings[].definition (ID and snapped position), including missing sources",
+      "x-position-snap-grid": 10,
+      "x-probe-inventory": "snapshot.scope.available descriptors: stable ID, label, signed positive/reference direction and SI unit; inventory alone does not imply a fresh accepted value",
+      "x-reading-provenance": "Optional value is in descriptor SI units; time_s, run_id and electrical_revision identify the accepted live frame. A valid zero has a value; unavailable has none. Current topology associations and old accepted-frame identity remain distinct.",
+      "x-reading-states": [
+        "live",
+        "stale",
+        "unavailable"
+      ],
+      "x-target-scope": "Live schematic and accepted live/DC frames, including while viewing recorded data; pins are saved definitions, never saved trusted values"
+    },
+    "measurement.pin.move": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "id": "v:C1",
+          "position": {
+            "x": 400,
+            "y": 300
+          },
+          "previous_position": {
+            "x": 350,
+            "y": 250
+          }
+        }
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "position": {
+          "additionalProperties": false,
+          "description": "Finite world coordinates inside \u00b110000 before snapping to nearest 10-unit grid; half steps round away from zero. Cards may overlap.",
+          "properties": {
+            "x": {
+              "maximum": 10000,
+              "minimum": -10000,
+              "type": "number"
+            },
+            "y": {
+              "maximum": 10000,
+              "minimum": -10000,
+              "type": "number"
+            }
+          },
+          "required": [
+            "x",
+            "y"
+          ],
+          "type": "object"
+        },
+        "previous_position": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y"
+              ],
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Optional/null skips the gesture-position check. A supplied finite complete point must exactly equal the existing snapped position; it is not re-snapped. Normal revision/document guards still apply."
+        }
+      },
+      "required": [
+        "id",
+        "position"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-measurement-inspection-and-pins",
+        "preconditions": [
+          "ID names an existing pin, even if its source is unavailable",
+          "Optional previous_position exactly equals the current definition's position"
+        ],
+        "effects": [
+          "Preserves graph, live time/charge, run/electrical revision and editing selection; recorded viewing does not substitute captured values",
+          "Undoable saved presentation definitions; changed membership/positions mark preferences_dirty and participate in unsaved-work protection",
+          "Moving an existing pin to the same snapped position creates no history entry or preference change; ordinary successful command/actor revisions may advance",
+          "Cards retain missing-source IDs without inventing voltage/current or reference terminals; missing-source pins remain portable"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or invalid command-specific parameter/relationship"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "ID does not name an existing pin"
+          },
+          {
+            "code": "conflict",
+            "phase": "admission",
+            "when": "Supplied previous_position differs from the current snapped pin position"
+          }
+        ],
+        "completion": {
+          "mode": "immediate live inspection or presentation update; no solve or file work",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-max-pinned-readings": 8,
+      "x-pin-inventory": "snapshot.pinned_readings[].definition (ID and snapped position), including missing sources",
+      "x-position-snap-grid": 10,
+      "x-probe-inventory": "snapshot.scope.available descriptors: stable ID, label, signed positive/reference direction and SI unit; inventory alone does not imply a fresh accepted value",
+      "x-reading-provenance": "Optional value is in descriptor SI units; time_s, run_id and electrical_revision identify the accepted live frame. A valid zero has a value; unavailable has none. Current topology associations and old accepted-frame identity remain distinct.",
+      "x-reading-states": [
+        "live",
+        "stale",
+        "unavailable"
+      ],
+      "x-target-scope": "Live schematic and accepted live/DC frames, including while viewing recorded data; pins are saved definitions, never saved trusted values"
+    },
+    "measurement.pin.remove": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "id": "v:C1"
+        }
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "live-measurement-inspection-and-pins",
+        "preconditions": [
+          "ID names an existing pin, including an unavailable source"
+        ],
+        "effects": [
+          "Preserves graph, live time/charge, run/electrical revision and editing selection; recorded viewing does not substitute captured values",
+          "Undoable saved presentation definitions; changed membership/positions mark preferences_dirty and participate in unsaved-work protection",
+          "Moving an existing pin to the same snapped position creates no history entry or preference change; ordinary successful command/actor revisions may advance",
+          "Cards retain missing-source IDs without inventing voltage/current or reference terminals; missing-source pins remain portable"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed input or invalid command-specific parameter/relationship"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "ID does not name an existing pin; repeated removal requires successful-request retry replay rather than a new command"
+          }
+        ],
+        "completion": {
+          "mode": "immediate live inspection or presentation update; no solve or file work",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-max-pinned-readings": 8,
+      "x-pin-inventory": "snapshot.pinned_readings[].definition (ID and snapped position), including missing sources",
+      "x-probe-inventory": "snapshot.scope.available descriptors: stable ID, label, signed positive/reference direction and SI unit; inventory alone does not imply a fresh accepted value",
+      "x-reading-provenance": "Optional value is in descriptor SI units; time_s, run_id and electrical_revision identify the accepted live frame. A valid zero has a value; unavailable has none. Current topology associations and old accepted-frame identity remain distinct.",
+      "x-reading-states": [
+        "live",
+        "stale",
+        "unavailable"
+      ],
+      "x-target-scope": "Live schematic and accepted live/DC frames, including while viewing recorded data; pins are saved definitions, never saved trusted values"
+    }
+  },
+  "observations": {
+    "accepted_ground_v": 0,
+    "charged_v": 3.1606027941427883,
+    "discharged_v": 2.8598316716894003,
+    "discharged_a": -0.00028598316716894006,
+    "maximum_pins": 8,
+    "half_grid_position": {
+      "x": -10,
+      "y": 10
+    },
+    "reopened_missing_pins": 2
+  },
+  "checks": [
+    "Five pure discoverable measurement contracts with current inventories and signed live provenance",
+    "Omitted/null/empty query targets and empty selection have distinct documented behavior",
+    "Unplotted live pins, snapping, boundary/duplicate/capacity refusal and exact previous-position guards",
+    "Same snapped move creates no history; undo/redo restores a whole move without physical changes",
+    "Captured replay does not substitute values for signed live RC voltage/current pins or inspection",
+    "Paused edits mark old accepted values stale; removed sources are unavailable without numeric zeros",
+    "Missing pins remain movable/removable/undoable and portable through save/load",
+    "New current source without accepted data can be pinned explicitly unavailable"
+  ],
+  "limits": [
+    "No new device models, numerical kernels, saved formats or public command IDs",
+    "Semantic/native endpoint behavior is separate from complete keyboard/focus/IME/accessibility/latency qualification"
+  ]
+}

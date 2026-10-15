@@ -80,3 +80,13 @@ Nine live controls now publish state/effect/error/completion contracts and uncha
 ## Scope and CSV controls
 
 Nine live scope/CSV controls now expose dynamic probe inventories, cursor/window state requirements, six-channel bounds, no-data semantics, signed sample measurements and file-work observation/cancellation. Recorded controls remain a distinct command family. See [scope contracts](scope-probes.md#discoverable-control-contracts) and [narrow intervals](scope-probes.md#very-narrow-intervals).
+
+## Live inspection and pinned measurement contracts
+
+Filtered discovery for `measurement.inspect`, `measurement.select` and the three `measurement.pin.*` commands includes `x-command-contract` scope `live-measurement-inspection-and-pins`. It identifies current object/terminal/net/probe inventories, signed SI reading provenance and live/stale/unavailable states. Source `available` is separate from a fresh numerical `value`. These controls always inspect the live schematic, even while the scope replays a captured recording.
+
+The query's omitted/null `target` uses current explicit focus or editing selection; a supplied empty `{kind:"",id:""}` queries no target. The same empty selector sent to the mutation instead clears explicit focus and falls back to editing selection. Nonempty selectors resolve against their current kind-specific inventories. Selecting a net captures its physical terminal anchor; subsequent merges/splits follow that anchor rather than reusing an unrelated old net ID. Queries own their results and change no focus, actor or revision.
+
+Pin details publish eight definitions and world coordinates within ±10000, snapped to the nearest 10-unit grid with half steps away from zero. Input coordinates need not already be on the grid. Adding requires a current unpinned probe and a free slot; it does not require plotting or fresh results. Moving/removing uses saved definition IDs, including missing sources. Optional/null `previous_position` skips only the position check; a supplied complete point must exactly equal the existing snapped position and is not re-snapped. Ordinary revision/document guards still apply.
+
+Pins are saved, undoable presentation definitions; changed positions/membership mark preferences dirty while preserving physics. A move to the same snapped position creates no history entry. Missing-source pins remain portable and explicitly unavailable. `invalid-params` covers malformed values, duplicate additions and full capacity; `not-found` covers missing selector/pin identities, and a stale previous position returns `conflict`. Shared request/retry/history rules and runtime validation remain authoritative. See [inspection](measurement-inspection.md) and [pinned readings](pinned-readings.md).

@@ -87,8 +87,8 @@ func TestScopeMembershipToleranceCannotDwarfWindow(t *testing.T) {
 		}
 	}
 	// Conventional decimal boundaries still tolerate the pre-existing tiny
-	// roundoff; import grid/range validation keeps its original helper unchanged.
+	// roundoff; requested-time admission keeps its original helper unchanged.
 	if !scopeWindowTimeInside(.020000000000000004, .01, .02) || !scopeTimeInside(.02+5e-13, .02, .02) {
-		t.Fatal("ordinary boundary or legacy import policy changed")
+		t.Fatal("ordinary boundary or requested-time admission policy changed")
 	}
 }
