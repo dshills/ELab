@@ -101,7 +101,8 @@ func (s *Service) installRecoveryConfigurationLocked(job *projectJob, result rec
 		s.normalizeRecoverySelectionLocked()
 		ctx, cancel := context.WithCancel(context.Background())
 		s.recoveryCancel = cancel
-		go s.recoveryLoop(ctx, result.store)
+		s.liveWorkers.Add(1)
+		go func() { defer s.liveWorkers.Done(); s.recoveryLoop(ctx, result.store) }()
 	}
 	s.recoveryCatalogRevision++
 	job.work.CatalogApplied = &catalogApplied

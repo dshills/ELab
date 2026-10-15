@@ -118,6 +118,7 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(CircuitDisplay{}), "urn:elab:circuit-display:1"},
 	{reflect.TypeOf(VerificationExportParams{}), "urn:elab:record-export:1"},
 	{reflect.TypeOf(RecordingImportParams{}), "urn:elab:record-import:1"},
+	{reflect.TypeOf(ShutdownWork{}), "urn:elab:shutdown:1"},
 	{reflect.TypeOf(RecoveryReadWork{}), "urn:elab:recovery-read-work:1"},
 	{reflect.TypeOf(RecoveryReadResult{}), "urn:elab:recovery-read-result:1"},
 	{reflect.TypeOf(RecoveryConfigureParams{}), "urn:elab:recovery-configure:1"},
@@ -364,7 +365,10 @@ func Catalog() []Capability {
 		capability("view.pan", "Pan by world-coordinate delta without restarting simulation", true, `{"type":"object","required":["dx","dy"],"properties":{"dx":{"type":"number"},"dy":{"type":"number"}},"additionalProperties":false}`),
 		capability("view.zoom", "Zoom by 0.25–4 around an optional world point; final zoom clamped to 0.01–4", true, `{"type":"object","required":["factor"],"properties":{"factor":{"type":"number","minimum":0.25,"maximum":4},"anchor":{"type":"object","required":["x","y"],"properties":{"x":{"type":"number"},"y":{"type":"number"}},"additionalProperties":false}},"additionalProperties":false}`),
 		typedCapability("view.fit", "Fit component bounds into width_px/height_px (64–100000); defaults 650 × 400", reflect.TypeOf(FitParams{})),
-		typedCapability("app.close", "Close session; unsaved changes require discard_changes", reflect.TypeOf(ReplaceParams{})),
+		typedCapability("app.close", "Admit protected close and wait for cleanup; inspect shutdown outcome", reflect.TypeOf(ReplaceParams{})),
+		typedCapability("app.close.start", "Admit protected irreversible close; background cleanup/join; inspect shutdown", reflect.TypeOf(ReplaceParams{})),
+		queryCapability("app.close.inspect", "Read retained shutdown progress/outcome; no IO", reflect.TypeOf(IDParams{}), reflect.TypeOf(ShutdownWork{})),
+		typedCapability("app.close.acknowledge", "Acknowledge exact failed terminal shutdown and allow process exit; no cleanup retry", reflect.TypeOf(IDParams{})),
 	}
 }
 

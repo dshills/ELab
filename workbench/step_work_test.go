@@ -45,7 +45,7 @@ func TestAsyncStepAllowsEditingSaveAndCancellationWithoutPartialPhysics(t *testi
 }
 
 func TestStepSupersededByRunInputOrProjectReplacement(t *testing.T) {
-	for _, command := range []string{"simulation.restart", "simulation.resume", "simulation.input.set", "switch.set", "component.set", "example.rc", "app.close"} {
+	for _, command := range []string{"simulation.restart", "simulation.resume", "simulation.input.set", "switch.set", "component.set", "example.rc", "app.close.start"} {
 		t.Run(command, func(t *testing.T) {
 			s := newGraphService(SolveLED, switchRCGraph(t, true))
 			defer s.Close()
@@ -62,7 +62,7 @@ func TestStepSupersededByRunInputOrProjectReplacement(t *testing.T) {
 				p = SwitchParams{ID: "S1", Closed: false}
 			case "component.set":
 				p = ValueParams{ID: "R1", Value: "20k"}
-			case "example.rc", "app.close":
+			case "example.rc", "app.close.start":
 				p = ReplaceParams{DiscardChanges: true}
 			}
 			promptLiveCommand(t, s, command, p)

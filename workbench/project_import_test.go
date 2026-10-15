@@ -61,7 +61,7 @@ func TestBlockedImportAllowsEditingAndSteppingThenAddsOnlyCompleteRecord(t *test
 	}
 }
 func TestImportCancellationAndReplacementNeverAttachStagedRecord(t *testing.T) {
-	for _, command := range []string{"project.work.cancel", "project.clear", "app.close"} {
+	for _, command := range []string{"project.work.cancel", "project.clear", "app.close.start"} {
 		t.Run(command, func(t *testing.T) {
 			path := importFixture(t)
 			s := pausedRC(t)
@@ -76,7 +76,7 @@ func TestImportCancellationAndReplacementNeverAttachStagedRecord(t *testing.T) {
 				p = IDParams{ID: admitted.ProjectWork.ID}
 				status = "canceled"
 			}
-			if command == "app.close" {
+			if command == "app.close.start" {
 				status = "canceled"
 			}
 			promptLiveCommand(t, s, command, p)

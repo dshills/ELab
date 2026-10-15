@@ -202,8 +202,11 @@ func TestRecoveryCloseCancelsAndJoinsReadWithoutLateMutation(t *testing.T) {
 	case <-time.After(time.Second):
 		t.Fatal("close did not drain read")
 	}
-	if !reflect.DeepEqual(before, s.Snapshot()) {
-		t.Fatal("late canceled read mutates closed state")
+	after := s.Snapshot()
+	// Shutdown publishes its own progress while the canceled reader drains.
+	before.Revision, before.Shutdown = after.Revision, after.Shutdown
+	if !reflect.DeepEqual(before, after) {
+		t.Fatal("late canceled read mutates closed circuit/catalog state")
 	}
 	refused := awaitRecoveryQuery(t, recoveryQueryRequest(t, s, context.Background(), "recovery.inspect", choice))
 	if refused.Error == nil || refused.Error.Code != "unavailable" {

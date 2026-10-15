@@ -204,7 +204,7 @@ func TestImmediateProjectLoadRetryAndClosePreserveAdmissionOwnership(t *testing.
 		t.Fatal("immediate retry corrupts admission or starts new work")
 	}
 	before := s.Snapshot()
-	closed := promptLiveCommand(t, s, "app.close", ReplaceParams{DiscardChanges: true}).Result.(Snapshot)
+	closed := promptLiveCommand(t, s, "app.close.start", ReplaceParams{DiscardChanges: true}).Result.(Snapshot)
 	if !closed.Closed || closed.ProjectWork.Status != "canceling" {
 		t.Fatal("close does not cancel pending file preparation")
 	}

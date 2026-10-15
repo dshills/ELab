@@ -126,7 +126,7 @@ func TestSweepImportOnBlankAndLaterViewerChoices(t *testing.T) {
 }
 func TestSweepImportCancellationReplacementAndCapacity(t *testing.T) {
 	path, _ := sweepImportFixture(t)
-	for _, command := range []string{"project.work.cancel", "project.clear", "app.close"} {
+	for _, command := range []string{"project.work.cancel", "project.clear", "app.close.start"} {
 		t.Run(command, func(t *testing.T) {
 			s := NewExample()
 			defer s.Close()
@@ -141,7 +141,7 @@ func TestSweepImportCancellationReplacementAndCapacity(t *testing.T) {
 				p = IDParams{ID: admitted.ProjectWork.ID}
 				status = "canceled"
 			}
-			if command == "app.close" {
+			if command == "app.close.start" {
 				status = "canceled"
 			}
 			promptLiveCommand(t, s, command, p)

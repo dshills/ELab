@@ -125,7 +125,7 @@ func TestLiveNetworkDiscardsObsoleteFailureAfterQueuedSwitch(t *testing.T) {
 }
 
 func TestLiveNetworkDiscardsWorkAfterRestartAndClose(t *testing.T) {
-	for _, command := range []string{"simulation.restart", "app.close"} {
+	for _, command := range []string{"simulation.restart", "app.close.start"} {
 		t.Run(command, func(t *testing.T) {
 			s := newGraphService(SolveLED, switchRCGraph(t, true))
 			defer s.Close()
@@ -135,7 +135,7 @@ func TestLiveNetworkDiscardsWorkAfterRestartAndClose(t *testing.T) {
 			call(t, s, "simulation.resume", struct{}{}, "resume")
 			awaitLiveSampleBlock(t, entered)
 			var p any = struct{}{}
-			if command == "app.close" {
+			if command == "app.close.start" {
 				p = ReplaceParams{DiscardChanges: true}
 			}
 			promptLiveCommand(t, s, command, p)
@@ -145,8 +145,11 @@ func TestLiveNetworkDiscardsWorkAfterRestartAndClose(t *testing.T) {
 			before := s.Snapshot()
 			release()
 			s.liveWorkers.Wait()
+			if command == "app.close.start" {
+				s.Close()
+			}
 			after := s.Snapshot()
-			if after.Revision != before.Revision || !reflect.DeepEqual(after.Transient, before.Transient) || !reflect.DeepEqual(after.Diagnostics, before.Diagnostics) {
+			if (command != "app.close.start" && after.Revision != before.Revision) || !reflect.DeepEqual(after.Transient, before.Transient) || !reflect.DeepEqual(after.Diagnostics, before.Diagnostics) {
 				t.Fatal("obsolete worker changed restarted/closed session")
 			}
 		})

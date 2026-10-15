@@ -15,6 +15,7 @@ import (
 )
 
 type Snapshot struct {
+	Shutdown               *ShutdownWork          `json:"shutdown,omitempty"`
 	Printing               *PrintState            `json:"printing,omitempty"`
 	VerificationInputModes []string               `json:"verification_input_modes"`
 	DCSweep                *SweepState            `json:"dc_sweep,omitempty"`
@@ -90,6 +91,7 @@ type savedResponse struct {
 	project     *projectJob
 }
 type Service struct {
+	shutdown                         *shutdownJob
 	printState                       *PrintState
 	printWork                        *printWork
 	printJobs                        []*PrintJob
@@ -292,6 +294,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		analysis = "DC operating point"
 	}
 	out := Snapshot{
+		Shutdown:               s.shutdownViewLocked(),
 		SourceAnnotations:      s.sourceAnnotationsLocked(),
 		Printing:               s.printingStateLocked(),
 		PrintPreview:           s.printPreviewLocked(),
@@ -480,7 +483,9 @@ func (s *Service) startLocked() {
 	ctx, cancel := context.WithCancel(context.Background())
 	s.cancel = cancel
 	c, revision, run := s.circuit, s.electrical, s.run
+	s.liveWorkers.Add(1)
 	go func() {
+		defer s.liveWorkers.Done()
 		result, err := s.solver(ctx, c)
 		if err == nil {
 			result = compiled.Annotate(result)
@@ -513,20 +518,28 @@ func (s *Service) startLocked() {
 func (s *Service) Close() {
 	s.mu.Lock()
 	s.closeLocked()
+	job := s.shutdown
 	s.mu.Unlock()
-	s.liveWorkers.Wait()
+	<-job.done
 }
 func (s *Service) closeLocked() {
 	if s.closed {
 		return
 	}
+	store := s.recoveryStore
+	capture := recoveryCapture{generation: s.documentGeneration}
+	if store != nil && !s.discardRecoveryOnClose && s.recovery.Enabled {
+		capture = s.recoveryCaptureLocked()
+	}
+	job := &shutdownJob{done: make(chan struct{}), work: ShutdownWork{ID: "shutdown-1", Status: "queued", Phase: "queued", Actor: "system", InputRevision: s.revision, CommandRevision: s.commandRevision, DocumentGeneration: s.documentGeneration, DiscardRecovery: s.discardRecoveryOnClose, CheckpointRecovery: s.recovery.Enabled}}
+	if store != nil {
+		job.work.RecoveryDirectory = store.directory
+	}
+	s.shutdown = job
 	for _, cancel := range s.recoveryReaders {
 		cancel()
 	}
 	if s.recoveryStore != nil {
-		if err := s.recoveryStore.finish(s.recoveryCaptureLocked(), s.discardRecoveryOnClose, s.recovery.Enabled); err != nil {
-			s.recovery.Error = err.Error()
-		}
 		if s.recoveryCancel != nil {
 			s.recoveryCancel()
 		}
@@ -572,6 +585,7 @@ func (s *Service) closeLocked() {
 	}
 	s.revision++
 	s.signalLocked("lifecycle", "simulation", "jobs", "recordings", "recovery")
+	go s.runShutdown(job, store, capture)
 }
 func (s *Service) Wait(ctx context.Context) (Snapshot, error) {
 	for {
@@ -601,6 +615,9 @@ func (s *Service) Dispatch(ctx context.Context, r Request, actor string) Respons
 	out := s.dispatch(ctx, r, actor)
 	if r.Command == "simulation.step" {
 		return s.awaitStep(ctx, r, actor, out)
+	}
+	if r.Command == "app.close" {
+		return s.awaitShutdown(ctx, out)
 	}
 	if waitingProjectCommand(r.Command) {
 		return s.awaitProjectWork(ctx, r, actor, out)
@@ -651,6 +668,18 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 		return fail("unknown-command", "enumerate capabilities.list for supported commands")
 	}
 	if !cap.Mutation {
+		if r.Command == "app.close.inspect" {
+			result, err := s.shutdownQueryLocked(r.Params)
+			if err != nil {
+				var action *actionError
+				if errors.As(err, &action) {
+					return fail(action.code, action.message)
+				}
+				return fail("invalid-params", err.Error())
+			}
+			out.Result = result
+			return out
+		}
 		if r.Command == "sweep.inspect" {
 			var p IDParams
 			if err := params(r.Params, &p, "id"); err != nil {
@@ -840,7 +869,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 		out.Duplicate = true
 		return out
 	}
-	if s.closed {
+	if s.closed && r.Command != "app.close.acknowledge" {
 		return fail("closed", "session is closed")
 	}
 	if r.ExpectedDocumentGeneration != nil && *r.ExpectedDocumentGeneration != s.documentGeneration {
@@ -936,6 +965,10 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	if r.Command == "recovery.read.start" && len(s.recoveryReadOrder) > 0 {
 		s.recoveryReadJobs[s.recoveryReadOrder[len(s.recoveryReadOrder)-1]].work.Actor = actor
 	}
+	if (r.Command == "app.close" || r.Command == "app.close.start") && s.shutdown != nil {
+		s.shutdown.work.Actor = actor
+		s.shutdown.work.CommandRevision = s.commandRevision + 1
+	}
 	if r.Command == "simulation.verify" {
 		s.operations[s.lastOperation].summary.Actor = actor
 	}
@@ -983,6 +1016,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	state.Shutdown = cloneShutdown(state.Shutdown)
 	state.SourceAnnotations = cloneSourceAnnotations(state.SourceAnnotations)
 	state.PrintPreview = clonePrintPreview(state.PrintPreview)
 	state.Printing = clonePrintState(state.Printing)

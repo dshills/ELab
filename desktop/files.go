@@ -27,6 +27,8 @@ func (s *screen) requestReplace(id string, p any) {
 	dispatchID := id
 	if id == "recovery.restore" {
 		dispatchID = "recovery.restore.start"
+	} else if id == "app.close" {
+		dispatchID = "app.close.start"
 	}
 	result := s.invoke(dispatchID, json.RawMessage(raw))
 	if result.Error != nil && result.Error.Code == "unsaved-changes" {
@@ -37,6 +39,9 @@ func (s *screen) requestReplace(id string, p any) {
 	s.app.Invalidate("main")
 }
 func (s *screen) beginFile(id string, choose bool, p any, after func()) {
+	if s.service.Snapshot().Closed {
+		return
+	}
 	if s.fileBusy {
 		return
 	}
@@ -224,6 +229,9 @@ func (s *screen) registerFileCommands() {
 	} {
 		entry := entry
 		if err := s.commands.Register(command.Command{ID: entry.id, Label: entry.text, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts, Available: func() error {
+			if s.service.Snapshot().Closed {
+				return fmt.Errorf("session is closing")
+			}
 			if s.fileBusy || s.pendingCommand != "" {
 				return fmt.Errorf("finish the current file operation first")
 			}

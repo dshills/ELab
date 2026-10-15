@@ -62,7 +62,7 @@ func run() error {
 				fmt.Fprintln(os.Stderr, "ELab headless endpoint:", *listen)
 				ticker := time.NewTicker(50 * time.Millisecond)
 				defer ticker.Stop()
-				for !s.Snapshot().Closed && ctx.Err() == nil {
+				for !s.Snapshot().ReadyToExit() && ctx.Err() == nil {
 					select {
 					case <-ctx.Done():
 					case <-ticker.C:

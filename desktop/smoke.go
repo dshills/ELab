@@ -259,6 +259,7 @@ rendered:
 	if err := nativeScopeContextSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeLifecycleSmoke")
 	return nativeLifecycleSmoke(ctx, a, s)
 }
 

@@ -100,7 +100,7 @@ func TestRecoveryConfigurationCancelAndCloseCleanStagedLease(t *testing.T) {
 				t.Fatal("test setup produced no staged lease")
 			}
 			if closeApp {
-				promptLiveCommand(t, s, "app.close", ReplaceParams{DiscardChanges: true})
+				promptLiveCommand(t, s, "app.close.start", ReplaceParams{DiscardChanges: true})
 			} else {
 				promptLiveCommand(t, s, "project.work.cancel", IDParams{ID: admitted.ProjectWork.ID})
 			}

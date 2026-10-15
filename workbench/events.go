@@ -70,7 +70,7 @@ func commandEventTopics(command string, documentChanged bool) []string {
 		topics = append(topics, "preferences")
 	case strings.HasPrefix(command, "parts."):
 		topics = append(topics, "library")
-	case command == "app.close":
+	case strings.HasPrefix(command, "app.close"):
 		topics = append(topics, "lifecycle")
 	}
 	if documentChanged {

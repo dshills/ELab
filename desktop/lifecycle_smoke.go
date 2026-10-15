@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"time"
 
 	"github.com/dshills/vellum/app"
 	"github.com/dshills/vellum/ui"
@@ -53,8 +54,30 @@ func nativeLifecycleSmoke(ctx context.Context, a *app.Application, s *screen) er
 	}
 	select {
 	case err := <-done:
-		return err
+		if err != nil {
+			return err
+		}
 	case <-ctx.Done():
+		if s.service.Snapshot().ReadyToExit() {
+			return nil
+		}
 		return ctx.Err()
+	}
+	for {
+		state := s.service.Snapshot()
+		if state.ReadyToExit() {
+			return nil
+		}
+		if state.Shutdown != nil && state.Shutdown.Status == "failed" {
+			return fmt.Errorf("native shutdown failed: %s / %s", state.Shutdown.RecoveryError, state.Shutdown.AppearanceError)
+		}
+		select {
+		case <-ctx.Done():
+			if s.service.Snapshot().ReadyToExit() {
+				return nil
+			}
+			return ctx.Err()
+		case <-time.After(10 * time.Millisecond):
+		}
 	}
 }

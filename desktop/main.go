@@ -23,6 +23,13 @@ import (
 )
 
 func main() {
+	if err := runNative(); err != nil {
+		log.Print(err)
+		os.Exit(1)
+	}
+}
+
+func runNative() (runErr error) {
 	endpoint := flag.String("agent-endpoint", "", "enable local agent access and write a private descriptor to this new file")
 	recoveryDirectory := flag.String("recovery-directory", "", "private autosave directory (default: user configuration directory)")
 	noRecovery := flag.Bool("no-recovery", false, "skip automatic recovery setup")
@@ -32,17 +39,22 @@ func main() {
 	smokeTimeout := flag.Duration("smoke-timeout", 20*time.Second, "native smoke harness deadline (up to 2 minutes; does not alter solver work limits)")
 	flag.Parse()
 	if *smokeTimeout <= 0 || *smokeTimeout > 2*time.Minute {
-		log.Fatal("smoke-timeout must be positive and at most 2 minutes")
+		return fmt.Errorf("smoke-timeout must be positive and at most 2 minutes")
 	}
 	service := workbench.New()
-	defer service.Close()
+	defer func() {
+		service.Close()
+		if work := service.Snapshot().Shutdown; work != nil && work.Error != nil && !work.ExitReady {
+			runErr = errors.Join(runErr, fmt.Errorf("shutdown cleanup failed: %s / %s", work.RecoveryError, work.AppearanceError))
+		}
+	}()
 	if !*noRecovery {
 		directory := *recoveryDirectory
 		if *smoke && directory == "" {
 			var err error
 			directory, err = os.MkdirTemp("", "elab-smoke-recovery-")
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
 			defer func() { service.Close(); _ = os.RemoveAll(directory) }()
 		}
@@ -55,7 +67,7 @@ func main() {
 		if *smoke && path == "" {
 			directory, err := os.MkdirTemp("", "elab-smoke-appearance-")
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
 			path = filepath.Join(directory, "appearance.json")
 			defer func() { service.Close(); _ = os.RemoveAll(directory) }()
@@ -66,7 +78,7 @@ func main() {
 	}
 	a, err := app.New(app.Config{})
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer a.Close()
 	screen := &screen{app: a, service: service, commands: command.New(), displayStarted: time.Now()}
@@ -86,12 +98,12 @@ func main() {
 	}
 	err = a.Open(app.Window{ID: "main", Title: "ELab · Live electronics", Width: width, Height: height, View: screen.view, CloseRequest: screen.requestClose})
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	if *endpoint != "" {
 		server, err := transport.Listen(service, *endpoint)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		defer server.Close()
 		log.Printf("Local agent endpoint descriptor: %s", *endpoint)
@@ -116,11 +128,11 @@ func main() {
 					}
 				}
 				state := service.Snapshot()
-				if state.Closed {
+				if state.ReadyToExit() {
 					a.Close()
 					return
 				}
-				if state.Display.Animate && time.Since(lastMotion) >= 125*time.Millisecond {
+				if !state.Closed && state.Display.Animate && time.Since(lastMotion) >= 125*time.Millisecond {
 					lastMotion = time.Now()
 					_ = a.Post(func() {
 						if !service.Snapshot().Display.Animate || screen.drawing.widget == nil {
@@ -151,14 +163,15 @@ func main() {
 		go func() { smokeResult <- nativeSmoke(a, screen, renderer, *smokeTimeout); a.Close() }()
 	}
 	if err := a.Run(context.Background(), cogent.Driver{Commands: screen.commands, Theme: desktopTheme()}); err != nil {
-		log.Fatal(err)
+		return err
 	}
 	if *smoke {
 		if err := <-smokeResult; err != nil {
-			log.Fatal(err)
+			return err
 		}
 		fmt.Println(`{"event":"elab.native.smoke","passed":true}`)
 	}
+	return nil
 }
 
 type screen struct {
@@ -245,6 +258,9 @@ func (s *screen) registerCommands() {
 					return fmt.Errorf("finish the current file operation first")
 				}
 				state := s.service.Snapshot()
+				if state.Closed && entry.id != "app.close" {
+					return fmt.Errorf("session is closing")
+				}
 				if entry.id == "example.current.reset" && state.Example == nil {
 					return fmt.Errorf("load an example before resetting it")
 				}

@@ -1,0 +1,69 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.71.0",
+  "build_version": "86",
+  "binary_sha256": "848247e60ab263c71ff0597ba0964ea438cc7258c654b598e42e6ce0124f865c",
+  "agent_binary_sha256": "114aa5d35b5ee3cdf9f4c1198da7c78ff61c1f34c0abda1cd81a4b1ef2b637d7",
+  "sdk_commit": "dbf273459b8a62e7ecf12d5029123f9a568a96d7",
+  "sdk_manifest_sha256": "1030a5f8d640b04fa24966157b93ed82ecfd728dabe1711d1507e85e5ba54b37",
+  "prepared_sdk_outputs_verified": 26,
+  "checks": [
+    "Regression on the previous implementation reproduces a held recovery store mutex blocking editor snapshots during Close; finalization now runs outside editor mutex",
+    "Protected app.close.start returns immediate admission; app.close waits for same job; exact pure app.close.inspect metadata and explicit app.close.acknowledge for failed terminal work",
+    "Closed freezes mutations while job reports captured directory/generation/input/command revision/actor, phases, cancellation boundary, recovery finalization, actual worker joining and exit readiness",
+    "Canceled computation/preparation/read/playback work is joined, including previously untracked DC solver, Verify, recovery loop and recording clock launchers; pending appearance gets existing final flush",
+    "Irreversible admission survives wait disconnect; waiting retry joins original job; immediate retry owns original admission; errors and pointer data are cloned",
+    "Recovery cleanup failure retains failed status and separate cause, keeps automatic native/headless-socket exit pending, and accepts exact acknowledgement without retry or unexpected-path removal",
+    "Native Save/Discard/Cancel/generation protection remains; Close uses start, hides editing, prevents new file pickers, displays failures and shares button/window acknowledgement; normal teardown waits for readiness",
+    "Native error returns now pass through defers in resource-owning runNative; outer main logs/exits only afterward; unexpected OS/platform teardown remains separately unqualified",
+    "Stdio pipe test proves failure stays inspectable until acknowledgement reply; public success/failure reports match native/headless except transport with saved/current-source/physics/history and other-document snapshot preservation",
+    "Full serialized lint/import/root/native race/vet, portable close/discovery, exact packaged GPU/protected-close smoke and all four existing circuit adapters pass; updated SDK gets another full suite and packaged smoke"
+  ],
+  "evidence": [
+    "docs/shutdown.md",
+    "workbench/shutdown_test.go",
+    "desktop/shutdown_test.go",
+    "transport/shutdown_test.go",
+    "desktop/lifecycle_smoke.go",
+    "scripts/shutdown-demo.py",
+    "docs/validation/headless-shutdown-success.json",
+    "docs/validation/desktop-shutdown-success.json",
+    "docs/validation/headless-shutdown-failure.json",
+    "docs/validation/desktop-shutdown-failure.json",
+    "docs/validation/shutdown-public-parity.json",
+    "docs/validation/shutdown-conformance.json"
+  ],
+  "logs": {
+    "mutex_regression_before": "15cd82381d42228ab1cf60aeffd975af0404e7dad68309be5ee526b229e2d427",
+    "held_io_worker_wait_and_stdio_race": "4217fe3f9ac97cc2101e5b9da3e70c1b7adc79e213e30f1b17d218509275cbda",
+    "full_quality": "2ea6f612c99ae32be055df9af067e60760659f25877123eae7eb8c994e132bd9",
+    "sdk_full_quality": "9be71d190f0dbe489f8d8aca13ebbe2dc5d73d753b4a5551b92bcadfa13260c0",
+    "portable": "35feacd2f174f375b4e7faf08d546c11ae196fce1c0f4bab9147e40eb5d57361",
+    "packaged_gpu_close": "f44c79dd4359329a29f1a6cd479b47fab98bf66bcf5036feb7240e105e8a91c7",
+    "sdk_packaged_gpu_close": "eca568f31eaa572a8e355f07c48fed5b89a565bba055b5e162be848d2d82ef74",
+    "native_failure_policy_focus": "72c3eef1625a85b05c5e1af281e3151cafb24eea5daa14aace9d41df2fa3fdc1"
+  },
+  "inventory": {
+    "sources": 45,
+    "sites": 351,
+    "public_commands": 152,
+    "source_routes": 122,
+    "binding_review_sites": 129
+  },
+  "notes": [
+    "Prior immediate-cancellation fixtures now use app.close.start; global revision assertions allow explicit shutdown progress while retaining source/physics/diagnostic guards",
+    "Worker group accounting lives at the Verify launch boundary so direct deterministic worker unit calls do not consume an unregistered worker count",
+    "Normal automatic teardown uses exit_ready; waiting response can contain a failed outcome. Immediate success may end host before later inspection; EOF/process signals remain caller-owned host termination",
+    "Vellum update discovered at final check adds named Canvas2D objects/accessibility routing. Reviewed read-only; ELab retains its custom mesh canvas and makes no new complete canvas-accessibility claim",
+    "Clean rebuild at SDK dbf2734 is byte-identical to the already qualified candidate/build/canonical binary, so earlier public and four-adapter evidence applies to the exact bytes; new SDK full suite/GPU smoke also pass",
+    "Manifest/26 prepared outputs verified read-only, sibling clean; prior .70/85 preserved at build/ELab-before-shutdown.app; all owned native/smoke/conformance sessions exited"
+  ],
+  "limits": [
+    "No cancellation after admitted close; held OS calls or uncooperative workers can keep a phase waiting until actual return",
+    "Joining is domain resource readiness, not proof of complete window/process/OS callback teardown, physical input/display/focus/IME/accessibility or visible latency",
+    "Already committed file/spool operations keep their own outcomes; shutdown completion does not certify successful computation/printing for every earlier job",
+    "Complete job/binding coverage, broader performance/distribution/participant and physical-printer qualification remain open",
+    "P0 remains 17 implemented /10 partial; private unsigned development app; continuing goal stays active"
+  ]
+}

@@ -181,6 +181,8 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		return s.startRecordingImportLocked(p)
 	case "recording.view.set", "recording.seek", "recording.step", "recording.play", "recording.speed.set", "recording.pause", "recording.window.set", "recording.probes.set", "recording.cursor.set", "recording.cursor.select", "recording.cursor.clear":
 		return s.recordingCommandLocked(command, raw)
+	case "app.close.acknowledge":
+		return s.acknowledgeShutdownLocked(raw)
 	case "recovery.read.start":
 		return s.startRecoveryReadLocked(raw)
 	case "recovery.read.cancel":
@@ -881,7 +883,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		s.view = View{center, zoom}
 		return nil
 	}
-	if command != "project.clear" && command != "example.reset" && command != "example.rc" && command != "example.npn" && command != "example.npn-pulse" && command != "example.flasher" && command != "example.switch-npn" && command != "example.rectifier" && command != "app.close" && command != "edit.undo" && command != "edit.redo" {
+	if command != "project.clear" && command != "example.reset" && command != "example.rc" && command != "example.npn" && command != "example.npn-pulse" && command != "example.flasher" && command != "example.switch-npn" && command != "example.rectifier" && command != "app.close" && command != "app.close.start" && command != "edit.undo" && command != "edit.redo" {
 		if err := params(raw, &struct{}{}); err != nil {
 			return err
 		}
@@ -984,7 +986,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	case "drawing.cancel":
 		s.drawing.Tool = "select"
 		s.drawing.WireStart = ""
-	case "app.close":
+	case "app.close", "app.close.start":
 		var p ReplaceParams
 		if err := params(raw, &p); err != nil {
 			return err

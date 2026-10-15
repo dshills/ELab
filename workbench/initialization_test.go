@@ -64,7 +64,7 @@ func TestBlockedInitializationAllowsNavigationSaveAndPause(t *testing.T) {
 }
 
 func TestInitializationSupersededByUndoNewSourceAndClose(t *testing.T) {
-	for _, command := range []string{"edit.undo", "component.set", "app.close"} {
+	for _, command := range []string{"edit.undo", "component.set", "app.close.start"} {
 		t.Run(command, func(t *testing.T) {
 			s := New()
 			defer s.Close()
@@ -76,7 +76,7 @@ func TestInitializationSupersededByUndoNewSourceAndClose(t *testing.T) {
 			if command == "component.set" {
 				p = ValueParams{ID: "V1", Value: "3V"}
 			}
-			if command == "app.close" {
+			if command == "app.close.start" {
 				p = ReplaceParams{DiscardChanges: true}
 			}
 			promptLiveCommand(t, s, command, p)
@@ -87,8 +87,11 @@ func TestInitializationSupersededByUndoNewSourceAndClose(t *testing.T) {
 			before := s.Snapshot()
 			release()
 			s.liveWorkers.Wait()
+			if command == "app.close.start" {
+				s.Close()
+			}
 			after := s.Snapshot()
-			if before.Revision != after.Revision || !reflect.DeepEqual(before.Components, after.Components) || !reflect.DeepEqual(before.Diagnostics, after.Diagnostics) || !reflect.DeepEqual(before.Mixed, after.Mixed) {
+			if (command != "app.close.start" && before.Revision != after.Revision) || !reflect.DeepEqual(before.Components, after.Components) || !reflect.DeepEqual(before.Diagnostics, after.Diagnostics) || !reflect.DeepEqual(before.Mixed, after.Mixed) {
 				t.Fatal("obsolete initializer replaced current run or failure")
 			}
 		})

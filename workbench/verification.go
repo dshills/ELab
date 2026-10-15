@@ -187,7 +187,8 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 	metadata.Engine = verificationEngineID(compiled.Analysis)
 	operation.inputMetadata = cloneVerificationMetadata(metadata)
 	input := verificationInput{compiled: compiled, settings: cfg, mode: settings.InputMode, probes: probes, duration: settings.Duration, steps: steps, serial: s.operationSerial, metadata: metadata}
-	go s.runVerification(operation, input)
+	s.liveWorkers.Add(1)
+	go func() { defer s.liveWorkers.Done(); s.runVerification(operation, input) }()
 	return nil
 }
 

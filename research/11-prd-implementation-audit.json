@@ -154,9 +154,9 @@
     },
     {
       "id": "AGENT-04",
-      "evidence": "Observable local print preparation/discovery/spool control, Verify, Step, input, file/open/save/export/import and manual recovery scan/checkpoint/Restore, configuration, dismissal and captured inspection/sample read jobs; stable inspection/cancellation, captured identity and publication/catalog outcomes",
+      "evidence": "Observable local print preparation/discovery/spool control, Verify, Step, input, file/open/save/export/import and manual recovery scan/checkpoint/Restore, configuration, dismissal, captured inspection/sample reads and protected shutdown jobs; stable inspection/cancellation, captured identity and publication/catalog outcomes",
       "status": "partial",
-      "assessment": "Partial: observable captured recovery read jobs provide progress/cancel/results independently of project work, preserving pure compatibility queries; serialized shutdown and complete job coverage remain open"
+      "assessment": "Partial: observable recovery/shutdown jobs now include progress, actual joining, failure acknowledgement and preserved compatibility queries; complete job/binding coverage and platform teardown qualification remain open"
     },
     {
       "id": "AGENT-05",

@@ -70,6 +70,14 @@ func (s *screen) view() ui.Node {
 	defer func() { s.actionContext = previousContext }()
 	colors := paletteForTheme(state.Theme)
 	s.nativePalette.Store(&colors)
+	if state.Closed {
+		s.drawing.pointer.invalidateFrame()
+		s.drawing.pointer.setEnabled(false)
+		s.nativePointerPane = ""
+		root := s.shutdownView(state)
+		applyPalette(&root, colors)
+		return root
+	}
 	if s.requestHelp != nil && state.CommandRevision != s.requestHelpRevision {
 		s.requestHelp = nil
 		s.errorMessage = ""

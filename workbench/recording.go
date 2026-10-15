@@ -203,7 +203,9 @@ func (s *Service) startRecordingClockLocked() {
 	}
 	ctx, cancel := context.WithCancel(context.Background())
 	s.recording.cancel = cancel
+	s.liveWorkers.Add(1)
 	go func() {
+		defer s.liveWorkers.Done()
 		ticker := time.NewTicker(33 * time.Millisecond)
 		defer ticker.Stop()
 		for {

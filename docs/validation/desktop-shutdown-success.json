@@ -1,0 +1,348 @@
+{
+  "passed": true,
+  "scenario": "success",
+  "transport": "native-socket",
+  "detailed_schemas": {
+    "app.close": {
+      "additionalProperties": false,
+      "properties": {
+        "discard_changes": {
+          "type": "boolean"
+        },
+        "expected_document_generation": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [],
+      "type": "object",
+      "x-cancellation": "No cancellation after admission; blocked OS calls/cooperatively canceled workers may continue; joining waits for actual return",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "session-shutdown",
+        "preconditions": [
+          "Normal revision/retry/document-generation guards; dirty work requires discard_changes true or a completed Save",
+          "Session has not already admitted shutdown, except a retry with the same original key"
+        ],
+        "effects": [
+          "Closed immediately freezes semantic mutations; it does not mean resources have finished closing",
+          "Recovery serialization/finalization and worker joining run outside the editor mutex; queries/progress remain available while the process exists",
+          "Shutdown is irreversible after admission: cancel at the unsaved-work decision beforehand; cancelable is false",
+          "Completed shutdown sets exit_ready; failed cleanup/preference persistence stays failed with exit_ready false until explicit acknowledgement; no automatic cleanup retry",
+          "Captures current document/directory and discard/checkpoint policy; cancels admitted computation/preparation/read/playback work and prevents late result publication",
+          "Discard retires only current document's owned recovery copies; internal Close checkpoints dirty work only when recovery enabled; other documents and explicit saved files remain intact",
+          "Accepted close survives caller disconnect; waiting retry joins the same retained job; host teardown waits for exit_ready"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed parameters"
+          },
+          {
+            "code": "unsaved-changes",
+            "phase": "admission",
+            "when": "Dirty project protected"
+          },
+          {
+            "code": "conflict",
+            "phase": "admission",
+            "when": "Document/revision guard changed"
+          },
+          {
+            "code": "closed",
+            "phase": "admission",
+            "when": "Another close already admitted"
+          },
+          {
+            "code": "shutdown-failed",
+            "phase": "work",
+            "when": "Recovery or appearance flush failed; outcome contains separate errors"
+          },
+          {
+            "code": "canceled",
+            "phase": "wait",
+            "when": "Caller stopped waiting; admitted job continues"
+          }
+        ],
+        "completion": {
+          "mode": "wait for same finalization/join; successful response can contain a failed shutdown outcome",
+          "observe": [
+            "app.close.inspect",
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-inventory": "snapshot.shutdown; one retained process-local job, exact id required for inspect/acknowledge"
+    },
+    "app.close.start": {
+      "additionalProperties": false,
+      "properties": {
+        "discard_changes": {
+          "type": "boolean"
+        },
+        "expected_document_generation": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [],
+      "type": "object",
+      "x-cancellation": "No cancellation after admission; blocked OS calls/cooperatively canceled workers may continue; joining waits for actual return",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "session-shutdown",
+        "preconditions": [
+          "Normal revision/retry/document-generation guards; dirty work requires discard_changes true or a completed Save",
+          "Session has not already admitted shutdown, except a retry with the same original key"
+        ],
+        "effects": [
+          "Closed immediately freezes semantic mutations; it does not mean resources have finished closing",
+          "Recovery serialization/finalization and worker joining run outside the editor mutex; queries/progress remain available while the process exists",
+          "Shutdown is irreversible after admission: cancel at the unsaved-work decision beforehand; cancelable is false",
+          "Completed shutdown sets exit_ready; failed cleanup/preference persistence stays failed with exit_ready false until explicit acknowledgement; no automatic cleanup retry",
+          "Captures current document/directory and discard/checkpoint policy; cancels admitted computation/preparation/read/playback work and prevents late result publication",
+          "Discard retires only current document's owned recovery copies; internal Close checkpoints dirty work only when recovery enabled; other documents and explicit saved files remain intact",
+          "Accepted close survives caller disconnect; waiting retry joins the same retained job; host teardown waits for exit_ready"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed parameters"
+          },
+          {
+            "code": "unsaved-changes",
+            "phase": "admission",
+            "when": "Dirty project protected"
+          },
+          {
+            "code": "conflict",
+            "phase": "admission",
+            "when": "Document/revision guard changed"
+          },
+          {
+            "code": "closed",
+            "phase": "admission",
+            "when": "Another close already admitted"
+          },
+          {
+            "code": "shutdown-failed",
+            "phase": "work",
+            "when": "Recovery or appearance flush failed; outcome contains separate errors"
+          }
+        ],
+        "completion": {
+          "mode": "immediate admission; inspect snapshot.shutdown until terminal",
+          "observe": [
+            "app.close.inspect",
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-inventory": "snapshot.shutdown; one retained process-local job, exact id required for inspect/acknowledge"
+    },
+    "app.close.inspect": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-cancellation": "No cancellation after admission; blocked OS calls/cooperatively canceled workers may continue; joining waits for actual return",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "session-shutdown",
+        "preconditions": null,
+        "effects": [
+          "Closed immediately freezes semantic mutations; it does not mean resources have finished closing",
+          "Recovery serialization/finalization and worker joining run outside the editor mutex; queries/progress remain available while the process exists",
+          "Shutdown is irreversible after admission: cancel at the unsaved-work decision beforehand; cancelable is false",
+          "Completed shutdown sets exit_ready; failed cleanup/preference persistence stays failed with exit_ready false until explicit acknowledgement; no automatic cleanup retry"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed parameters"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Unknown shutdown job"
+          }
+        ],
+        "completion": {
+          "mode": "immediate pure owned metadata; no IO or revision change",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-inventory": "snapshot.shutdown; one retained process-local job, exact id required for inspect/acknowledge"
+    },
+    "app.close.acknowledge": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-cancellation": "No cancellation after admission; blocked OS calls/cooperatively canceled workers may continue; joining waits for actual return",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "session-shutdown",
+        "preconditions": [
+          "Exact failed terminal shutdown ID; normal mutation revision/key guards even though session is closed"
+        ],
+        "effects": [
+          "Closed immediately freezes semantic mutations; it does not mean resources have finished closing",
+          "Recovery serialization/finalization and worker joining run outside the editor mutex; queries/progress remain available while the process exists",
+          "Shutdown is irreversible after admission: cancel at the unsaved-work decision beforehand; cancelable is false",
+          "Completed shutdown sets exit_ready; failed cleanup/preference persistence stays failed with exit_ready false until explicit acknowledgement; no automatic cleanup retry"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed parameters"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Unknown shutdown job"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Shutdown active or completed successfully"
+          }
+        ],
+        "completion": {
+          "mode": "immediate exit_ready acknowledgement; failed status/errors retained",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-inventory": "snapshot.shutdown; one retained process-local job, exact id required for inspect/acknowledge"
+    }
+  },
+  "captured_components": [
+    {
+      "id": "V1",
+      "kind": "pulse-source",
+      "name": "Pulse source",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "position": {
+        "x": -200,
+        "y": 0
+      },
+      "value": 5,
+      "unit": "V",
+      "model": "ideal-square.v1",
+      "rotation": 0
+    },
+    {
+      "id": "R1",
+      "kind": "resistor",
+      "name": "Resistor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "position": {
+        "x": 0,
+        "y": -110
+      },
+      "value": 30000,
+      "unit": "\u03a9",
+      "model": "ideal-resistor.v1",
+      "rotation": 0
+    },
+    {
+      "id": "C1",
+      "kind": "capacitor",
+      "name": "Capacitor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "position": {
+        "x": 200,
+        "y": 0
+      },
+      "value": 1e-06,
+      "unit": "F",
+      "model": "ideal-capacitor.v1",
+      "rotation": 0
+    },
+    {
+      "id": "GND",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "position": {
+        "x": 0,
+        "y": 110
+      },
+      "value": 0,
+      "model": "ground.v1",
+      "rotation": 0
+    }
+  ],
+  "outcome": {
+    "status": "completed",
+    "phase": "completed",
+    "discard_recovery": true,
+    "checkpoint_recovery": false,
+    "cancelable": false,
+    "recovery_finalized": true,
+    "workers_joined": true,
+    "exit_ready": true
+  },
+  "error_code": null,
+  "acknowledgement_exit_ready": true,
+  "checks": [
+    "Dirty/default and stale document guard refuse without mutation",
+    "Stable shutdown identity, captured input/actor and explicit admission/outcome",
+    "Current recovery discarded; other-document snapshot and explicit saved bytes retained",
+    "Closed source/history/physics preserved",
+    "Success waits for finalization and joins; failure remains inspectable until exact acknowledgement"
+  ],
+  "limits": [
+    "Controlled tests qualify held recovery serialization, blocked DC worker, wait disconnect/retry and owner responsiveness",
+    "Domain exit readiness precedes platform window/process teardown; no full OS/display/physical-input qualification"
+  ]
+}

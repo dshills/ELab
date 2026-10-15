@@ -246,3 +246,10 @@ macOS menu and selector presentation uses AppKit while retaining original shared
 `capabilities.list` accepts an optional `command` filter for one expanded input schema. Five electrical/example commands additionally advertise bounds, normalized-SI relations and runnable parameter examples; {} retains full discovery. [Detailed discovery contract](capability-details.md). Stateful/error/native-action coverage remains incomplete.
 
 Mutations also accept optional top-level `expected_document_generation` from the observed snapshot; it supplements the required revision guard and is checked atomically. Successful retry lookup still precedes all guard checks. [Document context and rendered actions](document-context-guard.md).
+
+
+### Observable protected shutdown
+
+`app.close.start` admits the same protected close as `app.close`, returning immediately with `snapshot.shutdown`. The native Close action uses start; `app.close` waits for the job's final outcome. Normal dirty/default, revision/key and document-generation guards apply. `closed:true` freezes mutations immediately; it does not mean resource cleanup has finished. `shutdown.exit_ready` distinguishes that state.
+
+`app.close.inspect {id}` returns owned retained progress/error/outcome without IO. Cleanup failure remains failed and holds automatic native/headless-socket exit; `app.close.acknowledge {id}` is the only mutation allowed after close, accepts an exact failed job, preserves its error and sets exit readiness. Use the waiting command when a final outcome response is needed: successful immediate shutdown may exit the host before a later query. Caller disconnect stops only the wait; a retry of the original waiting key joins the same job. No cancellation is possible after admission. See [shutdown contract](shutdown.md).

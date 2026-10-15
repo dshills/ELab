@@ -65,6 +65,9 @@ type inputRelation struct {
 }
 
 func addCapabilityDetails(id string, schema map[string]any) {
+	if addShutdownDetails(id, schema) {
+		return
+	}
 	if addRecoveryReadDetails(id, schema) {
 		return
 	}
