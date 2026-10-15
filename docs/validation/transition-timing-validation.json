@@ -1,0 +1,93 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.73.0",
+  "build_version": "88",
+  "binary_sha256": "5d6944a8d53f357f269d896c71a2bcc17e9f5d40b355ca8a70e84d8310f49834",
+  "agent_binary_sha256": "d1f7c96c0ff6467be653421c1c4f1b973729a34a10252f268840cfb4095c2998",
+  "sdk": {
+    "commit": "cc95afa66ce491fe1f0d9f70fbb126c0e6fb230a",
+    "clean": true,
+    "manifest_sha256": "3e09e1baac4b24ad38a0a97812275151a00f6ae24e5fcf2d17a42c30bc313c51",
+    "final_prepared_output_counts": {
+      "upstream": 226,
+      "typesetting": 5
+    }
+  },
+  "checks": [
+    "Existing recording.timing query/set accept optional second_level; empty/omitted retains previous behavior; levels use captured probe units and must be distinct after SI normalization",
+    "First low-to-high rise and high-to-low fall retain exact saved-row crossing brackets and existing duration arithmetic; opposite starting-threshold arrivals abort unfinished traversals; same-row and duplicate-time crossings remain bounded",
+    "Whole-interval traversal summaries ignore primary arrival direction/page filtering and threshold entry order; original single-threshold arrival/spacing/pulse/duty results remain identical",
+    "Core tests cover analytic RC tau*ln(9), reversed thresholds, interrupted traversals, start plateaus, initial in-band states, clipping, one-row/duplicate-time bounds, strict units/underflow/equal-level failures, owned snapshots, session clear and saved raw-capture reproduction",
+    "Native optional threshold field, rise/fall/bracket readouts and time-entry callbacks use shared commands and retain the second threshold; callback tests compare exact agent results and unchanged live/history state",
+    "Full serialized root/native lint/import/race/vet passes; final reuse of existing duration helper and completed discovery examples pass focused timing/discovery race tests plus final lint/vet",
+    "Public headless/native detailed schemas and six complete semantic cases match exactly except transport, including export/import/save/reopen and file/source/physics/history preservation",
+    "Exact final packaged GPU/UI smoke includes both transition readouts and ideal duplicate-time zero rise/fall; protected shutdown and all prior smoke stages pass",
+    "LED/RC/NPN reference workflows pass with equivalence through in-process, external stdio, headless socket and packaged native socket adapters",
+    "Canonical app is byte-identical to qualified candidate; prior .72/87 preserved at build/ELab-before-transitions.app; all owned runtime sessions terminal; sibling SDK unchanged/clean"
+  ],
+  "evidence": [
+    "docs/recording-timing.md#two-threshold-rise-and-fall-timing",
+    "workbench/recording_transitions_test.go",
+    "desktop/recording_transitions_test.go",
+    "desktop/recording_pulses_smoke.go",
+    "scripts/transition-timing-demo.py",
+    "docs/validation/headless-transition-timing.json",
+    "docs/validation/desktop-transition-timing.json",
+    "docs/validation/transition-timing-public-parity.json",
+    "docs/validation/transition-timing-conformance.json"
+  ],
+  "reference_observations": {
+    "rc_10_90_analytic_s": 0.021972245773362195,
+    "rc_saved_bounds_s": [
+      0.021,
+      0.023
+    ],
+    "finite_ramp_analytic_rise_fall_s": [
+      0.0016,
+      0.0024
+    ],
+    "ideal_source_bounds_s": [
+      0,
+      0
+    ],
+    "flasher_current_thresholds_a": [
+      0.0005,
+      0.002
+    ],
+    "flasher_saved_rise_bounds_s": [
+      0,
+      0.005
+    ],
+    "flasher_saved_fall_bounds_s": [
+      0.01,
+      0.02
+    ]
+  },
+  "logs_sha256": {
+    "transitions-core.log": "fc9538c18dd3031dc01cb9685b9339249dbc4fed8bb41d5a680cc94e6dd68cca",
+    "transitions-native-focus.log": "2a7c7278ff4387e61d2800478cdb53954d8e2363a03fa093b6435d25e8978399",
+    "transitions-check.log": "17d4edeeeec4686426058f1b86fe5dce4a5d4762f99af631c6e3794bd47d5d68",
+    "transitions-final-focus.log": "ae63e9c27444f03978070e46ca8b5bd66ed55663df4a06984244ef058f4bf962",
+    "transitions-final-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "transitions-final-vet.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "transitions-build-final.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "transitions-headless.log": "c858954b276faee733dde45f2f3cf98fc8a161b41542c26cee434da880ad61b0",
+    "transitions-smoke.log": "fb02e6077d14c24a9f2c405a2c2f1bc09ddf330e18125c35390d3acebe65c2df",
+    "transitions-conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "transitions-native-demo.log": "defff74ca699fa481076a525a9dcc60bb599a5ba9048da3cb66b37f1d8b4b486"
+  },
+  "source_inventory": {
+    "sources": 45,
+    "sites": 357,
+    "public_commands": 154,
+    "source_routes": 124,
+    "binding_review_sites": 130
+  },
+  "limits": [
+    "Observed sampled traversals only; no interpolation, monotonicity, hidden-transition or physical-device guarantee",
+    "Native callback/GPU validation does not establish complete physical focus/typing/IME/screen-reader/visible-latency acceptance",
+    "No numerical kernel/model or project/record format change; timing remains derived session data",
+    "P0 remains 17 implemented /10 partial; unsigned development app; ongoing electronics and repository-quality goal remains active"
+  ]
+}

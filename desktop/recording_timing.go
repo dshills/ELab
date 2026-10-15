@@ -41,13 +41,19 @@ func (s *screen) recordingTimingControls(state workbench.Snapshot) []ui.Node {
 		next.Offset = 0
 		s.invoke("recording.timing.set", next)
 	}})
+	nodes = append(nodes, quiet("recorded-timing-second-level-label", "Other threshold · "+result.Probe.Unit+" (optional)"), ui.Node{ID: "recorded-timing-second-level", Kind: ui.TextField, Text: cfg.SecondLevel, Accessibility: ui.Accessibility{Name: "Other transition threshold in " + result.Probe.Unit}, Change: func(e ui.ChangeEvent) {
+		next := cfg
+		next.SecondLevel = e.Text
+		next.Offset = 0
+		s.invoke("recording.timing.set", next)
+	}})
 	for _, field := range []struct {
 		name  string
 		value float64
 	}{{"start", cfg.Start}, {"end", cfg.End}} {
 		field := field
 		nodes = append(nodes, quiet("recorded-timing-"+field.name+"-label", "Timing "+field.name+" · time"), timeField("recorded-timing-"+field.name, "Threshold interval "+field.name, field.value, false, func(text string) {
-			p := map[string]any{"id": cfg.ID, "probe_id": cfg.ProbeID, "level": cfg.Level, "direction": cfg.Direction, "start_s": cfg.Start, "end_s": cfg.End, "limit": cfg.Limit, "offset": 0}
+			p := map[string]any{"id": cfg.ID, "probe_id": cfg.ProbeID, "level": cfg.Level, "second_level": cfg.SecondLevel, "direction": cfg.Direction, "start_s": cfg.Start, "end_s": cfg.End, "limit": cfg.Limit, "offset": 0}
 			p[field.name+"_s"] = text
 			s.invokeAtCommandRevision("recording.timing.set", p, state.CommandRevision)
 		}))
@@ -62,6 +68,7 @@ func (s *screen) recordingTimingControls(state workbench.Snapshot) []ui.Node {
 		}
 	}
 	nodes = append(nodes, recordingPulseReadouts(result)...)
+	nodes = append(nodes, recordingTransitionReadouts(result)...)
 	if result.Total == 0 {
 		nodes = append(nodes, quiet("recorded-timing-none", "No sampled threshold arrival.\nCheck level, direction and interval."))
 	}
@@ -103,6 +110,27 @@ func recordingPulseReadouts(result *workbench.RecordingTiming) []ui.Node {
 		nodes = append(nodes, quiet("recorded-pulse-duty-unavailable", cycle.Reason))
 	} else {
 		nodes = append(nodes, quiet("recorded-pulse-duty", fmt.Sprintf("Duty cycle · first rising cycle\n%.6g → %.6g %% high\nSample bounds; periodicity is not verified.", cycle.Duty.Minimum*100, cycle.Duty.Maximum*100)))
+	}
+	return nodes
+}
+
+func recordingTransitionReadouts(result *workbench.RecordingTiming) []ui.Node {
+	tr := result.Transitions
+	if tr == nil {
+		return nil
+	}
+	nodes := []ui.Node{quiet("recorded-transition-levels", fmt.Sprintf("Transition levels · %.6g → %.6g %s\nSaved brackets; no interpolation.", tr.Lower, tr.Upper, result.Probe.Unit))}
+	for _, entry := range []struct {
+		id, label string
+		value     *workbench.TimingSpacing
+	}{
+		{"rise", "First rise · low → high", tr.Rise}, {"fall", "First fall · high → low", tr.Fall},
+	} {
+		text := entry.label + "\nNo complete sampled traversal in interval."
+		if v := entry.value; v != nil {
+			text = fmt.Sprintf("%s\n%.6g → %.6g ms\nStart rows %d → %d; end rows %d → %d", entry.label, v.Minimum*1000, v.Maximum*1000, v.First.Before.Index, v.First.After.Index, v.Second.Before.Index, v.Second.After.Index)
+		}
+		nodes = append(nodes, quiet("recorded-transition-"+entry.id, text))
 	}
 	return nodes
 }

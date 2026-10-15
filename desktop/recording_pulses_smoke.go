@@ -68,7 +68,7 @@ func nativeRecordingPulsesSmoke(ctx context.Context, a *app.Application, s *scre
 		for _, action := range []struct {
 			id    string
 			event *ui.ChangeEvent
-		}{{"recording-show", nil}, {"recorded-timing-probe", &ui.ChangeEvent{SelectedID: "v:VIN.positive"}}, {"recorded-timing-level", &ui.ChangeEvent{Text: "2.5 V"}}, {"recorded-timing-direction", &ui.ChangeEvent{SelectedID: "falling"}}} {
+		}{{"recording-show", nil}, {"recorded-timing-probe", &ui.ChangeEvent{SelectedID: "v:VIN.positive"}}, {"recorded-timing-level", &ui.ChangeEvent{Text: "2.5 V"}}, {"recorded-timing-direction", &ui.ChangeEvent{SelectedID: "falling"}}, {"recorded-timing-second-level", &ui.ChangeEvent{Text: "4.5 V"}}} {
 			if err := smokeUI(s, action.id, action.event); err != nil {
 				done <- err
 				return
@@ -80,8 +80,13 @@ func nativeRecordingPulsesSmoke(ctx context.Context, a *app.Application, s *scre
 			done <- fmt.Errorf("native pulse timing differs from ideal source")
 			return
 		}
+		tr := state.Recording.Timing.Transitions
+		if tr == nil || tr.Rise == nil || tr.Fall == nil || tr.Rise.Minimum != 0 || tr.Rise.Maximum != 0 || tr.Fall.Minimum != 0 || tr.Fall.Maximum != 0 {
+			done <- fmt.Errorf("native ideal-source transition timing lost duplicate rows")
+			return
+		}
 		root := s.view()
-		for _, id := range []string{"recorded-pulse-high", "recorded-pulse-low", "recorded-pulse-period", "recorded-pulse-duty"} {
+		for _, id := range []string{"recorded-pulse-high", "recorded-pulse-low", "recorded-pulse-period", "recorded-pulse-duty", "recorded-transition-levels", "recorded-transition-rise", "recorded-transition-fall"} {
 			if _, ok := findNode(root, id); !ok {
 				done <- fmt.Errorf("native pulse readout absent: %s", id)
 				return

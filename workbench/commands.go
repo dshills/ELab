@@ -96,6 +96,7 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(RecordingTimingParams{}), "urn:elab:recording-timing-input:1"},
 	{reflect.TypeOf(RecordingTimingSettings{}), "urn:elab:recording-timing-settings:1"},
 	{reflect.TypeOf(RecordingTiming{}), "urn:elab:recording-timing:1"},
+	{reflect.TypeOf(TimingTransitions{}), "urn:elab:timing-transitions:1"},
 	{reflect.TypeOf(TimingSample{}), "urn:elab:timing-sample:1"},
 	{reflect.TypeOf(ThresholdCrossing{}), "urn:elab:threshold-crossing:1"},
 	{reflect.TypeOf(ScopeStatistics{}), "urn:elab:scope-statistics:1"},
