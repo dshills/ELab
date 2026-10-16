@@ -5,11 +5,7 @@ package workbench
 // Newton still checks every nonlinear branch, KCL and voltage/work limit.
 // An existing accepted guess is never passed here, preserving continuation.
 func (n *mixedNetwork) initialConstraintGuess(old []float64, dt float64, t *Transient, at float64) []float64 {
-	size := len(n.nodes) + len(n.sources)
-	if dt == 0 {
-		size += len(n.caps)
-	}
-	x := make([]float64, size)
+	x := make([]float64, n.matrixSize(dt))
 	type edge struct {
 		to   int
 		drop float64

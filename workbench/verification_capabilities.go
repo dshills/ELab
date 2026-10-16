@@ -36,10 +36,18 @@ func addVerificationCapabilityDetails(id string, schema map[string]any) bool {
 		inputProperty(item, "id")["description"] = "Current snapshot.components entry with kind capacitor."
 		voltage := inputProperty(item, "voltage_v")
 		voltage["minimum"], voltage["maximum"], voltage["x-unit"] = -12, 12, "V"
+		inductors := inputProperty(schema, "inductor_initials")
+		inductors["minItems"], inductors["maxItems"], inductors["x-unique-by"] = 0, MaxComponents, "id"
+		inductors["description"] = "Unique current inductor IDs; signed pin 1 to pin 2 startup current in A within ±1 A. Empty clears, null refuses. Start omission inherits stored defaults; full-settings omission clears the list."
+		inductorItem := inductors["items"].(map[string]any)
+		inputProperty(inductorItem, "id")["description"] = "Current snapshot.components entry with kind inductor."
+		current := inputProperty(inductorItem, "current_a")
+		current["minimum"], current["maximum"], current["x-unit"] = -MaxInductorInitialCurrent, MaxInductorInitialCurrent, "A"
 		mode := inputProperty(schema, "input_mode")
 		mode["enum"] = []string{"auto", "charge", "discharge", "high", "low"}
 		schema["x-input-mode-inventory"] = "snapshot.verification_input_modes for current analysis; stored defaults may be configured in advance"
 		schema["x-startup-precedence"] = []string{"scenario capacitor_initials", "saved component initial_voltage_v", "scenario/stored global initial_voltage_v", "project experiment initial_voltage_v"}
+		schema["x-inductor-startup-precedence"] = []string{"scenario/stored inductor_initials", "saved component initial_current_a", "zero A"}
 		contract.Effects = []string{"Preserves live graph, physics/time, pause/held inputs, simulation settings and edit history"}
 		if !starting {
 			contract.Preconditions = []string{"Ranges and current capacitor identities are valid; incomplete graphs and mode/analysis combinations may be configured before running"}

@@ -15,7 +15,8 @@ func (s *screen) exampleGuidance(state workbench.Snapshot) []ui.Node {
 		status = "Based on this example · circuit/experiment edited"
 	}
 	generation := state.Document.Generation
-	reset := s.button("example.current.reset", "Reset "+info.Title)
+	reset := s.button("example.current.reset", "Reset example")
+	reset.Accessibility.Name = "Reset " + info.Title
 	reset.Activate = func() {
 		s.requestReplace("example.current.reset", workbench.ExampleResetParams{ExpectedID: info.ID, ExpectedGeneration: &generation})
 	}

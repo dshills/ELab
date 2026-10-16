@@ -71,7 +71,11 @@ func TestFlasherLayoutPreservesTheOriginalCircuitAndTimedResponse(t *testing.T) 
 }
 
 func TestFlasherLabelMasksLeaveRoutedWiresContinuous(t *testing.T) {
-	g := FlasherExampleGraph()
+	assertLabelMasksLeaveWiresContinuous(t, FlasherExampleGraph(), []string{"RB1", "RB2", "C1", "C2"})
+}
+
+func assertLabelMasksLeaveWiresContinuous(t *testing.T, g Graph, ids []string) {
+	t.Helper()
 	crosses := func(a, b Point, box routeRect) bool {
 		lo, hi := 0., 1.
 		for _, axis := range [][4]float64{{a.X, b.X, box.left, box.right}, {a.Y, b.Y, box.top, box.bottom}} {
@@ -90,7 +94,7 @@ func TestFlasherLabelMasksLeaveRoutedWiresContinuous(t *testing.T) {
 		}
 		return true
 	}
-	for _, id := range []string{"RB1", "RB2", "C1", "C2"} {
+	for _, id := range ids {
 		p, _ := g.Component(id)
 		x, y, text := schematicPartLabel(p)
 		// Enclose the actual white mask plus half the 2.2-unit wire stroke.

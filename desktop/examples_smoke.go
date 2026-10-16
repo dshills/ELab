@@ -98,6 +98,9 @@ func nativeExamplesSmoke(ctx context.Context, a *app.Application, s *screen) err
 	if err := nativeCMOSSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	if err := nativeInductorSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	if err := nativeSplitSupplySmoke(ctx, a, s); err != nil {
 		return err
 	}

@@ -79,6 +79,7 @@ var commonSchemas = []struct {
 	ID   string
 }{
 	{reflect.TypeOf(WorkspaceLayout{}), "urn:elab:workspace-layout:1"},
+	{reflect.TypeOf(VerifyParams{}), "urn:elab:verification-input:1"},
 	{reflect.TypeOf(MOSFETModel{}), "urn:elab:mosfet-model:1"},
 	{reflect.TypeOf(NavigateParams{}), "urn:elab:object-navigation:1"},
 	{reflect.TypeOf(CenterSelectionParams{}), "urn:elab:selection-center:1"},
@@ -183,6 +184,9 @@ func SchemaRegistry() map[string]json.RawMessage {
 		}
 		// Input-only shared definitions retain command unit text without
 		// widening numeric output/settings schemas.
+		if common.Type == reflect.TypeOf(VerifyParams{}) {
+			schema = timeInputSchema("simulation.verify", schema)
+		}
 		if common.Type == reflect.TypeOf(RecoveryConfigureParams{}) {
 			schema = timeInputSchema("recovery.configure", schema)
 		}
@@ -402,6 +406,7 @@ func Catalog() []Capability {
 		typedCapability("selection.navigate", "Navigate objects; wraps, optionally centers and cancels unfinished drawing; details in capabilities.list", reflect.TypeOf(NavigateParams{})),
 		typedCapability("view.selection.center", "Center selected object without changing zoom; optional id guards selection; wire center uses routed half length", reflect.TypeOf(CenterSelectionParams{})),
 		typedCapability("component.select", "Select any component or wire by stable ID; empty ID clears selection", reflect.TypeOf(IDParams{})),
+		typedCapability("inductor.initial.set", "Set signed pin 1 to pin 2 startup current within ±1 A; unit-bearing A/mA/µA or default for zero; saved and undoable", reflect.TypeOf(ValueParams{})),
 		typedCapability("capacitor.initial.set", "Set a capacitor voltage at time zero (pin 1 minus pin 2), within ±12 V; value default uses experiment initial_voltage_v; saved and undoable", reflect.TypeOf(ValueParams{})),
 		typedCapability("example.flasher", "Load the capacitor-timed NPN flasher; protects unsaved work; guidance in examples.list", reflect.TypeOf(ReplaceParams{})),
 		typedCapability("example.npn-pulse", "Load the pulse-driven NPN LED; protects unsaved work; guidance in examples.list", reflect.TypeOf(ReplaceParams{})),

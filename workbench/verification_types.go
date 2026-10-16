@@ -9,7 +9,12 @@ type CapacitorInitial struct {
 	ID      string  `json:"id"`
 	Voltage float64 `json:"voltage_v"`
 }
+type InductorInitial struct {
+	ID      string  `json:"id"`
+	Current float64 `json:"current_a"`
+}
 type VerificationSettings struct {
+	Inductors      []InductorInitial  `json:"inductor_initials,omitempty"`
 	Duration       float64            `json:"duration_s"`
 	Step           float64            `json:"sample_step_s"`
 	InputMode      string             `json:"input_mode"`
@@ -23,6 +28,7 @@ func DefaultVerificationSettings() VerificationSettings {
 func cloneVerificationSettings(in VerificationSettings) VerificationSettings {
 	out := in
 	out.Capacitors = append([]CapacitorInitial{}, in.Capacitors...)
+	out.Inductors = append([]InductorInitial(nil), in.Inductors...)
 	if in.InitialVoltage != nil {
 		v := *in.InitialVoltage
 		out.InitialVoltage = &v
@@ -31,6 +37,7 @@ func cloneVerificationSettings(in VerificationSettings) VerificationSettings {
 }
 
 type VerifyParams struct {
+	Inductors      []InductorInitial  `json:"inductor_initials,omitempty"`
 	Duration       *float64           `json:"duration_s,omitempty"`
 	Step           *float64           `json:"sample_step_s,omitempty"`
 	InputMode      string             `json:"input_mode,omitempty"`
@@ -168,6 +175,12 @@ func (p VerifyParams) MarshalJSON() ([]byte, error) {
 	}
 	if p.Capacitors != nil {
 		fields["capacitor_initials"], err = json.Marshal(p.Capacitors)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if p.Inductors != nil {
+		fields["inductor_initials"], err = json.Marshal(p.Inductors)
 		if err != nil {
 			return nil, err
 		}

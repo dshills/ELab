@@ -28,6 +28,13 @@ func validateVerificationSettings(settings VerificationSettings, g Graph) error 
 		return fmt.Errorf("default verify initial voltage must be 0–12 V")
 	}
 	seen := map[string]bool{}
+	for _, initial := range settings.Inductors {
+		p, ok := g.Component(initial.ID)
+		if !ok || p.Kind != "inductor" || seen[initial.ID] || !finite(initial.Current) || math.Abs(initial.Current) > MaxInductorInitialCurrent {
+			return fmt.Errorf("invalid or duplicate inductor initial condition %q", initial.ID)
+		}
+		seen[initial.ID] = true
+	}
 	for _, initial := range settings.Capacitors {
 		p, ok := g.Component(initial.ID)
 		if !ok || p.Kind != "capacitor" || seen[initial.ID] || !finite(initial.Voltage) || math.Abs(initial.Voltage) > 12 {
@@ -62,6 +69,9 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 	if p.Capacitors != nil {
 		settings.Capacitors = p.Capacitors
 	}
+	if p.Inductors != nil {
+		settings.Inductors = p.Inductors
+	}
 	graph := s.graph.Clone()
 	if err := validateVerificationSettings(settings, graph); err != nil {
 		return err
@@ -78,6 +88,14 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 			if graph.Components[i].ID == initial.ID {
 				v := initial.Voltage
 				graph.Components[i].InitialVoltage = &v
+			}
+		}
+	}
+	for _, initial := range settings.Inductors {
+		for k := range graph.Components {
+			if graph.Components[k].ID == initial.ID {
+				v := initial.Current
+				graph.Components[k].InitialCurrent = &v
 			}
 		}
 	}
@@ -100,8 +118,8 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 		if settings.Duration != 0 {
 			return fmt.Errorf("DC Verify is an operating point: duration_s must be zero")
 		}
-		if settings.InitialVoltage != nil || len(settings.Capacitors) > 0 {
-			return fmt.Errorf("initial capacitor conditions require a transient circuit")
+		if settings.InitialVoltage != nil || len(settings.Capacitors) > 0 || len(settings.Inductors) > 0 {
+			return fmt.Errorf("initial capacitor/inductor conditions require a transient circuit")
 		}
 	}
 	if !verificationInputModeValid(compiled.Analysis, settings.InputMode) {
@@ -368,7 +386,7 @@ func validateCapacitorInitialFields(raw json.RawMessage) error {
 
 func verificationEngineID(analysis string) string {
 	switch analysis {
-	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis:
+	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis, InductorAnalysis:
 		return networkEngine(analysis)
 	case "RC transient":
 		return RCEngineID

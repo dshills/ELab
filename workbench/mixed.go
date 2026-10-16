@@ -40,6 +40,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	Inductors          []InductorResult      `json:"inductors,omitempty"`
 	MOSFETs            []MOSFETResult        `json:"mosfets,omitempty"`
 	Potentiometers     []PotentiometerResult `json:"potentiometers,omitempty"`
 	Diodes             []BranchResult        `json:"diodes,omitempty"`
@@ -65,6 +66,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.Inductors = append([]InductorResult(nil), r.Inductors...)
 	o.Nodes = map[string]float64{}
 	for k, v := range r.Nodes {
 		o.Nodes[k] = v
@@ -83,11 +85,14 @@ func cloneMixed(r *MixedResult) *MixedResult {
 }
 
 type mixedNetwork struct {
+	dc            bool
 	nonlinear     bool
 	c             Compiled
 	nodes         []string
 	index         map[string]int
 	sources, caps []Component
+	inductors     []Component
+	inductorCuts  []inductorCut
 }
 type mixedState struct {
 	net     *mixedNetwork
@@ -105,7 +110,7 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 	}
 	for _, p := range c.MixedGraph.Components {
 		switch p.Kind {
-		case "resistor", "capacitor", "switch", "potentiometer":
+		case "resistor", "capacitor", "inductor", "switch", "potentiometer":
 		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 		case "ground", "junction", "net-label":
 		default:
@@ -118,7 +123,11 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 		if p.Kind == "capacitor" {
 			n.caps = append(n.caps, p)
 		}
+		if p.Kind == "inductor" {
+			n.inductors = append(n.inductors, p)
+		}
 	}
+	n.inductorCuts = n.inductorStartupCuts()
 	return n
 }
 func (n *mixedNetwork) pin(p Component, t string) int { return n.index[n.c.TerminalNet[p.ID+"."+t]] }
@@ -167,10 +176,23 @@ func npnLinear(vb, vc float64) (ib, ic float64, db, dc, cb, cc float64) {
 	return f/m.ForwardBeta + r/m.ReverseBeta, f - (1+1/m.ReverseBeta)*r, gf/m.ForwardBeta + gr/m.ReverseBeta, -gr / m.ReverseBeta, gf - (1+1/m.ReverseBeta)*gr, (1 + 1/m.ReverseBeta) * gr
 }
 func (n *mixedNetwork) equations(x, old []float64, dt float64, t *Transient, at float64) ([][]float64, []float64) {
-	size := len(n.nodes) + len(n.sources)
-	if dt == 0 {
-		size += len(n.caps)
+	a, f := n.deviceEquations(x, old, dt, t, at)
+	if dt == 0 && !n.dc {
+		n.stampInductorStartup(x, a, f)
 	}
+	return a, f
+}
+
+// deviceEquations retains physical KCL even when startup substitutes a
+// differentiated cutset equation to determine otherwise undefined L voltages.
+func (n *mixedNetwork) deviceEquations(x, old []float64, dt float64, t *Transient, at float64) ([][]float64, []float64) {
+	return n.mnaEquations(x, old, dt, t, at, true)
+}
+
+// Collocation needs the same physical device/source equations and branch
+// injections, then supplies its own coupled storage rows for all stages.
+func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, at float64, storageRows bool) ([][]float64, []float64) {
+	size := n.matrixSize(dt)
 	a := make([][]float64, size)
 	f := make([]float64, size)
 	for i := range a {
@@ -229,7 +251,7 @@ func (n *mixedNetwork) equations(x, old []float64, dt float64, t *Transient, at 
 			flow(u, v, i, g)
 		case "led":
 			u, v := n.pin(p, "anode"), n.pin(p, "cathode")
-			i, g := diodeCurrent(voltage(x, u) - voltage(x, v))
+			i, g := n.ledCurrent(voltage(x, u) - voltage(x, v))
 			flow(u, v, i, g)
 		case "nmos", "pmos":
 			g, d, s := n.pin(p, "gate"), n.pin(p, "drain"), n.pin(p, "source")
@@ -260,10 +282,31 @@ func (n *mixedNetwork) equations(x, old []float64, dt float64, t *Transient, at 
 	for k, p := range n.sources {
 		branch(n.pin(p, "positive"), n.pin(p, "negative"), len(n.nodes)+k, n.sourceStimulus(p, t, at, dt))
 	}
+	if !storageRows {
+		for _, parts := range [][]Component{n.inductors, n.caps} {
+			for k, p := range parts {
+				row := n.inductorIndex(k)
+				if p.Kind == "capacitor" {
+					row = n.capacitorIndex(k)
+				}
+				u, v := n.pin(p, "1"), n.pin(p, "2")
+				if u >= 0 {
+					f[u] += x[row]
+				}
+				if v >= 0 {
+					f[v] -= x[row]
+				}
+				add(u, row, 1)
+				add(v, row, -1)
+			}
+		}
+		return a, f
+	}
+	n.stampInductors(x, old, add, f)
 	for k, p := range n.caps {
 		u, v := n.pin(p, "1"), n.pin(p, "2")
 		if dt == 0 {
-			branch(u, v, len(n.nodes)+len(n.sources)+k, old[k])
+			branch(u, v, n.capacitorIndex(k), old[k])
 		} else {
 			g := p.Value / dt
 			flow(u, v, g*(voltage(x, u)-voltage(x, v)-old[k]), g)
@@ -272,7 +315,17 @@ func (n *mixedNetwork) equations(x, old []float64, dt float64, t *Transient, at 
 	return a, f
 }
 func linearSolve(a [][]float64, b []float64) ([]float64, error) {
+	return linearSolveMode(a, b, false)
+}
+
+// Retain the original arithmetic path for existing circuits. Collocation's
+// mostly zero stage blocks can omit zero updates without changing pivoting.
+func linearSolveMode(a [][]float64, b []float64, skipZeros bool) ([]float64, error) {
 	n := len(b)
+	var columns []int
+	if skipZeros {
+		columns = make([]int, 0, n)
+	}
 	for col := 0; col < n; col++ {
 		pivot := col
 		for row := col + 1; row < n; row++ {
@@ -285,10 +338,29 @@ func linearSolve(a [][]float64, b []float64) ([]float64, error) {
 		}
 		a[col], a[pivot] = a[pivot], a[col]
 		b[col], b[pivot] = b[pivot], b[col]
+		pivotValues := a[col]
+		if skipZeros {
+			columns = columns[:0]
+			for j := col + 1; j < n; j++ {
+				if pivotValues[j] != 0 {
+					columns = append(columns, j)
+				}
+			}
+		}
 		for row := col + 1; row < n; row++ {
 			factor := a[row][col] / a[col][col]
-			for j := col + 1; j < n; j++ {
-				a[row][j] -= factor * a[col][j]
+			if skipZeros {
+				if factor == 0 {
+					continue
+				}
+				rowValues := a[row]
+				for _, j := range columns {
+					rowValues[j] -= factor * pivotValues[j]
+				}
+			} else {
+				for j := col + 1; j < n; j++ {
+					a[row][j] -= factor * a[col][j]
+				}
 			}
 			b[row] -= factor * b[col]
 		}
@@ -312,6 +384,17 @@ func (n *mixedNetwork) solve(guess, old []float64, dt float64, t *Transient, at 
 func (n *mixedNetwork) solveContext(ctx context.Context, guess, old []float64, dt float64, t *Transient, at float64) (*mixedState, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
+	}
+	if len(n.inductors) > 0 {
+		if dt > 0 {
+			return nil, fmt.Errorf("dynamic inductor states require coupled collocation stepping")
+		}
+		old = n.reactiveHistory(guess, old)
+		if dt == 0 && !n.dc {
+			if err := n.checkInductorStartup(old); err != nil {
+				return nil, err
+			}
+		}
 	}
 	result, err := n.newton(ctx, guess, old, dt, t, at)
 	if err == nil {
@@ -347,7 +430,7 @@ func (n *mixedNetwork) solveContext(ctx context.Context, guess, old []float64, d
 		if err := ctx.Err(); err != nil {
 			return nil, err
 		}
-		seed := make([]float64, len(n.nodes)+len(n.sources)+len(n.caps))
+		seed := make([]float64, n.matrixSize(dt))
 		copy(seed, guess)
 		for i, q := range qs {
 			b, c := n.pin(q, "base"), n.pin(q, "collector")
@@ -366,12 +449,16 @@ func (n *mixedNetwork) solveContext(ctx context.Context, guess, old []float64, d
 	return nil, err
 }
 func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt float64, t *Transient, at float64) (*mixedState, error) {
-	size := len(n.nodes) + len(n.sources)
-	if dt == 0 {
-		size += len(n.caps)
-	}
+	size := n.matrixSize(dt)
 	x := make([]float64, size)
 	copy(x, guess)
+	if dt == 0 && !n.dc {
+		for k := range n.inductors {
+			// Start on the immutable current constraint, including pA-scale
+			// intent; a residual tolerance must not erase a small startup.
+			x[n.inductorIndex(k)] = old[len(n.caps)+k]
+		}
+	}
 	for iter := 0; iter < maxMixedNewtonIterations; iter++ {
 		if err := ctx.Err(); err != nil {
 			return nil, err
@@ -379,16 +466,26 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 		a, f := n.equations(x, old, dt, t, at)
 		good := true
 		for i, v := range f {
-			tol := 1e-10
-			if i >= len(n.nodes) {
-				tol = 1e-8
-			}
+			tol := n.residualTolerance(i, x, a, old, dt)
 			if !finite(v) || math.Abs(v) > tol {
 				good = false
 			}
 		}
+		var delta []float64
+		if good && len(n.inductors) > 0 {
+			rhs := make([]float64, size)
+			for i := range f {
+				rhs[i] = -f[i]
+			}
+			var err error
+			delta, err = linearSolve(a, rhs)
+			if err != nil {
+				return nil, err
+			}
+			good = n.voltageCorrectionConverged(x, delta, 1)
+		}
 		if good {
-			if iter == 0 {
+			if iter == 0 && len(n.inductors) == 0 {
 				// A small residual is not evidence of a unique operating point.
 				// Check rank with zero RHS without moving an already acceptable
 				// guess or rebuilding all nonlinear device equations a second time.
@@ -403,14 +500,31 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 					return nil, fmt.Errorf("mixed node voltage exceeds the ±30 V educational model range")
 				}
 			}
-			return n.result(x, old, dt, t, at), nil
+			result := n.result(x, old, dt, t, at)
+			if len(n.inductors) > 0 {
+				if !finite(result.result.PowerResidual) || !finite(result.result.KCLResidual) {
+					return nil, fmt.Errorf("RLC result exceeds the finite energy/power range")
+				}
+				if result.result.KCLResidual > 1e-9 {
+					return nil, fmt.Errorf("RLC currents do not satisfy physical node current balance")
+				}
+				for _, p := range result.result.Inductors {
+					if !finite(p.Voltage) || !finite(p.Current) || !finite(p.Energy) {
+						return nil, fmt.Errorf("inductor %s exceeds the finite state range", p.ID)
+					}
+				}
+			}
+			return result, nil
 		}
-		for i := range f {
-			f[i] = -f[i]
-		}
-		delta, err := linearSolve(a, f)
-		if err != nil {
-			return nil, err
+		if delta == nil {
+			for i := range f {
+				f[i] = -f[i]
+			}
+			var err error
+			delta, err = linearSolve(a, f)
+			if err != nil {
+				return nil, err
+			}
 		}
 		scale := 1.
 		if n.nonlinear {
@@ -455,7 +569,7 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			var i float64
 			switch p.Kind {
 			case "led":
-				i, _ = diodeCurrent(v)
+				i, _ = n.ledCurrent(v)
 			case "diode":
 				i, _ = siliconDiodeCurrent(v)
 			default:
@@ -512,8 +626,8 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 		v := voltage(x, n.pin(p, "1")) - voltage(x, n.pin(p, "2"))
 		capV[k] = v
 		i := 0.
-		if dt == 0 {
-			i = x[len(n.nodes)+len(n.sources)+k]
+		if dt == 0 || len(n.inductors) > 0 {
+			i = x[n.capacitorIndex(k)]
 			energyRate += v * i
 		} else {
 			i = p.Value * (v - old[k]) / dt
@@ -522,7 +636,13 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 		}
 		r.Capacitors = append(r.Capacitors, CapacitorResult{p.ID, v, i, .5 * p.Value * v * v})
 	}
-	_, f := n.equations(x, old, dt, t, at)
+	for k, p := range n.inductors {
+		v := voltage(x, n.pin(p, "1")) - voltage(x, n.pin(p, "2"))
+		i := x[n.inductorIndex(k)]
+		energyRate += v * i
+		r.Inductors = append(r.Inductors, InductorResult{ID: p.ID, Voltage: v, Current: i, Energy: .5 * p.Value * i * i})
+	}
+	_, f := n.mnaEquations(x, old, dt, t, at, len(n.inductors) == 0)
 	for i := range n.nodes {
 		r.KCLResidual = math.Max(r.KCLResidual, math.Abs(f[i]))
 	}
@@ -530,12 +650,15 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 	return &mixedState{n, x, capV, r}
 }
 
-// Adaptive backward Euler: compare one full step with two half steps. Accept
-// the latter, retaining stable integration through rapid transistor transitions.
+// Compare one full step with two half steps and accept the latter. Legacy
+// networks use backward Euler; L networks use Radau IIA collocation.
 func (state *mixedState) advance(t *Transient, end float64) (*mixedState, error) {
 	return state.advanceBudget(t, end, newIntegrationBudget())
 }
 func (state *mixedState) advanceBudget(t *Transient, end float64, budget *integrationBudget) (*mixedState, error) {
+	if len(state.net.inductors) > 0 {
+		return state.advanceInductorBudget(t, end, budget)
+	}
 	cur := state
 	at := state.result.Time
 	h := end - at
@@ -554,7 +677,7 @@ func (state *mixedState) advanceBudget(t *Transient, end float64, budget *integr
 		if state.net.c.Analysis == WaveformAnalysis {
 			h = math.Min(h, cur.net.maximumWaveformStep(t, at))
 		}
-		if h < 1e-10 {
+		if h < 1e-10 || at+h <= at {
 			return nil, fmt.Errorf("mixed timestep too small at %.9g, h %.3g: %s", at, h, failure)
 		}
 		full, e1 := cur.net.solve(cur.x, cur.capV, h, t, at+h)

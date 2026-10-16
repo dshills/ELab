@@ -177,6 +177,13 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 				stroke(ink, 2, canvas.Point{X: 0, Y: -22}, canvas.Point{X: 0, Y: -4})
 				stroke(ink, 2, canvas.Point{X: -9, Y: 15}, canvas.Point{X: 9, Y: 15})
 			}
+		case "inductor":
+			points := workbench.InductorPolyline()
+			coil := make([]canvas.Point, len(points))
+			for k, p := range points {
+				coil[k] = canvas.Point{X: p.X, Y: p.Y}
+			}
+			stroke(ink, 2.5, coil...)
 		case "capacitor":
 			stroke(ink, 3, canvas.Point{X: -24, Y: -9}, canvas.Point{X: 24, Y: -9})
 			stroke(ink, 3, canvas.Point{X: -24, Y: 9}, canvas.Point{X: 24, Y: 9})
@@ -330,7 +337,9 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 			continue
 		}
 		title := part.ID
-		if part.Unit != "" {
+		if part.Kind == "inductor" {
+			title += " " + workbench.InductorValueLabel(part.Value)
+		} else if part.Unit != "" {
 			if part.Unit == "F" {
 				scale, suffix := 1., "F"
 				if part.Value < 1e-9 {
@@ -397,6 +406,9 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 }
 
 func nativePartLabelPosition(part workbench.Component, title string) workbench.Point {
+	if part.Kind == "inductor" {
+		return workbench.InductorLabelPosition(part)
+	}
 	if part.Kind == "led" {
 		return workbench.LEDLabelPosition(part)
 	}

@@ -7,10 +7,10 @@ import (
 )
 
 func IsNPNTransientAnalysis(a string) bool {
-	return a == WaveformAnalysis || a == NPNTransientAnalysis || a == MixedAnalysis || a == NetworkTransientAnalysis
+	return a == InductorAnalysis || a == WaveformAnalysis || a == NPNTransientAnalysis || a == MixedAnalysis || a == NetworkTransientAnalysis
 }
 func IsNPNTransientEngine(e string) bool {
-	return e == WaveformEngineID || e == NPNTransientEngineID || e == MixedEngineID || e == NetworkEngineID
+	return e == InductorEngineID || e == WaveformEngineID || e == NPNTransientEngineID || e == MixedEngineID || e == NetworkEngineID
 }
 func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 	_, region := MixedRegion(r)
@@ -45,6 +45,15 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 			p.Voltage = r.Nodes[compiled.Output]
 		}
 	}
+	if len(r.Inductors) > 0 {
+		p.Energy = 0
+		for _, part := range r.Inductors {
+			p.Energy += part.Energy
+		}
+		for _, part := range r.Capacitors {
+			p.Energy += part.Energy
+		}
+	}
 	currents := map[string]float64{}
 	for _, p := range r.Potentiometers {
 		currents[p.ID+".1"] = p.Terminal1Current
@@ -60,6 +69,9 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		currents[q.TransistorID+".base"] = q.BaseCurrent
 		currents[q.TransistorID+".collector"] = q.CollectorCurrent
 		currents[q.TransistorID+".emitter"] = q.EmitterCurrent
+	}
+	for _, inductor := range r.Inductors {
+		currents[inductor.ID] = inductor.Current
 	}
 	for _, cap := range r.Capacitors {
 		currents[cap.ID] = cap.Current

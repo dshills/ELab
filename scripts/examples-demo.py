@@ -24,7 +24,8 @@ def main():
         before = client.ask('project.inspect')
         catalog = client.ask('examples.list')
         expected_ids = {'led', 'rc', 'npn', 'switch-npn', 'blink', 'flasher',
-                        'rectifier', 'led-fade', 'nmos', 'pmos', 'cmos', 'split-supply', 'rc-high-pass'}
+                        'rectifier', 'led-fade', 'nmos', 'pmos', 'cmos', 'split-supply', 'rc-high-pass',
+                        'rl', 'rlc', 'flyback'}
         assert expected_ids == {e['id'] for e in catalog} and client.ask('project.inspect') == before
         tested = []
         for info in catalog:

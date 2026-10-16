@@ -32,6 +32,8 @@ func ValueDomainForKind(kind string) (ComponentValueDomain, bool) {
 		d = ComponentValueDomain{Parameter: "resistance", Unit: "Ω", Minimum: 10, Maximum: 100000, Range: "10–100000 Ω"}
 	case "capacitor":
 		d = ComponentValueDomain{Parameter: "capacitance", Unit: "F", Minimum: 1e-12, Maximum: 1, Range: "1 pF–1 F"}
+	case "inductor":
+		d = ComponentValueDomain{Parameter: "inductance", Unit: "H", Minimum: 1e-6, Maximum: 100, Range: "1 µH–100 H"}
 	default:
 		return d, false
 	}
@@ -46,6 +48,8 @@ func valueSyntax(unit string) string {
 		return "Bare SI or Ω/ohm; k/K/M prefixes, for example 2.2k or 0.1M Ω"
 	case "F":
 		return "Bare SI or F; p/n/u/µ/μ/m prefixes, for example 1 µF or 100nF"
+	case "H":
+		return "Bare SI or H; n/u/µ/μ/m prefixes, for example 10 mH or 100uH"
 	}
 	return ""
 }

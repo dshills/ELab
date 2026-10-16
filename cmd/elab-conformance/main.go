@@ -21,6 +21,7 @@ type adapterResult struct {
 	Equivalent  bool                           `json:"equivalent_to_in_process"`
 	Workflows   []conformance.Result           `json:"workflows"`
 	Electrical  *conformance.ElectricalResult  `json:"electrical,omitempty"`
+	Inductors   *conformance.InductorResult    `json:"inductors,omitempty"`
 	Performance *conformance.PerformanceResult `json:"performance,omitempty"`
 }
 type report struct {
@@ -39,9 +40,10 @@ func main() {
 }
 func run() error {
 	binary := flag.String("agent-binary", "build/elab-agent", "built external reference client/server binary")
-	native := flag.String("native-binary", "", "optional native binary; creates/closes six owned temporary native sessions")
+	native := flag.String("native-binary", "", "optional native binary; creates/closes owned temporary native sessions")
 	directory := flag.String("artifacts", "", "new empty output directory (required; never replaces existing data)")
 	electrical := flag.Bool("electrical-suite", false, "also run frozen independent electrical references and mixed flasher timestep refinement")
+	inductors := flag.Bool("inductor-suite", false, "also construct/probe/save/reopen coils and run analytic RL/RLC, flyback and mixed RC/NPN/coil checks")
 	performance := flag.Bool("performance-suite", false, "also measure fresh/warm backend edit/result and Verify latency in owned sessions")
 	repetitions := flag.Int("repetitions", 20, "performance repetitions per circuit/condition (20–100)")
 	flag.Parse()
@@ -79,6 +81,7 @@ func run() error {
 	result := report{GoVersion: runtime.Version(), Platform: runtime.GOOS + "/" + runtime.GOARCH, Limitations: []string{"engineering workflow parity on this workstation; not complete native action coverage or participant acceptance", "workflow parity uses shared pinned kernels; optional electrical suite adds independent frozen educational-model references and same-kernel flasher refinement, not real-device/SPICE qualification", "native socket path verifies semantic operations in real app processes; keyboard/focus/screen-reader and visible latency are separate", "all sessions are newly created and owned; pre-existing applications/endpoints are untouched"}}
 	var reference []conformance.Result
 	var electricalReference *conformance.ElectricalResult
+	var inductorReference *conformance.InductorResult
 	for _, mode := range modes {
 		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 		workflows, runErr := conformance.Run(ctx, mode.factory, filepath.Join(dir, mode.name))
@@ -106,6 +109,22 @@ func run() error {
 			if qualificationErr != nil {
 				result.Adapters = append(result.Adapters, adapter)
 				return writeFailure(dir, result, fmt.Errorf("%s electrical suite: %w", mode.name, qualificationErr))
+			}
+		}
+		if *inductors {
+			ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+			qualified, qualificationErr := conformance.RunInductors(ctx, mode.factory, filepath.Join(dir, mode.name, "inductors"))
+			cancel()
+			adapter.Inductors = &qualified
+			if qualificationErr == nil {
+				if inductorReference == nil {
+					inductorReference = &qualified
+				}
+				qualificationErr = conformance.CompareInductors(*inductorReference, qualified)
+			}
+			if qualificationErr != nil {
+				result.Adapters = append(result.Adapters, adapter)
+				return writeFailure(dir, result, fmt.Errorf("%s inductor suite: %w", mode.name, qualificationErr))
 			}
 		}
 		if *performance {

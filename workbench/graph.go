@@ -41,6 +41,10 @@ func (g Graph) Clone() Graph {
 			copy := *v
 			out.Components[i].InitialVoltage = &copy
 		}
+		if v := out.Components[i].InitialCurrent; v != nil {
+			copy := *v
+			out.Components[i].InitialCurrent = &copy
+		}
 	}
 	return out
 }
@@ -146,6 +150,7 @@ func libraryParts() []Part {
 		{Kind: "resistor", Name: "Resistor", Terminals: []string{"1", "2"}, DefaultValue: "1k", Unit: "Ω", Model: "ideal-resistor.v1"},
 		{Kind: "led", Name: "Red LED", Terminals: []string{"anode", "cathode"}, DefaultValue: "", Unit: "", Model: ModelID},
 		{Kind: "capacitor", Name: "Capacitor", Terminals: []string{"1", "2"}, DefaultValue: "1uF", Unit: "F", Model: "ideal-capacitor.v1"},
+		{Kind: "inductor", Name: "Inductor", Terminals: []string{"1", "2"}, DefaultValue: "10 mH", Unit: "H", Model: InductorModelID},
 		{Kind: "sine-source", Name: "Sine source", Terminals: []string{"positive", "negative"}, DefaultValue: "2.5 V", Unit: "V", Model: SineSourceModelID},
 		{Kind: "finite-pulse-source", Name: "Finite pulse source", Terminals: []string{"positive", "negative"}, DefaultValue: "5 V", Unit: "V", Model: FinitePulseModelID},
 		{Kind: "pulse-source", Name: "Pulse source", Terminals: []string{"positive", "negative"}, DefaultValue: "5 V", Unit: "V", Model: "ideal-square.v1"},
@@ -234,7 +239,7 @@ func SetValue(c Component, text string) (Component, error) {
 		c.Label = text
 		return c, nil
 	}
-	if c.Kind != "dc-source" && c.Kind != "pulse-source" && c.Kind != "resistor" && c.Kind != "capacitor" && c.Kind != "potentiometer" && !IsWaveformSource(c.Kind) {
+	if c.Kind != "dc-source" && c.Kind != "pulse-source" && c.Kind != "resistor" && c.Kind != "capacitor" && c.Kind != "inductor" && c.Kind != "potentiometer" && !IsWaveformSource(c.Kind) {
 		return c, fmt.Errorf("this component has no editable value")
 	}
 	value, err := ParseValue(text, c.Unit)
@@ -308,7 +313,7 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 		default:
 			found = false
 		}
-	case "switch", "resistor":
+	case "switch", "resistor", "inductor":
 		switch name {
 		case "1":
 			p = Point{-55, 0}
@@ -403,6 +408,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		}
 		parent[b] = a
 	}
+	hasInductor := false
 	hasMOS := false
 	hasSwitch := false
 	hasDiode := false
@@ -436,6 +442,8 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 			transistors = append(transistors, c)
 		case "capacitor":
 			capacitors = append(capacitors, c)
+		case "inductor":
+			hasInductor = true
 		case "led":
 			leds = append(leds, c)
 		case "ground":
@@ -522,7 +530,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 			}
 		}
 	}
-	if hasMOS || hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || floatingDC || len(transistors) > 0 && len(capacitors) > 0 {
+	if hasInductor || hasMOS || hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || floatingDC || len(transistors) > 0 && len(capacitors) > 0 {
 		return compileNetwork(out, g, groups, root)
 	}
 	if len(transistors) > 0 {

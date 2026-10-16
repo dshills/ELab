@@ -246,6 +246,7 @@ func solveDCOperatingPoint(ctx context.Context, g Graph, levels []SweepSource) (
 	}
 	network := newMixedNetwork(compiled)
 	network.caps = nil
+	network.dc = true
 	for i, p := range network.sources {
 		for _, source := range levels {
 			if source.ID == p.ID {

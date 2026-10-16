@@ -54,6 +54,9 @@ var callbackFields = map[string]bool{
 func nativeAliases() map[string][]string {
 	return map[string][]string{
 		"example.rc-high-pass": {"example.load"},
+		"example.rl":           {"example.load"},
+		"example.rlc":          {"example.load"},
+		"example.flyback":      {"example.load"},
 		"example.led-fade":     {"example.load"},
 		"example.nmos":         {"example.load"},
 		"example.pmos":         {"example.load"},

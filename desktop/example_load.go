@@ -13,6 +13,9 @@ import (
 func (s *screen) registerExampleLoadCommands() {
 	for _, template := range []struct{ command, label, id string }{
 		{"example.rc-high-pass", "Load RC high-pass edge detector", "rc-high-pass"},
+		{"example.rl", "Load coil current buildup and decay", "rl"},
+		{"example.rlc", "Load RLC ringing and damping", "rlc"},
+		{"example.flyback", "Load coil switching and flyback diode", "flyback"},
 		{"example.led-fade", "Load capacitor-buffered LED fade", "led-fade"},
 		{"example.nmos", "Load MOSFET LED switch", "nmos"},
 		{"example.pmos", "Load high-side MOSFET LED switch", "pmos"},

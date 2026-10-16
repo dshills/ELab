@@ -31,6 +31,9 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "split-supply", Title: "Split-rail DC supply", Question: "How do two positive batteries create a negative rail?", Expected: "The midpoint reference makes the rails +3 V and −3 V. Each source remains +3 V across its own terminals; R1 sees 6 V and carries 6 mA.", Try: "Inspect V2.negative relative to ground, then V2 across its terminals. Change either source to 5 V or move ground to the bottom rail and compare.", Limitation: "Ideal DC sources have no output resistance, current limit, battery discharge or physical ratings. The network still needs one common reference; ideal voltage-source/capacitor constraint loops refuse."},
 		{ID: "rc", Title: "RC charge and discharge", Question: "How quickly does a capacitor charge and discharge?", Expected: "Capacitor voltage changes smoothly; switching from charge to discharge reverses current while preserving voltage at the switching instant.", Try: "Pause, step 10 ms, then choose Discharge. Increase R1 or C1 to slow the response.", Limitation: "Ideal capacitor/resistor with zero ESR and leakage; this example uses an ideal source edge."},
 		{ID: "rc-high-pass", Title: "RC high-pass edge detector", Question: "Why does a capacitor pass changes but block a steady voltage?", Expected: "The voltage across R1 jumps positive at a rising input edge and negative at a falling edge, then decays toward zero. C1 voltage stays continuous at each edge.", Try: "Pause and step 50 ms to the falling edge. Compare input, R1 output and C1 voltage; increase R1 or C1 to lengthen the decay (10 ms in the template).", Limitation: "Ideal resistor/capacitor and instantaneous 0–5 V square source. ESR, leakage, component ratings and additional output loading are omitted."},
+		{ID: "rl", Title: "Coil current buildup and decay", Question: "Why does coil current keep flowing when the voltage changes?", Expected: "Current approaches 50 mA while input is high. At 50 ms, coil voltage reverses while current stays continuous and decays through R1; the time constant is 10 ms.", Try: "Plot coil current and voltage across the falling edge. Double L1 to 2 H, or set a signed startup current such as -20 mA and Restart.", Limitation: "Ideal 1 H coil and explicit 100 Ω resistance; no winding resistance beyond R1, saturation, parasitic capacitance, heating or ratings. Source low supplies an ideal return path."},
+		{ID: "rlc", Title: "RLC ringing and damping", Question: "How do electric and magnetic stored energy produce ringing?", Expected: "Capacitor voltage overshoots 5 V and rings while current reverses; R1 dissipates energy and the response settles.", Try: "Compare 50 Ω underdamping with 200 Ω critical damping and 500 Ω overdamping. Inspect signed L1 current and C1 voltage; startup edits reset the experiment.", Limitation: "Ideal L/C with explicit series resistance. No winding saturation, ESR, parasitic capacitance or ratings. Internal integration and output sampling have separate work/resolution limits."},
+		{ID: "flyback", Title: "Coil switching and flyback diode", Question: "Where does coil current go when the MOSFET turns off?", Expected: "After the falling gate edge, D1 provides a return path for the coil current. Drain voltage rises above the 5 V supply while stored magnetic energy drains through RL and D1.", Try: "Pause and step across 50 ms. Compare L1 current, drain voltage and diode current; increase L1 to lengthen decay. A missing diode path can exceed the model's node-voltage envelope.", Limitation: "Generic MOSFET/diode and ideal coil with explicit 100 Ω load resistance. No real coil saturation, switch avalanche, diode charge storage, heating or ratings."},
 		{ID: "npn", Title: "Transistor LED switch", Question: "How does a small base current control the LED?", Expected: "Low base drive turns the LED off; higher drive increases collector current until the transistor approaches saturation.", Try: "Choose base 0 V, 0.8 V and 5 V, then change RB and compare base/collector currents.", Limitation: "Educational Ebers–Moll NPN; no physical transistor identity, heating, breakdown or internal charge storage."},
 		{ID: "switch-npn", Title: "Manual transistor LED switch", Question: "How can a switch control an LED through a transistor?", Expected: "Closing S1 supplies base current and lights the LED. Opening S1 lets RPD hold the base near ground; the LED turns off.", Try: "Select S1 and choose Close switch / Open switch. Inspect Q1 base and collector currents, then increase RB.", Limitation: "Finite 1 Ω on / 1 GΩ off switch; educational NPN and illustrative LED brightness. No contact bounce, heating or physical ratings."},
 		{ID: "pmos", Title: "High-side MOSFET LED switch", Question: "How does a P-channel MOSFET switch the supply side?", Expected: "Gate high at the 5 V source turns M1 off. Pulling the gate low turns the LED on; signed drain current is negative because it leaves the drain.", Try: "Compare M1 gate-source voltage and drain current across a pulse edge. Change RG to 10k and add an external 1uF gate-source capacitor for delayed switching.", Limitation: PMOSDeviceModel().Limitations},
@@ -82,6 +85,21 @@ func findExample(id string) (exampleDefinition, bool) {
 		d.view = View{Center: Point{X: -70}, Zoom: .7}
 	case "npn":
 		d.graph = NPNExampleGraph()
+	case "rl":
+		d.graph = RLExampleGraph()
+		d.selected = "L1"
+		d.settings.PlaybackSpeed = .1
+		d.probes = []string{"i:L1", "v:L1", "v:V1.positive"}
+	case "rlc":
+		d.graph = RLCExampleGraph()
+		d.selected = "L1"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .0001, .01
+		d.probes = []string{"v:C1", "i:L1", "v:L1", "v:V1.positive"}
+	case "flyback":
+		d.graph = FlybackExampleGraph()
+		d.selected = "L1"
+		d.settings.PlaybackSpeed = .1
+		d.probes = []string{"i:L1", "v:M1.drain", "i:D1", "v:VIN.positive"}
 	case "switch-npn":
 		d.graph = SwitchedNPNExampleGraph()
 		d.view = View{Center: Point{X: -40, Y: 20}, Zoom: .7}

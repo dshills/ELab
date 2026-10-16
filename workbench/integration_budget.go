@@ -52,3 +52,17 @@ func (b *integrationBudget) take() error {
 	}
 	return nil
 }
+
+// A coupled stage solve can contain several Newton iterations. Check the
+// existing wall deadline between those iterations without counting them as
+// extra adaptive attempts or granting a fresh per-stage budget.
+func (b *integrationBudget) checkTime() error {
+	elapsed := time.Since(b.started)
+	if b.elapsed != nil {
+		elapsed = b.elapsed()
+	}
+	if elapsed > MaxIntegrationWallTime {
+		return &integrationBudgetError{code: "integration-time-limit", attempts: b.attempts, elapsed: elapsed}
+	}
+	return nil
+}

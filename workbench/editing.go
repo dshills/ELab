@@ -225,7 +225,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if err := params(raw, &p, "duration_s", "sample_step_s", "input_mode", "capacitor_initials"); err != nil {
 			return err
 		}
-		if err := validateCapacitorInitialFields(raw); err != nil {
+		if err := validateStartupFields(raw); err != nil {
 			return err
 		}
 		if err := validateVerificationSettings(p, s.graph); err != nil {
@@ -238,7 +238,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if err := params(raw, &p); err != nil {
 			return err
 		}
-		if err := validateCapacitorInitialFields(raw); err != nil {
+		if err := validateStartupFields(raw); err != nil {
 			return err
 		}
 		var fields map[string]json.RawMessage
@@ -548,6 +548,12 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		return s.pinCommandLocked(command, raw)
 	case "scope.trace.select", "scope.probe.remove", "scope.probes.set", "scope.cursor.set", "scope.cursor.select", "scope.cursor.clear":
 		return s.scopeCommandLocked(command, raw)
+	case "inductor.initial.set":
+		var p ValueParams
+		if err := params(raw, &p, "id", "value"); err != nil {
+			return err
+		}
+		return s.inductorInitialLocked(p)
 	case "capacitor.initial.set":
 		var p ValueParams
 		if err := params(raw, &p, "id", "value"); err != nil {
@@ -593,7 +599,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return fmt.Errorf("drawing supports at most %d components", MaxComponents)
 		}
 		if p.ID == "" {
-			prefix := map[string]string{"dc-source": "V", "resistor": "R", "led": "D", "diode": "D", "potentiometer": "P", "ground": "GND", "capacitor": "C", "pulse-source": "V", "sine-source": "V", "finite-pulse-source": "V", "npn": "Q", "nmos": "M", "pmos": "M", "junction": "J", "net-label": "L", "switch": "S"}[p.Kind]
+			prefix := map[string]string{"dc-source": "V", "resistor": "R", "led": "D", "diode": "D", "potentiometer": "P", "ground": "GND", "capacitor": "C", "inductor": "L", "pulse-source": "V", "sine-source": "V", "finite-pulse-source": "V", "npn": "Q", "nmos": "M", "pmos": "M", "junction": "J", "net-label": "L", "switch": "S"}[p.Kind]
 			if prefix == "" {
 				return fmt.Errorf("unknown part kind")
 			}

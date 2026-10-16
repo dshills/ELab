@@ -5,6 +5,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	fail := func(status, code, msg, id string) (Compiled, string, *Diagnostic) {
 		return out, status, &Diagnostic{code, msg, id}
 	}
+	inductors := []Component{}
 	mos := []Component{}
 	sources, caps, qs, rs, leds, grounds, switches, diodes, pots := []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}
 	for _, p := range g.Components {
@@ -13,6 +14,8 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			sources = append(sources, p)
 		case "capacitor":
 			caps = append(caps, p)
+		case "inductor":
+			inductors = append(inductors, p)
 		case "nmos", "pmos":
 			mos = append(mos, p)
 		case "npn":
@@ -32,7 +35,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		case "ground":
 			grounds = append(grounds, p)
 		default:
-			return fail("unsupported", "unsupported-model", "The network solver supports sources, resistors, SPST switches, potentiometers, capacitors, diodes, red LEDs, grounded-emitter NPNs and N/P-channel MOSFETs.", p.ID)
+			return fail("unsupported", "unsupported-model", "The network solver supports sources, resistors, SPST switches, potentiometers, capacitors, inductors, diodes, red LEDs, grounded-emitter NPNs and N/P-channel MOSFETs.", p.ID)
 		}
 	}
 	if len(mos) > 0 || len(pots) > 0 || len(diodes) > 0 || len(switches) > 0 || len(caps) == 0 || len(qs) == 0 {
@@ -54,7 +57,10 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		}
 	}
 
-	if len(mos) > MaxNetworkMOSFETs || SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
+	if len(inductors) > 0 {
+		out.Analysis = InductorAnalysis
+	}
+	if len(inductors) > MaxNetworkInductors || len(mos) > MaxNetworkMOSFETs || SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
 		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
 	}
 	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots) == 0 {

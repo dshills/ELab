@@ -1,0 +1,97 @@
+{
+  "analysis": "RLC network transient",
+  "paused": true,
+  "mixed": {
+    "inductors": [
+      {
+        "id": "L1",
+        "voltage_v": 4,
+        "current_a": 0.02,
+        "energy_j": 2e-05
+      }
+    ],
+    "engine": "elab.rlc-mna-radau5.v1",
+    "run_id": 30,
+    "electrical_revision": 24,
+    "time_s": 0,
+    "nodes_v": {
+      "net:C1.1": 0,
+      "net:C1.2": 0,
+      "net:L1.1": 4,
+      "net:R1.1": 5
+    },
+    "transistors": [],
+    "capacitors": [
+      {
+        "id": "C1",
+        "voltage_v": 0,
+        "current_a": 0.02,
+        "energy_j": 0
+      }
+    ],
+    "leds": [],
+    "resistors": [
+      {
+        "id": "R1",
+        "current_a": 0.02,
+        "voltage_v": 1,
+        "power_w": 0.02
+      }
+    ],
+    "sources": [
+      {
+        "id": "V1",
+        "current_a": 0.02,
+        "voltage_v": 5,
+        "power_w": 0.1
+      }
+    ],
+    "kcl_residual_a": 0,
+    "power_residual_w": 0,
+    "numerical_damping_w": 0,
+    "stale": false
+  },
+  "transient": {
+    "engine": "elab.rlc-mna-radau5.v1",
+    "run_id": 30,
+    "electrical_revision": 24,
+    "source_id": "V1",
+    "resistor_id": "",
+    "capacitor_id": "C1",
+    "output_net": "net:C1.1",
+    "time_constant_s": 0,
+    "settings": {
+      "step_s": 0.0001,
+      "high_s": 0.05,
+      "low_s": 0.05,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 0.01
+    },
+    "input_mode": "auto",
+    "sample": {
+      "state": "network",
+      "time_s": 0,
+      "input_v": 5,
+      "voltage_v": 0,
+      "current_a": 0.02,
+      "energy_j": 2e-05
+    },
+    "samples": [
+      {
+        "state": "network",
+        "time_s": 0,
+        "input_v": 5,
+        "voltage_v": 0,
+        "current_a": 0.02,
+        "energy_j": 2e-05
+      }
+    ],
+    "events": [
+      {
+        "time_s": 0,
+        "mode": "restart"
+      }
+    ],
+    "stale": false
+  }
+}

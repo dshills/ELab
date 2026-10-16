@@ -8,6 +8,8 @@ func partAliases(kind string) []string {
 		return []string{"resistance", "current limiter"}
 	case "capacitor":
 		return []string{"cap", "charge storage"}
+	case "inductor":
+		return []string{"coil", "choke", "magnetic energy"}
 	case "sine-source":
 		return []string{"sine wave", "AC source", "signal generator"}
 	case "finite-pulse-source":
@@ -45,6 +47,8 @@ func partLimitations(kind string) string {
 		return "Ideal constant resistance; no tolerance, heating, parasitics, ratings or physical part identity. Current is positive from pin 1 to pin 2."
 	case "capacitor":
 		return "Ideal capacitor with configurable initial voltage; no ESR, leakage, polarity, heating, ratings or physical part identity. Voltage and current use pin 1 relative to pin 2."
+	case "inductor":
+		return "Ideal constant inductance with configurable signed initial current; voltage pin 1 minus pin 2, current into pin 1/out of pin 2, energy L I² / 2. No winding resistance, saturation, mutual coupling, parasitic capacitance, heating, ratings or physical part identity. Add external resistance and a return path for switching current."
 	case "ground":
 		return "Common zero-volt reference; this symbol establishes the simulation reference, not protective earth or a physical grounding design."
 	case "pulse-source":

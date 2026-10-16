@@ -236,7 +236,7 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	if npn {
 		titleText = "Live NPN scope"
 	}
-	if t != nil && (t.Engine == workbench.MixedEngineID || t.Engine == workbench.NetworkEngineID || t.Engine == workbench.WaveformEngineID) {
+	if t != nil && (t.Engine == workbench.MixedEngineID || t.Engine == workbench.NetworkEngineID || t.Engine == workbench.WaveformEngineID || t.Engine == workbench.InductorEngineID) {
 		titleText = "Live circuit network"
 	}
 	title := section("scope-title", titleText)
@@ -315,10 +315,14 @@ func (s *screen) transientInspector(state workbench.Snapshot) []ui.Node {
 		title = "Pulse experiment"
 		help = "Instantaneous NPN response. Settings restart time; no device delay or storage."
 	}
-	mixed := workbench.IsNetworkAnalysis(state.Analysis) || state.Transient != nil && (state.Transient.Engine == workbench.NetworkEngineID || state.Transient.Engine == workbench.WaveformEngineID)
+	mixed := workbench.IsNetworkAnalysis(state.Analysis) || state.Transient != nil && (state.Transient.Engine == workbench.NetworkEngineID || state.Transient.Engine == workbench.WaveformEngineID || state.Transient.Engine == workbench.InductorEngineID)
 	if mixed {
 		title = "Network experiment"
 		help = "Capacitor state evolves with the coupled circuit. Select each C to set signed startup voltage."
+	}
+	if state.Analysis == workbench.InductorAnalysis {
+		title = "RLC experiment"
+		help = "Coil current and capacitor voltage stay continuous at source/switch events. Select L or C to set signed startup state."
 	}
 	nodes := s.probeInspector(state)
 	nodes = append(nodes, section("transient-title", title), quiet("transient-help", help))

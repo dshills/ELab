@@ -183,7 +183,7 @@ func recordingGridTimeMatches(at, target, spacing float64) bool {
 }
 
 func recordingNear(a, b float64) bool {
-	return finite(a) && math.Abs(a-b) <= 1e-12*math.Max(1, math.Abs(b))
+	return finite(a) && finite(b) && math.Abs(a-b) <= 1e-12*math.Max(1, math.Abs(b))
 }
 func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 	switch m.Analysis {
@@ -196,10 +196,16 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		if r == nil || m.LED != nil || m.Mixed != nil || r.Stale || r.Engine != NPNEngineID || r.Model != TransistorModel() || r.TransistorID != c.Transistor.ID || r.SupplyID != c.Source.ID || r.InputID != c.Input.ID {
 			return fmt.Errorf("invalid recorded NPN final result")
 		}
-	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis:
+	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis, InductorAnalysis:
 		r := m.Mixed
 		if r == nil || m.LED != nil || m.NPN != nil || r.Stale || r.Engine != networkEngine(m.Analysis) || !recordingNear(r.Time, m.Duration) || len(r.Nodes) > MaxMixedNodes+1 {
 			return fmt.Errorf("invalid recorded mixed final result")
+		}
+		for _, v := range r.Inductors {
+			p, ok := m.Graph.Component(v.ID)
+			if !ok || p.Kind != "inductor" || !recordingNear(v.Energy, .5*p.Value*v.Current*v.Current) || !recordingNear(v.Voltage, r.Nodes[c.TerminalNet[v.ID+".1"]]-r.Nodes[c.TerminalNet[v.ID+".2"]]) {
+				return fmt.Errorf("invalid recorded inductor identity, voltage or energy")
+			}
 		}
 		mosIDs := map[string][]string{"nmos": {}, "pmos": {}}
 		for _, mos := range r.MOSFETs {
@@ -225,8 +231,12 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		for _, group := range []struct {
 			kind string
 			ids  []string
-		}{{"capacitor", nil}, {"led", nil}, {"resistor", nil}, {"source", nil}, {"switch", nil}, {"diode", nil}, {"potentiometer", nil}} {
+		}{{"capacitor", nil}, {"inductor", nil}, {"led", nil}, {"resistor", nil}, {"source", nil}, {"switch", nil}, {"diode", nil}, {"potentiometer", nil}} {
 			switch group.kind {
+			case "inductor":
+				for _, v := range r.Inductors {
+					group.ids = append(group.ids, v.ID)
+				}
 			case "capacitor":
 				for _, v := range r.Capacitors {
 					group.ids = append(group.ids, v.ID)

@@ -244,6 +244,12 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			fmt.Fprintf(&b, `<path d="M0 -45 L%g -12 L%g -20 M%g -12 L%g -20"/>`, contact, contact-5, contact, contact+5)
 		case "resistor":
 			b.WriteString(`<path d="M-55 0 H-34 L-28 -10 L-17 10 L-6 -10 L6 10 L17 -10 L28 10 L34 0 H55"/>`)
+		case "inductor":
+			b.WriteString(`<polyline points="`)
+			for _, point := range InductorPolyline() {
+				fmt.Fprintf(&b, "%g,%g ", point.X, point.Y)
+			}
+			b.WriteString(`"/>`)
 		case "capacitor":
 			b.WriteString(`<path d="M0 -32 V-7 M-23 -7 H23 M-23 7 H23 M0 7 V32"/>`)
 		case "diode":
@@ -319,6 +325,9 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 		if p.InitialVoltage != nil {
 			text += fmt.Sprintf(" · initial %.4g V", *p.InitialVoltage)
 		}
+		if p.InitialCurrent != nil {
+			text += fmt.Sprintf(" · initial %.4g A", *p.InitialCurrent)
+		}
 		fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="12">%s</text>`, x, y, html.EscapeString(text))
 	}
 	b.WriteString("</g>")
@@ -339,6 +348,9 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 }
 
 func displayPartValue(p Component) string {
+	if p.Kind == "inductor" {
+		return InductorValueLabel(p.Value)
+	}
 	value, suffix := p.Value, p.Unit
 	if p.Kind == "resistor" && value >= 1000 {
 		value /= 1000
@@ -376,6 +388,9 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 		text += " · " + displayPartValue(p)
 	}
 	switch p.Kind {
+	case "inductor":
+		at := InductorLabelPosition(p)
+		x, y = at.X, at.Y
 	case "led":
 		at := LEDLabelPosition(p)
 		x, y = at.X, at.Y

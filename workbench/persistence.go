@@ -447,6 +447,12 @@ func decodeDocument(data []byte) (Document, error) {
 			}
 			expected.InitialVoltage = c.InitialVoltage
 		}
+		if c.InitialCurrent != nil {
+			if c.Kind != "inductor" || !finite(*c.InitialCurrent) || math.Abs(*c.InitialCurrent) > MaxInductorInitialCurrent {
+				return d, fmt.Errorf("invalid inductor initial current on %s", c.ID)
+			}
+			expected.InitialCurrent = c.InitialCurrent
+		}
 		if !reflect.DeepEqual(expected, c) {
 			return d, fmt.Errorf("invalid component metadata, model, value, or grid position on %s", c.ID)
 		}

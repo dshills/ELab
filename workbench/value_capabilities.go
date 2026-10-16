@@ -3,7 +3,7 @@ package workbench
 // Editing domains are distinct from analysis overrides (for example a signed
 // swept DC bias); this discovery describes ordinary schematic value commands.
 func addValueCapabilityDetails(id string, schema map[string]any) bool {
-	if id != "component.place" && id != "component.set" && id != "capacitor.initial.set" {
+	if id != "component.place" && id != "component.set" && id != "capacitor.initial.set" && id != "inductor.initial.set" {
 		return false
 	}
 	value := inputProperty(schema, "value")
@@ -11,7 +11,14 @@ func addValueCapabilityDetails(id string, schema map[string]any) bool {
 	value["minLength"] = 1
 	value["description"] = "Finite, representable SI text with case-sensitive prefixes in the component's units; bounds apply after parse-then-scale normalization. Nonzero values must not round to zero."
 	contract := commandContractDetail{Version: 1, Scope: "component-values-and-placement", Preconditions: []string{}, Effects: []string{"Commits through ordinary electrical edit/restart/paused-stale and undo rules; invalid input preserves previous graph/physics/history"}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Unknown target/kind, malformed value or value outside domain/coupled waveform constraints"}}, Completion: &commandCompletionDetail{Mode: "immediate edit admission; any asynchronous live recomputation remains observable on existing simulation state", Observe: []string{"project.inspect", "events.poll", "simulation.wait"}}}
-	if id == "capacitor.initial.set" {
+	if id == "inductor.initial.set" {
+		value["description"] = "Signed finite current text in A/mA/uA/µA/μA, or exact literal default for zero; positive into pin 1/out of pin 2."
+		value["x-numeric-domain"] = map[string]any{"unit": "A", "minimum": -MaxInductorInitialCurrent, "maximum": MaxInductorInitialCurrent}
+		value["x-special-values"] = []string{"default"}
+		contract.Preconditions = []string{"id names a current inductor"}
+		contract.Effects = append(contract.Effects, "Sets signed startup current; default clears the component override for zero. Existing live current is not resumed on a fresh run.")
+		schema["examples"] = []any{ValueParams{ID: "L1", Value: "-20 mA"}, ValueParams{ID: "L1", Value: "default"}}
+	} else if id == "capacitor.initial.set" {
 		value["description"] = "Signed finite voltage text in V/mV/uV/µV/μV, or exact literal default to use experiment startup; pin 1 minus pin 2."
 		value["x-numeric-domain"] = map[string]any{"unit": "V", "minimum": -12, "maximum": 12}
 		value["x-special-values"] = []string{"default"}
@@ -44,7 +51,14 @@ func addValueCapabilityDetails(id string, schema map[string]any) bool {
 			"max_grounded_constraint_retries": 1,
 			"max_newton_iterations":           maxMixedNewtonIterations, "max_nonlinear_node_update_v": maxMixedNewtonDelta,
 			"max_abs_node_voltage_v": maxMixedNodeVoltage,
-			"time_integration":       "Existing backward-Euler/adaptive error and per-output attempt/time budgets; no simplified model substitution",
+			"time_integration":       "Existing network circuits retain backward Euler and other legacy engines remain unchanged. L networks use elab.rlc-mna-radau5.v1 three-stage Radau IIA, conservative full/two-half current/node/charge checks and an LC step ceiling. Existing per-output attempt/time budgets remain; no device-model substitution.",
+			"inductor_numerics": map[string]any{
+				"engine": InductorEngineID, "minimum_internal_step_s": minimumInductorStep,
+				"kcl_absolute_floor_a": inductorKCLAbsolute, "kcl_relative_jacobian_scale": inductorKCLRelative,
+				"method":  "Three-stage fifth-order Radau IIA collocation; all stages enforce device KCL and storage equations. Newton requires current residual and voltage-correction convergence; stage iterations share the same output wall deadline.",
+				"startup": "Preserve configured/accepted L current and C voltage; require signed current-cut balance and differentiate redundant cutset KCL to determine voltage. DC instead imposes zero L voltage.",
+				"led":     "Same clipped forward LED equation, solved in junction voltage with a forward one-sided Jacobian at zero to resolve Is-scale startup; no new reverse leakage.",
+			},
 		}
 		schema["x-normalized-si-relations"] = []inputRelation{{Operator: "sum_absolute_maximum", Fields: []string{"value", "snapshot.components[id].sine.offset_v"}, Limit: 12, WhenKind: "sine-source"}, {Operator: "greater_or_equal", Fields: []string{"value", "snapshot.components[id].pulse.low_v"}, WhenKind: "finite-pulse-source"}}
 		schema["x-inventory"] = map[string]string{"part_definitions": "parts.list", "current_id_kind_waveforms": "snapshot.components"}

@@ -41,7 +41,7 @@ func routeBody(p Component) routeRect {
 	switch p.Kind {
 	case "potentiometer":
 		w, h = 58, 38
-	case "resistor", "switch":
+	case "resistor", "inductor", "switch":
 		w, h = 58, 24
 	case "led", "diode":
 		w = 56
@@ -133,6 +133,18 @@ func computeWireRoute(g Graph, w Wire) []Point {
 		if !IsConnectivityPrimitive(p.Kind) {
 			rects = append(rects, routeBody(p))
 		}
+		switch p.Kind {
+		case "pulse-source", "finite-pulse-source", "sine-source":
+			// Waveform annotations depend on experiment settings, outside
+			// this graph-only route cache. Do not substitute a false label.
+			continue
+		}
+		// Exported captions have opaque masks. Avoid those masks as well
+		// as symbols: a connected route must not appear broken beneath a
+		// caption after moving or rotating a component. Include clearance
+		// for the ordinary wire stroke, using the shared caption geometry.
+		x, y, text := schematicPartLabel(p)
+		rects = append(rects, routeRect{x - 4.5, x - 3 + schematicLabelWidth(text) + 1.5, y - 16.5, y + 5.5})
 	}
 	blocked := func(c routeCell) bool {
 		x, y := float64(c.x*10), float64(c.y*10)

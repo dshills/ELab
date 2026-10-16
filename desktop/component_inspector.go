@@ -45,6 +45,9 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 		if part.Kind == "resistor" {
 			inspector = append(inspector, ui.Node{ID: "presets", Kind: ui.Row, Children: []ui.Node{s.action("r-1k", "1 kΩ", "component.set", workbench.ValueParams{ID: part.ID, Value: "1k"}), s.action("r-2k", "2 kΩ", "component.set", workbench.ValueParams{ID: part.ID, Value: "2k"})}})
 		}
+		if part.Kind == "inductor" {
+			inspector = append(inspector, s.inductorControls(state, part)...)
+		}
 		if part.Kind == "capacitor" {
 			initial := state.TransientSettings.InitialVoltage
 			if c, _, d := graph.Compile(); d == nil && c.Analysis == "RC transient" && c.TerminalNet[part.ID+".1"] != c.Output {
