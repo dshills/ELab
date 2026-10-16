@@ -22,6 +22,7 @@ type adapterResult struct {
 	Workflows           []conformance.Result           `json:"workflows"`
 	Electrical          *conformance.ElectricalResult  `json:"electrical,omitempty"`
 	Inductors           *conformance.InductorResult    `json:"inductors,omitempty"`
+	OpAmps              *conformance.OpAmpSuiteResult  `json:"opamps,omitempty"`
 	Performance         *conformance.PerformanceResult `json:"performance,omitempty"`
 	InductorPerformance *conformance.PerformanceResult `json:"inductor_performance,omitempty"`
 }
@@ -45,6 +46,7 @@ func run() error {
 	directory := flag.String("artifacts", "", "new empty output directory (required; never replaces existing data)")
 	electrical := flag.Bool("electrical-suite", false, "also run frozen independent electrical references and mixed flasher timestep refinement")
 	inductors := flag.Bool("inductor-suite", false, "also construct/probe/save/reopen coils and run analytic RL/RLC, flyback and mixed RC/NPN/coil checks")
+	opamps := flag.Bool("opamp-suite", false, "also verify powered amplifier references, mixed RC/NPN and two-buffer RC/MOSFET circuits, captures and save/reopen")
 	performance := flag.Bool("performance-suite", false, "also measure fresh/warm backend edit/result and Verify latency in owned sessions")
 	inductorPerformance := flag.Bool("inductor-performance-suite", false, "also measure RL/RLC/flyback/mixed NPN-coil fresh/warm timing, 200 ms Verify at 1 ms outputs")
 	repetitions := flag.Int("repetitions", 20, "performance repetitions per circuit/condition (20–100)")
@@ -84,6 +86,7 @@ func run() error {
 	var reference []conformance.Result
 	var electricalReference *conformance.ElectricalResult
 	var inductorReference *conformance.InductorResult
+	var opAmpReference *conformance.OpAmpSuiteResult
 	for _, mode := range modes {
 		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 		workflows, runErr := conformance.Run(ctx, mode.factory, filepath.Join(dir, mode.name))
@@ -127,6 +130,22 @@ func run() error {
 			if qualificationErr != nil {
 				result.Adapters = append(result.Adapters, adapter)
 				return writeFailure(dir, result, fmt.Errorf("%s inductor suite: %w", mode.name, qualificationErr))
+			}
+		}
+		if *opamps {
+			ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+			qualified, qualificationErr := conformance.RunOpAmps(ctx, mode.factory, filepath.Join(dir, mode.name, "opamps"))
+			cancel()
+			adapter.OpAmps = &qualified
+			if qualificationErr == nil {
+				if opAmpReference == nil {
+					opAmpReference = &qualified
+				}
+				qualificationErr = conformance.CompareOpAmps(*opAmpReference, qualified)
+			}
+			if qualificationErr != nil {
+				result.Adapters = append(result.Adapters, adapter)
+				return writeFailure(dir, result, fmt.Errorf("%s op-amp suite: %w", mode.name, qualificationErr))
 			}
 		}
 		if *performance {

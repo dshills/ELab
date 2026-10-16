@@ -1,0 +1,244 @@
+{
+  "date": "2026-10-16",
+  "scope": "Unreleased powered op-amp numerical and four-adapter source qualification, with a narrow failed mounted-editor recheck; no app-release or universal topology/performance acceptance",
+  "source_base": "35d6afbaec47207aca4803457cac8dbc09c964c1",
+  "public_suite": {
+    "flag": "--opamp-suite",
+    "command": "build/opamp-qualification/elab-conformance --opamp-suite --agent-binary build/opamp-qualification/elab-agent --native-binary build/opamp-qualification/elab-desktop --artifacts build/opamp-qualification/adapters",
+    "exit_code": 0,
+    "adapters": [
+      "in-process",
+      "headless-stdio",
+      "headless-socket",
+      "native-socket"
+    ],
+    "checks_per_adapter": 931,
+    "cases": [
+      {
+        "name": "opamp-follower",
+        "rows": 101,
+        "probes": [
+          "v:VIN.positive",
+          "v:U1",
+          "i:U1",
+          "v:U1.input-difference"
+        ],
+        "observations": 3,
+        "graph_sha256": "8a9714a865f8c46e8a9f3ed0f33b6e03c614eb93cd129dcafb854ed16325588d"
+      },
+      {
+        "name": "opamp-inverting",
+        "rows": 101,
+        "probes": [
+          "v:VIN.positive",
+          "v:U1",
+          "i:U1",
+          "v:U1.input-difference"
+        ],
+        "observations": 3,
+        "graph_sha256": "3fd491015df460f03a0fb3c5b9b80f82cdc92249bebe8f26b7b669eafa242985"
+      },
+      {
+        "name": "opamp-rc-npn",
+        "rows": 105,
+        "probes": [
+          "v:C1",
+          "v:U1",
+          "i:U1",
+          "i:D1",
+          "v:Q1.base"
+        ],
+        "observations": 4,
+        "graph_sha256": "31167a0f5e22f0bf31b832464b5acdb256b9b9540fa196586d246b005a6ea383"
+      },
+      {
+        "name": "opamp-rc-mosfet",
+        "rows": 105,
+        "probes": [
+          "v:C1",
+          "v:U1",
+          "v:U2",
+          "i:D1"
+        ],
+        "observations": 4,
+        "graph_sha256": "e8796e88b83639a3410ed27240412423096cf9f21fbad3493eba8b7be328d4fb"
+      }
+    ],
+    "evidence": "docs/validation/opamp-adapter-conformance.json",
+    "lossless_reconstruction_checked": true,
+    "raw_report_sha256": "9061252d2c7ebde95b259d5a61d37d6d098694f98ab1edf5ab1fe1625f75f38e",
+    "independence_limits": [
+      "Frozen Decimal guided peaks and analytic RC input memory.",
+      "Independent scalar bisection of declared follower/current/load law; captured NPN base voltage is a boundary condition, not an independent NPN oracle.",
+      "Exact cross-adapter rows/observations verify parity separately from numerical references."
+    ],
+    "max_reference_absolute_error_v": 0.0007357166500039369
+  },
+  "repairs": [
+    {
+      "problem": "Current-domain LED bisection at the off NPN leakage scale left current roundoff that oscillated the strict Newton voltage correction.",
+      "change": "Use the existing coil junction-voltage evaluation in op-amp networks; shared evaluator moved into mixed_led.go.",
+      "test": "TestOpAmpLEDResolvesOffTransistorLeakageWithoutChangingLegacyPath spans 1e-22 A to 3 mA; verifies legacy branch equality."
+    },
+    {
+      "problem": "Mixed buffered 5 V RC discharge exceeded the existing max(1 mV, 0.1%) reference envelope.",
+      "change": "Use existing 5e-8 V /1.25e-6 local coupling-node scales for op-amp capacitor circuits across analysis families.",
+      "legacy_no_opamp_arithmetic_unchanged": true,
+      "iteration_voltage_and_work_limits_unchanged": true
+    },
+    {
+      "problem": "Verification test failures printed the operation error pointer rather than its details.",
+      "change": "Expand the actual error in the test helper."
+    }
+  ],
+  "quality": {
+    "command": "GOPROXY=off GOFLAGS=-p=1 ./scripts/check.sh",
+    "exit_code": 0,
+    "format_imports_staticcheck": true,
+    "python_tests": 15,
+    "root_race_seconds": 65.624,
+    "root_vet": true,
+    "native_race_seconds": 136.354,
+    "native_vet": true,
+    "conformance_race_seconds_first_gate": 62.408,
+    "conformance_final_gate_used_valid_cache": true,
+    "source_files_stable_during_gate": 614,
+    "source_changes_during_gate": [],
+    "started_utc": "2026-10-16T23:40:41.797028+00:00",
+    "finished_utc": "2026-10-16T23:44:55.986563+00:00",
+    "vellum_head": "f1b917892d70479b7a30a5854e61e41189fdda50",
+    "vellum_clean_and_stable": true,
+    "post_gate_comment_only_relocation": {
+      "files": [
+        "workbench/inductor.go",
+        "workbench/mixed_led.go"
+      ],
+      "identical_non_comment_go_tokens_including_semicolons": true,
+      "goimports_and_diff_checks_pass": true,
+      "final_sha256": {
+        "workbench/inductor.go": "7f8597a8ef2ee3ef4596a0c20aeda8819b32216b9c931f72e710369277131ea5",
+        "workbench/mixed_led.go": "3c075098e42b20b6fa10ea1e51fb0715589a249d9f1753f96da48e803025ac6b"
+      }
+    }
+  },
+  "retained_failures_and_corrections": [
+    {
+      "path": "build/opamp-qualification/initial-focused.log",
+      "description": "Deleted VIN identity cannot be reused; replacement now uses new VRC identity, preserving product tombstone rules."
+    },
+    {
+      "path": "build/opamp-qualification/focused-2.log",
+      "description": "Actual mixed NPN startup failed before the LED precision repair; circuit retained."
+    },
+    {
+      "path": "build/opamp-qualification/focused-4.log",
+      "description": "Mixed pulse captures contain 105 rows, including edge observations; harness now checks full grid/event membership rather than dropping rows."
+    },
+    {
+      "path": "build/opamp-qualification/focused-5.log",
+      "description": "Ideal follower expectation omitted loaded near-rail headroom; conditional scalar law/load references replace that invalid assumption without reducing input/load."
+    },
+    {
+      "path": "build/opamp-qualification/focused-7.log",
+      "description": "Unchanged RC reference envelope failed at 67 ms; local op-amp integration control tightened, acceptance bounds retained."
+    },
+    {
+      "path": "build/opamp-qualification/full-quality.log",
+      "description": "First full gate failed TestRecordingTimingBothFlasherSides at simulated 325 ms. Original error details were hidden by test formatting. Cause remains unproven.",
+      "current_race_repetitions": 20,
+      "current_passed": true,
+      "baseline_commit": "35d6afbaec47207aca4803457cac8dbc09c964c1",
+      "baseline_race_repetitions": 20,
+      "baseline_passed": true,
+      "budget_changes": false
+    }
+  ],
+  "sdk_build_context": {
+    "native_build_observed_before_head": "cdc0111e663b626fd11fe020aee81b63c0368843",
+    "source_snapshot_and_quality_head": "f1b917892d70479b7a30a5854e61e41189fdda50",
+    "intervening_changes": [
+      "docs/reports/README.md",
+      "docs/reports/macos-empty-text-geometry/README.md",
+      "docs/reports/macos-empty-text-geometry/records/archive-index.json",
+      "docs/reports/macos-empty-text-geometry/records/comparison.json",
+      "docs/reports/macos-empty-text-geometry/records/evidence.tar.xz",
+      "specs/macos-service-performance.md"
+    ],
+    "intervening_imported_code_changes": false,
+    "canonical_sdk_release_pin_promoted": false
+  },
+  "binaries_sha256": {
+    "build/opamp-qualification/elab-agent": "9a36ca04358c6467d9ee0951b39152a9fe7f329a92801e6f33f9b3ee1b0ea60c",
+    "build/opamp-qualification/elab-desktop": "621900db0f37c16cffd7ab2b2c137c0d96bb2986cbd71ab8d3f8d46ace306216",
+    "build/opamp-qualification/elab-conformance": "86e3986de2211f6e028701f6337ae139b1bb937bc98fa0ba30753f63cf01c01c"
+  },
+  "mounted_recheck": {
+    "report": "research/ui-audit/opamp-mixed/README.md",
+    "screenshots": 3,
+    "editor_passed": false,
+    "proof": {
+      "selected": "RF",
+      "draft": "20 k\u03a9",
+      "resistance_ohm": 20000,
+      "example_modified": false,
+      "native_binary": "build/opamp-qualification/elab-desktop"
+    },
+    "observations": [
+      "Native menu/Pause/Hide scope worked.",
+      "Pointer selected RF; visible value field and Apply missing from AX tree.",
+      "Click/select-all/type did not change 20 kohm draft/value; focus returned to previous-object action.",
+      "Persistent splitter tooltip still obscures metrics."
+    ],
+    "root_cause_ownership": "unproven",
+    "owned_generated_session_closed": true
+  },
+  "preserved_apps": {
+    "canonical": {
+      "path": "build/ELab.app",
+      "entries": 7,
+      "matches_qualified_bytes_and_modes": true
+    },
+    "preserved": {
+      "path": "build/ELab-0.104.0-119-preserved.app",
+      "entries": 7,
+      "matches_qualified_bytes_and_modes": true
+    }
+  },
+  "native_source_inventory": {
+    "files": 56,
+    "sites": 388,
+    "public_commands": 162,
+    "source_routed_commands": 132,
+    "native_production_source_unchanged": true
+  },
+  "p0": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "remaining": [
+    "Minimal mounted inspector/scroll reproduction and native value editing/focus/AX/tooltip repair.",
+    "Repeated new-part performance and wider mixed storage/device/corruption envelopes.",
+    "Source-pinned application candidate, GPU/legacy/project/export/print regression qualification before app promotion.",
+    "Broader accessibility/participant/physical printer/distribution and physical-device accuracy acceptance."
+  ],
+  "artifacts_sha256": {
+    "build/opamp-qualification/source-start.json": "9bbe69c1bf1a495a91a9307647c57be9b67f54c91238943cc69d260491379cbb",
+    "build/opamp-qualification/quality-start-final.json": "0d21e68fe99dacbe768d221174178d3157d0d817687ab2d8d9aa0796e3e0d4f9",
+    "build/opamp-qualification/quality-end-final.json": "ef1c838850860236bbb9937c91ddab5dfac4f3981ed32328a64b3def59b06dbe",
+    "build/opamp-qualification/full-quality.log": "f0da7f24b225d6122329985d0c0c8c2e3dd9e5f81d3fcd4123397cdda0d0a31b",
+    "build/opamp-qualification/full-quality-final.log": "7498659bd5cb43ce106fbc57558b7c94d33dddf4663ae0aca3ec16e9b3f3d903",
+    "build/opamp-qualification/final-focused.log": "b353dffdfbff9f2643546caa2d04dcfa36bd15644730c42d5447b06fb1c11fc3",
+    "build/opamp-qualification/focused-kernel.log": "4beef0d11062ae0d931832681ae9086a9a414988ba9f18e39886af9b2912e1d7",
+    "build/opamp-qualification/flasher-repeat-current.log": "2f5a620d3b4e158c3a0e720ff0e0d6bdf87021fde2ebe5d78b6bf0e924bf8081",
+    "build/opamp-qualification/flasher-repeat-baseline.log": "a4063542ca644b76391a3a129ec6efa930584c9caba02bd750a2d93a643fcdba",
+    "build/opamp-qualification/startup-trace.log": "517fca60ede1f1f3109729856cf9891529f461490aff737dd8c08ddeabd6c64c",
+    "build/opamp-qualification/evidence-audit.json": "aada6891ac7e181d429c986d94f4961b5e05471477d45dd4275d53f14c3b2542",
+    "build/opamp-qualification/compact-evidence.py": "6b5db9415517a0ba829cd0944d781ace14231d23bc048c866cb89a935e82a588",
+    "build/opamp-qualification/comment-token-check.log": "1d86500fd52b6a3ee9a2d665fd7e26745cfa0b5ed1dbe3d7245bcc1a9e036f31",
+    "build/opamp-qualification/sdk-build-range.txt": "0e54be55a3882c9997902b4370b0ba1af88262dde9d69a75c462b2dc924c5a62",
+    "build/opamp-qualification/mounted-edit-proof.json": "fcd3df841eb5c6622211b288744e7b7d27bdcdb6346b25e44d97f08c4d91ae2e",
+    "research/ui-audit/opamp-mixed/01-inverter-new-sdk.png": "c5af640e590381215736b54e345cabcf5dd8d6929997858d7737dddd2777965c",
+    "research/ui-audit/opamp-mixed/02-feedback-editor.png": "124aea2a3c222bfef88e97f4debd969dd042fe3484d306657720851896d1d8ae",
+    "research/ui-audit/opamp-mixed/03-value-edit-still-unresolved.png": "3ee7ffb1e4e9ef178244600244acb61c8a4eea38517563cbd1e602f56a78acdb"
+  }
+}

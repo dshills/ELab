@@ -27,7 +27,7 @@ type InductorResult struct {
 
 // Small current residuals do not bound voltage error near a controlled
 // current source. Check the actual Newton correction before accepting an L
-// network; this is tighter than its integration voltage accuracy target.
+// or powered op-amp network; this is tighter than integration voltage accuracy.
 func (n *mixedNetwork) voltageCorrectionConverged(x, delta []float64, stages int) bool {
 	size := len(x) / stages
 	for stage := range stages {
@@ -66,37 +66,6 @@ func (n *mixedNetwork) residualTolerance(row int, x []float64, jacobian [][]floa
 		return inductorKCLAbsolute + inductorKCLRelative*math.Abs(old[len(n.caps)+row-n.inductorIndex(0)])
 	}
 	return 1e-8 // Source/C voltage and positive-time storage equations.
-}
-
-// The LED has a clipped zero-current reverse branch. At its v=0 boundary,
-// use the forward one-sided Jacobian for L networks so a zero-current coil
-// can initialize on that boundary. The actual current remains exactly zero;
-// this neither adds reverse leakage nor changes legacy device equations.
-func (n *mixedNetwork) ledCurrent(v float64) (i, g float64) {
-	if len(n.inductors) == 0 {
-		return diodeCurrent(v)
-	}
-	if v < 0 {
-		return 0, 0
-	}
-	m := Model()
-	nv := m.EmissionCoefficient * 1.380649e-23 * (273.15 + m.Temperature) / 1.602176634e-19
-	// Bisect junction voltage: a current-domain interval [0,V/Rs] cannot
-	// resolve Is-scale startup currents in a fixed number of iterations.
-	lo, hi := 0., v
-	for k := 0; k < 65; k++ {
-		junction := (lo + hi) / 2
-		current := m.SaturationCurrent * math.Expm1(junction/nv)
-		if junction+current*m.SeriesResistance > v {
-			hi = junction
-		} else {
-			lo = junction
-		}
-	}
-	junction := (lo + hi) / 2
-	i = m.SaturationCurrent * math.Expm1(junction/nv)
-	g = m.SaturationCurrent * math.Exp(junction/nv) / nv
-	return i, g / (1 + m.SeriesResistance*g)
 }
 
 func (n *mixedNetwork) inductorIndex(k int) int { return len(n.nodes) + len(n.sources) + k }

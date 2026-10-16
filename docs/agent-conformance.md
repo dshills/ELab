@@ -23,3 +23,13 @@ The shared runner lives in `internal/conformance`; fixtures, numerical experimen
 This establishes the three-circuit execution requirement on this workstation. It does not establish exhaustive native action/preference coverage, independent SPICE validation, timestep refinement, visible latency, keyboard/focus/screen-reader usability, clean installation/distribution or participant acceptance. Those release requirements remain open. See the [PRD audit](../research/11-prd-implementation-audit.md).
 
 [Final validation](validation/agent-conformance-validation.json) and [four-adapter report/artifacts](validation/agent-conformance-prd/report.json) record the exact tested binaries and results.
+
+## Powered op-amp suite
+
+`--opamp-suite` adds four owned-session experiments: the guided follower and inverting amplifier, an RC-buffered NPN LED driver, and two cascaded buffers driving an RC/MOSFET LED circuit. All construction, deletion/replacement, wiring, probes, restart/step, Verify and project save/reopen use existing public commands. Deleted component IDs remain reserved; the mixed circuits replace the removed sine source with a distinct VRC identity.
+
+The sine circuits require 101 samples over 100 ms. Each mixed pulse circuit preserves all 101 grid samples plus pre/post observations at the two edges, for **105 rows**. RC values satisfy the existing max(1 mV, 0.1%) analytic envelope. Independent scalar bisection checks follower output KCL against the declared current law and resistor loads, including finite-gain/rail/output-resistance effects; NPN base voltage is an observed boundary condition, not an independent NPN reference. The two guided peaks retain the frozen 90-digit Decimal references.
+
+The suite records **931 numerical checks per adapter**, complete graphs/hashes, signed result observations, every row and logical command. Comparison recomputes checks from the rows/peaks, validates graph hashes and sample/edge coverage, then compares normalized evidence. It rejects missing/altered model, case, row, graph, command or numerical evidence. Native/headless transports must match; repeated identical status polls are the only command-sequence normalization. Run/electrical revision provenance is zeroed only in compared result observations; saved projects retain their own metadata.
+
+The [four-adapter evidence](validation/opamp-adapter-conformance.json) stores common numerical/graph data once and retains each adapter's original calls. Its encoding explains reconstruction; the reconstructed JSON object was checked against the complete raw report. This extends engineering qualification without claiming repeated performance, physical input/accessibility, device accuracy, universal topology coverage or application-release acceptance.

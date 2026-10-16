@@ -40,7 +40,7 @@ func verify(t *testing.T, s *Service, p VerifyParams, key string) (Response, Ope
 	}
 	view := awaitOperation(t, s, id)
 	if view.Operation.Status != "completed" {
-		t.Fatalf("verify failed %+v", view.Operation)
+		t.Fatalf("verify failed %+v; error %+v", view.Operation, view.Operation.Error)
 	}
 	return response, view
 }

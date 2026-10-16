@@ -739,9 +739,15 @@ func (state *mixedState) advanceBudget(t *Transient, end float64, budget *integr
 						absolute, relative = 5e-7, 5e-6
 					}
 				}
+				if len(cur.net.opamps) > 0 {
+					// Controlled buffers expose accumulated capacitor error at
+					// their outputs. Use the established coupling-node tolerance
+					// across their analysis families, including waveform circuits.
+					absolute, relative = 5e-8, 1.25e-6
+				}
 				tol := absolute + relative*math.Max(math.Abs(v), math.Abs(cur.capV[i]))
 				errRatio = math.Max(errRatio, math.Abs(v-full.capV[i])/tol)
-				if cur.net.c.Analysis != MixedAnalysis && cur.net.c.Analysis != WaveformAnalysis {
+				if (cur.net.c.Analysis != MixedAnalysis || len(cur.net.opamps) > 0) && cur.net.c.Analysis != WaveformAnalysis {
 					part := cur.net.caps[i]
 					one, two := cur.net.pin(part, "1"), cur.net.pin(part, "2")
 					if one >= 0 && two >= 0 {
