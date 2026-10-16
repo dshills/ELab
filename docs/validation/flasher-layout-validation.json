@@ -1,0 +1,121 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.96.0",
+  "build_version": "111",
+  "binary_sha256": "bfdc067705441734656bf0925347afb8da78fa39ad3568d23443b071bad5dcbd",
+  "agent_binary_sha256": "2d8ceae40f09e5860da7be4b8293865572c3184b116a4148e0efd030fae9df59",
+  "prior_bundle": "build/ELab-before-flasher-layout.app",
+  "prior_binary_sha256": "78061abd28f3725648fc8845fcff09b3241de4861401f05543dad23092a46b98",
+  "bundle_files_compared": 3,
+  "bundle_manifest_sha256": "80cb1344b4ed65f164a70ae1814cff57bc430b5a977ee7cfbb263e1c3c843b01",
+  "sdk_before": {
+    "commit": "82c0c5ec17fd7f90da1a0ac4a26d65a3de8367a4",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "sdk_after": {
+    "commit": "82c0c5ec17fd7f90da1a0ac4a26d65a3de8367a4",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "workbench/flasher.go": "c5f494ae6eb0feed8ba15e1023ae2badf9d64ed90db5ed252fbcd5530f10db17",
+    "workbench/flasher_layout_test.go": "6a8ceb18006c5d4f4f768e9ab83e34e87b7630476f59dae0d7bb528ad6287ca5",
+    "workbench/testdata/flasher-layout-095.json": "5a934d0eaf8c1673c166b00b84bea69d80f7ff5b1e5becd2ba77f3199d2d924f",
+    "scripts/examples-demo.py": "65fd38356347a361c949bf62063646715b7f0a88cec7350dc9df95d4bc3085c7",
+    "scripts/flasher-layout-demo.py": "8bea4b28a30a91b7a99deca038eccbbfe9183a674a52bd28d082aa2b0d7a12aa"
+  },
+  "positions": {
+    "V1": {
+      "x": -400,
+      "y": 0
+    },
+    "RB1": {
+      "x": -330,
+      "y": -100
+    },
+    "RB2": {
+      "x": 280,
+      "y": -100
+    }
+  },
+  "legacy_fixture": {
+    "path": "docs/validation/flasher-layout-legacy-095.elab",
+    "sha256": "fe99f7c790638b48708434d6a646ab301e03f0550d2f5a49acc23f4e4b643c97",
+    "source_version": "0.95.0",
+    "source_binary_sha256": "78061abd28f3725648fc8845fcff09b3241de4861401f05543dad23092a46b98",
+    "saved_paused": false,
+    "recording_count": 1
+  },
+  "captured_rows": 41,
+  "captured_output_step_s": 0.005,
+  "rows_sha256": "54e731093c894ea01322e2b85ca42f907a1b54279da120cedcd24d498c3b2abd",
+  "exports": {
+    "svg": "99212e4b34f670d01dc71a224136d105105a48df052bb9c67d1326acfca90a5f",
+    "png": "63f12d8aebb46e3da81357940ac87eb99e20ef850d6bc678785d107cd8757a8e"
+  },
+  "checks": [
+    "Only V1/RB1/RB2 positions change; component identities/values/models, named wires, startup/settings and kernel code remain unchanged",
+    "Bias labels clear neighboring pins; exact export masks plus wire half-stroke clear every routed wire; existing native route/body regression passes",
+    "Frozen actual .95 graph/settings and new graph produce exactly equal full MixedResult and TraceSample at startup and each millisecond through 600 ms",
+    "Actual .95 project and recording reopen/resave unchanged, including saved pause preference; protected reset refuses without mutation; guarded discard/reset/undo/redo follow schematic-only history",
+    "Public native/headless 200 ms captures exactly equal all 41 prior-release rows; SVG/PNG bytes match; SVG/PNG/PDF exports preserve state and revised file reopens",
+    "Existing examples workflow repaired to exercise all eleven shipped examples, guidance, running load, protected paused reset and edited-origin fresh-process reopen",
+    "Direct native and PNG review confirms bias clearance; remaining capacitor caption crowding and fitted small text explicitly recorded",
+    "Final serial lint/import/root/native race/vet, Python compile, source inventory, PRD coverage and diff whitespace checks pass",
+    "Packaged isolated GPU/UI/scope/protected-close smoke passes; all four adapters pass three workflows and 294 electrical checks each with 0.488 s three-level flasher period",
+    "Production native source inventory remains 51 files/384 sites/161 public IDs/131 routes; SDK clean and unchanged with all 237 final prepared outputs verified",
+    "Canonical/candidate/build bytes, bundle modes/version match; prior .95 bundle preserved; owned visual host exited 0 and managed smoke/conformance processes exited successfully"
+  ],
+  "corrections": [
+    "Intermediate spacing cleared LED pins but caused wire/supply-body and label-mask/wire intersections. Existing and new regressions rejected these layouts; a bounded geometry search identified the final supply at (-400,0). Routing constraints were retained.",
+    "Compatibility script initially assumed the source fixture was paused; actual .95 file saves paused=false. It now checks the persisted preference and explicitly pauses before geometry-only comparisons.",
+    "Compatibility script initially expected reset undo to restore recordings. Existing documented history restores schematics only; the final workflow verifies that contract and preserves the original full saved fixture instead. No history behavior was changed."
+  ],
+  "limitations": [
+    "Template bias spacing only; no general automatic routing/label placement. Native C1/D1 caption crowding, capacitor export captions and small fitted text remain open.",
+    "Kernel equality/refinement validates unchanged educational equations and sampling; not independent physical oscillator or SPICE qualification.",
+    "Native screenshots viewed through CUA inline, not retained screenshot files. Export PNG reviewed; PDF header/state exercised, not rendered PDF or physical print acceptance.",
+    "Performance suite not repeated because kernel/model/work limits are unchanged. Broader visible latency, capacity/difficult-circuit, mounted input/IME/accessibility, clean distribution and participant gates remain open. P0 stays 17 implemented/10 partial."
+  ],
+  "artifacts": [
+    "docs/flasher-layout.md",
+    "docs/validation/flasher-layout-conformance.json",
+    "docs/validation/flasher-layout-examples.json",
+    "docs/validation/flasher-layout-headless.json",
+    "docs/validation/flasher-layout-legacy-095.elab",
+    "docs/validation/flasher-layout-native.json",
+    "docs/validation/flasher-layout-visual-review.json"
+  ],
+  "build_evidence_sha256": {
+    "build/flasher-layout-096/before.log": "95dc71cd780b18fc08c5c4d637b15fe3d95b870e184b295a4cf788d6b6383412",
+    "build/flasher-layout-096/check.log": "48975002e7e10abbbd5b5aba167bbbcbfb649bc409e6f4783c35322e0c8c471b",
+    "build/flasher-layout-096/check-final.log": "dcf13f9a35fd64b0bbb4aeca61a5aee82a456578fe3583e86aa8881377d66207",
+    "build/flasher-layout-096/core-final.log": "2757094f036537917fb146c925c98dc1543291b34bef6147d5f67ef838b10df3",
+    "build/flasher-layout-096/routes-checked.log": "ef7fcd4af966d90c554f58c5fd7c3aece982e2075d6912320692ce0149b3cd69",
+    "build/flasher-layout-096/check-checked.log": "89fad1510a3341f867280f018e1df3af9bf335b446c5ecbc0f3697ac49ffce8f",
+    "build/flasher-layout-096/candidates.log": "8fb6aa7fbdd3bdb55dfb36221825ad14b15a72e0f36d078f127db515e386b045",
+    "build/flasher-layout-096/build-final.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/flasher-layout-096/package.log": "20106c53378fafb87a12c952b98ab1f4feda9fefcae5ac197029126b9d5875f7",
+    "build/flasher-layout-096/headless-final.log": "198dcf334663ca6945378788bcd306199dc5c4bc10ea7ad3665ddbf9c9cb77bf",
+    "build/flasher-layout-096/native.log": "7c1c09aad7c1b52721e4c5122b0f22637ab5685c3684ca6a4879391df5854984",
+    "build/flasher-layout-096/examples-final.log": "6933f42b944376e9409b0fc271fd06404f28dcc1ab9a9a8b13fcb70d1950f391",
+    "build/flasher-layout-096/smoke.log": "9f88840ca25b44205ff105fc61c6d15102190d6e232330723570cd2202f006af",
+    "build/flasher-layout-096/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/flasher-layout-096/sdk-before.json": "a5a70c36b0a8503ee04d93ac6f989cd755c92f818147bc206ac3effd6a62d489",
+    "build/flasher-layout-096/sdk-release-after.json": "a5a70c36b0a8503ee04d93ac6f989cd755c92f818147bc206ac3effd6a62d489",
+    "build/flasher-layout-096/ui-inventory-final.json": "16c1fdfa948650d0361838bd5055c2c93ec112a347996f4b46c9fa611564f4bf",
+    "build/flasher-layout-096/native-visual-state.json": "6100528f0744708fa8aacf81c5712ba0c97f28a75bb484fe4c48eee3d048a70f",
+    "build/flasher-layout-096/legacy-source.json": "70a886793113209a76368551755bd94ac1ec66edb1b82fa2eb090ad2d27d7c28",
+    "build/flasher-layout-096/promotion.json": "f1f7f105a51e17dffd4ddb427abdbe5f5095aec81b29ae2924ca3663be1b68f5"
+  }
+}

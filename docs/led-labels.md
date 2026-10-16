@@ -10,6 +10,6 @@ The public reference `scripts/led-labels-demo.py` exports a four-rotation incomp
 
 This is clearance from an LED's own geometry, not automatic global label placement. A neighboring wire, component, source annotation or other label can still need manual rearrangement. Full typography/layout/accessibility and physical-printer acceptance remain separate work.
 
-Native inspection of the four-rotation grid and the complete live 24 V circuit confirms the visible label clearance. Direct PNG review also covers the flasher, NMOS, PMOS and LED-fade layouts. The flasher still has a separate RB resistor-label crossing at a neighboring LED pin; automatic or template-level neighboring-object clearance is not claimed.
+Native inspection of the four-rotation grid and the complete live 24 V circuit confirms the visible label clearance. Direct PNG review also covers the flasher, NMOS, PMOS and LED-fade layouts. At the 0.95.0 checkpoint the flasher still had separate RB resistor-label crossings at neighboring LED pins. The [0.96.0 template spacing repair](flasher-layout.md) clears those bias labels; general neighboring-object avoidance remains open.
 
 The oversized native smoke fixture now explicitly scrolls its offscreen scope host into view before awaiting positioned scrollbar geometry. Its strict wheel movement/no-zoom assertions remain. The viewport wait transfers completed immutable samples through a channel, avoiding shared mutable locals when owner callbacks finish after context cancellation. Neither harness change alters the product’s circuit commands or model.

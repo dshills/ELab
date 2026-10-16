@@ -109,3 +109,6 @@ The 0.94.0 nonlinear-startup checkpoint changes backend startup/rank checks and 
 
 
 The 0.95.0 LED-label checkpoint reviews only `desktop/drawing.go` among production native hashes: existing non-LED label placement is extracted unchanged, and LED text uses the shared upright rotation anchor. Candidate/source mapping and all sites/routes are otherwise identical: 51 files /384 sites /161 IDs /131 source routes. Test-only viewport/scope harness changes do not add product routes. Native rotation callbacks, actual glyph geometry, direct CUA and public export comparisons provide bounded evidence without claiming all mounted interactions.
+
+
+The 0.96.0 flasher template changes only core graph positions and regression/reference scripts. No production native source, public ID or route changes; the existing ledger verifies unchanged at 51 files /384 sites /161 IDs /131 source routes. Native/headless reset/file/export checks remain bounded runtime evidence.

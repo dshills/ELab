@@ -9,9 +9,9 @@ func FlasherExampleGraph() Graph {
 		pos             Point
 		rotation        int
 	}{
-		{"V1", "dc-source", "5 V", Point{-300, 0}, 0},
+		{"V1", "dc-source", "5 V", Point{-400, 0}, 0},
 		{"RL1", "resistor", "1k", Point{-140, -200}, 90}, {"RL2", "resistor", "1k", Point{140, -200}, 90},
-		{"RB1", "resistor", "47k", Point{-220, -100}, 90}, {"RB2", "resistor", "47k", Point{60, -100}, 90},
+		{"RB1", "resistor", "47k", Point{-330, -100}, 90}, {"RB2", "resistor", "47k", Point{280, -100}, 90},
 		{"D1", "led", "", Point{-140, -70}, 0}, {"D2", "led", "", Point{140, -70}, 0},
 		{"Q1", "npn", "", Point{-140, 70}, 0}, {"Q2", "npn", "", Point{140, 70}, 0},
 		{"C1", "capacitor", "10uF", Point{-20, 10}, 270}, {"C2", "capacitor", "10uF", Point{20, 160}, 90},

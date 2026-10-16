@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "transport": "desktop-socket",
+  "old_project_sha256": "fe99f7c790638b48708434d6a646ab301e03f0550d2f5a49acc23f4e4b643c97",
+  "revised_positions": {
+    "V1": {
+      "x": -400,
+      "y": 0
+    },
+    "RB1": {
+      "x": -330,
+      "y": -100
+    },
+    "RB2": {
+      "x": 280,
+      "y": -100
+    }
+  },
+  "captured_rows": 41,
+  "rows_sha256": "54e731093c894ea01322e2b85ca42f907a1b54279da120cedcd24d498c3b2abd",
+  "exports": {
+    "svg": "99212e4b34f670d01dc71a224136d105105a48df052bb9c67d1326acfca90a5f",
+    "png": "63f12d8aebb46e3da81357940ac87eb99e20ef850d6bc678785d107cd8757a8e"
+  },
+  "checks": [
+    "old saved geometry and kept recording reopen/resave unchanged",
+    "dirty current reset refuses; guarded discard resets only on request",
+    "undo restores old geometry; redo restores new template; replacement clears session recordings",
+    "captured 200 ms values exactly match previous-release recording",
+    "exports preserve circuit/history/document; new saved template reopens"
+  ]
+}

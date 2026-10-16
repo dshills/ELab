@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-15",
+  "scope": "Bundled flasher bias-label and supply/route spacing; no general layout acceptance",
+  "native_observations": [
+    {
+      "source": "CUA getScreenshot viewed inline in chat; no retained native screenshot file",
+      "zoom_percent": 49,
+      "scope_visible": false,
+      "bias_labels_clear_neighboring_led_pins": true,
+      "supply_symbol_clear_bias_route": true,
+      "remaining": [
+        "C1 caption crowds D1 in the native renderer",
+        "Small fitted bitmap text remains difficult to read"
+      ]
+    }
+  ],
+  "exported_png": {
+    "path": "build/flasher-layout-096/headless-final-assets/flasher.png",
+    "sha256": "63f12d8aebb46e3da81357940ac87eb99e20ef850d6bc678785d107cd8757a8e",
+    "observations": [
+      "Complete circuit on page",
+      "Both 47 k\u03a9 bias labels clear neighboring LED pins and visible wire paths",
+      "Capacitor captions/other wire-mask clearance still merit a separate pass"
+    ]
+  },
+  "limitations": [
+    "PNG directly inspected; PDF header and state preservation exercised, no rendered PDF or physical print qualification",
+    "General routing, typography, accessibility and participant acceptance remain open"
+  ]
+}

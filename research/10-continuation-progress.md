@@ -1050,3 +1050,14 @@ Two initial smoke attempts exposed the oversized fixture’s offscreen target: s
 All four adapters pass the existing three reference workflows. Numerical/performance suites were not repeated for this presentation-only change. Native inventory review changes only `desktop/drawing.go` among production hashes; all sites/routes are identical at **51 files /384 sites /161 IDs /131 source routes**. Vellum **82c0c5e** remains clean with unchanged manifest and **232 upstream +5 typesetting** final prepared outputs.
 
 Canonical `build/ELab.app` is **0.95.0 /110**, identical in bytes/modes/metadata to the qualified candidate; prior .94 is preserved at `build/ELab-before-labels.app`. All owned sessions exited. [Behavior and scope](../docs/led-labels.md), [validation receipt](../docs/validation/led-labels-validation.json), [visual observations](../docs/validation/led-labels-visual-review.json). P0 remains **17 implemented /10 partial**; global layout/readability and the other recorded acceptance gates remain open. The continuing project goal stays active.
+
+
+## Flasher bias-label spacing — 0.96.0 /111
+
+Moved the bundled flasher’s two bias resistors and supply so their labels clear neighboring LED terminals and export masks leave routed wires continuous. Existing saved files retain their geometry and recordings; guarded current-template reset adopts the new positions, and schematic undo restores the old drawing. Recording contents follow the existing replacement/history contract. Values, named wires, models and solver behavior are unchanged.
+
+A real .95 saved project/recording is retained as a portable fixture. Native/headless workflows reopen and resave its graph/record unchanged, exercise protected reset/undo/redo, compare all 41 rows of a 200 ms capture exactly, export without changing circuit/history/physics, and reopen the new project. SVG/PNG match byte-for-byte. Core tests compare full voltages/currents/charge/trace at startup and every millisecond through 600 ms. The existing example workflow now covers all eleven shipped templates.
+
+Full lint/import/root/native race/vet, packaged GPU/UI/protected-close smoke, all four adapters ×three reference workflows ×294 electrical checks and three-level flasher refinement pass (median period 0.488 s). Native source inventory and clean Vellum 82c0c5e/237 prepared outputs are unchanged. Canonical `build/ELab.app` is the qualified .96/111 candidate; previous .95 is preserved at `build/ELab-before-flasher-layout.app`. Owned sessions exited. [Behavior and limits](../docs/flasher-layout.md), [receipt](../docs/validation/flasher-layout-validation.json).
+
+Direct native/export inspection confirms the bias-label repair; native C1/D1 caption crowding and small fitted text remain open. This is template spacing, not general label/routing acceptance. P0 stays **17 implemented /10 partial**; the continuing project goal remains active.
