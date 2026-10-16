@@ -1,20 +1,20 @@
 {
-  "commit": "6330b2d42050b46c2019e558074e087ed281e56a",
+  "commit": "7322f12be2c3b1de785a1e143371eab876691c64",
   "clean": true,
-  "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+  "manifest_sha256": "22b4e98b6c11bf67987987c62837422f660ddabbe588914f25a3a1e1ba4efd58",
   "final_prepared_output_counts": {
-    "upstream": 232,
+    "upstream": 233,
     "typesetting": 5
   },
   "recorded": "2026-10-16",
-  "elab_version": "0.103.0",
-  "build_version": "118",
+  "elab_version": "0.104.0",
+  "build_version": "119",
   "local_checkout": "../../Vellum (relative to desktop/go.mod)",
   "tested_go": "go1.27.2 darwin/arm64",
   "initial_sdk_commit": "621aca2da91836631fc05b2a7b97f124d53518dd",
-  "qualification": "validation/mixed-region-validation.json",
-  "source_update_review": "validation/rail-labels-sdk-review.json",
+  "qualification": "validation/inductor-release-validation.json",
+  "source_update_review": "validation/inductor-release-validation.json",
   "initial_integration_baseline": "vellum-baseline.json",
-  "status": "Qualified ELab local-checkout integration; SDK source/manifest and all 237 final prepared outputs unchanged across the mixed-device region checkpoint. Clean distribution and full SDK/platform/idle-budget acceptance remain open.",
+  "status": "Qualified ELab local-checkout integration; SDK source/manifest and all 238 declared final prepared outputs stay unchanged across the final build/native/recovery/four-adapter qualification pipeline. Full SDK/platform, distribution, input/accessibility and visible-latency acceptance remain separate and open.",
   "native_dependency_manifest": "drivers/cogent/native/dependencies.json"
 }

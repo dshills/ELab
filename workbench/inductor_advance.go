@@ -1,6 +1,7 @@
 package workbench
 
 import (
+	"errors"
 	"fmt"
 	"math"
 )
@@ -14,13 +15,22 @@ func (state *mixedState) advanceInductorBudget(trace *Transient, end float64, bu
 	at, h := state.result.Time, end-state.result.Time
 	lastStep := h
 	failure := ""
+	roundoffRetried := false
 	for at < end {
 		if err := budget.take(); err != nil {
 			return nil, fmt.Errorf("%w at %.9g s, step %.3g: %s", err, at, h, failure)
 		}
-		h = math.Min(h, end-at)
+		remaining := end - at
+		h = math.Min(h, remaining)
 		h = math.Min(h, n.maximumWaveformStep(trace, at))
 		h = math.Min(h, n.maximumInductorStep())
+		// Split the last two intervals evenly rather than leave a tiny tail.
+		// Both proposals stay below the original step bounds and undergo
+		// the complete solves/error check. Never advance reported time by
+		// discarding a fixed number of seconds of real storage evolution.
+		if h < remaining && remaining-h < h/4 {
+			h = remaining / 2
+		}
 		if h < minimumInductorStep || at+h <= at {
 			return nil, fmt.Errorf("RLC timestep too small at %.9g, h %.3g: %s", at, h, failure)
 		}
@@ -36,16 +46,27 @@ func (state *mixedState) advanceInductorBudget(trace *Transient, end float64, bu
 			ratio = n.inductorError(current, full, refined)
 		}
 		failure = fmt.Sprintf("ratio %.3g, errors %v / %v / %v", ratio, one, two, three)
+		var roundoff *inductorRoundoffError
+		if !roundoffRetried && (errors.As(one, &roundoff) || errors.As(two, &roundoff) || errors.As(three, &roundoff)) {
+			// Smaller intervals can amplify algebraic cancellation. Retry once
+			// from the last accepted state, inside the same source/LC bounds.
+			// This is only a proposal: all three solves and the error estimate
+			// must succeed, with the original convergence and work limits.
+			larger := math.Min(end-at, math.Min(n.maximumWaveformStep(trace, at), n.maximumInductorStep()))
+			if larger > 2*h {
+				h, roundoffRetried = larger, true
+				budget.roundoffRetries++
+				continue
+			}
+		}
 		if ratio > 1 {
 			h /= 2
 			continue
 		}
 		current = refined
+		roundoffRetried = false
 		at += h
 		lastStep = h / 2
-		if end-at < 1e-13 {
-			at = end
-		}
 		if ratio == 0 {
 			h *= 2
 		} else {

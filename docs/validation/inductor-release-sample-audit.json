@@ -1,0 +1,73 @@
+{
+  "passed": true,
+  "source_report_sha256": "d6f1cbae1a8e03f629e0de4c14df48172e01929f8e786355092b1c411269c2ce",
+  "samples": 1440,
+  "coil_samples": 640,
+  "original_samples": 800,
+  "summaries": [
+    {
+      "adapter": "in-process",
+      "suite": "performance",
+      "samples": 200,
+      "max_case_p95_fresh_ms": 2.658083,
+      "max_case_p95_verify_ms": 47.513959,
+      "max_verify_ms": 47.687124999999995
+    },
+    {
+      "adapter": "in-process",
+      "suite": "inductor_performance",
+      "samples": 160,
+      "max_case_p95_fresh_ms": 2.88025,
+      "max_case_p95_verify_ms": 230.870709,
+      "max_verify_ms": 235.81475
+    },
+    {
+      "adapter": "headless-stdio",
+      "suite": "performance",
+      "samples": 200,
+      "max_case_p95_fresh_ms": 6.5625,
+      "max_case_p95_verify_ms": 51.422542,
+      "max_verify_ms": 52.258167
+    },
+    {
+      "adapter": "headless-stdio",
+      "suite": "inductor_performance",
+      "samples": 160,
+      "max_case_p95_fresh_ms": 7.041917,
+      "max_case_p95_verify_ms": 245.720833,
+      "max_verify_ms": 271.669875
+    },
+    {
+      "adapter": "headless-socket",
+      "suite": "performance",
+      "samples": 200,
+      "max_case_p95_fresh_ms": 7.051917,
+      "max_case_p95_verify_ms": 50.680417,
+      "max_verify_ms": 54.282666
+    },
+    {
+      "adapter": "headless-socket",
+      "suite": "inductor_performance",
+      "samples": 160,
+      "max_case_p95_fresh_ms": 7.403,
+      "max_case_p95_verify_ms": 229.120416,
+      "max_verify_ms": 229.987125
+    },
+    {
+      "adapter": "native-socket",
+      "suite": "performance",
+      "samples": 200,
+      "max_case_p95_fresh_ms": 8.699584,
+      "max_case_p95_verify_ms": 50.520165999999996,
+      "max_verify_ms": 52.453167
+    },
+    {
+      "adapter": "native-socket",
+      "suite": "inductor_performance",
+      "samples": 160,
+      "max_case_p95_fresh_ms": 10.238916,
+      "max_case_p95_verify_ms": 205.008792,
+      "max_verify_ms": 213.125083
+    }
+  ]
+}

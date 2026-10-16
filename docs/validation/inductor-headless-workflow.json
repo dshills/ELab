@@ -1,0 +1,97 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "engine": "elab.rlc-mna-radau5.v1",
+  "part": {
+    "value_type": "number",
+    "value_domain": {
+      "parameter": "inductance",
+      "unit": "H",
+      "minimum": 1e-06,
+      "maximum": 100,
+      "range_text": "1 \u00b5H\u2013100 H",
+      "syntax": "Bare SI or H; n/u/\u00b5/\u03bc/m prefixes, for example 10 mH or 100uH"
+    },
+    "aliases": [
+      "coil",
+      "choke",
+      "magnetic energy"
+    ],
+    "limitations": "Ideal constant inductance with configurable signed initial current; voltage pin 1 minus pin 2, current into pin 1/out of pin 2, energy L I\u00b2 / 2. No winding resistance, saturation, mutual coupling, parasitic capacitance, heating, ratings or physical part identity. Add external resistance and a return path for switching current.",
+    "kind": "inductor",
+    "name": "Inductor",
+    "terminals": [
+      "1",
+      "2"
+    ],
+    "default_value": "10 mH",
+    "unit": "H",
+    "model": "ideal-inductor.v1"
+  },
+  "discovery": {
+    "bundle_sha256": "73f2827d951f4bc718ede081cd706aefeb82df0e5db8d2987953abd0d7ba8f70",
+    "schema_registry_count": 70,
+    "schema_registry_sha256": "5ffeb0fdd27a3f9ef190f1b66489f76e238173b3f2f543b219ae06c44a43d4a6",
+    "full_response_sha256": {
+      "component.place": "dea3009ac71959fea69f2c666c1fd3474268977d7441b43717107fe61e4e718b",
+      "inductor.initial.set": "1af52c0da047d6586dd56694f84c0c12e40c04b570c2fb0a7a09ab00257a7b0c",
+      "simulation.verify": "4c793de196d305cd529517da1d55d1cb02913df1c2c9f09306a8d4425160f1bd"
+    }
+  },
+  "exports": {
+    "svg": "5d58d65685c19df92515eb0f231e2552b1605ea62d44ea27505aaeb8278575f9",
+    "png": "33d66205c6da150142fa5a89b6fb3a9673c6929167525149c98e9b52809c4eb4"
+  },
+  "examples": [
+    {
+      "id": "rl",
+      "time_s": 0.05,
+      "reading": {
+        "id": "L1",
+        "voltage_v": -4.966310264997323,
+        "current_a": 0.04966310264997323,
+        "energy_j": 0.001233211882410889
+      }
+    },
+    {
+      "id": "rlc",
+      "time_s": 0.005,
+      "reading": {
+        "id": "L1",
+        "voltage_v": 0.550866887667719,
+        "current_a": -0.014672416495300052,
+        "energy_j": 1.0763990290577653e-05
+      }
+    },
+    {
+      "id": "flyback",
+      "time_s": 0.05,
+      "reading": {
+        "id": "L1",
+        "voltage_v": -5.656545302598163,
+        "current_a": 0.04830274775245753,
+        "energy_j": 0.0011665777202187703
+      }
+    }
+  ],
+  "maximum_rl_capture_current_error_a": 2.61034249771086e-13,
+  "maximum_rl_capture_voltage_error_v": 2.6103785799591606e-11,
+  "captured_rows": 6,
+  "mixed_time_s": 0.12,
+  "mixed_current_a": 0.04094280224350612,
+  "checks": [
+    "blank place/wire/value/rotation",
+    "signed startup and domain refusal",
+    "live RL exponential and geometry isolation",
+    "independent Verify startup override",
+    "unit-bearing CSV and complete JSON",
+    "saved capture/startup fresh-process reopen",
+    "SVG/PNG output without physical mutation",
+    "all three guided examples",
+    "coupled RC/NPN/L full-period public workflow"
+  ],
+  "limitations": [
+    "generic ideal coil and educational semiconductor models",
+    "public/native API evidence is separate from physical input/accessibility and physical printing"
+  ]
+}

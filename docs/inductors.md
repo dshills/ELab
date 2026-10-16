@@ -1,6 +1,6 @@
-# Ideal inductors — working 0.104 candidate
+# Ideal inductors
 
-Inductor support is in the working source and private test bundles. It is **not yet in the qualified `build/ELab.app`**, which remains 0.103.0 /118. The [integration plan](../research/14-inductor-integration-plan.md) records numerical choices and remaining release gates.
+Inductor support is included in the qualified local **0.104.0 /119** checkpoint at `build/ELab.app`. The [release record](validation/inductor-release-validation.json) pins numerical, recovery, native/API and timing evidence; the [integration plan](../research/14-inductor-integration-plan.md) records model choices and the broader acceptance gates that remain open.
 
 Search **Inductor**, **coil** or **choke**, then place and wire pins **1** and **2**. Inductance accepts H, mH and µH text, from **1 µH through 100 H**, with a **10 mH** default. Positive voltage is pin 1 minus pin 2; positive current enters pin 1 and leaves pin 2. Stored energy is `L × I² / 2`. Up to four inductors share the existing network, voltage and solver limits.
 
@@ -44,6 +44,10 @@ The reviewed PDF/PNG/preview workflow covers the three examples and four coil ro
 
 L networks use **`elab.rlc-mna-radau5.v1`**, a three-stage fifth-order Radau IIA implementation with coupled device/KCL/storage equations. Adaptive full/two-half-step comparisons check coil current, capacitor voltage and all node voltages; an LC ceiling also limits steps. Existing circuits without L keep their original engines. Existing 512-attempt/100 ms per-output budgets remain; every stage iteration checks the shared deadline. Failed, canceled or superseded output work cannot publish partial time or storage memory.
 
+Newton limits forward junction and gate-source updates while allowing linear nodes to move without a 0.2 V ramp. Strict residual and voltage-correction checks still decide acceptance. Stagnation near floating-point resolution rejects the trial; a single larger interval may be proposed from the same accepted state, inside the same source/output/LC bounds. It must pass the complete Newton and adaptive checks within the original budget.
+
+Distinct source corners and requested output times retain their own storage evolution. The solver balances the last two intervals to avoid an unnecessarily tiny final trial; it does not skip a fixed duration while advancing the reported time. Source/output times reconcile only within the existing four-ULP same-time rule. Fast 1 µH/1 nF LC and short post-pulse RL references cover the previously skipped 50 fs cases.
+
 Instantaneous KCL/power residuals verify circuit equations, not time-integration accuracy. `numerical_damping_w` retains its legacy backward-Euler compensation meaning and is zero for this engine; this does not mean Radau has no numerical dissipation. Independent RL/RLC/LC, LED-coil and flyback references, plus mixed RC/NPN/coil refinement and a separate reduced reference, qualify selected numerical cases rather than every allowed topology or physical device.
 
 The reproducible public workflow constructs an RL circuit from blank, exercises startup/probes/Verify/save/fresh-process reopen, exports all three examples and runs the mixed RC/NPN/coil regression:
@@ -55,3 +59,7 @@ python3 scripts/inductor-demo.py --output build/inductor-report.json --artifacts
 Use fresh output paths. Add `--connect /absolute/path/to/owned-endpoint.json` for a fresh owned native session; it closes that app afterward unless `--keep-open` is supplied. Current development evidence and release limits remain in the [progress record](../research/10-continuation-progress.md).
 
 The conformance runner also accepts `--inductor-suite`. It builds RL through public commands, checks 22 analytic/startup/reopen values, compares seven complete accepted network observations, exercises all three examples and the mixed RC/NPN/coil period, and rejects missing/changed cross-adapter evidence. Supply `--native-binary` to include the fourth adapter; the ordinary in-process, stdio and socket adapters always run. This supplements the original three reference workflows and their optional independent electrical/performance suites. It does not by itself qualify coil performance or physical devices.
+
+`scripts/inductor-recovery-demo.py --artifacts build/coil-recovery-assets --output build/coil-recovery.json` creates an owned headless producer, saves −20 mA startup intent, advances live physics, captures a separate +30 mA Verify scenario, then kills that producer. It checks record-only autosave, inactive-lease recovery, exact captured rows, paused fresh startup, valid import/re-export and atomic rejection of corrupt coil results/models. Add `--connect` for a fresh owned native restore target, which it closes afterward. Use new paths; this script deliberately kills only its own producer.
+
+`elab-conformance --inductor-performance-suite --repetitions 20` measures RL, RLC, NMOS flyback and mixed NPN/base-capacitor flyback separately from the original timing families. Each Verify capture spans 200 ms at 1 ms outputs. See [measurement boundaries and qualification scope](performance-qualification.md).

@@ -98,7 +98,14 @@ func advanceMixedBudget(state *mixedState, t *Transient, end float64, budget *in
 		at := cur.result.Time
 		corner := cur.net.nextSourceCorner(trace, at)
 		stop := math.Min(end, corner)
-		if end-stop < 1e-13 {
+		mergeOutput := end-stop < 1e-13
+		if len(cur.net.inductors) > 0 {
+			// A fast coil can change measurably in tens of femtoseconds.
+			// Reconcile representations of the same time, not distinct
+			// source/output boundaries separated by an absolute duration.
+			mergeOutput = sameSampleTime(stop, end)
+		}
+		if mergeOutput {
 			stop = end
 		}
 		next, err := cur.advanceBudget(trace, stop, budget)

@@ -32,9 +32,11 @@ func simulationFailureCode(err error, fallback string) string {
 }
 
 type integrationBudget struct {
-	started  time.Time
-	attempts int
-	elapsed  func() time.Duration // Test clock; nil uses the production monotonic clock.
+	started          time.Time
+	attempts         int
+	newtonIterations int                  // Private diagnostic work count; not an added budget.
+	roundoffRetries  int                  // Failed trials retried at a larger, independently checked interval.
+	elapsed          func() time.Duration // Test clock; nil uses the production monotonic clock.
 }
 
 func newIntegrationBudget() *integrationBudget { return &integrationBudget{started: time.Now()} }

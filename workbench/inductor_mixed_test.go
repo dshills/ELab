@@ -1,9 +1,11 @@
 package workbench
 
 import (
+	"fmt"
 	"math"
 	"strings"
 	"testing"
+	"time"
 )
 
 func inductorNPNCapGraph(t *testing.T) Graph {
@@ -29,7 +31,21 @@ func inductorNPNCapGraph(t *testing.T) Graph {
 }
 
 func TestInductorCoupledNPNGateCapacitorStepRefinement(t *testing.T) {
-	g := inductorNPNCapGraph(t)
+	for _, resistance := range []float64{100, 120} {
+		t.Run(fmt.Sprint(resistance), func(t *testing.T) {
+			g := inductorNPNCapGraph(t)
+			for k := range g.Components {
+				if g.Components[k].ID == "RL" {
+					g.Components[k].Value = resistance
+				}
+			}
+			checkInductorNPNRefinement(t, g)
+		})
+	}
+}
+
+func checkInductorNPNRefinement(t *testing.T, g Graph) {
+	t.Helper()
 	c, _, diagnostic := g.Compile()
 	if diagnostic != nil {
 		t.Fatal(diagnostic)
@@ -42,7 +58,7 @@ func TestInductorCoupledNPNGateCapacitorStepRefinement(t *testing.T) {
 			t.Fatal("mixed RLC/NPN initialization", err)
 		}
 	}
-	for sample := 1; sample <= 120; sample++ {
+	for sample := 1; sample <= 200; sample++ {
 		for k, kernel := range kernels {
 			substeps := 1 << k
 			for sub := 1; sub <= substeps; sub++ {
@@ -63,6 +79,37 @@ func TestInductorCoupledNPNGateCapacitorStepRefinement(t *testing.T) {
 				t.Fatal("mixed output does not agree with half/quarter-step runs", k, sample, r, ref)
 			}
 		}
+	}
+}
+
+func TestInductorNPNLoadedSwitchingWorkEnvelope(t *testing.T) {
+	for _, resistance := range []float64{100, 120} {
+		t.Run(fmt.Sprint(resistance), func(t *testing.T) {
+			g := inductorNPNCapGraph(t)
+			for i := range g.Components {
+				if g.Components[i].ID == "RL" {
+					g.Components[i].Value = resistance
+				}
+			}
+			state, trace := initializeInductorTest(t, g)
+			peakTime, peakAttempts, peakNewton := time.Duration(0), 0, 0
+			retries := 0
+			for sample := 1; sample <= 200; sample++ {
+				budget := newIntegrationBudget()
+				next, nextTrace, err := advanceMixedBudget(state, trace, float64(sample)*.001, budget)
+				if err != nil {
+					t.Fatalf("load %.0f Ω, sample %d, attempts %d, Newton %d: %v", resistance, sample, budget.attempts, budget.newtonIterations, err)
+				}
+				state, trace = next, nextTrace
+				peakTime = max(peakTime, time.Since(budget.started))
+				peakAttempts, peakNewton = max(peakAttempts, budget.attempts), max(peakNewton, budget.newtonIterations)
+				retries += budget.roundoffRetries
+			}
+			if resistance == 120 && retries == 0 {
+				t.Fatal("fixture did not exercise the checked roundoff retry")
+			}
+			t.Logf("200 ms, 1 ms outputs: peak %s, %d attempts, %d Newton iterations; %d checked roundoff retries", peakTime, peakAttempts, peakNewton, retries)
+		})
 	}
 }
 

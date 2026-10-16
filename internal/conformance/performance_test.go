@@ -6,8 +6,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"reflect"
 	"testing"
 	"time"
+
+	"github.com/dshills/elab/workbench"
 )
 
 func TestPerformancePercentilesAndRejectMissingTiming(t *testing.T) {
@@ -76,6 +79,43 @@ func TestPerformanceMeasurementsUseFreshChangedRuns(t *testing.T) {
 					if sample.FreshResultMS < sample.AcknowledgmentMS || sample.GraphSHA256 == "" || sample.Engine == "" || len(sample.ProbeIDs) != 4 || len(sample.Models) == 0 || sample.RunID == 0 || sample.ElectricalRevision == 0 {
 						t.Fatal("measurement identity/timing omitted")
 					}
+				}
+				return nil
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+		})
+	}
+}
+
+func TestInductorPerformanceFixturesUseChangedRunsAndFullCaptures(t *testing.T) {
+	ctx, cancel := context.WithTimeout(t.Context(), 2*time.Minute)
+	defer cancel()
+	for _, count := range []int{0, 19, 101} {
+		if _, err := RunInductorPerformance(ctx, nil, t.TempDir(), count); err == nil {
+			t.Fatal("unsupported coil repetition count admitted", count)
+		}
+	}
+	for _, name := range []string{"rl", "rlc", "flyback", "npn-coil"} {
+		t.Run(name, func(t *testing.T) {
+			err := electricalSession(ctx, InProcess, t.TempDir(), func(s *session) error {
+				if err := preparePerformance(s, name); err != nil {
+					return err
+				}
+				previous := ""
+				for i := 0; i < 3; i++ {
+					sample, err := measurePerformance(s, name, i, "test")
+					if err != nil {
+						return err
+					}
+					if sample.Engine != workbench.InductorEngineID || sample.Models["L1"] != "ideal-inductor.v1" || sample.VerifyDuration != .2 || sample.VerifySampleStep != .001 || !reflect.DeepEqual(sample.ProbeIDs, performanceProbes(name)) || sample.FreshResultMS < sample.AcknowledgmentMS {
+						t.Fatal("coil timing omitted engine, capture, probe or timing identity", sample)
+					}
+					if sample.GraphSHA256 == "" || sample.GraphSHA256 == previous {
+						t.Fatal("coil timing repeated a no-op instead of changing the resistor")
+					}
+					previous = sample.GraphSHA256
 				}
 				return nil
 			})

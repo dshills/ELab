@@ -93,6 +93,7 @@ type mixedNetwork struct {
 	sources, caps []Component
 	inductors     []Component
 	inductorCuts  []inductorCut
+	inductorPins  map[string]int
 }
 type mixedState struct {
 	net     *mixedNetwork
@@ -127,10 +128,25 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 			n.inductors = append(n.inductors, p)
 		}
 	}
+	if len(n.inductors) > 0 {
+		// A compiled plan is immutable. Resolve the second map lookup once
+		// instead of repeating it in every coupled stage/Newton iteration.
+		n.inductorPins = make(map[string]int, len(c.TerminalNet))
+		for terminal, net := range c.TerminalNet {
+			n.inductorPins[terminal] = n.index[net]
+		}
+	}
 	n.inductorCuts = n.inductorStartupCuts()
 	return n
 }
-func (n *mixedNetwork) pin(p Component, t string) int { return n.index[n.c.TerminalNet[p.ID+"."+t]] }
+func (n *mixedNetwork) pin(p Component, t string) int {
+	if n.inductorPins != nil {
+		if node, ok := n.inductorPins[p.ID+"."+t]; ok {
+			return node
+		}
+	}
+	return n.index[n.c.TerminalNet[p.ID+"."+t]]
+}
 func voltage(x []float64, i int) float64 {
 	if i < 0 {
 		return 0
@@ -193,11 +209,16 @@ func (n *mixedNetwork) deviceEquations(x, old []float64, dt float64, t *Transien
 // injections, then supplies its own coupled storage rows for all stages.
 func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, at float64, storageRows bool) ([][]float64, []float64) {
 	size := n.matrixSize(dt)
-	a := make([][]float64, size)
-	f := make([]float64, size)
-	for i := range a {
-		a[i] = make([]float64, size)
+	var a [][]float64
+	if len(n.inductors) > 0 {
+		a = inductorMatrix(size)
+	} else {
+		a = make([][]float64, size)
+		for i := range a {
+			a[i] = make([]float64, size)
+		}
 	}
+	f := make([]float64, size)
 	add := func(row, col int, v float64) {
 		if row >= 0 && col >= 0 {
 			a[row][col] += v
@@ -328,9 +349,11 @@ func linearSolveMode(a [][]float64, b []float64, skipZeros bool) ([]float64, err
 	}
 	for col := 0; col < n; col++ {
 		pivot := col
+		pivotMagnitude := math.Abs(a[col][col])
 		for row := col + 1; row < n; row++ {
-			if math.Abs(a[row][col]) > math.Abs(a[pivot][col]) {
+			if magnitude := math.Abs(a[row][col]); magnitude > pivotMagnitude {
 				pivot = row
+				pivotMagnitude = magnitude
 			}
 		}
 		if math.Abs(a[pivot][col]) < 1e-30 || !finite(a[pivot][col]) {
@@ -348,12 +371,12 @@ func linearSolveMode(a [][]float64, b []float64, skipZeros bool) ([]float64, err
 			}
 		}
 		for row := col + 1; row < n; row++ {
-			factor := a[row][col] / a[col][col]
+			rowValues := a[row]
+			factor := rowValues[col] / pivotValues[col]
 			if skipZeros {
 				if factor == 0 {
 					continue
 				}
-				rowValues := a[row]
 				for _, j := range columns {
 					rowValues[j] -= factor * pivotValues[j]
 				}
@@ -368,10 +391,11 @@ func linearSolveMode(a [][]float64, b []float64, skipZeros bool) ([]float64, err
 	x := make([]float64, n)
 	for i := n - 1; i >= 0; i-- {
 		sum := b[i]
+		rowValues := a[i]
 		for j := i + 1; j < n; j++ {
-			sum -= a[i][j] * x[j]
+			sum -= rowValues[j] * x[j]
 		}
-		x[i] = sum / a[i][i]
+		x[i] = sum / rowValues[i]
 		if !finite(x[i]) {
 			return nil, fmt.Errorf("nonfinite mixed solution")
 		}
@@ -528,9 +552,13 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 		}
 		scale := 1.
 		if n.nonlinear {
-			for i := range n.nodes {
-				if math.Abs(delta[i]) > maxMixedNewtonDelta {
-					scale = math.Min(scale, maxMixedNewtonDelta/math.Abs(delta[i]))
+			if len(n.inductors) > 0 {
+				scale = n.inductorNewtonScale(x, delta, 1)
+			} else {
+				for i := range n.nodes {
+					if math.Abs(delta[i]) > maxMixedNewtonDelta {
+						scale = math.Min(scale, maxMixedNewtonDelta/math.Abs(delta[i]))
+					}
 				}
 			}
 		}

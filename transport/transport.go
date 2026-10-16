@@ -59,6 +59,8 @@ func Stdio(ctx context.Context, s *workbench.Service, in io.Reader, out io.Write
 type Server struct {
 	listener              net.Listener
 	cancel                context.CancelFunc
+	service               *workbench.Service
+	replies               sync.RWMutex
 	directory, descriptor string
 	descriptorInfo        os.FileInfo
 	once                  sync.Once
@@ -110,7 +112,7 @@ func Listen(s *workbench.Service, descriptor string) (*Server, error) {
 		return nil, err
 	}
 	ctx, cancel := context.WithCancel(context.Background())
-	server := &Server{listener: listener, cancel: cancel, directory: dir, descriptor: descriptor, descriptorInfo: info, clients: map[net.Conn]bool{}}
+	server := &Server{listener: listener, cancel: cancel, service: s, directory: dir, descriptor: descriptor, descriptorInfo: info, clients: map[net.Conn]bool{}}
 	slots := make(chan struct{}, 8)
 	server.wg.Add(1)
 	go func() {
@@ -139,39 +141,59 @@ func Listen(s *workbench.Service, descriptor string) (*Server, error) {
 			go func(c net.Conn) {
 				defer server.wg.Done()
 				defer func() { c.Close(); server.mu.Lock(); delete(server.clients, c); server.mu.Unlock(); <-slots }()
-				c.SetDeadline(time.Now().Add(10 * time.Second))
-				reader := bufio.NewReader(io.LimitReader(c, MaxRequestBytes+100))
-				token, err := reader.ReadString('\n')
-				if err != nil || subtle.ConstantTimeCompare([]byte(token), []byte(endpoint.Token+"\n")) != 1 {
-					return
-				}
-				line, err := reader.ReadBytes('\n')
-				if err != nil {
-					return
-				}
-				bounded, cancel := context.WithTimeout(ctx, 6*time.Second)
-				defer cancel()
-				result := response(bounded, s, line, "agent.socket")
-				encoded, err := json.Marshal(result)
-				if err == nil && len(encoded) <= MaxResponseBytes {
-					c.Write(append(encoded, '\n'))
-				} else {
-					json.NewEncoder(c).Encode(workbench.Response{Version: 1, ID: result.ID, Revision: result.Revision, Error: &workbench.Failure{Code: "response-too-large", Message: "response exceeds 1 MiB"}})
-				}
+				server.serveConnection(ctx, s, endpoint.Token, c)
 			}(connection)
 		}
 	}()
 	return server, nil
 }
+
+func (server *Server) serveConnection(ctx context.Context, s *workbench.Service, token string, c net.Conn) {
+	c.SetDeadline(time.Now().Add(10 * time.Second))
+	reader := bufio.NewReader(io.LimitReader(c, MaxRequestBytes+100))
+	credential, err := reader.ReadString('\n')
+	if err != nil || subtle.ConstantTimeCompare([]byte(credential), []byte(token+"\n")) != 1 {
+		return
+	}
+	line, err := reader.ReadBytes('\n')
+	if err != nil {
+		return
+	}
+	// Domain shutdown can become exit-ready while its admitting request is
+	// still serializing/writing the final response. Retain that response
+	// through graceful endpoint retirement, within the existing deadlines.
+	server.replies.RLock()
+	defer server.replies.RUnlock()
+	if ctx.Err() != nil {
+		return
+	}
+	bounded, cancel := context.WithTimeout(ctx, 6*time.Second)
+	defer cancel()
+	result := response(bounded, s, line, "agent.socket")
+	encoded, err := json.Marshal(result)
+	if err == nil && len(encoded) <= MaxResponseBytes {
+		c.Write(append(encoded, '\n'))
+	} else {
+		json.NewEncoder(c).Encode(workbench.Response{Version: 1, ID: result.ID, Revision: result.Revision, Error: &workbench.Failure{Code: "response-too-large", Message: "response exceeds 1 MiB"}})
+	}
+}
+
 func (s *Server) Close() {
 	s.once.Do(func() {
-		s.cancel()
 		s.listener.Close()
+		graceful := s.service.Snapshot().ReadyToExit()
+		if graceful {
+			s.replies.Lock()
+		}
+		s.cancel()
 		s.mu.Lock()
 		for c := range s.clients {
 			c.Close()
 		}
 		s.mu.Unlock()
+		if graceful {
+			s.replies.Unlock()
+		}
 		s.wg.Wait()
 		os.Remove(filepath.Join(s.directory, "api.sock"))
 		os.Remove(s.directory)

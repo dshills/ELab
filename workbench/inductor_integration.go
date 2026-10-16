@@ -26,14 +26,27 @@ type inductorStage struct {
 	x, capV []float64
 }
 
+// Each row has its own disjoint span, while a single allocation avoids the
+// per-row allocator/collector cost in the repeatedly rebuilt stage matrices.
+func inductorMatrix(size int) [][]float64 {
+	rows, values := make([][]float64, size), make([]float64, size*size)
+	for row := range rows {
+		rows[row] = values[row*size : (row+1)*size : (row+1)*size]
+	}
+	return rows
+}
+
+type inductorRoundoffError struct{}
+
+func (*inductorRoundoffError) Error() string {
+	return "RLC collocation corrections stalled at floating-point resolution"
+}
+
 func (n *mixedNetwork) radauEquations(x, old []float64, h float64, trace *Transient, end float64) ([][]float64, []float64, []float64) {
 	size := n.matrixSize(h)
 	dimension := 3 * size
-	matrix := make([][]float64, dimension)
+	matrix := inductorMatrix(dimension)
 	residual, tolerances := make([]float64, dimension), make([]float64, dimension)
-	for i := range matrix {
-		matrix[i] = make([]float64, dimension)
-	}
 	for stage, c := range radauNodes {
 		offset := stage * size
 		local := x[offset : offset+size]
@@ -102,10 +115,12 @@ func (n *mixedNetwork) radauStep(state *inductorStage, trace *Transient, h, end 
 		copy(x[stage*size:(stage+1)*size], state.x)
 	}
 	old := n.reactiveHistory(state.x, state.capV)
+	bestCorrection, stagnant := math.Inf(1), 0
 	for iteration := 0; iteration < maxMixedNewtonIterations; iteration++ {
 		if err := budget.checkTime(); err != nil {
 			return nil, err
 		}
+		budget.newtonIterations++
 		if err := n.radauNodeRange(x, size); err != nil {
 			return nil, err
 		}
@@ -127,6 +142,7 @@ func (n *mixedNetwork) radauStep(state *inductorStage, trace *Transient, h, end 
 		if err != nil {
 			return nil, err
 		}
+		residualGood := good
 		good = good && n.voltageCorrectionConverged(x, delta, 3)
 		if good {
 			if !finite(kcl) || kcl > 1e-9 {
@@ -145,16 +161,26 @@ func (n *mixedNetwork) radauStep(state *inductorStage, trace *Transient, h, end 
 			}
 			return &inductorStage{x: endState, capV: caps}, nil
 		}
+		// A small, stagnant correction with already satisfied physical rows
+		// signals cancellation, not success. Reject this trial so the caller
+		// can propose a separately checked interval instead of shrinking
+		// indefinitely toward the floating-point time floor.
+		correction := n.inductorCorrectionRatio(x, delta, 3)
+		if residualGood && correction <= 1 {
+			if correction < bestCorrection*.5 {
+				bestCorrection, stagnant = correction, 0
+			} else {
+				stagnant++
+			}
+		} else {
+			bestCorrection, stagnant = math.Inf(1), 0
+		}
+		if stagnant >= 6 {
+			return nil, &inductorRoundoffError{}
+		}
 		scale := 1.
 		if n.nonlinear {
-			for stage := range radauNodes {
-				for node := range n.nodes {
-					index := stage*size + node
-					if math.Abs(delta[index]) > maxMixedNewtonDelta {
-						scale = math.Min(scale, maxMixedNewtonDelta/math.Abs(delta[index]))
-					}
-				}
-			}
+			scale = n.inductorNewtonScale(x, delta, 3)
 		}
 		for i := range x {
 			x[i] += scale * delta[i]

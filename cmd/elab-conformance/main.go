@@ -17,12 +17,13 @@ import (
 )
 
 type adapterResult struct {
-	Name        string                         `json:"name"`
-	Equivalent  bool                           `json:"equivalent_to_in_process"`
-	Workflows   []conformance.Result           `json:"workflows"`
-	Electrical  *conformance.ElectricalResult  `json:"electrical,omitempty"`
-	Inductors   *conformance.InductorResult    `json:"inductors,omitempty"`
-	Performance *conformance.PerformanceResult `json:"performance,omitempty"`
+	Name                string                         `json:"name"`
+	Equivalent          bool                           `json:"equivalent_to_in_process"`
+	Workflows           []conformance.Result           `json:"workflows"`
+	Electrical          *conformance.ElectricalResult  `json:"electrical,omitempty"`
+	Inductors           *conformance.InductorResult    `json:"inductors,omitempty"`
+	Performance         *conformance.PerformanceResult `json:"performance,omitempty"`
+	InductorPerformance *conformance.PerformanceResult `json:"inductor_performance,omitempty"`
 }
 type report struct {
 	Passed      bool            `json:"passed"`
@@ -45,9 +46,10 @@ func run() error {
 	electrical := flag.Bool("electrical-suite", false, "also run frozen independent electrical references and mixed flasher timestep refinement")
 	inductors := flag.Bool("inductor-suite", false, "also construct/probe/save/reopen coils and run analytic RL/RLC, flyback and mixed RC/NPN/coil checks")
 	performance := flag.Bool("performance-suite", false, "also measure fresh/warm backend edit/result and Verify latency in owned sessions")
+	inductorPerformance := flag.Bool("inductor-performance-suite", false, "also measure RL/RLC/flyback/mixed NPN-coil fresh/warm timing, 200 ms Verify at 1 ms outputs")
 	repetitions := flag.Int("repetitions", 20, "performance repetitions per circuit/condition (20–100)")
 	flag.Parse()
-	if *performance && (*repetitions < 20 || *repetitions > 100) {
+	if (*performance || *inductorPerformance) && (*repetitions < 20 || *repetitions > 100) {
 		return fmt.Errorf("--repetitions must be 20–100")
 	}
 	if *directory == "" {
@@ -139,6 +141,20 @@ func run() error {
 			if measurementErr != nil {
 				result.Adapters = append(result.Adapters, adapter)
 				return writeFailure(dir, result, fmt.Errorf("%s performance: %w", mode.name, measurementErr))
+			}
+		}
+		if *inductorPerformance {
+			fmt.Fprintf(os.Stderr, "%s: measuring four coil circuits, fresh/warm, %d repetitions\n", mode.name, *repetitions)
+			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
+			measured, measurementErr := conformance.RunInductorPerformance(ctx, mode.factory, filepath.Join(dir, mode.name, "inductor-performance"), *repetitions)
+			cancel()
+			adapter.InductorPerformance = &measured
+			if measurementErr == nil && !measured.TargetsPassed {
+				measurementErr = fmt.Errorf("coil backend performance target missed; inspect individual cases")
+			}
+			if measurementErr != nil {
+				result.Adapters = append(result.Adapters, adapter)
+				return writeFailure(dir, result, fmt.Errorf("%s coil performance: %w", mode.name, measurementErr))
 			}
 		}
 		result.Adapters = append(result.Adapters, adapter)

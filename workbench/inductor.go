@@ -170,10 +170,7 @@ func (n *mixedNetwork) maximumInductorStep() float64 {
 }
 
 func (n *mixedNetwork) inductorError(previous, full, refined *inductorStage) float64 {
-	absoluteV, absoluteI, relative := 5e-8, 1e-10, 5e-7
-	if len(n.caps) == 0 {
-		absoluteV, absoluteI, relative = 5e-7, 5e-9, 5e-6
-	}
+	absoluteV, absoluteI, relative := n.inductorAccuracy()
 	ratio := 0.
 	for k := range n.inductors {
 		index := n.inductorIndex(k)
@@ -187,6 +184,28 @@ func (n *mixedNetwork) inductorError(previous, full, refined *inductorStage) flo
 	for k, value := range refined.capV {
 		tolerance := 5e-8 + 5e-7*math.Max(math.Abs(value), math.Abs(previous.capV[k]))
 		ratio = math.Max(ratio, math.Abs(value-full.capV[k])/tolerance)
+	}
+	return ratio
+}
+
+func (n *mixedNetwork) inductorAccuracy() (absoluteV, absoluteI, relative float64) {
+	if len(n.caps) == 0 {
+		return 5e-7, 5e-9, 5e-6
+	}
+	return 5e-8, 1e-10, 5e-7
+}
+
+func (n *mixedNetwork) inductorCorrectionRatio(x, delta []float64, stages int) float64 {
+	absolute, _, relative := n.inductorAccuracy()
+	ratio, size := 0., len(x)/stages
+	for stage := range stages {
+		for node := range n.nodes {
+			i := stage*size + node
+			if !finite(delta[i]) {
+				return math.Inf(1)
+			}
+			ratio = math.Max(ratio, math.Abs(delta[i])/(absolute+relative*math.Abs(x[i])))
+		}
 	}
 	return ratio
 }

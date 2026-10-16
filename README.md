@@ -1,10 +1,12 @@
 # ELab
 
-ELab is a hobbyist electronics workbench built with Vellum. The current slice lets you draw LED, RC, NPN and N/P-channel MOSFET switch, and mixed transistor/RC circuits from blank: place components, connect named terminals, move and rotate parts, and edit exact values while simulation updates live. Users and agents invoke the same validated application commands.
+ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N/P-channel MOSFET and inductor/RLC circuits from blank: place components, connect named terminals, move and rotate parts, and edit exact values while simulation updates live. Users and agents invoke the same validated application commands.
 
 Choose **Examples → Split-rail DC supply** to explore [stacked DC sources and signed rail voltages](docs/floating-dc-sources.md). Two 3 V sources produce +3 V and −3 V around their midpoint reference. [Linear source/passive networks](docs/linear-network-solves.md) also solve 24 V stacks without artificial small-step nonconvergence, within the existing ±30 V node limit. [Nonlinear startup](docs/nonlinear-startup.md) also supports 24/30 V generic LED loads through a bounded grounded-constraint retry and rejects undefined floating MOSFET gates at zero supply.
 
 Choose **Examples → MOSFET LED switch** for pulse-driven NMOS/LED simulation, gate/drain/source probes and an external gate-RC experiment. See [MOSFET behavior and model](docs/nmos.md). **Examples → High-side MOSFET LED** adds the complementary [PMOS workflow](docs/pmos.md). **Examples → CMOS inverter** combines both devices with input/output and signed drain-current plots; see [the guided inverter](docs/cmos-inverter.md). [Mixed-device state captions](docs/mixed-device-regions.md) identify the NPN or MOSFET providing the accepted trace state.
+
+**Examples → Coil current buildup and decay**, **RLC ringing and damping**, and **Coil switching and flyback diode** add live ideal-inductor experiments. Set signed startup current, inspect current/voltage/energy, and save independent Verify captures through the same user and agent commands. See [inductors and their model limits](docs/inductors.md).
 
 ## Run the desktop app
 
@@ -25,7 +27,7 @@ From the ELab directory:
 ./build/elab
 ```
 
-The window starts with a blank schematic and focuses component Search. Pick a DC, sine, finite pulse or ideal square source, resistor, potentiometer, capacitor, red LED, silicon diode, NPN, N/P-channel MOSFET, SPST switch, junction, net label, or ground from the left palette, then click the sheet. Use Wire to click pairs of terminal dots. Select a component to edit its value in the right inspector; inputs such as `2.2k ohm` are accepted. The inspector also offers exact X/Y placement while a part is selected for placement, and named terminal connections while Wire is active.
+The window starts with a blank schematic and focuses component Search. Pick a DC, sine, finite pulse or ideal square source, resistor, potentiometer, capacitor, inductor, red LED, silicon diode, NPN, N/P-channel MOSFET, SPST switch, junction, net label, or ground from the left palette, then click the sheet. Use Wire to click pairs of terminal dots. Select a component to edit its value in the right inspector; inputs such as `2.2k ohm` are accepted. The inspector also offers exact X/Y placement while a part is selected for placement, and named terminal connections while Wire is active.
 
 Connect source positive → resistor → LED anode, LED cathode → ground, and ground → source negative. Completing the loop starts live simulation. Examples → Load LED example loads a ready-made 5 V / 1 kΩ circuit. The 1 kΩ and 2 kΩ presets produce approximately 2.9168 mA and 1.4767 mA.
 
@@ -53,9 +55,11 @@ For a local double-clickable development bundle, after building:
 
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
-  --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.103.0 --build-version 118 --platform darwin
+  --output build/ELab-local.app --name ELab --identifier com.dshills.elab \
+  --version 0.104.0 --build-version 119 --platform darwin
 ```
+
+The packager requires a new output path. The qualified local checkpoint is `build/ELab.app`; its previous 0.103 bundle is preserved as `build/ELab-0.103.0-118-preserved.app`.
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).
 

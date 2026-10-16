@@ -27,6 +27,7 @@ type PerformanceSample struct {
 	FreshResultMS      float64                     `json:"edit_start_to_fresh_result_ms"`
 	VerifyMS           float64                     `json:"verify_admission_to_completion_ms"`
 	VerifyDuration     float64                     `json:"verified_duration_s"`
+	VerifySampleStep   float64                     `json:"verified_sample_step_s"`
 	graph              workbench.Graph
 }
 type PerformanceSummary struct {
@@ -46,6 +47,7 @@ type PerformanceCase struct {
 	VerifyTargetPassed bool                `json:"verify_2s_target_passed"`
 }
 type PerformanceResult struct {
+	Families      []string                   `json:"circuit_families"`
 	Repetitions   int                        `json:"repetitions"`
 	TargetsPassed bool                       `json:"backend_targets_passed"`
 	Cases         []PerformanceCase          `json:"cases"`
@@ -70,14 +72,25 @@ func summarizePerformance(values []float64) (PerformanceSummary, error) {
 // RunPerformance measures only owned sessions and public domain commands.
 // Wall timings must be recorded in an ordinary build, outside race/other loads.
 func RunPerformance(ctx context.Context, factory Factory, dir string, repetitions int) (out PerformanceResult, err error) {
+	return runPerformance(ctx, factory, dir, repetitions, []string{"led", "rc", "npn", "npn-pulse", "flasher"})
+}
+
+// RunInductorPerformance keeps coil timing separate from the original families.
+// All four cases capture 200 ms at 1 ms outputs, including two switching periods.
+func RunInductorPerformance(ctx context.Context, factory Factory, dir string, repetitions int) (out PerformanceResult, err error) {
+	return runPerformance(ctx, factory, dir, repetitions, []string{"rl", "rlc", "flyback", "npn-coil"})
+}
+
+func runPerformance(ctx context.Context, factory Factory, dir string, repetitions int, families []string) (out PerformanceResult, err error) {
 	if repetitions < 20 || repetitions > 100 {
 		return out, fmt.Errorf("performance repetitions must be 20–100")
 	}
 	out.Repetitions = repetitions
+	out.Families = append([]string(nil), families...)
 	out.TargetsPassed = true
 	out.Circuits = make(map[string]workbench.Graph)
-	out.Limitations = []string{"command start includes admission/transport/JSON overhead and is a conservative backend upper bound; it is not input-to-visible acknowledgment", "fresh means a fresh owned session with the reference circuit prepared; OS/filesystem caches are not purged and process-launch time is excluded", "warm means one owned session after an unmeasured edit/Verify; successful records are excluded from project retention between repetitions and may be evicted by the ordinary bounded store", "the three reference families, DC/pulse NPN variants and a mixed flasher are tested on one recorded workstation; no universal hardware or UI performance claim"}
-	for _, name := range []string{"led", "rc", "npn", "npn-pulse", "flasher"} {
+	out.Limitations = []string{"command start includes admission/transport/JSON overhead and is a conservative backend upper bound; it is not input-to-visible acknowledgment", "fresh means a fresh owned session with the reference circuit prepared; OS/filesystem caches are not purged and process-launch time is excluded", "warm means one owned session after an unmeasured edit/Verify; successful records are excluded from project retention between repetitions and may be evicted by the ordinary bounded store", "only the explicitly listed circuit families are measured on this workstation; no universal hardware or UI performance claim"}
+	for _, name := range families {
 		for _, condition := range []string{"fresh-session", "warm-session"} {
 			entry := PerformanceCase{Name: name, Condition: condition}
 			if condition == "fresh-session" {
@@ -145,7 +158,25 @@ func RunPerformance(ctx context.Context, factory Factory, dir string, repetition
 	return out, nil
 }
 func preparePerformance(s *session, name string) error {
-	if name == "flasher" {
+	if isInductorPerformance(name) {
+		id := name
+		if name == "npn-coil" {
+			id = "flyback"
+		}
+		if err := s.ask("example.load", workbench.ExampleLoadParams{ID: id}, true, nil); err != nil {
+			return err
+		}
+		if err := s.ask("simulation.pause", nil, true, nil); err != nil {
+			return err
+		}
+		if name == "npn-coil" {
+			if err := buildInductorNPNExperiment(s); err != nil {
+				return err
+			}
+		} else if _, err := restart(s); err != nil {
+			return err
+		}
+	} else if name == "flasher" {
 		if err := s.ask("example.flasher", nil, true, nil); err != nil {
 			return err
 		}
@@ -190,10 +221,20 @@ func measurePerformance(s *session, name string, index int, condition string) (s
 		id, a, b = "BaseR", "10k", "20k"
 	case "flasher":
 		id, a, b = "RB1", "47k", "48k"
+	case "rl":
+		id, a, b = "R1", "100 Ω", "120 Ω"
+	case "rlc":
+		id, a, b = "R1", "50 Ω", "60 Ω"
+	case "flyback", "npn-coil":
+		id, a, b = "RL", "100 Ω", "120 Ω"
+	}
+	high, err := workbench.ParseValue(b, "Ω")
+	if err != nil {
+		return sample, err
 	}
 	value := b
 	for _, part := range before.Components {
-		if part.ID == id && ((name == "led" && part.Value == 2000) || (name == "rc" && part.Value == 20000) || ((name == "npn" || name == "npn-pulse") && part.Value == 20000) || (name == "flasher" && part.Value == 48000)) {
+		if part.ID == id && part.Value == high {
 			value = a
 		}
 	}
@@ -252,6 +293,8 @@ func measurePerformance(s *session, name string, index int, condition string) (s
 		}
 	case "flasher":
 		duration = .2
+	case "rl", "rlc", "flyback", "npn-coil":
+		duration = .2
 	}
 	step := .001
 	meta, _, elapsed, e := electricalVerify(s, duration, step, probes)
@@ -260,6 +303,7 @@ func measurePerformance(s *session, name string, index int, condition string) (s
 	}
 	sample.VerifyMS = elapsed * 1000
 	sample.VerifyDuration = meta.Duration
+	sample.VerifySampleStep = meta.Settings.StepSeconds
 	if err = s.ask("recording.keep.set", workbench.RecordingKeepParams{ID: meta.OperationID, Keep: false}, true, nil); err != nil {
 		return sample, err
 	}
@@ -278,6 +322,8 @@ func performanceFresh(s workbench.Snapshot, name string) bool {
 		return s.Transient != nil && !s.Transient.Stale && s.Transient.RunID == s.RunID && s.Transient.ElectricalRevision == s.ElectricalRevision && s.Mixed != nil && !s.Mixed.Stale
 	case "rc", "npn-pulse":
 		return s.Transient != nil && !s.Transient.Stale && s.Transient.RunID == s.RunID && s.Transient.ElectricalRevision == s.ElectricalRevision
+	case "rl", "rlc", "flyback", "npn-coil":
+		return s.Transient != nil && !s.Transient.Stale && s.Transient.Engine == workbench.InductorEngineID && s.Transient.RunID == s.RunID && s.Transient.ElectricalRevision == s.ElectricalRevision && s.Mixed != nil && !s.Mixed.Stale && s.Mixed.Engine == workbench.InductorEngineID && s.Mixed.RunID == s.RunID && s.Mixed.ElectricalRevision == s.ElectricalRevision
 	}
 	return false
 }
@@ -290,7 +336,20 @@ func performanceProbes(name string) []string {
 		return []string{"v:Storage.1", "i:Limit", "i:Storage", "v:Supply.positive"}
 	case "npn", "npn-pulse":
 		return []string{"v:Transistor.collector", "i:Transistor.collector", "i:Transistor.base", "v:Drive.positive"}
-	default:
+	case "rl":
+		return []string{"i:L1", "v:L1", "v:V1.positive", "i:R1"}
+	case "rlc":
+		return []string{"i:L1", "v:L1", "v:C1", "v:V1.positive"}
+	case "flyback":
+		return []string{"i:L1", "v:L1", "v:M1.drain", "i:D1"}
+	case "npn-coil":
+		return []string{"i:L1", "v:L1", "v:CB", "v:QCOIL.collector"}
+	case "flasher":
 		return []string{"i:D1", "i:D2", "v:C1", "v:C2"}
 	}
+	return nil
+}
+
+func isInductorPerformance(name string) bool {
+	return name == "rl" || name == "rlc" || name == "flyback" || name == "npn-coil"
 }

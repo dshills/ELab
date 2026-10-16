@@ -152,6 +152,58 @@ func TestInductorRLCIndependentThreeDampingRegimes(t *testing.T) {
 	}
 }
 
+func TestInductorRLCDefaultHalfQuarterOutputGrid(t *testing.T) {
+	s := New()
+	call(t, s, "example.load", ExampleLoadParams{ID: "rlc"}, "rlc")
+	step := s.Snapshot().TransientSettings.StepSeconds
+	s.Close()
+	if step != .0001 {
+		t.Fatal("review refinement grid when the guided RLC sample step changes", step)
+	}
+	for _, resistance := range []float64{50, 200, 500} {
+		t.Run(fmt.Sprint(resistance), func(t *testing.T) {
+			states := make([]*mixedState, 3)
+			traces := make([]*Transient, 3)
+			capacitance := 10e-6
+			for k := range states {
+				states[k], traces[k] = initializeInductorTest(t, inductorTestGraph(t, 5, resistance, .1, &capacitance))
+				substeps := 1 << k
+				traces[k].Settings.StepSeconds = step / float64(substeps)
+			}
+			maxVoltage, maxCurrent := 0., 0.
+			for sample := 1; sample <= 100; sample++ {
+				at := float64(sample) * step
+				wantV, wantI := rlcStepReference(at, resistance)
+				for k := range states {
+					substeps := 1 << k
+					for sub := 1; sub <= substeps; sub++ {
+						end := (float64(sample-1) + float64(sub)/float64(substeps)) * step
+						var err error
+						states[k], err = states[k].advance(traces[k], end)
+						if err != nil {
+							t.Fatal("RLC grid refinement refused", k, at, err)
+						}
+					}
+					r := states[k].result
+					cap, coil := r.Capacitors[0], r.Inductors[0]
+					if math.Abs(cap.Voltage-wantV) > .001 || math.Abs(coil.Current-wantI) > 1e-5 || math.Abs(coil.Voltage-(5-resistance*wantI-wantV)) > .001 || r.KCLResidual > 1e-9 || math.Abs(r.PowerResidual) > 1e-8 {
+						t.Fatal("RLC grid disagrees with independent reference", k, at, cap, coil, wantV, wantI)
+					}
+				}
+				for k := 0; k < 2; k++ {
+					coarse, fine := states[k].result, states[2].result
+					maxVoltage = math.Max(maxVoltage, math.Abs(coarse.Capacitors[0].Voltage-fine.Capacitors[0].Voltage))
+					maxCurrent = math.Max(maxCurrent, math.Abs(coarse.Inductors[0].Current-fine.Inductors[0].Current))
+				}
+			}
+			if maxVoltage > .001 || maxCurrent > 1e-5 {
+				t.Fatal("default/half outputs differ from quarter-grid outputs", maxVoltage, maxCurrent)
+			}
+			t.Logf("100/50/25 µs grids, 10 ms: maximum difference %.9g V / %.9g A", maxVoltage, maxCurrent)
+		})
+	}
+}
+
 func TestInductorSeriesStartupVoltagesAndCurrentConsistency(t *testing.T) {
 	g := inductorTestGraph(t, 5, 100, .4, nil)
 	second, err := MakeComponent("L2", "inductor", Point{X: 800}, "600 mH")

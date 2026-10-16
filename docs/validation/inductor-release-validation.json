@@ -1,0 +1,187 @@
+{
+  "passed": true,
+  "format": "elab.inductor-release-validation",
+  "version": 1,
+  "date": "2026-10-16",
+  "qualification_scope": "Curated local-workstation engineering checkpoint; broader MVP/product acceptance remains open",
+  "app_version": "0.104.0",
+  "build_version": "119",
+  "model": "ideal-inductor.v1",
+  "engine": "elab.rlc-mna-radau5.v1",
+  "source_parent_commit": "a56f80b64a1846c1f3e22c6182ce117b382e0654",
+  "changed_sources_sha256": {
+    "cmd/elab-conformance/main.go": "55ba1d208c1ecf314d9616c23f3dd34b2ef53a151d7ade87ca4d548286425c72",
+    "internal/conformance/performance.go": "69edf5e836480b9cf898cabcdc459d9d513e11f43b7443664a672bb976f0c9db",
+    "internal/conformance/performance_test.go": "7d6cc933fdeaaa1ae997e88e57e9433f41c1597f19c72d5ec090996d4ce5ba97",
+    "scripts/inductor-recovery-demo.py": "9ef62038bc60235471927f1300f009959d248efa4a61ea193bd31f1d8f3a0ace",
+    "transport/socket_shutdown_test.go": "8990d22b396bd49deec08f439938652cd33ab59944ad53a7727c9e05d18390d0",
+    "transport/transport.go": "68aefe6b1a2ece67be894e7490b257ceb2b1010526004d08618a1319551bc915",
+    "workbench/inductor.go": "6df94f082dde461c62be513164c9ffa2c1ddd2cd4ebea2d017624eb8190dc746",
+    "workbench/inductor_advance.go": "bdf7ba6e53b9367ae6aa57226f4a8d2c7c1a86ac2a2b281c477fd590bb116e6a",
+    "workbench/inductor_endpoint_test.go": "2a8dde0642ff7ca0cdb366af4eb1aa36bf5a9c4993798bec40955d28e599ab3a",
+    "workbench/inductor_integration.go": "da014a3404f05c42fd1a7b390d820df0b00c71fb7abeed232f554030bd1dde79",
+    "workbench/inductor_mixed_test.go": "72b20a1d505db6168e8cb8c273cf208bc4ec0c87cff60e16c510949fe2a76395",
+    "workbench/inductor_newton.go": "aec26dd7fd8f98e4804282cfedb78c47d15b45c3e30a5262c275e739938f6a60",
+    "workbench/inductor_newton_test.go": "a43db2757bdaeb4033272457dafc2c0ed1e54b7feb1c8e65f57abb48d2fe161b",
+    "workbench/inductor_test.go": "2ee7c7a136b8f891e7b61a8092260dd320ce4da0018e178154c918f6448b719a",
+    "workbench/integration_budget.go": "024db4b79afc7df9e5ee6d7aedcec5723f6c31328cda787a851896ac09285428",
+    "workbench/mixed.go": "7b09937f50ef30e68948fd48569f72f1ab541edd025a9981d8a25c0c2a649303",
+    "workbench/mixed_transient.go": "2efd69f72af36d3753b327bd2e0cbd08d4151dc2a6c0704ef1617b589631f706",
+    "workbench/value_capabilities.go": "2ce5d51550aaba7437043967197c6021908027c2611c56d44460b942181fba6b"
+  },
+  "binary_sha256": {
+    "build/elab-agent": "cccc43a278c830abd93682589721cc3e126abcf43bf3105fafddb99119d8668a",
+    "build/elab-conformance": "d20be27c6f862f27a20e3232aa9f72f199392b39cd41952e62025cb146ab94f0",
+    "build/elab": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1",
+    "build/ELab-inductor-qualified.app/Contents/MacOS/ELab": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1",
+    "build/ELab.app/Contents/MacOS/ELab": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1",
+    "build/ELab-0.103.0-118-preserved.app/Contents/MacOS/ELab": "f23de3e74312688f977f932d3f13b08f52650e85c113c7f014a232fd32f6de20"
+  },
+  "promoted_application": "build/ELab.app",
+  "promoted_binary_sha256": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1",
+  "preserved_application": "build/ELab-0.103.0-118-preserved.app",
+  "preserved_binary_sha256": "f23de3e74312688f977f932d3f13b08f52650e85c113c7f014a232fd32f6de20",
+  "bundle_files_compared": 3,
+  "bundle_tree": {
+    ".": {
+      "mode": 493,
+      "sha256": null
+    },
+    "Contents": {
+      "mode": 493,
+      "sha256": null
+    },
+    "Contents/Info.plist": {
+      "mode": 420,
+      "sha256": "472cb00ccdb9d991c5db8c968b3dee09de5a9af4693fcfb5e988987686f55fb8"
+    },
+    "Contents/MacOS": {
+      "mode": 493,
+      "sha256": null
+    },
+    "Contents/MacOS/ELab": {
+      "mode": 493,
+      "sha256": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1"
+    },
+    "Contents/Resources": {
+      "mode": 493,
+      "sha256": null
+    },
+    "Contents/Resources/APP_MANIFEST.json": {
+      "mode": 420,
+      "sha256": "b5d26694364735405bfe466009eb1d9e19ae9ed0811bf7ec7c9b48fa9e16767b"
+    }
+  },
+  "sdk_before": {
+    "commit": "7322f12be2c3b1de785a1e143371eab876691c64",
+    "clean": true,
+    "manifest_sha256": "22b4e98b6c11bf67987987c62837422f660ddabbe588914f25a3a1e1ba4efd58",
+    "prepared": {
+      "upstream": 233,
+      "typesetting": 5
+    }
+  },
+  "sdk_after": {
+    "commit": "7322f12be2c3b1de785a1e143371eab876691c64",
+    "clean": true,
+    "manifest_sha256": "22b4e98b6c11bf67987987c62837422f660ddabbe588914f25a3a1e1ba4efd58",
+    "prepared": {
+      "upstream": 233,
+      "typesetting": 5
+    }
+  },
+  "hardware": {
+    "cpu": "Apple M4 Pro",
+    "logical_cpus": "14",
+    "memory_bytes": "68719476736",
+    "os": "26.6.2",
+    "os_build": "25G83",
+    "go": "go version go1.27.2 darwin/arm64"
+  },
+  "source_and_sdk_unchanged_during_pipeline": true,
+  "full_report_sha256": "d6f1cbae1a8e03f629e0de4c14df48172e01929f8e786355092b1c411269c2ce",
+  "performance_sample_count": 1440,
+  "coil_sample_count": 640,
+  "original_sample_count": 800,
+  "max_case_p95_fresh_ms": 10.238916,
+  "max_verify_ms": 271.669875,
+  "numerical_and_work_limits_unchanged": true,
+  "checks": [
+    "Full goimports/staticcheck/root and native race/vet gate passes; workbench 63.027 s and native 118.206 s",
+    "Independent RL/RLC/free-LC/LED-coil/flyback and reduced NPN references; actual RLC default/half/quarter grids in three damping regimes",
+    "100/120 ohm NPN/base-capacitor/coil refinement over 200 ms at 1/0.5/0.25 ms outputs, with original accuracy and work budgets",
+    "Fast 1 uH/1 nF LC retains 50 fs output remainders; a distinct 50 fs post-pulse interval retains current and exact source event time",
+    "Socket final response drains before graceful exit; deterministic unread-response regression and forced idle cleanup pass",
+    "Packaged GPU/UI/protected-close/lifecycle smoke; complete native/headless public reports match apart from transport",
+    "Actual owned SIGKILL recovery, saved -20 mA startup versus +30 mA captured scenario, exact metadata/rows and byte-identical re-export",
+    "Eight corrupt imported coil recordings and a symlink refuse atomically; four actual qualified .103 projects/captures reopen unchanged",
+    "Four adapters each pass three reference workflows, 294 frozen electrical checks, three flasher refinements, 22 coil checks and seven coil observations",
+    "800 original-family and 640 coil timing measurements; all sample counts/identities/models/settings/probes and thresholds recomputed; 72 Go-encoded graph hashes and cross-adapter variant equality pass",
+    "All owned pipeline processes exit; source/SDK stay unchanged with 233 upstream plus 5 typesetting declared output hashes verified",
+    "Staged full bundle bytes/modes match candidate, canonical .104 promoted, and complete qualified .103 bundle preserved"
+  ],
+  "repairs": [
+    "100/120 ohm nonlinear loaded switching: junction-based damping and failed-trial larger proposal with full rechecks; strict voltage-correction criterion restored after unsuccessful tolerance experiments",
+    "Reduced stage allocation and repeated pin/solver reads; missing-terminal cache fallback preserved by the existing incomplete-plan regression",
+    "Graceful socket shutdown could truncate app.close response; admitted reply drainage preserves the final result under existing deadlines",
+    "Removed fixed 1e-13 s L endpoint/source-output merging; balanced final steps and existing four-ULP time equivalence preserve short real intervals"
+  ],
+  "carried_forward_visual_scope": {
+    "reference": "research/ui-audit/inductor/README.md",
+    "native_and_output_sources_unchanged_since": "a56f80b64a18",
+    "startup_rl_svg_png_hashes_match_reviewed_candidate": true,
+    "note": "Earlier physical UI/PDF/PNG reviews retain their original candidate/SDK attribution. Current packaged smoke/public exports are separate evidence; no new physical input audit claimed."
+  },
+  "limitations": [
+    "Generic educational/ideal models; no manufacturer parameters, winding resistance, saturation, intrinsic semiconductor capacitance, heating or ratings",
+    "One Apple M4 Pro workstation and listed fixtures; no universal hardware, maximum-capacity or input-to-visible latency qualification; no overlapping agent-controlled heavy builds/tests during timing",
+    "Full mounted input/IME/pointer/wheel/focus/screen-reader, clean distribution, participants and physical printer/media/cancellation acceptance remain open",
+    "P0 remains 17 implemented /10 partial; this P1 part extension does not declare the continuing project goal complete"
+  ],
+  "durable_evidence_sha256": {
+    "inductor-release-conformance.json": "289962121db98a42c4c8fed0713d8ea5d1c6eb7378e4d7ffe96ff9647587ff57",
+    "inductor-headless-workflow.json": "ad4379929aca33938ca25d6e4c5be2f1647d97cae5156a77d54d3551308bec80",
+    "inductor-native-workflow.json": "cedab2234bf76f5819633bc1b6df64d6c32efaffe90e204adba7d68c362f981d",
+    "inductor-recovery-headless.json": "8992c34e85fb3b5f7324e62f0ed4f398d6d97a1c8f8eb85b2009f21a01bf4a14",
+    "inductor-recovery-native.json": "5e76baca8a7346343c98a4be9e093b5ddbfe0975ee5101969b7fdcaad9acdd32",
+    "inductor-release-sample-audit.json": "e9825d735c56231371dc22c0b76c8ab566d88428a660a129236b110d891204df",
+    "inductor-discovery.json": "73f2827d951f4bc718ede081cd706aefeb82df0e5db8d2987953abd0d7ba8f70"
+  },
+  "raw_evidence_sha256": {
+    "build/inductor-release-104/check-endpoints.log": "d5faac0e8f39475c3e117751e72353cf5b136b24d64236e2f53ecc50ddd82758",
+    "build/inductor-release-104/endpoint-before.log": "c660d6dfc0c900187654f21b0da9c7c4931ad9903a4964734eeebe7d3f1a187b",
+    "build/inductor-release-104/endpoint-and-corner-after.log": "b8bd108d63b4d2839a746f5c0bfe5ecbcadeca1683e45c41ea6d7d46773652b3",
+    "build/inductor-release-104/source-corner-before-corrected.log": "c378980560f06360c2c6fcde575647cb0be7414b93571dc58955f8e82256fd78",
+    "build/inductor-release-104/socket-reply-before.log": "781cf98637be965e9d9a03d502c9806c04d4bb6c9354cd632bb75ce66b4e6d13",
+    "build/inductor-release-104/socket-reply-after.log": "abb7e2a9e9d51f996399f6156bdf48e5e681e0f5726fb33e5f6a5e185c83b35d",
+    "build/inductor-release-104/qualification-pipeline.log": "b754137db77a47a466166b16f102ae78ef21880c64708b4705f4fbb927a5f48b",
+    "build/inductor-release-104/qualified/smoke.log": "7bc95def048c93cb8c3eb7db292b71a4a215ccd48a18ed77cf02e5488ddd5e15",
+    "build/inductor-release-104/qualified/graph-audit.log": "87d4f7c0aae8329ca2ff162d1d97307103b5f2265323435d0d8cb9526469ae91",
+    "build/inductor-release-104/qualified/owned-native-exits.json": "13befb4826204174f6069c23b270217eac2de4a30263b4eda40dd819f6243aa5",
+    "build/inductor-release-104/qualified/pipeline.json": "a07608fb923961555760f80943310db9bef4aaf909fd46f2d22b118d68a676f3",
+    "build/inductor-release-104/qualified/old-project-compatibility/report.json": "e0b73e7f6df331492cfd39fadb7758f14b2e4ccd2825840034861602d91eaccc",
+    "build/inductor-release-104/qualified/source-before.json": "7f5d9e8dac5c10dde054f0eaeb8eb937765d985f31ede6177180208d538d1ab7",
+    "build/inductor-release-104/qualified/sdk-before.json": "8a77a1e2693799c1b235f4fc9ee4d78e017cc7b1721d1766c11b30c1f2ee6920",
+    "build/inductor-release-104/qualified/sdk-after.json": "8a77a1e2693799c1b235f4fc9ee4d78e017cc7b1721d1766c11b30c1f2ee6920",
+    "build/inductor-release-104/.audit/report.go": "a11de6e97ad23719668088d9c19848b7e716c108ec691b1fcb6e293147eed135",
+    "build/inductor-release-104/audit-samples.py": "b46830ceb4fb02cc9e43d7c7ceda98c5e314f9784f5a7bca9d7f7d6033963779",
+    "build/inductor-release-104/qualify.py": "efce1bf83aded1b70fd5e1800ff8ce5b180d0f69129979c93f766a2a5f5fdbd9"
+  },
+  "qualification_binary_sha256": {
+    "build/elab-agent": "cccc43a278c830abd93682589721cc3e126abcf43bf3105fafddb99119d8668a",
+    "build/elab-conformance": "d20be27c6f862f27a20e3232aa9f72f199392b39cd41952e62025cb146ab94f0",
+    "build/elab": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1",
+    "build/ELab-inductor-qualified.app/Contents/MacOS/ELab": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1",
+    "build/ELab.app/Contents/MacOS/ELab": "f23de3e74312688f977f932d3f13b08f52650e85c113c7f014a232fd32f6de20"
+  },
+  "sdk_review": {
+    "prior_canonical_commit": "6330b2d42050b46c2019e558074e087ed281e56a",
+    "current_commit": "7322f12be2c3b1de785a1e143371eab876691c64",
+    "reviewed_changes": [
+      "4da0d6b: documentation/evidence for composed Mac lifecycle",
+      "b8fd3e9: patch 0070 atomically retires window registry/current-context ownership and guards focus/Raise membership",
+      "7322f12: explicit OriginalCaptured availability in native menu diagnostics and scalar serializer fixture"
+    ],
+    "scope": "Read-only SDK source/dependency review and ELab integration requalification; no SDK edits or claim that the full SDK suite was rerun"
+  }
+}
