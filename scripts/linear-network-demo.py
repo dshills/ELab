@@ -14,6 +14,8 @@ spec.loader.exec_module(helper)
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect', help='Fresh owned native endpoint; closes afterward')
     parser.add_argument('--output', type=Path, required=True)
@@ -21,7 +23,7 @@ def main():
     args = parser.parse_args()
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
-    client = helper.Client(args.connect)
+    client = connect_demo_client(helper.Client, args.connect)
     mutate = lambda name, params=None: client.ask(name, params, True)
 
     def restart():

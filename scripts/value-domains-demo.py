@@ -6,12 +6,15 @@ import json
 import math
 from pathlib import Path
 
+
 spec = importlib.util.spec_from_file_location('helper', Path(__file__).with_name('persistence-demo.py'))
 helper = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(helper)
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect')
     parser.add_argument('--output', type=Path, required=True)
@@ -19,7 +22,7 @@ def main():
     args = parser.parse_args()
     directory = args.artifacts.resolve()
     directory.mkdir(parents=True, exist_ok=False)
-    client = helper.Client(args.connect, command_preconditions=True)
+    client = connect_demo_client(helper.Client, args.connect, command_preconditions=True)
 
     def refuse(command, params):
         before = client.ask('project.inspect')

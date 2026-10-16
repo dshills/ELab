@@ -1,0 +1,284 @@
+{
+  "passed": true,
+  "workflows": [
+    {
+      "script": "scripts/agent-demo.py",
+      "transport": "headless-stdio",
+      "passed": true,
+      "owned_host_exit": null,
+      "report_sha256": "eb98166d17791ddefae07de0463589edf55dad949dc003ee450645fa26396bc6",
+      "script_sha256": "f58a326a08b5df2fd4c7c02f69fc8bb25daef61793df9be3b6c39da01de177d5",
+      "report_path": "build/demo-session-audit/positive-qualified/headless/agent-demo/report.json",
+      "workflow_log_sha256": "4a28dda08c38d005bf411299b018418efdcba74dde90c018747b038dd1e79a79",
+      "checks": [
+        "live edit",
+        "retry deduplication",
+        "incomplete/stale feedback",
+        "undo recovery",
+        "paused edit",
+        "resume",
+        "invalid input refusal",
+        "selection/view without solver restart"
+      ]
+    },
+    {
+      "script": "scripts/drawing-demo.py",
+      "transport": "headless-stdio",
+      "passed": true,
+      "owned_host_exit": null,
+      "report_sha256": "2bcdddf9df0c4ca63af13f0a2e2f306e7d326ed522b55894554ef242b28273c7",
+      "script_sha256": "b8c9794c2011628e3f5c589b1092deaea39cabd465965badbde73378aa1a075a",
+      "report_path": "build/demo-session-audit/positive-qualified/headless/drawing-demo/report.json",
+      "workflow_log_sha256": "71d7625b36a07888e63a58b82d7b8e705a993bdd807cd015d0cac1d88f804a32",
+      "checks": [
+        "build from blank",
+        "terminal-derived nets",
+        "move/rotate/undo without solver restart",
+        "live edit",
+        "retry deduplication",
+        "incomplete/stale feedback",
+        "undo recovery",
+        "paused edit",
+        "resume",
+        "invalid input refusal",
+        "selection/view without solver restart"
+      ]
+    },
+    {
+      "script": "scripts/pmos-demo.py",
+      "transport": "headless-stdio",
+      "passed": true,
+      "owned_host_exit": null,
+      "report_sha256": "6e3aa47f09721a75584d3fb53ce54da5d80eb96511c3e054ce3db6155fda8cf1",
+      "script_sha256": "c817ea8a12425ea19c6fbc4c6fd4b1e550bf2509a68dab5045637238f30315d1",
+      "report_path": "build/demo-session-audit/positive-qualified/headless/pmos-demo/report.json",
+      "workflow_log_sha256": "25835d4ea03446cfcf20c6238ed96db43f436e154c749d4a34d24ad1a3a598e8",
+      "checks": [
+        "Blank PMOS placement/named wiring matches guided example",
+        "Low gate turns the high-side LED on with negative signed drain/source currents and zero gate current",
+        "Pulse edge has both sides; external gate RC retains charge and matches analytic charge/discharge within 3 mV",
+        "Verification CSV/JSON and save/reopen preserve PMOS parameters; wrong threshold polarity refuses",
+        "Complementary NMOS/PMOS inverter switches across both rails with conservation and both captured model dependencies"
+      ]
+    },
+    {
+      "script": "scripts/cmos-demo.py",
+      "transport": "headless-stdio",
+      "passed": true,
+      "owned_host_exit": null,
+      "report_sha256": "fc5f0142482f51c1e93f27fe25a50316a4a4c4b999e70b481fc72bc020507968",
+      "script_sha256": "09df45c13b87cc4ce2a257046a31b0b75bd1157b6a1a1e0ba5794df8a75c8087",
+      "report_path": "build/demo-session-audit/positive-qualified/headless/cmos-demo/report.json",
+      "workflow_log_sha256": "4d167bcbb0cd9e9ee0c326d7fbb774af4e92e3eb9277caa990e663a1ca2b08c1",
+      "checks": [
+        "catalog/schema and selected output/four probes",
+        "independent load-line and both captured ideal-edge sides",
+        "live inversion and simultaneous conduction at intermediate input",
+        "Verify preserves live physics and captures both model dependencies",
+        "paused edit stales; dirty reset refuses; saved edited origin/capture reopens fresh",
+        "reset/undo/redo and pure SVG/PNG output"
+      ]
+    },
+    {
+      "script": "scripts/lc-sampling-demo.py",
+      "transport": "headless-stdio",
+      "passed": true,
+      "owned_host_exit": null,
+      "report_sha256": "f42ca0e81aa7c2b660759dd7ebcbf2cd4b90ae9d8b01662cb7681146caf225a8",
+      "script_sha256": "ff5539e0a76db4012867248cec1f3f7abce3624216fb7aad7561b179ee0a3e48",
+      "report_path": "build/demo-session-audit/positive-qualified/headless/lc-sampling-demo/report.json",
+      "workflow_log_sha256": "05a22d2167b25b19ecbdef9d5ef407d4dd3e8dbba0423eff2f3b4381095b247d",
+      "checks": [
+        "DC-powered LC advice",
+        "independent RLC rows and recovered sampled peak",
+        "advanced paused physics retained stale",
+        "exact retry retention",
+        "existing captured samples unchanged",
+        "explicit Verify override preserved",
+        "one undo/redo and fresh-process persistence",
+        "staged-value atomic fit and rollback",
+        "unresolved supported-minimum limitation",
+        "original saved file unchanged"
+      ]
+    },
+    {
+      "script": "scripts/inductor-recovery-demo.py",
+      "transport": "headless-stdio",
+      "passed": true,
+      "owned_host_exit": null,
+      "report_sha256": "35aa57175b72e9b61bf4bcc77589d09c8e42a1651a97f6a01579f3ce15c06317",
+      "script_sha256": "29ae54a1ce957c03658de9d4afdcdea8f4d1dea13480e8d96b906f564c890cbd",
+      "report_path": "build/demo-session-audit/positive-qualified/headless/inductor-recovery-demo/report.json",
+      "workflow_log_sha256": "35aa57175b72e9b61bf4bcc77589d09c8e42a1651a97f6a01579f3ce15c06317",
+      "checks": [
+        "record-only dirty autosave",
+        "actual producer SIGKILL and inactive lease",
+        "exact recovery metadata and sample rows",
+        "paused t=0 restore of saved -20 mA intent",
+        "retained independent +30 mA scenario capture",
+        "fresh local import identity",
+        "byte-identical portable re-export",
+        "atomic corrupt import refusals",
+        "original saved file unchanged"
+      ]
+    },
+    {
+      "script": "scripts/agent-demo.py",
+      "transport": "native-socket",
+      "passed": true,
+      "owned_host_exit": 0,
+      "report_sha256": "2e4923562339f6773293401614bfa116f0a470a7f3116a0c0d7a4b286eb80943",
+      "script_sha256": "f58a326a08b5df2fd4c7c02f69fc8bb25daef61793df9be3b6c39da01de177d5",
+      "report_path": "build/demo-session-audit/positive-qualified/native/agent-demo/report.json",
+      "workflow_log_sha256": "a132d5e9300eb38f9bea3794541558d6efa963a8a05e4e50dbb458458ff47fe5",
+      "checks": [
+        "live edit",
+        "retry deduplication",
+        "incomplete/stale feedback",
+        "undo recovery",
+        "paused edit",
+        "resume",
+        "invalid input refusal",
+        "selection/view without solver restart"
+      ]
+    },
+    {
+      "script": "scripts/drawing-demo.py",
+      "transport": "native-socket",
+      "passed": true,
+      "owned_host_exit": 0,
+      "report_sha256": "014313e4550a7ffce0304d1cdb78dc160b62388b73b9776a58a76841746c93e8",
+      "script_sha256": "b8c9794c2011628e3f5c589b1092deaea39cabd465965badbde73378aa1a075a",
+      "report_path": "build/demo-session-audit/positive-qualified/native/drawing-demo/report.json",
+      "workflow_log_sha256": "b1943ef7806d381156e9c153152653d26830f3cc6f50811a9593c78f1a7ce99b",
+      "checks": [
+        "build from blank",
+        "terminal-derived nets",
+        "move/rotate/undo without solver restart",
+        "live edit",
+        "retry deduplication",
+        "incomplete/stale feedback",
+        "undo recovery",
+        "paused edit",
+        "resume",
+        "invalid input refusal",
+        "selection/view without solver restart"
+      ]
+    },
+    {
+      "script": "scripts/pmos-demo.py",
+      "transport": "native-socket",
+      "passed": true,
+      "owned_host_exit": 0,
+      "report_sha256": "e73a54bb9312354d37b7b9c34254b788baace5014252a5a3829e9575ed7671d5",
+      "script_sha256": "c817ea8a12425ea19c6fbc4c6fd4b1e550bf2509a68dab5045637238f30315d1",
+      "report_path": "build/demo-session-audit/positive-qualified/native/pmos-demo/report.json",
+      "workflow_log_sha256": "98aa880c253c0f1aad06307415126d25fae8365d04f43087960f664f2148205b",
+      "checks": [
+        "Blank PMOS placement/named wiring matches guided example",
+        "Low gate turns the high-side LED on with negative signed drain/source currents and zero gate current",
+        "Pulse edge has both sides; external gate RC retains charge and matches analytic charge/discharge within 3 mV",
+        "Verification CSV/JSON and save/reopen preserve PMOS parameters; wrong threshold polarity refuses",
+        "Complementary NMOS/PMOS inverter switches across both rails with conservation and both captured model dependencies"
+      ]
+    },
+    {
+      "script": "scripts/cmos-demo.py",
+      "transport": "native-socket",
+      "passed": true,
+      "owned_host_exit": 0,
+      "report_sha256": "9c428b3936d341345f297d7147336979ba8947fb3e079cf5eb720011aab2e349",
+      "script_sha256": "09df45c13b87cc4ce2a257046a31b0b75bd1157b6a1a1e0ba5794df8a75c8087",
+      "report_path": "build/demo-session-audit/positive-qualified/native/cmos-demo/report.json",
+      "workflow_log_sha256": "d1ab078d91c4963ee6d22457a4a886d28d3fd1ec99033d8465e15b8381ac31d4",
+      "checks": [
+        "catalog/schema and selected output/four probes",
+        "independent load-line and both captured ideal-edge sides",
+        "live inversion and simultaneous conduction at intermediate input",
+        "Verify preserves live physics and captures both model dependencies",
+        "paused edit stales; dirty reset refuses; saved edited origin/capture reopens fresh",
+        "reset/undo/redo and pure SVG/PNG output"
+      ]
+    },
+    {
+      "script": "scripts/lc-sampling-demo.py",
+      "transport": "native-socket",
+      "passed": true,
+      "owned_host_exit": 0,
+      "report_sha256": "460b96f4d91e0805867fd57b7d65945de7fb4869df4ff59f46caddec34d57c94",
+      "script_sha256": "ff5539e0a76db4012867248cec1f3f7abce3624216fb7aad7561b179ee0a3e48",
+      "report_path": "build/demo-session-audit/positive-qualified/native/lc-sampling-demo/report.json",
+      "workflow_log_sha256": "f08479d9336edf572eac71886c8999b95c771f48366af0c60e65750c23cbfd15",
+      "checks": [
+        "DC-powered LC advice",
+        "independent RLC rows and recovered sampled peak",
+        "advanced paused physics retained stale",
+        "exact retry retention",
+        "existing captured samples unchanged",
+        "explicit Verify override preserved",
+        "one undo/redo and fresh-process persistence",
+        "staged-value atomic fit and rollback",
+        "unresolved supported-minimum limitation",
+        "original saved file unchanged"
+      ]
+    },
+    {
+      "script": "scripts/inductor-recovery-demo.py",
+      "transport": "native-socket",
+      "passed": true,
+      "owned_host_exit": 0,
+      "report_sha256": "349eeb636cb905d227d41e33c0554344ebf9633c625318186e17aa7f12359e50",
+      "script_sha256": "29ae54a1ce957c03658de9d4afdcdea8f4d1dea13480e8d96b906f564c890cbd",
+      "report_path": "build/demo-session-audit/positive-qualified/native/inductor-recovery-demo/report.json",
+      "workflow_log_sha256": "349eeb636cb905d227d41e33c0554344ebf9633c625318186e17aa7f12359e50",
+      "checks": [
+        "record-only dirty autosave",
+        "actual producer SIGKILL and inactive lease",
+        "exact recovery metadata and sample rows",
+        "paused t=0 restore of saved -20 mA intent",
+        "retained independent +30 mA scenario capture",
+        "fresh local import identity",
+        "byte-identical portable re-export",
+        "atomic corrupt import refusals",
+        "original saved file unchanged"
+      ]
+    },
+    {
+      "script": "scripts/nmos-demo.py",
+      "transport": "headless-stdio",
+      "passed": true,
+      "owned_host_exit": null,
+      "report_sha256": "af765d09baf10cf2c04ee1213c6a87b91de5c346a2426d04320d08dbcff017cd",
+      "script_sha256": "9ad13739282462850b267d71cbd2eead0be96709dae6f1b574922a9a66395e62",
+      "report_path": "build/demo-session-audit/nmos-final/headless/nmos-demo/report.json",
+      "workflow_log_sha256": "3f3cac98f569577c947abdc4542b0161fd24a12b6bdfc95fc8c41382bace3850",
+      "checks": [
+        "Blank component placement and named wiring match the guided example",
+        "Pulse edges switch the LED with duplicate-time gate voltage samples and zero model gate current",
+        "Move/rotate preserve electrical result/run; selected MOSFET voltage and current probes available",
+        "External gate RC charge/discharge agree with analytic references within 3 mV; charge continuous at pulse edge",
+        "Verification/CSV/SVG/PNG preserve model and signed readings; saved recording reopens with fresh live time",
+        "Tampered model parameters refuse; KCL/power residuals remain bounded"
+      ]
+    },
+    {
+      "script": "scripts/nmos-demo.py",
+      "transport": "native-socket",
+      "passed": true,
+      "owned_host_exit": 0,
+      "report_sha256": "3143dc57a3e99898dd33300e1e65a676b0b64be4b312458d98069bd7d41e4915",
+      "script_sha256": "9ad13739282462850b267d71cbd2eead0be96709dae6f1b574922a9a66395e62",
+      "report_path": "build/demo-session-audit/nmos-final/native/nmos-demo/report.json",
+      "workflow_log_sha256": "b23b2238b02c3cd130523271bfe19dd304bb45c060e9ccfb22afa72610ea2ec7",
+      "checks": [
+        "Blank component placement and named wiring match the guided example",
+        "Pulse edges switch the LED with duplicate-time gate voltage samples and zero model gate current",
+        "Move/rotate preserve electrical result/run; selected MOSFET voltage and current probes available",
+        "External gate RC charge/discharge agree with analytic references within 3 mV; charge continuous at pulse edge",
+        "Verification/CSV/SVG/PNG preserve model and signed readings; saved recording reopens with fresh live time",
+        "Tampered model parameters refuse; KCL/power residuals remain bounded"
+      ]
+    }
+  ],
+  "scope": "Fourteen current representative successful workflows; final NMOS report replaces earlier static PMOS-future wording. No every-historical-demo success claim."
+}

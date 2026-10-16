@@ -7,18 +7,21 @@ import math
 from pathlib import Path
 import time
 
+
 spec = importlib.util.spec_from_file_location('helper', Path(__file__).with_name('persistence-demo.py'))
 helper = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(helper)
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect')
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--artifacts', type=Path, required=True)
     args = parser.parse_args()
-    client = helper.Client(args.connect, command_preconditions=True)
+    client = connect_demo_client(helper.Client, args.connect, command_preconditions=True)
     fresh = None
     try:
         client.ask('example.reset', {'discard_changes': True}, True)

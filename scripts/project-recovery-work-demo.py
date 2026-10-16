@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 import time
 
+
 spec = importlib.util.spec_from_file_location('helper', Path(__file__).with_name('persistence-demo.py'))
 helper = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(helper)
@@ -19,6 +20,8 @@ def protected(state):
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect')
     parser.add_argument('--output', type=Path)
@@ -26,7 +29,7 @@ def main():
     args = parser.parse_args()
     directory = args.artifacts.resolve()
     directory.mkdir(parents=True, exist_ok=True)
-    client = helper.Client(args.connect, command_preconditions=True)
+    client = connect_demo_client(helper.Client, args.connect, command_preconditions=True)
     try:
         client.ask('example.rc', {'discard_changes': True}, True)
         client.ask('simulation.pause', {}, True)

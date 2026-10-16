@@ -24,6 +24,8 @@ def invariant(state):
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect', help='Fresh owned native session; closed unless --keep-open succeeds')
     parser.add_argument('--keep-open', action='store_true')
@@ -33,7 +35,7 @@ def main():
     assert not args.keep_open or args.connect
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
-    client = helper.Client(args.connect)
+    client = connect_demo_client(helper.Client, args.connect)
     mutate = lambda name, params=None: client.ask(name, params, True)
     fresh = None
     keep = False

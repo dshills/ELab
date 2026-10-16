@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import threading
 
+
 spec = importlib.util.spec_from_file_location('helper', Path(__file__).with_name('persistence-demo.py'))
 helper = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(helper)
@@ -17,13 +18,15 @@ def physical(snapshot):
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect', required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--transport', default='packaged-native-private-socket',
         choices=['packaged-native-private-socket', 'headless-private-socket'])
     args = parser.parse_args()
-    client = helper.Client(str(Path(args.connect).resolve()), command_preconditions=True)
+    client = connect_demo_client(helper.Client, str(Path(args.connect).resolve()), command_preconditions=True)
     observer = helper.Client(str(Path(args.connect).resolve()), command_preconditions=True)
     try:
         client.ask('example.rc', {'discard_changes': True}, True)

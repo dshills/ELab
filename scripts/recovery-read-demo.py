@@ -9,12 +9,15 @@ import json
 from pathlib import Path
 import time
 
+
 spec = importlib.util.spec_from_file_location('helper', Path(__file__).with_name('persistence-demo.py'))
 helper = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(helper)
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect')
     parser.add_argument('--output', required=True, type=Path)
@@ -24,7 +27,7 @@ def main():
     root.mkdir(mode=0o700, parents=True, exist_ok=False)
     directory = root / 'recovery'
     directory.mkdir(mode=0o700)
-    client = helper.Client(args.connect, command_preconditions=True)
+    client = connect_demo_client(helper.Client, args.connect, command_preconditions=True)
 
     def wait(identity):
         deadline = time.monotonic() + 15

@@ -18,6 +18,8 @@ spec.loader.exec_module(helper)
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect', help='Fresh owned native endpoint; closed afterward')
     parser.add_argument('--sizes-from', type=Path)
@@ -30,7 +32,7 @@ def main():
         'large': {'width_px': 594, 'height_px': 306},
         'small': {'width_px': 594, 'height_px': 80},
         'restored': {'width_px': 594, 'height_px': 277}}
-    client = helper.Client(args.connect)
+    client = connect_demo_client(helper.Client, args.connect)
     mutate = lambda name, params=None: client.ask(name, params, True)
     sizes, views = {}, {}
 

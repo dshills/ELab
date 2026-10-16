@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import time
 
+
 spec = importlib.util.spec_from_file_location('viewport', Path(__file__).with_name('viewport-fit-demo.py'))
 helper = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(helper)
@@ -26,6 +27,8 @@ def electrical(graph):
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect', help='Fresh owned native session; closes unless --keep-open succeeds')
     parser.add_argument('--keep-open', action='store_true')
@@ -38,7 +41,7 @@ def main():
     assets.mkdir(parents=True, exist_ok=False)
     original = args.legacy.read_bytes()
     old = json.loads(original)
-    client = helper.Client(args.connect)
+    client = connect_demo_client(helper.Client, args.connect)
     mutate = lambda name, params=None: client.ask(name, params, True)
     keep = False
     try:

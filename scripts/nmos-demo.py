@@ -16,6 +16,8 @@ spec.loader.exec_module(helper)
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect', help='Requires a fresh owned blank native session; closes it afterward')
     parser.add_argument('--output', type=Path, required=True)
@@ -23,7 +25,7 @@ def main():
     args = parser.parse_args()
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
-    client = helper.Client(args.connect, command_preconditions=True)
+    client = connect_demo_client(helper.Client, args.connect, command_preconditions=True)
     ask = lambda command, params=None: client.ask(command, params, True)
     try:
         assert not client.ask('project.inspect')['components'], 'Use an owned blank session'
@@ -148,7 +150,7 @@ def main():
                               'Verification/CSV/SVG/PNG preserve model and signed readings; saved recording reopens with fresh live time',
                               'Tampered model parameters refuse; KCL/power residuals remain bounded'],
                       limits=['Educational generic NMOS; no physical part identity, intrinsic gate charge, heating, ratings or hardware timing claim',
-                              'PMOS and configurable MOSFET/device models remain future work'])
+                              'Generic PMOS is available; configurable physical-device models remain future work'])
         with args.output.open('x') as stream:
             json.dump(report, stream, indent=2)
             stream.write('\n')

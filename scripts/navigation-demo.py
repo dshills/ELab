@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import importlib.util
 
+
 spec = importlib.util.spec_from_file_location('elab_persistence', Path(__file__).with_name('persistence-demo.py'))
 persistence = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(persistence)
@@ -12,12 +13,14 @@ Client = persistence.Client
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect')
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--close', action='store_true', help='close this owned native host after the workflow')
     args = parser.parse_args()
-    client = Client(args.connect, command_preconditions=True)
+    client = connect_demo_client(Client, args.connect, command_preconditions=True)
     try:
         client.ask('project.clear', {'discard_changes': True}, True)
         client.ask('component.place', {'kind': 'net-label', 'position': {'x': 0, 'y': 0}, 'value': 'N' * 32}, True)

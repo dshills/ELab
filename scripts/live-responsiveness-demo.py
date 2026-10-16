@@ -12,12 +12,15 @@ import subprocess
 import tempfile
 import time
 
+
 spec = importlib.util.spec_from_file_location('helper', Path(__file__).with_name('persistence-demo.py'))
 helper = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(helper)
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect')
     parser.add_argument('--output', type=Path)
@@ -31,7 +34,7 @@ def main():
         hardware = dict(model=model, logical_cpus=int(cpus), memory_bytes=int(memory), cpu=cpu)
     except (OSError, ValueError, subprocess.CalledProcessError):
         pass
-    client = helper.Client(args.connect, command_preconditions=True)
+    client = connect_demo_client(helper.Client, args.connect, command_preconditions=True)
     fresh = None
     try:
         client.ask('example.flasher', {'discard_changes': True}, True)

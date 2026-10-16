@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
+
 spec = importlib.util.spec_from_file_location('viewport', Path(__file__).with_name('viewport-fit-demo.py'))
 helper = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(helper)
@@ -19,6 +20,8 @@ def invariants(state):
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect', help='Fresh owned native endpoint; closes unless --keep-open succeeds')
     parser.add_argument('--keep-open', action='store_true', help='Leave owned native rotation grid for visual inspection')
@@ -29,7 +32,7 @@ def main():
     assert not args.keep_open or args.connect
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
-    client = helper.Client(args.connect)
+    client = connect_demo_client(helper.Client, args.connect)
     mutate = lambda command, params=None: client.ask(command, params, True)
     keep = False
     reports = {}

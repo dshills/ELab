@@ -18,6 +18,8 @@ COMMANDS = ('parts.search.set', 'component.duplicate', 'component.move', 'compon
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect')
     parser.add_argument('--output', type=Path, required=True)
@@ -25,7 +27,7 @@ def main():
     args = parser.parse_args()
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
-    client = helper.Client(args.connect, command_preconditions=True)
+    client = connect_demo_client(helper.Client, args.connect, command_preconditions=True)
     ask = lambda name, params=None: client.ask(name, params, True)
     inspect = lambda: client.ask('project.inspect')
 

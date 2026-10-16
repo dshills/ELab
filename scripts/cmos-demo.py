@@ -45,6 +45,8 @@ def invariant(state):
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect', help='Fresh owned native endpoint')
     parser.add_argument('--keep-open', action='store_true')
@@ -54,7 +56,7 @@ def main():
     assert not args.keep_open or args.connect
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
-    client, fresh, keep = helper.Client(args.connect), None, False
+    client, fresh, keep = connect_demo_client(helper.Client, args.connect), None, False
     mutate = lambda command, params=None: client.ask(command, params, True)
     try:
         assert not client.ask('project.inspect')['components'], 'requires a fresh owned blank app'

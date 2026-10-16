@@ -64,6 +64,8 @@ def invariant(state):
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect', help='Fresh owned native endpoint, closed afterward')
     parser.add_argument('--sizes-from', type=Path, help='Replay native report sizes headlessly')
@@ -74,7 +76,7 @@ def main():
     replay = json.loads(args.sizes_from.read_text())['sizes'] if args.sizes_from else {
         'expanded': {'width_px': 594, 'height_px': 137},
         'collapsed': {'width_px': 594, 'height_px': 379}}
-    client = Client(args.connect)
+    client = connect_demo_client(Client, args.connect)
     mutate = lambda command, params=None: client.ask(command, params, True)
     sizes = {}
 

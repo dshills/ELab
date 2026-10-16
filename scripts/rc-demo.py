@@ -6,6 +6,8 @@ import math
 from pathlib import Path
 import tempfile
 import importlib.util
+
+
 helper_spec = importlib.util.spec_from_file_location("persistence_demo", Path(__file__).with_name("persistence-demo.py"))
 helper = importlib.util.module_from_spec(helper_spec)
 helper_spec.loader.exec_module(helper)
@@ -13,12 +15,14 @@ Client = helper.Client
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect')
     parser.add_argument('--output', type=Path)
     parser.add_argument('--fixture', type=Path)
     args = parser.parse_args()
-    client = Client(args.connect)
+    client = connect_demo_client(Client, args.connect)
     fresh = None
     try:
         catalog = client.ask('capabilities.list')['capabilities']

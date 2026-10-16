@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 import time
 
+
 spec = importlib.util.spec_from_file_location('viewport', Path(__file__).with_name('viewport-fit-demo.py'))
 helper = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(helper)
@@ -19,6 +20,8 @@ def physics(state):
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect', help='Fresh owned native session; closed afterward')
     parser.add_argument('--artifacts', required=True, type=Path)
@@ -26,7 +29,7 @@ def main():
     args = parser.parse_args()
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
-    client = helper.Client(args.connect)
+    client = connect_demo_client(helper.Client, args.connect)
     mutate = lambda command, params=None: client.ask(command, params, True)
     observations = []
 

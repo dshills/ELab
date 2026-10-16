@@ -5,6 +5,7 @@ import importlib.util
 import json
 from pathlib import Path
 
+
 spec = importlib.util.spec_from_file_location('helper', Path(__file__).with_name('persistence-demo.py'))
 helper = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(helper)
@@ -21,11 +22,13 @@ def guarded(client, generation, key):
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect', help='owned validation session; replaces its circuit')
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
-    client = helper.Client(args.connect, command_preconditions=True)
+    client = connect_demo_client(helper.Client, args.connect, command_preconditions=True)
     try:
         discovery = client.ask('capabilities.list')
         assert 'expected_document_generation' in discovery['mutation_preconditions']

@@ -15,6 +15,7 @@ import math
 from pathlib import Path
 import time
 
+
 spec = importlib.util.spec_from_file_location('viewport', Path(__file__).with_name('viewport-fit-demo.py'))
 helper = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(helper)
@@ -44,6 +45,8 @@ def wait_for(client, predicate, timeout=20):
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect', help='Fresh owned native restore target; closed afterward')
     parser.add_argument('--artifacts', type=Path, required=True)
@@ -52,7 +55,8 @@ def main():
     assert not args.output.exists(), 'report already exists'
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
-    producer, target = helper.Client(None), None
+    target = connect_demo_client(helper.Client, args.connect)
+    producer = helper.Client(None)
     killed = False
     try:
         producer.ask('example.load', {'id': 'rl'}, True)
@@ -106,7 +110,6 @@ def main():
         producer.process.stdin.close()
         producer.process.stdout.close()
 
-        target = helper.Client(args.connect)
         assert not target.ask('project.inspect')['components'], 'restore target must be fresh and blank'
         target.ask('recovery.configure', {'directory': directory, 'enabled': False, 'interval_s': 1}, True)
         scanned = wait_for(target, lambda state: any(

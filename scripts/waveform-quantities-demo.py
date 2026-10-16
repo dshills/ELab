@@ -7,12 +7,15 @@ import json
 import math
 from pathlib import Path
 
+
 spec = importlib.util.spec_from_file_location('waveforms', Path(__file__).with_name('waveforms-demo.py'))
 waveforms = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(waveforms)
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect')
     parser.add_argument('--output', type=Path, required=True)
@@ -20,7 +23,7 @@ def main():
     args = parser.parse_args()
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
-    client = waveforms.helper.Client(args.connect, command_preconditions=True)
+    client = connect_demo_client(waveforms.helper.Client, args.connect, command_preconditions=True)
 
     def inspect():
         return client.ask('project.inspect')

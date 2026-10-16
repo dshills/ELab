@@ -30,6 +30,8 @@ def reference(at):
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect', help='Fresh owned native endpoint; closed afterward unless --keep-open')
     parser.add_argument('--keep-open', action='store_true')
@@ -40,7 +42,7 @@ def main():
     assert not args.output.exists()
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
-    client, reopened = helper.Client(args.connect), None
+    client, reopened = connect_demo_client(helper.Client, args.connect), None
     mutate = lambda command, params=None: client.ask(command, params, True)
     captures = {}
     admitted_session = False

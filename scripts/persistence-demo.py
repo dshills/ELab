@@ -7,6 +7,7 @@ import subprocess
 import tempfile
 import time
 
+
 ROOT = Path(__file__).resolve().parents[1]
 
 class Client:
@@ -27,25 +28,30 @@ class Client:
         if mutate:
             guard = 'expected_command_revision' if self.command_preconditions else 'expected_revision'
             request.update({guard: self.command_revision if self.command_preconditions else self.revision, 'key': f'persist-{time.time_ns()}'})
-        self.process.stdin.write(json.dumps(request) + '\n')
-        self.process.stdin.flush()
-        response = json.loads(self.process.stdout.readline())
-        self.revision = response['revision']
-        if mutate and not self.command_preconditions and response.get('error', {}).get('code') == 'conflict':
-            request['expected_revision'] = self.revision
+        for attempt in range(8):
             self.process.stdin.write(json.dumps(request) + '\n')
             self.process.stdin.flush()
-            response = json.loads(self.process.stdout.readline())
+            line = self.process.stdout.readline()
+            assert line, f'agent terminated during {command}'
+            response = json.loads(line)
             self.revision = response['revision']
-        result = response.get('result')
-        snapshot = result.get('snapshot') if command == 'events.poll' and isinstance(result, dict) else result
-        if isinstance(snapshot, dict) and 'components' in snapshot and 'document' in snapshot and 'command_revision' in snapshot:
-            self.command_revision = snapshot['command_revision']
-        if expect:
-            assert response.get('error', {}).get('code') == expect, response
-        else:
-            assert 'error' not in response, response
-        return response.get('result')
+            result = response.get('result')
+            snapshot = result.get('snapshot') if command == 'events.poll' and isinstance(result, dict) else result
+            if isinstance(snapshot, dict) and 'components' in snapshot and 'document' in snapshot and 'command_revision' in snapshot:
+                self.command_revision = snapshot['command_revision']
+            # Native layout may legitimately advance the command revision.
+            # Refresh only an unexpected conflict, keeping exact intent/key/ID;
+            # an intentionally tested conflict must remain observable.
+            if (mutate and response.get('error', {}).get('code') == 'conflict'
+                    and expect != 'conflict' and attempt < 7):
+                self.ask('project.inspect')
+                request[guard] = self.command_revision if self.command_preconditions else self.revision
+                continue
+            if expect:
+                assert response.get('error', {}).get('code') == expect, response
+            else:
+                assert 'error' not in response, response
+            return response.get('result')
 
     def close(self):
         self.process.stdin.close()
@@ -53,12 +59,14 @@ class Client:
 
 
 def main():
+    from demo_session import connect_demo_client
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect')
     parser.add_argument('--output', type=Path)
     parser.add_argument('--fixture', type=Path)
     args = parser.parse_args()
-    first = Client(args.connect)
+    first = connect_demo_client(Client, args.connect)
     second = None
     try:
         first.ask('example.reset', {'discard_changes': True}, True)

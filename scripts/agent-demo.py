@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
 """Exercise the same LED workflow through stdio or a running desktop endpoint."""
+
 import argparse
 import json
 from pathlib import Path
 import subprocess
 import time
 
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
+    from demo_session import require_fresh_demo_session
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--connect", help="private endpoint descriptor for a running app")
     parser.add_argument("--output", type=Path, help="save the result report")
@@ -42,6 +46,8 @@ def main():
         return response
 
     try:
+        if args.connect:
+            require_fresh_demo_session(request("project.inspect")["result"])
         catalog = request("capabilities.list")["result"]["capabilities"]
         request("simulation.wait")
         request("example.reset", {"discard_changes": True}, mutation=True)
