@@ -235,6 +235,10 @@ rendered:
 	if err := nativeViewportSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	log.Print("smoke: nativeWorkspaceSmoke")
+	if err := nativeWorkspaceSmoke(ctx, s); err != nil {
+		return err
+	}
 	setStage("nativeIntegrationLimitSmoke")
 	if err := nativeIntegrationLimitSmoke(ctx, a, s); err != nil {
 		return err

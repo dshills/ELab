@@ -14,6 +14,7 @@ import (
 )
 
 type Snapshot struct {
+	WorkspaceLayout        WorkspaceLayout        `json:"workspace_layout"`
 	Viewport               ViewportState          `json:"viewport"`
 	PulseTimings           []PulseTiming          `json:"pulse_timings"`
 	Shutdown               *ShutdownWork          `json:"shutdown,omitempty"`
@@ -95,6 +96,7 @@ type savedResponse struct {
 	project     *projectJob
 }
 type Service struct {
+	workspaceLayout                  WorkspaceLayout
 	shutdown                         *shutdownJob
 	printState                       *PrintState
 	printWork                        *printWork
@@ -232,6 +234,7 @@ func newService(solver func(context.Context, Circuit) (Result, error)) *Service 
 }
 func newGraphService(solver func(context.Context, Circuit) (Result, error), graph Graph) *Service {
 	s := &Service{
+		workspaceLayout:        DefaultWorkspaceLayout(),
 		revision:               1,
 		sweepImport:            prepareSweepImport,
 		sweepCompute:           computeDCSweep,
@@ -303,6 +306,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		analysis = "DC operating point"
 	}
 	out := Snapshot{
+		WorkspaceLayout:        s.workspaceLayout,
 		Viewport:               cloneViewport(s.viewport),
 		PulseTimings:           s.pulseTimingsLocked(),
 		Shutdown:               s.shutdownViewLocked(),

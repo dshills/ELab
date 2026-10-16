@@ -501,6 +501,12 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		s.scopeVisible = p.Visible
 		return nil
+	case "workspace.layout.set":
+		var p WorkspaceLayout
+		if err := params(raw, &p, "schematic_fraction"); err != nil {
+			return err
+		}
+		return s.setWorkspaceLayoutLocked(p)
 	case "diagnostics.details.set":
 		var p DiagnosticDetailsParams
 		if err := params(raw, &p, "visible"); err != nil {

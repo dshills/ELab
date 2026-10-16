@@ -25,6 +25,7 @@ type scopeCanvas struct {
 	mountEpoch uint64
 	frame      atomic.Pointer[scopePlotFrame]
 	gesture    *scopeGesture // Owner-held; only accepted cursor commands advance it.
+	widget     *core.WidgetBase
 }
 
 func (c *scopeCanvas) Mount(parent tree.Node) core.Widget {
@@ -37,7 +38,8 @@ func (c *scopeCanvas) Mount(parent tree.Node) core.Widget {
 	c.gesture = nil
 	epoch := c.mountEpoch
 	w := widget.AsWidget()
-	w.OnFirst(events.Scroll, func(e events.Event) { e.SetHandled() })
+	c.widget = w
+	w.OnFirst(events.Scroll, func(e events.Event) { forwardScopeScroll(w, e) })
 	for _, kind := range []events.Types{events.MouseDown, events.SlideMove} {
 		w.OnFirst(kind, func(e events.Event) {
 			if c.screen != nil {

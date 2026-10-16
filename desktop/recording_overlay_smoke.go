@@ -17,7 +17,13 @@ func smokeScopeHash(ctx context.Context, a *app.Application, s *screen, previous
 	bounded, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 	ready := make(chan error, 1)
-	if err := a.PostWait(bounded, func() { s.view(); ready <- s.scope.RebuildResources() }); err != nil {
+	if err := a.PostWait(bounded, func() {
+		s.view()
+		if s.scope.widget != nil {
+			s.scope.widget.ScrollToThis()
+		}
+		ready <- s.scope.RebuildResources()
+	}); err != nil {
 		return [32]byte{}, err
 	}
 	if err := <-ready; err != nil {
@@ -25,9 +31,12 @@ func smokeScopeHash(ctx context.Context, a *app.Application, s *screen, previous
 	}
 	ticker := time.NewTicker(25 * time.Millisecond)
 	defer ticker.Stop()
+	var lastFrameError error
+	var frameWidth, frameHeight float64
 	for {
 		var hash [32]byte
 		if err := a.PostWait(bounded, func() {
+			frameWidth, frameHeight = s.scope.View.Width, s.scope.View.Height
 			pixels, err := s.scope.Snapshot()
 			if err == nil {
 				hash = sha256.Sum256(pixels.Pix)
@@ -37,6 +46,7 @@ func smokeScopeHash(ctx context.Context, a *app.Application, s *screen, previous
 			return [32]byte{}, err
 		}
 		err := <-ready
+		lastFrameError = err
 		if err != nil && !errors.Is(err, cogent.ErrFrameNotReady) {
 			return [32]byte{}, err
 		}
@@ -45,7 +55,7 @@ func smokeScopeHash(ctx context.Context, a *app.Application, s *screen, previous
 		}
 		select {
 		case <-bounded.Done():
-			return [32]byte{}, fmt.Errorf("reference overlay did not produce a fresh changed scope frame: %w", bounded.Err())
+			return [32]byte{}, fmt.Errorf("reference overlay did not produce a fresh changed scope frame (%gx%g, frame error %v, previous=%v): %w", frameWidth, frameHeight, lastFrameError, previous != nil, bounded.Err())
 		case <-ticker.C:
 		}
 	}

@@ -602,11 +602,15 @@ func (s *screen) view() ui.Node {
 		root.Children = children
 	}
 	if scopeAvailable(state) && !sourcePaneHidden(state) {
-		index := len(root.Children) - 3
-		children := append([]ui.Node{}, root.Children[:index]...)
-		children = append(children, s.scopePanel(state))
-		children = append(children, root.Children[index:]...)
-		root.Children = children
+		if state.ScopeVisible {
+			root.Children[1] = s.workspaceDock(root.Children[1], s.scopePanel(state), state)
+		} else {
+			index := len(root.Children) - 3
+			children := append([]ui.Node{}, root.Children[:index]...)
+			children = append(children, s.scopePanel(state))
+			children = append(children, root.Children[index:]...)
+			root.Children = children
+		}
 	}
 	if s.keyboardFocus.ID != "" {
 		if _, ok := ui.FocusTarget(root, s.keyboardFocus.ID); ok {

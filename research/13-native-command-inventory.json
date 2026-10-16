@@ -40,7 +40,7 @@
     "desktop/recovery.go": "7dee5ddf2c722f09d875b92dca638c4e03506b05932b271bbd61cb1d6a7d2195",
     "desktop/recovery_read.go": "664831bba332df59b002a1e2a18fcb4a932a4478bc461daae2f8f77c79536114",
     "desktop/routing.go": "4898c4c1de9d7de3c5f8ad751b15d7c0f199234243f62ec6ea949ee8d9ad2c1c",
-    "desktop/scope.go": "ea75d4501fd5bddfcf09bbd6eba9afac68ade038a8ce9a1ac5bb903d45e08a5b",
+    "desktop/scope.go": "dca36e00f5b4d01ad81e3412fa1313af03e0f3477a217ee4f53067a4aac11a7f",
     "desktop/scope_context.go": "6a67324480a62c368711ea81d438b1b2bf93ea011d5d8a458325b3163482c46f",
     "desktop/scope_overlay.go": "90c6ebc19d47b237257d1358c77f6ccd9ba7ac7910cff5d54504ad74c0ea1f38",
     "desktop/scope_visibility.go": "9594a6afdb06c2d612c4a507ac90b9443651d38c4c88005e2af65ff2d3d6c686",
@@ -48,10 +48,11 @@
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
     "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
     "desktop/verification.go": "550f32b3d90b99269bce6777233b68e9329b2ae704b5b2fca60a1a368fbab406",
-    "desktop/view.go": "d75483da5c92e3922c81d284b4b62c5d5e805e3da4d36775a4b1086490b75d4a",
+    "desktop/view.go": "7919f798b11c8bff98bcbf2c1960719d53ae143f0a041577edee37a81a86e01d",
     "desktop/viewport.go": "a0d8a6a6b3577a0a909a0f7b3f339532a5abfde78fcf8a1979fb2e46f5f074cc",
     "desktop/waveforms.go": "73b1b24045b550ac31b25871c5194738a45ea4b6169ff9dd23e14b37467dd85e",
-    "desktop/workflow.go": "7e39308677a6eec92663759ffbd61a568e1b87215d6453a31e8eae2bd11a6af0"
+    "desktop/workflow.go": "7e39308677a6eec92663759ffbd61a568e1b87215d6453a31e8eae2bd11a6af0",
+    "desktop/workspace.go": "b35de04775d1a1f058a3fb043ff19e85b1c62973ce5f2c3a5db9f39022f9fa32"
   },
   "public_commands": [
     "app.close",
@@ -213,7 +214,8 @@
     "wire.begin",
     "wire.connect",
     "wire.junction.insert",
-    "wire.terminals.set"
+    "wire.terminals.set",
+    "workspace.layout.set"
   ],
   "native_alias_targets": {
     "appearance.dark": [
@@ -2946,15 +2948,15 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 40,
+      "line": 42,
       "function": "*scopeCanvas.Mount",
       "kind": "event-or-dispatch-router",
-      "expression": "w.OnFirst(events.Scroll, func(e events.Event) { e.SetHandled() })",
+      "expression": "w.OnFirst(events.Scroll, func(e events.Event) { forwardScopeScroll(w, e) })",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/scope.go",
-      "line": 42,
+      "line": 44,
       "function": "*scopeCanvas.Mount",
       "kind": "event-or-dispatch-router",
       "expression": "w.OnFirst(kind, func(e events.Event) {\n\tif c.screen != nil {\n\t\tframe := c.frame.Load()\n\t\tpos := e.Pos().Sub(w.Geom.Pos.Content.ToPoint())\n\t\tc.Owner.Do(func() {\n\t\t\tif c.mountEpoch == epoch {\n\t\t\t\tc.cursorGesture(frame, float64(pos.X), kind == events.MouseDown)\n\t\t\t}\n\t\t})\n\t}\n\te.SetHandled()\n})",
@@ -2962,7 +2964,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 55,
+      "line": 57,
       "function": "*scopeCanvas.Mount",
       "kind": "event-or-dispatch-router",
       "expression": "w.OnFirst(events.SlideStop, func(e events.Event) {\n\tc.Owner.Do(func() {\n\t\tif c.mountEpoch == epoch {\n\t\t\tc.gesture = nil\n\t\t}\n\t})\n\te.SetHandled()\n})",
@@ -2970,7 +2972,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 63,
+      "line": 65,
       "function": "*scopeCanvas.Mount",
       "kind": "event-or-dispatch-router",
       "expression": "w.OnFirst(events.KeyChord, func(e events.Event) {\n\tswitch strings.ToLower(string(e.KeyChord())) {\n\tcase \"leftarrow\", \"rightarrow\", \"uparrow\", \"downarrow\":\n\t\te.SetHandled()\n\t}\n})",
@@ -2978,7 +2980,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 250,
+      "line": 252,
       "function": "*screen.scopePanel",
       "kind": "action-factory",
       "expression": "s.action(\"input-\"+mode, modeLabels[mode], \"simulation.input.set\", workbench.InputParams{Mode: mode})",
@@ -2989,7 +2991,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 263,
+      "line": 265,
       "function": "*screen.scopePanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"scope.trace.select\", workbench.IDParams{ID: id})\n}",
@@ -2997,7 +2999,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 268,
+      "line": 270,
       "function": "*screen.scopePanel",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"scope.trace.select\", workbench.IDParams{ID: id})",
@@ -3008,7 +3010,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 270,
+      "line": 272,
       "function": "*screen.scopePanel",
       "kind": "action-factory",
       "expression": "s.action(\"transient-step\", \"Step +1 sample\", \"simulation.step.start\", workbench.StepParams{Duration: state.TransientSettings.StepSeconds})",
@@ -3019,7 +3021,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 272,
+      "line": 274,
       "function": "*screen.scopePanel",
       "kind": "registry-button",
       "expression": "s.button(\"simulation.restart\", \"Restart\")",
@@ -3030,7 +3032,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 281,
+      "line": 283,
       "function": "*screen.scopePanel",
       "kind": "action-factory",
       "expression": "s.action(\"step-work-cancel\", \"Cancel step\", \"simulation.work.cancel\", workbench.IDParams{ID: work.ID})",
@@ -3041,7 +3043,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 302,
+      "line": 304,
       "function": "*screen.scopePanel",
       "kind": "node-Custom",
       "expression": "Custom: s.scope",
@@ -3049,7 +3051,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 351,
+      "line": 353,
       "function": "*screen.transientInspector",
       "kind": "callback-factory",
       "expression": "timeField(\"setting-\"+setting.id, setting.text, setting.value, false, func(text string) {\n\ts.invokeAtCommandRevision(\"simulation.transient.set\", textFieldParams(cfg, field, text), state.CommandRevision)\n})",
@@ -3057,7 +3059,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 352,
+      "line": 354,
       "function": "*screen.transientInspector",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"simulation.transient.set\", textFieldParams(cfg, field, text), state.CommandRevision)",
@@ -3068,7 +3070,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 356,
+      "line": 358,
       "function": "*screen.transientInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\n\tvalue := float64(e.Number)\n\tif e.Number == float32(setting.min) {\n\t\tvalue = setting.min\n\t}\n\tif e.Number == float32(setting.max) {\n\t\tvalue = setting.max\n\t}\n\tsetting.set(\u0026next, value/setting.scale)\n\ts.invoke(\"simulation.transient.set\", next)\n}",
@@ -3076,7 +3078,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 369,
+      "line": 371,
       "function": "*screen.transientInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"simulation.transient.set\", next)",
@@ -4058,6 +4060,25 @@
         "edit.batch"
       ],
       "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/workspace.go",
+      "line": 41,
+      "function": "*screen.workspaceDock",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tfraction := float64(e.Number)\n\tif e.Number == float32(.35) {\n\t\tfraction = .35\n\t} else if e.Number == float32(.85) {\n\t\tfraction = .85\n\t}\n\ts.invokeAtCommandRevision(\"workspace.layout.set\", workbench.WorkspaceLayout{SchematicFraction: fraction}, state.CommandRevision, state.Document.Generation)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/workspace.go",
+      "line": 48,
+      "function": "*screen.workspaceDock",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"workspace.layout.set\", workbench.WorkspaceLayout{SchematicFraction: fraction}, state.CommandRevision, state.Document.Generation)",
+      "public_commands": [
+        "workspace.layout.set"
+      ],
+      "status": "literal-public-route"
     }
   ],
   "commands_with_source_routes": [
@@ -4190,7 +4211,8 @@
     "wire.begin",
     "wire.connect",
     "wire.junction.insert",
-    "wire.terminals.set"
+    "wire.terminals.set",
+    "workspace.layout.set"
   ],
   "commands_without_source_routes": [
     "app.close.inspect",

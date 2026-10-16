@@ -78,6 +78,7 @@ var commonSchemas = []struct {
 	Type reflect.Type
 	ID   string
 }{
+	{reflect.TypeOf(WorkspaceLayout{}), "urn:elab:workspace-layout:1"},
 	{reflect.TypeOf(MOSFETModel{}), "urn:elab:mosfet-model:1"},
 	{reflect.TypeOf(NavigateParams{}), "urn:elab:object-navigation:1"},
 	{reflect.TypeOf(CenterSelectionParams{}), "urn:elab:selection-center:1"},
@@ -165,6 +166,10 @@ func SchemaRegistry() map[string]json.RawMessage {
 	}
 	for _, common := range commonSchemas {
 		schema := structSchema(common.Type)
+		if common.Type == reflect.TypeOf(WorkspaceLayout{}) {
+			p := inputProperty(schema, "schematic_fraction")
+			p["minimum"], p["maximum"], p["default"] = .35, .85, .65
+		}
 		if common.Type == reflect.TypeOf(SchematicPage{}) {
 			addTiledPageDefinition(schema)
 		}
@@ -351,6 +356,7 @@ func Catalog() []Capability {
 		typedCapability("example.load", "Load a known example ID into a new editable document; protects unsaved work and optional document generation", reflect.TypeOf(ExampleLoadParams{})),
 		typedCapability("example.current.reset", "Restore the current example template, not another example; protects unsaved work and optional expected_example_id/document generation", reflect.TypeOf(ExampleResetParams{})),
 		typedCapability("scope.visibility.set", "Show/hide the scope dock for this session; preserves acquisition, recorded playback and measurements", reflect.TypeOf(ScopeVisibilityParams{})),
+		typedCapability("workspace.layout.set", "Set the session schematic/scope split; preserves circuit, simulation and measurements", reflect.TypeOf(WorkspaceLayout{})),
 		typedCapability("diagnostics.details.set", "Show diagnostic details; session only; targets in diagnostic_presentation", reflect.TypeOf(DiagnosticDetailsParams{})),
 		typedCapability("appearance.configure", "Load and autosave bounded app theme preferences in background; empty path disables; inspect appearance", reflect.TypeOf(AppearanceConfigureParams{})),
 		capability("appearance.wait", "Wait up to 5 s for theme preference loading/saving; inspect appearance status/error", false, `{"type":"object","additionalProperties":false}`),

@@ -1,8 +1,8 @@
 # Native control and command inventory
 
-The [source ledger](13-native-command-inventory.json) records **50 production native Go files, 382 source sites and 160 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 130 public commands. The remaining 30 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
+The [source ledger](13-native-command-inventory.json) records **51 production native Go files, 384 source sites and 161 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 131 public commands. The remaining 30 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
 
-**143 sites require binding review.** The other categories are 213 literal routes, nine declared native-wrapper/menu sites and 17 registry declarations. These are syntax sites, including overlapping factories and callbacks; they are not 382 unique visible controls or 130 runtime-qualified capabilities. No literal route names an unknown command.
+**144 sites require binding review.** The other categories are 214 literal routes, nine declared native-wrapper/menu sites and 17 registry declarations. These are syntax sites, including overlapping factories and callbacks; they are not 384 unique visible controls or 131 runtime-qualified capabilities. No literal route names an unknown command.
 
 The ledger covers action/button/menu factories, package-level native menus, registry tables, callback fields/assignments, time-field factories, custom canvases, event routers, direct request command fields and shared dispatch bridges. Each entry retains its source, line, enclosing function and expression. File hashes and the public ID set make changes reproducible and reviewable. Both platform Go files are included; smoke/tests, framework internals and Objective-C event delivery are excluded and remain separate evidence scopes.
 
@@ -30,7 +30,7 @@ Native regressions prove stale Apply/Delete refusal and normal fresh Apply. A co
 
 ## Remaining qualification
 
-Resolve the 143 dynamic/relay/custom sites against instantiated states and public parameters, and attach runtime evidence per user capability. Audit file Save/Discard/Cancel semantics, raw field commits/IME, full menu/keyboard/focus behavior, canvas gesture lifetimes and the framework's window lifecycle. Inspection/readout equivalence also needs explicit evidence where the UI consumes shared Go snapshots/functions directly. Full agent parity stays **partial** until those proofs exist; this inventory prevents source drift and makes the remaining work explicit.
+Resolve the 144 dynamic/relay/custom sites against instantiated states and public parameters, and attach runtime evidence per user capability. Audit file Save/Discard/Cancel semantics, raw field commits/IME, full menu/keyboard/focus behavior, canvas gesture lifetimes and the framework's window lifecycle. Inspection/readout equivalence also needs explicit evidence where the UI consumes shared Go snapshots/functions directly. Full agent parity stays **partial** until those proofs exist; this inventory prevents source drift and makes the remaining work explicit.
 
 The 0.46.0 lifecycle checkpoint explicitly inventories `Window.CloseRequest`, preserves active file operations/decisions on repeated close, and adds File Close / Cmd+W through `app.close`. See [close evidence and remaining OS/runtime limits](../docs/native-close.md).
 
@@ -94,3 +94,6 @@ The 0.89.0 PMOS checkpoint reviews the same five native production files for the
 
 
 The 0.90.0 viewport checkpoint adds `view.viewport.set` through a deferred, coalesced native report guarded by rendered command revision, generation and widget identity. Review covers the new dispatcher/request-field sites plus changed canvas, view and Fit-registry hashes: 50 files /382 sites /160 public IDs /130 source routes /143 binding-review /213 literal /nine wrapper-menu /17 registry sites. Native Fit invokes the existing `view.fit` with `follow_viewport:true`; reports use the same command available to external/headless agents. Mounted scope resize, manual navigation and command publication have bounded tests/smoke and direct default-window inspection; syntax mapping still does not establish exhaustive bindings, keyboard/IME/accessibility or all layouts. See [viewport behavior and remaining readability work](../docs/viewport-fitting.md).
+
+
+The 0.91.0 adjustable-workspace checkpoint uses Vellum SplitPane through `workspace.layout.set`. Review covers the guarded Change callback/ingress, view reparenting and scope wheel relay to its named scroll host. Counts are 51 files /384 sites /161 IDs /131 source routes /144 binding-review /214 literal /nine wrapper-menu /17 registry sites. Source mapping and specific native/public/mounted checks remain distinct from exhaustive physical input/accessibility qualification. See [workspace layout](../docs/workspace-layout.md).

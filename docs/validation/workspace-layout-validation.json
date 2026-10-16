@@ -1,0 +1,180 @@
+{
+  "passed": true,
+  "app_version": "0.91.0",
+  "build_version": "106",
+  "binary_sha256": "1f7b3c03395a320d470020b8254fc7334209202cda5f20708fe88a388ae41165",
+  "agent_binary_sha256": "d6b6f1e7d624058899e14659faff66861391cf29b883bc6ffd66148df2e98fb6",
+  "prior_bundle": "build/ELab-before-workspace.app",
+  "prior_binary_sha256": "81ca3a6a3438796efe27068ed6da06b7ebed16912609a662b3c1864b736bef88",
+  "date": "2026-10-15",
+  "bundle_files_compared": 3,
+  "bundle_manifest_sha256": "4b0508541712d83feed6fabbd71a6552908ab825f2d89d5b4e44261ce21d16c7",
+  "sdk": {
+    "commit": "621aca2da91836631fc05b2a7b97f124d53518dd",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "desktop/recording_overlay_smoke.go": "6a0a8a6f8fbe1954f4342a5f095ccab6042e0ced905d85e5910097d75e77aa4a",
+    "desktop/scope.go": "dca36e00f5b4d01ad81e3412fa1313af03e0f3477a217ee4f53067a4aac11a7f",
+    "desktop/smoke.go": "a3be078cf35edb0e66c65e377a09eecb81fc9534ef6a54d416bd1dac1e19d62f",
+    "desktop/view.go": "7919f798b11c8bff98bcbf2c1960719d53ae143f0a041577edee37a81a86e01d",
+    "desktop/workspace.go": "b35de04775d1a1f058a3fb043ff19e85b1c62973ce5f2c3a5db9f39022f9fa32",
+    "desktop/workspace_smoke.go": "27965ea35baaa0501b80e5af11428d0fc0c75fe89f5eb1b5599fdf0e20a29bb1",
+    "desktop/workspace_test.go": "5927c0864e36bd116f6f1691c427c1da72d9f989e7efa06963aab2e9629d1987",
+    "scripts/workspace-layout-demo.py": "9971974b8b33ac310f79610f77602bb1d1b474c1d72b1df0bb90c91ee820c8f5",
+    "workbench/capability_details.go": "a96d91175d127764f28982727234d181cbbee92297a73819d5333de3707062dd",
+    "workbench/commands.go": "d3bac3f57a9b04ad4197a3ca42891291d7b248d104416480191a43e8f76dd9dc",
+    "workbench/editing.go": "677f82844945f7731d392a1f5d85df8776782df89f76afe9e481e94bcd827f0a",
+    "workbench/events.go": "770f282db320ba3a9edaa7233e6a65ea6bbde100c96f07e3f439c0ca4eb0d96f",
+    "workbench/service.go": "fcefaaf00a787cdaa123f67da06f68992a58de2dd262afec5ff86e3ecd3c3727",
+    "workbench/workspace.go": "6fc990ea112d59e05b991f34943f22a46489a65a5474e3c99d2f7ebfc23def28",
+    "workbench/workspace_test.go": "0e0c2649776df7ae8a14c0312a9ee34c14feb31eeb9f9ba04b470d6625b2075f"
+  },
+  "source_inventory": {
+    "sources": 51,
+    "sites": 384,
+    "public_commands": 161,
+    "source_routes": 131,
+    "status_counts": {
+      "requires-binding-review": 144,
+      "literal-public-route": 214,
+      "declared-native-wrapper": 9,
+      "declared-registry-route": 17
+    }
+  },
+  "observations": {
+    "default_native_sizes": {
+      "default": {
+        "width_px": 594,
+        "height_px": 217
+      },
+      "large": {
+        "width_px": 594,
+        "height_px": 305
+      },
+      "small": {
+        "width_px": 585,
+        "height_px": 81
+      },
+      "restored": {
+        "width_px": 594,
+        "height_px": 275
+      }
+    },
+    "views": {
+      "default": {
+        "center": {
+          "x": -150.5,
+          "y": 35
+        },
+        "zoom": 0.28933333333333333
+      },
+      "large": {
+        "center": {
+          "x": -150.5,
+          "y": 35
+        },
+        "zoom": 0.4066666666666667
+      },
+      "small": {
+        "center": {
+          "x": -130.5,
+          "y": 35
+        },
+        "zoom": 0.4066666666666667
+      },
+      "restored": {
+        "center": {
+          "x": -130.5,
+          "y": 35
+        },
+        "zoom": 0.4066666666666667
+      }
+    },
+    "native_headless_equal_except_transport": true,
+    "schema_registry_count": 69,
+    "mounted_workspace_smoke": {
+      "default_viewport": {
+        "width_px": 702,
+        "height_px": 417,
+        "registered": true,
+        "following": true
+      },
+      "event": "elab.workspace.smoke",
+      "large_viewport": {
+        "width_px": 702,
+        "height_px": 551,
+        "registered": true,
+        "following": true
+      },
+      "manual_resize_preserved": true,
+      "passed": true,
+      "plot_wheel_scrolls_controls_without_zoom": true,
+      "scope_fills_width": true,
+      "small_viewport": {
+        "width_px": 702,
+        "height_px": 197,
+        "registered": true,
+        "following": false
+      }
+    }
+  },
+  "checks": [
+    "Required finite 0.35\u20130.85 fraction; default0.65; invalid requests refuse atomically; owned/pure bounded discovery",
+    "Layout preserves graph, physics, run/time/charge, history, dirty state, view and scope; recorded cursor/playback tests use a real capture",
+    "Session layout survives New/example/file replacement, and a fresh independent process does not import it from a schematic",
+    "Guarded native SplitPane callback maps exact endpoints and rejects an intervening agent change; collapse retains the fraction",
+    "Native/public and headless measured-size replay match exactly, including complete discovery; manual view survives actual resize",
+    "Mounted scope fills the pane width; actual plot-wheel event moves the scope scrollbar without zoom; real mesh allocation reflects divider changes",
+    "Final serialized lint/import/root/native race/vet, Python compilation and whitespace checks pass",
+    "Final packaged GPU/UI/protected-close smoke passes, including recorded overlays and print-preview restoration; four adapters pass existing LED/RC/NPN references",
+    "Canonical/candidate/final build match in bytes, bundle modes and metadata; prior .90/105 preserved; SDK/prepared files unchanged; owned sessions exited"
+  ],
+  "artifacts": [
+    "docs/workspace-layout.md",
+    "docs/validation/workspace-layout-native.json",
+    "docs/validation/workspace-layout-headless.json",
+    "docs/validation/workspace-layout-discovery.json",
+    "docs/validation/workspace-layout-conformance.json"
+  ],
+  "build_evidence_sha256": {
+    "build/workspace-split-091/check.log": "2eace74338d068bccd9cb6f2b04af1990f8767cec467407f86b1b99cdc6d0d18",
+    "build/workspace-split-091/check-final.log": "d7df065959f6860fada9dad343c058f9dc773d915f5374e6796352c9890d7b1d",
+    "build/workspace-split-091/discovery-focused.log": "15a120cad0ee90c8b9c2bc8acc13dd269670b608228389ff803172a743204d3c",
+    "build/workspace-split-091/core-final-focused.log": "d7f19ac6f607dd7bb3dff04c7da900266fcca93d5be3d9e0a458892fa7791793",
+    "build/workspace-split-091/native-final-focused.log": "4ed0c992541017802368bc9108db8cc22950645b5aa04c0cd12d17bbca3c93d6",
+    "build/workspace-split-091/build-final.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/workspace-split-091/package-final.log": "64e804f23c90864380a18aa47bee47474ad06b215fc14591cd35e26bb47ac33a",
+    "build/workspace-split-091/public-native.log": "53ab83db83206a28d8128ef0a58edcc9599ecae6c40f2d7814a04bf25f8728c0",
+    "build/workspace-split-091/public-headless.log": "f19193e6e6850d34ed60b87d69dd8183139a7277208e293f8afc132b790cb0c9",
+    "build/workspace-split-091/smoke-scroll.log": "c13f823c2a6b3b52416a6fda991de9716e138c3cd28e7d62a9d12a6afaee97bf",
+    "build/workspace-split-091/smoke-diagnostic.log": "5325969bcbf08c0b68df0b222b1d8eee74c5fe7e16afaac784959cd6c7338aeb",
+    "build/workspace-split-091/smoke-visible.log": "29f60bd2d42a63571dc70ae4437a9a894fd9aa9904d115ca8a84822ea1d72606",
+    "build/workspace-split-091/smoke-cleanup.log": "f330244b920fbedbff895a2e066e2917c5abfd1629420585295fb53fe474aabd",
+    "build/workspace-split-091/smoke-final.log": "09d5c512174daa36975027c5d2e710c145d1b09ba43910fb7c13ff6b134db62e",
+    "build/workspace-split-091/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/workspace-split-091/sdk-before.json": "a361f1b0c67f89430c4c37c5418b3e38703d30eeba2df39947a0e5f35b5f36ff",
+    "build/workspace-split-091/sdk-after.json": "a361f1b0c67f89430c4c37c5418b3e38703d30eeba2df39947a0e5f35b5f36ff",
+    "build/workspace-split-091/promotion.json": "203ee5449672e6c74446dbd1793ff5422a5ea03e8763f398dd9d52da5e1aa71c",
+    "build/workspace-split-091/visual-80.json": "d38e836eb59f18adfff4cc8e62bda59f5f2493c03ba28d203676e398ff9d3d72"
+  },
+  "corrections": [
+    "Initial visual preview exposed a 320px scope-content width; enabling growth fills the scroll pane.",
+    "New scope scroll wrapper exposed the existing plot wheel suppression; wheel now forwards only to the named scope-scroll host, retaining disabled trace zoom.",
+    "Recorded-overlay smoke initially requested a GPU frame for an offscreen plot. It now scrolls its subject into view before rebuilding; fresh-frame and changed-overlay assertions remain.",
+    "Workspace smoke initially left its 40% fixture for later pixel tests. Restoring its prior split resolves the subsequent print-preview timeout without changing preview assertions.",
+    "Initial ordinary catalog grew to65596 bytes. A shared workspace-layout definition removes duplicate input/output shape, preserving descriptions and the existing 64KiB guard. Final registry has69 definitions."
+  ],
+  "limitations": [
+    "Divider fraction does not guarantee a minimum pixel size; large schematics still need zoom/collapse for readable labels.",
+    "Direct CUA accessibility sets 65% to80% and screenshots show about29% to41%; attempted scroll gestures before the forwarding repair did not establish physical scrollbar/wheel acceptance. Final scrolling proof is mounted native event/scrollbar state, not complete physical input acceptance.",
+    "Broader responsive rails/toolbars, all keyboard/IME/accessibility, visible latency, participants, physical printers and distribution remain open.",
+    "Source inventory counts are syntax mapping, not exhaustive instantiated binding/runtime coverage.",
+    "P0 stays17 implemented/10 partial/0 pending; continuing goal remains active."
+  ]
+}
