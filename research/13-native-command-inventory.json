@@ -3,7 +3,7 @@
   "version": 1,
   "source_sha256": {
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
-    "desktop/canvas.go": "d0988cd214b8e2de7c11bcd457d890b09eabbfe3c5bdcb31d1e0d04b43acbfb0",
+    "desktop/canvas.go": "4428e114af900449274a074fea9a5a5f7840ddbaaa47cc4f7d5661ff2c418c29",
     "desktop/component_palette.go": "5d7b83aba4bd8202b899f0168848226f8217a8dd3dbd73d2ff6c8d99b752d3ab",
     "desktop/dc_sweep.go": "6714f9c257faaf1e230e51dbc2c8b31a0d83ad9613eaa47d2de9bf8db495600f",
     "desktop/dc_sweep_canvas.go": "7679c9968c64ec16612baf21c8b31b1b66ac751373eea23f26dc7c81effe3e26",
@@ -18,7 +18,7 @@
     "desktop/keyboard_workflow.go": "42fa8031620577bff9c73eba71954730a71765328b219ab96911ffdbe7a5c883",
     "desktop/layout.go": "342ac81780e410c345b903d982ccae20228e7eff26ce476f4a828c7c3737c958",
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
-    "desktop/main.go": "55d6739bf11c4de4fed6bcd6afe55680f0be9fa178811bd4d84f41c241278d29",
+    "desktop/main.go": "4679879f1073ea3942ce17b035702f1ca6e361c34fd968e7ac60e7abc1a33a12",
     "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
     "desktop/menus.go": "ae51f2bdc479ffd60ba8991741d50cca9f819c5dcf7349071e8a0e38305c90c9",
     "desktop/menus_darwin.go": "8ecb12641ae79b167999a2bb2bb8e32b198177fa9b718a11472ceebf4d37e6fe",
@@ -48,7 +48,8 @@
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
     "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
     "desktop/verification.go": "550f32b3d90b99269bce6777233b68e9329b2ae704b5b2fca60a1a368fbab406",
-    "desktop/view.go": "f83d88abadba742c8943491f0673f6548bd78c334c0b41edb01bdb56629a1a8d",
+    "desktop/view.go": "d75483da5c92e3922c81d284b4b62c5d5e805e3da4d36775a4b1086490b75d4a",
+    "desktop/viewport.go": "a0d8a6a6b3577a0a909a0f7b3f339532a5abfde78fcf8a1979fb2e46f5f074cc",
     "desktop/waveforms.go": "73b1b24045b550ac31b25871c5194738a45ea4b6169ff9dd23e14b37467dd85e",
     "desktop/workflow.go": "7e39308677a6eec92663759ffbd61a568e1b87215d6453a31e8eae2bd11a6af0"
   },
@@ -207,6 +208,7 @@
     "view.fit",
     "view.pan",
     "view.selection.center",
+    "view.viewport.set",
     "view.zoom",
     "wire.begin",
     "wire.connect",
@@ -300,7 +302,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 47,
+      "line": 49,
       "function": "*commandCanvas.Mount",
       "kind": "event-or-dispatch-router",
       "expression": "w.OnFirst(events.Scroll, func(e events.Event) {\n\tif scroll, ok := e.(*events.MouseScroll); ok {\n\t\tc.Owner.Do(func() {\n\t\t\tanchor := c.world(e, w)\n\t\t\tfactor := math.Max(.25, math.Min(4, math.Exp(-float64(scroll.Delta.Y)*.003)))\n\t\t\tc.screen.invoke(\"view.zoom\", map[string]any{\"factor\": factor, \"anchor\": anchor})\n\t\t})\n\t\te.SetHandled()\n\t}\n})",
@@ -308,7 +310,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 52,
+      "line": 54,
       "function": "*commandCanvas.Mount",
       "kind": "domain-ingress",
       "expression": "c.screen.invoke(\"view.zoom\", map[string]any{\"factor\": factor, \"anchor\": anchor})",
@@ -319,7 +321,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 57,
+      "line": 59,
       "function": "*commandCanvas.Mount",
       "kind": "event-or-dispatch-router",
       "expression": "w.OnFirst(events.MouseDown, func(e events.Event) {\n\tc.Owner.Do(func() { c.routePointer(0, c.world(e, w), workbench.Point{}) })\n\te.SetHandled()\n})",
@@ -327,7 +329,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 61,
+      "line": 63,
       "function": "*commandCanvas.Mount",
       "kind": "event-or-dispatch-router",
       "expression": "w.OnFirst(events.SlideMove, func(e events.Event) {\n\tc.Owner.Do(func() {\n\t\tdelta := e.PrevDelta()\n\t\tc.routePointer(1, c.world(e, w), workbench.Point{X: float64(delta.X) / c.View.Zoom, Y: float64(delta.Y) / c.View.Zoom})\n\t})\n\te.SetHandled()\n})",
@@ -335,7 +337,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 68,
+      "line": 70,
       "function": "*commandCanvas.Mount",
       "kind": "event-or-dispatch-router",
       "expression": "w.OnFirst(events.SlideStop, func(e events.Event) {\n\tc.Owner.Do(func() { c.routePointer(2, c.world(e, w), workbench.Point{}) })\n\te.SetHandled()\n})",
@@ -343,7 +345,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 72,
+      "line": 74,
       "function": "*commandCanvas.Mount",
       "kind": "event-or-dispatch-router",
       "expression": "w.OnFirst(events.KeyChord, func(e events.Event) {\n\tif sourcePaneHidden(c.screen.service.Snapshot()) {\n\t\te.SetHandled()\n\t\treturn\n\t}\n\tchord := strings.ToLower(string(e.KeyChord()))\n\tif direction := navigationDirection(chord); direction != \"\" {\n\t\tcaptured := c.screen.service.Snapshot()\n\t\tc.Owner.Do(func() { c.navigateObject(direction, captured.CommandRevision, captured.Document.Generation) })\n\t\te.SetHandled()\n\t\treturn\n\t}\n\tdx, dy := 0., 0.\n\tswitch chord {\n\tcase \"leftarrow\":\n\t\tdx = -10\n\tcase \"rightarrow\":\n\t\tdx = 10\n\tcase \"uparrow\":\n\t\tdy = -10\n\tcase \"downarrow\":\n\t\tdy = 10\n\tcase \"escape\":\n\t\tc.Owner.Do(func() { c.dragID = \"\"; c.dragging = false; c.screen.invoke(\"drawing.cancel\", struct{}{}) })\n\t\te.SetHandled()\n\t\treturn\n\tcase \"delete\", \"backspace\":\n\t\tc.Owner.Do(func() {\n\t\t\tif id := c.screen.service.Snapshot().Selected; id != \"\" {\n\t\t\t\tc.screen.invoke(\"object.delete\", workbench.IDParams{ID: id})\n\t\t\t}\n\t\t})\n\t\te.SetHandled()\n\t\treturn\n\tdefault:\n\t\treturn\n\t}\n\tc.Owner.Do(func() {\n\t\tstate := c.screen.service.Snapshot()\n\t\tgraph := workbench.Graph{Components: state.Components, Wires: state.Wires}\n\t\tif part, ok := graph.Component(state.Selected); ok \u0026\u0026 state.Drawing.Tool == \"select\" {\n\t\t\tc.screen.invoke(\"component.move\", workbench.MoveParams{ID: part.ID, Position: workbench.Point{X: part.Position.X + dx, Y: part.Position.Y + dy}})\n\t\t} else {\n\t\t\tc.screen.invoke(\"view.pan\", map[string]float64{\"dx\": dx / c.View.Zoom, \"dy\": dy / c.View.Zoom})\n\t\t}\n\t})\n\te.SetHandled()\n})",
@@ -351,7 +353,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 95,
+      "line": 97,
       "function": "*commandCanvas.Mount",
       "kind": "domain-ingress",
       "expression": "c.screen.invoke(\"drawing.cancel\", struct{}{})",
@@ -362,7 +364,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 101,
+      "line": 103,
       "function": "*commandCanvas.Mount",
       "kind": "domain-ingress",
       "expression": "c.screen.invoke(\"object.delete\", workbench.IDParams{ID: id})",
@@ -373,7 +375,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 113,
+      "line": 115,
       "function": "*commandCanvas.Mount",
       "kind": "domain-ingress",
       "expression": "c.screen.invoke(\"component.move\", workbench.MoveParams{ID: part.ID, Position: workbench.Point{X: part.Position.X + dx, Y: part.Position.Y + dy}})",
@@ -384,7 +386,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 115,
+      "line": 117,
       "function": "*commandCanvas.Mount",
       "kind": "domain-ingress",
       "expression": "c.screen.invoke(\"view.pan\", map[string]float64{\"dx\": dx / c.View.Zoom, \"dy\": dy / c.View.Zoom})",
@@ -395,7 +397,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 205,
+      "line": 207,
       "function": "*screen.canvasClick",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"drawing.position.set\", workbench.PositionParams{Position: point})",
@@ -406,7 +408,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 211,
+      "line": 213,
       "function": "*screen.canvasClick",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"wire.junction.insert\", workbench.JunctionInsertParams{WireIDs: ids, Position: \u0026point})",
@@ -417,7 +419,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 219,
+      "line": 221,
       "function": "*screen.canvasClick",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"component.place\", workbench.PlaceParams{Kind: state.Drawing.Kind, Position: p, Value: value})",
@@ -428,7 +430,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 228,
+      "line": 230,
       "function": "*screen.canvasClick",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"wire.begin\", map[string]string{\"terminal\": ref})",
@@ -439,7 +441,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 230,
+      "line": 232,
       "function": "*screen.canvasClick",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"wire.connect\", workbench.ConnectParams{From: state.Drawing.WireStart, To: ref})",
@@ -450,7 +452,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 237,
+      "line": 239,
       "function": "*screen.canvasClick",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"measurement.select\", workbench.MeasurementSelectParams{Kind: \"terminal\", ID: ref})",
@@ -461,7 +463,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 244,
+      "line": 246,
       "function": "*screen.canvasClick",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"component.select\", workbench.IDParams{ID: id})",
@@ -472,7 +474,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 336,
+      "line": 343,
       "function": "*commandCanvas.routePointer",
       "kind": "domain-ingress",
       "expression": "c.screen.invoke(\"view.pan\", map[string]float64{\"dx\": -delta.X, \"dy\": -delta.Y})",
@@ -483,7 +485,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 340,
+      "line": 347,
       "function": "*commandCanvas.routePointer",
       "kind": "domain-ingress",
       "expression": "c.screen.invoke(\"view.zoom\", map[string]any{\"factor\": factor, \"anchor\": p})",
@@ -494,7 +496,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 347,
+      "line": 354,
       "function": "*commandCanvas.routePointer",
       "kind": "domain-ingress",
       "expression": "c.screen.invoke(\"measurement.pin.move\", workbench.MoveParams{ID: strings.TrimPrefix(c.dragID, \"pin|\"), Position: position, PreviousPosition: \u0026c.dragOrigin})",
@@ -505,7 +507,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 349,
+      "line": 356,
       "function": "*commandCanvas.routePointer",
       "kind": "domain-ingress",
       "expression": "c.screen.invoke(\"component.move\", workbench.MoveParams{ID: c.dragID, Position: position, PreviousPosition: \u0026c.dragOrigin})",
@@ -516,7 +518,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 404,
+      "line": 411,
       "function": "*commandCanvas.navigateObject",
       "kind": "domain-ingress",
       "expression": "c.screen.invokeAtCommandRevision(\"selection.navigate\", workbench.NavigateParams{Direction: direction, Center: true}, revision, generation)",
@@ -1369,7 +1371,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 208,
+      "line": 210,
       "function": "*screen.invoke",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(id, p, s.service.Snapshot().CommandRevision)",
@@ -1377,7 +1379,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 225,
+      "line": 227,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "request-command-field",
       "expression": "Command: id",
@@ -1385,7 +1387,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 229,
+      "line": 231,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "event-or-dispatch-router",
       "expression": "s.service.Dispatch(context.Background(), request, \"user\")",
@@ -1393,7 +1395,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 250,
+      "line": 252,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.undo\", \"Undo\", \"Meta+Z\"}",
@@ -1404,7 +1406,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 250,
+      "line": 252,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.redo\", \"Redo\", \"Meta+Shift+Z\"}",
@@ -1415,7 +1417,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 251,
+      "line": 253,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"project.clear\", \"New blank\", \"\"}",
@@ -1426,7 +1428,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 251,
+      "line": 253,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"drawing.cancel\", \"Cancel drawing\", \"Escape\"}",
@@ -1437,7 +1439,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 252,
+      "line": 254,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"app.close\", \"Close window\", \"Meta+W\"}",
@@ -1448,7 +1450,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 253,
+      "line": 255,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.current.reset\", \"Reset current example\", \"\"}",
@@ -1459,7 +1461,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 253,
+      "line": 255,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.reset\", \"Load LED example\", \"\"}",
@@ -1470,7 +1472,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 253,
+      "line": 255,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.rc\", \"Load RC example\", \"\"}",
@@ -1481,7 +1483,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 253,
+      "line": 255,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn\", \"Load NPN LED example\", \"\"}",
@@ -1492,7 +1494,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 253,
+      "line": 255,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.switch-npn\", \"Load manual transistor LED switch\", \"\"}",
@@ -1503,7 +1505,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 253,
+      "line": 255,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn-pulse\", \"Load blinking NPN LED\", \"\"}",
@@ -1514,7 +1516,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 253,
+      "line": 255,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.flasher\", \"Load capacitor-timed LED flasher\", \"\"}",
@@ -1525,7 +1527,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 253,
+      "line": 255,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.rectifier\", \"Load diode rectifier and smoothing\", \"\"}",
@@ -1536,7 +1538,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 254,
+      "line": 256,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.pause\", \"Pause\", \"\"}",
@@ -1547,7 +1549,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 254,
+      "line": 256,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.resume\", \"Resume\", \"\"}",
@@ -1558,7 +1560,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 254,
+      "line": 256,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.restart\", \"Restart\", \"\"}",
@@ -1569,7 +1571,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 254,
+      "line": 256,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"view.fit\", \"Fit circuit\", \"\"}",
@@ -1580,15 +1582,15 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 257,
+      "line": 259,
       "function": "*screen.registerCommands",
       "kind": "event-or-dispatch-router",
-      "expression": "s.commands.Register(command.Command{ID: entry.id, Label: entry.label, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts,\n\tAvailable: func() error {\n\t\tif s.fileBusy || s.pendingCommand != \"\" {\n\t\t\treturn fmt.Errorf(\"finish the current file operation first\")\n\t\t}\n\t\tstate := s.service.Snapshot()\n\t\tif state.Closed \u0026\u0026 entry.id != \"app.close\" {\n\t\t\treturn fmt.Errorf(\"session is closing\")\n\t\t}\n\t\tif entry.id == \"example.current.reset\" \u0026\u0026 state.Example == nil {\n\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t}\n\t\tif entry.id == \"edit.undo\" \u0026\u0026 !state.CanUndo {\n\t\t\treturn fmt.Errorf(\"nothing to undo\")\n\t\t}\n\t\tif entry.id == \"edit.redo\" \u0026\u0026 !state.CanRedo {\n\t\t\treturn fmt.Errorf(\"nothing to redo\")\n\t\t}\n\t\treturn nil\n\t}, Execute: func(context.Context) error {\n\t\tif entry.id == \"app.close\" {\n\t\t\ts.requestClose()\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"example.current.reset\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\tif state.Example == nil {\n\t\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t\t}\n\t\t\tgeneration := state.Document.Generation\n\t\t\ts.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"project.clear\" || entry.id == \"example.reset\" || entry.id == \"example.rc\" || entry.id == \"example.npn\" || entry.id == \"example.npn-pulse\" || entry.id == \"example.flasher\" || entry.id == \"example.switch-npn\" || entry.id == \"example.rectifier\" {\n\t\t\ts.requestReplace(entry.id, workbench.ReplaceParams{})\n\t\t\treturn nil\n\t\t}\n\t\tvar p any = struct{}{}\n\t\tif entry.id == \"edit.undo\" || entry.id == \"edit.redo\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\ttip := state.UndoEntry\n\t\t\tif entry.id == \"edit.redo\" {\n\t\t\t\ttip = state.RedoEntry\n\t\t\t}\n\t\t\tif tip != nil {\n\t\t\t\trevision := tip.CommandRevision\n\t\t\t\tp = workbench.HistoryParams{ExpectedEntryRevision: \u0026revision, AllowOtherActor: tip.Actor != \"user\"}\n\t\t\t}\n\t\t}\n\t\tif entry.id == \"view.fit\" {\n\t\t\tp = workbench.FitParams{Width: s.drawing.View.Width, Height: s.drawing.View.Height}\n\t\t}\n\t\tr := s.invoke(entry.id, p)\n\t\tif r.Error != nil {\n\t\t\treturn fmt.Errorf(\"%s\", r.Error.Message)\n\t\t}\n\t\tif entry.id == \"drawing.cancel\" {\n\t\t\ts.requestKeyboardFocus(\"part-search\")\n\t\t}\n\t\treturn nil\n\t},\n})",
+      "expression": "s.commands.Register(command.Command{ID: entry.id, Label: entry.label, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts,\n\tAvailable: func() error {\n\t\tif s.fileBusy || s.pendingCommand != \"\" {\n\t\t\treturn fmt.Errorf(\"finish the current file operation first\")\n\t\t}\n\t\tstate := s.service.Snapshot()\n\t\tif state.Closed \u0026\u0026 entry.id != \"app.close\" {\n\t\t\treturn fmt.Errorf(\"session is closing\")\n\t\t}\n\t\tif entry.id == \"example.current.reset\" \u0026\u0026 state.Example == nil {\n\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t}\n\t\tif entry.id == \"edit.undo\" \u0026\u0026 !state.CanUndo {\n\t\t\treturn fmt.Errorf(\"nothing to undo\")\n\t\t}\n\t\tif entry.id == \"edit.redo\" \u0026\u0026 !state.CanRedo {\n\t\t\treturn fmt.Errorf(\"nothing to redo\")\n\t\t}\n\t\treturn nil\n\t}, Execute: func(context.Context) error {\n\t\tif entry.id == \"app.close\" {\n\t\t\ts.requestClose()\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"example.current.reset\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\tif state.Example == nil {\n\t\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t\t}\n\t\t\tgeneration := state.Document.Generation\n\t\t\ts.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"project.clear\" || entry.id == \"example.reset\" || entry.id == \"example.rc\" || entry.id == \"example.npn\" || entry.id == \"example.npn-pulse\" || entry.id == \"example.flasher\" || entry.id == \"example.switch-npn\" || entry.id == \"example.rectifier\" {\n\t\t\ts.requestReplace(entry.id, workbench.ReplaceParams{})\n\t\t\treturn nil\n\t\t}\n\t\tvar p any = struct{}{}\n\t\tif entry.id == \"edit.undo\" || entry.id == \"edit.redo\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\ttip := state.UndoEntry\n\t\t\tif entry.id == \"edit.redo\" {\n\t\t\t\ttip = state.RedoEntry\n\t\t\t}\n\t\t\tif tip != nil {\n\t\t\t\trevision := tip.CommandRevision\n\t\t\t\tp = workbench.HistoryParams{ExpectedEntryRevision: \u0026revision, AllowOtherActor: tip.Actor != \"user\"}\n\t\t\t}\n\t\t}\n\t\tif entry.id == \"view.fit\" {\n\t\t\tp = workbench.FitParams{Width: s.drawing.View.Width, Height: s.drawing.View.Height, FollowViewport: true}\n\t\t}\n\t\tr := s.invoke(entry.id, p)\n\t\tif r.Error != nil {\n\t\t\treturn fmt.Errorf(\"%s\", r.Error.Message)\n\t\t}\n\t\tif entry.id == \"drawing.cancel\" {\n\t\t\ts.requestKeyboardFocus(\"part-search\")\n\t\t}\n\t\treturn nil\n\t},\n})",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/main.go",
-      "line": 287,
+      "line": 289,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})",
@@ -1596,7 +1598,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 291,
+      "line": 293,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ReplaceParams{})",
@@ -1604,7 +1606,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 309,
+      "line": 311,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.invoke(entry.id, p)",
@@ -1612,7 +1614,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 348,
+      "line": 350,
       "function": "*screen.button",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Invoke(context.Background(), id)",
@@ -1620,7 +1622,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 357,
+      "line": 359,
       "function": "*screen.button",
       "kind": "domain-ingress",
       "expression": "s.invoke(id, target)",
@@ -1628,7 +1630,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 360,
+      "line": 362,
       "function": "*screen.button",
       "kind": "node-Activate",
       "expression": "Activate: activate",
@@ -3376,7 +3378,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 118,
+      "line": 119,
       "function": "*screen.view",
       "kind": "command-menu",
       "expression": "s.commandMenu(\"file-menu\", \"File\", [][2]string{{\"project.clear\", \"New schematic\"}, {\"file.open\", \"Open…\"}, {\"file.save\", \"Save\"}, {\"file.save-as\", \"Save as…\"}, {\"app.close\", \"Close window\"}})",
@@ -3394,7 +3396,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 119,
+      "line": 120,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"file.save\", \"Save\")",
@@ -3406,7 +3408,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 120,
+      "line": 121,
       "function": "*screen.view",
       "kind": "command-menu",
       "expression": "s.commandMenu(\"examples-menu\", \"Examples\", [][2]string{{\"example.reset\", \"LED circuit\"}, {\"example.rc\", \"RC charge / discharge\"}, {\"example.npn\", \"Transistor LED\"}, {\"example.switch-npn\", \"Manual transistor switch\"}, {\"example.npn-pulse\", \"Blinking LED\"}, {\"example.flasher\", \"Capacitor-timed flasher\"}, {\"example.led-fade\", \"LED fade\"}, {\"example.nmos\", \"MOSFET LED switch\"}, {\"example.pmos\", \"High-side MOSFET LED\"}, {\"example.rectifier\", \"Rectifier / smoothing\"}})",
@@ -3426,7 +3428,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 121,
+      "line": 122,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"edit.undo\", \"Undo\")",
@@ -3437,7 +3439,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 121,
+      "line": 122,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"edit.redo\", \"Redo\")",
@@ -3448,7 +3450,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 166,
+      "line": 167,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"print-preview\", \"Print preview\", \"print.preview.start\", workbench.PreviewParams{})",
@@ -3459,7 +3461,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 169,
+      "line": 170,
       "function": "*screen.view",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.svg\", true, workbench.SaveParams{}, nil) }",
@@ -3467,7 +3469,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 169,
+      "line": 170,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.svg\", true, workbench.SaveParams{}, nil)",
@@ -3478,7 +3480,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 170,
+      "line": 171,
       "function": "*screen.view",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.pdf\", true, workbench.PDFExportParams{}, nil) }",
@@ -3486,7 +3488,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 170,
+      "line": 171,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.pdf\", true, workbench.PDFExportParams{}, nil)",
@@ -3497,7 +3499,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 171,
+      "line": 172,
       "function": "*screen.view",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{}, nil) }",
@@ -3505,7 +3507,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 171,
+      "line": 172,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{}, nil)",
@@ -3516,7 +3518,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 188,
+      "line": 189,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"component.select\", workbench.IDParams{ID: id})\n}",
@@ -3524,7 +3526,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 193,
+      "line": 194,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"component.select\", workbench.IDParams{ID: id})",
@@ -3535,7 +3537,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 195,
+      "line": 196,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"selection-previous\", \"Previous\", \"selection.navigate\", workbench.NavigateParams{Direction: \"previous\", Center: true})",
@@ -3546,7 +3548,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 197,
+      "line": 198,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"selection-next\", \"Next\", \"selection.navigate\", workbench.NavigateParams{Direction: \"next\", Center: true})",
@@ -3557,7 +3559,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 200,
+      "line": 201,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"selection-center\", \"Center selection\", \"view.selection.center\", workbench.CenterSelectionParams{ID: state.Selected})",
@@ -3568,7 +3570,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 236,
+      "line": 237,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"potentiometer.wiper.set\", workbench.WiperParams{ID: part.ID, Position: float64(e.Number) / 100})",
@@ -3579,7 +3581,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 238,
+      "line": 239,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: change",
@@ -3587,7 +3589,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 238,
+      "line": 239,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: change",
@@ -3595,7 +3597,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 277,
+      "line": 278,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"switch-actuate\", text, \"switch.set\", workbench.SwitchParams{ID: part.ID, Closed: !closed})",
@@ -3606,7 +3608,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 287,
+      "line": 288,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text}) }",
@@ -3614,7 +3616,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 287,
+      "line": 288,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
@@ -3625,7 +3627,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 287,
+      "line": 288,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"apply-value\", \"Apply label\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value})",
@@ -3636,7 +3638,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 299,
+      "line": 300,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text}) }",
@@ -3644,7 +3646,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 299,
+      "line": 300,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
@@ -3655,7 +3657,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 299,
+      "line": 300,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"apply-value\", \"Apply value\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value})",
@@ -3666,7 +3668,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 308,
+      "line": 309,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"r-1k\", \"1 kΩ\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"1k\"})",
@@ -3677,7 +3679,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 308,
+      "line": 309,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"r-2k\", \"2 kΩ\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"2k\"})",
@@ -3688,7 +3690,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 318,
+      "line": 319,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: fmt.Sprintf(\"%.9g V\", e.Number)})\n}",
@@ -3696,7 +3698,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 319,
+      "line": 320,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: fmt.Sprintf(\"%.9g V\", e.Number)})",
@@ -3707,7 +3709,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 320,
+      "line": 321,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"cap-initial-default\", \"Use experiment initial voltage\", \"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: \"default\"})",
@@ -3718,7 +3720,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 321,
+      "line": 322,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"c-1u\", \"1 µF\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"1uF\"})",
@@ -3729,7 +3731,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 321,
+      "line": 322,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"c-100u\", \"100 µF\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"100uF\"})",
@@ -3740,7 +3742,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 343,
+      "line": 344,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"rotate-part\", \"Rotate 90°\", \"component.rotate\", workbench.IDParams{ID: part.ID})",
@@ -3751,7 +3753,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 343,
+      "line": 344,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"duplicate-part\", \"Duplicate\", \"component.duplicate\", workbench.DuplicateParams{ID: part.ID})",
@@ -3762,7 +3764,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 349,
+      "line": 350,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"wire-insert-junction\", \"Insert junction on this wire\", \"wire.junction.insert\", workbench.JunctionInsertParams{WireIDs: []string{w.ID}})",
@@ -3773,7 +3775,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 363,
+      "line": 364,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"delete-object\", \"Delete selected\", \"object.delete\", workbench.IDParams{ID: state.Selected})",
@@ -3784,7 +3786,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 388,
+      "line": 389,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"tool-\"+tool, strings.ToUpper(tool[:1])+tool[1:], \"drawing.tool.set\", workbench.ToolParams{Tool: tool})",
@@ -3795,29 +3797,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 391,
-      "function": "*screen.view",
-      "kind": "registry-button",
-      "expression": "s.button(\"drawing.cancel\", \"Esc\")",
-      "public_commands": [
-        "drawing.cancel"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 391,
-      "function": "*screen.view",
-      "kind": "action-factory",
-      "expression": "s.action(\"sweep-open\", \"DC sweep\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
-      "public_commands": [
-        "sweep.visibility.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 391,
+      "line": 392,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"view.fit\", \"Fit\")",
@@ -3828,7 +3808,29 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 569,
+      "line": 394,
+      "function": "*screen.view",
+      "kind": "registry-button",
+      "expression": "s.button(\"drawing.cancel\", \"Esc\")",
+      "public_commands": [
+        "drawing.cancel"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 394,
+      "function": "*screen.view",
+      "kind": "action-factory",
+      "expression": "s.action(\"sweep-open\", \"DC sweep\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
+      "public_commands": [
+        "sweep.visibility.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 575,
       "function": "*screen.view",
       "kind": "node-Custom",
       "expression": "Custom: s.drawing",
@@ -3836,11 +3838,30 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 579,
+      "line": 585,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(pause, pauseText)",
       "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/viewport.go",
+      "line": 63,
+      "function": "*screen.observeSchematicViewport",
+      "kind": "event-or-dispatch-router",
+      "expression": "s.service.Dispatch(context.Background(), workbench.Request{Version: 1, ID: id, Command: \"view.viewport.set\", Params: raw, ExpectedCommandRevision: \u0026plan.revision, ExpectedDocumentGeneration: \u0026plan.generation, Key: id}, \"user\")",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/viewport.go",
+      "line": 63,
+      "function": "*screen.observeSchematicViewport",
+      "kind": "request-command-field",
+      "expression": "Command: \"view.viewport.set\"",
+      "public_commands": [
+        "view.viewport.set"
+      ],
+      "status": "literal-public-route"
     },
     {
       "file": "desktop/waveforms.go",
@@ -4164,6 +4185,7 @@
     "view.fit",
     "view.pan",
     "view.selection.center",
+    "view.viewport.set",
     "view.zoom",
     "wire.begin",
     "wire.connect",

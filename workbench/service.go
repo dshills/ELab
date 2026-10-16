@@ -14,6 +14,7 @@ import (
 )
 
 type Snapshot struct {
+	Viewport               ViewportState          `json:"viewport"`
 	PulseTimings           []PulseTiming          `json:"pulse_timings"`
 	Shutdown               *ShutdownWork          `json:"shutdown,omitempty"`
 	Printing               *PrintState            `json:"printing,omitempty"`
@@ -189,6 +190,7 @@ type Service struct {
 	drawing                     DrawingState
 	usedIDs                     map[string]bool
 	selected                    string
+	viewport                    ViewportState
 	view                        View
 	status                      string
 	paused, closed              bool
@@ -301,6 +303,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		analysis = "DC operating point"
 	}
 	out := Snapshot{
+		Viewport:               cloneViewport(s.viewport),
 		PulseTimings:           s.pulseTimingsLocked(),
 		Shutdown:               s.shutdownViewLocked(),
 		SourceAnnotations:      s.sourceAnnotationsLocked(),
@@ -1032,6 +1035,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	state.Viewport = cloneViewport(state.Viewport)
 	state.Shutdown = cloneShutdown(state.Shutdown)
 	state.SourceAnnotations = cloneSourceAnnotations(state.SourceAnnotations)
 	state.PrintPreview = clonePrintPreview(state.PrintPreview)

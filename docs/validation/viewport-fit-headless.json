@@ -1,0 +1,166 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "discovery": {
+    "capabilities": [
+      {
+        "id": "view.viewport.set",
+        "description": "Report drawable canvas dimensions; refit when following; session only, preserves physics/history",
+        "mutation": true,
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "height_px": {
+              "maximum": 100000,
+              "minimum": 64,
+              "type": "number"
+            },
+            "width_px": {
+              "maximum": 100000,
+              "minimum": 64,
+              "type": "number"
+            }
+          },
+          "required": [
+            "width_px",
+            "height_px"
+          ],
+          "type": "object",
+          "x-command-contract": {
+            "version": 1,
+            "scope": "schematic-viewport",
+            "preconditions": [
+              "Ordinary revision/document guards and retry retention apply"
+            ],
+            "effects": [
+              "Session presentation only; preserves graph, physics/run/time/charge, history and document dirty state",
+              "snapshot.viewport exposes measured width_px/height_px, registered, following and optional fit_failure; no OS window resize is requested",
+              "width_px and height_px are both required finite numbers within 64\u2013100000; identical size does not recompute fit",
+              "When following, size changes recompute complete schematic bounds using existing view.fit semantics; manual views keep their center/zoom",
+              "If a valid reported size cannot fit above .01 zoom, accept the measured size, preserve the last view and expose fit_failure=view-limit; a later larger size retries",
+              "Native publication is deferred past paint, coalesced while pending and guarded by captured revision/generation; stale reports retry from a later frame without overwriting navigation"
+            ],
+            "errors": [
+              {
+                "code": "invalid-params",
+                "phase": "admission",
+                "when": "Nonfinite or out-of-range dimensions, missing required size, malformed fields or non-boolean follow_viewport"
+              },
+              {
+                "code": "conflict",
+                "phase": "admission",
+                "when": "Document or command revision changed before this report/navigation"
+              }
+            ],
+            "completion": {
+              "mode": "immediate shared view/state update; no background solver job",
+              "observe": [
+                "project.inspect",
+                "events.poll"
+              ],
+              "cancel": "",
+              "cooperative_deadline_s": 0
+            }
+          }
+        },
+        "output": "Snapshot",
+        "output_schema": {
+          "$ref": "urn:elab:snapshot:1"
+        }
+      }
+    ],
+    "events": {
+      "command": "events.poll",
+      "default_timeout_ms": 1000,
+      "max_timeout_ms": 5000,
+      "max_waiters": 4,
+      "mode": "coalesced-latest-state",
+      "topics": [
+        "state",
+        "project",
+        "editor",
+        "view",
+        "simulation",
+        "diagnostics",
+        "jobs",
+        "measurements",
+        "recordings",
+        "recovery",
+        "preferences",
+        "lifecycle",
+        "library",
+        "preview",
+        "sweeps",
+        "printing"
+      ]
+    },
+    "mutation_preconditions": {
+      "combination": "A revision guard is required; all supplied revision/document guards must match",
+      "expected_command_revision": "Guards admitted commands, including other actors; live solver publication does not invalidate it",
+      "expected_document_generation": "Optional mutation context guard; prevents applying an old rendered action to a replacement document, including background publication",
+      "expected_revision": "Guards all state publication, including live samples"
+    },
+    "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee.",
+    "schema_version": 2,
+    "version": 1,
+    "schema_registry_count": 68,
+    "schema_registry_sha256": "fd8dc2849ac6f4c3c47a5c427c2116f730d7910efba80e33509f234b979ac705",
+    "full_response_sha256": "bb41b6bd0b9e1705ae40d328f19c7c6300d8d25945c0834076e3a29f4a692abb"
+  },
+  "sizes": {
+    "expanded": {
+      "width_px": 594,
+      "height_px": 137
+    },
+    "collapsed": {
+      "width_px": 594,
+      "height_px": 379
+    }
+  },
+  "views": {
+    "expanded": {
+      "center": {
+        "x": -150.5,
+        "y": 35
+      },
+      "zoom": 0.18266666666666667
+    },
+    "collapsed": {
+      "center": {
+        "x": -150.5,
+        "y": 35
+      },
+      "zoom": 0.5053333333333333
+    },
+    "manual": {
+      "center": {
+        "x": -130.5,
+        "y": 35
+      },
+      "zoom": 0.5053333333333333
+    },
+    "restored": {
+      "center": {
+        "x": -150.5,
+        "y": 35
+      },
+      "zoom": 0.18266666666666667
+    },
+    "one_shot": {
+      "center": {
+        "x": -150.5,
+        "y": 35
+      },
+      "zoom": 0.5333333333333333
+    }
+  },
+  "checks": [
+    "measured canvas fitting",
+    "scope resize without electrical/document/history changes",
+    "manual pan survives resize",
+    "follow mode resumes",
+    "invalid size/null follow refuse",
+    "legacy one-shot fit",
+    "saved view survives open; following and measured size stay session-only"
+  ]
+}

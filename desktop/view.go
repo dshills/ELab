@@ -101,6 +101,7 @@ func (s *screen) view() ui.Node {
 		s.drawing.dragID = ""
 		s.drawing.dragging = false
 	}
+	s.observeSchematicViewport(*s.drawing.View, state)
 	s.drawing.View.Center = canvas.Point{X: state.View.Center.X, Y: state.View.Center.Y}
 	s.drawing.View.Zoom = state.View.Zoom
 	drawRevision := state.Revision
@@ -388,7 +389,9 @@ func (s *screen) view() ui.Node {
 		n := s.action("tool-"+tool, strings.ToUpper(tool[:1])+tool[1:], "drawing.tool.set", workbench.ToolParams{Tool: tool})
 		tools.Children = append(tools.Children, buttonStyle(n, state.Drawing.Tool == tool))
 	}
-	tools.Children = append(tools.Children, s.button("drawing.cancel", "Esc"), ui.Node{ID: "tool-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, s.action("sweep-open", "DC sweep", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: true}), s.button("view.fit", "Fit"), label("zoom", fmt.Sprintf("%.0f%%", state.View.Zoom*100)))
+	fit := buttonStyle(s.button("view.fit", "Fit"), state.Viewport.Following)
+	fit.Accessibility.Help = "Fit the complete schematic and follow workspace resizing. Pan, zoom or center an object to return to manual positioning."
+	tools.Children = append(tools.Children, s.button("drawing.cancel", "Esc"), ui.Node{ID: "tool-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, s.action("sweep-open", "DC sweep", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: true}), fit, label("zoom", fmt.Sprintf("%.0f%%", state.View.Zoom*100)))
 	hints := "Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom"
 	switch state.Drawing.Tool {
 	case "wire":
@@ -419,6 +422,9 @@ func (s *screen) view() ui.Node {
 	}
 	if len(state.DiagnosticPresentation.Items) > 0 {
 		message = state.DiagnosticPresentation.Items[0].Summary
+	}
+	if state.Viewport.FitFailure != nil {
+		message = "Enlarge the schematic workspace or pan/zoom to inspect this circuit."
 	}
 	if s.errorMessage != "" {
 		message = s.errorMessage

@@ -231,6 +231,10 @@ rendered:
 	if err := nativeExamplesSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeViewportSmoke")
+	if err := nativeViewportSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	setStage("nativeIntegrationLimitSmoke")
 	if err := nativeIntegrationLimitSmoke(ctx, a, s); err != nil {
 		return err

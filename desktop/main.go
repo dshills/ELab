@@ -175,6 +175,8 @@ func runNative() (runErr error) {
 }
 
 type screen struct {
+	viewportPending                     *viewportReport
+	viewportSerial                      uint64
 	keyboardFocus                       ui.FocusRequest
 	recoveryInspection, recoverySamples recoveryReadCache
 	nativePointerPane                   string
@@ -304,7 +306,7 @@ func (s *screen) registerCommands() {
 					}
 				}
 				if entry.id == "view.fit" {
-					p = workbench.FitParams{Width: s.drawing.View.Width, Height: s.drawing.View.Height}
+					p = workbench.FitParams{Width: s.drawing.View.Width, Height: s.drawing.View.Height, FollowViewport: true}
 				}
 				r := s.invoke(entry.id, p)
 				if r.Error != nil {

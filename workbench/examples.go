@@ -153,6 +153,8 @@ func (s *Service) loadExampleLocked(id string, discard bool) error {
 	}
 	s.drawing = DefaultDrawing()
 	s.selected = d.selected
+	s.viewport.Following = true
+	s.fitViewportLocked()
 	return nil
 }
 func (s *Service) resetCurrentExampleLocked(p ExampleResetParams) error {

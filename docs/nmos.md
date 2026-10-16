@@ -1,6 +1,6 @@
 # N-channel MOSFET circuits
 
-In a small window, **Hide scope → Fit** gives the circuit more room; **Show scope** returns to the measurements. Automatic opening fit remains a layout follow-up.
+Examples now [fit the actual workspace and follow resizing](viewport-fitting.md). In a small window, **Hide scope** enlarges the fitted circuit; **Show scope** returns to the measurements. Pan/zoom keeps a manual view until you click Fit. Small-canvas text readability remains a layout follow-up.
 
 Choose **Examples → MOSFET LED switch** to see a 5 V pulse drive an LED through M1. The high phase lasts 200 ms and the low phase 300 ms. Pause, then Step to compare gate-source voltage, drain-source voltage and drain current. Select M1 for operating-region and signed-current readings or its three plot shortcuts. Search **MOSFET**, **NMOS** or **FET** to place one in a blank schematic.
 

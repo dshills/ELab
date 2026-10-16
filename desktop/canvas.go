@@ -15,13 +15,15 @@ import (
 
 type commandCanvas struct {
 	*cogent.MeshCanvas
-	screen                *screen
-	activeTool, dragID    string
-	dragOrigin, dragDelta workbench.Point
-	dragging              bool
-	dragGeneration        uint64
-	widget                *core.WidgetBase
-	pointer               *pointerBridge
+	preparedCommandRevision uint64
+	preparedGeneration      uint64
+	screen                  *screen
+	activeTool, dragID      string
+	dragOrigin, dragDelta   workbench.Point
+	dragging                bool
+	dragGeneration          uint64
+	widget                  *core.WidgetBase
+	pointer                 *pointerBridge
 }
 
 func (c *commandCanvas) world(e events.Event, w *core.WidgetBase) workbench.Point {
@@ -246,6 +248,11 @@ func (s *screen) canvasClick(p workbench.Point) {
 }
 func (s *screen) mesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	state := s.service.Snapshot()
+	if s.drawing != nil {
+		s.drawing.preparedCommandRevision = state.CommandRevision
+		s.drawing.preparedGeneration = state.Document.Generation
+	}
+	s.observeSchematicViewport(v, state)
 	if s.drawing != nil && s.drawing.widget != nil && s.drawing.pointer != nil && !sourcePaneHidden(state) {
 		w := s.drawing.widget
 		origin := w.Geom.Pos.Content

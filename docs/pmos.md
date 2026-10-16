@@ -1,6 +1,6 @@
 # P-channel MOSFETs and high-side switching
 
-Choose **Examples → High-side MOSFET LED**. The PMOS source connects to the 5 V supply, drain feeds the current-limited LED, and RPU pulls gate toward source. A high 5 V gate turns the LED off; a low gate turns it on. This reverses the control sense of the NMOS example. In smaller windows, **Hide scope → Fit** gives the schematic more room; adaptive opening fit/readability remains a tracked layout follow-up.
+Choose **Examples → High-side MOSFET LED**. The PMOS source connects to the 5 V supply, drain feeds the current-limited LED, and RPU pulls gate toward source. A high 5 V gate turns the LED off; a low gate turns it on. This reverses the control sense of the NMOS example. Examples now [fit the actual workspace and follow resizing](viewport-fitting.md); **Hide scope** gives the schematic more room. Small-canvas text readability remains a layout follow-up.
 
 The component has named **gate**, **drain**, **source** terminals and an insulated-gate symbol with the opposite body arrow to NMOS. The example rotates it 180° to put source above drain. J1 is an explicit two-wire routing junction for the input; geometric wire crossings alone remain unconnected. The rotated transistor export label now moves to the side away from the gate/base terminal.
 

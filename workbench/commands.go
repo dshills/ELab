@@ -81,6 +81,7 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(MOSFETModel{}), "urn:elab:mosfet-model:1"},
 	{reflect.TypeOf(NavigateParams{}), "urn:elab:object-navigation:1"},
 	{reflect.TypeOf(CenterSelectionParams{}), "urn:elab:selection-center:1"},
+	{reflect.TypeOf(ViewportParams{}), "urn:elab:viewport-size:1"},
 	{reflect.TypeOf(FitParams{}), "urn:elab:view-fit:1"},
 	{reflect.TypeOf(ExportStartParams{}), "urn:elab:export-start:1"},
 	{reflect.TypeOf(SchematicPage{}), "urn:elab:schematic-page:1"},
@@ -194,7 +195,7 @@ func SchemaRegistry() map[string]json.RawMessage {
 			inputProperty(schema, "kind")["enum"] = []string{"", "all", "components", "wires"}
 			inputProperty(schema, "kind")["default"] = "all"
 		}
-		if common.Type == reflect.TypeOf(FitParams{}) {
+		if common.Type == reflect.TypeOf(FitParams{}) || common.Type == reflect.TypeOf(ViewportParams{}) {
 			for _, field := range []string{"width_px", "height_px"} {
 				prop := inputProperty(schema, field)
 				prop["minimum"] = 64
@@ -415,7 +416,8 @@ func Catalog() []Capability {
 		capability("simulation.restart", "Restart transient time at zero or recalculate DC; retain paused state and current input mode", true, `{"type":"object","additionalProperties":false}`),
 		capability("view.pan", "Pan by world-coordinate delta without restarting simulation", true, `{"type":"object","required":["dx","dy"],"properties":{"dx":{"type":"number"},"dy":{"type":"number"}},"additionalProperties":false}`),
 		capability("view.zoom", "Zoom by 0.25–4 around an optional world point; final zoom clamped to 0.01–4", true, `{"type":"object","required":["factor"],"properties":{"factor":{"type":"number","minimum":0.25,"maximum":4},"anchor":{"type":"object","required":["x","y"],"properties":{"x":{"type":"number"},"y":{"type":"number"}},"additionalProperties":false}},"additionalProperties":false}`),
-		typedCapability("view.fit", "Fit schematic bodies, labels, routing envelopes and annotations into width_px/height_px (64–100000); defaults 650 × 400", reflect.TypeOf(FitParams{})),
+		typedCapability("view.viewport.set", "Report drawable canvas dimensions; refit when following; session only, preserves physics/history", reflect.TypeOf(ViewportParams{})),
+		typedCapability("view.fit", "Fit the complete schematic; optional follow_viewport uses measured size and follows resize; one-shot defaults 650 × 400", reflect.TypeOf(FitParams{})),
 		typedCapability("app.close", "Admit protected close and wait for cleanup; inspect shutdown outcome", reflect.TypeOf(ReplaceParams{})),
 		typedCapability("app.close.start", "Admit protected irreversible close; background cleanup/join; inspect shutdown", reflect.TypeOf(ReplaceParams{})),
 		queryCapability("app.close.inspect", "Read retained shutdown progress/outcome; no IO", reflect.TypeOf(IDParams{}), reflect.TypeOf(ShutdownWork{})),

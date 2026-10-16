@@ -1,0 +1,135 @@
+{
+  "passed": true,
+  "app_version": "0.90.0",
+  "build_version": "105",
+  "binary_sha256": "81ca3a6a3438796efe27068ed6da06b7ebed16912609a662b3c1864b736bef88",
+  "agent_binary_sha256": "7edd32ff206b9c24c9e111277feaf2ba6ee4d971705e38131e61f43d331818f7",
+  "prior_bundle": "build/ELab-before-viewport-fit.app",
+  "prior_binary_sha256": "628d7b48d6ebac25401c3a5305a7d8e4e1c2c588460ca84d98caf64b2302b4be",
+  "date": "2026-10-15",
+  "bundle_files_compared": 3,
+  "bundle_manifest_sha256": "a98d8833c1126dd289b9d25c56b03898ff41851bbf61efa0fe8691f37540b5b4",
+  "sdk": {
+    "commit": "621aca2da91836631fc05b2a7b97f124d53518dd",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "desktop/canvas.go": "4428e114af900449274a074fea9a5a5f7840ddbaaa47cc4f7d5661ff2c418c29",
+    "desktop/display_smoke.go": "5ec87d9fc6d4eb361d7763496dff70c119469df8b01c66e6d1cddc26077a384a",
+    "desktop/main.go": "4679879f1073ea3942ce17b035702f1ca6e361c34fd968e7ac60e7abc1a33a12",
+    "desktop/smoke.go": "1a96c4dd353bccbf88abcd163a5509243bbb063701aefdf671b4671184e45ab8",
+    "desktop/view.go": "d75483da5c92e3922c81d284b4b62c5d5e805e3da4d36775a4b1086490b75d4a",
+    "desktop/viewport.go": "a0d8a6a6b3577a0a909a0f7b3f339532a5abfde78fcf8a1979fb2e46f5f074cc",
+    "desktop/viewport_smoke.go": "2c874b0547270a0ffba1e17313ca2b35346faaca00594600e4b8ff211266289f",
+    "desktop/viewport_test.go": "df395a1d62b6e2866fb37201632eb8da8fb6036a9c186355482b6177f95d3d0e",
+    "scripts/viewport-fit-demo.py": "bd0247f61ac6925f8c8be1a8446d5cd1f4c874e3793c2660adba3c7fec52f769",
+    "workbench/capability_details.go": "532d63e5df5270d759e28df2984fe713ed8f03a4e05834ab4f42bbe2873bb1ba",
+    "workbench/commands.go": "394de180501e6728a4ce445c67f11d248652c83ec0ee1f7fd8ffe5a883e425f8",
+    "workbench/editing.go": "f030e94db04cb3b2a75318a608d398a52a6439f6a83b37a10add85f9530c7ff8",
+    "workbench/events.go": "d83451848e44c6c378c2aa2c34fda2bfb7a24f81abd96646687aae542b1974ad",
+    "workbench/examples.go": "7993a01e111f9c49395875403608af7b942412f7a25872d22b939a9933772f24",
+    "workbench/navigation.go": "7fc808ba8035292e84a7279d6b9905231873cd1c6d0d418e591fc1632c968131",
+    "workbench/persistence.go": "e00a00114c84d31603e75ecb233b3a1f55f6bddfff6a62a77f08d85029b62087",
+    "workbench/service.go": "ed4ae53573c6cddeb368b3489850ef3b2ca10748d595f891b7e615dd64d26747",
+    "workbench/viewport.go": "6ac2bc006a16d64d432af98fb3275e0eee340828ea4bb28d4325e00d534481b7",
+    "workbench/viewport_capabilities.go": "3d43ea7f30cc9e3a9f6a812fd74d33ca2a26e388dec0e442e98c0a77bd2b69e0",
+    "workbench/viewport_test.go": "a3acfa4ed61108b1fd4928d5ba2c8a8960d4698bd685c99c2f8bf350bdae7734"
+  },
+  "source_inventory": {
+    "sources": 50,
+    "sites": 382,
+    "public_commands": 160,
+    "source_routes": 130,
+    "status_counts": {
+      "requires-binding-review": 143,
+      "literal-public-route": 213,
+      "declared-native-wrapper": 9,
+      "declared-registry-route": 17
+    }
+  },
+  "observations": {
+    "default_native_canvas": {
+      "expanded": {
+        "width_px": 594,
+        "height_px": 137
+      },
+      "collapsed": {
+        "width_px": 594,
+        "height_px": 379
+      }
+    },
+    "native_headless_equal_except_transport": true,
+    "schema_registry_count": 68,
+    "mounted_frame_smoke": {
+      "collapsed_scope": {
+        "width_px": 702,
+        "height_px": 689,
+        "registered": true,
+        "following": true
+      },
+      "collapsed_zoom": 0.5749385749385749,
+      "event": "elab.viewport.smoke",
+      "expanded_scope": {
+        "width_px": 702,
+        "height_px": 447,
+        "registered": true,
+        "following": true
+      },
+      "expanded_zoom": 0.5749385749385749,
+      "manual_resize_preserved": true,
+      "passed": true
+    }
+  },
+  "checks": [
+    "All ten examples fit small/large registered canvases; independent terminal/wire/annotation projection checks",
+    "Deferred latest-pending publication, resize-back cancellation, mailbox backpressure and stale command/document/widget rejection",
+    "Pan/zoom/center/centered navigation disable following; selection alone preserves it; native Fit and agent follow mode agree",
+    "Valid unfittable size preserves last view and exposes owned failure, recovering on larger size; malformed reports refuse without mutation",
+    "Native/headless public workflow and complete discovery witness match; saved view survives open and viewport remains session-only",
+    "Final serialized lint/import/root/native race/vet, Python compilation and diff whitespace checks pass",
+    "Final packaged GPU/UI/protected-close smoke passes; four adapters pass LED/RC/NPN reference workflows",
+    "Canonical/candidate/final-build bytes and bundle modes/metadata match; prior .89/104 bundle preserved; owned sessions exited; SDK unchanged"
+  ],
+  "artifacts": [
+    "docs/viewport-fitting.md",
+    "docs/validation/viewport-fit-native.json",
+    "docs/validation/viewport-fit-headless.json",
+    "docs/validation/viewport-fit-discovery.json",
+    "docs/validation/viewport-fit-conformance.json"
+  ],
+  "build_evidence_sha256": {
+    "build/viewport-fit-090/check.log": "d014f0a1464678742077d1548a5eaf38f8d9ffbc28de9f877033399a47a57c99",
+    "build/viewport-fit-090/check-final.log": "98ad16b1a704cbc116b67f5f68361a7adadf577a11d47f6c978870afdf55d8f3",
+    "build/viewport-fit-090/check-qualified.log": "50dd1af56fdea85c423dfb52850713a5f88eaf983423b630fb65d9377053b0e3",
+    "build/viewport-fit-090/build-final.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/viewport-fit-090/package-final.log": "805c044844e7bb0e47e65743b51c7964d1771a10eccf6fabf7de4ccb0785ba39",
+    "build/viewport-fit-090/public-native.log": "7e082d4e5ab2a49d3b035d389c66805abef9d6095aeb8810b57a01d26611b30f",
+    "build/viewport-fit-090/public-headless.log": "f160a0b7f00c02e37b2731cc0de984a209b78e6e6c943dc92a80da1721cebd6e",
+    "build/viewport-fit-090/smoke-final.log": "de8ad99c555b6c3e4fe40f83219724a1294c9fb904da5c33ca88a02f6575991c",
+    "build/viewport-fit-090/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/viewport-fit-090/sdk-before.json": "a361f1b0c67f89430c4c37c5418b3e38703d30eeba2df39947a0e5f35b5f36ff",
+    "build/viewport-fit-090/sdk-after.json": "a361f1b0c67f89430c4c37c5418b3e38703d30eeba2df39947a0e5f35b5f36ff",
+    "build/viewport-fit-090/promotion.json": "b0366fb0d545f391edfde73f7000729f6226b4bab25773325ed927ad935e7e62",
+    "build/viewport-fit-090/visual-expanded.json": "4c0abe350789a37e66432130eaad38c5b33ba8c3ff8ffdf144d71fcf1cb55ec2",
+    "build/viewport-fit-090/visual-collapsed.json": "8f159ea38341205a6263c5ea137bf607b293e9a75f617634b8b54aa3b4e46922",
+    "build/viewport-fit-090/visual-manual.json": "48f04a3df3ac3ce06f72487fca471db87e63c4182faf66a4236464d17b1e903d",
+    "build/viewport-fit-090/visual-restored.json": "0b7dfbec616c6d98cb663ae1879f8b6009b00381fd5872e102678f50222debac"
+  },
+  "corrections": [
+    "Initial preview smoke took its display-animation baseline before initial viewport publication. It now waits for the measured current command/generation to reach actual mesh preparation; strict animation revision/physics invariants remain unchanged.",
+    "Initial lint flagged a capitalized smoke error string; corrected before final full checks.",
+    "Review repaired pending size B surviving a return to registered size A; final native regression proves no command publishes."
+  ],
+  "limitations": [
+    "Whole-circuit fit at 18.27% prevents clipping but leaves labels too small; minimum useful canvas and responsive scope/inspector layout remain open.",
+    "Following reacts to workspace resize, not every graph edit.",
+    "Mounted large-window smoke is width-limited, so collapsing scope preserves its zoom; actual default-window native/public checks demonstrate 18.27% to50.53%.",
+    "Source/callback/public/frame evidence does not establish exhaustive keyboard/IME/accessibility, visible latency, participant, physical-printer or distribution acceptance.",
+    "P0 remains17 implemented/10 partial/0 pending; continuing goal is active."
+  ]
+}

@@ -51,7 +51,10 @@ func nativeDisplaySmoke(ctx context.Context, a *app.Application, s *screen) erro
 	if err := <-ready; err != nil {
 		return err
 	}
-	baseline := s.service.Snapshot()
+	baseline, err := waitNativeViewport(ctx, a, s, func(workbench.Snapshot) bool { return true })
+	if err != nil {
+		return err
+	}
 	if !baseline.Display.Animate {
 		return fmt.Errorf("native current motion did not enable")
 	}

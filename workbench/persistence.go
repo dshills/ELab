@@ -81,6 +81,7 @@ func (s *Service) requireCleanLocked(discard bool) error {
 	return nil
 }
 func (s *Service) detachDocumentLocked() {
+	s.stopViewportFollowingLocked()
 	s.exampleID = ""
 	s.diagnosticDetails = false
 	s.displayPreferences = DefaultDisplayPreferences()
@@ -556,6 +557,7 @@ func (s *Service) documentLocked() Document {
 }
 
 func (s *Service) installDocumentLocked(d Document) {
+	s.stopViewportFollowingLocked()
 	s.exampleID = d.ExampleID
 	s.diagnosticDetails = false
 	s.displayPreferences = DefaultDisplayPreferences()

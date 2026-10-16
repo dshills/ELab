@@ -106,6 +106,9 @@ func (s *Service) navigateLocked(p NavigateParams) error {
 	s.drawing.WireStart = ""
 	s.normalizeDrawingLocked()
 	s.view.Center = center
+	if p.Center {
+		s.stopViewportFollowingLocked()
+	}
 	return nil
 }
 

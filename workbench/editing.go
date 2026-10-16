@@ -11,8 +11,9 @@ type actionError struct{ code, message string }
 func (e *actionError) Error() string { return e.message }
 
 type FitParams struct {
-	Width  float64 `json:"width_px,omitempty"`
-	Height float64 `json:"height_px,omitempty"`
+	FollowViewport bool    `json:"follow_viewport,omitempty"`
+	Width          float64 `json:"width_px,omitempty"`
+	Height         float64 `json:"height_px,omitempty"`
 }
 type PlaceParams struct {
 	ID       string `json:"id,omitempty"`
@@ -819,12 +820,31 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return nil
 		}
 		return s.connectLocked(ConnectParams{From: "R1.2", To: "D1.anode"})
+	case "view.viewport.set":
+		var p ViewportParams
+		if err := params(raw, &p, "width_px", "height_px"); err != nil {
+			return err
+		}
+		return s.setViewportLocked(p)
 	case "view.fit":
 		p := FitParams{Width: 650, Height: 400}
 		if err := params(raw, &p); err != nil {
 			return err
 		}
-		if !finite(p.Width) || !finite(p.Height) || p.Width < 64 || p.Height < 64 || p.Width > 100000 || p.Height > 100000 {
+		var fields map[string]json.RawMessage
+		_ = json.Unmarshal(raw, &fields)
+		if value, ok := fields["follow_viewport"]; ok && string(value) == "null" {
+			return fmt.Errorf("follow_viewport must be a boolean")
+		}
+		if p.FollowViewport && s.viewport.Registered {
+			if _, present := fields["width_px"]; !present {
+				p.Width = s.viewport.Width
+			}
+			if _, present := fields["height_px"]; !present {
+				p.Height = s.viewport.Height
+			}
+		}
+		if !validViewportSize(p.Width, p.Height) {
 			return fmt.Errorf("fit dimensions must be 64–100000 pixels")
 		}
 		view, err := s.fitViewLocked(p)
@@ -832,6 +852,11 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return err
 		}
 		s.view = view
+		s.viewport.Following = p.FollowViewport
+		if p.FollowViewport {
+			s.viewport.Width, s.viewport.Height, s.viewport.Registered = p.Width, p.Height, true
+		}
+		s.viewport.FitFailure = nil
 		return nil
 	case "selection.navigate":
 		var p NavigateParams
@@ -852,6 +877,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return err
 		}
 		s.view.Center = center
+		s.stopViewportFollowingLocked()
 		return nil
 	case "view.pan":
 		var p struct {
@@ -866,6 +892,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return fmt.Errorf("view center exceeds ±1000000 units")
 		}
 		s.view.Center = Point{x, y}
+		s.stopViewportFollowingLocked()
 		return nil
 	case "view.zoom":
 		var p struct {
@@ -897,6 +924,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return fmt.Errorf("zoom exceeds view bounds")
 		}
 		s.view = View{center, zoom}
+		s.stopViewportFollowingLocked()
 		return nil
 	}
 	if command != "project.clear" && command != "example.reset" && command != "example.rc" && command != "example.npn" && command != "example.npn-pulse" && command != "example.flasher" && command != "example.switch-npn" && command != "example.rectifier" && command != "app.close" && command != "app.close.start" && command != "edit.undo" && command != "edit.redo" {
