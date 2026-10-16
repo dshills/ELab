@@ -118,7 +118,7 @@ func (s *screen) view() ui.Node {
 	toolbar := ui.Node{ID: "toolbar", Kind: ui.Toolbar, Style: chromeStyle(), Children: []ui.Node{
 		s.commandMenu("file-menu", "File", [][2]string{{"project.clear", "New schematic"}, {"file.open", "Open…"}, {"file.save", "Save"}, {"file.save-as", "Save as…"}, {"app.close", "Close window"}}),
 		s.button("file.save", "Save"),
-		s.commandMenu("examples-menu", "Examples", [][2]string{{"example.reset", "LED circuit"}, {"example.split-supply", "Split-rail DC supply"}, {"example.rc", "RC charge / discharge"}, {"example.rc-high-pass", "RC high-pass filter"}, {"example.npn", "Transistor LED"}, {"example.switch-npn", "Manual transistor switch"}, {"example.npn-pulse", "Blinking LED"}, {"example.flasher", "Capacitor-timed flasher"}, {"example.led-fade", "LED fade"}, {"example.nmos", "MOSFET LED switch"}, {"example.pmos", "High-side MOSFET LED"}, {"example.rectifier", "Rectifier / smoothing"}}),
+		s.commandMenu("examples-menu", "Examples", [][2]string{{"example.reset", "LED circuit"}, {"example.split-supply", "Split-rail DC supply"}, {"example.rc", "RC charge / discharge"}, {"example.rc-high-pass", "RC high-pass filter"}, {"example.npn", "Transistor LED"}, {"example.switch-npn", "Manual transistor switch"}, {"example.npn-pulse", "Blinking LED"}, {"example.flasher", "Capacitor-timed flasher"}, {"example.led-fade", "LED fade"}, {"example.nmos", "MOSFET LED switch"}, {"example.pmos", "High-side MOSFET LED"}, {"example.cmos", "CMOS inverter"}, {"example.rectifier", "Rectifier / smoothing"}}),
 		s.button("edit.undo", "Undo"), s.button("edit.redo", "Redo"), s.themeMenu(state.Theme),
 	}}
 	for i := range toolbar.Children {
@@ -384,7 +384,7 @@ func (s *screen) view() ui.Node {
 			}
 			readStatus = fmt.Sprintf("Network · t = %.4g s", r.Time)
 			if len(r.MOSFETs) > 0 {
-				powerTitle = "MOSFET region"
+				powerTitle = r.MOSFETs[0].ID + " region"
 				power = r.MOSFETs[0].State
 			}
 			if len(r.Transistors) == 0 && len(r.MOSFETs) == 0 {

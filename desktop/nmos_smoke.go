@@ -15,6 +15,9 @@ func nativeNMOSSmoke(ctx context.Context, a *app.Application, s *screen) error {
 func nativePMOSSmoke(ctx context.Context, a *app.Application, s *screen) error {
 	return nativeMOSFETSmoke(ctx, a, s, "pmos", "cutoff", "triode")
 }
+func nativeCMOSSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	return nativeMOSFETSmoke(ctx, a, s, "cmos", "triode", "cutoff")
+}
 
 func nativeMOSFETSmoke(ctx context.Context, a *app.Application, s *screen, example, initial, final string) error {
 	owner := func(run func() error) error {
@@ -54,13 +57,23 @@ func nativeMOSFETSmoke(ctx context.Context, a *app.Application, s *screen, examp
 	check := func(region string) error {
 		return owner(func() error {
 			state := s.service.Snapshot()
-			if state.Example == nil || state.Example.Info.ID != example || state.Mixed == nil || state.Mixed.Stale || len(state.Mixed.MOSFETs) != 1 || state.Mixed.MOSFETs[0].State != region || state.Mixed.MOSFETs[0].GateCurrent != 0 || state.Mixed.KCLResidual > 1e-9 || math.Abs(state.Mixed.PowerResidual) > 1e-8 {
+			count, index, id := 1, 0, "M1"
+			if example == "cmos" {
+				count, index, id = 2, 1, "MN"
+			}
+			if state.Example == nil || state.Example.Info.ID != example || state.Mixed == nil || state.Mixed.Stale || len(state.Mixed.MOSFETs) != count || state.Mixed.MOSFETs[index].State != region || state.Mixed.MOSFETs[index].GateCurrent != 0 || state.Mixed.KCLResidual > 1e-9 || math.Abs(state.Mixed.PowerResidual) > 1e-8 {
 				return fmt.Errorf("native MOSFET %s result missing", region)
+			}
+			if example == "cmos" {
+				mp, mn := state.Mixed.MOSFETs[0], state.Mixed.MOSFETs[1]
+				if region == "triode" && (mp.State != "cutoff" || mn.VDS > 1e-6) || region == "cutoff" && (mp.State != "triode" || mn.VDS < 4.99) || len(state.Scope.Selected) != 4 {
+					return fmt.Errorf("native complementary output or four probes missing")
+				}
 			}
 			if err := ui.Validate(s.view()); err != nil {
 				return err
 			}
-			for _, id := range []string{"plot-v:M1", "plot-v:M1.gate-source", "plot-i:M1.drain"} {
+			for _, id := range []string{"plot-v:" + id, "plot-v:" + id + ".gate-source", "plot-i:" + id + ".drain"} {
 				if _, ok := findNode(s.view(), id); !ok {
 					return fmt.Errorf("native MOSFET action %s missing", id)
 				}

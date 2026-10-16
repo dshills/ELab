@@ -1,0 +1,144 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "default_probes": [
+    "v:VIN.positive",
+    "v:MN",
+    "i:MP.drain",
+    "i:MN.drain"
+  ],
+  "capture_rows": 107,
+  "maximum_reference_voltage_error_v": 2.856326579083207e-09,
+  "maximum_reference_current_error_a": 1e-09,
+  "live_edge_levels": [
+    {
+      "time_s": 0.2,
+      "input_v": 0,
+      "output_v": 4.998571583241784
+    },
+    {
+      "time_s": 0.5,
+      "input_v": 5,
+      "output_v": 2.8563265790853246e-09
+    }
+  ],
+  "midpoint": {
+    "output_v": 2.380952380952375,
+    "pmos_drain_a": -0.05261904861904762,
+    "nmos_drain_a": 0.052380953380952375
+  },
+  "rows_sha256": "23033858aa5cb2355413eca0c2fcba89b1cb9f8df2377fad728bfbfe29f472b7",
+  "exports": {
+    "svg": "3c36bef545c90b1c37071f672a961d469ff1f6860650638340de8c29d35cf530",
+    "png": "34a74dadb86b1f801c3ae6982d777c9559232666ebb0bcc5c7c299dd20635e81"
+  },
+  "discovery": {
+    "capabilities": [
+      {
+        "id": "example.load",
+        "description": "Load a known example ID into a new editable document; protects unsaved work and optional document generation",
+        "mutation": true,
+        "input_schema": {
+          "additionalProperties": false,
+          "examples": [
+            {
+              "id": "switch-npn"
+            }
+          ],
+          "properties": {
+            "discard_changes": {
+              "type": "boolean"
+            },
+            "expected_document_generation": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "id": {
+              "enum": [
+                "led",
+                "split-supply",
+                "rc",
+                "rc-high-pass",
+                "npn",
+                "switch-npn",
+                "pmos",
+                "nmos",
+                "cmos",
+                "blink",
+                "flasher",
+                "led-fade",
+                "rectifier"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "type": "object",
+          "x-details-scope": "parameter-bounds-and-examples; stateful-preconditions-and-errors-not-exhaustive"
+        },
+        "output": "Snapshot",
+        "output_schema": {
+          "$ref": "urn:elab:snapshot:1"
+        }
+      }
+    ],
+    "events": {
+      "command": "events.poll",
+      "default_timeout_ms": 1000,
+      "max_timeout_ms": 5000,
+      "max_waiters": 4,
+      "mode": "coalesced-latest-state",
+      "topics": [
+        "state",
+        "project",
+        "editor",
+        "view",
+        "simulation",
+        "diagnostics",
+        "jobs",
+        "measurements",
+        "recordings",
+        "recovery",
+        "preferences",
+        "lifecycle",
+        "library",
+        "preview",
+        "sweeps",
+        "printing"
+      ]
+    },
+    "mutation_preconditions": {
+      "combination": "A revision guard is required; all supplied revision/document guards must match",
+      "expected_command_revision": "Guards admitted commands, including other actors; live solver publication does not invalidate it",
+      "expected_document_generation": "Optional mutation context guard; prevents applying an old rendered action to a replacement document, including background publication",
+      "expected_revision": "Guards all state publication, including live samples"
+    },
+    "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee.",
+    "schema_version": 2,
+    "version": 1,
+    "schema_registry_count": 69,
+    "schema_registry_sha256": "3e48ca222fb0976ca3132d8b85780d65a7bb08bb30d9ddad9e676316d3972125",
+    "full_response_sha256": "8492cca3c19b22e9a5c808e8ea9b6b0f40a79f0e0ca878d7970feff92e31dd61"
+  },
+  "checks": [
+    "catalog/schema and selected output/four probes",
+    "independent load-line and both captured ideal-edge sides",
+    "live inversion and simultaneous conduction at intermediate input",
+    "Verify preserves live physics and captures both model dependencies",
+    "paused edit stales; dirty reset refuses; saved edited origin/capture reopens fresh",
+    "reset/undo/redo and pure SVG/PNG output"
+  ],
+  "limitations": [
+    "generic pinned pair with zero gate charge/capacitance/delay; not a physical logic-gate or switching-loss qualification",
+    "explicit 10k output load; independent reference omits <=1nA reverse body leakage",
+    "public API/native callbacks are separate from full mounted keyboard/pointer/accessibility acceptance"
+  ]
+}

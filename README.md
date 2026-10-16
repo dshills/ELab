@@ -4,7 +4,7 @@ ELab is a hobbyist electronics workbench built with Vellum. The current slice le
 
 Choose **Examples → Split-rail DC supply** to explore [stacked DC sources and signed rail voltages](docs/floating-dc-sources.md). Two 3 V sources produce +3 V and −3 V around their midpoint reference. [Linear source/passive networks](docs/linear-network-solves.md) also solve 24 V stacks without artificial small-step nonconvergence, within the existing ±30 V node limit. [Nonlinear startup](docs/nonlinear-startup.md) also supports 24/30 V generic LED loads through a bounded grounded-constraint retry and rejects undefined floating MOSFET gates at zero supply.
 
-Choose **Examples → MOSFET LED switch** for pulse-driven NMOS/LED simulation, gate/drain/source probes and an external gate-RC experiment. See [MOSFET behavior and model](docs/nmos.md). **Examples → High-side MOSFET LED** adds the complementary [PMOS workflow](docs/pmos.md).
+Choose **Examples → MOSFET LED switch** for pulse-driven NMOS/LED simulation, gate/drain/source probes and an external gate-RC experiment. See [MOSFET behavior and model](docs/nmos.md). **Examples → High-side MOSFET LED** adds the complementary [PMOS workflow](docs/pmos.md). **Examples → CMOS inverter** combines both devices with input/output and signed drain-current plots; see [the guided inverter](docs/cmos-inverter.md).
 
 ## Run the desktop app
 
@@ -54,7 +54,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.101.0 --build-version 116 --platform darwin
+  --version 0.102.0 --build-version 117 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).

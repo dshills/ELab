@@ -57,6 +57,7 @@ func nativeAliases() map[string][]string {
 		"example.led-fade":     {"example.load"},
 		"example.nmos":         {"example.load"},
 		"example.pmos":         {"example.load"},
+		"example.cmos":         {"example.load"},
 		"example.split-supply": {"example.load"},
 		"file.open":            {"project.load", "project.load.start"},
 		"file.save":            {"project.save", "project.save.start"},

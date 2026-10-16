@@ -1,0 +1,230 @@
+{
+  "passed": true,
+  "date": "2026-10-16",
+  "app_version": "0.102.0",
+  "build_version": "117",
+  "binary_sha256": "8c3426964f3b71fac668db14e2a49ca2a51f611d13656f93e5a2abdb4405067e",
+  "agent_binary_sha256": "8cb3c95029dae117272ecbda9989d70fdfe4201cafdeacea97a058dc47ebb195",
+  "prior_bundle": "build/ELab-before-cmos.app",
+  "prior_binary_sha256": "f6e90d1d688cf95ddf6d44968cb407d8efa06c1bee2e414b35e107e837c45d99",
+  "bundle_files_compared": 3,
+  "bundle_manifest_sha256": "3fd7e081e5e2aec8642095f83a3290a3697c5fce1666e6ef53b80ee89ce4dab1",
+  "sdk_before": {
+    "commit": "6330b2d42050b46c2019e558074e087ed281e56a",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "sdk_after": {
+    "commit": "6330b2d42050b46c2019e558074e087ed281e56a",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "workbench/cmos_example.go": "25e791d06acb8ac6cef143b105594868860c0269c7d277608c7114ab779ea053",
+    "workbench/cmos_example_test.go": "3159bedfd082b81d2667bb358e26bb4cecfc82a424f662a04356593f601da9b2",
+    "workbench/cmos_layout_test.go": "b606a674c561f53f8074e5c061321caa97e3b586d3d6d5d60341e60d36b50b9c",
+    "workbench/examples.go": "2f82ecf6dba101c6041a668a9fa1606107ee64bdbe0b0a66325a14280992a8a1",
+    "desktop/cmos_example_test.go": "a01d68aed858d7e75a01e5abd72c6659373b330f628a7f276407838ce2a79754",
+    "desktop/example_load.go": "39b04203a7cbc6c8d42795392ff84587185a1bdff536d866c6224039ab6061d3",
+    "desktop/examples_smoke.go": "3976df4bdab20ee984bfe48aafa7c53e4d755739eb84690072b50c8ff1064ae5",
+    "desktop/nmos_smoke.go": "4cc80ee995e5fa7aa896aef6abddb95bd6ffd9c15d8c1316229c812882fce832",
+    "desktop/menus.go": "ded5970c1645eba4fc6fdeeef25dc312928818c17e9146ec18122c74373e6700",
+    "desktop/scope.go": "cf6cd6ba1f37f316941883c62f75d2c290d0267487d89064d9c208eb03892473",
+    "desktop/view.go": "7bc3dc490c3c9ff0c507dec94923faee09b7a2d55eba08efa4323b8913b531d1",
+    "internal/uiaudit/audit.go": "a6003d382d4c27d3117b494427542c5cdefd66c5c57deff339eadd063f2ad014",
+    "scripts/cmos-demo.py": "54013a4e7aa6dad3b443d6785f83239bef19529dfca95c03cf3a3d2274787649",
+    "scripts/examples-demo.py": "f74ca49070172900cf310b02dc35e78a13017d1e9022d71a01217599d7bb51b8"
+  },
+  "native_source_review": {
+    "sources": 53,
+    "sites": 384,
+    "public_commands": 161,
+    "source_routes": 131,
+    "changed_sources": [
+      "desktop/example_load.go",
+      "desktop/menus.go",
+      "desktop/scope.go",
+      "desktop/view.go"
+    ],
+    "added_native_alias": {
+      "example.cmos": [
+        "example.load"
+      ]
+    },
+    "site_changes": {
+      "before": [
+        {
+          "expression": "Commands: []string{\"example.reset\", \"example.split-supply\", \"example.rc\", \"example.rc-high-pass\", \"example.npn\", \"example.switch-npn\", \"example.npn-pulse\", \"example.flasher\", \"example.led-fade\", \"example.nmos\", \"example.pmos\", \"example.rectifier\"}",
+          "file": "desktop/menus.go",
+          "function": "(package)",
+          "kind": "native-menu-group",
+          "public_commands": [
+            "example.reset",
+            "example.load",
+            "example.rc",
+            "example.load",
+            "example.npn",
+            "example.switch-npn",
+            "example.npn-pulse",
+            "example.flasher",
+            "example.load",
+            "example.load",
+            "example.load",
+            "example.rectifier"
+          ],
+          "status": "declared-native-wrapper"
+        },
+        {
+          "expression": "s.commandMenu(\"examples-menu\", \"Examples\", [][2]string{{\"example.reset\", \"LED circuit\"}, {\"example.split-supply\", \"Split-rail DC supply\"}, {\"example.rc\", \"RC charge / discharge\"}, {\"example.rc-high-pass\", \"RC high-pass filter\"}, {\"example.npn\", \"Transistor LED\"}, {\"example.switch-npn\", \"Manual transistor switch\"}, {\"example.npn-pulse\", \"Blinking LED\"}, {\"example.flasher\", \"Capacitor-timed flasher\"}, {\"example.led-fade\", \"LED fade\"}, {\"example.nmos\", \"MOSFET LED switch\"}, {\"example.pmos\", \"High-side MOSFET LED\"}, {\"example.rectifier\", \"Rectifier / smoothing\"}})",
+          "file": "desktop/view.go",
+          "function": "*screen.view",
+          "kind": "command-menu",
+          "public_commands": [
+            "example.reset",
+            "example.load",
+            "example.rc",
+            "example.load",
+            "example.npn",
+            "example.switch-npn",
+            "example.npn-pulse",
+            "example.flasher",
+            "example.load",
+            "example.load",
+            "example.load",
+            "example.rectifier"
+          ],
+          "status": "declared-native-wrapper"
+        }
+      ],
+      "after": [
+        {
+          "expression": "Commands: []string{\"example.reset\", \"example.split-supply\", \"example.rc\", \"example.rc-high-pass\", \"example.npn\", \"example.switch-npn\", \"example.npn-pulse\", \"example.flasher\", \"example.led-fade\", \"example.nmos\", \"example.pmos\", \"example.cmos\", \"example.rectifier\"}",
+          "file": "desktop/menus.go",
+          "function": "(package)",
+          "kind": "native-menu-group",
+          "public_commands": [
+            "example.reset",
+            "example.load",
+            "example.rc",
+            "example.load",
+            "example.npn",
+            "example.switch-npn",
+            "example.npn-pulse",
+            "example.flasher",
+            "example.load",
+            "example.load",
+            "example.load",
+            "example.load",
+            "example.rectifier"
+          ],
+          "status": "declared-native-wrapper"
+        },
+        {
+          "expression": "s.commandMenu(\"examples-menu\", \"Examples\", [][2]string{{\"example.reset\", \"LED circuit\"}, {\"example.split-supply\", \"Split-rail DC supply\"}, {\"example.rc\", \"RC charge / discharge\"}, {\"example.rc-high-pass\", \"RC high-pass filter\"}, {\"example.npn\", \"Transistor LED\"}, {\"example.switch-npn\", \"Manual transistor switch\"}, {\"example.npn-pulse\", \"Blinking LED\"}, {\"example.flasher\", \"Capacitor-timed flasher\"}, {\"example.led-fade\", \"LED fade\"}, {\"example.nmos\", \"MOSFET LED switch\"}, {\"example.pmos\", \"High-side MOSFET LED\"}, {\"example.cmos\", \"CMOS inverter\"}, {\"example.rectifier\", \"Rectifier / smoothing\"}})",
+          "file": "desktop/view.go",
+          "function": "*screen.view",
+          "kind": "command-menu",
+          "public_commands": [
+            "example.reset",
+            "example.load",
+            "example.rc",
+            "example.load",
+            "example.npn",
+            "example.switch-npn",
+            "example.npn-pulse",
+            "example.flasher",
+            "example.load",
+            "example.load",
+            "example.load",
+            "example.load",
+            "example.rectifier"
+          ],
+          "status": "declared-native-wrapper"
+        }
+      ]
+    },
+    "review": [
+      "Generic example-load alias and both menu literals; all other ingress-site semantics unchanged ignoring only source line numbers",
+      "Existing fixed first-MOSFET summary now identifies its device in both region card and live scope caption; no selection, command, model or state changes"
+    ],
+    "scope": "Source inventory, not exhaustive mounted input/accessibility acceptance"
+  },
+  "checks": [
+    "Thirteenth guided example combines existing generic PMOS/NMOS, 5 V supply, 0/5 V 200/300 ms input and explicit 10k load; MN selected with input/output and signed drain-current traces. Generic example.load/reset, native aliases, source edits/probes/Verify/files/outputs share commands",
+    "Independent scalar bisection and pinned textbook channel equations check five DC inputs; current signs, zero gate current and Kirchhoff/power residuals pass. Captured 107 rows match within 2.857e-9 V and 1e-9 A, including both sides of 200/500 ms edges",
+    "Live inversion, simultaneous 2.5 V-input conduction, paused edit staleness, pure Verify/model capture, dirty reset refusal, fresh-process edited origin/capture/probe reopen, reset/history and pure SVG/PNG outputs pass",
+    "Native blank construction and generic agent construction match both input phases; native menu/default probes/protected replacement pass. Packaged smoke covers CMOS via existing MOSFET helper and real mesh/scope building",
+    "Export and actual native inspection reveal two repaired defects: input/output collinear route overlap and unnamed first-MOSFET state. Both failing-before regressions retained; final native card/caption names MP. Physical native menu load/Pause/Hide scope observed and public state confirmed",
+    "Final serialized lint/import/root/native race/vet, build, packaged GPU/UI/lifecycle smoke and four-adapter LED/RC/NPN reference workflows pass. Native race package reports 96.789 seconds. All thirteen catalog/reset public workflows pass",
+    "Native source ledger verifies 53 files /384 sites /161 public IDs /131 routes. Generic cmos load alias and two menu expressions reviewed; all other ingress-site semantics unchanged apart from source lines. scope.go/view.go also identify the first MOSFET in presentation text",
+    "Electrical kernels/models/global work/device limits and file/command identities unchanged. Clean SDK 6330b2d, manifest and 232 upstream +5 typesetting prepared hashes verify before/after. No SDK files changed or SDK suite rerun",
+    "Canonical .102/117 matches final qualified bundle/build bytes and files/modes; prior .101 preserved. All owned visual/smoke/conformance/example processes exited"
+  ],
+  "corrections": [
+    "Initial new core harness used the wrong Go optional-duration/result types, then exceeded the existing 200-row page bound. Corrected to an explicit 5 ms capture grid and one complete 107-row page; no product bound weakened",
+    "Initial full check correctly refused noncanonical inventory JSON and sandbox-blocked Unix socket tests. Preserved Go-generated bytes after semantic review, then reran full gates with local socket access; reviewed and final release gates pass",
+    "Export inspection caught a real input/output shared route; moving JIN and ground fixes it. Mounted inspection caught ambiguous first-device region text; explicit MP IDs fix it. Both repairs triggered fresh serial final gates",
+    "Initial standalone example-run invocation omitted its required artifact directory; initial native launch used a relative endpoint after app working-directory change; both harness arguments corrected. Initial smoke disabled stores required by recovery/theme stages, correctly failed, then passed with isolated explicit stores. All earlier attempts retained separately"
+  ],
+  "limitations": [
+    "Generic fixed pair is not a physical matched pair or rated CMOS IC. Zero intrinsic gate charge/capacitance/delay/heating/breakdown; explicit external capacitors remain separate circuit timing",
+    "Small fitted schematic text remains, especially with scope expanded. Full mounted typing/IME/pointer/wheel/focus, screen-reader, visible latency, clean distribution, participant and physical-printer gates remain open",
+    "First-device summary explicitly identifies MP; selecting MN does not retarget that whole-network summary. Selected inspector and probes expose either device",
+    "Four-adapter reference regression covers existing LED/RC/NPN; separate CMOS native/headless/construction evidence qualifies the new example. Full 294-check electrical/performance suites were not repeated because kernels/models did not change",
+    "P0 remains 17 implemented /10 partial; continuing project goal stays active"
+  ],
+  "artifacts": [
+    "docs/cmos-inverter.md",
+    "research/ui-audit/cmos/README.md",
+    "docs/validation/cmos-headless.json",
+    "docs/validation/cmos-public.json",
+    "docs/validation/cmos-conformance.json",
+    "docs/validation/cmos-visual-review.json"
+  ],
+  "artifacts_sha256": {
+    "docs/cmos-inverter.md": "b5dba54b112ce30b4bae6105cbdc1a26eeb09c10b50b661442442121b27d3338",
+    "research/ui-audit/cmos/README.md": "05545714180e05b6707ef4e4806ddcf1b5929097f0529a8f3a63673324a53bc2",
+    "docs/validation/cmos-headless.json": "1bfbe34fe85a676ac6004ec459b8957cc1714db42391ae117290c8cce664ded1",
+    "docs/validation/cmos-public.json": "daed78e64a67c4842980976f0b0546e1f2594355cde1c57823d8f38da10850a3",
+    "docs/validation/cmos-conformance.json": "e7a3ecb6b79105205109c5db5ccc4dc32306667eb3755fae5a40259a8dfc7d6b",
+    "docs/validation/cmos-visual-review.json": "4be1ca270572a9102aa63568dc27b128647016ba38324d51da4caaeec0cbb1e8"
+  },
+  "build_evidence_sha256": {
+    "build/cmos-102/core-focused-final.log": "79127791670bdb50dcb5bbc8d167eb1271904706fc68a6e9e225ff74081e9530",
+    "build/cmos-102/native-focused.log": "93afb6d2bbc6f411e81bdd858580f0016f6541b6a0bdc07bb36346266e643aa2",
+    "build/cmos-102/layout-before.log": "ee9b9139436df7f5cedf39771c7ac010449ea7c701790f0a5b93aed19e1cda27",
+    "build/cmos-102/region-before.log": "c144f90ad7809944b039e6731b68c63994fbbec76896f4e9e7f329c6b41f3ba3",
+    "build/cmos-102/check.log": "68fcc0fa43e672e084abb42eb0be695e27eb0741283775d0ed098fdb62e1f0f9",
+    "build/cmos-102/check-final.log": "ac1689e753e91cb1bf9b88031b3f2ba42d9467fce11eac01003ef2dfbeaf9705",
+    "build/cmos-102/check-reviewed.log": "2d43356ef629af63643a1680311d2ee0972fa2048aedac0bbf83850287643539",
+    "build/cmos-102/check-release.log": "7b88de5bda387f2470ce8516885f6c4018df0663236ccdd356c73fcea2831c62",
+    "build/cmos-102/build-release.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/cmos-102/package-release.log": "1a711cf49aff6a24470d3cf192020d080152d404e727e2061395329fb6b87933",
+    "build/cmos-102/headless-release.log": "4d167bcbb0cd9e9ee0c326d7fbb774af4e92e3eb9277caa990e663a1ca2b08c1",
+    "build/cmos-102/native-release.log": "d1ab078d91c4963ee6d22457a4a886d28d3fd1ec99033d8465e15b8381ac31d4",
+    "build/cmos-102/native-host-release.log": "18ec52d3607f6a4f6b6c7cede14e489de3da5a8c6b631d81d46dd283984c432d",
+    "build/cmos-102/examples-release.log": "19d15a1cc2096faf60a8575f9b76e745aa9324bf4e6015979c96301966525207",
+    "build/cmos-102/examples-release.json": "19d15a1cc2096faf60a8575f9b76e745aa9324bf4e6015979c96301966525207",
+    "build/cmos-102/smoke-release.log": "8110d1fab233db74b76ef2015f065ec0c5fc5879c356ff200cac6f50ea90c002",
+    "build/cmos-102/smoke-qualified.log": "6261ee47fc0a160f02cfb16f37b63a229d5f2bf4abcd1676a97fb63284f530d8",
+    "build/cmos-102/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/cmos-102/ui-inventory-final-source.json": "0da3643b365c8ce353ffe4657a9963c43ca18c01388891be828fe48e784b80f5",
+    "build/cmos-102/ui-inventory-final-review.json": "476ff8025fb03e3a1581a9f62d009a8873312eb6e18a55a080bdf68393eb9d0f",
+    "build/cmos-102/sdk-before.json": "703a5929281e1a8cbbf5612e57f2765fd7b452801356e65125af84550fbba5d2",
+    "build/cmos-102/sdk-after.json": "703a5929281e1a8cbbf5612e57f2765fd7b452801356e65125af84550fbba5d2",
+    "build/cmos-102/sdk-release.json": "703a5929281e1a8cbbf5612e57f2765fd7b452801356e65125af84550fbba5d2",
+    "build/cmos-102/sdk-confirmed.json": "703a5929281e1a8cbbf5612e57f2765fd7b452801356e65125af84550fbba5d2",
+    "build/cmos-102/final-ax.txt": "17e7bfa0985acd05cebb83776479407d3598e44fb617f22603c0d51413751b42",
+    "build/cmos-102/mounted-menu-state.json": "700771919a21cb1fb3181c4963513f17598d85112c40b39483e83274e04e37ca",
+    "build/cmos-102/processes-final.json": "e7644776ab8e750bad76da6c34dd9ff8392a809545a00f256cec584e8bb6b715",
+    "build/cmos-102/promotion.json": "5c045824c811508986a46932aa9ba13fb92ff99d5c346695aa2f287e9f505df9"
+  }
+}

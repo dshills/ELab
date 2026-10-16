@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "retained_headless_report": {
+    "path": "docs/validation/cmos-headless.json",
+    "sha256": "1bfbe34fe85a676ac6004ec459b8957cc1714db42391ae117290c8cce664ded1"
+  },
+  "current_reports_sha256": {
+    "build/cmos-102/headless-release.json": "1bfbe34fe85a676ac6004ec459b8957cc1714db42391ae117290c8cce664ded1",
+    "build/cmos-102/native-release.json": "184904a84a762474569167c89405acb811c47626abe688cdeb32f4b990467002"
+  },
+  "native_reconstruction": {
+    "replace_transport": "native-socket",
+    "sha256": "184904a84a762474569167c89405acb811c47626abe688cdeb32f4b990467002",
+    "method": "Deep-copy retained headless JSON, replace transport, serialize with Python json.dumps(indent=2) and final newline; exact final native report verified"
+  },
+  "discovery_registry_reference": {
+    "path": "docs/validation/rc-high-pass-discovery.json",
+    "member": "schemas",
+    "sha256": "5c5c46b0e5aef27c08d920c673f335aec3e092e31da96be82a91cf917a197243"
+  },
+  "discovery_reconstruction": "Remove the three schema_registry_count/schema_registry_sha256/full_response_sha256 summary keys from retained discovery, add referenced schemas; canonical sort_keys/indent=2/final-newline encoding verifies its full_response_sha256",
+  "checks": [
+    "Final fresh native/headless observations, captured rows and SVG/PNG bytes match except transport",
+    "Both ideal-edge sides and independent scalar load-line references pass; midpoint experiment and pure Verify/save/reopen/reset/history/exports pass",
+    "Schema registry unchanged from pinned full .98 witness; new example ID is present in filtered command enum"
+  ],
+  "scope": "Public operation parity on this workstation; not exhaustive native input or physical-device acceptance"
+}

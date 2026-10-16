@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-16",
+  "review": "research/ui-audit/cmos/README.md",
+  "screenshots_sha256": {
+    "research/ui-audit/cmos/01-before-region-label.png": "b3e3353c5b8f3e7fad8f57aa2949e8214face49271c5617643488eb257cb60f6",
+    "research/ui-audit/cmos/02-named-region-and-scope.png": "65dbbe9557b08a1306c252c843a528bc61e60a42a06fd57a659d46a42e9955ba",
+    "research/ui-audit/cmos/03-native-circuit-expanded.png": "f6b7768dcabb59a8619392f60ac028eb2e734f1478ad661b531c02df9c4f6c29",
+    "research/ui-audit/cmos/04-exported-schematic.png": "34a74dadb86b1f801c3ae6982d777c9559232666ebb0bcc5c7c299dd20635e81"
+  },
+  "observations": [
+    "Initial input/output shared visible route repaired; separate-net collinear-overlap regression fails before and passes after",
+    "First-MOSFET region card and live scope caption identify MP while MN is selected; failing-before regression and mounted corrected capture retained",
+    "Actual native Examples menu activation then Pause; template input low, MP triode/MN cutoff and output >4.99 V confirmed through public inspection",
+    "Physical Hide scope gives 48% Fit versus 16% expanded; full route structure visible but text remains small"
+  ],
+  "mounted_menu_observation": {
+    "time_s": 0.4250000000000003,
+    "input_v": 0,
+    "output_v": 4.998571583241784,
+    "pmos_state": "triode",
+    "nmos_state": "cutoff"
+  },
+  "limitations": [
+    "Scope-expanded schematic text is difficult to read; not broad responsive/font/zoom acceptance",
+    "CUA still omits visible inspector semantics; no full keyboard/IME/pointer/wheel/screen-reader/participant or visible-latency acceptance",
+    "Generic zero-charge/zero-delay models; no physical CMOS-gate or switching-loss qualification"
+  ]
+}
