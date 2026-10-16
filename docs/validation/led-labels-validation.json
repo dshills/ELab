@@ -1,0 +1,132 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.95.0",
+  "build_version": "110",
+  "binary_sha256": "78061abd28f3725648fc8845fcff09b3241de4861401f05543dad23092a46b98",
+  "agent_binary_sha256": "155e428753161de990cbf5dfcab5560db620385799ac90507e2dc4fa58450b24",
+  "prior_bundle": "build/ELab-before-labels.app",
+  "prior_binary_sha256": "640575ad9bd7bd63f38e75876a6c04af056ebc9ecf57eea28541c06c94206b40",
+  "bundle_files_compared": 3,
+  "bundle_manifest_sha256": "98871b34cc25d2f53206ebf9ee0ed50575a72c86db68f6be8c1b0f0738ef0fba",
+  "sdk_before": {
+    "commit": "82c0c5ec17fd7f90da1a0ac4a26d65a3de8367a4",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "sdk_after": {
+    "commit": "82c0c5ec17fd7f90da1a0ac4a26d65a3de8367a4",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "desktop/drawing.go": "a0faf240d3bcaee70943892c5c1d1bf29e32fcc69bb36d2b6dd8f150b6a688fc",
+    "desktop/led_label_test.go": "62ce5005c7ddbf033e351247322d9bd1bacd6b5a069ff463753d8c0463c99857",
+    "desktop/viewport_smoke.go": "7603d01246cd1f4660f403979a282bf801b9e33e69929122715f81378e6d564f",
+    "desktop/workspace_smoke.go": "c1d005df8b18abea70c6c18be5b822705cf38c3f28e6eed3584e7a94840b3ecd",
+    "workbench/component_labels.go": "f931effc03b9885df911bbeeed26e17e58cf9d045cf2a22af5825b21156296fb",
+    "workbench/export.go": "8f1ef3a107776fff36333e7a9becaa102ce4c9b470794ae9c3815592c7475ec5",
+    "workbench/led_label_test.go": "01a530b8e7ccfd76c94fbbb56e00cdb7c13b709af3959a9913198ed4c78504cc",
+    "scripts/led-labels-demo.py": "8cf8b00fa187df1777e1c2edde12d94950e80944fcb9a372936158b75207cb90"
+  },
+  "rotation_labels": {
+    "D_0": {
+      "x": -96.0,
+      "y": -117.0
+    },
+    "D_90": {
+      "x": 160.0,
+      "y": -156.0
+    },
+    "D_180": {
+      "x": -125.0,
+      "y": 123.0
+    },
+    "D_270": {
+      "x": 160.0,
+      "y": 166.0
+    }
+  },
+  "export_case_count": 14,
+  "example_ids": [
+    "led",
+    "split-supply",
+    "rc",
+    "npn",
+    "switch-npn",
+    "pmos",
+    "nmos",
+    "blink",
+    "flasher",
+    "led-fade",
+    "rectifier"
+  ],
+  "prior_project_sha256": "82d0b0e01b70ef19045d4a4c2be842994a32d98a4cd0799659f465c670b17884",
+  "prior_project_current_a": 0.02777535635411269,
+  "recreated24_current_a": 0.021793883341236546,
+  "checks": [
+    "Failing-before LED label/body/arrow/stub geometry regression now passes at 0/90/180/270 degrees, for short and long IDs",
+    "Native renderer uses the shared upright LED anchor and emits actual ID glyphs there; long-ID Fit contains label bounds and preserves circuit/physics/document state",
+    "Only drawing.go changes among production native source hashes; all other inventory fields/routes/sites are exactly unchanged and verified",
+    "Public native/headless workflows render four-rotation incomplete schematic, prior-release 30 V LED, recreated 24 V LED and all 11 guided templates; all 14 SVG/PNG outputs match byte-for-byte",
+    "SVG/PNG/PDF capture preserves graph, physics, history and document state; actual .94 project reopens with unchanged original bytes and expected current",
+    "Direct CUA screenshots show upright clear native rotation labels and complete 24 V circuit with 21.794 mA /2.206 V; six exported PNG cases directly inspected",
+    "Viewport wait exchanges completed owned samples through a buffered channel; no shared mutable result is returned while a late callback can still write it",
+    "Oversized smoke fixture explicitly reveals an offscreen scope; two final isolated packaged GPU/UI/protected-close smoke runs pass strict configured-scrollbar movement/no-zoom tests",
+    "Final lint/import/root/native race/vet, Python compile, PRD coverage, source-inventory and diff whitespace checks pass",
+    "Four adapters pass the existing three reference workflows; electrical/performance suites are not repeated for this presentation-only change",
+    "SDK clean and unchanged, 232 upstream +5 typesetting final prepared outputs verified; canonical/candidate/build bytes/modes/version match; prior .94 preserved; all owned sessions exited"
+  ],
+  "corrections": [
+    "The old exported 0-degree label overlapped arrow bounds; 90/270-degree backgrounds intersected terminal stubs. Native and output label positioning now share the same rotation-aware baseline.",
+    "Two initial packaged smoke runs stalled on scope readiness. Diagnostics and direct CUA showed the oversized fixture placed the target outside the outer visible viewport: 309 internal /177 allocated height, but empty visible box and default 0..1 slider. Revealing the host through normal ancestor scrolling fixes the fixture precondition; strict readiness/wheel assertions and timeout are retained.",
+    "Code review of the viewport wait found shared mutable locals captured by admitted owner callbacks that could finish after context cancellation. Final helper delivers immutable completed samples through a channel and reports the last completed sample on failure. This is a test-harness correction, not a claim of reproducing a product race."
+  ],
+  "limitations": [
+    "Shared positions clear an LED\u2019s own body, emission arrows and terminal stubs; automatic global label/wire/neighbor avoidance is not added.",
+    "Direct flasher PNG review still shows RB resistor labels crossing neighboring LED anode pins. That separate template/global-clearance issue remains open.",
+    "Native screenshots were viewed through CUA inline in chat; repository evidence records observations, not retained native screenshot files. Export PNGs and their hashes remain in build artifacts.",
+    "PDF files are exercised through the existing source/renderer path and preserve state; direct visual review here uses PNGs, not physical printed pages.",
+    "Existing native bitmap typography and general small-canvas readability, complete mounted input/IME/accessibility, visible latency, clean distribution, participant and physical-printer gates remain open. P0 stays 17 implemented/10 partial."
+  ],
+  "artifacts": [
+    "docs/led-labels.md",
+    "docs/validation/led-labels-native.json",
+    "docs/validation/led-labels-headless.json",
+    "docs/validation/led-labels-visual-review.json",
+    "docs/validation/led-labels-conformance.json",
+    "research/13-native-command-inventory.json"
+  ],
+  "build_evidence_sha256": {
+    "build/led-labels-095/before.log": "d3c1b211424346cf9d414335d7981499ca82a5dba3bbbeb61ea4f3d6ca21ea41",
+    "build/led-labels-095/core-focused.log": "f54e572e0c0b7233a4de64661041ceaf7f32cf91bb7fcb8b11258ed732943663",
+    "build/led-labels-095/native-focused-final.log": "564898581c952c569dc8ce8f4ce40128df1eea8b5ee02520388bf77d40550361",
+    "build/led-labels-095/check.log": "af25b59232fb04acc1106e5d4d88191cb5dac904ce09a5a8efa03a13b559612c",
+    "build/led-labels-095/check-final.log": "720fe4a81c85ab2d1b3b0874a0cf56697d670c12d738148cd0857add90273dd6",
+    "build/led-labels-095/build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/led-labels-095/build-diagnostic.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/led-labels-095/build-visible-scope.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/led-labels-095/package-visible-scope.log": "041c2e4bda1df62205c8ac77c9d87a64e7368aed9b9450554a31f2b553ce7d36",
+    "build/led-labels-095/headless.log": "11390d67f83ee112303b23725427465b9cfd16fc014ee944410685538a4d70b4",
+    "build/led-labels-095/native.log": "c045f535b4374b63b55d6b0ce549ecacf602eb259ef6c416501a4fdbe12102b0",
+    "build/led-labels-095/native-final.log": "c045f535b4374b63b55d6b0ce549ecacf602eb259ef6c416501a4fdbe12102b0",
+    "build/led-labels-095/smoke.log": "37b7c5dc41c5fa20ceae1273c18ee7e9906d18336dfab34c08f2249c4f36ede0",
+    "build/led-labels-095/smoke-diagnostic.log": "7b960ed07d416283b56391dcfceb351efe2c3d4eee7aaf03b9ebac62346be7f0",
+    "build/led-labels-095/smoke-visible.log": "103eadd1b1ad44a00bc371d1330b399870399ecf8a0b957ec7b26b7b89603b16",
+    "build/led-labels-095/smoke-confirm.log": "8b83f85b08572399c53b1acc3bebf496618070b384cf1089be0874b021a8cf8b",
+    "build/led-labels-095/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/led-labels-095/sdk-before.json": "a5a70c36b0a8503ee04d93ac6f989cd755c92f818147bc206ac3effd6a62d489",
+    "build/led-labels-095/sdk-release-after.json": "a5a70c36b0a8503ee04d93ac6f989cd755c92f818147bc206ac3effd6a62d489",
+    "build/led-labels-095/ui-inventory.json": "023683ba1f822a8931181fa4458b2c1c95cc981e66b18e1a4637d9fbbd33289d",
+    "build/led-labels-095/native-visual-state.json": "ff86b1c07f4e306e6bf6c629d3ed277e78c3ef384f1923972b3006c5943a0f39",
+    "build/led-labels-095/promotion.json": "bfe384de174ecf9eee7735ca6db85e1511cba538595713b577eb8eb92cb8efe0"
+  }
+}

@@ -106,3 +106,6 @@ The 0.93.0 linear-network checkpoint changes backend solve strategy and detailed
 
 
 The 0.94.0 nonlinear-startup checkpoint changes backend startup/rank checks and numerical discovery, with no native production route/hash changes. The unchanged 51-file /384-site /161-ID /131-route ledger verifies. Native construction and extended split-supply smoke insert a generic LED into the 24 V circuit using existing placement/wiring/value commands. This source/test scope does not establish complete physical-input/accessibility acceptance.
+
+
+The 0.95.0 LED-label checkpoint reviews only `desktop/drawing.go` among production native hashes: existing non-LED label placement is extracted unchanged, and LED text uses the shared upright rotation anchor. Candidate/source mapping and all sites/routes are otherwise identical: 51 files /384 sites /161 IDs /131 source routes. Test-only viewport/scope harness changes do not add product routes. Native rotation callbacks, actual glyph geometry, direct CUA and public export comparisons provide bounded evidence without claiming all mounted interactions.

@@ -17,38 +17,49 @@ import (
 // waitNativeViewport waits for a measured viewport and the model's current
 // command/generation to reach real mesh preparation, beyond PostWait admission.
 func waitNativeViewport(ctx context.Context, a *app.Application, s *screen, ready func(workbench.Snapshot) bool) (workbench.Snapshot, error) {
-	owner := func(run func() error) error {
-		done := make(chan error, 1)
-		if err := a.PostWait(ctx, func() { done <- run() }); err != nil {
-			return err
-		}
-		select {
-		case err := <-done:
-			return err
-		case <-ctx.Done():
-			return ctx.Err()
-		}
+	type sample struct {
+		state                             workbench.Snapshot
+		width, height, zoom               float64
+		preparedCommand, preparedDocument uint64
+		wanted, matched                   bool
 	}
-
+	last := sample{}
+	observed := false
+	failure := func(err error) (workbench.Snapshot, error) {
+		if !observed {
+			return last.state, fmt.Errorf("%w; no completed owner viewport sample", err)
+		}
+		return last.state, fmt.Errorf("%w; viewport registered=%t measured=%gx%g drawing=%gx%g zoom=%g/%g command=%d/%d document=%d/%d predicate=%t", err, last.state.Viewport.Registered, last.state.Viewport.Width, last.state.Viewport.Height, last.width, last.height, last.state.View.Zoom, last.zoom, last.state.CommandRevision, last.preparedCommand, last.state.Document.Generation, last.preparedDocument, last.wanted)
+	}
 	tick := time.NewTicker(10 * time.Millisecond)
 	defer tick.Stop()
 	for {
-		var state workbench.Snapshot
-		matched := false
-		if err := owner(func() error {
-			state = s.service.Snapshot()
+		// PostWait admits owner work; it does not await callback completion.
+		// Send an owned result rather than sharing mutable locals with a
+		// callback that may finish after the caller's context is canceled.
+		done := make(chan sample, 1)
+		if err := a.PostWait(ctx, func() {
+			state := s.service.Snapshot()
 			v := state.Viewport
-			matched = v.Registered && s.drawing.widget != nil && v.Width == s.drawing.View.Width && v.Height == s.drawing.View.Height && s.drawing.preparedCommandRevision == state.CommandRevision && s.drawing.preparedGeneration == state.Document.Generation && s.drawing.View.Zoom == state.View.Zoom && ready(state)
-			return nil
+			p := sample{state: state, width: s.drawing.View.Width, height: s.drawing.View.Height, zoom: s.drawing.View.Zoom, preparedCommand: s.drawing.preparedCommandRevision, preparedDocument: s.drawing.preparedGeneration, wanted: ready(state)}
+			p.matched = v.Registered && s.drawing.widget != nil && v.Width == p.width && v.Height == p.height && p.preparedCommand == state.CommandRevision && p.preparedDocument == state.Document.Generation && p.zoom == state.View.Zoom && p.wanted
+			done <- p
 		}); err != nil {
-			return state, err
+			return failure(err)
 		}
-		if matched {
-			return state, nil
+		select {
+		case p := <-done:
+			last = p
+			observed = true
+			if p.matched {
+				return p.state, nil
+			}
+		case <-ctx.Done():
+			return failure(ctx.Err())
 		}
 		select {
 		case <-ctx.Done():
-			return state, ctx.Err()
+			return failure(ctx.Err())
 		case <-tick.C:
 		}
 	}

@@ -1,0 +1,102 @@
+{
+  "passed": true,
+  "transport": "desktop-socket",
+  "rotation_labels": {
+    "D_0": {
+      "x": -96.0,
+      "y": -117.0
+    },
+    "D_90": {
+      "x": 160.0,
+      "y": -156.0
+    },
+    "D_180": {
+      "x": -125.0,
+      "y": 123.0
+    },
+    "D_270": {
+      "x": 160.0,
+      "y": 166.0
+    }
+  },
+  "prior_project_current_a": 0.02777535635411269,
+  "recreated24_current_a": 0.021793883341236546,
+  "prior_project_sha256": "82d0b0e01b70ef19045d4a4c2be842994a32d98a4cd0799659f465c670b17884",
+  "example_ids": [
+    "led",
+    "split-supply",
+    "rc",
+    "npn",
+    "switch-npn",
+    "pmos",
+    "nmos",
+    "blink",
+    "flasher",
+    "led-fade",
+    "rectifier"
+  ],
+  "exports": {
+    "rotations": {
+      "svg_sha256": "003be1df9ed4c8adc99046b2a0035a9a68328605b0ee011cb3726e8a84a2386d",
+      "png_sha256": "f548e4066a104329855ef2dca3bfb2c4a5476f15393d2a253234a4d390ae46ad"
+    },
+    "led30": {
+      "svg_sha256": "78903e9c42819fae17f2b2792344641c1bfd2b37f4961a349c74d41f7174cceb",
+      "png_sha256": "31eed2fb4239062b24416b30310ffa6e76902a3111b69c791cfaab804b8631ba"
+    },
+    "led24": {
+      "svg_sha256": "aee80b7b87a38e667ab4119387d0cceca10b5a5a6fa141585b3f600638cf8026",
+      "png_sha256": "1edddb7ebba6ab0f103446bb3864be9dacd82b1155af5f0e94db15176d540bd4"
+    },
+    "example-led": {
+      "svg_sha256": "b9be201e5e4a69fd388f0cb709238df9495709acd401c7670c131467ac333a5d",
+      "png_sha256": "6ae69989ef267e1f0ca546d03b21b4e430e952bbd0dbc4565999e9ade2b92aae"
+    },
+    "example-split-supply": {
+      "svg_sha256": "ca1718df87dee2af4b1f153276a084aa61cf73c3abe719ef52729b23f30ef30e",
+      "png_sha256": "1c1e559ca962ba828840f045ed9bfaa0af628dcd35e53a6bd7adaf3e1d54a9f2"
+    },
+    "example-rc": {
+      "svg_sha256": "867a02f13e75e2e1f7ec1ea2ec0311bed0144074eb78bbc4a9da421d3eb5f061",
+      "png_sha256": "2dcb77ed04e455ad8243ecbed2143181371ee537fd5477d6b65fdc50e26bdc87"
+    },
+    "example-npn": {
+      "svg_sha256": "76c89a6c1804d4b02a29afeb66ba6b3bb23a4de44591f8d74c71afde5353195d",
+      "png_sha256": "b536505c2bf3c1238fdc8465885af6782008c82ee0d80edda06706ed8e34de66"
+    },
+    "example-switch-npn": {
+      "svg_sha256": "46ec9f9aeafbf52c40e6ad140d6f5a6e9685882a7c9f6b1c0d93ff2fbba41a4f",
+      "png_sha256": "faa87b8911df2929cf7a893d23a107e687bcd75e3dd9ce693d9f98b7e64df8c7"
+    },
+    "example-pmos": {
+      "svg_sha256": "d985bf4ebe79c53592ef52b956dd8cdc016a7ac3071884fb821885376c1e1a53",
+      "png_sha256": "3e64446136bcc256eb8cdea89cc28efcf8bd2dda940a0c6dc8435dc6d8380288"
+    },
+    "example-nmos": {
+      "svg_sha256": "64c7b99a7e996423a5cc68cae06fdc2be3e35a65f563a8831498df28227e8f2e",
+      "png_sha256": "0df95b762b5801a8336061bdf2a41f64abae580db0c4bfcd373e15ba6fe32364"
+    },
+    "example-blink": {
+      "svg_sha256": "efbea8b17e5f564a2514b0673ffbdc88ec3c1844e4c1d2dea1a44f17f650a02f",
+      "png_sha256": "e4b50a61cf37b804d00f6b5252b42c71bbbf03d6ba50b90a569496d7d234b103"
+    },
+    "example-flasher": {
+      "svg_sha256": "ec9567aab90d51fae46d215a79614367df4a41917156f26056e3c11699cfa95a",
+      "png_sha256": "2720e908ed9cc4d00569078cb86a5ead49750a45685f2c34945f948d6d055245"
+    },
+    "example-led-fade": {
+      "svg_sha256": "d1c2c12e7b7ca3515a4aa190694c0d87787abc20d97eb473f002a40b1c381378",
+      "png_sha256": "0af813d56582d2313606f2700574693c42edd9a8ef3067740d899da784aa65e1"
+    },
+    "example-rectifier": {
+      "svg_sha256": "8ea4b3b10ea734b6526b9a73e9d21850e3e250435db2233d117570ee489c8ebf",
+      "png_sha256": "3ff4ef87cc4344b80023f16a57d645522aeef84f32fe313bf526c298e5d7cb16"
+    }
+  },
+  "checks": [
+    "four upright LED rotations render in incomplete schematic",
+    "SVG/PNG/PDF capture preserves graph, physics, history and document state",
+    "actual previous-release 30 V LED project reopens without changing original bytes",
+    "all guided examples render through shared export commands"
+  ]
+}

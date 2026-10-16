@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-15",
+  "scope": "LED body/emission-arrow/terminal-stub label clearance at four rotations; sampled exported examples; not global auto-layout or full UI acceptance",
+  "native_observations": [
+    {
+      "case": "four-rotation incomplete grid",
+      "source": "CUA getScreenshot returned inline in this chat",
+      "zoom_percent": 96,
+      "labels_upright": true,
+      "own_body_arrows_clear": true
+    },
+    {
+      "case": "complete live 24 V LED circuit",
+      "source": "CUA getScreenshot returned inline in this chat",
+      "zoom_percent": 67,
+      "current_display": "21.794 mA",
+      "voltage_display": "2.206 V",
+      "label_clear": true
+    }
+  ],
+  "exported_pngs": [
+    {
+      "path": "build/led-labels-095/native-assets/rotations.png",
+      "sha256": "f548e4066a104329855ef2dca3bfb2c4a5476f15393d2a253234a4d390ae46ad"
+    },
+    {
+      "path": "build/led-labels-095/native-assets/led24.png",
+      "sha256": "1edddb7ebba6ab0f103446bb3864be9dacd82b1155af5f0e94db15176d540bd4"
+    },
+    {
+      "path": "build/led-labels-095/native-assets/example-flasher.png",
+      "sha256": "2720e908ed9cc4d00569078cb86a5ead49750a45685f2c34945f948d6d055245"
+    },
+    {
+      "path": "build/led-labels-095/native-assets/example-pmos.png",
+      "sha256": "3e64446136bcc256eb8cdea89cc28efcf8bd2dda940a0c6dc8435dc6d8380288"
+    },
+    {
+      "path": "build/led-labels-095/native-assets/example-nmos.png",
+      "sha256": "0df95b762b5801a8336061bdf2a41f64abae580db0c4bfcd373e15ba6fe32364"
+    },
+    {
+      "path": "build/led-labels-095/native-assets/example-led-fade.png",
+      "sha256": "0af813d56582d2313606f2700574693c42edd9a8ef3067740d899da784aa65e1"
+    }
+  ],
+  "remaining": [
+    "Flasher RB1/RB2 export labels cross neighboring LED anode pins; template/global neighboring-object clearance remains follow-up.",
+    "Default compact canvas still uses the existing bitmap font/fit behavior; broader typography and physical input/accessibility are unqualified.",
+    "Native screenshots were viewed through CUA in chat, not retained as repository image files."
+  ]
+}

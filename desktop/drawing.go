@@ -351,23 +351,8 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 				}
 			}
 		}
-		y := part.Position.Y - 55
-		if workbench.IsConnectivityPrimitive(part.Kind) {
-			y = part.Position.Y - 18
-		}
-		if part.Kind == "ground" {
-			y = part.Position.Y + 35
-		}
-		if part.Rotation == 90 || part.Rotation == 270 {
-			y = part.Position.Y - 75
-		}
-		x := part.Position.X - float64(len(title))*4.4
-		if part.Kind == "dc-source" {
-			x, y = part.Position.X-45-float64(len(title))*8.8, part.Position.Y+3
-		} else if part.Kind == "resistor" && (part.Rotation == 90 || part.Rotation == 270) {
-			x, y = part.Position.X+27, part.Position.Y+3
-		}
-		b.text(x, y, title, ink)
+		at := nativePartLabelPosition(part, title)
+		b.text(at.X, at.Y, title, ink)
 	}
 	for _, a := range state.SourceAnnotations {
 		_, max := workbench.SourceAnnotationBounds(a)
@@ -409,4 +394,27 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 		return nil, b.err
 	}
 	return canvas.NewMesh(b.vertices, b.indices)
+}
+
+func nativePartLabelPosition(part workbench.Component, title string) workbench.Point {
+	if part.Kind == "led" {
+		return workbench.LEDLabelPosition(part)
+	}
+	y := part.Position.Y - 55
+	if workbench.IsConnectivityPrimitive(part.Kind) {
+		y = part.Position.Y - 18
+	}
+	if part.Kind == "ground" {
+		y = part.Position.Y + 35
+	}
+	if part.Rotation == 90 || part.Rotation == 270 {
+		y = part.Position.Y - 75
+	}
+	x := part.Position.X - float64(len(title))*4.4
+	if part.Kind == "dc-source" {
+		x, y = part.Position.X-45-float64(len(title))*8.8, part.Position.Y+3
+	} else if part.Kind == "resistor" && (part.Rotation == 90 || part.Rotation == 270) {
+		x, y = part.Position.X+27, part.Position.Y+3
+	}
+	return workbench.Point{X: x, Y: y}
 }

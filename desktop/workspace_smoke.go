@@ -7,6 +7,7 @@ import (
 	"image"
 	"log"
 	"reflect"
+	"sync/atomic"
 
 	"cogentcore.org/core/core"
 	"cogentcore.org/core/events"
@@ -41,6 +42,8 @@ func nativeWorkspaceSmoke(ctx context.Context, s *screen) error {
 	}); err != nil {
 		return err
 	}
+	var scrollReadiness atomic.Pointer[string]
+	var revealed atomic.Bool
 	large, err := waitNativeViewport(ctx, s.app, s, func(state workbench.Snapshot) bool {
 		if state.Viewport.Height <= before.Viewport.Height || state.WorkspaceLayout.SchematicFraction <= .79 || s.scope.widget == nil {
 			return false
@@ -53,11 +56,25 @@ func nativeWorkspaceSmoke(ctx context.Context, s *screen) error {
 			return false
 		}
 		frame := host.AsFrame()
+		// The smoke window intentionally exceeds some display heights. A pane
+		// below the outer viewport has no positioned scrollbar yet. Reveal the
+		// target just as an outer scroll would, then await its actual layout.
+		if frame.Geom.ContentBBox.Empty() && host.AsWidget().ScrollToThis() {
+			revealed.Store(true)
+		}
 		bar := frame.Scrolls[math32.Y]
 		maximum, visible, _ := frame.ScrollValues(math32.Y)
-		return frame.HasScroll[math32.Y] && bar != nil && maximum > visible && visible > 0 && bar.Max == maximum && bar.Step == 1 && bar.Geom.Size.Actual.Content.Y > 0
+		if bar == nil {
+			return false
+		}
+		probe := fmt.Sprintf("has_scroll=%t maximum=%g visible=%g bar_max=%g step=%g bar_size=%v host_box=%v", frame.HasScroll[math32.Y], maximum, visible, bar.Max, bar.Step, bar.Geom.Size.Actual.Content, frame.Geom.ContentBBox)
+		scrollReadiness.Store(&probe)
+		return frame.HasScroll[math32.Y] && maximum > visible && visible > 0 && bar.Max == maximum && bar.Step == 1 && bar.Geom.Size.Actual.Content.Y > 0
 	})
 	if err != nil {
+		if probe := scrollReadiness.Load(); probe != nil {
+			return fmt.Errorf("%w; scope readiness: %s", err, *probe)
+		}
 		return err
 	}
 	if large.RunID != before.RunID || large.ElectricalRevision != before.ElectricalRevision || large.Document != before.Document || !reflect.DeepEqual(large.Mixed, before.Mixed) || !reflect.DeepEqual(large.Transient, before.Transient) || !reflect.DeepEqual(large.Scope, before.Scope) {
@@ -122,7 +139,7 @@ func nativeWorkspaceSmoke(ctx context.Context, s *screen) error {
 	}); err != nil {
 		return err
 	}
-	evidence, _ := json.Marshal(map[string]any{"event": "elab.workspace.smoke", "passed": true, "default_viewport": before.Viewport, "large_viewport": large.Viewport, "small_viewport": small.Viewport, "manual_resize_preserved": true, "scope_fills_width": true, "plot_wheel_scrolls_controls_without_zoom": true})
+	evidence, _ := json.Marshal(map[string]any{"event": "elab.workspace.smoke", "passed": true, "default_viewport": before.Viewport, "large_viewport": large.Viewport, "small_viewport": small.Viewport, "manual_resize_preserved": true, "scope_fills_width": true, "plot_wheel_scrolls_controls_without_zoom": true, "offscreen_scope_revealed": revealed.Load()})
 	log.Print(string(evidence))
 	return nil
 }

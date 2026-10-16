@@ -1,6 +1,6 @@
 # PRD implementation audit
 
-Audited against [PRD draft 0.3](07-product-requirements.md), starting at local checkpoint `90927b3` on October 13, 2026 and updated through the 0.94.0 checkpoint on October 15. This is an engineering conformance audit, not a participant or screen-reader study. Passing existing demonstrations does not establish MVP completion. Proposed targets and original scope are preserved.
+Audited against [PRD draft 0.3](07-product-requirements.md), starting at local checkpoint `90927b3` on October 13, 2026 and updated through the 0.95.0 checkpoint on October 15. This is an engineering conformance audit, not a participant or screen-reader study. Passing existing demonstrations does not establish MVP completion. Proposed targets and original scope are preserved.
 
 **Status terms:** Implemented means the stated behavior has direct source/test evidence within the documented envelope. Partial means some acceptance conditions remain unmet or unverified. Pending means evidence is absent or a release gate has not been performed. No row below declares an unperformed human, clean-installation, platform or visible-latency test passed.
 
@@ -186,3 +186,6 @@ The 0.93.0 linear-network checkpoint repairs artificial nonconvergence for passi
 
 
 The 0.94.0 startup checkpoint adds one grounded-ideal-constraint fallback after a failed ordinary nonlinear cold attempt, retaining the initial solution basin and per-attempt 100-iteration/0.2 V bounds. Every Newton attempt now checks matrix rank before accepting a zero initial residual, including zero-supply floating MOSFET gates. The pulse-corner test measures the physically discontinuous input current and its independent resistor law rather than relying on collector-current roundoff. These bounded engineering corrections do not close the remaining P0 acceptance gates; totals remain 17 implemented /10 partial. See [startup behavior and work envelope](../docs/nonlinear-startup.md).
+
+
+The 0.95.0 LED-label checkpoint shares upright rotation-aware positions between native and schematic renderers. Own body/emission-arrow/terminal-stub clearance and long-ID Fit containment pass; native glyph and direct mounted/export observations cover this specific repair. SVG/PNG exports match across native/headless execution for all 11 templates, the four-rotation incomplete sheet and 24/30 V cases. Separate flasher resistor-label/neighbor-pin crossings and general layout/readability remain open. The tall smoke fixture now reveals its offscreen scope before strict scrollbar assertions; viewport owner callbacks transfer completed snapshots through channels. No P0 acceptance gate is inferred; totals remain 17 implemented /10 partial. See [scope and remaining layout work](../docs/led-labels.md).

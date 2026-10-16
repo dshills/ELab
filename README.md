@@ -37,6 +37,8 @@ Captured runs now offer [time-weighted interval measurements](docs/interval-meas
 
 **Examples → Rectifier / smoothing** opens a sine-driven diode/capacitor supply. Compare input/output voltage and reduce ripple by increasing C1. See the [rectifier experiment](docs/rectifier-example.md).
 
+LED IDs now use [shared rotation-aware label positions](docs/led-labels.md), clearing emission arrows and terminal stubs in the canvas and schematic output.
+
 Select a **Finite pulse** source to enter its frequency, period or high-phase percentage directly. The same [pulse clock command](docs/source-pulse-clock.md) is available to agents and preserves configured voltage/ramp values.
 
 Agents can discover [schematic command rules](docs/schematic-command-contracts.md), including snapping, exact move guards, terminal planning and explicit junctions. Malformed move preimages now refuse without changing the circuit.
@@ -52,7 +54,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.94.0 --build-version 109 --platform darwin
+  --version 0.95.0 --build-version 110 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).

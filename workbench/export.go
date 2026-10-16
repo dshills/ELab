@@ -376,6 +376,9 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 		text += " · " + displayPartValue(p)
 	}
 	switch p.Kind {
+	case "led":
+		at := LEDLabelPosition(p)
+		x, y = at.X, at.Y
 	case "nmos", "pmos", "npn":
 		if p.Rotation == 180 {
 			x = p.Position.X - schematicLabelWidth(text) - 31

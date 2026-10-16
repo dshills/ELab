@@ -26,4 +26,4 @@ Independent inverse-Shockley load lines qualify 24 V and 30 V LED current, with 
 
 The public reference `scripts/constraint-start-demo.py` builds the floating-gate fault, repairs it, measures both high-rail LED loads, checks stale failure/undo recovery, captures/reopens the saved 30 V result, and checks an explicit 1.25 V capacitor startup followed by charging. Existing electrical/reference and transport workflows are separate regression evidence. Full native input/accessibility, visible-latency, distribution, participant and physical-printer acceptance remain open.
 
-Direct 24 V PNG inspection confirms complete paths and labels within the page, but the LED ID crowds its outward arrow marks. General label-clearance/readability remains a rendering follow-up; matched export bytes do not establish visual acceptance.
+The 0.94 direct 24 V PNG review found its LED ID crowding the outward arrows. [Shared LED label placement](led-labels.md) repairs that issue in 0.95. General neighboring-object clearance/readability remains a rendering follow-up; matched export bytes do not establish complete visual acceptance.
