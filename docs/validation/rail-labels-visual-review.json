@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-16",
+  "review": "research/ui-audit/rail-labels/README.md",
+  "screenshots_sha256": {
+    "research/ui-audit/rail-labels/01-clipped-before.png": "fe6dfe8012ec6bfb29da2cc259ec60ecd648c352ec9ac483a81adc0d5d589e73",
+    "research/ui-audit/rail-labels/02-contained-after.png": "57269415a243aa0f98995fef1fbdcc1a1e2cd349a84ab692ab50f5f10a878fbf",
+    "research/ui-audit/rail-labels/03-readings-after.png": "0e792cf70c7a02acdd5501aeccc028661921cca922c9ae9d70679bd5fc930ed5",
+    "research/ui-audit/rail-labels/04-dark-readings-after.png": "278279465e1c9f549561098a7a291458aa099a0988ac4afd9306b652e5da2639",
+    "research/ui-audit/rail-labels/05-dark-switch-after.png": "c65c0346c5833dee68116892ef002c82fb4a95e6a01d5d5ba6980c278c803c06"
+  },
+  "scope": "Current-run CUA default-window baseline/candidate, lower readings and dark/pending-switch captures; each saved capture inspected as a file.",
+  "observations": [
+    "Endpoint and transient-help text wrap completely after containment",
+    "Lower model/readings preserve complete wording and signed units; existing whitespace/newline behavior remains",
+    "Keyboard Tab reaches percentage editor; unchanged Return reaches resistance editor",
+    "Dark theme retains caption styling and source/physics/history/document invariants; pending switch state text wraps"
+  ],
+  "limitations": [
+    "External CUA still omits visible inspector fields in this live-RC fixture; native Cocoa inspection is a separate fixture, not a matched cross-tool diagnosis",
+    "Not every long unbroken ID, font/window/zoom, physical pointer/wheel, IME/focus, screen-reader, latency or participant scenario qualified"
+  ]
+}

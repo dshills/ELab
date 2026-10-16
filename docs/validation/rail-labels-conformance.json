@@ -1,0 +1,91 @@
+{
+  "passed": true,
+  "go_version": "go1.27.2",
+  "platform": "darwin/arm64",
+  "limitations": [
+    "engineering workflow parity on this workstation; not complete native action coverage or participant acceptance",
+    "workflow parity uses shared pinned kernels; optional electrical suite adds independent frozen educational-model references and same-kernel flasher refinement, not real-device/SPICE qualification",
+    "native socket path verifies semantic operations in real app processes; keyboard/focus/screen-reader and visible latency are separate",
+    "all sessions are newly created and owned; pre-existing applications/endpoints are untouched"
+  ],
+  "format": "elab.conformance-summary-reference",
+  "format_version": 1,
+  "raw_report": {
+    "path": "build/rail-labels-101/conformance/report.json",
+    "sha256": "58b8564760782c78cc7824b22f34b9fd5a480a763641f4fc6a5744ab599d4c09"
+  },
+  "reference_workflows_reference": {
+    "path": "docs/validation/rc-high-pass-conformance.json",
+    "member": "reference_workflows",
+    "sha256": "8d1f1e83c396c8db4aff321d7787a85516796432428c55882a842fdb8d9b00b0"
+  },
+  "reference_workflows_patches": [
+    {
+      "path": [
+        0,
+        "project",
+        "recordings",
+        "entries",
+        0,
+        "data",
+        "metadata",
+        "created_at"
+      ],
+      "value": "2026-10-16T05:41:53.816696Z"
+    },
+    {
+      "path": [
+        1,
+        "project",
+        "recordings",
+        "entries",
+        0,
+        "data",
+        "metadata",
+        "created_at"
+      ],
+      "value": "2026-10-16T05:41:53.900124Z"
+    },
+    {
+      "path": [
+        2,
+        "project",
+        "recordings",
+        "entries",
+        0,
+        "data",
+        "metadata",
+        "created_at"
+      ],
+      "value": "2026-10-16T05:41:53.977215Z"
+    }
+  ],
+  "reference_workflows_sha256": "86e4b2d21ce366a951c0ac36570ed169076d6bb2ee8c8be09ddcffe483f75456",
+  "reconstruction": "Verify referenced file hash, deep-copy reference_workflows and apply each path-array replacement. Only captured timestamps differ; this reconstructs the exact current in-process reference workflow array.",
+  "adapters": [
+    {
+      "name": "in-process",
+      "equivalent_to_in_process": true,
+      "workflow_count": 3,
+      "workflows_sha256": "86e4b2d21ce366a951c0ac36570ed169076d6bb2ee8c8be09ddcffe483f75456"
+    },
+    {
+      "name": "headless-stdio",
+      "equivalent_to_in_process": true,
+      "workflow_count": 3,
+      "workflows_sha256": "19fc8e4411ab078e8498ec3cbe618a9e7fcc5b4309cb3978fdb63bae65b5f9e4"
+    },
+    {
+      "name": "headless-socket",
+      "equivalent_to_in_process": true,
+      "workflow_count": 3,
+      "workflows_sha256": "fc7c8156f034c5ece80be977a0da3df86c9c1e3c0d214a35637415463f287611"
+    },
+    {
+      "name": "native-socket",
+      "equivalent_to_in_process": true,
+      "workflow_count": 3,
+      "workflows_sha256": "bb6dcbeb614ae81ef498dfe21fc4dc8e78f6ac3ea6b6308d77f68ce84d98a0fd"
+    }
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "before_labels": [
+    {
+      "id": "wiper-label",
+      "allocated_width_px": 278,
+      "actual_width_px": 239,
+      "shaped_right_px": 255.28125,
+      "lines": 1,
+      "complete_text": true,
+      "truncated": false
+    },
+    {
+      "id": "pot-actuation-help",
+      "allocated_width_px": 278,
+      "actual_width_px": 239,
+      "shaped_right_px": 273.125,
+      "lines": 4,
+      "complete_text": true,
+      "truncated": false
+    },
+    {
+      "id": "pot-model",
+      "allocated_width_px": 278,
+      "actual_width_px": 239,
+      "shaped_right_px": 266.8125,
+      "lines": 3,
+      "complete_text": true,
+      "truncated": false
+    }
+  ],
+  "after_labels": [
+    {
+      "id": "wiper-label",
+      "allocated_width_px": 228,
+      "actual_width_px": 228,
+      "shaped_right_px": 227.40625,
+      "lines": 2,
+      "complete_text": true,
+      "truncated": false
+    },
+    {
+      "id": "pot-actuation-help",
+      "allocated_width_px": 234,
+      "actual_width_px": 234,
+      "shaped_right_px": 233.64062,
+      "lines": 5,
+      "complete_text": true,
+      "truncated": false
+    },
+    {
+      "id": "pot-model",
+      "allocated_width_px": 234,
+      "actual_width_px": 234,
+      "shaped_right_px": 233.78125,
+      "lines": 3,
+      "complete_text": true,
+      "truncated": false
+    }
+  ],
+  "rounding_allowance_px": 1,
+  "passed": true,
+  "native_accessibility_diagnostic": {
+    "reachable": true,
+    "native_window": true,
+    "selected_controls": [
+      {
+        "domain_id": "selection",
+        "role": "AXButton",
+        "name": "Selected object",
+        "value": null,
+        "enabled": true,
+        "frame": [
+          124,
+          887,
+          0,
+          0
+        ]
+      },
+      {
+        "domain_id": "pot-wiper",
+        "role": "AXSlider",
+        "name": "Potentiometer wiper percent",
+        "value": 50,
+        "enabled": true,
+        "frame": [
+          1113,
+          636,
+          176,
+          31
+        ]
+      },
+      {
+        "domain_id": "pot-wiper-exact",
+        "role": "AXIncrementor",
+        "name": "Exact potentiometer wiper percent",
+        "value": 50,
+        "enabled": true,
+        "frame": [
+          1113,
+          587,
+          176,
+          37
+        ]
+      },
+      {
+        "domain_id": "pot-actuation-help",
+        "role": "AXStaticText",
+        "name": "Current transient readings: movement updates at the same time after calculation, preserving capacitor voltage. Paused stale readings refresh on Restart or Resume.",
+        "value": "Current transient readings: movement updates at the same time after calculation, preserving capacitor voltage. Paused stale readings refresh on Restart or Resume.",
+        "enabled": true,
+        "frame": [
+          1113,
+          484,
+          176,
+          91
+        ]
+      },
+      {
+        "domain_id": "value-entry",
+        "role": "AXTextField",
+        "name": "Component value",
+        "value": "10 k\u03a9",
+        "enabled": true,
+        "frame": [
+          1113,
+          339,
+          176,
+          37
+        ]
+      },
+      {
+        "domain_id": "part-assumptions",
+        "role": "AXStaticText",
+        "name": "Generic linear three-pin resistive track. Total resistance is split into two segments, each with 1 ohm endpoint resistance. Position 0 is toward pin 2; position 1 is toward pin 1. No contact noise, nonlinear taper, ratings, heating or physical part identity.",
+        "value": "Generic linear three-pin resistive track. Total resistance is split into two segments, each with 1 ohm endpoint resistance. Position 0 is toward pin 2; position 1 is toward pin 1. No contact noise, nonlinear taper, ratings, heating or physical part identity.",
+        "enabled": true,
+        "frame": [
+          124,
+          887,
+          0,
+          0
+        ]
+      }
+    ],
+    "scope": "Separate incomplete-potentiometer fixture; diagnostic presence/enabled state only. Not a matched comparison with the external CUA live-RC fixture or screen-reader acceptance."
+  }
+}

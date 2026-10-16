@@ -291,6 +291,10 @@ rendered:
 	if err := nativeNavigationSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeRailLabelsSmoke")
+	if err := nativeRailLabelsSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	setStage("nativeLifecycleSmoke")
 	return nativeLifecycleSmoke(ctx, a, s)
 }

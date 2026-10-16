@@ -1,0 +1,42 @@
+{
+  "before": {
+    "commit": "cebae61a01b9ca1d5f71beacd9d60ad5fd853fa7",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "after": {
+    "commit": "6330b2d42050b46c2019e558074e087ed281e56a",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "changed_files": [
+    "docs/reports/README.md",
+    "docs/reports/macos-ax-parent-graph/README.md",
+    "docs/reports/macos-ax-parent-graph/records/archive-index.json",
+    "docs/reports/macos-ax-parent-graph/records/evidence.tar.xz",
+    "docs/reports/macos-ax-parent-graph/records/qualification.json",
+    "drivers/cogent/accessibility_darwin.m",
+    "drivers/cogent/accessibility_graph_darwin_test.go",
+    "specs/accessibility.md",
+    "specs/macos-completion.md"
+  ],
+  "production_files": [
+    "drivers/cogent/accessibility_darwin.m"
+  ],
+  "source_diff_sha256": "5ed01573ffb875b41d14f170270dc16d8af32567f39019a58ad2bba94651e533",
+  "review": [
+    "Snapshot-local remaining/active sets validate complete acyclic parent graphs once; missing referenced parents still reject",
+    "Same-scope parent checks plus finite acyclic complete graph preserve required scope-host ancestry; existing preflight-before-publication boundary remains",
+    "No text shaping/layout or electrical model/kernel changes; manifest and 237 prepared final outputs unchanged",
+    "Upstream report macos-ax-parent-graph read for its scoped correctness/lifecycle/performance evidence; ELab did not rerun the SDK suite. Final ELab check/build/native validation use the new source."
+  ],
+  "limits": "ELab integration qualification only; upstream timing is not an ELab frame/latency or screen-reader qualification. No SDK files were changed by this task."
+}

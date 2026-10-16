@@ -18,7 +18,7 @@
     "desktop/files.go": "913fe6f40d68a56989f2192d11dc6e9c829844c64fa07e9052a7e77b43a05db5",
     "desktop/input_work.go": "63b1644f065e82f1deaedc018bcfa5b855af2b885ac96dc3d68b2d4971f701bc",
     "desktop/keyboard_workflow.go": "42fa8031620577bff9c73eba71954730a71765328b219ab96911ffdbe7a5c883",
-    "desktop/layout.go": "342ac81780e410c345b903d982ccae20228e7eff26ce476f4a828c7c3737c958",
+    "desktop/layout.go": "95c8d3aea1b220556a1a0b0cb90cb148c60494358f13fc6e94cded0a06498ddb",
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
     "desktop/main.go": "7209b25dc09a41e69a808e6ff6962d7d18294a60769644570fa8ecd78c15c257",
     "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
@@ -1529,7 +1529,7 @@
     },
     {
       "file": "desktop/layout.go",
-      "line": 81,
+      "line": 95,
       "function": "findAction",
       "kind": "node-Change",
       "expression": "Change: root.Change",
@@ -1537,7 +1537,7 @@
     },
     {
       "file": "desktop/layout.go",
-      "line": 88,
+      "line": 102,
       "function": "findAction",
       "kind": "node-Activate",
       "expression": "Activate: func() { choices.Change(ui.ChangeEvent{ID: root.ID, Kind: ui.MenuButton, SelectedID: id}) }",

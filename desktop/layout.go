@@ -33,9 +33,15 @@ func (s *screen) commandMenu(id, text string, entries [][2]string) ui.Node {
 	return node
 }
 
+const railLabelBoundsPrefix = "rail-label-bounds:"
+
 func constrainRail(nodes []ui.Node, width float32) {
 	for i := range nodes {
 		node := &nodes[i]
+		// Reapplying layout must not nest bounds frames or duplicate IDs.
+		if node.Kind == ui.Column && len(node.Children) == 1 && node.Children[0].Kind == ui.Label && node.ID == railLabelBoundsPrefix+node.Children[0].ID {
+			*node = node.Children[0]
+		}
 		padding := float32(0)
 		switch node.Kind {
 		case ui.Button, ui.MenuButton, ui.Selector, ui.TextField, ui.NumberField:
@@ -69,6 +75,14 @@ func constrainRail(nodes []ui.Node, width float32) {
 			childWidth = max(24, (width-gap*float32(len(node.Children)-1))/float32(len(node.Children)))
 		}
 		constrainRail(node.Children, childWidth)
+		if node.Kind == ui.Label {
+			// Sibling controls can make the native column allocate more than
+			// a label's MaxSize. Text wraps to that allocation, then its own
+			// smaller box clips the result. A frame clamps the allocation
+			// before the child text is shaped. Keep the label's ID and text.
+			caption := *node
+			*node = ui.Node{ID: railLabelBoundsPrefix + caption.ID, Kind: ui.Column, Style: ui.Style{MaxSize: caption.Style.MaxSize, Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0))}, Children: []ui.Node{caption}}
+		}
 	}
 }
 

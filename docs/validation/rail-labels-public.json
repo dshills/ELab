@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "workflows": [
+    {
+      "current_run": "build/rail-labels-101/headless.json",
+      "sha256": "1a0e4e2d2d20569dd41bbee42b85c845bd9ac7e93be480acc5d7c67e0639ace7",
+      "identical_retained_report": {
+        "path": "docs/validation/actuation-contracts-headless.json",
+        "sha256": "1a0e4e2d2d20569dd41bbee42b85c845bd9ac7e93be480acc5d7c67e0639ace7"
+      }
+    },
+    {
+      "current_run": "build/rail-labels-101/native.json",
+      "sha256": "4d1e1037ba9cb8078e40f4dd7d13f07ed9714396f344511992d044a98b6452f3",
+      "identical_retained_report": {
+        "path": "docs/validation/actuation-contracts-native.json",
+        "sha256": "4d1e1037ba9cb8078e40f4dd7d13f07ed9714396f344511992d044a98b6452f3"
+      }
+    }
+  ],
+  "scope": "Final fresh-session public workflows rerun; observations/discovery/SVG/PNG match except transport. Identical .99 reports are reused without duplicating them."
+}

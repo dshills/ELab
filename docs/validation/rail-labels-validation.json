@@ -1,0 +1,112 @@
+{
+  "passed": true,
+  "date": "2026-10-16",
+  "app_version": "0.101.0",
+  "build_version": "116",
+  "binary_sha256": "f6e90d1d688cf95ddf6d44968cb407d8efa06c1bee2e414b35e107e837c45d99",
+  "agent_binary_sha256": "451f5e42fc322d4a0165b6500b5edbde511567d6a6958f369a00c79484222f72",
+  "prior_bundle": "build/ELab-before-rail-labels.app",
+  "prior_binary_sha256": "15dc46883007ca47aff3a0849b80fcd2272102a58612491ae68fb366a05ddf54",
+  "bundle_files_compared": 3,
+  "bundle_manifest_sha256": "b402215f3bd4a7dd8cf721c206d38a288b92fe0ef57b1345a1e3cb692ba8edbb",
+  "sdk_before": {
+    "commit": "cebae61a01b9ca1d5f71beacd9d60ad5fd853fa7",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "sdk_after": {
+    "commit": "6330b2d42050b46c2019e558074e087ed281e56a",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "desktop/layout.go": "95c8d3aea1b220556a1a0b0cb90cb148c60494358f13fc6e94cded0a06498ddb",
+    "desktop/smoke.go": "d580409659cbc87671fc8b734b470fcad509a27e1c9f2e321711cf854e838933",
+    "desktop/rail_labels_smoke.go": "34801fd93f2e27d462b9421c210a604ee25fd84dd57e8910c9bd021f1729c938",
+    "desktop/rail_labels_test.go": "2a57047cdeac285484549b8f7a93eead7714b2187c9bd2860a67209d78c21874"
+  },
+  "native_source_review": {
+    "sources": 53,
+    "sites": 384,
+    "public_commands": 161,
+    "source_routes": 131,
+    "changed_sources": [
+      "desktop/layout.go"
+    ],
+    "site_semantics_and_command_sets_identical": true,
+    "normalization": "Only source line numbers omitted; file, function, expression, kind, route and status all retained.",
+    "review": "Only layout.go production hash changes: passive bounds columns preserve label IDs/text/semantics and command/focus routes. Private colon-prefixed container IDs avoid component-derived suffix collisions; repeated layout unwraps/rebuilds one bounds frame.",
+    "scope": "Source inventory plus bounded native shaping and UI evidence; not exhaustive runtime/reader acceptance"
+  },
+  "checks": [
+    "Before-fix actual mounted text shapes exceeded label content widths despite complete source strings; final bounds contain all three sampled labels with complete normalized text, no truncation and at most one pixel rounding allowance",
+    "Passive bounded columns clamp text allocation before shaping. Original label IDs/text/accessibility/style, control focus order and callbacks survive repeated layout. Private colon-prefixed IDs avoid real component-derived suffix collisions",
+    "Current-run before/after, lower readings, dark theme and pending-switch CUA captures were saved and inspected; observed paragraph endings wrap completely. Dark theme preserves graph/physics/history/document",
+    "Final serialized lint/import/root/native race/vet and build pass. First uncached native package reports 83.367 seconds; separate cached full check confirms a successful gate exit",
+    "Final packaged GPU/UI/lifecycle smoke passes including measured rail labels; all four adapters pass the three reference LED/RC/NPN workflows. Final fresh native/headless actuation observations/discovery/SVG/PNG match",
+    "Native source inventory verifies 53 files /384 sites /161 commands /131 routes, with only layout.go production hash changed. Site semantics and command sets are identical ignoring source line shifts",
+    "Clean Vellum SDK externally advanced from cebae61 to 6330b2d; parent-graph patch reviewed. Manifest and 237 prepared final outputs unchanged; final ELab checks/build/native workflows use updated SDK",
+    "Canonical .101/116 matches qualified candidate/build bytes and bundle files/modes; .100 preserved; final process-name inspection confirms no ELab validation processes running"
+  ],
+  "corrections": [
+    "Initial new smoke fixture reused P1 after prior clear, correctly triggering lifetime-ID reservation. Fixture now requests a fresh automatic ID; actual before-fix clipping failure is retained separately",
+    "First bounds-container suffix collided with legitimate mixed-X-bounds label ID. Failing duplicate-ID test retained; final private prefix and unwrap/rebuild behavior pass repeated layout",
+    "Combined check/build shell lacked set -e, so its final exit alone was insufficient to confirm the earlier gate. A separate full check completed successfully; its cached output is retained",
+    "Initial site comparison included shifted source lines; final explicit normalization omits only line numbers and retains all semantic fields"
+  ],
+  "limitations": [
+    "This samples bounded labels in the default window, not all arbitrary unbroken IDs, widths, font/zoom or complete responsive layout. Longer complete paragraphs need vertical scrolling; native newline collapsing remains",
+    "External CUA still omits visible controls in the live-RC fixture. Separate incomplete-potentiometer Cocoa diagnostic sees six controls enabled, with some offscreen empty frames; different fixtures cannot assign cause or establish screen-reader acceptance",
+    "No new full pointer/wheel, typing/IME/focus, participant, visible latency, clean distribution, physical-printer or full-platform acceptance",
+    "No model/kernel/API/file changes. Full electrical/performance suites from the previous numerical checkpoint were not rerun for this layout slice. P0 remains 17 implemented /10 partial; continuing project goal remains active"
+  ],
+  "artifacts": [
+    "docs/keyboard-construction.md",
+    "research/ui-audit/rail-labels/README.md",
+    "docs/validation/rail-labels-measurements.json",
+    "docs/validation/rail-labels-public.json",
+    "docs/validation/rail-labels-conformance.json",
+    "docs/validation/rail-labels-sdk-review.json",
+    "docs/validation/rail-labels-visual-review.json"
+  ],
+  "artifacts_sha256": {
+    "docs/keyboard-construction.md": "a2c3fff9625f670a423d12ec8aeaf95d1e69e5205afa2fe20a4a35b498c31496",
+    "research/ui-audit/rail-labels/README.md": "36cc76d0e523eddfe03a5fbc8c371dd7c7adfbb2b43ff15a379f2f50db6e7da1",
+    "docs/validation/rail-labels-measurements.json": "a7229698015c14dad6b8d38d9106f17accb022b6d193893f28f0222195ab0d90",
+    "docs/validation/rail-labels-public.json": "8ebaa2ccf4e5ab03a435f872b418a4169ec33ab3dfce9a655757001d5865c340",
+    "docs/validation/rail-labels-conformance.json": "faf8002c528cfe738fa8210b2a2eeedd682d08331a26413ddf98d06fc65efdd6",
+    "docs/validation/rail-labels-sdk-review.json": "6a9b7bccb0a8a25c2fb9732d8af071b2e7ac74a47fcf62ccd73ae3978cf45113",
+    "docs/validation/rail-labels-visual-review.json": "793fbf984da99217575547edc4495ada9aee4e3c0f64c9c6c2e6ca3b4f90a435"
+  },
+  "build_evidence_sha256": {
+    "build/rail-labels-101/native-focused.log": "24371b7f51580c1e25a3358ca74c3632462b03d9a37db78d9712c558f948f65e",
+    "build/rail-labels-101/containment-identity-before.log": "8ea3d89cfdac7a64461cd53fe2dfe541ff89fe9b77a102c9626e3238da423707",
+    "build/rail-labels-101/check-final.log": "94a56126a498dd3c1899338777d30c520bf0c27ad54ac2969e475a5d1c9e0df8",
+    "build/rail-labels-101/check-confirmed.log": "bea4da8752d4fd2febcf09a0616d3725a8b4362c57b096b15f91bf0a0f3dc756",
+    "build/rail-labels-101/build-final.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/rail-labels-101/package.log": "24bb4a3d8ee6a91322ac6c243b80ef30ccc22ceb808b738af23fd9c61a148112",
+    "build/rail-labels-101/smoke-before-fresh-id.log": "4e19034aa692f26520c74ddf3b3dcfb4478cd869fb58dedfcf319f946fa947f8",
+    "build/rail-labels-101/smoke-final.log": "6721fee156bf2c9e6647e044a2b9579c679344053465cca65df3312affd5e4bb",
+    "build/rail-labels-101/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/rail-labels-101/ui-inventory-final.json": "ec9e93221829570696b45eb50d217983e105e19841d69505c165709c0bbf8b19",
+    "build/rail-labels-101/ui-inventory-review.json": "2c9c02502b4243c914f389ca71919c9823e8d4c09274532c954b5b90c9240277",
+    "build/rail-labels-101/sdk-before.json": "90fade6d47869cbf391332d029da3869bfab84701bf1d279b943a9c7aea442bf",
+    "build/rail-labels-101/sdk-after.json": "703a5929281e1a8cbbf5612e57f2765fd7b452801356e65125af84550fbba5d2",
+    "build/rail-labels-101/sdk-confirmed.json": "703a5929281e1a8cbbf5612e57f2765fd7b452801356e65125af84550fbba5d2",
+    "build/rail-labels-101/sdk-promotion.json": "703a5929281e1a8cbbf5612e57f2765fd7b452801356e65125af84550fbba5d2",
+    "build/rail-labels-101/before-ax.txt": "5ff41dc7af8dbc17d20b489adec9e001caadff710bd9d0c9cada83dce7367e6d",
+    "build/rail-labels-101/after-ax.txt": "5ff41dc7af8dbc17d20b489adec9e001caadff710bd9d0c9cada83dce7367e6d",
+    "build/rail-labels-101/dark-state.json": "e3044eb6edf1253aef76c702c832cc12a88db075991c28a6165f6235e7f6d028",
+    "build/rail-labels-101/visual-final-state.json": "143313a81401999560e8f0a90d2a75a523ea0d83ca99587b1e7754c4c3c6b8dd",
+    "build/rail-labels-101/processes-final.json": "e7644776ab8e750bad76da6c34dd9ff8392a809545a00f256cec584e8bb6b715",
+    "build/rail-labels-101/promotion.json": "d6ddcf385ff465cc61be903eacc2a7bf53db88f8602b26174534771caf9cd348"
+  }
+}
