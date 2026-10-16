@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "transport": "desktop-socket",
+  "discovery": {
+    "bundle_sha256": "b8d2d25e92014e166e2e58ea6cd2b018a7a2fd6daa07bcdfaa215c5e85a0dddb",
+    "schema_registry_count": 69,
+    "schema_registry_sha256": "3e48ca222fb0976ca3132d8b85780d65a7bb08bb30d9ddad9e676316d3972125",
+    "full_response_sha256": {
+      "switch.set": "ad56d1881999c62f04d68383624dc1edd49403d588a49cfc1ac1b6bec46e35ad",
+      "potentiometer.wiper.set": "aaedb1167b33b0eddfd77325e96f1e0d1b50626784a3e305e5e88b9d5618c01a"
+    }
+  },
+  "hints": {
+    "switch.set": "Current transient readings: changes apply after the next sample; paused changes wait for Step or Resume. Otherwise the saved startup state changes.",
+    "potentiometer.wiper.set": "Current transient readings: movement updates at the same time after calculation, preserving capacitor voltage. Paused stale readings refresh on Restart or Resume."
+  },
+  "capacitor_before_actuation_v": 2.1607016642783763,
+  "capacitor_after_pending_switch_v": 2.816653667201719,
+  "independent_capacitor_reference_v": 2.817170536142668,
+  "exports": {
+    "svg": "9732683e532a6812c574308e88a19566d2e872b8a5fa841f3787ba5a130688af",
+    "png": "61bd0d3764f6af8be1ccb71620bf45eeffe68e3d5a6db2e8393875036fd1b2be"
+  },
+  "checks": [
+    "discovery is pure, target-kind and completion paths explicit",
+    "incomplete startup edit; fresh paused switch queues, Wait preserves pending, coalescing returns clean source",
+    "wiper completes at same charge/time/run while preserving pending applied switch",
+    "next sample advances old circuit then applies pending switch; independent Thevenin RC check",
+    "same-value commands preserve physics/history; invalid range/wrong kind refuses without mutation",
+    "atomic batch uses paused-stale startup semantics with one undo/redo; restart and fresh-process save/open preserve values",
+    "SVG/PNG/PDF capture preserves graph, physics, history and document"
+  ]
+}

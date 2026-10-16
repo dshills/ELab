@@ -229,61 +229,12 @@ func (s *screen) view() ui.Node {
 		inspector = append(inspector, s.partPlotControls(state, part)...)
 		inspector = append(inspector, s.waveformControls(state, part)...)
 		if part.Kind == "potentiometer" {
-			position := *part.WiperPosition
-			if activeInputWork(state) && state.InputWork.Wiper != nil && state.InputWork.Wiper.ID == part.ID {
-				position = state.InputWork.Wiper.Position
-			}
-			change := func(e ui.ChangeEvent) {
-				s.invoke("potentiometer.wiper.set", workbench.WiperParams{ID: part.ID, Position: float64(e.Number) / 100})
-			}
-			inspector = append(inspector, section("potentiometer-title", "Linear potentiometer"), quiet("wiper-label", fmt.Sprintf("Wiper %.4g%% · 0 toward pin 2 / 100 toward pin 1", position*100)), ui.Node{ID: "pot-wiper", Kind: ui.Slider, Number: float32(position * 100), Numeric: ui.Numeric{Min: 0, Max: 100, Step: 1}, Accessibility: ui.Accessibility{Name: "Potentiometer wiper percent"}, Change: change}, ui.Node{ID: "pot-wiper-exact", Kind: ui.NumberField, Number: float32(position * 100), Numeric: ui.Numeric{Min: 0, Max: 100, Step: .1}, Accessibility: ui.Accessibility{Name: "Exact potentiometer wiper percent"}, Change: change}, quiet("pot-model", "Two linear track segments; 1 Ω minimum each. Total resistance is preserved. No contact noise, taper, heating or ratings."))
-			if state.Mixed != nil {
-				for _, r := range state.Mixed.Potentiometers {
-					if r.ID == part.ID {
-						status := "Live"
-						if state.Mixed.Stale {
-							status = "Stale"
-						}
-						inspector = append(inspector, quiet("pot-reading", fmt.Sprintf("%s · wiper %.6g V / ground\nPin 1 %.6g mA · pin 2 %.6g mA\nWiper %.6g mA into track · %.6g mW", status, r.WiperVoltage, r.Terminal1Current*1000, r.Terminal2Current*1000, r.WiperCurrent*1000, r.Power*1000)))
-					}
-				}
-			}
+			inspector = append(inspector, s.potentiometerControls(state, part)...)
 		}
-
 		if part.Kind == "switch" {
-			closed := part.SwitchClosed != nil && *part.SwitchClosed
-			text := "Close switch"
-			stateText := "Open"
-			if closed {
-				text = "Open switch"
-				stateText = "Closed"
-			}
-			for _, input := range state.SwitchStates {
-				if input.ID == part.ID {
-					if input.AppliedClosed == nil {
-						stateText += " · startup; no fresh applied reading"
-					} else {
-						applied := "open"
-						if *input.AppliedClosed {
-							applied = "closed"
-						}
-						stateText += " · applied " + applied
-						if input.Pending {
-							stateText += " · pending next step"
-						}
-					}
-				}
-			}
-
-			inspector = append(inspector, section("switch-title", "SPST switch"), quiet("switch-state", stateText+" · 1 Ω on / 1 GΩ off"), s.action("switch-actuate", text, "switch.set", workbench.SwitchParams{ID: part.ID, Closed: !closed}), quiet("switch-limits", "Finite leakage, no bounce/arcing or physical rating. Transient actuation applies at the next accepted step; paused changes remain pending."))
-			if state.Mixed != nil && !state.Mixed.Stale {
-				for _, branch := range state.Mixed.Switches {
-					if branch.ID == part.ID {
-						inspector = append(inspector, quiet("switch-reading", fmt.Sprintf("%.6g V · %.6g mA\n%.6g mW", branch.Voltage, branch.Current*1000, branch.Power*1000)))
-					}
-				}
-			}
+			inspector = append(inspector, s.switchControls(state, part)...)
 		}
+
 		if part.Kind == "net-label" {
 			inspector = append(inspector, section("label-title", "Net label · exact matching"), ui.Node{ID: "value-entry", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "Net label name"}, Change: func(e ui.ChangeEvent) { s.invoke("editor.value.set", workbench.DraftParams{Value: e.Text}) }}, s.action("apply-value", "Apply label", "component.set", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value}), quiet("label-connectivity-help", "Names are case-sensitive. GND is a name; connect it to a ground symbol to establish the reference."))
 		}

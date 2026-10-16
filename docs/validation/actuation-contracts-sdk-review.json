@@ -1,0 +1,37 @@
+{
+  "before": {
+    "commit": "82c0c5ec17fd7f90da1a0ac4a26d65a3de8367a4",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "after": {
+    "commit": "cebae61a01b9ca1d5f71beacd9d60ad5fd853fa7",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "changed_files": [
+    "docs/reports/macos-event-driven-loop/README.md",
+    "docs/reports/macos-loop-native/README.md",
+    "docs/reports/macos-loop-native/records/archive-index.json",
+    "docs/reports/macos-loop-native/records/evidence.tar.xz",
+    "docs/reports/macos-loop-native/records/qualification.json",
+    "drivers/cogent/cmd/window-cycle-smoke/soak.go",
+    "drivers/cogent/cmd/window-cycle-smoke/soak_failure.go",
+    "drivers/cogent/cmd/window-cycle-smoke/soak_failure_test.go",
+    "specs/macos-completion.md",
+    "specs/native-dispatch.md",
+    "specs/workbench-endurance.md"
+  ],
+  "imported_driver_package_changed": false,
+  "prepared_outputs_changed": false,
+  "review": "External clean checkout advanced with test-command failure diagnostics, test-command regressions and qualification/spec reports only. No imported driver/library production source changed. Final full ELab check and build occurred after the new commit; the native public workflow, smoke and four-adapter run use that build.",
+  "source_diff_sha256": "f896767cab3a2d62ae38a5ab4914ff8c42528f84b0796a8ba4ed76780e8766ea"
+}

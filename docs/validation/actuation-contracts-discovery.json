@@ -1,0 +1,272 @@
+{
+  "format": "elab.discovery-bundle-reference",
+  "version": 1,
+  "queries": {
+    "potentiometer.wiper.set": {
+      "capabilities": [
+        {
+          "description": "Set wiper 0\u20131 through staged input_work; inspect/wait for completion. Preserves fresh transient charge/time/run.",
+          "id": "potentiometer.wiper.set",
+          "input_schema": {
+            "additionalProperties": false,
+            "examples": [
+              {
+                "id": "P1",
+                "position": 0.5
+              }
+            ],
+            "properties": {
+              "id": {
+                "description": "Exact current component ID with kind potentiometer",
+                "maxLength": 64,
+                "minLength": 1,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+                "type": "string"
+              },
+              "position": {
+                "description": "Finite fraction: 0 toward pin 2, 1 toward pin 1; 0.5 represents 50%. Native percentage controls normalize to this fraction",
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number",
+                "x-unit": "fraction"
+              }
+            },
+            "required": [
+              "id",
+              "position"
+            ],
+            "type": "object",
+            "x-command-contract": {
+              "completion": {
+                "cancel": "simulation.work.cancel",
+                "cooperative_deadline_s": 5,
+                "mode": "changed fresh transient: immediate admission with asynchronous atomic input_work outcome; unchanged values may only supersede a matching pending request. Otherwise ordinary edit admission; inspect which path actually occurred",
+                "observe": [
+                  "project.inspect",
+                  "simulation.wait",
+                  "events.poll"
+                ]
+              },
+              "effects": [
+                "Ordinary mutation guards and retry retention apply; a replay returns the original owned response, not current readiness",
+                "Inside edit.batch, these are ordinary startup configuration edits, not live actuation; changed running edits restart and paused edits stale results; undo/redo follow ordinary schematic history",
+                "A fresh network transient admits background input_work even while paused: solve at the committed simulated time with current capacitor voltages and previously applied switch states",
+                "Admission preserves committed graph/readings/history; requested_wiper is separate until successful atomic publication. Success commits the wiper, one actor-attributed undo entry and both sides of its event, preserving charge/time/run/electrical revision",
+                "New changed requests supersede active input/manual-step work. Setting the already committed position is a no-op except that it supersedes an active wiper request for the same potentiometer",
+                "Failure/cancel/supersession leaves committed wiper/charge/time/history intact; only the latest input_work is retained; old retired jobs cannot publish",
+                "Inspect input_work until completed before a dependent Step. Cancel through simulation.work.cancel with the exact active input_work.id; Pause also requests cancellation",
+                "DC, stale or incomplete drawings use ordinary electrical edit/restart/paused-stale behavior. Save/Verify capture committed wiper/startup, not a staged request or live movement history"
+              ],
+              "errors": [
+                {
+                  "code": "invalid-params",
+                  "phase": "admission",
+                  "when": "Malformed/missing input, wrong or unknown target kind/ID, or invalid value"
+                },
+                {
+                  "code": "solve-failed",
+                  "phase": "input_work",
+                  "when": "Algebraic staging fails or its cooperative deadline expires"
+                },
+                {
+                  "code": "canceled",
+                  "phase": "input_work",
+                  "when": "Explicit/Pause cancellation preserves committed values"
+                },
+                {
+                  "code": "superseded",
+                  "phase": "input_work",
+                  "when": "A newer request, committed-position cancellation, switch/input/source edit, run or document invalidates the captured job"
+                }
+              ],
+              "preconditions": [
+                "Target is an existing component of the declared kind; incomplete/stale/DC drawings may be configured",
+                "Fresh network transient means snapshot.transient is initialized and not stale, with a fresh network state; running and paused both qualify"
+              ],
+              "scope": "interactive-part-actuation",
+              "version": 1
+            },
+            "x-interaction-summary": "Current transient readings: movement updates at the same time after calculation, preserving capacitor voltage. Paused stale readings refresh on Restart or Resume.",
+            "x-model-id": "elab.linear-potentiometer.v1",
+            "x-target-inventory": "snapshot.components filtered by kind potentiometer",
+            "x-work-inventory": "Latest snapshot.input_work only; require matching ID, command and requested_wiper before attributing a retained outcome. Fallback edits do not create a new input job"
+          },
+          "mutation": true,
+          "output": "Snapshot",
+          "output_schema": {
+            "$ref": "urn:elab:snapshot:1"
+          }
+        }
+      ],
+      "events": {
+        "command": "events.poll",
+        "default_timeout_ms": 1000,
+        "max_timeout_ms": 5000,
+        "max_waiters": 4,
+        "mode": "coalesced-latest-state",
+        "topics": [
+          "state",
+          "project",
+          "editor",
+          "view",
+          "simulation",
+          "diagnostics",
+          "jobs",
+          "measurements",
+          "recordings",
+          "recovery",
+          "preferences",
+          "lifecycle",
+          "library",
+          "preview",
+          "sweeps",
+          "printing"
+        ]
+      },
+      "mutation_preconditions": {
+        "combination": "A revision guard is required; all supplied revision/document guards must match",
+        "expected_command_revision": "Guards admitted commands, including other actors; live solver publication does not invalidate it",
+        "expected_document_generation": "Optional mutation context guard; prevents applying an old rendered action to a replacement document, including background publication",
+        "expected_revision": "Guards all state publication, including live samples"
+      },
+      "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee.",
+      "schema_version": 2,
+      "version": 1
+    },
+    "switch.set": {
+      "capabilities": [
+        {
+          "description": "Set desired SPST state; queue/coalesce fresh transient actuation without losing charge/run. Inspect desired/applied/pending state.",
+          "id": "switch.set",
+          "input_schema": {
+            "additionalProperties": false,
+            "examples": [
+              {
+                "closed": true,
+                "id": "S1"
+              }
+            ],
+            "properties": {
+              "closed": {
+                "description": "Required Boolean saved desired startup state; false opens, true closes",
+                "type": "boolean"
+              },
+              "id": {
+                "description": "Exact current component ID with kind switch",
+                "maxLength": 64,
+                "minLength": 1,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "closed"
+            ],
+            "type": "object",
+            "x-command-contract": {
+              "completion": {
+                "cancel": "",
+                "cooperative_deadline_s": 0,
+                "mode": "changed fresh transient: desired-state admission immediately; application waits for a subsequent successful sample. Otherwise ordinary startup edit/initialization; unchanged values preserve the applied state. Inspect switch_states and readiness for the actual path",
+                "observe": [
+                  "project.inspect",
+                  "simulation.wait",
+                  "events.poll"
+                ]
+              },
+              "effects": [
+                "Ordinary mutation guards and retry retention apply; a replay returns the original owned response, not current readiness",
+                "Inside edit.batch, these are ordinary startup configuration edits, not live actuation; changed running edits restart and paused edits stale results; undo/redo follow ordinary schematic history",
+                "A fresh network transient commits the saved desired state and one undo entry immediately, preserving accepted time/charge/run/electrical revision; actuation revision changes separately",
+                "All pending switches apply as one staged group after the next accepted output sample advances the old applied circuit; a failed/canceled advance publishes neither partial time nor partial switch application",
+                "Paused changes remain pending until Step/Resume; simulation.wait alone does not advance time or apply a pending switch",
+                "Repeated desired values are no-ops; toggles coalesce to the final desired Boolean; returning to the applied state cancels that pending change",
+                "No separate input_work is launched; a changed desired state supersedes active input/manual-step work. Restart consumes the saved desired startup states at time zero",
+                "DC, stale or incomplete changes use ordinary electrical edit/restart/paused-stale behavior. Save/Verify capture desired startup states; live symbol/readings follow applied state"
+              ],
+              "errors": [
+                {
+                  "code": "invalid-params",
+                  "phase": "admission",
+                  "when": "Malformed/missing input, wrong or unknown target kind/ID, or invalid value"
+                },
+                {
+                  "code": "solve-failed",
+                  "phase": "step_work-or-live-simulation",
+                  "when": "Later sample/event solve fails; inspect the resulting work/diagnostic rather than attributing failure to desired-state admission"
+                },
+                {
+                  "code": "integration-attempt-limit",
+                  "phase": "step_work-or-live-simulation",
+                  "when": "Later sample exceeds the shared integration-attempt budget"
+                },
+                {
+                  "code": "integration-time-limit",
+                  "phase": "step_work-or-live-simulation",
+                  "when": "Later sample exceeds the shared integration wall-time budget"
+                }
+              ],
+              "preconditions": [
+                "Target is an existing component of the declared kind; incomplete/stale/DC drawings may be configured",
+                "Fresh network transient means snapshot.transient is initialized and not stale, with a fresh network state; running and paused both qualify"
+              ],
+              "scope": "interactive-part-actuation",
+              "version": 1
+            },
+            "x-interaction-summary": "Current transient readings: changes apply after the next sample; paused changes wait for Step or Resume. Otherwise the saved startup state changes.",
+            "x-state-inventory": "snapshot.switch_states: desired_closed, optional applied_closed, pending; absent applied state means no fresh applied reading",
+            "x-target-inventory": "snapshot.components filtered by kind switch"
+          },
+          "mutation": true,
+          "output": "Snapshot",
+          "output_schema": {
+            "$ref": "urn:elab:snapshot:1"
+          }
+        }
+      ],
+      "events": {
+        "command": "events.poll",
+        "default_timeout_ms": 1000,
+        "max_timeout_ms": 5000,
+        "max_waiters": 4,
+        "mode": "coalesced-latest-state",
+        "topics": [
+          "state",
+          "project",
+          "editor",
+          "view",
+          "simulation",
+          "diagnostics",
+          "jobs",
+          "measurements",
+          "recordings",
+          "recovery",
+          "preferences",
+          "lifecycle",
+          "library",
+          "preview",
+          "sweeps",
+          "printing"
+        ]
+      },
+      "mutation_preconditions": {
+        "combination": "A revision guard is required; all supplied revision/document guards must match",
+        "expected_command_revision": "Guards admitted commands, including other actors; live solver publication does not invalidate it",
+        "expected_document_generation": "Optional mutation context guard; prevents applying an old rendered action to a replacement document, including background publication",
+        "expected_revision": "Guards all state publication, including live samples"
+      },
+      "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee.",
+      "schema_version": 2,
+      "version": 1
+    }
+  },
+  "schemas_reference": {
+    "path": "docs/validation/rc-high-pass-discovery.json",
+    "member": "schemas",
+    "sha256": "5c5c46b0e5aef27c08d920c673f335aec3e092e31da96be82a91cf917a197243",
+    "schema_registry_sha256": "3e48ca222fb0976ca3132d8b85780d65a7bb08bb30d9ddad9e676316d3972125"
+  },
+  "reconstructed_bundle_sha256": "b8d2d25e92014e166e2e58ea6cd2b018a7a2fd6daa07bcdfaa215c5e85a0dddb",
+  "reconstruction": "Verify referenced file hash, read its schemas member, then replace schemas_reference with schemas in an elab.discovery-bundle version 1 object containing queries. Encode with sorted keys, indent 2 and a final newline. Per-query responses add schemas to each queries entry."
+}

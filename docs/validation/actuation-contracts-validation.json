@@ -1,0 +1,108 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.99.0",
+  "build_version": "114",
+  "binary_sha256": "b0ec8261b976b30b3e629a116775243efef48ea112ad5cbc23f7316711f1e828",
+  "agent_binary_sha256": "f780c6d6fcc7c5495143b34333291651701e7fb44d2638bbc94f023a4d3006d0",
+  "prior_bundle": "build/ELab-before-actuation-contracts.app",
+  "prior_binary_sha256": "40ea6f7953f24108137e94296dc323348bb661b67292bf5dbc058fcdfd70eb23",
+  "bundle_files_compared": 3,
+  "bundle_manifest_sha256": "0aafd8c4c1986708d9821d69324bf4e504d4464434f554468591b584921080ad",
+  "sdk_before": {
+    "commit": "82c0c5ec17fd7f90da1a0ac4a26d65a3de8367a4",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "sdk_after": {
+    "commit": "cebae61a01b9ca1d5f71beacd9d60ad5fd853fa7",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "sdk_update_review": "docs/validation/actuation-contracts-sdk-review.json",
+  "changed_sources_sha256": {
+    "workbench/capability_details.go": "c6f61b8251267780dc03c1a7fe8cf66933520570270c44b7e48fb8a5a83b33f5",
+    "workbench/actuation_capabilities.go": "06b1685c0c1d5f4e50bcb7cbd1c98450c3b01db9d45bec25a685b4431b46ac8d",
+    "workbench/actuation_capabilities_test.go": "ecc975c1ad27dc9a3326c236c625c06670b8d363183d449bbf3aa09a9fd3ab97",
+    "desktop/view.go": "9b188496e9cedf06eb0a9f4a8daefa9cb47f960c62b1bb29b5b5834b9c6d03cf",
+    "desktop/actuation_controls.go": "9b0e8148f7ca32ac2f1802d69411fcd355c2df5b2af4b89df1084d413166ee1e",
+    "desktop/actuation_controls_test.go": "e854c237a14c40bb7365a31863b8656872741cf7556291f837b20d7642266275",
+    "scripts/actuation-contracts-demo.py": "4edbdcbaaa348d6d2a3a94bf918bacb3a60d40523a51d11f387825c3ad3e30f3",
+    "scripts/validation_artifacts.py": "312d6e7196970a050d06d606472968ebbb3f9655dcecc6f8eccd66ebf525947b"
+  },
+  "native_source_review": {
+    "sources": 52,
+    "sites": 384,
+    "public_commands": 161,
+    "source_routes": 131,
+    "added_source": "desktop/actuation_controls.go",
+    "changed_source": "desktop/view.go",
+    "ingress_semantic_multiset_unchanged": true,
+    "review": "Switch and potentiometer builders moved from view.go with identical ingress expressions; help and pending-state readout added; rendered guards retained by assembled-view binding",
+    "additional_review": "Native callback suppresses unchanged float32 displayed percentages to preserve precise stored fractions; command targets/parameters/guards and ingress multiset unchanged"
+  },
+  "observations": {
+    "capacitor_before_actuation_v": 2.1607016642783763,
+    "capacitor_after_pending_switch_v": 2.816653667201719,
+    "independent_capacitor_reference_v": 2.817170536142668,
+    "exports": {
+      "svg": "9732683e532a6812c574308e88a19566d2e872b8a5fa841f3787ba5a130688af",
+      "png": "61bd0d3764f6af8be1ccb71620bf45eeffe68e3d5a6db2e8393875036fd1b2be"
+    }
+  },
+  "absolute_rc_reference_error_v": 0.0005168689409491556,
+  "checks": [
+    "Filtered switch/wiper contracts expose exact targets/domains, fresh/live and startup state paths, no-op/coalescing/supersession, save/history and asynchronous completion; ordinary catalog/output schemas unchanged",
+    "Native inspector and discovery share hints; callback tests distinguish requested percentage from committed/stale readings and preserve rendered revision guards",
+    "Precision regression fails before repair and passes after: unchanged represented native percent preserves exact stored .12345678912345 fraction and complete snapshot",
+    "Public native/headless workflows build from blank, preserve charge/time during wiper actuation and pending-switch Wait, advance old circuit then apply switch; independent Thevenin RC reference within 2 mV",
+    "Batch startup undo/redo, same-value purity, malformed range/wrong-kind refusal, fresh-process save/open and source/physics/history-pure SVG/PNG/PDF export pass; reports and SVG/PNG bytes match except transport",
+    "Final serial full lint/import/root/native race/vet and build pass; Python compile, source ledger, PRD coverage and whitespace checked",
+    "Isolated packaged GPU/UI/protected-close smoke and all four adapters with three reference circuits pass; all owned native and client processes exited",
+    "External Vellum test/report-only update reviewed; imported driver/library and 237 prepared outputs unchanged; final ELab checks/build run after update",
+    "Canonical/candidate/build binary bytes, bundle files/modes and .99/114 metadata match; prior .98 bundle preserved"
+  ],
+  "corrections": [
+    "Native unchanged-percentage commit previously rounded agent-set .12345678912345 to .1234567928314209 and created an edit. Equality at the represented float32 percent now suppresses that no-op without changing newly entered value precision.",
+    "Old switch documentation incorrectly required all source negatives grounded; floating DC sources are already supported, while waveform negatives and NPN emitters retain grounding restrictions."
+  ],
+  "limitations": [
+    "Mounted CUA session showed the circuit and successful AX object navigation; automated wheel/scrollbar actions did not reveal lower controls. Physical unchanged-value commits and new hint layout remain unqualified; callback tests are not full mounted input proof.",
+    "No device/kernel equations or quotas changed. The previous checkpoint electrical/performance suite was not repeated; this run includes existing full Go tests and four-adapter basic workflow conformance.",
+    "PNG reviewed directly; PDF header/state purity exercised without rendered PDF layout or physical printing. Existing small Fit text and broader caption issues remain.",
+    "Full mounted state, typing/IME/focus/accessibility, visible latency, clean distribution, participant and physical-printer acceptance remain open. P0 remains 17 implemented/10 partial.",
+    "Discovery witness losslessly reuses the hash-pinned rc-high-pass-discovery.json schemas member; reconstruction instructions and original bundle/per-response hashes are retained."
+  ],
+  "artifacts": [
+    "docs/interactive-actuation.md",
+    "docs/validation/actuation-contracts-conformance.json",
+    "docs/validation/actuation-contracts-discovery.json",
+    "docs/validation/actuation-contracts-headless.json",
+    "docs/validation/actuation-contracts-native.json",
+    "docs/validation/actuation-contracts-sdk-review.json",
+    "docs/validation/actuation-contracts-visual-review.json"
+  ],
+  "build_evidence_sha256": {
+    "build/actuation-contracts-099/check-reviewed.log": "fc4d42ea7558420a1af3d39b1301365d6bc77e66eae312f95b36b1a5ee566d6a",
+    "build/actuation-contracts-099/build-reviewed.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/actuation-contracts-099/native-numeric-before.log": "76b5cc65a6de4a6bc8621fd0d065ba1a2202537098e8c3fc7ab7eeb9cf0f6551",
+    "build/actuation-contracts-099/native-final.log": "c28eafb9bf840d91ca81b7cec972d45485be7c0c6f9caf4ebe783a929f02ccdc",
+    "build/actuation-contracts-099/core-final.log": "4bad61c00c043f6685e1d47c29b74bf3a6bf970fc5a17fc3d266f057b0251b49",
+    "build/actuation-contracts-099/smoke.log": "9d8da869997ac9daa83418ce7741df569a5b0d3361c01c1f612fb93dbda6896d",
+    "build/actuation-contracts-099/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/actuation-contracts-099/ui-inventory-review.json": "5d5eb603d401b5f13ef0111487aff0897ccb9730845b560231a54f84a9052af5",
+    "build/actuation-contracts-099/sdk-before.json": "a5a70c36b0a8503ee04d93ac6f989cd755c92f818147bc206ac3effd6a62d489",
+    "build/actuation-contracts-099/sdk-after.json": "90fade6d47869cbf391332d029da3869bfab84701bf1d279b943a9c7aea442bf",
+    "build/actuation-contracts-099/headless-reviewed.json": "1a0e4e2d2d20569dd41bbee42b85c845bd9ac7e93be480acc5d7c67e0639ace7",
+    "build/actuation-contracts-099/native-reviewed.json": "4d1e1037ba9cb8078e40f4dd7d13f07ed9714396f344511992d044a98b6452f3",
+    "build/actuation-contracts-099/promotion.json": "b827f4b37e7668b188bc9e951509530ef21c7bcbc1d693e8a94b3643685bb060"
+  }
+}

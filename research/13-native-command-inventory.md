@@ -1,6 +1,6 @@
 # Native control and command inventory
 
-The [source ledger](13-native-command-inventory.json) records **51 production native Go files, 384 source sites and 161 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 131 public commands. The remaining 30 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
+The [source ledger](13-native-command-inventory.json) records **52 production native Go files, 384 source sites and 161 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 131 public commands. The remaining 30 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
 
 **144 sites require binding review.** The other categories are 214 literal routes, nine declared native-wrapper/menu sites and 17 registry declarations. These are syntax sites, including overlapping factories and callbacks; they are not 384 unique visible controls or 131 runtime-qualified capabilities. No literal route names an unknown command.
 
@@ -118,3 +118,5 @@ The 0.97.0 capacitor-caption checkpoint changes only drawing.go among production
 
 
 The 0.98.0 high-pass checkpoint adds native alias `example.rc-high-pass → example.load` and entries in both Examples menus. Review covers only example_load.go, menus.go and view.go production hashes plus two menu expressions/line shifts. Sites/routes/public IDs remain 384/131/161 across 51 files. Blank construction, template/default-probe stepping, protected replacement, mounted smoke and actual AppKit activation add bounded runtime evidence.
+
+The 0.99.0 actuation-contract checkpoint extracts switch/wiper inspector builders from view.go into actuation_controls.go, adds shared state hints and distinguishes committed readings from pending wiper requests. The unchanged represented-percent guard prevents a native no-op from rounding precise stored fractions. Review verifies the complete ingress semantic multiset, aliases, public IDs and routes are unchanged: 52 files /384 sites /161 IDs /131 routes /144 binding-review /214 literal /nine wrapper-menu /17 registry sites. Native callback tests exercise the precision repair, requested/committed/stale labels and rendered revision guards. Automated wheel/scrollbar actions did not reveal the lower controls in the visual session; full physical typing/scrolling/accessibility acceptance remains open. See [interactive actuation](../docs/interactive-actuation.md).

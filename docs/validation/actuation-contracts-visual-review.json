@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-15",
+  "native_observations": [
+    "Owned candidate at 63% Fit with scope collapsed shows complete switch/potentiometer/capacitor circuit; schematic captions are small at this fit.",
+    "AX Next schematic object changed P1 selection to C1 and centered it.",
+    "Automated wheel and scrollbar attempts did not expose lower component controls, including the new hints. Physical unchanged-value commit and new hint layout were not qualified."
+  ],
+  "native_screenshot_file_retained": false,
+  "exported_png": {
+    "path": "build/actuation-contracts-099/native-reviewed-assets/actuators.png",
+    "sha256": "61bd0d3764f6af8be1ccb71620bf45eeffe68e3d5a6db2e8393875036fd1b2be",
+    "complete_circuit_clear_captions": true
+  },
+  "callback_tests": [
+    "Pending-request percentage uses requested value; readings explicitly label committed state; stale precedence",
+    "Assembled field rejects a stale rendered guard and accepts a current change",
+    "Unchanged represented float32 percent preserves precise committed fraction, graph/history/physics"
+  ],
+  "limits": [
+    "Callback tests do not establish mounted typing, IME, focus or accessibility.",
+    "Wheel/scrollbar automation failure is recorded without assuming a product or automation cause; mounted scrolling remains open.",
+    "PDF header/state purity exercised, not rendered PDF layout or physical printing.",
+    "Existing broader caption/fit readability issues remain open."
+  ]
+}

@@ -32,3 +32,5 @@ Up to 64 potentiometers fit within the existing [bounded network](switches.md) d
 Core tests compare loaded/unloaded divider and rheostat values against independent resistor equations, and capacitor charging against the Thevenin RC solution before and after wiper movement. They cover endpoint sums, conservation, running-clock continuity, no-op/range checks, independent snapshots/duplicates, batch/history semantics, strict imports and kept recordings. Native tray construction, slider/exact percentage fields, resistance editing and agent parity are exercised in the native suite and smoke.
 
 Run `python3 scripts/potentiometer-demo.py --output docs/validation/headless-potentiometer.json` after building. Add `--artifacts PATH` for saved projects/SVG/records. `--connect` is only for an owned development desktop: the fixture replaces its schematic.
+
+The [interactive control contract](interactive-actuation.md) makes pending-job and startup semantics discoverable. Native readouts distinguish requested percentages from committed electrical readings; recommitting an unchanged represented percentage preserves a more precise stored fraction.

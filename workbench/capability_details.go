@@ -89,6 +89,9 @@ func addCapabilityDetails(id string, schema map[string]any) {
 	if addScopeCapabilityDetails(id, schema) {
 		return
 	}
+	if addActuationCapabilityDetails(id, schema) {
+		return
+	}
 	if addLiveControlDetails(id, schema) {
 		return
 	}
@@ -164,9 +167,6 @@ func addCapabilityDetails(id string, schema map[string]any) {
 			inputRelation{Operator: "less_or_equal", Fields: []string{"waveform.fall_s", "waveform.low_s"}},
 			inputRelation{Operator: "sum_minimum", Fields: []string{"waveform.high_s", "waveform.low_s"}, Limit: .001})
 		schema["examples"] = []any{PulseParams{ID: "V1", Waveform: DefaultPulseWaveform()}}
-	case "potentiometer.wiper.set":
-		rangeSI("position", "fraction", 0, 1)
-		schema["examples"] = []any{WiperParams{ID: "P1", Position: .5}}
 	case "example.load":
 		ids := []string{}
 		for _, info := range ExampleCatalog() {

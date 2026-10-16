@@ -25,11 +25,11 @@ From the ELab directory:
 ./build/elab
 ```
 
-The window starts with a blank schematic. Pick a DC, sine, finite pulse or ideal square source, resistor, potentiometer, capacitor, red LED, silicon diode, NPN, SPST switch, junction, net label, or ground from the left palette, then click the sheet. Use Wire to click pairs of terminal dots. Select a component to edit its value in the right inspector; inputs such as `2.2k ohm` are accepted. The inspector also offers exact X/Y placement while a part is selected for placement, and named terminal connections while Wire is active.
+The window starts with a blank schematic. Pick a DC, sine, finite pulse or ideal square source, resistor, potentiometer, capacitor, red LED, silicon diode, NPN, N/P-channel MOSFET, SPST switch, junction, net label, or ground from the left palette, then click the sheet. Use Wire to click pairs of terminal dots. Select a component to edit its value in the right inspector; inputs such as `2.2k ohm` are accepted. The inspector also offers exact X/Y placement while a part is selected for placement, and named terminal connections while Wire is active.
 
 Connect source positive → resistor → LED anode, LED cathode → ground, and ground → source negative. Completing the loop starts live simulation. Examples → Load LED example loads a ready-made 5 V / 1 kΩ circuit. The 1 kΩ and 2 kΩ presets produce approximately 2.9168 mA and 1.4767 mA.
 
-**Examples → Manual transistor switch** opens a transistor-driven LED with its SPST control already selected. Close/open the switch in the Inspector and inspect base/collector currents. See the [manual transistor experiment](docs/manual-transistor-example.md).
+**Examples → Manual transistor switch** opens a transistor-driven LED with its SPST control already selected. Close/open the switch in the Inspector and inspect base/collector currents. See the [manual transistor experiment](docs/manual-transistor-example.md) and [switch/wiper timing and shared commands](docs/interactive-actuation.md).
 
 Captured runs now offer [time-weighted interval measurements](docs/interval-measurements.md): average, RMS, AC ripple RMS and peak-to-peak for voltage/current, through the same user and agent commands.
 
@@ -54,7 +54,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.98.0 --build-version 113 --platform darwin
+  --version 0.99.0 --build-version 114 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).

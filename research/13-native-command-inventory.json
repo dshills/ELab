@@ -2,6 +2,7 @@
   "format": "elab.native-command-inventory",
   "version": 1,
   "source_sha256": {
+    "desktop/actuation_controls.go": "9b0e8148f7ca32ac2f1802d69411fcd355c2df5b2af4b89df1084d413166ee1e",
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
     "desktop/canvas.go": "4428e114af900449274a074fea9a5a5f7840ddbaaa47cc4f7d5661ff2c418c29",
     "desktop/component_palette.go": "5d7b83aba4bd8202b899f0168848226f8217a8dd3dbd73d2ff6c8d99b752d3ab",
@@ -48,7 +49,7 @@
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
     "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
     "desktop/verification.go": "550f32b3d90b99269bce6777233b68e9329b2ae704b5b2fca60a1a368fbab406",
-    "desktop/view.go": "253b59cb653d65ef99b778682244d572a7e17f81237e5831941536817d2e45ef",
+    "desktop/view.go": "9b188496e9cedf06eb0a9f4a8daefa9cb47f960c62b1bb29b5b5834b9c6d03cf",
     "desktop/viewport.go": "a0d8a6a6b3577a0a909a0f7b3f339532a5abfde78fcf8a1979fb2e46f5f074cc",
     "desktop/waveforms.go": "73b1b24045b550ac31b25871c5194738a45ea4b6169ff9dd23e14b37467dd85e",
     "desktop/workflow.go": "7e39308677a6eec92663759ffbd61a568e1b87215d6453a31e8eae2bd11a6af0",
@@ -256,6 +257,44 @@
     ]
   },
   "sites": [
+    {
+      "file": "desktop/actuation_controls.go",
+      "line": 22,
+      "function": "*screen.potentiometerControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"potentiometer.wiper.set\", workbench.WiperParams{ID: part.ID, Position: float64(e.Number) / 100})",
+      "public_commands": [
+        "potentiometer.wiper.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/actuation_controls.go",
+      "line": 24,
+      "function": "*screen.potentiometerControls",
+      "kind": "node-Change",
+      "expression": "Change: change",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/actuation_controls.go",
+      "line": 24,
+      "function": "*screen.potentiometerControls",
+      "kind": "node-Change",
+      "expression": "Change: change",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/actuation_controls.go",
+      "line": 67,
+      "function": "*screen.switchControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"switch-actuate\", text, \"switch.set\", workbench.SwitchParams{ID: part.ID, Closed: !closed})",
+      "public_commands": [
+        "switch.set"
+      ],
+      "status": "literal-public-route"
+    },
     {
       "file": "desktop/appearance.go",
       "line": 22,
@@ -3582,45 +3621,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 237,
-      "function": "*screen.view",
-      "kind": "domain-ingress",
-      "expression": "s.invoke(\"potentiometer.wiper.set\", workbench.WiperParams{ID: part.ID, Position: float64(e.Number) / 100})",
-      "public_commands": [
-        "potentiometer.wiper.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/view.go",
       "line": 239,
-      "function": "*screen.view",
-      "kind": "node-Change",
-      "expression": "Change: change",
-      "status": "requires-binding-review"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 239,
-      "function": "*screen.view",
-      "kind": "node-Change",
-      "expression": "Change: change",
-      "status": "requires-binding-review"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 278,
-      "function": "*screen.view",
-      "kind": "action-factory",
-      "expression": "s.action(\"switch-actuate\", text, \"switch.set\", workbench.SwitchParams{ID: part.ID, Closed: !closed})",
-      "public_commands": [
-        "switch.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 288,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text}) }",
@@ -3628,7 +3629,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 288,
+      "line": 239,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
@@ -3639,7 +3640,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 288,
+      "line": 239,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"apply-value\", \"Apply label\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value})",
@@ -3650,7 +3651,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 300,
+      "line": 251,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text}) }",
@@ -3658,7 +3659,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 300,
+      "line": 251,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
@@ -3669,7 +3670,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 300,
+      "line": 251,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"apply-value\", \"Apply value\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value})",
@@ -3680,7 +3681,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 309,
+      "line": 260,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"r-1k\", \"1 kΩ\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"1k\"})",
@@ -3691,7 +3692,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 309,
+      "line": 260,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"r-2k\", \"2 kΩ\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"2k\"})",
@@ -3702,7 +3703,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 319,
+      "line": 270,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: fmt.Sprintf(\"%.9g V\", e.Number)})\n}",
@@ -3710,7 +3711,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 320,
+      "line": 271,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: fmt.Sprintf(\"%.9g V\", e.Number)})",
@@ -3721,7 +3722,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 321,
+      "line": 272,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"cap-initial-default\", \"Use experiment initial voltage\", \"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: \"default\"})",
@@ -3732,7 +3733,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 322,
+      "line": 273,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"c-1u\", \"1 µF\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"1uF\"})",
@@ -3743,7 +3744,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 322,
+      "line": 273,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"c-100u\", \"100 µF\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"100uF\"})",
@@ -3754,7 +3755,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 344,
+      "line": 295,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"rotate-part\", \"Rotate 90°\", \"component.rotate\", workbench.IDParams{ID: part.ID})",
@@ -3765,7 +3766,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 344,
+      "line": 295,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"duplicate-part\", \"Duplicate\", \"component.duplicate\", workbench.DuplicateParams{ID: part.ID})",
@@ -3776,7 +3777,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 350,
+      "line": 301,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"wire-insert-junction\", \"Insert junction on this wire\", \"wire.junction.insert\", workbench.JunctionInsertParams{WireIDs: []string{w.ID}})",
@@ -3787,7 +3788,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 364,
+      "line": 315,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"delete-object\", \"Delete selected\", \"object.delete\", workbench.IDParams{ID: state.Selected})",
@@ -3798,7 +3799,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 389,
+      "line": 340,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"tool-\"+tool, strings.ToUpper(tool[:1])+tool[1:], \"drawing.tool.set\", workbench.ToolParams{Tool: tool})",
@@ -3809,7 +3810,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 392,
+      "line": 343,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"view.fit\", \"Fit\")",
@@ -3820,7 +3821,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 394,
+      "line": 345,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"drawing.cancel\", \"Esc\")",
@@ -3831,7 +3832,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 394,
+      "line": 345,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-open\", \"DC sweep\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
@@ -3842,7 +3843,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 575,
+      "line": 526,
       "function": "*screen.view",
       "kind": "node-Custom",
       "expression": "Custom: s.drawing",
@@ -3850,7 +3851,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 585,
+      "line": 536,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(pause, pauseText)",
