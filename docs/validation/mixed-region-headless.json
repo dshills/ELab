@@ -1,0 +1,616 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "trace_state": "saturation",
+  "expected_state_source": "Q1",
+  "selected": "MX",
+  "mosfet_state": "cutoff",
+  "low_trace_state": "cutoff",
+  "initial_mixed": {
+    "mosfets": [
+      {
+        "id": "MX",
+        "model": {
+          "id": "elab.generic-nmos.v1",
+          "threshold_v": 1.5,
+          "beta_a_per_v2": 0.1,
+          "lambda_per_v": 0.02,
+          "body_diode": {
+            "id": "elab.generic-silicon-diode.v1",
+            "is_a": 1e-09,
+            "n": 1.7,
+            "rs_ohm": 1,
+            "temperature_c": 27,
+            "limitations": "Generic silicon junction with Shockley forward/reverse leakage and finite series resistance; no reverse breakdown, capacitance, charge storage, thermal dynamics, ratings or physical part identity."
+          },
+          "limitations": "Generic enhancement NMOS with square-law channel, channel-length modulation and source-to-drain body diode. Body tied to source; zero gate current. No subthreshold conduction, body effect, gate/junction capacitance, charge storage, switching loss, breakdown, heating, ratings or named device identity. External capacitors provide circuit timing."
+        },
+        "gate_current_a": 0,
+        "drain_current_a": 1e-09,
+        "source_current_a": 1e-09,
+        "vgs_v": 0,
+        "vds_v": 4.999999,
+        "power_w": 4.999999e-09,
+        "state": "cutoff"
+      }
+    ],
+    "engine": "elab.network-mna-be.v1",
+    "run_id": 9,
+    "electrical_revision": 8,
+    "time_s": 0,
+    "nodes_v": {
+      "net:D1.anode": 2.1396695089310063,
+      "net:D1.cathode": 0.05753380779429861,
+      "net:GND1.reference": 0,
+      "net:MX.drain": 4.999999,
+      "net:Q1.base": 0.6886034291648732,
+      "net:RB.1": 5,
+      "net:RL.1": 5
+    },
+    "transistors": [
+      {
+        "transistor_id": "Q1",
+        "model": {
+          "id": "elab.generic-npn.v1",
+          "saturation_current_a": 1e-14,
+          "forward_beta": 100,
+          "reverse_beta": 1,
+          "temperature_c": 27,
+          "limitations": "Educational Ebers\u2013Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+        },
+        "base_current_a": 0.00043113965708352066,
+        "collector_current_a": 0.0028603304910697507,
+        "emitter_current_a": 0.0032914701481532712,
+        "vbe_v": 0.6886034291648732,
+        "vce_v": 0.05753380779429861,
+        "power_w": 0.00046144995101805864,
+        "state": "saturation"
+      }
+    ],
+    "capacitors": [],
+    "leds": [
+      {
+        "id": "D1",
+        "current_a": 0.002860330491069517,
+        "voltage_v": 2.082135701136708,
+        "power_w": 0.005955596232505733
+      }
+    ],
+    "resistors": [
+      {
+        "id": "RB",
+        "current_a": 0.0004311396570835127,
+        "voltage_v": 4.311396570835127,
+        "power_w": 0.001858814039100889
+      },
+      {
+        "id": "RL",
+        "current_a": 0.0028603304910689935,
+        "voltage_v": 2.8603304910689937,
+        "power_w": 0.00818149051813899
+      },
+      {
+        "id": "RX",
+        "current_a": 1.0000000001397779e-09,
+        "voltage_v": 1.000000000139778e-06,
+        "power_w": 1.0000000002795558e-15
+      }
+    ],
+    "sources": [
+      {
+        "id": "VCC",
+        "current_a": 0.002860331491068994,
+        "voltage_v": 5,
+        "power_w": 0.014301657455344969
+      },
+      {
+        "id": "VIN",
+        "current_a": 0.0004311396570835127,
+        "voltage_v": 5,
+        "power_w": 0.0021556982854175634
+      }
+    ],
+    "kcl_residual_a": 5.230191280070073e-16,
+    "power_residual_w": -1.141448047192739e-15,
+    "numerical_damping_w": 0,
+    "stale": false
+  },
+  "final_mixed": {
+    "mosfets": [
+      {
+        "id": "MX",
+        "model": {
+          "id": "elab.generic-nmos.v1",
+          "threshold_v": 1.5,
+          "beta_a_per_v2": 0.1,
+          "lambda_per_v": 0.02,
+          "body_diode": {
+            "id": "elab.generic-silicon-diode.v1",
+            "is_a": 1e-09,
+            "n": 1.7,
+            "rs_ohm": 1,
+            "temperature_c": 27,
+            "limitations": "Generic silicon junction with Shockley forward/reverse leakage and finite series resistance; no reverse breakdown, capacitance, charge storage, thermal dynamics, ratings or physical part identity."
+          },
+          "limitations": "Generic enhancement NMOS with square-law channel, channel-length modulation and source-to-drain body diode. Body tied to source; zero gate current. No subthreshold conduction, body effect, gate/junction capacitance, charge storage, switching loss, breakdown, heating, ratings or named device identity. External capacitors provide circuit timing."
+        },
+        "gate_current_a": 0,
+        "drain_current_a": 1e-09,
+        "source_current_a": 1e-09,
+        "vgs_v": 0,
+        "vds_v": 4.999999,
+        "power_w": 4.999999e-09,
+        "state": "cutoff"
+      }
+    ],
+    "engine": "elab.network-mna-be.v1",
+    "run_id": 10,
+    "electrical_revision": 8,
+    "time_s": 0,
+    "nodes_v": {
+      "net:D1.anode": 2.1396695089310063,
+      "net:D1.cathode": 0.05753380779429861,
+      "net:GND1.reference": 0,
+      "net:MX.drain": 4.999999,
+      "net:Q1.base": 0.6886034291648732,
+      "net:RB.1": 5,
+      "net:RL.1": 5
+    },
+    "transistors": [
+      {
+        "transistor_id": "Q1",
+        "model": {
+          "id": "elab.generic-npn.v1",
+          "saturation_current_a": 1e-14,
+          "forward_beta": 100,
+          "reverse_beta": 1,
+          "temperature_c": 27,
+          "limitations": "Educational Ebers\u2013Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+        },
+        "base_current_a": 0.00043113965708352066,
+        "collector_current_a": 0.0028603304910697507,
+        "emitter_current_a": 0.0032914701481532712,
+        "vbe_v": 0.6886034291648732,
+        "vce_v": 0.05753380779429861,
+        "power_w": 0.00046144995101805864,
+        "state": "saturation"
+      }
+    ],
+    "capacitors": [],
+    "leds": [
+      {
+        "id": "D1",
+        "current_a": 0.002860330491069517,
+        "voltage_v": 2.082135701136708,
+        "power_w": 0.005955596232505733
+      }
+    ],
+    "resistors": [
+      {
+        "id": "RB",
+        "current_a": 0.0004311396570835127,
+        "voltage_v": 4.311396570835127,
+        "power_w": 0.001858814039100889
+      },
+      {
+        "id": "RL",
+        "current_a": 0.0028603304910689935,
+        "voltage_v": 2.8603304910689937,
+        "power_w": 0.00818149051813899
+      },
+      {
+        "id": "RX",
+        "current_a": 1.0000000001397779e-09,
+        "voltage_v": 1.000000000139778e-06,
+        "power_w": 1.0000000002795558e-15
+      }
+    ],
+    "sources": [
+      {
+        "id": "VCC",
+        "current_a": 0.002860331491068994,
+        "voltage_v": 5,
+        "power_w": 0.014301657455344969
+      },
+      {
+        "id": "VIN",
+        "current_a": 0.0004311396570835127,
+        "voltage_v": 5,
+        "power_w": 0.0021556982854175634
+      }
+    ],
+    "kcl_residual_a": 5.230191280070073e-16,
+    "power_residual_w": -1.141448047192739e-15,
+    "numerical_damping_w": 0,
+    "stale": false
+  },
+  "scope": {
+    "window": {
+      "mode": "live",
+      "start_s": 0,
+      "end_s": 0
+    },
+    "window_valid": true,
+    "statistics": [
+      {
+        "probe_id": "v:Q1.collector",
+        "count": 1,
+        "min": 0.05753380779429861,
+        "max": 0.05753380779429861,
+        "sample_mean": 0.05753380779429861,
+        "sample_rms": 0.05753380779429861
+      },
+      {
+        "probe_id": "i:Q1.collector",
+        "count": 1,
+        "min": 0.0028603304910697507,
+        "max": 0.0028603304910697507,
+        "sample_mean": 0.0028603304910697507,
+        "sample_rms": 0.0028603304910697507
+      },
+      {
+        "probe_id": "v:MX",
+        "count": 1,
+        "min": 4.999999,
+        "max": 4.999999,
+        "sample_mean": 4.999999,
+        "sample_rms": 4.999999
+      },
+      {
+        "probe_id": "i:MX.drain",
+        "count": 1,
+        "min": 1e-09,
+        "max": 1e-09,
+        "sample_mean": 1e-09,
+        "sample_rms": 1e-09
+      }
+    ],
+    "available": [
+      {
+        "id": "v:VCC.positive",
+        "label": "VCC.positive / ground",
+        "unit": "V",
+        "positive": "VCC.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:VCC.negative",
+        "label": "VCC.negative / ground",
+        "unit": "V",
+        "positive": "VCC.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:VCC",
+        "label": "VCC voltage",
+        "unit": "V",
+        "positive": "VCC.positive",
+        "reference": "VCC.negative"
+      },
+      {
+        "id": "i:VCC",
+        "label": "VCC delivered current",
+        "unit": "A",
+        "positive": "VCC.positive",
+        "reference": "out of positive"
+      },
+      {
+        "id": "v:VIN.positive",
+        "label": "VIN.positive / ground",
+        "unit": "V",
+        "positive": "VIN.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:VIN.negative",
+        "label": "VIN.negative / ground",
+        "unit": "V",
+        "positive": "VIN.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:VIN",
+        "label": "VIN voltage",
+        "unit": "V",
+        "positive": "VIN.positive",
+        "reference": "VIN.negative"
+      },
+      {
+        "id": "i:VIN",
+        "label": "VIN delivered current",
+        "unit": "A",
+        "positive": "VIN.positive",
+        "reference": "out of positive"
+      },
+      {
+        "id": "v:RB.1",
+        "label": "RB.1 / ground",
+        "unit": "V",
+        "positive": "RB.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:RB.2",
+        "label": "RB.2 / ground",
+        "unit": "V",
+        "positive": "RB.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:RB",
+        "label": "RB voltage",
+        "unit": "V",
+        "positive": "RB.1",
+        "reference": "RB.2"
+      },
+      {
+        "id": "i:RB",
+        "label": "RB current",
+        "unit": "A",
+        "positive": "RB.1",
+        "reference": "RB.2"
+      },
+      {
+        "id": "v:RL.1",
+        "label": "RL.1 / ground",
+        "unit": "V",
+        "positive": "RL.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:RL.2",
+        "label": "RL.2 / ground",
+        "unit": "V",
+        "positive": "RL.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:RL",
+        "label": "RL voltage",
+        "unit": "V",
+        "positive": "RL.1",
+        "reference": "RL.2"
+      },
+      {
+        "id": "i:RL",
+        "label": "RL current",
+        "unit": "A",
+        "positive": "RL.1",
+        "reference": "RL.2"
+      },
+      {
+        "id": "v:D1.anode",
+        "label": "D1.anode / ground",
+        "unit": "V",
+        "positive": "D1.anode",
+        "reference": "ground"
+      },
+      {
+        "id": "v:D1.cathode",
+        "label": "D1.cathode / ground",
+        "unit": "V",
+        "positive": "D1.cathode",
+        "reference": "ground"
+      },
+      {
+        "id": "v:D1",
+        "label": "D1 voltage",
+        "unit": "V",
+        "positive": "D1.anode",
+        "reference": "D1.cathode"
+      },
+      {
+        "id": "i:D1",
+        "label": "D1 current",
+        "unit": "A",
+        "positive": "D1.anode",
+        "reference": "D1.cathode"
+      },
+      {
+        "id": "v:Q1.base",
+        "label": "Q1.base / ground",
+        "unit": "V",
+        "positive": "Q1.base",
+        "reference": "ground"
+      },
+      {
+        "id": "v:Q1.collector",
+        "label": "Q1.collector / ground",
+        "unit": "V",
+        "positive": "Q1.collector",
+        "reference": "ground"
+      },
+      {
+        "id": "v:Q1.emitter",
+        "label": "Q1.emitter / ground",
+        "unit": "V",
+        "positive": "Q1.emitter",
+        "reference": "ground"
+      },
+      {
+        "id": "i:Q1.base",
+        "label": "Q1.base current",
+        "unit": "A",
+        "positive": "Q1.base",
+        "reference": "into device"
+      },
+      {
+        "id": "i:Q1.collector",
+        "label": "Q1.collector current",
+        "unit": "A",
+        "positive": "Q1.collector",
+        "reference": "into device"
+      },
+      {
+        "id": "i:Q1.emitter",
+        "label": "Q1.emitter current",
+        "unit": "A",
+        "positive": "Q1.emitter",
+        "reference": "out of device"
+      },
+      {
+        "id": "v:GND1.reference",
+        "label": "GND1.reference / ground",
+        "unit": "V",
+        "positive": "GND1.reference",
+        "reference": "ground"
+      },
+      {
+        "id": "v:MX.gate",
+        "label": "MX.gate / ground",
+        "unit": "V",
+        "positive": "MX.gate",
+        "reference": "ground"
+      },
+      {
+        "id": "v:MX.drain",
+        "label": "MX.drain / ground",
+        "unit": "V",
+        "positive": "MX.drain",
+        "reference": "ground"
+      },
+      {
+        "id": "v:MX.source",
+        "label": "MX.source / ground",
+        "unit": "V",
+        "positive": "MX.source",
+        "reference": "ground"
+      },
+      {
+        "id": "v:MX",
+        "label": "MX drain-source voltage",
+        "unit": "V",
+        "positive": "MX.drain",
+        "reference": "MX.source"
+      },
+      {
+        "id": "v:MX.gate-source",
+        "label": "MX gate-source voltage",
+        "unit": "V",
+        "positive": "MX.gate",
+        "reference": "MX.source"
+      },
+      {
+        "id": "i:MX.gate",
+        "label": "MX.gate current",
+        "unit": "A",
+        "positive": "MX.gate",
+        "reference": "into device"
+      },
+      {
+        "id": "i:MX.drain",
+        "label": "MX.drain current",
+        "unit": "A",
+        "positive": "MX.drain",
+        "reference": "into device"
+      },
+      {
+        "id": "i:MX.source",
+        "label": "MX.source current",
+        "unit": "A",
+        "positive": "MX.source",
+        "reference": "out of device"
+      },
+      {
+        "id": "v:RX.1",
+        "label": "RX.1 / ground",
+        "unit": "V",
+        "positive": "RX.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:RX.2",
+        "label": "RX.2 / ground",
+        "unit": "V",
+        "positive": "RX.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:RX",
+        "label": "RX voltage",
+        "unit": "V",
+        "positive": "RX.1",
+        "reference": "RX.2"
+      },
+      {
+        "id": "i:RX",
+        "label": "RX current",
+        "unit": "A",
+        "positive": "RX.1",
+        "reference": "RX.2"
+      }
+    ],
+    "selected": [
+      "v:Q1.collector",
+      "i:Q1.collector",
+      "v:MX",
+      "i:MX.drain"
+    ],
+    "traces": [
+      {
+        "probe": {
+          "id": "v:Q1.collector",
+          "label": "Q1.collector / ground",
+          "unit": "V",
+          "positive": "Q1.collector",
+          "reference": "ground"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 0.05753380779429861
+          }
+        ]
+      },
+      {
+        "probe": {
+          "id": "i:Q1.collector",
+          "label": "Q1.collector current",
+          "unit": "A",
+          "positive": "Q1.collector",
+          "reference": "into device"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 0.0028603304910697507
+          }
+        ]
+      },
+      {
+        "probe": {
+          "id": "v:MX",
+          "label": "MX drain-source voltage",
+          "unit": "V",
+          "positive": "MX.drain",
+          "reference": "MX.source"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 4.999999
+          }
+        ]
+      },
+      {
+        "probe": {
+          "id": "i:MX.drain",
+          "label": "MX.drain current",
+          "unit": "A",
+          "positive": "MX.drain",
+          "reference": "into device"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 1e-09
+          }
+        ]
+      }
+    ],
+    "run_id": 10,
+    "stale": false,
+    "active_cursor": "a",
+    "readings": []
+  }
+}

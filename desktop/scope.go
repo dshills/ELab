@@ -221,8 +221,8 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 		caption = fmt.Sprintf("t = %.4g s · τ = %.3g ms · run %d", t.Sample.Time, t.TimeConstant*1000, t.RunID)
 		if npn {
 			region := t.Sample.State
-			if state.Mixed != nil && len(state.Mixed.MOSFETs) > 0 {
-				region = state.Mixed.MOSFETs[0].ID + " " + region
+			if deviceID, _ := workbench.MixedRegion(state.Mixed); deviceID != "" {
+				region = deviceID + " " + region
 			}
 			caption = fmt.Sprintf("t = %.4g s · %s · run %d", t.Sample.Time, region, t.RunID)
 		}

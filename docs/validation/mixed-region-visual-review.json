@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-16",
+  "review": "research/ui-audit/mixed-region/README.md",
+  "screenshots_sha256": {
+    "research/ui-audit/mixed-region/01-before.png": "a68cbe0fd85bae5cf57c36470034a7b74019cf6e8cba210b176d7ab1d1e8a03b",
+    "research/ui-audit/mixed-region/02-after.png": "e6f81d35450f979afd75f496e518df0eaf3eea7d78ca87652f540ee7a3e4320e",
+    "research/ui-audit/mixed-region/03-after-low-step.png": "c80d12b9c4ca2ed5721e9c833a524d45994db9a24418093418b78a6ed1c83682"
+  },
+  "observations": [
+    ".102 actual native baseline caption attributes Q1 saturation to MX while separate MX card says cutoff",
+    "Final candidate uses Q1 saturation with identical accepted physics and MX selection",
+    "Physical Low shows pending legend and retains accepted high caption; physical Step accepts Q1 cutoff at 1ms"
+  ],
+  "limits": [
+    "Small fitted schematic and missing CUA inspector semantics remain",
+    "Not complete mounted keyboard/IME/pointer/wheel/focus/screen-reader or visible-latency/participant qualification",
+    "Fixture has no capacitors; no new charge-continuity qualification"
+  ]
+}

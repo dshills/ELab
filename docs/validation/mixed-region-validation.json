@@ -1,0 +1,119 @@
+{
+  "passed": true,
+  "date": "2026-10-16",
+  "app_version": "0.103.0",
+  "build_version": "118",
+  "binary_sha256": "f23de3e74312688f977f932d3f13b08f52650e85c113c7f014a232fd32f6de20",
+  "agent_binary_sha256": "29dcb139381e209929bcc45e9bce5d1c8caf6f6dbe2f67222ec02c0495557aaa",
+  "prior_bundle": "build/ELab-before-mixed-region.app",
+  "prior_binary_sha256": "8c3426964f3b71fac668db14e2a49ca2a51f611d13656f93e5a2abdb4405067e",
+  "bundle_files_compared": 3,
+  "bundle_manifest_sha256": "b27db54c18d485db382e2ebc9640f9b78f95256bf3ca88af4242404cb12da51b",
+  "sdk_before": {
+    "commit": "6330b2d42050b46c2019e558074e087ed281e56a",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "sdk_after": {
+    "commit": "6330b2d42050b46c2019e558074e087ed281e56a",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "workbench/mixed_region.go": "92c7d2ef7477a18f91b375ec3ccd31dc555e251e04edbd4e3d51192d6071be63",
+    "workbench/mixed_transient.go": "e9ace2758e154d170f7f63a140c81795d4d317064fdee1aa9792ab25a72253c5",
+    "desktop/scope.go": "54a4a3eb58c812832ee9e531b99aa2b13ae4eab87ffd657c4ab199d84f59d8ee",
+    "desktop/mixed_region_test.go": "95081acafa011eec6c78a788969c00170d3b6cdce2c97fd142fa713d1292a9b9"
+  },
+  "native_source_review": {
+    "sources": 53,
+    "sites": 384,
+    "public_commands": 161,
+    "source_routes": 131,
+    "changed_sources": [
+      "desktop/scope.go"
+    ],
+    "ingress_semantics_unchanged": true,
+    "scope": "Scope caption uses shared trace-region identity policy; no ingress expression, public command, alias or route changes"
+  },
+  "checks": [
+    "Reproduced a .102 mixed-family caption defect: scope says M1/MX saturation when accepted NPN Q1 is saturated and MOSFET is cutoff. Native blank-construction regression fails before repair",
+    "Shared MixedRegion couples state/identity with existing NPN-first, then MOSFET, then generic-network precedence. Trace state values are unchanged; native caption uses the shared source ID. Independent named first-MOSFET summary is preserved",
+    "Native/agent blank construction, selection and falling pulse edge pass. Actual owned .102/.103/headless fixture accepted Mixed/scope reports match apart from transport; no numerical-result change",
+    "Current-run CUA before/after confirms MX saturation becomes Q1 saturation while MX card remains cutoff. Physical Low request remains pending; physical Step accepts Q1 cutoff at 1ms with MX still selected. Both screenshots and public state retained",
+    "Final serialized lint/import/root/native race/vet and build pass; native race package reports 100.132 seconds. Packaged GPU/UI/lifecycle smoke passes; four adapters pass three LED/RC/NPN reference workflows",
+    "Unchanged CMOS public workflow exactly matches the retained .102 report, including capture rows, model/discovery observations and SVG/PNG export hashes",
+    "Native source ledger verifies 53 files /384 sites /161 public IDs /131 routes; only scope.go production hash changes, with all ingress-site semantic fields/aliases/command sets/routes unchanged",
+    "Numerical equations/models/work limits, public commands and file formats unchanged. SDK 6330b2d stays clean with same manifest and 232 upstream +5 typesetting prepared outputs verified; no SDK files changed or SDK suite rerun",
+    "Canonical .103/118 matches final candidate/build bytes and bundle modes/metadata; prior .102 preserved; all owned processes exited",
+    "Inductor integration obligations and unresolved timestep/operating-point/storage questions mapped in research/14; design only, no inductor part/model shipped"
+  ],
+  "corrections": [
+    "Staticcheck first rejected two new test-style issues (slice append loop and case-insensitive comparison); corrected before the final full gate",
+    "First public fixture asked for nonexistent generic three-terminal probe v:Q1. Existing inventory correctly refused it; corrected to v:Q1.collector. The serial set-e quality/build/package steps had already passed before this later harness failure"
+  ],
+  "limitations": [
+    "Small fitted text, missing CUA inspector semantics and full mounted keyboard/IME/pointer/wheel/focus/screen-reader coverage remain open",
+    "No new visible latency, participant, clean distribution, full-platform or physical-printer acceptance. The no-capacitor mixed fixture does not newly qualify charge continuity",
+    "Full 294-check electrical/performance suites were not repeated because numerical equations/models are unchanged; standard regression and scoped fixture evidence are retained separately",
+    "Inductors are planned only. P0 remains 17 implemented /10 partial; continuing project goal remains active"
+  ],
+  "artifacts": [
+    "docs/mixed-device-regions.md",
+    "research/ui-audit/mixed-region/README.md",
+    "research/14-inductor-integration-plan.md",
+    "docs/validation/mixed-region-headless.json",
+    "docs/validation/mixed-region-public.json",
+    "docs/validation/mixed-region-conformance.json",
+    "docs/validation/mixed-region-visual-review.json"
+  ],
+  "artifacts_sha256": {
+    "docs/mixed-device-regions.md": "e490ebc53f605b22145df547e2313580f0e9ff923215e87a6a96e81b593d7ff2",
+    "research/ui-audit/mixed-region/README.md": "3acedf38985c99f6d9c28d0a880e387208e246c4b8c1c301edb50b0f66c53d8c",
+    "research/14-inductor-integration-plan.md": "b2861f34b394e1b60e2af46f39f80cc41d376f0fdb16ec347f211dcc89df31d4",
+    "docs/validation/mixed-region-headless.json": "7b334b694dc874a3a70e2c38b4a708bf4f69b072e58b53f75fdbc90671c2a5f8",
+    "docs/validation/mixed-region-public.json": "bb0008efdc1a3e50fffb2558b9774f627d6375227bbc3c39a308f82021b3aca8",
+    "docs/validation/mixed-region-conformance.json": "f1a589f43ad2bc069bd717e3f7e038f3c5c93ae4cfd21a5e21ad32d25e33b596",
+    "docs/validation/mixed-region-visual-review.json": "51c11e126c9c2f7b4f96c65c30cd557560749c03e316772368439db3204315ad"
+  },
+  "build_evidence_sha256": {
+    "build/mixed-region-103/region-before.log": "331c6911903d1c87765b4aca9414965a37d0dc2b6e853bf6f03c4f8ffe28b9a2",
+    "build/mixed-region-103/native-focused.log": "4b24b8820eabec4b71106b0c34abadc9ddb46be331ac7540366f9e4dffa2acec",
+    "build/mixed-region-103/check.log": "330e474592c0799534e8aa37764627a74fc6aa8024d0e5cf4aa1ac8da9ff3e39",
+    "build/mixed-region-103/check-final.log": "e5d0adbd014f47ed4c6188a9a18668e24d8246e5eeb892ef88baeed1d0b3490b",
+    "build/mixed-region-103/build-final.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/mixed-region-103/package.log": "181b9cf76f9d5c2d4cba02146e4d00ab6881aaed5704cae298c9a8013dfc9fcd",
+    "build/mixed-region-103/fixture.py": "4d4a4355fc4ad143d83e7d97f4b0baab06fc971279be6d917832db65206d5e96",
+    "build/mixed-region-103/run-native.sh": "b2987a3e8c877977622800d1fd2c5b2b96eb08a80a48095813bf70c6e0b3ea1d",
+    "build/mixed-region-103/headless.log": "0f8aa60aaeaeb698377740e76104b15161ad915d8f49d8557480f14044687d9e",
+    "build/mixed-region-103/headless-corrected.log": "3feebd27c9291401cfe16711884047ffd218b9bff7e9961afc15ed431cf23bf2",
+    "build/mixed-region-103/headless.json": "7b334b694dc874a3a70e2c38b4a708bf4f69b072e58b53f75fdbc90671c2a5f8",
+    "build/mixed-region-103/baseline.json": "9f4f698e2060597e7691a924bb08d79bd6669d74c72076d81551af40026e7eb1",
+    "build/mixed-region-103/native.json": "9f4f698e2060597e7691a924bb08d79bd6669d74c72076d81551af40026e7eb1",
+    "build/mixed-region-103/baseline-host.log": "3202a1ef8a12e66f53a85bf2b2cb4a3664783f99629a5254f2e1c43709646dd9",
+    "build/mixed-region-103/native-host.log": "c69bc1b54a5c739c65e70939c32910c178310c0e210ed350d2b0b988501df302",
+    "build/mixed-region-103/before-ax.txt": "d4bf54e3d517e6a5ab25587606ab1001dc135912e9bd618eefc73dd5ad8c9b9d",
+    "build/mixed-region-103/after-ax.txt": "571195f2cbc5bba405095471606a5acdf04f0724948c5cb1d4e20c6248d8e68e",
+    "build/mixed-region-103/low-ax.txt": "93bb4bf3f5225f4ff8df91a2b117834fb2ddc585a2cf4562e6afa30a0c07bf3b",
+    "build/mixed-region-103/native-low-request.json": "3a5955257243fb6706a36977717a31c84398dba15997c263fccc0ff13cc8345c",
+    "build/mixed-region-103/native-low-accepted.json": "1da58429cd05b39339f110554212790310a5748f0803d92893af02958fca8109",
+    "build/mixed-region-103/smoke.log": "f1be65571badcdf67d0c124e5b2273a6e47b122cc6a0e73baf5bfb6d14516893",
+    "build/mixed-region-103/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/mixed-region-103/cmos.json": "1bfbe34fe85a676ac6004ec459b8957cc1714db42391ae117290c8cce664ded1",
+    "build/mixed-region-103/cmos.log": "4d167bcbb0cd9e9ee0c326d7fbb774af4e92e3eb9277caa990e663a1ca2b08c1",
+    "build/mixed-region-103/ui-inventory-final.json": "0f46a1bf20f7da69b8efda10413ff611f87aa685b31de6d8a76d53c9b88cae58",
+    "build/mixed-region-103/ui-inventory-review.json": "acfe98a9253bb1738c3fa76696336d0bd940b2beb75f08e1e4eb35b579c1abf6",
+    "build/mixed-region-103/sdk-before.json": "703a5929281e1a8cbbf5612e57f2765fd7b452801356e65125af84550fbba5d2",
+    "build/mixed-region-103/sdk-after.json": "703a5929281e1a8cbbf5612e57f2765fd7b452801356e65125af84550fbba5d2",
+    "build/mixed-region-103/processes-final.json": "e7644776ab8e750bad76da6c34dd9ff8392a809545a00f256cec584e8bb6b715",
+    "build/mixed-region-103/promotion.json": "eda1b78f7a613285feaf67f52eb9adc5a744b14ddf4f237dbbb502b97117e13b"
+  }
+}

@@ -13,10 +13,11 @@ func IsNPNTransientEngine(e string) bool {
 	return e == WaveformEngineID || e == NPNTransientEngineID || e == MixedEngineID || e == NetworkEngineID
 }
 func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
-	p := TraceSample{Time: r.Time, Input: input, Voltage: r.Nodes[compiled.Output], State: "network"}
+	_, region := MixedRegion(r)
+	p := TraceSample{Time: r.Time, Input: input, Voltage: r.Nodes[compiled.Output], State: region}
 	if len(r.MOSFETs) > 0 {
 		m := r.MOSFETs[0]
-		p.Voltage, p.Current, p.State = m.VDS, m.DrainCurrent, m.State
+		p.Voltage, p.Current = m.VDS, m.DrainCurrent
 	}
 	if len(r.Transistors) > 0 {
 		q := r.Transistors[0]
@@ -24,7 +25,6 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		p.Current = q.CollectorCurrent
 		p.BaseCurrent = q.BaseCurrent
 		p.VBE = q.VBE
-		p.State = q.State
 	}
 	if len(r.LEDs) > 0 {
 		p.Current = r.LEDs[0].Current

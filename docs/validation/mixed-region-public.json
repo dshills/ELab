@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "retained_report": {
+    "path": "docs/validation/mixed-region-headless.json",
+    "sha256": "7b334b694dc874a3a70e2c38b4a708bf4f69b072e58b53f75fdbc90671c2a5f8"
+  },
+  "current_reports_sha256": {
+    "build/mixed-region-103/headless.json": "7b334b694dc874a3a70e2c38b4a708bf4f69b072e58b53f75fdbc90671c2a5f8",
+    "build/mixed-region-103/native.json": "9f4f698e2060597e7691a924bb08d79bd6669d74c72076d81551af40026e7eb1",
+    "build/mixed-region-103/baseline.json": "9f4f698e2060597e7691a924bb08d79bd6669d74c72076d81551af40026e7eb1"
+  },
+  "native_and_baseline_reconstruction": {
+    "replace_transport": "native-socket",
+    "sha256": "9f4f698e2060597e7691a924bb08d79bd6669d74c72076d81551af40026e7eb1",
+    "method": "Deep-copy retained headless report, replace transport and serialize with json.dumps(indent=2) plus final newline; exact current native and actual .102 baseline report bytes match"
+  },
+  "cmosevidence": {
+    "current_run": "build/mixed-region-103/cmos.json",
+    "sha256": "1bfbe34fe85a676ac6004ec459b8957cc1714db42391ae117290c8cce664ded1",
+    "identical_retained_report": {
+      "path": "docs/validation/cmos-headless.json",
+      "sha256": "1bfbe34fe85a676ac6004ec459b8957cc1714db42391ae117290c8cce664ded1"
+    }
+  },
+  "mounted_low_step": {
+    "time_s": 0.001,
+    "trace_state": "cutoff",
+    "npn_id": "Q1",
+    "npn_state": "cutoff",
+    "mosfet_id": "MX",
+    "mosfet_state": "cutoff",
+    "selected": "MX"
+  },
+  "scope": "Actual baseline/candidate/headless fixture parity; physical native Low then Step and separate unchanged CMOS public workflow. No new numerical/device/whole-input qualification."
+}
