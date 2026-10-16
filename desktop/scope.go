@@ -38,6 +38,10 @@ func (c *scopeCanvas) Mount(parent tree.Node) core.Widget {
 	c.gesture = nil
 	epoch := c.mountEpoch
 	w := widget.AsWidget()
+	owner, window, scoped := cogent.WindowScope(w)
+	if !scoped || owner != c.Owner {
+		return nil
+	}
 	c.widget = w
 	w.OnFirst(events.Scroll, func(e events.Event) { forwardScopeScroll(w, e) })
 	for _, kind := range []events.Types{events.MouseDown, events.SlideMove} {
@@ -45,7 +49,7 @@ func (c *scopeCanvas) Mount(parent tree.Node) core.Widget {
 			if c.screen != nil {
 				frame := c.frame.Load()
 				pos := e.Pos().Sub(w.Geom.Pos.Content.ToPoint())
-				c.Owner.Do(func() {
+				withWindowOwner(c.Owner, window, func() {
 					if c.mountEpoch == epoch {
 						c.cursorGesture(frame, float64(pos.X), kind == events.MouseDown)
 					}
@@ -55,7 +59,7 @@ func (c *scopeCanvas) Mount(parent tree.Node) core.Widget {
 		})
 	}
 	w.OnFirst(events.SlideStop, func(e events.Event) {
-		c.Owner.Do(func() {
+		withWindowOwner(c.Owner, window, func() {
 			if c.mountEpoch == epoch {
 				c.gesture = nil
 			}

@@ -22,7 +22,11 @@ func openCloseTestWindow(t *testing.T, s *screen) {
 }
 func requestTestClose(t *testing.T, s *screen) {
 	t.Helper()
-	if err := s.app.CheckCloseWindow("main"); !errors.Is(err, app.ErrCloseRefused) {
+	ref, err := s.windowReference()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := s.app.CheckCloseWindow(ref); !errors.Is(err, app.ErrCloseRefused) {
 		t.Fatal("native policy bypassed asynchronous service admission", err)
 	}
 }

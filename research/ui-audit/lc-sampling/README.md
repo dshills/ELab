@@ -1,0 +1,15 @@
+# LC sampling controls
+
+October 16, 2026. Owned 0.105.0 /120 candidate, default 1185 ×855 captured window, Light appearance. This is a bounded rendered/keyboard check, not complete interaction or accessibility qualification.
+
+1. **Supported minimum.** With 1 µH /1 nF and a 1 µs interval, the notice explicitly says the reference scale cannot be resolved; no ineffective Fit button remains. With no selected component, collapsing scope exposes the complete paragraph. [Minimum notice](minimum-limit.jpg).
+2. **Ordinary fit.** Agent preparation changed the fixture to 10 mH /1 µF and 1 ms outputs. The Inspector shows approximately 628.3 µs reference and 19.63 µs suggested step, explains paused application, and labels the estimate as value-based. [Before fitting](before-fit.jpg).
+3. **Physical keyboard action.** Tab reaches Fit sampling with a visible focus ring; Return applies it. The warning/button disappear and the live sample interval receives focus with `19.634954084936208 us`. Public inspection corroborates a 19.634954 µs interval, unchanged accepted time 200 µs, paused state and resolved advice. [Focused action](keyboard-fit.jpg), [focused interval](after-fit.jpg), [corroborating state](after-fit-state.json). This did not restart the paused physical readings.
+
+CUA coordinate clicks on the visible button and wheel/scrollbar actions produced no accepted changes; they remain inconclusive. Keyboard activation succeeded. The accessibility tree omits this visible inspector section and several existing fields. The focused interval is brought into view, but its label is above the visible rail boundary in this capture. Those limitations remain open; a green callback test is not a physical pointer or screen-reader proof. Small schematic text at fitted zoom also remains a readability concern. No SDK or OS appearance setting was changed.
+
+All four images are original CUA JPEG bytes saved unchanged and inspected from disk. The initial `.png` names were corrected to `.jpg` after checking their actual encoding. The owned app was closed through its public command and its original supervisor exited successfully. Public native/headless workflows separately cover retries, captures, save/reopen, batch and floor behavior; they do not replace this physical-input evidence.
+
+## Final SDK verification
+
+After the external Vellum 2ced41a update, the final rebuilt bundle repeats the same minimum notice and actual Tab → Return fit. [Final minimum](final-sdk-minimum.jpg), [final focused action](final-sdk-keyboard-fit.jpg), [final focused interval](final-sdk-after-fit.jpg), [accepted state](final-sdk-after-fit-state.json). These three additional original CUA JPEGs were saved unchanged and inspected from disk. The accepted time remains 200 µs and paused; the interval is 19.634954 µs. A coordinate click still produced no accepted change, and the inspector section is still absent from CUA's tree. The interval label remains above the scrolled boundary. These limits are not qualified by the successful keyboard action. The final owned UI supervisor exited zero after public Close.

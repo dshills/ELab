@@ -1,0 +1,67 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "discovery": {
+    "bundle_sha256": "b446d6aa9a1d5d67216d7c4f5f85f43f1cee2c396f6220a9e554c28654f163b1",
+    "schema_registry_count": 70,
+    "schema_registry_sha256": "e6ed0ed898ce39b1fdf5e0dc56a60af87cae7457887cdd59b327fbb806db1e3b",
+    "full_response_sha256": {
+      "simulation.sampling.fit": "5511d3f49c2e11db3b4fa1bfb15c118f7515c834fec47629270bf7a1b1c826e5",
+      "simulation.transient.set": "a00b16c03ca82dc25f7de6fc1371fc7297acd7a2a0d4fd0a7226f681b6d0cfc6"
+    }
+  },
+  "analytic_peak_v": 7.2217211254424445,
+  "captures": {
+    "coarse": {
+      "rows": 3,
+      "step_s": 0.001,
+      "sampled_peak_v": 5.423879811314229,
+      "max_reference_error_v": 7.607248164731573e-12
+    },
+    "fitted": {
+      "rows": 103,
+      "step_s": 1.9634954084936207e-05,
+      "sampled_peak_v": 7.212202825349516,
+      "max_reference_error_v": 2.914060104330929e-10
+    },
+    "explicit-coarse": {
+      "rows": 3,
+      "step_s": 0.001,
+      "sampled_peak_v": 5.423879811314229,
+      "max_reference_error_v": 7.607248164731573e-12
+    }
+  },
+  "fitted_step_s": 1.9634954084936207e-05,
+  "fitted_playback": 0.01,
+  "retained_live_time_s": 0.0002,
+  "minimum_advice": {
+    "inductor_id": "L1",
+    "capacitor_id": "C1",
+    "reference_period_s": 1.9869176531592202e-07,
+    "target_step_s": 6.209117666122563e-09,
+    "recommended_step_s": 1e-06,
+    "minimum_step_s": 1e-06,
+    "unresolved": true,
+    "minimum_limited": true,
+    "can_fit": false,
+    "note": "Based on the smallest L/C values, not a measured period or circuit-pole estimate. Damping, connections and active devices can change timing. The supported minimum cannot resolve this reference scale."
+  },
+  "reopened_recordings": 3,
+  "retry_retained": true,
+  "checks": [
+    "DC-powered LC advice",
+    "independent RLC rows and recovered sampled peak",
+    "advanced paused physics retained stale",
+    "exact retry retention",
+    "existing captured samples unchanged",
+    "explicit Verify override preserved",
+    "one undo/redo and fresh-process persistence",
+    "staged-value atomic fit and rollback",
+    "unresolved supported-minimum limitation",
+    "original saved file unchanged"
+  ],
+  "limitations": [
+    "configured-value LC reference is not a measured period, circuit-pole estimate or resolution guarantee",
+    "public/native API workflow is separate from physical typing, focus, accessibility and visible-latency acceptance"
+  ]
+}

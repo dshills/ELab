@@ -41,13 +41,17 @@ func (s *screen) loadRecoveryRead(work *workbench.RecoveryReadWork) {
 	if work.Status != "completed" || cache.id == work.ID {
 		return
 	}
+	window, windowErr := s.windowReference()
+	if windowErr != nil {
+		return
+	}
 	*cache = recoveryReadCache{id: work.ID, loading: true}
 	captured := *work
 	go func() {
-		ctx, cancel := context.WithTimeout(s.app.Context(), 10*time.Second)
+		ctx, cancel := context.WithTimeout(window.Context(), 10*time.Second)
 		defer cancel()
 		result, err := readRecoveryResult(ctx, s.service, captured)
-		_ = s.app.PostWindow("main", func() {
+		_ = s.app.PostWindow(window, func() {
 			cache := s.recoveryCache(captured.Input.Kind)
 			// Selection may change while decoding. Keep this immutable result so
 			// returning to the same copy cannot strand a loading cache. Rendering

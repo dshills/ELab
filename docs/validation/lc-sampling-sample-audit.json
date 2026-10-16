@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "source_report_sha256": "3ac90cbe5d1df280faff649540f0c42c48496f4a2c540ec08e1177e1061667e3",
+  "samples": 640,
+  "coil_samples": 640,
+  "original_samples": 0,
+  "summaries": [
+    {
+      "adapter": "in-process",
+      "suite": "inductor_performance",
+      "samples": 160,
+      "max_case_p95_fresh_ms": 3.092083,
+      "max_case_p95_verify_ms": 227.229416,
+      "max_verify_ms": 234.225833
+    },
+    {
+      "adapter": "headless-stdio",
+      "suite": "inductor_performance",
+      "samples": 160,
+      "max_case_p95_fresh_ms": 7.425416,
+      "max_case_p95_verify_ms": 260.11962500000004,
+      "max_verify_ms": 262.683042
+    },
+    {
+      "adapter": "headless-socket",
+      "suite": "inductor_performance",
+      "samples": 160,
+      "max_case_p95_fresh_ms": 7.541084,
+      "max_case_p95_verify_ms": 235.16179100000002,
+      "max_verify_ms": 251.25862500000002
+    },
+    {
+      "adapter": "native-socket",
+      "suite": "inductor_performance",
+      "samples": 160,
+      "max_case_p95_fresh_ms": 11.055459,
+      "max_case_p95_verify_ms": 203.603458,
+      "max_verify_ms": 230.813458
+    }
+  ]
+}

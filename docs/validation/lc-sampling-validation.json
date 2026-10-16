@@ -1,0 +1,426 @@
+{
+  "passed": true,
+  "format": "elab.lc-sampling-validation",
+  "version": 1,
+  "date": "2026-10-16",
+  "app_version": "0.105.0",
+  "build_version": "120",
+  "source_parent_commit": "f4e19812a2a6be8070ed16aeb282447b0d5a2222",
+  "qualification_scope": "Curated local-workstation sampling/workflow checkpoint; broader MVP/product acceptance remains open",
+  "changed_sources_sha256": {
+    "desktop/canvas.go": "a241f57812c104171737149f067ae8a0d5aaf191c17092597c5a060b4587c7ef",
+    "desktop/dc_sweep_canvas.go": "6404c77863729aedfd18a886e88d57889c51c374197189de91665d7142ad1022",
+    "desktop/files.go": "d8e0e9c841e5ecbd685f9883b11dbf58c98b85f0af6c85a327d13248708a7747",
+    "desktop/inductor_smoke.go": "e26134da1b47f4b479d4d7c4a82deb579c76d2969994571999552f1cb0af6524",
+    "desktop/lifecycle_smoke.go": "af3fb6f34c96ae37ab93b5dbdf8d9914d8966032ee48b9ca9ee6fa2c132a5fb0",
+    "desktop/lifecycle_test.go": "3c67fb88b090d1c459884731001a6baf5ac7fd10cdd670ceeb6cc162402b8674",
+    "desktop/main.go": "60d063ab5488e0e807a89e0a802e6feebdd4d7127929b5751c7a9e1831d0aca3",
+    "desktop/menus_darwin.go": "3f7cd30cc99b38b4385e56303bbc790cce6e03add876634ff44cb267815522ea",
+    "desktop/pointer_darwin.go": "c1c5309bb10a6a4df62c9e34f8f42ab61ecf10dc7dfe01495b2200141ebba82d",
+    "desktop/pointer_other.go": "7c451ae4f8235e78e3e2803086c738488ee5463e878b003a203b9929497461c1",
+    "desktop/print_preview.go": "3cc0ff9070556c30b0a490090985c879fd5796918055da27bd4aa7a98957ecdc",
+    "desktop/recovery_read.go": "3f536a3af7ea2480b69a8142f600b24c194ce2f06148b46cc29634a7431a5ede",
+    "desktop/sampling.go": "9caef58d4d66e4b9d90806e682cd5985567dd923262bf41daed39b2d3572faf4",
+    "desktop/sampling_test.go": "cf4275682e0713def6a0df6c2759c013a673160d4e05f2287638f6ea37a396db",
+    "desktop/scope.go": "ea4701107023a8d3f5772f9bf8461acf4fbd87f6b60cd6fb2c8249ce85e29509",
+    "desktop/view.go": "1d48cde39d54108d96a9220a76b6c11d71dfa1ba3cd3f1073eaa1c6072149037",
+    "desktop/waveforms.go": "eaf42cdbe8e47131bea0d9bd3087b9294c36630b82ae0c026ec05fd68055357e",
+    "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
+    "desktop/window_lifetime_test.go": "b01869edaf8aae778b1a20528581bd698bf36765e0c907897169f91df6b5a3da",
+    "scripts/lc-sampling-demo.py": "43f91fec02123d5a64a323cfb66e985e643af43c92c0f1a0eb46e67c7d4eb343",
+    "workbench/capability_details.go": "0e2bf48f41c30abf8e5951edf8ee33286e8a1f0a62ce006f8b44476a3af232ca",
+    "workbench/commands.go": "3a607ade0e26e82b9503ae66f5aba190e7f0dd44785438e44667d084430dbfa6",
+    "workbench/diagnostic_help.go": "1949cb9ca3191a314a0e02c3f28e31a48239e34acf2fe4a612ea8280c1749369",
+    "workbench/editing.go": "35f1ef19c1d63e2bad56abccedc6863c695a51e32c627e3a167a422e462413f6",
+    "workbench/lc_sampling.go": "2cc7cbc3cc348b655d2c72763a346f7d44458fdaa7377cc3c00be2c4d200e65c",
+    "workbench/lc_sampling_test.go": "4d81449a8db6063aa5753a06be373ec8137bec51846cc0c75efce8f106af5156",
+    "workbench/sampling_capabilities.go": "a174354655852eb965bfff569656ff33c4212cd96909c1c717d2093eba6dad38",
+    "workbench/service.go": "3a79ed7fcdbdc4eb7f562b0f7337d4ca6470fc571ec107f1c7e61ac13024455e",
+    "workbench/transient.go": "aa7f33fa833520cfd9bf84b3184dd7b1eea299173bf198866ac49284ff3983f0",
+    "workbench/waveforms.go": "7163f0c243bf3386b035bea71ffdd9722e5b06ad56652d2addc0a80abd16f757",
+    "workbench/workflow.go": "0461c0078b6b58c9a468dc77ec050e5b3e57b71f0aa0bf2307b6bea5850e1b6e"
+  },
+  "binary_sha256": {
+    "build/elab-agent": "e545800f8da8edc40396660d1a7b118a79bad65cde641a62121e1b6042e92494",
+    "build/elab-conformance": "fa7a350deb2fdefa9b532347d9dcac3075a52e7045357f1bc18c49681ee95d27",
+    "build/elab": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "build/ELab-lc-sampling-sdk-qualified.app/Contents/MacOS/ELab": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "build/ELab.app/Contents/MacOS/ELab": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "build/ELab-0.104.0-119-preserved.app/Contents/MacOS/ELab": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1"
+  },
+  "promotion": {
+    "passed": true,
+    "promoted_application": "build/ELab.app",
+    "promoted_binary_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "preserved_application": "build/ELab-0.104.0-119-preserved.app",
+    "preserved_binary_sha256": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1",
+    "bundle_tree": {
+      ".": {
+        "mode": 493,
+        "sha256": null
+      },
+      "Contents": {
+        "mode": 493,
+        "sha256": null
+      },
+      "Contents/Info.plist": {
+        "mode": 420,
+        "sha256": "a93ecefc0bf11f728c464f6d6a00aafa70c27f52f9ee7113497c5eb0d9bf7878"
+      },
+      "Contents/MacOS": {
+        "mode": 493,
+        "sha256": null
+      },
+      "Contents/MacOS/ELab": {
+        "mode": 493,
+        "sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c"
+      },
+      "Contents/Resources": {
+        "mode": 493,
+        "sha256": null
+      },
+      "Contents/Resources/APP_MANIFEST.json": {
+        "mode": 420,
+        "sha256": "77e1b208d223bf5c0fc96a6dca4ce42dd933b3f3a93f54473087b35b7a471476"
+      }
+    },
+    "preserved_bundle_tree": {
+      ".": {
+        "mode": 493,
+        "sha256": null
+      },
+      "Contents": {
+        "mode": 493,
+        "sha256": null
+      },
+      "Contents/Info.plist": {
+        "mode": 420,
+        "sha256": "472cb00ccdb9d991c5db8c968b3dee09de5a9af4693fcfb5e988987686f55fb8"
+      },
+      "Contents/MacOS": {
+        "mode": 493,
+        "sha256": null
+      },
+      "Contents/MacOS/ELab": {
+        "mode": 493,
+        "sha256": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1"
+      },
+      "Contents/Resources": {
+        "mode": 493,
+        "sha256": null
+      },
+      "Contents/Resources/APP_MANIFEST.json": {
+        "mode": 420,
+        "sha256": "b5d26694364735405bfe466009eb1d9e19ae9ed0811bf7ec7c9b48fa9e16767b"
+      }
+    },
+    "bundle_files_compared": 3
+  },
+  "sdk_before": {
+    "commit": "2ced41ab65d9561e86934ee2ffbd10a7dbe20c8a",
+    "clean": true,
+    "manifest_sha256": "22b4e98b6c11bf67987987c62837422f660ddabbe588914f25a3a1e1ba4efd58",
+    "prepared": {
+      "upstream": 233,
+      "typesetting": 5
+    }
+  },
+  "sdk_after": {
+    "commit": "2ced41ab65d9561e86934ee2ffbd10a7dbe20c8a",
+    "clean": true,
+    "manifest_sha256": "22b4e98b6c11bf67987987c62837422f660ddabbe588914f25a3a1e1ba4efd58",
+    "prepared": {
+      "upstream": 233,
+      "typesetting": 5
+    }
+  },
+  "hardware": {
+    "cpu": "Apple M4 Pro",
+    "logical_cpus": "14",
+    "memory_bytes": "68719476736",
+    "os": "26.6.2",
+    "os_build": "25G83",
+    "go": "go version go1.27.2 darwin/arm64"
+  },
+  "quality": {
+    "passed": true,
+    "command": "./scripts/check.sh",
+    "workbench_race": "cached from unchanged root sources; preceding fresh run 62.197 s",
+    "native_race_seconds": 120.474,
+    "includes": [
+      "goimports",
+      "staticcheck",
+      "root race",
+      "root vet",
+      "native race",
+      "native vet"
+    ]
+  },
+  "native_smoke": {
+    "passed": true,
+    "command": "ELab --smoke --smoke-timeout 2m",
+    "includes": [
+      "existing GPU/control/lifecycle workflows",
+      "LC normal fit and paused focus",
+      "LC minimum remains unresolved without redundant action"
+    ]
+  },
+  "public_parity": {
+    "passed": true,
+    "exact_except_transport": true,
+    "paths": [
+      "lc-sampling-public-headless.json",
+      "lc-sampling-public-native.json"
+    ],
+    "checks": [
+      "DC-powered LC advice",
+      "independent RLC rows and recovered sampled peak",
+      "advanced paused physics retained stale",
+      "exact retry retention",
+      "existing captured samples unchanged",
+      "explicit Verify override preserved",
+      "one undo/redo and fresh-process persistence",
+      "staged-value atomic fit and rollback",
+      "unresolved supported-minimum limitation",
+      "original saved file unchanged"
+    ]
+  },
+  "compatibility": {
+    "passed": true,
+    "transport": "headless-stdio",
+    "source_release": "0.104.0 /119",
+    "fixtures": [
+      {
+        "path": "build/inductor-release-104/qualified/conformance/in-process/led/project.elab",
+        "sha256": "2d256c9ead0915d3111d59ad7e0a56ea5a14ae262e9ee84509f32d6985432105",
+        "components": 4,
+        "recordings": 1,
+        "analysis": "DC operating point",
+        "resaved_semantics_identical": true,
+        "exported_captures_identical": true,
+        "original_bytes_unchanged": true
+      },
+      {
+        "path": "build/inductor-release-104/qualified/conformance/in-process/rc/project.elab",
+        "sha256": "41a2d02dc698d6429f119f8931117299b950e4d132b8653ec4cf0daa374aab3c",
+        "components": 4,
+        "recordings": 1,
+        "analysis": "RC transient",
+        "resaved_semantics_identical": true,
+        "exported_captures_identical": true,
+        "original_bytes_unchanged": true
+      },
+      {
+        "path": "build/inductor-release-104/qualified/conformance/in-process/npn/project.elab",
+        "sha256": "8e03f8f2ebdc5617db660ef5d6815a214220aae59f9c2cdc5eb440f4ffa9c616",
+        "components": 6,
+        "recordings": 1,
+        "analysis": "NPN DC operating point",
+        "resaved_semantics_identical": true,
+        "exported_captures_identical": true,
+        "original_bytes_unchanged": true
+      },
+      {
+        "path": "build/inductor-release-104/qualified/conformance/in-process/inductors/signed-rl.elab",
+        "sha256": "fdc5ae8d56be86d004e2175c3367db53a203792111e1ed021efa8954b72408be",
+        "components": 4,
+        "recordings": 1,
+        "analysis": "RLC network transient",
+        "resaved_semantics_identical": true,
+        "exported_captures_identical": true,
+        "original_bytes_unchanged": true
+      },
+      {
+        "path": "build/inductor-release-104/qualified/public-headless-assets/mixed-npn-coil.elab",
+        "sha256": "5c9bb0beba000ecf4b5dcdcc390d679f65e812762d78ee4e6f0ff72faabb81e6",
+        "components": 17,
+        "recordings": 0,
+        "analysis": "RLC network transient",
+        "resaved_semantics_identical": true,
+        "exported_captures_identical": true,
+        "original_bytes_unchanged": true
+      }
+    ],
+    "limitations": [
+      "five retained qualified fixtures, not every historical project",
+      "native old-file reopening and recovery are separate evidence"
+    ]
+  },
+  "conformance": {
+    "passed": true,
+    "adapters": [
+      "in-process",
+      "headless-stdio",
+      "headless-socket",
+      "native-socket"
+    ],
+    "reference_workflows_per_adapter": 3,
+    "frozen_electrical_checks_per_adapter": 294,
+    "coil_checks_per_adapter": 22,
+    "coil_timing_samples": 640,
+    "original_family_timing_samples_this_checkpoint": 0,
+    "original_family_timing_scope": "800 measurements remain historical in the 0.104 release evidence; no current rerun claimed",
+    "exact_go_graph_hash_checks": 32,
+    "complete_evidence": "lc-sampling-conformance.json",
+    "sample_audit": "lc-sampling-sample-audit.json",
+    "max_case_p95_fresh_ms": 11.055459,
+    "max_individual_verify_ms": 262.683042,
+    "measurement_boundary": "Backend command/edit-to-fresh and captured Verify, not visible presentation latency; no agent-controlled heavy workload overlaps final timing"
+  },
+  "visual_review": {
+    "path": "../../research/ui-audit/lc-sampling/README.md",
+    "earlier_candidate_binary_sha256": "2897d653c9d9467706d113a70a320b775c1f79d3cb8d87598732a90577e36d74",
+    "qualified_candidate_binary_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "qualification": "Earlier images retain the pre-description/7322f12 candidate attribution; final-sdk images exercise the final 2ced41a build with actual keyboard input.",
+    "pointer": "Coordinate click/wheel/scrollbar attempts inconclusive; no pointer acceptance claimed",
+    "accessibility": "CUA omitted visible inspector semantics; complete screen-reader/focus/IME/input gates remain open"
+  },
+  "sdk_migration_review": {
+    "passed": true,
+    "prior_sdk": "7322f12be2c3b1de785a1e143371eab876691c64",
+    "sdk": "2ced41ab65d9561e86934ee2ffbd10a7dbe20c8a",
+    "sdk_scope": "Read-only review of window references, app retirement/completion, managed native scope/dirty/input/accessibility delivery and MeshCanvas consumers; not full SDK/platform qualification",
+    "external_update": "Prior final pipeline passed all tests/workflows/timing but failed its after-run SDK consistency assertion; no promotion occurred",
+    "source_changes": [
+      "desktop/canvas.go",
+      "desktop/dc_sweep_canvas.go",
+      "desktop/files.go",
+      "desktop/main.go",
+      "desktop/menus_darwin.go",
+      "desktop/pointer_darwin.go",
+      "desktop/pointer_other.go",
+      "desktop/print_preview.go",
+      "desktop/recovery_read.go",
+      "desktop/scope.go",
+      "desktop/window_lifetime.go"
+    ],
+    "sites": 388,
+    "native_production_files": 56,
+    "public_ids": 162,
+    "referenced_ids": 132,
+    "changed_event_relays": 8,
+    "event_relay_review": "Exactly eight existing Mount event callbacks replace application-wide Do with an original-opening owner guard; command names, parameters and prepared revision/document/cursor/gesture checks are retained",
+    "context_review": [
+      "Main OpenWindow atomically returns the original reference before installing its pointer bridge",
+      "Screen captures its original opening once; retired screen never adopts a reused main name",
+      "File picker/dispatch, preview and recovery decode workers retain original window reference/context before starting; owner publication uses that reference",
+      "Popup completion and native pointer delivery retain originating reference; native chrome/current animation posts are scoped",
+      "Custom schematic/scope/sweep callbacks capture managed mount scope and recheck retirement after acquiring owner; cleanup remains framework-owned",
+      "Protected close uses the original reference with unchanged user/agent unsaved-work decisions"
+    ],
+    "limitations": [
+      "ELab uses one main window; synthetic keeper/reused-name tests qualify the bounded callback migration, not full multiwindow product support",
+      "Final SDK rendered/keyboard evidence is retained separately; pointer and omitted inspector accessibility semantics remain unqualified"
+    ],
+    "current_qualification": {
+      "full_quality": true,
+      "native_race_seconds": 120.474,
+      "packaged_smoke": true,
+      "public_native_headless_parity": true,
+      "five_old_projects": true,
+      "four_adapter_electrical_and_timing": true,
+      "actual_final_keyboard_and_rendered_check": true
+    }
+  },
+  "post_qualification_helper_review": {
+    "scope": "Only the demo cleanup-admission guard changed after the Go/native qualification pipeline; Go sources and compiled binaries stayed unchanged",
+    "source_before_sha256": "eb4f8fa9a83f28f98b6eab24944918a34a64151d9a4ef924243ac9743c404862",
+    "source_after_sha256": "43f91fec02123d5a64a323cfb66e985e643af43c92c0f1a0eb46e67c7d4eb343",
+    "successful_reports_byte_identical": true,
+    "nonempty_refusal": {
+      "passed": true,
+      "refused_before_admission": true,
+      "owned_fixture_remains_live": true,
+      "schematic_settings_history_physics_preserved": true,
+      "script_sha256": "43f91fec02123d5a64a323cfb66e985e643af43c92c0f1a0eb46e67c7d4eb343"
+    }
+  },
+  "limitations": [
+    "Configured-value LC scale is not a measured period, circuit-pole estimate, or resolution guarantee",
+    "32 points per LC reference is ELab engineering policy, not a cited standard",
+    "Unchanged 1 us minimum can remain insufficient; models, equations, work bounds and saved file versions unchanged",
+    "Complete native action/dynamic binding, physical pointer/IME/screen-reader, visible latency, clean distribution, physical device/printing and participant acceptance remain open"
+  ],
+  "artifacts_sha256": {
+    "build/lc-sampling-105/final-sdk/quality.log": "139df7c7ba7c507e780fb177ee1355b670cc39a1761e94204359a086700e4ecf",
+    "build/lc-sampling-105/final-sdk/build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/lc-sampling-105/final-sdk/package.log": "10f2d2a2fe54654c820443ab17fe9f0a8e7b7e89442ab9f43396f27eadf4ccfc",
+    "build/lc-sampling-105/final-sdk/smoke.log": "79502984d73005dc95f8aad9574ed0a39d2434c6b351b5e66962c85b765c2a21",
+    "build/lc-sampling-105/final-sdk/public-headless.log": "05a22d2167b25b19ecbdef9d5ef407d4dd3e8dbba0423eff2f3b4381095b247d",
+    "build/lc-sampling-105/final-sdk/public-native.log": "f08479d9336edf572eac71886c8999b95c771f48366af0c60e65750c23cbfd15",
+    "build/lc-sampling-105/final-sdk/public-native-app.log": "ced0fd0b2ce5dd42ac8547009a68dfc01f4610e0867ddd459fa2a09e575850bb",
+    "build/lc-sampling-105/final-sdk/owned-native-exit.json": "1223dbc6f7b3efdcafda9c1b7c22b1f8c38856a1160ab4cd92fbd923660000d7",
+    "build/lc-sampling-105/final-sdk/compatibility.log": "f45c4357e9ad6ec9387294c555fdd122dc6e9c3886c5372125b5d6893a0e79ce",
+    "build/lc-sampling-105/final-sdk/conformance.log": "fbfbbc61fcfbebc44f285c0baa89192406565caba75316aa3ab7541a7da80378",
+    "build/lc-sampling-105/final-sdk/graph-audit.log": "4c13640fe4781fef4d72debbee4bc03583bcacf62a8bfa000a6da6c3aa55f380",
+    "build/lc-sampling-105/final-sdk/pipeline.json": "28fd32248bef0f34f302a99d394664d36fcfbb68987a6f99647e6b4b8473be51",
+    "build/lc-sampling-105/final-sdk/promotion.json": "0558479f219cbdf14e3d3d79f1ce604f3c6bb9626c5fc780ccec2b1eea7d0134",
+    "research/ui-audit/lc-sampling/README.md": "4d32ff03b3de33adde5d0b09ea89ab2a93951066480a1f3b5e9dd7ff7cc64dea",
+    "research/ui-audit/lc-sampling/after-fit-state.json": "f9512c13fb4e7f67b0bb1294499d5fc660d126689c4b51b4ebdf9f6f9dcadf23",
+    "research/ui-audit/lc-sampling/after-fit.jpg": "03b0990307e318a4761ef491c266878187e86585aa6def440b4081290491b47a",
+    "research/ui-audit/lc-sampling/before-fit.jpg": "610a500a5d5a47c7b425c5f3318189d5a5ac0fb2793a06fd9f5e5fab2b33ae6e",
+    "research/ui-audit/lc-sampling/final-sdk-after-fit-state.json": "61686e23ce12c642f43a798cff45f11f12ca403490fdd5bb051d9a81e3bbd54a",
+    "research/ui-audit/lc-sampling/final-sdk-after-fit.jpg": "ae731eb9d588ac1c5f755a94fe32b732553e01ecbfaec46157ef6e316691155b",
+    "research/ui-audit/lc-sampling/final-sdk-keyboard-fit.jpg": "79f077e5635ffe05efd3d99d04e93ef18e46b6510e966bc66a2f2fa5bfe2b7db",
+    "research/ui-audit/lc-sampling/final-sdk-minimum.jpg": "ad383c9b57cdc94a9547d01910ddd47fc3ca2d700f3dad10a0f31e28e49c7d9f",
+    "research/ui-audit/lc-sampling/keyboard-fit.jpg": "827976021f543fb6795ae74e7706567d206b169439c68ab18c729afd8a2c0816",
+    "research/ui-audit/lc-sampling/minimum-limit.jpg": "d006f6d5783a65ab6a76f61ddee0e1adda7b68885bb16be037877a9e84e31e59",
+    "docs/validation/lc-sampling-public-headless.json": "f42ca0e81aa7c2b660759dd7ebcbf2cd4b90ae9d8b01662cb7681146caf225a8",
+    "docs/validation/lc-sampling-public-native.json": "460b96f4d91e0805867fd57b7d65945de7fb4869df4ff59f46caddec34d57c94",
+    "docs/validation/lc-sampling-discovery.json": "b446d6aa9a1d5d67216d7c4f5f85f43f1cee2c396f6220a9e554c28654f163b1",
+    "docs/validation/lc-sampling-compatibility.json": "d3c41bffc620ed190eeb6375a47af80219a41303c2e248cf5b3903452f2aafab",
+    "docs/validation/lc-sampling-sample-audit.json": "2476d4d0f87b49e142941e7540264860060295a57b0b3bcd2049ffdeeac19462",
+    "docs/validation/lc-sampling-conformance.json": "fdfb9515ab63abea1f1792735b691f8dcb58ae459ec216934a4c9d366bf8bb8a",
+    "docs/validation/lc-sampling-nonempty-refusal.json": "bd2fedd32a24c4fc82b75ba2dbb28ac93e359ae073ef74d0e22d976c8d1915ac",
+    "build/lc-sampling-105/post-review/refusal.json": "bd2fedd32a24c4fc82b75ba2dbb28ac93e359ae073ef74d0e22d976c8d1915ac",
+    "build/lc-sampling-105/post-review/nonempty-refusal.log": "46edb2c45c514dce995e30e8272517bc751dd2fe1c94ae88fa091ec01472fc56",
+    "build/lc-sampling-105/post-review/exit.json": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17",
+    "build/lc-sampling-105/post-review-headless.log": "05a22d2167b25b19ecbdef9d5ef407d4dd3e8dbba0423eff2f3b4381095b247d",
+    "build/lc-sampling-105/post-review/public-native.log": "f08479d9336edf572eac71886c8999b95c771f48366af0c60e65750c23cbfd15",
+    "build/lc-sampling-105/sdk-app-race.log": "ba2f7680b94bf2c720ff712c3417a1f6cb40052e7eb65fa58da9012b5d006c20",
+    "build/lc-sampling-105/sdk-final-focused.log": "54a0ce8a09de7007d3ff7b71a576afbf6837f1ab56eb3f77c2036a6974ec88d3"
+  },
+  "binary_sha256_at_qualification_before_promotion": {
+    "build/elab-agent": "e545800f8da8edc40396660d1a7b118a79bad65cde641a62121e1b6042e92494",
+    "build/elab-conformance": "fa7a350deb2fdefa9b532347d9dcac3075a52e7045357f1bc18c49681ee95d27",
+    "build/elab": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "build/ELab-lc-sampling-sdk-qualified.app/Contents/MacOS/ELab": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "build/ELab.app/Contents/MacOS/ELab": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1"
+  },
+  "initial_lc_native_source_review": {
+    "passed": true,
+    "source_parent": "f4e1981",
+    "source_changes": [
+      "desktop/sampling.go",
+      "desktop/view.go",
+      "desktop/waveforms.go"
+    ],
+    "added_sites": [
+      {
+        "expression": "s.action(\"fit-circuit-sampling\", \"Fit sampling\", \"simulation.sampling.fit\", struct{}{})",
+        "file": "desktop/sampling.go",
+        "function": "*screen.lcSamplingControls",
+        "kind": "action-factory",
+        "public_commands": [
+          "simulation.sampling.fit"
+        ],
+        "status": "literal-public-route"
+      }
+    ],
+    "removed_sites": [],
+    "existing_site_semantics_unchanged": true,
+    "context_review": [
+      "view adds one global LC sampling notice after selected-object edits and before network summaries, including no selection",
+      "waveform notice keeps source-only control ID and suppresses its duplicate fit action while the combined LC notice is active",
+      "new fit uses the existing assembled revision/document guards; stale rendered action refuses without changing settings or focus",
+      "native-only focus continuation selects the live interval field, or Search for an incomplete non-transient drawing; rejected actions do not move focus"
+    ],
+    "counts": {
+      "sources": 55,
+      "sites": 388,
+      "public_commands": 162,
+      "source_routes": 132
+    },
+    "limits": "Source/binding review and focused callbacks; complete physical typing/IME/focus/screen-reader acceptance remains separate"
+  }
+}

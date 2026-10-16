@@ -1,0 +1,19 @@
+# LC output-sampling guidance
+
+October 16, 2026. Implemented in the qualified 0.105.0 /120 checkpoint after 0.104.
+
+Internal integration can resolve ringing that coarse scope samples miss. At 0.104, `simulation.sampling.fit` considered sine periods and finite source ramps; a DC-powered RLC circuit received no equivalent advice. The next slice extends that existing user/agent action and explains its limits without changing device equations, integration acceptance, or existing saved-file formats.
+
+The reference scale is `T = 2π√(Lmin Cmin)` using the smallest positive finite configured L/C values, with a target of 32 samples per reference period. This is a topology-blind hint, **not** a measured oscillation period, circuit-pole estimate, Nyquist guarantee, or proof of physical accuracy. Resistance, connections, active devices and other storage modes can change the behavior. Compare finer output steps for a demanding circuit. The elementary LC/RLC natural-frequency relationship is documented by [Analog Devices](https://www.analog.com/en/resources/technical-articles/design-a-crystal-oscillator-to-match-your-application.html); the 32-point choice is ELab's engineering policy, matching its existing sine display guidance rather than an external standard.
+
+Required behavior:
+
+- An optional `snapshot.lc_sampling` reports the contributing L/C IDs, reference period, raw target, supported recommendation, minimum-step clipping and whether fitting can improve current sampling. Omit it without both valid storage types. Read/query must preserve physics/history/document state; returned pointers must be independently owned.
+- Fitting takes the smallest of the current output step, existing source recommendations and the LC target, bounded by the unchanged 1 µs minimum. It never coarsens a finer step, changes L/C/source values or silently widens model/work limits. Preserve normal electrical-settings history, restart/stale, guard/retry and batch semantics. Lower playback only as required by the existing 1000-samples/wall-second bound.
+- If the raw LC target is below 1 µs, the advice must remain visibly unresolved even after fitting to the supported minimum. Do not present a clipped recommendation as sufficient resolution. Do not offer a useless repeated fit once the supported step is reached.
+- A compact inspector notice and shared diagnostic guidance identify the contributing parts. Users invoke the same `simulation.sampling.fit` command agents discover. Existing source-only warnings/control IDs retain their behavior.
+- Verify remains independently configurable; the live fit does not replace an explicit Verify sample-step override. Saved projects keep actual settings and recompute advice when reopened.
+
+Acceptance uses a 5 V /50 Ω /10 mH /1 µF series RLC step. Its initial ringing peak is missed by 1 ms output samples and recovered by the fitted interval, checked against an independent underdamped step equation. Also cover the minimum-step limitation, multi-storage selection, simultaneous source limits, no coarsening, no-L compatibility, read/clone ownership, history/retry/refusal/batch, paused state, persistence, native/agent controls, discovery purity/bounds, and current-source quality/native smoke/public workflows. Broader input/accessibility and physical-device qualification remain separate.
+
+Outcome: all stated functional checks pass in core/native tests and public native/headless workflows. Actual final-build Tab/Return applies fitting with interval focus continuation and preserved paused readings. The minimum notice remains explicit. Four-adapter electrical/coil workflows and 640 coil timing samples pass; full evidence and limits are in the [release receipt](../docs/validation/lc-sampling-validation.json). The Vellum window-reference migration is separately documented; physical pointer attempts and omitted inspector accessibility semantics remain unqualified.

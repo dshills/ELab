@@ -229,19 +229,7 @@ func waveformRecommendedStep(p Component) float64 {
 	if p.Pulse != nil && p.Pulse.HighVoltage != p.Pulse.LowVoltage {
 		recommended = math.Min(p.Pulse.RiseSeconds, p.Pulse.FallSeconds) / 4
 	}
-	return math.Max(1e-6, recommended)
-}
-func (s *Service) fitWaveformSamplingLocked() error {
-	next := s.transientSettings
-	for _, p := range s.graph.Components {
-		next.StepSeconds = math.Min(next.StepSeconds, waveformRecommendedStep(p))
-	}
-	next.PlaybackSpeed = math.Min(next.PlaybackSpeed, 1000*next.StepSeconds)
-	if err := next.validateForGraph(s.graph, true); err != nil {
-		return err
-	}
-	s.transientSettings = next
-	return nil
+	return math.Max(minimumTransientSampleStep, recommended)
 }
 func waveformSamplingWarnings(g Graph, cfg TransientSettings) []Diagnostic {
 	out := []Diagnostic{}

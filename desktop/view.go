@@ -230,6 +230,7 @@ func (s *screen) view() ui.Node {
 		n.Style.Foreground = ui.Some(color.NRGBA{R: 168, G: 65, B: 68, A: 255})
 		inspector = append(inspector, n)
 	}
+	inspector = append(inspector, s.lcSamplingControls(state)...)
 	inspector = append(inspector, s.npnControls(state)...)
 	if workbench.IsNetworkAnalysis(state.Analysis) {
 		inspector = append(inspector, section("mixed-title", "Circuit network"), quiet("mixed-help", "Bounded network simulation reports device currents, capacitor state and conservation residuals."))

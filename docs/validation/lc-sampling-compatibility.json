@@ -1,0 +1,61 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "source_release": "0.104.0 /119",
+  "fixtures": [
+    {
+      "path": "build/inductor-release-104/qualified/conformance/in-process/led/project.elab",
+      "sha256": "2d256c9ead0915d3111d59ad7e0a56ea5a14ae262e9ee84509f32d6985432105",
+      "components": 4,
+      "recordings": 1,
+      "analysis": "DC operating point",
+      "resaved_semantics_identical": true,
+      "exported_captures_identical": true,
+      "original_bytes_unchanged": true
+    },
+    {
+      "path": "build/inductor-release-104/qualified/conformance/in-process/rc/project.elab",
+      "sha256": "41a2d02dc698d6429f119f8931117299b950e4d132b8653ec4cf0daa374aab3c",
+      "components": 4,
+      "recordings": 1,
+      "analysis": "RC transient",
+      "resaved_semantics_identical": true,
+      "exported_captures_identical": true,
+      "original_bytes_unchanged": true
+    },
+    {
+      "path": "build/inductor-release-104/qualified/conformance/in-process/npn/project.elab",
+      "sha256": "8e03f8f2ebdc5617db660ef5d6815a214220aae59f9c2cdc5eb440f4ffa9c616",
+      "components": 6,
+      "recordings": 1,
+      "analysis": "NPN DC operating point",
+      "resaved_semantics_identical": true,
+      "exported_captures_identical": true,
+      "original_bytes_unchanged": true
+    },
+    {
+      "path": "build/inductor-release-104/qualified/conformance/in-process/inductors/signed-rl.elab",
+      "sha256": "fdc5ae8d56be86d004e2175c3367db53a203792111e1ed021efa8954b72408be",
+      "components": 4,
+      "recordings": 1,
+      "analysis": "RLC network transient",
+      "resaved_semantics_identical": true,
+      "exported_captures_identical": true,
+      "original_bytes_unchanged": true
+    },
+    {
+      "path": "build/inductor-release-104/qualified/public-headless-assets/mixed-npn-coil.elab",
+      "sha256": "5c9bb0beba000ecf4b5dcdcc390d679f65e812762d78ee4e6f0ff72faabb81e6",
+      "components": 17,
+      "recordings": 0,
+      "analysis": "RLC network transient",
+      "resaved_semantics_identical": true,
+      "exported_captures_identical": true,
+      "original_bytes_unchanged": true
+    }
+  ],
+  "limitations": [
+    "five retained qualified fixtures, not every historical project",
+    "native old-file reopening and recovery are separate evidence"
+  ]
+}

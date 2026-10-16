@@ -90,5 +90,52 @@ func nativeInductorSmoke(ctx context.Context, a *app.Application, s *screen) err
 			return err
 		}
 	}
-	return nil
+	return nativeLCSamplingSmoke(s, owner)
+}
+
+func nativeLCSamplingSmoke(s *screen, owner func(func() error) error) error {
+	return owner(func() error {
+		for _, action := range []struct {
+			command string
+			params  any
+		}{
+			{"example.load", workbench.ExampleLoadParams{ID: "rlc", DiscardChanges: true}},
+			{"simulation.pause", struct{}{}},
+			{"component.set", workbench.ValueParams{ID: "L1", Value: "10 mH"}},
+			{"component.set", workbench.ValueParams{ID: "C1", Value: "1 µF"}},
+			{"component.select", workbench.IDParams{}},
+		} {
+			if response := s.invoke(action.command, action.params); response.Error != nil {
+				return fmt.Errorf("LC sampling fixture: %s", response.Error.Message)
+			}
+		}
+		if err := smokeUI(s, "fit-circuit-sampling", nil); err != nil {
+			return err
+		}
+		state := s.service.Snapshot()
+		want := 2 * math.Pi * math.Sqrt(.01*1e-6) / 32
+		if state.LCSampling == nil || state.LCSampling.Unresolved || state.TransientSettings.StepSeconds != want || !state.Paused || s.keyboardFocus.ID != "setting-step" {
+			return fmt.Errorf("native LC fit/paused focus continuation differs from shared policy")
+		}
+		for _, value := range []workbench.ValueParams{{ID: "L1", Value: "1 µH"}, {ID: "C1", Value: "1 nF"}} {
+			if response := s.invoke("component.set", value); response.Error != nil {
+				return fmt.Errorf("minimum LC sampling fixture: %s", response.Error.Message)
+			}
+		}
+		if err := smokeUI(s, "fit-circuit-sampling", nil); err != nil {
+			return err
+		}
+		state = s.service.Snapshot()
+		if state.TransientSettings.StepSeconds != 1e-6 || !state.LCSampling.MinimumLimited || !state.LCSampling.Unresolved || state.LCSampling.CanFit {
+			return fmt.Errorf("native LC sample floor was presented as sufficient resolution")
+		}
+		root := s.view()
+		if err := ui.Validate(root); err != nil {
+			return err
+		}
+		if _, found := findNode(root, "fit-circuit-sampling"); found {
+			return fmt.Errorf("native sample-floor notice retains an ineffective action")
+		}
+		return nil
+	})
 }

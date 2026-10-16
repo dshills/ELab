@@ -40,6 +40,7 @@ type Snapshot struct {
 	ActuationRevision      uint64                 `json:"actuation_revision"`
 	SwitchStates           []SwitchState          `json:"switch_states,omitempty"`
 	SourceWarnings         []Diagnostic           `json:"source_warnings,omitempty"`
+	LCSampling             *LCSamplingAdvice      `json:"lc_sampling,omitempty"`
 	WaveformModel          *WaveformModel         `json:"waveform_model,omitempty"`
 	PotentiometerModel     *PotentiometerModel    `json:"potentiometer_model,omitempty"`
 	DiodeModel             *DiodeModel            `json:"diode_model,omitempty"`
@@ -329,6 +330,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		ActuationRevision:      s.actuationRevision,
 		SwitchStates:           s.switchStatesLocked(),
 		SourceWarnings:         waveformSamplingWarnings(graph, s.transientSettings),
+		LCSampling:             lcSamplingAdvice(graph, s.transientSettings),
 		Recording:              s.recordingViewLocked(),
 		Recovery:               s.recoveryStateLocked(),
 		VerificationSettings:   cloneVerificationSettings(s.verificationSettings),
@@ -1069,6 +1071,7 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	}
 	state.SwitchStates = cloneSwitchStates(state.SwitchStates)
 	state.SourceWarnings = append([]Diagnostic{}, state.SourceWarnings...)
+	state.LCSampling = cloneLCSamplingAdvice(state.LCSampling)
 	if state.WaveformModel != nil {
 		m := *state.WaveformModel
 		state.WaveformModel = &m

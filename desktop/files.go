@@ -45,6 +45,11 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 	if s.fileBusy {
 		return
 	}
+	window, windowErr := s.windowReference()
+	if windowErr != nil {
+		s.errorMessage = windowErr.Error()
+		return
+	}
 	s.fileBusy = true
 	s.errorMessage = ""
 	s.fileMessage = ""
@@ -69,7 +74,7 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 	raw, _ = json.Marshal(fields)
 	s.app.Invalidate("main")
 	go func() {
-		ctx := s.app.Context()
+		ctx := window.Context()
 		var err error
 
 		if choose {
@@ -142,13 +147,16 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 				raw, err = json.Marshal(fields)
 			}
 		}
+		if err == nil {
+			err = ctx.Err()
+		}
 		var response workbench.Response
 		if err == nil {
 			revision := s.service.Snapshot().CommandRevision
 			request := workbench.Request{Version: 1, ID: fmt.Sprintf("ui-%d", serial), Key: fmt.Sprintf("ui-%d", serial), Command: id, Params: raw, ExpectedCommandRevision: &revision}
 			response = s.service.Dispatch(ctx, request, "user")
 		}
-		_ = s.app.PostWindow("main", func() {
+		_ = s.app.PostWindow(window, func() {
 			s.fileBusy = false
 			if err != nil {
 				if !errors.Is(err, app.ErrCanceled) {

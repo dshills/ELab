@@ -6,7 +6,7 @@ Choose **Examples → Split-rail DC supply** to explore [stacked DC sources and 
 
 Choose **Examples → MOSFET LED switch** for pulse-driven NMOS/LED simulation, gate/drain/source probes and an external gate-RC experiment. See [MOSFET behavior and model](docs/nmos.md). **Examples → High-side MOSFET LED** adds the complementary [PMOS workflow](docs/pmos.md). **Examples → CMOS inverter** combines both devices with input/output and signed drain-current plots; see [the guided inverter](docs/cmos-inverter.md). [Mixed-device state captions](docs/mixed-device-regions.md) identify the NPN or MOSFET providing the accepted trace state.
 
-**Examples → Coil current buildup and decay**, **RLC ringing and damping**, and **Coil switching and flyback diode** add live ideal-inductor experiments. Set signed startup current, inspect current/voltage/energy, and save independent Verify captures through the same user and agent commands. See [inductors and their model limits](docs/inductors.md).
+**Examples → Coil current buildup and decay**, **RLC ringing and damping**, and **Coil switching and flyback diode** add live ideal-inductor experiments. Set signed startup current, inspect current/voltage/energy, and save independent Verify captures through the same user and agent commands. See [inductors and their model limits](docs/inductors.md). LC drawings also offer **Fit sampling** to reveal ringing that coarse scope samples can miss. See [the sampling hint and its limits](docs/lc-sampling.md).
 
 ## Run the desktop app
 

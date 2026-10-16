@@ -28,13 +28,17 @@ func (s *screen) loadPrintPreview(p *workbench.PrintPreview) {
 	if p.Status != "completed" || s.previewPixels.id == p.ID {
 		return
 	}
+	window, windowErr := s.windowReference()
+	if windowErr != nil {
+		return
+	}
 	s.previewPixels = previewPixels{id: p.ID, loading: true}
 	captured := *p
 	go func() {
-		ctx, cancel := context.WithTimeout(s.app.Context(), 10*time.Second)
+		ctx, cancel := context.WithTimeout(window.Context(), 10*time.Second)
 		defer cancel()
 		pixels, err := readPrintPreview(ctx, s.service, captured)
-		_ = s.app.PostWindow("main", func() {
+		_ = s.app.PostWindow(window, func() {
 			current := s.service.Snapshot().PrintPreview
 			if current == nil || !current.Visible || current.ID != captured.ID || s.previewPixels.id != captured.ID {
 				return

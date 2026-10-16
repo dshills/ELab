@@ -72,6 +72,10 @@ func (s *screen) showChoiceMenu(node ui.Node, choices menuChoices, selection boo
 	if s.service.Snapshot().CommandRevision != revision || node.Disabled || choices.Change == nil || s.drawing == nil || s.drawing.widget == nil || s.drawing.widget.Scene == nil {
 		return
 	}
+	window, windowErr := s.windowReference()
+	if windowErr != nil {
+		return
+	}
 	scene := s.drawing.widget.Scene
 	var x, y float64
 	found := false
@@ -112,7 +116,7 @@ func (s *screen) showChoiceMenu(node ui.Node, choices menuChoices, selection boo
 		if index < 0 || index >= len(choices.Options) {
 			return
 		}
-		_ = s.app.PostWindow("main", func() {
+		_ = s.app.PostWindow(window, func() {
 			s.acceptMenuChoice(node, choices, index, serial, revision)
 		})
 	}

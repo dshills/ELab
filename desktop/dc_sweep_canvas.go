@@ -34,12 +34,16 @@ func (c *sweepCanvas) Mount(parent tree.Node) core.Widget {
 	c.mountEpoch++
 	epoch := c.mountEpoch
 	w := widget.AsWidget()
+	owner, window, scoped := cogent.WindowScope(w)
+	if !scoped || owner != c.Owner {
+		return nil
+	}
 	c.widget = w
 	w.OnFirst(events.Scroll, func(e events.Event) { e.SetHandled() })
 	for _, kind := range []events.Types{events.MouseDown, events.SlideMove} {
 		w.OnFirst(kind, func(e events.Event) {
 			pos := e.Pos().Sub(w.Geom.Pos.Content.ToPoint())
-			c.Owner.Do(func() {
+			withWindowOwner(c.Owner, window, func() {
 				if c.mountEpoch == epoch {
 					c.placeCursor(float64(pos.X))
 				}

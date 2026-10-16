@@ -155,6 +155,9 @@ func (s *Service) diagnosticPresentationLocked(c Compiled) DiagnosticPresentatio
 	for _, d := range waveformSamplingWarnings(s.graph, s.transientSettings) {
 		out.Items = append(out.Items, makeDiagnosticHelp(s.graph, c, d, "sampling", nil))
 	}
+	if help := lcSamplingHelp(s.graph, c, lcSamplingAdvice(s.graph, s.transientSettings)); help != nil {
+		out.Items = append(out.Items, *help)
+	}
 	if s.inputJob != nil && s.inputJob.work.Status == "failed" && s.inputJob.work.Error != nil {
 		work := s.inputJob.work
 		help := makeDiagnosticHelp(s.graph, c, Diagnostic{Code: "solve-failed", Message: work.Error.Message}, "input", nil)

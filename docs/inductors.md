@@ -1,6 +1,6 @@
 # Ideal inductors
 
-Inductor support is included in the qualified local **0.104.0 /119** checkpoint at `build/ELab.app`. The [release record](validation/inductor-release-validation.json) pins numerical, recovery, native/API and timing evidence; the [integration plan](../research/14-inductor-integration-plan.md) records model choices and the broader acceptance gates that remain open.
+Inductor support was introduced in the qualified local **0.104.0 /119** checkpoint. The [release record](validation/inductor-release-validation.json) pins numerical, recovery, native/API and timing evidence; the [integration plan](../research/14-inductor-integration-plan.md) records model choices and the broader acceptance gates that remain open.
 
 Search **Inductor**, **coil** or **choke**, then place and wire pins **1** and **2**. Inductance accepts H, mH and µH text, from **1 µH through 100 H**, with a **10 mH** default. Positive voltage is pin 1 minus pin 2; positive current enters pin 1 and leaves pin 2. Stored energy is `L × I² / 2`. Up to four inductors share the existing network, voltage and solver limits.
 
@@ -13,6 +13,8 @@ The bottom summary names the first coil and shows its signed current. Its voltag
 - **Examples → Coil buildup / decay**: 5 V square input, 100 Ω and 1 H. The 10 ms time constant makes buildup and decay visible. A 50 ms high phase followed by 50 ms low repeats the experiment.
 - **Examples → RLC ringing**: 5 V DC, 50 Ω, 100 mH and 10 µF. Compare 50 Ω underdamping, 200 Ω critical damping and 500 Ω overdamping. The default output sample is 100 µs. Plot capacitor voltage with signed coil current and voltage.
 - **Examples → Coil / flyback diode**: a pulse-driven generic NMOS switches a 1 H/100 Ω load with an explicit flyback diode. At turn-off, the diode provides a return path and clamps the drain above the supply. Pause near 50 ms to inspect current continuity and signed coil voltage.
+
+For an LC drawing, [Fit sampling](lc-sampling.md) combines a configured-value reference with source constraints. It changes output spacing, preserves captured samples, and explicitly warns when the 1 µs floor cannot resolve the reference scale. It does not predict the circuit poles.
 
 These use the ordinary protected example loader and editable parts. Removing a current-return path can demand a voltage beyond the ±30 V educational envelope or an inconsistent ideal topology. Such a solve refuses and retains the last accepted state; it does not invent a leakage path or silently erase stored current.
 

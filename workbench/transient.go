@@ -20,7 +20,7 @@ type TransientSettings struct {
 
 func DefaultTransientSettings() TransientSettings { return TransientSettings{.001, .05, .05, 0, .02} }
 func (c TransientSettings) validateRanges() error {
-	if !finite(c.StepSeconds) || c.StepSeconds < 1e-6 || c.StepSeconds > 1 {
+	if !finite(c.StepSeconds) || c.StepSeconds < minimumTransientSampleStep || c.StepSeconds > 1 {
 		return fmt.Errorf("sample step must be 1 µs–1 s")
 	}
 	if !finite(c.HighSeconds) || !finite(c.LowSeconds) || c.HighSeconds < 1e-6 || c.LowSeconds < 1e-6 || c.HighSeconds > 10 || c.LowSeconds > 10 {

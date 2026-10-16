@@ -20,7 +20,7 @@ func nativeLifecycleSmoke(ctx context.Context, a *app.Application, s *screen) er
 			done <- fmt.Errorf("close smoke requires the unsaved manual circuit")
 			return
 		}
-		if err := a.CheckCloseWindow("main"); !errors.Is(err, app.ErrCloseRefused) || s.pendingCommand != "app.close" || s.service.Snapshot().Closed {
+		if err := a.CheckCloseWindow(s.window); !errors.Is(err, app.ErrCloseRefused) || s.pendingCommand != "app.close" || s.service.Snapshot().Closed {
 			done <- fmt.Errorf("native close bypassed protected service admission: %v", err)
 			return
 		}

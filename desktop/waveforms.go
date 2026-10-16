@@ -57,7 +57,12 @@ func (s *screen) waveformControls(state workbench.Snapshot, p workbench.Componen
 		nodes = append(nodes, quiet("waveform-source-model", "Ideal voltage source · no current limit, output resistance or physical generator rating."))
 		for _, warning := range state.SourceWarnings {
 			if warning.ObjectID == p.ID {
-				nodes = append(nodes, quiet("source-sampling-warning", warning.Message), s.action("fit-waveform-sampling", "Fit waveform sampling", "simulation.sampling.fit", struct{}{}))
+				nodes = append(nodes, quiet("source-sampling-warning", warning.Message))
+				// The combined LC notice supplies the same action once for the
+				// whole circuit. Source-only controls retain their existing ID.
+				if state.LCSampling == nil || !state.LCSampling.Unresolved {
+					nodes = append(nodes, s.action("fit-waveform-sampling", "Fit waveform sampling", "simulation.sampling.fit", struct{}{}))
+				}
 			}
 		}
 	}

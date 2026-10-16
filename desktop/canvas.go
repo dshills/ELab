@@ -38,7 +38,11 @@ func (c *commandCanvas) Mount(parent tree.Node) core.Widget {
 	}
 	w := widget.AsWidget()
 	c.widget = w
-	_ = c.Owner.Post(func() {
+	owner, window, scoped := cogent.WindowScope(w)
+	if !scoped || owner != c.Owner {
+		return nil
+	}
+	_ = c.Owner.PostWindow(window, func() {
 		if w.Scene != nil {
 			w.Scene.Updater(func() { c.screen.styleNativeChrome(w.Scene) })
 			if c.screen.styleNativeChrome(w.Scene) {
@@ -48,7 +52,7 @@ func (c *commandCanvas) Mount(parent tree.Node) core.Widget {
 	})
 	w.OnFirst(events.Scroll, func(e events.Event) {
 		if scroll, ok := e.(*events.MouseScroll); ok {
-			c.Owner.Do(func() {
+			withWindowOwner(c.Owner, window, func() {
 				anchor := c.world(e, w)
 				factor := math.Max(.25, math.Min(4, math.Exp(-float64(scroll.Delta.Y)*.003)))
 				c.screen.invoke("view.zoom", map[string]any{"factor": factor, "anchor": anchor})
@@ -57,18 +61,18 @@ func (c *commandCanvas) Mount(parent tree.Node) core.Widget {
 		}
 	})
 	w.OnFirst(events.MouseDown, func(e events.Event) {
-		c.Owner.Do(func() { c.routePointer(0, c.world(e, w), workbench.Point{}) })
+		withWindowOwner(c.Owner, window, func() { c.routePointer(0, c.world(e, w), workbench.Point{}) })
 		e.SetHandled()
 	})
 	w.OnFirst(events.SlideMove, func(e events.Event) {
-		c.Owner.Do(func() {
+		withWindowOwner(c.Owner, window, func() {
 			delta := e.PrevDelta()
 			c.routePointer(1, c.world(e, w), workbench.Point{X: float64(delta.X) / c.View.Zoom, Y: float64(delta.Y) / c.View.Zoom})
 		})
 		e.SetHandled()
 	})
 	w.OnFirst(events.SlideStop, func(e events.Event) {
-		c.Owner.Do(func() { c.routePointer(2, c.world(e, w), workbench.Point{}) })
+		withWindowOwner(c.Owner, window, func() { c.routePointer(2, c.world(e, w), workbench.Point{}) })
 		e.SetHandled()
 	})
 	w.OnFirst(events.KeyChord, func(e events.Event) {
@@ -79,7 +83,7 @@ func (c *commandCanvas) Mount(parent tree.Node) core.Widget {
 		chord := strings.ToLower(string(e.KeyChord()))
 		if direction := navigationDirection(chord); direction != "" {
 			captured := c.screen.service.Snapshot()
-			c.Owner.Do(func() { c.navigateObject(direction, captured.CommandRevision, captured.Document.Generation) })
+			withWindowOwner(c.Owner, window, func() { c.navigateObject(direction, captured.CommandRevision, captured.Document.Generation) })
 			e.SetHandled()
 			return
 		}
@@ -94,11 +98,11 @@ func (c *commandCanvas) Mount(parent tree.Node) core.Widget {
 		case "downarrow":
 			dy = 10
 		case "escape":
-			c.Owner.Do(func() { c.dragID = ""; c.dragging = false; c.screen.invoke("drawing.cancel", struct{}{}) })
+			withWindowOwner(c.Owner, window, func() { c.dragID = ""; c.dragging = false; c.screen.invoke("drawing.cancel", struct{}{}) })
 			e.SetHandled()
 			return
 		case "delete", "backspace":
-			c.Owner.Do(func() {
+			withWindowOwner(c.Owner, window, func() {
 				if id := c.screen.service.Snapshot().Selected; id != "" {
 					c.screen.invoke("object.delete", workbench.IDParams{ID: id})
 				}
@@ -108,7 +112,7 @@ func (c *commandCanvas) Mount(parent tree.Node) core.Widget {
 		default:
 			return
 		}
-		c.Owner.Do(func() {
+		withWindowOwner(c.Owner, window, func() {
 			state := c.screen.service.Snapshot()
 			graph := workbench.Graph{Components: state.Components, Wires: state.Wires}
 			if part, ok := graph.Component(state.Selected); ok && state.Drawing.Tool == "select" {

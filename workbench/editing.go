@@ -122,7 +122,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if err := params(raw, &struct{}{}); err != nil {
 			return err
 		}
-		return s.fitWaveformSamplingLocked()
+		return s.fitSamplingLocked()
 	case "source.sine.set":
 		var p SineParams
 		if err := params(raw, &p, "id", "waveform"); err != nil {

@@ -27,6 +27,7 @@ type pointerFrame struct {
 type pointerBridge struct {
 	enabled      atomic.Bool
 	owner        *app.Application
+	window       app.WindowRef
 	route        func(string, int, workbench.Point, workbench.Point)
 	mu           sync.Mutex
 	frame        pointerFrame
@@ -36,8 +37,8 @@ type pointerBridge struct {
 
 var activePointer atomic.Pointer[pointerBridge]
 
-func newPointerBridge(owner *app.Application, route func(string, int, workbench.Point, workbench.Point)) *pointerBridge {
-	b := &pointerBridge{owner: owner, route: route}
+func newPointerBridge(owner *app.Application, window app.WindowRef, route func(string, int, workbench.Point, workbench.Point)) *pointerBridge {
+	b := &pointerBridge{owner: owner, window: window, route: route}
 	b.enabled.Store(true)
 	activePointer.Store(b)
 	C.elabInstallPointerMonitor()
@@ -83,7 +84,7 @@ func (b *pointerBridge) close() {
 //export goELabPointer
 func goELabPointer(phase C.int, x, y, scroll C.double) C.int {
 	b := activePointer.Load()
-	if b == nil || b.owner.Context().Err() != nil {
+	if b == nil || b.window.Context().Err() != nil {
 		return 0
 	}
 	px, py := float64(x), float64(y)
@@ -122,7 +123,7 @@ func goELabPointer(phase C.int, x, y, scroll C.double) C.int {
 	}
 	point := frame.view.World(canvas.Point{X: px - frame.x, Y: py - frame.y})
 	b.mu.Unlock()
-	err := b.owner.PostWindow("main", func() {
+	err := b.owner.PostWindow(b.window, func() {
 		if !b.enabled.Load() {
 			return
 		}

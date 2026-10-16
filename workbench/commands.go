@@ -271,7 +271,7 @@ func queryCapability(id, description string, input, output reflect.Type) Capabil
 }
 func Catalog() []Capability {
 	return []Capability{
-		typedCapability("simulation.sampling.fit", "Fit waveform sample step (at least 1 µs); cap playback at 1000 samples/wall-second. Ordinary settings restart rules apply.", reflect.TypeOf(struct{}{})),
+		typedCapability("simulation.sampling.fit", "Fit source/LC-reference sample step (at least 1 µs), never coarsening; cap playback at 1000 samples/wall-second. Ordinary settings restart rules apply.", reflect.TypeOf(struct{}{})),
 		typedCapability("source.sine.set", "Set per-source sine amplitude, offset, frequency and phase; ordinary schematic restart semantics", reflect.TypeOf(SineParams{})),
 		typedCapability("source.pulse.set", "Set per-source finite pulse levels, phase lengths and linear rise/fall; ordinary schematic restart semantics", reflect.TypeOf(PulseParams{})),
 		typedCapability("source.pulse.timing.set", "Set finite-pulse frequency/period and duty; preserve voltage/ramp settings. Undoable electrical edit.", reflect.TypeOf(PulseTimingParams{})),
@@ -354,7 +354,7 @@ func Catalog() []Capability {
 		capability("scope.window.set", "Set mode live or fixed with start_s/end_s inside fresh retained history; plot and interval statistics use only that window", true, `{"type":"object","required":["mode"],"properties":{"mode":{"enum":["live","fixed"]},"start_s":{"type":"number"},"end_s":{"type":"number"}},"allOf":[{"if":{"properties":{"mode":{"const":"fixed"}}},"then":{"required":["start_s","end_s"]}}],"additionalProperties":false}`),
 		typedCapability("parts.search.set", "Filter components by case-insensitive words in names, hobbyist aliases, kind, pins, units, defaults or model IDs; session only", reflect.TypeOf(SearchParams{})),
 		typedCapability("component.duplicate", "Copy one component's value, orientation and startup voltage into an unconnected new component; optional exact position", reflect.TypeOf(DuplicateParams{})),
-		typedCapability("edit.batch", "Atomically apply 1–100 supported schematic edits as one named undo action; no file, simulation or nested batch commands", reflect.TypeOf(BatchParams{})),
+		typedCapability("edit.batch", "Atomically apply 1–100 supported schematic/settings edits as one named undo action, including sampling fit and shared pulse timing; no file, run-control or nested batch commands", reflect.TypeOf(BatchParams{})),
 		queryCapability("display.inspect", "Read exact wire voltages, unique conventional wire currents, palette and illustrative marker geometry at phase 0–1; no mutation or physics advancement", reflect.TypeOf(DisplayFrameParams{}), reflect.TypeOf(DisplayFrame{})),
 		queryCapability("examples.list", "Discover immutable example questions, expected template behavior, experiments and model limitations", reflect.TypeOf(struct{}{}), reflect.TypeOf([]ExampleInfo{})),
 		typedCapability("example.load", "Load a known example ID into a new editable document; protects unsaved work and optional document generation", reflect.TypeOf(ExampleLoadParams{})),

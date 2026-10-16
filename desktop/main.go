@@ -88,8 +88,6 @@ func runNative() (runErr error) {
 	screen.drawing = &commandCanvas{MeshCanvas: renderer, screen: screen}
 	scopeView := canvas.Viewport{Width: 800, Height: 120, Zoom: 1}
 	screen.scope = &scopeCanvas{MeshCanvas: &cogent.MeshCanvas{Owner: a, Window: "main", View: &scopeView, Prepare: screen.scopeMesh, OnError: func(err error) { log.Print("scope: ", err) }}, screen: screen}
-	screen.drawing.pointer = newPointerBridge(a, screen.routeNativePointer)
-	defer screen.drawing.pointer.close()
 	screen.registerCommands()
 	width, height := float32(1040), float32(760)
 	if *smoke {
@@ -97,10 +95,12 @@ func runNative() (runErr error) {
 		// Compact-window layout is inspected separately in the UI audit.
 		width, height = 1260, 1100
 	}
-	err = a.Open(app.Window{ID: "main", Title: "ELab · Live electronics", Width: width, Height: height, View: screen.view, CloseRequest: screen.requestClose})
+	screen.window, err = a.OpenWindow(app.Window{ID: "main", Title: "ELab · Live electronics", Width: width, Height: height, View: screen.view, CloseRequest: screen.requestClose})
 	if err != nil {
 		return err
 	}
+	screen.drawing.pointer = newPointerBridge(a, screen.window, screen.routeNativePointer)
+	defer screen.drawing.pointer.close()
 	if *endpoint != "" {
 		server, err := transport.Listen(service, *endpoint)
 		if err != nil {
@@ -135,7 +135,7 @@ func runNative() (runErr error) {
 				}
 				if !state.Closed && state.Display.Animate && time.Since(lastMotion) >= 125*time.Millisecond {
 					lastMotion = time.Now()
-					_ = a.Post(func() {
+					_ = a.PostWindow(screen.window, func() {
 						if !service.Snapshot().Display.Animate || screen.drawing.widget == nil {
 							return
 						}
@@ -187,6 +187,7 @@ type screen struct {
 	requestHelpRevision                 uint64
 	displayStarted                      time.Time
 	app                                 *app.Application
+	window                              app.WindowRef
 	service                             *workbench.Service
 	commands                            *command.Registry
 	drawing                             *commandCanvas
