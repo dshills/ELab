@@ -243,6 +243,17 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 				stroke(led, 2, canvas.Point{X: 30, Y: y}, canvas.Point{X: 50, Y: y - 20}, canvas.Point{X: 44, Y: y - 20})
 				stroke(led, 2, canvas.Point{X: 50, Y: y - 20}, canvas.Point{X: 50, Y: y - 14})
 			}
+		case "opamp":
+			for _, path := range workbench.OpAmpSymbolPaths() {
+				points := make([]canvas.Point, len(path))
+				for k, at := range path {
+					points[k] = canvas.Point{X: at.X, Y: at.Y}
+				}
+				stroke(ink, 2.5, points...)
+			}
+			for _, label := range workbench.OpAmpSupplyLabels(part) {
+				b.text(label.At.X, label.At.Y, label.Text, muted)
+			}
 		case "nmos", "pmos":
 			stroke(wireColor, 2.5, canvas.Point{X: -40}, canvas.Point{X: -16})
 			stroke(ink, 3, canvas.Point{X: -16, Y: -20}, canvas.Point{X: -16, Y: 20})
@@ -406,6 +417,9 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 }
 
 func nativePartLabelPosition(part workbench.Component, title string) workbench.Point {
+	if part.Kind == "opamp" {
+		return workbench.OpAmpLabelPosition(part)
+	}
 	if part.Kind == "inductor" {
 		return workbench.InductorLabelPosition(part)
 	}

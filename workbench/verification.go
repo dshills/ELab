@@ -216,6 +216,7 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 			break
 		}
 	}
+	metadata.OpAmpModel = opAmpModelForGraph(graph)
 	metadata.Engine = verificationEngineID(compiled.Analysis)
 	operation.inputMetadata = cloneVerificationMetadata(metadata)
 	input := verificationInput{compiled: compiled, settings: cfg, mode: settings.InputMode, probes: probes, duration: settings.Duration, steps: steps, serial: s.operationSerial, metadata: metadata}
@@ -336,6 +337,10 @@ func cloneVerificationMetadata(in VerificationMetadata) VerificationMetadata {
 	if in.NMOSModel != nil {
 		model := *in.NMOSModel
 		out.NMOSModel = &model
+	}
+	if in.OpAmpModel != nil {
+		model := *in.OpAmpModel
+		out.OpAmpModel = &model
 	}
 	if in.PMOSModel != nil {
 		model := *in.PMOSModel

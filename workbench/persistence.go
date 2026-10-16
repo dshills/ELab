@@ -27,6 +27,7 @@ type Document struct {
 	SwitchModel        *SwitchModel        `json:"switch_model,omitempty"`
 	NMOSModel          *NMOSModel          `json:"nmos_model,omitempty"`
 	PMOSModel          *PMOSModel          `json:"pmos_model,omitempty"`
+	OpAmpModel         *OpAmpModel         `json:"opamp_model,omitempty"`
 	Recordings         *ProjectRecordings  `json:"recordings,omitempty"`
 	Paused             *bool               `json:"paused,omitempty"`
 	ScopeProbes        *ProbeParams        `json:"scope_probes,omitempty"`
@@ -337,6 +338,9 @@ func decodeDocument(data []byte) (Document, error) {
 		}
 	}
 
+	if err := validateOpAmpModel(d.Graph, d.OpAmpModel); err != nil {
+		return d, err
+	}
 	if d.PMOSModel != nil && *d.PMOSModel != PMOSDeviceModel() {
 		return d, fmt.Errorf("unsupported PMOS model parameters/version")
 	}
@@ -559,6 +563,7 @@ func (s *Service) documentLocked() Document {
 			break
 		}
 	}
+	d.OpAmpModel = opAmpModelForGraph(s.graph)
 	return d
 }
 

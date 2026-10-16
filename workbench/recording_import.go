@@ -50,6 +50,9 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	if m.DiodeModel != nil {
 		envelope["diode_model"] = m.DiodeModel
 	}
+	if m.OpAmpModel != nil {
+		envelope["opamp_model"] = m.OpAmpModel
+	}
 	if m.PMOSModel != nil {
 		envelope["pmos_model"] = m.PMOSModel
 	}
@@ -200,6 +203,9 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		r := m.Mixed
 		if r == nil || m.LED != nil || m.NPN != nil || r.Stale || r.Engine != networkEngine(m.Analysis) || !recordingNear(r.Time, m.Duration) || len(r.Nodes) > MaxMixedNodes+1 {
 			return fmt.Errorf("invalid recorded mixed final result")
+		}
+		if err := validateRecordedOpAmps(c, m.Graph, r); err != nil {
+			return err
 		}
 		for _, v := range r.Inductors {
 			p, ok := m.Graph.Component(v.ID)

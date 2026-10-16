@@ -24,6 +24,8 @@ func partAliases(kind string) []string {
 		return []string{"MOSFET", "NMOS", "N-channel", "FET", "field effect transistor", "low-side switch"}
 	case "npn":
 		return []string{"bipolar transistor", "BJT", "transistor"}
+	case "opamp":
+		return []string{"op-amp", "operational amplifier", "buffer", "voltage follower", "amplifier"}
 	case "ground":
 		return []string{"ground", "voltage reference"}
 	case "junction":
@@ -63,6 +65,8 @@ func partLimitations(kind string) string {
 		return NMOSDeviceModel().Limitations
 	case "npn":
 		return TransistorModel().Limitations
+	case "opamp":
+		return OpAmpDeviceModel().Limitations
 	case "diode":
 		return SiliconDiodeModel().Limitations
 	case "potentiometer":

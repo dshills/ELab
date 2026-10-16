@@ -194,7 +194,11 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			sources = append(sources, p)
 		}
 	}
-	metadata, _ := json.Marshal(map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "switch_model": SwitchDeviceModel(), "nmos_model": NMOSDeviceModel(), "pmos_model": PMOSDeviceModel(), "diode_model": SiliconDiodeModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "source_annotations": annotations, "source_components": sources, "source_settings": settings, "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"})
+	metadataFields := map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "switch_model": SwitchDeviceModel(), "nmos_model": NMOSDeviceModel(), "pmos_model": PMOSDeviceModel(), "diode_model": SiliconDiodeModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "source_annotations": annotations, "source_components": sources, "source_settings": settings, "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"}
+	if model := opAmpModelForGraph(g); model != nil {
+		metadataFields["opamp_model"] = model
+	}
+	metadata, _ := json.Marshal(metadataFields)
 	fmt.Fprintf(&b, "<metadata>%s</metadata>", html.EscapeString(string(metadata)))
 	fmt.Fprintf(&b, `<rect x="%g" y="%g" width="%g" height="%g" fill="#ffffff"/><g fill="none" stroke="#426574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">`, minX, minY, width, height)
 	wireDisplays := map[string]WireDisplay{}
@@ -252,6 +256,14 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			b.WriteString(`"/>`)
 		case "capacitor":
 			b.WriteString(`<path d="M0 -32 V-7 M-23 -7 H23 M-23 7 H23 M0 7 V32"/>`)
+		case "opamp":
+			for _, path := range OpAmpSymbolPaths() {
+				b.WriteString(`<polyline points="`)
+				for _, point := range path {
+					fmt.Fprintf(&b, "%g,%g ", point.X, point.Y)
+				}
+				b.WriteString(`"/>`)
+			}
 		case "diode":
 			b.WriteString(`<path d="M0 -32 V-12 M-12 -12 H12 L0 10 Z M-12 11 H12 M0 11 V32"/>`)
 		case "led":
@@ -299,6 +311,11 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="19">ELab · schematic · electrical revision %d</text>`, minX+15, minY+25, revision)
 
 	for _, p := range g.Components {
+		if p.Kind == "opamp" {
+			for _, label := range OpAmpSupplyLabels(p) {
+				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="12">%s</text>`, label.At.X, label.At.Y, label.Text)
+			}
+		}
 		if annotated[p.ID] {
 			continue
 		}
@@ -388,6 +405,9 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 		text += " · " + displayPartValue(p)
 	}
 	switch p.Kind {
+	case "opamp":
+		at := OpAmpLabelPosition(p)
+		x, y = at.X, at.Y
 	case "inductor":
 		at := InductorLabelPosition(p)
 		x, y = at.X, at.Y

@@ -37,6 +37,9 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 	} else if len(r.Potentiometers) > 0 {
 		p.Current = r.Potentiometers[0].Terminal1Current
 	}
+	if len(r.OpAmps) > 0 && len(r.Transistors) == 0 && len(r.MOSFETs) == 0 {
+		p.Voltage, p.Current = r.OpAmps[0].OutputVoltage, r.OpAmps[0].OutputCurrent
+	}
 	if len(r.Capacitors) > 0 {
 		cap := r.Capacitors[0]
 		p.Energy = cap.Energy
@@ -55,6 +58,14 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		}
 	}
 	currents := map[string]float64{}
+	for _, u := range r.OpAmps {
+		currents[u.ID] = u.OutputCurrent
+		currents[u.ID+".noninverting"] = u.NoninvertingCurrent
+		currents[u.ID+".inverting"] = u.InvertingCurrent
+		currents[u.ID+".out"] = u.OutputCurrent
+		currents[u.ID+".vplus"] = u.PositiveSupplyCurrent
+		currents[u.ID+".vminus"] = u.NegativeSupplyCurrent
+	}
 	for _, p := range r.Potentiometers {
 		currents[p.ID+".1"] = p.Terminal1Current
 		currents[p.ID+".2"] = p.Terminal2Current

@@ -36,6 +36,14 @@ func uniqueWireCurrents(g Graph, c readingContext) map[string]float64 {
 			set("base", p.ID+".base", 1)
 			set("collector", p.ID+".collector", 1)
 			set("emitter", p.ID+".emitter", -1)
+		case "opamp":
+			for _, pin := range p.Terminals {
+				sign := 1.
+				if pin == "out" {
+					sign = -1
+				}
+				set(pin, p.ID+"."+pin, sign)
+			}
 		case "potentiometer":
 			for _, pin := range p.Terminals {
 				set(pin, p.ID+"."+pin, 1)

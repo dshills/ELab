@@ -93,6 +93,7 @@ type DocumentInspection struct {
 	SwitchModel        *SwitchModel           `json:"switch_model,omitempty"`
 	NMOSModel          *NMOSModel             `json:"nmos_model,omitempty"`
 	PMOSModel          *PMOSModel             `json:"pmos_model,omitempty"`
+	OpAmpModel         *OpAmpModel            `json:"opamp_model,omitempty"`
 	Format             string                 `json:"format"`
 	Version            int                    `json:"version"`
 	Graph              Graph                  `json:"graph"`

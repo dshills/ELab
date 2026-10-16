@@ -18,7 +18,7 @@ type OpAmpModel struct {
 	Limitations            string  `json:"limitations"`
 }
 
-// OpAmpDeviceModel returns an owned description of the experimental fixed model.
+// OpAmpDeviceModel returns an owned description of the fixed educational model.
 func OpAmpDeviceModel() OpAmpModel {
 	return OpAmpModel{
 		ID: OpAmpModelID, OpenLoopGain: 1e5, DifferentialResistance: 1e7,
@@ -74,7 +74,6 @@ func opAmpTarget(v opAmpVoltages, gain float64) (float64, [opAmpTerminalCount]fl
 
 // opAmpCurrents evaluates the memoryless current law and its analytic stamp.
 // Callers supply finite voltages within the network's existing node bounds.
-// This foundation is not yet registered as a supported schematic component.
 func opAmpCurrents(v opAmpVoltages) opAmpEvaluation {
 	m := OpAmpDeviceModel()
 	var result opAmpEvaluation

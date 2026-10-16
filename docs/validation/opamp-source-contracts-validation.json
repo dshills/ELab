@@ -1,0 +1,251 @@
+{
+  "format": "elab.opamp-source-contract-validation",
+  "version": 1,
+  "date": "2026-10-16",
+  "passed": true,
+  "app_release_qualified": false,
+  "scope": "Registered shared op-amp source component, compiler/model dependencies, Go workflows, native action-level parity and owned stdio boundary only. Packaged app remains 0.105.0/120.",
+  "source_parent_commit": "4043c39a4dcc4375b1b37e54c5b8d0a0aa7f849a",
+  "quality": {
+    "command": "GOPROXY=off GOFLAGS=-p=1 ./scripts/check.sh",
+    "started_utc": "2026-10-16T14:51:39.183798+00:00",
+    "source_parent_commit": "4043c39a4dcc4375b1b37e54c5b8d0a0aa7f849a",
+    "sources_before": {
+      "desktop/component_inspector.go": "53d180440f4fa3dc84d740e3976364b6c643f269c7b9bdddeeafab6627b1ebcf",
+      "desktop/drawing.go": "3a1668159240d3862ba1e9107f31f12c6433b7df8426ce12ce97908c0fe247fb",
+      "desktop/opamp_test.go": "c15987e7263a570f317daf2f1b9f1256239e6a1792eaf009548fae19aef3991e",
+      "desktop/workflow.go": "0a63aad05b5f4961d958285d244141ce1439ea569c4284ea5ed537143a221d41",
+      "research/13-native-command-inventory.json": "0f4bd44fb9c5a692272a57c2dddf5bd738ee61a69bfdf0819fb6a2eb1b3e9309",
+      "workbench/commands.go": "668a8907c6d1b73dafb58e3ae618b3eca4327faeb0e582f8aea2e0481090421d",
+      "workbench/dc_sweep_worker.go": "63cfd1c3307ac0d9c62345f3a385d8289f1225e484a90caa694d4aaae2d94033",
+      "workbench/editing.go": "4d9f2eadd0a56e62c029b478dfd56e0d5fb9687eb69dd962999af30d9159e6bb",
+      "workbench/export.go": "c76b4f269851af1b83e165651d58984e6458f69147cd449d807956a1922bff2d",
+      "workbench/graph.go": "7e33b972d8063c3edbc08200ae1771c2da6dacc5f9ba28933d22c4ad890bedcf",
+      "workbench/library.go": "181f48e73aeb299649db45b34af9e91b4775e0c3ef063a3cef356d5389f65bb8",
+      "workbench/limits.go": "43ae845d49bc91fa2d98605fb120ca380a9268dcf55a936ea1c180ebde7dc6c4",
+      "workbench/linear_network_test.go": "7f3e2075474fd3f6b2127a8f886bf47fc2b8a428943cc5435a4d95934422d72b",
+      "workbench/mixed_opamp_test.go": "741ae33dd83f31e5d1844f5fe5e48e5a5cadb7c17fe2bd36c85ded3e16a05ac3",
+      "workbench/mixed_region.go": "dbf4aa090da1af6434c3096b7e415b5fa29bbba532b4b587b07ec27167fb594c",
+      "workbench/mixed_transient.go": "2330a141feb198c06df4e6cd6dd163348b64ee2fd9bfd4ebfb23c92b4be615f5",
+      "workbench/network_compile.go": "97b104d0b531f19a03f977168149a3d3d20ed535fd11fe8f0f304a6a3424fd01",
+      "workbench/opamp.go": "c3c01b4115390cc08a233e80aeaa7b321a00fa7229294ec51f5fae771a4d31dd",
+      "workbench/opamp_compile.go": "8d38894cef4dab4ecd442c5b333371dcedc1a060c4122a70234b43dcff8c8752",
+      "workbench/opamp_compile_test.go": "2a1067e11d93734db5e1f1d72378f5b1f19cfc76500bea914258bd137f2919bb",
+      "workbench/opamp_dependencies.go": "32674d71f19f591f222e51e2dd1113f05329ccb5707c8a965953f91574a33492",
+      "workbench/opamp_symbol.go": "3a0d163b39ac41866a7de138d6993c66c6ac0f68d31592ceec1a17c6fa17ea12",
+      "workbench/opamp_workflow_test.go": "feec428803a09dfaf9e1c2e2be19caaccbc430b332b411244d9c61ade81a1d5f",
+      "workbench/persistence.go": "9107704dfcbf822ca4a900962e289170d7027a960717bda8b1c3c24ce0c8f8e2",
+      "workbench/project_recordings.go": "9d0535d0eb55aad5a6ecb463c795b1c602df1d58abf7703b0fe71c68a53e87b1",
+      "workbench/recording_import.go": "0a83be276861f631d414497e8947ebf1144f54f745c2c8857056198a128e813f",
+      "workbench/recovery.go": "c308018d757351cbe528b31095c36e89759ea18e870e7c0e8f648852db17080f",
+      "workbench/recovery_types.go": "04d7194399fd1e209cb09febd427c8d2b8cee0c400a60e52ca600e072de06c54",
+      "workbench/scope.go": "391c55f5105398a301df70425bfe3c22bcf38a4ab575675d1c8ffb4e97aba1e7",
+      "workbench/service.go": "7e1891dacbcbc3ad2c4d545e5339df5ee7bd111a4a1101ab8dc38a1c1ee5ceec",
+      "workbench/verification.go": "74b923807f514c8709b76921fe4ccb4a6e384dee36f76c0cfef318c083370402",
+      "workbench/verification_export.go": "1ff79c3b0ff3c139fbf6f4074b3d0f12b127e734656ab80613bdcc35a2494d96",
+      "workbench/verification_types.go": "7e629c8f850f1bb4df4668a080dbfcb2cbc9f8839dd19f35a68ad358efb0ef83",
+      "workbench/wire_currents.go": "162437dc6ae811afc699f060c1808caad63e24602a973d893fbc2108a7977674"
+    },
+    "sdk_before": {
+      "commit": "ddd23c6ea06ef7baf1014a08c61d01601c059f36",
+      "status": "",
+      "manifest_sha256": "22b4e98b6c11bf67987987c62837422f660ddabbe588914f25a3a1e1ba4efd58"
+    },
+    "exit_code": 0,
+    "finished_utc": "2026-10-16T14:56:00.783595+00:00",
+    "sources_after": {
+      "desktop/component_inspector.go": "53d180440f4fa3dc84d740e3976364b6c643f269c7b9bdddeeafab6627b1ebcf",
+      "desktop/drawing.go": "3a1668159240d3862ba1e9107f31f12c6433b7df8426ce12ce97908c0fe247fb",
+      "desktop/opamp_test.go": "c15987e7263a570f317daf2f1b9f1256239e6a1792eaf009548fae19aef3991e",
+      "desktop/workflow.go": "0a63aad05b5f4961d958285d244141ce1439ea569c4284ea5ed537143a221d41",
+      "research/13-native-command-inventory.json": "0f4bd44fb9c5a692272a57c2dddf5bd738ee61a69bfdf0819fb6a2eb1b3e9309",
+      "workbench/commands.go": "668a8907c6d1b73dafb58e3ae618b3eca4327faeb0e582f8aea2e0481090421d",
+      "workbench/dc_sweep_worker.go": "63cfd1c3307ac0d9c62345f3a385d8289f1225e484a90caa694d4aaae2d94033",
+      "workbench/editing.go": "4d9f2eadd0a56e62c029b478dfd56e0d5fb9687eb69dd962999af30d9159e6bb",
+      "workbench/export.go": "c76b4f269851af1b83e165651d58984e6458f69147cd449d807956a1922bff2d",
+      "workbench/graph.go": "7e33b972d8063c3edbc08200ae1771c2da6dacc5f9ba28933d22c4ad890bedcf",
+      "workbench/library.go": "181f48e73aeb299649db45b34af9e91b4775e0c3ef063a3cef356d5389f65bb8",
+      "workbench/limits.go": "43ae845d49bc91fa2d98605fb120ca380a9268dcf55a936ea1c180ebde7dc6c4",
+      "workbench/linear_network_test.go": "7f3e2075474fd3f6b2127a8f886bf47fc2b8a428943cc5435a4d95934422d72b",
+      "workbench/mixed_opamp_test.go": "741ae33dd83f31e5d1844f5fe5e48e5a5cadb7c17fe2bd36c85ded3e16a05ac3",
+      "workbench/mixed_region.go": "dbf4aa090da1af6434c3096b7e415b5fa29bbba532b4b587b07ec27167fb594c",
+      "workbench/mixed_transient.go": "2330a141feb198c06df4e6cd6dd163348b64ee2fd9bfd4ebfb23c92b4be615f5",
+      "workbench/network_compile.go": "97b104d0b531f19a03f977168149a3d3d20ed535fd11fe8f0f304a6a3424fd01",
+      "workbench/opamp.go": "c3c01b4115390cc08a233e80aeaa7b321a00fa7229294ec51f5fae771a4d31dd",
+      "workbench/opamp_compile.go": "8d38894cef4dab4ecd442c5b333371dcedc1a060c4122a70234b43dcff8c8752",
+      "workbench/opamp_compile_test.go": "2a1067e11d93734db5e1f1d72378f5b1f19cfc76500bea914258bd137f2919bb",
+      "workbench/opamp_dependencies.go": "32674d71f19f591f222e51e2dd1113f05329ccb5707c8a965953f91574a33492",
+      "workbench/opamp_symbol.go": "3a0d163b39ac41866a7de138d6993c66c6ac0f68d31592ceec1a17c6fa17ea12",
+      "workbench/opamp_workflow_test.go": "feec428803a09dfaf9e1c2e2be19caaccbc430b332b411244d9c61ade81a1d5f",
+      "workbench/persistence.go": "9107704dfcbf822ca4a900962e289170d7027a960717bda8b1c3c24ce0c8f8e2",
+      "workbench/project_recordings.go": "9d0535d0eb55aad5a6ecb463c795b1c602df1d58abf7703b0fe71c68a53e87b1",
+      "workbench/recording_import.go": "0a83be276861f631d414497e8947ebf1144f54f745c2c8857056198a128e813f",
+      "workbench/recovery.go": "c308018d757351cbe528b31095c36e89759ea18e870e7c0e8f648852db17080f",
+      "workbench/recovery_types.go": "04d7194399fd1e209cb09febd427c8d2b8cee0c400a60e52ca600e072de06c54",
+      "workbench/scope.go": "391c55f5105398a301df70425bfe3c22bcf38a4ab575675d1c8ffb4e97aba1e7",
+      "workbench/service.go": "7e1891dacbcbc3ad2c4d545e5339df5ee7bd111a4a1101ab8dc38a1c1ee5ceec",
+      "workbench/verification.go": "74b923807f514c8709b76921fe4ccb4a6e384dee36f76c0cfef318c083370402",
+      "workbench/verification_export.go": "1ff79c3b0ff3c139fbf6f4074b3d0f12b127e734656ab80613bdcc35a2494d96",
+      "workbench/verification_types.go": "7e629c8f850f1bb4df4668a080dbfcb2cbc9f8839dd19f35a68ad358efb0ef83",
+      "workbench/wire_currents.go": "162437dc6ae811afc699f060c1808caad63e24602a973d893fbc2108a7977674"
+    },
+    "sdk_after": {
+      "commit": "ddd23c6ea06ef7baf1014a08c61d01601c059f36",
+      "status": "",
+      "manifest_sha256": "22b4e98b6c11bf67987987c62837422f660ddabbe588914f25a3a1e1ba4efd58"
+    },
+    "sources_unchanged": true,
+    "sdk_unchanged": true
+  },
+  "core_checks": {
+    "placeable_kind": "opamp",
+    "five_named_terminals": [
+      "noninverting",
+      "inverting",
+      "out",
+      "vplus",
+      "vminus"
+    ],
+    "two_opamp_capacity": true,
+    "independent_feedback_references": 6,
+    "compiler_refuses_floating_input_groups_and_MOS_gate_reference_paths": true,
+    "equal_rails_and_unloaded_output_compile": true,
+    "existing_ideal_source_capacitor_refusal_preserved": true,
+    "public_blank_construction_auto_U1": true,
+    "signed_output_and_supply_probes": true,
+    "unique_supply_wire_current": true,
+    "move_rotate_preserve_accepted_physics": true,
+    "model_and_result_ownership": true,
+    "project_save_reopen_model_capture": true,
+    "missing_and_altered_project_models_refuse": true,
+    "captured_model_id_current_ground_and_result_corruption_refuse": true,
+    "csv_model_provenance": true,
+    "dirty_recovery_restore": true,
+    "stored_bias_sweep_reopen": true,
+    "pulse_rc_charge_discharge_and_independent_Verify": true,
+    "four_rotation_svg_named_pins_power_labels_and_model_metadata": true,
+    "sweep_source_model_validation": true,
+    "unused_model_omitted_from_legacy_sources": true
+  },
+  "native_scope": {
+    "test": "TestOpAmpBlankNativeConstructionInspectorAndAgentParity",
+    "passed": true,
+    "blank_palette_wires_values_shared_with_agent": true,
+    "signed_inspector_and_four_plot_controls": true,
+    "pulse_edge_and_paused_edit_restart": true,
+    "mesh_built": true,
+    "physical_input_or_mounted_visual_acceptance": false,
+    "source_review": {
+      "passed": true,
+      "changed_sources": [
+        "desktop/component_inspector.go",
+        "desktop/drawing.go",
+        "desktop/workflow.go"
+      ],
+      "source_review": "Shared op-amp paths/power labels, selected read-only model and signed readings, and four labels/eligibility cases in the existing scope.probes.set plot factory. No new command, callback, alias or action site.",
+      "normalized_sites_unchanged": true,
+      "line_numbers_ignored_only_for_comparison": true,
+      "sources": 56,
+      "sites": 388,
+      "public_commands": 162,
+      "routed_commands": 132
+    }
+  },
+  "stdio": {
+    "passed": true,
+    "transport": "actual JSON-line elab-agent process",
+    "requests": 26,
+    "paused_build_before_explicit_restart": {
+      "paused": true,
+      "has_mixed": false,
+      "status": "paused"
+    },
+    "output_voltage_v": 0.9999893408390604,
+    "output_delivered_current_a": 0.000999989339668128,
+    "catalog_commands": 162,
+    "saved_model_exact": true,
+    "svg_pins_and_metadata_present": true,
+    "clean_close_exit": 0,
+    "binary_sha256": "a5b00afe8b91fcd857c2cf2e7db2bf4c95875611ff657660684b5edc946f6297",
+    "project_sha256": "6264b9cf825980454219c56b6e2a52f80860b4c3ac63cfd128b0571f2d457998",
+    "svg_sha256": "b95b3e876e9de78ab9440ecf9691a48bbc579904601beb6d6fe3d99cce2174ab",
+    "harness_correction": "Initial attempt omitted restart after building while paused and tried to read absent mixed; no files were produced. Final workflow explicitly restarts, matching UI/core tests and paused-edit policy.",
+    "scope": "Owned fresh process; blank placement/wiring, model/probe discovery, solve, guarded save/export and clean close. Not all adapters or visual qualification."
+  },
+  "discovery": {
+    "catalog_bytes": 61611,
+    "unchanged_limit_bytes": 65536,
+    "parts": 18,
+    "public_commands": 162,
+    "common_schema_ids": [
+      "urn:elab:opamp-model:1",
+      "urn:elab:opamp-result:1",
+      "urn:elab:document-inspection:1"
+    ]
+  },
+  "reviewed_initial_failures": [
+    {
+      "gate": "quality-initial",
+      "problems": [
+        "ordinary discovery 66206 bytes exceeded the existing 65536-byte cap",
+        "exhaustive nonlinear-part expectation omitted opamp, although the kernel already classified it nonlinear"
+      ],
+      "repair": "Shared model/result/document-inspection schema references and new-part expected classification. No limits raised."
+    },
+    {
+      "focused_attempt": "discovery-focused",
+      "problem": "Model/result deduplication alone left discovery at 65591 bytes.",
+      "repair": "Shared existing DocumentInspection type; final Go-encoded catalog is 61611 bytes.",
+      "superseded_gate": "An accidentally admitted full rerun was interrupted only in its confirmed owned Go child before further source edits. The interrupted journal is retained and is not treated as a completed gate."
+    }
+  ],
+  "fixture_corrections": [
+    "Recovery checkpoint needs dirty content; a source edit followed by explicit paused restart supplies a fresh comparison.",
+    "Direct MNA fixture positions were all zero; wired/saved graph fixtures now use unique valid positions.",
+    "Capacitor startup is checked within its numerical voltage accuracy rather than bitwise zero.",
+    "SVG terminal-title checks distinguish real terminals from wire-description titles.",
+    "Owned stdio smoke explicitly restarts after paused blank construction; the initial harness had omitted that command."
+  ],
+  "preserved_apps": {
+    "canonical": {
+      "path": "build/ELab.app",
+      "matches_qualified_bytes_and_modes": true,
+      "entries": 7
+    },
+    "previous": {
+      "path": "build/ELab-0.104.0-119-preserved.app",
+      "matches_qualified_bytes_and_modes": true,
+      "entries": 7
+    }
+  },
+  "remaining": [
+    "Guided follower and inverting examples with user/agent load protection.",
+    "Mounted screenshot/keyboard/pointer and small-window inspector/plot/rendered geometry qualification.",
+    "Actual new-part adapter parity and bounded performance across the declared supported device/storage envelope.",
+    "Source-pinned candidate packaging, native GPU smoke and full regression/old-project qualification before replacing the current app.",
+    "Physical amplifier accuracy, bandwidth/stability, named devices/vendor import, physical printing and the broader P0/product gates remain unproven."
+  ],
+  "go_version": "go version go1.27.2 darwin/arm64",
+  "artifacts_sha256": {
+    "build/opamp-contracts/compiler-focused.log": "3c49ac45ee9beb890e547bfbfec64b4345096ee20fe28b20b817762e43803f40",
+    "build/opamp-contracts/discovery-focused.log": "586b1d4c56d0132daf94d66bf7f9f78ef7bf8b3d4abfdf1e5758de6cb2c3e55d",
+    "build/opamp-contracts/discovery-focused-2.log": "2ea029e4986e2e71e9e475f17c8e425aa3a16366d7bf50ccebf848f4010cc348",
+    "build/opamp-contracts/focused-final-2.log": "e7e119b874ee551dd4a25a72855d770a3c9d108d38eda68f199a5cc572606a78",
+    "build/opamp-contracts/native-focused.log": "cf036a084a1e417861b00f502c16995048f827c5a4a5de3e3edcddce73effa6e",
+    "build/opamp-contracts/quality-initial.log": "b389c29e75450a6468d88a1d9ace4a19c6c61df7613447fac476b482e41faa9b",
+    "build/opamp-contracts/quality-initial.json": "4a88f7af52e3e589eb2ba2e512daacade6eb710e695113a4a64629278e7fa620",
+    "build/opamp-contracts/quality-superseded.log": "0777ddcab17b75ccc927ff5402393615f69f615fac5493b5c8b5ae17c852da16",
+    "build/opamp-contracts/quality-superseded.json": "f7cdd9750ab3cd6772b364f3749e850c60b0cc063c9eab66c11f0ebac2e7e470",
+    "build/opamp-contracts/quality-superseded-note.txt": "daf69dd2dac88ae60d25da93fb1cd726e12b03017c22f044713cd1ecca1d1e79",
+    "build/opamp-contracts/quality-final.log": "a31297cc105517fb5748dbe882b012b3918ea73cb3448ffa48f175c47be3fc99",
+    "build/opamp-contracts/quality-final.json": "827b2c76abe6d4bdb17288cf10a1d3b86494bbff10f2df7f8e358d9eac6e95c6",
+    "build/opamp-contracts/native-inventory-candidate.json": "0f4bd44fb9c5a692272a57c2dddf5bd738ee61a69bfdf0819fb6a2eb1b3e9309",
+    "build/opamp-contracts/native-source-review.json": "dc5ecb90d098cdf383c56be5fc3355af638ca9cc5d1195bcc79a5df391baa1a8",
+    "build/opamp-contracts/preserved-apps.json": "66c0feb835467b6b250efff697f892d69df13db5626c18aea7927035423245b8",
+    "build/opamp-contracts/discovery-size.json": "baac1a61612fbe79c1d5809d1990bb381bd4a61b9840a56ee6703739abbf5f60",
+    "build/opamp-contracts/stdio-smoke.json": "64480f4bca468d278b49f30a84a463ea0959aad1e8143f18cd92c56d4f9a4bd7",
+    "build/opamp-contracts/stdio-transcript.json": "1da881a2442a07ca0323217fdc3af87712b13f38cf8633e6134cb956c16967bd",
+    "build/opamp-contracts/stdio-follower.elab": "6264b9cf825980454219c56b6e2a52f80860b4c3ac63cfd128b0571f2d457998",
+    "build/opamp-contracts/stdio-follower.svg": "b95b3e876e9de78ab9440ecf9691a48bbc579904601beb6d6fe3d99cce2174ab"
+  }
+}

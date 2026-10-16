@@ -61,6 +61,8 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}}, s.action("cap-initial-default", "Use experiment initial voltage", "capacitor.initial.set", workbench.ValueParams{ID: part.ID, Value: "default"}))
 			inspector = append(inspector, ui.Node{ID: "cap-presets", Kind: ui.Row, Children: []ui.Node{s.action("c-1u", "1 µF", "component.set", workbench.ValueParams{ID: part.ID, Value: "1uF"}), s.action("c-100u", "100 µF", "component.set", workbench.ValueParams{ID: part.ID, Value: "100uF"})}})
 		}
+	} else if part.Kind == "opamp" {
+		inspector = append(inspector, quiet("opamp-model", "Generic powered op-amp\nGain 100,000 · input 10 MΩ\nOutput 50 Ω scale · active limit 20 mA\nConnect V+ and V- explicitly. No internal bandwidth or slew model."))
 	} else if part.Kind == "npn" {
 		inspector = append(inspector, quiet("npn-model", "Generic NPN · βF 100 / βR 1\nIS 10 fA · 27°C\nInstantaneous junction response.\nNo heating or switching delay."))
 	} else if part.Kind == "diode" {
@@ -78,6 +80,15 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	}
 
 	if r := state.Mixed; r != nil {
+		for _, u := range r.OpAmps {
+			if u.ID == part.ID {
+				status := "Live"
+				if r.Stale {
+					status = "Stale"
+				}
+				inspector = append(inspector, quiet("opamp-selected-reading", fmt.Sprintf("%s · %s\nOutput %.6g V / ground · delivered %.6g mA\nInput difference %.6g V · supply span %.6g V\nInto V+ %.6g mA · into V- %.6g mA\nDevice power %.6g mW", status, u.State, u.OutputVoltage, u.OutputCurrent*1000, u.InputDifference, u.SupplyVoltage, u.PositiveSupplyCurrent*1000, u.NegativeSupplyCurrent*1000, u.Power*1000)))
+			}
+		}
 		for _, branches := range [][]workbench.BranchResult{r.LEDs, r.Diodes, r.Resistors, r.Sources} {
 			for _, b := range branches {
 				if b.ID == part.ID {

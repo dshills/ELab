@@ -11,9 +11,8 @@ import (
 	"testing"
 )
 
-// This fixture bypasses the public compiler deliberately: opamp is not a
-// registered palette/file kind until its persistence, probes and UI are ready.
-// The actual MNA/Newton, result and integration implementations run unchanged.
+// These direct-MNA fixtures isolate the numerical kernel. The wired-graph and
+// public command tests exercise compilation, construction and persistence.
 type opAmpNetworkFixture struct {
 	graph Graph
 	pins  map[string]string
@@ -25,21 +24,15 @@ func newOpAmpNetworkFixture() *opAmpNetworkFixture {
 
 func (f *opAmpNetworkFixture) add(t *testing.T, id, kind, value string, nets ...string) {
 	t.Helper()
-	var part Component
-	if kind == "opamp" {
-		part = Component{ID: id, Kind: kind, Terminals: []string{"noninverting", "inverting", "out", "vplus", "vminus"}}
-	} else {
-		var err error
-		// Public sources store nonnegative magnitudes. Reverse their terminals
-		// to create a negative rail without expanding accepted source values.
-		if kind == "dc-source" && strings.HasPrefix(value, "-") {
-			value = strings.TrimPrefix(value, "-")
-			nets[0], nets[1] = nets[1], nets[0]
-		}
-		part, err = MakeComponent(id, kind, Point{}, value)
-		if err != nil {
-			t.Fatal(err)
-		}
+	// Public sources store nonnegative magnitudes. Reverse terminals for a
+	// negative rail without expanding the accepted source-value domain.
+	if kind == "dc-source" && strings.HasPrefix(value, "-") {
+		value = strings.TrimPrefix(value, "-")
+		nets[0], nets[1] = nets[1], nets[0]
+	}
+	part, err := MakeComponent(id, kind, Point{}, value)
+	if err != nil {
+		t.Fatal(err)
 	}
 	if len(nets) != len(part.Terminals) {
 		t.Fatal("fixture has incomplete terminal assignment", id, part.Terminals, nets)

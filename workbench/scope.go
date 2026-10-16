@@ -109,6 +109,19 @@ func probeInventory(g Graph) []Probe {
 				}
 				out = append(out, Probe{"i:" + ref, ref + " current", "A", ref, direction})
 			}
+		case "opamp":
+			out = append(out,
+				Probe{"v:" + p.ID, p.ID + " output / ground", "V", p.ID + ".out", "ground"},
+				Probe{"v:" + p.ID + ".input-difference", p.ID + " noninverting minus inverting", "V", p.ID + ".noninverting", p.ID + ".inverting"},
+				Probe{"v:" + p.ID + ".supply", p.ID + " positive minus negative supply", "V", p.ID + ".vplus", p.ID + ".vminus"},
+				Probe{"i:" + p.ID, p.ID + " delivered output current", "A", p.ID + ".out", "out of device"})
+			for _, pin := range p.Terminals {
+				ref, direction := p.ID+"."+pin, "into device"
+				if pin == "out" {
+					direction = "out of device"
+				}
+				out = append(out, Probe{"i:" + ref, ref + " current", "A", ref, direction})
+			}
 		case "npn":
 			for _, pin := range p.Terminals {
 				ref := p.ID + "." + pin
@@ -158,6 +171,9 @@ func defaultProbes(c Compiled) []string {
 	if IsNetworkAnalysis(c.Analysis) {
 		out := []string{}
 		for _, p := range c.MixedGraph.Components {
+			if p.Kind == "opamp" {
+				out = append(out, "v:"+p.ID, "v:"+p.ID+".noninverting", "i:"+p.ID)
+			}
 			if IsMOSFETKind(p.Kind) {
 				out = append(out, "v:"+p.ID, "v:"+p.ID+".gate-source", "i:"+p.ID+".drain")
 			}

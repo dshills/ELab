@@ -1,0 +1,61 @@
+# Powered op-amps
+
+Source implementation in progress after 0.105.0. The packaged `build/ELab.app` remains the previously qualified 0.105 app. This addition has not yet received guided examples, mounted visual/input testing or an app-release qualification.
+
+The shared part library now includes `opamp`, searchable as **op-amp**, **operational amplifier**, **buffer**, or **voltage follower**. Its automatic IDs start at **U1**. Native palette placement, terminal wiring, source/resistor value edits, rotation and movement use the existing public commands. The gain and internal parameters are fixed generic model assumptions, rather than editable component values.
+
+## Build a follower
+
+Start on a blank sheet. Place a powered op-amp, three voltage sources, a 1 kΩ load resistor and ground. Set the signal source to 1 V and the two supply sources to 5 V. Connect:
+
+| Connection | Purpose |
+| --- | --- |
+| Signal positive → `U1.noninverting`; signal negative → ground | Input relative to ground |
+| Positive-rail source positive → `U1.vplus`; negative → ground | +5 V rail |
+| Negative-rail source positive → ground; negative → `U1.vminus` | −5 V rail, using an ordinary nonnegative source magnitude |
+| `U1.out` → `U1.inverting` | Negative feedback |
+| `U1.out` → load pin 1; load pin 2 → ground | Resistive load |
+
+The output should be close to 1 V. A single 5 V/ground supply also works for inputs within its modeled output range. For an inverting amplifier, ground `noninverting`, feed the signal through an input resistor into `inverting`, and connect a feedback resistor from `out` to `inverting`. The frozen 10 kΩ input /20 kΩ feedback reference gives approximately −0.999969336 V for a 0.5 V input with ±5 V rails and a 10 kΩ load.
+
+Agents use the same `component.place`, `wire.connect`, `component.set`, `component.rotate`, `component.move`, `scope.probes.set`, `simulation.restart` and `simulation.step` commands. For example, on a fresh sheet:
+
+```json
+{"command":"component.place","params":{"id":"U1","kind":"opamp","position":{"x":0,"y":0}}}
+{"command":"wire.connect","params":{"from":"U1.out","to":"U1.inverting"}}
+{"command":"scope.probes.set","params":{"ids":["v:U1","v:U1.input-difference","i:U1","i:U1.vplus","i:U1.vminus"]}}
+```
+
+These are intent fragments. Real requests need the normal protocol envelope, revision/document guards and retry keys. Inspect `parts.list`, `capabilities.list` and the current snapshot before constructing or editing an existing document. [Connected-demo admission rules](demo-sessions.md) apply to standalone demo programs; general agents retain normal guarded editing access.
+
+## Measurements and signs
+
+All five pins have individual voltage-to-ground and current probes. The selected native inspector reports output voltage/current, input difference, supply span, signed supply currents and device power. Its plot shortcuts use `scope.probes.set`, including the same six-trace limit as agents.
+
+| Probe | Meaning |
+| --- | --- |
+| `v:U1` or `v:U1.out` | Output relative to ground |
+| `v:U1.input-difference` | Noninverting minus inverting input |
+| `v:U1.supply` | Positive minus negative supply |
+| `i:U1` or `i:U1.out` | Current delivered out of the output pin |
+| `i:U1.noninverting`, `i:U1.inverting` | Current into that input pin |
+| `i:U1.vplus`, `i:U1.vminus` | Signed current into that supply pin |
+
+The output-current convention is explicitly opposite to internal current into the output. Negative supply current can be negative during ordinary operation. Terminal currents, unique wire currents and device power use these declared signs consistently. A positive supply span reports `powered`; zero reports `unpowered`; negative reports `reversed-supply`. Reversed supply disables the active stage and is an explanatory model state, not a simulation of protection or damage.
+
+Input common mode needs an external reference. The compiler connects the input pair through its declared 10 MΩ resistor, and output to V− through its declared 1 GΩ bleed. Supply/control coupling supplies no reference to the input pair, and V+ requires an external reference. In op-amp networks an ideal MOS gate also supplies no reference path. Floating groups refuse. Follower feedback, tied inputs and equal power rails are intentional joins; an unloaded output remains measurable through the declared bleed.
+
+## Fixed model and storage
+
+`elab.generic-opamp.v1` is an ELab educational macromodel. It has 100,000 V/V center-region gain, 10 MΩ differential resistance, a 50 Ω output-resistance scale, a 20 mA active-current scale, 1 mA quiescent-current scale, 0.1 V supply soft-enable scale and an always-present 1 GΩ output-to-V− bleed. The voltage target is smoothly limited around the supply midpoint; output current approaches its active bound smoothly. Total output current also includes the bleed.
+
+There is no intrinsic bandwidth, pole, slew, input offset/bias mismatch, common-mode limit, protection diode, noise, thermal/rating or named-device behavior. External capacitors and inductors supply circuit timing. The generic model cannot establish a physical amplifier's speed, stability or capacitive-load suitability. Equations and independently generated references are in the [integration plan](../research/16-opamp-integration-plan.md).
+
+Projects, recovery, Verify records and DC sweep sources carry the complete `opamp_model`. Missing or altered parameters refuse. Captured dependencies hash those parameters; imported final results require matching device IDs/models, a zero ground reference and readings consistent with the recorded terminal voltages. CSV exports include `opamp_model`. Unrelated circuits omit the new optional model fields, preserving existing model hashes. Older readers reject the unknown new model/part rather than silently dropping it.
+
+Native and exported symbols share the same triangle/sign/power-lead paths and five named terminals. SVG metadata includes the exact model. Existing PDF/PNG/print paths consume schematic output; mounted visual, print and broad device-envelope acceptance remain separate qualification work.
+
+There are at most two op-amps per network, within the existing total part/node/source/storage budgets. The numerical foundation retains the original equations and work limits, with a differential-input Newton proposal limit and a voltage-correction acceptance check for op-amp networks. This does not guarantee convergence for every possible feedback topology.
+
+
+[Source validation record](validation/opamp-source-contracts-validation.json) retains the focused/core/native/stdio scope, full quality gate, schema-budget repair, corrected fixture attempts and remaining release requirements.

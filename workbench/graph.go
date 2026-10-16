@@ -157,6 +157,7 @@ func libraryParts() []Part {
 		{Kind: "pmos", Name: "P-channel MOSFET", Terminals: []string{"gate", "drain", "source"}, Model: PMOSModelID},
 		{Kind: "nmos", Name: "N-channel MOSFET", Terminals: []string{"gate", "drain", "source"}, Model: NMOSModelID},
 		{Kind: "npn", Name: "NPN transistor", Terminals: []string{"base", "collector", "emitter"}, DefaultValue: "", Unit: "", Model: NPNModelID},
+		{Kind: "opamp", Name: "Powered op-amp", Terminals: []string{"noninverting", "inverting", "out", "vplus", "vminus"}, Model: OpAmpModelID},
 		{Kind: "ground", Name: "Ground", Terminals: []string{"reference"}, DefaultValue: "", Unit: "", Model: "ground.v1"},
 		{Kind: "junction", Name: "Junction", Terminals: []string{"node"}, DefaultValue: "", Unit: "", Model: "junction.v1"},
 		{Kind: "net-label", Name: "Net label", Terminals: []string{"node"}, DefaultValue: "", Unit: "", Model: "net-label.v1"},
@@ -331,6 +332,21 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 		default:
 			found = false
 		}
+	case "opamp":
+		switch name {
+		case "noninverting":
+			p = Point{-55, -20}
+		case "inverting":
+			p = Point{-55, 20}
+		case "out":
+			p = Point{55, 0}
+		case "vplus":
+			p = Point{0, -45}
+		case "vminus":
+			p = Point{0, 45}
+		default:
+			found = false
+		}
 	case "nmos", "pmos":
 		switch name {
 		case "gate":
@@ -410,6 +426,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 	}
 	hasInductor := false
 	hasMOS := false
+	hasOpAmp := false
 	hasSwitch := false
 	hasDiode := false
 	hasPot := false
@@ -438,6 +455,8 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 			resistors = append(resistors, c)
 		case "nmos", "pmos":
 			hasMOS = true
+		case "opamp":
+			hasOpAmp = true
 		case "npn":
 			transistors = append(transistors, c)
 		case "capacitor":
@@ -530,7 +549,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 			}
 		}
 	}
-	if hasInductor || hasMOS || hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || floatingDC || len(transistors) > 0 && len(capacitors) > 0 {
+	if hasOpAmp || hasInductor || hasMOS || hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || floatingDC || len(transistors) > 0 && len(capacitors) > 0 {
 		return compileNetwork(out, g, groups, root)
 	}
 	if len(transistors) > 0 {
