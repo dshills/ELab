@@ -39,6 +39,8 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "pmos", Title: "High-side MOSFET LED switch", Question: "How does a P-channel MOSFET switch the supply side?", Expected: "Gate high at the 5 V source turns M1 off. Pulling the gate low turns the LED on; signed drain current is negative because it leaves the drain.", Try: "Compare M1 gate-source voltage and drain current across a pulse edge. Change RG to 10k and add an external 1uF gate-source capacitor for delayed switching.", Limitation: PMOSDeviceModel().Limitations},
 		{ID: "nmos", Title: "MOSFET LED switch", Question: "How does gate voltage switch an LED without base current?", Expected: "A high gate voltage makes M1 conduct in its low-resistance triode region; a low gate turns the LED off. Gate current is zero in this model.", Try: "Pause and step across a pulse edge. Compare M1 gate-source voltage, drain-source voltage and drain current; change RG or add an external gate capacitor.", Limitation: NMOSDeviceModel().Limitations},
 		{ID: "cmos", Title: "Complementary MOSFET inverter", Question: "How do N-channel and P-channel MOSFETs invert a signal?", Expected: "High input turns MN on and drives output near ground. Low input turns MP on and drives output near 5 V. PMOS drain current is negative; NMOS drain current is positive.", Try: "Pause and step 200 ms to the falling input edge. Compare input/output and both drain currents. Change VIN high to 2.5 V and Restart to see both channels conduct.", Limitation: "Generic educational MOSFETs, not a physical matched pair or rated logic gate. The explicit 10 kΩ output load defines an otherwise undriven output. Zero intrinsic gate charge, capacitance, delay, heating and breakdown; ideal pulse edges have no modeled transition loss."},
+		{ID: "opamp-follower", Title: "Op-amp voltage follower", Question: "How does negative feedback make an output follow its input?", Expected: "The 10 Hz, ±1 V sine and output closely overlap. The explicit ±5 V supplies provide the delivered load current; input current is much smaller.", Try: "Pause and step 25 ms from Restart to inspect the positive peak. Reduce RL from 10 kΩ to 10 Ω and Restart to see the generic output-current limit distort the signal.", Limitation: OpAmpDeviceModel().Limitations},
+		{ID: "opamp-inverting", Title: "Inverting op-amp amplifier", Question: "How do two resistors set an amplifier's sign and gain?", Expected: "With RI 10 kΩ and RF 20 kΩ, the ±0.5 V sine produces approximately ∓1 V at the output. The input difference stays small; signed output current reverses with the waveform.", Try: "Pause and step 25 ms from Restart. Change RF from 20 kΩ to 10 kΩ, then Restart: the output amplitude halves and remains inverted.", Limitation: OpAmpDeviceModel().Limitations},
 		{ID: "blink", Title: "Pulse-controlled LED", Question: "What happens when transistor base drive alternates?", Expected: "The LED follows the high/low base-drive phases; the scope separates signed base and collector behavior.", Try: "Change pulse high/low durations, then pause and measure matching edges.", Limitation: "Instantaneous junction response; no physical switching delay or stored transistor charge."},
 		{ID: "flasher", Title: "Capacitor-timed LED flasher", Question: "How can two RC stages make alternating light?", Expected: "The LEDs alternate as capacitor voltages drive the two transistor bases; larger timing capacitors generally lengthen the period.", Try: "Plot both LED currents and collector voltages; double both capacitors and compare measured periods.", Limitation: "Generic grounded-emitter NPN/LED models, ideal capacitors and an explicit asymmetric startup; hardware tolerances are not modeled."},
 		{ID: "led-fade", Title: "Capacitor-buffered LED fade", Question: "How does stored capacitor charge change an LED pulse?", Expected: "C1 charges across D1 while the input is high; after the input falls, stored charge keeps LED current flowing briefly as voltage decays.", Try: "Compare input voltage, C1 voltage and D1 current. Change C1 from 100 µF to 220 µF and compare the falling-edge tail.", Limitation: "Ideal capacitor and generic red LED; source low discharges through R1 as well as D1. Brightness is illustrative; no physical LED rating, ESR or heating."},
@@ -69,6 +71,15 @@ func findExample(id string) (exampleDefinition, bool) {
 		return d, false
 	}
 	switch id {
+	case "opamp-follower", "opamp-inverting":
+		d.graph = OpAmpFollowerExampleGraph()
+		if id == "opamp-inverting" {
+			d.graph = OpAmpInvertingExampleGraph()
+		}
+		d.selected = "U1"
+		d.settings.PlaybackSpeed = .05
+		d.probes = []string{"v:VIN.positive", "v:U1", "i:U1", "v:U1.input-difference"}
+		d.view = View{Center: Point{X: 20, Y: -40}, Zoom: .7}
 	case "led":
 		d.graph = ExampleGraph()
 	case "split-supply":

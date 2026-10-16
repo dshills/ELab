@@ -1,0 +1,183 @@
+{
+  "date": "2026-10-16",
+  "scope": "Unreleased guided op-amp source and bounded native review; not full UI or application acceptance",
+  "source_base": "a5e637b882840f056f1e19cb026a2712cd10a4c4",
+  "examples": [
+    "opamp-follower",
+    "opamp-inverting"
+  ],
+  "shared_routes": {
+    "public": "example.load",
+    "native_aliases": [
+      "example.opamp-follower",
+      "example.opamp-inverting"
+    ],
+    "other_actions": [
+      "component.set",
+      "simulation.pause",
+      "simulation.restart",
+      "simulation.step",
+      "scope.probes.set",
+      "example.current.reset"
+    ]
+  },
+  "solver_repair": {
+    "problem": "Fixed microvolt outward differential damping prevented warm current-limited follower convergence within the original attempt limit.",
+    "change": "Allow outward half-magnitude growth plus the central transition interval; inward proposals cross only that interval.",
+    "equations_and_accuracy_and_work_limits_unchanged": true,
+    "validation": [
+      "cold and warm feedback references",
+      "both overloaded current signs",
+      "zero recovery and return to positive peak",
+      "one-cycle guide capture",
+      "KCL/power and gain edits"
+    ]
+  },
+  "quality": {
+    "command": "GOPROXY=off GOFLAGS=-p=1 ./scripts/check.sh",
+    "exit_code": 0,
+    "format_imports_staticcheck": true,
+    "python_tests": 15,
+    "root_race_seconds": 67.154,
+    "root_vet": true,
+    "native_race_seconds": 142.059,
+    "native_vet": true,
+    "source_files_stable": 607,
+    "source_changes_during_gate": [],
+    "started_utc": "2026-10-16T23:19:48.399778+00:00",
+    "finished_utc": "2026-10-16T23:25:28.665023+00:00",
+    "vellum_head": "1ba954c3188ad7c6d789d96344b0a7675dd73066",
+    "vellum_clean_and_stable": true,
+    "sdk_release_pin_promoted": false
+  },
+  "public_workflow": {
+    "scope": "Two guided sine circuits through actual desktop socket and headless stdio; not all adapters or performance qualification",
+    "examples": [
+      {
+        "id": "opamp-follower",
+        "matched_rows": 101,
+        "gain": 1,
+        "saved_projects": {
+          "native": "build/opamp-examples/public-guides-artifacts/native-opamp-follower.elab",
+          "headless": "build/opamp-examples/public-guides-artifacts/headless-opamp-follower.elab"
+        },
+        "probe_ids": [
+          "v:VIN.positive",
+          "v:U1",
+          "i:U1",
+          "v:U1.input-difference"
+        ],
+        "verify_preserves_live": true,
+        "reopened_recordings": 1
+      },
+      {
+        "id": "opamp-inverting",
+        "matched_rows": 101,
+        "gain": -2,
+        "saved_projects": {
+          "native": "build/opamp-examples/public-guides-artifacts/native-opamp-inverting.elab",
+          "headless": "build/opamp-examples/public-guides-artifacts/headless-opamp-inverting.elab"
+        },
+        "probe_ids": [
+          "v:VIN.positive",
+          "v:U1",
+          "i:U1",
+          "v:U1.input-difference"
+        ],
+        "verify_preserves_live": true,
+        "reopened_recordings": 1
+      }
+    ],
+    "passed": true,
+    "binary_sha256": "9cb46f962ea6ee12cbe3a90d4a3b20a74fea30d070c7620cc25b16d515c83d0e"
+  },
+  "native_source_inventory": {
+    "files": 56,
+    "sites": 388,
+    "public_commands": 162,
+    "commands_with_source_routes": 132,
+    "review": "Five native source hashes, two protected example aliases and two unchanged geometry actions moved to a helper; normalized site review preserves all other command routes."
+  },
+  "mounted_review": {
+    "report": "research/ui-audit/opamp-guides/README.md",
+    "screenshots": 12,
+    "viewport": [
+      1184,
+      853
+    ],
+    "passed_observations": [
+      "native example menu",
+      "protected generated-project replacement",
+      "Pause and scope collapse",
+      "canvas resistor selection",
+      "mounted supply plot adds shared probe"
+    ],
+    "unresolved": [
+      "Visible RF value editor left its draft unchanged after click/select-all/type attempts.",
+      "Value field and Apply action absent from exposed inspector AX tree; focus progression not proved.",
+      "Splitter tooltip persisted over bottom measurements after pointer left splitter.",
+      "Default fit still makes circuit labels small; some load/supply captions remain close.",
+      "Unsaved-project sheet has excessive empty space and an extra Close control."
+    ],
+    "runtime_input_acceptance": false,
+    "all_accessibility_acceptance": false
+  },
+  "retained_failures_and_corrections": [
+    {
+      "path": "build/opamp-examples/guided-focused.log",
+      "description": "The curated 10 ohm overload exposed the original limiter defect; load and solver budgets were retained."
+    },
+    {
+      "path": "build/opamp-examples/resume-focused-core.log",
+      "description": "The first new signed-cycle test reused one retry key, replaying the previous step. Distinct step-intent keys repair the harness; the unchanged thresholds then pass."
+    },
+    {
+      "path": "research/ui-audit/opamp-guides/11-feedback-edit-unresolved.png",
+      "description": "Mounted draft edit failed; not counted as a passing UI test."
+    }
+  ],
+  "preserved_apps": {
+    "canonical": {
+      "path": "build/ELab.app",
+      "entries": 7,
+      "matches_qualified_bytes_and_modes": true
+    },
+    "preserved": {
+      "path": "build/ELab-0.104.0-119-preserved.app",
+      "entries": 7,
+      "matches_qualified_bytes_and_modes": true
+    }
+  },
+  "p0": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "remaining": [
+    "Resolve mounted text editing/focus/AX and tooltip findings with actual input evidence.",
+    "Extend actual op-amp adapter/corruption and mixed-storage/device/performance qualification.",
+    "Source-pinned candidate build/GPU/legacy-project and release qualification before promoting an app.",
+    "Broader P0, participant, physical printer/distribution and physical-device acceptance remain open."
+  ],
+  "artifacts_sha256": {
+    "build/opamp-examples/full-quality.log": "fc98a42a7d39b28e9015d34d3f178750c062b2e1698b49b6a41a546472c27d79",
+    "build/opamp-examples/final-focused-core.log": "4c61779a7976a71984459e4b4d36094c504c50a37decf63f183edc0e32ea12f6",
+    "build/opamp-examples/resume-focused-native.log": "1e2bff39c154a0e800a907d57cf71efa7fcc305e6c779ebd50131690221b52f5",
+    "build/opamp-examples/quality-start.json": "f01c7cd9edc71992d5dba468ae04e4b4c12e19920e52c5c0bdfff9ad9164c294",
+    "build/opamp-examples/quality-end.json": "49a1d076181a502bac1e7364b3c09e32b6bac75b4f939acf8a62a48e9b13d83a",
+    "build/opamp-examples/public-guides.py": "eceb35a7d00f55a539946476330d7135d49fca18cbd7902772ef6af997a2f65a",
+    "build/opamp-examples/public-guides-report.json": "37707ebdd18a4195fa678e39f8a6a3874a8c7adc26a9ff87ca51d4f7466f5bfe",
+    "build/opamp-examples/preserved-apps.json": "e5d91256d53744ddc96d6f3d0d79cffeeeb1733513560d926ccf2b3bc7463340",
+    "research/ui-audit/opamp-guides/01-blank.png": "b6feb3c90409f2bc84145402c82473c31f82106cd68d76d907e50ef965f28666",
+    "research/ui-audit/opamp-guides/02-examples-menu.png": "1c0f837b30531eef8aa775bb24dac9ffe8d7daa22b960389afb6fd27cc7c476e",
+    "research/ui-audit/opamp-guides/03-follower-opening.png": "f505803dcbd675ed717425cc2943e0b3a08056b5300c42d9216271ecc1e60a82",
+    "research/ui-audit/opamp-guides/04-follower-expanded.png": "a6c1709f292ad15fc1a22ee3c3bd2f19e573a6141e199104109612d08a473109",
+    "research/ui-audit/opamp-guides/05-example-switch.png": "9322a4ded15c7134dd03a0c814ec817597cb4ee8e7d48010c4714906e1857874",
+    "research/ui-audit/opamp-guides/06-inverting-before.png": "0a187cacab449b91894d08b8482395e9c6752bd28c2849a57e101e980789c6a5",
+    "research/ui-audit/opamp-guides/07-inverting-revised.png": "35d64bcee207c063374d0eab9b902b098e4531ffc4c527211d3f19f6b1db3d50",
+    "research/ui-audit/opamp-guides/08-inverting-expanded.png": "ce222168893588172bbbe455daac3f4859a90a0db112b4af2f3e4a04571f4ec4",
+    "research/ui-audit/opamp-guides/09-inverting-final-scope.png": "d615cbf07841faaa2b2e7068fc2553fb60a1fea5f0b780c46e304a46ea34a3d5",
+    "research/ui-audit/opamp-guides/10-inverting-final-expanded.png": "83d170ad646d4f6b4f72cebe8f740991a2bfb4fb005fca2e57fe27bf42550ae2",
+    "research/ui-audit/opamp-guides/11-feedback-edit-unresolved.png": "94c8623ca3c8cd9d7d1a71a56c1ee6827ad911f24f056525cc3d44eb77bd382b",
+    "research/ui-audit/opamp-guides/12-follower-final.png": "5b8042e105974ac5a378437aafb2f7dd3451a5020cff5cb72fdfc1b3f3795302"
+  }
+}

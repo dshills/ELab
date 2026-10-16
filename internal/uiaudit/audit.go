@@ -53,21 +53,23 @@ var callbackFields = map[string]bool{
 // The file helpers can choose the asynchronous form of the same public action.
 func nativeAliases() map[string][]string {
 	return map[string][]string{
-		"example.rc-high-pass": {"example.load"},
-		"example.rl":           {"example.load"},
-		"example.rlc":          {"example.load"},
-		"example.flyback":      {"example.load"},
-		"example.led-fade":     {"example.load"},
-		"example.nmos":         {"example.load"},
-		"example.pmos":         {"example.load"},
-		"example.cmos":         {"example.load"},
-		"example.split-supply": {"example.load"},
-		"file.open":            {"project.load", "project.load.start"},
-		"file.save":            {"project.save", "project.save.start"},
-		"file.save-as":         {"project.save", "project.save.start"},
-		"appearance.light":     {"appearance.theme.set"},
-		"appearance.dark":      {"appearance.theme.set"},
-		"appearance.system":    {"appearance.theme.set"},
+		"example.opamp-follower":  {"example.load"},
+		"example.opamp-inverting": {"example.load"},
+		"example.rc-high-pass":    {"example.load"},
+		"example.rl":              {"example.load"},
+		"example.rlc":             {"example.load"},
+		"example.flyback":         {"example.load"},
+		"example.led-fade":        {"example.load"},
+		"example.nmos":            {"example.load"},
+		"example.pmos":            {"example.load"},
+		"example.cmos":            {"example.load"},
+		"example.split-supply":    {"example.load"},
+		"file.open":               {"project.load", "project.load.start"},
+		"file.save":               {"project.save", "project.save.start"},
+		"file.save-as":            {"project.save", "project.save.start"},
+		"appearance.light":        {"appearance.theme.set"},
+		"appearance.dark":         {"appearance.theme.set"},
+		"appearance.system":       {"appearance.theme.set"},
 	}
 }
 

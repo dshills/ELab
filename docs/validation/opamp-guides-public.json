@@ -1,0 +1,41 @@
+{
+  "scope": "Two guided sine circuits through actual desktop socket and headless stdio; not all adapters or performance qualification",
+  "examples": [
+    {
+      "id": "opamp-follower",
+      "matched_rows": 101,
+      "gain": 1,
+      "saved_projects": {
+        "native": "build/opamp-examples/public-guides-artifacts/native-opamp-follower.elab",
+        "headless": "build/opamp-examples/public-guides-artifacts/headless-opamp-follower.elab"
+      },
+      "probe_ids": [
+        "v:VIN.positive",
+        "v:U1",
+        "i:U1",
+        "v:U1.input-difference"
+      ],
+      "verify_preserves_live": true,
+      "reopened_recordings": 1
+    },
+    {
+      "id": "opamp-inverting",
+      "matched_rows": 101,
+      "gain": -2,
+      "saved_projects": {
+        "native": "build/opamp-examples/public-guides-artifacts/native-opamp-inverting.elab",
+        "headless": "build/opamp-examples/public-guides-artifacts/headless-opamp-inverting.elab"
+      },
+      "probe_ids": [
+        "v:VIN.positive",
+        "v:U1",
+        "i:U1",
+        "v:U1.input-difference"
+      ],
+      "verify_preserves_live": true,
+      "reopened_recordings": 1
+    }
+  ],
+  "passed": true,
+  "binary_sha256": "9cb46f962ea6ee12cbe3a90d4a3b20a74fea30d070c7620cc25b16d515c83d0e"
+}

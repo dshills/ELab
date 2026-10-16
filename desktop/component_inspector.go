@@ -13,7 +13,26 @@ import (
 // their ordinary shared commands and the assembled view's revision binding.
 func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Graph, part workbench.Component) []ui.Node {
 	inspector := []ui.Node{}
-	inspector = append(inspector, heading("inspector", part.ID+" · "+part.Name), quiet("part-terminals", "Terminals: "+strings.Join(part.Terminals, ", ")), quiet("part-model-id", "Model: "+part.Model))
+	terminals := "Terminals: " + strings.Join(part.Terminals, ", ")
+	if part.Kind == "opamp" {
+		terminals = "Inputs + / - · out · power V+ / V-"
+	}
+	inspector = append(inspector, heading("inspector", part.ID+" · "+part.Name), quiet("part-terminals", terminals))
+	if part.Kind == "opamp" {
+		if r := state.Mixed; r != nil {
+			for _, u := range r.OpAmps {
+				if u.ID == part.ID {
+					status := "Live"
+					if r.Stale {
+						status = "Stale"
+					}
+					inspector = append(inspector, quiet("opamp-selected-reading", fmt.Sprintf("%s · %s\nOut %.5g V · delivered %.4g mA\nΔin %.4g µV · supply %.4g V\nInto V+ %.4g / V- %.4g mA\nPower %.4g mW", status, u.State, u.OutputVoltage, u.OutputCurrent*1000, u.InputDifference*1e6, u.SupplyVoltage, u.PositiveSupplyCurrent*1000, u.NegativeSupplyCurrent*1000, u.Power*1000)))
+				}
+			}
+		}
+	} else {
+		inspector = append(inspector, quiet("part-model-id", "Model: "+part.Model))
+	}
 	if part.Kind == "potentiometer" {
 		inspector = append(inspector, s.potentiometerControls(state, part)...)
 	}
@@ -61,8 +80,7 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}}, s.action("cap-initial-default", "Use experiment initial voltage", "capacitor.initial.set", workbench.ValueParams{ID: part.ID, Value: "default"}))
 			inspector = append(inspector, ui.Node{ID: "cap-presets", Kind: ui.Row, Children: []ui.Node{s.action("c-1u", "1 µF", "component.set", workbench.ValueParams{ID: part.ID, Value: "1uF"}), s.action("c-100u", "100 µF", "component.set", workbench.ValueParams{ID: part.ID, Value: "100uF"})}})
 		}
-	} else if part.Kind == "opamp" {
-		inspector = append(inspector, quiet("opamp-model", "Generic powered op-amp\nGain 100,000 · input 10 MΩ\nOutput 50 Ω scale · active limit 20 mA\nConnect V+ and V- explicitly. No internal bandwidth or slew model."))
+
 	} else if part.Kind == "npn" {
 		inspector = append(inspector, quiet("npn-model", "Generic NPN · βF 100 / βR 1\nIS 10 fA · 27°C\nInstantaneous junction response.\nNo heating or switching delay."))
 	} else if part.Kind == "diode" {
@@ -72,6 +90,10 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	}
 	inspector = append(inspector, s.waveformControls(state, part)...)
 	inspector = append(inspector, s.partPlotControls(state, part)...)
+	if part.Kind == "opamp" {
+		inspector = append(inspector, s.partGeometryControls(part)...)
+		inspector = append(inspector, quiet("part-model-id", "Model: "+part.Model), quiet("opamp-model", "Gain 100,000 · input 10 MΩ\nOutput 50 Ω scale · active limit 20 mA\nNo internal bandwidth or slew model."))
+	}
 	for _, entry := range workbench.Library() {
 		if entry.Kind == part.Kind {
 			inspector = append(inspector, quiet("part-assumptions", entry.Limitations))
@@ -80,15 +102,6 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	}
 
 	if r := state.Mixed; r != nil {
-		for _, u := range r.OpAmps {
-			if u.ID == part.ID {
-				status := "Live"
-				if r.Stale {
-					status = "Stale"
-				}
-				inspector = append(inspector, quiet("opamp-selected-reading", fmt.Sprintf("%s · %s\nOutput %.6g V / ground · delivered %.6g mA\nInput difference %.6g V · supply span %.6g V\nInto V+ %.6g mA · into V- %.6g mA\nDevice power %.6g mW", status, u.State, u.OutputVoltage, u.OutputCurrent*1000, u.InputDifference, u.SupplyVoltage, u.PositiveSupplyCurrent*1000, u.NegativeSupplyCurrent*1000, u.Power*1000)))
-			}
-		}
 		for _, branches := range [][]workbench.BranchResult{r.LEDs, r.Diodes, r.Resistors, r.Sources} {
 			for _, b := range branches {
 				if b.ID == part.ID {
@@ -101,6 +114,12 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}
 		}
 	}
-	inspector = append(inspector, quiet("part-position", fmt.Sprintf("Position %.0f, %.0f · rotation %d°", part.Position.X, part.Position.Y, part.Rotation)), s.action("rotate-part", "Rotate 90°", "component.rotate", workbench.IDParams{ID: part.ID}), s.action("duplicate-part", "Duplicate", "component.duplicate", workbench.DuplicateParams{ID: part.ID}))
+	if part.Kind != "opamp" {
+		inspector = append(inspector, s.partGeometryControls(part)...)
+	}
 	return inspector
+}
+
+func (s *screen) partGeometryControls(part workbench.Component) []ui.Node {
+	return []ui.Node{quiet("part-position", fmt.Sprintf("Position %.0f, %.0f · rotation %d°", part.Position.X, part.Position.Y, part.Rotation)), s.action("rotate-part", "Rotate 90°", "component.rotate", workbench.IDParams{ID: part.ID}), s.action("duplicate-part", "Duplicate", "component.duplicate", workbench.DuplicateParams{ID: part.ID})}
 }

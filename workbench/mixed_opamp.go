@@ -75,10 +75,12 @@ func (n *mixedNetwork) opAmpResult(p Component, x []float64) OpAmpResult {
 	}
 }
 
-// opAmpNewtonScale limits outward differential-input motion to 0.1 normalized
-// input units, while allowing a saturated input to approach zero in one step.
-// Crossing zero lands within that same central interval. This changes only
-// the proposed iterate: equations, accuracy, voltage and work bounds remain.
+// opAmpNewtonScale resolves the narrow high-gain transition while permitting
+// outward growth into saturation. Outward proposals add at most half the
+// existing differential magnitude plus 0.1 normalized input units. An inward
+// proposal may approach zero in one step, crossing only that central interval.
+// This changes only the proposed iterate: equations, accuracy, voltage and work
+// bounds remain.
 // Existing circuits take the original path and keep their arithmetic order.
 func (n *mixedNetwork) opAmpNewtonScale(x, delta []float64, stages int, scale float64) float64 {
 	if len(n.opamps) == 0 {
@@ -102,9 +104,9 @@ func (n *mixedNetwork) opAmpNewtonScale(x, delta []float64, stages int, scale fl
 			change := voltage(changes, pins[opAmpNoninverting]) - voltage(changes, pins[opAmpInverting])
 			allowed := width
 			if change > 0 {
-				allowed += math.Max(0, -difference)
+				allowed += math.Max(0, -difference) + .5*math.Max(0, difference)
 			} else {
-				allowed += math.Max(0, difference)
+				allowed += math.Max(0, difference) + .5*math.Max(0, -difference)
 			}
 			if math.Abs(scale*change) > allowed {
 				scale = math.Min(scale, allowed/math.Abs(change))

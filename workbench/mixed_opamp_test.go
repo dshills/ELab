@@ -287,8 +287,10 @@ func TestOpAmpNewtonInputLimitAcrossAllCollocationStages(t *testing.T) {
 			{0, -.001, 1, .005},
 			{1, -.5, 1, 1},
 			{-1, .5, .1, .1},
-			{1, .5, 1, 1e-5},
-			{-1, -.5, 1, 1e-5},
+			{1, .5, 1, 1},
+			{-1, -.5, 1, 1},
+			{20e-6, .001, 1, .015},
+			{-20e-6, -.001, 1, .015},
 		} {
 			size := n.matrixSize(0)
 			x, delta := make([]float64, stages*size), make([]float64, stages*size)

@@ -1,6 +1,6 @@
 # Powered op-amps
 
-Source implementation in progress after 0.105.0. The packaged `build/ELab.app` remains the previously qualified 0.105 app. This addition has not yet received guided examples, mounted visual/input testing or an app-release qualification.
+Source implementation in progress after 0.105.0. The packaged `build/ELab.app` remains the previously qualified 0.105 app. Guided examples and a scoped mounted UI review are now available in source. Mounted value editing/accessibility issues and app-release qualification remain open.
 
 The shared part library now includes `opamp`, searchable as **op-amp**, **operational amplifier**, **buffer**, or **voltage follower**. Its automatic IDs start at **U1**. Native palette placement, terminal wiring, source/resistor value edits, rotation and movement use the existing public commands. The gain and internal parameters are fixed generic model assumptions, rather than editable component values.
 
@@ -59,3 +59,13 @@ There are at most two op-amps per network, within the existing total part/node/s
 
 
 [Source validation record](validation/opamp-source-contracts-validation.json) retains the focused/core/native/stdio scope, full quality gate, schema-budget repair, corrected fixture attempts and remaining release requirements.
+
+## Guided experiments
+
+Choose **Examples → Op-amp follower** or **Inverting amplifier**, or discover `opamp-follower` / `opamp-inverting` through `examples.list` and load with `example.load`. Both use a 10 Hz bipolar sine, explicit ±5 V supplies and a 10 kΩ output load. They select U1 and plot input voltage, output voltage, delivered output current and differential input voltage. Unsaved replacement and reset use the ordinary protected commands.
+
+Pause, Restart and step 25 ms for the positive input peak. The follower produces approximately +1 V. The inverter uses RI 10 kΩ / RF 20 kΩ: +0.5 V input gives approximately −1 V output. Changing RF to 10 kΩ halves that amplitude. Reducing the follower load to 10 Ω demonstrates the generic active current scale, producing approximately ±0.2 V rather than following ±1 V. The live and Verify paths use identical model equations; no intrinsic frequency response is modeled.
+
+Warm overload testing exposed excessive differential-input damping. The proposal limiter now permits geometric outward growth in saturation while bounding zero-crossing overshoot; equations, work/accuracy limits and iteration bounds remain unchanged. Tests cover both current signs, zero recovery, a full sine capture, conservation, gain edits, source identity, save/reopen and reset. Actual native socket and headless stdio captures match all 101 samples in each lesson.
+
+The inspector places live readings and two rows of plot shortcuts before assumptions. Full accessible action names and public commands are retained. [Native screenshots and findings](../research/ui-audit/opamp-guides/README.md) show the changes and unresolved mounted text-field/focus, accessibility, tooltip and small-label issues. This is an unreleased source checkpoint, not native-input or release acceptance.

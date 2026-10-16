@@ -59,6 +59,32 @@ func (s *screen) partPlotControls(state workbench.Snapshot, p workbench.Componen
 			nodes = append(nodes, n)
 		}
 	}
+	if p.Kind == "opamp" {
+		// Keep the four measurements near the live reading in a short inspector.
+		// Full action names remain available to accessibility clients.
+		byID := map[string]ui.Node{}
+		for _, n := range nodes {
+			n.Accessibility.Name = n.Text
+			n.Grow = true
+			byID[n.ID] = n
+		}
+		nodes = nil
+		for row, pair := range [][2]struct{ suffix, label string }{
+			{{"v:" + p.ID, "Output V"}, {"i:" + p.ID, "Output I"}},
+			{{"v:" + p.ID + ".input-difference", "Input ΔV"}, {"v:" + p.ID + ".supply", "Supply V"}},
+		} {
+			children := []ui.Node{}
+			for _, item := range pair {
+				if n, ok := byID["plot-"+item.suffix]; ok {
+					n.Text = item.label
+					children = append(children, n)
+				}
+			}
+			if len(children) > 0 {
+				nodes = append(nodes, ui.Node{ID: fmt.Sprintf("opamp-plot-row-%d", row), Kind: ui.Row, Children: children})
+			}
+		}
+	}
 	if len(nodes) > 0 {
 		nodes = append(nodes, quiet("plot-help", "Adds a trace; replaces the last when six are shown."))
 	}

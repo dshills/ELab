@@ -5,14 +5,14 @@
     "desktop/actuation_controls.go": "9b0e8148f7ca32ac2f1802d69411fcd355c2df5b2af4b89df1084d413166ee1e",
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
     "desktop/canvas.go": "a241f57812c104171737149f067ae8a0d5aaf191c17092597c5a060b4587c7ef",
-    "desktop/component_inspector.go": "53d180440f4fa3dc84d740e3976364b6c643f269c7b9bdddeeafab6627b1ebcf",
+    "desktop/component_inspector.go": "bdfe697a02716d0d236eac61162c962edb12d0cc518da11a6c7556e503cdac37",
     "desktop/component_palette.go": "5d7b83aba4bd8202b899f0168848226f8217a8dd3dbd73d2ff6c8d99b752d3ab",
     "desktop/dc_sweep.go": "6714f9c257faaf1e230e51dbc2c8b31a0d83ad9613eaa47d2de9bf8db495600f",
     "desktop/dc_sweep_canvas.go": "6404c77863729aedfd18a886e88d57889c51c374197189de91665d7142ad1022",
     "desktop/diagnostic_help.go": "822fcdf9c5904570b42bf1b98322de00ed9fdbd17299584cefedcfeb8098f171",
     "desktop/display_preferences.go": "f54283db2acec7240b861f415ce0855fbb7dc3349785883f2095002833bb9e13",
     "desktop/drawing.go": "3a1668159240d3862ba1e9107f31f12c6433b7df8426ce12ce97908c0fe247fb",
-    "desktop/example_load.go": "321a808dd6b3a6418b85241034350c20e55b83a4495100fda82cf4a096eb8a94",
+    "desktop/example_load.go": "21c8f683f88d56762de0b43849fe97338cbf4451f0cf147c21035f84b8602bbe",
     "desktop/examples.go": "e072cde40cfd291300dbb08f127ea8bff5d520b3b70604d1d9622b9755c12ad8",
     "desktop/field_context.go": "b8a1d409aa71c75cf14289a4e9e39cdea3ce52f1ba9f53c79916b6593074a087",
     "desktop/files.go": "d8e0e9c841e5ecbd685f9883b11dbf58c98b85f0af6c85a327d13248708a7747",
@@ -23,7 +23,7 @@
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
     "desktop/main.go": "60d063ab5488e0e807a89e0a802e6feebdd4d7127929b5751c7a9e1831d0aca3",
     "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
-    "desktop/menus.go": "f3e4cd1786841158d6ab55df1308f4ef7040fecaca463ef99d8f6ec8443dae9b",
+    "desktop/menus.go": "d78bfdb0b8ad01e290c7a3a8179dafc72b3e2a6f8b65d3994ca69f334aff700c",
     "desktop/menus_darwin.go": "3f7cd30cc99b38b4385e56303bbc790cce6e03add876634ff44cb267815522ea",
     "desktop/menus_other.go": "933f36929566cc8e40c0e2afa85e3c99e4c40c1516c607cb8eec0dd59ef50c2e",
     "desktop/native_chrome.go": "d90df4e3cf3aff47511c654a1a47981cbd5afee560a498dbd0a76058b371753e",
@@ -52,11 +52,11 @@
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
     "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
     "desktop/verification.go": "550f32b3d90b99269bce6777233b68e9329b2ae704b5b2fca60a1a368fbab406",
-    "desktop/view.go": "1d48cde39d54108d96a9220a76b6c11d71dfa1ba3cd3f1073eaa1c6072149037",
+    "desktop/view.go": "d24d2ff0d65b95066673060ec667692e8eb9c1f7e53852c6cb17fe190f23559d",
     "desktop/viewport.go": "a0d8a6a6b3577a0a909a0f7b3f339532a5abfde78fcf8a1979fb2e46f5f074cc",
     "desktop/waveforms.go": "eaf42cdbe8e47131bea0d9bd3087b9294c36630b82ae0c026ec05fd68055357e",
     "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
-    "desktop/workflow.go": "0a63aad05b5f4961d958285d244141ce1439ea569c4284ea5ed537143a221d41",
+    "desktop/workflow.go": "5a394af63b2eb24f76f21c27acfea86b1574e5b85d5199c79374a8a30abeeff5",
     "desktop/workspace.go": "b35de04775d1a1f058a3fb043ff19e85b1c62973ce5f2c3a5db9f39022f9fa32"
   },
   "public_commands": [
@@ -243,6 +243,12 @@
       "example.load"
     ],
     "example.nmos": [
+      "example.load"
+    ],
+    "example.opamp-follower": [
+      "example.load"
+    ],
+    "example.opamp-inverting": [
       "example.load"
     ],
     "example.pmos": [
@@ -593,7 +599,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 25,
+      "line": 44,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text}) }",
@@ -601,7 +607,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 25,
+      "line": 44,
       "function": "*screen.componentInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
@@ -612,7 +618,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 25,
+      "line": 44,
       "function": "*screen.componentInspector",
       "kind": "action-factory",
       "expression": "s.action(\"apply-value\", \"Apply label\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value})",
@@ -623,7 +629,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 37,
+      "line": 56,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text}) }",
@@ -631,7 +637,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 37,
+      "line": 56,
       "function": "*screen.componentInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
@@ -642,7 +648,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 37,
+      "line": 56,
       "function": "*screen.componentInspector",
       "kind": "action-factory",
       "expression": "s.action(\"apply-value\", \"Apply value\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value})",
@@ -653,7 +659,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 46,
+      "line": 65,
       "function": "*screen.componentInspector",
       "kind": "action-factory",
       "expression": "s.action(\"r-1k\", \"1 kΩ\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"1k\"})",
@@ -664,7 +670,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 46,
+      "line": 65,
       "function": "*screen.componentInspector",
       "kind": "action-factory",
       "expression": "s.action(\"r-2k\", \"2 kΩ\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"2k\"})",
@@ -675,7 +681,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 59,
+      "line": 78,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: fmt.Sprintf(\"%.9g V\", e.Number)})\n}",
@@ -683,7 +689,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 60,
+      "line": 79,
       "function": "*screen.componentInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: fmt.Sprintf(\"%.9g V\", e.Number)})",
@@ -694,7 +700,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 61,
+      "line": 80,
       "function": "*screen.componentInspector",
       "kind": "action-factory",
       "expression": "s.action(\"cap-initial-default\", \"Use experiment initial voltage\", \"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: \"default\"})",
@@ -705,7 +711,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 62,
+      "line": 81,
       "function": "*screen.componentInspector",
       "kind": "action-factory",
       "expression": "s.action(\"c-1u\", \"1 µF\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"1uF\"})",
@@ -716,7 +722,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 62,
+      "line": 81,
       "function": "*screen.componentInspector",
       "kind": "action-factory",
       "expression": "s.action(\"c-100u\", \"100 µF\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"100uF\"})",
@@ -727,8 +733,8 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 104,
-      "function": "*screen.componentInspector",
+      "line": 124,
+      "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"rotate-part\", \"Rotate 90°\", \"component.rotate\", workbench.IDParams{ID: part.ID})",
       "public_commands": [
@@ -738,8 +744,8 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 104,
-      "function": "*screen.componentInspector",
+      "line": 124,
+      "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"duplicate-part\", \"Duplicate\", \"component.duplicate\", workbench.DuplicateParams{ID: part.ID})",
       "public_commands": [
@@ -1162,7 +1168,7 @@
     },
     {
       "file": "desktop/example_load.go",
-      "line": 25,
+      "line": 27,
       "function": "*screen.registerExampleLoadCommands",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Register(command.Command{ID: template.command, Label: template.label, Available: func() error {\n\tif s.fileBusy || s.pendingCommand != \"\" || s.service.Snapshot().Closed {\n\t\treturn fmt.Errorf(\"finish the current operation before loading an example\")\n\t}\n\treturn nil\n}, Execute: func(context.Context) error {\n\ts.requestReplace(\"example.load\", workbench.ExampleLoadParams{ID: template.id})\n\treturn nil\n}})",
@@ -1170,7 +1176,7 @@
     },
     {
       "file": "desktop/example_load.go",
-      "line": 31,
+      "line": 33,
       "function": "*screen.registerExampleLoadCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(\"example.load\", workbench.ExampleLoadParams{ID: template.id})",
@@ -1961,7 +1967,7 @@
       "line": 20,
       "function": "(package)",
       "kind": "native-menu-group",
-      "expression": "Commands: []string{\"example.reset\", \"example.split-supply\", \"example.rc\", \"example.rc-high-pass\", \"example.rl\", \"example.rlc\", \"example.flyback\", \"example.npn\", \"example.switch-npn\", \"example.npn-pulse\", \"example.flasher\", \"example.led-fade\", \"example.nmos\", \"example.pmos\", \"example.cmos\", \"example.rectifier\"}",
+      "expression": "Commands: []string{\"example.reset\", \"example.split-supply\", \"example.rc\", \"example.rc-high-pass\", \"example.rl\", \"example.rlc\", \"example.flyback\", \"example.npn\", \"example.switch-npn\", \"example.npn-pulse\", \"example.flasher\", \"example.led-fade\", \"example.nmos\", \"example.pmos\", \"example.cmos\", \"example.opamp-follower\", \"example.opamp-inverting\", \"example.rectifier\"}",
       "public_commands": [
         "example.reset",
         "example.load",
@@ -1974,6 +1980,8 @@
         "example.switch-npn",
         "example.npn-pulse",
         "example.flasher",
+        "example.load",
+        "example.load",
         "example.load",
         "example.load",
         "example.load",
@@ -3678,7 +3686,7 @@
       "line": 121,
       "function": "*screen.view",
       "kind": "command-menu",
-      "expression": "s.commandMenu(\"examples-menu\", \"Examples\", [][2]string{{\"example.reset\", \"LED circuit\"}, {\"example.split-supply\", \"Split-rail DC supply\"}, {\"example.rc\", \"RC charge / discharge\"}, {\"example.rc-high-pass\", \"RC high-pass filter\"}, {\"example.rl\", \"Coil buildup / decay\"}, {\"example.rlc\", \"RLC ringing\"}, {\"example.flyback\", \"Coil / flyback diode\"}, {\"example.npn\", \"Transistor LED\"}, {\"example.switch-npn\", \"Manual transistor switch\"}, {\"example.npn-pulse\", \"Blinking LED\"}, {\"example.flasher\", \"Capacitor-timed flasher\"}, {\"example.led-fade\", \"LED fade\"}, {\"example.nmos\", \"MOSFET LED switch\"}, {\"example.pmos\", \"High-side MOSFET LED\"}, {\"example.cmos\", \"CMOS inverter\"}, {\"example.rectifier\", \"Rectifier / smoothing\"}})",
+      "expression": "s.commandMenu(\"examples-menu\", \"Examples\", [][2]string{{\"example.reset\", \"LED circuit\"}, {\"example.split-supply\", \"Split-rail DC supply\"}, {\"example.rc\", \"RC charge / discharge\"}, {\"example.rc-high-pass\", \"RC high-pass filter\"}, {\"example.rl\", \"Coil buildup / decay\"}, {\"example.rlc\", \"RLC ringing\"}, {\"example.flyback\", \"Coil / flyback diode\"}, {\"example.npn\", \"Transistor LED\"}, {\"example.switch-npn\", \"Manual transistor switch\"}, {\"example.npn-pulse\", \"Blinking LED\"}, {\"example.flasher\", \"Capacitor-timed flasher\"}, {\"example.led-fade\", \"LED fade\"}, {\"example.nmos\", \"MOSFET LED switch\"}, {\"example.pmos\", \"High-side MOSFET LED\"}, {\"example.cmos\", \"CMOS inverter\"}, {\"example.opamp-follower\", \"Op-amp follower\"}, {\"example.opamp-inverting\", \"Inverting amplifier\"}, {\"example.rectifier\", \"Rectifier / smoothing\"}})",
       "public_commands": [
         "example.reset",
         "example.load",
@@ -3691,6 +3699,8 @@
         "example.switch-npn",
         "example.npn-pulse",
         "example.flasher",
+        "example.load",
+        "example.load",
         "example.load",
         "example.load",
         "example.load",
@@ -4058,7 +4068,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 70,
+      "line": 96,
       "function": "*screen.scopeWindowControls",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.scope.csv\", true, workbench.SaveParams{}, nil) }",
@@ -4066,7 +4076,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 70,
+      "line": 96,
       "function": "*screen.scopeWindowControls",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.scope.csv\", true, workbench.SaveParams{}, nil)",
@@ -4077,7 +4087,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 71,
+      "line": 97,
       "function": "*screen.scopeWindowControls",
       "kind": "action-factory",
       "expression": "s.action(\"scope-live-window\", \"Follow live history\", \"scope.window.set\", workbench.ScopeWindow{Mode: \"live\"})",
@@ -4088,7 +4098,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 78,
+      "line": 104,
       "function": "*screen.scopeWindowControls",
       "kind": "action-factory",
       "expression": "s.action(\"scope-latest-window\", \"Last 200 ms\", \"scope.window.set\", workbench.ScopeWindow{Mode: \"fixed\", Start: math.Max(lo, hi-.2), End: hi})",
@@ -4099,7 +4109,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 87,
+      "line": 113,
       "function": "*screen.scopeWindowControls",
       "kind": "callback-factory",
       "expression": "timeField(\"window-\"+side, \"Scope interval \"+side, value, t == nil || t.Stale, func(text string) {\n\tp := sc.Window\n\tp.Mode = \"fixed\"\n\ts.invokeAtCommandRevision(\"scope.window.set\", textFieldParams(p, side+\"_s\", text), state.CommandRevision)\n})",
@@ -4107,7 +4117,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 90,
+      "line": 116,
       "function": "*screen.scopeWindowControls",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"scope.window.set\", textFieldParams(p, side+\"_s\", text), state.CommandRevision)",
@@ -4118,7 +4128,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 119,
+      "line": 145,
       "function": "*screen.scopeWindowControls",
       "kind": "request-command-field",
       "expression": "Command: \"component.set\"",
@@ -4129,7 +4139,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 121,
+      "line": 147,
       "function": "*screen.scopeWindowControls",
       "kind": "action-factory",
       "expression": "s.action(\"cap-pair-\"+value, \"Both capacitors · \"+value, \"edit.batch\", workbench.BatchParams{Name: \"Set both capacitors to \" + value, Edits: edits})",
