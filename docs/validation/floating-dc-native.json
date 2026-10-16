@@ -1,0 +1,616 @@
+{
+  "passed": true,
+  "transport": "desktop-socket",
+  "discovery": {
+    "capabilities": [
+      {
+        "id": "component.place",
+        "description": "Place a library part on the 10-unit grid; unused optional ID; bounds in snapshot.limits",
+        "mutation": true,
+        "input_schema": {
+          "additionalProperties": false,
+          "examples": [
+            {
+              "kind": "dc-source",
+              "position": {
+                "x": 100,
+                "y": 0
+              },
+              "value": "500 mV"
+            }
+          ],
+          "properties": {
+            "id": {
+              "description": "Omitted/empty allocates an unused designator; explicit ID cannot have been used earlier in this session, including after delete.",
+              "maxLength": 64,
+              "pattern": "^(?:[A-Za-z][A-Za-z0-9_-]{0,63})?$",
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "dc-source",
+                "resistor",
+                "led",
+                "capacitor",
+                "sine-source",
+                "finite-pulse-source",
+                "pulse-source",
+                "pmos",
+                "nmos",
+                "npn",
+                "ground",
+                "junction",
+                "net-label",
+                "potentiometer",
+                "diode",
+                "switch"
+              ],
+              "type": "string"
+            },
+            "position": {
+              "additionalProperties": false,
+              "properties": {
+                "x": {
+                  "maximum": 10000,
+                  "minimum": -10000,
+                  "type": "number"
+                },
+                "y": {
+                  "maximum": 10000,
+                  "minimum": -10000,
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y"
+              ],
+              "type": "object"
+            },
+            "value": {
+              "description": "Omitted/empty uses factory value; net-label uses new ID as name; non-value symbols require omitted/empty value. Supplied numeric values use the per-kind domains; new waveforms use factory offset/low level.",
+              "maxLength": 128,
+              "minLength": 0,
+              "type": "string",
+              "x-max-utf8-bytes": 128
+            }
+          },
+          "required": [
+            "kind",
+            "position"
+          ],
+          "type": "object",
+          "x-command-contract": {
+            "version": 1,
+            "scope": "component-values-and-placement",
+            "preconditions": [
+              "A drawing slot is free; explicit ID unused in this session",
+              "Finite position within \u00b110000 units; coordinates snap to nearest 10-unit grid and snapped position must be unoccupied"
+            ],
+            "effects": [
+              "Commits through ordinary electrical edit/restart/paused-stale and undo rules; invalid input preserves previous graph/physics/history",
+              "Selects placed part and returns drawing tool to select; net helpers count toward drawing-object bound, not simulated-part capacity"
+            ],
+            "errors": [
+              {
+                "code": "invalid-params",
+                "phase": "admission",
+                "when": "Unknown target/kind, malformed value or value outside domain/coupled waveform constraints"
+              }
+            ],
+            "completion": {
+              "mode": "immediate edit admission; any asynchronous live recomputation remains observable on existing simulation state",
+              "observe": [
+                "project.inspect",
+                "events.poll",
+                "simulation.wait"
+              ],
+              "cancel": "",
+              "cooperative_deadline_s": 0
+            }
+          },
+          "x-factory-waveform-baselines": {
+            "pulse_low_v": 0,
+            "sine_offset_v": 0
+          },
+          "x-inventory": {
+            "current_id_kind_waveforms": "snapshot.components",
+            "part_definitions": "parts.list"
+          },
+          "x-kind-value-domains": [
+            {
+              "default_value": "5 V",
+              "kind": "dc-source",
+              "numeric": {
+                "parameter": "voltage",
+                "unit": "V",
+                "minimum": 0,
+                "maximum": 12,
+                "range_text": "0\u201312 V",
+                "syntax": "Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V"
+              },
+              "value_type": "number"
+            },
+            {
+              "default_value": "1k",
+              "kind": "resistor",
+              "numeric": {
+                "parameter": "resistance",
+                "unit": "\u03a9",
+                "minimum": 10,
+                "maximum": 100000,
+                "range_text": "10\u2013100000 \u03a9",
+                "syntax": "Bare SI or \u03a9/ohm; k/K/M prefixes, for example 2.2k or 0.1M \u03a9"
+              },
+              "value_type": "number"
+            },
+            {
+              "kind": "led",
+              "value_type": "none"
+            },
+            {
+              "default_value": "1uF",
+              "kind": "capacitor",
+              "numeric": {
+                "parameter": "capacitance",
+                "unit": "F",
+                "minimum": 1e-12,
+                "maximum": 1,
+                "range_text": "1 pF\u20131 F",
+                "syntax": "Bare SI or F; p/n/u/\u00b5/\u03bc/m prefixes, for example 1 \u00b5F or 100nF"
+              },
+              "value_type": "number"
+            },
+            {
+              "default_value": "2.5 V",
+              "kind": "sine-source",
+              "numeric": {
+                "parameter": "amplitude",
+                "unit": "V",
+                "minimum": 0,
+                "maximum": 12,
+                "range_text": "0\u201312 V",
+                "syntax": "Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V",
+                "relation": "Amplitude plus the absolute offset must be \u226412 V."
+              },
+              "value_type": "number"
+            },
+            {
+              "default_value": "5 V",
+              "kind": "finite-pulse-source",
+              "numeric": {
+                "parameter": "high_voltage",
+                "unit": "V",
+                "minimum": -12,
+                "maximum": 12,
+                "range_text": "\u221212\u201312 V",
+                "syntax": "Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V",
+                "relation": "High level must be at least the current low level (factory: 0 V)."
+              },
+              "value_type": "number"
+            },
+            {
+              "default_value": "5 V",
+              "kind": "pulse-source",
+              "numeric": {
+                "parameter": "voltage",
+                "unit": "V",
+                "minimum": 0,
+                "maximum": 12,
+                "range_text": "0\u201312 V",
+                "syntax": "Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V"
+              },
+              "value_type": "number"
+            },
+            {
+              "kind": "pmos",
+              "value_type": "none"
+            },
+            {
+              "kind": "nmos",
+              "value_type": "none"
+            },
+            {
+              "kind": "npn",
+              "value_type": "none"
+            },
+            {
+              "kind": "ground",
+              "value_type": "none"
+            },
+            {
+              "kind": "junction",
+              "value_type": "none"
+            },
+            {
+              "kind": "net-label",
+              "label": {
+                "case_sensitive": true,
+                "maxLength": 32,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9_+./-]{1,32}$"
+              },
+              "value_type": "label"
+            },
+            {
+              "default_value": "10k \u03a9",
+              "kind": "potentiometer",
+              "numeric": {
+                "parameter": "resistance",
+                "unit": "\u03a9",
+                "minimum": 10,
+                "maximum": 100000,
+                "range_text": "10\u2013100000 \u03a9",
+                "syntax": "Bare SI or \u03a9/ohm; k/K/M prefixes, for example 2.2k or 0.1M \u03a9"
+              },
+              "value_type": "number"
+            },
+            {
+              "kind": "diode",
+              "value_type": "none"
+            },
+            {
+              "kind": "switch",
+              "value_type": "none"
+            }
+          ],
+          "x-max-drawing-components": 100,
+          "x-normalized-si-relations": [
+            {
+              "operator": "sum_absolute_maximum",
+              "fields": [
+                "value",
+                "x-factory-waveform-baselines.sine_offset_v"
+              ],
+              "limit": 12,
+              "when_component_kind": "sine-source"
+            },
+            {
+              "operator": "greater_or_equal",
+              "fields": [
+                "value",
+                "x-factory-waveform-baselines.pulse_low_v"
+              ],
+              "when_component_kind": "finite-pulse-source"
+            }
+          ],
+          "x-position-snap-grid": 10,
+          "x-source-reference-rules": {
+            "dc-source": "Value is positive minus negative; either terminal may be offset from ground in a referenced network",
+            "network": "A common ground reference and independent source/capacitor constraints remain required; accepted node voltages stay within \u00b130 V and existing solve/work limits",
+            "waveform-sources": "Negative terminal remains directly grounded"
+          }
+        },
+        "output": "Snapshot",
+        "output_schema": {
+          "$ref": "urn:elab:snapshot:1"
+        }
+      }
+    ],
+    "events": {
+      "command": "events.poll",
+      "default_timeout_ms": 1000,
+      "max_timeout_ms": 5000,
+      "max_waiters": 4,
+      "mode": "coalesced-latest-state",
+      "topics": [
+        "state",
+        "project",
+        "editor",
+        "view",
+        "simulation",
+        "diagnostics",
+        "jobs",
+        "measurements",
+        "recordings",
+        "recovery",
+        "preferences",
+        "lifecycle",
+        "library",
+        "preview",
+        "sweeps",
+        "printing"
+      ]
+    },
+    "mutation_preconditions": {
+      "combination": "A revision guard is required; all supplied revision/document guards must match",
+      "expected_command_revision": "Guards admitted commands, including other actors; live solver publication does not invalidate it",
+      "expected_document_generation": "Optional mutation context guard; prevents applying an old rendered action to a replacement document, including background publication",
+      "expected_revision": "Guards all state publication, including live samples"
+    },
+    "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee.",
+    "schema_version": 2,
+    "version": 1,
+    "schema_registry_count": 69,
+    "schema_registry_sha256": "3e48ca222fb0976ca3132d8b85780d65a7bb08bb30d9ddad9e676316d3972125",
+    "full_response_sha256": "f90e77c4ba4c8e3066336cc29717192d8fec98b25d403c8a7e90b01eef2f1c4b"
+  },
+  "dc_part": {
+    "value_type": "number",
+    "value_domain": {
+      "parameter": "voltage",
+      "unit": "V",
+      "minimum": 0,
+      "maximum": 12,
+      "range_text": "0\u201312 V",
+      "syntax": "Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V"
+    },
+    "aliases": [
+      "battery",
+      "power supply",
+      "voltage supply"
+    ],
+    "limitations": "Ideal DC voltage source; positive minus negative sets its voltage, and either terminal may be above/below ground in a referenced network. No output resistance, current limit, battery discharge, noise, heating, ratings or physical part identity.",
+    "kind": "dc-source",
+    "name": "DC source",
+    "terminals": [
+      "positive",
+      "negative"
+    ],
+    "default_value": "5 V",
+    "unit": "V",
+    "model": "ideal-dc.v1"
+  },
+  "observations": {
+    "split": {
+      "v:V1.positive": 3,
+      "v:V2.negative": -3,
+      "v:V2": 3,
+      "v:R1": 6,
+      "i:R1": 0.006,
+      "i:V2": 0.006
+    },
+    "source_results": [
+      {
+        "id": "V1",
+        "current_a": 0.006,
+        "voltage_v": 3,
+        "power_w": 0.018000000000000002
+      },
+      {
+        "id": "V2",
+        "current_a": 0.006,
+        "voltage_v": 3,
+        "power_w": 0.018000000000000002
+      }
+    ],
+    "series": {
+      "v:V1.positive": 8,
+      "v:V1.negative": 3,
+      "v:V1": 5,
+      "i:R1": 0.008
+    },
+    "sweep": {
+      "target": {
+        "component_id": "V1",
+        "parameter": "voltage",
+        "label": "V1 \u00b7 DC bias",
+        "unit": "V",
+        "minimum": -12,
+        "maximum": 12
+      },
+      "start_si": -5,
+      "stop_si": 5,
+      "probes": [
+        {
+          "id": "v:V1.positive",
+          "label": "V1.positive / ground",
+          "unit": "V",
+          "positive": "V1.positive",
+          "reference": "ground"
+        },
+        {
+          "id": "v:V1",
+          "label": "V1 voltage",
+          "unit": "V",
+          "positive": "V1.positive",
+          "reference": "V1.negative"
+        },
+        {
+          "id": "i:R1",
+          "label": "R1 current",
+          "unit": "A",
+          "positive": "R1.1",
+          "reference": "R1.2"
+        }
+      ],
+      "points": [
+        {
+          "input": -5,
+          "values": [
+            -2,
+            -5,
+            -0.002
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 0
+        },
+        {
+          "input": -4,
+          "values": [
+            -0.9999999999999999,
+            -4,
+            -0.0009999999999999998
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 4.336808689942018e-19
+        },
+        {
+          "input": -3,
+          "values": [
+            0,
+            -3,
+            0
+          ],
+          "kcl_residual_a": 6.3284239360806515e-21,
+          "power_residual_w": 0
+        },
+        {
+          "input": -2,
+          "values": [
+            0.9999999999999999,
+            -2,
+            0.0009999999999999998
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 0
+        },
+        {
+          "input": -1,
+          "values": [
+            2,
+            -1,
+            0.002
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 0
+        },
+        {
+          "input": 0,
+          "values": [
+            3,
+            0,
+            0.003
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 0
+        },
+        {
+          "input": 1,
+          "values": [
+            4,
+            1,
+            0.004
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 0
+        },
+        {
+          "input": 2,
+          "values": [
+            5,
+            2,
+            0.005
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 0
+        },
+        {
+          "input": 3,
+          "values": [
+            6,
+            3,
+            0.006
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 0
+        },
+        {
+          "input": 4,
+          "values": [
+            7,
+            4,
+            0.007
+          ],
+          "kcl_residual_a": 8.673617379884035e-19,
+          "power_residual_w": -6.938893903907228e-18
+        },
+        {
+          "input": 5,
+          "values": [
+            8,
+            5,
+            0.008
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 0
+        }
+      ],
+      "statistics": [
+        {
+          "probe_id": "v:V1.positive",
+          "minimum": -2,
+          "maximum": 8
+        },
+        {
+          "probe_id": "v:V1",
+          "minimum": -5,
+          "maximum": 5
+        },
+        {
+          "probe_id": "i:R1",
+          "minimum": -0.002,
+          "maximum": 0.008
+        }
+      ]
+    },
+    "rc_return": [
+      {
+        "time_s": 0.01,
+        "voltage_v": 3.159511529534532,
+        "analytic_v": 3.1606027941427883
+      },
+      {
+        "time_s": 0.02,
+        "voltage_v": 4.321918383287675,
+        "analytic_v": 4.323323583816936
+      },
+      {
+        "time_s": 0.03,
+        "voltage_v": 4.749847897782597,
+        "analytic_v": 4.75106465816068
+      },
+      {
+        "time_s": 0.04,
+        "voltage_v": 4.9075447853123935,
+        "analytic_v": 4.908421805556329
+      },
+      {
+        "time_s": 0.05,
+        "voltage_v": 4.965734391583044,
+        "analytic_v": 4.966310265004573
+      }
+    ],
+    "rc_discharge": [
+      {
+        "time_s": 0.060000000000000005,
+        "voltage_v": 1.8282178454844125,
+        "analytic_v": 1.8267915929813823
+      },
+      {
+        "time_s": 0.07,
+        "voltage_v": 0.6730888579568475,
+        "analytic_v": 0.6720390703626798
+      },
+      {
+        "time_s": 0.08,
+        "voltage_v": 0.24780887672913568,
+        "analytic_v": 0.24722935765039827
+      },
+      {
+        "time_s": 0.09,
+        "voltage_v": 0.09123496646811659,
+        "analytic_v": 0.09095059793360315
+      },
+      {
+        "time_s": 0.1,
+        "voltage_v": 0.033589672881398115,
+        "analytic_v": 0.033458855142022466
+      }
+    ],
+    "captured_current_a": 0.006
+  },
+  "checks": [
+    "blank placement/wiring matches guided split supply",
+    "signed rail and differential source readings",
+    "Kirchhoff/Ohm current and power signs",
+    "capture JSON/CSV and saved recording reopen",
+    "ground reference moved to bottom; source values add",
+    "independent DC sweep preserves live result",
+    "return-path RC matches analytic 10 ms charge/discharge within 3 mV; switching preserves time and voltage"
+  ],
+  "limits": [
+    "DC sources only may float; waveform negatives and NPN emitters remain grounded",
+    "Existing 3-source, node-voltage, integration and Newton limits remain; no physical battery or rating claim"
+  ]
+}

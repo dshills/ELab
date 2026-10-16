@@ -2,6 +2,8 @@
 
 ELab is a hobbyist electronics workbench built with Vellum. The current slice lets you draw LED, RC, NPN and N/P-channel MOSFET switch, and mixed transistor/RC circuits from blank: place components, connect named terminals, move and rotate parts, and edit exact values while simulation updates live. Users and agents invoke the same validated application commands.
 
+Choose **Examples → Split-rail DC supply** to explore [stacked DC sources and signed rail voltages](docs/floating-dc-sources.md). Two 3 V sources produce +3 V and −3 V around their midpoint reference.
+
 Choose **Examples → MOSFET LED switch** for pulse-driven NMOS/LED simulation, gate/drain/source probes and an external gate-RC experiment. See [MOSFET behavior and model](docs/nmos.md). **Examples → High-side MOSFET LED** adds the complementary [PMOS workflow](docs/pmos.md).
 
 ## Run the desktop app
@@ -14,7 +16,7 @@ projects/
   Vellum/
 ```
 
-Use Go 1.25.6 or newer and Vellum's macOS native prerequisites. Vellum must already have its pinned Cogent and typesetting dependencies prepared; on a fresh checkout run `Vellum/drivers/cogent/prepare.sh` following its development guide. ELab's `desktop/go.mod` contains the required four explicit framework/native replacements. The inspected [baseline](docs/vellum-baseline.json) records the framework commit and dependency manifest hash.
+Use Go 1.25.6 or newer and Vellum's macOS native prerequisites. Vellum must already have its pinned Cogent and typesetting dependencies prepared; on a fresh checkout run `Vellum/drivers/cogent/prepare.sh` following its development guide. ELab's `desktop/go.mod` contains the required four explicit framework/native replacements. The [initial baseline](docs/vellum-baseline.json) preserves the first integration record; the [current qualification](docs/vellum-baseline-current.json) records the SDK commit, dependency hashes and tested release.
 
 From the ELab directory:
 
@@ -50,7 +52,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.91.0 --build-version 106 --platform darwin
+  --version 0.92.0 --build-version 107 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).

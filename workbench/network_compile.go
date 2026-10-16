@@ -105,12 +105,13 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		}
 	}
 	for _, v := range sources {
-		if net(v, "negative") != out.Ground {
-			return fail("unsupported", "unsupported-topology", "Network sources must have their negative terminal grounded.", v.ID+".negative")
+		if v.Kind != "dc-source" && net(v, "negative") != out.Ground {
+			return fail("unsupported", "unsupported-topology", "Waveform sources must have their negative terminal grounded; DC sources may float in a ground-referenced network.", v.ID+".negative")
 		}
 		for _, c := range caps {
 			a, b := net(c, "1"), net(c, "2")
-			if a == net(v, "positive") && b == out.Ground || b == net(v, "positive") && a == out.Ground {
+			positive, negative := net(v, "positive"), net(v, "negative")
+			if a == positive && b == negative || b == positive && a == negative {
 				return fail("unsupported", "ideal-source-capacitor", "Insert resistance between an ideal source and capacitor; direct voltage jumps require an impulse model.", c.ID)
 			}
 		}
@@ -139,8 +140,8 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		return true
 	}
 	for _, p := range sources {
-		if !join(net(p, "positive"), out.Ground) {
-			return fail("unsupported", "ideal-constraint-loop", "Parallel ideal voltage sources have indeterminate currents; use one source or add series resistance.", p.ID)
+		if !join(net(p, "positive"), net(p, "negative")) {
+			return fail("unsupported", "ideal-constraint-loop", "A loop of ideal voltage sources has indeterminate or inconsistent constraints; remove the redundant source or add series resistance.", p.ID)
 		}
 	}
 	for _, p := range caps {

@@ -350,6 +350,13 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 			}
 		}
 		if good {
+			// A supplied guess can already satisfy KCL/constraints. Apply the
+			// same range guard before accepting it, not only after an update.
+			for _, v := range x[:len(n.nodes)] {
+				if !finite(v) || math.Abs(v) > 30 {
+					return nil, fmt.Errorf("mixed node voltage exceeds the ±30 V educational model range")
+				}
+			}
 			return n.result(x, old, dt, t, at), nil
 		}
 		for i := range f {

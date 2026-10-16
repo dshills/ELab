@@ -67,10 +67,17 @@ func nativeWorkspaceSmoke(ctx context.Context, s *screen) error {
 			return fmt.Errorf("short scope has no active scroll range")
 		}
 		bar := frame.AsFrame().Scrolls[math32.Y]
+		// Prior captured/live views can retain any valid offset, including the
+		// bottom. Exercise the wheel from an explicit start instead of assuming
+		// another fixture left room to scroll farther down.
+		frame.AsFrame().ScrollDimToContentEnd(math32.Y)
+		if !frame.AsFrame().ScrollDimToContentStart(math32.Y) || !frame.AsFrame().IsDimAtContentStart(math32.Y) {
+			return fmt.Errorf("scope wheel fixture could not return to content start")
+		}
 		position, zoom := bar.Value, s.scope.View.Zoom
 		plot.HandleEvent(events.NewScroll(image.Point{}, math32.Vec2(0, 100), 0))
 		if bar.Value <= position || s.scope.View.Zoom != zoom {
-			return fmt.Errorf("plot wheel did not scroll controls or changed scope zoom")
+			return fmt.Errorf("plot wheel failed: scroll %g to %g, range %g to %g, zoom %g to %g", position, bar.Value, bar.Min, bar.Max, zoom, s.scope.View.Zoom)
 		}
 		r := s.invoke("view.pan", map[string]float64{"dx": 20, "dy": 0})
 		if r.Error != nil {

@@ -1,0 +1,405 @@
+{
+  "passed": true,
+  "app_version": "0.92.0",
+  "build_version": "107",
+  "binary_sha256": "7ffe480440a902d990c02d78668f56aa2061d83766c30f4011ca45990f3dbba5",
+  "agent_binary_sha256": "986e7c682b7a96ef0be2ab3d6352e4a339271598a1aa36b75f459818d56d56ad",
+  "prior_bundle": "build/ELab-before-floating-dc.app",
+  "prior_binary_sha256": "1f7b3c03395a320d470020b8254fc7334209202cda5f20708fe88a388ae41165",
+  "date": "2026-10-15",
+  "bundle_files_compared": 3,
+  "bundle_manifest_sha256": "ba029a37709bcb323d3748e78793f5367cea33141c479de30def5b039c4bebd1",
+  "sdk_initial": {
+    "commit": "621aca2da91836631fc05b2a7b97f124d53518dd",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "sdk_final": {
+    "commit": "42319673ef8dea989b1dd1ff4e7a22a1b7603534",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "sdk_update_review": {
+    "passed": true,
+    "initial_commit": "621aca2da91836631fc05b2a7b97f124d53518dd",
+    "final_commit": "42319673ef8dea989b1dd1ff4e7a22a1b7603534",
+    "changed_sdk_paths": [
+      "docs/reports/README.md",
+      "docs/reports/macos-composed-campaign/README.md",
+      "docs/reports/macos-composed-campaign/records/archive-index.json",
+      "docs/reports/macos-composed-campaign/records/evidence.tar.xz",
+      "docs/reports/macos-composed-campaign/records/qualification.json",
+      "docs/reports/macos-post-glyph-native/README.md",
+      "drivers/cogent/cmd/window-cycle-smoke/soak.go",
+      "drivers/cogent/cmd/window-cycle-smoke/soak_test.go",
+      "drivers/cogent/native_services_checks_darwin.go",
+      "drivers/cogent/native_services_checks_darwin.m",
+      "specs/macos-completion.md",
+      "specs/workbench-endurance.md"
+    ],
+    "normal_build_sdk_file_count": 5203,
+    "changed_paths_in_normal_build": [],
+    "native_checks_tag_enabled": false,
+    "rebuild_binary_sha256": "7ffe480440a902d990c02d78668f56aa2061d83766c30f4011ca45990f3dbba5",
+    "qualified_binary_sha256": "7ffe480440a902d990c02d78668f56aa2061d83766c30f4011ca45990f3dbba5",
+    "scope": "Source update affects reports/specs, a separate smoke command and vellum_native_checks-tagged diagnostics. Normal ELab closure excludes every changed path; fresh rebuild is byte-identical."
+  },
+  "changed_sources_sha256": {
+    "desktop/drawing.go": "2ac5b7d74b491562a78e2c11ba3cdd27a12f5777c30f4a39c9256a3395d8271a",
+    "desktop/example_load.go": "8afe8d7f5ab47a967aa1e0b180e8457f1f86bceb53229c972c5d6d729dea2073",
+    "desktop/examples_smoke.go": "24d7d55fbd4189d1781340c2159ca9b55c7be787d07b19b6e52914988a0c6082",
+    "desktop/menus.go": "6ac47a73df1d629f70714e3319e9e3113a8221c8683782a94f80899fe8f4ca4c",
+    "desktop/nmos_test.go": "04b6c4402002a1d9ece0e4ce3a0ffb92d037690c4aac3fd3ba649b134ebc1fdf",
+    "desktop/smoke.go": "a7edc366d55bd792b6a014744fdb3064179e5b70e809932384e89ab3e721eda7",
+    "desktop/split_supply_smoke.go": "d88b101437358a6fbcffcbb116a283e9c6446691b8fb3866570aeff6ec81e656",
+    "desktop/split_supply_test.go": "6007ef26535daa065a8c6e0a6480dae65aa08c9da862b1d04ef337651157f147",
+    "desktop/view.go": "44b15712011fb79a92e0df4777fbe6c675917534037250fadbb27d6095b54b2f",
+    "desktop/workspace_smoke.go": "96df46923a665cdfef925c447c615996606fc457e39cd6fe0709cf5994fa9687",
+    "internal/uiaudit/audit.go": "04a2429c5e890e92855324d89f250caa39e5466b52574b83256424bd763b8809",
+    "scripts/floating-dc-demo.py": "c35440744c342b92a9e8a12990f1c0759043641dd29cbe037c78ff0988a22f2e",
+    "workbench/examples.go": "4e7d6af50d47f18901caccacebd73a8cfa01e29651c7e811b83c521ecdc47f80",
+    "workbench/floating_dc_test.go": "c6316214900a55c0ea6e035146d074db9f11477d0cc4988e7e6f0e97b17fb9dd",
+    "workbench/graph.go": "bd48ff3a0e88581bf478ee8cadeb9444799b64eb2ba815160f45d0ed885b3567",
+    "workbench/library.go": "d3957b5331890f7caa8d9733ec7bb8924e1da411489f86f3eae6c528b4782ee2",
+    "workbench/mixed.go": "acbc96bb33434a424a384478bd5086fee4fff1dedf1718fa4e4eff850026360f",
+    "workbench/network_compile.go": "5f98bba5c432b181b287d568d8a6e5d695bf357a2498681e4b1413a28722b022",
+    "workbench/split_supply_example.go": "077d6ecb8375ae883a38a3cae21670effbc1636d6e7527ad7fc5a8a796060630",
+    "workbench/value_capabilities.go": "dab766863b7f50d3651f03b5a92cb93971adf4525ffed216fdcd52a4527b7b72"
+  },
+  "source_inventory": {
+    "sources": 51,
+    "sites": 384,
+    "public_commands": 161,
+    "source_routes": 131,
+    "status_counts": {
+      "requires-binding-review": 144,
+      "literal-public-route": 214,
+      "declared-native-wrapper": 9,
+      "declared-registry-route": 17
+    }
+  },
+  "observations": {
+    "split": {
+      "v:V1.positive": 3,
+      "v:V2.negative": -3,
+      "v:V2": 3,
+      "v:R1": 6,
+      "i:R1": 0.006,
+      "i:V2": 0.006
+    },
+    "source_results": [
+      {
+        "id": "V1",
+        "current_a": 0.006,
+        "voltage_v": 3,
+        "power_w": 0.018000000000000002
+      },
+      {
+        "id": "V2",
+        "current_a": 0.006,
+        "voltage_v": 3,
+        "power_w": 0.018000000000000002
+      }
+    ],
+    "series": {
+      "v:V1.positive": 8,
+      "v:V1.negative": 3,
+      "v:V1": 5,
+      "i:R1": 0.008
+    },
+    "sweep": {
+      "target": {
+        "component_id": "V1",
+        "parameter": "voltage",
+        "label": "V1 \u00b7 DC bias",
+        "unit": "V",
+        "minimum": -12,
+        "maximum": 12
+      },
+      "start_si": -5,
+      "stop_si": 5,
+      "probes": [
+        {
+          "id": "v:V1.positive",
+          "label": "V1.positive / ground",
+          "unit": "V",
+          "positive": "V1.positive",
+          "reference": "ground"
+        },
+        {
+          "id": "v:V1",
+          "label": "V1 voltage",
+          "unit": "V",
+          "positive": "V1.positive",
+          "reference": "V1.negative"
+        },
+        {
+          "id": "i:R1",
+          "label": "R1 current",
+          "unit": "A",
+          "positive": "R1.1",
+          "reference": "R1.2"
+        }
+      ],
+      "points": [
+        {
+          "input": -5,
+          "values": [
+            -2,
+            -5,
+            -0.002
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 0
+        },
+        {
+          "input": -4,
+          "values": [
+            -0.9999999999999999,
+            -4,
+            -0.0009999999999999998
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 4.336808689942018e-19
+        },
+        {
+          "input": -3,
+          "values": [
+            0,
+            -3,
+            0
+          ],
+          "kcl_residual_a": 6.3284239360806515e-21,
+          "power_residual_w": 0
+        },
+        {
+          "input": -2,
+          "values": [
+            0.9999999999999999,
+            -2,
+            0.0009999999999999998
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 0
+        },
+        {
+          "input": -1,
+          "values": [
+            2,
+            -1,
+            0.002
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 0
+        },
+        {
+          "input": 0,
+          "values": [
+            3,
+            0,
+            0.003
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 0
+        },
+        {
+          "input": 1,
+          "values": [
+            4,
+            1,
+            0.004
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 0
+        },
+        {
+          "input": 2,
+          "values": [
+            5,
+            2,
+            0.005
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 0
+        },
+        {
+          "input": 3,
+          "values": [
+            6,
+            3,
+            0.006
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 0
+        },
+        {
+          "input": 4,
+          "values": [
+            7,
+            4,
+            0.007
+          ],
+          "kcl_residual_a": 8.673617379884035e-19,
+          "power_residual_w": -6.938893903907228e-18
+        },
+        {
+          "input": 5,
+          "values": [
+            8,
+            5,
+            0.008
+          ],
+          "kcl_residual_a": 0,
+          "power_residual_w": 0
+        }
+      ],
+      "statistics": [
+        {
+          "probe_id": "v:V1.positive",
+          "minimum": -2,
+          "maximum": 8
+        },
+        {
+          "probe_id": "v:V1",
+          "minimum": -5,
+          "maximum": 5
+        },
+        {
+          "probe_id": "i:R1",
+          "minimum": -0.002,
+          "maximum": 0.008
+        }
+      ]
+    },
+    "rc_return": [
+      {
+        "time_s": 0.01,
+        "voltage_v": 3.159511529534532,
+        "analytic_v": 3.1606027941427883
+      },
+      {
+        "time_s": 0.02,
+        "voltage_v": 4.321918383287675,
+        "analytic_v": 4.323323583816936
+      },
+      {
+        "time_s": 0.03,
+        "voltage_v": 4.749847897782597,
+        "analytic_v": 4.75106465816068
+      },
+      {
+        "time_s": 0.04,
+        "voltage_v": 4.9075447853123935,
+        "analytic_v": 4.908421805556329
+      },
+      {
+        "time_s": 0.05,
+        "voltage_v": 4.965734391583044,
+        "analytic_v": 4.966310265004573
+      }
+    ],
+    "rc_discharge": [
+      {
+        "time_s": 0.060000000000000005,
+        "voltage_v": 1.8282178454844125,
+        "analytic_v": 1.8267915929813823
+      },
+      {
+        "time_s": 0.07,
+        "voltage_v": 0.6730888579568475,
+        "analytic_v": 0.6720390703626798
+      },
+      {
+        "time_s": 0.08,
+        "voltage_v": 0.24780887672913568,
+        "analytic_v": 0.24722935765039827
+      },
+      {
+        "time_s": 0.09,
+        "voltage_v": 0.09123496646811659,
+        "analytic_v": 0.09095059793360315
+      },
+      {
+        "time_s": 0.1,
+        "voltage_v": 0.033589672881398115,
+        "analytic_v": 0.033458855142022466
+      }
+    ],
+    "captured_current_a": 0.006
+  },
+  "checks": [
+    "Failing-before split and shifted LED compilation regressions now pass; ideal-source stamps use both actual terminals",
+    "Independent split/series Ohm/Kirchhoff voltage/current/power references, shifted-reference LED comparison and two RC arrangements within existing 3 mV tolerance",
+    "Accepted-state \u00b130 V guard covers a converged 31 V seed; waveform grounding, source/capacitor loop and work bounds remain",
+    "Native blank construction matches agents; signed source-negative reading, protected template reset and real mesh preparation pass",
+    "Public native/headless observations, discovery and SVG/PNG bytes match, including signed bias sweep conservation, capture JSON/CSV and saved recording reopen",
+    "RC return-path charge/discharge matches analytic 10 ms response; paused input switch preserves time/voltage",
+    "Final serialized lint/import/root/native race/vet, Python compilation, source-ledger verification and diff whitespace checks pass",
+    "Two final packaged GPU/UI/protected-close smoke runs pass with explicit scroll precondition; four adapters pass existing LED/RC/NPN regressions",
+    "SDK update reviewed: no changed path among 5203 normal SDK build inputs, manifest/234 prepared files unchanged, new-checkout rebuild byte-identical to tested release",
+    "Canonical/candidate/final build byte/mode/metadata match; prior .91/106 preserved; owned sessions exited"
+  ],
+  "artifacts": [
+    "docs/floating-dc-sources.md",
+    "docs/vellum-baseline-current.json",
+    "docs/validation/floating-dc-native.json",
+    "docs/validation/floating-dc-headless.json",
+    "docs/validation/floating-dc-discovery.json",
+    "docs/validation/floating-dc-conformance.json",
+    "docs/validation/floating-dc-sdk-review.json"
+  ],
+  "build_evidence_sha256": {
+    "build/floating-dc-092/before.log": "c7ca27eec2fa65cf2334b7d7402c96db9b6e7fa9030453640a4cbc41e68a835d",
+    "build/floating-dc-092/range-before.log": "08f52cc00d240c435462c57d95441811a043057b2b3e080a42062d0ce7bacf9a",
+    "build/floating-dc-092/core-final-focused.log": "9eb0f065e737daaf6ffcbcc61ec88af6cac5d38a7e37c1067cba2a07e5fcb823",
+    "build/floating-dc-092/native-focused.log": "c328be277cf4421208ad7c5c294249b56628cd9b1bf43d75a9f95b0baf1c255a",
+    "build/floating-dc-092/native-focused-final.log": "3008b8f8871f90f3213cec27a1f4eb9906c39272862d207c6e79d27ae2692045",
+    "build/floating-dc-092/check.log": "db529b009e45298c5f50185c93b6ce4c45fb898c6cc5e02ca5bc7e376481a2a7",
+    "build/floating-dc-092/check-final.log": "4216e3e92732e3a8176f0f1d14340eff1f8a24cbb740de08c3fcf7272f5c8671",
+    "build/floating-dc-092/check-release.log": "8010ab3f61090f92498ff955a6b45656158a649c4d20645dea0109836baac430",
+    "build/floating-dc-092/build-release.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/floating-dc-092/package-release.log": "54f0ee098798fcd6ffce668e826a2860cf78d0eaba933b62e485c921afb9e6b5",
+    "build/floating-dc-092/headless-release.log": "b7b17e5211d316ff887fc9a48eb60cdf4966f26078b24b133bb426b73e0885a3",
+    "build/floating-dc-092/native-release.log": "71496d1b37ffb39e9edea3701e8677f8ed933ef337749aa3402c16e6e492efbd",
+    "build/floating-dc-092/smoke.log": "27bb11763bdb8e28feeb127371a25769898d3534a8be1a45f0e7cc891cbdde43",
+    "build/floating-dc-092/smoke-scroll-diagnostic.log": "c971fdc27ca29cc1322fc0e2dac26f467ba5b763289564336e7e3bdd4e6a1504",
+    "build/floating-dc-092/smoke-release.log": "c5ffe92ea2d8b2073ab022be8eb65188dd4e8de2d7f1e83ad7121785e8e330c2",
+    "build/floating-dc-092/smoke-confirm.log": "9d5abffd729acf4f83b806cfb2dafb2f48fae75d4af572e719a7572d27fd87d0",
+    "build/floating-dc-092/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/floating-dc-092/sdk-before.json": "a361f1b0c67f89430c4c37c5418b3e38703d30eeba2df39947a0e5f35b5f36ff",
+    "build/floating-dc-092/sdk-after.json": "a361f1b0c67f89430c4c37c5418b3e38703d30eeba2df39947a0e5f35b5f36ff",
+    "build/floating-dc-092/sdk-release-after.json": "43a477a732d8ccd8a9cf0c8b4977371ed5cabcdf3a54ac45438a4753ec742b83",
+    "build/floating-dc-092/sdk-update-review.json": "32da2a2fe2bf0b5fce828925ecc102d8739f662ba50d552c5a7798ba2a77e49c",
+    "build/floating-dc-092/sdk-dependency-closure.json": "c6dc69c9dcdff50b060009bdf72ee8372e6ef8d7f854e1bfcb545f7be89a83f4",
+    "build/floating-dc-092/build-sdk-update.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/floating-dc-092/promotion.json": "fada04cfa855dfa5ee73584bf3871926f5aad1df2f65a83dfc7a665472b081d0",
+    "build/floating-dc-092/visual-readings.json": "33c2b40954488f220bd7da857c3a7bd6feb08da922b9a1bc6ec86fec01a36fe5"
+  },
+  "export_sha256": {
+    "svg": "6191b17c57746eeb6f4f66298b1c05557bb33fd5bea67c48943f8065014287f2",
+    "png": "3a9c996360ddf972bac030c0f7f961d3a7ba7de69e76a57bf604d3ed70d89ef5"
+  },
+  "corrections": [
+    "An exact out-of-range Newton seed satisfied residuals and bypassed the after-update voltage guard. A failing-before31 V regression now refuses acceptance.",
+    "The first RC kernel test advanced 10 ms directly and hit the existing 512-attempt per-output budget. It now uses the ordinary 1 ms output grid without changing model/work limits.",
+    "Shared native fixture construction initially looked for a transient-only Restart control in static DC. Static construction is already fresh after Wait; the helper retains pause/restart for transient MOSFET fixtures.",
+    "Native source and vertical-resistor labels crossed their own wire stubs; moving them beside symbols is directly inspected. Exported paths/labels are clear.",
+    "One packaged workspace-wheel test failed before its start offset was explicit, then passed with diagnostics; exact first-failure cause was not reproduced. Fixture now exercises end then start and retains strict movement/no-zoom assertions. Two final runs pass. Failure-stage reporting was also corrected.",
+    "Vellum advanced externally from 621aca2 to 4231967 during qualification. Changes are tagged checks/separate command/reports; normal dependency closure and exact rebuild prove runtime equivalence. No SDK files were changed by this task."
+  ],
+  "limitations": [
+    "Only DC sources may float; waveform negative terminals and NPN emitters remain grounded. No source/capacitor impulse model, gmin, guessed branch currents or increased numerical limits.",
+    "Source edits remain 0\u201312 V; signed DC sweep biases are analysis overrides. Three-source capacity and \u00b130 V accepted node range do not guarantee convergence of every stack.",
+    "Ideal DC sources are not physical batteries; no current limit, output resistance, discharge, heating or ratings model added.",
+    "One earlier intermittent scroll-smoke failure did not reproduce with diagnostics; explicit fixture start removes its unstated offset assumption, while complete physical input/accessibility acceptance remains open.",
+    "Broader layout/readability, mounted gestures/state-table coverage, visible latency, clean distribution, participants and physical printers remain open; P0 stays 17 implemented/10 partial/0 pending."
+  ]
+}

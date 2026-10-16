@@ -40,7 +40,7 @@ func partAliases(kind string) []string {
 func partLimitations(kind string) string {
 	switch kind {
 	case "dc-source":
-		return "Ideal DC voltage source; no output resistance, current limit, battery discharge, noise, heating, ratings or physical part identity."
+		return "Ideal DC voltage source; positive minus negative sets its voltage, and either terminal may be above/below ground in a referenced network. No output resistance, current limit, battery discharge, noise, heating, ratings or physical part identity."
 	case "resistor":
 		return "Ideal constant resistance; no tolerance, heating, parasitics, ratings or physical part identity. Current is positive from pin 1 to pin 2."
 	case "capacitor":

@@ -16,12 +16,12 @@ func TestNMOSBlankConstructionUIAgentParity(t *testing.T) {
 	testMOSFETBlankConstruction(t, workbench.NMOSExampleGraph())
 }
 
-func testMOSFETBlankConstruction(t *testing.T, fixture workbench.Graph) {
+func buildNetworkFixtureUIAndAgent(t *testing.T, fixture workbench.Graph) (*screen, *workbench.Service, map[string]string) {
 	t.Helper()
 	user, cleanup := testScreen(t)
-	defer cleanup()
+	t.Cleanup(cleanup)
 	agent := workbench.New()
-	defer agent.Close()
+	t.Cleanup(agent.Close)
 	ids := map[string]string{}
 	for _, part := range fixture.Components {
 		uiAction(t, user, "part-list", &ui.ChangeEvent{SelectedID: part.Kind})
@@ -58,12 +58,24 @@ func testMOSFETBlankConstruction(t *testing.T, fixture workbench.Graph) {
 		t.Fatal(err)
 	}
 	for _, cmd := range []string{"simulation.pause", "simulation.restart"} {
+		if cmd == "simulation.restart" && user.service.Snapshot().Transient == nil {
+			continue // Static DC construction is already fresh after Wait.
+		}
 		uiAction(t, user, cmd, nil)
 		agentAction(t, agent, cmd, struct{}{})
 	}
 	left, right := user.service.Snapshot(), agent.Snapshot()
-	if !reflect.DeepEqual(left.Components, right.Components) || !reflect.DeepEqual(left.Wires, right.Wires) || left.Mixed == nil || right.Mixed == nil || !reflect.DeepEqual(left.Mixed.MOSFETs, right.Mixed.MOSFETs) {
-		t.Fatal("blank MOSFET construction diverged", left.Diagnostics, right.Diagnostics)
+	if !reflect.DeepEqual(left.Components, right.Components) || !reflect.DeepEqual(left.Wires, right.Wires) || left.Mixed == nil || right.Mixed == nil {
+		t.Fatal("blank network construction diverged", left.Diagnostics, right.Diagnostics)
+	}
+	return user, agent, ids
+}
+
+func testMOSFETBlankConstruction(t *testing.T, fixture workbench.Graph) {
+	t.Helper()
+	user, agent, ids := buildNetworkFixtureUIAndAgent(t, fixture)
+	if !reflect.DeepEqual(user.service.Snapshot().Mixed.MOSFETs, agent.Snapshot().Mixed.MOSFETs) {
+		t.Fatal("MOSFET construction results diverged")
 	}
 	uiAction(t, user, "selection", &ui.ChangeEvent{SelectedID: ids["M1"]})
 	for _, probe := range []string{"v:" + ids["M1"], "v:" + ids["M1"] + ".gate-source", "i:" + ids["M1"] + ".drain"} {

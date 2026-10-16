@@ -361,7 +361,13 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 		if part.Rotation == 90 || part.Rotation == 270 {
 			y = part.Position.Y - 75
 		}
-		b.text(part.Position.X-float64(len(title))*4.4, y, title, ink)
+		x := part.Position.X - float64(len(title))*4.4
+		if part.Kind == "dc-source" {
+			x, y = part.Position.X-45-float64(len(title))*8.8, part.Position.Y+3
+		} else if part.Kind == "resistor" && (part.Rotation == 90 || part.Rotation == 270) {
+			x, y = part.Position.X+27, part.Position.Y+3
+		}
+		b.text(x, y, title, ink)
 	}
 	for _, a := range state.SourceAnnotations {
 		_, max := workbench.SourceAnnotationBounds(a)

@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "initial_commit": "621aca2da91836631fc05b2a7b97f124d53518dd",
+  "final_commit": "42319673ef8dea989b1dd1ff4e7a22a1b7603534",
+  "changed_sdk_paths": [
+    "docs/reports/README.md",
+    "docs/reports/macos-composed-campaign/README.md",
+    "docs/reports/macos-composed-campaign/records/archive-index.json",
+    "docs/reports/macos-composed-campaign/records/evidence.tar.xz",
+    "docs/reports/macos-composed-campaign/records/qualification.json",
+    "docs/reports/macos-post-glyph-native/README.md",
+    "drivers/cogent/cmd/window-cycle-smoke/soak.go",
+    "drivers/cogent/cmd/window-cycle-smoke/soak_test.go",
+    "drivers/cogent/native_services_checks_darwin.go",
+    "drivers/cogent/native_services_checks_darwin.m",
+    "specs/macos-completion.md",
+    "specs/workbench-endurance.md"
+  ],
+  "normal_build_sdk_file_count": 5203,
+  "changed_paths_in_normal_build": [],
+  "native_checks_tag_enabled": false,
+  "rebuild_binary_sha256": "7ffe480440a902d990c02d78668f56aa2061d83766c30f4011ca45990f3dbba5",
+  "qualified_binary_sha256": "7ffe480440a902d990c02d78668f56aa2061d83766c30f4011ca45990f3dbba5",
+  "scope": "Source update affects reports/specs, a separate smoke command and vellum_native_checks-tagged diagnostics. Normal ELab closure excludes every changed path; fresh rebuild is byte-identical."
+}

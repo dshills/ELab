@@ -514,7 +514,15 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		return out, "incomplete", &Diagnostic{code, message, id}
 	}
 	networkTopology := len(transistors) == 0 && (len(sources) > 1 || len(resistors) > 1 || len(leds) > 1 || len(capacitors) > 1 || len(capacitors) > 0 && len(leds) > 0 || len(capacitors) == 0 && len(leds) == 0 && len(resistors) > 0)
-	if hasMOS || hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || len(transistors) > 0 && len(capacitors) > 0 {
+	floatingDC := false
+	if len(grounds) > 0 {
+		for _, source := range sources {
+			if source.Kind == "dc-source" && out.TerminalNet[source.ID+".negative"] != out.TerminalNet[grounds[0].ID+".reference"] {
+				floatingDC = true
+			}
+		}
+	}
+	if hasMOS || hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || floatingDC || len(transistors) > 0 && len(capacitors) > 0 {
 		return compileNetwork(out, g, groups, root)
 	}
 	if len(transistors) > 0 {
