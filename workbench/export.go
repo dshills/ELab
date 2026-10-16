@@ -390,11 +390,8 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 			x, y = p.Position.X-30, p.Position.Y+23
 		}
 	case "capacitor":
-		if p.Rotation == 90 || p.Rotation == 270 {
-			x, y = p.Position.X-35, p.Position.Y-23
-		} else {
-			x, y = p.Position.X+27, p.Position.Y-3
-		}
+		at := CapacitorLabelPosition(p)
+		x, y = at.X, at.Y
 	case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 		x, y = p.Position.X-schematicLabelWidth(text)-32, p.Position.Y-2
 	case "junction":

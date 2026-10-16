@@ -70,7 +70,7 @@ func TestFlasherLayoutPreservesTheOriginalCircuitAndTimedResponse(t *testing.T) 
 	}
 }
 
-func TestFlasherBiasLabelMasksLeaveRoutedWiresContinuous(t *testing.T) {
+func TestFlasherLabelMasksLeaveRoutedWiresContinuous(t *testing.T) {
 	g := FlasherExampleGraph()
 	crosses := func(a, b Point, box routeRect) bool {
 		lo, hi := 0., 1.
@@ -90,7 +90,7 @@ func TestFlasherBiasLabelMasksLeaveRoutedWiresContinuous(t *testing.T) {
 		}
 		return true
 	}
-	for _, id := range []string{"RB1", "RB2"} {
+	for _, id := range []string{"RB1", "RB2", "C1", "C2"} {
 		p, _ := g.Component(id)
 		x, y, text := schematicPartLabel(p)
 		// Enclose the actual white mask plus half the 2.2-unit wire stroke.

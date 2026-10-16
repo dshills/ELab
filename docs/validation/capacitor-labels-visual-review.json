@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-15",
+  "scope": "Capacitor plates/stubs and bundled flasher caption/route clearance; no general layout acceptance",
+  "native_observations": [
+    {
+      "case": "four-rotation incomplete capacitor grid",
+      "zoom_percent": 74,
+      "source": "CUA screenshot returned inline in chat; no retained screenshot file",
+      "captions_upright_clear_plates": true
+    },
+    {
+      "case": "bundled live flasher paused at startup",
+      "zoom_percent": 49,
+      "source": "CUA screenshot returned inline in chat; no retained screenshot file",
+      "capacitor_and_led_captions_separated": true,
+      "bias_captions_clear": true
+    }
+  ],
+  "exported_pngs": [
+    {
+      "path": "build/capacitor-labels-097/headless-assets/rotations.png",
+      "sha256": "77dc25b7091195826905af434dc1b3795e3737801f77789fff941fcf7bc6fa31"
+    },
+    {
+      "path": "build/capacitor-labels-097/headless-assets/example-flasher.png",
+      "sha256": "02da152c1668f0e864ae64ae383e485a8925bae79a0f248b76bd7af7fe700913"
+    },
+    {
+      "path": "build/capacitor-labels-097/headless-assets/example-rc.png",
+      "sha256": "0d1c73550db956c722719c09e4209ccc5ac7870778b5107a1f045f29f4fc129b"
+    },
+    {
+      "path": "build/capacitor-labels-097/headless-assets/example-rectifier.png",
+      "sha256": "80db08170a3f38924b674aa3d22faca4635d660dafe06f888a9d16d3b11b6adb"
+    },
+    {
+      "path": "build/capacitor-labels-097/headless-assets/example-led-fade.png",
+      "sha256": "ac1b2863defce95bf78a90c6f60da43e2865aad504458c88b64dc4272a64f6f2"
+    }
+  ],
+  "observations": [
+    "Rotation grid captions clear both plates and terminal stubs",
+    "Flasher capacitor captions are separated from LED captions and leave the previously interrupted wires continuous",
+    "RC, rectifier and LED-fade capacitor captions are clear in sampled exported pages"
+  ],
+  "remaining": [
+    "Small fitted native bitmap text and broader responsive layout/accessibility remain open",
+    "Rectifier D1 diode caption still masks part of its adjacent wire; outside this capacitor repair",
+    "PNG directly reviewed; PDF header and state purity exercised, not rendered PDF or physical printing"
+  ]
+}

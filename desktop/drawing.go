@@ -400,6 +400,9 @@ func nativePartLabelPosition(part workbench.Component, title string) workbench.P
 	if part.Kind == "led" {
 		return workbench.LEDLabelPosition(part)
 	}
+	if part.Kind == "capacitor" {
+		return workbench.CapacitorLabelPosition(part)
+	}
 	y := part.Position.Y - 55
 	if workbench.IsConnectivityPrimitive(part.Kind) {
 		y = part.Position.Y - 18

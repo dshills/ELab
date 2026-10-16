@@ -1,0 +1,125 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.97.0",
+  "build_version": "112",
+  "binary_sha256": "ad25a51c8e2556accb80596a78898ac9382230069c89000c43c5d82957c4f0c4",
+  "agent_binary_sha256": "44d047066299859dc2623e7b331f98e7f9466b61dcd629cab58a5b7fba966314",
+  "prior_bundle": "build/ELab-before-capacitor-labels.app",
+  "prior_binary_sha256": "bfdc067705441734656bf0925347afb8da78fa39ad3568d23443b071bad5dcbd",
+  "bundle_files_compared": 3,
+  "bundle_manifest_sha256": "e579631d0f4a1c3a06f63cfc0f8b68952411f32283a593fbfaf4f85c351fd2ba",
+  "sdk_before": {
+    "commit": "82c0c5ec17fd7f90da1a0ac4a26d65a3de8367a4",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "sdk_after": {
+    "commit": "82c0c5ec17fd7f90da1a0ac4a26d65a3de8367a4",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "workbench/component_labels.go": "ed6db6a09dd892fc83097598a99fd6fe23edcb4f76d1d9ee01556e89e36713c4",
+    "workbench/export.go": "6b7239a84f2f7a1d6f1c80486ab9fd1f7e28ac74dec6a3f5d115380117672e78",
+    "workbench/capacitor_label_test.go": "29c65f4b40b726f065ee76b85bf7bea74cc9eb36168e1aefd5846b41786cfb15",
+    "workbench/flasher_layout_test.go": "95b1ce7eb27852bc74db5635c7a966e6ffae32d72d22be207fd601f3995910f2",
+    "desktop/drawing.go": "09da099bab9ee50de7e3025092ef89bd33ac946f5ab99b349345bff95c2824bb",
+    "desktop/capacitor_label_test.go": "b5c911048e7e75f7b7c5c4e908f10f39bc4e366d9eb49d58fe4d9aa112d1f20a",
+    "scripts/capacitor-labels-demo.py": "343577d48c4dfec306fde86b8750807a430214fa7b488d3ae13920bfa97db0db"
+  },
+  "rotation_labels": {
+    "C_0": {
+      "x": -166.0,
+      "y": -147.0
+    },
+    "C_90": {
+      "x": 110.0,
+      "y": -186.0
+    },
+    "C_180": {
+      "x": -166.0,
+      "y": 153.0
+    },
+    "C_270": {
+      "x": 110.0,
+      "y": 114.0
+    }
+  },
+  "export_case_count": 13,
+  "example_ids": [
+    "led",
+    "split-supply",
+    "rc",
+    "npn",
+    "switch-npn",
+    "pmos",
+    "nmos",
+    "blink",
+    "flasher",
+    "led-fade",
+    "rectifier"
+  ],
+  "prior_project_sha256": "fe99f7c790638b48708434d6a646ab301e03f0550d2f5a49acc23f4e4b643c97",
+  "checks": [
+    "One shared upright capacitor anchor feeds native captions and SVG; Fit consumes the updated caption bounds; PNG/PDF/preview inherit output layout",
+    "Failing-before short/32-character ID geometry regression now clears native plate envelopes and 24-unit terminal routing stubs at all four rotations",
+    "Expanded exact flasher background-mask plus wire half-stroke checks cover RB1/RB2/C1/C2 against every routed segment; previously erased cross-coupling lines now remain continuous",
+    "Native renderer emits actual capacitor ID glyphs at each shared anchor; actual flasher caption glyph bounds clear both LED captions with four-unit margin",
+    "Long-ID Fit contains complete label bounds and preserves graph, connectivity, run/electrical identity and document state",
+    "Public native/headless workflows build/save the incomplete four-rotation drawing, reopen/resave actual .95 flasher graph and kept recording unchanged, then render all eleven guided examples",
+    "All thirteen SVG/PNG pairs match byte-for-byte; SVG/PNG/PDF capture preserves graph/physics/history/document; PDF headers valid",
+    "Direct CUA review shows four clear rotations at 74% and separated C1/D1 flasher captions at 49%; five exported PNG cases directly inspected",
+    "Only desktop/drawing.go changes among production native hashes; all sites/routes/aliases/public IDs otherwise unchanged and reviewed; inventory verifies 51/384/161/131",
+    "Final lint/import/root/native race/vet, Python compile, PRD coverage and diff whitespace checks pass; isolated packaged GPU/UI/scope/protected-close smoke passes",
+    "All four adapters pass the same three reference workflows; electrical/performance suites not repeated because graph/model/kernel/work limits are unchanged",
+    "SDK clean/unchanged and all 232 upstream +5 typesetting prepared outputs verified; canonical/candidate/build bytes/modes/version match; previous .96 preserved; owned visual host exited 0 and managed smoke/conformance completed"
+  ],
+  "corrections": [
+    "Initial below-plate trial still masked the flasher ground return. The existing full-route assertions rejected it; final above/left anchor clears all four tested flasher masks without changing wires or loosening clearance.",
+    "Initial full check detected the deliberately stale native source ledger. Candidate review proved only drawing.go digest changed, with identical routes/sites/aliases/public IDs; the reviewed ledger and final full check pass."
+  ],
+  "limitations": [
+    "Own plate/stub and bundled flasher clearance only; arbitrary neighboring labels/wires, values and layouts can still require rearrangement.",
+    "Small fitted native bitmap text and broader responsive layout remain open. Direct rectifier PNG review finds a separate D1 diode-caption/wire masking issue outside this capacitor repair.",
+    "Native screenshots were viewed through CUA inline; no retained native screenshot files. PNGs directly inspected; PDF headers/state exercised, not rendered PDF or physical printing.",
+    "Complete mounted input/IME/keyboard/accessibility, visible latency, clean distribution, participant and physical-printer acceptance remain open. P0 stays 17 implemented/10 partial."
+  ],
+  "artifacts": [
+    "docs/capacitor-labels.md",
+    "docs/validation/capacitor-labels-headless.json",
+    "docs/validation/capacitor-labels-native.json",
+    "docs/validation/capacitor-labels-visual-review.json",
+    "docs/validation/capacitor-labels-conformance.json",
+    "docs/validation/flasher-layout-legacy-095.elab",
+    "research/13-native-command-inventory.json"
+  ],
+  "build_evidence_sha256": {
+    "build/capacitor-labels-097/before.log": "444f958f42d801a8364d0b46e0283736f77365b0fa031f44d9bfc70078cc2903",
+    "build/capacitor-labels-097/core-focused.log": "ac8361e5606bef44098c5115e4d63c0d81fbe41160e8a7961f45ee4ac072a94e",
+    "build/capacitor-labels-097/core-checked.log": "127a50702c7ecb4d74b839baf9b2f191661c11da65ede3f41cacba711d366e14",
+    "build/capacitor-labels-097/native-focused.log": "667e92ac7652120b7feec145a1f02d1db2dbe53f6927e4376e06af1fc5a86421",
+    "build/capacitor-labels-097/check.log": "e0c28add3662eb1d392f88821c26a514269a4779340295b8c9f9a3a8b961593a",
+    "build/capacitor-labels-097/check-final.log": "873438ac7967f248f5bad742227487d94debf7c3894e27eca6a81a8854e3c7f9",
+    "build/capacitor-labels-097/build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/capacitor-labels-097/package.log": "aa25cc9880b72d576a35bcbf3f7968eec037593af9821adbf3acf7b2ace726b9",
+    "build/capacitor-labels-097/headless.log": "bbe11869be6b5b56ee0666fb3e58c0d62f6eb6533bb9fadd198f4a039442d0e5",
+    "build/capacitor-labels-097/native.log": "c7243c1d6d7df52bd5af8e277c7506815f6e4edbf5426247527f908152870eb9",
+    "build/capacitor-labels-097/smoke.log": "39f8c3c72e5881fa24a2f747491545b1d69b6977b34e36098794754ccb6a69b8",
+    "build/capacitor-labels-097/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/capacitor-labels-097/sdk-before.json": "a5a70c36b0a8503ee04d93ac6f989cd755c92f818147bc206ac3effd6a62d489",
+    "build/capacitor-labels-097/sdk-after.json": "a5a70c36b0a8503ee04d93ac6f989cd755c92f818147bc206ac3effd6a62d489",
+    "build/capacitor-labels-097/ui-inventory-candidate.json": "d07687dbf1cd4ea2bcd2164dd8b507cf9b2f3236e1dd73ca5fa507452f17a108",
+    "build/capacitor-labels-097/ui-inventory-final.json": "16c1fdfa948650d0361838bd5055c2c93ec112a347996f4b46c9fa611564f4bf",
+    "build/capacitor-labels-097/native-visual-state.json": "cf82574d25ff85c4c4473f71c2b0f0b1713bf5798a37f9a6936bc907483b5296",
+    "build/capacitor-labels-097/promotion.json": "aecd8742938b20b55c1dde230b571492128709c1eb663761f688365a424c9324"
+  }
+}

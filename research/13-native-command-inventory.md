@@ -112,3 +112,6 @@ The 0.95.0 LED-label checkpoint reviews only `desktop/drawing.go` among producti
 
 
 The 0.96.0 flasher template changes only core graph positions and regression/reference scripts. No production native source, public ID or route changes; the existing ledger verifies unchanged at 51 files /384 sites /161 IDs /131 source routes. Native/headless reset/file/export checks remain bounded runtime evidence.
+
+
+The 0.97.0 capacitor-caption checkpoint changes only drawing.go among production native hashes. It delegates capacitor placement to the core helper also used by SVG and Fit. All source sites, routes, aliases and public IDs are unchanged after review; actual native glyph/rotation and public export checks supply bounded runtime evidence.

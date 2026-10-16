@@ -1,6 +1,6 @@
 # PRD implementation audit
 
-Audited against [PRD draft 0.3](07-product-requirements.md), starting at local checkpoint `90927b3` on October 13, 2026 and updated through the 0.96.0 checkpoint on October 15. This is an engineering conformance audit, not a participant or screen-reader study. Passing existing demonstrations does not establish MVP completion. Proposed targets and original scope are preserved.
+Audited against [PRD draft 0.3](07-product-requirements.md), starting at local checkpoint `90927b3` on October 13, 2026 and updated through the 0.97.0 checkpoint on October 15. This is an engineering conformance audit, not a participant or screen-reader study. Passing existing demonstrations does not establish MVP completion. Proposed targets and original scope are preserved.
 
 **Status terms:** Implemented means the stated behavior has direct source/test evidence within the documented envelope. Partial means some acceptance conditions remain unmet or unverified. Pending means evidence is absent or a release gate has not been performed. No row below declares an unperformed human, clean-installation, platform or visible-latency test passed.
 
@@ -192,3 +192,6 @@ The 0.95.0 LED-label checkpoint shares upright rotation-aware positions between 
 
 
 The 0.96.0 flasher-spacing checkpoint separates bias captions from neighboring LED pins and clears their export masks from routed wires. Actual previous-release files/recordings reopen unchanged; protected reset/undo/redo, 41 exact captured rows, all eleven templates, native/export review and four-adapter electrical refinement qualify this bounded adjustment. Native C1/D1 caption crowding, small fitted text and general automatic placement remain open. No P0 gate closes; totals remain 17 implemented /10 partial. See [scope and evidence](../docs/flasher-layout.md).
+
+
+The 0.97.0 capacitor-caption checkpoint clears native/export plates and terminal stubs at every rotation and removes the flasher’s capacitor-mask route interruptions and C1/D1 caption crowding. Actual glyph/geometry/Fit tests, native/export review and thirteen native/headless SVG/PNG comparisons qualify the bounded presentation repair. Small fitted text and a separate rectifier diode-caption/wire crossing remain open; no P0 gate closes, with totals 17 implemented /10 partial. See [caption scope and evidence](../docs/capacitor-labels.md).

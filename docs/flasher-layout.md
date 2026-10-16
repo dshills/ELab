@@ -8,7 +8,7 @@ Regression checks cover bias-label clearance from neighboring terminals, white e
 
 `scripts/flasher-layout-demo.py` additionally reopens the previous-release project and its kept recording, saves them unchanged, tests protected reset/undo/redo, and compares a fresh 200 ms capture with every row in the previous-release recording. It exports SVG/PNG/PDF without changing circuit, physics, history or document state, then reopens the revised saved project. Its native mode uses the same public commands as its headless mode.
 
-Direct native inspection at 49% Fit confirms the separated bias labels, but the native C1 caption still crowds D1 and small fitted text remains difficult to read. Exported capacitor captions also merit a separate clearance pass. This work does not qualify general automatic routing or typography, every possible circuit layout, physical printing, participant usability or complete accessibility.
+At the 0.96.0 checkpoint, native inspection at 49% Fit confirmed the separated bias labels but found C1/D1 caption crowding and capacitor export-mask crossings. The [0.97.0 capacitor-caption repair](capacitor-labels.md) resolves those specific issues; small fitted text remains difficult to read. This work does not qualify general automatic routing or typography, every possible circuit layout, physical printing, participant usability or complete accessibility.
 
 To repeat the compatibility workflow in a fresh headless session after building:
 
