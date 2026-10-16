@@ -40,6 +40,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	OpAmps             []OpAmpResult         `json:"opamps,omitempty"`
 	Inductors          []InductorResult      `json:"inductors,omitempty"`
 	MOSFETs            []MOSFETResult        `json:"mosfets,omitempty"`
 	Potentiometers     []PotentiometerResult `json:"potentiometers,omitempty"`
@@ -66,6 +67,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.OpAmps = append([]OpAmpResult(nil), r.OpAmps...)
 	o.Inductors = append([]InductorResult(nil), r.Inductors...)
 	o.Nodes = map[string]float64{}
 	for k, v := range r.Nodes {
@@ -92,6 +94,7 @@ type mixedNetwork struct {
 	index         map[string]int
 	sources, caps []Component
 	inductors     []Component
+	opamps        []Component
 	inductorCuts  []inductorCut
 	inductorPins  map[string]int
 }
@@ -126,6 +129,9 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 		}
 		if p.Kind == "inductor" {
 			n.inductors = append(n.inductors, p)
+		}
+		if p.Kind == "opamp" {
+			n.opamps = append(n.opamps, p)
 		}
 	}
 	if len(n.inductors) > 0 {
@@ -289,6 +295,8 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 			add(s, g, -gm)
 			add(s, d, -gd)
 			add(s, s, gm+gd)
+		case "opamp":
+			n.stampOpAmp(p, x, add, f)
 		case "npn":
 			b, c := n.pin(p, "base"), n.pin(p, "collector")
 			ib, ic, bb, bc, cb, cc := npnLinear(voltage(x, b), voltage(x, c))
@@ -496,7 +504,7 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 			}
 		}
 		var delta []float64
-		if good && len(n.inductors) > 0 {
+		if good && (len(n.inductors) > 0 || len(n.opamps) > 0) {
 			rhs := make([]float64, size)
 			for i := range f {
 				rhs[i] = -f[i]
@@ -560,6 +568,7 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 						scale = math.Min(scale, maxMixedNewtonDelta/math.Abs(delta[i]))
 					}
 				}
+				scale = n.opAmpNewtonScale(x, delta, 1, scale)
 			}
 		}
 		for i := range x {
@@ -629,6 +638,10 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			power := vds * id
 			powers += power
 			r.MOSFETs = append(r.MOSFETs, MOSFETResult{ID: p.ID, Model: mosfetModel(p.Kind), DrainCurrent: id, SourceCurrent: id, VGS: vgs, VDS: vds, Power: power, State: mosfetState(p.Kind, vgs, vds)})
+		case "opamp":
+			device := n.opAmpResult(p, x)
+			powers += device.Power
+			r.OpAmps = append(r.OpAmps, device)
 		case "npn":
 			vb, vc := voltage(x, n.pin(p, "base")), voltage(x, n.pin(p, "collector"))
 			ib, ic, _, _, _, _ := npnLinear(vb, vc)

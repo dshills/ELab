@@ -51,5 +51,5 @@ func (n *mixedNetwork) inductorNewtonScale(x, delta []float64, stages int) float
 			}
 		}
 	}
-	return scale
+	return n.opAmpNewtonScale(x, delta, stages, scale)
 }

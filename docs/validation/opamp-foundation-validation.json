@@ -1,0 +1,180 @@
+{
+  "format": "elab.opamp-foundation-validation",
+  "version": 1,
+  "date": "2026-10-16",
+  "passed": true,
+  "scope": "Internal five-pin law and actual MNA/RC/RLC integration only. Op-amp product feature remains incomplete and unplaceable.",
+  "source_parent_commit": "de7a683b89d1d39d3c7c5863ca8d4a9dc0f77ed1",
+  "sources_sha256": {
+    "workbench/opamp.go": "fb1b03972bc56fa6463beec8eb9ade747d247ad8824919d5d458e092cd46e969",
+    "workbench/mixed_opamp.go": "de5bf8ff66c4354d95f5668725c4fd4566063750f0b46f1c8a2b178df8248ce2",
+    "workbench/mixed.go": "43089169315055ed96a403c6d608db5b74cb7958cb572a0324a3c4900d3e5e00",
+    "workbench/inductor_newton.go": "b546119bf3eff34466a4e10a8f529637c6b30ae4b75473c66163a0076647978a",
+    "workbench/opamp_test.go": "03bc4291d1c3b7c37db80d05dc0fa15619037512a7e5d63330f758dc1bdb7de7",
+    "workbench/mixed_opamp_test.go": "2519de714e55cf255424d3509a6483593964347d323040213c1b92cd7ff4280d",
+    "scripts/opamp-reference.py": "a9cb5116219e361548c4ce0b66bc54925895dbff3ed99e5fddcf695236d10024",
+    "workbench/testdata/opamp-model-reference.json": "9ffa5b8057568ea72cf356af85a4d558b3005c38ef71b2c3bd77e4d2b8dc6041"
+  },
+  "model": "elab.generic-opamp.v1",
+  "reference": {
+    "decimal_digits": 90,
+    "terminal_vectors": 14,
+    "scalar_feedback_roots": 6,
+    "generator_reproduces_frozen_bytes": true,
+    "vendor_or_physical_device_equivalence": false
+  },
+  "numerical_checks": {
+    "independent_jacobian_perturbations": true,
+    "random_charge_power_vectors": 1000,
+    "actual_amplifier_dc_and_transient_startup_contexts": 12,
+    "cold_and_perturbed_warm_guesses": true,
+    "merged_follower_jacobian": true,
+    "reversed_and_zero_supply_signs": true,
+    "unloaded_equal_rails_voltage_accuracy": true,
+    "two_cascaded_devices": true,
+    "tied_input_floating_common_mode_refused": true,
+    "cancelled_solve_refused": true,
+    "owned_result_copy": true,
+    "buffered_rc_charge_samples": 50,
+    "buffered_rlc_output_samples": 20,
+    "rlc_half_step_comparison": true,
+    "newton_attempt_iterations": 100,
+    "existing_node_range_v": [
+      -30,
+      30
+    ],
+    "work_and_accuracy_limits_raised": false
+  },
+  "quality": {
+    "started_utc": "2026-10-16T14:18:50.899135+00:00",
+    "sources_before": {
+      "workbench/opamp.go": "fb1b03972bc56fa6463beec8eb9ade747d247ad8824919d5d458e092cd46e969",
+      "workbench/mixed_opamp.go": "de5bf8ff66c4354d95f5668725c4fd4566063750f0b46f1c8a2b178df8248ce2",
+      "workbench/mixed.go": "43089169315055ed96a403c6d608db5b74cb7958cb572a0324a3c4900d3e5e00",
+      "workbench/inductor_newton.go": "b546119bf3eff34466a4e10a8f529637c6b30ae4b75473c66163a0076647978a",
+      "workbench/opamp_test.go": "03bc4291d1c3b7c37db80d05dc0fa15619037512a7e5d63330f758dc1bdb7de7",
+      "workbench/mixed_opamp_test.go": "2519de714e55cf255424d3509a6483593964347d323040213c1b92cd7ff4280d",
+      "scripts/opamp-reference.py": "a9cb5116219e361548c4ce0b66bc54925895dbff3ed99e5fddcf695236d10024",
+      "workbench/testdata/opamp-model-reference.json": "9ffa5b8057568ea72cf356af85a4d558b3005c38ef71b2c3bd77e4d2b8dc6041"
+    },
+    "sdk_before": {
+      "commit": "0c89dc4d58c27a920b801c5f4f7a017a20074865",
+      "status": "",
+      "manifest_sha256": "22b4e98b6c11bf67987987c62837422f660ddabbe588914f25a3a1e1ba4efd58"
+    },
+    "command": "GOPROXY=off GOFLAGS=-p=1 ./scripts/check.sh",
+    "exit_code": 0,
+    "finished_utc": "2026-10-16T14:22:02.971274+00:00",
+    "sources_after": {
+      "workbench/opamp.go": "fb1b03972bc56fa6463beec8eb9ade747d247ad8824919d5d458e092cd46e969",
+      "workbench/mixed_opamp.go": "de5bf8ff66c4354d95f5668725c4fd4566063750f0b46f1c8a2b178df8248ce2",
+      "workbench/mixed.go": "43089169315055ed96a403c6d608db5b74cb7958cb572a0324a3c4900d3e5e00",
+      "workbench/inductor_newton.go": "b546119bf3eff34466a4e10a8f529637c6b30ae4b75473c66163a0076647978a",
+      "workbench/opamp_test.go": "03bc4291d1c3b7c37db80d05dc0fa15619037512a7e5d63330f758dc1bdb7de7",
+      "workbench/mixed_opamp_test.go": "2519de714e55cf255424d3509a6483593964347d323040213c1b92cd7ff4280d",
+      "scripts/opamp-reference.py": "a9cb5116219e361548c4ce0b66bc54925895dbff3ed99e5fddcf695236d10024",
+      "workbench/testdata/opamp-model-reference.json": "9ffa5b8057568ea72cf356af85a4d558b3005c38ef71b2c3bd77e4d2b8dc6041"
+    },
+    "sdk_after": {
+      "commit": "0c89dc4d58c27a920b801c5f4f7a017a20074865",
+      "status": " M docs/development.md\n M drivers/cogent/cmd/window-cycle-smoke/main.go\n M drivers/cogent/cmd/window-cycle-smoke/soak.go\n M specs/window-lifetimes.md\n?? drivers/cogent/cmd/window-cycle-smoke/lifetime_native.go\n?? drivers/cogent/cmd/window-cycle-smoke/lifetime_probe.go\n?? drivers/cogent/cmd/window-cycle-smoke/lifetime_probe_test.go\n",
+      "manifest_sha256": "22b4e98b6c11bf67987987c62837422f660ddabbe588914f25a3a1e1ba4efd58"
+    },
+    "sources_unchanged": true,
+    "sdk_unchanged": false
+  },
+  "sdk_change_review": {
+    "sdk_commit": "0c89dc4d58c27a920b801c5f4f7a017a20074865",
+    "imported_sdk_package_directory_count": 136,
+    "imported_sdk_direct_input_count": 5700,
+    "changed_paths": [
+      {
+        "path": "docs/development.md",
+        "in_imported_input_set": false,
+        "in_imported_package_directory": false
+      },
+      {
+        "path": "drivers/cogent/cmd/window-cycle-smoke/main.go",
+        "in_imported_input_set": false,
+        "in_imported_package_directory": false
+      },
+      {
+        "path": "drivers/cogent/cmd/window-cycle-smoke/soak.go",
+        "in_imported_input_set": false,
+        "in_imported_package_directory": false
+      },
+      {
+        "path": "specs/window-lifetimes.md",
+        "in_imported_input_set": false,
+        "in_imported_package_directory": false
+      },
+      {
+        "path": "drivers/cogent/cmd/window-cycle-smoke/lifetime_native.go",
+        "in_imported_input_set": false,
+        "in_imported_package_directory": false
+      },
+      {
+        "path": "drivers/cogent/cmd/window-cycle-smoke/lifetime_probe.go",
+        "in_imported_input_set": false,
+        "in_imported_package_directory": false
+      },
+      {
+        "path": "drivers/cogent/cmd/window-cycle-smoke/lifetime_probe_test.go",
+        "in_imported_input_set": false,
+        "in_imported_package_directory": false
+      }
+    ],
+    "all_changes_outside_imported_packages": true,
+    "scope": "Review of tracked/untracked paths listed by the SDK end-of-gate status against go list -deps -test. Not a complete SDK/prepared-runtime or app release qualification."
+  },
+  "initial_full_gate_failure": {
+    "test": "TestMixedCapacitanceSetsFlasherPeriod",
+    "attempts": 47,
+    "elapsed_ms": 100.186,
+    "limit_ms": 100,
+    "disposition": "Retained failure; 10 subsequent current and 10 untouched-baseline race runs passed, as did the final full gate. No tolerance or work budget changed. The single timing excursion was not reproduced or conclusively attributed."
+  },
+  "baseline_comparison": {
+    "commit": "de7a683b89d1d39d3c7c5863ca8d4a9dc0f77ed1",
+    "current_repetitions": 10,
+    "baseline_repetitions": 10,
+    "both_passed": true
+  },
+  "preserved_apps": {
+    "canonical": {
+      "path": "build/ELab.app",
+      "entries": 7,
+      "matches_qualified_bundle_bytes_and_modes": true,
+      "manifest_sha256": "84c87539c59de168d5e12eff00f19232136b80743f78ce0435826374c90c16bd"
+    },
+    "preserved": {
+      "path": "build/ELab-0.104.0-119-preserved.app",
+      "entries": 7,
+      "matches_qualified_bundle_bytes_and_modes": true,
+      "manifest_sha256": "637944b021281ac814267524701225fa3b76294d3016df4019fccc31cbe25ded"
+    }
+  },
+  "limitations": [
+    "No public compiler/library placement, commands for the new part, file/recovery/model dependency support, probes/captures/sweeps, symbol, native inspector or rendered qualification yet.",
+    "Optional OpAmpResult shape is visible through reflected output discovery; unused results omit its JSON field.",
+    "Internal network fixtures construct Compiled maps directly and do not establish supported public topologies.",
+    "Compiler physical-reference groups must distinguish the input resistor from output/supply conductance before registration; an exploratory wholly ungrounded internal map exposed a spurious floating-point pivot.",
+    "Generic memoryless law has no internal bandwidth, slew, gate/protection/thermal/rating or named physical-device behavior. External storage supplies timing.",
+    "Full gate passed with stable ELab sources; Vellum became dirty outside imported package directories. This is not a new SDK/app release qualification.",
+    "P0 acceptance and broader backlog remain open; no application version or baseline pin was promoted."
+  ],
+  "artifacts_sha256": {
+    "build/opamp-foundation/network-focused-6.log": "a1d13842d247d4d0286360f537cce240521d58c62607e0c3467d026770434b0f",
+    "build/opamp-foundation/network-quality.log": "bc797d269d14f06b7573fbdbe0a263f37ff2dcec0decfc2d32dbfdc701881fdc",
+    "build/opamp-foundation/network-quality-final.log": "cd6b80f182c59890f7ce7bf75e0644629888b4d83c65c11883032db751a29264",
+    "build/opamp-foundation/network-quality-final.json": "31179c46fb35855ce1333a37859c9531aea18aac76ad96bbaddc1bc5b90bd3cf",
+    "build/opamp-foundation/reference-reproduction.json": "bb0398f56ab26e7cbe8185e2e04246da1d646cbed458fa9e785606a6ef22a5ed",
+    "build/opamp-foundation/network-reproduced-reference.json": "9ffa5b8057568ea72cf356af85a4d558b3005c38ef71b2c3bd77e4d2b8dc6041",
+    "build/opamp-foundation/flasher-budget-current.log": "94966887320ae420117ad096ba8c77e71a4f7fe71448839b07d5e4da34d759f7",
+    "build/opamp-foundation/flasher-budget-baseline.log": "dcbe57012a43ebc504d70f526a1a7c96a16c0b086778fb98ff06bd6d11c388b2",
+    "build/opamp-foundation/baseline-source.json": "374ebd7529af8821d8820a5beb308d7e88c992adbe2b7da175db75403dc13bed",
+    "build/opamp-foundation/sdk-change-review.json": "d7769f45ce5a96d4214fb5f8fc9b187cc988859c504dbcf83fcb6d98c299ea8b",
+    "build/opamp-foundation/preserved-app-check.json": "b09521e5036d3eb1e869febfa24c1488f731e84817d2df8dfebcb7b6b6ad6fc9",
+    "build/opamp-foundation/warm-debug.log": "7279204c2b3df2f051ff3f516193e141c0ae46b19e5a173df5743b123387b415"
+  }
+}
