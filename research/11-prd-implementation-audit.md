@@ -1,6 +1,6 @@
 # PRD implementation audit
 
-Audited against [PRD draft 0.3](07-product-requirements.md), starting at local checkpoint `90927b3` on October 13, 2026 and updated through the 0.93.0 checkpoint on October 15. This is an engineering conformance audit, not a participant or screen-reader study. Passing existing demonstrations does not establish MVP completion. Proposed targets and original scope are preserved.
+Audited against [PRD draft 0.3](07-product-requirements.md), starting at local checkpoint `90927b3` on October 13, 2026 and updated through the 0.94.0 checkpoint on October 15. This is an engineering conformance audit, not a participant or screen-reader study. Passing existing demonstrations does not establish MVP completion. Proposed targets and original scope are preserved.
 
 **Status terms:** Implemented means the stated behavior has direct source/test evidence within the documented envelope. Partial means some acceptance conditions remain unmet or unverified. Pending means evidence is absent or a release gate has not been performed. No row below declares an unperformed human, clean-installation, platform or visible-latency test passed.
 
@@ -183,3 +183,6 @@ The 0.92.0 floating-DC checkpoint expands the curated network to stacked/offset 
 
 
 The 0.93.0 linear-network checkpoint repairs artificial nonconvergence for passive/source stacks at 24 V within the existing ±30V envelope. Full affine corrections retain residual/rank/range/cancellation checks; nonlinear models retain damping. Shared edit/measurement/Verify/history/file commands and numerical discovery expose the behavior without new command or format versions. P0 remains **17 implemented /10 partial /0 pending**. Broader nonlinear convergence, mounted state/input/accessibility, latency, distribution, participant and physical-printer acceptance remain open. See [linear solves](../docs/linear-network-solves.md).
+
+
+The 0.94.0 startup checkpoint adds one grounded-ideal-constraint fallback after a failed ordinary nonlinear cold attempt, retaining the initial solution basin and per-attempt 100-iteration/0.2 V bounds. Every Newton attempt now checks matrix rank before accepting a zero initial residual, including zero-supply floating MOSFET gates. The pulse-corner test measures the physically discontinuous input current and its independent resistor law rather than relying on collector-current roundoff. These bounded engineering corrections do not close the remaining P0 acceptance gates; totals remain 17 implemented /10 partial. See [startup behavior and work envelope](../docs/nonlinear-startup.md).

@@ -87,5 +87,43 @@ func nativeSplitSupplySmoke(ctx context.Context, a *app.Application, s *screen) 
 	_, err := waitNativeViewport(ctx, a, s, func(state workbench.Snapshot) bool {
 		return state.Mixed != nil && !state.Mixed.Stale && math.Abs(state.Mixed.Resistors[0].Voltage-24) < 1e-10 && math.Abs(state.Mixed.Resistors[0].Current-.024) < 1e-12
 	})
+	if err != nil {
+		return err
+	}
+	if err := owner(func() error {
+		for _, action := range []struct {
+			id string
+			e  *ui.ChangeEvent
+		}{
+			{"part-list", &ui.ChangeEvent{SelectedID: "led"}},
+			{"position-x", &ui.ChangeEvent{Number: 350}}, {"position-y", &ui.ChangeEvent{Number: 100}}, {"place-at-position", nil},
+		} {
+			if err := smokeUI(s, action.id, action.e); err != nil {
+				return err
+			}
+		}
+		led := s.service.Snapshot().Selected
+		for _, action := range []struct {
+			id string
+			e  *ui.ChangeEvent
+		}{
+			{"selection", &ui.ChangeEvent{SelectedID: "W2"}}, {"delete-object", nil}, {"tool-wire", nil},
+			{"wire-from", &ui.ChangeEvent{SelectedID: "R1.2"}}, {"wire-to", &ui.ChangeEvent{SelectedID: led + ".anode"}}, {"connect-terminals", nil},
+			{"wire-from", &ui.ChangeEvent{SelectedID: led + ".cathode"}}, {"wire-to", &ui.ChangeEvent{SelectedID: "V2.negative"}}, {"connect-terminals", nil},
+		} {
+			if err := smokeUI(s, action.id, action.e); err != nil {
+				return err
+			}
+		}
+		return nil
+	}); err != nil {
+		return err
+	}
+	if _, err := s.service.Wait(ctx); err != nil {
+		return err
+	}
+	_, err = waitNativeViewport(ctx, a, s, func(state workbench.Snapshot) bool {
+		return state.Mixed != nil && !state.Mixed.Stale && len(state.Mixed.LEDs) == 1 && state.Mixed.LEDs[0].Current > .021 && state.Mixed.LEDs[0].Current < .023 && state.Mixed.KCLResidual < 1e-10 && math.Abs(state.Mixed.PowerResidual) < 1e-8
+	})
 	return err
 }

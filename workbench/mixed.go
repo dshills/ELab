@@ -310,9 +310,32 @@ func (n *mixedNetwork) solve(guess, old []float64, dt float64, t *Transient, at 
 	return n.solveContext(context.Background(), guess, old, dt, t, at)
 }
 func (n *mixedNetwork) solveContext(ctx context.Context, guess, old []float64, dt float64, t *Transient, at float64) (*mixedState, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
 	result, err := n.newton(ctx, guess, old, dt, t, at)
 	if err == nil {
 		return result, nil
+	}
+	// Preserve the normal starting point and its solution basin. If a cold
+	// nonlinear solve fails, make one bounded retry with only grounded ideal
+	// voltages initialized, avoiding an artificial slow ramp of a fixed rail.
+	if n.nonlinear && len(guess) == 0 {
+		if err := ctx.Err(); err != nil {
+			return nil, err
+		}
+		seed := n.initialConstraintGuess(old, dt, t, at)
+		changed := false
+		for _, v := range seed[:len(n.nodes)] {
+			changed = changed || v != 0
+		}
+		if changed {
+			var seededErr error
+			if result, seededErr = n.newton(ctx, seed, old, dt, t, at); seededErr == nil {
+				return result, nil
+			}
+			err = seededErr
+		}
 	}
 	qs := []Component{}
 	for _, p := range n.c.MixedGraph.Components {
@@ -364,7 +387,15 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 				good = false
 			}
 		}
-		if good && (n.nonlinear || iter > 0) {
+		if good {
+			if iter == 0 {
+				// A small residual is not evidence of a unique operating point.
+				// Check rank with zero RHS without moving an already acceptable
+				// guess or rebuilding all nonlinear device equations a second time.
+				if _, err := linearSolve(a, make([]float64, size)); err != nil {
+					return nil, err
+				}
+			}
 			// A supplied guess can already satisfy KCL/constraints. Apply the
 			// same range guard before accepting it, not only after an update.
 			for _, v := range x[:len(n.nodes)] {

@@ -1,20 +1,20 @@
 {
-  "commit": "42319673ef8dea989b1dd1ff4e7a22a1b7603534",
+  "commit": "82c0c5ec17fd7f90da1a0ac4a26d65a3de8367a4",
   "clean": true,
-  "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+  "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
   "final_prepared_output_counts": {
-    "upstream": 229,
+    "upstream": 232,
     "typesetting": 5
   },
   "recorded": "2026-10-15",
-  "elab_version": "0.93.0",
-  "build_version": "108",
+  "elab_version": "0.94.0",
+  "build_version": "109",
   "local_checkout": "../../Vellum (relative to desktop/go.mod)",
   "tested_go": "go1.27.2 darwin/arm64",
   "initial_sdk_commit": "621aca2da91836631fc05b2a7b97f124d53518dd",
-  "qualification": "validation/linear-network-validation.json",
-  "source_update_review": "validation/floating-dc-sdk-review.json",
+  "qualification": "validation/nonlinear-startup-validation.json",
+  "source_update_review": "validation/nonlinear-startup-sdk-review.json",
   "initial_integration_baseline": "vellum-baseline.json",
-  "status": "Qualified local checkout integration; clean supported distribution remains an open gate. SDK commit, manifest and all 234 prepared outputs are unchanged across this checkpoint.",
+  "status": "Qualified ELab local-checkout integration on the updated macOS event-loop endpoint. Clean supported distribution and full SDK/platform/idle-budget acceptance remain open.",
   "native_dependency_manifest": "drivers/cogent/native/dependencies.json"
 }

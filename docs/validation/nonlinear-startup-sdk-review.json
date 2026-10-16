@@ -1,0 +1,53 @@
+{
+  "reviewed": true,
+  "runtime_update": true,
+  "initial_sdk": {
+    "commit": "42319673ef8dea989b1dd1ff4e7a22a1b7603534",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "qualification_sdk": {
+    "commit": "82c0c5ec17fd7f90da1a0ac4a26d65a3de8367a4",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "changed_sdk_paths": [
+    "docs/development.md",
+    "docs/reports/macos-event-driven-loop/README.md",
+    "docs/reports/macos-event-driven-loop/records/archive-index.json",
+    "docs/reports/macos-event-driven-loop/records/evidence.tar.xz",
+    "docs/reports/macos-event-driven-loop/records/qualification.json",
+    "drivers/cogent/cmd/mainqueue-smoke/main.go",
+    "drivers/cogent/native/dependencies.json",
+    "drivers/cogent/native/patches/nativeidle/0069-macos-event-driven-main-loop.patch",
+    "drivers/cogent/native/patches/nativeidle/original-hashes.json",
+    "drivers/cogent/native/patches/nativeidle/output-hashes.json",
+    "drivers/cogent/prepare_test.py",
+    "scripts/check.sh",
+    "specs/native-dispatch.md",
+    "specs/windows-services.md"
+  ],
+  "pinned_patch": "drivers/cogent/native/patches/nativeidle/0069-macos-event-driven-main-loop.patch",
+  "patch_sha256": "5ecbd0f213ddb223738baedfb36f90e4ba7db1777490c44306de655c41ed18bd",
+  "prepared_patch_leaves_sha256": {
+    "system/driver/base/app.go": "f7c39f21a905e044e12a5e24f8bb708b26b04d1aaae4f08dfef26c8f7ff914dd",
+    "system/driver/base/helpers.go": "98e64f472e915ffed8878ffbe13d5be52ebce4b82664fa04dd0f76a43c3c559d",
+    "system/driver/desktop/app.go": "32326f74f0c8247766c6f0ccd4e67430991cff0b78f98938a956c0cd1e56a5be",
+    "system/driver/desktop/desktop_darwin.go": "c3150d2976b9e7dc4445c6d3f08e871e4095f33b9220ce0ba9f9909679456617",
+    "system/driver/desktop/native_idle.go": "74944313479981f6dcae212456b5cdfa35cfc6f19b54c9b55e142802d267e31c",
+    "system/driver/desktop/native_idle_vellum_test.go": "357755a442ad819b2d5eb32a229a8ab83e378b4f60c2d17dfe063087c5141b20"
+  },
+  "scope": "External SDK update changes the normal macOS queue/event wait, so prior binary equivalence is not claimed. ELab qualification must use the new prepared endpoint; no SDK files were modified by this task.",
+  "qualification": "nonlinear-startup-validation.json",
+  "limitations": [
+    "ELab package smoke and owned public/transport/performance sessions qualify their exercised paths on this workstation, not all Vellum native-loop/platform/idle-budget acceptance."
+  ]
+}

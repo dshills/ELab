@@ -10,9 +10,9 @@ Resistors, finite-resistance switches, fixed potentiometer segments, ideal capac
 
 The solver applies a full correction to these equations, checks residuals and voltage bounds, and publishes only an accepted result. Even zero excitation now requires a matrix solve to check rank; a zero residual alone does not establish a unique operating point. A private-kernel regression checks a singular floating resistor rather than accepting an arbitrary zero-voltage state.
 
-LED, silicon-diode, NPN, NMOS and PMOS circuits retain nonlinear damping. Unknown future device kinds conservatively retain it too. Nonlinear high-voltage convergence remains separate work; this change does not replace semiconductor models with linear approximations or promise that every circuit inside the voltage bounds converges.
+LED, silicon-diode, NPN, NMOS and PMOS circuits retain nonlinear damping. Unknown future device kinds conservatively retain it too. [Nonlinear startup](nonlinear-startup.md) adds one grounded-constraint fallback after a failed cold attempt; this change does not replace semiconductor models with linear approximations or promise that every circuit inside the voltage bounds converges.
 
-The iteration ceiling stays **100**, nonlinear node updates stay capped at **0.2 V**, and accepted nodes stay within **±30 V**. Component/source/node capacities, cancellation, residual tests, integration error control and per-output attempt/time limits stay in place. A 31 V stack now reaches the range check directly and refuses with that explanation instead of consuming damped iterations and reporting generic nonconvergence.
+The per-attempt iteration ceiling stays **100**, nonlinear node updates stay capped at **0.2 V**, and accepted nodes stay within **±30 V**. Component/source/node capacities, cancellation, residual tests, integration error control and per-output attempt/time limits stay in place. A 31 V stack now reaches the range check directly and refuses with that explanation instead of consuming damped iterations and reporting generic nonconvergence.
 
 ## Shared commands and saved results
 

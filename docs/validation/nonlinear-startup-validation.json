@@ -1,0 +1,190 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.94.0",
+  "build_version": "109",
+  "binary_sha256": "640575ad9bd7bd63f38e75876a6c04af056ebc9ecf57eea28541c06c94206b40",
+  "agent_binary_sha256": "3ef586fd79843979cb71d6ac387846ba6c4dad2e03d459e158bb0b834be9ced4",
+  "prior_bundle": "build/ELab-before-startup.app",
+  "prior_binary_sha256": "a887930be006c4de145d0ecccb237680d8177624256f5f99f9c29e05e797966a",
+  "bundle_files_compared": 3,
+  "bundle_manifest_sha256": "037840d5ebf4a9e1b25cbc16cd8a59d76d266aa552e5f9f9190b1fd3c7afcb2c",
+  "sdk_initial": {
+    "commit": "42319673ef8dea989b1dd1ff4e7a22a1b7603534",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "sdk_qualification_before": {
+    "commit": "82c0c5ec17fd7f90da1a0ac4a26d65a3de8367a4",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "sdk_after": {
+    "commit": "82c0c5ec17fd7f90da1a0ac4a26d65a3de8367a4",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "workstation": {
+    "system": "Darwin",
+    "machine": "arm64",
+    "os": "26.6.2",
+    "go": "go version go1.27.2 darwin/arm64",
+    "hw.model": "Mac16,11",
+    "hw.logicalcpu": "14",
+    "hw.memsize": "68719476736"
+  },
+  "changed_sources_sha256": {
+    "workbench/mixed.go": "e0ebdbf894f16b91c750910afb00f4b230ffaf61c730492dddf263eb4423b18c",
+    "workbench/mixed_startup.go": "2a220eee61dba78a2920b60503d86fa4908bdcae5684e5cc6a9f6705a4f81c85",
+    "workbench/constraint_seed_test.go": "a712cb36e63508fc896c08c68236f70165fba01f7a19a307947ab6583f997857",
+    "workbench/pulse_timing_test.go": "037bd423b405fcc9c1ba436aef55e322e5297e17b2b4d3a981ffe1e2d0331b8f",
+    "workbench/value_capabilities.go": "61344e371f3596fcf4b4b9c7b75d911a25e7ea5e4397fdfc98841a22a0bad4f6",
+    "desktop/linear_network_test.go": "abb341d482f8c05aee49a7b2970f91f6c447c2525d845f06376c63ea62140521",
+    "desktop/split_supply_smoke.go": "d40d1aab00cec6c2c54251d867b726a1cc371390b8abc505d92d3fa7b6fe18f5",
+    "scripts/constraint-start-demo.py": "179aa0f05d27f09e613e8e27e3585310776966b267882639befed9d994f8bea9"
+  },
+  "observations": {
+    "led24": {
+      "rail_v": 24,
+      "led_voltage_v": 2.2061166588035577,
+      "current_a": 0.021793883341236546,
+      "independent_current_a": 0.02179388334119657,
+      "kcl_residual_a": 4.0103337317631826e-14,
+      "power_residual_w": -8.848477506262498e-14
+    },
+    "led30": {
+      "rail_v": 30,
+      "led_voltage_v": 2.224643645887407,
+      "current_a": 0.02777535635411269,
+      "independent_current_a": 0.027775356354112588,
+      "kcl_residual_a": 1.0061396160665481e-16,
+      "power_residual_w": -2.220446049250313e-16
+    },
+    "floating_diagnostics": [
+      {
+        "code": "mixed-initialize-failed",
+        "message": "singular mixed circuit; check floating nodes or inconsistent ideal constraints",
+        "object_id": ""
+      }
+    ],
+    "over_range_diagnostics": [
+      {
+        "code": "mixed-initialize-failed",
+        "message": "mixed node voltage exceeds the \u00b130 V educational model range",
+        "object_id": ""
+      }
+    ],
+    "repaired_gate_v": 0,
+    "reopened_recordings": 1,
+    "capacitor_start_v": 1.25,
+    "capacitor_after_100us_v": 2.2246436313587488
+  },
+  "backend_performance": {
+    "in-process": {
+      "cases": 10,
+      "repetitions": 20,
+      "targets_passed": true,
+      "maximum_fresh_p95_ms": 2.461709,
+      "maximum_verify_ms": 44.949000000000005
+    },
+    "headless-stdio": {
+      "cases": 10,
+      "repetitions": 20,
+      "targets_passed": true,
+      "maximum_fresh_p95_ms": 6.169583,
+      "maximum_verify_ms": 48.931292
+    },
+    "headless-socket": {
+      "cases": 10,
+      "repetitions": 20,
+      "targets_passed": true,
+      "maximum_fresh_p95_ms": 6.461667,
+      "maximum_verify_ms": 55.244333
+    },
+    "native-socket": {
+      "cases": 10,
+      "repetitions": 20,
+      "targets_passed": true,
+      "maximum_fresh_p95_ms": 8.142042,
+      "maximum_verify_ms": 49.855292000000006
+    }
+  },
+  "checks": [
+    "Failing-before 24 V nonlinear LED startup regression passes; independent 24/30 V inverse-Shockley load lines and current/power conservation match",
+    "Cold retry propagates only grounded ideal-source/startup-capacitor constraints; unanchored groups and branch currents remain unguessed; pulse-edge stimulus side matches MNA",
+    "Ordinary successful PMOS startup and accepted warm continuation keep their path; 31 V still refuses within retained node limits",
+    "Previous .93 executable demonstrably accepted floating MOS gates at zero excitation; current kernel/public workflows refuse singular state and explicit grounding repairs it",
+    "Initial zero residual gets a rank-only solve without moving an acceptable guess or reevaluating nonlinear equations; per-attempt 100 iterations/0.2 V and integration limits remain",
+    "Pulse-corner regression measures actual input current and independent 5 V/RB jump while retaining capacitor continuity",
+    "Final lint/import/root/native race/vet, Python compile, source-ledger verification and whitespace checks pass",
+    "Native blank construction and real packaged callbacks produce 24 V LED loading; final packaged GPU/UI/protected-close smoke passes on new SDK",
+    "Public native/headless observations, detailed discovery and SVG/PNG bytes match; stale 31 V refusal/undo, captured saved 30 V reopen and explicit capacitor startup/charging pass",
+    "Four adapters pass three workflow comparisons and 294 frozen electrical checks each with three-level flasher refinement; five fresh/warm backend cases with 20 repetitions each meet existing targets",
+    "Actual .93 project reopens with graph/recordings unchanged and original file bytes preserved",
+    "SDK event-loop update reviewed; final qualification uses clean 82c0c5e and verified 232 upstream +5 typesetting final prepared outputs; no SDK edits by this task",
+    "Canonical package matches candidate bytes/modes/version; prior .93 preserved; all owned qualification processes exited"
+  ],
+  "corrections": [
+    "Trying the grounded seed first regressed PMOS startup/sweep basins. The final implementation retains the ordinary attempt and retries grounded constraints only after a failed nonlinear cold start.",
+    "A pulse test required unequal LED current across a mixed base-capacitor edge; its previous inequality depended on numerical roundoff. Final evidence uses the input branch, a nontrivial current jump and independent resistor law.",
+    "An intermediate native race run exceeded the retained 100 ms integration budget at a flasher sample. The initial rank implementation redundantly moved a converged guess and rebuilt nonlinear equations. Final rank-only validation preserves the guess and avoids that work; limits/tests were not relaxed. Full native checks and repeated final backend timing pass.",
+    "Vellum advanced externally during qualification from 4231967 to 82c0c5e, including runtime macOS main-loop changes. Earlier integration was not treated as equivalent: final full checks/build/public/native smoke/electrical/performance qualification use the new clean endpoint."
+  ],
+  "limitations": [
+    "One additional bounded Newton attempt is now permitted after a failed ordinary nonlinear cold start. Each attempt remains capped at 100 iterations; this is not a claim of unchanged total cold-start work.",
+    "Grounded-constraint seeding does not guarantee arbitrary nonlinear/reference-shifted operating points or real-device/SPICE/PVT accuracy; curated model equations, file/engine identities and ratings limitations remain.",
+    "Existing frozen suite covers its LED/RC/NPN families and flasher refinement; separate load-line, MOS, rank and capacitor-startup tests/public workflows cover this addition. Capacitor charge checks are not an independent full transient-accuracy study.",
+    "Backend timing is transport-inclusive on this workstation for five reference circuits, fresh/warm, 20 repetitions; it does not establish visible UI latency, capacity/difficult-circuit or all-hardware targets. OS caches were not purged and global machine inactivity was not asserted.",
+    "Direct PNG inspection found D1 label crowding its outward arrows; general label clearance/readability remains a rendering follow-up.",
+    "Clean distribution, complete mounted typing/IME/input/accessibility, full SDK/platform/idle-budget, participant and physical-printer acceptance remain open; P0 stays 17 implemented/10 partial."
+  ],
+  "artifacts": [
+    "docs/nonlinear-startup.md",
+    "docs/validation/nonlinear-startup-native.json",
+    "docs/validation/nonlinear-startup-headless.json",
+    "docs/validation/nonlinear-startup-discovery.json",
+    "docs/validation/nonlinear-startup-floating-gates-before.json",
+    "docs/validation/nonlinear-startup-conformance.json",
+    "docs/validation/nonlinear-startup-legacy-reopen.json",
+    "docs/validation/nonlinear-startup-sdk-review.json"
+  ],
+  "build_evidence_sha256": {
+    "build/constraint-seed-094/before.log": "e4f7b6f01774be18395c5df9d8dc77222fa51b3e6fc478dc8371b1693468d88c",
+    "build/constraint-seed-094/after.log": "80c920c8aa4b959133e4e937078a90b703d9ad63413dbb495324f97db835ed94",
+    "build/constraint-seed-094/after-preserved-start.log": "9b5a19c3bf1c6f640c76bf7e806d65ab766aa3d050f502d6be3c56ea0e74f8a8",
+    "build/constraint-seed-094/core-focused.log": "febee425492fdd0685136a3e98979f3cb7b52cf5b50ba3803421d256058f0322",
+    "build/constraint-seed-094/native-focused.log": "5c45d39b3656b0c6f3dd53fc42e14a910fc3e209f6a774686fa6590fc087771f",
+    "build/constraint-seed-094/check.log": "e94072178c964ec31999206957c91fee31fa7d8965610c00305cf34f3d4efb7d",
+    "build/constraint-seed-094/edge-focused.log": "af01c2fe71a9ee755111317b18fcb7ac9af2d5fdbb39c98cc0eb5bf73171bb10",
+    "build/constraint-seed-094/check-final.log": "233e69bc9ab196a471fa017236eb4d319fda36b052d487e9725b74c6ed3661bc",
+    "build/constraint-seed-094/rank-focused.log": "4bd5b2f0fa902ab7e44786ee3b6b760e4b426e53b3677f809afed41c26fb3f17",
+    "build/constraint-seed-094/check-release.log": "340f008c1b021acb58d8ddc5cd513055b44ad0ff819956d18edeb012e0ad76b2",
+    "build/constraint-seed-094/build.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/constraint-seed-094/package.log": "f95909004f60382ad80c35b9961a33844a39158f930cb3fbc9829d3dd3ceef30",
+    "build/constraint-seed-094/headless.log": "be627b0e792cfd7e8c8fe067f20a26099704cf1a98803d071745a0cbb32fb061",
+    "build/constraint-seed-094/native.log": "bb859f389b7fd52cc2091c0cd89ed33daae68b311330c2acd6abc000c3b0f918",
+    "build/constraint-seed-094/smoke.log": "e4e911083df94d4d84eaeb5923a14bac5a0caa632c6a4c6caa8fcdb744ca0869",
+    "build/constraint-seed-094/conformance.log": "0653934f5f9fd5a31fd1561b95462b23fe45f262703258e7585d8b5a554dcc81",
+    "build/constraint-seed-094/sdk-before.json": "43a477a732d8ccd8a9cf0c8b4977371ed5cabcdf3a54ac45438a4753ec742b83",
+    "build/constraint-seed-094/sdk-final-before.json": "a5a70c36b0a8503ee04d93ac6f989cd755c92f818147bc206ac3effd6a62d489",
+    "build/constraint-seed-094/sdk-after.json": "a5a70c36b0a8503ee04d93ac6f989cd755c92f818147bc206ac3effd6a62d489",
+    "build/constraint-seed-094/workstation.json": "3d873aa4588a4460210e671d6eaa87d44c413114a052ab21ad2659049a82c23c",
+    "build/constraint-seed-094/promotion.json": "f666dc3bbf0775d5481b683c69870b5808cf61c67df196c5a38fe5d347efa2ef"
+  },
+  "export_sha256": {
+    "svg": "09879c5e6ec17c913254eecb3d64b568d1317f7c4a1a63dc1046de0e389f9516",
+    "png": "0ef8b46291e4f25872f2e9a3f73172a50160f6b0f20a1c9b1ccba14da5933cad"
+  }
+}

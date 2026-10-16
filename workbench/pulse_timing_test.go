@@ -24,19 +24,32 @@ func TestPulseCornersRetainBothSidesAcrossKernels(t *testing.T) {
 			}
 			left, right := -1., -1.
 			voltage := 0.
+			inputCurrent := Probe{Unit: "A"}
+			for _, part := range graph.Components {
+				if part.Kind == "pulse-source" {
+					inputCurrent.ID = "i:" + part.ID
+				}
+			}
 			for _, p := range kernel.trace.Samples {
 				if math.Abs(p.Time-.15) > 1e-15 {
 					continue
 				}
+				// In the mixed fixture the base capacitor holds VBE across the
+				// edge, so LED/collector current is continuous. The input branch
+				// current must jump; tiny collector roundoff is not edge evidence.
+				current, ok := frameValue(p, inputCurrent)
+				if !ok {
+					t.Fatal("pulse-side input current is absent", inputCurrent.ID)
+				}
 				if p.Input == 5 {
-					left = p.Current
+					left = current
 					voltage = p.CapacitorVoltage
 					if name == "rc" {
 						voltage = p.Voltage
 					}
 				}
 				if p.Input == 0 {
-					right = p.Current
+					right = current
 					if left >= 0 && name != "npn" {
 						v := p.CapacitorVoltage
 						if name == "rc" {
@@ -48,8 +61,14 @@ func TestPulseCornersRetainBothSidesAcrossKernels(t *testing.T) {
 					}
 				}
 			}
-			if left < 0 || right == -1 || left == right {
+			if left < 0 || right == -1 || math.Abs(left-right) < 1e-8 {
 				t.Fatalf("150ms edge omitted a side: left %g right %g", left, right)
+			}
+			if name == "mixed" {
+				rb, _ := graph.Component("RB")
+				if math.Abs(left-right-5/rb.Value) > 1e-10 {
+					t.Fatal("held base voltage violates the input resistor's edge law", left, right)
+				}
 			}
 		})
 	}

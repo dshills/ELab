@@ -36,9 +36,13 @@ func addValueCapabilityDetails(id string, schema map[string]any) bool {
 		schema["x-kind-value-domains"] = domains
 		schema["x-source-reference-rules"] = map[string]any{"dc-source": "Value is positive minus negative; either terminal may be offset from ground in a referenced network", "waveform-sources": "Negative terminal remains directly grounded", "network": "A common ground reference and independent source/capacitor constraints remain required; accepted node voltages stay within ±30 V and existing solve/work limits"}
 		schema["x-network-numerics"] = map[string]any{
-			"linear_correction":     "Full affine MNA correction; even zero excitation checks matrix rank before acceptance",
-			"nonlinear_correction":  "Damped Newton; LED, silicon diode, NPN, NMOS, PMOS and unknown future devices retain damping",
-			"max_newton_iterations": maxMixedNewtonIterations, "max_nonlinear_node_update_v": maxMixedNewtonDelta,
+			"linear_correction":               "Full affine MNA correction; even zero excitation checks matrix rank before acceptance",
+			"nonlinear_correction":            "Damped Newton; LED, silicon diode, NPN, NMOS, PMOS and unknown future devices retain damping",
+			"cold_start_fallback":             "After a failed ordinary nonlinear cold start, retry once with only voltages fixed by ideal paths to ground initialized; startup capacitors participate only at dt=0. No substitute device equations or accepted result. Warm guesses retain their path.",
+			"rank_check":                      "Every Newton attempt solves its matrix before accepting even a zero-residual initial guess; floating insulated gates are not assigned an arbitrary zero",
+			"iteration_budget":                "100 iterations per Newton attempt; one additional grounded-constraint cold-start retry; existing per-NPN seed retries remain. Cancellation and integration attempt/time budgets still apply.",
+			"max_grounded_constraint_retries": 1,
+			"max_newton_iterations":           maxMixedNewtonIterations, "max_nonlinear_node_update_v": maxMixedNewtonDelta,
 			"max_abs_node_voltage_v": maxMixedNodeVoltage,
 			"time_integration":       "Existing backward-Euler/adaptive error and per-output attempt/time budgets; no simplified model substitution",
 		}

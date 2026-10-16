@@ -103,3 +103,6 @@ The 0.92.0 floating-DC checkpoint reviews native DC-source/vertical-resistor lab
 
 
 The 0.93.0 linear-network checkpoint changes backend solve strategy and detailed numerical discovery without changing native production routes or source hashes. The source ledger verifies unchanged: 51 files /384 sites /161 public IDs /131 source routes. Native test/smoke construction now includes a 24 V stack; scope-wheel smoke waits for positioned overflow parameters rather than the newly allocated slider’s default range. These validation changes do not establish broader physical-input/accessibility acceptance.
+
+
+The 0.94.0 nonlinear-startup checkpoint changes backend startup/rank checks and numerical discovery, with no native production route/hash changes. The unchanged 51-file /384-site /161-ID /131-route ledger verifies. Native construction and extended split-supply smoke insert a generic LED into the 24 V circuit using existing placement/wiring/value commands. This source/test scope does not establish complete physical-input/accessibility acceptance.
