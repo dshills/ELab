@@ -82,6 +82,7 @@ func runNative() (runErr error) {
 	}
 	defer a.Close()
 	screen := &screen{app: a, service: service, commands: command.New(), displayStarted: time.Now()}
+	screen.requestKeyboardFocus("part-search")
 	view := canvas.Viewport{Width: 800, Height: 500, Zoom: 1}
 	renderer := &cogent.MeshCanvas{Owner: a, Window: "main", View: &view, Prepare: func(v canvas.Viewport) (*canvas.Mesh, error) { return screen.mesh(v) }, OnError: func(err error) { log.Print("schematic: ", err) }}
 	screen.drawing = &commandCanvas{MeshCanvas: renderer, screen: screen}
@@ -314,6 +315,15 @@ func (s *screen) registerCommands() {
 				}
 				if entry.id == "drawing.cancel" {
 					s.requestKeyboardFocus("part-search")
+				}
+				if entry.id == "simulation.pause" || entry.id == "simulation.resume" {
+					// The header replaces this button when the clock changes.
+					// Continue keyboard focus once, as for completed placement.
+					target := "simulation.pause"
+					if r.Result.(workbench.Snapshot).Paused {
+						target = "simulation.resume"
+					}
+					s.requestKeyboardFocus(target)
 				}
 				return nil
 			},

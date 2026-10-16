@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-16",
+  "review": "research/ui-audit/keyboard-inspector/README.md",
+  "screenshots_sha256": {
+    "research/ui-audit/keyboard-inspector/01-blank.png": "21eab096f431047f289d3ff70a1a41ad1876d558ed1989e1ef867bf74114e2cd",
+    "research/ui-audit/keyboard-inspector/02-search.png": "f297196ad60a31038d0b5d68419954f12d137c20c89f5c07fe424cc310b66718",
+    "research/ui-audit/keyboard-inspector/03-selected-source-before.png": "d1bcb44c611d8f66d0cd530f559ee3aae1dc1a6af3c3bd5752e7b1e7d8659afd",
+    "research/ui-audit/keyboard-inspector/04-value-tab-reveal-before.png": "44e250d1648b43b6b8bf49720a66a948f98c3ec00f7d3dbfbdcb326e93997730",
+    "research/ui-audit/keyboard-inspector/05-startup-focus-after.png": "11d7c72752a0b21254ec872e9f02ca311822ba4f417ad2f1d1f33f27757f39e2",
+    "research/ui-audit/keyboard-inspector/06-source-editor-after.png": "29f2c070cf81e07d7749a7de643fd937827dcf07defcc0c9934eff183bd27dbe",
+    "research/ui-audit/keyboard-inspector/07-value-applied-after.png": "f8a21898c42559502d03eb2b8ba2be51904a4811edfbd355c37f04b76d203a9c",
+    "research/ui-audit/keyboard-inspector/08-pause-focus-after.png": "4074fb6c1c9f0fe6b9113d9323ee354751f49f41bed9126980fdd9e1c3077d65",
+    "research/ui-audit/keyboard-inspector/09-resume-tab-after.png": "fcd5bd540939a39dc549c73c73ab5e0a41190105f20418c99564159436ae6e7f",
+    "research/ui-audit/keyboard-inspector/10-live-wiper-after.png": "fe6dfe8012ec6bfb29da2cc259ec60ecd648c352ec9ac483a81adc0d5d589e73",
+    "research/ui-audit/keyboard-inspector/11-exact-wiper-commit-after.png": "76f3bbd14cfca781806f38ca2ab690c0e1c18f0a37afc56f776c5231f60c5e30",
+    "research/ui-audit/keyboard-inspector/12-pending-switch-after.png": "7765bb930ba40cc08b7dd4916764bb16b409d93c4582a0ecb60f51198912261c",
+    "research/ui-audit/keyboard-inspector/13-switch-coalesced-after.png": "37cfc334a3071c271cd20f215086f1738a9700f9f41206694f8452be0986d0bf"
+  },
+  "first_candidate_binary_sha256": "e6431af8a39fd135b20b701cfef7e938e78c16053d72f216930c62342974750e",
+  "final_candidate_binary_sha256": "15dc46883007ca47aff3a0849b80fcd2272102a58612491ae68fb366a05ddf54",
+  "scope": "Screenshots 01-04 baseline .99; 05-07 first .100 inspector candidate; 08-13 final .100 with Pause/Resume focus repair. Inspector layout source unchanged between .100 candidates.",
+  "observations": [
+    "Fresh window focuses Search; actual alias search and default-position source placement work through keyboard",
+    "Value/Apply visible after placement; keyboard applies 3.3 V and Cmd+Z restores 5 V with public actor-attributed inspection",
+    "Individually observed Pause and Resume continue focus to replacement, with next Tab to Search",
+    "Final mounted unchanged wiper attempt preserves exact stored value and physics/history; actual switch keyboard actuation coalesces pending state"
+  ],
+  "limits": [
+    "Fast dependent key batching was inconclusive; no visible latency bound measured",
+    "Live RC fixture is constructed by public agent commands, not a complete keyboard RC build",
+    "Long explanation/reading text clips in the narrow inspector; primary controls fit but complete responsive label layout remains open",
+    "CUA accessibility tree omits several visible inspector controls even while Tab reaches them; raw AX capture retained in build evidence",
+    "Raw pointer/wheel, screen-reader, full typing/IME/focus/dialog restoration and participant acceptance remain unqualified"
+  ]
+}

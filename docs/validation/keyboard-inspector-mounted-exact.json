@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "attempt": "Actual native NumberField was reached by Tab and Return was pressed without editing its displayed 12.345679 percent. Public state afterward retains the precise fraction and all listed invariants.",
+  "stored_fraction": 0.12345678912345,
+  "unchanged_fields": [
+    "components",
+    "wires",
+    "document",
+    "undo_entry",
+    "redo_entry",
+    "run_id",
+    "electrical_revision",
+    "transient",
+    "mixed",
+    "input_work",
+    "actuation_revision"
+  ],
+  "limitations": "This observes the physical unchanged-editor attempt, not whether the framework emitted a no-op Change event; the real callback regression separately covers that event."
+}

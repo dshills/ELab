@@ -1,0 +1,116 @@
+{
+  "passed": true,
+  "date": "2026-10-16",
+  "app_version": "0.100.0",
+  "build_version": "115",
+  "binary_sha256": "15dc46883007ca47aff3a0849b80fcd2272102a58612491ae68fb366a05ddf54",
+  "agent_binary_sha256": "a4e737113de926e46919764023fdbd788edc9977670971d4320a1c99a4883900",
+  "prior_bundle": "build/ELab-before-keyboard-inspector.app",
+  "prior_binary_sha256": "b0ec8261b976b30b3e629a116775243efef48ea112ad5cbc23f7316711f1e828",
+  "bundle_files_compared": 3,
+  "bundle_manifest_sha256": "cab65d223575d7a6c25610f8ab2406586252e37db7c7918ee078ef1b660c4f87",
+  "sdk_before": {
+    "commit": "cebae61a01b9ca1d5f71beacd9d60ad5fd853fa7",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "sdk_after": {
+    "commit": "cebae61a01b9ca1d5f71beacd9d60ad5fd853fa7",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "desktop/main.go": "7209b25dc09a41e69a808e6ff6962d7d18294a60769644570fa8ecd78c15c257",
+    "desktop/view.go": "4d297528894bbc9138f74df9660b9fb528ca1013492413064fbb49ca2a96d662",
+    "desktop/component_inspector.go": "428e8bab26d5c9feedd4e9fb87a2468fe7d3cfae1136ea3e287cb506d2add6b5",
+    "desktop/simulation_focus_test.go": "dc978e17cba079fbf0d14e59b48fe90e0161928c8eb4fecfe47805c0bb3c47b3"
+  },
+  "native_source_review": {
+    "sources": 53,
+    "sites": 384,
+    "public_commands": 161,
+    "source_routes": 131,
+    "added_source": "desktop/component_inspector.go",
+    "changed_sources": [
+      "desktop/main.go",
+      "desktop/view.go"
+    ],
+    "ingress_semantic_multiset_unchanged_except_navigation_captions": false,
+    "review": [
+      "Selected component builder moved with existing command IDs, arguments and rendered binding; primary editing controls reordered ahead of summaries/descriptions",
+      "Navigation retains Back/Next/Center commands and accessibility names while sharing one row",
+      "Native initial Search focus is one sequence request; successful UI Pause/Resume requests replacement button focus once; no agent/domain/model behavior changed"
+    ],
+    "scope": "Source review, not exhaustive mounted runtime or accessibility coverage",
+    "direct_ingress_and_command_sets_unchanged": true,
+    "registry_router_change": "One existing command registry callback adds only a successful-native-Pause/Resume focus request after the shared invoke. Removing that explicit focus-only block and normalizing two navigation captions makes the entire source-site semantic multiset identical."
+  },
+  "public_evidence": "docs/validation/keyboard-inspector-public.json",
+  "checks": [
+    "Selected component builder extracted without changing commands/parameters or rendered guard binding; main edits precede whole-network and longer descriptive content; Back/Next/Center fit in one row in observed default window",
+    "Fresh app requests Search once; actual keyboard alias search, source placement, unit-bearing 3.3 V draft/apply and Cmd+Z to 5 V observed and publicly inspected with user attribution",
+    "Observed native Pause replacement loses focus before repair; regression fails before and passes after. Successful UI Pause/Resume requests replacement focus once; redraw does not reissue and unavailable command preserves focus/clock",
+    "Final individually observed physical Pause/Resume actions focus their replacement; next Tab reaches Search. Fast dependent batches were inconclusive and excluded from this claim",
+    "Final public-client-built RC fixture has mounted wiper fields visible; unchanged Return attempt preserves agent-set .12345678912345 and graph/physics/history. Callback test separately covers an emitted no-op event",
+    "Final physical Tab/Space switch actuation coalesces pending-open back to applied-closed, with user history attribution and no accepted time/charge/run/electrical change",
+    "Final serialized lint/import/root/native race/vet and build pass; focused callback checks, source ledger, PRD coverage and whitespace pass. Native race package reports 83.260 seconds",
+    "Packaged GPU/UI/lifecycle smoke passes; all four adapters pass three LED/RC/NPN reference circuits; all owned visual/smoke/reference processes exited",
+    "Fresh native/headless actuation observations and SVG/PNG bytes match; identical retained .99 reports and hash-pinned discovery reused losslessly. Four-adapter reference workflows reuse pinned full .98 witness with only three captured timestamp replacements",
+    "SDK clean/unchanged at cebae61 with all 237 final prepared outputs verified; canonical/candidate/build bytes, files/modes and .100/115 metadata match; .99 bundle preserved"
+  ],
+  "corrections": [
+    "First full gate correctly rejected source-ledger drift after the extraction. Reviewed new source hashes and source-site changes, regenerated the ledger, and reran the full gate successfully.",
+    "Earlier native session had preceding keyboard clock actions and one extra run identity in export metadata. Its rendered SVG was unchanged, but bytes appropriately differed. A new untouched native session was run for exact export parity.",
+    "Initial evidence normalizer accounted for moved sites and button captions but initially omitted the new registry focus-only block. Final review retains the full source hashes and explicitly reviews that block; normalized complete multiset now matches."
+  ],
+  "limitations": [
+    "Long explanation/readout lines still clip in the narrow inspector. Primary editing controls and three navigation buttons fit in observed cases; complete responsive text layout remains a follow-up.",
+    "CUA accessibility tree omits several visible selected-component fields/labels even while keyboard Tab reaches them; raw observation retained. This is not screen-reader or complete semantic-control acceptance.",
+    "Physical input covers a source edit path plus bounded RC actuation; no full keyboard RC construction/plot/save/recovery, pointer/wheel, IME/dialog restoration or universal focus claim.",
+    "Native focus continuation follows successful human command invocation. Agent/domain behavior and numerical/model/file APIs are unchanged; no exhaustive agent-induced focus/lifecycle acceptance.",
+    "No visible latency, participant, clean distribution, full platform or physical-printer qualification. P0 remains 17 implemented/10 partial. Electrical/performance suites from the previous numerical checkpoint were not repeated for this layout/focus slice."
+  ],
+  "artifacts": [
+    "docs/keyboard-construction.md",
+    "research/ui-audit/keyboard-inspector/README.md",
+    "docs/validation/keyboard-inspector-conformance.json",
+    "docs/validation/keyboard-inspector-mounted-exact.json",
+    "docs/validation/keyboard-inspector-mounted-switch.json",
+    "docs/validation/keyboard-inspector-public.json",
+    "docs/validation/keyboard-inspector-visual-review.json"
+  ],
+  "build_evidence_sha256": {
+    "build/keyboard-inspector-100/native-focused.log": "e86aad53ed3d26f747c00a054ecfb2588eb89fc2a1fda1ebd9291c2c5c6372aa",
+    "build/keyboard-inspector-100/native-repaired.log": "3ca2064f436f0aeb2fc3d5f278b28e9da3792de7854732fc4556633d6a685798",
+    "build/keyboard-inspector-100/pause-focus-before.log": "5b83bbd22d1dfef523fba561640a795ce2ef5118579d3f09a1b9a94a65a892b1",
+    "build/keyboard-inspector-100/check-final.log": "79a9d669a5f52ba78ce35a53b03e16d9b833cdda1be86e5333101eac313e619c",
+    "build/keyboard-inspector-100/check-reviewed.log": "74464762458662233d6b5f63a3b7dafe43c50c8fa3470c0d6d7ae433afdc9156",
+    "build/keyboard-inspector-100/build-reviewed.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/keyboard-inspector-100/package-reviewed.log": "beb505f390cc853e9013ee655821866e19f062de294f940eceeb79129d023fe7",
+    "build/keyboard-inspector-100/smoke.log": "bf2572287ef811851ba32a89f0b971947d0d9c057a6af50a12a5f80764f05f73",
+    "build/keyboard-inspector-100/conformance.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/keyboard-inspector-100/ui-inventory-final.json": "607b7465c001032ad5319e2ebb4bc283c7fa7c4e14a42e974cbe8b807cb69ee8",
+    "build/keyboard-inspector-100/ui-inventory-review.json": "105091a7c589cc2793e37033730d4f45092d2ea4bce15dfd8b3d0b2cf7f82646",
+    "build/keyboard-inspector-100/sdk-before.json": "90fade6d47869cbf391332d029da3869bfab84701bf1d279b943a9c7aea442bf",
+    "build/keyboard-inspector-100/sdk-after.json": "90fade6d47869cbf391332d029da3869bfab84701bf1d279b943a9c7aea442bf",
+    "build/keyboard-inspector-100/baseline-state.json": "b0f099c45dabaead443cf1bcf4d0064fe837e66b43a8d6350c680581bee932e2",
+    "build/keyboard-inspector-100/source-3v3.json": "051f744a25e70bef05e9211bb27e4ecfaa4b994ef26daad47d0bcb07112dcf65",
+    "build/keyboard-inspector-100/pause-focus-before.json": "865e5b22e6dc3ed4694da359b8cc36188342369154a49434f3b6ed8a34db7c11",
+    "build/keyboard-inspector-100/exact-before.json": "e5e955837bf92d2b2912e206336e386ae5daf6abe9dcaa09249eabb8be2a4783",
+    "build/keyboard-inspector-100/exact-after.json": "f87dd6fe7f2d05d3e439f4c062e3f60909b5ca628a15beee0f8f1490e3ebfcee",
+    "build/keyboard-inspector-100/final-native-state.json": "c074f24bda6f1a373fc519978dec1004ca2ae9e5c57ba9ffb7984fa78bdccbca",
+    "build/keyboard-inspector-100/live-inspector-ax.txt": "98eac189854bccd0b4783bdd59d7ada0e178f312394b5437f2459bbefeab9d5e",
+    "build/keyboard-inspector-100/native.json": "1912fc04335516de136641c645f6a03e56461edb5a3d4e6dafffd6b96c7101c9",
+    "build/keyboard-inspector-100/native-fresh.json": "4d1e1037ba9cb8078e40f4dd7d13f07ed9714396f344511992d044a98b6452f3",
+    "build/keyboard-inspector-100/headless.json": "1a0e4e2d2d20569dd41bbee42b85c845bd9ac7e93be480acc5d7c67e0639ace7",
+    "build/keyboard-inspector-100/promotion.json": "dc4fa98664d985c569407b1de509875a1faa66679c0d1d0114c25d357ef7d9a6"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "workflows": [
+    {
+      "transport": "headless",
+      "current_run": {
+        "path": "build/keyboard-inspector-100/headless.json",
+        "sha256": "1a0e4e2d2d20569dd41bbee42b85c845bd9ac7e93be480acc5d7c67e0639ace7"
+      },
+      "identical_retained_report": {
+        "path": "docs/validation/actuation-contracts-headless.json",
+        "sha256": "1a0e4e2d2d20569dd41bbee42b85c845bd9ac7e93be480acc5d7c67e0639ace7"
+      }
+    },
+    {
+      "transport": "native",
+      "current_run": {
+        "path": "build/keyboard-inspector-100/native-fresh.json",
+        "sha256": "4d1e1037ba9cb8078e40f4dd7d13f07ed9714396f344511992d044a98b6452f3"
+      },
+      "identical_retained_report": {
+        "path": "docs/validation/actuation-contracts-native.json",
+        "sha256": "4d1e1037ba9cb8078e40f4dd7d13f07ed9714396f344511992d044a98b6452f3"
+      }
+    }
+  ],
+  "discovery": {
+    "path": "docs/validation/actuation-contracts-discovery.json",
+    "sha256": "5fc5c092b820fe22b749c785a33ccd115275e274cf368a62a8b0415e83d41f49",
+    "reconstructed_bundle_sha256": "b8d2d25e92014e166e2e58ea6cd2b018a7a2fd6daa07bcdfaa215c5e85a0dddb"
+  },
+  "scope": "Both workflows rerun on final binaries in fresh sessions; reports are byte-identical to the retained .99 witnesses, so those are reused instead of duplicated. Earlier keyboard session has one extra run identity; its raw evidence remains separate."
+}

@@ -5,6 +5,7 @@
     "desktop/actuation_controls.go": "9b0e8148f7ca32ac2f1802d69411fcd355c2df5b2af4b89df1084d413166ee1e",
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
     "desktop/canvas.go": "4428e114af900449274a074fea9a5a5f7840ddbaaa47cc4f7d5661ff2c418c29",
+    "desktop/component_inspector.go": "428e8bab26d5c9feedd4e9fb87a2468fe7d3cfae1136ea3e287cb506d2add6b5",
     "desktop/component_palette.go": "5d7b83aba4bd8202b899f0168848226f8217a8dd3dbd73d2ff6c8d99b752d3ab",
     "desktop/dc_sweep.go": "6714f9c257faaf1e230e51dbc2c8b31a0d83ad9613eaa47d2de9bf8db495600f",
     "desktop/dc_sweep_canvas.go": "7679c9968c64ec16612baf21c8b31b1b66ac751373eea23f26dc7c81effe3e26",
@@ -19,7 +20,7 @@
     "desktop/keyboard_workflow.go": "42fa8031620577bff9c73eba71954730a71765328b219ab96911ffdbe7a5c883",
     "desktop/layout.go": "342ac81780e410c345b903d982ccae20228e7eff26ce476f4a828c7c3737c958",
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
-    "desktop/main.go": "4679879f1073ea3942ce17b035702f1ca6e361c34fd968e7ac60e7abc1a33a12",
+    "desktop/main.go": "7209b25dc09a41e69a808e6ff6962d7d18294a60769644570fa8ecd78c15c257",
     "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
     "desktop/menus.go": "053c9e831df9be278a2e482b889dfa579913e654b0b37bf915bc911511899f59",
     "desktop/menus_darwin.go": "8ecb12641ae79b167999a2bb2bb8e32b198177fa9b718a11472ceebf4d37e6fe",
@@ -49,7 +50,7 @@
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
     "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
     "desktop/verification.go": "550f32b3d90b99269bce6777233b68e9329b2ae704b5b2fca60a1a368fbab406",
-    "desktop/view.go": "9b188496e9cedf06eb0a9f4a8daefa9cb47f960c62b1bb29b5b5834b9c6d03cf",
+    "desktop/view.go": "4d297528894bbc9138f74df9660b9fb528ca1013492413064fbb49ca2a96d662",
     "desktop/viewport.go": "a0d8a6a6b3577a0a909a0f7b3f339532a5abfde78fcf8a1979fb2e46f5f074cc",
     "desktop/waveforms.go": "73b1b24045b550ac31b25871c5194738a45ea4b6169ff9dd23e14b37467dd85e",
     "desktop/workflow.go": "7e39308677a6eec92663759ffbd61a568e1b87215d6453a31e8eae2bd11a6af0",
@@ -571,6 +572,162 @@
       "expression": "c.screen.invokeAtCommandRevision(\"selection.navigate\", workbench.NavigateParams{Direction: direction, Center: true}, revision, generation)",
       "public_commands": [
         "selection.navigate"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 25,
+      "function": "*screen.componentInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text}) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 25,
+      "function": "*screen.componentInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
+      "public_commands": [
+        "editor.value.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 25,
+      "function": "*screen.componentInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"apply-value\", \"Apply label\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value})",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 37,
+      "function": "*screen.componentInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text}) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 37,
+      "function": "*screen.componentInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
+      "public_commands": [
+        "editor.value.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 37,
+      "function": "*screen.componentInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"apply-value\", \"Apply value\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value})",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 46,
+      "function": "*screen.componentInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"r-1k\", \"1 kΩ\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"1k\"})",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 46,
+      "function": "*screen.componentInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"r-2k\", \"2 kΩ\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"2k\"})",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 56,
+      "function": "*screen.componentInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: fmt.Sprintf(\"%.9g V\", e.Number)})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 57,
+      "function": "*screen.componentInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: fmt.Sprintf(\"%.9g V\", e.Number)})",
+      "public_commands": [
+        "capacitor.initial.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 58,
+      "function": "*screen.componentInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"cap-initial-default\", \"Use experiment initial voltage\", \"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: \"default\"})",
+      "public_commands": [
+        "capacitor.initial.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 59,
+      "function": "*screen.componentInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"c-1u\", \"1 µF\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"1uF\"})",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 59,
+      "function": "*screen.componentInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"c-100u\", \"100 µF\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"100uF\"})",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 90,
+      "function": "*screen.componentInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"rotate-part\", \"Rotate 90°\", \"component.rotate\", workbench.IDParams{ID: part.ID})",
+      "public_commands": [
+        "component.rotate"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 90,
+      "function": "*screen.componentInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"duplicate-part\", \"Duplicate\", \"component.duplicate\", workbench.DuplicateParams{ID: part.ID})",
+      "public_commands": [
+        "component.duplicate"
       ],
       "status": "literal-public-route"
     },
@@ -1410,7 +1567,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 99,
+      "line": 100,
       "function": "runNative",
       "kind": "node-CloseRequest",
       "expression": "CloseRequest: screen.requestClose",
@@ -1418,7 +1575,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 210,
+      "line": 211,
       "function": "*screen.invoke",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(id, p, s.service.Snapshot().CommandRevision)",
@@ -1426,7 +1583,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 227,
+      "line": 228,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "request-command-field",
       "expression": "Command: id",
@@ -1434,7 +1591,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 231,
+      "line": 232,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "event-or-dispatch-router",
       "expression": "s.service.Dispatch(context.Background(), request, \"user\")",
@@ -1442,7 +1599,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 252,
+      "line": 253,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.undo\", \"Undo\", \"Meta+Z\"}",
@@ -1453,7 +1610,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 252,
+      "line": 253,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.redo\", \"Redo\", \"Meta+Shift+Z\"}",
@@ -1464,7 +1621,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 253,
+      "line": 254,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"project.clear\", \"New blank\", \"\"}",
@@ -1475,7 +1632,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 253,
+      "line": 254,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"drawing.cancel\", \"Cancel drawing\", \"Escape\"}",
@@ -1486,7 +1643,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 254,
+      "line": 255,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"app.close\", \"Close window\", \"Meta+W\"}",
@@ -1497,7 +1654,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 255,
+      "line": 256,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.current.reset\", \"Reset current example\", \"\"}",
@@ -1508,7 +1665,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 255,
+      "line": 256,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.reset\", \"Load LED example\", \"\"}",
@@ -1519,7 +1676,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 255,
+      "line": 256,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.rc\", \"Load RC example\", \"\"}",
@@ -1530,7 +1687,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 255,
+      "line": 256,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn\", \"Load NPN LED example\", \"\"}",
@@ -1541,7 +1698,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 255,
+      "line": 256,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.switch-npn\", \"Load manual transistor LED switch\", \"\"}",
@@ -1552,7 +1709,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 255,
+      "line": 256,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn-pulse\", \"Load blinking NPN LED\", \"\"}",
@@ -1563,7 +1720,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 255,
+      "line": 256,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.flasher\", \"Load capacitor-timed LED flasher\", \"\"}",
@@ -1574,7 +1731,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 255,
+      "line": 256,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.rectifier\", \"Load diode rectifier and smoothing\", \"\"}",
@@ -1585,7 +1742,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 256,
+      "line": 257,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.pause\", \"Pause\", \"\"}",
@@ -1596,7 +1753,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 256,
+      "line": 257,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.resume\", \"Resume\", \"\"}",
@@ -1607,7 +1764,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 256,
+      "line": 257,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.restart\", \"Restart\", \"\"}",
@@ -1618,7 +1775,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 256,
+      "line": 257,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"view.fit\", \"Fit circuit\", \"\"}",
@@ -1629,15 +1786,15 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 259,
+      "line": 260,
       "function": "*screen.registerCommands",
       "kind": "event-or-dispatch-router",
-      "expression": "s.commands.Register(command.Command{ID: entry.id, Label: entry.label, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts,\n\tAvailable: func() error {\n\t\tif s.fileBusy || s.pendingCommand != \"\" {\n\t\t\treturn fmt.Errorf(\"finish the current file operation first\")\n\t\t}\n\t\tstate := s.service.Snapshot()\n\t\tif state.Closed \u0026\u0026 entry.id != \"app.close\" {\n\t\t\treturn fmt.Errorf(\"session is closing\")\n\t\t}\n\t\tif entry.id == \"example.current.reset\" \u0026\u0026 state.Example == nil {\n\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t}\n\t\tif entry.id == \"edit.undo\" \u0026\u0026 !state.CanUndo {\n\t\t\treturn fmt.Errorf(\"nothing to undo\")\n\t\t}\n\t\tif entry.id == \"edit.redo\" \u0026\u0026 !state.CanRedo {\n\t\t\treturn fmt.Errorf(\"nothing to redo\")\n\t\t}\n\t\treturn nil\n\t}, Execute: func(context.Context) error {\n\t\tif entry.id == \"app.close\" {\n\t\t\ts.requestClose()\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"example.current.reset\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\tif state.Example == nil {\n\t\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t\t}\n\t\t\tgeneration := state.Document.Generation\n\t\t\ts.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"project.clear\" || entry.id == \"example.reset\" || entry.id == \"example.rc\" || entry.id == \"example.npn\" || entry.id == \"example.npn-pulse\" || entry.id == \"example.flasher\" || entry.id == \"example.switch-npn\" || entry.id == \"example.rectifier\" {\n\t\t\ts.requestReplace(entry.id, workbench.ReplaceParams{})\n\t\t\treturn nil\n\t\t}\n\t\tvar p any = struct{}{}\n\t\tif entry.id == \"edit.undo\" || entry.id == \"edit.redo\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\ttip := state.UndoEntry\n\t\t\tif entry.id == \"edit.redo\" {\n\t\t\t\ttip = state.RedoEntry\n\t\t\t}\n\t\t\tif tip != nil {\n\t\t\t\trevision := tip.CommandRevision\n\t\t\t\tp = workbench.HistoryParams{ExpectedEntryRevision: \u0026revision, AllowOtherActor: tip.Actor != \"user\"}\n\t\t\t}\n\t\t}\n\t\tif entry.id == \"view.fit\" {\n\t\t\tp = workbench.FitParams{Width: s.drawing.View.Width, Height: s.drawing.View.Height, FollowViewport: true}\n\t\t}\n\t\tr := s.invoke(entry.id, p)\n\t\tif r.Error != nil {\n\t\t\treturn fmt.Errorf(\"%s\", r.Error.Message)\n\t\t}\n\t\tif entry.id == \"drawing.cancel\" {\n\t\t\ts.requestKeyboardFocus(\"part-search\")\n\t\t}\n\t\treturn nil\n\t},\n})",
+      "expression": "s.commands.Register(command.Command{ID: entry.id, Label: entry.label, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts,\n\tAvailable: func() error {\n\t\tif s.fileBusy || s.pendingCommand != \"\" {\n\t\t\treturn fmt.Errorf(\"finish the current file operation first\")\n\t\t}\n\t\tstate := s.service.Snapshot()\n\t\tif state.Closed \u0026\u0026 entry.id != \"app.close\" {\n\t\t\treturn fmt.Errorf(\"session is closing\")\n\t\t}\n\t\tif entry.id == \"example.current.reset\" \u0026\u0026 state.Example == nil {\n\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t}\n\t\tif entry.id == \"edit.undo\" \u0026\u0026 !state.CanUndo {\n\t\t\treturn fmt.Errorf(\"nothing to undo\")\n\t\t}\n\t\tif entry.id == \"edit.redo\" \u0026\u0026 !state.CanRedo {\n\t\t\treturn fmt.Errorf(\"nothing to redo\")\n\t\t}\n\t\treturn nil\n\t}, Execute: func(context.Context) error {\n\t\tif entry.id == \"app.close\" {\n\t\t\ts.requestClose()\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"example.current.reset\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\tif state.Example == nil {\n\t\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t\t}\n\t\t\tgeneration := state.Document.Generation\n\t\t\ts.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"project.clear\" || entry.id == \"example.reset\" || entry.id == \"example.rc\" || entry.id == \"example.npn\" || entry.id == \"example.npn-pulse\" || entry.id == \"example.flasher\" || entry.id == \"example.switch-npn\" || entry.id == \"example.rectifier\" {\n\t\t\ts.requestReplace(entry.id, workbench.ReplaceParams{})\n\t\t\treturn nil\n\t\t}\n\t\tvar p any = struct{}{}\n\t\tif entry.id == \"edit.undo\" || entry.id == \"edit.redo\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\ttip := state.UndoEntry\n\t\t\tif entry.id == \"edit.redo\" {\n\t\t\t\ttip = state.RedoEntry\n\t\t\t}\n\t\t\tif tip != nil {\n\t\t\t\trevision := tip.CommandRevision\n\t\t\t\tp = workbench.HistoryParams{ExpectedEntryRevision: \u0026revision, AllowOtherActor: tip.Actor != \"user\"}\n\t\t\t}\n\t\t}\n\t\tif entry.id == \"view.fit\" {\n\t\t\tp = workbench.FitParams{Width: s.drawing.View.Width, Height: s.drawing.View.Height, FollowViewport: true}\n\t\t}\n\t\tr := s.invoke(entry.id, p)\n\t\tif r.Error != nil {\n\t\t\treturn fmt.Errorf(\"%s\", r.Error.Message)\n\t\t}\n\t\tif entry.id == \"drawing.cancel\" {\n\t\t\ts.requestKeyboardFocus(\"part-search\")\n\t\t}\n\t\tif entry.id == \"simulation.pause\" || entry.id == \"simulation.resume\" {\n\n\t\t\ttarget := \"simulation.pause\"\n\t\t\tif r.Result.(workbench.Snapshot).Paused {\n\t\t\t\ttarget = \"simulation.resume\"\n\t\t\t}\n\t\t\ts.requestKeyboardFocus(target)\n\t\t}\n\t\treturn nil\n\t},\n})",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/main.go",
-      "line": 289,
+      "line": 290,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})",
@@ -1645,7 +1802,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 293,
+      "line": 294,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ReplaceParams{})",
@@ -1653,7 +1810,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 311,
+      "line": 312,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.invoke(entry.id, p)",
@@ -1661,7 +1818,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 350,
+      "line": 360,
       "function": "*screen.button",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Invoke(context.Background(), id)",
@@ -1669,7 +1826,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 359,
+      "line": 369,
       "function": "*screen.button",
       "kind": "domain-ingress",
       "expression": "s.invoke(id, target)",
@@ -1677,7 +1834,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 362,
+      "line": 372,
       "function": "*screen.button",
       "kind": "node-Activate",
       "expression": "Activate: activate",
@@ -3591,7 +3748,7 @@
       "line": 196,
       "function": "*screen.view",
       "kind": "action-factory",
-      "expression": "s.action(\"selection-previous\", \"Previous\", \"selection.navigate\", workbench.NavigateParams{Direction: \"previous\", Center: true})",
+      "expression": "s.action(\"selection-previous\", \"Back\", \"selection.navigate\", workbench.NavigateParams{Direction: \"previous\", Center: true})",
       "public_commands": [
         "selection.navigate"
       ],
@@ -3613,7 +3770,7 @@
       "line": 201,
       "function": "*screen.view",
       "kind": "action-factory",
-      "expression": "s.action(\"selection-center\", \"Center selection\", \"view.selection.center\", workbench.CenterSelectionParams{ID: state.Selected})",
+      "expression": "s.action(\"selection-center\", \"Center\", \"view.selection.center\", workbench.CenterSelectionParams{ID: state.Selected})",
       "public_commands": [
         "view.selection.center"
       ],
@@ -3621,163 +3778,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 239,
-      "function": "*screen.view",
-      "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text}) }",
-      "status": "requires-binding-review"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 239,
-      "function": "*screen.view",
-      "kind": "domain-ingress",
-      "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
-      "public_commands": [
-        "editor.value.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 239,
-      "function": "*screen.view",
-      "kind": "action-factory",
-      "expression": "s.action(\"apply-value\", \"Apply label\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value})",
-      "public_commands": [
-        "component.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 251,
-      "function": "*screen.view",
-      "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text}) }",
-      "status": "requires-binding-review"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 251,
-      "function": "*screen.view",
-      "kind": "domain-ingress",
-      "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
-      "public_commands": [
-        "editor.value.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 251,
-      "function": "*screen.view",
-      "kind": "action-factory",
-      "expression": "s.action(\"apply-value\", \"Apply value\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value})",
-      "public_commands": [
-        "component.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 260,
-      "function": "*screen.view",
-      "kind": "action-factory",
-      "expression": "s.action(\"r-1k\", \"1 kΩ\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"1k\"})",
-      "public_commands": [
-        "component.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 260,
-      "function": "*screen.view",
-      "kind": "action-factory",
-      "expression": "s.action(\"r-2k\", \"2 kΩ\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"2k\"})",
-      "public_commands": [
-        "component.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 270,
-      "function": "*screen.view",
-      "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: fmt.Sprintf(\"%.9g V\", e.Number)})\n}",
-      "status": "requires-binding-review"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 271,
-      "function": "*screen.view",
-      "kind": "domain-ingress",
-      "expression": "s.invoke(\"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: fmt.Sprintf(\"%.9g V\", e.Number)})",
-      "public_commands": [
-        "capacitor.initial.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 272,
-      "function": "*screen.view",
-      "kind": "action-factory",
-      "expression": "s.action(\"cap-initial-default\", \"Use experiment initial voltage\", \"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: \"default\"})",
-      "public_commands": [
-        "capacitor.initial.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 273,
-      "function": "*screen.view",
-      "kind": "action-factory",
-      "expression": "s.action(\"c-1u\", \"1 µF\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"1uF\"})",
-      "public_commands": [
-        "component.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 273,
-      "function": "*screen.view",
-      "kind": "action-factory",
-      "expression": "s.action(\"c-100u\", \"100 µF\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"100uF\"})",
-      "public_commands": [
-        "component.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 295,
-      "function": "*screen.view",
-      "kind": "action-factory",
-      "expression": "s.action(\"rotate-part\", \"Rotate 90°\", \"component.rotate\", workbench.IDParams{ID: part.ID})",
-      "public_commands": [
-        "component.rotate"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 295,
-      "function": "*screen.view",
-      "kind": "action-factory",
-      "expression": "s.action(\"duplicate-part\", \"Duplicate\", \"component.duplicate\", workbench.DuplicateParams{ID: part.ID})",
-      "public_commands": [
-        "component.duplicate"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/view.go",
-      "line": 301,
+      "line": 215,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"wire-insert-junction\", \"Insert junction on this wire\", \"wire.junction.insert\", workbench.JunctionInsertParams{WireIDs: []string{w.ID}})",
@@ -3788,7 +3789,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 315,
+      "line": 229,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"delete-object\", \"Delete selected\", \"object.delete\", workbench.IDParams{ID: state.Selected})",
@@ -3799,7 +3800,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 340,
+      "line": 270,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"tool-\"+tool, strings.ToUpper(tool[:1])+tool[1:], \"drawing.tool.set\", workbench.ToolParams{Tool: tool})",
@@ -3810,7 +3811,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 343,
+      "line": 273,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"view.fit\", \"Fit\")",
@@ -3821,7 +3822,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 345,
+      "line": 275,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"drawing.cancel\", \"Esc\")",
@@ -3832,7 +3833,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 345,
+      "line": 275,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-open\", \"DC sweep\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
@@ -3843,7 +3844,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 526,
+      "line": 456,
       "function": "*screen.view",
       "kind": "node-Custom",
       "expression": "Custom: s.drawing",
@@ -3851,7 +3852,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 536,
+      "line": 466,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(pause, pauseText)",

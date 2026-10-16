@@ -186,113 +186,27 @@ func (s *screen) view() ui.Node {
 	if selected == "" {
 		selected = "__none"
 	}
-	inspector := []ui.Node{section("inspector-title", "Inspector"), quiet("circuit-capacity", fmt.Sprintf("%d/%d simulated parts · %d/%d drawing objects\n%d/%d nodes (including ground)", state.SimulatedComponents, state.Limits.SimulatedComponents, len(state.Components), state.Limits.DrawingObjects, len(state.Nets), state.Limits.ElectricalNodes)), {ID: "selection", Kind: ui.Selector, Options: objectOptions, SelectedID: selected, Accessibility: ui.Accessibility{Name: "Selected object"}, Change: func(e ui.ChangeEvent) {
+	inspector := []ui.Node{section("inspector-title", "Inspector"), {ID: "selection", Kind: ui.Selector, Options: objectOptions, SelectedID: selected, Accessibility: ui.Accessibility{Name: "Selected object"}, Change: func(e ui.ChangeEvent) {
 		id := e.SelectedID
 		if id == "__none" {
 			id = ""
 		}
 		s.invoke("component.select", workbench.IDParams{ID: id})
 	}}}
-	previous := s.action("selection-previous", "Previous", "selection.navigate", workbench.NavigateParams{Direction: "previous", Center: true})
+	previous := s.action("selection-previous", "Back", "selection.navigate", workbench.NavigateParams{Direction: "previous", Center: true})
 	previous.Accessibility.Name = "Previous schematic object"
 	next := s.action("selection-next", "Next", "selection.navigate", workbench.NavigateParams{Direction: "next", Center: true})
 	next.Accessibility.Name = "Next schematic object"
 	previous.Disabled, next.Disabled = len(objectOptions) == 1, len(objectOptions) == 1
-	center := s.action("selection-center", "Center selection", "view.selection.center", workbench.CenterSelectionParams{ID: state.Selected})
+	center := s.action("selection-center", "Center", "view.selection.center", workbench.CenterSelectionParams{ID: state.Selected})
+	center.Accessibility.Name = "Center selection"
 	center.Disabled = state.Selected == ""
-	inspector = append(inspector, ui.Node{ID: "selection-navigation", Kind: ui.Row, Children: []ui.Node{previous, next}}, center, quiet("selection-navigation-help", "Canvas: Option + ← / →\nHome / End with Option: first / last"))
-	inspector = append(inspector, s.npnControls(state)...)
-	if workbench.IsNetworkAnalysis(state.Analysis) {
-		inspector = append(inspector, section("mixed-title", "Circuit network"), quiet("mixed-help", "Bounded network simulation reports device currents, capacitor state and conservation residuals."))
-		if r := state.Mixed; r != nil {
-			for _, m := range r.MOSFETs {
-				inspector = append(inspector, quiet("mixed-"+m.ID, fmt.Sprintf("%s · %s\nVGS %.3f V · VDS %.3f V\nID %.4g mA · IG %.3g A", m.ID, m.State, m.VGS, m.VDS, m.DrainCurrent*1000, m.GateCurrent)))
-			}
-			for _, q := range r.Transistors {
-				inspector = append(inspector, quiet("mixed-"+q.TransistorID, fmt.Sprintf("%s · %s\nVBE %.3f V · VCE %.3f V", q.TransistorID, q.State, q.VBE, q.VCE)))
-			}
-			for _, c := range r.Capacitors {
-				inspector = append(inspector, quiet("mixed-"+c.ID, fmt.Sprintf("%s %.3f V · %.3f µJ", c.ID, c.Voltage, c.Energy*1e6)))
-			}
-		}
-	}
+	inspector = append(inspector, ui.Node{ID: "selection-navigation", Kind: ui.Row, Children: []ui.Node{previous, next, center}})
+
 	graph := workbench.Graph{Components: state.Components, Wires: state.Wires}
 	part, hasPart := graph.Component(state.Selected)
 	if hasPart {
-		inspector = append(inspector, heading("inspector", part.ID+" · "+part.Name), quiet("part-terminals", "Terminals: "+strings.Join(part.Terminals, ", ")), quiet("part-model-id", "Model: "+part.Model))
-		for _, entry := range workbench.Library() {
-			if entry.Kind == part.Kind {
-				inspector = append(inspector, quiet("part-assumptions", entry.Limitations))
-				break
-			}
-		}
-		inspector = append(inspector, s.partPlotControls(state, part)...)
-		inspector = append(inspector, s.waveformControls(state, part)...)
-		if part.Kind == "potentiometer" {
-			inspector = append(inspector, s.potentiometerControls(state, part)...)
-		}
-		if part.Kind == "switch" {
-			inspector = append(inspector, s.switchControls(state, part)...)
-		}
-
-		if part.Kind == "net-label" {
-			inspector = append(inspector, section("label-title", "Net label · exact matching"), ui.Node{ID: "value-entry", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "Net label name"}, Change: func(e ui.ChangeEvent) { s.invoke("editor.value.set", workbench.DraftParams{Value: e.Text}) }}, s.action("apply-value", "Apply label", "component.set", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value}), quiet("label-connectivity-help", "Names are case-sensitive. GND is a name; connect it to a ground symbol to establish the reference."))
-		}
-		if workbench.IsConnectivityPrimitive(part.Kind) {
-			for _, net := range state.Nets {
-				for _, ref := range net.Terminals {
-					if ref == part.ID+".node" {
-						inspector = append(inspector, quiet("primitive-net", net.ID+"\n"+strings.Join(net.Terminals, " · ")))
-					}
-				}
-			}
-		}
-		if part.Unit != "" {
-			inspector = append(inspector, section("value-title", "Value · "+part.Unit), ui.Node{ID: "value-entry", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "Component value", Help: "Use the shown part bounds and units, such as 2.2k Ω, 500 mV, or 1 µF"}, Change: func(e ui.ChangeEvent) { s.invoke("editor.value.set", workbench.DraftParams{Value: e.Text}) }}, buttonStyle(s.action("apply-value", "Apply value", "component.set", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value}), true))
-			if domain, ok := workbench.ValueDomainForKind(part.Kind); ok {
-				inspector = append(inspector, quiet("value-domain-range", domain.Range), quiet("value-domain-syntax", domain.Syntax))
-				if domain.Relation != "" {
-					inspector = append(inspector, quiet("value-domain-relation", domain.Relation))
-				}
-			}
-
-			if part.Kind == "resistor" {
-				inspector = append(inspector, ui.Node{ID: "presets", Kind: ui.Row, Children: []ui.Node{s.action("r-1k", "1 kΩ", "component.set", workbench.ValueParams{ID: part.ID, Value: "1k"}), s.action("r-2k", "2 kΩ", "component.set", workbench.ValueParams{ID: part.ID, Value: "2k"})}})
-			}
-			if part.Kind == "capacitor" {
-				initial := state.TransientSettings.InitialVoltage
-				if c, _, d := graph.Compile(); d == nil && c.Analysis == "RC transient" && c.TerminalNet[part.ID+".1"] != c.Output {
-					initial = -initial
-				}
-				if part.InitialVoltage != nil {
-					initial = *part.InitialVoltage
-				}
-				inspector = append(inspector, quiet("cap-initial-label", "Initial voltage · pin 1 minus pin 2"), ui.Node{ID: "cap-initial", Kind: ui.NumberField, Number: float32(initial), Numeric: ui.Numeric{Min: -12, Max: 12, Step: .01}, Accessibility: ui.Accessibility{Name: "Capacitor initial voltage"}, Change: func(e ui.ChangeEvent) {
-					s.invoke("capacitor.initial.set", workbench.ValueParams{ID: part.ID, Value: fmt.Sprintf("%.9g V", e.Number)})
-				}}, s.action("cap-initial-default", "Use experiment initial voltage", "capacitor.initial.set", workbench.ValueParams{ID: part.ID, Value: "default"}))
-				inspector = append(inspector, ui.Node{ID: "cap-presets", Kind: ui.Row, Children: []ui.Node{s.action("c-1u", "1 µF", "component.set", workbench.ValueParams{ID: part.ID, Value: "1uF"}), s.action("c-100u", "100 µF", "component.set", workbench.ValueParams{ID: part.ID, Value: "100uF"})}})
-			}
-		} else if part.Kind == "npn" {
-			inspector = append(inspector, quiet("npn-model", "Generic NPN · βF 100 / βR 1\nIS 10 fA · 27°C\nInstantaneous junction response.\nNo heating or switching delay."))
-		} else if part.Kind == "diode" {
-			inspector = append(inspector, quiet("diode-model", "Generic silicon diode · 27°C\nIS 1 nA · n 1.7 · Rs 1 Ω\nReverse leakage included. No breakdown, charge storage or ratings."))
-		} else if part.Kind == "led" {
-			inspector = append(inspector, quiet("led-model", "Generic red LED\nBrightness is illustrative."))
-		}
-		if r := state.Mixed; r != nil {
-			for _, branches := range [][]workbench.BranchResult{r.LEDs, r.Diodes, r.Resistors, r.Sources} {
-				for _, b := range branches {
-					if b.ID == part.ID {
-						status := "Live"
-						if r.Stale {
-							status = "Stale"
-						}
-						inspector = append(inspector, quiet("mixed-selected-reading", fmt.Sprintf("%s · %.6g mA · %.6g V\nPower %.6g mW", status, b.Current*1000, b.Voltage, b.Power*1000)))
-					}
-				}
-			}
-		}
-		inspector = append(inspector, quiet("part-position", fmt.Sprintf("Position %.0f, %.0f · rotation %d°", part.Position.X, part.Position.Y, part.Rotation)), s.action("rotate-part", "Rotate 90°", "component.rotate", workbench.IDParams{ID: part.ID}), s.action("duplicate-part", "Duplicate", "component.duplicate", workbench.DuplicateParams{ID: part.ID}))
+		inspector = append(inspector, s.componentInspector(state, graph, part)...)
 	} else if state.Selected == "" {
 		inspector = append(inspector, heading("nothing-selected", "Explore your circuit"), quiet("inspection-help", "Select a component to edit its value, rotate it, or see its terminals."))
 	}
@@ -316,6 +230,22 @@ func (s *screen) view() ui.Node {
 		n.Style.Foreground = ui.Some(color.NRGBA{R: 168, G: 65, B: 68, A: 255})
 		inspector = append(inspector, n)
 	}
+	inspector = append(inspector, s.npnControls(state)...)
+	if workbench.IsNetworkAnalysis(state.Analysis) {
+		inspector = append(inspector, section("mixed-title", "Circuit network"), quiet("mixed-help", "Bounded network simulation reports device currents, capacitor state and conservation residuals."))
+		if r := state.Mixed; r != nil {
+			for _, m := range r.MOSFETs {
+				inspector = append(inspector, quiet("mixed-"+m.ID, fmt.Sprintf("%s · %s\nVGS %.3f V · VDS %.3f V\nID %.4g mA · IG %.3g A", m.ID, m.State, m.VGS, m.VDS, m.DrainCurrent*1000, m.GateCurrent)))
+			}
+			for _, q := range r.Transistors {
+				inspector = append(inspector, quiet("mixed-"+q.TransistorID, fmt.Sprintf("%s · %s\nVBE %.3f V · VCE %.3f V", q.TransistorID, q.State, q.VBE, q.VCE)))
+			}
+			for _, c := range r.Capacitors {
+				inspector = append(inspector, quiet("mixed-"+c.ID, fmt.Sprintf("%s %.3f V · %.3f µJ", c.ID, c.Voltage, c.Energy*1e6)))
+			}
+		}
+	}
+	inspector = append(inspector, quiet("circuit-capacity", fmt.Sprintf("%d/%d simulated parts · %d/%d drawing objects\n%d/%d nodes (including ground)", state.SimulatedComponents, state.Limits.SimulatedComponents, len(state.Components), state.Limits.DrawingObjects, len(state.Nets), state.Limits.ElectricalNodes)), quiet("selection-navigation-help", "Canvas: Option + ← / →\nHome / End with Option: first / last"))
 	inspector = append(inspector, s.measurementInspector(state)...)
 	inspector = append(inspector, s.pinnedReadingControls(state)...)
 	inspector = append(inspector, s.displayControls(state)...)
