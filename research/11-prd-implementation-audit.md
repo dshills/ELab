@@ -1,6 +1,6 @@
 # PRD implementation audit
 
-Audited against [PRD draft 0.3](07-product-requirements.md), starting at local checkpoint `90927b3` on October 13, 2026 and updated through the 0.92.0 checkpoint on October 15. This is an engineering conformance audit, not a participant or screen-reader study. Passing existing demonstrations does not establish MVP completion. Proposed targets and original scope are preserved.
+Audited against [PRD draft 0.3](07-product-requirements.md), starting at local checkpoint `90927b3` on October 13, 2026 and updated through the 0.93.0 checkpoint on October 15. This is an engineering conformance audit, not a participant or screen-reader study. Passing existing demonstrations does not establish MVP completion. Proposed targets and original scope are preserved.
 
 **Status terms:** Implemented means the stated behavior has direct source/test evidence within the documented envelope. Partial means some acceptance conditions remain unmet or unverified. Pending means evidence is absent or a release gate has not been performed. No row below declares an unperformed human, clean-installation, platform or visible-latency test passed.
 
@@ -180,3 +180,6 @@ The 0.91.0 adjustable-workspace checkpoint adds shared `workspace.layout.set` an
 
 
 The 0.92.0 floating-DC checkpoint expands the curated network to stacked/offset DC sources while retaining grounded waveform negatives, grounded NPN emitters and existing numerical/work budgets. Shared placement/wiring/value/inspection/Verify/sweep/file paths and the protected split-supply example expose the behavior to users and agents. A converged-seed range-check gap is repaired. Independent rail/Ohm/Kirchhoff, shifted LED, RC timing and capture/reopen checks are scoped in [floating DC supplies](../docs/floating-dc-sources.md). P0 remains **17 implemented /10 partial /0 pending**; broader state/input/accessibility, visible latency, clean distribution, participant and physical-printer gates remain open.
+
+
+The 0.93.0 linear-network checkpoint repairs artificial nonconvergence for passive/source stacks at 24 V within the existing ±30V envelope. Full affine corrections retain residual/rank/range/cancellation checks; nonlinear models retain damping. Shared edit/measurement/Verify/history/file commands and numerical discovery expose the behavior without new command or format versions. P0 remains **17 implemented /10 partial /0 pending**. Broader nonlinear convergence, mounted state/input/accessibility, latency, distribution, participant and physical-printer acceptance remain open. See [linear solves](../docs/linear-network-solves.md).

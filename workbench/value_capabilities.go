@@ -35,6 +35,13 @@ func addValueCapabilityDetails(id string, schema map[string]any) bool {
 		}
 		schema["x-kind-value-domains"] = domains
 		schema["x-source-reference-rules"] = map[string]any{"dc-source": "Value is positive minus negative; either terminal may be offset from ground in a referenced network", "waveform-sources": "Negative terminal remains directly grounded", "network": "A common ground reference and independent source/capacitor constraints remain required; accepted node voltages stay within ±30 V and existing solve/work limits"}
+		schema["x-network-numerics"] = map[string]any{
+			"linear_correction":     "Full affine MNA correction; even zero excitation checks matrix rank before acceptance",
+			"nonlinear_correction":  "Damped Newton; LED, silicon diode, NPN, NMOS, PMOS and unknown future devices retain damping",
+			"max_newton_iterations": maxMixedNewtonIterations, "max_nonlinear_node_update_v": maxMixedNewtonDelta,
+			"max_abs_node_voltage_v": maxMixedNodeVoltage,
+			"time_integration":       "Existing backward-Euler/adaptive error and per-output attempt/time budgets; no simplified model substitution",
+		}
 		schema["x-normalized-si-relations"] = []inputRelation{{Operator: "sum_absolute_maximum", Fields: []string{"value", "snapshot.components[id].sine.offset_v"}, Limit: 12, WhenKind: "sine-source"}, {Operator: "greater_or_equal", Fields: []string{"value", "snapshot.components[id].pulse.low_v"}, WhenKind: "finite-pulse-source"}}
 		schema["x-inventory"] = map[string]string{"part_definitions": "parts.list", "current_id_kind_waveforms": "snapshot.components"}
 		if id == "component.place" {

@@ -1,0 +1,129 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.93.0",
+  "build_version": "108",
+  "binary_sha256": "a887930be006c4de145d0ecccb237680d8177624256f5f99f9c29e05e797966a",
+  "agent_binary_sha256": "fab2e1867c11d0327dd87e162b393f6141ab3fd02734b20a58b3ecccf9f16a99",
+  "prior_bundle": "build/ELab-before-linear-network.app",
+  "prior_binary_sha256": "7ffe480440a902d990c02d78668f56aa2061d83766c30f4011ca45990f3dbba5",
+  "bundle_files_compared": 3,
+  "bundle_manifest_sha256": "2c04077b074813765af40d9277d28509b6cfa1c1e3e9e0d8a2e1aec808967b39",
+  "sdk_before": {
+    "commit": "42319673ef8dea989b1dd1ff4e7a22a1b7603534",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "sdk_after": {
+    "commit": "42319673ef8dea989b1dd1ff4e7a22a1b7603534",
+    "clean": true,
+    "manifest_sha256": "e085eb1f3eae5383465a4dff1010c57fa99176d9c0f320379fa6fe010edf892f",
+    "final_prepared_output_counts": {
+      "upstream": 229,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "workbench/mixed.go": "83676466109a3bc14251fc03f1c77037c16bd00fa51874211a1205e46b4ffe8c",
+    "workbench/value_capabilities.go": "345a36aec8d1d8a233eafca8b32f20565260520a1e44af33c875f3979113f72f",
+    "workbench/linear_network_test.go": "1788f8684e9a732af7011fc5e13e8502895a4d59d9b479189eb41b37ff4637dc",
+    "desktop/linear_network_test.go": "3813e8f9f5ee2489be170748c443e30ab702bb6dd05f451e923609c768ad3491",
+    "desktop/split_supply_smoke.go": "52d43101032ce8f83f04b843a0eba3e1b46daef7e50f0ff553632ca2f382c118",
+    "desktop/workspace_smoke.go": "a3d2cbe41b798b349b5f843487f9c7ecb78e2c005a4d61bef78c364437530404",
+    "internal/conformance/client.go": "16bb9aca87f1c654318bee0f8efa6f076683c1fc00a557ab64a25b8a893ccb9e",
+    "internal/conformance/client_test.go": "301b2ec376b6d2480e5ceae30271b6e7661a43c8d927bfdaa8aa05f267365582",
+    "scripts/linear-network-demo.py": "a721ebdcc34bd382b5cfdc4aeb8a748ec77e4bae368b6d43b8aac362db7f1489"
+  },
+  "observations": {
+    "stack24": {
+      "voltage_v": 24,
+      "current_a": 0.024,
+      "power_w": 0.5760000000000001,
+      "kcl_residual_a": 0,
+      "power_residual_w": 0
+    },
+    "stack30": {
+      "voltage_v": 30,
+      "current_a": 0.03,
+      "power_w": 0.8999999999999999,
+      "kcl_residual_a": 0,
+      "power_residual_w": 0
+    },
+    "recovered30": {
+      "voltage_v": 30,
+      "current_a": 0.03,
+      "power_w": 0.8999999999999999,
+      "kcl_residual_a": 0,
+      "power_residual_w": 0
+    },
+    "negative_rail_v": -24,
+    "range_diagnostics": [
+      {
+        "code": "mixed-initialize-failed",
+        "message": "mixed node voltage exceeds the \u00b130 V educational model range",
+        "object_id": ""
+      }
+    ],
+    "reopened_recordings": 1
+  },
+  "checks": [
+    "Failing-before 24 V convergence and 31 V range-diagnostic regressions pass; independent 0/18/24/30 V Ohm/Kirchhoff and 24 V RC backward-Euler references pass",
+    "Linear zero-excitation rank and cancellation checks pass; all library kinds classified; unknown future kinds retain nonlinear damping",
+    "Native palette/named-wire/value construction matches agents; final packaged real callbacks reach fresh 24 V /24 mA mesh preparation",
+    "Final public native/headless observations and detailed discovery match; schematic SVG and PNG bytes are identical; 31 V retains a stale 30 V reading; undo/restart and saved capture reopen pass",
+    "Final lint/import/root/native race/vet, Python compile, source-ledger verification and diff whitespace checks pass",
+    "Final packaged GPU/UI/protected-close smoke passes; scroll test waits for configured overflow geometry before strict movement/no-zoom assertions",
+    "Final four-adapter comparison passes three workflows and 294 frozen electrical checks per adapter, with three-level flasher refinement",
+    "Bounded guarded-client retries recover explicit layout admission conflicts; real service tests refuse electrical/document replacements, non-conflict/transport errors and perpetual conflicts",
+    "Actual previous-release saved project reopens with graph and recorded results unchanged and original bytes preserved",
+    "SDK clean/unchanged; canonical package matches qualified candidate bytes/modes/version; prior .92 preserved; all owned qualification processes exited"
+  ],
+  "corrections": [
+    "First public native and headless runs used an incorrect availability assertion. Availability identifies an existing probe association; the corrected check requires one stale reading with the prior 30 V value.",
+    "First packaged smoke encountered a newly allocated 0..1 scrollbar before positioning. The harness now waits for configured overflow geometry; it retains strict actual scroll movement and unchanged zoom.",
+    "First broad electrical run refused a native simulation.step after a legitimate layout command advanced its guard. The conformance client now refreshes complete guards and uses bounded retries only after explicit conflict refusals; no failed electrical result was accepted."
+  ],
+  "limitations": [
+    "Full affine corrections apply only to source/passive networks. Semiconductor model equations and nonlinear 0.2 V damping/100-iteration ceiling remain unchanged; arbitrary high-voltage nonlinear convergence is not established.",
+    "Existing source/component/node/integration limits remain. Accepted nodes remain within \u00b130 V; no universal convergence, physical ratings or named-device accuracy claim.",
+    "Frozen suite covers its curated LED/RC/NPN families and flasher refinement; separate tests/public workflows cover this new linear behavior. It does not establish arbitrary SPICE/device/PVT equivalence.",
+    "Logical conformance evidence excludes guard queries/refused admission retries; transport failures are never retried automatically.",
+    "Complete mounted input/IME/accessibility, visible latency, clean distribution, participant and physical-printer gates remain open; P0 remains 17 implemented/10 partial."
+  ],
+  "artifacts": [
+    "docs/linear-network-solves.md",
+    "docs/agent-conformance.md",
+    "docs/validation/linear-network-native.json",
+    "docs/validation/linear-network-headless.json",
+    "docs/validation/linear-network-discovery.json",
+    "docs/validation/linear-network-conformance.json",
+    "docs/validation/linear-network-legacy-reopen.json"
+  ],
+  "build_evidence_sha256": {
+    "build/linear-network-093/before.log": "8429d5cd4afcdcd479692f0c20a1639b2e15a442e63e5d29762678ba3e2cb6e9",
+    "build/linear-network-093/after.log": "9b1104540f3b758022683ea321d31099bbc660841cc2a9c275893f0ac901d5eb",
+    "build/linear-network-093/check.log": "687ca20e0fa01fe2745bef24b8deed90e1c261c109acdea999c91c48aee49609",
+    "build/linear-network-093/check-final.log": "e49348427fa3eaddbc7a956ee8d8ed5c5e5039bfcb0c75cf7b465e6f65c3f66f",
+    "build/linear-network-093/build-final.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/linear-network-093/package-final.log": "da38cfc99dc8648ca2545c50577b281cc4a86d0d3e15b5ff0702129ee8556d22",
+    "build/linear-network-093/headless-final.log": "c24a0be5ee0cfcf657714eede49c036993c0b3711da9a94382531b8cea607238",
+    "build/linear-network-093/native-release.log": "8dbd6281b56647a6f72529ebaf3f621e6b6a178485d88a6b59e9f092db58112e",
+    "build/linear-network-093/smoke.log": "4b751ba91517f6ed2da33d71a8a15777f4b8d82c56ed1ae66f71454aa7d1c8aa",
+    "build/linear-network-093/smoke-final.log": "9e2a8330d2efa6caf99ea48a7b42d9b144e33b8610cf21e2e6cc663265284f04",
+    "build/linear-network-093/conformance.log": "f0fefe7d74be40f5832f14057f7fa713e2b61e947241d496fafb0dbfc1ee92e1",
+    "build/linear-network-093/conformance-final.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/linear-network-093/admission-focused-pass.log": "d566afd133817c2780adf623e80b8b6fafd3330d5c159e4312ff348728890a13",
+    "build/linear-network-093/sdk-before.json": "43a477a732d8ccd8a9cf0c8b4977371ed5cabcdf3a54ac45438a4753ec742b83",
+    "build/linear-network-093/sdk-release-after.json": "43a477a732d8ccd8a9cf0c8b4977371ed5cabcdf3a54ac45438a4753ec742b83",
+    "build/linear-network-093/legacy-reopen.json": "02a668064e6c3726b24289d3cdf85554a3d7d032e70afc0ec15401398d3a7d8c",
+    "build/linear-network-093/promotion.json": "dcdb6a09566abc6972490b426ccf99400628d22eb88ac69df3cc4eaa93b4c820"
+  },
+  "export_sha256": {
+    "svg": "7be579e5f349aa43be71fb5284ad31ec61f89e97522bdf559bc89ce2fca0d2f3",
+    "png": "c6da04cd63de867d9710acbdff22ccb454aa38de3b11b91c7b82822a5124f01c"
+  }
+}

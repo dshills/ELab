@@ -42,7 +42,20 @@ func nativeWorkspaceSmoke(ctx context.Context, s *screen) error {
 		return err
 	}
 	large, err := waitNativeViewport(ctx, s.app, s, func(state workbench.Snapshot) bool {
-		return state.Viewport.Height > before.Viewport.Height && state.WorkspaceLayout.SchematicFraction > .79
+		if state.Viewport.Height <= before.Viewport.Height || state.WorkspaceLayout.SchematicFraction <= .79 || s.scope.widget == nil {
+			return false
+		}
+		// Drawing preparation can finish before the scope's new scrollbar is
+		// positioned. HasScroll alone also includes an unconfigured slider with
+		// its default 0..1 range; wait for actual overflow geometry and params.
+		host, ok := s.scope.widget.ParentByName("scope-scroll").(core.Layouter)
+		if !ok {
+			return false
+		}
+		frame := host.AsFrame()
+		bar := frame.Scrolls[math32.Y]
+		maximum, visible, _ := frame.ScrollValues(math32.Y)
+		return frame.HasScroll[math32.Y] && bar != nil && maximum > visible && visible > 0 && bar.Max == maximum && bar.Step == 1 && bar.Geom.Size.Actual.Content.Y > 0
 	})
 	if err != nil {
 		return err

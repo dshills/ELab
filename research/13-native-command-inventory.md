@@ -100,3 +100,6 @@ The 0.91.0 adjustable-workspace checkpoint uses Vellum SplitPane through `worksp
 
 
 The 0.92.0 floating-DC checkpoint reviews native DC-source/vertical-resistor label placement and both example menu/alias routes. The new `example.split-supply` alias maps to `example.load {id:"split-supply"}` with protected replacement. Source counts remain 51 files /384 sites /161 public IDs /131 source routes /144 binding-review /214 literal /nine wrapper-menu /17 registry sites. Native construction, signed readings and actual frame preparation have bounded tests/smoke; mapping still does not prove exhaustive physical input/accessibility. See [DC supplies and limits](../docs/floating-dc-sources.md).
+
+
+The 0.93.0 linear-network checkpoint changes backend solve strategy and detailed numerical discovery without changing native production routes or source hashes. The source ledger verifies unchanged: 51 files /384 sites /161 public IDs /131 source routes. Native test/smoke construction now includes a 24 V stack; scope-wheel smoke waits for positioned overflow parameters rather than the newly allocated slider’s default range. These validation changes do not establish broader physical-input/accessibility acceptance.

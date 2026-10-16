@@ -7,6 +7,12 @@ import (
 )
 
 const MixedAnalysis = "RC/NPN transient"
+
+const (
+	maxMixedNewtonIterations = 100
+	maxMixedNewtonDelta      = .2
+	maxMixedNodeVoltage      = 30.
+)
 const MixedEngineID = "elab.mixed-mna-be.v1"
 
 type CapacitorResult struct {
@@ -77,6 +83,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 }
 
 type mixedNetwork struct {
+	nonlinear     bool
 	c             Compiled
 	nodes         []string
 	index         map[string]int
@@ -97,6 +104,14 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 		}
 	}
 	for _, p := range c.MixedGraph.Components {
+		switch p.Kind {
+		case "resistor", "capacitor", "switch", "potentiometer":
+		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
+		case "ground", "junction", "net-label":
+		default:
+			// Unknown future devices must not silently receive linear stepping.
+			n.nonlinear = true
+		}
 		if IsVoltageSource(p.Kind) {
 			n.sources = append(n.sources, p)
 		}
@@ -334,7 +349,7 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 	}
 	x := make([]float64, size)
 	copy(x, guess)
-	for iter := 0; iter < 100; iter++ {
+	for iter := 0; iter < maxMixedNewtonIterations; iter++ {
 		if err := ctx.Err(); err != nil {
 			return nil, err
 		}
@@ -349,11 +364,11 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 				good = false
 			}
 		}
-		if good {
+		if good && (n.nonlinear || iter > 0) {
 			// A supplied guess can already satisfy KCL/constraints. Apply the
 			// same range guard before accepting it, not only after an update.
 			for _, v := range x[:len(n.nodes)] {
-				if !finite(v) || math.Abs(v) > 30 {
+				if !finite(v) || math.Abs(v) > maxMixedNodeVoltage {
 					return nil, fmt.Errorf("mixed node voltage exceeds the ±30 V educational model range")
 				}
 			}
@@ -367,16 +382,18 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 			return nil, err
 		}
 		scale := 1.
-		for i := range n.nodes {
-			if math.Abs(delta[i]) > .2 {
-				scale = math.Min(scale, .2/math.Abs(delta[i]))
+		if n.nonlinear {
+			for i := range n.nodes {
+				if math.Abs(delta[i]) > maxMixedNewtonDelta {
+					scale = math.Min(scale, maxMixedNewtonDelta/math.Abs(delta[i]))
+				}
 			}
 		}
 		for i := range x {
 			x[i] += scale * delta[i]
 		}
 		for i := range n.nodes {
-			if math.Abs(x[i]) > 30 {
+			if math.Abs(x[i]) > maxMixedNodeVoltage {
 				return nil, fmt.Errorf("mixed node voltage exceeds the ±30 V educational model range")
 			}
 		}

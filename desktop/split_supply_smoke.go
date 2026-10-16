@@ -43,7 +43,7 @@ func nativeSplitSupplySmoke(ctx context.Context, a *app.Application, s *screen) 
 	}); err != nil {
 		return err
 	}
-	return owner(func() error {
+	if err := owner(func() error {
 		state := s.service.Snapshot()
 		if math.Abs(state.Mixed.Resistors[0].Voltage-6) > 1e-12 || math.Abs(state.Mixed.Resistors[0].Current-.006) > 1e-12 {
 			return fmt.Errorf("native split supply differs from Kirchhoff reference")
@@ -56,5 +56,36 @@ func nativeSplitSupplySmoke(ctx context.Context, a *app.Application, s *screen) 
 			return fmt.Errorf("native split supply has no signed negative-rail reading")
 		}
 		return nil
+	}); err != nil {
+		return err
+	}
+	if err := owner(func() error {
+		for _, action := range []struct {
+			id string
+			e  *ui.ChangeEvent
+		}{
+			{"value-entry", &ui.ChangeEvent{Text: "12 V"}}, {"apply-value", nil},
+			{"selection", &ui.ChangeEvent{SelectedID: "V1"}}, {"value-entry", &ui.ChangeEvent{Text: "12 V"}}, {"apply-value", nil},
+			{"selection", &ui.ChangeEvent{SelectedID: "W5"}}, {"delete-object", nil},
+			{"tool-wire", nil}, {"wire-from", &ui.ChangeEvent{SelectedID: "V2.negative"}},
+			{"wire-to", &ui.ChangeEvent{SelectedID: "GND1.reference"}}, {"connect-terminals", nil},
+		} {
+			if err := smokeUI(s, action.id, action.e); err != nil {
+				return err
+			}
+		}
+		if s.service.Snapshot().Paused {
+			return smokeUI(s, "simulation.resume", nil)
+		}
+		return nil
+	}); err != nil {
+		return err
+	}
+	if _, err := s.service.Wait(ctx); err != nil {
+		return err
+	}
+	_, err := waitNativeViewport(ctx, a, s, func(state workbench.Snapshot) bool {
+		return state.Mixed != nil && !state.Mixed.Stale && math.Abs(state.Mixed.Resistors[0].Voltage-24) < 1e-10 && math.Abs(state.Mixed.Resistors[0].Current-.024) < 1e-12
 	})
+	return err
 }
