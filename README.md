@@ -54,7 +54,7 @@ For a local double-clickable development bundle, after building:
 ```sh
 python3 ../Vellum/scripts/package-app.py --binary build/elab \
   --output build/ELab.app --name ELab --identifier org.dshills.elab \
-  --version 0.97.0 --build-version 112 --platform darwin
+  --version 0.98.0 --build-version 113 --platform darwin
 ```
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).
@@ -64,6 +64,8 @@ On macOS, File, Examples, Theme and Inspector dropdowns use native menus with ch
 **Export PDF** creates a [printable schematic](docs/schematic-pdf.md) with shared A4/Letter page settings. **Export PNG** creates a [schematic image](docs/schematic-image.md) from the same Output page settings. [Print captured page](docs/printing.md) submits the preview to a chosen macOS printer through shared commands, with observable spool jobs and cancellation. Physical-device qualification remains pending.
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
+
+Choose **Examples → RC high-pass filter** to compare input, positive/negative output pulses and continuous capacitor voltage. See the [high-pass experiment and accuracy checks](docs/rc-high-pass.md).
 
 ## Watch an RC circuit charge and discharge
 

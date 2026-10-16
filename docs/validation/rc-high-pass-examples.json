@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "templates": [
+    "led",
+    "split-supply",
+    "rc",
+    "rc-high-pass",
+    "npn",
+    "switch-npn",
+    "pmos",
+    "nmos",
+    "blink",
+    "flasher",
+    "led-fade",
+    "rectifier"
+  ],
+  "checks": [
+    "read-only immutable guidance catalog",
+    "all shipped examples open running",
+    "edited circuit labeled against template expectation",
+    "unsaved reset refuses without mutation",
+    "current reset restores exact template and fresh paused startup",
+    "saved edited origin survives fresh reopen without trusted readings",
+    "stale example/document reset guards",
+    "owned project ends clean and paused"
+  ],
+  "limitations": [
+    "template guidance describes expected template behavior, not guaranteed behavior of an edited circuit",
+    "origin is optional version-4 metadata; older readers lacking it refuse it",
+    "engineering guide/reset checks do not establish novice or accessibility qualification"
+  ]
+}

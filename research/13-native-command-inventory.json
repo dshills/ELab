@@ -10,7 +10,7 @@
     "desktop/diagnostic_help.go": "822fcdf9c5904570b42bf1b98322de00ed9fdbd17299584cefedcfeb8098f171",
     "desktop/display_preferences.go": "f54283db2acec7240b861f415ce0855fbb7dc3349785883f2095002833bb9e13",
     "desktop/drawing.go": "09da099bab9ee50de7e3025092ef89bd33ac946f5ab99b349345bff95c2824bb",
-    "desktop/example_load.go": "8afe8d7f5ab47a967aa1e0b180e8457f1f86bceb53229c972c5d6d729dea2073",
+    "desktop/example_load.go": "64b4c7049a84716ada5520906ef8f595301a012326c1869241653127bc5c1f4a",
     "desktop/examples.go": "13136f78517a201f806ebe369a8820e8c7de0fe1cc666a27adb0363a8bd7b937",
     "desktop/field_context.go": "b8a1d409aa71c75cf14289a4e9e39cdea3ce52f1ba9f53c79916b6593074a087",
     "desktop/files.go": "913fe6f40d68a56989f2192d11dc6e9c829844c64fa07e9052a7e77b43a05db5",
@@ -20,7 +20,7 @@
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
     "desktop/main.go": "4679879f1073ea3942ce17b035702f1ca6e361c34fd968e7ac60e7abc1a33a12",
     "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
-    "desktop/menus.go": "6ac47a73df1d629f70714e3319e9e3113a8221c8683782a94f80899fe8f4ca4c",
+    "desktop/menus.go": "053c9e831df9be278a2e482b889dfa579913e654b0b37bf915bc911511899f59",
     "desktop/menus_darwin.go": "8ecb12641ae79b167999a2bb2bb8e32b198177fa9b718a11472ceebf4d37e6fe",
     "desktop/menus_other.go": "933f36929566cc8e40c0e2afa85e3c99e4c40c1516c607cb8eec0dd59ef50c2e",
     "desktop/native_chrome.go": "d90df4e3cf3aff47511c654a1a47981cbd5afee560a498dbd0a76058b371753e",
@@ -48,7 +48,7 @@
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
     "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
     "desktop/verification.go": "550f32b3d90b99269bce6777233b68e9329b2ae704b5b2fca60a1a368fbab406",
-    "desktop/view.go": "44b15712011fb79a92e0df4777fbe6c675917534037250fadbb27d6095b54b2f",
+    "desktop/view.go": "253b59cb653d65ef99b778682244d572a7e17f81237e5831941536817d2e45ef",
     "desktop/viewport.go": "a0d8a6a6b3577a0a909a0f7b3f339532a5abfde78fcf8a1979fb2e46f5f074cc",
     "desktop/waveforms.go": "73b1b24045b550ac31b25871c5194738a45ea4b6169ff9dd23e14b37467dd85e",
     "desktop/workflow.go": "7e39308677a6eec92663759ffbd61a568e1b87215d6453a31e8eae2bd11a6af0",
@@ -234,6 +234,9 @@
       "example.load"
     ],
     "example.pmos": [
+      "example.load"
+    ],
+    "example.rc-high-pass": [
       "example.load"
     ],
     "example.split-supply": [
@@ -947,7 +950,7 @@
     },
     {
       "file": "desktop/example_load.go",
-      "line": 20,
+      "line": 21,
       "function": "*screen.registerExampleLoadCommands",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Register(command.Command{ID: template.command, Label: template.label, Available: func() error {\n\tif s.fileBusy || s.pendingCommand != \"\" || s.service.Snapshot().Closed {\n\t\treturn fmt.Errorf(\"finish the current operation before loading an example\")\n\t}\n\treturn nil\n}, Execute: func(context.Context) error {\n\ts.requestReplace(\"example.load\", workbench.ExampleLoadParams{ID: template.id})\n\treturn nil\n}})",
@@ -955,7 +958,7 @@
     },
     {
       "file": "desktop/example_load.go",
-      "line": 26,
+      "line": 27,
       "function": "*screen.registerExampleLoadCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(\"example.load\", workbench.ExampleLoadParams{ID: template.id})",
@@ -1716,11 +1719,12 @@
       "line": 20,
       "function": "(package)",
       "kind": "native-menu-group",
-      "expression": "Commands: []string{\"example.reset\", \"example.split-supply\", \"example.rc\", \"example.npn\", \"example.switch-npn\", \"example.npn-pulse\", \"example.flasher\", \"example.led-fade\", \"example.nmos\", \"example.pmos\", \"example.rectifier\"}",
+      "expression": "Commands: []string{\"example.reset\", \"example.split-supply\", \"example.rc\", \"example.rc-high-pass\", \"example.npn\", \"example.switch-npn\", \"example.npn-pulse\", \"example.flasher\", \"example.led-fade\", \"example.nmos\", \"example.pmos\", \"example.rectifier\"}",
       "public_commands": [
         "example.reset",
         "example.load",
         "example.rc",
+        "example.load",
         "example.npn",
         "example.switch-npn",
         "example.npn-pulse",
@@ -3417,11 +3421,12 @@
       "line": 121,
       "function": "*screen.view",
       "kind": "command-menu",
-      "expression": "s.commandMenu(\"examples-menu\", \"Examples\", [][2]string{{\"example.reset\", \"LED circuit\"}, {\"example.split-supply\", \"Split-rail DC supply\"}, {\"example.rc\", \"RC charge / discharge\"}, {\"example.npn\", \"Transistor LED\"}, {\"example.switch-npn\", \"Manual transistor switch\"}, {\"example.npn-pulse\", \"Blinking LED\"}, {\"example.flasher\", \"Capacitor-timed flasher\"}, {\"example.led-fade\", \"LED fade\"}, {\"example.nmos\", \"MOSFET LED switch\"}, {\"example.pmos\", \"High-side MOSFET LED\"}, {\"example.rectifier\", \"Rectifier / smoothing\"}})",
+      "expression": "s.commandMenu(\"examples-menu\", \"Examples\", [][2]string{{\"example.reset\", \"LED circuit\"}, {\"example.split-supply\", \"Split-rail DC supply\"}, {\"example.rc\", \"RC charge / discharge\"}, {\"example.rc-high-pass\", \"RC high-pass filter\"}, {\"example.npn\", \"Transistor LED\"}, {\"example.switch-npn\", \"Manual transistor switch\"}, {\"example.npn-pulse\", \"Blinking LED\"}, {\"example.flasher\", \"Capacitor-timed flasher\"}, {\"example.led-fade\", \"LED fade\"}, {\"example.nmos\", \"MOSFET LED switch\"}, {\"example.pmos\", \"High-side MOSFET LED\"}, {\"example.rectifier\", \"Rectifier / smoothing\"}})",
       "public_commands": [
         "example.reset",
         "example.load",
         "example.rc",
+        "example.load",
         "example.npn",
         "example.switch-npn",
         "example.npn-pulse",

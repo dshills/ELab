@@ -969,6 +969,10 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 		s.scopeConfigured = false
 		s.focusProbe = ""
 		s.scopeProbes = nil
+		if definition, ok := findExample(s.exampleID); ok && len(definition.probes) > 0 {
+			s.scopeProbes = append([]string{}, definition.probes...)
+			s.scopeConfigured = true
+		}
 		s.activeCursor = "a"
 		s.cursorA = nil
 		s.cursorB = nil

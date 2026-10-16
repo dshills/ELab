@@ -12,6 +12,7 @@ import (
 // template. Agents discover the same ID through examples.list / example.load.
 func (s *screen) registerExampleLoadCommands() {
 	for _, template := range []struct{ command, label, id string }{
+		{"example.rc-high-pass", "Load RC high-pass edge detector", "rc-high-pass"},
 		{"example.led-fade", "Load capacitor-buffered LED fade", "led-fade"},
 		{"example.nmos", "Load MOSFET LED switch", "nmos"},
 		{"example.pmos", "Load high-side MOSFET LED switch", "pmos"},

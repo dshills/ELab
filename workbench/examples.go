@@ -30,6 +30,7 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "led", Title: "LED current limiter", Question: "How does resistance change LED current?", Expected: "Increasing the series resistance lowers current and the illustrative LED brightness.", Try: "Change R1 from 1 kΩ to 2 kΩ and compare signed current.", Limitation: "Generic red LED; brightness is illustrative and there is no thermal behavior or physical part rating."},
 		{ID: "split-supply", Title: "Split-rail DC supply", Question: "How do two positive batteries create a negative rail?", Expected: "The midpoint reference makes the rails +3 V and −3 V. Each source remains +3 V across its own terminals; R1 sees 6 V and carries 6 mA.", Try: "Inspect V2.negative relative to ground, then V2 across its terminals. Change either source to 5 V or move ground to the bottom rail and compare.", Limitation: "Ideal DC sources have no output resistance, current limit, battery discharge or physical ratings. The network still needs one common reference; ideal voltage-source/capacitor constraint loops refuse."},
 		{ID: "rc", Title: "RC charge and discharge", Question: "How quickly does a capacitor charge and discharge?", Expected: "Capacitor voltage changes smoothly; switching from charge to discharge reverses current while preserving voltage at the switching instant.", Try: "Pause, step 10 ms, then choose Discharge. Increase R1 or C1 to slow the response.", Limitation: "Ideal capacitor/resistor with zero ESR and leakage; this example uses an ideal source edge."},
+		{ID: "rc-high-pass", Title: "RC high-pass edge detector", Question: "Why does a capacitor pass changes but block a steady voltage?", Expected: "The voltage across R1 jumps positive at a rising input edge and negative at a falling edge, then decays toward zero. C1 voltage stays continuous at each edge.", Try: "Pause and step 50 ms to the falling edge. Compare input, R1 output and C1 voltage; increase R1 or C1 to lengthen the decay (10 ms in the template).", Limitation: "Ideal resistor/capacitor and instantaneous 0–5 V square source. ESR, leakage, component ratings and additional output loading are omitted."},
 		{ID: "npn", Title: "Transistor LED switch", Question: "How does a small base current control the LED?", Expected: "Low base drive turns the LED off; higher drive increases collector current until the transistor approaches saturation.", Try: "Choose base 0 V, 0.8 V and 5 V, then change RB and compare base/collector currents.", Limitation: "Educational Ebers–Moll NPN; no physical transistor identity, heating, breakdown or internal charge storage."},
 		{ID: "switch-npn", Title: "Manual transistor LED switch", Question: "How can a switch control an LED through a transistor?", Expected: "Closing S1 supplies base current and lights the LED. Opening S1 lets RPD hold the base near ground; the LED turns off.", Try: "Select S1 and choose Close switch / Open switch. Inspect Q1 base and collector currents, then increase RB.", Limitation: "Finite 1 Ω on / 1 GΩ off switch; educational NPN and illustrative LED brightness. No contact bounce, heating or physical ratings."},
 		{ID: "pmos", Title: "High-side MOSFET LED switch", Question: "How does a P-channel MOSFET switch the supply side?", Expected: "Gate high at the 5 V source turns M1 off. Pulling the gate low turns the LED on; signed drain current is negative because it leaves the drain.", Try: "Compare M1 gate-source voltage and drain current across a pulse edge. Change RG to 10k and add an external 1uF gate-source capacitor for delayed switching.", Limitation: PMOSDeviceModel().Limitations},
@@ -47,6 +48,7 @@ type exampleDefinition struct {
 	settings TransientSettings
 	view     View
 	selected string
+	probes   []string
 }
 
 func findExample(id string) (exampleDefinition, bool) {
@@ -72,6 +74,11 @@ func findExample(id string) (exampleDefinition, bool) {
 	case "rc":
 		d.graph = RCExampleGraph()
 		d.view = View{Center: Point{X: -130, Y: 20}, Zoom: .7}
+	case "rc-high-pass":
+		d.graph = RCHighPassExampleGraph()
+		d.selected = "R1"
+		d.probes = []string{"v:V1.positive", "v:R1", "v:C1"}
+		d.view = View{Center: Point{X: -70}, Zoom: .7}
 	case "npn":
 		d.graph = NPNExampleGraph()
 	case "switch-npn":

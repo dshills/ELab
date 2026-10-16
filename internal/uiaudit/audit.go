@@ -53,6 +53,7 @@ var callbackFields = map[string]bool{
 // The file helpers can choose the asynchronous form of the same public action.
 func nativeAliases() map[string][]string {
 	return map[string][]string{
+		"example.rc-high-pass": {"example.load"},
 		"example.led-fade":     {"example.load"},
 		"example.nmos":         {"example.load"},
 		"example.pmos":         {"example.load"},

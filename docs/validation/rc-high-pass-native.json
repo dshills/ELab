@@ -1,0 +1,166 @@
+{
+  "passed": true,
+  "transport": "desktop-socket",
+  "example_ids": [
+    "led",
+    "split-supply",
+    "rc",
+    "rc-high-pass",
+    "npn",
+    "switch-npn",
+    "pmos",
+    "nmos",
+    "blink",
+    "flasher",
+    "led-fade",
+    "rectifier"
+  ],
+  "default_probes": [
+    "v:V1.positive",
+    "v:R1",
+    "v:C1"
+  ],
+  "capture_rows": 125,
+  "maximum_analytic_voltage_error_v": 0.0006886341683427499,
+  "maximum_analytic_tolerance_ratio": 0.6112887619859,
+  "falling_edge_output_v": -4.966242859377765,
+  "output_at_60ms_v": -1.8276920791422213,
+  "doubled_resistance_output_at_10ms_v": 3.033150321141187,
+  "rows_sha256": "9c6774aec9ffe35b5a1be1abfc431bb6a9000748fb5b53b7f0f640d3e17cddab",
+  "exports": {
+    "svg": "274625d8f7843f88163f7aded9f021896a5cf2533c1591afa60e317a36922247",
+    "png": "6471cf0a8e8b932ccf300dc46250db8e8d39db9a314104c53ff8fc2056f689fd"
+  },
+  "discovery": {
+    "capabilities": [
+      {
+        "id": "example.load",
+        "description": "Load a known example ID into a new editable document; protects unsaved work and optional document generation",
+        "mutation": true,
+        "input_schema": {
+          "additionalProperties": false,
+          "examples": [
+            {
+              "id": "switch-npn"
+            }
+          ],
+          "properties": {
+            "discard_changes": {
+              "type": "boolean"
+            },
+            "expected_document_generation": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "id": {
+              "enum": [
+                "led",
+                "split-supply",
+                "rc",
+                "rc-high-pass",
+                "npn",
+                "switch-npn",
+                "pmos",
+                "nmos",
+                "blink",
+                "flasher",
+                "led-fade",
+                "rectifier"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "type": "object",
+          "x-details-scope": "parameter-bounds-and-examples; stateful-preconditions-and-errors-not-exhaustive"
+        },
+        "output": "Snapshot",
+        "output_schema": {
+          "$ref": "urn:elab:snapshot:1"
+        }
+      }
+    ],
+    "events": {
+      "command": "events.poll",
+      "default_timeout_ms": 1000,
+      "max_timeout_ms": 5000,
+      "max_waiters": 4,
+      "mode": "coalesced-latest-state",
+      "topics": [
+        "state",
+        "project",
+        "editor",
+        "view",
+        "simulation",
+        "diagnostics",
+        "jobs",
+        "measurements",
+        "recordings",
+        "recovery",
+        "preferences",
+        "lifecycle",
+        "library",
+        "preview",
+        "sweeps",
+        "printing"
+      ]
+    },
+    "mutation_preconditions": {
+      "combination": "A revision guard is required; all supplied revision/document guards must match",
+      "expected_command_revision": "Guards admitted commands, including other actors; live solver publication does not invalidate it",
+      "expected_document_generation": "Optional mutation context guard; prevents applying an old rendered action to a replacement document, including background publication",
+      "expected_revision": "Guards all state publication, including live samples"
+    },
+    "retry_retention": "Latest 256 successful mutation keys per session; reconnect to the same process preserves them. Expired keys have no deduplication guarantee.",
+    "schema_version": 2,
+    "version": 1,
+    "schema_registry_count": 69,
+    "schema_registry_sha256": "3e48ca222fb0976ca3132d8b85780d65a7bb08bb30d9ddad9e676316d3972125",
+    "full_response_sha256": "5c5c46b0e5aef27c08d920c673f335aec3e092e31da96be82a91cf917a197243"
+  },
+  "verify_200ms_timing": {
+    "repetitions": 20,
+    "duration_s": 0.2,
+    "samples_ms": [
+      62.57237493991852,
+      61.96754099801183,
+      54.91104198154062,
+      61.05608306825161,
+      54.62737497873604,
+      48.53174998424947,
+      63.394792028702796,
+      61.096791992895305,
+      61.54820800293237,
+      56.98162503540516,
+      54.27962506655604,
+      59.63033309672028,
+      59.25133288837969,
+      51.943917060270905,
+      63.0962080322206,
+      59.90762496367097,
+      57.20441695302725,
+      59.893874917179346,
+      53.85691695846617,
+      48.01112494897097
+    ],
+    "p95_ms": 63.0962080322206,
+    "maximum_ms": 63.394792028702796,
+    "scope": "Transport-inclusive backend completion on this workstation; not visible UI latency"
+  },
+  "checks": [
+    "guided ID discoverable in catalog and command schema",
+    "live/captured positive and negative exponential responses agree with independent RC solution",
+    "geometry preserves physics; paused electrical edit stales; doubled R slows decay",
+    "kept baseline recording survives edited-origin fresh-process save/open",
+    "dirty reset refuses; clean reset restores template/probes; schematic undo/redo works",
+    "SVG/PNG/PDF exports preserve graph, physics, history and document"
+  ]
+}

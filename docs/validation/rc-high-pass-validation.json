@@ -1,0 +1,214 @@
+{
+  "passed": true,
+  "date": "2026-10-15",
+  "app_version": "0.98.0",
+  "build_version": "113",
+  "binary_sha256": "40ea6f7953f24108137e94296dc323348bb661b67292bf5dbc058fcdfd70eb23",
+  "agent_binary_sha256": "b3acbdfa1723e456a449164b40e7c9d176e6972aa76e865324ec4383278815b8",
+  "prior_bundle": "build/ELab-before-rc-high-pass.app",
+  "prior_binary_sha256": "ad25a51c8e2556accb80596a78898ac9382230069c89000c43c5d82957c4f0c4",
+  "bundle_files_compared": 3,
+  "bundle_manifest_sha256": "c7ba8f45f1ce407e63a05a0b1e181639211facd6b4ff6ba0b9150eda880699d6",
+  "sdk_before": {
+    "commit": "82c0c5ec17fd7f90da1a0ac4a26d65a3de8367a4",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "sdk_after": {
+    "commit": "82c0c5ec17fd7f90da1a0ac4a26d65a3de8367a4",
+    "clean": true,
+    "manifest_sha256": "60ff354b6b73b4ad82781b2b25e4d28fdd370162cf385f6024603c7a9a5ad3f8",
+    "final_prepared_output_counts": {
+      "upstream": 232,
+      "typesetting": 5
+    }
+  },
+  "changed_sources_sha256": {
+    "workbench/rc_high_pass_example.go": "c0525586e894009a258bfa7babc6511383e3c632431725065a85dd856c570ff4",
+    "workbench/rc_high_pass_example_test.go": "e2062e8076c8028f4f3bc790c275d63e0103300e8ef8347e75d85ff90b3c9257",
+    "workbench/examples.go": "b2e887937af5c6fb6ff24253df6f4f8b7309b03e8bb3bec288e10b4684c0892e",
+    "workbench/service.go": "37375d5ce4d250e5c40989248f3bd51e4868dc3b19b2441b7d5629a33157a13a",
+    "workbench/mixed.go": "8bd9a857a64329b9f40e7393bf348c80be7d0a6cdb0f67feef4281bb637a40e9",
+    "desktop/example_load.go": "64b4c7049a84716ada5520906ef8f595301a012326c1869241653127bc5c1f4a",
+    "desktop/menus.go": "053c9e831df9be278a2e482b889dfa579913e654b0b37bf915bc911511899f59",
+    "desktop/view.go": "253b59cb653d65ef99b778682244d572a7e17f81237e5831941536817d2e45ef",
+    "desktop/examples_smoke.go": "a8f34c933fa59fec48c7d8f5dcec39a64a189a4c48d0730522becb1d9eb4dc35",
+    "desktop/rc_high_pass_smoke.go": "44073244d9d9b058479735ac3ddea8fc7fc0fb6e4903245241ab308a17f2d98c",
+    "desktop/rc_high_pass_test.go": "7d7900e8bff5c58fb5fc69f817fc1e4b30673ee37b90733ba941bcd76fc01360",
+    "internal/uiaudit/audit.go": "ca80a940cf74424737bd9ac08703d00b1330534f160515b4d6254d132d02fe00",
+    "scripts/examples-demo.py": "0398b34d39c3b3d37e7394933414f3b18539ecd70a92a36d3e8465f838df0f9c",
+    "scripts/rc-high-pass-demo.py": "824f5e92fa3f3872522d3021900fe7345c351df10db5676502c70dbdba1d8428"
+  },
+  "example_id": "rc-high-pass",
+  "example_count": 12,
+  "default_probes": [
+    "v:V1.positive",
+    "v:R1",
+    "v:C1"
+  ],
+  "capture_rows": 125,
+  "maximum_analytic_voltage_error_v": 0.0006886341683427499,
+  "maximum_analytic_tolerance_ratio": 0.6112887619859,
+  "analytic_voltage_tolerance": "max(0.001 V, 0.001 * abs(reference voltage)) per output/capacitor value",
+  "observations": {
+    "falling_edge_output_v": -4.966242859377765,
+    "output_at_60ms_v": -1.8276920791422213,
+    "doubled_resistance_output_at_10ms_v": 3.033150321141187,
+    "rows_sha256": "9c6774aec9ffe35b5a1be1abfc431bb6a9000748fb5b53b7f0f640d3e17cddab",
+    "exports": {
+      "svg": "274625d8f7843f88163f7aded9f021896a5cf2533c1591afa60e317a36922247",
+      "png": "6471cf0a8e8b932ccf300dc46250db8e8d39db9a314104c53ff8fc2056f689fd"
+    }
+  },
+  "verify_200ms_timing": {
+    "headless-stdio": {
+      "repetitions": 20,
+      "duration_s": 0.2,
+      "samples_ms": [
+        66.56966707669199,
+        64.98249992728233,
+        65.42716699186713,
+        61.0222500981763,
+        61.76674994640052,
+        58.56074998155236,
+        59.10633294843137,
+        61.54804094694555,
+        59.39404107630253,
+        60.90662500355393,
+        56.49041698779911,
+        56.49800004903227,
+        65.45520899817348,
+        61.047625029459596,
+        51.66400002781302,
+        62.969792052172124,
+        64.36383305117488,
+        60.924667050130665,
+        55.20674993749708,
+        61.83245894499123
+      ],
+      "p95_ms": 65.45520899817348,
+      "maximum_ms": 66.56966707669199,
+      "scope": "Transport-inclusive backend completion on this workstation; not visible UI latency"
+    },
+    "desktop-socket": {
+      "repetitions": 20,
+      "duration_s": 0.2,
+      "samples_ms": [
+        62.57237493991852,
+        61.96754099801183,
+        54.91104198154062,
+        61.05608306825161,
+        54.62737497873604,
+        48.53174998424947,
+        63.394792028702796,
+        61.096791992895305,
+        61.54820800293237,
+        56.98162503540516,
+        54.27962506655604,
+        59.63033309672028,
+        59.25133288837969,
+        51.943917060270905,
+        63.0962080322206,
+        59.90762496367097,
+        57.20441695302725,
+        59.893874917179346,
+        53.85691695846617,
+        48.01112494897097
+      ],
+      "p95_ms": 63.0962080322206,
+      "maximum_ms": 63.394792028702796,
+      "scope": "Transport-inclusive backend completion on this workstation; not visible UI latency"
+    }
+  },
+  "workstation": {
+    "hw.model": "Mac16,11",
+    "hw.memsize": "68719476736",
+    "hw.logicalcpu": "14",
+    "machdep.cpu.brand_string": "Apple M4 Pro",
+    "macos": "26.6.2",
+    "go": "go version go1.27.2 darwin/arm64"
+  },
+  "native_source_review": {
+    "changed_sources": [
+      "desktop/example_load.go",
+      "desktop/menus.go",
+      "desktop/view.go"
+    ],
+    "added_native_alias": {
+      "example.rc-high-pass": [
+        "example.load"
+      ]
+    },
+    "reviewed_changes": [
+      "New row in existing generic example registry",
+      "High-pass entry added to native Examples menu and in-window Examples menu",
+      "Only two menu-site expressions change apart from line shifts; all public command and route sets unchanged"
+    ],
+    "sources": 51,
+    "sites": 384,
+    "public_commands": 161,
+    "source_routes": 131
+  },
+  "checks": [
+    "Catalog, guidance and loader schema expose rc-high-pass; native aliases in both menus delegate to existing generic example.load; no new public command/model/file versions",
+    "Template selects R1 and input/output/capacitor probes; custom probes persist; reset restores defaults; existing low-pass defaults unchanged; all twelve examples pass protected load/reset/origin workflow",
+    "Independent exponential edge superposition checks live and captured positive/negative output, capacitor continuity, current and conservation; strict pointwise RC tolerance passes",
+    "Coupling capacitor integration checks both non-ground node voltages in non-waveform networks; established grounded/waveform/mixed error paths and 512-attempt/100 ms work limits retained",
+    "Native blank construction and template stepping match agent commands; native/headless capture rows, discovery and SVG/PNG bytes match exactly",
+    "Geometry preserves accepted physics; paused electrical edits stale; doubled R slows decay; original capture survives edited-origin fresh-process save/open; protected reset, schematic undo/redo and pure SVG/PNG/PDF exports pass",
+    "Twenty 200 ms fresh-kernel captures per public transport complete under 2 s and preserve source/physics/history/document after excluding timing-only results; hardware/OS/build identities recorded",
+    "Final full lint/import/root/native race/vet passes, with confirmed cached gate exit; Python compile, PRD coverage, source-ledger and diff whitespace pass",
+    "Final isolated packaged GPU/UI/protected-close/high-pass smoke passes; four adapters pass three reference workflows and 294 existing electrical checks each, with 0.488 s three-level flasher period",
+    "Actual AppKit item activation observed on first candidate; final native CUA screenshot shows signed output pulses and continuous capacitor trace; final menu source unchanged and mounted smoke passes",
+    "SDK clean/unchanged with all 237 prepared outputs verified; canonical/candidate/build bytes/modes/version match; prior .97 preserved; all owned visual/smoke/conformance sessions exited"
+  ],
+  "corrections": [
+    "Initial permissive 3 mV high-pass check hid 1.47 mV cancellation error at a small output; strict PRD-style pointwise tolerance reproduced failure before the numerical repair.",
+    "Blanket fourfold passive-network tolerance tightening failed existing potentiometer/switch integration-attempt bounds; it was rejected. Final additional coupling-node check passes those cases without raising limits or changing device equations.",
+    "Edge tests account for duplicate post-edge grid samples while still requiring actual \u00b15 V transitions and exact capacitor continuity; paused history replay explicitly restarts before fresh final export."
+  ],
+  "limitations": [
+    "High-pass independent analysis is a separate new fixture, not added to the frozen 294-check reference table. Existing four-adapter references and flasher refinement supplement it; no universal device/SPICE claim.",
+    "Timing is transport-inclusive backend completion in running workstation processes with fresh kernels; not visible UI latency, cold OS cache, maximum capacity, difficult circuits or other hardware acceptance.",
+    "Node-error addition targets non-waveform coupling capacitors; waveform and mixed tolerances remain unchanged. Arbitrary topology convergence/accuracy is not universally certified.",
+    "26% native Fit at the tested half split leaves schematic text small; broader readability and the separate recorded diode-caption issue remain open. Native screenshots viewed inline, not retained files; PNG reviewed, PDF header/state exercised, no rendered PDF or physical printing.",
+    "Full mounted state/keyboard/IME/accessibility, clean distribution, participant and physical-printer gates remain open. P0 stays 17 implemented/10 partial. Older apps pre-dating the new example ID refuse files retaining that origin."
+  ],
+  "artifacts": [
+    "docs/rc-high-pass.md",
+    "docs/validation/rc-high-pass-capture.json",
+    "docs/validation/rc-high-pass-conformance.json",
+    "docs/validation/rc-high-pass-discovery.json",
+    "docs/validation/rc-high-pass-examples.json",
+    "docs/validation/rc-high-pass-headless.json",
+    "docs/validation/rc-high-pass-native.json",
+    "docs/validation/rc-high-pass-visual-review.json"
+  ],
+  "build_evidence_sha256": {
+    "build/rc-high-pass-098/accuracy-before.log": "22b2fd7b334185e5f45ec31fbded78ea8e2851b6f3f708f6bcd7481e78fd2971",
+    "build/rc-high-pass-098/accuracy-after.log": "ef7e6e71d83621f9878fb348941b7c46e1ae9610c1cf783dfa3bf858bc05ed03",
+    "build/rc-high-pass-098/check-accurate.log": "d1e0a184d929926c6a62a32eaa95fe3a8a145a853f10f7e62fe981c38f75342a",
+    "build/rc-high-pass-098/accuracy-coupling.log": "55649a57dc63a046b8d5356bc3658ebbde4adb1de0a3c79b80ec9daff03a3820",
+    "build/rc-high-pass-098/check-coupling.log": "b6f412ebe0c163e4ac760929916ee553fd6c1246f93d0dd7da586def81c18ac4",
+    "build/rc-high-pass-098/check-confirmed.log": "bea4da8752d4fd2febcf09a0616d3725a8b4362c57b096b15f91bf0a0f3dc756",
+    "build/rc-high-pass-098/build-accurate.log": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "build/rc-high-pass-098/headless-accurate.log": "dcb38d5160baf767b7f1681469b4c67bd19cc4e0b253f905c62783244a7ad807",
+    "build/rc-high-pass-098/native-accurate.log": "8574868299ef70eb03ac2033a77fe5898e208a68552541a5f3409aab879a0a37",
+    "build/rc-high-pass-098/examples-accurate.log": "8c8cd66c0a7ebd216887ac94212a1362764aabf312dc07f35e374fb7fd04858d",
+    "build/rc-high-pass-098/package-accurate.log": "ad9a8220f5fd8c3f12790a4c48dbd72c25012b826076f7351137e0d8c495ceef",
+    "build/rc-high-pass-098/smoke-accurate.log": "e7c686c8f47655efe9d042224b7d5ef7cf50bafbf2adfed25bd23fb9a8ecf01a",
+    "build/rc-high-pass-098/conformance-accurate.log": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "build/rc-high-pass-098/sdk-before.json": "a5a70c36b0a8503ee04d93ac6f989cd755c92f818147bc206ac3effd6a62d489",
+    "build/rc-high-pass-098/sdk-after.json": "a5a70c36b0a8503ee04d93ac6f989cd755c92f818147bc206ac3effd6a62d489",
+    "build/rc-high-pass-098/ui-inventory-final.json": "16c1fdfa948650d0361838bd5055c2c93ec112a347996f4b46c9fa611564f4bf",
+    "build/rc-high-pass-098/ui-inventory-review.json": "8b27a81cc6635692e59212f34369db19e1c96ed476c93688fa5e1b262e40337a",
+    "build/rc-high-pass-098/native-accurate-visual-state.json": "385ba8596e0949bab0aa8c7a137697da2f1c8fc9eb41513705599146715d06ae",
+    "build/rc-high-pass-098/native-visual-state.json": "d7b0db411ad38fa05c278ec96771e51872196ac424e31669f367cd50abbad205",
+    "build/rc-high-pass-098/workstation.json": "bcd77f178de524585347bf06f9c18670b306bb5cfe0ba593f6f5203ac64b2165",
+    "build/rc-high-pass-098/promotion.json": "08ae6b0f02fa3552d1f2415fb07feb810c611cdf63ddf7a1a22e4f508abc8f33"
+  }
+}

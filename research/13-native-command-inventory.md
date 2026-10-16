@@ -115,3 +115,6 @@ The 0.96.0 flasher template changes only core graph positions and regression/ref
 
 
 The 0.97.0 capacitor-caption checkpoint changes only drawing.go among production native hashes. It delegates capacitor placement to the core helper also used by SVG and Fit. All source sites, routes, aliases and public IDs are unchanged after review; actual native glyph/rotation and public export checks supply bounded runtime evidence.
+
+
+The 0.98.0 high-pass checkpoint adds native alias `example.rc-high-pass → example.load` and entries in both Examples menus. Review covers only example_load.go, menus.go and view.go production hashes plus two menu expressions/line shifts. Sites/routes/public IDs remain 384/131/161 across 51 files. Blank construction, template/default-probe stepping, protected replacement, mounted smoke and actual AppKit activation add bounded runtime evidence.

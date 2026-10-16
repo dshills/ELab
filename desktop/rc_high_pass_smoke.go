@@ -1,0 +1,65 @@
+package main
+
+import (
+	"context"
+	"fmt"
+	"math"
+	"reflect"
+
+	"github.com/dshills/vellum/app"
+	"github.com/dshills/vellum/ui"
+)
+
+func nativeRCHighPassSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	owner := func(run func() error) error {
+		done := make(chan error, 1)
+		if err := a.PostWait(ctx, func() { done <- run() }); err != nil {
+			return err
+		}
+		select {
+		case err := <-done:
+			return err
+		case <-ctx.Done():
+			return ctx.Err()
+		}
+	}
+	if err := owner(func() error {
+		if err := smokeUI(s, "examples-menu", &ui.ChangeEvent{SelectedID: "example.rc-high-pass"}); err != nil {
+			return err
+		}
+		if s.pendingCommand == "example.load" {
+			return smokeUI(s, "discard-continue", nil)
+		}
+		return nil
+	}); err != nil {
+		return err
+	}
+	if _, err := s.service.Wait(ctx); err != nil {
+		return err
+	}
+	for _, id := range []string{"simulation.pause", "simulation.restart"} {
+		if err := owner(func() error { return smokeUI(s, id, nil) }); err != nil {
+			return err
+		}
+	}
+	for i := 0; i < 60; i++ {
+		if err := owner(func() error { return smokeUI(s, "transient-step", nil) }); err != nil {
+			return err
+		}
+	}
+	return owner(func() error {
+		state := s.service.Snapshot()
+		want := (5*math.Exp(-5) - 5) * math.Exp(-1)
+		if state.Example == nil || state.Example.Info.ID != "rc-high-pass" || state.Mixed == nil || state.Mixed.Stale || math.Abs(state.Mixed.Resistors[0].Voltage-want) > .003 || !reflect.DeepEqual(state.Scope.Selected, []string{"v:V1.positive", "v:R1", "v:C1"}) || len(state.Scope.Traces) != 3 {
+			return fmt.Errorf("native RC high-pass negative pulse/output probes unavailable")
+		}
+		if err := ui.Validate(s.view()); err != nil {
+			return err
+		}
+		if _, err := s.mesh(*s.drawing.View); err != nil {
+			return err
+		}
+		_, err := s.scopeMesh(*s.scope.View)
+		return err
+	})
+}

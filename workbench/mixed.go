@@ -577,6 +577,20 @@ func (state *mixedState) advanceBudget(t *Transient, end float64, budget *integr
 				}
 				tol := absolute + relative*math.Max(math.Abs(v), math.Abs(cur.capV[i]))
 				errRatio = math.Max(errRatio, math.Abs(v-full.capV[i])/tol)
+				if cur.net.c.Analysis != MixedAnalysis && cur.net.c.Analysis != WaveformAnalysis {
+					part := cur.net.caps[i]
+					one, two := cur.net.pin(part, "1"), cur.net.pin(part, "2")
+					if one >= 0 && two >= 0 {
+						// Coupling-capacitor voltage can be large while its output
+						// node is small. Check both absolute node voltages too;
+						// grounded capacitors retain their established error path.
+						for _, node := range [2]int{one, two} {
+							previous, next := voltage(cur.x, node), voltage(refined.x, node)
+							nodeTolerance := 5e-8 + 1.25e-6*math.Max(math.Abs(previous), math.Abs(next))
+							errRatio = math.Max(errRatio, math.Abs(next-voltage(full.x, node))/nodeTolerance)
+						}
+					}
+				}
 			}
 		}
 		failure = fmt.Sprintf("ratio %.3g, errors %v / %v / %v", errRatio, e1, e2, e3)
