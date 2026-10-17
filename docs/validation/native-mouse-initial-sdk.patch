@@ -1,0 +1,397 @@
+diff --git a/drivers/cogent/accessibility_darwin.go b/drivers/cogent/accessibility_darwin.go
+index 6dd16cc..0193293 100644
+--- a/drivers/cogent/accessibility_darwin.go
++++ b/drivers/cogent/accessibility_darwin.go
+@@ -43,0 +44 @@ type accessibilityAttachment struct {
++	window *desktop.Window
+@@ -49,0 +51 @@ func (n *accessibilityAttachment) Close() {
++	n.window = nil
+@@ -72 +74 @@ func configureAccessibility(a *app.Application) error {
+-		return &accessibilityAttachment{bridge: b, text: text}, nil
++		return &accessibilityAttachment{bridge: b, text: text, window: w}, nil
+diff --git a/drivers/cogent/mouse_position_darwin.go b/drivers/cogent/mouse_position_darwin.go
+new file mode 100644
+index 0000000..096b815
+--- /dev/null
++++ b/drivers/cogent/mouse_position_darwin.go
+@@ -0,0 +1,26 @@
++//go:build darwin && cgo
++
++package cogent
++
++/*
++#cgo darwin CFLAGS: -fobjc-arc
++#cgo darwin LDFLAGS: -framework Cocoa
++int vellumNativeMouseEventPosition(void *window, double *x, double *y);
++*/
++import "C"
++
++import "image"
++
++// GLFW mouse-button/scroll callbacks can carry a queued event at a position
++// different from the hardware cursor. Keep window matching and conversion on
++// the native thread; this hook does not post work or inspect UI-owned records.
++func (n *accessibilityAttachment) MouseEventPosition() (image.Point, bool) {
++	if n == nil || n.window == nil || n.window.Glw == nil {
++		return image.Point{}, false
++	}
++	var x, y C.double
++	if C.vellumNativeMouseEventPosition(n.window.Glw.GetCocoaWindow(), &x, &y) == 0 {
++		return image.Point{}, false
++	}
++	return n.window.MousePosToPoint(float64(x), float64(y)), true
++}
+diff --git a/drivers/cogent/mouse_position_darwin.m b/drivers/cogent/mouse_position_darwin.m
+new file mode 100644
+index 0000000..bc51e94
+--- /dev/null
++++ b/drivers/cogent/mouse_position_darwin.m
+@@ -0,0 +1,37 @@
++//go:build darwin && cgo
++
++#import <Cocoa/Cocoa.h>
++#include <math.h>
++
++// No mouse position is cached: only this window's current mouse event can
++// replace hardware polling. Coordinates remain outside the view during drags.
++static int vellumMouseEventPosition(NSWindow *window, NSEvent *event,
++                                   double *x, double *y) {
++    if (![NSThread isMainThread] || !window || !event || !x || !y ||
++        event.window != window) return 0;
++    switch (event.type) {
++        case NSEventTypeLeftMouseDown: case NSEventTypeLeftMouseUp:
++        case NSEventTypeRightMouseDown: case NSEventTypeRightMouseUp:
++        case NSEventTypeOtherMouseDown: case NSEventTypeOtherMouseUp:
++        case NSEventTypeLeftMouseDragged: case NSEventTypeRightMouseDragged:
++        case NSEventTypeOtherMouseDragged: case NSEventTypeMouseMoved:
++        case NSEventTypeScrollWheel: break;
++        default: return 0;
++    }
++    NSView *view = window.contentView;
++    if (!view) return 0;
++    NSPoint point = [view convertPoint:event.locationInWindow fromView:nil];
++    NSRect bounds = view.bounds;
++    double left = point.x - NSMinX(bounds);
++    double top = view.isFlipped ? point.y - NSMinY(bounds) : NSMaxY(bounds) - point.y;
++    if (!isfinite(left) || !isfinite(top)) return 0;
++    *x = left;
++    *y = top;
++    return 1;
++}
++
++int vellumNativeMouseEventPosition(void *rawWindow, double *x, double *y) {
++    if (![NSThread isMainThread] || !rawWindow) return 0;
++    return vellumMouseEventPosition((__bridge NSWindow *)rawWindow,
++                                    [NSApp currentEvent], x, y);
++}
+diff --git a/drivers/cogent/mouse_position_darwin_test.go b/drivers/cogent/mouse_position_darwin_test.go
+new file mode 100644
+index 0000000..7b1ec5a
+--- /dev/null
++++ b/drivers/cogent/mouse_position_darwin_test.go
+@@ -0,0 +1,17 @@
++//go:build darwin && cgo
++
++package cogent
++
++import (
++	"testing"
++
++	"cogentcore.org/core/system/driver/desktop"
++)
++
++func TestNativeMousePositionWithoutLiveWindowFallsBack(t *testing.T) {
++	for _, attachment := range []*accessibilityAttachment{nil, {}, {window: &desktop.Window{}}} {
++		if _, ok := attachment.MouseEventPosition(); ok {
++			t.Fatal("absent native window supplied an event position")
++		}
++	}
++}
+diff --git a/drivers/cogent/native/dependencies.json b/drivers/cogent/native/dependencies.json
+index c85e664..b737830 100644
+--- a/drivers/cogent/native/dependencies.json
++++ b/drivers/cogent/native/dependencies.json
+@@ -729,0 +730,11 @@
++        },
++        {
++          "origin": "drivers/cogent/native/patches/mouseevent",
++          "inputs": "native/patches/mouseevent/original-hashes.json",
++          "outputs": "native/patches/mouseevent/output-hashes.json",
++          "patches": [
++            {
++              "file": "native/patches/mouseevent/0074-current-native-mouse-position.patch",
++              "sha256": "1348e56e81e3e3af11ff2890d96f87c3c41e63f47d658a43badd872e2ec5726a"
++            }
++          ]
+diff --git a/drivers/cogent/native/mouse-position-checks.m b/drivers/cogent/native/mouse-position-checks.m
+new file mode 100644
+index 0000000..cbd4274
+--- /dev/null
++++ b/drivers/cogent/native/mouse-position-checks.m
+@@ -0,0 +1,93 @@
++// Private, invisible Cocoa object fixtures. No event is posted or dispatched.
++#import "../mouse_position_darwin.m"
++
++@interface VellumMouseFixtureEvent : NSEvent
++@property NSWindow *target;
++@property NSEventType kind;
++@property NSPoint location;
++@end
++@implementation VellumMouseFixtureEvent
++- (NSWindow *)window { return self.target; }
++- (NSEventType)type { return self.kind; }
++- (NSPoint)locationInWindow { return self.location; }
++@end
++
++@interface VellumMouseFlippedView : NSView
++@end
++@implementation VellumMouseFlippedView
++- (BOOL)isFlipped { return YES; }
++@end
++
++static unsigned checks;
++static void expect(BOOL passed, const char *name) {
++    checks++;
++    if (!passed) { fprintf(stderr, "mouse position fixture failed: %s\n", name); exit(1); }
++}
++static void point(NSWindow *window, NSEvent *event, double wantX, double wantY) {
++    double x = 918, y = 719;
++    expect(vellumMouseEventPosition(window, event, &x, &y) &&
++           fabs(x - wantX) < 1e-9 && fabs(y - wantY) < 1e-9, "position");
++}
++static void refused(NSWindow *window, NSEvent *event) {
++    double x = 918, y = 719;
++    expect(!vellumMouseEventPosition(window, event, &x, &y) &&
++           x == 918 && y == 719, "refusal preserves outputs");
++}
++
++int main(void) {
++    @autoreleasepool {
++        [NSApplication sharedApplication];
++        NSRect rect = NSMakeRect(100, 100, 320, 240);
++        NSWindow *first = [[NSWindow alloc] initWithContentRect:rect
++            styleMask:NSWindowStyleMaskBorderless backing:NSBackingStoreBuffered defer:NO];
++        NSWindow *second = [[NSWindow alloc] initWithContentRect:rect
++            styleMask:NSWindowStyleMaskBorderless backing:NSBackingStoreBuffered defer:NO];
++        first.releasedWhenClosed = NO; second.releasedWhenClosed = NO;
++        VellumMouseFixtureEvent *event = [VellumMouseFixtureEvent new];
++        event.target = first; event.location = NSMakePoint(19.5, 31.25);
++        NSEventType types[] = {NSEventTypeLeftMouseDown, NSEventTypeLeftMouseUp,
++            NSEventTypeRightMouseDown, NSEventTypeRightMouseUp,
++            NSEventTypeOtherMouseDown, NSEventTypeOtherMouseUp,
++            NSEventTypeLeftMouseDragged, NSEventTypeRightMouseDragged,
++            NSEventTypeOtherMouseDragged, NSEventTypeMouseMoved, NSEventTypeScrollWheel};
++        for (unsigned i = 0; i < sizeof(types) / sizeof(types[0]); i++) {
++            event.kind = types[i]; point(first, event, 19.5, 208.75);
++        }
++        // Same screen location, independent of view flipping/bounds origin.
++        first.contentView = [[VellumMouseFlippedView alloc] initWithFrame:NSMakeRect(0, 0, 320, 240)];
++        point(first, event, 19.5, 208.75);
++        [first.contentView setBoundsOrigin:NSMakePoint(7, 11)];
++        point(first, event, 19.5, 208.75);
++        first.contentView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 320, 240)];
++        [first.contentView setBoundsOrigin:NSMakePoint(7, 11)];
++        point(first, event, 19.5, 208.75);
++        event.location = NSMakePoint(-4.5, 300.25);
++        point(first, event, -4.5, -60.25);
++        refused(second, event);
++        refused(nil, event); refused(first, nil);
++        event.target = nil; refused(first, event); event.target = first;
++        event.kind = NSEventTypeKeyDown; refused(first, event);
++        event.kind = NSEventTypeApplicationDefined; refused(first, event);
++        event.kind = NSEventTypeLeftMouseDown;
++        event.location = NSMakePoint(NAN, 12); refused(first, event);
++        event.location = NSMakePoint(12, INFINITY); refused(first, event);
++        event.location = NSMakePoint(19.5, 31.25);
++        double x = 918, y = 719;
++        expect(!vellumMouseEventPosition(first, event, NULL, &y) && y == 719, "null x");
++        expect(!vellumMouseEventPosition(first, event, &x, NULL) && x == 918, "null y");
++        __block BOOL rejected = NO;
++        dispatch_semaphore_t finished = dispatch_semaphore_create(0);
++        dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
++            double a = 918, b = 719;
++            rejected = !vellumMouseEventPosition(first, event, &a, &b) && a == 918 && b == 719;
++            dispatch_semaphore_signal(finished);
++        });
++        expect(dispatch_semaphore_wait(finished, dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC)) == 0, "worker completed");
++        expect(rejected, "off-main thread");
++        expect(!vellumNativeMouseEventPosition(NULL, &x, &y), "missing current window");
++        first.contentView = nil; refused(first, event);
++        [second close]; [first close];
++        printf("{\"passed\":true,\"checks\":%u,\"scope\":\"invisible Cocoa geometry and refusal fixtures; no posted input\"}\n", checks);
++    }
++    return 0;
++}
+diff --git a/drivers/cogent/native/patches/mouseevent/0074-current-native-mouse-position.patch b/drivers/cogent/native/patches/mouseevent/0074-current-native-mouse-position.patch
+new file mode 100644
+index 0000000..bb97c8a
+--- /dev/null
++++ b/drivers/cogent/native/patches/mouseevent/0074-current-native-mouse-position.patch
+@@ -0,0 +1,93 @@
++--- a/system/driver/desktop/app.go
+++++ b/system/driver/desktop/app.go
++@@ -38 +37,0 @@
++-// App is the [system.App] implementation for the desktop platform
++@@ -45,0 +45,8 @@
+++// NativeMouseEventPositioner optionally supplies the current native mouse
+++// event's position in device pixels. It runs on the native event thread and
+++// must not reenter the UI. False preserves hardware-cursor fallback.
+++type NativeMouseEventPositioner interface {
+++	MouseEventPosition() (image.Point, bool)
+++}
+++
+++// App is the [system.App] implementation for the desktop platform.
++--- a/system/driver/desktop/event.go
+++++ b/system/driver/desktop/event.go
++@@ -80,0 +81,16 @@
+++}
+++
+++// Only button and scroll callbacks consume the current event. General cursor
+++// queries and drops retain hardware polling instead of reusing a stale event.
+++func (w *Window) mouseEventPosPoint(gw *glfw.Window) image.Point {
+++	if point, ok := w.nativeMouseEventPosition(); ok {
+++		return point
+++	}
+++	return w.CurMousePosPoint(gw)
+++}
+++
+++func (w *Window) nativeMouseEventPosition() (image.Point, bool) {
+++	if native, ok := w.Native.(NativeMouseEventPositioner); ok {
+++		return native.MouseEventPosition()
+++	}
+++	return image.Point{}, false
++@@ -109 +125 @@
++-	where := w.CurMousePosPoint(gw)
+++	where := w.mouseEventPosPoint(gw)
++@@ -121 +137 @@
++-	where := w.CurMousePosPoint(gw)
+++	where := w.mouseEventPosPoint(gw)
++--- /dev/null
+++++ b/system/driver/desktop/mouse_position_vellum_test.go
++@@ -0,0 +1,52 @@
+++package desktop
+++
+++import (
+++	"image"
+++	"testing"
+++)
+++
+++type mousePositionAttachment struct {
+++	point image.Point
+++	valid bool
+++	calls int
+++}
+++
+++type passiveMouseAttachment struct{}
+++
+++func (*passiveMouseAttachment) Focus(bool) {}
+++func (*passiveMouseAttachment) Close()     {}
+++
+++func (*mousePositionAttachment) Focus(bool) {}
+++func (*mousePositionAttachment) Close()     {}
+++func (a *mousePositionAttachment) MouseEventPosition() (image.Point, bool) {
+++	a.calls++
+++	return a.point, a.valid
+++}
+++
+++func TestNativeMouseEventPositionPrecedesHardwarePolling(t *testing.T) {
+++	a := &mousePositionAttachment{point: image.Pt(1949, -37), valid: true}
+++	w := &Window{Native: a}
+++	w.DevicePixelRatio = 2 // A native point is already scaled; do not scale twice.
+++	// A nil GLFW window would panic if hardware polling preceded admission.
+++	if got := w.mouseEventPosPoint(nil); got != a.point || a.calls != 1 {
+++		t.Fatal("native device-pixel event lost", got, a.calls)
+++	}
+++	a.point = image.Pt(-4, 1000)
+++	if got := w.mouseEventPosPoint(nil); got != a.point || a.calls != 2 {
+++		t.Fatal("event position was cached or clamped", got, a.calls)
+++	}
+++}
+++
+++func TestNativeMouseEventPositionWindowAndFallbackIsolation(t *testing.T) {
+++	first := &Window{Native: &mousePositionAttachment{point: image.Pt(10, 20), valid: true}}
+++	second := &Window{Native: &mousePositionAttachment{point: image.Pt(30, 40), valid: true}}
+++	if first.mouseEventPosPoint(nil) != image.Pt(10, 20) || second.mouseEventPosPoint(nil) != image.Pt(30, 40) {
+++		t.Fatal("native event crossed window attachments")
+++	}
+++	for _, native := range []NativeAttachment{nil, &passiveMouseAttachment{}, &mousePositionAttachment{point: image.Pt(1, 2), valid: false}} {
+++		w := &Window{Native: native}
+++		if _, ok := w.nativeMouseEventPosition(); ok {
+++			t.Fatalf("unavailable event prevented hardware fallback: %T", native)
+++		}
+++	}
+++}
+diff --git a/drivers/cogent/native/patches/mouseevent/README.md b/drivers/cogent/native/patches/mouseevent/README.md
+new file mode 100644
+index 0000000..15259f6
+--- /dev/null
++++ b/drivers/cogent/native/patches/mouseevent/README.md
+@@ -0,0 +1,46 @@
++# Current native mouse-event position
++
++Stage 74 adds the optional `desktop.NativeMouseEventPositioner` attachment
++contract. Button and scroll callbacks prefer its accepted device-pixel position;
++without support, or when it returns false, the original GLFW hardware-cursor
++path remains. General cursor queries, file drops and GLFW-provided move/drag
++coordinates retain their prior paths. A supplied point is neither cached,
++clamped nor scaled twice.
++
++On Cocoa the accessibility/native attachment uses only the current mouse event
++for its exact live window, on the main thread. It converts content-view bounds
++and flipping to top-left logical coordinates and applies the existing desktop
++DPR conversion once. Key/application events, missing/foreign windows or views,
++non-finite coordinates and off-main calls refuse without writing outputs.
++Closing the native attachment withdraws its window reference first. This hook
++posts no work, acquires no render/owner locks and never calls RunOnMain.
++
++The patch/input/output hashes are owned by `native/dependencies.json` and
++`prepare.py`; do not hand-edit generated upstream sources. Original upstream
++files retain their BSD-style licensing; the new test is MIT under this SDK.
++
++## Checks
++
++From `drivers/cogent` after preparation:
++
++```sh
++go -C build/upstream test -race ./system/driver/desktop
++go test -race -tags offscreen -run 'TestNativeMousePosition|TestReviewFieldSettlement' .
++xcrun clang -fobjc-arc -framework Cocoa -Wall -Wextra native/mouse-position-checks.m -o build/mouse-position-checks
++./build/mouse-position-checks
++```
++
++The Cocoa check creates invisible window/view objects and protocol event
++fixtures. It posts or dispatches no input. Its 29 assertions cover all admitted
++mouse event kinds, flipped/offset view bounds, outside-view coordinates,
++window/type/thread/finite/null refusal and unchanged output sentinels. The
++worker uses asynchronous dispatch: synchronous dispatch may execute inline on
++the calling thread and cannot establish an off-main refusal test.
++
++Go tests establish native-point precedence without hardware access, fresh and
++unclamped device pixels, independent window attachments, unavailable-hook
++fallback admission and absent live-window refusal. These are unit/protocol
++proofs. Actual native button/field/scroll/menu/drag interactions and physical
++DPR/cross-display/lifecycle qualification remain separate gates. There is no
++claim of full platform, screen-reader, distribution or visible-latency
++qualification from these checks.
+diff --git a/drivers/cogent/native/patches/mouseevent/original-hashes.json b/drivers/cogent/native/patches/mouseevent/original-hashes.json
+new file mode 100644
+index 0000000..4850bf4
+--- /dev/null
++++ b/drivers/cogent/native/patches/mouseevent/original-hashes.json
+@@ -0,0 +1,5 @@
++{
++  "system/driver/desktop/app.go": "32326f74f0c8247766c6f0ccd4e67430991cff0b78f98938a956c0cd1e56a5be",
++  "system/driver/desktop/event.go": "fe2104045284b0069ca69ab7fdf4fb9654d6421f359e36a5aebf7e737d228334",
++  "system/driver/desktop/mouse_position_vellum_test.go": null
++}
+diff --git a/drivers/cogent/native/patches/mouseevent/output-hashes.json b/drivers/cogent/native/patches/mouseevent/output-hashes.json
+new file mode 100644
+index 0000000..326f431
+--- /dev/null
++++ b/drivers/cogent/native/patches/mouseevent/output-hashes.json
+@@ -0,0 +1,5 @@
++{
++  "system/driver/desktop/app.go": "d5b6e78e003c0323910777817ee90255283c69003d4eaeb8b9f30732f34a08f3",
++  "system/driver/desktop/event.go": "062ad2b4ca911d1f219fde0a453ad9a1bb5472d1291b54d9e85c884168eb6dc5",
++  "system/driver/desktop/mouse_position_vellum_test.go": "5ea32304134d0c1b7b9b6ef9f562a70be629712ccf1b3b1d931a82aaeceada3f"
++}

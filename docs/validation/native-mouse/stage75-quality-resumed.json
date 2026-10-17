@@ -1,0 +1,66 @@
+{
+  "passed": true,
+  "steps": [
+    {
+      "name": "elab-native-staticcheck",
+      "cwd": "desktop",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/tools/staticcheck",
+        "./..."
+      ],
+      "started_utc": "2026-10-17T03:51:52.731330+00:00",
+      "log": "build/inspector-input/stage75-resumed-elab-native-staticcheck.log",
+      "exit_code": 0,
+      "elapsed_seconds": 4.253385583055206,
+      "finished_utc": "2026-10-17T03:51:56.985074+00:00"
+    },
+    {
+      "name": "elab-root-race",
+      "cwd": ".",
+      "argv": [
+        "go",
+        "test",
+        "-race",
+        "./..."
+      ],
+      "started_utc": "2026-10-17T03:51:56.985324+00:00",
+      "log": "build/inspector-input/stage75-resumed-elab-root-race.log",
+      "exit_code": 0,
+      "elapsed_seconds": 4.229726790916175,
+      "finished_utc": "2026-10-17T03:52:01.215246+00:00"
+    },
+    {
+      "name": "elab-root-vet",
+      "cwd": ".",
+      "argv": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "started_utc": "2026-10-17T03:52:01.215470+00:00",
+      "log": "build/inspector-input/stage75-resumed-elab-root-vet.log",
+      "exit_code": 0,
+      "elapsed_seconds": 1.4677554169902578,
+      "finished_utc": "2026-10-17T03:52:02.683391+00:00"
+    },
+    {
+      "name": "elab-python",
+      "cwd": ".",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "started_utc": "2026-10-17T03:52:02.683650+00:00",
+      "log": "build/inspector-input/stage75-resumed-elab-python.log",
+      "exit_code": 0,
+      "elapsed_seconds": 0.08300029102247208,
+      "finished_utc": "2026-10-17T03:52:02.766815+00:00"
+    }
+  ]
+}

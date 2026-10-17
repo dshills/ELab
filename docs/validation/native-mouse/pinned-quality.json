@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "source_files": 620,
+  "source_freeze": "build/pinned-sdk/source-freeze.json",
+  "source_stable": true,
+  "steps": [
+    {
+      "name": "build",
+      "argv": [
+        "./scripts/build.sh"
+      ],
+      "started_utc": "2026-10-17T04:12:19.173639+00:00",
+      "log": "build/pinned-sdk/build.log.txt",
+      "exit_code": 0,
+      "elapsed_seconds": 22.25421370798722,
+      "finished_utc": "2026-10-17T04:12:41.428125+00:00"
+    },
+    {
+      "name": "check",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T04:12:41.428329+00:00",
+      "log": "build/pinned-sdk/check.log.txt",
+      "exit_code": 0,
+      "elapsed_seconds": 185.86335370794404,
+      "finished_utc": "2026-10-17T04:15:47.291044+00:00"
+    },
+    {
+      "name": "native-smoke",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/elab",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "started_utc": "2026-10-17T04:15:47.291452+00:00",
+      "log": "build/pinned-sdk/native-smoke.log.txt",
+      "exit_code": 0,
+      "elapsed_seconds": 39.296052457997575,
+      "finished_utc": "2026-10-17T04:16:26.598813+00:00"
+    }
+  ],
+  "binaries": {
+    "build/elab": "7f50eda3dbd817a6075c24e6958bb572500e745decbb59503849b05927ced311",
+    "build/elab-agent": "6390279344387bb767bad5ba5cd522299a546bececacf715a2fc2c46950630ac",
+    "build/elab-conformance": "98da1e2c68836e17cf2dc24435a7ac97cb13ba9189bcbf8d9663409bddfd8cb2",
+    "build/elab-ui-audit": "8fe9f9c5f272fc8b80633d8381c246443e5a775b99e22684d050cdf637f65a6a"
+  },
+  "preserved_binary_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c"
+}

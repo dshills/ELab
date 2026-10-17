@@ -1,0 +1,9 @@
+# Native mouse and pinned SDK evidence
+
+The parent [qualification receipt](../native-mouse-validation.json) binds these artifacts to the source pin and records limitations. `pinned-quality.json` contains the ordinary ELab build/check/smoke result; `pinned-*.log.txt` retain its complete output. `pinned-source-freeze.json` covers executable sources, scripts, module files, the command ledger and SDK lock. `pinned-native-input-equivalence.json` records the four default module origins and the actual build/test dependency inputs compared with the tested isolated SDK.
+
+The `stage75-*` records precede SDK export and qualify the isolated framework implementation. `stage75-source-qualified.json` freezes its tracked files and prepared patch outputs; the archive's manifest separately covers the complete exported SDK. `stage75-quality-qualified.json` intentionally retains a final lint-harness failure after its SDK race/vet suites passed. `stage75-quality-resumed.json` contains corrected lint/root checks. The final ordinary pinned quality gate passes without that harness override.
+
+`stage75-quality.json` and its native-smoke log retain the initial geometry-dependent rendering failure. `inspection-frame-probe.log.txt` is diagnostic evidence; `pointer-isolated-smoke.log.txt` and the later ordinary pinned smoke pass after fixture-only geometry isolation, with the original 50-pixel assertion. The Cocoa result covers 29 invisible geometry/refusal assertions, with no posted input. The early off-main fixture correction was observed through tool output; an original raw failure log was not retained.
+
+Physical actions, screenshots, public observations and unresolved divider/external-AX behavior are recorded in the [native UI audit](../../../research/ui-audit/native-mouse/README.md). None of these artifacts promotes the canonical application or proves full input/accessibility, physical-device, participant or distribution acceptance.

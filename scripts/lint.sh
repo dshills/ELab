@@ -1,6 +1,7 @@
 #!/bin/sh
 set -eu
 ELAB_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+python3 "$ELAB_ROOT/scripts/prepare-vellum.py"
 export GOWORK=off
 export GOCACHE="${ELAB_GOCACHE:-$ELAB_ROOT/build/go-cache}"
 export STATICCHECK_CACHE="$ELAB_ROOT/build/staticcheck-cache"

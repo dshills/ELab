@@ -13,6 +13,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	"cogentcore.org/core/core"
 	"github.com/dshills/elab/transport"
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/app"
@@ -40,6 +41,13 @@ func runNative() (runErr error) {
 	flag.Parse()
 	if *smokeTimeout <= 0 || *smokeTimeout > 2*time.Minute {
 		return fmt.Errorf("smoke-timeout must be positive and at most 2 minutes")
+	}
+	if *smoke {
+		// Honor the fixture's requested viewport and preserve the user's saved
+		// window geometry. Ordinary app launches keep their normal persistence.
+		previous := core.DebugSettings.DisableWindowGeometrySaver
+		core.DebugSettings.DisableWindowGeometrySaver = true
+		defer func() { core.DebugSettings.DisableWindowGeometrySaver = previous }()
 	}
 	service := workbench.New()
 	defer func() {

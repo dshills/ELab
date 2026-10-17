@@ -10,15 +10,9 @@ Choose **Examples → MOSFET LED switch** for pulse-driven NMOS/LED simulation, 
 
 ## Run the desktop app
 
-The development layout expects this repository beside the inspected Vellum checkout:
+Use Go 1.25.6 or newer, Python 3.10 or newer, and Vellum's macOS native prerequisites. Normal builds verify and extract the [pinned private Vellum SDK](third_party/vellum/README.md), including its prepared Cogent and typesetting sources. A sibling Vellum checkout is no longer required. ELab's `desktop/go.mod` contains the four explicit local replacements into the verified build cache. Run `python3 scripts/prepare-vellum.py` before invoking native Go tools directly; `build.sh`, `lint.sh` and `check.sh` prepare it automatically.
 
-```text
-projects/
-  ELab/
-  Vellum/
-```
-
-Use Go 1.25.6 or newer and Vellum's macOS native prerequisites. Vellum must already have its pinned Cogent and typesetting dependencies prepared; on a fresh checkout run `Vellum/drivers/cogent/prepare.sh` following its development guide. ELab's `desktop/go.mod` contains the required four explicit framework/native replacements. The [initial baseline](docs/vellum-baseline.json) preserves the first integration record; the [current qualification](docs/vellum-baseline-current.json) records the SDK commit, dependency hashes and tested release.
+The SDK lock describes unreleased source builds. The [initial baseline](docs/vellum-baseline.json) and [packaged application qualification](docs/vellum-baseline-current.json) retain their historical release identities; changing the source dependency does not promote an application bundle.
 
 From the ELab directory:
 
@@ -54,12 +48,12 @@ Drag a selected part to move it with its wires. Pan drags the sheet; scroll zoom
 For a local double-clickable development bundle, after building:
 
 ```sh
-python3 ../Vellum/scripts/package-app.py --binary build/elab \
+python3 -B build/.vellum-sdk-aa9d023/scripts/package-app.py --binary build/elab \
   --output build/ELab-local.app --name ELab --identifier com.dshills.elab \
-  --version 0.104.0 --build-version 119 --platform darwin
+  --version 0.0.0 --build-version 1 --platform darwin
 ```
 
-The packager requires a new output path. The qualified local checkpoint is `build/ELab.app`; its previous 0.103 bundle is preserved as `build/ELab-0.103.0-118-preserved.app`.
+The packager requires a new output path. This example creates an unreleased development bundle. The qualified local checkpoint remains `build/ELab.app` at 0.105.0 /120; its previous 0.104 bundle is preserved as `build/ELab-0.104.0-119-preserved.app`.
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).
 
@@ -187,7 +181,7 @@ The current engines support series LED DC, exact first-order RC, grounded-emitte
 - `desktop/`: independent native module using Vellum, controlled UI, command bindings, and schematic rendering.
 - `research/`: evidence, [PRD](research/07-product-requirements.md), and [Vellum integration decision](research/08-vellum-integration.md).
 
-Vellum's own code is MIT licensed; Cogent and other native dependencies retain their upstream licenses. No framework source is vendored here. Application licensing has not been selected.
+Vellum's own code is MIT licensed; Cogent and other native dependencies retain their upstream licenses. The private SDK archive retains its license inventory, notices and private-build marker. Application licensing has not been selected.
 
 Autosave and crash recovery are available in the Inspector. Snapshots preserve dirty edits separately from saved files; restoring opens a new copy for Save As. See [recovery commands and limits](docs/recovery.md). Native startup enables autosave by default; headless sessions opt in with `--recovery-directory` or the shared configuration command.
 

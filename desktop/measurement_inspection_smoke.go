@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"reflect"
 	"time"
 
@@ -96,9 +97,10 @@ func nativeMeasurementInspectionSmoke(ctx context.Context, a *app.Application, s
 				}
 			}
 			if green < 50 {
-				ready <- fmt.Errorf("fresh inspected-net wire/terminal highlights absent: %d pixels", green)
+				ready <- fmt.Errorf("fresh inspected-net wire/terminal highlights absent: %d pixels; image=%v viewport=%gx%g zoom=%g", green, pixels.Bounds(), s.drawing.View.Width, s.drawing.View.Height, s.drawing.View.Zoom)
 				return
 			}
+			log.Printf("smoke inspection: inspected-net highlight pixels=%d image=%v viewport=%gx%g zoom=%g", green, pixels.Bounds(), s.drawing.View.Width, s.drawing.View.Height, s.drawing.View.Zoom)
 			ready <- nil
 		}); err != nil {
 			return err
