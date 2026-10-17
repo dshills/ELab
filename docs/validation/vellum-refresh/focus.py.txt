@@ -1,0 +1,14 @@
+from pathlib import Path
+import datetime,json,os,subprocess,time
+root=Path.cwd();source=root/'build/.vellum-upgrade-762dcbf';out=root/'build/vellum-refresh';driver=source/'drivers/cogent'
+env=dict(os.environ,GOPROXY='off',GOWORK='off',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(root/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native');records=[]
+commands=[('prepare-tests',driver,['python3','-B','-m','unittest','prepare_test.py'],120),('key-mouse-race',driver/'build/upstream',['go','test','-race','./events','./system/driver/desktop','-run','^Test(SourceKey|NativeMouseEventPosition)','-count=1'],300),('driver-pointer-race',driver,['go','test','-race','-tags','offscreen','-run','^Test(NativeMousePosition|ReviewFieldSettlement)','-count=1','.'],300),('cocoa-build',driver,['xcrun','clang','-fobjc-arc','-framework','Cocoa','-Wall','-Wextra','native/mouse-position-checks.m','-o',str(out/'mouse-position-checks')],90),('cocoa-checks',driver,[str(out/'mouse-position-checks')],30)]
+for name,cwd,argv,timeout in commands:
+ record=dict(name=name,cwd=str(cwd),argv=argv,status='running',started_utc=datetime.datetime.now(datetime.timezone.utc).isoformat());records.append(record);started=time.monotonic()
+ def save():(out/'process-focus.json').write_text(json.dumps(records,indent=2)+'\n')
+ save();print('Starting '+name,flush=True)
+ try:
+  with (out/(name+'.log.txt')).open('x') as log:result=subprocess.run(argv,cwd=cwd,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=timeout)
+  record['exit_code']=result.returncode;assert result.returncode==0,(name,result.returncode);record['status']='completed'
+ except BaseException as error:record.update(status='failed',error_type=type(error).__name__);raise
+ finally:record.update(elapsed_seconds=time.monotonic()-started,finished_utc=datetime.datetime.now(datetime.timezone.utc).isoformat());save();print(json.dumps(record),flush=True)

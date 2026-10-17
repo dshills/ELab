@@ -1,0 +1,765 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T16:26:48.198353+00:00",
+  "scope": "Current local Vellum SDK adoption with byte-identical pointer compatibility, explicit verifier bootstrap, repaired graph-unchanged batch selection, and three atomic batch/history contracts",
+  "reference_configuration": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "processor": "Apple M4 Pro",
+    "logical_cpus": 14,
+    "memory_bytes": 68719476736,
+    "go_toolchain": "go version go1.27.2 darwin/arm64"
+  },
+  "source_parent_commit": "852e123fd1df85c72de03cade272b1d50a3c23ad",
+  "source_index": "docs/validation/vellum-refresh/source-freeze.json",
+  "source_frozen_files": 716,
+  "source_stable": true,
+  "source_delta": {
+    "desktop/go.mod": {
+      "before": "2aff266664d9502a9bb261d02a00bffdfd7031271e48c0170bee1c5cfddb4d11",
+      "after": "322aa093126523aa77df0991593bc0f6356df2693de97d7a850c137bc0e983f3"
+    },
+    "scripts/edit-history-contracts-demo.py": {
+      "before": null,
+      "after": "21bcd69934f82dc2e7c80dc71aeb7f720cbd551a5b325d3c59640ebd5cf813fd"
+    },
+    "scripts/prepare-vellum.py": {
+      "before": "a11825cfb685a8af88625afde459f92d37ef0dde1a12adde1a64ee72bdf31976",
+      "after": "be9e81a0c955a71d27efd283ea47379cd7b431f4db042ade9a43ae21b31b7a8a"
+    },
+    "scripts/test_prepare_vellum.py": {
+      "before": "10a4430bd89e8cdf9a1789d60775f6b4766a170724d8727d1a487d80e061eaed",
+      "after": "615e91a0c01b36c0306d63e7c5d94218b203fee88f4cf31ec4eb11f1f3183cf3"
+    },
+    "third_party/vellum/sdk.lock.json": {
+      "before": "ae7afae59247126e9c1bfc0b758a64eb4ea2825a9cb006d8bf81973acb3c6a8b",
+      "after": "73df0a27e07690a2813742c41322181444454e88df120087097d43dd3ba7b92d"
+    },
+    "workbench/capability_details.go": {
+      "before": "f1450cb75332e5419726b3ee92e36f97d24f25a8d2cb66e15162bb0c94429f92",
+      "after": "2061e44790cb1e1b09d165c5b46147a302bef268814761265a6a4feb8c82f72b"
+    },
+    "workbench/edit_history_capabilities.go": {
+      "before": null,
+      "after": "05565cc8fa332c78beacb17c139107ec8f2609118a6f9c546517acba02fac9c9"
+    },
+    "workbench/edit_history_contracts_test.go": {
+      "before": null,
+      "after": "76e62c00a7399aa351c0baa8bf2b4959d4478fe2860a37884a853cdac54c5fe8"
+    },
+    "workbench/workflow.go": {
+      "before": "0461c0078b6b58c9a468dc77ec050e5b3e57b71f0aa0bf2307b6bea5850e1b6e",
+      "after": "060cb5207698a103c47735eab67489ab10bfcdba44c76a8dd199c9829a839d34"
+    }
+  },
+  "binary_sha256": {
+    "build/elab": "16d6ce94ee18c3b6326ba279f97a310cc3e1a661bb684f10ad4ba9c46032ddc7",
+    "build/elab-agent": "77f0da5848ffbc3cc5ad05ea55ea723f5b8cd7578fe827693ba8de597a312fc5",
+    "build/elab-conformance": "3f7d7bb1dbeeb6daea561d5b2054f0fc5fb3320c212a853b7f0b69e8a1aa7875",
+    "build/elab-ui-audit": "7795ac148ecaefadcc4aaa3a826eaebf5ce37300de4210e6734a14787a20b0e7",
+    "build/ELab-0.121.0-138-vellum-refresh-candidate.app/Contents/MacOS/ELab": "16d6ce94ee18c3b6326ba279f97a310cc3e1a661bb684f10ad4ba9c46032ddc7"
+  },
+  "setup_notes": [
+    "Core regression reproduced the actual dangling selection after an accepted graph-unchanged create/delete batch; staged normalization fixes it. Before and after race logs and prior runtime source are retained.",
+    "The first public fixture assumed reopened operation summary display order equaled saved entry order. Final source matches complete captured metadata before exact re-export; no product persistence change was inferred.",
+    "Vellum source 762dcbf is imported read-only into an isolated copy. The existing mouse compatibility patch is carried byte-identically as stage 78 and committed as 47b7153. All 78 native preparation stages pass; seven mouse source/prepared files remain byte-identical to the prior SDK.",
+    "The current verifier imports two additional scripts. The trusted bootstrap list now pins all five explicit sources; missing/extra import sets refuse before any subprocess.",
+    "The new SDK is the standard private archive, with no optional native GPU binary overlay. Existing module versions and four local replacement topology remain."
+  ],
+  "candidate": "build/ELab-0.121.0-138-vellum-refresh-candidate.app",
+  "candidate_promoted": false,
+  "framework_base": "762dcbf79480da2ebc4381d9a3ec3f4b7bcb6b98",
+  "sdk": {
+    "schema": 1,
+    "archive": "third_party/vellum/vellum-47b7153.tar.gz",
+    "archive_bytes": 18615050,
+    "sha256": "931d3a7217dc2f63618323fc523100fc6cee57000b49ad55df2bd4b91a3cbf68",
+    "manifest_sha256": "11956d50895dbfa3887131f83155032e066457bf582008dd5914f9970515ac89",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-47b7153",
+    "source_commit": "47b7153109735006305e3610520e489a953fcd97",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 7446,
+    "bootstrap": {
+      "scripts/check-sdk.py": "b8062fbd4c57d1d8cb4d75a094184e1a5fa108cfa811fe9fb390f99f6d66be38",
+      "scripts/child_process.py": "04ba2610ddf112e936e8adcd9a81c03cff422843f993c2ce8a9e1acd96f39c9c",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "803d981c00f32d08a370577b37094848b2c79085cf3303a99b23d2a94336ac2c",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541"
+    }
+  },
+  "sdk_delta": {
+    "previous_source": "aa9d023243a6bded514c3d9696c08a9c917119c4",
+    "framework_base": "762dcbf79480da2ebc4381d9a3ec3f4b7bcb6b98",
+    "sdk_source": "47b7153109735006305e3610520e489a953fcd97",
+    "old_files": 7414,
+    "new_files": 7446,
+    "changed_or_added_or_removed": {
+      "README.md": {
+        "before": "2bc5ae2927a3ee27a773cbd8173f7a633013e156e5efb0b295bc0578bba92d0a",
+        "after": "020c62f978512a117bd32e1ee3a4dd2e8fcc9b583e93629938e6b5312608e005"
+      },
+      "docs/implementation.md": {
+        "before": "c2d18bbbdda78b9e2e1627fcb04f8425145bed34883e230ae65a43b3a7910cdf",
+        "after": "b2653dc262da751cf8889f23692cd0bd902ed74f550bf6a30d895970fc5c17a3"
+      },
+      "drivers/cogent/accessibility_grid_publication.go": {
+        "before": "6be79cc84a47d8a133f38f28a8114565380ab17abefc94b9a7152bbd36c8cc98",
+        "after": "7d72ad095d741a22d8831b99a64465b996a7d590c361164cd84b2aee89683c7c"
+      },
+      "drivers/cogent/accessibility_snapshot_copy_offscreen_test.go": {
+        "before": null,
+        "after": "1a74ebc8201810c7883e921855eb41598021727b1dbcbaae87f63057fa3b6792"
+      },
+      "drivers/cogent/build/upstream/events/source.go": {
+        "before": "cbe7f6d519c5d27799b02ba25113c8b17b664344634cbe3e5dfe035932e0643b",
+        "after": "7c697720f84fb2c5fa03d00e1a2afcfc8e9b06071c1e3b972f021efc7a43178c"
+      },
+      "drivers/cogent/build/upstream/events/source_key_ownership_vellum_test.go": {
+        "before": null,
+        "after": "19fde4cc53982acee3e98a47245ca19a781b545d48e0113064a37e7afa8e7144"
+      },
+      "drivers/cogent/build/upstream/paint/renderers/rasterx/glyph_coverage.go": {
+        "before": "3bbbf631ea035b983e24a30addc61c910d2ec0ea83169852314f494300f65e18",
+        "after": "2965921d89159d5a6ca70f17d56427d19883459d6bda7f3a5900c52143504576"
+      },
+      "drivers/cogent/build/upstream/paint/renderers/rasterx/glyph_placement.go": {
+        "before": null,
+        "after": "4fe746df3c51b2773e3e6e3462aea2722c506c54af2b855aee36d4d02a187f60"
+      },
+      "drivers/cogent/build/upstream/paint/renderers/rasterx/glyph_placement_bench_vellum_test.go": {
+        "before": null,
+        "after": "03267bd7f2ab01297e2cab0a02852c2d94292f400a929c2056578b87890f4c0d"
+      },
+      "drivers/cogent/build/upstream/paint/renderers/rasterx/glyph_placement_vellum_test.go": {
+        "before": null,
+        "after": "5b05208cb14dd4d46db1d111d211c7348cd83ce599ef057a3c5cdef3cdda681b"
+      },
+      "drivers/cogent/build/upstream/paint/renderers/rasterx/outline_cache.go": {
+        "before": "ce0fe6d0c8b83c223a51f28cbab06a0686629297a7321257d1e268b9358e0774",
+        "after": "327c88928dd3d1bd48621f1daad12dc9f3e5ca1b6060e637d98429eded990aa0"
+      },
+      "drivers/cogent/build/upstream/paint/renderers/rasterx/text.go": {
+        "before": "5c79e38249b2721e95cdc827ac29b4242884a6ec228da971d0c3a856eb27be62",
+        "after": "eb92ed998c1a3084b01764534ee4e012d5fd377fcfa6ad38f2f46dee94c87968"
+      },
+      "drivers/cogent/build/upstream/paint/renderers/sceneplan/packet.go": {
+        "before": "deb77d93f0a630ae428e122aa6a3e744eac524d9770f7300118e4476606d2d44",
+        "after": "9433c82a204fd19d3dbb7ff29d8abe959f5ae580e2c9e0a7b93586bcf1e9fd86"
+      },
+      "drivers/cogent/build/upstream/paint/renderers/sceneplan/tile_binning_vellum_test.go": {
+        "before": null,
+        "after": "c79cbdeff97a477ec524e3bc08eea6ca1981b563afba0bc700d328cde494dc3c"
+      },
+      "drivers/cogent/cmd/workbench/automation_native.go": {
+        "before": null,
+        "after": "dd83a5d3d3cc806f5ef986b05dc0e03b482fc112828265d9f81479c860985521"
+      },
+      "drivers/cogent/cmd/workbench/automation_native_test.go": {
+        "before": null,
+        "after": "be068cc2fe0a4c31970044d6a0d6c0c760a95a497977c4a1a82306ff0fcf26b8"
+      },
+      "drivers/cogent/cmd/workbench/main.go": {
+        "before": "ccb1f608b278ce84037dcd6cc9019ba18293dd0cd0afe6a8f2516af1c05985ee",
+        "after": "425d7bd1f1bbed719123ef9e901a9b65e73199166e915198ec416ef9422d2918"
+      },
+      "drivers/cogent/grid_glyph_placement_warm_offscreen_test.go": {
+        "before": null,
+        "after": "343c45178fec0a1b0502f751f3dc48a1756cb44bffb82c8958e93b564d55b9bc"
+      },
+      "drivers/cogent/grid_intrinsic_size_offscreen_test.go": {
+        "before": null,
+        "after": "0a7a553c4d30f4b657c4e22edb274db2f1c99982f7d64f514088abdadaa516f9"
+      },
+      "drivers/cogent/grid_retained.go": {
+        "before": "0044b857e9e8a34dd7e832c1c3fa2b674d0ba3affd49fda5b826bfc9176e91ee",
+        "after": "d0b7623fabffb66229f2447ef77d857e91ef6244a287edd52a6f6be43e430a40"
+      },
+      "drivers/cogent/grid_tile_binning_offscreen_test.go": {
+        "before": null,
+        "after": "4cfb19fe42794abd948217e27eda5e2b19dc49e97d66fd6bc07c959472a84674"
+      },
+      "drivers/cogent/native/README.md": {
+        "before": "8c90ab0d4b15bf0b99622ff9e2e0c3bd21c2883fea06d6cfc1b1d8e353ad5867",
+        "after": "b365252725e31c7c9962379dc115aca58cb20848034a6c85e93f26cd968b766a"
+      },
+      "drivers/cogent/native/dependencies.json": {
+        "before": "c431e8d13977ea64f38f857383b69303987556c73aff5f1bf4ae0d56d44d511d",
+        "after": "61cd655469897424d08836c31cde12ae83cc579a781243435e49706901c6c24c"
+      },
+      "drivers/cogent/native/patches/eventpublication/0077-key-event-publication-ownership.patch": {
+        "before": null,
+        "after": "23996a99f698f25a14505af406fa13b6d37bb70aab12a8922bd5ffad5602bc67"
+      },
+      "drivers/cogent/native/patches/eventpublication/README.md": {
+        "before": null,
+        "after": "7919f7a4390213baa66977bc5d320f419e04097d916764a6cc2ee929e9faa6b7"
+      },
+      "drivers/cogent/native/patches/eventpublication/original-hashes.json": {
+        "before": null,
+        "after": "9e90fcf0d68edb80f8a5863874ffb1e5ed542f4dd24f03c8872463551f1d4c3c"
+      },
+      "drivers/cogent/native/patches/eventpublication/output-hashes.json": {
+        "before": null,
+        "after": "422848e70c902f38d240062cb73ce351dd64f0f898da4bba062ff834a6eb6639"
+      },
+      "drivers/cogent/native/patches/glyphplacement/0076-exact-location-glyph-coverage.patch": {
+        "before": null,
+        "after": "c180b07f524aafd81477f6d201d6a15ccb549b115c0e81e3d04cc79fc1680237"
+      },
+      "drivers/cogent/native/patches/glyphplacement/README.md": {
+        "before": null,
+        "after": "dfbcbccbd0faa2820146678827cbbe38b84270fda812a63136bf73c543929238"
+      },
+      "drivers/cogent/native/patches/glyphplacement/original-hashes.json": {
+        "before": null,
+        "after": "a9a569d32a39de7d7bba7a070cf7e1d2ba123b102ccb8aac9706517d3012c3b3"
+      },
+      "drivers/cogent/native/patches/glyphplacement/output-hashes.json": {
+        "before": null,
+        "after": "ef5fa69c6ad1a6b32d5768497ce01719e253e316d95b93edc5979247d30f1a1b"
+      },
+      "drivers/cogent/native/patches/mouseevent/0075-current-native-mouse-position.patch": {
+        "before": "1348e56e81e3e3af11ff2890d96f87c3c41e63f47d658a43badd872e2ec5726a",
+        "after": null
+      },
+      "drivers/cogent/native/patches/mouseevent/0078-current-native-mouse-position.patch": {
+        "before": null,
+        "after": "1348e56e81e3e3af11ff2890d96f87c3c41e63f47d658a43badd872e2ec5726a"
+      },
+      "drivers/cogent/native/patches/mouseevent/README.md": {
+        "before": "b3fd5b8552c0b4a95e14cd40aa74198eecaa60538753aaae88b3b450b3c5f752",
+        "after": "fc2c273dd2f4e5465e20659bae627fe92c23fee12de9d448f70a381793fa460c"
+      },
+      "drivers/cogent/native/patches/tilebinning/0075-adaptive-tile-bin-counts.patch": {
+        "before": null,
+        "after": "d8ae35c6d00c1f2112e4fed17192de82484c251b4f3add6ab1439d8904a0e20a"
+      },
+      "drivers/cogent/native/patches/tilebinning/README.md": {
+        "before": null,
+        "after": "531b9ba620bae8f53d34816d9f9ac7edb3e9405193cf912ea7603a50116c8185"
+      },
+      "drivers/cogent/native/patches/tilebinning/original-hashes.json": {
+        "before": null,
+        "after": "a4a7f29447ea9e9fadc06001e49ffc2482803f439c1e04bd8307eea2f18626c0"
+      },
+      "drivers/cogent/native/patches/tilebinning/output-hashes.json": {
+        "before": null,
+        "after": "eda97463877fc4de722eed66cd8a99f9aa9712e4f71613ab6b7385643b464a87"
+      },
+      "drivers/cogent/prepare_test.py": {
+        "before": "a09c8e3e4e39c00cbbec2580c73ea461da38a652f6261ec54557382d9a595eea",
+        "after": "602b854e8a932490614f6689e2ed8189654d346de58a297e40c454b0acd124f7"
+      },
+      "examples/automation/LICENSE": {
+        "before": null,
+        "after": "07c4328563b9066be35c2ac90c6744e6ac904882fd2355ea82d7f0756c940b43"
+      },
+      "examples/automation/README.md": {
+        "before": null,
+        "after": "f4f4296c002bcbc31256276f883d19d375b3e8f03e7d17a6682333ed4d5bf7dc"
+      },
+      "examples/automation/go.mod": {
+        "before": null,
+        "after": "02e5cad964dd33f14ff0017cd5a8417d825356ad99a83165eaff227280b8db04"
+      },
+      "examples/automation/main.go": {
+        "before": null,
+        "after": "9119a88b1023eb1f7ba823121b2d270cefe4ab3dfa6291129bf88de4af81170e"
+      },
+      "examples/automation/main_test.go": {
+        "before": null,
+        "after": "37333adcee06ccb1343e63e30cb902459cc31413d5535c0ff258ba646781bf85"
+      },
+      "examples/automation/workflow.go": {
+        "before": null,
+        "after": "c9a905bc82e6dcbb7467d2aecc5064aadc3d8f6e3d1d76e0012626fb5eb6e456"
+      },
+      "examples/automation/workflow_test.go": {
+        "before": null,
+        "after": "597996660f5ebf63cdc75893586455e7ae9c76bb1651b14a05d85544cd37f8a9"
+      },
+      "examples/drawing/README.md": {
+        "before": "b14ab465bb3f3cd5515c3327f3f48c0fb69e9cffdb1d3ff0c512886f1b6d7751",
+        "after": "7e2d7b5284c8a087bf8d6db07538d3761a51754bbf9756ed356678c3428ede31"
+      },
+      "examples/drawing/main.go": {
+        "before": "8a3db358c45be5ef7f97b0e015cfcea8d79b2be1f69ff6e6d197895f4908d745",
+        "after": "42a34669bd25654a5d8ff1762b3f2837eeb7671fc5ca4b026cdd15eec9abab99"
+      },
+      "examples/drawing/smoke.go": {
+        "before": "740fe39196a9dfb713bff68df8f5aae202a1442b9009b610fb8bb3cdc24ead72",
+        "after": "8d4f635b28aa68bf9b8874a37d34293de38ad616580ee0f0d5001984a1345b15"
+      },
+      "examples/imaging/README.md": {
+        "before": "9004120283298f9735de3c88a398716c38302c54fc9d0a2192b846d896209d35",
+        "after": "2cd040a8f061d5a94004032adb9d7948981422c9ca88f8e283a480a6ec3e799c"
+      },
+      "examples/imaging/main.go": {
+        "before": "b56058a4ffff55deb04994ac1190fc2fc75554d7963da167d7153dac63176bdc",
+        "after": "5cfda9e997b6477bce0d7e59422897a5cac5e26a550588176a9b2789fd655f05"
+      },
+      "examples/imaging/main_test.go": {
+        "before": "339772a367a34ab6bf1256d7dbf9036c69cb7574ef24068d95271d639ac6c638",
+        "after": "1791702572748b40592282c842864ab8536889eb4f9e05e8dfc0cad9d578ab8c"
+      },
+      "examples/imaging/smoke.go": {
+        "before": "8ea572316e76a5eae77ffa0bc8173730c162cfc14cef5ef59e9c662e82100080",
+        "after": "7d6cb23d8f24b02d85f35fb69989ccb98ad0115ad0b2497ba75c9c7ef732ac53"
+      },
+      "examples/viewport3d/README.md": {
+        "before": "af55fcd180206a88efdf96e1cfa2a6b617a5a689aec2c6bb77778e878c80a7a0",
+        "after": "7bc410823f2dd7464113bd8d3ef4a4d77af36c8f49dcb4cfe7b758e157fd03fd"
+      },
+      "examples/viewport3d/main.go": {
+        "before": "de09db8b9a51bd9bb64741b532a7da6d3c8f07fe6531183043b7be19bb22064f",
+        "after": "76851b0252a30db3c84ba015aaca446302c70b8d7d2e87169cf55bf5244549f3"
+      },
+      "examples/viewport3d/model_test.go": {
+        "before": "c5343c7d5339f2794f1ea2c9044917c3247987973abf8120ea4f5cee631ca59a",
+        "after": "8ab3ccfb0555d5db455113a780e0875ab3fa79aaa1ce754d8dd785ee6d5a2e80"
+      },
+      "examples/viewport3d/smoke.go": {
+        "before": "8d1f972b214adf0c070356516c380ced2190dc5fd19b9ccdafe118e111ae5f4b",
+        "after": "839c630efae9d09166e73264b5770d90507c62876f665507263a527e38699704"
+      },
+      "scripts/check-example.sh": {
+        "before": "c980ef93a91b1c1602398ea6801bf4e7acfcbf54f9624cee6f7f9f1a6d90fdf5",
+        "after": "1b4a7d5de347bbe1583b6a0129c5c70eaf0f43d6711eadabc1748c8b936f6090"
+      },
+      "scripts/check-sdk.py": {
+        "before": "9451a7d8524c75a9369c4c1156c2cba3d3b85b709bf84cca421e6c26b7713567",
+        "after": "b8062fbd4c57d1d8cb4d75a094184e1a5fa108cfa811fe9fb390f99f6d66be38"
+      },
+      "scripts/native_gpu.py": {
+        "before": null,
+        "after": "803d981c00f32d08a370577b37094848b2c79085cf3303a99b23d2a94336ac2c"
+      },
+      "scripts/native_gpu_test.py": {
+        "before": null,
+        "after": "f3c49d20b793c24d827f8516a630c174216095dff5144d6b61b8f32a5f9ca28a"
+      },
+      "scripts/new-app.py": {
+        "before": "9c1891a71adfa303042eb27f6ba2cdb2f1ba1f722ffa7a9269258de9bde35b9b",
+        "after": "c6fa1fcfb3f2940df4f61815e1e3c64a712ab005b33b12de43b0f7f62e2b37af"
+      },
+      "scripts/release-sdk.py": {
+        "before": "4008d41e4445067ee1bd880250edd860361cdd7065057d6ca46674cf6cc5327c",
+        "after": "5dd3b569111c4703892b23c09766f8965feab3d31e182115b72028e6f9313a42"
+      },
+      "specs/accessibility.md": {
+        "before": "7b49f023cc39ce44998169ea8e122b6354faed94cd12bf359c5c85ba6a06bef7",
+        "after": "d87c76504c501ae7d9e86c4d18e175a89ff15612b8b5d83bba6819933516bad6"
+      },
+      "specs/advanced-gpu.md": {
+        "before": "2e39dcba8b8886ff7f575454a9ce41937b9ced054579f7e0e9ee48bfadf56880",
+        "after": "1dd92e01f813edcd9747a1557211865844406b0fe4da63039ad123c72ec8f122"
+      },
+      "specs/automation.md": {
+        "before": "c78c20f4f9d4eea3948fecbbe21a5d3925a44ba1de467a82f6deef8f2017feb0",
+        "after": "86756591b9c64101dfaaa8e204257efeeafda16dfd77e1de5c1af82f204b96f5"
+      },
+      "specs/drawing.md": {
+        "before": "03add6ac8193fcc8b2562859778d06e996d2b88e9efe40acb02efcd7ea3eabfc",
+        "after": "a124c8b884970da1db9980e17475c0730b022f3552909b16d35155de3f2f6009"
+      },
+      "specs/grid-native.md": {
+        "before": "ca129fbb3e4307e8c334df7849e16c61a539fcec19f74b465ace505aa0c1c4da",
+        "after": "e7e40865a454da876d987539d28c63ac6a53b9748355b6626d813cf925ac2b54"
+      },
+      "specs/grid-performance.md": {
+        "before": "1380fe8f4b4313e576dcaa52c71f15451d96efff72e68ef430f272d23d8b1577",
+        "after": "d12677c5afc0942171e2ecfbf865862676d5574aeae65b922c6c59e9aef4ffb4"
+      },
+      "specs/macos-completion.md": {
+        "before": "9a2ea608c0d7a420c28048815322e77bcccb7bd16287d43d0719d8550988a1d3",
+        "after": "11276a0e60615890d1cee5281dd9b445c2c7e539f1b1ded8c740cba36ecbc8b2"
+      },
+      "specs/native-dispatch.md": {
+        "before": "f43a7d2347678219e20718731f873c9957c917708eda201ea0539adac16d5594",
+        "after": "43198f8a74e06e530ffa4d4641d68351bd45a2a4345d887a69aba8e702ee8df6"
+      },
+      "specs/release.md": {
+        "before": "29fb4e6e3a665389a4024e30fdf2fdd5dc85b59a1f7d540c5fec45d145b9bafa",
+        "after": "de7853175176da99e2c88cbf548518b7a07eb9a96eb8649fb172a0bc8d2eb5a6"
+      },
+      "specs/rendering.md": {
+        "before": "969223b879243fe068a8e8c64a759eca83743fd653ffc6f8a949aa1efe470d2a",
+        "after": "fa61c61d4f4f7b5370be038012d56d73c977633980606dbb780ed67d5f12f3d0"
+      },
+      "specs/sdk.md": {
+        "before": "170fa4c5ab5084073e977900c431f6694e775cbc97b8a7f3048ab3628d08e223",
+        "after": "d14edc26b7e0c20b17c64fa865d3070e624ff6fbdd4033b0cdd4d896d3979f0a"
+      }
+    },
+    "mouse_sources_and_prepared_paths_exactly_equal": [
+      "drivers/cogent/mouse_position_darwin.go",
+      "drivers/cogent/mouse_position_darwin.m",
+      "drivers/cogent/mouse_position_darwin_test.go",
+      "drivers/cogent/native/mouse-position-checks.m",
+      "drivers/cogent/build/upstream/system/driver/desktop/app.go",
+      "drivers/cogent/build/upstream/system/driver/desktop/event.go",
+      "drivers/cogent/build/upstream/system/driver/desktop/mouse_position_vellum_test.go"
+    ],
+    "mouse_patch_bytes_unchanged": true
+  },
+  "sdk_focus_checks": [
+    {
+      "name": "prepare-tests",
+      "cwd": "/Users/dshills/Development/projects/ELab/build/.vellum-upgrade-762dcbf/drivers/cogent",
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "prepare_test.py"
+      ],
+      "status": "completed",
+      "started_utc": "2026-10-17T16:11:25.657820+00:00",
+      "exit_code": 0,
+      "elapsed_seconds": 0.10547616705298424,
+      "finished_utc": "2026-10-17T16:11:25.763404+00:00"
+    },
+    {
+      "name": "key-mouse-race",
+      "cwd": "/Users/dshills/Development/projects/ELab/build/.vellum-upgrade-762dcbf/drivers/cogent/build/upstream",
+      "argv": [
+        "go",
+        "test",
+        "-race",
+        "./events",
+        "./system/driver/desktop",
+        "-run",
+        "^Test(SourceKey|NativeMouseEventPosition)",
+        "-count=1"
+      ],
+      "status": "completed",
+      "started_utc": "2026-10-17T16:11:25.763678+00:00",
+      "exit_code": 0,
+      "elapsed_seconds": 13.973072375054471,
+      "finished_utc": "2026-10-17T16:11:39.736770+00:00"
+    },
+    {
+      "name": "driver-pointer-race",
+      "cwd": "/Users/dshills/Development/projects/ELab/build/.vellum-upgrade-762dcbf/drivers/cogent",
+      "argv": [
+        "go",
+        "test",
+        "-race",
+        "-tags",
+        "offscreen",
+        "-run",
+        "^Test(NativeMousePosition|ReviewFieldSettlement)",
+        "-count=1",
+        "."
+      ],
+      "status": "completed",
+      "started_utc": "2026-10-17T16:11:39.737065+00:00",
+      "exit_code": 0,
+      "elapsed_seconds": 29.499592374893837,
+      "finished_utc": "2026-10-17T16:12:09.236688+00:00"
+    },
+    {
+      "name": "cocoa-build",
+      "cwd": "/Users/dshills/Development/projects/ELab/build/.vellum-upgrade-762dcbf/drivers/cogent",
+      "argv": [
+        "xcrun",
+        "clang",
+        "-fobjc-arc",
+        "-framework",
+        "Cocoa",
+        "-Wall",
+        "-Wextra",
+        "native/mouse-position-checks.m",
+        "-o",
+        "/Users/dshills/Development/projects/ELab/build/vellum-refresh/mouse-position-checks"
+      ],
+      "status": "completed",
+      "started_utc": "2026-10-17T16:12:09.237151+00:00",
+      "exit_code": 0,
+      "elapsed_seconds": 0.3972541670082137,
+      "finished_utc": "2026-10-17T16:12:09.634412+00:00"
+    },
+    {
+      "name": "cocoa-checks",
+      "cwd": "/Users/dshills/Development/projects/ELab/build/.vellum-upgrade-762dcbf/drivers/cogent",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/vellum-refresh/mouse-position-checks"
+      ],
+      "status": "completed",
+      "started_utc": "2026-10-17T16:12:09.634706+00:00",
+      "exit_code": 0,
+      "elapsed_seconds": 0.24017045798245817,
+      "finished_utc": "2026-10-17T16:12:09.874885+00:00"
+    }
+  ],
+  "old_sdk_archive_and_cache_preserved": true,
+  "sibling_vellum_head_and_clean_checkout_preserved": true,
+  "reproduced_defect": "An accepted create/delete batch with final graph equality skipped outer normalization and published selection/value for the deleted component",
+  "repair": "Normalize final staged drawing/selection before publishing, preserving history/redo/physics and committed lifetime ID reservations",
+  "allowlist_exactly_unchanged": true,
+  "new_application_commands": 0,
+  "existing_commands": 162,
+  "new_contracts": 3,
+  "commands_with_contracts_before": 135,
+  "commands_with_contracts_after": 138,
+  "commands_without_contract": 24,
+  "default_catalog_output_schemas_models_numerical_methods_work_limits_file_versions_unchanged": true,
+  "quality": {
+    "lint_imports_staticcheck": true,
+    "python_tests": 38,
+    "root_native_race_and_vet": true
+  },
+  "process_quality": [
+    {
+      "name": "build",
+      "argv": [
+        "./scripts/build.sh"
+      ],
+      "started_utc": "2026-10-17T16:16:33.187058+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 1.1462206250289455,
+      "finished_utc": "2026-10-17T16:16:34.333282+00:00"
+    },
+    {
+      "name": "quality",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T16:16:34.343862+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 399.5669208749896,
+      "finished_utc": "2026-10-17T16:23:13.911105+00:00"
+    }
+  ],
+  "process_public": [
+    {
+      "name": "native-smoke",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.121.0-138-vellum-refresh-candidate.app/Contents/MacOS/ELab",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "started_utc": "2026-10-17T16:23:36.275473+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 38.511317417025566,
+      "finished_utc": "2026-10-17T16:24:14.786824+00:00"
+    },
+    {
+      "name": "public-suites",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+        "--native-binary",
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.121.0-138-vellum-refresh-candidate.app/Contents/MacOS/ELab",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/vellum-refresh/public-final"
+      ],
+      "started_utc": "2026-10-17T16:24:14.799127+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 48.47654116596095,
+      "finished_utc": "2026-10-17T16:25:03.275706+00:00"
+    },
+    {
+      "name": "headless-recovery",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/edit-history-contracts-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/vellum-refresh/headless-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/vellum-refresh/headless-final-assets"
+      ],
+      "started_utc": "2026-10-17T16:25:03.289120+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 0.1940457089804113,
+      "finished_utc": "2026-10-17T16:25:03.483166+00:00"
+    }
+  ],
+  "native_workflow": {
+    "started_utc": "2026-10-17T16:25:32.199055+00:00",
+    "status": "completed",
+    "owned_pid": 28917,
+    "demo_exit_code": 0,
+    "native_exit_code": 0,
+    "elapsed_seconds": 0.9199498340021819,
+    "finished_utc": "2026-10-17T16:25:33.119124+00:00"
+  },
+  "four_adapter_numerical_checks": 27596,
+  "four_adapter_project_workflow_checks": 44,
+  "four_adapter_project_snapshots": 56,
+  "native_smoke_stages": 45,
+  "edit_history_review": {
+    "passed": true,
+    "contracts_per_transport": 3,
+    "refusals_per_transport": 13,
+    "supported_batch_commands": 17,
+    "actors": {
+      "headless": "agent.stdio",
+      "native": "agent.socket"
+    },
+    "deleted_selection_normalized_without_history_physics_or_redo_change": true,
+    "rejected_ids_reusable_committed_ids_reserved": true,
+    "latest_saved_baseline_and_original_tip_attribution": true,
+    "successful_retry_does_not_reapply_after_undo": true,
+    "geometry_history_preserves_physics": true,
+    "exact_manual_sources_and_two_complete_captures_preserved": true,
+    "fresh_reopen_paused_time_zero_clean": true,
+    "recorded_voltage_current_reference_checks": 32,
+    "live_voltage_current_reference_checks": 12,
+    "maximum_recorded_voltage_error_v": 1.1102230246251565e-16,
+    "maximum_recorded_current_error_a": 5.421010862427522e-20,
+    "scope": "Named RC batch/history/selection/persistence workflows; controlled tests separately cover other actors and pending work; no new physical input or general latency claim"
+  },
+  "six_prior_recovery_choice_contracts_exactly_unchanged": true,
+  "typed_raw_gzip_numerical_review_equal": true,
+  "sdk_verified": {
+    "passed": true,
+    "source": "47b7153109735006305e3610520e489a953fcd97",
+    "archive_sha256": "931d3a7217dc2f63618323fc523100fc6cee57000b49ad55df2bd4b91a3cbf68"
+  },
+  "native_production_inventory_unchanged": {
+    "sources": 57,
+    "sites": 388,
+    "commands": 162
+  },
+  "preserved_bundle_trees": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7
+    }
+  },
+  "fixture_files": {
+    "docs/validation/vellum-refresh/fixtures/headless/original.elab": "69ed9e0d254bcbdd09e0e3b4d8f5be072487bf86123b9487ad690d4ce0fcd9f8",
+    "docs/validation/vellum-refresh/fixtures/headless/edited.elab": "d7446e9a5bb5262f8cdfb00298335850f0c7d1bbd2d7d3201a0589e3ce9e9595",
+    "docs/validation/vellum-refresh/fixtures/headless/final.elab": "3e381191ad230d2bbe2c3db60adc91cedf60333e6d153ac13f67f17c973e7ed0",
+    "docs/validation/vellum-refresh/fixtures/headless/original-record.json": "1ddc6ac801f1b8ab38df7f48bf53be39ec5f57de9972249d9de1575ea714c2a2",
+    "docs/validation/vellum-refresh/fixtures/headless/tuned-record.json": "4d2c1c4f4bb7bad8ae414d910d4fd2cebcc9ec2b31582d0b6aef33e604410f32",
+    "docs/validation/vellum-refresh/fixtures/headless/preserved-record.json": "1ddc6ac801f1b8ab38df7f48bf53be39ec5f57de9972249d9de1575ea714c2a2",
+    "docs/validation/vellum-refresh/fixtures/headless/reopened-original.json": "1ddc6ac801f1b8ab38df7f48bf53be39ec5f57de9972249d9de1575ea714c2a2",
+    "docs/validation/vellum-refresh/fixtures/headless/reopened-tuned.json": "4d2c1c4f4bb7bad8ae414d910d4fd2cebcc9ec2b31582d0b6aef33e604410f32",
+    "docs/validation/vellum-refresh/fixtures/native/original.elab": "e5fad7f80814ac19722b47ebd6c78051c21eae342a46a8364b4d6f22c274cbf1",
+    "docs/validation/vellum-refresh/fixtures/native/edited.elab": "2eaa0e3a9d7bb320d0a271987cce46532a80c9be4febeab8391e7b813c0102ac",
+    "docs/validation/vellum-refresh/fixtures/native/final.elab": "9d1963b1d9a29981401b0c2c45a7149603f09724640752aab3a630c77a20c0b5",
+    "docs/validation/vellum-refresh/fixtures/native/original-record.json": "adec7af9da7d61e2a476f48e8b385a1b130b9cc9eed6a9f8fdbbf74dbf6b9904",
+    "docs/validation/vellum-refresh/fixtures/native/tuned-record.json": "be0e561ab3c3a966cd73a7476ee2273b5af245dd896506e0f5ec9d3316811751",
+    "docs/validation/vellum-refresh/fixtures/native/preserved-record.json": "adec7af9da7d61e2a476f48e8b385a1b130b9cc9eed6a9f8fdbbf74dbf6b9904",
+    "docs/validation/vellum-refresh/fixtures/native/reopened-original.json": "adec7af9da7d61e2a476f48e8b385a1b130b9cc9eed6a9f8fdbbf74dbf6b9904",
+    "docs/validation/vellum-refresh/fixtures/native/reopened-tuned.json": "be0e561ab3c3a966cd73a7476ee2273b5af245dd896506e0f5ec9d3316811751"
+  },
+  "report_encoding": {
+    "conformance-report.json.gz": {
+      "decoded_bytes": 18208669,
+      "decoded_sha256": "c7ed1180c41fb3ffbd0e33637b255b1804cef9a8fcb77d1bd693fe12dc0e7d0c",
+      "gzip_bytes": 1660309,
+      "gzip_sha256": "1703b3341793e0839344c7f638dcbfa6a35de80b9161c11bc5e8785080b95e45"
+    }
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "limitations": [
+    "Framework source is the current observed local Vellum revision, with an explicitly isolated ELab pointer compatibility commit. Alpha metadata alone is not this snapshot identity; no public release/remote-latest claim.",
+    "The private standard SDK has no optional native GPU binary overlay. Existing module versions and replacement topology are retained.",
+    "New framework glyph/grid/accessibility/event code and the app selection repair are covered by named consumer checks, not full physical input/AX/readability/multi-display/visible-latency qualification.",
+    "Cross-actor acknowledgment, pending work and exact history attribution additionally use controlled core/native tests; the public demo has one actor identity per transport.",
+    "The initial public fixture assumed reopened summary display order; final source matches complete metadata before exact re-export. No persistence change was inferred.",
+    "Twenty-four commands still lack scoped contracts. Events, general hardware/storage, distribution/rights/signing/notarization, printers and participant acceptance remain open.",
+    "Private 0.121 /138 candidate is unpromoted. Canonical 0.105, preserved 0.104 and prior 0.120 candidate remain exact."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/vellum-refresh/SDK_MANIFEST.json": "11956d50895dbfa3887131f83155032e066457bf582008dd5914f9970515ac89",
+    "docs/validation/vellum-refresh/allowlist-unchanged.json": "6cec8420a0ad0ab833c88ba503d096beafc42e06960177adbbbeea59df874647",
+    "docs/validation/vellum-refresh/archive.py.txt": "bb569c60f8a66465c10c61c8279ef4b13191a0bc7ea98ec356ba6922f8cda885",
+    "docs/validation/vellum-refresh/build-initial.log.txt": "87d45a19cd9a783549bfcdad79c87490c6e9f2122502db33c5707e3c400e8538",
+    "docs/validation/vellum-refresh/build.log.txt": "7ec0cb31f1890706ae4a568e565be2f658df10f41a4f954f231f77aea9a8000d",
+    "docs/validation/vellum-refresh/cocoa-build.log.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/validation/vellum-refresh/cocoa-checks.log.txt": "1a6d8f761f57bd28be5db98e82327c245835655e85abf0164a376a486c7ada43",
+    "docs/validation/vellum-refresh/conformance-report.json.gz": "1703b3341793e0839344c7f638dcbfa6a35de80b9161c11bc5e8785080b95e45",
+    "docs/validation/vellum-refresh/contract-inventory.json": "067d7908369f6da03c9360bec24ee45d368bae4b694c23e02af7eec014bd9580",
+    "docs/validation/vellum-refresh/driver-pointer-race.log.txt": "76d61cc6a982464be90f18823a687f5e95c7d101bd2b71ce537d58901406a7b8",
+    "docs/validation/vellum-refresh/edit-core-before.log.txt": "4262f827a2d7ddcc8a5d670a8c25143f2a55659c3135b8f92b1cd7454430af57",
+    "docs/validation/vellum-refresh/edit-core-focused.log.txt": "5caa861313d4c44dc478d7d8eae8d6a61c1bbf511bd35ad3c430c0b13f08620b",
+    "docs/validation/vellum-refresh/edit-headless-initial.log.txt": "361751a4569e366f3b7cc9704c88f33d8b58cdc00427682a4b8b84dd288ed93a",
+    "docs/validation/vellum-refresh/edit-headless-preflight.json": "33b89ad3e708ec222e7a93b347040c0799d731cfde09e852b37dd8be19f71970",
+    "docs/validation/vellum-refresh/edit-headless-preflight.log.txt": "cb477f6bd480b28cede0ea29a199667dbeec99e07fc8a6c0e4f405cc5041a534",
+    "docs/validation/vellum-refresh/edit-history-review.json": "636e084c8d758917d1a49de040c538d7b9ba15db1d1c6522430a983203d73407",
+    "docs/validation/vellum-refresh/edit-history-review.py.txt": "19b1b6f6520ecea5052501cf4e396c8f2c2387dd0ce1bad1ca7364614029c19f",
+    "docs/validation/vellum-refresh/export.json": "3d669db4dc5fab198e556fc815288d546113ad86702ec05b6cdf66e767a21a8a",
+    "docs/validation/vellum-refresh/export.log.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/validation/vellum-refresh/fixtures/headless/edited.elab": "d7446e9a5bb5262f8cdfb00298335850f0c7d1bbd2d7d3201a0589e3ce9e9595",
+    "docs/validation/vellum-refresh/fixtures/headless/final.elab": "3e381191ad230d2bbe2c3db60adc91cedf60333e6d153ac13f67f17c973e7ed0",
+    "docs/validation/vellum-refresh/fixtures/headless/original-record.json": "1ddc6ac801f1b8ab38df7f48bf53be39ec5f57de9972249d9de1575ea714c2a2",
+    "docs/validation/vellum-refresh/fixtures/headless/original.elab": "69ed9e0d254bcbdd09e0e3b4d8f5be072487bf86123b9487ad690d4ce0fcd9f8",
+    "docs/validation/vellum-refresh/fixtures/headless/preserved-record.json": "1ddc6ac801f1b8ab38df7f48bf53be39ec5f57de9972249d9de1575ea714c2a2",
+    "docs/validation/vellum-refresh/fixtures/headless/reopened-original.json": "1ddc6ac801f1b8ab38df7f48bf53be39ec5f57de9972249d9de1575ea714c2a2",
+    "docs/validation/vellum-refresh/fixtures/headless/reopened-tuned.json": "4d2c1c4f4bb7bad8ae414d910d4fd2cebcc9ec2b31582d0b6aef33e604410f32",
+    "docs/validation/vellum-refresh/fixtures/headless/tuned-record.json": "4d2c1c4f4bb7bad8ae414d910d4fd2cebcc9ec2b31582d0b6aef33e604410f32",
+    "docs/validation/vellum-refresh/fixtures/native/edited.elab": "2eaa0e3a9d7bb320d0a271987cce46532a80c9be4febeab8391e7b813c0102ac",
+    "docs/validation/vellum-refresh/fixtures/native/final.elab": "9d1963b1d9a29981401b0c2c45a7149603f09724640752aab3a630c77a20c0b5",
+    "docs/validation/vellum-refresh/fixtures/native/original-record.json": "adec7af9da7d61e2a476f48e8b385a1b130b9cc9eed6a9f8fdbbf74dbf6b9904",
+    "docs/validation/vellum-refresh/fixtures/native/original.elab": "e5fad7f80814ac19722b47ebd6c78051c21eae342a46a8364b4d6f22c274cbf1",
+    "docs/validation/vellum-refresh/fixtures/native/preserved-record.json": "adec7af9da7d61e2a476f48e8b385a1b130b9cc9eed6a9f8fdbbf74dbf6b9904",
+    "docs/validation/vellum-refresh/fixtures/native/reopened-original.json": "adec7af9da7d61e2a476f48e8b385a1b130b9cc9eed6a9f8fdbbf74dbf6b9904",
+    "docs/validation/vellum-refresh/fixtures/native/reopened-tuned.json": "be0e561ab3c3a966cd73a7476ee2273b5af245dd896506e0f5ec9d3316811751",
+    "docs/validation/vellum-refresh/fixtures/native/tuned-record.json": "be0e561ab3c3a966cd73a7476ee2273b5af245dd896506e0f5ec9d3316811751",
+    "docs/validation/vellum-refresh/focus.py.txt": "fb2df61a77b62ede4f36709e93aa6387ba13f5b215a22f95f33f9b39d24096f8",
+    "docs/validation/vellum-refresh/headless-final.json": "7f6d5b195d8f6adb2ae55b9dc241743fdc902ff5dbb309a70d41d806a3400288",
+    "docs/validation/vellum-refresh/headless-recovery.log.txt": "cb477f6bd480b28cede0ea29a199667dbeec99e07fc8a6c0e4f405cc5041a534",
+    "docs/validation/vellum-refresh/inventory.py.txt": "f1cef88a083852fc9971a63c0d9db0fb23964f8e5a5879a6908f4b7cecccf3da",
+    "docs/validation/vellum-refresh/key-mouse-race.log.txt": "271fb1f30748ab72a3bd6397fa9b1ac7c6a63d5c1b2ffbf9389d4756663c9457",
+    "docs/validation/vellum-refresh/mouse-compatibility.patch": "9ce31018def4a601a0f91a454ec15d446c1c249d361e56c037080994286feeaf",
+    "docs/validation/vellum-refresh/native-final.json": "948ec1c51b1abc7e1002184c3e7626379c540b2bea8d2919c593db9c763a5e52",
+    "docs/validation/vellum-refresh/native-host.log.txt": "9991f87af9f333c0ee0bce7bdb41681d463de2e07774ed438f8452170b0a98ea",
+    "docs/validation/vellum-refresh/native-smoke.log.txt": "9d34b8bec3bfda67f76ebf1f85b70b21c57846718455b3c332124fc49862cc62",
+    "docs/validation/vellum-refresh/native-viewer.log.txt": "603f86f1dc38200cd0680eaaba1004d92c621ef9752ff976ab4540f77458de44",
+    "docs/validation/vellum-refresh/native.py.txt": "8896e79ff522ff277546e0ce89142cbe8cb11afdd61481c96db47fb717de7815",
+    "docs/validation/vellum-refresh/package.json": "710327ac95abec12e6d38c6e8b28a612d93d0773f6ac3499ef7ce22b65d81398",
+    "docs/validation/vellum-refresh/prepare-sdk.json": "24753ad5d3fa0473f9cc2cfbe0cdba354082965df6943ae94caa37246de96f42",
+    "docs/validation/vellum-refresh/prepare-sdk.log.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/validation/vellum-refresh/prepare-tests.log.txt": "3c4546d50591d7d5a1cbab25e6594ac67d09d6805af2912fa404d95a69217349",
+    "docs/validation/vellum-refresh/prepare.log.txt": "a7d4d89d1177c0e52f863fa0b0f44a05cff5d18ba70795fecde4d00c5ff70468",
+    "docs/validation/vellum-refresh/preparer-tests.log.txt": "d7741115a8ae8825da2227df360a543c8c38f0d82fe0f8464f4e621a74bec81c",
+    "docs/validation/vellum-refresh/prior-sdk.lock.json": "ae7afae59247126e9c1bfc0b758a64eb4ea2825a9cb006d8bf81973acb3c6a8b",
+    "docs/validation/vellum-refresh/prior-workflow.go.txt": "0461c0078b6b58c9a468dc77ec050e5b3e57b71f0aa0bf2307b6bea5850e1b6e",
+    "docs/validation/vellum-refresh/process-focus.json": "aeaba3a45d5726234300b1e9981c7e36983d00f945b1a66b368e47eb293e8fd8",
+    "docs/validation/vellum-refresh/process-native.json": "23190eaa2d6bc8ec0735e5dab28c96dfe5aea829c5895ec4ddb66125d215899f",
+    "docs/validation/vellum-refresh/process-public.json": "b35915c2e749b95fbb1393b2c02b29059ddf4a2fd9a9c0c630654afed5d96d12",
+    "docs/validation/vellum-refresh/process-quality.json": "b548352ace03ed9589760efe1beb51ae0d89a6fec86c83149ccbffa74248c606",
+    "docs/validation/vellum-refresh/public-suites.log.txt": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "docs/validation/vellum-refresh/qualify.py.txt": "54007b6cf48206fdfc314e97f5b588fce98f96491bba724eefa6b24629bcd7ce",
+    "docs/validation/vellum-refresh/quality.log.txt": "5968c56abeda9061e038e8d3feb766b6235fd6f35b706dae23c61e1e76706beb",
+    "docs/validation/vellum-refresh/recovery-choice-contracts-unchanged.json": "8ef2627f6a213ff443ebdaa54a343aef5bf721d53f6835d1e484ebb302aea7dc",
+    "docs/validation/vellum-refresh/report-review-gzip.json": "19b7b88ccf405aff6d87fce6ac14e998a7c87ec75f985cb4b88b38b796713381",
+    "docs/validation/vellum-refresh/report-review.json": "19b7b88ccf405aff6d87fce6ac14e998a7c87ec75f985cb4b88b38b796713381",
+    "docs/validation/vellum-refresh/review.go.txt": "808b076c8bf0bac85714632b87ab06a8364742575b33a383a734d7e37c729fb6",
+    "docs/validation/vellum-refresh/sdk-delta.json": "e5ef5ca7e018e525d216dbc023d6fbedb3cbb937c49be5f065b27197815cd969",
+    "docs/validation/vellum-refresh/sdk-source-commit.txt": "4f34da3a9fa98807dcbe6dcd9f256692bcb3598f312bf8b4d0eeb854c9c94eeb",
+    "docs/validation/vellum-refresh/setup-notes.json": "18a3855bfbf547eef8d0355d3f118c7423ecfe083a34bda79709415ad84c4254",
+    "docs/validation/vellum-refresh/source-delta.json": "75b232920d71905ff12dd0b0cad830e1af44011898fc4803f3d34c8cc896699e",
+    "docs/validation/vellum-refresh/source-freeze.json": "ffc8491f9d6db88e7e277cca6507471fdf78278b31984bd1d8b0c84be264b595"
+  },
+  "reconstruction_patch": {
+    "path": "docs/validation/vellum-refresh/mouse-compatibility.patch",
+    "format": "Git binary/unified-zero; apply with git apply --unidiff-zero",
+    "reverse_check_on_exact_private_commit_passed": true
+  }
+}

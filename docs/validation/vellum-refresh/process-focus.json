@@ -1,0 +1,90 @@
+[
+  {
+    "name": "prepare-tests",
+    "cwd": "/Users/dshills/Development/projects/ELab/build/.vellum-upgrade-762dcbf/drivers/cogent",
+    "argv": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "prepare_test.py"
+    ],
+    "status": "completed",
+    "started_utc": "2026-10-17T16:11:25.657820+00:00",
+    "exit_code": 0,
+    "elapsed_seconds": 0.10547616705298424,
+    "finished_utc": "2026-10-17T16:11:25.763404+00:00"
+  },
+  {
+    "name": "key-mouse-race",
+    "cwd": "/Users/dshills/Development/projects/ELab/build/.vellum-upgrade-762dcbf/drivers/cogent/build/upstream",
+    "argv": [
+      "go",
+      "test",
+      "-race",
+      "./events",
+      "./system/driver/desktop",
+      "-run",
+      "^Test(SourceKey|NativeMouseEventPosition)",
+      "-count=1"
+    ],
+    "status": "completed",
+    "started_utc": "2026-10-17T16:11:25.763678+00:00",
+    "exit_code": 0,
+    "elapsed_seconds": 13.973072375054471,
+    "finished_utc": "2026-10-17T16:11:39.736770+00:00"
+  },
+  {
+    "name": "driver-pointer-race",
+    "cwd": "/Users/dshills/Development/projects/ELab/build/.vellum-upgrade-762dcbf/drivers/cogent",
+    "argv": [
+      "go",
+      "test",
+      "-race",
+      "-tags",
+      "offscreen",
+      "-run",
+      "^Test(NativeMousePosition|ReviewFieldSettlement)",
+      "-count=1",
+      "."
+    ],
+    "status": "completed",
+    "started_utc": "2026-10-17T16:11:39.737065+00:00",
+    "exit_code": 0,
+    "elapsed_seconds": 29.499592374893837,
+    "finished_utc": "2026-10-17T16:12:09.236688+00:00"
+  },
+  {
+    "name": "cocoa-build",
+    "cwd": "/Users/dshills/Development/projects/ELab/build/.vellum-upgrade-762dcbf/drivers/cogent",
+    "argv": [
+      "xcrun",
+      "clang",
+      "-fobjc-arc",
+      "-framework",
+      "Cocoa",
+      "-Wall",
+      "-Wextra",
+      "native/mouse-position-checks.m",
+      "-o",
+      "/Users/dshills/Development/projects/ELab/build/vellum-refresh/mouse-position-checks"
+    ],
+    "status": "completed",
+    "started_utc": "2026-10-17T16:12:09.237151+00:00",
+    "exit_code": 0,
+    "elapsed_seconds": 0.3972541670082137,
+    "finished_utc": "2026-10-17T16:12:09.634412+00:00"
+  },
+  {
+    "name": "cocoa-checks",
+    "cwd": "/Users/dshills/Development/projects/ELab/build/.vellum-upgrade-762dcbf/drivers/cogent",
+    "argv": [
+      "/Users/dshills/Development/projects/ELab/build/vellum-refresh/mouse-position-checks"
+    ],
+    "status": "completed",
+    "started_utc": "2026-10-17T16:12:09.634706+00:00",
+    "exit_code": 0,
+    "elapsed_seconds": 0.24017045798245817,
+    "finished_utc": "2026-10-17T16:12:09.874885+00:00"
+  }
+]

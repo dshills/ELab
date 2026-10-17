@@ -3,6 +3,7 @@ package workbench
 import (
 	"encoding/json"
 	"fmt"
+	"slices"
 	"strings"
 )
 
@@ -20,6 +21,14 @@ type BatchEdit struct {
 type BatchParams struct {
 	Name  string      `json:"name"`
 	Edits []BatchEdit `json:"edits"`
+}
+
+// One allowlist serves staged validation and on-demand agent discovery.
+var atomicBatchCommands = [...]string{
+	"component.place", "component.move", "component.rotate", "component.set", "component.duplicate",
+	"capacitor.initial.set", "inductor.initial.set", "object.delete", "wire.connect", "wire.junction.insert",
+	"switch.set", "potentiometer.wiper.set", "source.sine.set", "source.pulse.set",
+	"source.pulse.timing.set", "simulation.pulse.timing.set", "simulation.sampling.fit",
 }
 
 func filteredParts(query string) []Part {
@@ -127,15 +136,16 @@ func (s *Service) batchLocked(p BatchParams) error {
 		staged.usedIDs[id] = used
 	}
 	for i, edit := range p.Edits {
-		switch edit.Command {
-		case "component.place", "component.move", "component.rotate", "component.set", "component.duplicate", "capacitor.initial.set", "inductor.initial.set", "object.delete", "wire.connect", "wire.junction.insert", "switch.set", "potentiometer.wiper.set", "source.sine.set", "source.pulse.set", "source.pulse.timing.set", "simulation.pulse.timing.set", "simulation.sampling.fit":
-		default:
+		if !slices.Contains(atomicBatchCommands[:], edit.Command) {
 			return fmt.Errorf("batch edit %d: command %q is not an atomic schematic edit", i+1, edit.Command)
 		}
 		if err := staged.applyLocked(edit.Command, edit.Params); err != nil {
 			return fmt.Errorf("batch edit %d (%s): %w", i+1, edit.Command, err)
 		}
 	}
+	// Final graph equality can suppress outer document-change normalization.
+	// Still retire selection/gesture references to staged objects now deleted.
+	staged.normalizeDrawingLocked()
 	s.graph = staged.graph
 	s.transientSettings = staged.transientSettings
 	s.usedIDs = staged.usedIDs

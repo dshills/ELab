@@ -14,6 +14,7 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[1]
 BOOTSTRAP = {
     "scripts/check-sdk.py", "scripts/child_process.py", "scripts/sdk_environment.py",
+    "scripts/native_gpu.py", "scripts/native_archive.py",
 }
 MODULES = {
     "github.com/dshills/vellum": "",
@@ -153,7 +154,7 @@ def prepare_sdk(root=ROOT):
         bootstrap = stage / "bootstrap"
         bootstrap.mkdir()
         # The complete archive is already trusted by digest. Extract only the
-        # three explicitly pinned verifier sources; never execute a path from
+        # explicitly pinned verifier sources; never execute a path from
         # archive metadata or use tarfile.extractall for the SDK payload.
         with tarfile.open(archive, "r:gz") as source:
             for name in sorted(BOOTSTRAP):

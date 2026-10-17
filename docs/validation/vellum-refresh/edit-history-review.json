@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "contracts_per_transport": 3,
+  "refusals_per_transport": 13,
+  "supported_batch_commands": 17,
+  "actors": {
+    "headless": "agent.stdio",
+    "native": "agent.socket"
+  },
+  "deleted_selection_normalized_without_history_physics_or_redo_change": true,
+  "rejected_ids_reusable_committed_ids_reserved": true,
+  "latest_saved_baseline_and_original_tip_attribution": true,
+  "successful_retry_does_not_reapply_after_undo": true,
+  "geometry_history_preserves_physics": true,
+  "exact_manual_sources_and_two_complete_captures_preserved": true,
+  "fresh_reopen_paused_time_zero_clean": true,
+  "recorded_voltage_current_reference_checks": 32,
+  "live_voltage_current_reference_checks": 12,
+  "maximum_recorded_voltage_error_v": 1.1102230246251565e-16,
+  "maximum_recorded_current_error_a": 5.421010862427522e-20,
+  "scope": "Named RC batch/history/selection/persistence workflows; controlled tests separately cover other actors and pending work; no new physical input or general latency claim"
+}

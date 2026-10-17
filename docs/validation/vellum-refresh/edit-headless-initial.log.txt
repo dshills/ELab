@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/scripts/edit-history-contracts-demo.py", line 181, in <module>
+    main()
+    ~~~~^^
+  File "/Users/dshills/Development/projects/ELab/scripts/edit-history-contracts-demo.py", line 157, in main
+    assert (assets / ('reopened-' + name + '.json')).read_bytes() == (assets / (name + '-record.json')).read_bytes()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

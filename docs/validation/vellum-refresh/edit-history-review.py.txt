@@ -1,0 +1,57 @@
+from pathlib import Path
+import hashlib,json,math
+root=Path.cwd();out=root/'build/vellum-refresh';reports=[json.loads((out/(t+'-final.json')).read_text()) for t in ['headless','native']]
+row_checks=0;live_checks=0;max_v=0.;max_a=0.;actors={}
+for transport,r in zip(['headless','native'],reports):
+ assets=out/(transport+'-final-assets');assert r['passed'] and len(r['contracts'])==3 and len(r['refusals'])==13
+ assert all(s['x-command-contract']['scope']=='atomic-edits-and-history' for s in r['contracts'].values())
+ commands=r['contracts']['edit.batch']['x-supported-edit-commands'];assert len(commands)==len(set(commands))==17
+ baseline=r['baseline'];noop=r['no_op'];ready=r['ready'];tuned=r['tuned'];undone=r['undone'];redone=r['redone'];geometry=r['geometry']
+ assert noop['selected']=='' and noop['drawing']['value']=='' and not any(c['id']=='Temporary' for c in noop['components'])
+ assert noop['components']==baseline['components'] and noop['wires']==baseline['wires'] and noop['document']==baseline['document']
+ for key in ['transient','mixed','npn','result','run_id','electrical_revision','paused','undo_entry','redo_entry']:assert noop.get(key)==baseline.get(key),key
+ assert noop['command_revision']==baseline['command_revision']+1 and tuned['command_revision']==ready['command_revision']+1
+ assert tuned['electrical_revision']==ready['electrical_revision']+1 and tuned['run_id']==ready['run_id']+1 and tuned['transient']['sample']==ready['transient']['sample']
+ actors[transport]='agent.stdio' if transport=='headless' else 'agent.socket'
+ assert tuned['undo_entry']['name']==' Tune RC pair ' and tuned['undo_entry']['actor']==actors[transport]
+ assert tuned['undo_entry']['command_revision']==tuned['command_revision'] and redone['undo_entry']==tuned['undo_entry']
+ assert undone['redo_entry']==tuned['undo_entry'] and undone['document']['dirty'] and not redone['document']['dirty']
+ assert undone['document']['path']==redone['document']['path']==str(assets/'edited.elab') and undone['document']['generation']==redone['document']['generation']==baseline['document']['generation']
+ assert geometry['undo_entry']['name']=='µ'*40 and len(geometry['undo_entry']['name'].encode())==80 and geometry['undo_entry']['actor']==actors[transport]
+ for key in ['transient','mixed','npn','result','run_id','electrical_revision','paused']:assert geometry.get(key)==redone.get(key),key
+ assert r['duplicate_returns_original_without_reapply'] and r['reopened']==dict(paused=True,dirty=False,recording_count=2,time_s=0)
+ assert hashlib.sha256((assets/'original.elab').read_bytes()).hexdigest()==r['original_sha256'] and hashlib.sha256((assets/'edited.elab').read_bytes()).hexdigest()==r['edited_sha256']
+ original=json.loads((assets/'original.elab').read_text());edited=json.loads((assets/'edited.elab').read_text());final=json.loads((assets/'final.elab').read_text())
+ assert len(original['recordings']['entries'])==len(edited['recordings']['entries'])==1 and len(final['recordings']['entries'])==2
+ def values(document):return {c['id']:c['value'] for c in document['graph']['components'] if c['id'] in ['R1','C1']}
+ assert values(original)=={'R1':10000,'C1':1e-6} and values(edited)==values(final)=={'R1':20000,'C1':2e-6}
+ assert edited['graph']==final['graph'] and final['graph']['components']==r['final']['components']
+ records={}
+ for name,tau,current in [('original',.01,.0005),('tuned',.04,.00025)]:
+  raw=(assets/(name+'-record.json')).read_bytes();record=json.loads(raw);records[name]=record
+  assert raw==(assets/('reopened-'+name+'.json')).read_bytes()
+  if name=='original':assert raw==(assets/'preserved-record.json').read_bytes()
+  assert [p['id'] for p in record['metadata']['probes']]==['v:C1','i:C1'] and [row['time_s'] for row in record['rows']]==[0,.001,.002,.003]
+  for row in record['rows']:
+   t=row['time_s'];dv=abs(row['values'][0]-5*(-math.expm1(-t/tau)));di=abs(row['values'][1]-current*math.exp(-t/tau));assert dv<1e-10 and di<1e-12
+   row_checks+=2;max_v=max(max_v,dv);max_a=max(max_a,di)
+ assert original['recordings']['entries'][0]['data']==edited['recordings']['entries'][0]['data']==records['original']
+ assert [e['data'] for e in final['recordings']['entries']]==[records['original'],records['tuned']]
+ for stage,tau,current in [('baseline',.01,.0005),('no_op',.01,.0005),('live',.04,.00025)]:
+  sample=r[stage]['transient']['sample'];assert sample['time_s']==.003
+  assert abs(sample['voltage_v']-5*(-math.expm1(-.003/tau)))<1e-10 and abs(sample['current_a']-current*math.exp(-.003/tau))<1e-12;live_checks+=2
+ assert not (assets/'forbidden.elab').exists() and not r['final']['document']['dirty'] and r['final']['document']['recording_count']==2
+for key in ['contracts','refusals','reopened']:assert reports[0][key]==reports[1][key],key
+for name in ['original','tuned']:
+ a=json.loads((out/('headless-final-assets/'+name+'-record.json')).read_text());b=json.loads((out/('native-final-assets/'+name+'-record.json')).read_text());assert a['rows']==b['rows']
+ for key in ['graph','settings','analysis','engine','led_model','probes','duration_s','sample_count','statistics']:assert a['metadata'][key]==b['metadata'][key],(name,key)
+for stage in ['baseline','no_op','ready','tuned','undone','redone','geometry','live','final']:
+ for key in ['components','wires','transient','mixed','npn','paused','run_id','electrical_revision']:assert reports[0][stage].get(key)==reports[1][stage].get(key),(stage,key)
+result=dict(passed=True,contracts_per_transport=3,refusals_per_transport=13,supported_batch_commands=17,actors=actors,
+ deleted_selection_normalized_without_history_physics_or_redo_change=True,rejected_ids_reusable_committed_ids_reserved=True,
+ latest_saved_baseline_and_original_tip_attribution=True,successful_retry_does_not_reapply_after_undo=True,geometry_history_preserves_physics=True,
+ exact_manual_sources_and_two_complete_captures_preserved=True,fresh_reopen_paused_time_zero_clean=True,
+ recorded_voltage_current_reference_checks=row_checks,live_voltage_current_reference_checks=live_checks,
+ maximum_recorded_voltage_error_v=max_v,maximum_recorded_current_error_a=max_a,
+ scope='Named RC batch/history/selection/persistence workflows; controlled tests separately cover other actors and pending work; no new physical input or general latency claim')
+(out/'edit-history-review.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

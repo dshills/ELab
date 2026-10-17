@@ -82,6 +82,19 @@ class PrepareVellumTests(unittest.TestCase):
             run.assert_not_called()
         self.assertFalse(self.cache.exists())
 
+    def test_pin_requires_complete_explicit_verifier_imports_before_execution(self):
+        original = dict(self.pin["bootstrap"])
+        for changed in [{k: v for k, v in original.items() if k != "scripts/native_gpu.py"},
+                        dict(original, **{"scripts/unexpected.py": "0" * 64})]:
+            with self.subTest(imports=sorted(changed)):
+                self.pin["bootstrap"] = changed
+                self.write_pin()
+                with mock.patch.object(prepare.subprocess, "run") as run:
+                    with self.assertRaisesRegex(ValueError, "bootstrap"):
+                        prepare.prepare_sdk(self.root)
+                    run.assert_not_called()
+                self.assertFalse(self.cache.exists())
+
     def test_modified_or_extra_cache_files_are_preserved(self):
         prepare.prepare_sdk(self.root)
         changed = self.cache / "go.mod"
