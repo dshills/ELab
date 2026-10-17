@@ -1,0 +1,2125 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "contracts": {
+    "recording.view.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "mode": "recorded"
+        },
+        {
+          "mode": "live"
+        }
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "live",
+            "recorded"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "recorded-viewer-and-kept-membership",
+        "preconditions": [
+          "live needs no selected capture; recorded requires a selected retained completed recording"
+        ],
+        "effects": [
+          "Preserves live schematic, device state/time, run/electrical revision, edit history and captured rows/model dependencies",
+          "Viewer commands may be used while live scope is shown; they do not implicitly switch to recorded view or select a different operation",
+          "Ordinary command/retry/actor rules apply; viewer clock publications advance presentation revision, not command revision",
+          "Later viewer intent takes precedence over automatic viewer selection by an admitted recording import; the imported asset can still be kept. Inspect the import job outcome",
+          "live stops recorded playback. recorded changes viewing only; it does not start playback or stop/restart the live solver. Returning to recorded retains its current row/window/cursors"
+        ],
+        "errors": [
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "No selected completed recording; for viewer commands other than view.set this check precedes command-specific parameter validation"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields or command-specific value/relationship violation"
+          }
+        ],
+        "completion": {
+          "mode": "immediate in-memory viewer update; no file IO or solver work",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-preserved-dirty-policy": "Viewer choices do not mark the document dirty. Save/recovery retain selected kept recording/viewing preference; index, playback speed, windows, recorded probe subset and cursors are session-only. Keep membership alone changes recordings_dirty.",
+      "x-recording-inventory": "snapshot.operations; operation.select chooses a retained operation, completed metadata exposes captured probes/duration/rows",
+      "x-viewer-state": "snapshot.recording: id, viewing, playing, seconds_per_wall_second, sample_index, time_s, duration_s, sample_count, last_sample_time_s and scope"
+    },
+    "recording.seek": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "index": 0
+        },
+        {
+          "time_s": "10 ms"
+        }
+      ],
+      "properties": {
+        "index": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Zero-based actual stored row, 0 <= index < snapshot.recording.sample_count. Null/omitted is absent; duplicate timestamps remain distinct rows.",
+          "minimum": 0
+        },
+        "time_s": {
+          "anyOf": [
+            {
+              "$ref": "urn:elab:time:1"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Time quantity within complete captured duration; null/omitted is absent. Select nearest stored row, later row on distance ties and last/right-hand row on an exact duplicate timestamp. No interpolation."
+        }
+      },
+      "required": [],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "recorded-viewer-and-kept-membership",
+        "preconditions": [
+          "A retained completed recording is selected; discover snapshot.recording and operation.inspect metadata"
+        ],
+        "effects": [
+          "Preserves live schematic, device state/time, run/electrical revision, edit history and captured rows/model dependencies",
+          "Viewer commands may be used while live scope is shown; they do not implicitly switch to recorded view or select a different operation",
+          "Ordinary command/retry/actor rules apply; viewer clock publications advance presentation revision, not command revision",
+          "Later viewer intent takes precedence over automatic viewer selection by an admitted recording import; the imported asset can still be kept. Inspect the import job outcome",
+          "Seeks within complete capture, independently of the visible plot window, and pauses playback; preserves window, probes, cursors and view mode"
+        ],
+        "errors": [
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "No selected completed recording; for viewer commands other than view.set this check precedes command-specific parameter validation"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields or command-specific value/relationship violation"
+          }
+        ],
+        "completion": {
+          "mode": "immediate in-memory viewer update; no file IO or solver work",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-preserved-dirty-policy": "Viewer choices do not mark the document dirty. Save/recovery retain selected kept recording/viewing preference; index, playback speed, windows, recorded probe subset and cursors are session-only. Keep membership alone changes recordings_dirty.",
+      "x-recording-inventory": "snapshot.operations; operation.select chooses a retained operation, completed metadata exposes captured probes/duration/rows",
+      "x-relations": [
+        {
+          "fields": [
+            "index",
+            "time_s"
+          ],
+          "operator": "exactly-one-non-null"
+        },
+        {
+          "index_max_exclusive": "snapshot.recording.sample_count",
+          "operator": "dynamic-selected-recording-bounds",
+          "time_max_inclusive": "snapshot.recording.duration_s"
+        }
+      ],
+      "x-viewer-state": "snapshot.recording: id, viewing, playing, seconds_per_wall_second, sample_index, time_s, duration_s, sample_count, last_sample_time_s and scope"
+    },
+    "recording.step": {
+      "additionalProperties": false,
+      "properties": {
+        "direction": {
+          "enum": [
+            "next",
+            "previous"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "direction"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "recorded-viewer-and-kept-membership",
+        "preconditions": [
+          "A retained completed recording is selected; discover snapshot.recording and operation.inspect metadata"
+        ],
+        "effects": [
+          "Preserves live schematic, device state/time, run/electrical revision, edit history and captured rows/model dependencies",
+          "Viewer commands may be used while live scope is shown; they do not implicitly switch to recorded view or select a different operation",
+          "Ordinary command/retry/actor rules apply; viewer clock publications advance presentation revision, not command revision",
+          "Later viewer intent takes precedence over automatic viewer selection by an admitted recording import; the imported asset can still be kept. Inspect the import job outcome",
+          "Moves exactly one actual row and pauses playback, including adjacent rows sharing a timestamp; no wrap, clamping or implicit window change"
+        ],
+        "errors": [
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "No selected completed recording; for viewer commands other than view.set this check precedes command-specific parameter validation"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields or command-specific value/relationship violation"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Requested row is before zero or after the final stored row; rejection preserves playback/viewer state"
+          }
+        ],
+        "completion": {
+          "mode": "immediate in-memory viewer update; no file IO or solver work",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-preserved-dirty-policy": "Viewer choices do not mark the document dirty. Save/recovery retain selected kept recording/viewing preference; index, playback speed, windows, recorded probe subset and cursors are session-only. Keep membership alone changes recordings_dirty.",
+      "x-recording-inventory": "snapshot.operations; operation.select chooses a retained operation, completed metadata exposes captured probes/duration/rows",
+      "x-viewer-state": "snapshot.recording: id, viewing, playing, seconds_per_wall_second, sample_index, time_s, duration_s, sample_count, last_sample_time_s and scope"
+    },
+    "recording.speed.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "seconds_per_wall_second": 0.1
+        }
+      ],
+      "properties": {
+        "seconds_per_wall_second": {
+          "description": "Required finite numeric rate .001\u201310; independent of live simulation playback. It is a numeric ratio, not a time quantity.",
+          "maximum": 10,
+          "minimum": 0.001,
+          "type": "number",
+          "x-unit": "simulated seconds per wall second"
+        }
+      },
+      "required": [
+        "seconds_per_wall_second"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "recorded-viewer-and-kept-membership",
+        "preconditions": [
+          "A retained completed recording is selected; discover snapshot.recording and operation.inspect metadata"
+        ],
+        "effects": [
+          "Preserves live schematic, device state/time, run/electrical revision, edit history and captured rows/model dependencies",
+          "Viewer commands may be used while live scope is shown; they do not implicitly switch to recorded view or select a different operation",
+          "Ordinary command/retry/actor rules apply; viewer clock publications advance presentation revision, not command revision",
+          "Later viewer intent takes precedence over automatic viewer selection by an admitted recording import; the imported asset can still be kept. Inspect the import job outcome",
+          "Does not start paused playback; if playing, reanchors at the current stored row and continues at the new configured rate. Works for a DC point"
+        ],
+        "errors": [
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "No selected completed recording; for viewer commands other than view.set this check precedes command-specific parameter validation"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields or command-specific value/relationship violation"
+          }
+        ],
+        "completion": {
+          "mode": "immediate in-memory viewer update; no file IO or solver work",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-preserved-dirty-policy": "Viewer choices do not mark the document dirty. Save/recovery retain selected kept recording/viewing preference; index, playback speed, windows, recorded probe subset and cursors are session-only. Keep membership alone changes recordings_dirty.",
+      "x-recording-inventory": "snapshot.operations; operation.select chooses a retained operation, completed metadata exposes captured probes/duration/rows",
+      "x-viewer-state": "snapshot.recording: id, viewing, playing, seconds_per_wall_second, sample_index, time_s, duration_s, sample_count, last_sample_time_s and scope"
+    },
+    "recording.play": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "seconds_per_wall_second": 0.1
+        }
+      ],
+      "properties": {
+        "seconds_per_wall_second": {
+          "description": "Required finite numeric rate .001\u201310; independent of live simulation playback. It is a numeric ratio, not a time quantity.",
+          "maximum": 10,
+          "minimum": 0.001,
+          "type": "number",
+          "x-unit": "simulated seconds per wall second"
+        }
+      },
+      "required": [
+        "seconds_per_wall_second"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "recorded-viewer-and-kept-membership",
+        "preconditions": [
+          "A retained completed recording is selected; discover snapshot.recording and operation.inspect metadata",
+          "Captured duration is positive; DC operating points cannot play"
+        ],
+        "effects": [
+          "Preserves live schematic, device state/time, run/electrical revision, edit history and captured rows/model dependencies",
+          "Viewer commands may be used while live scope is shown; they do not implicitly switch to recorded view or select a different operation",
+          "Ordinary command/retry/actor rules apply; viewer clock publications advance presentation revision, not command revision",
+          "Later viewer intent takes precedence over automatic viewer selection by an admitted recording import; the imported asset can still be kept. Inspect the import job outcome",
+          "Starts/continues a separate roughly 33 ms viewer ticker; at the last row, Play restarts from row zero. At captured end it stops on the final stored row",
+          "Ticks choose the last actual row at/before target time; duplicates select their later/right-hand row. No interpolation, looping, solver work or guarantee that every row is displayed",
+          "Playback uses the whole captured duration, independently of the visible plot window. It can advance while recorded view is hidden"
+        ],
+        "errors": [
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "No selected completed recording; for viewer commands other than view.set this check precedes command-specific parameter validation"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields or command-specific value/relationship violation"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Selected recording has zero DC duration"
+          }
+        ],
+        "completion": {
+          "mode": "immediate playback start; later coalesced recordings publications carry current row/playing state",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "recording.pause",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-preserved-dirty-policy": "Viewer choices do not mark the document dirty. Save/recovery retain selected kept recording/viewing preference; index, playback speed, windows, recorded probe subset and cursors are session-only. Keep membership alone changes recordings_dirty.",
+      "x-recording-inventory": "snapshot.operations; operation.select chooses a retained operation, completed metadata exposes captured probes/duration/rows",
+      "x-viewer-state": "snapshot.recording: id, viewing, playing, seconds_per_wall_second, sample_index, time_s, duration_s, sample_count, last_sample_time_s and scope"
+    },
+    "recording.pause": {
+      "additionalProperties": false,
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "recorded-viewer-and-kept-membership",
+        "preconditions": [
+          "A retained completed recording is selected; discover snapshot.recording and operation.inspect metadata"
+        ],
+        "effects": [
+          "Preserves live schematic, device state/time, run/electrical revision, edit history and captured rows/model dependencies",
+          "Viewer commands may be used while live scope is shown; they do not implicitly switch to recorded view or select a different operation",
+          "Ordinary command/retry/actor rules apply; viewer clock publications advance presentation revision, not command revision",
+          "Later viewer intent takes precedence over automatic viewer selection by an admitted recording import; the imported asset can still be kept. Inspect the import job outcome",
+          "Stops only recorded playback; keeps current row, configured speed, plot window and live solver/pause state. Repeating pause is allowed"
+        ],
+        "errors": [
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "No selected completed recording; for viewer commands other than view.set this check precedes command-specific parameter validation"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields or command-specific value/relationship violation"
+          }
+        ],
+        "completion": {
+          "mode": "immediate in-memory viewer update; no file IO or solver work",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-preserved-dirty-policy": "Viewer choices do not mark the document dirty. Save/recovery retain selected kept recording/viewing preference; index, playback speed, windows, recorded probe subset and cursors are session-only. Keep membership alone changes recordings_dirty.",
+      "x-recording-inventory": "snapshot.operations; operation.select chooses a retained operation, completed metadata exposes captured probes/duration/rows",
+      "x-viewer-state": "snapshot.recording: id, viewing, playing, seconds_per_wall_second, sample_index, time_s, duration_s, sample_count, last_sample_time_s and scope"
+    },
+    "recording.window.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "end_s": "15 ms",
+          "start_s": "5 ms"
+        }
+      ],
+      "properties": {
+        "end_s": {
+          "$ref": "urn:elab:time:1",
+          "description": "Required non-null time quantity within the selected captured duration, with existing 1e-12 * max(1,duration_s) boundary roundoff allowance. Near-boundary values clamp into [0,duration_s]."
+        },
+        "start_s": {
+          "$ref": "urn:elab:time:1",
+          "description": "Required non-null time quantity within the selected captured duration, with existing 1e-12 * max(1,duration_s) boundary roundoff allowance. Near-boundary values clamp into [0,duration_s]."
+        }
+      },
+      "required": [
+        "start_s",
+        "end_s"
+      ],
+      "type": "object",
+      "x-captured-interval": {
+        "boundary_roundoff_s": "1e-12 * max(1,duration_s)",
+        "dc_point": "start_s = end_s = 0",
+        "maximum": "snapshot.recording.duration_s",
+        "minimum": 0,
+        "raw_order": "start_s <= end_s",
+        "transient_after_clamp": "start_s < end_s"
+      },
+      "x-command-contract": {
+        "version": 1,
+        "scope": "recorded-viewer-and-kept-membership",
+        "preconditions": [
+          "A retained completed recording is selected; discover snapshot.recording and operation.inspect metadata"
+        ],
+        "effects": [
+          "Preserves live schematic, device state/time, run/electrical revision, edit history and captured rows/model dependencies",
+          "Viewer commands may be used while live scope is shown; they do not implicitly switch to recorded view or select a different operation",
+          "Ordinary command/retry/actor rules apply; viewer clock publications advance presentation revision, not command revision",
+          "Later viewer intent takes precedence over automatic viewer selection by an admitted recording import; the imported asset can still be kept. Inspect the import job outcome",
+          "Sets only plot/sample-statistics interval. It does not seek, pause, trim rows, constrain playback or place cursors; empty intervals between stored rows report no exact data",
+          "Positive-duration windows must remain positive after boundary clamping; a DC point permits only normalized [0,0]. Nearest-row cursor lookup and playback indices are independent of the window"
+        ],
+        "errors": [
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "No selected completed recording; for viewer commands other than view.set this check precedes command-specific parameter validation"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields or command-specific value/relationship violation"
+          }
+        ],
+        "completion": {
+          "mode": "immediate in-memory viewer update; no file IO or solver work",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-preserved-dirty-policy": "Viewer choices do not mark the document dirty. Save/recovery retain selected kept recording/viewing preference; index, playback speed, windows, recorded probe subset and cursors are session-only. Keep membership alone changes recordings_dirty.",
+      "x-recording-inventory": "snapshot.operations; operation.select chooses a retained operation, completed metadata exposes captured probes/duration/rows",
+      "x-viewer-state": "snapshot.recording: id, viewing, playing, seconds_per_wall_second, sample_index, time_s, duration_s, sample_count, last_sample_time_s and scope"
+    },
+    "recording.probes.set": {
+      "additionalProperties": false,
+      "properties": {
+        "ids": {
+          "description": "Required array of unique IDs from selected operation metadata.probes or snapshot.recording.scope.available; null is refused. [] hides every trace. Captured channels cannot be added after the fact.",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 6,
+          "minItems": 0,
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "ids"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "recorded-viewer-and-kept-membership",
+        "preconditions": [
+          "A retained completed recording is selected; discover snapshot.recording and operation.inspect metadata"
+        ],
+        "effects": [
+          "Preserves live schematic, device state/time, run/electrical revision, edit history and captured rows/model dependencies",
+          "Viewer commands may be used while live scope is shown; they do not implicitly switch to recorded view or select a different operation",
+          "Ordinary command/retry/actor rules apply; viewer clock publications advance presentation revision, not command revision",
+          "Later viewer intent takes precedence over automatic viewer selection by an admitted recording import; the imported asset can still be kept. Inspect the import job outcome",
+          "Sets ordered recorded trace subset; no live-probe change, row reordering, data removal or captured measurement change. New selection resets to all captured probes"
+        ],
+        "errors": [
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "No selected completed recording; for viewer commands other than view.set this check precedes command-specific parameter validation"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields or command-specific value/relationship violation"
+          }
+        ],
+        "completion": {
+          "mode": "immediate in-memory viewer update; no file IO or solver work",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-preserved-dirty-policy": "Viewer choices do not mark the document dirty. Save/recovery retain selected kept recording/viewing preference; index, playback speed, windows, recorded probe subset and cursors are session-only. Keep membership alone changes recordings_dirty.",
+      "x-recording-inventory": "snapshot.operations; operation.select chooses a retained operation, completed metadata exposes captured probes/duration/rows",
+      "x-viewer-state": "snapshot.recording: id, viewing, playing, seconds_per_wall_second, sample_index, time_s, duration_s, sample_count, last_sample_time_s and scope"
+    },
+    "recording.cursor.select": {
+      "additionalProperties": false,
+      "properties": {
+        "cursor": {
+          "enum": [
+            "a",
+            "b"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "cursor"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "recorded-viewer-and-kept-membership",
+        "preconditions": [
+          "A retained completed recording is selected; discover snapshot.recording and operation.inspect metadata"
+        ],
+        "effects": [
+          "Preserves live schematic, device state/time, run/electrical revision, edit history and captured rows/model dependencies",
+          "Viewer commands may be used while live scope is shown; they do not implicitly switch to recorded view or select a different operation",
+          "Ordinary command/retry/actor rules apply; viewer clock publications advance presentation revision, not command revision",
+          "Later viewer intent takes precedence over automatic viewer selection by an admitted recording import; the imported asset can still be kept. Inspect the import job outcome",
+          "Selects a/b target for recorded plot clicks; does not place, move or clear either cursor"
+        ],
+        "errors": [
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "No selected completed recording; for viewer commands other than view.set this check precedes command-specific parameter validation"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields or command-specific value/relationship violation"
+          }
+        ],
+        "completion": {
+          "mode": "immediate in-memory viewer update; no file IO or solver work",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-preserved-dirty-policy": "Viewer choices do not mark the document dirty. Save/recovery retain selected kept recording/viewing preference; index, playback speed, windows, recorded probe subset and cursors are session-only. Keep membership alone changes recordings_dirty.",
+      "x-recording-inventory": "snapshot.operations; operation.select chooses a retained operation, completed metadata exposes captured probes/duration/rows",
+      "x-viewer-state": "snapshot.recording: id, viewing, playing, seconds_per_wall_second, sample_index, time_s, duration_s, sample_count, last_sample_time_s and scope"
+    },
+    "recording.cursor.clear": {
+      "additionalProperties": false,
+      "properties": {
+        "cursor": {
+          "enum": [
+            "a",
+            "b"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "cursor"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "recorded-viewer-and-kept-membership",
+        "preconditions": [
+          "A retained completed recording is selected; discover snapshot.recording and operation.inspect metadata"
+        ],
+        "effects": [
+          "Preserves live schematic, device state/time, run/electrical revision, edit history and captured rows/model dependencies",
+          "Viewer commands may be used while live scope is shown; they do not implicitly switch to recorded view or select a different operation",
+          "Ordinary command/retry/actor rules apply; viewer clock publications advance presentation revision, not command revision",
+          "Later viewer intent takes precedence over automatic viewer selection by an admitted recording import; the imported asset can still be kept. Inspect the import job outcome",
+          "Clears only requested a/b cursor; repeated clear is allowed and does not change active cursor selection, live cursors or plot window"
+        ],
+        "errors": [
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "No selected completed recording; for viewer commands other than view.set this check precedes command-specific parameter validation"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields or command-specific value/relationship violation"
+          }
+        ],
+        "completion": {
+          "mode": "immediate in-memory viewer update; no file IO or solver work",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-preserved-dirty-policy": "Viewer choices do not mark the document dirty. Save/recovery retain selected kept recording/viewing preference; index, playback speed, windows, recorded probe subset and cursors are session-only. Keep membership alone changes recordings_dirty.",
+      "x-recording-inventory": "snapshot.operations; operation.select chooses a retained operation, completed metadata exposes captured probes/duration/rows",
+      "x-viewer-state": "snapshot.recording: id, viewing, playing, seconds_per_wall_second, sample_index, time_s, duration_s, sample_count, last_sample_time_s and scope"
+    },
+    "recording.keep.set": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Required non-null retained completed recording ID from snapshot.operations; empty/unknown or incomplete target returns not-ready. Does not select that recording.",
+          "type": "string"
+        },
+        "keep": {
+          "description": "Required non-null membership boolean. Exclusion keeps the session asset available until ordinary retention eviction.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "keep"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "recorded-viewer-and-kept-membership",
+        "preconditions": [
+          "id names any retained completed Verify/imported/project recording; it need not be selected. Sweep membership uses its separate command"
+        ],
+        "effects": [
+          "Changes only whether this completed asset is included in project saves/recovery. Does not select it, stop playback, modify captured rows/models, restart live physics or create an undo entry",
+          "recordings_dirty compares kept membership against the last saved baseline; restoring the same saved membership can return to clean. Viewer selection/preferences do not drive this dirty flag",
+          "Exclusion does not immediately free/remove the session operation; later admission may evict old unkept completed records. Kept records are not silently evicted",
+          "No project encoding/size validation is performed here; keeping a record does not guarantee a later Save/checkpoint fits the existing 8 MiB project bound",
+          "Changing kept membership can supersede an admitted Open whose captured membership guard no longer matches; later edits remain unsaved by a captured Save"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed, unknown, duplicate, missing or null required fields"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "ID is empty, unknown or not a retained completed recording"
+          }
+        ],
+        "completion": {
+          "mode": "immediate in-memory viewer update; no file IO or solver work",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-preserved-dirty-policy": "Viewer choices do not mark the document dirty. Save/recovery retain selected kept recording/viewing preference; index, playback speed, windows, recorded probe subset and cursors are session-only. Keep membership alone changes recordings_dirty.",
+      "x-recording-inventory": "snapshot.operations; operation.select chooses a retained operation, completed metadata exposes captured probes/duration/rows",
+      "x-viewer-state": "snapshot.recording: id, viewing, playing, seconds_per_wall_second, sample_index, time_s, duration_s, sample_count, last_sample_time_s and scope"
+    }
+  },
+  "rows": [
+    {
+      "time_s": 0,
+      "values": [
+        0,
+        0.0005
+      ]
+    },
+    {
+      "time_s": 0.001,
+      "values": [
+        0.47581290982020213,
+        0.0004524187090179798
+      ]
+    },
+    {
+      "time_s": 0.002,
+      "values": [
+        0.9063462346100908,
+        0.0004093653765389909
+      ]
+    },
+    {
+      "time_s": 0.003,
+      "values": [
+        1.2959088965914107,
+        0.00037040911034085894
+      ]
+    },
+    {
+      "time_s": 0.004,
+      "values": [
+        1.6483997698218036,
+        0.0003351600230178196
+      ]
+    },
+    {
+      "time_s": 0.005,
+      "values": [
+        1.9673467014368329,
+        0.0003032653298563167
+      ]
+    },
+    {
+      "time_s": 0.006,
+      "values": [
+        2.255941819529868,
+        0.0002744058180470132
+      ]
+    },
+    {
+      "time_s": 0.007,
+      "values": [
+        2.5170734810429525,
+        0.00024829265189570474
+      ]
+    },
+    {
+      "time_s": 0.008,
+      "values": [
+        2.753355179413892,
+        0.0002246644820586108
+      ]
+    },
+    {
+      "time_s": 0.009000000000000001,
+      "values": [
+        2.967151701297005,
+        0.00020328482987029951
+      ]
+    },
+    {
+      "time_s": 0.01,
+      "values": [
+        3.1606027941427883,
+        0.00018393972058572118
+      ]
+    },
+    {
+      "time_s": 0.011,
+      "values": [
+        3.335644581509602,
+        0.0001664355418490398
+      ]
+    },
+    {
+      "time_s": 0.012,
+      "values": [
+        3.4940289404389895,
+        0.00015059710595610105
+      ]
+    },
+    {
+      "time_s": 0.013000000000000001,
+      "values": [
+        3.637341034829937,
+        0.0001362658965170063
+      ]
+    },
+    {
+      "time_s": 0.014,
+      "values": [
+        3.7670151802919674,
+        0.00012329848197080326
+      ]
+    },
+    {
+      "time_s": 0.015,
+      "values": [
+        3.8843491992578505,
+        0.00011156508007421495
+      ]
+    },
+    {
+      "time_s": 0.016,
+      "values": [
+        3.990517410026723,
+        0.00010094825899732772
+      ]
+    },
+    {
+      "time_s": 0.017,
+      "values": [
+        4.086582379736327,
+        9.134176202636732e-05
+      ]
+    },
+    {
+      "time_s": 0.018000000000000002,
+      "values": [
+        4.173505558892067,
+        8.264944411079327e-05
+      ]
+    },
+    {
+      "time_s": 0.019,
+      "values": [
+        4.252156903886824,
+        7.478430961131756e-05
+      ]
+    },
+    {
+      "time_s": 0.02,
+      "values": [
+        4.323323583816936,
+        6.766764161830636e-05
+      ]
+    },
+    {
+      "time_s": 0.021,
+      "values": [
+        4.3877178587350905,
+        6.122821412649096e-05
+      ]
+    },
+    {
+      "time_s": 0.022,
+      "values": [
+        4.445984208188331,
+        5.540157918116693e-05
+      ]
+    },
+    {
+      "time_s": 0.023,
+      "values": [
+        4.498705781385982,
+        5.012942186140181e-05
+      ]
+    },
+    {
+      "time_s": 0.024,
+      "values": [
+        4.546410233552938,
+        4.535897664470623e-05
+      ]
+    },
+    {
+      "time_s": 0.025,
+      "values": [
+        4.589575006880506,
+        4.104249931194941e-05
+      ]
+    },
+    {
+      "time_s": 0.026000000000000002,
+      "values": [
+        4.628632108928331,
+        3.713678910716691e-05
+      ]
+    },
+    {
+      "time_s": 0.027,
+      "values": [
+        4.663972436301251,
+        3.360275636987486e-05
+      ]
+    },
+    {
+      "time_s": 0.028,
+      "values": [
+        4.69594968687391,
+        3.0405031312608967e-05
+      ]
+    },
+    {
+      "time_s": 0.029,
+      "values": [
+        4.724883899717964,
+        2.751161002820357e-05
+      ]
+    },
+    {
+      "time_s": 0.03,
+      "values": [
+        4.751064658160681,
+        2.4893534183931898e-05
+      ]
+    },
+    {
+      "time_s": 0.031,
+      "values": [
+        4.774753988032212,
+        2.2524601196778792e-05
+      ]
+    },
+    {
+      "time_s": 0.032,
+      "values": [
+        4.79618898010817,
+        2.0381101989183036e-05
+      ]
+    },
+    {
+      "time_s": 0.033,
+      "values": [
+        4.815584162993801,
+        1.84415837006199e-05
+      ]
+    },
+    {
+      "time_s": 0.034,
+      "values": [
+        4.833133650198371,
+        1.6686634980162918e-05
+      ]
+    },
+    {
+      "time_s": 0.035,
+      "values": [
+        4.849013082888408,
+        1.5098691711159163e-05
+      ]
+    },
+    {
+      "time_s": 0.036000000000000004,
+      "values": [
+        4.863381387763538,
+        1.3661861223646187e-05
+      ]
+    },
+    {
+      "time_s": 0.037,
+      "values": [
+        4.876382367648304,
+        1.2361763235169577e-05
+      ]
+    },
+    {
+      "time_s": 0.038,
+      "values": [
+        4.888146140719173,
+        1.1185385928082691e-05
+      ]
+    },
+    {
+      "time_s": 0.039,
+      "values": [
+        4.898790442770979,
+        1.0120955722902102e-05
+      ]
+    },
+    {
+      "time_s": 0.04,
+      "values": [
+        4.90842180555633,
+        9.15781944436702e-06
+      ]
+    },
+    {
+      "time_s": 0.041,
+      "values": [
+        4.917136622991195,
+        8.28633770088052e-06
+      ]
+    },
+    {
+      "time_s": 0.042,
+      "values": [
+        4.925022115897613,
+        7.497788410238737e-06
+      ]
+    },
+    {
+      "time_s": 0.043000000000000003,
+      "values": [
+        4.932157204938997,
+        6.784279506100343e-06
+      ]
+    },
+    {
+      "time_s": 0.044,
+      "values": [
+        4.938613300484659,
+        6.138669951534137e-06
+      ]
+    },
+    {
+      "time_s": 0.045,
+      "values": [
+        4.94445501730879,
+        5.554498269121044e-06
+      ]
+    },
+    {
+      "time_s": 0.046,
+      "values": [
+        4.9497408212768335,
+        5.025917872316654e-06
+      ]
+    },
+    {
+      "time_s": 0.047,
+      "values": [
+        4.954523614491523,
+        4.547638550847743e-06
+      ]
+    },
+    {
+      "time_s": 0.048,
+      "values": [
+        4.958851264754902,
+        4.114873524509832e-06
+      ]
+    },
+    {
+      "time_s": 0.049,
+      "values": [
+        4.96276708464538,
+        3.7232915354620034e-06
+      ]
+    },
+    {
+      "time_s": 0.05,
+      "values": [
+        4.966310265004574,
+        3.3689734995426156e-06
+      ]
+    },
+    {
+      "time_s": 0.05,
+      "values": [
+        4.966310265004574,
+        -0.0004966310265004574
+      ]
+    },
+    {
+      "time_s": 0.05,
+      "values": [
+        4.966310265004574,
+        -0.0004966310265004574
+      ]
+    },
+    {
+      "time_s": 0.051000000000000004,
+      "values": [
+        4.493703357352221,
+        -0.00044937033573522206
+      ]
+    },
+    {
+      "time_s": 0.052000000000000005,
+      "values": [
+        4.066070943286106,
+        -0.0004066070943286106
+      ]
+    },
+    {
+      "time_s": 0.053,
+      "values": [
+        3.679133133874041,
+        -0.0003679133133874041
+      ]
+    },
+    {
+      "time_s": 0.054,
+      "values": [
+        3.329017325465135,
+        -0.0003329017325465135
+      ]
+    },
+    {
+      "time_s": 0.055,
+      "values": [
+        3.0122194413708483,
+        -0.0003012219441370848
+      ]
+    },
+    {
+      "time_s": 0.056,
+      "values": [
+        2.7255688618877185,
+        -0.00027255688618877186
+      ]
+    },
+    {
+      "time_s": 0.057,
+      "values": [
+        2.466196691669692,
+        -0.0002466196691669692
+      ]
+    },
+    {
+      "time_s": 0.058,
+      "values": [
+        2.231507046859229,
+        -0.0002231507046859229
+      ]
+    },
+    {
+      "time_s": 0.059000000000000004,
+      "values": [
+        2.019151074609154,
+        -0.00020191510746091538
+      ]
+    },
+    {
+      "time_s": 0.06,
+      "values": [
+        1.827003444973881,
+        -0.0001827003444973881
+      ]
+    }
+  ],
+  "edge_first_index": 50,
+  "edge_rightmost_index": 52,
+  "time_seek_index": 52,
+  "row_step_index": 51,
+  "refusals": [
+    {
+      "command": "recording.window.set",
+      "params": {
+        "start_s": -1e-13,
+        "end_s": 0
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "recording.window.set",
+      "params": {
+        "start_s": 0.06,
+        "end_s": 0.0600000000001
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "recording.window.set",
+      "params": {
+        "start_s": -2e-13,
+        "end_s": -1e-13
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "recording.window.set",
+      "params": {
+        "start_s": 0.0600000000001,
+        "end_s": 0.0600000000002
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "recording.window.set",
+      "params": {
+        "start_s": null,
+        "end_s": 0.01
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "recording.seek",
+      "params": {
+        "index": null,
+        "time_s": null
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "recording.step",
+      "params": {
+        "direction": "previous"
+      },
+      "code": "unavailable"
+    },
+    {
+      "command": "recording.probes.set",
+      "params": {
+        "ids": null
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "recording.probes.set",
+      "params": {
+        "ids": [
+          "v:C1",
+          "v:C1"
+        ]
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "recording.keep.set",
+      "params": {
+        "id": "verify-1",
+        "keep": null
+      },
+      "code": "invalid-params"
+    }
+  ],
+  "clamped_window": {
+    "mode": "fixed",
+    "start_s": 0,
+    "end_s": 0.06
+  },
+  "no_sample_window": {
+    "last_sample_time_s": 0.06,
+    "id": "verify-1",
+    "origin_id": "verify-1",
+    "imported": false,
+    "viewing": false,
+    "playing": false,
+    "seconds_per_wall_second": 0,
+    "sample_index": 0,
+    "time_s": 0,
+    "duration_s": 0.06,
+    "sample_step_s": 0.001,
+    "sample_count": 63,
+    "window_sample_count": 0,
+    "plot_reduced": false,
+    "scope": {
+      "window": {
+        "mode": "fixed",
+        "start_s": 0.0101,
+        "end_s": 0.0102
+      },
+      "window_valid": false,
+      "window_reason": "No exact recorded samples in this interval",
+      "statistics": [],
+      "available": [
+        {
+          "id": "v:C1",
+          "label": "C1 voltage",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        {
+          "id": "i:C1",
+          "label": "C1 current",
+          "unit": "A",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        }
+      ],
+      "selected": [
+        "v:C1",
+        "i:C1"
+      ],
+      "traces": [
+        {
+          "probe": {
+            "id": "v:C1",
+            "label": "C1 voltage",
+            "unit": "V",
+            "positive": "C1.1",
+            "reference": "C1.2"
+          },
+          "points": []
+        },
+        {
+          "probe": {
+            "id": "i:C1",
+            "label": "C1 current",
+            "unit": "A",
+            "positive": "C1.1",
+            "reference": "C1.2"
+          },
+          "points": []
+        }
+      ],
+      "run_id": 0,
+      "stale": false,
+      "active_cursor": "a",
+      "readings": []
+    },
+    "readings": []
+  },
+  "record_sha256": "9f979d4f7ea346e185e93ae9018f6df4737967cdf7e4a4694b47b8afeec4de3e",
+  "project_sha256": "f2b06fd00f6e7f17a267aa0964005cebab70c905e16aa9c44361f348551049f1",
+  "live_semantic": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "pulse-source",
+        "name": "Pulse source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-square.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -110
+        },
+        "value": 10000,
+        "unit": "\u03a9",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "C1",
+        "kind": "capacitor",
+        "name": "Capacitor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 1e-06,
+        "unit": "F",
+        "model": "ideal-capacitor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 110
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "C1.1",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "C1.2",
+        "to": "GND.reference",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "GND.reference",
+        "to": "V1.negative",
+        "connected": true
+      }
+    ],
+    "run_id": 2,
+    "electrical_revision": 2,
+    "result": null,
+    "transient": {
+      "engine": "elab.ideal-rc-exact.v1",
+      "run_id": 2,
+      "electrical_revision": 2,
+      "source_id": "V1",
+      "resistor_id": "R1",
+      "capacitor_id": "C1",
+      "output_net": "net:C1.1",
+      "time_constant_s": 0.01,
+      "settings": {
+        "step_s": 0.001,
+        "high_s": 0.05,
+        "low_s": 0.05,
+        "initial_voltage_v": 0,
+        "seconds_per_wall_second": 0.02
+      },
+      "input_mode": "auto",
+      "sample": {
+        "time_s": 0,
+        "input_v": 5,
+        "voltage_v": 0,
+        "current_a": 0.0005,
+        "energy_j": 0
+      },
+      "samples": [
+        {
+          "time_s": 0,
+          "input_v": 5,
+          "voltage_v": 0,
+          "current_a": 0.0005,
+          "energy_j": 0
+        }
+      ],
+      "events": [
+        {
+          "time_s": 0,
+          "mode": "restart"
+        }
+      ],
+      "stale": false
+    },
+    "mixed": null,
+    "npn": null,
+    "undo_entry": {
+      "name": "example rc",
+      "actor": "agent.stdio",
+      "command_revision": 2
+    },
+    "view": {
+      "center": {
+        "x": -130,
+        "y": 20
+      },
+      "zoom": 0.7
+    }
+  },
+  "viewer_after_controls": {
+    "last_sample_time_s": 0.06,
+    "id": "verify-1",
+    "origin_id": "verify-1",
+    "imported": false,
+    "viewing": true,
+    "playing": false,
+    "seconds_per_wall_second": 0.002,
+    "sample_index": 0,
+    "time_s": 0,
+    "duration_s": 0.06,
+    "sample_step_s": 0.001,
+    "sample_count": 63,
+    "window_sample_count": 11,
+    "plot_reduced": false,
+    "scope": {
+      "window": {
+        "mode": "fixed",
+        "start_s": 0.005,
+        "end_s": 0.015
+      },
+      "window_valid": true,
+      "statistics": [],
+      "available": [
+        {
+          "id": "v:C1",
+          "label": "C1 voltage",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        {
+          "id": "i:C1",
+          "label": "C1 current",
+          "unit": "A",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        }
+      ],
+      "selected": [],
+      "traces": [],
+      "run_id": 0,
+      "stale": false,
+      "active_cursor": "b",
+      "readings": []
+    },
+    "readings": []
+  },
+  "reopened_viewer": {
+    "last_sample_time_s": 0.06,
+    "id": "record-1",
+    "origin_id": "verify-1",
+    "imported": true,
+    "viewing": true,
+    "playing": false,
+    "seconds_per_wall_second": 0,
+    "sample_index": 0,
+    "time_s": 0,
+    "duration_s": 0.06,
+    "sample_step_s": 0.001,
+    "sample_count": 63,
+    "window_sample_count": 63,
+    "plot_reduced": false,
+    "scope": {
+      "window": {
+        "mode": "fixed",
+        "start_s": 0,
+        "end_s": 0.06
+      },
+      "window_valid": true,
+      "statistics": [
+        {
+          "probe_id": "v:C1",
+          "count": 63,
+          "min": 0,
+          "max": 4.966310265004574,
+          "sample_mean": 3.850172465253175,
+          "sample_rms": 4.055859970766515
+        },
+        {
+          "probe_id": "i:C1",
+          "count": 63,
+          "min": -0.0004966310265004574,
+          "max": 0.0005,
+          "sample_mean": 1.974465823658736e-05,
+          "sample_rms": 0.00021215570497229636
+        }
+      ],
+      "available": [
+        {
+          "id": "v:C1",
+          "label": "C1 voltage",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        {
+          "id": "i:C1",
+          "label": "C1 current",
+          "unit": "A",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        }
+      ],
+      "selected": [
+        "v:C1",
+        "i:C1"
+      ],
+      "traces": [
+        {
+          "probe": {
+            "id": "v:C1",
+            "label": "C1 voltage",
+            "unit": "V",
+            "positive": "C1.1",
+            "reference": "C1.2"
+          },
+          "points": [
+            {
+              "time_s": 0,
+              "value": 0
+            },
+            {
+              "time_s": 0.001,
+              "value": 0.47581290982020213
+            },
+            {
+              "time_s": 0.002,
+              "value": 0.9063462346100908
+            },
+            {
+              "time_s": 0.003,
+              "value": 1.2959088965914107
+            },
+            {
+              "time_s": 0.004,
+              "value": 1.6483997698218036
+            },
+            {
+              "time_s": 0.005,
+              "value": 1.9673467014368329
+            },
+            {
+              "time_s": 0.006,
+              "value": 2.255941819529868
+            },
+            {
+              "time_s": 0.007,
+              "value": 2.5170734810429525
+            },
+            {
+              "time_s": 0.008,
+              "value": 2.753355179413892
+            },
+            {
+              "time_s": 0.009000000000000001,
+              "value": 2.967151701297005
+            },
+            {
+              "time_s": 0.01,
+              "value": 3.1606027941427883
+            },
+            {
+              "time_s": 0.011,
+              "value": 3.335644581509602
+            },
+            {
+              "time_s": 0.012,
+              "value": 3.4940289404389895
+            },
+            {
+              "time_s": 0.013000000000000001,
+              "value": 3.637341034829937
+            },
+            {
+              "time_s": 0.014,
+              "value": 3.7670151802919674
+            },
+            {
+              "time_s": 0.015,
+              "value": 3.8843491992578505
+            },
+            {
+              "time_s": 0.016,
+              "value": 3.990517410026723
+            },
+            {
+              "time_s": 0.017,
+              "value": 4.086582379736327
+            },
+            {
+              "time_s": 0.018000000000000002,
+              "value": 4.173505558892067
+            },
+            {
+              "time_s": 0.019,
+              "value": 4.252156903886824
+            },
+            {
+              "time_s": 0.02,
+              "value": 4.323323583816936
+            },
+            {
+              "time_s": 0.021,
+              "value": 4.3877178587350905
+            },
+            {
+              "time_s": 0.022,
+              "value": 4.445984208188331
+            },
+            {
+              "time_s": 0.023,
+              "value": 4.498705781385982
+            },
+            {
+              "time_s": 0.024,
+              "value": 4.546410233552938
+            },
+            {
+              "time_s": 0.025,
+              "value": 4.589575006880506
+            },
+            {
+              "time_s": 0.026000000000000002,
+              "value": 4.628632108928331
+            },
+            {
+              "time_s": 0.027,
+              "value": 4.663972436301251
+            },
+            {
+              "time_s": 0.028,
+              "value": 4.69594968687391
+            },
+            {
+              "time_s": 0.029,
+              "value": 4.724883899717964
+            },
+            {
+              "time_s": 0.03,
+              "value": 4.751064658160681
+            },
+            {
+              "time_s": 0.031,
+              "value": 4.774753988032212
+            },
+            {
+              "time_s": 0.032,
+              "value": 4.79618898010817
+            },
+            {
+              "time_s": 0.033,
+              "value": 4.815584162993801
+            },
+            {
+              "time_s": 0.034,
+              "value": 4.833133650198371
+            },
+            {
+              "time_s": 0.035,
+              "value": 4.849013082888408
+            },
+            {
+              "time_s": 0.036000000000000004,
+              "value": 4.863381387763538
+            },
+            {
+              "time_s": 0.037,
+              "value": 4.876382367648304
+            },
+            {
+              "time_s": 0.038,
+              "value": 4.888146140719173
+            },
+            {
+              "time_s": 0.039,
+              "value": 4.898790442770979
+            },
+            {
+              "time_s": 0.04,
+              "value": 4.90842180555633
+            },
+            {
+              "time_s": 0.041,
+              "value": 4.917136622991195
+            },
+            {
+              "time_s": 0.042,
+              "value": 4.925022115897613
+            },
+            {
+              "time_s": 0.043000000000000003,
+              "value": 4.932157204938997
+            },
+            {
+              "time_s": 0.044,
+              "value": 4.938613300484659
+            },
+            {
+              "time_s": 0.045,
+              "value": 4.94445501730879
+            },
+            {
+              "time_s": 0.046,
+              "value": 4.9497408212768335
+            },
+            {
+              "time_s": 0.047,
+              "value": 4.954523614491523
+            },
+            {
+              "time_s": 0.048,
+              "value": 4.958851264754902
+            },
+            {
+              "time_s": 0.049,
+              "value": 4.96276708464538
+            },
+            {
+              "time_s": 0.05,
+              "value": 4.966310265004574
+            },
+            {
+              "time_s": 0.05,
+              "value": 4.966310265004574
+            },
+            {
+              "time_s": 0.05,
+              "value": 4.966310265004574
+            },
+            {
+              "time_s": 0.051000000000000004,
+              "value": 4.493703357352221
+            },
+            {
+              "time_s": 0.052000000000000005,
+              "value": 4.066070943286106
+            },
+            {
+              "time_s": 0.053,
+              "value": 3.679133133874041
+            },
+            {
+              "time_s": 0.054,
+              "value": 3.329017325465135
+            },
+            {
+              "time_s": 0.055,
+              "value": 3.0122194413708483
+            },
+            {
+              "time_s": 0.056,
+              "value": 2.7255688618877185
+            },
+            {
+              "time_s": 0.057,
+              "value": 2.466196691669692
+            },
+            {
+              "time_s": 0.058,
+              "value": 2.231507046859229
+            },
+            {
+              "time_s": 0.059000000000000004,
+              "value": 2.019151074609154
+            },
+            {
+              "time_s": 0.06,
+              "value": 1.827003444973881
+            }
+          ]
+        },
+        {
+          "probe": {
+            "id": "i:C1",
+            "label": "C1 current",
+            "unit": "A",
+            "positive": "C1.1",
+            "reference": "C1.2"
+          },
+          "points": [
+            {
+              "time_s": 0,
+              "value": 0.0005
+            },
+            {
+              "time_s": 0.001,
+              "value": 0.0004524187090179798
+            },
+            {
+              "time_s": 0.002,
+              "value": 0.0004093653765389909
+            },
+            {
+              "time_s": 0.003,
+              "value": 0.00037040911034085894
+            },
+            {
+              "time_s": 0.004,
+              "value": 0.0003351600230178196
+            },
+            {
+              "time_s": 0.005,
+              "value": 0.0003032653298563167
+            },
+            {
+              "time_s": 0.006,
+              "value": 0.0002744058180470132
+            },
+            {
+              "time_s": 0.007,
+              "value": 0.00024829265189570474
+            },
+            {
+              "time_s": 0.008,
+              "value": 0.0002246644820586108
+            },
+            {
+              "time_s": 0.009000000000000001,
+              "value": 0.00020328482987029951
+            },
+            {
+              "time_s": 0.01,
+              "value": 0.00018393972058572118
+            },
+            {
+              "time_s": 0.011,
+              "value": 0.0001664355418490398
+            },
+            {
+              "time_s": 0.012,
+              "value": 0.00015059710595610105
+            },
+            {
+              "time_s": 0.013000000000000001,
+              "value": 0.0001362658965170063
+            },
+            {
+              "time_s": 0.014,
+              "value": 0.00012329848197080326
+            },
+            {
+              "time_s": 0.015,
+              "value": 0.00011156508007421495
+            },
+            {
+              "time_s": 0.016,
+              "value": 0.00010094825899732772
+            },
+            {
+              "time_s": 0.017,
+              "value": 9.134176202636732e-05
+            },
+            {
+              "time_s": 0.018000000000000002,
+              "value": 8.264944411079327e-05
+            },
+            {
+              "time_s": 0.019,
+              "value": 7.478430961131756e-05
+            },
+            {
+              "time_s": 0.02,
+              "value": 6.766764161830636e-05
+            },
+            {
+              "time_s": 0.021,
+              "value": 6.122821412649096e-05
+            },
+            {
+              "time_s": 0.022,
+              "value": 5.540157918116693e-05
+            },
+            {
+              "time_s": 0.023,
+              "value": 5.012942186140181e-05
+            },
+            {
+              "time_s": 0.024,
+              "value": 4.535897664470623e-05
+            },
+            {
+              "time_s": 0.025,
+              "value": 4.104249931194941e-05
+            },
+            {
+              "time_s": 0.026000000000000002,
+              "value": 3.713678910716691e-05
+            },
+            {
+              "time_s": 0.027,
+              "value": 3.360275636987486e-05
+            },
+            {
+              "time_s": 0.028,
+              "value": 3.0405031312608967e-05
+            },
+            {
+              "time_s": 0.029,
+              "value": 2.751161002820357e-05
+            },
+            {
+              "time_s": 0.03,
+              "value": 2.4893534183931898e-05
+            },
+            {
+              "time_s": 0.031,
+              "value": 2.2524601196778792e-05
+            },
+            {
+              "time_s": 0.032,
+              "value": 2.0381101989183036e-05
+            },
+            {
+              "time_s": 0.033,
+              "value": 1.84415837006199e-05
+            },
+            {
+              "time_s": 0.034,
+              "value": 1.6686634980162918e-05
+            },
+            {
+              "time_s": 0.035,
+              "value": 1.5098691711159163e-05
+            },
+            {
+              "time_s": 0.036000000000000004,
+              "value": 1.3661861223646187e-05
+            },
+            {
+              "time_s": 0.037,
+              "value": 1.2361763235169577e-05
+            },
+            {
+              "time_s": 0.038,
+              "value": 1.1185385928082691e-05
+            },
+            {
+              "time_s": 0.039,
+              "value": 1.0120955722902102e-05
+            },
+            {
+              "time_s": 0.04,
+              "value": 9.15781944436702e-06
+            },
+            {
+              "time_s": 0.041,
+              "value": 8.28633770088052e-06
+            },
+            {
+              "time_s": 0.042,
+              "value": 7.497788410238737e-06
+            },
+            {
+              "time_s": 0.043000000000000003,
+              "value": 6.784279506100343e-06
+            },
+            {
+              "time_s": 0.044,
+              "value": 6.138669951534137e-06
+            },
+            {
+              "time_s": 0.045,
+              "value": 5.554498269121044e-06
+            },
+            {
+              "time_s": 0.046,
+              "value": 5.025917872316654e-06
+            },
+            {
+              "time_s": 0.047,
+              "value": 4.547638550847743e-06
+            },
+            {
+              "time_s": 0.048,
+              "value": 4.114873524509832e-06
+            },
+            {
+              "time_s": 0.049,
+              "value": 3.7232915354620034e-06
+            },
+            {
+              "time_s": 0.05,
+              "value": 3.3689734995426156e-06
+            },
+            {
+              "time_s": 0.05,
+              "value": -0.0004966310265004574
+            },
+            {
+              "time_s": 0.05,
+              "value": -0.0004966310265004574
+            },
+            {
+              "time_s": 0.051000000000000004,
+              "value": -0.00044937033573522206
+            },
+            {
+              "time_s": 0.052000000000000005,
+              "value": -0.0004066070943286106
+            },
+            {
+              "time_s": 0.053,
+              "value": -0.0003679133133874041
+            },
+            {
+              "time_s": 0.054,
+              "value": -0.0003329017325465135
+            },
+            {
+              "time_s": 0.055,
+              "value": -0.0003012219441370848
+            },
+            {
+              "time_s": 0.056,
+              "value": -0.00027255688618877186
+            },
+            {
+              "time_s": 0.057,
+              "value": -0.0002466196691669692
+            },
+            {
+              "time_s": 0.058,
+              "value": -0.0002231507046859229
+            },
+            {
+              "time_s": 0.059000000000000004,
+              "value": -0.00020191510746091538
+            },
+            {
+              "time_s": 0.06,
+              "value": -0.0001827003444973881
+            }
+          ]
+        }
+      ],
+      "run_id": 0,
+      "stale": false,
+      "active_cursor": "a",
+      "readings": []
+    },
+    "readings": [
+      {
+        "probe": {
+          "id": "v:C1",
+          "label": "C1 voltage",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        "value": 0,
+        "min": 0,
+        "max": 4.966310265004574
+      },
+      {
+        "probe": {
+          "id": "i:C1",
+          "label": "C1 current",
+          "unit": "A",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        "value": 0.0005,
+        "min": -0.0004966310265004574,
+        "max": 0.0005
+      }
+    ]
+  },
+  "checks": [
+    "all eleven contracts/query purity",
+    "normalized boundary collapse refused atomically",
+    "rightmost time seek and actual equal-time row step",
+    "empty exact-sample interval",
+    "whole-capture Play independent of window/view",
+    "live-view stops recorded clock",
+    "hidden trace subset/cursor selection and repeat clear",
+    "null required fields refused",
+    "kept membership dirty restoration",
+    "exact live/source/history and captured byte preservation",
+    "explicit save/fresh reopen retains only supported viewer preferences"
+  ],
+  "limits": [
+    "Named paused RC capture; playback start/stop semantics rather than real-time frame performance",
+    "Controlled core tests separately cover DC and missing selection; full physical input/accessibility remains open"
+  ]
+}

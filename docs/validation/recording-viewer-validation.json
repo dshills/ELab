@@ -1,0 +1,325 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T13:56:23.256530+00:00",
+  "scope": "Eleven on-demand recorded viewer/kept-membership state contracts and atomic refusal of intervals collapsed by boundary normalization; native callbacks and exact public RC replay/save/reopen",
+  "reference_configuration": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "processor": "Apple M4 Pro",
+    "logical_cpus": 14,
+    "memory_bytes": 68719476736,
+    "go_toolchain": "go version go1.27.2 darwin/arm64"
+  },
+  "source_parent_commit": "e3e71f53798d11c6b5766d57f44720fffae4b7f6",
+  "source_index": "docs/validation/recording-viewer/source-freeze.json",
+  "source_frozen_files": 694,
+  "source_stable": true,
+  "binary_sha256": {
+    "build/elab": "9174ae05f8f8c9a682def1f0b6ee14eb747c3c78f0420eca222e6902e93e3d04",
+    "build/elab-agent": "91da5e58e800708b8b6b0f5d717842def04d43a7284cd234f1d2122c6ed94de7",
+    "build/elab-conformance": "ebf69d40e8101d48579b8ea573abfc8a8dad082e0bf8079288ee8479f0b323af",
+    "build/elab-ui-audit": "a351418be890aef613e1c30b8d834214f3aebbc17c9e4b887d41b1d8cb49e540",
+    "build/ELab-0.114.0-131-recording-viewer-candidate.app/Contents/MacOS/ELab": "9174ae05f8f8c9a682def1f0b6ee14eb747c3c78f0420eca222e6902e93e3d04"
+  },
+  "candidate": "build/ELab-0.114.0-131-recording-viewer-candidate.app",
+  "candidate_promoted": false,
+  "original_regression_failure": "docs/validation/recording-viewer/before.log.txt",
+  "new_application_commands": 0,
+  "existing_commands": 162,
+  "new_contracts": 11,
+  "commands_with_contracts_before": 98,
+  "commands_with_contracts_after": 109,
+  "default_catalog_output_schemas_models_numerical_methods_work_limits_file_versions_unchanged": true,
+  "quality": {
+    "lint_imports_staticcheck": true,
+    "python_tests": 37,
+    "root_native_race_and_vet": true
+  },
+  "process_quality": [
+    {
+      "name": "build",
+      "argv": [
+        "./scripts/build.sh"
+      ],
+      "started_utc": "2026-10-17T13:46:05.077759+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 7.067015958018601,
+      "finished_utc": "2026-10-17T13:46:12.144749+00:00"
+    },
+    {
+      "name": "quality",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T13:46:12.155410+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 359.76905670796987,
+      "finished_utc": "2026-10-17T13:52:11.923080+00:00"
+    },
+    {
+      "name": "quality-final",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T13:55:41.211922+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 12.594960124930367,
+      "finished_utc": "2026-10-17T13:55:53.806835+00:00"
+    }
+  ],
+  "process_public": [
+    {
+      "name": "native-smoke",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.114.0-131-recording-viewer-candidate.app/Contents/MacOS/ELab",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "started_utc": "2026-10-17T13:53:15.588820+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 38.803507833974436,
+      "finished_utc": "2026-10-17T13:53:54.392184+00:00"
+    },
+    {
+      "name": "public-suites",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+        "--native-binary",
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.114.0-131-recording-viewer-candidate.app/Contents/MacOS/ELab",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recording-viewer/public-final"
+      ],
+      "started_utc": "2026-10-17T13:53:54.405300+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 55.10818116704468,
+      "finished_utc": "2026-10-17T13:54:49.513270+00:00"
+    },
+    {
+      "name": "headless-viewer",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/recording-viewer-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/recording-viewer/headless-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recording-viewer/headless-final-assets"
+      ],
+      "started_utc": "2026-10-17T13:54:49.525228+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 0.1733246670337394,
+      "finished_utc": "2026-10-17T13:54:49.698550+00:00"
+    },
+    {
+      "name": "legacy-recording",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/recording-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/recording-viewer/legacy-recording-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recording-viewer/legacy-recording-final-assets"
+      ],
+      "started_utc": "2026-10-17T13:56:00.599262+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 0.14507850003428757,
+      "finished_utc": "2026-10-17T13:56:00.744340+00:00"
+    },
+    {
+      "name": "ownership",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/recovery-dismiss-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/recording-viewer/ownership-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recording-viewer/ownership-final-assets"
+      ],
+      "started_utc": "2026-10-17T13:56:00.755694+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 0.1502131250454113,
+      "finished_utc": "2026-10-17T13:56:00.905905+00:00"
+    },
+    {
+      "name": "crash-recovery",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/recovery-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/recording-viewer/crash-final.json"
+      ],
+      "started_utc": "2026-10-17T13:56:00.916752+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 2.185761083033867,
+      "finished_utc": "2026-10-17T13:56:03.102506+00:00"
+    }
+  ],
+  "native_workflow": {
+    "started_utc": "2026-10-17T13:56:09.334067+00:00",
+    "status": "completed",
+    "owned_pid": 40867,
+    "demo_exit_code": 0,
+    "native_exit_code": 0,
+    "elapsed_seconds": 0.9075550410198048,
+    "finished_utc": "2026-10-17T13:56:10.241739+00:00"
+  },
+  "four_adapter_numerical_checks": 27596,
+  "four_adapter_project_workflow_checks": 44,
+  "four_adapter_project_snapshots": 56,
+  "native_smoke_stages": 45,
+  "viewer_review": {
+    "passed": true,
+    "contracts_per_transport": 11,
+    "exact_rows_per_transport": 63,
+    "refusals_per_transport": 10,
+    "equal_contracts_rows_refusals_live_graph_physics": true,
+    "edge_time_s": 0.05,
+    "edge_first_index": 50,
+    "edge_rightmost_index": 52,
+    "time_seek_selects_rightmost_actual_row": true,
+    "step_preserves_equal_time_row_identity": true,
+    "window_clamp_empty_interval_and_cursors_checked": true,
+    "fresh_reopen_restores_supported_preferences_and_resets_session_controls": true
+  },
+  "typed_raw_gzip_numerical_review_equal": true,
+  "captured_export_bytes_and_kept_rows_preserved": true,
+  "legacy_import_replay_ownership_sigkill_workflows_pass": true,
+  "sdk_verified": {
+    "passed": true,
+    "source": "aa9d023243a6bded514c3d9696c08a9c917119c4",
+    "archive_sha256": "22b086442570641e4ae56e9937dd6483c26f92cde953f3aa3fc11811710ed7c5"
+  },
+  "native_production_inventory_unchanged": {
+    "sources": 57,
+    "sites": 388,
+    "commands": 162
+  },
+  "preserved_bundle_trees": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7
+    }
+  },
+  "fixture_files": {
+    "docs/validation/recording-viewer/fixtures/headless/original-record.json": "7c1881d3e8ed2b58c480611a9810a479eb8a7e2bb02c709b50312487e86976da",
+    "docs/validation/recording-viewer/fixtures/headless/record-after-controls.json": "7c1881d3e8ed2b58c480611a9810a479eb8a7e2bb02c709b50312487e86976da",
+    "docs/validation/recording-viewer/fixtures/headless/recorded-experiment.elab": "1aba6edb5d1f8c9c4b734bf9f3c972b6e16cc32b8a310573d00a9a863ce2c695",
+    "docs/validation/recording-viewer/fixtures/native/original-record.json": "c84361604ed5bab8e29f8a3f2c50ee792adeb9d7752f6a0d7ea78e2f1708413f",
+    "docs/validation/recording-viewer/fixtures/native/record-after-controls.json": "c84361604ed5bab8e29f8a3f2c50ee792adeb9d7752f6a0d7ea78e2f1708413f",
+    "docs/validation/recording-viewer/fixtures/native/recorded-experiment.elab": "b9f1c4bf410bd2fc64fc91c614618afb26e5df447bb55edb8c563920262fea1f"
+  },
+  "report_encoding": {
+    "conformance-report.json.gz": {
+      "decoded_bytes": 18169971,
+      "decoded_sha256": "a128275f1723c6276b69417e3a781fd1b3473157dda8d1d2af925ef3b1750d44",
+      "gzip_bytes": 1659858,
+      "gzip_sha256": "5878bbc735baa7614cf92b3ae758c496b5fe249edb1365afb75d4b5d5d867b02"
+    },
+    "headless-viewer.json.gz": {
+      "decoded_bytes": 66277,
+      "decoded_sha256": "371c553e6f3ef76b423ef27b584acfec91e1f7262a35e2728e89158a285d2b3b",
+      "gzip_bytes": 8711,
+      "gzip_sha256": "d2f8f92b4e57ca55964908ae211cfdf55b569d83b8ad6d88173c3caf5741db46"
+    },
+    "native-viewer.json.gz": {
+      "decoded_bytes": 66297,
+      "decoded_sha256": "a70071cdf81393fe77b8d36d0729727229a95871c95599c582b500cb6299ab21",
+      "gzip_bytes": 8725,
+      "gzip_sha256": "8b45e99bbfd7fe65913736c132d8a6ab1466c0bcfb5cf65f9ef55e39efe7af4d"
+    }
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "setup_corrections": [
+    "Verify helper returns a response plus an operation view; fixed test ID extraction.",
+    "Actual pulse edge retains three equal-time rows. Time seek requires the rightmost; Step preserves every actual row.",
+    "Required window/keep fields reject null through shared params validation; contracts/tests were corrected, with no null behavior change.",
+    "Public checker uses omitted recovery.directory safely and actual a/b cursor fields; cursor placement is asserted before repeat clear.",
+    "Legacy replay demo incorrectly compared document membership before and after an import that keeps a new asset. It now asserts exactly one added kept recording, then preserves that document and original live state/history through viewer controls. Only that script changed after the first full gate; final full quality passes, and unchanged binary/Go source hashes retain completed smoke/electronics evidence."
+  ],
+  "limitations": [
+    "The normalized-window repair changes input validation only, not stored rows or solver integration. Boundary tolerance remains; a normalized transient interval must stay positive.",
+    "Named paused RC workflow checks playback admission/pause/state semantics. It is not a real-time frame-rate or every-recording/hardware performance claim.",
+    "Common protocol/revision/time normalization occurs before handler readiness checks; full error coverage and 53 other command contracts remain open.",
+    "Native callback/descriptor tests do not prove full physical input, screen-reader, pixel/readability or complete action parity.",
+    "The private candidate remains unpromoted. Clean installation/distribution, other hardware/platforms, physical printer and participant gates remain open."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/recording-viewer/after-initial.log.txt": "6f05040e1153f8c412f5f82384416b755b2e5a14f2c9f7cdf46bc907b2be126f",
+    "docs/validation/recording-viewer/archive.py.txt": "1dab79ffc6149c3964f7c0fda878bbca0d7608707db69a78ae3c8a3816605b78",
+    "docs/validation/recording-viewer/before.log.txt": "132a7b8516bd433359797e2b0679f0f2ae1ee0aec70a15a57664d6a93d1fc270",
+    "docs/validation/recording-viewer/build.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/recording-viewer/conformance-report.json.gz": "5878bbc735baa7614cf92b3ae758c496b5fe249edb1365afb75d4b5d5d867b02",
+    "docs/validation/recording-viewer/contract-inventory.json": "647151e75680ef07f837dc46811adcdf3b7c908e871e46c8668bfe6f01dcca8d",
+    "docs/validation/recording-viewer/core-focused-final.log.txt": "bd60f6a350b3099e15d638d72ff3c2774e3f2327759fe4555c78bd5818e73a4e",
+    "docs/validation/recording-viewer/core-focused-final2.log.txt": "3b10ba15731148be5f49a4c68d3941f4708e1f71a10d42f584ccd265f1e4f403",
+    "docs/validation/recording-viewer/core-focused.log.txt": "5ad59c1041708c84e6da260660c2e84608bc637550ddad9c4ec29b0f90ddc684",
+    "docs/validation/recording-viewer/crash-final.json": "d504c3c9277ae83f5d0487925acd560811f144e88c2ada6b555e14af7b5362b2",
+    "docs/validation/recording-viewer/crash-recovery.log.txt": "d504c3c9277ae83f5d0487925acd560811f144e88c2ada6b555e14af7b5362b2",
+    "docs/validation/recording-viewer/fixtures/headless/original-record.json": "7c1881d3e8ed2b58c480611a9810a479eb8a7e2bb02c709b50312487e86976da",
+    "docs/validation/recording-viewer/fixtures/headless/record-after-controls.json": "7c1881d3e8ed2b58c480611a9810a479eb8a7e2bb02c709b50312487e86976da",
+    "docs/validation/recording-viewer/fixtures/headless/recorded-experiment.elab": "1aba6edb5d1f8c9c4b734bf9f3c972b6e16cc32b8a310573d00a9a863ce2c695",
+    "docs/validation/recording-viewer/fixtures/native/original-record.json": "c84361604ed5bab8e29f8a3f2c50ee792adeb9d7752f6a0d7ea78e2f1708413f",
+    "docs/validation/recording-viewer/fixtures/native/record-after-controls.json": "c84361604ed5bab8e29f8a3f2c50ee792adeb9d7752f6a0d7ea78e2f1708413f",
+    "docs/validation/recording-viewer/fixtures/native/recorded-experiment.elab": "b9f1c4bf410bd2fc64fc91c614618afb26e5df447bb55edb8c563920262fea1f",
+    "docs/validation/recording-viewer/headless-initial.log.txt": "970f65ee4a89f7f3bc9a4e88380e9b63a82a321d9a36e7e6c185d0643bb967c3",
+    "docs/validation/recording-viewer/headless-initial2.json": "9c3cb2a9ad8b27a69524ddb20bd8849e4b76212dd64c2b827770f777ad81b1f2",
+    "docs/validation/recording-viewer/headless-initial2.log.txt": "534acffc9b594ba228ff6457509ddb1b66cff76f85ca30cb081e5db7548758d3",
+    "docs/validation/recording-viewer/headless-viewer.json.gz": "d2f8f92b4e57ca55964908ae211cfdf55b569d83b8ad6d88173c3caf5741db46",
+    "docs/validation/recording-viewer/headless-viewer.log.txt": "534acffc9b594ba228ff6457509ddb1b66cff76f85ca30cb081e5db7548758d3",
+    "docs/validation/recording-viewer/legacy-difference.json": "2fd2b8fd88997326c9b1c5ef55eeb225121822dc8179395658444d94e41c86fa",
+    "docs/validation/recording-viewer/legacy-recording-before.log.txt": "c745be250446e41bf7b6704536ace2a86675c73408bdb73984d9773c7a347835",
+    "docs/validation/recording-viewer/legacy-recording-final.json": "193f26db10a7dbad9671d9fe1e65c5b9909e14968664cb910baaeb47f612b62d",
+    "docs/validation/recording-viewer/legacy-recording.log.txt": "193f26db10a7dbad9671d9fe1e65c5b9909e14968664cb910baaeb47f612b62d",
+    "docs/validation/recording-viewer/native-focused.log.txt": "a2cb5c850abc787035839fe8c74a19c0c7ad3422d07274956f8fde107df98ca7",
+    "docs/validation/recording-viewer/native-host.log.txt": "a82781ba0253530ae3acc32bc512e318c76b62ea96b7ff1325eedf2c7b30cc7b",
+    "docs/validation/recording-viewer/native-smoke.log.txt": "bc31068eee6afe2ce6a7fcf3f325edaf7a6f5162db86b2fd6619825a3b06f4d9",
+    "docs/validation/recording-viewer/native-viewer.json.gz": "8b45e99bbfd7fe65913736c132d8a6ab1466c0bcfb5cf65f9ef55e39efe7af4d",
+    "docs/validation/recording-viewer/native-viewer.log.txt": "5f5da08b1af5d5760f06866368328f00d8425fba3970bffe58f88c303f1b0a75",
+    "docs/validation/recording-viewer/native.py.txt": "577fbb23e9046b135ab2231425580c9bc6906bb21f856426c414adf5451b6a66",
+    "docs/validation/recording-viewer/ownership-final.json": "3195add30dd649f197c1ee9261ac25baea9adc3b4f6f1de539fe7be5bfe48278",
+    "docs/validation/recording-viewer/ownership.log.txt": "4f6e71e42368aa76bfcfbd9be810045f6a1a048bf2ed3957061a53ef1cda850e",
+    "docs/validation/recording-viewer/package.json": "11c3a7473f091f3c5f9dfc13d52c6fa47ed109719188fb4b258ec25c81861bb6",
+    "docs/validation/recording-viewer/process-native.json": "25280ec58d7b272c26723729bc749ee304158cee49dc2ee7a9c6594ef52d8b50",
+    "docs/validation/recording-viewer/process-public-initial.json": "e400cb1104bacd3eeff637f283a56a3ad3cc475fb4bd26dced6e91de63053474",
+    "docs/validation/recording-viewer/process-public.json": "53773801976ab74dae14fc4705961155af0bca8ce1e5987816c5e09c291ee893",
+    "docs/validation/recording-viewer/process-quality-final.json": "c0b406fd8fda51abff2a8e6aa889d460a64fe6811997b9a9c4a30a494abe7ffe",
+    "docs/validation/recording-viewer/process-quality.json": "1067b7269468c6011d313c9015ae3b95086bde8fbc2aa653052fc3bc79490855",
+    "docs/validation/recording-viewer/public-suites.log.txt": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "docs/validation/recording-viewer/qualify.py.txt": "7bb6167943024b283f432e78fb570c3acc91cd31efd8602eaba4a4822b6f9e85",
+    "docs/validation/recording-viewer/quality-final.log.txt": "9dfa61f0fbacb7d82457beee43358ddfb143e82855204a0ddeeea5a52202c0f6",
+    "docs/validation/recording-viewer/quality.log.txt": "79a3e3ef37459d7064b7692a469ea17ad677ff46a45f639d890cba381cdebe10",
+    "docs/validation/recording-viewer/report-review-gzip.json": "1d3d33acda891f38619695777f712f8f9441b0d47a737eb2a9b6de6656d496de",
+    "docs/validation/recording-viewer/report-review.json": "1d3d33acda891f38619695777f712f8f9441b0d47a737eb2a9b6de6656d496de",
+    "docs/validation/recording-viewer/review.go.txt": "808b076c8bf0bac85714632b87ab06a8364742575b33a383a734d7e37c729fb6",
+    "docs/validation/recording-viewer/source-delta.json": "c86e17475a5cdaf6ab78a5e1037cde678c0218061830a2a8dfd4564a662e329a",
+    "docs/validation/recording-viewer/source-freeze-before-script-repair.json": "a3e2910dcfdc49be48b08cde3da480f9e1c1adb3e45b71b136c77ea98f01ae91",
+    "docs/validation/recording-viewer/source-freeze.json": "c4d17d6b87a79ab0e72d5db59074dbed16bcd92108cbc1f85517f161d04e16a1",
+    "docs/validation/recording-viewer/viewer-review.json": "5256e1802000767744f054b7c6e4d6a908e0229029192b3ff908f6ce43eee0fc",
+    "docs/validation/recording-viewer/viewer-review.py.txt": "4f97c2945954b8f640879dd393d29bd7b3ce4ef3d8e730c7dfca7213711466ae"
+  }
+}

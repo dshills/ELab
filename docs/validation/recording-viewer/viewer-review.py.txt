@@ -1,0 +1,30 @@
+from pathlib import Path
+import json
+
+root=Path.cwd();out=root/'build/recording-viewer'
+reports=[json.loads((out/(transport+'-final.json')).read_text()) for transport in ['headless','native']]
+for report in reports:
+ assert report['passed'] and len(report['contracts'])==11 and len(report['refusals'])==10
+ assert all(s['x-command-contract']['scope']=='recorded-viewer-and-kept-membership' for s in report['contracts'].values())
+ rows=report['rows'];assert len(rows)==63 and rows[0]['time_s']==0 and rows[-1]['time_s']==.06
+ first=report['edge_first_index'];right=first
+ while right+1<len(rows) and rows[right+1]['time_s']==rows[first]['time_s']:right+=1
+ assert right>first and report['edge_rightmost_index']==right==report['time_seek_index'] and report['row_step_index']==first+1
+ assert rows[first]['time_s']==rows[first+1]['time_s']==.05
+ assert report['clamped_window']=={'mode':'fixed','start_s':0,'end_s':.06}
+ empty=report['no_sample_window'];assert empty['window_sample_count']==0 and not empty['scope']['window_valid']
+ assert all(not trace['points'] for trace in empty['scope']['traces'])
+ viewer=report['viewer_after_controls'];assert viewer['viewing'] and not viewer['playing'] and not viewer['scope']['selected']
+ assert 'a' not in viewer['scope'] and viewer['scope']['active_cursor']=='b'
+ fresh=report['reopened_viewer'];assert fresh['sample_index']==0 and fresh['viewing'] and not fresh['playing']
+ assert fresh['scope']['selected']==['v:C1','i:C1'] and fresh['scope']['window']['start_s']==0 and fresh['scope']['window']['end_s']==.06
+ assert 'a' not in fresh['scope'] and 'b' not in fresh['scope']
+assert reports[0]['contracts']==reports[1]['contracts'] and reports[0]['rows']==reports[1]['rows'] and reports[0]['refusals']==reports[1]['refusals']
+for key in ['components','wires','result','transient','mixed','npn']:
+ assert reports[0]['live_semantic'][key]==reports[1]['live_semantic'][key],key
+result={'passed':True,'contracts_per_transport':11,'exact_rows_per_transport':63,'refusals_per_transport':10,
+        'equal_contracts_rows_refusals_live_graph_physics':True,'edge_time_s':.05,'edge_first_index':reports[0]['edge_first_index'],
+        'edge_rightmost_index':reports[0]['edge_rightmost_index'],'time_seek_selects_rightmost_actual_row':True,
+        'step_preserves_equal_time_row_identity':True,'window_clamp_empty_interval_and_cursors_checked':True,
+        'fresh_reopen_restores_supported_preferences_and_resets_session_controls':True}
+(out/'viewer-review.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

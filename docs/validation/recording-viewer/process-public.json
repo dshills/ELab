@@ -1,0 +1,103 @@
+[
+  {
+    "name": "native-smoke",
+    "argv": [
+      "/Users/dshills/Development/projects/ELab/build/ELab-0.114.0-131-recording-viewer-candidate.app/Contents/MacOS/ELab",
+      "--smoke",
+      "--smoke-timeout",
+      "2m"
+    ],
+    "started_utc": "2026-10-17T13:53:15.588820+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 38.803507833974436,
+    "finished_utc": "2026-10-17T13:53:54.392184+00:00"
+  },
+  {
+    "name": "public-suites",
+    "argv": [
+      "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+      "--native-binary",
+      "/Users/dshills/Development/projects/ELab/build/ELab-0.114.0-131-recording-viewer-candidate.app/Contents/MacOS/ELab",
+      "--project-contract-suite",
+      "--electrical-suite",
+      "--inductor-suite",
+      "--opamp-suite",
+      "--opamp-storage-suite",
+      "--capacity-suite",
+      "--artifacts",
+      "/Users/dshills/Development/projects/ELab/build/recording-viewer/public-final"
+    ],
+    "started_utc": "2026-10-17T13:53:54.405300+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 55.10818116704468,
+    "finished_utc": "2026-10-17T13:54:49.513270+00:00"
+  },
+  {
+    "name": "headless-viewer",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "-B",
+      "scripts/recording-viewer-demo.py",
+      "--output",
+      "/Users/dshills/Development/projects/ELab/build/recording-viewer/headless-final.json",
+      "--artifacts",
+      "/Users/dshills/Development/projects/ELab/build/recording-viewer/headless-final-assets"
+    ],
+    "started_utc": "2026-10-17T13:54:49.525228+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 0.1733246670337394,
+    "finished_utc": "2026-10-17T13:54:49.698550+00:00"
+  },
+  {
+    "name": "legacy-recording",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "-B",
+      "scripts/recording-demo.py",
+      "--output",
+      "/Users/dshills/Development/projects/ELab/build/recording-viewer/legacy-recording-final.json",
+      "--artifacts",
+      "/Users/dshills/Development/projects/ELab/build/recording-viewer/legacy-recording-final-assets"
+    ],
+    "started_utc": "2026-10-17T13:56:00.599262+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 0.14507850003428757,
+    "finished_utc": "2026-10-17T13:56:00.744340+00:00"
+  },
+  {
+    "name": "ownership",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "-B",
+      "scripts/recovery-dismiss-demo.py",
+      "--output",
+      "/Users/dshills/Development/projects/ELab/build/recording-viewer/ownership-final.json",
+      "--artifacts",
+      "/Users/dshills/Development/projects/ELab/build/recording-viewer/ownership-final-assets"
+    ],
+    "started_utc": "2026-10-17T13:56:00.755694+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 0.1502131250454113,
+    "finished_utc": "2026-10-17T13:56:00.905905+00:00"
+  },
+  {
+    "name": "crash-recovery",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "-B",
+      "scripts/recovery-demo.py",
+      "--output",
+      "/Users/dshills/Development/projects/ELab/build/recording-viewer/crash-final.json"
+    ],
+    "started_utc": "2026-10-17T13:56:00.916752+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 2.185761083033867,
+    "finished_utc": "2026-10-17T13:56:03.102506+00:00"
+  }
+]

@@ -53,6 +53,9 @@ def main():
             imported = client.ask('verification.import', {'path': str(original_path)}, True)
             identifier = imported['recording']['id']
             assert imported['recording']['viewing'] and imported['recording']['imported']
+            # Import keeps a new recording in the document; subsequent viewer
+            # controls must preserve that membership as well as the live state.
+            assert imported['document'] == dict(before['document'], recording_count=before['document']['recording_count'] + 1)
             view = client.ask('operation.inspect', {'id': identifier})
             assert not view['operation']['source_unchanged']
             assert view['metadata'] == record['metadata']
@@ -77,7 +80,8 @@ def main():
                 time.sleep(.02)
                 state = client.ask('project.inspect')
             assert not state['recording']['playing'] and state['recording']['sample_index'] == 20
-            for key in ['document', 'transient', 'scope', 'components', 'wires', 'run_id', 'electrical_revision']:
+            assert state['document'] == imported['document']
+            for key in ['transient', 'scope', 'components', 'wires', 'run_id', 'electrical_revision', 'undo_entry']:
                 assert state[key] == before[key], key
             page = client.ask('operation.samples', {'id': identifier, 'limit': 100})
             assert page['rows'] == json.loads(original)['rows']

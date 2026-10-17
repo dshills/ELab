@@ -107,6 +107,9 @@ func addCapabilityDetails(id string, schema map[string]any) {
 	if addRecoveryReadDetails(id, schema) {
 		return
 	}
+	if addRecordingViewerDetails(id, schema) {
+		return
+	}
 	if addRecordingCursorDetails(id, schema) {
 		return
 	}

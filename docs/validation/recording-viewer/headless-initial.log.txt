@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/scripts/recording-viewer-demo.py", line 156, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/Users/dshills/Development/projects/ELab/scripts/recording-viewer-demo.py", line 37, in main
+    if initial['recovery']['directory']:
+       ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+KeyError: 'directory'

@@ -1,0 +1,13 @@
+=== RUN   TestRecordedViewerDiscoveryContractsAreCompleteAndQueryOwned
+--- PASS: TestRecordedViewerDiscoveryContractsAreCompleteAndQueryOwned (0.29s)
+=== RUN   TestRecordedWindowRejectsIntervalsCollapsedByBoundaryNormalization
+--- PASS: TestRecordedWindowRejectsIntervalsCollapsedByBoundaryNormalization (0.02s)
+=== RUN   TestRecordedViewerWindowBoundariesDCAndMissingSelection
+    recording_viewer_contracts_test.go:72: recording.window.set: &{Code:invalid-params Message:required field "start_s" is missing}
+--- FAIL: TestRecordedViewerWindowBoundariesDCAndMissingSelection (0.01s)
+=== RUN   TestRecordedViewerControlsRetainExactRowsAndSeparateLiveAndKeptState
+    recording_viewer_contracts_test.go:143: recording.keep.set: &{Code:invalid-params Message:required field "keep" is missing}
+--- FAIL: TestRecordedViewerControlsRetainExactRowsAndSeparateLiveAndKeptState (0.05s)
+FAIL
+FAIL	github.com/dshills/elab/workbench	0.726s
+FAIL

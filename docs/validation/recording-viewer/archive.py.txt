@@ -1,0 +1,74 @@
+from pathlib import Path
+import datetime,gzip,hashlib,importlib.util,json,shutil,stat,subprocess
+
+root=Path.cwd();src=root/'build/recording-viewer';out=root/'docs/validation/recording-viewer'
+def read(p):return json.loads(p.read_text())
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+def digest(p):return sha(p.read_bytes())
+frozen=read(src/'source-freeze.json');assert len(frozen)==694 and all(digest(root/p)==h for p,h in frozen.items())
+quality=read(src/'process-quality.json')+read(src/'process-quality-final.json');public=read(src/'process-public.json');native=read(src/'process-native.json')
+assert all(p['status']=='completed' and p['exit_code']==0 for p in quality+public)
+assert native['status']=='completed' and native['demo_exit_code']==native['native_exit_code']==0 and not native.get('forced_cleanup')
+assert 'Ran 37 tests' in (src/'quality.log.txt').read_text()
+assert sum('smoke: ' in line for line in (src/'native-smoke.log.txt').read_text().splitlines())==45
+assert read(src/'report-review.json')==read(src/'report-review-gzip.json') and read(src/'report-review.json')['numerical_checks']==27596
+viewer_review=read(src/'viewer-review.json');assert viewer_review['passed']
+inventory_contracts=read(src/'contract-inventory.json');assert (inventory_contracts['total'],inventory_contracts['with_contract'],inventory_contracts['without_contract'])==(162,109,53)
+spec=importlib.util.spec_from_file_location('sdk',root/'scripts/prepare-vellum.py');sdk=importlib.util.module_from_spec(spec);spec.loader.exec_module(sdk)
+pin=sdk.load_pin(root);sdk.verify_archive_identity(root/pin['archive'],pin);sdk.verify_cache(root/pin['cache'],pin)
+golden=read(root/'docs/validation/lc-sampling-validation.json')['promotion'];preserved={}
+for name,key in [('build/ELab.app','bundle_tree'),('build/ELab-0.104.0-119-preserved.app','preserved_bundle_tree')]:
+ folder=root/name;actual={}
+ for p in [folder,*sorted(folder.rglob('*'))]:
+  assert not p.is_symlink()
+  actual[str(p.relative_to(folder))]={'mode':stat.S_IMODE(p.stat().st_mode),'sha256':digest(p) if p.is_file() else None}
+ assert actual==golden[key];preserved[name]={'passed':True,'entries':len(actual)}
+for p,h in read(root/'docs/validation/recovery-disable-validation.json')['binary_sha256'].items():
+ if '.app/' in p:assert digest(root/p)==h,p
+files=['build/elab','build/elab-agent','build/elab-conformance','build/elab-ui-audit','build/ELab-0.114.0-131-recording-viewer-candidate.app/Contents/MacOS/ELab'];binaries={p:digest(root/p) for p in files};assert binaries[files[0]]==binaries[files[-1]]
+inventory=read(root/'research/13-native-command-inventory.json');assert all(digest(root/p)==h for p,h in inventory['source_sha256'].items())
+assert all(read(src/name)['passed'] for name in ['legacy-recording-final.json','ownership-final.json','crash-final.json'])
+out.mkdir(exist_ok=False)
+for name in ['before.log.txt','after-initial.log.txt','core-focused.log.txt','core-focused-final.log.txt','core-focused-final2.log.txt','native-focused.log.txt','legacy-recording-before.log.txt','legacy-difference.json','source-delta.json','source-freeze-before-script-repair.json','process-public-initial.json','process-quality-final.json','quality-final.log.txt','headless-initial.log.txt','headless-initial2.log.txt','headless-initial2.json','contract-inventory.json','build.log.txt','quality.log.txt','package.json','native-smoke.log.txt','public-suites.log.txt','headless-viewer.log.txt','native-host.log.txt','native-viewer.log.txt','legacy-recording.log.txt','legacy-recording-final.json','ownership.log.txt','crash-recovery.log.txt','process-quality.json','process-public.json','process-native.json','source-freeze.json','report-review.json','report-review-gzip.json','viewer-review.json','ownership-final.json','crash-final.json']:
+ shutil.copyfile(src/name,out/name)
+for source,name in [('build/.recording-viewer-qualify.py','qualify.py.txt'),('build/.recording-viewer-native.py','native.py.txt'),('build/.recording-viewer-review.py','viewer-review.py.txt'),('build/.recording-viewer-archive.py','archive.py.txt'),('build/.recording-viewer-review/main.go','review.go.txt')]:shutil.copyfile(root/source,out/name)
+encodings={}
+for source,name in [('public-final/report.json','conformance-report.json.gz'),('headless-final.json','headless-viewer.json.gz'),('native-final.json','native-viewer.json.gz')]:
+ raw=(src/source).read_bytes();compressed=gzip.compress(raw,mtime=0);(out/name).write_bytes(compressed);assert gzip.decompress(compressed)==raw
+ encodings[name]={'decoded_bytes':len(raw),'decoded_sha256':sha(raw),'gzip_bytes':len(compressed),'gzip_sha256':sha(compressed)}
+fixtures={}
+for transport in ['headless','native']:
+ report=read(src/(transport+'-final.json'));folder=out/'fixtures'/transport;folder.mkdir(parents=True)
+ for name in ['original-record.json','record-after-controls.json','recorded-experiment.elab']:
+  raw=(src/(transport+'-final-assets')/name).read_bytes();(folder/name).write_bytes(raw);fixtures[str((folder/name).relative_to(root))]=sha(raw)
+ assert (folder/'original-record.json').read_bytes()==(folder/'record-after-controls.json').read_bytes()
+ assert digest(folder/'original-record.json')==report['record_sha256'] and digest(folder/'recorded-experiment.elab')==report['project_sha256']
+ saved=read(folder/'recorded-experiment.elab');capture=read(folder/'original-record.json')
+ assert capture['rows']==report['rows']==saved['recordings']['entries'][0]['data']['rows']
+ assert capture['metadata']==saved['recordings']['entries'][0]['data']['metadata'] and saved['recordings']['viewing']
+receipt={'passed':True,'recorded_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ 'scope':'Eleven on-demand recorded viewer/kept-membership state contracts and atomic refusal of intervals collapsed by boundary normalization; native callbacks and exact public RC replay/save/reopen',
+ 'reference_configuration':read(root/'docs/validation/recovery-failure-validation.json')['reference_configuration'],
+ 'source_parent_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'source_index':str((out/'source-freeze.json').relative_to(root)),'source_frozen_files':694,'source_stable':True,
+ 'binary_sha256':binaries,'candidate':'build/ELab-0.114.0-131-recording-viewer-candidate.app','candidate_promoted':False,
+ 'original_regression_failure':str((out/'before.log.txt').relative_to(root)),'new_application_commands':0,'existing_commands':162,'new_contracts':11,'commands_with_contracts_before':98,'commands_with_contracts_after':109,
+ 'default_catalog_output_schemas_models_numerical_methods_work_limits_file_versions_unchanged':True,
+ 'quality':{'lint_imports_staticcheck':True,'python_tests':37,'root_native_race_and_vet':True},'process_quality':quality,'process_public':public,'native_workflow':native,
+ 'four_adapter_numerical_checks':27596,'four_adapter_project_workflow_checks':44,'four_adapter_project_snapshots':56,'native_smoke_stages':45,
+ 'viewer_review':viewer_review,'typed_raw_gzip_numerical_review_equal':True,'captured_export_bytes_and_kept_rows_preserved':True,
+ 'legacy_import_replay_ownership_sigkill_workflows_pass':True,'sdk_verified':{'passed':True,'source':pin['source_commit'],'archive_sha256':pin['sha256']},
+ 'native_production_inventory_unchanged':{'sources':len(inventory['source_sha256']),'sites':len(inventory['sites']),'commands':len(inventory['public_commands'])},
+ 'preserved_bundle_trees':preserved,'fixture_files':fixtures,'report_encoding':encodings,'p0_counts':{'implemented':17,'partial':10},
+ 'setup_corrections':['Verify helper returns a response plus an operation view; fixed test ID extraction.',
+ 'Actual pulse edge retains three equal-time rows. Time seek requires the rightmost; Step preserves every actual row.',
+ 'Required window/keep fields reject null through shared params validation; contracts/tests were corrected, with no null behavior change.',
+ 'Public checker uses omitted recovery.directory safely and actual a/b cursor fields; cursor placement is asserted before repeat clear.',
+ 'Legacy replay demo incorrectly compared document membership before and after an import that keeps a new asset. It now asserts exactly one added kept recording, then preserves that document and original live state/history through viewer controls. Only that script changed after the first full gate; final full quality passes, and unchanged binary/Go source hashes retain completed smoke/electronics evidence.'],
+ 'limitations':['The normalized-window repair changes input validation only, not stored rows or solver integration. Boundary tolerance remains; a normalized transient interval must stay positive.',
+ 'Named paused RC workflow checks playback admission/pause/state semantics. It is not a real-time frame-rate or every-recording/hardware performance claim.',
+ 'Common protocol/revision/time normalization occurs before handler readiness checks; full error coverage and 53 other command contracts remain open.',
+ 'Native callback/descriptor tests do not prove full physical input, screen-reader, pixel/readability or complete action parity.',
+ 'The private candidate remains unpromoted. Clean installation/distribution, other hardware/platforms, physical printer and participant gates remain open.']}
+receipt['artifacts_sha256']={str(p.relative_to(root)):digest(p) for p in sorted(out.rglob('*')) if p.is_file()}
+(root/'docs/validation/recording-viewer-validation.json').write_text(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps({'passed':True,'source_inputs':694,'new_contracts':11,'viewer_review':viewer_review,'fixture_files':len(fixtures)},indent=2))

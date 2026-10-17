@@ -136,11 +136,14 @@ func (s *Service) recordingCommandLocked(command string, raw json.RawMessage) er
 		if err := params(raw, &p, "start_s", "end_s"); err != nil {
 			return err
 		}
-		if !finite(p.Start) || !finite(p.End) || !scopeTimeInside(p.Start, 0, record.metadata.Duration) || !scopeTimeInside(p.End, 0, record.metadata.Duration) || p.Start > p.End || record.metadata.Duration > 0 && p.Start == p.End {
+		if !finite(p.Start) || !finite(p.End) || !scopeTimeInside(p.Start, 0, record.metadata.Duration) || !scopeTimeInside(p.End, 0, record.metadata.Duration) || p.Start > p.End {
 			return fmt.Errorf("recorded window must be an ordered interval inside the complete recording")
 		}
-		p.Start = math.Max(0, p.Start)
-		p.End = math.Min(record.metadata.Duration, p.End)
+		p.Start = math.Max(0, math.Min(record.metadata.Duration, p.Start))
+		p.End = math.Max(0, math.Min(record.metadata.Duration, p.End))
+		if record.metadata.Duration > 0 && p.Start >= p.End {
+			return fmt.Errorf("recorded window must retain positive width after boundary normalization")
+		}
 		s.recording.window = &p
 	case "recording.probes.set":
 		var p ProbeParams

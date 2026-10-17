@@ -1,0 +1,25 @@
+# Recorded viewer controls and kept results
+
+Filtered `capabilities.list` now describes eleven existing controls with dynamic inventories, state/error rules and completion semantics. This extends discovery without changing command IDs, the default catalog or output schemas. The same commands drive native controls and external agents.
+
+| Commands | Behavior |
+| --- | --- |
+| `recording.view.set` | `live` works without a capture and stops recorded playback. `recorded` needs a selected completed capture; it does not start playback or stop the live solver. |
+| `recording.seek`, `recording.step` | Seek by exactly one non-null index/time. Time chooses the nearest stored row, then the last/right-hand row on a tie. Step moves one actual row, including equal-time rows, and refuses at boundaries. Both pause recorded playback. |
+| `recording.speed.set`, `recording.play`, `recording.pause` | Numeric 0.001–10 simulated seconds per wall second, independent of live speed. Speed alone does not start playback. Play at the final row restarts at row zero and stops at capture end. DC points cannot play. |
+| `recording.window.set` | Sets a complete-capture interval for plotting/sample statistics. It does not seek, pause, trim rows or constrain playback. Empty intervals between stored rows report no exact data. |
+| `recording.probes.set` | Unique captured probe IDs, up to six. `[]` hides traces; null refuses. It changes neither live probes nor captured channels. |
+| `recording.cursor.select`, `recording.cursor.clear` | Select the a/b plot-click target or clear just that cursor. Clear leaves active selection and live cursors alone; repeated clear is allowed. |
+| `recording.keep.set` | Include/exclude any retained completed recording in project/recovery membership without selecting it or deleting its session replay asset. Only kept membership drives `recordings_dirty`. |
+
+The selected record and available channels come from `snapshot.recording`, `snapshot.operations` and `operation.inspect`. `operation.select` can select any retained operation status; viewer controls require completed data. Except for view mode and keep membership, that readiness check happens before command-specific field validation. Keep requires non-null `id` and `keep`; empty/unknown/incomplete targets are not ready. Required window fields reject null; seek's optional pointer alternatives treat null as absent.
+
+Common protocol/revision guards and shared time-quantity normalization happen before these handler checks. A malformed time quantity can therefore refuse before selected-record readiness; these contracts do not replace the common admission rules.
+
+The viewer clock runs over the whole saved capture at roughly 33 ms observation intervals, choosing actual stored rows at or before its target. It can skip displayed rows and does not interpolate new samples. Window and cursor lookup remain independent of playback/index selection. Play can run while recorded view is hidden; callers should explicitly choose recorded view if that is intended. Switching to live stops that recorded clock. Playback does not resume or advance a paused live circuit.
+
+Windows retain the existing boundary roundoff allowance, `1e-12 × max(1, duration_s)`. Near-boundary endpoints clamp into the complete captured extent. Positive-duration recordings must still have `start_s < end_s` **after** clamping; DC permits normalized `[0,0]`. A reproduced defect previously accepted an interval that collapsed to zero width or reversed at an endpoint after normalization. Rejection is now atomic and preserves the prior viewer/source state. No numerical integration or captured data changes.
+
+Viewer choices do not mark the project dirty. Explicit Save/recovery retain the selected kept recording and recorded/live preference; row index, playback state/speed, plot window, recorded probe subset and cursors are session-only. Excluding a record keeps it available until ordinary unkept-operation eviction; kept assets are not silently evicted. Keeping an asset does not pre-validate the later project's 8 MiB encoding limit. Later viewer intent also prevents an admitted import from unexpectedly selecting its new asset; inspect the import job's selection outcome.
+
+The [public RC workflow](../scripts/recording-viewer-demo.py) checks all eleven schemas, rejected normalized windows/null fields, exact duplicate-time row navigation, hidden whole-capture playback, probes/cursors, dirty membership restoration, byte-identical captured export and explicit Save/fresh-process reopen. Native callback tests cover quantity entry, boundary clamping and refusal preservation. [Receipt and full evidence](validation/recording-viewer-validation.json) retain scope and private build identities. Full physical input/accessibility, real-time frame performance, distribution and participant gates remain separate.

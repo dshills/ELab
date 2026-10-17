@@ -87,3 +87,30 @@ func TestNativeRecordingPickerAndControlsMatchAgentCommands(t *testing.T) {
 		t.Fatal("live view switch failed")
 	}
 }
+
+func TestNativeRecordedWindowNormalizesBoundariesAndPreservesStateOnRefusal(t *testing.T) {
+	user, cleanup := testScreen(t)
+	defer cleanup()
+	agentAction(t, user.service, "example.rc", workbench.ReplaceParams{})
+	agentAction(t, user.service, "simulation.pause", struct{}{})
+	duration := .02
+	agentAction(t, user.service, "simulation.verify", workbench.VerifyParams{Duration: &duration})
+	completedVerification(t, user.service, user.service.Snapshot().LastOperation)
+	agentAction(t, user.service, "recording.view.set", workbench.RecordingViewParams{Mode: "recorded"})
+	uiAction(t, user, "recorded-window-start", &ui.ChangeEvent{Text: "-1e-13 s"})
+	before := user.service.Snapshot()
+	if before.Recording.Scope.Window.Start != 0 || before.Recording.Scope.Window.End != duration {
+		t.Fatal("native quantity boundary did not clamp to captured extent")
+	}
+	user.app.Do(func() {
+		root := user.view()
+		node, ok := findAction(root, "recorded-window-end")
+		if !ok || node.Disabled {
+			t.Fatal("missing recorded interval control")
+		}
+		node.Change(ui.ChangeEvent{Text: "0 s"})
+	})
+	if user.errorMessage == "" || !reflect.DeepEqual(before, user.service.Snapshot()) {
+		t.Fatal("native zero-width refusal changed viewer/source state or lacked explanation")
+	}
+}
