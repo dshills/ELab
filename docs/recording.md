@@ -53,3 +53,7 @@ For RC delays and flasher edges, [threshold timing](recording-timing.md) reports
 Recorded cursor time fields and native plot input now pass an optional exact `operation_id` to `recording.cursor.set`. A changed selected capture refuses atomically; clients omitting the field keep current-selection behavior. See [scope input context](scope-input-context.md) for prepared geometry, revision/document guards, drag continuity and remaining OS presentation/input limits.
 
 Full-record plotting exposes the actual saved endpoint as `last_sample_time_s`, independently of rounded capture metadata duration. Empty visible intervals contain no scope statistics or recorded inspector readings; raw sample rows and position remain available. [Narrow-window membership](scope-probes.md#very-narrow-intervals) is shared with reference overlays and live scope/CSV.
+
+## Capacitor engine compatibility
+
+Current general capacitor captures identify SDIRK2. Earlier backward-Euler captures are admitted only within their original analysis family and retain their engine, samples and exact JSON re-export. Captured and final-result engine identities must agree. Current SDIRK2/Radau results require zero `numerical_damping_w`; historical backward-Euler results may retain finite nonnegative damping. These are consistency checks, not authentication of arbitrary solver history. See [integration and compatibility](capacitor-integration.md).

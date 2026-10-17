@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "fixtures": [
+    {
+      "family": "mixed",
+      "engine": "elab.mixed-mna-be.v1",
+      "rows": 21,
+      "original_sha256": "4dda234e6640fb61f4070eff1d81fc26b9f115d26f7b2268d8ce1ae6a4778b61",
+      "byte_exact_exports": 2,
+      "live_state_preserved": true,
+      "fresh_project_reopen": true,
+      "original_files_preserved": true
+    },
+    {
+      "family": "network",
+      "engine": "elab.network-mna-be.v1",
+      "rows": 21,
+      "original_sha256": "c7e5c3da8b99f6c5f8cd3447a0e576a1846eb1c419b50973dd25337366996ba7",
+      "byte_exact_exports": 2,
+      "live_state_preserved": true,
+      "fresh_project_reopen": true,
+      "original_files_preserved": true
+    },
+    {
+      "family": "waveform",
+      "engine": "elab.network-waveforms-mna-be.v1",
+      "rows": 21,
+      "original_sha256": "ca563f478e4a6aed8ba645c67736bfebe5738ea3012d72eff6f6dcb5fe53b078",
+      "byte_exact_exports": 2,
+      "live_state_preserved": true,
+      "fresh_project_reopen": true,
+      "original_files_preserved": true
+    }
+  ],
+  "scope": "Genuine pre-change captured data through public import, seek, export, keep/save and fresh owned project reopen; no relabeling or solver-history authentication."
+}

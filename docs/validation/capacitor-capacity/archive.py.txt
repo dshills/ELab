@@ -1,0 +1,30 @@
+from pathlib import Path
+import gzip,hashlib,io,json,tarfile
+root=Path('build/capacity-qualification');public=root/'public-reporting-final';legacy=root/'legacy-public-final';out=Path('docs/validation/capacitor-capacity')
+files={}
+for adapter in ('in-process','headless-stdio','headless-socket','native-socket'):
+ for case in ('capacity-100-nodes','capacity-64-parts','capacity-rc-mosfet'):
+  directory=public/adapter/'capacity'/case
+  for relative in ('project.elab','excess.elab','recording.json','reopen-valid/recording-copy.json','reopen-excess/recording-copy.json'):
+   source=directory/relative;assert source.is_file(),source
+   files['public/'+str(source.relative_to(public))]=source.read_bytes()
+  assert files['public/'+str((directory/'recording.json').relative_to(public))]==(directory/'reopen-valid/recording-copy.json').read_bytes()==(directory/'reopen-excess/recording-copy.json').read_bytes()
+for family in ('mixed','network','waveform'):
+ for name in ('original.json','copy.json','legacy-capture.elab','reopened.json'):
+  source=legacy/family/name;files[f'legacy/{family}/{name}']=source.read_bytes()
+assert len(files)==72
+index={name:{'sha256':hashlib.sha256(raw).hexdigest(),'bytes':len(raw)} for name,raw in sorted(files.items())}
+with (out/'file-fixtures.tar.gz').open('xb') as target:
+ with gzip.GzipFile(fileobj=target,mode='wb',mtime=0) as compressed:
+  with tarfile.open(fileobj=compressed,mode='w') as archive:
+   for name,raw in sorted(files.items()):
+    info=tarfile.TarInfo(name);info.size=len(raw);info.mode=0o600;info.mtime=0;archive.addfile(info,io.BytesIO(raw))
+with tarfile.open(out/'file-fixtures.tar.gz','r:gz') as archive:
+ actual={}
+ for member in archive.getmembers():
+  assert member.isfile() and not Path(member.name).is_absolute() and '..' not in Path(member.name).parts
+  raw=archive.extractfile(member).read();actual[member.name]={'sha256':hashlib.sha256(raw).hexdigest(),'bytes':len(raw)}
+ assert actual==index
+(out/'file-fixtures-index.json').write_text(json.dumps(index,indent=2)+'\n')
+(out/'file-fixtures-audit.json').write_text(json.dumps({'passed':True,'members':72,'public_capacity_files':60,'legacy_files':12,'regular_member_hashes_verified':True,'capacity_recording_reexports_byte_exact':24,'scope':'Only named project/recording fixtures; no process endpoints, recovery directories or authentication descriptors.'},indent=2)+'\n')
+print('Verified 72 archived synthetic project/recording fixtures')

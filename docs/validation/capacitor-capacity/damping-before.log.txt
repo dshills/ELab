@@ -1,0 +1,14 @@
+--- FAIL: TestCapacitorStageReportsInstantaneousPower (0.00s)
+    capacitor_integration_test.go:70: SDIRK stage history must not be reported as backward-Euler damping 1.1989054932412604e-06
+--- FAIL: TestRecordingDampingMatchesCapturedIntegrationMethod (0.12s)
+    --- FAIL: TestRecordingDampingMatchesCapturedIntegrationMethod/flasher (0.04s)
+        recording_damping_test.go:29: fresh capture contains a backward-Euler damping readout
+    --- FAIL: TestRecordingDampingMatchesCapturedIntegrationMethod/pmos (0.03s)
+        recording_damping_test.go:41: invalid method-specific damping accepted 1e-06 <nil>
+    --- FAIL: TestRecordingDampingMatchesCapturedIntegrationMethod/opamp-follower (0.02s)
+        recording_damping_test.go:41: invalid method-specific damping accepted 1e-06 <nil>
+    --- FAIL: TestRecordingDampingMatchesCapturedIntegrationMethod/rlc (0.03s)
+        recording_damping_test.go:41: invalid method-specific damping accepted 1e-06 <nil>
+FAIL
+FAIL	github.com/dshills/elab/workbench	0.409s
+FAIL

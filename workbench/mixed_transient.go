@@ -10,7 +10,7 @@ func IsNPNTransientAnalysis(a string) bool {
 	return a == InductorAnalysis || a == WaveformAnalysis || a == NPNTransientAnalysis || a == MixedAnalysis || a == NetworkTransientAnalysis
 }
 func IsNPNTransientEngine(e string) bool {
-	return e == InductorEngineID || e == WaveformEngineID || e == NPNTransientEngineID || e == MixedEngineID || e == NetworkEngineID
+	return e == InductorEngineID || e == WaveformEngineID || e == NPNTransientEngineID || e == MixedEngineID || e == NetworkEngineID || e == "elab.network-waveforms-mna-be.v1" || e == "elab.mixed-mna-be.v1" || e == "elab.network-mna-be.v1"
 }
 func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 	_, region := MixedRegion(r)

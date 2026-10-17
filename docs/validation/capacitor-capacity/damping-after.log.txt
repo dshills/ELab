@@ -1,0 +1,31 @@
+=== RUN   TestCapacitorStageStabilityFunctionAndSecondOrder
+--- PASS: TestCapacitorStageStabilityFunctionAndSecondOrder (0.00s)
+=== RUN   TestCapacitorStageReportsInstantaneousPower
+--- PASS: TestCapacitorStageReportsInstantaneousPower (0.00s)
+=== RUN   TestCapacitorStageBudgetFailurePreservesAcceptedState
+--- PASS: TestCapacitorStageBudgetFailurePreservesAcceptedState (0.00s)
+=== RUN   TestCapacityFourCapacitorMOSFETKernelWithinAttemptBudget
+    capacitor_integration_test.go:148: 64 parts /60 nodes /four capacitors: maximum 73/512 attempts per 1 ms output
+--- PASS: TestCapacityFourCapacitorMOSFETKernelWithinAttemptBudget (0.39s)
+=== RUN   TestRecordingDampingMatchesCapturedIntegrationMethod
+=== RUN   TestRecordingDampingMatchesCapturedIntegrationMethod/flasher
+=== RUN   TestRecordingDampingMatchesCapturedIntegrationMethod/pmos
+=== RUN   TestRecordingDampingMatchesCapturedIntegrationMethod/opamp-follower
+=== RUN   TestRecordingDampingMatchesCapturedIntegrationMethod/rlc
+--- PASS: TestRecordingDampingMatchesCapturedIntegrationMethod (0.10s)
+    --- PASS: TestRecordingDampingMatchesCapturedIntegrationMethod/flasher (0.03s)
+    --- PASS: TestRecordingDampingMatchesCapturedIntegrationMethod/pmos (0.02s)
+    --- PASS: TestRecordingDampingMatchesCapturedIntegrationMethod/opamp-follower (0.02s)
+    --- PASS: TestRecordingDampingMatchesCapturedIntegrationMethod/rlc (0.02s)
+=== RUN   TestBackwardEulerEngineCapturesRemainExactAndDoNotRelabel
+=== RUN   TestBackwardEulerEngineCapturesRemainExactAndDoNotRelabel/mixed
+=== RUN   TestBackwardEulerEngineCapturesRemainExactAndDoNotRelabel/network
+=== RUN   TestBackwardEulerEngineCapturesRemainExactAndDoNotRelabel/waveform
+--- PASS: TestBackwardEulerEngineCapturesRemainExactAndDoNotRelabel (0.01s)
+    --- PASS: TestBackwardEulerEngineCapturesRemainExactAndDoNotRelabel/mixed (0.00s)
+    --- PASS: TestBackwardEulerEngineCapturesRemainExactAndDoNotRelabel/network (0.00s)
+    --- PASS: TestBackwardEulerEngineCapturesRemainExactAndDoNotRelabel/waveform (0.00s)
+=== RUN   TestRecordedEngineAliasesStayWithinTheirAnalysisFamily
+--- PASS: TestRecordedEngineAliasesStayWithinTheirAnalysisFamily (0.00s)
+PASS
+ok  	github.com/dshills/elab/workbench	0.714s

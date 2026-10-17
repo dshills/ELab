@@ -1,0 +1,31 @@
+from pathlib import Path
+import gzip,hashlib,importlib.util,json,sys
+sys.path.insert(0,'scripts')
+spec=importlib.util.spec_from_file_location('viewport','scripts/viewport-fit-demo.py');helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+out=Path('build/capacity-qualification/legacy-public-final');out.mkdir()
+results=[]
+for family in ('mixed','network','waveform'):
+ directory=out/family;directory.mkdir();original=gzip.decompress(Path(f'workbench/testdata/legacy-engines/{family}.json.gz').read_bytes());document=json.loads(original)
+ source=directory/'original.json';source.write_bytes(original);client=helper.Client(None)
+ try:
+  client.ask('example.load',{'id':'rc'},True);client.ask('simulation.pause',{},True);client.ask('simulation.restart',{},True);client.ask('simulation.step',{'duration_s':.012},True)
+  before=client.ask('project.inspect');imported=client.ask('verification.import',{'path':str(source.resolve())},True);identity=imported['recording']['id']
+  metadata=client.ask('operation.inspect',{'id':identity})['metadata'];assert metadata==document['metadata']
+  selected=client.ask('recording.seek',{'index':len(document['rows'])-1},True)
+  assert selected['recording']['sample_index']==len(document['rows'])-1
+  after=client.ask('project.inspect')
+  for key in ('components','wires','mixed','transient','scope','run_id','electrical_revision','undo_name'):
+   assert before.get(key)==after.get(key),(family,key)
+  copy=directory/'copy.json';client.ask('verification.export',{'id':identity,'path':str(copy.resolve()),'format':'json'},True);assert copy.read_bytes()==original
+  client.ask('recording.keep.set',{'id':identity,'keep':True},True);project=directory/'legacy-capture.elab';client.ask('project.save',{'path':str(project.resolve())},True);saved=project.read_bytes()
+ finally:client.close()
+ fresh=helper.Client(None)
+ try:
+  loaded=fresh.ask('project.load',{'path':str(project.resolve())},True);assert loaded['paused'] and loaded['document']['recording_count']==1
+  identity=loaded['operations'][0]['id'];assert fresh.ask('operation.inspect',{'id':identity})['metadata']==metadata
+  reopened=directory/'reopened.json';fresh.ask('verification.export',{'id':identity,'path':str(reopened.resolve()),'format':'json'},True)
+  assert reopened.read_bytes()==original and project.read_bytes()==saved and source.read_bytes()==original
+ finally:fresh.close()
+ results.append({'family':family,'engine':metadata['engine'],'rows':len(document['rows']),'original_sha256':hashlib.sha256(original).hexdigest(),'byte_exact_exports':2,'live_state_preserved':True,'fresh_project_reopen':True,'original_files_preserved':True})
+result={'passed':True,'transport':'headless-stdio','fixtures':results,'scope':'Genuine pre-change captured data through public import, seek, export, keep/save and fresh owned project reopen; no relabeling or solver-history authentication.'}
+(out/'report.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

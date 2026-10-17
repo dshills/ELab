@@ -68,7 +68,7 @@ Use `pulse-source` for a separate NPN base drive and a `dc-source` collector sup
 
 `example.flasher` loads the DC-powered two-transistor, two-capacitor LED oscillator. `capacitor.initial.set` sets a saved, undoable startup voltage (pin 1 minus pin 2, ±12 V), or value `default` restores the experiment default. Drawing, values, pulse settings, pause/step/resume/restart and file commands are shared. Mixed Auto/High/Low controls actuate `transient.source_id` while preserving capacitor state; the DC example labels them Power on/off.
 
-Snapshot `mixed` exposes all node/device/capacitor/branch readings and conservation residuals; `transient` contains its primary rolling voltage/current/capacitor trace. Engine `elab.mixed-mna-be.v1` couples ideal capacitors to the generic nonlinear junction model with adaptive backward Euler. Limits, signed quantities, initialization, transactional failures and complete data semantics are in [mixed transient documentation](mixed-transient.md). Repeat the workflow with `scripts/mixed-demo.py`.
+Snapshot `mixed` exposes all node/device/capacitor/branch readings and conservation residuals; `transient` contains its primary rolling voltage/current/capacitor trace. The unreleased engine `elab.mixed-mna-sdirk2.v1` couples ideal capacitors to the generic nonlinear junction model with [adaptive SDIRK2](capacitor-integration.md); imported backward-Euler captures retain their original identity. Limits, signed quantities, initialization, transactional failures and complete data semantics are in [mixed transient documentation](mixed-transient.md). Repeat the workflow with `scripts/mixed-demo.py`.
 
 ## RC transient workflow
 

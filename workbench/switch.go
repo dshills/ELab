@@ -3,7 +3,7 @@ package workbench
 import "fmt"
 
 const SwitchModelID = "elab.spst-resistive.v1"
-const NetworkEngineID = "elab.network-mna-be.v1"
+const NetworkEngineID = "elab.network-mna-sdirk2.v1"
 const NetworkDCAnalysis = "Network DC operating point"
 const NetworkTransientAnalysis = "Network transient"
 

@@ -8,7 +8,7 @@ import (
 const SineSourceModelID = "elab.ideal-sine-source.v1"
 const FinitePulseModelID = "elab.finite-pulse-source.v1"
 const WaveformAnalysis = "Waveform network transient"
-const WaveformEngineID = "elab.network-waveforms-mna-be.v1"
+const WaveformEngineID = "elab.network-waveforms-mna-sdirk2.v1"
 
 type WaveformModel struct {
 	ID                string  `json:"id"`

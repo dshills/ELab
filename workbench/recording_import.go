@@ -70,7 +70,7 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 		return nil, fmt.Errorf("recorded schematic: %w", err)
 	}
 	c, _, diagnostic := m.Graph.Compile()
-	if diagnostic != nil || c.Analysis != m.Analysis || m.Engine != verificationEngineID(m.Analysis) {
+	if diagnostic != nil || c.Analysis != m.Analysis || !recordingEngineCompatible(m.Analysis, m.Engine) {
 		return nil, fmt.Errorf("unsupported or inconsistent recorded analysis/engine")
 	}
 	if err := validateRecordingSettings(m.Settings, IsTransientAnalysis(m.Analysis)); err != nil {
@@ -213,8 +213,11 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		}
 	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis, InductorAnalysis:
 		r := m.Mixed
-		if r == nil || m.LED != nil || m.NPN != nil || r.Stale || r.Engine != networkEngine(m.Analysis) || !recordingNear(r.Time, m.Duration) || len(r.Nodes) > MaxMixedNodes+1 {
+		if r == nil || m.LED != nil || m.NPN != nil || r.Stale || r.Engine != m.Engine || !recordingNear(r.Time, m.Duration) || len(r.Nodes) > MaxMixedNodes+1 {
 			return fmt.Errorf("invalid recorded mixed final result")
+		}
+		if !finite(r.NumericalDamping) || r.NumericalDamping < 0 || m.Engine == verificationEngineID(m.Analysis) && r.NumericalDamping != 0 {
+			return fmt.Errorf("invalid recorded numerical damping for integration method")
 		}
 		if _, _, err := recordedDeviceNodes(c, r); err != nil {
 			return err

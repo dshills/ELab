@@ -24,6 +24,7 @@ type adapterResult struct {
 	Inductors           *conformance.InductorResult     `json:"inductors,omitempty"`
 	OpAmps              *conformance.OpAmpSuiteResult   `json:"opamps,omitempty"`
 	OpAmpStorage        *conformance.OpAmpStorageResult `json:"opamp_storage,omitempty"`
+	Capacity            *conformance.CapacityResult     `json:"capacity,omitempty"`
 	Performance         *conformance.PerformanceResult  `json:"performance,omitempty"`
 	InductorPerformance *conformance.PerformanceResult  `json:"inductor_performance,omitempty"`
 	OpAmpPerformance    *conformance.PerformanceResult  `json:"opamp_performance,omitempty"`
@@ -50,6 +51,7 @@ func run() error {
 	inductors := flag.Bool("inductor-suite", false, "also construct/probe/save/reopen coils and run analytic RL/RLC, flyback and mixed RC/NPN/coil checks")
 	opamps := flag.Bool("opamp-suite", false, "also verify powered amplifier references, mixed RC/NPN and two-buffer RC/MOSFET circuits, captures and save/reopen")
 	opampStorage := flag.Bool("opamp-storage-suite", false, "also verify buffered RLC and RC/PMOS references, refinement, fresh reopen and corrupted recording/project refusal")
+	capacity := flag.Bool("capacity-suite", false, "also construct 100-node and 64-part networks, verify four-stage RC/MOSFET references and over-limit edit/save/reopen behavior")
 	performance := flag.Bool("performance-suite", false, "also measure fresh/warm backend edit/result and Verify latency in owned sessions")
 	inductorPerformance := flag.Bool("inductor-performance-suite", false, "also measure RL/RLC/flyback/mixed NPN-coil fresh/warm timing, 200 ms Verify at 1 ms outputs")
 	opampPerformance := flag.Bool("opamp-performance-suite", false, "also measure follower/inverting/mixed RC/NPN/MOSFET fresh/warm timing, 200 ms Verify at 1 ms outputs")
@@ -92,6 +94,7 @@ func run() error {
 	var inductorReference *conformance.InductorResult
 	var opAmpReference *conformance.OpAmpSuiteResult
 	var opAmpStorageReference *conformance.OpAmpStorageResult
+	var capacityReference *conformance.CapacityResult
 	for _, mode := range modes {
 		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 		workflows, runErr := conformance.Run(ctx, mode.factory, filepath.Join(dir, mode.name))
@@ -167,6 +170,22 @@ func run() error {
 			if qualificationErr != nil {
 				result.Adapters = append(result.Adapters, adapter)
 				return writeFailure(dir, result, fmt.Errorf("%s op-amp storage suite: %w", mode.name, qualificationErr))
+			}
+		}
+		if *capacity {
+			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
+			qualified, qualificationErr := conformance.RunCapacity(ctx, mode.factory, filepath.Join(dir, mode.name, "capacity"))
+			cancel()
+			adapter.Capacity = &qualified
+			if qualificationErr == nil {
+				if capacityReference == nil {
+					capacityReference = &qualified
+				}
+				qualificationErr = conformance.CompareCapacity(*capacityReference, qualified)
+			}
+			if qualificationErr != nil {
+				result.Adapters = append(result.Adapters, adapter)
+				return writeFailure(dir, result, fmt.Errorf("%s capacity suite: %w", mode.name, qualificationErr))
 			}
 		}
 		if *performance {

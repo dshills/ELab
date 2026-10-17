@@ -1,0 +1,17 @@
+from pathlib import Path
+import datetime,hashlib,json,subprocess,time
+root=Path.cwd();out=root/'build/capacity-qualification';frozen=json.loads((out/'source-freeze-final2.json').read_text());stages=[]
+def stable():
+ changed=[p for p,h in frozen.items() if hashlib.sha256((root/p).read_bytes()).hexdigest()!=h]
+ assert not changed,changed
+stable()
+commands=[('native-smoke',[str(root/'build/ELab-0.107.0-122-capacitor-candidate2.app/Contents/MacOS/ELab'),'--smoke','--smoke-timeout','2m'],180),
+ ('public-suites',[str(root/'build/elab-conformance'),'--native-binary',str(root/'build/ELab-0.107.0-122-capacitor-candidate2.app/Contents/MacOS/ELab'),'--capacity-suite','--opamp-suite','--opamp-storage-suite','--inductor-suite','--electrical-suite','--performance-suite','--opamp-performance-suite','--inductor-performance-suite','--artifacts',str(out/'public-reporting-final')],1800)]
+for name,argv,timeout in commands:
+ stable();start=time.monotonic();record={'name':name,'argv':argv,'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'running'};stages.append(record);(out/'qualification-status-final.json').write_text(json.dumps(stages,indent=2)+'\n')
+ print('Starting '+name,flush=True)
+ with (out/(name+'-final.log.txt')).open('x') as log:result=subprocess.run(argv,stdout=log,stderr=subprocess.STDOUT,timeout=timeout)
+ record.update(status='completed' if result.returncode==0 else 'failed',exit_code=result.returncode,elapsed_seconds=time.monotonic()-start,finished_utc=datetime.datetime.now(datetime.timezone.utc).isoformat());(out/'qualification-status-final.json').write_text(json.dumps(stages,indent=2)+'\n');stable()
+ assert result.returncode==0,(name,result.returncode)
+ print('Completed '+name,flush=True)
+print('All source-frozen native/public stages completed',flush=True)

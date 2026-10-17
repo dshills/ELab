@@ -19,7 +19,7 @@ Failed operations show a captured-experiment explanation and next action before 
 - Keep the latest eight operations per process. Starting a new one may evict an excluded terminal operation; kept records require explicit exclusion before replacement. IDs are never reused during the process. App close cancels active operations. Records are project assets saved in format 4; they are not schematic undo actions or saved physical state. Project replacement clears/cancels the old project operations.
 - Progress updates use the shared revision, leaving command/electrical revisions and document dirty state untouched. Agents handle ordinary admission conflicts as usual. A retry key returns the original accepted ID; it does not start the computation twice.
 
-Models and kernels are identical to live LED, RC, NPN DC/pulse and mixed simulation. RC uses the exact exponential response; pulse NPN uses the same phase solves; mixed uses the same adaptive backward-Euler kernel. The same existing generic/ideal-device limits apply. This is application numerical verification, not hardware certification or independent SPICE validation.
+Models and kernels are identical to live LED, RC, NPN DC/pulse and mixed simulation. RC uses the exact exponential response; pulse NPN uses the same phase solves; general capacitor networks use the same [adaptive SDIRK2 kernel](capacitor-integration.md), while inductor networks retain Radau IIA. The same existing generic/ideal-device limits apply. This is application numerical verification, not hardware certification or independent SPICE validation.
 
 ## Agent commands
 

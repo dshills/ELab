@@ -1,0 +1,161 @@
+package main
+
+import (
+	"bytes"
+	"compress/gzip"
+	"crypto/sha256"
+	"encoding/json"
+	"fmt"
+	"io"
+	"math"
+	"os"
+	"reflect"
+	"sort"
+
+	"github.com/dshills/elab/internal/conformance"
+	"github.com/dshills/elab/workbench"
+)
+
+type adapter struct {
+	Name        string                         `json:"name"`
+	Equivalent  bool                           `json:"equivalent_to_in_process"`
+	Workflows   []conformance.Result           `json:"workflows"`
+	Electrical  conformance.ElectricalResult   `json:"electrical"`
+	Inductors   conformance.InductorResult     `json:"inductors"`
+	OpAmps      conformance.OpAmpSuiteResult   `json:"opamps"`
+	Storage     conformance.OpAmpStorageResult `json:"opamp_storage"`
+	Capacity    conformance.CapacityResult     `json:"capacity"`
+	Performance conformance.PerformanceResult  `json:"inductor_performance"`
+}
+
+func require(ok bool, message string) {
+	if !ok {
+		panic(message)
+	}
+}
+func hash(g workbench.Graph) string {
+	b, e := json.Marshal(g)
+	require(e == nil, "graph encoding")
+	return fmt.Sprintf("%x", sha256.Sum256(b))
+}
+func distribution(values []float64) conformance.PerformanceSummary {
+	require(len(values) == 20, "missing timing samples")
+	sort.Float64s(values)
+	return conformance.PerformanceSummary{Count: 20, P50: values[9], P95: values[18], Maximum: values[19]}
+}
+func main() {
+	raw, e := os.ReadFile(os.Args[1])
+	require(e == nil, "read report")
+	if len(raw) > 2 && raw[0] == 0x1f && raw[1] == 0x8b {
+		reader, err := gzip.NewReader(bytes.NewReader(raw))
+		require(err == nil, "gzip reader")
+		raw, err = io.ReadAll(reader)
+		require(err == nil, "gzip content")
+		require(reader.Close() == nil, "gzip close")
+	}
+	var input struct {
+		Passed   bool      `json:"passed"`
+		Adapters []adapter `json:"adapters"`
+	}
+	require(json.Unmarshal(raw, &input) == nil, "decode report")
+	require(input.Passed && len(input.Adapters) == 4, "four passing adapters")
+	names := []string{"in-process", "headless-stdio", "headless-socket", "native-socket"}
+	families := []string{"rl", "rlc", "flyback", "npn-coil"}
+	ids := []string{"R1", "R1", "RL", "RL"}
+	values := [][2]float64{{100, 120}, {50, 60}, {100, 120}, {100, 120}}
+	probes := [][]string{{"i:L1", "v:L1", "v:V1.positive", "i:R1"}, {"i:L1", "v:L1", "v:C1", "v:V1.positive"}, {"i:L1", "v:L1", "v:M1.drain", "i:D1"}, {"i:L1", "v:L1", "v:CB", "v:QCOIL.collector"}}
+	engines := []string{workbench.InductorEngineID, workbench.InductorEngineID, workbench.InductorEngineID, workbench.InductorEngineID}
+	checks, samples, refusals := 0, 0, 0
+	summaries := []map[string]any{}
+	for ai, a := range input.Adapters {
+		require(a.Name == names[ai] && a.Equivalent && len(a.Workflows) == 3, "adapter/base coverage")
+		ref := input.Adapters[0]
+		require(conformance.Compare(ref.Workflows, a.Workflows) == nil, "base parity")
+		require(conformance.CompareElectrical(ref.Electrical, a.Electrical) == nil, "electrical references")
+		require(conformance.CompareInductors(ref.Inductors, a.Inductors) == nil, "inductor references")
+		require(conformance.CompareOpAmps(ref.OpAmps, a.OpAmps) == nil, "amplifier references")
+		require(conformance.CompareOpAmpStorage(ref.Storage, a.Storage) == nil, "storage references")
+		require(conformance.CompareCapacity(ref.Capacity, a.Capacity) == nil, "capacity references")
+		require(len(a.Electrical.Checks) == 294 && len(a.Inductors.Checks) == 22 && len(a.OpAmps.Checks) == 931 && len(a.Storage.Checks) == 752 && len(a.Capacity.Checks) == 4900, "numerical reference counts")
+		checks += 6899
+		for _, c := range a.Storage.Cases {
+			refusals += len(c.Refusals)
+		}
+		p := a.Performance
+		require(p.Repetitions == 20 && reflect.DeepEqual(p.Families, families) && len(p.Cases) == 8 && len(p.Circuits) == 8 && p.TargetsPassed, "base timing coverage")
+		if ai > 0 {
+			require(reflect.DeepEqual(p.Circuits, ref.Performance.Circuits), "adapter timing graphs")
+		}
+		for key, g := range p.Circuits {
+			require(key == hash(g), "graph hash")
+		}
+		seen := map[string]bool{}
+		maxFresh, maxVerify := 0., 0.
+		for ci, c := range p.Cases {
+			family := ci / 2
+			condition := []string{"fresh-session", "warm-session"}[ci%2]
+			require(c.Name == families[family] && c.Condition == condition && len(c.Samples) == 20, "case identity")
+			ack, fresh, verify := []float64{}, []float64{}, []float64{}
+			var previousRun, previousRevision uint64
+			var normalized *workbench.Graph
+			for i, s := range c.Samples {
+				require(s.Index == i && s.Condition == condition && s.RunID > 0 && s.ElectricalRevision > 0, "sample identity")
+				if i > 0 && condition == "warm-session" {
+					require(s.RunID > previousRun && s.ElectricalRevision > previousRevision, "warm identity advancement")
+				}
+				previousRun, previousRevision = s.RunID, s.ElectricalRevision
+				g, ok := p.Circuits[s.GraphSHA256]
+				require(ok, "sample graph missing")
+				seen[s.GraphSHA256] = true
+				models := map[string]string{}
+				variant := 1
+				if condition == "warm-session" {
+					variant = i % 2
+				}
+				g = g.Clone()
+				found := false
+				for k, part := range g.Components {
+					models[part.ID] = part.Model
+					if part.ID == ids[family] {
+						require(part.Kind == "resistor" && part.Value == values[family][variant], "resistor variant")
+						g.Components[k].Value = values[family][0]
+						found = true
+					}
+				}
+				require(found && reflect.DeepEqual(models, s.Models), "model inventory")
+				if normalized == nil {
+					normalized = &g
+				} else {
+					require(reflect.DeepEqual(*normalized, g), "edit changed other circuit fields")
+				}
+				require(s.Engine == engines[family] && reflect.DeepEqual(s.ProbeIDs, probes[family]), "engine/probes")
+				settings := workbench.DefaultTransientSettings()
+				settings.PlaybackSpeed = .1
+				if family == 1 {
+					settings.StepSeconds = .0001
+					settings.PlaybackSpeed = .01
+				}
+				duration := .2
+				require(s.VerifyDuration == duration && s.VerifySampleStep == .001 && s.Settings == settings, "capture interval")
+				for _, v := range []float64{s.AcknowledgmentMS, s.FreshResultMS, s.VerifyMS} {
+					require(!math.IsNaN(v) && !math.IsInf(v, 0) && v >= 0, "invalid timing")
+				}
+				require(s.FreshResultMS >= s.AcknowledgmentMS, "fresh before admission")
+				ack = append(ack, s.AcknowledgmentMS)
+				fresh = append(fresh, s.FreshResultMS)
+				verify = append(verify, s.VerifyMS)
+			}
+			ad, fd, vd := distribution(ack), distribution(fresh), distribution(verify)
+			require(c.Acknowledgment == ad && c.FreshResult == fd && c.Verify == vd, "timing distributions")
+			require(c.FreshTargetPassed == (fd.P95 <= 500) && c.VerifyTargetPassed == (vd.Maximum <= 2000) && c.FreshTargetPassed && c.VerifyTargetPassed, "timing targets")
+			maxFresh = math.Max(maxFresh, fd.P95)
+			maxVerify = math.Max(maxVerify, vd.Maximum)
+			samples += 20
+		}
+		require(len(seen) == 8, "unused timing graphs")
+		summaries = append(summaries, map[string]any{"adapter": a.Name, "numerical_checks": 6899, "capacity_checks": 4900, "inductor_timing_samples": 160, "max_case_fresh_p95_ms": maxFresh, "max_verify_ms": maxVerify})
+	}
+	require(checks == 27596 && samples == 640, "total evidence coverage")
+	output, _ := json.MarshalIndent(map[string]any{"passed": true, "source_report_sha256": fmt.Sprintf("%x", sha256.Sum256(raw)), "numerical_checks": checks, "capacity_checks": 19600, "inductor_timing_samples": samples, "storage_file_refusals": refusals, "adapters": summaries}, "", "  ")
+	fmt.Println(string(output))
+}

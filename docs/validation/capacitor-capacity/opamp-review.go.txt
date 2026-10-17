@@ -1,0 +1,187 @@
+package main
+
+import (
+	"compress/gzip"
+	"crypto/sha256"
+	"encoding/json"
+	"fmt"
+	"io"
+	"math"
+	"os"
+	"reflect"
+	"sort"
+
+	"github.com/dshills/elab/internal/conformance"
+	"github.com/dshills/elab/workbench"
+)
+
+type adapter struct {
+	Name        string                        `json:"name"`
+	Equivalent  bool                          `json:"equivalent_to_in_process"`
+	Workflows   []json.RawMessage             `json:"workflows"`
+	OpAmps      conformance.OpAmpSuiteResult  `json:"opamps"`
+	Performance conformance.PerformanceResult `json:"opamp_performance"`
+}
+type report struct {
+	Passed   bool      `json:"passed"`
+	Adapters []adapter `json:"adapters"`
+}
+type summary struct {
+	Adapter         string  `json:"adapter"`
+	Samples         int     `json:"samples"`
+	NumericalChecks int     `json:"numerical_checks"`
+	MaxFreshP95     float64 `json:"max_case_p95_fresh_ms"`
+	MaxVerifyP95    float64 `json:"max_case_p95_verify_ms"`
+	MaxVerify       float64 `json:"max_verify_ms"`
+}
+
+func require(ok bool, message string) {
+	if !ok {
+		panic(message)
+	}
+}
+func graphHash(graph workbench.Graph) string {
+	raw, err := json.Marshal(graph)
+	require(err == nil, "marshal graph")
+	return fmt.Sprintf("%x", sha256.Sum256(raw))
+}
+func distribution(values []float64) conformance.PerformanceSummary {
+	require(len(values) == 20, "missing timing observations")
+	sort.Float64s(values)
+	return conformance.PerformanceSummary{Count: len(values), P50: values[9], P95: values[18], Maximum: values[19]}
+}
+func expectedVariant(base workbench.Graph, id string, value float64) workbench.Graph {
+	graph := base.Clone()
+	found := false
+	for i := range graph.Components {
+		if graph.Components[i].ID == id {
+			require(graph.Components[i].Kind == "resistor", "timed edit is not a resistor")
+			graph.Components[i].Value = value
+			found = true
+		}
+	}
+	require(found, "timed resistor missing")
+	return graph
+}
+func main() {
+	require(len(os.Args) == 2, "usage: reviewer report.json[.gz]")
+	raw, err := os.ReadFile(os.Args[1])
+	require(err == nil, "read report")
+	if len(raw) > 2 && raw[0] == 0x1f && raw[1] == 0x8b {
+		file, e := os.Open(os.Args[1])
+		require(e == nil, "open gzip")
+		reader, e := gzip.NewReader(file)
+		require(e == nil, "gzip reader")
+		raw, e = io.ReadAll(reader)
+		require(e == nil, "decode gzip")
+		reader.Close()
+		file.Close()
+	}
+	var input report
+	require(json.Unmarshal(raw, &input) == nil, "decode typed report")
+	require(input.Passed && len(input.Adapters) == 4, "four passing adapters required")
+	names := []string{"in-process", "headless-stdio", "headless-socket", "native-socket"}
+	families := []string{"opamp-follower", "opamp-inverting", "opamp-rc-npn", "opamp-rc-mosfet"}
+	var summaries []summary
+	total := 0
+	var referenceGraphs map[string]workbench.Graph
+	for ai, a := range input.Adapters {
+		require(a.Name == names[ai] && a.Equivalent && len(a.Workflows) == 3, "adapter/workflow coverage")
+		require(conformance.CompareOpAmps(input.Adapters[0].OpAmps, a.OpAmps) == nil, "recomputed numerical/adaptor references differ")
+		require(len(a.OpAmps.Checks) == 931, "missing numerical reference checks")
+		p := a.Performance
+		require(p.Repetitions == 20 && reflect.DeepEqual(p.Families, families) && len(p.Cases) == 8 && len(p.Circuits) == 8, "performance family/case/variant coverage")
+		require(p.TargetsPassed, "aggregate backend targets failed")
+		if referenceGraphs == nil {
+			referenceGraphs = p.Circuits
+		} else {
+			require(reflect.DeepEqual(referenceGraphs, p.Circuits), "adapter circuits differ")
+		}
+		for hash, graph := range p.Circuits {
+			require(hash == graphHash(graph), "graph SHA-256 mismatch")
+		}
+		seen := make(map[string]bool)
+		result := summary{Adapter: a.Name, NumericalChecks: len(a.OpAmps.Checks)}
+		for ci, c := range p.Cases {
+			family := families[ci/2]
+			condition := []string{"fresh-session", "warm-session"}[ci%2]
+			require(c.Name == family && c.Condition == condition && len(c.Samples) == 20, "case/condition/repetition coverage")
+			base := a.OpAmps.Cases[ci/2]
+			require(base.Name == family, "numerical base family differs")
+			id, lo, hi := "RI", 10000., 12000.
+			if family == "opamp-follower" {
+				id, lo, hi = "RL", 10000, 20000
+			} else if family == "opamp-inverting" {
+				id, lo, hi = "RF", 20000, 22000
+			}
+			variants := []workbench.Graph{expectedVariant(base.Graph, id, lo), expectedVariant(base.Graph, id, hi)}
+			hashes := []string{graphHash(variants[0]), graphHash(variants[1])}
+			for vi, h := range hashes {
+				graph, ok := p.Circuits[h]
+				require(ok && reflect.DeepEqual(graph, variants[vi]), "timed circuit changed beyond the declared resistor")
+			}
+			ack, fresh, verify := []float64{}, []float64{}, []float64{}
+			var previousRun, previousRevision uint64
+			for i, s := range c.Samples {
+				require(s.Index == i && s.Condition == condition && s.RunID > 0 && s.ElectricalRevision > 0, "sample identity/index")
+				if condition == "warm-session" && i > 0 {
+					require(s.RunID > previousRun && s.ElectricalRevision > previousRevision, "warm edit did not advance both identities")
+				}
+				previousRun, previousRevision = s.RunID, s.ElectricalRevision
+				variant := 1
+				if condition == "warm-session" {
+					variant = i % 2
+				}
+				require(s.GraphSHA256 == hashes[variant], "resistor alternation/session boundary differs")
+				graph := p.Circuits[s.GraphSHA256]
+				seen[s.GraphSHA256] = true
+				models := make(map[string]string)
+				for _, part := range graph.Components {
+					models[part.ID] = part.Model
+				}
+				require(reflect.DeepEqual(models, s.Models), "sample model IDs differ from exact circuit")
+				require(reflect.DeepEqual(s.ProbeIDs, base.Probes[:4]), "four captured/live probes differ")
+				require(s.VerifyDuration == .2 && s.VerifySampleStep == .001 && s.Settings.StepSeconds == .001, "capture horizon/output interval differs")
+				compiled, _, diagnostic := graph.Compile()
+				require(diagnostic == nil, "timed circuit does not compile")
+				engine := ""
+				switch compiled.Analysis {
+				case workbench.WaveformAnalysis:
+					engine = workbench.WaveformEngineID
+				case workbench.MixedAnalysis:
+					engine = workbench.MixedEngineID
+				case workbench.NetworkTransientAnalysis:
+					engine = workbench.NetworkEngineID
+				}
+				require(engine != "" && s.Engine == engine, "timing engine differs from circuit analysis")
+				for _, v := range []float64{s.AcknowledgmentMS, s.FreshResultMS, s.VerifyMS} {
+					require(v >= 0 && !math.IsNaN(v) && !math.IsInf(v, 0), "invalid timing")
+				}
+				require(s.FreshResultMS >= s.AcknowledgmentMS, "fresh timing precedes its admission")
+				ack = append(ack, s.AcknowledgmentMS)
+				fresh = append(fresh, s.FreshResultMS)
+				verify = append(verify, s.VerifyMS)
+			}
+			ad, fd, vd := distribution(ack), distribution(fresh), distribution(verify)
+			require(c.Acknowledgment == ad && c.FreshResult == fd && c.Verify == vd, "recomputed timing distributions differ")
+			require(c.FreshTargetPassed == (fd.P95 <= 500) && c.VerifyTargetPassed == (vd.Maximum <= 2000) && c.FreshTargetPassed && c.VerifyTargetPassed, "per-case backend targets differ/failed")
+			result.Samples += len(c.Samples)
+			result.MaxFreshP95 = math.Max(result.MaxFreshP95, fd.P95)
+			result.MaxVerifyP95 = math.Max(result.MaxVerifyP95, vd.P95)
+			result.MaxVerify = math.Max(result.MaxVerify, vd.Maximum)
+		}
+		require(len(seen) == 8 && result.Samples == 160, "unused/missing graph or sample coverage")
+		total += result.Samples
+		summaries = append(summaries, result)
+	}
+	require(total == 640, "total timing coverage")
+	result := struct {
+		Passed       bool      `json:"passed"`
+		SourceSHA256 string    `json:"source_report_sha256"`
+		Samples      int       `json:"samples"`
+		Summaries    []summary `json:"summaries"`
+	}{true, fmt.Sprintf("%x", sha256.Sum256(raw)), total, summaries}
+	output, err := json.MarshalIndent(result, "", "  ")
+	require(err == nil, "encode audit")
+	fmt.Println(string(output))
+}

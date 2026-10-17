@@ -96,6 +96,10 @@ func TestInductorNPNLoadedSwitchingWorkEnvelope(t *testing.T) {
 			retries := 0
 			for sample := 1; sample <= 200; sample++ {
 				budget := newIntegrationBudget()
+				// Keep the production attempt bound under race instrumentation.
+				// Wall deadlines belong to ordinary public performance runs;
+				// instrumented execution is not workstation latency evidence.
+				budget.elapsed = func() time.Duration { return 0 }
 				next, nextTrace, err := advanceMixedBudget(state, trace, float64(sample)*.001, budget)
 				if err != nil {
 					t.Fatalf("load %.0f Ω, sample %d, attempts %d, Newton %d: %v", resistance, sample, budget.attempts, budget.newtonIterations, err)

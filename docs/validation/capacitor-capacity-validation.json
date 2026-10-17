@@ -1,0 +1,218 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T09:45:16.399519+00:00",
+  "scope": "Unreleased capacitor integration, compatibility and representative public capacity qualification; no app promotion or full MVP acceptance",
+  "source_parent_commit": "da4d03bfcdf2cde5fa7c0355669fa2bf22734083",
+  "measurement_source_index": "docs/validation/capacitor-capacity/source-freeze.json",
+  "final_verifier_source_index": "docs/validation/capacitor-capacity/final-verifier-source-freeze.json",
+  "source_frozen_files": 656,
+  "final_sources_stable": true,
+  "verifier_only_source_delta": "docs/validation/capacitor-capacity/verifier-only-source-delta.json",
+  "measured_binaries": {
+    "build/elab": "1d0da2a97afa4e1ee8d354775256afa4cea3acc9a1eb42df2e87b9d0bc70c2ec",
+    "build/elab-agent": "d62f918f0b8f87ecd3087f9b8ce1a0533c7ca0aacf36bdda73ffd5b0df78d5c8",
+    "build/elab-conformance": "aaa1f6ecd99fbf13becbf6f910f3402382c7c6d3552727d362b9bdc6bda12cf7",
+    "build/elab-ui-audit": "6ebb960a096ef5ccb5d48bc1a5507cf5ef349c2d1a2318531118b7726ab2f3f1",
+    "build/ELab-0.107.0-122-capacitor-candidate2.app/Contents/MacOS/ELab": "1d0da2a97afa4e1ee8d354775256afa4cea3acc9a1eb42df2e87b9d0bc70c2ec"
+  },
+  "final_binary_audit": {
+    "passed": true,
+    "current_sha256": {
+      "build/elab": "1d0da2a97afa4e1ee8d354775256afa4cea3acc9a1eb42df2e87b9d0bc70c2ec",
+      "build/elab-agent": "d62f918f0b8f87ecd3087f9b8ce1a0533c7ca0aacf36bdda73ffd5b0df78d5c8",
+      "build/elab-conformance": "90b79ffab7f11fae0e7dd87d33bc2ca8a612f6a3a995143c9be84918074fe4be",
+      "build/elab-ui-audit": "6ebb960a096ef5ccb5d48bc1a5507cf5ef349c2d1a2318531118b7726ab2f3f1",
+      "build/ELab-0.107.0-122-capacitor-candidate2.app/Contents/MacOS/ELab": "1d0da2a97afa4e1ee8d354775256afa4cea3acc9a1eb42df2e87b9d0bc70c2ec"
+    },
+    "changed_binaries": [
+      "build/elab-conformance"
+    ],
+    "scope": "Only the qualification CLI changed after stricter report validation; measured app, agent and native inventory tool binaries remain identical."
+  },
+  "candidate": "build/ELab-0.107.0-122-capacitor-candidate2.app",
+  "candidate_promoted": false,
+  "environment": {
+    "os": "ProductName:\t\tmacOS\nProductVersion:\t\t26.6.2\nBuildVersion:\t\t25G83",
+    "architecture": "arm64",
+    "cpu": "Apple M4 Pro",
+    "memory_bytes": "68719476736",
+    "go": "go version go1.27.2 darwin/arm64"
+  },
+  "sdk_lock": "third_party/vellum/sdk.lock.json",
+  "quality": {
+    "measurement_phase_script_exit_code": 0,
+    "final_verifier_phase_script_exit_code": 0,
+    "python_tests": 22,
+    "root_and_native_race_and_vet": true,
+    "lint_imports_staticcheck": true,
+    "measurement_log": "docs/validation/capacitor-capacity/quality.log.txt",
+    "final_verifier_log": "docs/validation/capacitor-capacity/verifier-quality.log.txt",
+    "earlier_race_wall_failure_retained": "docs/validation/capacitor-capacity/quality-race-wall-failure.log.txt"
+  },
+  "native_smoke_stages": 45,
+  "measurement_process": "docs/validation/capacitor-capacity/measurement-process.json",
+  "numerical_checks": 27596,
+  "capacity_checks": 19600,
+  "capacity_cases_per_adapter": 3,
+  "capacity_capture_rows_all_adapters": 4080,
+  "capacity_fresh_reopens": 24,
+  "storage_file_refusals": 232,
+  "capacity_report_corruption_categories": 17,
+  "corruption_self_comparison_refuses": true,
+  "timing_samples": 2080,
+  "timing_samples_by_suite": {
+    "reference": 800,
+    "opamp": 640,
+    "inductor": 640
+  },
+  "max_case_p95_edit_to_fresh_ms": 12.53275,
+  "max_verify_ms": 243.860667,
+  "timed_backend_targets_pass": true,
+  "repeated_maximum_capacity_timing_qualified": false,
+  "reports_recomputed_from_raw_and_gzip": true,
+  "report": {
+    "path": "docs/validation/capacitor-capacity/conformance-report.json.gz",
+    "encoding": "lossless gzip of complete measured report",
+    "decoded_sha256": "0db8bcf026fc74d1f301224493754091e2b0fa467fddd3c08836bdc6eff92f54",
+    "decoded_bytes": 19469542,
+    "round_trip_verified": true
+  },
+  "typed_audits": [
+    "docs/validation/capacitor-capacity/sample-audit.json",
+    "docs/validation/capacitor-capacity/opamp-sample-audit.json",
+    "docs/validation/capacitor-capacity/inductor-sample-audit.json"
+  ],
+  "independent_rc_reference": {
+    "source": "internal/conformance/testdata/generate_capacity_reference.py",
+    "frozen": "internal/conformance/testdata/capacity-rc-reference.json",
+    "times": 12,
+    "decimal_precision": 80,
+    "go_reference_match_tolerance_v": 2e-12
+  },
+  "legacy_public": {
+    "passed": true,
+    "transport": "headless-stdio",
+    "fixtures": [
+      {
+        "family": "mixed",
+        "engine": "elab.mixed-mna-be.v1",
+        "rows": 21,
+        "original_sha256": "4dda234e6640fb61f4070eff1d81fc26b9f115d26f7b2268d8ce1ae6a4778b61",
+        "byte_exact_exports": 2,
+        "live_state_preserved": true,
+        "fresh_project_reopen": true,
+        "original_files_preserved": true
+      },
+      {
+        "family": "network",
+        "engine": "elab.network-mna-be.v1",
+        "rows": 21,
+        "original_sha256": "c7e5c3da8b99f6c5f8cd3447a0e576a1846eb1c419b50973dd25337366996ba7",
+        "byte_exact_exports": 2,
+        "live_state_preserved": true,
+        "fresh_project_reopen": true,
+        "original_files_preserved": true
+      },
+      {
+        "family": "waveform",
+        "engine": "elab.network-waveforms-mna-be.v1",
+        "rows": 21,
+        "original_sha256": "ca563f478e4a6aed8ba645c67736bfebe5738ea3012d72eff6f6dcb5fe53b078",
+        "byte_exact_exports": 2,
+        "live_state_preserved": true,
+        "fresh_project_reopen": true,
+        "original_files_preserved": true
+      }
+    ],
+    "scope": "Genuine pre-change captured data through public import, seek, export, keep/save and fresh owned project reopen; no relabeling or solver-history authentication."
+  },
+  "file_fixtures": {
+    "passed": true,
+    "members": 72,
+    "public_capacity_files": 60,
+    "legacy_files": 12,
+    "regular_member_hashes_verified": true,
+    "capacity_recording_reexports_byte_exact": 24,
+    "scope": "Only named project/recording fixtures; no process endpoints, recovery directories or authentication descriptors."
+  },
+  "preserved_bundles_unchanged": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7,
+      "executable_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c"
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7,
+      "executable_sha256": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1"
+    }
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "limitations": [
+    "Three representative capacity fixtures do not establish convergence for every permitted topology or device combination.",
+    "Timing excludes process launch and visible-frame latency, does not purge OS caches, and does not measure repeated maximum-capacity p95.",
+    "The final two-file checker/test tightening occurred after measurement. All retained reports pass the stricter checker, a fresh public capacity run passes, and rebuilt app/agent/inventory binaries are byte-identical to those measured. Only the conformance CLI changes.",
+    "The first stricter quality run hit the unchanged 100 ms wall guard in an instrumented 120 ohm NPN/coil test. Five ordinary runs pass. The numerical regression now injects a clock while preserving the attempt limit; ordinary four-adapter coil timing retains the production wall limit.",
+    "Initial auxiliary timing readers conflated live grids with Verify outputs. The final readers require exact template settings; captured data is unchanged.",
+    "Historical backward-Euler captures retain engine identities and bytes. Consistency checks do not authenticate arbitrary solver history or replay older physics.",
+    "Native automated smoke/socket evidence does not close complete physical input, readability, divider/focus/AX or screen-reader gates.",
+    "Physical device/hardware, clean installation/distribution, physical printing and participant acceptance remain open. The canonical app remains 0.105.0."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/capacitor-capacity/README.md": "9f4fc079123569feff0acd03bc605d273f0c03947b7f5f2d22bccf7213b81e4e",
+    "docs/validation/capacitor-capacity/archive.py.txt": "06dc9c28aa69116a85acdde0b9b1ce61e6918db0e1143a85bc26ec5178e575dc",
+    "docs/validation/capacitor-capacity/build.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/capacitor-capacity/capacity-public-reference-before-reporting-fix.json.gz": "b611d7bc2c6db2eeff93ad10c4295fa763a6760e995a4f56f10d7595b68dc92a",
+    "docs/validation/capacitor-capacity/conformance-report.json.gz": "8de9a63153de3186b5918c1bfe6f6f9d3cd022a9236bc3b23c71e33af15233f6",
+    "docs/validation/capacitor-capacity/damping-after.log.txt": "ac7de0f9f7066e12d2347c7fb7081e6e106c580d9a65a472161d58014525d570",
+    "docs/validation/capacitor-capacity/damping-before.log.txt": "84ebb588c047be495537d126ac123dad8547b635ccb27ea7514e97c9703c1522",
+    "docs/validation/capacitor-capacity/environment.json": "f18fa37f693828782da17fd58951407c38c1fd350da942587ddfea380c1c70af",
+    "docs/validation/capacitor-capacity/experiment4.log.txt.gz": "92caa5690b92a8dfe243d5bbec43f203b275d5a02895af2c455accc77b795721",
+    "docs/validation/capacitor-capacity/experiment5.log.txt.gz": "598af93e1043d03ab378d1fb869f4ffc250197bd6a489408fffec76f810d0ecc",
+    "docs/validation/capacitor-capacity/file-fixtures-audit.json": "cf435dbdb5b97caefccbbdae9795c6947db553ca2cb03f431231dbdb15c3860d",
+    "docs/validation/capacitor-capacity/file-fixtures-index.json": "201ff29acf56ff63cdf39163b268734e0c3d4a47dac875d8889bf71382fbb811",
+    "docs/validation/capacitor-capacity/file-fixtures.tar.gz": "c19d633dbb7a2ee3b336a71726bb72295192d33a2990a21aa5e35287bb5dd329",
+    "docs/validation/capacitor-capacity/final-binaries.json": "7ff13c04897d1e9b205186a1512b8b3d3ccd0c9002c0021857d6fb91f6234f75",
+    "docs/validation/capacitor-capacity/final-verifier-source-freeze.json": "d3d9b3d50517521c9accdfbdb8504d2eb38229dc9a2e783804458bb2c11b4563",
+    "docs/validation/capacitor-capacity/in-process-initial4-report.json.gz": "b611d7bc2c6db2eeff93ad10c4295fa763a6760e995a4f56f10d7595b68dc92a",
+    "docs/validation/capacitor-capacity/in-process-reporting-final-report.json.gz": "c2a1cee61b4508cb87fc9e9f01d676a398d4acc0ca6f3bed2ea115f3348dade1",
+    "docs/validation/capacitor-capacity/inductor-review.go.txt": "ae5224991eb8fea70487c233182c1da34b0eb87b4015290e463e9b7feaef079b",
+    "docs/validation/capacitor-capacity/inductor-sample-audit.json": "4f21f65c841d15c6488a9377a5367f0949d7dd9724f7ae5ba560683ac18f35a2",
+    "docs/validation/capacitor-capacity/inductor-wall-ordinary.log.txt": "dd73b92eb33a17b7cd70b3f3ee5fc60e2434f77ce3531022fec53611e829ac89",
+    "docs/validation/capacitor-capacity/kcl-review-after.log.txt": "b48be8da32c35b2cb55bcca084344703d8afeef782ba09d2842bf2abc80bd91e",
+    "docs/validation/capacitor-capacity/kcl-review-before.log.txt": "6b6347e7c3a584690c632883641ef7d0542b9997ffc824cfca0b850a3f6e4377",
+    "docs/validation/capacitor-capacity/kernel-before.log.txt": "d03a0253ca953676b237f2da9fa22caa6a6fc76d22a57024bcf8e32384b50e10",
+    "docs/validation/capacitor-capacity/legacy-public.json": "1e2e737e9be9c4a99da1ec954f9f2fe26893d8b6c93e7ebe579701e2e1d475e9",
+    "docs/validation/capacitor-capacity/legacy-public.py.txt": "d5d9d0dabde9563f348ac5d94c09786a1b3f967878588a6e56797f4e436a5acb",
+    "docs/validation/capacitor-capacity/measurement-binaries.json": "ad67c4ffcea507b9aab1047fe185e8153b6d44438fd9a7346765fb8ebea90db3",
+    "docs/validation/capacitor-capacity/measurement-process.json": "5eed267f0681f6ce87021fcdda059b89666bde88f59666d6718b381b41a1bc70",
+    "docs/validation/capacitor-capacity/measurement.log.txt": "417c614db68656dd81f14a7a306d414bddbaaac9ea1c9cf49a3c6295b3930f69",
+    "docs/validation/capacitor-capacity/mixed-before.go.txt": "fdd54b04c4cfd1987af1d37359d0a36fdae76fd1fef4604b01b3b74fe4b9a893",
+    "docs/validation/capacitor-capacity/native-inventory-post-final.json": "e55eca6e3d915ee806b858a0f83503fdcdca34131bfe832bb924eef1920bd8e9",
+    "docs/validation/capacitor-capacity/native-inventory-verified.json": "e55eca6e3d915ee806b858a0f83503fdcdca34131bfe832bb924eef1920bd8e9",
+    "docs/validation/capacitor-capacity/native-smoke.log.txt": "c9ff1f51992501f13d1be666db93728fa5902b83c8acf2cc92ca8e3acd02e544",
+    "docs/validation/capacitor-capacity/opamp-review.go.txt": "1110bac400d0beddc9c7e6af24bf728113ad15fedf6e7318b73a450de41ba88e",
+    "docs/validation/capacitor-capacity/opamp-sample-audit.json": "60fbbceffa23f640c630fec53a94ed7c42340a8ae663ae8f8e16693167d51b28",
+    "docs/validation/capacitor-capacity/package.json": "69667f94480ad9499aa987bea8523f933a05289a8b8253e68df8c22031121f45",
+    "docs/validation/capacitor-capacity/preserved-bundles.json": "29c025d16bec382ddc1be254b89ee3dcda5f743409842967480c0e4b4eb8d826",
+    "docs/validation/capacitor-capacity/qualify.py.txt": "99fd85c0f57d0b36d8600a30d5b892fe9a69dd58c68a5a906343d90ccf2e2de1",
+    "docs/validation/capacitor-capacity/quality-race-wall-failure.log.txt": "bff15392dc44235a6918be3658d4ffabcf000d096ac48163f8246bcede3b1c89",
+    "docs/validation/capacitor-capacity/quality.log.txt": "e27353dffffa6af2343b4f2099efd068b884d8f90cb6487be3ca657693cd66fd",
+    "docs/validation/capacitor-capacity/receipt.py.txt": "8fea1a71060212151b410a2a867617cce32dc9475f40b1be397e82c197e92009",
+    "docs/validation/capacitor-capacity/reference-tests.log.txt": "dfc28d0d3049d26543915cc9b41c11b6b6559221a0c926c09ca73d7bccb2c0a0",
+    "docs/validation/capacitor-capacity/reporting-trajectory-comparison.json": "d086e1e1cb1370e51681d42dc89378c465c19c3dd7f415cc792e60d4b92257e9",
+    "docs/validation/capacitor-capacity/review.go.txt": "a826b0620253affaff5d9335f2a9e3c3bd400428e1193624e84dd9346a792a67",
+    "docs/validation/capacitor-capacity/sample-audit.json": "db7bd16d79bd08bd6069abe71cbfa599501681047c0e3c4dc23d9a24c4d6013e",
+    "docs/validation/capacitor-capacity/sdk-post-final.json": "833a277bcd0532bf6e2b828e73fa39d3494b1867ba97bf82489cb1528af36a17",
+    "docs/validation/capacitor-capacity/sdk-verified.json": "833a277bcd0532bf6e2b828e73fa39d3494b1867ba97bf82489cb1528af36a17",
+    "docs/validation/capacitor-capacity/source-freeze.json": "6756a881b80509ca373d6177feaf5c1865aec28421862b9963e9c94f72aca59d",
+    "docs/validation/capacitor-capacity/verifier-build.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/capacitor-capacity/verifier-only-source-delta.json": "77e259e9e4c3d3385c392913c9d4abee3511b64da7e0eb94a859449be224d5ab",
+    "docs/validation/capacitor-capacity/verifier-public-report.json.gz": "74979d0fd19e46f3612c74a2833832138e40a5285c51f0a0b2e05fa5962444e8",
+    "docs/validation/capacitor-capacity/verifier-public-run.log.txt": "c85bc3e6619642c493e41d33e974ea01aaeb8ba6e58707140af3800d45381dfb",
+    "docs/validation/capacitor-capacity/verifier-quality.log.txt": "59e964f5a0a9ef198262f08acf9ea42927f62478d996a4198d85369db9754acf"
+  }
+}

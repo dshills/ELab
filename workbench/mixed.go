@@ -13,7 +13,7 @@ const (
 	maxMixedNewtonDelta      = .2
 	maxMixedNodeVoltage      = 30.
 )
-const MixedEngineID = "elab.mixed-mna-be.v1"
+const MixedEngineID = "elab.mixed-mna-sdirk2.v1"
 
 type CapacitorResult struct {
 	ID      string  `json:"id"`
@@ -666,12 +666,12 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 		i := 0.
 		if dt == 0 || len(n.inductors) > 0 {
 			i = x[n.capacitorIndex(k)]
-			energyRate += v * i
 		} else {
 			i = p.Value * (v - old[k]) / dt
-			energyRate += .5 * p.Value * (v*v - old[k]*old[k]) / dt
-			r.NumericalDamping += .5 * p.Value * (v - old[k]) * (v - old[k]) / dt
 		}
+		// SDIRK history is a stage construction, not the previous accepted
+		// voltage. Balance instantaneous terminal power for every method.
+		energyRate += v * i
 		r.Capacitors = append(r.Capacitors, CapacitorResult{p.ID, v, i, .5 * p.Value * v * v})
 	}
 	for k, p := range n.inductors {
@@ -688,8 +688,8 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 	return &mixedState{n, x, capV, r}
 }
 
-// Compare one full step with two half steps and accept the latter. Legacy
-// networks use backward Euler; L networks use Radau IIA collocation.
+// Compare one full step with two half steps and accept the latter. Capacitor
+// networks use SDIRK2; L networks use Radau IIA collocation.
 func (state *mixedState) advance(t *Transient, end float64) (*mixedState, error) {
 	return state.advanceBudget(t, end, newIntegrationBudget())
 }
@@ -718,12 +718,12 @@ func (state *mixedState) advanceBudget(t *Transient, end float64, budget *integr
 		if h < 1e-10 || at+h <= at {
 			return nil, fmt.Errorf("mixed timestep too small at %.9g, h %.3g: %s", at, h, failure)
 		}
-		full, e1 := cur.net.solve(cur.x, cur.capV, h, t, at+h)
-		half, e2 := cur.net.solve(cur.x, cur.capV, h/2, t, at+h/2)
+		full, e1 := cur.capacitorStep(t, h, at+h, budget)
+		half, e2 := cur.capacitorStep(t, h/2, at+h/2, budget)
 		var refined *mixedState
 		var e3 error
 		if e2 == nil {
-			refined, e3 = cur.net.solve(half.x, half.capV, h/2, t, at+h)
+			refined, e3 = half.capacitorStep(t, h/2, at+h, budget)
 		}
 		errRatio := math.Inf(1)
 		if e1 == nil && e2 == nil && e3 == nil {
@@ -768,18 +768,12 @@ func (state *mixedState) advanceBudget(t *Transient, end float64, budget *integr
 				at = end
 			}
 			cur.result.Time = at
-			if cur.net.c.Analysis == WaveformAnalysis {
-				// Full-vs-two-half backward-Euler error scales with h².
-				// Target three quarters of the existing acceptance bound instead of holding
-				// a halved step until a binary doubling becomes admissible.
-				// Every proposed next step is still independently checked.
-				if errRatio == 0 {
-					h *= 2
-				} else {
-					h *= math.Min(2, math.Sqrt(.75/errRatio))
-				}
-			} else if errRatio < .2 {
+			// Full-vs-two-half SDIRK2 error scales with h³. Keep the
+			// existing acceptance bounds; independently check every proposal.
+			if errRatio == 0 {
 				h *= 2
+			} else {
+				h *= math.Min(2, math.Cbrt(.75/errRatio))
 			}
 		} else {
 			h /= 2

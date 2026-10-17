@@ -1,0 +1,62 @@
+from pathlib import Path
+import datetime,gzip,hashlib,json,re,shutil,stat,subprocess
+src=Path('build/capacity-qualification');out=Path('docs/validation/capacitor-capacity')
+def read(path):return json.loads(Path(path).read_text())
+def digest(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+freeze=read(src/'source-freeze-final3.json');measured=read(src/'source-freeze-final2.json');delta=read(out/'verifier-only-source-delta.json')
+assert len(freeze)==len(measured)==656 and all(digest(p)==h for p,h in freeze.items())
+assert set(p for p in freeze if freeze[p]!=measured[p])==set(delta)=={'internal/conformance/capacity_references.go','internal/conformance/capacity_test.go'}
+assert read(out/'sdk-post-final.json')['passed'] and read(out/'native-inventory-post-final.json')['passed']
+binaries=read(out/'final-binaries.json');assert binaries['passed'] and all(digest(p)==h for p,h in binaries['current_sha256'].items())
+promotion=read('docs/validation/lc-sampling-validation.json')['promotion'];preserved={}
+for name,key in [('build/ELab.app','bundle_tree'),('build/ELab-0.104.0-119-preserved.app','preserved_bundle_tree')]:
+ base=Path(name);paths=[base,*sorted(base.rglob('*'))];assert all(not p.is_symlink() for p in paths)
+ tree={str(p.relative_to(base)):{'mode':stat.S_IMODE(p.stat().st_mode),'sha256':digest(p) if p.is_file() else None} for p in paths}
+ assert tree==promotion[key]
+ preserved[name]={'passed':True,'entries':len(tree),'executable_sha256':tree['Contents/MacOS/ELab']['sha256']}
+assert preserved==read(out/'preserved-bundles.json')
+process=read(out/'measurement-process.json');assert len(process)==2 and all(p['status']=='completed' and p['exit_code']==0 for p in process)
+smoke=(out/'native-smoke.log.txt').read_text();assert '"event":"elab.native.smoke","passed":true' in smoke
+stages=len(re.findall(r'smoke: ',smoke));assert stages==45
+for name in ('quality.log.txt','verifier-quality.log.txt'):
+ log=(out/name).read_text();assert 'Ran 22 tests' in log and '\nFAIL' not in log and 'github.com/dshills/elab/desktop' in log and 'github.com/dshills/elab/workbench' in log
+base=read(out/'sample-audit.json');opamp=read(out/'opamp-sample-audit.json');coil=read(out/'inductor-sample-audit.json');assert all(r['passed'] for r in (base,opamp,coil))
+raw=gzip.decompress((out/'conformance-report.json.gz').read_bytes());report=json.loads(raw);assert report['passed'] and len(report['adapters'])==4
+assert all(r['source_report_sha256']==hashlib.sha256(raw).hexdigest() for r in (base,opamp,coil))
+for current,compressed in [('sample-audit.json','sample-audit-from-gzip.json'),('opamp-sample-audit-final.json','opamp-sample-audit-from-gzip.json'),('inductor-sample-audit.json','inductor-sample-audit-from-gzip.json')]:assert (src/current).read_bytes()==(src/compressed).read_bytes()
+fresh=max([a['max_case_fresh_p95_ms'] for a in base['adapters']+coil['adapters']]+[a['max_case_p95_fresh_ms'] for a in opamp['summaries']])
+verify=max([a['max_verify_ms'] for a in base['adapters']+coil['adapters']]+[a['max_verify_ms'] for a in opamp['summaries']])
+assert base['numerical_checks']==27596 and base['capacity_checks']==19600 and base['base_timing_samples']+opamp['samples']+coil['inductor_timing_samples']==2080
+receipt={
+ 'passed':True,'recorded_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ 'scope':'Unreleased capacitor integration, compatibility and representative public capacity qualification; no app promotion or full MVP acceptance',
+ 'source_parent_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+ 'measurement_source_index':str(out/'source-freeze.json'),'final_verifier_source_index':str(out/'final-verifier-source-freeze.json'),
+ 'source_frozen_files':656,'final_sources_stable':True,'verifier_only_source_delta':str(out/'verifier-only-source-delta.json'),
+ 'measured_binaries':read(out/'measurement-binaries.json'),'final_binary_audit':binaries,
+ 'candidate':'build/ELab-0.107.0-122-capacitor-candidate2.app','candidate_promoted':False,
+ 'environment':read(out/'environment.json'),'sdk_lock':'third_party/vellum/sdk.lock.json',
+ 'quality':{'measurement_phase_script_exit_code':0,'final_verifier_phase_script_exit_code':0,'python_tests':22,'root_and_native_race_and_vet':True,'lint_imports_staticcheck':True,'measurement_log':str(out/'quality.log.txt'),'final_verifier_log':str(out/'verifier-quality.log.txt'),'earlier_race_wall_failure_retained':str(out/'quality-race-wall-failure.log.txt')},
+ 'native_smoke_stages':stages,'measurement_process':str(out/'measurement-process.json'),
+ 'numerical_checks':27596,'capacity_checks':19600,'capacity_cases_per_adapter':3,'capacity_capture_rows_all_adapters':4080,'capacity_fresh_reopens':24,'storage_file_refusals':232,
+ 'capacity_report_corruption_categories':17,'corruption_self_comparison_refuses':True,
+ 'timing_samples':2080,'timing_samples_by_suite':{'reference':800,'opamp':640,'inductor':640},'max_case_p95_edit_to_fresh_ms':fresh,'max_verify_ms':verify,'timed_backend_targets_pass':True,'repeated_maximum_capacity_timing_qualified':False,
+ 'reports_recomputed_from_raw_and_gzip':True,'report':read(src/'report-encoding.json'),
+ 'typed_audits':[str(out/n) for n in ('sample-audit.json','opamp-sample-audit.json','inductor-sample-audit.json')],
+ 'independent_rc_reference':{'source':'internal/conformance/testdata/generate_capacity_reference.py','frozen':'internal/conformance/testdata/capacity-rc-reference.json','times':12,'decimal_precision':80,'go_reference_match_tolerance_v':2e-12},
+ 'legacy_public':read(out/'legacy-public.json'),'file_fixtures':read(out/'file-fixtures-audit.json'),
+ 'preserved_bundles_unchanged':preserved,'p0_counts':{'implemented':17,'partial':10},
+ 'limitations':[
+  'Three representative capacity fixtures do not establish convergence for every permitted topology or device combination.',
+  'Timing excludes process launch and visible-frame latency, does not purge OS caches, and does not measure repeated maximum-capacity p95.',
+  'The final two-file checker/test tightening occurred after measurement. All retained reports pass the stricter checker, a fresh public capacity run passes, and rebuilt app/agent/inventory binaries are byte-identical to those measured. Only the conformance CLI changes.',
+  'The first stricter quality run hit the unchanged 100 ms wall guard in an instrumented 120 ohm NPN/coil test. Five ordinary runs pass. The numerical regression now injects a clock while preserving the attempt limit; ordinary four-adapter coil timing retains the production wall limit.',
+  'Initial auxiliary timing readers conflated live grids with Verify outputs. The final readers require exact template settings; captured data is unchanged.',
+  'Historical backward-Euler captures retain engine identities and bytes. Consistency checks do not authenticate arbitrary solver history or replay older physics.',
+  'Native automated smoke/socket evidence does not close complete physical input, readability, divider/focus/AX or screen-reader gates.',
+  'Physical device/hardware, clean installation/distribution, physical printing and participant acceptance remain open. The canonical app remains 0.105.0.'
+ ]}
+shutil.copyfile('build/.capacity-receipt.py',out/'receipt.py.txt')
+receipt['artifacts_sha256']={str(p):digest(p) for p in sorted(out.rglob('*')) if p.is_file()}
+Path('docs/validation/capacitor-capacity-validation.json').write_text(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps({k:receipt[k] for k in ('passed','numerical_checks','capacity_checks','timing_samples','native_smoke_stages','max_case_p95_edit_to_fresh_ms','max_verify_ms')}))

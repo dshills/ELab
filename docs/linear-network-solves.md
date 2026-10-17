@@ -6,7 +6,7 @@ Start with **Examples → Split-rail DC supply**, set V1 and V2 to 12 V and reco
 
 ## Numerical strategy
 
-Resistors, finite-resistance switches, fixed potentiometer segments, ideal capacitors and supported ideal voltage sources produce affine equations at each solve instant. Capacitors retain their existing startup-voltage constraints or backward-Euler stamps. Source values are fixed for that instant even when their configured waveform changes over time. Reference/connectivity helpers add no device nonlinearity.
+Resistors, finite-resistance switches, fixed potentiometer segments, ideal capacitors and supported ideal voltage sources produce affine equations at each solve instant. Capacitors retain startup-voltage constraints or implicit companion stamps; the unreleased [SDIRK2 composition](capacitor-integration.md) uses these stamps for each diagonal stage. Source values are fixed for that instant even when their configured waveform changes over time. Reference/connectivity helpers add no device nonlinearity.
 
 The solver applies a full correction to these equations, checks residuals and voltage bounds, and publishes only an accepted result. Even zero excitation now requires a matrix solve to check rank; a zero residual alone does not establish a unique operating point. A private-kernel regression checks a singular floating resistor rather than accepting an arbitrary zero-voltage state.
 
@@ -22,7 +22,7 @@ An over-range electrical edit does not publish a valid zero. The prior accepted 
 
 ## Validation
 
-Failing-before regressions cover the 24 V convergence problem and the 31 V diagnostic. Independent Ohm/Kirchhoff references cover 0, 18, 24 and 30 V, negative-reference rails, current and power conservation. A 24 V RC kernel step matches the independent backward-Euler equation `C·v/dt = (24−v)/R`; the time integration method is unchanged. Every library part's classification and conservative handling of unknown kinds are checked, as are rank and cancellation.
+Failing-before regressions cover the 24 V convergence problem and the 31 V diagnostic. Independent Ohm/Kirchhoff references cover 0, 18, 24 and 30 V, negative-reference rails, current and power conservation. A 24 V implicit-stage test matches the independent companion equation `C·v/dt = (24−v)/R`. The original affine-solve repair preserved the then-current method; general capacitor time integration subsequently advances to SDIRK2. Every library part's classification and conservative handling of unknown kinds are checked, as are rank and cancellation.
 
 Native palette/named-wire/value construction produces the same 24 V /24 mA result as an agent. Packaged smoke edits and reconnects the example through its real controls, then waits for that current result to reach mesh preparation. The public reference `scripts/linear-network-demo.py` measures 24 V and 30 V, exports schematic/captured artifacts, refuses 31 V, checks stale labeling and undo recovery, reopens the saved recording and changes the reference to −24 V. The conformance client refreshes revision/document guards and retries at most eight explicit admission conflicts in its owned sessions; it refuses retries across document or electrical changes. Logical workflow evidence excludes these guard queries. The scroll smoke waits for configured overflow geometry before testing wheel movement. Existing nonlinear/electrical and transport regressions remain distinct evidence scopes.
 

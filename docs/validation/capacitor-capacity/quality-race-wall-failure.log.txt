@@ -1,0 +1,20 @@
+{"passed": true, "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-aa9d023", "source": "aa9d023243a6bded514c3d9696c08a9c917119c4"}
+......................
+----------------------------------------------------------------------
+Ran 22 tests in 0.411s
+
+OK
+?   	github.com/dshills/elab/cmd/elab-agent	[no test files]
+?   	github.com/dshills/elab/cmd/elab-conformance	[no test files]
+?   	github.com/dshills/elab/cmd/elab-ui-audit	[no test files]
+ok  	github.com/dshills/elab/internal/conformance	71.364s
+ok  	github.com/dshills/elab/internal/printspool	(cached)
+ok  	github.com/dshills/elab/internal/schematicpdf	(cached)
+ok  	github.com/dshills/elab/internal/uiaudit	(cached)
+ok  	github.com/dshills/elab/transport	1.426s
+--- FAIL: TestInductorNPNLoadedSwitchingWorkEnvelope (1.61s)
+    --- FAIL: TestInductorNPNLoadedSwitchingWorkEnvelope/120 (0.64s)
+        inductor_mixed_test.go:101: load 120 Ω, sample 102, attempts 160, Newton 1935: mixed integration exceeded its work budget: elapsed-time limit (160 attempted, maximum 512; 100.030 ms elapsed, maximum 100 ms); reduce sample step at 0.101778079 s, step 3.61e-05: ratio +Inf, errors <nil> / <nil> / mixed integration exceeded its work budget: elapsed-time limit (159 attempted, maximum 512; 100.012 ms elapsed, maximum 100 ms); reduce sample step
+FAIL
+FAIL	github.com/dshills/elab/workbench	68.586s
+FAIL

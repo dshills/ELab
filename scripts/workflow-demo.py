@@ -82,7 +82,7 @@ def main():
             with csv_path.open() as f:
                 rows = list(csv.reader(f))
             assert len(rows) == 202 and rows[0][-1] == 'v:C2 [V]'
-            assert rows[1][2] == 'elab.mixed-mna-be.v1'
+            assert rows[1][2] == 'elab.mixed-mna-sdirk2.v1'
             ET.parse(svg_path)
             assert 'C1.1' in svg_path.read_text()
             after = client.ask('project.inspect')

@@ -14,13 +14,16 @@ The tested envelope admits **64 simulated parts and 100 electrical nodes includi
 | Wires | 300 |
 | Sources | 3 |
 | Capacitors | 4 |
+| Inductors | 4 |
+| MOSFETs, NMOS/PMOS combined | 2 |
+| Powered op-amps | 2 |
 | Grounded-emitter NPNs | 2 |
 | Resistors / potentiometers | 64 each, subject to combined part/node bounds |
 | SPST switches / silicon diodes | 8 each |
 | Generic red LEDs | 4 |
 | Selected scope traces | 6 |
 
-Existing device ranges, grounded-source/emitter rules, floating/open-pin checks, ideal-constraint restrictions, numerical tolerances, output work guards and operation/document size bounds remain in effect. The dense numerical kernel and its engine/model identities are unchanged. The envelope does not imply convergence for every arrangement of parts.
+Existing device ranges, grounded-source/emitter rules, floating/open-pin checks, ideal-constraint restrictions, numerical tolerances, output work guards and operation/document size bounds remain in effect. The original capacity expansion retained its numerical kernel. Current unreleased general capacitor networks use [SDIRK2 with new engine identities](capacitor-integration.md); device models and the published work/accuracy bounds remain. The envelope does not imply convergence for every arrangement of parts.
 
 ## Fixtures and evidence
 
@@ -28,6 +31,8 @@ A source plus 50 series 10 kΩ potentiometers has 101 nodes when every wiper is 
 
 DC and ideal-square versions run at the node boundary. Four live channels capture the source, two wipers and a branch current through a pulse edge. Verify, embedded recording validation and fresh paused project reopen retain all 100 nodes. A separate source plus 63 series 1 kΩ resistors tests the **64-part boundary** against 5/63,000 A. A 101-node drawing and a 65-part drawing are diagnosed and remain savable. These meet the PRD's original minimum-size target in representative supported fixtures; they do not establish universal topology, hardware, visible-latency or usability acceptance.
 
-Core/native race tests, lint and vet cover the changes. Native construction uses the same placement/connection batches and bounds; the GPU smoke additionally checks actual schematic and four-trace scope pixels at 100 nodes. Public `scripts/capacity-demo.py` builds the fixtures, compares independent values, verifies/embeds a record, saves/reopens, exports SVG and saves excess complexity. Use `--connect` only for an owned development endpoint: it replaces that project. Use `--output REPORT --artifacts DIRECTORY` to retain results.
+Core/native race tests, lint and vet cover the changes. Native construction uses the same placement/connection batches and bounds; the GPU smoke additionally checks actual schematic and four-trace scope pixels at 100 nodes. Public `scripts/capacity-demo.py` builds the fixtures, compares independent values, verifies/embeds a record, saves/reopens, exports SVG and saves excess complexity. Use `--connect` only for a fresh owned blank endpoint; the admission guard refuses existing work. Use `--output REPORT --artifacts DIRECTORY` to retain results.
 
 The existing `.elab` format remains version 4; model parameters and dependency hashes are unchanged. Current readers use the expanded drawing bounds, while legacy file byte limits remain unchanged. Older application versions with smaller numerical/drawing limits may refuse the newly larger projects.
+
+The optional `elab-conformance --capacity-suite` adds all four adapters, complete 200 ms captures for these two pulse fixtures and a 64-part four-stage RC/NMOS LED circuit, half-step refinement, exact recording reopen and editable/savable boundary refusals. It recomputes 4,900 numerical references per adapter. See [capacitor integration and public capacity workflows](capacitor-integration.md). Repeated maximum-capacity timing remains a separate gate.
