@@ -121,6 +121,10 @@ func (s *screen) view() ui.Node {
 		s.commandMenu("examples-menu", "Examples", [][2]string{{"example.reset", "LED circuit"}, {"example.split-supply", "Split-rail DC supply"}, {"example.rc", "RC charge / discharge"}, {"example.rc-high-pass", "RC high-pass filter"}, {"example.rl", "Coil buildup / decay"}, {"example.rlc", "RLC ringing"}, {"example.flyback", "Coil / flyback diode"}, {"example.npn", "Transistor LED"}, {"example.switch-npn", "Manual transistor switch"}, {"example.npn-pulse", "Blinking LED"}, {"example.flasher", "Capacitor-timed flasher"}, {"example.led-fade", "LED fade"}, {"example.nmos", "MOSFET LED switch"}, {"example.pmos", "High-side MOSFET LED"}, {"example.cmos", "CMOS inverter"}, {"example.opamp-follower", "Op-amp follower"}, {"example.opamp-inverting", "Inverting amplifier"}, {"example.rectifier", "Rectifier / smoothing"}}),
 		s.button("edit.undo", "Undo"), s.button("edit.redo", "Redo"), s.themeMenu(state.Theme),
 	}}
+	// Reserve the complete action row even when both history labels include
+	// "agent"/"other". Otherwise the toolbar clips Theme while header space
+	// remains unused beside the status controls.
+	toolbar.Style.MinSize = ui.Some(ui.Size{Width: 560, Height: 48})
 	for i := range toolbar.Children {
 		toolbar.Children[i].Style.Padding = ui.Some(ui.Insets{Top: 7, Bottom: 7, Left: 9, Right: 9})
 	}
@@ -273,7 +277,12 @@ func (s *screen) view() ui.Node {
 	}
 	fit := buttonStyle(s.button("view.fit", "Fit"), state.Viewport.Following)
 	fit.Accessibility.Help = "Fit the complete schematic and follow workspace resizing. Pan, zoom or center an object to return to manual positioning."
-	tools.Children = append(tools.Children, s.button("drawing.cancel", "Esc"), ui.Node{ID: "tool-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, s.action("sweep-open", "DC sweep", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: true}), fit, label("zoom", fmt.Sprintf("%.0f%%", state.View.Zoom*100)))
+	tools.Children = append(tools.Children, s.button("drawing.cancel", "Esc"), ui.Node{ID: "tool-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, s.action("sweep-open", "DC sweep", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: true}), fit)
+	for i := range tools.Children {
+		if tools.Children[i].Kind == ui.Button {
+			tools.Children[i].Style.Padding = ui.Some(ui.Insets{Top: 9, Bottom: 9, Left: 9, Right: 9})
+		}
+	}
 	hints := "Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom"
 	switch state.Drawing.Tool {
 	case "wire":
@@ -485,14 +494,14 @@ func (s *screen) view() ui.Node {
 		s.previewPixels = previewPixels{}
 	}
 	root := ui.Node{ID: "root", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(12)), Gap: ui.Some(float32(10)), Background: ui.Some(surface)}, Children: []ui.Node{
-		{ID: "header", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 60}), Padding: ui.Some(ui.UniformInsets(12)), Gap: ui.Some(float32(16)), Align: ui.Some(ui.AlignCenter), Background: ui.Some(paper)}, Children: []ui.Node{heading("title", "ELab"), toolbar, statusNode, s.button(pause, pauseText)}},
+		{ID: "header", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 60}), Padding: ui.Some(ui.UniformInsets(12)), Gap: ui.Some(float32(8)), Align: ui.Some(ui.AlignCenter), Background: ui.Some(paper)}, Children: []ui.Node{heading("title", "ELab"), toolbar, statusNode, s.button(pause, pauseText)}},
 		{ID: "workspace", Kind: ui.Row, Grow: true, Style: ui.Style{Gap: ui.Some(float32(10))}, Children: []ui.Node{
 			{ID: "parts-scroll", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 200}), MaxSize: ui.Some(ui.Size{Width: 200}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("palette", 152, palette...)}},
 			{ID: "schematic-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(12)), Gap: ui.Some(float32(8)), Background: ui.Some(paper)}, Children: schematicChildren},
 			{ID: "sidebar", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 296}), MaxSize: ui.Some(ui.Size{Width: 296}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("sidebar-content", 248, inspector...)}},
 		}},
 		{ID: "readings", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 72}), Gap: ui.Some(float32(10)), Align: ui.Some(ui.AlignCenter)}, Children: []ui.Node{metric("current", currentTitle, current), metric("voltage", voltageTitle, voltage), metric("power", powerTitle, power), panel("simulation-info", 232, section("simulation-title", "Live simulation"), quiet("reading-status", readStatus))}},
-		{ID: "footer-row", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 20})}, Children: []ui.Node{quiet("footer", fmt.Sprintf("%s · %d components · %d wires · last change: %s", filename, len(state.Components), len(state.Wires), state.LastActor)), {ID: "footer-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, quiet("grid-info", "10-unit snap · local workspace")}},
+		{ID: "footer-row", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 20}), Gap: ui.Some(float32(8))}, Children: []ui.Node{quiet("footer", fmt.Sprintf("%s · %d components · %d wires · last change: %s", filename, len(state.Components), len(state.Wires), state.LastActor)), {ID: "footer-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, quiet("zoom", fmt.Sprintf("%.0f%%", state.View.Zoom*100)), quiet("grid-info", "10-unit snap · local workspace")}},
 		s.filePrompt(),
 	}}
 	if sourcePaneHidden(state) {

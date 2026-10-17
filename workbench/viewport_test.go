@@ -189,6 +189,16 @@ func assertViewportContainsSchematic(t *testing.T, state Snapshot) {
 			at, _ := TerminalPosition(p, pin)
 			check(at)
 		}
+		annotated := false
+		for _, a := range state.SourceAnnotations {
+			annotated = annotated || a.ID == p.ID
+		}
+		if !annotated {
+			at, text := CanvasPartLabel(p)
+			lo, hi := CanvasTextBounds(at, text, CanvasFontScale(state.View.Zoom))
+			check(lo)
+			check(hi)
+		}
 	}
 	for _, w := range g.Wires {
 		for _, at := range WirePath(g, w) {
@@ -199,6 +209,13 @@ func assertViewportContainsSchematic(t *testing.T, state Snapshot) {
 		lo, hi := SourceAnnotationBounds(a)
 		check(lo)
 		check(hi)
+		part, _ := g.Component(a.ID)
+		layout := LayoutCanvasAnnotation(a, part.Rotation, state.View.Zoom)
+		for i, line := range a.Lines {
+			lo, hi := CanvasTextBounds(layout.Position(line, i), line, layout.Scale)
+			check(lo)
+			check(hi)
+		}
 	}
 }
 

@@ -20,6 +20,8 @@ To review a change, create a candidate at a new path:
 
 The tool never overwrites an existing output. Compare the candidate's routes and source changes before updating the ledger; regeneration alone is not a review. Root tests verify ledger freshness and reject unknown literal routes. Deliberate fixture changes exercise dynamic callbacks, field assignments, menu routes, excluded smoke code and source digest changes.
 
+The October 17 first-version UI review refreshes `desktop/drawing.go`, `desktop/view.go` and the preceding cursor repair in `desktop/probes.go`. Comparing every site with only its line number removed yields **identical expressions, commands, enclosing functions, kinds and review categories**. Public commands, aliases, coverage sets and all totals above are unchanged. Drawing now shares caption geometry with the core fitter; the header/tool/footer changes retain the same actions and Toolbar behavior. The prior source ledger was correctly rejected by the full gate until these hashes/locations were reviewed. [Actual UI checks and remaining work](ui-audit/first-version/README.md) qualify the demonstrated RC controls; 146 broader binding-review sites remain open.
+
 ## Defect found during review
 
 Ordinary `screen.action` buttons previously captured targets/parameters from the rendered view but obtained a fresh mutation revision at activation. An old Apply button could overwrite an agent's newer resistance; an old Delete could act on an obsolete selection. Actions now capture the view's command revision and document generation. A single immutable context is shared while constructing the view, avoiding repeated full snapshot cloning per button.

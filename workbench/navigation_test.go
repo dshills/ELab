@@ -4,10 +4,42 @@ import (
 	"context"
 	"encoding/json"
 	"math"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 )
+
+func TestFitCompactHandBuiltCircuitAvoidsRouterSearchMargins(t *testing.T) {
+	s := New()
+	defer s.Close()
+	call(t, s, "project.load", LoadParams{Path: filepath.Join("..", "research", "ui-audit", "first-version", "rc-built-ui.elab")}, "open")
+	before := settled(t, s)
+	call(t, s, "view.viewport.set", ViewportParams{Width: 456, Height: 158}, "viewport")
+	call(t, s, "view.fit", FitParams{FollowViewport: true}, "fit")
+	after := s.Snapshot()
+	// Framing must improve while leaving room for the enlarged captions.
+	if after.View.Zoom < .4 {
+		t.Fatalf("Fit wastes compact workspace on routing search margins: zoom %.6g", after.View.Zoom)
+	}
+	t.Logf("compact Fit zoom %.6g (previous 0.319192)", after.View.Zoom)
+	assertViewportContainsSchematic(t, after)
+	if before.RunID != after.RunID || before.ElectricalRevision != after.ElectricalRevision || before.Document != after.Document || !reflect.DeepEqual(before.Transient, after.Transient) || !reflect.DeepEqual(before.Components, after.Components) || !reflect.DeepEqual(before.Wires, after.Wires) {
+		t.Fatal("Fit changed the measured experiment")
+	}
+}
+
+func TestFitColdCapacityEnclosesAllRoutes(t *testing.T) {
+	s := newGraphService(SolveLED, capacityChain(t, "dc-source", 50))
+	defer s.Close()
+	settled(t, s)
+	call(t, s, "view.viewport.set", ViewportParams{Width: 900, Height: 500}, "viewport")
+	started := time.Now()
+	call(t, s, "view.fit", FitParams{FollowViewport: true}, "fit")
+	t.Logf("52-object / 53-wire Fit: %s", time.Since(started))
+	assertViewportContainsSchematic(t, s.Snapshot())
+}
 
 func TestFitContainsLongNetLabel(t *testing.T) {
 	s := New()

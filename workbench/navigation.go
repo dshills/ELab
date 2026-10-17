@@ -120,10 +120,25 @@ func (s *Service) fitViewLocked(p FitParams) (View, error) {
 		maxX = max(maxX, b.X)
 		maxY = max(maxY, b.Y)
 	}
+	annotations := s.sourceAnnotationsLocked()
+	annotated := map[string]bool{}
+	for _, a := range annotations {
+		annotated[a.ID] = true
+	}
+	type caption struct {
+		at   Point
+		text string
+	}
+	captions := []caption{}
 	for _, c := range s.graph.Components {
-		include(Point{c.Position.X - 90, c.Position.Y - 80}, Point{c.Position.X + 140, c.Position.Y + 95})
-		x, y, label := schematicPartLabel(c)
-		include(Point{x - 10, y - 25}, Point{x + schematicLabelWidth(label) + 10, y + 10})
+		left, right, top, bottom := BodyBounds(c)
+		include(Point{left - 4, top - 4}, Point{right + 4, bottom + 4})
+		if !annotated[c.ID] {
+			x, y, label := schematicPartLabel(c)
+			include(Point{x - 10, y - 25}, Point{x + schematicLabelWidth(label) + 10, y + 10})
+			at, title := CanvasPartLabel(c)
+			captions = append(captions, caption{at, title})
+		}
 		for _, terminal := range c.Terminals {
 			if pos, ok := TerminalPosition(c, terminal); ok {
 				include(Point{pos.X - 10, pos.Y - 10}, Point{pos.X + 10, pos.Y + 10})
@@ -131,27 +146,63 @@ func (s *Service) fitViewLocked(p FitParams) (View, error) {
 		}
 	}
 	for _, w := range s.graph.Wires {
-		if a, b, ok := WireRoutingBounds(s.graph, w); ok {
-			include(a, b)
+		// Fit the deterministic route used by both drawing and output, rather
+		// than its much larger path-finder search envelope. WirePath owns its
+		// result and caches by the complete graph/route input.
+		for _, at := range WirePath(s.graph, w) {
+			include(Point{at.X - 4, at.Y - 4}, Point{at.X + 4, at.Y + 4})
 		}
 	}
 	for _, r := range s.pinnedReadingsLocked() {
 		a, b := PinnedReadingBounds(r)
 		include(a, b)
 	}
-	for _, a := range s.sourceAnnotationsLocked() {
+	for _, a := range annotations {
 		lo, hi := SourceAnnotationBounds(a)
 		include(lo, hi)
 	}
 	if math.IsInf(minX, 1) {
 		return View{Zoom: 1}, nil
 	}
-	center := boundedCenter(Point{(minX + maxX) / 2, (minY + maxY) / 2})
-	width := 2 * (max(center.X-minX, maxX-center.X) + 20)
-	height := 2 * (max(center.Y-minY, maxY-center.Y) + 20)
-	zoom := min(2, p.Width/width, p.Height/height)
-	if zoom < .01 {
+	baseMinX, baseMinY, baseMaxX, baseMaxY := minX, minY, maxX, maxY
+	fitAt := func(zoom float64) (View, bool) {
+		minX, minY, maxX, maxY = baseMinX, baseMinY, baseMaxX, baseMaxY
+		for _, c := range captions {
+			lo, hi := CanvasTextBounds(c.at, c.text, CanvasFontScale(zoom))
+			include(lo, hi)
+		}
+		for _, a := range annotations {
+			part, _ := s.graph.Component(a.ID)
+			layout := LayoutCanvasAnnotation(a, part.Rotation, zoom)
+			for i, line := range a.Lines {
+				lo, hi := CanvasTextBounds(layout.Position(line, i), line, layout.Scale)
+				include(lo, hi)
+			}
+		}
+		center := boundedCenter(Point{(minX + maxX) / 2, (minY + maxY) / 2})
+		width := 2 * (max(center.X-minX, maxX-center.X) + 20)
+		height := 2 * (max(center.Y-minY, maxY-center.Y) + 20)
+		// Reserve screen-space clearance for the minimum visible stroke too.
+		return View{Center: center, Zoom: zoom}, width*zoom <= p.Width-4 && height*zoom <= p.Height-4
+	}
+	view, fits := fitAt(.01)
+	if !fits {
 		return View{}, &actionError{"view-limit", "Schematic exceeds the minimum zoom; use object navigation, move objects closer, or enlarge the viewport"}
 	}
-	return View{Center: center, Zoom: zoom}, nil
+	if largest, ok := fitAt(2); ok {
+		return largest, nil
+	}
+	// Enlarged captions depend on zoom. Keep a known-fitting lower endpoint
+	// and check every accepted candidate against its own caption geometry.
+	// Route finding is outside this bounded search.
+	low, high := .01, 2.
+	for range 40 {
+		mid := (low + high) / 2
+		if candidate, ok := fitAt(mid); ok {
+			low, view = mid, candidate
+		} else {
+			high = mid
+		}
+	}
+	return view, nil
 }

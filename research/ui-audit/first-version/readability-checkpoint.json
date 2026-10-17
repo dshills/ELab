@@ -1,0 +1,157 @@
+{
+  "passed": true,
+  "source_base": "6dd7af1",
+  "scope": "UI readability repair; no complete MVP or latency qualification",
+  "native_binary_sha256": "047b9e8a066f4db1814092b0f0f4b056f82d34baabb74b6d4025902ed1ead73b",
+  "agent_binary_sha256": "1e31692b674280fb9253214ac674ea97564987616261351e73bd5f06c6c37f8d",
+  "fixture_sha256": "6380351c8c51640b0221969b97259cf49161989f300d4eb1b9bdcf885759e338",
+  "fixture_unchanged": true,
+  "comparisons": [
+    {
+      "size": "compact",
+      "viewport": {
+        "width_px": 456,
+        "height_px": 159,
+        "registered": true,
+        "following": true
+      },
+      "native_view": {
+        "center": {
+          "x": -135.1363636363833,
+          "y": 49.36013986013847
+        },
+        "zoom": 0.424332344213608
+      },
+      "headless_view": {
+        "center": {
+          "x": -135.1363636363833,
+          "y": 49.36013986013847
+        },
+        "zoom": 0.424332344213608
+      },
+      "graph_settings_and_sample_match": true
+    },
+    {
+      "size": "large",
+      "viewport": {
+        "width_px": 594,
+        "height_px": 217,
+        "registered": true,
+        "following": true
+      },
+      "native_view": {
+        "center": {
+          "x": -109.5,
+          "y": 53.44029850744521
+        },
+        "zoom": 0.5964391691384299
+      },
+      "headless_view": {
+        "center": {
+          "x": -109.5,
+          "y": 53.44029850744521
+        },
+        "zoom": 0.5964391691384299
+      },
+      "graph_settings_and_sample_match": true
+    }
+  ],
+  "screenshot_dimensions": {
+    "rc-compact-dark-after.jpg": [
+      1044,
+      764
+    ],
+    "rc-compact-light-after.jpg": [
+      1044,
+      764
+    ],
+    "rc-large-dark-after.jpg": [
+      1184,
+      854
+    ],
+    "rc-large-light-after.jpg": [
+      1184,
+      854
+    ]
+  },
+  "new_commands": 0,
+  "pinned_sdk_source": "47b7153109735006305e3610520e489a953fcd97",
+  "screenshot_format_normalization": {
+    "cursor-zero-after.png": {
+      "path": "cursor-zero-after.jpg",
+      "sha256": "ac95e69288eff5aff001045d2928cb9dcbcd567d04ac75128276a349f9319d61"
+    },
+    "led-from-blank-light.png": {
+      "path": "led-from-blank-light.jpg",
+      "sha256": "e28420d43cdd655d989c9fd56c498e0d998afe5ed51451d65cca9838aac97c2f"
+    },
+    "rc-compact-before.png": {
+      "path": "rc-compact-before.jpg",
+      "sha256": "0a73b9151aad1bba024329a4311f8decf91d9a863be60af7099e209284004843"
+    },
+    "rc-compact-dark-after.png": {
+      "path": "rc-compact-dark-after.jpg",
+      "sha256": "4180f11709938495b0dc800340e75c7ba7c2370af5ce807be32e504ec0c6367f"
+    },
+    "rc-compact-light-after.png": {
+      "path": "rc-compact-light-after.jpg",
+      "sha256": "fd655e299b6679beaa1ebfc3fa7017456d4c4e9d394526d9b369d6c79d2b5ad7"
+    },
+    "rc-cursors-before.png": {
+      "path": "rc-cursors-before.jpg",
+      "sha256": "f3da72b6efa2f2d35dfdd919f6ca784e64fbc6879bb1242a949778f1b50ad0ab"
+    },
+    "rc-dark-before.png": {
+      "path": "rc-dark-before.jpg",
+      "sha256": "ae204466cc71fc5c7606862b40f5a62d315744ee0da1e9c63a7e4ce971e39919"
+    },
+    "rc-header-before.png": {
+      "path": "rc-header-before.jpg",
+      "sha256": "fba406a0b69b7f91fef1935b9ad68364ebbf53714337839f8aa688d9efb92189"
+    },
+    "rc-large-dark-after.png": {
+      "path": "rc-large-dark-after.jpg",
+      "sha256": "2bd2eafaf2a964553b903fcf70d321cd4c7dc597e49727ea4ae634ef214a2ccf"
+    },
+    "rc-large-light-after.png": {
+      "path": "rc-large-light-after.jpg",
+      "sha256": "1d098665db939327ec210f669334bd0fb57db4ce33f49b3d0b562dce3a747ea4"
+    }
+  },
+  "native_test_exit_code": 0,
+  "source_inventory_review": {
+    "changed_files": [
+      "desktop/drawing.go",
+      "desktop/probes.go",
+      "desktop/view.go"
+    ],
+    "sources": 57,
+    "sites": 388,
+    "public_commands": 162,
+    "source_routes": 132,
+    "binding_review_sites": 146,
+    "site_expressions_unchanged_excluding_line_numbers": true
+  },
+  "historical_screenshot_bytes_preserved": 5,
+  "changed_source_sha256": {
+    "workbench/canvas_labels.go": "545c16c6ea8e5e160ff88127f82984687a98613f92b6b2177de97e68926d6f27",
+    "workbench/navigation.go": "c464846329a11ec2de0e4cd40fe1beda189fbb9d981d9c7fb0e493d6326e3e35",
+    "workbench/navigation_test.go": "9021be9cf12e7142c889392e8283b8043e6158c3e0b963e95bda80eb69d9f703",
+    "workbench/viewport_test.go": "0f5e95e774a093d50b63db4b1cd5fa9790808469236f4515d2e6af897371e036",
+    "desktop/drawing.go": "f199b31b5f65bb2155fd46ce507782c5f22c970d4ada33d68dc2a1be5c280d4a",
+    "desktop/view.go": "fbb31655ab2e8d1cc21a62bb821cefe4d10ab5fdca642e91a49e4c453ce2aede",
+    "desktop/canvas_readability_test.go": "5d4b0eeba4d3a4f20ad30ffae604e3a61265a1b49c62195bcbf03b46fa449823"
+  },
+  "quality_gate": {
+    "command": "scripts/check.sh",
+    "passed": true,
+    "python_tests": 38,
+    "root_race_tests": "passed; successful package results cached on final rerun",
+    "native_race_seconds": 142.992,
+    "root_vet": "passed",
+    "native_vet": "passed",
+    "lint": "passed",
+    "initial_failure": "stale native source inventory",
+    "resolution": "reviewed identical sites excluding line numbers, refreshed hashes/locations, reran full gate"
+  }
+}

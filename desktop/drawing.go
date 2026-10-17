@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"image/color"
 	"math"
 	"strings"
@@ -13,9 +12,10 @@ import (
 )
 
 type meshBuilder struct {
-	vertices []canvas.Vertex
-	indices  []uint32
-	err      error
+	vertices      []canvas.Vertex
+	indices       []uint32
+	err           error
+	minimumStroke float64
 }
 
 func (b *meshBuilder) add(m *canvas.Mesh, err error) {
@@ -30,7 +30,7 @@ func (b *meshBuilder) add(m *canvas.Mesh, err error) {
 	}
 }
 func (b *meshBuilder) stroke(c color.NRGBA, width float64, p ...canvas.Point) {
-	b.add(canvas.StrokePolyline(p, width, c))
+	b.add(canvas.StrokePolyline(p, max(width, b.minimumStroke), c))
 }
 func (b *meshBuilder) quad(x, y, width, height float64, c color.NRGBA) {
 	offset := uint32(len(b.vertices))
@@ -38,6 +38,9 @@ func (b *meshBuilder) quad(x, y, width, height float64, c color.NRGBA) {
 	b.indices = append(b.indices, offset, offset+1, offset+2, offset+1, offset+3, offset+2)
 }
 func (b *meshBuilder) text(x, y float64, text string, c color.NRGBA) {
+	b.textAtScale(x, y, text, c, 1.25)
+}
+func (b *meshBuilder) textAtScale(x, y float64, text string, c color.NRGBA, scale float64) {
 	// Tessellate the bundled bitmap font into retained geometry. Labels follow the
 	// same world transform as symbols and need no per-frame CPU image readback.
 	text = strings.ReplaceAll(text, "Ω", "ohm")
@@ -52,22 +55,22 @@ func (b *meshBuilder) text(x, y float64, text string, c color.NRGBA) {
 			for px := rect.Min.X; px < rect.Max.X; px++ {
 				_, _, _, alpha := mask.At(origin.X+px-rect.Min.X, origin.Y+py-rect.Min.Y).RGBA()
 				if alpha > 0 {
-					b.quad(x+float64(px)*1.25, y+float64(py)*1.25, 1.25, 1.25, c)
+					b.quad(x+float64(px)*scale, y+float64(py)*scale, scale, scale, c)
 				}
 			}
 		}
-		x += float64(advance) / 64 * 1.25
+		x += float64(advance) / 64 * scale
 	}
 }
 func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*canvas.Mesh, error) {
-	b := &meshBuilder{}
+	b := &meshBuilder{minimumStroke: 1.25 / view.Zoom}
 	annotated := map[string]bool{}
 	for _, a := range state.SourceAnnotations {
 		annotated[a.ID] = true
 	}
 	palette := paletteForTheme(state.Theme)
 	ink, muted, accent := palette.Ink, palette.Muted, palette.Accent
-	wireColor := color.NRGBA{R: 56, G: 125, B: 147, A: 255}
+	wireColor := traceColor(color.NRGBA{R: 56, G: 125, B: 147, A: 255}, palette)
 	grid := palette.Grid
 	selectedColor := color.NRGBA{R: 40, G: 158, B: 180, A: 255}
 	pendingColor := color.NRGBA{R: 212, G: 138, B: 28, A: 255}
@@ -347,37 +350,15 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 		if annotated[part.ID] {
 			continue
 		}
-		title := part.ID
-		if part.Kind == "inductor" {
-			title += " " + workbench.InductorValueLabel(part.Value)
-		} else if part.Unit != "" {
-			if part.Unit == "F" {
-				scale, suffix := 1., "F"
-				if part.Value < 1e-9 {
-					scale, suffix = 1e12, "pF"
-				} else if part.Value < 1e-6 {
-					scale, suffix = 1e9, "nF"
-				} else if part.Value < 1e-3 {
-					scale, suffix = 1e6, "uF"
-				} else if part.Value < 1 {
-					scale, suffix = 1e3, "mF"
-				}
-				title += fmt.Sprintf(" %.4g %s", part.Value*scale, suffix)
-			} else {
-				if part.Unit == "Ω" && part.Value >= 1000 {
-					title += fmt.Sprintf(" %.4g kΩ", part.Value/1000)
-				} else {
-					title += fmt.Sprintf(" %.4g %s", part.Value, part.Unit)
-				}
-			}
-		}
-		at := nativePartLabelPosition(part, title)
-		b.text(at.X, at.Y, title, ink)
+		at, title := workbench.CanvasPartLabel(part)
+		b.textAtScale(at.X, at.Y, title, ink, workbench.CanvasFontScale(view.Zoom))
 	}
 	for _, a := range state.SourceAnnotations {
-		_, max := workbench.SourceAnnotationBounds(a)
+		part, _ := graph.Component(a.ID)
+		layout := workbench.LayoutCanvasAnnotation(a, part.Rotation, view.Zoom)
 		for i, line := range a.Lines {
-			b.text(max.X-float64(len([]rune(line)))*8.75, a.Position.Y+float64(i)*workbench.SourceAnnotationLineHeight, line, ink)
+			at := layout.Position(line, i)
+			b.textAtScale(at.X, at.Y, line, ink, layout.Scale)
 		}
 	}
 	frame := workbench.MakeDisplayFrame(graph, state.Display, phase)
@@ -417,33 +398,5 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 }
 
 func nativePartLabelPosition(part workbench.Component, title string) workbench.Point {
-	if part.Kind == "opamp" {
-		return workbench.OpAmpLabelPosition(part)
-	}
-	if part.Kind == "inductor" {
-		return workbench.InductorLabelPosition(part)
-	}
-	if part.Kind == "led" {
-		return workbench.LEDLabelPosition(part)
-	}
-	if part.Kind == "capacitor" {
-		return workbench.CapacitorLabelPosition(part)
-	}
-	if part.Kind == "ground" {
-		return workbench.GroundLabelPosition(part)
-	}
-	y := part.Position.Y - 55
-	if workbench.IsConnectivityPrimitive(part.Kind) {
-		y = part.Position.Y - 18
-	}
-	if part.Rotation == 90 || part.Rotation == 270 {
-		y = part.Position.Y - 75
-	}
-	x := part.Position.X - float64(len(title))*4.4
-	if part.Kind == "dc-source" {
-		x, y = part.Position.X-45-float64(len(title))*8.8, part.Position.Y+3
-	} else if part.Kind == "resistor" && (part.Rotation == 90 || part.Rotation == 270) {
-		x, y = part.Position.X+27, part.Position.Y+3
-	}
-	return workbench.Point{X: x, Y: y}
+	return workbench.CanvasPartLabelPosition(part, title)
 }
