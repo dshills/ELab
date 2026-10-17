@@ -972,8 +972,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if err := s.requireCleanLocked(p.DiscardChanges); err != nil {
 			return err
 		}
-		ids := map[string]string{"example.reset": "led", "example.rc": "rc", "example.npn": "npn", "example.npn-pulse": "blink", "example.flasher": "flasher", "example.switch-npn": "switch-npn", "example.rectifier": "rectifier"}
-		return s.loadExampleLocked(ids[command], p.DiscardChanges)
+		return s.loadExampleLocked(legacyExampleID(command), p.DiscardChanges)
 	case "edit.undo":
 		if len(s.undo) == 0 {
 			return &actionError{"unavailable", "nothing to undo"}

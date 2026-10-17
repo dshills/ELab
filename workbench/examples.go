@@ -25,6 +25,28 @@ type ExampleResetParams struct {
 	DiscardChanges     bool    `json:"discard_changes,omitempty"`
 }
 
+// legacyExampleID keeps named loaders and their restart semantics in sync.
+func legacyExampleID(command string) string {
+	switch command {
+	case "example.reset":
+		return "led"
+	case "example.rc":
+		return "rc"
+	case "example.npn":
+		return "npn"
+	case "example.npn-pulse":
+		return "blink"
+	case "example.flasher":
+		return "flasher"
+	case "example.switch-npn":
+		return "switch-npn"
+	case "example.rectifier":
+		return "rectifier"
+	default:
+		return ""
+	}
+}
+
 func ExampleCatalog() []ExampleInfo {
 	return []ExampleInfo{
 		{ID: "led", Title: "LED current limiter", Question: "How does resistance change LED current?", Expected: "Increasing the series resistance lowers current and the illustrative LED brightness.", Try: "Change R1 from 1 kΩ to 2 kΩ and compare signed current.", Limitation: "Generic red LED; brightness is illustrative and there is no thermal behavior or physical part rating."},

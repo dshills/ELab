@@ -1,6 +1,6 @@
 # First usable version: delivery plan
 
-**Written October 17, 2026. Status: planned; no release gates closed by this document.**
+**Written October 17, 2026. Status: in progress; package 1 command/startup checks complete. Alpha release gates remain open.**
 
 ## Decision and outcome
 
@@ -45,8 +45,8 @@ I own implementation, review, automated checks, direct UI inspection and packagi
 
 | Order | Deliverable | Exit condition | Status |
 |---|---|---|---|
-| 1. Stabilize examples and entry points | Repair reproducible startup/reset defects; reconcile the example catalog, demo and instructions. | Every current example loads; repeated load/reset gives a valid fresh run; dirty-project and stale-document guards work; blank startup is usable. Targeted regression tests accompany fixes. | Next |
-| 2. Complete the real UI pass | Walk the four reference tasks below using actual controls. Fix clipping, menu behavior, scrolling, focus, value commits, wiring and scope interactions that obstruct them. | All tasks completed at 1280×800 and 1440×900 display settings, with the visible window size recorded; inspect both themes. Define/enforce the minimum usable window size from evidence. No essential button is clipped or unreachable; keyboard completion of the core loop works. | Planned |
+| 1. Stabilize examples and entry points | Repair reproducible startup/reset defects; reconcile the example catalog, demo and instructions. | Every current example loads; repeated load/reset gives a valid fresh run; dirty-project and stale-document guards work; blank startup is usable. Targeted regression tests accompany fixes. | Complete for command/startup behavior; direct control usability follows in package 2 |
+| 2. Complete the real UI pass | Walk the four reference tasks below using actual controls. Fix clipping, menu behavior, scrolling, focus, value commits, wiring and scope interactions that obstruct them. | All tasks completed at 1280×800 and 1440×900 display settings, with the visible window size recorded; inspect both themes. Define/enforce the minimum usable window size from evidence. No essential button is clipped or unreachable; keyboard completion of the core loop works. | Next |
 | 3. Close correctness and parity blockers | Repeat the same tasks through an external agent, including invalid edits, interrupted jobs, save/reopen and recovery; check native action-to-command mapping. | Matching connectivity, values and numerical/state outcomes; no GUI-only decision in the reference loop; no known data-loss, stale-result or parity defect. Unresolved wider audit evidence is explicitly listed. | Planned |
 | 4. Qualify the release candidate | Build from the frozen SDK/source; run the final quality, numerical, native smoke and responsiveness checks. | Gates below pass or have an explicit owner-reviewed alpha limitation where allowed. Core correctness/data ownership gates cannot be waived. One candidate identity is recorded. | Planned |
 | 5. Package and promote | Produce the owner bundle, agent executable/launch instructions, starter projects and concise release notes. Update stale SDK/package commands in the main README. | Launch the copied bundle outside the checkout without development-file access or network; save/reopen there; verify app and agent packaging. Preserve the previous canonical bundle, then promote the qualified candidate to `build/ELab.app`. Publish exact paths/version/hash. | Planned |
@@ -54,9 +54,9 @@ I own implementation, review, automated checks, direct UI inspection and packagi
 
 The **first reviewable candidate is delivered after packages 1–3**, with remaining qualification clearly labeled. Packages 4–5 produce the supported local alpha. Package 6 is user acceptance, not a reason to keep adding features while awaiting feedback.
 
-### First concrete defect investigation
+### First concrete defect: repaired
 
-Source inspection found that the legacy LED load command, `example.reset`, is absent from the dispatcher's forced-restart list although the other legacy example loaders are present. Reloading an unchanged LED example may therefore clear its results without starting a new simulation. This is **suspected, not yet reproduced**. Package 1 begins with a failing-before/passing-after regression if confirmed. Also update the example demo's expected IDs: it currently omits the two op-amp examples present in the catalog.
+The legacy LED load command, `example.reset`, was absent from the dispatcher's forced-restart list. A regression reproduced the failure: reloading an unchanged, paused LED template advanced the document generation but left the run/electrical identities unchanged and cleared its results. The shared loader mapping now drives the restart decision. All 18 catalog reloads and seven legacy reloads pass; the public demo now includes the two op-amp examples. See the [checkpoint and evidence](../docs/validation/first-version-examples/README.md).
 
 ## Acceptance tasks
 
@@ -93,6 +93,10 @@ A failed integrity, simulation-truthfulness or core parity check blocks promotio
 3. Run targeted checks during repairs, then one complete final gate. Repeat a broad suite only when changes or failures justify it. Avoid accumulating another independent validation archive or version for each small annotation.
 4. Freeze Vellum, models and file format during this release unless a blocker requires a change. Review Go boundaries and concurrency as part of touched-code review; defer general restructuring.
 5. When the checklist passes, package and hand off. Do not replace delivery with another set of unrelated improvements. After handoff, continue only the bounded fix queue and prepare the full-MVP validation work already required by the PRD.
+
+## Execution checkpoints
+
+- **October 17, package 1:** repaired LED reload, reconciled catalog/demo/guide, passed all 25 focused reload cases, full `scripts/check.sh`, and the public 18-template/seven-alias demo in fresh headless and native sessions. Both native test host and forwarding client exited normally. Canonical app remains unchanged. This closes command/startup behavior; physical input, layout, visible latency and owner acceptance remain open. Next action is package 2's actual UI walkthrough, not more schema annotations.
 
 ## After the alpha
 

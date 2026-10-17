@@ -28,7 +28,7 @@ def main():
         catalog = client.ask('examples.list')
         expected_ids = {'led', 'rc', 'npn', 'switch-npn', 'blink', 'flasher',
                         'rectifier', 'led-fade', 'nmos', 'pmos', 'cmos', 'split-supply', 'rc-high-pass',
-                        'rl', 'rlc', 'flyback'}
+                        'rl', 'rlc', 'flyback', 'opamp-follower', 'opamp-inverting'}
         assert expected_ids == {e['id'] for e in catalog} and client.ask('project.inspect') == before
         tested = []
         for info in catalog:
@@ -53,6 +53,23 @@ def main():
             if 'transient' in reset:
                 assert reset['transient']['sample']['time_s'] == 0 and not reset['transient']['stale']
             tested.append(info['id'])
+        aliases = {'example.reset': 'led', 'example.rc': 'rc', 'example.npn': 'npn',
+                   'example.npn-pulse': 'blink', 'example.flasher': 'flasher',
+                   'example.switch-npn': 'switch-npn', 'example.rectifier': 'rectifier'}
+        for command, example_id in aliases.items():
+            client.ask('example.load', {'id': example_id, 'discard_changes': True}, True)
+            client.ask('simulation.wait')
+            client.ask('simulation.pause', {}, True)
+            before_reload = client.ask('project.inspect')
+            client.ask(command, {'discard_changes': True}, True)
+            reloaded = client.ask('simulation.wait')
+            assert reloaded['run_id'] == before_reload['run_id'] + 1
+            assert reloaded['electrical_revision'] == before_reload['electrical_revision'] + 1
+            assert reloaded['document']['generation'] == before_reload['document']['generation'] + 1
+            assert not reloaded['paused'] and not reloaded['example']['modified']
+            assert reloaded['example']['info']['id'] == example_id
+            assert reloaded['components'] == before_reload['components'] and reloaded['wires'] == before_reload['wires']
+            assert any(reloaded.get(key) is not None for key in ('result', 'transient', 'npn', 'mixed'))
         client.ask('example.load', {'id': 'rc', 'discard_changes': True}, True)
         client.ask('simulation.pause', {}, True)
         client.ask('component.set', {'id': 'R1', 'value': '20k'}, True)
@@ -75,8 +92,10 @@ def main():
         client.ask('project.load', {'path': path, 'discard_changes': True}, True)
         final = client.ask('simulation.wait')
         assert final['paused'] and not final['document']['dirty'] and final['example']['info']['id'] == 'rc'
-        report = dict(passed=True, transport='packaged-native-private-socket' if args.connect else 'headless-stdio',
-                      templates=tested, checks=['read-only immutable guidance catalog', 'all shipped examples open running',
+        report = dict(passed=True, transport='native-private-socket' if args.connect else 'headless-stdio',
+                      templates=tested, legacy_loaders=aliases,
+                      checks=['read-only immutable guidance catalog', 'all shipped examples open running',
+                                              'all legacy loaders restart unchanged paused templates with fresh results',
                                               'edited circuit labeled against template expectation', 'unsaved reset refuses without mutation',
                                               'current reset restores exact template and fresh paused startup',
                                               'saved edited origin survives fresh reopen without trusted readings',

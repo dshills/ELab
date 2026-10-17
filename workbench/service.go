@@ -936,7 +936,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	changedDisplay := before.Display != s.displayPreferences
 	changedExample := before.ExampleID != s.exampleID
 	changedDocument := changedGraph || changedSettings || changedPins || changedDisplay || changedExample
-	forceRestart := r.Command == "example.load" || r.Command == "example.current.reset" || r.Command == "example.rc" || r.Command == "example.npn" || r.Command == "example.npn-pulse" || r.Command == "example.flasher" || r.Command == "example.switch-npn" || r.Command == "example.rectifier"
+	forceRestart := r.Command == "example.load" || r.Command == "example.current.reset" || legacyExampleID(r.Command) != ""
 	if changedDocument {
 		if changedGraph {
 			s.retainInterruptedDefaultProbesLocked(before.Graph)

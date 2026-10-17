@@ -4,6 +4,8 @@
 
 **Priority change, October 17:** The [first-version delivery plan](34-first-version-plan.md) now controls upcoming work: freeze features, repair entry points, complete the actual UI/agent workflow pass, qualify and promote one usable macOS alpha, then collect owner feedback. The remainder of this file is a historical implementation record, not the active release queue. Full PRD acceptance gates remain open.
 
+**Release package 1, October 17:** Reproduced and repaired the legacy LED loader clearing results without starting a fresh run when its template was unchanged. All 18 catalog reloads and seven legacy loaders now pass the focused regression. Updated the public demo and guide to the actual 18-template catalog, including both op-amp examples. Full lint/Python/root-native race/vet and fresh headless/native public demos pass. [Concise evidence](../docs/validation/first-version-examples/README.md). No new features, command IDs, file/model changes or canonical app promotion. Package 2's real UI pass is next; full PRD audit status is unchanged.
+
 ## Quality checkpoint and review
 
 The previously uncommitted implementation/research was checkpointed locally on `codex/mvp-continuation` (`8ef5cf4`). No changes were pushed. Subsequent green slices receive separate local commits so their scope is reviewable and reversible.

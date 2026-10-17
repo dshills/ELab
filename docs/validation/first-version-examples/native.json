@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "transport": "native-private-socket",
+  "templates": [
+    "led",
+    "split-supply",
+    "rc",
+    "rc-high-pass",
+    "rl",
+    "rlc",
+    "flyback",
+    "npn",
+    "switch-npn",
+    "pmos",
+    "nmos",
+    "cmos",
+    "opamp-follower",
+    "opamp-inverting",
+    "blink",
+    "flasher",
+    "led-fade",
+    "rectifier"
+  ],
+  "legacy_loaders": {
+    "example.reset": "led",
+    "example.rc": "rc",
+    "example.npn": "npn",
+    "example.npn-pulse": "blink",
+    "example.flasher": "flasher",
+    "example.switch-npn": "switch-npn",
+    "example.rectifier": "rectifier"
+  },
+  "checks": [
+    "read-only immutable guidance catalog",
+    "all shipped examples open running",
+    "all legacy loaders restart unchanged paused templates with fresh results",
+    "edited circuit labeled against template expectation",
+    "unsaved reset refuses without mutation",
+    "current reset restores exact template and fresh paused startup",
+    "saved edited origin survives fresh reopen without trusted readings",
+    "stale example/document reset guards",
+    "owned project ends clean and paused"
+  ],
+  "limitations": [
+    "template guidance describes expected template behavior, not guaranteed behavior of an edited circuit",
+    "origin is optional version-4 metadata; older readers lacking it refuse it",
+    "engineering guide/reset checks do not establish novice or accessibility qualification"
+  ]
+}

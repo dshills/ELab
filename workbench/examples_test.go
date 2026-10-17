@@ -9,6 +9,46 @@ import (
 	"testing"
 )
 
+func TestRepeatedExampleLoadsAlwaysStartFreshAfterPause(t *testing.T) {
+	cases := []struct{ command, id string }{
+		{"example.reset", "led"},
+		{"example.rc", "rc"},
+		{"example.npn", "npn"},
+		{"example.npn-pulse", "blink"},
+		{"example.flasher", "flasher"},
+		{"example.switch-npn", "switch-npn"},
+		{"example.rectifier", "rectifier"},
+	}
+	for _, info := range ExampleCatalog() {
+		cases = append(cases, struct{ command, id string }{"example.load", info.ID})
+	}
+	for _, tc := range cases {
+		t.Run(tc.command+"/"+tc.id, func(t *testing.T) {
+			s := New()
+			defer s.Close()
+			call(t, s, "example.load", ExampleLoadParams{ID: tc.id}, "load")
+			settled(t, s)
+			call(t, s, "simulation.pause", struct{}{}, "pause")
+			before := s.Snapshot()
+			var p any = ReplaceParams{DiscardChanges: true}
+			if tc.command == "example.load" {
+				p = ExampleLoadParams{ID: tc.id, DiscardChanges: true}
+			}
+			call(t, s, tc.command, p, "reload")
+			after := settled(t, s)
+			if after.RunID != before.RunID+1 || after.ElectricalRevision != before.ElectricalRevision+1 || after.Document.Generation != before.Document.Generation+1 || after.Paused {
+				t.Fatalf("repeated load did not start fresh: run %d→%d, electrical %d→%d, generation %d→%d, paused %v", before.RunID, after.RunID, before.ElectricalRevision, after.ElectricalRevision, before.Document.Generation, after.Document.Generation, after.Paused)
+			}
+			if after.Example == nil || after.Example.Info.ID != tc.id || after.Example.Modified || !reflect.DeepEqual(after.Components, before.Components) || !reflect.DeepEqual(after.Wires, before.Wires) {
+				t.Fatal("repeated load changed the template")
+			}
+			if after.Result == nil && after.Transient == nil && after.NPN == nil && after.Mixed == nil {
+				t.Fatal("repeated load lost simulation results")
+			}
+		})
+	}
+}
+
 func TestExampleCatalogAndProtectedResetTrackEveryTemplate(t *testing.T) {
 	for _, info := range ExampleCatalog() {
 		t.Run(info.ID, func(t *testing.T) {
