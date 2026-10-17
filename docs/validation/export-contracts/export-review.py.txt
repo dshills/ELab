@@ -1,0 +1,39 @@
+from pathlib import Path
+import hashlib,json,math,struct,xml.etree.ElementTree as ET
+root=Path.cwd();out=root/'build/export-contracts'
+reports=[json.loads((out/(t+'-final.json')).read_text()) for t in ['headless','native']]
+maximum_voltage=0.;maximum_current=0.;checks=0;fixtures={}
+for transport,report in zip(['headless','native'],reports):
+ assert report['passed'] and len(report['contracts'])==6 and len(report['atomic_refusals'])==4 and len(report['alias_outcomes'])==12
+ assert all(s['x-command-contract']['scope']=='captured-file-export' for s in report['contracts'].values())
+ assert {v['kind'] for v in report['alias_outcomes'] if 'kind' in v}=={'schematic-svg','schematic-pdf','schematic-png','scope-csv','verification-json','verification-csv','sweep-json','sweep-csv'}
+ assert all(v['code']=='invalid-params' for v in report['alias_outcomes'])
+ assets=out/(transport+'-final-assets');saved=json.loads((assets/'source.elab').read_text())
+ assert hashlib.sha256((assets/'source.elab').read_bytes()).hexdigest()==report['source_sha256']
+ assert saved['graph']['components']==report['live']['components'] and saved['graph']['wires']==report['live']['wires']
+ assert not report['live']['document']['dirty'] and report['live']['transient']['sample']['time_s']==.003
+ rows=report['capture_rows'];assert len(rows)==4 and [r['time_s'] for r in rows]==[0,.001,.002,.003]
+ record=json.loads((assets/'record.json').read_text());assert record['rows']==rows==saved['recordings']['entries'][0]['data']['rows']
+ assert record['metadata']==saved['recordings']['entries'][0]['data']['metadata']
+ assert len(saved['dc_sweeps']['entries'])==1
+ for row in rows:
+  at=row['time_s'];voltage=5*(-math.expm1(-at/.01));current=.0005*math.exp(-at/.01)
+  dv=abs(row['values'][0]-voltage);di=abs(row['values'][1]-current)
+  assert dv<1e-10 and di<1e-12,(transport,row,dv,di)
+  maximum_voltage=max(maximum_voltage,dv);maximum_current=max(maximum_current,di);checks+=2
+ assert len(report['files'])==4
+ for f in report['files']:
+  raw=(assets/f['name']).read_bytes();assert len(raw)==f['bytes'] and hashlib.sha256(raw).hexdigest()==f['sha256']
+  if f['name'].endswith('.svg'):ET.fromstring(raw)
+  if f['name'].endswith('.pdf'):assert raw.startswith(b'%PDF-')
+  if f['name'].endswith('.png'):assert raw[:8]==b'\x89PNG\r\n\x1a\n' and struct.unpack('>II',raw[16:24])==(792,612)
+ assert not list(assets.glob('.elab-export-*'))
+ assert report['page_reset']['paper']=='letter' and report['page_reset']['orientation']=='landscape' and report['page_reset']['margin_mm']==0
+for key in ['contracts','atomic_refusals','alias_outcomes','capture_rows','page_reset']:assert reports[0][key]==reports[1][key],key
+for key in ['components','wires','transient','mixed','npn','scope','run_id','electrical_revision']:assert reports[0]['live'][key]==reports[1]['live'][key],key
+result={'passed':True,'contracts_per_transport':6,'pure_page_refusals_per_transport':4,'alias_refusals_per_transport':12,
+        'all_eight_immediate_kinds_and_four_waiting_commands_protected':True,'successful_distinct_exports_per_transport':4,
+        'source_files_and_four_captured_rows_per_transport_preserved':True,'equal_contracts_alias_outcomes_rows_and_live_physics':True,
+        'rc_reference_checks':checks,'maximum_voltage_error_v':maximum_voltage,'maximum_current_error_a':maximum_current,
+        'rendered_file_checks':'SVG XML, PDF signature and 792x612 PNG with hashes; no fresh pixel/readability claim'}
+(out/'export-review.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

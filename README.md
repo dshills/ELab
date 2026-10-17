@@ -221,6 +221,8 @@ Save now captures the committed project and writes in the background; later edit
 
 Schematic SVG, live scope CSV and recorded JSON/CSV exports now encode/write a captured source in the background. Native controls and agents share job inspection and preparation cancellation. See [captured exports](docs/project-export.md).
 
+Shared export workers protect the saved schematic even when another path reaches it through a directory alias or same-file link. Filtered discovery documents six export/page controls, including complete page overrides, queued versus waiting completion and atomic file outcomes.
+
 Recorded-result import now validates in the background, preserves live editing and later viewer choices, and rechecks kept-record capacity before attachment. Users and agents share jobs/provenance/cancellation. See [record import](docs/project-import.md).
 
 Manual recovery refresh and checkpoint now run as shared background jobs, preserving selection, current edits and newer recovery lists. See [recovery work](docs/project-recovery-work.md).

@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/scripts/export-contracts-demo.py", line 147, in <module>
+    main()
+    ~~~~^^
+  File "/Users/dshills/Development/projects/ELab/scripts/export-contracts-demo.py", line 66, in main
+    settle_native_view(client);client.ask('view.pan', {'dx': 0, 'dy': 0}, True)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/Users/dshills/Development/projects/ELab/scripts/recovery_timing.py", line 133, in settle_native_view
+    assert time.monotonic() < deadline, 'native viewport did not finish initial allocation'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: native viewport did not finish initial allocation

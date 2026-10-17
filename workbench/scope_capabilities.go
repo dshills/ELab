@@ -72,6 +72,7 @@ func addScopeCapabilityDetails(id string, schema map[string]any) bool {
 		failure("conflict", "admission", "Parameter document-generation target changed")
 		failure("file-exists", "project_work", "Destination exists without explicit overwrite")
 		failure("file-conflict", "publication", "Captured destination identity/content changed before publication")
+		failure("invalid-params", "project_work", "Destination aliases the associated schematic; directory aliases and same-file identities are checked outside the editor mutex")
 		failure("file-error", "project_work", "Local file encoding/preparation/publication error; arbitrary OS causes are not exhaustive")
 		failure("canceled", "wait-or-project_work", "Caller wait ended without canceling admitted work, or exact work cancellation was requested")
 		contract.Completion = &commandCompletionDetail{Mode: "waiting alias for captured background scope-csv export; inspect terminal project_work/artifact outcome", Observe: []string{"project.work.inspect", "project.inspect", "simulation.wait", "events.poll"}, Cancel: "project.work.cancel", CooperativeDeadlineSeconds: 30}

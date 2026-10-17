@@ -1,0 +1,8 @@
+{
+  "notes": [
+    "Initial public-script creation used the desktop submodule working directory; shell refused its nonexistent scripts directory without writing a file. Retried at the project root. The separately started native focused test retained its original process handle.",
+    "Initial final native workflow timed out observing stable schematic allocation after opening the sweep plot. The fixture now explicitly hides the plot through sweep.visibility.set before observing the actual schematic viewport; records its pre-hide state. No runtime/Go/binary change.",
+    "Scratch native wrapper initially retained status running after a failed demo despite terminating/waiting its owned host. Original journal and terminal failure audit are retained; wrapper now records failure explicitly.",
+    "Pre-run schema inspection corrected the new diagnostic field to actual dc_sweep.visible. No invalid diagnostic access was executed. Final full quality and workflows use that actual field."
+  ]
+}

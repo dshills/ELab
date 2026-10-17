@@ -25,21 +25,22 @@ type ExportStartParams struct {
 	ExpectedGeneration *uint64        `json:"expected_document_generation,omitempty"`
 }
 type exportCapture struct {
-	previewData []byte
-	annotations []SourceAnnotation
-	settings    TransientSettings
-	page        schematicpdf.Page
-	kind        string
-	generation  uint64
-	overwrite   bool
-	graph       Graph
-	display     CircuitDisplay
-	readings    []PinnedReading
-	trace       *Transient
-	scope       Scope
-	record      *verificationRecord
-	sweep       *SweepRecord
-	artifact    Artifact
+	protectedPath string
+	previewData   []byte
+	annotations   []SourceAnnotation
+	settings      TransientSettings
+	page          schematicpdf.Page
+	kind          string
+	generation    uint64
+	overwrite     bool
+	graph         Graph
+	display       CircuitDisplay
+	readings      []PinnedReading
+	trace         *Transient
+	scope         Scope
+	record        *verificationRecord
+	sweep         *SweepRecord
+	artifact      Artifact
 }
 type projectExportFunc func(context.Context, exportCapture, func(string, int)) (*preparedFile, error)
 
@@ -201,6 +202,9 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 			return fmt.Errorf("export kind must be schematic-svg, schematic-pdf, schematic-png, scope-csv, verification-json, verification-csv, sweep-json or sweep-csv")
 		}
 	}
+	// Keep protection tied to this admission even for an older preview capture.
+	// Filesystem alias checks run in the worker, outside the editor mutex.
+	capture.protectedPath = s.documentPath
 	s.projectSerial++
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	job := &projectJob{ctx: ctx, cancel: cancel, done: make(chan struct{}), export: &capture, work: ProjectWork{ID: fmt.Sprintf("project-%d", s.projectSerial), Command: command, Status: "queued", Phase: "queued", Cancelable: true, Path: path, InputRevision: s.revision, CommandRevision: s.commandRevision + 1, DocumentGeneration: s.documentGeneration}}
@@ -212,6 +216,9 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 	return nil
 }
 func prepareProjectExport(ctx context.Context, capture exportCapture, progress func(string, int)) (*preparedFile, error) {
+	if err := checkExportDestination(capture.artifact.Path, capture.protectedPath); err != nil {
+		return nil, err
+	}
 	progress("encoding", 0)
 	if err := ctx.Err(); err != nil {
 		return nil, err
@@ -269,7 +276,10 @@ func (s *Service) runProjectExport(job *projectJob, prepare projectExportFunc, p
 		s.revision++
 		s.signalLocked("jobs")
 		s.mu.Unlock()
-		err = publish(prepared)
+		err = checkExportDestination(prepared.path, job.export.protectedPath)
+		if err == nil {
+			err = publish(prepared)
+		}
 		s.mu.Lock()
 	}
 	if prepared != nil {
@@ -306,6 +316,7 @@ func (s *Service) runProjectExport(job *projectJob, prepare projectExportFunc, p
 		job.work.Phase = "completed"
 	}
 	job.export.previewData = nil
+	job.export.protectedPath = ""
 	job.export.graph = Graph{}
 	job.export.trace = nil
 	job.export.record = nil

@@ -1,0 +1,1867 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "contracts": {
+    "export.page.set": {
+      "additionalProperties": false,
+      "examples": [
+        {}
+      ],
+      "properties": {
+        "color": {
+          "default": false,
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "margin_mm": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Omitted/null defaults to 10 mm; numeric zero is a valid zero margin.",
+          "maximum": 40,
+          "minimum": 0,
+          "x-unit": "mm"
+        },
+        "measurements": {
+          "default": false,
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "orientation": {
+          "default": "landscape",
+          "enum": [
+            "",
+            "portrait",
+            "landscape",
+            null
+          ],
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "overlap_mm": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Tiled overlap 0\u201320 mm; omitted/null defaults to 5 mm when tile is true. Nonzero overlap requires tile.",
+          "maximum": 20,
+          "minimum": 0,
+          "x-unit": "mm"
+        },
+        "paper": {
+          "default": "letter",
+          "enum": [
+            "",
+            "letter",
+            "a4",
+            null
+          ],
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scale": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Omitted/null fits a single page; explicit zero refuses. Tiling requires an explicit scale. Actual fit/page-count is checked during rendering.",
+          "maximum": 4,
+          "minimum": 0.1,
+          "x-unit": "PDF points per schematic unit"
+        },
+        "tile": {
+          "default": false,
+          "description": "Tile at explicit scale, up to 16 pages in row-major order. False retains single-page fit/clip refusal.",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-file-export",
+        "preconditions": [
+          "Object parameters; every field is optional. Page bounds and tiling/overlap relationships must hold; a complete circuit is not required"
+        ],
+        "effects": [
+          "Replace session PDF/PNG defaults, not a patch: omitted/null paper/orientation use letter/landscape, margin 10 mm, fit scale, grayscale/no measurement overlays and no tiling",
+          "snapshot.schematic_page exposes normalized settings. Defaults are not stored in circuit/recovery documents and do not dirty or alter graph, physics, history, selection or existing preview/export captures",
+          "An export's omitted/null page uses these defaults; a supplied page object replaces the defaults for that job. Validation here does not render or guarantee the chosen scale/layout will fit"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields, missing/null required fields, invalid path/kind/format/page parameters or incompatible options"
+          }
+        ],
+        "completion": {
+          "mode": "immediate session update",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-page-relations": [
+        "tile true requires explicit scale 0.1\u20134 points per schematic unit; no implicit shrinking",
+        "Each tile reserves an 18-point footer with page/grid/scale/overlap labels",
+        "Row-major complete viewBox coverage with overlap; at most 16 pages; oversized layouts fail before publication",
+        "PDF and print.submit include every page; multi-page PNG requires explicit zero-based page_index",
+        "Settings are session output choices; preserve graph, dirty state, simulation and history"
+      ]
+    },
+    "export.start": {
+      "additionalProperties": false,
+      "properties": {
+        "dpi": {
+          "anyOf": [
+            {
+              "const": 0
+            },
+            {
+              "maximum": 300,
+              "minimum": 72
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 150,
+          "description": "PNG: omitted/null/zero means 150 dpi; otherwise 72\u2013300. Nonzero refuses for other kinds.",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "expected_document_generation": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Omitted/null adds no parameter-level guard; supplied uint64 must equal snapshot.document.generation. Common envelope/retry guards remain separate."
+        },
+        "id": {
+          "description": "Omitted/null/empty means no recording ID. Verification/sweep kinds look up this value and return not-found when absent/unknown; other kinds reject a nonempty ID.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "schematic-svg",
+            "schematic-pdf",
+            "schematic-png",
+            "scope-csv",
+            "verification-json",
+            "verification-csv",
+            "sweep-json",
+            "sweep-csv"
+          ],
+          "type": "string"
+        },
+        "overwrite": {
+          "default": false,
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "page": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "color": {
+                  "default": false,
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "margin_mm": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "Omitted/null defaults to 10 mm; numeric zero is a valid zero margin.",
+                  "maximum": 40,
+                  "minimum": 0,
+                  "x-unit": "mm"
+                },
+                "measurements": {
+                  "default": false,
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "orientation": {
+                  "default": "landscape",
+                  "enum": [
+                    "",
+                    "portrait",
+                    "landscape",
+                    null
+                  ],
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "overlap_mm": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "Tiled overlap 0\u201320 mm; omitted/null defaults to 5 mm when tile is true. Nonzero overlap requires tile.",
+                  "maximum": 20,
+                  "minimum": 0,
+                  "x-unit": "mm"
+                },
+                "paper": {
+                  "default": "letter",
+                  "enum": [
+                    "",
+                    "letter",
+                    "a4",
+                    null
+                  ],
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "scale": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "Omitted/null fits a single page; explicit zero refuses. Tiling requires an explicit scale. Actual fit/page-count is checked during rendering.",
+                  "maximum": 4,
+                  "minimum": 0.1,
+                  "x-unit": "PDF points per schematic unit"
+                },
+                "tile": {
+                  "default": false,
+                  "description": "Tile at explicit scale, up to 16 pages in row-major order. False retains single-page fit/clip refusal.",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                }
+              },
+              "required": [],
+              "type": "object",
+              "x-page-relations": [
+                "tile true requires explicit scale 0.1\u20134 points per schematic unit; no implicit shrinking",
+                "Each tile reserves an 18-point footer with page/grid/scale/overlap labels",
+                "Row-major complete viewBox coverage with overlap; at most 16 pages; oversized layouts fail before publication",
+                "PDF and print.submit include every page; multi-page PNG requires explicit zero-based page_index",
+                "Settings are session output choices; preserve graph, dirty state, simulation and history"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Omitted/null uses snapshot.schematic_page; object is a complete per-job override with omitted fields reset to built-in defaults."
+        },
+        "page_index": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "minimum": 0
+        },
+        "path": {
+          "description": "Required non-null nonblank literal local path, no NUL; relative resolves with filepath.Abs. ~ and environment variables are not expanded; other spaces remain literal. No parent creation or automatic extension. Must differ from the associated schematic, including filesystem aliases.",
+          "maxLength": 4096,
+          "minLength": 1,
+          "type": "string",
+          "x-max-utf8-bytes": 4096
+        },
+        "preview_id": {
+          "description": "Optional nonempty exact visible completed preview ID exports its original selected PNG bytes, even after editor edits or later preview close; no renderer/page/index/dpi override. Omitted/null/empty selects a new live capture.",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "path"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-file-export",
+        "preconditions": [
+          "No active shared project operation and fewer than eight outstanding filesystem workers; canceling workers retain their slot",
+          "Valid destination and optional current document-generation guard; incomplete drawings may be exported without a successful solve"
+        ],
+        "effects": [
+          "Capture source at admission and perform encoding/destination checks/temp write/sync/publication outside the editor mutex; later graph, view, physics or recording choices cannot substitute their data",
+          "Preserve source file association/save point, current editor/selection/history/physics and kept membership; publish only job/artifact metadata. Runtime jobs are not saved",
+          "Exact associated path refuses at admission; parent-directory aliases and same-file identities refuse in worker preparation and are checked again before publication. Explicit overwrite never authorizes replacing the associated schematic",
+          "Existing regular destinations require overwrite=true. Recheck captured destination identity/content before rename; new targets publish exclusively. Reject final links/special files and oversized output; clean temp files before terminal completion",
+          "Source replacement/Close before publication supersedes work. Publishing is noncancelable and can finish after replacement, with original provenance and false associated_with_current_document; it cannot associate an export as the new project file",
+          "last_export and retained project work expose captured generation/run/electrical or record identity, byte count and SHA-256. Association describes completion time, not later editor/disk equality",
+          "Admission consumes the actor/retry key even after later file failure; use a new key for corrected intent. Identical immediate-start retries return original admission; waiting retries return the original terminal outcome without another write",
+          "Filesystem checks/rename are not compare-and-swap against arbitrary outside writers; blocked OS calls may outlast cooperative deadlines. Directory sync is best effort, not power-loss qualification",
+          "Scope kind captures fresh selected live rows/window/units even while recorded view is shown. Verification/sweep kinds capture retained complete immutable data and original metadata, independent of selection or later membership/view changes",
+          "PDF/PNG capture full drawing, ignoring viewport zoom/pan. Page.measurements opts into frozen live display/pinned readings with stale/unavailable labels. SVG always includes its captured display/readings",
+          "PDF includes all tiled pages; PNG requires page_index for a multi-page layout. Layout/page-index/16-page/12-megapixel/clip constraints are checked during rendering and can fail after admission",
+          "No printer job is submitted; printing has separate captured preview/spool controls"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields, missing/null required fields, invalid path/kind/format/page parameters or incompatible options"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "Active shared project operation or outstanding worker capacity"
+          },
+          {
+            "code": "conflict",
+            "phase": "admission",
+            "when": "Supplied document-generation guard differs"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "project_work",
+            "when": "Destination aliases the associated schematic, or encoded output exceeds 8 MiB"
+          },
+          {
+            "code": "file-exists",
+            "phase": "project_work",
+            "when": "Existing/newly created destination lacks overwrite consent"
+          },
+          {
+            "code": "file-conflict",
+            "phase": "publication",
+            "when": "Destination identity/content changed during preparation"
+          },
+          {
+            "code": "file-error",
+            "phase": "project_work",
+            "when": "Local IO/encoding/rendering/layout failure; OS causes are not exhaustive"
+          },
+          {
+            "code": "timeout",
+            "phase": "project_work",
+            "when": "Cooperative 30-second budget expires"
+          },
+          {
+            "code": "canceled",
+            "phase": "project_work",
+            "when": "Exact job canceled before publication"
+          },
+          {
+            "code": "superseded",
+            "phase": "project_work",
+            "when": "Captured publication no longer belongs to the current document/job before publication"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "scope-csv lacks fresh selected rows in a valid live interval"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Verification/sweep ID unknown or evicted"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "Selected retained asset has no completed capture, or exact preview PNG is not ready"
+          },
+          {
+            "code": "unsupported",
+            "phase": "admission",
+            "when": "PDF/PNG renderer unavailable on this platform/build"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "Nonempty preview ID is not the exact visible completed page"
+          }
+        ],
+        "completion": {
+          "mode": "immediate queued admission, not completion; inspect retained job by returned ID. project_work.command names the underlying export, not export.start",
+          "observe": [
+            "project.work.inspect",
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "project.work.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-kind-options": "Recording id required for verification/sweep; nonempty id refuses for schematic/scope. Non-null page only PDF/PNG, nonzero dpi only PNG, non-null page_index only PNG. Nonempty preview_id only exact completed visible PNG, with no id/page/page_index/nonzero dpi override.",
+      "x-phases": [
+        "queued",
+        "encoding",
+        "checking-destination",
+        "writing",
+        "publishing",
+        "cleanup",
+        "completed"
+      ],
+      "x-png-page-selection": "PNG only: zero-based page_index required for a multi-page layout; omitted selects the sole page. Out-of-range layout fails before publication.",
+      "x-preview-png": "PNG only: preview_id selects exact visible completed page bytes; no page/page_index/dpi or recording ID override. Retains original source/page identity, even after edits; export can finish after preview closes.",
+      "x-work-bounds": {
+        "cooperative_deadline_s": 30,
+        "max_encoded_bytes": 8388608,
+        "max_workers": 8,
+        "retained_jobs": 8
+      },
+      "x-work-inventory": "snapshot.project_work is latest only; retain returned ID and inspect project.work.inspect across terminal states until ordinary eight-job eviction"
+    },
+    "export.schematic.svg": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_document_generation": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Omitted/null adds no parameter-level guard; supplied uint64 must equal snapshot.document.generation. Common envelope/retry guards remain separate."
+        },
+        "overwrite": {
+          "default": false,
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "path": {
+          "description": "Required non-null nonblank literal local path, no NUL; relative resolves with filepath.Abs. ~ and environment variables are not expanded; other spaces remain literal. No parent creation or automatic extension. Must differ from the associated schematic, including filesystem aliases.",
+          "maxLength": 4096,
+          "minLength": 1,
+          "type": "string",
+          "x-max-utf8-bytes": 4096
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-file-export",
+        "preconditions": [
+          "No active shared project operation and fewer than eight outstanding filesystem workers; canceling workers retain their slot",
+          "Valid destination and optional current document-generation guard; incomplete drawings may be exported without a successful solve"
+        ],
+        "effects": [
+          "Capture source at admission and perform encoding/destination checks/temp write/sync/publication outside the editor mutex; later graph, view, physics or recording choices cannot substitute their data",
+          "Preserve source file association/save point, current editor/selection/history/physics and kept membership; publish only job/artifact metadata. Runtime jobs are not saved",
+          "Exact associated path refuses at admission; parent-directory aliases and same-file identities refuse in worker preparation and are checked again before publication. Explicit overwrite never authorizes replacing the associated schematic",
+          "Existing regular destinations require overwrite=true. Recheck captured destination identity/content before rename; new targets publish exclusively. Reject final links/special files and oversized output; clean temp files before terminal completion",
+          "Source replacement/Close before publication supersedes work. Publishing is noncancelable and can finish after replacement, with original provenance and false associated_with_current_document; it cannot associate an export as the new project file",
+          "last_export and retained project work expose captured generation/run/electrical or record identity, byte count and SHA-256. Association describes completion time, not later editor/disk equality",
+          "Admission consumes the actor/retry key even after later file failure; use a new key for corrected intent. Identical immediate-start retries return original admission; waiting retries return the original terminal outcome without another write",
+          "Filesystem checks/rename are not compare-and-swap against arbitrary outside writers; blocked OS calls may outlast cooperative deadlines. Directory sync is best effort, not power-loss qualification"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields, missing/null required fields, invalid path/kind/format/page parameters or incompatible options"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "Active shared project operation or outstanding worker capacity"
+          },
+          {
+            "code": "conflict",
+            "phase": "admission",
+            "when": "Supplied document-generation guard differs"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "project_work",
+            "when": "Destination aliases the associated schematic, or encoded output exceeds 8 MiB"
+          },
+          {
+            "code": "file-exists",
+            "phase": "project_work",
+            "when": "Existing/newly created destination lacks overwrite consent"
+          },
+          {
+            "code": "file-conflict",
+            "phase": "publication",
+            "when": "Destination identity/content changed during preparation"
+          },
+          {
+            "code": "file-error",
+            "phase": "project_work",
+            "when": "Local IO/encoding/rendering/layout failure; OS causes are not exhaustive"
+          },
+          {
+            "code": "timeout",
+            "phase": "project_work",
+            "when": "Cooperative 30-second budget expires"
+          },
+          {
+            "code": "canceled",
+            "phase": "project_work",
+            "when": "Exact job canceled before publication"
+          },
+          {
+            "code": "superseded",
+            "phase": "project_work",
+            "when": "Captured publication no longer belongs to the current document/job before publication"
+          },
+          {
+            "code": "canceled",
+            "phase": "wait",
+            "when": "Caller wait ends while admitted work continues"
+          },
+          {
+            "code": "operation-unavailable",
+            "phase": "wait",
+            "when": "Original admitted job expired"
+          }
+        ],
+        "completion": {
+          "mode": "waiting alias for the shared export job; terminal error includes owned job snapshot. Caller cancellation ends only the wait, not the admitted work",
+          "observe": [
+            "project.work.inspect",
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "project.work.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-phases": [
+        "queued",
+        "encoding",
+        "checking-destination",
+        "writing",
+        "publishing",
+        "cleanup",
+        "completed"
+      ],
+      "x-work-bounds": {
+        "cooperative_deadline_s": 30,
+        "max_encoded_bytes": 8388608,
+        "max_workers": 8,
+        "retained_jobs": 8
+      },
+      "x-work-inventory": "snapshot.project_work is latest only; retain returned ID and inspect project.work.inspect across terminal states until ordinary eight-job eviction"
+    },
+    "export.schematic.pdf": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_document_generation": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Omitted/null adds no parameter-level guard; supplied uint64 must equal snapshot.document.generation. Common envelope/retry guards remain separate."
+        },
+        "overwrite": {
+          "default": false,
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "page": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "color": {
+                  "default": false,
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "margin_mm": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "Omitted/null defaults to 10 mm; numeric zero is a valid zero margin.",
+                  "maximum": 40,
+                  "minimum": 0,
+                  "x-unit": "mm"
+                },
+                "measurements": {
+                  "default": false,
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "orientation": {
+                  "default": "landscape",
+                  "enum": [
+                    "",
+                    "portrait",
+                    "landscape",
+                    null
+                  ],
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "overlap_mm": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "Tiled overlap 0\u201320 mm; omitted/null defaults to 5 mm when tile is true. Nonzero overlap requires tile.",
+                  "maximum": 20,
+                  "minimum": 0,
+                  "x-unit": "mm"
+                },
+                "paper": {
+                  "default": "letter",
+                  "enum": [
+                    "",
+                    "letter",
+                    "a4",
+                    null
+                  ],
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "scale": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "Omitted/null fits a single page; explicit zero refuses. Tiling requires an explicit scale. Actual fit/page-count is checked during rendering.",
+                  "maximum": 4,
+                  "minimum": 0.1,
+                  "x-unit": "PDF points per schematic unit"
+                },
+                "tile": {
+                  "default": false,
+                  "description": "Tile at explicit scale, up to 16 pages in row-major order. False retains single-page fit/clip refusal.",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                }
+              },
+              "required": [],
+              "type": "object",
+              "x-page-relations": [
+                "tile true requires explicit scale 0.1\u20134 points per schematic unit; no implicit shrinking",
+                "Each tile reserves an 18-point footer with page/grid/scale/overlap labels",
+                "Row-major complete viewBox coverage with overlap; at most 16 pages; oversized layouts fail before publication",
+                "PDF and print.submit include every page; multi-page PNG requires explicit zero-based page_index",
+                "Settings are session output choices; preserve graph, dirty state, simulation and history"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Omitted/null uses snapshot.schematic_page; object is a complete per-job override with omitted fields reset to built-in defaults."
+        },
+        "path": {
+          "description": "Required non-null nonblank literal local path, no NUL; relative resolves with filepath.Abs. ~ and environment variables are not expanded; other spaces remain literal. No parent creation or automatic extension. Must differ from the associated schematic, including filesystem aliases.",
+          "maxLength": 4096,
+          "minLength": 1,
+          "type": "string",
+          "x-max-utf8-bytes": 4096
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-file-export",
+        "preconditions": [
+          "No active shared project operation and fewer than eight outstanding filesystem workers; canceling workers retain their slot",
+          "Valid destination and optional current document-generation guard; incomplete drawings may be exported without a successful solve"
+        ],
+        "effects": [
+          "Capture source at admission and perform encoding/destination checks/temp write/sync/publication outside the editor mutex; later graph, view, physics or recording choices cannot substitute their data",
+          "Preserve source file association/save point, current editor/selection/history/physics and kept membership; publish only job/artifact metadata. Runtime jobs are not saved",
+          "Exact associated path refuses at admission; parent-directory aliases and same-file identities refuse in worker preparation and are checked again before publication. Explicit overwrite never authorizes replacing the associated schematic",
+          "Existing regular destinations require overwrite=true. Recheck captured destination identity/content before rename; new targets publish exclusively. Reject final links/special files and oversized output; clean temp files before terminal completion",
+          "Source replacement/Close before publication supersedes work. Publishing is noncancelable and can finish after replacement, with original provenance and false associated_with_current_document; it cannot associate an export as the new project file",
+          "last_export and retained project work expose captured generation/run/electrical or record identity, byte count and SHA-256. Association describes completion time, not later editor/disk equality",
+          "Admission consumes the actor/retry key even after later file failure; use a new key for corrected intent. Identical immediate-start retries return original admission; waiting retries return the original terminal outcome without another write",
+          "Filesystem checks/rename are not compare-and-swap against arbitrary outside writers; blocked OS calls may outlast cooperative deadlines. Directory sync is best effort, not power-loss qualification",
+          "PDF/PNG capture full drawing, ignoring viewport zoom/pan. Page.measurements opts into frozen live display/pinned readings with stale/unavailable labels. SVG always includes its captured display/readings",
+          "PDF includes all tiled pages; PNG requires page_index for a multi-page layout. Layout/page-index/16-page/12-megapixel/clip constraints are checked during rendering and can fail after admission",
+          "No printer job is submitted; printing has separate captured preview/spool controls"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields, missing/null required fields, invalid path/kind/format/page parameters or incompatible options"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "Active shared project operation or outstanding worker capacity"
+          },
+          {
+            "code": "conflict",
+            "phase": "admission",
+            "when": "Supplied document-generation guard differs"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "project_work",
+            "when": "Destination aliases the associated schematic, or encoded output exceeds 8 MiB"
+          },
+          {
+            "code": "file-exists",
+            "phase": "project_work",
+            "when": "Existing/newly created destination lacks overwrite consent"
+          },
+          {
+            "code": "file-conflict",
+            "phase": "publication",
+            "when": "Destination identity/content changed during preparation"
+          },
+          {
+            "code": "file-error",
+            "phase": "project_work",
+            "when": "Local IO/encoding/rendering/layout failure; OS causes are not exhaustive"
+          },
+          {
+            "code": "timeout",
+            "phase": "project_work",
+            "when": "Cooperative 30-second budget expires"
+          },
+          {
+            "code": "canceled",
+            "phase": "project_work",
+            "when": "Exact job canceled before publication"
+          },
+          {
+            "code": "superseded",
+            "phase": "project_work",
+            "when": "Captured publication no longer belongs to the current document/job before publication"
+          },
+          {
+            "code": "canceled",
+            "phase": "wait",
+            "when": "Caller wait ends while admitted work continues"
+          },
+          {
+            "code": "operation-unavailable",
+            "phase": "wait",
+            "when": "Original admitted job expired"
+          },
+          {
+            "code": "unsupported",
+            "phase": "admission",
+            "when": "PDF/PNG renderer unavailable on this platform/build"
+          }
+        ],
+        "completion": {
+          "mode": "waiting alias for the shared export job; terminal error includes owned job snapshot. Caller cancellation ends only the wait, not the admitted work",
+          "observe": [
+            "project.work.inspect",
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "project.work.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-phases": [
+        "queued",
+        "encoding",
+        "checking-destination",
+        "writing",
+        "publishing",
+        "cleanup",
+        "completed"
+      ],
+      "x-work-bounds": {
+        "cooperative_deadline_s": 30,
+        "max_encoded_bytes": 8388608,
+        "max_workers": 8,
+        "retained_jobs": 8
+      },
+      "x-work-inventory": "snapshot.project_work is latest only; retain returned ID and inspect project.work.inspect across terminal states until ordinary eight-job eviction"
+    },
+    "export.schematic.png": {
+      "additionalProperties": false,
+      "properties": {
+        "dpi": {
+          "anyOf": [
+            {
+              "const": 0
+            },
+            {
+              "maximum": 300,
+              "minimum": 72
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 150,
+          "description": "PNG: omitted/null/zero means 150 dpi; otherwise 72\u2013300. Nonzero refuses for other kinds.",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "expected_document_generation": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Omitted/null adds no parameter-level guard; supplied uint64 must equal snapshot.document.generation. Common envelope/retry guards remain separate."
+        },
+        "overwrite": {
+          "default": false,
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "page": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "color": {
+                  "default": false,
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "margin_mm": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "Omitted/null defaults to 10 mm; numeric zero is a valid zero margin.",
+                  "maximum": 40,
+                  "minimum": 0,
+                  "x-unit": "mm"
+                },
+                "measurements": {
+                  "default": false,
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "orientation": {
+                  "default": "landscape",
+                  "enum": [
+                    "",
+                    "portrait",
+                    "landscape",
+                    null
+                  ],
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "overlap_mm": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "Tiled overlap 0\u201320 mm; omitted/null defaults to 5 mm when tile is true. Nonzero overlap requires tile.",
+                  "maximum": 20,
+                  "minimum": 0,
+                  "x-unit": "mm"
+                },
+                "paper": {
+                  "default": "letter",
+                  "enum": [
+                    "",
+                    "letter",
+                    "a4",
+                    null
+                  ],
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "scale": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "Omitted/null fits a single page; explicit zero refuses. Tiling requires an explicit scale. Actual fit/page-count is checked during rendering.",
+                  "maximum": 4,
+                  "minimum": 0.1,
+                  "x-unit": "PDF points per schematic unit"
+                },
+                "tile": {
+                  "default": false,
+                  "description": "Tile at explicit scale, up to 16 pages in row-major order. False retains single-page fit/clip refusal.",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                }
+              },
+              "required": [],
+              "type": "object",
+              "x-page-relations": [
+                "tile true requires explicit scale 0.1\u20134 points per schematic unit; no implicit shrinking",
+                "Each tile reserves an 18-point footer with page/grid/scale/overlap labels",
+                "Row-major complete viewBox coverage with overlap; at most 16 pages; oversized layouts fail before publication",
+                "PDF and print.submit include every page; multi-page PNG requires explicit zero-based page_index",
+                "Settings are session output choices; preserve graph, dirty state, simulation and history"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Omitted/null uses snapshot.schematic_page; object is a complete per-job override with omitted fields reset to built-in defaults."
+        },
+        "page_index": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "minimum": 0
+        },
+        "path": {
+          "description": "Required non-null nonblank literal local path, no NUL; relative resolves with filepath.Abs. ~ and environment variables are not expanded; other spaces remain literal. No parent creation or automatic extension. Must differ from the associated schematic, including filesystem aliases.",
+          "maxLength": 4096,
+          "minLength": 1,
+          "type": "string",
+          "x-max-utf8-bytes": 4096
+        },
+        "preview_id": {
+          "description": "Optional nonempty exact visible completed preview ID exports its original selected PNG bytes, even after editor edits or later preview close; no renderer/page/index/dpi override. Omitted/null/empty selects a new live capture.",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-file-export",
+        "preconditions": [
+          "No active shared project operation and fewer than eight outstanding filesystem workers; canceling workers retain their slot",
+          "Valid destination and optional current document-generation guard; incomplete drawings may be exported without a successful solve"
+        ],
+        "effects": [
+          "Capture source at admission and perform encoding/destination checks/temp write/sync/publication outside the editor mutex; later graph, view, physics or recording choices cannot substitute their data",
+          "Preserve source file association/save point, current editor/selection/history/physics and kept membership; publish only job/artifact metadata. Runtime jobs are not saved",
+          "Exact associated path refuses at admission; parent-directory aliases and same-file identities refuse in worker preparation and are checked again before publication. Explicit overwrite never authorizes replacing the associated schematic",
+          "Existing regular destinations require overwrite=true. Recheck captured destination identity/content before rename; new targets publish exclusively. Reject final links/special files and oversized output; clean temp files before terminal completion",
+          "Source replacement/Close before publication supersedes work. Publishing is noncancelable and can finish after replacement, with original provenance and false associated_with_current_document; it cannot associate an export as the new project file",
+          "last_export and retained project work expose captured generation/run/electrical or record identity, byte count and SHA-256. Association describes completion time, not later editor/disk equality",
+          "Admission consumes the actor/retry key even after later file failure; use a new key for corrected intent. Identical immediate-start retries return original admission; waiting retries return the original terminal outcome without another write",
+          "Filesystem checks/rename are not compare-and-swap against arbitrary outside writers; blocked OS calls may outlast cooperative deadlines. Directory sync is best effort, not power-loss qualification",
+          "PDF/PNG capture full drawing, ignoring viewport zoom/pan. Page.measurements opts into frozen live display/pinned readings with stale/unavailable labels. SVG always includes its captured display/readings",
+          "PDF includes all tiled pages; PNG requires page_index for a multi-page layout. Layout/page-index/16-page/12-megapixel/clip constraints are checked during rendering and can fail after admission",
+          "No printer job is submitted; printing has separate captured preview/spool controls"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields, missing/null required fields, invalid path/kind/format/page parameters or incompatible options"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "Active shared project operation or outstanding worker capacity"
+          },
+          {
+            "code": "conflict",
+            "phase": "admission",
+            "when": "Supplied document-generation guard differs"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "project_work",
+            "when": "Destination aliases the associated schematic, or encoded output exceeds 8 MiB"
+          },
+          {
+            "code": "file-exists",
+            "phase": "project_work",
+            "when": "Existing/newly created destination lacks overwrite consent"
+          },
+          {
+            "code": "file-conflict",
+            "phase": "publication",
+            "when": "Destination identity/content changed during preparation"
+          },
+          {
+            "code": "file-error",
+            "phase": "project_work",
+            "when": "Local IO/encoding/rendering/layout failure; OS causes are not exhaustive"
+          },
+          {
+            "code": "timeout",
+            "phase": "project_work",
+            "when": "Cooperative 30-second budget expires"
+          },
+          {
+            "code": "canceled",
+            "phase": "project_work",
+            "when": "Exact job canceled before publication"
+          },
+          {
+            "code": "superseded",
+            "phase": "project_work",
+            "when": "Captured publication no longer belongs to the current document/job before publication"
+          },
+          {
+            "code": "canceled",
+            "phase": "wait",
+            "when": "Caller wait ends while admitted work continues"
+          },
+          {
+            "code": "operation-unavailable",
+            "phase": "wait",
+            "when": "Original admitted job expired"
+          },
+          {
+            "code": "unsupported",
+            "phase": "admission",
+            "when": "PDF/PNG renderer unavailable on this platform/build"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "Nonempty preview ID is not the exact visible completed page"
+          }
+        ],
+        "completion": {
+          "mode": "waiting alias for the shared export job; terminal error includes owned job snapshot. Caller cancellation ends only the wait, not the admitted work",
+          "observe": [
+            "project.work.inspect",
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "project.work.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-phases": [
+        "queued",
+        "encoding",
+        "checking-destination",
+        "writing",
+        "publishing",
+        "cleanup",
+        "completed"
+      ],
+      "x-png-page-selection": "PNG only: zero-based page_index required for a multi-page layout; omitted selects the sole page. Out-of-range layout fails before publication.",
+      "x-preview-png": "PNG only: preview_id selects exact visible completed page bytes; no page/page_index/dpi or recording ID override. Retains original source/page identity, even after edits; export can finish after preview closes.",
+      "x-work-bounds": {
+        "cooperative_deadline_s": 30,
+        "max_encoded_bytes": 8388608,
+        "max_workers": 8,
+        "retained_jobs": 8
+      },
+      "x-work-inventory": "snapshot.project_work is latest only; retain returned ID and inspect project.work.inspect across terminal states until ordinary eight-job eviction"
+    },
+    "verification.export": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_document_generation": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Omitted/null adds no parameter-level guard; supplied uint64 must equal snapshot.document.generation. Common envelope/retry guards remain separate."
+        },
+        "format": {
+          "enum": [
+            "json",
+            "csv"
+          ],
+          "type": "string"
+        },
+        "id": {
+          "description": "Required non-null retained completed Verify/import/project recording ID; selection is irrelevant. Discover snapshot.operations and operation.inspect.",
+          "type": "string"
+        },
+        "overwrite": {
+          "default": false,
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "path": {
+          "description": "Required non-null nonblank literal local path, no NUL; relative resolves with filepath.Abs. ~ and environment variables are not expanded; other spaces remain literal. No parent creation or automatic extension. Must differ from the associated schematic, including filesystem aliases.",
+          "maxLength": 4096,
+          "minLength": 1,
+          "type": "string",
+          "x-max-utf8-bytes": 4096
+        }
+      },
+      "required": [
+        "id",
+        "path",
+        "format"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-file-export",
+        "preconditions": [
+          "No active shared project operation and fewer than eight outstanding filesystem workers; canceling workers retain their slot",
+          "Valid destination and optional current document-generation guard; incomplete drawings may be exported without a successful solve"
+        ],
+        "effects": [
+          "Capture source at admission and perform encoding/destination checks/temp write/sync/publication outside the editor mutex; later graph, view, physics or recording choices cannot substitute their data",
+          "Preserve source file association/save point, current editor/selection/history/physics and kept membership; publish only job/artifact metadata. Runtime jobs are not saved",
+          "Exact associated path refuses at admission; parent-directory aliases and same-file identities refuse in worker preparation and are checked again before publication. Explicit overwrite never authorizes replacing the associated schematic",
+          "Existing regular destinations require overwrite=true. Recheck captured destination identity/content before rename; new targets publish exclusively. Reject final links/special files and oversized output; clean temp files before terminal completion",
+          "Source replacement/Close before publication supersedes work. Publishing is noncancelable and can finish after replacement, with original provenance and false associated_with_current_document; it cannot associate an export as the new project file",
+          "last_export and retained project work expose captured generation/run/electrical or record identity, byte count and SHA-256. Association describes completion time, not later editor/disk equality",
+          "Admission consumes the actor/retry key even after later file failure; use a new key for corrected intent. Identical immediate-start retries return original admission; waiting retries return the original terminal outcome without another write",
+          "Filesystem checks/rename are not compare-and-swap against arbitrary outside writers; blocked OS calls may outlast cooperative deadlines. Directory sync is best effort, not power-loss qualification",
+          "JSON exports complete captured graph/models/settings/metadata and exact rows; CSV exports original SI channels and model/operation attribution. Viewer window/probe subset/cursors never trim exported data"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields, missing/null required fields, invalid path/kind/format/page parameters or incompatible options"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "Active shared project operation or outstanding worker capacity"
+          },
+          {
+            "code": "conflict",
+            "phase": "admission",
+            "when": "Supplied document-generation guard differs"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "project_work",
+            "when": "Destination aliases the associated schematic, or encoded output exceeds 8 MiB"
+          },
+          {
+            "code": "file-exists",
+            "phase": "project_work",
+            "when": "Existing/newly created destination lacks overwrite consent"
+          },
+          {
+            "code": "file-conflict",
+            "phase": "publication",
+            "when": "Destination identity/content changed during preparation"
+          },
+          {
+            "code": "file-error",
+            "phase": "project_work",
+            "when": "Local IO/encoding/rendering/layout failure; OS causes are not exhaustive"
+          },
+          {
+            "code": "timeout",
+            "phase": "project_work",
+            "when": "Cooperative 30-second budget expires"
+          },
+          {
+            "code": "canceled",
+            "phase": "project_work",
+            "when": "Exact job canceled before publication"
+          },
+          {
+            "code": "superseded",
+            "phase": "project_work",
+            "when": "Captured publication no longer belongs to the current document/job before publication"
+          },
+          {
+            "code": "canceled",
+            "phase": "wait",
+            "when": "Caller wait ends while admitted work continues"
+          },
+          {
+            "code": "operation-unavailable",
+            "phase": "wait",
+            "when": "Original admitted job expired"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "ID unknown/evicted"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "Retained operation has no completed recording"
+          }
+        ],
+        "completion": {
+          "mode": "waiting alias for the shared export job; terminal error includes owned job snapshot. Caller cancellation ends only the wait, not the admitted work",
+          "observe": [
+            "project.work.inspect",
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "project.work.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-phases": [
+        "queued",
+        "encoding",
+        "checking-destination",
+        "writing",
+        "publishing",
+        "cleanup",
+        "completed"
+      ],
+      "x-work-bounds": {
+        "cooperative_deadline_s": 30,
+        "max_encoded_bytes": 8388608,
+        "max_workers": 8,
+        "retained_jobs": 8
+      },
+      "x-work-inventory": "snapshot.project_work is latest only; retain returned ID and inspect project.work.inspect across terminal states until ordinary eight-job eviction"
+    }
+  },
+  "atomic_refusals": [
+    {
+      "command": "export.page.set",
+      "params": {
+        "tile": true
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "export.page.set",
+      "params": {
+        "scale": 0
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "export.page.set",
+      "params": {
+        "overlap_mm": 1
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "export.page.set",
+      "params": {
+        "paper": "legal"
+      },
+      "code": "invalid-params"
+    }
+  ],
+  "alias_outcomes": [
+    {
+      "kind": "schematic-svg",
+      "status": "failed",
+      "code": "invalid-params"
+    },
+    {
+      "kind": "schematic-pdf",
+      "status": "failed",
+      "code": "invalid-params"
+    },
+    {
+      "kind": "schematic-png",
+      "status": "failed",
+      "code": "invalid-params"
+    },
+    {
+      "kind": "scope-csv",
+      "status": "failed",
+      "code": "invalid-params"
+    },
+    {
+      "kind": "verification-json",
+      "status": "failed",
+      "code": "invalid-params"
+    },
+    {
+      "kind": "verification-csv",
+      "status": "failed",
+      "code": "invalid-params"
+    },
+    {
+      "kind": "sweep-json",
+      "status": "failed",
+      "code": "invalid-params"
+    },
+    {
+      "kind": "sweep-csv",
+      "status": "failed",
+      "code": "invalid-params"
+    },
+    {
+      "command": "export.schematic.svg",
+      "code": "invalid-params"
+    },
+    {
+      "command": "export.schematic.pdf",
+      "code": "invalid-params"
+    },
+    {
+      "command": "export.schematic.png",
+      "code": "invalid-params"
+    },
+    {
+      "command": "verification.export",
+      "code": "invalid-params"
+    }
+  ],
+  "files": [
+    {
+      "name": "schematic.svg",
+      "sha256": "9d09e0da1820c3093ba7fd2fe543e24290c65a15b7ad7d84cabdcb1952b264ce",
+      "bytes": 10031,
+      "format": "svg"
+    },
+    {
+      "name": "schematic.pdf",
+      "sha256": "e9359869a6113ca4a50e776dfb4b136d4f6fa8ef008192dbdb8db1676a394cd2",
+      "bytes": 21348,
+      "format": "pdf"
+    },
+    {
+      "name": "schematic.png",
+      "sha256": "acf5e76ec21bd2037416138049f33e7c07064457bd11c159b6236bbab9e8ba36",
+      "bytes": 36749,
+      "format": "png"
+    },
+    {
+      "name": "record.json",
+      "sha256": "a9ca96439b47ea44bff97a2288211e3dd65bf9936167de5ed25941808c4ea74d",
+      "bytes": 4096,
+      "format": "verification.json"
+    }
+  ],
+  "source_sha256": "349fcb47f329529f98a9aa774491f1acdc55a929c80283c9f78cf5d75cff8609",
+  "live": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "pulse-source",
+        "name": "Pulse source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-square.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -110
+        },
+        "value": 10000,
+        "unit": "\u03a9",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "C1",
+        "kind": "capacitor",
+        "name": "Capacitor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 1e-06,
+        "unit": "F",
+        "model": "ideal-capacitor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 110
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "C1.1",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "C1.2",
+        "to": "GND.reference",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "GND.reference",
+        "to": "V1.negative",
+        "connected": true
+      }
+    ],
+    "document": {
+      "preferences_dirty": false,
+      "schematic_dirty": false,
+      "recordings_dirty": false,
+      "recording_count": 2,
+      "path": "/Users/dshills/Development/projects/ELab/build/export-contracts/headless-initial-assets/source.elab",
+      "dirty": false,
+      "format_version": 5,
+      "generation": 2
+    },
+    "view": {
+      "center": {
+        "x": -130,
+        "y": 20
+      },
+      "zoom": 0.7
+    },
+    "transient": {
+      "engine": "elab.ideal-rc-exact.v1",
+      "run_id": 3,
+      "electrical_revision": 2,
+      "source_id": "V1",
+      "resistor_id": "R1",
+      "capacitor_id": "C1",
+      "output_net": "net:C1.1",
+      "time_constant_s": 0.01,
+      "settings": {
+        "step_s": 0.001,
+        "high_s": 0.05,
+        "low_s": 0.05,
+        "initial_voltage_v": 0,
+        "seconds_per_wall_second": 0.02
+      },
+      "input_mode": "auto",
+      "sample": {
+        "time_s": 0.003,
+        "input_v": 5,
+        "voltage_v": 1.2959088965914107,
+        "current_a": 0.00037040911034085894,
+        "energy_j": 8.396899341323838e-07
+      },
+      "samples": [
+        {
+          "time_s": 0,
+          "input_v": 5,
+          "voltage_v": 0,
+          "current_a": 0.0005,
+          "energy_j": 0
+        },
+        {
+          "time_s": 0.001,
+          "input_v": 5,
+          "voltage_v": 0.47581290982020213,
+          "current_a": 0.0004524187090179798,
+          "energy_j": 1.131989625757839e-07
+        },
+        {
+          "time_s": 0.002,
+          "input_v": 5,
+          "voltage_v": 0.9063462346100908,
+          "current_a": 0.0004093653765389909,
+          "energy_j": 4.1073174849594485e-07
+        },
+        {
+          "time_s": 0.003,
+          "input_v": 5,
+          "voltage_v": 1.2959088965914107,
+          "current_a": 0.00037040911034085894,
+          "energy_j": 8.396899341323838e-07
+        }
+      ],
+      "events": [
+        {
+          "time_s": 0,
+          "mode": "restart"
+        }
+      ],
+      "stale": false
+    },
+    "mixed": null,
+    "npn": null,
+    "scope": {
+      "window": {
+        "mode": "live",
+        "start_s": 0,
+        "end_s": 0.003
+      },
+      "window_valid": true,
+      "statistics": [
+        {
+          "probe_id": "v:C1",
+          "count": 4,
+          "min": 0,
+          "max": 1.2959088965914107,
+          "sample_mean": 0.669517010255426,
+          "sample_rms": 0.8257180648393593
+        },
+        {
+          "probe_id": "i:C1",
+          "count": 4,
+          "min": 0.00037040911034085894,
+          "max": 0.0005,
+          "sample_mean": 0.00043304829897445745,
+          "sample_rms": 0.00043573662021968956
+        }
+      ],
+      "available": [
+        {
+          "id": "v:V1.positive",
+          "label": "V1.positive / ground",
+          "unit": "V",
+          "positive": "V1.positive",
+          "reference": "ground"
+        },
+        {
+          "id": "v:V1.negative",
+          "label": "V1.negative / ground",
+          "unit": "V",
+          "positive": "V1.negative",
+          "reference": "ground"
+        },
+        {
+          "id": "v:V1",
+          "label": "V1 voltage",
+          "unit": "V",
+          "positive": "V1.positive",
+          "reference": "V1.negative"
+        },
+        {
+          "id": "i:V1",
+          "label": "V1 delivered current",
+          "unit": "A",
+          "positive": "V1.positive",
+          "reference": "out of positive"
+        },
+        {
+          "id": "v:R1.1",
+          "label": "R1.1 / ground",
+          "unit": "V",
+          "positive": "R1.1",
+          "reference": "ground"
+        },
+        {
+          "id": "v:R1.2",
+          "label": "R1.2 / ground",
+          "unit": "V",
+          "positive": "R1.2",
+          "reference": "ground"
+        },
+        {
+          "id": "v:R1",
+          "label": "R1 voltage",
+          "unit": "V",
+          "positive": "R1.1",
+          "reference": "R1.2"
+        },
+        {
+          "id": "i:R1",
+          "label": "R1 current",
+          "unit": "A",
+          "positive": "R1.1",
+          "reference": "R1.2"
+        },
+        {
+          "id": "v:C1.1",
+          "label": "C1.1 / ground",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "ground"
+        },
+        {
+          "id": "v:C1.2",
+          "label": "C1.2 / ground",
+          "unit": "V",
+          "positive": "C1.2",
+          "reference": "ground"
+        },
+        {
+          "id": "v:C1",
+          "label": "C1 voltage",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        {
+          "id": "i:C1",
+          "label": "C1 current",
+          "unit": "A",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        {
+          "id": "v:GND.reference",
+          "label": "GND.reference / ground",
+          "unit": "V",
+          "positive": "GND.reference",
+          "reference": "ground"
+        }
+      ],
+      "selected": [
+        "v:C1",
+        "i:C1"
+      ],
+      "traces": [
+        {
+          "probe": {
+            "id": "v:C1",
+            "label": "C1 voltage",
+            "unit": "V",
+            "positive": "C1.1",
+            "reference": "C1.2"
+          },
+          "points": [
+            {
+              "time_s": 0,
+              "value": 0
+            },
+            {
+              "time_s": 0.001,
+              "value": 0.47581290982020213
+            },
+            {
+              "time_s": 0.002,
+              "value": 0.9063462346100908
+            },
+            {
+              "time_s": 0.003,
+              "value": 1.2959088965914107
+            }
+          ]
+        },
+        {
+          "probe": {
+            "id": "i:C1",
+            "label": "C1 current",
+            "unit": "A",
+            "positive": "C1.1",
+            "reference": "C1.2"
+          },
+          "points": [
+            {
+              "time_s": 0,
+              "value": 0.0005
+            },
+            {
+              "time_s": 0.001,
+              "value": 0.0004524187090179798
+            },
+            {
+              "time_s": 0.002,
+              "value": 0.0004093653765389909
+            },
+            {
+              "time_s": 0.003,
+              "value": 0.00037040911034085894
+            }
+          ]
+        }
+      ],
+      "run_id": 3,
+      "stale": false,
+      "active_cursor": "a",
+      "readings": []
+    },
+    "undo_entry": {
+      "name": "example rc",
+      "actor": "agent.stdio",
+      "command_revision": 2
+    },
+    "redo_entry": null,
+    "run_id": 3,
+    "electrical_revision": 2
+  },
+  "capture_rows": [
+    {
+      "time_s": 0,
+      "values": [
+        0,
+        0.0005
+      ]
+    },
+    {
+      "time_s": 0.001,
+      "values": [
+        0.47581290982020213,
+        0.0004524187090179798
+      ]
+    },
+    {
+      "time_s": 0.002,
+      "values": [
+        0.9063462346100908,
+        0.0004093653765389909
+      ]
+    },
+    {
+      "time_s": 0.003,
+      "values": [
+        1.2959088965914107,
+        0.00037040911034085894
+      ]
+    }
+  ],
+  "page_reset": {
+    "paper": "letter",
+    "orientation": "landscape",
+    "margin_mm": 0
+  },
+  "limits": [
+    "Named owned-session callback/socket and file tests; no full physical typing/AX/printer or arbitrary filesystem race guarantee",
+    "Backend image magic/dimensions and valid PDF/SVG are not fresh pixel/readability qualification"
+  ]
+}

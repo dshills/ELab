@@ -147,6 +147,7 @@ func addSweepCapabilityDetails(id string, schema map[string]any) bool {
 		inputProperty(schema, "format")["enum"] = []string{"json", "csv"}
 		fail("not-ready", "admission", "Export requires a complete curve")
 		fail("file-exists", "work", "Destination already exists and overwrite is false")
+		fail("invalid-params", "work", "Destination aliases the associated schematic; checked during preparation and again before publication")
 		contract.Effects = append(contract.Effects, "Atomically exports captured data; never substitutes current editor state; does not associate destination as the project file")
 	case "sweep.import", "sweep.import.start":
 		file()
