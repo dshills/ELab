@@ -24,8 +24,8 @@ The wider implemented library stays available. Freeze Vellum, models, project fo
 
 - The editor, simulation, measurements, history, persistence, recovery and schematic output exist. NPN, NMOS and PMOS are implemented; more component breadth is unnecessary for this milestone.
 - UI reference tasks, minimum-window checks, reference user/agent parity and isolated copied-runtime checks established a private review boundary. [Evidence](ui-audit/first-version/README.md), [review walkthrough](35-first-version-review.md).
-- Review **0.124.0 /141** is packaged with its matching agent and examples. The canonical app remains **0.105.0 /120**; earlier review folders/windows are preserved. Packaging is not promotion.
-- **New blocker:** a longer native run found accumulated live-clock rounding that stops a valid pulsed capacity RC/MOSFET circuit near 1.1 s. The source repair passes real-clock regressions, the full quality gate and actual native interactions through **40.9 s**. It is **not included in /141**. [Repair receipt](ui-audit/first-version/live-clock-grid-checkpoint.json).
+- Corrected review **0.125.0 /142** is packaged with its matching agent and examples. The canonical app remains **0.105.0 /120**; earlier review folders/windows are preserved. Packaging is not promotion.
+- **Clock blocker closed for the review package:** 0.125.0 /142 is built cleanly from `f87b71f`. Its exact copied runtime passes smoke, four adapters, reference parity and pulse/Pause/Resume/save checks through 3.41 s. The source also has native interaction evidence through 40.9 s. The defective /141 is retained for rollback/history, not promoted. [Replacement receipt](ui-audit/first-version/corrected-review-checkpoint.json).
 - The full-PRD [audit](11-prd-implementation-audit.md) records 17 implemented /10 partial P0 requirements. These are evidence categories, not a completion percentage.
 
 ## Ordered work and finish criteria
@@ -34,12 +34,12 @@ The wider implemented library stays available. Freeze Vellum, models, project fo
 |---|---|---|---|
 | 1 | Stabilize startup/examples and core UI | Repeated catalog loads work; reference tasks use real controls; essential controls are reachable in both themes at the declared minimum size. | Private review boundary passed. Wider display/accessibility/input evidence remains open. |
 | 2 | Verify user/agent reference parity | Same components, connectivity, values and results; invalid edits, undo, files and crash recovery preserve work. | Reference pass completed; exhaustive mounted-action conformance remains open. |
-| 3 | Package the clock repair | Build one clean replacement app/agent from the repair commit. Exact copied runtime passes native smoke, public adapters, reference parity and the previously failing live pulse case. Record version/hashes and retain rollback. | **Next engineering deliverable.** Source checks pass; package/runtime qualification pending. |
-| 4 | Hand over the replacement | Explicit app path, matching agent, LED/RC/flasher projects, notices, known limits and the existing 15–20 minute walkthrough. | Earlier task sheet delivered; corrected package pending. Do not open over the owner's existing window. |
+| 3 | Package the clock repair | Build one clean replacement app/agent from the repair commit. Exact copied runtime passes native smoke, public adapters, reference parity and the previously failing live pulse case. Record version/hashes and retain rollback. | Complete for the corrected private review; exact runtime and acceptance pass. |
+| 4 | Hand over the replacement | Explicit app path, matching agent, LED/RC/flasher projects, notices, known limits and the existing 15–20 minute walkthrough. | Corrected app/agent/examples and task sheet delivered at the linked path. Owner window preserved; feedback pending. |
 | 5 | Resolve walkthrough failures and promote | No reproduced work loss, misleading result, blocked reference task or core parity defect. Complete supported-alpha gates below, or obtain explicit owner review of permitted private-alpha limitations. Promote once with rollback. | Owner feedback and remaining qualification pending. Waiting does not authorize feature expansion. |
 | 6 | Validate the broader MVP | Close original PRD accessibility, agent coverage, distribution, performance and actual hobbyist-study gates; correct observed failures. | Subsequent milestone, not claimed complete by the private alpha. |
 
-**Time box:** replacement packaging/qualification is one focused release session, budgeted at half an engineering day. If it fails, end that session with the named failing check, reproduction, smallest next action and revised estimate. If it passes, hand it over immediately. Owner acceptance and broader MVP dates depend on actual access and feedback; do not invent dates for those gates.
+**Time-box result:** replacement packaging/qualification completed in this focused release session; the corrected build and walkthrough are ready. Next is owner acceptance and the remaining qualification table below. Any new blocker gets a bounded reproduction/repair session and revised estimate if unresolved. Owner acceptance and broader MVP dates depend on actual access and feedback; do not invent dates for those gates.
 
 ## Acceptance tasks
 
@@ -58,7 +58,7 @@ Scripts alone do not establish native focus, typing, dialog or pointer behavior.
 
 | Issue | Severity and closure |
 |---|---|
-| Live pulse clock drifts into a sub-minimum integration gap | Correctness blocker. Source repair verified; **package open**. Close only after the exact replacement runtime crosses the old failure and reference regressions pass. [Before/after evidence](../docs/validation/live-clock-grid/README.md). |
+| Live pulse clock drifts into a sub-minimum integration gap | **Closed in 0.125.0 /142.** Exact copied runtime crosses the old failure, nonzero Resume/save checks and reference parity pass. [Before/after evidence](../docs/validation/live-clock-grid/README.md). |
 
 No other reproduced core-workflow blocker is currently recorded here. A 64-part/100-node dense topology reaches the existing 100 ms integration budget before a staged sample; graph and committed physics survive. Disclose this solver limit, and do not equate capacity limits with guaranteed convergence. The repaired 60-net topology does not qualify every difficult circuit.
 
@@ -68,13 +68,13 @@ New work loss, corrupted connectivity, misleading simulation, core user/agent mi
 
 | Gate | Existing evidence and remaining work |
 |---|---|
-| Quality/correctness | Clock source passes `scripts/check.sh`: lint/Staticcheck, 43 Python tests, root/native race and vet. Review touched concurrency/error/state ownership; no general restructuring. Exact replacement smoke and public-runtime checks still required. |
+| Quality/correctness | Clock source passes `scripts/check.sh`: lint/Staticcheck, 43 Python tests, root/native race and vet. Review touched concurrency/error/state ownership; no general restructuring. Exact replacement smoke, public-runtime and acceptance checks also pass. |
 | Layout/input | Both themes and app windows at 1280×800 and 1440×900 inspected. Enforced floor 1040×720 mounted units; observed native frame 1053×762 pixels. Core keyboard loop works. Actual OS display modes, monitor transitions, hardware, IME and fast human typing remain unqualified. |
 | Visible responsiveness | PRD targets: p95 edit acknowledgment 100 ms and first updated sample 500 ms. Need at least 20 eligible native observations per LED, RC and resistor-loaded NPN reference; flasher is extra stress. Include navigation/cancel/save/undo under difficult solves and cold routing. Backend capacity timings and functional UI runs do **not** establish event-to-pixel timing. Current capture method yields no eligible visible p95 cohort. Report unavailable measurement rather than an inferred pass. |
 | Files/recovery | Reference round-trip, failed saves, replacement decisions and controlled crash recovery have evidence. Retain it where unchanged; rerun package-specific file paths. Last manual saves must survive. |
 | Agent surface | Reference graph/numerical/state parity passes. Preserve capabilities, structured outcomes and retry/conflict/cancel behavior. Inventory drift and remaining mounted binding evidence remain explicit; reference parity is not exhaustive conformance. |
 | Accessibility | Native Cocoa inspector selector checks pass, but external snapshots can omit visible controls. Complete VoiceOver acceptance is open. Prepared OS-settings test awaits actual permission; a posted question is not approval. |
-| Packaging/distribution | Prior copied app/agent pass offline with repository/SDK/toolchain/cache reads and outbound IP denied. Repeat for replacement bytes; record version/hash. Clean account, other environments, signing/notarization and public distribution remain unqualified. |
+| Packaging/distribution | Prior copied app/agent pass offline with repository/SDK/toolchain/cache reads and outbound IP denied. Replacement bytes repeat this gate successfully; version/hash are in the replacement receipt. Clean account, other environments, signing/notarization and public distribution remain unqualified. |
 | Printing | Native submission of one LED page to the Brother queue completed as job 161. Actual paper, readability, margins, media and scale await owner inspection. Do not print more merely to fill evidence. |
 | Acceptance | Owner walkthrough feedback is pending. The original ten-person study with corrections remains a broader MVP gate. |
 

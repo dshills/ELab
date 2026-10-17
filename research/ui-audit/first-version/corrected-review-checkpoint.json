@@ -1,0 +1,167 @@
+{
+  "date": "2026-10-17",
+  "version": "0.125.0",
+  "build": "142",
+  "status": "corrected private owner-review alpha; supported-alpha promotion/full MVP remain open",
+  "source_commit": "f87b71f2f3ccd737ce9933e6a66d2688b25b7329",
+  "clean_build_vcs": true,
+  "native_sha256": "2c2c855970ac9ac6520efb2e11cf0f9788c026bc6b3435718494df24f0e4a1f2",
+  "agent_sha256": "b8e12442548a3c9ecb0f6bef435cc5d9edcdb3129ba43adbecf140ade20a6da0",
+  "canonical_promoted": false,
+  "previous_reviews_preserved": [
+    "0.123.0 /140: 113 manifest entries verified",
+    "0.124.0 /141: 126 manifest entries verified"
+  ],
+  "release_diff": [
+    "Live transient output grid anchored to committed launch origin and integer accepted-output count; discarded work does not consume a point",
+    "Two regression tests: real pulsed loaded-RC clock/independent voltage law and nonzero Resume origin"
+  ],
+  "release_review": {
+    "base_release_source": "b2f485bb4138a144a878a468a0abee3cfa223a39",
+    "replacement_source": "f87b71f2f3cc",
+    "scope": "All production Go/module changes since 0.124 reviewed",
+    "production_files": [
+      "workbench/transient.go"
+    ],
+    "findings": [],
+    "checks": [
+      "Output origin captured under service lock; counter is owned by one launched goroutine",
+      "Counter advances only after accepted successful sample; canceled/stale work consumes no grid point",
+      "Existing run/cancellation/actuation guards and stale diagnostic path retained",
+      "Resume anchors at committed sample time; no restart of circuit state",
+      "No module/SDK/model/format/tolerance/work-budget/command change"
+    ],
+    "verification": "Real-clock and nonzero-origin regressions plus complete check.sh gate passed before source commit; exact new runtime qualification tracked separately"
+  },
+  "quality": {
+    "source_gate": "scripts/check.sh pass: lint/Staticcheck, 43 Python, root/native race and vet",
+    "source_gate_record": "docs/validation/live-clock-grid/full-check.txt",
+    "native_race_seconds": 142.4,
+    "runtime": [
+      {
+        "name": "native-smoke",
+        "command": [
+          "/private/tmp/elab-first-version-142-runtime/native",
+          "--smoke",
+          "--smoke-timeout",
+          "2m"
+        ],
+        "status": "completed",
+        "exit_code": 0,
+        "elapsed_seconds": 39.836490082903765
+      },
+      {
+        "name": "public-suites",
+        "command": [
+          "/Users/dshills/Development/projects/ELab/build/first-version-142-tools/build/elab-conformance",
+          "--agent-binary",
+          "/private/tmp/elab-first-version-142-runtime/agent",
+          "--native-binary",
+          "/private/tmp/elab-first-version-142-runtime/native",
+          "--project-contract-suite",
+          "--electrical-suite",
+          "--inductor-suite",
+          "--opamp-suite",
+          "--opamp-storage-suite",
+          "--capacity-suite",
+          "--artifacts",
+          "/private/tmp/elab-first-version-142-runtime/public"
+        ],
+        "status": "completed",
+        "exit_code": 0,
+        "elapsed_seconds": 49.15038616606034
+      }
+    ],
+    "native_smoke_passed": true,
+    "four_public_adapters_passed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "scope": "exact copied 0.125.0 /142 native runtime with development-file/outbound-IP denial; public commands",
+    "reference_parity": {
+      "passed": true,
+      "cases": [
+        {
+          "task": "led",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "3fa7d62e283b88765cb8c9b07533254aa899516a8b72298d37121f61e916dd82",
+          "project_sha256": "96635fc0cd1ab4b13258373c4e5ed474dc3239dda4dfc37202cbce59324cc032"
+        },
+        {
+          "task": "rc",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "6380351c8c51640b0221969b97259cf49161989f300d4eb1b9bdcf885759e338",
+          "project_sha256": "4c86701997fb227c1f3f8e55b2e8ec613ca7a51d75b4061356cd51185203eadf"
+        },
+        {
+          "task": "flasher",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "b0dc7c61c9d757086937176d7cc8de1539e4cac82e8f95d5f9a00576cc62d4b8",
+          "project_sha256": "d62dba5123d42b3dbf76356a7c28411a46ab09678aad9aa72ec727889c9a7a95"
+        }
+      ],
+      "comparison": "Every component/wire field; every reported result field except run/electrical identities; numerical rel 1e-9 / abs 1e-12",
+      "limitations": [
+        "Native endpoint loading/observation does not replace the recorded physical UI construction walkthrough",
+        "File failure, crash recovery, cancellation and live interaction have separate acceptance checks"
+      ]
+    },
+    "live_grid": {
+      "first_time_s": 2.201,
+      "resume_origin_s": 2.201,
+      "second_time_s": 3.408,
+      "final_time_s": 3.41,
+      "paused_physics_stable": true,
+      "graph_settings_and_run_electrical_preserved": true,
+      "save_reopen_fresh": true
+    },
+    "limits": [
+      "Public command functionality; not new pointer/keyboard evidence or visible p95 qualification",
+      "Native physical interaction through 40.9 s is reused from the identical repaired source; this clean build has different metadata/hash"
+    ],
+    "native_host_closed_normally": true
+  },
+  "reused_evidence": [
+    "Original real-control drawing/theme/minimum-window/file/scope/recovery walkthroughs; only clock scheduling changed",
+    "Native controls exercised through 40.9 s on identical repaired source in private development build; hash differs from clean candidate",
+    "Earlier real printer job 161 completion; paper still uninspected"
+  ],
+  "open_gates": [
+    "owner walkthrough feedback",
+    "visible p95/native main-loop timing under difficult solves",
+    "VoiceOver, external accessibility completeness, IME/fast human typing",
+    "OS display modes, monitor transitions, other hardware",
+    "clean account, signing/notarization/public distribution/native rights",
+    "actual paper, margins, media, scale and device cancellation",
+    "broader mounted agent coverage and actual ten-person study"
+  ],
+  "known_solver_limit": "Dense 64-part/100-node fixture reaches existing 100 ms integration budget before staged sample; preserved committed graph/physics. Not a clock repair target.",
+  "sdk_models_tolerances_work_budget_format_commands_changed": false,
+  "packaging_notes": [
+    "First runtime attempt stopped before staging on three packager-help-generated Python bytecode entries. Preserved outside cache and full trusted pin reverified before successful retry. No SDK source changed.",
+    "Go stat-cache writes outside writable root reported EPERM but all builds completed; clean VCS metadata verified.",
+    "No paper printed or OS settings changed; owned acceptance host normal exit 0."
+  ],
+  "evidence_sha256": {
+    "docs/validation/first-version-142-runtime.json": "ab2dcff6a886da7e103d1658aafb77300b0aad8d2f8dbeeb8bf7a58924b0469c",
+    "docs/validation/first-version-142-public.json.gz": "38ff5b443ef77a2b75502f75a12e7c797eac08e8ab45fd9333f6fe25349c9f52",
+    "docs/validation/first-version-142-acceptance.json": "5b6c746bbb41fedf9cfe7e359147e14b4da94f99963c5a19c90d4eff196ce650",
+    "docs/validation/first-version-142-states.json.gz": "c736933f21c7d63d0611c07baabae402a38aa3befeb53bfcf60b9163734e1b9d"
+  },
+  "preservation_verified_at_handoff": {
+    "reviews": {
+      "0.123.0-140": 113,
+      "0.124.0-141": 126
+    },
+    "canonical_version": "0.105.0",
+    "canonical_build": "120",
+    "canonical_binary_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "owner_window": "not operated or closed"
+  }
+}
