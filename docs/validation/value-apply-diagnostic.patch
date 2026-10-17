@@ -1,9 +1,6 @@
 --- a/Vellum/drivers/cogent/build/upstream/system/driver/desktop/app.go
 +++ b/Vellum/drivers/cogent/build/upstream/system/driver/desktop/app.go
-@@ -41,6 +41,13 @@
- type NativeAttachment interface {
- 	Focus(bool)
- 	Close()
+@@ -43,0 +44,7 @@
 +}
 +
 +// NativeEventPositioner optionally supplies the position carried by the current
@@ -11,28 +8,15 @@
 +// It runs on the native event thread and must not reenter the UI.
 +type NativeEventPositioner interface {
 +	MouseEventPosition() (image.Point, bool)
- }
- 
- type App struct {
 --- a/Vellum/drivers/cogent/build/upstream/system/driver/desktop/event.go
 +++ b/Vellum/drivers/cogent/build/upstream/system/driver/desktop/event.go
-@@ -6,6 +6,7 @@
- 
- import (
- 	"image"
+@@ -8,0 +9 @@
 +	"log"
- 
- 	"cogentcore.org/core/base/fileinfo/mimedata"
- 	"cogentcore.org/core/events"
-@@ -76,8 +77,18 @@
- }
- 
- func (w *Window) CurMousePosPoint(gw *glfw.Window) image.Point {
+@@ -78,0 +80,3 @@
 +	if point, ok := w.nativeMouseEventPosition(); ok {
 +		return point
 +	}
- 	xp, yp := gw.GetCursorPos()
- 	return w.MousePosToPoint(xp, yp)
+@@ -80,0 +85,7 @@
 +}
 +
 +func (w *Window) nativeMouseEventPosition() (image.Point, bool) {
@@ -40,44 +24,17 @@
 +		return positioner.MouseEventPosition()
 +	}
 +	return image.Point{}, false
- }
- 
- func (w *Window) MousePosToPoint(x, y float64) image.Point {
-@@ -107,6 +118,7 @@
- 		but = events.Right
- 	}
- 	where := w.CurMousePosPoint(gw)
+@@ -109,0 +121 @@
 +	log.Printf("SDK-BUTTON type=%v point=%v mods=%v", typ, where, mods)
- 	w.Event.MouseButton(typ, but, where, mods)
- 	TheApp.SendEmptyEvent()
- }
 --- a/Vellum/drivers/cogent/accessibility_darwin.go
 +++ b/Vellum/drivers/cogent/accessibility_darwin.go
-@@ -7,6 +7,7 @@
- #cgo darwin LDFLAGS: -framework Cocoa
- #include <stdlib.h>
- #include <stdint.h>
+@@ -9,0 +10 @@
 +int vellumNativeMouseEventPosition(void *window, double *x, double *y);
- char *vellumAXScopedFixture(const char *json);
- char *vellumAXPayloadFixture(const char *json,int consume);
- char *vellumAXGridFixture(const char *json,const char *tableID,int column,int row);
-@@ -30,6 +31,7 @@
- 	"context"
- 	"encoding/json"
- 	"fmt"
+@@ -32,0 +34 @@
 +	"image"
- 	"math"
- 	"sync"
- 	"sync/atomic"
-@@ -41,10 +43,24 @@
- )
- 
- type accessibilityAttachment struct {
+@@ -43,0 +46 @@
 +	window *desktop.Window
- 	bridge *accessibilityBridge
- 	text   *textWindow
- }
- 
+@@ -47,0 +51,13 @@
 +func (n *accessibilityAttachment) MouseEventPosition() (image.Point, bool) {
 +	if n == nil || n.window == nil || n.window.Glw == nil {
 +		return image.Point{}, false
@@ -91,118 +48,47 @@
 +	fmt.Printf("SDK-POS %v\n", point)
 +	return point, true
 +}
- func (n *accessibilityAttachment) Focus(bool) {}
- func (n *accessibilityAttachment) Close() {
- 	if n.text != nil && n.text.native != nil {
-@@ -69,7 +85,7 @@
- 			C.vellumAXDetach(C.uint64_t(b.token))
- 			return nil, err
- 		}
+@@ -72 +88 @@
 -		return &accessibilityAttachment{bridge: b, text: text}, nil
 +		return &accessibilityAttachment{bridge: b, text: text, window: w}, nil
- 	}
- 	return nil
- }
 --- a/Vellum/drivers/cogent/build/upstream/core/events.go
 +++ b/Vellum/drivers/cogent/build/upstream/core/events.go
-@@ -400,6 +400,7 @@
- 	switch et {
- 	case events.MouseDown:
- 		if !tree.IsNil(press) {
+@@ -402,0 +403 @@
 +			fmt.Printf("CORE-PRESS down=%v ptr=%p pos=%v\n", press, press, e.Pos())
- 			em.press = press
- 			em.setAttend(press)
- 		}
-@@ -516,6 +517,7 @@
- 		}
- 		// if we have sent a long press start event, we don't send click
- 		// events (non-nil widget plus nil timer means we already sent)
+@@ -518,0 +520 @@
 +		fmt.Printf("CORE-RELEASE down=%v ptr=%p up=%v ptr=%p equal=%v pos=%v long=%v timer=%v selected=%v\n", em.press, em.press, up, up, em.press == up, e.Pos(), em.longPressWidget, em.longPressTimer, sc.selectedWidgetChan)
- 		if em.press == up && !tree.IsNil(up) && !(!tree.IsNil(em.longPressWidget) && em.longPressTimer == nil) {
- 			em.cancelLongPress()
- 			switch e.MouseButton() {
 --- a/Vellum/drivers/cogent/controls.go
 +++ b/Vellum/drivers/cogent/controls.go
-@@ -140,12 +140,14 @@
- 			}
- 		})
- 		button.OnClick(func(e events.Event) {
+@@ -142,0 +143 @@
 +			fmt.Printf("CONTROL-CLICK id=%s retired=%v disabled=%v action=%v\n", r.node.ID, c.retired, c.disabled, r.node.Activate != nil)
- 			if r.node.PlacementSource != nil && e.HasPos() {
- 				e.SetHandled()
- 				return
- 			}
- 			guard := placementActivationGuard(r)
- 			postControl(r, func() {
+@@ -148,0 +150 @@
 +				fmt.Printf("CONTROL-POST id=%s guard=%v retired=%v disabled=%v action=%v\n", r.node.ID, guard(), c.retired, c.disabled, r.node.Activate != nil)
- 				if guard() && !c.disabled && r.node.Activate != nil {
- 					r.node.Activate()
- 					c.a.Invalidate(c.window)
 --- a/ELab/desktop/main.go
 +++ b/ELab/desktop/main.go
-@@ -93,11 +93,14 @@
- 	if *smoke {
- 		// The full pixel-inspection fixture includes two distant reading cards.
- 		// Compact-window layout is inspected separately in the UI audit.
+@@ -96 +96 @@
 -		width, height = 1260, 1100
 +		width, height = 1040, 760
- 	}
- 	screen.window, err = a.OpenWindow(app.Window{ID: "main", Title: "ELab · Live electronics", Width: width, Height: height, View: screen.view, CloseRequest: screen.requestClose})
- 	if err != nil {
- 		return err
+@@ -100,0 +101,3 @@
 +	}
 +	screen.settleField = func(id string, done func(error)) error {
 +		return cogent.SettleTextField(a.Context(), a, "main", id, done)
- 	}
- 	screen.drawing.pointer = newPointerBridge(a, screen.window, screen.routeNativePointer)
- 	defer screen.drawing.pointer.close()
-@@ -159,7 +162,8 @@
- 			}
- 		}
- 	}()
+@@ -162 +165,2 @@
 -	smokeResult := make(chan error, 1)
 +	go liveInspectorProbe(a, screen)
 + smokeResult := make(chan error, 1)
- 	if *smoke {
- 		go func() { smokeResult <- nativeSmoke(a, screen, renderer, *smokeTimeout); a.Close() }()
- 	}
-@@ -206,6 +210,8 @@
- 	menuCommandRevision                 *uint64
- 	actionContext                       *actionContext
- 	fieldContext                        *actionContext
+@@ -208,0 +213,2 @@
 +	settleField                         func(string, func(error)) error
 +	pendingValueApply                   *valueApply
- }
- 
- func (s *screen) invoke(id string, p any) workbench.Response {
-@@ -231,6 +237,7 @@
- 		request.ExpectedDocumentGeneration = &generation[0]
- 	}
- 	result := s.service.Dispatch(context.Background(), request, "user")
+@@ -233,0 +240 @@
 + log.Printf("APP-INVOKE command=%s params=%s rev=%d generation=%v resultError=%+v stateRev=%d", id, raw, rev, generation, result.Error, s.service.Snapshot().CommandRevision)
- 	if result.Error != nil {
- 		s.errorMessage = result.Error.Message
- 		s.requestHelp = result.Help
 --- a/ELab/desktop/component_inspector.go
 +++ b/ELab/desktop/component_inspector.go
-@@ -41,7 +41,7 @@
- 	}
- 
- 	if part.Kind == "net-label" {
+@@ -44 +44 @@
 -		inspector = append(inspector, section("label-title", "Net label · exact matching"), ui.Node{ID: "value-entry", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "Net label name"}, Change: func(e ui.ChangeEvent) { s.invoke("editor.value.set", workbench.DraftParams{Value: e.Text}) }}, s.action("apply-value", "Apply label", "component.set", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value}), quiet("label-connectivity-help", "Names are case-sensitive. GND is a name; connect it to a ground symbol to establish the reference."))
 +		inspector = append(inspector, section("label-title", "Net label · exact matching"), ui.Node{ID: "value-entry", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "Net label name"}, Change: s.changeValueDraft}, s.valueApplyAction(state, part.ID, "Apply label"), quiet("label-connectivity-help", "Names are case-sensitive. GND is a name; connect it to a ground symbol to establish the reference."))
- 	}
- 	if workbench.IsConnectivityPrimitive(part.Kind) {
- 		for _, net := range state.Nets {
-@@ -53,7 +53,7 @@
- 		}
- 	}
- 	if part.Unit != "" {
+@@ -56 +56 @@
 -		inspector = append(inspector, section("value-title", "Value · "+part.Unit), ui.Node{ID: "value-entry", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "Component value", Help: "Use the shown part bounds and units, such as 2.2k Ω, 500 mV, or 1 µF"}, Change: func(e ui.ChangeEvent) { s.invoke("editor.value.set", workbench.DraftParams{Value: e.Text}) }}, buttonStyle(s.action("apply-value", "Apply value", "component.set", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value}), true))
 +		inspector = append(inspector, section("value-title", "Value · "+part.Unit), ui.Node{ID: "value-entry", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "Component value", Help: "Use the shown part bounds and units, such as 2.2k Ω, 500 mV, or 1 µF"}, Change: s.changeValueDraft}, buttonStyle(s.valueApplyAction(state, part.ID, "Apply value"), true))
- 		if domain, ok := workbench.ValueDomainForKind(part.Kind); ok {
- 			inspector = append(inspector, quiet("value-domain-range", domain.Range), quiet("value-domain-syntax", domain.Syntax))
- 			if domain.Relation != "" {
 --- /dev/null
 +++ b/ELab/desktop/value_apply.go
 @@ -0,0 +1,68 @@
@@ -276,19 +162,10 @@
 +}
 --- a/ELab/desktop/pointer_darwin.m
 +++ b/ELab/desktop/pointer_darwin.m
-@@ -20,6 +20,8 @@
-             // Use the location carried by this event. GLFW's button callback
-             // queries the current hardware cursor instead, which can differ
-             // after queued movement or targeted desktop automation.
+@@ -22,0 +23,2 @@
 +            NSPoint hardware = [window mouseLocationOutsideOfEventStream];
 +            NSLog(@"ELAB-POINTER event=(%.1f,%.1f) hardware=(%.1f,%.1f) phase=%d", point.x, point.y, hardware.x, hardware.y, phase);
-             int handled = goELabPointer(phase, point.x * scale, ([view bounds].size.height - point.y) * scale, phase == 3 ? [event scrollingDeltaY] : 0);
-             return handled ? nil : event;
-         }] retain];
-@@ -35,3 +37,28 @@
-     };
-     if ([NSThread isMainThread]) remove(); else dispatch_async(dispatch_get_main_queue(), remove);
- }
+@@ -37,0 +40,25 @@
 +
 +// A queued/targeted event need not match the current hardware cursor. Use only
 +// the current mouse event for this exact window; every other call falls back.
@@ -489,21 +366,12 @@
 +}
 --- a/ELab/desktop/smoke.go
 +++ b/ELab/desktop/smoke.go
-@@ -17,7 +17,7 @@
- 	"github.com/dshills/vellum/ui"
- )
- 
+@@ -20 +20 @@
 -func nativeSmoke(a *app.Application, s *screen, g *cogent.MeshCanvas, timeout time.Duration) (err error) {
 +func nativeSmokeFull(a *app.Application, s *screen, g *cogent.MeshCanvas, timeout time.Duration) (err error) {
- 	ctx, cancel := context.WithTimeout(a.Context(), timeout)
- 	defer cancel()
- 	stage := "construction and first GPU frame"
 --- a/ELab/desktop/go.mod
 +++ b/ELab/desktop/go.mod
-@@ -47,12 +47,12 @@
- )
- 
- replace (
+@@ -50,4 +50,4 @@
 -	cogentcore.org/core => ../../Vellum/drivers/cogent/build/upstream
 -	github.com/dshills/vellum => ../../Vellum
 -	github.com/dshills/vellum/drivers/cogent => ../../Vellum/drivers/cogent
@@ -512,9 +380,6 @@
 +	github.com/dshills/vellum => /Users/dshills/Development/projects/Vellum
 +	github.com/dshills/vellum/drivers/cogent => /Users/dshills/Development/projects/Vellum/drivers/cogent
 +	github.com/go-text/typesetting => /Users/dshills/Development/projects/Vellum/drivers/cogent/build/typesetting
- )
- 
- require github.com/dshills/elab v0.0.0
- 
+@@ -58 +58 @@
 -replace github.com/dshills/elab => ..
 +replace github.com/dshills/elab => /Users/dshills/Development/projects/ELab

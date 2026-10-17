@@ -2,7 +2,7 @@
   "elab_base": "2bfc347c5f536a98f45929868d4ac2a1e286a04f",
   "vellum_base": "f1b917892d70479b7a30a5854e61e41189fdda50",
   "patch": "docs/validation/value-apply-diagnostic.patch",
-  "patch_sha256": "48d5b0c3f3bae259aca925c802d4e2cb8551f8238460616a1407985170b6d76c",
+  "patch_sha256": "a1f627a91dff1aa3c7ab5d53131bf1170106ca4c410fd85f9d8ade5faad20cba",
   "compiled_files": {
     "Vellum/drivers/cogent/build/upstream/system/driver/desktop/app.go": {
       "base_sha256": "32326f74f0c8247766c6f0ccd4e67430991cff0b78f98938a956c0cd1e56a5be",
@@ -62,5 +62,6 @@
     }
   },
   "reconstruction_verified": true,
-  "omitted_unused_overlay": "drivers/cogent/accessibility_darwin.m: Go -overlay did not compile this Objective-C replacement. The actual helper was compiled in ELab/desktop/pointer_darwin.m."
+  "omitted_unused_overlay": "drivers/cogent/accessibility_darwin.m: Go -overlay did not compile this Objective-C replacement. The actual helper was compiled in ELab/desktop/pointer_darwin.m.",
+  "patch_format": "Zero-context unified diff preserves exact compiled inputs without context-line whitespace false positives."
 }

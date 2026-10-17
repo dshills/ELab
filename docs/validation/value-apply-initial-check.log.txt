@@ -1,0 +1,31 @@
+...............
+----------------------------------------------------------------------
+Ran 15 tests in 0.033s
+
+OK
+?   	github.com/dshills/elab/cmd/elab-agent	[no test files]
+?   	github.com/dshills/elab/cmd/elab-conformance	[no test files]
+?   	github.com/dshills/elab/cmd/elab-ui-audit	[no test files]
+ok  	github.com/dshills/elab/internal/conformance	63.206s
+ok  	github.com/dshills/elab/internal/printspool	(cached)
+ok  	github.com/dshills/elab/internal/schematicpdf	(cached)
+ok  	github.com/dshills/elab/internal/uiaudit	1.439s
+--- FAIL: TestSocketShutdownDrainsAdmittedReplyBeforeClosingConnections (0.00s)
+    socket_shutdown_test.go:39: listen unix /tmp/elab-api-1974013887/api.sock: bind: operation not permitted
+--- FAIL: TestSocketForcedCloseStillReleasesIdleConnections (0.00s)
+    socket_shutdown_test.go:84: listen unix /tmp/elab-api-3747854722/api.sock: bind: operation not permitted
+--- FAIL: TestStdioAndSocketShareCommands (0.00s)
+    transport_test.go:33: listen unix /tmp/elab-api-629361385/api.sock: bind: operation not permitted
+--- FAIL: TestSocketRefusesInvalidTokenAndExistingDescriptor (0.00s)
+    transport_test.go:77: listen unix /tmp/elab-api-2522752161/api.sock: bind: operation not permitted
+--- FAIL: TestEventObservationOverSocketDoesNotBlockControlAndStdioIdleParity (0.00s)
+    transport_test.go:113: listen unix /tmp/elab-api-1205425123/api.sock: bind: operation not permitted
+FAIL
+FAIL	github.com/dshills/elab/transport	0.329s
+--- FAIL: TestInductorLEDZeroCurrentStartup (0.12s)
+    inductor_test.go:332: series LED/coil did not start 1e-06 mixed integration exceeded its work budget: elapsed-time limit (8 attempted, maximum 512; 118.570 ms elapsed, maximum 100 ms); reduce sample step at 0 s, step 7.81e-09: ratio +Inf, errors <nil> / mixed integration exceeded its work budget: elapsed-time limit (7 attempted, maximum 512; 118.529 ms elapsed, maximum 100 ms); reduce sample step / <nil>
+--- FAIL: TestInductorLEDSmallAndLargeInductanceStartup (0.10s)
+    inductor_test.go:394: scaled LED startup 1e-06 mixed integration exceeded its work budget: elapsed-time limit (103 attempted, maximum 512; 100.042 ms elapsed, maximum 100 ms); reduce sample step at 6.2661427e-14 s, step 3.13e-14: ratio +Inf, errors <nil> / mixed integration exceeded its work budget: elapsed-time limit (102 attempted, maximum 512; 100.018 ms elapsed, maximum 100 ms); reduce sample step / <nil>
+FAIL
+FAIL	github.com/dshills/elab/workbench	65.273s
+FAIL
