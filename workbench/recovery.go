@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"reflect"
 	"time"
 )
 
@@ -57,52 +56,17 @@ func (s *Service) recoveryLoop(ctx context.Context, store *recoveryStore) {
 			s.mu.Unlock()
 			continue
 		}
-		capture := s.recoveryCaptureLocked()
+		capture := automaticRecoveryCapture{s.recoveryCaptureLocked(), s.recoveryCatalogRevision}
 		s.mu.Unlock()
 		last = time.Now()
-		id, savedAt, err := store.checkpoint(capture)
+		id, savedAt, err := store.checkpoint(capture.recoveryCapture)
 		candidates, problems, scanErr := store.scan()
 		if err == nil {
 			err = scanErr
 		}
-		// Filesystem work does not hold the editor lock. Late publication cannot
-		// replace a newer capture; the store guards per-document command revisions.
+		// Filesystem work does not hold the editor lock.
 		s.mu.Lock()
-		if s.closed || s.recoveryStore != store {
-			s.mu.Unlock()
-			return
-		}
-		if capture.commandRevision != s.commandRevision {
-			s.mu.Unlock()
-			continue
-		}
-		changed := false
-		if scanErr == nil && (!reflect.DeepEqual(candidates, s.recovery.Candidates) || !reflect.DeepEqual(problems, s.recovery.Problems)) {
-			s.recovery.Candidates, s.recovery.Problems = candidates, problems
-			s.normalizeRecoverySelectionLocked()
-			changed = true
-		}
-		if err != nil {
-			if s.recovery.Error != err.Error() {
-				s.recovery.Error = err.Error()
-				changed = true
-			}
-		} else {
-			if s.recovery.Error != "" {
-				s.recovery.Error = ""
-				changed = true
-			}
-			if id != "" {
-				s.recovery.LastSnapshot = id
-				s.recovery.LastSavedAt = savedAt
-				changed = true
-			}
-		}
-		if changed {
-			s.recoveryCatalogRevision++
-			s.revision++
-			s.signalLocked("recovery")
-		}
+		s.publishAutomaticRecoveryLocked(store, capture, recoveryWorkResult{id: id, savedAt: savedAt, candidates: candidates, problems: problems, scanError: scanErr}, err)
 		s.mu.Unlock()
 	}
 }

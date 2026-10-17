@@ -1,0 +1,25 @@
+=== RUN   TestReplacementDuringSaveRecoveryCleanupHasNoCurrentAssociation
+    project_save_test.go:288: project.save.start during blocked kernel: 1.596917ms
+    project_save_test.go:296: project.clear during blocked kernel: 1.132875ms
+--- PASS: TestReplacementDuringSaveRecoveryCleanupHasNoCurrentAssociation (0.07s)
+=== RUN   TestAutomaticRecoveryFailureAndRetrySurviveInterveningEdits
+--- PASS: TestAutomaticRecoveryFailureAndRetrySurviveInterveningEdits (0.06s)
+=== RUN   TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore
+=== RUN   TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/scan
+=== RUN   TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/save
+=== RUN   TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/reconfigure
+=== RUN   TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/close
+--- PASS: TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore (0.17s)
+    --- PASS: TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/scan (0.04s)
+    --- PASS: TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/save (0.04s)
+    --- PASS: TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/reconfigure (0.05s)
+    --- PASS: TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/close (0.03s)
+=== RUN   TestAutomaticRecoveryKeepsExplicitlyClearedSelection
+--- PASS: TestAutomaticRecoveryKeepsExplicitlyClearedSelection (0.03s)
+=== RUN   TestAutomaticRecoveryCannotResurrectRetiredCapsuleDuringEditedSaveCleanup
+    recovery_automatic_test.go:191: project.save.start during blocked kernel: 1.471208ms
+--- PASS: TestAutomaticRecoveryCannotResurrectRetiredCapsuleDuringEditedSaveCleanup (0.05s)
+=== RUN   TestRecoveryAutomaticCheckpointAndRetention
+--- PASS: TestRecoveryAutomaticCheckpointAndRetention (1.13s)
+PASS
+ok  	github.com/dshills/elab/workbench	2.898s

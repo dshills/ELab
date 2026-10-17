@@ -131,6 +131,10 @@ func (s *Service) runProjectSave(job *projectJob, prepare projectSaveFunc, publi
 		digest := sha256.Sum256(prepared.data)
 		job.work.ArtifactSHA256 = hex.EncodeToString(digest[:])
 		if associated && s.recoveryStore != nil {
+			// The saved baseline can retire capsules during unlocked cleanup.
+			// Fence older automatic observations now, even when a later edit
+			// prevents the cleanup result from updating the catalog itself.
+			s.recoveryCatalogRevision++
 			s.revision++
 			s.signalLocked("jobs", "project", "recovery")
 			capture := s.recoveryCaptureLocked()

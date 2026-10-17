@@ -277,4 +277,6 @@ Scopes now have [discoverable control contracts and bounded narrow-window clippi
 
 Recovery snapshots now distinguish [active, inactive and unverified owners](docs/recovery-ownership.md). An unreadable ownership record preserves another session's copy and blocks dismissal, while restoration as a new copy remains available through the same user/agent commands.
 
-[Repeated recovery timing](docs/recovery-timing.md) passes 240 paused/live native/headless measurements on the recorded workstation: maximum 2.544 s with ordinary two-second autosave, plus 20 complete crash restores. The existing app binaries remain unchanged.
+[Repeated recovery timing](docs/recovery-timing.md) passes 240 paused/live native/headless measurements on the recorded workstation: maximum 2.544 s with ordinary two-second autosave, plus 20 complete crash restores. That timing checkpoint used unchanged runtime binaries.
+
+[Automatic storage errors and retry results](docs/recovery-failure.md) now remain observable while you edit. Restoring available storage saves a complete recovery copy automatically, while later dirty edits, manual saves and newer recovery work keep their own state.

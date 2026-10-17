@@ -118,7 +118,7 @@
     },
     {
       "id": "FILE-02",
-      "evidence": "Atomic manual saves, conflict guards, private immutable recovery snapshots, process-crash and fault tests; tri-state lease ownership preserves foreign active/unknown capsules with preparation/commit refusal and native/headless copy restoration; 240 repeated paused/advancing automatic samples within five seconds and 20 complete process-crash restores on the recorded pilot workstation",
+      "evidence": "Atomic manual saves, conflict guards, private immutable recovery snapshots, process-crash and fault tests; tri-state lease ownership preserves foreign active/unknown capsules with preparation/commit refusal and native/headless copy restoration; 240 repeated paused/advancing automatic samples within five seconds and 20 complete process-crash restores on the recorded pilot workstation; automatic unavailable-directory errors/retries remain visible across edits, with stale catalog and edited manual-save cleanup fences, native status/detail checks and exact public recorded-RC preservation",
       "status": "implemented",
       "assessment": "Implemented tested process/filesystem behavior; no power-loss qualification claimed"
     },

@@ -1,0 +1,86 @@
+[
+  {
+    "name": "native-smoke",
+    "argv": [
+      "/Users/dshills/Development/projects/ELab/build/ELab-0.112.0-128-recovery-failure-candidate.app/Contents/MacOS/ELab",
+      "--smoke",
+      "--smoke-timeout",
+      "2m"
+    ],
+    "started_utc": "2026-10-17T12:56:34.514988+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 40.88666249997914,
+    "finished_utc": "2026-10-17T12:57:15.400418+00:00"
+  },
+  {
+    "name": "public-suites",
+    "argv": [
+      "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+      "--native-binary",
+      "/Users/dshills/Development/projects/ELab/build/ELab-0.112.0-128-recovery-failure-candidate.app/Contents/MacOS/ELab",
+      "--project-contract-suite",
+      "--electrical-suite",
+      "--inductor-suite",
+      "--opamp-suite",
+      "--opamp-storage-suite",
+      "--capacity-suite",
+      "--artifacts",
+      "/Users/dshills/Development/projects/ELab/build/recovery-failure/public-final"
+    ],
+    "started_utc": "2026-10-17T12:57:15.411852+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 50.33522075007204,
+    "finished_utc": "2026-10-17T12:58:05.856671+00:00"
+  },
+  {
+    "name": "headless-failure",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "-B",
+      "scripts/recovery-failure-demo.py",
+      "--output",
+      "/Users/dshills/Development/projects/ELab/build/recovery-failure/headless-final.json",
+      "--artifacts",
+      "/Users/dshills/Development/projects/ELab/build/recovery-failure/headless-final-assets"
+    ],
+    "started_utc": "2026-10-17T12:58:05.871483+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 7.165071667055599,
+    "finished_utc": "2026-10-17T12:58:13.036543+00:00"
+  },
+  {
+    "name": "ownership",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "-B",
+      "scripts/recovery-dismiss-demo.py",
+      "--output",
+      "/Users/dshills/Development/projects/ELab/build/recovery-failure/ownership-final.json",
+      "--artifacts",
+      "/Users/dshills/Development/projects/ELab/build/recovery-failure/ownership-final-assets"
+    ],
+    "started_utc": "2026-10-17T12:58:13.051368+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 0.1510541250463575,
+    "finished_utc": "2026-10-17T12:58:13.202423+00:00"
+  },
+  {
+    "name": "crash-recovery",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "-B",
+      "scripts/recovery-demo.py",
+      "--output",
+      "/Users/dshills/Development/projects/ELab/build/recovery-failure/crash-final.json"
+    ],
+    "started_utc": "2026-10-17T12:58:13.212759+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 2.180500749964267,
+    "finished_utc": "2026-10-17T12:58:15.393258+00:00"
+  }
+]

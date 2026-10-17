@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "ordinary_interval_s": 2,
+  "failure_visible_s": 2.4641172079136595,
+  "automatic_retry_s": 2.5342259160242975,
+  "edits_during_fault": 40,
+  "error": "fdopendir /Users/dshills/Development/projects/ELab/build/recovery-failure/headless-initial-assets/recovery: not a directory",
+  "last_good_capsule_sha256": "dd0102b78218a94582fbaf718faa147de1ee3f19ace948d87025b00a1580a43d",
+  "retry_capsule_sha256": "b1ac3f328ee064ff3bc028682f7edb8781026b4621ef7814d21abbc978ca2b52",
+  "manual_source_sha256": "9e977a10e97e690fd72bfeddb8127429635832ef86cbe481feb5e20c1761fa6d",
+  "recorded_rows": 209,
+  "manual_source_and_previous_capsule_unchanged": true,
+  "retry_document_exact": true,
+  "checks": [
+    "actual interrupted private storage",
+    "automatic error during repeated editing",
+    "no manual checkpoint/scan for failure or retry",
+    "latest dirty graph and full kept record saved automatically",
+    "manual source and last complete capsule unchanged",
+    "editor/history/physics preserved by status publication"
+  ],
+  "limits": [
+    "Owned cooperating filesystem fault on this workstation; not power-loss/hostile-filesystem qualification",
+    "Controlled core tests separately force an edit exactly between filesystem preparation and publication"
+  ]
+}

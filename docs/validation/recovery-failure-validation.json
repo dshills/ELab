@@ -1,0 +1,302 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T13:01:27.300647+00:00",
+  "reference_configuration": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "processor": "Apple M4 Pro",
+    "logical_cpus": 14,
+    "memory_bytes": 68719476736,
+    "go_toolchain": "go version go1.27.2 darwin/arm64"
+  },
+  "scope": "Repair automatic storage status lost across ordinary edits; actual owned unavailable-directory failure/retry through headless/native plus protected stale-publication tests",
+  "source_parent_commit": "29cc1454fa37d5864ab238955435da61c59f85b3",
+  "source_index": "docs/validation/recovery-failure/source-freeze.json",
+  "source_frozen_files": 689,
+  "source_stable": true,
+  "binary_sha256": {
+    "build/elab": "03adb5acd0a43df89e3d36a5142bca573103dfc7faf1c3802e0f0d4a93220093",
+    "build/elab-agent": "86e300df550d0da43edeb52065d176eba387c3ecd5fb890a28fcf5e3fc94c116",
+    "build/elab-conformance": "e0fbc2109cd11cef1da76eb3c0a218b9a2dc5313bc1a4ac2193e9fbfc33dcdbb",
+    "build/elab-ui-audit": "bf00b24acbef3a064876f6da6cd66c2eb76d2cf28e065e37f8aedd1c205d3eab",
+    "build/ELab-0.112.0-128-recovery-failure-candidate.app/Contents/MacOS/ELab": "03adb5acd0a43df89e3d36a5142bca573103dfc7faf1c3802e0f0d4a93220093"
+  },
+  "candidate": "build/ELab-0.112.0-128-recovery-failure-candidate.app",
+  "candidate_promoted": false,
+  "original_regression_failure": "docs/validation/recovery-failure/before.log.txt",
+  "new_application_commands": 0,
+  "existing_commands": 162,
+  "edited_save_cleanup_regression_failure": "docs/validation/recovery-failure/save-fence-before.log.txt",
+  "save_baseline_fences_older_automatic_observations_before_unlocked_cleanup": true,
+  "scheduler_writer_models_methods_limits_file_versions_unchanged": true,
+  "quality": {
+    "lint_imports_staticcheck": true,
+    "python_tests": 37,
+    "root_native_race_and_vet": true
+  },
+  "process_quality": [
+    {
+      "name": "build",
+      "argv": [
+        "./scripts/build.sh"
+      ],
+      "started_utc": "2026-10-17T12:49:37.849607+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 7.588648917037062,
+      "finished_utc": "2026-10-17T12:49:45.438028+00:00"
+    },
+    {
+      "name": "quality",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T12:49:45.448962+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 366.7052440829575,
+      "finished_utc": "2026-10-17T12:55:52.143142+00:00"
+    }
+  ],
+  "process_public": [
+    {
+      "name": "native-smoke",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.112.0-128-recovery-failure-candidate.app/Contents/MacOS/ELab",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "started_utc": "2026-10-17T12:56:34.514988+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 40.88666249997914,
+      "finished_utc": "2026-10-17T12:57:15.400418+00:00"
+    },
+    {
+      "name": "public-suites",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+        "--native-binary",
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.112.0-128-recovery-failure-candidate.app/Contents/MacOS/ELab",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recovery-failure/public-final"
+      ],
+      "started_utc": "2026-10-17T12:57:15.411852+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 50.33522075007204,
+      "finished_utc": "2026-10-17T12:58:05.856671+00:00"
+    },
+    {
+      "name": "headless-failure",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/recovery-failure-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/recovery-failure/headless-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recovery-failure/headless-final-assets"
+      ],
+      "started_utc": "2026-10-17T12:58:05.871483+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 7.165071667055599,
+      "finished_utc": "2026-10-17T12:58:13.036543+00:00"
+    },
+    {
+      "name": "ownership",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/recovery-dismiss-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/recovery-failure/ownership-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recovery-failure/ownership-final-assets"
+      ],
+      "started_utc": "2026-10-17T12:58:13.051368+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 0.1510541250463575,
+      "finished_utc": "2026-10-17T12:58:13.202423+00:00"
+    },
+    {
+      "name": "crash-recovery",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/recovery-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/recovery-failure/crash-final.json"
+      ],
+      "started_utc": "2026-10-17T12:58:13.212759+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 2.180500749964267,
+      "finished_utc": "2026-10-17T12:58:15.393258+00:00"
+    }
+  ],
+  "native_workflow": {
+    "started_utc": "2026-10-17T12:58:27.771171+00:00",
+    "status": "completed",
+    "owned_pid": 98802,
+    "demo_exit_code": 0,
+    "native_exit_code": 0,
+    "elapsed_seconds": 7.373873958014883,
+    "finished_utc": "2026-10-17T12:58:35.145153+00:00"
+  },
+  "public_failure_retry": [
+    {
+      "transport": "headless-stdio",
+      "ordinary_interval_s": 2,
+      "failure_visible_s": 2.456018583034165,
+      "automatic_retry_s": 2.53222191601526,
+      "edits_during_fault": 45,
+      "recorded_rows": 209
+    },
+    {
+      "transport": "native-socket",
+      "ordinary_interval_s": 2,
+      "failure_visible_s": 1.9708264160435647,
+      "automatic_retry_s": 2.554919125046581,
+      "edits_during_fault": 36,
+      "recorded_rows": 209
+    }
+  ],
+  "automatic_failure_and_retry_preserve_explicit_save_and_previous_capsule": true,
+  "retry_contains_exact_latest_dirty_graph_and_original_records": true,
+  "controlled_intervening_edit_and_stale_catalog_save_configuration_close_tests": true,
+  "native_actual_background_descriptor_status_error_and_clear_test": true,
+  "four_adapter_numerical_checks": 27596,
+  "four_adapter_project_workflow_checks": 44,
+  "four_adapter_project_snapshots": 56,
+  "native_smoke_stages": 45,
+  "ownership_transitions_and_existing_sigkill_recovery_pass": true,
+  "typed_raw_gzip_report_review_equal": true,
+  "sdk_verified": {
+    "passed": true,
+    "source": "aa9d023243a6bded514c3d9696c08a9c917119c4",
+    "archive_sha256": "22b086442570641e4ae56e9937dd6483c26f92cde953f3aa3fc11811710ed7c5"
+  },
+  "native_inventory": {
+    "production_sources": 57,
+    "sites": 388,
+    "public_commands": 162,
+    "production_hashes_unchanged": true
+  },
+  "preserved_bundle_trees": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7
+    }
+  },
+  "fixture_files": {
+    "docs/validation/recovery-failure/fixtures/headless/manual-source.elab": "948efcc2a3304af0a31630ddeb82c62f8da85db01b27f7a13553a5087713b832",
+    "docs/validation/recovery-failure/fixtures/headless/last-good.elab-recovery": "e1fdc0d8442697cc598032c1eebcb95f5175f306f01438d5c42e9afd04d44dbd",
+    "docs/validation/recovery-failure/fixtures/headless/retry.elab-recovery": "96d4c61ad0040520f63580bfe76607db0c2242dbfb43e47f67e817295a90da69",
+    "docs/validation/recovery-failure/fixtures/headless/failure-state.json": "2028a06e550388675e69acb0023fc399be3ec5ea955903c68afba64fda774f05",
+    "docs/validation/recovery-failure/fixtures/headless/retry-state.json": "f895b0cdc5714540d53d57bcca7110b234a83feb9924e8b30356b7b5c735a3a2",
+    "docs/validation/recovery-failure/fixtures/native/manual-source.elab": "1f48a566f5a31fa8720db103d390b16d009a63450995e83032caf82aa93f9177",
+    "docs/validation/recovery-failure/fixtures/native/last-good.elab-recovery": "8407e70ef714ab44b20dcec3b181d6981b0140992c3d8691ba895fff7eba94be",
+    "docs/validation/recovery-failure/fixtures/native/retry.elab-recovery": "128ca24e3ce6935e0e3bb5b198afd13cb66676813c3192df321eb1248f3d93a9",
+    "docs/validation/recovery-failure/fixtures/native/failure-state.json": "13488ac5c50c62b663502258c24a596f6ad6c13c8060d00eccb4cdfa1311022c",
+    "docs/validation/recovery-failure/fixtures/native/retry-state.json": "3c1a284cdd1a70d350a3a9749801c35bd3c71fea6d7e6bb16d8577f2e6433e56"
+  },
+  "report_encoding": {
+    "conformance-report.json.gz": {
+      "decoded_bytes": 18203681,
+      "decoded_sha256": "cc6904597874e61bc5f084bba9f1303ca2e01d206fe98363e367657f0ce6873b",
+      "gzip_bytes": 1660174,
+      "gzip_sha256": "fc9bc4f9dea9f1ef4e0f95b10173bb2f6180c22f9b6119633fdce8c6ee13d4ae"
+    },
+    "headless-failure.json.gz": {
+      "decoded_bytes": 1312,
+      "decoded_sha256": "ced785f3f24f947dd59575023acf237e22dbba59b60e1284c0bafc99f65595e7",
+      "gzip_bytes": 747,
+      "gzip_sha256": "07ac2d943ec3a235e27fbd6c3a2b7dab1875cb91a4aa1715b1f297b0ca6dcb39"
+    },
+    "native-failure.json.gz": {
+      "decoded_bytes": 1311,
+      "decoded_sha256": "a5a758da0786882c466645569a4bd1f91639639f934ddabaa6c8e7f65cbb1264",
+      "gzip_bytes": 748,
+      "gzip_sha256": "a258edfa70f1b20c6bb151b978d70744a2d6cd8294776253c8a0668a623e00c3"
+    }
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "setup_corrections": [
+    "The first replacement-store fixture reused the configure retry key, then supplied a nonprivate TempDir. Final tests use a new key and explicit 0700 permissions; production protections remain unchanged.",
+    "An early focused native invocation created an owned nested Go cache, included in initial quality. After that run finished, the cache was preserved under build and the edited-Save fence was added. Final quality uses 689 stable code-only inputs."
+  ],
+  "limitations": [
+    "Public fault evidence is a cooperating unavailable-directory interruption of an owned recorded RC fixture on this workstation; not every storage/device fault, hostile writer or power-loss behavior.",
+    "Ordinary public editing is repeated during failure. Controlled core tests force the exact filesystem-completion/intervening-edit/publication boundary independently.",
+    "A completed captured snapshot is not a claim that subsequent edits were saved. Dirty state and current editor/physics/history remain unchanged.",
+    "Native tests verify real background error/status/detail descriptors and clearing; no complete physical input, screen-reader or pixel/readability acceptance.",
+    "The prior 240-sample two-mode timing series remains its recorded 0.111 result. This fix retains scheduler/writer behavior and measures the named failure/retry workflow; it is not a new 240-sample benchmark.",
+    "The private candidate is not promoted. Clean installation/distribution, other platform/hardware, physical printer and participant gates remain open."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/recovery-failure/archive.py.txt": "a22a69ad36857a48002f2695267506bf83e373cfd61d055c98c6828a924dc21b",
+    "docs/validation/recovery-failure/before.log.txt": "24256c1cdc4ff15427ab5922d178c10a9f2b89c4403bfdb57fe7cfebac3043c7",
+    "docs/validation/recovery-failure/build.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/recovery-failure/conformance-report.json.gz": "fc9bc4f9dea9f1ef4e0f95b10173bb2f6180c22f9b6119633fdce8c6ee13d4ae",
+    "docs/validation/recovery-failure/core-final.log.txt": "4c3e9d8604d58f76634dc22f2065b0edcd83c9dd65fd76d9b6f1f7d2399d5972",
+    "docs/validation/recovery-failure/core-focused-final.log.txt": "143ef6e641bd61583d84031d46f2c5e3e26d05493488f35a2aba1e9206604158",
+    "docs/validation/recovery-failure/core-focused-final2.log.txt": "8b312dd798667e67705313fb1b6a03d28f4ed248e17248d0d7dd1f65ac782d23",
+    "docs/validation/recovery-failure/core-focused.log.txt": "a5068a298dac08eccf5954177fb25773fed350e84e9ffac34b2a0b0926faf36e",
+    "docs/validation/recovery-failure/crash-final.json": "d504c3c9277ae83f5d0487925acd560811f144e88c2ada6b555e14af7b5362b2",
+    "docs/validation/recovery-failure/crash-recovery.log.txt": "d504c3c9277ae83f5d0487925acd560811f144e88c2ada6b555e14af7b5362b2",
+    "docs/validation/recovery-failure/fixtures/headless/failure-state.json": "2028a06e550388675e69acb0023fc399be3ec5ea955903c68afba64fda774f05",
+    "docs/validation/recovery-failure/fixtures/headless/last-good.elab-recovery": "e1fdc0d8442697cc598032c1eebcb95f5175f306f01438d5c42e9afd04d44dbd",
+    "docs/validation/recovery-failure/fixtures/headless/manual-source.elab": "948efcc2a3304af0a31630ddeb82c62f8da85db01b27f7a13553a5087713b832",
+    "docs/validation/recovery-failure/fixtures/headless/retry-state.json": "f895b0cdc5714540d53d57bcca7110b234a83feb9924e8b30356b7b5c735a3a2",
+    "docs/validation/recovery-failure/fixtures/headless/retry.elab-recovery": "96d4c61ad0040520f63580bfe76607db0c2242dbfb43e47f67e817295a90da69",
+    "docs/validation/recovery-failure/fixtures/native/failure-state.json": "13488ac5c50c62b663502258c24a596f6ad6c13c8060d00eccb4cdfa1311022c",
+    "docs/validation/recovery-failure/fixtures/native/last-good.elab-recovery": "8407e70ef714ab44b20dcec3b181d6981b0140992c3d8691ba895fff7eba94be",
+    "docs/validation/recovery-failure/fixtures/native/manual-source.elab": "1f48a566f5a31fa8720db103d390b16d009a63450995e83032caf82aa93f9177",
+    "docs/validation/recovery-failure/fixtures/native/retry-state.json": "3c1a284cdd1a70d350a3a9749801c35bd3c71fea6d7e6bb16d8577f2e6433e56",
+    "docs/validation/recovery-failure/fixtures/native/retry.elab-recovery": "128ca24e3ce6935e0e3bb5b198afd13cb66676813c3192df321eb1248f3d93a9",
+    "docs/validation/recovery-failure/headless-failure.json.gz": "07ac2d943ec3a235e27fbd6c3a2b7dab1875cb91a4aa1715b1f297b0ca6dcb39",
+    "docs/validation/recovery-failure/headless-failure.log.txt": "00530b888eaa9e6281781ef5764a3555624619b91e9a149a00155fd159728f33",
+    "docs/validation/recovery-failure/headless-initial.json": "a77755675e3637b68d7c83c2ef321cd238fb2a1946a37b706fc74d2808be6a97",
+    "docs/validation/recovery-failure/headless-initial.log.txt": "4978ebeead2d2fc159714c84810b9847b76cce8dd186e164abbb938d6cca2bd9",
+    "docs/validation/recovery-failure/initial-build.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/recovery-failure/initial-package.json": "5e1fd87862edf575f8a83ad5a38f0d331e7e2ec2e9cde1dee11ef6bb276ab5a9",
+    "docs/validation/recovery-failure/initial-process-quality.json": "cb4adcb4f8ecb19882037f083bf614c6f66ac99a83c01c8ca2be536727c56d67",
+    "docs/validation/recovery-failure/initial-quality.log.txt": "27e20f3853db12709a607586640bf33ec081aa82c8c9d730d4e76c70bb6495fc",
+    "docs/validation/recovery-failure/native-failure.json.gz": "a258edfa70f1b20c6bb151b978d70744a2d6cd8294776253c8a0668a623e00c3",
+    "docs/validation/recovery-failure/native-failure.log.txt": "00f155dd246bfdf20578efe89ca91896e4aef392dc565fdd976e81a6b09ae427",
+    "docs/validation/recovery-failure/native-focused.log.txt": "7ce818ace33caf1ed23fbe0de8a6d74d60fe9e3b95b8bbb8beb05a6d8a8979e5",
+    "docs/validation/recovery-failure/native-host.log.txt": "1a126aa91e343a81922b4795484d49d0cfc26979ff6f4bfebe7ca7bb2ab3009c",
+    "docs/validation/recovery-failure/native-smoke.log.txt": "e08d5fff28c15575e0726a37061703fe90fefe16e8ec47f0d09339cf1aef33c3",
+    "docs/validation/recovery-failure/native.py.txt": "5a2ef4ff24db74e29800db6c94721b392d66ee51abd9031ac636e8f5a0b40db3",
+    "docs/validation/recovery-failure/ownership-final.json": "b69a2674e556a10b504440d38b40300fcdbecf82847c2177cd85995b88851670",
+    "docs/validation/recovery-failure/ownership.log.txt": "4f6e71e42368aa76bfcfbd9be810045f6a1a048bf2ed3957061a53ef1cda850e",
+    "docs/validation/recovery-failure/package.json": "8662035054afd77c5c6b6be2267de7879b2bf46d87f64dc76ad5a7fc43f9d82e",
+    "docs/validation/recovery-failure/process-native.json": "20497ae5939b77e66c99bdf244d0af35e76bb513c4f4062855fcc4dc7c060eba",
+    "docs/validation/recovery-failure/process-public.json": "5f02a2c6de9ef5668f5b50f91c7330de1c30f5ad08771dcf5c64945eeeb65ad7",
+    "docs/validation/recovery-failure/process-quality.json": "b702f46b7a4e94299f0682fcd20c7a809f7033e0ef0fdc0e7845a0bbc6a678d6",
+    "docs/validation/recovery-failure/public-suites.log.txt": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "docs/validation/recovery-failure/qualify.py.txt": "f152b4d2e9fe99919682184722cf6218858339bfe0b8282713a7589567c0d579",
+    "docs/validation/recovery-failure/quality.log.txt": "5ebaed647bbd499e41e7b9fcd481ac281b4916c6e20092f66bbef1bd1c461386",
+    "docs/validation/recovery-failure/report-review-gzip.json": "1deb576955a9e4b5156363522ea1fec4363b8d5296126022feb1f764acdef95a",
+    "docs/validation/recovery-failure/report-review.json": "1deb576955a9e4b5156363522ea1fec4363b8d5296126022feb1f764acdef95a",
+    "docs/validation/recovery-failure/review.go.txt": "808b076c8bf0bac85714632b87ab06a8364742575b33a383a734d7e37c729fb6",
+    "docs/validation/recovery-failure/save-fence-before.log.txt": "fe794d311e6952d7f3d99c96539f5d34d8a9019283c51f6ba244ec0d490ac660",
+    "docs/validation/recovery-failure/source-freeze.json": "472dc9fd48fa108bb1399a4a6e025f43c271a6426534d9bafcaac18aa5a444d9"
+  }
+}

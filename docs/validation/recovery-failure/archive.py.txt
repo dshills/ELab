@@ -1,0 +1,89 @@
+from pathlib import Path
+import copy, datetime, gzip, hashlib, importlib.util, json, shutil, stat, subprocess
+
+root=Path.cwd();src=root/'build/recovery-failure';out=root/'docs/validation/recovery-failure'
+def read(path):return json.loads(path.read_text())
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+def digest(path):return sha(path.read_bytes())
+frozen=read(src/'source-freeze.json');assert len(frozen)==689 and all(digest(root/p)==h for p,h in frozen.items())
+quality=read(src/'process-quality.json');public=read(src/'process-public.json');native=read(src/'process-native.json')
+assert all(p['status']=='completed' and p['exit_code']==0 for p in quality+public)
+assert native['status']=='completed' and native['demo_exit_code']==0 and native['native_exit_code']==0 and not native.get('forced_cleanup')
+assert 'Ran 37 tests' in (src/'quality.log.txt').read_text()
+assert sum('smoke: ' in line for line in (src/'native-smoke.log.txt').read_text().splitlines())==45
+review=read(src/'report-review.json');assert review==read(src/'report-review-gzip.json') and review['numerical_checks']==27596
+reports=[read(src/(transport+'-final.json')) for transport in ['headless','native']]
+for report in reports:
+ assert report['passed'] and 0<report['failure_visible_s']<=5 and 0<report['automatic_retry_s']<=5
+ assert report['edits_during_fault']>=2 and report['ordinary_interval_s']==2 and report['recorded_rows']==209
+ assert report['manual_source_and_previous_capsule_unchanged'] and report['retry_document_exact'] and report['error']
+assert read(src/'ownership-final.json')['passed'] and read(src/'crash-final.json')['passed']
+spec=importlib.util.spec_from_file_location('sdk',root/'scripts/prepare-vellum.py');sdk=importlib.util.module_from_spec(spec);spec.loader.exec_module(sdk)
+pin=sdk.load_pin(root);sdk.verify_archive_identity(root/pin['archive'],pin);sdk.verify_cache(root/pin['cache'],pin)
+golden=read(root/'docs/validation/lc-sampling-validation.json')['promotion'];preserved={}
+for name,key in [('build/ELab.app','bundle_tree'),('build/ELab-0.104.0-119-preserved.app','preserved_bundle_tree')]:
+ folder=root/name;actual={}
+ for p in [folder,*sorted(folder.rglob('*'))]:
+  assert not p.is_symlink()
+  actual[str(p.relative_to(folder))]={'mode':stat.S_IMODE(p.stat().st_mode),'sha256':digest(p) if p.is_file() else None}
+ assert actual==golden[key];preserved[name]={'passed':True,'entries':len(actual)}
+for p,h in read(root/'docs/validation/recovery-ownership-validation.json')['binary_sha256'].items():
+ if '.app/' in p:assert digest(root/p)==h,p
+files=['build/elab','build/elab-agent','build/elab-conformance','build/elab-ui-audit','build/ELab-0.112.0-128-recovery-failure-candidate.app/Contents/MacOS/ELab'];binaries={p:digest(root/p) for p in files};assert binaries[files[0]]==binaries[files[-1]]
+inventory=read(root/'research/13-native-command-inventory.json')
+assert all(digest(root/p)==h for p,h in inventory['source_sha256'].items())
+out.mkdir(exist_ok=False)
+for name in ['before.log.txt','save-fence-before.log.txt','core-focused.log.txt','core-focused-final.log.txt','core-focused-final2.log.txt','core-final.log.txt','native-focused.log.txt','headless-initial.log.txt','headless-initial.json','initial-build.log.txt','initial-quality.log.txt','initial-process-quality.json','initial-package.json','build.log.txt','quality.log.txt','package.json','native-smoke.log.txt','public-suites.log.txt','headless-failure.log.txt','native-host.log.txt','native-failure.log.txt','ownership.log.txt','crash-recovery.log.txt','process-quality.json','process-public.json','process-native.json','source-freeze.json','report-review.json','report-review-gzip.json','ownership-final.json','crash-final.json']:
+ shutil.copyfile(src/name,out/name)
+for source,name in [('build/.recovery-failure-qualify.py','qualify.py.txt'),('build/.recovery-failure-native.py','native.py.txt'),('build/.recovery-failure-archive.py','archive.py.txt'),('build/.recovery-failure-review/main.go','review.go.txt')]:shutil.copyfile(root/source,out/name)
+encodings={}
+for source,name in [('public-final/report.json','conformance-report.json.gz'),('headless-final.json','headless-failure.json.gz'),('native-final.json','native-failure.json.gz')]:
+ raw=(src/source).read_bytes();compressed=gzip.compress(raw,mtime=0);(out/name).write_bytes(compressed);assert gzip.decompress(compressed)==raw
+ encodings[name]={'decoded_bytes':len(raw),'decoded_sha256':sha(raw),'gzip_bytes':len(compressed),'gzip_sha256':sha(compressed)}
+fixtures={}
+for transport,report in zip(['headless','native'],reports):
+ folder=src/(transport+'-final-assets');destination=out/'fixtures'/transport;destination.mkdir(parents=True)
+ for name in ['manual-source.elab','last-good.elab-recovery','retry.elab-recovery','failure-state.json','retry-state.json']:
+  raw=(folder/name).read_bytes();(destination/name).write_bytes(raw);fixtures[str((destination/name).relative_to(root))]=sha(raw)
+ manual=read(destination/'manual-source.elab');good=read(destination/'last-good.elab-recovery');retry=read(destination/'retry.elab-recovery');failed=read(destination/'failure-state.json');ready=read(destination/'retry-state.json')
+ assert digest(destination/'manual-source.elab')==report['manual_source_sha256']
+ assert digest(destination/'last-good.elab-recovery')==report['last_good_capsule_sha256'] and digest(destination/'retry.elab-recovery')==report['retry_capsule_sha256']
+ assert next(p['value'] for p in good['document']['graph']['components'] if p['id']=='R1')==20000
+ assert next(p['value'] for p in retry['document']['graph']['components'] if p['id']=='R1')==50000
+ for capsule,value in [(good,20000),(retry,50000)]:
+  expected=copy.deepcopy(manual)
+  next(p for p in expected['graph']['components'] if p['id']=='R1')['value']=value
+  assert capsule['document']==expected
+ assert failed['recovery']['error']==report['error'] and not ready['recovery'].get('error')
+ assert retry['document']['recordings']==manual['recordings'] and ready['document']['dirty']
+ assert retry['document']['graph']=={'components':ready['components'],'wires':ready['wires']}
+receipt={'passed':True,'recorded_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ 'reference_configuration':read(src/'reference-machine.json'),
+ 'scope':'Repair automatic storage status lost across ordinary edits; actual owned unavailable-directory failure/retry through headless/native plus protected stale-publication tests',
+ 'source_parent_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'source_index':str((out/'source-freeze.json').relative_to(root)),
+ 'source_frozen_files':689,'source_stable':True,'binary_sha256':binaries,'candidate':'build/ELab-0.112.0-128-recovery-failure-candidate.app','candidate_promoted':False,
+ 'original_regression_failure':str((out/'before.log.txt').relative_to(root)),'new_application_commands':0,'existing_commands':162,
+ 'edited_save_cleanup_regression_failure':str((out/'save-fence-before.log.txt').relative_to(root)),
+ 'save_baseline_fences_older_automatic_observations_before_unlocked_cleanup':True,
+ 'scheduler_writer_models_methods_limits_file_versions_unchanged':True,
+ 'quality':{'lint_imports_staticcheck':True,'python_tests':37,'root_native_race_and_vet':True},
+ 'process_quality':quality,'process_public':public,'native_workflow':native,
+ 'public_failure_retry':[{k:r[k] for k in ['transport','ordinary_interval_s','failure_visible_s','automatic_retry_s','edits_during_fault','recorded_rows']} for r in reports],
+ 'automatic_failure_and_retry_preserve_explicit_save_and_previous_capsule':True,'retry_contains_exact_latest_dirty_graph_and_original_records':True,
+ 'controlled_intervening_edit_and_stale_catalog_save_configuration_close_tests':True,'native_actual_background_descriptor_status_error_and_clear_test':True,
+ 'four_adapter_numerical_checks':27596,'four_adapter_project_workflow_checks':44,'four_adapter_project_snapshots':56,'native_smoke_stages':45,
+ 'ownership_transitions_and_existing_sigkill_recovery_pass':True,'typed_raw_gzip_report_review_equal':True,
+ 'sdk_verified':{'passed':True,'source':pin['source_commit'],'archive_sha256':pin['sha256']},
+ 'native_inventory':{'production_sources':len(inventory['source_sha256']),'sites':len(inventory['sites']),'public_commands':len(inventory['public_commands']),'production_hashes_unchanged':True},
+ 'preserved_bundle_trees':preserved,'fixture_files':fixtures,'report_encoding':encodings,'p0_counts':{'implemented':17,'partial':10},
+ 'setup_corrections':['The first replacement-store fixture reused the configure retry key, then supplied a nonprivate TempDir. Final tests use a new key and explicit 0700 permissions; production protections remain unchanged.',
+ 'An early focused native invocation created an owned nested Go cache, included in initial quality. After that run finished, the cache was preserved under build and the edited-Save fence was added. Final quality uses 689 stable code-only inputs.'],
+ 'limitations':['Public fault evidence is a cooperating unavailable-directory interruption of an owned recorded RC fixture on this workstation; not every storage/device fault, hostile writer or power-loss behavior.',
+ 'Ordinary public editing is repeated during failure. Controlled core tests force the exact filesystem-completion/intervening-edit/publication boundary independently.',
+ 'A completed captured snapshot is not a claim that subsequent edits were saved. Dirty state and current editor/physics/history remain unchanged.',
+ 'Native tests verify real background error/status/detail descriptors and clearing; no complete physical input, screen-reader or pixel/readability acceptance.',
+ 'The prior 240-sample two-mode timing series remains its recorded 0.111 result. This fix retains scheduler/writer behavior and measures the named failure/retry workflow; it is not a new 240-sample benchmark.',
+ 'The private candidate is not promoted. Clean installation/distribution, other platform/hardware, physical printer and participant gates remain open.']}
+receipt['artifacts_sha256']={str(p.relative_to(root)):digest(p) for p in sorted(out.rglob('*')) if p.is_file()}
+(root/'docs/validation/recovery-failure-validation.json').write_text(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps({'passed':True,'source_inputs':689,'fixture_files':len(fixtures),'numeric_checks':27596,'failure_retry':receipt['public_failure_retry']},indent=2))

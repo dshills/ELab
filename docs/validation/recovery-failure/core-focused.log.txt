@@ -1,0 +1,20 @@
+=== RUN   TestAutomaticRecoveryFailureAndRetrySurviveInterveningEdits
+--- PASS: TestAutomaticRecoveryFailureAndRetrySurviveInterveningEdits (0.08s)
+=== RUN   TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore
+=== RUN   TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/scan
+=== RUN   TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/save
+=== RUN   TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/reconfigure
+    recovery_automatic_test.go:133: recovery.configure: &{Code:key-reused Message:retry key already belongs to a different command}
+=== RUN   TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/close
+--- FAIL: TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore (0.15s)
+    --- PASS: TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/scan (0.04s)
+    --- PASS: TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/save (0.04s)
+    --- FAIL: TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/reconfigure (0.03s)
+    --- PASS: TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/close (0.03s)
+=== RUN   TestAutomaticRecoveryKeepsExplicitlyClearedSelection
+--- PASS: TestAutomaticRecoveryKeepsExplicitlyClearedSelection (0.04s)
+=== RUN   TestRecoveryAutomaticCheckpointAndRetention
+--- PASS: TestRecoveryAutomaticCheckpointAndRetention (1.12s)
+FAIL
+FAIL	github.com/dshills/elab/workbench	1.748s
+FAIL

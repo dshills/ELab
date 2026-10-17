@@ -1,0 +1,6 @@
+--- FAIL: TestAutomaticRecoveryCannotResurrectRetiredCapsuleDuringEditedSaveCleanup (0.05s)
+    recovery_automatic_test.go:191: project.save.start during blocked kernel: 372.458µs
+    recovery_automatic_test.go:209: late automatic result resurrected a capsule retired by an edited save cleanup
+FAIL
+FAIL	github.com/dshills/elab/workbench	0.357s
+FAIL

@@ -1,0 +1,18 @@
+=== RUN   TestAutomaticRecoveryFailureAndRetrySurviveInterveningEdits
+--- PASS: TestAutomaticRecoveryFailureAndRetrySurviveInterveningEdits (0.07s)
+=== RUN   TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore
+=== RUN   TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/scan
+=== RUN   TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/save
+=== RUN   TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/reconfigure
+=== RUN   TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/close
+--- PASS: TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore (0.17s)
+    --- PASS: TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/scan (0.04s)
+    --- PASS: TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/save (0.05s)
+    --- PASS: TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/reconfigure (0.04s)
+    --- PASS: TestAutomaticRecoveryCannotReplaceNewerCatalogOrStore/close (0.03s)
+=== RUN   TestAutomaticRecoveryKeepsExplicitlyClearedSelection
+--- PASS: TestAutomaticRecoveryKeepsExplicitlyClearedSelection (0.04s)
+=== RUN   TestRecoveryAutomaticCheckpointAndRetention
+--- PASS: TestRecoveryAutomaticCheckpointAndRetention (1.20s)
+PASS
+ok  	github.com/dshills/elab/workbench	2.774s
