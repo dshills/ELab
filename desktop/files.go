@@ -91,6 +91,7 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 	go func() {
 		ctx := window.Context()
 		var err error
+		var restoreFocus func()
 
 		if choose {
 			options := app.FileOptions{Mode: app.OpenFile, Title: "Open project", Extensions: []string{"elab"}}
@@ -151,6 +152,7 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 				var services app.Services
 				services, err = s.app.Services()
 				if err == nil {
+					restoreFocus = captureFileDialogFocus()
 					path, err = services.ChooseFile(ctx, options)
 				}
 			}
@@ -173,6 +175,9 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 			response = s.service.Dispatch(ctx, request, "user")
 		}
 		_ = s.app.PostWindow(window, func() {
+			if restoreFocus != nil {
+				restoreFocus()
+			}
 			s.fileBusy = false
 			if err != nil {
 				if !errors.Is(err, app.ErrCanceled) {

@@ -15,7 +15,9 @@
     "desktop/example_load.go": "21c8f683f88d56762de0b43849fe97338cbf4451f0cf147c21035f84b8602bbe",
     "desktop/examples.go": "e072cde40cfd291300dbb08f127ea8bff5d520b3b70604d1d9622b9755c12ad8",
     "desktop/field_context.go": "4f3abac0bc24fd5054e89ad5e479a6a9196ba0ab52faa9134294743a34b74bd5",
-    "desktop/files.go": "9cc3f819e9348e12109621a97ce3795a762577b3ea455f9cc221dd4aaffd0bbb",
+    "desktop/file_focus_darwin.go": "fd24d88b522308de015cb02496434e62343e221916167f4c84773cd22b5967a5",
+    "desktop/file_focus_other.go": "c027b71d35fbd52d344ed31b46bba5f5b828d1ae622ef7ca20b89f4f4423a343",
+    "desktop/files.go": "09ef46c31bf583a57f3c8f5c4ed1fcaa1e8dcfd5745cdfa2a7a87dedabecdb67",
     "desktop/inductor_controls.go": "e39fa6858b17c015b9d7003297257a69e402a038a2cbe7d720e142234ba97d77",
     "desktop/input_work.go": "63b1644f065e82f1deaedc018bcfa5b855af2b885ac96dc3d68b2d4971f701bc",
     "desktop/keyboard_workflow.go": "42fa8031620577bff9c73eba71954730a71765328b219ab96911ffdbe7a5c883",
@@ -53,7 +55,7 @@
     "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
     "desktop/value_apply.go": "eab16eb97a0b34a4cff40d5fd77d96dbdce394c5071aaa7ed0e58169ea45713d",
     "desktop/verification.go": "550f32b3d90b99269bce6777233b68e9329b2ae704b5b2fca60a1a368fbab406",
-    "desktop/view.go": "9e8190ceb41ac368eee4ffe9988ca64ef9397a68252e26a5625851c83e6f0ca1",
+    "desktop/view.go": "9b49a018838950c24a2f4e21931a710fae6249ee485a6dc7d4caf480c76fdfdb",
     "desktop/viewport.go": "a0d8a6a6b3577a0a909a0f7b3f339532a5abfde78fcf8a1979fb2e46f5f074cc",
     "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
     "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
@@ -1190,7 +1192,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 172,
+      "line": 174,
       "function": "*screen.beginFile",
       "kind": "request-command-field",
       "expression": "Command: id",
@@ -1198,7 +1200,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 173,
+      "line": 175,
       "function": "*screen.beginFile",
       "kind": "event-or-dispatch-router",
       "expression": "s.service.Dispatch(ctx, request, \"user\")",
@@ -1206,7 +1208,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 248,
+      "line": 253,
       "function": "*screen.continuePending",
       "kind": "domain-ingress",
       "expression": "s.beginFile(id, false, raw, nil)",
@@ -1214,7 +1216,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 250,
+      "line": 255,
       "function": "*screen.continuePending",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(id, raw)",
@@ -1222,7 +1224,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 258,
+      "line": 263,
       "function": "*screen.registerFileCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"file.open\", \"Open…\", \"Meta+O\", func() { s.beginFile(\"project.load\", true, workbench.LoadParams{}, nil) }}",
@@ -1234,7 +1236,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 259,
+      "line": 264,
       "function": "*screen.registerFileCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"file.save\", \"Save\", \"Meta+S\", func() {\n\ts.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, nil)\n}}",
@@ -1246,7 +1248,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 262,
+      "line": 267,
       "function": "*screen.registerFileCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"file.save-as\", \"Save As…\", \"Meta+Shift+S\", func() { s.beginFile(\"project.save\", true, workbench.SaveParams{}, nil) }}",
@@ -1258,7 +1260,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 258,
+      "line": 263,
       "function": "*screen.registerFileCommands",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"project.load\", true, workbench.LoadParams{}, nil)",
@@ -1269,7 +1271,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 260,
+      "line": 265,
       "function": "*screen.registerFileCommands",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, nil)",
@@ -1280,7 +1282,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 262,
+      "line": 267,
       "function": "*screen.registerFileCommands",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"project.save\", true, workbench.SaveParams{}, nil)",
@@ -1291,7 +1293,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 265,
+      "line": 270,
       "function": "*screen.registerFileCommands",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Register(command.Command{ID: entry.id, Label: entry.text, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts, Available: func() error {\n\tif s.service.Snapshot().Closed {\n\t\treturn fmt.Errorf(\"session is closing\")\n\t}\n\tif s.fileBusy || s.pendingCommand != \"\" {\n\t\treturn fmt.Errorf(\"finish the current file operation first\")\n\t}\n\treturn nil\n}, Execute:\tfunc(context.Context) error { entry.action(); return nil }})",
@@ -1299,7 +1301,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 279,
+      "line": 284,
       "function": "*screen.filePrompt",
       "kind": "node-Dismiss",
       "expression": "Dismiss: func() {\n\tif s.fileBusy {\n\t\treturn\n\t}\n\ts.pendingCommand = \"\"\n\ts.pendingParams = nil\n\ts.app.Invalidate(\"main\")\n}",
@@ -1307,7 +1309,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 291,
+      "line": 296,
       "function": "*screen.filePrompt",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\ts.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, func() { s.continuePending(false) })\n}",
@@ -1315,7 +1317,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 292,
+      "line": 297,
       "function": "*screen.filePrompt",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, func() { s.continuePending(false) })",
@@ -1326,7 +1328,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 294,
+      "line": 299,
       "function": "*screen.filePrompt",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.continuePending(true) }",
@@ -1334,7 +1336,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 295,
+      "line": 300,
       "function": "*screen.filePrompt",
       "kind": "node-Activate",
       "expression": "Activate: prompt.Dismiss",
@@ -3936,7 +3938,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 490,
+      "line": 489,
       "function": "*screen.view",
       "kind": "node-Custom",
       "expression": "Custom: s.drawing",
@@ -3944,7 +3946,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 500,
+      "line": 502,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(pause, pauseText)",

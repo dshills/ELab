@@ -298,7 +298,7 @@ func (s *screen) view() ui.Node {
 	if state.Drawing.WireStart != "" {
 		hints = "Wire from " + state.Drawing.WireStart + " · click its destination"
 	}
-	message := "Ready to experiment. Values update the simulation automatically."
+	message := ""
 	for _, candidate := range state.Recovery.Candidates {
 		if !candidate.ActiveSession || candidate.OwnerStatus == workbench.RecoveryOwnerUnknown {
 			message = "Recovery available · choose a snapshot in the Inspector to restore a copy."
@@ -330,7 +330,6 @@ func (s *screen) view() ui.Node {
 		}
 	}
 	messages := quiet("messages", message)
-	messages.Style.MinSize = ui.Some(ui.Size{Height: 40})
 	messages.Style.MaxSize = ui.Some(ui.Size{Height: 40})
 	if s.errorMessage != "" {
 		messages.Style.Foreground = ui.Some(color.NRGBA{R: 168, G: 65, B: 68, A: 255})
@@ -487,7 +486,10 @@ func (s *screen) view() ui.Node {
 	if state.Document.Dirty {
 		filename += " · Unsaved"
 	}
-	schematicChildren := []ui.Node{tools, {ID: "schematic", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 80})}, Custom: s.drawing}, quiet("schematic-help", hints), messages}
+	schematicChildren := []ui.Node{tools, {ID: "schematic", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 80})}, Custom: s.drawing}, quiet("schematic-help", hints)}
+	if message != "" {
+		schematicChildren = append(schematicChildren, messages)
+	}
 	if previewVisible(state) {
 		schematicChildren = append(s.printPreviewPanel(state), messages)
 	} else if sweepVisible(state) {

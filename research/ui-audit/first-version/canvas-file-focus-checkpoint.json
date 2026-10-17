@@ -1,0 +1,129 @@
+{
+  "scope": "Compact canvas space and native file-focus repair; incomplete alpha qualification",
+  "source_base": "9f00996a092faca382254ece819abe929b924677",
+  "production_source_sha256": {
+    "desktop/files.go": "09ef46c31bf583a57f3c8f5c4ed1fcaa1e8dcfd5745cdfa2a7a87dedabecdb67",
+    "desktop/view.go": "9b49a018838950c24a2f4e21931a710fae6249ee485a6dc7d4caf480c76fdfdb",
+    "desktop/file_focus_darwin.go": "fd24d88b522308de015cb02496434e62343e221916167f4c84773cd22b5967a5",
+    "desktop/file_focus_darwin.m": "72429ab8a6d98552ac1598ea39bd1be5fbfd3747417d86dfa0535432eee67e4d",
+    "desktop/file_focus_other.go": "c027b71d35fbd52d344ed31b46bba5f5b828d1ae622ef7ca20b89f4f4423a343"
+  },
+  "native_binary_sha256": "b9abb337101401acd2f616d284f0e098bd0a7be08e241c263564eee8c00fbcf2",
+  "sdk_source": "47b7153109735006305e3610520e489a953fcd97",
+  "compact_fit": {
+    "native_viewport": {
+      "width_px": 456,
+      "height_px": 209,
+      "registered": true,
+      "following": true
+    },
+    "native_view": {
+      "center": {
+        "x": -30,
+        "y": 4
+      },
+      "zoom": 0.33279220779045315
+    },
+    "headless_same_view": {
+      "center": {
+        "x": -30,
+        "y": 4
+      },
+      "zoom": 0.33279220779045315
+    },
+    "old_height_159_view": {
+      "center": {
+        "x": -30,
+        "y": 4
+      },
+      "zoom": 0.25162337662270146
+    },
+    "graph_matches": true
+  },
+  "larger_fit": {
+    "viewport": {
+      "width_px": 852,
+      "height_px": 295,
+      "registered": true,
+      "following": true
+    },
+    "view": {
+      "center": {
+        "x": -44.94329896906095,
+        "y": 4
+      },
+      "zoom": 0.4724025974025333
+    },
+    "headless_view": {
+      "center": {
+        "x": -44.94329896906095,
+        "y": 4
+      },
+      "zoom": 0.4724025974025333
+    },
+    "cursor_a": {
+      "requested_s": 0.01,
+      "time_s": 0.01,
+      "valid": true
+    },
+    "time_s": 0.22500000000000012,
+    "graph_matches": true
+  },
+  "keyboard_after_dialogs": {
+    "cancel": "Tab focused Examples immediately",
+    "save": "Typed filename stem; single-suffix file saved; Tab focused Examples immediately",
+    "open": "Command+O, Command+Shift+G, typed full path, Return, Return; Tab focused Undo",
+    "undo": "Space on focused Undo restored 2.917 mA",
+    "redo": "Tab then Space restored 1.477 mA",
+    "original_keyboard_project_sha256_unchanged": true
+  },
+  "window_sizes_pixels": [
+    [
+      1044,
+      764
+    ],
+    [
+      1280,
+      800
+    ],
+    [
+      1440,
+      900
+    ]
+  ],
+  "actual_display_modes_changed_or_qualified": false,
+  "scrolled_ax": {
+    "before_repaint": "cannotClickOffscreenElement on visibly scrolled Cursor A",
+    "after_theme_repaint": "setValue accepted on same visible field; Return committed 10 ms cursor",
+    "fixed": false
+  },
+  "remaining": [
+    "DC-source caption alignment at enlarged font",
+    "scrolled AX geometry publication",
+    "full accessibility/IME/ordinary fast typing qualification",
+    "declared OS display configurations",
+    "visible latency, complete agent/reference qualification and packaging"
+  ],
+  "tests": {
+    "canvas_recovery_file_layout_race": "passed, 12.199 s",
+    "file_window_lifetime_race": "passed, 3.759 s before replacing the initial synchronous capture with asynchronous primitive tokens",
+    "complete_scripts_check": "passed final asynchronous source: lint/imports/Staticcheck, 38 Python tests, root/native race and vet; native 147.985 s"
+  },
+  "native_focus_safety": "One admitted picker; primitive window number/token only; asynchronous main-queue capture/restore; PostWindow lifetime check; no activate/order-front call; another live key window takes precedence",
+  "inventory_review": "59 Go sources, 388 sites, 162 public IDs, 132 routed IDs; all site mappings unchanged excluding locations; Objective-C delivery remains separately scoped",
+  "owned_hosts_closed": true,
+  "canonical_bundle_promoted": false,
+  "artifacts": {
+    "file-focus-observations.json": "f5ff78e9a93dca5daeb558d6d1c67dde5a00855a0ba4bb688dbef015caddc2d3",
+    "file-keyboard-after.jpg": "62fb268caec8445112886d316324880e75b94f277d236b396cd42ce1ecc211be",
+    "flasher-canvas-compact-final.jpg": "d89683b8316f04834ea71c51ea32af0b4a9e832708f14689ac881cb16af60065",
+    "flasher-window-1280x800-light.jpg": "dd5b38a3fabdef3c57209c8603d319d16a2f4a5e4f0405708be96b7cfb90cf1a",
+    "flasher-window-1280x800-dark.jpg": "9594d38a612b56cfc50ae6b7f0316d5d50d73caf41f6542d4592a28351397cbc",
+    "flasher-window-1440x900-light.jpg": "77518b3920e49a629f7e79528a78697878e825bd40dc55d6c3cf761387508d7c",
+    "flasher-window-1440x900-dark.jpg": "3d0af44585523a0d540a1bbee3d836e866d6dfc16d94ad3c7f7fd67d861b7e98",
+    "flasher-canvas-ui.elab": "ed3b1f7e87eae3c52bb0a0f22522ca3f05620a913db0afb584debb6adc99c214",
+    "keyboard-focus-ui.elab": "320ffb154d3054f3226980cff8d8cee25f92d70b8202931a914840bf55ecfa58",
+    "scrolled-cursor-ax-recheck.json": "1e2cf081567599c1bb39825d8b323fb1a12a79bec5ba721a303c976fc1712241",
+    "scrolled-cursor-ax-repaint.json": "c0d6d8665c4be15cffb3f8c46be92ddfd350f6496350d7a5adba41b90b1a05fb"
+  }
+}
