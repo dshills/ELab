@@ -42,3 +42,22 @@ SVG/live CSV/recorded JSON+CSV export encoding and disk work now run outside the
 Recorded import now also uses [background project work](project-import.md). Manual recovery and some shutdown calls remain separate paths.
 
 Manual recovery scan/checkpoint now also run outside the lock through [shared jobs](project-recovery-work.md). Other recovery/shutdown paths remain explicit remaining work.
+
+## Real capacity-work command spans
+
+The unchanged 0.124.0 /141 executable was measured through a private native endpoint on the same Apple M4 Pro configuration above. The frozen capacity RC/MOSFET fixture has **64 simulated parts, 65 drawing objects, 70 wires, 60 nets and four capacitors**. Twenty trials requested one-second /1,000-output-sample manual advances. Pan, drawing cancel, save, geometry undo and exact work cancellation were bracketed by actual same-ID/run numerical progress; Pause was measured separately after the real live clock advanced. No kernel was replaced or artificially blocked.
+
+| Shared command | Eligible backend spans | Request → response p95 | Maximum |
+|---|---:|---:|---:|
+| `view.pan` | 20 | 4.87 ms | 5.60 ms |
+| `drawing.cancel` | 20 | 4.41 ms | 5.06 ms |
+| `project.save` | 20 | 27.62 ms | 28.71 ms |
+| `edit.undo` | 20 | 5.58 ms | 6.25 ms |
+| `simulation.work.cancel` | 20 | 5.04 ms | 5.37 ms |
+| `simulation.pause` | 20 | 4.63 ms | 11.05 ms |
+
+Cancellation discarded **8–82 staged samples** per trial while preserving committed physics and graph. This is not a full-advance completion benchmark. The saved capacity circuit freshly reopens paused/clean at time zero with the exact graph and no staged job. [Raw native observations](validation/capacity-responsiveness-native.json), [one-trial headless pilot](validation/capacity-responsiveness-pilot.json), [reopen/native state witness](validation/capacity-responsiveness-states.json.gz), [configuration, identities and limits](../research/ui-audit/first-version/capacity-responsiveness-checkpoint.json).
+
+Run `python3 scripts/capacity-responsiveness-demo.py --connect OWNED_ENDPOINT --artifacts NEW_DIRECTORY`; the default is 20 trials. It replaces only the designated test session and leaves it paused for inspection; close that owned host afterward. With no endpoint its headless session closes on return. Timing includes IPC/JSON, validation and any command waiting. Ineligible spans stay in the report; a percentile requires at least 20 eligible spans. Five regression cases reject queued/unstarted, terminal, replaced, regressed or committed-state-changing work as overlap witnesses. All 43 Python tooling tests pass; compiled Go source and the review package are unchanged, so their full quality gate is reused.
+
+This establishes specific **backend** behavior during real capacity work. It does not time individual Newton iterations, native main-loop acknowledgment, first visible samples or frame presentation. Foreground/occlusion was not established, and default scope selection does not reproduce the separate four-probe flasher condition. One topology does not qualify all difficult/ill-conditioned cases. The PRD's visible 100/500 ms p95 and broader usability gates remain open.

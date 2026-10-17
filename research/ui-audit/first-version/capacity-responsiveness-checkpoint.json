@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-17",
+  "scope": "real supported-capacity backend command spans; visible/main-loop latency remains unqualified",
+  "product_version": "0.124.0 /141",
+  "product_source_commit": "b2f485bb4138a144a878a468a0abee3cfa223a39",
+  "native_binary_sha256": "5e1aabde0744f2134b54a90bf5d5b159f70c3259130904e5b7627206b7e0cd60",
+  "measurement_source_base": "34c89fb",
+  "configuration": {
+    "os": "26.6.2",
+    "architecture": "arm64",
+    "hardware": {
+      "model": "Mac16,11",
+      "logical_cpus": 14,
+      "memory_bytes": 68719476736,
+      "cpu": "Apple M4 Pro"
+    },
+    "transport": "native-private-socket",
+    "agent_sha256": "894fdfb80a1de5038ec5578e7590e1a0664133a54504716c701df5e44ab2bc5c"
+  },
+  "workload": {
+    "simulated_parts": 64,
+    "objects": 65,
+    "wires": 70,
+    "nets": 60,
+    "settings": {
+      "step_s": 0.001,
+      "high_s": 0.1,
+      "low_s": 0.1,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 1
+    },
+    "manual_duration_s": 1,
+    "manual_output_samples": 1000
+  },
+  "cohort": {
+    "native_trials": 20,
+    "eligible_spans_per_command": 20,
+    "headless_pilot_trials": 1,
+    "staged_samples_canceled_range": [
+      8,
+      82
+    ],
+    "policy": "manual commands bracketed by running same-ID/run progress; pause brackets a real advanced live clock; no blocked/replaced numerical kernel"
+  },
+  "summaries": {
+    "drawing.cancel": {
+      "total": 20,
+      "eligible": 20,
+      "maximum_ms": 5.062957992777228,
+      "p95_ms": 4.4111659517511725
+    },
+    "edit.undo": {
+      "total": 20,
+      "eligible": 20,
+      "maximum_ms": 6.252333056181669,
+      "p95_ms": 5.581042030826211
+    },
+    "project.save": {
+      "total": 20,
+      "eligible": 20,
+      "maximum_ms": 28.714791988022625,
+      "p95_ms": 27.619458036497235
+    },
+    "simulation.pause": {
+      "total": 20,
+      "eligible": 20,
+      "maximum_ms": 11.047292035073042,
+      "p95_ms": 4.629834089428186
+    },
+    "simulation.work.cancel": {
+      "total": 20,
+      "eligible": 20,
+      "maximum_ms": 5.369334015995264,
+      "p95_ms": 5.037875031121075
+    },
+    "view.pan": {
+      "total": 20,
+      "eligible": 20,
+      "maximum_ms": 5.603249999694526,
+      "p95_ms": 4.868792020715773
+    }
+  },
+  "source_invariants": "each cancellation preserved components/wires/mixed/transient/run/electrical identity; fresh save reopens exact graph clean/paused at time zero with no staged job",
+  "limits": [
+    "Timings include IPC/JSON/validation and any command waiting; not native event-to-pixel or first-visible-sample measurements",
+    "Job state/progress brackets do not time individual Newton iteration overlap",
+    "Foreground/occlusion and main-loop/frame presentation were not controlled or observed",
+    "No other agent-owned build/test/benchmark ran concurrently; ordinary desktop activity uncontrolled",
+    "Default scope selection; this does not replicate the separate four-probe flasher benchmark",
+    "Requests were for 1000-sample work; jobs were canceled after 8\u201382 staged samples, not timed to full completion",
+    "One supported topology does not qualify all difficult/ill-conditioned/nonconvergent cases"
+  ],
+  "quality": {
+    "new_python_tests": 5,
+    "python_suite": "43 tests pass in 1.107s",
+    "go_source_changed": false,
+    "compiled_quality_evidence_reused": "0.124 consolidated full lint/vet/root+native race and copied-runtime gate; no repeat full Go gate for benchmark-only changes"
+  },
+  "ownership": {
+    "private_native_host": "clean normal close confirmed",
+    "review_package_manifest_files_verified_unchanged": 126,
+    "print_jobs_submitted": 0,
+    "sdk_changed": false
+  },
+  "source_sha256": {
+    "scripts/capacity-responsiveness-demo.py": "982e6a617661ee3d881d498ce3361a22a7d80b9dafea78b58cf2765bc5722e1f",
+    "scripts/test_capacity_responsiveness.py": "c55f92ab2532de6a33ff76821d76cc0420498063e9627bf06ed053c3e621e74d"
+  },
+  "evidence_sha256": {
+    "docs/validation/capacity-responsiveness-native.json": "e007bda95b8066a6d70e320e3633947be7ecffe22e5e9e0d3fe53d4b61714001",
+    "docs/validation/capacity-responsiveness-pilot.json": "ede6d2492ee7cbcb42c8744369dc476358876695e771ada504fe35be3bbf2148",
+    "docs/validation/capacity-responsiveness-states.json.gz": "78b7f89cb648616c69a0b87c5e70160ddde5aad4a0433d2bf9ee09e404c3561f"
+  }
+}

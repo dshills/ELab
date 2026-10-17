@@ -1,0 +1,6172 @@
+{
+  "passed": true,
+  "scope": "backend request-to-response and observed real work; no visible latency claim",
+  "fixture_sha256": "0911f169a808a3826fe79616a5df2db2650346e2bfcaac60a727ed81d370fffe",
+  "configuration": {
+    "os": "26.6.2",
+    "architecture": "arm64",
+    "hardware": {
+      "model": "Mac16,11",
+      "logical_cpus": 14,
+      "memory_bytes": 68719476736,
+      "cpu": "Apple M4 Pro"
+    },
+    "transport": "native-private-socket",
+    "agent_sha256": "894fdfb80a1de5038ec5578e7590e1a0664133a54504716c701df5e44ab2bc5c"
+  },
+  "trials": [
+    {
+      "index": 0,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-1",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 10,
+        "start_time_s": 0,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.001
+      },
+      "canceled": {
+        "id": "step-1",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 10,
+        "start_time_s": 0,
+        "duration_s": 1,
+        "completed_samples": 8,
+        "total_samples": 1000,
+        "progress": 0.008,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.002
+    },
+    {
+      "index": 1,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-2",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 21,
+        "start_time_s": 0.002,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.001
+      },
+      "canceled": {
+        "id": "step-2",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 21,
+        "start_time_s": 0.002,
+        "duration_s": 1,
+        "completed_samples": 25,
+        "total_samples": 1000,
+        "progress": 0.025,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.005
+    },
+    {
+      "index": 2,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-3",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 31,
+        "start_time_s": 0.005,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.001
+      },
+      "canceled": {
+        "id": "step-3",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 31,
+        "start_time_s": 0.005,
+        "duration_s": 1,
+        "completed_samples": 17,
+        "total_samples": 1000,
+        "progress": 0.016999999999999998,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.007
+    },
+    {
+      "index": 3,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-4",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 41,
+        "start_time_s": 0.007,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.001
+      },
+      "canceled": {
+        "id": "step-4",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 41,
+        "start_time_s": 0.007,
+        "duration_s": 1,
+        "completed_samples": 42,
+        "total_samples": 1000,
+        "progress": 0.042,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.011000000000000003
+    },
+    {
+      "index": 4,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-5",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 51,
+        "start_time_s": 0.011000000000000003,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.0010000000000000009
+      },
+      "canceled": {
+        "id": "step-5",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 51,
+        "start_time_s": 0.011000000000000003,
+        "duration_s": 1,
+        "completed_samples": 57,
+        "total_samples": 1000,
+        "progress": 0.057,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.015000000000000006
+    },
+    {
+      "index": 5,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-6",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 61,
+        "start_time_s": 0.015000000000000006,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.0010000000000000009
+      },
+      "canceled": {
+        "id": "step-6",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 61,
+        "start_time_s": 0.015000000000000006,
+        "duration_s": 1,
+        "completed_samples": 69,
+        "total_samples": 1000,
+        "progress": 0.069,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.01900000000000001
+    },
+    {
+      "index": 6,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-7",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 71,
+        "start_time_s": 0.01900000000000001,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.0010000000000000009
+      },
+      "canceled": {
+        "id": "step-7",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 71,
+        "start_time_s": 0.01900000000000001,
+        "duration_s": 1,
+        "completed_samples": 82,
+        "total_samples": 1000,
+        "progress": 0.08199999999999999,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.023000000000000013
+    },
+    {
+      "index": 7,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-8",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 81,
+        "start_time_s": 0.023000000000000013,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.0010000000000000009
+      },
+      "canceled": {
+        "id": "step-8",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 81,
+        "start_time_s": 0.023000000000000013,
+        "duration_s": 1,
+        "completed_samples": 78,
+        "total_samples": 1000,
+        "progress": 0.07800000000000001,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.03000000000000002
+    },
+    {
+      "index": 8,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-9",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 91,
+        "start_time_s": 0.03000000000000002,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.0010000000000000009
+      },
+      "canceled": {
+        "id": "step-9",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 91,
+        "start_time_s": 0.03000000000000002,
+        "duration_s": 1,
+        "completed_samples": 72,
+        "total_samples": 1000,
+        "progress": 0.07200000000000001,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.036000000000000025
+    },
+    {
+      "index": 9,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-10",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 101,
+        "start_time_s": 0.036000000000000025,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.0010000000000000009
+      },
+      "canceled": {
+        "id": "step-10",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 101,
+        "start_time_s": 0.036000000000000025,
+        "duration_s": 1,
+        "completed_samples": 66,
+        "total_samples": 1000,
+        "progress": 0.066,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.04100000000000003
+    },
+    {
+      "index": 10,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-11",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 111,
+        "start_time_s": 0.04100000000000003,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.0010000000000000009
+      },
+      "canceled": {
+        "id": "step-11",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 111,
+        "start_time_s": 0.04100000000000003,
+        "duration_s": 1,
+        "completed_samples": 61,
+        "total_samples": 1000,
+        "progress": 0.061000000000000006,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.048000000000000036
+    },
+    {
+      "index": 11,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-12",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 121,
+        "start_time_s": 0.048000000000000036,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.0010000000000000009
+      },
+      "canceled": {
+        "id": "step-12",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 121,
+        "start_time_s": 0.048000000000000036,
+        "duration_s": 1,
+        "completed_samples": 55,
+        "total_samples": 1000,
+        "progress": 0.055,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.05400000000000004
+    },
+    {
+      "index": 12,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-13",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 131,
+        "start_time_s": 0.05400000000000004,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.0010000000000000009
+      },
+      "canceled": {
+        "id": "step-13",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 131,
+        "start_time_s": 0.05400000000000004,
+        "duration_s": 1,
+        "completed_samples": 49,
+        "total_samples": 1000,
+        "progress": 0.048999999999999995,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.059000000000000045
+    },
+    {
+      "index": 13,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-14",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 141,
+        "start_time_s": 0.059000000000000045,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.0010000000000000009
+      },
+      "canceled": {
+        "id": "step-14",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 141,
+        "start_time_s": 0.059000000000000045,
+        "duration_s": 1,
+        "completed_samples": 44,
+        "total_samples": 1000,
+        "progress": 0.044000000000000004,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.06900000000000005
+    },
+    {
+      "index": 14,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-15",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 151,
+        "start_time_s": 0.06900000000000005,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.0010000000000000009
+      },
+      "canceled": {
+        "id": "step-15",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 151,
+        "start_time_s": 0.06900000000000005,
+        "duration_s": 1,
+        "completed_samples": 36,
+        "total_samples": 1000,
+        "progress": 0.036000000000000004,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.07300000000000005
+    },
+    {
+      "index": 15,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-16",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 161,
+        "start_time_s": 0.07300000000000005,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.0010000000000000009
+      },
+      "canceled": {
+        "id": "step-16",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 161,
+        "start_time_s": 0.07300000000000005,
+        "duration_s": 1,
+        "completed_samples": 32,
+        "total_samples": 1000,
+        "progress": 0.032,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.08700000000000006
+    },
+    {
+      "index": 16,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-17",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 172,
+        "start_time_s": 0.08700000000000006,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.0010000000000000009
+      },
+      "canceled": {
+        "id": "step-17",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 172,
+        "start_time_s": 0.08700000000000006,
+        "duration_s": 1,
+        "completed_samples": 19,
+        "total_samples": 1000,
+        "progress": 0.019000000000000003,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.09900000000000007
+    },
+    {
+      "index": 17,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-18",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 182,
+        "start_time_s": 0.09900000000000007,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.0010000000000000009
+      },
+      "canceled": {
+        "id": "step-18",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 182,
+        "start_time_s": 0.09900000000000007,
+        "duration_s": 1,
+        "completed_samples": 12,
+        "total_samples": 1000,
+        "progress": 0.011999999999999997,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.10100000000000008
+    },
+    {
+      "index": 18,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-19",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 193,
+        "start_time_s": 0.10100000000000008,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.0010000000000000009
+      },
+      "canceled": {
+        "id": "step-19",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 193,
+        "start_time_s": 0.10100000000000008,
+        "duration_s": 1,
+        "completed_samples": 13,
+        "total_samples": 1000,
+        "progress": 0.012999999999999998,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.10400000000000008
+    },
+    {
+      "index": 19,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-20",
+        "status": "running",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 203,
+        "start_time_s": 0.10400000000000008,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.0010000000000000009
+      },
+      "canceled": {
+        "id": "step-20",
+        "status": "canceled",
+        "actor": "agent.socket",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 203,
+        "start_time_s": 0.10400000000000008,
+        "duration_s": 1,
+        "completed_samples": 26,
+        "total_samples": 1000,
+        "progress": 0.02600000000000001,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.10700000000000008
+    }
+  ],
+  "observations": [
+    {
+      "command": "view.pan",
+      "wall_ms": 1.7944170394912362,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 10,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 10,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 1.9880000036209822,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 10,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 10,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 14.117791899479926,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 10,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 10,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 2.061625011265278,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 10,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 10,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 1.7749168910086155,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 10,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "canceling",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 10,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 1.8667089752852917,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.002,
+        "step_work": {
+          "id": "step-1",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 10,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 8,
+          "total_samples": 1000,
+          "progress": 0.008,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.002,
+        "step_work": {
+          "id": "step-1",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 10,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 8,
+          "total_samples": 1000,
+          "progress": 0.008,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 4.3808340560644865,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.002,
+        "step_work": {
+          "id": "step-2",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 21,
+          "start_time_s": 0.002,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.002,
+        "step_work": {
+          "id": "step-2",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 21,
+          "start_time_s": 0.002,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 3.814541967585683,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.002,
+        "step_work": {
+          "id": "step-2",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 21,
+          "start_time_s": 0.002,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.002,
+        "step_work": {
+          "id": "step-2",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 21,
+          "start_time_s": 0.002,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 15.458332956768572,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.002,
+        "step_work": {
+          "id": "step-2",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 21,
+          "start_time_s": 0.002,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.002,
+        "step_work": {
+          "id": "step-2",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 21,
+          "start_time_s": 0.002,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 3.672917024232447,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.002,
+        "step_work": {
+          "id": "step-2",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 21,
+          "start_time_s": 0.002,
+          "duration_s": 1,
+          "completed_samples": 12,
+          "total_samples": 1000,
+          "progress": 0.012
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.002,
+        "step_work": {
+          "id": "step-2",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 21,
+          "start_time_s": 0.002,
+          "duration_s": 1,
+          "completed_samples": 12,
+          "total_samples": 1000,
+          "progress": 0.012
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 3.5208339104428887,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.002,
+        "step_work": {
+          "id": "step-2",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 21,
+          "start_time_s": 0.002,
+          "duration_s": 1,
+          "completed_samples": 12,
+          "total_samples": 1000,
+          "progress": 0.012
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.002,
+        "step_work": {
+          "id": "step-2",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 21,
+          "start_time_s": 0.002,
+          "duration_s": 1,
+          "completed_samples": 25,
+          "total_samples": 1000,
+          "progress": 0.025,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 1.8730410374701023,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.004,
+        "step_work": {
+          "id": "step-2",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 21,
+          "start_time_s": 0.002,
+          "duration_s": 1,
+          "completed_samples": 25,
+          "total_samples": 1000,
+          "progress": 0.025,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.005,
+        "step_work": {
+          "id": "step-2",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 21,
+          "start_time_s": 0.002,
+          "duration_s": 1,
+          "completed_samples": 25,
+          "total_samples": 1000,
+          "progress": 0.025,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 3.5752500407397747,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.005,
+        "step_work": {
+          "id": "step-3",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 31,
+          "start_time_s": 0.005,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.005,
+        "step_work": {
+          "id": "step-3",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 31,
+          "start_time_s": 0.005,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 2.9200419085100293,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.005,
+        "step_work": {
+          "id": "step-3",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 31,
+          "start_time_s": 0.005,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.005,
+        "step_work": {
+          "id": "step-3",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 31,
+          "start_time_s": 0.005,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 13.48629198037088,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.005,
+        "step_work": {
+          "id": "step-3",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 31,
+          "start_time_s": 0.005,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.005,
+        "step_work": {
+          "id": "step-3",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 31,
+          "start_time_s": 0.005,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 2.2516250610351562,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.005,
+        "step_work": {
+          "id": "step-3",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 31,
+          "start_time_s": 0.005,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.005,
+        "step_work": {
+          "id": "step-3",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 31,
+          "start_time_s": 0.005,
+          "duration_s": 1,
+          "completed_samples": 13,
+          "total_samples": 1000,
+          "progress": 0.013000000000000001
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 2.3540830006822944,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.005,
+        "step_work": {
+          "id": "step-3",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 31,
+          "start_time_s": 0.005,
+          "duration_s": 1,
+          "completed_samples": 13,
+          "total_samples": 1000,
+          "progress": 0.013000000000000001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.005,
+        "step_work": {
+          "id": "step-3",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 31,
+          "start_time_s": 0.005,
+          "duration_s": 1,
+          "completed_samples": 17,
+          "total_samples": 1000,
+          "progress": 0.016999999999999998,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 3.7701670080423355,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.007,
+        "step_work": {
+          "id": "step-3",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 31,
+          "start_time_s": 0.005,
+          "duration_s": 1,
+          "completed_samples": 17,
+          "total_samples": 1000,
+          "progress": 0.016999999999999998,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.007,
+        "step_work": {
+          "id": "step-3",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 31,
+          "start_time_s": 0.005,
+          "duration_s": 1,
+          "completed_samples": 17,
+          "total_samples": 1000,
+          "progress": 0.016999999999999998,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.8551249522715807,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.007,
+        "step_work": {
+          "id": "step-4",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 41,
+          "start_time_s": 0.007,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.007,
+        "step_work": {
+          "id": "step-4",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 41,
+          "start_time_s": 0.007,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 3.3494170056656003,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.007,
+        "step_work": {
+          "id": "step-4",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 41,
+          "start_time_s": 0.007,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.007,
+        "step_work": {
+          "id": "step-4",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 41,
+          "start_time_s": 0.007,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 26.138583081774414,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.007,
+        "step_work": {
+          "id": "step-4",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 41,
+          "start_time_s": 0.007,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.007,
+        "step_work": {
+          "id": "step-4",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 41,
+          "start_time_s": 0.007,
+          "duration_s": 1,
+          "completed_samples": 28,
+          "total_samples": 1000,
+          "progress": 0.028000000000000004
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 2.230792073532939,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.007,
+        "step_work": {
+          "id": "step-4",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 41,
+          "start_time_s": 0.007,
+          "duration_s": 1,
+          "completed_samples": 28,
+          "total_samples": 1000,
+          "progress": 0.028000000000000004
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.007,
+        "step_work": {
+          "id": "step-4",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 41,
+          "start_time_s": 0.007,
+          "duration_s": 1,
+          "completed_samples": 28,
+          "total_samples": 1000,
+          "progress": 0.028000000000000004
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 1.9915829179808497,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.007,
+        "step_work": {
+          "id": "step-4",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 41,
+          "start_time_s": 0.007,
+          "duration_s": 1,
+          "completed_samples": 28,
+          "total_samples": 1000,
+          "progress": 0.028000000000000004
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.007,
+        "step_work": {
+          "id": "step-4",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 41,
+          "start_time_s": 0.007,
+          "duration_s": 1,
+          "completed_samples": 42,
+          "total_samples": 1000,
+          "progress": 0.042,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 3.4536250168457627,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.010000000000000002,
+        "step_work": {
+          "id": "step-4",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 41,
+          "start_time_s": 0.007,
+          "duration_s": 1,
+          "completed_samples": 42,
+          "total_samples": 1000,
+          "progress": 0.042,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.011000000000000003,
+        "step_work": {
+          "id": "step-4",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 41,
+          "start_time_s": 0.007,
+          "duration_s": 1,
+          "completed_samples": 42,
+          "total_samples": 1000,
+          "progress": 0.042,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 2.4794579949229956,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.011000000000000003,
+        "step_work": {
+          "id": "step-5",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 51,
+          "start_time_s": 0.011000000000000003,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.011000000000000003,
+        "step_work": {
+          "id": "step-5",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 51,
+          "start_time_s": 0.011000000000000003,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 1.953125,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.011000000000000003,
+        "step_work": {
+          "id": "step-5",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 51,
+          "start_time_s": 0.011000000000000003,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.011000000000000003,
+        "step_work": {
+          "id": "step-5",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 51,
+          "start_time_s": 0.011000000000000003,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 28.714791988022625,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.011000000000000003,
+        "step_work": {
+          "id": "step-5",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 51,
+          "start_time_s": 0.011000000000000003,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.011000000000000003,
+        "step_work": {
+          "id": "step-5",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 51,
+          "start_time_s": 0.011000000000000003,
+          "duration_s": 1,
+          "completed_samples": 40,
+          "total_samples": 1000,
+          "progress": 0.04
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 2.2935839369893074,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.011000000000000003,
+        "step_work": {
+          "id": "step-5",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 51,
+          "start_time_s": 0.011000000000000003,
+          "duration_s": 1,
+          "completed_samples": 40,
+          "total_samples": 1000,
+          "progress": 0.04
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.011000000000000003,
+        "step_work": {
+          "id": "step-5",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 51,
+          "start_time_s": 0.011000000000000003,
+          "duration_s": 1,
+          "completed_samples": 40,
+          "total_samples": 1000,
+          "progress": 0.04
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 2.0195000106468797,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.011000000000000003,
+        "step_work": {
+          "id": "step-5",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 51,
+          "start_time_s": 0.011000000000000003,
+          "duration_s": 1,
+          "completed_samples": 40,
+          "total_samples": 1000,
+          "progress": 0.04
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.011000000000000003,
+        "step_work": {
+          "id": "step-5",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 51,
+          "start_time_s": 0.011000000000000003,
+          "duration_s": 1,
+          "completed_samples": 57,
+          "total_samples": 1000,
+          "progress": 0.057,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 3.4866658970713615,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.014000000000000005,
+        "step_work": {
+          "id": "step-5",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 51,
+          "start_time_s": 0.011000000000000003,
+          "duration_s": 1,
+          "completed_samples": 57,
+          "total_samples": 1000,
+          "progress": 0.057,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.015000000000000006,
+        "step_work": {
+          "id": "step-5",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 51,
+          "start_time_s": 0.011000000000000003,
+          "duration_s": 1,
+          "completed_samples": 57,
+          "total_samples": 1000,
+          "progress": 0.057,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 3.355082939378917,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.015000000000000006,
+        "step_work": {
+          "id": "step-6",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 61,
+          "start_time_s": 0.015000000000000006,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.015000000000000006,
+        "step_work": {
+          "id": "step-6",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 61,
+          "start_time_s": 0.015000000000000006,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 2.021041000261903,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.015000000000000006,
+        "step_work": {
+          "id": "step-6",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 61,
+          "start_time_s": 0.015000000000000006,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.015000000000000006,
+        "step_work": {
+          "id": "step-6",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 61,
+          "start_time_s": 0.015000000000000006,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 13.774790917523205,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.015000000000000006,
+        "step_work": {
+          "id": "step-6",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 61,
+          "start_time_s": 0.015000000000000006,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.015000000000000006,
+        "step_work": {
+          "id": "step-6",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 61,
+          "start_time_s": 0.015000000000000006,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 3.3416670048609376,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.015000000000000006,
+        "step_work": {
+          "id": "step-6",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 61,
+          "start_time_s": 0.015000000000000006,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.015000000000000006,
+        "step_work": {
+          "id": "step-6",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 61,
+          "start_time_s": 0.015000000000000006,
+          "duration_s": 1,
+          "completed_samples": 49,
+          "total_samples": 1000,
+          "progress": 0.048999999999999995
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 5.037875031121075,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.015000000000000006,
+        "step_work": {
+          "id": "step-6",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 61,
+          "start_time_s": 0.015000000000000006,
+          "duration_s": 1,
+          "completed_samples": 49,
+          "total_samples": 1000,
+          "progress": 0.048999999999999995
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.015000000000000006,
+        "step_work": {
+          "id": "step-6",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 61,
+          "start_time_s": 0.015000000000000006,
+          "duration_s": 1,
+          "completed_samples": 69,
+          "total_samples": 1000,
+          "progress": 0.069,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 2.041290979832411,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.01800000000000001,
+        "step_work": {
+          "id": "step-6",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 61,
+          "start_time_s": 0.015000000000000006,
+          "duration_s": 1,
+          "completed_samples": 69,
+          "total_samples": 1000,
+          "progress": 0.069,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.01900000000000001,
+        "step_work": {
+          "id": "step-6",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 61,
+          "start_time_s": 0.015000000000000006,
+          "duration_s": 1,
+          "completed_samples": 69,
+          "total_samples": 1000,
+          "progress": 0.069,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 1.893749926239252,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.01900000000000001,
+        "step_work": {
+          "id": "step-7",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 71,
+          "start_time_s": 0.01900000000000001,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.01900000000000001,
+        "step_work": {
+          "id": "step-7",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 71,
+          "start_time_s": 0.01900000000000001,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 3.7857909919694066,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.01900000000000001,
+        "step_work": {
+          "id": "step-7",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 71,
+          "start_time_s": 0.01900000000000001,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.01900000000000001,
+        "step_work": {
+          "id": "step-7",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 71,
+          "start_time_s": 0.01900000000000001,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 24.810542003251612,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.01900000000000001,
+        "step_work": {
+          "id": "step-7",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 71,
+          "start_time_s": 0.01900000000000001,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.01900000000000001,
+        "step_work": {
+          "id": "step-7",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 71,
+          "start_time_s": 0.01900000000000001,
+          "duration_s": 1,
+          "completed_samples": 62,
+          "total_samples": 1000,
+          "progress": 0.062000000000000006
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 2.3032909957692027,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.01900000000000001,
+        "step_work": {
+          "id": "step-7",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 71,
+          "start_time_s": 0.01900000000000001,
+          "duration_s": 1,
+          "completed_samples": 62,
+          "total_samples": 1000,
+          "progress": 0.062000000000000006
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.01900000000000001,
+        "step_work": {
+          "id": "step-7",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 71,
+          "start_time_s": 0.01900000000000001,
+          "duration_s": 1,
+          "completed_samples": 62,
+          "total_samples": 1000,
+          "progress": 0.062000000000000006
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 2.03029194381088,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.01900000000000001,
+        "step_work": {
+          "id": "step-7",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 71,
+          "start_time_s": 0.01900000000000001,
+          "duration_s": 1,
+          "completed_samples": 62,
+          "total_samples": 1000,
+          "progress": 0.062000000000000006
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.01900000000000001,
+        "step_work": {
+          "id": "step-7",
+          "status": "canceling",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 71,
+          "start_time_s": 0.01900000000000001,
+          "duration_s": 1,
+          "completed_samples": 62,
+          "total_samples": 1000,
+          "progress": 0.062000000000000006
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 3.008000086992979,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.022000000000000013,
+        "step_work": {
+          "id": "step-7",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 71,
+          "start_time_s": 0.01900000000000001,
+          "duration_s": 1,
+          "completed_samples": 82,
+          "total_samples": 1000,
+          "progress": 0.08199999999999999,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.023000000000000013,
+        "step_work": {
+          "id": "step-7",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 71,
+          "start_time_s": 0.01900000000000001,
+          "duration_s": 1,
+          "completed_samples": 82,
+          "total_samples": 1000,
+          "progress": 0.08199999999999999,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 2.53633304964751,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.023000000000000013,
+        "step_work": {
+          "id": "step-8",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 81,
+          "start_time_s": 0.023000000000000013,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.023000000000000013,
+        "step_work": {
+          "id": "step-8",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 81,
+          "start_time_s": 0.023000000000000013,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 1.955667044967413,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.023000000000000013,
+        "step_work": {
+          "id": "step-8",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 81,
+          "start_time_s": 0.023000000000000013,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.023000000000000013,
+        "step_work": {
+          "id": "step-8",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 81,
+          "start_time_s": 0.023000000000000013,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 27.619458036497235,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.023000000000000013,
+        "step_work": {
+          "id": "step-8",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 81,
+          "start_time_s": 0.023000000000000013,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.023000000000000013,
+        "step_work": {
+          "id": "step-8",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 81,
+          "start_time_s": 0.023000000000000013,
+          "duration_s": 1,
+          "completed_samples": 64,
+          "total_samples": 1000,
+          "progress": 0.064
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 2.5558338966220617,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.023000000000000013,
+        "step_work": {
+          "id": "step-8",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 81,
+          "start_time_s": 0.023000000000000013,
+          "duration_s": 1,
+          "completed_samples": 64,
+          "total_samples": 1000,
+          "progress": 0.064
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.023000000000000013,
+        "step_work": {
+          "id": "step-8",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 81,
+          "start_time_s": 0.023000000000000013,
+          "duration_s": 1,
+          "completed_samples": 64,
+          "total_samples": 1000,
+          "progress": 0.064
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 2.112249960191548,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.023000000000000013,
+        "step_work": {
+          "id": "step-8",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 81,
+          "start_time_s": 0.023000000000000013,
+          "duration_s": 1,
+          "completed_samples": 64,
+          "total_samples": 1000,
+          "progress": 0.064
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.023000000000000013,
+        "step_work": {
+          "id": "step-8",
+          "status": "canceling",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 81,
+          "start_time_s": 0.023000000000000013,
+          "duration_s": 1,
+          "completed_samples": 64,
+          "total_samples": 1000,
+          "progress": 0.064
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 2.0897919312119484,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.028000000000000018,
+        "step_work": {
+          "id": "step-8",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 81,
+          "start_time_s": 0.023000000000000013,
+          "duration_s": 1,
+          "completed_samples": 78,
+          "total_samples": 1000,
+          "progress": 0.07800000000000001,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.03000000000000002,
+        "step_work": {
+          "id": "step-8",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 81,
+          "start_time_s": 0.023000000000000013,
+          "duration_s": 1,
+          "completed_samples": 78,
+          "total_samples": 1000,
+          "progress": 0.07800000000000001,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 4.868792020715773,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.03000000000000002,
+        "step_work": {
+          "id": "step-9",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 91,
+          "start_time_s": 0.03000000000000002,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.03000000000000002,
+        "step_work": {
+          "id": "step-9",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 91,
+          "start_time_s": 0.03000000000000002,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 3.8829169934615493,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.03000000000000002,
+        "step_work": {
+          "id": "step-9",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 91,
+          "start_time_s": 0.03000000000000002,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.03000000000000002,
+        "step_work": {
+          "id": "step-9",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 91,
+          "start_time_s": 0.03000000000000002,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 19.929290981963277,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.03000000000000002,
+        "step_work": {
+          "id": "step-9",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 91,
+          "start_time_s": 0.03000000000000002,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.03000000000000002,
+        "step_work": {
+          "id": "step-9",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 91,
+          "start_time_s": 0.03000000000000002,
+          "duration_s": 1,
+          "completed_samples": 64,
+          "total_samples": 1000,
+          "progress": 0.064
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 4.365250002592802,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.03000000000000002,
+        "step_work": {
+          "id": "step-9",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 91,
+          "start_time_s": 0.03000000000000002,
+          "duration_s": 1,
+          "completed_samples": 64,
+          "total_samples": 1000,
+          "progress": 0.064
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.03000000000000002,
+        "step_work": {
+          "id": "step-9",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 91,
+          "start_time_s": 0.03000000000000002,
+          "duration_s": 1,
+          "completed_samples": 64,
+          "total_samples": 1000,
+          "progress": 0.064
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 4.015417071059346,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.03000000000000002,
+        "step_work": {
+          "id": "step-9",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 91,
+          "start_time_s": 0.03000000000000002,
+          "duration_s": 1,
+          "completed_samples": 64,
+          "total_samples": 1000,
+          "progress": 0.064
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.03000000000000002,
+        "step_work": {
+          "id": "step-9",
+          "status": "canceling",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 91,
+          "start_time_s": 0.03000000000000002,
+          "duration_s": 1,
+          "completed_samples": 64,
+          "total_samples": 1000,
+          "progress": 0.064
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 2.925042062997818,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.03400000000000002,
+        "step_work": {
+          "id": "step-9",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 91,
+          "start_time_s": 0.03000000000000002,
+          "duration_s": 1,
+          "completed_samples": 72,
+          "total_samples": 1000,
+          "progress": 0.07200000000000001,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.036000000000000025,
+        "step_work": {
+          "id": "step-9",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 91,
+          "start_time_s": 0.03000000000000002,
+          "duration_s": 1,
+          "completed_samples": 72,
+          "total_samples": 1000,
+          "progress": 0.07200000000000001,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 3.998875035904348,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.036000000000000025,
+        "step_work": {
+          "id": "step-10",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 101,
+          "start_time_s": 0.036000000000000025,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.036000000000000025,
+        "step_work": {
+          "id": "step-10",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 101,
+          "start_time_s": 0.036000000000000025,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 4.0437920251861215,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.036000000000000025,
+        "step_work": {
+          "id": "step-10",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 101,
+          "start_time_s": 0.036000000000000025,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.036000000000000025,
+        "step_work": {
+          "id": "step-10",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 101,
+          "start_time_s": 0.036000000000000025,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 21.84437506366521,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.036000000000000025,
+        "step_work": {
+          "id": "step-10",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 101,
+          "start_time_s": 0.036000000000000025,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.036000000000000025,
+        "step_work": {
+          "id": "step-10",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 101,
+          "start_time_s": 0.036000000000000025,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 2.636625082232058,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.036000000000000025,
+        "step_work": {
+          "id": "step-10",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 101,
+          "start_time_s": 0.036000000000000025,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.036000000000000025,
+        "step_work": {
+          "id": "step-10",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 101,
+          "start_time_s": 0.036000000000000025,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 2.0971669582650065,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.036000000000000025,
+        "step_work": {
+          "id": "step-10",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 101,
+          "start_time_s": 0.036000000000000025,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.036000000000000025,
+        "step_work": {
+          "id": "step-10",
+          "status": "canceling",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 101,
+          "start_time_s": 0.036000000000000025,
+          "duration_s": 1,
+          "completed_samples": 65,
+          "total_samples": 1000,
+          "progress": 0.065
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 2.981416997499764,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.04000000000000003,
+        "step_work": {
+          "id": "step-10",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 101,
+          "start_time_s": 0.036000000000000025,
+          "duration_s": 1,
+          "completed_samples": 66,
+          "total_samples": 1000,
+          "progress": 0.066,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.04100000000000003,
+        "step_work": {
+          "id": "step-10",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 101,
+          "start_time_s": 0.036000000000000025,
+          "duration_s": 1,
+          "completed_samples": 66,
+          "total_samples": 1000,
+          "progress": 0.066,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 3.6293750163167715,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.04100000000000003,
+        "step_work": {
+          "id": "step-11",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 111,
+          "start_time_s": 0.04100000000000003,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.04100000000000003,
+        "step_work": {
+          "id": "step-11",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 111,
+          "start_time_s": 0.04100000000000003,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 2.0568330073729157,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.04100000000000003,
+        "step_work": {
+          "id": "step-11",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 111,
+          "start_time_s": 0.04100000000000003,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.04100000000000003,
+        "step_work": {
+          "id": "step-11",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 111,
+          "start_time_s": 0.04100000000000003,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 18.913957988843322,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.04100000000000003,
+        "step_work": {
+          "id": "step-11",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 111,
+          "start_time_s": 0.04100000000000003,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.04100000000000003,
+        "step_work": {
+          "id": "step-11",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 111,
+          "start_time_s": 0.04100000000000003,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 5.565625033341348,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.04100000000000003,
+        "step_work": {
+          "id": "step-11",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 111,
+          "start_time_s": 0.04100000000000003,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.04100000000000003,
+        "step_work": {
+          "id": "step-11",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 111,
+          "start_time_s": 0.04100000000000003,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 3.4651249879971147,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.04100000000000003,
+        "step_work": {
+          "id": "step-11",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 111,
+          "start_time_s": 0.04100000000000003,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.04100000000000003,
+        "step_work": {
+          "id": "step-11",
+          "status": "canceling",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 111,
+          "start_time_s": 0.04100000000000003,
+          "duration_s": 1,
+          "completed_samples": 60,
+          "total_samples": 1000,
+          "progress": 0.060000000000000005
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 2.152291010133922,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.046000000000000034,
+        "step_work": {
+          "id": "step-11",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 111,
+          "start_time_s": 0.04100000000000003,
+          "duration_s": 1,
+          "completed_samples": 61,
+          "total_samples": 1000,
+          "progress": 0.061000000000000006,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.048000000000000036,
+        "step_work": {
+          "id": "step-11",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 111,
+          "start_time_s": 0.04100000000000003,
+          "duration_s": 1,
+          "completed_samples": 61,
+          "total_samples": 1000,
+          "progress": 0.061000000000000006,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 4.228124977089465,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.048000000000000036,
+        "step_work": {
+          "id": "step-12",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 121,
+          "start_time_s": 0.048000000000000036,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.048000000000000036,
+        "step_work": {
+          "id": "step-12",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 121,
+          "start_time_s": 0.048000000000000036,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 4.041834035888314,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.048000000000000036,
+        "step_work": {
+          "id": "step-12",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 121,
+          "start_time_s": 0.048000000000000036,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.048000000000000036,
+        "step_work": {
+          "id": "step-12",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 121,
+          "start_time_s": 0.048000000000000036,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 18.160833045840263,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.048000000000000036,
+        "step_work": {
+          "id": "step-12",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 121,
+          "start_time_s": 0.048000000000000036,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.048000000000000036,
+        "step_work": {
+          "id": "step-12",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 121,
+          "start_time_s": 0.048000000000000036,
+          "duration_s": 1,
+          "completed_samples": 53,
+          "total_samples": 1000,
+          "progress": 0.053
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 4.268915974535048,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.048000000000000036,
+        "step_work": {
+          "id": "step-12",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 121,
+          "start_time_s": 0.048000000000000036,
+          "duration_s": 1,
+          "completed_samples": 53,
+          "total_samples": 1000,
+          "progress": 0.053
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.048000000000000036,
+        "step_work": {
+          "id": "step-12",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 121,
+          "start_time_s": 0.048000000000000036,
+          "duration_s": 1,
+          "completed_samples": 53,
+          "total_samples": 1000,
+          "progress": 0.053
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 5.369334015995264,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.048000000000000036,
+        "step_work": {
+          "id": "step-12",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 121,
+          "start_time_s": 0.048000000000000036,
+          "duration_s": 1,
+          "completed_samples": 53,
+          "total_samples": 1000,
+          "progress": 0.053
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.048000000000000036,
+        "step_work": {
+          "id": "step-12",
+          "status": "canceling",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 121,
+          "start_time_s": 0.048000000000000036,
+          "duration_s": 1,
+          "completed_samples": 53,
+          "total_samples": 1000,
+          "progress": 0.053
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 2.7034169761464,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.05300000000000004,
+        "step_work": {
+          "id": "step-12",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 121,
+          "start_time_s": 0.048000000000000036,
+          "duration_s": 1,
+          "completed_samples": 55,
+          "total_samples": 1000,
+          "progress": 0.055,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.05400000000000004,
+        "step_work": {
+          "id": "step-12",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 121,
+          "start_time_s": 0.048000000000000036,
+          "duration_s": 1,
+          "completed_samples": 55,
+          "total_samples": 1000,
+          "progress": 0.055,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 2.6461250381544232,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.05400000000000004,
+        "step_work": {
+          "id": "step-13",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 131,
+          "start_time_s": 0.05400000000000004,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.05400000000000004,
+        "step_work": {
+          "id": "step-13",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 131,
+          "start_time_s": 0.05400000000000004,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 5.062957992777228,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.05400000000000004,
+        "step_work": {
+          "id": "step-13",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 131,
+          "start_time_s": 0.05400000000000004,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.05400000000000004,
+        "step_work": {
+          "id": "step-13",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 131,
+          "start_time_s": 0.05400000000000004,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 21.711625042371452,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.05400000000000004,
+        "step_work": {
+          "id": "step-13",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 131,
+          "start_time_s": 0.05400000000000004,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.05400000000000004,
+        "step_work": {
+          "id": "step-13",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 131,
+          "start_time_s": 0.05400000000000004,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 2.6277080178260803,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.05400000000000004,
+        "step_work": {
+          "id": "step-13",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 131,
+          "start_time_s": 0.05400000000000004,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.05400000000000004,
+        "step_work": {
+          "id": "step-13",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 131,
+          "start_time_s": 0.05400000000000004,
+          "duration_s": 1,
+          "completed_samples": 48,
+          "total_samples": 1000,
+          "progress": 0.047999999999999994
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 2.115042065270245,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.05400000000000004,
+        "step_work": {
+          "id": "step-13",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 131,
+          "start_time_s": 0.05400000000000004,
+          "duration_s": 1,
+          "completed_samples": 48,
+          "total_samples": 1000,
+          "progress": 0.047999999999999994
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.05400000000000004,
+        "step_work": {
+          "id": "step-13",
+          "status": "canceling",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 131,
+          "start_time_s": 0.05400000000000004,
+          "duration_s": 1,
+          "completed_samples": 48,
+          "total_samples": 1000,
+          "progress": 0.047999999999999994
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 2.945750020444393,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.058000000000000045,
+        "step_work": {
+          "id": "step-13",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 131,
+          "start_time_s": 0.05400000000000004,
+          "duration_s": 1,
+          "completed_samples": 49,
+          "total_samples": 1000,
+          "progress": 0.048999999999999995,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.059000000000000045,
+        "step_work": {
+          "id": "step-13",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 131,
+          "start_time_s": 0.05400000000000004,
+          "duration_s": 1,
+          "completed_samples": 49,
+          "total_samples": 1000,
+          "progress": 0.048999999999999995,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 2.8650410240516067,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.059000000000000045,
+        "step_work": {
+          "id": "step-14",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 141,
+          "start_time_s": 0.059000000000000045,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.059000000000000045,
+        "step_work": {
+          "id": "step-14",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 141,
+          "start_time_s": 0.059000000000000045,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 2.1505410550162196,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.059000000000000045,
+        "step_work": {
+          "id": "step-14",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 141,
+          "start_time_s": 0.059000000000000045,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.059000000000000045,
+        "step_work": {
+          "id": "step-14",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 141,
+          "start_time_s": 0.059000000000000045,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 18.07412493508309,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.059000000000000045,
+        "step_work": {
+          "id": "step-14",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 141,
+          "start_time_s": 0.059000000000000045,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.059000000000000045,
+        "step_work": {
+          "id": "step-14",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 141,
+          "start_time_s": 0.059000000000000045,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 5.486082984134555,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.059000000000000045,
+        "step_work": {
+          "id": "step-14",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 141,
+          "start_time_s": 0.059000000000000045,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.059000000000000045,
+        "step_work": {
+          "id": "step-14",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 141,
+          "start_time_s": 0.059000000000000045,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 4.008165909908712,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.059000000000000045,
+        "step_work": {
+          "id": "step-14",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 141,
+          "start_time_s": 0.059000000000000045,
+          "duration_s": 1,
+          "completed_samples": 43,
+          "total_samples": 1000,
+          "progress": 0.043000000000000003
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.059000000000000045,
+        "step_work": {
+          "id": "step-14",
+          "status": "canceling",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 141,
+          "start_time_s": 0.059000000000000045,
+          "duration_s": 1,
+          "completed_samples": 43,
+          "total_samples": 1000,
+          "progress": 0.043000000000000003
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 3.198208985850215,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.06600000000000004,
+        "step_work": {
+          "id": "step-14",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 141,
+          "start_time_s": 0.059000000000000045,
+          "duration_s": 1,
+          "completed_samples": 44,
+          "total_samples": 1000,
+          "progress": 0.044000000000000004,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.06900000000000005,
+        "step_work": {
+          "id": "step-14",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 141,
+          "start_time_s": 0.059000000000000045,
+          "duration_s": 1,
+          "completed_samples": 44,
+          "total_samples": 1000,
+          "progress": 0.044000000000000004,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 2.770166960544884,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.06900000000000005,
+        "step_work": {
+          "id": "step-15",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 151,
+          "start_time_s": 0.06900000000000005,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.06900000000000005,
+        "step_work": {
+          "id": "step-15",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 151,
+          "start_time_s": 0.06900000000000005,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 4.280666005797684,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.06900000000000005,
+        "step_work": {
+          "id": "step-15",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 151,
+          "start_time_s": 0.06900000000000005,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.06900000000000005,
+        "step_work": {
+          "id": "step-15",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 151,
+          "start_time_s": 0.06900000000000005,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 21.961416001431644,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.06900000000000005,
+        "step_work": {
+          "id": "step-15",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 151,
+          "start_time_s": 0.06900000000000005,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.06900000000000005,
+        "step_work": {
+          "id": "step-15",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 151,
+          "start_time_s": 0.06900000000000005,
+          "duration_s": 1,
+          "completed_samples": 33,
+          "total_samples": 1000,
+          "progress": 0.033
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 6.252333056181669,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.06900000000000005,
+        "step_work": {
+          "id": "step-15",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 151,
+          "start_time_s": 0.06900000000000005,
+          "duration_s": 1,
+          "completed_samples": 33,
+          "total_samples": 1000,
+          "progress": 0.033
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.06900000000000005,
+        "step_work": {
+          "id": "step-15",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 151,
+          "start_time_s": 0.06900000000000005,
+          "duration_s": 1,
+          "completed_samples": 33,
+          "total_samples": 1000,
+          "progress": 0.033
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 4.2292500147596,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.06900000000000005,
+        "step_work": {
+          "id": "step-15",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 151,
+          "start_time_s": 0.06900000000000005,
+          "duration_s": 1,
+          "completed_samples": 33,
+          "total_samples": 1000,
+          "progress": 0.033
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.06900000000000005,
+        "step_work": {
+          "id": "step-15",
+          "status": "canceling",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 151,
+          "start_time_s": 0.06900000000000005,
+          "duration_s": 1,
+          "completed_samples": 33,
+          "total_samples": 1000,
+          "progress": 0.033
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 2.602374996058643,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.07200000000000005,
+        "step_work": {
+          "id": "step-15",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 151,
+          "start_time_s": 0.06900000000000005,
+          "duration_s": 1,
+          "completed_samples": 36,
+          "total_samples": 1000,
+          "progress": 0.036000000000000004,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.07300000000000005,
+        "step_work": {
+          "id": "step-15",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 151,
+          "start_time_s": 0.06900000000000005,
+          "duration_s": 1,
+          "completed_samples": 36,
+          "total_samples": 1000,
+          "progress": 0.036000000000000004,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 2.2935420274734497,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.07300000000000005,
+        "step_work": {
+          "id": "step-16",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 161,
+          "start_time_s": 0.07300000000000005,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.07300000000000005,
+        "step_work": {
+          "id": "step-16",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 161,
+          "start_time_s": 0.07300000000000005,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 4.197124973870814,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.07300000000000005,
+        "step_work": {
+          "id": "step-16",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 161,
+          "start_time_s": 0.07300000000000005,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.07300000000000005,
+        "step_work": {
+          "id": "step-16",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 161,
+          "start_time_s": 0.07300000000000005,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 25.44037497136742,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.07300000000000005,
+        "step_work": {
+          "id": "step-16",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 161,
+          "start_time_s": 0.07300000000000005,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.07300000000000005,
+        "step_work": {
+          "id": "step-16",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 161,
+          "start_time_s": 0.07300000000000005,
+          "duration_s": 1,
+          "completed_samples": 29,
+          "total_samples": 1000,
+          "progress": 0.028999999999999998
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 3.611499909311533,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.07300000000000005,
+        "step_work": {
+          "id": "step-16",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 161,
+          "start_time_s": 0.07300000000000005,
+          "duration_s": 1,
+          "completed_samples": 29,
+          "total_samples": 1000,
+          "progress": 0.028999999999999998
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.07300000000000005,
+        "step_work": {
+          "id": "step-16",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 161,
+          "start_time_s": 0.07300000000000005,
+          "duration_s": 1,
+          "completed_samples": 29,
+          "total_samples": 1000,
+          "progress": 0.028999999999999998
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 4.254583967849612,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.07300000000000005,
+        "step_work": {
+          "id": "step-16",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 161,
+          "start_time_s": 0.07300000000000005,
+          "duration_s": 1,
+          "completed_samples": 29,
+          "total_samples": 1000,
+          "progress": 0.028999999999999998
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.07300000000000005,
+        "step_work": {
+          "id": "step-16",
+          "status": "canceling",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 161,
+          "start_time_s": 0.07300000000000005,
+          "duration_s": 1,
+          "completed_samples": 29,
+          "total_samples": 1000,
+          "progress": 0.028999999999999998
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 11.047292035073042,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.08100000000000006,
+        "step_work": {
+          "id": "step-16",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 161,
+          "start_time_s": 0.07300000000000005,
+          "duration_s": 1,
+          "completed_samples": 32,
+          "total_samples": 1000,
+          "progress": 0.032,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.08700000000000006,
+        "step_work": {
+          "id": "step-16",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 161,
+          "start_time_s": 0.07300000000000005,
+          "duration_s": 1,
+          "completed_samples": 32,
+          "total_samples": 1000,
+          "progress": 0.032,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 3.1606670236214995,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.08700000000000006,
+        "step_work": {
+          "id": "step-17",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 172,
+          "start_time_s": 0.08700000000000006,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.08700000000000006,
+        "step_work": {
+          "id": "step-17",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 172,
+          "start_time_s": 0.08700000000000006,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 2.430124906823039,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.08700000000000006,
+        "step_work": {
+          "id": "step-17",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 172,
+          "start_time_s": 0.08700000000000006,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.08700000000000006,
+        "step_work": {
+          "id": "step-17",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 172,
+          "start_time_s": 0.08700000000000006,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 20.345209049992263,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.08700000000000006,
+        "step_work": {
+          "id": "step-17",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 172,
+          "start_time_s": 0.08700000000000006,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.08700000000000006,
+        "step_work": {
+          "id": "step-17",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 172,
+          "start_time_s": 0.08700000000000006,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 5.581042030826211,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.08700000000000006,
+        "step_work": {
+          "id": "step-17",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 172,
+          "start_time_s": 0.08700000000000006,
+          "duration_s": 1,
+          "completed_samples": 16,
+          "total_samples": 1000,
+          "progress": 0.016
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.08700000000000006,
+        "step_work": {
+          "id": "step-17",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 172,
+          "start_time_s": 0.08700000000000006,
+          "duration_s": 1,
+          "completed_samples": 16,
+          "total_samples": 1000,
+          "progress": 0.016
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 4.145457991398871,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.08700000000000006,
+        "step_work": {
+          "id": "step-17",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 172,
+          "start_time_s": 0.08700000000000006,
+          "duration_s": 1,
+          "completed_samples": 16,
+          "total_samples": 1000,
+          "progress": 0.016
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.08700000000000006,
+        "step_work": {
+          "id": "step-17",
+          "status": "canceling",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 172,
+          "start_time_s": 0.08700000000000006,
+          "duration_s": 1,
+          "completed_samples": 16,
+          "total_samples": 1000,
+          "progress": 0.016
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 3.660749993287027,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.09600000000000007,
+        "step_work": {
+          "id": "step-17",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 172,
+          "start_time_s": 0.08700000000000006,
+          "duration_s": 1,
+          "completed_samples": 19,
+          "total_samples": 1000,
+          "progress": 0.019000000000000003,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.09900000000000007,
+        "step_work": {
+          "id": "step-17",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 172,
+          "start_time_s": 0.08700000000000006,
+          "duration_s": 1,
+          "completed_samples": 19,
+          "total_samples": 1000,
+          "progress": 0.019000000000000003,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 5.603249999694526,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.09900000000000007,
+        "step_work": {
+          "id": "step-18",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 182,
+          "start_time_s": 0.09900000000000007,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.09900000000000007,
+        "step_work": {
+          "id": "step-18",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 182,
+          "start_time_s": 0.09900000000000007,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 4.4111659517511725,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.09900000000000007,
+        "step_work": {
+          "id": "step-18",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 182,
+          "start_time_s": 0.09900000000000007,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.09900000000000007,
+        "step_work": {
+          "id": "step-18",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 182,
+          "start_time_s": 0.09900000000000007,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 20.49133402761072,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.09900000000000007,
+        "step_work": {
+          "id": "step-18",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 182,
+          "start_time_s": 0.09900000000000007,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.09900000000000007,
+        "step_work": {
+          "id": "step-18",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 182,
+          "start_time_s": 0.09900000000000007,
+          "duration_s": 1,
+          "completed_samples": 5,
+          "total_samples": 1000,
+          "progress": 0.0050000000000000044
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 4.729792010039091,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.09900000000000007,
+        "step_work": {
+          "id": "step-18",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 182,
+          "start_time_s": 0.09900000000000007,
+          "duration_s": 1,
+          "completed_samples": 5,
+          "total_samples": 1000,
+          "progress": 0.0050000000000000044
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.09900000000000007,
+        "step_work": {
+          "id": "step-18",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 182,
+          "start_time_s": 0.09900000000000007,
+          "duration_s": 1,
+          "completed_samples": 5,
+          "total_samples": 1000,
+          "progress": 0.0050000000000000044
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 4.125416046008468,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.09900000000000007,
+        "step_work": {
+          "id": "step-18",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 182,
+          "start_time_s": 0.09900000000000007,
+          "duration_s": 1,
+          "completed_samples": 5,
+          "total_samples": 1000,
+          "progress": 0.0050000000000000044
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.09900000000000007,
+        "step_work": {
+          "id": "step-18",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 182,
+          "start_time_s": 0.09900000000000007,
+          "duration_s": 1,
+          "completed_samples": 12,
+          "total_samples": 1000,
+          "progress": 0.011999999999999997,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 2.700124983675778,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.10100000000000008,
+        "step_work": {
+          "id": "step-18",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 182,
+          "start_time_s": 0.09900000000000007,
+          "duration_s": 1,
+          "completed_samples": 12,
+          "total_samples": 1000,
+          "progress": 0.011999999999999997,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10100000000000008,
+        "step_work": {
+          "id": "step-18",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 182,
+          "start_time_s": 0.09900000000000007,
+          "duration_s": 1,
+          "completed_samples": 12,
+          "total_samples": 1000,
+          "progress": 0.011999999999999997,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 3.1805000035092235,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10100000000000008,
+        "step_work": {
+          "id": "step-19",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 193,
+          "start_time_s": 0.10100000000000008,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10100000000000008,
+        "step_work": {
+          "id": "step-19",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 193,
+          "start_time_s": 0.10100000000000008,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 3.3294999739155173,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10100000000000008,
+        "step_work": {
+          "id": "step-19",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 193,
+          "start_time_s": 0.10100000000000008,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10100000000000008,
+        "step_work": {
+          "id": "step-19",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 193,
+          "start_time_s": 0.10100000000000008,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 17.77433301322162,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10100000000000008,
+        "step_work": {
+          "id": "step-19",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 193,
+          "start_time_s": 0.10100000000000008,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10100000000000008,
+        "step_work": {
+          "id": "step-19",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 193,
+          "start_time_s": 0.10100000000000008,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 4.767959006130695,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10100000000000008,
+        "step_work": {
+          "id": "step-19",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 193,
+          "start_time_s": 0.10100000000000008,
+          "duration_s": 1,
+          "completed_samples": 7,
+          "total_samples": 1000,
+          "progress": 0.007000000000000006
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10100000000000008,
+        "step_work": {
+          "id": "step-19",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 193,
+          "start_time_s": 0.10100000000000008,
+          "duration_s": 1,
+          "completed_samples": 7,
+          "total_samples": 1000,
+          "progress": 0.007000000000000006
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 4.2704170336946845,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10100000000000008,
+        "step_work": {
+          "id": "step-19",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 193,
+          "start_time_s": 0.10100000000000008,
+          "duration_s": 1,
+          "completed_samples": 7,
+          "total_samples": 1000,
+          "progress": 0.007000000000000006
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10100000000000008,
+        "step_work": {
+          "id": "step-19",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 193,
+          "start_time_s": 0.10100000000000008,
+          "duration_s": 1,
+          "completed_samples": 13,
+          "total_samples": 1000,
+          "progress": 0.012999999999999998,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 4.629834089428186,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.10300000000000008,
+        "step_work": {
+          "id": "step-19",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 193,
+          "start_time_s": 0.10100000000000008,
+          "duration_s": 1,
+          "completed_samples": 13,
+          "total_samples": 1000,
+          "progress": 0.012999999999999998,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10400000000000008,
+        "step_work": {
+          "id": "step-19",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 193,
+          "start_time_s": 0.10100000000000008,
+          "duration_s": 1,
+          "completed_samples": 13,
+          "total_samples": 1000,
+          "progress": 0.012999999999999998,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "view.pan",
+      "wall_ms": 4.545541945844889,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10400000000000008,
+        "step_work": {
+          "id": "step-20",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 203,
+          "start_time_s": 0.10400000000000008,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10400000000000008,
+        "step_work": {
+          "id": "step-20",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 203,
+          "start_time_s": 0.10400000000000008,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 4.125750041566789,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10400000000000008,
+        "step_work": {
+          "id": "step-20",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 203,
+          "start_time_s": 0.10400000000000008,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10400000000000008,
+        "step_work": {
+          "id": "step-20",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 203,
+          "start_time_s": 0.10400000000000008,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 23.791916901245713,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10400000000000008,
+        "step_work": {
+          "id": "step-20",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 203,
+          "start_time_s": 0.10400000000000008,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.0010000000000000009
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10400000000000008,
+        "step_work": {
+          "id": "step-20",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 203,
+          "start_time_s": 0.10400000000000008,
+          "duration_s": 1,
+          "completed_samples": 12,
+          "total_samples": 1000,
+          "progress": 0.011999999999999997
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 3.4600410144776106,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10400000000000008,
+        "step_work": {
+          "id": "step-20",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 203,
+          "start_time_s": 0.10400000000000008,
+          "duration_s": 1,
+          "completed_samples": 12,
+          "total_samples": 1000,
+          "progress": 0.011999999999999997
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10400000000000008,
+        "step_work": {
+          "id": "step-20",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 203,
+          "start_time_s": 0.10400000000000008,
+          "duration_s": 1,
+          "completed_samples": 12,
+          "total_samples": 1000,
+          "progress": 0.011999999999999997
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 2.626791945658624,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10400000000000008,
+        "step_work": {
+          "id": "step-20",
+          "status": "running",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 203,
+          "start_time_s": 0.10400000000000008,
+          "duration_s": 1,
+          "completed_samples": 12,
+          "total_samples": 1000,
+          "progress": 0.011999999999999997
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10400000000000008,
+        "step_work": {
+          "id": "step-20",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 203,
+          "start_time_s": 0.10400000000000008,
+          "duration_s": 1,
+          "completed_samples": 26,
+          "total_samples": 1000,
+          "progress": 0.02600000000000001,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 3.3400000538676977,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.10600000000000008,
+        "step_work": {
+          "id": "step-20",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 203,
+          "start_time_s": 0.10400000000000008,
+          "duration_s": 1,
+          "completed_samples": 26,
+          "total_samples": 1000,
+          "progress": 0.02600000000000001,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.10700000000000008,
+        "step_work": {
+          "id": "step-20",
+          "status": "canceled",
+          "actor": "agent.socket",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 203,
+          "start_time_s": 0.10400000000000008,
+          "duration_s": 1,
+          "completed_samples": 26,
+          "total_samples": 1000,
+          "progress": 0.02600000000000001,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    }
+  ],
+  "summaries": {
+    "drawing.cancel": {
+      "total": 20,
+      "eligible": 20,
+      "maximum_ms": 5.062957992777228,
+      "p95_ms": 4.4111659517511725
+    },
+    "edit.undo": {
+      "total": 20,
+      "eligible": 20,
+      "maximum_ms": 6.252333056181669,
+      "p95_ms": 5.581042030826211
+    },
+    "project.save": {
+      "total": 20,
+      "eligible": 20,
+      "maximum_ms": 28.714791988022625,
+      "p95_ms": 27.619458036497235
+    },
+    "simulation.pause": {
+      "total": 20,
+      "eligible": 20,
+      "maximum_ms": 11.047292035073042,
+      "p95_ms": 4.629834089428186
+    },
+    "simulation.work.cancel": {
+      "total": 20,
+      "eligible": 20,
+      "maximum_ms": 5.369334015995264,
+      "p95_ms": 5.037875031121075
+    },
+    "view.pan": {
+      "total": 20,
+      "eligible": 20,
+      "maximum_ms": 5.603249999694526,
+      "p95_ms": 4.868792020715773
+    }
+  },
+  "limitations": [
+    "Job-state bracketing does not time individual Newton iterations or visible frames",
+    "This capacity topology does not establish all difficult-topology behavior",
+    "No percentile is reported with fewer than 20 eligible observations"
+  ],
+  "workload": {
+    "simulated_parts": 64,
+    "objects": 65,
+    "wires": 70,
+    "nets": 60,
+    "settings": {
+      "step_s": 0.001,
+      "high_s": 0.1,
+      "low_s": 0.1,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 1
+    },
+    "manual_duration_s": 1,
+    "manual_output_samples": 1000
+  },
+  "twenty_eligible_spans_per_command": true
+}

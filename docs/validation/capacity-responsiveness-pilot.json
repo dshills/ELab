@@ -1,0 +1,383 @@
+{
+  "passed": true,
+  "scope": "backend request-to-response and observed real work; no visible latency claim",
+  "fixture_sha256": "0911f169a808a3826fe79616a5df2db2650346e2bfcaac60a727ed81d370fffe",
+  "configuration": {
+    "os": "26.6.2",
+    "architecture": "arm64",
+    "hardware": {
+      "model": "Mac16,11",
+      "logical_cpus": 14,
+      "memory_bytes": 68719476736,
+      "cpu": "Apple M4 Pro"
+    },
+    "transport": "headless-stdio",
+    "agent_sha256": "894fdfb80a1de5038ec5578e7590e1a0664133a54504716c701df5e44ab2bc5c"
+  },
+  "trials": [
+    {
+      "index": 0,
+      "eligible": true,
+      "staged_progress": {
+        "id": "step-1",
+        "status": "running",
+        "actor": "agent.stdio",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 9,
+        "start_time_s": 0,
+        "duration_s": 1,
+        "completed_samples": 1,
+        "total_samples": 1000,
+        "progress": 0.001
+      },
+      "canceled": {
+        "id": "step-1",
+        "status": "canceled",
+        "actor": "agent.stdio",
+        "run_id": 5,
+        "electrical_revision": 4,
+        "actuation_revision": 0,
+        "command_revision": 9,
+        "start_time_s": 0,
+        "duration_s": 1,
+        "completed_samples": 5,
+        "total_samples": 1000,
+        "progress": 0.005,
+        "error": {
+          "code": "canceled",
+          "message": "Manual step discarded; committed time and charge were preserved"
+        }
+      },
+      "paused_time_s": 0.002
+    }
+  ],
+  "observations": [
+    {
+      "command": "view.pan",
+      "wall_ms": 2.88041599560529,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.stdio",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 9,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.stdio",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 9,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "drawing.cancel",
+      "wall_ms": 2.4492089869454503,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.stdio",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 9,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.stdio",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 9,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "project.save",
+      "wall_ms": 15.576375066302717,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.stdio",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 9,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.stdio",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 9,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "edit.undo",
+      "wall_ms": 2.715290989726782,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.stdio",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 9,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.stdio",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 9,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "simulation.work.cancel",
+      "wall_ms": 2.344417036511004,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "running",
+          "actor": "agent.stdio",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 9,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0,
+        "step_work": {
+          "id": "step-1",
+          "status": "canceling",
+          "actor": "agent.stdio",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 9,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 1,
+          "total_samples": 1000,
+          "progress": 0.001
+        }
+      }
+    },
+    {
+      "command": "simulation.pause",
+      "wall_ms": 2.2639159578830004,
+      "eligible": true,
+      "before": {
+        "run_id": 5,
+        "paused": false,
+        "time_s": 0.002,
+        "step_work": {
+          "id": "step-1",
+          "status": "canceled",
+          "actor": "agent.stdio",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 9,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 5,
+          "total_samples": 1000,
+          "progress": 0.005,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      },
+      "after": {
+        "run_id": 5,
+        "paused": true,
+        "time_s": 0.002,
+        "step_work": {
+          "id": "step-1",
+          "status": "canceled",
+          "actor": "agent.stdio",
+          "run_id": 5,
+          "electrical_revision": 4,
+          "actuation_revision": 0,
+          "command_revision": 9,
+          "start_time_s": 0,
+          "duration_s": 1,
+          "completed_samples": 5,
+          "total_samples": 1000,
+          "progress": 0.005,
+          "error": {
+            "code": "canceled",
+            "message": "Manual step discarded; committed time and charge were preserved"
+          }
+        }
+      }
+    }
+  ],
+  "summaries": {
+    "drawing.cancel": {
+      "total": 1,
+      "eligible": 1,
+      "maximum_ms": 2.4492089869454503,
+      "p95_ms": null
+    },
+    "edit.undo": {
+      "total": 1,
+      "eligible": 1,
+      "maximum_ms": 2.715290989726782,
+      "p95_ms": null
+    },
+    "project.save": {
+      "total": 1,
+      "eligible": 1,
+      "maximum_ms": 15.576375066302717,
+      "p95_ms": null
+    },
+    "simulation.pause": {
+      "total": 1,
+      "eligible": 1,
+      "maximum_ms": 2.2639159578830004,
+      "p95_ms": null
+    },
+    "simulation.work.cancel": {
+      "total": 1,
+      "eligible": 1,
+      "maximum_ms": 2.344417036511004,
+      "p95_ms": null
+    },
+    "view.pan": {
+      "total": 1,
+      "eligible": 1,
+      "maximum_ms": 2.88041599560529,
+      "p95_ms": null
+    }
+  },
+  "limitations": [
+    "Job-state bracketing does not time individual Newton iterations or visible frames",
+    "This capacity topology does not establish all difficult-topology behavior",
+    "No percentile is reported with fewer than 20 eligible observations"
+  ],
+  "workload": {
+    "simulated_parts": 64,
+    "objects": 65,
+    "wires": 70,
+    "nets": 60,
+    "settings": {
+      "step_s": 0.001,
+      "high_s": 0.1,
+      "low_s": 0.1,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 1
+    },
+    "manual_duration_s": 1,
+    "manual_output_samples": 1000
+  },
+  "twenty_eligible_spans_per_command": false
+}
