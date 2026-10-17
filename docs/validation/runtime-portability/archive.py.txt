@@ -1,0 +1,55 @@
+from pathlib import Path
+import datetime,gzip,hashlib,json,platform,re,shutil,stat,subprocess,tarfile
+root=Path.cwd();src=root/'build/runtime-portability';out=root/'docs/validation/runtime-portability';out.mkdir(exist_ok=False)
+def read(p):return json.loads(p.read_text())
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+def digest(p):return sha(p.read_bytes())
+frozen=read(src/'source-freeze.json');assert len(frozen)==674 and all(digest(root/p)==h for p,h in frozen.items())
+for name in ['source-freeze.json','source-delta.json','binaries.json','process.json','initial-location.json','final-location.json','initial-sandbox-probe.json','initial-run.log.txt','runtime-final.log.txt','quality-final.log.txt','unit-tests.log.txt','unit-tests-final.log.txt','unit-tests-hardened.log.txt','initial-runtime_isolation.py.txt','initial-review-raw.json','initial-review-gzip.json','final-review-raw.json','final-review-gzip.json']:
+ shutil.copyfile(src/name,out/name)
+shutil.copyfile(root/'build/.runtime-portability-qualify.py',out/'qualify.py.txt')
+shutil.copyfile(root/'build/.runtime-portability-archive.py',out/'archive.py.txt')
+shutil.copyfile(root/'docs/validation/project-contracts/review.go.txt',out/'review.go.txt')
+environment={'platform':platform.platform(),'architecture':platform.machine(),'python':platform.python_version(),'go':subprocess.check_output(['go','version'],text=True).strip(),'macos':subprocess.check_output(['sw_vers'],text=True).strip()}
+(out/'environment.json').write_text(json.dumps(environment,indent=2)+'\n')
+encodings={};runs={}
+for phase in ['initial','final']:
+ directory=Path(read(src/(phase+'-location.json'))['directory']);record=read(directory/'runtime-report.json');assert record['passed'] and all(s['status']=='completed' and s['exit_code']==0 for s in record['stages'])
+ folder=out/phase;folder.mkdir()
+ for name in ['runtime-report.json','runtime.sb','controls.json','controls-input.json','controls-stderr.log.txt','native-smoke.log.txt','public-suites.log.txt']:
+  shutil.copyfile(directory/name,folder/name)
+ for name in ['native','agent','probe.py']:shutil.copyfile(directory/name,folder/(name+'.txt'))
+ raw=(directory/'public/report.json').read_bytes();compressed=gzip.compress(raw,mtime=0);(folder/'conformance-report.json.gz').write_bytes(compressed);assert gzip.decompress((folder/'conformance-report.json.gz').read_bytes())==raw
+ review=read(src/(phase+'-review-raw.json'));assert review==read(src/(phase+'-review-gzip.json')) and review['passed'] and review['source_report_sha256']==sha(raw) and review['numerical_checks']==27596
+ encodings[phase]={'decoded_bytes':len(raw),'decoded_sha256':sha(raw),'gzip_bytes':len(compressed),'gzip_sha256':sha(compressed)}
+ assert len(re.findall(r'smoke: ',(folder/'native-smoke.log.txt').read_text()))==45
+ assert all(v.get('denied') is True and v.get('errno')==1 for group in ['files','network'] for v in record['controls'][group].values())
+ assert record['controls']['allowed_read'] and len(record['controls']['files'])==8 and len(record['controls']['network'])==4
+ runs[phase]={'passed':True,'directory':str(directory),'native_smoke_stages':45,'read_controls':8,'unique_development_directories':len({v['root'] for v in record['blocked_development'].values()}),'network_controls':4,'numerical_checks':review['numerical_checks'],'stages':record['stages']}
+(out/'report-encoding.json').write_text(json.dumps(encodings,indent=2)+'\n')
+final_dir=Path(read(src/'final-location.json')['directory'])
+files=[p for p in (final_dir/'public').rglob('*') if p.is_file() and p.suffix in ['.elab','.svg','.csv'] and 'process' not in p.relative_to(final_dir/'public').parts]
+index={p.relative_to(final_dir/'public').as_posix():{'sha256':digest(p),'bytes':p.stat().st_size} for p in sorted(files)}
+with (out/'owned-files.tar.gz').open('wb') as target:
+ with gzip.GzipFile(fileobj=target,mode='wb',filename='',mtime=0) as zipped:
+  with tarfile.open(fileobj=zipped,mode='w|',format=tarfile.PAX_FORMAT) as archive:
+   for p in sorted(files):
+    member=tarfile.TarInfo(p.relative_to(final_dir/'public').as_posix());member.size=p.stat().st_size;member.mode=0o644
+    with p.open('rb') as source:archive.addfile(member,source)
+with tarfile.open(out/'owned-files.tar.gz','r:gz') as archive:
+ assert {m.name for m in archive.getmembers()}==set(index)
+ for m in archive.getmembers():assert m.isfile() and sha(archive.extractfile(m).read())==index[m.name]['sha256']
+(out/'owned-files-index.json').write_text(json.dumps({'passed':True,'files':index,'project_files':sum(p.suffix=='.elab' for p in files),'svg_files':sum(p.suffix=='.svg' for p in files),'csv_files':sum(p.suffix=='.csv' for p in files),'archive_sha256':digest(out/'owned-files.tar.gz'),'auth_endpoint_recovery_files_excluded':True},indent=2)+'\n')
+reference=read(root/'docs/validation/lc-sampling-validation.json')['promotion'];preserved={}
+for path,key in [('build/ELab.app','bundle_tree'),('build/ELab-0.104.0-119-preserved.app','preserved_bundle_tree')]:
+ directory=root/path;tree={str(p.relative_to(directory)):{'mode':stat.S_IMODE(p.stat().st_mode),'sha256':digest(p) if p.is_file() else None} for p in [directory]+sorted(directory.rglob('*'))};assert tree==reference[key]
+ preserved[path]={'passed':True,'entries':len(tree),'executable_sha256':tree['Contents/MacOS/ELab']['sha256']}
+(out/'preserved-bundles.json').write_text(json.dumps(preserved,indent=2)+'\n')
+sdk=subprocess.run(['python3','-B','scripts/prepare-vellum.py'],check=True,text=True,capture_output=True);(out/'sdk-verified.json').write_text(sdk.stdout)
+receipt={'passed':True,'recorded_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'scope':'Copied macOS private runtime with development-file and outbound IP denial on the current workstation; no clean OS/account or distribution claim','source_parent_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'source_index':str((out/'source-freeze.json').relative_to(root)),'source_frozen_files':len(frozen),'source_stable':True,'source_delta':read(src/'source-delta.json'),'runtime_binary_source_receipt':'docs/validation/project-contracts-validation.json','binary_sha256':read(src/'binaries.json'),'candidate':'build/ELab-0.109.0-124-project-contract-candidate.app','candidate_rebuilt_or_promoted':False,'environment':environment,'process':read(src/'process.json'),'quality':{'passed':True,'python_tests':31,'lint_imports_staticcheck':True,'root_native_race_vet':True,'unchanged_Go_suites_cached':True,'log':str((out/'quality-final.log.txt').relative_to(root))},'runs':runs,'final_adapters':['in-process','headless-stdio','headless-socket','native-socket'],'restricted_adapters':['headless-stdio','headless-socket','native-socket'],'controller_and_in_process_unrestricted':True,'final_numerical_checks':27596,'final_project_workflow_checks':44,'final_project_snapshots':56,'native_smoke_stages':45,'final_read_controls':8,'final_unique_development_directories':runs['final']['unique_development_directories'],'final_outbound_IP_controls':4,'original_inputs_and_copied_runtime_unchanged':True,'saved_project_files_including_intentionally_malformed':204,'owned_files_archive':str((out/'owned-files.tar.gz').relative_to(root)),'report_encoding':encodings,'sdk_post_check':read(out/'sdk-verified.json'),'preserved_bundles_unchanged':preserved,'p0_counts':{'implemented':17,'partial':10},'limitations':['The external child runtimes are restricted; the conformance controller/in-process baseline, local control targets and development tools are not.','Initial controls deny eight distinct directories. Final GOCACHE points to the project cache, so eight logical read controls cover seven distinct directories. Both raw policies and paths are retained; counts are not conflated.','The OS frameworks/fonts/services/GPU and ordinary user/system caches remain available. This is not a clean OS/account, other hardware/platform or signed/notarized distribution test.','Policy denies development writes, but no write to a user/source file is attempted as a control. Permission-denied read and IP controls are explicitly observed.','The pinned SDK runner handles stage timeout/interruption cleanup. Forced process termination/power loss and uninterruptible OS calls remain outside that guarantee.','Initial run uses the original controller helper. Final source additionally prevents SDK bytecode pollution and records failed/interrupted stages as terminal; final plain-Python execution and 31 tests pass.','No Go production source, numerical model/method, file format, app command or capacity changes. Full physical input/accessibility/readability, event, clean installation/distribution, printer and participant gates remain open.']}
+assert all(digest(root/p)==h for p,h in frozen.items());assert all(digest(root/p)==h for p,h in receipt['binary_sha256'].items())
+assert read(out/'owned-files-index.json')['project_files']==204 and all(p['status']=='completed' and p['exit_code']==0 for p in receipt['process'])
+assert 'Ran 31 tests' in (out/'quality-final.log.txt').read_text() and '\nFAIL' not in (out/'quality-final.log.txt').read_text()
+receipt['artifacts_sha256']={str(p.relative_to(root)):digest(p) for p in sorted(out.rglob('*')) if p.is_file()}
+(root/'docs/validation/runtime-portability-validation.json').write_text(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps({'passed':True,'source_inputs':len(frozen),'project_files':204,'owned_files':len(files),'report':encodings['final'],'runs':runs},indent=2))

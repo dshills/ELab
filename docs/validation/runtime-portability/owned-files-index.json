@@ -1,0 +1,938 @@
+{
+  "passed": true,
+  "files": {
+    "headless-socket/capacity/capacity-100-nodes/excess.elab": {
+      "sha256": "7a4d8d79ca63977b98058714d32917e7c105f0321bc3652cada49306d0b58c37",
+      "bytes": 159493
+    },
+    "headless-socket/capacity/capacity-100-nodes/project.elab": {
+      "sha256": "f55afeaf3629ec620d6f588de9f6de41f31c90e0f623a7f4e0942bc6e0f0461b",
+      "bytes": 159603
+    },
+    "headless-socket/capacity/capacity-64-parts/excess.elab": {
+      "sha256": "4a7306165e67b91073b6eed1b3bd5d41d6d3b08ef4ae49b1d2683d42c7fa86da",
+      "bytes": 144730
+    },
+    "headless-socket/capacity/capacity-64-parts/project.elab": {
+      "sha256": "64335a0ccef26d68ed0cb76ec08002eb715175d2d8a3183dfcea7043270f1467",
+      "bytes": 144389
+    },
+    "headless-socket/capacity/capacity-rc-mosfet/excess.elab": {
+      "sha256": "dd03f76547f3f6994a65189d2dd07f31323768b3c78e05c732496e414d999855",
+      "bytes": 152198
+    },
+    "headless-socket/capacity/capacity-rc-mosfet/project.elab": {
+      "sha256": "38726c83a1c22f9329ddba0dba5688fc47f7a050d226c894e2b408eff739ca6d",
+      "bytes": 151857
+    },
+    "headless-socket/inductors/signed-rl.elab": {
+      "sha256": "d806dd2ce35ede2cc15e6b2b727a7acb7a606a03b514395fd4f23315f99ea820",
+      "bytes": 10477
+    },
+    "headless-socket/led/project.elab": {
+      "sha256": "9acf3184bf6b56e95557d2845fececbe64dfc7d3de80c0f5520e1848b449bb39",
+      "bytes": 10471
+    },
+    "headless-socket/led/reopened.elab": {
+      "sha256": "9acf3184bf6b56e95557d2845fececbe64dfc7d3de80c0f5520e1848b449bb39",
+      "bytes": 10471
+    },
+    "headless-socket/led/schematic.svg": {
+      "sha256": "e16df447f9a44a99748c4a7c1351c8ea6f5a6755e7bd2f100a8822d2021e5464",
+      "bytes": 9409
+    },
+    "headless-socket/led/verification.csv": {
+      "sha256": "5ad391bc83298d5bfdaf26242c48ead9f7abffe64edb1cbeba938e72d4aa4512",
+      "bytes": 305
+    },
+    "headless-socket/npn/project.elab": {
+      "sha256": "c8935fac55f974a1aa428b427fcedbfa7a2ac8aa1748b53805177f53aed70e41",
+      "bytes": 15049
+    },
+    "headless-socket/npn/reopened.elab": {
+      "sha256": "c8935fac55f974a1aa428b427fcedbfa7a2ac8aa1748b53805177f53aed70e41",
+      "bytes": 15049
+    },
+    "headless-socket/npn/schematic.svg": {
+      "sha256": "1463f75433842452a74f1fa4561a27b0cf1ed80a4221cb71be604bf22c045c88",
+      "bytes": 11865
+    },
+    "headless-socket/npn/verification.csv": {
+      "sha256": "269999a0aa8a7df52a5e4735e1f243ff49fda248194fc7a17404c5c4cafa745a",
+      "bytes": 398
+    },
+    "headless-socket/opamp-storage/opamp-buffered-rlc/bad-capacitor-energy.elab": {
+      "sha256": "2320cbae3810196a025551d2248f03851051fdef1162894bf3d7b09227bf0111",
+      "bytes": 19510
+    },
+    "headless-socket/opamp-storage/opamp-buffered-rlc/bad-capacitor-voltage.elab": {
+      "sha256": "1c527b777c0299cd643fb57aae3a8e8dbe59a5467b02ac3a66a3cafb12164b4e",
+      "bytes": 19509
+    },
+    "headless-socket/opamp-storage/opamp-buffered-rlc/bad-foreign-node.elab": {
+      "sha256": "f1319ee109eb0003bcfda2d7dfd108ab6f725ba91e86bf14a092c8bfc2f0c38c",
+      "bytes": 19527
+    },
+    "headless-socket/opamp-storage/opamp-buffered-rlc/bad-inductor-current.elab": {
+      "sha256": "01afd54af94ed3dfb530c8802c8e905930f883a0fcdc6f2e08d9b64fe9a789e8",
+      "bytes": 19509
+    },
+    "headless-socket/opamp-storage/opamp-buffered-rlc/bad-inductor-energy.elab": {
+      "sha256": "6dfa95d0fd399fe7117531aaa71325af0075bb6617c60580f83c397c7e9cbe0b",
+      "bytes": 19510
+    },
+    "headless-socket/opamp-storage/opamp-buffered-rlc/bad-inductor-voltage.elab": {
+      "sha256": "d7b7ba674a2793b7f83983918946a3568e0cdf595ea25ad45cd5e21b89564291",
+      "bytes": 19506
+    },
+    "headless-socket/opamp-storage/opamp-buffered-rlc/bad-missing-ground.elab": {
+      "sha256": "8f69ff9590824dd12ed8539554ad0130850499bb35f6059a62754ed1ed57c691",
+      "bytes": 19497
+    },
+    "headless-socket/opamp-storage/opamp-buffered-rlc/bad-missing-opamp-model.elab": {
+      "sha256": "f00f163d600a40aada8a4ac79d3ab8a233b36d6f9ecc50f8321e8d52dcf544d0",
+      "bytes": 18605
+    },
+    "headless-socket/opamp-storage/opamp-buffered-rlc/bad-opamp-id.elab": {
+      "sha256": "277a15262386fe38e230b1ec8523d28d38a04851f45b8332ab26c3e6529b2dd7",
+      "bytes": 19515
+    },
+    "headless-socket/opamp-storage/opamp-buffered-rlc/bad-opamp-model.elab": {
+      "sha256": "9ffd33161bd5d7d0231e896499526864c1aaa4236860c1c0817c1275812ff793",
+      "bytes": 19506
+    },
+    "headless-socket/opamp-storage/opamp-buffered-rlc/bad-opamp-power.elab": {
+      "sha256": "e7d37c9dabdad99ba78da87c6fca79bed727f375f27c0a7b5abce6b7e66a22e2",
+      "bytes": 19510
+    },
+    "headless-socket/opamp-storage/opamp-buffered-rlc/project.elab": {
+      "sha256": "23fb973721088fae7f4659c84a2a43efa28bd4691682921bedad1545ba5be7ca",
+      "bytes": 40439
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-capacitor-energy.elab": {
+      "sha256": "c066873218bb10926e93d33b473eeedf6a24df960d3dc87e8576a7c7d32efe2a",
+      "bytes": 32306
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-capacitor-voltage.elab": {
+      "sha256": "c720a051785404b9df6848103ffc0925471c96f38fb597eec686aa0b439d814e",
+      "bytes": 32306
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-drain-current.elab": {
+      "sha256": "ab42659f994d3c67de2ac0734c350b0473425a61ae675cf49cfa3cfec61a5c75",
+      "bytes": 32306
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-drain-voltage.elab": {
+      "sha256": "c8804b7c7ca42d4ebc427ac7e07349271b899a2f6d3e6a0c158db881f1cc9db5",
+      "bytes": 32304
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-foreign-node.elab": {
+      "sha256": "2d2f03a5edd48611e94b0d7c9cbe3d18b8f847216f0079ce62943f742377f0ec",
+      "bytes": 32323
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-gate-current.elab": {
+      "sha256": "ab4e8778b86c1bdb3920be32385d61c0da9760b9e6fa93c35805a4b38d8199c2",
+      "bytes": 32310
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-gate-voltage.elab": {
+      "sha256": "86c7d54569cd479183b74dcb9a326741856416c1a7ead4b56a88e99fbaa03f08",
+      "bytes": 32306
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-missing-ground.elab": {
+      "sha256": "c3361b611176942637cb18ad3779c5cef3ccba356434086f77bccc1e2070b59c",
+      "bytes": 32293
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-missing-opamp-model.elab": {
+      "sha256": "37b702c232bae87c4b30a3e9bbca2c763c35411c78ccc230ebc33cb9e7599cf6",
+      "bytes": 31401
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-missing-pmos-model.elab": {
+      "sha256": "ba7ea5be914acf28400661da037cb77072e2dba1501b5cc0f8549a18ebca1c2f",
+      "bytes": 31444
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-mosfet-id.elab": {
+      "sha256": "e0cd33b9eb85234b1eda93df263b7cbc9f29f81eb6b1529462478ac3ba457477",
+      "bytes": 32310
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-mosfet-model.elab": {
+      "sha256": "31fab89baed4e9b960572196e78c777a10fd9cf7f3b295af35f179b477847e0c",
+      "bytes": 32222
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-mosfet-power.elab": {
+      "sha256": "8eeb5005fbf574721961be23558de4399fd1ccfc77fae5a0a72152bfbc80760b",
+      "bytes": 32303
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-mosfet-region.elab": {
+      "sha256": "a8eb79d9e121a446c7ab2673c00041308cbd1322bc5f0427dde8753c811a0ceb",
+      "bytes": 32307
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-opamp-id.elab": {
+      "sha256": "50f800429d19cf91e2236740626545929e4f855fa89f2eb4b90ce6c7bacdfd30",
+      "bytes": 32311
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-opamp-model.elab": {
+      "sha256": "cc870ca35bfeb0e50da6dd4fa3be4020901e88c810ec90197c1be9441a69a185",
+      "bytes": 32302
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-opamp-power.elab": {
+      "sha256": "700e68f9165af749f66fc92237d3657d0a57414e1690f4b707757b0b410e9fb1",
+      "bytes": 32307
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/bad-source-current.elab": {
+      "sha256": "3d701eabf672a592f1b635637fc82f9a1ea5ef0367ac5bf6758a1dbff29b67a5",
+      "bytes": 32306
+    },
+    "headless-socket/opamp-storage/opamp-rc-pmos/project.elab": {
+      "sha256": "0e3b885247b22d1613084cb95fa082a7f78f49b79bc79e6fc90bfd1c7ace87d7",
+      "bytes": 67718
+    },
+    "headless-socket/opamps/opamp-follower/captured.elab": {
+      "sha256": "7fa8bf3715ed8622f20276f033933c4252cdd5ef62a042bc6e0da2d13b233af6",
+      "bytes": 56504
+    },
+    "headless-socket/opamps/opamp-inverting/captured.elab": {
+      "sha256": "40b5de6f19fb282d3f7aa909bf05d2338d883eccc4e2e73d1e3108a01b1a99a0",
+      "bytes": 60296
+    },
+    "headless-socket/opamps/opamp-rc-mosfet/captured.elab": {
+      "sha256": "5dcf8d7f3c75e6986b3d17f024a36748e047420ec3f74ac307b37f083efc6413",
+      "bytes": 71740
+    },
+    "headless-socket/opamps/opamp-rc-npn/captured.elab": {
+      "sha256": "d55fbdadb96cffb8606f4e277ab46883440c58f16ddf6962657abb807c4bd93f",
+      "bytes": 70663
+    },
+    "headless-socket/project-contracts/admitted-save.elab": {
+      "sha256": "964b1c3860a59f4ebcfa7827bef3b8af18504fade057cae6dc8b518a1e1b1fe5",
+      "bytes": 11731
+    },
+    "headless-socket/project-contracts/captured.elab": {
+      "sha256": "6530695fa27671697d5a3a86f3eee221eeb0f3f8f775c4c7cec8b2a65eeba078",
+      "bytes": 11731
+    },
+    "headless-socket/project-contracts/invalid.elab": {
+      "sha256": "f90448c1e06fd425306851923a142084bc3cbf7f5ff0e8020100459b491161cd",
+      "bytes": 13
+    },
+    "headless-socket/rc/project.elab": {
+      "sha256": "7a2ee9ac47176cca08319b7bbb382059d9b4e710859dc11544e43a81e8218900",
+      "bytes": 45523
+    },
+    "headless-socket/rc/reopened.elab": {
+      "sha256": "7a2ee9ac47176cca08319b7bbb382059d9b4e710859dc11544e43a81e8218900",
+      "bytes": 45523
+    },
+    "headless-socket/rc/schematic.svg": {
+      "sha256": "de6c8aba450d84b22e4fd31267f690247887399b1d3c575f03a3a6ad2eee3543",
+      "bytes": 10186
+    },
+    "headless-socket/rc/scope.csv": {
+      "sha256": "46483bb158ebfd3e438c57171b9279072bea410090b617b159dd0fa81efa4e75",
+      "bytes": 1192
+    },
+    "headless-socket/rc/verification.csv": {
+      "sha256": "b18ac12f9d31b307d65b5b205e466b3db4026ddb22afce60f6d3255086362e5a",
+      "bytes": 32049
+    },
+    "headless-stdio/capacity/capacity-100-nodes/excess.elab": {
+      "sha256": "937cc6924bfd86dca1f98e24566d7278415a0e873e95c393a557ea745e2b09f7",
+      "bytes": 159493
+    },
+    "headless-stdio/capacity/capacity-100-nodes/project.elab": {
+      "sha256": "f67937ce7791ce518b2ab99dc23525a449468c14c346183bd55fedaa892daf3b",
+      "bytes": 159603
+    },
+    "headless-stdio/capacity/capacity-64-parts/excess.elab": {
+      "sha256": "129abfbd199d9cea511aec86c61c74c5062b0c4bf132e7c5982a50d381296353",
+      "bytes": 144732
+    },
+    "headless-stdio/capacity/capacity-64-parts/project.elab": {
+      "sha256": "e92d217e730d17d0693fc51e07ab02d5d1a24a8e9d36155412d91a63bb477819",
+      "bytes": 144391
+    },
+    "headless-stdio/capacity/capacity-rc-mosfet/excess.elab": {
+      "sha256": "7bf995310306caa5b15248a8c9d9a0fa576315ca82a3ed0f97920dbede65ce9d",
+      "bytes": 152198
+    },
+    "headless-stdio/capacity/capacity-rc-mosfet/project.elab": {
+      "sha256": "012455dd6bbb58d11dac87b6f1913d40d62faba9d23acb5ff7321662e66bd1d7",
+      "bytes": 151857
+    },
+    "headless-stdio/inductors/signed-rl.elab": {
+      "sha256": "ddf75b628fa80d4815caca9c542618da5c5a3045ad04599ebeab3448213bd9e6",
+      "bytes": 10477
+    },
+    "headless-stdio/led/project.elab": {
+      "sha256": "9b2ae9facae975274c3eb06a9b22657ea24d8221ba7240a53fd18faaf504c053",
+      "bytes": 10471
+    },
+    "headless-stdio/led/reopened.elab": {
+      "sha256": "9b2ae9facae975274c3eb06a9b22657ea24d8221ba7240a53fd18faaf504c053",
+      "bytes": 10471
+    },
+    "headless-stdio/led/schematic.svg": {
+      "sha256": "e16df447f9a44a99748c4a7c1351c8ea6f5a6755e7bd2f100a8822d2021e5464",
+      "bytes": 9409
+    },
+    "headless-stdio/led/verification.csv": {
+      "sha256": "5ad391bc83298d5bfdaf26242c48ead9f7abffe64edb1cbeba938e72d4aa4512",
+      "bytes": 305
+    },
+    "headless-stdio/npn/project.elab": {
+      "sha256": "600d6edff8ea588270afdc240ba5ec4df2d8d3852178fbcdd7450716187ab21a",
+      "bytes": 15049
+    },
+    "headless-stdio/npn/reopened.elab": {
+      "sha256": "600d6edff8ea588270afdc240ba5ec4df2d8d3852178fbcdd7450716187ab21a",
+      "bytes": 15049
+    },
+    "headless-stdio/npn/schematic.svg": {
+      "sha256": "1463f75433842452a74f1fa4561a27b0cf1ed80a4221cb71be604bf22c045c88",
+      "bytes": 11865
+    },
+    "headless-stdio/npn/verification.csv": {
+      "sha256": "269999a0aa8a7df52a5e4735e1f243ff49fda248194fc7a17404c5c4cafa745a",
+      "bytes": 398
+    },
+    "headless-stdio/opamp-storage/opamp-buffered-rlc/bad-capacitor-energy.elab": {
+      "sha256": "3dfc4fa54ae1a78939a649abe981ba44357c0b2709bdd7ae5f49622d272e64fe",
+      "bytes": 19510
+    },
+    "headless-stdio/opamp-storage/opamp-buffered-rlc/bad-capacitor-voltage.elab": {
+      "sha256": "4532d3dea8cf6c6a8a4717528016a7ebf5723bbe03125e58acc8cbe1fa958f6b",
+      "bytes": 19509
+    },
+    "headless-stdio/opamp-storage/opamp-buffered-rlc/bad-foreign-node.elab": {
+      "sha256": "6798a938ae8ed6deddebfa54e80fbf1bd127a79a98d315e536976056f37ddef8",
+      "bytes": 19527
+    },
+    "headless-stdio/opamp-storage/opamp-buffered-rlc/bad-inductor-current.elab": {
+      "sha256": "468f6903aee02da90e631893437e7d30217689a504d0942814711152da6c1bb9",
+      "bytes": 19509
+    },
+    "headless-stdio/opamp-storage/opamp-buffered-rlc/bad-inductor-energy.elab": {
+      "sha256": "459112bfe8bacc4e2834ffceb30986f14c9df5a025ba8712cb1542c01d2e8466",
+      "bytes": 19510
+    },
+    "headless-stdio/opamp-storage/opamp-buffered-rlc/bad-inductor-voltage.elab": {
+      "sha256": "7ae7f60eb134be9351396bb96a207f18b4af6fcb3dd51733f0df00a460312578",
+      "bytes": 19506
+    },
+    "headless-stdio/opamp-storage/opamp-buffered-rlc/bad-missing-ground.elab": {
+      "sha256": "904fea0c25ad16cd70eb0d66eadfac0b3640bc863c79017ca3f4778438b3c9f9",
+      "bytes": 19497
+    },
+    "headless-stdio/opamp-storage/opamp-buffered-rlc/bad-missing-opamp-model.elab": {
+      "sha256": "9554f66d90823deb0c16cc90f108a756d868467865024947b7f8c76f9593ea66",
+      "bytes": 18605
+    },
+    "headless-stdio/opamp-storage/opamp-buffered-rlc/bad-opamp-id.elab": {
+      "sha256": "c8a370d6a092b5a54bea25dec3308580bf2be957ff06ee342c7bbd1a64993219",
+      "bytes": 19515
+    },
+    "headless-stdio/opamp-storage/opamp-buffered-rlc/bad-opamp-model.elab": {
+      "sha256": "c04a3ca13e9905141d65baeed598c4cc8e71f2485fc99cf85879882b08bb4073",
+      "bytes": 19506
+    },
+    "headless-stdio/opamp-storage/opamp-buffered-rlc/bad-opamp-power.elab": {
+      "sha256": "5a4ed2c752ec69629ac1d923909a251eff2be039d43ef31f41e7b864dd935c9c",
+      "bytes": 19510
+    },
+    "headless-stdio/opamp-storage/opamp-buffered-rlc/project.elab": {
+      "sha256": "0a19a5dc41bfb550ec2b7b8cb5ad6df7ad1ac2bee593831d9e69b9efaae3c77f",
+      "bytes": 40439
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-capacitor-energy.elab": {
+      "sha256": "01c3e23def3bf00527c4f258cf6a5d3be2fd5ce21c599a296102f258f405a0fe",
+      "bytes": 32306
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-capacitor-voltage.elab": {
+      "sha256": "2fd29169e0199149dbb98b34af4320bcf48f02777e2fa933d4be7763b10005bc",
+      "bytes": 32306
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-drain-current.elab": {
+      "sha256": "193e870a4d03593d784f22622fc419cab2d1583183bfcfaf24e52a727ca6177a",
+      "bytes": 32306
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-drain-voltage.elab": {
+      "sha256": "a921e272a3a377d36cb0b82ab75c8edf12441a713052514eb84caaded1db1fac",
+      "bytes": 32304
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-foreign-node.elab": {
+      "sha256": "9cd455ef6c0c4db424690d3a7b46549beb70d3910b901363fc1745927ed63b6c",
+      "bytes": 32323
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-gate-current.elab": {
+      "sha256": "24777e7aeff8851aa615776eca7bc54ad72544df7ef7e504777e28f314dc0ae5",
+      "bytes": 32310
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-gate-voltage.elab": {
+      "sha256": "8ee9b3c45ad7cecd0d43dbf0d13d2325266cb4fa2815cea5cc7806d8bdfb25f0",
+      "bytes": 32306
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-missing-ground.elab": {
+      "sha256": "8b1c28ab57cee1eab78791a4952868ff157428df96455f0a09f4c5b10df10e83",
+      "bytes": 32293
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-missing-opamp-model.elab": {
+      "sha256": "cfea2cb1332648a1130a23f9ac5657cfbd836760b774155d709407bc6c66dd46",
+      "bytes": 31401
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-missing-pmos-model.elab": {
+      "sha256": "a8cc43355f695b5acbad4c92aced462066be6cadf178835d3c77a1fb53b16f79",
+      "bytes": 31444
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-mosfet-id.elab": {
+      "sha256": "0c0a5c7b4db72a7cb0b52f4c0f640551eb0eeddd7d0b2135abdf9be3529bad90",
+      "bytes": 32310
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-mosfet-model.elab": {
+      "sha256": "e5b43f339fb71b1634d95217da33a1583e9a7265787d6732b94d294dd5add2d7",
+      "bytes": 32222
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-mosfet-power.elab": {
+      "sha256": "f744ddf4e204b9faca31a044ebfe1f06ae71e20726c297e581a24fdb7fd724d1",
+      "bytes": 32303
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-mosfet-region.elab": {
+      "sha256": "a37da44e2349ef20079640592449f28747cdbb79dde1f4b174015cef2f265ecd",
+      "bytes": 32307
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-opamp-id.elab": {
+      "sha256": "32e20c4346eeaa4651bea2db9593385100b54098a0008719d55238251ade9295",
+      "bytes": 32311
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-opamp-model.elab": {
+      "sha256": "955a56fbe4bebb4bc29f5ced69f8db99280a775f6fb194381b4c8c098013c2e3",
+      "bytes": 32302
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-opamp-power.elab": {
+      "sha256": "caf2ff2e75469aafafc109578a4fc246c98e57473366ce59a201564bca2ce269",
+      "bytes": 32307
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/bad-source-current.elab": {
+      "sha256": "0fd77bf5439c0e2c5f385f8855c473ef9a3f3345cc64d8ebfefb7017e3250112",
+      "bytes": 32306
+    },
+    "headless-stdio/opamp-storage/opamp-rc-pmos/project.elab": {
+      "sha256": "38f25241ba9f011391f51769dfd48198970e8a436010c405086c4aaf5c199ecb",
+      "bytes": 67718
+    },
+    "headless-stdio/opamps/opamp-follower/captured.elab": {
+      "sha256": "02d81ebc6898369fc258ac925402a27afee73ab1d84f493062038100fef63018",
+      "bytes": 56504
+    },
+    "headless-stdio/opamps/opamp-inverting/captured.elab": {
+      "sha256": "5cda8c49ac287c6b979d0cdfebe43cbce2d9efca654b2b4ecc9a02724f969005",
+      "bytes": 60295
+    },
+    "headless-stdio/opamps/opamp-rc-mosfet/captured.elab": {
+      "sha256": "0c4b32ab52a18e0431fa1ebd9d200131333309b36eaae173f966a4c1e318859e",
+      "bytes": 71740
+    },
+    "headless-stdio/opamps/opamp-rc-npn/captured.elab": {
+      "sha256": "420980b76f558e3d937065f528ea49f6befe1030be6700fb56aeff8f7649c30d",
+      "bytes": 70663
+    },
+    "headless-stdio/project-contracts/admitted-save.elab": {
+      "sha256": "2651e262b846e1a6862bfcd44edd8935a4ec4c57402d78162885470138a9caef",
+      "bytes": 11731
+    },
+    "headless-stdio/project-contracts/captured.elab": {
+      "sha256": "15f41bbc32498aca6b5657c2e5906f928ca2550b1b3c4a60e27cc295d12960f1",
+      "bytes": 11731
+    },
+    "headless-stdio/project-contracts/invalid.elab": {
+      "sha256": "f90448c1e06fd425306851923a142084bc3cbf7f5ff0e8020100459b491161cd",
+      "bytes": 13
+    },
+    "headless-stdio/rc/project.elab": {
+      "sha256": "a61c98cca80a9e47af5dd73140dccc5300399ee9e0e01b069484babc723db146",
+      "bytes": 45523
+    },
+    "headless-stdio/rc/reopened.elab": {
+      "sha256": "a61c98cca80a9e47af5dd73140dccc5300399ee9e0e01b069484babc723db146",
+      "bytes": 45523
+    },
+    "headless-stdio/rc/schematic.svg": {
+      "sha256": "de6c8aba450d84b22e4fd31267f690247887399b1d3c575f03a3a6ad2eee3543",
+      "bytes": 10186
+    },
+    "headless-stdio/rc/scope.csv": {
+      "sha256": "46483bb158ebfd3e438c57171b9279072bea410090b617b159dd0fa81efa4e75",
+      "bytes": 1192
+    },
+    "headless-stdio/rc/verification.csv": {
+      "sha256": "b18ac12f9d31b307d65b5b205e466b3db4026ddb22afce60f6d3255086362e5a",
+      "bytes": 32049
+    },
+    "in-process/capacity/capacity-100-nodes/excess.elab": {
+      "sha256": "f8794354d90bb7e33b7ac086839e13a6b7be82bc8f87015ef06c05a7f6c120c1",
+      "bytes": 159493
+    },
+    "in-process/capacity/capacity-100-nodes/project.elab": {
+      "sha256": "be9e41f51b5c34aed65365543689b98b477d1d62abe9fdd40c1059ec04cd8a88",
+      "bytes": 159603
+    },
+    "in-process/capacity/capacity-64-parts/excess.elab": {
+      "sha256": "e56f70358aa47e4bd920ef48b45c0ea0122ada9ab70c6987d8e67468f9778a56",
+      "bytes": 144732
+    },
+    "in-process/capacity/capacity-64-parts/project.elab": {
+      "sha256": "747aae7118cea9a404203115054992db96d9fa1d8d8d1eb26a2e492584cf844e",
+      "bytes": 144391
+    },
+    "in-process/capacity/capacity-rc-mosfet/excess.elab": {
+      "sha256": "da86d5e43732ac28ea01b14eeace034826c1bdb82c9557eb852f737ce23b4ca3",
+      "bytes": 152198
+    },
+    "in-process/capacity/capacity-rc-mosfet/project.elab": {
+      "sha256": "82449ed3d762bec30ae29a67d27f6b344c7f492d64a33e38110a524b9cff9577",
+      "bytes": 151857
+    },
+    "in-process/inductors/signed-rl.elab": {
+      "sha256": "bb2a221a988be3ab715c957625995747d2e924afae86100047416eae46d278ea",
+      "bytes": 10477
+    },
+    "in-process/led/project.elab": {
+      "sha256": "03ebacb8da2205937116ad75a33b789ae54c6999be9a8b0f28832ed7d4d590dc",
+      "bytes": 10470
+    },
+    "in-process/led/reopened.elab": {
+      "sha256": "03ebacb8da2205937116ad75a33b789ae54c6999be9a8b0f28832ed7d4d590dc",
+      "bytes": 10470
+    },
+    "in-process/led/schematic.svg": {
+      "sha256": "e16df447f9a44a99748c4a7c1351c8ea6f5a6755e7bd2f100a8822d2021e5464",
+      "bytes": 9409
+    },
+    "in-process/led/verification.csv": {
+      "sha256": "5ad391bc83298d5bfdaf26242c48ead9f7abffe64edb1cbeba938e72d4aa4512",
+      "bytes": 305
+    },
+    "in-process/npn/project.elab": {
+      "sha256": "acc30329e23c35e90f6be2d62726acba2cb0d211d02a0dba56afc2469cf3e8ad",
+      "bytes": 15048
+    },
+    "in-process/npn/reopened.elab": {
+      "sha256": "acc30329e23c35e90f6be2d62726acba2cb0d211d02a0dba56afc2469cf3e8ad",
+      "bytes": 15048
+    },
+    "in-process/npn/schematic.svg": {
+      "sha256": "1463f75433842452a74f1fa4561a27b0cf1ed80a4221cb71be604bf22c045c88",
+      "bytes": 11865
+    },
+    "in-process/npn/verification.csv": {
+      "sha256": "269999a0aa8a7df52a5e4735e1f243ff49fda248194fc7a17404c5c4cafa745a",
+      "bytes": 398
+    },
+    "in-process/opamp-storage/opamp-buffered-rlc/bad-capacitor-energy.elab": {
+      "sha256": "d3ff74d36d642441a5afd329e3febb24f7314e30144ad7d21cd2bcb3a455d8a9",
+      "bytes": 19510
+    },
+    "in-process/opamp-storage/opamp-buffered-rlc/bad-capacitor-voltage.elab": {
+      "sha256": "3a15d696b7b638996e3e87fea8154d0216023ebdb7d3805eb5d1dfe9282bb3aa",
+      "bytes": 19509
+    },
+    "in-process/opamp-storage/opamp-buffered-rlc/bad-foreign-node.elab": {
+      "sha256": "67b9185be9a897a8b4d59e93c2a7e371f068b5ecd1572ed4304c5044123ebb24",
+      "bytes": 19527
+    },
+    "in-process/opamp-storage/opamp-buffered-rlc/bad-inductor-current.elab": {
+      "sha256": "4ff453bca42e1d3c7d8e8c29db136ea918c808d94484427d3d3abb78ff3b9cc7",
+      "bytes": 19509
+    },
+    "in-process/opamp-storage/opamp-buffered-rlc/bad-inductor-energy.elab": {
+      "sha256": "5fb951c956ce06e3c12e1273f3bd1c2dd45c39cbed31845b60eae599b7365694",
+      "bytes": 19510
+    },
+    "in-process/opamp-storage/opamp-buffered-rlc/bad-inductor-voltage.elab": {
+      "sha256": "177cf8a3ba63be92584b4198bb2bae0e7d042280be1ced0191a549c320782292",
+      "bytes": 19506
+    },
+    "in-process/opamp-storage/opamp-buffered-rlc/bad-missing-ground.elab": {
+      "sha256": "6424c006744da870b6fa6a37f245f02e67b168fb6b4767278e7a72e0cc02d568",
+      "bytes": 19497
+    },
+    "in-process/opamp-storage/opamp-buffered-rlc/bad-missing-opamp-model.elab": {
+      "sha256": "390b0c8f0fcbbec3eac7e31907b7a7d16a169474b39161d4fd2de6683edda387",
+      "bytes": 18605
+    },
+    "in-process/opamp-storage/opamp-buffered-rlc/bad-opamp-id.elab": {
+      "sha256": "825d003d14d6f2b29d746f4c6a7fb4dd01f3d55941bde993e705058f76229bdf",
+      "bytes": 19515
+    },
+    "in-process/opamp-storage/opamp-buffered-rlc/bad-opamp-model.elab": {
+      "sha256": "3ca663b932be7bd3db60c125c659e3201517e79a00dfc8289bfde3e629ac9fc8",
+      "bytes": 19506
+    },
+    "in-process/opamp-storage/opamp-buffered-rlc/bad-opamp-power.elab": {
+      "sha256": "54e1e549d7c32e4c332668e685d2641d6a78026531ff27202f41b3d5abe1054e",
+      "bytes": 19510
+    },
+    "in-process/opamp-storage/opamp-buffered-rlc/project.elab": {
+      "sha256": "a7c7bf339a87801c0d3a3c32c383773cbb4bba9487a0a1a7b22f1e4c56374072",
+      "bytes": 40439
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-capacitor-energy.elab": {
+      "sha256": "d53be9b4eb2e1a45ceeab7d06910277e650dd7ad39a6ec613d817220dc2fc131",
+      "bytes": 32306
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-capacitor-voltage.elab": {
+      "sha256": "350215d703663e94c2c33b26c56b3812fcf560ce2854e03fbf9cc66e4c6deca2",
+      "bytes": 32306
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-drain-current.elab": {
+      "sha256": "f48ddbce38d71f522b81319807dc07461a43d43645704b51135acd8a6350cd85",
+      "bytes": 32306
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-drain-voltage.elab": {
+      "sha256": "d4c3d3581c8c3c710e5ed0d46bbf8fa9a2ad8f6e0d2e593a417450390819d85d",
+      "bytes": 32304
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-foreign-node.elab": {
+      "sha256": "a35a0d7d525aff127e4d43832d40387513ae346deda9daf63548d608ab28476d",
+      "bytes": 32323
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-gate-current.elab": {
+      "sha256": "65f69017cd15a1174000059190d7ee1abd74ba470bed1261082f1a517cd6e431",
+      "bytes": 32310
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-gate-voltage.elab": {
+      "sha256": "e5d6b96854dee72cced9c1676931549f4ef25bd354a85c0cf3f1099f5626e5f3",
+      "bytes": 32306
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-missing-ground.elab": {
+      "sha256": "0350d0047fd708197afc21d1fb85af54c175fee22509d7d79f8d1ba7753dee03",
+      "bytes": 32293
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-missing-opamp-model.elab": {
+      "sha256": "98b28ae3ca037b7701c5b0daaa6169d570a3d96b9e9b5fc05e57ec4d934bdd4d",
+      "bytes": 31401
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-missing-pmos-model.elab": {
+      "sha256": "309cc1e13f1934c3a4498dea700a00eabc5083a973d765080d15a41629d4c417",
+      "bytes": 31444
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-mosfet-id.elab": {
+      "sha256": "87731c2daaaf6b2464f6d1ee0c505346022e50ac904550eae12225dc0f51c051",
+      "bytes": 32310
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-mosfet-model.elab": {
+      "sha256": "786d292f058dd4e37aed9e0f1877a4a029fc04c06d74597f67929a4f3e6339d4",
+      "bytes": 32222
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-mosfet-power.elab": {
+      "sha256": "143fa40032ee1f2b762fb773bc32e05c65545da67001eafdbc04a9951c331672",
+      "bytes": 32303
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-mosfet-region.elab": {
+      "sha256": "6bdec32d6d17b2e25240523109c85435e4bfe2b8606e0f2e245789284641ff7c",
+      "bytes": 32307
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-opamp-id.elab": {
+      "sha256": "e94b80a4f9065a4fb92b1a5786c000600134f31322dac506b70b2d7c5987fdbd",
+      "bytes": 32311
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-opamp-model.elab": {
+      "sha256": "484fda00b85dfea62cc20050b0bb91bdfbd5ea2fb7b546e963b6d92bbc744e03",
+      "bytes": 32302
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-opamp-power.elab": {
+      "sha256": "3d7b7a76f816cfdc9ff9b5a40dae0b7ca990f5e30fe0649b1616321ac2c1b4d6",
+      "bytes": 32307
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/bad-source-current.elab": {
+      "sha256": "3138b6923ae62758686e065ab2322d405802ca57a23cff8ec0eaa2c3723d8f1a",
+      "bytes": 32306
+    },
+    "in-process/opamp-storage/opamp-rc-pmos/project.elab": {
+      "sha256": "54871341260e2d7a81010479379c805e42a2517cacd7eaac8d9a6b20b3111a27",
+      "bytes": 67718
+    },
+    "in-process/opamps/opamp-follower/captured.elab": {
+      "sha256": "4c7497c2874f3a0788ca71fe160ffcbcd9cbf0b5899d83332e436e80042e5bdf",
+      "bytes": 56504
+    },
+    "in-process/opamps/opamp-inverting/captured.elab": {
+      "sha256": "2eac39fe0ebf6ea78d05681a2851dedadbd7e046ed3e00ebeb96b2089aca29a4",
+      "bytes": 60296
+    },
+    "in-process/opamps/opamp-rc-mosfet/captured.elab": {
+      "sha256": "4cdcf1decf09a973e78725f884804e2ab303693f682944ad18d65a5708208d02",
+      "bytes": 71740
+    },
+    "in-process/opamps/opamp-rc-npn/captured.elab": {
+      "sha256": "66fe30fd571c6d58964eec9f5ff2319b2708dbf3e3f2e2a4ac95272b13223f82",
+      "bytes": 70663
+    },
+    "in-process/project-contracts/admitted-save.elab": {
+      "sha256": "c4464ef1eb94190dea09a9e5b3f673de36680dcc0984bb385ab18d33bbe500fa",
+      "bytes": 11731
+    },
+    "in-process/project-contracts/captured.elab": {
+      "sha256": "f9178e751da69273d5f3cb5392c898003fe9001b2e030c29f17ad3823e0cf348",
+      "bytes": 11731
+    },
+    "in-process/project-contracts/invalid.elab": {
+      "sha256": "f90448c1e06fd425306851923a142084bc3cbf7f5ff0e8020100459b491161cd",
+      "bytes": 13
+    },
+    "in-process/rc/project.elab": {
+      "sha256": "198ef9ee2e1a90042554533c92bf649379fc11834407ad244f5f56b74137ea1f",
+      "bytes": 45523
+    },
+    "in-process/rc/reopened.elab": {
+      "sha256": "198ef9ee2e1a90042554533c92bf649379fc11834407ad244f5f56b74137ea1f",
+      "bytes": 45523
+    },
+    "in-process/rc/schematic.svg": {
+      "sha256": "de6c8aba450d84b22e4fd31267f690247887399b1d3c575f03a3a6ad2eee3543",
+      "bytes": 10186
+    },
+    "in-process/rc/scope.csv": {
+      "sha256": "46483bb158ebfd3e438c57171b9279072bea410090b617b159dd0fa81efa4e75",
+      "bytes": 1192
+    },
+    "in-process/rc/verification.csv": {
+      "sha256": "b18ac12f9d31b307d65b5b205e466b3db4026ddb22afce60f6d3255086362e5a",
+      "bytes": 32049
+    },
+    "native-socket/capacity/capacity-100-nodes/excess.elab": {
+      "sha256": "a2e19264a7a8ba26020f6301ff31e0ae0e0d8f078cc04e27b59b924892239aab",
+      "bytes": 159492
+    },
+    "native-socket/capacity/capacity-100-nodes/project.elab": {
+      "sha256": "96077a46bbf294324fa862524be7595c6d20ae495377bf7f93761877548a67cf",
+      "bytes": 159602
+    },
+    "native-socket/capacity/capacity-64-parts/excess.elab": {
+      "sha256": "b9de8ad5213a022495a6a685fedb9696cc5067c0cd3c9a40a93471965c220178",
+      "bytes": 144732
+    },
+    "native-socket/capacity/capacity-64-parts/project.elab": {
+      "sha256": "916c3cbfdcb83e22c2520c9cedbe9467f6c9ec22866c80ce80caa75d867a5572",
+      "bytes": 144391
+    },
+    "native-socket/capacity/capacity-rc-mosfet/excess.elab": {
+      "sha256": "3c99a9b384c5d1736f934c0401c43e2e3b47bb08641360dd371f3ca086b90784",
+      "bytes": 152198
+    },
+    "native-socket/capacity/capacity-rc-mosfet/project.elab": {
+      "sha256": "94d532b9ae6456ded0c494da87e727f5d3d774ebda18a3a310b92124d6f57c88",
+      "bytes": 151857
+    },
+    "native-socket/inductors/signed-rl.elab": {
+      "sha256": "fec985fd4c99699a8362c9f9ba0f62597438e3bb61e1ae8dc6b67ac9be5ce834",
+      "bytes": 10477
+    },
+    "native-socket/led/project.elab": {
+      "sha256": "89d359f475b3db4e0f3831f33980e818261d94a35c3b75cbb5acdcda7de01057",
+      "bytes": 10471
+    },
+    "native-socket/led/reopened.elab": {
+      "sha256": "89d359f475b3db4e0f3831f33980e818261d94a35c3b75cbb5acdcda7de01057",
+      "bytes": 10471
+    },
+    "native-socket/led/schematic.svg": {
+      "sha256": "e16df447f9a44a99748c4a7c1351c8ea6f5a6755e7bd2f100a8822d2021e5464",
+      "bytes": 9409
+    },
+    "native-socket/led/verification.csv": {
+      "sha256": "d4d401ee50f5b485f1de35b3890e9dfdfc227ad7c624f4cb809c3bcda0e6332c",
+      "bytes": 305
+    },
+    "native-socket/npn/project.elab": {
+      "sha256": "7b70dbc6920026c290e9fd9becc849070b00ff34df0d1bdf90c453befdb8d749",
+      "bytes": 15049
+    },
+    "native-socket/npn/reopened.elab": {
+      "sha256": "7b70dbc6920026c290e9fd9becc849070b00ff34df0d1bdf90c453befdb8d749",
+      "bytes": 15049
+    },
+    "native-socket/npn/schematic.svg": {
+      "sha256": "1463f75433842452a74f1fa4561a27b0cf1ed80a4221cb71be604bf22c045c88",
+      "bytes": 11865
+    },
+    "native-socket/npn/verification.csv": {
+      "sha256": "897bd410d618875d51b561ea6bc941326dfb49faec0c751f545fc249a1e35c6b",
+      "bytes": 398
+    },
+    "native-socket/opamp-storage/opamp-buffered-rlc/bad-capacitor-energy.elab": {
+      "sha256": "7257ebbce56389ae9ff2bbdd63e2f558951bb7bb339169f0faa779658a3ba09d",
+      "bytes": 19510
+    },
+    "native-socket/opamp-storage/opamp-buffered-rlc/bad-capacitor-voltage.elab": {
+      "sha256": "3a1613253d3384682aa0e37a67fa4099a54670f030dbae8ceb907341a801d1af",
+      "bytes": 19509
+    },
+    "native-socket/opamp-storage/opamp-buffered-rlc/bad-foreign-node.elab": {
+      "sha256": "5c00db2e4dd8fecc257a07cbbfd336d80a7422f93e473644ca41290e5725ac91",
+      "bytes": 19527
+    },
+    "native-socket/opamp-storage/opamp-buffered-rlc/bad-inductor-current.elab": {
+      "sha256": "18c18f8ba619c42b68c2282e0af418f248ac42ec49151d968ec18707b0e3399d",
+      "bytes": 19509
+    },
+    "native-socket/opamp-storage/opamp-buffered-rlc/bad-inductor-energy.elab": {
+      "sha256": "dc90c190846e71a21bb33104692b9ce46d212afe003e7928121f7399b2cc4ff7",
+      "bytes": 19510
+    },
+    "native-socket/opamp-storage/opamp-buffered-rlc/bad-inductor-voltage.elab": {
+      "sha256": "9eac95d8db6697dc6afd640c7bf63f0a0e17247b5d3bbd79c094329327e84f5c",
+      "bytes": 19506
+    },
+    "native-socket/opamp-storage/opamp-buffered-rlc/bad-missing-ground.elab": {
+      "sha256": "38627f5826cdd5be3ee5614804a3ce26c43ecf21238cb64cda340e0058298ef2",
+      "bytes": 19497
+    },
+    "native-socket/opamp-storage/opamp-buffered-rlc/bad-missing-opamp-model.elab": {
+      "sha256": "87c941f34d94fbea4c27fd2cc8b7024b75834cae377760c315556a631b59ef5a",
+      "bytes": 18605
+    },
+    "native-socket/opamp-storage/opamp-buffered-rlc/bad-opamp-id.elab": {
+      "sha256": "a55a76dcc724bd3a95608bd5f272b287821144e610aba267e8a0b6595f4e75a6",
+      "bytes": 19515
+    },
+    "native-socket/opamp-storage/opamp-buffered-rlc/bad-opamp-model.elab": {
+      "sha256": "153e53b8db1267ff85d1b3a34d1ab8b51eae1399c95b1b39b71c2d8a00e52a27",
+      "bytes": 19506
+    },
+    "native-socket/opamp-storage/opamp-buffered-rlc/bad-opamp-power.elab": {
+      "sha256": "f13499729c8d09fa57ff755aab9444c602dfba5ce4ddf9d14bac2d3056515044",
+      "bytes": 19510
+    },
+    "native-socket/opamp-storage/opamp-buffered-rlc/project.elab": {
+      "sha256": "939d515a71b7bcc02d1c5382a1d458d897dcfc57f0e9c874f2cb99c1d00a8067",
+      "bytes": 40439
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-capacitor-energy.elab": {
+      "sha256": "559f11a1d9d46ffa34f9e441ff4685bf76d0a374183d10864b7c2554d93b48c6",
+      "bytes": 32306
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-capacitor-voltage.elab": {
+      "sha256": "57b9b3f3cfbe1852212a217d2652ebd36ad2babf821443e47a1c2e4f71877bd8",
+      "bytes": 32306
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-drain-current.elab": {
+      "sha256": "c726dc23aa88ffb1a6fa6f5c7fefa4211fcc07b63195460b5750b64504dea4f9",
+      "bytes": 32306
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-drain-voltage.elab": {
+      "sha256": "22ec2dd9364d4ab0252b6c79de89fd101a2524d482e008527c9d08133cd3c142",
+      "bytes": 32304
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-foreign-node.elab": {
+      "sha256": "b384c0a9c36ba1fcceb0104ed89fb2f370a3e549eca5e77c933c74e6d02f46e0",
+      "bytes": 32323
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-gate-current.elab": {
+      "sha256": "9b4dcf840c45068ac027e85ee3d292da7403aab3342d7eb49366f82ed34d64ef",
+      "bytes": 32310
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-gate-voltage.elab": {
+      "sha256": "5b55c968a3441aa987d9d90b9257ec6c2955a1e64ac1972a6b93eb1ed447d567",
+      "bytes": 32306
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-missing-ground.elab": {
+      "sha256": "4877473151d4ce94b4fb235fbd64d51567bd2e14810446d8c4a2a739fbf7a2f7",
+      "bytes": 32293
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-missing-opamp-model.elab": {
+      "sha256": "e7b2de6d61809659dad664f3fa7e4386fae3966d24188ca7167e9eb37d6a20e1",
+      "bytes": 31401
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-missing-pmos-model.elab": {
+      "sha256": "89ede51683191ab313c0ceedd6ddd6ab819c4499f55fd27bf4d22c60b555f6e1",
+      "bytes": 31444
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-mosfet-id.elab": {
+      "sha256": "5034c302cba7f70ca5804da5484ef3a4f1edfe65bbb492c5a623d35c74d39a77",
+      "bytes": 32310
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-mosfet-model.elab": {
+      "sha256": "53cf5850e2eeca902077d04b7b4829f0a280ed122733df4203c688a3384702ec",
+      "bytes": 32222
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-mosfet-power.elab": {
+      "sha256": "e3b743970dbba7686b1511f60e9f9b94e3854360788aa13a55a06ab43ba3987b",
+      "bytes": 32303
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-mosfet-region.elab": {
+      "sha256": "09087bc5c91bcb7648159f0dd7b7c3bf798b064bef21030bfb5b9b33299f48ee",
+      "bytes": 32307
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-opamp-id.elab": {
+      "sha256": "53cd8289603743ce6030249fbdba9a96aa235cdbc346b1b65f5d9561096fff00",
+      "bytes": 32311
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-opamp-model.elab": {
+      "sha256": "b217ebf83afeac51e997b17612d6d16bc148c8c56a9c9cceb5ac3734aa103f37",
+      "bytes": 32302
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-opamp-power.elab": {
+      "sha256": "8152c23453b6d6f296a398f880478b99f1e439a1cfb511f619793855eb176e35",
+      "bytes": 32307
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/bad-source-current.elab": {
+      "sha256": "5f0e637bbb0a19e513a30b717693690b3c54a37e6ed5af12f31005d2feb48acb",
+      "bytes": 32306
+    },
+    "native-socket/opamp-storage/opamp-rc-pmos/project.elab": {
+      "sha256": "db8ec292cdee1990ff862f230cb6421fb75a936581fc6410b772538185e3de44",
+      "bytes": 67718
+    },
+    "native-socket/opamps/opamp-follower/captured.elab": {
+      "sha256": "8080db8cfc7cb6b3369664af3e1a649b77c6aea317e49b05b564f9a1e175d103",
+      "bytes": 56504
+    },
+    "native-socket/opamps/opamp-inverting/captured.elab": {
+      "sha256": "13465cf396507dcdc634c3b7f966216ea7596daacbae1702ab8ebb3ad807d8bf",
+      "bytes": 60296
+    },
+    "native-socket/opamps/opamp-rc-mosfet/captured.elab": {
+      "sha256": "5cfcbcd8deb0709f46938eaec4102df2edac2de5f748c61737176025e629a888",
+      "bytes": 71740
+    },
+    "native-socket/opamps/opamp-rc-npn/captured.elab": {
+      "sha256": "65f3fbfc753783d2e2b3796feb3f1811710d2e223599ecf803eee612bc7d455a",
+      "bytes": 70663
+    },
+    "native-socket/project-contracts/admitted-save.elab": {
+      "sha256": "edd78819838bbbf044206c1000b6b57ea9e4f3ece0d10ff92918b7367179ac1b",
+      "bytes": 11732
+    },
+    "native-socket/project-contracts/captured.elab": {
+      "sha256": "1d6479d557e259a88d81667c655cc97a5497cfc0634d24cd119d7648272e2b06",
+      "bytes": 11732
+    },
+    "native-socket/project-contracts/invalid.elab": {
+      "sha256": "f90448c1e06fd425306851923a142084bc3cbf7f5ff0e8020100459b491161cd",
+      "bytes": 13
+    },
+    "native-socket/rc/project.elab": {
+      "sha256": "b9b61f3c5fee124ca76705be4999efd057c8f628db42670794d4c0e400eb4a94",
+      "bytes": 45523
+    },
+    "native-socket/rc/reopened.elab": {
+      "sha256": "b9b61f3c5fee124ca76705be4999efd057c8f628db42670794d4c0e400eb4a94",
+      "bytes": 45523
+    },
+    "native-socket/rc/schematic.svg": {
+      "sha256": "de6c8aba450d84b22e4fd31267f690247887399b1d3c575f03a3a6ad2eee3543",
+      "bytes": 10186
+    },
+    "native-socket/rc/scope.csv": {
+      "sha256": "46483bb158ebfd3e438c57171b9279072bea410090b617b159dd0fa81efa4e75",
+      "bytes": 1192
+    },
+    "native-socket/rc/verification.csv": {
+      "sha256": "6fa0ea20dcb3378dc9628fe4abc5622995ea44658322c36ba6df5439a32cd326",
+      "bytes": 32049
+    }
+  },
+  "project_files": 204,
+  "svg_files": 12,
+  "csv_files": 16,
+  "archive_sha256": "786cf27f43d700003ede4c55d0be48fae81517e5f94029dd472d257ac76df1bc",
+  "auth_endpoint_recovery_files_excluded": true
+}

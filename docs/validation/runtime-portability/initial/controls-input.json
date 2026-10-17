@@ -1,0 +1,51 @@
+{
+  "allowed": "/private/tmp/elab-runtime-da3d937916f7/allowed-control.txt",
+  "canaries": {
+    "repository": "/Users/dshills/Development/projects/ELab/README.md",
+    "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-aa9d023/go.mod",
+    "sibling_vellum": "/Users/dshills/Development/projects/Vellum/go.mod",
+    "go_toolchain": "/opt/homebrew/Cellar/go/1.27.2/libexec/VERSION",
+    "go_build_cache": "/Users/dshills/Library/Caches/go-build/README",
+    "project_go_cache": "/Users/dshills/Development/projects/ELab/build/go-cache/README",
+    "go_module_cache": "/Users/dshills/Development/Go/pkg/mod/cache/download/golang.org/x/text/@v/v0.9.0.mod",
+    "developer_sdk": "/Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild"
+  },
+  "network": {
+    "ipv4_tcp": {
+      "ipv6": false,
+      "udp": false,
+      "address": [
+        "127.0.0.1",
+        54427
+      ]
+    },
+    "ipv4_udp": {
+      "ipv6": false,
+      "udp": true,
+      "address": [
+        "127.0.0.1",
+        55119
+      ]
+    },
+    "ipv6_tcp": {
+      "ipv6": true,
+      "udp": false,
+      "address": [
+        "::1",
+        54429,
+        0,
+        0
+      ]
+    },
+    "ipv6_udp": {
+      "ipv6": true,
+      "udp": true,
+      "address": [
+        "::1",
+        51347,
+        0,
+        0
+      ]
+    }
+  }
+}

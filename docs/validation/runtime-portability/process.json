@@ -1,0 +1,29 @@
+[
+  {
+    "name": "quality",
+    "command": [
+      "./scripts/check.sh"
+    ],
+    "started_utc": "2026-10-17T11:12:24.055028+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 13.191802959074266,
+    "finished_utc": "2026-10-17T11:12:37.246899+00:00"
+  },
+  {
+    "name": "runtime",
+    "command": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "scripts/runtime-portability.py",
+      "--app",
+      "/Users/dshills/Development/projects/ELab/build/ELab-0.109.0-124-project-contract-candidate.app",
+      "--artifacts",
+      "/private/tmp/elab-runtime-57d6b461bfd3"
+    ],
+    "started_utc": "2026-10-17T11:12:37.348669+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 90.4635540000163,
+    "finished_utc": "2026-10-17T11:14:07.812673+00:00"
+  }
+]

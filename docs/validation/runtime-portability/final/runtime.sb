@@ -1,0 +1,4 @@
+(version 1)
+(allow default)
+(deny file-read* file-write* (subpath "/Users/dshills/Development/projects/ELab") (subpath "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-aa9d023") (subpath "/Users/dshills/Development/projects/Vellum") (subpath "/opt/homebrew/Cellar/go/1.27.2/libexec") (subpath "/Users/dshills/Development/projects/ELab/build/go-cache") (subpath "/Users/dshills/Development/projects/ELab/build/go-cache") (subpath "/Users/dshills/Development/Go/pkg/mod") (subpath "/Applications/Xcode.app/Contents/Developer"))
+(deny network-outbound (remote ip "*:*"))

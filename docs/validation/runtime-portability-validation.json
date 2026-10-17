@@ -1,0 +1,280 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T11:15:54.834941+00:00",
+  "scope": "Copied macOS private runtime with development-file and outbound IP denial on the current workstation; no clean OS/account or distribution claim",
+  "source_parent_commit": "dad9624f5cdec87a9cfdbdcf9d85e414bf68fd27",
+  "source_index": "docs/validation/runtime-portability/source-freeze.json",
+  "source_frozen_files": 674,
+  "source_stable": true,
+  "source_delta": {
+    "passed": true,
+    "previous": "docs/validation/project-contracts/source-freeze.json",
+    "existing_inputs_unchanged": true,
+    "added_inputs": [
+      "scripts/runtime-portability.py",
+      "scripts/runtime_isolation.py",
+      "scripts/test_runtime_isolation.py"
+    ],
+    "frozen_files": 674
+  },
+  "runtime_binary_source_receipt": "docs/validation/project-contracts-validation.json",
+  "binary_sha256": {
+    "build/elab-agent": "25c475d2978e2680436ad9f6597e7fdbad43f70f6053dda22dc4a0325e4ca71b",
+    "build/elab-conformance": "2c4a187becf5f2bb8c666a87e73fa86cf42565b2ba0cabc0fda8224a222649d1",
+    "build/ELab-0.109.0-124-project-contract-candidate.app/Contents/MacOS/ELab": "7c9105364e2526c9a502bdab68a204799e7722a3336c2438bb7f3427051aaa3a"
+  },
+  "candidate": "build/ELab-0.109.0-124-project-contract-candidate.app",
+  "candidate_rebuilt_or_promoted": false,
+  "environment": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "python": "3.15.0",
+    "go": "go version go1.27.2 darwin/arm64",
+    "macos": "ProductName:\t\tmacOS\nProductVersion:\t\t26.6.2\nBuildVersion:\t\t25G83"
+  },
+  "process": [
+    {
+      "name": "quality",
+      "command": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T11:12:24.055028+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 13.191802959074266,
+      "finished_utc": "2026-10-17T11:12:37.246899+00:00"
+    },
+    {
+      "name": "runtime",
+      "command": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "scripts/runtime-portability.py",
+        "--app",
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.109.0-124-project-contract-candidate.app",
+        "--artifacts",
+        "/private/tmp/elab-runtime-57d6b461bfd3"
+      ],
+      "started_utc": "2026-10-17T11:12:37.348669+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 90.4635540000163,
+      "finished_utc": "2026-10-17T11:14:07.812673+00:00"
+    }
+  ],
+  "quality": {
+    "passed": true,
+    "python_tests": 31,
+    "lint_imports_staticcheck": true,
+    "root_native_race_vet": true,
+    "unchanged_Go_suites_cached": true,
+    "log": "docs/validation/runtime-portability/quality-final.log.txt"
+  },
+  "runs": {
+    "initial": {
+      "passed": true,
+      "directory": "/private/tmp/elab-runtime-da3d937916f7",
+      "native_smoke_stages": 45,
+      "read_controls": 8,
+      "unique_development_directories": 8,
+      "network_controls": 4,
+      "numerical_checks": 27596,
+      "stages": [
+        {
+          "name": "native-smoke",
+          "command": [
+            "/private/tmp/elab-runtime-da3d937916f7/native",
+            "--smoke",
+            "--smoke-timeout",
+            "2m"
+          ],
+          "status": "completed",
+          "exit_code": 0,
+          "elapsed_seconds": 39.87922670901753
+        },
+        {
+          "name": "public-suites",
+          "command": [
+            "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+            "--agent-binary",
+            "/private/tmp/elab-runtime-da3d937916f7/agent",
+            "--native-binary",
+            "/private/tmp/elab-runtime-da3d937916f7/native",
+            "--project-contract-suite",
+            "--electrical-suite",
+            "--inductor-suite",
+            "--opamp-suite",
+            "--opamp-storage-suite",
+            "--capacity-suite",
+            "--artifacts",
+            "/private/tmp/elab-runtime-da3d937916f7/public"
+          ],
+          "status": "completed",
+          "exit_code": 0,
+          "elapsed_seconds": 49.439240291016176
+        }
+      ]
+    },
+    "final": {
+      "passed": true,
+      "directory": "/private/tmp/elab-runtime-57d6b461bfd3",
+      "native_smoke_stages": 45,
+      "read_controls": 8,
+      "unique_development_directories": 7,
+      "network_controls": 4,
+      "numerical_checks": 27596,
+      "stages": [
+        {
+          "name": "native-smoke",
+          "command": [
+            "/private/tmp/elab-runtime-57d6b461bfd3/native",
+            "--smoke",
+            "--smoke-timeout",
+            "2m"
+          ],
+          "status": "completed",
+          "exit_code": 0,
+          "elapsed_seconds": 40.379890917101875
+        },
+        {
+          "name": "public-suites",
+          "command": [
+            "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+            "--agent-binary",
+            "/private/tmp/elab-runtime-57d6b461bfd3/agent",
+            "--native-binary",
+            "/private/tmp/elab-runtime-57d6b461bfd3/native",
+            "--project-contract-suite",
+            "--electrical-suite",
+            "--inductor-suite",
+            "--opamp-suite",
+            "--opamp-storage-suite",
+            "--capacity-suite",
+            "--artifacts",
+            "/private/tmp/elab-runtime-57d6b461bfd3/public"
+          ],
+          "status": "completed",
+          "exit_code": 0,
+          "elapsed_seconds": 49.343833000049926
+        }
+      ]
+    }
+  },
+  "final_adapters": [
+    "in-process",
+    "headless-stdio",
+    "headless-socket",
+    "native-socket"
+  ],
+  "restricted_adapters": [
+    "headless-stdio",
+    "headless-socket",
+    "native-socket"
+  ],
+  "controller_and_in_process_unrestricted": true,
+  "final_numerical_checks": 27596,
+  "final_project_workflow_checks": 44,
+  "final_project_snapshots": 56,
+  "native_smoke_stages": 45,
+  "final_read_controls": 8,
+  "final_unique_development_directories": 7,
+  "final_outbound_IP_controls": 4,
+  "original_inputs_and_copied_runtime_unchanged": true,
+  "saved_project_files_including_intentionally_malformed": 204,
+  "owned_files_archive": "docs/validation/runtime-portability/owned-files.tar.gz",
+  "report_encoding": {
+    "initial": {
+      "decoded_bytes": 18198348,
+      "decoded_sha256": "d144d3c941e5ea46f13e09930fcf7a82c1963a29eccc280c040afb515d2f8771",
+      "gzip_bytes": 1659325,
+      "gzip_sha256": "2d6e6178fca70d8c7fe8c378d553ee583b9cd0ae6e0a4a78a45bc785d36252ed"
+    },
+    "final": {
+      "decoded_bytes": 18203366,
+      "decoded_sha256": "7c1691dd43376ee8ea5a2bd8111c6702bc08d8344868e7d5e3c9a4d2494e7e66",
+      "gzip_bytes": 1659340,
+      "gzip_sha256": "8732b6cc4f191cda85e985d229e250ff80f9ac9d8d2b666e91a91c48e0f5d01c"
+    }
+  },
+  "sdk_post_check": {
+    "passed": true,
+    "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-aa9d023",
+    "source": "aa9d023243a6bded514c3d9696c08a9c917119c4"
+  },
+  "preserved_bundles_unchanged": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7,
+      "executable_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c"
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7,
+      "executable_sha256": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1"
+    }
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "limitations": [
+    "The external child runtimes are restricted; the conformance controller/in-process baseline, local control targets and development tools are not.",
+    "Initial controls deny eight distinct directories. Final GOCACHE points to the project cache, so eight logical read controls cover seven distinct directories. Both raw policies and paths are retained; counts are not conflated.",
+    "The OS frameworks/fonts/services/GPU and ordinary user/system caches remain available. This is not a clean OS/account, other hardware/platform or signed/notarized distribution test.",
+    "Policy denies development writes, but no write to a user/source file is attempted as a control. Permission-denied read and IP controls are explicitly observed.",
+    "The pinned SDK runner handles stage timeout/interruption cleanup. Forced process termination/power loss and uninterruptible OS calls remain outside that guarantee.",
+    "Initial run uses the original controller helper. Final source additionally prevents SDK bytecode pollution and records failed/interrupted stages as terminal; final plain-Python execution and 31 tests pass.",
+    "No Go production source, numerical model/method, file format, app command or capacity changes. Full physical input/accessibility/readability, event, clean installation/distribution, printer and participant gates remain open."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/runtime-portability/archive.py.txt": "d94184179ea7989757399f501878a5f93d4396d96df53a6810b1231231b7a49a",
+    "docs/validation/runtime-portability/binaries.json": "502fbbde137312a5573c2c4991ada45304573a1699b242df73954ca5083f2d95",
+    "docs/validation/runtime-portability/environment.json": "ff9b9def7d3f1a22435f84295719d155cb82e5d4679c76cc810a9c9cc41f4590",
+    "docs/validation/runtime-portability/final/agent.txt": "f925639231a7cfcf0195b30e0901cb8155c47a3cd5631573a02359a1cc024c5a",
+    "docs/validation/runtime-portability/final/conformance-report.json.gz": "8732b6cc4f191cda85e985d229e250ff80f9ac9d8d2b666e91a91c48e0f5d01c",
+    "docs/validation/runtime-portability/final/controls-input.json": "1bee3617ca0799b52809fbc43008f7319dbc7f183af0f95be896ece9ff888476",
+    "docs/validation/runtime-portability/final/controls-stderr.log.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/validation/runtime-portability/final/controls.json": "822e48ffcb5f2e4c651719ae3fe808ea509c3ba5ba248f97d2b73f35fc5764bc",
+    "docs/validation/runtime-portability/final/native-smoke.log.txt": "d84cbd14f97bae2ed55029f6b3a3e467222b6926e080484534f106bf3aec8588",
+    "docs/validation/runtime-portability/final/native.txt": "98ef508a56980d15a8812a5ef93a7e1669804a8bdf6af1f519a2e0dd1dc214d6",
+    "docs/validation/runtime-portability/final/probe.py.txt": "3acd7c4bdbdc51e7919712ebfb8ff0cb6467bfa5b0fceb8bfcf8d88b9f6e70fc",
+    "docs/validation/runtime-portability/final/public-suites.log.txt": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "docs/validation/runtime-portability/final/runtime-report.json": "2b0b6b228ddaf23960e91d1d28c8455a3b9c23f95fba20a1e08ee502cc27d1b7",
+    "docs/validation/runtime-portability/final/runtime.sb": "459b5b6899e8dbb044980ec9081bf0f7a8b614dab9d82cc45ae94036a49cd8d2",
+    "docs/validation/runtime-portability/final-location.json": "788de727ee4be486900e3f875af9815ad919da8e72e035c33719114b4eb98b98",
+    "docs/validation/runtime-portability/final-review-gzip.json": "b8a64404d98faee51ca58bb747baab3d61d5bb545cceda8d5e0693fcb0d10428",
+    "docs/validation/runtime-portability/final-review-raw.json": "b8a64404d98faee51ca58bb747baab3d61d5bb545cceda8d5e0693fcb0d10428",
+    "docs/validation/runtime-portability/initial/agent.txt": "e783782a8786bebf537896039c9bdea6f9107634463dad254e22bb152216f224",
+    "docs/validation/runtime-portability/initial/conformance-report.json.gz": "2d6e6178fca70d8c7fe8c378d553ee583b9cd0ae6e0a4a78a45bc785d36252ed",
+    "docs/validation/runtime-portability/initial/controls-input.json": "2ec65739286059ca67e2b514954f19d8409885712723fec327617638a280c96a",
+    "docs/validation/runtime-portability/initial/controls-stderr.log.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/validation/runtime-portability/initial/controls.json": "822e48ffcb5f2e4c651719ae3fe808ea509c3ba5ba248f97d2b73f35fc5764bc",
+    "docs/validation/runtime-portability/initial/native-smoke.log.txt": "b4bea43afbb9433fc1fa938067e29412aa3c8b8ae8fd2c6f575dce1df41905bc",
+    "docs/validation/runtime-portability/initial/native.txt": "6bb4408420bd621b6a86908de034c1e3201801d52570ff6b10da1389151cc6d1",
+    "docs/validation/runtime-portability/initial/probe.py.txt": "3acd7c4bdbdc51e7919712ebfb8ff0cb6467bfa5b0fceb8bfcf8d88b9f6e70fc",
+    "docs/validation/runtime-portability/initial/public-suites.log.txt": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "docs/validation/runtime-portability/initial/runtime-report.json": "fdb77e3f28dcbcdff6592a73be92681a9ae88c69e2915bfe9bd564ce6d3fc033",
+    "docs/validation/runtime-portability/initial/runtime.sb": "49d85a16a8751a17552a1fdfc66deba32a9afd7e01ef7b027a13726465533102",
+    "docs/validation/runtime-portability/initial-location.json": "fba1dcf22af64a2eb6d2e7fe75b5b5b8ed1754021a1f05768674f36a09d21582",
+    "docs/validation/runtime-portability/initial-review-gzip.json": "35d4fa320b99aab8e9941783285be57ed9a0261a6d9fce17bf1b9638a3d97746",
+    "docs/validation/runtime-portability/initial-review-raw.json": "35d4fa320b99aab8e9941783285be57ed9a0261a6d9fce17bf1b9638a3d97746",
+    "docs/validation/runtime-portability/initial-run.log.txt": "293dca292514c2962282ef0f4668a5c84e6da833313aabb94dd2f220575e4005",
+    "docs/validation/runtime-portability/initial-runtime_isolation.py.txt": "e66035c9f8fc489212351230afb87a0b887a4c6554cb74af38959168c54fe943",
+    "docs/validation/runtime-portability/initial-sandbox-probe.json": "96639dc25dfcfd94e0df751560b1332ecf6f40722da5dea1c96430f6b4501151",
+    "docs/validation/runtime-portability/owned-files-index.json": "080e2795f54df1562ec271872480d6699c95bbc7dc865f9ef10606dbbdc8e057",
+    "docs/validation/runtime-portability/owned-files.tar.gz": "786cf27f43d700003ede4c55d0be48fae81517e5f94029dd472d257ac76df1bc",
+    "docs/validation/runtime-portability/preserved-bundles.json": "29c025d16bec382ddc1be254b89ee3dcda5f743409842967480c0e4b4eb8d826",
+    "docs/validation/runtime-portability/process.json": "46f06d1ccb68e890047a302d7c3d1f738dfbe7010646ecbe78fcdbfa470f5658",
+    "docs/validation/runtime-portability/qualify.py.txt": "093200c4980c0fa85364b38623354ee3b3273320bbad83f071b8b2a7d902553d",
+    "docs/validation/runtime-portability/quality-final.log.txt": "14190b2524bf0427dd1b858af17db192635fe71c9daf01be347d248ab10fb9fd",
+    "docs/validation/runtime-portability/report-encoding.json": "c4c4bc7e0340e949c0d2000a3505432275755a0bc9382ed63983a2aaee118b51",
+    "docs/validation/runtime-portability/review.go.txt": "808b076c8bf0bac85714632b87ab06a8364742575b33a383a734d7e37c729fb6",
+    "docs/validation/runtime-portability/runtime-final.log.txt": "d063801f58cf33d84be6228f34d046d8310045f3ddc9d5494b2ef7a1fb031eb7",
+    "docs/validation/runtime-portability/sdk-verified.json": "833a277bcd0532bf6e2b828e73fa39d3494b1867ba97bf82489cb1528af36a17",
+    "docs/validation/runtime-portability/source-delta.json": "aa6b7fda676f56aef31d17bb57688deee1f0117b29a915e5e1230c53f4bdecc4",
+    "docs/validation/runtime-portability/source-freeze.json": "a7f5b468acc3e4940468999cd1378b435d86318255d1a8bd41b56eb960606450",
+    "docs/validation/runtime-portability/unit-tests-final.log.txt": "22767020c936fb264568fa6fb4cf6278d218e7d91c25e541839f079aec4df27d",
+    "docs/validation/runtime-portability/unit-tests-hardened.log.txt": "9678738ed7f8e6619bbd2ee42b4514683fb132146f0b12792d3a524a4d840b9d",
+    "docs/validation/runtime-portability/unit-tests.log.txt": "80e949fcba645b34f07106347bab50b46e11f1afd65af6db5787a6ce6ca2d8ba",
+    "docs/validation/runtime-portability/README.md": "dafb88e4444a8a857dc9b6e03eabba5408b7dcc628773233305d197d2e6adad9"
+  }
+}

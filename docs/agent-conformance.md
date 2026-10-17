@@ -43,3 +43,7 @@ Each fixture saves and freshly reopens a project and exact retained recording, t
 ## Capacity timing suite
 
 `--capacity-performance-suite` adds twenty fresh/twenty warm measurements for each of the three capacity fixtures. Every sample retains a full 205-row reference-checked capture and exact graph/model/settings/probe associations. The validator recomputes variants, increasing warm identities, numerical references, statistics, percentiles and target flags; it does not trust aggregate success. See [protocol and scope](capacity-performance.md). Construction/process launch and visible-frame latency are outside these backend measurements.
+
+## Copied runtime without development files or IP networking
+
+The [macOS runtime rehearsal](isolated-runtime.md) runs these suites using copied external app/agent processes under OS-enforced development-file and outbound-IP denial. The in-process baseline/controller remains unrestricted. Saved models/recordings reopen through the same public commands. This extends workstation portability evidence without establishing a clean OS/account or distribution qualification.

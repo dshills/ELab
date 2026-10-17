@@ -1,0 +1,23 @@
+
+import errno,json,pathlib,socket,sys
+configuration=json.loads(pathlib.Path(sys.argv[1]).read_text())
+results={"allowed_read":pathlib.Path(configuration["allowed"]).read_text()=="ELab allowed control\n","files":{},"network":{}}
+for name,path in configuration["canaries"].items():
+    try:
+        with open(path,"rb") as source:source.read(1)
+        results["files"][name]={"denied":False}
+    except OSError as error:
+        results["files"][name]={"denied":isinstance(error,PermissionError) and error.errno in (errno.EPERM,errno.EACCES),"errno":error.errno}
+for name,entry in configuration["network"].items():
+    family=socket.AF_INET6 if entry["ipv6"] else socket.AF_INET
+    kind=socket.SOCK_DGRAM if entry["udp"] else socket.SOCK_STREAM
+    with socket.socket(family,kind) as client:
+        client.settimeout(2)
+        try:
+            address=tuple(entry["address"])
+            if entry["udp"]:client.sendto(b"ELab network control",address)
+            else:client.connect(address)
+            results["network"][name]={"denied":False}
+        except OSError as error:
+            results["network"][name]={"denied":isinstance(error,PermissionError) and error.errno in (errno.EPERM,errno.EACCES),"errno":error.errno}
+print(json.dumps(results))

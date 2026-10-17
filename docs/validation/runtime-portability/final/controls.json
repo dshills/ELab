@@ -1,0 +1,55 @@
+{
+  "allowed_read": true,
+  "files": {
+    "repository": {
+      "denied": true,
+      "errno": 1
+    },
+    "sdk": {
+      "denied": true,
+      "errno": 1
+    },
+    "sibling_vellum": {
+      "denied": true,
+      "errno": 1
+    },
+    "go_toolchain": {
+      "denied": true,
+      "errno": 1
+    },
+    "go_build_cache": {
+      "denied": true,
+      "errno": 1
+    },
+    "project_go_cache": {
+      "denied": true,
+      "errno": 1
+    },
+    "go_module_cache": {
+      "denied": true,
+      "errno": 1
+    },
+    "developer_sdk": {
+      "denied": true,
+      "errno": 1
+    }
+  },
+  "network": {
+    "ipv4_tcp": {
+      "denied": true,
+      "errno": 1
+    },
+    "ipv4_udp": {
+      "denied": true,
+      "errno": 1
+    },
+    "ipv6_tcp": {
+      "denied": true,
+      "errno": 1
+    },
+    "ipv6_udp": {
+      "denied": true,
+      "errno": 1
+    }
+  }
+}

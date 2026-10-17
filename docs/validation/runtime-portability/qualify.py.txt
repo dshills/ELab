@@ -1,0 +1,25 @@
+from pathlib import Path
+import datetime,hashlib,json,os,subprocess,sys,time,uuid
+root=Path.cwd();out=root/'build/runtime-portability'
+def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+files=[]
+for base in ['cmd','desktop','internal','workbench','transport','scripts','tools']:
+ files.extend(p for p in (root/base).rglob('*') if p.is_file() and '__pycache__' not in p.parts and p.suffix!='.pyc')
+files.extend(root/p for p in ['go.mod','go.sum','third_party/vellum/sdk.lock.json'] if (root/p).is_file())
+frozen={str(p.relative_to(root)):digest(p) for p in sorted(set(files))};(out/'source-freeze.json').write_text(json.dumps(frozen,indent=2)+'\n')
+previous=json.loads((root/'docs/validation/project-contracts/source-freeze.json').read_text())
+assert all(frozen[p]==h for p,h in previous.items())
+(out/'source-delta.json').write_text(json.dumps({'passed':True,'previous':'docs/validation/project-contracts/source-freeze.json','existing_inputs_unchanged':True,'added_inputs':sorted(frozen.keys()-previous.keys()),'frozen_files':len(frozen)},indent=2)+'\n')
+def stable():
+ changed=[p for p,h in frozen.items() if digest(root/p)!=h];assert not changed,changed
+candidate=root/'build/ELab-0.109.0-124-project-contract-candidate.app';paths=['build/elab-agent','build/elab-conformance',str(candidate.relative_to(root)/'Contents/MacOS/ELab')]
+binaries={p:digest(root/p) for p in paths};(out/'binaries.json').write_text(json.dumps(binaries,indent=2)+'\n')
+directory=Path('/private/tmp')/('elab-runtime-'+uuid.uuid4().hex[:12]);(out/'final-location.json').write_text(json.dumps({'directory':str(directory)},indent=2)+'\n')
+env=dict(os.environ,GOPROXY='off',GOWORK='off',GOFLAGS='-p=1',GOCACHE=str(root/'build/go-cache'))
+commands=[('quality',['./scripts/check.sh'],900),('runtime',[sys.executable,'scripts/runtime-portability.py','--app',str(candidate),'--artifacts',str(directory)],1200)]
+stages=[]
+for name,command,timeout in commands:
+ stable();assert all(digest(root/p)==h for p,h in binaries.items());start=time.monotonic();record={'name':name,'command':command,'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'running'};stages.append(record);(out/'process.json').write_text(json.dumps(stages,indent=2)+'\n');print('Starting '+name,flush=True)
+ with (out/(name+'-final.log.txt')).open('x') as log:r=subprocess.run(command,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=timeout)
+ record.update(status='completed' if r.returncode==0 else 'failed',exit_code=r.returncode,elapsed_seconds=time.monotonic()-start,finished_utc=datetime.datetime.now(datetime.timezone.utc).isoformat());(out/'process.json').write_text(json.dumps(stages,indent=2)+'\n');stable();assert all(digest(root/p)==h for p,h in binaries.items());print(json.dumps(record),flush=True)
+ if r.returncode:sys.exit(r.returncode)
