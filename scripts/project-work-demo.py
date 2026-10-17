@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Background project-open admission, failure purity and legacy wait compatibility.
---connect replaces only the designated owned development session.
+--connect requires a fresh owned blank development session.
 """
 import argparse
 import importlib.util
@@ -80,7 +80,7 @@ def main():
                 'legacy waiting command and fresh-process portability'],
             limitations=['blocked-reader navigation/save/cancel/supersession are separately proven by controlled race tests',
                 'OS filesystem calls may finish after cancellation; canceled work cannot install a document',
-                'backend admission timing excludes visible latency', 'save/export/manual recovery still include synchronous work'])
+                'backend admission timing excludes visible latency', 'complete event/native input, accessibility and release qualification remain open'])
         if args.output:
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_text(json.dumps(report, indent=2)+'\n')

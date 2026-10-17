@@ -1,0 +1,255 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T11:00:43.857284+00:00",
+  "scope": "Eight on-demand project state/file/job contracts and dedicated owned-file parity; existing electronics regressions; no release promotion or complete agent/native/event acceptance",
+  "source_parent_commit": "a414f5269a6852b323d2ae38e04dd8bdb8c7e2d7",
+  "source_index": "docs/validation/project-contracts/source-freeze.json",
+  "source_frozen_files": 671,
+  "source_stable": true,
+  "source_delta": {
+    "passed": true,
+    "comparison": "docs/validation/capacity-performance/source-freeze.json",
+    "changed_inputs": [
+      "cmd/elab-conformance/main.go",
+      "scripts/project-save-demo.py",
+      "scripts/project-work-demo.py",
+      "workbench/capability_details.go"
+    ],
+    "added_inputs": [
+      "internal/conformance/project_contract_comparison.go",
+      "internal/conformance/project_contract_evidence.go",
+      "internal/conformance/project_contracts.go",
+      "internal/conformance/project_contracts_test.go",
+      "workbench/project_capabilities.go",
+      "workbench/project_capabilities_test.go",
+      "workbench/project_file_capabilities.go"
+    ],
+    "removed_inputs": [],
+    "native_sources_unchanged": true,
+    "models_solver_format_transport_unchanged": true,
+    "runtime_change": "on-demand discovery annotations only; numerical methods and file workflows unchanged"
+  },
+  "binary_sha256": {
+    "build/elab": "7c9105364e2526c9a502bdab68a204799e7722a3336c2438bb7f3427051aaa3a",
+    "build/elab-agent": "25c475d2978e2680436ad9f6597e7fdbad43f70f6053dda22dc4a0325e4ca71b",
+    "build/elab-conformance": "2c4a187becf5f2bb8c666a87e73fa86cf42565b2ba0cabc0fda8224a222649d1",
+    "build/elab-ui-audit": "665ace9921a4abc4ae84b8ec4770cb981c17e41f4b4357c4ccd49399f01b3259",
+    "build/ELab-0.109.0-124-project-contract-candidate.app/Contents/MacOS/ELab": "7c9105364e2526c9a502bdab68a204799e7722a3336c2438bb7f3427051aaa3a"
+  },
+  "candidate": "build/ELab-0.109.0-124-project-contract-candidate.app",
+  "candidate_promoted": false,
+  "sdk_lock": "third_party/vellum/sdk.lock.json",
+  "sdk_post_check": {
+    "passed": true,
+    "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-aa9d023",
+    "source": "aa9d023243a6bded514c3d9696c08a9c917119c4"
+  },
+  "preserved_bundles_unchanged": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7,
+      "executable_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c"
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7,
+      "executable_sha256": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1"
+    }
+  },
+  "native_inventory": {
+    "passed": true,
+    "public_commands": 162,
+    "scope": "source inventory; dynamic binding and runtime coverage remain separate",
+    "sites": 388,
+    "source_route_count": 132,
+    "sources": 57
+  },
+  "ordinary_discovery_equal_before_after": true,
+  "public_commands": 162,
+  "new_scoped_contracts": 8,
+  "scoped_contract_inventory": {
+    "present": 98,
+    "without_scoped_contract": 64,
+    "presence_is_not_behavior_qualification": true
+  },
+  "adapters": [
+    "in-process",
+    "headless-stdio",
+    "headless-socket",
+    "native-socket"
+  ],
+  "project_workflow_checks": 44,
+  "observed_project_snapshots": 56,
+  "retained_project_files": 12,
+  "numerical_checks": 27596,
+  "negative_report_cases": 14,
+  "native_smoke_stages": 45,
+  "native_smoke_reused_after_harness_fix_with_identical_runtime_hashes": true,
+  "quality": {
+    "log": "docs/validation/project-contracts/quality-final.log.txt",
+    "lint_imports_staticcheck": true,
+    "python_tests": 22,
+    "root_and_native_race_and_vet": true,
+    "unchanged_cached_suites_labeled_in_log": true
+  },
+  "process_quality": [
+    {
+      "name": "build",
+      "argv": [
+        "./scripts/build.sh"
+      ],
+      "started_utc": "2026-10-17T10:56:32.872503+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 1.7047141250222921,
+      "finished_utc": "2026-10-17T10:56:34.577227+00:00"
+    },
+    {
+      "name": "quality",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T10:56:34.600864+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 129.80321579100564,
+      "finished_utc": "2026-10-17T10:58:44.404730+00:00"
+    }
+  ],
+  "process_public": [
+    {
+      "name": "public-suites",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+        "--native-binary",
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.109.0-124-project-contract-candidate.app/Contents/MacOS/ELab",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/project-contracts/public-final2"
+      ],
+      "started_utc": "2026-10-17T10:59:12.394829+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 48.02010045805946,
+      "finished_utc": "2026-10-17T11:00:00.415172+00:00"
+    }
+  ],
+  "report": {
+    "initial-report.json.gz": {
+      "decoded_bytes": 14503085,
+      "decoded_sha256": "99b93efcad250a8492fdcbbebab058388c9780c1dd032bd44f1b5d661bcbd56b",
+      "gzip_bytes": 1353190,
+      "gzip_sha256": "8766881e9e06329ee64c25c9040ab16edf53a38b872b0b6162547a85b447d7fc"
+    },
+    "conformance-report.json.gz": {
+      "decoded_bytes": 18173623,
+      "decoded_sha256": "ef8bfa2975413ad46b475479cf1191ac200d4e8ad03b1a851036cf57fcb30803",
+      "gzip_bytes": 1659634,
+      "gzip_sha256": "647beeea625800e875aa8620a424f8a15e3ac45d9c06d8d03b194f0b080360df"
+    },
+    "discovery-before.json.gz": {
+      "decoded_bytes": 997102,
+      "decoded_sha256": "408e1ec04c82e1f27856093b1bc328b8d2fe0fb8295c7544347439131f2fd04c",
+      "gzip_bytes": 119396,
+      "gzip_sha256": "a9b6e340ba41851d12a061c4f8a6589f2658b281bcf98f1b99873a476983c067"
+    },
+    "discovery-after.json.gz": {
+      "decoded_bytes": 1028418,
+      "decoded_sha256": "76e2233fe1d568326084aaf543c5f54f54e1b6db04175f7517690deb42483e6f",
+      "gzip_bytes": 131213,
+      "gzip_sha256": "fc61c6ffc5daae62cd82d9f860abe8150d1f79ea34f7aa063815f6cdb1a15a15"
+    }
+  },
+  "typed_review": {
+    "adapters": [
+      "in-process",
+      "headless-stdio",
+      "headless-socket",
+      "native-socket"
+    ],
+    "detailed_contracts_per_adapter": 8,
+    "numerical_checks": 27596,
+    "passed": true,
+    "project_states_per_adapter": 14,
+    "project_workflow_checks_per_adapter": 11,
+    "source_report_sha256": "ef8bfa2975413ad46b475479cf1191ac200d4e8ad03b1a851036cf57fcb30803"
+  },
+  "initial_comparison_failure": "Native recovery configuration shifts project job IDs; only two target-ID parameters differed. Final comparator validates actual job roles before normalization. Original failed report and diff retained.",
+  "test_setup_failures": "Restart readiness and example pause preference corrected; a blocked-publication test now uses direct dispatch instead of a helper that waits for settlement. No runtime guard/model/format was weakened.",
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "limitations": [
+    "These eight contracts and bounded file fixtures do not close all remaining command semantics or complete native action parity.",
+    "Public workflow retains actual states/calls/files; controlled core race tests separately prove blocked publication/cancellation, ownership, deadlines, literal/null paths, retained IDs and repaired-file retries.",
+    "Paths and observed job counters remain in raw evidence. Comparison maps only validated exact targets to roles; native viewport/layout publications are not required to be byte-identical.",
+    "No numerical method/model, runtime file behavior, command identity, project format or work limit changes. Existing numerical suites pass; repeated performance measurement was not rerun for discovery-only runtime changes.",
+    "OS calls may outlast cooperative cancellation; publishing cannot be rolled back. Portable file final-check/rename is not universal cross-process compare-and-swap or power-loss qualification.",
+    "Complete event ordering, physical input/accessibility/readability, universal filesystem/device support, signed distribution, physical printer and participant gates remain open."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/project-contracts/README.md": "68235021c0eb0a0385782ee64871a29559c55ee10c8b4050ecfb9a909a9e2694",
+    "docs/validation/project-contracts/archive.py.txt": "d96b3b574bdb8b5735577fef1233340198c6c5811ec4eaf25386837d5ea9a96f",
+    "docs/validation/project-contracts/binaries-initial.json": "0a3d871269e4a15da8e0f5adff9fd4020564892b12ea574b90431f2de63449d9",
+    "docs/validation/project-contracts/binaries.json": "c271341b9cf644c72e0f6e1567e147f450e1d2bf9ee094da9e82889092a9b58a",
+    "docs/validation/project-contracts/build-final.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/project-contracts/build.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/project-contracts/conformance-report.json.gz": "647beeea625800e875aa8620a424f8a15e3ac45d9c06d8d03b194f0b080360df",
+    "docs/validation/project-contracts/contracts-tests-final.log.txt": "65e4a13164ea5ace858942a878e520c0eaa4af5634c143acfa7c02c9f0ff0e3e",
+    "docs/validation/project-contracts/contracts-tests.log.txt": "c8b8872616e58737c067439bc8204ee4c0727d8519b9fb35b57d7cc0aea10452",
+    "docs/validation/project-contracts/discovery-after.json.gz": "fc61c6ffc5daae62cd82d9f860abe8150d1f79ea34f7aa063815f6cdb1a15a15",
+    "docs/validation/project-contracts/discovery-before.json.gz": "a9b6e340ba41851d12a061c4f8a6589f2658b281bcf98f1b99873a476983c067",
+    "docs/validation/project-contracts/discovery-comparison.json": "be8cf3696d7d9462ce9abcf47aeac8f655bd802e3d9a071ccaa144009b0043a9",
+    "docs/validation/project-contracts/discovery-coverage.json": "7c3aa6dbc826f80c9ec7a17555a844143cd958d189775d9836df8bbb46b7e62d",
+    "docs/validation/project-contracts/harness-fix-delta.json": "6963b90dd1183bc0ccaa8412e38ec7c285f5cc964142b2acb2891b4aea535e8c",
+    "docs/validation/project-contracts/initial-call-differences.json": "08ef00cc36934abd4162f7ff18206890e1c3b1ee72213cb247191c6a1aaabe4b",
+    "docs/validation/project-contracts/initial-qualify.py.txt": "ec0aafa98c2faf86090e41dc8d50931e10655d359881fd3f826f49309d407688",
+    "docs/validation/project-contracts/initial-report.json.gz": "8766881e9e06329ee64c25c9040ab16edf53a38b872b0b6162547a85b447d7fc",
+    "docs/validation/project-contracts/native-inventory.json": "e55eca6e3d915ee806b858a0f83503fdcdca34131bfe832bb924eef1920bd8e9",
+    "docs/validation/project-contracts/native-smoke.log.txt": "80afe4086974b2e82374485897248935feaa70eaaf33a8336ccc5561099c6c6e",
+    "docs/validation/project-contracts/package.json": "5434d2224d6fab4cf5f4d19a12a4677508371f548b801bea36a11fbe5ba56d7f",
+    "docs/validation/project-contracts/preserved-bundles.json": "29c025d16bec382ddc1be254b89ee3dcda5f743409842967480c0e4b4eb8d826",
+    "docs/validation/project-contracts/process-public-final.json": "09114f3c4b92dbbe15e13d92e41003ea496ef14dd8fc0ff9eb04f7f68c5db35a",
+    "docs/validation/project-contracts/process-public.json": "b1fa1e75909a8c1e544d59579f261a8a9b65c5f7fb11b0c4286a3dea307b8f93",
+    "docs/validation/project-contracts/process-quality-final.json": "d3002c0150edb10254664790715e409d53584450a72e790d50ea61e11b9bd078",
+    "docs/validation/project-contracts/process-quality.json": "9546558d18abc3c1522b10a7f59ae86a7eeb999cf73a9782f7b3377f4af17cd0",
+    "docs/validation/project-contracts/project-files/headless-socket/admitted-save.elab": "c651fb217e582929577d5be9a216a50615f6edebe9b0adcc92fdddd45cfbf33a",
+    "docs/validation/project-contracts/project-files/headless-socket/captured.elab": "5b7c54cfd6dde9a54de9382cf7b0be7fd5c00ae8d26cf9a507ea1eb50909c514",
+    "docs/validation/project-contracts/project-files/headless-socket/invalid.elab": "f90448c1e06fd425306851923a142084bc3cbf7f5ff0e8020100459b491161cd",
+    "docs/validation/project-contracts/project-files/headless-stdio/admitted-save.elab": "2cf3ed223d2559657a2d1d600b72ef875ac534e3530ca4da1859f7a615347fc4",
+    "docs/validation/project-contracts/project-files/headless-stdio/captured.elab": "72e52d296b2efed7b39f0860f46bd4acfd0811b6bdfeec7d7f8fc6193743a1e0",
+    "docs/validation/project-contracts/project-files/headless-stdio/invalid.elab": "f90448c1e06fd425306851923a142084bc3cbf7f5ff0e8020100459b491161cd",
+    "docs/validation/project-contracts/project-files/in-process/admitted-save.elab": "b08c3a6c9c1425c1113b0e50c599f6dcec21e4da6e9a6248520c3f7e62d2c61c",
+    "docs/validation/project-contracts/project-files/in-process/captured.elab": "be260ad85783fd5f110ae3dfeb70ce483bd33076c5252517a07726e2691155ac",
+    "docs/validation/project-contracts/project-files/in-process/invalid.elab": "f90448c1e06fd425306851923a142084bc3cbf7f5ff0e8020100459b491161cd",
+    "docs/validation/project-contracts/project-files/native-socket/admitted-save.elab": "dddee0baab2ef105c2746defb3b4c5e4ea71fd7fecb09720d3e8b33a74d55c6e",
+    "docs/validation/project-contracts/project-files/native-socket/captured.elab": "e9a2c791a121977a67d8e45a25ca721da1dde56651554664d9836406b587de2f",
+    "docs/validation/project-contracts/project-files/native-socket/invalid.elab": "f90448c1e06fd425306851923a142084bc3cbf7f5ff0e8020100459b491161cd",
+    "docs/validation/project-contracts/project-files-index.json": "b2ab19a6d2b0b3e64ac2c328bc158bc7cfe2af8682ce6a9ce100e09f4436bbb6",
+    "docs/validation/project-contracts/public-suites-final.log.txt": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "docs/validation/project-contracts/public-suites.log.txt": "111e209162b5cd2ecfd15aac4d32e273ca86bf51312381786fc27e73ae41868b",
+    "docs/validation/project-contracts/public-tests-2.log.txt": "505d7f9bc50ee5283b391aa61407036d16c8f096c4d1b318607ab4cc87a3a278",
+    "docs/validation/project-contracts/public-tests-3.log.txt": "23e0b406e5936ede7e44920e94c0bddbbac6289ef99ec4c6d6758952a9f79ca4",
+    "docs/validation/project-contracts/public-tests-final.log.txt": "81378766b756d0617ef9e0622db2a94dcb8b7dcb8a824c0b95e1e2e94a92e945",
+    "docs/validation/project-contracts/public-tests-job-roles.log.txt": "cda4957aebe67e2768b0901bd6e4d96bebbe69ad6af21f9bd9f1418dd581ea78",
+    "docs/validation/project-contracts/public-tests.log.txt": "d42cf99f13ba3554aa3421bf7cc4a04bcc617c26fb28c3887a4e44e4f8a428de",
+    "docs/validation/project-contracts/qualify.py.txt": "cb444e6667ac03e8962e869326d8f07c32e0f67f9c038ca1cf7f245a5ff999af",
+    "docs/validation/project-contracts/quality-final.log.txt": "4bfde8a1d8f8a25361f77651fdb7119249cb5d25f6a8f51e3921ff7873c904e3",
+    "docs/validation/project-contracts/quality.log.txt": "ebb398731278ff835ae0b20abfd32b2386fb18c7f3d81a8e1a88a7e0cdd98d50",
+    "docs/validation/project-contracts/receipt.py.txt": "5748928bc7c6851a54b4f3fe5e2474e52014a2261cba6b599d57e6bcea03773f",
+    "docs/validation/project-contracts/report-encoding.json": "a7f005ce97865f7a29e9046fbb5ff878dd86576bc0224167b51fe079eaf8c991",
+    "docs/validation/project-contracts/report-review-gzip.json": "44bbaf6d6d99c47c3bd1e26a58c498a487b0269ff5ace61cee24273a3e263f81",
+    "docs/validation/project-contracts/report-review.json": "44bbaf6d6d99c47c3bd1e26a58c498a487b0269ff5ace61cee24273a3e263f81",
+    "docs/validation/project-contracts/review.go.txt": "808b076c8bf0bac85714632b87ab06a8364742575b33a383a734d7e37c729fb6",
+    "docs/validation/project-contracts/sdk-verified.json": "833a277bcd0532bf6e2b828e73fa39d3494b1867ba97bf82489cb1528af36a17",
+    "docs/validation/project-contracts/source-delta.json": "b904857c53d719ee96245ef1b89b7be16df99d5e781894a3a9bc48f24031dad8",
+    "docs/validation/project-contracts/source-freeze-initial.json": "48406eb3bd68debea78ccdb136017f3ce58fdb9e49871c6bb0191d816e0eb7d5",
+    "docs/validation/project-contracts/source-freeze.json": "57604fbc3bc2dc41621b90f1e77a93f98956d779a884949e594926031daabc33"
+  }
+}

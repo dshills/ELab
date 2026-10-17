@@ -24,10 +24,6 @@ An admitted validation/read failure records only operation bookkeeping, admissio
 
 Controlled blocked-reader race tests cover responsive navigation/save, exact cancellation, failed read purity, content/preference/replacement/recording supersession, original actor/history, disconnected wait and retry ownership. Native file-control tests preserve Save/Discard/Cancel and picker-generation protections while checking shared job status. Actual GPU smoke uses native Save As/Open with an owned temporary picker adapter. Public headless and packaged workflows exercise immediate admission, invalid-file preservation, saved fresh startup and waiting compatibility.
 
-Run `python3 scripts/project-work-demo.py --output REPORT --artifacts DIRECTORY`; `--connect` replaces only a designated owned session. Admission timings exclude visible input-to-pixel latency. Save now uses [background captured work](project-save.md); export/manual recovery still contain synchronous work; full job/event conformance, accessibility, distribution and participant gates remain open.
+Run `python3 scripts/project-work-demo.py --output REPORT --artifacts DIRECTORY`; `--connect` requires a fresh owned blank session. Admission timings exclude visible input-to-pixel latency. [Save](project-save.md), [export](project-export.md), [import](project-import.md), [manual recovery scan/checkpoint](project-recovery-work.md) and [shutdown](shutdown.md) also expose shared background jobs. Complete job/event conformance, accessibility, distribution and participant gates remain open.
 
-SVG/live CSV/recorded JSON+CSV export encoding and disk work now run outside the lock via [captured exports](project-export.md). Manual recovery/import/shutdown remain separate paths.
-
-Recorded import now also uses [background project work](project-import.md). Manual recovery and some shutdown calls remain separate paths.
-
-Manual recovery scan/checkpoint now also run outside the lock through [shared jobs](project-recovery-work.md). Other recovery/shutdown paths remain explicit remaining work.
+The eight core project commands now expose [on-demand semantic contracts](project-command-contracts.md), including retained IDs, file bounds, cancellation and retry behavior after admitted failure. A dedicated public conformance workflow exercises those contracts through owned files.

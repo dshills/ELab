@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "comparison": "docs/validation/capacity-performance/source-freeze.json",
+  "changed_inputs": [
+    "cmd/elab-conformance/main.go",
+    "scripts/project-save-demo.py",
+    "scripts/project-work-demo.py",
+    "workbench/capability_details.go"
+  ],
+  "added_inputs": [
+    "internal/conformance/project_contract_comparison.go",
+    "internal/conformance/project_contract_evidence.go",
+    "internal/conformance/project_contracts.go",
+    "internal/conformance/project_contracts_test.go",
+    "workbench/project_capabilities.go",
+    "workbench/project_capabilities_test.go",
+    "workbench/project_file_capabilities.go"
+  ],
+  "removed_inputs": [],
+  "native_sources_unchanged": true,
+  "models_solver_format_transport_unchanged": true,
+  "runtime_change": "on-demand discovery annotations only; numerical methods and file workflows unchanged"
+}

@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "default_equal_before_after": true,
+  "commands": 162,
+  "detailed_commands": 8,
+  "before_contracts": {
+    "project.inspect": false,
+    "project.clear": false,
+    "project.save": false,
+    "project.save.start": false,
+    "project.load": false,
+    "project.load.start": false,
+    "project.work.inspect": false,
+    "project.work.cancel": false
+  },
+  "after_contracts": {
+    "project.inspect": true,
+    "project.clear": true,
+    "project.save": true,
+    "project.save.start": true,
+    "project.load": true,
+    "project.load.start": true,
+    "project.work.inspect": true,
+    "project.work.cancel": true
+  }
+}

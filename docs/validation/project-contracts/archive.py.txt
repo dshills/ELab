@@ -1,0 +1,29 @@
+from pathlib import Path
+import gzip,hashlib,json,shutil,subprocess
+root=Path.cwd();src=root/'build/project-contracts';out=root/'docs/validation/project-contracts';out.mkdir(exist_ok=False)
+def digest(raw):return hashlib.sha256(raw).hexdigest()
+def copy(name):shutil.copyfile(src/name,out/name)
+files=['build.log.txt','quality.log.txt','build-final.log.txt','quality-final.log.txt','process-quality.json','process-quality-final.json','process-public.json','process-public-final.json','native-smoke.log.txt','public-suites.log.txt','public-suites-final.log.txt','source-freeze.json','source-freeze-initial.json','binaries.json','binaries-initial.json','source-delta.json','harness-fix-delta.json','preserved-bundles.json','native-inventory.json','discovery-comparison.json','discovery-coverage.json','package.json','initial-call-differences.json','contracts-tests.log.txt','contracts-tests-final.log.txt','public-tests.log.txt','public-tests-2.log.txt','public-tests-3.log.txt','public-tests-final.log.txt','public-tests-job-roles.log.txt','initial-qualify.py.txt','report-review.json','report-review-gzip.json','sdk-verified.json']
+for name in files:copy(name)
+shutil.copyfile(root/'build/.project-contract-qualify.py',out/'qualify.py.txt')
+shutil.copyfile(root/'build/.project-contract-review/main.go',out/'review.go.txt')
+shutil.copyfile(root/'build/.project-contract-archive.py',out/'archive.py.txt')
+encoded={}
+for source,name in [('public-final/report.json','initial-report.json.gz'),('public-final2/report.json','conformance-report.json.gz'),('discovery-before.json','discovery-before.json.gz'),('discovery-after.json','discovery-after.json.gz')]:
+ raw=(src/source).read_bytes();compressed=gzip.compress(raw,mtime=0);(out/name).write_bytes(compressed);assert gzip.decompress((out/name).read_bytes())==raw
+ encoded[name]={'decoded_bytes':len(raw),'decoded_sha256':digest(raw),'gzip_bytes':len(compressed),'gzip_sha256':digest(compressed)}
+r=json.loads((src/'public-final2/report.json').read_text());indexed={}
+assert r['passed'] and len(r['adapters'])==4
+for adapter in r['adapters']:
+ name=adapter['name'];report=adapter['project_contracts'];folder=out/'project-files'/name;folder.mkdir(parents=True)
+ for file in ['admitted-save.elab','captured.elab','invalid.elab']:
+  raw=(src/'public-final2'/name/'project-contracts'/file).read_bytes();(folder/file).write_bytes(raw);indexed[str((folder/file).relative_to(root))]=digest(raw)
+  if file=='admitted-save.elab':assert json.loads(raw)==report['admitted_save_document'] and digest(raw)==report['states']['captured-save']['project_work']['artifact_sha256']
+  if file=='captured.elab':
+   assert digest(raw)==report['states']['overwritten']['project_work']['artifact_sha256']
+   assert json.loads(raw)['graph']['components']==report['states']['loaded']['components']
+  if file=='invalid.elab':assert raw==b'invalid JSON\n'
+ assert report['external_file_after_refusal']=='outside writer\n'
+(out/'report-encoding.json').write_text(json.dumps(encoded,indent=2)+'\n')
+(out/'project-files-index.json').write_text(json.dumps({'passed':True,'files':indexed,'count':len(indexed),'admission_and_overwrite_hashes_match':True,'loaded_components_match_written_graph':True,'outside_writer_refusal_bytes_match':True},indent=2)+'\n')
+print(json.dumps({'report_encoding':encoded,'project_files':len(indexed)}))

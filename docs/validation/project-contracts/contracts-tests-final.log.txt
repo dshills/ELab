@@ -1,0 +1,12 @@
+=== RUN   TestProjectDiscoveryOwnedPureBoundsAndCompletion
+--- PASS: TestProjectDiscoveryOwnedPureBoundsAndCompletion (0.45s)
+=== RUN   TestProjectContractPathAndNullAdmissionMatchesRuntime
+--- PASS: TestProjectContractPathAndNullAdmissionMatchesRuntime (0.26s)
+=== RUN   TestProjectContractFailedWaitRetryNeedsNewKeyAfterRepair
+--- PASS: TestProjectContractFailedWaitRetryNeedsNewKeyAfterRepair (0.05s)
+=== RUN   TestProjectContractPublishingBoundaryAndOwnedInspection
+    project_capabilities_test.go:164: project.save.start during blocked kernel: 1.2215ms
+    project_capabilities_test.go:187: project.clear during blocked kernel: 787.75µs
+--- PASS: TestProjectContractPublishingBoundaryAndOwnedInspection (0.11s)
+PASS
+ok  	github.com/dshills/elab/workbench	2.232s

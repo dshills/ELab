@@ -1,0 +1,490 @@
+{
+  "public_commands": 162,
+  "scoped_contracts": 98,
+  "without_scoped_contracts": 64,
+  "scope_counts": {
+    "output-sampling-fit": 1,
+    "finite-pulse-frequency-period-duty": 1,
+    "ideal-square-shared-clock": 1,
+    "interactive-part-actuation": 2,
+    "schematic-editing": 14,
+    "captured-interval-statistics": 2,
+    "sampled-threshold-timing": 2,
+    "captured-record-comparison": 2,
+    "recorded-cursor-set": 1,
+    "captured-recovery-read": 5,
+    "verification-and-retained-operation-commands": 6,
+    "live-scope-controls-and-csv": 9,
+    "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive": 12,
+    "local-macOS-spooler": 6,
+    "captured-preview-page": 1,
+    "workspace-layout": 1,
+    "live-measurement-inspection-and-pins": 5,
+    "project-files-and-work": 8,
+    "live-simulation-controls": 9,
+    "component-values-and-placement": 4,
+    "schematic-viewport": 2,
+    "session-shutdown": 4
+  },
+  "contracts": {
+    "simulation.sampling.fit": {
+      "scope": "output-sampling-fit",
+      "version": 1
+    },
+    "source.pulse.timing.set": {
+      "scope": "finite-pulse-frequency-period-duty",
+      "version": 1
+    },
+    "simulation.pulse.timing.set": {
+      "scope": "ideal-square-shared-clock",
+      "version": 1
+    },
+    "potentiometer.wiper.set": {
+      "scope": "interactive-part-actuation",
+      "version": 1
+    },
+    "switch.set": {
+      "scope": "interactive-part-actuation",
+      "version": 1
+    },
+    "wire.junction.insert": {
+      "scope": "schematic-editing",
+      "version": 1
+    },
+    "recording.statistics.set": {
+      "scope": "captured-interval-statistics",
+      "version": 1
+    },
+    "recording.statistics": {
+      "scope": "captured-interval-statistics",
+      "version": 1
+    },
+    "recording.timing.set": {
+      "scope": "sampled-threshold-timing",
+      "version": 1
+    },
+    "recording.timing": {
+      "scope": "sampled-threshold-timing",
+      "version": 1
+    },
+    "recording.compare.set": {
+      "scope": "captured-record-comparison",
+      "version": 1
+    },
+    "recording.compare": {
+      "scope": "captured-record-comparison",
+      "version": 1
+    },
+    "recording.cursor.set": {
+      "scope": "recorded-cursor-set",
+      "version": 1
+    },
+    "recovery.read.start": {
+      "scope": "captured-recovery-read",
+      "version": 1
+    },
+    "recovery.read.cancel": {
+      "scope": "captured-recovery-read",
+      "version": 1
+    },
+    "recovery.read.inspect": {
+      "scope": "captured-recovery-read",
+      "version": 1
+    },
+    "recovery.read.chunk": {
+      "scope": "captured-recovery-read",
+      "version": 1
+    },
+    "recovery.read.result": {
+      "scope": "captured-recovery-read",
+      "version": 1
+    },
+    "simulation.verify": {
+      "scope": "verification-and-retained-operation-commands",
+      "version": 1
+    },
+    "verification.settings.set": {
+      "scope": "verification-and-retained-operation-commands",
+      "version": 1
+    },
+    "operation.cancel": {
+      "scope": "verification-and-retained-operation-commands",
+      "version": 1
+    },
+    "operation.select": {
+      "scope": "verification-and-retained-operation-commands",
+      "version": 1
+    },
+    "operation.inspect": {
+      "scope": "verification-and-retained-operation-commands",
+      "version": 1
+    },
+    "operation.samples": {
+      "scope": "verification-and-retained-operation-commands",
+      "version": 1
+    },
+    "export.scope.csv": {
+      "scope": "live-scope-controls-and-csv",
+      "version": 1
+    },
+    "sweep.settings.set": {
+      "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+      "version": 1
+    },
+    "sweep.start": {
+      "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+      "version": 1
+    },
+    "sweep.cancel": {
+      "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+      "version": 1
+    },
+    "sweep.inspect": {
+      "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+      "version": 1
+    },
+    "sweep.select": {
+      "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+      "version": 1
+    },
+    "sweep.visibility.set": {
+      "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+      "version": 1
+    },
+    "sweep.trace.select": {
+      "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+      "version": 1
+    },
+    "sweep.cursor.set": {
+      "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+      "version": 1
+    },
+    "sweep.import.start": {
+      "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+      "version": 1
+    },
+    "sweep.import": {
+      "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+      "version": 1
+    },
+    "sweep.export": {
+      "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+      "version": 1
+    },
+    "sweep.keep.set": {
+      "scope": "sweep-command-specific; common protocol/revision/retry rules are in the discovery envelope; OS/filesystem errors are not exhaustive",
+      "version": 1
+    },
+    "print.printers.refresh": {
+      "scope": "local-macOS-spooler",
+      "version": 1
+    },
+    "print.destination.set": {
+      "scope": "local-macOS-spooler",
+      "version": 1
+    },
+    "print.submit": {
+      "scope": "local-macOS-spooler",
+      "version": 1
+    },
+    "print.job.refresh": {
+      "scope": "local-macOS-spooler",
+      "version": 1
+    },
+    "print.job.cancel": {
+      "scope": "local-macOS-spooler",
+      "version": 1
+    },
+    "print.work.cancel": {
+      "scope": "local-macOS-spooler",
+      "version": 1
+    },
+    "print.preview.page.set": {
+      "scope": "captured-preview-page",
+      "version": 1
+    },
+    "scope.window.set": {
+      "scope": "live-scope-controls-and-csv",
+      "version": 1
+    },
+    "parts.search.set": {
+      "scope": "schematic-editing",
+      "version": 1
+    },
+    "component.duplicate": {
+      "scope": "schematic-editing",
+      "version": 1
+    },
+    "scope.visibility.set": {
+      "scope": "live-scope-controls-and-csv",
+      "version": 1
+    },
+    "workspace.layout.set": {
+      "scope": "workspace-layout",
+      "version": 1
+    },
+    "measurement.select": {
+      "scope": "live-measurement-inspection-and-pins",
+      "version": 1
+    },
+    "measurement.inspect": {
+      "scope": "live-measurement-inspection-and-pins",
+      "version": 1
+    },
+    "measurement.pin.add": {
+      "scope": "live-measurement-inspection-and-pins",
+      "version": 1
+    },
+    "measurement.pin.move": {
+      "scope": "live-measurement-inspection-and-pins",
+      "version": 1
+    },
+    "measurement.pin.remove": {
+      "scope": "live-measurement-inspection-and-pins",
+      "version": 1
+    },
+    "scope.trace.select": {
+      "scope": "live-scope-controls-and-csv",
+      "version": 1
+    },
+    "scope.probe.remove": {
+      "scope": "live-scope-controls-and-csv",
+      "version": 1
+    },
+    "scope.probes.set": {
+      "scope": "live-scope-controls-and-csv",
+      "version": 1
+    },
+    "scope.cursor.set": {
+      "scope": "live-scope-controls-and-csv",
+      "version": 1
+    },
+    "scope.cursor.select": {
+      "scope": "live-scope-controls-and-csv",
+      "version": 1
+    },
+    "scope.cursor.clear": {
+      "scope": "live-scope-controls-and-csv",
+      "version": 1
+    },
+    "project.inspect": {
+      "scope": "project-files-and-work",
+      "version": 1
+    },
+    "simulation.wait": {
+      "scope": "live-simulation-controls",
+      "version": 1
+    },
+    "project.clear": {
+      "scope": "project-files-and-work",
+      "version": 1
+    },
+    "project.work.inspect": {
+      "scope": "project-files-and-work",
+      "version": 1
+    },
+    "project.save.start": {
+      "scope": "project-files-and-work",
+      "version": 1
+    },
+    "project.save": {
+      "scope": "project-files-and-work",
+      "version": 1
+    },
+    "project.load.start": {
+      "scope": "project-files-and-work",
+      "version": 1
+    },
+    "project.work.cancel": {
+      "scope": "project-files-and-work",
+      "version": 1
+    },
+    "project.load": {
+      "scope": "project-files-and-work",
+      "version": 1
+    },
+    "component.place": {
+      "scope": "component-values-and-placement",
+      "version": 1
+    },
+    "component.move": {
+      "scope": "schematic-editing",
+      "version": 1
+    },
+    "component.rotate": {
+      "scope": "schematic-editing",
+      "version": 1
+    },
+    "object.delete": {
+      "scope": "schematic-editing",
+      "version": 1
+    },
+    "wire.connect": {
+      "scope": "schematic-editing",
+      "version": 1
+    },
+    "wire.begin": {
+      "scope": "schematic-editing",
+      "version": 1
+    },
+    "drawing.tool.set": {
+      "scope": "schematic-editing",
+      "version": 1
+    },
+    "drawing.position.set": {
+      "scope": "schematic-editing",
+      "version": 1
+    },
+    "wire.terminals.set": {
+      "scope": "schematic-editing",
+      "version": 1
+    },
+    "editor.value.set": {
+      "scope": "schematic-editing",
+      "version": 1
+    },
+    "drawing.cancel": {
+      "scope": "schematic-editing",
+      "version": 1
+    },
+    "component.set": {
+      "scope": "component-values-and-placement",
+      "version": 1
+    },
+    "component.select": {
+      "scope": "schematic-editing",
+      "version": 1
+    },
+    "inductor.initial.set": {
+      "scope": "component-values-and-placement",
+      "version": 1
+    },
+    "capacitor.initial.set": {
+      "scope": "component-values-and-placement",
+      "version": 1
+    },
+    "simulation.transient.set": {
+      "scope": "live-simulation-controls",
+      "version": 1
+    },
+    "simulation.input.set": {
+      "scope": "live-simulation-controls",
+      "version": 1
+    },
+    "simulation.step": {
+      "scope": "live-simulation-controls",
+      "version": 1
+    },
+    "simulation.step.start": {
+      "scope": "live-simulation-controls",
+      "version": 1
+    },
+    "simulation.work.cancel": {
+      "scope": "live-simulation-controls",
+      "version": 1
+    },
+    "simulation.pause": {
+      "scope": "live-simulation-controls",
+      "version": 1
+    },
+    "simulation.resume": {
+      "scope": "live-simulation-controls",
+      "version": 1
+    },
+    "simulation.restart": {
+      "scope": "live-simulation-controls",
+      "version": 1
+    },
+    "view.viewport.set": {
+      "scope": "schematic-viewport",
+      "version": 1
+    },
+    "view.fit": {
+      "scope": "schematic-viewport",
+      "version": 1
+    },
+    "app.close": {
+      "scope": "session-shutdown",
+      "version": 1
+    },
+    "app.close.start": {
+      "scope": "session-shutdown",
+      "version": 1
+    },
+    "app.close.inspect": {
+      "scope": "session-shutdown",
+      "version": 1
+    },
+    "app.close.acknowledge": {
+      "scope": "session-shutdown",
+      "version": 1
+    }
+  },
+  "missing": [
+    "source.sine.set",
+    "source.pulse.set",
+    "recording.keep.set",
+    "verification.import.start",
+    "verification.import",
+    "recording.view.set",
+    "recording.seek",
+    "recording.step",
+    "recording.speed.set",
+    "recording.play",
+    "recording.pause",
+    "recording.window.set",
+    "recording.probes.set",
+    "recording.cursor.select",
+    "recording.cursor.clear",
+    "recovery.configure",
+    "recovery.configure.start",
+    "recovery.work.start",
+    "recovery.scan",
+    "recovery.checkpoint",
+    "recovery.select",
+    "recovery.restore.start",
+    "recovery.restore",
+    "recovery.dismiss",
+    "recovery.dismiss.start",
+    "recovery.samples",
+    "recovery.inspect",
+    "verification.export",
+    "export.schematic.svg",
+    "export.schematic.pdf",
+    "export.schematic.png",
+    "print.preview.start",
+    "print.preview.cancel",
+    "print.preview.close",
+    "print.preview.image",
+    "export.page.set",
+    "edit.batch",
+    "display.inspect",
+    "examples.list",
+    "example.load",
+    "example.current.reset",
+    "diagnostics.details.set",
+    "appearance.configure",
+    "appearance.wait",
+    "appearance.theme.set",
+    "display.preferences.set",
+    "capabilities.list",
+    "parts.list",
+    "events.poll",
+    "export.start",
+    "circuit.connection.set",
+    "selection.navigate",
+    "view.selection.center",
+    "example.flasher",
+    "example.npn-pulse",
+    "example.npn",
+    "example.switch-npn",
+    "example.rectifier",
+    "example.rc",
+    "example.reset",
+    "edit.undo",
+    "edit.redo",
+    "view.pan",
+    "view.zoom"
+  ],
+  "scope": "Read-only filtered schema inventory; presence of annotation alone does not qualify behavior or complete agent parity."
+}

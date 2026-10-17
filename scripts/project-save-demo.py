@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Background captured saves, exact artifacts and legacy persistence protections.
---connect replaces only the designated owned development session.
+--connect requires a fresh owned blank development session.
 """
 import argparse
 import hashlib
@@ -87,7 +87,7 @@ def main():
             limitations=['controlled race tests separately cover blocked preparation/publication, cancellation and replacement',
                 'publishing saves cannot be canceled; replacement/close never associates their file with a new document',
                 'OS calls can outlast cancellation/deadline', 'portable final-check/rename has no universal cross-process compare-and-swap guarantee',
-                'backend timing excludes visible latency', 'manual recovery/import/shutdown still have synchronous paths'])
+                'backend timing excludes visible latency', 'complete event/native input, accessibility and release qualification remain open'])
         if args.output:
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_text(json.dumps(report, indent=2)+'\n')
