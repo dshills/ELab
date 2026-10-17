@@ -1,0 +1,87 @@
+from pathlib import Path
+import datetime, gzip, hashlib, importlib.util, io, json, shutil, stat, subprocess, tarfile
+
+root=Path.cwd();src=root/'build/recovery-timing';out=root/'docs/validation/recovery-timing'
+def read(path):return json.loads(path.read_text())
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+def digest(path):return sha(path.read_bytes())
+frozen=read(src/'source-freeze-final.json');assert len(frozen)==685 and all(digest(root/p)==h for p,h in frozen.items())
+previous=read(root/'docs/validation/recovery-ownership/source-freeze.json')
+assert all(frozen[p]==h for p,h in previous.items())
+processes=read(src/'processes-final.json');assert len(processes)==3 and all(p['status']=='completed' and p['exit_code']==0 for p in processes)
+assert 'Ran 37 tests' in (src/'quality-final.log.txt').read_text()
+review=read(src/'report-review.json');assert review['passed'] and review['all_samples']==240
+old_receipt=read(root/'docs/validation/recovery-ownership-validation.json')
+assert all(digest(root/p)==h for p,h in old_receipt['binary_sha256'].items())
+spec=importlib.util.spec_from_file_location('pinned_sdk',root/'scripts/prepare-vellum.py');sdk=importlib.util.module_from_spec(spec);spec.loader.exec_module(sdk)
+pin=sdk.load_pin(root);sdk.verify_archive_identity(root/pin['archive'],pin);sdk.verify_cache(root/pin['cache'],pin)
+golden=read(root/'docs/validation/lc-sampling-validation.json')['promotion'];preserved={}
+for name,key in [('build/ELab.app','bundle_tree'),('build/ELab-0.104.0-119-preserved.app','preserved_bundle_tree')]:
+ folder=root/name;actual={}
+ for path in [folder,*sorted(folder.rglob('*'))]:
+  assert not path.is_symlink()
+  actual[str(path.relative_to(folder))]={'mode':stat.S_IMODE(path.stat().st_mode),'sha256':digest(path) if path.is_file() else None}
+ assert actual==golden[key];preserved[name]={'passed':True,'entries':len(actual)}
+out.mkdir(exist_ok=False)
+for name in ['source-freeze.json','source-freeze-final.json','processes.json','processes-final.json','quality.log.txt','quality-final.log.txt','timing.log.txt','paused-final.log.txt','running-final.log.txt','report-review.json','paused-recovery_timing.py.txt','paused-test_recovery_timing.py.txt']:
+ shutil.copyfile(src/name,out/name)
+for source,name in [('build/.recovery-timing-qualify.py','initial-qualify.py.txt'),('build/.recovery-timing-final.py','qualify.py.txt'),('build/.recovery-timing-review.py','review.py.txt'),('build/.recovery-timing-archive.py','archive.py.txt')]:shutil.copyfile(root/source,out/name)
+encodings={}
+for source,name in [('paused-final/report.json','paused-report.json.gz'),('running-final/report.json','running-report.json.gz'),('final/report.partial.json','initial-partial-report.json.gz'),('../recovery-timing-initial/report.json','initial-rehearsal-report.json.gz')]:
+ raw=(src/source).read_bytes();compressed=gzip.compress(raw,mtime=0);(out/name).write_bytes(compressed);assert gzip.decompress(compressed)==raw
+ encodings[name]={'decoded_bytes':len(raw),'decoded_sha256':sha(raw),'gzip_bytes':len(compressed),'gzip_sha256':sha(compressed)}
+fixture_index=review['files'].copy()
+for prefix in ['final/native-socket-led','native-led-debug','native-led-fixed']:
+ folder=src/prefix
+ for name in ['manual-source.elab','state-00-before.json','state-00-after.json','host.log.txt']:
+  path=folder/name
+  if path.exists():fixture_index[str(path.relative_to(src))]={'sha256':digest(path),'bytes':path.stat().st_size}
+ # Capsules contain synthetic document/session namespaces, never endpoint credentials.
+ for path in (folder/'private/recovery').glob('*.elab-recovery'):
+  fixture_index[str(path.relative_to(src))]={'sha256':digest(path),'bytes':path.stat().st_size}
+with io.BytesIO() as buffer:
+ with tarfile.open(fileobj=buffer,mode='w') as archive:
+  for name,identity in sorted(fixture_index.items()):
+   assert not name.endswith('endpoint.json') and '/session-' not in name
+   raw=(src/name).read_bytes();assert sha(raw)==identity['sha256']
+   member=tarfile.TarInfo(name);member.size=len(raw);member.mode=0o600;member.mtime=0;archive.addfile(member,io.BytesIO(raw))
+ raw_tar=buffer.getvalue()
+compressed=gzip.compress(raw_tar,mtime=0);(out/'fixtures.tar.gz').write_bytes(compressed)
+with tarfile.open(fileobj=io.BytesIO(gzip.decompress(compressed)),mode='r:') as archive:
+ assert set(archive.getnames())==set(fixture_index)
+ for member in archive:
+  assert member.isfile() and sha(archive.extractfile(member).read())==fixture_index[member.name]['sha256']
+(out/'fixtures-index.json').write_text(json.dumps(fixture_index,indent=2)+'\n')
+receipt={'passed':True,'recorded_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ 'scope':'Repeated automatic complete-document recovery under paused/advancing simulation on named reference and separate capacity fixtures; pilot workstation only',
+ 'source_parent_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+ 'source_index':str((out/'source-freeze-final.json').relative_to(root)),'source_frozen_files':len(frozen),'source_stable':True,
+ 'all_preexisting_inputs_unchanged':len(previous),'runtime_changes':0,'new_app_commands':0,'existing_commands':162,
+ 'binaries_unchanged_from_ownership_qualification':old_receipt['binary_sha256'],
+ 'candidate':old_receipt['candidate'],'candidate_promoted':False,
+ 'target_s':5,'ordinary_interval_s':2,'measurement':'Before edit dispatch through exact matching on-disk capsule/hash and public validation; 25 ms polling; conservative wall-clock upper bound',
+ 'cases':['led','rc-recorded','blink','100-nodes','64-parts'],'modes':['paused','running'],
+ 'transports':['headless-socket','native-socket'],'samples':240,'repetitions_per_case_transport_mode':12,
+ 'first_and_warm_measured_separately':True,'actual_sigkill_restores':20,
+ 'reference_configuration':{'platform':review['modes']['paused']['reference'],
+                            'logical_cpus':int(subprocess.check_output(['sysctl','-n','hw.ncpu'],text=True)),
+                            'memory_bytes':int(subprocess.check_output(['sysctl','-n','hw.memsize'],text=True)),
+                            'go_toolchain':subprocess.check_output(['go','version'],text=True).strip()},
+ 'review':{k:v for k,v in review.items() if k!='files'},'processes':processes,
+ 'quality':{'lint_imports_staticcheck':True,'python_tests':37,'root_native_race_and_vet':True,'unchanged_go_test_results_cached':True},
+ 'previous_numerical_validation':'docs/validation/recovery-ownership-validation.json',
+ 'previous_numerical_validation_reused_only_after_all_existing_inputs_and_binaries_match':True,
+ 'artifact_encodings':encodings,'fixture_archive':{'path':str((out/'fixtures.tar.gz').relative_to(root)),'files':len(fixture_index),'gzip_bytes':len(compressed),'gzip_sha256':sha(compressed),'all_members_read_and_hashed':True},
+ 'sdk_verified':{'passed':True,'source':pin['source_commit'],'archive_sha256':pin['sha256']},'preserved_bundle_trees':preserved,
+ 'p0_counts':{'implemented':17,'partial':10},
+ 'setup_corrections':['The initial two-repeat rehearsal ended with records excluded; final repetitions are multiples of four and require kept-record restoration.',
+ 'The first native matcher assumed no later view/revision publication. Original capsule, source, failed log and before/after viewport trace are retained. Final setup observes actual allocation and fixes the view; native viewport-only counter changes remain explicit and cannot hide a document/view/history/run change.'],
+ 'limitations':['Named fixtures and ordinary available local storage on this workstation; no universal topology/hardware/storage bound, simultaneous capacity maxima, maximum recording storage or arbitrary system load claim.',
+ 'Pause and advancing solver modes are measured separately. Timing includes controller polling/validation and excludes fixture setup. First means first edit in this prepared owned session, not filesystem-cache eviction or a clean OS install.',
+ 'SIGKILL is a process-crash test, not power-loss, hostile-filesystem or atomic-conditional-unlink durability qualification.',
+ 'Native viewport publications are observed through complete before/after snapshots in an owned session; this is not a complete command-event transition log or mounted input/accessibility/visible-latency qualification.',
+ 'Existing numerical/native smoke qualification is retained for exact unchanged runtime inputs/binaries; it was not rerun as a new electrical performance series.',
+ 'The existing candidate remains private/unpromoted. Clean installation, signing/distribution, other hardware/platforms, physical printer and participant gates remain open.']}
+receipt['artifacts_sha256']={str(p.relative_to(root)):digest(p) for p in sorted(out.rglob('*')) if p.is_file()}
+(root/'docs/validation/recovery-timing-validation.json').write_text(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps({'passed':True,'samples':240,'crash_restores':20,'fixture_files':len(fixture_index),'archive_bytes':len(compressed)},indent=2))

@@ -1,0 +1,26 @@
+from pathlib import Path
+import datetime, hashlib, json, os, subprocess, time
+
+root=Path.cwd();out=root/'build/recovery-timing'
+frozen=json.loads((out/'source-freeze-final.json').read_text())
+def stable():
+ assert all(hashlib.sha256((root/p).read_bytes()).hexdigest()==h for p,h in frozen.items())
+env=dict(os.environ,GOPROXY='off',GOWORK='off',GOFLAGS='-p=1',GOCACHE=str(root/'build/go-cache'))
+candidate=root/'build/ELab-0.111.0-126-recovery-ownership-candidate.app/Contents/MacOS/ELab'
+stages=[]
+commands=[('quality-final',['./scripts/check.sh'],900)]
+for mode in ['paused','running']:
+ commands.append((mode+'-final',['python3','-B','scripts/recovery_timing.py','--native-binary',str(candidate),'--simulation-mode',mode,'--repetitions','12','--artifacts',str(out/(mode+'-final'))],600))
+for name,argv,timeout in commands:
+ stable();started=time.monotonic();record={'name':name,'argv':argv,'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'running'};stages.append(record)
+ def save():(out/'processes-final.json').write_text(json.dumps(stages,indent=2)+'\n')
+ save();print('Starting '+name,flush=True)
+ try:
+  with (out/(name+'.log.txt')).open('x') as log:result=subprocess.run(argv,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=timeout)
+  record['exit_code']=result.returncode
+  assert result.returncode==0,(name,result.returncode)
+  record['status']='completed';stable()
+ except BaseException as error:
+  record.update(status='failed',error_type=type(error).__name__);raise
+ finally:
+  record.update(elapsed_seconds=time.monotonic()-started,finished_utc=datetime.datetime.now(datetime.timezone.utc).isoformat());save();print(json.dumps(record),flush=True)

@@ -1,0 +1,55 @@
+[
+  {
+    "name": "quality-final",
+    "argv": [
+      "./scripts/check.sh"
+    ],
+    "started_utc": "2026-10-17T12:23:10.032198+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 11.734039124916308,
+    "finished_utc": "2026-10-17T12:23:21.766182+00:00"
+  },
+  {
+    "name": "paused-final",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/recovery_timing.py",
+      "--native-binary",
+      "/Users/dshills/Development/projects/ELab/build/ELab-0.111.0-126-recovery-ownership-candidate.app/Contents/MacOS/ELab",
+      "--simulation-mode",
+      "paused",
+      "--repetitions",
+      "12",
+      "--artifacts",
+      "/Users/dshills/Development/projects/ELab/build/recovery-timing/paused-final"
+    ],
+    "started_utc": "2026-10-17T12:23:21.776428+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 280.0403016250348,
+    "finished_utc": "2026-10-17T12:28:01.815366+00:00"
+  },
+  {
+    "name": "running-final",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/recovery_timing.py",
+      "--native-binary",
+      "/Users/dshills/Development/projects/ELab/build/ELab-0.111.0-126-recovery-ownership-candidate.app/Contents/MacOS/ELab",
+      "--simulation-mode",
+      "running",
+      "--repetitions",
+      "12",
+      "--artifacts",
+      "/Users/dshills/Development/projects/ELab/build/recovery-timing/running-final"
+    ],
+    "started_utc": "2026-10-17T12:28:01.829060+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 279.5768190000672,
+    "finished_utc": "2026-10-17T12:32:41.404516+00:00"
+  }
+]

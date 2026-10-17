@@ -1,0 +1,89 @@
+"""Prevent incomplete or over-budget recovery series from becoming acceptance."""
+import copy
+import unittest
+
+import recovery_timing as timing
+
+
+def report_fixture():
+    report = {'format': 'elab.recovery-timing.v1', 'limit_s': 5.0, 'repetitions': 4,
+              'transports': list(timing.TRANSPORTS), 'runs': []}
+    for transport in timing.TRANSPORTS:
+        for name in timing.CASES:
+            samples = [{'index': index, 'phase': 'first' if index == 0 else 'warm',
+                        'elapsed_s': 1.5+index*.25, 'document_exact': True, 'live_preserved': True,
+                        'source_preserved': True, 'retained_capsules': min(index+1, 2),
+                        'edit_kind': 'component', 'capsule_sha256': 'a'*64, 'document_sha256': 'b'*64}
+                       for index in range(4)]
+            run = {'transport': transport, 'case': name, 'interval_s': 2, 'crash_exit_code': -9,
+                   'restored_document_exact': True, 'samples': samples,
+                   'summary': timing.summary([s['elapsed_s'] for s in samples])}
+            if name != 'led':run.update(recorded_rows=209, restored_recorded_rows=209)
+            if name == '100-nodes':run.update(simulated_parts=51, electrical_nodes=100)
+            if name == '64-parts':run.update(simulated_parts=64, electrical_nodes=64)
+            report['runs'].append(run)
+    return report
+
+
+class RecoveryTimingReportTests(unittest.TestCase):
+    def test_complete_series_and_nearest_rank_summary(self):
+        report = report_fixture()
+        self.assertEqual(timing.validate_report(report), {'count': 40, 'min_s': 1.5, 'p50_s': 1.75,
+                                                        'p95_s': 2.25, 'max_s': 2.25})
+
+    def test_missing_repetition_transport_case_and_crash_are_rejected(self):
+        changes = [lambda r: r['runs'].pop(), lambda r: r['runs'].reverse(),
+                   lambda r: r['runs'][0]['samples'].pop(),
+                   lambda r: r['runs'][0].update(crash_exit_code=0),
+                   lambda r: r['runs'][0].update(interval_s=1),
+                   lambda r: r['runs'][0].update(restored_document_exact=False),
+                   lambda r: r['runs'][1].update(restored_recorded_rows=0),
+                   lambda r: r['runs'][1].update(recorded_rows=0),
+                   lambda r: r.update(repetitions=True), lambda r: r.update(transports=['unexpected']),
+                   lambda r: r.update(simulation_mode='unknown'),
+                   lambda r: r['runs'][-1].update(simulated_parts=63),
+                   lambda r: r['runs'][-2].update(electrical_nodes=99)]
+        for change in changes:
+            damaged = copy.deepcopy(report_fixture());change(damaged)
+            with self.subTest(change=change), self.assertRaises(ValueError):timing.validate_report(damaged)
+
+    def test_invalid_latency_identity_purity_retention_and_summary_are_rejected(self):
+        changes = [dict(elapsed_s=5.00001), dict(elapsed_s=float('nan')), dict(elapsed_s=0),
+                   dict(elapsed_s=True), dict(phase='warm'), dict(document_exact=False),
+                   dict(live_preserved='yes'), dict(source_preserved=False), dict(retained_capsules=0),
+                   dict(capsule_sha256='a'*63), dict(document_sha256='z'*64), dict(edit_kind='manual-checkpoint')]
+        for fields in changes:
+            damaged = report_fixture();damaged['runs'][0]['samples'][0].update(fields)
+            with self.subTest(fields=fields), self.assertRaises(ValueError):timing.validate_report(damaged)
+        damaged = report_fixture();damaged['runs'][0]['summary']['max_s'] = 0
+        with self.assertRaises(ValueError):timing.validate_report(damaged)
+
+    def test_advancing_clock_preserves_identity_and_rejects_rewind_restart_pause(self):
+        before = {'components': [{'id': 'R1'}], 'paused': False, 'run_id': 3,
+                  'transient': {'sample': {'time_s': 1}, 'stale': False}}
+        after = copy.deepcopy(before);after['transient']['sample']['time_s'] = 2
+        timing.assert_live_preserved(before, after, 'running')
+        for change in [lambda s: s['transient']['sample'].update(time_s=.5),
+                       lambda s: s['transient']['sample'].update(time_s=float('nan')),
+                       lambda s: s.update(run_id=4), lambda s: s.update(paused=True),
+                       lambda s: s['components'].clear(), lambda s: s['transient'].update(stale=True)]:
+            damaged = copy.deepcopy(after);change(damaged)
+            with self.subTest(change=change), self.assertRaises(AssertionError):
+                timing.assert_live_preserved(before, damaged, 'running')
+        with self.assertRaises(AssertionError):timing.assert_live_preserved(before, after, 'paused')
+
+    def test_native_viewport_publication_is_explicit_and_cannot_hide_document_changes(self):
+        before = {'command_revision': 4, 'paused': True, 'view': {'zoom': 1},
+                  'viewport': {'registered': True, 'following': False, 'width_px': 597, 'height_px': 439}}
+        after = copy.deepcopy(before);after.update(command_revision=5, last_actor='user')
+        after['viewport']['height_px'] = 443
+        timing.assert_live_preserved(before, after, 'paused', native=True)
+        with self.assertRaises(AssertionError):timing.assert_live_preserved(before, after, 'paused')
+        for change in [lambda s: s['view'].update(zoom=.9), lambda s: s['viewport'].update(following=True),
+                       lambda s: s.update(last_actor='agent'), lambda s: s['viewport'].update(height_px=439)]:
+            damaged = copy.deepcopy(after);change(damaged)
+            with self.subTest(change=change), self.assertRaises(AssertionError):
+                timing.assert_live_preserved(before, damaged, 'paused', native=True)
+
+
+if __name__ == '__main__':unittest.main()

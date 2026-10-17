@@ -1,0 +1,265 @@
+"""Measure automatic recovery through fresh owned headless/native socket hosts.
+
+No endpoint may be supplied: every host killed by this protocol is created here.
+The five-second timer includes command admission, polling, disk read/hash and
+public capsule validation. It is a conservative upper bound, not visible latency.
+"""
+import argparse
+import copy
+import hashlib
+import importlib.util
+import json
+import math
+from pathlib import Path
+import platform
+import subprocess
+import time
+
+from demo_session import require_fresh_demo_session
+
+ROOT = Path(__file__).resolve().parents[1]
+CASES = ('led', 'rc-recorded', 'blink', '100-nodes', '64-parts')
+TRANSPORTS = ('headless-socket', 'native-socket')
+LIMIT_S = 5.0
+
+
+def load_helper(name, filename):
+    spec = importlib.util.spec_from_file_location(name, ROOT/'scripts'/filename)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+helper = load_helper('recovery_timing_client', 'persistence-demo.py')
+capacity = load_helper('recovery_timing_capacity', 'capacity-demo.py')
+
+
+def digest(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def summary(values):
+    ordered = sorted(values)
+    return {'count': len(values), 'min_s': ordered[0],
+            'p50_s': ordered[math.ceil(len(values)*.5)-1],
+            'p95_s': ordered[math.ceil(len(values)*.95)-1], 'max_s': ordered[-1]}
+
+
+def validate_report(report):
+    """Reject incomplete/mislabeled timing evidence before summarizing success."""
+    if report.get('format') != 'elab.recovery-timing.v1' or report.get('limit_s') != LIMIT_S:
+        raise ValueError('unexpected timing protocol')
+    repeats = report.get('repetitions')
+    if type(repeats) is not int or repeats < 4 or repeats % 4:
+        raise ValueError('multiples of four keep the final recording for crash recovery')
+    runs = report.get('runs', [])
+    expected = [(transport, case) for transport in report['transports'] for case in CASES]
+    if report['transports'] not in [list(TRANSPORTS), [TRANSPORTS[0]]]:
+        raise ValueError('unexpected transport set')
+    if [(run.get('transport'), run.get('case')) for run in runs] != expected:
+        raise ValueError('missing/duplicated case or transport')
+    for run in runs:
+        if run.get('interval_s') != 2 or run.get('crash_exit_code') != -9 or run.get('restored_document_exact') is not True:
+            raise ValueError('default interval/crash/restore evidence missing')
+        samples = run.get('samples', [])
+        if len(samples) != repeats:
+            raise ValueError('missing repetitions')
+        for index, sample in enumerate(samples):
+            elapsed = sample.get('elapsed_s')
+            if (sample.get('index') != index or sample.get('phase') != ('first' if index == 0 else 'warm')
+                    or type(elapsed) not in (int, float) or not math.isfinite(elapsed) or not 0 < elapsed <= LIMIT_S
+                    or sample.get('document_exact') is not True or sample.get('live_preserved') is not True
+                    or sample.get('source_preserved') is not True or sample.get('retained_capsules') != min(index+1, 2)):
+                raise ValueError('invalid or over-budget sample')
+            if sample.get('edit_kind') not in ('component', 'recording-membership'):
+                raise ValueError('unidentified committed change')
+            if any(not isinstance(sample.get(key), str) or len(sample[key]) != 64
+                   or any(c not in '0123456789abcdef' for c in sample[key])
+                   for key in ('capsule_sha256', 'document_sha256')):
+                raise ValueError('missing capsule/document identity')
+        if run.get('summary') != summary([sample['elapsed_s'] for sample in samples]):
+            raise ValueError('summary differs from complete measured series')
+        expected_size = {'100-nodes': (51, 100), '64-parts': (64, 64)}.get(run['case'])
+        if expected_size and (run.get('simulated_parts'), run.get('electrical_nodes')) != expected_size:
+            raise ValueError('capacity fixture was reduced')
+        if run['case'] != 'led' and (type(run.get('recorded_rows')) is not int or run['recorded_rows'] < 201
+                                   or run.get('restored_recorded_rows') != run['recorded_rows']):
+            raise ValueError('complete recorded results did not survive crash restoration')
+    return summary([sample['elapsed_s'] for run in runs for sample in run['samples']])
+
+
+def stable_live(state):
+    return {key: copy.deepcopy(state.get(key)) for key in
+            ('components', 'wires', 'command_revision', 'document', 'run_id', 'electrical_revision',
+             'result', 'transient', 'mixed', 'npn', 'undo_entry', 'redo_entry', 'view', 'recording')}
+
+
+def prepare(client, name):
+    if name in ('100-nodes', '64-parts'):
+        count = 50 if name == '100-nodes' else 63
+        kind = 'potentiometer' if name == '100-nodes' else 'resistor'
+        state, source, parts, _ = capacity.build_chain(client, 'pulse-source', kind, count, name == '100-nodes')
+        probes = ['v:'+source, 'i:'+parts[0]]
+        if name == '100-nodes':
+            probes = ['v:'+source, 'v:'+parts[0]+'.wiper', 'v:'+parts[24]+'.wiper', 'i:'+parts[48]+'.1']
+        else:
+            probes = ['v:'+source, 'v:'+parts[31]+'.1', 'v:'+parts[62]+'.1', 'i:'+parts[62]]
+        target = parts[0]
+    else:
+        client.ask('example.load', {'id': 'rc' if name == 'rc-recorded' else name}, True)
+        target = 'R1' if name != 'blink' else 'RB'
+        probes = None
+    client.ask('simulation.pause', {}, True)
+    state = client.ask('simulation.wait')
+    assert state['status'] not in ('unsupported', 'incomplete', 'error'), state['diagnostics']
+    if probes:
+        client.ask('scope.probes.set', {'ids': probes}, True)
+    record_id = None
+    if name != 'led':
+        accepted = client.ask('simulation.verify', {'duration_s': .2}, True)
+        record_id = accepted['last_operation']
+        deadline = time.monotonic()+15
+        while True:
+            record = client.ask('operation.inspect', {'id': record_id})
+            assert record['operation']['status'] not in ('failed', 'canceled'), record
+            if record['operation']['status'] == 'completed':
+                break
+            assert time.monotonic() < deadline, 'Verify timed out'
+            time.sleep(.01)
+    state = client.ask('project.inspect')
+    assert any(p['id'] == target for p in state['components']), target
+    return target, record_id, state
+
+
+def measure_run(transport, name, repetitions, directory, native_binary, save_progress):
+    directory.mkdir(mode=0o700)
+    private = directory/'private';private.mkdir(mode=0o700)
+    endpoint = private/'endpoint.json';recovery = private/'recovery'
+    native = transport == 'native-socket'
+    argv = ([str(native_binary), '--agent-endpoint', str(endpoint), '--no-appearance'] if native else
+            [str(ROOT/'build/elab-agent'), '--listen', str(endpoint)]) + ['--recovery-directory', str(recovery)]
+    client = observer = None
+    with (directory/'host.log.txt').open('x') as log:
+        host = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=log, stderr=subprocess.STDOUT)
+        try:
+            deadline = time.monotonic()+30
+            while not endpoint.exists():
+                assert host.poll() is None and time.monotonic() < deadline, 'owned host failed startup'
+                time.sleep(.025)
+            client = helper.Client(str(endpoint), command_preconditions=True)
+            initial = client.ask('project.inspect');require_fresh_demo_session(initial)
+            assert initial['recovery']['enabled'] and initial['recovery']['interval_s'] == 2
+            client.ask('recovery.configure', {'directory': str(recovery), 'enabled': False, 'interval_s': 2}, True)
+            target, record_id, prepared = prepare(client, name)
+            source = directory/'manual-source.elab'
+            client.ask('project.save', {'path': str(source)}, True)
+            baseline_raw = source.read_bytes();baseline = json.loads(baseline_raw)
+            client.ask('recovery.configure', {'directory': str(recovery), 'enabled': True, 'interval_s': 2}, True)
+            run = {'transport': transport, 'case': name, 'interval_s': 2, 'samples': [],
+                   'simulated_parts': prepared['simulated_component_count'], 'electrical_nodes': len(prepared['nets']),
+                   'manual_source_sha256': digest(baseline_raw), 'scope_probes': baseline['scope_probes']['ids'],
+                   'recorded_rows': sum(len(e['data']['rows']) for e in baseline['recordings']['entries'])}
+            original_value = next(p['value'] for p in baseline['graph']['components'] if p['id'] == target)
+            keep = True
+            expected = copy.deepcopy(baseline)
+            for index in range(repetitions):
+                started = time.monotonic()
+                if record_id and index % 2:
+                    keep = not keep
+                    committed = client.ask('recording.keep.set', {'id': record_id, 'keep': keep}, True)
+                    edit_kind = 'recording-membership'
+                else:
+                    component_index = index//2 if record_id else index
+                    value = original_value*(1.1 if component_index % 2 == 0 else 1.2)
+                    committed = client.ask('component.set', {'id': target, 'value': format(value, '.17g')}, True)
+                    edit_kind = 'component'
+                committed = client.ask('simulation.wait')
+                assert committed['document']['dirty']
+                expected['graph'] = {'components': committed['components'], 'wires': committed['wires']}
+                expected['view'] = committed['view']
+                expected['recordings'] = copy.deepcopy(baseline['recordings']) if keep else {'entries': [], 'selected_index': -1, 'viewing': False}
+                before = stable_live(committed)
+                while True:
+                    observed = client.ask('project.inspect')
+                    assert not observed['recovery'].get('error'), observed['recovery']
+                    candidate = next((c for c in observed['recovery']['candidates'] if c['current_session']), None)
+                    if candidate:
+                        path = recovery/(candidate['id']+'.elab-recovery')
+                        raw = path.read_bytes();capsule = json.loads(raw)
+                        if capsule['command_revision'] == committed['command_revision'] and capsule['document'] == expected:
+                            assert digest(raw) == candidate['sha256']
+                            validated = client.ask('recovery.inspect', {key: candidate[key] for key in ('id', 'sha256')})
+                            assert validated['candidate']['sha256'] == candidate['sha256']
+                            break
+                    assert time.monotonic()-started <= LIMIT_S, 'automatic complete capsule missed five-second target'
+                    time.sleep(.025)
+                elapsed = time.monotonic()-started
+                assert elapsed <= LIMIT_S
+                assert before == stable_live(client.ask('project.inspect')), 'autosave changed live state'
+                assert source.read_bytes() == baseline_raw
+                capsule_file = directory/('sample-%02d.elab-recovery' % index);capsule_file.write_bytes(raw)
+                sample = {'index': index, 'phase': 'first' if index == 0 else 'warm', 'edit_kind': edit_kind,
+                          'elapsed_s': elapsed, 'command_revision': committed['command_revision'],
+                          'capsule_sha256': digest(raw), 'document_sha256': capsule['document_sha256'],
+                          'document_exact': True, 'live_preserved': True, 'source_preserved': True,
+                          'retained_capsules': len(list(recovery.glob('*.elab-recovery')))}
+                run['samples'].append(sample);save_progress(run)
+            host.kill();assert host.wait(timeout=10) == -9
+            client.close();client = None
+            observer = helper.Client(command_preconditions=True)
+            observer.ask('recovery.configure', {'directory': str(recovery), 'enabled': False, 'interval_s': 2}, True)
+            candidates = observer.ask('project.inspect')['recovery']['candidates']
+            newest = candidates[0]
+            assert newest['sha256'] == digest(raw) and newest['owner_status'] == 'inactive'
+            observer.ask('recovery.restore', {key: newest[key] for key in ('id', 'sha256')}, True)
+            restored = observer.ask('simulation.wait')
+            assert restored['document']['dirty'] and not restored['document']['path'] and restored['paused']
+            copy_path = directory/'restored-copy.elab'
+            observer.ask('project.save', {'path': str(copy_path)}, True)
+            restored_document = json.loads(copy_path.read_bytes())
+            assert restored_document == expected
+            assert source.read_bytes() == baseline_raw
+            run.update(crash_exit_code=host.returncode, restored_document_exact=True,
+                       restored_recorded_rows=sum(len(e['data']['rows']) for e in restored_document['recordings']['entries']),
+                       summary=summary([s['elapsed_s'] for s in run['samples']]))
+            return run
+        finally:
+            if observer:observer.close()
+            if host.poll() is None:host.terminate();host.wait(timeout=10)
+            if client:client.close()
+            host.stdin.close()
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--native-binary', type=Path)
+    parser.add_argument('--repetitions', type=int, default=12)
+    parser.add_argument('--artifacts', type=Path, required=True)
+    args = parser.parse_args()
+    if args.repetitions < 4 or args.repetitions % 4:parser.error('use a multiple of four repetitions, at least four')
+    directory = args.artifacts.resolve();directory.mkdir(mode=0o700, parents=True, exist_ok=False)
+    report = {'format': 'elab.recovery-timing.v1', 'limit_s': LIMIT_S, 'repetitions': args.repetitions,
+              'transports': list(TRANSPORTS) if args.native_binary else [TRANSPORTS[0]], 'runs': [],
+              'reference': {'platform': platform.platform(), 'machine': platform.machine(),
+                            'processor': subprocess.check_output(['sysctl', '-n', 'machdep.cpu.brand_string'], text=True).strip()},
+              'binary_sha256': {'agent': digest((ROOT/'build/elab-agent').read_bytes())},
+              'measurement': 'dispatch-to-complete-capsule disk read/hash plus public validation; monotonic wall clock; 25 ms polling; first/warm retained separately; paused solver',
+              'limits': ['Named fixtures on this workstation; no universal storage/hardware or visible-latency guarantee',
+                         'SIGKILL is not a power-loss or hostile-filesystem durability test']}
+    if args.native_binary:report['binary_sha256']['native'] = digest(args.native_binary.read_bytes())
+    for transport in report['transports']:
+        for name in CASES:
+            def progress(run):
+                (directory/'progress.json').write_text(json.dumps({'completed_runs': len(report['runs']), 'current_run': run}, indent=2)+'\n')
+            run = measure_run(transport, name, args.repetitions, directory/(transport+'-'+name), args.native_binary, progress)
+            report['runs'].append(run)
+            (directory/'report.partial.json').write_text(json.dumps(report, indent=2)+'\n')
+            print(json.dumps({'transport': transport, 'case': name, **run['summary']}), flush=True)
+    report['summary'] = validate_report(report)
+    report['passed'] = True
+    (directory/'report.json').write_text(json.dumps(report, indent=2)+'\n')
+    print(json.dumps({'passed': True, **report['summary']}), flush=True)
+
+
+if __name__ == '__main__':
+    main()

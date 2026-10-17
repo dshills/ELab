@@ -1,0 +1,273 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T12:33:04.242330+00:00",
+  "scope": "Repeated automatic complete-document recovery under paused/advancing simulation on named reference and separate capacity fixtures; pilot workstation only",
+  "source_parent_commit": "4e4e7e323a82a36f3e26934fc959b124cf74c5cc",
+  "source_index": "docs/validation/recovery-timing/source-freeze-final.json",
+  "source_frozen_files": 685,
+  "source_stable": true,
+  "all_preexisting_inputs_unchanged": 683,
+  "runtime_changes": 0,
+  "new_app_commands": 0,
+  "existing_commands": 162,
+  "binaries_unchanged_from_ownership_qualification": {
+    "build/elab": "e673d6ca8ae1f46501faa8be6036b4936e5febd62f7778f58dc52ae7eb816013",
+    "build/elab-agent": "9b04f8f64f32766862901ce6be4600226c99f4a02c2d7c8ebdafbe52f2ca2653",
+    "build/elab-conformance": "715b9ad55ba499ac93c27cb88cd03f38deea74f0a8ea13ed9421cdef0b28a68a",
+    "build/elab-ui-audit": "0c25bd6f5e85fd84a8d727444b3c8029401782fb5be26da20ad480085d36e813",
+    "build/ELab-0.111.0-126-recovery-ownership-candidate.app/Contents/MacOS/ELab": "e673d6ca8ae1f46501faa8be6036b4936e5febd62f7778f58dc52ae7eb816013"
+  },
+  "candidate": "build/ELab-0.111.0-126-recovery-ownership-candidate.app",
+  "candidate_promoted": false,
+  "target_s": 5,
+  "ordinary_interval_s": 2,
+  "measurement": "Before edit dispatch through exact matching on-disk capsule/hash and public validation; 25 ms polling; conservative wall-clock upper bound",
+  "cases": [
+    "led",
+    "rc-recorded",
+    "blink",
+    "100-nodes",
+    "64-parts"
+  ],
+  "modes": [
+    "paused",
+    "running"
+  ],
+  "transports": [
+    "headless-socket",
+    "native-socket"
+  ],
+  "samples": 240,
+  "repetitions_per_case_transport_mode": 12,
+  "first_and_warm_measured_separately": true,
+  "actual_sigkill_restores": 20,
+  "reference_configuration": {
+    "platform": {
+      "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+      "machine": "arm64",
+      "processor": "Apple M4 Pro"
+    },
+    "logical_cpus": 14,
+    "memory_bytes": 68719476736,
+    "go_toolchain": "go version go1.27.2 darwin/arm64"
+  },
+  "review": {
+    "passed": true,
+    "modes": {
+      "paused": {
+        "summary": {
+          "count": 120,
+          "min_s": 1.3266806249739602,
+          "p50_s": 2.4708587910281494,
+          "p95_s": 2.5185090829618275,
+          "max_s": 2.5444449589122087
+        },
+        "runs": 10,
+        "reference": {
+          "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+          "machine": "arm64",
+          "processor": "Apple M4 Pro"
+        },
+        "binaries": {
+          "agent": "9b04f8f64f32766862901ce6be4600226c99f4a02c2d7c8ebdafbe52f2ca2653",
+          "native": "e673d6ca8ae1f46501faa8be6036b4936e5febd62f7778f58dc52ae7eb816013"
+        }
+      },
+      "running": {
+        "summary": {
+          "count": 120,
+          "min_s": 1.3124471670016646,
+          "p50_s": 2.4738569170003757,
+          "p95_s": 2.518425624934025,
+          "max_s": 2.5266965409973636
+        },
+        "runs": 10,
+        "reference": {
+          "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+          "machine": "arm64",
+          "processor": "Apple M4 Pro"
+        },
+        "binaries": {
+          "agent": "9b04f8f64f32766862901ce6be4600226c99f4a02c2d7c8ebdafbe52f2ca2653",
+          "native": "e673d6ca8ae1f46501faa8be6036b4936e5febd62f7778f58dc52ae7eb816013"
+        }
+      }
+    },
+    "all_samples": 240,
+    "phase_summaries": {
+      "first": {
+        "count": 20,
+        "min_s": 1.3124471670016646,
+        "p50_s": 1.4900814589345828,
+        "p95_s": 2.0078163750004023,
+        "max_s": 2.034568459028378
+      },
+      "warm": {
+        "count": 220,
+        "min_s": 1.9524120000423864,
+        "p50_s": 2.477147666970268,
+        "p95_s": 2.5194680000422522,
+        "max_s": 2.5444449589122087
+      }
+    },
+    "edit_counts": {
+      "component": 144,
+      "recording-membership": 96
+    },
+    "exact_restored_recorded_rows": 3344,
+    "explicit_native_viewport_publications": 5,
+    "capsules_complete_and_hashes_exact": true,
+    "full_documents_and_rows_equal_saved_expectations": true
+  },
+  "processes": [
+    {
+      "name": "quality-final",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T12:23:10.032198+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 11.734039124916308,
+      "finished_utc": "2026-10-17T12:23:21.766182+00:00"
+    },
+    {
+      "name": "paused-final",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/recovery_timing.py",
+        "--native-binary",
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.111.0-126-recovery-ownership-candidate.app/Contents/MacOS/ELab",
+        "--simulation-mode",
+        "paused",
+        "--repetitions",
+        "12",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recovery-timing/paused-final"
+      ],
+      "started_utc": "2026-10-17T12:23:21.776428+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 280.0403016250348,
+      "finished_utc": "2026-10-17T12:28:01.815366+00:00"
+    },
+    {
+      "name": "running-final",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/recovery_timing.py",
+        "--native-binary",
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.111.0-126-recovery-ownership-candidate.app/Contents/MacOS/ELab",
+        "--simulation-mode",
+        "running",
+        "--repetitions",
+        "12",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recovery-timing/running-final"
+      ],
+      "started_utc": "2026-10-17T12:28:01.829060+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 279.5768190000672,
+      "finished_utc": "2026-10-17T12:32:41.404516+00:00"
+    }
+  ],
+  "quality": {
+    "lint_imports_staticcheck": true,
+    "python_tests": 37,
+    "root_native_race_and_vet": true,
+    "unchanged_go_test_results_cached": true
+  },
+  "previous_numerical_validation": "docs/validation/recovery-ownership-validation.json",
+  "previous_numerical_validation_reused_only_after_all_existing_inputs_and_binaries_match": true,
+  "artifact_encodings": {
+    "paused-report.json.gz": {
+      "decoded_bytes": 70029,
+      "decoded_sha256": "83d8651c71168a27b211216453d0d9c6a47d328048a0062cabe284936fee62f9",
+      "gzip_bytes": 10843,
+      "gzip_sha256": "12c1c7c17907af7b06bb78d1d12f6d027ad13f7b2acad8556a8a9cccba5460c3"
+    },
+    "running-report.json.gz": {
+      "decoded_bytes": 70041,
+      "decoded_sha256": "10f4e9b209e553390e1546891bde149591e64512c0c1c535cac547a68d7aec54",
+      "gzip_bytes": 10873,
+      "gzip_sha256": "97188f20960db6a8f1ec452e677d6ac2567359709c2cfc3d5dfbdab76a40f1f9"
+    },
+    "initial-partial-report.json.gz": {
+      "decoded_bytes": 35334,
+      "decoded_sha256": "59a9a3d40a37fb00153d7051b4156741f717a1533dad5e50c7972334f768baff",
+      "gzip_bytes": 5974,
+      "gzip_sha256": "c5c2cc33b1e3a55c9a6d5bcb2304bb40ae513202048d1d821fcec277ca5e5967"
+    },
+    "initial-rehearsal-report.json.gz": {
+      "decoded_bytes": 8946,
+      "decoded_sha256": "5921220beb4200551dd1db8b01a411114aeb514fd84dd89b6dc07bbda7fd709b",
+      "gzip_bytes": 2256,
+      "gzip_sha256": "ad60e334dc2b141818683f6a48861d2f6e00b0eb0a960988589d3e9207105595"
+    }
+  },
+  "fixture_archive": {
+    "path": "docs/validation/recovery-timing/fixtures.tar.gz",
+    "files": 794,
+    "gzip_bytes": 7627835,
+    "gzip_sha256": "603408bc65ff962b5e9e7012b0f5ebe7bc41a96b1f327b2ac4a28d406cbf2b10",
+    "all_members_read_and_hashed": true
+  },
+  "sdk_verified": {
+    "passed": true,
+    "source": "aa9d023243a6bded514c3d9696c08a9c917119c4",
+    "archive_sha256": "22b086442570641e4ae56e9937dd6483c26f92cde953f3aa3fc11811710ed7c5"
+  },
+  "preserved_bundle_trees": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7
+    }
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "setup_corrections": [
+    "The initial two-repeat rehearsal ended with records excluded; final repetitions are multiples of four and require kept-record restoration.",
+    "The first native matcher assumed no later view/revision publication. Original capsule, source, failed log and before/after viewport trace are retained. Final setup observes actual allocation and fixes the view; native viewport-only counter changes remain explicit and cannot hide a document/view/history/run change."
+  ],
+  "limitations": [
+    "Named fixtures and ordinary available local storage on this workstation; no universal topology/hardware/storage bound, simultaneous capacity maxima, maximum recording storage or arbitrary system load claim.",
+    "Pause and advancing solver modes are measured separately. Timing includes controller polling/validation and excludes fixture setup. First means first edit in this prepared owned session, not filesystem-cache eviction or a clean OS install.",
+    "SIGKILL is a process-crash test, not power-loss, hostile-filesystem or atomic-conditional-unlink durability qualification.",
+    "Native viewport publications are observed through complete before/after snapshots in an owned session; this is not a complete command-event transition log or mounted input/accessibility/visible-latency qualification.",
+    "Existing numerical/native smoke qualification is retained for exact unchanged runtime inputs/binaries; it was not rerun as a new electrical performance series.",
+    "The existing candidate remains private/unpromoted. Clean installation, signing/distribution, other hardware/platforms, physical printer and participant gates remain open."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/recovery-timing/archive.py.txt": "3e907f80c23c5e41d7f53a69f9a4bf964f4a375e1f3cbfe1dc07e2571dd5fd7e",
+    "docs/validation/recovery-timing/fixtures-index.json": "70811d8780eafad9729b14bafdb5131da5ea126d5ee3a11aeb740cad8a0987e1",
+    "docs/validation/recovery-timing/fixtures.tar.gz": "603408bc65ff962b5e9e7012b0f5ebe7bc41a96b1f327b2ac4a28d406cbf2b10",
+    "docs/validation/recovery-timing/initial-partial-report.json.gz": "c5c2cc33b1e3a55c9a6d5bcb2304bb40ae513202048d1d821fcec277ca5e5967",
+    "docs/validation/recovery-timing/initial-qualify.py.txt": "673d2a31c9fbf6ae8435b91ad945b49d9647ecc432c3cad02a9cd6838c015880",
+    "docs/validation/recovery-timing/initial-rehearsal-report.json.gz": "ad60e334dc2b141818683f6a48861d2f6e00b0eb0a960988589d3e9207105595",
+    "docs/validation/recovery-timing/paused-final.log.txt": "a6e10e1d912b450f68c7510dd8f3aa6c0c7d7c824aee83676a6b6bcac8cce5fb",
+    "docs/validation/recovery-timing/paused-recovery_timing.py.txt": "f71783ae6fa58ff5d42bd0c8153d05ee3ecc2936159b8f1f4015baa94618f618",
+    "docs/validation/recovery-timing/paused-report.json.gz": "12c1c7c17907af7b06bb78d1d12f6d027ad13f7b2acad8556a8a9cccba5460c3",
+    "docs/validation/recovery-timing/paused-test_recovery_timing.py.txt": "a3ae40359aa71817683fa60553190b77e8f8df92e82b81b5b287ec84d6e89b15",
+    "docs/validation/recovery-timing/processes-final.json": "0eb40f6781e46050e5c095e5612da8d125beff1e7f0e7b070c2b3f86ac9861a6",
+    "docs/validation/recovery-timing/processes.json": "7d8c88341557ba31125219b54ead05e1ae9e7ff94ca89e800d6d5793ccb24371",
+    "docs/validation/recovery-timing/qualify.py.txt": "a632d3e921a2445e9c54e11ae9a748f47bc179860d473015d4d93b25b08e1d22",
+    "docs/validation/recovery-timing/quality-final.log.txt": "31bf52859e52c5a2e615e988c963ca9db0aa6799d0c93355eddae5f90c3bc8c6",
+    "docs/validation/recovery-timing/quality.log.txt": "e89f5393457d6d80acf366aee626ff088e70295366a1e2ec65b4727d48d3e8c5",
+    "docs/validation/recovery-timing/report-review.json": "7195102c65a808d804dfc872f1d48e5042458ae295ed02e5f3256cccc4212c84",
+    "docs/validation/recovery-timing/review.py.txt": "ac383921d1c271872b010ba6cd87d4599fdb50815ae29f1ae8e507930e75251a",
+    "docs/validation/recovery-timing/running-final.log.txt": "f3187611cafd101ce42454786248962704c0e449620747950deec232162c4908",
+    "docs/validation/recovery-timing/running-report.json.gz": "97188f20960db6a8f1ec452e677d6ac2567359709c2cfc3d5dfbdab76a40f1f9",
+    "docs/validation/recovery-timing/source-freeze-final.json": "3ac92ce8a08b72a80abe048e48744b771bbb41f811436a3897ed14aa7f47397f",
+    "docs/validation/recovery-timing/source-freeze.json": "b816893255c2d3ac646ad74fbd82f71aaf0fa7b1c7d19fcdaa913a792f7e491d",
+    "docs/validation/recovery-timing/timing.log.txt": "463b3966b7430db99e0c29f852dddbaf92b922d8a156776b204bb4d351f0b5c7"
+  }
+}

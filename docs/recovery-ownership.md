@@ -22,4 +22,4 @@ Existing source/capsule formats, integrity/hash checks, current-session dismissa
 
 On Windows, the current process can be identified; another present lease remains unknown/protected until platform liveness is qualified. This does not claim Windows runtime acceptance. Unix dead-process/crash behavior is checked separately.
 
-[Validation evidence](validation/recovery-ownership-validation.json) retains the failing regression, real separate-process active/unknown/repaired/inactive transitions, copy restoration, source/capsule preservation and existing SIGKILL recovery. The repeated five-second autosave timing gate remains open; this safety repair does not count as that performance qualification.
+[Validation evidence](validation/recovery-ownership-validation.json) retains the failing regression, real separate-process active/unknown/repaired/inactive transitions, copy restoration, source/capsule preservation and existing SIGKILL recovery. The safety repair itself does not count as performance qualification. Subsequent [repeated timing evidence](recovery-timing.md) covers named paused/advancing fixtures on the pilot workstation.

@@ -1,0 +1,33 @@
+[
+  {
+    "name": "quality",
+    "argv": [
+      "./scripts/check.sh"
+    ],
+    "started_utc": "2026-10-17T12:16:14.601355+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 12.392589500057511,
+    "finished_utc": "2026-10-17T12:16:26.993889+00:00"
+  },
+  {
+    "name": "timing",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/recovery_timing.py",
+      "--native-binary",
+      "/Users/dshills/Development/projects/ELab/build/ELab-0.111.0-126-recovery-ownership-candidate.app/Contents/MacOS/ELab",
+      "--repetitions",
+      "12",
+      "--artifacts",
+      "/Users/dshills/Development/projects/ELab/build/recovery-timing/final"
+    ],
+    "started_utc": "2026-10-17T12:16:27.004208+00:00",
+    "status": "failed",
+    "exit_code": 1,
+    "error_type": "AssertionError",
+    "elapsed_seconds": 145.04116804199293,
+    "finished_utc": "2026-10-17T12:18:52.044670+00:00"
+  }
+]

@@ -1,0 +1,44 @@
+from pathlib import Path
+import copy, hashlib, json, sys
+
+root=Path.cwd();out=root/'build/recovery-timing';sys.path.insert(0,str(root/'scripts'))
+import recovery_timing as protocol
+
+def read(path):return json.loads(path.read_text())
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+results={};phase={'first':[],'warm':[]};edits={};files={};viewport_publications=0;recorded_rows=0
+for mode in ['paused','running']:
+ folder=out/(mode+'-final');report=read(folder/'report.json')
+ assert report['passed'] and report['simulation_mode']==mode and report['summary']==protocol.validate_report(report)
+ for run in report['runs']:
+  directory=folder/(run['transport']+'-'+run['case'])
+  baseline_raw=(directory/'manual-source.elab').read_bytes();baseline=json.loads(baseline_raw)
+  assert sha(baseline_raw)==run['manual_source_sha256']
+  assert len(baseline['scope_probes']['ids'])==4 if run['case'] in ['100-nodes','64-parts'] else True
+  for sample in run['samples']:
+   index=sample['index'];capsule_raw=(directory/('sample-%02d.elab-recovery'%index)).read_bytes();capsule=json.loads(capsule_raw)
+   before=read(directory/('state-%02d-before.json'%index));after=read(directory/('state-%02d-after.json'%index))
+   assert sha(capsule_raw)==sample['capsule_sha256'] and capsule['document_sha256']==sample['document_sha256']
+   document_raw=capsule_raw.split(b',"document":',1)[1][:-2]
+   assert json.loads(document_raw)==capsule['document'] and sha(document_raw)==capsule['document_sha256']
+   assert capsule['command_revision']>=sample['command_revision']==before['command_revision']
+   expected=copy.deepcopy(baseline);expected['graph']={'components':before['components'],'wires':before['wires']};expected['view']=before['view']
+   if before['document']['recording_count']==0:expected['recordings']={'entries':[],'selected_index':-1,'viewing':False}
+   assert capsule['document']==expected
+   assert expected['paused']==(mode=='paused')
+   protocol.assert_live_preserved(before,after,mode,run['transport']=='native-socket')
+   if before['command_revision']!=after['command_revision']:viewport_publications+=1
+   assert before['simulated_component_count']==run['simulated_parts'] and len(before['nets'])==run['electrical_nodes']
+   phase[sample['phase']].append(sample['elapsed_s']);edits[sample['edit_kind']]=edits.get(sample['edit_kind'],0)+1
+  restored=read(directory/'restored-copy.elab');assert restored==expected
+  assert restored['recordings']==baseline['recordings']
+  recorded_rows+=sum(len(e['data']['rows']) for e in restored['recordings']['entries'])
+  for path in sorted(directory.iterdir()):
+   if path.is_file() and (path.name in ['manual-source.elab','restored-copy.elab','host.log.txt'] or path.name.startswith(('sample-','state-'))):
+    files[str(path.relative_to(out))]={'sha256':sha(path.read_bytes()),'bytes':path.stat().st_size}
+ results[mode]={'summary':report['summary'],'runs':len(report['runs']),'reference':report['reference'],'binaries':report['binary_sha256']}
+result={'passed':True,'modes':results,'all_samples':sum(edits.values()),'phase_summaries':{p:protocol.summary(v) for p,v in phase.items()},
+        'edit_counts':edits,'exact_restored_recorded_rows':recorded_rows,'explicit_native_viewport_publications':viewport_publications,
+        'capsules_complete_and_hashes_exact':True,'full_documents_and_rows_equal_saved_expectations':True,'files':files}
+(out/'report-review.json').write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps({k:v for k,v in result.items() if k!='files'},indent=2))

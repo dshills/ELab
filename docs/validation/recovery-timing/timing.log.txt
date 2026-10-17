@@ -1,0 +1,15 @@
+{"transport": "headless-socket", "case": "led", "count": 12, "min_s": 1.9817838750313967, "p50_s": 2.4734480830375105, "p95_s": 2.525387250003405, "max_s": 2.525387250003405}
+{"transport": "headless-socket", "case": "rc-recorded", "count": 12, "min_s": 1.9580017919652164, "p50_s": 2.480187625042163, "p95_s": 2.5268833339214325, "max_s": 2.5268833339214325}
+{"transport": "headless-socket", "case": "blink", "count": 12, "min_s": 1.9813681660452858, "p50_s": 2.473609875072725, "p95_s": 2.5185654590604827, "max_s": 2.5185654590604827}
+{"transport": "headless-socket", "case": "100-nodes", "count": 12, "min_s": 1.9506259170593694, "p50_s": 2.469161874963902, "p95_s": 2.537336791981943, "max_s": 2.537336791981943}
+{"transport": "headless-socket", "case": "64-parts", "count": 12, "min_s": 1.9575002919882536, "p50_s": 2.4423694589640945, "p95_s": 2.538908915943466, "max_s": 2.538908915943466}
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/scripts/recovery_timing.py", line 265, in <module>
+    main()
+    ~~~~^^
+  File "/Users/dshills/Development/projects/ELab/scripts/recovery_timing.py", line 254, in main
+    run = measure_run(transport, name, args.repetitions, directory/(transport+'-'+name), args.native_binary, progress)
+  File "/Users/dshills/Development/projects/ELab/scripts/recovery_timing.py", line 194, in measure_run
+    assert time.monotonic()-started <= LIMIT_S, 'automatic complete capsule missed five-second target'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: automatic complete capsule missed five-second target

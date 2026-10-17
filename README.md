@@ -276,3 +276,5 @@ The waiting Step alias now handles [unit text during initialization](docs/live-s
 Scopes now have [discoverable control contracts and bounded narrow-window clipping](docs/scope-probes.md#discoverable-control-contracts). Empty intervals report no data, CSV agrees with plotted rows, and captured/reference views preserve exact saved timestamps.
 
 Recovery snapshots now distinguish [active, inactive and unverified owners](docs/recovery-ownership.md). An unreadable ownership record preserves another session's copy and blocks dismissal, while restoration as a new copy remains available through the same user/agent commands.
+
+[Repeated recovery timing](docs/recovery-timing.md) passes 240 paused/live native/headless measurements on the recorded workstation: maximum 2.544 s with ordinary two-second autosave, plus 20 complete crash restores. The existing app binaries remain unchanged.
