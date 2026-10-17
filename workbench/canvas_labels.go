@@ -44,8 +44,8 @@ func (l CanvasAnnotationLayout) Position(text string, index int) Point {
 	return Point{X: l.Right - CanvasTextWidth(text, l.Scale), Y: l.FirstBaseline + float64(index)*l.LineHeight}
 }
 
-// CanvasPartLabel is the upright caption used by the interactive schematic.
-// Fit and drawing share its text and anchor, including rotated symbols.
+// CanvasPartLabel provides caption text and the base upright anchor. Interactive
+// drawing and Fit use CanvasPartLabelPositionAtZoom when enlarging captions.
 func CanvasPartLabel(part Component) (Point, string) {
 	title := part.ID
 	if part.Kind == "inductor" {
@@ -70,6 +70,20 @@ func CanvasPartLabel(part Component) (Point, string) {
 		}
 	}
 	return CanvasPartLabelPosition(part, title), title
+}
+
+// CanvasPartLabelPositionAtZoom keeps a DC caption's right edge clear of the
+// source as its text grows. Horizontal sources put text above both leads.
+// Other symbols retain their established anchors; export geometry is unchanged.
+func CanvasPartLabelPositionAtZoom(part Component, title string, zoom float64) Point {
+	if part.Kind != "dc-source" {
+		return CanvasPartLabelPosition(part, title)
+	}
+	width := CanvasTextWidth(title, CanvasFontScale(zoom))
+	if part.Rotation == 90 || part.Rotation == 270 {
+		return Point{X: part.Position.X + 40 - width, Y: part.Position.Y - 60}
+	}
+	return Point{X: part.Position.X - 45 - width, Y: part.Position.Y + 3}
 }
 
 func CanvasPartLabelPosition(part Component, title string) Point {

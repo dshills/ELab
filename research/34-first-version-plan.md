@@ -2,13 +2,32 @@
 
 **Written October 17, 2026. Status: in progress; package 1 command/startup checks complete. Alpha release gates remain open.**
 
+## Concrete next handoff
+
+**Deliver one macOS private alpha for the owner to use.** It must support drawing an LED circuit from blank, live LED/RC/transistor simulation, value edits, probes/cursors, undo, save/reopen and schematic export. The external agent must perform the same reference workflows. This is the first-version cut line; additional devices and analysis features do not enter this milestone.
+
+The implementation has spent too long accumulating improvements and evidence without promoting a build the owner can use. Delivery now has four remaining work units:
+
+| Order | Remaining work | Evidence needed to leave this unit |
+|---|---|---|
+| 1 | Finish the two reproduced UI repairs: DC captions crowding source symbols, and stale accessibility bounds after scrolling. Preserve the current work; qualify the minimal framework patch before changing the pinned SDK. | Native reproduction passes after each fix; targeted regressions pass. Finish the core keyboard loop and minimum-window check. Record unsupported display/accessibility configurations as unqualified rather than extending the investigation indefinitely. |
+| 2 | Run acceptance tasks A–D below through the external agent against the UI artifacts. | Saved connectivity/values and numerical/state results agree; invalid edits, undo, save/reopen and recovery preserve work. Produce a clearly labeled owner-review build at this boundary. |
+| 3 | Qualify and package that source once. | Final quality gate, release-diff review, copied-app offline launch and file round-trip pass. Include the matching agent, examples, known issues and rollback instructions. Promote the qualified bundle to the canonical app path. |
+| 4 | Hand over the app and a 15–20 minute task sheet. | Publish exact app/agent paths, version and hashes. Owner feedback becomes a bounded defect queue; waiting for feedback does not authorize more feature development. |
+
+**Stop rules:** no general refactoring, new feature batches, optional schema campaigns or broad Vellum refresh. Reuse applicable evidence. Run focused checks for a repair, then one full gate on the final source; rerun only what a subsequent change invalidates. A blocker investigation gets one focused reproduction/repair pass before a checkpoint that states the unresolved failure, smallest next action and revised estimate. Do not silently turn a blocker into an open-ended framework project.
+
+**Delivery decision:** data loss, incorrect or misleading simulation, broken core user/agent parity, and inability to complete A–D block the alpha. Wider environment, performance, accessibility and physical-print qualification gaps must be disclosed and remain open for the full MVP; they are not inferred passes. Any permitted limitation requiring owner review is presented with the concrete review build.
+
+The existing **2–4 focused engineering day estimate is provisional, not a delivery commitment**. Re-estimate when unit 1 closes. The next progress report must identify which of these four units closed and link its artifact or failing reproduction; a test count alone is not delivery progress.
+
 ## Delivery summary
 
 **The next deliverable is one installable macOS alpha, not another feature batch.** The existing LED, RC and transistor workflows are the release scope. New features and framework upgrades are frozen except for demonstrated blockers.
 
 The immediate queue is:
 
-1. Finish the native UI walkthrough. Save defaults, device/file decisions, rapid coordinate repeats, measurement access and post-dialog keyboard navigation are repaired or directly verified. Next are the remaining DC caption anchor, scrolled accessibility and minimum-window/display qualification.
+1. Finish the native UI walkthrough. Save defaults, device/file decisions, rapid coordinate repeats, measurement access and post-dialog keyboard navigation are repaired or directly verified. The DC caption anchor is now repaired. Next are scrolled accessibility and minimum-window/display qualification.
 2. Run the four acceptance tasks below through the external agent and compare their saved circuits and results with the UI runs. Deliver a clearly labeled review build at this checkpoint.
 3. Run the final qualification checks, then package and promote one app with its matching agent, example projects, known issues and rollback path.
 4. Hand over a 15–20 minute owner walkthrough. Restrict subsequent alpha work to failures in that walkthrough.
@@ -117,6 +136,8 @@ A failed integrity, simulation-truthfulness or core parity check blocks promotio
 - **October 17, package 2 device/keyboard/file pass:** native NMOS/PMOS High/Low switch the LED in the expected opposite directions. Save-and-continue preserves NMOS before loading PMOS; Discard replaces the disposable PMOS copy with RC. Native CSV matches every point in its 241-row public scope observation. Keyboard construction, named wiring, Resume and a 1 kΩ → 2 kΩ edit work, and a separately constructed external-agent circuit matches the resulting graph and electrical result exactly. [Evidence and limitations](ui-audit/first-version/README.md#device-file-and-keyboard-workflow-checkpoint). Repeated coordinate arrows exposed a revision-refusal/input issue; measurement controls are buried in the inspector, and compact device overview text remains small. These demonstrated issues define the next repair queue, alongside scrolled AX publication. Complete keyboard history/save/reopen, display configurations and release qualification remain open; package 2 is not closed.
 - **October 17, package 2 input/measurement repairs:** retained field callbacks now continue from their own accepted command responses, while stale opposite-axis/agent/document contexts remain refused. Native 20 Up /20 Down /20 Up produces all 60 intended coordinate increments with no revision error. CSV is beside the scope trace selector; probe controls precede general settings, and native current-probe selection reaches the shared scope. The relocated export's 177 rows match the public samples. [Evidence](ui-audit/first-version/README.md#coordinate-continuation-and-measurement-access-repair). Focused race tests and the full quality gate pass. Next are compact device overview readability and scrolled AX behavior, then keyboard history/file navigation. Package 2 remains open; no SDK/model/format change or app promotion occurred.
 - **October 17, package 2 canvas/file-focus repairs:** reclaimed the empty status row, increasing compact flasher drawing height by 50 pixels and Fit from 25.16% to 33.28%, with exact native/headless parity. Inspected actual 1280×800/1440×900 app windows in both themes; OS display modes remain unqualified. Repaired a new native file-focus defect using an asynchronous, window-guarded application continuation. Keyboard Cancel/Save/Open and Undo/Redo now work; the source project stays unchanged. [Evidence](ui-audit/first-version/README.md#canvas-space-and-keyboard-file-focus-repair). Full final quality gate passes. Scrolled AX editing still fails until a repaint, narrowing its investigation; enlarged DC captions still crowd the source symbol. Those two concrete repairs and minimum-window/display qualification remain before package 2 exit. No SDK/model/format change or app promotion occurred.
+
+- **October 17, package 2 source-caption repair:** drawing and shared Fit now use a scale-aware DC-source caption anchor. Compact/large and keyboard-rotated native observations pass; run/results/wires remain unchanged and native/headless Fit agrees. Clearance and containment regressions plus the complete quality gate pass. [Checkpoint](ui-audit/first-version/README.md#dc-source-caption-repair). Scrolled accessibility is being tested in an isolated framework copy; no new SDK pin or canonical promotion is implied. Minimum-window/release gates remain open.
 
 ## After the alpha
 

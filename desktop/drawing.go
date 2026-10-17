@@ -350,7 +350,8 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 		if annotated[part.ID] {
 			continue
 		}
-		at, title := workbench.CanvasPartLabel(part)
+		_, title := workbench.CanvasPartLabel(part)
+		at := workbench.CanvasPartLabelPositionAtZoom(part, title, view.Zoom)
 		b.textAtScale(at.X, at.Y, title, ink, workbench.CanvasFontScale(view.Zoom))
 	}
 	for _, a := range state.SourceAnnotations {

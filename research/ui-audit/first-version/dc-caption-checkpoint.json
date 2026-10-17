@@ -1,0 +1,62 @@
+{
+  "scope": "DC-source caption anchor repair; alpha qualification remains open",
+  "source_base": "9997bb2",
+  "production_source_sha256": {
+    "desktop/drawing.go": "6b3af72a3b900487e91c57d182c1634e6a8b648dde2dbd96f9b51e143308ccb6",
+    "workbench/canvas_labels.go": "48e6ed28787e2ccd308ab42cbac8204b5ae698743a5278aec9c67d8d8b2d2901",
+    "workbench/navigation.go": "9503fbf63d32bf618fcbd0b4163997387bff21b757faa57dc6114475df39a205"
+  },
+  "sdk_source": "47b7153109735006305e3610520e489a953fcd97",
+  "native_binary_sha256": "c88c7fc24729182ed074d45fe167b89efaa2695496f34939464ebed8fe0cdf6f",
+  "parity": {
+    "preserved": {
+      "run_id": true,
+      "electrical_revision": true,
+      "mixed": true,
+      "transient": true,
+      "scope": true,
+      "wires": true
+    },
+    "native_view": {
+      "center": {
+        "x": -30,
+        "y": 4
+      },
+      "zoom": 0.33279220779045315
+    },
+    "headless_view": {
+      "center": {
+        "x": -30,
+        "y": 4
+      },
+      "zoom": 0.33279220779045315
+    },
+    "viewport": {
+      "width_px": 456,
+      "height_px": 209,
+      "registered": true,
+      "following": true
+    },
+    "source_rotation": 90,
+    "paused_time_s": 0.2500000000000001,
+    "graph_matches": true
+  },
+  "validation": {
+    "caption_clearance": "48 combinations of short/long IDs, four rotations and six zooms",
+    "fit": "long caption containment at every rotation plus existing viewport coverage",
+    "complete_quality_gate": "scripts/check.sh exited 0: lint/imports/Staticcheck, 38 Python tests, root/native race and vet; applicable Go results cached",
+    "quality_log_sha256": "53b4ae1892bbd1aea511afd67aa5521d895f55a46144429462734c40ba92be0a",
+    "native": "compact and large window captions clear source circle; keyboard Rotate 90 puts caption above horizontal leads"
+  },
+  "limitations": [
+    "Minimum-window and display configuration release gate remains open",
+    "Dense overviews still require zoom for detailed inspection",
+    "Scrolled accessibility repair is separately qualified"
+  ],
+  "canonical_bundle_promoted": false,
+  "artifacts": {
+    "dc-caption-compact-after.jpg": "64d0579b1e75c1cb496c0e89ced6ea8419cccb61fc017b6a1e1eab09de6775de",
+    "dc-caption-large-after.jpg": "334a555fc2ef5aa1abbcee8cabdfd619e3216228282f69b234a099b9bb5142a9",
+    "dc-caption-rotated-after.jpg": "d2db55dfef76168664c4038a0ed2d85cf46a696bfddacfa39dbb0c7f1d03f816"
+  }
+}

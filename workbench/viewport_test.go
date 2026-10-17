@@ -194,7 +194,8 @@ func assertViewportContainsSchematic(t *testing.T, state Snapshot) {
 			annotated = annotated || a.ID == p.ID
 		}
 		if !annotated {
-			at, text := CanvasPartLabel(p)
+			_, text := CanvasPartLabel(p)
+			at := CanvasPartLabelPositionAtZoom(p, text, state.View.Zoom)
 			lo, hi := CanvasTextBounds(at, text, CanvasFontScale(state.View.Zoom))
 			check(lo)
 			check(hi)

@@ -126,7 +126,7 @@ func (s *Service) fitViewLocked(p FitParams) (View, error) {
 		annotated[a.ID] = true
 	}
 	type caption struct {
-		at   Point
+		part Component
 		text string
 	}
 	captions := []caption{}
@@ -136,8 +136,8 @@ func (s *Service) fitViewLocked(p FitParams) (View, error) {
 		if !annotated[c.ID] {
 			x, y, label := schematicPartLabel(c)
 			include(Point{x - 10, y - 25}, Point{x + schematicLabelWidth(label) + 10, y + 10})
-			at, title := CanvasPartLabel(c)
-			captions = append(captions, caption{at, title})
+			_, title := CanvasPartLabel(c)
+			captions = append(captions, caption{c, title})
 		}
 		for _, terminal := range c.Terminals {
 			if pos, ok := TerminalPosition(c, terminal); ok {
@@ -168,7 +168,8 @@ func (s *Service) fitViewLocked(p FitParams) (View, error) {
 	fitAt := func(zoom float64) (View, bool) {
 		minX, minY, maxX, maxY = baseMinX, baseMinY, baseMaxX, baseMaxY
 		for _, c := range captions {
-			lo, hi := CanvasTextBounds(c.at, c.text, CanvasFontScale(zoom))
+			at := CanvasPartLabelPositionAtZoom(c.part, c.text, zoom)
+			lo, hi := CanvasTextBounds(at, c.text, CanvasFontScale(zoom))
 			include(lo, hi)
 		}
 		for _, a := range annotations {
