@@ -2,6 +2,8 @@
 
 **Started October 13, 2026.** The product owner asked for continued backlog work until they return and explicitly stop it, with attention to reviews, lint, structure and Go practices. This record tracks completed and active slices; it does not declare the entire MVP complete.
 
+**Priority change, October 17:** The [first-version delivery plan](34-first-version-plan.md) now controls upcoming work: freeze features, repair entry points, complete the actual UI/agent workflow pass, qualify and promote one usable macOS alpha, then collect owner feedback. The remainder of this file is a historical implementation record, not the active release queue. Full PRD acceptance gates remain open.
+
 ## Quality checkpoint and review
 
 The previously uncommitted implementation/research was checkpointed locally on `codex/mvp-continuation` (`8ef5cf4`). No changes were pushed. Subsequent green slices receive separate local commits so their scope is reviewable and reversible.

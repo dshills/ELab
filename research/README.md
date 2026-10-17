@@ -6,6 +6,8 @@ This first research phase covers **24 product families**, **82 selected source r
 
 ## Start here
 
+**Current delivery plan:** [First usable version](34-first-version-plan.md) — October 17, 2026. Frozen hobbyist alpha scope, six ordered work packages, release checks and a concrete app handoff. This is the active implementation priority; full PRD acceptance remains separate.
+
 **Product definition:** [ELab product requirements](07-product-requirements.md) — Draft 0.3, October 13, 2026. Defines the hobbyist workflow, live simulation contract, complete user/agent capability parity, Vellum UI foundation, MVP boundaries, acceptance criteria, and release validation.
 
 **Framework decision:** [Vellum adoption and integration](08-vellum-integration.md) — October 13, 2026. Records the selected Go UI framework, inspected baseline, application responsibilities, agent-interface gaps, and first implementation gate.

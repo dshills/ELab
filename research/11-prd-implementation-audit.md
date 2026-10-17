@@ -80,6 +80,8 @@ Audited against [PRD draft 0.3](07-product-requirements.md), starting at local c
 
 ## Prioritized continuation
 
+**Superseded for work ordering on October 17 by the [first-version delivery plan](34-first-version-plan.md).** The list below is retained as historical audit context. The new private-alpha milestone changes delivery order; it does not close partial requirements or waive the PRD's MVP gates.
+
 1. Resolve switch pending/next-step semantics, native slider gesture evidence/coalescing, actor-aware history, and other state/agent correctness gaps.
 2. Expand/measure physical circuit capacity and move difficult work off the interactive service lock, preserving model fidelity and bounded failure semantics.
 3. Implement visible voltage/current presentation preferences, pinned readings/source highlighting, diagnostics and concise example guidance.
