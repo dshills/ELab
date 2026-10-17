@@ -1,5 +1,13 @@
 # Current Vellum SDK integration
 
+The first-version UI pass reproduced stale native accessibility bounds after child-only scrolling. ELab now pins private source `bc6b456f0c71b0327d0c02629b109eabbbc8994c`, based on `47b7153`, with a narrow scroll-publication repair. The adjacent Vellum checkout is unchanged. This is the release-freeze exception for a demonstrated defect, not a broad framework upgrade.
+
+The archive has 7,448 hashed files, 18,617,992 bytes, SHA-256 `f202a535b4cd931767e589e981c6e9265309ec262b48f28e9d5a57bbdf903fef`. Its manifest SHA-256 is `b3cc6914bb0557a297a2b34b75c2a076883c78ac65725348b83508e14c50b9a2`. Exactly four SDK source members differ from the previous archive: accessibility host publication, Scroll mounting, the new partial-scroll host and its regression test. All prepared upstream/typesetting files and verifier/bootstrap sources are unchanged. The lock and four native replacements point to `build/.vellum-sdk-bc6b456`; the previous archive/cache remain intact.
+
+The [portable source patch](validation/vellum-ax-scroll.patch) and [first-version UI evidence](../research/ui-audit/first-version/README.md#scrolled-accessibility-repair) record the reproduction and validation. Normal driver race tests and vet, plus targeted offscreen accessibility/native lifetime/grid/modal regressions, pass. The same original native scrolled cursor edit succeeds without a theme repaint. Consumer qualification for the new pin is recorded at that UI checkpoint; the historical integration results below do not by themselves qualify this new pin.
+
+## Previous pinned integration: 47b7153
+
 ELab now consumes Vellum's clean local revision `762dcbf79480da2ebc4381d9a3ec3f4b7bcb6b98`, with the existing ELab mouse-position compatibility patch carried into private source commit `47b7153109735006305e3610520e489a953fcd97`. The adjacent Vellum checkout is unchanged. The new dependency is pinned by archive, manifest, exact source/file inventory and verifier hashes; its alpha version alone does not identify it.
 
 Compared with the previous private SDK, the current framework adds intrinsic grid sizing, adaptive tile binning, exact-location glyph placement/coverage, owned accessibility snapshot copying and the key-event publication race repair. It also provides private Mac GPU overlay packaging. This ELab integration uses the standard private SDK and existing native module versions.

@@ -82,8 +82,16 @@ func nativeValueApplySmoke(ctx context.Context, a *app.Application, s *screen, i
 				if (got.message != "") != wantError {
 					return fmt.Errorf("mounted Apply error=%q; wantError=%t", got.message, wantError)
 				}
-				if wantError && !reflect.DeepEqual(before, s.service.Snapshot()) {
-					return fmt.Errorf("refused mounted Apply changed accepted state")
+				if wantError && !nativeValueRefusalPreservesState(before, s.service.Snapshot()) {
+					after := s.service.Snapshot()
+					left, right := reflect.ValueOf(before), reflect.ValueOf(after)
+					changed := []string{}
+					for i := range left.NumField() {
+						if !reflect.DeepEqual(left.Field(i).Interface(), right.Field(i).Interface()) {
+							changed = append(changed, left.Type().Field(i).Name)
+						}
+					}
+					return fmt.Errorf("refused mounted Apply changed accepted state: %v", changed)
 				}
 				_, err := s.service.Wait(ctx)
 				return err
@@ -97,4 +105,18 @@ func nativeValueApplySmoke(ctx context.Context, a *app.Application, s *screen, i
 			return ctx.Err()
 		}
 	}
+}
+
+// Showing the refusal message can resize the drawable canvas. That native
+// observation advances the two sequencing revisions without accepting a value.
+// Permit only those dimensions/revisions; retain every circuit, history, draft,
+// selection, simulation and view field in the comparison. With no resize, even
+// an unexplained sequencing change remains a failure.
+func nativeValueRefusalPreservesState(before, after workbench.Snapshot) bool {
+	if before.Viewport.Registered && after.Viewport.Registered &&
+		(before.Viewport.Width != after.Viewport.Width || before.Viewport.Height != after.Viewport.Height) {
+		before.Viewport.Width, before.Viewport.Height = after.Viewport.Width, after.Viewport.Height
+		before.CommandRevision, before.Revision = after.CommandRevision, after.Revision
+	}
+	return reflect.DeepEqual(before, after)
 }

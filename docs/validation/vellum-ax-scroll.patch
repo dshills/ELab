@@ -1,0 +1,235 @@
+commit bc6b456f0c71b0327d0c02629b109eabbbc8994c
+Author:     Davin Hills <dshills@gmail.com>
+AuthorDate: Sat Oct 17 14:33:30 2026 -0500
+Commit:     Davin Hills <dshills@gmail.com>
+CommitDate: Sat Oct 17 14:33:30 2026 -0500
+
+    Publish accessibility geometry after partial scroll paints
+
+diff --git a/drivers/cogent/accessibility.go b/drivers/cogent/accessibility.go
+index ad0bf4b..edfa8c5 100644
+--- a/drivers/cogent/accessibility.go
++++ b/drivers/cogent/accessibility.go
+@@ -1075,17 +1075,20 @@ func accessibilityFocusedID(root *record) string {
+ // layout/render pass. It never enters the application owner or reads models.
+ type accessibilityHost struct {
+ 	core.Frame
+-	window *nativeWindow
++	publishGeometry func()
++	painting        bool // Native render context only.
+ }
+ 
+ func newAccessibilityHost(w *nativeWindow) *core.Frame {
+ 	host := tree.New[accessibilityHost](w.body)
+-	host.window = w
++	host.publishGeometry = func() { publishAccessibilityGeometry(w) }
+ 	return &host.Frame
+ }
+ func (h *accessibilityHost) RenderWidget() {
+-	h.Frame.RenderWidget()
+-	publishAccessibilityGeometry(h.window)
++	renderAccessibilityFrame(&h.Frame, &h.painting)
++	if h.publishGeometry != nil {
++		h.publishGeometry()
++	}
+ }
+ func publishAccessibilityGeometry(w *nativeWindow) {
+ 	if w == nil || w.closing.Load() {
+@@ -1244,7 +1247,8 @@ func lookupAccessibility(window string) (*accessibilityBridge, error) {
+ // here handles resize and scroll independently of the main Scene's host.
+ type accessibilityDialogHost struct {
+ 	core.Frame
+-	record *record
++	record   *record
++	painting bool // Native render context only.
+ }
+ 
+ func newAccessibilityDialogHost(parent tree.Node, r *record) *accessibilityDialogHost {
+@@ -1253,7 +1257,10 @@ func newAccessibilityDialogHost(parent tree.Node, r *record) *accessibilityDialo
+ 	return host
+ }
+ func (h *accessibilityDialogHost) RenderWidget() {
+-	h.Frame.RenderWidget()
++	renderAccessibilityFrame(&h.Frame, &h.painting)
++	h.publishGeometry()
++}
++func (h *accessibilityDialogHost) publishGeometry() {
+ 	r := h.record
+ 	if r == nil || r.control == nil {
+ 		return
+diff --git a/drivers/cogent/accessibility_scroll.go b/drivers/cogent/accessibility_scroll.go
+new file mode 100644
+index 0000000..dc9be63
+--- /dev/null
++++ b/drivers/cogent/accessibility_scroll.go
+@@ -0,0 +1,48 @@
++package cogent
++
++import (
++	"cogentcore.org/core/core"
++	"cogentcore.org/core/tree"
++)
++
++// A scroll can repaint only its own subtree. The enclosing accessibility host
++// is then absent from the paint traversal, despite its children's moved bounds.
++type accessibilityScrollHost struct {
++	core.Frame
++	painting bool // Native render context only.
++}
++
++func newAccessibilityScrollHost(parent tree.Node) *core.Frame {
++	return &tree.New[accessibilityScrollHost](parent).Frame
++}
++
++func renderAccessibilityFrame(frame *core.Frame, painting *bool) {
++	*painting = true
++	defer func() { *painting = false }()
++	frame.RenderWidget()
++}
++
++func (h *accessibilityScrollHost) RenderWidget() {
++	renderAccessibilityFrame(&h.Frame, &h.painting)
++	// Publish after the complete partial subtree, once. Full main/modal paints
++	// and nested scroll paints let their enclosing host publish at completion.
++	// Resolve the parent dynamically so reparented modal content keeps its scope.
++	for parent := h.Parent; !tree.IsNil(parent); parent = parent.AsTree().Parent {
++		switch host := parent.AsTree().This.(type) {
++		case *accessibilityScrollHost:
++			if host.painting {
++				return
++			}
++		case *accessibilityHost:
++			if !host.painting && host.publishGeometry != nil {
++				host.publishGeometry()
++			}
++			return
++		case *accessibilityDialogHost:
++			if !host.painting {
++				host.publishGeometry()
++			}
++			return
++		}
++	}
++}
+diff --git a/drivers/cogent/accessibility_scroll_geometry_offscreen_test.go b/drivers/cogent/accessibility_scroll_geometry_offscreen_test.go
+new file mode 100644
+index 0000000..2d6c89b
+--- /dev/null
++++ b/drivers/cogent/accessibility_scroll_geometry_offscreen_test.go
+@@ -0,0 +1,103 @@
++//go:build offscreen
++
++package cogent
++
++import (
++	"fmt"
++	"reflect"
++	"testing"
++
++	"cogentcore.org/core/core"
++	"cogentcore.org/core/math32"
++	"github.com/dshills/vellum/ui"
++)
++
++func TestAccessibilityGeometryFollowsPartialScrollPaint(t *testing.T) {
++	for _, dpi := range []float32{96, 192} {
++		for _, nested := range []bool{false, true} {
++			t.Run(fmt.Sprintf("dpi-%g/nested-%t", dpi, nested), func(t *testing.T) {
++				testAccessibilityPartialScroll(t, dpi, nested)
++			})
++		}
++	}
++}
++
++func testAccessibilityPartialScroll(t *testing.T, dpi float32, nested bool) {
++	t.Helper()
++	config := manualConfig(t, 7)
++	config.LogicalDPI = dpi
++	views := 0
++	m, a := gridManual(t, config, func() ui.Node {
++		views++
++		rows := []ui.Node{}
++		for i := range 20 {
++			rows = append(rows, ui.Node{ID: fmt.Sprint("row-", i), Kind: ui.Label, Text: fmt.Sprint("Row ", i), Style: ui.Style{MinSize: ui.Some(ui.Size{Height: 40})}})
++		}
++		rows = append(rows, ui.Node{ID: "field", Kind: ui.TextField, Text: "Edit me"})
++		scroll := ui.Node{ID: "scroll", Kind: ui.Scroll, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 160})}, Children: rows}
++		if nested {
++			scroll = ui.Node{ID: "outer", Kind: ui.Scroll, Grow: true, Children: []ui.Node{scroll}}
++		}
++		return ui.Node{ID: "root", Kind: ui.Column, Grow: true, Children: []ui.Node{scroll}}
++	})
++	gridFrame(t, m)
++	w := m.implementation.find("one").state
++	var scroll *core.Frame
++	var published map[string][4]float32
++	publications := 0
++	if err := a.Do(func() {
++		w.host.This.(*accessibilityHost).publishGeometry = func() {
++			publications++
++			published = nativeAccessibilityBounds(w.root)
++		}
++		scroll = findRecord(w.root, "scroll").widget.(*core.Frame)
++		if !scroll.HasScroll[math32.Y] {
++			t.Fatal("fixture did not create a scroll viewport")
++		}
++		published = nativeAccessibilityBounds(w.root)
++	}); err != nil {
++		t.Fatal(err)
++	}
++	beforeViews := views
++	before := published[accessibilityManagedID("field")]
++	if err := a.Do(func() { scroll.ScrollDimToStart(math32.Y, 100000) }); err != nil {
++		t.Fatal(err)
++	}
++	gridFrame(t, m)
++	if err := a.Do(func() {
++		actual := nativeAccessibilityBounds(w.root)
++		field := actual[accessibilityManagedID("field")]
++		if field == before || field[2] <= 0 || field[3] <= 0 {
++			t.Fatal("fixture did not reveal the text field", before, field)
++		}
++		if publications != 1 || !reflect.DeepEqual(published, actual) || views != beforeViews {
++			t.Fatalf("child-only scroll left native geometry stale: publications=%d views=%d/%d field=%v published=%v", publications, views, beforeViews, field, published[accessibilityManagedID("field")])
++		}
++	}); err != nil {
++		t.Fatal(err)
++	}
++	if err := a.Do(func() {
++		publications = 0
++		w.host.NeedsRender()
++	}); err != nil {
++		t.Fatal(err)
++	}
++	gridFrame(t, m)
++	if err := a.Do(func() {
++		if publications != 1 || !reflect.DeepEqual(published, nativeAccessibilityBounds(w.root)) || views != beforeViews {
++			t.Fatal("ancestor repaint published intermediate/repeated geometry", publications)
++		}
++		publications = 0
++		scroll.ScrollDimToContentStart(math32.Y)
++	}); err != nil {
++		t.Fatal(err)
++	}
++	gridFrame(t, m)
++	if err := a.Do(func() {
++		if publications != 1 || published[accessibilityManagedID("field")] != before || views != beforeViews {
++			t.Fatal("scrolling back retained revealed field geometry", publications, published)
++		}
++	}); err != nil {
++		t.Fatal(err)
++	}
++}
+diff --git a/drivers/cogent/controls.go b/drivers/cogent/controls.go
+index 2b5fd6e..c692778 100644
+--- a/drivers/cogent/controls.go
++++ b/drivers/cogent/controls.go
+@@ -240,7 +240,7 @@ func mountControl(parent tree.Node, r *record, a *app.Application, window string
+ 		c.client = textClientID.Add(1)
+ 		widget = mountEditor(parent, r)
+ 	case ui.Scroll:
+-		w := core.NewFrame(parent)
++		w := newAccessibilityScrollHost(parent)
+ 		w.Styler(func(s *styles.Style) { s.Direction = styles.Column; s.Overflow.Set(styles.OverflowAuto) })
+ 		widget = w
+ 	case ui.Tabs:

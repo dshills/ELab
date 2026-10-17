@@ -50,7 +50,7 @@ Drag a selected part to move it with its wires. Pan drags the sheet; scroll zoom
 For a local double-clickable development bundle, after building:
 
 ```sh
-python3 -B build/.vellum-sdk-aa9d023/scripts/package-app.py --binary build/elab \
+python3 -B build/.vellum-sdk-bc6b456/scripts/package-app.py --binary build/elab \
   --output build/ELab-local.app --name ELab --identifier com.dshills.elab \
   --version 0.0.0 --build-version 1 --platform darwin
 ```

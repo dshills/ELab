@@ -1,0 +1,118 @@
+{
+  "scope": "Partial-scroll accessibility geometry repair; private alpha release gates remain open",
+  "source_base": "8fb2f86f7145ae798b357b1c150d2465fe7cad25",
+  "sdk": {
+    "old": {
+      "schema": 1,
+      "archive": "third_party/vellum/vellum-47b7153.tar.gz",
+      "archive_bytes": 18615050,
+      "sha256": "931d3a7217dc2f63618323fc523100fc6cee57000b49ad55df2bd4b91a3cbf68",
+      "manifest_sha256": "11956d50895dbfa3887131f83155032e066457bf582008dd5914f9970515ac89",
+      "prefix": "vellum-v0.1.0-alpha.2",
+      "cache": "build/.vellum-sdk-47b7153",
+      "source_commit": "47b7153109735006305e3610520e489a953fcd97",
+      "private_build": true,
+      "module": "github.com/dshills/vellum",
+      "version": "v0.1.0-alpha.2",
+      "files": 7446,
+      "bootstrap": {
+        "scripts/check-sdk.py": "b8062fbd4c57d1d8cb4d75a094184e1a5fa108cfa811fe9fb390f99f6d66be38",
+        "scripts/child_process.py": "04ba2610ddf112e936e8adcd9a81c03cff422843f993c2ce8a9e1acd96f39c9c",
+        "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+        "scripts/native_gpu.py": "803d981c00f32d08a370577b37094848b2c79085cf3303a99b23d2a94336ac2c",
+        "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541"
+      }
+    },
+    "new": {
+      "schema": 1,
+      "archive": "third_party/vellum/vellum-bc6b456.tar.gz",
+      "archive_bytes": 18617992,
+      "sha256": "f202a535b4cd931767e589e981c6e9265309ec262b48f28e9d5a57bbdf903fef",
+      "manifest_sha256": "b3cc6914bb0557a297a2b34b75c2a076883c78ac65725348b83508e14c50b9a2",
+      "prefix": "vellum-v0.1.0-alpha.2",
+      "cache": "build/.vellum-sdk-bc6b456",
+      "source_commit": "bc6b456f0c71b0327d0c02629b109eabbbc8994c",
+      "private_build": true,
+      "module": "github.com/dshills/vellum",
+      "version": "v0.1.0-alpha.2",
+      "files": 7448,
+      "bootstrap": {
+        "scripts/check-sdk.py": "b8062fbd4c57d1d8cb4d75a094184e1a5fa108cfa811fe9fb390f99f6d66be38",
+        "scripts/child_process.py": "04ba2610ddf112e936e8adcd9a81c03cff422843f993c2ce8a9e1acd96f39c9c",
+        "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+        "scripts/native_gpu.py": "803d981c00f32d08a370577b37094848b2c79085cf3303a99b23d2a94336ac2c",
+        "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541"
+      }
+    },
+    "changed_members": [
+      "drivers/cogent/accessibility.go",
+      "drivers/cogent/accessibility_scroll.go",
+      "drivers/cogent/accessibility_scroll_geometry_offscreen_test.go",
+      "drivers/cogent/controls.go"
+    ]
+  },
+  "framework_patch_sha256": "056bd1205412c45c899c3047536a99681133822f27d3b0f82f31eecfa7b99b03",
+  "framework_tests": {
+    "original_repro": "partial Scroll paint revealed field while last published bounds remained zero",
+    "targeted_offscreen_race": "passed, 12.267 s: direct/nested scrolling at 96/192 logical DPI, full ancestor repaint, scroll back; existing accessibility/native-lifetime/grid/modal checks",
+    "normal_driver_race": "passed, 18.952 s",
+    "normal_driver_vet": "passed"
+  },
+  "native_retest": {
+    "transport": "public client plus actual pointer/AX/keyboard in the private native harness",
+    "prototype_binary_sha256": "254431b86ccbc2b267f4b2fa50cc6bf23882893afea60ee5ab9bba0319d4dcf3",
+    "fixture": "rc-built-ui.elab",
+    "fixture_sha256": "6380351c8c51640b0221969b97259cf49161989f300d4eb1b9bdcf885759e338",
+    "cursor_a": {
+      "requested_s": 0.01,
+      "time_s": 0.01,
+      "valid": true
+    },
+    "paused_time_s": 0.02,
+    "stale": false,
+    "theme_repaint_required": false,
+    "initial_attempt": "10 ms at time zero had no retained history; valid 10 ms retest followed public 20 ms advance",
+    "owned_host_preserved_and_closed": true
+  },
+  "smoke_assertion": {
+    "initial_failure": "Refused value message changes drawable height; whole-snapshot assertion reported only Viewport, CommandRevision and Revision changes",
+    "repair": "Allow only canvas width/height and their sequencing revisions when actual registered canvas size changes; compare every other field including view, drawing, data, history, selection and results",
+    "regression": "Actual refused underflow plus native viewport command passes; real 20k resistor edit and unexplained revision-only change fail the invariant",
+    "production_source_sha256": "9893817efb140e4d01e5ec387a3c40980c051f0ec3619a5d184d2c3407014a40"
+  },
+  "consumer_validation": {
+    "complete_scripts_check": "passed on new SDK pin before smoke assertion refinement: lint/imports/Staticcheck, 38 Python tests, root/native race and vet; native 145.365 s",
+    "final_focused_race": "passed, 1.959 s: value refusal, value domains and native viewport regressions",
+    "final_lint_and_vet": "passed",
+    "final_packaged_native_smoke": "passed; real native render/command smoke exits 0 after value-domain and lifecycle checks",
+    "inventory": "Existing native source ledger unchanged; smoke helpers lie outside its source scope",
+    "final_native_binary_sha256": "7ae0fb5eafe3dc6098c52b5eddc340652eb577074fbb9402d92fca65fe44477b"
+  },
+  "logs_sha256": {
+    "first-version-ax-scroll-regressions.log": "ed6c2359f529280c7eb6ea0cb07bc117450d855a4c17a282867b9cf4ab167c96",
+    "first-version-ax-driver-race.log": "0253a7574dfdb6b6a0397f47772d7f2e3c16a1cd9d8467ea292233b8fec5cd2d",
+    "first-version-ax-driver-vet.log": "dba523366c26307ab2803229d82ad4a6fc79e1eb64e2fd1b691b59da5ef55b31",
+    "first-version-ax-pinned-check.log": "a28943f384ffd7bba723e705628b2ca86abab0256076f7d7905ead58a6732f59",
+    "first-version-refusal-diagnostic-smoke.log": "a131ce2e69dd6fb42dccd6657833d43f5a61af2131884b514d6b61743499cf99",
+    "first-version-refusal-regression.log": "09ba4a1f2843b305aa7b5ee75866bc77dd6be4e164e2d0342850bf5829bf3701",
+    "first-version-ax-final-lint.log": "34b1e6a23cb5d5f9f5f940009a19e351181b83f59a6c68cf45fac3f17ceafebd",
+    "first-version-ax-final-vet.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "first-version-refusal-final-smoke.log": "484b0ce2877c4523ece728f3646639b1390618281ba55519525c9619e8a72725"
+  },
+  "artifacts": {
+    "scrolled-cursor-fixed.ax.txt": "c142c0f1f32af28c818594c86f3f1dc21662ad0a1457a6bfb23a6856b01130ba",
+    "scrolled-cursor-fixed.jpg": "b554a32d049de26715180f155f0707a23658d1a700e85afd43ce9b1cc54581f8"
+  },
+  "canonical_app": {
+    "version": "0.105.0",
+    "build": "120",
+    "binary_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "promoted": false
+  },
+  "limitations": [
+    "Complete VoiceOver/IME and ordinary fast typing qualification remain open",
+    "Synthetic DPI is not OS display configuration qualification",
+    "Minimum window enforcement and release acceptance/packaging remain open",
+    "Final release-source full qualification remains package 4"
+  ]
+}
