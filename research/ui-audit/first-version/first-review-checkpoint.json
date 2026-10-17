@@ -1,0 +1,333 @@
+{
+  "scope": "First-version minimum-window and A-D reference acceptance; private owner-review build, full MVP remains open",
+  "source_base_commit": "2a9f51d0de3293cd70988fb293bc66d45fee181e",
+  "native_source_inventory_sha256": "e29aad4c0c640ff00624ee6e6bd6ca69f13d0d4518444492a7876cd91b579265",
+  "changed_source_sha256": {
+    "desktop/main.go": "0762cc87fd023afdb881a22d02f7d56655e77e954bf8acd82976dc9a10cf266e",
+    "desktop/native_chrome.go": "b85e2b7d3b6758052162cfdb47319351c6a33b18484760bf80692a530ccecd99",
+    "desktop/window_minimum.go": "f6c1590898646b8b570abac29c857162bf13b50d14f39809c8f7f92bee9d180e",
+    "desktop/window_minimum_darwin.go": "b7c9fe1d3bb1b7350f70dc4b1ba29708b8975ef0b507ba0595d730c4ddb607e8",
+    "desktop/window_minimum_other.go": "1acf27d143422fd66ad4e691aa191afd844510f24004de9aec1f3c8030ca0225",
+    "scripts/workflow-demo.py": "1340b443f79301a264d4a599bc9c8aea6157b8c54f9e24cd78c42817c6fd1808",
+    "scripts/first-version-parity.py": "936f8c79a1a1e7278c299973c7edc8f925f88b158cc474759005ba97e6723370"
+  },
+  "minimum_window": {
+    "requested_ui_dp": [
+      1040,
+      720
+    ],
+    "observed_frame_pixels": [
+      1053,
+      762
+    ],
+    "reproduction": "900x650 native resize clipped Fit and introduced root/tool horizontal scroll; original tool observation was not retained as a matching file",
+    "verified": "Two attempts to shrink further stop at the observed floor; Fit, header actions, dark/light flasher, CSV and native AX cursor entry remain reachable",
+    "first_attempt": "Screen initial-window DPI produced an oversized floor; corrected to mounted UI units. Intermediate 802-high captures are preserved privately; final floor is 762 high.",
+    "threading": "RunOnMainQueued waits for completion; a worker performs it, with atomic latest-request and main-queue native-window lifetime guards",
+    "scroll_style": "core.AsFrame handles embedded framework scroll hosts and retains their scrollbars"
+  },
+  "numerical_parity": {
+    "passed": true,
+    "cases": [
+      {
+        "task": "led",
+        "constructed_graph_matches_native_fixture": true,
+        "native_ui_numerical_reference_matches": true,
+        "native_endpoint_matches": true,
+        "fixture_sha256": "3fa7d62e283b88765cb8c9b07533254aa899516a8b72298d37121f61e916dd82",
+        "project_sha256": "96635fc0cd1ab4b13258373c4e5ed474dc3239dda4dfc37202cbce59324cc032"
+      },
+      {
+        "task": "rc",
+        "constructed_graph_matches_native_fixture": true,
+        "native_ui_numerical_reference_matches": true,
+        "native_endpoint_matches": true,
+        "fixture_sha256": "6380351c8c51640b0221969b97259cf49161989f300d4eb1b9bdcf885759e338",
+        "project_sha256": "4c86701997fb227c1f3f8e55b2e8ec613ca7a51d75b4061356cd51185203eadf"
+      },
+      {
+        "task": "flasher",
+        "constructed_graph_matches_native_fixture": true,
+        "native_ui_numerical_reference_matches": true,
+        "native_endpoint_matches": true,
+        "fixture_sha256": "b0dc7c61c9d757086937176d7cc8de1539e4cac82e8f95d5f9a00576cc62d4b8",
+        "project_sha256": "d62dba5123d42b3dbf76356a7c28411a46ab09678aad9aa72ec727889c9a7a95"
+      }
+    ],
+    "comparison": "Every component/wire field; every reported result field except run/electrical identities; numerical rel 1e-9 / abs 1e-12",
+    "limitations": [
+      "Native endpoint loading/observation does not replace the recorded physical UI construction walkthrough",
+      "File failure, crash recovery, cancellation and live interaction have separate acceptance checks"
+    ]
+  },
+  "scope_parity": {
+    "passed": true,
+    "all_scope_fields_match": true,
+    "comparison": "rel 1e-9 / abs 1e-12; independent run/electrical identities excluded",
+    "cursor_a": {
+      "requested_s": 15.45,
+      "time_s": 15.45,
+      "valid": true
+    },
+    "cursor_b": {
+      "requested_s": 15.935,
+      "time_s": 15.935,
+      "valid": true
+    },
+    "delta_s": 0.4850000000000012
+  },
+  "headless_acceptance": {
+    "led": {
+      "passed": true,
+      "current_1k_a": 0.0029167965774405296,
+      "current_2k_a": 0.001476723549138745,
+      "checks": [
+        "build from blank",
+        "terminal-derived nets",
+        "move/rotate/undo without solver restart",
+        "live edit",
+        "retry deduplication",
+        "incomplete/stale feedback",
+        "undo recovery",
+        "paused edit",
+        "resume",
+        "invalid input refusal",
+        "selection/view without solver restart"
+      ],
+      "report_sha256": "209478e36c6d6850df6614db8d5317d700187ff2b4ae8dd3594d4f1d23332569"
+    },
+    "rc": {
+      "passed": true,
+      "voltage_10ms_v": 3.1606027941427883,
+      "checks": [
+        "construction from blank",
+        "10 ms analytical charge reference",
+        "automatic pulse falling/rising edges",
+        "manual charge/discharge continuity",
+        "paused stepping",
+        "move/rotate preserves time and energy",
+        "invalid capacitance refusal",
+        "save/reopen RC configuration"
+      ],
+      "report_sha256": "2294021414254edb8f1a140014df9f68572e73f238029e3dc414e64112915346"
+    },
+    "mixed": {
+      "passed": true,
+      "period_10uf_s": 0.49000000000000044,
+      "period_20uf_s": 0.9800000000000009,
+      "checks": [
+        "construction from blank",
+        "DC-powered autonomous alternation",
+        "capacitance doubles physical period",
+        "KCL and power balance with BE damping",
+        "geometry preserves memory",
+        "power override preserves run",
+        "live resume",
+        "signed initial voltage / undo",
+        "save and fresh Auto initialization"
+      ],
+      "report_sha256": "1682527698046e8e9079f6b7c4bf713ef189141a55a49a4edf5c19867c8f201f"
+    },
+    "files-scope": {
+      "passed": true,
+      "interval_rows": 201,
+      "cursor_interval_s": 0.3999999999999999,
+      "checks": [
+        "component search",
+        "duplicate preserves value/rotation/startup without wires",
+        "named undo/redo",
+        "atomic edit commit/rollback and one undo",
+        "direct plot command path (native parity suite)",
+        "fixed scope interval",
+        "interval min/max/sample mean/RMS",
+        "probe selections reopen in v4 file",
+        "CSV interval units and run/engine identity",
+        "headless SVG using shared routes",
+        "exports preserve schematic and refuse unsafe destinations"
+      ],
+      "report_sha256": "2f99d03b344a6300ff2a268a9449575dc2af6f1b61d5cc32838783673c25a82f"
+    },
+    "recovery": {
+      "passed": true,
+      "crash_exit_code": -9,
+      "checks": [
+        "automatic checkpoint",
+        "live state and explicit file preserved",
+        "SIGKILL recovery",
+        "inactive crashed owner",
+        "validated inspect",
+        "dirty unassociated copy",
+        "Save As without original overwrite",
+        "hash-confirmed dismissal"
+      ],
+      "report_sha256": "d504c3c9277ae83f5d0487925acd560811f144e88c2ada6b555e14af7b5362b2"
+    }
+  },
+  "workflow_script_repair": "Wait for accepted simulation readiness after project.load; an immediate transient read raced the asynchronous solver. Corrected obsolete v3 wording to v4.",
+  "validation": {
+    "embedded_scroll_viewport_race": "passed, 1.698 s before asynchronous/window-height refinement; final source covered by full gate",
+    "final_scripts_check": "passed: lint/imports/Staticcheck, 38 Python tests, root/native race and vet; native 143.188 s",
+    "inventory": "62 sources, 388 sites, 162 public IDs, 132 routed IDs; every site mapping unchanged excluding locations",
+    "initial_gate_failure": "Equivalent parsed ledger had been reserialized with Python; restored the reviewed Go writer bytes and final full gate passed",
+    "runtime_stages": [
+      {
+        "name": "native-smoke",
+        "command": [
+          "/private/tmp/elab-first-version-140-runtime/native",
+          "--smoke",
+          "--smoke-timeout",
+          "2m"
+        ],
+        "status": "completed",
+        "exit_code": 0,
+        "elapsed_seconds": 40.049196459003724
+      },
+      {
+        "name": "public-suites",
+        "command": [
+          "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+          "--agent-binary",
+          "/private/tmp/elab-first-version-140-runtime/agent",
+          "--native-binary",
+          "/private/tmp/elab-first-version-140-runtime/native",
+          "--project-contract-suite",
+          "--electrical-suite",
+          "--inductor-suite",
+          "--opamp-suite",
+          "--opamp-storage-suite",
+          "--capacity-suite",
+          "--artifacts",
+          "/private/tmp/elab-first-version-140-runtime/public"
+        ],
+        "status": "completed",
+        "exit_code": 0,
+        "elapsed_seconds": 50.00551245803945
+      }
+    ],
+    "runtime_controls": {
+      "allowed_read": true,
+      "files": {
+        "repository": {
+          "denied": true,
+          "errno": 1
+        },
+        "sdk": {
+          "denied": true,
+          "errno": 1
+        },
+        "sibling_vellum": {
+          "denied": true,
+          "errno": 1
+        },
+        "go_toolchain": {
+          "denied": true,
+          "errno": 1
+        },
+        "go_build_cache": {
+          "denied": true,
+          "errno": 1
+        },
+        "project_go_cache": {
+          "denied": true,
+          "errno": 1
+        },
+        "go_module_cache": {
+          "denied": true,
+          "errno": 1
+        },
+        "developer_sdk": {
+          "denied": true,
+          "errno": 1
+        }
+      },
+      "network": {
+        "ipv4_tcp": {
+          "denied": true,
+          "errno": 1
+        },
+        "ipv4_udp": {
+          "denied": true,
+          "errno": 1
+        },
+        "ipv6_tcp": {
+          "denied": true,
+          "errno": 1
+        },
+        "ipv6_udp": {
+          "denied": true,
+          "errno": 1
+        }
+      }
+    },
+    "public_adapters": [
+      {
+        "name": "in-process",
+        "equivalent_to_in_process": true,
+        "workflows": [
+          "led",
+          "rc",
+          "npn"
+        ]
+      },
+      {
+        "name": "headless-stdio",
+        "equivalent_to_in_process": true,
+        "workflows": [
+          "led",
+          "rc",
+          "npn"
+        ]
+      },
+      {
+        "name": "headless-socket",
+        "equivalent_to_in_process": true,
+        "workflows": [
+          "led",
+          "rc",
+          "npn"
+        ]
+      },
+      {
+        "name": "native-socket",
+        "equivalent_to_in_process": true,
+        "workflows": [
+          "led",
+          "rc",
+          "npn"
+        ]
+      }
+    ]
+  },
+  "review_build": {
+    "version": "0.123.0",
+    "build": "140",
+    "path": "build/ELab-0.123.0-140-review/ELab.app",
+    "native_binary_sha256": "53f075c7835b88df95b96154b25b8cd34f73db08844da126f11cc1637ed62a6b",
+    "agent_sha256": "2e869dc31dc96be1962ac4cab2d678472cc6c9564619fab2fb5aa9b6adc835cc",
+    "app_manifest_sha256": "83005c28cff0e3c8c29cfe32e9f1374c3aa9ba5a77ecd8278992b3f9b5882d07",
+    "canonical_promoted": false
+  },
+  "runtime_evidence": {
+    "receipt": "docs/validation/first-version-review-runtime.json",
+    "receipt_sha256": "b78bcbd026b8a92887a7e57253a590977d9e4cacbac89fea651633b554cdfa58",
+    "public_gzip": "docs/validation/first-version-review-public.json.gz",
+    "gzip_bytes": 1658084,
+    "gzip_sha256": "7e318f9a10e42c6ed98ffabcb25d2b80ebb03abd50037e375968e7ac54f39d33",
+    "uncompressed_report_sha256": "650da67148d720c39651b38862abf059a8c44b1b4061f77cc7be59d01c337feb"
+  },
+  "artifacts": {
+    "minimum-flasher-light.jpg": "4e6c8cde52be3260511fd05ffb5addbeec1f7f65ec375068caa65f57cb959b84",
+    "minimum-flasher-dark.jpg": "f7e61b2734f0f7be9f20eb26106667d8728341ddbe5c8c359355ad733e2fbe7a",
+    "minimum-cursors-dark.jpg": "1ca9386444693ad47409149da066520f8fe94d534953c3582bc820baac0f42b6",
+    "minimum-cursors.ax.txt": "35c559200f53745942f1d9580395705defde66d3e0a7a69f8f368c9f4b944295",
+    "flasher-observed-reference.json": "f5e327fb2db32d7e17ec50342dc1550b5a2506053d77af90b15c0d31f01fd720"
+  },
+  "owned_hosts_closed": true,
+  "remaining": [
+    "Owner walkthrough and feedback",
+    "Visible p95 latency/difficult-solve qualification",
+    "OS display modes/other hardware, complete VoiceOver/IME, clean-account installation",
+    "Physical printing, public distribution and ten-person study",
+    "Canonical app promotion only after its required gates"
+  ]
+}

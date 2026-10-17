@@ -74,7 +74,8 @@ def main():
             doc = json.loads(doc_path.read_text())
             assert doc['version'] == 4 and doc['scope_probes']['ids'] == ids
             fresh = helper.Client()
-            reopened = fresh.ask('project.load', {'path': str(doc_path)}, True)
+            fresh.ask('project.load', {'path': str(doc_path)}, True)
+            reopened = fresh.ask('simulation.wait')
             assert reopened['scope']['selected'] == ids and reopened['transient']['sample']['time_s'] == 0
             assert reopened['scope']['window']['mode'] == 'live' and 'a' not in reopened['scope']
             csv_state = client.ask('export.scope.csv', {'path': str(csv_path), 'overwrite': True}, True)
@@ -98,7 +99,7 @@ def main():
                       'checks': ['component search', 'duplicate preserves value/rotation/startup without wires',
                                  'named undo/redo', 'atomic edit commit/rollback and one undo',
                                  'direct plot command path (native parity suite)', 'fixed scope interval',
-                                 'interval min/max/sample mean/RMS', 'probe selections reopen in v3 file',
+                                 'interval min/max/sample mean/RMS', 'probe selections reopen in v4 file',
                                  'CSV interval units and run/engine identity', 'headless SVG using shared routes',
                                  'exports preserve schematic and refuse unsafe destinations']}
             if args.artifacts:

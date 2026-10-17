@@ -4,6 +4,8 @@ ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N
 
 The [first-version delivery plan](research/34-first-version-plan.md) defines the current release target: a usable macOS hobbyist alpha, with frozen scope, ordered blockers and a concrete packaged-app handoff.
 
+**Owner review:** [ELab 0.123.0 /140](build/ELab-0.123.0-140-review/ELab.app) is packaged with a matching agent and examples. Start with the [15–20 minute walkthrough and known limits](research/35-first-version-review.md). Source/native/isolated-runtime checks pass; full MVP acceptance and canonical promotion remain open.
+
 Choose **Examples → Split-rail DC supply** to explore [stacked DC sources and signed rail voltages](docs/floating-dc-sources.md). Two 3 V sources produce +3 V and −3 V around their midpoint reference. [Linear source/passive networks](docs/linear-network-solves.md) also solve 24 V stacks without artificial small-step nonconvergence, within the existing ±30 V node limit. [Nonlinear startup](docs/nonlinear-startup.md) also supports 24/30 V generic LED loads through a bounded grounded-constraint retry and rejects undefined floating MOSFET gates at zero supply.
 
 Choose **Examples → MOSFET LED switch** for pulse-driven NMOS/LED simulation, gate/drain/source probes and an external gate-RC experiment. See [MOSFET behavior and model](docs/nmos.md). **Examples → High-side MOSFET LED** adds the complementary [PMOS workflow](docs/pmos.md). **Examples → CMOS inverter** combines both devices with input/output and signed drain-current plots; see [the guided inverter](docs/cmos-inverter.md). [Mixed-device state captions](docs/mixed-device-regions.md) identify the NPN or MOSFET providing the accepted trace state.

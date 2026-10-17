@@ -1,0 +1,138 @@
+{
+  "scope": "Retained direct native UI observation from the flasher walkthrough, before the paused capacitor edit; extracted without recomputing",
+  "source_observation_sha256": "35e6676da58c0679f79859baffd8d912f591cdec8731257c573bca364625d96e",
+  "schematic_sha256": "b0dc7c61c9d757086937176d7cc8de1539e4cac82e8f95d5f9a00576cc62d4b8",
+  "transient": {
+    "sample": {
+      "capacitor_voltage_v": 0.49000315847114406,
+      "base_current_a": 9.74857258531117e-05,
+      "vbe_v": 0.6841131640159784,
+      "state": "saturation",
+      "time_s": 16.575000000000987,
+      "input_v": 5,
+      "voltage_v": 0.0989845740555098,
+      "current_a": 0.0028196611884841218,
+      "energy_j": 1.2005154765584855e-06
+    }
+  },
+  "mixed": {
+    "engine": "elab.mixed-mna-sdirk2.v1",
+    "run_id": 2,
+    "electrical_revision": 2,
+    "time_s": 16.575000000000987,
+    "nodes_v": {
+      "net:C1.1": 0.0989845740555098,
+      "net:C1.2": -0.39101858441563425,
+      "net:C2.1": 3.237107958941189,
+      "net:C2.2": 0.6841131640159784,
+      "net:D1.anode": 2.1803388115158917,
+      "net:D2.anode": 4.994341653629553,
+      "net:GND1.reference": 0,
+      "net:RB1.1": 5
+    },
+    "transistors": [
+      {
+        "transistor_id": "Q1",
+        "model": {
+          "id": "elab.generic-npn.v1",
+          "saturation_current_a": 1e-14,
+          "forward_beta": 100,
+          "reverse_beta": 1,
+          "temperature_c": 27,
+          "limitations": "Educational Ebers\u2013Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+        },
+        "base_current_a": 9.74857258531117e-05,
+        "collector_current_a": 0.0029343637115600845,
+        "emitter_current_a": 0.003031849437413196,
+        "vbe_v": 0.6841131640159784,
+        "vce_v": 0.0989845740555098,
+        "power_w": 0.00035714801047248627,
+        "state": "saturation"
+      },
+      {
+        "transistor_id": "Q2",
+        "model": {
+          "id": "elab.generic-npn.v1",
+          "saturation_current_a": 1e-14,
+          "forward_beta": 100,
+          "reverse_beta": 1,
+          "temperature_c": 27,
+          "limitations": "Educational Ebers\u2013Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+        },
+        "base_current_a": -1.009999997280684e-14,
+        "collector_current_a": 1.0000002719315914e-14,
+        "emitter_current_a": -9.999725349092698e-17,
+        "vbe_v": -0.39101858441563425,
+        "vce_v": 3.237107958941189,
+        "power_w": 3.6320376084095954e-14,
+        "state": "cutoff"
+      }
+    ],
+    "capacitors": [
+      {
+        "id": "C1",
+        "voltage_v": 0.49000315847114406,
+        "current_a": -0.0001147025230827727,
+        "energy_j": 1.2005154765584855e-06
+      },
+      {
+        "id": "C2",
+        "voltage_v": 2.5529947949252105,
+        "current_a": 5.658346360446025e-06,
+        "energy_j": 3.258891211457609e-05
+      }
+    ],
+    "leds": [
+      {
+        "id": "D1",
+        "current_a": 0.0028196611884841218,
+        "voltage_v": 2.0813542374603817,
+        "power_w": 0.005868713762854003
+      },
+      {
+        "id": "D2",
+        "current_a": 5.658346371216637e-06,
+        "voltage_v": 1.7572336946883635,
+        "power_w": 9.943036899719504e-06
+      }
+    ],
+    "resistors": [
+      {
+        "id": "RL1",
+        "current_a": 0.0028196611884841083,
+        "voltage_v": 2.8196611884841083,
+        "power_w": 0.007950489217843614
+      },
+      {
+        "id": "RL2",
+        "current_a": 5.658346370447376e-06,
+        "voltage_v": 0.005658346370447376,
+        "power_w": 3.201688364795499e-08
+      },
+      {
+        "id": "RB1",
+        "current_a": 9.182737948902174e-05,
+        "voltage_v": 4.3158868359840215,
+        "power_w": 0.00039631657831957806
+      },
+      {
+        "id": "RB2",
+        "current_a": 0.00011470252307267307,
+        "voltage_v": 5.391018584415634,
+        "power_w": 0.0006183634335641436
+      }
+    ],
+    "sources": [
+      {
+        "id": "V1",
+        "current_a": 0.0030318494374162504,
+        "voltage_v": 5,
+        "power_w": 0.015159247187081252
+      }
+    ],
+    "kcl_residual_a": 6.8099932218912264e-15,
+    "power_residual_w": -3.1949472906710186e-15,
+    "numerical_damping_w": 0,
+    "stale": false
+  }
+}

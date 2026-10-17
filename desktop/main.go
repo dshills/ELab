@@ -97,7 +97,7 @@ func runNative() (runErr error) {
 	scopeView := canvas.Viewport{Width: 800, Height: 120, Zoom: 1}
 	screen.scope = &scopeCanvas{MeshCanvas: &cogent.MeshCanvas{Owner: a, Window: "main", View: &scopeView, Prepare: screen.scopeMesh, OnError: func(err error) { log.Print("scope: ", err) }}, screen: screen}
 	screen.registerCommands()
-	width, height := float32(1040), float32(760)
+	width, height := float32(minimumWindowWidthDP), float32(initialWindowHeightDP)
 	if *smoke {
 		// The full pixel-inspection fixture includes two distant reading cards.
 		// Compact-window layout is inspected separately in the UI audit.

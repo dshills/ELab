@@ -1,6 +1,6 @@
 # Native control and command inventory
 
-The [source ledger](13-native-command-inventory.json) records **59 production native Go files, 388 source sites and 162 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 132 public commands. The remaining 30 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
+The [source ledger](13-native-command-inventory.json) records **62 production native Go files, 388 source sites and 162 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 132 public commands. The remaining 30 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
 
 **146 sites require binding review.** The other categories are 216 literal routes, nine declared native-wrapper/menu sites and 17 registry declarations. These are syntax sites, including overlapping factories and callbacks; they are not 388 unique visible controls or 132 runtime-qualified capabilities. No literal route names an unknown command.
 
@@ -160,3 +160,5 @@ The source-sampling-floor checkpoint reviews `desktop/waveforms.go` for conditio
 The recovery-ownership checkpoint reviews `desktop/recovery.go` and `desktop/view.go` for unknown-owner wording, conservative dismissal availability and a recoverable-copy notice. Literal routes, aliases and site semantics excluding line positions remain unchanged: **57 production files /388 sites /162 public IDs /132 source routes**. Native descriptor/callback checks remain distinct from full physical input/accessibility.
 
 The storage-independent disable checkpoint reviews `desktop/view.go` for off/last-error status and `desktop/project_work.go` for neutral retained-state wording on settings-only completion. Generated literal routes, aliases and site semantics excluding source positions remain unchanged: **57 files /388 sites /162 IDs /132 source routes**. The actual toggle callback and on-demand agent semantics are separately tested; physical input/accessibility remain open.
+
+The minimum-window repair adds three platform/constant helpers and refreshes main.go/native_chrome.go. Every source-site mapping is unchanged apart from locations, with the same public/alias/coverage sets. Window limits and embedded Frame styling are presentation adapters; they introduce no circuit command. Native resize/theme/cursor evidence is in the first-version walkthrough.

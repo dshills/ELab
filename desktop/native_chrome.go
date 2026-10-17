@@ -15,6 +15,7 @@ func (s *screen) styleNativeChrome(scene *core.Scene) bool {
 	if scene == nil {
 		return false
 	}
+	applyNativeWindowMinimum(scene)
 	changed := false
 	install := func(w *core.WidgetBase, style func(*styles.Style)) {
 		if marker, _ := w.Property("elab.chrome.styled").(bool); marker {
@@ -25,7 +26,7 @@ func (s *screen) styleNativeChrome(scene *core.Scene) bool {
 		changed = true
 	}
 	scene.WidgetWalkDown(func(widget core.Widget, w *core.WidgetBase) bool {
-		if frame, ok := widget.(*core.Frame); ok {
+		if frame := core.AsFrame(widget); frame != nil {
 			install(w, func(style *styles.Style) { style.ScrollbarWidth = units.Dp(8) })
 			for _, scrollbar := range frame.Scrolls {
 				if scrollbar == nil {

@@ -1,0 +1,44 @@
+# ELab first-version review · 0.123.0 /140
+
+This is the first owner-review alpha. Open [ELab.app](../build/ELab-0.123.0-140-review/ELab.app) in the [review folder](../build/ELab-0.123.0-140-review). The folder includes the matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required to use the app. The previous canonical app is preserved.
+
+The reference workflows and source quality gate pass. The copied app and agent also pass native smoke and four-adapter public conformance with repository/SDK/toolchain/cache reads and outbound IP denied on the recorded Mac. This does not declare the full PRD MVP complete.
+
+## Try these four tasks · 15–20 minutes
+
+1. **Build an LED loop.** Start on the blank sheet. Place a DC source, resistor, red LED and ground. Use 5 V and 1 kΩ. Wire source positive → resistor → LED anode, LED cathode → ground, ground → source negative. Expect about **2.917 mA** with the generic model. Change the resistor to `2k`: about **1.477 mA**. Undo/redo, delete a wire and reconnect it. An incomplete drawing must not present old readings as current.
+2. **Watch an RC circuit.** Choose Examples → Load RC example, then Resume. Pause, Restart and Step ten samples: capacitor voltage should be about **3.161 V at 10 ms**. Try Charge/Discharge, change a value, and inspect the paused/stale indicator. Scope controls scroll independently below the plot; drag the divider to give either area more room.
+3. **Measure the flasher.** Choose the capacitor-timed flasher from Examples. Resume and watch both LEDs. Pause after several cycles; place A/B cursors at visible waveform transitions and read Δt. Select a collector voltage or LED current probe. Change the capacitor pair from 10 µF to 20 µF and restart/resume: timing should slow. Fit provides an overview; zoom in to inspect a dense drawing.
+4. **Keep and share it.** Save As into your own project folder, close/reopen it, and export SVG or PDF plus scope CSV. Try Cancel on an unsaved-change prompt. Open Print preview; physical-printer qualification remains pending. The included Examples files are copies for exploration; Save As keeps their starting versions available.
+
+Note the task, action and visible result when something fails. A screenshot and the saved `.elab` file are useful. Mark anything that felt confusing even if it eventually worked.
+
+## External agents
+
+From the review folder, `./elab-agent` accepts one JSON request per line and replies on stdout. Start with:
+
+```json
+{"version":1,"id":"catalog","command":"capabilities.list","params":{}}
+{"version":1,"id":"place-help","command":"capabilities.list","params":{"command":"component.place"}}
+{"version":1,"id":"state","command":"project.inspect","params":{}}
+```
+
+Commands use the same validated state as the UI. Mutations require a unique retry `key` and the current `expected_command_revision` (or the documented revision guard); use `project.inspect` to read current state and document identity. `simulation.wait` waits for accepted results after operations such as loading a project. Command discovery describes input schemas and errors.
+
+To control the visible app, close the current review window, then launch a new instance from the review folder with a fresh private endpoint:
+
+```sh
+ELAB_REVIEW_SESSION=$(mktemp -d "${TMPDIR:-/tmp}/elab-review.XXXXXX")
+./ELab.app/Contents/MacOS/ELab --agent-endpoint "$ELAB_REVIEW_SESSION/endpoint.json"
+```
+
+In another terminal, run `./elab-agent --connect /absolute/path/to/endpoint.json`. Use the endpoint path from the first terminal. Do not start a separate headless agent when the intent is to edit the open window.
+
+## Review boundary and known limits
+
+- Tested on this Apple Silicon Mac with macOS 26.6.2. The enforced minimum is 1040×720 in the mounted UI's units; the observed native frame is **1053×762 pixels**. App windows at 1280×800 and 1440×900 were inspected earlier. OS display modes, other hardware and monitor transitions remain unqualified.
+- Educational generic device models have the limits shown in the app. This is not general SPICE compatibility or PCB layout software.
+- Complete VoiceOver, IME/fast typing, visible p95 latency under difficult solves, clean-account installation and the ten-person study remain open. Physical printing has not been qualified.
+- This is a private unsigned build; notarization and public distribution/native-rights qualification remain open. The versioned review folder is separate from `build/ELab.app` at 0.105.0 /120.
+
+The [delivery plan](34-first-version-plan.md) and [native walkthrough/agent evidence](ui-audit/first-version/README.md) track remaining acceptance work. This handoff begins owner feedback; it does not reopen feature scope.
