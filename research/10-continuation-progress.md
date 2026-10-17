@@ -6,6 +6,8 @@
 
 **Release package 1, October 17:** Reproduced and repaired the legacy LED loader clearing results without starting a fresh run when its template was unchanged. All 18 catalog reloads and seven legacy loaders now pass the focused regression. Updated the public demo and guide to the actual 18-template catalog, including both op-amp examples. Full lint/Python/root-native race/vet and fresh headless/native public demos pass. [Concise evidence](../docs/validation/first-version-examples/README.md). No new features, command IDs, file/model changes or canonical app promotion. Package 2's real UI pass is next; full PRD audit status is unchanged.
 
+**Release package 2, first UI pass:** [Actual UI evidence and one issue list](ui-audit/first-version/README.md) now cover blank-sheet LED/RC construction, live edit/history, disconnected-wire recovery, native save/open, 10 ms RC stepping/cursors, themes and compact windows. Fixed unset cursor fields incorrectly displaying `0 s`; focused native race/lint/vet and actual zero-entry/clear recheck pass. Compact Fit readability is the next alpha blocker; filename suggestions, rapid input and accessibility geometry need investigation. Package 2 and the full release gates remain open. Both owned test apps exited normally; canonical/preserved apps and pinned SDK are unchanged.
+
 ## Quality checkpoint and review
 
 The previously uncommitted implementation/research was checkpointed locally on `codex/mvp-continuation` (`8ef5cf4`). No changes were pushed. Subsequent green slices receive separate local commits so their scope is reviewable and reversible.

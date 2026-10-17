@@ -1,0 +1,134 @@
+{
+  "recordings": {
+    "entries": [],
+    "selected_index": -1,
+    "viewing": false
+  },
+  "paused": true,
+  "scope_probes": {
+    "ids": [
+      "v:C1.1",
+      "v:V2.positive"
+    ]
+  },
+  "format": "elab.schematic",
+  "version": 4,
+  "graph": {
+    "components": [
+      {
+        "id": "C1",
+        "kind": "capacitor",
+        "name": "Capacitor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 130,
+          "y": 30
+        },
+        "value": 0.000001,
+        "unit": "F",
+        "model": "ideal-capacitor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R2",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 70,
+          "y": -30
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "V2",
+        "kind": "pulse-source",
+        "name": "Pulse source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -140,
+          "y": -20
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-square.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND2",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": -130,
+          "y": 160
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W6",
+        "from": "V2.positive",
+        "to": "R2.1",
+        "connected": true
+      },
+      {
+        "id": "W7",
+        "from": "R2.2",
+        "to": "C1.1",
+        "connected": true
+      },
+      {
+        "id": "W8",
+        "from": "C1.2",
+        "to": "GND2.reference",
+        "connected": true
+      },
+      {
+        "id": "W9",
+        "from": "GND2.reference",
+        "to": "V2.negative",
+        "connected": true
+      }
+    ]
+  },
+  "view": {
+    "center": {
+      "x": -109.5,
+      "y": 27.5
+    },
+    "zoom": 0.4383838383838384
+  },
+  "led_model": {
+    "id": "elab.generic-red-led.v1",
+    "is_a": 1e-20,
+    "n": 2,
+    "rs_ohm": 1,
+    "temperature_c": 27,
+    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+  },
+  "transient_settings": {
+    "step_s": 0.001,
+    "high_s": 0.05,
+    "low_s": 0.05,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.02
+  }
+}

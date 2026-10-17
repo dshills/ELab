@@ -1,0 +1,120 @@
+Window: "ELab · Live electronics", App: ELab-first-version-ui.
+0 standard window ELab · Live electronics, Secondary Actions: Raise
+	1 container node:cm9vdA
+		2 row node:aGVhZGVy
+			3 text (settable) ELab, ID: node:dGl0bGU
+			4 toolbar node:dG9vbGJhcg
+				5 button File, Help: Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:ZmlsZS1tZW51
+				6 button Save, ID: node:ZmlsZS5zYXZl
+				7 button Examples, Help: Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:ZXhhbXBsZXMtbWVudQ
+				8 button Undo, Help: Change value · by user, ID: node:ZWRpdC51bmRv
+				9 button (disabled) Redo, ID: node:ZWRpdC5yZWRv
+				10 button Appearance theme, Help: Current choice: Dark ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:dGhlbWUtbWVudQ
+			11 text (settable) Ⅱ Paused, ID: node:c3RhdHVz
+			12 button Resume, ID: node:c2ltdWxhdGlvbi5yZXN1bWU
+		13 split group Schematic and scope divider, ID: node:d29ya3NwYWNlLXNwbGl0, Help: Drag to resize; Up/Down adjusts the schematic share, Home/End selects its limits. Scope controls scroll when space is limited.
+			14 row node:d29ya3NwYWNl
+				15 scroll area node:cGFydHMtc2Nyb2xs
+					16 container node:cGFsZXR0ZQ
+						17 text (settable) COMPONENTS, ID: node:cGFydHMtdGl0bGU
+						18 text field (settable) Search components, Help: Type a name or hobbyist alias. Return focuses the matching component list., Value: ground, ID: node:cGFydC1zZWFyY2g
+						19 list (settable) Matching components, ID: node:cGFydC1saXN0, Help: Use Up/Down, Home/End, page keys or an initial letter to choose a part. Return or Space chooses the focused row. Tab moves to exact placement.
+							20 row (settable, boolean) Ground, Value: off, ID: option:cGFydC1saXN0:Z3JvdW5k
+						21 text (settable) 1 match · Return chooses · Tab to position, ID: node:cGxhY2VtZW50LWhlbHA
+						22 button Connect by name, ID: node:d2lyZS1ieS1uYW1l
+						23 button Print preview, ID: node:cHJpbnQtcHJldmlldw
+						24 button Export schematic SVG, ID: node:ZXhwb3J0LXN2Zw
+						25 button Export printable schematic PDF, ID: node:ZXhwb3J0LXBkZg
+						26 button Export schematic image PNG, ID: node:ZXhwb3J0LXBuZw
+						27 text (settable) YOUR FIRST CIRCUIT, ID: node:Z2V0dGluZy1zdGFydGVkLXRpdGxl
+						28 text (settable) 1  Place parts and ground, ID: node:c3RlcC1wbGFjZQ
+						29 text (settable) 2  Wire the terminal dots, ID: node:c3RlcC13aXJl
+						30 text (settable) 3  Watch the live measurements, ID: node:c3RlcC1vYnNlcnZl
+						31 text (settable) Undo: Change value, ID: node:dW5kby1uYW1l
+						32 text (settable) Redo: , ID: node:cmVkby1uYW1l
+						33 text (settable) SHORTCUTS, ID: node:c2hvcnRjdXRzLXRpdGxl
+						34 text (settable) ⌘ Z · Undo, ID: node:c2hvcnRjdXQtdW5kbw
+						35 text (settable) Delete · Remove selection, ID: node:c2hvcnRjdXQtZGVsZXRl
+				36 container node:c2NoZW1hdGljLXBhbmVs
+					37 toolbar node:dG9vbHM
+						38 button Select, ID: node:dG9vbC1zZWxlY3Q
+						39 button Wire, ID: node:dG9vbC13aXJl
+						40 button Pan, ID: node:dG9vbC1wYW4
+						41 button Esc, ID: node:ZHJhd2luZy5jYW5jZWw
+						42 row node:dG9vbC1zcGFjZXI
+						43 button DC sweep, ID: node:c3dlZXAtb3Blbg
+						44 button Fit, ID: node:dmlldy5maXQ, Help: Fit the complete schematic and follow workspace resizing. Pan, zoom or center an object to return to manual positioning.
+						45 text (settable) 32%, ID: node:em9vbQ
+					46 text (settable) Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom, ID: node:c2NoZW1hdGljLWhlbHA
+					47 text (settable) Ready to experiment. Values update the simulation automatically., ID: node:bWVzc2FnZXM
+				48 scroll area node:c2lkZWJhcg
+					49 container node:c2lkZWJhci1jb250ZW50
+						50 row node:c2VsZWN0aW9uLW5hdmlnYXRpb24
+							51 button Previous schematic object, ID: node:c2VsZWN0aW9uLXByZXZpb3Vz
+							52 button Next schematic object, ID: node:c2VsZWN0aW9uLW5leHQ
+							53 button Center selection, ID: node:c2VsZWN0aW9uLWNlbnRlcg
+						54 row node:cHJlc2V0cw
+							55 button 1 kΩ, ID: node:ci0xaw
+							56 button 2 kΩ, ID: node:ci0yaw
+						57 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlIyLjE
+							58 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlIyLjE
+							59 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6UjIuMQ
+						60 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlIyLjI
+							61 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlIyLjI
+							62 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6UjIuMg
+						63 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlIy
+							64 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlIy
+							65 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6UjI
+						66 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlIy
+							67 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlIy
+							68 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6UjI
+			69 splitter (settable, float) Schematic and scope divider, Value: 0.65, ID: split:d29ya3NwYWNlLXNwbGl0, Help: Drag to resize; Up/Down adjusts the schematic share, Home/End selects its limits. Scope controls scroll when space is limited.
+			70 scroll area node:c2NvcGUtc2Nyb2xs
+				71 container node:c2NvcGUtcGFuZWw
+					72 toolbar node:c2NvcGUtdG9vbGJhcg
+						73 button Hide scope, Help: Expand or collapse the dock without changing simulation or recorded measurements, ID: node:c2NvcGUtdmlzaWJpbGl0eQ
+						74 text (settable) LIVE RC SCOPE, ID: node:c2NvcGUtdGl0bGU
+						75 text (settable) t = 0.01 s · τ = 10 ms · run 25 · paused, ID: node:c2NvcGUtY2FwdGlvbg
+						76 button Auto, ID: node:aW5wdXQtYXV0bw
+						77 button Charge, ID: node:aW5wdXQtY2hhcmdl
+						78 button Discharge, ID: node:aW5wdXQtZGlzY2hhcmdl
+						79 button Step +1 sample, ID: node:dHJhbnNpZW50LXN0ZXA
+						80 button Restart, ID: node:c2ltdWxhdGlvbi5yZXN0YXJ0
+					81 toolbar node:c2NvcGUtdHJhY2Utcm93
+						82 button Inspect trace source, ID: node:c2NvcGUtdHJhY2UtZm9jdXM, Help: Current choice: Inspect trace… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+						83 text (settable) Teal: C1.1 / ground · Amber: V2.positive / ground, ID: node:c2NvcGUtbGVnZW5k
+					84 text (settable) Step completed · 1/1 staged samples, ID: node:c3RlcC13b3JrLXN0YXR1cw
+					85 toolbar node:c2NvcGUtY3Vyc29ycw
+						86 button A, ID: node:Y3Vyc29yLXNlbGVjdC1h
+						87 text field (settable) Cursor A time, Help: Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds., Value: 0 s, ID: node:Y3Vyc29yLXRpbWUtYQ
+						88 button ×, ID: node:Y3Vyc29yLWNsZWFyLWE
+						89 button B, ID: node:Y3Vyc29yLXNlbGVjdC1i
+						90 text field (settable) Cursor B time, Help: Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds., Value: 10 ms, ID: node:Y3Vyc29yLXRpbWUtYg
+						91 button ×, ID: node:Y3Vyc29yLWNsZWFyLWI
+						92 text (settable) A 0 · B 10 ms · Δt 10 ms · 1/|Δt| 100 Hz, ID: node:Y3Vyc29yLW1lYXN1cmVtZW50
+		93 row node:cmVhZGluZ3M
+			94 container node:Y3VycmVudA
+				95 text (settable) RC CURRENT, ID: node:Y3VycmVudC10aXRsZQ
+				96 text (settable) 0.184 mA, ID: node:Y3VycmVudC12YWx1ZQ
+			97 container node:dm9sdGFnZQ
+				98 text (settable) CAPACITOR VOLTAGE, ID: node:dm9sdGFnZS10aXRsZQ
+				99 text (settable) 3.161 V, ID: node:dm9sdGFnZS12YWx1ZQ
+			100 container node:cG93ZXI
+				101 text (settable) STORED ENERGY, ID: node:cG93ZXItdGl0bGU
+				102 text (settable) 4.99 µJ, ID: node:cG93ZXItdmFsdWU
+			103 container node:c2ltdWxhdGlvbi1pbmZv
+				104 text (settable) LIVE SIMULATION, ID: node:c2ltdWxhdGlvbi10aXRsZQ
+				105 text (settable) C1 · t = 0.01 s · paused, ID: node:cmVhZGluZy1zdGF0dXM
+		106 row node:Zm9vdGVyLXJvdw
+			107 text (settable) rc-built-ui.elab · 4 components · 4 wires · last change: user, ID: node:Zm9vdGVy
+			108 row node:Zm9vdGVyLXNwYWNlcg
+			109 text (settable) 10-unit snap · local workspace, ID: node:Z3JpZC1pbmZv
+	110 close button
+	111 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	112 minimize button
+	113 text ELab · Live electronics
+114 menu bar
+	115 ELab-first-version-ui
+	116 File
+	117 Examples
+	118 Appearance

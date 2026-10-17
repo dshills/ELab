@@ -18,6 +18,42 @@ func TestTimeTextFormatsRoundTripWithoutFloat32Loss(t *testing.T) {
 		}
 	}
 }
+
+func TestCursorTimeFieldsDistinguishUnsetFromStartup(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	uiAction(t, s, "example.rc", nil)
+	uiAction(t, s, "simulation.pause", nil)
+	uiAction(t, s, "simulation.restart", nil)
+	agentAction(t, s.service, "simulation.step", workbench.StepParams{Duration: .01})
+	for _, id := range []string{"a", "b"} {
+		field, ok := findNode(s.view(), "cursor-time-"+id)
+		clear, _ := findNode(s.view(), "cursor-clear-"+id)
+		if !ok || field.Text != "" || field.Disabled || !clear.Disabled {
+			t.Fatalf("unset cursor %s: text %q, disabled %v, clear disabled %v", id, field.Text, field.Disabled, clear.Disabled)
+		}
+	}
+	// Typing zero must change the initially empty native field, so its normal
+	// commit event places a cursor instead of accepting an unchanged fake zero.
+	uiAction(t, s, "cursor-time-a", &ui.ChangeEvent{Text: "0 s"})
+	uiAction(t, s, "cursor-time-b", &ui.ChangeEvent{Text: "10 ms"})
+	state := s.service.Snapshot()
+	if state.Scope.A == nil || !state.Scope.A.Valid || state.Scope.A.Requested != 0 || state.Scope.DeltaSeconds == nil || math.Abs(*state.Scope.DeltaSeconds-.01) > 1e-12 {
+		t.Fatal("startup cursor and timing interval unavailable", state.Scope)
+	}
+	field, _ := findNode(s.view(), "cursor-time-a")
+	clear, _ := findNode(s.view(), "cursor-clear-a")
+	if field.Text != "0 s" || clear.Disabled {
+		t.Fatal("placed zero cursor is indistinguishable from an unset cursor")
+	}
+	uiAction(t, s, "cursor-clear-a", nil)
+	field, _ = findNode(s.view(), "cursor-time-a")
+	other, _ := findNode(s.view(), "cursor-time-b")
+	if field.Text != "" || other.Text != "10 ms" || s.service.Snapshot().Scope.A != nil {
+		t.Fatal("clearing a cursor keeps a misleading time or clears the other cursor")
+	}
+}
+
 func TestCommittedTimeFieldsRejectInvalidAndInterveningChanges(t *testing.T) {
 	user, cleanup := testScreen(t)
 	defer cleanup()

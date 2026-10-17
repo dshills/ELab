@@ -27,6 +27,8 @@ This is an observation of the existing solver, with its existing ideal-device an
 
 Pause the run to keep the rolling window still. Choose **A** or **B**, then click or drag in the plot to place the selected cursor; the ms number fields provide exact requested times. The scope draws both cursor lines and shows their actual recorded times, signed **Δt = B − A**, and **1 / |Δt|** in Hz. The inspector shows A, B, and B − A for every selected channel. Clear each cursor with its × button.
 
+An unplaced cursor has an empty time field. Type a time such as `0 s` or `10 ms` and press Return to place it. A placed startup cursor displays `0 s`; clearing it makes the field empty again. This avoids presenting an unset cursor as if it were already positioned at zero. The same `scope.cursor.set` / `scope.cursor.clear` commands govern UI and agent state.
+
 Cursors snap to the nearest retained sample. Equal-distance ties and duplicate timestamps choose the latest sample, so a cursor exactly on an ideal edge reads its right-hand state. The API distinguishes `requested_s` from the snapped `time_s`. There is no interpolation or sub-sample precision claim; choose a smaller sample interval for finer timing. Equal cursor times have Δt = 0 and no reciprocal frequency. Hz is the reciprocal of the chosen interval, not automatic period recognition: choose equivalent edges on the same branch to measure a period, or opposite sides to measure phase separation.
 
 If a requested cursor time rolls outside the retained window, it stays identified as invalid with `reason: "outside retained history"`; timing/readings disappear until it is repositioned. A stale run similarly refuses measurement. No prior-run samples are joined into a measurement.

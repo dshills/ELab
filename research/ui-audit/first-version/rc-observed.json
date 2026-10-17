@@ -1,0 +1,409 @@
+{
+  "run_id": 25,
+  "electrical_revision": 24,
+  "document": {
+    "preferences_dirty": false,
+    "schematic_dirty": false,
+    "recordings_dirty": false,
+    "recording_count": 0,
+    "path": "/Users/dshills/Development/projects/ELab/research/ui-audit/first-version/rc-built-ui.elab",
+    "dirty": false,
+    "format_version": 4,
+    "generation": 2
+  },
+  "view": {
+    "center": {
+      "x": -109.5,
+      "y": 27.5
+    },
+    "zoom": 0.3191919191919192
+  },
+  "viewport": {
+    "width_px": 456,
+    "height_px": 158,
+    "registered": true,
+    "following": true
+  },
+  "transient_settings": {
+    "step_s": 0.001,
+    "high_s": 0.05,
+    "low_s": 0.05,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.02
+  },
+  "scope": {
+    "window": {
+      "mode": "live",
+      "start_s": 0,
+      "end_s": 0.010000000000000002
+    },
+    "window_valid": true,
+    "statistics": [
+      {
+        "probe_id": "v:C1.1",
+        "count": 11,
+        "min": 0,
+        "max": 3.1606027941427888,
+        "sample_mean": 1.8134490443369862,
+        "sample_rms": 2.069567643080484
+      },
+      {
+        "probe_id": "v:V2.positive",
+        "count": 11,
+        "min": 5,
+        "max": 5,
+        "sample_mean": 5,
+        "sample_rms": 5
+      }
+    ],
+    "available": [
+      {
+        "id": "v:C1.1",
+        "label": "C1.1 / ground",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:C1.2",
+        "label": "C1.2 / ground",
+        "unit": "V",
+        "positive": "C1.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:C1",
+        "label": "C1 voltage",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      },
+      {
+        "id": "i:C1",
+        "label": "C1 current",
+        "unit": "A",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      },
+      {
+        "id": "v:R2.1",
+        "label": "R2.1 / ground",
+        "unit": "V",
+        "positive": "R2.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R2.2",
+        "label": "R2.2 / ground",
+        "unit": "V",
+        "positive": "R2.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R2",
+        "label": "R2 voltage",
+        "unit": "V",
+        "positive": "R2.1",
+        "reference": "R2.2"
+      },
+      {
+        "id": "i:R2",
+        "label": "R2 current",
+        "unit": "A",
+        "positive": "R2.1",
+        "reference": "R2.2"
+      },
+      {
+        "id": "v:V2.positive",
+        "label": "V2.positive / ground",
+        "unit": "V",
+        "positive": "V2.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V2.negative",
+        "label": "V2.negative / ground",
+        "unit": "V",
+        "positive": "V2.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V2",
+        "label": "V2 voltage",
+        "unit": "V",
+        "positive": "V2.positive",
+        "reference": "V2.negative"
+      },
+      {
+        "id": "i:V2",
+        "label": "V2 delivered current",
+        "unit": "A",
+        "positive": "V2.positive",
+        "reference": "out of positive"
+      },
+      {
+        "id": "v:GND2.reference",
+        "label": "GND2.reference / ground",
+        "unit": "V",
+        "positive": "GND2.reference",
+        "reference": "ground"
+      }
+    ],
+    "selected": [
+      "v:C1.1",
+      "v:V2.positive"
+    ],
+    "traces": [
+      {
+        "probe": {
+          "id": "v:C1.1",
+          "label": "C1.1 / ground",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "ground"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 0
+          },
+          {
+            "time_s": 0.001,
+            "value": 0.47581290982020213
+          },
+          {
+            "time_s": 0.002,
+            "value": 0.9063462346100908
+          },
+          {
+            "time_s": 0.003,
+            "value": 1.2959088965914107
+          },
+          {
+            "time_s": 0.004,
+            "value": 1.6483997698218036
+          },
+          {
+            "time_s": 0.005,
+            "value": 1.9673467014368329
+          },
+          {
+            "time_s": 0.006,
+            "value": 2.255941819529868
+          },
+          {
+            "time_s": 0.007,
+            "value": 2.5170734810429525
+          },
+          {
+            "time_s": 0.008,
+            "value": 2.753355179413892
+          },
+          {
+            "time_s": 0.009000000000000001,
+            "value": 2.967151701297005
+          },
+          {
+            "time_s": 0.010000000000000002,
+            "value": 3.1606027941427888
+          }
+        ]
+      },
+      {
+        "probe": {
+          "id": "v:V2.positive",
+          "label": "V2.positive / ground",
+          "unit": "V",
+          "positive": "V2.positive",
+          "reference": "ground"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 5
+          },
+          {
+            "time_s": 0.001,
+            "value": 5
+          },
+          {
+            "time_s": 0.002,
+            "value": 5
+          },
+          {
+            "time_s": 0.003,
+            "value": 5
+          },
+          {
+            "time_s": 0.004,
+            "value": 5
+          },
+          {
+            "time_s": 0.005,
+            "value": 5
+          },
+          {
+            "time_s": 0.006,
+            "value": 5
+          },
+          {
+            "time_s": 0.007,
+            "value": 5
+          },
+          {
+            "time_s": 0.008,
+            "value": 5
+          },
+          {
+            "time_s": 0.009000000000000001,
+            "value": 5
+          },
+          {
+            "time_s": 0.010000000000000002,
+            "value": 5
+          }
+        ]
+      }
+    ],
+    "run_id": 25,
+    "stale": false,
+    "active_cursor": "a",
+    "a": {
+      "requested_s": 0,
+      "time_s": 0,
+      "valid": true
+    },
+    "b": {
+      "requested_s": 0.01,
+      "time_s": 0.010000000000000002,
+      "valid": true
+    },
+    "delta_s": 0.010000000000000002,
+    "interval_hz": 99.99999999999999,
+    "readings": [
+      {
+        "probe_id": "v:C1.1",
+        "a": 0,
+        "b": 3.1606027941427888,
+        "delta": 3.1606027941427888
+      },
+      {
+        "probe_id": "v:V2.positive",
+        "a": 5,
+        "b": 5,
+        "delta": 0
+      }
+    ]
+  },
+  "transient": {
+    "engine": "elab.ideal-rc-exact.v1",
+    "run_id": 25,
+    "electrical_revision": 24,
+    "source_id": "V2",
+    "resistor_id": "R2",
+    "capacitor_id": "C1",
+    "output_net": "net:C1.1",
+    "time_constant_s": 0.01,
+    "settings": {
+      "step_s": 0.001,
+      "high_s": 0.05,
+      "low_s": 0.05,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 0.02
+    },
+    "input_mode": "auto",
+    "sample": {
+      "time_s": 0.010000000000000002,
+      "input_v": 5,
+      "voltage_v": 3.1606027941427888,
+      "current_a": 0.00018393972058572113,
+      "energy_j": 4.9947050111716015e-06
+    },
+    "samples": [
+      {
+        "time_s": 0,
+        "input_v": 5,
+        "voltage_v": 0,
+        "current_a": 0.0005,
+        "energy_j": 0
+      },
+      {
+        "time_s": 0.001,
+        "input_v": 5,
+        "voltage_v": 0.47581290982020213,
+        "current_a": 0.0004524187090179798,
+        "energy_j": 1.131989625757839e-07
+      },
+      {
+        "time_s": 0.002,
+        "input_v": 5,
+        "voltage_v": 0.9063462346100908,
+        "current_a": 0.0004093653765389909,
+        "energy_j": 4.1073174849594485e-07
+      },
+      {
+        "time_s": 0.003,
+        "input_v": 5,
+        "voltage_v": 1.2959088965914107,
+        "current_a": 0.00037040911034085894,
+        "energy_j": 8.396899341323838e-07
+      },
+      {
+        "time_s": 0.004,
+        "input_v": 5,
+        "voltage_v": 1.6483997698218036,
+        "current_a": 0.0003351600230178196,
+        "energy_j": 1.3586109005742874e-06
+      },
+      {
+        "time_s": 0.005,
+        "input_v": 5,
+        "voltage_v": 1.9673467014368329,
+        "current_a": 0.0003032653298563167,
+        "energy_j": 1.9352265218271934e-06
+      },
+      {
+        "time_s": 0.006,
+        "input_v": 5,
+        "voltage_v": 2.255941819529868,
+        "current_a": 0.0002744058180470132,
+        "energy_j": 2.5446367465518655e-06
+      },
+      {
+        "time_s": 0.007,
+        "input_v": 5,
+        "voltage_v": 2.5170734810429525,
+        "current_a": 0.00024829265189570474,
+        "energy_j": 3.1678294544848432e-06
+      },
+      {
+        "time_s": 0.008,
+        "input_v": 5,
+        "voltage_v": 2.753355179413892,
+        "current_a": 0.0002246644820586108,
+        "energy_j": 3.790482372002653e-06
+      },
+      {
+        "time_s": 0.009000000000000001,
+        "input_v": 5,
+        "voltage_v": 2.967151701297005,
+        "current_a": 0.00020328482987029951,
+        "energy_j": 4.401994609254855e-06
+      },
+      {
+        "time_s": 0.010000000000000002,
+        "input_v": 5,
+        "voltage_v": 3.1606027941427888,
+        "current_a": 0.00018393972058572113,
+        "energy_j": 4.9947050111716015e-06
+      }
+    ],
+    "events": [
+      {
+        "time_s": 0,
+        "mode": "restart"
+      }
+    ],
+    "stale": false
+  }
+}
