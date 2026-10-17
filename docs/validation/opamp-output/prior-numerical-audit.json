@@ -1,0 +1,2227 @@
+{
+  "passed": true,
+  "prior_report": "docs/validation/opamp-storage/conformance-report.json.gz",
+  "scope": "Only explicit reviewed coordinates are normalized; all non-layout graph data and recorded numerical/refusal evidence match exactly. Only operation.inspect polling is omitted from command comparison.",
+  "cases": [
+    {
+      "adapter": "in-process",
+      "case": "opamp-follower",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 2,
+      "after_poll_count": 2
+    },
+    {
+      "adapter": "in-process",
+      "case": "opamp-inverting",
+      "reviewed_position_changes": [
+        {
+          "id": "VIN",
+          "before": {
+            "x": -260,
+            "y": 20
+          },
+          "after": {
+            "x": -320,
+            "y": 20
+          }
+        },
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -340,
+            "y": 120
+          },
+          "after": {
+            "x": -320,
+            "y": 120
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        },
+        {
+          "id": "RI",
+          "before": {
+            "x": -150,
+            "y": 20
+          },
+          "after": {
+            "x": -190,
+            "y": 20
+          }
+        },
+        {
+          "id": "GNDPLUS",
+          "before": {
+            "x": -110,
+            "y": -20
+          },
+          "after": {
+            "x": -200,
+            "y": -80
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 2,
+      "after_poll_count": 2
+    },
+    {
+      "adapter": "in-process",
+      "case": "opamp-rc-npn",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 178,
+      "after_poll_count": 202
+    },
+    {
+      "adapter": "in-process",
+      "case": "opamp-rc-mosfet",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 207,
+      "after_poll_count": 235
+    },
+    {
+      "adapter": "in-process",
+      "case": "opamp-buffered-rlc",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 26,
+      "after_poll_count": 28
+    },
+    {
+      "adapter": "in-process",
+      "case": "opamp-rc-pmos",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 167,
+      "after_poll_count": 195
+    },
+    {
+      "adapter": "headless-stdio",
+      "case": "opamp-follower",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 2,
+      "after_poll_count": 2
+    },
+    {
+      "adapter": "headless-stdio",
+      "case": "opamp-inverting",
+      "reviewed_position_changes": [
+        {
+          "id": "VIN",
+          "before": {
+            "x": -260,
+            "y": 20
+          },
+          "after": {
+            "x": -320,
+            "y": 20
+          }
+        },
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -340,
+            "y": 120
+          },
+          "after": {
+            "x": -320,
+            "y": 120
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        },
+        {
+          "id": "RI",
+          "before": {
+            "x": -150,
+            "y": 20
+          },
+          "after": {
+            "x": -190,
+            "y": 20
+          }
+        },
+        {
+          "id": "GNDPLUS",
+          "before": {
+            "x": -110,
+            "y": -20
+          },
+          "after": {
+            "x": -200,
+            "y": -80
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 2,
+      "after_poll_count": 2
+    },
+    {
+      "adapter": "headless-stdio",
+      "case": "opamp-rc-npn",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 164,
+      "after_poll_count": 184
+    },
+    {
+      "adapter": "headless-stdio",
+      "case": "opamp-rc-mosfet",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 194,
+      "after_poll_count": 212
+    },
+    {
+      "adapter": "headless-stdio",
+      "case": "opamp-buffered-rlc",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 24,
+      "after_poll_count": 26
+    },
+    {
+      "adapter": "headless-stdio",
+      "case": "opamp-rc-pmos",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 159,
+      "after_poll_count": 178
+    },
+    {
+      "adapter": "headless-socket",
+      "case": "opamp-follower",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 1,
+      "after_poll_count": 1
+    },
+    {
+      "adapter": "headless-socket",
+      "case": "opamp-inverting",
+      "reviewed_position_changes": [
+        {
+          "id": "VIN",
+          "before": {
+            "x": -260,
+            "y": 20
+          },
+          "after": {
+            "x": -320,
+            "y": 20
+          }
+        },
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -340,
+            "y": 120
+          },
+          "after": {
+            "x": -320,
+            "y": 120
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        },
+        {
+          "id": "RI",
+          "before": {
+            "x": -150,
+            "y": 20
+          },
+          "after": {
+            "x": -190,
+            "y": 20
+          }
+        },
+        {
+          "id": "GNDPLUS",
+          "before": {
+            "x": -110,
+            "y": -20
+          },
+          "after": {
+            "x": -200,
+            "y": -80
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 2,
+      "after_poll_count": 2
+    },
+    {
+      "adapter": "headless-socket",
+      "case": "opamp-rc-npn",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 150,
+      "after_poll_count": 167
+    },
+    {
+      "adapter": "headless-socket",
+      "case": "opamp-rc-mosfet",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 178,
+      "after_poll_count": 192
+    },
+    {
+      "adapter": "headless-socket",
+      "case": "opamp-buffered-rlc",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 22,
+      "after_poll_count": 23
+    },
+    {
+      "adapter": "headless-socket",
+      "case": "opamp-rc-pmos",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 145,
+      "after_poll_count": 156
+    },
+    {
+      "adapter": "native-socket",
+      "case": "opamp-follower",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 1,
+      "after_poll_count": 2
+    },
+    {
+      "adapter": "native-socket",
+      "case": "opamp-inverting",
+      "reviewed_position_changes": [
+        {
+          "id": "VIN",
+          "before": {
+            "x": -260,
+            "y": 20
+          },
+          "after": {
+            "x": -320,
+            "y": 20
+          }
+        },
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -340,
+            "y": 120
+          },
+          "after": {
+            "x": -320,
+            "y": 120
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        },
+        {
+          "id": "RI",
+          "before": {
+            "x": -150,
+            "y": 20
+          },
+          "after": {
+            "x": -190,
+            "y": 20
+          }
+        },
+        {
+          "id": "GNDPLUS",
+          "before": {
+            "x": -110,
+            "y": -20
+          },
+          "after": {
+            "x": -200,
+            "y": -80
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 2,
+      "after_poll_count": 2
+    },
+    {
+      "adapter": "native-socket",
+      "case": "opamp-rc-npn",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 128,
+      "after_poll_count": 140
+    },
+    {
+      "adapter": "native-socket",
+      "case": "opamp-rc-mosfet",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 159,
+      "after_poll_count": 169
+    },
+    {
+      "adapter": "native-socket",
+      "case": "opamp-buffered-rlc",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 18,
+      "after_poll_count": 19
+    },
+    {
+      "adapter": "native-socket",
+      "case": "opamp-rc-pmos",
+      "reviewed_position_changes": [
+        {
+          "id": "GNDIN",
+          "before": {
+            "x": -300,
+            "y": 80
+          },
+          "after": {
+            "x": -220,
+            "y": 80
+          }
+        },
+        {
+          "id": "VP",
+          "before": {
+            "x": 430,
+            "y": -70
+          },
+          "after": {
+            "x": 610,
+            "y": -70
+          }
+        },
+        {
+          "id": "VN",
+          "before": {
+            "x": 430,
+            "y": 70
+          },
+          "after": {
+            "x": 610,
+            "y": 70
+          }
+        },
+        {
+          "id": "JM",
+          "before": {
+            "x": 430,
+            "y": 0
+          },
+          "after": {
+            "x": 610,
+            "y": 0
+          }
+        },
+        {
+          "id": "GNDP",
+          "before": {
+            "x": 490,
+            "y": 0
+          },
+          "after": {
+            "x": 670,
+            "y": 0
+          }
+        },
+        {
+          "id": "LPS",
+          "before": {
+            "x": 430,
+            "y": -140
+          },
+          "after": {
+            "x": 610,
+            "y": -140
+          }
+        },
+        {
+          "id": "LNS",
+          "before": {
+            "x": 430,
+            "y": 140
+          },
+          "after": {
+            "x": 610,
+            "y": 140
+          }
+        }
+      ],
+      "non_layout_graph_and_all_rows_observations_checks_refusals_equal": true,
+      "commands_equal_except_operation_inspect_polls": true,
+      "before_poll_count": 123,
+      "after_poll_count": 137
+    }
+  ]
+}

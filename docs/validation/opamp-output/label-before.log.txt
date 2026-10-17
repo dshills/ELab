@@ -1,0 +1,9 @@
+--- FAIL: TestGroundLabelClearsRotatedBarsAndTerminalStub (0.00s)
+    ground_label_test.go:21: ground export diverges from shared caption {<nil> <nil> <nil> <nil>  <nil> <nil> GND ground Ground [reference] {100 -40} 0  ground.v1 0} 129 -35 GND
+--- FAIL: TestOpAmpExampleSupplyCaptionsClearLoadCaption (0.00s)
+    opamp_examples_test.go:19: curated supply caption crowds load caption VN {430 70} {260 60}
+--- FAIL: TestSourceAnnotationBlocksClearEveryRotatedSourceAndItsTerminalStubs (0.00s)
+    source_annotations_test.go:57: horizontal source block crosses symbol or leads sine-source 90 {VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV {-494 27} [VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV | sine 2.5 Vpk | 10 Hz offset 0 V | phase 0 deg] configured  }
+FAIL
+FAIL	github.com/dshills/elab/workbench	0.282s
+FAIL

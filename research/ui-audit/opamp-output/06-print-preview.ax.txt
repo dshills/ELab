@@ -1,0 +1,115 @@
+Window: "ELab · Live electronics", App: ELab-output-preview.
+0 standard window ELab · Live electronics, Secondary Actions: Raise
+	1 container node:cm9vdA
+		2 row node:aGVhZGVy
+			3 text (settable) ELab, ID: node:dGl0bGU
+			4 toolbar node:dG9vbGJhcg
+				5 button File, Help: Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:ZmlsZS1tZW51
+				6 button Save, ID: node:ZmlsZS5zYXZl
+				7 button Examples, Help: Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:ZXhhbXBsZXMtbWVudQ
+				8 button Undo agent, Help: Load example · by agent.socket, ID: node:ZWRpdC51bmRv
+				9 button (disabled) Redo, ID: node:ZWRpdC5yZWRv
+				10 button Appearance theme, Help: Current choice: Light ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:dGhlbWUtbWVudQ
+			11 text (settable) Ⅱ Paused, ID: node:c3RhdHVz
+			12 button Resume, ID: node:c2ltdWxhdGlvbi5yZXN1bWU
+		13 row node:d29ya3NwYWNl
+			14 scroll area node:cGFydHMtc2Nyb2xs
+				15 container node:cGFsZXR0ZQ
+					16 text (settable) PRINT CAPTURED PAGES, ID: node:cHJpbnRlci10aXRsZQ
+					17 button Refresh printers, ID: node:cHJpbnRlcnMtcmVmcmVzaA
+					18 text (settable) Find printers configured in macOS, then choose a destination., ID: node:cHJpbnRlci1kaXNjb3ZlcnktaGVscA
+					19 text (settable) OUTPUT PAGE, ID: node:cGRmLXBhZ2UtdGl0bGU
+					20 text (settable) PDF or PNG · white paper · full schematic, ID: node:cGRmLXBhZ2UtaGVscA
+					21 button Output Paper, Help: Current choice: Letter ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:cGRmLXBhcGVy
+					22 button Output Orientation, Help: Current choice: Landscape ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:cGRmLW9yaWVudGF0aW9u
+					23 text (settable) Margin · mm, ID: node:cGRmLW1hcmdpbi1sYWJlbA
+					24 stepper (settable, integer) Output margin millimeters, Value: 10, ID: node:cGRmLW1hcmdpbg
+					25 text (settable) Fit complete schematic, ID: node:cGRmLXNjYWxlLW1vZGU
+					26 button Fit to page, ID: node:cGRmLWZpdA
+					27 stepper (settable, integer) Output explicit scale percent, Value: 100, ID: node:cGRmLXNjYWxl
+					28 checkbox (settable, boolean) Tile schematic at explicit scale, Value: off, ID: node:cGRmLXRpbGU
+					29 checkbox (settable, boolean) Color output, Value: off, ID: node:cGRmLWNvbG9y
+					30 checkbox (settable, boolean) Include live measurement overlays, Value: off, ID: node:cGRmLW1lYXN1cmVtZW50cw
+					31 button Export schematic SVG, ID: node:ZXhwb3J0LXN2Zw
+					32 button Export printable schematic PDF, ID: node:ZXhwb3J0LXBkZg
+					33 button Export schematic image PNG, ID: node:ZXhwb3J0LXBuZw
+			34 container node:c2NoZW1hdGljLXBhbmVs
+				35 toolbar node:cHJldmlldy10b29scw
+					36 text (settable) Print preview, ID: node:cHJldmlldy10aXRsZQ
+					37 button Refresh preview, ID: node:cHJldmlldy1yZWZyZXNo
+					38 button Back to circuit, ID: node:cHJldmlldy1jbG9zZQ
+				39 text (settable) letter · landscape · captured circuit · page 1/1, ID: node:cHJldmlldy1jYXB0aW9u
+				40 toolbar node:cHJldmlldy1wYWdlLXRvb2xz
+					41 button (disabled) Previous page, ID: node:cHJldmlldy1wcmV2aW91cw
+					42 button (disabled) Next page, ID: node:cHJldmlldy1uZXh0
+					43 button Export exact shown preview page PNG, ID: node:cHJldmlldy1leHBvcnQtcG5n
+				44 image Captured schematic page, ID: node:cHJldmlldy1pbWFnZQ
+				45 text (settable) ID: node:cHJldmlldy1oZWxw, Print submits all captured pages. Save shown PNG saves this exact page. Export PDF uses the current circuit.
+				46 text (settable) Ready to experiment. Values update the simulation automatically., ID: node:bWVzc2FnZXM
+			47 scroll area node:c2lkZWJhcg
+				48 container node:c2lkZWJhci1jb250ZW50
+					49 row node:c2VsZWN0aW9uLW5hdmlnYXRpb24
+						50 button Previous schematic object, ID: node:c2VsZWN0aW9uLXByZXZpb3Vz
+						51 button Next schematic object, ID: node:c2VsZWN0aW9uLW5leHQ
+						52 button Center selection, ID: node:c2VsZWN0aW9uLWNlbnRlcg
+					53 row node:b3BhbXAtcGxvdC1yb3ctMA
+						54 button Plot output voltage, ID: node:cGxvdC12OlUx
+						55 button Plot delivered output current, ID: node:cGxvdC1pOlUx
+					56 row node:b3BhbXAtcGxvdC1yb3ctMQ
+						57 button Plot input difference, ID: node:cGxvdC12OlUxLmlucHV0LWRpZmZlcmVuY2U
+						58 button Plot supply voltage, ID: node:cGxvdC12OlUxLnN1cHBseQ
+					59 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLm5vbmludmVydGluZw
+						60 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLm5vbmludmVydGluZw
+						61 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEubm9uaW52ZXJ0aW5n
+					62 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLmludmVydGluZw
+						63 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLmludmVydGluZw
+						64 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEuaW52ZXJ0aW5n
+					65 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLm91dA
+						66 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLm91dA
+						67 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEub3V0
+					68 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLnZwbHVz
+						69 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLnZwbHVz
+						70 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEudnBsdXM
+					71 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLnZtaW51cw
+						72 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLnZtaW51cw
+						73 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEudm1pbnVz
+					74 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUx
+						75 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUx
+						76 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTE
+					77 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLmlucHV0LWRpZmZlcmVuY2U
+						78 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLmlucHV0LWRpZmZlcmVuY2U
+						79 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEuaW5wdXQtZGlmZmVyZW5jZQ
+					80 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLnN1cHBseQ
+						81 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLnN1cHBseQ
+						82 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEuc3VwcGx5
+					83 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUx
+						84 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUx
+						85 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTE
+					86 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLm5vbmludmVydGluZw
+						87 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLm5vbmludmVydGluZw
+						88 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEubm9uaW52ZXJ0aW5n
+					89 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLmludmVydGluZw
+						90 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLmludmVydGluZw
+						91 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEuaW52ZXJ0aW5n
+					92 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLm91dA
+						93 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLm91dA
+						94 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEub3V0
+					95 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLnZwbHVz
+						96 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLnZwbHVz
+						97 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEudnBsdXM
+					98 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLnZtaW51cw
+						99 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLnZtaW51cw
+						100 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEudm1pbnVz
+		101 row node:Zm9vdGVyLXJvdw
+			102 text (settable) Untitled · Unsaved · 20 components · 19 wires · last change: user, ID: node:Zm9vdGVy
+			103 row node:Zm9vdGVyLXNwYWNlcg
+			104 text (settable) 10-unit snap · local workspace, ID: node:Z3JpZC1pbmZv
+	105 close button
+	106 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	107 minimize button
+	108 text ELab · Live electronics
+109 menu bar
+	110 ELab-output-preview
+	111 File
+	112 Examples
+	113 Appearance

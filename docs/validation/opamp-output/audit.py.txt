@@ -1,0 +1,67 @@
+from pathlib import Path
+import collections,copy,gzip,hashlib,json,re,sys
+from pypdf import PdfReader
+root=Path.cwd();out=Path(sys.argv[1]).resolve() if len(sys.argv)>1 else root/'build/opamp-app'
+old=json.loads(gzip.decompress((root/'docs/validation/opamp-storage/conformance-report.json.gz').read_bytes()));new=json.loads((out/'public-conformance/report.json').read_bytes())
+allowed={
+ 'VP':[((430,-70),(610,-70))], 'VN':[((430,70),(610,70))], 'JM':[((430,0),(610,0))],
+ 'GNDP':[((490,0),(670,0))], 'LPS':[((430,-140),(610,-140))], 'LNS':[((430,140),(610,140))],
+ 'VIN':[((-260,20),(-320,20))], 'RI':[((-150,20),(-190,20))], 'GNDPLUS':[((-110,-20),(-200,-80))],
+ 'GNDIN':[((-300,80),(-220,80)),((-340,120),(-320,120))]}
+assert old['passed'] and new['passed'] and len(old['adapters'])==len(new['adapters'])==4
+observations=[]
+for a,b in zip(old['adapters'],new['adapters']):
+ assert a['name']==b['name'] and b['equivalent_to_in_process']
+ for suite in ('electrical','inductors','opamps','opamp_storage'):
+  assert a[suite]['checks']==b[suite]['checks'],(b['name'],suite,'numerical references changed')
+ for suite in ('opamps','opamp_storage'):
+  assert len(a[suite]['cases'])==len(b[suite]['cases'])
+  for x,y in zip(a[suite]['cases'],b[suite]['cases']):
+   assert x['name']==y['name'];graph=copy.deepcopy(x['graph']);changes=[]
+   assert len(graph['components'])==len(y['graph']['components'])
+   for op,np in zip(graph['components'],y['graph']['components']):
+    assert op['id']==np['id']
+    if op['position']!=np['position']:
+     pair=(tuple(op['position'][k] for k in ('x','y')),tuple(np['position'][k] for k in ('x','y')))
+     assert pair in allowed.get(op['id'],[]),(y['name'],op['id'],pair)
+     changes.append({'id':op['id'],'before':op['position'],'after':np['position']});op['position']=np['position']
+   assert len(changes)==(10 if y['name']=='opamp-inverting' else 7)
+   assert graph==y['graph'],'non-layout graph change'
+   def stable_calls(case,key):return [v for v in case[key] if v['command']!='operation.inspect']
+   for k in x:
+    if k in ('graph','graph_sha256'):continue
+    if k in ('calls','reopen_calls'):assert stable_calls(x,k)==stable_calls(y,k),(y['name'],k)
+    else:assert x[k]==y[k],(y['name'],k)
+   observations.append({'adapter':b['name'],'case':y['name'],'reviewed_position_changes':changes,
+     'non_layout_graph_and_all_rows_observations_checks_refusals_equal':True,
+     'commands_equal_except_operation_inspect_polls':True,
+     'before_poll_count':sum(v['command']=='operation.inspect' for v in x['calls']),
+     'after_poll_count':sum(v['command']=='operation.inspect' for v in y['calls'])})
+(out/'prior-numerical-audit.json').write_text(json.dumps({'passed':True,'prior_report':'docs/validation/opamp-storage/conformance-report.json.gz',
+ 'scope':'Only explicit reviewed coordinates are normalized; all non-layout graph data and recorded numerical/refusal evidence match exactly. Only operation.inspect polling is omitted from command comparison.',
+ 'cases':observations},indent=2)+'\n')
+h=json.loads((out/'qualified-headless-output.json').read_text());n=json.loads((out/'qualified-native-output.json').read_text());assert h['passed'] and n['passed'];assert len(h['observations'])==len(n['observations'])==10
+parity=[]
+def normalize_pdf(data):
+ data,count=re.subn(rb'/(CreationDate|ModDate) \(D:\d{14}Z00\x2700\x27\)',rb'/\1 (TIMESTAMP)',data);assert count==2
+ data,count=re.subn(rb'/ID\s+\[\s*<[a-f0-9]{32}>\s*<[a-f0-9]{32}>\s*\]',b'/ID [<FILEID> <FILEID>]',data);assert count==1
+ return data
+for a,b in zip(h['observations'],n['observations']):
+ assert a['name']==b['name'] and a['pages']==b['pages']
+ assert {k:v for k,v in a.items() if k!='sha256'}=={k:v for k,v in b.items() if k!='sha256'}
+ for filename in a['sha256']:
+  ap=out/'qualified-headless-outputs'/filename;bp=out/'qualified-native-outputs'/filename
+  assert hashlib.sha256(ap.read_bytes()).hexdigest()==a['sha256'][filename]
+  assert hashlib.sha256(bp.read_bytes()).hexdigest()==b['sha256'][filename]
+  if ap.suffix=='.pdf':
+   assert normalize_pdf(ap.read_bytes())==normalize_pdf(bp.read_bytes()),filename
+   ar,br=PdfReader(ap),PdfReader(bp)
+   assert {k:v for k,v in ar.metadata.items() if k not in ('/CreationDate','/ModDate')}=={k:v for k,v in br.metadata.items() if k not in ('/CreationDate','/ModDate')}
+   assert len(ar.pages)==len(br.pages)==len(a['pages'])
+   for p,q in zip(ar.pages,br.pages):assert p.mediabox==q.mediabox
+  else:assert ap.read_bytes()==bp.read_bytes(),filename
+ parity.append({'name':a['name'],'pages':len(a['pages']),'svg_and_png_byte_identical':True,'pdf_identical_except_two_timestamps_and_trailer_ids':True})
+(out/'output-parity.json').write_text(json.dumps({'passed':True,'captures':len(parity),'pages':sum(p['pages'] for p in parity),
+ 'observations':parity,'pdf_scope':'Only exactly two Quartz creation/modification timestamps and one trailer ID pair are normalized. Every other byte and all non-date metadata match.',
+ 'render_scope':'All 13 headless PDF pages independently rendered by Poppler; four contact sheets and three full-size reference pages visually inspected. Native PDF drawing bytes are identical.'},indent=2)+'\n')
+print('Prior numerical evidence and native/headless output parity verified')

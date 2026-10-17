@@ -434,7 +434,8 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 	case "net-label":
 		x, y = p.Position.X+22, p.Position.Y+4
 	case "ground":
-		x, y = p.Position.X+29, p.Position.Y+5
+		at := GroundLabelPosition(p)
+		x, y = at.X, at.Y
 	}
 	return x, y, text
 }

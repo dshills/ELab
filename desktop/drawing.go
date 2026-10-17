@@ -429,12 +429,12 @@ func nativePartLabelPosition(part workbench.Component, title string) workbench.P
 	if part.Kind == "capacitor" {
 		return workbench.CapacitorLabelPosition(part)
 	}
+	if part.Kind == "ground" {
+		return workbench.GroundLabelPosition(part)
+	}
 	y := part.Position.Y - 55
 	if workbench.IsConnectivityPrimitive(part.Kind) {
 		y = part.Position.Y - 18
-	}
-	if part.Kind == "ground" {
-		y = part.Position.Y + 35
 	}
 	if part.Rotation == 90 || part.Rotation == 270 {
 		y = part.Position.Y - 75

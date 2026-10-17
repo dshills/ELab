@@ -37,6 +37,41 @@ func TestSourceAnnotationsDescribeConfiguredWaveformsAndLegacyTiming(t *testing.
 	}
 }
 
+func TestSourceAnnotationBlocksClearEveryRotatedSourceAndItsTerminalStubs(t *testing.T) {
+	for _, kind := range []string{"sine-source", "finite-pulse-source", "pulse-source"} {
+		for _, rotation := range []int{0, 90, 180, 270} {
+			p, err := MakeComponent(strings.Repeat("V", 32), kind, Point{100, 40}, "")
+			if err != nil {
+				t.Fatal(err)
+			}
+			p.Rotation = rotation
+			g := Graph{Components: []Component{p}}
+			for _, extra := range [][]string{nil, {"configured | live stale"}, {"input held: high", "pending input: low"}} {
+				annotations := configuredSourceAnnotations(g, DefaultTransientSettings())
+				annotations[0].Lines = append(annotations[0].Lines, extra...)
+				positionSourceAnnotations(g, annotations)
+				a := annotations[0]
+				lo, hi := SourceAnnotationBounds(a)
+				if rotation == 90 || rotation == 270 {
+					if hi.Y > p.Position.Y-50 || hi.X != p.Position.X+40 {
+						t.Fatal("horizontal source block crosses symbol or leads", kind, rotation, a)
+					}
+				} else if hi.X > p.Position.X-39 {
+					t.Fatal("vertical source block crosses symbol or leads", kind, rotation, a)
+				}
+				// Native bitmap ink and exported conservative text bounds must both
+				// fit the same block, including any extra live-state lines.
+				for i, line := range a.Lines {
+					y := a.Position.Y + float64(i)*SourceAnnotationLineHeight
+					if hi.X-float64(len([]rune(line)))*8.75 < lo.X || hi.X-schematicLabelWidth(line) < lo.X || y-15 < lo.Y || y+4 > hi.Y {
+						t.Fatal("annotation bounds clip a rendered line", kind, rotation, a)
+					}
+				}
+			}
+		}
+	}
+}
+
 func TestSourceAnnotationsOwnDataAndDistinguishAppliedPendingAndStale(t *testing.T) {
 	s := pausedRectifier(t)
 	defer s.Close()

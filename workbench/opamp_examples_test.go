@@ -8,6 +8,63 @@ import (
 	"testing"
 )
 
+func TestOpAmpExampleSupplyCaptionsClearLoadCaption(t *testing.T) {
+	for _, g := range []Graph{OpAmpFollowerExampleGraph(), OpAmpInvertingExampleGraph()} {
+		load, _ := g.Component("RL")
+		lx, ly, lt := schematicPartLabel(load)
+		for _, id := range []string{"VP", "VN"} {
+			p, _ := g.Component(id)
+			x, y, text := schematicPartLabel(p)
+			if x-3 <= lx+schematicLabelWidth(lt)+4 && x+schematicLabelWidth(text)+4 >= lx-3 && y-18 <= ly+5+4 && y+5+4 >= ly-18 {
+				t.Fatal("curated supply caption crowds load caption", id, p.Position, load.Position)
+			}
+		}
+	}
+}
+
+func TestOpAmpExampleWaveformCaptionClearsGroundAndAmplifierCaptions(t *testing.T) {
+	for _, g := range []Graph{OpAmpFollowerExampleGraph(), OpAmpInvertingExampleGraph()} {
+		annotation := configuredSourceAnnotations(g, DefaultTransientSettings())[0]
+		lo, hi := SourceAnnotationBounds(annotation)
+		for _, p := range g.Components {
+			if p.Kind != "ground" && p.Kind != "opamp" {
+				continue
+			}
+			x, y, text := schematicPartLabel(p)
+			if x-3 <= hi.X+4 && x+schematicLabelWidth(text)+4 >= lo.X && y-18 <= hi.Y+4 && y+5+4 >= lo.Y {
+				t.Fatal("curated waveform caption crowds ground/amplifier caption", p.ID, annotation)
+			}
+		}
+	}
+}
+
+func TestOpAmpExampleCaptionMasksLeaveWiresContinuous(t *testing.T) {
+	for _, g := range []Graph{OpAmpFollowerExampleGraph(), OpAmpInvertingExampleGraph()} {
+		ids := []string{}
+		for _, p := range g.Components {
+			if p.Kind != "sine-source" {
+				ids = append(ids, p.ID)
+			}
+		}
+		assertLabelMasksLeaveWiresContinuous(t, g, ids)
+		for _, id := range []string{"VIN", "GNDPLUS"} {
+			for _, rotation := range []int{0, 90, 180, 270} {
+				rotated := g.Clone()
+				for i := range rotated.Components {
+					if rotated.Components[i].ID == id {
+						rotated.Components[i].Rotation = rotation
+					}
+				}
+				assertLabelMasksLeaveWiresContinuous(t, rotated, ids)
+				for _, annotation := range configuredSourceAnnotations(rotated, DefaultTransientSettings()) {
+					lo, hi := SourceAnnotationBounds(annotation)
+					assertMaskLeavesWiresContinuous(t, rotated, annotation.ID, routeRect{lo.X - 1.1, hi.X + 1.1, lo.Y - 1.1, hi.Y + 1.1})
+				}
+			}
+		}
+	}
+}
+
 func TestOpAmpGuidedSineReferencesCaptureAndSavedOrigin(t *testing.T) {
 	for _, id := range []string{"opamp-follower", "opamp-inverting"} {
 		t.Run(id, func(t *testing.T) {

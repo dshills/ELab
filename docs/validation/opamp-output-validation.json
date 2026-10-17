@@ -1,0 +1,259 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T08:33:31.100697+00:00",
+  "scope": "Unreleased amplifier presentation repair, separate pinned-SDK application candidate and captured schematic-output qualification; no canonical app promotion",
+  "source_parent_commit": "323b461e47bf87a9265d8fbbc048eaa2cb18ac0e",
+  "source_freeze": {
+    "path": "docs/validation/opamp-output/source-index-final.json",
+    "files": 630,
+    "production_inputs_stable": true,
+    "subsequent_test_only_change": "docs/validation/opamp-output/test-cleanup-source-delta.json",
+    "final_index": "docs/validation/opamp-output/source-index-post-cleanup.json"
+  },
+  "quality": {
+    "normal_build": "docs/validation/opamp-output/build-final.log.txt",
+    "full_gate": "docs/validation/opamp-output/quality-reviewed.log.txt",
+    "includes": [
+      "formatting/imports",
+      "Staticcheck",
+      "22 Python tests",
+      "root and native Go race",
+      "root and native Go vet"
+    ],
+    "post_full_gate_test_cleanup": [
+      "docs/validation/opamp-output/native-ground-cleanup-test.log.txt",
+      "docs/validation/opamp-output/lint-post-cleanup.log.txt",
+      "docs/validation/opamp-output/native-vet-post-cleanup.log.txt"
+    ],
+    "earlier_gate_refusals": {
+      "fixture_directory": "docs/validation/opamp-output/quality-before-fixture-isolation.log.txt",
+      "native_hash_review": "docs/validation/opamp-output/quality-final.log.txt"
+    },
+    "before_regressions": "docs/validation/opamp-output/label-before.log.txt",
+    "after_regressions": "docs/validation/opamp-output/label-final-core2.log.txt"
+  },
+  "candidate": {
+    "path": "build/ELab-0.106.0-121-candidate3.app",
+    "version": "0.106.0",
+    "build": 121,
+    "sha256": "ddfab0b92177cc4a5bd2db458e980fc55048b07b266dfb51ffcd7d72daf1ca50",
+    "same_as_ordinary_binary_and_preview_host": true,
+    "smoke_stages": 45,
+    "promoted": false,
+    "signed": false,
+    "notarized": false
+  },
+  "sdk": {
+    "passed": true,
+    "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-aa9d023",
+    "source": "aa9d023243a6bded514c3d9696c08a9c917119c4"
+  },
+  "native_inventory": {
+    "passed": true,
+    "public_commands": 162,
+    "scope": "source inventory; dynamic binding and runtime coverage remain separate",
+    "sites": 388,
+    "source_route_count": 132,
+    "sources": 57
+  },
+  "numerical": {
+    "passed": true,
+    "source_report_sha256": "7924d93a90e73988749acb701ca86ebb19ac5cda70681052c96c1103414986f9",
+    "reference_checks": 7996,
+    "new_storage_reference_checks": 3008,
+    "file_refusals": 232,
+    "storage_rows": 668,
+    "current_adapter_evidence_valid": true
+  },
+  "prior_numerical_comparison": "docs/validation/opamp-output/prior-numerical-audit.json",
+  "output_parity": {
+    "passed": true,
+    "captures": 10,
+    "pages": 13,
+    "observations": [
+      {
+        "name": "opamp-follower",
+        "pages": 1,
+        "svg_and_png_byte_identical": true,
+        "pdf_identical_except_two_timestamps_and_trailer_ids": true
+      },
+      {
+        "name": "opamp-inverting",
+        "pages": 1,
+        "svg_and_png_byte_identical": true,
+        "pdf_identical_except_two_timestamps_and_trailer_ids": true
+      },
+      {
+        "name": "source-0",
+        "pages": 1,
+        "svg_and_png_byte_identical": true,
+        "pdf_identical_except_two_timestamps_and_trailer_ids": true
+      },
+      {
+        "name": "source-180",
+        "pages": 1,
+        "svg_and_png_byte_identical": true,
+        "pdf_identical_except_two_timestamps_and_trailer_ids": true
+      },
+      {
+        "name": "source-270",
+        "pages": 1,
+        "svg_and_png_byte_identical": true,
+        "pdf_identical_except_two_timestamps_and_trailer_ids": true
+      },
+      {
+        "name": "ground-0",
+        "pages": 1,
+        "svg_and_png_byte_identical": true,
+        "pdf_identical_except_two_timestamps_and_trailer_ids": true
+      },
+      {
+        "name": "ground-180",
+        "pages": 1,
+        "svg_and_png_byte_identical": true,
+        "pdf_identical_except_two_timestamps_and_trailer_ids": true
+      },
+      {
+        "name": "ground-270",
+        "pages": 1,
+        "svg_and_png_byte_identical": true,
+        "pdf_identical_except_two_timestamps_and_trailer_ids": true
+      },
+      {
+        "name": "inverting-grayscale",
+        "pages": 1,
+        "svg_and_png_byte_identical": true,
+        "pdf_identical_except_two_timestamps_and_trailer_ids": true
+      },
+      {
+        "name": "inverting-tiled",
+        "pages": 4,
+        "svg_and_png_byte_identical": true,
+        "pdf_identical_except_two_timestamps_and_trailer_ids": true
+      }
+    ],
+    "pdf_scope": "Only exactly two Quartz creation/modification timestamps and one trailer ID pair are normalized. Every other byte and all non-date metadata match.",
+    "render_scope": "All 13 headless PDF pages independently rendered by Poppler; four contact sheets and three full-size reference pages visually inspected. Native PDF drawing bytes are identical."
+  },
+  "public_reports": [
+    "docs/validation/opamp-output/qualified-headless-output.json",
+    "docs/validation/opamp-output/qualified-native-output.json"
+  ],
+  "report": {
+    "path": "docs/validation/opamp-output/conformance-report.json.gz",
+    "decoded_sha256": "7924d93a90e73988749acb701ca86ebb19ac5cda70681052c96c1103414986f9",
+    "complete_raw_json": true
+  },
+  "archives": {
+    "outputs": {
+      "members": 43,
+      "hashes_verified": true,
+      "archive_sha256": "8b43f5629afd6862da38e2a80ba7c2e314e17fdea1da2406efa86d411a82c2a6"
+    },
+    "file-fixtures": {
+      "members": 296,
+      "hashes_verified": true,
+      "archive_sha256": "122a373f1221b83413e87888f631d088f457155f0cc31b070d544d928c477a3b"
+    }
+  },
+  "archive_indexes": [
+    "docs/validation/opamp-output/outputs-index.json",
+    "docs/validation/opamp-output/file-fixtures-index.json"
+  ],
+  "native_ui": {
+    "report": "research/ui-audit/opamp-output/README.md",
+    "observations": "docs/validation/opamp-output/ui-observations.json",
+    "screenshots": 6,
+    "dimensions_px": [
+      1185,
+      855
+    ],
+    "preview_launcher": "docs/validation/opamp-output/preview-launcher.go.txt",
+    "no_recovery_or_appearance": true,
+    "saved_window_geometry_restored": true,
+    "owned_ui_process_observed_exited": true,
+    "no_physical_print_job": true
+  },
+  "qualified_bundles_unchanged": {
+    "ELab.app": {
+      "passed": true,
+      "entries": 7,
+      "tree": {
+        ".": {
+          "mode": 493,
+          "sha256": null
+        },
+        "Contents": {
+          "mode": 493,
+          "sha256": null
+        },
+        "Contents/Info.plist": {
+          "mode": 420,
+          "sha256": "a93ecefc0bf11f728c464f6d6a00aafa70c27f52f9ee7113497c5eb0d9bf7878"
+        },
+        "Contents/MacOS": {
+          "mode": 493,
+          "sha256": null
+        },
+        "Contents/MacOS/ELab": {
+          "mode": 493,
+          "sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c"
+        },
+        "Contents/Resources": {
+          "mode": 493,
+          "sha256": null
+        },
+        "Contents/Resources/APP_MANIFEST.json": {
+          "mode": 420,
+          "sha256": "77e1b208d223bf5c0fc96a6dca4ce42dd933b3f3a93f54473087b35b7a471476"
+        }
+      }
+    },
+    "ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7,
+      "tree": {
+        ".": {
+          "mode": 493,
+          "sha256": null
+        },
+        "Contents": {
+          "mode": 493,
+          "sha256": null
+        },
+        "Contents/Info.plist": {
+          "mode": 420,
+          "sha256": "472cb00ccdb9d991c5db8c968b3dee09de5a9af4693fcfb5e988987686f55fb8"
+        },
+        "Contents/MacOS": {
+          "mode": 493,
+          "sha256": null
+        },
+        "Contents/MacOS/ELab": {
+          "mode": 493,
+          "sha256": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1"
+        },
+        "Contents/Resources": {
+          "mode": 493,
+          "sha256": null
+        },
+        "Contents/Resources/APP_MANIFEST.json": {
+          "mode": 420,
+          "sha256": "b5d26694364735405bfe466009eb1d9e19ae9ed0811bf7ec7c9b48fa9e16767b"
+        }
+      }
+    }
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "limitations": [
+    "Curated rotation/caption-mask tests do not qualify arbitrary automatic layout or routing fallback.",
+    "Native fitted text remains tiny; palette tooltip persists until preview replaces workspace; first Pause click did not apply, second accepted.",
+    "External accessibility omits visible inspector leaves; complete mounted pointer/keyboard/IME/screen-reader and divider acceptance remains open.",
+    "Captured output evidence does not qualify physical printers, media, scaling, margins or real hardware.",
+    "Visible latency, maximum device/capacity envelope, distribution audit and app-release qualification remain open.",
+    "CUA getApp observation timing is not an application benchmark."
+  ]
+}

@@ -1,5 +1,16 @@
 package workbench
 
+// GroundLabelPosition keeps the upright caption clear of the bars and the
+// terminal lead at every rotation. Native and exported schematics share the
+// baseline; arbitrary neighboring objects still need layout consideration.
+func GroundLabelPosition(p Component) Point {
+	y := p.Position.Y - 42
+	if p.Rotation == 0 {
+		y = p.Position.Y + 42
+	}
+	return Point{p.Position.X - float64(len([]rune(p.ID)))*4.375, y}
+}
+
 // LEDLabelPosition is the upright label baseline shared by the native canvas
 // and schematic outputs. It clears the larger native body/emission arrows and
 // terminal routing stubs at every supported rotation. Global label/wire layout

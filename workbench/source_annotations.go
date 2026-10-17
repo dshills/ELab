@@ -65,6 +65,13 @@ func positionSourceAnnotations(g Graph, annotations []SourceAnnotation) {
 		for _, line := range annotations[i].Lines {
 			width = math.Max(width, schematicLabelWidth(line))
 		}
+		if p.Rotation == 90 || p.Rotation == 270 {
+			// Horizontal sources have terminal leads on both sides. Put the
+			// entire block above them, including held/pending/stale lines,
+			// with its right edge aligned over the right-hand terminal.
+			annotations[i].Position = Point{X: p.Position.X + 40 - width, Y: p.Position.Y - 60 - float64(len(annotations[i].Lines)-1)*SourceAnnotationLineHeight}
+			continue
+		}
 		annotations[i].Position = Point{X: p.Position.X - width - 40, Y: p.Position.Y - float64(len(annotations[i].Lines)-1)*SourceAnnotationLineHeight/2 + 5}
 	}
 }

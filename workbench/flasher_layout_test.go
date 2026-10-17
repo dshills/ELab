@@ -76,6 +76,17 @@ func TestFlasherLabelMasksLeaveRoutedWiresContinuous(t *testing.T) {
 
 func assertLabelMasksLeaveWiresContinuous(t *testing.T, g Graph, ids []string) {
 	t.Helper()
+	for _, id := range ids {
+		p, _ := g.Component(id)
+		x, y, text := schematicPartLabel(p)
+		// Enclose the actual white mask plus half the 2.2-unit wire stroke.
+		mask := routeRect{x - 4.1, x - 3 + schematicLabelWidth(text) + 1.1, y - 16.1, y + 5.1}
+		assertMaskLeavesWiresContinuous(t, g, id, mask)
+	}
+}
+
+func assertMaskLeavesWiresContinuous(t *testing.T, g Graph, id string, mask routeRect) {
+	t.Helper()
 	crosses := func(a, b Point, box routeRect) bool {
 		lo, hi := 0., 1.
 		for _, axis := range [][4]float64{{a.X, b.X, box.left, box.right}, {a.Y, b.Y, box.top, box.bottom}} {
@@ -94,17 +105,11 @@ func assertLabelMasksLeaveWiresContinuous(t *testing.T, g Graph, ids []string) {
 		}
 		return true
 	}
-	for _, id := range ids {
-		p, _ := g.Component(id)
-		x, y, text := schematicPartLabel(p)
-		// Enclose the actual white mask plus half the 2.2-unit wire stroke.
-		mask := routeRect{x - 4.1, x - 3 + schematicLabelWidth(text) + 1.1, y - 16.1, y + 5.1}
-		for _, wire := range g.Wires {
-			path := WirePath(g, wire)
-			for i := 1; i < len(path); i++ {
-				if crosses(path[i-1], path[i], mask) {
-					t.Errorf("%s mask cuts %s segment %v → %v", id, wire.ID, path[i-1], path[i])
-				}
+	for _, wire := range g.Wires {
+		path := WirePath(g, wire)
+		for i := 1; i < len(path); i++ {
+			if crosses(path[i-1], path[i], mask) {
+				t.Errorf("%s mask cuts %s segment %v → %v", id, wire.ID, path[i-1], path[i])
 			}
 		}
 	}

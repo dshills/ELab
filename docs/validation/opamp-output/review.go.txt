@@ -1,0 +1,113 @@
+package main
+
+import (
+	"compress/gzip"
+	"crypto/sha256"
+	"encoding/json"
+	"fmt"
+	"io"
+	"os"
+
+	"github.com/dshills/elab/internal/conformance"
+	"github.com/dshills/elab/workbench"
+)
+
+type adapter struct {
+	Name       string                         `json:"name"`
+	Equivalent bool                           `json:"equivalent_to_in_process"`
+	Workflows  []conformance.Result           `json:"workflows"`
+	Electrical conformance.ElectricalResult   `json:"electrical"`
+	Inductors  conformance.InductorResult     `json:"inductors"`
+	OpAmps     conformance.OpAmpSuiteResult   `json:"opamps"`
+	Storage    conformance.OpAmpStorageResult `json:"opamp_storage"`
+}
+type report struct {
+	Passed   bool      `json:"passed"`
+	Adapters []adapter `json:"adapters"`
+}
+
+func load(path string) (report, []byte) {
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		panic(err)
+	}
+	if len(raw) > 2 && raw[0] == 0x1f && raw[1] == 0x8b {
+		file, err := os.Open(path)
+		if err != nil {
+			panic(err)
+		}
+		reader, err := gzip.NewReader(file)
+		if err != nil {
+			panic(err)
+		}
+		raw, err = io.ReadAll(reader)
+		if err != nil {
+			panic(err)
+		}
+		reader.Close()
+		file.Close()
+	}
+	var result report
+	if err = json.Unmarshal(raw, &result); err != nil {
+		panic(err)
+	}
+	return result, raw
+}
+func require(ok bool, message string) {
+	if !ok {
+		panic(message)
+	}
+}
+func main() {
+	require(len(os.Args) == 3, "usage: reviewer new-report.json[.gz] prior-opamp-report.json.gz")
+	current, raw := load(os.Args[1])
+	prior, _ := load(os.Args[2])
+	require(current.Passed && prior.Passed && len(current.Adapters) == 4 && len(prior.Adapters) == 4, "four passing current/prior adapters required")
+	names := []string{"in-process", "headless-stdio", "headless-socket", "native-socket"}
+	checks, refusals, frames := 0, 0, 0
+	for i, actual := range current.Adapters {
+		require(actual.Name == names[i] && actual.Equivalent && len(actual.Workflows) == 3, "adapter/workflow coverage")
+		require(conformance.Compare(current.Adapters[0].Workflows, actual.Workflows) == nil, "base workflows differ")
+		require(conformance.CompareElectrical(current.Adapters[0].Electrical, actual.Electrical) == nil, "electrical references differ")
+		require(conformance.CompareInductors(current.Adapters[0].Inductors, actual.Inductors) == nil, "coil references differ")
+		require(conformance.CompareOpAmps(current.Adapters[0].OpAmps, actual.OpAmps) == nil, "amplifier references differ")
+		require(conformance.CompareOpAmpStorage(current.Adapters[0].Storage, actual.Storage) == nil, "storage references/refinement/file boundaries differ")
+		require(len(actual.Storage.Checks) == 752 && len(actual.OpAmps.Checks) == 931 && len(actual.Electrical.Checks) == 294 && len(actual.Inductors.Checks) == 22, "reference coverage differs")
+		checks += len(actual.Storage.Checks) + len(actual.OpAmps.Checks) + len(actual.Electrical.Checks) + len(actual.Inductors.Checks)
+		for _, entry := range actual.Storage.Cases {
+			compiled, _, diagnostic := entry.Graph.Compile()
+			require(diagnostic == nil, "storage graph does not compile")
+			engine := workbench.NetworkEngineID
+			if compiled.Analysis == workbench.InductorAnalysis {
+				engine = workbench.InductorEngineID
+			} else if compiled.Analysis == workbench.WaveformAnalysis {
+				engine = workbench.WaveformEngineID
+			} else if compiled.Analysis == workbench.MixedAnalysis {
+				engine = workbench.MixedEngineID
+			}
+			for _, observation := range entry.Observations {
+				require(observation.Engine == engine, "storage observed engine differs from compiled circuit")
+			}
+			for _, refusal := range entry.Refusals {
+				require(refusal.ProjectUnchanged, "rejected file changed project")
+				refusals++
+			}
+			frames += len(entry.Rows) + len(entry.RefinedRows)
+		}
+	}
+	require(checks == 7996 && refusals == 232 && frames == 668, "complete reference/refusal/frame coverage")
+	out := struct {
+		Passed                 bool   `json:"passed"`
+		RawSHA256              string `json:"source_report_sha256"`
+		ReferenceChecks        int    `json:"reference_checks"`
+		NewReferenceChecks     int    `json:"new_storage_reference_checks"`
+		Refusals               int    `json:"file_refusals"`
+		StorageRows            int    `json:"storage_rows"`
+		CurrentEvidenceValid bool   `json:"current_adapter_evidence_valid"`
+	}{true, fmt.Sprintf("%x", sha256.Sum256(raw)), checks, 4 * 752, refusals, frames, true}
+	result, err := json.MarshalIndent(out, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(result))
+}
