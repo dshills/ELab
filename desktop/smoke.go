@@ -115,6 +115,10 @@ rendered:
 	if state.Circuit.Resistance != 2000 || state.Result == nil || math.Abs(state.Result.Current-0.0014767) > 0.000002 {
 		return fmt.Errorf("UI edit did not update live result")
 	}
+	setStage("nativeLEDInspectorAccessibilitySmoke")
+	if err := nativeLEDInspectorAccessibilitySmoke(ctx, a, s); err != nil {
+		return err
+	}
 	setStage("nativeRCSmoke")
 	if err := nativeRCSmoke(ctx, a, s); err != nil {
 		return err

@@ -2,14 +2,96 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"log"
+	"math"
 	"reflect"
 	"time"
 
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/app"
+	"github.com/dshills/vellum/drivers/cogent"
 	"github.com/dshills/vellum/ui"
 )
+
+// Query the real Cocoa elements and invoke their native action selectors. This
+// covers mounted inspector bindings; it does not certify an external reader or
+// explain why a separate CUA projection omits some of these controls.
+func nativeLEDInspectorAccessibilitySmoke(ctx context.Context, a *app.Application, s *screen) error {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+	var controls []cogent.AccessibilityElement
+	tick := time.NewTicker(20 * time.Millisecond)
+	defer tick.Stop()
+	for {
+		inspection, err := cogent.InspectAccessibility(ctx, "main")
+		if err != nil {
+			return err
+		}
+		controls = nil
+		for _, element := range inspection.Elements {
+			if element.DomainID == "value-entry" || element.DomainID == "apply-value" {
+				controls = append(controls, element)
+			}
+		}
+		ready := inspection.Reachable && inspection.NativeWindow && len(controls) == 2
+		for _, element := range controls {
+			ready = ready && element.Enabled && element.Frame[2] > 0 && element.Frame[3] > 0 && element.HitTestID == element.ID
+		}
+		if ready {
+			break
+		}
+		select {
+		case <-ctx.Done():
+			return fmt.Errorf("LED inspector native accessibility not ready: %w; controls=%+v", ctx.Err(), controls)
+		case <-tick.C:
+		}
+	}
+	if accepted, err := cogent.PerformAccessibilityAction(ctx, "main", "value-entry", "focus", ""); err != nil || !accepted {
+		return fmt.Errorf("native inspector focus: accepted=%t err=%v", accepted, err)
+	}
+	// Admission is not completion. A focus refresh can retire the preceding
+	// semantic generation; observe completion before sending a dependent edit.
+	for {
+		inspection, err := cogent.InspectAccessibility(ctx, "main")
+		if err != nil {
+			return err
+		}
+		focused := false
+		for _, element := range controls {
+			focused = focused || element.DomainID == "value-entry" && inspection.FocusedID == element.ID
+		}
+		if focused {
+			break
+		}
+		select {
+		case <-ctx.Done():
+			return fmt.Errorf("native inspector focus did not complete: %w; focused=%q", ctx.Err(), inspection.FocusedID)
+		case <-tick.C:
+		}
+	}
+	if accepted, err := cogent.PerformAccessibilityAction(ctx, "main", "value-entry", "set", "2.2k"); err != nil || !accepted {
+		return fmt.Errorf("native inspector set: accepted=%t err=%v", accepted, err)
+	}
+	if state, err := waitNativeViewport(ctx, a, s, func(state workbench.Snapshot) bool {
+		return state.Selected == "R1" && state.Drawing.Value == "2.2k"
+	}); err != nil {
+		return fmt.Errorf("native inspector set did not complete: %w; selected=%q draft=%q", err, state.Selected, state.Drawing.Value)
+	}
+	if accepted, err := cogent.PerformAccessibilityAction(ctx, "main", "apply-value", "press", ""); err != nil || !accepted {
+		return fmt.Errorf("native inspector Apply: accepted=%t err=%v", accepted, err)
+	}
+	state, err := waitNativeViewport(ctx, a, s, func(state workbench.Snapshot) bool {
+		return state.Circuit.Resistance == 2200 && state.Result != nil && !state.Result.Stale && math.Abs(state.Result.Current-0.001345) < 0.000002
+	})
+	if err != nil {
+		return err
+	}
+	evidence, _ := json.Marshal(map[string]any{"event": "elab.led-inspector.accessibility.smoke", "passed": true, "initial_native_controls": controls, "resistance_ohm": state.Circuit.Resistance, "current_a": state.Result.Current, "scope": "in-process Cocoa selectors, not external AX or VoiceOver acceptance"})
+	log.Print(string(evidence))
+	return nil
+}
 
 // Exercise controlled Change -> mounted refresh -> asynchronous Apply. This
 // helper runs on the smoke worker, never blocks the owner waiting for its FIFO,
