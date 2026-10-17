@@ -7,7 +7,6 @@ import (
 
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/app"
-	"github.com/dshills/vellum/ui"
 )
 
 func nativeValueDomainsSmoke(ctx context.Context, a *app.Application, s *screen) error {
@@ -21,75 +20,60 @@ func nativeValueDomainsSmoke(ctx context.Context, a *app.Application, s *screen)
 	}); err != nil {
 		return err
 	}
-	if err := <-result; err != nil {
-		return err
+	select {
+	case err := <-result:
+		if err != nil {
+			return err
+		}
+	case <-ctx.Done():
+		return ctx.Err()
 	}
 	if _, err := s.service.Wait(ctx); err != nil {
 		return err
 	}
+	if err := nativeValueApplySmoke(ctx, a, s, "V1", "500 mV", false); err != nil {
+		return err
+	}
 	if err := a.PostWait(ctx, func() {
-		for _, action := range []struct {
-			id    string
-			event *ui.ChangeEvent
-		}{{"selection", &ui.ChangeEvent{SelectedID: "V1"}}, {"value-entry", &ui.ChangeEvent{Text: "500 mV"}}, {"apply-value", nil}} {
-			if err := smokeUI(s, action.id, action.event); err != nil {
-				result <- err
-				return
-			}
-		}
-		state := s.service.Snapshot()
-		part, _ := (workbench.Graph{Components: state.Components}).Component("V1")
+		part, _ := (workbench.Graph{Components: s.service.Snapshot().Components}).Component("V1")
 		label, ok := findNode(s.view(), "value-domain-range")
 		if part.Value != .5 || !ok || label.Text != "0–12 V" {
 			result <- fmt.Errorf("native source value/range not shared")
-			return
-		}
-		if err := smokeUI(s, "value-entry", &ui.ChangeEvent{Text: "1e-999 V"}); err != nil {
-			result <- err
-			return
-		}
-		before := s.service.Snapshot()
-		apply, _ := findAction(s.view(), "apply-value")
-		apply.Activate()
-		if s.errorMessage == "" || !reflect.DeepEqual(before, s.service.Snapshot()) {
-			result <- fmt.Errorf("native underflow silently committed")
-			return
-		}
-		if err := smokeUI(s, "value-entry", &ui.ChangeEvent{Text: "750 mV"}); err != nil {
-			result <- err
-			return
-		}
-		if err := smokeUI(s, "apply-value", nil); err != nil {
-			result <- err
-			return
-		}
-		part, _ = (workbench.Graph{Components: s.service.Snapshot().Components}).Component("V1")
-		if part.Value != .75 {
-			result <- fmt.Errorf("native value correction failed")
-			return
-		}
-		for _, action := range []struct {
-			id    string
-			event *ui.ChangeEvent
-		}{{"selection", &ui.ChangeEvent{SelectedID: "C1"}}, {"value-entry", &ui.ChangeEvent{Text: "1.234567890123456 µF"}}, {"apply-value", nil}} {
-			if err := smokeUI(s, action.id, action.event); err != nil {
-				result <- err
-				return
-			}
-		}
-		preciseBefore := s.service.Snapshot()
-		if err := smokeUI(s, "apply-value", nil); err != nil {
-			result <- err
-			return
-		}
-		preciseAfter := s.service.Snapshot()
-		if !reflect.DeepEqual(preciseBefore.Components, preciseAfter.Components) || preciseBefore.ElectricalRevision != preciseAfter.ElectricalRevision || preciseBefore.RunID != preciseAfter.RunID || preciseBefore.Document != preciseAfter.Document || !reflect.DeepEqual(preciseBefore.UndoEntry, preciseAfter.UndoEntry) {
-			result <- fmt.Errorf("untouched native value Apply changed stored circuit")
 			return
 		}
 		result <- nil
 	}); err != nil {
 		return err
 	}
-	return <-result
+	select {
+	case err := <-result:
+		if err != nil {
+			return err
+		}
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+	if err := nativeValueApplySmoke(ctx, a, s, "V1", "1e-999 V", true); err != nil {
+		return err
+	}
+	if err := nativeValueApplySmoke(ctx, a, s, "V1", "750 mV", false); err != nil {
+		return err
+	}
+	part, _ := (workbench.Graph{Components: s.service.Snapshot().Components}).Component("V1")
+	if part.Value != .75 {
+		return fmt.Errorf("native value correction failed")
+	}
+	const precise = "1.234567890123456 µF"
+	if err := nativeValueApplySmoke(ctx, a, s, "C1", precise, false); err != nil {
+		return err
+	}
+	before := s.service.Snapshot()
+	if err := nativeValueApplySmoke(ctx, a, s, "C1", "", false); err != nil {
+		return err
+	}
+	after := s.service.Snapshot()
+	if !reflect.DeepEqual(before.Components, after.Components) || before.ElectricalRevision != after.ElectricalRevision || before.RunID != after.RunID || before.Document != after.Document || !reflect.DeepEqual(before.UndoEntry, after.UndoEntry) {
+		return fmt.Errorf("untouched native value Apply changed stored circuit")
+	}
+	return nil
 }

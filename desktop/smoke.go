@@ -86,18 +86,6 @@ func nativeSmoke(a *app.Application, s *screen, g *cogent.MeshCanvas, timeout ti
 				completed <- probe{err: fmt.Errorf("schematic drawing absent: %d colored pixels", colored)}
 				return
 			}
-			if err := smokeUI(s, "selection", &ui.ChangeEvent{SelectedID: "R1"}); err != nil {
-				completed <- probe{err: err}
-				return
-			}
-			if err := smokeUI(s, "value-entry", &ui.ChangeEvent{Text: "2k"}); err != nil {
-				completed <- probe{err: err}
-				return
-			}
-			if err := smokeUI(s, "apply-value", nil); err != nil {
-				completed <- probe{err: err}
-				return
-			}
 			completed <- probe{ready: true}
 		})
 		if err != nil {
@@ -116,6 +104,9 @@ func nativeSmoke(a *app.Application, s *screen, g *cogent.MeshCanvas, timeout ti
 		}
 	}
 rendered:
+	if err := nativeValueApplySmoke(ctx, a, s, "R1", "2k", false); err != nil {
+		return err
+	}
 	state, err = s.service.Wait(ctx)
 	if err != nil {
 		return err

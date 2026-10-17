@@ -1,0 +1,66 @@
+{
+  "elab_base": "2bfc347c5f536a98f45929868d4ac2a1e286a04f",
+  "vellum_base": "f1b917892d70479b7a30a5854e61e41189fdda50",
+  "patch": "docs/validation/value-apply-diagnostic.patch",
+  "patch_sha256": "48d5b0c3f3bae259aca925c802d4e2cb8551f8238460616a1407985170b6d76c",
+  "compiled_files": {
+    "Vellum/drivers/cogent/build/upstream/system/driver/desktop/app.go": {
+      "base_sha256": "32326f74f0c8247766c6f0ccd4e67430991cff0b78f98938a956c0cd1e56a5be",
+      "compiled_sha256": "194175dda1002db24ecef93c65f28daca806a00aaea8f18c6797430a22124448"
+    },
+    "Vellum/drivers/cogent/build/upstream/system/driver/desktop/event.go": {
+      "base_sha256": "fe2104045284b0069ca69ab7fdf4fb9654d6421f359e36a5aebf7e737d228334",
+      "compiled_sha256": "bb794f54aff8442d16c7ded312057a157788512a8e5f418023a395323503f8db"
+    },
+    "Vellum/drivers/cogent/accessibility_darwin.go": {
+      "base_sha256": "fd278aa39e50654bc0e9e46bda5ffd57595558aea30c8ee896bae8d55b6f0513",
+      "compiled_sha256": "45be1ebdb415838e550af6e7e4d332a2cbad65aa4b58c7c286951e5c361f1d37"
+    },
+    "Vellum/drivers/cogent/build/upstream/core/events.go": {
+      "base_sha256": "f8d968d7579811731a79f8ed5b6d52f9c257af0c5a2f1f0efa4e2625e3a6b848",
+      "compiled_sha256": "a430017950765771ac2a2403d5243a156c3e5607e51f4c31fb826aed76875351"
+    },
+    "Vellum/drivers/cogent/controls.go": {
+      "base_sha256": "a76446f2155de833fd21cfc6d56182152b6b882eb1b68f216eeec2270e9fe8f9",
+      "compiled_sha256": "c8325e97fbc65f40bb2a26b59811daac3014f0485db47635f298b1273c3ec031"
+    },
+    "ELab/desktop/main.go": {
+      "base_sha256": "60d063ab5488e0e807a89e0a802e6feebdd4d7127929b5751c7a9e1831d0aca3",
+      "compiled_sha256": "aff9d6086b96d4c763c46089ef02211c813bbed7c1d8e40313cf605701cff820"
+    },
+    "ELab/desktop/component_inspector.go": {
+      "base_sha256": "bdfe697a02716d0d236eac61162c962edb12d0cc518da11a6c7556e503cdac37",
+      "compiled_sha256": "c8509dbe15e8aae4ecece30bce55f75360ff3eaa07c23ef51dc82fbaaee00ff6"
+    },
+    "ELab/desktop/value_apply.go": {
+      "base_sha256": null,
+      "compiled_sha256": "1bced8953501b25f5e90ca0c1eb128df536c82eb9fde85390ce14f5d31e330b0"
+    },
+    "ELab/desktop/pointer_darwin.m": {
+      "base_sha256": "801277a80e7baaeff023ad41c46d818540438cf62e7fbecda9cf117712b7d7ed",
+      "compiled_sha256": "dd8fd93f6643436492f17faf8f492ede5245c32f9784af6dc615340e5a3d4352"
+    },
+    "ELab/desktop/live_probe.go": {
+      "base_sha256": null,
+      "compiled_sha256": "6c446860905ba07c0337f0c3601bba04ae64b321247453420231560ca1a803d0"
+    },
+    "ELab/desktop/probe_smoke.go": {
+      "base_sha256": null,
+      "compiled_sha256": "feace6b77e6f74ece800172f319499274877c04142051ba3efcf6503897c35cb"
+    },
+    "ELab/desktop/smoke.go": {
+      "base_sha256": "d580409659cbc87671fc8b734b470fcad509a27e1c9f2e321711cf854e838933",
+      "compiled_sha256": "69cedcc0b5f94f1a5d2d320cf9900c1e89a9df3151155c1bd2aa2db1cb31dcae"
+    },
+    "ELab/desktop/go.mod": {
+      "base_sha256": "8b1267e9b7ec46f455a03ba15e6a914b0a1f0d186a437c4ba951f63c15211ce2",
+      "compiled_sha256": "50e16dfebc5574fa1d9221d2de4b170bfc3ef117c4b45f3a77271ec97db6866b"
+    },
+    "ELab/desktop/go.sum": {
+      "base_sha256": "b2e6f478ea44ceacd079f61e26e13c035609404cc037fb264ab5a858092bbc14",
+      "compiled_sha256": "b2e6f478ea44ceacd079f61e26e13c035609404cc037fb264ab5a858092bbc14"
+    }
+  },
+  "reconstruction_verified": true,
+  "omitted_unused_overlay": "drivers/cogent/accessibility_darwin.m: Go -overlay did not compile this Objective-C replacement. The actual helper was compiled in ELab/desktop/pointer_darwin.m."
+}

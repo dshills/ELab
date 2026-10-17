@@ -99,6 +99,9 @@ func runNative() (runErr error) {
 	if err != nil {
 		return err
 	}
+	screen.settleField = func(id string, done func(error)) error {
+		return cogent.SettleTextField(a.Context(), a, "main", id, done)
+	}
 	screen.drawing.pointer = newPointerBridge(a, screen.window, screen.routeNativePointer)
 	defer screen.drawing.pointer.close()
 	if *endpoint != "" {
@@ -206,6 +209,8 @@ type screen struct {
 	menuCommandRevision                 *uint64
 	actionContext                       *actionContext
 	fieldContext                        *actionContext
+	settleField                         func(string, func(error)) error
+	pendingValueApply                   *valueApply
 }
 
 func (s *screen) invoke(id string, p any) workbench.Response {

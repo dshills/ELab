@@ -5,7 +5,7 @@
     "desktop/actuation_controls.go": "9b0e8148f7ca32ac2f1802d69411fcd355c2df5b2af4b89df1084d413166ee1e",
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
     "desktop/canvas.go": "a241f57812c104171737149f067ae8a0d5aaf191c17092597c5a060b4587c7ef",
-    "desktop/component_inspector.go": "bdfe697a02716d0d236eac61162c962edb12d0cc518da11a6c7556e503cdac37",
+    "desktop/component_inspector.go": "c8509dbe15e8aae4ecece30bce55f75360ff3eaa07c23ef51dc82fbaaee00ff6",
     "desktop/component_palette.go": "5d7b83aba4bd8202b899f0168848226f8217a8dd3dbd73d2ff6c8d99b752d3ab",
     "desktop/dc_sweep.go": "6714f9c257faaf1e230e51dbc2c8b31a0d83ad9613eaa47d2de9bf8db495600f",
     "desktop/dc_sweep_canvas.go": "6404c77863729aedfd18a886e88d57889c51c374197189de91665d7142ad1022",
@@ -21,7 +21,7 @@
     "desktop/keyboard_workflow.go": "42fa8031620577bff9c73eba71954730a71765328b219ab96911ffdbe7a5c883",
     "desktop/layout.go": "95c8d3aea1b220556a1a0b0cb90cb148c60494358f13fc6e94cded0a06498ddb",
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
-    "desktop/main.go": "60d063ab5488e0e807a89e0a802e6feebdd4d7127929b5751c7a9e1831d0aca3",
+    "desktop/main.go": "e70d463d24c92cba3229e4f6973c0ad06c107f5727b79c7dff70d764ea07d36b",
     "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
     "desktop/menus.go": "d78bfdb0b8ad01e290c7a3a8179dafc72b3e2a6f8b65d3994ca69f334aff700c",
     "desktop/menus_darwin.go": "3f7cd30cc99b38b4385e56303bbc790cce6e03add876634ff44cb267815522ea",
@@ -51,6 +51,7 @@
     "desktop/shutdown.go": "39e6d600f9edf67e2fe6a09e6b2b5ada051e67c1cf3fac2e3efe3ec4fe631a26",
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
     "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
+    "desktop/value_apply.go": "eab16eb97a0b34a4cff40d5fd77d96dbdce394c5071aaa7ed0e58169ea45713d",
     "desktop/verification.go": "550f32b3d90b99269bce6777233b68e9329b2ae704b5b2fca60a1a368fbab406",
     "desktop/view.go": "d24d2ff0d65b95066673060ec667692e8eb9c1f7e53852c6cb17fe190f23559d",
     "desktop/viewport.go": "a0d8a6a6b3577a0a909a0f7b3f339532a5abfde78fcf8a1979fb2e46f5f074cc",
@@ -602,60 +603,16 @@
       "line": 44,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text}) }",
+      "expression": "Change: s.changeValueDraft",
       "status": "requires-binding-review"
-    },
-    {
-      "file": "desktop/component_inspector.go",
-      "line": 44,
-      "function": "*screen.componentInspector",
-      "kind": "domain-ingress",
-      "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
-      "public_commands": [
-        "editor.value.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/component_inspector.go",
-      "line": 44,
-      "function": "*screen.componentInspector",
-      "kind": "action-factory",
-      "expression": "s.action(\"apply-value\", \"Apply label\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value})",
-      "public_commands": [
-        "component.set"
-      ],
-      "status": "literal-public-route"
     },
     {
       "file": "desktop/component_inspector.go",
       "line": 56,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text}) }",
+      "expression": "Change: s.changeValueDraft",
       "status": "requires-binding-review"
-    },
-    {
-      "file": "desktop/component_inspector.go",
-      "line": 56,
-      "function": "*screen.componentInspector",
-      "kind": "domain-ingress",
-      "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
-      "public_commands": [
-        "editor.value.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/component_inspector.go",
-      "line": 56,
-      "function": "*screen.componentInspector",
-      "kind": "action-factory",
-      "expression": "s.action(\"apply-value\", \"Apply value\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: state.Drawing.Value})",
-      "public_commands": [
-        "component.set"
-      ],
-      "status": "literal-public-route"
     },
     {
       "file": "desktop/component_inspector.go",
@@ -1627,7 +1584,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 212,
+      "line": 217,
       "function": "*screen.invoke",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(id, p, s.service.Snapshot().CommandRevision)",
@@ -1635,7 +1592,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 229,
+      "line": 234,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "request-command-field",
       "expression": "Command: id",
@@ -1643,7 +1600,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 233,
+      "line": 238,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "event-or-dispatch-router",
       "expression": "s.service.Dispatch(context.Background(), request, \"user\")",
@@ -1651,7 +1608,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 254,
+      "line": 259,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.undo\", \"Undo\", \"Meta+Z\"}",
@@ -1662,7 +1619,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 254,
+      "line": 259,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.redo\", \"Redo\", \"Meta+Shift+Z\"}",
@@ -1673,7 +1630,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 255,
+      "line": 260,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"project.clear\", \"New blank\", \"\"}",
@@ -1684,7 +1641,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 255,
+      "line": 260,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"drawing.cancel\", \"Cancel drawing\", \"Escape\"}",
@@ -1695,7 +1652,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 256,
+      "line": 261,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"app.close\", \"Close window\", \"Meta+W\"}",
@@ -1706,7 +1663,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 257,
+      "line": 262,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.current.reset\", \"Reset current example\", \"\"}",
@@ -1717,7 +1674,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 257,
+      "line": 262,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.reset\", \"Load LED example\", \"\"}",
@@ -1728,7 +1685,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 257,
+      "line": 262,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.rc\", \"Load RC example\", \"\"}",
@@ -1739,7 +1696,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 257,
+      "line": 262,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn\", \"Load NPN LED example\", \"\"}",
@@ -1750,7 +1707,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 257,
+      "line": 262,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.switch-npn\", \"Load manual transistor LED switch\", \"\"}",
@@ -1761,7 +1718,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 257,
+      "line": 262,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn-pulse\", \"Load blinking NPN LED\", \"\"}",
@@ -1772,7 +1729,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 257,
+      "line": 262,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.flasher\", \"Load capacitor-timed LED flasher\", \"\"}",
@@ -1783,7 +1740,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 257,
+      "line": 262,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.rectifier\", \"Load diode rectifier and smoothing\", \"\"}",
@@ -1794,7 +1751,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 258,
+      "line": 263,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.pause\", \"Pause\", \"\"}",
@@ -1805,7 +1762,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 258,
+      "line": 263,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.resume\", \"Resume\", \"\"}",
@@ -1816,7 +1773,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 258,
+      "line": 263,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.restart\", \"Restart\", \"\"}",
@@ -1827,7 +1784,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 258,
+      "line": 263,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"view.fit\", \"Fit circuit\", \"\"}",
@@ -1838,7 +1795,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 261,
+      "line": 266,
       "function": "*screen.registerCommands",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Register(command.Command{ID: entry.id, Label: entry.label, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts,\n\tAvailable: func() error {\n\t\tif s.fileBusy || s.pendingCommand != \"\" {\n\t\t\treturn fmt.Errorf(\"finish the current file operation first\")\n\t\t}\n\t\tstate := s.service.Snapshot()\n\t\tif state.Closed \u0026\u0026 entry.id != \"app.close\" {\n\t\t\treturn fmt.Errorf(\"session is closing\")\n\t\t}\n\t\tif entry.id == \"example.current.reset\" \u0026\u0026 state.Example == nil {\n\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t}\n\t\tif entry.id == \"edit.undo\" \u0026\u0026 !state.CanUndo {\n\t\t\treturn fmt.Errorf(\"nothing to undo\")\n\t\t}\n\t\tif entry.id == \"edit.redo\" \u0026\u0026 !state.CanRedo {\n\t\t\treturn fmt.Errorf(\"nothing to redo\")\n\t\t}\n\t\treturn nil\n\t}, Execute: func(context.Context) error {\n\t\tif entry.id == \"app.close\" {\n\t\t\ts.requestClose()\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"example.current.reset\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\tif state.Example == nil {\n\t\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t\t}\n\t\t\tgeneration := state.Document.Generation\n\t\t\ts.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"project.clear\" || entry.id == \"example.reset\" || entry.id == \"example.rc\" || entry.id == \"example.npn\" || entry.id == \"example.npn-pulse\" || entry.id == \"example.flasher\" || entry.id == \"example.switch-npn\" || entry.id == \"example.rectifier\" {\n\t\t\ts.requestReplace(entry.id, workbench.ReplaceParams{})\n\t\t\treturn nil\n\t\t}\n\t\tvar p any = struct{}{}\n\t\tif entry.id == \"edit.undo\" || entry.id == \"edit.redo\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\ttip := state.UndoEntry\n\t\t\tif entry.id == \"edit.redo\" {\n\t\t\t\ttip = state.RedoEntry\n\t\t\t}\n\t\t\tif tip != nil {\n\t\t\t\trevision := tip.CommandRevision\n\t\t\t\tp = workbench.HistoryParams{ExpectedEntryRevision: \u0026revision, AllowOtherActor: tip.Actor != \"user\"}\n\t\t\t}\n\t\t}\n\t\tif entry.id == \"view.fit\" {\n\t\t\tp = workbench.FitParams{Width: s.drawing.View.Width, Height: s.drawing.View.Height, FollowViewport: true}\n\t\t}\n\t\tr := s.invoke(entry.id, p)\n\t\tif r.Error != nil {\n\t\t\treturn fmt.Errorf(\"%s\", r.Error.Message)\n\t\t}\n\t\tif entry.id == \"drawing.cancel\" {\n\t\t\ts.requestKeyboardFocus(\"part-search\")\n\t\t}\n\t\tif entry.id == \"simulation.pause\" || entry.id == \"simulation.resume\" {\n\n\t\t\ttarget := \"simulation.pause\"\n\t\t\tif r.Result.(workbench.Snapshot).Paused {\n\t\t\t\ttarget = \"simulation.resume\"\n\t\t\t}\n\t\t\ts.requestKeyboardFocus(target)\n\t\t}\n\t\treturn nil\n\t},\n})",
@@ -1846,7 +1803,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 291,
+      "line": 296,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})",
@@ -1854,7 +1811,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 295,
+      "line": 300,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ReplaceParams{})",
@@ -1862,7 +1819,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 313,
+      "line": 318,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.invoke(entry.id, p)",
@@ -1870,7 +1827,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 361,
+      "line": 366,
       "function": "*screen.button",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Invoke(context.Background(), id)",
@@ -1878,7 +1835,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 370,
+      "line": 375,
       "function": "*screen.button",
       "kind": "domain-ingress",
       "expression": "s.invoke(id, target)",
@@ -1886,7 +1843,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 373,
+      "line": 378,
       "function": "*screen.button",
       "kind": "node-Activate",
       "expression": "Activate: activate",
@@ -3427,6 +3384,47 @@
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { change(e.Text) }",
       "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/value_apply.go",
+      "line": 21,
+      "function": "*screen.changeValueDraft",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
+      "public_commands": [
+        "editor.value.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/value_apply.go",
+      "line": 42,
+      "function": "*screen.valueApplyAction",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\tif s.pendingValueApply != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\n\t\ts.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := \u0026valueApply{context: context, params: params}\n\ts.pendingValueApply = pending\n\tdone := func(err error) {\n\t\tif s.pendingValueApply != pending {\n\t\t\treturn\n\t\t}\n\t\ts.pendingValueApply = nil\n\t\tif err != nil {\n\t\t\ts.errorMessage = fmt.Sprintf(\"Could not finish value entry: %v\", err)\n\t\t} else if !pending.failed {\n\t\t\ts.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)\n\t\t}\n\t\ts.app.Invalidate(\"main\")\n\t}\n\tif s.settleField == nil {\n\n\t\tdone(nil)\n\t} else if err := s.settleField(\"value-entry\", done); err != nil {\n\t\tdone(err)\n\t}\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/value_apply.go",
+      "line": 49,
+      "function": "*screen.valueApplyAction",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/value_apply.go",
+      "line": 62,
+      "function": "*screen.valueApplyAction",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
     },
     {
       "file": "desktop/verification.go",

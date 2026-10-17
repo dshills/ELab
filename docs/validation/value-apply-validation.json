@@ -1,0 +1,124 @@
+{
+  "date": "2026-10-16",
+  "scope": "Unreleased numeric/net-label Apply settlement; mounted callback smoke and scoped physical gain experiment on an isolated pointer prototype. No canonical app or SDK pin promotion.",
+  "source_base": "2bfc347c5f536a98f45929868d4ac2a1e286a04f",
+  "shared_commands": [
+    "editor.value.set",
+    "component.set"
+  ],
+  "regressions": [
+    "deferred numeric and net-label commits",
+    "exact draft/component command count and duplicate completion",
+    "agent edit before and after controlled commit",
+    "document replacement",
+    "refreshed field after an agent edit",
+    "settlement admission/completion failure",
+    "invalid draft refusal",
+    "untouched precise capacitance in mounted smoke"
+  ],
+  "quality": {
+    "command": "GOPROXY=off GOFLAGS=-p=1 ./scripts/check.sh",
+    "exit_code": 0,
+    "format_imports_staticcheck": true,
+    "python_tests": 15,
+    "root_race": "passed; unchanged packages use valid cache; uiaudit reran",
+    "root_race_previous_uncached_seconds": 65.713,
+    "native_race_seconds": 136.854,
+    "root_vet": true,
+    "native_vet": true,
+    "frozen_files": 619,
+    "source_changes": [],
+    "source_hash_map_sha256": "b06905e647243860f5e90686d9d770ff2a7f887be8ecc7745e2ee6d89f01de32",
+    "started_utc": "2026-10-17T00:23:14.894990+00:00",
+    "finished_utc": "2026-10-17T00:27:05.890785+00:00"
+  },
+  "native_smoke": {
+    "command": "./build/elab-value-apply-final --smoke --smoke-timeout 2m",
+    "exit_code": 0,
+    "stages": 45,
+    "binary_sha256": "d940919e9c23c3a2aee3a6ff89bb0b649bc193d289c9233de9a77a467d1088c8",
+    "scope": "Actual native owner, GPU/mesh, mounted callback and asynchronous settlement suite; not complete physical typing/IME/accessibility qualification."
+  },
+  "physical_experiment": {
+    "diagnostic_binary_sha256": "0e05c055462d1ffc7d902da086c6335da024ea6f1c597c30ef9c1a6751d20697",
+    "source_receipt": "docs/validation/value-apply-diagnostic-sources.json",
+    "rf_ohm": 10000,
+    "time_s": 0.025,
+    "input_v": 0.5,
+    "output_v": -0.4999898605773058,
+    "report": "research/ui-audit/value-apply/README.md",
+    "production_difference": "Diagnostic uses the same successful Apply path; production adds explicit error feedback for a refreshed field context. Its exact diagnostic source is separately frozen. Pointer coordinate hook is diagnostic only."
+  },
+  "sdk_context": {
+    "diagnostic_and_initial_gate_commit": "f1b917892d70479b7a30a5854e61e41189fdda50",
+    "finish_commit": "00f060bb6c1a504fbc74c39c2a406db54f8d611c",
+    "finish_status": "",
+    "external_changes_during_gate": [
+      "examples/placement/README.md",
+      "examples/placement/main.go",
+      "examples/placement/main_default.go",
+      "examples/placement/native_probe_darwin.go",
+      "examples/placement/native_probe_darwin_test.go",
+      "specs/placement.md"
+    ],
+    "changed_imported_inputs": [],
+    "imported_input_files_inspected": 5212,
+    "postcheck": "Strict same-HEAD assertion stopped orchestration after successful smoke/check. Explicit commit diff and actual go list -deps compilation/embed closure prove all six changes are outside ELab imported inputs (placement example/spec only). ELab did not edit the shared SDK."
+  },
+  "retained_failures": [
+    "Restricted first gate could not bind test Unix sockets; two existing coil-startup cases exceeded unchanged 100 ms wall budgets during concurrent diagnostic build activity. Scheduling causation unproven; no electronics/budget change. Subsequent unrestricted root/native gate passed.",
+    "First native smoke incorrectly used --no-recovery and stopped at recovery smoke. Corrected final invocation uses isolated temporary stores and passes all stages."
+  ],
+  "sources_sha256": {
+    "desktop/main.go": "e70d463d24c92cba3229e4f6973c0ad06c107f5727b79c7dff70d764ea07d36b",
+    "desktop/component_inspector.go": "c8509dbe15e8aae4ecece30bce55f75360ff3eaa07c23ef51dc82fbaaee00ff6",
+    "desktop/value_apply.go": "eab16eb97a0b34a4cff40d5fd77d96dbdce394c5071aaa7ed0e58169ea45713d",
+    "desktop/value_apply_test.go": "87bfd30c072a776728678fa6138c5147974da3903a87c10ab3256d80bf9fd0da",
+    "desktop/value_apply_smoke.go": "bbe967f0664acfcdcbe7f66e27a959c5a265202e802902fbb02f87f06ec207ca",
+    "desktop/value_domains_smoke.go": "7cc58bc0db9f9e34819ead41b30da4dc1b0f66d0ab8fbaf47854a58ee6a498c6",
+    "desktop/split_supply_smoke.go": "db041d0c12dfda1cf0e47771a1813d49ea89a43bc73c3e94bbf226b9cd6cc619",
+    "desktop/smoke.go": "bcf7569511fdaa377a9129bea15dd7256193d8fd00db85f2bf6570a69e80828e",
+    "research/13-native-command-inventory.json": "664653ed3f9a356dd66b1595d544b15cd583df87c0eec99972a67e95f59db4e1"
+  },
+  "preserved_apps": {
+    "build/ELab.app": {
+      "qualified_tree_matches": true,
+      "binary_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c"
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "qualified_tree_matches": true,
+      "binary_sha256": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1"
+    }
+  },
+  "native_inventory": {
+    "files": 57,
+    "sites": 388,
+    "public_ids": 162,
+    "source_routed_ids": 132,
+    "literal_routes": 216,
+    "binding_review_sites": 146
+  },
+  "p0": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "remaining": [
+    "Integrate and qualify event-coordinate support through Vellum owned patches and pinned inputs/outputs.",
+    "Investigate external AX omission; complete native hover/drag/scroll/multiple-window/fallback/keyboard/IME/accessibility qualification.",
+    "Repeated op-amp performance, wider storage/device/corruption and source-pinned application/export/print qualification."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/value-apply-diagnostic-sources.json": "2518782464e619a75d93ba9c0f947085eb2c43eb6783612a2e1bcba9a0a18e28",
+    "docs/validation/value-apply-diagnostic.patch": "48d5b0c3f3bae259aca925c802d4e2cb8551f8238460616a1407985170b6d76c",
+    "docs/validation/value-apply-initial-check.log": "01b4b5e96191bd4c9b8df8bb74265c8af75ee9e8cdbe94aee9e9b3dfccbb15e0",
+    "docs/validation/value-apply-native-smoke.log": "0e0bfb2733b34398ee3f2470784411adc979d2e81c1d096b6fc3c397527f0074",
+    "docs/validation/value-apply-quality.log": "8af7eb1e21cb199f5ebd1348646e2f19fc779ae5d57522f332ea09929e1a3db1",
+    "research/ui-audit/value-apply/01-applied.png": "7603afc893c0e6455811e2b98be6657f12f0204637ba732ccd361c0360f1b77d",
+    "research/ui-audit/value-apply/02-external-ax.txt": "1fa98a28d237929be9d951c60632ec77c39a48d042078a537ae2ac983a0e418f",
+    "research/ui-audit/value-apply/02-public-inspect.json": "c2f1669b405997cb6faa6a472c72616e5b77bf51503cbb1a3d36b8154ec9df3f",
+    "research/ui-audit/value-apply/02-stepped.png": "5381f5b92b434932b2e23d6c8481e8225234acf3795d684bc2bdd44e43984c79",
+    "research/ui-audit/value-apply/README.md": "b6d86875b2d01933a6a8cb40734ebc4536043ae7bc8242500d1babc084e2bb9b",
+    "research/ui-audit/value-apply/event-trace.txt": "cc46b3d49f4a6e186d74fd6cd757dc854758087d38d6297df3b710a475fe92ec",
+    "research/ui-audit/value-apply/native-inspector.json": "bd9188cbd093a09ecc86be3dce95a1f0d178ba649d93ae31190ecfbc11cd3259"
+  }
+}

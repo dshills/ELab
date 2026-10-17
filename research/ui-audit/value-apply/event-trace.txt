@@ -1,0 +1,52 @@
+2026-10-16 19:13:59.905 ELab-host[47505:30125260] ELAB-POINTER event=(30.0,839.0) hardware=(1160.7,449.7) phase=0
+2026-10-16 19:13:59.908 ELab-host[47505:30125260] ELAB-POINTER event=(30.0,839.0) hardware=(1160.7,449.7) phase=2
+2026-10-16 19:13:59.998 ELab-host[47505:30125260] ELAB-POINTER event=(591.0,397.0) hardware=(1160.7,449.7) phase=0
+2026/10/16 19:14:00 APP-INVOKE command=component.select params={"id":"RF"} rev=9 generation=[] resultError=<nil> stateRev=10
+2026-10-16 19:14:00.049 ELab-host[47505:30125260] ELAB-POINTER event=(591.0,397.0) hardware=(1160.7,449.7) phase=2
+2026-10-16 19:14:02.340 ELab-host[47505:30125260] ELAB-POINTER event=(975.0,425.0) hardware=(1160.7,449.7) phase=0
+SDK-POS (975,398)
+2026/10/16 19:14:02 SDK-BUTTON type=MouseDown point=(975,398) mods=
+CORE-PRESS down=/ELab · Live elec…content/value-entry ptr=0x6d443c3ce008 pos=(975,398)
+2026-10-16 19:14:02.394 ELab-host[47505:30125260] ELAB-POINTER event=(975.0,425.0) hardware=(1160.7,449.7) phase=2
+SDK-POS (975,398)
+2026/10/16 19:14:02 SDK-BUTTON type=MouseUp point=(975,398) mods=
+CORE-RELEASE down=/ELab · Live elec…content/value-entry ptr=0x6d443c3ce008 up=/ELab · Live elec…content/value-entry ptr=0x6d443c3ce008 equal=true pos=(975,398) long=/ELab · Live elec…content/value-entry timer=&{<nil> true} selected=<nil>
+2026-10-16 19:14:11.018 ELab-host[47505:30125260] ELAB-POINTER event=(932.0,370.0) hardware=(1160.7,449.7) phase=0
+SDK-POS (932,453)
+2026/10/16 19:14:11 SDK-BUTTON type=MouseDown point=(932,453) mods=
+CORE-PRESS down=/ELab · Live elec…content/apply-value ptr=0x6d443c3c5508 pos=(932,453)
+2026-10-16 19:14:11.094 ELab-host[47505:30125260] ELAB-POINTER event=(932.0,370.0) hardware=(1160.7,449.7) phase=2
+SDK-POS (932,453)
+2026/10/16 19:14:11 SDK-BUTTON type=MouseUp point=(932,453) mods=
+CORE-RELEASE down=/ELab · Live elec…content/apply-value ptr=0x6d443c3c5508 up=/ELab · Live elec…content/apply-value ptr=0x6d443c3c5508 equal=true pos=(932,453) long=/ELab · Live elec…content/apply-value timer=&{<nil> true} selected=<nil>
+CONTROL-CLICK id=apply-value retired=false disabled=false action=true
+CONTROL-POST id=apply-value guard=true retired=false disabled=false action=true
+2026/10/16 19:14:11 APP-INVOKE command=editor.value.set params={"value":"10k"} rev=10 generation=[2] resultError=<nil> stateRev=11
+2026/10/16 19:14:11 APP-INVOKE command=component.set params={"id":"RF","value":"10k"} rev=11 generation=[2] resultError=<nil> stateRev=12
+2026/10/16 19:14:26 APP-INVOKE command=scope.visibility.set params={"visible":true} rev=12 generation=[2] resultError=<nil> stateRev=13
+2026/10/16 19:14:29 APP-INVOKE command=simulation.restart params={} rev=14 generation=[] resultError=<nil> stateRev=15
+2026/10/16 19:14:43 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=15 generation=[2] resultError=<nil> stateRev=16
+2026/10/16 19:14:44 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=16 generation=[2] resultError=<nil> stateRev=17
+2026/10/16 19:14:45 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=17 generation=[2] resultError=<nil> stateRev=18
+2026/10/16 19:14:46 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=18 generation=[2] resultError=<nil> stateRev=19
+2026/10/16 19:14:46 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=19 generation=[2] resultError=<nil> stateRev=20
+2026/10/16 19:14:47 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=20 generation=[2] resultError=<nil> stateRev=21
+2026/10/16 19:14:48 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=21 generation=[2] resultError=<nil> stateRev=22
+2026/10/16 19:14:49 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=22 generation=[2] resultError=<nil> stateRev=23
+2026/10/16 19:14:50 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=23 generation=[2] resultError=<nil> stateRev=24
+2026/10/16 19:14:51 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=24 generation=[2] resultError=<nil> stateRev=25
+2026/10/16 19:14:52 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=25 generation=[2] resultError=<nil> stateRev=26
+2026/10/16 19:14:52 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=26 generation=[2] resultError=<nil> stateRev=27
+2026/10/16 19:14:53 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=27 generation=[2] resultError=<nil> stateRev=28
+2026/10/16 19:14:54 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=28 generation=[2] resultError=<nil> stateRev=29
+2026/10/16 19:14:55 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=29 generation=[2] resultError=<nil> stateRev=30
+2026/10/16 19:14:56 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=30 generation=[2] resultError=<nil> stateRev=31
+2026/10/16 19:14:57 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=31 generation=[2] resultError=<nil> stateRev=32
+2026/10/16 19:14:57 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=32 generation=[2] resultError=<nil> stateRev=33
+2026/10/16 19:14:58 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=33 generation=[2] resultError=<nil> stateRev=34
+2026/10/16 19:14:59 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=34 generation=[2] resultError=<nil> stateRev=35
+2026/10/16 19:15:00 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=35 generation=[2] resultError=<nil> stateRev=36
+2026/10/16 19:15:01 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=36 generation=[2] resultError=<nil> stateRev=37
+2026/10/16 19:15:02 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=37 generation=[2] resultError=<nil> stateRev=38
+2026/10/16 19:15:02 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=38 generation=[2] resultError=<nil> stateRev=39
+2026/10/16 19:15:03 APP-INVOKE command=simulation.step.start params={"duration_s":0.001} rev=39 generation=[2] resultError=<nil> stateRev=40

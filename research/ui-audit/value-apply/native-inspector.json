@@ -1,0 +1,228 @@
+{
+  "accessibility": [
+    {
+      "grid_scope": "",
+      "grid_incarnation": 0,
+      "grid_pending": false,
+      "grid_target_generation": 0,
+      "grid_generation": 0,
+      "object_identity": 199,
+      "id": "node:aW5zcGVjdG9y",
+      "role": "AXStaticText",
+      "name": "RF \u00b7 Resistor",
+      "value": "RF \u00b7 Resistor",
+      "enabled": true,
+      "row_count": 0,
+      "column_count": 0,
+      "row_index": [
+        -1,
+        0
+      ],
+      "column_index": [
+        -1,
+        0
+      ],
+      "text_selection": [
+        -1,
+        0
+      ],
+      "insertion_line": 9223372036854775807,
+      "frame": [
+        4769,
+        598,
+        110,
+        27
+      ],
+      "selected": false,
+      "expanded": false,
+      "parent": "node:cmFpbC1sYWJlbC1ib3VuZHM6aW5zcGVjdG9y",
+      "domain_id": "inspector",
+      "hit_test_id": "node:aW5zcGVjdG9y"
+    },
+    {
+      "grid_scope": "",
+      "grid_incarnation": 0,
+      "grid_pending": false,
+      "grid_target_generation": 0,
+      "grid_generation": 0,
+      "object_identity": 217,
+      "id": "node:cGFydC1tb2RlbC1pZA",
+      "role": "AXStaticText",
+      "name": "Model: ideal-resistor.v1",
+      "value": "Model: ideal-resistor.v1",
+      "enabled": true,
+      "row_count": 0,
+      "column_count": 0,
+      "row_index": [
+        -1,
+        0
+      ],
+      "column_index": [
+        -1,
+        0
+      ],
+      "text_selection": [
+        -1,
+        0
+      ],
+      "insertion_line": 9223372036854775807,
+      "frame": [
+        4769,
+        538,
+        130,
+        18
+      ],
+      "selected": false,
+      "expanded": false,
+      "parent": "node:cmFpbC1sYWJlbC1ib3VuZHM6cGFydC1tb2RlbC1pZA",
+      "domain_id": "part-model-id",
+      "hit_test_id": "node:cGFydC1tb2RlbC1pZA"
+    },
+    {
+      "grid_scope": "",
+      "grid_incarnation": 0,
+      "grid_pending": false,
+      "grid_target_generation": 0,
+      "grid_generation": 0,
+      "object_identity": 448,
+      "id": "node:dmFsdWUtZW50cnk",
+      "role": "AXTextField",
+      "name": "Component value",
+      "value": "10 k\u03a9",
+      "enabled": true,
+      "row_count": 0,
+      "column_count": 0,
+      "row_index": [
+        -1,
+        0
+      ],
+      "column_index": [
+        -1,
+        0
+      ],
+      "text_selection": [
+        3,
+        0
+      ],
+      "insertion_line": 0,
+      "frame": [
+        4769,
+        460,
+        251,
+        37
+      ],
+      "selected": false,
+      "expanded": false,
+      "parent": "node:c2lkZWJhci1jb250ZW50",
+      "domain_id": "value-entry",
+      "hit_test_id": "node:dmFsdWUtZW50cnk"
+    },
+    {
+      "grid_scope": "",
+      "grid_incarnation": 0,
+      "grid_pending": false,
+      "grid_target_generation": 0,
+      "grid_generation": 0,
+      "object_identity": 449,
+      "id": "node:YXBwbHktdmFsdWU",
+      "role": "AXButton",
+      "name": "Apply value",
+      "value": null,
+      "enabled": true,
+      "row_count": 0,
+      "column_count": 0,
+      "row_index": [
+        -1,
+        0
+      ],
+      "column_index": [
+        -1,
+        0
+      ],
+      "text_selection": [
+        -1,
+        0
+      ],
+      "insertion_line": 9223372036854775807,
+      "frame": [
+        4769,
+        413,
+        104,
+        35
+      ],
+      "selected": false,
+      "expanded": false,
+      "parent": "node:c2lkZWJhci1jb250ZW50",
+      "domain_id": "apply-value",
+      "hit_test_id": "node:YXBwbHktdmFsdWU"
+    }
+  ],
+  "ax_focused": "",
+  "event": "elab.inspector.live.probe",
+  "focus_request": {
+    "ID": "part-search",
+    "Sequence": 1
+  },
+  "widgets": [
+    {
+      "bbox": {
+        "Min": {
+          "X": 882,
+          "Y": 254
+        },
+        "Max": {
+          "X": 992,
+          "Y": 281
+        }
+      },
+      "id": "inspector",
+      "type": "*core.Text",
+      "visible": true
+    },
+    {
+      "bbox": {
+        "Min": {
+          "X": 882,
+          "Y": 323
+        },
+        "Max": {
+          "X": 1012,
+          "Y": 341
+        }
+      },
+      "id": "part-model-id",
+      "type": "*core.Text",
+      "visible": true
+    },
+    {
+      "bbox": {
+        "Min": {
+          "X": 882,
+          "Y": 382
+        },
+        "Max": {
+          "X": 1133,
+          "Y": 419
+        }
+      },
+      "id": "value-entry",
+      "type": "*core.TextField",
+      "visible": true
+    },
+    {
+      "bbox": {
+        "Min": {
+          "X": 882,
+          "Y": 431
+        },
+        "Max": {
+          "X": 986,
+          "Y": 466
+        }
+      },
+      "id": "apply-value",
+      "type": "*core.Button",
+      "visible": true
+    }
+  ]
+}

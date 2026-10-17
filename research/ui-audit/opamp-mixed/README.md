@@ -15,3 +15,5 @@ October 16, 2026. Narrow follow-up to the [guided op-amp review](../opamp-guides
    ![Unchanged feedback value after typing](03-value-edit-still-unresolved.png)
 
 This recheck establishes that the particular newer SDK change did not resolve the observed editor behavior. It does not establish full accessibility, pointer/keyboard, IME or screen-reader qualification. Agent and callback editing still work; those paths cannot replace the missing physical editing evidence. Investigate a minimal mounted inspector/scroll reproduction before releasing the op-amp app.
+
+Subsequent [direct Cocoa/event tracing](../value-apply/README.md) narrows these findings: the field/button do exist in native Cocoa children, while external AX still omits them. An event/hardware-cursor mismatch and Apply-before-field-commit ordering were reproduced separately. The ELab settlement repair passes a scoped physical edit/gain experiment on an isolated pointer prototype; dependency integration and full release/input/accessibility gates remain open.

@@ -13,3 +13,13 @@ The [release receipt](validation/field-context-validation.json) records stale wa
 Full mounted typing/IME/focus behavior, every raw Activate/dialog/gesture path, OS lifecycle interaction and accessibility remain separate gates. The [source inventory](../research/13-native-command-inventory.md) records the guard-binding site and unresolved source routes; it is not runtime coverage proof for every generated control.
 
 Scope plot input is now separately bound to [prepared scope context](scope-input-context.md), including interval/cursor identity and optional recorded capture guards. This does not turn field/callback tests into complete physical gesture or OS display-completion qualification.
+
+## Settling ordinary value entry before Apply
+
+The unreleased component inspector uses Vellum's asynchronous `SettleTextField` barrier for numeric values and net-label names. Clicking Apply can precede the native field's final Change. Apply now waits, then uses the accepted draft through the same `component.set` command available to agents. Partial typing remains editor behavior; simulation changes on the ordinary committed command.
+
+The action retains its rendered document/revision. Only its own successful `editor.value.set` result can advance that revision; it never refreshes from an unrelated snapshot. An agent edit before or after that commit, or a document replacement, refuses the obsolete action. Failed settlement/draft admission does not apply an old value, and duplicate callbacks do not replay it. The pending Apply control is disabled until completion. Unmounted semantic tests already have controlled Change values and complete synchronously.
+
+The mounted smoke harness now waits for the controlled draft to reach the actual form and for asynchronous Apply to complete. These are callback/mounted tests; [physical editing evidence](../research/ui-audit/value-apply/README.md) comes from CUA on an isolated pointer-coordinate prototype. Shared Vellum and the canonical application remain unchanged; dependency, full input/IME and accessibility qualification remain required.
+
+[Scoped validation and retained initial failures](validation/value-apply-validation.json) bind the final 45-stage native smoke, race/vet/lint checks, source hashes and dependency context.

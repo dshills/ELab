@@ -59,13 +59,16 @@ func nativeSplitSupplySmoke(ctx context.Context, a *app.Application, s *screen) 
 	}); err != nil {
 		return err
 	}
+	for _, id := range []string{"V2", "V1"} {
+		if err := nativeValueApplySmoke(ctx, a, s, id, "12 V", false); err != nil {
+			return err
+		}
+	}
 	if err := owner(func() error {
 		for _, action := range []struct {
 			id string
 			e  *ui.ChangeEvent
 		}{
-			{"value-entry", &ui.ChangeEvent{Text: "12 V"}}, {"apply-value", nil},
-			{"selection", &ui.ChangeEvent{SelectedID: "V1"}}, {"value-entry", &ui.ChangeEvent{Text: "12 V"}}, {"apply-value", nil},
 			{"selection", &ui.ChangeEvent{SelectedID: "W5"}}, {"delete-object", nil},
 			{"tool-wire", nil}, {"wire-from", &ui.ChangeEvent{SelectedID: "V2.negative"}},
 			{"wire-to", &ui.ChangeEvent{SelectedID: "GND1.reference"}}, {"connect-terminals", nil},
