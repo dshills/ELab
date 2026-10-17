@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-17",
+  "scope": "shared live-clock correctness repair and native functional retest; not visible latency qualification",
+  "source_base": "95712d4e0d41c808159d01b5a4776f781ca732bc",
+  "native_build_vcs_modified": true,
+  "native_binary_sha256": "8c65578d4da2dfc465cee0d7c780be2718b69e3d4f89d2aec8799b467283c580",
+  "failure": {
+    "time_s": 1.0999999999999897,
+    "diagnostics": [
+      {
+        "code": "mixed-integration-failed",
+        "message": "mixed timestep too small at 1.1, h 1.04e-14: ",
+        "object_id": ""
+      }
+    ],
+    "shared_real_clock_regression": "failed before repair, passed after"
+  },
+  "repair": "origin + integer accepted output count * configured step; do not count discarded work; preserve resume origin",
+  "native_retest": {
+    "final_time_s": 40.9,
+    "fresh": true,
+    "paused": true,
+    "actor": "user",
+    "graph_settings_match_old_fault": true,
+    "run_and_electrical_identity_preserved": true,
+    "actions": [
+      "Resume",
+      "Pan Right",
+      "Escape to cancel Pan",
+      "Move R1 Right",
+      "Undo move",
+      "Save",
+      "Pause"
+    ],
+    "saved_copy": "capacity-pulse.elab"
+  },
+  "quality": {
+    "focused_race": "pass, 5.880 s",
+    "full_gate": "exit 0: scripts/check.sh; lint, Staticcheck, 43 Python tests, root/native race and vet",
+    "native_race_s": 142.4
+  },
+  "limits": [
+    "Source repair is not included in immutable 0.124.0 /141 review; replacement packaging and exact-runtime qualification pending.",
+    "No native main-loop, event-to-pixel or first-visible-sample percentile established.",
+    "Earlier manual-work UI span is ineligible: running before, completed after; native work cancellation under that overlap is not qualified.",
+    "64-part/100-node dense fixture hit existing 100 ms integration budget before any staged sample at 1 ms and 1 us; preserved graph and committed physics. Not fixed or claimed solved.",
+    "Native Save overwrote the owned private reproducer during retest. Graph/settings match raw old failure; no byte-identical original-file claim.",
+    "No SDK, models, tolerances, integration work budget, project format or command change."
+  ],
+  "source_sha256": {
+    "workbench/transient.go": "899959e298f3b426681b89a2fb5c4bcca2ee356823142c4e5d57a68ea9637195",
+    "workbench/live_clock_grid_test.go": "55e29efda7b77a1284eaab09f9c31fe03b59ad9422557e3c9fd95f0018132fcf"
+  },
+  "evidence_sha256": {
+    "capacity-pulse.elab": "44dc24a973b30ae37cf53e69c922420b963676920ba20e8d1a1e4eaddb6c2385",
+    "dense-fixture-builder.py": "1772b60d19b9eb94d29861583b182858c5920a1c753a49ee2d5175b3e0a30fc7",
+    "moved.ax.txt": "5421a0cc2dab2c9a4e2118fc1837b214f5cbd77b975fa9382f25e99feeb2c1b6",
+    "pan.ax.txt": "d9af97cf2430693275a2e55f95406be94dd243754f20b5de5a78d80de4c614b1",
+    "paused.ax.txt": "3a14827e1520eb2300f75824666c6be14827473380fd786ef5a7f76b919d6c4e",
+    "paused.jpg": "4e4fa74de767d35b1437568a91020dba7cc62161da48561e13e1e1251b73b332",
+    "states.json.gz": "f85b19c24c95c7e7423ab04c58836f2076faeb685009a71fb29395779edb1913",
+    "undo-save.ax.txt": "2e888f7d6d0502f1aa426531af2033168aed2d43c3d96f033cfcc29d52cdb778",
+    "focused-race.txt": "dc0255b8bc643c94a4c7ea0b61acfee70595aeceef89df0309e3ec64478c4c16",
+    "regression-before.txt": "4351e039cf543bbd602d93f78683698978f4a3f8b9b531f2622f8a8dfb4c3647",
+    "full-check.txt": "63c097835a5d86d54d1e8b73af721c4c3d5e57072da16080f9479d0200528794"
+  }
+}

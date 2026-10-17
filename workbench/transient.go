@@ -261,6 +261,7 @@ func (s *Service) launchTransientLocked(c Compiled) {
 	ctx, cancel := context.WithCancel(context.Background())
 	s.cancel = cancel
 	run := s.run
+	origin := s.transient.Sample.Time
 	s.liveWorkers.Add(1)
 	go func() {
 		defer s.liveWorkers.Done()
@@ -268,6 +269,7 @@ func (s *Service) launchTransientLocked(c Compiled) {
 		defer ticker.Stop()
 		last := time.Now()
 		budget := 0.
+		outputs := uint64(0)
 		for {
 			select {
 			case <-ctx.Done():
@@ -297,7 +299,10 @@ func (s *Service) launchTransientLocked(c Compiled) {
 				budget = math.Min(budget, .25*s.transientSettings.PlaybackSpeed)
 				budget -= float64(steps) * s.transientSettings.StepSeconds
 				for i := 0; i < steps; i++ {
-					end := s.transient.Sample.Time + s.transientSettings.StepSeconds
+					// Anchor output times to this clock's origin. Repeated addition
+					// drifts just short of pulse corners and can invent a sub-minimum
+					// capacitor step. Discarded work does not consume a grid point.
+					end := origin + float64(outputs+1)*s.transientSettings.StepSeconds
 					var err error
 					if IsNetworkAnalysis(c.Analysis) {
 						var current bool
@@ -321,6 +326,7 @@ func (s *Service) launchTransientLocked(c Compiled) {
 						cancel()
 						return
 					}
+					outputs++
 				}
 				if steps > 0 && !IsNetworkAnalysis(c.Analysis) {
 					s.revision++

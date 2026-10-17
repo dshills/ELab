@@ -6,6 +6,8 @@ Before opening the replacement, save your work and quit the earlier review app w
 
 The reference workflows and source quality gate pass. The copied app and agent also pass native smoke and four-adapter public conformance with repository/SDK/toolchain/cache reads and outbound IP denied on the recorded Mac. This does not declare the full PRD MVP complete.
 
+**Newly found blocker:** this packaged version can stop a valid pulsed RC/MOSFET network at about 1.1 seconds because of accumulated live-clock rounding. It reports an error/stale result. The source repair passes the complete quality gate and a native 40.9-second retest, but is **not included in this folder**. Replacement packaging and exact-runtime qualification are the next release step. [Evidence and limits](../docs/validation/live-clock-grid/README.md). Do not promote this build as the corrected alpha.
+
 ## Try these four tasks · 15–20 minutes
 
 1. **Build an LED loop.** Start on the blank sheet. Place a DC source, resistor, red LED and ground. Use 5 V and 1 kΩ. Wire source positive → resistor → LED anode, LED cathode → ground, ground → source negative. Expect about **2.917 mA** with the generic model. Change the resistor to `2k`: about **1.477 mA**. Undo/redo, delete a wire and reconnect it. An incomplete drawing must not present old readings as current.
