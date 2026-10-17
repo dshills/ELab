@@ -39,6 +39,7 @@ In another terminal, run `./elab-agent --connect /absolute/path/to/endpoint.json
 - Tested on this Apple Silicon Mac with macOS 26.6.2. The enforced minimum is 1040×720 in the mounted UI's units; the observed native frame is **1053×762 pixels**. App windows at 1280×800 and 1440×900 were inspected earlier. OS display modes, other hardware and monitor transitions remain unqualified.
 - Educational generic device models have the limits shown in the app. This is not general SPICE compatibility or PCB layout software.
 - Complete VoiceOver, IME/fast typing, visible p95 latency under difficult solves, clean-account installation and the ten-person study remain open. Physical printing has not been qualified.
+- An invalid-value error can disappear after canvas resizing in this review build; the valid circuit is preserved. A [source repair has been directly retested](ui-audit/first-version/README.md#value-refusal-and-settled-input-checkpoint) and awaits the next qualified candidate.
 - This is a private unsigned build; notarization and public distribution/native-rights qualification remain open. The versioned review folder is separate from `build/ELab.app` at 0.105.0 /120.
 
 The [delivery plan](34-first-version-plan.md) and [native walkthrough/agent evidence](ui-audit/first-version/README.md) track remaining acceptance work. This handoff begins owner feedback; it does not reopen feature scope.

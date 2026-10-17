@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-17",
+  "status": "focused unreleased source repair; no bundle promotion",
+  "source_base": "97dda0a",
+  "private_retest_executable_sha256": "9bd942c0c8ccc87e907dfaa35f879da48795baf09a908b9277ebce971079caa9",
+  "defect": {
+    "trigger": "invalid resistance Apply -> message row -> automatic smaller viewport publication -> next view",
+    "cause": "structured refusal retained the preceding command revision; view cleared it after the accepted layout observation",
+    "repair": "advance only the current refusal context through its own accepted guarded viewport response; later user/agent edits still invalidate it"
+  },
+  "direct_native": {
+    "before_valid_resistance_ohm": 2200,
+    "after_valid_resistance_ohm": 1000,
+    "attempt_ohm": 0,
+    "before_error": "absent after layout settled",
+    "after_error": "visible after layout settled",
+    "circuit_preserved": true,
+    "corrected_ohm": 2000,
+    "corrected_current_a": 0.001476723549138745,
+    "corrected_error_row": false,
+    "keyboard_undo_before_repair_restored_ohm": 1000
+  },
+  "input_scope": {
+    "passed": [
+      "established focus then resistor text input",
+      "capacitor and mosfet individual keystrokes",
+      "ground text input",
+      "Return focuses matching list",
+      "2.2k value entry, Tab/Return commit, paused stale state, Resume current, keyboard undo"
+    ],
+    "paste": "inconclusive: CUA -10005 clipboard conflict; observed intended search, no retry",
+    "ime": "not tested",
+    "human_typing": "not a participant study",
+    "accessibility": "known visible-inspector CUA omissions reproduced, cause unassigned; no VoiceOver settings changed"
+  },
+  "validation": {
+    "native_focused_race": "passed 2.365s; TestNativeViewport|TestValueApply|TestNativeStaleViewport",
+    "lint_staticcheck": "passed",
+    "native_vet": "passed",
+    "ledger": "only viewport.go source hash; all 388 sites,162 public IDs,132 source routes unchanged",
+    "full_release_gate": "not rerun for this development checkpoint; required before next candidate"
+  },
+  "ownership": {
+    "private_hosts": "saved separately and closed normally",
+    "review_files_verified_unchanged": 113,
+    "canonical_executable_verified_unchanged": true,
+    "sdk_changed": false
+  },
+  "evidence": {
+    "value-refusal-before.jpg": {
+      "sha256": "fe4153bfe812dd2253205afca696bbf9a720d9a23ea73252ca5e8ff49f5ccd36"
+    },
+    "value-refusal-before.ax.txt": {
+      "sha256": "7b6d0890db18111454b64905588b5b4ac8c5c5278e455af11e885628a757815b"
+    },
+    "value-refusal-fixed.jpg": {
+      "sha256": "8470a5aa7e3131b49439500bbed494b6faccca9e4e85339d8f456ecda92acb59"
+    },
+    "value-refusal-fixed.ax.txt": {
+      "sha256": "b2568437687bf75f9e7504acbce303a2a8135907d078d5b6151ad5cbb06e91eb"
+    },
+    "value-corrected.jpg": {
+      "sha256": "3d0b6b8417eec2a9b24527310d7b3ed3efa366725093b4c285b32c5254ed88a9"
+    },
+    "value-corrected.ax.txt": {
+      "sha256": "b028889fc197a3214d6af6ef965769f0785e5c350d568cb193b9ee0bd1f066c1"
+    },
+    "settled-search-trials.json": {
+      "sha256": "9efc81971629f785d2d22674305ae4b120e5da5648c2bdc6fbc14e5a9add53f5"
+    },
+    "value-refusal-regression-before.txt": {
+      "sha256": "625975ef264054b8e8da557cf628bd493eeb7a0938d46e195490b23c9046c3ae"
+    },
+    "value-refusal-regression-after.txt": {
+      "sha256": "aaeda06407ebd595b2e45eb984060db17910050d53e01bf24ad205878344af75"
+    }
+  },
+  "source_sha256": {
+    "desktop/viewport.go": "8452950aa3113be66c59ed10b8f26ef21e0a5be3d1b4aee5ec57fb8dbd966590",
+    "desktop/viewport_test.go": "f67b9f3f3f689d682922e1893c1ddf8e43c6c6ef371ed805e418985fb21b6abc",
+    "workbench/routing.go": "96e0d727d86f0b5eee7a23d27254c9b867f59ea9c371dd20391b1ab8ad0f492a"
+  }
+}

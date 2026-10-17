@@ -1,0 +1,8 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+--- FAIL: TestNativeViewportRetainsValueRefusalAcrossItsOwnLayout (0.01s)
+    --- FAIL: TestNativeViewportRetainsValueRefusalAcrossItsOwnLayout/agent-edit-false (0.01s)
+        viewport_test.go:99: automatic canvas resize erased its triggering value refusal
+FAIL
+exit status 1
+FAIL	github.com/dshills/elab/desktop	0.499s

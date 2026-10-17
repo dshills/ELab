@@ -1,0 +1,95 @@
+Window: "ELab · Live electronics", App: ELab-first-version-ui.
+0 standard window ELab · Live electronics, Secondary Actions: Raise
+	1 container node:cm9vdA
+		2 row node:aGVhZGVy
+			3 text (settable) ELab, ID: node:dGl0bGU
+			4 toolbar node:dG9vbGJhcg
+				5 button File, Help: Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:ZmlsZS1tZW51
+				6 button Save, ID: node:ZmlsZS5zYXZl
+				7 button Examples, Help: Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:ZXhhbXBsZXMtbWVudQ
+				8 button Undo, Help: Change value · by user, ID: node:ZWRpdC51bmRv
+				9 button (disabled) Redo, ID: node:ZWRpdC5yZWRv
+				10 button Appearance theme, Help: Current choice: Dark ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:dGhlbWUtbWVudQ
+			11 text (settable) ● Live · DC simulation, ID: node:c3RhdHVz
+			12 button Pause, ID: node:c2ltdWxhdGlvbi5wYXVzZQ
+		13 row node:d29ya3NwYWNl
+			14 scroll area node:cGFydHMtc2Nyb2xs
+				15 container node:cGFsZXR0ZQ
+					16 text (settable) COMPONENTS, ID: node:cGFydHMtdGl0bGU
+					17 text field (settable) Search components, Help: Type a name or hobbyist alias. Return focuses the matching component list., Value: resistor, ID: node:cGFydC1zZWFyY2g
+					18 list (settable) Matching components, ID: node:cGFydC1saXN0, Help: Use Up/Down, Home/End, page keys or an initial letter to choose a part. Return or Space chooses the focused row. Tab moves to exact placement.
+						19 row (settable, boolean) Resistor, Value: off, ID: option:cGFydC1saXN0:cmVzaXN0b3I
+						20 row (settable, boolean) Potentiometer, Value: off, ID: option:cGFydC1saXN0:cG90ZW50aW9tZXRlcg
+					21 text (settable) 2 matches · arrows choose · Tab to position, ID: node:cGxhY2VtZW50LWhlbHA
+					22 button Connect by name, ID: node:d2lyZS1ieS1uYW1l
+					23 button Print preview, ID: node:cHJpbnQtcHJldmlldw
+					24 button Export schematic SVG, ID: node:ZXhwb3J0LXN2Zw
+					25 button Export printable schematic PDF, ID: node:ZXhwb3J0LXBkZg
+					26 button Export schematic image PNG, ID: node:ZXhwb3J0LXBuZw
+					27 text (settable) YOUR FIRST CIRCUIT, ID: node:Z2V0dGluZy1zdGFydGVkLXRpdGxl
+					28 text (settable) 1  Place parts and ground, ID: node:c3RlcC1wbGFjZQ
+					29 text (settable) 2  Wire the terminal dots, ID: node:c3RlcC13aXJl
+					30 text (settable) 3  Watch the live measurements, ID: node:c3RlcC1vYnNlcnZl
+					31 text (settable) Undo: Change value, ID: node:dW5kby1uYW1l
+					32 text (settable) Redo: , ID: node:cmVkby1uYW1l
+					33 text (settable) SHORTCUTS, ID: node:c2hvcnRjdXRzLXRpdGxl
+					34 text (settable) ⌘ Z · Undo, ID: node:c2hvcnRjdXQtdW5kbw
+					35 text (settable) Delete · Remove selection, ID: node:c2hvcnRjdXQtZGVsZXRl
+			36 container node:c2NoZW1hdGljLXBhbmVs
+				37 toolbar node:dG9vbHM
+					38 button Select, ID: node:dG9vbC1zZWxlY3Q
+					39 button Wire, ID: node:dG9vbC13aXJl
+					40 button Pan, ID: node:dG9vbC1wYW4
+					41 button Esc, ID: node:ZHJhd2luZy5jYW5jZWw
+					42 row node:dG9vbC1zcGFjZXI
+					43 button DC sweep, ID: node:c3dlZXAtb3Blbg
+					44 button Fit, ID: node:dmlldy5maXQ, Help: Fit the complete schematic and follow workspace resizing. Pan, zoom or center an object to return to manual positioning.
+				45 text (settable) Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom, ID: node:c2NoZW1hdGljLWhlbHA
+			46 scroll area node:c2lkZWJhcg
+				47 container node:c2lkZWJhci1jb250ZW50
+					48 row node:c2VsZWN0aW9uLW5hdmlnYXRpb24
+						49 button Previous schematic object, ID: node:c2VsZWN0aW9uLXByZXZpb3Vz
+						50 button Next schematic object, ID: node:c2VsZWN0aW9uLW5leHQ
+						51 button Center selection, ID: node:c2VsZWN0aW9uLWNlbnRlcg
+					52 row node:cHJlc2V0cw
+						53 button 1 kΩ, ID: node:ci0xaw
+						54 button 2 kΩ, ID: node:ci0yaw
+					55 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OkxpbWl0LjE
+						56 button (disabled) Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OkxpbWl0LjE
+						57 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6TGltaXQuMQ
+					58 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OkxpbWl0LjI
+						59 button (disabled) Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OkxpbWl0LjI
+						60 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6TGltaXQuMg
+					61 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OkxpbWl0
+						62 button (disabled) Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OkxpbWl0
+						63 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6TGltaXQ
+					64 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOkxpbWl0
+						65 button (disabled) Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOkxpbWl0
+						66 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6TGltaXQ
+		67 row node:cmVhZGluZ3M
+			68 container node:Y3VycmVudA
+				69 text (settable) LED CURRENT, ID: node:Y3VycmVudC10aXRsZQ
+				70 text (settable) 1.345 mA, ID: node:Y3VycmVudC12YWx1ZQ
+			71 container node:dm9sdGFnZQ
+				72 text (settable) LED VOLTAGE, ID: node:dm9sdGFnZS10aXRsZQ
+				73 text (settable) 2.042 V, ID: node:dm9sdGFnZS12YWx1ZQ
+			74 container node:cG93ZXI
+				75 text (settable) LED POWER, ID: node:cG93ZXItdGl0bGU
+				76 text (settable) 2.75 mW, ID: node:cG93ZXItdmFsdWU
+			77 container node:c2ltdWxhdGlvbi1pbmZv
+				78 text (settable) LIVE SIMULATION, ID: node:c2ltdWxhdGlvbi10aXRsZQ
+				79 text (settable) Light · DC operating point, ID: node:cmVhZGluZy1zdGF0dXM
+		80 row node:Zm9vdGVyLXJvdw
+			81 text (settable) led.elab · Unsaved · 4 components · 4 wires · last change: user, ID: node:Zm9vdGVy
+			82 row node:Zm9vdGVyLXNwYWNlcg
+			83 text (settable) 98%, ID: node:em9vbQ
+			84 text (settable) 10-unit snap · local workspace, ID: node:Z3JpZC1pbmZv
+	85 close button
+	86 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	87 minimize button
+	88 text ELab · Live electronics
+89 menu bar
+	90 ELab-first-version-ui
+	91 File
+	92 Examples
+	93 Appearance

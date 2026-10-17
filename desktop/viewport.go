@@ -60,7 +60,13 @@ func (s *screen) observeSchematicViewport(v canvas.Viewport, state workbench.Sna
 		raw, _ := json.Marshal(workbench.ViewportParams{Width: plan.width, Height: plan.height})
 		// A racing agent command refuses this report. A later view/frame retries;
 		// observation never replaces the user's error or file-completion messages.
-		_ = s.service.Dispatch(context.Background(), workbench.Request{Version: 1, ID: id, Command: "view.viewport.set", Params: raw, ExpectedCommandRevision: &plan.revision, ExpectedDocumentGeneration: &plan.generation, Key: id}, "user")
+		result := s.service.Dispatch(context.Background(), workbench.Request{Version: 1, ID: id, Command: "view.viewport.set", Params: raw, ExpectedCommandRevision: &plan.revision, ExpectedDocumentGeneration: &plan.generation, Key: id}, "user")
+		if accepted, ok := result.Result.(workbench.Snapshot); result.Error == nil && ok && s.requestHelp != nil && s.requestHelpRevision == plan.revision {
+			// Showing a refusal can itself resize the canvas. Continue only
+			// that refusal's context through this accepted layout observation;
+			// a later agent/user command still invalidates it in view().
+			s.requestHelpRevision = accepted.CommandRevision
+		}
 		s.app.Invalidate("main")
 	}
 	if err := s.app.Post(publish); err != nil {

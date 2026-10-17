@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 	"time"
@@ -59,6 +60,45 @@ func TestNativeViewportDefersCoalescesAndPreservesMessages(t *testing.T) {
 	_ = s.app.Drain()
 	if s.service.Snapshot().CommandRevision != after.CommandRevision {
 		t.Fatal("same size keeps publishing")
+	}
+}
+
+func TestNativeViewportRetainsValueRefusalAcrossItsOwnLayout(t *testing.T) {
+	for _, agentEdit := range []bool{false, true} {
+		t.Run(fmt.Sprint("agent-edit-", agentEdit), func(t *testing.T) {
+			s, cleanup := testScreen(t)
+			defer cleanup()
+			uiAction(t, s, "example.reset", nil)
+			agentAction(t, s.service, "view.viewport.set", workbench.ViewportParams{Width: 520, Height: 138})
+			s.drawing.widget = &core.WidgetBase{}
+			s.drawing.View.Width, s.drawing.View.Height = 520, 138
+			_ = s.app.Do(func() {
+				s.invoke("component.set", workbench.ValueParams{ID: "R1", Value: "0"})
+			})
+			if s.requestHelp == nil || s.errorMessage == "" {
+				t.Fatal("expected a structured value refusal")
+			}
+			help, message := s.requestHelp, s.errorMessage
+			before := s.service.Snapshot()
+			// The refusal row reduces the canvas; its observation is not another
+			// user intent and must not erase the error on the following view.
+			s.drawing.View.Height = 88
+			_ = s.app.Do(func() {
+				s.observeSchematicViewport(*s.drawing.View, before)
+			})
+			drainViewport(t, s, func() bool { return s.service.Snapshot().Viewport.Height == 88 })
+			if agentEdit {
+				agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "2k"})
+			}
+			_ = s.app.Do(func() { s.view() })
+			if agentEdit {
+				if s.requestHelp != nil || s.errorMessage != "" {
+					t.Fatal("layout continuation hid a later agent edit from refusal invalidation")
+				}
+			} else if s.requestHelp != help || s.errorMessage != message || s.requestHelpRevision != s.service.Snapshot().CommandRevision {
+				t.Fatal("automatic canvas resize erased its triggering value refusal")
+			}
+		})
 	}
 }
 
