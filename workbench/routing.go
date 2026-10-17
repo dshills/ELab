@@ -10,11 +10,34 @@ import (
 
 // Routing is presentation only. Connectivity remains explicit named terminals.
 // Cache by graph geometry/content so live waveform frames reuse the same paths.
-var routeCache = struct {
+type wireRouteCache struct {
 	sync.Mutex
 	paths map[[32]byte][]Point
 	order [][32]byte
-}{paths: map[[32]byte][]Point{}}
+}
+
+var routeCache wireRouteCache
+
+func (c *wireRouteCache) retain(key [32]byte, path []Point) []Point {
+	c.Lock()
+	defer c.Unlock()
+	// Routing runs outside this mutex. Another caller may have published the
+	// same miss while we computed; retain its slot rather than duplicating FIFO
+	// entries or evicting an unrelated route when the cache is full.
+	if cached, ok := c.paths[key]; ok {
+		return cached
+	}
+	if c.paths == nil {
+		c.paths = make(map[[32]byte][]Point)
+	}
+	if len(c.order) >= 512 {
+		delete(c.paths, c.order[0])
+		c.order = c.order[1:]
+	}
+	c.paths[key] = path
+	c.order = append(c.order, key)
+	return path
+}
 
 type routeCell struct{ x, y int }
 type routeNode struct {
@@ -68,14 +91,7 @@ func WirePath(g Graph, w Wire) []Point {
 		return append([]Point{}, cached...)
 	}
 	path := computeWireRoute(g, w)
-	routeCache.Lock()
-	if len(routeCache.order) >= 512 {
-		delete(routeCache.paths, routeCache.order[0])
-		routeCache.order = routeCache.order[1:]
-	}
-	routeCache.paths[key] = path
-	routeCache.order = append(routeCache.order, key)
-	routeCache.Unlock()
+	path = routeCache.retain(key, path)
 	return append([]Point{}, path...)
 }
 func wireRouteEndpoints(g Graph, w Wire) (a, b, sa, sb Point, ok bool) {
