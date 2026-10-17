@@ -2,6 +2,19 @@
 
 **Written October 17, 2026. Status: in progress; package 1 command/startup checks complete. Alpha release gates remain open.**
 
+## Delivery summary
+
+**The next deliverable is one installable macOS alpha, not another feature batch.** The existing LED, RC and transistor workflows are the release scope. New features and framework upgrades are frozen except for demonstrated blockers.
+
+The immediate queue is:
+
+1. Finish the native UI walkthrough and repair the reproduced Save filename defect. Resolve or explicitly classify the input/accessibility findings on the single issue list.
+2. Run the four acceptance tasks below through the external agent and compare their saved circuits and results with the UI runs. Deliver a clearly labeled review build at this checkpoint.
+3. Run the final qualification checks, then package and promote one app with its matching agent, example projects, known issues and rollback path.
+4. Hand over a 15–20 minute owner walkthrough. Restrict subsequent alpha work to failures in that walkthrough.
+
+Packages 1–6 below define the detailed exit criteria. Package 1 is complete; package 2 is the current constraint. The 2–4 day estimate below remains provisional until the native input/file issues are resolved. No completion date is established by that estimate. Each package exit must report what passed, what remains and any revised estimate; it must not silently expand the release scope.
+
 ## Decision and outcome
 
 The next milestone is a **macOS hobbyist alpha that the owner can install, launch and use**, followed by the original PRD's broader MVP validation. Work is now organized around delivering that build. Additional components, analysis modes and standalone contract-documentation campaigns leave the immediate queue.
@@ -99,6 +112,7 @@ A failed integrity, simulation-truthfulness or core parity check blocks promotio
 - **October 17, package 1:** repaired LED reload, reconciled catalog/demo/guide, passed all 25 focused reload cases, full `scripts/check.sh`, and the public 18-template/seven-alias demo in fresh headless and native sessions. Both native test host and forwarding client exited normally. Canonical app remains unchanged. This closes command/startup behavior; physical input, layout, visible latency and owner acceptance remain open. Next action is package 2's actual UI walkthrough, not more schema annotations.
 - **October 17, package 2 started:** built LED and RC from blank with actual controls; checked live value edits, undo/redo, wire-fault repair, native save/reopen, 10 ms RC stepping/cursors and both themes in two app-window sizes. Repaired misleading unset cursor fields and retested zero entry/clear in the rebuilt UI. [Evidence and five-item issue list](ui-audit/first-version/README.md). Next repair is compact schematic readability. Display configurations, remaining tasks and complete input/accessibility qualification remain open; the delivery estimate will be reassessed at package 2 exit.
 - **October 17, package 2 readability repair:** replaced routing search envelopes/generic part margins with actual paths and shared enlarged-caption bounds. Rechecked RC framing in both themes and both observed window sizes; native/headless views match exactly. Fixed Theme clipping with both agent history labels and removed the compact tool-row scrollbar while retaining its controls. Full quality gate passes after a reviewed source-ledger refresh; command/site mappings are unchanged. [Updated issue list and screenshots](ui-audit/first-version/README.md). Remaining work is the transistor/device walkthrough plus the listed input, filename and accessibility investigations; package 2 is not yet closed.
+- **October 17, package 2 flasher checkpoint:** observed alternating LEDs, inspected Q1/Q2 and measured a 485 ms cursor interval through native controls. A paused capacitor edit correctly marked prior results stale; Cancel preserved the edit and Undo restored the saved value. The first Save in a fresh process also reproduced the duplicated extension, narrowing UI-3 beyond panel reuse. [Evidence](ui-audit/first-version/README.md#flasher-walkthrough-checkpoint). NMOS was opened, but its full walkthrough and PMOS remain unqualified. The owned review host was saved privately and closed; no canonical app was promoted. The next implementation action is the Save filename repair, followed by the remaining UI tasks.
 
 ## After the alpha
 
