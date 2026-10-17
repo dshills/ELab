@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "import_admission_ms": 0.2867920557036996,
+  "source_sha256": "9ffa98cd352b257549a4cddaf832122b67b87c108399b086ee26d3be9690acb1",
+  "result_operation_id": "record-1",
+  "checks": [
+    "separate process produces immutable recorded source",
+    "queued import preserves live source and publishes no staged record",
+    "later value/navigation edits preserved on complete attachment",
+    "source hash and original metadata/rows retained",
+    "import never claims current live source association",
+    "byte-identical reexport",
+    "invalid file records only terminal job bookkeeping",
+    "kept project round trip with recorded viewer and fresh paused live startup"
+  ],
+  "limitations": [
+    "blocked race tests separately prove cancellation, capacity races, replacement and later-viewer ownership",
+    "OS calls may outlast cooperative cancellation/deadline",
+    "backend timing excludes visible latency",
+    "recovery/shutdown job qualification is separate from this import workflow"
+  ]
+}

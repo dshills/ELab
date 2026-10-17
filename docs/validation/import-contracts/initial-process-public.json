@@ -1,0 +1,71 @@
+[
+  {
+    "name": "native-smoke",
+    "argv": [
+      "/Users/dshills/Development/projects/ELab/build/ELab-0.118.0-135-import-contracts-candidate.app/Contents/MacOS/ELab",
+      "--smoke",
+      "--smoke-timeout",
+      "2m"
+    ],
+    "started_utc": "2026-10-17T15:16:30.350332+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 102.53422583302017,
+    "finished_utc": "2026-10-17T15:18:12.858186+00:00"
+  },
+  {
+    "name": "public-suites",
+    "argv": [
+      "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+      "--native-binary",
+      "/Users/dshills/Development/projects/ELab/build/ELab-0.118.0-135-import-contracts-candidate.app/Contents/MacOS/ELab",
+      "--project-contract-suite",
+      "--electrical-suite",
+      "--inductor-suite",
+      "--opamp-suite",
+      "--opamp-storage-suite",
+      "--capacity-suite",
+      "--artifacts",
+      "/Users/dshills/Development/projects/ELab/build/import-contracts/public-final"
+    ],
+    "started_utc": "2026-10-17T15:18:12.872752+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 48.43276354193222,
+    "finished_utc": "2026-10-17T15:19:01.305729+00:00"
+  },
+  {
+    "name": "headless-import",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "-B",
+      "scripts/import-contracts-demo.py",
+      "--output",
+      "/Users/dshills/Development/projects/ELab/build/import-contracts/headless-final.json",
+      "--artifacts",
+      "/Users/dshills/Development/projects/ELab/build/import-contracts/headless-final-assets"
+    ],
+    "started_utc": "2026-10-17T15:19:01.316945+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 0.20042545907199383,
+    "finished_utc": "2026-10-17T15:19:01.517373+00:00"
+  },
+  {
+    "name": "legacy-import",
+    "argv": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "-B",
+      "scripts/project-import-demo.py",
+      "--output",
+      "/Users/dshills/Development/projects/ELab/build/import-contracts/legacy-final.json",
+      "--artifacts",
+      "/Users/dshills/Development/projects/ELab/build/import-contracts/legacy-final-assets"
+    ],
+    "started_utc": "2026-10-17T15:19:01.527894+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 0.10903733293525875,
+    "finished_utc": "2026-10-17T15:19:01.636935+00:00"
+  }
+]

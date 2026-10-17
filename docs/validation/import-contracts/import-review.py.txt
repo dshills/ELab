@@ -1,0 +1,46 @@
+from pathlib import Path
+import gzip,hashlib,json,math
+root=Path.cwd();out=root/'build/import-contracts';reports=[json.loads((out/(t+'-final.json')).read_text()) for t in ['headless','native']]
+row_checks=0;live_checks=0;maximum_v=0.;maximum_a=0.;input_controls={}
+for transport,report in zip(['headless','native'],reports):
+ assert report['passed'] and len(report['contracts'])==2 and len(report['admission_refusals'])==4 and len(report['work_failures'])==9
+ assert all(s['x-command-contract']['scope']=='captured-recording-import' for s in report['contracts'].values())
+ assert report['retry']=={'failure':'invalid-recording','duplicate_failure':True,'same_original_job':True,'new_key_record_count':3}
+ expected_failures={'missing':'file-error','final-symlink':'file-error','directory':'file-error','oversized':'file-error','exact-size-invalid':'invalid-recording','malformed':'invalid-recording','duplicate-fields':'invalid-recording','version':'invalid-recording','schematic-format':'invalid-recording'}
+ assert {v['case']:v['code'] for v in report['work_failures']}==expected_failures
+ work=report['first_work'];assert work['status']=='completed' and work['command']=='verification.import' and work['viewer_selected'] and work['associated_with_current_document'] and not work['cancelable']
+ assert work['actor']=={'headless':'agent.stdio','native':'agent.socket'}[transport] and work['source_sha256']==report['source_sha256'] and work['result_operation_id']==report['first_id']
+ assets=out/(transport+'-final-assets');raw=(assets/'source-record.json').read_bytes();record=json.loads(raw)
+ assert hashlib.sha256(raw).hexdigest()==report['source_sha256'] and record['metadata']==report['metadata'] and record['rows']==report['rows']
+ for name in ['reexport-first.json','reexport-repaired.json','reexport-reopened.json','repair.json']:assert (assets/name).read_bytes()==raw,name
+ manual=json.loads((assets/'manual.elab').read_text());saved=json.loads((assets/'imported-project.elab').read_text())
+ assert hashlib.sha256((assets/'manual.elab').read_bytes()).hexdigest()==report['manual_sha256']
+ assert len(manual['recordings']['entries'])==1 and len(saved['recordings']['entries'])==3
+ assert manual['graph']==saved['graph'] and saved['graph']['components']==report['live']['components'] and saved['graph']['wires']==report['live']['wires']
+ assert [len(entry['data']['rows']) for entry in saved['recordings']['entries']]==[4,7,7]
+ assert all(entry['data']==record for entry in saved['recordings']['entries'][1:])
+ assert report['first_id']!=report['second_id'] and report['reopened']=={'paused':True,'time_s':0,'recording_count':3,'dirty':False}
+ rows=report['rows'];assert len(rows)==7 and [row['time_s'] for row in rows]==[0,.001,.002,.003,.004,.005,.006]
+ assert [p['id'] for p in report['metadata']['probes']]==['v:C1','i:C1']
+ for row in rows:
+  t=row['time_s'];dv=abs(row['values'][0]-5*(-math.expm1(-t/.01)));di=abs(row['values'][1]-.0005*math.exp(-t/.01))
+  assert dv<1e-10 and di<1e-12;maximum_v=max(maximum_v,dv);maximum_a=max(maximum_a,di);row_checks+=2
+ sample=report['live']['transient']['sample'];assert sample['time_s']==.003 and abs(sample['voltage_v']-5*(-math.expm1(-.003/.01)))<1e-10;live_checks+=1
+ controls={}
+ for name,size in [('exact-limit.json',8*1024*1024),('oversized.json',8*1024*1024+1)]:
+  data=(assets/name).read_bytes();assert len(data)==size and not any(data)
+  controls[name]={'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()}
+ assert (assets/'linked.json').is_symlink() and (assets/'directory').is_dir() and not (assets/'missing.json').exists()
+ input_controls[transport]=controls
+for key in ['contracts','admission_refusals','work_failures','retry','rows','reopened']:assert reports[0][key]==reports[1][key],key
+for key in ['components','wires','transient','mixed','npn','scope','paused','run_id','electrical_revision']:assert reports[0]['live'][key]==reports[1]['live'][key],key
+assert input_controls['headless']==input_controls['native']
+result={'passed':True,'contracts_per_transport':2,'admission_refusals_per_transport':4,'work_failures_per_transport':9,
+        'expected_import_actors':{'headless':'agent.stdio','native':'agent.socket'},'exact_record_exports_and_all_three_kept_entries_reviewed':True,
+        'recorded_rows_per_transport':7,'recorded_voltage_current_reference_checks':row_checks,'preserved_live_voltage_reference_checks':live_checks,
+        'maximum_recorded_voltage_error_v':maximum_v,'maximum_recorded_current_error_a':maximum_a,
+        'failed_retry_retains_original_outcome_new_key_attaches_distinct_asset':True,'manual_source_kept_count_before_after':1,
+        'saved_kept_count':3,'saved_total_rows':18,'fresh_reopen_paused_time_zero_clean':True,
+        'size_input_controls':input_controls,'equal_schemas_errors_rows_live_physics':True,
+        'scope':'Named import/retry/persistence/data references; controlled core tests separately cover preview intent, cancellation, capacity and replacement races'}
+(out/'import-review.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

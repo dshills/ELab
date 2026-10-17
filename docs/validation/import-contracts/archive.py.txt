@@ -1,0 +1,74 @@
+from pathlib import Path
+import datetime,gzip,hashlib,importlib.util,json,shutil,stat,subprocess
+
+root=Path.cwd();src=root/'build/import-contracts';out=root/'docs/validation/import-contracts'
+def read(p):return json.loads(p.read_text())
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+def digest(p):return sha(p.read_bytes())
+frozen=read(src/'source-freeze.json');assert len(frozen)==707 and all(digest(root/p)==h for p,h in frozen.items())
+quality=read(src/'process-quality.json')+read(src/'process-quality-final.json');public=read(src/'process-public.json');native=read(src/'process-native.json')
+assert all(p['status']=='completed' and p['exit_code']==0 for p in quality+public)
+assert native['status']=='completed' and native['demo_exit_code']==native['native_exit_code']==0 and not native.get('forced_cleanup')
+assert 'Ran 37 tests' in (src/'quality.log.txt').read_text()
+assert sum('smoke: ' in line for line in (src/'native-smoke.log.txt').read_text().splitlines())==45
+assert read(src/'report-review.json')==read(src/'report-review-gzip.json') and read(src/'report-review.json')['numerical_checks']==27596
+review=read(src/'import-review.json');assert review['passed']
+contracts=read(src/'contract-inventory.json');assert (contracts['total'],contracts['with_contract'],contracts['without_contract'])==(162,123,39)
+spec=importlib.util.spec_from_file_location('sdk',root/'scripts/prepare-vellum.py');sdk=importlib.util.module_from_spec(spec);spec.loader.exec_module(sdk)
+pin=sdk.load_pin(root);sdk.verify_archive_identity(root/pin['archive'],pin);sdk.verify_cache(root/pin['cache'],pin)
+golden=read(root/'docs/validation/lc-sampling-validation.json')['promotion'];preserved={}
+for name,key in [('build/ELab.app','bundle_tree'),('build/ELab-0.104.0-119-preserved.app','preserved_bundle_tree')]:
+ folder=root/name;actual={}
+ for p in [folder,*sorted(folder.rglob('*'))]:
+  assert not p.is_symlink()
+  actual[str(p.relative_to(folder))]={'mode':stat.S_IMODE(p.stat().st_mode),'sha256':digest(p) if p.is_file() else None}
+ assert actual==golden[key];preserved[name]={'passed':True,'entries':len(actual)}
+for p,h in read(root/'docs/validation/preview-contracts-validation.json')['binary_sha256'].items():
+ if '.app/' in p:assert digest(root/p)==h,p
+files=['build/elab','build/elab-agent','build/elab-conformance','build/elab-ui-audit','build/ELab-0.118.0-135-import-contracts-candidate.app/Contents/MacOS/ELab'];binaries={p:digest(root/p) for p in files};assert binaries[files[0]]==binaries[files[-1]]
+inventory=read(root/'research/13-native-command-inventory.json');assert all(digest(root/p)==h for p,h in inventory['source_sha256'].items())
+out.mkdir(exist_ok=False)
+for name in ['core-focused.log.txt','setup-notes.json','source-freeze-before-fixture-observation.json','initial-process-public.json','initial-headless-final.json','initial-headless-import.log.txt','initial-legacy-final.json','initial-legacy-import.log.txt','quality-final.log.txt','process-quality-final.json','preview-contracts-unchanged.json','build-initial.log.txt','headless-initial.log.txt','headless-initial.json','build.log.txt','quality.log.txt','package.json','native-smoke.log.txt','public-suites.log.txt','headless-import.log.txt','headless-final.json','native-host.log.txt','native-viewer.log.txt','native-final.json','process-quality.json','process-public.json','process-native.json','source-freeze.json','source-delta.json','report-review.json','report-review-gzip.json','import-review.json','contract-inventory.json','legacy-import.log.txt','legacy-final.json']:
+ shutil.copyfile(src/name,out/name)
+for source,name in [('build/.import-contracts-qualify.py','qualify.py.txt'),('build/.import-contracts-native.py','native.py.txt'),('build/.import-contracts-review.py','import-review.py.txt'),('build/.import-contracts-archive.py','archive.py.txt'),('build/.import-contracts-review/main.go','review.go.txt')]:shutil.copyfile(root/source,out/name)
+raw=(src/'public-final/report.json').read_bytes();compressed=gzip.compress(raw,mtime=0);(out/'conformance-report.json.gz').write_bytes(compressed);assert gzip.decompress(compressed)==raw
+fixtures={}
+for transport in ['headless','native']:
+ folder=out/'fixtures'/transport;folder.mkdir(parents=True)
+ for name in ['source-record.json','manual.elab','reexport-first.json','reexport-repaired.json','reexport-reopened.json','imported-project.elab','repair.json','invalid.json','duplicate.json','version.json']:
+  raw_fixture=(src/(transport+'-final-assets')/name).read_bytes();(folder/name).write_bytes(raw_fixture);fixtures[str((folder/name).relative_to(root))]=sha(raw_fixture)
+size_controls={};file_types={}
+for transport in ['headless','native']:
+ assets=src/(transport+'-final-assets');folder=out/'fixtures'/transport
+ size_controls[transport]={}
+ for name in ['exact-limit.json','oversized.json']:
+  raw_control=(assets/name).read_bytes();encoded=gzip.compress(raw_control,mtime=0);target=folder/(name+'.gz');target.write_bytes(encoded)
+  assert gzip.decompress(encoded)==raw_control
+  size_controls[transport][name]={'decoded_bytes':len(raw_control),'decoded_sha256':sha(raw_control),'gzip_bytes':len(encoded),'gzip_sha256':sha(encoded)}
+ file_types[transport]={'linked.json':{'type':'symlink','target':str((assets/'linked.json').readlink()),'target_sha256':digest(assets/'source-record.json')},'directory':{'type':'directory','entries':[p.name for p in (assets/'directory').iterdir()]},'missing.json':{'type':'absent'}}
+ assert (assets/'linked.json').is_symlink() and not (assets/'missing.json').exists()
+(out/'file-type-controls.json').write_text(json.dumps(file_types,indent=2)+'\n')
+receipt={'passed':True,'recorded_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ 'scope':'Two captured recording-import state contracts, admission/read-validation boundaries, exact failed-key replay/new-key repair, preserved live/manual source and three-kept-record save/reopen',
+ 'reference_configuration':read(root/'docs/validation/preview-contracts-validation.json')['reference_configuration'],
+ 'source_parent_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'source_index':str((out/'source-freeze.json').relative_to(root)),'source_frozen_files':707,'source_stable':True,
+ 'setup_corrections':read(src/'setup-notes.json')['notes'],
+ 'source_delta':read(src/'source-delta.json'),'binary_sha256':binaries,'candidate':'build/ELab-0.118.0-135-import-contracts-candidate.app','candidate_promoted':False,
+ 'new_application_commands':0,'existing_commands':162,'new_contracts':2,'commands_with_contracts_before':121,'commands_with_contracts_after':123,'commands_without_contract':39,
+ 'default_catalog_output_schemas_models_numerical_methods_work_limits_file_versions_unchanged':True,
+ 'quality':{'lint_imports_staticcheck':True,'python_tests':37,'root_native_race_and_vet':True},'process_quality':quality,'process_public':public,'native_workflow':native,
+ 'four_adapter_numerical_checks':27596,'four_adapter_project_workflow_checks':44,'four_adapter_project_snapshots':56,'native_smoke_stages':45,
+ 'import_review':review,'four_prior_preview_contracts_exactly_unchanged':read(src/'preview-contracts-unchanged.json')['passed'],'legacy_import_workflow_passed':read(src/'legacy-final.json')['passed'],'size_controls':size_controls,'file_type_controls':file_types,'typed_raw_gzip_numerical_review_equal':True,'sdk_verified':{'passed':True,'source':pin['source_commit'],'archive_sha256':pin['sha256']},
+ 'native_production_inventory_unchanged':{'sources':len(inventory['source_sha256']),'sites':len(inventory['sites']),'commands':len(inventory['public_commands'])},
+ 'preserved_bundle_trees':preserved,'fixture_files':fixtures,
+ 'report_encoding':{'conformance-report.json.gz':{'decoded_bytes':len(raw),'decoded_sha256':sha(raw),'gzip_bytes':len(compressed),'gzip_sha256':sha(compressed)}},
+ 'p0_counts':{'implemented':17,'partial':10},
+  'limitations':['Discovery and regressions describe existing import/decoder behavior; no runtime, source model, numerical/work limit, command ID or file format change is claimed.',
+ 'Later preview/viewer intent, capacity, cancel/Close/replacement and waiting disconnect use controlled core race tests; public workflows do not claim nondeterministic race coverage.',
+ 'Actor, job IDs, source paths, timestamps and input digests are transport/session provenance; exact portable data is compared within each workflow and numerical rows/physics across transports.',
+ 'Encoded bad-size inputs are lossless gzip to retain exact controls without bloating the repository. Symlink/directory/missing controls retain file-type metadata and the executable generator.',
+ 'Thirty-nine commands remain without scoped state contracts. Complete physical picker/typing/AX, event/distribution/storage-device/latency and participant gates remain open.',
+ 'The private 0.118 /135 candidate is unpromoted; canonical 0.105 and preserved 0.104 bundles stay exact.']}
+receipt['artifacts_sha256']={str(p.relative_to(root)):digest(p) for p in sorted(out.rglob('*')) if p.is_file()}
+(root/'docs/validation/import-contracts-validation.json').write_text(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps({'passed':True,'source_inputs':707,'new_contracts':2,'import_review':review,'four_prior_preview_contracts_exactly_unchanged':read(src/'preview-contracts-unchanged.json')['passed'],'legacy_import_workflow_passed':read(src/'legacy-final.json')['passed'],'size_controls':size_controls,'file_type_controls':file_types,'fixture_files':len(fixtures)},indent=2))

@@ -103,7 +103,7 @@ def main():
                 'invalid file records only terminal job bookkeeping', 'kept project round trip with recorded viewer and fresh paused live startup'],
             limitations=['blocked race tests separately prove cancellation, capacity races, replacement and later-viewer ownership',
                 'OS calls may outlast cooperative cancellation/deadline', 'backend timing excludes visible latency',
-                'manual recovery and some shutdown paths remain synchronous'])
+                'recovery/shutdown job qualification is separate from this import workflow'])
         if args.output:
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_text(json.dumps(report, indent=2)+'\n')

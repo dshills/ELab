@@ -1,0 +1,945 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "contracts": {
+    "verification.import": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "path": "Captured RC.json"
+        }
+      ],
+      "properties": {
+        "expected_document_generation": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Omitted/null adds no parameter-level guard; supplied uint64 must equal snapshot.document.generation. Common protocol/revision/actor/retry guards still apply."
+        },
+        "path": {
+          "description": "Required non-null nonblank literal local filename, no NUL; relative resolves with filepath.Abs in the host working directory. No ~ or environment expansion; other spaces stay literal. Read a regular file, not a final symlink/directory/special file, up to 8 MiB. Parent-directory aliases are allowed.",
+          "maxLength": 4096,
+          "minLength": 1,
+          "type": "string",
+          "x-max-utf8-bytes": 4096
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-recording-import",
+        "preconditions": [
+          "No active shared project job and fewer than eight outstanding filesystem workers, including canceling/superseded workers that have not returned",
+          "Recording slot available under retention policy; optional parameter document generation matches. A current live solve/complete circuit is not required"
+        ],
+        "effects": [
+          "Capture source filename, current document generation and recording/sweep viewer-intent revisions at admission. Read/strict validation run outside the editor mutex; no staged asset is visible",
+          "Atomically attach one complete kept recording with a new session record-N ID, original immutable metadata/rows and admitting actor; result_operation_id and source_sha256 identify attachment and exact read bytes. Source path/hash are session provenance, not injected into portable reexports",
+          "Preserve graph/settings/physical time/charge/run, navigation, selection of schematic objects and undo/redo. Electrical/presentation edits and stepping within the same document may continue; kept membership alone can make recordings_dirty true",
+          "Without later viewer intent, select imported first row and show recorded view. Later recording/sweep choices, Verify or preview intent keep their choice; inspect viewer_selected. Autonomous playback ticks alone do not count as user intent. Eviction of an unkept selected asset clears dangling selection to live",
+          "No slot is reserved. Recheck capacity before attachment; another Verify can consume the last slot and make this admitted import fail with record-limit without evicting kept/active assets",
+          "Import is recorded data, never a trusted live result: imported source_unchanged remains false even if its graph matches. It changes neither live circuit association nor the manual saved file and performs no file publication",
+          "Failure/cancel/supersession preserves source, kept membership, viewer and history except shared job/admission bookkeeping. Project replacement/Close prevents stale attachment; same-document edits alone do not supersede import",
+          "Owned retries retain original admission/terminal outcome without a duplicate attachment or rereading repaired bytes. Admission consumes the key even on failure; use a new key for a corrected attempt. A new successful key may intentionally import the same content again as another kept asset",
+          "One 30-second cooperative context covers read/validation. Blocked OS reads/bounded validation may finish later, but canceled/obsolete data cannot attach; worker slots last until actual return. Jobs are not stored in circuit/recovery documents"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate/missing/null required fields or invalid literal path"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "Active project job or outstanding filesystem worker capacity"
+          },
+          {
+            "code": "conflict",
+            "phase": "admission",
+            "when": "Parameter document-generation guard differs"
+          },
+          {
+            "code": "record-limit",
+            "phase": "admission-or-attachment",
+            "when": "Eight protected kept/active recordings leave no evictable slot"
+          },
+          {
+            "code": "file-error",
+            "phase": "project_work",
+            "when": "Missing/inaccessible/nonregular/final-symlink/oversized/changed-on-open input or OS read failure"
+          },
+          {
+            "code": "invalid-recording",
+            "phase": "project_work",
+            "when": "Read bytes fail strict format/version/model/graph/settings/probe/grid/row/statistics/result validation"
+          },
+          {
+            "code": "timeout",
+            "phase": "project_work",
+            "when": "Cooperative job deadline expires before attachment"
+          },
+          {
+            "code": "canceled",
+            "phase": "project_work",
+            "when": "Exact job canceled or app closed before attachment"
+          },
+          {
+            "code": "superseded",
+            "phase": "project_work",
+            "when": "Captured job/document generation no longer current before attachment"
+          },
+          {
+            "code": "canceled",
+            "phase": "wait",
+            "when": "Waiting caller disconnect/cancellation; admitted work can still finish"
+          },
+          {
+            "code": "operation-unavailable",
+            "phase": "wait",
+            "when": "Original admitted job expired under retention"
+          }
+        ],
+        "completion": {
+          "mode": "waiting alias for the same background job; terminal failure includes owned job snapshot. Caller cancellation ends its wait only, not admitted work; owned retry rejoins original outcome",
+          "observe": [
+            "project.work.inspect",
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "project.work.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-import-capacity": {
+        "checks": "At admission and again before complete attachment; unkept terminal records can be evicted, kept/active records cannot. Admission order after structural/common guards: active work/worker capacity, document generation, recording capacity, path syntax.",
+        "max_filesystem_workers": 8,
+        "reservation": false,
+        "retained_project_jobs": 8,
+        "retained_recordings": 8
+      },
+      "x-import-format": {
+        "format": "elab.verification",
+        "max_bytes": 8388608,
+        "max_duration_s": 10,
+        "max_output_steps": 1000,
+        "max_probes": 6,
+        "max_recorded_frames": 4096,
+        "validation": "Complete strict captured graph/model/settings/mode/probe/output-grid/finite-row/statistics/result consistency; no live solve or network model fetch. DC has one zero-duration row; transient captures retain actual output and corner rows, including duplicate timestamps.",
+        "version": 1
+      },
+      "x-import-inventory": "snapshot.project_work is latest job only; retain its ID for project.work.inspect. Completed result_operation_id identifies a new retained recording in snapshot.operations / operation.inspect / operation.samples, distinct from metadata.operation_id.",
+      "x-phases": [
+        "queued",
+        "reading",
+        "validating-recording",
+        "completed"
+      ]
+    },
+    "verification.import.start": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "path": "Captured RC.json"
+        }
+      ],
+      "properties": {
+        "expected_document_generation": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Omitted/null adds no parameter-level guard; supplied uint64 must equal snapshot.document.generation. Common protocol/revision/actor/retry guards still apply."
+        },
+        "path": {
+          "description": "Required non-null nonblank literal local filename, no NUL; relative resolves with filepath.Abs in the host working directory. No ~ or environment expansion; other spaces stay literal. Read a regular file, not a final symlink/directory/special file, up to 8 MiB. Parent-directory aliases are allowed.",
+          "maxLength": 4096,
+          "minLength": 1,
+          "type": "string",
+          "x-max-utf8-bytes": 4096
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-recording-import",
+        "preconditions": [
+          "No active shared project job and fewer than eight outstanding filesystem workers, including canceling/superseded workers that have not returned",
+          "Recording slot available under retention policy; optional parameter document generation matches. A current live solve/complete circuit is not required"
+        ],
+        "effects": [
+          "Capture source filename, current document generation and recording/sweep viewer-intent revisions at admission. Read/strict validation run outside the editor mutex; no staged asset is visible",
+          "Atomically attach one complete kept recording with a new session record-N ID, original immutable metadata/rows and admitting actor; result_operation_id and source_sha256 identify attachment and exact read bytes. Source path/hash are session provenance, not injected into portable reexports",
+          "Preserve graph/settings/physical time/charge/run, navigation, selection of schematic objects and undo/redo. Electrical/presentation edits and stepping within the same document may continue; kept membership alone can make recordings_dirty true",
+          "Without later viewer intent, select imported first row and show recorded view. Later recording/sweep choices, Verify or preview intent keep their choice; inspect viewer_selected. Autonomous playback ticks alone do not count as user intent. Eviction of an unkept selected asset clears dangling selection to live",
+          "No slot is reserved. Recheck capacity before attachment; another Verify can consume the last slot and make this admitted import fail with record-limit without evicting kept/active assets",
+          "Import is recorded data, never a trusted live result: imported source_unchanged remains false even if its graph matches. It changes neither live circuit association nor the manual saved file and performs no file publication",
+          "Failure/cancel/supersession preserves source, kept membership, viewer and history except shared job/admission bookkeeping. Project replacement/Close prevents stale attachment; same-document edits alone do not supersede import",
+          "Owned retries retain original admission/terminal outcome without a duplicate attachment or rereading repaired bytes. Admission consumes the key even on failure; use a new key for a corrected attempt. A new successful key may intentionally import the same content again as another kept asset",
+          "One 30-second cooperative context covers read/validation. Blocked OS reads/bounded validation may finish later, but canceled/obsolete data cannot attach; worker slots last until actual return. Jobs are not stored in circuit/recovery documents"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate/missing/null required fields or invalid literal path"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "Active project job or outstanding filesystem worker capacity"
+          },
+          {
+            "code": "conflict",
+            "phase": "admission",
+            "when": "Parameter document-generation guard differs"
+          },
+          {
+            "code": "record-limit",
+            "phase": "admission-or-attachment",
+            "when": "Eight protected kept/active recordings leave no evictable slot"
+          },
+          {
+            "code": "file-error",
+            "phase": "project_work",
+            "when": "Missing/inaccessible/nonregular/final-symlink/oversized/changed-on-open input or OS read failure"
+          },
+          {
+            "code": "invalid-recording",
+            "phase": "project_work",
+            "when": "Read bytes fail strict format/version/model/graph/settings/probe/grid/row/statistics/result validation"
+          },
+          {
+            "code": "timeout",
+            "phase": "project_work",
+            "when": "Cooperative job deadline expires before attachment"
+          },
+          {
+            "code": "canceled",
+            "phase": "project_work",
+            "when": "Exact job canceled or app closed before attachment"
+          },
+          {
+            "code": "superseded",
+            "phase": "project_work",
+            "when": "Captured job/document generation no longer current before attachment"
+          }
+        ],
+        "completion": {
+          "mode": "immediate queued admission, not a recording. Inspect project.work.inspect until terminal; completed work identifies result_operation_id, source_sha256 and viewer_selected",
+          "observe": [
+            "project.work.inspect",
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "project.work.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-import-capacity": {
+        "checks": "At admission and again before complete attachment; unkept terminal records can be evicted, kept/active records cannot. Admission order after structural/common guards: active work/worker capacity, document generation, recording capacity, path syntax.",
+        "max_filesystem_workers": 8,
+        "reservation": false,
+        "retained_project_jobs": 8,
+        "retained_recordings": 8
+      },
+      "x-import-format": {
+        "format": "elab.verification",
+        "max_bytes": 8388608,
+        "max_duration_s": 10,
+        "max_output_steps": 1000,
+        "max_probes": 6,
+        "max_recorded_frames": 4096,
+        "validation": "Complete strict captured graph/model/settings/mode/probe/output-grid/finite-row/statistics/result consistency; no live solve or network model fetch. DC has one zero-duration row; transient captures retain actual output and corner rows, including duplicate timestamps.",
+        "version": 1
+      },
+      "x-import-inventory": "snapshot.project_work is latest job only; retain its ID for project.work.inspect. Completed result_operation_id identifies a new retained recording in snapshot.operations / operation.inspect / operation.samples, distinct from metadata.operation_id.",
+      "x-phases": [
+        "queued",
+        "reading",
+        "validating-recording",
+        "completed"
+      ]
+    }
+  },
+  "admission_refusals": [
+    {
+      "code": "invalid-params",
+      "case": "params"
+    },
+    {
+      "code": "invalid-params",
+      "case": "params"
+    },
+    {
+      "code": "invalid-params",
+      "case": "params"
+    },
+    {
+      "code": "conflict",
+      "case": "guard"
+    }
+  ],
+  "work_failures": [
+    {
+      "case": "missing",
+      "code": "file-error"
+    },
+    {
+      "case": "final-symlink",
+      "code": "file-error"
+    },
+    {
+      "case": "directory",
+      "code": "file-error"
+    },
+    {
+      "case": "oversized",
+      "code": "file-error"
+    },
+    {
+      "case": "exact-size-invalid",
+      "code": "invalid-recording"
+    },
+    {
+      "case": "malformed",
+      "code": "invalid-recording"
+    },
+    {
+      "case": "duplicate-fields",
+      "code": "invalid-recording"
+    },
+    {
+      "case": "version",
+      "code": "invalid-recording"
+    },
+    {
+      "case": "schematic-format",
+      "code": "invalid-recording"
+    }
+  ],
+  "retry": {
+    "failure": "invalid-recording",
+    "duplicate_failure": true,
+    "same_original_job": true,
+    "new_key_record_count": 3
+  },
+  "source_sha256": "494b45a5ab1a6493e3921e272b628b52510b5f310a90f02e16e50097fa7fb73b",
+  "manual_sha256": "0fe2ba2433b905e6250fffcd64f502666a0bd35144c0f821a1df80266eb034c0",
+  "metadata": {
+    "format": "elab.verification",
+    "version": 1,
+    "operation_id": "verify-1",
+    "created_at": "2026-10-17T15:20:45.086691Z",
+    "input_revision": 3,
+    "electrical_revision": 2,
+    "document_generation": 2,
+    "graph": {
+      "components": [
+        {
+          "id": "V1",
+          "kind": "pulse-source",
+          "name": "Pulse source",
+          "terminals": [
+            "positive",
+            "negative"
+          ],
+          "position": {
+            "x": -200,
+            "y": 0
+          },
+          "value": 5,
+          "unit": "V",
+          "model": "ideal-square.v1",
+          "rotation": 0
+        },
+        {
+          "id": "R1",
+          "kind": "resistor",
+          "name": "Resistor",
+          "terminals": [
+            "1",
+            "2"
+          ],
+          "position": {
+            "x": 0,
+            "y": -110
+          },
+          "value": 10000,
+          "unit": "\u03a9",
+          "model": "ideal-resistor.v1",
+          "rotation": 0
+        },
+        {
+          "id": "C1",
+          "kind": "capacitor",
+          "name": "Capacitor",
+          "terminals": [
+            "1",
+            "2"
+          ],
+          "position": {
+            "x": 200,
+            "y": 0
+          },
+          "value": 1e-06,
+          "unit": "F",
+          "model": "ideal-capacitor.v1",
+          "rotation": 0
+        },
+        {
+          "id": "GND",
+          "kind": "ground",
+          "name": "Ground",
+          "terminals": [
+            "reference"
+          ],
+          "position": {
+            "x": 0,
+            "y": 110
+          },
+          "value": 0,
+          "model": "ground.v1",
+          "rotation": 0
+        }
+      ],
+      "wires": [
+        {
+          "id": "W1",
+          "from": "V1.positive",
+          "to": "R1.1",
+          "connected": true
+        },
+        {
+          "id": "W2",
+          "from": "R1.2",
+          "to": "C1.1",
+          "connected": true
+        },
+        {
+          "id": "W3",
+          "from": "C1.2",
+          "to": "GND.reference",
+          "connected": true
+        },
+        {
+          "id": "W4",
+          "from": "GND.reference",
+          "to": "V1.negative",
+          "connected": true
+        }
+      ]
+    },
+    "settings": {
+      "step_s": 0.001,
+      "high_s": 0.05,
+      "low_s": 0.05,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 0.02
+    },
+    "input_mode": "auto",
+    "analysis": "RC transient",
+    "engine": "elab.ideal-rc-exact.v1",
+    "led_model": {
+      "id": "elab.generic-red-led.v1",
+      "is_a": 1e-20,
+      "n": 2,
+      "rs_ohm": 1,
+      "temperature_c": 27,
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+    },
+    "probes": [
+      {
+        "id": "v:C1",
+        "label": "C1 voltage",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      },
+      {
+        "id": "i:C1",
+        "label": "C1 current",
+        "unit": "A",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      }
+    ],
+    "duration_s": 0.006,
+    "sample_count": 7,
+    "statistics": [
+      {
+        "probe_id": "v:C1",
+        "count": 7,
+        "min": 0,
+        "max": 2.255941819529868,
+        "sample_mean": 1.2213937616871726,
+        "sample_rms": 1.4344829645114505
+      },
+      {
+        "probe_id": "i:C1",
+        "count": 7,
+        "min": 0.0002744058180470132,
+        "max": 0.0005,
+        "sample_mean": 0.0003778606238312828,
+        "sample_rms": 0.00038527657284867235
+      }
+    ]
+  },
+  "rows": [
+    {
+      "time_s": 0,
+      "values": [
+        0,
+        0.0005
+      ]
+    },
+    {
+      "time_s": 0.001,
+      "values": [
+        0.47581290982020213,
+        0.0004524187090179798
+      ]
+    },
+    {
+      "time_s": 0.002,
+      "values": [
+        0.9063462346100908,
+        0.0004093653765389909
+      ]
+    },
+    {
+      "time_s": 0.003,
+      "values": [
+        1.2959088965914107,
+        0.00037040911034085894
+      ]
+    },
+    {
+      "time_s": 0.004,
+      "values": [
+        1.6483997698218036,
+        0.0003351600230178196
+      ]
+    },
+    {
+      "time_s": 0.005,
+      "values": [
+        1.9673467014368329,
+        0.0003032653298563167
+      ]
+    },
+    {
+      "time_s": 0.006,
+      "values": [
+        2.255941819529868,
+        0.0002744058180470132
+      ]
+    }
+  ],
+  "first_work": {
+    "result_operation_id": "record-2",
+    "source_sha256": "494b45a5ab1a6493e3921e272b628b52510b5f310a90f02e16e50097fa7fb73b",
+    "viewer_selected": true,
+    "cancelable": false,
+    "associated_with_current_document": true,
+    "id": "project-2",
+    "command": "verification.import",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "agent.stdio",
+    "path": "/Users/dshills/Development/projects/ELab/build/import-contracts/headless-final-assets/source-record.json",
+    "input_revision": 19,
+    "command_revision": 8,
+    "document_generation": 2,
+    "bytes": 4453,
+    "result_document_generation": 2
+  },
+  "first_id": "record-2",
+  "second_id": "record-3",
+  "live": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "pulse-source",
+        "name": "Pulse source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-square.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -110
+        },
+        "value": 10000,
+        "unit": "\u03a9",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "C1",
+        "kind": "capacitor",
+        "name": "Capacitor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 1e-06,
+        "unit": "F",
+        "model": "ideal-capacitor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 110
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "C1.1",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "C1.2",
+        "to": "GND.reference",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "GND.reference",
+        "to": "V1.negative",
+        "connected": true
+      }
+    ],
+    "view": {
+      "center": {
+        "x": -130,
+        "y": 20
+      },
+      "zoom": 0.7
+    },
+    "transient": {
+      "engine": "elab.ideal-rc-exact.v1",
+      "run_id": 3,
+      "electrical_revision": 2,
+      "source_id": "V1",
+      "resistor_id": "R1",
+      "capacitor_id": "C1",
+      "output_net": "net:C1.1",
+      "time_constant_s": 0.01,
+      "settings": {
+        "step_s": 0.001,
+        "high_s": 0.05,
+        "low_s": 0.05,
+        "initial_voltage_v": 0,
+        "seconds_per_wall_second": 0.02
+      },
+      "input_mode": "auto",
+      "sample": {
+        "time_s": 0.003,
+        "input_v": 5,
+        "voltage_v": 1.2959088965914107,
+        "current_a": 0.00037040911034085894,
+        "energy_j": 8.396899341323838e-07
+      },
+      "samples": [
+        {
+          "time_s": 0,
+          "input_v": 5,
+          "voltage_v": 0,
+          "current_a": 0.0005,
+          "energy_j": 0
+        },
+        {
+          "time_s": 0.001,
+          "input_v": 5,
+          "voltage_v": 0.47581290982020213,
+          "current_a": 0.0004524187090179798,
+          "energy_j": 1.131989625757839e-07
+        },
+        {
+          "time_s": 0.002,
+          "input_v": 5,
+          "voltage_v": 0.9063462346100908,
+          "current_a": 0.0004093653765389909,
+          "energy_j": 4.1073174849594485e-07
+        },
+        {
+          "time_s": 0.003,
+          "input_v": 5,
+          "voltage_v": 1.2959088965914107,
+          "current_a": 0.00037040911034085894,
+          "energy_j": 8.396899341323838e-07
+        }
+      ],
+      "events": [
+        {
+          "time_s": 0,
+          "mode": "restart"
+        }
+      ],
+      "stale": false
+    },
+    "mixed": null,
+    "npn": null,
+    "scope": {
+      "window": {
+        "mode": "live",
+        "start_s": 0,
+        "end_s": 0.003
+      },
+      "window_valid": true,
+      "statistics": [
+        {
+          "probe_id": "v:C1.1",
+          "count": 4,
+          "min": 0,
+          "max": 1.2959088965914107,
+          "sample_mean": 0.669517010255426,
+          "sample_rms": 0.8257180648393593
+        },
+        {
+          "probe_id": "v:V1.positive",
+          "count": 4,
+          "min": 5,
+          "max": 5,
+          "sample_mean": 5,
+          "sample_rms": 5
+        }
+      ],
+      "available": [
+        {
+          "id": "v:V1.positive",
+          "label": "V1.positive / ground",
+          "unit": "V",
+          "positive": "V1.positive",
+          "reference": "ground"
+        },
+        {
+          "id": "v:V1.negative",
+          "label": "V1.negative / ground",
+          "unit": "V",
+          "positive": "V1.negative",
+          "reference": "ground"
+        },
+        {
+          "id": "v:V1",
+          "label": "V1 voltage",
+          "unit": "V",
+          "positive": "V1.positive",
+          "reference": "V1.negative"
+        },
+        {
+          "id": "i:V1",
+          "label": "V1 delivered current",
+          "unit": "A",
+          "positive": "V1.positive",
+          "reference": "out of positive"
+        },
+        {
+          "id": "v:R1.1",
+          "label": "R1.1 / ground",
+          "unit": "V",
+          "positive": "R1.1",
+          "reference": "ground"
+        },
+        {
+          "id": "v:R1.2",
+          "label": "R1.2 / ground",
+          "unit": "V",
+          "positive": "R1.2",
+          "reference": "ground"
+        },
+        {
+          "id": "v:R1",
+          "label": "R1 voltage",
+          "unit": "V",
+          "positive": "R1.1",
+          "reference": "R1.2"
+        },
+        {
+          "id": "i:R1",
+          "label": "R1 current",
+          "unit": "A",
+          "positive": "R1.1",
+          "reference": "R1.2"
+        },
+        {
+          "id": "v:C1.1",
+          "label": "C1.1 / ground",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "ground"
+        },
+        {
+          "id": "v:C1.2",
+          "label": "C1.2 / ground",
+          "unit": "V",
+          "positive": "C1.2",
+          "reference": "ground"
+        },
+        {
+          "id": "v:C1",
+          "label": "C1 voltage",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        {
+          "id": "i:C1",
+          "label": "C1 current",
+          "unit": "A",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        {
+          "id": "v:GND.reference",
+          "label": "GND.reference / ground",
+          "unit": "V",
+          "positive": "GND.reference",
+          "reference": "ground"
+        }
+      ],
+      "selected": [
+        "v:C1.1",
+        "v:V1.positive"
+      ],
+      "traces": [
+        {
+          "probe": {
+            "id": "v:C1.1",
+            "label": "C1.1 / ground",
+            "unit": "V",
+            "positive": "C1.1",
+            "reference": "ground"
+          },
+          "points": [
+            {
+              "time_s": 0,
+              "value": 0
+            },
+            {
+              "time_s": 0.001,
+              "value": 0.47581290982020213
+            },
+            {
+              "time_s": 0.002,
+              "value": 0.9063462346100908
+            },
+            {
+              "time_s": 0.003,
+              "value": 1.2959088965914107
+            }
+          ]
+        },
+        {
+          "probe": {
+            "id": "v:V1.positive",
+            "label": "V1.positive / ground",
+            "unit": "V",
+            "positive": "V1.positive",
+            "reference": "ground"
+          },
+          "points": [
+            {
+              "time_s": 0,
+              "value": 5
+            },
+            {
+              "time_s": 0.001,
+              "value": 5
+            },
+            {
+              "time_s": 0.002,
+              "value": 5
+            },
+            {
+              "time_s": 0.003,
+              "value": 5
+            }
+          ]
+        }
+      ],
+      "run_id": 3,
+      "stale": false,
+      "active_cursor": "a",
+      "readings": []
+    },
+    "paused": true,
+    "undo_entry": {
+      "name": "example rc",
+      "actor": "agent.stdio",
+      "command_revision": 2
+    },
+    "redo_entry": null,
+    "run_id": 3,
+    "electrical_revision": 2
+  },
+  "reopened": {
+    "paused": true,
+    "time_s": 0,
+    "recording_count": 3,
+    "dirty": false
+  },
+  "limits": [
+    "Viewer/capacity/cancel/replacement races use controlled core tests; no nondeterministic public-race claim",
+    "No decoder/model/numerical/runtime/format change or complete physical picker/AX/device/storage qualification"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "notes": [
+    "Source review found the new fixture used simulation.wait after Verify. That API intentionally does not wait for independent Verify work. Initial workflows passed because the tiny capture completed quickly; final fixture explicitly inspects its exact Verify ID before depending on completion. No application/Go/binary change.",
+    "Corrected the legacy report historical synchronous-recovery/shutdown wording to describe separate job qualification. Only the two Python reference files changed after initial full gates."
+  ]
+}

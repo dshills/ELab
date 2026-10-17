@@ -86,6 +86,9 @@ func addCapabilityDetails(id string, schema map[string]any) {
 	if addPreviewCapabilityDetails(id, schema) {
 		return
 	}
+	if addRecordingImportDetails(id, schema) {
+		return
+	}
 	if addExportCapabilityDetails(id, schema) {
 		return
 	}

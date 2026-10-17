@@ -1,0 +1,25 @@
+from pathlib import Path
+import datetime, json, subprocess, sys, time
+
+root=Path.cwd();out=root/'build/import-contracts';private=out/'native-session';private.mkdir(mode=0o700)
+endpoint=private/'endpoint.json';candidate=root/'build/ELab-0.118.0-135-import-contracts-candidate.app/Contents/MacOS/ELab'
+record={'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'running'};started=time.monotonic();host=None
+try:
+ with (out/'native-host.log.txt').open('x') as log:
+  host=subprocess.Popen([str(candidate),'--agent-endpoint',str(endpoint),'--no-appearance','--recovery-directory',str(private/'recovery')],stdout=log,stderr=subprocess.STDOUT)
+  record['owned_pid']=host.pid;deadline=time.monotonic()+30
+  while not endpoint.exists():
+   assert host.poll() is None and time.monotonic()<deadline,'owned native host failed startup'
+   time.sleep(.025)
+  with (out/'native-viewer.log.txt').open('x') as demo_log:
+   result=subprocess.run([sys.executable,'-B','scripts/import-contracts-demo.py','--connect',str(endpoint),'--output',str(out/'native-final.json'),'--artifacts',str(out/'native-final-assets')],stdout=demo_log,stderr=subprocess.STDOUT,timeout=90)
+  record['demo_exit_code']=result.returncode;assert result.returncode==0
+  record['native_exit_code']=host.wait(timeout=15);assert record['native_exit_code']==0
+  record['status']='completed'
+except BaseException as error:
+ record.update(status='failed',error_type=type(error).__name__);raise
+finally:
+ if host is not None and host.poll() is None:
+  host.terminate();host.wait(timeout=10);record['forced_cleanup']=True
+ record.update(elapsed_seconds=time.monotonic()-started,finished_utc=datetime.datetime.now(datetime.timezone.utc).isoformat())
+ (out/'process-native.json').write_text(json.dumps(record,indent=2)+'\n');print(json.dumps(record),flush=True)

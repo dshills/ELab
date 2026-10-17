@@ -1,0 +1,420 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T15:21:05.344420+00:00",
+  "scope": "Two captured recording-import state contracts, admission/read-validation boundaries, exact failed-key replay/new-key repair, preserved live/manual source and three-kept-record save/reopen",
+  "reference_configuration": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "processor": "Apple M4 Pro",
+    "logical_cpus": 14,
+    "memory_bytes": 68719476736,
+    "go_toolchain": "go version go1.27.2 darwin/arm64"
+  },
+  "source_parent_commit": "0711afd85a3d17fca42e03540c2658283c8b31bb",
+  "source_index": "docs/validation/import-contracts/source-freeze.json",
+  "source_frozen_files": 707,
+  "source_stable": true,
+  "setup_corrections": [
+    "Source review found the new fixture used simulation.wait after Verify. That API intentionally does not wait for independent Verify work. Initial workflows passed because the tiny capture completed quickly; final fixture explicitly inspects its exact Verify ID before depending on completion. No application/Go/binary change.",
+    "Corrected the legacy report historical synchronous-recovery/shutdown wording to describe separate job qualification. Only the two Python reference files changed after initial full gates."
+  ],
+  "source_delta": {
+    "scripts/import-contracts-demo.py": {
+      "before": null,
+      "after": "bc8ece1cfa029a61b29e412a517e0c29c85dc31efaf4e6470d74462ec07c0779"
+    },
+    "workbench/capability_details.go": {
+      "before": "3e2803a9274285d339ba5142c60af41d3c9e22bebfde2fb280edd31546afb96c",
+      "after": "590746d95cd05ab1594362e154c59c112a0c20041f3683382116e1caeeaed250"
+    },
+    "workbench/import_capabilities.go": {
+      "before": null,
+      "after": "bf916de799e79bf13b11603f599c600a10bc3b7e2291f1772b31ed6c70e982c5"
+    },
+    "workbench/import_contracts_test.go": {
+      "before": null,
+      "after": "de15ee87709c2b9a1568ef30640a2eefc096f1db19ebb1ac0d3af3fa070d6a0a"
+    },
+    "scripts/project-import-demo.py": {
+      "before": "e212eac1471c2fcfe309e4f693c12283fc95b37adf06a486b1bdb314570ed7c3",
+      "after": "0423bf830cbff6695e43bcee23a609a8a4aaf87cdc6127480a20096d158c6d7a"
+    }
+  },
+  "binary_sha256": {
+    "build/elab": "9f6563d7df94e3835e0e89bae81e46d34e67cc657034e56f28c0904e1deddd9c",
+    "build/elab-agent": "3b426cb1dae2ae84dccc1cb18dee836f948b7b4517435e682b6afd11219078d8",
+    "build/elab-conformance": "381c2d9b31e5805ffd2bc29de6a21b9970a18b8c5f366735c54e85a8421b1f1d",
+    "build/elab-ui-audit": "534b20978643dd21075952833af933dc7b46c205cb215ea3b2594bc540903b0a",
+    "build/ELab-0.118.0-135-import-contracts-candidate.app/Contents/MacOS/ELab": "9f6563d7df94e3835e0e89bae81e46d34e67cc657034e56f28c0904e1deddd9c"
+  },
+  "candidate": "build/ELab-0.118.0-135-import-contracts-candidate.app",
+  "candidate_promoted": false,
+  "new_application_commands": 0,
+  "existing_commands": 162,
+  "new_contracts": 2,
+  "commands_with_contracts_before": 121,
+  "commands_with_contracts_after": 123,
+  "commands_without_contract": 39,
+  "default_catalog_output_schemas_models_numerical_methods_work_limits_file_versions_unchanged": true,
+  "quality": {
+    "lint_imports_staticcheck": true,
+    "python_tests": 37,
+    "root_native_race_and_vet": true
+  },
+  "process_quality": [
+    {
+      "name": "build",
+      "argv": [
+        "./scripts/build.sh"
+      ],
+      "started_utc": "2026-10-17T15:09:51.669151+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 1.0618925830349326,
+      "finished_utc": "2026-10-17T15:09:52.731068+00:00"
+    },
+    {
+      "name": "quality",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T15:09:52.741738+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 360.3263962920755,
+      "finished_utc": "2026-10-17T15:15:53.075460+00:00"
+    },
+    {
+      "name": "quality-final",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T15:20:17.093985+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 12.576298250001855,
+      "finished_utc": "2026-10-17T15:20:29.670449+00:00"
+    }
+  ],
+  "process_public": [
+    {
+      "name": "native-smoke",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.118.0-135-import-contracts-candidate.app/Contents/MacOS/ELab",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "started_utc": "2026-10-17T15:16:30.350332+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 102.53422583302017,
+      "finished_utc": "2026-10-17T15:18:12.858186+00:00"
+    },
+    {
+      "name": "public-suites",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+        "--native-binary",
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.118.0-135-import-contracts-candidate.app/Contents/MacOS/ELab",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/import-contracts/public-final"
+      ],
+      "started_utc": "2026-10-17T15:18:12.872752+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 48.43276354193222,
+      "finished_utc": "2026-10-17T15:19:01.305729+00:00"
+    },
+    {
+      "name": "headless-import",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/import-contracts-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/import-contracts/headless-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/import-contracts/headless-final-assets"
+      ],
+      "started_utc": "2026-10-17T15:20:45.033621+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 0.17689966701436788,
+      "finished_utc": "2026-10-17T15:20:45.210524+00:00"
+    },
+    {
+      "name": "legacy-import",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/project-import-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/import-contracts/legacy-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/import-contracts/legacy-final-assets"
+      ],
+      "started_utc": "2026-10-17T15:20:45.222831+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 0.1036683750571683,
+      "finished_utc": "2026-10-17T15:20:45.326499+00:00"
+    }
+  ],
+  "native_workflow": {
+    "started_utc": "2026-10-17T15:20:45.352134+00:00",
+    "status": "completed",
+    "owned_pid": 87162,
+    "demo_exit_code": 0,
+    "native_exit_code": 0,
+    "elapsed_seconds": 0.8842567090177909,
+    "finished_utc": "2026-10-17T15:20:46.236523+00:00"
+  },
+  "four_adapter_numerical_checks": 27596,
+  "four_adapter_project_workflow_checks": 44,
+  "four_adapter_project_snapshots": 56,
+  "native_smoke_stages": 45,
+  "import_review": {
+    "passed": true,
+    "contracts_per_transport": 2,
+    "admission_refusals_per_transport": 4,
+    "work_failures_per_transport": 9,
+    "expected_import_actors": {
+      "headless": "agent.stdio",
+      "native": "agent.socket"
+    },
+    "exact_record_exports_and_all_three_kept_entries_reviewed": true,
+    "recorded_rows_per_transport": 7,
+    "recorded_voltage_current_reference_checks": 28,
+    "preserved_live_voltage_reference_checks": 2,
+    "maximum_recorded_voltage_error_v": 0.0,
+    "maximum_recorded_current_error_a": 5.421010862427522e-20,
+    "failed_retry_retains_original_outcome_new_key_attaches_distinct_asset": true,
+    "manual_source_kept_count_before_after": 1,
+    "saved_kept_count": 3,
+    "saved_total_rows": 18,
+    "fresh_reopen_paused_time_zero_clean": true,
+    "size_input_controls": {
+      "headless": {
+        "exact-limit.json": {
+          "bytes": 8388608,
+          "sha256": "2daeb1f36095b44b318410b3f4e8b5d989dcc7bb023d1426c492dab0a3053e74"
+        },
+        "oversized.json": {
+          "bytes": 8388609,
+          "sha256": "4459f957d031a8b782dfee09d2c7070a4b5e6c33130a8f20ac35393fd97fc57a"
+        }
+      },
+      "native": {
+        "exact-limit.json": {
+          "bytes": 8388608,
+          "sha256": "2daeb1f36095b44b318410b3f4e8b5d989dcc7bb023d1426c492dab0a3053e74"
+        },
+        "oversized.json": {
+          "bytes": 8388609,
+          "sha256": "4459f957d031a8b782dfee09d2c7070a4b5e6c33130a8f20ac35393fd97fc57a"
+        }
+      }
+    },
+    "equal_schemas_errors_rows_live_physics": true,
+    "scope": "Named import/retry/persistence/data references; controlled core tests separately cover preview intent, cancellation, capacity and replacement races"
+  },
+  "four_prior_preview_contracts_exactly_unchanged": true,
+  "legacy_import_workflow_passed": true,
+  "size_controls": {
+    "headless": {
+      "exact-limit.json": {
+        "decoded_bytes": 8388608,
+        "decoded_sha256": "2daeb1f36095b44b318410b3f4e8b5d989dcc7bb023d1426c492dab0a3053e74",
+        "gzip_bytes": 8175,
+        "gzip_sha256": "59c3ceb764d440dc99fc10d3bef8f2c1a058d98b94b6b7d342d9941dc7d29c4d"
+      },
+      "oversized.json": {
+        "decoded_bytes": 8388609,
+        "decoded_sha256": "4459f957d031a8b782dfee09d2c7070a4b5e6c33130a8f20ac35393fd97fc57a",
+        "gzip_bytes": 8175,
+        "gzip_sha256": "60ccc7f1052745ac18669a61ff1704cf464bbe0d4467c56cf4a83e994df244f3"
+      }
+    },
+    "native": {
+      "exact-limit.json": {
+        "decoded_bytes": 8388608,
+        "decoded_sha256": "2daeb1f36095b44b318410b3f4e8b5d989dcc7bb023d1426c492dab0a3053e74",
+        "gzip_bytes": 8175,
+        "gzip_sha256": "59c3ceb764d440dc99fc10d3bef8f2c1a058d98b94b6b7d342d9941dc7d29c4d"
+      },
+      "oversized.json": {
+        "decoded_bytes": 8388609,
+        "decoded_sha256": "4459f957d031a8b782dfee09d2c7070a4b5e6c33130a8f20ac35393fd97fc57a",
+        "gzip_bytes": 8175,
+        "gzip_sha256": "60ccc7f1052745ac18669a61ff1704cf464bbe0d4467c56cf4a83e994df244f3"
+      }
+    }
+  },
+  "file_type_controls": {
+    "headless": {
+      "linked.json": {
+        "type": "symlink",
+        "target": "/Users/dshills/Development/projects/ELab/build/import-contracts/headless-final-assets/source-record.json",
+        "target_sha256": "494b45a5ab1a6493e3921e272b628b52510b5f310a90f02e16e50097fa7fb73b"
+      },
+      "directory": {
+        "type": "directory",
+        "entries": []
+      },
+      "missing.json": {
+        "type": "absent"
+      }
+    },
+    "native": {
+      "linked.json": {
+        "type": "symlink",
+        "target": "/Users/dshills/Development/projects/ELab/build/import-contracts/native-final-assets/source-record.json",
+        "target_sha256": "640033a7e9ca474205bba3cf1078dc8cc7e8ce092293f2faf100c6d0acdd74de"
+      },
+      "directory": {
+        "type": "directory",
+        "entries": []
+      },
+      "missing.json": {
+        "type": "absent"
+      }
+    }
+  },
+  "typed_raw_gzip_numerical_review_equal": true,
+  "sdk_verified": {
+    "passed": true,
+    "source": "aa9d023243a6bded514c3d9696c08a9c917119c4",
+    "archive_sha256": "22b086442570641e4ae56e9937dd6483c26f92cde953f3aa3fc11811710ed7c5"
+  },
+  "native_production_inventory_unchanged": {
+    "sources": 57,
+    "sites": 388,
+    "commands": 162
+  },
+  "preserved_bundle_trees": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7
+    }
+  },
+  "fixture_files": {
+    "docs/validation/import-contracts/fixtures/headless/source-record.json": "494b45a5ab1a6493e3921e272b628b52510b5f310a90f02e16e50097fa7fb73b",
+    "docs/validation/import-contracts/fixtures/headless/manual.elab": "0fe2ba2433b905e6250fffcd64f502666a0bd35144c0f821a1df80266eb034c0",
+    "docs/validation/import-contracts/fixtures/headless/reexport-first.json": "494b45a5ab1a6493e3921e272b628b52510b5f310a90f02e16e50097fa7fb73b",
+    "docs/validation/import-contracts/fixtures/headless/reexport-repaired.json": "494b45a5ab1a6493e3921e272b628b52510b5f310a90f02e16e50097fa7fb73b",
+    "docs/validation/import-contracts/fixtures/headless/reexport-reopened.json": "494b45a5ab1a6493e3921e272b628b52510b5f310a90f02e16e50097fa7fb73b",
+    "docs/validation/import-contracts/fixtures/headless/imported-project.elab": "4b65542ad9cdf1f7fb2109fda64311bb0ae9a592024f6af320e7d17c8c96f0f8",
+    "docs/validation/import-contracts/fixtures/headless/repair.json": "494b45a5ab1a6493e3921e272b628b52510b5f310a90f02e16e50097fa7fb73b",
+    "docs/validation/import-contracts/fixtures/headless/invalid.json": "81ce0df1bdcb683453f28fa5f1abc92a277ef85f80e0de9414d80613a2bea760",
+    "docs/validation/import-contracts/fixtures/headless/duplicate.json": "489146bde9a49b8aa43a704ce6511e6a28d8901d74284c911c9f7ac050e7e1af",
+    "docs/validation/import-contracts/fixtures/headless/version.json": "e82fe488754c573ea0e834c492b7be7a5f03792a650e42c23bcc766787ce5476",
+    "docs/validation/import-contracts/fixtures/native/source-record.json": "640033a7e9ca474205bba3cf1078dc8cc7e8ce092293f2faf100c6d0acdd74de",
+    "docs/validation/import-contracts/fixtures/native/manual.elab": "17365ff1d81323c4fb6aaff9522f1ba34fc7d681cf1d880de69250368f8322fe",
+    "docs/validation/import-contracts/fixtures/native/reexport-first.json": "640033a7e9ca474205bba3cf1078dc8cc7e8ce092293f2faf100c6d0acdd74de",
+    "docs/validation/import-contracts/fixtures/native/reexport-repaired.json": "640033a7e9ca474205bba3cf1078dc8cc7e8ce092293f2faf100c6d0acdd74de",
+    "docs/validation/import-contracts/fixtures/native/reexport-reopened.json": "640033a7e9ca474205bba3cf1078dc8cc7e8ce092293f2faf100c6d0acdd74de",
+    "docs/validation/import-contracts/fixtures/native/imported-project.elab": "5aa30df3e3d142a09d7dc7ee5c2bf06c83f148eca22ebea1d24c20976b932577",
+    "docs/validation/import-contracts/fixtures/native/repair.json": "640033a7e9ca474205bba3cf1078dc8cc7e8ce092293f2faf100c6d0acdd74de",
+    "docs/validation/import-contracts/fixtures/native/invalid.json": "81ce0df1bdcb683453f28fa5f1abc92a277ef85f80e0de9414d80613a2bea760",
+    "docs/validation/import-contracts/fixtures/native/duplicate.json": "489146bde9a49b8aa43a704ce6511e6a28d8901d74284c911c9f7ac050e7e1af",
+    "docs/validation/import-contracts/fixtures/native/version.json": "aedc5c564e3352ea2d5db9bb93199a006cd60416f5abfdee692974dc293e1c7a"
+  },
+  "report_encoding": {
+    "conformance-report.json.gz": {
+      "decoded_bytes": 18171124,
+      "decoded_sha256": "508287bb4d0360f78840f0c33226e16a189c2b9f71534406cc234205fe918726",
+      "gzip_bytes": 1659702,
+      "gzip_sha256": "71e674fb810a4521286521e617b27d0adcd4d2f675ebafb780dd38f9b977fd00"
+    }
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "limitations": [
+    "Discovery and regressions describe existing import/decoder behavior; no runtime, source model, numerical/work limit, command ID or file format change is claimed.",
+    "Later preview/viewer intent, capacity, cancel/Close/replacement and waiting disconnect use controlled core race tests; public workflows do not claim nondeterministic race coverage.",
+    "Actor, job IDs, source paths, timestamps and input digests are transport/session provenance; exact portable data is compared within each workflow and numerical rows/physics across transports.",
+    "Encoded bad-size inputs are lossless gzip to retain exact controls without bloating the repository. Symlink/directory/missing controls retain file-type metadata and the executable generator.",
+    "Thirty-nine commands remain without scoped state contracts. Complete physical picker/typing/AX, event/distribution/storage-device/latency and participant gates remain open.",
+    "The private 0.118 /135 candidate is unpromoted; canonical 0.105 and preserved 0.104 bundles stay exact."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/import-contracts/archive.py.txt": "59ada21a033e869d8df0b3a8c3150a4b4f6ef6682515fb9625b98d8fc2168651",
+    "docs/validation/import-contracts/build-initial.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/import-contracts/build.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/import-contracts/conformance-report.json.gz": "71e674fb810a4521286521e617b27d0adcd4d2f675ebafb780dd38f9b977fd00",
+    "docs/validation/import-contracts/contract-inventory.json": "735a655a1527ce58587b92d3ef6b9d50bca3bf1ef772112318c26bad79a0ca3e",
+    "docs/validation/import-contracts/core-focused.log.txt": "6dff6e8878b253443b3f0763b368ca90964d98d1d7ad4fb8d1f85cb3f0aab7ca",
+    "docs/validation/import-contracts/file-type-controls.json": "37f902261ab512bd66d9a6f53fde5294f1bb1a80b0cbfeebe0535d87eefc1765",
+    "docs/validation/import-contracts/fixtures/headless/duplicate.json": "489146bde9a49b8aa43a704ce6511e6a28d8901d74284c911c9f7ac050e7e1af",
+    "docs/validation/import-contracts/fixtures/headless/exact-limit.json.gz": "59c3ceb764d440dc99fc10d3bef8f2c1a058d98b94b6b7d342d9941dc7d29c4d",
+    "docs/validation/import-contracts/fixtures/headless/imported-project.elab": "4b65542ad9cdf1f7fb2109fda64311bb0ae9a592024f6af320e7d17c8c96f0f8",
+    "docs/validation/import-contracts/fixtures/headless/invalid.json": "81ce0df1bdcb683453f28fa5f1abc92a277ef85f80e0de9414d80613a2bea760",
+    "docs/validation/import-contracts/fixtures/headless/manual.elab": "0fe2ba2433b905e6250fffcd64f502666a0bd35144c0f821a1df80266eb034c0",
+    "docs/validation/import-contracts/fixtures/headless/oversized.json.gz": "60ccc7f1052745ac18669a61ff1704cf464bbe0d4467c56cf4a83e994df244f3",
+    "docs/validation/import-contracts/fixtures/headless/reexport-first.json": "494b45a5ab1a6493e3921e272b628b52510b5f310a90f02e16e50097fa7fb73b",
+    "docs/validation/import-contracts/fixtures/headless/reexport-reopened.json": "494b45a5ab1a6493e3921e272b628b52510b5f310a90f02e16e50097fa7fb73b",
+    "docs/validation/import-contracts/fixtures/headless/reexport-repaired.json": "494b45a5ab1a6493e3921e272b628b52510b5f310a90f02e16e50097fa7fb73b",
+    "docs/validation/import-contracts/fixtures/headless/repair.json": "494b45a5ab1a6493e3921e272b628b52510b5f310a90f02e16e50097fa7fb73b",
+    "docs/validation/import-contracts/fixtures/headless/source-record.json": "494b45a5ab1a6493e3921e272b628b52510b5f310a90f02e16e50097fa7fb73b",
+    "docs/validation/import-contracts/fixtures/headless/version.json": "e82fe488754c573ea0e834c492b7be7a5f03792a650e42c23bcc766787ce5476",
+    "docs/validation/import-contracts/fixtures/native/duplicate.json": "489146bde9a49b8aa43a704ce6511e6a28d8901d74284c911c9f7ac050e7e1af",
+    "docs/validation/import-contracts/fixtures/native/exact-limit.json.gz": "59c3ceb764d440dc99fc10d3bef8f2c1a058d98b94b6b7d342d9941dc7d29c4d",
+    "docs/validation/import-contracts/fixtures/native/imported-project.elab": "5aa30df3e3d142a09d7dc7ee5c2bf06c83f148eca22ebea1d24c20976b932577",
+    "docs/validation/import-contracts/fixtures/native/invalid.json": "81ce0df1bdcb683453f28fa5f1abc92a277ef85f80e0de9414d80613a2bea760",
+    "docs/validation/import-contracts/fixtures/native/manual.elab": "17365ff1d81323c4fb6aaff9522f1ba34fc7d681cf1d880de69250368f8322fe",
+    "docs/validation/import-contracts/fixtures/native/oversized.json.gz": "60ccc7f1052745ac18669a61ff1704cf464bbe0d4467c56cf4a83e994df244f3",
+    "docs/validation/import-contracts/fixtures/native/reexport-first.json": "640033a7e9ca474205bba3cf1078dc8cc7e8ce092293f2faf100c6d0acdd74de",
+    "docs/validation/import-contracts/fixtures/native/reexport-reopened.json": "640033a7e9ca474205bba3cf1078dc8cc7e8ce092293f2faf100c6d0acdd74de",
+    "docs/validation/import-contracts/fixtures/native/reexport-repaired.json": "640033a7e9ca474205bba3cf1078dc8cc7e8ce092293f2faf100c6d0acdd74de",
+    "docs/validation/import-contracts/fixtures/native/repair.json": "640033a7e9ca474205bba3cf1078dc8cc7e8ce092293f2faf100c6d0acdd74de",
+    "docs/validation/import-contracts/fixtures/native/source-record.json": "640033a7e9ca474205bba3cf1078dc8cc7e8ce092293f2faf100c6d0acdd74de",
+    "docs/validation/import-contracts/fixtures/native/version.json": "aedc5c564e3352ea2d5db9bb93199a006cd60416f5abfdee692974dc293e1c7a",
+    "docs/validation/import-contracts/headless-final.json": "07f2c95eaf695ba59f759cb6bca6289ea55a02a53e50e049327eba898da86052",
+    "docs/validation/import-contracts/headless-import.log.txt": "5c3fa114e6a2eb1c40c8dc5b2d475a555b2a51239e79aca7daa3ce6f7276e600",
+    "docs/validation/import-contracts/headless-initial.json": "4249c19cd0fc198d6b0f7a3a701740d192b1065fd9c3836ad49c18a20cdccbcf",
+    "docs/validation/import-contracts/headless-initial.log.txt": "5c3fa114e6a2eb1c40c8dc5b2d475a555b2a51239e79aca7daa3ce6f7276e600",
+    "docs/validation/import-contracts/import-review.json": "98e7827096c336bc37795b78a864a0c0cc3f211565a96c9031c736de3d6466c7",
+    "docs/validation/import-contracts/import-review.py.txt": "8c03a7638dedf0af503b35772da7440d4cb20fa9b9b9a67dc3c73159bfed231b",
+    "docs/validation/import-contracts/initial-headless-final.json": "f27b10aa9f803f96b5f7205c1982d77f9f8c1b745b7fec0d8b4109935598e941",
+    "docs/validation/import-contracts/initial-headless-import.log.txt": "5c3fa114e6a2eb1c40c8dc5b2d475a555b2a51239e79aca7daa3ce6f7276e600",
+    "docs/validation/import-contracts/initial-legacy-final.json": "fdb4ef22c3e1f15dfb1608081c7863658917fe6ca690d65db8d430b496a835b3",
+    "docs/validation/import-contracts/initial-legacy-import.log.txt": "fdb4ef22c3e1f15dfb1608081c7863658917fe6ca690d65db8d430b496a835b3",
+    "docs/validation/import-contracts/initial-process-public.json": "d1da5cd3b5e2f00303a6f22a8e4634722b5d641168f3321db0dd7151cc30d351",
+    "docs/validation/import-contracts/legacy-final.json": "1fb96b76e5f62639aeb96fc13f24080e917134ce83d30a1e670b2d0d8beb827d",
+    "docs/validation/import-contracts/legacy-import.log.txt": "1fb96b76e5f62639aeb96fc13f24080e917134ce83d30a1e670b2d0d8beb827d",
+    "docs/validation/import-contracts/native-final.json": "d29e01ab851f3393da06ab1f6f00ed6b34f5d2e22795576220362badfefc068c",
+    "docs/validation/import-contracts/native-host.log.txt": "35778c20ccf24e0292f21640f486d2dc166b86ef45837b70dc54f8947667a7db",
+    "docs/validation/import-contracts/native-smoke.log.txt": "339474f8cc8f5cb3665901b210fccaa5b34145f45314a50f5d8d6abe87461cda",
+    "docs/validation/import-contracts/native-viewer.log.txt": "240dce96cf771ec6ec566ce303c05a20e2285fc41bc0201e2abb4898fe76339f",
+    "docs/validation/import-contracts/native.py.txt": "9e8b4f389586e69121003eb6173ef04f1662b6b31bfb84c24bcd7fb40cf087cc",
+    "docs/validation/import-contracts/package.json": "1e2897c3eff7a7064494f6b02bdd98aba803d1e748906bc3c9c18ad83c461005",
+    "docs/validation/import-contracts/preview-contracts-unchanged.json": "7cfd3ea1450d7758c78255dd8cdc9fb5f24adf050ae15ab88e4c84ea196fbe83",
+    "docs/validation/import-contracts/process-native.json": "53037c0fbf0ec0974422c15cc7900873eb74d072004ddf0bdfdc4bbcb6d41ddf",
+    "docs/validation/import-contracts/process-public.json": "ed323f38596a6b62d1a9af5f9db38972e81ed12cbcf63faf9fa04bc78b73c737",
+    "docs/validation/import-contracts/process-quality-final.json": "97d0ede5a57b33ad19590d550fb73ad0148c91142a10044c29b0fb7677c14753",
+    "docs/validation/import-contracts/process-quality.json": "84d1034614c01f4f712a67cebebdc024df8ce149763ec7a6f7c682f020b12eef",
+    "docs/validation/import-contracts/public-suites.log.txt": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "docs/validation/import-contracts/qualify.py.txt": "1f7480f39e9ce894c60eec38fb402df913814cedafe1fef6d661a62cd17de4f2",
+    "docs/validation/import-contracts/quality-final.log.txt": "72618669f6f7cfb7cb26c1e0ac399aa9b250a4290d4c14c1c78790bdca931558",
+    "docs/validation/import-contracts/quality.log.txt": "43f0f4afc6e2bf680c7a6d754610ea3d8f3c4b7e5d8fa36101af7c1917ed14bc",
+    "docs/validation/import-contracts/report-review-gzip.json": "6a5ca694e6b872a75ed9d84c5f1a5291cde7aa2da7409419f3f16898b1074ec2",
+    "docs/validation/import-contracts/report-review.json": "6a5ca694e6b872a75ed9d84c5f1a5291cde7aa2da7409419f3f16898b1074ec2",
+    "docs/validation/import-contracts/review.go.txt": "808b076c8bf0bac85714632b87ab06a8364742575b33a383a734d7e37c729fb6",
+    "docs/validation/import-contracts/setup-notes.json": "29079e6333187e56dfed7e158392c3e9b1256ec7649017380b12a0dca0e479f0",
+    "docs/validation/import-contracts/source-delta.json": "d8e9de2c52f1b53310cff62f8953b64487917d2a5721468a5cb050b7850149ab",
+    "docs/validation/import-contracts/source-freeze-before-fixture-observation.json": "92738954b5d1b3207869c908245de555c847ec9d6e0ef81f1947bcb392f76b54",
+    "docs/validation/import-contracts/source-freeze.json": "1d3b0804a5294dc7dd68257e22b236f58bd31ad89ebc69599f149bc95672f056"
+  }
+}
