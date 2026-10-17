@@ -1,0 +1,69 @@
+from pathlib import Path
+import json, math
+
+root=Path.cwd();out=root/'build/waveform-contracts'
+reports=[json.loads((out/(name+'-final.json')).read_text()) for name in ['headless','native']]
+counts=[];max_source=0.;max_capacitor=0.;captured_rows=[]
+for transport,report in zip(['headless','native'],reports):
+ assert report['passed'] and len(report['refusals'])==15
+ assert len(report['detailed_schemas'])==2
+ assert all(s['x-command-contract']['scope']=='per-source-waveform' for s in report['detailed_schemas'].values())
+ observations=report['observations']
+ assert abs(observations['sine_capacitor_at_30ms_v']-observations['sine_reference_v'])<.003
+ assert abs(observations['ramp_capacitor_at_5ms_v']-observations['ramp_reference_v'])<.003
+ docs={name:json.loads((out/(transport+'-final-assets')/name).read_text()) for name in ['exact-sine-rc.elab','exact-ramp-rc.elab']}
+ for name,kind,key in [('exact-sine-rc.elab','sine-source','sine'),('exact-ramp-rc.elab','finite-pulse-source','pulse')]:
+  source=next(c for c in docs[name]['graph']['components'] if c['kind']==kind)
+  assert source[key]==observations['exact_sine' if key=='sine' else 'exact_pulse']
+  assert all(type(v) in (float,int) for v in source[key].values())
+ captures=report['captures'];assert len(captures)==2
+ kept=docs['exact-ramp-rc.elab']['recordings']['entries'];assert len(kept)==1 and kept[0]['data']==captures[1]
+ transport_counts=[];row_map={}
+ for entry in captures:
+  data=entry;meta=data['metadata'];graph=meta['graph']['components']
+  source=next(c for c in graph if c['kind'] in ('sine-source','finite-pulse-source'))
+  tau=next(c['value'] for c in graph if c['id']=='R1')*next(c['value'] for c in graph if c['id']=='C1')
+  assert abs(tau-.01)<1e-16 and meta['input_mode']=='auto' and meta['settings']['initial_voltage_v']==0
+  source_index=next(i for i,p in enumerate(meta['probes']) if p['id']==f"v:{source['id']}.positive")
+  capacitor_index=next(i for i,p in enumerate(meta['probes']) if p['id']=='v:C1')
+  rows=data['rows'];assert len(rows)==meta['sample_count'] and rows[0]['time_s']==0 and rows[-1]['time_s']==meta['duration_s']
+  assert all(a['time_s']<=b['time_s'] for a,b in zip(rows,rows[1:]))
+  if source['kind']=='sine-source':
+   w=source['sine'];assert w=={'amplitude_v':2,'offset_v':1,'frequency_hz':20,'phase_degrees':30}
+   omega=2*math.pi*w['frequency_hz'];phi=math.radians(w['phase_degrees']);x=omega*tau
+   def source_at(t):return w['offset_v']+w['amplitude_v']*math.sin(omega*t+phi)
+   def steady(t):return w['offset_v']+w['amplitude_v']*(math.sin(omega*t+phi)-x*math.cos(omega*t+phi))/(1+x*x)
+   def cap_at(t):return steady(t)-steady(0)*math.exp(-t/tau)
+   expected_count=observations['sine_source_samples']
+  else:
+   w=source['pulse'];assert w==observations['exact_pulse']
+   lo=w['low_v'];hi=w['high_v'];rise=w['rise_s'];high=w['high_s'];fall=w['fall_s'];period=high+w['low_s']
+   assert meta['duration_s']<period
+   bounds=[(0.,lo),(rise,hi),(high,hi),(high+fall,lo),(period,lo)]
+   def source_at(t):
+    for (start,a),(end,b) in zip(bounds,bounds[1:]):
+     if t<=end:return a+(b-a)*(t-start)/(end-start)
+    raise AssertionError('outside captured period')
+   def cap_at(t):
+    value=0.
+    for (start,a),(end,b) in zip(bounds,bounds[1:]):
+     if t<=start:break
+     delta=min(t,end)-start;one_minus=-math.expm1(-delta/tau);slope=(b-a)/(end-start)
+     value=value*(1-one_minus)+a*one_minus+slope*(delta-tau*one_minus)
+    return value
+   expected_count=observations['ramp_source_samples']
+  assert len(rows)==expected_count
+  for row in rows:
+   t=row['time_s'];source_error=abs(row['values'][source_index]-source_at(t));capacitor_error=abs(row['values'][capacitor_index]-cap_at(t))
+   assert source_error<1e-12 and capacitor_error<.003,(transport,source['kind'],t,source_error,capacitor_error)
+   max_source=max(max_source,source_error);max_capacitor=max(max_capacitor,capacitor_error)
+  transport_counts.append(len(rows));row_map[source['kind']]=rows
+ counts.append(transport_counts);captured_rows.append(row_map)
+assert counts[0]==counts[1] and captured_rows[0]==captured_rows[1]
+for key in ['detailed_schemas','quantity_schemas','refusals','observations']:assert reports[0][key]==reports[1][key],key
+result={'passed':True,'contracts_per_transport':2,'refusals_per_transport':15,'capture_row_counts_per_transport':counts[0],
+        'total_source_and_capacitor_reference_checks':sum(sum(c) for c in counts)*2,
+        'maximum_source_voltage_error_v':max_source,'maximum_capacitor_voltage_error_v':max_capacitor,
+        'reference_envelopes_v':{'source':1e-12,'capacitor':.003},'equal_contracts_refusals_observations_and_exact_rows':True,
+        'saved_numeric_waveforms_and_both_complete_captures_reviewed':True}
+(out/'waveform-review.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

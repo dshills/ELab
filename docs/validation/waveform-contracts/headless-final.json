@@ -1,0 +1,1670 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "detailed_schemas": {
+    "source.sine.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "id": "V1",
+          "waveform": {
+            "amplitude_v": 2.5,
+            "offset_v": 0,
+            "frequency_hz": 10,
+            "phase_degrees": 0
+          }
+        }
+      ],
+      "properties": {
+        "id": {
+          "description": "Required non-null existing sine-source component ID from snapshot.components. Missing IDs and wrong kinds both return invalid-params. Selection and circuit completeness are not required.",
+          "type": "string"
+        },
+        "waveform": {
+          "additionalProperties": false,
+          "description": "Complete replacement definition. Every nested field is required and non-null, including zero values; omitted fields do not retain previous values. Quantity text normalizes before coupled model validation and retry matching.",
+          "properties": {
+            "amplitude_v": {
+              "$ref": "urn:elab:waveform-quantity-V:1",
+              "maximum": 12,
+              "minimum": 0,
+              "x-normalized-si-range": {
+                "maximum": 12,
+                "minimum": 0
+              },
+              "x-unit": "V"
+            },
+            "frequency_hz": {
+              "$ref": "urn:elab:waveform-quantity-Hz:1",
+              "maximum": 1000,
+              "minimum": 0.1,
+              "x-normalized-si-range": {
+                "maximum": 1000,
+                "minimum": 0.1
+              },
+              "x-unit": "Hz"
+            },
+            "offset_v": {
+              "$ref": "urn:elab:waveform-quantity-V:1",
+              "maximum": 12,
+              "minimum": -12,
+              "x-normalized-si-range": {
+                "maximum": 12,
+                "minimum": -12
+              },
+              "x-unit": "V"
+            },
+            "phase_degrees": {
+              "$ref": "urn:elab:waveform-quantity-deg:1",
+              "maximum": 360,
+              "minimum": -360,
+              "x-normalized-si-range": {
+                "maximum": 360,
+                "minimum": -360
+              },
+              "x-unit": "degrees"
+            }
+          },
+          "required": [
+            "amplitude_v",
+            "offset_v",
+            "frequency_hz",
+            "phase_degrees"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "waveform"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "per-source-waveform",
+        "preconditions": [
+          "Ordinary protocol, revision/document, actor and retry admission guards apply",
+          "id names an existing sine-source; complete nested waveform satisfies individual and coupled normalized SI bounds",
+          "Incomplete drawings may be configured; successful editing does not guarantee a solvable circuit or a successful later simulation"
+        ],
+        "effects": [
+          "Replaces only the named source waveform; preserves its identity/kind, geometry, terminals/wires and other sources. component.value tracks sine amplitude or finite-pulse high voltage",
+          "An actual change is one ordinary undoable electrical edit; running simulation restarts from configured startup/time zero. Paused edits retain stale accepted readings/charge/time until Restart or Resume",
+          "Changed electrical configuration clears live scope cursors and window; independent recorded-view controls and captured rows are retained",
+          "Preserves experiment sample step/playback and other transient settings; sampling advice is recomputed from configured values. Fit sampling is a separate explicit command",
+          "Reapplying identical normalized numeric fields preserves graph, history, dirty state and physics; an ordinary successful command/actor revision may still advance. Equivalent unit/numeric retry intent normalizes before fingerprinting",
+          "Allowed in edit.batch against staged components; every edit commits together or the entire batch refuses. One undo restores the committed batch",
+          "Existing verification/recording rows and captured model/source parameters stay immutable; their source_unchanged becomes false when electrical revision changes. Saved projects retain numeric SI waveforms and the existing versioned model",
+          "Sine offset \u00b1 amplitude stays within \u00b112 V. Zero amplitude is a constant configured source, but frequency/phase bounds still apply"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Missing/unknown/duplicate/null fields, invalid quantities/units, nonfinite or coupled model bounds, missing source or wrong source kind. Waveform validation precedes target lookup; ordinary shared admission rules still apply"
+          }
+        ],
+        "completion": {
+          "mode": "immediate validated graph commit; ordinary live initialization is asynchronous or deferred while paused",
+          "observe": [
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-details-scope": "parameter-bounds-and-per-source-waveform-state-contract",
+      "x-normalized-si-relations": [
+        {
+          "operator": "sum_absolute_maximum",
+          "fields": [
+            "waveform.offset_v",
+            "waveform.amplitude_v"
+          ],
+          "limit": 12
+        }
+      ],
+      "x-source-inventory": "snapshot.components filtered by kind sine-source; component.sine/pulse is configured data, while snapshot.mixed and transient describe the last accepted live result"
+    },
+    "source.pulse.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "id": "V1",
+          "waveform": {
+            "high_v": 5,
+            "low_v": 0,
+            "high_s": 0.05,
+            "low_s": 0.05,
+            "rise_s": 0.001,
+            "fall_s": 0.001
+          }
+        }
+      ],
+      "properties": {
+        "id": {
+          "description": "Required non-null existing finite-pulse-source component ID from snapshot.components. Missing IDs and wrong kinds both return invalid-params. Selection and circuit completeness are not required.",
+          "type": "string"
+        },
+        "waveform": {
+          "additionalProperties": false,
+          "description": "Complete replacement definition. Every nested field is required and non-null, including zero values; omitted fields do not retain previous values. Quantity text normalizes before coupled model validation and retry matching.",
+          "properties": {
+            "fall_s": {
+              "$ref": "urn:elab:time:1",
+              "maximum": 10,
+              "minimum": 1e-06,
+              "x-normalized-si-range": {
+                "maximum": 10,
+                "minimum": 1e-06
+              },
+              "x-unit": "s"
+            },
+            "high_s": {
+              "$ref": "urn:elab:time:1",
+              "maximum": 10,
+              "minimum": 1e-06,
+              "x-normalized-si-range": {
+                "maximum": 10,
+                "minimum": 1e-06
+              },
+              "x-unit": "s"
+            },
+            "high_v": {
+              "$ref": "urn:elab:waveform-quantity-V:1",
+              "maximum": 12,
+              "minimum": -12,
+              "x-normalized-si-range": {
+                "maximum": 12,
+                "minimum": -12
+              },
+              "x-unit": "V"
+            },
+            "low_s": {
+              "$ref": "urn:elab:time:1",
+              "maximum": 10,
+              "minimum": 1e-06,
+              "x-normalized-si-range": {
+                "maximum": 10,
+                "minimum": 1e-06
+              },
+              "x-unit": "s"
+            },
+            "low_v": {
+              "$ref": "urn:elab:waveform-quantity-V:1",
+              "maximum": 12,
+              "minimum": -12,
+              "x-normalized-si-range": {
+                "maximum": 12,
+                "minimum": -12
+              },
+              "x-unit": "V"
+            },
+            "rise_s": {
+              "$ref": "urn:elab:time:1",
+              "maximum": 10,
+              "minimum": 1e-06,
+              "x-normalized-si-range": {
+                "maximum": 10,
+                "minimum": 1e-06
+              },
+              "x-unit": "s"
+            }
+          },
+          "required": [
+            "high_v",
+            "low_v",
+            "high_s",
+            "low_s",
+            "rise_s",
+            "fall_s"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "waveform"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "per-source-waveform",
+        "preconditions": [
+          "Ordinary protocol, revision/document, actor and retry admission guards apply",
+          "id names an existing finite-pulse-source; complete nested waveform satisfies individual and coupled normalized SI bounds",
+          "Incomplete drawings may be configured; successful editing does not guarantee a solvable circuit or a successful later simulation"
+        ],
+        "effects": [
+          "Replaces only the named source waveform; preserves its identity/kind, geometry, terminals/wires and other sources. component.value tracks sine amplitude or finite-pulse high voltage",
+          "An actual change is one ordinary undoable electrical edit; running simulation restarts from configured startup/time zero. Paused edits retain stale accepted readings/charge/time until Restart or Resume",
+          "Changed electrical configuration clears live scope cursors and window; independent recorded-view controls and captured rows are retained",
+          "Preserves experiment sample step/playback and other transient settings; sampling advice is recomputed from configured values. Fit sampling is a separate explicit command",
+          "Reapplying identical normalized numeric fields preserves graph, history, dirty state and physics; an ordinary successful command/actor revision may still advance. Equivalent unit/numeric retry intent normalizes before fingerprinting",
+          "Allowed in edit.batch against staged components; every edit commits together or the entire batch refuses. One undo restores the committed batch",
+          "Existing verification/recording rows and captured model/source parameters stay immutable; their source_unchanged becomes false when electrical revision changes. Saved projects retain numeric SI waveforms and the existing versioned model",
+          "Rise is included in high_s and fall in low_s; equality permits a zero-length plateau. Equal ordered levels are a constant source, but phase/ramp bounds still apply",
+          "This is the per-source finite pulse definition. Ideal-square pulse-source uses separate shared experiment timing; frequency/period/duty convenience editing uses source.pulse.timing.set"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Missing/unknown/duplicate/null fields, invalid quantities/units, nonfinite or coupled model bounds, missing source or wrong source kind. Waveform validation precedes target lookup; ordinary shared admission rules still apply"
+          }
+        ],
+        "completion": {
+          "mode": "immediate validated graph commit; ordinary live initialization is asynchronous or deferred while paused",
+          "observe": [
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-details-scope": "parameter-bounds-and-per-source-waveform-state-contract",
+      "x-normalized-si-relations": [
+        {
+          "operator": "less_or_equal",
+          "fields": [
+            "waveform.low_v",
+            "waveform.high_v"
+          ]
+        },
+        {
+          "operator": "less_or_equal",
+          "fields": [
+            "waveform.rise_s",
+            "waveform.high_s"
+          ]
+        },
+        {
+          "operator": "less_or_equal",
+          "fields": [
+            "waveform.fall_s",
+            "waveform.low_s"
+          ]
+        },
+        {
+          "operator": "sum_minimum",
+          "fields": [
+            "waveform.high_s",
+            "waveform.low_s"
+          ],
+          "limit": 0.001
+        }
+      ],
+      "x-source-inventory": "snapshot.components filtered by kind finite-pulse-source; component.sine/pulse is configured data, while snapshot.mixed and transient describe the last accepted live result"
+    }
+  },
+  "quantity_schemas": {
+    "urn:elab:waveform-quantity-Hz:1": {
+      "$id": "urn:elab:waveform-quantity-Hz:1",
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        }
+      ],
+      "description": "Finite numeric value or decimal/scientific quantity text; bare text uses Hz. Model/coupled bounds apply after conversion. No hexadecimal, NaN, Inf or nonzero underflow.",
+      "x-max-utf8-bytes": 128,
+      "x-text-units": [
+        "Hz",
+        "kHz",
+        "mHz"
+      ],
+      "x-unit": "Hz"
+    },
+    "urn:elab:waveform-quantity-V:1": {
+      "$id": "urn:elab:waveform-quantity-V:1",
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        }
+      ],
+      "description": "Finite numeric value or decimal/scientific quantity text; bare text uses V. Model/coupled bounds apply after conversion. No hexadecimal, NaN, Inf or nonzero underflow.",
+      "x-max-utf8-bytes": 128,
+      "x-text-units": [
+        "V",
+        "mV",
+        "uV",
+        "\u00b5V",
+        "\u03bcV"
+      ],
+      "x-unit": "V"
+    },
+    "urn:elab:waveform-quantity-deg:1": {
+      "$id": "urn:elab:waveform-quantity-deg:1",
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        }
+      ],
+      "description": "Finite numeric value or decimal/scientific quantity text; bare text uses deg. Model/coupled bounds apply after conversion. No hexadecimal, NaN, Inf or nonzero underflow.",
+      "x-max-utf8-bytes": 128,
+      "x-text-units": [
+        "deg",
+        "\u00b0"
+      ],
+      "x-unit": "deg"
+    }
+  },
+  "refusals": [
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "Wave",
+        "waveform": {
+          "amplitude_v": "1234.56789012345 mV",
+          "offset_v": "-123456.789012345 uV",
+          "frequency_hz": "20 V",
+          "phase_degrees": "-123.456789012345 \u00b0"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "Wave",
+        "waveform": {
+          "amplitude_v": "1e-999 V",
+          "offset_v": "-123456.789012345 uV",
+          "frequency_hz": ".123456789012345 kHz",
+          "phase_degrees": "-123.456789012345 \u00b0"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "Wave",
+        "waveform": {
+          "amplitude_v": "1234.56789012345 mV",
+          "offset_v": "1 MV",
+          "frequency_hz": ".123456789012345 kHz",
+          "phase_degrees": "-123.456789012345 \u00b0"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "Wave",
+        "waveform": {
+          "amplitude_v": "1234.56789012345 mV",
+          "offset_v": "-123456.789012345 uV",
+          "frequency_hz": ".123456789012345 kHz",
+          "phase_degrees": "3.14 rad"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "Wave",
+        "waveform": {
+          "amplitude_v": null,
+          "offset_v": "-123456.789012345 uV",
+          "frequency_hz": ".123456789012345 kHz",
+          "phase_degrees": "-123.456789012345 \u00b0"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "Wave",
+        "waveform": {
+          "amplitude_v": "1234.56789012345 mV",
+          "frequency_hz": ".123456789012345 kHz",
+          "phase_degrees": "-123.456789012345 \u00b0"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "Wave",
+        "waveform": null
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "R1",
+        "waveform": {
+          "amplitude_v": "1234.56789012345 mV",
+          "offset_v": "-123456.789012345 uV",
+          "frequency_hz": ".123456789012345 kHz",
+          "phase_degrees": "-123.456789012345 \u00b0"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "MissingSource",
+        "waveform": {
+          "amplitude_v": "1234.56789012345 mV",
+          "offset_v": "-123456.789012345 uV",
+          "frequency_hz": ".123456789012345 kHz",
+          "phase_degrees": "-123.456789012345 \u00b0"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "Wave",
+        "waveform": {
+          "amplitude_v": "11 V",
+          "offset_v": "2 V",
+          "frequency_hz": "20 Hz",
+          "phase_degrees": "30 deg"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.pulse.set",
+      "params": {
+        "id": "Ramp",
+        "waveform": {
+          "high_v": "4123.456789012345 mV",
+          "low_v": "5 V",
+          "high_s": "7 ms",
+          "low_s": "13 ms",
+          "rise_s": "2 ms",
+          "fall_s": "3 ms"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.pulse.set",
+      "params": {
+        "id": "Ramp",
+        "waveform": {
+          "high_v": "4123.456789012345 mV",
+          "high_s": "7 ms",
+          "low_s": "13 ms",
+          "rise_s": "2 ms",
+          "fall_s": "3 ms"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.pulse.set",
+      "params": {
+        "id": "Ramp",
+        "waveform": {
+          "high_v": "4123.456789012345 mV",
+          "low_v": "-123456.789012345 \u03bcV",
+          "high_s": "7 ms",
+          "low_s": "13 ms",
+          "rise_s": null,
+          "fall_s": "3 ms"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.pulse.set",
+      "params": {
+        "id": "R1",
+        "waveform": {
+          "high_v": "4123.456789012345 mV",
+          "low_v": "-123456.789012345 \u03bcV",
+          "high_s": "7 ms",
+          "low_s": "13 ms",
+          "rise_s": "2 ms",
+          "fall_s": "3 ms"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.pulse.set",
+      "params": {
+        "id": "MissingSource",
+        "waveform": {
+          "high_v": "4123.456789012345 mV",
+          "low_v": "-123456.789012345 \u03bcV",
+          "high_s": "7 ms",
+          "low_s": "13 ms",
+          "rise_s": "2 ms",
+          "fall_s": "3 ms"
+        }
+      },
+      "code": "invalid-params"
+    }
+  ],
+  "captures": [
+    {
+      "metadata": {
+        "waveform_model": {
+          "id": "elab.source-waveforms.v1",
+          "sine_model_id": "elab.ideal-sine-source.v1",
+          "pulse_model_id": "elab.finite-pulse-source.v1",
+          "minimum_transition_s": 1e-06,
+          "maximum_frequency_hz": 1000,
+          "maximum_magnitude_v": 12,
+          "limitations": "Ideal grounded voltage sources with per-component periodic sine or linear pulse ramps. No output resistance, current limit, battery discharge, noise or physical generator identity. Finite pulse high/low phase lengths include rise/fall respectively. Output sampling can alias; internal integration resolves waveform features within its work budget."
+        },
+        "format": "elab.verification",
+        "version": 1,
+        "operation_id": "verify-1",
+        "created_at": "2026-10-17T14:11:09.611207Z",
+        "input_revision": 25,
+        "electrical_revision": 6,
+        "document_generation": 3,
+        "graph": {
+          "components": [
+            {
+              "id": "R1",
+              "kind": "resistor",
+              "name": "Resistor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 0,
+                "y": -110
+              },
+              "value": 10000,
+              "unit": "\u03a9",
+              "model": "ideal-resistor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "C1",
+              "kind": "capacitor",
+              "name": "Capacitor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 200,
+                "y": 0
+              },
+              "value": 1e-06,
+              "unit": "F",
+              "model": "ideal-capacitor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "GND",
+              "kind": "ground",
+              "name": "Ground",
+              "terminals": [
+                "reference"
+              ],
+              "position": {
+                "x": 0,
+                "y": 110
+              },
+              "value": 0,
+              "model": "ground.v1",
+              "rotation": 0
+            },
+            {
+              "sine": {
+                "amplitude_v": 2,
+                "offset_v": 1,
+                "frequency_hz": 20,
+                "phase_degrees": 30
+              },
+              "id": "Wave",
+              "kind": "sine-source",
+              "name": "Sine source",
+              "terminals": [
+                "positive",
+                "negative"
+              ],
+              "position": {
+                "x": -200,
+                "y": 0
+              },
+              "value": 2,
+              "unit": "V",
+              "model": "elab.ideal-sine-source.v1",
+              "rotation": 0
+            }
+          ],
+          "wires": [
+            {
+              "id": "W2",
+              "from": "R1.2",
+              "to": "C1.1",
+              "connected": true
+            },
+            {
+              "id": "W3",
+              "from": "C1.2",
+              "to": "GND.reference",
+              "connected": true
+            },
+            {
+              "id": "W5",
+              "from": "Wave.positive",
+              "to": "R1.1",
+              "connected": true
+            },
+            {
+              "id": "W6",
+              "from": "Wave.negative",
+              "to": "GND.reference",
+              "connected": true
+            }
+          ]
+        },
+        "settings": {
+          "step_s": 0.0005,
+          "high_s": 0.05,
+          "low_s": 0.05,
+          "initial_voltage_v": 0,
+          "seconds_per_wall_second": 0.02
+        },
+        "input_mode": "auto",
+        "analysis": "Waveform network transient",
+        "engine": "elab.network-waveforms-mna-sdirk2.v1",
+        "led_model": {
+          "id": "elab.generic-red-led.v1",
+          "is_a": 1e-20,
+          "n": 2,
+          "rs_ohm": 1,
+          "temperature_c": 27,
+          "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+        },
+        "probes": [
+          {
+            "id": "v:Wave.positive",
+            "label": "Wave.positive / ground",
+            "unit": "V",
+            "positive": "Wave.positive",
+            "reference": "ground"
+          },
+          {
+            "id": "v:C1",
+            "label": "C1 voltage",
+            "unit": "V",
+            "positive": "C1.1",
+            "reference": "C1.2"
+          }
+        ],
+        "duration_s": 0.03,
+        "sample_count": 61,
+        "statistics": [
+          {
+            "probe_id": "v:Wave.positive",
+            "count": 61,
+            "min": -0.8270909152852017,
+            "max": 2.999561366949691,
+            "sample_mean": 1.657154091144781,
+            "sample_rms": 2.085449436909847
+          },
+          {
+            "probe_id": "v:C1",
+            "count": 61,
+            "min": 0,
+            "max": 2.1329648311448857,
+            "sample_mean": 1.4362754024287945,
+            "sample_rms": 1.5570066384549723
+          }
+        ],
+        "mixed": {
+          "engine": "elab.network-waveforms-mna-sdirk2.v1",
+          "run_id": 1,
+          "electrical_revision": 6,
+          "time_s": 0.03,
+          "nodes_v": {
+            "net:C1.1": 0.6608884666027326,
+            "net:C1.2": 0,
+            "net:R1.1": -0.8270909152852017
+          },
+          "transistors": [],
+          "capacitors": [
+            {
+              "id": "C1",
+              "voltage_v": 0.6608884666027326,
+              "current_a": -0.00014879793818879317,
+              "energy_j": 2.1838678264425557e-07
+            }
+          ],
+          "leds": [],
+          "resistors": [
+            {
+              "id": "R1",
+              "current_a": -0.00014879793818879344,
+              "voltage_v": -1.4879793818879343,
+              "power_w": 0.0002214082640923599
+            }
+          ],
+          "sources": [
+            {
+              "id": "Wave",
+              "current_a": -0.00014879793818879344,
+              "voltage_v": -0.8270909152852017,
+              "power_w": 0.00012306942288912003
+            }
+          ],
+          "kcl_residual_a": 2.850019997121303e-19,
+          "power_residual_w": -1.8973538018496328e-19,
+          "numerical_damping_w": 0,
+          "stale": false
+        }
+      },
+      "rows": [
+        {
+          "time_s": 0,
+          "values": [
+            2,
+            0
+          ]
+        },
+        {
+          "time_s": 0.0005,
+          "values": [
+            2.106783098486688,
+            0.10018352360197347
+          ]
+        },
+        {
+          "time_s": 0.001,
+          "values": [
+            2.2091982297247497,
+            0.2005832048949291
+          ]
+        },
+        {
+          "time_s": 0.0015,
+          "values": [
+            2.3068412079802108,
+            0.3009650363231761
+          ]
+        },
+        {
+          "time_s": 0.002,
+          "values": [
+            2.399326681026731,
+            0.4010880775039516
+          ]
+        },
+        {
+          "time_s": 0.0025,
+          "values": [
+            2.4862896509547885,
+            0.5007043604014869
+          ]
+        },
+        {
+          "time_s": 0.003,
+          "values": [
+            2.5673869146516797,
+            0.5995607390895143
+          ]
+        },
+        {
+          "time_s": 0.0035,
+          "values": [
+            2.6422984182674076,
+            0.6974002388783269
+          ]
+        },
+        {
+          "time_s": 0.004,
+          "values": [
+            2.710728520321013,
+            0.7939634034784013
+          ]
+        },
+        {
+          "time_s": 0.0045000000000000005,
+          "values": [
+            2.7724071584624292,
+            0.8889896357166645
+          ]
+        },
+        {
+          "time_s": 0.005,
+          "values": [
+            2.8270909152852015,
+            0.9822185273063169
+          ]
+        },
+        {
+          "time_s": 0.0055,
+          "values": [
+            2.874563978983783,
+            1.073391173175694
+          ]
+        },
+        {
+          "time_s": 0.006,
+          "values": [
+            2.9146389950641343,
+            1.1622514658858352
+          ]
+        },
+        {
+          "time_s": 0.006500000000000001,
+          "values": [
+            2.9471578057463206,
+            1.2485473657100563
+          ]
+        },
+        {
+          "time_s": 0.007,
+          "values": [
+            2.97199207414101,
+            1.3320321420116226
+          ]
+        },
+        {
+          "time_s": 0.0075,
+          "values": [
+            2.989043790736547,
+            1.4124655816372607
+          ]
+        },
+        {
+          "time_s": 0.008,
+          "values": [
+            2.9982456601977168,
+            1.489615160144332
+          ]
+        },
+        {
+          "time_s": 0.0085,
+          "values": [
+            2.999561366949691,
+            1.5632571717975576
+          ]
+        },
+        {
+          "time_s": 0.009000000000000001,
+          "values": [
+            2.9929857184990087,
+            1.633177814406675
+          ]
+        },
+        {
+          "time_s": 0.0095,
+          "values": [
+            2.978544665925977,
+            1.6991742252287207
+          ]
+        },
+        {
+          "time_s": 0.01,
+          "values": [
+            2.9562952014676114,
+            1.7610554643271534
+          ]
+        },
+        {
+          "time_s": 0.0105,
+          "values": [
+            2.9263251335953164,
+            1.8186434419639352
+          ]
+        },
+        {
+          "time_s": 0.011,
+          "values": [
+            2.8887527404749624,
+            1.8717737867992932
+          ]
+        },
+        {
+          "time_s": 0.0115,
+          "values": [
+            2.843726303177001,
+            1.9202966518862885
+          ]
+        },
+        {
+          "time_s": 0.012,
+          "values": [
+            2.7914235204788254,
+            1.9640774556726306
+          ]
+        },
+        {
+          "time_s": 0.0125,
+          "values": [
+            2.732050807568877,
+            2.0029975554595105
+          ]
+        },
+        {
+          "time_s": 0.013000000000000001,
+          "values": [
+            2.6658424814201984,
+            2.036954851015522
+          ]
+        },
+        {
+          "time_s": 0.0135,
+          "values": [
+            2.5930598360483925,
+            2.065864316302037
+          ]
+        },
+        {
+          "time_s": 0.014,
+          "values": [
+            2.513990111303513,
+            2.089658457533587
+          ]
+        },
+        {
+          "time_s": 0.0145,
+          "values": [
+            2.4289453592656063,
+            2.108287696071851
+          ]
+        },
+        {
+          "time_s": 0.015,
+          "values": [
+            2.3382612127177165,
+            2.1217206749335067
+          ]
+        },
+        {
+          "time_s": 0.0155,
+          "values": [
+            2.242295560556621,
+            2.1299444879795
+          ]
+        },
+        {
+          "time_s": 0.016,
+          "values": [
+            2.1414271353688634,
+            2.1329648311448857
+          ]
+        },
+        {
+          "time_s": 0.0165,
+          "values": [
+            2.0360540187462606,
+            2.1308060753631985
+          ]
+        },
+        {
+          "time_s": 0.017,
+          "values": [
+            1.9265920702397232,
+            2.1235112611361355
+          ]
+        },
+        {
+          "time_s": 0.0175,
+          "values": [
+            1.8134732861516,
+            2.111142014996912
+          ]
+        },
+        {
+          "time_s": 0.018000000000000002,
+          "values": [
+            1.6971440946436307,
+            2.0937783884128383
+          ]
+        },
+        {
+          "time_s": 0.0185,
+          "values": [
+            1.5780635938889434,
+            2.071518619968241
+          ]
+        },
+        {
+          "time_s": 0.019,
+          "values": [
+            1.4567017402213114,
+            2.0444788219616
+          ]
+        },
+        {
+          "time_s": 0.0195,
+          "values": [
+            1.3335374934322053,
+            2.01279259283956
+          ]
+        },
+        {
+          "time_s": 0.02,
+          "values": [
+            1.2090569265353075,
+            1.9766105571740995
+          ]
+        },
+        {
+          "time_s": 0.0205,
+          "values": [
+            1.0837513074583995,
+            1.936099835166477
+          ]
+        },
+        {
+          "time_s": 0.021,
+          "values": [
+            0.9581151602332854,
+            1.891443443931492
+          ]
+        },
+        {
+          "time_s": 0.021500000000000002,
+          "values": [
+            0.8326443133353681,
+            1.8428396330770338
+          ]
+        },
+        {
+          "time_s": 0.022,
+          "values": [
+            0.7078339428751774,
+            1.7905011573457916
+          ]
+        },
+        {
+          "time_s": 0.0225,
+          "values": [
+            0.5841766183644819,
+            1.7346544893273075
+          ]
+        },
+        {
+          "time_s": 0.023,
+          "values": [
+            0.4621603587694689,
+            1.6755389754783705
+          ]
+        },
+        {
+          "time_s": 0.0235,
+          "values": [
+            0.34226670652283364,
+            1.6134059389070987
+          ]
+        },
+        {
+          "time_s": 0.024,
+          "values": [
+            0.22496882709579402,
+            1.5485177325800763
+          ]
+        },
+        {
+          "time_s": 0.0245,
+          "values": [
+            0.11072964163014487,
+            1.4811467468017951
+          ]
+        },
+        {
+          "time_s": 0.025,
+          "values": [
+            -2.220446049250313e-16,
+            1.4115743749906247
+          ]
+        },
+        {
+          "time_s": 0.025500000000000002,
+          "values": [
+            -0.10678309848668865,
+            1.340089941934881
+          ]
+        },
+        {
+          "time_s": 0.026000000000000002,
+          "values": [
+            -0.20919822972475033,
+            1.266989598855675
+          ]
+        },
+        {
+          "time_s": 0.0265,
+          "values": [
+            -0.3068412079802101,
+            1.1925751897294867
+          ]
+        },
+        {
+          "time_s": 0.027,
+          "values": [
+            -0.3993266810267304,
+            1.1171530934323288
+          ]
+        },
+        {
+          "time_s": 0.0275,
+          "values": [
+            -0.48628965095478804,
+            1.0410330463585225
+          ]
+        },
+        {
+          "time_s": 0.028,
+          "values": [
+            -0.5673869146516792,
+            0.9645269502400676
+          ]
+        },
+        {
+          "time_s": 0.0285,
+          "values": [
+            -0.6422984182674074,
+            0.8879476699471474
+          ]
+        },
+        {
+          "time_s": 0.029,
+          "values": [
+            -0.7107285203210132,
+            0.8116078260861523
+          ]
+        },
+        {
+          "time_s": 0.029500000000000002,
+          "values": [
+            -0.7724071584624292,
+            0.735818587228635
+          ]
+        },
+        {
+          "time_s": 0.03,
+          "values": [
+            -0.8270909152852017,
+            0.6608884666027326
+          ]
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "waveform_model": {
+          "id": "elab.source-waveforms.v1",
+          "sine_model_id": "elab.ideal-sine-source.v1",
+          "pulse_model_id": "elab.finite-pulse-source.v1",
+          "minimum_transition_s": 1e-06,
+          "maximum_frequency_hz": 1000,
+          "maximum_magnitude_v": 12,
+          "limitations": "Ideal grounded voltage sources with per-component periodic sine or linear pulse ramps. No output resistance, current limit, battery discharge, noise or physical generator identity. Finite pulse high/low phase lengths include rise/fall respectively. Output sampling can alias; internal integration resolves waveform features within its work budget."
+        },
+        "format": "elab.verification",
+        "version": 1,
+        "operation_id": "verify-2",
+        "created_at": "2026-10-17T14:11:09.641846Z",
+        "input_revision": 40,
+        "electrical_revision": 10,
+        "document_generation": 4,
+        "graph": {
+          "components": [
+            {
+              "id": "R1",
+              "kind": "resistor",
+              "name": "Resistor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 0,
+                "y": -110
+              },
+              "value": 10000,
+              "unit": "\u03a9",
+              "model": "ideal-resistor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "C1",
+              "kind": "capacitor",
+              "name": "Capacitor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 200,
+                "y": 0
+              },
+              "value": 1e-06,
+              "unit": "F",
+              "model": "ideal-capacitor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "GND",
+              "kind": "ground",
+              "name": "Ground",
+              "terminals": [
+                "reference"
+              ],
+              "position": {
+                "x": 0,
+                "y": 110
+              },
+              "value": 0,
+              "model": "ground.v1",
+              "rotation": 0
+            },
+            {
+              "pulse": {
+                "high_v": 4.123456789012345,
+                "low_v": -0.123456789012345,
+                "high_s": 0.007,
+                "low_s": 0.013,
+                "rise_s": 0.002,
+                "fall_s": 0.003
+              },
+              "id": "Ramp",
+              "kind": "finite-pulse-source",
+              "name": "Finite pulse source",
+              "terminals": [
+                "positive",
+                "negative"
+              ],
+              "position": {
+                "x": -200,
+                "y": 0
+              },
+              "value": 4.123456789012345,
+              "unit": "V",
+              "model": "elab.finite-pulse-source.v1",
+              "rotation": 0
+            }
+          ],
+          "wires": [
+            {
+              "id": "W2",
+              "from": "R1.2",
+              "to": "C1.1",
+              "connected": true
+            },
+            {
+              "id": "W3",
+              "from": "C1.2",
+              "to": "GND.reference",
+              "connected": true
+            },
+            {
+              "id": "W7",
+              "from": "Ramp.positive",
+              "to": "R1.1",
+              "connected": true
+            },
+            {
+              "id": "W8",
+              "from": "Ramp.negative",
+              "to": "GND.reference",
+              "connected": true
+            }
+          ]
+        },
+        "settings": {
+          "step_s": 0.0005,
+          "high_s": 0.05,
+          "low_s": 0.05,
+          "initial_voltage_v": 0,
+          "seconds_per_wall_second": 0.02
+        },
+        "input_mode": "auto",
+        "analysis": "Waveform network transient",
+        "engine": "elab.network-waveforms-mna-sdirk2.v1",
+        "led_model": {
+          "id": "elab.generic-red-led.v1",
+          "is_a": 1e-20,
+          "n": 2,
+          "rs_ohm": 1,
+          "temperature_c": 27,
+          "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+        },
+        "probes": [
+          {
+            "id": "v:Ramp.positive",
+            "label": "Ramp.positive / ground",
+            "unit": "V",
+            "positive": "Ramp.positive",
+            "reference": "ground"
+          },
+          {
+            "id": "v:C1",
+            "label": "C1 voltage",
+            "unit": "V",
+            "positive": "C1.1",
+            "reference": "C1.2"
+          }
+        ],
+        "duration_s": 0.012,
+        "sample_count": 28,
+        "statistics": [
+          {
+            "probe_id": "v:Ramp.positive",
+            "count": 28,
+            "min": -0.123456789012345,
+            "max": 4.123456789012345,
+            "sample_mean": 2.4550264547883587,
+            "sample_rms": 3.04964253392188
+          },
+          {
+            "probe_id": "v:C1",
+            "count": 28,
+            "min": 0,
+            "max": 2.015210797864756,
+            "sample_mean": 1.2692469626178204,
+            "sample_rms": 1.441984658494551
+          }
+        ],
+        "mixed": {
+          "engine": "elab.network-waveforms-mna-sdirk2.v1",
+          "run_id": 2,
+          "electrical_revision": 10,
+          "time_s": 0.012,
+          "nodes_v": {
+            "net:C1.1": 1.501692883319126,
+            "net:C1.2": 0,
+            "net:R1.1": -0.123456789012345
+          },
+          "transistors": [],
+          "capacitors": [
+            {
+              "id": "C1",
+              "voltage_v": 1.501692883319126,
+              "current_a": -0.0001625149672331467,
+              "energy_j": 1.1275407579056552e-06
+            }
+          ],
+          "leds": [],
+          "resistors": [
+            {
+              "id": "R1",
+              "current_a": -0.00016251496723314711,
+              "voltage_v": -1.6251496723314711,
+              "power_w": 0.0002641111457479088
+            }
+          ],
+          "sources": [
+            {
+              "id": "Ramp",
+              "current_a": -0.00016251496723314711,
+              "voltage_v": -0.123456789012345,
+              "power_w": 2.0063576021050805e-05
+            }
+          ],
+          "kcl_residual_a": 4.077852849270879e-19,
+          "power_residual_w": -5.963111948670274e-19,
+          "numerical_damping_w": 0,
+          "stale": false
+        }
+      },
+      "rows": [
+        {
+          "time_s": 0,
+          "values": [
+            -0.123456789012345,
+            0
+          ]
+        },
+        {
+          "time_s": 0.0005,
+          "values": [
+            0.9382716054938276,
+            0.020084553512357717
+          ]
+        },
+        {
+          "time_s": 0.001,
+          "values": [
+            2.0000000000000004,
+            0.09097058701742602
+          ]
+        },
+        {
+          "time_s": 0.0015,
+          "values": [
+            3.061728394506173,
+            0.21018031235357537
+          ]
+        },
+        {
+          "time_s": 0.002,
+          "values": [
+            4.123456789012345,
+            0.37535682063497616
+          ]
+        },
+        {
+          "time_s": 0.002,
+          "values": [
+            4.123456789012345,
+            0.37535682063497616
+          ]
+        },
+        {
+          "time_s": 0.0025,
+          "values": [
+            4.123456789012345,
+            0.5581549408330783
+          ]
+        },
+        {
+          "time_s": 0.003,
+          "values": [
+            4.123456789012345,
+            0.732037836509454
+          ]
+        },
+        {
+          "time_s": 0.0035,
+          "values": [
+            4.123456789012345,
+            0.897440310977106
+          ]
+        },
+        {
+          "time_s": 0.004,
+          "values": [
+            4.123456789012345,
+            1.054775961810411
+          ]
+        },
+        {
+          "time_s": 0.0045000000000000005,
+          "values": [
+            4.123456789012345,
+            1.2044382150675772
+          ]
+        },
+        {
+          "time_s": 0.005,
+          "values": [
+            4.123456789012345,
+            1.3468013090731645
+          ]
+        },
+        {
+          "time_s": 0.0055,
+          "values": [
+            4.123456789012345,
+            1.4822212302206728
+          ]
+        },
+        {
+          "time_s": 0.006,
+          "values": [
+            4.123456789012345,
+            1.6110366031352115
+          ]
+        },
+        {
+          "time_s": 0.006500000000000001,
+          "values": [
+            4.123456789012345,
+            1.7335718087491772
+          ]
+        },
+        {
+          "time_s": 0.007,
+          "values": [
+            4.123456789012345,
+            1.8501307542219212
+          ]
+        },
+        {
+          "time_s": 0.007,
+          "values": [
+            4.123456789012345,
+            1.8501307542219212
+          ]
+        },
+        {
+          "time_s": 0.0075,
+          "values": [
+            3.4156378593415644,
+            1.9436014683618896
+          ]
+        },
+        {
+          "time_s": 0.008,
+          "values": [
+            2.7078189296707817,
+            1.9979928552520405
+          ]
+        },
+        {
+          "time_s": 0.0085,
+          "values": [
+            1.9999999999999991,
+            2.015210797864756
+          ]
+        },
+        {
+          "time_s": 0.009000000000000001,
+          "values": [
+            1.2921810703292174,
+            1.9970682313923782
+          ]
+        },
+        {
+          "time_s": 0.0095,
+          "values": [
+            0.584362140658437,
+            1.9452896825607782
+          ]
+        },
+        {
+          "time_s": 0.01,
+          "values": [
+            -0.123456789012345,
+            1.8615155605739893
+          ]
+        },
+        {
+          "time_s": 0.01,
+          "values": [
+            -0.123456789012345,
+            1.8615155605739893
+          ]
+        },
+        {
+          "time_s": 0.0105,
+          "values": [
+            -0.123456789012345,
+            1.7647049250115776
+          ]
+        },
+        {
+          "time_s": 0.011,
+          "values": [
+            -0.123456789012345,
+            1.672615916508582
+          ]
+        },
+        {
+          "time_s": 0.0115,
+          "values": [
+            -0.123456789012345,
+            1.5850182529068608
+          ]
+        },
+        {
+          "time_s": 0.012,
+          "values": [
+            -0.123456789012345,
+            1.501692883319126
+          ]
+        }
+      ]
+    }
+  ],
+  "observations": {
+    "exact_sine": {
+      "amplitude_v": 1.23456789012345,
+      "offset_v": -0.123456789012345,
+      "frequency_hz": 123.456789012345,
+      "phase_degrees": -123.456789012345
+    },
+    "exact_pulse": {
+      "high_v": 4.123456789012345,
+      "low_v": -0.123456789012345,
+      "high_s": 0.007,
+      "low_s": 0.013,
+      "rise_s": 0.002,
+      "fall_s": 0.003
+    },
+    "sine_capacitor_at_30ms_v": 0.6608870272923015,
+    "sine_reference_v": 0.6608630887037612,
+    "sine_source_samples": 61,
+    "ramp_capacitor_at_5ms_v": 1.3468013090731645,
+    "ramp_reference_v": 1.3467987865008904,
+    "ramp_source_samples": 28
+  },
+  "checks": [
+    "Exact decimal waveform quantities retain binary64 values; numeric re-entry preserves history/physics",
+    "Voltage, frequency, phase and time input share public commands; numeric compatibility and typed local references retained",
+    "Wrong units, underflow, null and coupled model violations refuse without mutation",
+    "Sine and finite-ramp RC transients agree with independent first-order references within existing 3 mV envelope",
+    "Every captured sine/ramp source sample agrees with independent analytic waveform",
+    "Saved waveform fields stay numeric SI and save/reopen preserves exact configured values and bytes"
+  ],
+  "limits": [
+    "No device/model/kernel/sampling/file-version changes",
+    "Quantity text is command-only; persisted data and outputs stay numeric SI",
+    "Existing model and integration/work limits still apply; no physical device or complete mounted typing/IME/accessibility/latency qualification"
+  ]
+}

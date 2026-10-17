@@ -24,6 +24,8 @@ def main():
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
     client = connect_demo_client(waveforms.helper.Client, args.connect, command_preconditions=True)
+    refusal_checks = []
+    captures = []
 
     def inspect():
         return client.ask('project.inspect')
@@ -35,13 +37,16 @@ def main():
         before = inspect()
         client.ask(command, params, True, 'invalid-params')
         assert inspect() == before
+        refusal_checks.append(dict(command=command, params=params, code='invalid-params'))
 
     def capture(duration, source_id):
         state = client.ask('simulation.verify', dict(duration_s=duration, sample_step_s='500 us',
                                                     probe_ids=[f'v:{source_id}.positive', 'v:C1']), True)
         identity = state['last_operation']
-        waveforms.wait(client, identity)
-        return client.ask('operation.samples', {'id': identity, 'limit': 200})['rows']
+        captured = waveforms.wait(client, identity)
+        rows = client.ask('operation.samples', {'id': identity, 'limit': 200})['rows']
+        captures.append(dict(metadata=captured['metadata'], rows=rows))
+        return rows
 
     def save_reopen(identity, field, expected, filename):
         path = assets / filename
@@ -62,6 +67,7 @@ def main():
         quantity_schemas = {key: value for key, value in registry.items() if key.startswith('urn:elab:waveform-quantity-')}
         assert len(quantity_schemas) == 3
         for name, schema in schemas.items():
+            assert schema['x-command-contract']['scope'] == 'per-source-waveform'
             for field in ('amplitude_v', 'offset_v', 'frequency_hz', 'phase_degrees') if name == 'source.sine.set' else ('high_v', 'low_v'):
                 ref = schema['properties']['waveform']['properties'][field]['$ref']
                 assert ref in quantity_schemas and len(quantity_schemas[ref]['anyOf']) == 2
@@ -82,6 +88,12 @@ def main():
             invalid = dict(text)
             invalid[field] = value
             refuse('source.sine.set', {'id': 'Wave', 'waveform': invalid})
+        incomplete = dict(text)
+        del incomplete['offset_v']
+        refuse('source.sine.set', dict(id='Wave', waveform=incomplete))
+        refuse('source.sine.set', dict(id='Wave', waveform=None))
+        for target in ('R1', 'MissingSource'):
+            refuse('source.sine.set', dict(id=target, waveform=text))
         refuse('source.sine.set', dict(id='Wave', waveform=dict(amplitude_v='11 V', offset_v='2 V',
                                                              frequency_hz='20 Hz', phase_degrees='30 deg')))
         sine_text = dict(amplitude_v='2000 mV', offset_v='1000000 µV', frequency_hz='.02 kHz', phase_degrees='30 °')
@@ -108,6 +120,12 @@ def main():
         assert part(inspect(), 'Ramp')['pulse'] == expected_pulse
         invalid = dict(pulse_text, low_v='5 V')
         refuse('source.pulse.set', dict(id='Ramp', waveform=invalid))
+        incomplete = dict(pulse_text)
+        del incomplete['low_v']
+        refuse('source.pulse.set', dict(id='Ramp', waveform=incomplete))
+        refuse('source.pulse.set', dict(id='Ramp', waveform=dict(pulse_text, rise_s=None)))
+        for target in ('R1', 'MissingSource'):
+            refuse('source.pulse.set', dict(id=target, waveform=pulse_text))
         client.ask('simulation.sampling.fit', {}, True)
         client.ask('simulation.restart', {}, True)
         client.ask('simulation.wait')
@@ -124,6 +142,8 @@ def main():
             assert abs(row['values'][0]-value) < 1e-12, row
         save_reopen('Ramp', 'pulse', expected_pulse, 'exact-ramp-rc.elab')
         report = dict(passed=True, transport='native-socket' if args.connect else 'headless-stdio', detailed_schemas=schemas, quantity_schemas=quantity_schemas,
+                      refusals=refusal_checks,
+                      captures=captures,
                       observations=dict(exact_sine=exact, exact_pulse=expected_pulse, sine_capacitor_at_30ms_v=sine_voltage,
                                         sine_reference_v=sine_reference, sine_source_samples=len(sine_rows),
                                         ramp_capacitor_at_5ms_v=pulse_voltage, ramp_reference_v=pulse_reference,

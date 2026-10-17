@@ -190,6 +190,9 @@ func addCapabilityDetails(id string, schema map[string]any) {
 	if len(rules) != 0 {
 		schema["x-normalized-si-relations"] = rules
 	}
+	if addWaveformSourceContract(id, schema) {
+		return
+	}
 	// This is explicit coverage of parameter restrictions, not an exhaustive
 	// catalog of stateful admission preconditions or all possible failure codes.
 	schema["x-details-scope"] = "parameter-bounds-and-examples; stateful-preconditions-and-errors-not-exhaustive"

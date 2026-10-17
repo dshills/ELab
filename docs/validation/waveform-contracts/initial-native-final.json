@@ -1,0 +1,605 @@
+{
+  "passed": true,
+  "transport": "native-socket",
+  "detailed_schemas": {
+    "source.sine.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "id": "V1",
+          "waveform": {
+            "amplitude_v": 2.5,
+            "offset_v": 0,
+            "frequency_hz": 10,
+            "phase_degrees": 0
+          }
+        }
+      ],
+      "properties": {
+        "id": {
+          "description": "Required non-null existing sine-source component ID from snapshot.components. Missing IDs and wrong kinds both return invalid-params. Selection and circuit completeness are not required.",
+          "type": "string"
+        },
+        "waveform": {
+          "additionalProperties": false,
+          "description": "Complete replacement definition. Every nested field is required and non-null, including zero values; omitted fields do not retain previous values. Quantity text normalizes before coupled model validation and retry matching.",
+          "properties": {
+            "amplitude_v": {
+              "$ref": "urn:elab:waveform-quantity-V:1",
+              "maximum": 12,
+              "minimum": 0,
+              "x-normalized-si-range": {
+                "maximum": 12,
+                "minimum": 0
+              },
+              "x-unit": "V"
+            },
+            "frequency_hz": {
+              "$ref": "urn:elab:waveform-quantity-Hz:1",
+              "maximum": 1000,
+              "minimum": 0.1,
+              "x-normalized-si-range": {
+                "maximum": 1000,
+                "minimum": 0.1
+              },
+              "x-unit": "Hz"
+            },
+            "offset_v": {
+              "$ref": "urn:elab:waveform-quantity-V:1",
+              "maximum": 12,
+              "minimum": -12,
+              "x-normalized-si-range": {
+                "maximum": 12,
+                "minimum": -12
+              },
+              "x-unit": "V"
+            },
+            "phase_degrees": {
+              "$ref": "urn:elab:waveform-quantity-deg:1",
+              "maximum": 360,
+              "minimum": -360,
+              "x-normalized-si-range": {
+                "maximum": 360,
+                "minimum": -360
+              },
+              "x-unit": "degrees"
+            }
+          },
+          "required": [
+            "amplitude_v",
+            "offset_v",
+            "frequency_hz",
+            "phase_degrees"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "waveform"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "per-source-waveform",
+        "preconditions": [
+          "Ordinary protocol, revision/document, actor and retry admission guards apply",
+          "id names an existing sine-source; complete nested waveform satisfies individual and coupled normalized SI bounds",
+          "Incomplete drawings may be configured; successful editing does not guarantee a solvable circuit or a successful later simulation"
+        ],
+        "effects": [
+          "Replaces only the named source waveform; preserves its identity/kind, geometry, terminals/wires and other sources. component.value tracks sine amplitude or finite-pulse high voltage",
+          "An actual change is one ordinary undoable electrical edit; running simulation restarts from configured startup/time zero. Paused edits retain stale accepted readings/charge/time until Restart or Resume",
+          "Changed electrical configuration clears live scope cursors and window; independent recorded-view controls and captured rows are retained",
+          "Preserves experiment sample step/playback and other transient settings; sampling advice is recomputed from configured values. Fit sampling is a separate explicit command",
+          "Reapplying identical normalized numeric fields preserves graph, history, dirty state and physics; an ordinary successful command/actor revision may still advance. Equivalent unit/numeric retry intent normalizes before fingerprinting",
+          "Allowed in edit.batch against staged components; every edit commits together or the entire batch refuses. One undo restores the committed batch",
+          "Existing verification/recording rows and captured model/source parameters stay immutable; their source_unchanged becomes false when electrical revision changes. Saved projects retain numeric SI waveforms and the existing versioned model",
+          "Sine offset \u00b1 amplitude stays within \u00b112 V. Zero amplitude is a constant configured source, but frequency/phase bounds still apply"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Missing/unknown/duplicate/null fields, invalid quantities/units, nonfinite or coupled model bounds, missing source or wrong source kind. Waveform validation precedes target lookup; ordinary shared admission rules still apply"
+          }
+        ],
+        "completion": {
+          "mode": "immediate validated graph commit; ordinary live initialization is asynchronous or deferred while paused",
+          "observe": [
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-details-scope": "parameter-bounds-and-per-source-waveform-state-contract",
+      "x-normalized-si-relations": [
+        {
+          "operator": "sum_absolute_maximum",
+          "fields": [
+            "waveform.offset_v",
+            "waveform.amplitude_v"
+          ],
+          "limit": 12
+        }
+      ],
+      "x-source-inventory": "snapshot.components filtered by kind sine-source; component.sine/pulse is configured data, while snapshot.mixed and transient describe the last accepted live result"
+    },
+    "source.pulse.set": {
+      "additionalProperties": false,
+      "examples": [
+        {
+          "id": "V1",
+          "waveform": {
+            "high_v": 5,
+            "low_v": 0,
+            "high_s": 0.05,
+            "low_s": 0.05,
+            "rise_s": 0.001,
+            "fall_s": 0.001
+          }
+        }
+      ],
+      "properties": {
+        "id": {
+          "description": "Required non-null existing finite-pulse-source component ID from snapshot.components. Missing IDs and wrong kinds both return invalid-params. Selection and circuit completeness are not required.",
+          "type": "string"
+        },
+        "waveform": {
+          "additionalProperties": false,
+          "description": "Complete replacement definition. Every nested field is required and non-null, including zero values; omitted fields do not retain previous values. Quantity text normalizes before coupled model validation and retry matching.",
+          "properties": {
+            "fall_s": {
+              "$ref": "urn:elab:time:1",
+              "maximum": 10,
+              "minimum": 1e-06,
+              "x-normalized-si-range": {
+                "maximum": 10,
+                "minimum": 1e-06
+              },
+              "x-unit": "s"
+            },
+            "high_s": {
+              "$ref": "urn:elab:time:1",
+              "maximum": 10,
+              "minimum": 1e-06,
+              "x-normalized-si-range": {
+                "maximum": 10,
+                "minimum": 1e-06
+              },
+              "x-unit": "s"
+            },
+            "high_v": {
+              "$ref": "urn:elab:waveform-quantity-V:1",
+              "maximum": 12,
+              "minimum": -12,
+              "x-normalized-si-range": {
+                "maximum": 12,
+                "minimum": -12
+              },
+              "x-unit": "V"
+            },
+            "low_s": {
+              "$ref": "urn:elab:time:1",
+              "maximum": 10,
+              "minimum": 1e-06,
+              "x-normalized-si-range": {
+                "maximum": 10,
+                "minimum": 1e-06
+              },
+              "x-unit": "s"
+            },
+            "low_v": {
+              "$ref": "urn:elab:waveform-quantity-V:1",
+              "maximum": 12,
+              "minimum": -12,
+              "x-normalized-si-range": {
+                "maximum": 12,
+                "minimum": -12
+              },
+              "x-unit": "V"
+            },
+            "rise_s": {
+              "$ref": "urn:elab:time:1",
+              "maximum": 10,
+              "minimum": 1e-06,
+              "x-normalized-si-range": {
+                "maximum": 10,
+                "minimum": 1e-06
+              },
+              "x-unit": "s"
+            }
+          },
+          "required": [
+            "high_v",
+            "low_v",
+            "high_s",
+            "low_s",
+            "rise_s",
+            "fall_s"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "waveform"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "per-source-waveform",
+        "preconditions": [
+          "Ordinary protocol, revision/document, actor and retry admission guards apply",
+          "id names an existing finite-pulse-source; complete nested waveform satisfies individual and coupled normalized SI bounds",
+          "Incomplete drawings may be configured; successful editing does not guarantee a solvable circuit or a successful later simulation"
+        ],
+        "effects": [
+          "Replaces only the named source waveform; preserves its identity/kind, geometry, terminals/wires and other sources. component.value tracks sine amplitude or finite-pulse high voltage",
+          "An actual change is one ordinary undoable electrical edit; running simulation restarts from configured startup/time zero. Paused edits retain stale accepted readings/charge/time until Restart or Resume",
+          "Changed electrical configuration clears live scope cursors and window; independent recorded-view controls and captured rows are retained",
+          "Preserves experiment sample step/playback and other transient settings; sampling advice is recomputed from configured values. Fit sampling is a separate explicit command",
+          "Reapplying identical normalized numeric fields preserves graph, history, dirty state and physics; an ordinary successful command/actor revision may still advance. Equivalent unit/numeric retry intent normalizes before fingerprinting",
+          "Allowed in edit.batch against staged components; every edit commits together or the entire batch refuses. One undo restores the committed batch",
+          "Existing verification/recording rows and captured model/source parameters stay immutable; their source_unchanged becomes false when electrical revision changes. Saved projects retain numeric SI waveforms and the existing versioned model",
+          "Rise is included in high_s and fall in low_s; equality permits a zero-length plateau. Equal ordered levels are a constant source, but phase/ramp bounds still apply",
+          "This is the per-source finite pulse definition. Ideal-square pulse-source uses separate shared experiment timing; frequency/period/duty convenience editing uses source.pulse.timing.set"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Missing/unknown/duplicate/null fields, invalid quantities/units, nonfinite or coupled model bounds, missing source or wrong source kind. Waveform validation precedes target lookup; ordinary shared admission rules still apply"
+          }
+        ],
+        "completion": {
+          "mode": "immediate validated graph commit; ordinary live initialization is asynchronous or deferred while paused",
+          "observe": [
+            "project.inspect",
+            "simulation.wait",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-details-scope": "parameter-bounds-and-per-source-waveform-state-contract",
+      "x-normalized-si-relations": [
+        {
+          "operator": "less_or_equal",
+          "fields": [
+            "waveform.low_v",
+            "waveform.high_v"
+          ]
+        },
+        {
+          "operator": "less_or_equal",
+          "fields": [
+            "waveform.rise_s",
+            "waveform.high_s"
+          ]
+        },
+        {
+          "operator": "less_or_equal",
+          "fields": [
+            "waveform.fall_s",
+            "waveform.low_s"
+          ]
+        },
+        {
+          "operator": "sum_minimum",
+          "fields": [
+            "waveform.high_s",
+            "waveform.low_s"
+          ],
+          "limit": 0.001
+        }
+      ],
+      "x-source-inventory": "snapshot.components filtered by kind finite-pulse-source; component.sine/pulse is configured data, while snapshot.mixed and transient describe the last accepted live result"
+    }
+  },
+  "quantity_schemas": {
+    "urn:elab:waveform-quantity-Hz:1": {
+      "$id": "urn:elab:waveform-quantity-Hz:1",
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        }
+      ],
+      "description": "Finite numeric value or decimal/scientific quantity text; bare text uses Hz. Model/coupled bounds apply after conversion. No hexadecimal, NaN, Inf or nonzero underflow.",
+      "x-max-utf8-bytes": 128,
+      "x-text-units": [
+        "Hz",
+        "kHz",
+        "mHz"
+      ],
+      "x-unit": "Hz"
+    },
+    "urn:elab:waveform-quantity-V:1": {
+      "$id": "urn:elab:waveform-quantity-V:1",
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        }
+      ],
+      "description": "Finite numeric value or decimal/scientific quantity text; bare text uses V. Model/coupled bounds apply after conversion. No hexadecimal, NaN, Inf or nonzero underflow.",
+      "x-max-utf8-bytes": 128,
+      "x-text-units": [
+        "V",
+        "mV",
+        "uV",
+        "\u00b5V",
+        "\u03bcV"
+      ],
+      "x-unit": "V"
+    },
+    "urn:elab:waveform-quantity-deg:1": {
+      "$id": "urn:elab:waveform-quantity-deg:1",
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        }
+      ],
+      "description": "Finite numeric value or decimal/scientific quantity text; bare text uses deg. Model/coupled bounds apply after conversion. No hexadecimal, NaN, Inf or nonzero underflow.",
+      "x-max-utf8-bytes": 128,
+      "x-text-units": [
+        "deg",
+        "\u00b0"
+      ],
+      "x-unit": "deg"
+    }
+  },
+  "refusals": [
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "Wave",
+        "waveform": {
+          "amplitude_v": "1234.56789012345 mV",
+          "offset_v": "-123456.789012345 uV",
+          "frequency_hz": "20 V",
+          "phase_degrees": "-123.456789012345 \u00b0"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "Wave",
+        "waveform": {
+          "amplitude_v": "1e-999 V",
+          "offset_v": "-123456.789012345 uV",
+          "frequency_hz": ".123456789012345 kHz",
+          "phase_degrees": "-123.456789012345 \u00b0"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "Wave",
+        "waveform": {
+          "amplitude_v": "1234.56789012345 mV",
+          "offset_v": "1 MV",
+          "frequency_hz": ".123456789012345 kHz",
+          "phase_degrees": "-123.456789012345 \u00b0"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "Wave",
+        "waveform": {
+          "amplitude_v": "1234.56789012345 mV",
+          "offset_v": "-123456.789012345 uV",
+          "frequency_hz": ".123456789012345 kHz",
+          "phase_degrees": "3.14 rad"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "Wave",
+        "waveform": {
+          "amplitude_v": null,
+          "offset_v": "-123456.789012345 uV",
+          "frequency_hz": ".123456789012345 kHz",
+          "phase_degrees": "-123.456789012345 \u00b0"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "Wave",
+        "waveform": {
+          "amplitude_v": "1234.56789012345 mV",
+          "frequency_hz": ".123456789012345 kHz",
+          "phase_degrees": "-123.456789012345 \u00b0"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "Wave",
+        "waveform": null
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "R1",
+        "waveform": {
+          "amplitude_v": "1234.56789012345 mV",
+          "offset_v": "-123456.789012345 uV",
+          "frequency_hz": ".123456789012345 kHz",
+          "phase_degrees": "-123.456789012345 \u00b0"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "MissingSource",
+        "waveform": {
+          "amplitude_v": "1234.56789012345 mV",
+          "offset_v": "-123456.789012345 uV",
+          "frequency_hz": ".123456789012345 kHz",
+          "phase_degrees": "-123.456789012345 \u00b0"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "Wave",
+        "waveform": {
+          "amplitude_v": "11 V",
+          "offset_v": "2 V",
+          "frequency_hz": "20 Hz",
+          "phase_degrees": "30 deg"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.pulse.set",
+      "params": {
+        "id": "Ramp",
+        "waveform": {
+          "high_v": "4123.456789012345 mV",
+          "low_v": "5 V",
+          "high_s": "7 ms",
+          "low_s": "13 ms",
+          "rise_s": "2 ms",
+          "fall_s": "3 ms"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.pulse.set",
+      "params": {
+        "id": "Ramp",
+        "waveform": {
+          "high_v": "4123.456789012345 mV",
+          "high_s": "7 ms",
+          "low_s": "13 ms",
+          "rise_s": "2 ms",
+          "fall_s": "3 ms"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.pulse.set",
+      "params": {
+        "id": "Ramp",
+        "waveform": {
+          "high_v": "4123.456789012345 mV",
+          "low_v": "-123456.789012345 \u03bcV",
+          "high_s": "7 ms",
+          "low_s": "13 ms",
+          "rise_s": null,
+          "fall_s": "3 ms"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.pulse.set",
+      "params": {
+        "id": "R1",
+        "waveform": {
+          "high_v": "4123.456789012345 mV",
+          "low_v": "-123456.789012345 \u03bcV",
+          "high_s": "7 ms",
+          "low_s": "13 ms",
+          "rise_s": "2 ms",
+          "fall_s": "3 ms"
+        }
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "source.pulse.set",
+      "params": {
+        "id": "MissingSource",
+        "waveform": {
+          "high_v": "4123.456789012345 mV",
+          "low_v": "-123456.789012345 \u03bcV",
+          "high_s": "7 ms",
+          "low_s": "13 ms",
+          "rise_s": "2 ms",
+          "fall_s": "3 ms"
+        }
+      },
+      "code": "invalid-params"
+    }
+  ],
+  "observations": {
+    "exact_sine": {
+      "amplitude_v": 1.23456789012345,
+      "offset_v": -0.123456789012345,
+      "frequency_hz": 123.456789012345,
+      "phase_degrees": -123.456789012345
+    },
+    "exact_pulse": {
+      "high_v": 4.123456789012345,
+      "low_v": -0.123456789012345,
+      "high_s": 0.007,
+      "low_s": 0.013,
+      "rise_s": 0.002,
+      "fall_s": 0.003
+    },
+    "sine_capacitor_at_30ms_v": 0.6608870272923015,
+    "sine_reference_v": 0.6608630887037612,
+    "sine_source_samples": 61,
+    "ramp_capacitor_at_5ms_v": 1.3468013090731645,
+    "ramp_reference_v": 1.3467987865008904,
+    "ramp_source_samples": 28
+  },
+  "checks": [
+    "Exact decimal waveform quantities retain binary64 values; numeric re-entry preserves history/physics",
+    "Voltage, frequency, phase and time input share public commands; numeric compatibility and typed local references retained",
+    "Wrong units, underflow, null and coupled model violations refuse without mutation",
+    "Sine and finite-ramp RC transients agree with independent first-order references within existing 3 mV envelope",
+    "Every captured sine/ramp source sample agrees with independent analytic waveform",
+    "Saved waveform fields stay numeric SI and save/reopen preserves exact configured values and bytes"
+  ],
+  "limits": [
+    "No device/model/kernel/sampling/file-version changes",
+    "Quantity text is command-only; persisted data and outputs stay numeric SI",
+    "Existing model and integration/work limits still apply; no physical device or complete mounted typing/IME/accessibility/latency qualification"
+  ]
+}

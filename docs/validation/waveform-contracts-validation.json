@@ -1,0 +1,264 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T14:11:18.604161+00:00",
+  "scope": "Two on-demand complete per-source waveform state contracts, strict complete replacements, paused accepted data/capture preservation and owned native/headless sine/ramp RC persistence/reference checks",
+  "reference_configuration": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "processor": "Apple M4 Pro",
+    "logical_cpus": 14,
+    "memory_bytes": 68719476736,
+    "go_toolchain": "go version go1.27.2 darwin/arm64"
+  },
+  "source_parent_commit": "db2ed2cfd1a1c1ff6990bc28dd5801412ddf326c",
+  "source_index": "docs/validation/waveform-contracts/source-freeze.json",
+  "source_frozen_files": 696,
+  "source_stable": true,
+  "setup_corrections": [
+    "Independent checker initially assumed both captures were kept in the final ramp project. Actual inspection found zero captures in the earlier sine save and one ramp capture in the final project. The demo now retains both complete metadata/row datasets before replacing the example; final review also cross-checks the ramp dataset against its kept file. Only that demo script changed after the first full gate. Final full quality passes; unchanged source/binary hashes retain completed smoke/electronics evidence."
+  ],
+  "source_delta": {
+    "scripts/waveform-quantities-demo.py": {
+      "before": "2063893005fa66473f725e6af1845ba281124e6cc317237fd177fb2445b4c7fe",
+      "after": "bd229e1c74dc6d6947b8166017eef71907dd67aa17a78f0ee602831362d03d08"
+    },
+    "workbench/capability_details.go": {
+      "before": "6387c42ae2486a18936e7e75a054f83ac5d504fab7f441c9b51017cb93eee92f",
+      "after": "b1a8a5f6cebdee3e21b4e61fbf0eae0255ba9e8b138e59585bdc3cb95a00c697"
+    },
+    "workbench/waveform_source_capabilities.go": {
+      "before": null,
+      "after": "69c1d65554bc113e9bf09a9aa3200593488e8c758086bf676de630d1c70fa69c"
+    },
+    "workbench/waveform_source_contracts_test.go": {
+      "before": null,
+      "after": "d1ea53f55954ca9f54b02ec3c7c86c2990dcd98d70acf4dab2a473fd483a4006"
+    }
+  },
+  "binary_sha256": {
+    "build/elab": "0b62be4ace39add8ff61f9bbec52796070a3f857ccdb91f1b6f9077aee70ff13",
+    "build/elab-agent": "da48ebf95d430c759ff5e2ae2ead30027301583ffa865af6d73d71b0c8331cc5",
+    "build/elab-conformance": "add3bc717128af046738550bb5742cff4814427f453bee3e869e89f9b5a62743",
+    "build/elab-ui-audit": "7aad47c4658412656d369e6ec6e9a4b906a3d92f1910c64059d164f845163503",
+    "build/ELab-0.115.0-132-waveform-contracts-candidate.app/Contents/MacOS/ELab": "0b62be4ace39add8ff61f9bbec52796070a3f857ccdb91f1b6f9077aee70ff13"
+  },
+  "candidate": "build/ELab-0.115.0-132-waveform-contracts-candidate.app",
+  "candidate_promoted": false,
+  "new_application_commands": 0,
+  "existing_commands": 162,
+  "new_contracts": 2,
+  "commands_with_contracts_before": 109,
+  "commands_with_contracts_after": 111,
+  "commands_without_contract": 51,
+  "default_catalog_output_schemas_models_numerical_methods_work_limits_file_versions_unchanged": true,
+  "quality": {
+    "lint_imports_staticcheck": true,
+    "python_tests": 37,
+    "root_native_race_and_vet": true
+  },
+  "process_quality": [
+    {
+      "name": "build",
+      "argv": [
+        "./scripts/build.sh"
+      ],
+      "started_utc": "2026-10-17T14:01:46.280203+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 7.380648332997225,
+      "finished_utc": "2026-10-17T14:01:53.660823+00:00"
+    },
+    {
+      "name": "quality",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T14:01:53.671694+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 366.19844204199035,
+      "finished_utc": "2026-10-17T14:07:59.949339+00:00"
+    },
+    {
+      "name": "quality-final",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T14:10:36.074541+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 13.28872745798435,
+      "finished_utc": "2026-10-17T14:10:49.363491+00:00"
+    }
+  ],
+  "process_public": [
+    {
+      "name": "native-smoke",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.115.0-132-waveform-contracts-candidate.app/Contents/MacOS/ELab",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "started_utc": "2026-10-17T14:08:04.535373+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 39.752367625012994,
+      "finished_utc": "2026-10-17T14:08:44.288404+00:00"
+    },
+    {
+      "name": "public-suites",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+        "--native-binary",
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.115.0-132-waveform-contracts-candidate.app/Contents/MacOS/ELab",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/waveform-contracts/public-final"
+      ],
+      "started_utc": "2026-10-17T14:08:44.300920+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 49.023020833032206,
+      "finished_utc": "2026-10-17T14:09:33.324760+00:00"
+    },
+    {
+      "name": "headless-waveforms",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/waveform-quantities-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/waveform-contracts/headless-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/waveform-contracts/headless-final-assets"
+      ],
+      "started_utc": "2026-10-17T14:11:09.533706+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 0.16713445796631277,
+      "finished_utc": "2026-10-17T14:11:09.700845+00:00"
+    }
+  ],
+  "native_workflow": {
+    "started_utc": "2026-10-17T14:11:09.726271+00:00",
+    "status": "completed",
+    "owned_pid": 51706,
+    "demo_exit_code": 0,
+    "native_exit_code": 0,
+    "elapsed_seconds": 0.5272343750111759,
+    "finished_utc": "2026-10-17T14:11:10.253642+00:00"
+  },
+  "four_adapter_numerical_checks": 27596,
+  "four_adapter_project_workflow_checks": 44,
+  "four_adapter_project_snapshots": 56,
+  "native_smoke_stages": 45,
+  "waveform_review": {
+    "passed": true,
+    "contracts_per_transport": 2,
+    "refusals_per_transport": 15,
+    "capture_row_counts_per_transport": [
+      61,
+      28
+    ],
+    "total_source_and_capacitor_reference_checks": 356,
+    "maximum_source_voltage_error_v": 1.1102230246251565e-15,
+    "maximum_capacitor_voltage_error_v": 3.020755394134156e-05,
+    "reference_envelopes_v": {
+      "source": 1e-12,
+      "capacitor": 0.003
+    },
+    "equal_contracts_refusals_observations_and_exact_rows": true,
+    "saved_numeric_waveforms_and_both_complete_captures_reviewed": true
+  },
+  "typed_raw_gzip_numerical_review_equal": true,
+  "sdk_verified": {
+    "passed": true,
+    "source": "aa9d023243a6bded514c3d9696c08a9c917119c4",
+    "archive_sha256": "22b086442570641e4ae56e9937dd6483c26f92cde953f3aa3fc11811710ed7c5"
+  },
+  "native_production_inventory_unchanged": {
+    "sources": 57,
+    "sites": 388,
+    "commands": 162
+  },
+  "preserved_bundle_trees": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7
+    }
+  },
+  "fixture_files": {
+    "docs/validation/waveform-contracts/fixtures/headless/exact-sine-rc.elab": "45402b55bbaf54d311caccc86477ac99c0bb3a078e98aa51663e551f579352f9",
+    "docs/validation/waveform-contracts/fixtures/headless/exact-ramp-rc.elab": "94d284fb0ef65f85a5a423eb0b548bce975974424ab594831e37a23b94d4d208",
+    "docs/validation/waveform-contracts/fixtures/native/exact-sine-rc.elab": "45402b55bbaf54d311caccc86477ac99c0bb3a078e98aa51663e551f579352f9",
+    "docs/validation/waveform-contracts/fixtures/native/exact-ramp-rc.elab": "412e0659eb6f8944c89e0a4b5ef3ca03aaa3a71cd02b871dfac9ded24e4d61e1"
+  },
+  "report_encoding": {
+    "conformance-report.json.gz": {
+      "decoded_bytes": 18206800,
+      "decoded_sha256": "170c9cae489050e0f177927f4eb04ba5dc50b0dcd1024a83b363397554078796",
+      "gzip_bytes": 1660006,
+      "gzip_sha256": "fd07e75eb148553fb4d42e6d70454e02180e81869b40279ee7510cbb6ed18481"
+    }
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "limitations": [
+    "Discovery annotations describe existing implemented behavior; no source model, numerical kernel, runtime validation or work-limit change is claimed.",
+    "The two native-socket workflows and existing callback/race tests do not prove full physical typing/IME, pointer, accessibility, visible latency or exhaustive action coverage.",
+    "Named analytic source/RC references use the unchanged 1e-12 V source and 3 mV capacitor envelopes; they are not arbitrary circuit or hardware guarantees.",
+    "Fifty-one commands remain without scoped state contracts. AGENT-02, complete event/native/accessibility/distribution, physical printer and participant gates remain open.",
+    "The private 0.115 /132 candidate is unpromoted; canonical 0.105 and preserved 0.104 bundle trees stay exact."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/waveform-contracts/archive.py.txt": "ba6ff9bd4e3b3c648cde576a27c3d37dd1aeb79e941c07550d9b731c1a189e28",
+    "docs/validation/waveform-contracts/build.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/waveform-contracts/conformance-report.json.gz": "fd07e75eb148553fb4d42e6d70454e02180e81869b40279ee7510cbb6ed18481",
+    "docs/validation/waveform-contracts/contract-inventory.json": "5a78db7454a4bc6c79adcda8770d56ad6278a729785738d317944de42ea27089",
+    "docs/validation/waveform-contracts/core-focused.log.txt": "10e8b4931fc5dfccca3c3c2f9db34dc64d0ebd491b2624360d612180c23dc5b6",
+    "docs/validation/waveform-contracts/fixtures/headless/exact-ramp-rc.elab": "94d284fb0ef65f85a5a423eb0b548bce975974424ab594831e37a23b94d4d208",
+    "docs/validation/waveform-contracts/fixtures/headless/exact-sine-rc.elab": "45402b55bbaf54d311caccc86477ac99c0bb3a078e98aa51663e551f579352f9",
+    "docs/validation/waveform-contracts/fixtures/native/exact-ramp-rc.elab": "412e0659eb6f8944c89e0a4b5ef3ca03aaa3a71cd02b871dfac9ded24e4d61e1",
+    "docs/validation/waveform-contracts/fixtures/native/exact-sine-rc.elab": "45402b55bbaf54d311caccc86477ac99c0bb3a078e98aa51663e551f579352f9",
+    "docs/validation/waveform-contracts/headless-final.json": "87ec0ab4d914759124c39d71ab4a9989d4487b8247483802ab6e087206743876",
+    "docs/validation/waveform-contracts/headless-waveforms.log.txt": "53257c1b3eac615b2b5d1ab30185b48eab789aaec97cd6004743242b26a90ad3",
+    "docs/validation/waveform-contracts/initial-headless-final.json": "4db6e64e6812d0a6403a702e1c82512d752b7f6effb92195c24291f9d92f69a1",
+    "docs/validation/waveform-contracts/initial-native-final.json": "85c82883816c1adabdfbe4a86cded0e1e83f69145207ba5e434203ca36d2ebc6",
+    "docs/validation/waveform-contracts/initial-process-native.json": "daa97b70ea20b057a81f89c1ab3b81e8310bf6b4d9d0433e2bcd48b566010a5a",
+    "docs/validation/waveform-contracts/initial-process-public.json": "8740e672d65f67681e21baa547b39be0a5c6cb5e9c7c029906ce1a0caa3c60f1",
+    "docs/validation/waveform-contracts/native-final.json": "c4e665e1edd725b10bd253b25d9e56783711302187ac654cf96d001d7d873a79",
+    "docs/validation/waveform-contracts/native-host.log.txt": "9c36924431b28938c338139d79dade5626b3b322f61200af5bc9b1ca2d210b4b",
+    "docs/validation/waveform-contracts/native-smoke.log.txt": "8edba9ee2daf7887a0308b640f42d63abc96f1c3489107e91076e2a9f5620f86",
+    "docs/validation/waveform-contracts/native-viewer.log.txt": "0f30d2f71831b5318bbffc995b899c348182b96b13c8276a0f5e9f2996efc736",
+    "docs/validation/waveform-contracts/native.py.txt": "0af081213022b498806b6533dce19b5fd07b0563a88051e00e1fe702acb369f9",
+    "docs/validation/waveform-contracts/package.json": "932f3e8cc3e3549023ac0ea32767e415282f98ae0fa9ed48ed9f0695c6bff626",
+    "docs/validation/waveform-contracts/process-native.json": "b8d0b57bb06502b92e8ca0ea27ac694ec660f98620265faf9e43b5dc7372934f",
+    "docs/validation/waveform-contracts/process-public.json": "d1fc18f6821a8d4bf4a7265e395f59244b423173bd45bf7dacb19b49c6f76f7d",
+    "docs/validation/waveform-contracts/process-quality-final.json": "eeb99abf4d65b3ffd414378b2a599e590d687ee6bdc826bf4e711d58e546e5b7",
+    "docs/validation/waveform-contracts/process-quality.json": "0f37cc8cfb874d81f53c848644dc153fc86ef1e8bbbfcf32ff9e29495484a674",
+    "docs/validation/waveform-contracts/public-suites.log.txt": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "docs/validation/waveform-contracts/qualify.py.txt": "e97aaebd016c565d2784f034a0ad1f395445f1bd22011e312b207802e55430ea",
+    "docs/validation/waveform-contracts/quality-final.log.txt": "831b0f7703c249e1a1dab3286edfe0eeb35decb04aedc5ab3ab9f7cecbd0a478",
+    "docs/validation/waveform-contracts/quality.log.txt": "f520ddf68657d5688df96576cea6d047bf549b055321f159c7d6853a3a3da0d4",
+    "docs/validation/waveform-contracts/report-review-gzip.json": "5026b215a70ae469392fb7636eaec8b94f96ee4715e4c009e6e03698347a43da",
+    "docs/validation/waveform-contracts/report-review.json": "5026b215a70ae469392fb7636eaec8b94f96ee4715e4c009e6e03698347a43da",
+    "docs/validation/waveform-contracts/review-before.log.txt": "95273bc540c93b095bda98cc43bfdb73487e2e71772ca2acc36cf10ebea7392d",
+    "docs/validation/waveform-contracts/review.go.txt": "808b076c8bf0bac85714632b87ab06a8364742575b33a383a734d7e37c729fb6",
+    "docs/validation/waveform-contracts/source-delta.json": "14d311778ea6ca341b108b04044f9db89aaa51863e1b78e368762601d5787696",
+    "docs/validation/waveform-contracts/source-freeze-before-capture-retention.json": "d7298175ca647d56d859d529ae1e307fc88ff2f7d5a976c859c58a4497f3afba",
+    "docs/validation/waveform-contracts/source-freeze.json": "8ea5264e4e17d3d282b4db96034d68dd6a372e8ab4d7b0b23aa313a7785ee3a4",
+    "docs/validation/waveform-contracts/waveform-review.json": "c50bfeb8a5537692c66fa32ebe3d251b885b35b6c38a64b01856c70cda4659dd",
+    "docs/validation/waveform-contracts/waveform-review.py.txt": "79759316ae536790224ad793aa7afd74967ea886a3642c541b5c4803fb0c11df"
+  }
+}
