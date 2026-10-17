@@ -1,0 +1,53 @@
+package workbench
+
+func addRecoveryControlDetails(id string, schema map[string]any) bool {
+	switch id {
+	case "recovery.configure", "recovery.configure.start", "recovery.work.start", "recovery.scan", "recovery.checkpoint", "recovery.select":
+	default:
+		return false
+	}
+	c := commandContractDetail{Version: 1, Scope: "recovery-controls-and-work", Preconditions: []string{}, Effects: []string{"Preserves committed graph/settings, live acquisition/pause/time/charge/run, file association/saved baseline, history and kept membership; recovery work does not mark current edits saved", "Common protocol/revision/actor/retry guards apply. Recovery catalog/selection and session scheduling are distinct from circuit document state"}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Malformed/unknown/duplicate fields, missing/null required fields or command-specific domain violation"}}, Completion: &commandCompletionDetail{Mode: "immediate session selection"}}
+	schema["x-recovery-inventory"] = "snapshot.recovery directory/enabled/interval_s, candidates/problems, selected, error and last_snapshot/last_saved_at; snapshot.project_work is latest only, retain exact IDs for project.work.inspect"
+	if id == "recovery.select" {
+		inputProperty(schema, "id")["description"] = "Required non-null exact ID from recovery.candidates; empty string explicitly clears selection, even with no configured store. Problems/unknown IDs are not selectable."
+		c.Preconditions = []string{"Empty ID or a listed valid candidate; no file access/readiness or ownership check is performed by selection"}
+		c.Effects = append(c.Effects, "Session-only selection with no disk IO, work admission, restore or dismissal. Empty selection remains explicitly cleared across scans/same-store catalog refreshes", "Selecting a candidate does not grant dismissal permission or prove its current disk hash/owner. Restore/dismiss require separate exact ID/hash guards", "Keep a selected ID while still present after refresh; otherwise normal selection chooses the newest listed candidate unless explicitly cleared. A new recovery store resets that clear intent")
+		schema["examples"] = []any{IDParams{ID: ""}}
+		schema["x-command-contract"] = c
+		return true
+	}
+	schema["x-work-bounds"] = map[string]any{"retained_project_jobs": MaxProjectOperations, "max_filesystem_workers": MaxProjectOperations, "directory_entries_including_unrelated_and_leases": MaxRecoveryEntries, "max_document_bytes": MaxProjectBytes, "max_capsule_bytes": MaxRecoveryBytes, "cooperative_deadline_s": 30}
+	schema["x-recovery-format"] = map[string]any{"format": RecoveryFormat, "version": RecoveryVersion, "catalog": "Newest valid sequence per document key, sorted newest saved_at then descending ID on ties. Damaged recognized snapshots become bounded problems; unrelated filenames are ignored after the all-entry directory bound.", "retention": "Two owned capsules per session/document key; foreign capsules are not silently retired"}
+	c.Errors = append(c.Errors, commandFailureDetail{"busy", "admission", "Active shared project work or eight outstanding workers, including canceled/superseded OS work not yet returned"}, commandFailureDetail{"file-error", "project_work", "Directory access, encoding/size, lease, scan, write/retirement or other OS error; causes are not exhaustive"}, commandFailureDetail{"canceled", "project_work", "Cooperative cancellation/Close before publication"}, commandFailureDetail{"superseded", "project_work", "Captured store/job or checkpoint source generation no longer eligible before publication"}, commandFailureDetail{"timeout", "project_work", "Cooperative 30-second preparation/scan deadline; blocked OS work can return later"})
+	c.Completion = &commandCompletionDetail{Mode: "immediate queued admission; inspect retained job ID until terminal, not just latest metadata", Observe: []string{"project.work.inspect", "project.inspect", "simulation.wait", "events.poll"}, Cancel: "project.work.cancel", CooperativeDeadlineSeconds: 30}
+	c.Effects = append(c.Effects, "Preparation and filesystem work run outside the editor mutex with named phases/bytes, not percentages. Worker slots remain until actual return", "Owned immediate retries return original admission and waiting retries return original terminal outcome without repeating IO. An admitted failure consumes its key; use a new key after correcting storage", "Cancelable preparation/scan is cooperative. Once checkpoint publication or configuration installation begins, cancellation returns operation-committing; cleanup may finish later and warnings do not undo installed/written results", "Jobs are runtime only. Historical last_snapshot/last_saved_at do not guarantee a capsule still exists; clean retirement or retention may remove it")
+	configure := id == "recovery.configure" || id == "recovery.configure.start"
+	if configure {
+		interval := inputProperty(schema, "interval_s")
+		interval["minimum"], interval["maximum"], interval["x-unit"] = 1, 60, "s"
+		interval["x-normalized-si-range"] = map[string]float64{"minimum": 1, "maximum": 60}
+		inputProperty(schema, "directory")["minLength"], inputProperty(schema, "directory")["maxLength"], inputProperty(schema, "directory")["x-max-utf8-bytes"] = 1, 4096, 4096
+		inputProperty(schema, "directory")["description"] = "Required non-null nonblank literal local path, no NUL; filepath.Abs resolves relative paths and cleans spelling, without ~ or environment expansion. A new store creates missing directories and requires a real final directory with no group/other permissions (0700). Same-store disable compares this normalized absolute path string; physical parent aliases are not deduplicated."
+		schema["x-existing-store-disable"] = map[string]any{"folder_access": false, "recovery_catalog_applied": false, "preserves_last_known_catalog_and_error": true, "in_flight_checkpoint_may_finish": true, "reenable": "Scans storage normally and can fail; disabling does not validate availability"}
+		c.Preconditions = []string{"Required non-null directory/enabled/interval_s; time quantity interval 1–60 s inclusive. Structural/common guards, interval/path validation, then active-job/worker capacity checks", "Session configuration may install across circuit edits or replacement when its captured previous store/job still matches"}
+		c.Effects = append(c.Effects, "Opening a new/different store creates a session ownership lease and scans storage, even when enabled=false. Enabled controls only automatic scheduling; manual scan/checkpoint remain usable while disabled", "For the existing normalized path, enabled=false reuses the lease and changes scheduling/interval without opening/scanning the folder. Retain last-known catalog, selection and error; recovery_configuration_applied=true and recovery_catalog_applied=false do not claim storage is healthy", "Enable/same-store refresh scans normally. A newer catalog publication suppresses stale scan metadata while still applying scheduling. A different store replaces catalog and resets explicit clear-selection intent", "Atomic session installation is followed by old/staged lease cleanup outside the editor lock; inspect recovery_configuration_applied, recovery_catalog_applied and cleanup_warning. It is not document attachment; result_document_generation is the generation at installation", "An older captured automatic write may finish after disable under normal retention, but cannot replace disabled observations. New enabled loops use the existing roughly 500 ms scheduler; interval is not a fresh timer or latency guarantee from configuration completion")
+		c.Errors = append(c.Errors, commandFailureDetail{"invalid-params", "project_work", "Overfull catalog reported by setup; existing-store disable skips that scan"})
+		schema["x-phases"] = []string{"queued", "updating-autosave-settings", "opening-recovery-directory", "scanning-recovery", "closing-previous-recovery", "completed"}
+		schema["examples"] = []any{RecoveryConfigureParams{Directory: "/absolute/path/recovery", Enabled: false, Interval: 2}}
+	} else {
+		if id == "recovery.work.start" {
+			inputProperty(schema, "kind")["enum"] = []string{"scan", "checkpoint"}
+			schema["examples"] = []any{RecoveryWorkParams{Kind: "scan"}, RecoveryWorkParams{Kind: "checkpoint"}}
+		}
+		c.Preconditions = []string{"scan/checkpoint kind (or empty parameters for waiting alias), configured store, then available shared project job/worker capacity; enabled need not be true"}
+		c.Errors = append(c.Errors, commandFailureDetail{"unavailable", "admission", "No configured recovery store"})
+		c.Effects = append(c.Effects, "Scan is directory-scoped and stays cancelable through IO; it can complete after document replacement in the same store. It validates capsules, updates catalog only if captured catalog revision still owns publication, and preserves later valid/explicitly cleared selection", "Checkpoint captures the committed document/models/settings/preferences/kept complete data, view/dirty state and capture ordering at admission. Later edits are not saved by it; pending work/live numerical state are not restored as a running simulation", "Checkpoint preparation can be canceled/superseded before publication. Publication writes a complete capsule, deduplicates unchanged content, skips obsolete captures or retires owned snapshots for a clean captured document. Never infer a new capsule from completed status alone", "result_recovery_id/result_recovery_saved_at identify only newly created capsules. Later catalog/selection publication can make recovery_catalog_applied=false. Checkpoint success is retained if follow-up scanning fails; recovery.error is updated only while that observation still owns current catalog state", "A publishing checkpoint may complete after replacement without relabeling the replacement; associated_with_current_document=false and original result_document_generation explain it. For scan, association follows store/job eligibility rather than captured circuit generation")
+		schema["x-phases"] = []string{"queued", "scanning", "serializing-recovery", "prepared-recovery", "publishing-recovery", "completed"}
+	}
+	if id == "recovery.configure" || id == "recovery.scan" || id == "recovery.checkpoint" {
+		c.Completion.Mode = "waiting alias for the same job; terminal failure includes owned job snapshot. Caller cancellation ends only its wait, not admitted work"
+		c.Errors = append(c.Errors, commandFailureDetail{"canceled", "wait", "Waiting caller disconnected/canceled while admitted work can still finish"}, commandFailureDetail{"operation-unavailable", "wait", "Original admitted job evicted"})
+	}
+	schema["x-command-contract"] = c
+	return true
+}

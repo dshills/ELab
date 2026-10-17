@@ -1,0 +1,275 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T15:44:39.816131+00:00",
+  "scope": "Six recovery configuration/manual-work/cached-selection state contracts, disabled manual checkpoint, no-storage same-store disable, failed-key replay/new-key repair, deduplication and clean retirement with preserved RC sample/kept capture/manual source",
+  "reference_configuration": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "processor": "Apple M4 Pro",
+    "logical_cpus": 14,
+    "memory_bytes": 68719476736,
+    "go_toolchain": "go version go1.27.2 darwin/arm64"
+  },
+  "source_parent_commit": "a84513c5b38a6500d3166162882c43d987cc7220",
+  "source_index": "docs/validation/recovery-controls/source-freeze.json",
+  "source_frozen_files": 710,
+  "source_stable": true,
+  "setup_corrections": [
+    "The initial public fixture compared full transient state to the saved baseline after two intentional electrical edits. Existing paused editing marks accepted physics stale and advances the requested run. Three preserved observations identify fixture assertions only; no product runtime changed. The final fixture compares complete source state across recovery operations at the actual pre-operation boundary and separately verifies unchanged accepted sample values.",
+    "Verify is awaited by exact operation ID before Save; simulation.wait alone does not await Verify.",
+    "All public fixture directories and processes are freshly owned. Automatic recovery is disabled throughout the workflow."
+  ],
+  "source_delta": {
+    "scripts/recovery-control-contracts-demo.py": {
+      "before": null,
+      "after": "6b4f32f5d047b93f57cbd0cec061ec6a1330075984ff182cd1de17463b8d9c26"
+    },
+    "workbench/capability_details.go": {
+      "before": "590746d95cd05ab1594362e154c59c112a0c20041f3683382116e1caeeaed250",
+      "after": "943e16b3bc50c2fc8c57fd67950b6e911d76d9faaae4564242f68f48da1fcf02"
+    },
+    "workbench/recovery_control_capabilities.go": {
+      "before": null,
+      "after": "01bab7eea242b4ba78e421f5cc97f636a2e2971d64b3af863b17a06b3f159ff4"
+    },
+    "workbench/recovery_control_contracts_test.go": {
+      "before": null,
+      "after": "cad58d7f2f74ea5ef04d5a60230671ccf08d27b75879aae6a38e8bd2b0566ef2"
+    }
+  },
+  "binary_sha256": {
+    "build/elab": "00ed94ec04aaea0ee8786cad5d6bd2a678f3c993228e106994025bfb9ce730c8",
+    "build/elab-agent": "e722080835dfa5766a2dd235b0f226d7782373cf43f7fa071b6a0033f0074957",
+    "build/elab-conformance": "4e6d8fd28845abb46c41d2664d13d6700ec80e44e415fafb0e0210b02bf01ba6",
+    "build/elab-ui-audit": "bac3a059d8bf3f4fa0dceaa3742df34385b919942fbe8187e3826daa466f1710",
+    "build/ELab-0.119.0-136-recovery-controls-candidate.app/Contents/MacOS/ELab": "00ed94ec04aaea0ee8786cad5d6bd2a678f3c993228e106994025bfb9ce730c8"
+  },
+  "candidate": "build/ELab-0.119.0-136-recovery-controls-candidate.app",
+  "candidate_promoted": false,
+  "new_application_commands": 0,
+  "existing_commands": 162,
+  "new_contracts": 6,
+  "commands_with_contracts_before": 123,
+  "commands_with_contracts_after": 129,
+  "commands_without_contract": 33,
+  "default_catalog_output_schemas_models_numerical_methods_work_limits_file_versions_unchanged": true,
+  "quality": {
+    "lint_imports_staticcheck": true,
+    "python_tests": 37,
+    "root_native_race_and_vet": true
+  },
+  "process_quality": [
+    {
+      "name": "build",
+      "argv": [
+        "./scripts/build.sh"
+      ],
+      "started_utc": "2026-10-17T15:35:49.054616+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 1.078290749923326,
+      "finished_utc": "2026-10-17T15:35:50.132921+00:00"
+    },
+    {
+      "name": "quality",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T15:35:50.144622+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 363.1827542920364,
+      "finished_utc": "2026-10-17T15:41:53.330681+00:00"
+    }
+  ],
+  "process_public": [
+    {
+      "name": "native-smoke",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.119.0-136-recovery-controls-candidate.app/Contents/MacOS/ELab",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "started_utc": "2026-10-17T15:42:12.141000+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 39.991832875064574,
+      "finished_utc": "2026-10-17T15:42:52.133343+00:00"
+    },
+    {
+      "name": "public-suites",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+        "--native-binary",
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.119.0-136-recovery-controls-candidate.app/Contents/MacOS/ELab",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recovery-control-contracts/public-final"
+      ],
+      "started_utc": "2026-10-17T15:42:52.147270+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 48.6467900830321,
+      "finished_utc": "2026-10-17T15:43:40.794679+00:00"
+    },
+    {
+      "name": "headless-recovery",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/recovery-control-contracts-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/recovery-control-contracts/headless-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recovery-control-contracts/headless-final-assets"
+      ],
+      "started_utc": "2026-10-17T15:43:40.809196+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 0.1705597499385476,
+      "finished_utc": "2026-10-17T15:43:40.979758+00:00"
+    }
+  ],
+  "native_workflow": {
+    "started_utc": "2026-10-17T15:44:02.423425+00:00",
+    "status": "completed",
+    "owned_pid": 5712,
+    "demo_exit_code": 0,
+    "native_exit_code": 0,
+    "elapsed_seconds": 0.910837542032823,
+    "finished_utc": "2026-10-17T15:44:03.334376+00:00"
+  },
+  "four_adapter_numerical_checks": 27596,
+  "four_adapter_project_workflow_checks": 44,
+  "four_adapter_project_snapshots": 56,
+  "native_smoke_stages": 45,
+  "recovery_review": {
+    "passed": true,
+    "contracts_per_transport": 6,
+    "admission_refusals_per_transport": 8,
+    "terminal_jobs_per_transport": 10,
+    "recorded_rows_per_transport": 4,
+    "recorded_voltage_current_reference_checks": 16,
+    "preserved_live_voltage_reference_checks": 2,
+    "maximum_recorded_voltage_error_v": 0.0,
+    "maximum_recorded_current_error_a": 5.421010862427522e-20,
+    "actors": {
+      "headless": "agent.stdio",
+      "native": "agent.socket"
+    },
+    "capsules": {
+      "headless": {
+        "sha256": "ec444d0c45d685ea29740306f48894297caa85b92928238133b63efe80fa7757",
+        "document_sha256": "5fcee42ae378599279d4aca6732dd80c9352616e485e4a08d25a0b1dc725f605",
+        "rows": 4
+      },
+      "native": {
+        "sha256": "a3ad36525512ac5bdf720e3937fa86bb9183dbd662d519ae466bd352211edcd1",
+        "document_sha256": "1c8cb3f2beec50e0a29926e3b3e11d8d63d0a2d6366f36b9e5447b16cea5a89f",
+        "rows": 4
+      }
+    },
+    "exact_manual_file_and_kept_capture_preserved": true,
+    "exact_capsule_hash_and_embedded_document_checksum": true,
+    "unavailable_folder_cached_selection_and_both_disable_aliases": true,
+    "failed_key_replay_new_key_repair": true,
+    "dedup_and_clean_retirement_without_new_capsule": true,
+    "historical_snapshot_survives_retirement": true,
+    "equal_schemas_errors_rows_live_physics": true,
+    "scope": "Named public recovery workflows; controlled core race tests separately cover blocked workers/cancel/Close/replacement/newer catalog interleavings"
+  },
+  "two_prior_import_contracts_exactly_unchanged": true,
+  "typed_raw_gzip_numerical_review_equal": true,
+  "sdk_verified": {
+    "passed": true,
+    "source": "aa9d023243a6bded514c3d9696c08a9c917119c4",
+    "archive_sha256": "22b086442570641e4ae56e9937dd6483c26f92cde953f3aa3fc11811710ed7c5"
+  },
+  "native_production_inventory_unchanged": {
+    "sources": 57,
+    "sites": 388,
+    "commands": 162
+  },
+  "preserved_bundle_trees": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7
+    }
+  },
+  "fixture_files": {
+    "docs/validation/recovery-controls/fixtures/headless/manual.elab": "2768103aae9256847175b641ce895fc9abbaebc5e2ef036391601cb3f75e04d9",
+    "docs/validation/recovery-controls/fixtures/headless/checkpoint-capsule.json": "ec444d0c45d685ea29740306f48894297caa85b92928238133b63efe80fa7757",
+    "docs/validation/recovery-controls/fixtures/native/manual.elab": "84465cddb1759e11f12f46b959e8d225c342e5c71fe1eaaa7ad6f6a958539ba4",
+    "docs/validation/recovery-controls/fixtures/native/checkpoint-capsule.json": "a3ad36525512ac5bdf720e3937fa86bb9183dbd662d519ae466bd352211edcd1"
+  },
+  "report_encoding": {
+    "conformance-report.json.gz": {
+      "decoded_bytes": 18177770,
+      "decoded_sha256": "f8d522b4ead008e9fb0465ed1de83c48b1e39302a215bc84503b995e163f3681",
+      "gzip_bytes": 1659887,
+      "gzip_sha256": "73b3d291a2254f9d05cf34a01e91695160921e3a01b81d46e4925f1dd2aae364"
+    }
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "limitations": [
+    "Contracts and regressions describe existing recovery behavior; no runtime/model/solver/work limit/command ID/file format change.",
+    "Blocked worker, cancel/Close/replacement, newer catalog/selection and installation cleanup interleavings use controlled core race tests; no nondeterministic public race claim.",
+    "Source paths, actors, session/job/capsule IDs and timestamps are transport/session provenance; exact captured/manual bytes are checked within each workflow and schemas/data/physics across transports.",
+    "Three initial public fixture failures were assertions across intentional electrical edits, not product defects. Frozen final source passes the complete gate.",
+    "Thirty-three command IDs still lack scoped contracts. Complete physical input/AX, events, general storage/hardware, visible latency, distribution, physical printers and participant gates remain open.",
+    "Private 0.119 /136 candidate is unpromoted. Canonical 0.105, preserved 0.104 and prior 0.118 candidate remain unchanged."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/recovery-controls/archive.py.txt": "ca8e7137f5ab24f70753df4b26337480201d15832a73df510585fe301d98e3e1",
+    "docs/validation/recovery-controls/build-initial.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/recovery-controls/build.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/recovery-controls/conformance-report.json.gz": "73b3d291a2254f9d05cf34a01e91695160921e3a01b81d46e4925f1dd2aae364",
+    "docs/validation/recovery-controls/contract-inventory.json": "8c106289185cb8b0fdfd4c67d7cdc039e5e6cd55f3ae9ffbed22dbe4f62b1e31",
+    "docs/validation/recovery-controls/core-focused.log.txt": "aeb495c8e6c3b1f8b6ecd5d1f3325742cdeb77461b605ed8aa5d2af7395f4750",
+    "docs/validation/recovery-controls/fixtures/headless/checkpoint-capsule.json": "ec444d0c45d685ea29740306f48894297caa85b92928238133b63efe80fa7757",
+    "docs/validation/recovery-controls/fixtures/headless/manual.elab": "2768103aae9256847175b641ce895fc9abbaebc5e2ef036391601cb3f75e04d9",
+    "docs/validation/recovery-controls/fixtures/native/checkpoint-capsule.json": "a3ad36525512ac5bdf720e3937fa86bb9183dbd662d519ae466bd352211edcd1",
+    "docs/validation/recovery-controls/fixtures/native/manual.elab": "84465cddb1759e11f12f46b959e8d225c342e5c71fe1eaaa7ad6f6a958539ba4",
+    "docs/validation/recovery-controls/headless-final.json": "5c076a7ba61113e10b380fd0c625a9dd3bc5b056b6d7ca7bed29418073a4b2e1",
+    "docs/validation/recovery-controls/headless-initial.log.txt": "d347ad8a7c15c8ee941d3430c53ba915a365eb4e655012c57fb2bc3256802caa",
+    "docs/validation/recovery-controls/headless-observation.log.txt": "c84180957fe6f932c31ad8be4cf22c196b39549cc43e421dce8575b7a751a5e5",
+    "docs/validation/recovery-controls/headless-preflight.log.txt": "a3517a1eb12721ced92b10a02b5db3ba64d5949a164ed66505855d5fc6e7ed21",
+    "docs/validation/recovery-controls/headless-ready.json": "00703e4c6d6db0e81655cd4ec4cc7cc5aa507a327f8122bf211838fdf6c74675",
+    "docs/validation/recovery-controls/headless-ready.log.txt": "40c97b63707e079181193f830c9339e75bb2a0ac6cad804ae6a9c5d1b796331b",
+    "docs/validation/recovery-controls/headless-recovery.log.txt": "40c97b63707e079181193f830c9339e75bb2a0ac6cad804ae6a9c5d1b796331b",
+    "docs/validation/recovery-controls/import-contracts-unchanged.json": "c86c92442a6ae25d3a4cc22770eb90d8dc88f2de9c09a7afbec3e6dfd261b069",
+    "docs/validation/recovery-controls/inventory.py.txt": "c4d83ec7c848e3be215624704cff42b85f5219e1c36f31f4751f5a1c88cb7c07",
+    "docs/validation/recovery-controls/native-final.json": "fe7fe57634fe57e2045d02ba4805dd0343480d1a6f87763cdb7063b20bb2aed7",
+    "docs/validation/recovery-controls/native-host.log.txt": "5e55e41b04f5581545ac675e6e0115a8461e8d1a8041bb759919ede5eecd3b4a",
+    "docs/validation/recovery-controls/native-smoke.log.txt": "4a78c033de6d9521721c812516496729ee395e43e7806844a85ac53325b684be",
+    "docs/validation/recovery-controls/native-viewer.log.txt": "a1117b6562b42ffba5f40b89895bb69abf69803b6f5344c87712615497973515",
+    "docs/validation/recovery-controls/native.py.txt": "b56957c7b98cea5aab2fedc96339cedc9315fc4ebab34c3b2a5f5038edae3ed9",
+    "docs/validation/recovery-controls/package.json": "1ee7a934288d172d68b2836b1a10058853c29f8ac32b50f29b66cd175c4d3307",
+    "docs/validation/recovery-controls/process-native.json": "3ef1786a899ef20cd00095f0a3919e43d042a3842c6f047056c6fc2462359688",
+    "docs/validation/recovery-controls/process-public.json": "d49a61cbf99608910c4e99ca20f334210e43e64ff01d69977cbce1dff20acdd4",
+    "docs/validation/recovery-controls/process-quality.json": "eb9d994d434d7954e64c80b52aa36559139feb08ab9b20bee5a8e6467ae6ce94",
+    "docs/validation/recovery-controls/public-suites.log.txt": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "docs/validation/recovery-controls/qualify.py.txt": "d12e4c3e9e4cf88be65afff339e4941997edefbbad9a93e08d91cd658620ba0a",
+    "docs/validation/recovery-controls/quality.log.txt": "7dbc20b4c16dbd84ee15ea97404e5b63cfa36c018e743f3e8314e9dc5bd6ea70",
+    "docs/validation/recovery-controls/recovery-review.json": "a4713afcae303f953fd7b5499e337da9fb4ef541f2b735d118224a839c6ce363",
+    "docs/validation/recovery-controls/recovery-review.py.txt": "a84160e9de4e9c7a7f9918653d7b8baf6f042749edc943cddcea5fa2c76734e0",
+    "docs/validation/recovery-controls/report-review-gzip.json": "9ac5d406d229748cf1758ed58b4cf0da9dd7d675a461b9d4be6ca03d46f73f84",
+    "docs/validation/recovery-controls/report-review.json": "9ac5d406d229748cf1758ed58b4cf0da9dd7d675a461b9d4be6ca03d46f73f84",
+    "docs/validation/recovery-controls/review.go.txt": "808b076c8bf0bac85714632b87ab06a8364742575b33a383a734d7e37c729fb6",
+    "docs/validation/recovery-controls/setup-notes.json": "6314205a61f672010eb89cb5f93e2225266712187f70a939b7c1c00deba0ec46",
+    "docs/validation/recovery-controls/source-delta.json": "9f251472abc858059d72d8e4fd0b6ebb9df626b5a4eecd7fb539230e91259a9f",
+    "docs/validation/recovery-controls/source-freeze.json": "8caebb803af1d59b37cbe94e02e02da5aa63d4dea5df36916d0037a56f02fda0"
+  }
+}

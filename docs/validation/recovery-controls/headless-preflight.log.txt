@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/scripts/recovery-control-contracts-demo.py", line 212, in <module>
+    main()
+    ~~~~^^
+  File "/Users/dshills/Development/projects/ELab/scripts/recovery-control-contracts-demo.py", line 181, in main
+    assert final['transient']['sample'] == baseline['transient']['sample'] and final['run_id'] == baseline['run_id']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/scripts/recovery-control-contracts-demo.py", line 214, in <module>
+    main()
+    ~~~~^^
+  File "/Users/dshills/Development/projects/ELab/scripts/recovery-control-contracts-demo.py", line 181, in main
+    assert final['transient']['sample'] == baseline['transient']['sample'] and final['run_id'] == baseline['run_id'], {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'baseline_sample': {'time_s': 0.003, 'input_v': 5, 'voltage_v': 1.2959088965914107, 'current_a': 0.00037040911034085894, 'energy_j': 8.396899341323838e-07}, 'final_sample': {'time_s': 0.003, 'input_v': 5, 'voltage_v': 1.2959088965914107, 'current_a': 0.00037040911034085894, 'energy_j': 8.396899341323838e-07}, 'baseline_run': 3, 'final_run': 5}

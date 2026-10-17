@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "contracts_per_transport": 6,
+  "admission_refusals_per_transport": 8,
+  "terminal_jobs_per_transport": 10,
+  "recorded_rows_per_transport": 4,
+  "recorded_voltage_current_reference_checks": 16,
+  "preserved_live_voltage_reference_checks": 2,
+  "maximum_recorded_voltage_error_v": 0.0,
+  "maximum_recorded_current_error_a": 5.421010862427522e-20,
+  "actors": {
+    "headless": "agent.stdio",
+    "native": "agent.socket"
+  },
+  "capsules": {
+    "headless": {
+      "sha256": "ec444d0c45d685ea29740306f48894297caa85b92928238133b63efe80fa7757",
+      "document_sha256": "5fcee42ae378599279d4aca6732dd80c9352616e485e4a08d25a0b1dc725f605",
+      "rows": 4
+    },
+    "native": {
+      "sha256": "a3ad36525512ac5bdf720e3937fa86bb9183dbd662d519ae466bd352211edcd1",
+      "document_sha256": "1c8cb3f2beec50e0a29926e3b3e11d8d63d0a2d6366f36b9e5447b16cea5a89f",
+      "rows": 4
+    }
+  },
+  "exact_manual_file_and_kept_capture_preserved": true,
+  "exact_capsule_hash_and_embedded_document_checksum": true,
+  "unavailable_folder_cached_selection_and_both_disable_aliases": true,
+  "failed_key_replay_new_key_repair": true,
+  "dedup_and_clean_retirement_without_new_capsule": true,
+  "historical_snapshot_survives_retirement": true,
+  "equal_schemas_errors_rows_live_physics": true,
+  "scope": "Named public recovery workflows; controlled core race tests separately cover blocked workers/cancel/Close/replacement/newer catalog interleavings"
+}

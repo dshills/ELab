@@ -1,0 +1,69 @@
+from pathlib import Path
+import hashlib,json,math
+root=Path.cwd();out=root/'build/recovery-control-contracts'
+reports=[json.loads((out/(t+'-final.json')).read_text()) for t in ['headless','native']]
+checks=0;max_v=0.;max_a=0.;actors={};capsules={}
+expected_commands=['recovery.configure','recovery.checkpoint','recovery.checkpoint','recovery.scan','recovery.scan','recovery.configure','recovery.configure','recovery.scan','recovery.scan','recovery.checkpoint']
+for transport,r in zip(['headless','native'],reports):
+ assert r['passed'] and r['commands']==162 and len(r['contracts'])==6 and len(r['admission_refusals'])==8 and len(r['work'])==10
+ assert all(s['x-command-contract']['scope']=='recovery-controls-and-work' for s in r['contracts'].values())
+ assert [w['command'] for w in r['work']]==expected_commands
+ assert [w['status'] for w in r['work']]==['completed']*7+['failed','completed','completed']
+ actors[transport]='agent.stdio' if transport=='headless' else 'agent.socket'
+ assert all(w['actor']==actors[transport] for w in r['work'])
+ assert r['work'][7]['error']['code']=='file-error' and r['work'][8]['id']!=r['work'][7]['id']
+ assert r['work'][0]['recovery_configuration_applied'] and r['work'][0]['recovery_catalog_applied']
+ for w in r['work'][5:7]:assert w['recovery_configuration_applied'] and not w['recovery_catalog_applied']
+ assert sum(bool(w.get('result_recovery_id')) for w in r['work'])==1
+ assert r['retry']==dict(failed_code='file-error',same_original_job=True,duplicate_failure_after_repair=True,new_key_succeeded=True)
+ assets=out/(transport+'-final-assets');manual_raw=(assets/'manual.elab').read_bytes();capsule_raw=(assets/'checkpoint-capsule.json').read_bytes()
+ assert hashlib.sha256(manual_raw).hexdigest()==r['manual_sha256'] and hashlib.sha256(capsule_raw).hexdigest()==r['capsule_sha256']
+ manual=json.loads(manual_raw);capsule=json.loads(capsule_raw);document=capsule['document']
+ assert capsule['format']=='elab.recovery' and capsule['version']==1 and capsule['source_path']==str(assets/'manual.elab')
+ assert capsule['id']==r['work'][1]['result_recovery_id']==r['final']['recovery']['last_snapshot']
+ assert capsule['saved_at']==r['work'][1]['result_recovery_saved_at']==r['final']['recovery']['last_saved_at']
+ # Compact the exact raw document token, preserving Go's numeric spellings.
+ text=capsule_raw.decode();start=text.index('"document":')+len('"document":');start+=len(text[start:])-len(text[start:].lstrip())
+ _,end=json.JSONDecoder().raw_decode(text,start);quoted=False;escaped=False;compact=[]
+ for ch in text[start:end]:
+  if quoted:
+   compact.append(ch)
+   if escaped:escaped=False
+   elif ch=='\\':escaped=True
+   elif ch=='"':quoted=False
+  elif ch=='"':quoted=True;compact.append(ch)
+  elif not ch.isspace():compact.append(ch)
+ assert hashlib.sha256(''.join(compact).encode()).hexdigest()==capsule['document_sha256']
+ assert document['graph']['components']==r['dirty']['components'] and document['graph']['wires']==r['dirty']['wires']
+ assert manual['graph']['components']==r['baseline']['components']==r['final']['components']
+ assert len(document['recordings']['entries'])==len(manual['recordings']['entries'])==1
+ assert document['recordings']==manual['recordings']
+ data=document['recordings']['entries'][0]['data'];assert data['metadata']==r['metadata'] and data['rows']==r['rows']
+ assert [p['id'] for p in r['metadata']['probes']]==['v:C1','i:C1']
+ assert not r['baseline']['document']['dirty'] and r['dirty']['document']['dirty'] and not r['final']['document']['dirty']
+ assert r['final']['document']['recording_count']==1 and r['final']['paused'] and not r['final']['recovery']['enabled']
+ assert r['final']['recovery']['candidates']==[] and r['final']['recovery']['selected']=='' and r['final']['recovery']['interval_s']==1.5
+ assert not list((assets/'recovery').glob('*.elab-recovery')) and not (assets/'recovery-preserved').exists()
+ for key in ['components','wires','view','transient','mixed','npn','scope','paused','undo_entry','redo_entry','run_id','electrical_revision','document','operations','recording','selected_operation','last_operation']:
+  assert r['restored'].get(key)==r['final'].get(key),key
+ assert r['final']['run_id']>r['baseline']['run_id'] and r['final']['transient']['stale']
+ assert r['final']['transient']['sample']==r['baseline']['transient']['sample']
+ assert [row['time_s'] for row in r['rows']]==[0,.001,.002,.003]
+ for row in r['rows']:
+  t=row['time_s'];dv=abs(row['values'][0]-5*(-math.expm1(-t/.01)));di=abs(row['values'][1]-.0005*math.exp(-t/.01))
+  assert dv<1e-10 and di<1e-12;checks+=2;max_v=max(max_v,dv);max_a=max(max_a,di)
+ sample=r['final']['transient']['sample'];assert sample['time_s']==.003 and abs(sample['voltage_v']-5*(-math.expm1(-.003/.01)))<1e-10
+ capsules[transport]={'sha256':r['capsule_sha256'],'document_sha256':capsule['document_sha256'],'rows':len(data['rows'])}
+for key in ['contracts','retry','rows']:assert reports[0][key]==reports[1][key],key
+assert [(e['command'],e['code']) for e in reports[0]['admission_refusals']]==[(e['command'],e['code']) for e in reports[1]['admission_refusals']]
+for stage in ['baseline','dirty','restored','final']:
+ for key in ['components','wires','transient','mixed','npn','scope','paused','run_id','electrical_revision']:assert reports[0][stage].get(key)==reports[1][stage].get(key),(stage,key)
+result=dict(passed=True,contracts_per_transport=6,admission_refusals_per_transport=8,terminal_jobs_per_transport=10,
+ recorded_rows_per_transport=4,recorded_voltage_current_reference_checks=checks,preserved_live_voltage_reference_checks=2,
+ maximum_recorded_voltage_error_v=max_v,maximum_recorded_current_error_a=max_a,actors=actors,capsules=capsules,
+ exact_manual_file_and_kept_capture_preserved=True,exact_capsule_hash_and_embedded_document_checksum=True,
+ unavailable_folder_cached_selection_and_both_disable_aliases=True,failed_key_replay_new_key_repair=True,
+ dedup_and_clean_retirement_without_new_capsule=True,historical_snapshot_survives_retirement=True,
+ equal_schemas_errors_rows_live_physics=True,
+ scope='Named public recovery workflows; controlled core race tests separately cover blocked workers/cancel/Close/replacement/newer catalog interleavings')
+(out/'recovery-review.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))
