@@ -1,0 +1,224 @@
+{
+  "version": "0.124.0",
+  "build": "141",
+  "status": "updated private owner-review alpha; supported-alpha promotion and full MVP acceptance remain open",
+  "source_commit": "b2f485bb4138a144a878a468a0abee3cfa223a39",
+  "clean_build_vcs": true,
+  "previous_review_version": "0.123.0 /140",
+  "canonical_promoted": false,
+  "native_sha256": "5e1aabde0744f2134b54a90bf5d5b159f70c3259130904e5b7627206b7e0cd60",
+  "agent_sha256": "894fdfb80a1de5038ec5578e7590e1a0664133a54504716c701df5e44ab2bc5c",
+  "release_diff": [
+    "routing cache publication rechecks duplicate misses under lock; unchanged geometry/capacity/command behavior",
+    "native value refusal continues through its own accepted viewport resize; later edits still invalidate it",
+    "singular print labels; same command bindings",
+    "native smoke now exercises real Cocoa inspector focus/set/Apply with observed focus completion"
+  ],
+  "quality": {
+    "scripts_check": "passed: lint/imports/Staticcheck, 38 Python tests, root/native race and vet",
+    "native_race_seconds": 142.643,
+    "new_runtime_stages": [
+      {
+        "name": "native-smoke",
+        "command": [
+          "/private/tmp/elab-first-version-141-runtime/native",
+          "--smoke",
+          "--smoke-timeout",
+          "2m"
+        ],
+        "status": "completed",
+        "exit_code": 0,
+        "elapsed_seconds": 39.082216916023754
+      },
+      {
+        "name": "public-suites",
+        "command": [
+          "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+          "--agent-binary",
+          "/private/tmp/elab-first-version-141-runtime/agent",
+          "--native-binary",
+          "/private/tmp/elab-first-version-141-runtime/native",
+          "--project-contract-suite",
+          "--electrical-suite",
+          "--inductor-suite",
+          "--opamp-suite",
+          "--opamp-storage-suite",
+          "--capacity-suite",
+          "--artifacts",
+          "/private/tmp/elab-first-version-141-runtime/public"
+        ],
+        "status": "completed",
+        "exit_code": 0,
+        "elapsed_seconds": 48.81884516600985
+      }
+    ],
+    "four_adapters": [
+      "in-process",
+      "headless-stdio",
+      "headless-socket",
+      "native-socket"
+    ]
+  },
+  "reference_parity": {
+    "passed": true,
+    "cases": [
+      {
+        "task": "led",
+        "constructed_graph_matches_native_fixture": true,
+        "native_ui_numerical_reference_matches": true,
+        "native_endpoint_matches": true,
+        "fixture_sha256": "3fa7d62e283b88765cb8c9b07533254aa899516a8b72298d37121f61e916dd82",
+        "project_sha256": "96635fc0cd1ab4b13258373c4e5ed474dc3239dda4dfc37202cbce59324cc032"
+      },
+      {
+        "task": "rc",
+        "constructed_graph_matches_native_fixture": true,
+        "native_ui_numerical_reference_matches": true,
+        "native_endpoint_matches": true,
+        "fixture_sha256": "6380351c8c51640b0221969b97259cf49161989f300d4eb1b9bdcf885759e338",
+        "project_sha256": "4c86701997fb227c1f3f8e55b2e8ec613ca7a51d75b4061356cd51185203eadf"
+      },
+      {
+        "task": "flasher",
+        "constructed_graph_matches_native_fixture": true,
+        "native_ui_numerical_reference_matches": true,
+        "native_endpoint_matches": true,
+        "fixture_sha256": "b0dc7c61c9d757086937176d7cc8de1539e4cac82e8f95d5f9a00576cc62d4b8",
+        "project_sha256": "d62dba5123d42b3dbf76356a7c28411a46ab09678aad9aa72ec727889c9a7a95"
+      }
+    ],
+    "comparison": "Every component/wire field; every reported result field except run/electrical identities; numerical rel 1e-9 / abs 1e-12",
+    "limitations": [
+      "Native endpoint loading/observation does not replace the recorded physical UI construction walkthrough",
+      "File failure, crash recovery, cancellation and live interaction have separate acceptance checks"
+    ]
+  },
+  "direct_ui": {
+    "binary_sha256": "5e1aabde0744f2134b54a90bf5d5b159f70c3259130904e5b7627206b7e0cd60",
+    "harness": "separate private bundle; candidate executable byte-identical, harness bundle metadata differs",
+    "invalid_zero": "native accessible Set value/Apply; error remains after resized layout",
+    "correction": "native 2k preset then Resume; shared fresh current 0.001476723549138745 A",
+    "print_label": "Print 1 page observed in actual preview, empty destination; zero submitted jobs",
+    "accessibility_limit": "initial inspector fields were exposed in this run; subsequent AX omission remains unresolved and is not accepted as fixed",
+    "private_host": "saved separately and closed normally"
+  },
+  "reused_evidence": [
+    "original native construction/minimum-window/theme/file/scope walkthroughs; product/SDK changes do not alter those paths",
+    "earlier cache capacity/caller ownership regressions and cold-routing measurement",
+    "real configured-printer job 161 completion; paper inspection remains pending"
+  ],
+  "open_gates": [
+    "owner task-sheet feedback",
+    "visible p95 and real difficult-workload performance qualification",
+    "actual VoiceOver/external AX completeness and IME/human fast typing",
+    "OS display modes/monitor transitions and other hardware",
+    "clean-account installation, signing/notarization/public distribution/native rights",
+    "paper/media/margin/scale/device-cancellation qualification",
+    "broader PRD mounted agent coverage and ten-person study"
+  ],
+  "sdk_changed": false,
+  "source_format_models_commands_changed": false,
+  "source_sha256": {
+    "workbench/routing.go": "96e0d727d86f0b5eee7a23d27254c9b867f59ea9c371dd20391b1ab8ad0f492a",
+    "workbench/routing_cache_test.go": "5001e500217b7b185553c4ac54362b665cf8ddf38d28c9937664195c8af0a8fa",
+    "workbench/routing_benchmark_test.go": "1c59d73c260e28e54d87afc01bb5ef9372740ac34f70559f7f8f6a80adfdc32a",
+    "desktop/viewport.go": "8452950aa3113be66c59ed10b8f26ef21e0a5be3d1b4aee5ec57fb8dbd966590",
+    "desktop/viewport_test.go": "f67b9f3f3f689d682922e1893c1ddf8e43c6c6ef371ed805e418985fb21b6abc",
+    "desktop/printing.go": "9c40645db6de5affc3ae9d654f72c7003671f5d8c23c8bd7de93ffa35bea8c59",
+    "desktop/smoke.go": "56ac1bbdbdcb9da2c608834ee7efdf592a4ef65fa9479613da6c9a063d27c58f",
+    "desktop/value_apply_smoke.go": "97c32c7e8d85bea40c3c827e180f25dec20397b30fe365636d9ac735c42e6efb",
+    "research/13-native-command-inventory.json": "e1685028b5eab84adc82a9fe0dd97f5f242cd2e1a19b81a180c2b5c51d5d5852"
+  },
+  "public_report_uncompressed_sha256": "5f774b6bbeb308345b52d72f8dd7b0f973af2008cef77f494b3607fad202a312",
+  "isolated_native_inspector": {
+    "current_a": 0.001344737452917332,
+    "event": "elab.led-inspector.accessibility.smoke",
+    "initial_native_controls": [
+      {
+        "grid_scope": "",
+        "grid_incarnation": 0,
+        "grid_pending": false,
+        "grid_target_generation": 0,
+        "grid_generation": 0,
+        "object_identity": 259,
+        "id": "node:dmFsdWUtZW50cnk",
+        "role": "AXTextField",
+        "name": "Component value",
+        "value": "2 k\u03a9",
+        "enabled": true,
+        "row_count": 0,
+        "column_count": 0,
+        "row_index": [
+          -1,
+          0
+        ],
+        "column_index": [
+          -1,
+          0
+        ],
+        "text_selection": [
+          0,
+          0
+        ],
+        "insertion_line": 0,
+        "frame": [
+          2895,
+          858,
+          231,
+          37
+        ],
+        "selected": false,
+        "expanded": false,
+        "parent": "node:c2lkZWJhci1jb250ZW50",
+        "domain_id": "value-entry",
+        "hit_test_id": "node:dmFsdWUtZW50cnk"
+      },
+      {
+        "grid_scope": "",
+        "grid_incarnation": 0,
+        "grid_pending": false,
+        "grid_target_generation": 0,
+        "grid_generation": 0,
+        "object_identity": 260,
+        "id": "node:YXBwbHktdmFsdWU",
+        "role": "AXButton",
+        "name": "Apply value",
+        "value": null,
+        "enabled": true,
+        "row_count": 0,
+        "column_count": 0,
+        "row_index": [
+          -1,
+          0
+        ],
+        "column_index": [
+          -1,
+          0
+        ],
+        "text_selection": [
+          -1,
+          0
+        ],
+        "insertion_line": 9223372036854775807,
+        "frame": [
+          2895,
+          799,
+          104,
+          47
+        ],
+        "selected": false,
+        "expanded": false,
+        "parent": "node:c2lkZWJhci1jb250ZW50",
+        "domain_id": "apply-value",
+        "hit_test_id": "node:YXBwbHktdmFsdWU"
+      }
+    ],
+    "passed": true,
+    "resistance_ohm": 2200,
+    "scope": "in-process Cocoa selectors, not external AX or VoiceOver acceptance"
+  },
+  "native_smoke_log_uncompressed_sha256": "0b08ef7364a670365d4fbb3c95f98eae98cc0330bea0e9d87a4c210d037d29e4",
+  "package_manifest_sha256": "d4b008f18f06ad0e7eca4b7187af709d3ba9359d27fd67c747181297faf7ed56",
+  "package_files": 126,
+  "package_path": "/Users/dshills/Development/projects/ELab/build/ELab-0.124.0-141-review"
+}

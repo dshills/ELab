@@ -1,6 +1,8 @@
-# ELab first-version review · 0.123.0 /140
+# ELab first-version review · 0.124.0 /141
 
-This is the first owner-review alpha. Open [ELab.app](../build/ELab-0.123.0-140-review/ELab.app) in the [review folder](../build/ELab-0.123.0-140-review). The folder includes the matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required to use the app. The previous canonical app is preserved.
+This is the updated owner-review alpha. Open [ELab.app](../build/ELab-0.124.0-141-review/ELab.app) in the [review folder](../build/ELab-0.124.0-141-review). The folder includes the matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required to use the app. The previous canonical app and 0.123.0 /140 review folder are preserved.
+
+Before opening the replacement, save your work and quit the earlier review app when ready. Its open window was left untouched. Version 0.124 fixes routing-cache eviction during concurrent misses, keeps invalid-value errors visible after automatic canvas resizing, and corrects singular print labels. Models, project format, commands and the pinned Vellum SDK are unchanged.
 
 The reference workflows and source quality gate pass. The copied app and agent also pass native smoke and four-adapter public conformance with repository/SDK/toolchain/cache reads and outbound IP denied on the recorded Mac. This does not declare the full PRD MVP complete.
 
@@ -39,7 +41,7 @@ In another terminal, run `./elab-agent --connect /absolute/path/to/endpoint.json
 - Tested on this Apple Silicon Mac with macOS 26.6.2. The enforced minimum is 1040×720 in the mounted UI's units; the observed native frame is **1053×762 pixels**. App windows at 1280×800 and 1440×900 were inspected earlier. OS display modes, other hardware and monitor transitions remain unqualified.
 - Educational generic device models have the limits shown in the app. This is not general SPICE compatibility or PCB layout software.
 - Complete VoiceOver, IME/fast typing, visible p95 latency under difficult solves, clean-account installation and the ten-person study remain open. A real Brother queue [completed one LED test job](ui-audit/first-version/physical-print/checkpoint.json); paper delivery, legibility, margins and scale remain unqualified.
-- An invalid-value error can disappear after canvas resizing in this review build; the valid circuit is preserved. A [source repair has been directly retested](ui-audit/first-version/README.md#value-refusal-and-settled-input-checkpoint) and awaits the next qualified candidate.
+- Some visible inspector controls can be omitted from external accessibility snapshots. The native Cocoa selector check passes, but complete external-reader acceptance remains open.
 - This is a private unsigned build; notarization and public distribution/native-rights qualification remain open. The versioned review folder is separate from `build/ELab.app` at 0.105.0 /120.
 
-The [delivery plan](34-first-version-plan.md) and [native walkthrough/agent evidence](ui-audit/first-version/README.md) track remaining acceptance work. This handoff begins owner feedback; it does not reopen feature scope.
+The [delivery plan](34-first-version-plan.md), [updated build receipt](ui-audit/first-version/consolidated-review-checkpoint.json) and [native walkthrough/agent evidence](ui-audit/first-version/README.md) track remaining acceptance work. This handoff continues owner feedback; it does not reopen feature scope.
