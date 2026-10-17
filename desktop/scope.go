@@ -306,10 +306,12 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	traceStyle.MinSize = ui.Some(ui.Size{Width: 320, Height: 32})
 	traceStyle.MaxSize = ui.Some(ui.Size{Height: 32})
 	traceSelector.Style.Padding = ui.Some(ui.Insets{Top: 4, Bottom: 4, Left: 10, Right: 10})
+	export := ui.Node{ID: "export-csv", Kind: ui.Button, Text: "Export CSV", Accessibility: ui.Accessibility{Name: "Export scope CSV"}, Disabled: t == nil || t.Stale || !state.Scope.WindowValid, Activate: func() { s.beginFile("export.scope.csv", true, workbench.SaveParams{}, nil) }}
+	export.Style.Padding = ui.Some(ui.Insets{Top: 4, Bottom: 4, Left: 10, Right: 10})
 	s.scope.Revision = state.Revision
 	return ui.Node{ID: "scope-panel", Kind: ui.Column, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 288}), Padding: ui.Some(ui.UniformInsets(10)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: []ui.Node{
 		{ID: "scope-toolbar", Kind: ui.Toolbar, Grow: true, Style: chromeStyle(), Children: controls},
-		{ID: "rc-scope", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 120}), MaxSize: ui.Some(ui.Size{Height: 120})}, Custom: s.scope}, {ID: "scope-trace-row", Kind: ui.Toolbar, Style: traceStyle, Children: []ui.Node{traceSelector, quiet("scope-legend", legend)}}, quiet("step-work-status", stepStatus), s.cursorControls(state),
+		{ID: "rc-scope", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 120}), MaxSize: ui.Some(ui.Size{Height: 120})}, Custom: s.scope}, {ID: "scope-trace-row", Kind: ui.Toolbar, Style: traceStyle, Children: []ui.Node{export, traceSelector, quiet("scope-legend", legend)}}, quiet("step-work-status", stepStatus), s.cursorControls(state),
 	}}
 }
 func (s *screen) transientInspector(state workbench.Snapshot) []ui.Node {
@@ -328,8 +330,7 @@ func (s *screen) transientInspector(state workbench.Snapshot) []ui.Node {
 		title = "RLC experiment"
 		help = "Coil current and capacitor voltage stay continuous at source/switch events. Select L or C to set signed startup state."
 	}
-	nodes := s.probeInspector(state)
-	nodes = append(nodes, section("transient-title", title), quiet("transient-help", help))
+	nodes := []ui.Node{section("transient-title", title), quiet("transient-help", help)}
 	if state.StepWork != nil && state.StepWork.Error != nil {
 		nodes = append(nodes, quiet("step-work-error", state.StepWork.Error.Message))
 	}

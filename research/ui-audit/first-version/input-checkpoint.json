@@ -1,0 +1,110 @@
+{
+  "scope": "Rapid field continuation and scope/probe reachability repair; incomplete release qualification",
+  "source_base": "e6fb1c5eddbaf917d3c827fec693f6c51f73bab8",
+  "production_source_sha256": {
+    "desktop/field_context.go": "4f3abac0bc24fd5054e89ad5e479a6a9196ba0ab52faa9134294743a34b74bd5",
+    "desktop/main.go": "ec0aedb785f8f107cf67e9b75166fbffc3d9f5608fa596b450d633f96bc94958",
+    "desktop/scope.go": "fdbd3cc1920f0a1444b823b99d124aaa5fbc9e4f4e831ead99ef0a6ee194faf3",
+    "desktop/view.go": "9e8190ceb41ac368eee4ffe9988ca64ef9397a68252e26a5625851c83e6f0ca1",
+    "desktop/workflow.go": "2e09cd0daa7f171e0e919712d2d51aba96c60df89b823d4ea26f51193163d7a5"
+  },
+  "native_binary_sha256": "b7ecbf86f59083c641504e351b7bd643b5b8b1e04d8d1d1d6ac4bc8e269dcc37",
+  "sdk_source": "47b7153109735006305e3610520e489a953fcd97",
+  "native_repeats": [
+    {
+      "keys": "20 Up",
+      "field": "~\t\t\t\t\t\t163 stepper (settable, integer) Placement X, Value: 0, ID: node:cG9zaXRpb24teA",
+      "revision_refusal": false
+    },
+    {
+      "keys": "20 Down",
+      "field": "~\t\t\t\t\t\t163 stepper (settable, integer) Placement X, Value: -200, ID: node:cG9zaXRpb24teA",
+      "revision_refusal": false
+    },
+    {
+      "keys": "20 Up",
+      "field": "~\t\t\t\t\t\t163 stepper (settable, integer) Placement X, Value: 0, ID: node:cG9zaXRpb24teA",
+      "revision_refusal": false
+    }
+  ],
+  "public_coordinate_confirmation": {
+    "drawing": {
+      "tool": "place",
+      "kind": "resistor",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "wire_start": "",
+      "from": "",
+      "to": "",
+      "value": ""
+    },
+    "command_revision": 67,
+    "document": {
+      "preferences_dirty": false,
+      "schematic_dirty": false,
+      "recordings_dirty": false,
+      "recording_count": 0,
+      "path": "",
+      "dirty": false,
+      "format_version": 4,
+      "generation": 1
+    },
+    "components": []
+  },
+  "scope_probes": [
+    "v:C1.1",
+    "v:V1.positive",
+    "i:R1"
+  ],
+  "native_export": {
+    "path": "rc-scope-after-layout.csv",
+    "rows": 177,
+    "all_values_match_public_paused_scope": true
+  },
+  "native_reachability": {
+    "scope_scroll_pages": 0.3,
+    "inspector_pages_to_probes": 1,
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "window_pixels": [
+      1044,
+      764
+    ]
+  },
+  "tests": {
+    "pre_repair_regression": "Second retained coordinate event refused with expected revision 2/current 3",
+    "focused_native_race": "passed, 14.357 s",
+    "complete_scripts_check": "passed: lint/imports/Staticcheck, 38 Python tests, root/native race and vet; native 145.238 s",
+    "guard_cases": [
+      "20 originating field events without render",
+      "opposite-axis old callback refusal",
+      "intervening agent edit refusal",
+      "document replacement refusal",
+      "accepted response preceding a later agent edit",
+      "existing value settlement and stale-context tests"
+    ]
+  },
+  "inventory_review": "388 sites/162 public IDs/132 routed IDs unchanged; binder callback changed and CSV callback/ingress moved from workflow.go to scope.go",
+  "remaining": [
+    "scrolled accessibility publication/geometry",
+    "compact device overview readability",
+    "complete keyboard history/save/reopen",
+    "declared display configurations",
+    "visible latency and release packaging"
+  ],
+  "owned_host_closed": true,
+  "canonical_bundle_promoted": false,
+  "artifacts": {
+    "coordinate-repeat-after.jpg": "b074d0801028b68dc4d592d7bce24533300cc6387317f17756b1047369f84101",
+    "scope-export-near-plot.jpg": "85644db35542d16cc5194f946655905939be5f787b31f78d52e0e4e4f42c2e14",
+    "scope-export-after.ax.txt": "61d916b410826ac3cdf16b2c847322f2bac017ae7343378d9962a5d9ec7b2bb9",
+    "probes-earlier-after.jpg": "52f8f777e0662fbf2e9c53dddcb28fe10eac4bc5fe25700b9a083b3021056ec2",
+    "probe-current-selected-after.jpg": "6b34ba844c535e1ca1a9dd44b267c9ff01d3b9e23eced125eb12f6af5d2c6c82",
+    "measurement-controls-dark-after.jpg": "82192f49fab0ba496ddf299a78020e92086cd496c95a1617a06bb385170fae35",
+    "rc-scope-after-layout.csv": "983aeee39eaf13f495e37d0bf8f3a3139d0f31cacca9b43996fbded0f4fbcd71"
+  }
+}

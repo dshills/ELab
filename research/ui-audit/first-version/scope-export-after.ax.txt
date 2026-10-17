@@ -1,0 +1,115 @@
+Window: "ELab · Live electronics", App: ELab-first-version-ui.
+0 standard window ELab · Live electronics, Secondary Actions: Raise
+	1 container node:cm9vdA
+		2 row node:aGVhZGVy
+			3 text (settable) ELab, ID: node:dGl0bGU
+			4 toolbar node:dG9vbGJhcg
+				5 button File, Help: Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:ZmlsZS1tZW51
+				6 button Save, ID: node:ZmlsZS5zYXZl
+				7 button Examples, Help: Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:ZXhhbXBsZXMtbWVudQ
+				8 button Undo, Help: example rc · by user, ID: node:ZWRpdC51bmRv
+				9 button (disabled) Redo, ID: node:ZWRpdC5yZWRv
+				10 button Appearance theme, Help: Current choice: Light ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:dGhlbWUtbWVudQ
+			11 text (settable) Ⅱ Paused, ID: node:c3RhdHVz
+			12 button Resume, ID: node:c2ltdWxhdGlvbi5yZXN1bWU
+		13 split group Schematic and scope divider, ID: node:d29ya3NwYWNlLXNwbGl0, Help: Drag to resize; Up/Down adjusts the schematic share, Home/End selects its limits. Scope controls scroll when space is limited.
+			14 row node:d29ya3NwYWNl
+				15 scroll area node:cGFydHMtc2Nyb2xs
+					16 container node:cGFsZXR0ZQ
+						17 text (settable) COMPONENTS, ID: node:cGFydHMtdGl0bGU
+						18 text field (settable) Search components, Help: Type a name or hobbyist alias. Return focuses the matching component list., Value: resistor, ID: node:cGFydC1zZWFyY2g
+						19 list (settable) Matching components, ID: node:cGFydC1saXN0, Help: Use Up/Down, Home/End, page keys or an initial letter to choose a part. Return or Space chooses the focused row. Tab moves to exact placement.
+							20 row (settable, boolean) Resistor, Value: off, ID: option:cGFydC1saXN0:cmVzaXN0b3I
+							21 row (settable, boolean) Potentiometer, Value: off, ID: option:cGFydC1saXN0:cG90ZW50aW9tZXRlcg
+						22 text (settable) 2 matches · arrows choose · Tab to position, ID: node:cGxhY2VtZW50LWhlbHA
+						23 button Connect by name, ID: node:d2lyZS1ieS1uYW1l
+						24 button Print preview, ID: node:cHJpbnQtcHJldmlldw
+						25 button Export schematic SVG, ID: node:ZXhwb3J0LXN2Zw
+						26 button Export printable schematic PDF, ID: node:ZXhwb3J0LXBkZg
+						27 button Export schematic image PNG, ID: node:ZXhwb3J0LXBuZw
+						28 text (settable) RC CHARGE AND DISCHARGE, ID: node:ZXhhbXBsZS1ndWlkYW5jZS10aXRsZQ
+						29 text (settable) Original template circuit, ID: node:ZXhhbXBsZS1vcmlnaW4tc3RhdHVz
+						30 text (settable) How quickly does a capacitor charge and discharge?, ID: node:ZXhhbXBsZS1xdWVzdGlvbg
+						31 text (settable) ID: node:ZXhhbXBsZS1leHBlY3RlZA, Template expectation: Capacitor voltage changes smoothly; switching from charge to discharge reverses current while preserving voltage at the switching instant.
+						32 text (settable) Pause, step 10 ms, then choose Discharge. Increase R1 or C1 to slow the response., ID: node:ZXhhbXBsZS10cnk
+						33 text (settable) Ideal capacitor/resistor with zero ESR and leakage; this example uses an ideal source edge., ID: node:ZXhhbXBsZS1saW1pdGF0aW9u
+						34 button Reset RC charge and discharge, ID: node:ZXhhbXBsZS5jdXJyZW50LnJlc2V0
+						35 text (settable) YOUR FIRST CIRCUIT, ID: node:Z2V0dGluZy1zdGFydGVkLXRpdGxl
+						36 text (settable) 1  Place parts and ground, ID: node:c3RlcC1wbGFjZQ
+						37 text (settable) 2  Wire the terminal dots, ID: node:c3RlcC13aXJl
+						38 text (settable) 3  Watch the live measurements, ID: node:c3RlcC1vYnNlcnZl
+						39 text (settable) Undo: example rc, ID: node:dW5kby1uYW1l
+						40 text (settable) Redo: , ID: node:cmVkby1uYW1l
+						41 text (settable) SHORTCUTS, ID: node:c2hvcnRjdXRzLXRpdGxl
+						42 text (settable) ⌘ Z · Undo, ID: node:c2hvcnRjdXQtdW5kbw
+						43 text (settable) Delete · Remove selection, ID: node:c2hvcnRjdXQtZGVsZXRl
+				44 container node:c2NoZW1hdGljLXBhbmVs
+					45 toolbar node:dG9vbHM
+						46 button Select, ID: node:dG9vbC1zZWxlY3Q
+						47 button Wire, ID: node:dG9vbC13aXJl
+						48 button Pan, ID: node:dG9vbC1wYW4
+						49 button Esc, ID: node:ZHJhd2luZy5jYW5jZWw
+						50 row node:dG9vbC1zcGFjZXI
+						51 button DC sweep, ID: node:c3dlZXAtb3Blbg
+						52 button Fit, ID: node:dmlldy5maXQ, Help: Fit the complete schematic and follow workspace resizing. Pan, zoom or center an object to return to manual positioning.
+					53 text (settable) Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom, ID: node:c2NoZW1hdGljLWhlbHA
+					54 text (settable) Ready to experiment. Values update the simulation automatically., ID: node:bWVzc2FnZXM
+				55 scroll area node:c2lkZWJhcg
+					56 row node:c2VsZWN0aW9uLW5hdmlnYXRpb24
+						57 button Previous schematic object, ID: node:c2VsZWN0aW9uLXByZXZpb3Vz
+						58 button Next schematic object, ID: node:c2VsZWN0aW9uLW5leHQ
+						59 button (disabled) Center selection, ID: node:c2VsZWN0aW9uLWNlbnRlcg
+			60 splitter (settable, float) Schematic and scope divider, Value: 0.65, ID: split:d29ya3NwYWNlLXNwbGl0, Help: Drag to resize; Up/Down adjusts the schematic share, Home/End selects its limits. Scope controls scroll when space is limited.
+			61 scroll area node:c2NvcGUtc2Nyb2xs
+				62 container node:c2NvcGUtcGFuZWw
+					63 toolbar node:c2NvcGUtdG9vbGJhcg
+						64 button Hide scope, Help: Expand or collapse the dock without changing simulation or recorded measurements, ID: node:c2NvcGUtdmlzaWJpbGl0eQ
+						65 text (settable) LIVE RC SCOPE, ID: node:c2NvcGUtdGl0bGU
+						66 text (settable) t = 0.17 s · τ = 10 ms · run 2 · paused, ID: node:c2NvcGUtY2FwdGlvbg
+						67 button Auto, ID: node:aW5wdXQtYXV0bw
+						68 button Charge, ID: node:aW5wdXQtY2hhcmdl
+						69 button Discharge, ID: node:aW5wdXQtZGlzY2hhcmdl
+						70 button Step +1 sample, ID: node:dHJhbnNpZW50LXN0ZXA
+						71 button Restart, ID: node:c2ltdWxhdGlvbi5yZXN0YXJ0
+					72 toolbar node:c2NvcGUtdHJhY2Utcm93
+						73 button Export scope CSV, ID: node:ZXhwb3J0LWNzdg
+						74 button Inspect trace source, ID: node:c2NvcGUtdHJhY2UtZm9jdXM, Help: Current choice: Inspect trace… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+						75 text (settable) Teal: C1.1 / ground · Amber: V1.positive / ground, ID: node:c2NvcGUtbGVnZW5k
+					76 text (settable) node:c3RlcC13b3JrLXN0YXR1cw
+					77 toolbar node:c2NvcGUtY3Vyc29ycw
+						78 button A, ID: node:Y3Vyc29yLXNlbGVjdC1h
+						79 text field (settable) Cursor A time, ID: node:Y3Vyc29yLXRpbWUtYQ, Help: Enter a time to place this cursor. Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds.
+						80 button (disabled) ×, ID: node:Y3Vyc29yLWNsZWFyLWE
+						81 button B, ID: node:Y3Vyc29yLXNlbGVjdC1i
+						82 text field (settable) Cursor B time, ID: node:Y3Vyc29yLXRpbWUtYg, Help: Enter a time to place this cursor. Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds.
+						83 button (disabled) ×, ID: node:Y3Vyc29yLWNsZWFyLWI
+						84 text (settable) ms · click / drag plot to place selected cursor, ID: node:Y3Vyc29yLW1lYXN1cmVtZW50
+		85 row node:cmVhZGluZ3M
+			86 container node:Y3VycmVudA
+				87 text (settable) RC CURRENT, ID: node:Y3VycmVudC10aXRsZQ
+				88 text (settable) -0.067 mA, ID: node:Y3VycmVudC12YWx1ZQ
+			89 container node:dm9sdGFnZQ
+				90 text (settable) CAPACITOR VOLTAGE, ID: node:dm9sdGFnZS10aXRsZQ
+				91 text (settable) 0.672 V, ID: node:dm9sdGFnZS12YWx1ZQ
+			92 container node:cG93ZXI
+				93 text (settable) STORED ENERGY, ID: node:cG93ZXItdGl0bGU
+				94 text (settable) 0.226 µJ, ID: node:cG93ZXItdmFsdWU
+			95 container node:c2ltdWxhdGlvbi1pbmZv
+				96 text (settable) LIVE SIMULATION, ID: node:c2ltdWxhdGlvbi10aXRsZQ
+				97 text (settable) C1 · t = 0.17 s · paused, ID: node:cmVhZGluZy1zdGF0dXM
+		98 row node:Zm9vdGVyLXJvdw
+			99 text (settable) Untitled · Unsaved · 4 components · 4 wires · last change: user, ID: node:Zm9vdGVy
+			100 row node:Zm9vdGVyLXNwYWNlcg
+			101 text (settable) 39%, ID: node:em9vbQ
+			102 text (settable) 10-unit snap · local workspace, ID: node:Z3JpZC1pbmZv
+	103 close button
+	104 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	105 minimize button
+	106 text ELab · Live electronics
+107 menu bar
+	108 ELab-first-version-ui
+	109 File
+	110 Examples
+	111 Appearance
+
+The focused UI element is 12 button Resume, ID: node:c2ltdWxhdGlvbi5yZXN1bWU

@@ -252,6 +252,9 @@ func (s *screen) view() ui.Node {
 	}
 	inspector = append(inspector, quiet("circuit-capacity", fmt.Sprintf("%d/%d simulated parts · %d/%d drawing objects\n%d/%d nodes (including ground)", state.SimulatedComponents, state.Limits.SimulatedComponents, len(state.Components), state.Limits.DrawingObjects, len(state.Nets), state.Limits.ElectricalNodes)), quiet("selection-navigation-help", "Canvas: Option + ← / →\nHome / End with Option: first / last"))
 	inspector = append(inspector, s.measurementInspector(state)...)
+	if workbench.IsTransientAnalysis(state.Analysis) || state.Transient != nil {
+		inspector = append(inspector, s.probeInspector(state)...)
+	}
 	inspector = append(inspector, s.pinnedReadingControls(state)...)
 	inspector = append(inspector, s.displayControls(state)...)
 	inspector = append(inspector, s.appearanceControls(state)...)

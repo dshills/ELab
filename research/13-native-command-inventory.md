@@ -24,6 +24,8 @@ The October 17 first-version UI review refreshes `desktop/drawing.go`, `desktop/
 
 The subsequent Save filename repair refreshes only `desktop/files.go` and its site locations. Every site's non-line fields, public commands, aliases and coverage sets remain identical. The adjustment affects macOS dialog defaults; selected paths still use the same guarded shared save/export commands. Native Save As and exports were directly retested, and the full quality gate passes. [Filename checkpoint](ui-audit/first-version/save-checkpoint.json).
 
+The coordinate-repeat/measurement-access repair changes five production source hashes. Exactly three site records differ beyond locations: the binder callback now retains only its originating field's accepted response context, and the unchanged `export.scope.csv` callback/ingress moves from `scopeWindowControls` to `scopePanel`. The other site mappings, all totals and public/alias/coverage sets are unchanged. Focused guards and native rapid input/export/probe interactions pass; the complete quality gate passes. [Input checkpoint](ui-audit/first-version/input-checkpoint.json). This does not close full mounted accessibility or the remaining binding-review scope.
+
 ## Defect found during review
 
 Ordinary `screen.action` buttons previously captured targets/parameters from the rendered view but obtained a fresh mutation revision at activation. An old Apply button could overwrite an agent's newer resistance; an old Delete could act on an obsolete selection. Actions now capture the view's command revision and document generation. A single immutable context is shared while constructing the view, avoiding repeated full snapshot cloning per button.

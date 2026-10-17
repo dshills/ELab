@@ -93,7 +93,7 @@ func (s *screen) partPlotControls(state workbench.Snapshot, p workbench.Componen
 func (s *screen) scopeWindowControls(state workbench.Snapshot) []ui.Node {
 	sc := state.Scope
 	t := state.Transient
-	nodes := []ui.Node{section("scope-window-title", "Measure an interval"), {ID: "export-csv", Kind: ui.Button, Text: "Export scope CSV", Accessibility: ui.Accessibility{Name: "Export scope CSV"}, Disabled: t == nil || t.Stale || !sc.WindowValid, Activate: func() { s.beginFile("export.scope.csv", true, workbench.SaveParams{}, nil) }}}
+	nodes := []ui.Node{section("scope-window-title", "Measure an interval")}
 	live := s.action("scope-live-window", "Follow live history", "scope.window.set", workbench.ScopeWindow{Mode: "live"})
 	nodes = append(nodes, buttonStyle(live, sc.Window.Mode != "fixed"))
 	lo, hi := 0., 0.

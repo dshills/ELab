@@ -217,6 +217,7 @@ type screen struct {
 	menuCommandRevision                 *uint64
 	actionContext                       *actionContext
 	fieldContext                        *actionContext
+	fieldAccepted                       *actionContext
 	settleField                         func(string, func(error)) error
 	pendingValueApply                   *valueApply
 }
@@ -244,6 +245,14 @@ func (s *screen) invokeAtCommandRevision(id string, p any, rev uint64, generatio
 		request.ExpectedDocumentGeneration = &generation[0]
 	}
 	result := s.service.Dispatch(context.Background(), request, "user")
+	if s.fieldContext != nil {
+		s.fieldAccepted = nil
+		if state, ok := result.Result.(workbench.Snapshot); result.Error == nil && ok {
+			// Record this dispatch's accepted context, never a later snapshot:
+			// an agent may already have changed the service again.
+			s.fieldAccepted = &actionContext{state.CommandRevision, state.Document.Generation}
+		}
+	}
 	if result.Error != nil {
 		s.errorMessage = result.Error.Message
 		s.requestHelp = result.Help
