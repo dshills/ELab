@@ -1,0 +1,8 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestNativeUnknownRecoveryOwnerKeepsCopyAndDisablesDismiss
+    recovery_ownership_test.go:64: selector omits ownership uncertainty
+--- FAIL: TestNativeUnknownRecoveryOwnerKeepsCopyAndDisablesDismiss (0.09s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	0.660s
+FAIL

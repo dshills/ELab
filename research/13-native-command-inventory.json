@@ -40,7 +40,7 @@
     "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
     "desktop/recording_statistics.go": "161cc2eb9e62f089a91eb1967b9d6ed8a9a30dd914af3b7705ad3584bee2caec",
     "desktop/recording_timing.go": "f2eb9e3fd241a81ee0aef093d74309da4527dea39ba955a66642f4b6a2bdf6e2",
-    "desktop/recovery.go": "7dee5ddf2c722f09d875b92dca638c4e03506b05932b271bbd61cb1d6a7d2195",
+    "desktop/recovery.go": "861a98a5411f432028f371925192b9ffb68198de6dd92246d8846d37fd9902fa",
     "desktop/recovery_read.go": "3f536a3af7ea2480b69a8142f600b24c194ce2f06148b46cc29634a7431a5ede",
     "desktop/routing.go": "4898c4c1de9d7de3c5f8ad751b15d7c0f199234243f62ec6ea949ee8d9ad2c1c",
     "desktop/sampling.go": "9caef58d4d66e4b9d90806e682cd5985567dd923262bf41daed39b2d3572faf4",
@@ -53,7 +53,7 @@
     "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
     "desktop/value_apply.go": "eab16eb97a0b34a4cff40d5fd77d96dbdce394c5071aaa7ed0e58169ea45713d",
     "desktop/verification.go": "550f32b3d90b99269bce6777233b68e9329b2ae704b5b2fca60a1a368fbab406",
-    "desktop/view.go": "d24d2ff0d65b95066673060ec667692e8eb9c1f7e53852c6cb17fe190f23559d",
+    "desktop/view.go": "0f1992d67fc0f96ce5c93b877345a3db0fe20ceb4b7140dee9b8b519bd0c8a2b",
     "desktop/viewport.go": "a0d8a6a6b3577a0a909a0f7b3f339532a5abfde78fcf8a1979fb2e46f5f074cc",
     "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
     "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
@@ -3025,7 +3025,7 @@
     },
     {
       "file": "desktop/recovery.go",
-      "line": 83,
+      "line": 85,
       "function": "*screen.recoveryInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"recovery.select\", workbench.IDParams{ID: id})\n}",
@@ -3033,7 +3033,7 @@
     },
     {
       "file": "desktop/recovery.go",
-      "line": 88,
+      "line": 90,
       "function": "*screen.recoveryInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"recovery.select\", workbench.IDParams{ID: id})",
@@ -3044,7 +3044,7 @@
     },
     {
       "file": "desktop/recovery.go",
-      "line": 92,
+      "line": 94,
       "function": "*screen.recoveryInspector",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.requestReplace(\"recovery.restore\", choice) }",
@@ -3052,7 +3052,7 @@
     },
     {
       "file": "desktop/recovery.go",
-      "line": 92,
+      "line": 94,
       "function": "*screen.recoveryInspector",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(\"recovery.restore\", choice)",
@@ -3063,7 +3063,7 @@
     },
     {
       "file": "desktop/recovery.go",
-      "line": 93,
+      "line": 95,
       "function": "*screen.recoveryInspector",
       "kind": "action-factory",
       "expression": "s.action(\"recovery-dismiss\", \"Dismiss this snapshot\", \"recovery.dismiss.start\", choice)",
@@ -3074,7 +3074,7 @@
     },
     {
       "file": "desktop/recovery.go",
-      "line": 102,
+      "line": 107,
       "function": "*screen.recoveryInspector",
       "kind": "action-factory",
       "expression": "s.action(\"recovery-dismiss-\"+problem.ID, \"Dismiss damaged snapshot\", \"recovery.dismiss.start\", workbench.RecoveryChoiceParams{ID: problem.ID, SHA256: problem.SHA256})",

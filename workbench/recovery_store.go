@@ -269,17 +269,6 @@ func readRegularBounded(path string, limit int64) ([]byte, error) {
 	}
 	return data, nil
 }
-func (store *recoveryStore) sessionActive(session string) bool {
-	data, err := readRegularBounded(filepath.Join(store.directory, "session-"+session+".json"), 4096)
-	if err != nil {
-		return false
-	}
-	var lease recoveryLease
-	if err := DecodeStrict(data, &lease); err != nil || lease.Session != session || lease.PID <= 0 {
-		return false
-	}
-	return recoveryProcessAlive(lease.PID)
-}
 func (store *recoveryStore) scan() ([]RecoveryCandidate, []RecoveryProblem, error) {
 	entries, err := store.entries()
 	if err != nil {
@@ -306,7 +295,7 @@ func (store *recoveryStore) scan() ([]RecoveryCandidate, []RecoveryProblem, erro
 			continue
 		}
 		latest[capsule.DocumentKey] = capsule
-		candidates[capsule.DocumentKey] = RecoveryCandidate{ID: id, DocumentKey: capsule.DocumentKey, SavedAt: capsule.SavedAt, SourcePath: capsule.SourcePath, SHA256: hash, CurrentSession: capsule.Session == store.session, ActiveSession: store.sessionActive(capsule.Session), Recordings: documentRecordingCount(document), Components: len(document.Graph.Components)}
+		candidates[capsule.DocumentKey] = store.recoveryCandidate(capsule, document, hash)
 	}
 	out := []RecoveryCandidate{}
 	for _, candidate := range candidates {

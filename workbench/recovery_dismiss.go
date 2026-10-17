@@ -43,8 +43,14 @@ func validateRecoveryDismiss(capture recoveryDismissCapture) (os.FileInfo, error
 	var capsule recoveryCapsule
 	_ = params(data, &capsule, "format", "version", "id", "document_key", "session", "sequence", "command_revision", "saved_at", "document_sha256", "document")
 	_, sessionErr := hex.DecodeString(capsule.Session)
-	if sessionErr == nil && len(capsule.Session) == 24 && capsule.Session != capture.store.session && capture.store.sessionActive(capsule.Session) {
-		return nil, &actionError{"unavailable", "Another active session owns this snapshot; its recovery data is preserved"}
+	if sessionErr == nil && len(capsule.Session) == 24 && capsule.Session != capture.store.session {
+		status := capture.store.sessionOwnerStatus(capsule.Session)
+		if status == RecoveryOwnerUnknown {
+			return nil, &actionError{"unavailable", "Another session's ownership could not be verified; its recovery copy is preserved. Restore a copy or refresh after the owner closes."}
+		}
+		if status == RecoveryOwnerActive {
+			return nil, &actionError{"unavailable", "Another active session owns this snapshot; its recovery data is preserved"}
+		}
 	}
 	current, err := os.Lstat(path)
 	if err != nil || !current.Mode().IsRegular() || !os.SameFile(info, current) {

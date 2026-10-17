@@ -1,0 +1,31 @@
+=== RUN   TestRecoveryUnreadableOwnershipCannotAuthorizeOtherSessionDismissal
+--- PASS: TestRecoveryUnreadableOwnershipCannotAuthorizeOtherSessionDismissal (0.07s)
+=== RUN   TestRecoveryOwnerClassificationAndForeignCopyProtection
+=== RUN   TestRecoveryOwnerClassificationAndForeignCopyProtection/malformed
+=== RUN   TestRecoveryOwnerClassificationAndForeignCopyProtection/missing-session
+=== RUN   TestRecoveryOwnerClassificationAndForeignCopyProtection/wrong-session
+=== RUN   TestRecoveryOwnerClassificationAndForeignCopyProtection/zero-pid
+=== RUN   TestRecoveryOwnerClassificationAndForeignCopyProtection/oversized-pid
+=== RUN   TestRecoveryOwnerClassificationAndForeignCopyProtection/extra-field
+=== RUN   TestRecoveryOwnerClassificationAndForeignCopyProtection/oversized
+=== RUN   TestRecoveryOwnerClassificationAndForeignCopyProtection/symlink
+=== RUN   TestRecoveryOwnerClassificationAndForeignCopyProtection/directory
+=== RUN   TestRecoveryOwnerClassificationAndForeignCopyProtection/unreadable
+--- PASS: TestRecoveryOwnerClassificationAndForeignCopyProtection (0.64s)
+    --- PASS: TestRecoveryOwnerClassificationAndForeignCopyProtection/malformed (0.06s)
+    --- PASS: TestRecoveryOwnerClassificationAndForeignCopyProtection/missing-session (0.07s)
+    --- PASS: TestRecoveryOwnerClassificationAndForeignCopyProtection/wrong-session (0.06s)
+    --- PASS: TestRecoveryOwnerClassificationAndForeignCopyProtection/zero-pid (0.07s)
+    --- PASS: TestRecoveryOwnerClassificationAndForeignCopyProtection/oversized-pid (0.06s)
+    --- PASS: TestRecoveryOwnerClassificationAndForeignCopyProtection/extra-field (0.06s)
+    --- PASS: TestRecoveryOwnerClassificationAndForeignCopyProtection/oversized (0.07s)
+    --- PASS: TestRecoveryOwnerClassificationAndForeignCopyProtection/symlink (0.06s)
+    --- PASS: TestRecoveryOwnerClassificationAndForeignCopyProtection/directory (0.06s)
+    --- PASS: TestRecoveryOwnerClassificationAndForeignCopyProtection/unreadable (0.06s)
+=== RUN   TestRecoveryOwnerTransitionsAndOwnUnknownDismissal
+--- PASS: TestRecoveryOwnerTransitionsAndOwnUnknownDismissal (0.10s)
+=== RUN   TestRecoveryDismissRechecksLeaseThatBecomesUnverifiable
+    recovery_ownership_test.go:206: recovery.dismiss.start during blocked kernel: 1.265125ms
+--- PASS: TestRecoveryDismissRechecksLeaseThatBecomesUnverifiable (0.06s)
+PASS
+ok  	github.com/dshills/elab/workbench	2.257s

@@ -274,3 +274,5 @@ Live controls expose a [shared input-mode inventory and state/completion contrac
 The waiting Step alias now handles [unit text during initialization](docs/live-simulation-controls.md#waiting-for-initialization) consistently with numeric seconds, rejects already-stale context promptly, and preserves original retry/guard behavior.
 
 Scopes now have [discoverable control contracts and bounded narrow-window clipping](docs/scope-probes.md#discoverable-control-contracts). Empty intervals report no data, CSV agrees with plotted rows, and captured/reference views preserve exact saved timestamps.
+
+Recovery snapshots now distinguish [active, inactive and unverified owners](docs/recovery-ownership.md). An unreadable ownership record preserves another session's copy and blocks dismissal, while restoration as a new copy remains available through the same user/agent commands.

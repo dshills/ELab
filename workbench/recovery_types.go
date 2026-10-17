@@ -19,15 +19,16 @@ type RecoveryChoiceParams struct {
 	ExpectedGeneration *uint64 `json:"expected_document_generation,omitempty"`
 }
 type RecoveryCandidate struct {
-	ID             string `json:"id"`
-	DocumentKey    string `json:"document_key"`
-	SavedAt        string `json:"saved_at"`
-	SourcePath     string `json:"source_path,omitempty"`
-	SHA256         string `json:"sha256"`
-	CurrentSession bool   `json:"current_session"`
-	ActiveSession  bool   `json:"active_session"`
-	Recordings     int    `json:"recording_count"`
-	Components     int    `json:"components"`
+	OwnerStatus    RecoveryOwnerStatus `json:"owner_status"`
+	ID             string              `json:"id"`
+	DocumentKey    string              `json:"document_key"`
+	SavedAt        string              `json:"saved_at"`
+	SourcePath     string              `json:"source_path,omitempty"`
+	SHA256         string              `json:"sha256"`
+	CurrentSession bool                `json:"current_session"`
+	ActiveSession  bool                `json:"active_session"`
+	Recordings     int                 `json:"recording_count"`
+	Components     int                 `json:"components"`
 }
 type RecoveryProblem struct {
 	ID      string `json:"id"`

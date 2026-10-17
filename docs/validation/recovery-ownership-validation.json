@@ -1,0 +1,263 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T12:10:34.833145+00:00",
+  "scope": "Preserve attributable foreign recovery capsules when lease/process ownership cannot be verified; native and agent parity; no full release or repeated recovery-latency qualification",
+  "source_parent_commit": "92d922ee3f7bc78df48d01732b404234bb22661c",
+  "source_index": "docs/validation/recovery-ownership/source-freeze.json",
+  "source_frozen_files": 683,
+  "source_stable": true,
+  "binary_sha256": {
+    "build/elab": "e673d6ca8ae1f46501faa8be6036b4936e5febd62f7778f58dc52ae7eb816013",
+    "build/elab-agent": "9b04f8f64f32766862901ce6be4600226c99f4a02c2d7c8ebdafbe52f2ca2653",
+    "build/elab-conformance": "715b9ad55ba499ac93c27cb88cd03f38deea74f0a8ea13ed9421cdef0b28a68a",
+    "build/elab-ui-audit": "0c25bd6f5e85fd84a8d727444b3c8029401782fb5be26da20ad480085d36e813",
+    "build/ELab-0.111.0-126-recovery-ownership-candidate.app/Contents/MacOS/ELab": "e673d6ca8ae1f46501faa8be6036b4936e5febd62f7778f58dc52ae7eb816013"
+  },
+  "candidate": "build/ELab-0.111.0-126-recovery-ownership-candidate.app",
+  "candidate_promoted": false,
+  "original_regression_failure": "docs/validation/recovery-ownership/before.log.txt",
+  "owner_status_enum": [
+    "active",
+    "inactive",
+    "unknown"
+  ],
+  "legacy_active_session_protects_unknown": true,
+  "ownership_checked_during_preparation_and_commit": true,
+  "new_app_commands": 0,
+  "existing_app_commands": 162,
+  "models_numerical_methods_work_limits_file_versions_unchanged": true,
+  "quality": {
+    "lint_imports_staticcheck": true,
+    "python_tests": 32,
+    "root_native_race_and_vet": true,
+    "log": "docs/validation/recovery-ownership/quality.log.txt"
+  },
+  "process_quality": [
+    {
+      "name": "build",
+      "argv": [
+        "./scripts/build.sh"
+      ],
+      "started_utc": "2026-10-17T12:02:15.291206+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 8.105574708082713,
+      "finished_utc": "2026-10-17T12:02:23.396711+00:00"
+    },
+    {
+      "name": "quality",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T12:02:23.421484+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 358.71076325001195,
+      "finished_utc": "2026-10-17T12:08:22.129008+00:00"
+    }
+  ],
+  "process_public": [
+    {
+      "name": "native-smoke",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.111.0-126-recovery-ownership-candidate.app/Contents/MacOS/ELab",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "started_utc": "2026-10-17T12:08:34.172692+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 39.30791466694791,
+      "finished_utc": "2026-10-17T12:09:13.480254+00:00"
+    },
+    {
+      "name": "public-suites",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+        "--native-binary",
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.111.0-126-recovery-ownership-candidate.app/Contents/MacOS/ELab",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recovery-ownership/public-final"
+      ],
+      "started_utc": "2026-10-17T12:09:13.507921+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 48.31580583401956,
+      "finished_utc": "2026-10-17T12:10:01.823288+00:00"
+    },
+    {
+      "name": "headless-ownership",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/recovery-dismiss-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/recovery-ownership/headless-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recovery-ownership/headless-final-assets"
+      ],
+      "started_utc": "2026-10-17T12:10:01.858177+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 0.14068595797289163,
+      "finished_utc": "2026-10-17T12:10:01.998861+00:00"
+    },
+    {
+      "name": "crash-recovery",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/recovery-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/recovery-ownership/crash-final.json"
+      ],
+      "started_utc": "2026-10-17T12:10:02.026117+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 2.169535250053741,
+      "finished_utc": "2026-10-17T12:10:04.195635+00:00"
+    }
+  ],
+  "native_workflow": {
+    "started_utc": "2026-10-17T12:10:25.247611+00:00",
+    "status": "completed",
+    "owned_pid": 75004,
+    "exit_code": 0,
+    "elapsed_seconds": 0.5305838340427727,
+    "finished_utc": "2026-10-17T12:10:25.778307+00:00"
+  },
+  "native_smoke_stages": 45,
+  "four_adapter_numerical_checks": 27596,
+  "four_adapter_project_workflow_checks": 44,
+  "four_adapter_project_snapshots": 56,
+  "ownership_transports": [
+    "headless-stdio",
+    "native-socket"
+  ],
+  "real_separate_owner_process": true,
+  "ownership_transition_per_transport": [
+    "active",
+    "unknown",
+    "active",
+    "inactive"
+  ],
+  "unknown_owner_copy_restored": true,
+  "source_and_capsule_hashes_preserved_during_refusal_and_restore": true,
+  "known_inactive_dismissal_succeeds": true,
+  "own_unknown_dismissal_core_test": true,
+  "late_unknown_commit_refusal_core_test": true,
+  "crash_recovery_sigkill_passed": true,
+  "saved_source_fixtures": {
+    "docs/validation/recovery-ownership/fixtures/headless/owner-source.elab": "a11a6d7d0cb43713e0fc1aefbd223729c5a1b82664b72e851ee00e93fe251688",
+    "docs/validation/recovery-ownership/fixtures/native/owner-source.elab": "a11a6d7d0cb43713e0fc1aefbd223729c5a1b82664b72e851ee00e93fe251688"
+  },
+  "report_encoding": {
+    "conformance-report.json.gz": {
+      "decoded_bytes": 18208419,
+      "decoded_sha256": "b362c3b34dfadb69919d76a8d7309d0d43ece9d846f248ec4a43e891f20f1eac",
+      "gzip_bytes": 1660343,
+      "gzip_sha256": "a101ec713266d492bfadf4fd31ac5eac232360fbec5d6f339afa77d10d4bbd9b"
+    },
+    "headless-ownership.json.gz": {
+      "decoded_bytes": 6789,
+      "decoded_sha256": "884e807c6662298075102ebbbe78fbfcbec50d5fac3512846d9841b4c37af0f1",
+      "gzip_bytes": 1804,
+      "gzip_sha256": "8be456479d56241f08ab4deab8ee7cb6d34fabe9e823459f2002a0e04735b21b"
+    },
+    "native-ownership.json.gz": {
+      "decoded_bytes": 6780,
+      "decoded_sha256": "0f23c674f50a9459bd3e44a0f0aff65f59c5cc0a3d7ba52f297816a06ea93627",
+      "gzip_bytes": 1796,
+      "gzip_sha256": "ef8cd2ceacf1285b074227b58dfbe7e0e896ace941c9597ea20bbf56c77d3aed"
+    }
+  },
+  "typed_raw_gzip_review_equal": true,
+  "sdk_post_check": {
+    "passed": true,
+    "source": "aa9d023243a6bded514c3d9696c08a9c917119c4",
+    "archive_sha256": "22b086442570641e4ae56e9937dd6483c26f92cde953f3aa3fc11811710ed7c5"
+  },
+  "native_inventory": {
+    "passed": true,
+    "reviewed_sources": [
+      "desktop/recovery.go",
+      "desktop/view.go"
+    ],
+    "commands_aliases_and_site_semantics_unchanged": true,
+    "sources": 57,
+    "sites": 388,
+    "public_commands": 162,
+    "source_routes": 132
+  },
+  "preserved_bundles_unchanged": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7,
+      "executable_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c"
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7,
+      "executable_sha256": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1"
+    }
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "test_setup_corrections": [
+    "The first native selector test inspected Options after macOS adaptation removes them. The final test also checks the rendered selector title; the initial failure is retained."
+  ],
+  "limitations": [
+    "Missing leases retain the existing cooperating graceful-close protocol. Arbitrary hostile writers, atomic conditional unlink and power loss are not qualified.",
+    "Unidentifiable damaged capsules retain the existing explicit hash-confirmed damaged-file path; no foreign identity is inferred from missing metadata.",
+    "Unknown owners remain protected. Windows other-process liveness and Windows runtime are not qualified.",
+    "Native unknown-owner text/disabled dismissal has descriptor/callback evidence; full physical input, accessibility and pixels/readability remain open.",
+    "The existing SIGKILL workflow passed once; repeated five-second recovery timing remains open.",
+    "No full release promotion, clean installation/distribution, other platform/hardware, physical printer or participant acceptance is claimed."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/recovery-ownership/after-initial.log.txt": "85ad77beaf0c8ad23d55dc6d1c798b22c223001961e96bf0099928efa2aebfc9",
+    "docs/validation/recovery-ownership/archive.py.txt": "d5258c88fd8ad9bbd9686e4424c8ff37375f0bc0a720b7162f221ace91ee4dd1",
+    "docs/validation/recovery-ownership/before.log.txt": "71ffdb885397a7e0a253347f541d72657eb384522f1427cbad74699bb3186830",
+    "docs/validation/recovery-ownership/binaries.json": "2754bdbf3ea1efbbef92ec99557489e69fadfc63b8bfbaf88ca699ae9725f15f",
+    "docs/validation/recovery-ownership/build.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/recovery-ownership/conformance-report.json.gz": "a101ec713266d492bfadf4fd31ac5eac232360fbec5d6f339afa77d10d4bbd9b",
+    "docs/validation/recovery-ownership/core-focused.log.txt": "08b41bb0ecbb2d4696a1712af4c06dd005caab79334eee83d8c624a4fd3e348d",
+    "docs/validation/recovery-ownership/crash-final.json": "d504c3c9277ae83f5d0487925acd560811f144e88c2ada6b555e14af7b5362b2",
+    "docs/validation/recovery-ownership/crash-recovery.log.txt": "d504c3c9277ae83f5d0487925acd560811f144e88c2ada6b555e14af7b5362b2",
+    "docs/validation/recovery-ownership/fixtures/headless/owner-source.elab": "a11a6d7d0cb43713e0fc1aefbd223729c5a1b82664b72e851ee00e93fe251688",
+    "docs/validation/recovery-ownership/fixtures/native/owner-source.elab": "a11a6d7d0cb43713e0fc1aefbd223729c5a1b82664b72e851ee00e93fe251688",
+    "docs/validation/recovery-ownership/headless-initial.log.txt": "4f6e71e42368aa76bfcfbd9be810045f6a1a048bf2ed3957061a53ef1cda850e",
+    "docs/validation/recovery-ownership/headless-ownership.json.gz": "8be456479d56241f08ab4deab8ee7cb6d34fabe9e823459f2002a0e04735b21b",
+    "docs/validation/recovery-ownership/headless-ownership.log.txt": "4f6e71e42368aa76bfcfbd9be810045f6a1a048bf2ed3957061a53ef1cda850e",
+    "docs/validation/recovery-ownership/native-focused-final.log.txt": "0cc15c210f6a23fae8c433df3b4962646152be21aad984ece9c2eb34152f2f07",
+    "docs/validation/recovery-ownership/native-focused.log.txt": "98e0cf0aee1c1b99b4c499e2bf46d4c567d92c176e0394a885e55fa0c29503a1",
+    "docs/validation/recovery-ownership/native-host.log.txt": "6716b325ff3c04bda9eed0a771166d2e3bf5507679419cb627ea4248bfdd2dc4",
+    "docs/validation/recovery-ownership/native-inventory-review.json": "94f7d5d3bfcc8d62f9cce729d6c0789988857d5d383d6fc5ce7d90dccca51516",
+    "docs/validation/recovery-ownership/native-inventory-verified.json": "c4877d0567ff5620037417ac8ba57396648111abc21b298a48f9f92d7d2c3ef5",
+    "docs/validation/recovery-ownership/native-ownership.json.gz": "ef8cd2ceacf1285b074227b58dfbe7e0e896ace941c9597ea20bbf56c77d3aed",
+    "docs/validation/recovery-ownership/native-ownership.log.txt": "7a35633a62b79a5510f4d5eb98029ce4238b4634d99d7016ce40b31300dfc266",
+    "docs/validation/recovery-ownership/native-smoke.log.txt": "15980ce21ccdee73c60b80c434c3e0b763507e4d27222608b9694989015d2a25",
+    "docs/validation/recovery-ownership/native.py.txt": "3c4322c6d8308b82c117e4a869623c8b0c256ad3858e051d0db7899f99a15fa5",
+    "docs/validation/recovery-ownership/preserved-bundles.json": "29c025d16bec382ddc1be254b89ee3dcda5f743409842967480c0e4b4eb8d826",
+    "docs/validation/recovery-ownership/process-native.json": "82e3869013be915da6e213be5b02d1a5291d0c036c6fcf1cebabad91384a5107",
+    "docs/validation/recovery-ownership/process-public.json": "a26a0b89a93dab393d88ae33d1ba51fa0a4a8f609287abb962c356666159d337",
+    "docs/validation/recovery-ownership/process-quality.json": "6b9a86eed49f1ad924fa303b0034558d2d378690b342762e4ee90edb0569c33d",
+    "docs/validation/recovery-ownership/public-suites.log.txt": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "docs/validation/recovery-ownership/qualify.py.txt": "c62d9f3acfbed72dee43e3d7b992d72eb82e821aa4903cb5c608873546e7c3aa",
+    "docs/validation/recovery-ownership/quality.log.txt": "203badcf35f704fa03ec4c067dd7b3592e57f8a93fbaae944758a9fd507e29cd",
+    "docs/validation/recovery-ownership/report-review-gzip.json": "d4e844f3738c8da103b9923bc857783e2434f380ccc8ab867ce7e059beec7422",
+    "docs/validation/recovery-ownership/report-review.json": "d4e844f3738c8da103b9923bc857783e2434f380ccc8ab867ce7e059beec7422",
+    "docs/validation/recovery-ownership/review.go.txt": "808b076c8bf0bac85714632b87ab06a8364742575b33a383a734d7e37c729fb6",
+    "docs/validation/recovery-ownership/sdk-verified.json": "57d6746f85007501e96136e48a5a54fc413f7fa71f1802f63d65a16f62320ca9",
+    "docs/validation/recovery-ownership/source-freeze.json": "cd33ebbc92696403c9673f59a686d0d7279194c303dc5567f5967a71050f41de"
+  }
+}

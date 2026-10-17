@@ -68,7 +68,9 @@ func (s *screen) recoveryInspector(state workbench.Snapshot) []ui.Node {
 			source = filepath.Base(candidate.SourcePath)
 		}
 		status := ""
-		if candidate.ActiveSession {
+		if candidate.OwnerStatus == workbench.RecoveryOwnerUnknown {
+			status = " · owner not verified"
+		} else if candidate.ActiveSession {
 			status = " · active session"
 		}
 		options = append(options, ui.Option{ID: candidate.ID, Label: source + " · " + recoveryTime(candidate.SavedAt) + status})
@@ -91,8 +93,11 @@ func (s *screen) recoveryInspector(state workbench.Snapshot) []ui.Node {
 		choice := workbench.RecoveryChoiceParams{ID: chosen.ID, SHA256: chosen.SHA256, ExpectedGeneration: &state.Document.Generation}
 		nodes = append(nodes, quiet("recovery-summary", fmt.Sprintf("%d components · %d recordings · %s", chosen.Components, chosen.Recordings, recoveryTime(chosen.SavedAt))), buttonStyle(ui.Node{ID: "recovery-restore", Kind: ui.Button, Text: "Restore as a new copy", Disabled: s.fileBusy || s.pendingCommand != "", Accessibility: ui.Accessibility{Name: "Restore recovery as a new copy"}, Activate: func() { s.requestReplace("recovery.restore", choice) }}, true))
 		dismiss := s.action("recovery-dismiss", "Dismiss this snapshot", "recovery.dismiss.start", choice)
-		// Other live sessions keep their snapshots. The shared service enforces ownership.
-		dismiss.Disabled = dismiss.Disabled || busy || chosen.ActiveSession && !chosen.CurrentSession
+		if chosen.OwnerStatus == workbench.RecoveryOwnerUnknown && !chosen.CurrentSession {
+			nodes = append(nodes, quiet("recovery-owner-unknown", "Owner could not be verified. Restore a copy; dismissal is unavailable."))
+		}
+		// Other active or unverified sessions keep their snapshots.
+		dismiss.Disabled = dismiss.Disabled || busy || (chosen.ActiveSession || chosen.OwnerStatus == workbench.RecoveryOwnerUnknown) && !chosen.CurrentSession
 		nodes = append(nodes, dismiss)
 		nodes = append(nodes, s.recoveryReadControls(state, *chosen)...)
 	}

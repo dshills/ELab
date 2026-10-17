@@ -1,0 +1,75 @@
+from pathlib import Path
+import datetime, gzip, hashlib, json, re, shutil, subprocess
+
+root=Path.cwd();src=root/'build/recovery-ownership';out=root/'docs/validation/recovery-ownership'
+def read(path):return json.loads(path.read_text())
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+def digest(path):return sha(path.read_bytes())
+frozen=read(src/'source-freeze.json')
+assert len(frozen)==683 and all(digest(root/p)==h for p,h in frozen.items())
+quality=read(src/'process-quality.json');public=read(src/'process-public.json');native=read(src/'process-native.json')
+assert all(p['status']=='completed' and p['exit_code']==0 for p in quality+public)
+assert native['status']=='completed' and native['exit_code']==0 and not native.get('forced_cleanup')
+assert 'Ran 32 tests' in (src/'quality.log.txt').read_text()
+assert len(re.findall(r'smoke: ',(src/'native-smoke.log.txt').read_text()))==45
+assert read(src/'report-review.json')==read(src/'report-review-gzip.json')
+assert read(src/'report-review.json')['numerical_checks']==27596
+assert all(digest(root/p)==h for p,h in read(src/'binaries.json').items())
+reports=[read(src/(transport+'-final.json')) for transport in ['headless','native']]
+for report in reports:
+ assert report['passed'] and report['unknown_copy_restored'] and report['unknown_refusal']['code']=='unavailable'
+ states=report['ownership_states'];assert list(states)==['active','unknown','repaired','inactive']
+ for name,status in [('active','active'),('unknown','unknown'),('repaired','active'),('inactive','inactive')]:
+  state=states[name];assert state['owner_status']==status and state['active_session']==(status!='inactive') and not state['current_session']
+  assert state['sha256']==report['capsule_sha256']
+ for state in states.values():assert state['id']==states['active']['id']
+for field in ['components','wires','result','transient','mixed','npn']:
+ assert reports[0]['live_semantic'][field]==reports[1]['live_semantic'][field],field
+assert read(src/'crash-final.json')['passed']
+out.mkdir(exist_ok=False)
+names=['before.log.txt','after-initial.log.txt','core-focused.log.txt','native-focused.log.txt','native-focused-final.log.txt','headless-initial.log.txt','build.log.txt','quality.log.txt','native-smoke.log.txt','public-suites.log.txt','headless-ownership.log.txt','crash-recovery.log.txt','native-host.log.txt','native-ownership.log.txt','process-quality.json','process-public.json','process-native.json','source-freeze.json','binaries.json','preserved-bundles.json','sdk-verified.json','native-inventory-review.json','native-inventory-verified.json','report-review.json','report-review-gzip.json','crash-final.json']
+for name in names:shutil.copyfile(src/name,out/name)
+for source,name in [('build/.recovery-ownership-qualify.py','qualify.py.txt'),('build/.recovery-ownership-native.py','native.py.txt'),('build/.recovery-ownership-archive.py','archive.py.txt'),('build/.recovery-ownership-review/main.go','review.go.txt')]:
+ shutil.copyfile(root/source,out/name)
+encodings={}
+for source,name in [('public-final/report.json','conformance-report.json.gz'),('headless-final.json','headless-ownership.json.gz'),('native-final.json','native-ownership.json.gz')]:
+ raw=(src/source).read_bytes();compressed=gzip.compress(raw,mtime=0);(out/name).write_bytes(compressed)
+ assert gzip.decompress(compressed)==raw
+ encodings[name]={'decoded_bytes':len(raw),'decoded_sha256':sha(raw),'gzip_bytes':len(compressed),'gzip_sha256':sha(compressed)}
+fixtures={}
+for transport,report in zip(['headless','native'],reports):
+ folder=out/'fixtures'/transport;folder.mkdir(parents=True)
+ raw=(src/(transport+'-final-assets')/'owner-source.elab').read_bytes();assert sha(raw)==report['saved_source_sha256']
+ path=folder/'owner-source.elab';path.write_bytes(raw);fixtures[str(path.relative_to(root))]=sha(raw)
+receipt={
+ 'passed':True,'recorded_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ 'scope':'Preserve attributable foreign recovery capsules when lease/process ownership cannot be verified; native and agent parity; no full release or repeated recovery-latency qualification',
+ 'source_parent_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+ 'source_index':str((out/'source-freeze.json').relative_to(root)),'source_frozen_files':len(frozen),'source_stable':True,
+ 'binary_sha256':read(src/'binaries.json'),'candidate':'build/ELab-0.111.0-126-recovery-ownership-candidate.app','candidate_promoted':False,
+ 'original_regression_failure':str((out/'before.log.txt').relative_to(root)),
+ 'owner_status_enum':['active','inactive','unknown'],'legacy_active_session_protects_unknown':True,
+ 'ownership_checked_during_preparation_and_commit':True,'new_app_commands':0,'existing_app_commands':162,
+ 'models_numerical_methods_work_limits_file_versions_unchanged':True,
+ 'quality':{'lint_imports_staticcheck':True,'python_tests':32,'root_native_race_and_vet':True,'log':str((out/'quality.log.txt').relative_to(root))},
+ 'process_quality':quality,'process_public':public,'native_workflow':native,'native_smoke_stages':45,
+ 'four_adapter_numerical_checks':27596,'four_adapter_project_workflow_checks':44,'four_adapter_project_snapshots':56,
+ 'ownership_transports':['headless-stdio','native-socket'],'real_separate_owner_process':True,
+ 'ownership_transition_per_transport':['active','unknown','active','inactive'],
+ 'unknown_owner_copy_restored':True,'source_and_capsule_hashes_preserved_during_refusal_and_restore':True,
+ 'known_inactive_dismissal_succeeds':True,'own_unknown_dismissal_core_test':True,'late_unknown_commit_refusal_core_test':True,
+ 'crash_recovery_sigkill_passed':True,'saved_source_fixtures':fixtures,'report_encoding':encodings,'typed_raw_gzip_review_equal':True,
+ 'sdk_post_check':read(src/'sdk-verified.json'),'native_inventory':read(src/'native-inventory-review.json'),
+ 'preserved_bundles_unchanged':read(src/'preserved-bundles.json'),'p0_counts':{'implemented':17,'partial':10},
+ 'test_setup_corrections':['The first native selector test inspected Options after macOS adaptation removes them. The final test also checks the rendered selector title; the initial failure is retained.'],
+ 'limitations':[
+  'Missing leases retain the existing cooperating graceful-close protocol. Arbitrary hostile writers, atomic conditional unlink and power loss are not qualified.',
+  'Unidentifiable damaged capsules retain the existing explicit hash-confirmed damaged-file path; no foreign identity is inferred from missing metadata.',
+  'Unknown owners remain protected. Windows other-process liveness and Windows runtime are not qualified.',
+  'Native unknown-owner text/disabled dismissal has descriptor/callback evidence; full physical input, accessibility and pixels/readability remain open.',
+  'The existing SIGKILL workflow passed once; repeated five-second recovery timing remains open.',
+  'No full release promotion, clean installation/distribution, other platform/hardware, physical printer or participant acceptance is claimed.'
+ ]}
+receipt['artifacts_sha256']={str(p.relative_to(root)):digest(p) for p in sorted(out.rglob('*')) if p.is_file()}
+(root/'docs/validation/recovery-ownership-validation.json').write_text(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps({'passed':True,'source_inputs':len(frozen),'numerical_checks':27596,'ownership_transports':receipt['ownership_transports'],'artifact_count':len(receipt['artifacts_sha256'])},indent=2))

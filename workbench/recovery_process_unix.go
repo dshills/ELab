@@ -8,11 +8,20 @@ import (
 	"syscall"
 )
 
-func recoveryProcessAlive(pid int) bool {
+func recoveryProcessOwnerStatus(pid int) RecoveryOwnerStatus {
 	process, err := os.FindProcess(pid)
 	if err != nil {
-		return false
+		if errors.Is(err, syscall.ESRCH) || errors.Is(err, os.ErrProcessDone) {
+			return RecoveryOwnerInactive
+		}
+		return RecoveryOwnerUnknown
 	}
 	err = process.Signal(syscall.Signal(0))
-	return err == nil || errors.Is(err, syscall.EPERM)
+	if err == nil || errors.Is(err, syscall.EPERM) {
+		return RecoveryOwnerActive
+	}
+	if errors.Is(err, syscall.ESRCH) || errors.Is(err, os.ErrProcessDone) {
+		return RecoveryOwnerInactive
+	}
+	return RecoveryOwnerUnknown
 }

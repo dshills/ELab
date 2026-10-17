@@ -222,6 +222,9 @@ func SchemaRegistry() map[string]json.RawMessage {
 }
 
 func typeSchema(t reflect.Type) map[string]any {
+	if t == reflect.TypeOf(RecoveryOwnerStatus("")) {
+		return map[string]any{"type": "string", "enum": []RecoveryOwnerStatus{RecoveryOwnerActive, RecoveryOwnerInactive, RecoveryOwnerUnknown}}
+	}
 	if t == reflect.TypeOf([]byte{}) {
 		return map[string]any{"type": "string", "contentEncoding": "base64"}
 	}

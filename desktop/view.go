@@ -288,7 +288,7 @@ func (s *screen) view() ui.Node {
 	}
 	message := "Ready to experiment. Values update the simulation automatically."
 	for _, candidate := range state.Recovery.Candidates {
-		if !candidate.ActiveSession {
+		if !candidate.ActiveSession || candidate.OwnerStatus == workbench.RecoveryOwnerUnknown {
 			message = "Recovery available · choose a snapshot in the Inspector to restore a copy."
 			break
 		}

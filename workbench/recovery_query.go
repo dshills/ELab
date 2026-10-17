@@ -79,7 +79,7 @@ func projectRecoveryRead(bounded context.Context, store *recoveryStore, choice R
 		}
 		return page, err
 	}
-	candidate := RecoveryCandidate{ID: capsule.ID, DocumentKey: capsule.DocumentKey, SavedAt: capsule.SavedAt, SourcePath: capsule.SourcePath, SHA256: hash, CurrentSession: capsule.Session == store.session, ActiveSession: store.sessionActive(capsule.Session), Recordings: documentRecordingCount(document), Components: len(document.Graph.Components)}
+	candidate := store.recoveryCandidate(capsule, document, hash)
 	result := RecoveryInspection{Directory: store.directory, Candidate: candidate, Document: inspectDocument(document)}
 	if bounded.Err() != nil {
 		return nil, bounded.Err()

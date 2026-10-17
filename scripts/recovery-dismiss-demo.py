@@ -28,6 +28,8 @@ def main():
     directory.mkdir(mode=0o700)
     client = connect_demo_client(helper.Client, args.connect, command_preconditions=True)
     owner = helper.Client(command_preconditions=True)
+    copied = None
+    ownership_states = {}
 
     def live(state):
         return {k: copy.deepcopy(state.get(k)) for k in ('components', 'wires', 'run_id', 'electrical_revision',
@@ -61,7 +63,8 @@ def main():
         client.ask('recovery.configure', {'directory': str(directory), 'enabled': False, 'interval_s': 2}, True)
         state = client.ask('project.inspect')
         candidate = state['recovery']['candidates'][0]
-        assert candidate['active_session'] and not candidate['current_session']
+        assert candidate['active_session'] and not candidate['current_session'] and candidate['owner_status']=='active'
+        ownership_states['active']=candidate
         choice = {'id': candidate['id'], 'sha256': candidate['sha256']}
         capsule = directory / (candidate['id'] + '.elab-recovery')
         capsule_digest = hashlib.sha256(capsule.read_bytes()).hexdigest()
@@ -70,11 +73,44 @@ def main():
         protected = client.ask('project.inspect')
         assert live(protected) == live(before) and not protected['project_work']['recovery_snapshot_removed']
         assert hashlib.sha256(capsule.read_bytes()).hexdigest() == capsule_digest
+        capsule_data = json.loads(capsule.read_text())
+        lease = directory / ('session-'+capsule_data['session']+'.json')
+        original_lease = lease.read_bytes()
+        assert json.loads(original_lease)['pid']==owner.process.pid
+        lease.write_text('owned deliberately malformed lease')
+        client.ask('recovery.scan', {}, True)
+        unknown=client.ask('project.inspect')['recovery']['candidates'][0]
+        assert unknown['owner_status']=='unknown' and unknown['active_session'] and not unknown['current_session']
+        ownership_states['unknown']=unknown
+        inspected=client.ask('recovery.inspect',choice)
+        assert inspected['candidate']['owner_status']=='unknown' and inspected['candidate']['active_session']
+        before=client.ask('project.inspect')
+        client.ask('recovery.dismiss',choice,True,'unavailable')
+        refused_unknown=client.ask('project.inspect')
+        assert live(refused_unknown)==live(before) and not refused_unknown['project_work']['recovery_snapshot_removed']
+        assert hashlib.sha256(capsule.read_bytes()).hexdigest()==capsule_digest
+        copied=helper.Client(command_preconditions=True)
+        copied.ask('recovery.configure',{'directory':str(directory),'enabled':False,'interval_s':2},True)
+        copied.ask('recovery.restore',choice,True)
+        copy_state=copied.ask('simulation.wait')
+        assert copy_state['components']==inspected['document']['graph']['components']
+        assert copy_state['wires']==inspected['document']['graph']['wires']
+        assert copy_state['document']['dirty'] and not copy_state['document']['path']
+        assert copy_state['document']['recovered_from']==str(saved)
+        assert hashlib.sha256(capsule.read_bytes()).hexdigest()==capsule_digest
+        assert hashlib.sha256(saved.read_bytes()).hexdigest()==saved_digest
+        copied.close();copied=None
+        lease.write_bytes(original_lease)
+        client.ask('recovery.scan',{},True)
+        repaired=client.ask('project.inspect')['recovery']['candidates'][0]
+        assert repaired['owner_status']=='active' and repaired['active_session']
+        ownership_states['repaired']=repaired
         owner.close()
         owner = None
         client.ask('recovery.scan', {}, True)
         inactive = client.ask('project.inspect')['recovery']['candidates'][0]
-        assert not inactive['active_session'] and inactive['sha256'] == capsule_digest
+        assert not inactive['active_session'] and inactive['sha256'] == capsule_digest and inactive['owner_status']=='inactive'
+        ownership_states['inactive']=inactive
         before = client.ask('project.inspect')
         admitted = client.ask('recovery.dismiss.start', choice, True)
         assert admitted['project_work']['status'] == 'queued' and admitted['project_work']['cancelable']
@@ -101,7 +137,9 @@ def main():
         report = {'passed': True, 'transport': 'native-socket' if args.connect else 'headless-stdio',
                   'live_semantic': {k: live(removed)[k] for k in ('components', 'wires', 'run_id', 'electrical_revision',
                                    'result', 'transient', 'mixed', 'npn', 'view')},
-                  'checks': ['real separate-process active owner protected', 'waiting refusal exposes false removal outcome',
+                  'ownership_states':ownership_states,'unknown_copy_restored':True,'capsule_sha256':capsule_digest,'saved_source_sha256':saved_digest,
+                  'unknown_refusal':refused_unknown['project_work']['error'],
+                  'checks': ['real separate-process active owner protected','unknown lease remains protected in scan/inspection/dismissal','unknown-owner snapshot restores as a dirty copy','repair and close yield active/inactive states', 'waiting refusal exposes false removal outcome',
                              'exact inactive capsule removed through immediate background command', 'admission differs from removal',
                              'result ID and digest identify removed snapshot', 'stale hash preserves damaged capsule',
                              'waiting damaged-snapshot dismissal succeeds', 'live RC circuit/physics/history/dirty state preserved',
@@ -113,6 +151,8 @@ def main():
             target.write(json.dumps(report, indent=2) + '\n')
         print(json.dumps({'passed': True, 'transport': report['transport']}))
     finally:
+        if copied is not None:
+            copied.close()
         if owner is not None:
             owner.close()
         client.close()

@@ -1,0 +1,42 @@
+from pathlib import Path
+import datetime, importlib.util, json, subprocess, sys, time
+
+root = Path.cwd()
+out = root / 'build/recovery-ownership'
+private = out / 'native-session'
+private.mkdir(mode=0o700)
+endpoint = private / 'endpoint.json'
+candidate = root / 'build/ELab-0.111.0-126-recovery-ownership-candidate.app/Contents/MacOS/ELab'
+record = {'started_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'status': 'running'}
+process = None
+start = time.monotonic()
+try:
+    with (out / 'native-host.log.txt').open('x') as log:
+        process = subprocess.Popen([str(candidate), '--agent-endpoint', str(endpoint), '--no-appearance', '--recovery-directory', str(private / 'recovery')], stdout=log, stderr=subprocess.STDOUT)
+        record['owned_pid'] = process.pid
+        deadline = time.monotonic() + 30
+        while not endpoint.exists():
+            assert process.poll() is None, 'owned native host exited before startup'
+            assert time.monotonic() < deadline, 'owned native host startup timed out'
+            time.sleep(.05)
+        with (out / 'native-ownership.log.txt').open('x') as demo_log:
+            subprocess.run([sys.executable, '-B', 'scripts/recovery-dismiss-demo.py', '--connect', str(endpoint), '--output', str(out / 'native-final.json'), '--artifacts', str(out / 'native-final-assets')], check=True, timeout=100, stdout=demo_log, stderr=subprocess.STDOUT)
+        spec = importlib.util.spec_from_file_location('owned_client', root / 'scripts/persistence-demo.py')
+        helper = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(helper)
+        client = helper.Client(str(endpoint), command_preconditions=True)
+        try:
+            client.ask('app.close', {'discard_changes': True}, True)
+        finally:
+            client.close()
+        record['exit_code'] = process.wait(timeout=15)
+        assert record['exit_code'] == 0, record
+        record['status'] = 'completed'
+finally:
+    if process is not None and process.poll() is None:
+        process.terminate()
+        process.wait(timeout=10)
+        record['forced_cleanup'] = True
+    record.update(elapsed_seconds=time.monotonic()-start, finished_utc=datetime.datetime.now(datetime.timezone.utc).isoformat())
+    (out / 'process-native.json').write_text(json.dumps(record, indent=2)+'\n')
+    print(json.dumps(record), flush=True)
