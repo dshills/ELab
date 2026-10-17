@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/dshills/elab/workbench"
@@ -13,6 +14,20 @@ import (
 	"github.com/dshills/vellum/command"
 	"github.com/dshills/vellum/ui"
 )
+
+// AppKit supplies the selected file type's suffix. Supplying that suffix in
+// the name as well can produce names such as Untitled.elab.elab. Other native
+// pickers still need the complete filename, and command paths are untouched.
+func nativeFileOptions(options app.FileOptions, platform string) app.FileOptions {
+	if platform != "darwin" || options.Mode != app.SaveFile || len(options.Extensions) != 1 {
+		return options
+	}
+	extension := filepath.Ext(options.Filename)
+	if len(extension) > 1 && len(options.Filename) > len(extension) && strings.EqualFold(extension[1:], options.Extensions[0]) {
+		options.Filename = strings.TrimSuffix(options.Filename, extension)
+	}
+	return options
+}
 
 func (s *screen) requestReplace(id string, p any) {
 	raw, _ := json.Marshal(p)
@@ -128,6 +143,7 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 					options.Filename = filepath.Base(state.Document.Path)
 				}
 			}
+			options = nativeFileOptions(options, runtime.GOOS)
 			var path string
 			if s.chooseFile != nil {
 				path, err = s.chooseFile(ctx, options)

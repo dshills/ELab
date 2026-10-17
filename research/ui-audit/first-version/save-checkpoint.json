@@ -1,0 +1,44 @@
+{
+  "scope": "Native Save filename repair and bounded export/input checks; not full release qualification",
+  "source_base": "38fe737feea166fea1fc611ad038a347b275a482",
+  "native_source_sha256": "9cc3f819e9348e12109621a97ce3795a762577b3ea455f9cc221dd4aaffd0bbb",
+  "native_binary_sha256": "b6cacf4d559782da8e3a289d9c5b27fbc89f9789e1dd31ba903181b9c390dc87",
+  "sdk_source": "47b7153109735006305e3610520e489a953fcd97",
+  "native_save_defaults": [
+    "Untitled.elab (first and repeat)",
+    "flasher-timing.elab (Save As)",
+    "Schematic.svg",
+    "Schematic.pdf",
+    "Schematic.png"
+  ],
+  "saved_project_semantically_identical": true,
+  "native_export_written": [
+    "svg",
+    "pdf",
+    "png"
+  ],
+  "visually_inspected_export": "flasher-output.png",
+  "not_qualified": [
+    "native CSV default/write in this checkpoint",
+    "physical printer",
+    "full keyboard/accessibility",
+    "declared display configurations",
+    "visible p95 latency"
+  ],
+  "tests": {
+    "focused_native_race": "passed, 3.987 s",
+    "full_scripts_check": "passed: lint/imports/Staticcheck, 38 Python tests, root/native race and vet; native 144.970 s",
+    "ledger_review": "Only desktop/files.go source hash and site line locations changed; 388 site mappings unchanged"
+  },
+  "owned_host_closed": true,
+  "canonical_bundle_promoted": false,
+  "artifacts": {
+    "save-default-after.jpg": "056de954adff810a216320e4f9e3280125f6767a5da75a6741f7495d02892cc7",
+    "export-default-after.jpg": "bd03ae801565a6d094e6b297b270b5762428b0df5aa435c8fd4c3b784d22c18a",
+    "flasher-save-roundtrip.elab": "b0dc7c61c9d757086937176d7cc8de1539e4cac82e8f95d5f9a00576cc62d4b8",
+    "flasher-output.svg": "eb027c9826ba3ec1e469df150965de99aa24a8530a1a265f0e4530ce486f211d",
+    "flasher-output.pdf": "8259ee45b07a3a4b4d0e7002ce467477e0e9b7582cea53207a28755a7d866c96",
+    "flasher-output.png": "f769f898f5418cf231b790090e0539798d4c590f7a70c406a949902ed8ae1f16",
+    "typing-comparison.json": "b506dfc7b17f494130add35118b8f71c91e8cdeb49b17411166bcccf49432f35"
+  }
+}
