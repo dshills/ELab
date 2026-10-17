@@ -1,0 +1,80 @@
+{
+  "trials": [
+    {
+      "case": "LED",
+      "value_ohm": 2000,
+      "start_epoch_ms": 1792267888423.6323,
+      "click_call_ms": 23.295583000406623,
+      "observation_call_ms": 414.07212499994785,
+      "request_to_observed_ms": 437.36770800035447,
+      "image": "calibration-01.jpg",
+      "ax": "calibration-01.ax.txt"
+    },
+    {
+      "case": "LED",
+      "value_ohm": 1000,
+      "start_epoch_ms": 1792267971393.384,
+      "click_call_ms": 20.717250000685453,
+      "observation_call_ms": 413.89516599942,
+      "request_to_observed_ms": 434.61241600010544,
+      "image": "calibration-02.jpg",
+      "ax": "calibration-02.ax.txt",
+      "method": "screenshot before subsequent AX query"
+    },
+    {
+      "case": "LED",
+      "value_ohm": 2000,
+      "click_call_ms": 8.013584000058472,
+      "observation_call_ms": 842.6927499994636,
+      "request_to_observed_ms": 850.706333999522,
+      "method": "Window raised before timed activation; screenshot then AX",
+      "image": "foreground-calibration.jpg"
+    }
+  ],
+  "stable_screenshot_call_ms": 82.26633299980313,
+  "classification": "Observation-method calibration only; no p95 gate qualified",
+  "visibility_check": "Raising the window brought pixels into agreement with the already-updated public state; actual OS occlusion/presentation times were unavailable",
+  "scope": "Measurement-method calibration on one LED reference only; no application latency threshold failure or pass established",
+  "build_sha256": "53f075c7835b88df95b96154b25b8cd34f73db08844da126f11cc1637ed62a6b",
+  "source_commit": "54bc8611154be468a0299bfabf19cc3bb971587c",
+  "sdk_source": "bc6b456f0c71b0327d0c02629b109eabbbc8994c",
+  "race_instrumented": false,
+  "go_version": "go version go1.27.2 darwin/arm64",
+  "os": "26.6.2",
+  "hardware": {
+    "model": "Mac16,11",
+    "logical_cpus": "14",
+    "memory_bytes": "68719476736",
+    "cpu": "Apple M4 Pro"
+  },
+  "public_state_after_reverse_edit": {
+    "resistance_ohm": 1000,
+    "current_a": 0.0029167965774405296
+  },
+  "native_event_timestamp_available": false,
+  "compositor_presentation_timestamp_available": false,
+  "capture_instant_available": false,
+  "eligible_p95_samples": 0,
+  "repetition_gate": "20 per reference circuit not attempted after the method calibration failed; p95 not calculated",
+  "reference_scope_correction": "PRD section 11 names LED, RC and NPN switch. The capacitor-timed flasher is an additional stress/reference exercise, not a replacement for the NPN switch performance case.",
+  "interpretation": [
+    "First two trials did not establish a visible foreground precondition; a later Raise made the screenshot agree with already-updated public state. Occlusion is a possible explanation, not an observed OS fact.",
+    "Screenshot/observation call duration includes tool waiting/capture/transfer overhead; it is not a native presentation duration.",
+    "The raised trial showed the expected new value/sample by return, but its 851 ms bound cannot resolve a 100 ms target or attribute a 500 ms miss to ELab.",
+    "Framework FrameMetrics and NativeActivity explicitly exclude actual compositor presentation; their CPU/present-call durations cannot replace this gate."
+  ],
+  "artifacts": {
+    "latency-unraised-old-frame.jpg": "08e28698ea7ab43e5bb54811c8f37d05756de79c7f18e6eb3e8a46c592256843",
+    "latency-raised-current-frame.jpg": "0823c15a1c3fcfb63c5fbe637b54168e690a0ad0d48b513d880a3145151bf755",
+    "latency-after-edit.ax.txt": "1b9f77a52292600cc8902dc7b0adb3f637f8547bd02fb44b744e961dadd869c7"
+  },
+  "window_frame_pixels": [
+    1053,
+    762
+  ],
+  "theme": "light",
+  "thermal_or_power_state": "not separately controlled",
+  "cold_warm": "Warm initialized app/session; cold routing not measured",
+  "operator_path": "Cua native value field + Apply button in the separate harness; native input timestamp not exposed",
+  "approval_state": "VoiceOver and caption-panel permission requested; no response/approval recorded, no OS setting change performed"
+}

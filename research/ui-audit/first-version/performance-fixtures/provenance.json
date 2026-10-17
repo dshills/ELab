@@ -1,0 +1,53 @@
+{
+  "scope": "Prepared PRD performance fixtures, not latency measurements",
+  "source_public_report_sha256": "650da67148d720c39651b38862abf059a8c44b1b4061f77cc7be59d01c337feb",
+  "construction": "Fresh external headless clients using first-version-parity.construct and shared commands; LED baseline changed to 1k through component.set; RC restarted after the analytical check; all saved paused and without recordings",
+  "agent_sha256": "2e869dc31dc96be1962ac4cab2d678472cc6c9564619fab2fb5aa9b6adc835cc",
+  "fixtures": [
+    {
+      "name": "led",
+      "file": "led.elab",
+      "sha256": "d7865cc6fce57283df734e200eeb39bd29d799a42cbe1136fab039403c055078",
+      "checks": [
+        "5V/1k generic LED baseline agrees with frozen conformance result"
+      ],
+      "measurements": {
+        "current_a": 0.0029167965774405296
+      },
+      "components": 4,
+      "wires": 4,
+      "initial_live_time_s": null,
+      "fresh_process_reopen": "passed: clean, paused, no recordings, correct baseline/startup"
+    },
+    {
+      "name": "rc",
+      "file": "rc.elab",
+      "sha256": "5d3276435b6e8b31fd3ebb65b2906b577261fd4d276694df34d8712c9cda42ef",
+      "checks": [
+        "10k/1uF exact-step 10 ms charge reference"
+      ],
+      "measurements": {
+        "voltage_10ms_v": 3.1606027941427883
+      },
+      "components": 4,
+      "wires": 4,
+      "initial_live_time_s": 0,
+      "fresh_process_reopen": "passed: clean, paused, no recordings, correct baseline/startup"
+    },
+    {
+      "name": "npn",
+      "file": "npn.elab",
+      "sha256": "69d4a4258e637b5afe61a8ec24136175ea31f828846f36c6617d226d1cc2144a",
+      "checks": [
+        "5V supply/5V drive, 10k base/1k collector and Is=1e-14 Bf=100 NPN; no LED in collector load"
+      ],
+      "measurements": {
+        "saturation_vce_v": 0.07039921913818598
+      },
+      "components": 6,
+      "wires": 7,
+      "initial_live_time_s": null,
+      "fresh_process_reopen": "passed: clean, paused, no recordings, correct baseline/startup"
+    }
+  ]
+}
