@@ -33,17 +33,9 @@ func validateRecordedOpAmps(c Compiled, g Graph, result *MixedResult) error {
 	if len(ids) == 0 {
 		return nil
 	}
-	if ground, ok := result.Nodes[c.Ground]; !ok || ground != 0 {
-		return fmt.Errorf("invalid recorded op-amp ground reference")
-	}
-	n := newMixedNetwork(c)
-	x := make([]float64, len(n.nodes))
-	for k, node := range n.nodes {
-		v, ok := result.Nodes[node]
-		if !ok || !finite(v) || v < -maxMixedNodeVoltage || v > maxMixedNodeVoltage {
-			return fmt.Errorf("invalid recorded op-amp node voltages")
-		}
-		x[k] = v
+	n, x, err := recordedDeviceNodes(c, result)
+	if err != nil {
+		return err
 	}
 	for _, actual := range result.OpAmps {
 		p, _ := g.Component(actual.ID)

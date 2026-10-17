@@ -1,0 +1,53 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "name": "missing-adapter",
+      "refused": true,
+      "expected_reason": "four passing current/prior adapters required",
+      "exit_code": 2
+    },
+    {
+      "name": "missing-refusal",
+      "refused": true,
+      "expected_reason": "storage references/refinement/file boundaries differ",
+      "exit_code": 2
+    },
+    {
+      "name": "changed-fine-point",
+      "refused": true,
+      "expected_reason": "storage references/refinement/file boundaries differ",
+      "exit_code": 2
+    },
+    {
+      "name": "forged-check",
+      "refused": true,
+      "expected_reason": "storage references/refinement/file boundaries differ",
+      "exit_code": 2
+    },
+    {
+      "name": "changed-graph",
+      "refused": true,
+      "expected_reason": "storage references/refinement/file boundaries differ",
+      "exit_code": 2
+    },
+    {
+      "name": "forged-refusal",
+      "refused": true,
+      "expected_reason": "storage references/refinement/file boundaries differ",
+      "exit_code": 2
+    },
+    {
+      "name": "foreign-engine-all-adapters",
+      "refused": true,
+      "expected_reason": "storage observed engine differs from compiled circuit",
+      "exit_code": 2
+    },
+    {
+      "name": "legacy-row-changed",
+      "refused": true,
+      "expected_reason": "amplifier references differ",
+      "exit_code": 2
+    }
+  ]
+}

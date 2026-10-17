@@ -47,33 +47,41 @@ type session struct {
 	directory string
 }
 
-func (s *session) ask(command string, p any, mutation bool, target any) error {
+func (s *session) request(command string, p any, mutation bool) (workbench.Response, error) {
 	s.sequence++
 	if p == nil {
 		p = struct{}{}
 	}
 	raw, err := json.Marshal(p)
 	if err != nil {
-		return err
+		return workbench.Response{}, err
 	}
 	r := workbench.Request{Version: workbench.ProtocolVersion, ID: fmt.Sprintf("conformance-%d", s.sequence), Command: command, Params: raw}
 	response, err := s.dispatch(r, mutation)
 	if err != nil {
-		return fmt.Errorf("%s: %w", command, err)
+		return response, fmt.Errorf("%s: %w", command, err)
 	}
 	s.commands = append(s.commands, command)
 	var normalized map[string]any
 	if err := json.Unmarshal(raw, &normalized); err != nil {
-		return err
+		return response, err
 	}
 	if path, ok := normalized["path"].(string); ok && strings.HasPrefix(path, s.directory+string(filepath.Separator)) {
 		normalized["path"] = "<artifacts>/" + strings.TrimPrefix(path, s.directory+string(filepath.Separator))
 	}
 	callParams, err := json.Marshal(normalized)
 	if err != nil {
-		return err
+		return response, err
 	}
 	s.calls = append(s.calls, Call{command, callParams})
+	return response, nil
+}
+
+func (s *session) ask(command string, p any, mutation bool, target any) error {
+	response, err := s.request(command, p, mutation)
+	if err != nil {
+		return err
+	}
 	if response.Error != nil {
 		return fmt.Errorf("%s: %s: %s", command, response.Error.Code, response.Error.Message)
 	}

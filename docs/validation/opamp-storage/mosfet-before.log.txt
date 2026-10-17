@@ -1,0 +1,69 @@
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/gate_current_a
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/drain_current_a
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/source_current_a
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/vgs_v
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/vds_v
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/power_w
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/state
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/missing-ground
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/foreign-node
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/missing-terminal-node
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/gate_current_a
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/drain_current_a
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/source_current_a
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/vgs_v
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/vds_v
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/power_w
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/state
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/missing-ground
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/foreign-node
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/missing-terminal-node
+    recording_mosfet_test.go:75: verification.import: want invalid-recording, got <nil>
+--- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState (0.12s)
+    --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos (0.07s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/gate_current_a (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/drain_current_a (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/source_current_a (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/vgs_v (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/vds_v (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/power_w (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/state (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/missing-ground (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/foreign-node (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/missing-terminal-node (0.00s)
+    --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos (0.05s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/gate_current_a (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/drain_current_a (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/source_current_a (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/vgs_v (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/vds_v (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/power_w (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/state (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/missing-ground (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/foreign-node (0.00s)
+        --- FAIL: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/missing-terminal-node (0.00s)
+FAIL
+FAIL	github.com/dshills/elab/workbench	0.402s
+FAIL

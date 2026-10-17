@@ -1,0 +1,65 @@
+package main
+
+import (
+	"encoding/json"
+	"os"
+
+	"github.com/dshills/elab/internal/conformance"
+)
+
+type adapter struct {
+	Name       string                         `json:"name"`
+	Equivalent bool                           `json:"equivalent_to_in_process"`
+	Workflows  []conformance.Result           `json:"workflows"`
+	Electrical conformance.ElectricalResult   `json:"electrical"`
+	Inductors  conformance.InductorResult     `json:"inductors"`
+	OpAmps     conformance.OpAmpSuiteResult   `json:"opamps"`
+	Storage    conformance.OpAmpStorageResult `json:"opamp_storage"`
+}
+type report struct {
+	Passed   bool      `json:"passed"`
+	Adapters []adapter `json:"adapters"`
+}
+
+func main() {
+	if len(os.Args) != 4 {
+		panic("input mutation output required")
+	}
+	raw, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
+	var data report
+	if err = json.Unmarshal(raw, &data); err != nil {
+		panic(err)
+	}
+	switch os.Args[2] {
+	case "missing-adapter":
+		data.Adapters = data.Adapters[:3]
+	case "missing-refusal":
+		data.Adapters[0].Storage.Cases[0].Refusals = data.Adapters[0].Storage.Cases[0].Refusals[1:]
+	case "changed-fine-point":
+		data.Adapters[0].Storage.Cases[0].RefinedRows[1].Values[0] = .9
+	case "forged-check":
+		data.Adapters[0].Storage.Checks[0].Actual = 99
+	case "changed-graph":
+		data.Adapters[0].Storage.Cases[0].Graph.Components[0].Value = 99
+	case "forged-refusal":
+		data.Adapters[0].Storage.Cases[0].Refusals[0].ProjectUnchanged = false
+	case "foreign-engine-all-adapters":
+		for i := range data.Adapters {
+			data.Adapters[i].Storage.Cases[1].Observations[0].Engine = "foreign"
+		}
+	case "legacy-row-changed":
+		data.Adapters[0].OpAmps.Cases[0].Rows[0].Values[0] = .2
+	default:
+		panic("unknown mutation")
+	}
+	raw, err = json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	if err = os.WriteFile(os.Args[3], raw, 0600); err != nil {
+		panic(err)
+	}
+}

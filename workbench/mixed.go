@@ -632,12 +632,9 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			r.Potentiometers = append(r.Potentiometers, PotentiometerResult{ID: p.ID, Resistance: p.Value, WiperPosition: *p.WiperPosition, UpperResistance: upper, LowerResistance: lower, Terminal1Voltage: v1, Terminal2Voltage: v2, WiperVoltage: vw, Terminal1Current: i1, Terminal2Current: i2, WiperCurrent: -i1 - i2, Power: power})
 
 		case "nmos", "pmos":
-			vgs := voltage(x, n.pin(p, "gate")) - voltage(x, n.pin(p, "source"))
-			vds := voltage(x, n.pin(p, "drain")) - voltage(x, n.pin(p, "source"))
-			id, _, _ := mosfetLinear(p.Kind, vgs, vds)
-			power := vds * id
-			powers += power
-			r.MOSFETs = append(r.MOSFETs, MOSFETResult{ID: p.ID, Model: mosfetModel(p.Kind), DrainCurrent: id, SourceCurrent: id, VGS: vgs, VDS: vds, Power: power, State: mosfetState(p.Kind, vgs, vds)})
+			device := n.mosfetResult(p, x)
+			powers += device.Power
+			r.MOSFETs = append(r.MOSFETs, device)
 		case "opamp":
 			device := n.opAmpResult(p, x)
 			powers += device.Power

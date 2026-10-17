@@ -1,0 +1,20 @@
+from pathlib import Path
+import json,subprocess
+root=Path.cwd();folder=root/'build/opamp-storage-quality';results=[]
+mutations=[
+  ('missing-adapter','four passing current/prior adapters required'),
+  ('missing-refusal','storage references/refinement/file boundaries differ'),
+  ('changed-fine-point','storage references/refinement/file boundaries differ'),
+  ('forged-check','storage references/refinement/file boundaries differ'),
+  ('changed-graph','storage references/refinement/file boundaries differ'),
+  ('forged-refusal','storage references/refinement/file boundaries differ'),
+  ('foreign-engine-all-adapters','storage observed engine differs from compiled circuit'),
+  ('legacy-row-changed','amplifier references differ'),
+]
+for name,expected in mutations:
+ path=folder/(name+'.json')
+ subprocess.run([str(folder/'mutate-review'),str(root/'build/opamp-storage-qual/report.json'),name,str(path)],check=True,timeout=30)
+ result=subprocess.run([str(folder/'reviewer'),str(path),str(root/'docs/validation/opamp-performance/conformance-report.json.gz')],capture_output=True,text=True,timeout=30)
+ assert result.returncode!=0 and expected in result.stderr,(name,result.stderr)
+ results.append({'name':name,'refused':True,'expected_reason':expected,'exit_code':result.returncode})
+(folder/'reviewer-negative-checks.json').write_text(json.dumps({'passed':True,'cases':results},indent=2)+'\n');print('All eight corrupted public reports refused for the expected reason')

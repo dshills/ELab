@@ -1,0 +1,144 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T05:04:31.433463+00:00",
+  "scope": "Unreleased mixed-recording consistency repair and two public powered-storage fixtures; source qualification, no app promotion",
+  "source_parent_commit": "6a2d109a8dedef0ad0bd2781775217714b83314a",
+  "changed_sources_sha256": {
+    "cmd/elab-conformance/main.go": "dbd5956e7ea0fa86a63f7efcd5fa5b878980584bb4d602fc498261f0f3252ac1",
+    "internal/conformance/client.go": "838a67ff13346a0bcb17fc2fa8275c1dad6d906cc3161a8bfb14c48d89a15a0d",
+    "internal/conformance/opamp_storage.go": "289d57935afe8a5c24aabd8a25b45b9f222d0f2c9d193bcfaccf274ea4ce109b",
+    "internal/conformance/opamp_storage_comparison.go": "3cf3afc8ce9619785e199ecb5970a0218298ea1ca8fa28a148c73cc6c83f2d00",
+    "internal/conformance/opamp_storage_corruption.go": "11bc08c14802b834dcd1ba51e78cf4656913e612ffff80abba5444e4ab7907a0",
+    "internal/conformance/opamp_storage_fixtures.go": "6642cf5cc89bb06274533ca3eed0028bdceba30a29185d7802d7aa52aefea215",
+    "internal/conformance/opamp_storage_references.go": "2aebe379f748f945c30d3c6aaec68aa337f62ad5557a9f38df20d62eba436a1f",
+    "internal/conformance/opamp_storage_test.go": "c4e68142045293c8bc25a969c1bfb01743985b51070a1e6000d9948239d86b8e",
+    "workbench/mixed.go": "fdd54b04c4cfd1987af1d37359d0a36fdae76fd1fef4604b01b3b74fe4b9a893",
+    "workbench/mosfet.go": "df2869b5fd98f8a10f1fce85d5f73c0c8eec19f42572f4548bd4f3f3fb43ebe6",
+    "workbench/opamp_dependencies.go": "0afd982900d1ebf9a674a12f18bd6896cfe7daa81a58ac46379a091919586156",
+    "workbench/recording_devices.go": "d28dd070a9c8b0fd134f00e555401dcf6401e623be8a00d89430bb779f8c938c",
+    "workbench/recording_import.go": "b58cfb9cbdece8274d87b83db25f8aa423af832a746d5879e7518b1f30bbcf7d",
+    "workbench/recording_mosfet_test.go": "7cf6b8913a111ddec54a49c5b7ed3e48d7213c02ea004bbbcd590ca0ffc09dc0"
+  },
+  "source_frozen_files": 628,
+  "source_stable": true,
+  "sdk_lock": "third_party/vellum/sdk.lock.json",
+  "post_gate_sdk_verification": {
+    "passed": true,
+    "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-aa9d023",
+    "source": "aa9d023243a6bded514c3d9696c08a9c917119c4"
+  },
+  "quality": "docs/validation/opamp-storage/quality.json",
+  "sample_audit": "docs/validation/opamp-storage/sample-audit.json",
+  "ordinary_binaries_sha256": {
+    "build/elab": "dde3b63a39d76ffed6e3233867e308742dfce7c0f3e5df9c198c5e7557d94843",
+    "build/elab-agent": "929e54595181d0bff278217f389ec8923592891dfeeb6bc88b9017079d128de7",
+    "build/elab-conformance": "a21990aa535121e8dbc67783661601a0a4adffe6cf7c4b1dff07a1c7f86348d1",
+    "build/elab-ui-audit": "0e61e3eda643457ff97480128826cd4c2b01f7fb7dedc5f1b7953ccfafda092f"
+  },
+  "numerical_checks": 7996,
+  "new_storage_checks": 3008,
+  "public_file_refusals": 232,
+  "storage_rows": 668,
+  "native_smoke_stages": 45,
+  "direct_regression_scope": {
+    "initial_failing_mosfet_import_cases": 20,
+    "initial_failing_storage_cases": 3,
+    "standalone_and_embedded_mosfet_refusals": 40,
+    "asynchronous_failed_mosfet_imports": 2,
+    "legitimate_mosfet_region_or_pair_roundtrips": 9
+  },
+  "compatibility": {
+    "report": "docs/validation/opamp-storage/compatibility-final.json",
+    "files": 13,
+    "exact_recording_reexports": 5,
+    "scope": "retained build fixtures from 0.88/0.89/0.102 directories; identities hashed at this audit, not proof they were immutable since those runs"
+  },
+  "prior_opamp_nmos_evidence_unchanged": true,
+  "prior_reference": "docs/validation/opamp-performance/conformance-report.json.gz",
+  "prior_reference_sha256": "b10456312263182ba5fa6f2cf9056df9ff267c782966e19cd965198a0131cc5a",
+  "report": {
+    "path": "docs/validation/opamp-storage/conformance-report.json.gz",
+    "encoding": "gzip of the exact original JSON; no fields/observations removed",
+    "decoded_sha256": "62a045dce746a83d38c89f2970fb63caa4dd46f3649502bbfdd0543e76bad6df",
+    "decoded_bytes": 4960755,
+    "round_trip_verified": true,
+    "gzip_review_matches_original": true
+  },
+  "file_fixtures": {
+    "archive": "docs/validation/opamp-storage/file-fixtures.tar.gz",
+    "index": "docs/validation/opamp-storage/file-fixtures-index.json",
+    "members": 261,
+    "regular_member_hashes_verified": true
+  },
+  "bundles_unchanged": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7,
+      "executable_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c"
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7,
+      "executable_sha256": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1"
+    }
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "limitations": [
+    "Consistency checks do not replay the transient solver, authenticate arbitrary history or establish hardware agreement.",
+    "Numerical qualification covers the two named RLC/PMOS fixtures and stated references/refinement, not every storage/device combination or maximum capacity.",
+    "Native socket/automated smoke evidence does not establish complete physical input, divider/focus/AX, screen-reader or visible-latency acceptance.",
+    "RLC analytic reference idealizes the buffer at .2 V; separate scalar buffer checks and stated tolerances account for finite gain. PMOS scalar load-line approximation is bounded as documented.",
+    "No device equations/parameters, numerical accuracy/work limits, part capacity, file versions or public app commands changed. Live MOSFET result arithmetic is extracted unchanged and prior amplified/NMOS numeric/command evidence matches exactly.",
+    "The 0.105 canonical app predates the source op-amps and fixes. No application promotion or MVP completion is claimed.",
+    "Compatibility files are retained build fixtures hashed now, not proof they were immutable since their earlier qualification runs.",
+    "Initial reverse-body fixtures overlapped component positions and were correctly rejected; only fixture positions were corrected, with that raw failing test log retained.",
+    "The first compatibility reader wrongly assumed every saved project had a capture; the original inverter project intentionally has none. Expected asset counts now come from the saved document. This was a tool-observed reader assertion, not a product import failure.",
+    "Initial Python-based damaged-report generation rewrote raw call number lexemes and triggered exact prior-call comparison before the intended mutation. The final typed Go mutation builder preserves those raw parameters; all eight reports are refused for the expected reason."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/opamp-storage/README.md": "5bacf8ad42a5dde9b15e568f586446d9e16fa8d5b0cfda7be8664921cf2fde55",
+    "docs/validation/opamp-storage/build.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/opamp-storage/check-fixture-archive.py.txt": "e58e7e425e30421ee5affccb58b08adb50573d23ec4a79aa441f9245c53303eb",
+    "docs/validation/opamp-storage/check.log.txt": "5c7c52f728472f45f5ca75d4ad6a83ad074b30965d0f4dbab5c97a61d8dd56df",
+    "docs/validation/opamp-storage/compatibility-final.json": "5cde06d3463867880887e9aee095237666e1ddd0578b662466575f82cfd11abf",
+    "docs/validation/opamp-storage/compatibility-from-archive.json": "5cde06d3463867880887e9aee095237666e1ddd0578b662466575f82cfd11abf",
+    "docs/validation/opamp-storage/compatibility.go.txt": "08fcab20510f05ae9516b85fe9d2c67101c1432a9cce9a4f810178833a2544b6",
+    "docs/validation/opamp-storage/conformance-report.json.gz": "a1f3c1d35ad3304830f397a45519432f665610a5fa408b3b0fb77c10d7acf0f8",
+    "docs/validation/opamp-storage/file-fixtures-index.json": "58eaa658fda37387a02e863c3ab76d1bc3bfff968fc9549a022fdeb22677b060",
+    "docs/validation/opamp-storage/file-fixtures.tar.gz": "933d3d791b56051fb12e28c3007a973f2b8d6b98b733213e724657003824d43d",
+    "docs/validation/opamp-storage/mosfet-after.log.txt": "2a4ef963501c91b9a1c9f45a5643da0b9e610fe4c2f7c4d4368679e7982917e1",
+    "docs/validation/opamp-storage/mosfet-before.log.txt": "e8a1a2972305b23c51730e982a467b67a876ff4f3538e1233568aa4ca1111811",
+    "docs/validation/opamp-storage/mosfet-fixture-position-failure.log.txt": "42c331fbb7601dea1583202087718952cf327f69c90ce2c330d8e42d97f4fc36",
+    "docs/validation/opamp-storage/mosfet-focused.log.txt": "a787d7e38238811c589224193c1f2be719950b25ea3e25a3b912aa6905059abb",
+    "docs/validation/opamp-storage/native-smoke.log.txt": "154c09af2a427f3fbd2b303eeb914438acd1cf630487f380a4e4ba51985a92c2",
+    "docs/validation/opamp-storage/post-doc-audit.log.txt": "6418b239381bfd130f510d6302854532cadd6cfc8b126a6b3a66d69e493a70a3",
+    "docs/validation/opamp-storage/public-after.log.txt": "fe88eca0cb48661be2fe7b28ba28a7dcdf66799f38a5bd013908fb83d30be8a8",
+    "docs/validation/opamp-storage/public-before.log.txt": "5afe1f4c2ae9c62e929b6074cfd554a811501df331f8b8ccfe995fe3a5ffd857",
+    "docs/validation/opamp-storage/public-refined.log.txt": "13bb6d33c4675de08c33eafa48995fd053489d66afb3cb77984b06f6a4d4cb2c",
+    "docs/validation/opamp-storage/public-suites.log.txt": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "docs/validation/opamp-storage/quality.json": "7f92a689e01c4fd7c79e0e1af9d4ced3d62bc16b0084942ceab2cfbfc6f55adc",
+    "docs/validation/opamp-storage/recording-final-focused.log.txt": "c1294e8b2f89e0b52a23da474e31a056b345ae03bd3b19234699a904038b93ce",
+    "docs/validation/opamp-storage/review-mutations.go.txt": "65b8ff9416e4282e190c6e4ad405778205eac066c59f708a9d36cb3b83aaf454",
+    "docs/validation/opamp-storage/review-negative-checks.py.txt": "734fb3d3e0c509af5c041cd3ce9a4f39b39d497997f54db393e989ad63d951ca",
+    "docs/validation/opamp-storage/review.go.txt": "706a2bf2114d7e2101d85557f0341bbd87eb83627d559c0d5dd4430b732931d3",
+    "docs/validation/opamp-storage/reviewer-negative-checks.json": "0552672d7f56ceb620f070fe8c9a30176de91a408c92a56e1df3e48ea18f9414",
+    "docs/validation/opamp-storage/sample-audit.json": "b3a094885251dac1bcbefd93b548dff70c7468bff209b450ba926c875f241d94",
+    "docs/validation/opamp-storage/source-freeze.json": "cc7a3cc35335afdedd5d6092012acd79dadc66d557f48ad1800489dadffa575d",
+    "docs/validation/opamp-storage/storage-before.log.txt": "5e1c7ad15b3bc4c5888e496f8e59aeac50d7245b8d111eaf779197faaac55227",
+    "docs/validation/opamp-storage/storage-focused.log.txt": "af1afb68ee252a4ed3fc429aadbca73be94d927f152511b1c6fa6a76014f621e"
+  },
+  "archive_compatibility_reproduction": {
+    "passed": true,
+    "exactly_matches_original_13_checks": true,
+    "report": "docs/validation/opamp-storage/compatibility-from-archive.json",
+    "source": "docs/validation/opamp-storage/check-fixture-archive.py.txt"
+  },
+  "post_documentation_audit": {
+    "passed": true,
+    "command": "go test -race ./internal/uiaudit",
+    "log": "docs/validation/opamp-storage/post-doc-audit.log.txt"
+  }
+}

@@ -17,15 +17,16 @@ import (
 )
 
 type adapterResult struct {
-	Name                string                         `json:"name"`
-	Equivalent          bool                           `json:"equivalent_to_in_process"`
-	Workflows           []conformance.Result           `json:"workflows"`
-	Electrical          *conformance.ElectricalResult  `json:"electrical,omitempty"`
-	Inductors           *conformance.InductorResult    `json:"inductors,omitempty"`
-	OpAmps              *conformance.OpAmpSuiteResult  `json:"opamps,omitempty"`
-	Performance         *conformance.PerformanceResult `json:"performance,omitempty"`
-	InductorPerformance *conformance.PerformanceResult `json:"inductor_performance,omitempty"`
-	OpAmpPerformance    *conformance.PerformanceResult `json:"opamp_performance,omitempty"`
+	Name                string                          `json:"name"`
+	Equivalent          bool                            `json:"equivalent_to_in_process"`
+	Workflows           []conformance.Result            `json:"workflows"`
+	Electrical          *conformance.ElectricalResult   `json:"electrical,omitempty"`
+	Inductors           *conformance.InductorResult     `json:"inductors,omitempty"`
+	OpAmps              *conformance.OpAmpSuiteResult   `json:"opamps,omitempty"`
+	OpAmpStorage        *conformance.OpAmpStorageResult `json:"opamp_storage,omitempty"`
+	Performance         *conformance.PerformanceResult  `json:"performance,omitempty"`
+	InductorPerformance *conformance.PerformanceResult  `json:"inductor_performance,omitempty"`
+	OpAmpPerformance    *conformance.PerformanceResult  `json:"opamp_performance,omitempty"`
 }
 type report struct {
 	Passed      bool            `json:"passed"`
@@ -48,6 +49,7 @@ func run() error {
 	electrical := flag.Bool("electrical-suite", false, "also run frozen independent electrical references and mixed flasher timestep refinement")
 	inductors := flag.Bool("inductor-suite", false, "also construct/probe/save/reopen coils and run analytic RL/RLC, flyback and mixed RC/NPN/coil checks")
 	opamps := flag.Bool("opamp-suite", false, "also verify powered amplifier references, mixed RC/NPN and two-buffer RC/MOSFET circuits, captures and save/reopen")
+	opampStorage := flag.Bool("opamp-storage-suite", false, "also verify buffered RLC and RC/PMOS references, refinement, fresh reopen and corrupted recording/project refusal")
 	performance := flag.Bool("performance-suite", false, "also measure fresh/warm backend edit/result and Verify latency in owned sessions")
 	inductorPerformance := flag.Bool("inductor-performance-suite", false, "also measure RL/RLC/flyback/mixed NPN-coil fresh/warm timing, 200 ms Verify at 1 ms outputs")
 	opampPerformance := flag.Bool("opamp-performance-suite", false, "also measure follower/inverting/mixed RC/NPN/MOSFET fresh/warm timing, 200 ms Verify at 1 ms outputs")
@@ -89,6 +91,7 @@ func run() error {
 	var electricalReference *conformance.ElectricalResult
 	var inductorReference *conformance.InductorResult
 	var opAmpReference *conformance.OpAmpSuiteResult
+	var opAmpStorageReference *conformance.OpAmpStorageResult
 	for _, mode := range modes {
 		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 		workflows, runErr := conformance.Run(ctx, mode.factory, filepath.Join(dir, mode.name))
@@ -148,6 +151,22 @@ func run() error {
 			if qualificationErr != nil {
 				result.Adapters = append(result.Adapters, adapter)
 				return writeFailure(dir, result, fmt.Errorf("%s op-amp suite: %w", mode.name, qualificationErr))
+			}
+		}
+		if *opampStorage {
+			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
+			qualified, qualificationErr := conformance.RunOpAmpStorage(ctx, mode.factory, filepath.Join(dir, mode.name, "opamp-storage"))
+			cancel()
+			adapter.OpAmpStorage = &qualified
+			if qualificationErr == nil {
+				if opAmpStorageReference == nil {
+					opAmpStorageReference = &qualified
+				}
+				qualificationErr = conformance.CompareOpAmpStorage(*opAmpStorageReference, qualified)
+			}
+			if qualificationErr != nil {
+				result.Adapters = append(result.Adapters, adapter)
+				return writeFailure(dir, result, fmt.Errorf("%s op-amp storage suite: %w", mode.name, qualificationErr))
 			}
 		}
 		if *performance {

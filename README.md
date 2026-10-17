@@ -187,6 +187,8 @@ Autosave and crash recovery are available in the Inspector. Snapshots preserve d
 
 Open exported recorded JSON from the Verify inspector to inspect/play its captured samples in a separate Recorded scope. Live state remains independent. [Recorded viewer commands and limits](docs/recording.md) describe exact edge stepping, probes and timing measurements.
 
+The unreleased [recording consistency repair](docs/recording-consistency.md) rejects contradictory final MOSFET/storage readings and probe values through the same user/agent import and project-load paths, preserving existing work on failure.
+
 Projects now save kept recorded results with their complete inputs/data, and reopen with fresh live startup alongside the recorded viewer. Completion/import marks those assets unsaved; Include/Exclude controls are shared with agents. [Project format, ownership and bounds](docs/project-format.md).
 
 Junctions and net labels now support explicit branched/named connectivity. Select a wire to insert a junction, or review crossing routes in the X/Y controls. Matching label names join attached nets; crossings remain separate. [Shared primitive commands and rules](docs/schematic-primitives.md).

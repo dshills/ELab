@@ -40,6 +40,13 @@ func mosfetModel(kind string) MOSFETModel {
 	return NMOSDeviceModel()
 }
 
+func (n *mixedNetwork) mosfetResult(p Component, x []float64) MOSFETResult {
+	vgs := voltage(x, n.pin(p, "gate")) - voltage(x, n.pin(p, "source"))
+	vds := voltage(x, n.pin(p, "drain")) - voltage(x, n.pin(p, "source"))
+	id, _, _ := mosfetLinear(p.Kind, vgs, vds)
+	return MOSFETResult{ID: p.ID, Model: mosfetModel(p.Kind), DrainCurrent: id, SourceCurrent: id, VGS: vgs, VDS: vds, Power: vds * id, State: mosfetState(p.Kind, vgs, vds)}
+}
+
 // positiveMOSChannel uses polarity-normalized voltages; beta includes W/L.
 func positiveMOSChannel(m MOSFETModel, vgs, vds float64) (i, gm, gd float64) {
 	u := vgs - math.Abs(m.Threshold)

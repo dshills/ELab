@@ -1,0 +1,14 @@
+from pathlib import Path
+import hashlib,json,tarfile
+stage=Path('build/.storage-fixture-inputs-qualified');stage.mkdir(mode=0o700)
+index=json.loads(Path('docs/validation/opamp-storage/file-fixtures-index.json').read_text())['members'];seen=set()
+with tarfile.open('docs/validation/opamp-storage/file-fixtures.tar.gz','r:gz') as archive:
+ for member in archive:
+  target=stage/member.name
+  assert member.isfile() and target.resolve().is_relative_to(stage.resolve()) and member.name not in seen
+  data=archive.extractfile(member).read();assert len(data)==index[member.name]['bytes'] and hashlib.sha256(data).hexdigest()==index[member.name]['sha256']
+  target.parent.mkdir(parents=True,exist_ok=True)
+  with target.open('xb') as output:output.write(data)
+  seen.add(member.name)
+assert seen==set(index)
+print('All 261 archived regular files extracted exclusively and verified')

@@ -1,0 +1,127 @@
+package main
+
+import (
+	"bytes"
+	"context"
+	"crypto/sha256"
+	"encoding/json"
+	"fmt"
+	"os"
+	"path/filepath"
+	"time"
+
+	"github.com/dshills/elab/workbench"
+)
+
+type check struct {
+	Path          string `json:"path"`
+	SHA256        string `json:"sha256"`
+	Passed        bool   `json:"passed"`
+	Recordings    int    `json:"recordings"`
+	ExactReexport bool   `json:"exact_reexport,omitempty"`
+}
+
+func main() {
+	if len(os.Args) != 3 {
+		panic("input root and new output directory required")
+	}
+	if err := os.Mkdir(os.Args[2], 0700); err != nil {
+		panic(err)
+	}
+	files := []string{
+		"build/nmos-088/headless-final-assets/nmos.elab", "build/nmos-088/native-final-assets/nmos.elab",
+		"build/pmos-089/headless-final-assets/pmos.elab", "build/pmos-089/native-final-assets/pmos.elab",
+		"build/pmos-089/headless-final-assets/cmos.elab", "build/pmos-089/native-final-assets/cmos.elab",
+		"build/cmos-102/native-release-assets/inverter.elab", "build/cmos-102/native-release-assets/edited-inverter.elab",
+		"build/nmos-088/headless-final-assets/nmos.json", "build/nmos-088/native-final-assets/nmos.json",
+		"build/pmos-089/headless-final-assets/pmos.json", "build/pmos-089/native-final-assets/pmos.json",
+		"build/cmos-102/native-release-assets/inverter-capture.json",
+	}
+	var results []check
+	for i, path := range files {
+		readPath := filepath.Join(os.Args[1], path)
+		original, err := os.ReadFile(readPath)
+		if err != nil {
+			panic(err)
+		}
+		func() {
+			service := workbench.New()
+			defer service.Close()
+			sequence := 0
+			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancel()
+			invoke := func(command string, params any) workbench.Response {
+				sequence++
+				raw, e := json.Marshal(params)
+				if e != nil {
+					panic(e)
+				}
+				revision := service.Snapshot().Revision
+				response := service.Dispatch(ctx, workbench.Request{Version: 1, ID: fmt.Sprint(sequence), Command: command, Params: raw, ExpectedRevision: &revision, Key: fmt.Sprint(sequence)}, "compatibility")
+				if response.Error != nil {
+					panic(fmt.Sprintf("%s %s: %+v", path, command, response.Error))
+				}
+				return response
+			}
+			result := check{Path: path, SHA256: fmt.Sprintf("%x", sha256.Sum256(original))}
+			absolute, e := filepath.Abs(readPath)
+			if e != nil {
+				panic(e)
+			}
+			if filepath.Ext(path) == ".elab" {
+				invoke("project.load", workbench.LoadParams{Path: absolute})
+				state, e := service.Wait(ctx)
+				if e != nil {
+					panic(e)
+				}
+				var saved workbench.Document
+				if e = json.Unmarshal(original, &saved); e != nil {
+					panic(e)
+				}
+				expected := 0
+				if saved.Recordings != nil {
+					expected += len(saved.Recordings.Entries)
+				}
+				if saved.Sweeps != nil {
+					expected += len(saved.Sweeps.Entries)
+				}
+				if state.Mixed == nil || state.Mixed.Stale || state.Document.RecordingCount != expected {
+					panic(fmt.Sprintf("%s lost fresh physics or assets: %d/%d", path, state.Document.RecordingCount, expected))
+				}
+				result.Recordings = state.Document.RecordingCount
+			} else {
+				invoke("verification.import", workbench.RecordingImportParams{Path: absolute})
+				state := service.Snapshot()
+				if state.Recording == nil || !state.Recording.Imported || state.Document.RecordingCount != 1 {
+					panic("retained recording failed import")
+				}
+				copyPath, e := filepath.Abs(filepath.Join(os.Args[2], fmt.Sprintf("%02d.json", i)))
+				if e != nil {
+					panic(e)
+				}
+				invoke("verification.export", workbench.VerificationExportParams{ID: state.Recording.ID, Path: copyPath, Format: "json"})
+				copy, e := os.ReadFile(copyPath)
+				if e != nil || !bytes.Equal(copy, original) {
+					panic("retained recording changed on reexport")
+				}
+				result.Recordings = 1
+				result.ExactReexport = true
+			}
+			after, e := os.ReadFile(readPath)
+			if e != nil || !bytes.Equal(after, original) {
+				panic("retained source file changed")
+			}
+			result.Passed = true
+			results = append(results, result)
+		}()
+	}
+	raw, err := json.MarshalIndent(struct {
+		Passed bool    `json:"passed"`
+		Scope  string  `json:"scope"`
+		Checks []check `json:"checks"`
+	}{true, "retained build fixtures from 0.88/0.89/0.102 directories; identities hashed at this audit, not proof they were immutable since those runs", results}, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(raw))
+}

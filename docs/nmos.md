@@ -47,3 +47,5 @@ python3 scripts/nmos-demo.py --output build/nmos-report.json --artifacts build/n
 ```
 
 The reference checks blank/template equality, gate/drain/source probes, pulse corners, geometry preservation, captured model CSV/JSON, save/reopen, tampered-model refusal and analytic external gate RC charge/discharge. Native runs close the owned app afterward. Outputs and asset directories must be new. Full generic-device hardware qualification and complete mounted input/accessibility testing remain separate gates.
+
+The unreleased [recording-consistency repair](recording-consistency.md) also validates unprobed final MOSFET readings and node inventories on import, including embedded project assets. Valid captured data retains its existing format and exact re-export.

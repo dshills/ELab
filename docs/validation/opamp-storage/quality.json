@@ -1,0 +1,69 @@
+{
+  "passed": true,
+  "source_files": 628,
+  "source_freeze": "build/opamp-storage-quality/source-freeze.json",
+  "source_stable": true,
+  "steps": [
+    {
+      "name": "build",
+      "argv": [
+        "./scripts/build.sh"
+      ],
+      "started_utc": "2026-10-17T04:49:30.262307+00:00",
+      "log": "build/opamp-storage-quality/build.log.txt",
+      "exit_code": 0,
+      "elapsed_seconds": 6.444909834070131,
+      "finished_utc": "2026-10-17T04:49:36.707549+00:00"
+    },
+    {
+      "name": "check",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T04:49:36.707747+00:00",
+      "log": "build/opamp-storage-quality/check.log.txt",
+      "exit_code": 0,
+      "elapsed_seconds": 306.68666166695766,
+      "finished_utc": "2026-10-17T04:54:43.396099+00:00"
+    },
+    {
+      "name": "native-smoke",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/elab",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "started_utc": "2026-10-17T04:54:43.396315+00:00",
+      "log": "build/opamp-storage-quality/native-smoke.log.txt",
+      "exit_code": 0,
+      "elapsed_seconds": 37.969276417046785,
+      "finished_utc": "2026-10-17T04:55:21.365930+00:00"
+    },
+    {
+      "name": "public-suites",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+        "--opamp-storage-suite",
+        "--opamp-suite",
+        "--inductor-suite",
+        "--electrical-suite",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/opamp-storage-qual",
+        "--native-binary",
+        "/Users/dshills/Development/projects/ELab/build/elab"
+      ],
+      "started_utc": "2026-10-17T04:55:21.366194+00:00",
+      "log": "build/opamp-storage-quality/public-suites.log.txt",
+      "exit_code": 0,
+      "elapsed_seconds": 31.716655624913983,
+      "finished_utc": "2026-10-17T04:55:53.083178+00:00"
+    }
+  ],
+  "binaries": {
+    "build/elab": "dde3b63a39d76ffed6e3233867e308742dfce7c0f3e5df9c198c5e7557d94843",
+    "build/elab-agent": "929e54595181d0bff278217f389ec8923592891dfeeb6bc88b9017079d128de7",
+    "build/elab-conformance": "a21990aa535121e8dbc67783661601a0a4adffe6cf7c4b1dff07a1c7f86348d1",
+    "build/elab-ui-audit": "0e61e3eda643457ff97480128826cd4c2b01f7fb7dedc5f1b7953ccfafda092f"
+  }
+}

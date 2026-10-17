@@ -172,6 +172,18 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	if err := validateRecordedResults(m, c); err != nil {
 		return nil, err
 	}
+	if m.Mixed != nil {
+		// The final device state and the last plotted row describe the same
+		// accepted instant, including the right side of a source edge.
+		frame := mixedSample(c, m.Mixed, 0)
+		last := d.Rows[len(d.Rows)-1]
+		for i, probe := range m.Probes {
+			value, ok := frameValue(frame, probe)
+			if !ok || !recordingNear(value, last.Values[i]) {
+				return nil, fmt.Errorf("recorded final state disagrees with its last probe sample")
+			}
+		}
+	}
 	return &verificationRecord{metadata: cloneVerificationMetadata(m), rows: d.Rows}, nil
 }
 
@@ -204,6 +216,9 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		if r == nil || m.LED != nil || m.NPN != nil || r.Stale || r.Engine != networkEngine(m.Analysis) || !recordingNear(r.Time, m.Duration) || len(r.Nodes) > MaxMixedNodes+1 {
 			return fmt.Errorf("invalid recorded mixed final result")
 		}
+		if _, _, err := recordedDeviceNodes(c, r); err != nil {
+			return err
+		}
 		if err := validateRecordedOpAmps(c, m.Graph, r); err != nil {
 			return err
 		}
@@ -213,18 +228,14 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 				return fmt.Errorf("invalid recorded inductor identity, voltage or energy")
 			}
 		}
-		mosIDs := map[string][]string{"nmos": {}, "pmos": {}}
-		for _, mos := range r.MOSFETs {
-			part, ok := m.Graph.Component(mos.ID)
-			if !ok || !IsMOSFETKind(part.Kind) || mos.Model != mosfetModel(part.Kind) {
-				return fmt.Errorf("invalid recorded MOSFET identity/model")
+		for _, v := range r.Capacitors {
+			p, ok := m.Graph.Component(v.ID)
+			if !ok || p.Kind != "capacitor" || !recordingNear(v.Energy, .5*p.Value*v.Voltage*v.Voltage) || !recordingNear(v.Voltage, r.Nodes[c.TerminalNet[v.ID+".1"]]-r.Nodes[c.TerminalNet[v.ID+".2"]]) {
+				return fmt.Errorf("invalid recorded capacitor identity, voltage or energy")
 			}
-			mosIDs[part.Kind] = append(mosIDs[part.Kind], mos.ID)
 		}
-		for _, kind := range []string{"nmos", "pmos"} {
-			if err := recordedObjectIDs(m.Graph, kind, mosIDs[kind]); err != nil {
-				return err
-			}
+		if err := validateRecordedMOSFETs(c, m.Graph, r); err != nil {
+			return err
 		}
 
 		ids := []string{}

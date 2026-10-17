@@ -1,0 +1,14 @@
+=== RUN   TestRecordedStorageAndFinalProbeMustDescribeTheSameState
+=== RUN   TestRecordedStorageAndFinalProbeMustDescribeTheSameState/capacitor-voltage
+    recording_mosfet_test.go:217: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedStorageAndFinalProbeMustDescribeTheSameState/capacitor-energy
+    recording_mosfet_test.go:217: verification.import: want invalid-recording, got <nil>
+=== RUN   TestRecordedStorageAndFinalProbeMustDescribeTheSameState/inductor-current-with-consistent-energy
+    recording_mosfet_test.go:217: verification.import: want invalid-recording, got <nil>
+--- FAIL: TestRecordedStorageAndFinalProbeMustDescribeTheSameState (0.05s)
+    --- FAIL: TestRecordedStorageAndFinalProbeMustDescribeTheSameState/capacitor-voltage (0.01s)
+    --- FAIL: TestRecordedStorageAndFinalProbeMustDescribeTheSameState/capacitor-energy (0.00s)
+    --- FAIL: TestRecordedStorageAndFinalProbeMustDescribeTheSameState/inductor-current-with-consistent-energy (0.00s)
+FAIL
+FAIL	github.com/dshills/elab/workbench	0.343s
+FAIL

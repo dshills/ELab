@@ -47,3 +47,5 @@ python3 scripts/pmos-demo.py --output build/pmos-report.json --artifacts build/p
 ```
 
 It reconstructs the example, verifies signed pulse/RC behavior, exports and reopens captured models, refuses wrong polarity, then builds/records a complementary inverter. Native mode closes that owned app afterward. No hardware, physical matched-pair, complete mounted input/accessibility or release qualification is inferred from these checks.
+
+The unreleased [recording-consistency repair](recording-consistency.md) validates unprobed signed PMOS readings and stored nodes on import. Its public RC-buffered high-side workflow adds independent reference and failed-file preservation checks alongside the earlier PMOS cases.

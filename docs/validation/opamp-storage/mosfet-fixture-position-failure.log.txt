@@ -1,0 +1,71 @@
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/gate_current_a
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/drain_current_a
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/source_current_a
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/vgs_v
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/vds_v
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/power_w
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/state
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/missing-ground
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/foreign-node
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/missing-terminal-node
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/gate_current_a
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/drain_current_a
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/source_current_a
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/vgs_v
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/vds_v
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/power_w
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/state
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/missing-ground
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/foreign-node
+=== RUN   TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/missing-terminal-node
+--- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState (0.20s)
+    --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos (0.11s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/gate_current_a (0.01s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/drain_current_a (0.01s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/source_current_a (0.01s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/vgs_v (0.01s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/vds_v (0.01s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/power_w (0.01s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/state (0.00s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/missing-ground (0.01s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/foreign-node (0.00s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/nmos/missing-terminal-node (0.00s)
+    --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos (0.09s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/gate_current_a (0.01s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/drain_current_a (0.01s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/source_current_a (0.01s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/vgs_v (0.00s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/vds_v (0.00s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/power_w (0.00s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/state (0.00s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/missing-ground (0.00s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/foreign-node (0.00s)
+        --- PASS: TestRecordedMOSFETReadingsMustMatchUnprobedTerminalState/pmos/missing-terminal-node (0.00s)
+=== RUN   TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip
+=== RUN   TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/nmos-cutoff
+=== RUN   TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/nmos-saturation
+=== RUN   TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/nmos-triode
+=== RUN   TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/pmos-cutoff
+=== RUN   TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/pmos-saturation
+=== RUN   TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/pmos-triode
+=== RUN   TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/nmos-reverse
+    recording_mosfet_test.go:159: verification.import: &{Code:invalid-recording Message:recorded schematic: duplicate object ID or occupied position on R1}
+=== RUN   TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/pmos-reverse
+    recording_mosfet_test.go:159: verification.import: &{Code:invalid-recording Message:recorded schematic: duplicate object ID or occupied position on R1}
+=== RUN   TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/complementary
+--- FAIL: TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip (0.23s)
+    --- PASS: TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/nmos-cutoff (0.03s)
+    --- PASS: TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/nmos-saturation (0.03s)
+    --- PASS: TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/nmos-triode (0.03s)
+    --- PASS: TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/pmos-cutoff (0.03s)
+    --- PASS: TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/pmos-saturation (0.03s)
+    --- PASS: TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/pmos-triode (0.03s)
+    --- FAIL: TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/nmos-reverse (0.02s)
+    --- FAIL: TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/pmos-reverse (0.02s)
+    --- PASS: TestRecordedMOSFETLegitimateRegionsAndBodyDirectionsRoundTrip/complementary (0.03s)
+FAIL
+FAIL	github.com/dshills/elab/workbench	0.692s
+FAIL
