@@ -1,0 +1,135 @@
+{
+  "date": "2026-10-17",
+  "source_base": "a631f7a",
+  "status": "one native UI submission completed in real configured local queue; physical paper inspection pending",
+  "device": {
+    "queue": "Brother_HL_L2390DW",
+    "display_name": "Brother HL-L2390DW",
+    "configured_default_media": "Letter",
+    "configured_state_before": "idle/accepting"
+  },
+  "procedure": [
+    "Load the paused public LED fixture in a separate private native instance",
+    "Set Letter landscape, fit, 12 mm margins, grayscale, no overlays through shared agent commands",
+    "Open captured preview, discover and select actual Brother queue through native controls; observe one page and one copy",
+    "Export matching current-source PDF and independently render with Poppler; visually inspect complete labels/wires/parts list",
+    "Activate native Print exactly once",
+    "Inspect and refresh only that retained job through external agent commands",
+    "Observe completed in native UI and independently match only job 161 in lpstat completed queue"
+  ],
+  "job": {
+    "page_count": 1,
+    "id": "print-1",
+    "preview_id": "preview-1",
+    "printer_id": "Brother_HL_L2390DW",
+    "copies": 1,
+    "status": "completed",
+    "spool_id": 161,
+    "cancel_requested": false,
+    "page": {
+      "paper": "letter",
+      "orientation": "landscape",
+      "margin_mm": 12
+    },
+    "run_id": 2,
+    "electrical_revision": 2,
+    "document_generation": 2,
+    "actor": "user",
+    "pdf_sha256": "72b12da60c6d08d06e91ecc499af62d26bbd13c4f21938d2eab1048842b0e4f6",
+    "pdf_bytes": 20068
+  },
+  "preview": {
+    "page_index": 0,
+    "page_count": 1,
+    "rows": 1,
+    "columns": 1,
+    "id": "preview-1",
+    "status": "completed",
+    "visible": true,
+    "source_current": true,
+    "page": {
+      "paper": "letter",
+      "orientation": "landscape",
+      "margin_mm": 12
+    },
+    "run_id": 2,
+    "electrical_revision": 2,
+    "document_generation": 2,
+    "actor": "user",
+    "width_px": 1650,
+    "height_px": 1275,
+    "bytes": 97909,
+    "sha256": "16d682c2da3da080f4785a39879ea47a589d27745643cca5fd0ae3ad400ca8dd"
+  },
+  "source_preservation": {
+    "only_changed_top_level_fields": [
+      "command_revision",
+      "last_export",
+      "print_preview",
+      "printing",
+      "project_work",
+      "revision",
+      "viewport"
+    ],
+    "all_other_snapshot_fields_equal": true,
+    "document_clean_after": true,
+    "fixture_sha256": "d7865cc6fce57283df734e200eeb39bd29d799a42cbe1136fab039403c055078"
+  },
+  "pdf_review": {
+    "file": "LED-letter.pdf",
+    "pages": 1,
+    "points": [
+      792,
+      612
+    ],
+    "visual": "complete schematic, labels and parts list; readable grayscale, no observed clipping/overlap",
+    "reviewed_pdf_sha256": "f5fbc790d0a963fdfa6c3cb358260ee56dd68c372104c6c9726c5f805f53a025",
+    "spool_bytes_limit": "The reviewed export and spooled PDF are separate renders with different hashes. Captured source/page/run/document identities agree; exact spooled bytes were not retained or visually inspected.",
+    "metadata_fields_match_job_receipt": true
+  },
+  "source_changes": {
+    "kind": "wording only",
+    "single_page_button": "Print 1 page",
+    "single_copy_receipt": "1 copy",
+    "public_commands_changed": false,
+    "sdk_changed": false,
+    "native_screenshot_scope": "screenshots precede wording repair; no additional physical job was submitted to retest labels"
+  },
+  "quality": {
+    "existing_native_print_tiled_race": "passed 4.726s",
+    "lint_imports_staticcheck": "passed",
+    "native_vet": "passed",
+    "source_ledger": "only printing.go hash and site locations; all non-line site fields and command sets identical",
+    "full_release_gate": "not rerun for this wording-only checkpoint"
+  },
+  "limits": [
+    "Paper not observed; owner inspection requested and pending",
+    "Actual media/margins/scale not measured",
+    "No A4/portrait/tiled/RC/flasher physical output qualification",
+    "No device cancellation qualification",
+    "Spool completion is not proof of paper delivery"
+  ],
+  "ownership": {
+    "private_host": "closed normally after acknowledged job became terminal; no project edits or unsaved changes",
+    "physical_jobs_submitted": 1,
+    "copies_requested": 1,
+    "review_files_verified_unchanged": 113,
+    "canonical_executable_verified_unchanged": true,
+    "os_printer_settings_changed": false
+  },
+  "evidence_sha256": {
+    "LED-letter-render.png": "46910e282f6079781f42bb931ebaaa35f2e883155062819feec88ac30f34120d",
+    "LED-letter.pdf": "f5fbc790d0a963fdfa6c3cb358260ee56dd68c372104c6c9726c5f805f53a025",
+    "completed.ax.txt": "357f6f6aa93b44930a4373b54217c6b5484fff9bd2450d19c491461bcc9fdee2",
+    "completed.jpg": "37fff24af9afec8f7e0b58bce31fc6a8c37b7a32975a6657897223614d51968e",
+    "job-observations.json": "93ca5b6c66b414a0ae581df104e1bc08e6dbdb18ab136787eeb102a5aafcc603",
+    "owned-system-job.txt": "8ea92f4dc51aed9c810a33d7a1312db0dddacea93e0cf0d76766857e7afe036c",
+    "pdfinfo.txt": "f9745bb9d2e9daaf1f83469103c61086b34411ce21b55a9ad38b078cda93cf33",
+    "prepared.ax.txt": "e7fd57060d6e6919543945bbaede2fa473fe1a9837fc9ded11ab56ee2911187b",
+    "prepared.jpg": "c554cccc5b1c17d3440f3cdfe7c44be36ba97c2c0d37c89a5cc708197145a34a",
+    "states.json.gz": "bb0d175d25ed04fa0ab25801e748c11f1c15d4f66a4eb92befd3304300576724"
+  },
+  "source_sha256": {
+    "desktop/printing.go": "9c40645db6de5affc3ae9d654f72c7003671f5d8c23c8bd7de93ffa35bea8c59"
+  }
+}

@@ -41,7 +41,9 @@ func (s *screen) printingControls(state workbench.Snapshot) []ui.Node {
 	p := state.PrintPreview
 	if p != nil {
 		label := "Print captured pages"
-		if p.PageCount > 0 {
+		if p.PageCount == 1 {
+			label = "Print 1 page"
+		} else if p.PageCount > 1 {
 			label = fmt.Sprintf("Print all %d pages", p.PageCount)
 		}
 		submit := s.action("printer-submit", label, "print.submit", workbench.PrintSubmitParams{PreviewID: p.ID, PrinterID: printing.PrinterID, Copies: printing.Copies})
@@ -64,7 +66,11 @@ func (s *screen) printingControls(state workbench.Snapshot) []ui.Node {
 		}
 	}
 	for _, job := range printing.Jobs {
-		nodes = append(nodes, quiet("printer-job-"+job.ID, fmt.Sprintf("%s · %s · %d copies\n%s", job.ID, job.Status, job.Copies, job.PrinterID)))
+		copies := fmt.Sprintf("%d copies", job.Copies)
+		if job.Copies == 1 {
+			copies = "1 copy"
+		}
+		nodes = append(nodes, quiet("printer-job-"+job.ID, fmt.Sprintf("%s · %s · %s\n%s", job.ID, job.Status, copies, job.PrinterID)))
 		if job.SpoolID > 0 {
 			refresh := s.action("printer-refresh-"+job.ID, "Refresh job", "print.job.refresh", workbench.IDParams{ID: job.ID})
 			refresh.Disabled = busy

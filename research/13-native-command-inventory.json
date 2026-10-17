@@ -35,7 +35,7 @@
     "desktop/pointer_other.go": "7c451ae4f8235e78e3e2803086c738488ee5463e878b003a203b9929497461c1",
     "desktop/print_page.go": "96cb763e746bbc8d055fa7a78bc4cb6b47e3230308713e1d1cb0a8a5f06daf14",
     "desktop/print_preview.go": "3cc0ff9070556c30b0a490090985c879fd5796918055da27bd4aa7a98957ecdc",
-    "desktop/printing.go": "5c404d079910b3b0db27f81ec8f4ff721cb561bcacadbe2b6878701bfd360b6b",
+    "desktop/printing.go": "9c40645db6de5affc3ae9d654f72c7003671f5d8c23c8bd7de93ffa35bea8c59",
     "desktop/probes.go": "bd632c82d6a0ef88be1b2ac39299c13c1cd3fd6fa7d35238b16f5944ed08fdcd",
     "desktop/project_work.go": "f4109a9a2e8bfa2098a9bf7a35327f4dcd557e696f9ac9178c19788de0694c20",
     "desktop/recording.go": "7bf3fafefb079de4cb5d8f03ff092b4ae5a5481913dd6c9aa51f9299377d948e",
@@ -2351,7 +2351,7 @@
     },
     {
       "file": "desktop/printing.go",
-      "line": 47,
+      "line": 49,
       "function": "*screen.printingControls",
       "kind": "action-factory",
       "expression": "s.action(\"printer-submit\", label, \"print.submit\", workbench.PrintSubmitParams{PreviewID: p.ID, PrinterID: printing.PrinterID, Copies: printing.Copies})",
@@ -2362,7 +2362,7 @@
     },
     {
       "file": "desktop/printing.go",
-      "line": 58,
+      "line": 60,
       "function": "*screen.printingControls",
       "kind": "action-factory",
       "expression": "s.action(\"printer-work-cancel\", \"Cancel preparation\", \"print.work.cancel\", workbench.IDParams{ID: w.ID})",
@@ -2373,7 +2373,7 @@
     },
     {
       "file": "desktop/printing.go",
-      "line": 69,
+      "line": 75,
       "function": "*screen.printingControls",
       "kind": "action-factory",
       "expression": "s.action(\"printer-refresh-\"+job.ID, \"Refresh job\", \"print.job.refresh\", workbench.IDParams{ID: job.ID})",
@@ -2384,7 +2384,7 @@
     },
     {
       "file": "desktop/printing.go",
-      "line": 71,
+      "line": 77,
       "function": "*screen.printingControls",
       "kind": "action-factory",
       "expression": "s.action(\"printer-cancel-\"+job.ID, \"Cancel print job\", \"print.job.cancel\", workbench.IDParams{ID: job.ID})",
