@@ -1,0 +1,92 @@
+package main
+
+import (
+	"bytes"
+	"compress/gzip"
+	"crypto/sha256"
+	"encoding/json"
+	"fmt"
+	"io"
+	"math"
+	"os"
+	"reflect"
+
+	"github.com/dshills/elab/internal/conformance"
+	"github.com/dshills/elab/workbench"
+)
+
+type adapter struct {
+	Name        string                         `json:"name"`
+	Equivalent  bool                           `json:"equivalent_to_in_process"`
+	Workflows   []conformance.Result           `json:"workflows"`
+	Electrical  conformance.ElectricalResult   `json:"electrical"`
+	Inductors   conformance.InductorResult     `json:"inductors"`
+	OpAmps      conformance.OpAmpSuiteResult   `json:"opamps"`
+	Storage     conformance.OpAmpStorageResult `json:"opamp_storage"`
+	Capacity    conformance.CapacityResult     `json:"capacity"`
+	Performance conformance.PerformanceResult  `json:"capacity_performance"`
+}
+
+func require(ok bool, message string) {
+	if !ok {
+		panic(message)
+	}
+}
+func main() {
+	raw, err := os.ReadFile(os.Args[1])
+	require(err == nil, "read report")
+	if len(raw) > 2 && raw[0] == 0x1f && raw[1] == 0x8b {
+		reader, e := gzip.NewReader(bytes.NewReader(raw))
+		require(e == nil, "gzip reader")
+		raw, e = io.ReadAll(reader)
+		require(e == nil, "gzip decode")
+		require(reader.Close() == nil, "gzip close")
+	}
+	var input struct {
+		Passed   bool      `json:"passed"`
+		Adapters []adapter `json:"adapters"`
+	}
+	require(json.Unmarshal(raw, &input) == nil, "decode report")
+	require(input.Passed && len(input.Adapters) == 4, "four passing adapters")
+	names := []string{"in-process", "headless-stdio", "headless-socket", "native-socket"}
+	rowsByGraph := map[string][]workbench.VerificationRow{}
+	finalByGraph := map[string]workbench.MixedResult{}
+	summaries := []map[string]any{}
+	samples, rows := 0, 0
+	maxFresh, maxVerify := 0., 0.
+	for i, a := range input.Adapters {
+		require(a.Name == names[i] && a.Equivalent, "adapter coverage")
+		base := input.Adapters[0]
+		require(conformance.Compare(base.Workflows, a.Workflows) == nil, "base parity")
+		require(conformance.CompareElectrical(base.Electrical, a.Electrical) == nil && len(a.Electrical.Checks) == 294, "electrical references")
+		require(conformance.CompareInductors(base.Inductors, a.Inductors) == nil && len(a.Inductors.Checks) == 22, "coil references")
+		require(conformance.CompareOpAmps(base.OpAmps, a.OpAmps) == nil && len(a.OpAmps.Checks) == 931, "amplifier references")
+		require(conformance.CompareOpAmpStorage(base.Storage, a.Storage) == nil && len(a.Storage.Checks) == 752, "storage references")
+		require(conformance.CompareCapacity(base.Capacity, a.Capacity) == nil && len(a.Capacity.Checks) == 4900, "capacity references")
+		require(conformance.ValidateCapacityPerformance(a.Performance) == nil && a.Performance.TargetsPassed && a.Performance.Repetitions == 20, "complete capacity timing validation")
+		for _, c := range a.Performance.Cases {
+			summaries = append(summaries, map[string]any{"adapter": a.Name, "circuit": c.Name, "condition": c.Condition, "samples": len(c.Samples), "roundtrip_p95_ms": c.Acknowledgment.P95, "fresh_p95_ms": c.FreshResult.P95, "verify_p95_ms": c.Verify.P95, "verify_max_ms": c.Verify.Maximum})
+			maxFresh = math.Max(maxFresh, c.FreshResult.P95)
+			maxVerify = math.Max(maxVerify, c.Verify.Maximum)
+			for _, s := range c.Samples {
+				samples++
+				captured := s.CapacityVerification
+				rows += len(captured.Rows)
+				physical := *captured.Metadata.Mixed
+				physical.RunID, physical.ElectricalRevision = 0, 0
+				if previous, ok := rowsByGraph[s.GraphSHA256]; ok {
+					require(reflect.DeepEqual(previous, captured.Rows), "same-variant captured rows differ across repeats/adapters")
+					require(reflect.DeepEqual(finalByGraph[s.GraphSHA256], physical), "same-variant final physics differs")
+				} else {
+					rowsByGraph[s.GraphSHA256] = captured.Rows
+					finalByGraph[s.GraphSHA256] = physical
+				}
+			}
+		}
+	}
+	require(samples == 480 && rows == 98400 && len(rowsByGraph) == 6, "sample/row/variant coverage")
+	out := map[string]any{"passed": true, "source_report_sha256": fmt.Sprintf("%x", sha256.Sum256(raw)), "samples": samples, "captured_rows": rows, "timed_row_reference_checks": rows * 4, "other_numerical_checks": 27596, "distinct_variants": 6, "same_variant_physics_identical": true, "max_case_p95_edit_to_fresh_ms": maxFresh, "max_verify_ms": maxVerify, "cases": summaries}
+	encoded, e := json.MarshalIndent(out, "", "  ")
+	require(e == nil, "encode audit")
+	fmt.Println(string(encoded))
+}

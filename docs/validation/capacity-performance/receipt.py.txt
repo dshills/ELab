@@ -1,0 +1,49 @@
+from pathlib import Path
+import datetime,gzip,hashlib,json,re,shutil,subprocess
+out=Path('docs/validation/capacity-performance');src=Path('build/capacity-performance')
+def read(p):return json.loads(Path(p).read_text())
+def digest(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+source=read(out/'source-freeze.json');assert len(source)==664 and all(digest(p)==h for p,h in source.items())
+process=read(out/'process.json');assert len(process)==2 and all(p['status']=='completed' and p['exit_code']==0 for p in process)
+audit=read(out/'sample-audit.json');assert audit['passed'] and audit['samples']==480 and audit['captured_rows']==98400 and audit['same_variant_physics_identical']
+raw=(src/'public-final/report.json').read_bytes();assert gzip.decompress((out/'conformance-report.json.gz').read_bytes())==raw
+assert hashlib.sha256(raw).hexdigest()==audit['source_report_sha256']
+assert (src/'sample-audit.json').read_bytes()==(src/'sample-audit-from-gzip.json').read_bytes()
+smoke=(out/'native-smoke.log.txt').read_text();assert len(re.findall(r'smoke: ',smoke))==45 and '"event":"elab.native.smoke","passed":true' in smoke
+quality=(out/'quality.log.txt').read_text();assert '\nFAIL' not in quality and 'Ran 22 tests' in quality and 'github.com/dshills/elab/desktop' in quality and 'github.com/dshills/elab/workbench' in quality
+assert read(out/'sdk-verified.json')['passed'] and read(out/'native-inventory.json')['passed'] and read(out/'runtime-source-audit.json')['passed']
+binaries=read(out/'binaries.json');assert all(digest(p)==h for p,h in binaries.items())
+receipt={
+ 'passed':True,'recorded_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ 'scope':'Repeated ordinary backend timing and complete captured numerical evidence for three named fixtures at individual published circuit boundaries; no app promotion or full MVP acceptance',
+ 'source_parent_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+ 'source_index':str(out/'source-freeze.json'),'source_frozen_files':664,'source_stable':True,
+ 'runtime_source_audit':read(out/'runtime-source-audit.json'),
+ 'environment':read(out/'environment.json'),'sdk_lock':'third_party/vellum/sdk.lock.json','sdk_post_check':read(out/'sdk-verified.json'),
+ 'binary_sha256':binaries,'candidate':'build/ELab-0.108.0-123-capacity-performance-candidate.app','candidate_promoted':False,
+ 'preserved_bundles_unchanged':read(out/'preserved-bundles.json'),
+ 'process':str(out/'process.json'),'quality':{'script_exit_code':0,'lint_imports_staticcheck':True,'python_tests':22,'root_native_race_and_vet':True,'log':str(out/'quality.log.txt'),'initial_instrumented_solver_wall_failure_retained':str(out/'initial-race-wall-failure.log.txt'),'full_size_test_strategy':'ordinary test-owned agent with real production limits; controller and report checks instrumented; core controlled-clock numerical race tests remain'},
+ 'native_smoke_stages':45,'adapters':['in-process','headless-stdio','headless-socket','native-socket'],
+ 'circuit_variants':6,'conditions':['fresh-session','warm-session'],'repetitions_per_fixture_condition_adapter':20,
+ 'timing_samples':480,'captured_rows':98400,'timed_row_reference_checks':393600,'accompanying_numerical_checks':27596,
+ 'same_variant_physics_identical':True,'max_case_p95_edit_to_fresh_ms':audit['max_case_p95_edit_to_fresh_ms'],'max_verify_ms':audit['max_verify_ms'],
+ 'backend_targets_passed':True,'fresh_p95_target_ms':500,'verify_max_target_ms':2000,
+ 'named_boundary_fixture_timing_qualified':True,'universal_capacity_or_visible_timing_qualified':False,
+ 'report':read(out/'report-encoding.json'),'raw_and_gzip_audits_identical':True,'sample_audit':str(out/'sample-audit.json'),
+ 'negative_capture_report_categories':30,'frozen_unit_fixture':read(out/'unit-fixture-provenance.json'),
+ 'native_inventory':read(out/'native-inventory.json'),'invalid_repetitions':read(out/'invalid-repetitions.json'),
+ 'p0_counts':{'implemented':17,'partial':10},
+ 'limitations':[
+  'Three named fixtures exercise individual 100-node and 64-part boundaries; simultaneous maxima, every permitted topology/device combination and other hardware remain unqualified.',
+  'Timings include transport/admission/polling but exclude construction, process launch, sample paging and independent reference review. OS caches were not purged. No visible-frame timing claim.',
+  'Fresh means a new owned prepared session. Warm includes one unmeasured edit/Verify and uses the ordinary bounded unkept-record store.',
+  'The first full race run reached the real 100 ms wall limit in the instrumented full-size solver. The final test drives ordinary owned agents from an instrumented controller; it does not skip fixtures, shrink grids or relax runtime limits.',
+  'The initial mutation helper decoded into a shared pointer and contaminated its own baseline. Fresh-value cloning and a final unchanged-reference check repair the helper; its raw failure is retained separately from the two real checker gaps.',
+  'The checker now refuses nonfinite final time and statistics inconsistent with rows. The thirty categories establish specified consistency checks, not authentication of arbitrary history.',
+  'Runtime/application sources remain unchanged. Rebuilding after the preceding commit changes Go VCS build metadata; new hashes and private candidate are qualified rather than claiming prior binaries are identical.',
+  'Native socket/GPU smoke does not close complete physical input, focus/divider/AX, screen-reader or readability gates. Device/hardware, clean installation/distribution, physical printing and participant acceptance remain open.'
+ ]}
+shutil.copyfile('build/.capacity-performance-receipt.py',out/'receipt.py.txt')
+receipt['artifacts_sha256']={str(p):digest(p) for p in sorted(out.rglob('*')) if p.is_file()}
+Path('docs/validation/capacity-performance-validation.json').write_text(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps({k:receipt[k] for k in ('passed','timing_samples','captured_rows','timed_row_reference_checks','max_case_p95_edit_to_fresh_ms','max_verify_ms')}))

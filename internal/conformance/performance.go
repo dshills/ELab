@@ -14,21 +14,22 @@ import (
 )
 
 type PerformanceSample struct {
-	Index              int                         `json:"index"`
-	Condition          string                      `json:"condition"`
-	GraphSHA256        string                      `json:"graph_sha256"`
-	Engine             string                      `json:"engine"`
-	ElectricalRevision uint64                      `json:"electrical_revision"`
-	RunID              uint64                      `json:"run_id"`
-	ProbeIDs           []string                    `json:"probe_ids"`
-	Models             map[string]string           `json:"model_ids"`
-	Settings           workbench.TransientSettings `json:"transient_settings"`
-	AcknowledgmentMS   float64                     `json:"command_roundtrip_ms"`
-	FreshResultMS      float64                     `json:"edit_start_to_fresh_result_ms"`
-	VerifyMS           float64                     `json:"verify_admission_to_completion_ms"`
-	VerifyDuration     float64                     `json:"verified_duration_s"`
-	VerifySampleStep   float64                     `json:"verified_sample_step_s"`
-	graph              workbench.Graph
+	CapacityVerification *workbench.VerificationDocument `json:"capacity_verification,omitempty"`
+	Index                int                             `json:"index"`
+	Condition            string                          `json:"condition"`
+	GraphSHA256          string                          `json:"graph_sha256"`
+	Engine               string                          `json:"engine"`
+	ElectricalRevision   uint64                          `json:"electrical_revision"`
+	RunID                uint64                          `json:"run_id"`
+	ProbeIDs             []string                        `json:"probe_ids"`
+	Models               map[string]string               `json:"model_ids"`
+	Settings             workbench.TransientSettings     `json:"transient_settings"`
+	AcknowledgmentMS     float64                         `json:"command_roundtrip_ms"`
+	FreshResultMS        float64                         `json:"edit_start_to_fresh_result_ms"`
+	VerifyMS             float64                         `json:"verify_admission_to_completion_ms"`
+	VerifyDuration       float64                         `json:"verified_duration_s"`
+	VerifySampleStep     float64                         `json:"verified_sample_step_s"`
+	graph                workbench.Graph
 }
 type PerformanceSummary struct {
 	Count   int     `json:"count"`
@@ -164,7 +165,11 @@ func runPerformance(ctx context.Context, factory Factory, dir string, repetition
 	return out, nil
 }
 func preparePerformance(s *session, name string) error {
-	if isOpAmpPerformance(name) {
+	if isCapacityPerformance(name) {
+		if _, err := prepareCapacity(s, name); err != nil {
+			return err
+		}
+	} else if isOpAmpPerformance(name) {
 		if err := prepareOpAmpCase(s, name); err != nil {
 			return err
 		}
@@ -246,6 +251,12 @@ func measurePerformance(s *session, name string, index int, condition string) (s
 		id, a, b = "RF", "20k", "22k"
 	case "opamp-rc-npn", "opamp-rc-mosfet":
 		id, a, b = "RI", "10k", "12k"
+	case "capacity-100-nodes":
+		id, a, b = "P1", "10k", "20k"
+	case "capacity-64-parts":
+		id, a, b = "R1", "1k", "2k"
+	case "capacity-rc-mosfet":
+		id, a, b = "RL", "1k", "2k"
 	}
 	high, err := workbench.ParseValue(b, "Ω")
 	if err != nil {
@@ -316,15 +327,23 @@ func measurePerformance(s *session, name string, index int, condition string) (s
 		duration = .2
 	case "opamp-follower", "opamp-inverting", "opamp-rc-npn", "opamp-rc-mosfet":
 		duration = .2
+	case "capacity-100-nodes", "capacity-64-parts", "capacity-rc-mosfet":
+		duration = .2
 	}
 	step := .001
-	meta, _, elapsed, e := electricalVerify(s, duration, step, probes)
+	meta, rows, elapsed, e := electricalVerify(s, duration, step, probes)
 	if e != nil {
 		return sample, e
 	}
 	sample.VerifyMS = elapsed * 1000
 	sample.VerifyDuration = meta.Duration
 	sample.VerifySampleStep = meta.Settings.StepSeconds
+	if isCapacityPerformance(name) {
+		sample.CapacityVerification = &workbench.VerificationDocument{Metadata: *meta, Rows: rows}
+		if err := validateCapacityPerformanceSample(name, sample); err != nil {
+			return sample, err
+		}
+	}
 	if err = s.ask("recording.keep.set", workbench.RecordingKeepParams{ID: meta.OperationID, Keep: false}, true, nil); err != nil {
 		return sample, err
 	}
@@ -334,6 +353,9 @@ func measurePerformance(s *session, name string, index int, condition string) (s
 	return sample, nil
 }
 func performanceFresh(s workbench.Snapshot, name string) bool {
+	if isCapacityPerformance(name) {
+		return capacityPerformanceFresh(s, name)
+	}
 	if isOpAmpPerformance(name) {
 		count := 1
 		if name == "opamp-rc-mosfet" {
@@ -357,6 +379,9 @@ func performanceFresh(s workbench.Snapshot, name string) bool {
 }
 
 func performanceProbes(name string) []string {
+	if isCapacityPerformance(name) {
+		return capacityProbes(name)
+	}
 	if isOpAmpPerformance(name) {
 		// The numerical RC/NPN reference uses a fifth base-voltage boundary
 		// probe. Timing keeps four probes in every family for comparability.

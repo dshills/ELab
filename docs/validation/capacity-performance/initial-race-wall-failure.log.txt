@@ -1,0 +1,20 @@
+{"passed": true, "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-aa9d023", "source": "aa9d023243a6bded514c3d9696c08a9c917119c4"}
+......................
+----------------------------------------------------------------------
+Ran 22 tests in 0.390s
+
+OK
+?   	github.com/dshills/elab/cmd/elab-agent	[no test files]
+?   	github.com/dshills/elab/cmd/elab-conformance	[no test files]
+?   	github.com/dshills/elab/cmd/elab-ui-audit	[no test files]
+--- FAIL: TestCapacityPerformanceMeasuresFullSizeChangedCaptures (12.30s)
+    --- FAIL: TestCapacityPerformanceMeasuresFullSizeChangedCaptures/capacity-rc-mosfet (2.88s)
+        capacity_performance_test.go:117: electrical Verify: &{Code:integration-time-limit Message:mixed integration exceeded its work budget: elapsed-time limit (14 attempted, maximum 512; 100.246 ms elapsed, maximum 100 ms); reduce sample step at 2.07148551e-05 s, step 2.86e-06: ratio +Inf, errors mixed integration exceeded its work budget: elapsed-time limit (13 attempted, maximum 512; 100.229 ms elapsed, maximum 100 ms); reduce sample step / mixed integration exceeded its work budget: elapsed-time limit (13 attempted, maximum 512; 100.229 ms elapsed, maximum 100 ms); reduce sample step / <nil>}
+FAIL
+FAIL	github.com/dshills/elab/internal/conformance	97.566s
+ok  	github.com/dshills/elab/internal/printspool	(cached)
+ok  	github.com/dshills/elab/internal/schematicpdf	(cached)
+ok  	github.com/dshills/elab/internal/uiaudit	(cached)
+ok  	github.com/dshills/elab/transport	(cached)
+ok  	github.com/dshills/elab/workbench	(cached)
+FAIL

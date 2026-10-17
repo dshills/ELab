@@ -1,0 +1,67 @@
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/missing-family
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/missing-case
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/missing-sample
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/missing-graph
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/bad-graph-hash
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/no-op-edit
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/warm-run-reuse
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/wrong-live-engine
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/wrong-live-settings
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/missing-capture
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/wrong-captured-revision
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/wrong-captured-engine
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/wrong-captured-graph
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/wrong-model
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/wrong-model-map
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/missing-probe
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/wrong-unit
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/missing-edge
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/changed-voltage
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/changed-current
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/foreign-node
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/stale-final
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/negative-kcl
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/nan-final-time
+    capacity_performance_report_test.go:126: corrupted timing report accepted
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/changed-statistics
+    capacity_performance_report_test.go:126: corrupted timing report accepted
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/changed-percentile
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/negative-timing
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/nan-timing
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/false-target
+=== RUN   TestCapacityPerformancePublicReportRejectsCorruption/false-aggregate
+--- FAIL: TestCapacityPerformancePublicReportRejectsCorruption (1.60s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/missing-family (0.00s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/missing-case (0.00s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/missing-sample (0.00s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/missing-graph (0.00s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/bad-graph-hash (0.04s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/no-op-edit (0.07s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/warm-run-reuse (0.07s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/wrong-live-engine (0.04s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/wrong-live-settings (0.04s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/missing-capture (0.04s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/wrong-captured-revision (0.04s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/wrong-captured-engine (0.04s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/wrong-captured-graph (0.04s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/wrong-model (0.04s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/wrong-model-map (0.04s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/missing-probe (0.04s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/wrong-unit (0.04s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/missing-edge (0.05s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/changed-voltage (0.04s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/changed-current (0.05s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/foreign-node (0.05s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/stale-final (0.05s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/negative-kcl (0.04s)
+    --- FAIL: TestCapacityPerformancePublicReportRejectsCorruption/nan-final-time (0.10s)
+    --- FAIL: TestCapacityPerformancePublicReportRejectsCorruption/changed-statistics (0.10s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/changed-percentile (0.01s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/negative-timing (0.04s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/nan-timing (0.05s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/false-target (0.01s)
+    --- PASS: TestCapacityPerformancePublicReportRejectsCorruption/false-aggregate (0.10s)
+FAIL
+FAIL	github.com/dshills/elab/internal/conformance	1.891s
+FAIL

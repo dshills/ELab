@@ -1,0 +1,37 @@
+[
+  {
+    "name": "native-smoke",
+    "argv": [
+      "/Users/dshills/Development/projects/ELab/build/ELab-0.108.0-123-capacity-performance-candidate.app/Contents/MacOS/ELab",
+      "--smoke",
+      "--smoke-timeout",
+      "2m"
+    ],
+    "started_utc": "2026-10-17T10:05:49.933805+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 40.826467958977446,
+    "finished_utc": "2026-10-17T10:06:30.760540+00:00"
+  },
+  {
+    "name": "public-suites",
+    "argv": [
+      "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+      "--native-binary",
+      "/Users/dshills/Development/projects/ELab/build/ELab-0.108.0-123-capacity-performance-candidate.app/Contents/MacOS/ELab",
+      "--capacity-suite",
+      "--electrical-suite",
+      "--inductor-suite",
+      "--opamp-suite",
+      "--opamp-storage-suite",
+      "--capacity-performance-suite",
+      "--artifacts",
+      "/Users/dshills/Development/projects/ELab/build/capacity-performance/public-final"
+    ],
+    "started_utc": "2026-10-17T10:06:30.876608+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 297.3137239170028,
+    "finished_utc": "2026-10-17T10:11:28.192271+00:00"
+  }
+]

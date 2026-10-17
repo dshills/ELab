@@ -1,0 +1,164 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T10:19:02.674167+00:00",
+  "scope": "Repeated ordinary backend timing and complete captured numerical evidence for three named fixtures at individual published circuit boundaries; no app promotion or full MVP acceptance",
+  "source_parent_commit": "bf84d18bfba4e82ef050d4d688dc0ebd98f8c28c",
+  "source_index": "docs/validation/capacity-performance/source-freeze.json",
+  "source_frozen_files": 664,
+  "source_stable": true,
+  "runtime_source_audit": {
+    "passed": true,
+    "baseline": "docs/validation/capacitor-capacity/final-verifier-source-freeze.json",
+    "files": 492,
+    "changed_files": [],
+    "scope": "Application/core, transport, agent entrypoint, print/PDF support, modules and SDK lock; qualifier/reference/test changes are separate."
+  },
+  "environment": {
+    "os": "ProductName:\t\tmacOS\nProductVersion:\t\t26.6.2\nBuildVersion:\t\t25G83",
+    "architecture": "arm64",
+    "cpu": "Apple M4 Pro",
+    "memory_bytes": "68719476736",
+    "go": "go version go1.27.2 darwin/arm64"
+  },
+  "sdk_lock": "third_party/vellum/sdk.lock.json",
+  "sdk_post_check": {
+    "passed": true,
+    "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-aa9d023",
+    "source": "aa9d023243a6bded514c3d9696c08a9c917119c4"
+  },
+  "binary_sha256": {
+    "build/elab": "1eec19b6eb3a4f6d20ec5de105f6083db7e9eeb0b2a8fcc13b23f4a8a701e22c",
+    "build/elab-agent": "84ab6d6f826ca98110e1ca4daf6a244f56f33534e24c21c2a197fbb0a0f2db1e",
+    "build/elab-conformance": "cf165afcae3997ccbd79738589701c4951789cceeb17c6edb791aef9309fde96",
+    "build/elab-ui-audit": "b13e76c456dea77e871d01599c14e4644203088c588787a59e872bbe6d5b6848",
+    "build/ELab-0.108.0-123-capacity-performance-candidate.app/Contents/MacOS/ELab": "1eec19b6eb3a4f6d20ec5de105f6083db7e9eeb0b2a8fcc13b23f4a8a701e22c"
+  },
+  "candidate": "build/ELab-0.108.0-123-capacity-performance-candidate.app",
+  "candidate_promoted": false,
+  "preserved_bundles_unchanged": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7,
+      "executable_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c"
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7,
+      "executable_sha256": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1"
+    }
+  },
+  "process": "docs/validation/capacity-performance/process.json",
+  "quality": {
+    "script_exit_code": 0,
+    "lint_imports_staticcheck": true,
+    "python_tests": 22,
+    "root_native_race_and_vet": true,
+    "log": "docs/validation/capacity-performance/quality.log.txt",
+    "initial_instrumented_solver_wall_failure_retained": "docs/validation/capacity-performance/initial-race-wall-failure.log.txt",
+    "full_size_test_strategy": "ordinary test-owned agent with real production limits; controller and report checks instrumented; core controlled-clock numerical race tests remain"
+  },
+  "native_smoke_stages": 45,
+  "adapters": [
+    "in-process",
+    "headless-stdio",
+    "headless-socket",
+    "native-socket"
+  ],
+  "circuit_variants": 6,
+  "conditions": [
+    "fresh-session",
+    "warm-session"
+  ],
+  "repetitions_per_fixture_condition_adapter": 20,
+  "timing_samples": 480,
+  "captured_rows": 98400,
+  "timed_row_reference_checks": 393600,
+  "accompanying_numerical_checks": 27596,
+  "same_variant_physics_identical": true,
+  "max_case_p95_edit_to_fresh_ms": 23.375084,
+  "max_verify_ms": 470.2145,
+  "backend_targets_passed": true,
+  "fresh_p95_target_ms": 500,
+  "verify_max_target_ms": 2000,
+  "named_boundary_fixture_timing_qualified": true,
+  "universal_capacity_or_visible_timing_qualified": false,
+  "report": {
+    "path": "docs/validation/capacity-performance/conformance-report.json.gz",
+    "encoding": "lossless gzip of the complete report, including every metadata object and row",
+    "decoded_bytes": 91851506,
+    "decoded_sha256": "bbaaa309af9d1047349afccda3b5880448659fb9eb1ceada3dad499dea197b6b",
+    "compressed_bytes": 6001607,
+    "round_trip_verified": true
+  },
+  "raw_and_gzip_audits_identical": true,
+  "sample_audit": "docs/validation/capacity-performance/sample-audit.json",
+  "negative_capture_report_categories": 30,
+  "frozen_unit_fixture": {
+    "source_parent_commit": "bf84d18bfba4e82ef050d4d688dc0ebd98f8c28c",
+    "method": "ordinary public in-process 20 fresh/20 warm samples for three fixtures; captured before reader hardening, with all source rows/metadata retained unchanged",
+    "path": "internal/conformance/testdata/capacity-performance-public-reference.json.gz",
+    "raw_sha256": "ce802fab8d4d367d24549ec2151446c3db6b44a2c64fdb884df4ce34accda106",
+    "raw_bytes": 16168205,
+    "samples": 120
+  },
+  "native_inventory": {
+    "passed": true,
+    "public_commands": 162,
+    "scope": "source inventory; dynamic binding and runtime coverage remain separate",
+    "sites": 388,
+    "source_route_count": 132,
+    "sources": 57
+  },
+  "invalid_repetitions": {
+    "passed": true,
+    "exit_code": 1,
+    "stderr": "--repetitions must be 20\u2013100\n",
+    "artifacts_created": false
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "limitations": [
+    "Three named fixtures exercise individual 100-node and 64-part boundaries; simultaneous maxima, every permitted topology/device combination and other hardware remain unqualified.",
+    "Timings include transport/admission/polling but exclude construction, process launch, sample paging and independent reference review. OS caches were not purged. No visible-frame timing claim.",
+    "Fresh means a new owned prepared session. Warm includes one unmeasured edit/Verify and uses the ordinary bounded unkept-record store.",
+    "The first full race run reached the real 100 ms wall limit in the instrumented full-size solver. The final test drives ordinary owned agents from an instrumented controller; it does not skip fixtures, shrink grids or relax runtime limits.",
+    "The initial mutation helper decoded into a shared pointer and contaminated its own baseline. Fresh-value cloning and a final unchanged-reference check repair the helper; its raw failure is retained separately from the two real checker gaps.",
+    "The checker now refuses nonfinite final time and statistics inconsistent with rows. The thirty categories establish specified consistency checks, not authentication of arbitrary history.",
+    "Runtime/application sources remain unchanged. Rebuilding after the preceding commit changes Go VCS build metadata; new hashes and private candidate are qualified rather than claiming prior binaries are identical.",
+    "Native socket/GPU smoke does not close complete physical input, focus/divider/AX, screen-reader or readability gates. Device/hardware, clean installation/distribution, physical printing and participant acceptance remain open."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/capacity-performance/README.md": "2f36526ebd88e1418a09f27ad6db1c868a4cb911a6dd8ab5186d28e9f636bd21",
+    "docs/validation/capacity-performance/binaries.json": "48906b56d458c28818e69786df1030d2e162b9b7f157a6a87686b2ac83f0c103",
+    "docs/validation/capacity-performance/build.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/capacity-performance/capture-guards-after.log.txt": "9eef33f28fa011f6ee9d7047e95fb3f2644d5bb16294d638348bccce72b5d1ed",
+    "docs/validation/capacity-performance/capture-guards-before.log.txt": "d3fb62a7d00e96b6f914d8984621ca28f550776c211ca0f73957573be4387b35",
+    "docs/validation/capacity-performance/conformance-report.json.gz": "e5bb2dfed8b94beafffdb6a775cf457eb84b8a0b1440d3310a53d8dd3d240983",
+    "docs/validation/capacity-performance/current-buildinfo.txt": "3e6f39e428fc5c10bf97559a0586f07feffbe25a91725aeea682e1b1c64c9da5",
+    "docs/validation/capacity-performance/environment.json": "f18fa37f693828782da17fd58951407c38c1fd350da942587ddfea380c1c70af",
+    "docs/validation/capacity-performance/initial-race-wall-failure.log.txt": "6992eaeb5cc9088259f3b3711550b968e7c10056e17ee54264fac122f6d3422c",
+    "docs/validation/capacity-performance/initial-runner.go.txt": "4db66e7b82b88bfaab29719771764bbb6cc4fde93338dedec8e614b6ff75feaa",
+    "docs/validation/capacity-performance/invalid-repetitions.json": "04745f49a8a7d91ff51c5bb30c9d30594fb252ae3146790ba4444e25e5e83c32",
+    "docs/validation/capacity-performance/measurement.log.txt": "75ee1bcadd73bbbe7a7cae77f07d4c31ae60f1ef9fdf6e0391d87f274233940b",
+    "docs/validation/capacity-performance/mutation-helper-failure.log.txt": "a064077d42fc47c2ca968ff78e21ad3be0925aaf3243e02d4071529ba3c9a0df",
+    "docs/validation/capacity-performance/native-inventory.json": "e55eca6e3d915ee806b858a0f83503fdcdca34131bfe832bb924eef1920bd8e9",
+    "docs/validation/capacity-performance/native-smoke.log.txt": "59dbd749897cbb2a00386ccf1026835138cc4b821a877f79d5ef4ff8041a1a7e",
+    "docs/validation/capacity-performance/package.json": "ea115b423b65027bf3ebb511a5bbe859d0bed2c52f1e70408001e8e5e75246eb",
+    "docs/validation/capacity-performance/preserved-bundles.json": "29c025d16bec382ddc1be254b89ee3dcda5f743409842967480c0e4b4eb8d826",
+    "docs/validation/capacity-performance/previous-buildinfo.txt": "0f61140949d260c6dbeb8c73ed409e12557977a54259e51402399a57d67541a0",
+    "docs/validation/capacity-performance/process.json": "32481c0879490e0bfee622214f66cf5eaccca79a3048a060c048d39f9c092eaf",
+    "docs/validation/capacity-performance/qualify.py.txt": "1cacca4a3d164f8cf65fc14e868117eec16042641525435f06e36081fff872f7",
+    "docs/validation/capacity-performance/quality.log.txt": "ec6c0a5699e7bafef4860bbfc82ff285e968cf739b2b922d9bc99ac2ee351840",
+    "docs/validation/capacity-performance/race-ordinary-agent.log.txt": "c7625f7f0a138217b70158ec699428c862a98c8092d707c0428ad7fdd6c3968a",
+    "docs/validation/capacity-performance/receipt.py.txt": "cc8bbcefd8c140b9b857c09d88775098753787db63e1a97ed3f1a4f449fa6131",
+    "docs/validation/capacity-performance/report-encoding.json": "536dcbc3e74a13ea8173b8613fe90192249281440f02e2e4250a04f12c44743e",
+    "docs/validation/capacity-performance/review.go.txt": "437c5d67fa2a5df18c5ade8eff62868bd3823cf2b28a5a6e32349d1f90faed24",
+    "docs/validation/capacity-performance/runtime-source-audit.json": "2b265ffabfa2b49e90d2e058e5cfa38ddeb62933df70f37f85fb183753d372c2",
+    "docs/validation/capacity-performance/sample-audit.json": "852109b69c503ecc7d8fe3f4a5e5ca8e265a3674f5077eef1e4c118b8932039e",
+    "docs/validation/capacity-performance/sdk-verified.json": "833a277bcd0532bf6e2b828e73fa39d3494b1867ba97bf82489cb1528af36a17",
+    "docs/validation/capacity-performance/source-freeze.json": "5353922f4e94bed65e99efa444a46a36d6099fe69e82f32290c23f43a48b079d",
+    "docs/validation/capacity-performance/unit-fixture-provenance.json": "138d123fb80634511ba0610e24692d2b1e990c0fb70b57227fec3fce615201d6"
+  }
+}

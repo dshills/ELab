@@ -1,0 +1,3 @@
+package main
+import("context";"encoding/json";"fmt";"os";"time";"github.com/dshills/elab/internal/conformance")
+func main(){ctx,cancel:=context.WithTimeout(context.Background(),5*time.Minute);defer cancel();result,err:=conformance.RunCapacityPerformance(ctx,conformance.InProcess,os.Args[1],20);raw,e:=json.MarshalIndent(result,"","  ");if e!=nil{panic(e)};if e=os.WriteFile(os.Args[1]+"-report.json",append(raw,'\n'),0600);e!=nil{panic(e)};if err!=nil{panic(err)};fmt.Printf("Capacity performance passed: %d cases, %d samples, targets %v\n",len(result.Cases),20*len(result.Cases),result.TargetsPassed)}

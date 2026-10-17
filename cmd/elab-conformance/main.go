@@ -28,6 +28,7 @@ type adapterResult struct {
 	Performance         *conformance.PerformanceResult  `json:"performance,omitempty"`
 	InductorPerformance *conformance.PerformanceResult  `json:"inductor_performance,omitempty"`
 	OpAmpPerformance    *conformance.PerformanceResult  `json:"opamp_performance,omitempty"`
+	CapacityPerformance *conformance.PerformanceResult  `json:"capacity_performance,omitempty"`
 }
 type report struct {
 	Passed      bool            `json:"passed"`
@@ -55,9 +56,10 @@ func run() error {
 	performance := flag.Bool("performance-suite", false, "also measure fresh/warm backend edit/result and Verify latency in owned sessions")
 	inductorPerformance := flag.Bool("inductor-performance-suite", false, "also measure RL/RLC/flyback/mixed NPN-coil fresh/warm timing, 200 ms Verify at 1 ms outputs")
 	opampPerformance := flag.Bool("opamp-performance-suite", false, "also measure follower/inverting/mixed RC/NPN/MOSFET fresh/warm timing, 200 ms Verify at 1 ms outputs")
+	capacityPerformance := flag.Bool("capacity-performance-suite", false, "also measure 100-node and both 64-part fresh/warm edits with full reference-checked 200 ms captures")
 	repetitions := flag.Int("repetitions", 20, "performance repetitions per circuit/condition (20–100)")
 	flag.Parse()
-	if (*performance || *inductorPerformance || *opampPerformance) && (*repetitions < 20 || *repetitions > 100) {
+	if (*performance || *inductorPerformance || *opampPerformance || *capacityPerformance) && (*repetitions < 20 || *repetitions > 100) {
 		return fmt.Errorf("--repetitions must be 20–100")
 	}
 	if *directory == "" {
@@ -186,6 +188,20 @@ func run() error {
 			if qualificationErr != nil {
 				result.Adapters = append(result.Adapters, adapter)
 				return writeFailure(dir, result, fmt.Errorf("%s capacity suite: %w", mode.name, qualificationErr))
+			}
+		}
+		if *capacityPerformance {
+			fmt.Fprintf(os.Stderr, "%s: measuring three capacity circuits, fresh/warm, %d repetitions\n", mode.name, *repetitions)
+			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
+			measured, measurementErr := conformance.RunCapacityPerformance(ctx, mode.factory, filepath.Join(dir, mode.name, "capacity-performance"), *repetitions)
+			cancel()
+			adapter.CapacityPerformance = &measured
+			if measurementErr == nil && !measured.TargetsPassed {
+				measurementErr = fmt.Errorf("capacity backend performance target missed; inspect individual cases")
+			}
+			if measurementErr != nil {
+				result.Adapters = append(result.Adapters, adapter)
+				return writeFailure(dir, result, fmt.Errorf("%s capacity performance: %w", mode.name, measurementErr))
 			}
 		}
 		if *performance {

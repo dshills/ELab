@@ -50,6 +50,6 @@ Series/divider laws and an independent 4×4 matrix exponential check the rows. A
 
 Removing the 100-node fixture's wiper tie creates node 101. Adding a resistor to either 64-part fixture creates part 65. These drawings remain editable and savable with `mixed-limit` guidance; Step refuses without changing accepted state. A paused lifecycle remains `paused`, while graph compilation reports `unsupported`. Fresh reopen preserves the drawing and earlier valid capture.
 
-This is representative capacity coverage. Repeated maximum-capacity timing, visible latency, all device combinations, physical hardware, native accessibility and release/distribution remain separate gates. Difficult circuits can still produce bounded failures.
+This is representative capacity coverage. [Repeated timing for the three named boundary fixtures](capacity-performance.md) extends this evidence separately. Visible latency, simultaneous maxima, all device combinations, physical hardware, native accessibility and release/distribution remain separate gates. Difficult circuits can still produce bounded failures.
 
 [Qualification receipt](validation/capacitor-capacity-validation.json) and [retained raw evidence](validation/capacitor-capacity/README.md) bind the tested source, candidate, complete numerical reports and timing scope.

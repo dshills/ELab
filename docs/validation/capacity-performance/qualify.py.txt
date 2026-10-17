@@ -1,0 +1,12 @@
+from pathlib import Path
+import datetime,hashlib,json,subprocess,time
+root=Path.cwd();out=root/'build/capacity-performance';frozen=json.loads((out/'source-freeze-final.json').read_text());stages=[]
+def stable():
+ changed=[p for p,h in frozen.items() if hashlib.sha256((root/p).read_bytes()).hexdigest()!=h]
+ assert not changed,changed
+candidate=root/'build/ELab-0.108.0-123-capacity-performance-candidate.app/Contents/MacOS/ELab'
+commands=[('native-smoke',[str(candidate),'--smoke','--smoke-timeout','2m'],180),('public-suites',[str(root/'build/elab-conformance'),'--native-binary',str(candidate),'--capacity-suite','--electrical-suite','--inductor-suite','--opamp-suite','--opamp-storage-suite','--capacity-performance-suite','--artifacts',str(out/'public-final')],1800)]
+for name,argv,timeout in commands:
+ stable();start=time.monotonic();record={'name':name,'argv':argv,'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'running'};stages.append(record);(out/'process.json').write_text(json.dumps(stages,indent=2)+'\n');print('Starting '+name,flush=True)
+ with (out/(name+'.log.txt')).open('x') as log:completed=subprocess.run(argv,stdout=log,stderr=subprocess.STDOUT,timeout=timeout)
+ record.update(status='completed' if completed.returncode==0 else 'failed',exit_code=completed.returncode,elapsed_seconds=time.monotonic()-start,finished_utc=datetime.datetime.now(datetime.timezone.utc).isoformat());(out/'process.json').write_text(json.dumps(stages,indent=2)+'\n');stable();assert completed.returncode==0,(name,completed.returncode);print('Completed '+name,flush=True)

@@ -1,3 +1,5 @@
 # Preserve original diagnostic output, including terminal blank lines.
 docs/validation/native-mouse/*.log.txt whitespace=-blank-at-eof
 docs/validation/opamp-output/*.log.txt whitespace=-blank-at-eof
+# Preserve Go's original tab-delimited build metadata.
+docs/validation/capacity-performance/*-buildinfo.txt whitespace=-blank-at-eol

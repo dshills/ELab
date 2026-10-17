@@ -1,0 +1,254 @@
+{
+  "captured_rows": 98400,
+  "cases": [
+    {
+      "adapter": "in-process",
+      "circuit": "capacity-100-nodes",
+      "condition": "fresh-session",
+      "fresh_p95_ms": 5.612667,
+      "roundtrip_p95_ms": 4.1185,
+      "samples": 20,
+      "verify_max_ms": 59.742792,
+      "verify_p95_ms": 59.441292
+    },
+    {
+      "adapter": "in-process",
+      "circuit": "capacity-100-nodes",
+      "condition": "warm-session",
+      "fresh_p95_ms": 6.932167,
+      "roundtrip_p95_ms": 5.004709,
+      "samples": 20,
+      "verify_max_ms": 60.167584000000005,
+      "verify_p95_ms": 59.459459
+    },
+    {
+      "adapter": "in-process",
+      "circuit": "capacity-64-parts",
+      "condition": "fresh-session",
+      "fresh_p95_ms": 4.898333,
+      "roundtrip_p95_ms": 3.66525,
+      "samples": 20,
+      "verify_max_ms": 25.093042,
+      "verify_p95_ms": 24.576541
+    },
+    {
+      "adapter": "in-process",
+      "circuit": "capacity-64-parts",
+      "condition": "warm-session",
+      "fresh_p95_ms": 5.765292,
+      "roundtrip_p95_ms": 4.177417,
+      "samples": 20,
+      "verify_max_ms": 24.865834,
+      "verify_p95_ms": 24.230999999999998
+    },
+    {
+      "adapter": "in-process",
+      "circuit": "capacity-rc-mosfet",
+      "condition": "fresh-session",
+      "fresh_p95_ms": 5.866667,
+      "roundtrip_p95_ms": 3.851917,
+      "samples": 20,
+      "verify_max_ms": 433.301917,
+      "verify_p95_ms": 432.82587500000005
+    },
+    {
+      "adapter": "in-process",
+      "circuit": "capacity-rc-mosfet",
+      "condition": "warm-session",
+      "fresh_p95_ms": 6.465583,
+      "roundtrip_p95_ms": 4.081792,
+      "samples": 20,
+      "verify_max_ms": 435.421917,
+      "verify_p95_ms": 435.318292
+    },
+    {
+      "adapter": "headless-stdio",
+      "circuit": "capacity-100-nodes",
+      "condition": "fresh-session",
+      "fresh_p95_ms": 12.055208,
+      "roundtrip_p95_ms": 8.407375,
+      "samples": 20,
+      "verify_max_ms": 64.54941699999999,
+      "verify_p95_ms": 64.12975
+    },
+    {
+      "adapter": "headless-stdio",
+      "circuit": "capacity-100-nodes",
+      "condition": "warm-session",
+      "fresh_p95_ms": 14.998542,
+      "roundtrip_p95_ms": 10.503958,
+      "samples": 20,
+      "verify_max_ms": 81.40383399999999,
+      "verify_p95_ms": 75.380584
+    },
+    {
+      "adapter": "headless-stdio",
+      "circuit": "capacity-64-parts",
+      "condition": "fresh-session",
+      "fresh_p95_ms": 9.672417,
+      "roundtrip_p95_ms": 6.540541,
+      "samples": 20,
+      "verify_max_ms": 27.208208000000003,
+      "verify_p95_ms": 27.038125
+    },
+    {
+      "adapter": "headless-stdio",
+      "circuit": "capacity-64-parts",
+      "condition": "warm-session",
+      "fresh_p95_ms": 12.429292,
+      "roundtrip_p95_ms": 8.52925,
+      "samples": 20,
+      "verify_max_ms": 27.737083,
+      "verify_p95_ms": 27.620334
+    },
+    {
+      "adapter": "headless-stdio",
+      "circuit": "capacity-rc-mosfet",
+      "condition": "fresh-session",
+      "fresh_p95_ms": 9.923292,
+      "roundtrip_p95_ms": 6.953292,
+      "samples": 20,
+      "verify_max_ms": 448.705709,
+      "verify_p95_ms": 448.086875
+    },
+    {
+      "adapter": "headless-stdio",
+      "circuit": "capacity-rc-mosfet",
+      "condition": "warm-session",
+      "fresh_p95_ms": 13.031708,
+      "roundtrip_p95_ms": 9.270833,
+      "samples": 20,
+      "verify_max_ms": 470.2145,
+      "verify_p95_ms": 448.931125
+    },
+    {
+      "adapter": "headless-socket",
+      "circuit": "capacity-100-nodes",
+      "condition": "fresh-session",
+      "fresh_p95_ms": 12.821583,
+      "roundtrip_p95_ms": 8.82875,
+      "samples": 20,
+      "verify_max_ms": 64.975958,
+      "verify_p95_ms": 64.60312499999999
+    },
+    {
+      "adapter": "headless-socket",
+      "circuit": "capacity-100-nodes",
+      "condition": "warm-session",
+      "fresh_p95_ms": 15.61125,
+      "roundtrip_p95_ms": 10.556083,
+      "samples": 20,
+      "verify_max_ms": 64.41458399999999,
+      "verify_p95_ms": 64.29650000000001
+    },
+    {
+      "adapter": "headless-socket",
+      "circuit": "capacity-64-parts",
+      "condition": "fresh-session",
+      "fresh_p95_ms": 10.076,
+      "roundtrip_p95_ms": 7.107042,
+      "samples": 20,
+      "verify_max_ms": 26.943584,
+      "verify_p95_ms": 26.811208999999998
+    },
+    {
+      "adapter": "headless-socket",
+      "circuit": "capacity-64-parts",
+      "condition": "warm-session",
+      "fresh_p95_ms": 13.096083,
+      "roundtrip_p95_ms": 8.866792,
+      "samples": 20,
+      "verify_max_ms": 27.987708,
+      "verify_p95_ms": 27.314375
+    },
+    {
+      "adapter": "headless-socket",
+      "circuit": "capacity-rc-mosfet",
+      "condition": "fresh-session",
+      "fresh_p95_ms": 10.843625,
+      "roundtrip_p95_ms": 7.864208,
+      "samples": 20,
+      "verify_max_ms": 446.694792,
+      "verify_p95_ms": 440.984166
+    },
+    {
+      "adapter": "headless-socket",
+      "circuit": "capacity-rc-mosfet",
+      "condition": "warm-session",
+      "fresh_p95_ms": 14.327792,
+      "roundtrip_p95_ms": 10.196167,
+      "samples": 20,
+      "verify_max_ms": 461.40700000000004,
+      "verify_p95_ms": 460.841875
+    },
+    {
+      "adapter": "native-socket",
+      "circuit": "capacity-100-nodes",
+      "condition": "fresh-session",
+      "fresh_p95_ms": 23.375084,
+      "roundtrip_p95_ms": 17.742834,
+      "samples": 20,
+      "verify_max_ms": 71.671542,
+      "verify_p95_ms": 68.295333
+    },
+    {
+      "adapter": "native-socket",
+      "circuit": "capacity-100-nodes",
+      "condition": "warm-session",
+      "fresh_p95_ms": 21.075209,
+      "roundtrip_p95_ms": 14.352375,
+      "samples": 20,
+      "verify_max_ms": 73.48858299999999,
+      "verify_p95_ms": 70.868084
+    },
+    {
+      "adapter": "native-socket",
+      "circuit": "capacity-64-parts",
+      "condition": "fresh-session",
+      "fresh_p95_ms": 15.211917,
+      "roundtrip_p95_ms": 10.777083,
+      "samples": 20,
+      "verify_max_ms": 32.126458,
+      "verify_p95_ms": 31.840584
+    },
+    {
+      "adapter": "native-socket",
+      "circuit": "capacity-64-parts",
+      "condition": "warm-session",
+      "fresh_p95_ms": 18.941,
+      "roundtrip_p95_ms": 13.074,
+      "samples": 20,
+      "verify_max_ms": 34.407333,
+      "verify_p95_ms": 33.353
+    },
+    {
+      "adapter": "native-socket",
+      "circuit": "capacity-rc-mosfet",
+      "condition": "fresh-session",
+      "fresh_p95_ms": 14.519916,
+      "roundtrip_p95_ms": 10.459167,
+      "samples": 20,
+      "verify_max_ms": 450.318125,
+      "verify_p95_ms": 443.475209
+    },
+    {
+      "adapter": "native-socket",
+      "circuit": "capacity-rc-mosfet",
+      "condition": "warm-session",
+      "fresh_p95_ms": 18.597584,
+      "roundtrip_p95_ms": 12.465916,
+      "samples": 20,
+      "verify_max_ms": 454.51620799999995,
+      "verify_p95_ms": 450.649
+    }
+  ],
+  "distinct_variants": 6,
+  "max_case_p95_edit_to_fresh_ms": 23.375084,
+  "max_verify_ms": 470.2145,
+  "other_numerical_checks": 27596,
+  "passed": true,
+  "same_variant_physics_identical": true,
+  "samples": 480,
+  "source_report_sha256": "bbaaa309af9d1047349afccda3b5880448659fb9eb1ceada3dad499dea197b6b",
+  "timed_row_reference_checks": 393600
+}
