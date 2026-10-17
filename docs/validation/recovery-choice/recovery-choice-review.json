@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "contracts_per_transport": 6,
+  "pure_query_refusals_per_transport": 11,
+  "admission_refusals_per_transport": 5,
+  "work_failures_per_transport": 5,
+  "terminal_jobs_per_transport": 9,
+  "actors": {
+    "headless": "agent.stdio",
+    "native": "agent.socket"
+  },
+  "fixtures": {
+    "headless": {
+      "capsule_sha256": "95ce7d00eab19bd5d1bad715f42cbc962e3662e023c419dc0979b447cc8f08e8",
+      "document_sha256": "c3d3dae5caa4168bc8aab0ae39775a1c58ac056717281868b62231af7a846211",
+      "kept_rows": 4,
+      "manual_source_ohms": 10000,
+      "target_live_ohms_before_restore": 30000,
+      "restored_ohms": 20000
+    },
+    "native": {
+      "capsule_sha256": "844c10bce9727e4cedd393d336e731bc8e789f05f62c06ccaf85419c88a7dcd0",
+      "document_sha256": "acfa0af70f5fb8b8bc1bdc93f665ad6f215efe99bf9cafca30d55f8edca5536c",
+      "kept_rows": 4,
+      "manual_source_ohms": 10000,
+      "target_live_ohms_before_restore": 30000,
+      "restored_ohms": 20000
+    }
+  },
+  "recorded_rows_per_transport": 4,
+  "recorded_voltage_current_reference_checks": 16,
+  "live_voltage_current_reference_checks": 12,
+  "maximum_recorded_voltage_error_v": 0.0,
+  "maximum_recorded_current_error_a": 5.421010862427522e-20,
+  "active_unknown_owners_protected_from_dismissal_but_copy_restore_allowed": true,
+  "inactive_and_damaged_dismissal_confirmed": true,
+  "exact_source_target_files_capsule_checksums_and_all_record_exports": true,
+  "restored_dirty_unassociated_paused_time_zero": true,
+  "separate_saved_copy_reopens_clean_with_exact_capture": true,
+  "equal_schemas_errors_rows_and_live_physics": true,
+  "scope": "Named public read/ownership/copy/dismissal workflows; controlled core race tests separately cover blocked workers/cancel/Close/replacement/catalog interleavings"
+}

@@ -1,0 +1,21 @@
+from pathlib import Path
+import hashlib,importlib.util,json
+root=Path.cwd();out=root/'build/recovery-choice-contracts'
+spec=importlib.util.spec_from_file_location('helper',root/'scripts/persistence-demo.py');helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+client=helper.Client(command_preconditions=True)
+try:
+ before=client.ask('project.inspect');catalog=client.ask('capabilities.list');yes=[];no=[];scopes={}
+ for c in catalog['capabilities']:
+  identity=c['id'];schema=client.ask('capabilities.list',{'command':identity})['capabilities'][0]['input_schema'];contract=schema.get('x-command-contract')
+  (yes if contract else no).append(identity)
+  if contract:scopes[identity]=contract['scope']
+ after=client.ask('project.inspect');assert before==after
+ result=dict(total=len(catalog['capabilities']),with_contract=len(yes),without_contract=len(no),commands_with_contract=yes,commands_without_contract=no,scopes=scopes,query_pure=True)
+ assert (result['total'],result['with_contract'],result['without_contract'])==(162,135,27)
+ (out/'contract-inventory.json').write_text(json.dumps(result,indent=2)+'\n')
+ prior=json.loads((root/'docs/validation/recovery-controls/headless-final.json').read_text())['contracts']
+ current={c:client.ask('capabilities.list',{'command':c})['capabilities'][0]['input_schema'] for c in prior}
+ assert current==prior
+ (out/'recovery-controls-contracts-unchanged.json').write_text(json.dumps(dict(passed=True,commands=list(prior),schemas_sha256=hashlib.sha256(json.dumps(current,sort_keys=True,separators=(',',':')).encode()).hexdigest()),indent=2)+'\n')
+ print(json.dumps({k:result[k] for k in ['total','with_contract','without_contract','query_pure']}))
+finally:client.close()

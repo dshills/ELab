@@ -1,0 +1,27 @@
+from pathlib import Path
+import datetime, hashlib, json, os, subprocess, sys, time
+
+root=Path.cwd();out=root/'build/recovery-choice-contracts';frozen=json.loads((out/'source-freeze.json').read_text())
+def stable():
+ assert all(hashlib.sha256((root/p).read_bytes()).hexdigest()==h for p,h in frozen.items())
+public='public' in sys.argv
+candidate=root/'build/ELab-0.120.0-137-recovery-choice-candidate.app/Contents/MacOS/ELab'
+commands=[('build',['./scripts/build.sh'],300),('quality',['./scripts/check.sh'],900)]
+if public:
+ commands=[('native-smoke',[str(candidate),'--smoke','--smoke-timeout','2m'],180),
+           ('public-suites',[str(root/'build/elab-conformance'),'--native-binary',str(candidate),'--project-contract-suite','--electrical-suite','--inductor-suite','--opamp-suite','--opamp-storage-suite','--capacity-suite','--artifacts',str(out/'public-final')],900),
+           ('headless-recovery',[sys.executable,'-B','scripts/recovery-choice-contracts-demo.py','--output',str(out/'headless-final.json'),'--artifacts',str(out/'headless-final-assets')],90)]
+env=dict(os.environ,GOPROXY='off',GOWORK='off',GOFLAGS='-p=1',GOCACHE=str(root/'build/go-cache'));stages=[]
+for name,argv,timeout in commands:
+ stable();started=time.monotonic();record={'name':name,'argv':argv,'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'running'};stages.append(record)
+ def save():(out/('process-public.json' if public else 'process-quality.json')).write_text(json.dumps(stages,indent=2)+'\n')
+ save();print('Starting '+name,flush=True)
+ try:
+  with (out/(name+'.log.txt')).open('x') as log:result=subprocess.run(argv,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=timeout)
+  record['exit_code']=result.returncode
+  assert result.returncode==0,(name,result.returncode)
+  record['status']='completed';stable()
+ except BaseException as error:
+  record.update(status='failed',error_type=type(error).__name__);raise
+ finally:
+  record.update(elapsed_seconds=time.monotonic()-started,finished_utc=datetime.datetime.now(datetime.timezone.utc).isoformat());save();print(json.dumps(record),flush=True)

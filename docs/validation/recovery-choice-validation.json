@@ -1,0 +1,298 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T15:59:46.286030+00:00",
+  "scope": "Six recovery restore/dismiss/pure-query state contracts, real foreign active/unknown/inactive ownership, strict read/hash/projection error stages, unassociated paused copy restores, confirmed guarded removal and exact capture save/reopen",
+  "reference_configuration": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "processor": "Apple M4 Pro",
+    "logical_cpus": 14,
+    "memory_bytes": 68719476736,
+    "go_toolchain": "go version go1.27.2 darwin/arm64"
+  },
+  "source_parent_commit": "31050182fd9e7ce798c35f87279cc2d117bcf3bd",
+  "source_index": "docs/validation/recovery-choice/source-freeze.json",
+  "source_frozen_files": 713,
+  "source_stable": true,
+  "source_delta": {
+    "scripts/recovery-choice-contracts-demo.py": {
+      "before": null,
+      "after": "87006541c70d42c3a44fbf48b1e4b5940afe618fcf3f3856dd2fbcf7cc39a96d"
+    },
+    "workbench/capability_details.go": {
+      "before": "943e16b3bc50c2fc8c57fd67950b6e911d76d9faaae4564242f68f48da1fcf02",
+      "after": "f1450cb75332e5419726b3ee92e36f97d24f25a8d2cb66e15162bb0c94429f92"
+    },
+    "workbench/recovery_choice_capabilities.go": {
+      "before": null,
+      "after": "1d489575d2f10a63534c95b3a5d2e513c609a7b27d1992a362552428d53d0278"
+    },
+    "workbench/recovery_choice_contracts_test.go": {
+      "before": null,
+      "after": "e08f406ad027f290ba46369350a6e63ef69c5eb8996e911515a9a4819b2bb2bc"
+    }
+  },
+  "binary_sha256": {
+    "build/elab": "971bbc545acc229a521d3979f5187415827a1a5b95ffde4be82930c22c3c5035",
+    "build/elab-agent": "e335d212f5e56f76cd237da3783257c8c36acd20e30bd172294a2e34732fd861",
+    "build/elab-conformance": "1ed1107fb3090409c8924aa78345e6ed06f0d0070c9256b647bd767e06903b8f",
+    "build/elab-ui-audit": "4d738a4b0bb49d8b7968a39b6be83fef75e5fcf79fc26e69155361fa0a3e2e58",
+    "build/ELab-0.120.0-137-recovery-choice-candidate.app/Contents/MacOS/ELab": "971bbc545acc229a521d3979f5187415827a1a5b95ffde4be82930c22c3c5035"
+  },
+  "candidate": "build/ELab-0.120.0-137-recovery-choice-candidate.app",
+  "candidate_promoted": false,
+  "new_application_commands": 0,
+  "existing_commands": 162,
+  "new_contracts": 6,
+  "commands_with_contracts_before": 129,
+  "commands_with_contracts_after": 135,
+  "commands_without_contract": 27,
+  "default_catalog_output_schemas_models_numerical_methods_work_limits_file_versions_unchanged": true,
+  "quality": {
+    "lint_imports_staticcheck": true,
+    "python_tests": 37,
+    "root_native_race_and_vet": true
+  },
+  "process_quality": [
+    {
+      "name": "build",
+      "argv": [
+        "./scripts/build.sh"
+      ],
+      "started_utc": "2026-10-17T15:51:14.723286+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 1.0688820829382166,
+      "finished_utc": "2026-10-17T15:51:15.792182+00:00"
+    },
+    {
+      "name": "quality",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T15:51:15.803477+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 360.11966049997136,
+      "finished_utc": "2026-10-17T15:57:15.927723+00:00"
+    }
+  ],
+  "process_public": [
+    {
+      "name": "native-smoke",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.120.0-137-recovery-choice-candidate.app/Contents/MacOS/ELab",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "started_utc": "2026-10-17T15:57:26.094429+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 38.28288995788898,
+      "finished_utc": "2026-10-17T15:58:04.377809+00:00"
+    },
+    {
+      "name": "public-suites",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+        "--native-binary",
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.120.0-137-recovery-choice-candidate.app/Contents/MacOS/ELab",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recovery-choice-contracts/public-final"
+      ],
+      "started_utc": "2026-10-17T15:58:04.391526+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 47.97428874997422,
+      "finished_utc": "2026-10-17T15:58:52.366424+00:00"
+    },
+    {
+      "name": "headless-recovery",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/recovery-choice-contracts-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/recovery-choice-contracts/headless-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recovery-choice-contracts/headless-final-assets"
+      ],
+      "started_utc": "2026-10-17T15:58:52.382715+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 0.27058124996256083,
+      "finished_utc": "2026-10-17T15:58:52.653299+00:00"
+    }
+  ],
+  "native_workflow": {
+    "started_utc": "2026-10-17T15:59:01.231328+00:00",
+    "status": "completed",
+    "owned_pid": 12761,
+    "demo_exit_code": 0,
+    "native_exit_code": 0,
+    "elapsed_seconds": 0.9790370840346441,
+    "finished_utc": "2026-10-17T15:59:02.210484+00:00"
+  },
+  "four_adapter_numerical_checks": 27596,
+  "four_adapter_project_workflow_checks": 44,
+  "four_adapter_project_snapshots": 56,
+  "native_smoke_stages": 45,
+  "recovery_choice_review": {
+    "passed": true,
+    "contracts_per_transport": 6,
+    "pure_query_refusals_per_transport": 11,
+    "admission_refusals_per_transport": 5,
+    "work_failures_per_transport": 5,
+    "terminal_jobs_per_transport": 9,
+    "actors": {
+      "headless": "agent.stdio",
+      "native": "agent.socket"
+    },
+    "fixtures": {
+      "headless": {
+        "capsule_sha256": "95ce7d00eab19bd5d1bad715f42cbc962e3662e023c419dc0979b447cc8f08e8",
+        "document_sha256": "c3d3dae5caa4168bc8aab0ae39775a1c58ac056717281868b62231af7a846211",
+        "kept_rows": 4,
+        "manual_source_ohms": 10000,
+        "target_live_ohms_before_restore": 30000,
+        "restored_ohms": 20000
+      },
+      "native": {
+        "capsule_sha256": "844c10bce9727e4cedd393d336e731bc8e789f05f62c06ccaf85419c88a7dcd0",
+        "document_sha256": "acfa0af70f5fb8b8bc1bdc93f665ad6f215efe99bf9cafca30d55f8edca5536c",
+        "kept_rows": 4,
+        "manual_source_ohms": 10000,
+        "target_live_ohms_before_restore": 30000,
+        "restored_ohms": 20000
+      }
+    },
+    "recorded_rows_per_transport": 4,
+    "recorded_voltage_current_reference_checks": 16,
+    "live_voltage_current_reference_checks": 12,
+    "maximum_recorded_voltage_error_v": 0.0,
+    "maximum_recorded_current_error_a": 5.421010862427522e-20,
+    "active_unknown_owners_protected_from_dismissal_but_copy_restore_allowed": true,
+    "inactive_and_damaged_dismissal_confirmed": true,
+    "exact_source_target_files_capsule_checksums_and_all_record_exports": true,
+    "restored_dirty_unassociated_paused_time_zero": true,
+    "separate_saved_copy_reopens_clean_with_exact_capture": true,
+    "equal_schemas_errors_rows_and_live_physics": true,
+    "scope": "Named public read/ownership/copy/dismissal workflows; controlled core race tests separately cover blocked workers/cancel/Close/replacement/catalog interleavings"
+  },
+  "six_prior_recovery_control_contracts_exactly_unchanged": true,
+  "typed_raw_gzip_numerical_review_equal": true,
+  "sdk_verified": {
+    "passed": true,
+    "source": "aa9d023243a6bded514c3d9696c08a9c917119c4",
+    "archive_sha256": "22b086442570641e4ae56e9937dd6483c26f92cde953f3aa3fc11811710ed7c5"
+  },
+  "native_production_inventory_unchanged": {
+    "sources": 57,
+    "sites": 388,
+    "commands": 162
+  },
+  "preserved_bundle_trees": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7
+    }
+  },
+  "fixture_files": {
+    "docs/validation/recovery-choice/fixtures/headless/source.elab": "fa9bf0d9abd3b9ee76eb76fef2ad84957d1b3b7d36643be18ceb6322ba37304b",
+    "docs/validation/recovery-choice/fixtures/headless/target.elab": "923f757503789752ae8058082f36dfb6323a35b29d61204aab527f7b7e0cedb4",
+    "docs/validation/recovery-choice/fixtures/headless/restored-copy.elab": "e1b0e79953c0d4361fcb5f4bd716a06eb647130b0e9d1893e7a6966ac8d12579",
+    "docs/validation/recovery-choice/fixtures/headless/source-capsule.json": "95ce7d00eab19bd5d1bad715f42cbc962e3662e023c419dc0979b447cc8f08e8",
+    "docs/validation/recovery-choice/fixtures/headless/damaged-capsule.json": "1d784fbb57aef6b85a815513776ad937fcf71ad9734c7b1f0776215b0d1fd1be",
+    "docs/validation/recovery-choice/fixtures/headless/source-record.json": "38f973f2bf05d71023aedd7ecbecafa5abdfda4b7549694c537780a4db30936e",
+    "docs/validation/recovery-choice/fixtures/headless/restored-record.json": "38f973f2bf05d71023aedd7ecbecafa5abdfda4b7549694c537780a4db30936e",
+    "docs/validation/recovery-choice/fixtures/headless/reopened-record.json": "38f973f2bf05d71023aedd7ecbecafa5abdfda4b7549694c537780a4db30936e",
+    "docs/validation/recovery-choice/fixtures/native/source.elab": "28852a3b14f265182d0b94f6b355b224e8d1f252f9f566bfd05012fcfab2a657",
+    "docs/validation/recovery-choice/fixtures/native/target.elab": "d28665be8d51063e1bd015a133dd06fe6b79157f7b27d03bd6566de3ce06bf46",
+    "docs/validation/recovery-choice/fixtures/native/restored-copy.elab": "66deefa6b782c35211a45e0489a6dc2e16925c9d53eeb8dbc184a6f8bf31c60c",
+    "docs/validation/recovery-choice/fixtures/native/source-capsule.json": "844c10bce9727e4cedd393d336e731bc8e789f05f62c06ccaf85419c88a7dcd0",
+    "docs/validation/recovery-choice/fixtures/native/damaged-capsule.json": "1d784fbb57aef6b85a815513776ad937fcf71ad9734c7b1f0776215b0d1fd1be",
+    "docs/validation/recovery-choice/fixtures/native/source-record.json": "97c49534cbad7180ec30235d54d37faaf1f209dfd141640df7b690ffe9965fd6",
+    "docs/validation/recovery-choice/fixtures/native/restored-record.json": "97c49534cbad7180ec30235d54d37faaf1f209dfd141640df7b690ffe9965fd6",
+    "docs/validation/recovery-choice/fixtures/native/reopened-record.json": "97c49534cbad7180ec30235d54d37faaf1f209dfd141640df7b690ffe9965fd6"
+  },
+  "report_encoding": {
+    "conformance-report.json.gz": {
+      "decoded_bytes": 18175409,
+      "decoded_sha256": "788959feb88ed14e6818e3ff0a44e29e3b800ce2fad4de213420aa28a0ef72d8",
+      "gzip_bytes": 1660024,
+      "gzip_sha256": "67c57d11bbf39d355fbdd8d4f16e45f9710536bd0359eec546c756d7e3023e18"
+    }
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "limitations": [
+    "Contracts/regressions describe existing recovery behavior; no runtime/model/solver/work-limit/command-ID/file-format change.",
+    "Blocked workers, cancellation/Close, later graph/probe/navigation/document changes, newer catalogs, cleanup and exact retry interleavings use controlled core race tests; no nondeterministic public-race claim.",
+    "Legacy pure inspection accepts ignored discard/document-generation compatibility fields; legacy hash shape is not validated at admission. Observable read jobs retain stricter existing input rules.",
+    "Source paths, actors, IDs and timestamps are session provenance. Exact bytes and source protection are checked within each workflow; schemas/errors/recorded rows/live physics are compared across transports.",
+    "Cooperating filesystem identity/hash/owner checks are not a hostile-process atomic conditional-unlink guarantee.",
+    "Twenty-seven command IDs still lack scoped contracts. Complete physical input/AX, events, general storage/hardware, visible latency, distribution, physical printers and participant gates remain open.",
+    "Private 0.120 /137 candidate is unpromoted. Canonical 0.105, preserved 0.104 and prior 0.119 candidate remain unchanged."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/recovery-choice/archive.py.txt": "23b3ed1991b42b9b1f3678bfdde97d3b29afc6c7f30f2fbb45d685c216690687",
+    "docs/validation/recovery-choice/build-initial.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/recovery-choice/build.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/recovery-choice/conformance-report.json.gz": "67c57d11bbf39d355fbdd8d4f16e45f9710536bd0359eec546c756d7e3023e18",
+    "docs/validation/recovery-choice/contract-inventory.json": "77b44161a2e9419d019f4910b4c7782b007d06ad1d0a375e3bc92b47f37f8953",
+    "docs/validation/recovery-choice/core-focused.log.txt": "ed5993f53da110c9460211441e8f6a29b1b8f77127678294b966049feab0e7aa",
+    "docs/validation/recovery-choice/fixtures/headless/damaged-capsule.json": "1d784fbb57aef6b85a815513776ad937fcf71ad9734c7b1f0776215b0d1fd1be",
+    "docs/validation/recovery-choice/fixtures/headless/reopened-record.json": "38f973f2bf05d71023aedd7ecbecafa5abdfda4b7549694c537780a4db30936e",
+    "docs/validation/recovery-choice/fixtures/headless/restored-copy.elab": "e1b0e79953c0d4361fcb5f4bd716a06eb647130b0e9d1893e7a6966ac8d12579",
+    "docs/validation/recovery-choice/fixtures/headless/restored-record.json": "38f973f2bf05d71023aedd7ecbecafa5abdfda4b7549694c537780a4db30936e",
+    "docs/validation/recovery-choice/fixtures/headless/source-capsule.json": "95ce7d00eab19bd5d1bad715f42cbc962e3662e023c419dc0979b447cc8f08e8",
+    "docs/validation/recovery-choice/fixtures/headless/source-record.json": "38f973f2bf05d71023aedd7ecbecafa5abdfda4b7549694c537780a4db30936e",
+    "docs/validation/recovery-choice/fixtures/headless/source.elab": "fa9bf0d9abd3b9ee76eb76fef2ad84957d1b3b7d36643be18ceb6322ba37304b",
+    "docs/validation/recovery-choice/fixtures/headless/target.elab": "923f757503789752ae8058082f36dfb6323a35b29d61204aab527f7b7e0cedb4",
+    "docs/validation/recovery-choice/fixtures/native/damaged-capsule.json": "1d784fbb57aef6b85a815513776ad937fcf71ad9734c7b1f0776215b0d1fd1be",
+    "docs/validation/recovery-choice/fixtures/native/reopened-record.json": "97c49534cbad7180ec30235d54d37faaf1f209dfd141640df7b690ffe9965fd6",
+    "docs/validation/recovery-choice/fixtures/native/restored-copy.elab": "66deefa6b782c35211a45e0489a6dc2e16925c9d53eeb8dbc184a6f8bf31c60c",
+    "docs/validation/recovery-choice/fixtures/native/restored-record.json": "97c49534cbad7180ec30235d54d37faaf1f209dfd141640df7b690ffe9965fd6",
+    "docs/validation/recovery-choice/fixtures/native/source-capsule.json": "844c10bce9727e4cedd393d336e731bc8e789f05f62c06ccaf85419c88a7dcd0",
+    "docs/validation/recovery-choice/fixtures/native/source-record.json": "97c49534cbad7180ec30235d54d37faaf1f209dfd141640df7b690ffe9965fd6",
+    "docs/validation/recovery-choice/fixtures/native/source.elab": "28852a3b14f265182d0b94f6b355b224e8d1f252f9f566bfd05012fcfab2a657",
+    "docs/validation/recovery-choice/fixtures/native/target.elab": "d28665be8d51063e1bd015a133dd06fe6b79157f7b27d03bd6566de3ce06bf46",
+    "docs/validation/recovery-choice/headless-final.json": "9f56cc40fee9048ff1d4da99d5578ddcccee760580921eb7b7d74628edc77943",
+    "docs/validation/recovery-choice/headless-initial.json": "c50a104111698689a49a1216ee0faeae92f3046fdd9215d72c6f7f4c3ee5ceb7",
+    "docs/validation/recovery-choice/headless-initial.log.txt": "7cb41352961ab0719470bcfadb35d4a1a0f495c76044c320e8c94343499bc5f2",
+    "docs/validation/recovery-choice/headless-recovery.log.txt": "7cb41352961ab0719470bcfadb35d4a1a0f495c76044c320e8c94343499bc5f2",
+    "docs/validation/recovery-choice/inventory.py.txt": "5ca23dc90f92f51dbd9ca9a52f2c940f9a9f1c204eb84df0414ca2dd2fa59bbd",
+    "docs/validation/recovery-choice/native-final.json": "1db1333fdfd41231b32332290cb4b8e5b9f699e8c1000aa0e2e3e4c58ef0a72b",
+    "docs/validation/recovery-choice/native-host.log.txt": "298705635949cb18858da9f4d8660c782c37cd3e59dc5447c49aedc5a9dfddc3",
+    "docs/validation/recovery-choice/native-smoke.log.txt": "5c5bbd55f5772b92666fb7facd07e239b420a469ca9f18d14b0464497182e666",
+    "docs/validation/recovery-choice/native-viewer.log.txt": "6e2038cb3997978770a3a72e1bed43eff396a9ec617dc84bd22c5e72d066ba3c",
+    "docs/validation/recovery-choice/native.py.txt": "e44d415d0531a9196adcc936651701cb9c5c34d7f79acaa14a5b7320724a4c32",
+    "docs/validation/recovery-choice/package.json": "ac684fc07265c3f9071b373efd1db2bd61f74da135a71e54b8007865238eb7db",
+    "docs/validation/recovery-choice/process-native.json": "cfa63ab41f57b53452159affe888087126111c19d1820c9cd71bf426587b23e8",
+    "docs/validation/recovery-choice/process-public.json": "9730924fc8bdd9a4237338225185c02587d67f32f27dd156ce55a79b29bfd473",
+    "docs/validation/recovery-choice/process-quality.json": "ed8e2a9a802c99eb0e0d41c8f7a0cba145ae446e952bf3738a92c5f5da771c33",
+    "docs/validation/recovery-choice/public-suites.log.txt": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "docs/validation/recovery-choice/qualify.py.txt": "89db9e1ffe425da05768cf547d33e50bde6f2b0139dd2dc06dab4831e078b609",
+    "docs/validation/recovery-choice/quality.log.txt": "5016dae8c3bb2f9819c34229853dd19bcd51fdc2127b62c6774e2f0f1e3afe5e",
+    "docs/validation/recovery-choice/recovery-choice-review.json": "9976e37fb27f526bfadf92049844a1707db60ed1e927919b72b0691ed6a58c04",
+    "docs/validation/recovery-choice/recovery-choice-review.py.txt": "48159899c7fdca27f8d697e7329fa2a984fe0224955e25255767244d84b91206",
+    "docs/validation/recovery-choice/recovery-controls-contracts-unchanged.json": "e1d5106d0ee8235efc898409209fcb8d386be8e94e92e16f1e4a742ad6e7ebcd",
+    "docs/validation/recovery-choice/report-review-gzip.json": "d8c01f60888bfd79805b58b4b9fd349b10c5f87f80000d66f1a3068031444074",
+    "docs/validation/recovery-choice/report-review.json": "d8c01f60888bfd79805b58b4b9fd349b10c5f87f80000d66f1a3068031444074",
+    "docs/validation/recovery-choice/review.go.txt": "808b076c8bf0bac85714632b87ab06a8364742575b33a383a734d7e37c729fb6",
+    "docs/validation/recovery-choice/source-delta.json": "b67ca7cf372cef4fbfe81bc338c9192d48faacaae15db1c09f15c23971245a14",
+    "docs/validation/recovery-choice/source-freeze.json": "42ddac991671ac9553650a9118d4f2f84b06e5eb2f32ccf836c34c83c6299564"
+  }
+}

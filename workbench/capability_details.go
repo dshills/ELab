@@ -92,6 +92,9 @@ func addCapabilityDetails(id string, schema map[string]any) {
 	if addRecoveryControlDetails(id, schema) {
 		return
 	}
+	if addRecoveryChoiceDetails(id, schema) {
+		return
+	}
 	if addExportCapabilityDetails(id, schema) {
 		return
 	}

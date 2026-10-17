@@ -1,0 +1,64 @@
+from pathlib import Path
+import datetime,gzip,hashlib,importlib.util,json,shutil,stat,subprocess
+root=Path.cwd();src=root/'build/recovery-choice-contracts';out=root/'docs/validation/recovery-choice'
+def read(p):return json.loads(p.read_text())
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+def digest(p):return sha(p.read_bytes())
+frozen=read(src/'source-freeze.json');assert len(frozen)==713 and all(digest(root/p)==h for p,h in frozen.items())
+quality=read(src/'process-quality.json');public=read(src/'process-public.json');native=read(src/'process-native.json')
+assert all(p['status']=='completed' and p['exit_code']==0 for p in quality+public)
+assert native['status']=='completed' and native['demo_exit_code']==native['native_exit_code']==0 and not native.get('forced_cleanup')
+assert 'Ran 37 tests' in (src/'quality.log.txt').read_text()
+assert sum('smoke: ' in line for line in (src/'native-smoke.log.txt').read_text().splitlines())==45
+assert read(src/'report-review.json')==read(src/'report-review-gzip.json') and read(src/'report-review.json')['numerical_checks']==27596
+review=read(src/'recovery-choice-review.json');assert review['passed']
+contracts=read(src/'contract-inventory.json');assert (contracts['total'],contracts['with_contract'],contracts['without_contract'])==(162,135,27)
+spec=importlib.util.spec_from_file_location('sdk',root/'scripts/prepare-vellum.py');sdk=importlib.util.module_from_spec(spec);spec.loader.exec_module(sdk)
+pin=sdk.load_pin(root);sdk.verify_archive_identity(root/pin['archive'],pin);sdk.verify_cache(root/pin['cache'],pin)
+golden=read(root/'docs/validation/lc-sampling-validation.json')['promotion'];preserved={}
+for name,key in [('build/ELab.app','bundle_tree'),('build/ELab-0.104.0-119-preserved.app','preserved_bundle_tree')]:
+ folder=root/name;actual={}
+ for p in [folder,*sorted(folder.rglob('*'))]:
+  assert not p.is_symlink()
+  actual[str(p.relative_to(folder))]={'mode':stat.S_IMODE(p.stat().st_mode),'sha256':digest(p) if p.is_file() else None}
+ assert actual==golden[key];preserved[name]={'passed':True,'entries':len(actual)}
+for p,h in read(root/'docs/validation/recovery-controls-validation.json')['binary_sha256'].items():
+ if '.app/' in p:assert digest(root/p)==h,p
+files=['build/elab','build/elab-agent','build/elab-conformance','build/elab-ui-audit','build/ELab-0.120.0-137-recovery-choice-candidate.app/Contents/MacOS/ELab'];binaries={p:digest(root/p) for p in files};assert binaries[files[0]]==binaries[files[-1]]
+inventory=read(root/'research/13-native-command-inventory.json');assert all(digest(root/p)==h for p,h in inventory['source_sha256'].items())
+out.mkdir(exist_ok=False)
+for name in ['core-focused.log.txt','build-initial.log.txt','headless-initial.log.txt','headless-initial.json','build.log.txt','quality.log.txt','package.json','native-smoke.log.txt','public-suites.log.txt','headless-recovery.log.txt','headless-final.json','native-host.log.txt','native-viewer.log.txt','native-final.json','process-quality.json','process-public.json','process-native.json','source-freeze.json','source-delta.json','report-review.json','report-review-gzip.json','recovery-choice-review.json','contract-inventory.json','recovery-controls-contracts-unchanged.json']:
+ shutil.copyfile(src/name,out/name)
+for source,name in [('build/.recovery-choice-qualify.py','qualify.py.txt'),('build/.recovery-choice-native.py','native.py.txt'),('build/.recovery-choice-review.py','recovery-choice-review.py.txt'),('build/.recovery-choice-inventory.py','inventory.py.txt'),('build/.recovery-choice-archive.py','archive.py.txt'),('build/.recovery-choice-review/main.go','review.go.txt')]:shutil.copyfile(root/source,out/name)
+raw=(src/'public-final/report.json').read_bytes();compressed=gzip.compress(raw,mtime=0);(out/'conformance-report.json.gz').write_bytes(compressed);assert gzip.decompress(compressed)==raw
+fixtures={}
+for transport in ['headless','native']:
+ folder=out/'fixtures'/transport;folder.mkdir(parents=True)
+ for name in ['source.elab','target.elab','restored-copy.elab','source-capsule.json','damaged-capsule.json','source-record.json','restored-record.json','reopened-record.json']:
+  raw_fixture=(src/(transport+'-final-assets')/name).read_bytes();(folder/name).write_bytes(raw_fixture);fixtures[str((folder/name).relative_to(root))]=sha(raw_fixture)
+receipt={'passed':True,'recorded_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ 'scope':'Six recovery restore/dismiss/pure-query state contracts, real foreign active/unknown/inactive ownership, strict read/hash/projection error stages, unassociated paused copy restores, confirmed guarded removal and exact capture save/reopen',
+ 'reference_configuration':read(root/'docs/validation/recovery-controls-validation.json')['reference_configuration'],
+ 'source_parent_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'source_index':str((out/'source-freeze.json').relative_to(root)),'source_frozen_files':713,'source_stable':True,
+ 'source_delta':read(src/'source-delta.json'),'binary_sha256':binaries,
+ 'candidate':'build/ELab-0.120.0-137-recovery-choice-candidate.app','candidate_promoted':False,
+ 'new_application_commands':0,'existing_commands':162,'new_contracts':6,'commands_with_contracts_before':129,'commands_with_contracts_after':135,'commands_without_contract':27,
+ 'default_catalog_output_schemas_models_numerical_methods_work_limits_file_versions_unchanged':True,
+ 'quality':{'lint_imports_staticcheck':True,'python_tests':37,'root_native_race_and_vet':True},'process_quality':quality,'process_public':public,'native_workflow':native,
+ 'four_adapter_numerical_checks':27596,'four_adapter_project_workflow_checks':44,'four_adapter_project_snapshots':56,'native_smoke_stages':45,
+ 'recovery_choice_review':review,'six_prior_recovery_control_contracts_exactly_unchanged':read(src/'recovery-controls-contracts-unchanged.json')['passed'],
+ 'typed_raw_gzip_numerical_review_equal':True,'sdk_verified':{'passed':True,'source':pin['source_commit'],'archive_sha256':pin['sha256']},
+ 'native_production_inventory_unchanged':{'sources':len(inventory['source_sha256']),'sites':len(inventory['sites']),'commands':len(inventory['public_commands'])},
+ 'preserved_bundle_trees':preserved,'fixture_files':fixtures,
+ 'report_encoding':{'conformance-report.json.gz':{'decoded_bytes':len(raw),'decoded_sha256':sha(raw),'gzip_bytes':len(compressed),'gzip_sha256':sha(compressed)}},
+ 'p0_counts':{'implemented':17,'partial':10},
+ 'limitations':['Contracts/regressions describe existing recovery behavior; no runtime/model/solver/work-limit/command-ID/file-format change.',
+ 'Blocked workers, cancellation/Close, later graph/probe/navigation/document changes, newer catalogs, cleanup and exact retry interleavings use controlled core race tests; no nondeterministic public-race claim.',
+ 'Legacy pure inspection accepts ignored discard/document-generation compatibility fields; legacy hash shape is not validated at admission. Observable read jobs retain stricter existing input rules.',
+ 'Source paths, actors, IDs and timestamps are session provenance. Exact bytes and source protection are checked within each workflow; schemas/errors/recorded rows/live physics are compared across transports.',
+ 'Cooperating filesystem identity/hash/owner checks are not a hostile-process atomic conditional-unlink guarantee.',
+ 'Twenty-seven command IDs still lack scoped contracts. Complete physical input/AX, events, general storage/hardware, visible latency, distribution, physical printers and participant gates remain open.',
+ 'Private 0.120 /137 candidate is unpromoted. Canonical 0.105, preserved 0.104 and prior 0.119 candidate remain unchanged.']}
+receipt['artifacts_sha256']={str(p.relative_to(root)):digest(p) for p in sorted(out.rglob('*')) if p.is_file()}
+(root/'docs/validation/recovery-choice-validation.json').write_text(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps(dict(passed=True,source_inputs=713,new_contracts=6,artifacts=len(receipt['artifacts_sha256']),fixtures=len(fixtures),review=review),indent=2))

@@ -10,4 +10,6 @@ An admitted failure changes only job bookkeeping. Corrected requests require a n
 
 Blocked-worker race tests exercise navigation, cancellation, intervening edits/replacement and complete original-attribution commit. Existing corruption/hash/generation/unsaved guards, file preservation, kept-record/preference round trips and native/agent parity tests remain active. Native GPU smoke exercises the actual Restore/discard callbacks with assertion-only waits. Run `python3 scripts/project-restore-demo.py --output REPORT --artifacts DIRECTORY`; `--connect` targets only a designated owned development session.
 
-Recovery configuration/dismiss/inspection and shutdown still include synchronous work. Full event/conformance coverage, accessibility, numerical/performance consolidation, distribution and participant validation remain open.
+Recovery configuration/dismissal now use shared background work; inspection/sample reads run outside the editor lock and also offer observable aliases. Shutdown exposes protected cleanup through its own lifecycle. Full event/conformance coverage, accessibility, numerical/performance consolidation, distribution and participant validation remain open.
+
+The six restore/dismiss/pure-read commands now expose [detailed choice contracts](recovery-choice-contracts.md), including legacy hash/error precedence, compatibility fields, captured session controls and ownership/removal outcomes.

@@ -1,0 +1,79 @@
+from pathlib import Path
+import hashlib,json,math
+root=Path.cwd();out=root/'build/recovery-choice-contracts';reports=[json.loads((out/(t+'-final.json')).read_text()) for t in ['headless','native']]
+record_checks=0;live_checks=0;max_v=0.;max_a=0.;actors={};fixtures={}
+expected_queries=[('recovery.inspect','file-conflict'),('recovery.inspect','invalid-recovery'),('recovery.inspect','invalid-params'),('recovery.samples','invalid-params'),('recovery.samples','invalid-params'),('recovery.samples','invalid-params'),('recovery.samples','invalid-params'),('recovery.samples','invalid-recovery'),('recovery.samples','file-conflict'),('recovery.samples','invalid-params'),('recovery.inspect','invalid-recovery')]
+for transport,r in zip(['headless','native'],reports):
+ assert r['passed'] and r['commands']==162 and len(r['contracts'])==6 and len(r['work'])==9
+ assert all(s['x-command-contract']['scope']=='recovery-choice-and-query' for s in r['contracts'].values())
+ assert [(q['command'],q['code']) for q in r['pure_query_errors']]==expected_queries
+ assert len(r['admission_and_work_refusals'])==10 and sum(x['admitted'] for x in r['admission_and_work_refusals'])==5
+ actors[transport]='agent.stdio' if transport=='headless' else 'agent.socket'
+ assert all(w['actor']==actors[transport] for w in r['work'])
+ assert [w['status'] for w in r['work']]==['failed']*5+['completed']*4
+ assert [w['error']['code'] for w in r['work'][:5]]==['invalid-recovery','file-conflict','unavailable','file-conflict','unavailable']
+ assert all(not w['recovery_snapshot_removed'] for w in r['work'][2:5])
+ assert r['ownership']==[dict(owner_status='active',active_session=True,current_session=False),dict(owner_status='unknown',active_session=True,current_session=False),dict(owner_status='inactive',active_session=False,current_session=False)]
+ assets=out/(transport+'-final-assets');capsule_raw=(assets/'source-capsule.json').read_bytes();capsule=json.loads(capsule_raw)
+ source=(assets/'source.elab').read_bytes();target=(assets/'target.elab').read_bytes();copy=json.loads((assets/'restored-copy.elab').read_text())
+ assert hashlib.sha256(capsule_raw).hexdigest()==r['capsule_sha256'] and hashlib.sha256(source).hexdigest()==r['source_sha256'] and hashlib.sha256(target).hexdigest()==r['target_sha256']
+ assert capsule['format']=='elab.recovery' and capsule['version']==1 and capsule['source_path']==str(assets/'source.elab')
+ text=capsule_raw.decode();start=text.index('"document":')+len('"document":');start+=len(text[start:])-len(text[start:].lstrip());_,end=json.JSONDecoder().raw_decode(text,start)
+ quoted=False;escaped=False;compact=[]
+ for ch in text[start:end]:
+  if quoted:
+   compact.append(ch)
+   if escaped:escaped=False
+   elif ch=='\\':escaped=True
+   elif ch=='"':quoted=False
+  elif ch=='"':quoted=True;compact.append(ch)
+  elif not ch.isspace():compact.append(ch)
+ assert hashlib.sha256(''.join(compact).encode()).hexdigest()==capsule['document_sha256']
+ document=capsule['document'];record_raw=(assets/'source-record.json').read_bytes();record=json.loads(record_raw)
+ assert hashlib.sha256(record_raw).hexdigest()==r['record_sha256']
+ assert record_raw==(assets/'restored-record.json').read_bytes()==(assets/'reopened-record.json').read_bytes()
+ assert len(document['recordings']['entries'])==len(copy['recordings']['entries'])==1
+ assert document['recordings']['entries'][0]['data']==copy['recordings']['entries'][0]['data']==record
+ assert document['graph']==copy['graph'] and document['graph']==r['inspection']['document']['graph']
+ assert r['inspection']['document']['recordings']==[record['metadata']] and r['inspection']['candidate']['sha256']==r['capsule_sha256']
+ assert r['samples']['rows']==record['rows'] and r['samples']['probes']==record['metadata']['probes'] and r['samples']['id']==capsule['id']
+ assert r['eof']['rows']==[] and r['eof']['offset']==r['eof']['next_offset']==r['eof']['total']==4
+ assert [p['id'] for p in record['metadata']['probes']]==['v:C1','i:C1']
+ for i,stage in enumerate(['restored','second_restored']):
+  s=r[stage];w=r['work'][5+i]
+  assert s['document']['dirty'] and s['document']['path']=='' and s['document']['recording_count']==1 and s['document']['recovered_from']==str(assets/'source.elab')
+  assert s['document']['generation']==r['baseline']['document']['generation']+i+1 and s['run_id']==r['baseline']['run_id']+i+1 and s['paused']
+  assert w['source_sha256']==r['capsule_sha256'] and w['result_recovery_id']==capsule['id'] and w['result_document_generation']==s['document']['generation'] and w['result_run_id']==s['run_id']
+  assert s['components']==document['graph']['components'] and s['wires']==document['graph']['wires']
+ assert r['restored']['undo_entry']['actor']==actors[transport] and r['restored']['undo_entry']['command_revision']==r['work'][5]['command_revision']
+ assert r['second_restored']['undo_entry']==r['restored']['undo_entry']  # Same content needs no second history entry.
+ for key in ['components','wires','view','transient','mixed','npn','scope','paused','undo_entry','redo_entry','run_id','electrical_revision','document','operations','recording','selected_operation','last_operation']:
+  assert r['final'].get(key)==r['second_restored'].get(key),key
+ assert all(w['recovery_snapshot_removed'] for w in r['work'][7:]) and r['work'][7]['result_recovery_id']==capsule['id']
+ assert r['work'][8]['result_recovery_id']=='rec-owned-damaged' and r['work'][8]['source_sha256']==hashlib.sha256((assets/'damaged-capsule.json').read_bytes()).hexdigest()
+ assert not r['final']['recovery']['candidates'] and not r['final']['recovery']['problems'] and not list((assets/'recovery').glob('*.elab-recovery'))
+ assert r['reopened']==dict(paused=True,dirty=False,recording_count=1,time_s=0)
+ assert next(c for c in json.loads(source)['graph']['components'] if c['id']=='R1')['value']==10000
+ assert next(c for c in json.loads(target)['graph']['components'] if c['id']=='R1')['value']==10000
+ assert next(c for c in r['baseline']['components'] if c['id']=='R1')['value']==30000
+ assert next(c for c in document['graph']['components'] if c['id']=='R1')['value']==20000
+ assert [row['time_s'] for row in record['rows']]==[0,.001,.002,.003]
+ for row in record['rows']:
+  t=row['time_s'];dv=abs(row['values'][0]-5*(-math.expm1(-t/.01)));di=abs(row['values'][1]-.0005*math.exp(-t/.01));assert dv<1e-10 and di<1e-12
+  record_checks+=2;max_v=max(max_v,dv);max_a=max(max_a,di)
+ for stage,t,tau,current in [('baseline',.002,.01,.0005),('restored',0,.02,.00025),('second_restored',0,.02,.00025)]:
+  sample=r[stage]['transient']['sample'];assert sample['time_s']==t
+  assert abs(sample['voltage_v']-5*(-math.expm1(-t/tau)))<1e-10 and abs(sample['current_a']-current*math.exp(-t/tau))<1e-12;live_checks+=2
+ fixtures[transport]={'capsule_sha256':r['capsule_sha256'],'document_sha256':capsule['document_sha256'],'kept_rows':4,'manual_source_ohms':10000,'target_live_ohms_before_restore':30000,'restored_ohms':20000}
+for key in ['contracts','admission_and_work_refusals','pure_query_errors','ownership','reopened']:assert reports[0][key]==reports[1][key],key
+assert reports[0]['samples']['rows']==reports[1]['samples']['rows']
+for stage in ['baseline','restored','second_restored','final']:
+ for key in ['components','wires','transient','mixed','npn','scope','paused','run_id','electrical_revision']:assert reports[0][stage].get(key)==reports[1][stage].get(key),(stage,key)
+result=dict(passed=True,contracts_per_transport=6,pure_query_refusals_per_transport=11,admission_refusals_per_transport=5,work_failures_per_transport=5,terminal_jobs_per_transport=9,
+ actors=actors,fixtures=fixtures,recorded_rows_per_transport=4,recorded_voltage_current_reference_checks=record_checks,live_voltage_current_reference_checks=live_checks,
+ maximum_recorded_voltage_error_v=max_v,maximum_recorded_current_error_a=max_a,
+ active_unknown_owners_protected_from_dismissal_but_copy_restore_allowed=True,inactive_and_damaged_dismissal_confirmed=True,
+ exact_source_target_files_capsule_checksums_and_all_record_exports=True,restored_dirty_unassociated_paused_time_zero=True,
+ separate_saved_copy_reopens_clean_with_exact_capture=True,equal_schemas_errors_rows_and_live_physics=True,
+ scope='Named public read/ownership/copy/dismissal workflows; controlled core race tests separately cover blocked workers/cancel/Close/replacement/catalog interleavings')
+(out/'recovery-choice-review.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))
