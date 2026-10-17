@@ -19,6 +19,20 @@ The coil extension uses `--inductor-performance-suite --repetitions 20` for four
 
 The [0.104 qualification](validation/inductor-release-validation.json) reruns all 800 original-family and 640 coil measurements on the recorded Apple M4 Pro workstation. Maximum case p95 edit-to-fresh is **10.239 ms**; maximum individual Verify is **271.670 ms**. [Complete evidence](validation/inductor-release-conformance.json) shares repeated graphs and sample contexts through an explicitly documented lossless encoding; reconstruction was compared to the full raw report. [The sample audit](validation/inductor-release-sample-audit.json) recomputes distributions and checks complete coverage. These are backend observations with the scope and limits below; they do not establish visible latency.
 
+The unreleased op-amp extension uses `--opamp-performance-suite --repetitions 20` for the follower, inverting amplifier, RC/NPN LED driver and two-buffer RC/MOSFET LED driver. Each captures 200 ms at 1 ms outputs and selects four live/Verify probes. It alternates RL between 10/20 kΩ, RF between 20/22 kΩ, or the mixed input resistor RI between 10/12 kΩ. The same fresh/warm definitions and backend targets apply; four adapters produce 640 measurements. Timing requires matching run/revision identities in both transient and mixed results, the expected amplifier count and complete fixed op-amp model metadata.
+
+Use the development binary for this extension; the qualified 0.105 app predates op-amps:
+
+```sh
+GOPROXY=off ./scripts/build.sh
+./build/elab-conformance --opamp-suite --opamp-performance-suite --repetitions 20 \
+  --artifacts build/opamp-performance-new --native-binary build/elab
+```
+
+The numerical suite supplies separate reference/capture and adapter-equality evidence. Timing alone does not qualify model accuracy, physical amplifier bandwidth/stability, maximum capacity or visible response.
+
+The [unreleased op-amp qualification](validation/opamp-performance-validation.json) passes all 640 measurements and 931 numerical reference checks per adapter. Maximum case p95 edit-to-fresh is **11.837 ms**; maximum individual Verify is **604.578 ms**. The [sample audit](validation/opamp-performance/sample-audit.json) recomputes every distribution, graph hash, resistor variant, engine/model/probe association and coverage count. Its reviewer also rejects eight deliberately altered reports. The [complete report](validation/opamp-performance/conformance-report.json.gz) is gzip of the exact original JSON, with a verified lossless round trip; [reproduction instructions](validation/opamp-performance/README.md) describe the retained audit sources. These results use the pinned private source SDK and do not promote the canonical app.
+
 ## Measurement boundaries
 
 | Measurement | Boundary and target |

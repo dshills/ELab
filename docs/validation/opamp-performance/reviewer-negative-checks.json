@@ -1,0 +1,53 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "name": "missing-observation",
+      "refused": true,
+      "expected_reason": "case/condition/repetition coverage",
+      "exit_code": 2
+    },
+    {
+      "name": "incorrect-percentile",
+      "refused": true,
+      "expected_reason": "recomputed timing distributions differ",
+      "exit_code": 2
+    },
+    {
+      "name": "changed-graph-body",
+      "refused": true,
+      "expected_reason": "graph SHA-256 mismatch",
+      "exit_code": 2
+    },
+    {
+      "name": "wrong-resistor-variant",
+      "refused": true,
+      "expected_reason": "resistor alternation/session boundary differs",
+      "exit_code": 2
+    },
+    {
+      "name": "wrong-model",
+      "refused": true,
+      "expected_reason": "sample model IDs differ",
+      "exit_code": 2
+    },
+    {
+      "name": "wrong-engine",
+      "refused": true,
+      "expected_reason": "timing engine differs",
+      "exit_code": 2
+    },
+    {
+      "name": "changed-numerical-row",
+      "refused": true,
+      "expected_reason": "recomputed numerical/adaptor references differ",
+      "exit_code": 2
+    },
+    {
+      "name": "repeated-warm-run",
+      "refused": true,
+      "expected_reason": "warm edit did not advance both identities",
+      "exit_code": 2
+    }
+  ]
+}

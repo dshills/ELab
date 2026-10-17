@@ -81,6 +81,12 @@ func RunInductorPerformance(ctx context.Context, factory Factory, dir string, re
 	return runPerformance(ctx, factory, dir, repetitions, []string{"rl", "rlc", "flyback", "npn-coil"})
 }
 
+// RunOpAmpPerformance measures the guided amplifiers and their mixed RC/device
+// loads separately. Each Verify captures 200 ms at 1 ms output intervals.
+func RunOpAmpPerformance(ctx context.Context, factory Factory, dir string, repetitions int) (PerformanceResult, error) {
+	return runPerformance(ctx, factory, dir, repetitions, opAmpCaseNames)
+}
+
 func runPerformance(ctx context.Context, factory Factory, dir string, repetitions int, families []string) (out PerformanceResult, err error) {
 	if repetitions < 20 || repetitions > 100 {
 		return out, fmt.Errorf("performance repetitions must be 20–100")
@@ -158,7 +164,14 @@ func runPerformance(ctx context.Context, factory Factory, dir string, repetition
 	return out, nil
 }
 func preparePerformance(s *session, name string) error {
-	if isInductorPerformance(name) {
+	if isOpAmpPerformance(name) {
+		if err := prepareOpAmpCase(s, name); err != nil {
+			return err
+		}
+		if _, err := restart(s); err != nil {
+			return err
+		}
+	} else if isInductorPerformance(name) {
 		id := name
 		if name == "npn-coil" {
 			id = "flyback"
@@ -227,6 +240,12 @@ func measurePerformance(s *session, name string, index int, condition string) (s
 		id, a, b = "R1", "50 Ω", "60 Ω"
 	case "flyback", "npn-coil":
 		id, a, b = "RL", "100 Ω", "120 Ω"
+	case "opamp-follower":
+		id, a, b = "RL", "10k", "20k"
+	case "opamp-inverting":
+		id, a, b = "RF", "20k", "22k"
+	case "opamp-rc-npn", "opamp-rc-mosfet":
+		id, a, b = "RI", "10k", "12k"
 	}
 	high, err := workbench.ParseValue(b, "Ω")
 	if err != nil {
@@ -295,6 +314,8 @@ func measurePerformance(s *session, name string, index int, condition string) (s
 		duration = .2
 	case "rl", "rlc", "flyback", "npn-coil":
 		duration = .2
+	case "opamp-follower", "opamp-inverting", "opamp-rc-npn", "opamp-rc-mosfet":
+		duration = .2
 	}
 	step := .001
 	meta, _, elapsed, e := electricalVerify(s, duration, step, probes)
@@ -313,6 +334,13 @@ func measurePerformance(s *session, name string, index int, condition string) (s
 	return sample, nil
 }
 func performanceFresh(s workbench.Snapshot, name string) bool {
+	if isOpAmpPerformance(name) {
+		count := 1
+		if name == "opamp-rc-mosfet" {
+			count = 2
+		}
+		return s.Transient != nil && !s.Transient.Stale && s.Transient.RunID == s.RunID && s.Transient.ElectricalRevision == s.ElectricalRevision && s.Mixed != nil && !s.Mixed.Stale && s.Mixed.RunID == s.RunID && s.Mixed.ElectricalRevision == s.ElectricalRevision && len(s.Mixed.OpAmps) == count && s.OpAmpModel != nil && *s.OpAmpModel == workbench.OpAmpDeviceModel()
+	}
 	switch name {
 	case "led":
 		return s.Result != nil && !s.Result.Stale && s.Result.RunID == s.RunID && s.Result.ElectricalRevision == s.ElectricalRevision
@@ -329,6 +357,11 @@ func performanceFresh(s workbench.Snapshot, name string) bool {
 }
 
 func performanceProbes(name string) []string {
+	if isOpAmpPerformance(name) {
+		// The numerical RC/NPN reference uses a fifth base-voltage boundary
+		// probe. Timing keeps four probes in every family for comparability.
+		return opAmpCaseProbes(name)[:4]
+	}
 	switch name {
 	case "led":
 		return []string{"v:Light.anode", "i:Light", "i:Limit", "v:Supply.positive"}
@@ -352,4 +385,13 @@ func performanceProbes(name string) []string {
 
 func isInductorPerformance(name string) bool {
 	return name == "rl" || name == "rlc" || name == "flyback" || name == "npn-coil"
+}
+
+func isOpAmpPerformance(name string) bool {
+	for _, known := range opAmpCaseNames {
+		if name == known {
+			return true
+		}
+	}
+	return false
 }

@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "source_files": 620,
+  "source_freeze": "build/opamp-performance-quality/source-freeze.json",
+  "source_stable": true,
+  "steps": [
+    {
+      "name": "build",
+      "argv": [
+        "./scripts/build.sh"
+      ],
+      "started_utc": "2026-10-17T04:20:14.771276+00:00",
+      "log": "build/opamp-performance-quality/build.log.txt",
+      "exit_code": 0,
+      "elapsed_seconds": 6.223332165973261,
+      "finished_utc": "2026-10-17T04:20:20.994941+00:00"
+    },
+    {
+      "name": "check",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T04:20:20.995189+00:00",
+      "log": "build/opamp-performance-quality/check.log.txt",
+      "exit_code": 0,
+      "elapsed_seconds": 84.6722268749727,
+      "finished_utc": "2026-10-17T04:21:45.667768+00:00"
+    }
+  ],
+  "binaries": {
+    "build/elab": "d9d4fec9f39793adbe601e41999d14876464329015e623b3f91d7081324322fd",
+    "build/elab-agent": "1c489e76edb02ef24f25a01135fc057ad513f1213538f2f732586cfbe527eed2",
+    "build/elab-conformance": "e07345994f9abf38440c530bff6d55dd14d880ffde2d929b79a65976ff262e80",
+    "build/elab-ui-audit": "8e0d3528e21ea9965e1065eadad9173d6500ed92547acdd6e0513e9b815f9178"
+  }
+}

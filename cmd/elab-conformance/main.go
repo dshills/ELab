@@ -25,6 +25,7 @@ type adapterResult struct {
 	OpAmps              *conformance.OpAmpSuiteResult  `json:"opamps,omitempty"`
 	Performance         *conformance.PerformanceResult `json:"performance,omitempty"`
 	InductorPerformance *conformance.PerformanceResult `json:"inductor_performance,omitempty"`
+	OpAmpPerformance    *conformance.PerformanceResult `json:"opamp_performance,omitempty"`
 }
 type report struct {
 	Passed      bool            `json:"passed"`
@@ -49,9 +50,10 @@ func run() error {
 	opamps := flag.Bool("opamp-suite", false, "also verify powered amplifier references, mixed RC/NPN and two-buffer RC/MOSFET circuits, captures and save/reopen")
 	performance := flag.Bool("performance-suite", false, "also measure fresh/warm backend edit/result and Verify latency in owned sessions")
 	inductorPerformance := flag.Bool("inductor-performance-suite", false, "also measure RL/RLC/flyback/mixed NPN-coil fresh/warm timing, 200 ms Verify at 1 ms outputs")
+	opampPerformance := flag.Bool("opamp-performance-suite", false, "also measure follower/inverting/mixed RC/NPN/MOSFET fresh/warm timing, 200 ms Verify at 1 ms outputs")
 	repetitions := flag.Int("repetitions", 20, "performance repetitions per circuit/condition (20–100)")
 	flag.Parse()
-	if (*performance || *inductorPerformance) && (*repetitions < 20 || *repetitions > 100) {
+	if (*performance || *inductorPerformance || *opampPerformance) && (*repetitions < 20 || *repetitions > 100) {
 		return fmt.Errorf("--repetitions must be 20–100")
 	}
 	if *directory == "" {
@@ -174,6 +176,20 @@ func run() error {
 			if measurementErr != nil {
 				result.Adapters = append(result.Adapters, adapter)
 				return writeFailure(dir, result, fmt.Errorf("%s coil performance: %w", mode.name, measurementErr))
+			}
+		}
+		if *opampPerformance {
+			fmt.Fprintf(os.Stderr, "%s: measuring four amplifier circuits, fresh/warm, %d repetitions\n", mode.name, *repetitions)
+			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
+			measured, measurementErr := conformance.RunOpAmpPerformance(ctx, mode.factory, filepath.Join(dir, mode.name, "opamp-performance"), *repetitions)
+			cancel()
+			adapter.OpAmpPerformance = &measured
+			if measurementErr == nil && !measured.TargetsPassed {
+				measurementErr = fmt.Errorf("amplifier backend performance target missed; inspect individual cases")
+			}
+			if measurementErr != nil {
+				result.Adapters = append(result.Adapters, adapter)
+				return writeFailure(dir, result, fmt.Errorf("%s amplifier performance: %w", mode.name, measurementErr))
 			}
 		}
 		result.Adapters = append(result.Adapters, adapter)

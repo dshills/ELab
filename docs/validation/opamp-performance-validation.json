@@ -1,0 +1,98 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T04:28:28.347195+00:00",
+  "scope": "Unreleased source; four reference amplifier-family backend performance and numerical adapter qualification on one workstation",
+  "source_parent_commit": "6103628e8470d1cf8e965c60075e4f6f172717da",
+  "changed_executable_sources_sha256": {
+    "cmd/elab-conformance/main.go": "f291fb5018fbd9a57cf26cd927f696745f48432097096a816401a78dc5236e0f",
+    "internal/conformance/performance.go": "3ab185e2710dc5c7627c13c3ccfa0a189588d2646a2c7173cf178c3f8b280d34",
+    "internal/conformance/performance_test.go": "cd4c2437d8a8b639b22acc20911f91cb8fb5e3e475f84fe3b825644e9fe39207"
+  },
+  "source_frozen_files": 620,
+  "source_stable": true,
+  "quality": "docs/validation/opamp-performance/quality.json",
+  "measurement": "docs/validation/opamp-performance/measurement-process.json",
+  "sdk_lock": "third_party/vellum/sdk.lock.json",
+  "post_gate_sdk_verification": {
+    "passed": true,
+    "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-aa9d023",
+    "source": "aa9d023243a6bded514c3d9696c08a9c917119c4"
+  },
+  "hardware": {
+    "cpu": "Apple M4 Pro",
+    "memory_bytes": 68719476736,
+    "os_version": "26.6.2",
+    "go": "go version go1.27.2 darwin/arm64"
+  },
+  "ordinary_binaries_sha256": {
+    "build/elab": "d9d4fec9f39793adbe601e41999d14876464329015e623b3f91d7081324322fd",
+    "build/elab-agent": "1c489e76edb02ef24f25a01135fc057ad513f1213538f2f732586cfbe527eed2",
+    "build/elab-conformance": "e07345994f9abf38440c530bff6d55dd14d880ffde2d929b79a65976ff262e80",
+    "build/elab-ui-audit": "8e0d3528e21ea9965e1065eadad9173d6500ed92547acdd6e0513e9b815f9178"
+  },
+  "timing_samples": 640,
+  "numerical_reference_checks": 3724,
+  "sample_audit": "docs/validation/opamp-performance/sample-audit.json",
+  "max_case_p95_fresh_ms": 11.837334,
+  "max_verify_ms": 604.578291,
+  "conformance_report": {
+    "path": "docs/validation/opamp-performance/conformance-report.json.gz",
+    "encoding": "gzip of the exact original UTF-8 JSON report, mtime=0; no fields or observations omitted",
+    "uncompressed_bytes": 4550678,
+    "uncompressed_sha256": "6248241da2b79d6c0db66b9c34e2ff8011383c64d5862307145b888ef294cd08",
+    "compressed_bytes": 341206,
+    "round_trip_verified": true,
+    "gzip_review_matches_raw_review": true
+  },
+  "negative_audit_checks": "docs/validation/opamp-performance/reviewer-negative-checks.json",
+  "bundles_unchanged": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7,
+      "executable_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c"
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7,
+      "executable_sha256": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1"
+    }
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "limitations": [
+    "Backend timing includes public command/transport/serialization overhead; it is not visible acknowledgment or UI response latency.",
+    "Session launch/construction and OS cache purging are outside the timed boundary; this is not cold startup or maximum-capacity qualification.",
+    "Four amplifier fixtures and their exact declared resistor variants are qualified; no broader topology or universal hardware performance claim.",
+    "Fixed educational amplifier has no intrinsic bandwidth/slew/stability or named physical-device identity; separate references qualify declared equations within these fixtures.",
+    "Native socket sessions verify shared semantic commands; complete physical input, divider/focus/AX, screen-reader and visible-latency acceptance remain open.",
+    "All process adapters create owned temporary sessions; pre-existing user apps/endpoints and canonical bundles are not reused.",
+    "No electronics equations, solver accuracy/work limits, part capacities or public application commands changed.",
+    "The canonical 0.105 app predates op-amps; no application promotion or MVP completion is claimed.",
+    "The initial audit build attempt used a dot-prefixed Go filename, which Go ignores. The same formatted source was placed in an owned hidden directory and then built/audited successfully; measurement sources and results were unchanged.",
+    "The copied quality wrapper initially named the prior freeze in its metadata. Its final record now names this gate's actual frozen source file; all runtime source hashes were checked before and after measurement."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/opamp-performance/build.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/opamp-performance/check.log.txt": "5647891c131ee6f45262b0431c8a7489c4ab8b61a25ca399b808698e2f6dfb14",
+    "docs/validation/opamp-performance/conformance-report.json.gz": "b10456312263182ba5fa6f2cf9056df9ff267c782966e19cd965198a0131cc5a",
+    "docs/validation/opamp-performance/invalid-repetitions.json": "b955e49e8e3270761ffc48d5fecefbdc8e777b0e63a789f150716703935cb6ef",
+    "docs/validation/opamp-performance/measurement-process.json": "3752a599ee3c90aa8b4088f0cd6645a48b6c24056f44215c100c08015e6192bc",
+    "docs/validation/opamp-performance/measurement.log.txt": "346a580d2a409899bc094ad449b9809d1091e2638d6189daa25930363835e467",
+    "docs/validation/opamp-performance/quality.json": "5e444bd55568fb391c95c437cf1454fe9949fc467060e92814167b49f4064d8f",
+    "docs/validation/opamp-performance/review-negative-checks.py.txt": "020e2433e3fcc927f86c647d0fe875c57e4b09a8c78a4df3041b89db4767ff3a",
+    "docs/validation/opamp-performance/review.go.txt": "1110bac400d0beddc9c7e6af24bf728113ad15fedf6e7318b73a450de41ba88e",
+    "docs/validation/opamp-performance/reviewer-negative-checks.json": "db6fb1a33a1e82552c56975ed42b4079142b710b0efdf655c71ec6e30c5aa6d3",
+    "docs/validation/opamp-performance/sample-audit.json": "123f120c559392c05fd9ef9379874f03d86e25e8b6bce27e45744cd74d4e0ca5",
+    "docs/validation/opamp-performance/source-freeze.json": "47e72a56c12c526ee7cea595c20a8e8532e734f6f69c63c7b171441e5093b352",
+    "docs/validation/opamp-performance/README.md": "082970f328b28916b6ec61b64d7151a9f4ba466335636a7d7804f830db652323",
+    "docs/validation/opamp-performance/post-doc-audit.log.txt": "6418b239381bfd130f510d6302854532cadd6cfc8b126a6b3a66d69e493a70a3"
+  },
+  "post_documentation_audit": {
+    "command": "go test -race ./internal/uiaudit",
+    "passed": true,
+    "cached": true,
+    "log": "docs/validation/opamp-performance/post-doc-audit.log.txt"
+  }
+}

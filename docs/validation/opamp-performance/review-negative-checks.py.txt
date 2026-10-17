@@ -1,0 +1,22 @@
+from pathlib import Path
+import copy,json,subprocess
+root=Path.cwd();output=root/'build/opamp-performance-quality';base=json.loads((root/'build/opamp-performance-qual/report.json').read_text()); results=[]
+def case(report):return report['adapters'][0]['opamp_performance']['cases'][0]
+def graph_change(report):
+ graphs=report['adapters'][0]['opamp_performance']['circuits_by_sha256'];next(iter(graphs.values()))['components'][0]['value']+=1
+mutations=[
+ ('missing-observation',lambda r:case(r)['samples'].pop(),'case/condition/repetition coverage'),
+ ('incorrect-percentile',lambda r:case(r)['edit_to_fresh_result'].__setitem__('p95_ms',999),'recomputed timing distributions differ'),
+ ('changed-graph-body',graph_change,'graph SHA-256 mismatch'),
+ ('wrong-resistor-variant',lambda r:case(r)['samples'][0].__setitem__('graph_sha256','f'*64),'resistor alternation/session boundary differs'),
+ ('wrong-model',lambda r:case(r)['samples'][0]['model_ids'].__setitem__('U1','foreign-model'),'sample model IDs differ'),
+ ('wrong-engine',lambda r:case(r)['samples'][0].__setitem__('engine','foreign-engine'),'timing engine differs'),
+ ('changed-numerical-row',lambda r:r['adapters'][0]['opamps']['cases'][0]['rows'][0]['values'].__setitem__(0,.1),'recomputed numerical/adaptor references differ'),
+ ('repeated-warm-run',lambda r:r['adapters'][0]['opamp_performance']['cases'][1]['samples'][1].__setitem__('run_id',r['adapters'][0]['opamp_performance']['cases'][1]['samples'][0]['run_id']),'warm edit did not advance both identities'),
+]
+for name,mutate,expected in mutations:
+ damaged=copy.deepcopy(base);mutate(damaged);path=output/(name+'.json');path.write_text(json.dumps(damaged))
+ check=subprocess.run([str(output/'reviewer'),str(path)],capture_output=True,text=True,timeout=30)
+ assert check.returncode!=0 and expected in check.stderr,(name,check.returncode,check.stderr)
+ results.append({'name':name,'refused':True,'expected_reason':expected,'exit_code':check.returncode})
+(output/'reviewer-negative-checks.json').write_text(json.dumps({'passed':True,'cases':results},indent=2)+'\n');print('All eight altered reports refused for the expected reason')

@@ -125,3 +125,78 @@ func TestInductorPerformanceFixturesUseChangedRunsAndFullCaptures(t *testing.T) 
 		})
 	}
 }
+
+func TestOpAmpPerformanceUsesChangedRunsAndTwoHundredMillisecondCaptures(t *testing.T) {
+	ctx, cancel := context.WithTimeout(t.Context(), 2*time.Minute)
+	defer cancel()
+	for _, count := range []int{0, 19, 101} {
+		if _, err := RunOpAmpPerformance(ctx, nil, t.TempDir(), count); err == nil {
+			t.Fatal("unsupported amplifier repetition count admitted", count)
+		}
+	}
+	for _, name := range opAmpCaseNames {
+		t.Run(name, func(t *testing.T) {
+			err := electricalSession(ctx, InProcess, t.TempDir(), func(s *session) error {
+				if err := preparePerformance(s, name); err != nil {
+					return err
+				}
+				variants := make(map[string]bool)
+				previous := ""
+				for i := 0; i < 3; i++ {
+					sample, err := measurePerformance(s, name, i, "test")
+					if err != nil {
+						return err
+					}
+					if sample.Engine == "" || sample.Models["U1"] != workbench.OpAmpDeviceModel().ID || sample.VerifyDuration != .2 || sample.VerifySampleStep != .001 || !reflect.DeepEqual(sample.ProbeIDs, performanceProbes(name)) || sample.FreshResultMS < sample.AcknowledgmentMS {
+						t.Fatal("amplifier timing lost model, capture, probes or timing identity", sample)
+					}
+					if name == "opamp-rc-mosfet" && (sample.Models["U2"] != workbench.OpAmpDeviceModel().ID || sample.Models["M1"] != workbench.NMOSDeviceModel().ID) {
+						t.Fatal("two-buffer MOSFET timing lost mixed device identities", sample.Models)
+					}
+					if sample.GraphSHA256 == "" || sample.GraphSHA256 == previous {
+						t.Fatal("amplifier measurement repeated a no-op")
+					}
+					data, err := json.Marshal(sample.graph)
+					if err != nil || sample.GraphSHA256 != fmt.Sprintf("%x", sha256.Sum256(data)) {
+						t.Fatal("amplifier graph cannot be recovered from its identity")
+					}
+					variants[sample.GraphSHA256], previous = true, sample.GraphSHA256
+				}
+				if len(variants) != 2 {
+					t.Fatal("measurements did not alternate two electrical variants")
+				}
+				current, err := s.state("simulation.wait", nil, false)
+				if err != nil {
+					return err
+				}
+				if !performanceFresh(current, name) {
+					t.Fatal("valid current amplifier result refused")
+				}
+				for _, damage := range []string{"stale-mixed", "old-run", "old-revision", "missing-model", "missing-amplifier"} {
+					bad := current
+					mixed := *current.Mixed
+					bad.Mixed = &mixed
+					switch damage {
+					case "stale-mixed":
+						bad.Mixed.Stale = true
+					case "old-run":
+						bad.Mixed.RunID--
+					case "old-revision":
+						bad.Mixed.ElectricalRevision--
+					case "missing-model":
+						bad.OpAmpModel = nil
+					case "missing-amplifier":
+						bad.Mixed.OpAmps = nil
+					}
+					if performanceFresh(bad, name) {
+						t.Fatal("invalid amplifier evidence considered fresh", damage)
+					}
+				}
+				return nil
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+		})
+	}
+}
