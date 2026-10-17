@@ -1,0 +1,27 @@
+from pathlib import Path
+import datetime,json,subprocess,sys,time
+root=Path.cwd();out=root/'build/source-sampling';directory=out/'native-demo-process';directory.mkdir(mode=0o700)
+endpoint=directory/'endpoint.json';log=(directory/'process.log').open('x');candidate=root/'build/ELab-0.110.0-125-source-sampling-candidate.app/Contents/MacOS/ELab'
+command=[str(candidate),'--agent-endpoint',str(endpoint),'--no-appearance','--recovery-directory',str(directory/'recovery')]
+process=subprocess.Popen(command,stdout=log,stderr=subprocess.STDOUT)
+record={'command':command,'pid':process.pid,'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'running'}
+try:
+ deadline=time.monotonic()+15
+ while not endpoint.exists():
+  assert process.poll() is None,'native process stopped before endpoint'
+  assert time.monotonic()<deadline,'native endpoint deadline'
+  time.sleep(.02)
+ argv=[sys.executable,'-B','scripts/source-sampling-demo.py','--connect',str(endpoint),'--output',str(out/'native-final.json'),'--artifacts',str(out/'native-final-assets')]
+ with (out/'native-source.log.txt').open('x') as result:completed=subprocess.run(argv,stdout=result,stderr=subprocess.STDOUT,timeout=90)
+ record['demo_exit_code']=completed.returncode
+ assert process.wait(timeout=10)==0,'native did not close gracefully'
+ assert completed.returncode==0,'native source demo failed'
+ record.update(status='completed',native_exit_code=process.returncode)
+finally:
+ if process.poll() is None:
+  process.terminate()
+  try:process.wait(timeout=5)
+  except subprocess.TimeoutExpired:process.kill();process.wait(timeout=5)
+ if record['status']=='running':record.update(status='failed',native_exit_code=process.returncode)
+ log.close();record['finished_utc']=datetime.datetime.now(datetime.timezone.utc).isoformat();(out/'native-source-process.json').write_text(json.dumps(record,indent=2)+'\n')
+print(json.dumps(record))

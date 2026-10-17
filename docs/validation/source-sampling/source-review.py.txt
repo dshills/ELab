@@ -1,0 +1,20 @@
+from pathlib import Path
+import importlib.util,json,sys
+root=Path.cwd();out=root/'build/source-sampling';sys.path.insert(0,str(root/'scripts'));spec=importlib.util.spec_from_file_location('source_demo',root/'scripts/source-sampling-demo.py');demo=importlib.util.module_from_spec(spec);spec.loader.exec_module(demo)
+a=json.loads((out/'headless-final.json').read_text());b=json.loads((out/'native-final.json').read_text())
+for report in [a,b]:
+ demo.validate_report(report)
+ parts={p['id']:p for p in report['metadata']['graph']['components']}
+ assert set(parts)=={'Ramp','R1','C1','GND'}
+ assert parts['R1']['kind']=='resistor' and parts['R1']['value']==1000
+ assert parts['C1']['kind']=='capacitor' and parts['C1']['value']==1e-9
+ assert parts['Ramp']['pulse']=={'high_v':5,'low_v':0,'high_s':.0005,'low_s':.0005,'rise_s':1e-6,'fall_s':2e-6}
+ assert report['metadata']['input_mode']=='auto' and report['metadata']['waveform_model']['id']=='elab.source-waveforms.v1'
+for name in ['before','fitted','reopened','slower_ramp']:
+ for field in ['source_sampling','source_warnings','components','wires','transient_settings']:
+  assert a[name].get(field)==b[name].get(field),(name,field)
+assert a['rows']==b['rows'] and a['metadata']['graph']==b['metadata']['graph'] and a['metadata']['settings']==b['metadata']['settings']
+errors={k:max(abs(row['values'][column]-expected(row['time_s'])) for row in a['rows']) for k,column,expected in [
+ ('source_v',0,lambda t:0 if t==0 else 5),('capacitor_v',1,demo.expected_voltage),('resistor_a',2,lambda t:((0 if t==0 else 5)-demo.expected_voltage(t))/1000)]}
+result={'passed':True,'transports':['headless-stdio','native-socket'],'exact_rows_equal':True,'configured_advice_graph_settings_warnings_equal':True,'rows_per_transport':6,'numeric_references_per_transport':18,'actual_metadata_fixture_checked':True,'maximum_absolute_error':errors,'half_ramp_analytic_v':demo.expected_voltage(.5e-6),'straight_line_through_stored_endpoints_v':a['rows'][1]['values'][1]/2}
+(out/'source-report-review.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

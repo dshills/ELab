@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"strings"
 	"time"
 
 	"github.com/dshills/elab/workbench"
@@ -1348,6 +1349,23 @@ func nativeWaveformSmoke(ctx context.Context, a *app.Application, s *screen) err
 		state := s.service.Snapshot()
 		if state.Transient == nil || state.Transient.Engine != workbench.WaveformEngineID || state.Transient.Sample.Input <= 0 || state.Mixed.Capacitors[0].Voltage <= 0 {
 			checked <- fmt.Errorf("native finite ramp/RC failed")
+			return
+		}
+		for _, field := range []struct{ id, text string }{{"pulse-rise", "1 us"}, {"pulse-fall", "2 us"}} {
+			if err := smokeUI(s, field.id, &ui.ChangeEvent{Text: field.text}); err != nil {
+				checked <- err
+				return
+			}
+		}
+		if err := smokeUI(s, "fit-waveform-sampling", nil); err != nil {
+			checked <- err
+			return
+		}
+		minimum := s.service.Snapshot()
+		warning, hasWarning := findAction(s.view(), "source-sampling-warning")
+		_, hasFit := findAction(s.view(), "fit-waveform-sampling")
+		if len(minimum.SourceSampling) != 1 || !minimum.SourceSampling[0].MinimumLimited || !minimum.SourceSampling[0].Unresolved || minimum.SourceSampling[0].CanFit || !hasWarning || !strings.Contains(warning.Text, "minimum") || hasFit {
+			checked <- fmt.Errorf("native minimum source sampling falsely resolved or offered ineffective Fit")
 			return
 		}
 		if err := smokeConstructWaveform(s, "sine-source"); err != nil {

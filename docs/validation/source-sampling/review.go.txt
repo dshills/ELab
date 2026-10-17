@@ -1,0 +1,82 @@
+package main
+
+import (
+	"bytes"
+	"compress/gzip"
+	"crypto/sha256"
+	"encoding/json"
+	"fmt"
+	"io"
+	"os"
+
+	"github.com/dshills/elab/internal/conformance"
+)
+
+func main() {
+	if err := run(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+}
+func run() error {
+	raw, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		return err
+	}
+	if len(raw) > 2 && raw[0] == 0x1f && raw[1] == 0x8b {
+		r, err := gzip.NewReader(bytes.NewReader(raw))
+		if err != nil {
+			return err
+		}
+		raw, err = io.ReadAll(r)
+		if err != nil {
+			return err
+		}
+		if err := r.Close(); err != nil {
+			return err
+		}
+	}
+	var report struct {
+		Passed   bool `json:"passed"`
+		Adapters []struct {
+			Name       string                             `json:"name"`
+			Equivalent bool                               `json:"equivalent_to_in_process"`
+			Workflows  []conformance.Result               `json:"workflows"`
+			Project    *conformance.ProjectContractResult `json:"project_contracts"`
+			Electrical *conformance.ElectricalResult      `json:"electrical"`
+			Inductors  *conformance.InductorResult        `json:"inductors"`
+			OpAmps     *conformance.OpAmpSuiteResult      `json:"opamps"`
+			Storage    *conformance.OpAmpStorageResult    `json:"opamp_storage"`
+			Capacity   *conformance.CapacityResult        `json:"capacity"`
+		} `json:"adapters"`
+	}
+	if err := json.Unmarshal(raw, &report); err != nil {
+		return err
+	}
+	if !report.Passed || len(report.Adapters) != 4 {
+		return fmt.Errorf("missing complete successful report")
+	}
+	names := []string{"in-process", "headless-stdio", "headless-socket", "native-socket"}
+	checks := 0
+	reference := report.Adapters[0]
+	for i, a := range report.Adapters {
+		if a.Name != names[i] || !a.Equivalent || a.Project == nil || reference.Project == nil || a.Electrical == nil || a.Inductors == nil || a.OpAmps == nil || a.Storage == nil || a.Capacity == nil {
+			return fmt.Errorf("missing adapter evidence")
+		}
+		for _, err := range []error{
+			conformance.Compare(reference.Workflows, a.Workflows), conformance.CompareProjectContracts(*reference.Project, *a.Project), conformance.CompareElectrical(*reference.Electrical, *a.Electrical), conformance.CompareInductors(*reference.Inductors, *a.Inductors), conformance.CompareOpAmps(*reference.OpAmps, *a.OpAmps), conformance.CompareOpAmpStorage(*reference.Storage, *a.Storage), conformance.CompareCapacity(*reference.Capacity, *a.Capacity),
+		} {
+			if err != nil {
+				return fmt.Errorf("%s: %w", a.Name, err)
+			}
+		}
+		checks += len(a.Electrical.Checks) + len(a.Inductors.Checks) + len(a.OpAmps.Checks) + len(a.Storage.Checks) + len(a.Capacity.Checks)
+	}
+	result := map[string]any{"passed": true, "source_report_sha256": fmt.Sprintf("%x", sha256.Sum256(raw)), "adapters": names, "detailed_contracts_per_adapter": 8, "project_workflow_checks_per_adapter": len(reference.Project.Checks), "project_states_per_adapter": len(reference.Project.States), "numerical_checks": checks}
+	encoded, err := json.MarshalIndent(result, "", "  ")
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(encoded))
+	return nil
+}

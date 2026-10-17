@@ -64,7 +64,7 @@ func makeDiagnosticHelp(g Graph, c Compiled, d Diagnostic, source string, refs [
 		out.Action = "Use the supported topology/model limits described in the details; your drawing is retained."
 	case "source-sampling":
 		out.Severity = "warning"
-		out.Action = "Use Fit waveform resolution or reduce the output sample interval."
+		out.Action = "Use Fit waveform sampling or reduce the output sample interval."
 	case "integration-attempt-limit":
 		out.Severity = "error"
 		out.Summary = "This sample needed more calculation attempts than allowed."
@@ -152,8 +152,10 @@ func (s *Service) diagnosticPresentationLocked(c Compiled) DiagnosticPresentatio
 		}
 		out.Items = append(out.Items, help)
 	}
-	for _, d := range waveformSamplingWarnings(s.graph, s.transientSettings) {
-		out.Items = append(out.Items, makeDiagnosticHelp(s.graph, c, d, "sampling", nil))
+	for _, advice := range sourceSamplingAdvice(s.graph, s.transientSettings) {
+		if advice.Unresolved {
+			out.Items = append(out.Items, sourceSamplingHelp(s.graph, c, advice, s.transientSettings.StepSeconds))
+		}
 	}
 	if help := lcSamplingHelp(s.graph, c, lcSamplingAdvice(s.graph, s.transientSettings)); help != nil {
 		out.Items = append(out.Items, *help)

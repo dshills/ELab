@@ -1,0 +1,271 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T11:44:09.574387+00:00",
+  "scope": "Repair false source-sampling resolution at the supported floor; shared derived advice/native guarded availability/focus and bounded analytic RC reference; no full release qualification",
+  "source_parent_commit": "56731f870498d41da1f4d42574e413fb0f941c34",
+  "source_index": "docs/validation/source-sampling/source-freeze.json",
+  "source_frozen_files": 680,
+  "source_stable": true,
+  "binary_sha256": {
+    "build/elab": "1eae9637f041ca9bb64b49f6a281d47ea63d944807bb8c0e7334d894e0e203d1",
+    "build/elab-agent": "ee3c2a08b0d6ab46716c014554a66548edb7a2001cd9f72fab95d4596a4e2970",
+    "build/elab-conformance": "59fe9f07c4ce7bd5596ed2c4c168904195f773aaaa3036b72d229566e0480b27",
+    "build/elab-ui-audit": "4ed858c7c86ca79d3e12a9ba4ad9a6d11ea4160c556c513795bbe1630a9b7282",
+    "build/ELab-0.110.0-125-source-sampling-candidate.app/Contents/MacOS/ELab": "1eae9637f041ca9bb64b49f6a281d47ea63d944807bb8c0e7334d894e0e203d1"
+  },
+  "candidate": "build/ELab-0.110.0-125-source-sampling-candidate.app",
+  "candidate_promoted": false,
+  "original_regression_failure": "docs/validation/source-sampling/before.log.txt",
+  "source_targets_separate_from_supported_recommendations": true,
+  "new_app_commands": 0,
+  "existing_app_commands": 162,
+  "source_sampling_snapshot_additive": true,
+  "model_engine_tolerance_work_limit_file_versions_unchanged": true,
+  "quality": {
+    "lint_imports_staticcheck": true,
+    "python_tests": 32,
+    "root_native_race_and_vet": true,
+    "log": "docs/validation/source-sampling/quality.log.txt"
+  },
+  "process_quality": [
+    {
+      "name": "build",
+      "argv": [
+        "./scripts/build.sh"
+      ],
+      "started_utc": "2026-10-17T11:31:12.364053+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 8.053803834016435,
+      "finished_utc": "2026-10-17T11:31:20.417839+00:00"
+    },
+    {
+      "name": "quality",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T11:31:20.442021+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 356.6248660830315,
+      "finished_utc": "2026-10-17T11:37:17.066038+00:00"
+    }
+  ],
+  "process_public": [
+    {
+      "name": "native-smoke",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.110.0-125-source-sampling-candidate.app/Contents/MacOS/ELab",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "started_utc": "2026-10-17T11:38:02.361621+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 39.63493624993134,
+      "finished_utc": "2026-10-17T11:38:41.996466+00:00"
+    },
+    {
+      "name": "public-suites",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+        "--native-binary",
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.110.0-125-source-sampling-candidate.app/Contents/MacOS/ELab",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/source-sampling/public-final"
+      ],
+      "started_utc": "2026-10-17T11:38:42.024530+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 48.62793470895849,
+      "finished_utc": "2026-10-17T11:39:30.652348+00:00"
+    },
+    {
+      "name": "headless-source",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/source-sampling-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/source-sampling/headless-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/source-sampling/headless-final-assets"
+      ],
+      "started_utc": "2026-10-17T11:39:30.679096+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 0.14822516706772149,
+      "finished_utc": "2026-10-17T11:39:30.827321+00:00"
+    }
+  ],
+  "native_source_workflow": {
+    "command": [
+      "/Users/dshills/Development/projects/ELab/build/ELab-0.110.0-125-source-sampling-candidate.app/Contents/MacOS/ELab",
+      "--agent-endpoint",
+      "/Users/dshills/Development/projects/ELab/build/source-sampling/native-demo-process/endpoint.json",
+      "--no-appearance",
+      "--recovery-directory",
+      "/Users/dshills/Development/projects/ELab/build/source-sampling/native-demo-process/recovery"
+    ],
+    "pid": 58287,
+    "started_utc": "2026-10-17T11:40:48.644604+00:00",
+    "status": "completed",
+    "demo_exit_code": 0,
+    "native_exit_code": 0,
+    "finished_utc": "2026-10-17T11:40:49.144212+00:00"
+  },
+  "native_smoke_stages": 45,
+  "four_adapter_numerical_checks": 27596,
+  "four_adapter_project_workflow_checks": 44,
+  "four_adapter_project_snapshots": 56,
+  "source_transports": [
+    "headless-stdio",
+    "native-socket"
+  ],
+  "source_rows_per_transport": 6,
+  "source_reference_checks": 36,
+  "source_report_review": {
+    "passed": true,
+    "transports": [
+      "headless-stdio",
+      "native-socket"
+    ],
+    "exact_rows_equal": true,
+    "configured_advice_graph_settings_warnings_equal": true,
+    "rows_per_transport": 6,
+    "numeric_references_per_transport": 18,
+    "actual_metadata_fixture_checked": true,
+    "maximum_absolute_error": {
+      "source_v": 0,
+      "capacitor_v": 4.5716308687104856e-05,
+      "resistor_a": 4.57163086871196e-08
+    },
+    "half_ramp_analytic_v": 0.5326532985631672,
+    "straight_line_through_stored_endpoints_v": 0.9196894573789834
+  },
+  "negative_source_report_cases": 9,
+  "fixture_files": 6,
+  "captured_bytes_preserved": true,
+  "report_encoding": {
+    "conformance-report.json.gz": {
+      "decoded_bytes": 18167650,
+      "decoded_sha256": "fc89fb08f02791bd390ad05285ca8c82b08ee3d424194ec66f6053f26c66dcc9",
+      "gzip_bytes": 1659854,
+      "gzip_sha256": "4d1323786de3a60c033dca653274332116f80015685cfd22e9a9ce66e71de8a3"
+    },
+    "headless-source.json.gz": {
+      "decoded_bytes": 159532,
+      "decoded_sha256": "f7d4ea97d109cd971eed9c89c3111f6740fcb2772751b13a9c1104b0265bb834",
+      "gzip_bytes": 24508,
+      "gzip_sha256": "70f8f51bcabe9eb9069335ba94134746be4639e32d73f8d0ccf376d7a8cf5c0c"
+    },
+    "native-source.json.gz": {
+      "decoded_bytes": 160948,
+      "decoded_sha256": "eae7eca31859dd2e2a375c963642218033be22e5da547ea7ddf052066c0ad71a",
+      "gzip_bytes": 24834,
+      "gzip_sha256": "c9f2b8fa418f4351bed4591b2d785d42d1d06d6b14633d2db9733d6f8dae57f1"
+    }
+  },
+  "typed_raw_gzip_review_equal": true,
+  "sdk_post_check": {
+    "passed": true,
+    "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-aa9d023",
+    "source": "aa9d023243a6bded514c3d9696c08a9c917119c4"
+  },
+  "native_inventory": {
+    "passed": true,
+    "reviewed_production_sources": [
+      "desktop/waveforms.go"
+    ],
+    "smoke_checked_separately_in_source_freeze": true,
+    "site_semantics_commands_aliases_unchanged": true,
+    "production_files": 57,
+    "sites": 388,
+    "public_commands": 162,
+    "source_routes": 132
+  },
+  "preserved_bundles_unchanged": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7,
+      "executable_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c"
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7,
+      "executable_sha256": "2e26ef4691e17741f90f71ea69e3f5828345021787f6e940a718cd15086c41d1"
+    }
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "test_setup_corrections": [
+    "The first native focus expectation assumed Search; a source already exposes the transient interval field. The corrected test requires the available setting-step continuation.",
+    "The public checker initially assumed five rows. Actual existing capture retains both sides of the continuous ramp corner at 1 us; all six rows are now required, not discarded.",
+    "A smoke extension initially lacked its strings import; the compile failure is retained and final complete quality/smoke passes."
+  ],
+  "limitations": [
+    "Source targets are configured display policies, not internal integration limits, measured circuit timing or error/resolution guarantees.",
+    "The new minimum warning/availability/focus has native descriptor/callback and packaged smoke evidence. Full physical input/IME/accessibility, minimum-warning pixel/readability and visible latency remain unqualified.",
+    "Only the named fast RC/source fixture has new analytic checks; the existing broad numerical reference families pass unchanged. No repeated performance or universal circuit/hardware claim.",
+    "Derived source_sampling is not stored as authoritative data; current graph/settings recompute it. Old captured rows/model dependencies remain unchanged.",
+    "The separate private app candidate is not promoted. Clean installation/distribution, other platform/hardware, physical printer and participant gates remain open."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/source-sampling/after-initial.log.txt": "392b56804628fa91163d0bcb41e80a811b96a3444d3672df32560cddb3077c32",
+    "docs/validation/source-sampling/archive.py.txt": "3deb0f9c6babdc449187a42bdc8c7a24393a6247cdee8a34410717757f1c236b",
+    "docs/validation/source-sampling/before.log.txt": "b0696425d55001a42c36eb46fea9f377373feedc3bade83531a72a4cdb9a539a",
+    "docs/validation/source-sampling/binaries.json": "1d4719a9718fcc6aed69ea8efe52160d331b2b76688bf1f07efcf4e57c5f0cef",
+    "docs/validation/source-sampling/build.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/source-sampling/conformance-report.json.gz": "4d1323786de3a60c033dca653274332116f80015685cfd22e9a9ce66e71de8a3",
+    "docs/validation/source-sampling/core-final.log.txt": "04fd8dde3086bdcc1a6df37eaa29fecacb202a512af5ee78a47429cc324ba124",
+    "docs/validation/source-sampling/core-focused.log.txt": "3396c2d1deaf6121877c4a5daf1dd978eefc201b55b693b13a281b0fa528fcfc",
+    "docs/validation/source-sampling/fixtures/headless/fast-ramp-after-edit.json": "7ae59984efdfa4b6fa4a6ca62da9e0787ffbba08a72a8c6c820c017e089b7e4c",
+    "docs/validation/source-sampling/fixtures/headless/fast-ramp.json": "7ae59984efdfa4b6fa4a6ca62da9e0787ffbba08a72a8c6c820c017e089b7e4c",
+    "docs/validation/source-sampling/fixtures/headless/minimum-ramp.elab": "d7a03bfe22b5c2c95bfbf94abf76f376f12f01ca477633cba9245c702e78a5e7",
+    "docs/validation/source-sampling/fixtures/native/fast-ramp-after-edit.json": "554ab0c8cceb407556f6903ff7bd150820c7e6f9c22b304b28ad4f6a9ba8ef90",
+    "docs/validation/source-sampling/fixtures/native/fast-ramp.json": "554ab0c8cceb407556f6903ff7bd150820c7e6f9c22b304b28ad4f6a9ba8ef90",
+    "docs/validation/source-sampling/fixtures/native/minimum-ramp.elab": "36d1f0c086b2a91fbcbbf3511f9a1a01333a34044c9e9ede87cdbae3d7fc3e2e",
+    "docs/validation/source-sampling/fixtures-index.json": "b7241cd331b4477ee02d48026e61a1f4de60038b2878b12b9e2a8188459e3d48",
+    "docs/validation/source-sampling/headless-checked.log.txt": "de093c66c26f0b384479284d3c8ca4d66680ad5f870366d53aa5f04e2790bd99",
+    "docs/validation/source-sampling/headless-initial.log.txt": "584f2f3fd6adf5fb53df7c00dc77cb5c7b53287122d576f44246e354144112f7",
+    "docs/validation/source-sampling/headless-source.json.gz": "70f8f51bcabe9eb9069335ba94134746be4639e32d73f8d0ccf376d7a8cf5c0c",
+    "docs/validation/source-sampling/headless-source.log.txt": "50720e43314e65077cd1e6cb86fa3214e9b410bfcbbc3ac294ec1a352948210d",
+    "docs/validation/source-sampling/native-focused-final.log.txt": "9b98823b49e8cc00c02b279bca89f30d31115f3cf816e5045469a3c696d4d54a",
+    "docs/validation/source-sampling/native-focused-final2.log.txt": "89f098c4bafcf19696314d0481480d34ac726dd89612fca288d800c80f5ec665",
+    "docs/validation/source-sampling/native-focused-fixed.log.txt": "06354063a6b69e55682802ac2f0f9c0a77f7759ee5a906037bbb56f4ba38de5b",
+    "docs/validation/source-sampling/native-focused.log.txt": "5ca7a0d0035d11eca05eb83dc9ff05d0d2a618ad8549ee1d6011590c7a44ece5",
+    "docs/validation/source-sampling/native-inventory-review.json": "a56ec744e8e8f2086258faa9b534a97bf5d6d895ba50eafae29a790676a465ff",
+    "docs/validation/source-sampling/native-inventory-verified.json": "e55eca6e3d915ee806b858a0f83503fdcdca34131bfe832bb924eef1920bd8e9",
+    "docs/validation/source-sampling/native-smoke.log.txt": "cfd678cc503537d08a1da209473a594644f9a2e35dae0ddf7387fd7a082dc593",
+    "docs/validation/source-sampling/native-source-process.json": "c4f650a3ae70de9ae8d88d90fa204153d102c78fe0527cc5d643f61e1b7a9e13",
+    "docs/validation/source-sampling/native-source.json.gz": "c9f2b8fa418f4351bed4591b2d785d42d1d06d6b14633d2db9733d6f8dae57f1",
+    "docs/validation/source-sampling/native-source.log.txt": "3e508eb442a0ba035dc2f4e82fe6c78f6493d0ffdda4e202cf2a47db1a250871",
+    "docs/validation/source-sampling/native.py.txt": "d66c71fc1b9494d1d5987ab245464f01b87a236583f08d3769e07a5e66c2f9df",
+    "docs/validation/source-sampling/package.json": "f43e6da3c121263f5b2f1928561f41ef0062d6604f09a5756ab9ad671eba315c",
+    "docs/validation/source-sampling/preserved-bundles.json": "29c025d16bec382ddc1be254b89ee3dcda5f743409842967480c0e4b4eb8d826",
+    "docs/validation/source-sampling/process-public.json": "ba7346ff93d46e67e573dda4fdb80561f7d7060a514168f7153c1d9c3ee2f2ea",
+    "docs/validation/source-sampling/process-quality.json": "caeeeadd222e05083631d51d8dd38538089046438a5c554b51786695f86ad599",
+    "docs/validation/source-sampling/public-suites.log.txt": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "docs/validation/source-sampling/qualify.py.txt": "c53bd5f75c95dee47fedb64dd2c00717539df82321e1430f27619e48a89b7b3c",
+    "docs/validation/source-sampling/quality.log.txt": "366cdb02e0f98dc72aa16cfedbd6ca9d00c3de372d22b88d7af99e8a15cb9dd7",
+    "docs/validation/source-sampling/report-encoding.json": "61f3ddc12326ed01686907629eebbd1b64e0e18950b55e761c29b610a04505a5",
+    "docs/validation/source-sampling/report-guards.log.txt": "96cad0d36481c1b40aee57d8c427af99e41cb6c99ea84137f6bc54bb153b2f60",
+    "docs/validation/source-sampling/report-review-gzip.json": "5d2c904c90dc9235d34033f0b07f0e06bf0729739820f4fbca7611dd6214dee9",
+    "docs/validation/source-sampling/report-review.json": "5d2c904c90dc9235d34033f0b07f0e06bf0729739820f4fbca7611dd6214dee9",
+    "docs/validation/source-sampling/review.go.txt": "808b076c8bf0bac85714632b87ab06a8364742575b33a383a734d7e37c729fb6",
+    "docs/validation/source-sampling/sdk-verified.json": "833a277bcd0532bf6e2b828e73fa39d3494b1867ba97bf82489cb1528af36a17",
+    "docs/validation/source-sampling/source-freeze.json": "e94e4bbcfb275c374920bba5a6d8b50229803f6013d75b991efc55cccf049c88",
+    "docs/validation/source-sampling/source-report-review.json": "6da41c335c96e8c0db28ae740eca51f86aa78fd630f43e7e8764f957040dce6b",
+    "docs/validation/source-sampling/source-review.py.txt": "268afc701a1d3cf740285acd3972cc5ce475becd5d9663a7b063863bfa4f3b5f",
+    "docs/validation/source-sampling/README.md": "f22836e2e832ac37ddadc0c3b06b27c1e8e6cd0655709cf1324c2ff494cb60a5"
+  }
+}

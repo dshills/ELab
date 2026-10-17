@@ -222,22 +222,5 @@ func (n *mixedNetwork) maximumWaveformStep(t *Transient, at float64) float64 {
 	return limit
 }
 func waveformRecommendedStep(p Component) float64 {
-	recommended := math.Inf(1)
-	if p.Sine != nil && p.Sine.Amplitude > 0 {
-		recommended = 1 / (32 * p.Sine.Frequency)
-	}
-	if p.Pulse != nil && p.Pulse.HighVoltage != p.Pulse.LowVoltage {
-		recommended = math.Min(p.Pulse.RiseSeconds, p.Pulse.FallSeconds) / 4
-	}
-	return math.Max(minimumTransientSampleStep, recommended)
-}
-func waveformSamplingWarnings(g Graph, cfg TransientSettings) []Diagnostic {
-	out := []Diagnostic{}
-	for _, p := range g.Components {
-		recommended := waveformRecommendedStep(p)
-		if cfg.StepSeconds > recommended {
-			out = append(out, Diagnostic{"source-sampling", fmt.Sprintf("%s: output sample step %.6g s may hide waveform detail; use %.6g s or less.", p.ID, cfg.StepSeconds, recommended), p.ID})
-		}
-	}
-	return out
+	return math.Max(minimumTransientSampleStep, waveformTargetStep(p))
 }

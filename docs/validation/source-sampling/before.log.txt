@@ -1,0 +1,6 @@
+=== RUN   TestFinitePulseMinimumSamplingDoesNotEraseWarning
+    source_sampling_test.go:18: minimum clipping falsely resolved the finite-ramp warning {1e-06 0.05 0.05 0 0.001} []
+--- FAIL: TestFinitePulseMinimumSamplingDoesNotEraseWarning (0.00s)
+FAIL
+FAIL	github.com/dshills/elab/workbench	0.295s
+FAIL

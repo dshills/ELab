@@ -1,0 +1,12 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestNativeSourceEditsAndFitUseSharedAnnotations
+--- PASS: TestNativeSourceEditsAndFitUseSharedAnnotations (0.37s)
+=== RUN   TestNativeSourceMinimumWarningAndFitMatchAgent
+    source_sampling_test.go:44: disappearing incomplete-source Fit lost keyboard continuation {setting-step 1}
+--- FAIL: TestNativeSourceMinimumWarningAndFitMatchAgent (0.04s)
+=== RUN   TestNativeSourceSamplingFitKeepsFocusAndRefusesRetainedAction
+--- PASS: TestNativeSourceSamplingFitKeepsFocusAndRefusesRetainedAction (0.50s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	1.477s
+FAIL

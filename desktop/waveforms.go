@@ -58,10 +58,19 @@ func (s *screen) waveformControls(state workbench.Snapshot, p workbench.Componen
 		for _, warning := range state.SourceWarnings {
 			if warning.ObjectID == p.ID {
 				nodes = append(nodes, quiet("source-sampling-warning", warning.Message))
+				if state.Recording != nil && state.Recording.Viewing {
+					nodes = append(nodes, quiet("source-sampling-recorded-note", "Live sampling only. This saved capture keeps its original samples."))
+				}
 				// The combined LC notice supplies the same action once for the
 				// whole circuit. Source-only controls retain their existing ID.
-				if state.LCSampling == nil || !state.LCSampling.Unresolved {
-					nodes = append(nodes, s.action("fit-waveform-sampling", "Fit waveform sampling", "simulation.sampling.fit", struct{}{}))
+				for _, advice := range state.SourceSampling {
+					if advice.ID == p.ID && advice.CanFit && (state.LCSampling == nil || !state.LCSampling.Unresolved) {
+						target := "part-search"
+						if workbench.IsTransientAnalysis(state.Analysis) || state.Transient != nil {
+							target = "setting-step"
+						}
+						nodes = append(nodes, s.focusAfterAction(s.action("fit-waveform-sampling", "Fit waveform sampling", "simulation.sampling.fit", struct{}{}), target))
+					}
 				}
 			}
 		}
