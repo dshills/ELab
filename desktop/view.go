@@ -295,6 +295,9 @@ func (s *screen) view() ui.Node {
 	}
 	if state.Recovery.Error != "" {
 		message = "Autosave needs attention · " + state.Recovery.Error
+		if !state.Recovery.Enabled {
+			message = "Autosave is off · last recovery error: " + state.Recovery.Error
+		}
 	}
 	if s.fileMessage != "" && !(state.Document.Dirty && strings.HasPrefix(s.fileMessage, "Saved ")) {
 		message = s.fileMessage

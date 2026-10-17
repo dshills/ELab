@@ -20,6 +20,7 @@ def main():
     parser.add_argument('--connect')
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--artifacts', type=Path, required=True)
+    parser.add_argument('--exercise-disable', action='store_true', help='disable during the fault, prove stopped scheduling, then re-enable')
     args = parser.parse_args()
     directory = args.artifacts.resolve()
     directory.mkdir(mode=0o700, parents=True, exist_ok=False)
@@ -85,10 +86,52 @@ def main():
         old_path = moved/(initial_candidate['id']+'.elab-recovery')
         assert old_path.read_bytes()==initial_raw and source.read_bytes()==manual
         (directory/'failure-state.json').write_text(json.dumps(failed,indent=2)+'\n')
+        disable_report = {}
+        if args.exercise_disable:
+            started = time.monotonic()
+            disabled = client.ask('recovery.configure', {'directory':str(recovery),'enabled':False,'interval_s':2}, True)
+            disable_elapsed = time.monotonic()-started
+            expected_recovery = copy.deepcopy(failed['recovery']);expected_recovery['enabled'] = False
+            assert disabled['recovery']==expected_recovery
+            assert disabled['project_work']['recovery_configuration_applied'] and disabled['project_work']['recovery_catalog_applied'] is False
+            (directory/'disabled-state.json').write_text(json.dumps(disabled,indent=2)+'\n')
+            admitted = client.ask('recovery.configure.start', {'directory':str(recovery),'enabled':False,'interval_s':'2 s'}, True)
+            deadline = time.monotonic()+5
+            while True:
+                repeated = client.ask('project.inspect')
+                assert repeated['project_work']['id']==admitted['project_work']['id']
+                assert repeated['project_work']['status'] not in ('failed','canceled','superseded')
+                if repeated['project_work']['status']=='completed':break
+                assert time.monotonic()<deadline
+                time.sleep(.005)
+            assert repeated['recovery']==disabled['recovery'] and repeated['project_work']['recovery_catalog_applied'] is False
+            client.ask('recovery.configure', {'directory':str(recovery),'enabled':True,'interval_s':2}, True, 'file-error')
+            denied = client.ask('project.inspect')
+            assert denied['recovery']==disabled['recovery'] and not denied['project_work']['recovery_configuration_applied']
+            (directory/'reenable-denied-state.json').write_text(json.dumps(denied,indent=2)+'\n')
+            disable_report = {'disable_s':disable_elapsed,'both_disable_aliases_completed':True,'catalog_applied_on_disable':False,
+                              'last_error_and_catalog_preserved':True,'reenable_refused_while_unavailable':True}
         committed = client.ask('component.set', {'id':'R1','value':'50k'}, True)
         committed = client.ask('simulation.wait')
         started = time.monotonic()
         recovery.unlink();moved.rename(recovery);broken = False
+        if args.exercise_disable:
+            held_before = client.ask('project.inspect')
+            files_before = {p.name:digest(p.read_bytes()) for p in recovery.iterdir()}
+            held_started = time.monotonic()
+            time.sleep(3)
+            held_after = client.ask('project.inspect')
+            held_elapsed = time.monotonic()-held_started
+            assert held_after['recovery']==held_before['recovery'] and held_after['recovery']['enabled'] is False
+            assert files_before=={p.name:digest(p.read_bytes()) for p in recovery.iterdir()}
+            assert_live_preserved(held_before,held_after,'paused',bool(args.connect))
+            (directory/'disabled-after-storage-restored.json').write_text(json.dumps(held_after,indent=2)+'\n')
+            started = time.monotonic()
+            enabled = client.ask('recovery.configure', {'directory':str(recovery),'enabled':True,'interval_s':2}, True)
+            assert enabled['recovery']['enabled'] and enabled['project_work']['recovery_catalog_applied']
+            committed = client.ask('simulation.wait')
+            disable_report.update(available_storage_held_disabled_s=held_elapsed,
+                                  disabled_file_set_unchanged=True,reenable_catalog_applied=True)
         ready, candidate, raw, recovered = await_capsule(50000)
         retry_elapsed = time.monotonic()-started
         assert_live_preserved(committed,ready,'paused',bool(args.connect))
@@ -105,6 +148,7 @@ def main():
                   'last_good_capsule_sha256':digest(initial_raw),'retry_capsule_sha256':digest(raw),
                   'manual_source_sha256':digest(manual),'recorded_rows':sum(len(e['data']['rows']) for e in recovered['recordings']['entries']),
                   'manual_source_and_previous_capsule_unchanged':True,'retry_document_exact':True,
+                  'disable_control':disable_report,'retry_timing_origin':'reenable dispatch' if args.exercise_disable else 'storage repair',
                   'checks':['actual interrupted private storage','automatic error during repeated editing',
                             'no manual checkpoint/scan for failure or retry','latest dirty graph and full kept record saved automatically',
                             'manual source and last complete capsule unchanged','editor/history/physics preserved by status publication'],

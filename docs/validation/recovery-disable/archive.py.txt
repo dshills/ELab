@@ -1,0 +1,90 @@
+from pathlib import Path
+import copy, datetime, gzip, hashlib, importlib.util, json, shutil, stat, subprocess
+
+root=Path.cwd();src=root/'build/recovery-disable';out=root/'docs/validation/recovery-disable'
+def read(path):return json.loads(path.read_text())
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+def digest(path):return sha(path.read_bytes())
+frozen=read(src/'source-freeze.json');assert len(frozen)==691 and all(digest(root/p)==h for p,h in frozen.items())
+quality=read(src/'process-quality.json');public=read(src/'process-public.json');native=read(src/'process-native.json')
+assert all(p['status']=='completed' and p['exit_code']==0 for p in quality+public)
+assert native['status']=='completed' and native['demo_exit_code']==0 and native['native_exit_code']==0 and not native.get('forced_cleanup')
+assert 'Ran 37 tests' in (src/'quality.log.txt').read_text()
+assert sum('smoke: ' in line for line in (src/'native-smoke.log.txt').read_text().splitlines())==45
+review=read(src/'report-review.json');assert review==read(src/'report-review-gzip.json') and review['numerical_checks']==27596
+reports=[read(src/(transport+'-final.json')) for transport in ['headless','native']]
+for report in reports:
+ assert report['passed'] and 0<report['failure_visible_s']<=5 and 0<report['automatic_retry_s']<=5 and report['recorded_rows']==209
+ control=report['disable_control'];assert control['both_disable_aliases_completed'] and control['catalog_applied_on_disable'] is False
+ assert control['last_error_and_catalog_preserved'] and control['reenable_refused_while_unavailable']
+ assert control['available_storage_held_disabled_s']>=3 and control['disabled_file_set_unchanged'] and control['reenable_catalog_applied']
+ assert report['retry_timing_origin']=='reenable dispatch'
+assert all(read(src/name)['passed'] for name in ['configuration-final.json','ownership-final.json','crash-final.json'])
+spec=importlib.util.spec_from_file_location('sdk',root/'scripts/prepare-vellum.py');sdk=importlib.util.module_from_spec(spec);spec.loader.exec_module(sdk)
+pin=sdk.load_pin(root);sdk.verify_archive_identity(root/pin['archive'],pin);sdk.verify_cache(root/pin['cache'],pin)
+golden=read(root/'docs/validation/lc-sampling-validation.json')['promotion'];preserved={}
+for name,key in [('build/ELab.app','bundle_tree'),('build/ELab-0.104.0-119-preserved.app','preserved_bundle_tree')]:
+ folder=root/name;actual={}
+ for p in [folder,*sorted(folder.rglob('*'))]:
+  assert not p.is_symlink()
+  actual[str(p.relative_to(folder))]={'mode':stat.S_IMODE(p.stat().st_mode),'sha256':digest(p) if p.is_file() else None}
+ assert actual==golden[key];preserved[name]={'passed':True,'entries':len(actual)}
+for p,h in read(root/'docs/validation/recovery-failure-validation.json')['binary_sha256'].items():
+ if '.app/' in p:assert digest(root/p)==h,p
+files=['build/elab','build/elab-agent','build/elab-conformance','build/elab-ui-audit','build/ELab-0.113.0-130-recovery-disable-candidate.app/Contents/MacOS/ELab'];binaries={p:digest(root/p) for p in files};assert binaries[files[0]]==binaries[files[-1]]
+inventory=read(root/'research/13-native-command-inventory.json')
+assert all(digest(root/p)==h for p,h in inventory['source_sha256'].items())
+out.mkdir(exist_ok=False)
+for name in ['before.log.txt','after-initial.log.txt','core-focused.log.txt','native-focused.log.txt','headless-initial.log.txt','headless-initial2.log.txt','headless-initial2.json','initial-quality.log.txt','initial-process-quality.json','initial-process-public.json','build.log.txt','quality.log.txt','package.json','native-smoke.log.txt','public-suites.log.txt','headless-failure.log.txt','native-host.log.txt','native-failure.log.txt','configuration.log.txt','configuration-final.json','ownership.log.txt','crash-recovery.log.txt','process-quality.json','process-public.json','process-native.json','source-freeze.json','native-inventory-generated.json','native-inventory-review.json','native-inventory-final-generated.json','native-inventory-final-review.json','report-review.json','report-review-gzip.json','ownership-final.json','crash-final.json']:
+ shutil.copyfile(src/name,out/name)
+for source,name in [('build/.recovery-disable-qualify.py','qualify.py.txt'),('build/.recovery-disable-native.py','native.py.txt'),('build/.recovery-disable-archive.py','archive.py.txt'),('build/.recovery-disable-review/main.go','review.go.txt')]:shutil.copyfile(root/source,out/name)
+encodings={}
+for source,name in [('public-final/report.json','conformance-report.json.gz'),('headless-final.json','headless-control.json.gz'),('native-final.json','native-control.json.gz')]:
+ raw=(src/source).read_bytes();compressed=gzip.compress(raw,mtime=0);(out/name).write_bytes(compressed);assert gzip.decompress(compressed)==raw
+ encodings[name]={'decoded_bytes':len(raw),'decoded_sha256':sha(raw),'gzip_bytes':len(compressed),'gzip_sha256':sha(compressed)}
+fixtures={}
+for transport,report in zip(['headless','native'],reports):
+ folder=src/(transport+'-final-assets');destination=out/'fixtures'/transport;destination.mkdir(parents=True)
+ names=['manual-source.elab','last-good.elab-recovery','retry.elab-recovery','failure-state.json','disabled-state.json','reenable-denied-state.json','disabled-after-storage-restored.json','retry-state.json']
+ for name in names:
+  raw=(folder/name).read_bytes();target=destination/name.replace('.elab-recovery','.capsule.json');target.write_bytes(raw);fixtures[str(target.relative_to(root))]=sha(raw)
+ manual=read(destination/'manual-source.elab');good=read(destination/'last-good.capsule.json');retry=read(destination/'retry.capsule.json')
+ assert digest(destination/'manual-source.elab')==report['manual_source_sha256']
+ assert digest(destination/'last-good.capsule.json')==report['last_good_capsule_sha256'] and digest(destination/'retry.capsule.json')==report['retry_capsule_sha256']
+ for capsule,value in [(good,20000),(retry,50000)]:
+  expected=copy.deepcopy(manual);next(p for p in expected['graph']['components'] if p['id']=='R1')['value']=value
+  assert capsule['document']==expected
+ failed=read(destination/'failure-state.json');disabled=read(destination/'disabled-state.json');denied=read(destination/'reenable-denied-state.json');held=read(destination/'disabled-after-storage-restored.json');ready=read(destination/'retry-state.json')
+ assert failed['recovery']['error']==report['error'] and disabled['recovery']['error']==report['error']
+ assert disabled['project_work']['recovery_catalog_applied'] is False and disabled['project_work']['recovery_configuration_applied']
+ assert denied['recovery']==disabled['recovery'] and held['recovery']==disabled['recovery'] and not held['recovery']['enabled']
+ assert ready['recovery']['enabled'] and not ready['recovery'].get('error') and ready['document']['dirty']
+receipt={'passed':True,'recorded_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ 'scope':'Disable configured autosave scheduling during unavailable storage without scanning; preserve last-known status; prove stopped scheduling after repair and explicit enable into a complete recorded checkpoint',
+ 'reference_configuration':read(root/'docs/validation/recovery-failure-validation.json')['reference_configuration'],
+ 'source_parent_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'source_index':str((out/'source-freeze.json').relative_to(root)),
+ 'source_frozen_files':691,'source_stable':True,'binary_sha256':binaries,'candidate':'build/ELab-0.113.0-130-recovery-disable-candidate.app','candidate_promoted':False,
+ 'original_regression_failure':str((out/'before.log.txt').relative_to(root)),'new_application_commands':0,'existing_commands':162,
+ 'same_store_disable_accesses_configured_folder':False,'same_store_disable_catalog_applied':False,'last_error_catalog_selection_lease_preserved':True,
+ 'in_flight_checkpoint_can_finish_but_status_is_fenced':True,'cancellation_bounds_new_store_and_enable_validation_kept':True,
+ 'models_methods_limits_file_versions_unchanged':True,
+ 'quality':{'lint_imports_staticcheck':True,'python_tests':37,'root_native_race_and_vet':True},
+ 'process_quality':quality,'process_public':public,'native_workflow':native,
+ 'public_controls':[{k:r[k] for k in ['transport','disable_control','automatic_retry_s','retry_timing_origin','recorded_rows']} for r in reports],
+ 'retry_exact_latest_graph_original_recording_manual_source_and_last_capsule_preserved':True,
+ 'native_user_toggle_off_last_error_and_reenable_callback_test':True,
+ 'four_adapter_numerical_checks':27596,'four_adapter_project_workflow_checks':44,'four_adapter_project_snapshots':56,'native_smoke_stages':45,
+ 'legacy_configuration_ownership_and_sigkill_workflows_pass':True,'typed_raw_gzip_review_equal':True,
+ 'sdk_verified':{'passed':True,'source':pin['source_commit'],'archive_sha256':pin['sha256']},
+ 'native_inventory_review':read(src/'native-inventory-final-review.json'),'preserved_bundle_trees':preserved,'fixture_files':fixtures,'report_encoding':encodings,
+ 'p0_counts':{'implemented':17,'partial':10},
+ 'setup_corrections':['The initial public checker used catalog_applied instead of the existing recovery_catalog_applied output field. The protocol and discovery now use the actual field; no output field was renamed.'],
+ 'limitations':['Only disabling the currently configured canonical path avoids folder I/O. New/different stores and enable still prepare/scan normally; disabling does not validate storage availability.',
+ 'Stopping new scheduling is not cancellation of an already captured checkpoint. It may finish under existing retention; stale status cannot replace disabled settings.',
+ 'The public restored-storage hold is at least three seconds with a two-second setting on one named recorded RC fixture. This is not a universal storage/load/device or performance distribution claim.',
+ 'Native callbacks/descriptors qualify actual toggle/status semantics. Complete physical typing, screen-reader, pixel/readability and visible latency remain open.',
+ 'Synthetic capsule bytes are archived unchanged as .capsule.json, avoiding ordinary recovery-file ignore rules. No endpoint credentials or lease directories are published.',
+ 'The private candidate remains unpromoted. Clean installation/distribution, other hardware/platforms, physical printer and participant gates remain open.']}
+receipt['artifacts_sha256']={str(p.relative_to(root)):digest(p) for p in sorted(out.rglob('*')) if p.is_file()}
+(root/'docs/validation/recovery-disable-validation.json').write_text(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps({'passed':True,'source_inputs':691,'fixture_files':len(fixtures),'numeric_checks':27596,'public_controls':receipt['public_controls']},indent=2))

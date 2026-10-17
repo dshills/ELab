@@ -1,0 +1,357 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T13:30:26.466058+00:00",
+  "scope": "Disable configured autosave scheduling during unavailable storage without scanning; preserve last-known status; prove stopped scheduling after repair and explicit enable into a complete recorded checkpoint",
+  "reference_configuration": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "processor": "Apple M4 Pro",
+    "logical_cpus": 14,
+    "memory_bytes": 68719476736,
+    "go_toolchain": "go version go1.27.2 darwin/arm64"
+  },
+  "source_parent_commit": "540db4ad3dbfff817d70dd3cdfd83cb45a4b72f3",
+  "source_index": "docs/validation/recovery-disable/source-freeze.json",
+  "source_frozen_files": 691,
+  "source_stable": true,
+  "binary_sha256": {
+    "build/elab": "aa486ef06545409edc06f230a5fcadfedd0ddd22be499e3f9714540c64fd53b2",
+    "build/elab-agent": "76af510e260eda154a068aaa9adc3e8e5e0b17dad0bb1943492f53192a110aa6",
+    "build/elab-conformance": "4d7fd61ce69b4aff491c0c5551d696e29c106d14da4272dcdd089269809478d2",
+    "build/elab-ui-audit": "c699138d5f4b214119796e9b4329c734ab7858544f177e45ebd3e1fe8aa536ba",
+    "build/ELab-0.113.0-130-recovery-disable-candidate.app/Contents/MacOS/ELab": "aa486ef06545409edc06f230a5fcadfedd0ddd22be499e3f9714540c64fd53b2"
+  },
+  "candidate": "build/ELab-0.113.0-130-recovery-disable-candidate.app",
+  "candidate_promoted": false,
+  "original_regression_failure": "docs/validation/recovery-disable/before.log.txt",
+  "new_application_commands": 0,
+  "existing_commands": 162,
+  "same_store_disable_accesses_configured_folder": false,
+  "same_store_disable_catalog_applied": false,
+  "last_error_catalog_selection_lease_preserved": true,
+  "in_flight_checkpoint_can_finish_but_status_is_fenced": true,
+  "cancellation_bounds_new_store_and_enable_validation_kept": true,
+  "models_methods_limits_file_versions_unchanged": true,
+  "quality": {
+    "lint_imports_staticcheck": true,
+    "python_tests": 37,
+    "root_native_race_and_vet": true
+  },
+  "process_quality": [
+    {
+      "name": "build",
+      "argv": [
+        "./scripts/build.sh"
+      ],
+      "started_utc": "2026-10-17T13:24:54.483927+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 8.403781333006918,
+      "finished_utc": "2026-10-17T13:25:02.887514+00:00"
+    },
+    {
+      "name": "quality",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T13:25:02.900789+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 171.60825583303813,
+      "finished_utc": "2026-10-17T13:27:54.504841+00:00"
+    }
+  ],
+  "process_public": [
+    {
+      "name": "native-smoke",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.113.0-130-recovery-disable-candidate.app/Contents/MacOS/ELab",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "started_utc": "2026-10-17T13:28:07.208552+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 38.61629787494894,
+      "finished_utc": "2026-10-17T13:28:45.823902+00:00"
+    },
+    {
+      "name": "public-suites",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+        "--native-binary",
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.113.0-130-recovery-disable-candidate.app/Contents/MacOS/ELab",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recovery-disable/public-final"
+      ],
+      "started_utc": "2026-10-17T13:28:45.835785+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 47.54388737492263,
+      "finished_utc": "2026-10-17T13:29:33.378503+00:00"
+    },
+    {
+      "name": "headless-failure",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/recovery-failure-demo.py",
+        "--exercise-disable",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/recovery-disable/headless-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recovery-disable/headless-final-assets"
+      ],
+      "started_utc": "2026-10-17T13:29:33.395928+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 8.183967499993742,
+      "finished_utc": "2026-10-17T13:29:41.579696+00:00"
+    },
+    {
+      "name": "configuration",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/recovery-configuration-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/recovery-disable/configuration-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recovery-disable/configuration-final-assets"
+      ],
+      "started_utc": "2026-10-17T13:29:41.592403+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 0.1501241670921445,
+      "finished_utc": "2026-10-17T13:29:41.742525+00:00"
+    },
+    {
+      "name": "ownership",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/recovery-dismiss-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/recovery-disable/ownership-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/recovery-disable/ownership-final-assets"
+      ],
+      "started_utc": "2026-10-17T13:29:41.753255+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 0.14945529191754758,
+      "finished_utc": "2026-10-17T13:29:41.902708+00:00"
+    },
+    {
+      "name": "crash-recovery",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/recovery-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/recovery-disable/crash-final.json"
+      ],
+      "started_utc": "2026-10-17T13:29:41.913488+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 2.1864022499648854,
+      "finished_utc": "2026-10-17T13:29:44.099839+00:00"
+    }
+  ],
+  "native_workflow": {
+    "started_utc": "2026-10-17T13:29:51.186270+00:00",
+    "status": "completed",
+    "owned_pid": 28062,
+    "demo_exit_code": 0,
+    "native_exit_code": 0,
+    "elapsed_seconds": 8.819281000061892,
+    "finished_utc": "2026-10-17T13:30:00.005438+00:00"
+  },
+  "public_controls": [
+    {
+      "transport": "headless-stdio",
+      "disable_control": {
+        "disable_s": 0.0020754580618813634,
+        "both_disable_aliases_completed": true,
+        "catalog_applied_on_disable": false,
+        "last_error_and_catalog_preserved": true,
+        "reenable_refused_while_unavailable": true,
+        "available_storage_held_disabled_s": 3.0112575410166755,
+        "disabled_file_set_unchanged": true,
+        "reenable_catalog_applied": true
+      },
+      "automatic_retry_s": 0.5006265409756452,
+      "retry_timing_origin": "reenable dispatch",
+      "recorded_rows": 209
+    },
+    {
+      "transport": "native-socket",
+      "disable_control": {
+        "disable_s": 0.0009281670209020376,
+        "both_disable_aliases_completed": true,
+        "catalog_applied_on_disable": false,
+        "last_error_and_catalog_preserved": true,
+        "reenable_refused_while_unavailable": true,
+        "available_storage_held_disabled_s": 3.008653208031319,
+        "disabled_file_set_unchanged": true,
+        "reenable_catalog_applied": true
+      },
+      "automatic_retry_s": 0.4685565420659259,
+      "retry_timing_origin": "reenable dispatch",
+      "recorded_rows": 209
+    }
+  ],
+  "retry_exact_latest_graph_original_recording_manual_source_and_last_capsule_preserved": true,
+  "native_user_toggle_off_last_error_and_reenable_callback_test": true,
+  "four_adapter_numerical_checks": 27596,
+  "four_adapter_project_workflow_checks": 44,
+  "four_adapter_project_snapshots": 56,
+  "native_smoke_stages": 45,
+  "legacy_configuration_ownership_and_sigkill_workflows_pass": true,
+  "typed_raw_gzip_review_equal": true,
+  "sdk_verified": {
+    "passed": true,
+    "source": "aa9d023243a6bded514c3d9696c08a9c917119c4",
+    "archive_sha256": "22b086442570641e4ae56e9937dd6483c26f92cde953f3aa3fc11811710ed7c5"
+  },
+  "native_inventory_review": {
+    "passed": true,
+    "reviewed_sources": [
+      "desktop/view.go",
+      "desktop/project_work.go"
+    ],
+    "site_semantics_commands_aliases_unchanged": true,
+    "sources": 57,
+    "sites": 388,
+    "commands": 162,
+    "routes": 132
+  },
+  "preserved_bundle_trees": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7
+    }
+  },
+  "fixture_files": {
+    "docs/validation/recovery-disable/fixtures/headless/manual-source.elab": "32ff26cf3f806fca8a4e5c8b5e89fa108c52e3ac1f75dfedd6414f1674a8fd67",
+    "docs/validation/recovery-disable/fixtures/headless/last-good.capsule.json": "29217ff4c318f8a473be73738689ee7875eed55937a20946528f3eec178ef86c",
+    "docs/validation/recovery-disable/fixtures/headless/retry.capsule.json": "e4736a02cad97b49399cae5462154abb0e3ecf1d4f2ec549212e51b0da9fb048",
+    "docs/validation/recovery-disable/fixtures/headless/failure-state.json": "0dbfccace7c1889cd6f9829c5e199443bee2a5e8ba0a8341e542106bdc5d404d",
+    "docs/validation/recovery-disable/fixtures/headless/disabled-state.json": "d8dee02cd23aec0a3312a86ff1985f1e1cd52b2b42d9d8b52fbc105c7368eacc",
+    "docs/validation/recovery-disable/fixtures/headless/reenable-denied-state.json": "ed89648d57b2e78c9ae20e76c645bd5f7a85d8d755b13fc8fab1fa58d667a8ff",
+    "docs/validation/recovery-disable/fixtures/headless/disabled-after-storage-restored.json": "82fd9022a26b8f5873cb6d639342aeb250846301b60234711996794b77859b42",
+    "docs/validation/recovery-disable/fixtures/headless/retry-state.json": "be741dd1df6fe4c5b366d4a305655a26bd1c20bbbc92fb379c2ce1250e960bfd",
+    "docs/validation/recovery-disable/fixtures/native/manual-source.elab": "8aeba3b5f876684f7f4707366fcb96fc968ed5de40e1fa625187a0950cfe16fe",
+    "docs/validation/recovery-disable/fixtures/native/last-good.capsule.json": "d7c82ec38fe8c68a107b429fa03392633f73b6141d7fc3947e096826c598a732",
+    "docs/validation/recovery-disable/fixtures/native/retry.capsule.json": "3ebf6d6166facfb6e6888f8bf2acce743f86d19797d7fb443d600118f50f90b3",
+    "docs/validation/recovery-disable/fixtures/native/failure-state.json": "09e2a08cd3279831f7dcea4c0e8b7ab96326de5aeb01e85d9b64942022835969",
+    "docs/validation/recovery-disable/fixtures/native/disabled-state.json": "73d825b4c062a8f3cef335e57581f2740c6909aacc093747847a55ae55a59d40",
+    "docs/validation/recovery-disable/fixtures/native/reenable-denied-state.json": "73f5ffb9e72ae623f3ad7b43f9881caf3a103acffbee8206fa29271c4cb3f6b2",
+    "docs/validation/recovery-disable/fixtures/native/disabled-after-storage-restored.json": "42c8cbd30c21960ae7d3424a85b3d545d7bd306020b5ef14544ad549f653b6f8",
+    "docs/validation/recovery-disable/fixtures/native/retry-state.json": "20d767300121556d1d26c552716771c33ec30e9a5c3eb29a15a581b793920785"
+  },
+  "report_encoding": {
+    "conformance-report.json.gz": {
+      "decoded_bytes": 18209193,
+      "decoded_sha256": "3588087eba078fe964853457aad0495f9997357a51502774a5d3c47e7ef16380",
+      "gzip_bytes": 1660175,
+      "gzip_sha256": "398b84d3453e5a0cde3db5d5410711acdc84a5335152538b2115e6a8213ffb37"
+    },
+    "headless-control.json.gz": {
+      "decoded_bytes": 1746,
+      "decoded_sha256": "a0e48a4ae2ba392a5cd15c7dab4eeb3eef5307822ce2d637d6b8509ebbc2467c",
+      "gzip_bytes": 919,
+      "gzip_sha256": "38250f92331987d1e3959d537454e575ef091105e7272bb16d6d900ab317e45f"
+    },
+    "native-control.json.gz": {
+      "decoded_bytes": 1743,
+      "decoded_sha256": "e5d829ee68d0232f777c8e0d93c10f723493d5f7efe3d0a3052fb8175f2be49b",
+      "gzip_bytes": 921,
+      "gzip_sha256": "3583c5ead22cd862a33546648c3dbca50c459db4f836058cf7cf73dab140bbea"
+    }
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "setup_corrections": [
+    "The initial public checker used catalog_applied instead of the existing recovery_catalog_applied output field. The protocol and discovery now use the actual field; no output field was renamed."
+  ],
+  "limitations": [
+    "Only disabling the currently configured canonical path avoids folder I/O. New/different stores and enable still prepare/scan normally; disabling does not validate storage availability.",
+    "Stopping new scheduling is not cancellation of an already captured checkpoint. It may finish under existing retention; stale status cannot replace disabled settings.",
+    "The public restored-storage hold is at least three seconds with a two-second setting on one named recorded RC fixture. This is not a universal storage/load/device or performance distribution claim.",
+    "Native callbacks/descriptors qualify actual toggle/status semantics. Complete physical typing, screen-reader, pixel/readability and visible latency remain open.",
+    "Synthetic capsule bytes are archived unchanged as .capsule.json, avoiding ordinary recovery-file ignore rules. No endpoint credentials or lease directories are published.",
+    "The private candidate remains unpromoted. Clean installation/distribution, other hardware/platforms, physical printer and participant gates remain open."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/recovery-disable/after-initial.log.txt": "508d994f210e07fbaaf5d2135e5fe479258452ab93c30d0fa9f4cdce8f4ee210",
+    "docs/validation/recovery-disable/archive.py.txt": "86fabd21d53f71abe2360b16ac99e1991cf9cbadbc33562fb3a242e3dfc42a7c",
+    "docs/validation/recovery-disable/before.log.txt": "46d3895972c0bfd3152c65bb50e1aad0431a03bf2e951f5e4126b823e60ae314",
+    "docs/validation/recovery-disable/build.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/recovery-disable/configuration-final.json": "db7df634675a9ddc9e2701b5d3417c4b5a583765396b566e8261bbaac087012a",
+    "docs/validation/recovery-disable/configuration.log.txt": "16f0f03916f2cd909cf98868de7ab59dce8418c7f8cfc67b6bf46e7b8b50e01c",
+    "docs/validation/recovery-disable/conformance-report.json.gz": "398b84d3453e5a0cde3db5d5410711acdc84a5335152538b2115e6a8213ffb37",
+    "docs/validation/recovery-disable/core-focused.log.txt": "6f29ee5bb9d7b10a08eafcee784f3444cf15a0409884aa17f0b28bafa671524b",
+    "docs/validation/recovery-disable/crash-final.json": "d504c3c9277ae83f5d0487925acd560811f144e88c2ada6b555e14af7b5362b2",
+    "docs/validation/recovery-disable/crash-recovery.log.txt": "d504c3c9277ae83f5d0487925acd560811f144e88c2ada6b555e14af7b5362b2",
+    "docs/validation/recovery-disable/fixtures/headless/disabled-after-storage-restored.json": "82fd9022a26b8f5873cb6d639342aeb250846301b60234711996794b77859b42",
+    "docs/validation/recovery-disable/fixtures/headless/disabled-state.json": "d8dee02cd23aec0a3312a86ff1985f1e1cd52b2b42d9d8b52fbc105c7368eacc",
+    "docs/validation/recovery-disable/fixtures/headless/failure-state.json": "0dbfccace7c1889cd6f9829c5e199443bee2a5e8ba0a8341e542106bdc5d404d",
+    "docs/validation/recovery-disable/fixtures/headless/last-good.capsule.json": "29217ff4c318f8a473be73738689ee7875eed55937a20946528f3eec178ef86c",
+    "docs/validation/recovery-disable/fixtures/headless/manual-source.elab": "32ff26cf3f806fca8a4e5c8b5e89fa108c52e3ac1f75dfedd6414f1674a8fd67",
+    "docs/validation/recovery-disable/fixtures/headless/reenable-denied-state.json": "ed89648d57b2e78c9ae20e76c645bd5f7a85d8d755b13fc8fab1fa58d667a8ff",
+    "docs/validation/recovery-disable/fixtures/headless/retry-state.json": "be741dd1df6fe4c5b366d4a305655a26bd1c20bbbc92fb379c2ce1250e960bfd",
+    "docs/validation/recovery-disable/fixtures/headless/retry.capsule.json": "e4736a02cad97b49399cae5462154abb0e3ecf1d4f2ec549212e51b0da9fb048",
+    "docs/validation/recovery-disable/fixtures/native/disabled-after-storage-restored.json": "42c8cbd30c21960ae7d3424a85b3d545d7bd306020b5ef14544ad549f653b6f8",
+    "docs/validation/recovery-disable/fixtures/native/disabled-state.json": "73d825b4c062a8f3cef335e57581f2740c6909aacc093747847a55ae55a59d40",
+    "docs/validation/recovery-disable/fixtures/native/failure-state.json": "09e2a08cd3279831f7dcea4c0e8b7ab96326de5aeb01e85d9b64942022835969",
+    "docs/validation/recovery-disable/fixtures/native/last-good.capsule.json": "d7c82ec38fe8c68a107b429fa03392633f73b6141d7fc3947e096826c598a732",
+    "docs/validation/recovery-disable/fixtures/native/manual-source.elab": "8aeba3b5f876684f7f4707366fcb96fc968ed5de40e1fa625187a0950cfe16fe",
+    "docs/validation/recovery-disable/fixtures/native/reenable-denied-state.json": "73f5ffb9e72ae623f3ad7b43f9881caf3a103acffbee8206fa29271c4cb3f6b2",
+    "docs/validation/recovery-disable/fixtures/native/retry-state.json": "20d767300121556d1d26c552716771c33ec30e9a5c3eb29a15a581b793920785",
+    "docs/validation/recovery-disable/fixtures/native/retry.capsule.json": "3ebf6d6166facfb6e6888f8bf2acce743f86d19797d7fb443d600118f50f90b3",
+    "docs/validation/recovery-disable/headless-control.json.gz": "38250f92331987d1e3959d537454e575ef091105e7272bb16d6d900ab317e45f",
+    "docs/validation/recovery-disable/headless-failure.log.txt": "b5863a4429494ff32a56149d0e9b46b52ac1fffa8f3d038742c5c8cf93e02f6a",
+    "docs/validation/recovery-disable/headless-initial.log.txt": "ed159d44e38b7ff1e5c90b69032fe5f76f50b92ecde950565f19488581a8b186",
+    "docs/validation/recovery-disable/headless-initial2.json": "54fabac24a6003a6f72ecaaf37a16c0027c060a01c67217c6f52afc7491d7c00",
+    "docs/validation/recovery-disable/headless-initial2.log.txt": "b5e98b6495a79033413fe9cbc30682687531995c42075f357ca416c25cd70fa3",
+    "docs/validation/recovery-disable/initial-process-public.json": "ce1c90b8cb6994f4fc35ea4eda1915ec70b69f3a9b004223b7720098adaa65b2",
+    "docs/validation/recovery-disable/initial-process-quality.json": "d4ed6b74271d911fe6b0993724e69901705565024c350a875dcf096f468deb90",
+    "docs/validation/recovery-disable/initial-quality.log.txt": "3a8e3bb2260559b99dafcc9ca69cd420cca99ffd4c5798d5c36f5399392542b7",
+    "docs/validation/recovery-disable/native-control.json.gz": "3583c5ead22cd862a33546648c3dbca50c459db4f836058cf7cf73dab140bbea",
+    "docs/validation/recovery-disable/native-failure.log.txt": "ec285123f9ee3e6d8951dd64d9807cb00f03692f7f10b00955ea6a17d5908cd1",
+    "docs/validation/recovery-disable/native-focused.log.txt": "ab6f8cdb2be2a0e2b4b12f70ded5cb0810cf8f2efb3bc52b4613a2fbfbd9ccc3",
+    "docs/validation/recovery-disable/native-host.log.txt": "28b6052e4b3cf78e72e4af61b2137df7a639fea43465461c41fec4b5d84baf89",
+    "docs/validation/recovery-disable/native-inventory-final-generated.json": "e55eca6e3d915ee806b858a0f83503fdcdca34131bfe832bb924eef1920bd8e9",
+    "docs/validation/recovery-disable/native-inventory-final-review.json": "4a75cee463cd9257148fca19222fe662bcbba37ecaa2184ebaa1c35a804391ba",
+    "docs/validation/recovery-disable/native-inventory-generated.json": "e55eca6e3d915ee806b858a0f83503fdcdca34131bfe832bb924eef1920bd8e9",
+    "docs/validation/recovery-disable/native-inventory-review.json": "1c9117f4bec2629f717404ced855b9e6250f3bb2388fb6197c7e532b0dd98ec0",
+    "docs/validation/recovery-disable/native-smoke.log.txt": "bd63e2d79f36dff70e314fdb434cb1efff1845915bbd2f4096fa18fb8be53b84",
+    "docs/validation/recovery-disable/native.py.txt": "884dfe75cb3f9d9f95281ec9f1f5200dc28d7b816fa05bb98b821282125db5e8",
+    "docs/validation/recovery-disable/ownership-final.json": "aeb9d1de114e89d0b88bec54073e34efede888e6510250b175b37788b5b8cbdc",
+    "docs/validation/recovery-disable/ownership.log.txt": "4f6e71e42368aa76bfcfbd9be810045f6a1a048bf2ed3957061a53ef1cda850e",
+    "docs/validation/recovery-disable/package.json": "a8687487a768cd89a93d94e4ec85c95e482b8cf4e99e883239513f07616ba17f",
+    "docs/validation/recovery-disable/process-native.json": "c82518ed49cd409f28bec41380479219889c5500bc08307fa595424efccf601f",
+    "docs/validation/recovery-disable/process-public.json": "05837f08c31c23155faef517b3104ddf195f03ac075f0c6da8c009d1e210411f",
+    "docs/validation/recovery-disable/process-quality.json": "172bb3414b8c32c06efca99d783cbf6d046b3cbb4d98cd7f4a7217f894b41b7b",
+    "docs/validation/recovery-disable/public-suites.log.txt": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "docs/validation/recovery-disable/qualify.py.txt": "bb1eec908b5b77eb7d31a3c93f5e01fb74ea2e1fdc7b2297c6b34c641bf13d2e",
+    "docs/validation/recovery-disable/quality.log.txt": "b82383e62db487ffdae61efaf5ab4ed94d7f5bd4f0ecc232f76b70ee264eeb63",
+    "docs/validation/recovery-disable/report-review-gzip.json": "3f5977fd7b92b6267601290ddaf861d0a4c16147abcc8fea120ae2c3cd474fad",
+    "docs/validation/recovery-disable/report-review.json": "3f5977fd7b92b6267601290ddaf861d0a4c16147abcc8fea120ae2c3cd474fad",
+    "docs/validation/recovery-disable/review.go.txt": "808b076c8bf0bac85714632b87ab06a8364742575b33a383a734d7e37c729fb6",
+    "docs/validation/recovery-disable/source-freeze.json": "4561e68c2212564387386e2ec8b4638277c1d3fd63f1b1608c777ff9f18d415b"
+  }
+}

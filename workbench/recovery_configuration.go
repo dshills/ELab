@@ -24,6 +24,14 @@ func prepareRecoveryConfiguration(ctx context.Context, capture recoveryConfigura
 	if err := ctx.Err(); err != nil {
 		return result, err
 	}
+	if !capture.params.Enabled && capture.previous != nil && capture.previous.directory == capture.params.Directory {
+		// Stopping an existing timer must remain available when its folder is
+		// unavailable or an older writer holds the store lock. Keep the last
+		// observed catalog/error; this action does not validate storage.
+		progress("updating-autosave-settings", 0)
+		result.store = capture.previous
+		return result, ctx.Err()
+	}
 	progress("opening-recovery-directory", 0)
 	var err error
 	if capture.previous != nil && capture.previous.directory == capture.params.Directory {
@@ -83,7 +91,9 @@ func (s *Service) installRecoveryConfigurationLocked(job *projectJob, result rec
 	capture := job.recoveryConfigure
 	previous := s.recoveryStore
 	same := previous == result.store
-	catalogApplied := !same || s.recoveryCatalogRevision == capture.catalogRevision
+	// Same-store disable changes scheduling only, even if storage is healthy.
+	// In particular it cannot clear an unverified error or claim a fresh scan.
+	catalogApplied := (!same || capture.params.Enabled) && (!same || s.recoveryCatalogRevision == capture.catalogRevision)
 	if same {
 		s.recovery.Enabled, s.recovery.Interval = capture.params.Enabled, capture.params.Interval
 		if catalogApplied {

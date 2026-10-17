@@ -280,3 +280,5 @@ Recovery snapshots now distinguish [active, inactive and unverified owners](docs
 [Repeated recovery timing](docs/recovery-timing.md) passes 240 paused/live native/headless measurements on the recorded workstation: maximum 2.544 s with ordinary two-second autosave, plus 20 complete crash restores. That timing checkpoint used unchanged runtime binaries.
 
 [Automatic storage errors and retry results](docs/recovery-failure.md) now remain observable while you edit. Restoring available storage saves a complete recovery copy automatically, while later dirty edits, manual saves and newer recovery work keep their own state.
+
+You can [disable autosave even while its current recovery folder is unavailable](docs/recovery-disable.md). The last error/list stay visible, and restoring storage leaves autosave off until you enable it again. Users and agents use the same commands.

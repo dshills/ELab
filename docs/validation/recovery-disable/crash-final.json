@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "capability_count": 162,
+  "crash_exit_code": -9,
+  "source_sha256": "923f757503789752ae8058082f36dfb6323a35b29d61204aab527f7b7e0cedb4",
+  "recovered_components": 4,
+  "checks": [
+    "automatic checkpoint",
+    "live state and explicit file preserved",
+    "SIGKILL recovery",
+    "inactive crashed owner",
+    "validated inspect",
+    "dirty unassociated copy",
+    "Save As without original overwrite",
+    "hash-confirmed dismissal"
+  ]
+}

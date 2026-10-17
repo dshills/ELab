@@ -147,7 +147,8 @@ func addCapabilityDetails(id string, schema map[string]any) {
 		inputProperty(schema, "directory")["minLength"] = 1
 		inputProperty(schema, "directory")["maxLength"] = 4096
 		inputProperty(schema, "directory")["x-max-utf8-bytes"] = 4096
-		inputProperty(schema, "directory")["description"] = "Nonblank local path without NUL; existing directories must be private (0700) and not symlinks. Relative paths resolve against the process working directory."
+		inputProperty(schema, "directory")["description"] = "Nonblank local path without NUL. A new store requires a private (0700) real directory. Relative paths resolve against the process working directory. Disabling the already configured canonical path updates scheduling without opening/scanning that folder; last-known catalog/error remain."
+		schema["x-existing-store-disable"] = map[string]any{"folder_access": false, "recovery_catalog_applied": false, "preserves_last_known_catalog_and_error": true, "in_flight_checkpoint_may_finish": true, "reenable": "Scans storage normally and can fail; disabling does not validate availability"}
 		schema["examples"] = []any{RecoveryConfigureParams{Directory: "/absolute/path/recovery", Enabled: false, Interval: 2}}
 	case "export.schematic.png":
 		p := inputProperty(schema, "dpi")

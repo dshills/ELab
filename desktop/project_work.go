@@ -77,7 +77,7 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 		nodes = append(nodes, quiet("project-work-recovery-dismissed", "Removed the confirmed recovery snapshot."))
 	}
 	if w.CatalogApplied != nil && !*w.CatalogApplied {
-		nodes = append(nodes, quiet("project-work-catalog-preserved", "Recovery work completed; newer recovery state was preserved."))
+		nodes = append(nodes, quiet("project-work-catalog-preserved", "Recovery work completed; existing recovery state was preserved."))
 	}
 	return nodes
 }

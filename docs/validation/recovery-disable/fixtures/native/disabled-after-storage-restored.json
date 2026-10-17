@@ -1,0 +1,2932 @@
+{
+  "workspace_layout": {
+    "schematic_fraction": 0.65
+  },
+  "viewport": {
+    "width_px": 586,
+    "height_px": 207,
+    "registered": true,
+    "following": false
+  },
+  "pulse_timings": [
+    {
+      "source_kind": "pulse-source",
+      "shared": true,
+      "id": "V1",
+      "frequency_hz": 10,
+      "period_s": 0.1,
+      "duty_percent": 50,
+      "frequency_text": "10 Hz",
+      "duty_text": "50 %"
+    }
+  ],
+  "verification_input_modes": [
+    "auto",
+    "charge",
+    "discharge"
+  ],
+  "live_input_modes": [
+    "auto",
+    "charge",
+    "discharge"
+  ],
+  "dc_sweep": {
+    "settings": {
+      "component_id": "V1",
+      "parameter": "voltage",
+      "start": "0 V",
+      "stop": "5 V",
+      "points": 51
+    },
+    "targets": [
+      {
+        "component_id": "V1",
+        "parameter": "voltage",
+        "label": "V1 \u00b7 DC bias",
+        "unit": "V",
+        "minimum": -12,
+        "maximum": 12
+      },
+      {
+        "component_id": "R1",
+        "parameter": "resistance",
+        "label": "R1 \u00b7 Resistance",
+        "unit": "\u03a9",
+        "minimum": 10,
+        "maximum": 100000
+      }
+    ],
+    "available_probes": [
+      {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1.negative",
+        "label": "V1.negative / ground",
+        "unit": "V",
+        "positive": "V1.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1",
+        "label": "V1 voltage",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "V1.negative"
+      },
+      {
+        "id": "i:V1",
+        "label": "V1 delivered current",
+        "unit": "A",
+        "positive": "V1.positive",
+        "reference": "out of positive"
+      },
+      {
+        "id": "v:R1.1",
+        "label": "R1.1 / ground",
+        "unit": "V",
+        "positive": "R1.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R1.2",
+        "label": "R1.2 / ground",
+        "unit": "V",
+        "positive": "R1.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R1",
+        "label": "R1 voltage",
+        "unit": "V",
+        "positive": "R1.1",
+        "reference": "R1.2"
+      },
+      {
+        "id": "i:R1",
+        "label": "R1 current",
+        "unit": "A",
+        "positive": "R1.1",
+        "reference": "R1.2"
+      },
+      {
+        "id": "v:C1.1",
+        "label": "C1.1 / ground",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:C1.2",
+        "label": "C1.2 / ground",
+        "unit": "V",
+        "positive": "C1.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:C1",
+        "label": "C1 voltage",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      },
+      {
+        "id": "i:C1",
+        "label": "C1 current",
+        "unit": "A",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      },
+      {
+        "id": "v:GND.reference",
+        "label": "GND.reference / ground",
+        "unit": "V",
+        "positive": "GND.reference",
+        "reference": "ground"
+      }
+    ],
+    "operations": [],
+    "selected_operation": "",
+    "visible": false,
+    "trace_id": ""
+  },
+  "source_annotations": [
+    {
+      "id": "V1",
+      "position": {
+        "x": -584,
+        "y": -22
+      },
+      "lines": [
+        "V1 | pulse (ideal edges)",
+        "low 0 V | high 5 V",
+        "high 50 ms | low 50 ms",
+        "configured | live stale"
+      ],
+      "state": "stale"
+    }
+  ],
+  "project_work": {
+    "recovery_configuration_applied": false,
+    "cancelable": false,
+    "id": "project-6",
+    "command": "recovery.configure",
+    "status": "failed",
+    "phase": "scanning-recovery",
+    "actor": "agent.socket",
+    "path": "/Users/dshills/Development/projects/ELab/build/recovery-disable/native-final-assets/recovery",
+    "input_revision": 84,
+    "command_revision": 59,
+    "document_generation": 2,
+    "bytes": 0,
+    "error": {
+      "code": "file-error",
+      "message": "fdopendir /Users/dshills/Development/projects/ELab/build/recovery-disable/native-final-assets/recovery: not a directory"
+    }
+  },
+  "example": {
+    "info": {
+      "id": "rc",
+      "title": "RC charge and discharge",
+      "question": "How quickly does a capacitor charge and discharge?",
+      "expected": "Capacitor voltage changes smoothly; switching from charge to discharge reverses current while preserving voltage at the switching instant.",
+      "try": "Pause, step 10 ms, then choose Discharge. Increase R1 or C1 to slow the response.",
+      "limitation": "Ideal capacitor/resistor with zero ESR and leakage; this example uses an ideal source edge."
+    },
+    "modified": true
+  },
+  "diagnostic_presentation": {
+    "details_visible": false,
+    "items": []
+  },
+  "display": {
+    "preferences": {
+      "voltage_color": false,
+      "voltage_range_v": 5,
+      "current_cues": false,
+      "current_motion": false,
+      "reduced_motion": false,
+      "direction": "conventional"
+    },
+    "run_id": 2,
+    "electrical_revision": 2,
+    "time_s": 0,
+    "animate": false,
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "voltage_v": 5,
+        "state": "stale",
+        "reason": "Previous accepted live result; resume or restart a valid circuit",
+        "current_reason": "Current direction requires a fresh accepted circuit",
+        "color": "#387d93"
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "C1.1",
+        "voltage_v": 0,
+        "state": "stale",
+        "reason": "Previous accepted live result; resume or restart a valid circuit",
+        "current_reason": "Current direction requires a fresh accepted circuit",
+        "color": "#387d93"
+      },
+      {
+        "id": "W3",
+        "from": "C1.2",
+        "to": "GND.reference",
+        "voltage_v": 0,
+        "state": "stale",
+        "reason": "Previous accepted live result; resume or restart a valid circuit",
+        "current_reason": "Current direction requires a fresh accepted circuit",
+        "color": "#387d93"
+      },
+      {
+        "id": "W4",
+        "from": "GND.reference",
+        "to": "V1.negative",
+        "voltage_v": 0,
+        "state": "stale",
+        "reason": "Previous accepted live result; resume or restart a valid circuit",
+        "current_reason": "Current direction requires a fresh accepted circuit",
+        "color": "#387d93"
+      }
+    ]
+  },
+  "measurement_inspection": {
+    "result_kind": "none",
+    "available": false,
+    "object_ids": [],
+    "terminal_refs": [],
+    "wire_ids": [],
+    "nets": [],
+    "readings": []
+  },
+  "pinned_readings": [],
+  "limits": {
+    "integration_attempts_per_sample": 512,
+    "integration_wall_ms_per_sample": 100,
+    "pinned_readings": 8,
+    "drawing_objects": 100,
+    "wires": 300,
+    "simulated_components": 64,
+    "electrical_nodes_including_ground": 100,
+    "sources": 3,
+    "capacitors": 4,
+    "inductors": 4,
+    "npn_transistors": 2,
+    "nmos_transistors": 2,
+    "pmos_transistors": 2,
+    "mosfets_total": 2,
+    "opamps": 2,
+    "resistors": 64,
+    "switches": 8,
+    "silicon_diodes": 8,
+    "potentiometers": 64,
+    "leds": 4,
+    "scope_traces": 6
+  },
+  "simulated_component_count": 3,
+  "undo_entry": {
+    "name": "Change value",
+    "actor": "agent.socket",
+    "command_revision": 60
+  },
+  "actuation_revision": 0,
+  "recording": {
+    "last_sample_time_s": 0.2,
+    "id": "verify-1",
+    "origin_id": "verify-1",
+    "imported": false,
+    "viewing": false,
+    "playing": false,
+    "seconds_per_wall_second": 0,
+    "sample_index": 0,
+    "time_s": 0,
+    "duration_s": 0.2,
+    "sample_step_s": 0.001,
+    "sample_count": 209,
+    "window_sample_count": 209,
+    "plot_reduced": false,
+    "scope": {
+      "window": {
+        "mode": "fixed",
+        "start_s": 0,
+        "end_s": 0.2
+      },
+      "window_valid": true,
+      "statistics": [
+        {
+          "probe_id": "v:C1.1",
+          "count": 209,
+          "min": 0,
+          "max": 4.966535735141783,
+          "sample_mean": 2.486513668610153,
+          "sample_rms": 3.173240140582658
+        },
+        {
+          "probe_id": "v:V1.positive",
+          "count": 209,
+          "min": 0,
+          "max": 5,
+          "sample_mean": 2.511961722488038,
+          "sample_rms": 3.5439820276689034
+        }
+      ],
+      "available": [
+        {
+          "id": "v:C1.1",
+          "label": "C1.1 / ground",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "ground"
+        },
+        {
+          "id": "v:V1.positive",
+          "label": "V1.positive / ground",
+          "unit": "V",
+          "positive": "V1.positive",
+          "reference": "ground"
+        }
+      ],
+      "selected": [
+        "v:C1.1",
+        "v:V1.positive"
+      ],
+      "traces": [
+        {
+          "probe": {
+            "id": "v:C1.1",
+            "label": "C1.1 / ground",
+            "unit": "V",
+            "positive": "C1.1",
+            "reference": "ground"
+          },
+          "points": [
+            {
+              "time_s": 0,
+              "value": 0
+            },
+            {
+              "time_s": 0.001,
+              "value": 0.47581290982020213
+            },
+            {
+              "time_s": 0.002,
+              "value": 0.9063462346100908
+            },
+            {
+              "time_s": 0.003,
+              "value": 1.2959088965914107
+            },
+            {
+              "time_s": 0.004,
+              "value": 1.6483997698218036
+            },
+            {
+              "time_s": 0.005,
+              "value": 1.9673467014368329
+            },
+            {
+              "time_s": 0.006,
+              "value": 2.255941819529868
+            },
+            {
+              "time_s": 0.007,
+              "value": 2.5170734810429525
+            },
+            {
+              "time_s": 0.008,
+              "value": 2.753355179413892
+            },
+            {
+              "time_s": 0.009000000000000001,
+              "value": 2.967151701297005
+            },
+            {
+              "time_s": 0.01,
+              "value": 3.1606027941427883
+            },
+            {
+              "time_s": 0.011,
+              "value": 3.335644581509602
+            },
+            {
+              "time_s": 0.012,
+              "value": 3.4940289404389895
+            },
+            {
+              "time_s": 0.013000000000000001,
+              "value": 3.637341034829937
+            },
+            {
+              "time_s": 0.014,
+              "value": 3.7670151802919674
+            },
+            {
+              "time_s": 0.015,
+              "value": 3.8843491992578505
+            },
+            {
+              "time_s": 0.016,
+              "value": 3.990517410026723
+            },
+            {
+              "time_s": 0.017,
+              "value": 4.086582379736327
+            },
+            {
+              "time_s": 0.018000000000000002,
+              "value": 4.173505558892067
+            },
+            {
+              "time_s": 0.019,
+              "value": 4.252156903886824
+            },
+            {
+              "time_s": 0.02,
+              "value": 4.323323583816936
+            },
+            {
+              "time_s": 0.021,
+              "value": 4.3877178587350905
+            },
+            {
+              "time_s": 0.022,
+              "value": 4.445984208188331
+            },
+            {
+              "time_s": 0.023,
+              "value": 4.498705781385982
+            },
+            {
+              "time_s": 0.024,
+              "value": 4.546410233552938
+            },
+            {
+              "time_s": 0.025,
+              "value": 4.589575006880506
+            },
+            {
+              "time_s": 0.026000000000000002,
+              "value": 4.628632108928331
+            },
+            {
+              "time_s": 0.027,
+              "value": 4.663972436301251
+            },
+            {
+              "time_s": 0.028,
+              "value": 4.69594968687391
+            },
+            {
+              "time_s": 0.029,
+              "value": 4.724883899717964
+            },
+            {
+              "time_s": 0.03,
+              "value": 4.751064658160681
+            },
+            {
+              "time_s": 0.031,
+              "value": 4.774753988032212
+            },
+            {
+              "time_s": 0.032,
+              "value": 4.79618898010817
+            },
+            {
+              "time_s": 0.033,
+              "value": 4.815584162993801
+            },
+            {
+              "time_s": 0.034,
+              "value": 4.833133650198371
+            },
+            {
+              "time_s": 0.035,
+              "value": 4.849013082888408
+            },
+            {
+              "time_s": 0.036000000000000004,
+              "value": 4.863381387763538
+            },
+            {
+              "time_s": 0.037,
+              "value": 4.876382367648304
+            },
+            {
+              "time_s": 0.038,
+              "value": 4.888146140719173
+            },
+            {
+              "time_s": 0.039,
+              "value": 4.898790442770979
+            },
+            {
+              "time_s": 0.04,
+              "value": 4.90842180555633
+            },
+            {
+              "time_s": 0.041,
+              "value": 4.917136622991195
+            },
+            {
+              "time_s": 0.042,
+              "value": 4.925022115897613
+            },
+            {
+              "time_s": 0.043000000000000003,
+              "value": 4.932157204938997
+            },
+            {
+              "time_s": 0.044,
+              "value": 4.938613300484659
+            },
+            {
+              "time_s": 0.045,
+              "value": 4.94445501730879
+            },
+            {
+              "time_s": 0.046,
+              "value": 4.9497408212768335
+            },
+            {
+              "time_s": 0.047,
+              "value": 4.954523614491523
+            },
+            {
+              "time_s": 0.048,
+              "value": 4.958851264754902
+            },
+            {
+              "time_s": 0.049,
+              "value": 4.96276708464538
+            },
+            {
+              "time_s": 0.05,
+              "value": 4.966310265004574
+            },
+            {
+              "time_s": 0.05,
+              "value": 4.966310265004574
+            },
+            {
+              "time_s": 0.05,
+              "value": 4.966310265004574
+            },
+            {
+              "time_s": 0.051000000000000004,
+              "value": 4.493703357352221
+            },
+            {
+              "time_s": 0.052000000000000005,
+              "value": 4.066070943286106
+            },
+            {
+              "time_s": 0.053,
+              "value": 3.679133133874041
+            },
+            {
+              "time_s": 0.054,
+              "value": 3.329017325465135
+            },
+            {
+              "time_s": 0.055,
+              "value": 3.0122194413708483
+            },
+            {
+              "time_s": 0.056,
+              "value": 2.7255688618877185
+            },
+            {
+              "time_s": 0.057,
+              "value": 2.466196691669692
+            },
+            {
+              "time_s": 0.058,
+              "value": 2.231507046859229
+            },
+            {
+              "time_s": 0.059000000000000004,
+              "value": 2.019151074609154
+            },
+            {
+              "time_s": 0.06,
+              "value": 1.827003444973881
+            },
+            {
+              "time_s": 0.061,
+              "value": 1.6531410798929698
+            },
+            {
+              "time_s": 0.062,
+              "value": 1.4958239063795327
+            },
+            {
+              "time_s": 0.063,
+              "value": 1.353477441284919
+            },
+            {
+              "time_s": 0.064,
+              "value": 1.224677033342163
+            },
+            {
+              "time_s": 0.065,
+              "value": 1.1081336047772614
+            },
+            {
+              "time_s": 0.066,
+              "value": 1.0026807497855377
+            },
+            {
+              "time_s": 0.067,
+              "value": 0.9072630607503058
+            },
+            {
+              "time_s": 0.068,
+              "value": 0.8209255653687085
+            },
+            {
+              "time_s": 0.069,
+              "value": 0.7428041689679326
+            },
+            {
+              "time_s": 0.07,
+              "value": 0.6721170063552907
+            },
+            {
+              "time_s": 0.07100000000000001,
+              "value": 0.6081566166485798
+            },
+            {
+              "time_s": 0.07200000000000001,
+              "value": 0.5502828627697858
+            },
+            {
+              "time_s": 0.073,
+              "value": 0.49791652473804987
+            },
+            {
+              "time_s": 0.074,
+              "value": 0.450533502641415
+            },
+            {
+              "time_s": 0.075,
+              "value": 0.40765957126875507
+            },
+            {
+              "time_s": 0.076,
+              "value": 0.36886563390446653
+            },
+            {
+              "time_s": 0.077,
+              "value": 0.33376342778431495
+            },
+            {
+              "time_s": 0.078,
+              "value": 0.30200163823119097
+            },
+            {
+              "time_s": 0.079,
+              "value": 0.2732623825797407
+            },
+            {
+              "time_s": 0.08,
+              "value": 0.24725802869980715
+            },
+            {
+              "time_s": 0.081,
+              "value": 0.22372831627739467
+            },
+            {
+              "time_s": 0.082,
+              "value": 0.20243775204197031
+            },
+            {
+              "time_s": 0.083,
+              "value": 0.18317325287066022
+            },
+            {
+              "time_s": 0.084,
+              "value": 0.1657420131807361
+            },
+            {
+              "time_s": 0.085,
+              "value": 0.1499695752665392
+            },
+            {
+              "time_s": 0.08600000000000001,
+              "value": 0.13569808326812483
+            },
+            {
+              "time_s": 0.08700000000000001,
+              "value": 0.1227847032967587
+            },
+            {
+              "time_s": 0.088,
+              "value": 0.11110019390535066
+            },
+            {
+              "time_s": 0.089,
+              "value": 0.10052761259661193
+            },
+            {
+              "time_s": 0.09,
+              "value": 0.09096114542323754
+            },
+            {
+              "time_s": 0.091,
+              "value": 0.08230504796635568
+            },
+            {
+              "time_s": 0.092,
+              "value": 0.07447268709320308
+            },
+            {
+              "time_s": 0.093,
+              "value": 0.0673856739036138
+            },
+            {
+              "time_s": 0.094,
+              "value": 0.06097307918755905
+            },
+            {
+              "time_s": 0.095,
+              "value": 0.05517072354177303
+            },
+            {
+              "time_s": 0.096,
+              "value": 0.04992053504071363
+            },
+            {
+              "time_s": 0.097,
+              "value": 0.045169968033212965
+            },
+            {
+              "time_s": 0.098,
+              "value": 0.04087147724793925
+            },
+            {
+              "time_s": 0.099,
+              "value": 0.036982041944340814
+            },
+            {
+              "time_s": 0.1,
+              "value": 0.0334627353466149
+            },
+            {
+              "time_s": 0.1,
+              "value": 0.0334627353466149
+            },
+            {
+              "time_s": 0.1,
+              "value": 0.0334627353466149
+            },
+            {
+              "time_s": 0.101,
+              "value": 0.5060912448716542
+            },
+            {
+              "time_s": 0.10200000000000001,
+              "value": 0.9337432051204747
+            },
+            {
+              "time_s": 0.10300000000000001,
+              "value": 1.3206987006500341
+            },
+            {
+              "time_s": 0.10400000000000001,
+              "value": 1.670830512119826
+            },
+            {
+              "time_s": 0.105,
+              "value": 1.9876428763824014
+            },
+            {
+              "time_s": 0.106,
+              "value": 2.2743065580636226
+            },
+            {
+              "time_s": 0.107,
+              "value": 2.5336905836407406
+            },
+            {
+              "time_s": 0.108,
+              "value": 2.7683909556237136
+            },
+            {
+              "time_s": 0.109,
+              "value": 2.980756634220866
+            },
+            {
+              "time_s": 0.11,
+              "value": 3.1729130465221678
+            },
+            {
+              "time_s": 0.111,
+              "value": 3.346783358487931
+            },
+            {
+              "time_s": 0.112,
+              "value": 3.504107722640139
+            },
+            {
+              "time_s": 0.113,
+              "value": 3.646460694093772
+            },
+            {
+              "time_s": 0.114,
+              "value": 3.775266989233624
+            },
+            {
+              "time_s": 0.115,
+              "value": 3.8918157447547457
+            },
+            {
+              "time_s": 0.116,
+              "value": 3.9972734197757815
+            },
+            {
+              "time_s": 0.117,
+              "value": 4.092695470153891
+            },
+            {
+              "time_s": 0.11800000000000001,
+              "value": 4.179036911841717
+            },
+            {
+              "time_s": 0.11900000000000001,
+              "value": 4.257161879008031
+            },
+            {
+              "time_s": 0.12,
+              "value": 4.327852272582942
+            },
+            {
+              "time_s": 0.121,
+              "value": 4.391815585785212
+            },
+            {
+              "time_s": 0.122,
+              "value": 4.449691984952178
+            },
+            {
+              "time_s": 0.123,
+              "value": 4.502060716539635
+            },
+            {
+              "time_s": 0.124,
+              "value": 4.549445904415047
+            },
+            {
+              "time_s": 0.125,
+              "value": 4.592321795465384
+            },
+            {
+              "time_s": 0.126,
+              "value": 4.631117506019363
+            },
+            {
+              "time_s": 0.127,
+              "value": 4.666221316587895
+            },
+            {
+              "time_s": 0.128,
+              "value": 4.697984557905949
+            },
+            {
+              "time_s": 0.129,
+              "value": 4.72672512716863
+            },
+            {
+              "time_s": 0.13,
+              "value": 4.752730669653158
+            },
+            {
+              "time_s": 0.131,
+              "value": 4.7762614575694835
+            },
+            {
+              "time_s": 0.132,
+              "value": 4.797552994952042
+            },
+            {
+              "time_s": 0.133,
+              "value": 4.816818374663293
+            },
+            {
+              "time_s": 0.134,
+              "value": 4.8342504110987035
+            },
+            {
+              "time_s": 0.135,
+              "value": 4.850023569938029
+            },
+            {
+              "time_s": 0.136,
+              "value": 4.8642957142564756
+            },
+            {
+              "time_s": 0.137,
+              "value": 4.877209684471415
+            },
+            {
+              "time_s": 0.138,
+              "value": 4.888894727937295
+            },
+            {
+              "time_s": 0.139,
+              "value": 4.8994677924965995
+            },
+            {
+              "time_s": 0.14,
+              "value": 4.909034696933168
+            },
+            {
+              "time_s": 0.14100000000000001,
+              "value": 4.91769119004215
+            },
+            {
+              "time_s": 0.14200000000000002,
+              "value": 4.9255239089161265
+            },
+            {
+              "time_s": 0.14300000000000002,
+              "value": 4.932611246038257
+            },
+            {
+              "time_s": 0.14400000000000002,
+              "value": 4.939024133860596
+            },
+            {
+              "time_s": 0.145,
+              "value": 4.944826754719916
+            },
+            {
+              "time_s": 0.146,
+              "value": 4.950077183196104
+            },
+            {
+              "time_s": 0.147,
+              "value": 4.95482796734208
+            },
+            {
+              "time_s": 0.148,
+              "value": 4.959126654602372
+            },
+            {
+              "time_s": 0.149,
+              "value": 4.963016267683918
+            },
+            {
+              "time_s": 0.15,
+              "value": 4.966535735141783
+            },
+            {
+              "time_s": 0.15,
+              "value": 4.966535735141783
+            },
+            {
+              "time_s": 0.15,
+              "value": 4.966535735141783
+            },
+            {
+              "time_s": 0.151,
+              "value": 4.493907371169017
+            },
+            {
+              "time_s": 0.152,
+              "value": 4.06625554262134
+            },
+            {
+              "time_s": 0.153,
+              "value": 3.6793001662599027
+            },
+            {
+              "time_s": 0.154,
+              "value": 3.329168462617887
+            },
+            {
+              "time_s": 0.155,
+              "value": 3.0123561959219134
+            },
+            {
+              "time_s": 0.156,
+              "value": 2.725692602522609
+            },
+            {
+              "time_s": 0.157,
+              "value": 2.4663086568262726
+            },
+            {
+              "time_s": 0.158,
+              "value": 2.2316083571224197
+            },
+            {
+              "time_s": 0.159,
+              "value": 2.0192427439261196
+            },
+            {
+              "time_s": 0.16,
+              "value": 1.8270863908019561
+            },
+            {
+              "time_s": 0.161,
+              "value": 1.653216132381882
+            },
+            {
+              "time_s": 0.162,
+              "value": 1.495891816679817
+            },
+            {
+              "time_s": 0.163,
+              "value": 1.3535388890656863
+            },
+            {
+              "time_s": 0.164,
+              "value": 1.2247326335934565
+            },
+            {
+              "time_s": 0.165,
+              "value": 1.108183913965084
+            },
+            {
+              "time_s": 0.166,
+              "value": 1.0027262714211505
+            },
+            {
+              "time_s": 0.167,
+              "value": 0.9073042504295384
+            },
+            {
+              "time_s": 0.168,
+              "value": 0.8209628353317151
+            },
+            {
+              "time_s": 0.169,
+              "value": 0.7428378922250297
+            },
+            {
+              "time_s": 0.17,
+              "value": 0.6721475204201702
+            },
+            {
+              "time_s": 0.171,
+              "value": 0.6081842269162592
+            },
+            {
+              "time_s": 0.17200000000000001,
+              "value": 0.5503078455731041
+            },
+            {
+              "time_s": 0.17300000000000001,
+              "value": 0.49793913011329904
+            },
+            {
+              "time_s": 0.17400000000000002,
+              "value": 0.4505539568307892
+            },
+            {
+              "time_s": 0.17500000000000002,
+              "value": 0.40767807898465647
+            },
+            {
+              "time_s": 0.176,
+              "value": 0.36888238037833754
+            },
+            {
+              "time_s": 0.177,
+              "value": 0.33377858062049365
+            },
+            {
+              "time_s": 0.178,
+              "value": 0.30201534908435484
+            },
+            {
+              "time_s": 0.179,
+              "value": 0.2732747886727166
+            },
+            {
+              "time_s": 0.18,
+              "value": 0.24726925419694334
+            },
+            {
+              "time_s": 0.181,
+              "value": 0.22373847352723955
+            },
+            {
+              "time_s": 0.182,
+              "value": 0.2024469427016943
+            },
+            {
+              "time_s": 0.183,
+              "value": 0.1831815689234749
+            },
+            {
+              "time_s": 0.184,
+              "value": 0.16574953785649318
+            },
+            {
+              "time_s": 0.185,
+              "value": 0.1499763838747228
+            },
+            {
+              "time_s": 0.186,
+              "value": 0.1357042439515741
+            },
+            {
+              "time_s": 0.187,
+              "value": 0.12279027771366428
+            },
+            {
+              "time_s": 0.188,
+              "value": 0.11110523784635042
+            },
+            {
+              "time_s": 0.189,
+              "value": 0.10053217654316288
+            },
+            {
+              "time_s": 0.19,
+              "value": 0.09096527505285075
+            },
+            {
+              "time_s": 0.191,
+              "value": 0.08230878460975236
+            },
+            {
+              "time_s": 0.192,
+              "value": 0.07447606814796624
+            },
+            {
+              "time_s": 0.193,
+              "value": 0.06738873320847594
+            },
+            {
+              "time_s": 0.194,
+              "value": 0.060975847361071485
+            },
+            {
+              "time_s": 0.195,
+              "value": 0.0551732282887467
+            },
+            {
+              "time_s": 0.196,
+              "value": 0.04992280142949812
+            },
+            {
+              "time_s": 0.197,
+              "value": 0.045172018746588986
+            },
+            {
+              "time_s": 0.198,
+              "value": 0.04087333281013554
+            },
+            {
+              "time_s": 0.199,
+              "value": 0.036983720926447514
+            },
+            {
+              "time_s": 0.2,
+              "value": 0.03346425455244925
+            },
+            {
+              "time_s": 0.2,
+              "value": 0.03346425455244925
+            },
+            {
+              "time_s": 0.2,
+              "value": 0.03346425455244925
+            }
+          ]
+        },
+        {
+          "probe": {
+            "id": "v:V1.positive",
+            "label": "V1.positive / ground",
+            "unit": "V",
+            "positive": "V1.positive",
+            "reference": "ground"
+          },
+          "points": [
+            {
+              "time_s": 0,
+              "value": 5
+            },
+            {
+              "time_s": 0.001,
+              "value": 5
+            },
+            {
+              "time_s": 0.002,
+              "value": 5
+            },
+            {
+              "time_s": 0.003,
+              "value": 5
+            },
+            {
+              "time_s": 0.004,
+              "value": 5
+            },
+            {
+              "time_s": 0.005,
+              "value": 5
+            },
+            {
+              "time_s": 0.006,
+              "value": 5
+            },
+            {
+              "time_s": 0.007,
+              "value": 5
+            },
+            {
+              "time_s": 0.008,
+              "value": 5
+            },
+            {
+              "time_s": 0.009000000000000001,
+              "value": 5
+            },
+            {
+              "time_s": 0.01,
+              "value": 5
+            },
+            {
+              "time_s": 0.011,
+              "value": 5
+            },
+            {
+              "time_s": 0.012,
+              "value": 5
+            },
+            {
+              "time_s": 0.013000000000000001,
+              "value": 5
+            },
+            {
+              "time_s": 0.014,
+              "value": 5
+            },
+            {
+              "time_s": 0.015,
+              "value": 5
+            },
+            {
+              "time_s": 0.016,
+              "value": 5
+            },
+            {
+              "time_s": 0.017,
+              "value": 5
+            },
+            {
+              "time_s": 0.018000000000000002,
+              "value": 5
+            },
+            {
+              "time_s": 0.019,
+              "value": 5
+            },
+            {
+              "time_s": 0.02,
+              "value": 5
+            },
+            {
+              "time_s": 0.021,
+              "value": 5
+            },
+            {
+              "time_s": 0.022,
+              "value": 5
+            },
+            {
+              "time_s": 0.023,
+              "value": 5
+            },
+            {
+              "time_s": 0.024,
+              "value": 5
+            },
+            {
+              "time_s": 0.025,
+              "value": 5
+            },
+            {
+              "time_s": 0.026000000000000002,
+              "value": 5
+            },
+            {
+              "time_s": 0.027,
+              "value": 5
+            },
+            {
+              "time_s": 0.028,
+              "value": 5
+            },
+            {
+              "time_s": 0.029,
+              "value": 5
+            },
+            {
+              "time_s": 0.03,
+              "value": 5
+            },
+            {
+              "time_s": 0.031,
+              "value": 5
+            },
+            {
+              "time_s": 0.032,
+              "value": 5
+            },
+            {
+              "time_s": 0.033,
+              "value": 5
+            },
+            {
+              "time_s": 0.034,
+              "value": 5
+            },
+            {
+              "time_s": 0.035,
+              "value": 5
+            },
+            {
+              "time_s": 0.036000000000000004,
+              "value": 5
+            },
+            {
+              "time_s": 0.037,
+              "value": 5
+            },
+            {
+              "time_s": 0.038,
+              "value": 5
+            },
+            {
+              "time_s": 0.039,
+              "value": 5
+            },
+            {
+              "time_s": 0.04,
+              "value": 5
+            },
+            {
+              "time_s": 0.041,
+              "value": 5
+            },
+            {
+              "time_s": 0.042,
+              "value": 5
+            },
+            {
+              "time_s": 0.043000000000000003,
+              "value": 5
+            },
+            {
+              "time_s": 0.044,
+              "value": 5
+            },
+            {
+              "time_s": 0.045,
+              "value": 5
+            },
+            {
+              "time_s": 0.046,
+              "value": 5
+            },
+            {
+              "time_s": 0.047,
+              "value": 5
+            },
+            {
+              "time_s": 0.048,
+              "value": 5
+            },
+            {
+              "time_s": 0.049,
+              "value": 5
+            },
+            {
+              "time_s": 0.05,
+              "value": 5
+            },
+            {
+              "time_s": 0.05,
+              "value": 0
+            },
+            {
+              "time_s": 0.05,
+              "value": 0
+            },
+            {
+              "time_s": 0.051000000000000004,
+              "value": 0
+            },
+            {
+              "time_s": 0.052000000000000005,
+              "value": 0
+            },
+            {
+              "time_s": 0.053,
+              "value": 0
+            },
+            {
+              "time_s": 0.054,
+              "value": 0
+            },
+            {
+              "time_s": 0.055,
+              "value": 0
+            },
+            {
+              "time_s": 0.056,
+              "value": 0
+            },
+            {
+              "time_s": 0.057,
+              "value": 0
+            },
+            {
+              "time_s": 0.058,
+              "value": 0
+            },
+            {
+              "time_s": 0.059000000000000004,
+              "value": 0
+            },
+            {
+              "time_s": 0.06,
+              "value": 0
+            },
+            {
+              "time_s": 0.061,
+              "value": 0
+            },
+            {
+              "time_s": 0.062,
+              "value": 0
+            },
+            {
+              "time_s": 0.063,
+              "value": 0
+            },
+            {
+              "time_s": 0.064,
+              "value": 0
+            },
+            {
+              "time_s": 0.065,
+              "value": 0
+            },
+            {
+              "time_s": 0.066,
+              "value": 0
+            },
+            {
+              "time_s": 0.067,
+              "value": 0
+            },
+            {
+              "time_s": 0.068,
+              "value": 0
+            },
+            {
+              "time_s": 0.069,
+              "value": 0
+            },
+            {
+              "time_s": 0.07,
+              "value": 0
+            },
+            {
+              "time_s": 0.07100000000000001,
+              "value": 0
+            },
+            {
+              "time_s": 0.07200000000000001,
+              "value": 0
+            },
+            {
+              "time_s": 0.073,
+              "value": 0
+            },
+            {
+              "time_s": 0.074,
+              "value": 0
+            },
+            {
+              "time_s": 0.075,
+              "value": 0
+            },
+            {
+              "time_s": 0.076,
+              "value": 0
+            },
+            {
+              "time_s": 0.077,
+              "value": 0
+            },
+            {
+              "time_s": 0.078,
+              "value": 0
+            },
+            {
+              "time_s": 0.079,
+              "value": 0
+            },
+            {
+              "time_s": 0.08,
+              "value": 0
+            },
+            {
+              "time_s": 0.081,
+              "value": 0
+            },
+            {
+              "time_s": 0.082,
+              "value": 0
+            },
+            {
+              "time_s": 0.083,
+              "value": 0
+            },
+            {
+              "time_s": 0.084,
+              "value": 0
+            },
+            {
+              "time_s": 0.085,
+              "value": 0
+            },
+            {
+              "time_s": 0.08600000000000001,
+              "value": 0
+            },
+            {
+              "time_s": 0.08700000000000001,
+              "value": 0
+            },
+            {
+              "time_s": 0.088,
+              "value": 0
+            },
+            {
+              "time_s": 0.089,
+              "value": 0
+            },
+            {
+              "time_s": 0.09,
+              "value": 0
+            },
+            {
+              "time_s": 0.091,
+              "value": 0
+            },
+            {
+              "time_s": 0.092,
+              "value": 0
+            },
+            {
+              "time_s": 0.093,
+              "value": 0
+            },
+            {
+              "time_s": 0.094,
+              "value": 0
+            },
+            {
+              "time_s": 0.095,
+              "value": 0
+            },
+            {
+              "time_s": 0.096,
+              "value": 0
+            },
+            {
+              "time_s": 0.097,
+              "value": 0
+            },
+            {
+              "time_s": 0.098,
+              "value": 0
+            },
+            {
+              "time_s": 0.099,
+              "value": 0
+            },
+            {
+              "time_s": 0.1,
+              "value": 0
+            },
+            {
+              "time_s": 0.1,
+              "value": 5
+            },
+            {
+              "time_s": 0.1,
+              "value": 5
+            },
+            {
+              "time_s": 0.101,
+              "value": 5
+            },
+            {
+              "time_s": 0.10200000000000001,
+              "value": 5
+            },
+            {
+              "time_s": 0.10300000000000001,
+              "value": 5
+            },
+            {
+              "time_s": 0.10400000000000001,
+              "value": 5
+            },
+            {
+              "time_s": 0.105,
+              "value": 5
+            },
+            {
+              "time_s": 0.106,
+              "value": 5
+            },
+            {
+              "time_s": 0.107,
+              "value": 5
+            },
+            {
+              "time_s": 0.108,
+              "value": 5
+            },
+            {
+              "time_s": 0.109,
+              "value": 5
+            },
+            {
+              "time_s": 0.11,
+              "value": 5
+            },
+            {
+              "time_s": 0.111,
+              "value": 5
+            },
+            {
+              "time_s": 0.112,
+              "value": 5
+            },
+            {
+              "time_s": 0.113,
+              "value": 5
+            },
+            {
+              "time_s": 0.114,
+              "value": 5
+            },
+            {
+              "time_s": 0.115,
+              "value": 5
+            },
+            {
+              "time_s": 0.116,
+              "value": 5
+            },
+            {
+              "time_s": 0.117,
+              "value": 5
+            },
+            {
+              "time_s": 0.11800000000000001,
+              "value": 5
+            },
+            {
+              "time_s": 0.11900000000000001,
+              "value": 5
+            },
+            {
+              "time_s": 0.12,
+              "value": 5
+            },
+            {
+              "time_s": 0.121,
+              "value": 5
+            },
+            {
+              "time_s": 0.122,
+              "value": 5
+            },
+            {
+              "time_s": 0.123,
+              "value": 5
+            },
+            {
+              "time_s": 0.124,
+              "value": 5
+            },
+            {
+              "time_s": 0.125,
+              "value": 5
+            },
+            {
+              "time_s": 0.126,
+              "value": 5
+            },
+            {
+              "time_s": 0.127,
+              "value": 5
+            },
+            {
+              "time_s": 0.128,
+              "value": 5
+            },
+            {
+              "time_s": 0.129,
+              "value": 5
+            },
+            {
+              "time_s": 0.13,
+              "value": 5
+            },
+            {
+              "time_s": 0.131,
+              "value": 5
+            },
+            {
+              "time_s": 0.132,
+              "value": 5
+            },
+            {
+              "time_s": 0.133,
+              "value": 5
+            },
+            {
+              "time_s": 0.134,
+              "value": 5
+            },
+            {
+              "time_s": 0.135,
+              "value": 5
+            },
+            {
+              "time_s": 0.136,
+              "value": 5
+            },
+            {
+              "time_s": 0.137,
+              "value": 5
+            },
+            {
+              "time_s": 0.138,
+              "value": 5
+            },
+            {
+              "time_s": 0.139,
+              "value": 5
+            },
+            {
+              "time_s": 0.14,
+              "value": 5
+            },
+            {
+              "time_s": 0.14100000000000001,
+              "value": 5
+            },
+            {
+              "time_s": 0.14200000000000002,
+              "value": 5
+            },
+            {
+              "time_s": 0.14300000000000002,
+              "value": 5
+            },
+            {
+              "time_s": 0.14400000000000002,
+              "value": 5
+            },
+            {
+              "time_s": 0.145,
+              "value": 5
+            },
+            {
+              "time_s": 0.146,
+              "value": 5
+            },
+            {
+              "time_s": 0.147,
+              "value": 5
+            },
+            {
+              "time_s": 0.148,
+              "value": 5
+            },
+            {
+              "time_s": 0.149,
+              "value": 5
+            },
+            {
+              "time_s": 0.15,
+              "value": 5
+            },
+            {
+              "time_s": 0.15,
+              "value": 0
+            },
+            {
+              "time_s": 0.15,
+              "value": 0
+            },
+            {
+              "time_s": 0.151,
+              "value": 0
+            },
+            {
+              "time_s": 0.152,
+              "value": 0
+            },
+            {
+              "time_s": 0.153,
+              "value": 0
+            },
+            {
+              "time_s": 0.154,
+              "value": 0
+            },
+            {
+              "time_s": 0.155,
+              "value": 0
+            },
+            {
+              "time_s": 0.156,
+              "value": 0
+            },
+            {
+              "time_s": 0.157,
+              "value": 0
+            },
+            {
+              "time_s": 0.158,
+              "value": 0
+            },
+            {
+              "time_s": 0.159,
+              "value": 0
+            },
+            {
+              "time_s": 0.16,
+              "value": 0
+            },
+            {
+              "time_s": 0.161,
+              "value": 0
+            },
+            {
+              "time_s": 0.162,
+              "value": 0
+            },
+            {
+              "time_s": 0.163,
+              "value": 0
+            },
+            {
+              "time_s": 0.164,
+              "value": 0
+            },
+            {
+              "time_s": 0.165,
+              "value": 0
+            },
+            {
+              "time_s": 0.166,
+              "value": 0
+            },
+            {
+              "time_s": 0.167,
+              "value": 0
+            },
+            {
+              "time_s": 0.168,
+              "value": 0
+            },
+            {
+              "time_s": 0.169,
+              "value": 0
+            },
+            {
+              "time_s": 0.17,
+              "value": 0
+            },
+            {
+              "time_s": 0.171,
+              "value": 0
+            },
+            {
+              "time_s": 0.17200000000000001,
+              "value": 0
+            },
+            {
+              "time_s": 0.17300000000000001,
+              "value": 0
+            },
+            {
+              "time_s": 0.17400000000000002,
+              "value": 0
+            },
+            {
+              "time_s": 0.17500000000000002,
+              "value": 0
+            },
+            {
+              "time_s": 0.176,
+              "value": 0
+            },
+            {
+              "time_s": 0.177,
+              "value": 0
+            },
+            {
+              "time_s": 0.178,
+              "value": 0
+            },
+            {
+              "time_s": 0.179,
+              "value": 0
+            },
+            {
+              "time_s": 0.18,
+              "value": 0
+            },
+            {
+              "time_s": 0.181,
+              "value": 0
+            },
+            {
+              "time_s": 0.182,
+              "value": 0
+            },
+            {
+              "time_s": 0.183,
+              "value": 0
+            },
+            {
+              "time_s": 0.184,
+              "value": 0
+            },
+            {
+              "time_s": 0.185,
+              "value": 0
+            },
+            {
+              "time_s": 0.186,
+              "value": 0
+            },
+            {
+              "time_s": 0.187,
+              "value": 0
+            },
+            {
+              "time_s": 0.188,
+              "value": 0
+            },
+            {
+              "time_s": 0.189,
+              "value": 0
+            },
+            {
+              "time_s": 0.19,
+              "value": 0
+            },
+            {
+              "time_s": 0.191,
+              "value": 0
+            },
+            {
+              "time_s": 0.192,
+              "value": 0
+            },
+            {
+              "time_s": 0.193,
+              "value": 0
+            },
+            {
+              "time_s": 0.194,
+              "value": 0
+            },
+            {
+              "time_s": 0.195,
+              "value": 0
+            },
+            {
+              "time_s": 0.196,
+              "value": 0
+            },
+            {
+              "time_s": 0.197,
+              "value": 0
+            },
+            {
+              "time_s": 0.198,
+              "value": 0
+            },
+            {
+              "time_s": 0.199,
+              "value": 0
+            },
+            {
+              "time_s": 0.2,
+              "value": 0
+            },
+            {
+              "time_s": 0.2,
+              "value": 5
+            },
+            {
+              "time_s": 0.2,
+              "value": 5
+            }
+          ]
+        }
+      ],
+      "run_id": 0,
+      "stale": false,
+      "active_cursor": "a",
+      "readings": []
+    },
+    "readings": [
+      {
+        "probe": {
+          "id": "v:C1.1",
+          "label": "C1.1 / ground",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "ground"
+        },
+        "value": 0,
+        "min": 0,
+        "max": 4.966535735141783
+      },
+      {
+        "probe": {
+          "id": "v:V1.positive",
+          "label": "V1.positive / ground",
+          "unit": "V",
+          "positive": "V1.positive",
+          "reference": "ground"
+        },
+        "value": 5,
+        "min": 0,
+        "max": 5
+      }
+    ]
+  },
+  "recovery": {
+    "directory": "/Users/dshills/Development/projects/ELab/build/recovery-disable/native-final-assets/recovery",
+    "enabled": false,
+    "interval_s": 2,
+    "last_snapshot": "rec-4aeab9f4249b58fbd83e83a3-0000000001",
+    "last_saved_at": "2026-10-17T13:29:53.916869Z",
+    "error": "fdopendir /Users/dshills/Development/projects/ELab/build/recovery-disable/native-final-assets/recovery: not a directory",
+    "selected": "rec-4aeab9f4249b58fbd83e83a3-0000000001",
+    "candidates": [
+      {
+        "owner_status": "active",
+        "id": "rec-4aeab9f4249b58fbd83e83a3-0000000001",
+        "document_key": "4aeab9f4249b58fbd83e83a3",
+        "saved_at": "2026-10-17T13:29:53.916869Z",
+        "source_path": "/Users/dshills/Development/projects/ELab/build/recovery-disable/native-final-assets/manual-source.elab",
+        "sha256": "d7c82ec38fe8c68a107b429fa03392633f73b6141d7fc3947e096826c598a732",
+        "current_session": true,
+        "active_session": true,
+        "recording_count": 1,
+        "components": 4
+      }
+    ],
+    "problems": []
+  },
+  "verification_settings": {
+    "duration_s": 0.1,
+    "sample_step_s": 0,
+    "input_mode": "auto",
+    "capacitor_initials": []
+  },
+  "operations": [
+    {
+      "kept_in_project": true,
+      "id": "verify-1",
+      "kind": "verify",
+      "status": "completed",
+      "actor": "agent.socket",
+      "input_revision": 8,
+      "electrical_revision": 2,
+      "document_generation": 2,
+      "requested_duration_s": 0.2,
+      "simulated_time_s": 0.2,
+      "completed_steps": 200,
+      "total_steps": 200,
+      "progress": 1,
+      "source_unchanged": false
+    }
+  ],
+  "selected_operation": "verify-1",
+  "last_operation": "verify-1",
+  "verification": {
+    "id": "verify-1",
+    "engine": "elab.ideal-rc-exact.v1",
+    "input_mode": "auto",
+    "duration_s": 0.2,
+    "sample_count": 209,
+    "readings": [
+      {
+        "probe": {
+          "id": "v:C1.1",
+          "label": "C1.1 / ground",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "ground"
+        },
+        "value": 0.03346425455244925,
+        "min": 0,
+        "max": 4.966535735141783
+      },
+      {
+        "probe": {
+          "id": "v:V1.positive",
+          "label": "V1.positive / ground",
+          "unit": "V",
+          "positive": "V1.positive",
+          "reference": "ground"
+        },
+        "value": 5,
+        "min": 0,
+        "max": 5
+      }
+    ]
+  },
+  "schematic_page": {
+    "paper": "letter",
+    "orientation": "landscape",
+    "margin_mm": 10
+  },
+  "part_search": "",
+  "theme": "light",
+  "appearance": {
+    "path": "",
+    "status": "disabled"
+  },
+  "matching_parts": [
+    {
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "voltage",
+        "unit": "V",
+        "minimum": 0,
+        "maximum": 12,
+        "range_text": "0\u201312 V",
+        "syntax": "Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V"
+      },
+      "aliases": [
+        "battery",
+        "power supply",
+        "voltage supply"
+      ],
+      "limitations": "Ideal DC voltage source; positive minus negative sets its voltage, and either terminal may be above/below ground in a referenced network. No output resistance, current limit, battery discharge, noise, heating, ratings or physical part identity.",
+      "kind": "dc-source",
+      "name": "DC source",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "default_value": "5 V",
+      "unit": "V",
+      "model": "ideal-dc.v1"
+    },
+    {
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "resistance",
+        "unit": "\u03a9",
+        "minimum": 10,
+        "maximum": 100000,
+        "range_text": "10\u2013100000 \u03a9",
+        "syntax": "Bare SI or \u03a9/ohm; k/K/M prefixes, for example 2.2k or 0.1M \u03a9"
+      },
+      "aliases": [
+        "resistance",
+        "current limiter"
+      ],
+      "limitations": "Ideal constant resistance; no tolerance, heating, parasitics, ratings or physical part identity. Current is positive from pin 1 to pin 2.",
+      "kind": "resistor",
+      "name": "Resistor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "default_value": "1k",
+      "unit": "\u03a9",
+      "model": "ideal-resistor.v1"
+    },
+    {
+      "value_type": "none",
+      "aliases": [
+        "LED",
+        "light emitting diode",
+        "indicator"
+      ],
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness.",
+      "kind": "led",
+      "name": "Red LED",
+      "terminals": [
+        "anode",
+        "cathode"
+      ],
+      "model": "elab.generic-red-led.v1"
+    },
+    {
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "capacitance",
+        "unit": "F",
+        "minimum": 1e-12,
+        "maximum": 1,
+        "range_text": "1 pF\u20131 F",
+        "syntax": "Bare SI or F; p/n/u/\u00b5/\u03bc/m prefixes, for example 1 \u00b5F or 100nF"
+      },
+      "aliases": [
+        "cap",
+        "charge storage"
+      ],
+      "limitations": "Ideal capacitor with configurable initial voltage; no ESR, leakage, polarity, heating, ratings or physical part identity. Voltage and current use pin 1 relative to pin 2.",
+      "kind": "capacitor",
+      "name": "Capacitor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "default_value": "1uF",
+      "unit": "F",
+      "model": "ideal-capacitor.v1"
+    },
+    {
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "inductance",
+        "unit": "H",
+        "minimum": 1e-06,
+        "maximum": 100,
+        "range_text": "1 \u00b5H\u2013100 H",
+        "syntax": "Bare SI or H; n/u/\u00b5/\u03bc/m prefixes, for example 10 mH or 100uH"
+      },
+      "aliases": [
+        "coil",
+        "choke",
+        "magnetic energy"
+      ],
+      "limitations": "Ideal constant inductance with configurable signed initial current; voltage pin 1 minus pin 2, current into pin 1/out of pin 2, energy L I\u00b2 / 2. No winding resistance, saturation, mutual coupling, parasitic capacitance, heating, ratings or physical part identity. Add external resistance and a return path for switching current.",
+      "kind": "inductor",
+      "name": "Inductor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "default_value": "10 mH",
+      "unit": "H",
+      "model": "ideal-inductor.v1"
+    },
+    {
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "amplitude",
+        "unit": "V",
+        "minimum": 0,
+        "maximum": 12,
+        "range_text": "0\u201312 V",
+        "syntax": "Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V",
+        "relation": "Amplitude plus the absolute offset must be \u226412 V."
+      },
+      "aliases": [
+        "sine wave",
+        "AC source",
+        "signal generator"
+      ],
+      "limitations": "Ideal grounded voltage sources with per-component periodic sine or linear pulse ramps. No output resistance, current limit, battery discharge, noise or physical generator identity. Finite pulse high/low phase lengths include rise/fall respectively. Output sampling can alias; internal integration resolves waveform features within its work budget.",
+      "kind": "sine-source",
+      "name": "Sine source",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "default_value": "2.5 V",
+      "unit": "V",
+      "model": "elab.ideal-sine-source.v1"
+    },
+    {
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "high_voltage",
+        "unit": "V",
+        "minimum": -12,
+        "maximum": 12,
+        "range_text": "\u221212\u201312 V",
+        "syntax": "Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V",
+        "relation": "High level must be at least the current low level (factory: 0 V)."
+      },
+      "aliases": [
+        "square wave",
+        "pulse generator",
+        "PWM",
+        "clock"
+      ],
+      "limitations": "Ideal grounded voltage sources with per-component periodic sine or linear pulse ramps. No output resistance, current limit, battery discharge, noise or physical generator identity. Finite pulse high/low phase lengths include rise/fall respectively. Output sampling can alias; internal integration resolves waveform features within its work budget.",
+      "kind": "finite-pulse-source",
+      "name": "Finite pulse source",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "default_value": "5 V",
+      "unit": "V",
+      "model": "elab.finite-pulse-source.v1"
+    },
+    {
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "voltage",
+        "unit": "V",
+        "minimum": 0,
+        "maximum": 12,
+        "range_text": "0\u201312 V",
+        "syntax": "Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V"
+      },
+      "aliases": [
+        "ideal square wave",
+        "clock"
+      ],
+      "limitations": "Ideal square source with instantaneous edges and shared experiment phase timing; no output resistance, current limit, noise, ratings or physical part identity.",
+      "kind": "pulse-source",
+      "name": "Pulse source",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "default_value": "5 V",
+      "unit": "V",
+      "model": "ideal-square.v1"
+    },
+    {
+      "value_type": "none",
+      "aliases": [
+        "MOSFET",
+        "PMOS",
+        "P-channel",
+        "FET",
+        "field effect transistor",
+        "high-side switch"
+      ],
+      "limitations": "Generic enhancement PMOS with square-law channel, channel-length modulation and drain-to-source body diode. Body tied to source; zero gate current. No subthreshold conduction, body effect, gate/junction capacitance, charge storage, switching loss, breakdown, heating, ratings or named device identity. External capacitors provide circuit timing. Same illustrative beta magnitude as the generic NMOS, not a physical matched pair.",
+      "kind": "pmos",
+      "name": "P-channel MOSFET",
+      "terminals": [
+        "gate",
+        "drain",
+        "source"
+      ],
+      "model": "elab.generic-pmos.v1"
+    },
+    {
+      "value_type": "none",
+      "aliases": [
+        "MOSFET",
+        "NMOS",
+        "N-channel",
+        "FET",
+        "field effect transistor",
+        "low-side switch"
+      ],
+      "limitations": "Generic enhancement NMOS with square-law channel, channel-length modulation and source-to-drain body diode. Body tied to source; zero gate current. No subthreshold conduction, body effect, gate/junction capacitance, charge storage, switching loss, breakdown, heating, ratings or named device identity. External capacitors provide circuit timing.",
+      "kind": "nmos",
+      "name": "N-channel MOSFET",
+      "terminals": [
+        "gate",
+        "drain",
+        "source"
+      ],
+      "model": "elab.generic-nmos.v1"
+    },
+    {
+      "value_type": "none",
+      "aliases": [
+        "bipolar transistor",
+        "BJT",
+        "transistor"
+      ],
+      "limitations": "Educational Ebers\u2013Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only.",
+      "kind": "npn",
+      "name": "NPN transistor",
+      "terminals": [
+        "base",
+        "collector",
+        "emitter"
+      ],
+      "model": "elab.generic-npn.v1"
+    },
+    {
+      "value_type": "none",
+      "aliases": [
+        "op-amp",
+        "operational amplifier",
+        "buffer",
+        "voltage follower",
+        "amplifier"
+      ],
+      "limitations": "Generic five-pin educational macromodel with differential input resistance, midpoint-centered soft voltage limiting, finite output resistance, bounded active output current, supply-dependent enable and explicit supply currents. A declared 1 Gohm output-to-V- bleed remains with power off or reversed; differential input resistance also remains. No internal bandwidth, slew rate, offset/bias mismatch, common-mode restrictions, protection diodes, noise, thermal behavior, ratings or named physical device. External storage supplies circuit timing; this model cannot qualify physical amplifier speed or stability.",
+      "kind": "opamp",
+      "name": "Powered op-amp",
+      "terminals": [
+        "noninverting",
+        "inverting",
+        "out",
+        "vplus",
+        "vminus"
+      ],
+      "model": "elab.generic-opamp.v1"
+    },
+    {
+      "value_type": "none",
+      "aliases": [
+        "ground",
+        "voltage reference"
+      ],
+      "limitations": "Common zero-volt reference; this symbol establishes the simulation reference, not protective earth or a physical grounding design.",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "model": "ground.v1"
+    },
+    {
+      "value_type": "none",
+      "aliases": [
+        "branch",
+        "join",
+        "connection dot"
+      ],
+      "limitations": "Explicit electrical join; geometry/crossings alone do not connect wires. This helper has no physical device model.",
+      "kind": "junction",
+      "name": "Junction",
+      "terminals": [
+        "node"
+      ],
+      "model": "junction.v1"
+    },
+    {
+      "value_type": "label",
+      "aliases": [
+        "label",
+        "net name",
+        "named connection"
+      ],
+      "limitations": "Exact case-sensitive names join attached nets. A name alone never establishes ground. This helper has no physical device model.",
+      "kind": "net-label",
+      "name": "Net label",
+      "terminals": [
+        "node"
+      ],
+      "model": "net-label.v1"
+    },
+    {
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "resistance",
+        "unit": "\u03a9",
+        "minimum": 10,
+        "maximum": 100000,
+        "range_text": "10\u2013100000 \u03a9",
+        "syntax": "Bare SI or \u03a9/ohm; k/K/M prefixes, for example 2.2k or 0.1M \u03a9"
+      },
+      "aliases": [
+        "pot",
+        "variable resistor",
+        "rheostat",
+        "volume knob"
+      ],
+      "limitations": "Generic linear three-pin resistive track. Total resistance is split into two segments, each with 1 ohm endpoint resistance. Position 0 is toward pin 2; position 1 is toward pin 1. No contact noise, nonlinear taper, ratings, heating or physical part identity.",
+      "kind": "potentiometer",
+      "name": "Potentiometer",
+      "terminals": [
+        "1",
+        "2",
+        "wiper"
+      ],
+      "default_value": "10k \u03a9",
+      "unit": "\u03a9",
+      "model": "elab.linear-potentiometer.v1"
+    },
+    {
+      "value_type": "none",
+      "aliases": [
+        "rectifier",
+        "silicon diode",
+        "junction diode"
+      ],
+      "limitations": "Generic silicon junction with Shockley forward/reverse leakage and finite series resistance; no reverse breakdown, capacitance, charge storage, thermal dynamics, ratings or physical part identity.",
+      "kind": "diode",
+      "name": "Silicon diode",
+      "terminals": [
+        "anode",
+        "cathode"
+      ],
+      "model": "elab.generic-silicon-diode.v1"
+    },
+    {
+      "value_type": "none",
+      "aliases": [
+        "toggle",
+        "on/off",
+        "SPST"
+      ],
+      "limitations": "Generic SPST with finite on/off resistance; no contact bounce, arcing, thermal behavior, ratings or named physical part. Actuation is instantaneous; capacitor voltage remains continuous.",
+      "kind": "switch",
+      "name": "SPST switch",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "model": "elab.spst-resistive.v1"
+    }
+  ],
+  "undo_name": "Change value",
+  "redo_name": "",
+  "scope": {
+    "window": {
+      "mode": "live",
+      "start_s": 0,
+      "end_s": 0
+    },
+    "window_valid": true,
+    "statistics": [],
+    "available": [
+      {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1.negative",
+        "label": "V1.negative / ground",
+        "unit": "V",
+        "positive": "V1.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1",
+        "label": "V1 voltage",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "V1.negative"
+      },
+      {
+        "id": "i:V1",
+        "label": "V1 delivered current",
+        "unit": "A",
+        "positive": "V1.positive",
+        "reference": "out of positive"
+      },
+      {
+        "id": "v:R1.1",
+        "label": "R1.1 / ground",
+        "unit": "V",
+        "positive": "R1.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R1.2",
+        "label": "R1.2 / ground",
+        "unit": "V",
+        "positive": "R1.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R1",
+        "label": "R1 voltage",
+        "unit": "V",
+        "positive": "R1.1",
+        "reference": "R1.2"
+      },
+      {
+        "id": "i:R1",
+        "label": "R1 current",
+        "unit": "A",
+        "positive": "R1.1",
+        "reference": "R1.2"
+      },
+      {
+        "id": "v:C1.1",
+        "label": "C1.1 / ground",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:C1.2",
+        "label": "C1.2 / ground",
+        "unit": "V",
+        "positive": "C1.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:C1",
+        "label": "C1 voltage",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      },
+      {
+        "id": "i:C1",
+        "label": "C1 current",
+        "unit": "A",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      },
+      {
+        "id": "v:GND.reference",
+        "label": "GND.reference / ground",
+        "unit": "V",
+        "positive": "GND.reference",
+        "reference": "ground"
+      }
+    ],
+    "selected": [
+      "v:C1.1",
+      "v:V1.positive"
+    ],
+    "traces": [
+      {
+        "probe": {
+          "id": "v:C1.1",
+          "label": "C1.1 / ground",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "ground"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 0
+          }
+        ]
+      },
+      {
+        "probe": {
+          "id": "v:V1.positive",
+          "label": "V1.positive / ground",
+          "unit": "V",
+          "positive": "V1.positive",
+          "reference": "ground"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 5
+          }
+        ]
+      }
+    ],
+    "run_id": 2,
+    "stale": true,
+    "active_cursor": "a",
+    "readings": []
+  },
+  "scope_visible": true,
+  "transient": {
+    "engine": "elab.ideal-rc-exact.v1",
+    "run_id": 2,
+    "electrical_revision": 2,
+    "source_id": "V1",
+    "resistor_id": "R1",
+    "capacitor_id": "C1",
+    "output_net": "net:C1.1",
+    "time_constant_s": 0.01,
+    "settings": {
+      "step_s": 0.001,
+      "high_s": 0.05,
+      "low_s": 0.05,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 0.02
+    },
+    "input_mode": "auto",
+    "sample": {
+      "time_s": 0,
+      "input_v": 5,
+      "voltage_v": 0,
+      "current_a": 0.0005,
+      "energy_j": 0
+    },
+    "samples": [
+      {
+        "time_s": 0,
+        "input_v": 5,
+        "voltage_v": 0,
+        "current_a": 0.0005,
+        "energy_j": 0
+      }
+    ],
+    "events": [
+      {
+        "time_s": 0,
+        "mode": "restart"
+      }
+    ],
+    "stale": true
+  },
+  "transient_settings": {
+    "step_s": 0.001,
+    "high_s": 0.05,
+    "low_s": 0.05,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.02
+  },
+  "document": {
+    "preferences_dirty": false,
+    "schematic_dirty": true,
+    "recordings_dirty": false,
+    "recording_count": 1,
+    "path": "/Users/dshills/Development/projects/ELab/build/recovery-disable/native-final-assets/manual-source.elab",
+    "dirty": true,
+    "format_version": 4,
+    "generation": 2
+  },
+  "command_revision": 61,
+  "revision": 90,
+  "electrical_revision": 49,
+  "circuit": {
+    "voltage_v": 5,
+    "resistance_ohm": 50000,
+    "connected": true
+  },
+  "components": [
+    {
+      "id": "V1",
+      "kind": "pulse-source",
+      "name": "Pulse source",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "position": {
+        "x": -200,
+        "y": 0
+      },
+      "value": 5,
+      "unit": "V",
+      "model": "ideal-square.v1",
+      "rotation": 0
+    },
+    {
+      "id": "R1",
+      "kind": "resistor",
+      "name": "Resistor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "position": {
+        "x": 0,
+        "y": -110
+      },
+      "value": 50000,
+      "unit": "\u03a9",
+      "model": "ideal-resistor.v1",
+      "rotation": 0
+    },
+    {
+      "id": "C1",
+      "kind": "capacitor",
+      "name": "Capacitor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "position": {
+        "x": 200,
+        "y": 0
+      },
+      "value": 1e-06,
+      "unit": "F",
+      "model": "ideal-capacitor.v1",
+      "rotation": 0
+    },
+    {
+      "id": "GND",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "position": {
+        "x": 0,
+        "y": 110
+      },
+      "value": 0,
+      "model": "ground.v1",
+      "rotation": 0
+    }
+  ],
+  "wires": [
+    {
+      "id": "W1",
+      "from": "V1.positive",
+      "to": "R1.1",
+      "connected": true
+    },
+    {
+      "id": "W2",
+      "from": "R1.2",
+      "to": "C1.1",
+      "connected": true
+    },
+    {
+      "id": "W3",
+      "from": "C1.2",
+      "to": "GND.reference",
+      "connected": true
+    },
+    {
+      "id": "W4",
+      "from": "GND.reference",
+      "to": "V1.negative",
+      "connected": true
+    }
+  ],
+  "nets": [
+    {
+      "id": "net:C1.1",
+      "terminals": [
+        "C1.1",
+        "R1.2"
+      ]
+    },
+    {
+      "id": "net:C1.2",
+      "terminals": [
+        "C1.2",
+        "GND.reference",
+        "V1.negative"
+      ]
+    },
+    {
+      "id": "net:R1.1",
+      "terminals": [
+        "R1.1",
+        "V1.positive"
+      ]
+    }
+  ],
+  "drawing": {
+    "tool": "select",
+    "kind": "dc-source",
+    "position": {
+      "x": -200,
+      "y": 0
+    },
+    "wire_start": "",
+    "from": "",
+    "to": "",
+    "value": ""
+  },
+  "model": {
+    "id": "elab.generic-red-led.v1",
+    "is_a": 1e-20,
+    "n": 2,
+    "rs_ohm": 1,
+    "temperature_c": 27,
+    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+  },
+  "selected": "",
+  "view": {
+    "center": {
+      "x": -104.5,
+      "y": -12.5
+    },
+    "zoom": 0.4568421052631579
+  },
+  "status": "paused",
+  "analysis": "RC transient",
+  "paused": true,
+  "run_id": 49,
+  "diagnostics": [],
+  "can_undo": true,
+  "can_redo": false,
+  "last_actor": "user",
+  "closed": false
+}

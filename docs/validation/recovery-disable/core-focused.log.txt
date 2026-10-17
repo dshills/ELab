@@ -1,0 +1,58 @@
+=== RUN   TestRecoveryConfigurationStagingPreservesLiveEditingAndPreviousStore
+    recovery_configuration_test.go:57: recovery.configure.start during blocked kernel: 1.402083ms
+    recovery_configuration_test.go:66: view.pan during blocked kernel: 1.179458ms
+    recovery_configuration_test.go:68: component.set during blocked kernel: 1.288625ms
+--- PASS: TestRecoveryConfigurationStagingPreservesLiveEditingAndPreviousStore (0.06s)
+=== RUN   TestRecoveryConfigurationCancelAndCloseCleanStagedLease
+=== RUN   TestRecoveryConfigurationCancelAndCloseCleanStagedLease/cancel
+    recovery_configuration_test.go:97: recovery.configure.start during blocked kernel: 1.314208ms
+    recovery_configuration_test.go:105: project.work.cancel during blocked kernel: 1.251875ms
+=== RUN   TestRecoveryConfigurationCancelAndCloseCleanStagedLease/close
+    recovery_configuration_test.go:97: recovery.configure.start during blocked kernel: 1.472625ms
+    recovery_configuration_test.go:103: app.close.start during blocked kernel: 1.269125ms
+--- PASS: TestRecoveryConfigurationCancelAndCloseCleanStagedLease (0.06s)
+    --- PASS: TestRecoveryConfigurationCancelAndCloseCleanStagedLease/cancel (0.03s)
+    --- PASS: TestRecoveryConfigurationCancelAndCloseCleanStagedLease/close (0.03s)
+=== RUN   TestRecoveryConfigurationLeaseCleanupDoesNotHoldEditorLock
+    recovery_configuration_test.go:132: recovery.configure.start during blocked kernel: 1.333375ms
+    recovery_configuration_test.go:147: view.pan during blocked kernel: 1.181542ms
+--- PASS: TestRecoveryConfigurationLeaseCleanupDoesNotHoldEditorLock (0.04s)
+=== RUN   TestRecoveryConfigurationFailureKeepsPreviousSettingsAndCleansLease
+=== RUN   TestRecoveryConfigurationFailureKeepsPreviousSettingsAndCleansLease/scan
+=== RUN   TestRecoveryConfigurationFailureKeepsPreviousSettingsAndCleansLease/timeout
+=== RUN   TestRecoveryConfigurationFailureKeepsPreviousSettingsAndCleansLease/nil
+--- PASS: TestRecoveryConfigurationFailureKeepsPreviousSettingsAndCleansLease (0.08s)
+    --- PASS: TestRecoveryConfigurationFailureKeepsPreviousSettingsAndCleansLease/scan (0.04s)
+    --- PASS: TestRecoveryConfigurationFailureKeepsPreviousSettingsAndCleansLease/timeout (0.02s)
+    --- PASS: TestRecoveryConfigurationFailureKeepsPreviousSettingsAndCleansLease/nil (0.01s)
+=== RUN   TestRecoveryConfigurationSameStorePreservesNewerCatalogAndSelection
+    recovery_configuration_test.go:215: recovery.configure.start during blocked kernel: 1.321375ms
+    recovery_configuration_test.go:217: recovery.select during blocked kernel: 1.101375ms
+--- PASS: TestRecoveryConfigurationSameStorePreservesNewerCatalogAndSelection (0.04s)
+=== RUN   TestRecoveryConfigurationWaitingDisconnectRetryAndDocumentReplacement
+    recovery_configuration_test.go:250: project.clear during blocked kernel: 1.219458ms
+--- PASS: TestRecoveryConfigurationWaitingDisconnectRetryAndDocumentReplacement (0.02s)
+=== RUN   TestRecoveryConfigurationAliasesKeepUnitGrammarAndNumericOutputs
+--- PASS: TestRecoveryConfigurationAliasesKeepUnitGrammarAndNumericOutputs (0.06s)
+=== RUN   TestRecoveryConfigurationCloseJoinsStagedCleanup
+    recovery_configuration_test.go:300: recovery.configure.start during blocked kernel: 740.791µs
+--- PASS: TestRecoveryConfigurationCloseJoinsStagedCleanup (0.01s)
+=== RUN   TestRecoveryConfigurationCleanupWarningDoesNotUndoInstalledSettings
+--- PASS: TestRecoveryConfigurationCleanupWarningDoesNotUndoInstalledSettings (0.04s)
+=== RUN   TestDisableExistingRecoveryDoesNotRequireAvailableStorage
+=== RUN   TestDisableExistingRecoveryDoesNotRequireAvailableStorage/recovery.configure
+=== RUN   TestDisableExistingRecoveryDoesNotRequireAvailableStorage/recovery.configure.start
+--- PASS: TestDisableExistingRecoveryDoesNotRequireAvailableStorage (0.09s)
+    --- PASS: TestDisableExistingRecoveryDoesNotRequireAvailableStorage/recovery.configure (0.05s)
+    --- PASS: TestDisableExistingRecoveryDoesNotRequireAvailableStorage/recovery.configure.start (0.05s)
+=== RUN   TestDisableRecoveryDoesNotWaitForCapturedWriteOrPublishItsLateStatus
+    recovery_disable_test.go:104: recovery.configure.start during blocked kernel: 1.324583ms
+--- PASS: TestDisableRecoveryDoesNotWaitForCapturedWriteOrPublishItsLateStatus (0.03s)
+=== RUN   TestDisableRecoveryKeepsAdmissionValidationAndCanBeCanceled
+    recovery_disable_test.go:141: recovery.configure.start during blocked kernel: 1.244333ms
+    recovery_disable_test.go:146: project.work.cancel during blocked kernel: 1.077ms
+--- PASS: TestDisableRecoveryKeepsAdmissionValidationAndCanBeCanceled (0.03s)
+=== RUN   TestDisableRecoverySemanticsAreDiscoverableForBothAliases
+--- PASS: TestDisableRecoverySemanticsAreDiscoverableForBothAliases (0.03s)
+PASS
+ok  	github.com/dshills/elab/workbench	1.914s

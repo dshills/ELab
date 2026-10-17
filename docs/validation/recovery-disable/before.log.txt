@@ -1,0 +1,8 @@
+--- FAIL: TestDisableExistingRecoveryDoesNotRequireAvailableStorage (5.08s)
+    --- FAIL: TestDisableExistingRecoveryDoesNotRequireAvailableStorage/recovery.configure (0.04s)
+        recovery_disable_test.go:54: recovery.configure: &{Code:file-error Message:fdopendir /var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/TestDisableExistingRecoveryDoesNotRequireAvailableStoragerecove2708583277/001/recovery: not a directory}
+    --- FAIL: TestDisableExistingRecoveryDoesNotRequireAvailableStorage/recovery.configure.start (5.04s)
+        recovery_disable_test.go:55: open did not reach completed: &{RecoveryDismissed:<nil> RecoveryConfigured:0x7e6a0c06ea48 CatalogApplied:<nil> RecoveryID: RecoverySavedAt: ResultOperationID: SourceSHA256: ViewerSelected:<nil> Cancelable:false Associated:<nil> CleanupWarning: ArtifactSHA256: ID:project-4 Command:recovery.configure Status:failed Phase:scanning-recovery Actor:test Path:/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/TestDisableExistingRecoveryDoesNotRequireAvailableStoragerecove4078376352/001/recovery InputRevision:22 CommandRevision:6 DocumentGeneration:1 Bytes:0 ResultGeneration:0 ResultRun:0 Error:0x7e6a0c153aa0}
+FAIL
+FAIL	github.com/dshills/elab/workbench	5.355s
+FAIL

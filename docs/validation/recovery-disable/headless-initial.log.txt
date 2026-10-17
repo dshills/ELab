@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/scripts/recovery-failure-demo.py", line 165, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/Users/dshills/Development/projects/ELab/scripts/recovery-failure-demo.py", line 96, in main
+    assert disabled['project_work']['recovery_configuration_applied'] and disabled['project_work']['catalog_applied'] is False
+                                                                          ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+KeyError: 'catalog_applied'
