@@ -1,0 +1,64 @@
+from pathlib import Path
+import binascii,hashlib,json,math,struct,zlib
+root=Path.cwd();out=root/'build/preview-contracts'
+reports=[json.loads((out/(t+'-final.json')).read_text()) for t in ['headless','native']]
+images=[];total_chunks=0;checks=0
+
+def png(raw):
+ assert raw[:8]==b'\x89PNG\r\n\x1a\n';offset=8;compressed=[];ended=False;header=False
+ while offset<len(raw):
+  n=int.from_bytes(raw[offset:offset+4],'big');kind=raw[offset+4:offset+8];data=raw[offset+8:offset+8+n]
+  crc=int.from_bytes(raw[offset+8+n:offset+12+n],'big');assert len(data)==n and crc==(binascii.crc32(kind+data)&0xffffffff)
+  if kind==b'IHDR':
+   assert offset==8 and not header and struct.unpack('>IIBBBBB',data)==(1650,1275,8,6,0,0,0);header=True
+  else:assert header
+  if kind==b'IDAT':compressed.append(data)
+  offset+=12+n
+  if kind==b'IEND':assert n==0 and offset==len(raw);ended=True
+ assert header and ended and compressed
+ decoded=zlib.decompress(b''.join(compressed));assert len(decoded)==1275*(1650*4+1)
+ assert all(decoded[y*(1650*4+1)]<=4 for y in range(1275))
+ return hashlib.sha256(raw).hexdigest()
+
+for transport,report in zip(['headless','native'],reports):
+ assert report['passed'] and len(report['contracts'])==4 and len(report['refusals'])==14 and len(report['previews'])==4
+ assert all(s['x-command-contract']['scope']=='captured-print-preview' for s in report['contracts'].values())
+ first,second,failed,third=report['previews'];assert all(p['status']=='completed' and p['visible'] and p['source_current'] for p in [first,second,third])
+ assert len({p['id'] for p in report['previews']})==4 and failed['status']=='failed' and failed['error']['code']=='preview-failed' and failed['page_count']==1 and failed['bytes']==0
+ closed=report['closed'];assert closed['id']==third['id'] and closed['status']=='completed' and not closed['visible'] and closed['bytes']==0 and not closed.get('sha256')
+ assert (closed['width_px'],closed['height_px'])==(1650,1275)
+ assets=out/(transport+'-final-assets');source=assets/'source.elab';saved=json.loads(source.read_text())
+ assert hashlib.sha256(source.read_bytes()).hexdigest()==report['source_sha256']
+ original=report['original_live'];edited=report['edited_live'];assert saved['graph']['components']==original['components'] and saved['graph']['wires']==original['wires']
+ assert not original['document']['dirty'] and edited['document']['schematic_dirty'] and edited['paused'] and edited['transient']['stale']
+ assert original['transient']['sample']==edited['transient']['sample'] and original['transient']['sample']['time_s']==.003
+ voltage=5*(-math.expm1(-.003/.01));assert abs(original['transient']['sample']['voltage_v']-voltage)<1e-10 and report['rc_reference_v']==voltage;checks+=1
+ for before,after in zip(original['components'],edited['components']):
+  if before['id']=='R1':assert before['value']==10000 and after['value']==20000 and {k:v for k,v in before.items() if k!='value'}=={k:v for k,v in after.items() if k!='value'}
+  else:assert before==after
+ hashes=[]
+ for chunk,p in zip(report['chunks'],[first,second,third]):
+  raw=(assets/chunk['name']).read_bytes();h=png(raw);assert len(raw)==chunk['bytes']==p['bytes'] and h==chunk['sha256']==p['sha256']
+  assert chunk['chunks']==math.ceil(len(raw)/997) and chunk['chunks']>1
+  total_chunks+=chunk['chunks'];hashes.append(h)
+ assert hashes[0]==hashes[1]!=hashes[2]
+ assert (assets/'shown-stale.png').read_bytes()==(assets/'captured-default.png').read_bytes()
+ images.append(hashes)
+for key in ['contracts','refusals','chunks']:assert reports[0][key]==reports[1][key],key
+normalized=[]
+for transport,report in zip(['headless','native'],reports):
+ expected_actor={'headless':'agent.stdio','native':'agent.socket'}[transport]
+ records=report['previews']+[report['closed']]
+ assert all(record['actor']==expected_actor for record in records)
+ normalized.append([{key:value for key,value in record.items() if key!='actor'} for record in records])
+assert normalized[0]==normalized[1]
+for phase in ['original_live','edited_live']:
+ for key in ['components','wires','transient','mixed','npn','scope','paused','run_id','electrical_revision']:assert reports[0][phase][key]==reports[1][phase][key],(phase,key)
+assert images[0]==images[1]
+result={'passed':True,'contracts_per_transport':4,'refusals_per_transport':14,'complete_preview_outcomes_per_transport':4,
+        'completed_images_per_transport':3,'selected_pngs_equal_across_transports':True,'expected_transport_actors':{'headless':'agent.stdio','native':'agent.socket'},'other_preview_metadata_exactly_equal':True,'all_png_chunks_crc_and_scanlines_validated':True,
+        'queried_997_byte_chunks_total':total_chunks,'captured_default_and_explicit_pixels_identical':True,'edited_pixels_differ':True,
+        'exact_stale_png_export_and_manual_source_preserved':True,'rc_reference_checks':checks,
+        'active_cancel_worker_slot_behavior_covered_by_controlled_race_tests':True,
+        'scope':'Encoded PNG/container and lifecycle validation, not new visible UI/readability, physical-input/AX or printer qualification'}
+(out/'preview-review.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

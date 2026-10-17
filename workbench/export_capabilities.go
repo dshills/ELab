@@ -2,7 +2,7 @@ package workbench
 
 import "encoding/json"
 
-func addExportPageBounds(schema map[string]any) {
+func addSchematicPageBounds(schema map[string]any) {
 	for field, values := range map[string][]any{"paper": {"", "letter", "a4", nil}, "orientation": {"", "portrait", "landscape", nil}} {
 		p := inputProperty(schema, field)
 		p["type"], p["enum"] = []string{"string", "null"}, values
@@ -29,7 +29,7 @@ func addExportCapabilityDetails(id string, schema map[string]any) bool {
 	}
 	c := commandContractDetail{Version: 1, Scope: "captured-file-export", Preconditions: []string{}, Effects: []string{}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Malformed/unknown/duplicate fields, missing/null required fields, invalid path/kind/format/page parameters or incompatible options"}}, Completion: &commandCompletionDetail{Mode: "immediate session update"}}
 	if id == "export.page.set" {
-		addExportPageBounds(schema)
+		addSchematicPageBounds(schema)
 		c.Preconditions = []string{"Object parameters; every field is optional. Page bounds and tiling/overlap relationships must hold; a complete circuit is not required"}
 		c.Effects = []string{"Replace session PDF/PNG defaults, not a patch: omitted/null paper/orientation use letter/landscape, margin 10 mm, fit scale, grayscale/no measurement overlays and no tiling", "snapshot.schematic_page exposes normalized settings. Defaults are not stored in circuit/recovery documents and do not dirty or alter graph, physics, history, selection or existing preview/export captures", "An export's omitted/null page uses these defaults; a supplied page object replaces the defaults for that job. Validation here does not render or guarantee the chosen scale/layout will fit"}
 		schema["examples"] = []any{SchematicPage{}}
@@ -70,7 +70,7 @@ func addExportCapabilityDetails(id string, schema map[string]any) bool {
 		var page map[string]any
 		_ = json.Unmarshal(SchemaRegistry()["urn:elab:schematic-page:1"], &page)
 		delete(page, "$id")
-		addExportPageBounds(page)
+		addSchematicPageBounds(page)
 		inputProperty(schema, "page")["anyOf"] = []any{page, map[string]any{"type": "null"}}
 		inputProperty(schema, "page")["description"] = "Omitted/null uses snapshot.schematic_page; object is a complete per-job override with omitted fields reset to built-in defaults."
 		c.Errors = append(c.Errors, commandFailureDetail{"unsupported", "admission", "PDF/PNG renderer unavailable on this platform/build"})

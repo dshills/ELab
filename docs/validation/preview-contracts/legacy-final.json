@@ -1,0 +1,88 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "captured": {
+    "page_index": 0,
+    "page_count": 1,
+    "rows": 1,
+    "columns": 1,
+    "id": "preview-1",
+    "status": "completed",
+    "visible": true,
+    "source_current": true,
+    "page": {
+      "paper": "a4",
+      "orientation": "portrait",
+      "margin_mm": 12,
+      "color": true
+    },
+    "run_id": 2,
+    "electrical_revision": 2,
+    "document_generation": 2,
+    "actor": "agent.stdio",
+    "width_px": 1241,
+    "height_px": 1754,
+    "bytes": 85410,
+    "sha256": "8948fe1549ce90d1154365c4adf8ce298144be3ec450e57e80d7e53c73c71066"
+  },
+  "refreshed": {
+    "page_index": 0,
+    "page_count": 1,
+    "rows": 1,
+    "columns": 1,
+    "id": "preview-2",
+    "status": "completed",
+    "visible": true,
+    "source_current": true,
+    "page": {
+      "paper": "a4",
+      "orientation": "portrait",
+      "margin_mm": 12,
+      "color": true
+    },
+    "run_id": 3,
+    "electrical_revision": 3,
+    "document_generation": 2,
+    "actor": "agent.stdio",
+    "width_px": 1241,
+    "height_px": 1754,
+    "bytes": 88366,
+    "sha256": "ffdf746d459eaa80b8ced051e98c8c7e31c375c18dec08e02dd7010f872ebd2e"
+  },
+  "closed": {
+    "page_index": 0,
+    "page_count": 1,
+    "rows": 1,
+    "columns": 1,
+    "id": "preview-2",
+    "status": "completed",
+    "visible": false,
+    "source_current": true,
+    "page": {
+      "paper": "a4",
+      "orientation": "portrait",
+      "margin_mm": 12,
+      "color": true
+    },
+    "run_id": 3,
+    "electrical_revision": 3,
+    "document_generation": 2,
+    "actor": "agent.stdio",
+    "width_px": 1241,
+    "height_px": 1754,
+    "bytes": 0
+  },
+  "checks": [
+    "capture preserves source/physics/history",
+    "chunk checksum and ownership",
+    "preview equals PNG export bytes",
+    "later edits retain captured pixels and mark stale",
+    "refresh captures latest source",
+    "old preview ID cannot close new capture",
+    "close releases image"
+  ],
+  "limits": [
+    "macOS CoreGraphics page backend",
+    "preview only; no printer job or physical print proof"
+  ]
+}

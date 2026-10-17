@@ -1,0 +1,39 @@
+package main
+
+import (
+	"crypto/sha256"
+	"encoding/json"
+	"fmt"
+	"image"
+	"image/draw"
+	"image/png"
+	"os"
+)
+
+func main() {
+	out := make(map[string]string)
+	for _, path := range os.Args[1:] {
+		f, err := os.Open(path)
+		if err != nil {
+			panic(err)
+		}
+		src, err := png.Decode(f)
+		closeErr := f.Close()
+		if err != nil {
+			panic(err)
+		}
+		if closeErr != nil {
+			panic(closeErr)
+		}
+		bounds := src.Bounds()
+		if bounds.Dx() != 1650 || bounds.Dy() != 1275 {
+			panic("unexpected preview dimensions")
+		}
+		pixels := image.NewNRGBA(image.Rect(0, 0, 1650, 1275))
+		draw.Draw(pixels, pixels.Bounds(), src, bounds.Min, draw.Src)
+		out[path] = fmt.Sprintf("%x", sha256.Sum256(pixels.Pix))
+	}
+	if err := json.NewEncoder(os.Stdout).Encode(out); err != nil {
+		panic(err)
+	}
+}

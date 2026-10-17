@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "contracts_per_transport": 4,
+  "refusals_per_transport": 14,
+  "complete_preview_outcomes_per_transport": 4,
+  "completed_images_per_transport": 3,
+  "selected_pngs_equal_across_transports": true,
+  "expected_transport_actors": {
+    "headless": "agent.stdio",
+    "native": "agent.socket"
+  },
+  "other_preview_metadata_exactly_equal": true,
+  "all_png_chunks_crc_and_scanlines_validated": true,
+  "queried_997_byte_chunks_total": 586,
+  "captured_default_and_explicit_pixels_identical": true,
+  "edited_pixels_differ": true,
+  "decoded_rgba_sha256": [
+    "5e3a4377d02c6a30cb5125dd347dce17a54b9b88c8d95728cde393002d08f5bf",
+    "5e3a4377d02c6a30cb5125dd347dce17a54b9b88c8d95728cde393002d08f5bf",
+    "fb48493ca18478d1f5acb49865d9a5628ebdc25ffd25eed97b29b2e049fa54d4"
+  ],
+  "decoded_pixel_comparison_excludes_png_metadata_and_compression": true,
+  "exact_stale_png_export_and_manual_source_preserved": true,
+  "rc_reference_checks": 2,
+  "active_cancel_worker_slot_behavior_covered_by_controlled_race_tests": true,
+  "scope": "Encoded PNG/container and lifecycle validation, not new visible UI/readability, physical-input/AX or printer qualification"
+}

@@ -1,0 +1,302 @@
+{
+  "passed": true,
+  "recorded_utc": "2026-10-17T15:00:52.679085+00:00",
+  "scope": "Four captured preview lifecycle/image state contracts; owned EOF/default chunks, actual worker-return cancellation boundaries and native/headless stale/default/explicit/failed-refresh PNG/source preservation",
+  "reference_configuration": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "processor": "Apple M4 Pro",
+    "logical_cpus": 14,
+    "memory_bytes": 68719476736,
+    "go_toolchain": "go version go1.27.2 darwin/arm64"
+  },
+  "source_parent_commit": "c4d2654079e771f779c2dcc842f8c31a0a01cfbd",
+  "source_index": "docs/validation/preview-contracts/source-freeze.json",
+  "source_frozen_files": 704,
+  "source_stable": true,
+  "setup_corrections": [
+    "Independent reviewer initially compared transport-specific preview actor strings directly. Actual metadata identifies agent.stdio and agent.socket. Final review explicitly requires those exact actors and compares all other preview metadata and exact PNG chunks/bytes; no application or public workflow source changed."
+  ],
+  "source_delta": {
+    "scripts/preview-contracts-demo.py": {
+      "before": null,
+      "after": "b4774f0a9a9ae6b4cc74fecba21a19f3ca61fc8b718dc7403783176ddfedc191"
+    },
+    "workbench/capability_details.go": {
+      "before": "4b7c791fdf3cd443e03e68697bb2785ac10961ddeb59d862a65e0a629826c568",
+      "after": "3e2803a9274285d339ba5142c60af41d3c9e22bebfde2fb280edd31546afb96c"
+    },
+    "workbench/export_capabilities.go": {
+      "before": "d6f5fc50476bfe97e7df351e619eb09520725d530c4559a607a4dcb5bc7ae1b3",
+      "after": "301443a8f5e907a7e001ebce4668fd28e768a39402e18964c55778ce4ad24106"
+    },
+    "workbench/preview_capabilities.go": {
+      "before": null,
+      "after": "6085cfd0dfb7bdd35a1fc173a1ca467af06a07ec6fcfe50dfae74d2c77362d4a"
+    },
+    "workbench/preview_contracts_test.go": {
+      "before": null,
+      "after": "81ee246ea3ff05ed799d1035c16b726475826da1db860a5c32ac3a71b9367725"
+    }
+  },
+  "binary_sha256": {
+    "build/elab": "3b7e2a025c1d8a5da0a3f7f814ce89c9e262ed8e2955017c6ebb2cb105a2b0aa",
+    "build/elab-agent": "dcb6a019a6fc70ca2f7b15a483040e327d93e95604fa6d4ae19e55c19c899dbd",
+    "build/elab-conformance": "3fdbf1bfe481a805f4f297689cb5438b69c6b11120a081cb9531821dc367ff1b",
+    "build/elab-ui-audit": "9ced3726e2972764862b0ce790bd47fcfea1fb39ce8e6a35b3811fd69692eb00",
+    "build/ELab-0.117.0-134-preview-contracts-candidate.app/Contents/MacOS/ELab": "3b7e2a025c1d8a5da0a3f7f814ce89c9e262ed8e2955017c6ebb2cb105a2b0aa"
+  },
+  "candidate": "build/ELab-0.117.0-134-preview-contracts-candidate.app",
+  "candidate_promoted": false,
+  "new_application_commands": 0,
+  "existing_commands": 162,
+  "new_contracts": 4,
+  "commands_with_contracts_before": 117,
+  "commands_with_contracts_after": 121,
+  "commands_without_contract": 41,
+  "default_catalog_output_schemas_models_numerical_methods_work_limits_file_versions_unchanged": true,
+  "quality": {
+    "lint_imports_staticcheck": true,
+    "python_tests": 37,
+    "root_native_race_and_vet": true
+  },
+  "process_quality": [
+    {
+      "name": "build",
+      "argv": [
+        "./scripts/build.sh"
+      ],
+      "started_utc": "2026-10-17T14:47:09.088266+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 1.159271000069566,
+      "finished_utc": "2026-10-17T14:47:10.247559+00:00"
+    },
+    {
+      "name": "quality",
+      "argv": [
+        "./scripts/check.sh"
+      ],
+      "started_utc": "2026-10-17T14:47:10.258504+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 361.3013704579789,
+      "finished_utc": "2026-10-17T14:53:11.566480+00:00"
+    }
+  ],
+  "process_public": [
+    {
+      "name": "native-smoke",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.117.0-134-preview-contracts-candidate.app/Contents/MacOS/ELab",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "started_utc": "2026-10-17T14:53:17.367103+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 70.11547537497245,
+      "finished_utc": "2026-10-17T14:54:27.486522+00:00"
+    },
+    {
+      "name": "public-suites",
+      "argv": [
+        "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+        "--native-binary",
+        "/Users/dshills/Development/projects/ELab/build/ELab-0.117.0-134-preview-contracts-candidate.app/Contents/MacOS/ELab",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/preview-contracts/public-final"
+      ],
+      "started_utc": "2026-10-17T14:54:27.498910+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 47.91217554197647,
+      "finished_utc": "2026-10-17T14:55:15.417099+00:00"
+    },
+    {
+      "name": "headless-preview",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/preview-contracts-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/preview-contracts/headless-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/preview-contracts/headless-final-assets"
+      ],
+      "started_utc": "2026-10-17T14:55:15.428482+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 0.19654758309479803,
+      "finished_utc": "2026-10-17T14:55:15.625036+00:00"
+    },
+    {
+      "name": "legacy-preview",
+      "argv": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/print-preview-demo.py",
+        "--output",
+        "/Users/dshills/Development/projects/ELab/build/preview-contracts/legacy-final.json",
+        "--artifacts",
+        "/Users/dshills/Development/projects/ELab/build/preview-contracts/legacy-final-assets"
+      ],
+      "started_utc": "2026-10-17T14:55:15.635672+00:00",
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 0.1292333339806646,
+      "finished_utc": "2026-10-17T14:55:15.764911+00:00"
+    }
+  ],
+  "native_workflow": {
+    "started_utc": "2026-10-17T14:56:10.794850+00:00",
+    "status": "completed",
+    "owned_pid": 77838,
+    "demo_exit_code": 0,
+    "native_exit_code": 0,
+    "elapsed_seconds": 0.9144902090774849,
+    "finished_utc": "2026-10-17T14:56:11.709473+00:00"
+  },
+  "four_adapter_numerical_checks": 27596,
+  "four_adapter_project_workflow_checks": 44,
+  "four_adapter_project_snapshots": 56,
+  "native_smoke_stages": 45,
+  "preview_review": {
+    "passed": true,
+    "contracts_per_transport": 4,
+    "refusals_per_transport": 14,
+    "complete_preview_outcomes_per_transport": 4,
+    "completed_images_per_transport": 3,
+    "selected_pngs_equal_across_transports": true,
+    "expected_transport_actors": {
+      "headless": "agent.stdio",
+      "native": "agent.socket"
+    },
+    "other_preview_metadata_exactly_equal": true,
+    "all_png_chunks_crc_and_scanlines_validated": true,
+    "queried_997_byte_chunks_total": 586,
+    "captured_default_and_explicit_pixels_identical": true,
+    "edited_pixels_differ": true,
+    "decoded_rgba_sha256": [
+      "5e3a4377d02c6a30cb5125dd347dce17a54b9b88c8d95728cde393002d08f5bf",
+      "5e3a4377d02c6a30cb5125dd347dce17a54b9b88c8d95728cde393002d08f5bf",
+      "fb48493ca18478d1f5acb49865d9a5628ebdc25ffd25eed97b29b2e049fa54d4"
+    ],
+    "decoded_pixel_comparison_excludes_png_metadata_and_compression": true,
+    "exact_stale_png_export_and_manual_source_preserved": true,
+    "rc_reference_checks": 2,
+    "active_cancel_worker_slot_behavior_covered_by_controlled_race_tests": true,
+    "scope": "Encoded PNG/container and lifecycle validation, not new visible UI/readability, physical-input/AX or printer qualification"
+  },
+  "decoded_pixel_audit_cross_checked_with_go_standard_png": true,
+  "six_prior_export_contracts_exactly_unchanged": true,
+  "legacy_preview_workflow_passed": true,
+  "typed_raw_gzip_numerical_review_equal": true,
+  "sdk_verified": {
+    "passed": true,
+    "source": "aa9d023243a6bded514c3d9696c08a9c917119c4",
+    "archive_sha256": "22b086442570641e4ae56e9937dd6483c26f92cde953f3aa3fc11811710ed7c5"
+  },
+  "native_production_inventory_unchanged": {
+    "sources": 57,
+    "sites": 388,
+    "commands": 162
+  },
+  "preserved_bundle_trees": {
+    "build/ELab.app": {
+      "passed": true,
+      "entries": 7
+    },
+    "build/ELab-0.104.0-119-preserved.app": {
+      "passed": true,
+      "entries": 7
+    }
+  },
+  "fixture_files": {
+    "docs/validation/preview-contracts/fixtures/headless/source.elab": "923f757503789752ae8058082f36dfb6323a35b29d61204aab527f7b7e0cedb4",
+    "docs/validation/preview-contracts/fixtures/headless/captured-default.png": "b338001b7298d0cd44475f419ab54d7dc02cc1d7bf9bac4f51a6e0b0f13a61a1",
+    "docs/validation/preview-contracts/fixtures/headless/captured-explicit.png": "b338001b7298d0cd44475f419ab54d7dc02cc1d7bf9bac4f51a6e0b0f13a61a1",
+    "docs/validation/preview-contracts/fixtures/headless/captured-edited.png": "49f3ce5bd58ce66d2c107bed709a337f8ffb14305e4c310115aba3116adc4f2d",
+    "docs/validation/preview-contracts/fixtures/headless/shown-stale.png": "b338001b7298d0cd44475f419ab54d7dc02cc1d7bf9bac4f51a6e0b0f13a61a1",
+    "docs/validation/preview-contracts/fixtures/native/source.elab": "d28665be8d51063e1bd015a133dd06fe6b79157f7b27d03bd6566de3ce06bf46",
+    "docs/validation/preview-contracts/fixtures/native/captured-default.png": "b338001b7298d0cd44475f419ab54d7dc02cc1d7bf9bac4f51a6e0b0f13a61a1",
+    "docs/validation/preview-contracts/fixtures/native/captured-explicit.png": "b338001b7298d0cd44475f419ab54d7dc02cc1d7bf9bac4f51a6e0b0f13a61a1",
+    "docs/validation/preview-contracts/fixtures/native/captured-edited.png": "49f3ce5bd58ce66d2c107bed709a337f8ffb14305e4c310115aba3116adc4f2d",
+    "docs/validation/preview-contracts/fixtures/native/shown-stale.png": "b338001b7298d0cd44475f419ab54d7dc02cc1d7bf9bac4f51a6e0b0f13a61a1"
+  },
+  "report_encoding": {
+    "conformance-report.json.gz": {
+      "decoded_bytes": 18168303,
+      "decoded_sha256": "7f48d86f2bc1f7e51b1fd579342669a9c7282646506e3d31615113d59393992b",
+      "gzip_bytes": 1659734,
+      "gzip_sha256": "b3a0f44f614981b75be1cf1e0d3c43a5ee45406c381001e400948c90f1f033e0"
+    }
+  },
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "limitations": [
+    "Discovery describes existing behavior; refresh failure replaces old pixels/ID and close retains non-readable metadata. No renderer or runtime lifecycle change is claimed.",
+    "Controlled race tests model cancellation while an OS renderer has not returned; public cancellation coverage is terminal refusal, not a nondeterministic active-race claim.",
+    "PNG bytes, CRCs/decompressed scanlines, exact export/source parity and native socket workflows do not establish new visible image/readability, full physical input/AX or printer qualification.",
+    "Forty-one commands remain without scoped state contracts; AGENT-02, complete events/accessibility/distribution/participant gates remain open.",
+    "The private 0.117 /134 candidate is unpromoted; canonical 0.105 and preserved 0.104 bundles stay exact."
+  ],
+  "artifacts_sha256": {
+    "docs/validation/preview-contracts/archive.py.txt": "34fa5ba9a9bc255397a56bfb2f7e07efa5fe10bd233b3dd3f20c7b9a1e21c2fd",
+    "docs/validation/preview-contracts/build-initial.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/preview-contracts/build.log.txt": "287639a899e67fbb63233d980e47fc2a177b40ca183bb9bb75044ed137df743b",
+    "docs/validation/preview-contracts/conformance-report.json.gz": "b3a0f44f614981b75be1cf1e0d3c43a5ee45406c381001e400948c90f1f033e0",
+    "docs/validation/preview-contracts/contract-inventory.json": "55c0bf6685c6a0128f02c3bfda58980125302c603068dcec462034ca47cbf48c",
+    "docs/validation/preview-contracts/core-focused.log.txt": "3b4a864320bba0ea205d776d817f40812b77bc1715843044adb87bc94d3e164a",
+    "docs/validation/preview-contracts/export-contracts-unchanged.json": "d4852b839b542893d67dc247bbe516204693b08e3b193f4c389f7296957bf243",
+    "docs/validation/preview-contracts/fixtures/headless/captured-default.png": "b338001b7298d0cd44475f419ab54d7dc02cc1d7bf9bac4f51a6e0b0f13a61a1",
+    "docs/validation/preview-contracts/fixtures/headless/captured-edited.png": "49f3ce5bd58ce66d2c107bed709a337f8ffb14305e4c310115aba3116adc4f2d",
+    "docs/validation/preview-contracts/fixtures/headless/captured-explicit.png": "b338001b7298d0cd44475f419ab54d7dc02cc1d7bf9bac4f51a6e0b0f13a61a1",
+    "docs/validation/preview-contracts/fixtures/headless/shown-stale.png": "b338001b7298d0cd44475f419ab54d7dc02cc1d7bf9bac4f51a6e0b0f13a61a1",
+    "docs/validation/preview-contracts/fixtures/headless/source.elab": "923f757503789752ae8058082f36dfb6323a35b29d61204aab527f7b7e0cedb4",
+    "docs/validation/preview-contracts/fixtures/native/captured-default.png": "b338001b7298d0cd44475f419ab54d7dc02cc1d7bf9bac4f51a6e0b0f13a61a1",
+    "docs/validation/preview-contracts/fixtures/native/captured-edited.png": "49f3ce5bd58ce66d2c107bed709a337f8ffb14305e4c310115aba3116adc4f2d",
+    "docs/validation/preview-contracts/fixtures/native/captured-explicit.png": "b338001b7298d0cd44475f419ab54d7dc02cc1d7bf9bac4f51a6e0b0f13a61a1",
+    "docs/validation/preview-contracts/fixtures/native/shown-stale.png": "b338001b7298d0cd44475f419ab54d7dc02cc1d7bf9bac4f51a6e0b0f13a61a1",
+    "docs/validation/preview-contracts/fixtures/native/source.elab": "d28665be8d51063e1bd015a133dd06fe6b79157f7b27d03bd6566de3ce06bf46",
+    "docs/validation/preview-contracts/headless-final.json": "bd4b2f6afe0d14ccc319ae111b6d6acf2d2d0933eb140526374e3d5f45f34fdf",
+    "docs/validation/preview-contracts/headless-initial.json": "8a48102c7cef0b0a3fea1a89f66403bfdef4ef1c416cb85e3f14189fed54f8c6",
+    "docs/validation/preview-contracts/headless-initial.log.txt": "7cdae0d3e1d626b8c48ba2fa773679dde4f46b29c1dcc7158ef5bbd3aa0c1c5f",
+    "docs/validation/preview-contracts/headless-preview.log.txt": "7cdae0d3e1d626b8c48ba2fa773679dde4f46b29c1dcc7158ef5bbd3aa0c1c5f",
+    "docs/validation/preview-contracts/legacy-final.json": "49405111cfc40f8ab32a17bddef6c3524b62dd30c4f487d8ee26a03b821c0c55",
+    "docs/validation/preview-contracts/legacy-preview.log.txt": "6281bef6df4fd6c37724e02aaf4ab19a8736fd15b16027c5b233a0fde8bbf448",
+    "docs/validation/preview-contracts/native-final.json": "9913b3f68b15840eff357610ee3421d03916dd248b02b180d76cf6dcb09c64bd",
+    "docs/validation/preview-contracts/native-host.log.txt": "293fd2fc5191384ee6974bfc62cd79960cafa07d99e9fa9b99c8e779142dac51",
+    "docs/validation/preview-contracts/native-smoke.log.txt": "fca5a9af7dc7310aa840aaf4faa5c994508a034e3cb571da576a393960798573",
+    "docs/validation/preview-contracts/native-viewer.log.txt": "c2113e1021bcdd98152f2eac3f421656c1f947d81a8a805cbb0578ac25ce5053",
+    "docs/validation/preview-contracts/native.py.txt": "a457089440651e015b3448ea6b8d0a05939492b058dbd3a3de0ed48456d44508",
+    "docs/validation/preview-contracts/package.json": "09052966c464354360c5bda0a27be005d661796fc1049d474a58457e1c835781",
+    "docs/validation/preview-contracts/pixels.go.txt": "d427cb26197621429fc71560c14e70436757a2408ef7186a471d1fd3a9ef86a0",
+    "docs/validation/preview-contracts/preview-review.json": "6929f9a1e68fbf5824ccf276543f95c7b3cd1fe168517fc133133d054e03d2c7",
+    "docs/validation/preview-contracts/preview-review.py.txt": "740db6e9f1e4ea2c5b64b6325e7a0624d8c9f5066d84cd35f2e3c580cac625b0",
+    "docs/validation/preview-contracts/process-native.json": "5ab54d9364bc3b67c463d86453d826ddd2030908dea539e25a30626015e171d8",
+    "docs/validation/preview-contracts/process-public.json": "9b263f1dc34b4d12f1b7f93deefb70c10cb2b3c1d7a64ab75d9eedfbbf972609",
+    "docs/validation/preview-contracts/process-quality.json": "5be5459d73acf84e426d3741048792815f72a833e32074b3d599129496634cb1",
+    "docs/validation/preview-contracts/public-suites.log.txt": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d",
+    "docs/validation/preview-contracts/qualify.py.txt": "35fa7fda7bcf69e76e52add80cd334f086e42b8ea29c23c8b4609f1e40d26e5f",
+    "docs/validation/preview-contracts/quality.log.txt": "dfc5f80f26f8f76bd6f735539816dc9016e6d5dc2e1e815b3c738459186fc811",
+    "docs/validation/preview-contracts/report-review-gzip.json": "03ebf2f80f90b2f0259ce28d46855c4bd3a90f800e64c387b776191af5012596",
+    "docs/validation/preview-contracts/report-review.json": "03ebf2f80f90b2f0259ce28d46855c4bd3a90f800e64c387b776191af5012596",
+    "docs/validation/preview-contracts/review-before-pixel-audit.json": "dcd475e06316cb68cb447f17b0b50f1b81280e4eee857bddac7f1444c4e03cae",
+    "docs/validation/preview-contracts/review-before-pixel-audit.py.txt": "0dd22e5fd702ea3732a6ebe0b45705e177367459b97c95ede146daaad902ff3f",
+    "docs/validation/preview-contracts/review-before.log.txt": "d1eec50ce2933495ad8fc75b64b93b713255acc73648a6340f0b6b5b7b2f1544",
+    "docs/validation/preview-contracts/review-before.py.txt": "6eb227c2c26ccb54758a37db100c60453f41159a6dc487092fadf0542b3227a3",
+    "docs/validation/preview-contracts/review.go.txt": "808b076c8bf0bac85714632b87ab06a8364742575b33a383a734d7e37c729fb6",
+    "docs/validation/preview-contracts/source-delta.json": "e356bbafccf1030721800e35eae36eb2e4f28d335f59c0982bca928e1622506a",
+    "docs/validation/preview-contracts/source-freeze.json": "923a30c1f624aa2c83d6dfcea281c1eda6de9998730705b4506294eacf8073b7",
+    "docs/validation/preview-contracts/stdlib-pixel-review.json": "613d2d8f448f0c4232fbf3878776989c03a8c4719d09e1d6087bcd41ad0cad0c"
+  }
+}

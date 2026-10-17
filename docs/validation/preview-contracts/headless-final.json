@@ -1,0 +1,1362 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "contracts": {
+    "print.preview.start": {
+      "additionalProperties": false,
+      "examples": [
+        {},
+        {
+          "page": null,
+          "page_index": 0
+        }
+      ],
+      "properties": {
+        "page": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "color": {
+                  "default": false,
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "margin_mm": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "Omitted/null defaults to 10 mm; numeric zero is a valid zero margin.",
+                  "maximum": 40,
+                  "minimum": 0,
+                  "x-unit": "mm"
+                },
+                "measurements": {
+                  "default": false,
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "orientation": {
+                  "default": "landscape",
+                  "enum": [
+                    "",
+                    "portrait",
+                    "landscape",
+                    null
+                  ],
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "overlap_mm": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "Tiled overlap 0\u201320 mm; omitted/null defaults to 5 mm when tile is true. Nonzero overlap requires tile.",
+                  "maximum": 20,
+                  "minimum": 0,
+                  "x-unit": "mm"
+                },
+                "paper": {
+                  "default": "letter",
+                  "enum": [
+                    "",
+                    "letter",
+                    "a4",
+                    null
+                  ],
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "scale": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "Omitted/null fits a single page; explicit zero refuses. Tiling requires an explicit scale. Actual fit/page-count is checked during rendering.",
+                  "maximum": 4,
+                  "minimum": 0.1,
+                  "x-unit": "PDF points per schematic unit"
+                },
+                "tile": {
+                  "default": false,
+                  "description": "Tile at explicit scale, up to 16 pages in row-major order. False retains single-page fit/clip refusal.",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                }
+              },
+              "required": [],
+              "type": "object",
+              "x-page-relations": [
+                "tile true requires explicit scale 0.1\u20134 points per schematic unit; no implicit shrinking",
+                "Each tile reserves an 18-point footer with page/grid/scale/overlap labels",
+                "Row-major complete viewBox coverage with overlap; at most 16 pages; oversized layouts fail before publication",
+                "PDF and print.submit include every page; multi-page PNG requires explicit zero-based page_index",
+                "Settings are session output choices; preserve graph, dirty state, simulation and history"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Omitted/null captures snapshot.schematic_page defaults; an object is a complete override with omitted fields reset to built-ins. Explicit overrides do not follow later defaults."
+        },
+        "page_index": {
+          "default": 0,
+          "description": "Omitted/null selects zero. Negative refuses at admission; upper bound depends on the rendered captured layout and fails as preview-failed after admission.",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-print-preview",
+        "preconditions": [
+          "No outstanding preview worker, including canceling/hidden work; macOS cgo page renderer available",
+          "Complete valid page settings and nonnegative page_index; empty/incomplete circuits are allowed"
+        ],
+        "effects": [
+          "Preserves current circuit, source association/save point, live acquisition/pause/time, history, scope preferences and stored recordings; never submits printer work",
+          "snapshot.print_preview and preview publications expose metadata only; read pixels through print.preview.image by exact ID",
+          "Source freshness and image readiness are separate: a stale completed visible preview remains readable/exportable/printable as its captured source. Refresh explicitly to include later edits",
+          "Capture graph/configured annotations/settings, page and optional frozen live display/pinned readings at admission; one 150 dpi PNG page, up to 8 MiB, 16 tiled pages and the existing raster/layout bounds",
+          "Replaces the old preview/ID immediately, even if later rendering fails; no fallback to its old pixels. Hides the sweep plot without stopping analysis; only one selected page image is retained",
+          "Metadata completion/currentness is independent of actual UI image decoding. Source_current compares document generation/content/settings/annotations, plus live overlays when requested and current defaults only for a default-page capture; view pan/zoom/theme alone do not stale it",
+          "Completion advances presentation revision, not command revision. simulation.wait does not await preview work; inspect exact preview status or events.poll",
+          "A new refresh requires the previous worker to return; cooperative cancellation/30-second deadline cannot preempt every CoreGraphics operation"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields, missing/null required ID, wrong types or command-specific bounds"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "An outstanding preview worker has not returned"
+          },
+          {
+            "code": "unsupported",
+            "phase": "admission",
+            "when": "macOS cgo page renderer unavailable"
+          },
+          {
+            "code": "preview-failed",
+            "phase": "work",
+            "when": "Layout/page-index/raster/8 MiB/image-decoding or renderer failure; admitted preview remains with error and no readable pixels"
+          },
+          {
+            "code": "preview-timeout",
+            "phase": "work",
+            "when": "Cooperative 30-second rendering budget expired"
+          }
+        ],
+        "completion": {
+          "mode": "immediate queued preview admission, not pixels; inspect until completed/failed/canceled and require visible completed metadata before reading",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "print.preview.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-page-selection": "Capture current source/settings; page_index defaults to 0; actual count checked during rendering. Inspect page_count/rows/columns/status before use. Use page.set to navigate same capture.",
+      "x-preview-inventory": "snapshot.print_preview: exact id, status, visible, source_current, captured page/index/count/grid, run/electrical/document identity, admitting actor, dimensions, bytes/hash and error",
+      "x-work-bounds": {
+        "cooperative_deadline_s": 30,
+        "max_encoded_bytes": 8388608,
+        "outstanding_workers": 1,
+        "raster_dpi": 150
+      }
+    },
+    "print.preview.cancel": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Required non-null exact current preview ID from snapshot.print_preview; old/unknown/empty IDs return not-found. A closed preview retains metadata/ID until replaced.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-print-preview",
+        "preconditions": [
+          "Exact current queued/running/canceling preview; matching terminal preview returns unavailable"
+        ],
+        "effects": [
+          "Preserves current circuit, source association/save point, live acquisition/pause/time, history, scope preferences and stored recordings; never submits printer work",
+          "snapshot.print_preview and preview publications expose metadata only; read pixels through print.preview.image by exact ID",
+          "Source freshness and image readiness are separate: a stale completed visible preview remains readable/exportable/printable as its captured source. Refresh explicitly to include later edits",
+          "Request cancellation and mark canceling without hiding the pane. Repeated cancel while still canceling is accepted; terminal state is observed separately",
+          "Worker slot remains occupied until actual return; no partial pixels are published and no prior preview image is restored"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields, missing/null required ID, wrong types or command-specific bounds"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "No current preview or ID is old/unknown/empty"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Matching preview is terminal"
+          }
+        ],
+        "completion": {
+          "mode": "immediate cancellation request; inspect preview until terminal, then refresh if needed",
+          "observe": [
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-preview-inventory": "snapshot.print_preview: exact id, status, visible, source_current, captured page/index/count/grid, run/electrical/document identity, admitting actor, dimensions, bytes/hash and error"
+    },
+    "print.preview.close": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Required non-null exact current preview ID from snapshot.print_preview; old/unknown/empty IDs return not-found. A closed preview retains metadata/ID until replaced.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-print-preview",
+        "preconditions": [
+          "Exact current preview ID in any state, including already hidden/terminal"
+        ],
+        "effects": [
+          "Preserves current circuit, source association/save point, live acquisition/pause/time, history, scope preferences and stored recordings; never submits printer work",
+          "snapshot.print_preview and preview publications expose metadata only; read pixels through print.preview.image by exact ID",
+          "Source freshness and image readiness are separate: a stale completed visible preview remains readable/exportable/printable as its captured source. Refresh explicitly to include later edits",
+          "Hide pane immediately, clear encoded bytes/hash and request cancellation if active. Metadata/status/dimensions and ID remain until replacement; completed status alone no longer means pixels are readable",
+          "Repeated close is accepted for the same retained ID. Active close still occupies its worker slot until return; it does not restore a previously hidden sweep plot or change live scope preferences"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields, missing/null required ID, wrong types or command-specific bounds"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "No current preview or ID is old/unknown/empty"
+          }
+        ],
+        "completion": {
+          "mode": "immediate owned state/result; no filesystem publication",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-preview-inventory": "snapshot.print_preview: exact id, status, visible, source_current, captured page/index/count/grid, run/electrical/document identity, admitting actor, dimensions, bytes/hash and error"
+    },
+    "print.preview.image": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Required non-null exact current preview ID from snapshot.print_preview; old/unknown/empty IDs return not-found. A closed preview retains metadata/ID until replaced.",
+          "type": "string"
+        },
+        "limit": {
+          "anyOf": [
+            {
+              "const": 0
+            },
+            {
+              "maximum": 65536,
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 65536,
+          "description": "Omitted/null/zero means 65536; explicit nonzero limit is 1\u201365536 bytes. Final chunk may be shorter.",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "offset": {
+          "default": 0,
+          "description": "Omitted/null starts at byte zero. Inclusive bound offset <= snapshot.print_preview.bytes; exactly bytes returns empty base64, next_offset=total.",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-print-preview",
+        "preconditions": [
+          "Exact visible completed current preview with retained bytes; source_current need not be true",
+          "After structural decoding, ID/readiness precede offset/limit bounds"
+        ],
+        "effects": [
+          "Preserves current circuit, source association/save point, live acquisition/pause/time, history, scope preferences and stored recordings; never submits printer work",
+          "snapshot.print_preview and preview publications expose metadata only; read pixels through print.preview.image by exact ID",
+          "Source freshness and image readiness are separate: a stale completed visible preview remains readable/exportable/printable as its captured source. Refresh explicitly to include later edits",
+          "Pure in-memory query with independently owned PNG bytes; no IO/render/wait, revisions, retry keys, visibility or currentness changes",
+          "Result contains exact id/offset/next_offset/total and whole-image SHA-256. Decode png_base64, advance to next_offset until total, and verify assembled digest; restart on ID replacement rather than mixing captures"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed/unknown/duplicate fields, missing/null required ID, wrong types or command-specific bounds"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "No current preview or ID is old/unknown/empty"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "Matching preview hidden, incomplete, failed/canceled or lacks bytes"
+          }
+        ],
+        "completion": {
+          "mode": "immediate owned state/result; no filesystem publication",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-preview-inventory": "snapshot.print_preview: exact id, status, visible, source_current, captured page/index/count/grid, run/electrical/document identity, admitting actor, dimensions, bytes/hash and error"
+    }
+  },
+  "refusals": [
+    {
+      "command": "print.preview.image",
+      "params": {
+        "id": "unknown",
+        "offset": -1
+      },
+      "code": "not-found"
+    },
+    {
+      "command": "print.preview.image",
+      "params": {
+        "id": "preview-1",
+        "offset": -1
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "print.preview.image",
+      "params": {
+        "id": "preview-1",
+        "offset": 95393
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "print.preview.image",
+      "params": {
+        "id": "preview-1",
+        "limit": -1
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "print.preview.image",
+      "params": {
+        "id": "preview-1",
+        "limit": 65537
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "print.preview.image",
+      "params": {
+        "id": null
+      },
+      "code": "invalid-params"
+    },
+    {
+      "command": "print.preview.cancel",
+      "params": {
+        "id": "preview-1"
+      },
+      "code": "unavailable"
+    },
+    {
+      "command": "print.preview.image",
+      "params": {
+        "id": "preview-1"
+      },
+      "code": "not-found"
+    },
+    {
+      "command": "print.preview.close",
+      "params": {
+        "id": "preview-1"
+      },
+      "code": "not-found"
+    },
+    {
+      "command": "print.preview.image",
+      "params": {
+        "id": "preview-2"
+      },
+      "code": "not-found"
+    },
+    {
+      "command": "print.preview.image",
+      "params": {
+        "id": "preview-3"
+      },
+      "code": "not-ready"
+    },
+    {
+      "command": "print.preview.cancel",
+      "params": {
+        "id": "preview-3"
+      },
+      "code": "unavailable"
+    },
+    {
+      "command": "print.preview.image",
+      "params": {
+        "id": "preview-4",
+        "offset": -1
+      },
+      "code": "not-ready"
+    },
+    {
+      "command": "print.preview.cancel",
+      "params": {
+        "id": "preview-4"
+      },
+      "code": "unavailable"
+    }
+  ],
+  "previews": [
+    {
+      "page_index": 0,
+      "page_count": 1,
+      "rows": 1,
+      "columns": 1,
+      "id": "preview-1",
+      "status": "completed",
+      "visible": true,
+      "source_current": true,
+      "page": {
+        "paper": "letter",
+        "orientation": "landscape",
+        "margin_mm": 10
+      },
+      "run_id": 3,
+      "electrical_revision": 2,
+      "document_generation": 2,
+      "actor": "agent.stdio",
+      "width_px": 1650,
+      "height_px": 1275,
+      "bytes": 95392,
+      "sha256": "b338001b7298d0cd44475f419ab54d7dc02cc1d7bf9bac4f51a6e0b0f13a61a1"
+    },
+    {
+      "page_index": 0,
+      "page_count": 1,
+      "rows": 1,
+      "columns": 1,
+      "id": "preview-2",
+      "status": "completed",
+      "visible": true,
+      "source_current": true,
+      "page": {
+        "paper": "letter",
+        "orientation": "landscape",
+        "margin_mm": 10
+      },
+      "run_id": 3,
+      "electrical_revision": 2,
+      "document_generation": 2,
+      "actor": "agent.stdio",
+      "width_px": 1650,
+      "height_px": 1275,
+      "bytes": 95392,
+      "sha256": "b338001b7298d0cd44475f419ab54d7dc02cc1d7bf9bac4f51a6e0b0f13a61a1"
+    },
+    {
+      "page_index": 1,
+      "page_count": 1,
+      "rows": 1,
+      "columns": 1,
+      "id": "preview-3",
+      "status": "failed",
+      "visible": true,
+      "source_current": true,
+      "page": {
+        "paper": "letter",
+        "orientation": "landscape",
+        "margin_mm": 10
+      },
+      "run_id": 4,
+      "electrical_revision": 3,
+      "document_generation": 2,
+      "actor": "agent.stdio",
+      "width_px": 0,
+      "height_px": 0,
+      "bytes": 0,
+      "error": {
+        "code": "preview-failed",
+        "message": "page_index is outside the captured page count"
+      }
+    },
+    {
+      "page_index": 0,
+      "page_count": 1,
+      "rows": 1,
+      "columns": 1,
+      "id": "preview-4",
+      "status": "completed",
+      "visible": true,
+      "source_current": true,
+      "page": {
+        "paper": "letter",
+        "orientation": "landscape",
+        "margin_mm": 10
+      },
+      "run_id": 4,
+      "electrical_revision": 3,
+      "document_generation": 2,
+      "actor": "agent.stdio",
+      "width_px": 1650,
+      "height_px": 1275,
+      "bytes": 99906,
+      "sha256": "49f3ce5bd58ce66d2c107bed709a337f8ffb14305e4c310115aba3116adc4f2d"
+    }
+  ],
+  "closed": {
+    "page_index": 0,
+    "page_count": 1,
+    "rows": 1,
+    "columns": 1,
+    "id": "preview-4",
+    "status": "completed",
+    "visible": false,
+    "source_current": true,
+    "page": {
+      "paper": "letter",
+      "orientation": "landscape",
+      "margin_mm": 10
+    },
+    "run_id": 4,
+    "electrical_revision": 3,
+    "document_generation": 2,
+    "actor": "agent.stdio",
+    "width_px": 1650,
+    "height_px": 1275,
+    "bytes": 0
+  },
+  "chunks": [
+    {
+      "id": "preview-1",
+      "name": "captured-default.png",
+      "chunks": 96,
+      "bytes": 95392,
+      "sha256": "b338001b7298d0cd44475f419ab54d7dc02cc1d7bf9bac4f51a6e0b0f13a61a1"
+    },
+    {
+      "id": "preview-2",
+      "name": "captured-explicit.png",
+      "chunks": 96,
+      "bytes": 95392,
+      "sha256": "b338001b7298d0cd44475f419ab54d7dc02cc1d7bf9bac4f51a6e0b0f13a61a1"
+    },
+    {
+      "id": "preview-4",
+      "name": "captured-edited.png",
+      "chunks": 101,
+      "bytes": 99906,
+      "sha256": "49f3ce5bd58ce66d2c107bed709a337f8ffb14305e4c310115aba3116adc4f2d"
+    }
+  ],
+  "source_sha256": "923f757503789752ae8058082f36dfb6323a35b29d61204aab527f7b7e0cedb4",
+  "original_live": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "pulse-source",
+        "name": "Pulse source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-square.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -110
+        },
+        "value": 10000,
+        "unit": "\u03a9",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "C1",
+        "kind": "capacitor",
+        "name": "Capacitor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 1e-06,
+        "unit": "F",
+        "model": "ideal-capacitor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 110
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "C1.1",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "C1.2",
+        "to": "GND.reference",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "GND.reference",
+        "to": "V1.negative",
+        "connected": true
+      }
+    ],
+    "document": {
+      "preferences_dirty": false,
+      "schematic_dirty": false,
+      "recordings_dirty": false,
+      "recording_count": 0,
+      "path": "/Users/dshills/Development/projects/ELab/build/preview-contracts/headless-final-assets/source.elab",
+      "dirty": false,
+      "format_version": 4,
+      "generation": 2
+    },
+    "view": {
+      "center": {
+        "x": -130,
+        "y": 20
+      },
+      "zoom": 0.7
+    },
+    "transient": {
+      "engine": "elab.ideal-rc-exact.v1",
+      "run_id": 3,
+      "electrical_revision": 2,
+      "source_id": "V1",
+      "resistor_id": "R1",
+      "capacitor_id": "C1",
+      "output_net": "net:C1.1",
+      "time_constant_s": 0.01,
+      "settings": {
+        "step_s": 0.001,
+        "high_s": 0.05,
+        "low_s": 0.05,
+        "initial_voltage_v": 0,
+        "seconds_per_wall_second": 0.02
+      },
+      "input_mode": "auto",
+      "sample": {
+        "time_s": 0.003,
+        "input_v": 5,
+        "voltage_v": 1.2959088965914107,
+        "current_a": 0.00037040911034085894,
+        "energy_j": 8.396899341323838e-07
+      },
+      "samples": [
+        {
+          "time_s": 0,
+          "input_v": 5,
+          "voltage_v": 0,
+          "current_a": 0.0005,
+          "energy_j": 0
+        },
+        {
+          "time_s": 0.001,
+          "input_v": 5,
+          "voltage_v": 0.47581290982020213,
+          "current_a": 0.0004524187090179798,
+          "energy_j": 1.131989625757839e-07
+        },
+        {
+          "time_s": 0.002,
+          "input_v": 5,
+          "voltage_v": 0.9063462346100908,
+          "current_a": 0.0004093653765389909,
+          "energy_j": 4.1073174849594485e-07
+        },
+        {
+          "time_s": 0.003,
+          "input_v": 5,
+          "voltage_v": 1.2959088965914107,
+          "current_a": 0.00037040911034085894,
+          "energy_j": 8.396899341323838e-07
+        }
+      ],
+      "events": [
+        {
+          "time_s": 0,
+          "mode": "restart"
+        }
+      ],
+      "stale": false
+    },
+    "mixed": null,
+    "npn": null,
+    "scope": {
+      "window": {
+        "mode": "live",
+        "start_s": 0,
+        "end_s": 0.003
+      },
+      "window_valid": true,
+      "statistics": [
+        {
+          "probe_id": "v:C1.1",
+          "count": 4,
+          "min": 0,
+          "max": 1.2959088965914107,
+          "sample_mean": 0.669517010255426,
+          "sample_rms": 0.8257180648393593
+        },
+        {
+          "probe_id": "v:V1.positive",
+          "count": 4,
+          "min": 5,
+          "max": 5,
+          "sample_mean": 5,
+          "sample_rms": 5
+        }
+      ],
+      "available": [
+        {
+          "id": "v:V1.positive",
+          "label": "V1.positive / ground",
+          "unit": "V",
+          "positive": "V1.positive",
+          "reference": "ground"
+        },
+        {
+          "id": "v:V1.negative",
+          "label": "V1.negative / ground",
+          "unit": "V",
+          "positive": "V1.negative",
+          "reference": "ground"
+        },
+        {
+          "id": "v:V1",
+          "label": "V1 voltage",
+          "unit": "V",
+          "positive": "V1.positive",
+          "reference": "V1.negative"
+        },
+        {
+          "id": "i:V1",
+          "label": "V1 delivered current",
+          "unit": "A",
+          "positive": "V1.positive",
+          "reference": "out of positive"
+        },
+        {
+          "id": "v:R1.1",
+          "label": "R1.1 / ground",
+          "unit": "V",
+          "positive": "R1.1",
+          "reference": "ground"
+        },
+        {
+          "id": "v:R1.2",
+          "label": "R1.2 / ground",
+          "unit": "V",
+          "positive": "R1.2",
+          "reference": "ground"
+        },
+        {
+          "id": "v:R1",
+          "label": "R1 voltage",
+          "unit": "V",
+          "positive": "R1.1",
+          "reference": "R1.2"
+        },
+        {
+          "id": "i:R1",
+          "label": "R1 current",
+          "unit": "A",
+          "positive": "R1.1",
+          "reference": "R1.2"
+        },
+        {
+          "id": "v:C1.1",
+          "label": "C1.1 / ground",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "ground"
+        },
+        {
+          "id": "v:C1.2",
+          "label": "C1.2 / ground",
+          "unit": "V",
+          "positive": "C1.2",
+          "reference": "ground"
+        },
+        {
+          "id": "v:C1",
+          "label": "C1 voltage",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        {
+          "id": "i:C1",
+          "label": "C1 current",
+          "unit": "A",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        {
+          "id": "v:GND.reference",
+          "label": "GND.reference / ground",
+          "unit": "V",
+          "positive": "GND.reference",
+          "reference": "ground"
+        }
+      ],
+      "selected": [
+        "v:C1.1",
+        "v:V1.positive"
+      ],
+      "traces": [
+        {
+          "probe": {
+            "id": "v:C1.1",
+            "label": "C1.1 / ground",
+            "unit": "V",
+            "positive": "C1.1",
+            "reference": "ground"
+          },
+          "points": [
+            {
+              "time_s": 0,
+              "value": 0
+            },
+            {
+              "time_s": 0.001,
+              "value": 0.47581290982020213
+            },
+            {
+              "time_s": 0.002,
+              "value": 0.9063462346100908
+            },
+            {
+              "time_s": 0.003,
+              "value": 1.2959088965914107
+            }
+          ]
+        },
+        {
+          "probe": {
+            "id": "v:V1.positive",
+            "label": "V1.positive / ground",
+            "unit": "V",
+            "positive": "V1.positive",
+            "reference": "ground"
+          },
+          "points": [
+            {
+              "time_s": 0,
+              "value": 5
+            },
+            {
+              "time_s": 0.001,
+              "value": 5
+            },
+            {
+              "time_s": 0.002,
+              "value": 5
+            },
+            {
+              "time_s": 0.003,
+              "value": 5
+            }
+          ]
+        }
+      ],
+      "run_id": 3,
+      "stale": false,
+      "active_cursor": "a",
+      "readings": []
+    },
+    "paused": true,
+    "run_id": 3,
+    "electrical_revision": 2,
+    "undo_entry": {
+      "name": "example rc",
+      "actor": "agent.stdio",
+      "command_revision": 2
+    },
+    "redo_entry": null
+  },
+  "edited_live": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "pulse-source",
+        "name": "Pulse source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-square.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -110
+        },
+        "value": 20000,
+        "unit": "\u03a9",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "C1",
+        "kind": "capacitor",
+        "name": "Capacitor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 1e-06,
+        "unit": "F",
+        "model": "ideal-capacitor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 110
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "C1.1",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "C1.2",
+        "to": "GND.reference",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "GND.reference",
+        "to": "V1.negative",
+        "connected": true
+      }
+    ],
+    "document": {
+      "preferences_dirty": false,
+      "schematic_dirty": true,
+      "recordings_dirty": false,
+      "recording_count": 0,
+      "path": "/Users/dshills/Development/projects/ELab/build/preview-contracts/headless-final-assets/source.elab",
+      "dirty": true,
+      "format_version": 4,
+      "generation": 2
+    },
+    "view": {
+      "center": {
+        "x": -130,
+        "y": 20
+      },
+      "zoom": 0.7
+    },
+    "transient": {
+      "engine": "elab.ideal-rc-exact.v1",
+      "run_id": 3,
+      "electrical_revision": 2,
+      "source_id": "V1",
+      "resistor_id": "R1",
+      "capacitor_id": "C1",
+      "output_net": "net:C1.1",
+      "time_constant_s": 0.01,
+      "settings": {
+        "step_s": 0.001,
+        "high_s": 0.05,
+        "low_s": 0.05,
+        "initial_voltage_v": 0,
+        "seconds_per_wall_second": 0.02
+      },
+      "input_mode": "auto",
+      "sample": {
+        "time_s": 0.003,
+        "input_v": 5,
+        "voltage_v": 1.2959088965914107,
+        "current_a": 0.00037040911034085894,
+        "energy_j": 8.396899341323838e-07
+      },
+      "samples": [
+        {
+          "time_s": 0,
+          "input_v": 5,
+          "voltage_v": 0,
+          "current_a": 0.0005,
+          "energy_j": 0
+        },
+        {
+          "time_s": 0.001,
+          "input_v": 5,
+          "voltage_v": 0.47581290982020213,
+          "current_a": 0.0004524187090179798,
+          "energy_j": 1.131989625757839e-07
+        },
+        {
+          "time_s": 0.002,
+          "input_v": 5,
+          "voltage_v": 0.9063462346100908,
+          "current_a": 0.0004093653765389909,
+          "energy_j": 4.1073174849594485e-07
+        },
+        {
+          "time_s": 0.003,
+          "input_v": 5,
+          "voltage_v": 1.2959088965914107,
+          "current_a": 0.00037040911034085894,
+          "energy_j": 8.396899341323838e-07
+        }
+      ],
+      "events": [
+        {
+          "time_s": 0,
+          "mode": "restart"
+        }
+      ],
+      "stale": true
+    },
+    "mixed": null,
+    "npn": null,
+    "scope": {
+      "window": {
+        "mode": "live",
+        "start_s": 0,
+        "end_s": 0.003
+      },
+      "window_valid": true,
+      "statistics": [],
+      "available": [
+        {
+          "id": "v:V1.positive",
+          "label": "V1.positive / ground",
+          "unit": "V",
+          "positive": "V1.positive",
+          "reference": "ground"
+        },
+        {
+          "id": "v:V1.negative",
+          "label": "V1.negative / ground",
+          "unit": "V",
+          "positive": "V1.negative",
+          "reference": "ground"
+        },
+        {
+          "id": "v:V1",
+          "label": "V1 voltage",
+          "unit": "V",
+          "positive": "V1.positive",
+          "reference": "V1.negative"
+        },
+        {
+          "id": "i:V1",
+          "label": "V1 delivered current",
+          "unit": "A",
+          "positive": "V1.positive",
+          "reference": "out of positive"
+        },
+        {
+          "id": "v:R1.1",
+          "label": "R1.1 / ground",
+          "unit": "V",
+          "positive": "R1.1",
+          "reference": "ground"
+        },
+        {
+          "id": "v:R1.2",
+          "label": "R1.2 / ground",
+          "unit": "V",
+          "positive": "R1.2",
+          "reference": "ground"
+        },
+        {
+          "id": "v:R1",
+          "label": "R1 voltage",
+          "unit": "V",
+          "positive": "R1.1",
+          "reference": "R1.2"
+        },
+        {
+          "id": "i:R1",
+          "label": "R1 current",
+          "unit": "A",
+          "positive": "R1.1",
+          "reference": "R1.2"
+        },
+        {
+          "id": "v:C1.1",
+          "label": "C1.1 / ground",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "ground"
+        },
+        {
+          "id": "v:C1.2",
+          "label": "C1.2 / ground",
+          "unit": "V",
+          "positive": "C1.2",
+          "reference": "ground"
+        },
+        {
+          "id": "v:C1",
+          "label": "C1 voltage",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        {
+          "id": "i:C1",
+          "label": "C1 current",
+          "unit": "A",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        {
+          "id": "v:GND.reference",
+          "label": "GND.reference / ground",
+          "unit": "V",
+          "positive": "GND.reference",
+          "reference": "ground"
+        }
+      ],
+      "selected": [
+        "v:C1.1",
+        "v:V1.positive"
+      ],
+      "traces": [
+        {
+          "probe": {
+            "id": "v:C1.1",
+            "label": "C1.1 / ground",
+            "unit": "V",
+            "positive": "C1.1",
+            "reference": "ground"
+          },
+          "points": [
+            {
+              "time_s": 0,
+              "value": 0
+            },
+            {
+              "time_s": 0.001,
+              "value": 0.47581290982020213
+            },
+            {
+              "time_s": 0.002,
+              "value": 0.9063462346100908
+            },
+            {
+              "time_s": 0.003,
+              "value": 1.2959088965914107
+            }
+          ]
+        },
+        {
+          "probe": {
+            "id": "v:V1.positive",
+            "label": "V1.positive / ground",
+            "unit": "V",
+            "positive": "V1.positive",
+            "reference": "ground"
+          },
+          "points": [
+            {
+              "time_s": 0,
+              "value": 5
+            },
+            {
+              "time_s": 0.001,
+              "value": 5
+            },
+            {
+              "time_s": 0.002,
+              "value": 5
+            },
+            {
+              "time_s": 0.003,
+              "value": 5
+            }
+          ]
+        }
+      ],
+      "run_id": 3,
+      "stale": true,
+      "active_cursor": "a",
+      "readings": []
+    },
+    "paused": true,
+    "run_id": 4,
+    "electrical_revision": 3,
+    "undo_entry": {
+      "name": "Change value",
+      "actor": "agent.stdio",
+      "command_revision": 12
+    },
+    "redo_entry": null
+  },
+  "rc_reference_v": 1.2959088965914107,
+  "checks": [
+    "EOF/default chunks, stale/default versus explicit captures, exact stale PNG export, failed refresh replaces old ID, repeated close and source preservation"
+  ],
+  "limits": [
+    "Active cancellation and non-returned worker capacity use controlled core tests; public cancel checks terminal refusal",
+    "No new renderer/model/equation/file format or physical input/AX/pixel/printer qualification"
+  ]
+}
