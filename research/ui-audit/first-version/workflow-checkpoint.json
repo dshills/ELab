@@ -1,0 +1,138 @@
+{
+  "scope": "Observed native workflow checkpoint; incomplete package 2 and release qualification",
+  "native_led_graph_matches_keyboard_fixture": true,
+  "agent_constructed_same_graph_through_commands": true,
+  "agent_initial_current_a": 0.0029167965774405296,
+  "native_edited_result": {
+    "run_id": 15,
+    "electrical_revision": 14,
+    "engine": "elab.series-led-dc.v1",
+    "model": {
+      "id": "elab.generic-red-led.v1",
+      "is_a": 1e-20,
+      "n": 2,
+      "rs_ohm": 1,
+      "temperature_c": 27,
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+    },
+    "current_a": 0.001476723549138745,
+    "led_voltage_v": 2.04655290172251,
+    "resistor_voltage_v": 2.95344709827749,
+    "led_power_w": 0.0030221928645318623,
+    "resistor_power_w": 0.004361424881161862,
+    "kvl_residual_v": -1.249000902703301e-16,
+    "node_voltage_v": {
+      "ground": 0,
+      "led-anode": 2.04655290172251,
+      "net:D2.anode": 2.04655290172251,
+      "net:D2.cathode": 0,
+      "net:R2.1": 5,
+      "supply": 5
+    },
+    "stale": false,
+    "source_id": "V2",
+    "resistor_id": "R2",
+    "led_id": "D2"
+  },
+  "agent_edited_result": {
+    "run_id": 10,
+    "electrical_revision": 10,
+    "engine": "elab.series-led-dc.v1",
+    "model": {
+      "id": "elab.generic-red-led.v1",
+      "is_a": 1e-20,
+      "n": 2,
+      "rs_ohm": 1,
+      "temperature_c": 27,
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+    },
+    "current_a": 0.001476723549138745,
+    "led_voltage_v": 2.04655290172251,
+    "resistor_voltage_v": 2.95344709827749,
+    "led_power_w": 0.0030221928645318623,
+    "resistor_power_w": 0.004361424881161862,
+    "kvl_residual_v": -1.249000902703301e-16,
+    "node_voltage_v": {
+      "ground": 0,
+      "led-anode": 2.04655290172251,
+      "net:D2.anode": 2.04655290172251,
+      "net:D2.cathode": 0,
+      "net:R2.1": 5,
+      "supply": 5
+    },
+    "stale": false,
+    "source_id": "V2",
+    "resistor_id": "R2",
+    "led_id": "D2"
+  },
+  "native_csv": {
+    "row_count": 241,
+    "trace_count": 2,
+    "all_times_values_and_run_identities_match_public_snapshot": true,
+    "time_end_s": 0.23200000000000018
+  },
+  "pmos_low": {
+    "mosfet": {
+      "id": "M1",
+      "model": {
+        "id": "elab.generic-pmos.v1",
+        "threshold_v": -1.5,
+        "beta_a_per_v2": 0.1,
+        "lambda_per_v": 0.02,
+        "body_diode": {
+          "id": "elab.generic-silicon-diode.v1",
+          "is_a": 1e-09,
+          "n": 1.7,
+          "rs_ohm": 1,
+          "temperature_c": 27,
+          "limitations": "Generic silicon junction with Shockley forward/reverse leakage and finite series resistance; no reverse breakdown, capacitance, charge storage, thermal dynamics, ratings or physical part identity."
+        },
+        "limitations": "Generic enhancement PMOS with square-law channel, channel-length modulation and drain-to-source body diode. Body tied to source; zero gate current. No subthreshold conduction, body effect, gate/junction capacitance, charge storage, switching loss, breakdown, heating, ratings or named device identity. External capacitors provide circuit timing. Same illustrative beta magnitude as the generic NMOS, not a physical matched pair."
+      },
+      "gate_current_a": 0,
+      "drain_current_a": -0.002908619225645558,
+      "source_current_a": -0.002908619225645558,
+      "vgs_v": -4.995004995004995,
+      "vds_v": -0.008330759456665504,
+      "power_w": 2.423100711988583e-05,
+      "state": "triode"
+    },
+    "led": {
+      "id": "D1",
+      "current_a": 0.002908619225648683,
+      "voltage_v": 2.0830500148973994,
+      "power_w": 0.006058799321318351
+    }
+  },
+  "limitations": [
+    "No complete screen-reader/AX qualification",
+    "Rapid coordinate arrows produced revision conflicts; exact numeric entry worked",
+    "Native Save selection excludes the suffix; typing an additional suffix in that selection produced a duplicate",
+    "Keyboard undo/redo not established in this pass",
+    "Display configurations and visible p95 latency remain unqualified"
+  ],
+  "filename_observation": {
+    "original": "research/ui-audit/first-version/keyboard-led-ui.elab.elab",
+    "preserved_private": "build/first-version-workflows-session/duplicate-suffix-observed.elab",
+    "sha256": "3fa7d62e283b88765cb8c9b07533254aa899516a8b72298d37121f61e916dd82",
+    "native_selected_text_excluded_final_elab_suffix": true,
+    "basename_only_keyboard_entry_saved_single_suffix": true
+  },
+  "source_commit": "b1137e084b536af22ea8e49fb215f4e49ff5d75e",
+  "native_binary_sha256": "b6cacf4d559782da8e3a289d9c5b27fbc89f9789e1dd31ba903181b9c390dc87",
+  "sdk_source": "47b7153109735006305e3610520e489a953fcd97",
+  "owned_host_closed": true,
+  "canonical_bundle_promoted": false,
+  "artifacts": {
+    "nmos-high.jpg": "b76abe5ae47ef417a961e35399c928e2f98e1d1c5416dfd496b9318c5320f47f",
+    "nmos-low.jpg": "879e4887eec1ad900ef69e3f30847714a3cbd765e7f2f6181d6a39093bca9da2",
+    "pmos-high.jpg": "f1fbbfe667b886fc41fa6a5585025b06c85553fe6a3351efad12c14ceb1c6c64",
+    "pmos-low.jpg": "d872564994717e539807097badc002b7af5f62273cd9d0c929f4d1e1a8ca986e",
+    "nmos-switch-ui.elab": "f5e4091230bb01c7806bfb17b991bc6f6f04d552dce130aae22b698e368cf413",
+    "rc-export-ui.elab": "2e53e9f3ffa4373e55cdc35540363726a8471eb94c1809a786d1d27ecd7b581d",
+    "rc-scope-ui.csv": "ec5a716bfb9d5c2d4ec594223986b62421ae59eff52b1de15623ac68f543ecfc",
+    "rc-csv-observed.json": "e09566a7df1dcf59d21bfd04e7d63a8b687c5af89ffc1ecbf31131fa9447bdec",
+    "keyboard-led-ui.elab": "3fa7d62e283b88765cb8c9b07533254aa899516a8b72298d37121f61e916dd82",
+    "keyboard-led-complete.jpg": "6c09084cb0a46ac7d892e1c39a854afa8eaec007bbe6ebd9f0ab4e155aee87ca"
+  }
+}
