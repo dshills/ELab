@@ -111,3 +111,8 @@ October 18: [native /158 value/Apply and keyboard close](first-version/native-cl
 ### Numeric placement replacement · 0.142.0 /159
 
 October 18: [clean replacement qualification](first-version/numeric-placement-review-checkpoint.json) incorporates SDK `b22478c` from clean source `37046dc`. Exact copied native API smoke/four-adapter/reference/measurement/live/save checks pass. Source-mounted and development native accessibility/pointer commitment retain their separate scope. All 257 files, nineteen prior qualified reviews, original /147 candidate and canonical /120 verify. Commands/models/format remain unchanged; owner Not tried yet and broader input/reader/latency/environment/distribution/study gates remain open.
+
+
+### Native /159 LED construction from blank
+
+[Four actual placements, native named-wire menus, Undo/Redo and Fit](first-version/native-draw-159/README.md) now match a separate packaged agent, with fresh 2.917 mA, truthful stale readings after Undo, and public save/fresh-reopen parity. No native graph seeding, owner work or sealed package change. This closes the stopped construction portion, while current-build value editing/Delete/reconnect and other acceptance scopes remain separate.

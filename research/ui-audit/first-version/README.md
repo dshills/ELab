@@ -1,6 +1,6 @@
 # First-version UI walkthrough and issue list
 
-October 18 update: the [coordinate-placement failure on preserved /158](native-placement-158/README.md) is repaired in [qualified /159](numeric-placement-review-checkpoint.json). Source-mounted/native development accessibility and pointer replay prove commitment; clean copied native API/reference integration qualifies the new package. Owner acceptance remains “Not tried yet.” The stopped blank native LED workflow is the next independent check.
+October 18 update: the [coordinate-placement failure on preserved /158](native-placement-158/README.md) is repaired in [qualified /159](numeric-placement-review-checkpoint.json). Source-mounted/native development accessibility and pointer replay prove commitment; clean copied native API/reference integration qualifies the new package. Owner acceptance remains “Not tried yet.” The [blank native LED construction/wiring/history check](native-draw-159/README.md) now passes on /159; remaining task-A value-edit/Delete/reconnect interactions are next.
 
 October 17, 2026. **Private review boundary reached; wider release/MVP qualification remains open.** These are direct observations of ELab's actual native window, using pointer, keyboard and accessibility actions. They are not participant results, a screen-reader study or visible-latency measurements.
 
@@ -427,3 +427,8 @@ October 18: [numeric-field settlement source proof](../../../docs/validation/num
 ### Numeric placement replacement · 0.142.0 /159
 
 October 18: [clean replacement qualification](numeric-placement-review-checkpoint.json) incorporates SDK `b22478c` from clean source `37046dc`. Exact copied native API smoke/four-adapter/reference/measurement/live/save checks pass. Source-mounted and development native accessibility/pointer commitment retain their separate scope. All 257 files, nineteen prior qualified reviews, original /147 candidate and canonical /120 verify. Commands/models/format remain unchanged; owner Not tried yet and broader input/reader/latency/environment/distribution/study gates remain open.
+
+
+### Native blank LED construction · /159
+
+October 18: [actual native construction/wiring/history](native-draw-159/README.md) starts with an empty host, places four parts with palette/typed coordinates, connects four wires through eight native menu choices, and reads fresh 2.917 mA. Ten graph/drawing/history/result/scope stages match a separate packaged agent. Undo marks old readings stale; Redo restores fresh physics. Fit exposes all captions. Public Save preserves all fields except native view against the agent save, and a fresh agent reopens matching graph/results/scope. Original PID50780 closes normally and is absent; the stopped custom test bundle is restored. This is the byte-identical /159 executable in an isolated bundle, not whole-bundle or full reader/IME/visible-p95 acceptance. Owner remains Not tried yet, with no source/SDK/version change.
