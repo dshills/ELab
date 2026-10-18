@@ -1,0 +1,109 @@
+{
+  "date": "2026-10-18",
+  "status": "bounded mounted paused-potentiometer drag and one-Undo match shared agent commands; no product change",
+  "version": "0.126.0 /143",
+  "native_binary_sha256": "44515a5ae3d85a82d2f1415c9be9d4377d05cd83aa84faa580c445356d67c4ce",
+  "agent_sha256": "7b2a5cf5a314ac09c651c11252a26adaaed6378064fb8cd3856afb1096143e78",
+  "harness": "closed owned bundle reused with exact clean /143 executable; original app binding reused; fresh private endpoint; no recovery/appearance",
+  "physical_input": {
+    "drag_start_image_xy": [
+      889,
+      249
+    ],
+    "drag_end_image_xy": [
+      951,
+      249
+    ],
+    "source_image": "drag-ready.jpg",
+    "undo": "one native Cmd+Z",
+    "motion_event_count": "not instrumented; no individual preview-count claim"
+  },
+  "observations": {
+    "passed": true,
+    "scope": "one mounted physical mouse drag and one native Cmd+Z on the exact review-143 executable; separate agent replay",
+    "wiper_before": 0.5,
+    "wiper_after_drag": 0.7510121154785157,
+    "wiper_after_one_undo": 0.5,
+    "command_revision_delta_drag": 1,
+    "new_wiper_event_count": 1,
+    "undo_entry": {
+      "name": "Adjust wiper",
+      "actor": "user",
+      "command_revision": 11
+    },
+    "before_undo_tip_restored": true,
+    "physical_time_s": 0.005,
+    "capacitor_voltage_v": 2.1616852538229714,
+    "independent_thevenin_reference_v": 2.161661791908468,
+    "independent_reference_tolerance_v": 0.002,
+    "run_electrical_and_charge_preserved_during_drag": true,
+    "undo_marks_results_stale_and_restores_clean_source": true,
+    "agent_comparison": "Every reported mixed/transient field including traces/events except independent run/electrical identities; rel 1e-9/abs 1e-12; exact graph equality at all three phases",
+    "limits": [
+      "One paused capacitor-loaded pot at one window/configuration",
+      "No agent interleaving during held drag, loss of focus mid-drag, running drag, VoiceOver/IME or latency percentile claim",
+      "Slider and exact percent field remain absent from external AX snapshot; physical drag located using actual screenshot"
+    ]
+  },
+  "source_sites": [
+    {
+      "file": "desktop/actuation_controls.go",
+      "line": 22,
+      "function": "*screen.potentiometerControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"potentiometer.wiper.set\", workbench.WiperParams{ID: part.ID, Position: float64(e.Number) / 100})",
+      "public_commands": [
+        "potentiometer.wiper.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/actuation_controls.go",
+      "line": 24,
+      "function": "*screen.potentiometerControls",
+      "kind": "node-Change",
+      "expression": "Change: change",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/actuation_controls.go",
+      "line": 24,
+      "function": "*screen.potentiometerControls",
+      "kind": "node-Change",
+      "expression": "Change: change",
+      "status": "requires-binding-review"
+    }
+  ],
+  "source_sha256": {
+    "desktop/actuation_controls.go": "9b0e8148f7ca32ac2f1802d69411fcd355c2df5b2af4b89df1084d413166ee1e",
+    "desktop/field_context.go": "4f3abac0bc24fd5054e89ad5e479a6a9196ba0ab52faa9134294743a34b74bd5",
+    "desktop/slider_gesture_test.go": "2725e7ed06db68344fead47d4cd81221bcb8d0ae938978246644270d67230f81",
+    "desktop/potentiometer_test.go": "ec4d87a6365ebd187dc61be74cdccaf2e2126553a55819e7fe395af529d7d2fc"
+  },
+  "quality": "Actual native pointer and shortcut, independent RC law, full reported electrical/trace agent comparison and structural history checks pass. Product/SDK Go unchanged; existing complete source race/vet/lint and copied review runtime evidence remains applicable.",
+  "ownership": {
+    "private_host": "private test copy saved; app.close accepted; original host exit 0 observed",
+    "owner_window": "not operated",
+    "physical_jobs_submitted": 0,
+    "OS_settings_changed": false,
+    "review_packages": "unchanged; verified separately"
+  },
+  "limits": [
+    "One paused capacitor-loaded fixture at this workstation/window; not full mounted gesture coverage",
+    "No agent interleaving during held drag, running drag, loss of focus mid-drag, IME/VoiceOver or p95 timing established",
+    "External AX snapshots still omit the slider/exact field; screenshots used to locate the actual slider. No cause assigned.",
+    "Source verifier is retained provenance for the owned test fixture/observations, not a general-purpose destructive demo to run against user sessions"
+  ],
+  "evidence_sha256": {
+    "scrolled.ax.txt": "775aaaf38ad90c287007525bf94d2a40a0b00c33203fe041638ef94c3f486967",
+    "drag-ready.jpg": "1ba4a4df3b28ca489f7afe570cdcbacfe386800fe5c392837621f6b7241a4541",
+    "Pot-before.elab": "582c6fb3933d6ba1e7e7b23a29aec7a1cfbb672a0398a49795689979ed3ba1c3",
+    "after-drag.ax.txt": "14105d853f003da0144fd84022f0028f83c8b1a1ce998166aa641bb15bf2c1c1",
+    "Pot-after-undo.elab": "582c6fb3933d6ba1e7e7b23a29aec7a1cfbb672a0398a49795689979ed3ba1c3",
+    "undo.ax.txt": "615b8f70c5d00624d810948b43ce5cbcbc6a5e604bee15e55b2507239e5af80c",
+    "undo.jpg": "ef2add82e4300568502bd7e9e49b71c2f8334163e61d2064b4d008812b174ccc",
+    "after-drag.jpg": "42579d1d7aa78c7c58728d4a454dcca02926734ff3fcd5543c5bb517127b423e",
+    "verify.py": "50acf60ed55727f279c2bbd90bcc70f551d49dc31fff27693f2f3ca7a879db1f",
+    "states.json.gz": "8ec5b20c6dd17eaddf349032ae20587813dfb5518ebd30ca978b754e3f2ed326"
+  }
+}

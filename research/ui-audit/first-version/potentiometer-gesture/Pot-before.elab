@@ -1,0 +1,150 @@
+{
+  "example_id": "rc",
+  "potentiometer_model": {
+    "id": "elab.linear-potentiometer.v1",
+    "end_resistance_ohm": 1,
+    "limitations": "Generic linear three-pin resistive track. Total resistance is split into two segments, each with 1 ohm endpoint resistance. Position 0 is toward pin 2; position 1 is toward pin 1. No contact noise, nonlinear taper, ratings, heating or physical part identity."
+  },
+  "recordings": {
+    "entries": [],
+    "selected_index": -1,
+    "viewing": false
+  },
+  "paused": true,
+  "scope_probes": {
+    "ids": [
+      "v:Timing.wiper",
+      "i:Timing.wiper",
+      "v:C1",
+      "v:V1.positive"
+    ]
+  },
+  "format": "elab.schematic",
+  "version": 4,
+  "graph": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "pulse-source",
+        "name": "Pulse source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-square.v1",
+        "rotation": 0
+      },
+      {
+        "id": "C1",
+        "kind": "capacitor",
+        "name": "Capacitor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 0.000001,
+        "unit": "F",
+        "model": "ideal-capacitor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 110
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      },
+      {
+        "wiper_position": 0.5,
+        "id": "Timing",
+        "kind": "potentiometer",
+        "name": "Potentiometer",
+        "terminals": [
+          "1",
+          "2",
+          "wiper"
+        ],
+        "position": {
+          "x": 0,
+          "y": -110
+        },
+        "value": 10000,
+        "unit": "Ω",
+        "model": "elab.linear-potentiometer.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W3",
+        "from": "C1.2",
+        "to": "GND.reference",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "GND.reference",
+        "to": "V1.negative",
+        "connected": true
+      },
+      {
+        "id": "W5",
+        "from": "V1.positive",
+        "to": "Timing.1",
+        "connected": true
+      },
+      {
+        "id": "W6",
+        "from": "Timing.2",
+        "to": "GND.reference",
+        "connected": true
+      },
+      {
+        "id": "W7",
+        "from": "Timing.wiper",
+        "to": "C1.1",
+        "connected": true
+      }
+    ]
+  },
+  "view": {
+    "center": {
+      "x": -121.41438356170516,
+      "y": -15.020547945209827
+    },
+    "zoom": 0.44376899696034344
+  },
+  "led_model": {
+    "id": "elab.generic-red-led.v1",
+    "is_a": 1e-20,
+    "n": 2,
+    "rs_ohm": 1,
+    "temperature_c": 27,
+    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+  },
+  "transient_settings": {
+    "step_s": 0.001,
+    "high_s": 0.05,
+    "low_s": 0.05,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.02
+  }
+}

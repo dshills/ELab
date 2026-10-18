@@ -30,7 +30,7 @@
       "id": "EDIT-03",
       "evidence": "Resistance/capacitance and shared command time parser; native unit-aware time and exact voltage/frequency/phase waveform fields, strict files, invalid-value preservation, named batches/history; potentiometer slider; actual settled native value entry, retained refusals and keyboard coordinate-repeat repairs",
       "status": "partial",
-      "assessment": "Partial: time/waveform units and exact round-trip value drafts now work through shared commands/native committed fields; native slider events prove one commit/undo per drag; mounted-driver typing/IME/invalidation/focus conformance remains open"
+      "assessment": "Partial: time/waveform units and exact round-trip value drafts now work through shared commands/native committed fields; control-event tests plus one actual mounted paused slider drag/Undo prove a single commit/event/history entry and charge/time continuity; running/interleaved/focus/typing/IME coverage remains open"
     },
     {
       "id": "EDIT-04",
@@ -46,7 +46,7 @@
     },
     {
       "id": "SIM-02",
-      "evidence": "Fresh/stale identities; queued switches and atomic background input/wiper publication with charge/time continuity; actual native RC Charge/Discharge queues preserve committed voltage/time, with one-sample Step and Restart matching the external agent and independent RC law",
+      "evidence": "Fresh/stale identities; queued switches and atomic background input/wiper publication with charge/time continuity; actual native RC Charge/Discharge queues preserve committed voltage/time, with one-sample Step and Restart matching the external agent and independent RC law; one mounted pot drag and Undo match agent physics/history, preserve charge/time during drag and visibly mark Undo results stale",
       "status": "partial",
       "assessment": "Partial: pending/coalescing/cancellation/provenance evidence exists; complete mounted gesture invalidation and state-table qualification remain open"
     },

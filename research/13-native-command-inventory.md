@@ -172,3 +172,6 @@ The October 18 [native RC control parity check](ui-audit/first-version/live-cont
 
 
 The rendered simulation-button repair changes only `desktop/main.go`: the registry's accepted Pause/Resume focus continuation moves to a shared helper, and rendered Pause/Resume/Restart now call the same public dispatcher with the view's command revision/document generation. One new guarded dynamic ingress makes the source totals **389 sites /147 requiring binding review**; all 162 public IDs, aliases and source-routed sets remain unchanged. Failure-before/passing-after regressions cover retained controls after replacement, document-only mismatch, fresh controls, focus and live solver publication. This count is a syntax change, not an acceptance upgrade.
+
+
+The [mounted potentiometer drag](ui-audit/first-version/potentiometer-gesture/checkpoint.json) ties the actual slider `Change: change` callback in `actuation_controls.go` to `potentiometer.wiper.set` and one shared history entry. Native Undo and a separate external-agent replay agree. The sibling exact-percent callback and broader gesture invalidation/AX behavior remain unqualified; the 389-site /147-binding-review syntax inventory is unchanged.
