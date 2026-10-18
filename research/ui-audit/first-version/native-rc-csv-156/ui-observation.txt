@@ -1,0 +1,25 @@
+Transcribed CUA AX excerpts and screenshot observations; not a raw tool transcript.
+Original endpoint-backed native PID: 86661. Exact-path app selection 0.1541 seconds.
+Initial: Paused RC trace at 20 ms; C1 voltage/R1 current; clean RC reference.elab.
+Scroll scope dock down one page. AX tree unchanged; screenshot confirms visible
+Export CSV button, selected plot axes 0.004 s to 0.016 s and live 4.323 V /0.068 mA.
+After fresh full AX, click visible Export scope CSV once.
+Native panel: Export scope CSV; Save As Waveforms; Where observations; Cancel/Save.
+Click native Cancel once.
+App returns Paused, 4.323 V /0.068 mA, clean RC reference.elab /4 components/4 wires.
+Controller confirms identical circuit, full simulation/scope, document/history, prior
+project-work metadata and absent last_export; no CSV created and project bytes unchanged.
+
+Click Export scope CSV again.
+Native panel: Export scope CSV; Save As Waveforms.
+Cmd+Shift+G; native PathTextField set to exact owned native-rc-csv-156 observations
+folder; AX verifies the path. Return returns to export panel.
+Native Save As setValue RC interval; AX verifies exact filename and field focus.
+Click Save once.
+AX: Exported RC interval.csv; Paused; 4.323 V /0.068 mA;
+footer RC reference.elab /4 components /4 wires /last change user.
+Only after this visible result is export-ui-observed signalled to the controller.
+Completed user-owned export.scope.csv metadata matches the actual file hash/bytes
+and captured generation/run/electrical identities. All 13 rows match agent and RC law.
+No further UI actions. Original host closes normally after verification.
+Screenshots were inspected in the tool session but were not exported.

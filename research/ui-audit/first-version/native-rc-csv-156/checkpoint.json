@@ -1,0 +1,106 @@
+{
+  "date": "2026-10-18",
+  "source_base": "4ad434c8bb8ea766f0139fe7ff08b6cd3df73d4a",
+  "status": "bounded native RC CSV Cancel/Save matches packaged agent and independent RC equations; broader qualification remains open",
+  "production_changed": false,
+  "sdk_changed": false,
+  "product_version_increment": false,
+  "product_rebuild_or_promotion": false,
+  "native_input": {
+    "method": "CUA scope scroll, visible Export CSV, native Cancel; fresh Export CSV, verified native folder/name setters, Save",
+    "cancel_preserves_accepted_state_and_artifact_metadata": true,
+    "success_message": "Exported RC interval.csv",
+    "export_actor": "user"
+  },
+  "comparison": {
+    "rows": 13,
+    "columns": [
+      "run_id",
+      "electrical_revision",
+      "engine",
+      "window_start_s",
+      "window_end_s",
+      "sample_step_s",
+      "time_s",
+      "v:C1 [V]",
+      "i:R1 [A]"
+    ],
+    "native_sha256": "f161d9723f548256ebf3449a68ac0c41a84824dfbfdfc1c452685e1f82fb4158",
+    "agent_sha256": "f161d9723f548256ebf3449a68ac0c41a84824dfbfdfc1c452685e1f82fb4158",
+    "bytes_equal": true,
+    "all_fields_equal_except_independent_run_electrical_ids": true,
+    "independent_RC_law_passed": true,
+    "temporary_export_files_remaining": 0
+  },
+  "preservation": {
+    "retained_simulation_samples": 21,
+    "exported_samples": 13,
+    "window_s": [
+      0.004,
+      0.016
+    ],
+    "sample_step_s": 0.001,
+    "selected_probes": [
+      "v:C1",
+      "i:R1"
+    ],
+    "graph_scope_physics_document_history_unchanged": true,
+    "saved_project_bytes_unchanged": true,
+    "artifact_provenance_hash_byte_count_verified": true
+  },
+  "independent_reference": {
+    "resistance_ohm": 10000,
+    "capacitance_f": 1e-06,
+    "input_v": 5,
+    "time_constant_s": 0.01,
+    "voltage_law": "5*(1-exp(-t/0.01))",
+    "current_law": "5*exp(-t/0.01)/10000",
+    "relative_tolerance": 1e-10,
+    "absolute_tolerance_SI": 1e-12,
+    "timestamp_tolerance_s": 1e-12
+  },
+  "process": {
+    "original_endpoint_pid": 86661,
+    "normal_closure": true,
+    "exit_code": 0,
+    "no_remaining_matching_native_processes": true
+  },
+  "preserved_review": {
+    "source_commit": "22a84d590df498c023cabb94bf6ccf9883204a94",
+    "release": "0.139.0 /156",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.139.0-156-review/elab-agent",
+    "agent_sha256": "0b0d62a5b34156f04cb4ef298f6a8671af8b7e20e9fa1133c4a8cb79a32de5dd",
+    "receipt_sha256": "b2659269a286e3230deac30659fadb3d7df20d409fa8616a9d3d33425963c181",
+    "ledger_sha256": "b5cdacef44f6205d554ba8f1f315d4138e297ef0b1f1c2c1047148a7f5aa7d95",
+    "production_source_files_verified": 68,
+    "runtime_inputs_verified": 343,
+    "manifest_file_entries_verified": 135,
+    "manifest_sha256": "ec49b66aa2c9a10c06df76882245bca16b69addbd8dfceabf6077e3f54da3155"
+  },
+  "producer_sha256": {
+    "scripts/first-version-parity.py": "936f8c79a1a1e7278c299973c7edc8f925f88b158cc474759005ba97e6723370",
+    "scripts/persistence-demo.py": "4f3893eec22b3e6173aa75138e7774a43727b0bfc908c4bb56e8616e0d45dae5"
+  },
+  "quality": {
+    "reused_unchanged_source_and_runtime_gates": true,
+    "full_gate_rerun": false
+  },
+  "limits": [
+    "One paused fixed-window RC native CSV Cancel/Save sequence; source/window seeded publicly",
+    "Other topologies, concurrent/running/stale/empty/overwrite/error/conflict cases and other formats remain separate",
+    "No full typing/IME/reader, spreadsheet-app, p95/environment/distribution/study qualification",
+    "Owner walkthrough Not tried yet; P0 stays 17 implemented /10 partial"
+  ],
+  "evidence_sha256": {
+    "Agent interval.csv": "f161d9723f548256ebf3449a68ac0c41a84824dfbfdfc1c452685e1f82fb4158",
+    "RC interval.csv": "f161d9723f548256ebf3449a68ac0c41a84824dfbfdfc1c452685e1f82fb4158",
+    "RC reference.elab": "5a96b8608be0909f865b61039e25415513aa1bfbe2b227b8efb8ffd05749ef0e",
+    "README.md": "10e5476256e67db57f4e2f0ca8bb4d708534cbd9613020dcf4f638c5dba7bc17",
+    "native-host.txt": "45850b150f55227a54a45c0fa8944cc65487526b7ba22d54fac7dc61d82b99d9",
+    "native-session.json.gz": "50ebe597d2a84f61fafcd45ceadf80e92faa3eb4379169ebc04fe8bf88ae82a4",
+    "observer-source.py": "98b66c63e0fce02a4224ac3d31cec8882dd587d111d94e53fcdc84e82200f0f1",
+    "process-verification.json": "ef402878d67be6e4399e501f3dde7fc1a93ace0fd299dccb21326f7ef281ba23",
+    "source-release-identity.json": "0922ea3d67ced36a474c6d90b1b9253dd12fa5f22523b8ea28d4f7fae977db70",
+    "ui-observation.txt": "f1af1e51857f92a84c8f0ee6e27e48016813c0f41fd29dbea53c7ccf8431fe70"
+  }
+}
