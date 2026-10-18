@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-18",
+  "source_base": "ce48c8f6f30e192d8e512e786c74cd2eb78f3a8a",
+  "scope": "progress-record reconciliation and read-only quality guard; no product acceptance upgrade",
+  "defect": "Saved audit JSON differed from reviewed Markdown, and current native source count still read 57 rather than verified 62",
+  "repair": [
+    "Reviewed current functional evidence rows against 0.125.0 /142, native RC control evidence and direct paper confirmation",
+    "Regenerated saved JSON with identical 27 P0 ID/status pairs",
+    "Added mutually exclusive --verify to prd-audit.py and invoke it at start of scripts/check.sh; no saved-report writes in verify mode"
+  ],
+  "unchanged_acceptance_counts": {
+    "implemented": 17,
+    "partial": 10,
+    "pending": 0
+  },
+  "discovery_inventory": {
+    "commands": 162,
+    "expanded_root_inputs": 162,
+    "scoped_contracts": 138,
+    "without_scoped_contracts": 24,
+    "query_purity": true,
+    "native_source_files": 62,
+    "source_sites": 388,
+    "source_routed_ids": 132,
+    "binding_review_sites": 146
+  },
+  "validation": {
+    "real_stale_before": "exit 1",
+    "valid_report_after": "exit 0",
+    "CLI_cases": "valid/missing/malformed/stale; preserved bytes; incompatible --verify/--output refused before write",
+    "shell_syntax": "sh -n scripts/check.sh passed",
+    "python_suite": "43 tests, 1.569 s, pass",
+    "lint_imports_Staticcheck_SDK_pin": "pass",
+    "compiled_gate_reused": "Product Go/native source unchanged; prior complete source race/vet and exact review runtime receipts remain applicable; no redundant compiled suite repeated"
+  },
+  "limits": [
+    "Report freshness/ID coverage is not implementation acceptance",
+    "Contract/schema presence is not complete semantics, parity or accessibility",
+    "Owner walkthrough not tried yet; broader external/visible/platform/participant gates remain open"
+  ],
+  "native_sha256": "2c2c855970ac9ac6520efb2e11cf0f9788c026bc6b3435718494df24f0e4a1f2",
+  "agent_sha256": "b8e12442548a3c9ecb0f6bef435cc5d9edcdb3129ba43adbecf140ade20a6da0",
+  "source_sha256": {
+    "scripts/prd-audit.py": "348d8ae7f45d12308974d4f541f130ceee7aa8feb6adf73922f7559ff96c87a3",
+    "scripts/check.sh": "4831adce935558bd65abd3b95d18abde050c69872658ea6d000b244d33d8ea78",
+    "research/11-prd-implementation-audit.md": "e74018ab455a1e0ce3d30451fd1cb85ba2491472e83a8154c8d55a4b19a88ce3",
+    "research/11-prd-implementation-audit.json": "eee703aee46c76225feeedd754e36fa03c343d96b7150ab35c2f159e2d2c08e8"
+  },
+  "evidence_sha256": {
+    "python-tests.txt": "b8968fe7ae8fd900cb6a00ccbc07ecebacd374817d3d438ad55a61148ea03c9e",
+    "stale-before.txt": "f68be0bff66264f0421be603633a98453fc8a86cdbe820948a259ef5468f7121",
+    "discovery.json": "d2851ecc6faf625ced92db971e646354874f917115ba0798265a9a79bd9663e9",
+    "verify-cases.json": "7a148541315cb6e77456d4935435430d1e582e45c625e3f7d906bf65bffbcaba",
+    "lint.txt": "34b1e6a23cb5d5f9f5f940009a19e351181b83f59a6c68cf45fac3f17ceafebd"
+  }
+}

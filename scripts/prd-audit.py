@@ -10,7 +10,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--output', type=Path)
+    destination = parser.add_mutually_exclusive_group()
+    destination.add_argument('--output', type=Path)
+    destination.add_argument('--verify', type=Path, help='check a saved report without changing it')
     args = parser.parse_args()
     requirements = ROOT/'research/07-product-requirements.md'
     audit = ROOT/'research/11-prd-implementation-audit.md'
@@ -30,6 +32,13 @@ def main():
                   requirements=len(required), counts={status: sum(r['status'] == status for r in rows)
                                                      for status in ['implemented', 'partial', 'pending']},
                   rows=rows)
+    if args.verify:
+        try:
+            saved = json.loads(args.verify.read_text())
+        except (OSError, ValueError) as error:
+            parser.exit(1, f'Cannot read PRD audit report {args.verify}: {error}\n')
+        if saved != report:
+            parser.exit(1, f'PRD audit report differs from current Markdown: {args.verify}; review the changes and regenerate with --output\n')
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(report, indent=2)+'\n')

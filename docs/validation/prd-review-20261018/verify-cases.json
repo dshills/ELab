@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "scope": "manual CLI regression and report-preservation checks, not product acceptance",
+  "cases": [
+    {
+      "case": "valid",
+      "exit_code": 0,
+      "file_preserved": true,
+      "diagnostic": "verified"
+    },
+    {
+      "case": "missing",
+      "exit_code": 1,
+      "file_preserved": true,
+      "diagnostic": "Cannot read PRD audit report /Users/dshills/Development/projects/ELab/build/prd-review-20261018/elab-prd-verify-me1_ri84/missing.json: [Errno 2] No such file or directory: '/Users/dshills/Development/projects/ELab/build/prd-review-20261018/elab-prd-verify-me1_ri84/missing.json'"
+    },
+    {
+      "case": "malformed",
+      "exit_code": 1,
+      "file_preserved": true,
+      "diagnostic": "Cannot read PRD audit report /Users/dshills/Development/projects/ELab/build/prd-review-20261018/elab-prd-verify-me1_ri84/malformed.json: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+    },
+    {
+      "case": "stale",
+      "exit_code": 1,
+      "file_preserved": true,
+      "diagnostic": "PRD audit report differs from current Markdown: /Users/dshills/Development/projects/ELab/build/prd-review-20261018/elab-prd-verify-me1_ri84/stale.json; review the changes and regenerate with --output"
+    },
+    {
+      "case": "output-and-verify-exclusive",
+      "exit_code": 2,
+      "output_not_created": true
+    }
+  ],
+  "p0_id_status_pairs_unchanged": true,
+  "counts": {
+    "implemented": 17,
+    "partial": 10,
+    "pending": 0
+  }
+}
