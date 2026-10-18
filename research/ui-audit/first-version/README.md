@@ -414,3 +414,5 @@ October 18: [native legacy/Cocoa handoff source repair](../../../docs/validation
 ### Native text handoff replacement · 0.141.0 /158
 
 October 18: [clean replacement qualification](native-text-review-checkpoint.json) incorporates SDK `274f5cc` from clean source `622d31b`. Exact copied native smoke/four-adapter/reference/measurement/recorded/live/save checks pass. Source Cocoa/FIFO and development native six-entry/interval behavior retain distinct scopes. All 196 files, eighteen prior qualified reviews, original /147 candidate and canonical /120 verify. Commands/models/format and native ledger remain unchanged; owner Not tried yet and broader typing/IME/reader/latency/environment/distribution/study gates remain open.
+
+October 18: [native /158 value/Apply and keyboard close](native-close-158/README.md) verifies complete ASCII entry, one Apply, Cmd+W/Cancel preserving edits/manual save, and fresh Cmd+W/Save-close with exact user save metadata and agent reopening parity. Clean semantic close precedes normal original-host exit; queued shutdown flags retain their scope. Source/SDK/release bytes and owner status are unchanged.
