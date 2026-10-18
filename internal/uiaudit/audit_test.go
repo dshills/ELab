@@ -82,16 +82,21 @@ func view(s *screen, route string) {
  s.cursorAction(state, "select-b", "Label fake.command", "scope.cursor.select", "b")
  s.cursorAction(state, "dynamic", "Dynamic", route, "a")
  s.cursorAction(state, "unknown", "Clear", "missing.command", "a")
+ s.recordedCursorAction(state, "recorded", "Label fake.command", "recording.cursor.clear", "a")
+ s.cursorActionFor(state, "relay", "Dynamic", route, "a", "capture-1")
 }`
 	if err := os.WriteFile(filepath.Join(dir, "view.go"), []byte(source), 0600); err != nil {
 		t.Fatal(err)
 	}
 	r, err := Audit(dir)
-	if err != nil || len(r.Issues) != 1 || !strings.Contains(r.Issues[0], "missing.command") || len(r.Sites) != 3 {
+	if err != nil || len(r.Issues) != 1 || !strings.Contains(r.Issues[0], "missing.command") || len(r.Sites) != 5 {
 		t.Fatal("cursor factory route/unknown command detection failed", r.Issues, err)
 	}
 	if len(r.Sites[0].Commands) != 1 || r.Sites[0].Commands[0] != "scope.cursor.select" || r.Sites[1].Status != "requires-binding-review" || len(r.Sites[1].Commands) != 0 {
 		t.Fatal("cursor command argument confused with label or dynamic route", r.Sites)
+	}
+	if len(r.Sites[3].Commands) != 1 || r.Sites[3].Commands[0] != "recording.cursor.clear" || r.Sites[4].Status != "requires-binding-review" {
+		t.Fatal("recorded cursor factory or captured-recording relay lost", r.Sites)
 	}
 }
 

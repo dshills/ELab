@@ -1,0 +1,7 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+--- FAIL: TestMountedScopeCursorRecordedFocusLossClearUsesOneClick (0.16s)
+    recorded_cursor_offscreen_test.go:84: one Clear click did not settle and clear recorded cursor: cursor=&{Requested:0.008 Time:0.008 Valid:true Reason:} revision=6→7 error=expected command revision 6; current command revision is 7
+FAIL
+FAIL	github.com/dshills/elab/desktop	1.005s
+FAIL

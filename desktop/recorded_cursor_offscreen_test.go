@@ -1,0 +1,97 @@
+//go:build offscreen
+
+package main
+
+import (
+	"reflect"
+	"testing"
+
+	"cogentcore.org/core/events"
+	"cogentcore.org/core/events/key"
+	"github.com/dshills/elab/workbench"
+	"github.com/dshills/vellum/drivers/cogent"
+	"github.com/dshills/vellum/ui"
+)
+
+func TestMountedScopeCursorRecordedStartupMatchesPublicAgent(t *testing.T) {
+	s, cleanup := testScreen(t)
+	t.Cleanup(cleanup)
+	agent := workbench.New()
+	t.Cleanup(agent.Close)
+	for _, service := range []*workbench.Service{s.service, agent} {
+		recordedCursorSource(t, service)
+	}
+	m := mountedRecordedCursorControls(t, s)
+	before := s.service.Snapshot()
+	if before.Recording.Scope.A != nil || before.Recording.Scope.B != nil {
+		t.Fatal("fixture already has a cursor")
+	}
+	typeMountedCursor(t, m, "recorded-cursor-a", "0 s")
+	if !reflect.DeepEqual(before, s.service.Snapshot()) {
+		t.Fatal("private typing changed recorded measurements")
+	}
+	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeReturnEnter})
+	agentAction(t, agent, "recording.cursor.set", workbench.RecordingCursorParams{OperationID: agent.Snapshot().Recording.ID, Cursor: "a", Time: 0})
+	after := s.service.Snapshot()
+	if after.Recording.Scope.A == nil || !after.Recording.Scope.A.Valid || after.Recording.Scope.A.Time != 0 || after.CommandRevision != before.CommandRevision+1 || !reflect.DeepEqual(after.Recording.Scope, agent.Snapshot().Recording.Scope) {
+		t.Fatalf("typing startup time did not place the same cursor as the agent: cursor=%+v revision=%d→%d error=%s", after.Recording.Scope.A, before.CommandRevision, after.CommandRevision, s.errorMessage)
+	}
+	assertCursorMeasurementPreservesPhysics(t, before, after)
+}
+
+func mountedRecordedCursorControls(t *testing.T, s *screen) *mountedControlWindow {
+	t.Helper()
+	m := newMountedControlWindow(t, s, func() ui.Node {
+		state := s.service.Snapshot()
+		controls := s.recordingCursors(state)
+		root := ui.Node{ID: "root", Kind: ui.Column, Focus: ui.FocusRequest{ID: "recorded-cursor-a", Sequence: 1}}
+		for i := 0; i < 6; i += 3 {
+			row := ui.Node{ID: controls.Children[i].ID + "-row", Kind: ui.Row}
+			for _, node := range controls.Children[i : i+3] {
+				if node.Kind == ui.TextField {
+					node.MinWidth, node.MinHeight = 190, 40
+				}
+				row.Children = append(row.Children, node)
+			}
+			root.Children = append(root.Children, row)
+		}
+		s.bindFieldContext(&root, actionContext{state.CommandRevision, state.Document.Generation})
+		return root
+	})
+	s.settleField = func(id string, done func(error)) error {
+		return cogent.SettleTextField(m.ctx, s.app, "main", id, done)
+	}
+	return m
+}
+
+func TestMountedScopeCursorRecordedFocusLossClearUsesOneClick(t *testing.T) {
+	for _, action := range []struct{ name, button, command, cursor string }{
+		{"clear", "recorded-cursor-clear-a", "recording.cursor.clear", "a"},
+		{"select", "recorded-cursor-select-b", "recording.cursor.select", "b"},
+	} {
+		t.Run(action.name, func(t *testing.T) {
+			s, cleanup := recordedCursorRC(t)
+			t.Cleanup(cleanup)
+			agent := workbench.New()
+			t.Cleanup(agent.Close)
+			recordedCursorSource(t, agent)
+			for _, service := range []*workbench.Service{s.service, agent} {
+				agentAction(t, service, "recording.cursor.set", workbench.RecordingCursorParams{OperationID: service.Snapshot().Recording.ID, Cursor: "a", Time: .004})
+			}
+			m := mountedRecordedCursorControls(t, s)
+			before := s.service.Snapshot()
+			typeMountedCursor(t, m, "recorded-cursor-a", "8 ms")
+			if !reflect.DeepEqual(before, s.service.Snapshot()) {
+				t.Fatal("private typing changed captured state")
+			}
+			clickMountedControl(t, m, action.button)
+			agentAction(t, agent, "recording.cursor.set", workbench.RecordingCursorParams{OperationID: agent.Snapshot().Recording.ID, Cursor: "a", Time: .008})
+			agentAction(t, agent, action.command, workbench.CursorSelectParams{Cursor: action.cursor})
+			after := s.service.Snapshot()
+			if after.CommandRevision != before.CommandRevision+2 || s.errorMessage != "" || !reflect.DeepEqual(after.Recording.Scope, agent.Snapshot().Recording.Scope) {
+				t.Fatalf("one %s click did not settle and match the agent: cursor=%+v active=%s revision=%d→%d error=%s", action.name, after.Recording.Scope.A, after.Recording.Scope.ActiveCursor, before.CommandRevision, after.CommandRevision, s.errorMessage)
+			}
+			assertCursorMeasurementPreservesPhysics(t, before, after)
+		})
+	}
+}

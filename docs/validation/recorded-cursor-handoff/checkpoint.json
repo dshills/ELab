@@ -1,0 +1,69 @@
+{
+  "passed": true,
+  "scope": "Recorded cursor Clear/Select source repair, mounted router and in-process public-agent comparison; clean replacement qualification pending",
+  "previous_source_commit": "b002b455ffc6ce9366be70691ef22bbbd29a3153",
+  "source_sha256": {
+    "desktop/cursor_actions.go": "760fc37cc3fcd864732b2db13169a6019c0b20e755c6d511940655b2a55340c3",
+    "desktop/recording.go": "1f4ef6a4fa3f8e41ef944cc9bc19e476415103cded24d610947eef3eec150db7",
+    "internal/uiaudit/audit.go": "39aed55c709ce518ddfc65c01e0e1b5480485b408a64ef1de7019097dc3fde89",
+    "desktop/recorded_cursor_actions_test.go": "932160a2374b128b476535d5b9f1a6e702705de938e4c34ba10f6ce1aea1d788",
+    "desktop/recorded_cursor_offscreen_test.go": "d90712fa8742f39ec4ce780a0e3fd38c494b9b8ceaa1206e411db7b5ee78c483",
+    "desktop/scope_context_test.go": "0cb03f3e50afb41d62a0906211a0e572ca9ffaeb8845401c9bcd7dab96379e81",
+    "desktop/scope_cursor_offscreen_test.go": "7c0923270fc32cc39eddae31f168d4c1e66d8f9ccbf0bb3e8f6bc7c7839298a8",
+    "internal/uiaudit/audit_test.go": "7964629beabb72095aab2a11571f8fe63641d41eb94b5ef084b91209f071a171"
+  },
+  "evidence_sha256": {
+    "README.md": "4308a30717705f6d3778cdf052b6a46933fca455fd26a2afb9ca89cff4eebb42",
+    "before.txt": "5ccfb33747839f52b48ad7e97a26f04ad676c70ce25a216ab2ca47ccc88063ad",
+    "development-build-info.txt": "3d572c06fad74a85a64905d67fca14ccba25ad37620212f60a340f47f8a6425c",
+    "focused.txt": "18fe25e1b54d5bc9700d6397cafce14234bcf225b8cdcf408d9fd10c4b915f56",
+    "full-check.txt": "4eba68df60ae06bfd902c2d7eddcc62586dd465df021014c7dd6ed43be49e613",
+    "native-smoke.txt": "322a9baadf92232e206150595cb5bd0c07d09c1dfa2cf1a16846962752bc32a4"
+  },
+  "quality": {
+    "full_source_gate_exit_code": 0,
+    "python_tests": 51,
+    "native_race_s": 151.518,
+    "existing_mounted_race_s": 16.31,
+    "focused_race_s": 6.491,
+    "native_smoke_exit_code": 0
+  },
+  "native_development_binary_sha256": "69a1bce2df6ce7af5b054e1b6690bf754231c874b2364d36e749fec1d5723397",
+  "source_ledger": {
+    "production_files": 68,
+    "sites": 393,
+    "binding_review_sites": 160,
+    "literal_routes": 207,
+    "public_commands": 162,
+    "source_routes": 132,
+    "ledger_sha256": "3f02d9a7c05a5a2b7cc77b9d7c4e88582b83075d0196b851e839bafc60532303",
+    "command_alias_and_coverage_sets_unchanged": true
+  },
+  "sdk_source": "677548d0ea93d7d6a689998eb8cf3d6f3ff9f59f",
+  "preserved_review": {
+    "version": "0.137.0 /154",
+    "manifest_file_entries_verified": 151,
+    "manifest_sha256": "ae56437933b9312caf543173a0b1696601badfd40fe7342af1a52bbbcc0999f1"
+  },
+  "canonical": {
+    "version": "0.105.0 /120",
+    "native_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "promoted": false
+  },
+  "self_review": {
+    "findings": [],
+    "review": [
+      "Only consecutive accepted cursor writes for the same live/recorded surface and recording ID advance a pending action",
+      "No generic command-revision retry or latest-state adoption; field and action keep command/document guards",
+      "Both recorded fields settle before Select/Clear; duplicate callbacks and activation are ignored",
+      "Recorded measurement changes preserve live graph/physics/document/history and match public commands",
+      "Factory/relay source audit preserves literal, dynamic and unknown-command detection"
+    ]
+  },
+  "limits": [
+    "Mounted routing and existing native smoke; no new physical OS/IME/reader/visible-p95 qualification",
+    "Recorded cursor startup hypothesis was disproved; no startup behavior change",
+    "Clean replacement packaging and exact copied-runtime qualification pending",
+    "Owner walkthrough remains Not tried yet; P0 remains 17 implemented /10 partial"
+  ]
+}

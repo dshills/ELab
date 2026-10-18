@@ -112,3 +112,13 @@ func TestScopeClickCannotRetargetAnotherCaptureBeforeRedraw(t *testing.T) {
 		t.Fatal("old scope click placed a cursor on the newly selected capture")
 	}
 }
+
+func assertCursorMeasurementPreservesPhysics(t *testing.T, before, after workbench.Snapshot) {
+	t.Helper()
+	if before.RunID != after.RunID || before.ElectricalRevision != after.ElectricalRevision || before.Document != after.Document ||
+		!reflect.DeepEqual(before.Components, after.Components) || !reflect.DeepEqual(before.Wires, after.Wires) ||
+		!reflect.DeepEqual(before.Transient, after.Transient) || !reflect.DeepEqual(before.Mixed, after.Mixed) ||
+		!reflect.DeepEqual(before.UndoEntry, after.UndoEntry) || !reflect.DeepEqual(before.RedoEntry, after.RedoEntry) {
+		t.Fatal("cursor measurement changed physics, document or circuit history")
+	}
+}

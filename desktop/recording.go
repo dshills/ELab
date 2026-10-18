@@ -174,16 +174,16 @@ func (s *screen) recordingCursors(state workbench.Snapshot) ui.Node {
 		value *workbench.ScopeCursor
 	}{{"a", r.Scope.A}, {"b", r.Scope.B}} {
 		c := c
-		nodes = append(nodes, buttonStyle(s.action("recorded-cursor-select-"+c.id, strings.ToUpper(c.id), "recording.cursor.select", workbench.CursorSelectParams{Cursor: c.id}), r.Scope.ActiveCursor == c.id))
+		nodes = append(nodes, buttonStyle(s.recordedCursorAction(state, "recorded-cursor-select-"+c.id, strings.ToUpper(c.id), "recording.cursor.select", c.id), r.Scope.ActiveCursor == c.id))
 		at := 0.
 		if c.value != nil {
 			at = c.value.Requested
 		}
 		nodes = append(nodes, timeField("recorded-cursor-"+c.id, "Recorded cursor "+strings.ToUpper(c.id), at, false, func(text string) {
-			s.invokeAtCommandRevision("recording.cursor.set", map[string]any{"operation_id": r.ID, "cursor": c.id, "time_s": text}, state.CommandRevision)
+			s.changeCursorTimeFor(state, c.id, text, r.ID)
 		}))
-		clear := s.action("recorded-cursor-clear-"+c.id, "×", "recording.cursor.clear", workbench.CursorSelectParams{Cursor: c.id})
-		clear.Disabled = c.value == nil
+		clear := s.recordedCursorAction(state, "recorded-cursor-clear-"+c.id, "×", "recording.cursor.clear", c.id)
+		clear.Disabled = clear.Disabled || c.value == nil
 		nodes = append(nodes, clear)
 	}
 	caption := "ms · click plot for recorded cursor"

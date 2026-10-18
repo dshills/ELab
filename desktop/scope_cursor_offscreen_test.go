@@ -67,16 +67,6 @@ func typeMountedCursor(t *testing.T, m *mountedControlWindow, id, text string) {
 	}
 }
 
-func assertCursorMeasurementPreservesPhysics(t *testing.T, before, after workbench.Snapshot) {
-	t.Helper()
-	if before.RunID != after.RunID || before.ElectricalRevision != after.ElectricalRevision || before.Document != after.Document ||
-		!reflect.DeepEqual(before.Components, after.Components) || !reflect.DeepEqual(before.Wires, after.Wires) ||
-		!reflect.DeepEqual(before.Transient, after.Transient) || !reflect.DeepEqual(before.Mixed, after.Mixed) ||
-		!reflect.DeepEqual(before.UndoEntry, after.UndoEntry) || !reflect.DeepEqual(before.RedoEntry, after.RedoEntry) {
-		t.Fatal("cursor measurement changed physics, document or circuit history")
-	}
-}
-
 func TestMountedScopeCursorEnterSelectClearMatchesPublicAgent(t *testing.T) {
 	for _, family := range []struct {
 		name, a, b string

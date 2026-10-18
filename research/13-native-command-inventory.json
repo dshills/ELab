@@ -7,7 +7,7 @@
     "desktop/canvas.go": "164b644c58fd16b6c370cbad30fb063cb30d6b4bb47a2d982dbe664618802b5f",
     "desktop/component_inspector.go": "3a565a9c5c40dc50399b43e5dec3eb49543e04e8bfee070f5ab377a042fcf19f",
     "desktop/component_palette.go": "5d7b83aba4bd8202b899f0168848226f8217a8dd3dbd73d2ff6c8d99b752d3ab",
-    "desktop/cursor_actions.go": "d5ece86db5f433ef690b6655957f9a226175c3d2329c8f0a056091ee77866027",
+    "desktop/cursor_actions.go": "760fc37cc3fcd864732b2db13169a6019c0b20e755c6d511940655b2a55340c3",
     "desktop/dc_sweep.go": "6714f9c257faaf1e230e51dbc2c8b31a0d83ad9613eaa47d2de9bf8db495600f",
     "desktop/dc_sweep_canvas.go": "6404c77863729aedfd18a886e88d57889c51c374197189de91665d7142ad1022",
     "desktop/diagnostic_help.go": "822fcdf9c5904570b42bf1b98322de00ed9fdbd17299584cefedcfeb8098f171",
@@ -42,7 +42,7 @@
     "desktop/printing.go": "9c40645db6de5affc3ae9d654f72c7003671f5d8c23c8bd7de93ffa35bea8c59",
     "desktop/probes.go": "f4de24411296aa77b9f693e07ace56ccf8a65652bd2845d948bd3b6e283ea61b",
     "desktop/project_work.go": "f4109a9a2e8bfa2098a9bf7a35327f4dcd557e696f9ac9178c19788de0694c20",
-    "desktop/recording.go": "7bf3fafefb079de4cb5d8f03ff092b4ae5a5481913dd6c9aa51f9299377d948e",
+    "desktop/recording.go": "1f4ef6a4fa3f8e41ef944cc9bc19e476415103cded24d610947eef3eec150db7",
     "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
     "desktop/recording_statistics.go": "161cc2eb9e62f089a91eb1967b9d6ed8a9a30dd914af3b7705ad3584bee2caec",
     "desktop/recording_timing.go": "f2eb9e3fd241a81ee0aef093d74309da4527dea39ba955a66642f4b6a2bdf6e2",
@@ -709,8 +709,8 @@
     },
     {
       "file": "desktop/cursor_actions.go",
-      "line": 36,
-      "function": "*screen.changeCursorTime",
+      "line": 46,
+      "function": "*screen.changeCursorTimeFor",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"scope.cursor.set\", map[string]any{\"cursor\": cursor, \"time_s\": text}, state.CommandRevision)",
       "public_commands": [
@@ -720,23 +720,50 @@
     },
     {
       "file": "desktop/cursor_actions.go",
-      "line": 62,
+      "line": 48,
+      "function": "*screen.changeCursorTimeFor",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"recording.cursor.set\", map[string]any{\"operation_id\": recordingID, \"cursor\": cursor, \"time_s\": text}, state.CommandRevision)",
+      "public_commands": [
+        "recording.cursor.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 75,
       "function": "*screen.cursorAction",
-      "kind": "node-Activate",
-      "expression": "Activate: func() {\n\tif s.pendingCursorAction != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.cursorFieldAccepted; accepted != nil \u0026\u0026 accepted.from.generation == context.generation \u0026\u0026\n\t\taccepted.from.revision \u003c= context.revision \u0026\u0026 context.revision \u003c= accepted.to.revision \u0026\u0026\n\t\taccepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) {\n\t\tcontext = accepted.to\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\t\ts.invokeAtCommandRevision(command, workbench.CursorSelectParams{Cursor: cursor}, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := \u0026cursorActionWork{context: context, command: command, cursor: cursor}\n\ts.pendingCursorAction = pending\n\tif current.Transient == nil || current.Transient.Stale {\n\n\t\ts.finishCursorAction(pending, nil)\n\t} else {\n\t\ts.settleCursorActionField(pending, 0)\n\t}\n}",
+      "kind": "action-factory",
+      "expression": "s.cursorActionFor(state, id, text, command, cursor, \"\")",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/cursor_actions.go",
-      "line": 73,
-      "function": "*screen.cursorAction",
+      "line": 79,
+      "function": "*screen.recordedCursorAction",
+      "kind": "action-factory",
+      "expression": "s.cursorActionFor(state, id, text, command, cursor, state.Recording.ID)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 84,
+      "function": "*screen.cursorActionFor",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\tif s.pendingCursorAction != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.cursorFieldAccepted; accepted != nil \u0026\u0026 accepted.recordingID == recordingID \u0026\u0026 accepted.from.generation == context.generation \u0026\u0026\n\t\taccepted.from.revision \u003c= context.revision \u0026\u0026 context.revision \u003c= accepted.to.revision \u0026\u0026\n\t\taccepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) {\n\t\tcontext = accepted.to\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\t\ts.invokeAtCommandRevision(command, workbench.CursorSelectParams{Cursor: cursor}, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := \u0026cursorActionWork{context: context, command: command, cursor: cursor, recordingID: recordingID}\n\ts.pendingCursorAction = pending\n\tif recordingID == \"\" \u0026\u0026 (current.Transient == nil || current.Transient.Stale) {\n\n\t\ts.finishCursorAction(pending, nil)\n\t} else {\n\t\ts.settleCursorActionField(pending, 0)\n\t}\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 95,
+      "function": "*screen.cursorActionFor",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(command, workbench.CursorSelectParams{Cursor: cursor}, context.revision, context.generation)",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/cursor_actions.go",
-      "line": 126,
+      "line": 154,
       "function": "*screen.finishCursorAction",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(pending.command, workbench.CursorSelectParams{Cursor: pending.cursor}, pending.context.revision, pending.context.generation)",
@@ -2677,7 +2704,7 @@
       "line": 177,
       "function": "*screen.recordingCursors",
       "kind": "action-factory",
-      "expression": "s.action(\"recorded-cursor-select-\"+c.id, strings.ToUpper(c.id), \"recording.cursor.select\", workbench.CursorSelectParams{Cursor: c.id})",
+      "expression": "s.recordedCursorAction(state, \"recorded-cursor-select-\"+c.id, strings.ToUpper(c.id), \"recording.cursor.select\", c.id)",
       "public_commands": [
         "recording.cursor.select"
       ],
@@ -2688,26 +2715,15 @@
       "line": 182,
       "function": "*screen.recordingCursors",
       "kind": "callback-factory",
-      "expression": "timeField(\"recorded-cursor-\"+c.id, \"Recorded cursor \"+strings.ToUpper(c.id), at, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.cursor.set\", map[string]any{\"operation_id\": r.ID, \"cursor\": c.id, \"time_s\": text}, state.CommandRevision)\n})",
+      "expression": "timeField(\"recorded-cursor-\"+c.id, \"Recorded cursor \"+strings.ToUpper(c.id), at, false, func(text string) {\n\ts.changeCursorTimeFor(state, c.id, text, r.ID)\n})",
       "status": "requires-binding-review"
-    },
-    {
-      "file": "desktop/recording.go",
-      "line": 183,
-      "function": "*screen.recordingCursors",
-      "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"recording.cursor.set\", map[string]any{\"operation_id\": r.ID, \"cursor\": c.id, \"time_s\": text}, state.CommandRevision)",
-      "public_commands": [
-        "recording.cursor.set"
-      ],
-      "status": "literal-public-route"
     },
     {
       "file": "desktop/recording.go",
       "line": 185,
       "function": "*screen.recordingCursors",
       "kind": "action-factory",
-      "expression": "s.action(\"recorded-cursor-clear-\"+c.id, \"×\", \"recording.cursor.clear\", workbench.CursorSelectParams{Cursor: c.id})",
+      "expression": "s.recordedCursorAction(state, \"recorded-cursor-clear-\"+c.id, \"×\", \"recording.cursor.clear\", c.id)",
       "public_commands": [
         "recording.cursor.clear"
       ],
