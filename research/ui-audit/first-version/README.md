@@ -328,3 +328,7 @@ The clean candidate passes the full source gate and separate exact copied-runtim
 ### Native focus admission is not completion
 
 The [causal follow-up](../../../docs/validation/native-focus-admission/README.md) captures a request admitted at generation 4 and correctly retired at 5 before delivery. Queries complete in approximately 14 ms; repeated traversal in the prior sample was a polling symptom. The SDK remains unchanged. The corrected smoke observes completion and retries only focus within the original deadline; its full native run exercises two admissions then applies 2200 Ω and matches the reference current. Focused failure-path tests and full quality pass. A separate clean /147-focus replacement must still qualify; the original /147 candidate remains immutable. Broader acceptance and owner walkthrough remain open.
+
+### Corrected /147 owner review
+
+Clean `77f9319` qualifies the held-button repair in a separate `147-focus-review` folder, preserving the first /147 candidate. Exact copied native smoke (two admitted focus requests then observed completion), four public adapters, reference parity and pulse/Pause/Resume/save/reopen through 3.402 s pass. [Receipt](focus-completion-review-checkpoint.json), [walkthrough](../../35-first-version-review.md). SDK `677548d` is unchanged. All seven earlier review folders and canonical /120 are verified unchanged; no owner, physical OS interleaving/window-blur, full accessibility, visible-p95 or participant gate is upgraded.

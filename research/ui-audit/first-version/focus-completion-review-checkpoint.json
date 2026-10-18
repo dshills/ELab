@@ -1,0 +1,352 @@
+{
+  "date": "2026-10-18",
+  "version": "0.130.0",
+  "build": "147",
+  "status": "held-button repair and corrected native focus protocol qualified for private owner review; supported-alpha promotion/full MVP remain open",
+  "source_commit": "77f9319e12d7c4f69361b2f8f772a15f17c0438d",
+  "clean_build_vcs": true,
+  "native_sha256": "4a6364f318f7052d0cd310b71896383ee5b28ea18995da70ce9ca781f74fcabe",
+  "agent_sha256": "8e443022fac958210a05874617c61973c1c5cff8b66cfeac16b7f86d2e5c7379",
+  "sdk": {
+    "schema": 1,
+    "archive": "third_party/vellum/vellum-677548d.tar.gz",
+    "archive_bytes": 18627256,
+    "sha256": "9233f875cf11829e68ccc62772f9d841c4e01c0da9b2364c0f6f6a7e0d871fe9",
+    "manifest_sha256": "f5e9dcab46eb4c6805587f0301f96745a4802abf2f2f50614bb42ebf3479cc89",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-677548d",
+    "source_commit": "677548d0ea93d7d6a689998eb8cf3d6f3ff9f59f",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 7454,
+    "bootstrap": {
+      "scripts/check-sdk.py": "b8062fbd4c57d1d8cb4d75a094184e1a5fa108cfa811fe9fb390f99f6d66be38",
+      "scripts/child_process.py": "04ba2610ddf112e936e8adcd9a81c03cff422843f993c2ce8a9e1acd96f39c9c",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "803d981c00f32d08a370577b37094848b2c79085cf3303a99b23d2a94336ac2c",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541"
+    }
+  },
+  "canonical_promoted": false,
+  "version_policy": "Same /147 version for validation-only correction; original candidate preserved in separate folder",
+  "quality": {
+    "full_source_gate": "scripts/check.sh exit 0: audit freshness, lint/imports/Staticcheck, 43 Python tests, root/native race/vet, all mounted regressions and tagged vet",
+    "native_race_s": 144.614,
+    "offscreen_race_s": 9.708,
+    "source_record": "docs/validation/native-focus-admission/checkpoint.json",
+    "copied_runtime": [
+      {
+        "name": "native-smoke",
+        "command": [
+          "/private/tmp/elab-first-version-147-focus-runtime/native",
+          "--smoke",
+          "--smoke-timeout",
+          "2m"
+        ],
+        "status": "completed",
+        "exit_code": 0,
+        "elapsed_seconds": 39.97521575004794
+      },
+      {
+        "name": "public-suites",
+        "command": [
+          "/Users/dshills/Development/projects/ELab/build/first-version-147-focus-tools/build/elab-conformance",
+          "--agent-binary",
+          "/private/tmp/elab-first-version-147-focus-runtime/agent",
+          "--native-binary",
+          "/private/tmp/elab-first-version-147-focus-runtime/native",
+          "--project-contract-suite",
+          "--electrical-suite",
+          "--inductor-suite",
+          "--opamp-suite",
+          "--opamp-storage-suite",
+          "--capacity-suite",
+          "--artifacts",
+          "/private/tmp/elab-first-version-147-focus-runtime/public"
+        ],
+        "status": "completed",
+        "exit_code": 0,
+        "elapsed_seconds": 49.18444224994164
+      }
+    ],
+    "four_adapters": [
+      "in-process",
+      "headless-stdio",
+      "headless-socket",
+      "native-socket"
+    ]
+  },
+  "release_diff": {
+    "base_release": "0.129.0 /146",
+    "base_source": "30b05071e13388edbaac3ba020f7c929a3d20a15",
+    "replacement_source": "77f9319e12d7c4f69361b2f8f772a15f17c0438d",
+    "production_diff": [
+      "Vellum 677548d preserves the action from ordinary pointer press through release/owner delivery; no SDK changes in the focus follow-up",
+      "ELab native_focus_smoke.go/value_apply_smoke.go correct only native validation admission/completion, with unchanged deadlines and mutation checks",
+      "Public command IDs/schemas, models and project format unchanged"
+    ],
+    "tests": [
+      "Same-owner retained Close and Undo reach shared conflict/history guards without changing exact snapshots",
+      "Normal/fresh pointer input and canceled-pointer keyboard input work once",
+      "Held Pause accepts real sample-only repaint without reset",
+      "Mounted RC switch matches public agent graph/desired-applied state/charge/trace/event; paused actuation preserves committed physics",
+      "SDK queued-pointer binding, nil origin, disabled/retired controls and unchanged programmatic delivery contracts pass",
+      "Previous mounted numeric/text/slider/one-click Apply tests pass",
+      "Focus refusal/retirement, current target identity, admission without completion, canceled/late/error and unavailable-target paths"
+    ],
+    "self_review": [
+      {
+        "reviewed_production_files": [
+          "Vellum drivers/cogent/controls.go"
+        ],
+        "review": [
+          "Only ordinary held left-button presses carry their originating action; mouse-button identity survives native cloned Click events",
+          "Queued pointer delivery retains the press binding; keyboard/programmatic activation keeps its established current-descriptor contract",
+          "Canceled press bindings are constant-size, ignored by keyboard and replaced on the next pointer press; disposal clears them",
+          "Existing postControl window/record retirement and disabled checks remain in force; nil originating actions cannot borrow refreshed callbacks",
+          "Placement source handling is excluded and existing placement tests pass",
+          "ELab revision/document/history guards perform refusal; no command, model, format or control ID changes",
+          "Mounted switch and Undo cases fail before repair and pass after; fresh pointer/keyboard, RC physics and earlier controls remain functional",
+          "Mounted stale actions reach explicit shared conflict/history refusal, while held Pause accepts real sample-only repaint without resetting time"
+        ],
+        "findings": [],
+        "remaining": [
+          "Physical OS interleaving/window deactivation and broader input/accessibility/performance gates",
+          "Owner walkthrough and exhaustive mounted command conformance"
+        ]
+      },
+      {
+        "scope": [
+          "desktop/native_focus_smoke.go",
+          "desktop/native_focus_smoke_test.go",
+          "desktop/value_apply_smoke.go"
+        ],
+        "findings": [],
+        "review": [
+          "Retry is restricted to idempotent native focus; value setting and Apply remain exactly one request each",
+          "The current native target must be enabled/nonpending/reachable/hittable with positive geometry, then actually observed as focused",
+          "An admitted request is never treated as completion; every retry uses a fresh native observation",
+          "Original shared five-second context and 20 ms polling are unchanged; cancellation/native errors remain visible",
+          "Retired-focus generation guards and all SDK sources remain unchanged",
+          "Smoke evidence records actual requests, admissions and observed native focus; current native run exercises two admissions",
+          "Production command-ledger hashes/IDs, models, schemas and format are unchanged"
+        ],
+        "limits": [
+          "Cocoa selectors in an owned process, not physical input or complete VoiceOver qualification",
+          "Corrected packaged bytes still require separate runtime qualification"
+        ]
+      }
+    ],
+    "source_ledger": {
+      "ledger_sha256": "231956153613890382565a27977ecb56469477016839f0bf03e36acff896e9ba",
+      "sources": 62,
+      "public_commands": 162,
+      "source_hashes_and_all_ledger_bytes_unchanged": true,
+      "change_scope": "native smoke protocol, its tests and qualification records; pinned SDK unchanged"
+    },
+    "findings": [],
+    "limits": [
+      "Deterministic actual widget routing, not physically interleaved OS input/window blur/IME/VoiceOver/p95 qualification",
+      "Owner walkthrough not tried yet; broader MVP gates unchanged",
+      "No canonical promotion; all earlier review packages preserved"
+    ]
+  },
+  "native_focus_completion": {
+    "current_a": 0.001344737452917332,
+    "event": "elab.led-inspector.accessibility.smoke",
+    "focus_admissions": 2,
+    "focus_requests": 2,
+    "initial_native_controls": [
+      {
+        "grid_scope": "",
+        "grid_incarnation": 0,
+        "grid_pending": false,
+        "grid_target_generation": 0,
+        "grid_generation": 0,
+        "object_identity": 259,
+        "id": "node:dmFsdWUtZW50cnk",
+        "role": "AXTextField",
+        "name": "Component value",
+        "value": "2 k\u03a9",
+        "enabled": true,
+        "row_count": 0,
+        "column_count": 0,
+        "row_index": [
+          -1,
+          0
+        ],
+        "column_index": [
+          -1,
+          0
+        ],
+        "text_selection": [
+          0,
+          0
+        ],
+        "insertion_line": 0,
+        "frame": [
+          2895,
+          858,
+          231,
+          37
+        ],
+        "selected": false,
+        "expanded": false,
+        "parent": "node:c2lkZWJhci1jb250ZW50",
+        "domain_id": "value-entry",
+        "hit_test_id": "node:dmFsdWUtZW50cnk"
+      },
+      {
+        "grid_scope": "",
+        "grid_incarnation": 0,
+        "grid_pending": false,
+        "grid_target_generation": 0,
+        "grid_generation": 0,
+        "object_identity": 260,
+        "id": "node:YXBwbHktdmFsdWU",
+        "role": "AXButton",
+        "name": "Apply value",
+        "value": null,
+        "enabled": true,
+        "row_count": 0,
+        "column_count": 0,
+        "row_index": [
+          -1,
+          0
+        ],
+        "column_index": [
+          -1,
+          0
+        ],
+        "text_selection": [
+          -1,
+          0
+        ],
+        "insertion_line": 9223372036854775807,
+        "frame": [
+          2895,
+          799,
+          104,
+          47
+        ],
+        "selected": false,
+        "expanded": false,
+        "parent": "node:c2lkZWJhci1jb250ZW50",
+        "domain_id": "apply-value",
+        "hit_test_id": "node:YXBwbHktdmFsdWU"
+      }
+    ],
+    "observed_focus_generation": 7,
+    "observed_focus_id": "node:dmFsdWUtZW50cnk",
+    "passed": true,
+    "resistance_ohm": 2200,
+    "scope": "in-process Cocoa selectors, not external AX or VoiceOver acceptance"
+  },
+  "native_focus_cause": {
+    "native_trace": "AXFOCUS retired on owner node:dmFsdWUtZW50cnk 4 5",
+    "interpretation": "A focus request admitted against native generation 4 was retired before owner delivery at generation 5. Prior smoke requested once and waited without retry; SDK refusal obeys its existing contract.",
+    "traversal_measurement": "Approximately 280 managed elements, 65\u201369 thousand hit visits, approximately 14 ms per completed query; not evidence that one traversal consumed five seconds."
+  },
+  "acceptance": {
+    "passed": true,
+    "scope": "exact copied 0.130.0 /147 native runtime with development-file/outbound-IP denial; public commands",
+    "reference_parity": {
+      "passed": true,
+      "cases": [
+        {
+          "task": "led",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "3fa7d62e283b88765cb8c9b07533254aa899516a8b72298d37121f61e916dd82",
+          "project_sha256": "96635fc0cd1ab4b13258373c4e5ed474dc3239dda4dfc37202cbce59324cc032"
+        },
+        {
+          "task": "rc",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "6380351c8c51640b0221969b97259cf49161989f300d4eb1b9bdcf885759e338",
+          "project_sha256": "4c86701997fb227c1f3f8e55b2e8ec613ca7a51d75b4061356cd51185203eadf"
+        },
+        {
+          "task": "flasher",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "b0dc7c61c9d757086937176d7cc8de1539e4cac82e8f95d5f9a00576cc62d4b8",
+          "project_sha256": "d62dba5123d42b3dbf76356a7c28411a46ab09678aad9aa72ec727889c9a7a95"
+        }
+      ],
+      "comparison": "Every component/wire field; every reported result field except run/electrical identities; numerical rel 1e-9 / abs 1e-12",
+      "limitations": [
+        "Native endpoint loading/observation does not replace the recorded physical UI construction walkthrough",
+        "File failure, crash recovery, cancellation and live interaction have separate acceptance checks"
+      ]
+    },
+    "live_grid": {
+      "first_time_s": 2.201,
+      "resume_origin_s": 2.201,
+      "second_time_s": 3.4010000000000002,
+      "final_time_s": 3.402,
+      "paused_physics_stable": true,
+      "graph_settings_and_run_electrical_preserved": true,
+      "save_reopen_fresh": true
+    },
+    "limits": [
+      "Public command functionality; not new pointer/keyboard evidence or visible p95 qualification",
+      "Held pointer actions, control-owner reset and single-click Apply are qualified by deterministic real-router tests. The corrected native smoke protocol observes focus completion with bounded idempotent retry; full native qualification is recorded separately. Earlier physical UI evidence remains scoped to its recorded build; no physically coalesced OS input/window-blur or visible-latency claim."
+    ],
+    "native_host_closed_normally": true
+  },
+  "owner_acceptance": "Pending: owner answered Not tried yet; no acceptance inferred",
+  "preserved_bundles": {
+    "0.123.0-140": {
+      "files_verified": 113,
+      "manifest_sha256": "c2d35b4b8cf4920636a987e39b83d4d989729201b9164f0c23372c2ea1602bd3"
+    },
+    "0.124.0-141": {
+      "files_verified": 126,
+      "manifest_sha256": "d4b008f18f06ad0e7eca4b7187af709d3ba9359d27fd67c747181297faf7ed56"
+    },
+    "0.125.0-142": {
+      "files_verified": 124,
+      "manifest_sha256": "45e1fc51016b21e6a3fea9388ce113716075f4bc1e112e03b15e72b12bf69a8e"
+    },
+    "0.126.0-143": {
+      "files_verified": 124,
+      "manifest_sha256": "14d1fbbff5b1be63c13d14bfbb2462bbeeeacce208ad36e4cd54fb41b7d56d12"
+    },
+    "0.127.0-144": {
+      "files_verified": 130,
+      "manifest_sha256": "0073beb958b5128d383380e08d89ed1c5f926c5d14ae6aec6d57ef5e9a53e0ae"
+    },
+    "0.128.0-145": {
+      "files_verified": 131,
+      "manifest_sha256": "93a9e275f8c50995f1cab73ef03b94b62b99192e627ac527ca1ae5d5f46b660b"
+    },
+    "0.129.0-146": {
+      "files_verified": 134,
+      "manifest_sha256": "74ee03a4d3f89271b02df5d4b52edc61b125ac16492a9ae33966b78ea31a2179"
+    },
+    "canonical": {
+      "version": "0.105.0 /120",
+      "native_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c"
+    }
+  },
+  "preserved_original_147_candidate": {
+    "files_verified": 135,
+    "manifest_sha256": "3aa7dd84084944c9926a907e5c87bbb559a8bbcb1d9ad19309fbf3a1c29b7d29"
+  },
+  "manifest_file_entries": 139,
+  "review_path": "/Users/dshills/Development/projects/ELab/build/ELab-0.130.0-147-focus-review",
+  "launch_note": "Save and quit any earlier review before opening this replacement; same bundle identity. No owner window was operated or automatically opened.",
+  "known_limits": [
+    "Physically coalesced OS input, running pointer/window-blur, IME and exhaustive mounted conformance remain open",
+    "Complete VoiceOver, visible p95, wider hardware/OS, clean-account installation and ten-person study remain open",
+    "Private unsigned build; notarization and public distribution/native-rights qualification remain open",
+    "Dense 64-part/100-node topology can reach the existing integration work limit; source/committed physics survive",
+    "One LED print page is owner-confirmed readable and complete; other printer settings and measured margins/scale remain open"
+  ]
+}
