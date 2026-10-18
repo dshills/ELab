@@ -1,14 +1,12 @@
-# ELab first-version review · 0.125.0 /142
+# ELab first-version review · 0.126.0 /143
 
-This is the updated owner-review alpha. Open [ELab.app](../build/ELab-0.125.0-142-review/ELab.app) in the [review folder](../build/ELab-0.125.0-142-review). The folder includes the matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required to use the app. The canonical app and both earlier review folders (0.123.0 /140 and 0.124.0 /141) are preserved.
+This is the updated owner-review alpha. Open [ELab.app](../build/ELab-0.126.0-143-review/ELab.app) in the [review folder](../build/ELab-0.126.0-143-review). The folder includes the matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required to use the app. The canonical app and all three earlier review folders (0.123.0 /140, 0.124.0 /141 and 0.125.0 /142) are preserved.
 
-Before opening the replacement, save your work and quit the earlier review app when ready. Its open window was left untouched. Version 0.125 fixes accumulated live-clock rounding that could stop a valid pulsed RC/MOSFET circuit near 1.1 seconds. It includes the earlier routing-cache, retained-value-error and print-label repairs. Models, project format, commands and the pinned Vellum SDK are unchanged.
+Before opening the replacement, save your work and quit the earlier review app when ready. Its open window was left untouched. Version 0.126 guards rendered Pause/Resume/Restart against agent edits or document replacement. A retained old button refuses instead of changing the new experiment. Fresh controls retain keyboard focus after Pause/Resume; ordinary solver samples do not invalidate them. The earlier clock, routing-cache, value-error and print-label repairs are included. Models, project format, commands and the pinned Vellum SDK are unchanged.
 
 The reference workflows and source quality gate pass. The copied app and agent also pass native smoke and four-adapter public conformance with repository/SDK/toolchain/cache reads and outbound IP denied on the recorded Mac. This does not declare the full PRD MVP complete.
 
-The exact copied replacement passes native smoke, all four public adapters, LED/RC/flasher graph and numerical parity, and the repaired pulse case through 3.41 seconds with a nonzero Pause/Resume and fresh save/reopen. Earlier actual native interaction through 40.9 seconds used the identical repaired source in a private development build. These checks do not establish visible-latency percentiles. [Replacement receipt](ui-audit/first-version/corrected-review-checkpoint.json).
-
-**Newly found concurrency limitation in this package:** a retained Pause/Resume/Restart button from before an agent replaces the document can act on the replacement experiment. The source repair passes stale-context regressions, the full quality gate and fresh native focus checks, but is not yet included here. [Repair and replacement status](../docs/validation/rendered-simulation-buttons/checkpoint.json).
+The exact copied replacement passes LED/RC/flasher graph and numerical parity, and the pulse case through **3.4 seconds** with a nonzero Pause/Resume and fresh save/reopen. Stale-button refusal is covered by owner-thread race regressions; actual fresh native Resume/Space Pause/Restart and focus were checked on the identical repaired production source. This is not a claim of physically reproducing stale OS event delivery or measuring visible-latency percentiles. [Replacement receipt](ui-audit/first-version/guarded-review-checkpoint.json).
 
 ## Try these four tasks · 15–20 minutes
 
@@ -49,4 +47,4 @@ In another terminal, run `./elab-agent --connect /absolute/path/to/endpoint.json
 - Some visible inspector controls can be omitted from external accessibility snapshots. The native Cocoa selector check passes, but complete external-reader acceptance remains open.
 - This is a private unsigned build; notarization and public distribution/native-rights qualification remain open. The versioned review folder is separate from `build/ELab.app` at 0.105.0 /120.
 
-The [delivery plan](34-first-version-plan.md), [updated build receipt](ui-audit/first-version/corrected-review-checkpoint.json) and [native walkthrough/agent evidence](ui-audit/first-version/README.md) track remaining acceptance work. This handoff continues owner feedback; it does not reopen feature scope.
+The [delivery plan](34-first-version-plan.md), [updated build receipt](ui-audit/first-version/guarded-review-checkpoint.json) and [native walkthrough/agent evidence](ui-audit/first-version/README.md) track remaining acceptance work. This handoff continues owner feedback; it does not reopen feature scope.

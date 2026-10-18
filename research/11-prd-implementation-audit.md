@@ -1,6 +1,6 @@
 # PRD implementation audit
 
-Audited against [PRD draft 0.3](07-product-requirements.md), starting at local checkpoint `90927b3` on October 13, 2026 and reconciled with the corrected 0.125.0 /142 review and owner print report on October 18; the canonical app remains at the 0.105.0 checkpoint. This is an engineering conformance audit, not a participant or screen-reader study. Passing existing demonstrations does not establish MVP completion. Proposed targets and original scope are preserved.
+Audited against [PRD draft 0.3](07-product-requirements.md), starting at local checkpoint `90927b3` on October 13, 2026 and reconciled with the guarded 0.126.0 /143 review and owner print report on October 18; the canonical app remains at the 0.105.0 checkpoint. This is an engineering conformance audit, not a participant or screen-reader study. Passing existing demonstrations does not establish MVP completion. Proposed targets and original scope are preserved.
 
 **Status terms:** Implemented means the stated behavior has direct source/test evidence within the documented envelope. Partial means some acceptance conditions remain unmet or unverified. Pending means evidence is absent or a release gate has not been performed. No row below declares an unperformed human, clean-installation, platform or visible-latency test passed.
 
@@ -8,7 +8,7 @@ Audited against [PRD draft 0.3](07-product-requirements.md), starting at local c
 
 | ID | Current evidence | Status and remaining work |
 |---|---|---|
-| UI-01 | Independent root/native modules, Vellum baseline, shared dispatcher; build and packaged GPU smoke; native AppKit menus, session themes and compact-window screenshot audit; corrected 0.125.0 /142 copied app/agent pass native smoke and four public adapters with development-file/outbound-IP denial | Partial: current-workstation builds and isolated copied runtime are proven; clean dependency bootstrap, supported account/OS installation and distribution remain unqualified |
+| UI-01 | Independent root/native modules, Vellum baseline, shared dispatcher; build and packaged GPU smoke; native AppKit menus, session themes and compact-window screenshot audit; guarded 0.126.0 /143 copied app/agent pass native smoke and four public adapters with development-file/outbound-IP denial | Partial: current-workstation builds and isolated copied runtime are proven; clean dependency bootstrap, supported account/OS installation and distribution remain unqualified |
 | EDIT-01 | Native `smokeConstruct`, drawing regressions, headless/desktop drawing fixtures | Implemented visible blank LED construction; novice discoverability still requires Gate D |
 | EDIT-02 | Named terminals, explicit junction tests, crossings/near misses, geometry-only moves, pointer-generation guards | Implemented within one sheet and existing bounds |
 | EDIT-03 | Resistance/capacitance and shared command time parser; native unit-aware time and exact voltage/frequency/phase waveform fields, strict files, invalid-value preservation, named batches/history; potentiometer slider; actual settled native value entry, retained refusals and keyboard coordinate-repeat repairs | Partial: time/waveform units and exact round-trip value drafts now work through shared commands/native committed fields; native slider events prove one commit/undo per drag; mounted-driver typing/IME/invalidation/focus conformance remains open |
@@ -283,3 +283,6 @@ The stale JSON report was reproduced as a failure, then regenerated from the rev
 
 
 The subsequent [rendered simulation-button repair](../docs/validation/rendered-simulation-buttons/checkpoint.json) reproduces stale Restart acting on an agent-replaced experiment. Rendered Pause/Resume/Restart now retain the same command/document guards as editing actions, while global registry behavior and fresh native focus remain. One guarded ingress increases the source ledger to **389 sites /147 requiring binding review**, with the same 62 sources, 162 IDs and source-route sets. Full quality passes; the source repair awaits a clean replacement package. P0 remains 17 implemented /10 partial; neither this focused fix nor the larger syntax total closes exhaustive mounted coverage.
+
+
+The rendered-button repair is now included in clean **0.126.0 /143**, built from `c2e15e2`. Exact copied native smoke and all four adapters pass with development-file/outbound-IP denial; LED/RC/flasher parity plus pulse/Pause/Resume/save/reopen checks pass. [Handoff receipt](ui-audit/first-version/guarded-review-checkpoint.json). Earlier packages and the canonical app are preserved. No full-MVP or owner acceptance gate is upgraded.

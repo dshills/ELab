@@ -1,0 +1,187 @@
+{
+  "date": "2026-10-18",
+  "version": "0.126.0",
+  "build": "143",
+  "status": "guarded private owner-review alpha; supported-alpha promotion/full MVP remain open",
+  "source_commit": "c2e15e273929ae125b497ee20807e8c46bc19b17",
+  "clean_build_vcs": true,
+  "native_sha256": "44515a5ae3d85a82d2f1415c9be9d4377d05cd83aa84faa580c445356d67c4ce",
+  "agent_sha256": "7b2a5cf5a314ac09c651c11252a26adaaed6378064fb8cd3856afb1096143e78",
+  "canonical_promoted": false,
+  "release_diff": {
+    "base_release": "0.125.0 /142",
+    "base_source": "f87b71f2f3cc",
+    "replacement_source": "c2e15e273929",
+    "production_diff": [
+      "desktop/main.go: rendered Pause/Resume/Restart capture command revision/document generation; shared accepted focus continuation"
+    ],
+    "test_diff": [
+      "desktop/simulation_button_context_test.go: replacement refusal, isolated generation guard, live solver publication and fresh controls"
+    ],
+    "review": [
+      "Unavailable/file-busy gates retained",
+      "No stale-context retry; refusal does not mutate domain state or focus",
+      "Live samples do not invalidate command revision",
+      "Global registry actions retain current context",
+      "Same public command IDs/params, models, SDK, file format and numerical tolerances"
+    ],
+    "known_limits": [
+      "Actual stale OS event delivery not physically reproduced; retained callbacks tested on owner under race",
+      "Fresh native Resume/Space Pause/Restart and focus checked separately on identical repaired production source"
+    ],
+    "findings": []
+  },
+  "quality": {
+    "full_source_gate": "scripts/check.sh passed: audit freshness, lint/imports/Staticcheck, 43 Python tests, root/native race and vet",
+    "native_race_s": 142.924,
+    "source_gate_record": "docs/validation/rendered-simulation-buttons/full-check.txt",
+    "copied_runtime": [
+      {
+        "name": "native-smoke",
+        "command": [
+          "/private/tmp/elab-first-version-143-runtime/native",
+          "--smoke",
+          "--smoke-timeout",
+          "2m"
+        ],
+        "status": "completed",
+        "exit_code": 0,
+        "elapsed_seconds": 39.10238516703248
+      },
+      {
+        "name": "public-suites",
+        "command": [
+          "/Users/dshills/Development/projects/ELab/build/first-version-143-tools/build/elab-conformance",
+          "--agent-binary",
+          "/private/tmp/elab-first-version-143-runtime/agent",
+          "--native-binary",
+          "/private/tmp/elab-first-version-143-runtime/native",
+          "--project-contract-suite",
+          "--electrical-suite",
+          "--inductor-suite",
+          "--opamp-suite",
+          "--opamp-storage-suite",
+          "--capacity-suite",
+          "--artifacts",
+          "/private/tmp/elab-first-version-143-runtime/public"
+        ],
+        "status": "completed",
+        "exit_code": 0,
+        "elapsed_seconds": 49.105433041928336
+      }
+    ],
+    "four_adapters": [
+      "in-process",
+      "headless-stdio",
+      "headless-socket",
+      "native-socket"
+    ]
+  },
+  "acceptance": {
+    "passed": true,
+    "scope": "exact copied 0.126.0 /143 native runtime with development-file/outbound-IP denial; public commands",
+    "reference_parity": {
+      "passed": true,
+      "cases": [
+        {
+          "task": "led",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "3fa7d62e283b88765cb8c9b07533254aa899516a8b72298d37121f61e916dd82",
+          "project_sha256": "96635fc0cd1ab4b13258373c4e5ed474dc3239dda4dfc37202cbce59324cc032"
+        },
+        {
+          "task": "rc",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "6380351c8c51640b0221969b97259cf49161989f300d4eb1b9bdcf885759e338",
+          "project_sha256": "4c86701997fb227c1f3f8e55b2e8ec613ca7a51d75b4061356cd51185203eadf"
+        },
+        {
+          "task": "flasher",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "b0dc7c61c9d757086937176d7cc8de1539e4cac82e8f95d5f9a00576cc62d4b8",
+          "project_sha256": "d62dba5123d42b3dbf76356a7c28411a46ab09678aad9aa72ec727889c9a7a95"
+        }
+      ],
+      "comparison": "Every component/wire field; every reported result field except run/electrical identities; numerical rel 1e-9 / abs 1e-12",
+      "limitations": [
+        "Native endpoint loading/observation does not replace the recorded physical UI construction walkthrough",
+        "File failure, crash recovery, cancellation and live interaction have separate acceptance checks"
+      ]
+    },
+    "live_grid": {
+      "first_time_s": 2.2,
+      "resume_origin_s": 2.2,
+      "second_time_s": 3.4000000000000004,
+      "final_time_s": 3.4000000000000004,
+      "paused_physics_stable": true,
+      "graph_settings_and_run_electrical_preserved": true,
+      "save_reopen_fresh": true
+    },
+    "limits": [
+      "Public command functionality; not new pointer/keyboard evidence or visible p95 qualification",
+      "Earlier 40.9 s live-clock evidence reuses the unchanged solver; fresh native Resume/Space Pause/Restart focus evidence is separately retained for this repaired source. Clean build metadata/hash differ from the private development harness"
+    ],
+    "native_host_closed_normally": true
+  },
+  "reused_evidence": [
+    "Stale retained callback failure-before/after owner-thread race regressions from the exact committed production source",
+    "Actual native Resume to focused Pause, Space to focused Resume and Restart with same-endpoint fresh state on identical repaired source; private development binary has different metadata/hash",
+    "Prior construction/theme/minimum-window/scope/file/recovery walkthroughs; those product paths/SDK unchanged",
+    "Earlier 40.9 s live-clock evidence uses unchanged solver",
+    "Real Brother job 161 and direct owner reply: Printed clearly and completely; no more paper submitted"
+  ],
+  "open_gates": [
+    "Owner four-task walkthrough; owner answered Not tried yet on October 18",
+    "Visible p95/main-loop responsiveness and broader difficult topology/hardware qualification",
+    "VoiceOver, external accessibility completeness, IME/fast human typing",
+    "OS display modes and monitor transitions",
+    "Clean supported account/OS installation, signing/notarization/distribution/native rights",
+    "Measured media/margins/scale, other physical print settings and device cancellation",
+    "Full mounted binding/agent qualification and actual ten-person study"
+  ],
+  "known_solver_limit": "64-part/100-node dense stress fixture reaches existing 100 ms integration budget without publishing staged physics; supported size is not guaranteed convergence",
+  "source_inventory": {
+    "production_native_Go_files": 62,
+    "sites": 389,
+    "binding_review_sites": 147,
+    "public_commands": 162,
+    "source_routed_IDs": 132
+  },
+  "unchanged": [
+    "SDK",
+    "models",
+    "tolerances",
+    "work budgets",
+    "format",
+    "public command IDs/parameters"
+  ],
+  "ownership": {
+    "copied_acceptance_host": "normal exit 0 confirmed",
+    "physical_jobs_submitted": 0,
+    "OS_settings_changed": false,
+    "owner_window": "not operated",
+    "earlier_review_packages": {
+      "0.123.0-140": 113,
+      "0.124.0-141": 126,
+      "0.125.0-142": 124
+    },
+    "canonical": {
+      "version": "0.105.0",
+      "build": "120",
+      "binary_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+      "promoted": false
+    }
+  },
+  "evidence_sha256": {
+    "docs/validation/first-version-143-runtime.json": "e7add194058611b0cd5b0eccdc9d73e64c73726eb733f7c7b3ced5bf58761251",
+    "docs/validation/first-version-143-public.json.gz": "01d88ccc94933379562c82c61e87e04301abb3fc6ad68bea348355a3c8b2b9f9",
+    "docs/validation/first-version-143-acceptance.json": "6e49173bf40a1b5b2d4a193a20ffdde66c775caf73c254b1f74307ce5dca178f",
+    "docs/validation/first-version-143-states.json.gz": "c3a758fe4d727acedec242d92e8df2ee35acf105e29ea03188e0adb5828199d8"
+  }
+}
