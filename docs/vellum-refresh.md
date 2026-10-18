@@ -4,7 +4,7 @@ ELab now pins private source `88dc650884f97629a6370e8408fd9e9242f1a7e0`, a narro
 
 The archive has 7,449 hashed files, 18,621,213 bytes, SHA-256 `c5be13c5e74e555ebd3e13f82626d6c182bba34d08f034259538aea053a1c13a`. Its manifest SHA-256 is `cc39252c78acf160eb95b6b1a603e1b22aa4c716b0b2d0c1ab2a58c42b202d8c`. Exactly two source members differ: `drivers/cogent/controls.go` and its new `control_context_test.go`. Prepared upstream/typesetting and all five bootstrap sources are byte-identical. The lock and four native replacements point to `build/.vellum-sdk-88dc650`; previous archives/caches and the adjacent Vellum project are preserved.
 
-Framework driver race tests/vet and focused offscreen control/lifetime/accessibility tests/vet pass. The consumer's real retained-widget reproduction fails against the previous pin and passes against the repair. [Evidence and consumer qualification](validation/held-slider-context/README.md) distinguish source validation from a replacement packaged app. Review /143 remains immutable and contains the defect until a separately qualified replacement is delivered.
+Framework driver race tests/vet and focused offscreen control/lifetime/accessibility tests/vet pass. The consumer's real retained-widget reproduction fails against the previous pin and passes against the repair. [Evidence and consumer qualification](validation/held-slider-context/README.md) distinguish source validation from a replacement packaged app. Clean [review /144](../research/ui-audit/first-version/slider-review-checkpoint.json) now includes this repair and passes exact copied native smoke/four-adapter conformance plus reference/pulse/save acceptance. Review /143 remains immutable and contains the defect.
 
 ## Previous pinned integration: bc6b456
 

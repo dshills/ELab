@@ -282,3 +282,8 @@ Only this paused drag/Undo is qualified. Interleaving during a held drag, runnin
 ## Held-slider context blocker
 
 A later deterministic native-driver check reproduced work loss when an agent edit or document replacement repainted a retained potentiometer slider while its pointer was held. Releasing the old drag used the newly bound callback and bypassed the intended old-context refusal. A narrow SDK repair preserves the originating callback; uninterrupted and unchanged-repaint drags still commit once. [Failing/passing reproduction and qualification](../../../docs/validation/held-slider-context/README.md). This uses Vellum’s exported offscreen event router and real retained widgets, not a physically interleaved OS pointer test. Review /143 remains unchanged and affected pending a qualified replacement.
+
+
+### Slider-context replacement ready
+
+The repair above is packaged in clean **0.127.0 /144** with the matching agent and unchanged example projects. Exact copied runtime passes native smoke, four public adapters, reference parity and pulse/Pause/Resume/save acceptance through 3.404 s. [Receipt](slider-review-checkpoint.json), [walkthrough](../../35-first-version-review.md). Earlier review folders and the canonical app remain unchanged; the owner has not tried the four tasks yet. No broader input/accessibility/performance or MVP gate is upgraded.

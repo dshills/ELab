@@ -1,0 +1,190 @@
+{
+  "date": "2026-10-18",
+  "version": "0.127.0",
+  "build": "144",
+  "status": "slider-context repair qualified for private owner review; supported-alpha promotion/full MVP remain open",
+  "source_commit": "1f0a89a0723d2986081f1fda977d8f42a1de4f0e",
+  "clean_build_vcs": true,
+  "native_sha256": "1e8b481047b0a1b615195aa9aa78f25ec19351df3186c11494251930ad67d46b",
+  "agent_sha256": "2b2a7fbf4655bf8b309ba6e39080bcb797860ebee63d40fe390b1f64b60404f7",
+  "sdk": {
+    "schema": 1,
+    "archive": "third_party/vellum/vellum-88dc650.tar.gz",
+    "archive_bytes": 18621213,
+    "sha256": "c5be13c5e74e555ebd3e13f82626d6c182bba34d08f034259538aea053a1c13a",
+    "manifest_sha256": "cc39252c78acf160eb95b6b1a603e1b22aa4c716b0b2d0c1ab2a58c42b202d8c",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-88dc650",
+    "source_commit": "88dc650884f97629a6370e8408fd9e9242f1a7e0",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 7449,
+    "bootstrap": {
+      "scripts/check-sdk.py": "b8062fbd4c57d1d8cb4d75a094184e1a5fa108cfa811fe9fb390f99f6d66be38",
+      "scripts/child_process.py": "04ba2610ddf112e936e8adcd9a81c03cff422843f993c2ce8a9e1acd96f39c9c",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "803d981c00f32d08a370577b37094848b2c79085cf3303a99b23d2a94336ac2c",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541"
+    }
+  },
+  "canonical_promoted": false,
+  "release_diff": {
+    "base_release": "0.126.0 /143",
+    "base_source": "c2e15e273929ae125b497ee20807e8c46bc19b17",
+    "replacement_source": "1f0a89a0723d2986081f1fda977d8f42a1de4f0e",
+    "production_diff": [
+      "ELab production Go unchanged",
+      "Vellum controls.go retains slider gesture origin and event callback through controlled refresh and queued delivery; discrete controls retain existing semantics"
+    ],
+    "test_diff": [
+      "Vellum held-slider and queued-slider callback regressions",
+      "ELab offscreen real retained-widget test covers normal drag, unchanged repaint, agent edit and document replacement",
+      "scripts/check.sh runs consumer offscreen race regression and tagged vet"
+    ],
+    "self_review": [
+      "Current descriptor disabled/nil checks, numeric clamping, owner posting and invalidation are retained",
+      "Captured slider callback cannot borrow a refreshed revision/document context",
+      "SlideStop final listener runs after native Change; gesture binding also clears on disposal",
+      "Framework tests preserve established discrete-control latest-descriptor semantics",
+      "No exported API, public command, model, project format or prepared dependency changes"
+    ],
+    "findings": [],
+    "limits": [
+      "Deterministic real retained-widget routing; no physically interleaved OS pointer claim",
+      "Broader accessibility/input/performance and owner gates remain open"
+    ]
+  },
+  "quality": {
+    "full_source_gate": "scripts/check.sh exit 0: audit freshness, lint/imports/Staticcheck, 43 Python tests, root/native race/vet, new held-slider offscreen race regression and tagged vet",
+    "native_race_s": 142.41,
+    "offscreen_race_s": 3.902,
+    "source_record": "docs/validation/held-slider-context/checkpoint.json",
+    "copied_runtime": [
+      {
+        "name": "native-smoke",
+        "command": [
+          "/private/tmp/elab-first-version-144-runtime/native",
+          "--smoke",
+          "--smoke-timeout",
+          "2m"
+        ],
+        "status": "completed",
+        "exit_code": 0,
+        "elapsed_seconds": 38.92552358296234
+      },
+      {
+        "name": "public-suites",
+        "command": [
+          "/Users/dshills/Development/projects/ELab/build/first-version-144-tools/build/elab-conformance",
+          "--agent-binary",
+          "/private/tmp/elab-first-version-144-runtime/agent",
+          "--native-binary",
+          "/private/tmp/elab-first-version-144-runtime/native",
+          "--project-contract-suite",
+          "--electrical-suite",
+          "--inductor-suite",
+          "--opamp-suite",
+          "--opamp-storage-suite",
+          "--capacity-suite",
+          "--artifacts",
+          "/private/tmp/elab-first-version-144-runtime/public"
+        ],
+        "status": "completed",
+        "exit_code": 0,
+        "elapsed_seconds": 49.17232879193034
+      }
+    ],
+    "four_adapters": [
+      "in-process",
+      "headless-stdio",
+      "headless-socket",
+      "native-socket"
+    ]
+  },
+  "acceptance": {
+    "passed": true,
+    "scope": "exact copied 0.127.0 /144 native runtime with development-file/outbound-IP denial; public commands",
+    "reference_parity": {
+      "passed": true,
+      "cases": [
+        {
+          "task": "led",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "3fa7d62e283b88765cb8c9b07533254aa899516a8b72298d37121f61e916dd82",
+          "project_sha256": "96635fc0cd1ab4b13258373c4e5ed474dc3239dda4dfc37202cbce59324cc032"
+        },
+        {
+          "task": "rc",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "6380351c8c51640b0221969b97259cf49161989f300d4eb1b9bdcf885759e338",
+          "project_sha256": "4c86701997fb227c1f3f8e55b2e8ec613ca7a51d75b4061356cd51185203eadf"
+        },
+        {
+          "task": "flasher",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "b0dc7c61c9d757086937176d7cc8de1539e4cac82e8f95d5f9a00576cc62d4b8",
+          "project_sha256": "d62dba5123d42b3dbf76356a7c28411a46ab09678aad9aa72ec727889c9a7a95"
+        }
+      ],
+      "comparison": "Every component/wire field; every reported result field except run/electrical identities; numerical rel 1e-9 / abs 1e-12",
+      "limitations": [
+        "Native endpoint loading/observation does not replace the recorded physical UI construction walkthrough",
+        "File failure, crash recovery, cancellation and live interaction have separate acceptance checks"
+      ]
+    },
+    "live_grid": {
+      "first_time_s": 2.201,
+      "resume_origin_s": 2.202,
+      "second_time_s": 3.403,
+      "final_time_s": 3.404,
+      "paused_physics_stable": true,
+      "graph_settings_and_run_electrical_preserved": true,
+      "save_reopen_fresh": true
+    },
+    "limits": [
+      "Public command functionality; not new pointer/keyboard evidence or visible p95 qualification",
+      "Earlier actual native pointer/focus evidence is retained for unchanged ELab UI source; the new SDK slider context is qualified by deterministic retained-widget tests. No physically interleaved OS pointer or visible latency claim."
+    ],
+    "native_host_closed_normally": true
+  },
+  "owner_acceptance": "Pending: owner answered Not tried yet; no acceptance inferred",
+  "preserved_bundles": {
+    "0.123.0-140": {
+      "files_verified": 113,
+      "manifest_sha256": "c2d35b4b8cf4920636a987e39b83d4d989729201b9164f0c23372c2ea1602bd3"
+    },
+    "0.124.0-141": {
+      "files_verified": 126,
+      "manifest_sha256": "d4b008f18f06ad0e7eca4b7187af709d3ba9359d27fd67c747181297faf7ed56"
+    },
+    "0.125.0-142": {
+      "files_verified": 124,
+      "manifest_sha256": "45e1fc51016b21e6a3fea9388ce113716075f4bc1e112e03b15e72b12bf69a8e"
+    },
+    "0.126.0-143": {
+      "files_verified": 124,
+      "manifest_sha256": "14d1fbbff5b1be63c13d14bfbb2462bbeeeacce208ad36e4cd54fb41b7d56d12"
+    },
+    "canonical": {
+      "native_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+      "version": "0.105.0 /120"
+    }
+  },
+  "manifest_file_entries": 130,
+  "review_path": "/Users/dshills/Development/projects/ELab/build/ELab-0.127.0-144-review",
+  "launch_note": "Save and quit any earlier review before opening this replacement; same bundle identity. No owner app was operated or automatically opened.",
+  "known_limits": [
+    "Physically interleaved OS pointer, running/focus-loss/IME and full mounted-action qualification remain open",
+    "Complete VoiceOver, visible p95 latency, wider hardware/OS, clean-account installation and ten-person study remain open",
+    "Private unsigned build; notarization and public distribution/native-rights qualification remain open",
+    "Dense 64-part/100-node topology can reach the existing integration work limit; graph/committed physics survive",
+    "One LED print page is owner-confirmed readable and complete; other printer settings and measured margins/scale remain open"
+  ]
+}

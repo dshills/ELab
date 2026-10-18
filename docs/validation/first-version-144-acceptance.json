@@ -1,0 +1,52 @@
+{
+  "passed": true,
+  "scope": "exact copied 0.127.0 /144 native runtime with development-file/outbound-IP denial; public commands",
+  "reference_parity": {
+    "passed": true,
+    "cases": [
+      {
+        "task": "led",
+        "constructed_graph_matches_native_fixture": true,
+        "native_ui_numerical_reference_matches": true,
+        "native_endpoint_matches": true,
+        "fixture_sha256": "3fa7d62e283b88765cb8c9b07533254aa899516a8b72298d37121f61e916dd82",
+        "project_sha256": "96635fc0cd1ab4b13258373c4e5ed474dc3239dda4dfc37202cbce59324cc032"
+      },
+      {
+        "task": "rc",
+        "constructed_graph_matches_native_fixture": true,
+        "native_ui_numerical_reference_matches": true,
+        "native_endpoint_matches": true,
+        "fixture_sha256": "6380351c8c51640b0221969b97259cf49161989f300d4eb1b9bdcf885759e338",
+        "project_sha256": "4c86701997fb227c1f3f8e55b2e8ec613ca7a51d75b4061356cd51185203eadf"
+      },
+      {
+        "task": "flasher",
+        "constructed_graph_matches_native_fixture": true,
+        "native_ui_numerical_reference_matches": true,
+        "native_endpoint_matches": true,
+        "fixture_sha256": "b0dc7c61c9d757086937176d7cc8de1539e4cac82e8f95d5f9a00576cc62d4b8",
+        "project_sha256": "d62dba5123d42b3dbf76356a7c28411a46ab09678aad9aa72ec727889c9a7a95"
+      }
+    ],
+    "comparison": "Every component/wire field; every reported result field except run/electrical identities; numerical rel 1e-9 / abs 1e-12",
+    "limitations": [
+      "Native endpoint loading/observation does not replace the recorded physical UI construction walkthrough",
+      "File failure, crash recovery, cancellation and live interaction have separate acceptance checks"
+    ]
+  },
+  "live_grid": {
+    "first_time_s": 2.201,
+    "resume_origin_s": 2.202,
+    "second_time_s": 3.403,
+    "final_time_s": 3.404,
+    "paused_physics_stable": true,
+    "graph_settings_and_run_electrical_preserved": true,
+    "save_reopen_fresh": true
+  },
+  "limits": [
+    "Public command functionality; not new pointer/keyboard evidence or visible p95 qualification",
+    "Earlier actual native pointer/focus evidence is retained for unchanged ELab UI source; the new SDK slider context is qualified by deterministic retained-widget tests. No physically interleaved OS pointer or visible latency claim."
+  ],
+  "native_host_closed_normally": true
+}
