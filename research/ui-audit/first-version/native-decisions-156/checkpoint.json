@@ -1,0 +1,95 @@
+{
+  "date": "2026-10-18",
+  "source_base": "d0283d2c9bba7698d0cd8b1932f2272b134bb93b",
+  "status": "bounded native unsaved choices and picker Cancel verified with exact packaged-agent parity; broader qualification remains open",
+  "production_changed": false,
+  "sdk_changed": false,
+  "product_version_increment": false,
+  "product_rebuild_or_promotion": false,
+  "native_input": {
+    "method": "CUA Cmd-O/native file selection/Open; visible Cancel, Discard changes, Save and continue; native picker Cancel",
+    "one_click_per_decision": true,
+    "initial_resistance_ohm": 2200,
+    "discard_loaded_ohm": 2000,
+    "final_loaded_ohm": 1000,
+    "generations": [
+      2,
+      3,
+      4
+    ]
+  },
+  "comparison": {
+    "cancel_preserves_domain_and_original_files": true,
+    "picker_cancel_preserves_domain_and_original_files": true,
+    "discard_preserves_both_files": true,
+    "save_and_continue_preserves_outgoing_2200_ohm_graph": true,
+    "original_manual_save_bytes_unchanged": true,
+    "agent_saved_fields_equal_except_view": true,
+    "agent_loaded_semantics_equal_except_run_electrical_ids": true,
+    "fresh_agent_reopens_both_files": true
+  },
+  "process": {
+    "original_endpoint_pid": 76608,
+    "normal_closure": true,
+    "exit_code": 0,
+    "no_remaining_matching_native_processes": true
+  },
+  "excluded_observer_failures": [
+    {
+      "pid": 75610,
+      "error": "KeyError: scope_probes",
+      "cleanup_exit": -15
+    },
+    {
+      "pid": 76224,
+      "error": "KeyError: redo_entry",
+      "cleanup_exit": -15
+    }
+  ],
+  "preserved_review": {
+    "source_commit": "22a84d590df498c023cabb94bf6ccf9883204a94",
+    "release": "0.139.0 /156",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.139.0-156-review/elab-agent",
+    "agent_sha256": "0b0d62a5b34156f04cb4ef298f6a8671af8b7e20e9fa1133c4a8cb79a32de5dd",
+    "receipt_sha256": "b2659269a286e3230deac30659fadb3d7df20d409fa8616a9d3d33425963c181",
+    "ledger_sha256": "b5cdacef44f6205d554ba8f1f315d4138e297ef0b1f1c2c1047148a7f5aa7d95",
+    "production_source_files_verified": 68,
+    "runtime_inputs_verified": 343,
+    "manifest_file_entries_verified": 135,
+    "manifest_sha256": "ec49b66aa2c9a10c06df76882245bca16b69addbd8dfceabf6077e3f54da3155"
+  },
+  "producer_sha256": {
+    "scripts/first-version-parity.py": "936f8c79a1a1e7278c299973c7edc8f925f88b158cc474759005ba97e6723370",
+    "scripts/persistence-demo.py": "4f3893eec22b3e6173aa75138e7774a43727b0bfc908c4bb56e8616e0d45dae5"
+  },
+  "quality": {
+    "reused_unchanged_source_and_runtime_gates": true,
+    "full_gate_rerun": false
+  },
+  "limits": [
+    "One saved-document native decision sequence; untitled/error/conflict/concurrent/close/crash routes separate",
+    "Native UI is automated; no full reader/IME or visible-p95 qualification",
+    "Owner walkthrough Not tried yet; P0 17 implemented /10 partial"
+  ],
+  "evidence_sha256": {
+    "Agent-preserved.elab": "1e067f08ff658f1951d99ec3cf67e68487fc8af30ea4a73d4f324216224fca74",
+    "README.md": "084c96361ef12cdfbe26aab783f6331351eb107085664b5e5e357352586653ff",
+    "Target-original.elab": "5870351a22f6b03a9e9e403fc7487d84fbb46aa6a75843bdac75ed44a0784d3a",
+    "Target.elab": "1e067f08ff658f1951d99ec3cf67e68487fc8af30ea4a73d4f324216224fca74",
+    "Working-original.elab": "9ba929d20c014c45a4a20cc01974d83b574f3112a4ad46c860b01a7a24e1ea2b",
+    "Working.elab": "9ba929d20c014c45a4a20cc01974d83b574f3112a4ad46c860b01a7a24e1ea2b",
+    "fresh-file-reference.json.gz": "e6fc16ece0d134ef77f41fdbecc743a98ea6818dc4d4335f8b0b7519ad862810",
+    "native-host.txt": "cc6e28883c83cbe7a700ff29e2538142dcb033b538edfe71048681ce28385459",
+    "native-session.json.gz": "ad9e36a6b89e5ce3203e6a8cc1c94c62dbc47f5153a56b7ec86fbf7c711a9a5a",
+    "observer-failures/optional-redo-host.txt": "437703c1cc79a1ea3038fab5f9c2fc28c61b9745a62438e79a7e882d6b42a47c",
+    "observer-failures/optional-redo-observer.py": "009ea1010dfeaabf5dc28c72c6a78d46052996c20b6ff172cff1777e88444e68",
+    "observer-failures/optional-redo-session.json.gz": "a8c7460aaeea374a6cf3c1dc88a469231176f4926741b1978051dfc89166baea",
+    "observer-failures/scope-field-host.txt": "878c99ac1fc1785ae76ded68408d0be2cfcd938ff7285d92c42069170642f313",
+    "observer-failures/scope-field-observer.py": "7ae10eed196984cde0865a2bf990ed1aa90084d06749224af8757df5bb3c96aa",
+    "observer-failures/scope-field-session.json.gz": "57a0fdb6010d213a58dfc028e7a7fd5c155fa16236083d9a9e897580fa521f08",
+    "observer-source.py": "5f2444cc7c6e0497f919505ef3175445020b11157e871d4abef104a2eb543523",
+    "process-verification.json": "7381f9062b3e4aeaa0fa56003f5fdcfd3e6806d86d5375d837cec8f13606152a",
+    "source-release-identity.json": "0922ea3d67ced36a474c6d90b1b9253dd12fa5f22523b8ea28d4f7fae977db70",
+    "ui-observation.txt": "970163b198211ae70bb0145b04ff4448e3fc42a343c028aeb0183b5efd698cdc"
+  }
+}

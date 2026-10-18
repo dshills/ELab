@@ -1,0 +1,46 @@
+Transcribed CUA AX excerpts; not a raw full-tool transcript or screenshot export.
+Final original endpoint PID: 76608. Full-path app selection 0.1101 seconds.
+Initial app: Working.elab /Unsaved /4 components /4 wires; 1.345 mA.
+
+UNSAVED CANCEL:
+Cmd+O: actual macOS Open project panel, observations folder.
+Select Target.elab, observe selected image and enabled Open, click Open once.
+Unsaved project window: Keep your changes?; Save and continue; Discard changes; Cancel.
+Click Cancel once.
+App: Working.elab /Unsaved /4 components /4 wires; 1.345 mA.
+Controller records cancel and verifies baseline domain identity and both files unchanged.
+
+PICKER CANCEL:
+Cmd+O: Open project panel; click native Cancel once.
+App: Working.elab /Unsaved /4 components /4 wires; 1.345 mA.
+Controller verifies same domain identity and both files unchanged.
+
+DISCARD:
+Cmd+O; select Target.elab; observe selection; click Open once.
+Unsaved project window: same three choices.
+Click Discard changes once.
+App: Opened Target.elab; completed work; 1.477 mA;
+footer Target.elab /4 components /4 wires /last change user, no Unsaved label.
+Controller verifies fresh 2000 Ω, generation 2→3, files unchanged, agent parity.
+Only after this visible result does controller prepare the next public 2.2k edit.
+
+SAVE AND CONTINUE:
+App after agent edit: 1.345 mA; Target.elab /Unsaved /last change agent.socket.
+Cmd+O; select Working.elab; observe selection; click Open once.
+Unsaved project window: Save and continue /Discard changes /Cancel.
+Click Save and continue once.
+App: Opened Working.elab; completed work; 2.917 mA;
+footer Working.elab /4 components /4 wires /last change user, no Unsaved label.
+Controller verifies Target.elab now contains 2200 Ω, Working.elab bytes unchanged,
+fresh loaded 1000 Ω at generation 4, and public-agent parity.
+No further UI actions; controller closes original host normally after visible result.
+
+Earlier excluded runs:
+PID 75610: Cancel visibly retained Working.elab /Unsaved /1.345 mA, then observer
+failed with KeyError scope_probes (document field, not snapshot field); host terminated -15.
+PID 76224: same visible Cancel result; observer retained before/after snapshots but failed
+with KeyError redo_entry (legitimately omitted when no Redo entry); host terminated -15.
+A subsequent attempted key on the first terminated binding was rejected as inactive;
+no app was relaunched by that input. Both failures remain failed and are preserved.
+The corrected comparison checks optional-field presence as well as values. It was
+executed against PID 76224's retained before/after states before the final host launched.
