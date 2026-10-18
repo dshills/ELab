@@ -1,0 +1,33 @@
+Transcribed CUA AX excerpts; this is not a raw full-tool transcript or screenshot export.
+Original endpoint-backed native PID: 72125; exact /156 executable.
+Selection: bundle ID was ambiguous because an older, nonrunning owned harness shares it.
+Exact current app path resolved in 0.0858 seconds. A subsequent var binding succeeded.
+
+Cmd+Shift+S:
+  Window: Save project; Where: Documents; Save As: Untitled; Save button.
+Cmd+Shift+G, typed owned observations directory, Return:
+  Window: Save project; Where: observations; Save As: Untitled.
+Initial combined click / Cmd+A / typeText('LED UI') / Save:
+  App message: Saved UntitledLED U.elab; 2.917 mA.
+This filename mismatch is retained as tool/input evidence, not qualified typing behavior.
+Reopen Save As; AX-selected filename: UntitledLED U.
+Native setValue(214, 'LED UI'), followed by AX before Save:
+  Save As: LED UI; focused text field 214.
+One Save click:
+  Saved LED UI.elab; Live i:R1: 2.9168 mA; bottom 2.917 mA;
+  LED UI.elab: completed; footer 4 components /4 wires /last change user.
+
+Controller then applies public component.set R1=2.2k and saves a separate copy.
+AX before Cmd+O:
+  Component value: 2.2 kΩ; Live i:R1: 1.3447 mA; bottom 1.345 mA;
+  LED agent change.elab: completed; last change agent.socket.
+Cmd+O:
+  Window: Open project; Where: observations;
+  images include LED agent change.elab, LED UI.elab, UntitledLED U.elab.
+Click LED UI.elab:
+  image selected; Open button enabled.
+One Open click:
+  Window: ELab · Live electronics;
+  Opened LED UI.elab; project work completed;
+  bottom 2.917 mA; footer LED UI.elab /4 components /4 wires /last change user.
+No further UI actions. Controller reference/save verification passes, then closes original host normally.

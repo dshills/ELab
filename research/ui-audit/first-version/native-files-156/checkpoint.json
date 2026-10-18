@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-18",
+  "source_base": "baa044b84a64a7c240eb8ab6a8f2677fd272731f",
+  "status": "bounded native Save As/Open and exact packaged-agent file parity verified; broader qualification remains open",
+  "production_changed": false,
+  "sdk_changed": false,
+  "product_version_increment": false,
+  "product_rebuild_or_promotion": false,
+  "process": {
+    "original_endpoint_pid": 72125,
+    "same_pid_for_all_native_observations": true,
+    "normal_host_closure": true,
+    "exit_code": 0,
+    "no_remaining_matching_native_processes": true
+  },
+  "native_input": {
+    "method": "CUA Cmd-Shift-S, native Go to Folder, verified native filename setValue, Save; Cmd-O, select original file, Open",
+    "save_actor": "user",
+    "load_actor": "user",
+    "document_generation_before_open": 2,
+    "document_generation_after_open": 3,
+    "initial_mistyped_extra_file_preserved": true
+  },
+  "comparison": {
+    "native_save_preserves_graph_nets_full_result_run_electrical_history": true,
+    "independent_agent_document_bytes_equal": true,
+    "independent_agent_document_json_equal": true,
+    "loaded_graph_nets_settings_result_equal_except_run_electrical_ids": true,
+    "original_resistance_ohm": 1000,
+    "changed_copy_resistance_ohm": 2200,
+    "restored_current_a": 0.0029167965774405296
+  },
+  "preserved_review": {
+    "source_commit": "22a84d590df498c023cabb94bf6ccf9883204a94",
+    "release": "0.139.0 /156",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.139.0-156-review/elab-agent",
+    "agent_sha256": "0b0d62a5b34156f04cb4ef298f6a8671af8b7e20e9fa1133c4a8cb79a32de5dd",
+    "receipt_sha256": "b2659269a286e3230deac30659fadb3d7df20d409fa8616a9d3d33425963c181",
+    "ledger_sha256": "b5cdacef44f6205d554ba8f1f315d4138e297ef0b1f1c2c1047148a7f5aa7d95",
+    "production_source_files_verified": 68,
+    "runtime_inputs_verified": 343,
+    "manifest_file_entries_verified": 135,
+    "manifest_sha256": "ec49b66aa2c9a10c06df76882245bca16b69addbd8dfceabf6077e3f54da3155"
+  },
+  "producer_sha256": {
+    "scripts/first-version-parity.py": "936f8c79a1a1e7278c299973c7edc8f925f88b158cc474759005ba97e6723370",
+    "scripts/persistence-demo.py": "4f3893eec22b3e6173aa75138e7774a43727b0bfc908c4bb56e8616e0d45dae5"
+  },
+  "quality": {
+    "reused_unchanged_source_gate_and_release_runtime": true,
+    "full_gate_rerun": false,
+    "new_production_tests": false
+  },
+  "limits": [
+    "One clean native replacement path only; overwrite/cancel/error/permission/unsaved/crash paths remain separate",
+    "Initial combined input produced an unintended filename; no fast-typing or product-defect conclusion",
+    "No complete reader/IME, eligible visible p95, broader environment/distribution/study or owner acceptance",
+    "Owner walkthrough Not tried yet; P0 stays 17 implemented /10 partial"
+  ],
+  "evidence_sha256": {
+    "LED UI.elab": "956801a6b7bb477f871421b0883fb0e0f422c941158c4c6325e1216b63ae2794",
+    "LED agent change.elab": "5bfc3604190a4b335ad0cc30ce127b3c0ab0645d1206e5bd8072de88d8481e3f",
+    "LED agent.elab": "956801a6b7bb477f871421b0883fb0e0f422c941158c4c6325e1216b63ae2794",
+    "README.md": "52e1b9476e2c7a6120ed615584dde9c13ff93f4a803c624884fa9b8e3e38a6f7",
+    "UntitledLED U.elab": "956801a6b7bb477f871421b0883fb0e0f422c941158c4c6325e1216b63ae2794",
+    "native-host.txt": "94f251337ba69e22ce5eeb9178473bbb0b0a9b458a597da64c8f1b76b02f5e9d",
+    "native-session.json": "aea286a21bda8e856ba5bc918157d1684c3433c1d2540ab89b14be2b75bc2f35",
+    "observer-source.py": "4205bc7b38817951537ca323b14d9c74a8f29a599ea6bbaebc754bdd946057c4",
+    "process-verification.json": "3ab88c515641600d833cc8ca2bd6da009cf1bb0e185d032b1ce6fe8901ed1628",
+    "source-release-identity.json": "0922ea3d67ced36a474c6d90b1b9253dd12fa5f22523b8ea28d4f7fae977db70",
+    "ui-observation.txt": "43ebe120d82be5ff608f9da107e15e1017a7c103713ba7241fc8693b1250e886"
+  }
+}
