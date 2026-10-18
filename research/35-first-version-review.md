@@ -1,6 +1,6 @@
 # ELab first-version review · /156 preserved, replacement pending
 
-**Replacement pending:** a private live cursor draft can survive an agent restart and apply to the new run in /156. The [source repair](../docs/validation/live-cursor-owner/README.md) passes mounted tests, full quality and development native smoke; clean replacement packaging is next. The /156 folder remains unchanged for history and does not contain the fix.
+**Replacement pending:** private live cursor and interval drafts can survive an agent restart and apply to the new run in /156. The [cursor](../docs/validation/live-cursor-owner/README.md) and [interval](../docs/validation/live-window-owner/README.md) source repairs pass mounted tests, full quality and development native smoke; the bounded sibling check is complete and clean replacement qualification is next. The /156 folder remains unchanged for history and contains neither fix.
 
 The preserved [ELab.app](../build/ELab-0.139.0-156-review/ELab.app) remains in the [review folder](../build/ELab-0.139.0-156-review). It includes the matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required. The canonical app, sixteen earlier qualified review folders (0.123.0 /140 through 0.138.0 /155) and the original unqualified /147 candidate are preserved. Owner walkthrough remains pending (October 18: “Not tried yet”).
 

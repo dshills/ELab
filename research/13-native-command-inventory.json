@@ -68,7 +68,7 @@
     "desktop/window_minimum.go": "f6c1590898646b8b570abac29c857162bf13b50d14f39809c8f7f92bee9d180e",
     "desktop/window_minimum_darwin.go": "b7c9fe1d3bb1b7350f70dc4b1ba29708b8975ef0b507ba0595d730c4ddb607e8",
     "desktop/window_minimum_other.go": "1acf27d143422fd66ad4e691aa191afd844510f24004de9aec1f3c8030ca0225",
-    "desktop/workflow.go": "2e09cd0daa7f171e0e919712d2d51aba96c60df89b823d4ea26f51193163d7a5",
+    "desktop/workflow.go": "af9bd26d9efe8f258f5d13cd11b680b638c475c139198ed4a0362cad96ad2bae",
     "desktop/workspace.go": "b35de04775d1a1f058a3fb043ff19e85b1c62973ce5f2c3a5db9f39022f9fa32"
   },
   "public_commands": [
@@ -4150,7 +4150,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 145,
+      "line": 149,
       "function": "*screen.scopeWindowControls",
       "kind": "request-command-field",
       "expression": "Command: \"component.set\"",
@@ -4161,7 +4161,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 147,
+      "line": 151,
       "function": "*screen.scopeWindowControls",
       "kind": "action-factory",
       "expression": "s.action(\"cap-pair-\"+value, \"Both capacitors · \"+value, \"edit.batch\", workbench.BatchParams{Name: \"Set both capacitors to \" + value, Edits: edits})",

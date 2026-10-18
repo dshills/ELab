@@ -130,6 +130,10 @@ func (s *screen) scopeWindowControls(state workbench.Snapshot) []ui.Node {
 		}
 		nodes = append(nodes, quiet("stats-"+stat.ProbeID, fmt.Sprintf("%s · %d samples\nMin %.4g · Max %.4g %s\nMean %.4g · RMS %.4g %s", stat.ProbeID, stat.Count, stat.Minimum*scale, stat.Maximum*scale, unit, stat.Mean*scale, stat.RMS*scale, unit)))
 	}
+	owner := fmt.Sprintf("live-run:%d", state.RunID)
+	for i := range nodes {
+		scopeOwnedControlState(&nodes[i], owner)
+	}
 	// A common flasher edit is a single named transaction for both capacitors.
 	caps := []workbench.Component{}
 	for _, p := range state.Components {

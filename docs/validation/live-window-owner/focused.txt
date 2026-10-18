@@ -1,0 +1,147 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedFileDecisionHeldDiscardPreservesAgentEdit
+--- PASS: TestMountedFileDecisionHeldDiscardPreservesAgentEdit (0.12s)
+=== RUN   TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit
+=== RUN   TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit/save-continue
+=== RUN   TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit/discard-continue
+=== RUN   TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit/cancel-file-action
+--- PASS: TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit (0.33s)
+    --- PASS: TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit/save-continue (0.11s)
+    --- PASS: TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit/discard-continue (0.11s)
+    --- PASS: TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit/cancel-file-action (0.11s)
+=== RUN   TestMountedFileDecisionHeldDiscardCannotUseReopenedPrompt
+--- PASS: TestMountedFileDecisionHeldDiscardCannotUseReopenedPrompt (0.15s)
+=== RUN   TestMountedFileDecisionFreshSaveKeepsAgentWorkBeforeContinuing
+--- PASS: TestMountedFileDecisionFreshSaveKeepsAgentWorkBeforeContinuing (0.13s)
+=== RUN   TestMountedNamedWiringLEDMatchesAgentAndUndo
+    named_wiring_offscreen_test.go:119: named-wiring-observation {"case":"mounted-complete","components":[{"id":"V1","kind":"dc-source","name":"DC source","terminals":["positive","negative"],"position":{"x":-200,"y":0},"value":5,"unit":"V","model":"ideal-dc.v1","rotation":0},{"id":"R1","kind":"resistor","name":"Resistor","terminals":["1","2"],"position":{"x":0,"y":-120},"value":1000,"unit":"Ω","model":"ideal-resistor.v1","rotation":0},{"id":"D1","kind":"led","name":"Red LED","terminals":["anode","cathode"],"position":{"x":200,"y":0},"value":0,"model":"elab.generic-red-led.v1","rotation":0},{"id":"GND","kind":"ground","name":"Ground","terminals":["reference"],"position":{"x":-200,"y":120},"value":0,"model":"ground.v1","rotation":0}],"current_a":0.0029167965774405296,"drawing":{"tool":"wire","kind":"dc-source","position":{"x":-200,"y":0},"wire_start":"","from":"","to":"","value":""},"nets":[{"id":"net:D1.anode","terminals":["D1.anode","R1.2"]},{"id":"net:D1.cathode","terminals":["D1.cathode","GND.reference","V1.negative"]},{"id":"net:R1.1","terminals":["R1.1","V1.positive"]}],"result_stale":false,"selected":"GND","undo_name":"Connect wire","wires":[{"id":"W1","from":"V1.positive","to":"R1.1","connected":true},{"id":"W2","from":"R1.2","to":"D1.anode","connected":true},{"id":"W3","from":"D1.cathode","to":"GND.reference","connected":true},{"id":"W4","from":"GND.reference","to":"V1.negative","connected":true}]}
+    named_wiring_offscreen_test.go:134: named-wiring-observation {"case":"mounted-undo","components":[{"id":"V1","kind":"dc-source","name":"DC source","terminals":["positive","negative"],"position":{"x":-200,"y":0},"value":5,"unit":"V","model":"ideal-dc.v1","rotation":0},{"id":"R1","kind":"resistor","name":"Resistor","terminals":["1","2"],"position":{"x":0,"y":-120},"value":1000,"unit":"Ω","model":"ideal-resistor.v1","rotation":0},{"id":"D1","kind":"led","name":"Red LED","terminals":["anode","cathode"],"position":{"x":200,"y":0},"value":0,"model":"elab.generic-red-led.v1","rotation":0},{"id":"GND","kind":"ground","name":"Ground","terminals":["reference"],"position":{"x":-200,"y":120},"value":0,"model":"ground.v1","rotation":0}],"current_a":null,"drawing":{"tool":"wire","kind":"dc-source","position":{"x":-200,"y":0},"wire_start":"","from":"","to":"","value":""},"nets":[{"id":"net:D1.anode","terminals":["D1.anode","R1.2"]},{"id":"net:D1.cathode","terminals":["D1.cathode","GND.reference"]},{"id":"net:R1.1","terminals":["R1.1","V1.positive"]},{"id":"net:V1.negative","terminals":["V1.negative"]}],"result_stale":true,"selected":"GND","undo_name":"Connect wire","wires":[{"id":"W1","from":"V1.positive","to":"R1.1","connected":true},{"id":"W2","from":"R1.2","to":"D1.anode","connected":true},{"id":"W3","from":"D1.cathode","to":"GND.reference","connected":true}]}
+--- PASS: TestMountedNamedWiringLEDMatchesAgentAndUndo (0.50s)
+=== RUN   TestMountedNamedWiringDuplicateRefusesWithoutHistoryOrFocusChange
+--- PASS: TestMountedNamedWiringDuplicateRefusesWithoutHistoryOrFocusChange (0.13s)
+=== RUN   TestMountedNamedWiringHeldConnectRefusesAgentEndpointChange
+--- PASS: TestMountedNamedWiringHeldConnectRefusesAgentEndpointChange (0.11s)
+=== RUN   TestMountedOutputPageOneClickPreviewIncludesTypedMargin
+--- PASS: TestMountedOutputPageOneClickPreviewIncludesTypedMargin (0.16s)
+=== RUN   TestMountedOutputPageFitAndRefreshUseTypedMargin
+=== RUN   TestMountedOutputPageFitAndRefreshUseTypedMargin/pdf-fit
+=== RUN   TestMountedOutputPageFitAndRefreshUseTypedMargin/preview-refresh
+--- PASS: TestMountedOutputPageFitAndRefreshUseTypedMargin (0.42s)
+    --- PASS: TestMountedOutputPageFitAndRefreshUseTypedMargin/pdf-fit (0.18s)
+    --- PASS: TestMountedOutputPageFitAndRefreshUseTypedMargin/preview-refresh (0.24s)
+=== RUN   TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit
+=== RUN   TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit/print-preview
+=== RUN   TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit/preview-refresh
+=== RUN   TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit/pdf-fit
+--- PASS: TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit (0.93s)
+    --- PASS: TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit/print-preview (0.26s)
+    --- PASS: TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit/preview-refresh (0.39s)
+    --- PASS: TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit/pdf-fit (0.28s)
+=== RUN   TestMountedOutputPagePreviewPixelsMatchPublicAgent
+    output_page_offscreen_test.go:201: matched preview: 1650x1275, 93013 bytes, SHA-256 dea794f0bbaf10caa06dddc741200e81caa48fe4d89921094d8de09181e4206a
+--- PASS: TestMountedOutputPagePreviewPixelsMatchPublicAgent (0.22s)
+=== RUN   TestMountedScopeCursorRecordedStartupMatchesPublicAgent
+--- PASS: TestMountedScopeCursorRecordedStartupMatchesPublicAgent (0.14s)
+=== RUN   TestMountedScopeCursorRecordedFocusLossClearUsesOneClick
+=== RUN   TestMountedScopeCursorRecordedFocusLossClearUsesOneClick/clear
+=== RUN   TestMountedScopeCursorRecordedFocusLossClearUsesOneClick/select
+--- PASS: TestMountedScopeCursorRecordedFocusLossClearUsesOneClick (0.34s)
+    --- PASS: TestMountedScopeCursorRecordedFocusLossClearUsesOneClick/clear (0.17s)
+    --- PASS: TestMountedScopeCursorRecordedFocusLossClearUsesOneClick/select (0.17s)
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a/same-capture-repaint
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-1; incarnation 2→2; field=8 ms
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a/agent-selected-capture
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-2; incarnation 2→3; field=0 s
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time/same-capture-repaint
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-1; incarnation 2→2; field=8 ms
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time/agent-selected-capture
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-2; incarnation 2→3; field=0 s
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start/same-capture-repaint
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-1; incarnation 2→2; field=8 ms
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start/agent-selected-capture
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-2; incarnation 2→3; field=0 s
+--- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft (1.05s)
+    --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a (0.34s)
+        --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a/same-capture-repaint (0.15s)
+        --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a/agent-selected-capture (0.19s)
+    --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time (0.36s)
+        --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time/same-capture-repaint (0.15s)
+        --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time/agent-selected-capture (0.21s)
+    --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start (0.35s)
+        --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start/same-capture-repaint (0.15s)
+        --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start/agent-selected-capture (0.20s)
+=== RUN   TestScopeClickRejectsStaleWindowAndFreshFrameUsesCapturedAxis
+--- PASS: TestScopeClickRejectsStaleWindowAndFreshFrameUsesCapturedAxis (0.01s)
+=== RUN   TestScopeDragOnlyContinuesItsOwnCursorWrites
+--- PASS: TestScopeDragOnlyContinuesItsOwnCursorWrites (0.02s)
+=== RUN   TestScopeClickCannotRetargetAnotherCaptureBeforeRedraw
+--- PASS: TestScopeClickCannotRetargetAnotherCaptureBeforeRedraw (0.02s)
+=== RUN   TestMountedScopeCursorEnterSelectClearMatchesPublicAgent
+=== RUN   TestMountedScopeCursorEnterSelectClearMatchesPublicAgent/rc
+=== RUN   TestMountedScopeCursorEnterSelectClearMatchesPublicAgent/flasher
+--- PASS: TestMountedScopeCursorEnterSelectClearMatchesPublicAgent (1.83s)
+    --- PASS: TestMountedScopeCursorEnterSelectClearMatchesPublicAgent/rc (0.25s)
+    --- PASS: TestMountedScopeCursorEnterSelectClearMatchesPublicAgent/flasher (1.58s)
+=== RUN   TestMountedScopeCursorFocusLossThenClearUsesOneClick
+--- PASS: TestMountedScopeCursorFocusLossThenClearUsesOneClick (0.15s)
+=== RUN   TestMountedScopeCursorHeldSelectionRefusesAgentAfterOwnCommit
+--- PASS: TestMountedScopeCursorHeldSelectionRefusesAgentAfterOwnCommit (0.17s)
+=== RUN   TestMountedScopeCursorFocusLossThenSelectUsesOneClick
+--- PASS: TestMountedScopeCursorFocusLossThenSelectUsesOneClick (0.15s)
+=== RUN   TestMountedScopeCursorStaleSelectPreservesPhysics
+--- PASS: TestMountedScopeCursorStaleSelectPreservesPhysics (0.08s)
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/repaint
+    scope_cursor_offscreen_test.go:226: run 3→3; incarnation 4→4; field=8 ms
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/sample
+    scope_cursor_offscreen_test.go:226: run 3→3; incarnation 4→4; field=8 ms
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/restart
+    scope_cursor_offscreen_test.go:226: run 3→4; incarnation 4→11; field=
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/repaint
+    scope_cursor_offscreen_test.go:226: run 3→3; incarnation 8→8; field=8 ms
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/sample
+    scope_cursor_offscreen_test.go:226: run 3→3; incarnation 8→8; field=8 ms
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/restart
+    scope_cursor_offscreen_test.go:226: run 3→4; incarnation 8→14; field=
+--- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun (1.04s)
+    --- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/repaint (0.16s)
+    --- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/sample (0.16s)
+    --- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/restart (0.21s)
+    --- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/repaint (0.15s)
+    --- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/sample (0.16s)
+    --- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/restart (0.21s)
+=== RUN   TestNativeNarrowWindowReportsNoRowsAndDisablesCSV
+--- PASS: TestNativeNarrowWindowReportsNoRowsAndDisablesCSV (0.32s)
+=== RUN   TestMountedScopeCursorWindowDraftBelongsToLiveRun
+=== RUN   TestMountedScopeCursorWindowDraftBelongsToLiveRun/start/repaint
+    scope_window_offscreen_test.go:78: run 3→3; incarnation 2→2; field=8 ms
+=== RUN   TestMountedScopeCursorWindowDraftBelongsToLiveRun/start/sample
+    scope_window_offscreen_test.go:78: run 3→3; incarnation 2→2; field=8 ms
+=== RUN   TestMountedScopeCursorWindowDraftBelongsToLiveRun/start/restart
+    scope_window_offscreen_test.go:78: run 3→4; incarnation 2→3; field=0 s
+=== RUN   TestMountedScopeCursorWindowDraftBelongsToLiveRun/end/repaint
+    scope_window_offscreen_test.go:78: run 3→3; incarnation 2→2; field=8 ms
+=== RUN   TestMountedScopeCursorWindowDraftBelongsToLiveRun/end/sample
+    scope_window_offscreen_test.go:78: run 3→3; incarnation 2→2; field=8 ms
+=== RUN   TestMountedScopeCursorWindowDraftBelongsToLiveRun/end/restart
+    scope_window_offscreen_test.go:78: run 3→4; incarnation 2→3; field=20 ms
+--- PASS: TestMountedScopeCursorWindowDraftBelongsToLiveRun (1.07s)
+    --- PASS: TestMountedScopeCursorWindowDraftBelongsToLiveRun/start/repaint (0.16s)
+    --- PASS: TestMountedScopeCursorWindowDraftBelongsToLiveRun/start/sample (0.17s)
+    --- PASS: TestMountedScopeCursorWindowDraftBelongsToLiveRun/start/restart (0.21s)
+    --- PASS: TestMountedScopeCursorWindowDraftBelongsToLiveRun/end/repaint (0.16s)
+    --- PASS: TestMountedScopeCursorWindowDraftBelongsToLiveRun/end/sample (0.16s)
+    --- PASS: TestMountedScopeCursorWindowDraftBelongsToLiveRun/end/restart (0.21s)
+=== RUN   TestTimeTextFormatsRoundTripWithoutFloat32Loss
+--- PASS: TestTimeTextFormatsRoundTripWithoutFloat32Loss (0.00s)
+=== RUN   TestCursorTimeFieldsDistinguishUnsetFromStartup
+--- PASS: TestCursorTimeFieldsDistinguishUnsetFromStartup (0.36s)
+=== RUN   TestCommittedTimeFieldsRejectInvalidAndInterveningChanges
+--- PASS: TestCommittedTimeFieldsRejectInvalidAndInterveningChanges (0.18s)
+PASS
+ok  	github.com/dshills/elab/desktop	11.766s

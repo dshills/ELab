@@ -1,0 +1,27 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedScopeCursorWindowDraftBelongsToLiveRun
+=== RUN   TestMountedScopeCursorWindowDraftBelongsToLiveRun/start/repaint
+    scope_window_offscreen_test.go:78: run 3→3; incarnation 2→2; field=8 ms
+=== RUN   TestMountedScopeCursorWindowDraftBelongsToLiveRun/start/sample
+    scope_window_offscreen_test.go:78: run 3→3; incarnation 2→2; field=8 ms
+=== RUN   TestMountedScopeCursorWindowDraftBelongsToLiveRun/start/restart
+    scope_window_offscreen_test.go:78: run 3→4; incarnation 2→2; field=8 ms
+    scope_window_offscreen_test.go:87: old private interval text changed a restarted run: field=window-start run=3→4 interval={Mode:fixed Start:0.008 End:0.02} revision=8→9 error=
+=== RUN   TestMountedScopeCursorWindowDraftBelongsToLiveRun/end/repaint
+    scope_window_offscreen_test.go:78: run 3→3; incarnation 2→2; field=8 ms
+=== RUN   TestMountedScopeCursorWindowDraftBelongsToLiveRun/end/sample
+    scope_window_offscreen_test.go:78: run 3→3; incarnation 2→2; field=8 ms
+=== RUN   TestMountedScopeCursorWindowDraftBelongsToLiveRun/end/restart
+    scope_window_offscreen_test.go:78: run 3→4; incarnation 2→2; field=8 ms
+    scope_window_offscreen_test.go:87: old private interval text changed a restarted run: field=window-end run=3→4 interval={Mode:fixed Start:0 End:0.008} revision=8→9 error=
+--- FAIL: TestMountedScopeCursorWindowDraftBelongsToLiveRun (1.02s)
+    --- PASS: TestMountedScopeCursorWindowDraftBelongsToLiveRun/start/repaint (0.19s)
+    --- PASS: TestMountedScopeCursorWindowDraftBelongsToLiveRun/start/sample (0.17s)
+    --- FAIL: TestMountedScopeCursorWindowDraftBelongsToLiveRun/start/restart (0.17s)
+    --- PASS: TestMountedScopeCursorWindowDraftBelongsToLiveRun/end/repaint (0.16s)
+    --- PASS: TestMountedScopeCursorWindowDraftBelongsToLiveRun/end/sample (0.17s)
+    --- FAIL: TestMountedScopeCursorWindowDraftBelongsToLiveRun/end/restart (0.17s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	1.622s
+FAIL
