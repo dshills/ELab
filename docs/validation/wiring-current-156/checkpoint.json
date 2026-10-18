@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-18",
+  "passed": true,
+  "prior_goal_turn": "progress: 13a26e0 qualified clean /156 review",
+  "source_anchor": "13a26e07440d6fc4a492e3b2a9c310d5d17920c6",
+  "status": "current-review bounded wiring parity qualified; broader MVP and owner acceptance remain open",
+  "product_source_changed": false,
+  "product_version_increment": false,
+  "product_rebuild_or_promotion": false,
+  "sdk_changed": false,
+  "qualified_review": {
+    "source_commit": "22a84d590df498c023cabb94bf6ccf9883204a94",
+    "release": "0.139.0 /156",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.139.0-156-review/elab-agent",
+    "agent_sha256": "0b0d62a5b34156f04cb4ef298f6a8671af8b7e20e9fa1133c4a8cb79a32de5dd",
+    "receipt_sha256": "b2659269a286e3230deac30659fadb3d7df20d409fa8616a9d3d33425963c181",
+    "ledger_sha256": "b5cdacef44f6205d554ba8f1f315d4138e297ef0b1f1c2c1047148a7f5aa7d95",
+    "production_source_files_verified": 68,
+    "runtime_inputs_verified": 343,
+    "manifest_file_entries_verified": 135,
+    "manifest_sha256": "ec49b66aa2c9a10c06df76882245bca16b69addbd8dfceabf6077e3f54da3155"
+  },
+  "producer_files_verified": 120,
+  "test_command": [
+    "go",
+    "test",
+    "-race",
+    "-tags=offscreen",
+    "-count=1",
+    "-timeout=60s",
+    "-run",
+    "^(TestMountedNamedWiring|TestNativeNamedWiring)",
+    "-v",
+    "./..."
+  ],
+  "focused_race_s": 2.793,
+  "controller_exit_code": 0,
+  "worker_exit_code": 0,
+  "compared_cases": [
+    "mounted-complete",
+    "mounted-undo",
+    "native-adapter-complete"
+  ],
+  "current_a": 0.0029167965774405296,
+  "undo_wires": 3,
+  "undo_result_stale": true,
+  "coverage": "Publicly seeded components; mounted named-terminal selector/Connect/Undo and assembled native menu callbacks, compared with exact packaged agent",
+  "self_review": {
+    "findings": [],
+    "review": [
+      "Current runtime inputs/ledger/SDK/review files are pinned before execution",
+      "Producer command, uncached transcript and all test-source identities are checked by the worker",
+      "Component placement is seeded via public commands; no fresh physical UI construction/menu claim",
+      "Current wiring proof supersedes older-release mapping only for the stated cases"
+    ]
+  },
+  "limits": [
+    "No physical OS menu/IME/VoiceOver or visible p95 evidence",
+    "No product rebuild, promotion or owner acceptance",
+    "Owner walkthrough Not tried yet; P0 unchanged at 17 implemented /10 partial"
+  ],
+  "evidence_sha256": {
+    "README.md": "b3be34bc308dfe6e25c0c1fe592ca1b26bcad2cd4836b8f9225351b1728c7357",
+    "focused.txt": "3b0a5f7c587c459bd2358a1804ef055523427ebbbb6a589763e6c40bc38b4a55",
+    "producer.json": "349ffe75a3fd0e0367700a89f44548a82b313ff9ac7782d3fd6d87b7aa02cfec",
+    "replay.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "report.json": "d777fbfce9a583758b06ed21a91cc8c911d27a0e327a64618cf2f8c4840b529d"
+  }
+}
