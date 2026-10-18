@@ -1,0 +1,101 @@
+{
+  "date": "2026-10-18",
+  "prior_goal_turn": "progress: b560f6d button repair and 1967b63 candidate/failure evidence",
+  "source_base": "1967b63f0ebef213895e5d4545c1d41bcb6365f5",
+  "status": "native focus admission/completion protocol repair verified; exact clean replacement qualification pending",
+  "validation_only": true,
+  "cause": {
+    "native_trace": "AXFOCUS retired on owner node:dmFsdWUtZW50cnk 4 5",
+    "interpretation": "A focus request admitted against native generation 4 was retired before owner delivery at generation 5. Prior smoke requested once and waited without retry; SDK refusal obeys its existing contract.",
+    "traversal_measurement": "Approximately 280 managed elements, 65\u201369 thousand hit visits, approximately 14 ms per completed query; not evidence that one traversal consumed five seconds."
+  },
+  "repair": [
+    "Observe current native target and require actual focus completion",
+    "Retry only idempotent focus within the unchanged shared five-second deadline and 20 ms polling interval",
+    "Require current native ID, reachability/native-window, enabled/nonpending state, positive geometry and exact hit-test identity",
+    "Value set and Apply still execute once with original graph/numerical checks",
+    "Preserve context/native error reporting and reject late canceled observations"
+  ],
+  "quality": {
+    "consumer_full_gate": "scripts/check.sh exit 0: audit freshness, lint/imports/Staticcheck, 43 Python tests, root/native race/vet, all mounted regressions and tagged vet",
+    "native_race_s": 144.614,
+    "offscreen_race_s": 9.708,
+    "focused_race_s": 1.781,
+    "full_native_smoke": "exit 0; real Cocoa selectors; focus requests/admissions=2/2; observed current field; 2200 ohm and 0.001344737452917332 A"
+  },
+  "sdk": {
+    "schema": 1,
+    "archive": "third_party/vellum/vellum-677548d.tar.gz",
+    "archive_bytes": 18627256,
+    "sha256": "9233f875cf11829e68ccc62772f9d841c4e01c0da9b2364c0f6f6a7e0d871fe9",
+    "manifest_sha256": "f5e9dcab46eb4c6805587f0301f96745a4802abf2f2f50614bb42ebf3479cc89",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-677548d",
+    "source_commit": "677548d0ea93d7d6a689998eb8cf3d6f3ff9f59f",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 7454,
+    "bootstrap": {
+      "scripts/check-sdk.py": "b8062fbd4c57d1d8cb4d75a094184e1a5fa108cfa811fe9fb390f99f6d66be38",
+      "scripts/child_process.py": "04ba2610ddf112e936e8adcd9a81c03cff422843f993c2ce8a9e1acd96f39c9c",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "803d981c00f32d08a370577b37094848b2c79085cf3303a99b23d2a94336ac2c",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541"
+    }
+  },
+  "sdk_changed": false,
+  "isolated_sdk_restored_clean": true,
+  "source_ledger": {
+    "ledger_sha256": "231956153613890382565a27977ecb56469477016839f0bf03e36acff896e9ba",
+    "sources": 62,
+    "public_commands": 162,
+    "source_hashes_and_all_ledger_bytes_unchanged": true,
+    "change_scope": "native smoke protocol, its tests and qualification records; pinned SDK unchanged"
+  },
+  "self_review": {
+    "scope": [
+      "desktop/native_focus_smoke.go",
+      "desktop/native_focus_smoke_test.go",
+      "desktop/value_apply_smoke.go"
+    ],
+    "findings": [],
+    "review": [
+      "Retry is restricted to idempotent native focus; value setting and Apply remain exactly one request each",
+      "The current native target must be enabled/nonpending/reachable/hittable with positive geometry, then actually observed as focused",
+      "An admitted request is never treated as completion; every retry uses a fresh native observation",
+      "Original shared five-second context and 20 ms polling are unchanged; cancellation/native errors remain visible",
+      "Retired-focus generation guards and all SDK sources remain unchanged",
+      "Smoke evidence records actual requests, admissions and observed native focus; current native run exercises two admissions",
+      "Production command-ledger hashes/IDs, models, schemas and format are unchanged"
+    ],
+    "limits": [
+      "Cocoa selectors in an owned process, not physical input or complete VoiceOver qualification",
+      "Corrected packaged bytes still require separate runtime qualification"
+    ]
+  },
+  "source_sha256": {
+    "desktop/native_focus_smoke.go": "eced08cd9f2cc1400d32f9fd452187a3f9a2974979a9ba04e1971e5dd65a2a01",
+    "desktop/native_focus_smoke_test.go": "2b82fb027cac117bc45530a956aa296f8c499b75046a933bc316b71c8c161f3e",
+    "desktop/value_apply_smoke.go": "e7c4930692a1662faf043bf4481e91547ff396abf0179a65c901d1015280bd50"
+  },
+  "evidence_sha256": {
+    "README.md": "115ca2c2111503d99ed69ca0b6ba4aed158b5a28fd2fcb8c87a3bb94c51b03f9",
+    "focus-diagnostic.patch": "65c57be5b0d51aaf2e7aeff7f329ccbee5f487e48db1c299ce7b18d16344d222",
+    "full-check.txt": "e90cda70a14e222913d28706ab543e4f8b4f2a44f4a4b0ada0f5928020e7ac94",
+    "ledger-review.json": "0a163490136f645ecc91d490bc66c94b05b369e2e44ec10472713bc85cb1d8aa",
+    "native-after.txt": "71ff79344d05dd6055acc7d57532ee877a050042927f59d894d8dc293a5b2acb",
+    "native-focus-result.json": "2f2fac2ac91202c06219bf2f2596f3ec09fa6d18ac3c1dedd35bf3b1ec9db335",
+    "native-refusal-before.txt": "405ac36ea8212b2259a1ff1a0f2fe045a9ddcb5e8484fea1b140cd0f92a86866",
+    "probe-counts-before.txt": "9f7238372ed9100b0d5f8216ce0b042f1dcfb64973045084788262ef07708e09",
+    "probe-diagnostic.patch": "7a0fe13a1f05bf23aa672ae194b6021e15a0df189c97507fdc7a5f68f1599e6a",
+    "self-review.json": "93d8130e0f89a00d39448810eedad841a2f24349d895495a834ef0d46df7170a",
+    "wait-after.txt": "4a051d57a4e7d3d4ef9ed7fb564f1b1127660b897f3410b4b91894916b0f14ec",
+    "wait-before.txt": "44d25dccf5aa8abaefef586dc13b6e65611f5020e5a773643758c2238e47bf5d"
+  },
+  "remaining": [
+    "Clean exact copied-runtime smoke/four-adapter conformance/reference/live/save acceptance",
+    "Owner walkthrough, broader physical input/VoiceOver/p95/install/study gates"
+  ],
+  "version_policy": "Keep 0.130.0 /147 for this validation-only correction, use a separate 147-focus-review folder, preserve original unqualified candidate and all prior reviews"
+}

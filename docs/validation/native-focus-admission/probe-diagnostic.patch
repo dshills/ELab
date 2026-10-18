@@ -1,0 +1,39 @@
+diff --git a/drivers/cogent/accessibility_darwin.m b/drivers/cogent/accessibility_darwin.m
+index e470577..dd00600 100644
+--- a/drivers/cogent/accessibility_darwin.m
++++ b/drivers/cogent/accessibility_darwin.m
+@@ -11,6 +11,7 @@ extern int vellumAXAction(uint64_t token,uint64_t generation,char *id,char *kind
+ extern void vellumAXResult(uint64_t request,char *json);
+ @class VellumAXState;
+ static char vellumAXKey;
++static NSUInteger diagnosticWalks,diagnosticHits;
+ static NSMutableDictionary<NSNumber *,VellumAXState *> *vellumAXStates;
+ 
+ @interface VellumAXElement : NSAccessibilityElement
+@@ -264,6 +265,7 @@ static id vellumAXFocused(VellumAXState *state){for(VellumAXElement *x in state.
+ // because synthetic groups may still contain laid-out native targets.
+ static VellumAXElement *vellumAXHitTree(NSArray *elements,NSPoint point){
+  for(VellumAXElement *element in elements.reverseObjectEnumerator){
++  diagnosticHits++;
+   if(![element isAccessibilityElement])continue;
+   VellumAXElement *child=vellumAXHitTree(element.childElements,point);
+   if(child)return child;
+@@ -653,7 +655,7 @@ char *vellumAXScopedFixture(const char *json){
+ static void vellumAXWalk(id object,NSMutableArray *out){
+  for(id child in [object accessibilityChildren]){
+   if([child isKindOfClass:VellumAXElement.class]){
+-   VellumAXElement *x=child;NSRect frame=x.accessibilityFrame;id value=x.accessibilityValue?:NSNull.null;NSString *parent=[x.parentElement isKindOfClass:VellumAXElement.class]?[x.parentElement accessibilityIdentifier]:@"";
++   VellumAXElement *x=child;diagnosticWalks++;if(diagnosticWalks%100==0)fprintf(stderr,"AX diagnostic walks=%lu hit_visits=%lu\n",(unsigned long)diagnosticWalks,(unsigned long)diagnosticHits);NSRect frame=x.accessibilityFrame;id value=x.accessibilityValue?:NSNull.null;NSString *parent=[x.parentElement isKindOfClass:VellumAXElement.class]?[x.parentElement accessibilityIdentifier]:@"";
+    id hit=[x.state.view accessibilityHitTest:NSMakePoint(NSMidX(frame),NSMidY(frame))];NSString *hitID=[hit isKindOfClass:VellumAXElement.class]?[hit accessibilityIdentifier]:@"";
+    [out addObject:@{@"id":x.accessibilityIdentifier,@"domain_id":x.node[@"domain_id"]?:@"",@"role":x.accessibilityRole,@"name":x.accessibilityLabel?:@"",@"value":value,@"enabled":@([x isAccessibilityEnabled]),@"object_identity":@(x.objectIdentity),@"grid_scope":x.node[@"grid_scope"]?:@"",@"grid_incarnation":x.node[@"grid_incarnation"]?:@0,@"grid_pending":@([x.node[@"grid_pending"] boolValue]),@"grid_target_generation":x.node[@"grid_target_generation"]?:@0,@"grid_generation":x.node[@"grid_generation"]?:@0,@"selected":@([x isAccessibilitySelected]),@"expanded":@([x isAccessibilityExpanded]),@"parent":parent,@"hit_test_id":hitID,@"text_selection":@[x.accessibilitySelectedTextRange.location==NSNotFound?@(-1):@(x.accessibilitySelectedTextRange.location),@(x.accessibilitySelectedTextRange.length)],@"insertion_line":@(x.accessibilityInsertionPointLineNumber),@"row_count":@(x.accessibilityRowCount),@"column_count":@(x.accessibilityColumnCount),@"row_index":@[x.accessibilityRowIndexRange.location==NSNotFound?@(-1):@(x.accessibilityRowIndexRange.location),@(x.accessibilityRowIndexRange.length)],@"column_index":@[x.accessibilityColumnIndexRange.location==NSNotFound?@(-1):@(x.accessibilityColumnIndexRange.location),@(x.accessibilityColumnIndexRange.length)],@"frame":@[@(frame.origin.x),@(frame.origin.y),@(frame.size.width),@(frame.size.height)]}];
+   }
+@@ -662,7 +664,8 @@ static void vellumAXWalk(id object,NSMutableArray *out){
+ }
+ void vellumAXProbe(uint64_t token,uint64_t request){dispatch_async(dispatch_get_main_queue(),^{@autoreleasepool{
+  VellumAXState *state=vellumAXStates[@(token)];if(!state||state.closed){vellumAXResult(request,"{}");return;}
+- NSMutableArray *out=[NSMutableArray new];vellumAXWalk(state.window.contentView,out);
++ fprintf(stderr,"AX diagnostic nodes=%lu roots=%lu\n",(unsigned long)state.elements.count,(unsigned long)state.roots.count);diagnosticWalks=diagnosticHits=0;CFAbsoluteTime diagnosticStart=CFAbsoluteTimeGetCurrent();NSMutableArray *out=[NSMutableArray new];vellumAXWalk(state.window.contentView,out);fprintf(stderr,"AX diagnostic done walks=%lu hit_visits=%lu elapsed=%.6f\n",(unsigned long)diagnosticWalks,(unsigned long)diagnosticHits,CFAbsoluteTimeGetCurrent()-diagnosticStart);
++ for(NSDictionary *item in out)if([item[@"domain_id"] isEqual:@"value-entry"]||[item[@"domain_id"] isEqual:@"apply-value"])fprintf(stderr,"AX target %s\n",[[NSString alloc]initWithData:[NSJSONSerialization dataWithJSONObject:item options:0 error:nil] encoding:NSUTF8StringEncoding].UTF8String);
+  id focused=[state.window accessibilityFocusedUIElement];NSString *id=[focused isKindOfClass:VellumAXElement.class]?[focused accessibilityIdentifier]:@"";
+  NSDictionary *result=@{@"generation":@(state.generation),@"reachable":@((BOOL)(out.count==state.elements.count&&out.count>0)),@"focused_id":id,@"window_role":state.window.accessibilityRole?:@"",@"native_window":@([state.window isKindOfClass:NSWindow.class]),@"elements":out};
+  NSData *data=[NSJSONSerialization dataWithJSONObject:result options:0 error:nil];NSString *json=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];vellumAXResult(request,(char *)json.UTF8String);

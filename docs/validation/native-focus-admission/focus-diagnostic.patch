@@ -1,0 +1,12 @@
+diff --git a/drivers/cogent/accessibility.go b/drivers/cogent/accessibility.go
+index edfa8c5..80ee7e9 100644
+--- a/drivers/cogent/accessibility.go
++++ b/drivers/cogent/accessibility.go
+@@ -206,6 +206,7 @@ func accessibilityDeliver(token, generation uint64, id string, action accessibil
+ 	// generation is rechecked when an admitted action reaches the bounded queue.
+ 	err := b.owner.PostWindow(ref, func() {
+ 		if b.closed.Load() || b.generation.Load() != generation || (guard != nil && !guard()) {
++			if action.Kind == "focus" { println("AXFOCUS retired on owner", id, generation, b.generation.Load()) }
+ 			return
+ 		}
+ 		b.mu.Lock()

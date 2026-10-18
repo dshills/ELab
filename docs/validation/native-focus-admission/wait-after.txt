@@ -1,0 +1,40 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestNativeFocusWaitObservesCompletionAfterLostAdmission
+=== RUN   TestNativeFocusWaitObservesCompletionAfterLostAdmission/refused-before-queue
+=== RUN   TestNativeFocusWaitObservesCompletionAfterLostAdmission/retired-after-admission
+--- PASS: TestNativeFocusWaitObservesCompletionAfterLostAdmission (0.08s)
+    --- PASS: TestNativeFocusWaitObservesCompletionAfterLostAdmission/refused-before-queue (0.04s)
+    --- PASS: TestNativeFocusWaitObservesCompletionAfterLostAdmission/retired-after-admission (0.04s)
+=== RUN   TestNativeFocusWaitNeverTreatsAdmissionAsSuccess
+--- PASS: TestNativeFocusWaitNeverTreatsAdmissionAsSuccess (0.07s)
+=== RUN   TestNativeFocusWaitRejectsObservationAfterCancellation
+--- PASS: TestNativeFocusWaitRejectsObservationAfterCancellation (0.00s)
+=== RUN   TestNativeFocusWaitUsesCurrentNativeTarget
+--- PASS: TestNativeFocusWaitUsesCurrentNativeTarget (0.02s)
+=== RUN   TestNativeFocusWaitDoesNotActOnUnavailableTarget
+=== RUN   TestNativeFocusWaitDoesNotActOnUnavailableTarget/missing
+=== RUN   TestNativeFocusWaitDoesNotActOnUnavailableTarget/disabled
+=== RUN   TestNativeFocusWaitDoesNotActOnUnavailableTarget/pending
+=== RUN   TestNativeFocusWaitDoesNotActOnUnavailableTarget/zero-frame
+=== RUN   TestNativeFocusWaitDoesNotActOnUnavailableTarget/obscured
+=== RUN   TestNativeFocusWaitDoesNotActOnUnavailableTarget/unreachable
+=== RUN   TestNativeFocusWaitDoesNotActOnUnavailableTarget/not-native
+--- PASS: TestNativeFocusWaitDoesNotActOnUnavailableTarget (0.00s)
+    --- PASS: TestNativeFocusWaitDoesNotActOnUnavailableTarget/missing (0.00s)
+    --- PASS: TestNativeFocusWaitDoesNotActOnUnavailableTarget/disabled (0.00s)
+    --- PASS: TestNativeFocusWaitDoesNotActOnUnavailableTarget/pending (0.00s)
+    --- PASS: TestNativeFocusWaitDoesNotActOnUnavailableTarget/zero-frame (0.00s)
+    --- PASS: TestNativeFocusWaitDoesNotActOnUnavailableTarget/obscured (0.00s)
+    --- PASS: TestNativeFocusWaitDoesNotActOnUnavailableTarget/unreachable (0.00s)
+    --- PASS: TestNativeFocusWaitDoesNotActOnUnavailableTarget/not-native (0.00s)
+=== RUN   TestNativeFocusWaitPreservesCancellationAndNativeErrors
+=== RUN   TestNativeFocusWaitPreservesCancellationAndNativeErrors/pre-canceled
+=== RUN   TestNativeFocusWaitPreservesCancellationAndNativeErrors/inspect
+=== RUN   TestNativeFocusWaitPreservesCancellationAndNativeErrors/request
+--- PASS: TestNativeFocusWaitPreservesCancellationAndNativeErrors (0.00s)
+    --- PASS: TestNativeFocusWaitPreservesCancellationAndNativeErrors/pre-canceled (0.00s)
+    --- PASS: TestNativeFocusWaitPreservesCancellationAndNativeErrors/inspect (0.00s)
+    --- PASS: TestNativeFocusWaitPreservesCancellationAndNativeErrors/request (0.00s)
+PASS
+ok  	github.com/dshills/elab/desktop	1.781s

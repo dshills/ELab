@@ -48,28 +48,13 @@ func nativeLEDInspectorAccessibilitySmoke(ctx context.Context, a *app.Applicatio
 		case <-tick.C:
 		}
 	}
-	if accepted, err := cogent.PerformAccessibilityAction(ctx, "main", "value-entry", "focus", ""); err != nil || !accepted {
-		return fmt.Errorf("native inspector focus: accepted=%t err=%v", accepted, err)
-	}
-	// Admission is not completion. A focus refresh can retire the preceding
-	// semantic generation; observe completion before sending a dependent edit.
-	for {
-		inspection, err := cogent.InspectAccessibility(ctx, "main")
-		if err != nil {
-			return err
-		}
-		focused := false
-		for _, element := range controls {
-			focused = focused || element.DomainID == "value-entry" && inspection.FocusedID == element.ID
-		}
-		if focused {
-			break
-		}
-		select {
-		case <-ctx.Done():
-			return fmt.Errorf("native inspector focus did not complete: %w; focused=%q", ctx.Err(), inspection.FocusedID)
-		case <-tick.C:
-		}
+	focus, err := waitNativeAccessibilityFocus(ctx, "value-entry", func(ctx context.Context) (cogent.AccessibilityInspection, error) {
+		return cogent.InspectAccessibility(ctx, "main")
+	}, func(ctx context.Context, id string) (bool, error) {
+		return cogent.PerformAccessibilityAction(ctx, "main", id, "focus", "")
+	})
+	if err != nil {
+		return fmt.Errorf("native inspector focus: %w", err)
 	}
 	if accepted, err := cogent.PerformAccessibilityAction(ctx, "main", "value-entry", "set", "2.2k"); err != nil || !accepted {
 		return fmt.Errorf("native inspector set: accepted=%t err=%v", accepted, err)
@@ -88,7 +73,7 @@ func nativeLEDInspectorAccessibilitySmoke(ctx context.Context, a *app.Applicatio
 	if err != nil {
 		return err
 	}
-	evidence, _ := json.Marshal(map[string]any{"event": "elab.led-inspector.accessibility.smoke", "passed": true, "initial_native_controls": controls, "resistance_ohm": state.Circuit.Resistance, "current_a": state.Result.Current, "scope": "in-process Cocoa selectors, not external AX or VoiceOver acceptance"})
+	evidence, _ := json.Marshal(map[string]any{"event": "elab.led-inspector.accessibility.smoke", "passed": true, "initial_native_controls": controls, "focus_requests": focus.Requests, "focus_admissions": focus.Admissions, "observed_focus_id": focus.FocusedID, "observed_focus_generation": focus.Generation, "resistance_ohm": state.Circuit.Resistance, "current_a": state.Result.Current, "scope": "in-process Cocoa selectors, not external AX or VoiceOver acceptance"})
 	log.Print(string(evidence))
 	return nil
 }

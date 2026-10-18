@@ -1,0 +1,15 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestNativeFocusWaitObservesCompletionAfterLostAdmission
+=== RUN   TestNativeFocusWaitObservesCompletionAfterLostAdmission/refused-before-queue
+    native_focus_smoke_test.go:47: admission was mistaken for completion or no fresh retry occurred 1 0 {1 0  0} native focus admission accepted=false: %!w(<nil>)
+=== RUN   TestNativeFocusWaitObservesCompletionAfterLostAdmission/retired-after-admission
+    native_focus_smoke_test.go:47: admission was mistaken for completion or no fresh retry occurred 1 13 {1 1 wire-selector 17} native focus "value-entry" not observed; focused="wire-selector": context deadline exceeded
+--- FAIL: TestNativeFocusWaitObservesCompletionAfterLostAdmission (0.25s)
+    --- FAIL: TestNativeFocusWaitObservesCompletionAfterLostAdmission/refused-before-queue (0.00s)
+    --- FAIL: TestNativeFocusWaitObservesCompletionAfterLostAdmission/retired-after-admission (0.25s)
+=== RUN   TestNativeFocusWaitNeverTreatsAdmissionAsSuccess
+--- PASS: TestNativeFocusWaitNeverTreatsAdmissionAsSuccess (0.07s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	0.969s
+FAIL

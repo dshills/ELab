@@ -1,0 +1,21 @@
+{
+  "scope": [
+    "desktop/native_focus_smoke.go",
+    "desktop/native_focus_smoke_test.go",
+    "desktop/value_apply_smoke.go"
+  ],
+  "findings": [],
+  "review": [
+    "Retry is restricted to idempotent native focus; value setting and Apply remain exactly one request each",
+    "The current native target must be enabled/nonpending/reachable/hittable with positive geometry, then actually observed as focused",
+    "An admitted request is never treated as completion; every retry uses a fresh native observation",
+    "Original shared five-second context and 20 ms polling are unchanged; cancellation/native errors remain visible",
+    "Retired-focus generation guards and all SDK sources remain unchanged",
+    "Smoke evidence records actual requests, admissions and observed native focus; current native run exercises two admissions",
+    "Production command-ledger hashes/IDs, models, schemas and format are unchanged"
+  ],
+  "limits": [
+    "Cocoa selectors in an owned process, not physical input or complete VoiceOver qualification",
+    "Corrected packaged bytes still require separate runtime qualification"
+  ]
+}
