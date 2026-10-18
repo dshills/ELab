@@ -1,0 +1,188 @@
+{
+  "passed": true,
+  "scope": "macOS copied runtime with development-file and outbound IP denial; controller unrestricted",
+  "app_source": "/Users/dshills/Development/projects/ELab/build/ELab-0.139.0-156-review/ELab.app",
+  "source_bundle": {
+    ".": {
+      "mode": 493,
+      "sha256": null
+    },
+    "Contents": {
+      "mode": 493,
+      "sha256": null
+    },
+    "Contents/Info.plist": {
+      "mode": 420,
+      "sha256": "1f846258fc63c9055946e0c3b52faed3db873bdaebbba95e0aaa7baf7917cc7b"
+    },
+    "Contents/MacOS": {
+      "mode": 493,
+      "sha256": null
+    },
+    "Contents/MacOS/ELab": {
+      "mode": 493,
+      "sha256": "24e98f76934fbc2956474ef0db5bd10ed7d71ef6adf1758039f6222110d56cdf"
+    },
+    "Contents/Resources": {
+      "mode": 493,
+      "sha256": null
+    },
+    "Contents/Resources/APP_MANIFEST.json": {
+      "mode": 420,
+      "sha256": "b27a3dc3a51f8c5590c3773207336e9b3d703256115c39856a5e4ff6a1dec4bb"
+    }
+  },
+  "source_agent_sha256": "0b0d62a5b34156f04cb4ef298f6a8671af8b7e20e9fa1133c4a8cb79a32de5dd",
+  "source_controller_sha256": "fb5fed0db51785cba36c928e79551e00eb4dd1f5fb9b5e2beefe0c10f02bf0ad",
+  "system_dependencies": [
+    "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+    "/System/Library/Frameworks/Carbon.framework/Versions/A/Carbon",
+    "/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa",
+    "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+    "/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics",
+    "/System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices",
+    "/System/Library/Frameworks/CoreText.framework/Versions/A/CoreText",
+    "/System/Library/Frameworks/CoreVideo.framework/Versions/A/CoreVideo",
+    "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+    "/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit",
+    "/System/Library/Frameworks/ImageIO.framework/Versions/A/ImageIO",
+    "/System/Library/Frameworks/Metal.framework/Versions/A/Metal",
+    "/System/Library/Frameworks/OpenGL.framework/Versions/A/OpenGL",
+    "/System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore",
+    "/System/Library/Frameworks/Security.framework/Versions/A/Security",
+    "/System/Library/Frameworks/UniformTypeIdentifiers.framework/Versions/A/UniformTypeIdentifiers",
+    "/System/Library/Frameworks/UserNotifications.framework/Versions/A/UserNotifications",
+    "/usr/lib/libSystem.B.dylib",
+    "/usr/lib/libcups.2.dylib",
+    "/usr/lib/libobjc.A.dylib",
+    "/usr/lib/libresolv.9.dylib"
+  ],
+  "blocked_development": {
+    "repository": {
+      "root": "/Users/dshills/Development/projects/ELab",
+      "canary": "/Users/dshills/Development/projects/ELab/README.md"
+    },
+    "sdk": {
+      "root": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-677548d",
+      "canary": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-677548d/go.mod"
+    },
+    "sibling_vellum": {
+      "root": "/Users/dshills/Development/projects/Vellum",
+      "canary": "/Users/dshills/Development/projects/Vellum/go.mod"
+    },
+    "go_toolchain": {
+      "root": "/opt/homebrew/Cellar/go/1.27.2/libexec",
+      "canary": "/opt/homebrew/Cellar/go/1.27.2/libexec/VERSION"
+    },
+    "go_build_cache": {
+      "root": "/Users/dshills/Library/Caches/go-build",
+      "canary": "/Users/dshills/Library/Caches/go-build/README"
+    },
+    "project_go_cache": {
+      "root": "/Users/dshills/Development/projects/ELab/build/go-cache",
+      "canary": "/Users/dshills/Development/projects/ELab/build/go-cache/README"
+    },
+    "go_module_cache": {
+      "root": "/Users/dshills/Development/Go/pkg/mod",
+      "canary": "/Users/dshills/Development/Go/pkg/mod/cache/download/golang.org/x/text/@v/v0.9.0.mod"
+    },
+    "developer_sdk": {
+      "root": "/Applications/Xcode.app/Contents/Developer",
+      "canary": "/Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild"
+    }
+  },
+  "stages": [
+    {
+      "name": "native-smoke",
+      "command": [
+        "/private/tmp/elab-first-version-156-runtime/native",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 39.90396329096984
+    },
+    {
+      "name": "public-suites",
+      "command": [
+        "/Users/dshills/Development/projects/ELab/build/first-version-156-tools/build/elab-conformance",
+        "--agent-binary",
+        "/private/tmp/elab-first-version-156-runtime/agent",
+        "--native-binary",
+        "/private/tmp/elab-first-version-156-runtime/native",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/private/tmp/elab-first-version-156-runtime/public"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 48.92043575004209
+    }
+  ],
+  "controls": {
+    "allowed_read": true,
+    "files": {
+      "repository": {
+        "denied": true,
+        "errno": 1
+      },
+      "sdk": {
+        "denied": true,
+        "errno": 1
+      },
+      "sibling_vellum": {
+        "denied": true,
+        "errno": 1
+      },
+      "go_toolchain": {
+        "denied": true,
+        "errno": 1
+      },
+      "go_build_cache": {
+        "denied": true,
+        "errno": 1
+      },
+      "project_go_cache": {
+        "denied": true,
+        "errno": 1
+      },
+      "go_module_cache": {
+        "denied": true,
+        "errno": 1
+      },
+      "developer_sdk": {
+        "denied": true,
+        "errno": 1
+      }
+    },
+    "network": {
+      "ipv4_tcp": {
+        "denied": true,
+        "errno": 1
+      },
+      "ipv4_udp": {
+        "denied": true,
+        "errno": 1
+      },
+      "ipv6_tcp": {
+        "denied": true,
+        "errno": 1
+      },
+      "ipv6_udp": {
+        "denied": true,
+        "errno": 1
+      }
+    }
+  },
+  "public_report_sha256": "ac34bcb1c3a729dc69f5fb07e92f062b3d3ae9e564f46f690f5cb0eb7099a36b",
+  "copied_bundle_unchanged": true,
+  "agent_unchanged": true,
+  "controller_unchanged": true
+}
