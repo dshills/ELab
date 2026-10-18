@@ -1,0 +1,13 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedOutputPageFitAndRefreshUseTypedMargin
+=== RUN   TestMountedOutputPageFitAndRefreshUseTypedMargin/pdf-fit
+    output_page_offscreen_test.go:103: output action refused its own margin commit pdf-fit expected command revision 3; current command revision is 4
+=== RUN   TestMountedOutputPageFitAndRefreshUseTypedMargin/preview-refresh
+    output_page_offscreen_test.go:103: output action refused its own margin commit preview-refresh expected command revision 3; current command revision is 4
+--- FAIL: TestMountedOutputPageFitAndRefreshUseTypedMargin (0.46s)
+    --- FAIL: TestMountedOutputPageFitAndRefreshUseTypedMargin/pdf-fit (0.22s)
+    --- FAIL: TestMountedOutputPageFitAndRefreshUseTypedMargin/preview-refresh (0.24s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	1.111s
+FAIL

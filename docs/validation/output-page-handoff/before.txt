@@ -1,0 +1,8 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedOutputPageOneClickPreviewIncludesTypedMargin
+    output_page_offscreen_test.go:56: one-click preview did not capture typed margin: margin=17 preview=<nil> revision=2→3 error=expected command revision 2; current command revision is 3
+--- FAIL: TestMountedOutputPageOneClickPreviewIncludesTypedMargin (0.21s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	0.859s
+FAIL

@@ -223,6 +223,7 @@ type screen struct {
 	settleField                         func(string, func(error)) error
 	pendingValueApply                   *valueApply
 	valueDraftAccepted                  *valueDraftContinuation
+	outputPageAccepted                  *outputPageContinuation
 	placementFieldAccepted              *placementFieldContinuation
 	pendingPlacement                    *placementActionWork
 	cursorFieldAccepted                 *cursorFieldContinuation

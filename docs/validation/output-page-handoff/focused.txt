@@ -1,0 +1,67 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestOutputPageFitContinuesAcceptedSettingsFromOriginalAction
+--- PASS: TestOutputPageFitContinuesAcceptedSettingsFromOriginalAction (0.22s)
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/print-preview
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/print-preview/agent-before-field
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/print-preview/agent-after-field
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/print-preview/other-user-field
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/print-preview/new-document
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/print-preview/failed-field
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/preview-refresh
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/preview-refresh/agent-before-field
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/preview-refresh/agent-after-field
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/preview-refresh/other-user-field
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/preview-refresh/new-document
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/preview-refresh/failed-field
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/pdf-fit
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/pdf-fit/agent-before-field
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/pdf-fit/agent-after-field
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/pdf-fit/other-user-field
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/pdf-fit/new-document
+=== RUN   TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/pdf-fit/failed-field
+--- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments (0.81s)
+    --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/print-preview (0.27s)
+        --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/print-preview/agent-before-field (0.04s)
+        --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/print-preview/agent-after-field (0.04s)
+        --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/print-preview/other-user-field (0.07s)
+        --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/print-preview/new-document (0.04s)
+        --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/print-preview/failed-field (0.07s)
+    --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/preview-refresh (0.27s)
+        --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/preview-refresh/agent-before-field (0.04s)
+        --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/preview-refresh/agent-after-field (0.04s)
+        --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/preview-refresh/other-user-field (0.07s)
+        --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/preview-refresh/new-document (0.04s)
+        --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/preview-refresh/failed-field (0.07s)
+    --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/pdf-fit (0.27s)
+        --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/pdf-fit/agent-before-field (0.04s)
+        --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/pdf-fit/agent-after-field (0.04s)
+        --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/pdf-fit/other-user-field (0.07s)
+        --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/pdf-fit/new-document (0.04s)
+        --- PASS: TestOutputPageContinuationRefusesOtherActorsFieldsAndDocuments/pdf-fit/failed-field (0.07s)
+=== RUN   TestMountedOutputPageOneClickPreviewIncludesTypedMargin
+--- PASS: TestMountedOutputPageOneClickPreviewIncludesTypedMargin (0.22s)
+=== RUN   TestMountedOutputPageFitAndRefreshUseTypedMargin
+=== RUN   TestMountedOutputPageFitAndRefreshUseTypedMargin/pdf-fit
+=== RUN   TestMountedOutputPageFitAndRefreshUseTypedMargin/preview-refresh
+--- PASS: TestMountedOutputPageFitAndRefreshUseTypedMargin (0.42s)
+    --- PASS: TestMountedOutputPageFitAndRefreshUseTypedMargin/pdf-fit (0.19s)
+    --- PASS: TestMountedOutputPageFitAndRefreshUseTypedMargin/preview-refresh (0.23s)
+=== RUN   TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit
+=== RUN   TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit/print-preview
+=== RUN   TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit/preview-refresh
+=== RUN   TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit/pdf-fit
+--- PASS: TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit (0.99s)
+    --- PASS: TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit/print-preview (0.27s)
+    --- PASS: TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit/preview-refresh (0.43s)
+    --- PASS: TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit/pdf-fit (0.29s)
+=== RUN   TestMountedOutputPagePreviewPixelsMatchPublicAgent
+    output_page_offscreen_test.go:201: matched preview: 1650x1275, 93013 bytes, SHA-256 dea794f0bbaf10caa06dddc741200e81caa48fe4d89921094d8de09181e4206a
+--- PASS: TestMountedOutputPagePreviewPixelsMatchPublicAgent (0.22s)
+=== RUN   TestNativePDFPageControlsMatchAgentAndPreserveCircuit
+--- PASS: TestNativePDFPageControlsMatchAgentAndPreserveCircuit (0.48s)
+=== RUN   TestNativeTiledPageControlsNavigationAndCapturedExport
+--- PASS: TestNativeTiledPageControlsNavigationAndCapturedExport (1.26s)
+PASS
+ok  	github.com/dshills/elab/desktop	6.326s

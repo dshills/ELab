@@ -1,5 +1,7 @@
 # ELab first-version review · 0.133.0 /150
 
+**New output-page issue found:** committing a typed page setting can make the first Preview/Refresh/Fit click refuse its own revision advance. The source repair has focused retained-widget and exact preview-byte parity evidence; full quality passes; replacement qualification is pending. /150 remains immutable and affected.
+
 This is the updated owner-review alpha. Open [ELab.app](../build/ELab-0.133.0-150-review/ELab.app) in the [review folder](../build/ELab-0.133.0-150-review). It includes the matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required. The canonical app, ten earlier qualified review folders (0.123.0 /140 through 0.132.0 /149) and the original unqualified /147 candidate are preserved. Owner walkthrough remains pending (October 18: “Not tried yet”).
 
 Before opening the replacement, save your work and quit an earlier review app when ready. Version 0.133 fixes a held Discard press that could discard an agent's later edit. Save/Discard/Cancel stay attached to the document state and pending choice they were shown for. An old click cannot adopt a canceled and reopened prompt, and Save/Open workers retain the command guard. Fresh choices work; Save writes the current graph before continuing. Earlier placement, cursor, button/control ownership, slider and clock repairs are included. Public IDs/commands, models and project format remain unchanged; Vellum stays pinned at `677548d`.

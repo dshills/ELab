@@ -1,0 +1,25 @@
+{
+  "production_files": [
+    "desktop/main.go",
+    "desktop/print_page.go",
+    "desktop/print_preview.go",
+    "desktop/view.go",
+    "desktop/output_page_actions.go"
+  ],
+  "findings": [],
+  "review": [
+    "Only consecutive accepted output-page field responses may continue Preview/Refresh/Fit in the same document",
+    "Accepted parameters and context come from the dispatch response, not a later service snapshot",
+    "Fit preserves accepted paper/orientation/margin/color/measurement options before clearing explicit scale/tiling/overlap",
+    "Agent-before/after, unrelated user fields, document replacement and failed fields break continuation; final shared dispatch still pins command/document",
+    "NumberField focus-loss FIFO commits precede output activation; no generic retries or SDK changes",
+    "Existing active-preview disable conditions and command IDs/accessibility names remain",
+    "Source route consolidation preserves all command/alias/coverage sets; syntax-site reductions are not coverage completion",
+    "Mounted results include exact public-agent PNG dimensions, size, checksum and page metadata plus graph/physics/history preservation"
+  ],
+  "limits": [
+    "Retained-widget input and public commands, not physical OS interaction, visible p95, IME/VoiceOver or printer qualification",
+    "No printer discovery/submission or additional physical page; earlier paper report retains its original scope",
+    "Clean replacement qualification and owner walkthrough remain separate"
+  ]
+}

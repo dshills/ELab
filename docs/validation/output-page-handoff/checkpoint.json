@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-18",
+  "prior_goal_turn": "progress: 6e57636 unsaved-decision repair and d003761 /150 qualification",
+  "source_base": "d003761142d5f01243a0f1b2cfe5106e2e57cef2",
+  "status": "output-page own-field handoff repair verified; clean replacement qualification pending",
+  "cause": "Focus-loss page field commit advanced command revision before the captured Preview/Refresh/Fit action",
+  "sdk_changed": false,
+  "sdk": {
+    "schema": 1,
+    "archive": "third_party/vellum/vellum-677548d.tar.gz",
+    "archive_bytes": 18627256,
+    "sha256": "9233f875cf11829e68ccc62772f9d841c4e01c0da9b2364c0f6f6a7e0d871fe9",
+    "manifest_sha256": "f5e9dcab46eb4c6805587f0301f96745a4802abf2f2f50614bb42ebf3479cc89",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-677548d",
+    "source_commit": "677548d0ea93d7d6a689998eb8cf3d6f3ff9f59f",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 7454,
+    "bootstrap": {
+      "scripts/check-sdk.py": "b8062fbd4c57d1d8cb4d75a094184e1a5fa108cfa811fe9fb390f99f6d66be38",
+      "scripts/child_process.py": "04ba2610ddf112e936e8adcd9a81c03cff422843f993c2ce8a9e1acd96f39c9c",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "803d981c00f32d08a370577b37094848b2c79085cf3303a99b23d2a94336ac2c",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541"
+    }
+  },
+  "quality": {
+    "full_source_gate": "scripts/check.sh exit 0: audit freshness, lint/imports/Staticcheck, 43 Python tests, root/native race/vet, expanded mounted regressions and tagged vet",
+    "native_race_s": 152.101,
+    "offscreen_race_s": 16.165,
+    "focused_race_s": 6.326,
+    "native_smoke": "full exploratory dirty-source smoke exit 0; exact clean replacement runtime remains separate"
+  },
+  "preview_parity": {
+    "public_png_chunks_compared_byte_for_byte": true,
+    "width_px": 1650,
+    "height_px": 1275,
+    "bytes": 93013,
+    "sha256": "dea794f0bbaf10caa06dddc741200e81caa48fe4d89921094d8de09181e4206a",
+    "page_index_count_settings_and_source_current_equal": true,
+    "circuit_document_scope_physics_and_history_preserved": true,
+    "printer_contacted": false
+  },
+  "source_ledger": {
+    "sources": 66,
+    "sites": 394,
+    "binding_review_sites": 157,
+    "literal_routes": 211,
+    "public_commands": 162,
+    "source_routes": 132,
+    "ledger_sha256": "1e6d45933b6d76596d83a2d033fef57ba8781d3bf691ef9c188c1478b987cb86",
+    "public_and_route_sets_unchanged": true,
+    "review": "ledger-review.json"
+  },
+  "self_review": {
+    "production_files": [
+      "desktop/main.go",
+      "desktop/print_page.go",
+      "desktop/print_preview.go",
+      "desktop/view.go",
+      "desktop/output_page_actions.go"
+    ],
+    "findings": [],
+    "review": [
+      "Only consecutive accepted output-page field responses may continue Preview/Refresh/Fit in the same document",
+      "Accepted parameters and context come from the dispatch response, not a later service snapshot",
+      "Fit preserves accepted paper/orientation/margin/color/measurement options before clearing explicit scale/tiling/overlap",
+      "Agent-before/after, unrelated user fields, document replacement and failed fields break continuation; final shared dispatch still pins command/document",
+      "NumberField focus-loss FIFO commits precede output activation; no generic retries or SDK changes",
+      "Existing active-preview disable conditions and command IDs/accessibility names remain",
+      "Source route consolidation preserves all command/alias/coverage sets; syntax-site reductions are not coverage completion",
+      "Mounted results include exact public-agent PNG dimensions, size, checksum and page metadata plus graph/physics/history preservation"
+    ],
+    "limits": [
+      "Retained-widget input and public commands, not physical OS interaction, visible p95, IME/VoiceOver or printer qualification",
+      "No printer discovery/submission or additional physical page; earlier paper report retains its original scope",
+      "Clean replacement qualification and owner walkthrough remain separate"
+    ]
+  },
+  "source_sha256": {
+    "desktop/main.go": "ac62c11cba0df2377914ef3da90c983abf4602d4c76d73a6f303a2588ebc962c",
+    "desktop/view.go": "479d5cc45ba71a3d5fe6b59f430b5d381b4f8f69a6d71ae0f5759a9c59a44dd8",
+    "desktop/print_page.go": "9eda4922d28184f3aeaf4c7a32a14b0e4dadedb4e8ef489f21565b6e670879fe",
+    "desktop/print_preview.go": "56b3ac5c0c25bbfd5603921a3600dff6a23671defbcd94d9b99c61794f18f158",
+    "desktop/output_page_actions.go": "92b5592e3bb9ead8363e4c6f6c6b4ae9ac892926e253eb415a97a98bbdf8a923",
+    "desktop/output_page_actions_test.go": "3e9b446e4ad0865e9b49af0aa29d2536bf6c1368904eaf8800e0c0163ce7c4e2",
+    "desktop/output_page_offscreen_test.go": "9f7cc3164d5167b4dfb18984640929a7ef96cd3547b2d27c54df62aacb8dba95",
+    "scripts/check.sh": "6a7f10bcdbbac2883da9236adcf63bf636f585043bed26906f4034fc13601aa1"
+  },
+  "evidence_sha256": {
+    "README.md": "6df85dfde54fc5996c39871edf83b9e020d8ab0fed972cb629b4d81cf2757d73",
+    "before.txt": "df4d178904936d86b62731b2900925502f782b0f58857088fec4280fc9993372",
+    "fit-refresh-before.txt": "f10ee5f42d584bf2c6b7855c6886c965213b0f6c18d00237970dd4a67b5f3748",
+    "focused.txt": "c9bcbb02adf3d7b085ef198870d08ae94663213f4baae2c2861fa4f624067edd",
+    "full-check.txt": "bf67349981e31291a6e48175d8b56e83e36980e0db08f95f17a09ad1ada8a8f1",
+    "ledger-review.json": "88a73fdf264374d7c19b2d47573c4ab6c6f7028f62a4fdc263d6277baf2550a9",
+    "native-smoke.txt": "77ed3aca115915123a1496fbac45b12ff0ed459b06f87fad9eea0c297936d3e9",
+    "self-review.json": "aa40f7d35d8f018435cef9dbea41d77081d0723e7813ff435305d6f3bf8ad048"
+  },
+  "limits": [
+    "Retained-widget routing and public preview commands, not new physical OS/menu/IME/VoiceOver or visible p95 evidence",
+    "No printer contacted or physical paper submitted; prior page inspection retains its original scope",
+    "Owner walkthrough Not tried yet and broader MVP qualification remain open"
+  ],
+  "remaining": [
+    "Build clean 0.134.0 /151 replacement and qualify exact copied app/agent",
+    "Owner walkthrough and declared remaining qualification"
+  ]
+}

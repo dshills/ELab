@@ -1,0 +1,280 @@
+{
+  "sources": 66,
+  "sites": 394,
+  "binding_review_sites": 157,
+  "literal_routes": 211,
+  "public_commands": 162,
+  "source_routes": 132,
+  "source_hashes_changed": {
+    "desktop/main.go": {
+      "before": "f80298170f83df701670943b96867b28b6d4cb7b7d2e72e2be9b29268d271e13",
+      "after": "ac62c11cba0df2377914ef3da90c983abf4602d4c76d73a6f303a2588ebc962c"
+    },
+    "desktop/output_page_actions.go": {
+      "before": null,
+      "after": "92b5592e3bb9ead8363e4c6f6c6b4ae9ac892926e253eb415a97a98bbdf8a923"
+    },
+    "desktop/print_page.go": {
+      "before": "96cb763e746bbc8d055fa7a78bc4cb6b47e3230308713e1d1cb0a8a5f06daf14",
+      "after": "9eda4922d28184f3aeaf4c7a32a14b0e4dadedb4e8ef489f21565b6e670879fe"
+    },
+    "desktop/print_preview.go": {
+      "before": "3cc0ff9070556c30b0a490090985c879fd5796918055da27bd4aa7a98957ecdc",
+      "after": "56b3ac5c0c25bbfd5603921a3600dff6a23671defbcd94d9b99c61794f18f158"
+    },
+    "desktop/view.go": {
+      "before": "9b49a018838950c24a2f4e21931a710fae6249ee485a6dc7d4caf480c76fdfdb",
+      "after": "479d5cc45ba71a3d5fe6b59f430b5d381b4f8f69a6d71ae0f5759a9c59a44dd8"
+    }
+  },
+  "removed_sites": [
+    {
+      "file": "desktop/print_page.go",
+      "line": 21,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tif choice.id == \"paper\" {\n\t\tnext.Paper = e.SelectedID\n\t} else {\n\t\tnext.Orientation = e.SelectedID\n\t}\n\ts.invoke(\"export.page.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 28,
+      "function": "*screen.schematicPageControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"export.page.set\", next)",
+      "public_commands": [
+        "export.page.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 31,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tv := float64(e.Number)\n\tnext.MarginMM = &v\n\ts.invoke(\"export.page.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 35,
+      "function": "*screen.schematicPageControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"export.page.set\", next)",
+      "public_commands": [
+        "export.page.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 43,
+      "function": "*screen.schematicPageControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"pdf-fit\", \"Fit to page\", \"export.page.set\", func() workbench.SchematicPage { p := page; p.Scale = nil; p.Tile = false; p.OverlapMM = nil; return p }())",
+      "public_commands": [
+        "export.page.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 43,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tv := float64(e.Number) / 100\n\tnext.Scale = &v\n\ts.invoke(\"export.page.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 47,
+      "function": "*screen.schematicPageControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"export.page.set\", next)",
+      "public_commands": [
+        "export.page.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 49,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tnext.Tile = e.Checked\n\tif next.Tile && next.Scale == nil {\n\t\tv := 1.\n\t\tnext.Scale = &v\n\t}\n\tif !next.Tile {\n\t\tnext.OverlapMM = nil\n\t}\n\ts.invoke(\"export.page.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 59,
+      "function": "*screen.schematicPageControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"export.page.set\", next)",
+      "public_commands": [
+        "export.page.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 62,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tv := float64(e.Number)\n\tnext.OverlapMM = &v\n\ts.invoke(\"export.page.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 66,
+      "function": "*screen.schematicPageControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"export.page.set\", next)",
+      "public_commands": [
+        "export.page.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 78,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tif toggle.id == \"color\" {\n\t\tnext.Color = e.Checked\n\t} else {\n\t\tnext.Measurements = e.Checked\n\t}\n\ts.invoke(\"export.page.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 85,
+      "function": "*screen.schematicPageControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"export.page.set\", next)",
+      "public_commands": [
+        "export.page.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/print_preview.go",
+      "line": 100,
+      "function": "*screen.printPreviewPanel",
+      "kind": "action-factory",
+      "expression": "s.action(\"preview-refresh\", \"Refresh preview\", \"print.preview.start\", workbench.PreviewParams{})",
+      "public_commands": [
+        "print.preview.start"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 171,
+      "function": "*screen.view",
+      "kind": "action-factory",
+      "expression": "s.action(\"print-preview\", \"Print preview\", \"print.preview.start\", workbench.PreviewParams{})",
+      "public_commands": [
+        "print.preview.start"
+      ],
+      "status": "literal-public-route"
+    }
+  ],
+  "added_sites": [
+    {
+      "file": "desktop/output_page_actions.go",
+      "line": 21,
+      "function": "*screen.changeOutputPage",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"export.page.set\", page)",
+      "public_commands": [
+        "export.page.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/output_page_actions.go",
+      "line": 50,
+      "function": "*screen.outputPreviewAction",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\tif accepted := s.continuedOutputPage(context); accepted != nil {\n\t\tcontext = accepted.to\n\t}\n\ts.invokeAtCommandRevision(\"print.preview.start\", workbench.PreviewParams{}, context.revision, context.generation)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/output_page_actions.go",
+      "line": 54,
+      "function": "*screen.outputPreviewAction",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"print.preview.start\", workbench.PreviewParams{}, context.revision, context.generation)",
+      "public_commands": [
+        "print.preview.start"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/output_page_actions.go",
+      "line": 61,
+      "function": "*screen.outputFitAction",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\tif accepted := s.continuedOutputPage(context); accepted != nil {\n\t\tcontext = accepted.to\n\t\tpage = accepted.page\n\t}\n\tpage.Scale = nil\n\tpage.Tile = false\n\tpage.OverlapMM = nil\n\ts.invokeAtCommandRevision(\"export.page.set\", page, context.revision, context.generation)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/output_page_actions.go",
+      "line": 69,
+      "function": "*screen.outputFitAction",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"export.page.set\", page, context.revision, context.generation)",
+      "public_commands": [
+        "export.page.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 21,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tif choice.id == \"paper\" {\n\t\tnext.Paper = e.SelectedID\n\t} else {\n\t\tnext.Orientation = e.SelectedID\n\t}\n\ts.changeOutputPage(next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 31,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tv := float64(e.Number)\n\tnext.MarginMM = &v\n\ts.changeOutputPage(next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 43,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tv := float64(e.Number) / 100\n\tnext.Scale = &v\n\ts.changeOutputPage(next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 49,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tnext.Tile = e.Checked\n\tif next.Tile && next.Scale == nil {\n\t\tv := 1.\n\t\tnext.Scale = &v\n\t}\n\tif !next.Tile {\n\t\tnext.OverlapMM = nil\n\t}\n\ts.changeOutputPage(next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 62,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tv := float64(e.Number)\n\tnext.OverlapMM = &v\n\ts.changeOutputPage(next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 78,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tif toggle.id == \"color\" {\n\t\tnext.Color = e.Checked\n\t} else {\n\t\tnext.Measurements = e.Checked\n\t}\n\ts.changeOutputPage(next)\n}",
+      "status": "requires-binding-review"
+    }
+  ],
+  "all_other_sites_equal_except_lines": true,
+  "public_alias_and_route_sets_unchanged": true
+}

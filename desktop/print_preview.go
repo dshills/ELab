@@ -97,7 +97,7 @@ func previewActive(p *workbench.PrintPreview) bool {
 func (s *screen) printPreviewPanel(state workbench.Snapshot) []ui.Node {
 	p := state.PrintPreview
 	s.loadPrintPreview(p)
-	refresh := s.action("preview-refresh", "Refresh preview", "print.preview.start", workbench.PreviewParams{})
+	refresh := s.outputPreviewAction(state, "preview-refresh", "Refresh preview")
 	refresh.Disabled = previewActive(p)
 	toolbar := ui.Node{ID: "preview-tools", Kind: ui.Toolbar, Style: chromeStyle(), Children: []ui.Node{heading("preview-title", "Print preview"), refresh, s.action("preview-close", "Back to circuit", "print.preview.close", workbench.IDParams{ID: p.ID})}}
 	if previewActive(p) {

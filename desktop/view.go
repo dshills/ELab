@@ -168,7 +168,7 @@ func (s *screen) view() ui.Node {
 	palette := s.componentPalette(state)
 	palette = append(palette, s.placementControls(state)...)
 	palette = append(palette, s.namedWireControls(state)...)
-	previewButton := s.action("print-preview", "Print preview", "print.preview.start", workbench.PreviewParams{})
+	previewButton := s.outputPreviewAction(state, "print-preview", "Print preview")
 	previewButton.Disabled = state.PrintPreview != nil && previewActive(state.PrintPreview)
 	palette = append(palette, previewButton)
 	palette = append(palette, ui.Node{ID: "export-svg", Kind: ui.Button, Text: "Export SVG", Accessibility: ui.Accessibility{Name: "Export schematic SVG"}, Activate: func() { s.beginFile("export.schematic.svg", true, workbench.SaveParams{}, nil) }})
