@@ -1,0 +1,190 @@
+{
+  "sources": 64,
+  "sites": 395,
+  "binding_review_sites": 152,
+  "public_commands": 162,
+  "source_routes": 132,
+  "source_hashes_changed": {
+    "desktop/keyboard_workflow.go": {
+      "before": "42fa8031620577bff9c73eba71954730a71765328b219ab96911ffdbe7a5c883",
+      "after": "f1ef3cfeae1ead43841a5a8b0ac9b8d8348b6723568c9c2c48568a5b95bc8378"
+    },
+    "desktop/main.go": {
+      "before": "a84553d7f300515ee9f914af69f9f9311a208bd5c79dfc05a47c1c36b2905801",
+      "after": "04741f8bd6ccb96be0ac6608b77d56a52b999da91a50959a4bdef6921eaf3896"
+    },
+    "desktop/placement_actions.go": {
+      "before": null,
+      "after": "500516a2f19db1f881eb5fa3842168d5fc98bc996fe1367a13fb2b12ee191e19"
+    }
+  },
+  "removed_sites": [
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 27,
+      "function": "*screen.placementControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text}) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 27,
+      "function": "*screen.placementControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
+      "public_commands": [
+        "editor.value.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 32,
+      "function": "*screen.placementControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"drawing.position.set\", workbench.PositionParams{Position: workbench.Point{X: float64(e.Number), Y: position.Y}})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 33,
+      "function": "*screen.placementControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"drawing.position.set\", workbench.PositionParams{Position: workbench.Point{X: float64(e.Number), Y: position.Y}})",
+      "public_commands": [
+        "drawing.position.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 36,
+      "function": "*screen.placementControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"drawing.position.set\", workbench.PositionParams{Position: workbench.Point{X: position.X, Y: float64(e.Number)}})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 37,
+      "function": "*screen.placementControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"drawing.position.set\", workbench.PositionParams{Position: workbench.Point{X: position.X, Y: float64(e.Number)}})",
+      "public_commands": [
+        "drawing.position.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 39,
+      "function": "*screen.placementControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"place-at-position\", \"Place at X / Y\", \"component.place\", workbench.PlaceParams{Kind: state.Drawing.Kind, Position: position, Value: func() string {\n\tif state.Drawing.Kind == \"net-label\" {\n\t\treturn state.Drawing.Value\n\t}\n\treturn \"\"\n}()})",
+      "public_commands": [
+        "component.place"
+      ],
+      "status": "literal-public-route"
+    }
+  ],
+  "added_sites": [
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 27,
+      "function": "*screen.placementControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changePlacementField(\"editor.value.set\", workbench.DraftParams{Value: e.Text})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 28,
+      "function": "*screen.placementControls",
+      "kind": "domain-ingress",
+      "expression": "s.changePlacementField(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
+      "public_commands": [
+        "editor.value.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 34,
+      "function": "*screen.placementControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changePlacementField(\"drawing.position.set\", workbench.PositionParams{Position: workbench.Point{X: float64(e.Number), Y: position.Y}})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 35,
+      "function": "*screen.placementControls",
+      "kind": "domain-ingress",
+      "expression": "s.changePlacementField(\"drawing.position.set\", workbench.PositionParams{Position: workbench.Point{X: float64(e.Number), Y: position.Y}})",
+      "public_commands": [
+        "drawing.position.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 38,
+      "function": "*screen.placementControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changePlacementField(\"drawing.position.set\", workbench.PositionParams{Position: workbench.Point{X: position.X, Y: float64(e.Number)}})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 39,
+      "function": "*screen.placementControls",
+      "kind": "domain-ingress",
+      "expression": "s.changePlacementField(\"drawing.position.set\", workbench.PositionParams{Position: workbench.Point{X: position.X, Y: float64(e.Number)}})",
+      "public_commands": [
+        "drawing.position.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/placement_actions.go",
+      "line": 46,
+      "function": "*screen.changePlacementField",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(command, params)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/placement_actions.go",
+      "line": 73,
+      "function": "*screen.placementAction",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\tif s.pendingPlacement != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.placementFieldAccepted; accepted != nil && accepted.params.Kind == params.Kind && accepted.from.generation == context.generation && accepted.from.revision <= context.revision && context.revision <= accepted.to.revision && accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) {\n\t\tcontext = accepted.to\n\t\tparams = accepted.params\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\t\ts.invokeAtCommandRevision(\"component.place\", params, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := &placementActionWork{context: context, params: params}\n\ts.pendingPlacement = pending\n\tif params.Kind != \"net-label\" || s.settleField == nil {\n\t\ts.finishPlacement(pending, nil)\n\t} else if err := s.settleField(\"place-label\", func(err error) { s.finishPlacement(pending, err) }); err != nil {\n\t\ts.finishPlacement(pending, err)\n\t}\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/placement_actions.go",
+      "line": 83,
+      "function": "*screen.placementAction",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"component.place\", params, context.revision, context.generation)",
+      "public_commands": [
+        "component.place"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/placement_actions.go",
+      "line": 104,
+      "function": "*screen.finishPlacement",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"component.place\", pending.params, pending.context.revision, pending.context.generation)",
+      "public_commands": [
+        "component.place"
+      ],
+      "status": "literal-public-route"
+    }
+  ],
+  "all_other_sites_equal_except_lines": true,
+  "all_public_alias_and_route_sets_equal": true
+}

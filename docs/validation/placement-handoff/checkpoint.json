@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-18",
+  "source_base": "1903880a19c4cb1a6d7abda56018514ed58b887e",
+  "status": "placement focus-loss/deferred-label repair verified; clean replacement qualification pending",
+  "sdk_changed": false,
+  "sdk": {
+    "schema": 1,
+    "archive": "third_party/vellum/vellum-677548d.tar.gz",
+    "archive_bytes": 18627256,
+    "sha256": "9233f875cf11829e68ccc62772f9d841c4e01c0da9b2364c0f6f6a7e0d871fe9",
+    "manifest_sha256": "f5e9dcab46eb4c6805587f0301f96745a4802abf2f2f50614bb42ebf3479cc89",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-677548d",
+    "source_commit": "677548d0ea93d7d6a689998eb8cf3d6f3ff9f59f",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 7454,
+    "bootstrap": {
+      "scripts/check-sdk.py": "b8062fbd4c57d1d8cb4d75a094184e1a5fa108cfa811fe9fb390f99f6d66be38",
+      "scripts/child_process.py": "04ba2610ddf112e936e8adcd9a81c03cff422843f993c2ce8a9e1acd96f39c9c",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "803d981c00f32d08a370577b37094848b2c79085cf3303a99b23d2a94336ac2c",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541"
+    }
+  },
+  "quality": {
+    "full_source_gate": "scripts/check.sh exit 0: audit freshness, lint/imports/Staticcheck, 43 Python tests, root/native race/vet, expanded mounted regressions and tagged vet",
+    "native_race_s": 142.079,
+    "offscreen_race_s": 12.881,
+    "focused_race_s": 2.879,
+    "native_smoke": "exploratory dirty-source full native smoke exit 0; exact clean replacement qualification remains separate"
+  },
+  "source_ledger": {
+    "sources": 64,
+    "sites": 395,
+    "binding_review_sites": 152,
+    "public_commands": 162,
+    "source_routes": 132,
+    "ledger_sha256": "b9d98875285faf2707120c7a9c67c1e2b4e5ec32140d04acbf61768abc8832fb",
+    "public_and_route_sets_unchanged": true,
+    "review": "ledger-review.json"
+  },
+  "self_review": {
+    "production_files": [
+      "desktop/main.go",
+      "desktop/keyboard_workflow.go",
+      "desktop/placement_actions.go"
+    ],
+    "review": [
+      "Only X/Y and new-label field responses may continue a rendered Place action within the same document and component kind",
+      "Placement parameters come from the exact accepted response, retaining snapped coordinates and label; never a later agent snapshot",
+      "Intervening agent, other field, tool and document commands break the continuation; failed field writes clear it",
+      "Coordinate spinners commit through the originating event FIFO before activation; both pointer events queued before owner stepping are tested",
+      "A new-label TextField uses the existing native settlement barrier; focus returns to search only after successful placement",
+      "Deferred transactions suppress duplicate activation/completion and refuse a rebound field before it can overwrite agent state",
+      "No SDK, command/schema/model or project-format changes; new relay literal/dynamic/unknown paths explicitly inventoried"
+    ],
+    "findings": [],
+    "limits": [
+      "Deterministic real-widget routing and owned native smoke; not physical concurrent OS input, IME, VoiceOver or visible p95",
+      "No owner walkthrough acceptance inferred; clean replacement qualification remains separate"
+    ]
+  },
+  "source_sha256": {
+    "desktop/main.go": "04741f8bd6ccb96be0ac6608b77d56a52b999da91a50959a4bdef6921eaf3896",
+    "desktop/keyboard_workflow.go": "f1ef3cfeae1ead43841a5a8b0ac9b8d8348b6723568c9c2c48568a5b95bc8378",
+    "desktop/placement_actions.go": "500516a2f19db1f881eb5fa3842168d5fc98bc996fe1367a13fb2b12ee191e19",
+    "desktop/placement_actions_test.go": "ce1b35dca0edb30e09def7e17f7f6ed328e4772fd4830c96ca5b20281411ab66",
+    "desktop/placement_offscreen_test.go": "51f84cdd3fc563e677ed5aa1ed2c3801522fa8cb9d72c9c25a0b26952f4b8fd0",
+    "desktop/smoke.go": "8e173695e9f5eae433a9a4e0c5f30107769dd57453cde7cd99b058df5060080d",
+    "internal/uiaudit/audit.go": "61fb645239fff1368487722748bbc8b8347e15d30943228a2d2fa5ae375dda07",
+    "internal/uiaudit/audit_test.go": "fc2c942e39059347e00a53ebf1b1691450104e5beb3ec2a08e885122a7e376d0",
+    "scripts/check.sh": "1bc05c41e95cd451952a73a1dabd349fc31d24d6559f0f89ee5c8edc57d71b1d"
+  },
+  "limits": [
+    "Deterministic mounted numeric/text/button routing and owned native smoke; not physical concurrent OS input, IME, VoiceOver or visible p95",
+    "Owner walkthrough Not tried yet; broader qualification remains open"
+  ],
+  "remaining": [
+    "Build clean 0.132.0 /149 replacement and qualify exact copied runtime and matching agent",
+    "Owner walkthrough and declared remaining qualification"
+  ],
+  "evidence_sha256": {
+    "README.md": "f10b3372b1d92730f0fe8d89a78c8cc002c3b8d0d21c3ddfce339741ee5da252",
+    "before.txt": "d833a45038fee5a3d9e67dfab6ddf1bcdf5a184d0829f610d13b0d677153987b",
+    "focused.txt": "7254edb07a52766d4d90183db4e393c87f2fb8b73f12a4b0c08181b214a906ad",
+    "full-check.txt": "d2d0500b2c4f2c35010c089827b76892fb782499c78ff3842267b7fd617f6684",
+    "ledger-review.json": "c9a003f678cd3247cb4adaeeff84839d2b9604f0788ed8ec4a921f96808915f6",
+    "native-smoke.txt": "aaab076d5f2a017325393540bd28d0d26dcf820c44793eac7fa5d5968b525731",
+    "self-review.json": "8d1a79cb8c402264d41d6ee1bf7f0f3090f4a4503e1a5d630dd24d799b649e45"
+  }
+}

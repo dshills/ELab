@@ -1,0 +1,8 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedPlacementOneClickUsesTypedCoordinate
+    placement_offscreen_test.go:51: one-click placement did not use typed X: position={X:120 Y:0} components=[] error=expected command revision 2; current command revision is 3
+--- FAIL: TestMountedPlacementOneClickUsesTypedCoordinate (0.14s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	0.776s
+FAIL

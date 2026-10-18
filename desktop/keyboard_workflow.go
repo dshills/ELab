@@ -24,30 +24,23 @@ func (s *screen) placementControls(state workbench.Snapshot) []ui.Node {
 	placement := []ui.Node{}
 	if state.Drawing.Tool == "place" {
 		if state.Drawing.Kind == "net-label" {
-			placement = append(placement, quiet("place-label-help", "Matching labels connect their attached nets. Leave blank for a unique name."), ui.Node{ID: "place-label", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "New net label"}, Change: func(e ui.ChangeEvent) { s.invoke("editor.value.set", workbench.DraftParams{Value: e.Text}) }})
+			placement = append(placement, quiet("place-label-help", "Matching labels connect their attached nets. Leave blank for a unique name."), ui.Node{ID: "place-label", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "New net label"}, Change: func(e ui.ChangeEvent) {
+				s.changePlacementField("editor.value.set", workbench.DraftParams{Value: e.Text})
+			}})
 		}
 		position := state.Drawing.Position
 		placement = append(placement, section("position-title", "Place "+componentName(state.Drawing.Kind)), quiet("position-labels", "X / Y · snaps to 10 units"), ui.Node{ID: "position-row", Kind: ui.Column, Children: []ui.Node{
 			quiet("position-x-label", "X"),
 			{ID: "position-x", Kind: ui.NumberField, Number: float32(position.X), Numeric: ui.Numeric{Min: -10000, Max: 10000, Step: 10}, Accessibility: ui.Accessibility{Name: "Placement X"}, Change: func(e ui.ChangeEvent) {
-				s.invoke("drawing.position.set", workbench.PositionParams{Position: workbench.Point{X: float64(e.Number), Y: position.Y}})
+				s.changePlacementField("drawing.position.set", workbench.PositionParams{Position: workbench.Point{X: float64(e.Number), Y: position.Y}})
 			}},
 			quiet("position-y-label", "Y"),
 			{ID: "position-y", Kind: ui.NumberField, Number: float32(position.Y), Numeric: ui.Numeric{Min: -10000, Max: 10000, Step: 10}, Accessibility: ui.Accessibility{Name: "Placement Y"}, Change: func(e ui.ChangeEvent) {
-				s.invoke("drawing.position.set", workbench.PositionParams{Position: workbench.Point{X: position.X, Y: float64(e.Number)}})
+				s.changePlacementField("drawing.position.set", workbench.PositionParams{Position: workbench.Point{X: position.X, Y: float64(e.Number)}})
 			}},
-		}}, s.action("place-at-position", "Place at X / Y", "component.place", workbench.PlaceParams{Kind: state.Drawing.Kind, Position: position, Value: func() string {
-			if state.Drawing.Kind == "net-label" {
-				return state.Drawing.Value
-			}
-			return ""
-		}()}))
+		}}, s.placementAction(state))
 	}
-	for i := range placement {
-		if placement[i].ID == "place-at-position" {
-			placement[i] = s.focusAfterAction(placement[i], "part-search")
-		}
-	}
+
 	if state.Drawing.Tool == "place" && state.Drawing.Kind == "junction" {
 		graph := workbench.Graph{Components: state.Components, Wires: state.Wires}
 		point := state.Drawing.Position

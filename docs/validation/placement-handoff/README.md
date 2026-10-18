@@ -1,0 +1,13 @@
+# Placement accepts its own committed coordinates
+
+October 18, 2026. A real-widget /148 reproduction types X `120`, then clicks **Place at X / Y** once. X commits, but no component is placed: `expected command revision 2; current command revision is 3`. [Before](before.txt). This blocks an ordinary from-scratch LED construction step.
+
+The repair scopes continuation to the placement X/Y and new-label fields. Only consecutive accepted field response contexts can advance the rendered Place action, in the same document and component kind. The response supplies the actual snapped position and label; a later service snapshot cannot supply replacement parameters. Other user fields, agent work, tool changes and document replacement still refuse. Failed field writes clear the span. Public commands/IDs, device models, project format and pinned SDK `677548d` stay unchanged.
+
+The mounted fixture uses production placement controls and field binding, arranging X/Y in one row so the relevant controls fit its small window. It types real private drafts, repaints, queues both pointer events before owner stepping, and checks resistor/label placement against an independent public-agent service. One Undo removes the component. Held Place across an agent coordinate edit preserves the exact snapshot and focus; a fresh click uses the agent coordinates. Semantic tests check accepted snapping, original rendered actions, other-field/tool/document/agent/invalid-input refusals, deferred label admission/completion errors, duplicate activation/completion, and focus only after successful completion. [Focused results](focused.txt).
+
+Ordinary NumberField spinners use the originating native event FIFO; labels use the existing real `SettleTextField` barrier. The native primitive smoke now waits for the mounted label field, then placement completion before wiring its returned ID. Its component-count, connectivity and LED-current checks retain their original values and the overall deadline. [Native smoke](native-smoke.txt). This does not claim physical OS interleaving, IME/VoiceOver, visible latency or owner acceptance.
+
+The [ledger review](ledger-review.json) records seven removed and ten added syntax sites; all other sites differ only by location. All 162 public IDs/aliases and 132 routed IDs are unchanged. Counts are 64 production sources /395 sites /152 requiring binding review; these do not close exhaustive agent parity.
+
+Stable source passes the [full quality gate](full-check.txt): native race 142.079 s; expanded mounted race 12.881 s, plus audit freshness, lint/Staticcheck, 43 Python tests, root race/vet and tagged vet. [Source checkpoint](checkpoint.json). Clean /149 replacement qualification remains separate.

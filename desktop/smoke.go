@@ -1010,38 +1010,71 @@ func nativeProjectRecordingSmoke(ctx context.Context, a *app.Application, s *scr
 }
 
 func nativePrimitivesSmoke(ctx context.Context, a *app.Application, s *screen) error {
-	done := make(chan error, 1)
-	if err := a.PostWait(ctx, func() {
+	owner := func(run func() error) error {
+		done := make(chan error, 1)
+		if err := a.PostWait(ctx, func() { done <- run() }); err != nil {
+			return err
+		}
+		select {
+		case err := <-done:
+			return err
+		case <-ctx.Done():
+			return ctx.Err()
+		}
+	}
+	if err := owner(func() error {
 		for _, action := range []struct {
 			id    string
 			event *ui.ChangeEvent
-		}{{"example.reset", nil}, {"selection", &ui.ChangeEvent{SelectedID: "W1"}}, {"wire-insert-junction", nil}, {"part-list", &ui.ChangeEvent{SelectedID: "net-label"}}, {"place-label", &ui.ChangeEvent{Text: "SUPPLY"}}, {"position-x", &ui.ChangeEvent{Number: 350}}, {"position-y", &ui.ChangeEvent{Number: -180}}, {"place-at-position", nil}} {
+		}{
+			{"example.reset", nil}, {"selection", &ui.ChangeEvent{SelectedID: "W1"}}, {"wire-insert-junction", nil},
+			{"part-list", &ui.ChangeEvent{SelectedID: "net-label"}}, {"place-label", &ui.ChangeEvent{Text: "SUPPLY"}},
+			{"position-x", &ui.ChangeEvent{Number: 350}}, {"position-y", &ui.ChangeEvent{Number: -180}},
+		} {
 			if err := smokeUI(s, action.id, action.event); err != nil {
-				done <- err
-				return
+				return err
 			}
 			if action.id == "example.reset" && s.service.Snapshot().Paused {
 				if err := smokeUI(s, "simulation.resume", nil); err != nil {
-					done <- err
-					return
+					return err
 				}
 			}
+		}
+		return nil
+	}); err != nil {
+		return err
+	}
+	// Label settlement needs its current mounted field, then completion before
+	// wiring the newly placed ID. PostWait admission alone proves neither.
+	if _, err := waitNativeViewport(ctx, a, s, func(state workbench.Snapshot) bool {
+		return state.Drawing.Tool == "place" && state.Drawing.Kind == "net-label" && state.Drawing.Position == (workbench.Point{X: 350, Y: -180})
+	}); err != nil {
+		return err
+	}
+	if err := owner(func() error { return smokeUI(s, "place-at-position", nil) }); err != nil {
+		return err
+	}
+	if _, err := waitNativeViewport(ctx, a, s, func(workbench.Snapshot) bool { return s.pendingPlacement == nil }); err != nil {
+		return err
+	}
+	if err := owner(func() error {
+		if s.errorMessage != "" {
+			return fmt.Errorf("native label placement: %s", s.errorMessage)
 		}
 		id := s.service.Snapshot().Selected
 		for _, action := range []struct {
 			id    string
 			event *ui.ChangeEvent
-		}{{"tool-wire", nil}, {"wire-from", &ui.ChangeEvent{SelectedID: "V1.positive"}}, {"wire-to", &ui.ChangeEvent{SelectedID: id + ".node"}}, {"connect-terminals", nil}} {
+		}{
+			{"tool-wire", nil}, {"wire-from", &ui.ChangeEvent{SelectedID: "V1.positive"}},
+			{"wire-to", &ui.ChangeEvent{SelectedID: id + ".node"}}, {"connect-terminals", nil},
+		} {
 			if err := smokeUI(s, action.id, action.event); err != nil {
-				done <- err
-				return
+				return err
 			}
 		}
-		done <- nil
+		return nil
 	}); err != nil {
-		return err
-	}
-	if err := <-done; err != nil {
 		return err
 	}
 	state, err := s.service.Wait(ctx)

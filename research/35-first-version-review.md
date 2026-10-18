@@ -1,5 +1,7 @@
 # ELab first-version review · 0.131.0 /148
 
+**New placement issue found:** a typed coordinate can commit while its first Place click refuses. A narrow source repair has focused mounted/agent evidence; replacement qualification remains pending. /148 remains immutable and affected.
+
 This is the updated owner-review alpha. Open [ELab.app](../build/ELab-0.131.0-148-review/ELab.app) in the [review folder](../build/ELab-0.131.0-148-review). It includes the matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required. The canonical app, eight earlier qualified review folders (0.123.0 /140 through 0.130.0 /147) and the original unqualified /147 candidate are preserved. Owner walkthrough remains pending (October 18: “Not tried yet”).
 
 Before opening the replacement, save your work and quit an earlier review app when ready. Version 0.131 fixes cursor time entry followed by one Select/Clear click. Both cursor fields finish committing before the requested action; only their own accepted command responses may continue the click. Intervening agent edits, unrelated user fields and document replacement still refuse safely. Earlier held-button, control ownership, one-click Apply, text, slider and clock repairs are included. Public control IDs/command schemas, models and project format remain unchanged. Vellum stays pinned at `677548d`.

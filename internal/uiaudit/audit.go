@@ -190,7 +190,7 @@ func Audit(directory string) (Report, error) {
 						if len(n.Args) == 3 {
 							add(function, "command-menu", n, menuRoutes(n.Args[2]), "menu-route-set")
 						}
-					case "invoke", "invokeAtCommandRevision", "beginFile", "requestReplace":
+					case "invoke", "invokeAtCommandRevision", "beginFile", "requestReplace", "changePlacementField":
 						if len(n.Args) > 0 {
 							add(function, "domain-ingress", n, literalRoutes(n.Args[0]), routeStatus(n.Args[0]))
 						}

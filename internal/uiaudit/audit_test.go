@@ -94,3 +94,23 @@ func view(s *screen, route string) {
 		t.Fatal("cursor command argument confused with label or dynamic route", r.Sites)
 	}
 }
+
+func TestInventoryTracksPlacementFieldRelay(t *testing.T) {
+	dir := t.TempDir()
+	source := `package main
+func view(s *screen,route string) {
+ s.changePlacementField("drawing.position.set",params)
+ s.changePlacementField(route,params)
+ s.changePlacementField("missing.command",params)
+}`
+	if err := os.WriteFile(filepath.Join(dir, "view.go"), []byte(source), 0600); err != nil {
+		t.Fatal(err)
+	}
+	r, err := Audit(dir)
+	if err != nil || len(r.Issues) != 1 || !strings.Contains(r.Issues[0], "missing.command") || len(r.Sites) != 3 {
+		t.Fatal("placement relay inventory failed", r.Issues, err)
+	}
+	if len(r.Sites[0].Commands) != 1 || r.Sites[0].Commands[0] != "drawing.position.set" || r.Sites[1].Status != "requires-binding-review" {
+		t.Fatal("placement relay lost literal or dynamic route", r.Sites)
+	}
+}

@@ -1,0 +1,21 @@
+{
+  "production_files": [
+    "desktop/main.go",
+    "desktop/keyboard_workflow.go",
+    "desktop/placement_actions.go"
+  ],
+  "review": [
+    "Only X/Y and new-label field responses may continue a rendered Place action within the same document and component kind",
+    "Placement parameters come from the exact accepted response, retaining snapped coordinates and label; never a later agent snapshot",
+    "Intervening agent, other field, tool and document commands break the continuation; failed field writes clear it",
+    "Coordinate spinners commit through the originating event FIFO before activation; both pointer events queued before owner stepping are tested",
+    "A new-label TextField uses the existing native settlement barrier; focus returns to search only after successful placement",
+    "Deferred transactions suppress duplicate activation/completion and refuse a rebound field before it can overwrite agent state",
+    "No SDK, command/schema/model or project-format changes; new relay literal/dynamic/unknown paths explicitly inventoried"
+  ],
+  "findings": [],
+  "limits": [
+    "Deterministic real-widget routing and owned native smoke; not physical concurrent OS input, IME, VoiceOver or visible p95",
+    "No owner walkthrough acceptance inferred; clean replacement qualification remains separate"
+  ]
+}

@@ -1,0 +1,64 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestComponentListFocusOrderAndNoMatches
+--- PASS: TestComponentListFocusOrderAndNoMatches (0.08s)
+=== RUN   TestComponentListStaleBindingAndFailedPlacementPreserveFocus
+--- PASS: TestComponentListStaleBindingAndFailedPlacementPreserveFocus (0.05s)
+=== RUN   TestRepeatedCoordinateEventsContinueWithoutRendering
+--- PASS: TestRepeatedCoordinateEventsContinueWithoutRendering (0.03s)
+=== RUN   TestContinuedCoordinateFieldStillRefusesInterveningActions
+=== RUN   TestContinuedCoordinateFieldStillRefusesInterveningActions/agent_edit
+=== RUN   TestContinuedCoordinateFieldStillRefusesInterveningActions/document_replacement
+--- PASS: TestContinuedCoordinateFieldStillRefusesInterveningActions (0.04s)
+    --- PASS: TestContinuedCoordinateFieldStillRefusesInterveningActions/agent_edit (0.02s)
+    --- PASS: TestContinuedCoordinateFieldStillRefusesInterveningActions/document_replacement (0.02s)
+=== RUN   TestPlacementContinuesOnlyOwnAcceptedParameters
+=== RUN   TestPlacementContinuesOnlyOwnAcceptedParameters/resistor
+=== RUN   TestPlacementContinuesOnlyOwnAcceptedParameters/net-label
+--- PASS: TestPlacementContinuesOnlyOwnAcceptedParameters (0.07s)
+    --- PASS: TestPlacementContinuesOnlyOwnAcceptedParameters/resistor (0.03s)
+    --- PASS: TestPlacementContinuesOnlyOwnAcceptedParameters/net-label (0.04s)
+=== RUN   TestPlacementContinuationRefusesInterveningWork
+=== RUN   TestPlacementContinuationRefusesInterveningWork/agent-before
+=== RUN   TestPlacementContinuationRefusesInterveningWork/agent-after
+=== RUN   TestPlacementContinuationRefusesInterveningWork/other-field
+=== RUN   TestPlacementContinuationRefusesInterveningWork/new-document
+=== RUN   TestPlacementContinuationRefusesInterveningWork/different-tool
+=== RUN   TestPlacementContinuationRefusesInterveningWork/failed-field
+--- PASS: TestPlacementContinuationRefusesInterveningWork (0.16s)
+    --- PASS: TestPlacementContinuationRefusesInterveningWork/agent-before (0.02s)
+    --- PASS: TestPlacementContinuationRefusesInterveningWork/agent-after (0.02s)
+    --- PASS: TestPlacementContinuationRefusesInterveningWork/other-field (0.03s)
+    --- PASS: TestPlacementContinuationRefusesInterveningWork/new-document (0.03s)
+    --- PASS: TestPlacementContinuationRefusesInterveningWork/different-tool (0.02s)
+    --- PASS: TestPlacementContinuationRefusesInterveningWork/failed-field (0.03s)
+=== RUN   TestPlacementDeferredLabelSettlement
+=== RUN   TestPlacementDeferredLabelSettlement/success
+=== RUN   TestPlacementDeferredLabelSettlement/agent-before-field
+=== RUN   TestPlacementDeferredLabelSettlement/agent-after-field
+=== RUN   TestPlacementDeferredLabelSettlement/other-field
+=== RUN   TestPlacementDeferredLabelSettlement/new-document
+=== RUN   TestPlacementDeferredLabelSettlement/admission-failure
+=== RUN   TestPlacementDeferredLabelSettlement/completion-failure
+=== RUN   TestPlacementDeferredLabelSettlement/invalid-label
+--- PASS: TestPlacementDeferredLabelSettlement (0.24s)
+    --- PASS: TestPlacementDeferredLabelSettlement/success (0.03s)
+    --- PASS: TestPlacementDeferredLabelSettlement/agent-before-field (0.03s)
+    --- PASS: TestPlacementDeferredLabelSettlement/agent-after-field (0.03s)
+    --- PASS: TestPlacementDeferredLabelSettlement/other-field (0.04s)
+    --- PASS: TestPlacementDeferredLabelSettlement/new-document (0.03s)
+    --- PASS: TestPlacementDeferredLabelSettlement/admission-failure (0.02s)
+    --- PASS: TestPlacementDeferredLabelSettlement/completion-failure (0.02s)
+    --- PASS: TestPlacementDeferredLabelSettlement/invalid-label (0.03s)
+=== RUN   TestMountedPlacementOneClickUsesTypedCoordinate
+--- PASS: TestMountedPlacementOneClickUsesTypedCoordinate (0.13s)
+=== RUN   TestMountedPlacementLabelAndBatchedCoordinatesMatchAgent
+=== RUN   TestMountedPlacementLabelAndBatchedCoordinatesMatchAgent/resistor
+=== RUN   TestMountedPlacementLabelAndBatchedCoordinatesMatchAgent/net-label
+--- PASS: TestMountedPlacementLabelAndBatchedCoordinatesMatchAgent (0.32s)
+    --- PASS: TestMountedPlacementLabelAndBatchedCoordinatesMatchAgent/resistor (0.15s)
+    --- PASS: TestMountedPlacementLabelAndBatchedCoordinatesMatchAgent/net-label (0.18s)
+=== RUN   TestMountedPlacementHeldClickRefusesAgentAfterOwnCommit
+--- PASS: TestMountedPlacementHeldClickRefusesAgentAfterOwnCommit (0.14s)
+PASS
+ok  	github.com/dshills/elab/desktop	2.879s
