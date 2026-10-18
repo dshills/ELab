@@ -1,0 +1,12 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+--- FAIL: TestRenderedSimulationButtonRefusesAgentDocumentReplacement (0.19s)
+    --- FAIL: TestRenderedSimulationButtonRefusesAgentDocumentReplacement/simulation.pause (0.05s)
+        simulation_button_context_test.go:37: old rendered simulation control acted on the replacement document
+    --- FAIL: TestRenderedSimulationButtonRefusesAgentDocumentReplacement/simulation.resume (0.07s)
+        simulation_button_context_test.go:37: old rendered simulation control acted on the replacement document
+    --- FAIL: TestRenderedSimulationButtonRefusesAgentDocumentReplacement/simulation.restart (0.07s)
+        simulation_button_context_test.go:37: old rendered simulation control acted on the replacement document
+FAIL
+exit status 1
+FAIL	github.com/dshills/elab/desktop	0.765s

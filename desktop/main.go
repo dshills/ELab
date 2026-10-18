@@ -339,15 +339,7 @@ func (s *screen) registerCommands() {
 				if entry.id == "drawing.cancel" {
 					s.requestKeyboardFocus("part-search")
 				}
-				if entry.id == "simulation.pause" || entry.id == "simulation.resume" {
-					// The header replaces this button when the clock changes.
-					// Continue keyboard focus once, as for completed placement.
-					target := "simulation.pause"
-					if r.Result.(workbench.Snapshot).Paused {
-						target = "simulation.resume"
-					}
-					s.requestKeyboardFocus(target)
-				}
+				s.continueSimulationFocus(entry.id, r)
 				return nil
 			},
 		})
@@ -356,6 +348,20 @@ func (s *screen) registerCommands() {
 		}
 	}
 }
+
+func (s *screen) continueSimulationFocus(id string, response workbench.Response) {
+	if response.Error != nil || id != "simulation.pause" && id != "simulation.resume" {
+		return
+	}
+	// The header replaces this button when the clock changes. Continue focus
+	// once after accepted commands, including guarded rendered buttons.
+	target := "simulation.pause"
+	if response.Result.(workbench.Snapshot).Paused {
+		target = "simulation.resume"
+	}
+	s.requestKeyboardFocus(target)
+}
+
 func (s *screen) button(id, text string) ui.Node {
 	help := ""
 	state := s.service.Snapshot()
@@ -381,6 +387,22 @@ func (s *screen) button(id, text string) ui.Node {
 	}
 
 	activate := func() { s.commands.Invoke(context.Background(), id) }
+	if id == "simulation.pause" || id == "simulation.resume" || id == "simulation.restart" {
+		rendered := s.actionContext
+		if rendered == nil {
+			state := s.service.Snapshot()
+			rendered = &actionContext{state.CommandRevision, state.Document.Generation}
+		}
+		activate = func() {
+			if err := s.commands.Enabled(id); err != nil {
+				s.errorMessage = err.Error()
+				s.app.Invalidate("main")
+				return
+			}
+			response := s.invokeAtCommandRevision(id, struct{}{}, rendered.revision, rendered.generation)
+			s.continueSimulationFocus(id, response)
+		}
+	}
 	if (id == "edit.undo" || id == "edit.redo") && tip != nil {
 		revision := tip.CommandRevision
 		target := workbench.HistoryParams{ExpectedEntryRevision: &revision, AllowOtherActor: tip.Actor != "user"}

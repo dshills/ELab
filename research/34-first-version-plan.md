@@ -28,13 +28,15 @@ The wider implemented library stays available. Freeze Vellum, models, project fo
 - **Clock blocker closed for the review package:** 0.125.0 /142 is built cleanly from `f87b71f`. Its exact copied runtime passes smoke, four adapters, reference parity and pulse/Pause/Resume/save checks through 3.41 s. The source also has native interaction evidence through 40.9 s. The defective /141 is retained for rollback/history, not promoted. [Replacement receipt](ui-audit/first-version/corrected-review-checkpoint.json).
 - The full-PRD [audit](11-prd-implementation-audit.md) records 17 implemented /10 partial P0 requirements. These are evidence categories, not a completion percentage.
 
+- **New reproduced blocker:** retained rendered Pause/Resume/Restart could use current command context after an agent replaced the document. The guarded source repair, failure-before regressions, full quality gate and fresh native keyboard-focus checks pass. It is not in /142; [replacement packaging is next](../docs/validation/rendered-simulation-buttons/checkpoint.json).
+
 ## Ordered work and finish criteria
 
 | Order | Deliverable | Exit condition | Status |
 |---|---|---|---|
 | 1 | Stabilize startup/examples and core UI | Repeated catalog loads work; reference tasks use real controls; essential controls are reachable in both themes at the declared minimum size. | Private review boundary passed. Wider display/accessibility/input evidence remains open. |
 | 2 | Verify user/agent reference parity | Same components, connectivity, values and results; invalid edits, undo, files and crash recovery preserve work. | Reference pass completed; exhaustive mounted-action conformance remains open. |
-| 3 | Package the clock repair | Build one clean replacement app/agent from the repair commit. Exact copied runtime passes native smoke, public adapters, reference parity and the previously failing live pulse case. Record version/hashes and retain rollback. | Complete for the corrected private review; exact runtime and acceptance pass. |
+| 3 | Package the clock repair | Build one clean replacement app/agent from the repair commit. Exact copied runtime passes native smoke, public adapters, reference parity and the previously failing live pulse case. Record version/hashes and retain rollback. | Clock repair complete in /142. Reopened for the verified rendered-button repair: clean replacement/runtime qualification next. |
 | 4 | Hand over the replacement | Explicit app path, matching agent, LED/RC/flasher projects, notices, known limits and the existing 15–20 minute walkthrough. | Corrected app/agent/examples and task sheet delivered at the linked path. Owner window preserved; feedback pending. |
 | 5 | Resolve walkthrough failures and promote | No reproduced work loss, misleading result, blocked reference task or core parity defect. Complete supported-alpha gates below, or obtain explicit owner review of permitted private-alpha limitations. Promote once with rollback. | Owner feedback and remaining qualification pending. Waiting does not authorize feature expansion. |
 | 6 | Validate the broader MVP | Close original PRD accessibility, agent coverage, distribution, performance and actual hobbyist-study gates; correct observed failures. | Subsequent milestone, not claimed complete by the private alpha. |
@@ -58,9 +60,10 @@ Scripts alone do not establish native focus, typing, dialog or pointer behavior.
 
 | Issue | Severity and closure |
 |---|---|
+| Retained simulation button can act on an agent-replaced experiment | **Source repair verified; package open.** Tests refuse stale controls and preserve fresh/live-sample behavior; full quality and actual native focus checks pass. Clean replacement and exact-runtime acceptance next. [Receipt](../docs/validation/rendered-simulation-buttons/checkpoint.json). |
 | Live pulse clock drifts into a sub-minimum integration gap | **Closed in 0.125.0 /142.** Exact copied runtime crosses the old failure, nonzero Resume/save checks and reference parity pass. [Before/after evidence](../docs/validation/live-clock-grid/README.md). |
 
-No other reproduced core-workflow blocker is currently recorded here. A 64-part/100-node dense topology reaches the existing 100 ms integration budget before a staged sample; graph and committed physics survive. Disclose this solver limit, and do not equate capacity limits with guaranteed convergence. The repaired 60-net topology does not qualify every difficult circuit.
+The rendered simulation-button guard defect is source-closed/package-open. It blocks supported-alpha promotion until a clean replacement incorporates it. No other reproduced core-workflow blocker is currently recorded here. A 64-part/100-node dense topology reaches the existing 100 ms integration budget before a staged sample; graph and committed physics survive. Disclose this solver limit, and do not equate capacity limits with guaranteed convergence. The repaired 60-net topology does not qualify every difficult circuit.
 
 New work loss, corrupted connectivity, misleading simulation, core user/agent mismatch or inability to complete A–D enters this list and blocks promotion. Broader evidence gaps below remain open requirements; they are not inferred passes or silently waived blockers.
 

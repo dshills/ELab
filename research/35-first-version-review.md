@@ -8,6 +8,8 @@ The reference workflows and source quality gate pass. The copied app and agent a
 
 The exact copied replacement passes native smoke, all four public adapters, LED/RC/flasher graph and numerical parity, and the repaired pulse case through 3.41 seconds with a nonzero Pause/Resume and fresh save/reopen. Earlier actual native interaction through 40.9 seconds used the identical repaired source in a private development build. These checks do not establish visible-latency percentiles. [Replacement receipt](ui-audit/first-version/corrected-review-checkpoint.json).
 
+**Newly found concurrency limitation in this package:** a retained Pause/Resume/Restart button from before an agent replaces the document can act on the replacement experiment. The source repair passes stale-context regressions, the full quality gate and fresh native focus checks, but is not yet included here. [Repair and replacement status](../docs/validation/rendered-simulation-buttons/checkpoint.json).
+
 ## Try these four tasks · 15–20 minutes
 
 1. **Build an LED loop.** Start on the blank sheet. Place a DC source, resistor, red LED and ground. Use 5 V and 1 kΩ. Wire source positive → resistor → LED anode, LED cathode → ground, ground → source negative. Expect about **2.917 mA** with the generic model. Change the resistor to `2k`: about **1.477 mA**. Undo/redo, delete a wire and reconnect it. An incomplete drawing must not present old readings as current.

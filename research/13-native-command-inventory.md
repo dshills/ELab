@@ -1,8 +1,8 @@
 # Native control and command inventory
 
-The [source ledger](13-native-command-inventory.json) records **62 production native Go files, 388 source sites and 162 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 132 public commands. The remaining 30 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
+The [source ledger](13-native-command-inventory.json) records **62 production native Go files, 389 source sites and 162 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 132 public commands. The remaining 30 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
 
-**146 sites require binding review.** The other categories are 216 literal routes, nine declared native-wrapper/menu sites and 17 registry declarations. These are syntax sites, including overlapping factories and callbacks; they are not 388 unique visible controls or 132 runtime-qualified capabilities. No literal route names an unknown command.
+**147 sites require binding review.** The other categories are 216 literal routes, nine declared native-wrapper/menu sites and 17 registry declarations. These are syntax sites, including overlapping factories and callbacks; they are not 389 unique visible controls or 132 runtime-qualified capabilities. No literal route names an unknown command.
 
 The ledger covers action/button/menu factories, package-level native menus, registry tables, callback fields/assignments, time-field factories, custom canvases, event routers, direct request command fields and shared dispatch bridges. Each entry retains its source, line, enclosing function and expression. File hashes and the public ID set make changes reproducible and reviewable. Both platform Go files are included; smoke/tests, framework internals and Objective-C event delivery are excluded and remain separate evidence scopes.
 
@@ -42,7 +42,7 @@ Native regressions prove stale Apply/Delete refusal and normal fresh Apply. A co
 
 ## Remaining qualification
 
-Resolve the 146 dynamic/relay/custom sites against instantiated states and public parameters, and attach runtime evidence per user capability. Audit file Save/Discard/Cancel semantics, raw field commits/IME, full menu/keyboard/focus behavior, canvas gesture lifetimes and the framework's window lifecycle. Inspection/readout equivalence also needs explicit evidence where the UI consumes shared Go snapshots/functions directly. Full agent parity stays **partial** until those proofs exist; this inventory prevents source drift and makes the remaining work explicit.
+Resolve the 147 dynamic/relay/custom sites against instantiated states and public parameters, and attach runtime evidence per user capability. Audit file Save/Discard/Cancel semantics, raw field commits/IME, full menu/keyboard/focus behavior, canvas gesture lifetimes and the framework's window lifecycle. Inspection/readout equivalence also needs explicit evidence where the UI consumes shared Go snapshots/functions directly. Full agent parity stays **partial** until those proofs exist; this inventory prevents source drift and makes the remaining work explicit.
 
 The 0.46.0 lifecycle checkpoint explicitly inventories `Window.CloseRequest`, preserves active file operations/decisions on repeated close, and adds File Close / Cmd+W through `app.close`. See [close evidence and remaining OS/runtime limits](../docs/native-close.md).
 
@@ -169,3 +169,6 @@ The minimum-window repair adds three platform/constant helpers and refreshes mai
 
 
 The October 18 [native RC control parity check](ui-audit/first-version/live-control-parity/checkpoint.json) ties actual Charge/Discharge presses, one-sample Step and Restart to their exact `scope.go` routes and shared parameters. Endpoint observations around each phase match the external-agent sequence and independent RC law. This is runtime evidence for four instantiated controls and three commands; it does not reclassify the 146 syntax sites or establish every generic callback/menu/field family. Source ledger and product/SDK files are unchanged.
+
+
+The rendered simulation-button repair changes only `desktop/main.go`: the registry's accepted Pause/Resume focus continuation moves to a shared helper, and rendered Pause/Resume/Restart now call the same public dispatcher with the view's command revision/document generation. One new guarded dynamic ingress makes the source totals **389 sites /147 requiring binding review**; all 162 public IDs, aliases and source-routed sets remain unchanged. Failure-before/passing-after regressions cover retained controls after replacement, document-only mismatch, fresh controls, focus and live solver publication. This count is a syntax change, not an acceptance upgrade.

@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-18",
+  "status": "source repair verified; review 0.125.0 /142 unchanged and still requires replacement",
+  "source_base": "1467c18ad37f18f1e9db5902a428f9775091cd5f",
+  "defect": "Rendered Pause/Resume/Restart used registry activation with current command context; a retained old Restart could reset an agent-replaced experiment. Ordinary rendered editing actions already retained guards.",
+  "repair": [
+    "Only the three rendered simulation buttons use captured command revision and document generation with the same public IDs/empty parameters",
+    "Registry/global commands continue from current state; accepted Pause/Resume focus continuation is shared",
+    "Availability/file-operation gates retained; refusals do not change domain state or move keyboard focus"
+  ],
+  "regressions": [
+    "All three retained buttons after an agent replaces and advances an RC document: before fail, after pass; fresh controls still work",
+    "Current command revision with old document generation refuses",
+    "Real live-sample publication without intervening commands still permits retained Pause",
+    "Existing Pause/Resume focus sequence, stale Apply/Delete/fields and owner-context tests pass"
+  ],
+  "quality": {
+    "focused_race_s": 2.349,
+    "full_check": "exit 0; lint/imports/Staticcheck, 43 Python tests, root/native race and vet",
+    "native_race_s": 142.924,
+    "first_full_attempt": "Root inventory freshness check rejected Python-reserialized ledger bytes. Parsed reviewed content was identical; restored canonical Go tool bytes and reran complete gate successfully."
+  },
+  "source_inventory": {
+    "sources": 62,
+    "sites_before": 388,
+    "sites_after": 389,
+    "binding_review_sites": 147,
+    "changed_production_file": "desktop/main.go",
+    "changed_existing_site": "registry wrapper extracts identical focus continuation",
+    "added_site": "guarded dynamic ingress in screen.button",
+    "public_IDs_aliases_source_route_sets_unchanged": true
+  },
+  "native_functional": {
+    "build": "private development harness, vcs.modified=true; not clean packaged replacement",
+    "binary_sha256": "fe3525efeeb42732372dd9e0720004c5bbc9efb131acf8b5411955462784df8f",
+    "baseline_time_s": 0.01,
+    "resume": "actual native click; focus Pause and advancing RC",
+    "pause": "actual Space on focused button; focus Resume; same-endpoint fresh paused result at .083 s, actor user",
+    "restart": "actual native click; paused, run increments once, time zero; same-endpoint graph/settings/electrical identity preserved",
+    "cleanup": "private test copy saved, app.close accepted, original terminal host exit 0 confirmed"
+  },
+  "limits": [
+    "Stale retained callback is exercised by owner-thread race regressions; OS stale-event delivery is not claimed physically reproduced",
+    "Native fresh controls/focus verified separately; no visible p95 inference from delayed app-binding tool",
+    "Models, tolerance, SDK, file format and public command surface unchanged",
+    "Existing review packages/canonical app remain unmodified; corrected clean package and exact-runtime qualification are next",
+    "Owner walkthrough, VoiceOver/IME, full mounted coverage, environment and study gates remain open"
+  ],
+  "source_sha256": {
+    "desktop/main.go": "34b33f0ad5d9d0fb635260b9ca97ad928dc0bb695eafd6302451ec1357a070b6",
+    "desktop/simulation_button_context_test.go": "3dff8253c09be855ca2874592c497cbba8fb282904f7fad31ed902ec2cc6dd5c",
+    "research/13-native-command-inventory.json": "592610deb149c5853c6b3721b827de7e3e02a872615a551b2d8f0678e883c652"
+  },
+  "evidence_sha256": {
+    "pause-space.ax.txt": "8dd4e219d7b82235dbe5010bbe852bc35517890063e45b816fe373e6e4864a7a",
+    "Repaired simulation controls.elab": "b378903d6ba1c1cc63e0a9761ffb57448f468e519dd836f57a20bf1573948187",
+    "regression-before.txt": "9f0346f79e651620998c4ccbd0ad2bb53a40e3e322f808920f6489a4cc0da86f",
+    "native-states.json.gz": "58567ab5adfa270abe182e601d606d8c327e4202bea2a72651869532e048ce59",
+    "native-build-info.txt": "e3ee8ceb407f09cc9adcf35bbbdc07e1f59fc7b01ba31147cfc988e48157a185",
+    "full-check.txt": "7285ae2eae6be326f91c06efe50bb5c7bb2740f930dfb7f255b9e152febb1dca",
+    "restart.ax.txt": "83ddef8ff6210f45dc724f3478e3f187fd6cf8354393021ddd554ebde8bd63d1",
+    "resume.ax.txt": "bfd0fa276c524c831004d5d573706f78e54f629039ec7d05fb0ab03cd9d4f6a3",
+    "full-check-inventory-format-failure.txt": "907f96c6700887bb6886c47526614fd9ecfb77593582f9507f1e4d3a5b6c9530",
+    "focused-race.txt": "4660c670e8e9a191049e3de9a57ef0da05a638cb3517677e0cf4bb375ec58692"
+  }
+}
