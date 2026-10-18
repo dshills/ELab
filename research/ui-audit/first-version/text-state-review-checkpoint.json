@@ -1,0 +1,236 @@
+{
+  "date": "2026-10-18",
+  "version": "0.128.0",
+  "build": "145",
+  "status": "text-field logical-owner repair qualified for private owner review; supported-alpha promotion/full MVP remain open",
+  "source_commit": "8ae6284b45862b199c5b047d7703e794ee2e86ad",
+  "clean_build_vcs": true,
+  "native_sha256": "d2c1953735b995b5b051db243dc4bae8a6dfbc8dfe40dc7b2a56542b85598b4f",
+  "agent_sha256": "ac72696ee9a999ee08835fac1263c4368ce67f3c92c12dc5f1ba3ce65b8909e2",
+  "sdk": {
+    "schema": 1,
+    "archive": "third_party/vellum/vellum-178945c.tar.gz",
+    "archive_bytes": 18622757,
+    "sha256": "2bfc4dc6438251485cc4b52704f9b57d87ae1456ef9d88d22f66beebb47fc00c",
+    "manifest_sha256": "fff345ab03cc8f26a4c612fd7e55dfdc0471f3f5aca8bf14c4110f7f9020cfcb",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-178945c",
+    "source_commit": "178945c802f144f9313b43fa4c42c8cca4eaff05",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 7451,
+    "bootstrap": {
+      "scripts/check-sdk.py": "b8062fbd4c57d1d8cb4d75a094184e1a5fa108cfa811fe9fb390f99f6d66be38",
+      "scripts/child_process.py": "04ba2610ddf112e936e8adcd9a81c03cff422843f993c2ce8a9e1acd96f39c9c",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "803d981c00f32d08a370577b37094848b2c79085cf3303a99b23d2a94336ac2c",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541"
+    }
+  },
+  "canonical_promoted": false,
+  "release_diff": {
+    "base_release": "0.127.0 /144",
+    "base_source": "1f0a89a0723d2986081f1fda977d8f42a1de4f0e",
+    "replacement_source": "8ae6284b45862b199c5b047d7703e794ee2e86ad",
+    "production_diff": [
+      "desktop/field_context.go: text field identity includes document generation",
+      "desktop/component_inspector.go: component text field identity includes object ID",
+      "Vellum optional text-only TextStateKey changes native retention without remapping public IDs"
+    ],
+    "test_diff": [
+      "Actual routed private-text coalesced document/object changes, ordinary redraw and explicit fresh pointer/keyboard editing",
+      "Shared offscreen window fixture reused by slider/value tests; gate includes both suites",
+      "SDK text-only contract, same-key retention, replacement and retired queued-change tests"
+    ],
+    "self_review": [
+      "No key is based on command revision; own edits/live publication must not churn field identity",
+      "Key includes exact generation/object strings; no identity hash collision or public ID remapping",
+      "Other managed kinds reject TextStateKey; model-owned controls keep established contracts",
+      "Private text reset occurs through normal remount/disposal, including stale native clients and queued callbacks",
+      "Fresh-input focus is explicitly exercised so refusal cannot pass merely because no widget received Return"
+    ],
+    "source_ledger": {
+      "source_hashes_changed": {
+        "desktop/component_inspector.go": {
+          "before": "c8509dbe15e8aae4ecece30bce55f75360ff3eaa07c23ef51dc82fbaaee00ff6",
+          "after": "21b820631a291b2b062fee89439654cd15e3a5788e0b83f0c5a4cb6ac1f8e3fe"
+        },
+        "desktop/field_context.go": {
+          "before": "4f3abac0bc24fd5054e89ad5e479a6a9196ba0ab52faa9134294743a34b74bd5",
+          "after": "18f5ec46649575e16528d973bb53214116b57f93e3d2354f474c40fb780b5298"
+        }
+      },
+      "sites_moved": [
+        {
+          "file": "desktop/component_inspector.go",
+          "function": "*screen.partGeometryControls",
+          "line_before": 124,
+          "line_after": 127,
+          "expression_and_classification_unchanged": true
+        },
+        {
+          "file": "desktop/component_inspector.go",
+          "function": "*screen.partGeometryControls",
+          "line_before": 124,
+          "line_after": 127,
+          "expression_and_classification_unchanged": true
+        },
+        {
+          "file": "desktop/field_context.go",
+          "function": "*screen.bindFieldContext",
+          "line_before": 10,
+          "line_after": 19,
+          "expression_and_classification_unchanged": true
+        }
+      ],
+      "sources": 62,
+      "sites": 389,
+      "public_IDs": 162,
+      "source_routes": 132,
+      "remaining_binding_review_sites": 147,
+      "public_commands_aliases_route_sets_classifications_unchanged": true
+    },
+    "findings": [],
+    "limits": [
+      "Deterministic native widgets/event router; no physically coalesced OS delivery or window-blur claim",
+      "Broader input/accessibility/performance and owner gates remain open"
+    ]
+  },
+  "quality": {
+    "full_source_gate": "scripts/check.sh exit 0: audit freshness, lint/imports/Staticcheck, 43 Python tests, root/native race/vet, mounted slider/value-draft offscreen race/vet",
+    "native_race_s": 142.338,
+    "offscreen_race_s": 6.64,
+    "source_record": "docs/validation/text-field-state/checkpoint.json",
+    "copied_runtime": [
+      {
+        "name": "native-smoke",
+        "command": [
+          "/private/tmp/elab-first-version-145-runtime/native",
+          "--smoke",
+          "--smoke-timeout",
+          "2m"
+        ],
+        "status": "completed",
+        "exit_code": 0,
+        "elapsed_seconds": 39.095917999977246
+      },
+      {
+        "name": "public-suites",
+        "command": [
+          "/Users/dshills/Development/projects/ELab/build/first-version-145-tools/build/elab-conformance",
+          "--agent-binary",
+          "/private/tmp/elab-first-version-145-runtime/agent",
+          "--native-binary",
+          "/private/tmp/elab-first-version-145-runtime/native",
+          "--project-contract-suite",
+          "--electrical-suite",
+          "--inductor-suite",
+          "--opamp-suite",
+          "--opamp-storage-suite",
+          "--capacity-suite",
+          "--artifacts",
+          "/private/tmp/elab-first-version-145-runtime/public"
+        ],
+        "status": "completed",
+        "exit_code": 0,
+        "elapsed_seconds": 49.461265332996845
+      }
+    ],
+    "four_adapters": [
+      "in-process",
+      "headless-stdio",
+      "headless-socket",
+      "native-socket"
+    ]
+  },
+  "acceptance": {
+    "passed": true,
+    "scope": "exact copied 0.128.0 /145 native runtime with development-file/outbound-IP denial; public commands",
+    "reference_parity": {
+      "passed": true,
+      "cases": [
+        {
+          "task": "led",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "3fa7d62e283b88765cb8c9b07533254aa899516a8b72298d37121f61e916dd82",
+          "project_sha256": "96635fc0cd1ab4b13258373c4e5ed474dc3239dda4dfc37202cbce59324cc032"
+        },
+        {
+          "task": "rc",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "6380351c8c51640b0221969b97259cf49161989f300d4eb1b9bdcf885759e338",
+          "project_sha256": "4c86701997fb227c1f3f8e55b2e8ec613ca7a51d75b4061356cd51185203eadf"
+        },
+        {
+          "task": "flasher",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "b0dc7c61c9d757086937176d7cc8de1539e4cac82e8f95d5f9a00576cc62d4b8",
+          "project_sha256": "d62dba5123d42b3dbf76356a7c28411a46ab09678aad9aa72ec727889c9a7a95"
+        }
+      ],
+      "comparison": "Every component/wire field; every reported result field except run/electrical identities; numerical rel 1e-9 / abs 1e-12",
+      "limitations": [
+        "Native endpoint loading/observation does not replace the recorded physical UI construction walkthrough",
+        "File failure, crash recovery, cancellation and live interaction have separate acceptance checks"
+      ]
+    },
+    "live_grid": {
+      "first_time_s": 2.201,
+      "resume_origin_s": 2.201,
+      "second_time_s": 3.4010000000000002,
+      "final_time_s": 3.4010000000000002,
+      "paused_physics_stable": true,
+      "graph_settings_and_run_electrical_preserved": true,
+      "save_reopen_fresh": true
+    },
+    "limits": [
+      "Public command functionality; not new pointer/keyboard evidence or visible p95 qualification",
+      "Retained text-field logical-owner reset is qualified by deterministic real-router tests; native smoke checks the new adapter. Earlier physical UI evidence remains scoped to its recorded build; no physically coalesced OS input/window-blur or visible-latency claim."
+    ],
+    "native_host_closed_normally": true
+  },
+  "owner_acceptance": "Pending: owner answered Not tried yet; no acceptance inferred",
+  "preserved_bundles": {
+    "0.123.0-140": {
+      "files_verified": 113,
+      "manifest_sha256": "c2d35b4b8cf4920636a987e39b83d4d989729201b9164f0c23372c2ea1602bd3"
+    },
+    "0.124.0-141": {
+      "files_verified": 126,
+      "manifest_sha256": "d4b008f18f06ad0e7eca4b7187af709d3ba9359d27fd67c747181297faf7ed56"
+    },
+    "0.125.0-142": {
+      "files_verified": 124,
+      "manifest_sha256": "45e1fc51016b21e6a3fea9388ce113716075f4bc1e112e03b15e72b12bf69a8e"
+    },
+    "0.126.0-143": {
+      "files_verified": 124,
+      "manifest_sha256": "14d1fbbff5b1be63c13d14bfbb2462bbeeeacce208ad36e4cd54fb41b7d56d12"
+    },
+    "0.127.0-144": {
+      "files_verified": 130,
+      "manifest_sha256": "0073beb958b5128d383380e08d89ed1c5f926c5d14ae6aec6d57ef5e9a53e0ae"
+    },
+    "canonical": {
+      "version": "0.105.0 /120",
+      "native_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c"
+    }
+  },
+  "manifest_file_entries": 131,
+  "review_path": "/Users/dshills/Development/projects/ELab/build/ELab-0.128.0-145-review",
+  "launch_note": "Save and quit any earlier review before opening this replacement; same bundle identity. No owner window was operated or automatically opened.",
+  "known_limits": [
+    "Physically coalesced OS input, running pointer/window-blur, IME and exhaustive mounted conformance remain open",
+    "Complete VoiceOver, visible p95, wider hardware/OS, clean-account installation and ten-person study remain open",
+    "Private unsigned build; notarization and public distribution/native-rights qualification remain open",
+    "Dense 64-part/100-node topology can reach the existing integration work limit; source/committed physics survive",
+    "One LED print page is owner-confirmed readable and complete; other printer settings and measured margins/scale remain open"
+  ]
+}

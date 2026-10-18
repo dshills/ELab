@@ -302,3 +302,8 @@ The [bounded /144 native check](native-value-replacement/README.md) confirms pri
 ### Retained value-field identity blocker
 
 A subsequent [real-router reproduction](../../../docs/validation/text-field-state/README.md) covers the missing retained case: coalesced document load/reselection or selecting another same-value resistor carries private text across logical owners. The source repair adds text-field-only state identity, scoped to document generation and selected part, while keeping public IDs/commands. Ordinary redraw and fresh-input controls pass, as does full quality. /144 remains affected pending a qualified replacement. Physical OS coalescing/window blur and broader input gates remain separate.
+
+
+### Text-state replacement ready
+
+Clean **0.128.0 /145** includes the retained text-field identity repair with its matching agent and unchanged examples. Exact copied native smoke/four-adapter conformance, reference parity and pulse/Pause/Resume/save acceptance through 3.401 s pass. [Receipt](text-state-review-checkpoint.json), [walkthrough](../../35-first-version-review.md). All five earlier review folders and canonical /120 remain unchanged. No physical OS interleaving, window-blur, visible-p95, accessibility, participant or owner-acceptance claim is added.
