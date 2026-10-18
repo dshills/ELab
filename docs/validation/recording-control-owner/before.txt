@@ -1,0 +1,34 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a/same-capture-repaint
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-1; incarnation 2→2; field=8 ms
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a/agent-selected-capture
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-2; incarnation 2→2; field=8 ms
+    recorded_cursor_offscreen_test.go:178: old private draft changed a different recording: field=recorded-cursor-a old=verify-1 selected=verify-2 cursor=&{Requested:0.008 Time:0.008 Valid:true Reason:} index=0 start=0 revision=8→9 error=
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time/same-capture-repaint
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-1; incarnation 2→2; field=8 ms
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time/agent-selected-capture
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-2; incarnation 2→2; field=8 ms
+    recorded_cursor_offscreen_test.go:178: old private draft changed a different recording: field=recorded-time old=verify-1 selected=verify-2 cursor=<nil> index=8 start=0 revision=8→9 error=
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start/same-capture-repaint
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-1; incarnation 2→2; field=8 ms
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start/agent-selected-capture
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-2; incarnation 2→2; field=8 ms
+    recorded_cursor_offscreen_test.go:178: old private draft changed a different recording: field=recorded-window-start old=verify-1 selected=verify-2 cursor=<nil> index=0 start=0.008 revision=8→9 error=
+--- FAIL: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft (0.94s)
+    --- FAIL: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a (0.32s)
+        --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a/same-capture-repaint (0.17s)
+        --- FAIL: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a/agent-selected-capture (0.15s)
+    --- FAIL: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time (0.32s)
+        --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time/same-capture-repaint (0.16s)
+        --- FAIL: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time/agent-selected-capture (0.16s)
+    --- FAIL: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start (0.30s)
+        --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start/same-capture-repaint (0.15s)
+        --- FAIL: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start/agent-selected-capture (0.15s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	1.608s
+FAIL

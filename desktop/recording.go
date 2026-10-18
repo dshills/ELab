@@ -118,6 +118,9 @@ func (s *screen) recordingInspector(state workbench.Snapshot) []ui.Node {
 			nodes = append(nodes, quiet("recorded-source-wires", strings.Join(wires, "\n")))
 		}
 	}
+	for i := range nodes {
+		scopeOwnedControlState(&nodes[i], "recording:"+r.ID)
+	}
 	return nodes
 }
 func (s *screen) recordingPanel(state workbench.Snapshot) ui.Node {
@@ -164,7 +167,9 @@ func (s *screen) recordingPanel(state workbench.Snapshot) ui.Node {
 	}
 	s.scope.Revision = state.Revision
 	rowStyle := chromeStyle()
-	return ui.Node{ID: "scope-panel", Kind: ui.Column, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 328}), Padding: ui.Some(ui.UniformInsets(10)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: []ui.Node{{ID: "recorded-toolbar", Kind: ui.Toolbar, Children: controls, Style: rowStyle}, {ID: "recorded-position", Kind: ui.Toolbar, Children: position, Style: rowStyle}, {ID: "rc-scope", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 120}), MaxSize: ui.Some(ui.Size{Height: 120})}, Custom: s.scope}, quiet("recorded-legend", strings.Join(legend, " · ")+" · "+policy), s.recordingCursors(state)}}
+	panel := ui.Node{ID: "scope-panel", Kind: ui.Column, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 328}), Padding: ui.Some(ui.UniformInsets(10)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: []ui.Node{{ID: "recorded-toolbar", Kind: ui.Toolbar, Children: controls, Style: rowStyle}, {ID: "recorded-position", Kind: ui.Toolbar, Children: position, Style: rowStyle}, {ID: "rc-scope", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 120}), MaxSize: ui.Some(ui.Size{Height: 120})}, Custom: s.scope}, quiet("recorded-legend", strings.Join(legend, " · ")+" · "+policy), s.recordingCursors(state)}}
+	scopeOwnedControlState(&panel, "recording:"+r.ID)
+	return panel
 }
 func (s *screen) recordingCursors(state workbench.Snapshot) ui.Node {
 	r := state.Recording
@@ -199,5 +204,7 @@ func (s *screen) recordingCursors(state workbench.Snapshot) ui.Node {
 		}
 	}
 	nodes = append(nodes, quiet("recorded-cursor-timing", caption))
-	return ui.Node{ID: "recorded-cursors", Kind: ui.Toolbar, Children: nodes, Style: chromeStyle()}
+	controls := ui.Node{ID: "recorded-cursors", Kind: ui.Toolbar, Children: nodes, Style: chromeStyle()}
+	scopeOwnedControlState(&controls, "recording:"+r.ID)
+	return controls
 }

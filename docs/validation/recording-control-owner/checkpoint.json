@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "scope": "Recorded-control private-state ownership source repair and three mounted target-switch regressions; clean replacement qualification pending",
+  "previous_source_commit": "9caac8ccbbabdd380dee2315c49db581afe89ec0",
+  "source_sha256": {
+    "desktop/field_context.go": "996a42a6402abae65837cf2b5a63160d62777d0c71af7c545bf2c316df2c0a9a",
+    "desktop/recording.go": "830e7402a48c5148463df94857717d98b59ac4249f088ccd32bffd7c1cb1bcf0",
+    "desktop/recorded_cursor_offscreen_test.go": "4e5d4df5e440f52e390cc4d79042b3627a6fa790686fd180461a4101b183a60e"
+  },
+  "evidence_sha256": {
+    "README.md": "54ac37f5a4de37fe17e66aae3f4f7950fe0fb7e322fd24a3574361a5d26845bd",
+    "after.txt": "10973f12e8c60201bb61850526924a7b98882207140543d221d31e761d442cd2",
+    "before.txt": "807f1971775fb1f32845ebfac9b6e349d31f254b88a3c6e4d4f054c3d814929d",
+    "development-build-info.txt": "d5e3862fe74cc83180da087f686791d24e16ded5eff91736cecf4901a88c13f8",
+    "focused.txt": "2122c06453c21ad54e33ae5eee9710973eacd569410e4c2875b4c72364e7a75e",
+    "full-check.txt": "3698bb08cb5c050bc41e19a04324e964166f0af390ee5eb016a9b0fa433926fb",
+    "native-smoke.txt": "0a993ce16cf29e92a5039663026cfd1abaa68ebad2f001f76165b4fdae9a3ea1"
+  },
+  "quality": {
+    "full_source_gate_exit_code": 0,
+    "python_tests": 51,
+    "native_race_s": 153.344,
+    "existing_mounted_race_s": 17.538,
+    "focused_race_s": 11.431,
+    "native_smoke_exit_code": 0
+  },
+  "source_ledger": {
+    "production_files": 68,
+    "sites": 393,
+    "binding_review_sites": 160,
+    "literal_routes": 207,
+    "public_commands": 162,
+    "source_routes": 132,
+    "ledger_sha256": "b5cdacef44f6205d554ba8f1f315d4138e297ef0b1f1c2c1047148a7f5aa7d95",
+    "non_line_sites_and_command_alias_coverage_sets_unchanged": true
+  },
+  "native_development_binary_sha256": "1319b7907ce20a2e0bdf69ae49285727bb052e85d70f9458cf1a6f1c0a6fa461",
+  "sdk_source": "677548d0ea93d7d6a689998eb8cf3d6f3ff9f59f",
+  "preserved_review": {
+    "version": "0.138.0 /155",
+    "manifest_file_entries_verified": 134,
+    "manifest_sha256": "9ef7cd693ad97b6eb0ab58dbe6db8f5b621ca7d69e3dfa7f00aa1a72193e718d"
+  },
+  "canonical": {
+    "version": "0.105.0 /120",
+    "native_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "promoted": false
+  },
+  "self_review": {
+    "findings": [],
+    "review": [
+      "Only native private control identity changes; public IDs, callbacks, domain commands and stored data do not",
+      "Recorded ownership uses capture ID with the existing subsequent document-generation prefix",
+      "Factories scope their controls independently; repeated same-owner scoping is idempotent",
+      "The component wrapper uses its exact previous component ID and the shared helper preserves its former implementation",
+      "Same-capture repaint retains the private draft; switched-capture tests explicitly focus before Enter and then prove fresh input works"
+    ]
+  },
+  "limits": [
+    "Three mounted text-field cases across cursor, panel and inspector; not exhaustive recorded-control input coverage",
+    "No new physical OS/IME/reader/visible-p95 acceptance",
+    "Clean replacement packaging and exact copied-runtime qualification pending",
+    "Owner walkthrough remains Not tried yet; P0 remains 17 implemented /10 partial"
+  ]
+}

@@ -95,3 +95,100 @@ func TestMountedScopeCursorRecordedFocusLossClearUsesOneClick(t *testing.T) {
 		})
 	}
 }
+
+func mountedOwnedRecordedField(t *testing.T, s *screen, id string) *mountedControlWindow {
+	t.Helper()
+	return newMountedControlWindow(t, s, func() ui.Node {
+		state := s.service.Snapshot()
+		var controls ui.Node
+		switch id {
+		case "recorded-cursor-a":
+			controls = s.recordingCursors(state)
+		case "recorded-time":
+			controls = s.recordingPanel(state)
+		default:
+			controls = ui.Node{ID: "recorded-inspector", Kind: ui.Column, Children: s.recordingInspector(state)}
+		}
+		field, ok := findNode(controls, id)
+		if !ok || field.Disabled {
+			t.Fatal("missing enabled recorded field", id)
+		}
+		field.MinWidth, field.MinHeight = 190, 40
+		root := ui.Node{ID: "root", Kind: ui.Column, Focus: ui.FocusRequest{ID: id, Sequence: 1}, Children: []ui.Node{field}}
+		s.bindFieldContext(&root, actionContext{state.CommandRevision, state.Document.Generation})
+		return root
+	})
+}
+
+func TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft(t *testing.T) {
+	for _, id := range []string{"recorded-cursor-a", "recorded-time", "recorded-window-start"} {
+		t.Run(id, func(t *testing.T) {
+			for _, replace := range []bool{false, true} {
+				name := "same-capture-repaint"
+				if replace {
+					name = "agent-selected-capture"
+				}
+				t.Run(name, func(t *testing.T) {
+					s, cleanup := recordedCursorRC(t)
+					t.Cleanup(cleanup)
+					first := s.service.Snapshot().Recording.ID
+					duration := .02
+					agentAction(t, s.service, "simulation.verify", workbench.VerifyParams{Duration: &duration})
+					completedVerification(t, s.service, s.service.Snapshot().LastOperation)
+					second := s.service.Snapshot().Recording.ID
+					if first == second {
+						t.Fatal("fixture did not create two captures")
+					}
+					agentAction(t, s.service, "operation.select", workbench.IDParams{ID: first})
+					m := mountedOwnedRecordedField(t, s, id)
+					original := mountedControlElement(t, m, id)
+					before := s.service.Snapshot()
+					typeMountedCursor(t, m, id, "8 ms")
+					if !reflect.DeepEqual(before, s.service.Snapshot()) {
+						t.Fatal("fixture lacks private uncommitted input")
+					}
+					if replace {
+						agentAction(t, s.service, "operation.select", workbench.IDParams{ID: second})
+					}
+					current := s.service.Snapshot()
+					m.frame()
+					field := mountedControlElement(t, m, id)
+					t.Logf("capture %s→%s; incarnation %d→%d; field=%v", first, current.Recording.ID, original.Incarnation, field.Incarnation, field.Value)
+					clickMountedControl(t, m, id)
+					m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeReturnEnter})
+					after := s.service.Snapshot()
+					check := func(state workbench.Snapshot, at float64) bool {
+						switch id {
+						case "recorded-cursor-a":
+							return state.Recording.Scope.A != nil && state.Recording.Scope.A.Requested == at
+						case "recorded-time":
+							return state.Recording.Time == at
+						default:
+							return state.Recording.Scope.Window.Start == at
+						}
+					}
+					if !replace {
+						if field.Incarnation != original.Incarnation || !check(after, .008) || after.CommandRevision != before.CommandRevision+1 {
+							t.Fatal("same-capture repaint lost its unfinished edit", s.errorMessage)
+						}
+						assertCursorMeasurementPreservesPhysics(t, before, after)
+						return
+					}
+					if !reflect.DeepEqual(current, after) {
+						t.Fatalf("old private draft changed a different recording: field=%s old=%s selected=%s cursor=%+v index=%d start=%g revision=%d→%d error=%s", id, first, second, after.Recording.Scope.A, after.Recording.Index, after.Recording.Scope.Window.Start, current.CommandRevision, after.CommandRevision, s.errorMessage)
+					}
+					if field.Incarnation == original.Incarnation || field.Value != "0 s" {
+						t.Fatal("recording replacement retained private native state", field)
+					}
+					typeMountedCursor(t, m, id, "6 ms")
+					m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeReturnEnter})
+					after = s.service.Snapshot()
+					if after.Recording.ID != second || !check(after, .006) || after.CommandRevision != current.CommandRevision+1 || s.errorMessage != "" {
+						t.Fatal("fresh input did not work on the new recording", s.errorMessage)
+					}
+					assertCursorMeasurementPreservesPhysics(t, current, after)
+				})
+			}
+		})
+	}
+}

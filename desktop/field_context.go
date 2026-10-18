@@ -38,10 +38,16 @@ func (s *screen) bindFieldContext(node *ui.Node, context actionContext) {
 // The same inspector control IDs serve different selected objects. Their private
 // native state belongs to that object rather than the reusable public control ID.
 func scopeComponentControlState(node *ui.Node, id string) {
+	scopeOwnedControlState(node, id)
+}
+
+// Native editing/pressed state belongs to the logical object behind a control,
+// even when another object renders the same control ID and controlled value.
+func scopeOwnedControlState(node *ui.Node, id string) {
 	if ui.SupportsControlStateKey(node.Kind) {
 		node.ControlStateKey = id
 	}
 	for i := range node.Children {
-		scopeComponentControlState(&node.Children[i], id)
+		scopeOwnedControlState(&node.Children[i], id)
 	}
 }

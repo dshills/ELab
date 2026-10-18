@@ -1,0 +1,30 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a/same-capture-repaint
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-1; incarnation 2→2; field=8 ms
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a/agent-selected-capture
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-2; incarnation 2→3; field=0 s
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time/same-capture-repaint
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-1; incarnation 2→2; field=8 ms
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time/agent-selected-capture
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-2; incarnation 2→3; field=0 s
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start/same-capture-repaint
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-1; incarnation 2→2; field=8 ms
+=== RUN   TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start/agent-selected-capture
+    recorded_cursor_offscreen_test.go:156: capture verify-1→verify-2; incarnation 2→3; field=0 s
+--- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft (1.09s)
+    --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a (0.36s)
+        --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a/same-capture-repaint (0.17s)
+        --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-cursor-a/agent-selected-capture (0.19s)
+    --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time (0.37s)
+        --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time/same-capture-repaint (0.16s)
+        --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-time/agent-selected-capture (0.21s)
+    --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start (0.35s)
+        --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start/same-capture-repaint (0.15s)
+        --- PASS: TestMountedScopeCursorRecordedOwnerDropsOnlyAnotherCapturesDraft/recorded-window-start/agent-selected-capture (0.20s)
+PASS
+ok  	github.com/dshills/elab/desktop	2.709s
