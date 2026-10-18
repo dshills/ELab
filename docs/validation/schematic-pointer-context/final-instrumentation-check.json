@@ -1,0 +1,17 @@
+[
+  {
+    "command": [
+      "go",
+      "vet",
+      "./..."
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "../build/tools/staticcheck",
+      "./..."
+    ],
+    "exit_code": 0
+  }
+]

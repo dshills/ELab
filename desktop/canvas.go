@@ -3,6 +3,7 @@ package main
 import (
 	"math"
 	"strings"
+	"sync/atomic"
 	"time"
 
 	"cogentcore.org/core/core"
@@ -17,6 +18,8 @@ type commandCanvas struct {
 	*cogent.MeshCanvas
 	preparedCommandRevision uint64
 	preparedGeneration      uint64
+	pointerContext          atomic.Pointer[actionContext]
+	pointerGesture          *actionContext
 	screen                  *screen
 	activeTool, dragID      string
 	dragOrigin, dragDelta   workbench.Point
@@ -52,27 +55,33 @@ func (c *commandCanvas) Mount(parent tree.Node) core.Widget {
 	})
 	w.OnFirst(events.Scroll, func(e events.Event) {
 		if scroll, ok := e.(*events.MouseScroll); ok {
+			context := c.pointerContext.Load()
 			withWindowOwner(c.Owner, window, func() {
-				anchor := c.world(e, w)
-				factor := math.Max(.25, math.Min(4, math.Exp(-float64(scroll.Delta.Y)*.003)))
-				c.screen.invoke("view.zoom", map[string]any{"factor": factor, "anchor": anchor})
+				c.withPreparedPointer(context, func() {
+					anchor := c.world(e, w)
+					factor := math.Max(.25, math.Min(4, math.Exp(-float64(scroll.Delta.Y)*.003)))
+					c.screen.invoke("view.zoom", map[string]any{"factor": factor, "anchor": anchor})
+				})
 			})
 			e.SetHandled()
 		}
 	})
 	w.OnFirst(events.MouseDown, func(e events.Event) {
-		withWindowOwner(c.Owner, window, func() { c.routePointer(0, c.world(e, w), workbench.Point{}) })
+		context := c.pointerContext.Load()
+		withWindowOwner(c.Owner, window, func() {
+			c.pointerGesture = c.withPreparedPointer(context, func() { c.routePointer(0, c.world(e, w), workbench.Point{}) })
+		})
 		e.SetHandled()
 	})
 	w.OnFirst(events.SlideMove, func(e events.Event) {
 		withWindowOwner(c.Owner, window, func() {
 			delta := e.PrevDelta()
-			c.routePointer(1, c.world(e, w), workbench.Point{X: float64(delta.X) / c.View.Zoom, Y: float64(delta.Y) / c.View.Zoom})
+			c.routePreparedPointer(1, c.world(e, w), workbench.Point{X: float64(delta.X) / c.View.Zoom, Y: float64(delta.Y) / c.View.Zoom})
 		})
 		e.SetHandled()
 	})
 	w.OnFirst(events.SlideStop, func(e events.Event) {
-		withWindowOwner(c.Owner, window, func() { c.routePointer(2, c.world(e, w), workbench.Point{}) })
+		withWindowOwner(c.Owner, window, func() { c.routePreparedPointer(2, c.world(e, w), workbench.Point{}) })
 		e.SetHandled()
 	})
 	w.OnFirst(events.KeyChord, func(e events.Event) {
@@ -255,6 +264,7 @@ func (s *screen) mesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	if s.drawing != nil {
 		s.drawing.preparedCommandRevision = state.CommandRevision
 		s.drawing.preparedGeneration = state.Document.Generation
+		s.drawing.pointerContext.Store(&actionContext{state.CommandRevision, state.Document.Generation})
 	}
 	s.observeSchematicViewport(v, state)
 	if s.drawing != nil && s.drawing.widget != nil && s.drawing.pointer != nil && !sourcePaneHidden(state) {
@@ -264,7 +274,7 @@ func (s *screen) mesh(v canvas.Viewport) (*canvas.Mesh, error) {
 			origin.X += float32(w.Scene.SceneGeom.Pos.X)
 			origin.Y += float32(w.Scene.SceneGeom.Pos.Y)
 		}
-		s.drawing.pointer.publish(float64(origin.X), float64(origin.Y), v)
+		s.drawing.pointer.publish(float64(origin.X), float64(origin.Y), v, "schematic", s.drawing.pointerToken())
 	}
 	if s.drawing != nil && s.drawing.dragging && s.drawing.dragGeneration == state.Document.Generation {
 		for i, reading := range state.PinnedReadings {
@@ -386,7 +396,7 @@ func (s *screen) routeNativePointer(pane string, phase int, p, delta workbench.P
 		}
 	case "schematic":
 		if !sourcePaneHidden(state) {
-			s.drawing.routePointer(phase, p, delta)
+			s.drawing.routePreparedPointer(phase, p, delta)
 		}
 	}
 }

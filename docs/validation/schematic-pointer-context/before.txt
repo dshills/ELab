@@ -1,0 +1,9 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+--- FAIL: TestSchematicPreparedPointerCannotPlaceIntoReplacement (0.01s)
+    schematic_pointer_context_test.go:31: old schematic click placed a component into replacement document
+--- FAIL: TestSchematicPreparedPointerCannotAdoptAgentWireStart (0.01s)
+    schematic_pointer_context_test.go:48: old schematic click connected the agent's newly selected wire start
+FAIL
+FAIL	github.com/dshills/elab/desktop	0.614s
+FAIL

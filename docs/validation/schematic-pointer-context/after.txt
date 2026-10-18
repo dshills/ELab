@@ -1,0 +1,28 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestSchematicNativeQueuedFrameCannotAdoptRepaint
+--- PASS: TestSchematicNativeQueuedFrameCannotAdoptRepaint (0.01s)
+=== RUN   TestSchematicNativeQueuedReleaseSurvivesOwnSelectionRepaint
+--- PASS: TestSchematicNativeQueuedReleaseSurvivesOwnSelectionRepaint (0.01s)
+=== RUN   TestSchematicNativeQueuedPanContinuesOnlyOwnWrites
+=== RUN   TestSchematicNativeQueuedPanContinuesOnlyOwnWrites/own-pan
+=== RUN   TestSchematicNativeQueuedPanContinuesOnlyOwnWrites/agent-pan
+--- PASS: TestSchematicNativeQueuedPanContinuesOnlyOwnWrites (0.01s)
+    --- PASS: TestSchematicNativeQueuedPanContinuesOnlyOwnWrites/own-pan (0.01s)
+    --- PASS: TestSchematicNativeQueuedPanContinuesOnlyOwnWrites/agent-pan (0.00s)
+=== RUN   TestSchematicPreparedPointerCannotPlaceIntoReplacement
+--- PASS: TestSchematicPreparedPointerCannotPlaceIntoReplacement (0.01s)
+=== RUN   TestSchematicPreparedPointerCannotAdoptAgentWireStart
+--- PASS: TestSchematicPreparedPointerCannotAdoptAgentWireStart (0.01s)
+=== RUN   TestSchematicPreparedPointerZoomAndCapturedContextRefuseChanges
+--- PASS: TestSchematicPreparedPointerZoomAndCapturedContextRefuseChanges (0.00s)
+=== RUN   TestSchematicPreparedPointerDragMatchesPublicMoveAndUndo
+=== RUN   TestSchematicPreparedPointerDragMatchesPublicMoveAndUndo/own-repaint
+=== RUN   TestSchematicPreparedPointerDragMatchesPublicMoveAndUndo/agent-edit
+--- PASS: TestSchematicPreparedPointerDragMatchesPublicMoveAndUndo (0.02s)
+    --- PASS: TestSchematicPreparedPointerDragMatchesPublicMoveAndUndo/own-repaint (0.01s)
+    --- PASS: TestSchematicPreparedPointerDragMatchesPublicMoveAndUndo/agent-edit (0.01s)
+=== RUN   TestSchematicPreparedPointerDispatchKeepsOriginalPreconditions
+--- PASS: TestSchematicPreparedPointerDispatchKeepsOriginalPreconditions (0.00s)
+PASS
+ok  	github.com/dshills/elab/desktop	1.701s

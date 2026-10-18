@@ -123,18 +123,7 @@ func goELabPointer(phase C.int, x, y, scroll C.double) C.int {
 	}
 	point := frame.view.World(canvas.Point{X: px - frame.x, Y: py - frame.y})
 	b.mu.Unlock()
-	err := b.owner.PostWindow(b.window, func() {
-		if !b.enabled.Load() {
-			return
-		}
-		b.mu.Lock()
-		current := b.frame
-		b.mu.Unlock()
-		if current != frame {
-			return
-		}
-		b.route(frame.pane, int(phase), workbench.Point{X: point.X, Y: point.Y}, delta)
-	})
+	err := b.owner.PostWindow(b.window, func() { b.deliver(frame, int(phase), workbench.Point{X: point.X, Y: point.Y}, delta) })
 	if err != nil {
 		b.mu.Lock()
 		b.active = false
@@ -142,4 +131,26 @@ func goELabPointer(phase C.int, x, y, scroll C.double) C.int {
 		return 0
 	}
 	return 1
+}
+
+// Runs on the owner with the packet's original prepared frame. Geometry alone
+// cannot distinguish two documents/tools rendered at the same window size.
+func (b *pointerBridge) deliver(frame pointerFrame, phase int, point, delta workbench.Point) {
+	if !b.enabled.Load() {
+		return
+	}
+	b.mu.Lock()
+	current := b.frame
+	b.mu.Unlock()
+	if frame.pane == "schematic" && (phase == 1 || phase == 2) {
+		// Continuations retain the canvas gesture's accepted command/document
+		// guard. Its own selection/pan can repaint before a queued release.
+		// A different actor or replacement is rejected by that guard.
+		current.token, frame.token = "", ""
+		current.view.Center = frame.view.Center
+	}
+	if current != frame {
+		return
+	}
+	b.route(frame.pane, phase, point, delta)
 }

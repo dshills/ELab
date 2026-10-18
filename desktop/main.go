@@ -219,6 +219,8 @@ type screen struct {
 	menuCommandRevision                 *uint64
 	actionContext                       *actionContext
 	fieldContext                        *actionContext
+	pointerContext                      *actionContext
+	pointerAccepted                     *actionContext
 	fieldAccepted                       *actionContext
 	settleField                         func(string, func(error)) error
 	pendingValueApply                   *valueApply
@@ -234,6 +236,10 @@ func (s *screen) invoke(id string, p any) workbench.Response {
 	return s.invokeAtCommandRevision(id, p, s.service.Snapshot().CommandRevision)
 }
 func (s *screen) invokeAtCommandRevision(id string, p any, rev uint64, generation ...uint64) workbench.Response {
+	if s.pointerContext != nil {
+		rev = s.pointerContext.revision
+		generation = []uint64{s.pointerContext.generation}
+	}
 	if s.fieldContext != nil {
 		rev = s.fieldContext.revision
 		generation = []uint64{s.fieldContext.generation}
@@ -258,6 +264,12 @@ func (s *screen) invokeAtCommandRevision(id string, p any, rev uint64, generatio
 		request.ExpectedDocumentGeneration = &generation[0]
 	}
 	result := s.service.Dispatch(context.Background(), request, "user")
+	if s.pointerContext != nil {
+		s.pointerAccepted = nil
+		if state, ok := result.Result.(workbench.Snapshot); result.Error == nil && ok {
+			s.pointerAccepted = &actionContext{state.CommandRevision, state.Document.Generation}
+		}
+	}
 	if s.fieldContext != nil {
 		s.fieldAccepted = nil
 		if state, ok := result.Result.(workbench.Snapshot); result.Error == nil && ok {
