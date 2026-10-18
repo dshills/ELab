@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-18",
+  "typing_qualification_passed": false,
+  "causal_trace_captured": true,
+  "repair_implemented": false,
+  "scope": "Instrumented Go-overlay native legacy/Cocoa handoff and exact refusal; no clean replacement",
+  "original_pid": 13210,
+  "original_host_exit_code": 0,
+  "diagnostic_binary_sha256": "7624f65777c233bdb2192fa5e077cc0d6250d7800d8e178e73072ecae6f3712d",
+  "source_release_identity": {
+    "source_commit": "87db1ab95070668c3d54591c950f520fca295ac0",
+    "release": "0.140.0 /157",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.140.0-157-review/elab-agent",
+    "agent_sha256": "45b0a66666684b54dd9fac18954c9cb61b7c6f127b9bcaff0315c62484d024bc",
+    "receipt_sha256": "47fe2a1fe5b1680fd772610b9c2ff97cd0269ae36cd2a9ced5790e3d33d58e1c",
+    "ledger_sha256": "60d323c80a1c8396c7cc6eb6cba78d98225dd03714f7e6fcb552d1e8a34135e5",
+    "production_source_files_verified": 68,
+    "runtime_inputs_verified": 343,
+    "manifest_file_entries_verified": 158,
+    "manifest_sha256": "29ecc32819f447565698ce114040d04fe020e8345959562ae006627ed697600f"
+  },
+  "original_source_sdk_review_unchanged": true,
+  "successful_requested_entries": 2,
+  "failed_requested_entries": 4,
+  "mechanism": "Legacy field edits precede native insertion records that still use old native text/selection; incompatible baselines refuse and intended input is lost/truncated/appended",
+  "exact_refusal": {
+    "command": "scope.cursor.set",
+    "time_s": "12 m",
+    "code": "invalid-params",
+    "message": "time_s: use a time such as 10 ms, 250 us, or 0.01 s"
+  },
+  "domain_and_saved_bytes_preserved": true,
+  "observational_limits": [
+    "Instrumentation changes timing; no statistical comparison or native latency claim",
+    "Mechanism captured in diagnostic run; earlier uninstrumented trials lack exact event trace",
+    "No product/source/SDK repair or typing qualification",
+    "Original SDK stale-input/document/run/validation guards must remain",
+    "Owner walkthrough remains Not tried yet"
+  ],
+  "next": "One bounded source repair pass beginning with native-boundary regression, then focused replay and one final quality gate before packaging",
+  "files": {
+    "Diagnostic-build-info.txt": "906cd0a533232d3922d48eeac1af92d2ce37661d9a804ed32707335a661bc81c",
+    "Diagnostic-build.txt": "600357df22b96667e830ec0c46e39e1adec480c53e37428cc0381ef8f57e0875",
+    "Overlay-controls.go.txt": "c0310bbc8e5892735af010d3d87af37f27d41dd9c2364c39695584cc36de6565",
+    "Overlay-editor.go.txt": "5e0ee863d02e29c5326be78edaac3d16add01d4f654e89f2453abc0fd3d6c553",
+    "Overlay-editor_geometry.go.txt": "e591e91eec4bde78ecae91bb2cf273d8040b89071e0aa1e1e966dcf7e70c22ae",
+    "Overlay-main.go.txt": "8ce6d0689a370e4251fd41eb31763bb20c00780f9909126543210f1cddf1d8af",
+    "RC reference.elab": "5a96b8608be0909f865b61039e25415513aa1bfbe2b227b8efb8ffd05749ef0e",
+    "README.md": "1e7cf4077f26009cf69a05d48be3c79b1eefa9f3a27f96544516c274d17753de",
+    "native-session.json.gz": "5ac8fc56e20ec9ac6ca93f9bd1b0b49931b85ce6b88cc7ebb378d6da11f7dceb",
+    "native-trace.txt.gz": "4082159e3a60555242e0454285fcf3c70f679d885c7061f0c24ad21d0cd58819",
+    "observer-source.py": "b6bd35f87a8709acbdbd49f49b1b50dd067d819b3fce6d869d8113bd211a3991",
+    "overlay-provenance.json": "acb512ed62dddbbbe80b86fd1dafcad4002e78ec67e9f95a9a2feb032cd4a230",
+    "prepare-overlay-source.py": "c1be1c51eb6c187e0a32e20d90e10143d62800921996c28cd69356922d87a3c4",
+    "process-verification.json": "89386c3b0ab7dd69a57ce8f6820929d85a0b61137480877a744ecbabeda96650",
+    "source-release-identity.json": "9a046cb3af2fbe9df149409fd2bd92a9475b99e464b176fb56ab466dac9f3157",
+    "ui-observation.txt": "26d5083627c57987b2be0ffd95df7d9d119a6b0aee1caf9df42093c9cfcaf75f"
+  }
+}

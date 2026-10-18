@@ -1,0 +1,270 @@
+package cogent
+
+import (
+	"cogentcore.org/core/core"
+	"cogentcore.org/core/styles/states"
+	"fmt"
+	"github.com/dshills/vellum/drivers/cogent/internal/textinput"
+	"github.com/dshills/vellum/ui"
+	"github.com/dshills/vellum/workbench"
+	"image"
+	"log"
+	"time"
+	"unicode/utf8"
+)
+
+var elabTracePublications = map[uint64]string{}
+
+func textPoints(rect image.Rectangle, scale float64) [4]float64 {
+	return [4]float64{float64(rect.Min.X) / scale, float64(rect.Min.Y) / scale, float64(rect.Dx()) / scale, float64(rect.Dy()) / scale}
+}
+func textGeometry(state core.TextFieldEditingState, layout core.TextFieldGeometry, scale float64) textinput.Geometry {
+	g := textinput.Geometry{Cells: []textinput.TextCell{}, Carets: []textinput.TextCaret{}, Viewport: textPoints(layout.Viewport.ToRect(), scale), FocusLine: state.VisualLine}
+	offsets := textinput.UTF16Offsets(state.Text)
+	for _, c := range layout.Cells {
+		if c.Range.Start < 0 || c.Range.End >= len(offsets) {
+			continue
+		}
+		g.Cells = append(g.Cells, textinput.TextCell{Start: offsets[c.Range.Start], End: offsets[c.Range.End], Line: c.Line, Rect: [4]float64{float64(c.Rect.Min.X) / scale, float64(c.Rect.Min.Y) / scale, float64(c.Rect.Size().X) / scale, float64(c.Rect.Size().Y) / scale}})
+	}
+	for _, c := range layout.Carets {
+		if c.Rune < 0 || c.Rune >= len(offsets) {
+			continue
+		}
+		g.Carets = append(g.Carets, textinput.TextCaret{Offset: offsets[c.Rune], Line: c.Line, Rect: [4]float64{float64(c.Pos.X) / scale, float64(c.Pos.Y) / scale, 0, float64(c.Height) / scale}})
+	}
+	return g
+}
+func (t *textWindow) focusedClient() *record {
+	targets := map[string]accessibilityFocusTarget{}
+	accessibilityNativeFocusTargets(t.window.root, "", targets)
+	order := ui.FocusOrder(ui.FocusScope(accessibilityFocusProjection(t.window.root, "")))
+	for _, id := range order {
+		target := targets[id]
+		if !target.focused || accessibilityTreeNil(target.widget) {
+			continue
+		}
+		for _, r := range t.clients {
+			if r.widget == target.widget && !r.control.disabled && r.widget.AsWidget().StateIs(states.Focused) {
+				return r
+			}
+		}
+	}
+	return nil
+}
+func (t *textWindow) publish() {
+	if t.native == nil || !t.acceptsNativeInput() || !t.nativeReady.Load() {
+		return
+	}
+	// A refresh may move Go focus ahead of already admitted Cocoa edits. Do
+	// not activate the new native client, or emit a partial controlled Change,
+	// until the outgoing client acknowledges every edit and native unmark.
+	if !t.finishFieldFocusLosses(func(*record) (bool, error) { return t.deactivateNativeClient() }) {
+		return
+	}
+	r := t.focusedClient()
+	active := r != nil
+	if r == nil {
+		r = t.clients[t.activeClient]
+	}
+	if r == nil {
+		// Retired clients still relinquish native preedit through the handoff FIFO;
+		// resulting old-incarnation messages are explicitly refused by apply.
+		accepted, _ := publishTextOnMain(t, 0, core.TextFieldEditingState{}, -1, -1, false, t.ack, [4]float64{}, textinput.Geometry{}, textinput.MaxDocumentBytes)
+		if accepted {
+			t.setActiveClient(0, false)
+		}
+		return
+	}
+	_, _ = t.publishClient(r, active)
+}
+
+// setActiveClient publishes only the acceptance result, never an attempted
+// target. The atomics are read by focus listeners outside the owner.
+func (t *textWindow) setActiveClient(id uint64, active bool) {
+	if previous := t.clients[t.activeClient]; previous != nil && t.activeClient != id {
+		previous.control.fieldNativeActive.Store(false)
+	}
+	t.activeClient = id
+	if current := t.clients[id]; current != nil && current.node.Kind == ui.TextField {
+		current.control.fieldNativeActive.Store(active)
+	}
+	t.publishGridRules()
+}
+
+// deactivateNativeClient seals the actual native preedit, without validating or
+// copying outgoing Go text/geometry. Ack rejection still preserves the old
+// native state; only accepted client-zero publication retires its activation.
+func (t *textWindow) deactivateNativeClient() (bool, error) {
+	accepted, err := publishTextOnMain(t, 0, core.TextFieldEditingState{}, -1, -1, false, t.ack, [4]float64{}, textinput.Geometry{}, textinput.MaxDocumentBytes)
+	if accepted {
+		t.setActiveClient(0, false)
+	}
+	return accepted, err
+}
+
+func (t *textWindow) finishFieldFocusLosses(deactivate func(*record) (bool, error)) bool {
+	if !t.acceptsNativeInput() {
+		for _, r := range t.clients {
+			r.control.fieldFocusLost.Store(false)
+		}
+		return false
+	}
+	if outgoing := t.clients[t.activeClient]; outgoing != nil && outgoing.control.fieldFocusLost.Load() {
+		accepted, err := deactivate(outgoing)
+		if err != nil || !accepted {
+			if err != nil {
+				editorError(outgoing, err)
+			}
+			// Existing input acknowledgments/main readiness retry through the
+			// bounded publication wake. Never spin or wait for the owner here.
+			return false
+		}
+		outgoing.control.fieldNativeActive.Store(false)
+	}
+	for _, r := range t.clients {
+		if !r.control.fieldFocusLost.Load() {
+			continue
+		}
+		if r.control.retired || !t.acceptsNativeInput() {
+			r.control.fieldFocusLost.Store(false)
+			continue
+		}
+		// A non-active field was already deactivated with all prior native
+		// messages acknowledged. It must not be activated just to finalize.
+		field := r.widget.(*core.TextField)
+		r.control.fieldFocusLost.Store(false)
+		refuseOversizedFieldEditing(r) // existing controlled refusal restores invalid legacy bytes
+		field.FinishNativeFocusLost()
+		if b := r.control.gridEdit; b != nil {
+			if _, err := b.current(); err == nil && b.grid.eligible() {
+				if err := syncGridDraft(r); err != nil {
+					editorError(r, err)
+				}
+			}
+		}
+		// This outgoing client may never be chosen by publishClient again.
+		// Capture after finalization, including preserved refocus selection.
+		if cacheFieldEditingState(r, field.EditingState()) {
+			_ = r.control.a.Invalidate(r.control.window)
+		}
+	}
+	return true
+}
+
+func (t *textWindow) publishClient(r *record, active bool) (bool, error) {
+	client, ok := r.widget.(nativeTextClient)
+	if !ok {
+		return false, nil
+	}
+	state := client.EditingState()
+	if r.node.Kind == ui.TextField && refuseOversizedFieldEditing(r) {
+		return false, nil
+	}
+	if r.node.Kind == ui.TextField && cacheFieldEditingState(r, state) {
+		_ = r.control.a.Invalidate(r.control.window)
+	}
+	if r.control.editor != nil {
+		syncEditorFromWidget(r, state)
+	}
+	if !utf8.ValidString(state.Text) || len(state.Text) > textinput.MaxDocumentBytes {
+		editorError(r, fmt.Errorf("cogent: native input document budget exceeded"))
+		return false, nil
+	}
+	active = active && !r.control.disabled && !client.IsReadOnly()
+	start, end, marked := client.NativeCompositionRange()
+	if marked {
+		start, _ = textinput.UTF16Offset(state.Text, start)
+		end, _ = textinput.UTF16Offset(state.Text, end)
+	} else {
+		start, end = -1, -1
+	}
+	scale := nativeTextScale(t.window)
+	geometry := textGeometry(state, client.NativeTextGeometry(), scale)
+	caret := textPoints(client.NativeCaretBounds(), scale)
+	maximum := textinput.MaxDocumentBytes
+	if b := r.control.gridEdit; b != nil {
+		maximum = min(maximum, b.maximum())
+		active = active && b.writable()
+	}
+	shadow := textShadow{Text: state.Text, Epoch: r.control.textEpoch}
+	if b := r.control.editor; b != nil {
+		s := b.model.Snapshot()
+		if s.Revision != b.revision || s.VisibleText != state.Text || s.VisibleEpoch != b.epoch || s.SelectionEpoch != b.selectionEpoch {
+			return false, nil
+		}
+		shadow.Revision, shadow.Epoch, shadow.SelectionEpoch = s.Revision, s.VisibleEpoch, s.SelectionEpoch
+		maximum = min(maximum, b.model.MaxBytes())
+	}
+	accepted, err := publishTextOnMain(t, r.control.client, state, start, end, active, t.ack, caret, geometry, maximum)
+	if r.node.ID == "cursor-time-a" {
+		value := fmt.Sprintf("%t/%d/%t/%q/%d/%d/%d/%d", accepted, r.control.client, active, state.Text, state.Anchor, state.Focus, t.ack, r.control.textEpoch)
+		if elabTracePublications[r.control.client] != value {
+			elabTracePublications[r.control.client] = value
+			log.Printf("ELAB_TRACE publish at=%d state=%s error=%v", time.Now().UnixNano(), value, err)
+		}
+	}
+	if err != nil {
+		editorError(r, err)
+		return false, err
+	}
+	if accepted {
+		t.setActiveClient(r.control.client, active)
+		t.shadows[r.control.client] = shadow
+	}
+	return accepted, nil
+}
+
+func focusedManagedTextRecord(root *record) *record {
+	if root == nil {
+		return nil
+	}
+	if root.control != nil && root.control.client != 0 && !root.control.retired && root.widget.AsWidget().StateIs(states.Focused) {
+		return root
+	}
+	if edit := gridEditingRecord(root); edit != nil {
+		if found := focusedManagedTextRecord(edit); found != nil {
+			return found
+		}
+	}
+	for _, r := range root.children {
+		if found := focusedManagedTextRecord(r); found != nil {
+			return found
+		}
+	}
+	for _, r := range activeWorkbenchRecords(root) {
+		if found := focusedManagedTextRecord(r); found != nil {
+			return found
+		}
+	}
+	return nil
+}
+func accessibilityTextGeometry(root *record) map[string]any {
+	out := map[string]any{}
+	var visit func(*record, string)
+	visit = func(r *record, prefix string) {
+		if r == nil {
+			return
+		}
+		if r.control != nil && r.control.client != 0 && !r.control.retired {
+			if client, ok := r.widget.(nativeTextClient); ok {
+				state := client.EditingState()
+				geometry := textGeometry(state, client.NativeTextGeometry(), 1)
+				out[prefix+accessibilityManagedID(r.node.ID)] = map[string]any{"client": r.control.client, "text": state.Text, "geometry": geometry}
+			}
+		}
+		if edit := gridEditingRecord(r); edit != nil {
+			visit(edit, prefix)
+		}
+		for _, c := range r.children {
+			visit(c, prefix)
+		}
+		if w, ok := r.node.Custom.(*Workbench); r.node.Kind == ui.Extension && ok {
+			accessibilityWorkbenchLeaves(w, func(g *workbench.Group) {
+				visit(w.records[g.Active], prefix+accessibilityWorkbenchNamespace(r.node.ID, g.Active))
+			})
+		}
+	}
+	visit(root, "")
+	return out
+}

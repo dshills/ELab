@@ -1,0 +1,942 @@
+package cogent
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"image"
+	"log"
+	"strings"
+	"sync"
+	"sync/atomic"
+	"time"
+
+	"cogentcore.org/core/core"
+	"cogentcore.org/core/events"
+	"cogentcore.org/core/styles"
+	"cogentcore.org/core/styles/states"
+	"cogentcore.org/core/text/lines"
+	"cogentcore.org/core/text/text"
+	"cogentcore.org/core/text/textcore"
+	"cogentcore.org/core/text/textpos"
+	"cogentcore.org/core/tree"
+	"github.com/dshills/vellum/app"
+	"github.com/dshills/vellum/drivers/cogent/internal/mailbox"
+	"github.com/dshills/vellum/drivers/cogent/internal/textinput"
+	"github.com/dshills/vellum/drivers/cogent/internal/transport"
+	"github.com/dshills/vellum/editor"
+	"github.com/dshills/vellum/ui"
+)
+
+var ErrEditorBinding = errors.New("cogent: editor requires exactly one live binding")
+var ErrTextInputStale = errors.New("cogent: native text client is stale")
+
+var textClientID atomic.Uint64
+
+// Native documents must stay inside the admission transport budget for their
+// entire lifetime, including future owner replacements of an empty model.
+func validateNativeEditor(n ui.Node) error {
+	if n.Kind == ui.TextField && (len(n.Text) > textinput.MaxDocumentBytes || strings.ContainsRune(n.Text, 0)) {
+		return fmt.Errorf("cogent: text field %q exceeds native document limit %d", n.ID, textinput.MaxDocumentBytes)
+	}
+	if n.Kind == ui.MultilineText && n.Editor != nil && n.Editor.MaxBytes() > textinput.MaxDocumentBytes {
+		return fmt.Errorf("cogent: multiline editor %q maximum %d exceeds native limit %d", n.ID, n.Editor.MaxBytes(), textinput.MaxDocumentBytes)
+	}
+	return nil
+}
+
+// The private Lines buffer is a renderer/editing engine, never the document or
+// history authority. Fields below are confined to the application owner except
+// syncing, which is used by the originating render loop during setter callbacks.
+type editorBinding struct {
+	model                           *editor.Model
+	buffer                          *lines.Lines
+	revision, epoch, selectionEpoch uint64
+	syncing                         bool
+}
+type textShadow struct {
+	Text                            string
+	Revision, Epoch, SelectionEpoch uint64
+}
+type textMessage struct {
+	Kind    string
+	Input   textinput.Update
+	Request uint64
+}
+
+type nativeTextClient interface {
+	EditingState() core.TextFieldEditingState
+	NativeCompositionRange() (int, int, bool)
+	NativeCaretBounds() image.Rectangle
+	NativeTextGeometry() core.TextFieldGeometry
+	IsReadOnly() bool
+}
+
+// nativeTextBackend is owned exclusively by the Cocoa main queue. Its methods
+// never inspect widgets, acquire the application owner or invoke user callbacks.
+type nativeTextBackend interface {
+	Publish(uint64, core.TextFieldEditingState, int, int, bool, uint64, [4]float64, textinput.Geometry, int) (bool, error)
+	Settle(uint64) bool
+	Close()
+}
+type textLifetime struct{ ctx context.Context }
+type textWindow struct {
+	admission          sync.Mutex // accepted Cocoa preflight through commit; never owner/widget callbacks
+	pendingInput       *transport.OrderedTicket[textMessage]
+	lifetime           atomic.Pointer[textLifetime]
+	owner              *app.Application
+	window             *nativeWindow
+	pump               *transport.OrderedPump[textMessage]
+	manual             bool // explicit offscreen routing; settlement never invokes Cocoa/ambient workers
+	rules              atomic.Pointer[gridTextRules]
+	native             nativeTextBackend
+	clients            map[uint64]*record    // owner only, exact mount incarnations
+	shadows            map[uint64]textShadow // owner only; publications become authoritative only on native acceptance
+	ack                uint64
+	activeClient       uint64
+	closed             atomic.Bool
+	nativeReady        atomic.Bool // set only by a callback executed on the actual platform main loop
+	nativeReadyStarted atomic.Bool
+	requests           map[uint64]*textSettlement // owner only
+	nextRequest        uint64
+	settleDispatch     func(context.Context, *textWindow, uint64, uint64) error
+	boundaries         map[*core.Scene]func(events.Event) // originating loop, restored on teardown
+}
+type textSettlement struct {
+	binding   *record
+	model     *editor.Model
+	gridEdit  *gridEditBinding
+	field     *fieldChangeEpoch
+	ctx       context.Context
+	callback  func(error)
+	stop      func() bool
+	completed bool // owner only
+}
+
+var textWindows = struct {
+	sync.Mutex
+	windows map[string]*textWindow
+}{windows: map[string]*textWindow{}}
+var editorBindings = map[*editor.Model]*record{} // one process application owner
+
+func mountEditor(parent tree.Node, r *record) core.Widget {
+	w := textcore.NewEditor(parent)
+	old := w.Lines
+	b := lines.NewLinesExact()
+	w.SetLines(b)
+	old.Close() // SetLines only releases the view; close the default buffer too.
+	b.Autosave = false
+	b.SetUndoOn(false)
+	b.Settings.AutoIndent = false
+	r.widget = w
+	r.control.editor = &editorBinding{model: r.node.Editor, buffer: b}
+	syncEditor(r)
+	w.Styler(func(s *styles.Style) {
+		if r.node.SoftWrap {
+			s.Text.WhiteSpace = text.WhiteSpacePreWrap
+		} else {
+			s.Text.WhiteSpace = text.WrapNever
+		}
+	})
+	w.SetNativeEditingListener(func(state core.TextFieldEditingState) {
+		if r.control.editor.syncing {
+			return
+		}
+		requestTextPublicationScoped(r.control.windowRef)
+	})
+	w.OnFirst(events.KeyChord, func(e events.Event) {
+		chord := strings.ToLower(string(e.KeyChord()))
+		undo := chord == "meta+z" || chord == "ctrl+z"
+		redo := chord == "meta+shift+z" || chord == "ctrl+shift+z" || chord == "ctrl+y"
+		if !undo && !redo {
+			return
+		}
+		e.SetHandled()
+		_ = r.control.a.Do(func() {
+			if r.control.retired || r.control.disabled || r.control.windowRef.Context().Err() != nil {
+				return
+			}
+			apply := func(err error) {
+				if err != nil {
+					editorError(r, err)
+					return
+				}
+				if r.control.retired || r.control.windowRef.Context().Err() != nil {
+					return
+				}
+				syncEditorFromWidget(r, w.EditingState())
+				before := r.node.Editor.Snapshot().Text
+				if undo {
+					err = r.node.Editor.Journal().Undo()
+				} else {
+					err = r.node.Editor.Journal().Redo()
+				}
+				if err != nil {
+					editorError(r, err)
+					return
+				}
+				syncEditor(r)
+				if r.node.Editor.Snapshot().Text != before {
+					committedEditorChange(r)
+				}
+			}
+			if r.node.Editor.Snapshot().Composing {
+				if err := SettleEditor(r.control.a.Context(), r.control.a, r.control.window, r.node.Editor, apply); err != nil {
+					editorError(r, err)
+				}
+			} else {
+				apply(nil)
+			}
+		})
+		requestTextPublicationScoped(r.control.windowRef)
+	})
+	return w
+}
+func editorError(r *record, err error) {
+	if err != nil && r.control.onError != nil {
+		r.control.onError(err)
+	}
+	if err != nil {
+		r.control.restore = true
+		_ = r.control.a.Invalidate(r.control.window)
+	}
+}
+func committedEditorChange(r *record) {
+	if r.node.Change != nil {
+		r.node.Change(ui.ChangeEvent{ID: r.node.ID, Kind: ui.MultilineText, Text: r.node.Editor.Snapshot().Text})
+	}
+	_ = r.control.a.Invalidate(r.control.window)
+}
+func fullEditorEdit(s editor.Snapshot, next string, selection editor.Selection, marked editor.Range) editor.Edit {
+	// Keep undo captures proportional to the actual changed span. Scalar-aligned
+	// common prefix/suffix work for CRLF, supplementary characters and preedit.
+	a, b := []rune(s.VisibleText), []rune(next)
+	prefix := 0
+	for prefix < len(a) && prefix < len(b) && a[prefix] == b[prefix] {
+		prefix++
+	}
+	ae, be := len(a), len(b)
+	for ae > prefix && be > prefix && a[ae-1] == b[be-1] {
+		ae--
+		be--
+	}
+	span := editor.Range{Start: prefix, End: ae}
+	before, insert := string(a[prefix:ae]), string(b[prefix:be])
+	return editor.Edit{BaseRevision: s.Revision, BaseVisibleEpoch: s.VisibleEpoch, Range: span, Before: before, Insert: insert, Selection: selection, Marked: marked}
+}
+
+// Only a real model request resets selection. An unrelated reconciliation or
+// geometry refresh preserves the editor's shaped caret affinity and scroll.
+func syncEditor(r *record) {
+	if r.control == nil || r.control.editor == nil {
+		return
+	}
+	b := r.control.editor
+	w, ok := r.widget.(*textcore.Editor)
+	if !ok {
+		return
+	}
+	s := b.model.Snapshot()
+	b.syncing = true
+	defer func() { b.syncing = false }()
+	state := w.EditingState()
+	if state.Text != s.VisibleText {
+		// A composition replacement must discard the previous private restoration
+		// baseline; Model is the only authority allowed to restore committed bytes.
+		b.buffer.SetText([]byte(s.VisibleText))
+		w.Update()
+	}
+	if s.Composing {
+		start, end, active := w.NativeCompositionRange()
+		if !active || start != s.Marked.Start || end != s.Marked.End || b.selectionEpoch != s.SelectionEpoch {
+			w.ApplyNativeEdit(s.VisibleText, s.Selection.Anchor, s.Selection.Focus, s.Marked.Start, s.Marked.End, "mark")
+		}
+	} else {
+		// An owner Install/Replace can seal preedit without changing its visible
+		// bytes. Retire the private baseline too; otherwise later Escape could
+		// restore bytes from before the accepted owner transaction.
+		if _, _, active := w.NativeCompositionRange(); active {
+			if !w.ApplyNativeEdit(s.VisibleText, s.Selection.Anchor, s.Selection.Focus, -1, -1, "unmark") {
+				editorError(r, ErrTextInputStale)
+				return
+			}
+		}
+		if b.selectionEpoch != s.SelectionEpoch || state.Text != s.VisibleText {
+			if !w.SetEditingSelection(s.Selection.Anchor, s.Selection.Focus) {
+				// Portable selections use scalar units. Ordinary native navigation
+				// operates on shaped graphemes, so normalize an external interior
+				// caret/range once, preserve direction, and publish the mapped
+				// selection back to the owner instead of a restore/redraw loop.
+				selection := nativeSelection(s.VisibleText, s.Selection)
+				if err := b.model.Select(selection); err != nil {
+					editorError(r, err)
+					return
+				}
+				if !w.SetEditingSelection(selection.Anchor, selection.Focus) {
+					editorError(r, editor.ErrRange)
+					return
+				}
+				s = b.model.Snapshot()
+			}
+		}
+	}
+	b.revision, b.epoch, b.selectionEpoch = s.Revision, s.VisibleEpoch, s.SelectionEpoch
+}
+func syncEditorFromWidget(r *record, state core.TextFieldEditingState) {
+	b := r.control.editor
+	s := b.model.Snapshot()
+	if r.control.disabled || b.revision != s.Revision || b.epoch != s.VisibleEpoch || b.selectionEpoch != s.SelectionEpoch {
+		requestControlRestore(r)
+		return
+	}
+	if s.Composing {
+		return
+	} // Native phases own preedit, including zero-delta commit.
+	before := s.Text
+	previousSelection := s.SelectionEpoch
+	sel := editor.Selection{Anchor: state.Anchor, Focus: state.Focus}
+	if err := b.model.Apply(fullEditorEdit(s, state.Text, sel, editor.Range{})); err != nil {
+		editorError(r, err)
+		return
+	}
+	s = b.model.Snapshot()
+	b.revision, b.epoch, b.selectionEpoch = s.Revision, s.VisibleEpoch, s.SelectionEpoch
+	if s.Text != before {
+		committedEditorChange(r)
+	}
+	if s.SelectionEpoch != previousSelection {
+		_ = r.control.a.Invalidate(r.control.window)
+	}
+}
+func disposeEditor(r *record) {
+	if r.control == nil {
+		return
+	}
+	if existing := editorBindings[r.node.Editor]; existing == r {
+		delete(editorBindings, r.node.Editor)
+	}
+	if b := r.control.editor; b != nil {
+		// Retiring an incarnation cancels accepted preview. Queued native updates
+		// cannot subsequently target its model or a replacement at the same ID.
+		_ = b.model.CancelComposition()
+		w := r.widget.(*textcore.Editor)
+		b.syncing = true
+		w.SetNativeEditingListener(nil)
+		w.SetLines(nil)
+		b.buffer.Close()
+	}
+}
+func bindEditorModels(root *record) error {
+	pending := map[*editor.Model]*record{}
+	var check func(*record) error
+	check = func(r *record) error {
+		if r == nil {
+			return nil
+		}
+		if r.control != nil && r.control.editor != nil {
+			m := r.control.editor.model
+			if existing := editorBindings[m]; existing != nil && existing != r && !existing.control.retired {
+				return ErrEditorBinding
+			}
+			if previous := pending[m]; previous != nil && previous != r {
+				return ErrEditorBinding
+			}
+			pending[m] = r
+		}
+		for _, c := range r.children {
+			if err := check(c); err != nil {
+				return err
+			}
+		}
+		for _, c := range activeWorkbenchRecords(r) {
+			if err := check(c); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+	if err := check(root); err != nil {
+		return err
+	}
+	for m, r := range pending {
+		editorBindings[m] = r
+	}
+	return nil
+}
+func newTextWindow(a *app.Application, deque *events.Deque) (*textWindow, error) {
+	// Worst-case JSON escaping of two 4MiB fragments plus metadata stays below
+	// 50MiB. Aggregate credit includes reservations/in-flight records; allocator,
+	// native shadow, model and history storage are separate documented budgets.
+	p, err := transport.NewOrdered[textMessage](mailbox.Limits{Slots: 256, PayloadBytes: 64 << 20, MessageBytes: 50 << 20}, deque, 16)
+	if err != nil {
+		return nil, err
+	}
+	return &textWindow{owner: a, pump: p, clients: map[uint64]*record{}, shadows: map[uint64]textShadow{}, requests: map[uint64]*textSettlement{}, boundaries: map[*core.Scene]func(events.Event){}, settleDispatch: settleTextOnMain}, nil
+}
+func startTextWindow(w *nativeWindow, a *app.Application) error {
+	t := nativeTextAttachment(w)
+	if t == nil {
+		var err error
+		t, err = newTextWindow(a, &w.source.Load().Deque)
+		if err != nil {
+			return err
+		}
+	}
+	t.window = w
+	lifetime, err := scopedWindowContext(a, w.window.Ref())
+	if err != nil {
+		return err
+	}
+	t.lifetime.Store(&textLifetime{ctx: lifetime})
+	w.input.Store(t)
+	textWindows.Lock()
+	textWindows.windows[w.window.ID] = t
+	textWindows.Unlock()
+	startNativeTextPublication(t)
+	return bindTextWindow(w)
+}
+func bindTextWindow(w *nativeWindow) error {
+	if err := bindEditorModels(w.root); err != nil {
+		return err
+	}
+	t := w.input.Load()
+	if t == nil {
+		return nil
+	}
+	current := map[uint64]*record{}
+	var visit func(*record)
+	visit = func(r *record) {
+		if r == nil {
+			return
+		}
+		if r.control != nil && r.control.client != 0 && !r.control.retired {
+			current[r.control.client] = r
+		}
+		if edit := gridRetainedEditingRecord(r); edit != nil {
+			visit(edit)
+		}
+		for _, c := range r.children {
+			visit(c)
+		}
+		for _, c := range activeWorkbenchRecords(r) {
+			visit(c)
+		}
+	}
+	visit(w.root)
+	t.clients = current
+	t.publishGridRules()
+	scenes := map[*core.Scene]bool{}
+	if w.body != nil {
+		scenes[w.body.Scene] = true
+	}
+	for _, r := range current {
+		scenes[r.widget.AsWidget().Scene] = true
+	}
+	for scene, previous := range t.boundaries {
+		if !scenes[scene] {
+			scene.EventBoundary = previous
+			delete(t.boundaries, scene)
+		}
+	}
+	for scene := range scenes {
+		t.bindBoundary(scene)
+	}
+	for id := range t.shadows {
+		if current[id] == nil {
+			delete(t.shadows, id)
+		}
+	}
+	for id, request := range t.requests {
+		if request.binding.control.retired || current[request.binding.control.client] != request.binding {
+			t.complete(id, ErrTextInputStale)
+		}
+	}
+	requestTextPublicationScoped(w.window.Ref())
+	return nil
+}
+func lookupTextWindow(window string) *textWindow {
+	textWindows.Lock()
+	defer textWindows.Unlock()
+	t := textWindows.windows[window]
+	if t == nil || !t.acceptsNativeInput() {
+		return nil
+	}
+	return t
+}
+func requestTextPublicationScoped(ref app.WindowRef) {
+	if t := lookupTextWindow(ref.ID()); t != nil && t.window.window.Ref() == ref && !t.closed.Load() {
+		_ = t.pump.Latest(textMessage{Kind: "publication"})
+	}
+}
+func closeTextWindow(w *nativeWindow) {
+	t := w.input.Load()
+	if t == nil || !t.closed.CompareAndSwap(false, true) {
+		return
+	}
+	textWindows.Lock()
+	if textWindows.windows[w.window.ID] == t {
+		delete(textWindows.windows, w.window.ID)
+	}
+	textWindows.Unlock()
+	for scene, previous := range t.boundaries {
+		scene.EventBoundary = previous
+	}
+	clear(t.boundaries)
+	for id := range t.requests {
+		t.complete(id, app.ErrWindowClosed)
+	}
+	t.admission.Lock() // await an already accepted native mutation/commit
+	defer t.admission.Unlock()
+	t.pump.Close() // committed records are refused on teardown, never replayed against destroyed widgets.
+	for t.pump.Stats().Queue.Outstanding > 0 {
+		_ = t.pump.Drain(16, func(textMessage) {})
+	}
+}
+func handleTextEvent(w *nativeWindow, e events.Event) bool {
+	t := w.input.Load()
+	if t == nil {
+		return false
+	}
+	handled, err := t.pump.HandleEvent(e, func(m textMessage) {
+		_ = t.owner.Do(func() {
+			w.rootMu.Lock()
+			defer w.rootMu.Unlock()
+			if !t.acceptsNativeInput() || w.closing.Load() {
+				return
+			}
+			switch m.Kind {
+			case "input":
+				t.apply(m.Input)
+			case "publication":
+				t.publish()
+			case "settle":
+				t.settled(m.Request)
+			}
+		})
+	})
+	if err != nil && w.root != nil && w.root.control != nil {
+		editorError(w.root, err)
+	}
+	return handled
+}
+func (t *textWindow) apply(u textinput.Update) {
+	log.Printf("ELAB_TRACE input at=%d seq=%d client=%d kind=%s delta=%t before=%q text=%q anchor=%d focus=%d ack=%d", time.Now().UnixNano(), u.Sequence, u.ClientID, u.Kind, u.Delta, u.BeforeText, u.Text, u.Anchor, u.Focus, t.ack)
+	defer func() {
+		if r := t.clients[u.ClientID]; r != nil && r.node.ID == "cursor-time-a" {
+			log.Printf("ELAB_TRACE applied at=%d seq=%d epoch=%d shadow=%+v widget=%+v", time.Now().UnixNano(), u.Sequence, r.control.textEpoch, t.shadows[u.ClientID], r.widget.(nativeTextClient).EditingState())
+		}
+	}()
+	if !t.acceptsNativeInput() {
+		return
+	}
+	if u.Sequence <= t.ack {
+		return
+	}
+	defer func() {
+		t.ack = u.Sequence
+		_ = t.owner.Invalidate(t.window.window.ID)
+		requestTextPublicationScoped(t.window.window.Ref())
+	}()
+	r := t.clients[u.ClientID]
+	shadow, known := t.shadows[u.ClientID]
+	if !known || r == nil || r.control.retired || r.control.disabled {
+		return
+	}
+	expanded, err := textinput.ExpandDelta(u, shadow.Text)
+	if err != nil {
+		editorError(r, err)
+		return
+	}
+	decoded, err := textinput.Decode(expanded)
+	if err != nil {
+		editorError(r, err)
+		return
+	}
+	client, ok := r.widget.(nativeTextClient)
+	if !ok || client.IsReadOnly() && r.control.gridEdit == nil || client.EditingState().Text != expanded.BeforeText {
+		return
+	}
+	if r.control.editor == nil {
+		if b := r.control.gridEdit; b != nil {
+			if _, err := b.current(); err != nil || !b.grid.eligible() || !validGridDraft(expanded.Text, b.maximum()) {
+				return
+			}
+		}
+		if shadow.Epoch != r.control.textEpoch {
+			return
+		}
+		field := r.widget.(*core.TextField)
+		if u.Kind == "unmark" && expanded.Text == expanded.BeforeText && r.control.fieldFocusLost.Load() && field.StateIs(states.Focused) {
+			// A -> B -> A can establish a newer Go selection before Cocoa's
+			// outgoing seal arrives. The seal still commits its exact baseline,
+			// but its old native caret must not erase that refocused selection.
+			selection := field.EditingState()
+			decoded.RuneAnchor, decoded.RuneFocus = selection.Anchor, selection.Focus
+		}
+		accepted := applyGridFieldNative(r, expanded.Text, decoded.RuneAnchor, decoded.RuneFocus, decoded.RuneMarkedStart, decoded.RuneMarkedEnd, u.Kind)
+		if !accepted {
+			return
+		}
+		t.shadows[u.ClientID] = textShadow{Text: expanded.Text, Epoch: r.control.textEpoch}
+		if r.control.gridEdit != nil {
+			if err := syncGridDraft(r); err != nil {
+				editorError(r, err)
+			}
+		}
+		return // Single-field Change retains its existing commit-on-change semantics.
+	}
+	b := r.control.editor
+	s := b.model.Snapshot()
+	if s.Revision != shadow.Revision || s.VisibleText != expanded.BeforeText || s.VisibleEpoch != shadow.Epoch || s.SelectionEpoch != shadow.SelectionEpoch {
+		return
+	}
+	before := s.Text
+	if u.Kind == "insert" || u.Kind == "unmark" {
+		normalized := nativeSelection(expanded.Text, editor.Selection{Anchor: decoded.RuneAnchor, Focus: decoded.RuneFocus})
+		decoded.RuneAnchor, decoded.RuneFocus = normalized.Anchor, normalized.Focus
+	}
+	sel := editor.Selection{Anchor: decoded.RuneAnchor, Focus: decoded.RuneFocus}
+	edit := fullEditorEdit(s, expanded.Text, sel, editor.Range{Start: decoded.RuneMarkedStart, End: decoded.RuneMarkedEnd})
+	switch u.Kind {
+	case "mark":
+		err = b.model.Preview(edit)
+	case "insert", "unmark":
+		if s.Composing {
+			edit.Marked = s.Marked
+			// Insert can finish with a different final string. Publish its final
+			// selection/preedit, then seal exactly one committed transaction.
+			edit.Marked = editor.Range{Start: min(sel.Anchor, sel.Focus), End: max(sel.Anchor, sel.Focus)}
+			err = b.model.Preview(edit)
+			if err == nil {
+				err = b.model.CommitComposition()
+			}
+		} else {
+			err = b.model.Apply(edit)
+		}
+	case "cancel":
+		err = b.model.CancelComposition()
+	default:
+		err = ErrTextInputStale
+	}
+	if err != nil {
+		editorError(r, err)
+		return
+	}
+	b.syncing = true
+	accepted := r.widget.(*textcore.Editor).ApplyNativeEditFrom(expanded.BeforeText, expanded.Text, decoded.RuneAnchor, decoded.RuneFocus, decoded.RuneMarkedStart, decoded.RuneMarkedEnd, u.Kind)
+	b.syncing = false
+	if !accepted {
+		editorError(r, ErrTextInputStale)
+		syncEditor(r)
+	}
+	s = b.model.Snapshot()
+	b.revision, b.epoch, b.selectionEpoch = s.Revision, s.VisibleEpoch, s.SelectionEpoch
+	t.shadows[u.ClientID] = textShadow{Text: s.VisibleText, Revision: s.Revision, Epoch: s.VisibleEpoch, SelectionEpoch: s.SelectionEpoch}
+	if s.Text != before {
+		committedEditorChange(r)
+	}
+	_ = r.control.a.Invalidate(r.control.window)
+}
+
+// SettleEditor admits an asynchronous originating-window FIFO barrier. Call
+// while holding Application.Do/Drain. Immediate errors do not call callback;
+// once admitted, callback runs exactly once on the owner while Application is
+// open, including cancellation/retirement errors. Application.Close cancels all
+// user dispatch. One live binding per model is supported. Never wait for the
+// callback on Cocoa main or the application owner.
+func SettleEditor(ctx context.Context, a *app.Application, window string, model *editor.Model, callback func(error)) error {
+	if ctx == nil || a == nil || model == nil || callback == nil {
+		return fmt.Errorf("cogent: settle requires context, application, model and callback")
+	}
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	t := lookupTextWindow(window)
+	if t == nil || t.owner != a || !t.acceptsNativeInput() {
+		return app.ErrWindowClosed
+	}
+	var binding *record
+	for _, r := range t.clients {
+		if r.control.editor != nil && r.control.editor.model == model && !r.control.retired {
+			if binding != nil {
+				return ErrEditorBinding
+			}
+			binding = r
+		}
+	}
+	if binding == nil {
+		return ErrEditorBinding
+	}
+	return t.admitSettlement(ctx, &textSettlement{binding: binding, model: model, ctx: ctx, callback: callback})
+}
+func (t *textWindow) admitSettlement(ctx context.Context, q *textSettlement) error {
+	if len(t.requests) > 0 {
+		return mailbox.ErrFull
+	}
+	if t.nextRequest == ^uint64(0) {
+		return mailbox.ErrID
+	}
+	lifetime, err := scopedWindowContext(t.owner, q.binding.control.windowRef)
+	if err != nil {
+		return err
+	}
+	t.nextRequest++
+	id := t.nextRequest
+	t.requests[id] = q
+	if t.manual {
+		if err := t.pump.Send(textMessage{Kind: "settle", Request: id}); err != nil {
+			delete(t.requests, id)
+			return err
+		}
+		return nil // cancellation is observed on explicit FIFO delivery or owned teardown
+	}
+	stopCtx := context.AfterFunc(ctx, func() { _ = t.owner.Do(func() { t.complete(id, ctx.Err()) }) })
+	stopWindow := context.AfterFunc(lifetime, func() { _ = t.owner.Do(func() { t.complete(id, app.ErrWindowClosed) }) })
+	q.stop = func() bool { first := stopCtx(); second := stopWindow(); return first && second }
+	go func() {
+		err := t.settleDispatch(ctx, t, q.binding.control.client, id)
+		if err != nil {
+			_ = t.owner.Do(func() { t.complete(id, err) })
+		}
+	}()
+	return nil
+}
+
+func (t *textWindow) complete(id uint64, err error) {
+	q := t.requests[id]
+	if q == nil || q.completed {
+		return
+	}
+	q.completed = true
+	delete(t.requests, id)
+	if q.stop != nil {
+		q.stop()
+	}
+	if t.owner.Context().Err() == nil {
+		q.callback(err)
+	}
+}
+func (t *textWindow) settled(id uint64) {
+	q := t.requests[id]
+	if q == nil {
+		return
+	}
+	if err := q.ctx.Err(); err != nil {
+		t.complete(id, err)
+		return
+	}
+	if q.binding.control.retired || t.clients[q.binding.control.client] != q.binding {
+		t.complete(id, ErrTextInputStale)
+		return
+	}
+	if q.field != nil {
+		t.settledField(id, q)
+		return
+	}
+	if q.gridEdit != nil {
+		b := q.gridEdit
+		if b.grid.editing != b {
+			t.complete(id, ErrTextInputStale)
+			return
+		}
+		field := q.binding.widget.(*core.TextField)
+		if _, _, marked := field.NativeCompositionRange(); marked {
+			if !t.manual {
+				t.complete(id, editor.ErrComposition)
+				return
+			}
+			state := field.EditingState()
+			if !applyGridFieldNative(q.binding, state.Text, state.Anchor, state.Focus, -1, -1, "unmark") {
+				t.complete(id, ErrTextInputStale)
+				return
+			}
+		}
+		t.complete(id, syncGridDraft(q.binding))
+		return
+	}
+	syncEditorFromWidget(q.binding, q.binding.widget.(nativeTextClient).EditingState())
+	if q.model.Snapshot().Composing {
+		t.complete(id, editor.ErrComposition)
+		return
+	}
+	t.complete(id, nil)
+}
+
+// Each accepted legacy event publishes its editing result before the native
+// Deque takes the next key or Cocoa record. A tail geometry wake cannot serve as
+// an edit boundary: already queued Undo/input must see the preceding journal.
+func (t *textWindow) bindBoundary(scene *core.Scene) {
+	if scene == nil {
+		return
+	}
+	if _, bound := t.boundaries[scene]; bound {
+		return
+	}
+	previous := scene.EventBoundary
+	t.boundaries[scene] = previous
+	scene.EventBoundary = func(e events.Event) {
+		if previous != nil {
+			previous(e)
+		}
+		if e.Type() == events.Custom || !t.acceptsNativeInput() {
+			return
+		}
+		if !e.Type().IsKey() && !e.Type().IsMouse() {
+			return
+		}
+		_ = t.owner.Do(func() {
+			t.window.rootMu.Lock()
+			defer t.window.rootMu.Unlock()
+			if !t.acceptsNativeInput() || t.window.closing.Load() {
+				return
+			}
+			for _, r := range t.clients {
+				if r.control.retired || r.widget.AsWidget().Scene != scene {
+					continue
+				}
+				if r.control.editor != nil {
+					syncEditorFromWidget(r, r.widget.(nativeTextClient).EditingState())
+				} else if r.node.Kind == ui.TextField {
+					if b := r.control.gridEdit; b != nil {
+						if _, err := b.current(); err != nil || !b.grid.eligible() {
+							continue
+						}
+						if err := syncGridDraft(r); err != nil {
+							editorError(r, err)
+						}
+					} else {
+						refuseOversizedFieldEditing(r)
+					}
+				}
+			}
+		})
+		requestTextPublicationScoped(t.window.window.Ref())
+	}
+}
+
+func nativeSelection(text string, selection editor.Selection) editor.Selection {
+	rs := []rune(text)
+	a, f := selection.Anchor, selection.Focus
+	if a == f {
+		a = textpos.GraphemeAtOrAfter(rs, a)
+		f = a
+	} else {
+		lo, hi := textpos.GraphemeAtOrBefore(rs, min(a, f)), textpos.GraphemeAtOrAfter(rs, max(a, f))
+		if a < f {
+			a, f = lo, hi
+		} else {
+			a, f = hi, lo
+		}
+	}
+	return editor.Selection{Anchor: a, Focus: f}
+}
+
+func (t *textWindow) acceptsNativeInput() bool {
+	if t.closed.Load() || t.owner.Context().Err() != nil {
+		return false
+	}
+	lifetime := t.lifetime.Load()
+	return lifetime != nil && lifetime.ctx.Err() == nil
+}
+
+// Preflight holds one transaction barrier only for an accepted native edit.
+// Cocoa then mutates and immediately commits on the same main-thread call.
+// Teardown first closes admission and waits for this commit before closing the
+// mailbox; cancellation cannot invalidate an accepted reservation mid-mutation.
+func (t *textWindow) preflightInput(u textinput.Update) bool {
+	t.admission.Lock()
+	if !t.acceptsNativeInput() || !t.gridInputAllowed(u) {
+		t.admission.Unlock()
+		return false
+	}
+	ticket, err := t.pump.Preflight(textMessage{Kind: "input", Input: u})
+	if err != nil {
+		t.admission.Unlock()
+		return false
+	}
+	t.pendingInput = ticket
+	return true
+}
+func (t *textWindow) commitInput() error {
+	defer t.admission.Unlock()
+	err := t.pendingInput.Commit()
+	t.pendingInput = nil
+	return err
+}
+
+// Only the worker waits for main-loop publication. A pre-loop render callback
+// must never publish the queue itself or wait while holding application owner:
+// native main may still need that owner to construct a second window.
+func (t *textWindow) awaitNativeTextMain(enqueue func(func())) {
+	if !t.nativeReadyStarted.CompareAndSwap(false, true) {
+		return
+	}
+	ref := t.window.window.Ref()
+	go enqueue(func() {
+		if t.closed.Load() {
+			return
+		}
+		t.nativeReady.Store(true)
+		requestTextPublicationScoped(ref)
+	})
+}
+
+// Legacy fields keep their existing controlled-value refusal contract. Their
+// widget has already edited by the event boundary; exceeding the native bound
+// discards pending local edits and restores the descriptor, not an editor-style
+// atomic transaction/selection or private undo checkpoint.
+func refuseOversizedFieldEditing(r *record) bool {
+	field, ok := r.widget.(*core.TextField)
+	if !ok {
+		return false
+	}
+	state := field.EditingState()
+	if len(state.Text) <= textinput.MaxDocumentBytes && !strings.ContainsRune(state.Text, 0) {
+		return false
+	}
+	editorError(r, fmt.Errorf("cogent: text field native document budget/encoding refused"))
+	// Here and in publication we hold the originating render lock. A deferred
+	// Change refusal merely sets restore and leaves this to origin refresh.
+	_ = syncControl(r, r.node)
+	return true
+}
+
+// Cocoa preflight reads only immutable admission rules published on the owner.
+// The native bridge enforces prospective UTF8 size before mutation; the rule
+// also refuses newline fragments before reserving any ordered credit.
+type gridTextRule struct {
+	maximum             int
+	allowed, singleLine bool
+}
+type gridTextRules struct {
+	clients  map[uint64]gridTextRule
+	retiring uint64
+}
+
+func (t *textWindow) publishGridRules() {
+	rules := &gridTextRules{clients: map[uint64]gridTextRule{}, retiring: t.activeClient}
+	for id, r := range t.clients {
+		rule := gridTextRule{maximum: textinput.MaxDocumentBytes, allowed: !r.control.retired && !r.control.disabled}
+		if b := r.control.gridEdit; b != nil {
+			rule.maximum = b.maximum()
+			rule.allowed = b.writable()
+			rule.singleLine = true
+		}
+		rules.clients[id] = rule
+	}
+	t.rules.Store(rules)
+}
+func (t *textWindow) gridInputAllowed(u textinput.Update) bool {
+	rules := t.rules.Load()
+	if rules == nil {
+		return true
+	}
+	rule, ok := rules.clients[u.ClientID]
+	if !ok {
+		return rules.retiring == u.ClientID && (u.Kind == "unmark" || u.Kind == "cancel")
+	}
+	if !rule.allowed {
+		return rules.retiring == u.ClientID && (u.Kind == "unmark" || u.Kind == "cancel")
+	}
+	return !rule.singleLine || validGridDraft(u.Text, rule.maximum) && (u.Delta || validGridDraft(u.BeforeText, rule.maximum))
+}

@@ -1,0 +1,992 @@
+package cogent
+
+import (
+	"errors"
+	"fmt"
+	"github.com/dshills/vellum/drivers/cogent/internal/textinput"
+	"html"
+	"log"
+	"reflect"
+	"strings"
+	"sync/atomic"
+	"time"
+
+	"cogentcore.org/core/core"
+	"cogentcore.org/core/events"
+	"cogentcore.org/core/styles"
+	"cogentcore.org/core/styles/states"
+	"cogentcore.org/core/styles/units"
+	"cogentcore.org/core/text/textcore"
+	"cogentcore.org/core/tree"
+	"github.com/dshills/vellum/app"
+	"github.com/dshills/vellum/editor"
+	"github.com/dshills/vellum/ui"
+)
+
+// SemanticsProperty exposes stable, typed control metadata on native widgets.
+// It is an adapter seam, not a claim that a platform screen reader consumes it.
+const SemanticsProperty = "vellum.semantics"
+const disabledProperty = "vellum.disabled"
+
+type Semantics struct {
+	ID               string
+	Role             ui.Kind
+	Name, Help       string
+	Disabled         bool
+	Checked          bool
+	Number           float32
+	Text, SelectedID string
+}
+
+// fieldChangeEpoch retires queued ordinary Change snapshots only at explicit
+// settlement. Its nonzero size keeps independently allocated identities distinct.
+type fieldChangeEpoch struct{ marker byte }
+
+// A held gesture belongs to the descriptor at its start, even if a controlled
+// refresh replaces the callback before release. Application context guards must
+// see that originating callback rather than borrow the refreshed descriptor.
+type controlChangeBinding struct{ callback func(ui.ChangeEvent) }
+
+type controlActivationBinding struct{ callback func() }
+
+type controlState struct {
+	a                 *app.Application
+	window            string
+	windowRef         app.WindowRef
+	tabs              *tabState
+	chrome            *chromeState
+	disclosure        *disclosureState
+	split             *splitState
+	choice            *choiceState
+	menu              *menuState
+	dialog            *dialogState
+	wake              func(events.Event)
+	onError           func(error)
+	committed         bool
+	disabled          bool // UI-owner snapshot; queued callbacks never inspect native ancestors.
+	client            uint64
+	textEpoch         uint64
+	editor            *editorBinding
+	grid              *gridBinding
+	outline           *outlineBinding
+	gridEdit          *gridEditBinding
+	placement         *placementBinding
+	fieldChanges      atomic.Pointer[fieldChangeEpoch]
+	sliderGesture     atomic.Pointer[controlChangeBinding]
+	buttonPress       atomic.Pointer[controlActivationBinding]
+	fieldDelivered    string // owner: last delivered value, or controlled value applied by reconciliation
+	fieldState        *core.TextFieldEditingState
+	fieldSelection    *editor.Selection
+	fieldNativeActive atomic.Bool           // native acceptance snapshot; focus callbacks may run outside the application owner
+	fieldFocusLost    atomic.Bool           // retain a loss until native acknowledged deactivation, including refocus
+	retired           bool                  // UI-owner lifetime marker; native tree destruction is window-owned.
+	restore           bool                  // Restore accepted controlled value during the next native refresh.
+	refused           atomic.Pointer[error] // Native-event refusal handed to the owner refresh.
+}
+
+// cacheFieldEditingState copies the accepted widget state on the owner. Native
+// publication can coalesce or select another client after a focus handoff; the
+// semantic cache must also follow completed local/controlled transitions.
+func cacheFieldEditingState(r *record, state core.TextFieldEditingState) bool {
+	if r.control.fieldState != nil && *r.control.fieldState == state {
+		return false
+	}
+	copy := state
+	r.control.fieldState = &copy
+	return true
+}
+
+type tabState struct {
+	pages    map[string]*core.Frame
+	buttons  map[string]*core.Tab
+	order    []string
+	bindings map[string]*tabBinding
+	visible  bool
+}
+type dialogState struct {
+	host                       *accessibilityDialogHost
+	body                       *core.Body
+	active, closing, dismissed bool
+	tabScope                   atomic.Pointer[tabCloseScope]
+}
+
+func mountControl(parent tree.Node, r *record, a *app.Application, window string) (core.Widget, bool, error) {
+	if err := validateNativeEditor(r.node); err != nil {
+		return nil, true, err
+	}
+	if err := ui.ValidateControl(r.node); err != nil {
+		return nil, true, err
+	}
+	c := &controlState{a: a, window: window, windowRef: r.scope, fieldDelivered: r.node.Text}
+	r.control = c
+	var widget core.Widget
+	managedReturned := false
+	defer func() {
+		if !managedReturned && c.placement != nil {
+			disposePlacement(r)
+		}
+		// A source callback can panic or Goexit after registry admission but
+		// before reconcile owns this record. Retire admission first even if
+		// private widget deletion itself has an abnormal return. Do not recover
+		// the caller's panic/Goexit or alter its portable Grid state.
+		if !managedReturned && c.outline != nil {
+			disposeTree(r)
+			if host := c.outline.host; !tree.IsNil(host) {
+				host.AsTree().Delete()
+			}
+		}
+		if !managedReturned && c.grid != nil {
+			disposeGrid(r)
+			if host := c.grid.host; !tree.IsNil(host) {
+				host.AsTree().Delete()
+			}
+		}
+	}()
+	switch r.node.Kind {
+	case ui.Button:
+		button := core.NewButton(parent)
+		button.Styler(func(s *styles.Style) {
+			if r.node.Appearance == ui.ButtonTool {
+				s.Padding.Set(units.Dp(6))
+			}
+		})
+		button.OnClick(func(e events.Event) {
+			if r.node.PlacementSource != nil && e.HasPos() {
+				e.SetHandled()
+				return
+			}
+			guard := placementActivationGuard(r)
+			var press *controlActivationBinding
+			// Native Send clones MouseUp into Base: HasPos is then false,
+			// but the mouse button survives. Keyboard/programmatic activation
+			// carries NoButton and must ignore an earlier canceled pointer press.
+			if e.MouseButton() == events.Left {
+				press = c.buttonPress.Swap(nil)
+			}
+			postControl(r, func() {
+				activate := r.node.Activate
+				if press != nil {
+					activate = press.callback
+				}
+				if guard() && !c.disabled && activate != nil {
+					activate()
+					c.a.Invalidate(c.window)
+				}
+			})
+		})
+		widget = button
+		button.OnFirst(events.MouseDown, func(e events.Event) {
+			if e.MouseButton() == events.Left && r.node.PlacementSource == nil {
+				c.buttonPress.Store(&controlActivationBinding{callback: r.node.Activate})
+			}
+			beginPlacement(r, e)
+		})
+		// The native router emits Click after MouseUp listeners finish. Do not
+		// clear the origin on MouseUp. Click consumes it; a canceled press is
+		// replaced by the next pointer press and ignored by keyboard activation.
+	case ui.Canvas2D:
+		widget = mountManagedCanvas(parent, r)
+	case ui.MenuButton:
+		widget = mountMenuButton(parent, r)
+	case ui.Icon:
+		icon := core.NewIcon(parent)
+		icon.Styler(func(s *styles.Style) { s.IconSize.Set(units.Dp(24)) })
+		icon.FinalStyler(func(s *styles.Style) { applyStyle(s, r.node, r.theme) })
+		widget = icon
+	case ui.Image:
+		widget = tree.New[managedImage](parent)
+	case ui.SplitPane:
+		widget = mountSplit(parent, r)
+	case ui.Toolbar, ui.StatusBar, ui.FormGroup:
+		widget = mountChrome(parent, r)
+	case ui.Disclosure:
+		widget = mountDisclosure(parent, r)
+	case ui.Checkbox:
+		widget = core.NewSwitch(parent).SetType(core.SwitchCheckbox)
+	case ui.RadioGroup, ui.SegmentedControl, ui.ListBox:
+		widget = core.NewFrame(parent)
+		c.choice = &choiceState{buttons: make(map[string]*core.Switch)}
+		widget.AsWidget().Styler(func(s *styles.Style) {
+			s.Direction = styles.Row
+			if choiceVertical(r.node) {
+				s.Direction = styles.Column
+			}
+			if r.node.Kind == ui.SegmentedControl {
+				s.Gap.Zero()
+			}
+			if r.node.Kind == ui.ListBox {
+				styleListBox(s)
+			}
+		})
+	case ui.Switch:
+		widget = core.NewSwitch(parent).SetType(core.SwitchSwitch)
+	case ui.ToggleButton:
+		widget = core.NewSwitch(parent).SetType(core.SwitchSegmentedButton)
+	case ui.ProgressBar:
+		widget = core.NewMeter(parent)
+	case ui.ProgressRing:
+		widget = core.NewMeter(parent).SetType(core.MeterCircle)
+	case ui.ProgressGauge:
+		widget = core.NewMeter(parent).SetType(core.MeterSemicircle)
+	case ui.Separator:
+		widget = core.NewSeparator(parent)
+	case ui.Selector:
+		widget = core.NewChooser(parent)
+	case ui.Slider:
+		slider := core.NewSlider(parent)
+		slider.OnFirst(events.SlideStart, func(events.Event) {
+			c.sliderGesture.Store(&controlChangeBinding{callback: r.node.Change})
+		})
+		// The Slider's own SlideStop handler emits Change first; dispatchControl
+		// captures the origin before this later handler retires the gesture.
+		slider.OnFinal(events.SlideStop, func(events.Event) { c.sliderGesture.Store(nil) })
+		widget = slider
+	case ui.NumberField:
+		widget = core.NewSpinner(parent)
+	case ui.TextField:
+		c.fieldChanges.Store(&fieldChangeEpoch{})
+		c.client = textClientID.Add(1)
+		c.textEpoch = 1
+		field := core.NewTextField(parent)
+		field.SetNativeEditingListener(func(state core.TextFieldEditingState) {
+			if r.node.ID == "cursor-time-a" {
+				log.Printf("ELAB_TRACE editing at=%d nativeactive=%t lost=%t state=%+v", time.Now().UnixNano(), c.fieldNativeActive.Load(), c.fieldFocusLost.Load(), state)
+			}
+			requestTextPublicationScoped(c.windowRef)
+		})
+		if r.node.ID == "cursor-time-a" {
+			field.OnFirst(events.KeyChord, func(e events.Event) {
+				log.Printf("ELAB_TRACE legacy-key at=%d event=%v nativeactive=%t", time.Now().UnixNano(), e, c.fieldNativeActive.Load())
+			})
+		}
+		field.SetNativeFocusLostHandler(func() bool {
+			// Focus can change from either the scene loop or an owner refresh.
+			// Do not inspect widgets, records or owner-only native shadows here.
+			t := lookupTextWindow(window)
+			if t == nil || t.window.window.Ref() != c.windowRef || !t.nativeReady.Load() || !t.acceptsNativeInput() || (!c.fieldNativeActive.Load() && !c.fieldFocusLost.Load()) {
+				return false
+			}
+			c.fieldFocusLost.Store(true)
+			requestTextPublicationScoped(c.windowRef)
+			return true
+		})
+		widget = field
+	case ui.DataTree:
+		var err error
+		widget, err = mountTree(parent, r, a, window)
+		if err != nil {
+			return nil, true, err
+		}
+	case ui.DataGrid:
+		var err error
+		widget, err = mountGrid(parent, r, a, window)
+		if err != nil {
+			return nil, true, err
+		}
+	case ui.MultilineText:
+		c.client = textClientID.Add(1)
+		widget = mountEditor(parent, r)
+	case ui.Scroll:
+		w := newAccessibilityScrollHost(parent)
+		w.Styler(func(s *styles.Style) { s.Direction = styles.Column; s.Overflow.Set(styles.OverflowAuto) })
+		widget = w
+	case ui.Tabs:
+		widget = core.NewTabs(parent)
+		c.tabs = &tabState{pages: map[string]*core.Frame{}, buttons: map[string]*core.Tab{}, bindings: map[string]*tabBinding{}}
+	case ui.Dialog:
+		w := core.NewFrame(parent)
+		w.Styler(func(s *styles.Style) { s.Display = styles.DisplayNone })
+		widget = w
+		c.dialog = &dialogState{host: newAccessibilityDialogHost(w, r)}
+		c.dialog.host.Styler(func(s *styles.Style) { s.Direction = styles.Column; s.Grow.Set(1, 1) })
+	default:
+		r.control = nil
+		return nil, false, nil
+	}
+	r.widget = widget
+	if r.node.Kind == ui.ProgressBar || r.node.Kind == ui.ProgressRing || r.node.Kind == ui.ProgressGauge || r.node.Kind == ui.Separator || r.node.Kind == ui.Slider {
+		if r.node.Kind != ui.Slider {
+			widget.AsWidget().Styler(func(s *styles.Style) {
+				s.Direction = styles.Row
+				if r.node.Orientation == ui.Vertical {
+					s.Direction = styles.Column
+				}
+			})
+		}
+		// These native controls set dimensions/growth in FinalStyler. Managed
+		// explicit styles must run after those defaults, including restoration.
+		widget.AsWidget().FinalStyler(func(s *styles.Style) { applyStyle(s, r.node, r.theme) })
+	}
+	if r.node.Kind == ui.Checkbox || r.node.Kind == ui.Switch || r.node.Kind == ui.ToggleButton || r.node.Kind == ui.Selector || r.node.Kind == ui.Slider || r.node.Kind == ui.NumberField || r.node.Kind == ui.TextField {
+		widget.AsWidget().OnChange(func(e events.Event) { dispatchControl(r, e) })
+	}
+	if err := prepareControl(r, r.node); err != nil {
+		return nil, true, err
+	}
+	if err := syncControl(r, ui.Node{}); err != nil {
+		return nil, true, err
+	}
+	if c.grid != nil && !c.grid.live() {
+		return nil, true, ErrGridClosed
+	}
+	if c.outline != nil && !c.outline.live() {
+		return nil, true, ErrTreeClosed
+	}
+	managedReturned = true
+	return widget, true, nil
+}
+
+func controlDisabled(r *record) bool {
+	if r.node.Disabled || r.node.Kind == ui.MenuButton && !ui.MenuEnabled(r.node) {
+		return true
+	}
+	for p := r.widget.AsTree().Parent; p != nil; p = p.AsTree().Parent {
+		if disabled, ok := p.AsTree().Property(disabledProperty).(bool); ok && disabled {
+			return true
+		}
+	}
+	return false
+}
+func postControl(r *record, fn func()) {
+	if tree.IsNil(r.widget) {
+		return
+	}
+	if err := r.control.a.PostWindow(r.control.windowRef, func() {
+		if !r.control.retired {
+			fn()
+		}
+	}); err != nil {
+		if errors.Is(err, app.ErrClosed) || errors.Is(err, app.ErrWindowClosed) {
+			return
+		}
+		// Refusal can occur outside the owner. Coalesce the error atomically;
+		// accepted values and user error callbacks are handled by native refresh.
+		r.control.refused.Store(&err)
+		r.control.a.Invalidate(r.control.window)
+	}
+}
+func dispatchControl(r *record, e events.Event) {
+	if r.control == nil || r.control.gridEdit != nil {
+		return
+	} // private draft is synchronized only at the originating boundary/barrier
+	change := ui.ChangeEvent{ID: r.node.ID, Kind: r.node.Kind}
+	callback := r.node.Change
+	if change.Kind == ui.Slider {
+		if origin := r.control.sliderGesture.Load(); origin != nil {
+			callback = origin.callback
+		}
+	}
+	switch w := r.widget.(type) {
+	case *core.Switch:
+		change.Checked = w.IsChecked()
+	case *core.Chooser:
+		id, ok := w.CurrentItem.Value.(string)
+		if !ok || w.CurrentIndex < 0 {
+			return
+		}
+		change.SelectedID = id
+	case *core.Slider:
+		change.Number = w.Value
+	case *core.Spinner:
+		change.Number = w.Value
+	case *core.TextField:
+		change.Text = w.EditingState().Text
+	default:
+		return
+	}
+	if change.Kind == ui.TextField && r.node.ID == "cursor-time-a" {
+		log.Printf("ELAB_TRACE queue-change at=%d text=%q", time.Now().UnixNano(), change.Text)
+	}
+	fieldEpoch := r.control.fieldChanges.Load()
+	postControl(r, func() {
+		if change.Kind == ui.TextField && r.control.fieldChanges.Load() != fieldEpoch {
+			return // explicit settlement already published this field's final value
+		}
+		// Discrete controls keep their established latest-descriptor delivery.
+		// A slider change carries the callback of its originating interaction.
+		if change.Kind != ui.Slider {
+			callback = r.node.Change
+		}
+		if r.control.disabled || r.node.Change == nil || callback == nil {
+			requestControlRestore(r)
+			return
+		}
+		switch change.Kind {
+		case ui.TextField:
+			if len(change.Text) > textinput.MaxDocumentBytes || strings.ContainsRune(change.Text, 0) {
+				editorError(r, fmt.Errorf("cogent: text field native document budget/encoding refused"))
+				return
+			}
+		case ui.Selector:
+			enabled := false
+			for _, o := range r.node.Options {
+				if o.ID == change.SelectedID && !o.Disabled {
+					enabled = true
+					break
+				}
+			}
+			if !enabled {
+				requestControlRestore(r)
+				return
+			}
+		case ui.Slider, ui.NumberField:
+			value, ok := ui.ClampNumeric(change.Number, r.node.Numeric)
+			if !ok {
+				requestControlRestore(r)
+				return
+			}
+			change.Number = value
+		}
+		if change.Kind == ui.TextField {
+			r.control.fieldDelivered = change.Text
+		}
+		if change.Kind == ui.TextField && r.node.ID == "cursor-time-a" {
+			log.Printf("ELAB_TRACE deliver-change at=%d text=%q", time.Now().UnixNano(), change.Text)
+		}
+		callback(change)
+		r.control.committed = true
+		r.control.a.Invalidate(r.control.window)
+	})
+}
+
+// This function only updates owner fields/model invalidation. A Drain may run
+// from another window's event loop, where this widget's native lock is absent.
+func requestControlRestore(r *record) {
+	r.control.restore = true
+	r.control.a.Invalidate(r.control.window)
+}
+
+func syncSemantics(r *record) {
+	name := r.node.Accessibility.Name
+	if name == "" || ((r.node.Kind == ui.Icon || r.node.Kind == ui.Image) && strings.TrimSpace(name) == "") {
+		name = r.node.Text
+	}
+	disabled := controlDisabled(r)
+	sem := Semantics{ID: r.node.ID, Role: r.node.Kind, Name: name, Help: r.node.Accessibility.Help, Disabled: disabled, Checked: r.node.Checked, Number: r.node.Number, Text: r.node.Text, SelectedID: r.node.SelectedID}
+	r.widget.AsTree().SetProperty(SemanticsProperty, sem)
+	r.widget.AsTree().SetProperty(disabledProperty, r.node.Disabled)
+	r.widget.AsWidget().Tooltip = html.EscapeString(r.node.Accessibility.Help)
+	r.widget.AsWidget().SetState(disabled, states.Disabled)
+	if r.control != nil && r.control.dialog != nil {
+		r.control.dialog.host.SetProperty(disabledProperty, disabled)
+	}
+}
+
+func syncControl(r *record, previous ui.Node) error {
+	if err := ui.ValidateControl(r.node); err != nil {
+		return err
+	}
+	if r.control == nil {
+		return nil
+	}
+	// reconcile attaches the full topology before syncRecord visits parents then
+	// children; parent semantic properties are current before this snapshot.
+	r.control.disabled = controlDisabled(r)
+	if err := syncPlacement(r); err != nil {
+		return err
+	}
+	refused := r.control.refused.Swap(nil)
+	restoring := r.control.restore || refused != nil
+	committed := r.control.committed || restoring
+	r.control.committed = false
+	r.control.restore = false
+	if r.node.Kind == ui.DataGrid || r.node.Kind == ui.DataTree {
+		if refused != nil {
+			r.widget.AsTree().SetProperty("vellum.control-error", *refused)
+			if r.control.onError != nil {
+				r.control.onError(*refused)
+			}
+		}
+		if r.node.Kind == ui.DataTree {
+			return syncTree(r)
+		}
+		return syncGrid(r)
+	}
+	nativeValueChanged := false
+	if r.control.choice != nil {
+		err := syncChoice(r, previous)
+		if refused != nil {
+			r.widget.AsTree().SetProperty("vellum.control-error", *refused)
+			if r.control.onError != nil {
+				r.control.onError(*refused)
+			}
+		}
+		return err
+	}
+	if r.control.chrome != nil {
+		syncChrome(r, previous)
+	}
+	if r.control.disclosure != nil {
+		syncDisclosure(r)
+	}
+	if r.control.split != nil {
+		syncSplit(r, previous)
+	}
+	switch w := r.widget.(type) {
+	case *core.Button:
+		if r.control.menu != nil {
+			syncMenuButton(r, previous)
+		}
+		w.SetText(html.EscapeString(r.node.Text)).SetIcon(nativeSymbol(r.node.Icon)).SetType(nativeButtonAppearance(r.node.Appearance))
+	case *core.Icon:
+		w.SetIcon(nativeSymbol(r.node.Icon))
+	case *managedImage:
+		w.source, w.fit = r.node.Image, r.node.Fit
+	case *core.Switch:
+		// Resetting Checked alone leaves a segmented toggle's checked styling
+		// behind when the owner declines a native change without changing state.
+		nativeValueChanged = w.IsChecked() != r.node.Checked
+		w.SetText(html.EscapeString(r.node.Text)).SetChecked(r.node.Checked)
+		if r.node.Kind == ui.ToggleButton {
+			syncToggleSymbol(w, r.node.Icon)
+		}
+	case *core.Chooser:
+		w.Items = nil
+		for _, o := range r.node.Options {
+			if !o.Disabled {
+				w.Items = append(w.Items, core.ChooserItem{Value: o.ID, Text: html.EscapeString(o.Label)})
+			}
+		}
+		chosen := -1
+		for i, o := range w.Items {
+			if o.Value == r.node.SelectedID {
+				chosen = i
+				break
+			}
+		}
+		if chosen >= 0 {
+			w.SetCurrentIndex(chosen)
+		} else {
+			label := r.node.Text
+			for _, o := range r.node.Options {
+				if o.ID == r.node.SelectedID {
+					label = o.Label
+				}
+			}
+			w.CurrentItem = core.ChooserItem{}
+			w.SetPlaceholder(html.EscapeString(label))
+		}
+	case *core.Slider:
+		n := r.node.Numeric
+		w.Min = n.Min
+		w.Max = n.Max
+		w.Step = n.Step
+		w.PageStep = n.Step
+		w.EnforceStep = false
+		w.SetValue(r.node.Number)
+	case *core.Meter:
+		w.Min, w.Max, w.Value = 0, 1, r.node.Number
+		w.Text = ""
+		switch r.node.Kind {
+		case ui.ProgressRing:
+			w.Type, w.Text = core.MeterCircle, html.EscapeString(r.node.Text)
+		case ui.ProgressGauge:
+			w.Type, w.Text = core.MeterSemicircle, html.EscapeString(r.node.Text)
+		default:
+			w.Type = core.MeterLinear
+		}
+	case *core.Spinner:
+		w.Precision = 9 // round-trip every float32 without crossing tight bounds
+		n := r.node.Numeric
+		w.SetMin(n.Min).SetMax(n.Max)
+		w.Step = n.Step
+		w.EnforceStep = false
+		if previous.Number != r.node.Number || previous.Numeric != r.node.Numeric || committed {
+			w.SetValue(r.node.Number)
+		}
+	case *textcore.Editor:
+		syncEditor(r)
+	case *core.TextField:
+		if previous.Text != r.node.Text {
+			r.control.textEpoch++
+		}
+		if previous.Text != r.node.Text || committed {
+			w.SetText(r.node.Text)
+			r.control.fieldDelivered = r.node.Text
+		}
+		if r.control.fieldSelection != nil {
+			selection := r.control.fieldSelection
+			r.control.fieldSelection = nil
+			w.SetEditingSelection(selection.Anchor, selection.Focus)
+		}
+		// Reconciliation is followed by the current semantic publication. Read
+		// editing state, rather than descriptor text, to preserve live preedit.
+		cacheFieldEditingState(r, w.EditingState())
+	case *core.Tabs:
+		if err := prepareControl(r, r.node); err != nil {
+			return err
+		}
+		syncTabsPresentation(r)
+		for _, o := range r.node.Options {
+			b := r.control.tabs.buttons[o.ID]
+			b.SetText(html.EscapeString(o.Label)).SetState(controlDisabled(r) || o.Disabled, states.Disabled)
+		}
+		w.SelectTabByName(r.node.SelectedID)
+		selectTabButtons(r, r.node.SelectedID)
+	}
+	syncSemantics(r)
+	if r.control.dialog != nil {
+		syncDialog(r)
+	}
+	// Value setters preserve identity; a redraw is necessary when externally
+	// controlled values/option labels change, including same-length option edits.
+	if nativeValueChanged || restoring || previous.Image != r.node.Image || previous.Fit != r.node.Fit || previous.Icon != r.node.Icon || previous.Appearance != r.node.Appearance || previous.Orientation != r.node.Orientation || previous.SoftWrap != r.node.SoftWrap || previous.Text != r.node.Text || previous.Checked != r.node.Checked || previous.Number != r.node.Number || previous.Numeric != r.node.Numeric || previous.SelectedID != r.node.SelectedID || previous.Disabled != r.node.Disabled || previous.Accessibility != r.node.Accessibility || !reflect.DeepEqual(previous.Options, r.node.Options) {
+		r.widget.AsWidget().Update()
+	}
+	if refused != nil {
+		r.widget.AsTree().SetProperty("vellum.control-error", *refused)
+		if r.control.onError != nil {
+			r.control.onError(*refused)
+		}
+	}
+	return nil
+}
+
+// prepareControl allocates child hosts before the retained tree is reparented.
+// Only newly needed tabs are allocated; removed pages are disposed after their
+// managed descendants have moved, in finishControl.
+func prepareControl(r *record, n ui.Node) error {
+	if err := validateNativeEditor(n); err != nil {
+		return err
+	}
+	if r.control != nil && r.control.choice != nil {
+		return prepareChoice(r, n)
+	}
+	if r.control != nil && r.control.split != nil {
+		return prepareSplit(r, n)
+	}
+	if r.control == nil || r.control.tabs == nil {
+		return nil
+	}
+	if err := ui.ValidateControl(n); err != nil {
+		return err
+	}
+	c := r.control.tabs
+	w := r.widget.(*core.Tabs)
+	for _, o := range n.Options {
+		if c.pages[o.ID] == nil {
+			page, button := w.NewTab(o.ID)
+			button.SetText(html.EscapeString(o.Label))
+			c.pages[o.ID] = page
+			c.buttons[o.ID] = button
+			c.order = append(c.order, o.ID)
+			id := o.ID
+			binding := bindTab(r, id, button)
+			button.OnClick(func(e events.Event) {
+				postControl(r, func() {
+					enabled := false
+					for _, current := range r.node.Options {
+						if current.ID == id {
+							enabled = !r.control.disabled && !current.Disabled
+							break
+						}
+					}
+					if !enabled || r.node.Change == nil || r.control.tabs.bindings[id] != binding || !r.control.tabs.visible {
+						requestControlRestore(r)
+						return
+					}
+					r.node.Change(ui.ChangeEvent{ID: r.node.ID, Kind: ui.Tabs, SelectedID: id})
+					r.control.a.Invalidate(r.control.window)
+				})
+			})
+		}
+	}
+	return nil
+}
+func childHost(r *record, id string) (host tree.Node) {
+	defer func() {
+		if !tree.IsNil(host) && r.control != nil {
+			bindWindowScope(host, r.control.a, r.scope)
+		}
+	}()
+	if r.control != nil {
+		if r.control.split != nil {
+			for i, childID := range r.control.split.plannedIDs {
+				if childID == id {
+					return r.control.split.panes[i]
+				}
+			}
+		}
+		if r.control.chrome != nil {
+			return r.control.chrome.host
+		}
+		if r.control.disclosure != nil {
+			return r.control.disclosure.host
+		}
+		if r.control.tabs != nil {
+			return r.control.tabs.pages[id]
+		}
+		if r.control.dialog != nil {
+			return r.control.dialog.host
+		}
+	}
+	return r.widget
+}
+func finishControl(r *record, n ui.Node) {
+	if r.control != nil && r.control.split != nil {
+		for i, child := range r.children {
+			r.control.split.panes[i].Children = []tree.Node{child.widget}
+			r.control.split.childIDs[i] = n.Children[i].ID
+		}
+	}
+	if r.control != nil && r.control.choice != nil {
+		finishChoice(r, n)
+	}
+	if r.control != nil && r.control.outline != nil {
+		r.control.outline.previous = nil
+	}
+	if r.control != nil && r.control.grid != nil {
+		r.control.grid.previous = nil
+	}
+	if r.control == nil || r.control.tabs == nil {
+		return
+	}
+	c := r.control.tabs
+	w := r.widget.(*core.Tabs)
+	desired := map[string]bool{}
+	for _, o := range n.Options {
+		desired[o.ID] = true
+	}
+	for i := len(c.order) - 1; i >= 0; i-- {
+		id := c.order[i]
+		if !desired[id] {
+			w.DeleteTabIndex(i)
+			delete(c.pages, id)
+			if binding := c.bindings[id]; binding != nil {
+				binding.closeEpoch.Store(nil)
+				binding.closeWidget.Store(nil)
+			}
+			delete(c.bindings, id)
+			delete(c.buttons, id)
+			c.order = append(c.order[:i], c.order[i+1:]...)
+		}
+	}
+	pages := make([]tree.Node, len(n.Options))
+	buttons := make([]tree.Node, len(n.Options))
+	c.order = make([]string, len(n.Options))
+	for i, o := range n.Options {
+		pages[i] = c.pages[o.ID]
+		buttons[i] = c.buttons[o.ID]
+		c.order[i] = o.ID
+	}
+	// Cogent Tabs owns two internal frames; never replace the Tabs child array.
+	w.Child(0).AsTree().Children = buttons
+	w.Child(1).AsTree().Children = pages
+	w.SelectTabByName(n.SelectedID)
+	selectTabButtons(r, n.SelectedID)
+}
+
+// Native selection may return early when a reordered page retains the same
+// numeric stack index. Set button states from stable model IDs independently.
+func selectTabButtons(r *record, selected string) {
+	for id, button := range r.control.tabs.buttons {
+		button.SetSelected(id == selected)
+	}
+}
+
+func syncDialog(r *record) {
+	d := r.control.dialog
+	if !r.node.Open || controlDisabled(r) || !accessibilityDialogVisible(r) {
+		d.dismissed = false
+		closeDialog(r)
+		return
+	}
+	if d.active || d.dismissed {
+		return
+	}
+	scene := r.widget.AsWidget().Scene
+	if scene == nil || scene.RenderWindow() == nil {
+		return
+	}
+	body := prepareDialogBody(r)
+	d.active = true
+	body.NewDialog(r.widget).Run()
+}
+
+// prepareDialogBody keeps one stable child host across native modal scenes.
+func prepareDialogBody(r *record) *core.Body {
+	d := r.control.dialog
+	scope := &tabCloseScope{}
+	d.tabScope.Store(scope)
+	d.body = core.NewBody(r.node.Text)
+	body := d.body
+	bindAccessibilityDialogKeyboard(r, body)
+	body.Scene.OnFirst(events.Custom, func(e events.Event) {
+		if r.control.wake != nil {
+			r.control.wake(e)
+		}
+	})
+
+	withdrawDataGeometry(r)
+	tree.MoveToParent(d.host, body)
+	d.host.SetScene(body.Scene)
+	body.OnClose(func(e events.Event) {
+		scope.closed.Store(true) // revoke this lifetime before retaining/parking native children
+		// Preserve retained children before Cogent destroys the closing Scene.
+		withdrawDataGeometry(r)
+		tree.MoveToParent(d.host, r.widget)
+		d.host.SetScene(r.widget.AsWidget().Scene)
+		d.active = false
+		d.body = nil
+		if d.closing {
+			return
+		}
+		d.dismissed = true
+		postControl(r, func() {
+			if r.node.Dismiss != nil {
+				r.node.Dismiss()
+			}
+			r.control.a.Invalidate(r.control.window)
+		})
+	})
+	body.AddBottomBar(func(bar *core.Frame) { body.AddCancel(bar).SetText("Close") })
+	return body
+}
+
+func closeDialog(r *record) {
+	d := r.control.dialog
+	if d == nil || d.body == nil {
+		return
+	}
+	body := d.body
+	d.closing = true
+	withdrawDataGeometry(r)
+	tree.MoveToParent(d.host, r.widget)
+	d.host.SetScene(r.widget.AsWidget().Scene)
+	body.Close()
+	d.body = nil
+	d.active = false
+	d.closing = false
+}
+func flushDialogs(r *record) {
+	if r == nil {
+		return
+	}
+	if r.control != nil && r.control.dialog != nil {
+		syncDialog(r)
+	}
+	for _, c := range r.children {
+		flushDialogs(c)
+	}
+	for _, c := range activeWorkbenchRecords(r) {
+		flushDialogs(c)
+	}
+}
+
+// bindControlWake keeps queued owner work flowing while a modal owns events.
+func bindControlWake(r *record, wake func(events.Event), onError ...func(error)) {
+	if r == nil {
+		return
+	}
+	if r.control != nil {
+		r.control.wake = wake
+		if len(onError) > 0 {
+			r.control.onError = onError[0]
+		}
+	}
+	if edit := gridEditingRecord(r); edit != nil {
+		bindControlWake(edit, wake, onError...)
+	}
+	for _, c := range r.children {
+		bindControlWake(c, wake, onError...)
+	}
+	for _, c := range activeWorkbenchRecords(r) {
+		bindControlWake(c, wake, onError...)
+	}
+}
+
+func disposeControl(r *record) {
+	if r == nil {
+		return
+	}
+	if r.control != nil {
+		disposePlacement(r)
+		r.control.retired = true
+		r.control.sliderGesture.Store(nil)
+		r.control.buttonPress.Store(nil)
+		if r.control.tabs != nil {
+			for _, binding := range r.control.tabs.bindings {
+				binding.closeEpoch.Store(nil)
+				binding.closeWidget.Store(nil)
+			}
+		}
+		if r.control.menu != nil {
+			requestMenuClose(r)
+			flushMenuClose(r) // disposal is originating reconciliation/native teardown
+		}
+		if image, ok := r.widget.(*managedImage); ok {
+			image.source = nil
+			r.node.Image = nil
+		}
+		r.control.fieldFocusLost.Store(false)
+		r.control.fieldNativeActive.Store(false)
+		if field, ok := r.widget.(*core.TextField); ok {
+			field.SetNativeFocusLostHandler(nil)
+			field.SetNativeEditingListener(nil)
+		}
+		disposeEditor(r)
+		disposeGrid(r)
+		disposeTree(r)
+	}
+	if r.control != nil && r.control.dialog != nil {
+		closeDialog(r)
+	}
+}
+func disposeControlTree(r *record) {
+	if r == nil {
+		return
+	}
+	disposeControl(r)
+	// Workbench extensions own retained records outside descriptor Children.
+	// Dispose those bindings under the same owner before widget destruction.
+	if extension, ok := r.node.Custom.(interface{ disposeControlRecords() }); r.node.Kind == ui.Extension && ok {
+		extension.disposeControlRecords()
+	}
+	for _, c := range r.children {
+		disposeControlTree(c)
+	}
+}
+
+func applyFocus(root *record, request ui.FocusRequest, last *ui.FocusRequest) error {
+	return applyAccessibleFocus(root, request, last)
+}
+
+// A Tabs descriptor focuses an enabled header button, never its nonfocusable
+// native container. Prefer the selected option, then the first enabled option.
+func focusWidget(r *record) (core.Widget, error) {
+	if r.control != nil && r.control.disclosure != nil {
+		return r.control.disclosure.header, nil
+	}
+	if r.control != nil && r.control.split != nil {
+		return r.control.split.handle, nil
+	}
+	if edit := gridEditingRecord(r); edit != nil && !edit.node.Disabled {
+		return edit.widget, nil
+	}
+	if r.control != nil && r.control.choice != nil {
+		return choiceFocusWidget(r)
+	}
+	if r.node.Kind != ui.Tabs {
+		return r.widget, nil
+	}
+	var first *core.Tab
+	for _, option := range r.node.Options {
+		if option.Disabled {
+			continue
+		}
+		button := r.control.tabs.buttons[option.ID]
+		if tree.IsNil(button) {
+			continue
+		}
+		if option.ID == r.node.SelectedID {
+			return button, nil
+		}
+		if first == nil {
+			first = button
+		}
+	}
+	if first != nil {
+		return first, nil
+	}
+	return nil, fmt.Errorf("cogent: focus target %q has no enabled tab", r.node.ID)
+}
