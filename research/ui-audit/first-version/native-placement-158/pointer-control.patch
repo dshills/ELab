@@ -1,0 +1,32 @@
+diff --git a/desktop/placement_offscreen_test.go b/desktop/placement_offscreen_test.go
+index 677098a..3dcd770 100644
+--- a/desktop/placement_offscreen_test.go
++++ b/desktop/placement_offscreen_test.go
+@@ -71,6 +71,27 @@ func TestMountedPlacementOneClickUsesTypedCoordinate(t *testing.T) {
+ 	}
+ }
+ 
++func TestMountedPlacementSequentialCoordinates(t *testing.T) {
++	s, cleanup := testScreen(t)
++	t.Cleanup(cleanup)
++	agentAction(t, s.service, "drawing.tool.set", workbench.ToolParams{Tool: "place", Kind: "resistor"})
++	agentAction(t, s.service, "drawing.position.set", workbench.PositionParams{Position: workbench.Point{X: -200}})
++	m := mountedPlacementControls(t, s)
++	for _, field := range []struct{ id, text string }{{"position-x", "0"}, {"position-y", "-110"}} {
++		clickMountedControl(t, m, field.id)
++		m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
++		for _, r := range field.text {
++			m.input(cogent.ManualInput{Type: events.KeyChord, Rune: r})
++		}
++		m.frame()
++	}
++	clickMountedControl(t, m, "place-at-position")
++	after := s.service.Snapshot()
++	if s.errorMessage != "" || len(after.Components) != 1 || after.Components[0].Position != (workbench.Point{Y: -110}) {
++		t.Fatalf("sequential coordinate placement: components=%+v drawing=%+v error=%s", after.Components, after.Drawing, s.errorMessage)
++	}
++}
++
+ func TestMountedPlacementLabelAndBatchedCoordinatesMatchAgent(t *testing.T) {
+ 	for _, kind := range []string{"resistor", "net-label"} {
+ 		t.Run(kind, func(t *testing.T) {

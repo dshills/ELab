@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "case": "blank-construction",
+      "pid": 31291,
+      "exit_code": -15,
+      "normal_exit": false,
+      "error": "AssertionError: ('components', [{'id': 'V1', 'kind': 'dc-source', 'name': 'DC source', 'terminals': ['positive', 'negative'], 'position': {'x': -200, 'y': 0}, 'value': 5, 'unit': 'V', 'model': 'ideal-dc.v1', 'rotation': 0}, {'id': 'R1', 'kind': 'resistor', 'name': 'Resistor', 'terminals': ['1', '2'], 'position': {'x': 0, 'y': 0}, 'value': 1000, 'unit': '\u03a9', 'model': 'ideal-resistor.v1', 'rotation': 0}], [{'id': 'V1', 'kind': 'dc-source', 'name': 'DC source', 'terminals': ['positive', 'negative'], 'position': {'x': -200, 'y': 0}, 'value': 5, 'unit': 'V', 'model': 'ideal-dc.v1', 'rotation': 0}, {'id': 'R1', 'kind': 'resistor', 'name': 'Resistor', 'terminals': ['1', '2'], 'position': {'x': 0, 'y': -110}, 'value': 1000, 'unit': '\u03a9', 'model': 'ideal-resistor.v1', 'rotation': 0}])"
+    },
+    {
+      "case": "accessibility-press",
+      "pid": 32871,
+      "exit_code": 0,
+      "normal_exit": true,
+      "error": null
+    },
+    {
+      "case": "pointer-control",
+      "pid": 33746,
+      "exit_code": 0,
+      "normal_exit": true,
+      "error": null
+    }
+  ],
+  "ps_return_code": 1,
+  "ps_stdout": "",
+  "all_original_pids_absent": true
+}

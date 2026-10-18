@@ -1,5 +1,7 @@
 # First-version UI walkthrough and issue list
 
+October 18 update: **[open /158 coordinate-placement blocker](native-placement-158/README.md)**. Accessibility-index Place uses accepted Y=0 despite a visible private −110 draft; direct pointer Place succeeds. A mounted descriptor reproduction fails and its pointer control passes. The blank LED check stopped before wiring. No repair/version/promotion is claimed; the delivery plan now prioritizes a bounded numeric commit-barrier repair. Owner acceptance remains “Not tried yet.”
+
 October 17, 2026. **Private review boundary reached; wider release/MVP qualification remains open.** These are direct observations of ELab's actual native window, using pointer, keyboard and accessibility actions. They are not participant results, a screen-reader study or visible-latency measurements.
 
 ## Configuration and boundaries

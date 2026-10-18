@@ -1,0 +1,8 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedPlacementSequentialCoordinates
+    placement_offscreen_test.go:94: sequential coordinate placement: components=[{Sine:<nil> Pulse:<nil> WiperPosition:<nil> SwitchClosed:<nil> Label: InitialVoltage:<nil> InitialCurrent:<nil> ID:R1 Kind:resistor Name:Resistor Terminals:[1 2] Position:{X:0 Y:0} Value:1000 Unit:Ω Model:ideal-resistor.v1 Rotation:0}] drawing={Tool:select Kind:resistor Position:{X:0 Y:0} WireStart: From: To: Value:1 kΩ} error=
+--- FAIL: TestMountedPlacementSequentialCoordinates (0.03s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	0.548s
+FAIL

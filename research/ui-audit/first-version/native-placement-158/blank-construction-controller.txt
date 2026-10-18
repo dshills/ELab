@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/native-draw-158/observe.py", line 42, in <module>
+    s=wait_marker('part-'+str(index)+'-ui-observed');event('part-'+str(index),s);equivalent(s,result['agent_reference']['part-'+str(index)]);assert len(s['components'])==index and not s['wires'];marker('part-'+str(index)+'-verified.json')
+                                                                                 ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dshills/Development/projects/ELab/build/native-draw-158/observe.py", line 26, in equivalent
+    for k in ['components','wires','nets','selected','drawing','undo_name','redo_name','paused']:assert a.get(k)==b.get(k),(k,a.get(k),b.get(k))
+                                                                                                        ^^^^^^^^^^^^^^^^^^
+AssertionError: ('components', [{'id': 'V1', 'kind': 'dc-source', 'name': 'DC source', 'terminals': ['positive', 'negative'], 'position': {'x': -200, 'y': 0}, 'value': 5, 'unit': 'V', 'model': 'ideal-dc.v1', 'rotation': 0}, {'id': 'R1', 'kind': 'resistor', 'name': 'Resistor', 'terminals': ['1', '2'], 'position': {'x': 0, 'y': 0}, 'value': 1000, 'unit': 'Ω', 'model': 'ideal-resistor.v1', 'rotation': 0}], [{'id': 'V1', 'kind': 'dc-source', 'name': 'DC source', 'terminals': ['positive', 'negative'], 'position': {'x': -200, 'y': 0}, 'value': 5, 'unit': 'V', 'model': 'ideal-dc.v1', 'rotation': 0}, {'id': 'R1', 'kind': 'resistor', 'name': 'Resistor', 'terminals': ['1', '2'], 'position': {'x': 0, 'y': -110}, 'value': 1000, 'unit': 'Ω', 'model': 'ideal-resistor.v1', 'rotation': 0}])

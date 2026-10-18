@@ -1,0 +1,22 @@
+# Native coordinate placement · /158 open blocker
+
+October 18, 2026. **Accessibility activation of Place can discard an unfinished numeric coordinate.** Entering X=`0`, then Y=`-110`, and activating the visible Place button through its accessibility index places R1 at `(0,0)`. A direct pointer click on the same button places it at `(0,-110)`. This is an open core input/parity blocker; the blank-sheet LED walkthrough stopped before wiring. Owner acceptance remains “Not tried yet.”
+
+All three isolated hosts use the exact /158 native executable, SHA `570b805b42a9f3ee01acb6fecd3bdea5420c57a0b38dd247d1c52689127d82b5`, and agent SHA `cea0fd702622b7ded25e4319cd27e69df9ad11c7a7d519a77c2f5347bf7ac042`. [Identity](source-release-identity.json) revalidates the sealed 196-file package, 68 native sources and 343 runtime inputs after removing the temporary diagnostic test. No product/SDK/version/package changes or promotion were made.
+
+| Case | Input and result |
+|---|---|
+| Native construction from blank, PID 31291 | Palette/default placement creates V1 at `(-200,0)` and matches the independent agent. The second part's typed X/Y followed by accessibility-index Place creates R1 at `(0,0)` rather than `(0,-110)`. Observer records the mismatch and terminates only its host, exit −15. |
+| Bounded accessibility comparison, PID 32871 | Public commands seed one source and the resistor placement tool. Actual native X/Y typing visibly leaves `-110` in Y. Accessibility-index Place creates R1 at `(0,0)`. Public save preserves this observed graph; normal close exits 0. |
+| Pointer control, PID 33746 | Same seeded state and actual native typing. Pointer-coordinate Place creates R1 at `(0,-110)`. Public save preserves the graph; normal close exits 0. |
+| Mounted diagnostic | Actual mounted coordinate typing followed by descriptor activation reproduces `(0,0)` and fails the desired-position assertion. Replacing only activation with the ordinary pointer click passes. |
+
+The [private Y screenshot](accessibility-press-y-private.png) establishes complete text before activation; the numeric AX Value still reports accepted Y=0 while the draft is private. [Pointer control](pointer-control-y-private.png), [input transcription](ui-observation.txt), [process verification](process-verification.json). The first source placement's return to Select was expected and matched the reference; it was not the failure.
+
+The scoped cause is supported by both native observations and the mounted reproduction: pinned Vellum `drivers/cogent/accessibility.go` invokes a Button descriptor's `Activate` directly. ELab `desktop/placement_actions.go` explicitly settles net-label text but assumes numeric spinners have committed on pointer focus loss. Accessibility activation has no such pointer transfer, so Place captures accepted Y=0 before the later focus change. This does not implicate the /158 Cocoa text handoff repair or establish a general keyboard/IME failure.
+
+The temporary test patches are retained as evidence, outside the active Go suite: [failing descriptor reproduction](descriptor-repro.patch), [failure output](descriptor-repro.txt), [passing pointer control](pointer-control.patch), [pass output](pointer-control.txt). The reproduction uses production callbacks after mounted typing, not a full mounted Cocoa accessibility transport. Actual CUA accessibility activation supplies that separate native observation. It does not qualify all accessibility actions or VoiceOver.
+
+Next repair: provide an explicit originating numeric-field commit barrier before Place, preserving the existing revision/document guards. Require the descriptor reproduction and native accessibility action to use `(0,-110)`, retain the pointer pass, and refuse intervening agent/document changes. Investigate and implement in one focused session, estimated 1–2 hours; if unresolved, checkpoint the remaining barrier/API issue rather than expand framework scope. Only a verified source repair triggers another version and the affected quality/package gates. No release date depends on an assumed pass.
+
+The two `.elab` observations were saved by the public agent, not native Save. No completed LED/current/wiring/Undo/Redo result is claimed. The initial failed controller's later reference stages are unused expectations. Owner work, canonical /120, sealed /158 and earlier reviews remain preserved. Earlier qualification retains its recorded scope; this newly observed blocker prevents promotion. [Checkpoint](checkpoint.json).
