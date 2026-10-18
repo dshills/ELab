@@ -315,3 +315,8 @@ The [bounded retained-field reproduction and repair](../docs/validation/text-fie
 
 
 The retained-text repair is now included in clean **0.128.0 /145**, built from `8ae6284` and private SDK `178945c`. Exact copied runtime passes native smoke/four-adapter conformance, LED/RC/flasher parity and the live pulse/Pause/Resume/save/reopen case through 3.401 s. [Replacement receipt](ui-audit/first-version/text-state-review-checkpoint.json). Old/new public field IDs and command schemas match. Owner, physical OS coalescing/window blur and broader P0 gates remain open; counts stay 17 implemented /10 partial.
+
+
+### Numeric/button ownership and one-click Apply · October 18
+
+[Source qualification](../docs/validation/control-owner/README.md) reproduces actual wrong-part numeric/Rotate changes and a held Restart acting on a replacement document. A separate ordinary Apply focus-loss conflict reproduces against archived /145 desktop source and original SDK. Explicit control-owner state now covers simple controls, and Apply continues only consecutive accepted value-field contexts. Normal/fresh controls, one-click Apply, agent/other-field/replacement refusal, full source quality and SDK race/vet pass. /145 remains immutable and needs replacement; public commands/models/format and P0 statuses are unchanged.

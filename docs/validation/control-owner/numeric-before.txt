@@ -1,0 +1,26 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft
+=== RUN   TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft/unchanged-repaint
+    control_owner_offscreen_test.go:89: incarnation 2→2; owner P1→P1
+=== RUN   TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft/document-replacement
+    control_owner_offscreen_test.go:89: incarnation 2→2; owner P1→P1
+    control_owner_offscreen_test.go:97: old private numeric edit changed new owner: before [{ID:P1 Resistance:10000 WiperPosition:0.5 UpperResistance:5000 LowerResistance:5000 Terminal1Voltage:5 Terminal2Voltage:0 WiperVoltage:1.94708002171507 Terminal1Current:0.0006105839956569859 Terminal2Current:-0.000389416004343014 WiperCurrent:-0.00022116799131397191 Power:0.0026222882009546426}] after [{ID:P1 Resistance:10000 WiperPosition:0.75 UpperResistance:2500.5 LowerResistance:7499.5 Terminal1Voltage:5 Terminal2Voltage:0 WiperVoltage:2.021606081107744 Terminal1Current:0.0011911193436881648 Terminal2Current:-0.00026956544851093324 WiperCurrent:-0.0009215538951772315 Power:0.0040925777598820046}]
+=== RUN   TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft/selected-object
+    control_owner_offscreen_test.go:89: incarnation 2→2; owner P1→P2
+    control_owner_offscreen_test.go:97: old private numeric edit changed new owner: before [{ID:P1 Resistance:10000 WiperPosition:0.5 UpperResistance:5000 LowerResistance:5000 Terminal1Voltage:5 Terminal2Voltage:0 WiperVoltage:1.94708002171507 Terminal1Current:0.0006105839956569859 Terminal2Current:-0.000389416004343014 WiperCurrent:-0.00022116799131397191 Power:0.0026222882009546426} {ID:P2 Resistance:10000 WiperPosition:0.5 UpperResistance:5000 LowerResistance:5000 Terminal1Voltage:5 Terminal2Voltage:0 WiperVoltage:2.5 Terminal1Current:0.0005 Terminal2Current:-0.0005 WiperCurrent:0 Power:0.0025}] after [{ID:P1 Resistance:10000 WiperPosition:0.5 UpperResistance:5000 LowerResistance:5000 Terminal1Voltage:5 Terminal2Voltage:0 WiperVoltage:1.94708002171507 Terminal1Current:0.0006105839956569859 Terminal2Current:-0.000389416004343014 WiperCurrent:-0.00022116799131397191 Power:0.0026222882009546426} {ID:P2 Resistance:10000 WiperPosition:0.75 UpperResistance:2500.5 LowerResistance:7499.5 Terminal1Voltage:5 Terminal2Voltage:0 WiperVoltage:3.74975 Terminal1Current:0.0004999999999999999 Terminal2Current:-0.0005 WiperCurrent:1.0842021724855044e-19 Power:0.0024999999999999996}]
+--- FAIL: TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft (1.78s)
+    --- PASS: TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft/unchanged-repaint (0.61s)
+    --- FAIL: TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft/document-replacement (0.59s)
+    --- FAIL: TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft/selected-object (0.58s)
+=== RUN   TestMountedButtonOwnerCannotRetargetHeldRotate
+=== RUN   TestMountedButtonOwnerCannotRetargetHeldRotate/unchanged-repaint
+    control_owner_offscreen_test.go:123: &{invalid-params this grid position is occupied; choose another}
+=== RUN   TestMountedButtonOwnerCannotRetargetHeldRotate/selected-object
+    control_owner_offscreen_test.go:123: &{invalid-params this grid position is occupied; choose another}
+--- FAIL: TestMountedButtonOwnerCannotRetargetHeldRotate (0.00s)
+    --- FAIL: TestMountedButtonOwnerCannotRetargetHeldRotate/unchanged-repaint (0.00s)
+    --- FAIL: TestMountedButtonOwnerCannotRetargetHeldRotate/selected-object (0.00s)
+FAIL
+exit status 1
+FAIL	github.com/dshills/elab/desktop	2.413s

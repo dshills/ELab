@@ -1,0 +1,45 @@
+{
+  "sources": 62,
+  "sites": 389,
+  "public_commands": 162,
+  "source_routes": 132,
+  "source_hashes_changed": {
+    "desktop/component_inspector.go": {
+      "before": "21b820631a291b2b062fee89439654cd15e3a5788e0b83f0c5a4cb6ac1f8e3fe",
+      "after": "3a565a9c5c40dc50399b43e5dec3eb49543e04e8bfee070f5ab377a042fcf19f"
+    },
+    "desktop/field_context.go": {
+      "before": "18f5ec46649575e16528d973bb53214116b57f93e3d2354f474c40fb780b5298",
+      "after": "dd4eb5c89212c8ac7f967807bc3c52bdf0fb94409fa20162ed899ded54a0152e"
+    },
+    "desktop/main.go": {
+      "before": "34b33f0ad5d9d0fb635260b9ca97ad928dc0bb695eafd6302451ec1357a070b6",
+      "after": "6ea6affab2f82710c9d8f9092e6f1e20678779f15e1e5279166d8f7c99734fd3"
+    },
+    "desktop/value_apply.go": {
+      "before": "eab16eb97a0b34a4cff40d5fd77d96dbdce394c5071aaa7ed0e58169ea45713d",
+      "after": "2b67bd25e325a0edb829669ec8d1539ed217b9a9cfbb897c2834c4f16e724ee9"
+    }
+  },
+  "expression_changes": [
+    {
+      "before": {
+        "file": "desktop/value_apply.go",
+        "line": 42,
+        "function": "*screen.valueApplyAction",
+        "kind": "node-Activate",
+        "expression": "Activate: func() {\n\tif s.pendingValueApply != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\n\t\ts.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := &valueApply{context: context, params: params}\n\ts.pendingValueApply = pending\n\tdone := func(err error) {\n\t\tif s.pendingValueApply != pending {\n\t\t\treturn\n\t\t}\n\t\ts.pendingValueApply = nil\n\t\tif err != nil {\n\t\t\ts.errorMessage = fmt.Sprintf(\"Could not finish value entry: %v\", err)\n\t\t} else if !pending.failed {\n\t\t\ts.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)\n\t\t}\n\t\ts.app.Invalidate(\"main\")\n\t}\n\tif s.settleField == nil {\n\n\t\tdone(nil)\n\t} else if err := s.settleField(\"value-entry\", done); err != nil {\n\t\tdone(err)\n\t}\n}",
+        "status": "requires-binding-review"
+      },
+      "after": {
+        "file": "desktop/value_apply.go",
+        "line": 69,
+        "function": "*screen.valueApplyAction",
+        "kind": "node-Activate",
+        "expression": "Activate: func() {\n\tif s.pendingValueApply != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.valueDraftAccepted; accepted != nil && accepted.from.generation == context.generation &&\n\t\taccepted.from.revision <= context.revision && context.revision <= accepted.to.revision &&\n\t\taccepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) &&\n\t\taccepted.id == id && current.Selected == id && current.Drawing.Value == accepted.text {\n\t\tcontext = accepted.to\n\t\tparams.Value = accepted.text\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\n\t\ts.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := &valueApply{context: context, params: params}\n\ts.pendingValueApply = pending\n\tdone := func(err error) {\n\t\tif s.pendingValueApply != pending {\n\t\t\treturn\n\t\t}\n\t\ts.pendingValueApply = nil\n\t\tif err != nil {\n\t\t\ts.errorMessage = fmt.Sprintf(\"Could not finish value entry: %v\", err)\n\t\t} else if !pending.failed {\n\t\t\ts.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)\n\t\t}\n\t\ts.app.Invalidate(\"main\")\n\t}\n\tif s.settleField == nil {\n\n\t\tdone(nil)\n\t} else if err := s.settleField(\"value-entry\", done); err != nil {\n\t\tdone(err)\n\t}\n}",
+        "status": "requires-binding-review"
+      }
+    }
+  ],
+  "public_IDs_aliases_route_sets_and_site_classifications_unchanged": true
+}

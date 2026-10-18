@@ -4,6 +4,8 @@ ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N
 
 The [first-version delivery plan](research/34-first-version-plan.md) defines the current release target: a usable macOS hobbyist alpha, with frozen scope, ordered blockers and a concrete packaged-app handoff.
 
+**New blockers under repair:** unfinished numeric edits and held button presses can affect another document/selected part. An ordinary Apply click can also reject its own focus-loss draft commit. The pinned repairs pass the full source quality gate; /145 is preserved and affected pending a qualified replacement.
+
 **Owner review:** [ELab 0.128.0 /145](build/ELab-0.128.0-145-review/ELab.app) prevents unfinished value text from entering another document or selected object when a redraw retains the same field ID/value. It includes earlier slider, simulation-button and clock repairs, with the matching agent and examples. Start with the [15–20 minute walkthrough and known limits](research/35-first-version-review.md); save/quit an earlier review before opening this replacement. Full source quality, exact copied-runtime smoke/four-adapter conformance, reference parity and pulse/Pause/Resume/save checks pass. Previous review folders and the canonical app are preserved; owner walkthrough (“Not tried yet”), supported-alpha promotion and full MVP gates remain open.
 
 Choose **Examples → Split-rail DC supply** to explore [stacked DC sources and signed rail voltages](docs/floating-dc-sources.md). Two 3 V sources produce +3 V and −3 V around their midpoint reference. [Linear source/passive networks](docs/linear-network-solves.md) also solve 24 V stacks without artificial small-step nonconvergence, within the existing ±30 V node limit. [Nonlinear startup](docs/nonlinear-startup.md) also supports 24/30 V generic LED loads through a bounded grounded-constraint retry and rejects undefined floating MOSFET gates at zero supply.
@@ -52,7 +54,7 @@ Drag a selected part to move it with its wires. Pan drags the sheet; scroll zoom
 For a local double-clickable development bundle, after building:
 
 ```sh
-python3 -B build/.vellum-sdk-178945c/scripts/package-app.py --binary build/elab \
+python3 -B build/.vellum-sdk-ade66eb/scripts/package-app.py --binary build/elab \
   --output build/ELab-local.app --name ELab --identifier com.dshills.elab \
   --version 0.0.0 --build-version 1 --platform darwin
 ```

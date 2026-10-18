@@ -16,9 +16,36 @@ type valueApply struct {
 	failed  bool
 }
 
+// A focus loss can commit this field before its Apply click is delivered. Only
+// consecutive accepted changes from that field may bridge the rendered context.
+// Never use a later snapshot as evidence that another actor's edit was ours.
+type valueDraftContinuation struct {
+	from, to actionContext
+	id, text string
+}
+
 func (s *screen) changeValueDraft(e ui.ChangeEvent) {
 	pending := s.pendingValueApply
+	var origin *actionContext
+	if s.fieldContext != nil {
+		copy := *s.fieldContext
+		origin = &copy
+	}
 	result := s.invoke("editor.value.set", workbench.DraftParams{Value: e.Text})
+	if result.Error != nil {
+		s.valueDraftAccepted = nil
+	}
+	if result.Error == nil && origin != nil {
+		accepted := result.Result.(workbench.Snapshot)
+		from := *origin
+		if previous := s.valueDraftAccepted; previous != nil && previous.to == from && previous.id == accepted.Selected {
+			from = previous.from
+		}
+		s.valueDraftAccepted = &valueDraftContinuation{
+			from: from, to: actionContext{accepted.CommandRevision, accepted.Document.Generation},
+			id: accepted.Selected, text: e.Text,
+		}
+	}
 	if pending == nil {
 		return
 	}
@@ -44,6 +71,13 @@ func (s *screen) valueApplyAction(state workbench.Snapshot, id, text string) ui.
 			return
 		}
 		current := s.service.Snapshot()
+		if accepted := s.valueDraftAccepted; accepted != nil && accepted.from.generation == context.generation &&
+			accepted.from.revision <= context.revision && context.revision <= accepted.to.revision &&
+			accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) &&
+			accepted.id == id && current.Selected == id && current.Drawing.Value == accepted.text {
+			context = accepted.to
+			params.Value = accepted.text
+		}
 		if current.CommandRevision != context.revision || current.Document.Generation != context.generation {
 			// Use the ordinary shared refusal without flushing an obsolete field.
 			s.invokeAtCommandRevision("component.set", params, context.revision, context.generation)

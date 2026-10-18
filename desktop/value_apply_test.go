@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -132,5 +133,72 @@ func TestValueApplyDoesNotAdoptARefreshedFieldAfterAgentEdit(t *testing.T) {
 	state := s.service.Snapshot()
 	if s.errorMessage == "" || s.pendingValueApply != nil || state.Circuit.Resistance != 2000 || state.Drawing.Value != "10k" {
 		t.Fatal("pending Apply adopted a later field context", s.errorMessage)
+	}
+}
+
+func TestValueApplyContinuesOwnDraftCommittedBeforeClick(t *testing.T) {
+	for _, tc := range []struct{ changes, captureAfter int }{{1, 0}, {2, 0}, {2, 1}} {
+		changes := tc.changes
+		t.Run(fmt.Sprintf("%d-drafts/capture-%d", changes, tc.captureAfter), func(t *testing.T) {
+			s, cleanup := testScreen(t)
+			defer cleanup()
+			uiAction(t, s, "example.reset", nil)
+			uiAction(t, s, "selection", &ui.ChangeEvent{SelectedID: "R1"})
+			var field, apply ui.Node
+			s.app.Do(func() {
+				root := s.view()
+				field, _ = findNode(root, "value-entry")
+				apply, _ = findNode(root, "apply-value")
+			})
+			before := s.service.Snapshot()
+			values := []string{"2.2k", "3.3k"}
+			s.app.Do(func() {
+				for i, text := range values[:changes] {
+					field.Change(ui.ChangeEvent{Text: text})
+					if tc.captureAfter == i+1 {
+						apply, _ = findNode(s.view(), "apply-value")
+					}
+				}
+				apply.Activate()
+			})
+			after := s.service.Snapshot()
+			want := 2200.
+			if changes == 2 {
+				want = 3300
+			}
+			if s.errorMessage != "" || after.Circuit.Resistance != want || after.CommandRevision != before.CommandRevision+uint64(changes)+1 {
+				t.Fatal("own accepted value drafts did not continue into one Apply", s.errorMessage, after.Circuit.Resistance)
+			}
+		})
+	}
+}
+
+func TestValueApplyOwnDraftContinuationRefusesInterveningEdits(t *testing.T) {
+	for _, when := range []string{"agent-before-draft", "agent-after-draft", "other-user-field", "new-document"} {
+		t.Run(when, func(t *testing.T) {
+			s, cleanup := testScreen(t)
+			defer cleanup()
+			uiAction(t, s, "example.reset", nil)
+			uiAction(t, s, "selection", &ui.ChangeEvent{SelectedID: "R1"})
+			var apply ui.Node
+			s.app.Do(func() { apply, _ = findNode(s.view(), "apply-value") })
+			if when == "agent-before-draft" {
+				agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "2k"})
+			}
+			uiAction(t, s, "value-entry", &ui.ChangeEvent{Text: "3.3k"})
+			switch when {
+			case "agent-after-draft":
+				agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "2k"})
+			case "other-user-field":
+				uiAction(t, s, "pdf-margin", &ui.ChangeEvent{Number: 11})
+			case "new-document":
+				agentAction(t, s.service, "project.clear", workbench.ReplaceParams{DiscardChanges: true})
+			}
+			before := s.service.Snapshot()
+			s.app.Do(func() { apply.Activate() })
+			if s.errorMessage == "" || !reflect.DeepEqual(before, s.service.Snapshot()) || s.pendingValueApply != nil {
+				t.Fatal("own-draft continuation borrowed an intervening actor/field/document context")
+			}
+		})
 	}
 }

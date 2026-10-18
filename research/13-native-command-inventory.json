@@ -5,7 +5,7 @@
     "desktop/actuation_controls.go": "9b0e8148f7ca32ac2f1802d69411fcd355c2df5b2af4b89df1084d413166ee1e",
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
     "desktop/canvas.go": "a241f57812c104171737149f067ae8a0d5aaf191c17092597c5a060b4587c7ef",
-    "desktop/component_inspector.go": "21b820631a291b2b062fee89439654cd15e3a5788e0b83f0c5a4cb6ac1f8e3fe",
+    "desktop/component_inspector.go": "3a565a9c5c40dc50399b43e5dec3eb49543e04e8bfee070f5ab377a042fcf19f",
     "desktop/component_palette.go": "5d7b83aba4bd8202b899f0168848226f8217a8dd3dbd73d2ff6c8d99b752d3ab",
     "desktop/dc_sweep.go": "6714f9c257faaf1e230e51dbc2c8b31a0d83ad9613eaa47d2de9bf8db495600f",
     "desktop/dc_sweep_canvas.go": "6404c77863729aedfd18a886e88d57889c51c374197189de91665d7142ad1022",
@@ -14,7 +14,7 @@
     "desktop/drawing.go": "6b3af72a3b900487e91c57d182c1634e6a8b648dde2dbd96f9b51e143308ccb6",
     "desktop/example_load.go": "21c8f683f88d56762de0b43849fe97338cbf4451f0cf147c21035f84b8602bbe",
     "desktop/examples.go": "e072cde40cfd291300dbb08f127ea8bff5d520b3b70604d1d9622b9755c12ad8",
-    "desktop/field_context.go": "18f5ec46649575e16528d973bb53214116b57f93e3d2354f474c40fb780b5298",
+    "desktop/field_context.go": "dd4eb5c89212c8ac7f967807bc3c52bdf0fb94409fa20162ed899ded54a0152e",
     "desktop/file_focus_darwin.go": "fd24d88b522308de015cb02496434e62343e221916167f4c84773cd22b5967a5",
     "desktop/file_focus_other.go": "c027b71d35fbd52d344ed31b46bba5f5b828d1ae622ef7ca20b89f4f4423a343",
     "desktop/files.go": "09ef46c31bf583a57f3c8f5c4ed1fcaa1e8dcfd5745cdfa2a7a87dedabecdb67",
@@ -23,7 +23,7 @@
     "desktop/keyboard_workflow.go": "42fa8031620577bff9c73eba71954730a71765328b219ab96911ffdbe7a5c883",
     "desktop/layout.go": "95c8d3aea1b220556a1a0b0cb90cb148c60494358f13fc6e94cded0a06498ddb",
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
-    "desktop/main.go": "34b33f0ad5d9d0fb635260b9ca97ad928dc0bb695eafd6302451ec1357a070b6",
+    "desktop/main.go": "6ea6affab2f82710c9d8f9092e6f1e20678779f15e1e5279166d8f7c99734fd3",
     "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
     "desktop/menus.go": "d78bfdb0b8ad01e290c7a3a8179dafc72b3e2a6f8b65d3994ca69f334aff700c",
     "desktop/menus_darwin.go": "3f7cd30cc99b38b4385e56303bbc790cce6e03add876634ff44cb267815522ea",
@@ -53,7 +53,7 @@
     "desktop/shutdown.go": "39e6d600f9edf67e2fe6a09e6b2b5ada051e67c1cf3fac2e3efe3ec4fe631a26",
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
     "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
-    "desktop/value_apply.go": "eab16eb97a0b34a4cff40d5fd77d96dbdce394c5071aaa7ed0e58169ea45713d",
+    "desktop/value_apply.go": "2b67bd25e325a0edb829669ec8d1539ed217b9a9cfbb897c2834c4f16e724ee9",
     "desktop/verification.go": "550f32b3d90b99269bce6777233b68e9329b2ae704b5b2fca60a1a368fbab406",
     "desktop/view.go": "9b49a018838950c24a2f4e21931a710fae6249ee485a6dc7d4caf480c76fdfdb",
     "desktop/viewport.go": "8452950aa3113be66c59ed10b8f26ef21e0a5be3d1b4aee5ec57fb8dbd966590",
@@ -1589,7 +1589,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 226,
+      "line": 227,
       "function": "*screen.invoke",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(id, p, s.service.Snapshot().CommandRevision)",
@@ -1597,7 +1597,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 243,
+      "line": 244,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "request-command-field",
       "expression": "Command: id",
@@ -1605,7 +1605,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 247,
+      "line": 248,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "event-or-dispatch-router",
       "expression": "s.service.Dispatch(context.Background(), request, \"user\")",
@@ -1613,7 +1613,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 276,
+      "line": 277,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.undo\", \"Undo\", \"Meta+Z\"}",
@@ -1624,7 +1624,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 276,
+      "line": 277,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.redo\", \"Redo\", \"Meta+Shift+Z\"}",
@@ -1635,7 +1635,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 277,
+      "line": 278,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"project.clear\", \"New blank\", \"\"}",
@@ -1646,7 +1646,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 277,
+      "line": 278,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"drawing.cancel\", \"Cancel drawing\", \"Escape\"}",
@@ -1657,7 +1657,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 278,
+      "line": 279,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"app.close\", \"Close window\", \"Meta+W\"}",
@@ -1668,7 +1668,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 279,
+      "line": 280,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.current.reset\", \"Reset current example\", \"\"}",
@@ -1679,7 +1679,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 279,
+      "line": 280,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.reset\", \"Load LED example\", \"\"}",
@@ -1690,7 +1690,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 279,
+      "line": 280,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.rc\", \"Load RC example\", \"\"}",
@@ -1701,7 +1701,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 279,
+      "line": 280,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn\", \"Load NPN LED example\", \"\"}",
@@ -1712,7 +1712,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 279,
+      "line": 280,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.switch-npn\", \"Load manual transistor LED switch\", \"\"}",
@@ -1723,7 +1723,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 279,
+      "line": 280,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn-pulse\", \"Load blinking NPN LED\", \"\"}",
@@ -1734,7 +1734,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 279,
+      "line": 280,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.flasher\", \"Load capacitor-timed LED flasher\", \"\"}",
@@ -1745,7 +1745,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 279,
+      "line": 280,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.rectifier\", \"Load diode rectifier and smoothing\", \"\"}",
@@ -1756,7 +1756,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 280,
+      "line": 281,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.pause\", \"Pause\", \"\"}",
@@ -1767,7 +1767,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 280,
+      "line": 281,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.resume\", \"Resume\", \"\"}",
@@ -1778,7 +1778,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 280,
+      "line": 281,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.restart\", \"Restart\", \"\"}",
@@ -1789,7 +1789,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 280,
+      "line": 281,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"view.fit\", \"Fit circuit\", \"\"}",
@@ -1800,7 +1800,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 283,
+      "line": 284,
       "function": "*screen.registerCommands",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Register(command.Command{ID: entry.id, Label: entry.label, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts,\n\tAvailable: func() error {\n\t\tif s.fileBusy || s.pendingCommand != \"\" {\n\t\t\treturn fmt.Errorf(\"finish the current file operation first\")\n\t\t}\n\t\tstate := s.service.Snapshot()\n\t\tif state.Closed \u0026\u0026 entry.id != \"app.close\" {\n\t\t\treturn fmt.Errorf(\"session is closing\")\n\t\t}\n\t\tif entry.id == \"example.current.reset\" \u0026\u0026 state.Example == nil {\n\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t}\n\t\tif entry.id == \"edit.undo\" \u0026\u0026 !state.CanUndo {\n\t\t\treturn fmt.Errorf(\"nothing to undo\")\n\t\t}\n\t\tif entry.id == \"edit.redo\" \u0026\u0026 !state.CanRedo {\n\t\t\treturn fmt.Errorf(\"nothing to redo\")\n\t\t}\n\t\treturn nil\n\t}, Execute: func(context.Context) error {\n\t\tif entry.id == \"app.close\" {\n\t\t\ts.requestClose()\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"example.current.reset\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\tif state.Example == nil {\n\t\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t\t}\n\t\t\tgeneration := state.Document.Generation\n\t\t\ts.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"project.clear\" || entry.id == \"example.reset\" || entry.id == \"example.rc\" || entry.id == \"example.npn\" || entry.id == \"example.npn-pulse\" || entry.id == \"example.flasher\" || entry.id == \"example.switch-npn\" || entry.id == \"example.rectifier\" {\n\t\t\ts.requestReplace(entry.id, workbench.ReplaceParams{})\n\t\t\treturn nil\n\t\t}\n\t\tvar p any = struct{}{}\n\t\tif entry.id == \"edit.undo\" || entry.id == \"edit.redo\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\ttip := state.UndoEntry\n\t\t\tif entry.id == \"edit.redo\" {\n\t\t\t\ttip = state.RedoEntry\n\t\t\t}\n\t\t\tif tip != nil {\n\t\t\t\trevision := tip.CommandRevision\n\t\t\t\tp = workbench.HistoryParams{ExpectedEntryRevision: \u0026revision, AllowOtherActor: tip.Actor != \"user\"}\n\t\t\t}\n\t\t}\n\t\tif entry.id == \"view.fit\" {\n\t\t\tp = workbench.FitParams{Width: s.drawing.View.Width, Height: s.drawing.View.Height, FollowViewport: true}\n\t\t}\n\t\tr := s.invoke(entry.id, p)\n\t\tif r.Error != nil {\n\t\t\treturn fmt.Errorf(\"%s\", r.Error.Message)\n\t\t}\n\t\tif entry.id == \"drawing.cancel\" {\n\t\t\ts.requestKeyboardFocus(\"part-search\")\n\t\t}\n\t\ts.continueSimulationFocus(entry.id, r)\n\t\treturn nil\n\t},\n})",
@@ -1808,7 +1808,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 313,
+      "line": 314,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})",
@@ -1816,7 +1816,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 317,
+      "line": 318,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ReplaceParams{})",
@@ -1824,7 +1824,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 335,
+      "line": 336,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.invoke(entry.id, p)",
@@ -1832,7 +1832,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 389,
+      "line": 390,
       "function": "*screen.button",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Invoke(context.Background(), id)",
@@ -1840,7 +1840,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 402,
+      "line": 403,
       "function": "*screen.button",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(id, struct{}{}, rendered.revision, rendered.generation)",
@@ -1848,7 +1848,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 414,
+      "line": 415,
       "function": "*screen.button",
       "kind": "domain-ingress",
       "expression": "s.invoke(id, target)",
@@ -1856,7 +1856,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 417,
+      "line": 418,
       "function": "*screen.button",
       "kind": "node-Activate",
       "expression": "Activate: activate",
@@ -3419,7 +3419,7 @@
     },
     {
       "file": "desktop/value_apply.go",
-      "line": 21,
+      "line": 34,
       "function": "*screen.changeValueDraft",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
@@ -3430,15 +3430,15 @@
     },
     {
       "file": "desktop/value_apply.go",
-      "line": 42,
+      "line": 69,
       "function": "*screen.valueApplyAction",
       "kind": "node-Activate",
-      "expression": "Activate: func() {\n\tif s.pendingValueApply != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\n\t\ts.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := \u0026valueApply{context: context, params: params}\n\ts.pendingValueApply = pending\n\tdone := func(err error) {\n\t\tif s.pendingValueApply != pending {\n\t\t\treturn\n\t\t}\n\t\ts.pendingValueApply = nil\n\t\tif err != nil {\n\t\t\ts.errorMessage = fmt.Sprintf(\"Could not finish value entry: %v\", err)\n\t\t} else if !pending.failed {\n\t\t\ts.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)\n\t\t}\n\t\ts.app.Invalidate(\"main\")\n\t}\n\tif s.settleField == nil {\n\n\t\tdone(nil)\n\t} else if err := s.settleField(\"value-entry\", done); err != nil {\n\t\tdone(err)\n\t}\n}",
+      "expression": "Activate: func() {\n\tif s.pendingValueApply != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.valueDraftAccepted; accepted != nil \u0026\u0026 accepted.from.generation == context.generation \u0026\u0026\n\t\taccepted.from.revision \u003c= context.revision \u0026\u0026 context.revision \u003c= accepted.to.revision \u0026\u0026\n\t\taccepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) \u0026\u0026\n\t\taccepted.id == id \u0026\u0026 current.Selected == id \u0026\u0026 current.Drawing.Value == accepted.text {\n\t\tcontext = accepted.to\n\t\tparams.Value = accepted.text\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\n\t\ts.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := \u0026valueApply{context: context, params: params}\n\ts.pendingValueApply = pending\n\tdone := func(err error) {\n\t\tif s.pendingValueApply != pending {\n\t\t\treturn\n\t\t}\n\t\ts.pendingValueApply = nil\n\t\tif err != nil {\n\t\t\ts.errorMessage = fmt.Sprintf(\"Could not finish value entry: %v\", err)\n\t\t} else if !pending.failed {\n\t\t\ts.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)\n\t\t}\n\t\ts.app.Invalidate(\"main\")\n\t}\n\tif s.settleField == nil {\n\n\t\tdone(nil)\n\t} else if err := s.settleField(\"value-entry\", done); err != nil {\n\t\tdone(err)\n\t}\n}",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/value_apply.go",
-      "line": 49,
+      "line": 83,
       "function": "*screen.valueApplyAction",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)",
@@ -3449,7 +3449,7 @@
     },
     {
       "file": "desktop/value_apply.go",
-      "line": 62,
+      "line": 96,
       "function": "*screen.valueApplyAction",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)",

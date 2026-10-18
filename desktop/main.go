@@ -220,6 +220,7 @@ type screen struct {
 	fieldAccepted                       *actionContext
 	settleField                         func(string, func(error)) error
 	pendingValueApply                   *valueApply
+	valueDraftAccepted                  *valueDraftContinuation
 }
 
 func (s *screen) invoke(id string, p any) workbench.Response {

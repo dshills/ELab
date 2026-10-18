@@ -1,5 +1,13 @@
 # Current Vellum SDK integration
 
+Private SDK `ade66eb3586c6d881647cea52f19048087e598c5` adds optional `ControlStateKey` for twelve simple managed control kinds. ELab scopes it to document generation and, in the component inspector, object ID. New owners cannot inherit private numeric text or pressed controls; public IDs stay stable. The earlier `TextStateKey` API remains compatible. Caller-owned editor/grid/tree/placement bindings retain their established contracts and refuse this key.
+
+Exactly four members differ from `178945c`: `ui/node.go`, `ui/control_state_key_test.go`, `drivers/cogent/reconcile.go`, `drivers/cogent/control_state_key_test.go`. The archive has 7,453 hashed files, 18,625,527 bytes, SHA-256 `53b824706108f481ec1dcca842a72fee8ee7797ad2127e00489fda4e645ecf04`, manifest SHA-256 `9e30d55182850a11c54cb754782c3a7a66af2c3487cb0ccb85f874c8e31beb9e`. Prepared dependencies/bootstrap are unchanged; all four native replacements point to `build/.vellum-sdk-ade66eb`.
+
+Framework root/driver race/vet and focused offscreen checks pass. Consumer regressions cover wrong-owner numeric drafts, held Rotate/Restart, normal/fresh input and one-click Apply. The Apply repair uses only consecutive accepted value-field responses to continue its rendered context; intervening actor/field/document changes still refuse. [Evidence](validation/control-owner/README.md) records qualification. Review /145 remains immutable and affected until replacement.
+
+## Previous pinned integration: 178945c
+
 Private SDK `178945c802f144f9313b43fa4c42c8cca4eaff05` adds optional `ui.Node.TextStateKey` for managed TextFields. ELab scopes it to document generation and, inside the component inspector, selected component ID. Old private text cannot survive into another logical owner simply because its public ID and controlled text match. Ordinary redraws and own accepted edits preserve the binding. Public commands/IDs, models and project format are unchanged; the SDK API addition is limited to this explicit text-state identity.
 
 Exactly four SDK source members differ from `88dc650`: `ui/node.go`, `ui/text_state_key_test.go`, `drivers/cogent/reconcile.go` and `drivers/cogent/state_key_test.go`. Prepared upstream/typesetting and bootstrap sources are byte-identical. The archive has 7,451 hashed files, 18,622,757 bytes, SHA-256 `2bfc4dc6438251485cc4b52704f9b57d87ae1456ef9d88d22f66beebb47fc00c`, manifest SHA-256 `fff345ab03cc8f26a4c612fd7e55dfdc0471f3f5aca8bf14c4110f7f9020cfcb`. All four native replacements point to `build/.vellum-sdk-178945c`. Prior source/cache/archive and sibling checkout are preserved.

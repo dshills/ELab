@@ -1,0 +1,14 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedButtonOwnerCannotRetargetHeldRotate
+=== RUN   TestMountedButtonOwnerCannotRetargetHeldRotate/unchanged-repaint
+    control_owner_offscreen_test.go:140: incarnation 2→2; owner R1→R1
+=== RUN   TestMountedButtonOwnerCannotRetargetHeldRotate/selected-object
+    control_owner_offscreen_test.go:140: incarnation 2→2; owner R1→R2
+    control_owner_offscreen_test.go:145: held rotate changed a different selected object [{<nil> <nil> <nil> <nil>  <nil> <nil> R1 resistor Resistor [1 2] {0 0} 1000 Ω ideal-resistor.v1 0} {<nil> <nil> <nil> <nil>  <nil> <nil> R2 resistor Resistor [1 2] {100 0} 1000 Ω ideal-resistor.v1 90}]
+--- FAIL: TestMountedButtonOwnerCannotRetargetHeldRotate (0.16s)
+    --- PASS: TestMountedButtonOwnerCannotRetargetHeldRotate/unchanged-repaint (0.09s)
+    --- FAIL: TestMountedButtonOwnerCannotRetargetHeldRotate/selected-object (0.07s)
+FAIL
+exit status 1
+FAIL	github.com/dshills/elab/desktop	0.854s

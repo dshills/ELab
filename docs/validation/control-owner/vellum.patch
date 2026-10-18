@@ -1,0 +1,149 @@
+diff --git a/drivers/cogent/control_state_key_test.go b/drivers/cogent/control_state_key_test.go
+new file mode 100644
+index 0000000..ae65662
+--- /dev/null
++++ b/drivers/cogent/control_state_key_test.go
+@@ -0,0 +1,43 @@
++package cogent
++
++import (
++	"testing"
++
++	"cogentcore.org/core/core"
++	"github.com/dshills/vellum/ui"
++)
++
++func TestControlStateKeyRetainsSameOwnerAndReplacesChangedOwner(t *testing.T) {
++	for _, kind := range []ui.Kind{ui.Button, ui.Checkbox, ui.Switch, ui.ToggleButton, ui.Selector, ui.Slider, ui.NumberField, ui.TextField, ui.RadioGroup, ui.SegmentedControl, ui.ListBox, ui.MenuButton} {
++		t.Run(string(kind), func(t *testing.T) {
++			a, _ := newAXTest(t, 8)
++			host := core.NewFrame(core.NewBody("control-owner"))
++			n := ui.Node{ID: "root", Kind: ui.Column, Children: []ui.Node{{ID: "control", Kind: kind, ControlStateKey: "doc:part1", Numeric: ui.Numeric{Min: 0, Max: 100, Step: 1}, Options: []ui.Option{{ID: "one", Label: "One"}}, SelectedID: "one", Activate: func() {}, Change: func(ui.ChangeEvent) {}}}}
++			if kind == ui.ListBox || kind == ui.MenuButton {
++				n.Children[0].Activate = nil
++			}
++			if kind == ui.MenuButton {
++				n.Children[0].SelectedID = ""
++				n.Children[0].Text = "Actions"
++			}
++			r, err := reconcile(host, nil, n, a, "ax")
++			if err != nil {
++				t.Fatal(err)
++			}
++			old := findRecord(r, "control")
++			r, err = reconcile(host, r, n, a, "ax")
++			if err != nil || findRecord(r, "control") != old {
++				t.Fatal("same owner changed binding", err)
++			}
++			n.Children[0].ControlStateKey = "doc:part2"
++			r, err = reconcile(host, r, n, a, "ax")
++			if err != nil {
++				t.Fatal(err)
++			}
++			fresh := findRecord(r, "control")
++			if fresh == old || fresh.widget == old.widget || !old.control.retired || fresh.node.ID != old.node.ID {
++				t.Fatal("owner change failed to retire old binding under the same public ID")
++			}
++		})
++	}
++}
+diff --git a/drivers/cogent/reconcile.go b/drivers/cogent/reconcile.go
+index c0231f8..e8d269d 100644
+--- a/drivers/cogent/reconcile.go
++++ b/drivers/cogent/reconcile.go
+@@ -242,7 +242,7 @@ func reconcileScoped(parent core.Widget, previous *record, n ui.Node, a *app.App
+ }
+ 
+ func compatible(old, next ui.Node) bool {
+-	if old.ID != next.ID || old.Kind != next.Kind {
++	if old.ID != next.ID || old.Kind != next.Kind || old.ControlStateKey != next.ControlStateKey {
+ 		return false
+ 	}
+ 	if next.Kind == ui.TextField && old.TextStateKey != next.TextStateKey {
+diff --git a/ui/control_state_key_test.go b/ui/control_state_key_test.go
+new file mode 100644
+index 0000000..f0b5c6c
+--- /dev/null
++++ b/ui/control_state_key_test.go
+@@ -0,0 +1,36 @@
++package ui
++
++import (
++	"strings"
++	"testing"
++
++	"github.com/dshills/vellum/placement"
++)
++
++func TestControlStateKeyRequiresSimpleControl(t *testing.T) {
++	for _, kind := range []Kind{Button, Checkbox, Switch, ToggleButton, Selector, Slider, NumberField, TextField, RadioGroup, SegmentedControl, ListBox, MenuButton, Label, Column, DataGrid, DataTree, MultilineText} {
++		n := Node{ID: "control", Kind: kind, ControlStateKey: "doc:part", Numeric: Numeric{Min: 0, Max: 100, Step: 1}, Options: []Option{{ID: "one", Label: "One"}}, SelectedID: "one", Activate: func() {}, Change: func(ChangeEvent) {}}
++		if kind == ListBox || kind == MenuButton {
++			n.Activate = nil
++		}
++		if kind == MenuButton {
++			n.SelectedID = ""
++			n.Text = "Actions"
++		}
++		err := Validate(n)
++		if SupportsControlStateKey(kind) {
++			if err != nil {
++				t.Fatalf("supported kind %s: %v", kind, err)
++			}
++		} else if err == nil || !strings.Contains(err.Error(), "ControlStateKey") {
++			t.Fatalf("kind=%s must refuse unsupported state key: %v", kind, err)
++		}
++	}
++}
++
++func TestControlStateKeyRejectsPlacementModelBinding(t *testing.T) {
++	n := Node{ID: "source", Kind: Button, ControlStateKey: "owner", PlacementSource: &placement.Source{}}
++	if err := Validate(n); err == nil || !strings.Contains(err.Error(), "ControlStateKey") {
++		t.Fatalf("placement model must retain its established binding contract: %v", err)
++	}
++}
+diff --git a/ui/node.go b/ui/node.go
+index 0730e0e..80781ab 100644
+--- a/ui/node.go
++++ b/ui/node.go
+@@ -41,6 +41,13 @@ type Node struct {
+ 	// Other kinds must leave this empty; caller-owned editor/grid/tree models
+ 	// already provide their own identity contracts.
+ 	TextStateKey string
++	// ControlStateKey identifies the logical owner of a simple managed control's
++	// local editing, selection or pressed state. Changing it remounts the control
++	// without changing its public ID. Empty retains ordinary ID/kind behavior.
++	// Use SupportsControlStateKey to distinguish these controls from caller-owned
++	// editor/grid/tree models, which retain their separate identity contracts.
++	// Placement-bound controls must also leave this empty.
++	ControlStateKey string
+ 	// Icon is bundled artwork for Icon/Button/ToggleButton. Text is alternate
+ 	// text for an Icon. Icon-only actions require Accessibility.Name.
+ 	Icon Symbol
+@@ -112,6 +119,9 @@ func Validate(root Node) error {
+ 		if n.ID == "" || seen[n.ID] {
+ 			return fmt.Errorf("ui: empty or duplicate ID %q", n.ID)
+ 		}
++		if n.ControlStateKey != "" && (!SupportsControlStateKey(n.Kind) || n.PlacementSource != nil || n.PlacementTarget != nil) {
++			return fmt.Errorf("ui: node %q: ControlStateKey requires a simple managed control", n.ID)
++		}
+ 		if n.TextStateKey != "" && n.Kind != TextField {
+ 			return fmt.Errorf("ui: node %q: TextStateKey requires TextField", n.ID)
+ 		}
+@@ -203,3 +213,16 @@ func Validate(root Node) error {
+ 	}
+ 	return nil
+ }
++
++// SupportsControlStateKey reports the ordinary controls whose local native state
++// can be replaced independently of their public IDs. It excludes caller-owned
++// model bindings and containers; keys do not propagate to descendants.
++func SupportsControlStateKey(kind Kind) bool {
++	switch kind {
++	case Button, Checkbox, Switch, ToggleButton, Selector, Slider, NumberField,
++		TextField, RadioGroup, SegmentedControl, ListBox, MenuButton:
++		return true
++	default:
++		return false
++	}
++}

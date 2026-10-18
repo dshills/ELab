@@ -1,0 +1,145 @@
+{
+  "date": "2026-10-18",
+  "prior_goal_turn": "progress: text-state source repair and qualified /145 delivered",
+  "source_base": "0216eb826fa7447b2c29ae110baa1e23cb4b64ee",
+  "status": "source repairs verified; immutable /145 needs qualified replacement",
+  "defects": [
+    "Private 75% numeric text changes a replacement document or another selected potentiometer from 50% to 75%",
+    "Held Rotate on R1 retargets R2; held Restart resets an agent-replaced/advanced document",
+    "Ordinary one-click Apply conflicts with its own field commit; same failure reproduced on archived original /145 source+SDK"
+  ],
+  "repair": [
+    "Compatible optional ControlStateKey scopes twelve simple managed controls to document and component identity; public IDs remain stable",
+    "Caller-owned editor/grid/tree/placement models are excluded; text-only key remains compatible",
+    "Apply advances only across a consecutive accepted value-field response span, with current context/target/draft equality; failed commits clear it",
+    "No command-revision keys, so own draft commits do not remount/cancel their Apply button"
+  ],
+  "quality": {
+    "SDK_root_driver_race_vet": "exit 0",
+    "SDK_offscreen_race_vet": "exit 0",
+    "SDK_control_matrix_kinds": 12,
+    "consumer_full_gate": "scripts/check.sh exit 0; audit freshness, lint/imports/Staticcheck, 43 Python tests, root/native race/vet, all mounted control/text/slider offscreen race/vet",
+    "native_race_s": 147.211,
+    "offscreen_race_s": 9.213
+  },
+  "regressions": [
+    "Unchanged repaint preserves numeric input and ordinary press/release",
+    "Cross-owner state remounts; explicitly focused new numeric fields reject old text and accept fresh 60% only for current owner",
+    "Old Rotate/Restart releases cannot act; fresh clicks work once",
+    "Single actual pointer Apply click settles 2.2k and applies 2200 \u03a9 with one draft+one source command",
+    "Consecutive own drafts continue from original/intermediate rendered Apply contexts",
+    "Agent before/after, other user field and replacement still refuse; previous settlement/failure and slider/text checks pass"
+  ],
+  "SDK": {
+    "schema": 1,
+    "archive": "third_party/vellum/vellum-ade66eb.tar.gz",
+    "archive_bytes": 18625527,
+    "sha256": "53b824706108f481ec1dcca842a72fee8ee7797ad2127e00489fda4e645ecf04",
+    "manifest_sha256": "9e30d55182850a11c54cb754782c3a7a66af2c3487cb0ccb85f874c8e31beb9e",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-ade66eb",
+    "source_commit": "ade66eb3586c6d881647cea52f19048087e598c5",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 7453,
+    "bootstrap": {
+      "scripts/check-sdk.py": "b8062fbd4c57d1d8cb4d75a094184e1a5fa108cfa811fe9fb390f99f6d66be38",
+      "scripts/child_process.py": "04ba2610ddf112e936e8adcd9a81c03cff422843f993c2ce8a9e1acd96f39c9c",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "803d981c00f32d08a370577b37094848b2c79085cf3303a99b23d2a94336ac2c",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541"
+    }
+  },
+  "self_review": {
+    "reviewed_production_files": [
+      "desktop/component_inspector.go",
+      "desktop/field_context.go",
+      "desktop/main.go",
+      "desktop/value_apply.go"
+    ],
+    "review": [
+      "Logical owner keys use exact generation/object strings, not command revisions, so own field commits do not remount Apply",
+      "Public IDs remain stable; old numeric/widget state is disposed through existing lifetime guards",
+      "SDK ordinary-control matrix covers retention/remount; model-owned bindings are excluded; text-only API remains compatible",
+      "Menu retirement marks old popup dead and clears its active context only when that context still points to the same popup",
+      "Apply span contains only consecutive accepted value-field response contexts; current revision/generation, object and draft must match",
+      "An intervening agent/other user field/replacement breaks the span; failed draft commits clear it",
+      "Fresh controls and one-click Apply are tested through pointer/keyboard routing; old schedule also reproduced against archived /145 source"
+    ],
+    "findings": [],
+    "remaining": [
+      "Physical OS interleaving/window blur/IME/VoiceOver and visible timing",
+      "Exhaustive mounted command conformance and owner walkthrough"
+    ]
+  },
+  "source_ledger": {
+    "sources": 62,
+    "sites": 389,
+    "public_commands": 162,
+    "source_routes": 132,
+    "source_hashes_changed": {
+      "desktop/component_inspector.go": {
+        "before": "21b820631a291b2b062fee89439654cd15e3a5788e0b83f0c5a4cb6ac1f8e3fe",
+        "after": "3a565a9c5c40dc50399b43e5dec3eb49543e04e8bfee070f5ab377a042fcf19f"
+      },
+      "desktop/field_context.go": {
+        "before": "18f5ec46649575e16528d973bb53214116b57f93e3d2354f474c40fb780b5298",
+        "after": "dd4eb5c89212c8ac7f967807bc3c52bdf0fb94409fa20162ed899ded54a0152e"
+      },
+      "desktop/main.go": {
+        "before": "34b33f0ad5d9d0fb635260b9ca97ad928dc0bb695eafd6302451ec1357a070b6",
+        "after": "6ea6affab2f82710c9d8f9092e6f1e20678779f15e1e5279166d8f7c99734fd3"
+      },
+      "desktop/value_apply.go": {
+        "before": "eab16eb97a0b34a4cff40d5fd77d96dbdce394c5071aaa7ed0e58169ea45713d",
+        "after": "2b67bd25e325a0edb829669ec8d1539ed217b9a9cfbb897c2834c4f16e724ee9"
+      }
+    },
+    "expression_changes": [
+      {
+        "before": {
+          "file": "desktop/value_apply.go",
+          "line": 42,
+          "function": "*screen.valueApplyAction",
+          "kind": "node-Activate",
+          "expression": "Activate: func() {\n\tif s.pendingValueApply != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\n\t\ts.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := &valueApply{context: context, params: params}\n\ts.pendingValueApply = pending\n\tdone := func(err error) {\n\t\tif s.pendingValueApply != pending {\n\t\t\treturn\n\t\t}\n\t\ts.pendingValueApply = nil\n\t\tif err != nil {\n\t\t\ts.errorMessage = fmt.Sprintf(\"Could not finish value entry: %v\", err)\n\t\t} else if !pending.failed {\n\t\t\ts.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)\n\t\t}\n\t\ts.app.Invalidate(\"main\")\n\t}\n\tif s.settleField == nil {\n\n\t\tdone(nil)\n\t} else if err := s.settleField(\"value-entry\", done); err != nil {\n\t\tdone(err)\n\t}\n}",
+          "status": "requires-binding-review"
+        },
+        "after": {
+          "file": "desktop/value_apply.go",
+          "line": 69,
+          "function": "*screen.valueApplyAction",
+          "kind": "node-Activate",
+          "expression": "Activate: func() {\n\tif s.pendingValueApply != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.valueDraftAccepted; accepted != nil && accepted.from.generation == context.generation &&\n\t\taccepted.from.revision <= context.revision && context.revision <= accepted.to.revision &&\n\t\taccepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) &&\n\t\taccepted.id == id && current.Selected == id && current.Drawing.Value == accepted.text {\n\t\tcontext = accepted.to\n\t\tparams.Value = accepted.text\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\n\t\ts.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := &valueApply{context: context, params: params}\n\ts.pendingValueApply = pending\n\tdone := func(err error) {\n\t\tif s.pendingValueApply != pending {\n\t\t\treturn\n\t\t}\n\t\ts.pendingValueApply = nil\n\t\tif err != nil {\n\t\t\ts.errorMessage = fmt.Sprintf(\"Could not finish value entry: %v\", err)\n\t\t} else if !pending.failed {\n\t\t\ts.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)\n\t\t}\n\t\ts.app.Invalidate(\"main\")\n\t}\n\tif s.settleField == nil {\n\n\t\tdone(nil)\n\t} else if err := s.settleField(\"value-entry\", done); err != nil {\n\t\tdone(err)\n\t}\n}",
+          "status": "requires-binding-review"
+        }
+      }
+    ],
+    "public_IDs_aliases_route_sets_and_site_classifications_unchanged": true
+  },
+  "limits": [
+    "Deterministic actual widget routing; no physical OS interleaving/window-blur/IME/VoiceOver/p95 qualification",
+    "Owner walkthrough not tried yet; full mounted conformance and broader MVP remain open",
+    "No canonical promotion; all earlier review packages preserved"
+  ],
+  "test_sha256": "371b670898b6527c17c0563630bd9bd39ae4c5cb89ec50ba637d50eea6d185b0",
+  "evidence_sha256": {
+    "README.md": "ab306e6bbabece2ca0c7572bccfb51c0876bd5da7e2e0b4370538b26d5a6c0c2",
+    "archived145-restart-apply-before.txt": "17a1d8539b591d5b9c3f3ebe10e2b193157b42fe0ce31ed4ee5dbd2db801dbc7",
+    "full-check.txt": "e16726e13b660f841d42c9e09bde61f8f98667f56abd7933e28031a1259c4ded",
+    "isolated-after.txt": "9321dec57aeef0c2f97eb399b522ddbb2c2d4e993f71c24f60f7fae972063acc",
+    "ledger-review.json": "a2c70008a4ed5c847f928c4c767cad4207cb4a1e19fbcef556b052393ee11777",
+    "numeric-before.txt": "cfef414cd975bbb4007dfe20a4f12cfc0e69233c66e0661668b3b74974167a1c",
+    "prepare.txt": "fa426ac397e4a58cf31ad8cb7433f2af3735d025800126170306ea11a8b60f2d",
+    "prior-sdk.lock.json": "a4377d0528851d902bb650e5dd653b23722e5bd2079afaa02764f6376854b987",
+    "rotate-before.txt": "1aca9eeb4789f8cbf2e33e5476f9e133463a120e8cd17415a76bf75ab33b4596",
+    "sdk-diff.json": "676bf9231901a0beefc64936895a1c6e3cb3bed69f6663d2ac0dbb06ffa29db4",
+    "sdk-driver-quality.txt": "7698114ba48a5ac76dc53d3e6cb3b982c5940281c24586b730ba5e8c0429c83b",
+    "sdk-offscreen-quality.txt": "adcd46cbd60878f1b6409b917af53d3e551fb339aab5a6bce9793ff45cd7a410",
+    "sdk-root-quality.txt": "8b08d9fe86cfbc5aae43732eb2d67735f9fba5b36033d84658ce9bfc3fac2587",
+    "self-review.json": "7a5595bf74c8d3645c959b556ccece5a62e38e10bff7b1213e98333b8cbd57ce",
+    "vellum.commit.txt": "8482b4b755ed0258d79d2ce08521e73e05716fa300e5cb66db0bdf2f60b4fa30",
+    "vellum.patch": "53586c1758c284904f5fcc82db8921d2b6bdb57925baf98365f98b714315c079"
+  }
+}

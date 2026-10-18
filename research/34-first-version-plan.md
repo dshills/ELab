@@ -64,6 +64,7 @@ Scripts alone do not establish native focus, typing, dialog or pointer behavior.
 
 | Issue | Severity and closure |
 |---|---|
+| Numeric drafts / held presses can change a different logical owner; Apply can reject its own draft commit | **Blocks promotion; source repairs verified, replacement pending.** Real-router regressions reproduce numeric/wrong-object rotation/replacement Restart and ordinary Apply on archived /145 source. |
 | Retained text field can carry an old private draft into another document/object | **Closed in 0.128.0 /145.** Both old schedules fail before repair; current fields remount on document/object identity change, preserve ordinary redraw, and accept fresh input. Full source quality and clean copied-runtime acceptance pass. [Receipt](ui-audit/first-version/text-state-review-checkpoint.json). |
 | Held potentiometer drag can overwrite an agent edit or replacement after repaint | **Closed in 0.127.0 /144.** Old SDK fails both interleavings; pinned repair passes normal/repaint/refusal controls, full source quality and clean exact copied-runtime acceptance. [Receipt](ui-audit/first-version/slider-review-checkpoint.json). Actual OS concurrent/focus-loss qualification remains separate. |
 | Retained simulation button can act on an agent-replaced experiment | **Closed in 0.126.0 /143.** Tests refuse stale controls and preserve fresh/live-sample behavior; full quality, actual fresh native focus, clean replacement and exact-runtime acceptance pass. [Receipt](../docs/validation/rendered-simulation-buttons/checkpoint.json). |

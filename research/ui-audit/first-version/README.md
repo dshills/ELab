@@ -307,3 +307,8 @@ A subsequent [real-router reproduction](../../../docs/validation/text-field-stat
 ### Text-state replacement ready
 
 Clean **0.128.0 /145** includes the retained text-field identity repair with its matching agent and unchanged examples. Exact copied native smoke/four-adapter conformance, reference parity and pulse/Pause/Resume/save acceptance through 3.401 s pass. [Receipt](text-state-review-checkpoint.json), [walkthrough](../../35-first-version-review.md). All five earlier review folders and canonical /120 remain unchanged. No physical OS interleaving, window-blur, visible-p95, accessibility, participant or owner-acceptance claim is added.
+
+
+### Numeric/button ownership and Apply blockers
+
+The [bounded follow-up](../../../docs/validation/control-owner/README.md) found three wrong-owner schedules beyond text fields and a normal one-click Apply conflict. The verified source uses logical owner keys for ordinary controls and accepted value-field continuation for Apply, preserving public IDs and actor conflict guards. Source/SDK quality passes; /145 is affected until replacement. Deterministic routing does not qualify physical OS interleaving/window blur.

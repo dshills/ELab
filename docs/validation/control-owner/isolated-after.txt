@@ -1,0 +1,104 @@
+# github.com/dshills/vellum/drivers/cogent
+accessibility_darwin.m:605:43: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+accessibility_darwin.m:606:42: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft
+=== RUN   TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft/unchanged-repaint
+    control_owner_offscreen_test.go:89: incarnation 2→2; owner P1→P1
+=== RUN   TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft/document-replacement
+    control_owner_offscreen_test.go:89: incarnation 2→3; owner P1→P1
+=== RUN   TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft/selected-object
+    control_owner_offscreen_test.go:89: incarnation 2→3; owner P1→P2
+--- PASS: TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft (2.02s)
+    --- PASS: TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft/unchanged-repaint (0.63s)
+    --- PASS: TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft/document-replacement (0.69s)
+    --- PASS: TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft/selected-object (0.70s)
+=== RUN   TestMountedButtonOwnerCannotRetargetHeldRotate
+=== RUN   TestMountedButtonOwnerCannotRetargetHeldRotate/unchanged-repaint
+    control_owner_offscreen_test.go:175: incarnation 2→2; owner R1→R1
+=== RUN   TestMountedButtonOwnerCannotRetargetHeldRotate/selected-object
+    control_owner_offscreen_test.go:175: incarnation 2→3; owner R1→R2
+--- PASS: TestMountedButtonOwnerCannotRetargetHeldRotate (0.16s)
+    --- PASS: TestMountedButtonOwnerCannotRetargetHeldRotate/unchanged-repaint (0.08s)
+    --- PASS: TestMountedButtonOwnerCannotRetargetHeldRotate/selected-object (0.08s)
+=== RUN   TestMountedButtonOwnerDoesNotRestartReplacementDocument
+--- PASS: TestMountedButtonOwnerDoesNotRestartReplacementDocument (0.12s)
+=== RUN   TestMountedButtonOwnerPreservesSingleClickValueApply
+--- PASS: TestMountedButtonOwnerPreservesSingleClickValueApply (0.15s)
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/uninterrupted
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/unchanged-repaint
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-repaint
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-document-replacement
+--- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag (2.25s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/uninterrupted (0.56s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/unchanged-repaint (0.56s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-repaint (0.56s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-document-replacement (0.58s)
+=== RUN   TestMountedSliderKeyboardFocusChangePreservesContext
+=== RUN   TestMountedSliderKeyboardFocusChangePreservesContext/normal
+=== RUN   TestMountedSliderKeyboardFocusChangePreservesContext/replacement
+--- PASS: TestMountedSliderKeyboardFocusChangePreservesContext (1.15s)
+    --- PASS: TestMountedSliderKeyboardFocusChangePreservesContext/normal (0.57s)
+    --- PASS: TestMountedSliderKeyboardFocusChangePreservesContext/replacement (0.58s)
+=== RUN   TestMountedSliderRunningChargeAndAgentParity
+    slider_invalidation_offscreen_test.go:396: held 0.002→0.004 s; accepted at 0.004 s; wiper 0.940625; event charge 1.995280651 V; one user history/event; agent replay 4.626952142 V
+--- PASS: TestMountedSliderRunningChargeAndAgentParity (0.94s)
+=== RUN   TestValueApplyWaitsForNativeFieldAndUsesSharedCommands
+=== RUN   TestValueApplyWaitsForNativeFieldAndUsesSharedCommands/resistor
+=== RUN   TestValueApplyWaitsForNativeFieldAndUsesSharedCommands/net-label
+--- PASS: TestValueApplyWaitsForNativeFieldAndUsesSharedCommands (0.06s)
+    --- PASS: TestValueApplyWaitsForNativeFieldAndUsesSharedCommands/resistor (0.03s)
+    --- PASS: TestValueApplyWaitsForNativeFieldAndUsesSharedCommands/net-label (0.03s)
+=== RUN   TestValueApplySettlementPreservesInterveningAgentWork
+=== RUN   TestValueApplySettlementPreservesInterveningAgentWork/before-change
+=== RUN   TestValueApplySettlementPreservesInterveningAgentWork/after-change
+=== RUN   TestValueApplySettlementPreservesInterveningAgentWork/document-replaced
+--- PASS: TestValueApplySettlementPreservesInterveningAgentWork (0.28s)
+    --- PASS: TestValueApplySettlementPreservesInterveningAgentWork/before-change (0.10s)
+    --- PASS: TestValueApplySettlementPreservesInterveningAgentWork/after-change (0.09s)
+    --- PASS: TestValueApplySettlementPreservesInterveningAgentWork/document-replaced (0.09s)
+=== RUN   TestValueApplySettlementFailureDoesNotApplyOldText
+=== RUN   TestValueApplySettlementFailureDoesNotApplyOldText/admission
+=== RUN   TestValueApplySettlementFailureDoesNotApplyOldText/completion
+=== RUN   TestValueApplySettlementFailureDoesNotApplyOldText/invalid-draft
+--- PASS: TestValueApplySettlementFailureDoesNotApplyOldText (0.22s)
+    --- PASS: TestValueApplySettlementFailureDoesNotApplyOldText/admission (0.06s)
+    --- PASS: TestValueApplySettlementFailureDoesNotApplyOldText/completion (0.06s)
+    --- PASS: TestValueApplySettlementFailureDoesNotApplyOldText/invalid-draft (0.09s)
+=== RUN   TestValueApplyDoesNotAdoptARefreshedFieldAfterAgentEdit
+--- PASS: TestValueApplyDoesNotAdoptARefreshedFieldAfterAgentEdit (0.09s)
+=== RUN   TestValueApplyContinuesOwnDraftCommittedBeforeClick
+=== RUN   TestValueApplyContinuesOwnDraftCommittedBeforeClick/1-drafts/capture-0
+=== RUN   TestValueApplyContinuesOwnDraftCommittedBeforeClick/2-drafts/capture-0
+=== RUN   TestValueApplyContinuesOwnDraftCommittedBeforeClick/2-drafts/capture-1
+--- PASS: TestValueApplyContinuesOwnDraftCommittedBeforeClick (0.23s)
+    --- PASS: TestValueApplyContinuesOwnDraftCommittedBeforeClick/1-drafts/capture-0 (0.07s)
+    --- PASS: TestValueApplyContinuesOwnDraftCommittedBeforeClick/2-drafts/capture-0 (0.07s)
+    --- PASS: TestValueApplyContinuesOwnDraftCommittedBeforeClick/2-drafts/capture-1 (0.09s)
+=== RUN   TestValueApplyOwnDraftContinuationRefusesInterveningEdits
+=== RUN   TestValueApplyOwnDraftContinuationRefusesInterveningEdits/agent-before-draft
+=== RUN   TestValueApplyOwnDraftContinuationRefusesInterveningEdits/agent-after-draft
+=== RUN   TestValueApplyOwnDraftContinuationRefusesInterveningEdits/other-user-field
+=== RUN   TestValueApplyOwnDraftContinuationRefusesInterveningEdits/new-document
+--- PASS: TestValueApplyOwnDraftContinuationRefusesInterveningEdits (0.40s)
+    --- PASS: TestValueApplyOwnDraftContinuationRefusesInterveningEdits/agent-before-draft (0.09s)
+    --- PASS: TestValueApplyOwnDraftContinuationRefusesInterveningEdits/agent-after-draft (0.10s)
+    --- PASS: TestValueApplyOwnDraftContinuationRefusesInterveningEdits/other-user-field (0.12s)
+    --- PASS: TestValueApplyOwnDraftContinuationRefusesInterveningEdits/new-document (0.09s)
+=== RUN   TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement
+=== RUN   TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement/unchanged-repaint
+    value_context_offscreen_test.go:83: native incarnation 2→2; text after redraw 2.2k; controlled "1 kΩ"
+=== RUN   TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement/document-replacement
+    value_context_offscreen_test.go:83: native incarnation 2→3; text after redraw 1 kΩ; controlled "1 kΩ"
+=== RUN   TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement/selected-object
+    value_context_offscreen_test.go:83: native incarnation 2→3; text after redraw 1 kΩ; controlled "1 kΩ"
+--- PASS: TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement (0.62s)
+    --- PASS: TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement/unchanged-repaint (0.15s)
+    --- PASS: TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement/document-replacement (0.23s)
+    --- PASS: TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement/selected-object (0.23s)
+PASS
+ok  	github.com/dshills/elab/desktop	10.339s

@@ -9,10 +9,10 @@ import (
 // Bind before platform selector adaptation so asynchronous native choices keep
 // the original field callback's context too. All callbacks run on the owner.
 func (s *screen) bindFieldContext(node *ui.Node, context actionContext) {
-	if node.Kind == ui.TextField {
-		// A new document must not inherit an unfinished native draft, even if
-		// the controlled text and public field ID are unchanged in one redraw.
-		node.TextStateKey = strconv.FormatUint(context.generation, 10) + ":" + node.TextStateKey
+	if ui.SupportsControlStateKey(node.Kind) {
+		// A new document must not inherit private edits or a pressed control,
+		// even when its public ID and controlled value return in one redraw.
+		node.ControlStateKey = strconv.FormatUint(context.generation, 10) + ":" + node.ControlStateKey
 	}
 	if node.Change != nil {
 		change := node.Change
@@ -35,13 +35,13 @@ func (s *screen) bindFieldContext(node *ui.Node, context actionContext) {
 	}
 }
 
-// The same inspector field IDs serve different selected objects. Their private
-// native drafts belong to that object rather than the reusable public field ID.
-func scopeComponentFieldState(node *ui.Node, id string) {
-	if node.Kind == ui.TextField {
-		node.TextStateKey = id
+// The same inspector control IDs serve different selected objects. Their private
+// native state belongs to that object rather than the reusable public control ID.
+func scopeComponentControlState(node *ui.Node, id string) {
+	if ui.SupportsControlStateKey(node.Kind) {
+		node.ControlStateKey = id
 	}
 	for i := range node.Children {
-		scopeComponentFieldState(&node.Children[i], id)
+		scopeComponentControlState(&node.Children[i], id)
 	}
 }

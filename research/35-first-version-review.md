@@ -1,5 +1,7 @@
 # ELab first-version review · 0.128.0 /145
 
+**New blockers found after this handoff:** numeric drafts and held button presses can target another logical owner, and a normal Apply click can conflict with its own field commit. Pinned repairs pass the full source quality gate; /145 is preserved and needs replacement. [Evidence](../docs/validation/control-owner/README.md).
+
 This is the updated owner-review alpha. Open [ELab.app](../build/ELab-0.128.0-145-review/ELab.app) in the [review folder](../build/ELab-0.128.0-145-review). The folder includes the matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required. The canonical app and all five earlier review folders (0.123.0 /140 through 0.127.0 /144) are preserved. Owner walkthrough remains pending (October 18: “Not tried yet”).
 
 Before opening the replacement, save your work and quit an earlier review app when ready. Version 0.128 keeps unfinished value text attached to its document and selected object. A new logical owner clears the old private draft even if the same field ID and controlled value return in one redraw. Ordinary redraws keep pending text, and fresh typing still works. The narrow SDK TextStateKey repair retains public field IDs and command schemas. Earlier slider-context, rendered simulation-button and live-clock repairs are included; models and project format are unchanged.

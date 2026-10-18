@@ -1,0 +1,22 @@
+{
+  "reviewed_production_files": [
+    "desktop/component_inspector.go",
+    "desktop/field_context.go",
+    "desktop/main.go",
+    "desktop/value_apply.go"
+  ],
+  "review": [
+    "Logical owner keys use exact generation/object strings, not command revisions, so own field commits do not remount Apply",
+    "Public IDs remain stable; old numeric/widget state is disposed through existing lifetime guards",
+    "SDK ordinary-control matrix covers retention/remount; model-owned bindings are excluded; text-only API remains compatible",
+    "Menu retirement marks old popup dead and clears its active context only when that context still points to the same popup",
+    "Apply span contains only consecutive accepted value-field response contexts; current revision/generation, object and draft must match",
+    "An intervening agent/other user field/replacement breaks the span; failed draft commits clear it",
+    "Fresh controls and one-click Apply are tested through pointer/keyboard routing; old schedule also reproduced against archived /145 source"
+  ],
+  "findings": [],
+  "remaining": [
+    "Physical OS interleaving/window blur/IME/VoiceOver and visible timing",
+    "Exhaustive mounted command conformance and owner walkthrough"
+  ]
+}

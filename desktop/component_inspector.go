@@ -118,7 +118,7 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 		inspector = append(inspector, s.partGeometryControls(part)...)
 	}
 	for i := range inspector {
-		scopeComponentFieldState(&inspector[i], part.ID)
+		scopeComponentControlState(&inspector[i], part.ID)
 	}
 	return inspector
 }

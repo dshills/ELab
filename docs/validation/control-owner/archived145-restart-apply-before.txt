@@ -1,0 +1,11 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedButtonOwnerDoesNotRestartReplacementDocument
+    control_owner_offscreen_test.go:222: old Restart press changed the replacement experiment
+--- FAIL: TestMountedButtonOwnerDoesNotRestartReplacementDocument (0.12s)
+=== RUN   TestMountedButtonOwnerPreservesSingleClickValueApply
+    control_owner_offscreen_test.go:274: one Apply click failed to settle draft and apply source once <nil> expected command revision 3; current command revision is 4 3 4
+--- FAIL: TestMountedButtonOwnerPreservesSingleClickValueApply (0.13s)
+FAIL
+exit status 1
+FAIL	github.com/dshills/elab/desktop	0.900s
