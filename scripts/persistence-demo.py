@@ -11,8 +11,8 @@ import time
 ROOT = Path(__file__).resolve().parents[1]
 
 class Client:
-    def __init__(self, endpoint=None, command_preconditions=False):
-        argv = [str(ROOT / 'build/elab-agent')]
+    def __init__(self, endpoint=None, command_preconditions=False, agent_binary=None):
+        argv = [str(agent_binary if agent_binary is not None else ROOT / 'build/elab-agent')]
         if endpoint:
             argv += ['--connect', endpoint]
         self.process = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True)

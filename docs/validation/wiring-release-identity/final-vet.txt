@@ -1,0 +1,4 @@
+env GOWORK=off GOCACHE=<workspace>/build/go-cache CGO_LDFLAGS_ALLOW=-Wl,-rpath,@executable_path/native go vet -tags=offscreen ./...
+Working directory: desktop
+Exit code: 0
+Repeated only the final silent check because the original terminal receipt was not retained after context compaction.

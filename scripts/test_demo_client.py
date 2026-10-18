@@ -4,6 +4,7 @@ import io
 import json
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 
 spec = importlib.util.spec_from_file_location('persistence_client', Path(__file__).with_name('persistence-demo.py'))
 helper = importlib.util.module_from_spec(spec)
@@ -30,6 +31,13 @@ def client_with_responses(responses, command_preconditions=True):
 
 
 class ClientRetryTests(unittest.TestCase):
+    def test_explicit_agent_binary_is_used_without_changing_the_default(self):
+        for binary in (None, Path('/private/tmp/qualified-agent')):
+            process = type('Fixture', (), dict(stdin=io.StringIO(), stdout=io.StringIO(response())))()
+            with patch.object(helper.subprocess, 'Popen', return_value=process) as launch:
+                helper.Client(agent_binary=binary)
+                self.assertEqual(launch.call_args.args[0], [str(binary if binary is not None else helper.ROOT/'build/elab-agent')])
+
     def test_conflict_refreshes_only_guard_and_retains_exact_request_intent(self):
         for command_guard in (False, True):
             with self.subTest(command_guard=command_guard):

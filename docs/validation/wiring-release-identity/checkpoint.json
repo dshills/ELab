@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-18",
+  "prior_goal_turn": "progress: 5766dd1 output-page repair and c48eeeb clean /151 qualification",
+  "source_base": "c48eeeb7243bce98cc2ca00a7a80fb6862884216",
+  "status": "release-pinned wiring provenance qualified; owner walkthrough and wider MVP remain pending",
+  "production_changed": false,
+  "product_version_increment": false,
+  "product_rebuild_or_promotion": false,
+  "sdk_changed": false,
+  "reproduction": {
+    "historical_release": "0.132.0 /149",
+    "historical_release_sources": 64,
+    "historical_runner_reported_current_sources": 66,
+    "consequence": "Mixed source/release identity; no wiring behavior failure demonstrated"
+  },
+  "stale_review_refusal": {
+    "exit_code": 1,
+    "before_sdk_tests_agent_and_output": true,
+    "output_directory_created": false
+  },
+  "qualified_review": {
+    "source_commit": "5766dd194e124fbbd2e5782129109fbcb813c1e7",
+    "release": "0.134.0 /151",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.134.0-151-review/elab-agent",
+    "agent_sha256": "290d59079091fb9bac9e95e97dd8215be6320a26933e15350c47481fda91e319",
+    "receipt_sha256": "c57e968e39c616a0ee84648681248286c341d90ed556860d7b2fd087f9b72939",
+    "ledger_sha256": "1e6d45933b6d76596d83a2d033fef57ba8781d3bf691ef9c188c1478b987cb86",
+    "production_source_files_verified": 66,
+    "runtime_inputs_verified": 339,
+    "manifest_file_entries_verified": 129,
+    "manifest_sha256": "36c05644dcdcaefe7241b0c78a02bd98fe703ff742b1a398d6095d0a3daa6c57"
+  },
+  "producer_files_verified": 115,
+  "compared_cases": [
+    "mounted-complete",
+    "mounted-undo",
+    "native-adapter-complete"
+  ],
+  "current_a": 0.0029167965774405296,
+  "quality": {
+    "python_tests": 51,
+    "python_result": "passed",
+    "lint_and_audit": "passed in sequential quality log",
+    "root_native_and_mounted_race": "passed; cached",
+    "focused_wiring": "fresh count=1 race test and packaged agent replay passed",
+    "source_gate_terminal_receipt": "not retained across context compaction; no aggregate exit status claimed",
+    "final_tagged_vet_exit_code": 0
+  },
+  "historical_evidence_hashes_unchanged": true,
+  "self_review": {
+    "findings": [],
+    "scope": [
+      "Exact runtime inputs and ledger pinned independently of evolving tests",
+      "Recorded test producer, command, transcript and packaged agent checked before execution",
+      "Prior artifacts and default client selection preserved",
+      "No OS interaction or complete conformance inferred"
+    ]
+  },
+  "source_sha256": {
+    "scripts/wiring_replay.py": "dd31a0d14c68e4f65241597a8678e87c6e92ae2905cd0746ec75100677a92f08",
+    "scripts/test_wiring_replay.py": "316b641623d5c173239b8249fefee5ceced5e0a9e83e25fb8361822242385915",
+    "scripts/persistence-demo.py": "4f3893eec22b3e6173aa75138e7774a43727b0bfc908c4bb56e8616e0d45dae5",
+    "scripts/test_demo_client.py": "eb82c9ab53467c4e37d9ade3f4de755047eebfbb2a86b6a69ccdd950523c33eb"
+  },
+  "limits": [
+    "Owner walkthrough: Not tried yet",
+    "P0 unchanged: 17 implemented /10 partial",
+    "No physical OS menus/IME/VoiceOver, eligible visible p95, broader environment/signing/study or physical printing evidence"
+  ],
+  "evidence_sha256": {
+    "README.md": "0b08bec8e1193a0f4d1b1511a0e9224a9a774269bebb5765f88c34470ff63db2",
+    "final-vet.txt": "de49f2919e63e97675098b8fcd7b94c07270de7fe2e32262b4e23dda3bab6ef8",
+    "focused.txt": "c371056c773a04ae0583b17c44584f9bd5ef65f9335e467aaa23cbb031ecb895",
+    "full-check.txt": "d08a4e1d28eaf3fb83c5a4511a3e79be14c605e4b092026a8cc51ecd603fccce",
+    "historical-replay-before.json": "fa8936cf98831f998ebdd33282624f6e3e67a4d5243a3138f75fe1445669cbfc",
+    "producer.json": "0e9fd521d6b0a2a8e46cc7bbac41fe97e0338aa404d697650a34f1dd97c6f6af",
+    "report.json": "811b58a4673891a28f76b520db639f972ffa34c2826f1188ca150283fbe7ac9d",
+    "stale-review-refusal.txt": "70630b52e42540fb9df507205c322bd1a20f76451c2982454ae205d7a01437d4"
+  }
+}
