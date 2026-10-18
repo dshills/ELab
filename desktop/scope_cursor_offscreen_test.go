@@ -195,3 +195,68 @@ func TestMountedScopeCursorStaleSelectPreservesPhysics(t *testing.T) {
 	}
 	assertCursorMeasurementPreservesPhysics(t, before, after)
 }
+
+func TestMountedScopeCursorPrivateDraftBelongsToLiveRun(t *testing.T) {
+	for _, cursor := range []string{"a", "b"} {
+		for _, change := range []string{"repaint", "sample", "restart"} {
+			t.Run(cursor+"/"+change, func(t *testing.T) {
+				s, cleanup := scopeContextRC(t)
+				t.Cleanup(cleanup)
+				m := mountedCursorControls(t, s)
+				id := "cursor-time-" + cursor
+				original := mountedControlElement(t, m, id)
+				before := s.service.Snapshot()
+				typeMountedCursor(t, m, id, "8 ms")
+				if !reflect.DeepEqual(before, s.service.Snapshot()) {
+					t.Fatal("fixture lacks private uncommitted cursor input")
+				}
+				switch change {
+				case "sample":
+					agentAction(t, s.service, "simulation.step", workbench.StepParams{Duration: .001})
+				case "restart":
+					agentAction(t, s.service, "simulation.restart", struct{}{})
+					agentAction(t, s.service, "simulation.step", workbench.StepParams{Duration: .02})
+				}
+				current := s.service.Snapshot()
+				if (current.RunID != before.RunID) != (change == "restart") || current.Document.Generation != before.Document.Generation {
+					t.Fatal("fixture did not preserve the document and intended run identity")
+				}
+				m.frame()
+				field := mountedControlElement(t, m, id)
+				t.Logf("run %d→%d; incarnation %d→%d; field=%v", before.RunID, current.RunID, original.Incarnation, field.Incarnation, field.Value)
+				clickMountedControl(t, m, id)
+				if m.snapshot().FocusedID != id {
+					t.Fatal("cursor field did not receive focus before Enter", id)
+				}
+				m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeReturnEnter})
+				after := s.service.Snapshot()
+				at := func(state workbench.Snapshot) *workbench.ScopeCursor {
+					if cursor == "a" {
+						return state.Scope.A
+					}
+					return state.Scope.B
+				}
+				if change != "restart" {
+					if field.Incarnation != original.Incarnation || at(after) == nil || at(after).Requested != .008 || after.CommandRevision != current.CommandRevision+1 || s.errorMessage != "" {
+						t.Fatal("same-run repaint or sample lost its unfinished cursor edit", s.errorMessage)
+					}
+					assertCursorMeasurementPreservesPhysics(t, current, after)
+					return
+				}
+				if !reflect.DeepEqual(current, after) {
+					t.Fatalf("old private cursor text changed a restarted run: cursor=%s run=%d→%d requested=%+v revision=%d→%d error=%s", cursor, before.RunID, current.RunID, at(after), current.CommandRevision, after.CommandRevision, s.errorMessage)
+				}
+				if field.Incarnation == original.Incarnation || field.Value != "" {
+					t.Fatal("new run retained old private cursor state", field)
+				}
+				typeMountedCursor(t, m, id, "6 ms")
+				m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeReturnEnter})
+				after = s.service.Snapshot()
+				if at(after) == nil || at(after).Requested != .006 || after.CommandRevision != current.CommandRevision+1 || s.errorMessage != "" {
+					t.Fatal("fresh cursor input failed on the restarted run", s.errorMessage)
+				}
+				assertCursorMeasurementPreservesPhysics(t, current, after)
+			})
+		}
+	}
+}

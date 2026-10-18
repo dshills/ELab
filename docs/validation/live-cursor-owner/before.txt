@@ -1,0 +1,27 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/repaint
+    scope_cursor_offscreen_test.go:226: run 3→3; incarnation 4→4; field=8 ms
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/sample
+    scope_cursor_offscreen_test.go:226: run 3→3; incarnation 4→4; field=8 ms
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/restart
+    scope_cursor_offscreen_test.go:226: run 3→4; incarnation 4→4; field=8 ms
+    scope_cursor_offscreen_test.go:244: old private cursor text changed a restarted run: cursor=a run=3→4 requested=&{Requested:0.008 Time:0.008 Valid:true Reason:} revision=7→8 error=
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/repaint
+    scope_cursor_offscreen_test.go:226: run 3→3; incarnation 8→8; field=8 ms
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/sample
+    scope_cursor_offscreen_test.go:226: run 3→3; incarnation 8→8; field=8 ms
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/restart
+    scope_cursor_offscreen_test.go:226: run 3→4; incarnation 8→8; field=8 ms
+    scope_cursor_offscreen_test.go:244: old private cursor text changed a restarted run: cursor=b run=3→4 requested=&{Requested:0.008 Time:0.008 Valid:true Reason:} revision=7→8 error=
+--- FAIL: TestMountedScopeCursorPrivateDraftBelongsToLiveRun (0.99s)
+    --- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/repaint (0.17s)
+    --- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/sample (0.16s)
+    --- FAIL: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/restart (0.16s)
+    --- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/repaint (0.16s)
+    --- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/sample (0.17s)
+    --- FAIL: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/restart (0.17s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	1.680s
+FAIL

@@ -164,5 +164,9 @@ func (s *screen) cursorControls(state workbench.Snapshot) ui.Node {
 	}
 	nodes = append(nodes, quiet("cursor-measurement", caption))
 	// The inspector contains per-trace readings; the scope toolbar stays compact.
-	return ui.Node{ID: "scope-cursors", Kind: ui.Toolbar, Style: chromeStyle(), Children: nodes}
+	controls := ui.Node{ID: "scope-cursors", Kind: ui.Toolbar, Style: chromeStyle(), Children: nodes}
+	// Unfinished times belong to this run; ordinary samples keep that identity,
+	// while a restart must not carry a private draft into the new experiment.
+	scopeOwnedControlState(&controls, fmt.Sprintf("live-run:%d", state.RunID))
+	return controls
 }

@@ -1,0 +1,24 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/repaint
+    scope_cursor_offscreen_test.go:226: run 3→3; incarnation 4→4; field=8 ms
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/sample
+    scope_cursor_offscreen_test.go:226: run 3→3; incarnation 4→4; field=8 ms
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/restart
+    scope_cursor_offscreen_test.go:226: run 3→4; incarnation 4→11; field=
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/repaint
+    scope_cursor_offscreen_test.go:226: run 3→3; incarnation 8→8; field=8 ms
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/sample
+    scope_cursor_offscreen_test.go:226: run 3→3; incarnation 8→8; field=8 ms
+=== RUN   TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/restart
+    scope_cursor_offscreen_test.go:226: run 3→4; incarnation 8→14; field=
+--- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun (1.07s)
+    --- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/repaint (0.17s)
+    --- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/sample (0.16s)
+    --- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/a/restart (0.21s)
+    --- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/repaint (0.16s)
+    --- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/sample (0.16s)
+    --- PASS: TestMountedScopeCursorPrivateDraftBelongsToLiveRun/b/restart (0.21s)
+PASS
+ok  	github.com/dshills/elab/desktop	2.753s
