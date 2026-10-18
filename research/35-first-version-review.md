@@ -1,5 +1,7 @@
 # ELab first-version review · 0.130.0 /147
 
+**New interaction defect found after qualification:** typing a cursor time then clicking A/B can require a second click because its own focus-loss commit advances the command revision. The source repair passes mounted tests; full quality passes; replacement qualification is pending. /147 remains immutable and affected.
+
 This is the updated owner-review alpha. Open [ELab.app](../build/ELab-0.130.0-147-focus-review/ELab.app) in the [review folder](../build/ELab-0.130.0-147-focus-review). It includes the matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required. The canonical app, seven earlier review folders (0.123.0 /140 through 0.129.0 /146) and the original unqualified /147 candidate are preserved. Owner walkthrough remains pending (October 18: “Not tried yet”).
 
 Before opening the replacement, save your work and quit an earlier review app when ready. Version 0.130 keeps the action from a held pointer press through repaint and queued delivery. Old Close/Undo releases cannot reverse a newer agent switch edit or borrow its history permission. Fresh clicks and keyboard input work; live samples do not invalidate Pause. Earlier logical control ownership, one-click Apply, text, slider and clock repairs are included. Public control IDs/command schemas, models and project format remain unchanged.

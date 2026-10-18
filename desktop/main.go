@@ -221,6 +221,8 @@ type screen struct {
 	settleField                         func(string, func(error)) error
 	pendingValueApply                   *valueApply
 	valueDraftAccepted                  *valueDraftContinuation
+	cursorFieldAccepted                 *cursorFieldContinuation
+	pendingCursorAction                 *cursorActionWork
 }
 
 func (s *screen) invoke(id string, p any) workbench.Response {

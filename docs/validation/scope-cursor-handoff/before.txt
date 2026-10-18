@@ -1,0 +1,10 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedScopeCursorEnterSelectClearMatchesPublicAgent
+--- PASS: TestMountedScopeCursorEnterSelectClearMatchesPublicAgent (0.29s)
+=== RUN   TestMountedScopeCursorFocusLossThenSelectUsesOneClick
+    scope_cursor_offscreen_test.go:127: one click failed to commit A and select B: A=&{Requested:0.004 Time:0.004 Valid:true Reason:} active=a revision=5→6 error=expected command revision 5; current command revision is 6
+--- FAIL: TestMountedScopeCursorFocusLossThenSelectUsesOneClick (0.15s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	1.091s
+FAIL

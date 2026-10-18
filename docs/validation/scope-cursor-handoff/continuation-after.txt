@@ -1,0 +1,22 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestCursorActionContinuesOnlyConsecutiveOwnTimeFields
+=== RUN   TestCursorActionContinuesOnlyConsecutiveOwnTimeFields/original-action
+=== RUN   TestCursorActionContinuesOnlyConsecutiveOwnTimeFields/intermediate-action
+--- PASS: TestCursorActionContinuesOnlyConsecutiveOwnTimeFields (0.22s)
+    --- PASS: TestCursorActionContinuesOnlyConsecutiveOwnTimeFields/original-action (0.10s)
+    --- PASS: TestCursorActionContinuesOnlyConsecutiveOwnTimeFields/intermediate-action (0.12s)
+=== RUN   TestCursorActionContinuationRefusesInterveningWork
+=== RUN   TestCursorActionContinuationRefusesInterveningWork/agent-before-field
+=== RUN   TestCursorActionContinuationRefusesInterveningWork/agent-after-field
+=== RUN   TestCursorActionContinuationRefusesInterveningWork/other-user-field
+=== RUN   TestCursorActionContinuationRefusesInterveningWork/document-replaced
+=== RUN   TestCursorActionContinuationRefusesInterveningWork/failed-field
+--- PASS: TestCursorActionContinuationRefusesInterveningWork (0.41s)
+    --- PASS: TestCursorActionContinuationRefusesInterveningWork/agent-before-field (0.07s)
+    --- PASS: TestCursorActionContinuationRefusesInterveningWork/agent-after-field (0.07s)
+    --- PASS: TestCursorActionContinuationRefusesInterveningWork/other-user-field (0.11s)
+    --- PASS: TestCursorActionContinuationRefusesInterveningWork/document-replaced (0.07s)
+    --- PASS: TestCursorActionContinuationRefusesInterveningWork/failed-field (0.10s)
+PASS
+ok  	github.com/dshills/elab/desktop	2.215s

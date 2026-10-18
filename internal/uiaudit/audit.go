@@ -178,6 +178,10 @@ func Audit(directory string) (Report, error) {
 						if len(n.Args) == 4 {
 							add(function, "action-factory", n, literalRoutes(n.Args[2]), routeStatus(n.Args[2]))
 						}
+					case "cursorAction":
+						if len(n.Args) == 5 {
+							add(function, "action-factory", n, literalRoutes(n.Args[3]), routeStatus(n.Args[3]))
+						}
 					case "button":
 						if len(n.Args) == 2 {
 							add(function, "registry-button", n, literalRoutes(n.Args[0]), routeStatus(n.Args[0]))

@@ -1,0 +1,16 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedScopeCursorEnterSelectClearMatchesPublicAgent
+=== RUN   TestMountedScopeCursorEnterSelectClearMatchesPublicAgent/rc
+=== RUN   TestMountedScopeCursorEnterSelectClearMatchesPublicAgent/flasher
+--- PASS: TestMountedScopeCursorEnterSelectClearMatchesPublicAgent (1.91s)
+    --- PASS: TestMountedScopeCursorEnterSelectClearMatchesPublicAgent/rc (0.26s)
+    --- PASS: TestMountedScopeCursorEnterSelectClearMatchesPublicAgent/flasher (1.65s)
+=== RUN   TestMountedScopeCursorFocusLossThenClearUsesOneClick
+--- PASS: TestMountedScopeCursorFocusLossThenClearUsesOneClick (0.15s)
+=== RUN   TestMountedScopeCursorHeldSelectionRefusesAgentAfterOwnCommit
+--- PASS: TestMountedScopeCursorHeldSelectionRefusesAgentAfterOwnCommit (0.16s)
+=== RUN   TestMountedScopeCursorFocusLossThenSelectUsesOneClick
+--- PASS: TestMountedScopeCursorFocusLossThenSelectUsesOneClick (0.15s)
+PASS
+ok  	github.com/dshills/elab/desktop	4.067s

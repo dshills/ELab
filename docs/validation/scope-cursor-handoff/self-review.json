@@ -1,0 +1,26 @@
+{
+  "production_files": [
+    "desktop/cursor_actions.go",
+    "desktop/probes.go",
+    "desktop/main.go"
+  ],
+  "review": [
+    "Only scope cursor Select/Clear may bridge consecutive accepted cursor-field response contexts",
+    "Response contexts are retained from the dispatch result, never from a later service snapshot; failed field commands clear the span",
+    "Current revision/document must match the accepted endpoint, and the rendered action must be inside that same-document span",
+    "Intervening agent, unrelated user field and document work still reaches ordinary guarded refusal; no generic command retry",
+    "Both own cursor fields can continue original/intermediate rendered actions; normal/fresh controls work",
+    "No SDK, public schema, model or project-format changes; state is constant-size and owner-held",
+    "Auditor explicitly recognizes the new factory command argument and still rejects unknown/dynamic routes appropriately",
+    "Both native commit orders are handled: earlier accepted field continuation and deferred real native field settlement",
+    "Pending transaction phases prevent duplicate activation/completion; both field completions precede the final Select/Clear dispatch",
+    "A rebound deferred field is refused before dispatch if it no longer has the pending transaction context; failures suppress the final action",
+    "Disabled cursor time fields are skipped for selection when transient data is absent/stale; a real public graph edit regression covers stale selection",
+    "Native smoke waits for matching mounted document and asynchronous cursor selection completion before placement; original numerical assertions and deadlines retained"
+  ],
+  "findings": [],
+  "limits": [
+    "Offscreen real-widget routing, not physical OS/IME/VoiceOver/latency qualification",
+    "Replacement packaging and owner walkthrough remain separate"
+  ]
+}

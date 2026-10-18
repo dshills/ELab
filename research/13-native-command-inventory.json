@@ -7,6 +7,7 @@
     "desktop/canvas.go": "a241f57812c104171737149f067ae8a0d5aaf191c17092597c5a060b4587c7ef",
     "desktop/component_inspector.go": "3a565a9c5c40dc50399b43e5dec3eb49543e04e8bfee070f5ab377a042fcf19f",
     "desktop/component_palette.go": "5d7b83aba4bd8202b899f0168848226f8217a8dd3dbd73d2ff6c8d99b752d3ab",
+    "desktop/cursor_actions.go": "d5ece86db5f433ef690b6655957f9a226175c3d2329c8f0a056091ee77866027",
     "desktop/dc_sweep.go": "6714f9c257faaf1e230e51dbc2c8b31a0d83ad9613eaa47d2de9bf8db495600f",
     "desktop/dc_sweep_canvas.go": "6404c77863729aedfd18a886e88d57889c51c374197189de91665d7142ad1022",
     "desktop/diagnostic_help.go": "822fcdf9c5904570b42bf1b98322de00ed9fdbd17299584cefedcfeb8098f171",
@@ -23,7 +24,7 @@
     "desktop/keyboard_workflow.go": "42fa8031620577bff9c73eba71954730a71765328b219ab96911ffdbe7a5c883",
     "desktop/layout.go": "95c8d3aea1b220556a1a0b0cb90cb148c60494358f13fc6e94cded0a06498ddb",
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
-    "desktop/main.go": "6ea6affab2f82710c9d8f9092e6f1e20678779f15e1e5279166d8f7c99734fd3",
+    "desktop/main.go": "a84553d7f300515ee9f914af69f9f9311a208bd5c79dfc05a47c1c36b2905801",
     "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
     "desktop/menus.go": "d78bfdb0b8ad01e290c7a3a8179dafc72b3e2a6f8b65d3994ca69f334aff700c",
     "desktop/menus_darwin.go": "3f7cd30cc99b38b4385e56303bbc790cce6e03add876634ff44cb267815522ea",
@@ -36,7 +37,7 @@
     "desktop/print_page.go": "96cb763e746bbc8d055fa7a78bc4cb6b47e3230308713e1d1cb0a8a5f06daf14",
     "desktop/print_preview.go": "3cc0ff9070556c30b0a490090985c879fd5796918055da27bd4aa7a98957ecdc",
     "desktop/printing.go": "9c40645db6de5affc3ae9d654f72c7003671f5d8c23c8bd7de93ffa35bea8c59",
-    "desktop/probes.go": "bd632c82d6a0ef88be1b2ac39299c13c1cd3fd6fa7d35238b16f5944ed08fdcd",
+    "desktop/probes.go": "f4de24411296aa77b9f693e07ace56ccf8a65652bd2845d948bd3b6e283ea61b",
     "desktop/project_work.go": "f4109a9a2e8bfa2098a9bf7a35327f4dcd557e696f9ac9178c19788de0694c20",
     "desktop/recording.go": "7bf3fafefb079de4cb5d8f03ff092b4ae5a5481913dd6c9aa51f9299377d948e",
     "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
@@ -752,6 +753,41 @@
         "drawing.tool.set"
       ],
       "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 36,
+      "function": "*screen.changeCursorTime",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"scope.cursor.set\", map[string]any{\"cursor\": cursor, \"time_s\": text}, state.CommandRevision)",
+      "public_commands": [
+        "scope.cursor.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 62,
+      "function": "*screen.cursorAction",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\tif s.pendingCursorAction != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.cursorFieldAccepted; accepted != nil \u0026\u0026 accepted.from.generation == context.generation \u0026\u0026\n\t\taccepted.from.revision \u003c= context.revision \u0026\u0026 context.revision \u003c= accepted.to.revision \u0026\u0026\n\t\taccepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) {\n\t\tcontext = accepted.to\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\t\ts.invokeAtCommandRevision(command, workbench.CursorSelectParams{Cursor: cursor}, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := \u0026cursorActionWork{context: context, command: command, cursor: cursor}\n\ts.pendingCursorAction = pending\n\tif current.Transient == nil || current.Transient.Stale {\n\n\t\ts.finishCursorAction(pending, nil)\n\t} else {\n\t\ts.settleCursorActionField(pending, 0)\n\t}\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 73,
+      "function": "*screen.cursorAction",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(command, workbench.CursorSelectParams{Cursor: cursor}, context.revision, context.generation)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 126,
+      "function": "*screen.finishCursorAction",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(pending.command, workbench.CursorSelectParams{Cursor: pending.cursor}, pending.context.revision, pending.context.generation)",
+      "status": "requires-binding-review"
     },
     {
       "file": "desktop/dc_sweep.go",
@@ -1589,7 +1625,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 227,
+      "line": 229,
       "function": "*screen.invoke",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(id, p, s.service.Snapshot().CommandRevision)",
@@ -1597,7 +1633,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 244,
+      "line": 246,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "request-command-field",
       "expression": "Command: id",
@@ -1605,7 +1641,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 248,
+      "line": 250,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "event-or-dispatch-router",
       "expression": "s.service.Dispatch(context.Background(), request, \"user\")",
@@ -1613,7 +1649,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 277,
+      "line": 279,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.undo\", \"Undo\", \"Meta+Z\"}",
@@ -1624,7 +1660,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 277,
+      "line": 279,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.redo\", \"Redo\", \"Meta+Shift+Z\"}",
@@ -1635,7 +1671,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 278,
+      "line": 280,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"project.clear\", \"New blank\", \"\"}",
@@ -1646,7 +1682,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 278,
+      "line": 280,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"drawing.cancel\", \"Cancel drawing\", \"Escape\"}",
@@ -1657,7 +1693,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 279,
+      "line": 281,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"app.close\", \"Close window\", \"Meta+W\"}",
@@ -1668,7 +1704,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 280,
+      "line": 282,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.current.reset\", \"Reset current example\", \"\"}",
@@ -1679,7 +1715,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 280,
+      "line": 282,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.reset\", \"Load LED example\", \"\"}",
@@ -1690,7 +1726,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 280,
+      "line": 282,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.rc\", \"Load RC example\", \"\"}",
@@ -1701,7 +1737,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 280,
+      "line": 282,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn\", \"Load NPN LED example\", \"\"}",
@@ -1712,7 +1748,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 280,
+      "line": 282,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.switch-npn\", \"Load manual transistor LED switch\", \"\"}",
@@ -1723,7 +1759,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 280,
+      "line": 282,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn-pulse\", \"Load blinking NPN LED\", \"\"}",
@@ -1734,7 +1770,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 280,
+      "line": 282,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.flasher\", \"Load capacitor-timed LED flasher\", \"\"}",
@@ -1745,7 +1781,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 280,
+      "line": 282,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.rectifier\", \"Load diode rectifier and smoothing\", \"\"}",
@@ -1756,7 +1792,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 281,
+      "line": 283,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.pause\", \"Pause\", \"\"}",
@@ -1767,7 +1803,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 281,
+      "line": 283,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.resume\", \"Resume\", \"\"}",
@@ -1778,7 +1814,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 281,
+      "line": 283,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.restart\", \"Restart\", \"\"}",
@@ -1789,7 +1825,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 281,
+      "line": 283,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"view.fit\", \"Fit circuit\", \"\"}",
@@ -1800,7 +1836,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 284,
+      "line": 286,
       "function": "*screen.registerCommands",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Register(command.Command{ID: entry.id, Label: entry.label, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts,\n\tAvailable: func() error {\n\t\tif s.fileBusy || s.pendingCommand != \"\" {\n\t\t\treturn fmt.Errorf(\"finish the current file operation first\")\n\t\t}\n\t\tstate := s.service.Snapshot()\n\t\tif state.Closed \u0026\u0026 entry.id != \"app.close\" {\n\t\t\treturn fmt.Errorf(\"session is closing\")\n\t\t}\n\t\tif entry.id == \"example.current.reset\" \u0026\u0026 state.Example == nil {\n\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t}\n\t\tif entry.id == \"edit.undo\" \u0026\u0026 !state.CanUndo {\n\t\t\treturn fmt.Errorf(\"nothing to undo\")\n\t\t}\n\t\tif entry.id == \"edit.redo\" \u0026\u0026 !state.CanRedo {\n\t\t\treturn fmt.Errorf(\"nothing to redo\")\n\t\t}\n\t\treturn nil\n\t}, Execute: func(context.Context) error {\n\t\tif entry.id == \"app.close\" {\n\t\t\ts.requestClose()\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"example.current.reset\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\tif state.Example == nil {\n\t\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t\t}\n\t\t\tgeneration := state.Document.Generation\n\t\t\ts.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"project.clear\" || entry.id == \"example.reset\" || entry.id == \"example.rc\" || entry.id == \"example.npn\" || entry.id == \"example.npn-pulse\" || entry.id == \"example.flasher\" || entry.id == \"example.switch-npn\" || entry.id == \"example.rectifier\" {\n\t\t\ts.requestReplace(entry.id, workbench.ReplaceParams{})\n\t\t\treturn nil\n\t\t}\n\t\tvar p any = struct{}{}\n\t\tif entry.id == \"edit.undo\" || entry.id == \"edit.redo\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\ttip := state.UndoEntry\n\t\t\tif entry.id == \"edit.redo\" {\n\t\t\t\ttip = state.RedoEntry\n\t\t\t}\n\t\t\tif tip != nil {\n\t\t\t\trevision := tip.CommandRevision\n\t\t\t\tp = workbench.HistoryParams{ExpectedEntryRevision: \u0026revision, AllowOtherActor: tip.Actor != \"user\"}\n\t\t\t}\n\t\t}\n\t\tif entry.id == \"view.fit\" {\n\t\t\tp = workbench.FitParams{Width: s.drawing.View.Width, Height: s.drawing.View.Height, FollowViewport: true}\n\t\t}\n\t\tr := s.invoke(entry.id, p)\n\t\tif r.Error != nil {\n\t\t\treturn fmt.Errorf(\"%s\", r.Error.Message)\n\t\t}\n\t\tif entry.id == \"drawing.cancel\" {\n\t\t\ts.requestKeyboardFocus(\"part-search\")\n\t\t}\n\t\ts.continueSimulationFocus(entry.id, r)\n\t\treturn nil\n\t},\n})",
@@ -1808,7 +1844,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 314,
+      "line": 316,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})",
@@ -1816,7 +1852,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 318,
+      "line": 320,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ReplaceParams{})",
@@ -1824,7 +1860,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 336,
+      "line": 338,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.invoke(entry.id, p)",
@@ -1832,7 +1868,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 390,
+      "line": 392,
       "function": "*screen.button",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Invoke(context.Background(), id)",
@@ -1840,7 +1876,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 403,
+      "line": 405,
       "function": "*screen.button",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(id, struct{}{}, rendered.revision, rendered.generation)",
@@ -1848,7 +1884,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 415,
+      "line": 417,
       "function": "*screen.button",
       "kind": "domain-ingress",
       "expression": "s.invoke(id, target)",
@@ -1856,7 +1892,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 418,
+      "line": 420,
       "function": "*screen.button",
       "kind": "node-Activate",
       "expression": "Activate: activate",
@@ -2458,7 +2494,7 @@
       "line": 133,
       "function": "*screen.cursorControls",
       "kind": "action-factory",
-      "expression": "s.action(\"cursor-select-\"+cursor.id, strings.ToUpper(cursor.id), \"scope.cursor.select\", workbench.CursorSelectParams{Cursor: cursor.id})",
+      "expression": "s.cursorAction(state, \"cursor-select-\"+cursor.id, strings.ToUpper(cursor.id), \"scope.cursor.select\", cursor.id)",
       "public_commands": [
         "scope.cursor.select"
       ],
@@ -2469,26 +2505,15 @@
       "line": 139,
       "function": "*screen.cursorControls",
       "kind": "callback-factory",
-      "expression": "timeField(\"cursor-time-\"+cursor.id, \"Cursor \"+strings.ToUpper(cursor.id)+\" time\", value, t == nil || t.Stale, func(text string) {\n\ts.invokeAtCommandRevision(\"scope.cursor.set\", map[string]any{\"cursor\": cursor.id, \"time_s\": text}, state.CommandRevision)\n})",
+      "expression": "timeField(\"cursor-time-\"+cursor.id, \"Cursor \"+strings.ToUpper(cursor.id)+\" time\", value, t == nil || t.Stale, func(text string) {\n\ts.changeCursorTime(state, cursor.id, text)\n})",
       "status": "requires-binding-review"
-    },
-    {
-      "file": "desktop/probes.go",
-      "line": 140,
-      "function": "*screen.cursorControls",
-      "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"scope.cursor.set\", map[string]any{\"cursor\": cursor.id, \"time_s\": text}, state.CommandRevision)",
-      "public_commands": [
-        "scope.cursor.set"
-      ],
-      "status": "literal-public-route"
     },
     {
       "file": "desktop/probes.go",
       "line": 149,
       "function": "*screen.cursorControls",
       "kind": "action-factory",
-      "expression": "s.action(\"cursor-clear-\"+cursor.id, \"×\", \"scope.cursor.clear\", workbench.CursorSelectParams{Cursor: cursor.id})",
+      "expression": "s.cursorAction(state, \"cursor-clear-\"+cursor.id, \"×\", \"scope.cursor.clear\", cursor.id)",
       "public_commands": [
         "scope.cursor.clear"
       ],

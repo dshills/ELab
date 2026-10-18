@@ -1,0 +1,22 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestCursorActionWaitsForDeferredTimeFields
+    cursor_actions_test.go:20: selection did not wait for native cursor field completion
+--- FAIL: TestCursorActionWaitsForDeferredTimeFields (0.04s)
+=== RUN   TestCursorActionDeferredCommitDoesNotAdoptInterveningAgentContext
+    cursor_actions_test.go:46: selection did not wait for native field
+--- FAIL: TestCursorActionDeferredCommitDoesNotAdoptInterveningAgentContext (0.04s)
+=== RUN   TestCursorActionSettlementFailurePreservesCursorState
+=== RUN   TestCursorActionSettlementFailurePreservesCursorState/admission
+    cursor_actions_test.go:80: missing native field settlement
+=== RUN   TestCursorActionSettlementFailurePreservesCursorState/completion
+    cursor_actions_test.go:80: missing native field settlement
+=== RUN   TestCursorActionSettlementFailurePreservesCursorState/invalid-time
+    cursor_actions_test.go:80: missing native field settlement
+--- FAIL: TestCursorActionSettlementFailurePreservesCursorState (0.11s)
+    --- FAIL: TestCursorActionSettlementFailurePreservesCursorState/admission (0.04s)
+    --- FAIL: TestCursorActionSettlementFailurePreservesCursorState/completion (0.04s)
+    --- FAIL: TestCursorActionSettlementFailurePreservesCursorState/invalid-time (0.04s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	0.846s
+FAIL

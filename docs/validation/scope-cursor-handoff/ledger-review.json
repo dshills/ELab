@@ -1,0 +1,139 @@
+{
+  "sources": 63,
+  "sites": 392,
+  "public_commands": 162,
+  "source_routes": 132,
+  "binding_review_sites": 150,
+  "source_hashes_changed": {
+    "desktop/cursor_actions.go": {
+      "before": null,
+      "after": "d5ece86db5f433ef690b6655957f9a226175c3d2329c8f0a056091ee77866027"
+    },
+    "desktop/main.go": {
+      "before": "6ea6affab2f82710c9d8f9092e6f1e20678779f15e1e5279166d8f7c99734fd3",
+      "after": "a84553d7f300515ee9f914af69f9f9311a208bd5c79dfc05a47c1c36b2905801"
+    },
+    "desktop/probes.go": {
+      "before": "bd632c82d6a0ef88be1b2ac39299c13c1cd3fd6fa7d35238b16f5944ed08fdcd",
+      "after": "f4de24411296aa77b9f693e07ace56ccf8a65652bd2845d948bd3b6e283ea61b"
+    }
+  },
+  "removed_sites": [
+    {
+      "file": "desktop/probes.go",
+      "line": 133,
+      "function": "*screen.cursorControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"cursor-select-\"+cursor.id, strings.ToUpper(cursor.id), \"scope.cursor.select\", workbench.CursorSelectParams{Cursor: cursor.id})",
+      "public_commands": [
+        "scope.cursor.select"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/probes.go",
+      "line": 139,
+      "function": "*screen.cursorControls",
+      "kind": "callback-factory",
+      "expression": "timeField(\"cursor-time-\"+cursor.id, \"Cursor \"+strings.ToUpper(cursor.id)+\" time\", value, t == nil || t.Stale, func(text string) {\n\ts.invokeAtCommandRevision(\"scope.cursor.set\", map[string]any{\"cursor\": cursor.id, \"time_s\": text}, state.CommandRevision)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/probes.go",
+      "line": 140,
+      "function": "*screen.cursorControls",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"scope.cursor.set\", map[string]any{\"cursor\": cursor.id, \"time_s\": text}, state.CommandRevision)",
+      "public_commands": [
+        "scope.cursor.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/probes.go",
+      "line": 149,
+      "function": "*screen.cursorControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"cursor-clear-\"+cursor.id, \"\u00d7\", \"scope.cursor.clear\", workbench.CursorSelectParams{Cursor: cursor.id})",
+      "public_commands": [
+        "scope.cursor.clear"
+      ],
+      "status": "literal-public-route"
+    }
+  ],
+  "added_sites": [
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 36,
+      "function": "*screen.changeCursorTime",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"scope.cursor.set\", map[string]any{\"cursor\": cursor, \"time_s\": text}, state.CommandRevision)",
+      "public_commands": [
+        "scope.cursor.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 62,
+      "function": "*screen.cursorAction",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\tif s.pendingCursorAction != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.cursorFieldAccepted; accepted != nil && accepted.from.generation == context.generation &&\n\t\taccepted.from.revision <= context.revision && context.revision <= accepted.to.revision &&\n\t\taccepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) {\n\t\tcontext = accepted.to\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\t\ts.invokeAtCommandRevision(command, workbench.CursorSelectParams{Cursor: cursor}, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := &cursorActionWork{context: context, command: command, cursor: cursor}\n\ts.pendingCursorAction = pending\n\tif current.Transient == nil || current.Transient.Stale {\n\n\t\ts.finishCursorAction(pending, nil)\n\t} else {\n\t\ts.settleCursorActionField(pending, 0)\n\t}\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 73,
+      "function": "*screen.cursorAction",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(command, workbench.CursorSelectParams{Cursor: cursor}, context.revision, context.generation)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 126,
+      "function": "*screen.finishCursorAction",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(pending.command, workbench.CursorSelectParams{Cursor: pending.cursor}, pending.context.revision, pending.context.generation)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/probes.go",
+      "line": 133,
+      "function": "*screen.cursorControls",
+      "kind": "action-factory",
+      "expression": "s.cursorAction(state, \"cursor-select-\"+cursor.id, strings.ToUpper(cursor.id), \"scope.cursor.select\", cursor.id)",
+      "public_commands": [
+        "scope.cursor.select"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/probes.go",
+      "line": 139,
+      "function": "*screen.cursorControls",
+      "kind": "callback-factory",
+      "expression": "timeField(\"cursor-time-\"+cursor.id, \"Cursor \"+strings.ToUpper(cursor.id)+\" time\", value, t == nil || t.Stale, func(text string) {\n\ts.changeCursorTime(state, cursor.id, text)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/probes.go",
+      "line": 149,
+      "function": "*screen.cursorControls",
+      "kind": "action-factory",
+      "expression": "s.cursorAction(state, \"cursor-clear-\"+cursor.id, \"\u00d7\", \"scope.cursor.clear\", cursor.id)",
+      "public_commands": [
+        "scope.cursor.clear"
+      ],
+      "status": "literal-public-route"
+    }
+  ],
+  "all_other_sites_identical_except_lines": true,
+  "public_IDs_aliases_route_sets_unchanged": true,
+  "review": [
+    "Select/Clear factory sites remain literal public routes; cursorAction argument position is explicitly audited and tested for unknown/dynamic commands",
+    "Cursor time ingress moves into accepted-response helper; node-Activate and stale/final deferred ingress remain unresolved binding-review syntax sites",
+    "Native text settlement is a bounded two-field owner-held sequence, distinct from a domain command retry",
+    "No source count is treated as universal runtime conformance"
+  ]
+}

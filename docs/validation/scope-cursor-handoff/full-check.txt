@@ -1,0 +1,34 @@
+{
+  "passed": true,
+  "requirements": 27,
+  "counts": {
+    "implemented": 17,
+    "partial": 10,
+    "pending": 0
+  },
+  "scope": "Requirement coverage validation only; does not establish product acceptance"
+}
+{"passed": true, "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-677548d", "source": "677548d0ea93d7d6a689998eb8cf3d6f3ff9f59f"}
+....................................Starting owned
+Starting owned
+Starting owned
+.......
+----------------------------------------------------------------------
+Ran 43 tests in 1.232s
+
+OK
+?   	github.com/dshills/elab/cmd/elab-agent	[no test files]
+?   	github.com/dshills/elab/cmd/elab-conformance	[no test files]
+?   	github.com/dshills/elab/cmd/elab-ui-audit	[no test files]
+ok  	github.com/dshills/elab/internal/conformance	(cached)
+ok  	github.com/dshills/elab/internal/printspool	(cached)
+ok  	github.com/dshills/elab/internal/schematicpdf	(cached)
+ok  	github.com/dshills/elab/internal/uiaudit	1.335s
+ok  	github.com/dshills/elab/transport	(cached)
+ok  	github.com/dshills/elab/workbench	(cached)
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+ok  	github.com/dshills/elab/desktop	143.742s
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+ok  	github.com/dshills/elab/desktop	11.922s

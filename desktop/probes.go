@@ -130,14 +130,14 @@ func (s *screen) cursorControls(state workbench.Snapshot) ui.Node {
 		value *workbench.ScopeCursor
 	}{{"a", state.Scope.A}, {"b", state.Scope.B}} {
 		cursor := cursor
-		button := s.action("cursor-select-"+cursor.id, strings.ToUpper(cursor.id), "scope.cursor.select", workbench.CursorSelectParams{Cursor: cursor.id})
+		button := s.cursorAction(state, "cursor-select-"+cursor.id, strings.ToUpper(cursor.id), "scope.cursor.select", cursor.id)
 		nodes = append(nodes, buttonStyle(button, state.Scope.ActiveCursor == cursor.id))
 		value := 0.
 		if cursor.value != nil {
 			value = cursor.value.Requested
 		}
 		field := timeField("cursor-time-"+cursor.id, "Cursor "+strings.ToUpper(cursor.id)+" time", value, t == nil || t.Stale, func(text string) {
-			s.invokeAtCommandRevision("scope.cursor.set", map[string]any{"cursor": cursor.id, "time_s": text}, state.CommandRevision)
+			s.changeCursorTime(state, cursor.id, text)
 		})
 		if cursor.value == nil {
 			// An unplaced cursor has no committed time. In particular, typing
@@ -146,8 +146,8 @@ func (s *screen) cursorControls(state workbench.Snapshot) ui.Node {
 			field.Accessibility.Help = "Enter a time to place this cursor. " + field.Accessibility.Help
 		}
 		nodes = append(nodes, field)
-		clear := s.action("cursor-clear-"+cursor.id, "×", "scope.cursor.clear", workbench.CursorSelectParams{Cursor: cursor.id})
-		clear.Disabled = cursor.value == nil
+		clear := s.cursorAction(state, "cursor-clear-"+cursor.id, "×", "scope.cursor.clear", cursor.id)
+		clear.Disabled = clear.Disabled || cursor.value == nil
 		nodes = append(nodes, clear)
 	}
 	caption := "ms · click / drag plot to place selected cursor"

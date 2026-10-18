@@ -1,0 +1,56 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestCursorActionWaitsForDeferredTimeFields
+--- PASS: TestCursorActionWaitsForDeferredTimeFields (0.15s)
+=== RUN   TestCursorActionDeferredCommitDoesNotAdoptInterveningAgentContext
+=== RUN   TestCursorActionDeferredCommitDoesNotAdoptInterveningAgentContext/agent-before-field
+=== RUN   TestCursorActionDeferredCommitDoesNotAdoptInterveningAgentContext/agent-after-field
+=== RUN   TestCursorActionDeferredCommitDoesNotAdoptInterveningAgentContext/other-user-field
+=== RUN   TestCursorActionDeferredCommitDoesNotAdoptInterveningAgentContext/document-replaced
+--- PASS: TestCursorActionDeferredCommitDoesNotAdoptInterveningAgentContext (0.36s)
+    --- PASS: TestCursorActionDeferredCommitDoesNotAdoptInterveningAgentContext/agent-before-field (0.09s)
+    --- PASS: TestCursorActionDeferredCommitDoesNotAdoptInterveningAgentContext/agent-after-field (0.09s)
+    --- PASS: TestCursorActionDeferredCommitDoesNotAdoptInterveningAgentContext/other-user-field (0.11s)
+    --- PASS: TestCursorActionDeferredCommitDoesNotAdoptInterveningAgentContext/document-replaced (0.06s)
+=== RUN   TestCursorActionSettlementFailurePreservesCursorState
+=== RUN   TestCursorActionSettlementFailurePreservesCursorState/admission
+=== RUN   TestCursorActionSettlementFailurePreservesCursorState/completion
+=== RUN   TestCursorActionSettlementFailurePreservesCursorState/invalid-time
+--- PASS: TestCursorActionSettlementFailurePreservesCursorState (0.13s)
+    --- PASS: TestCursorActionSettlementFailurePreservesCursorState/admission (0.04s)
+    --- PASS: TestCursorActionSettlementFailurePreservesCursorState/completion (0.04s)
+    --- PASS: TestCursorActionSettlementFailurePreservesCursorState/invalid-time (0.06s)
+=== RUN   TestCursorActionContinuesOnlyConsecutiveOwnTimeFields
+=== RUN   TestCursorActionContinuesOnlyConsecutiveOwnTimeFields/original-action
+=== RUN   TestCursorActionContinuesOnlyConsecutiveOwnTimeFields/intermediate-action
+--- PASS: TestCursorActionContinuesOnlyConsecutiveOwnTimeFields (0.21s)
+    --- PASS: TestCursorActionContinuesOnlyConsecutiveOwnTimeFields/original-action (0.09s)
+    --- PASS: TestCursorActionContinuesOnlyConsecutiveOwnTimeFields/intermediate-action (0.12s)
+=== RUN   TestCursorActionContinuationRefusesInterveningWork
+=== RUN   TestCursorActionContinuationRefusesInterveningWork/agent-before-field
+=== RUN   TestCursorActionContinuationRefusesInterveningWork/agent-after-field
+=== RUN   TestCursorActionContinuationRefusesInterveningWork/other-user-field
+=== RUN   TestCursorActionContinuationRefusesInterveningWork/document-replaced
+=== RUN   TestCursorActionContinuationRefusesInterveningWork/failed-field
+--- PASS: TestCursorActionContinuationRefusesInterveningWork (0.37s)
+    --- PASS: TestCursorActionContinuationRefusesInterveningWork/agent-before-field (0.07s)
+    --- PASS: TestCursorActionContinuationRefusesInterveningWork/agent-after-field (0.06s)
+    --- PASS: TestCursorActionContinuationRefusesInterveningWork/other-user-field (0.09s)
+    --- PASS: TestCursorActionContinuationRefusesInterveningWork/document-replaced (0.06s)
+    --- PASS: TestCursorActionContinuationRefusesInterveningWork/failed-field (0.09s)
+=== RUN   TestMountedScopeCursorEnterSelectClearMatchesPublicAgent
+=== RUN   TestMountedScopeCursorEnterSelectClearMatchesPublicAgent/rc
+=== RUN   TestMountedScopeCursorEnterSelectClearMatchesPublicAgent/flasher
+--- PASS: TestMountedScopeCursorEnterSelectClearMatchesPublicAgent (1.89s)
+    --- PASS: TestMountedScopeCursorEnterSelectClearMatchesPublicAgent/rc (0.27s)
+    --- PASS: TestMountedScopeCursorEnterSelectClearMatchesPublicAgent/flasher (1.61s)
+=== RUN   TestMountedScopeCursorFocusLossThenClearUsesOneClick
+--- PASS: TestMountedScopeCursorFocusLossThenClearUsesOneClick (0.15s)
+=== RUN   TestMountedScopeCursorHeldSelectionRefusesAgentAfterOwnCommit
+--- PASS: TestMountedScopeCursorHeldSelectionRefusesAgentAfterOwnCommit (0.17s)
+=== RUN   TestMountedScopeCursorFocusLossThenSelectUsesOneClick
+--- PASS: TestMountedScopeCursorFocusLossThenSelectUsesOneClick (0.15s)
+=== RUN   TestMountedScopeCursorStaleSelectPreservesPhysics
+--- PASS: TestMountedScopeCursorStaleSelectPreservesPhysics (0.08s)
+PASS
+ok  	github.com/dshills/elab/desktop	5.316s

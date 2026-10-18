@@ -617,10 +617,30 @@ func nativeMixedSmoke(ctx context.Context, a *app.Application, s *screen) error 
 			result <- err
 			return
 		}
-		if err := smokeUI(s, "cursor-select-b", nil); err != nil {
-			result <- err
-			return
-		}
+		result <- nil
+	}); err != nil {
+		return err
+	}
+	if err := <-result; err != nil {
+		return err
+	}
+	// The native settlement barrier needs the current document's controls,
+	// beyond constructing descriptors during the setup owner callback.
+	if _, err := waitNativeViewport(ctx, a, s, func(state workbench.Snapshot) bool {
+		return state.Scope.A != nil && state.Scope.A.Requested == .1
+	}); err != nil {
+		return err
+	}
+	if err := a.PostWait(ctx, func() { result <- smokeUI(s, "cursor-select-b", nil) }); err != nil {
+		return err
+	}
+	if err := <-result; err != nil {
+		return err
+	}
+	if err := waitNativeCursorAction(ctx, a, s, "b"); err != nil {
+		return err
+	}
+	if err := a.PostWait(ctx, func() {
 		if _, err := s.scopeMesh(*s.scope.View); err != nil {
 			result <- err
 			return
