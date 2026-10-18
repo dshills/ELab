@@ -1,6 +1,6 @@
 # First-version UI walkthrough and issue list
 
-October 18 update: **[open /158 coordinate-placement blocker](native-placement-158/README.md)**. Accessibility-index Place uses accepted Y=0 despite a visible private −110 draft; direct pointer Place succeeds. A mounted descriptor reproduction fails and its pointer control passes. The blank LED check stopped before wiring. No repair/version/promotion is claimed; the delivery plan now prioritizes a bounded numeric commit-barrier repair. Owner acceptance remains “Not tried yet.”
+October 18 update: the [coordinate-placement failure on preserved /158](native-placement-158/README.md) is repaired in [qualified /159](numeric-placement-review-checkpoint.json). Source-mounted/native development accessibility and pointer replay prove commitment; clean copied native API/reference integration qualifies the new package. Owner acceptance remains “Not tried yet.” The stopped blank native LED workflow is the next independent check.
 
 October 17, 2026. **Private review boundary reached; wider release/MVP qualification remains open.** These are direct observations of ELab's actual native window, using pointer, keyboard and accessibility actions. They are not participant results, a screen-reader study or visible-latency measurements.
 
@@ -423,3 +423,7 @@ October 18: [native /158 value/Apply and keyboard close](native-close-158/README
 ### Numeric placement source repair · clean replacement pending
 
 October 18: [numeric-field settlement source proof](../../../docs/validation/number-field-placement/README.md) fixes the /158 accessibility Place failure. Mounted descriptor activation, pointer placement and guarded refusal tests pass; actual native accessibility Place accepts the complete private −110 draft and matches the packaged /158 agent. SDK race/vet, final complete consumer quality (170.309 s) and development native smoke (39.309 s) pass. Clean replacement packaging remains pending. Earlier /158 and all other reviews remain preserved; owner remains Not tried yet.
+
+### Numeric placement replacement · 0.142.0 /159
+
+October 18: [clean replacement qualification](numeric-placement-review-checkpoint.json) incorporates SDK `b22478c` from clean source `37046dc`. Exact copied native API smoke/four-adapter/reference/measurement/live/save checks pass. Source-mounted and development native accessibility/pointer commitment retain their separate scope. All 257 files, nineteen prior qualified reviews, original /147 candidate and canonical /120 verify. Commands/models/format remain unchanged; owner Not tried yet and broader input/reader/latency/environment/distribution/study gates remain open.

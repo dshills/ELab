@@ -224,3 +224,5 @@ The native text handoff repair is in clean 0.141.0 /158 with SDK `274f5cc`. The 
 
 
 The numeric-placement settlement repair updates `main.go` and `placement_actions.go` production hashes and the Place Activate descriptor expression. X/Y settlement now precedes the unchanged guarded `component.place` command; optional label settlement follows. All command/alias/route sets and the 68/393/160/162/132 counts above are unchanged. [Source and native replay evidence](../docs/validation/number-field-placement/README.md); clean replacement qualification remains separate.
+
+Numeric placement is now in clean 0.142.0 /159 with SDK `b22478c`. The reviewed two-hash/one-descriptor source change is bound to the exact 257-file app/agent package; command/alias/route sets and 68/393/160/162/132 counts are unchanged. [Receipt](ui-audit/first-version/numeric-placement-review-checkpoint.json). Source private-input replay and copied integration remain distinct; full native conformance remains partial.
