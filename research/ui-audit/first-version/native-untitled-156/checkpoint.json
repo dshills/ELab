@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-18",
+  "source_base": "100aaadea6c396738cee42ba4438bb7b994a5941",
+  "status": "bounded native untitled Save cancellation and successful continuation verified; broader qualification remains open",
+  "production_changed": false,
+  "sdk_changed": false,
+  "product_version_increment": false,
+  "product_rebuild_or_promotion": false,
+  "native_input": {
+    "method": "CUA native Open/Go-to-Folder; Save and continue; native Cancel; fresh Save and continue; verified native directory/name setters; Save",
+    "cancel_restores_unsaved_prompt": true,
+    "initial_untitled_path": "",
+    "cancel_remains_dirty": true,
+    "saved_resistance_ohm": 2200,
+    "loaded_resistance_ohm": 2000,
+    "document_generations": [
+      2,
+      3
+    ],
+    "undo_label": "Open schematic"
+  },
+  "comparison": {
+    "cancel_preserves_domain_run_history_document": true,
+    "saved_graph_matches_original": true,
+    "agent_saved_fields_equal_except_view": true,
+    "loaded_semantics_scope_history_results_equal_except_run_electrical_ids": true,
+    "blank_start_agent_reopens_both_files": true,
+    "target_original_bytes_unchanged": true
+  },
+  "process": {
+    "original_endpoint_pid": 80454,
+    "normal_closure": true,
+    "exit_code": 0,
+    "no_remaining_matching_native_processes": true
+  },
+  "excluded_observer_failure": {
+    "pid": 79564,
+    "error": "AssertionError: undo_name",
+    "cleanup_exit": -15,
+    "corrected_reference_matches_retained_native": true
+  },
+  "excluded_tool_extra": {
+    "pid": 79916,
+    "blank": true,
+    "qualified": false,
+    "closed_via_CUA_Cmd_W": true
+  },
+  "preserved_review": {
+    "source_commit": "22a84d590df498c023cabb94bf6ccf9883204a94",
+    "release": "0.139.0 /156",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.139.0-156-review/elab-agent",
+    "agent_sha256": "0b0d62a5b34156f04cb4ef298f6a8671af8b7e20e9fa1133c4a8cb79a32de5dd",
+    "receipt_sha256": "b2659269a286e3230deac30659fadb3d7df20d409fa8616a9d3d33425963c181",
+    "ledger_sha256": "b5cdacef44f6205d554ba8f1f315d4138e297ef0b1f1c2c1047148a7f5aa7d95",
+    "production_source_files_verified": 68,
+    "runtime_inputs_verified": 343,
+    "manifest_file_entries_verified": 135,
+    "manifest_sha256": "ec49b66aa2c9a10c06df76882245bca16b69addbd8dfceabf6077e3f54da3155"
+  },
+  "producer_sha256": {
+    "scripts/first-version-parity.py": "936f8c79a1a1e7278c299973c7edc8f925f88b158cc474759005ba97e6723370",
+    "scripts/persistence-demo.py": "4f3893eec22b3e6173aa75138e7774a43727b0bfc908c4bb56e8616e0d45dae5"
+  },
+  "quality": {
+    "reused_unchanged_source_and_runtime_gates": true,
+    "full_gate_rerun": false
+  },
+  "limits": [
+    "One automated untitled Save Cancel/retry path only; errors/conflicts/concurrent/close/crash routes separate",
+    "Native field setters do not qualify typing/IME; reader/visible-p95/environment/distribution/study remain open",
+    "Owner walkthrough Not tried yet; P0 stays 17 implemented /10 partial"
+  ],
+  "evidence_sha256": {
+    "Agent-preserved.elab": "1e067f08ff658f1951d99ec3cf67e68487fc8af30ea4a73d4f324216224fca74",
+    "Preserved untitled.elab": "5bfc3604190a4b335ad0cc30ce127b3c0ab0645d1206e5bd8072de88d8481e3f",
+    "README.md": "d02fc25638ae5707578b02d44234c1a46ebd2de7837f3a0cfd5b234fac268437",
+    "Target-original.elab": "5870351a22f6b03a9e9e403fc7487d84fbb46aa6a75843bdac75ed44a0784d3a",
+    "Target.elab": "5870351a22f6b03a9e9e403fc7487d84fbb46aa6a75843bdac75ed44a0784d3a",
+    "fresh-file-reference.json.gz": "7122ebdbc07e8fbab98211f7eb9b65884197c61439a0a7c81131a74216dd6b32",
+    "native-host.txt": "bbf60a71afd08553dbfba3e71c038e471fa00813c82de67a55b2e3aa33044fae",
+    "native-session.json.gz": "6e9360f3466f5b42bdc9b112db93aa3563d820fdf832bd1b34ea4a5e92ff9c14",
+    "observer-failure/Agent-reference-check.elab": "1e067f08ff658f1951d99ec3cf67e68487fc8af30ea4a73d4f324216224fca74",
+    "observer-failure/Preserved untitled.elab": "5bfc3604190a4b335ad0cc30ce127b3c0ab0645d1206e5bd8072de88d8481e3f",
+    "observer-failure/Target.elab": "5870351a22f6b03a9e9e403fc7487d84fbb46aa6a75843bdac75ed44a0784d3a",
+    "observer-failure/native-host.txt": "fd5921d97838ca1fc70dbdb7a32f3488bbdda239da1c77f9a841763f07459fc7",
+    "observer-failure/native-session.json.gz": "7b88f0cc2197ac07f83cdce3ee743dc9c2e421e0d7079e11615429affa861973",
+    "observer-failure/observer-source.py": "5e60ba948860a8c9bec7b971823ae7972beb6a93e9bc05f0fab41c5cc7fa7d4b",
+    "observer-failure/reference-correction.json.gz": "a875e81a996853da90c4419a60e3482106227bc274b317c960b448b1ba096ef1",
+    "observer-source.py": "bfe032521dd626595310ff84c64ec2ca809b3ba2bd899e4ab3e5e9361b99476a",
+    "process-verification.json": "d3222442ff7d3af576c671f01bf17254725b962047250d0c2f0a7a5e49fa6243",
+    "source-release-identity.json": "0922ea3d67ced36a474c6d90b1b9253dd12fa5f22523b8ea28d4f7fae977db70",
+    "ui-observation.txt": "390bc5d4ec83948e74a97fe30f96da546591cf6a868220b772f54c1bc15ab7ee"
+  }
+}

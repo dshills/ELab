@@ -1,0 +1,37 @@
+Transcribed CUA AX excerpts; not a raw full-tool transcript or exported screenshot.
+Final original endpoint PID: 80454. Exact-path app selection: 0.1052 seconds.
+Initial: Untitled /Unsaved /4 components /4 wires; 1.345 mA.
+Cmd+O opens actual macOS Open project panel.
+Cmd+Shift+G; native PathTextField set to exact retry Target.elab path; AX verifies it.
+Return: Target.elab selected, Open enabled. One Open click:
+  Unsaved project; Keep your changes?; Save and continue; Discard changes; Cancel.
+One Save and continue click:
+  Save project; Save As Untitled; native Save and Cancel buttons.
+One native Cancel click:
+  Unsaved project; same three choices; no error label.
+Controller records same dirty untitled domain, run/history/document and unchanged target.
+
+One fresh Save and continue click:
+  Save project; Save As Untitled.
+Cmd+Shift+G; native PathTextField set to exact owned retry observations directory;
+AX verifies path; Return returns to Save project.
+Native Save As field setValue Preserved untitled; AX verifies exact name and focus.
+One Save click:
+  ELab main window; Undo button: Open schematic /by user;
+  message Opened Target.elab; project work Target.elab completed;
+  1.477 mA; footer Target.elab /4 components /4 wires /last change user.
+Only after this visible result is load-ui-observed signalled to the same-PID controller.
+All reference comparisons pass. No further UI actions; original host closes normally.
+
+Excluded earlier run:
+PID 79564 also returned to the unsaved prompt after Cancel and wrote the intended
+2200 Ω file, then loaded Target.elab at 2000 Ω. Its observer compared Undo labels
+against a same-graph target-file reload, which retained a different history tip,
+and failed AssertionError undo_name. Original host cleanup exit -15.
+The UI observation raced cleanup and displayed a new blank default-launched owned
+instance, PID 79916. It had 0 components/0 wires and no Undo; none of its state is
+qualified. It was inspected, then closed via CUA Cmd+W (tool reports App quit).
+The corrected public reference saves 2200 Ω then opens 2000 Ω, matching the retained
+original native loaded state including Open schematic history before the final run.
+The final observer waits for the visible replacement result before final comparisons,
+and retains the full semantic/history comparison against the correct sequence.
