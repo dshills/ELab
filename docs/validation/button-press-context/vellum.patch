@@ -1,0 +1,177 @@
+commit 677548d0ea93d7d6a689998eb8cf3d6f3ff9f59f
+Author:     Davin Hills <dshills@gmail.com>
+AuthorDate: Sun Oct 18 08:25:54 2026 -0500
+Commit:     Davin Hills <dshills@gmail.com>
+CommitDate: Sun Oct 18 08:25:54 2026 -0500
+
+    Retain originating action through held button release
+
+diff --git a/drivers/cogent/button_context_test.go b/drivers/cogent/button_context_test.go
+new file mode 100644
+index 0000000..e35fdfb
+--- /dev/null
++++ b/drivers/cogent/button_context_test.go
+@@ -0,0 +1,96 @@
++package cogent
++
++import (
++	"image"
++	"testing"
++
++	"cogentcore.org/core/core"
++	"cogentcore.org/core/events"
++	"github.com/dshills/vellum/app"
++	"github.com/dshills/vellum/ui"
++)
++
++func TestButtonActivationRetainsInputCallbackAcrossRebind(t *testing.T) {
++	for _, scenario := range []string{"held-pointer", "queued-pointer", "programmatic-latest", "canceled-pointer-keyboard", "next-pointer", "disabled", "disposed", "nil-origin"} {
++		t.Run(scenario, func(t *testing.T) {
++			a, err := app.New(app.Config{})
++			if err != nil {
++				t.Fatal(err)
++			}
++			defer a.Close()
++			if err := a.Open(app.Window{ID: "main", Title: "Button context", Width: 200, Height: 100, View: func() ui.Node { return ui.Node{ID: "root", Kind: ui.Column} }}); err != nil {
++				t.Fatal(err)
++			}
++			oldCalls, newCalls := 0, 0
++			n := ui.Node{ID: "root", Kind: ui.Column, Children: []ui.Node{{ID: "action", Kind: ui.Button, Text: "Action", Activate: func() { oldCalls++ }}}}
++			if scenario == "nil-origin" {
++				n.Children[0].Activate = nil
++			}
++			host := core.NewFrame(core.NewBody("button-context"))
++			r, err := reconcile(host, nil, n, a, "main")
++			if err != nil {
++				t.Fatal(err)
++			}
++			record := findRecord(r, "action")
++			button := record.widget.(*core.Button)
++			pointer := func(kind events.Types) {
++				e := events.NewMouse(kind, events.Left, image.Pt(10, 10), 0)
++				e.SetLocalOff(image.Point{})
++				if kind == events.Click {
++					// Match the native router's cloned MouseUp, including Base's
++					// loss of HasPos while retaining the original mouse button.
++					button.Send(events.Click, e)
++				} else {
++					button.HandleEvent(e)
++				}
++			}
++			if scenario == "programmatic-latest" {
++				button.Send(events.Click)
++			} else {
++				pointer(events.MouseDown)
++				if scenario == "queued-pointer" {
++					pointer(events.Click)
++				}
++			}
++			n.Children[0].Activate = func() { newCalls++ }
++			n.Children[0].Disabled = scenario == "disabled"
++			r, err = reconcile(host, r, n, a, "main")
++			if err != nil {
++				t.Fatal(err)
++			}
++			if findRecord(r, "action").widget != button {
++				t.Fatal("fixture replaced the widget")
++			}
++			switch scenario {
++			case "queued-pointer", "programmatic-latest":
++			case "canceled-pointer-keyboard":
++				pointer(events.MouseUp) // canceled router sequences emit no Click
++				button.Send(events.Click)
++			case "next-pointer":
++				pointer(events.MouseUp)
++				pointer(events.MouseDown)
++				pointer(events.Click)
++			case "disposed":
++				pointer(events.Click)
++				disposeControl(record)
++				if record.control.buttonPress.Load() != nil {
++					t.Fatal("disposal retained the pressed callback")
++				}
++			default:
++				pointer(events.MouseUp)
++				pointer(events.Click)
++			}
++			a.Drain()
++			wantOld, wantNew := 0, 0
++			switch scenario {
++			case "held-pointer", "queued-pointer":
++				wantOld = 1
++			case "programmatic-latest", "canceled-pointer-keyboard", "next-pointer":
++				wantNew = 1
++			}
++			if oldCalls != wantOld || newCalls != wantNew {
++				t.Fatalf("activation context: origin=%d refreshed=%d want %d/%d", oldCalls, newCalls, wantOld, wantNew)
++			}
++		})
++	}
++}
+diff --git a/drivers/cogent/controls.go b/drivers/cogent/controls.go
+index 4668497..3fb2ec6 100644
+--- a/drivers/cogent/controls.go
++++ b/drivers/cogent/controls.go
+@@ -45,6 +45,8 @@ type fieldChangeEpoch struct{ marker byte }
+ // see that originating callback rather than borrow the refreshed descriptor.
+ type controlChangeBinding struct{ callback func(ui.ChangeEvent) }
+ 
++type controlActivationBinding struct{ callback func() }
++
+ type controlState struct {
+ 	a                 *app.Application
+ 	window            string
+@@ -69,6 +71,7 @@ type controlState struct {
+ 	placement         *placementBinding
+ 	fieldChanges      atomic.Pointer[fieldChangeEpoch]
+ 	sliderGesture     atomic.Pointer[controlChangeBinding]
++	buttonPress       atomic.Pointer[controlActivationBinding]
+ 	fieldDelivered    string // owner: last delivered value, or controlled value applied by reconciliation
+ 	fieldState        *core.TextFieldEditingState
+ 	fieldSelection    *editor.Selection
+@@ -151,15 +154,34 @@ func mountControl(parent tree.Node, r *record, a *app.Application, window string
+ 				return
+ 			}
+ 			guard := placementActivationGuard(r)
++			var press *controlActivationBinding
++			// Native Send clones MouseUp into Base: HasPos is then false,
++			// but the mouse button survives. Keyboard/programmatic activation
++			// carries NoButton and must ignore an earlier canceled pointer press.
++			if e.MouseButton() == events.Left {
++				press = c.buttonPress.Swap(nil)
++			}
+ 			postControl(r, func() {
+-				if guard() && !c.disabled && r.node.Activate != nil {
+-					r.node.Activate()
++				activate := r.node.Activate
++				if press != nil {
++					activate = press.callback
++				}
++				if guard() && !c.disabled && activate != nil {
++					activate()
+ 					c.a.Invalidate(c.window)
+ 				}
+ 			})
+ 		})
+ 		widget = button
+-		button.OnFirst(events.MouseDown, func(e events.Event) { beginPlacement(r, e) })
++		button.OnFirst(events.MouseDown, func(e events.Event) {
++			if e.MouseButton() == events.Left && r.node.PlacementSource == nil {
++				c.buttonPress.Store(&controlActivationBinding{callback: r.node.Activate})
++			}
++			beginPlacement(r, e)
++		})
++		// The native router emits Click after MouseUp listeners finish. Do not
++		// clear the origin on MouseUp. Click consumes it; a canceled press is
++		// replaced by the next pointer press and ignored by keyboard activation.
+ 	case ui.Canvas2D:
+ 		widget = mountManagedCanvas(parent, r)
+ 	case ui.MenuButton:
+@@ -863,6 +885,7 @@ func disposeControl(r *record) {
+ 		disposePlacement(r)
+ 		r.control.retired = true
+ 		r.control.sliderGesture.Store(nil)
++		r.control.buttonPress.Store(nil)
+ 		if r.control.tabs != nil {
+ 			for _, binding := range r.control.tabs.bindings {
+ 				binding.closeEpoch.Store(nil)

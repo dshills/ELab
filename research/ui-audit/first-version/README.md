@@ -316,3 +316,7 @@ The [bounded follow-up](../../../docs/validation/control-owner/README.md) found 
 ### Control-owner/Apply replacement review · 0.129.0 /146
 
 The verified repairs are packaged from clean `30b0507` with private SDK `ade66eb`, the matching agent and unchanged examples/notices. Exact copied native smoke/four-adapter conformance, reference parity and pulse/Pause/Resume/save/reopen through 3.4 s pass. [Receipt](control-owner-review-checkpoint.json), [walkthrough](../../35-first-version-review.md). All six prior review folders and canonical /120 remain unchanged. The source gate includes real-router numeric/button/text/slider and one-click Apply checks. No owner, physical OS interleaving/window-blur, visible-p95, accessibility or participant acceptance is inferred.
+
+### Same-owner held-button callback blocker
+
+The [bounded real-router checks](../../../docs/validation/button-press-context/README.md) reproduce a held Close reversing an agent edit and held Undo borrowing the repainted agent history permission. Pinned SDK `677548d` keeps the originating pointer action; shared guards refuse old input while fresh/canceled mouse and keyboard, live-clock Pause and RC switch physics parity pass. Full source/SDK quality passes. /146 remains immutable and affected pending replacement; no physical OS interleaving/window-blur or broader acceptance claim is added.

@@ -1,5 +1,11 @@
 # Current Vellum SDK integration
 
+Private SDK `677548d0ea93d7d6a689998eb8cf3d6f3ff9f59f` preserves the action from an ordinary left-button press through release and queued delivery. Existing ELab revision/history guards reject old Close/Undo actions after an agent edit, even when repaint retains the same logical owner. Keyboard/programmatic current-callback and placement behavior remain unchanged.
+
+Only `drivers/cogent/controls.go` and the new `drivers/cogent/button_context_test.go` differ from `ade66eb`. Dependencies/notices and all five bootstrap sources are identical. The archive has 7,454 hashed files, 18,627,256 bytes, SHA-256 `9233f875cf11829e68ccc62772f9d841c4e01c0da9b2364c0f6f6a7e0d871fe9`, manifest SHA-256 `f5e9dcab46eb4c6805587f0301f96745a4802abf2f2f50614bb42ebf3479cc89`. All four native replacements use `build/.vellum-sdk-677548d`. [Evidence](validation/button-press-context/README.md) records the before/after mounted checks and framework qualification. Review /146 remains immutable and affected pending replacement qualification.
+
+## Previous pinned integration: ade66eb
+
 Private SDK `ade66eb3586c6d881647cea52f19048087e598c5` adds optional `ControlStateKey` for twelve simple managed control kinds. ELab scopes it to document generation and, in the component inspector, object ID. New owners cannot inherit private numeric text or pressed controls; public IDs stay stable. The earlier `TextStateKey` API remains compatible. Caller-owned editor/grid/tree/placement bindings retain their established contracts and refuse this key.
 
 Exactly four members differ from `178945c`: `ui/node.go`, `ui/control_state_key_test.go`, `drivers/cogent/reconcile.go`, `drivers/cogent/control_state_key_test.go`. The archive has 7,453 hashed files, 18,625,527 bytes, SHA-256 `53b824706108f481ec1dcca842a72fee8ee7797ad2127e00489fda4e645ecf04`, manifest SHA-256 `9e30d55182850a11c54cb754782c3a7a66af2c3487cb0ccb85f874c8e31beb9e`. Prepared dependencies/bootstrap are unchanged; all four native replacements point to `build/.vellum-sdk-ade66eb`.

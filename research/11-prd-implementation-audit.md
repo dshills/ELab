@@ -324,3 +324,7 @@ The retained-text repair is now included in clean **0.128.0 /145**, built from `
 ### Control-owner/Apply replacement qualification · October 18
 
 Clean **0.129.0 /146**, built from `30b0507` and private SDK `ade66eb`, includes the numeric/button ownership and one-click Apply repairs. Full source quality, exact copied native smoke/four-adapter conformance, LED/RC/flasher parity and pulse/Pause/Resume/save/reopen through 3.4 s pass. [Receipt](ui-audit/first-version/control-owner-review-checkpoint.json). All six earlier review folders and canonical /120 are unchanged. Owner walkthrough, physical OS interleaving/window blur and broader P0 gates remain open; counts stay 17 implemented /10 partial.
+
+### Same-owner held-button callback blocker · October 18
+
+The [bounded pointer-context reproduction and repair](../docs/validation/button-press-context/README.md) shows a retained held Close can reverse an agent switch edit after repaint, and held Undo can borrow the new agent tip/permission. Both fail on /146 and pass on pinned SDK `677548d`, with explicit shared guard refusals. Canceled/fresh mouse and keyboard, real-clock held Pause and mounted RC switch/public-agent physics parity pass, as do SDK and full consumer quality gates. ELab production sources, command ledger, models and format are unchanged. /146 is immutable and requires a qualified replacement; no P0 status is upgraded.

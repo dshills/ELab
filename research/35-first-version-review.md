@@ -1,5 +1,7 @@
 # ELab first-version review · 0.129.0 /146
 
+**New blocker found after this handoff:** a held Close/Undo can borrow a repainted Open/agent-history action after an intervening agent edit. /146 is preserved and affected; an isolated SDK repair passes the new real-router regressions, with full qualification in progress.
+
 This is the updated owner-review alpha. Open [ELab.app](../build/ELab-0.129.0-146-review/ELab.app) in the [review folder](../build/ELab-0.129.0-146-review). It includes the matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required. The canonical app and six earlier review folders (0.123.0 /140 through 0.128.0 /145) are preserved. Owner walkthrough remains pending (October 18: “Not tried yet”).
 
 Before opening the replacement, save your work and quit an earlier review app when ready. Version 0.129 keeps unfinished numeric edits and held presses attached to their document and selected part. Old Rotate/Restart releases cannot affect a replacement target; fresh controls still work. A normal Apply click now accepts its own field's focus-loss commit without borrowing an agent or unrelated edit. Earlier text/slider/simulation-button/clock repairs are included. Public control IDs/command schemas, models and project format remain unchanged.

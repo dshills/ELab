@@ -1,0 +1,23 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedButtonOwnerKeepsPressContextAcrossAgentSwitchEdit
+=== RUN   TestMountedButtonOwnerKeepsPressContextAcrossAgentSwitchEdit/unchanged-repaint
+=== RUN   TestMountedButtonOwnerKeepsPressContextAcrossAgentSwitchEdit/agent-repaint
+    button_context_offscreen_test.go:47: held Close borrowed repainted Open action: closed true→false; revision 3→4
+--- FAIL: TestMountedButtonOwnerKeepsPressContextAcrossAgentSwitchEdit (0.17s)
+    --- PASS: TestMountedButtonOwnerKeepsPressContextAcrossAgentSwitchEdit/unchanged-repaint (0.09s)
+    --- FAIL: TestMountedButtonOwnerKeepsPressContextAcrossAgentSwitchEdit/agent-repaint (0.07s)
+=== RUN   TestMountedButtonOwnerKeepsPressContextAcrossAgentHistoryTip
+    button_context_offscreen_test.go:86: held Undo borrowed the new agent history tip/permission
+--- FAIL: TestMountedButtonOwnerKeepsPressContextAcrossAgentHistoryTip (0.08s)
+=== RUN   TestMountedButtonOwnerCanceledPressDoesNotPoisonFreshInput
+=== RUN   TestMountedButtonOwnerCanceledPressDoesNotPoisonFreshInput/fresh-pointer
+=== RUN   TestMountedButtonOwnerCanceledPressDoesNotPoisonFreshInput/fresh-keyboard
+--- PASS: TestMountedButtonOwnerCanceledPressDoesNotPoisonFreshInput (0.15s)
+    --- PASS: TestMountedButtonOwnerCanceledPressDoesNotPoisonFreshInput/fresh-pointer (0.08s)
+    --- PASS: TestMountedButtonOwnerCanceledPressDoesNotPoisonFreshInput/fresh-keyboard (0.08s)
+=== RUN   TestMountedButtonOwnerSwitchPreservesRCPhysicsLikePublicAgent
+--- PASS: TestMountedButtonOwnerSwitchPreservesRCPhysicsLikePublicAgent (0.13s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	1.220s
+FAIL

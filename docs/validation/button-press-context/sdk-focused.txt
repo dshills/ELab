@@ -1,0 +1,31 @@
+# github.com/dshills/vellum/drivers/cogent [github.com/dshills/vellum/drivers/cogent.test]
+accessibility_darwin.m:605:43: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+accessibility_darwin.m:606:42: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+# github.com/dshills/vellum/drivers/cogent.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestButtonActivationRetainsInputCallbackAcrossRebind
+=== RUN   TestButtonActivationRetainsInputCallbackAcrossRebind/held-pointer
+=== RUN   TestButtonActivationRetainsInputCallbackAcrossRebind/queued-pointer
+=== RUN   TestButtonActivationRetainsInputCallbackAcrossRebind/programmatic-latest
+=== RUN   TestButtonActivationRetainsInputCallbackAcrossRebind/canceled-pointer-keyboard
+=== RUN   TestButtonActivationRetainsInputCallbackAcrossRebind/next-pointer
+=== RUN   TestButtonActivationRetainsInputCallbackAcrossRebind/disabled
+=== RUN   TestButtonActivationRetainsInputCallbackAcrossRebind/disposed
+=== RUN   TestButtonActivationRetainsInputCallbackAcrossRebind/nil-origin
+--- PASS: TestButtonActivationRetainsInputCallbackAcrossRebind (0.02s)
+    --- PASS: TestButtonActivationRetainsInputCallbackAcrossRebind/held-pointer (0.01s)
+    --- PASS: TestButtonActivationRetainsInputCallbackAcrossRebind/queued-pointer (0.00s)
+    --- PASS: TestButtonActivationRetainsInputCallbackAcrossRebind/programmatic-latest (0.00s)
+    --- PASS: TestButtonActivationRetainsInputCallbackAcrossRebind/canceled-pointer-keyboard (0.00s)
+    --- PASS: TestButtonActivationRetainsInputCallbackAcrossRebind/next-pointer (0.00s)
+    --- PASS: TestButtonActivationRetainsInputCallbackAcrossRebind/disabled (0.00s)
+    --- PASS: TestButtonActivationRetainsInputCallbackAcrossRebind/disposed (0.00s)
+    --- PASS: TestButtonActivationRetainsInputCallbackAcrossRebind/nil-origin (0.00s)
+=== RUN   TestIconsButtonOwnerDeliveryAndRetirement
+--- PASS: TestIconsButtonOwnerDeliveryAndRetirement (0.00s)
+=== RUN   TestKeyedInsertionReorderRemovalAndCallback
+--- PASS: TestKeyedInsertionReorderRemovalAndCallback (0.00s)
+PASS
+ok  	github.com/dshills/vellum/drivers/cogent	1.622s

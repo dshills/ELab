@@ -1,0 +1,20 @@
+{
+  "reviewed_production_files": [
+    "Vellum drivers/cogent/controls.go"
+  ],
+  "review": [
+    "Only ordinary held left-button presses carry their originating action; mouse-button identity survives native cloned Click events",
+    "Queued pointer delivery retains the press binding; keyboard/programmatic activation keeps its established current-descriptor contract",
+    "Canceled press bindings are constant-size, ignored by keyboard and replaced on the next pointer press; disposal clears them",
+    "Existing postControl window/record retirement and disabled checks remain in force; nil originating actions cannot borrow refreshed callbacks",
+    "Placement source handling is excluded and existing placement tests pass",
+    "ELab revision/document/history guards perform refusal; no command, model, format or control ID changes",
+    "Mounted switch and Undo cases fail before repair and pass after; fresh pointer/keyboard, RC physics and earlier controls remain functional",
+    "Mounted stale actions reach explicit shared conflict/history refusal, while held Pause accepts real sample-only repaint without resetting time"
+  ],
+  "findings": [],
+  "remaining": [
+    "Physical OS interleaving/window deactivation and broader input/accessibility/performance gates",
+    "Owner walkthrough and exhaustive mounted command conformance"
+  ]
+}
