@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "requirements": 27,
+  "counts": {
+    "implemented": 17,
+    "partial": 10,
+    "pending": 0
+  },
+  "scope": "Requirement coverage validation only; does not establish product acceptance"
+}
+{"passed": true, "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-178945c", "source": "178945c802f144f9313b43fa4c42c8cca4eaff05"}
+....................................Starting owned
+Starting owned
+Starting owned
+.......
+----------------------------------------------------------------------
+Ran 43 tests in 1.156s
+
+OK
+?   	github.com/dshills/elab/cmd/elab-agent	[no test files]
+?   	github.com/dshills/elab/cmd/elab-conformance	[no test files]
+?   	github.com/dshills/elab/cmd/elab-ui-audit	[no test files]
+ok  	github.com/dshills/elab/internal/conformance	(cached)
+ok  	github.com/dshills/elab/internal/printspool	(cached)
+ok  	github.com/dshills/elab/internal/schematicpdf	(cached)
+ok  	github.com/dshills/elab/internal/uiaudit	1.389s
+ok  	github.com/dshills/elab/transport	(cached)
+ok  	github.com/dshills/elab/workbench	(cached)
+# github.com/dshills/vellum/drivers/cogent
+accessibility_darwin.m:605:43: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+accessibility_darwin.m:606:42: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+ok  	github.com/dshills/elab/desktop	142.338s
+# github.com/dshills/vellum/drivers/cogent
+accessibility_darwin.m:605:43: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+accessibility_darwin.m:606:42: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+ok  	github.com/dshills/elab/desktop	6.640s
+# github.com/dshills/vellum/drivers/cogent
+accessibility_darwin.m:605:43: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+accessibility_darwin.m:606:42: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here

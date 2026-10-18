@@ -1,5 +1,13 @@
 # Current Vellum SDK integration
 
+Private SDK `178945c802f144f9313b43fa4c42c8cca4eaff05` adds optional `ui.Node.TextStateKey` for managed TextFields. ELab scopes it to document generation and, inside the component inspector, selected component ID. Old private text cannot survive into another logical owner simply because its public ID and controlled text match. Ordinary redraws and own accepted edits preserve the binding. Public commands/IDs, models and project format are unchanged; the SDK API addition is limited to this explicit text-state identity.
+
+Exactly four SDK source members differ from `88dc650`: `ui/node.go`, `ui/text_state_key_test.go`, `drivers/cogent/reconcile.go` and `drivers/cogent/state_key_test.go`. Prepared upstream/typesetting and bootstrap sources are byte-identical. The archive has 7,451 hashed files, 18,622,757 bytes, SHA-256 `2bfc4dc6438251485cc4b52704f9b57d87ae1456ef9d88d22f66beebb47fc00c`, manifest SHA-256 `fff345ab03cc8f26a4c612fd7e55dfdc0471f3f5aca8bf14c4110f7f9020cfcb`. All four native replacements point to `build/.vellum-sdk-178945c`. Prior source/cache/archive and sibling checkout are preserved.
+
+Framework root/driver race and vet, focused offscreen routing/native-field/lifetime tests and tagged vet pass. The consumer before/after uses real retained widgets and routed keyboard input; both cross-owner cases fail on the prior pin, while the repair preserves ordinary pending text and accepts fresh edits. [Qualification evidence](validation/text-field-state/README.md) distinguishes source validation from a replacement review package. Review /144 remains immutable and affected pending replacement.
+
+## Previous pinned integration: 88dc650
+
 ELab now pins private source `88dc650884f97629a6370e8408fd9e9242f1a7e0`, a narrow slider-context repair on `bc6b456`. A held potentiometer drag could borrow a newer callback after repaint and overwrite an intervening agent edit or replacement document. The repair retains the callback from gesture start through release and queued delivery, allowing ELab's existing context guards to refuse the old action. Discrete controls retain their established delivery semantics; no public API, model or project format changes.
 
 The archive has 7,449 hashed files, 18,621,213 bytes, SHA-256 `c5be13c5e74e555ebd3e13f82626d6c182bba34d08f034259538aea053a1c13a`. Its manifest SHA-256 is `cc39252c78acf160eb95b6b1a603e1b22aa4c716b0b2d0c1ab2a58c42b202d8c`. Exactly two source members differ: `drivers/cogent/controls.go` and its new `control_context_test.go`. Prepared upstream/typesetting and all five bootstrap sources are byte-identical. The lock and four native replacements point to `build/.vellum-sdk-88dc650`; previous archives/caches and the adjacent Vellum project are preserved.

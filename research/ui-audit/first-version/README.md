@@ -297,3 +297,8 @@ The [bounded retained-widget follow-up](slider-running-focus/README.md) passes r
 ### Native unfinished-field replacement
 
 The [bounded /144 native check](native-value-replacement/README.md) confirms private `2.2k` text does not mutate the old 1 kΩ graph, is removed on document load, and does not leak into a fresh 3.3 kΩ field/Apply. The final saved graph and all DC result fields agree with a separate matching headless agent. Cmd+Tab/minimize attempts have insufficient activation evidence and do not close OS window-blur acceptance. The owned host exited normally; canonical and all five review folders are unchanged. No production/SDK/version changes or P0 upgrade.
+
+
+### Retained value-field identity blocker
+
+A subsequent [real-router reproduction](../../../docs/validation/text-field-state/README.md) covers the missing retained case: coalesced document load/reselection or selecting another same-value resistor carries private text across logical owners. The source repair adds text-field-only state identity, scoped to document generation and selected part, while keeping public IDs/commands. Ordinary redraw and fresh-input controls pass, as does full quality. /144 remains affected pending a qualified replacement. Physical OS coalescing/window blur and broader input gates remain separate.

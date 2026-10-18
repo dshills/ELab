@@ -1,0 +1,120 @@
+{
+  "date": "2026-10-18",
+  "prior_goal_turn": "progress: native field removal/remount qualification completed; retained schedule remained open",
+  "source_base": "89c3e019b11a61d173d635e9ce5232e032cfa670",
+  "status": "source repair verified; immutable /144 requires qualified replacement",
+  "defect": "Retained private 2.2k enters another document/selected object editor draft on Return when public ID and controlled 1 k\u03a9 text match",
+  "repair": [
+    "SDK TextStateKey is explicitly limited to managed TextFields; default empty retains old behavior",
+    "ELab text fields carry document generation; component-inspector text fields also carry object ID",
+    "Public node/command IDs and params remain stable; ordinary own edits/redraws preserve private state",
+    "Existing revision/generation guards and native retirement/queued-change refusal paths retained"
+  ],
+  "SDK": {
+    "schema": 1,
+    "archive": "third_party/vellum/vellum-178945c.tar.gz",
+    "archive_bytes": 18622757,
+    "sha256": "2bfc4dc6438251485cc4b52704f9b57d87ae1456ef9d88d22f66beebb47fc00c",
+    "manifest_sha256": "fff345ab03cc8f26a4c612fd7e55dfdc0471f3f5aca8bf14c4110f7f9020cfcb",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-178945c",
+    "source_commit": "178945c802f144f9313b43fa4c42c8cca4eaff05",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 7451,
+    "bootstrap": {
+      "scripts/check-sdk.py": "b8062fbd4c57d1d8cb4d75a094184e1a5fa108cfa811fe9fb390f99f6d66be38",
+      "scripts/child_process.py": "04ba2610ddf112e936e8adcd9a81c03cff422843f993c2ce8a9e1acd96f39c9c",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "803d981c00f32d08a370577b37094848b2c79085cf3303a99b23d2a94336ac2c",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541"
+    }
+  },
+  "quality": {
+    "framework_root_and_driver_race_vet": "exit 0",
+    "framework_offscreen_race_vet": "exit 0",
+    "ui_contract_strengthened_test": "exit 0; non-text kinds fail specifically on TextStateKey",
+    "consumer_full_gate": "scripts/check.sh exit 0; audit freshness, lint/imports/Staticcheck, 43 Python tests, root/native race/vet, mounted slider/value-draft offscreen race/vet",
+    "native_race_s": 142.338,
+    "offscreen_race_s": 6.64
+  },
+  "regressions": [
+    "Both cross-owner schedules fail before repair: native incarnation 2 retained old private text; Return overwrites new draft",
+    "After repair both remount as incarnation 3 with controlled text; explicit pointer focus and Return cannot publish old text",
+    "Fresh 3.3k typing/Return accepts exactly one new draft command with graph unchanged",
+    "Same-owner redraw keeps incarnation 2 and private 2.2k; ordinary Return commits once",
+    "Existing held-slider interruptions, keyboard Tab and running RC/agent replay pass"
+  ],
+  "source_ledger": {
+    "source_hashes_changed": {
+      "desktop/component_inspector.go": {
+        "before": "c8509dbe15e8aae4ecece30bce55f75360ff3eaa07c23ef51dc82fbaaee00ff6",
+        "after": "21b820631a291b2b062fee89439654cd15e3a5788e0b83f0c5a4cb6ac1f8e3fe"
+      },
+      "desktop/field_context.go": {
+        "before": "4f3abac0bc24fd5054e89ad5e479a6a9196ba0ab52faa9134294743a34b74bd5",
+        "after": "18f5ec46649575e16528d973bb53214116b57f93e3d2354f474c40fb780b5298"
+      }
+    },
+    "sites_moved": [
+      {
+        "file": "desktop/component_inspector.go",
+        "function": "*screen.partGeometryControls",
+        "line_before": 124,
+        "line_after": 127,
+        "expression_and_classification_unchanged": true
+      },
+      {
+        "file": "desktop/component_inspector.go",
+        "function": "*screen.partGeometryControls",
+        "line_before": 124,
+        "line_after": 127,
+        "expression_and_classification_unchanged": true
+      },
+      {
+        "file": "desktop/field_context.go",
+        "function": "*screen.bindFieldContext",
+        "line_before": 10,
+        "line_after": 19,
+        "expression_and_classification_unchanged": true
+      }
+    ],
+    "sources": 62,
+    "sites": 389,
+    "public_IDs": 162,
+    "source_routes": 132,
+    "remaining_binding_review_sites": 147,
+    "public_commands_aliases_route_sets_classifications_unchanged": true
+  },
+  "self_review": [
+    "No key is based on command revision; own edits/live publication must not churn field identity",
+    "Key includes exact generation/object strings; no identity hash collision or public ID remapping",
+    "Other managed kinds reject TextStateKey; model-owned controls keep established contracts",
+    "Private text reset occurs through normal remount/disposal, including stale native clients and queued callbacks",
+    "Fresh-input focus is explicitly exercised so refusal cannot pass merely because no widget received Return"
+  ],
+  "limits": [
+    "Deterministic retained native widgets and event routing; not physically coalesced OS input or window blur",
+    "Only managed TextField identity; broader mounted field/IME/VoiceOver/performance conformance remains open",
+    "Owner walkthrough not tried yet; P0 statuses stay 17 implemented /10 partial",
+    "No canonical promotion; /144 and older review bundles preserved"
+  ],
+  "test_sha256": "11e3fd449f983238d73e2ef4224425e9bd6197c08e9151bd41e6182c0bf4d080",
+  "evidence_sha256": {
+    "README.md": "82fb2795482bb74e3059243655b5b07b49422cbec12400f19dd6132b7d2c49d4",
+    "before.txt": "5ccbc90099ddaf7c79c8e9daf78f30495972bfa652256a95de849c0ce530d9cd",
+    "full-check.txt": "35b9df963fd22c0b690c8803715b9d366765281ef3d57b47fc4eedfbdef6fea9",
+    "isolated-after.txt": "5602408d938e9b48094e9eda195582196a313751192dcd95b96d38d08c25ff7f",
+    "ledger-review.json": "9f22095aefbfcb42114590db1f792a5d7a09753b9525254c9e1c9168749a3ac4",
+    "prepare.txt": "d087a17312d91af04e7fab668f8aa5aefb6324b286240ebebfd266b0c68113c1",
+    "prior-sdk.lock.json": "32739212848079486f996eb49950772682625c06c302e9a5cbc441006ea9869b",
+    "sdk-diff.json": "974dc8af348852ae3c089674b67884ca22d4bbda425fbd43c4f60d89b62da3aa",
+    "sdk-driver-quality.txt": "d098e106b07a71f54fb434ca26135a0cd768298f74e4306350bd52aca1f705b0",
+    "sdk-offscreen-quality.txt": "e5034c6e01b61f852a27ebcaac42794338a2006f16680bf66663db4158a51bd6",
+    "sdk-root-quality.txt": "506fb2d246e97aab4d1146a58077ad2e64dd4640a073f0c80626e9e4bf6d76b0",
+    "sdk-ui-contract.txt": "a2c1cdea5df1b640276a5903ab334daf4d883a08f4d4253c9321b81442a7a55c",
+    "vellum.commit.txt": "40620b9a91aac8527c813c0f09f1e39473bb36bf9183fdff4ee48a5b81227181",
+    "vellum.patch": "df55333440365875df31c99dc541bed35155ff18efc6d67627d6bf2950f278ee"
+  }
+}

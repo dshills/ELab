@@ -1,0 +1,15 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement
+=== RUN   TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement/document-replacement
+    value_context_offscreen_test.go:83: native incarnation 2→2; text after replacement 2.2k; controlled "1 kΩ"
+    value_context_offscreen_test.go:86: old private text acted on replacement: draft "1 kΩ"→"2.2k"
+=== RUN   TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement/selected-object
+    value_context_offscreen_test.go:83: native incarnation 2→2; text after replacement 2.2k; controlled "1 kΩ"
+    value_context_offscreen_test.go:86: old private text acted on replacement: draft "1 kΩ"→"2.2k"
+--- FAIL: TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement (0.35s)
+    --- FAIL: TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement/document-replacement (0.19s)
+    --- FAIL: TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement/selected-object (0.16s)
+FAIL
+exit status 1
+FAIL	github.com/dshills/elab/desktop	1.006s

@@ -62,6 +62,7 @@ Scripts alone do not establish native focus, typing, dialog or pointer behavior.
 
 | Issue | Severity and closure |
 |---|---|
+| Retained text field can carry an old private draft into another document/object | **Blocks promotion; source repair verified, replacement package pending.** Driver-routed keyboard tests reproduce both schedules; field removal/remount alone does not cover this case. Public IDs/commands stay unchanged in the proposed text-state identity repair. |
 | Held potentiometer drag can overwrite an agent edit or replacement after repaint | **Closed in 0.127.0 /144.** Old SDK fails both interleavings; pinned repair passes normal/repaint/refusal controls, full source quality and clean exact copied-runtime acceptance. [Receipt](ui-audit/first-version/slider-review-checkpoint.json). Actual OS concurrent/focus-loss qualification remains separate. |
 | Retained simulation button can act on an agent-replaced experiment | **Closed in 0.126.0 /143.** Tests refuse stale controls and preserve fresh/live-sample behavior; full quality, actual fresh native focus, clean replacement and exact-runtime acceptance pass. [Receipt](../docs/validation/rendered-simulation-buttons/checkpoint.json). |
 | Live pulse clock drifts into a sub-minimum integration gap | **Closed in 0.125.0 /142.** Exact copied runtime crosses the old failure, nonzero Resume/save checks and reference parity pass. [Before/after evidence](../docs/validation/live-clock-grid/README.md). |

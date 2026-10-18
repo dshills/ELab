@@ -307,3 +307,8 @@ The held-slider repair is now included in clean **0.127.0 /144**, built from `1f
 ### Native pending value and document replacement · October 18
 
 The [actual native /144 field check](ui-audit/first-version/native-value-replacement/README.md) preserves the original graph during unfinished typing, removes the private field on document replacement and applies the fresh replacement value without carrying old text. A separate matching external headless agent agrees on the saved graph and all DC result fields. This is one field removal/remount path; it does not close every retained-identity schedule. App-switch/minimize attempts lacked conclusive activation evidence, so OS window deactivation remains unqualified. No code/SDK/version change, no new defect, no P0 status upgrade.
+
+
+### Retained text-field identity blocker · October 18
+
+The [bounded retained-field reproduction and repair](../docs/validation/text-field-state/README.md) show the earlier native field removal/remount case was insufficient: if a redraw retains the field ID and controlled text, old private `2.2k` can enter another document or selected object's public draft on Return. The pinned SDK's text-only state identity now remounts on logical owner change, preserving ordinary redraws and accepting fresh edits. Full source quality passes; /144 is immutable and requires a qualified replacement package. Public command IDs/params, models and project format are unchanged. No P0 status is upgraded.

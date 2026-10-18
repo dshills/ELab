@@ -29,23 +29,22 @@ import (
 
 // Use the pinned driver's real retained widgets/event router without an OS
 // window or a GPU. No SDK source or descriptor callback is replaced by the test.
+type mountedControlWindow struct {
+	t      *testing.T
+	ctx    context.Context
+	screen *screen
+	manual *cogent.Manual
+	clock  *execution.ManualClock
+	window cogent.ManualWindowSnapshot
+}
+
 type mountedWiper struct {
-	t        *testing.T
-	ctx      context.Context
-	screen   *screen
-	manual   *cogent.Manual
-	clock    *execution.ManualClock
-	window   cogent.ManualWindowSnapshot
+	*mountedControlWindow
 	from, to image.Point
 }
 
 func newMountedWiper(t *testing.T, s *screen) *mountedWiper {
 	t.Helper()
-	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
-	t.Cleanup(cancel)
-	if _, err := s.service.Wait(ctx); err != nil {
-		t.Fatal(err)
-	}
 	id := ""
 	for _, p := range s.service.Snapshot().Components {
 		if p.Kind == "potentiometer" {
@@ -75,7 +74,29 @@ func newMountedWiper(t *testing.T, s *screen) *mountedWiper {
 		s.bindFieldContext(&root, actionContext{state.CommandRevision, state.Document.Generation})
 		return root
 	}
-	if err := s.app.Open(app.Window{ID: "main", Title: "Held wiper", Width: 520, Height: 180, View: view}); err != nil {
+	m := &mountedWiper{mountedControlWindow: newMountedControlWindow(t, s, view)}
+	var bounds image.Rectangle
+	for _, e := range m.window.Elements {
+		if e.ID == "pot-wiper" {
+			bounds = e.Bounds
+		}
+	}
+	if bounds.Empty() {
+		t.Fatal("slider has no measured geometry")
+	}
+	m.from = bounds.Min.Add(bounds.Size().Div(2))
+	m.to = m.from.Add(image.Pt(bounds.Dx()/4, 0))
+	return m
+}
+
+func newMountedControlWindow(t *testing.T, s *screen, view func() ui.Node) *mountedControlWindow {
+	t.Helper()
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	t.Cleanup(cancel)
+	if _, err := s.service.Wait(ctx); err != nil {
+		t.Fatal(err)
+	}
+	if err := s.app.Open(app.Window{ID: "main", Title: "Mounted controls", Width: 520, Height: 180, View: view}); err != nil {
 		t.Fatal(err)
 	}
 	clock, err := execution.NewManualClock(time.Unix(1730000000, 0).UTC(), 256, 256)
@@ -118,24 +139,13 @@ func newMountedWiper(t *testing.T, s *screen) *mountedWiper {
 			t.Error(err)
 		}
 	})
-	m := &mountedWiper{t: t, ctx: ctx, screen: s, manual: manual, clock: clock}
+	m := &mountedControlWindow{t: t, ctx: ctx, screen: s, manual: manual, clock: clock}
 	m.settle()
 	m.window = m.snapshot()
-	var bounds image.Rectangle
-	for _, e := range m.window.Elements {
-		if e.ID == "pot-wiper" {
-			bounds = e.Bounds
-		}
-	}
-	if bounds.Empty() {
-		t.Fatal("slider has no measured geometry")
-	}
-	m.from = bounds.Min.Add(bounds.Size().Div(2))
-	m.to = m.from.Add(image.Pt(bounds.Dx()/4, 0))
 	return m
 }
 
-func (m *mountedWiper) snapshot() cogent.ManualWindowSnapshot {
+func (m *mountedControlWindow) snapshot() cogent.ManualWindowSnapshot {
 	m.t.Helper()
 	snapshot, err := m.manual.Snapshot(m.ctx)
 	if err != nil {
@@ -147,7 +157,7 @@ func (m *mountedWiper) snapshot() cogent.ManualWindowSnapshot {
 	return snapshot.Windows[0]
 }
 
-func (m *mountedWiper) settle() {
+func (m *mountedControlWindow) settle() {
 	m.t.Helper()
 	for range 128 {
 		snapshot, err := m.manual.Snapshot(m.ctx)
@@ -177,7 +187,7 @@ func (m *mountedWiper) settle() {
 	m.t.Fatal("manual settle bound exhausted")
 }
 
-func (m *mountedWiper) frame() {
+func (m *mountedControlWindow) frame() {
 	m.t.Helper()
 	if err := m.screen.app.Invalidate("main"); err != nil {
 		m.t.Fatal(err)
@@ -188,7 +198,7 @@ func (m *mountedWiper) frame() {
 	m.settle()
 }
 
-func (m *mountedWiper) input(input cogent.ManualInput) {
+func (m *mountedControlWindow) input(input cogent.ManualInput) {
 	m.t.Helper()
 	input.Window, input.WindowIncarnation = "main", m.window.Incarnation
 	if err := m.manual.Input(m.ctx, input); err != nil {

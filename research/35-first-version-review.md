@@ -1,5 +1,7 @@
 # ELab first-version review · 0.127.0 /144
 
+**New blocker found after this handoff:** a retained value field can carry old unfinished text across document/object changes when a redraw keeps the same field ID and controlled text. The pinned source repair passes the full source gate; /144 remains immutable and needs a qualified replacement package. [Evidence](../docs/validation/text-field-state/README.md).
+
 This is the updated owner-review alpha. Open [ELab.app](../build/ELab-0.127.0-144-review/ELab.app) in the [review folder](../build/ELab-0.127.0-144-review). The folder includes the matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required to use the app. The canonical app and all four earlier review folders (0.123.0 /140 through 0.126.0 /143) are preserved. Owner walkthrough remains pending (October 18: “Not tried yet”).
 
 Before opening the replacement, save your work and quit an earlier review app when ready. Version 0.127 repairs a held potentiometer drag overwriting an intervening agent edit or document replacement after repaint. The slider now retains its original callback context, allowing the existing command guards to refuse an old drag. Ordinary drags and repaints still commit once. Earlier rendered Pause/Resume/Restart guards, live-clock, routing-cache, value-error and print-label repairs are included. Models, project format and public commands are unchanged; only the narrow verified SDK repair is adopted.

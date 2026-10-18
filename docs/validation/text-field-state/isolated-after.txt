@@ -1,0 +1,39 @@
+# github.com/dshills/vellum/drivers/cogent
+accessibility_darwin.m:605:43: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+accessibility_darwin.m:606:42: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/uninterrupted
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/unchanged-repaint
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-repaint
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-document-replacement
+--- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag (2.51s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/uninterrupted (0.61s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/unchanged-repaint (0.61s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-repaint (0.65s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-document-replacement (0.64s)
+=== RUN   TestMountedSliderKeyboardFocusChangePreservesContext
+=== RUN   TestMountedSliderKeyboardFocusChangePreservesContext/normal
+=== RUN   TestMountedSliderKeyboardFocusChangePreservesContext/replacement
+--- PASS: TestMountedSliderKeyboardFocusChangePreservesContext (1.20s)
+    --- PASS: TestMountedSliderKeyboardFocusChangePreservesContext/normal (0.59s)
+    --- PASS: TestMountedSliderKeyboardFocusChangePreservesContext/replacement (0.61s)
+=== RUN   TestMountedSliderRunningChargeAndAgentParity
+    slider_invalidation_offscreen_test.go:396: held 0.002→0.004 s; accepted at 0.004 s; wiper 0.940625; event charge 1.995280651 V; one user history/event; agent replay 4.626952142 V
+--- PASS: TestMountedSliderRunningChargeAndAgentParity (1.06s)
+=== RUN   TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement
+=== RUN   TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement/unchanged-repaint
+    value_context_offscreen_test.go:83: native incarnation 2→2; text after redraw 2.2k; controlled "1 kΩ"
+=== RUN   TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement/document-replacement
+    value_context_offscreen_test.go:83: native incarnation 2→3; text after redraw 1 kΩ; controlled "1 kΩ"
+=== RUN   TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement/selected-object
+    value_context_offscreen_test.go:83: native incarnation 2→3; text after redraw 1 kΩ; controlled "1 kΩ"
+--- PASS: TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement (0.69s)
+    --- PASS: TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement/unchanged-repaint (0.17s)
+    --- PASS: TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement/document-replacement (0.27s)
+    --- PASS: TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement/selected-object (0.25s)
+PASS
+ok  	github.com/dshills/elab/desktop	7.068s

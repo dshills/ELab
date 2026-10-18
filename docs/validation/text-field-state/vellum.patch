@@ -1,0 +1,127 @@
+diff --git a/drivers/cogent/reconcile.go b/drivers/cogent/reconcile.go
+index 59f2f54..c0231f8 100644
+--- a/drivers/cogent/reconcile.go
++++ b/drivers/cogent/reconcile.go
+@@ -245,6 +245,9 @@ func compatible(old, next ui.Node) bool {
+ 	if old.ID != next.ID || old.Kind != next.Kind {
+ 		return false
+ 	}
++	if next.Kind == ui.TextField && old.TextStateKey != next.TextStateKey {
++		return false
++	}
+ 	if next.Kind == ui.DataTree && old.Tree != next.Tree {
+ 		return false
+ 	}
+diff --git a/drivers/cogent/state_key_test.go b/drivers/cogent/state_key_test.go
+new file mode 100644
+index 0000000..6758801
+--- /dev/null
++++ b/drivers/cogent/state_key_test.go
+@@ -0,0 +1,54 @@
++package cogent
++
++import (
++	"testing"
++
++	"cogentcore.org/core/core"
++	"github.com/dshills/vellum/ui"
++)
++
++func TestTextStateKeyReplacesPrivateFieldStateAndRetiresQueuedChanges(t *testing.T) {
++	a, _ := newAXTest(t, 8)
++	host := core.NewFrame(core.NewBody("field-owner"))
++	calls := 0
++	n := ui.Node{ID: "root", Kind: ui.Column, Children: []ui.Node{{ID: "field", Kind: ui.TextField, TextStateKey: "doc1:part1", Text: "1k", Change: func(ui.ChangeEvent) { calls++ }}}}
++	r, err := reconcile(host, nil, n, a, "ax")
++	if err != nil {
++		t.Fatal(err)
++	}
++	old := findRecord(r, "field")
++	field := old.widget.(*core.TextField)
++	if !field.ApplyNativeEdit("2.2k", 4, 4, -1, -1, "insert") {
++		t.Fatal("private native edit refused")
++	}
++	r, err = reconcile(host, r, n, a, "ax")
++	if err != nil {
++		t.Fatal(err)
++	}
++	if findRecord(r, "field") != old || field.EditingState().Text != "2.2k" {
++		t.Fatal("ordinary redraw lost private text")
++	}
++	field.SendChange() // owner callback is queued before the binding is retired
++	n.Children[0].TextStateKey = "doc2:part1"
++	r, err = reconcile(host, r, n, a, "ax")
++	if err != nil {
++		t.Fatal(err)
++	}
++	a.Drain()
++	fresh := findRecord(r, "field")
++	if fresh == old || fresh.widget == field || !old.control.retired || calls != 0 {
++		t.Fatal("logical owner change retained field or delivered old queued change")
++	}
++	current := fresh.widget.(*core.TextField)
++	if current.EditingState().Text != "1k" {
++		t.Fatal("replacement inherited private text", current.EditingState())
++	}
++	if !current.ApplyNativeEdit("3.3k", 4, 4, -1, -1, "insert") {
++		t.Fatal("fresh field edit refused")
++	}
++	current.SendChange()
++	a.Drain()
++	if calls != 1 {
++		t.Fatal("fresh field did not deliver its change")
++	}
++}
+diff --git a/ui/node.go b/ui/node.go
+index 08049ab..0730e0e 100644
+--- a/ui/node.go
++++ b/ui/node.go
+@@ -35,6 +35,12 @@ type Node struct {
+ 	ID   string
+ 	Kind Kind
+ 	Text string
++	// TextStateKey identifies the logical owner of a managed TextField's private
++	// editing state. A change remounts that field, even when Text is unchanged,
++	// while retaining its public ID. Empty preserves normal ID/kind retention.
++	// Other kinds must leave this empty; caller-owned editor/grid/tree models
++	// already provide their own identity contracts.
++	TextStateKey string
+ 	// Icon is bundled artwork for Icon/Button/ToggleButton. Text is alternate
+ 	// text for an Icon. Icon-only actions require Accessibility.Name.
+ 	Icon Symbol
+@@ -106,6 +112,9 @@ func Validate(root Node) error {
+ 		if n.ID == "" || seen[n.ID] {
+ 			return fmt.Errorf("ui: empty or duplicate ID %q", n.ID)
+ 		}
++		if n.TextStateKey != "" && n.Kind != TextField {
++			return fmt.Errorf("ui: node %q: TextStateKey requires TextField", n.ID)
++		}
+ 		if strings.HasPrefix(n.ID, "canvas-object:") {
+ 			return fmt.Errorf("ui: ID %q uses reserved canvas-object: prefix", n.ID)
+ 		}
+diff --git a/ui/text_state_key_test.go b/ui/text_state_key_test.go
+new file mode 100644
+index 0000000..3d92573
+--- /dev/null
++++ b/ui/text_state_key_test.go
+@@ -0,0 +1,20 @@
++package ui
++
++import (
++	"strings"
++	"testing"
++)
++
++func TestTextStateKeyRequiresManagedTextField(t *testing.T) {
++	for _, kind := range []Kind{TextField, Label, Button, NumberField, MultilineText} {
++		n := Node{ID: "field", Kind: kind, TextStateKey: "document:part"}
++		err := Validate(n)
++		if kind == TextField {
++			if err != nil {
++				t.Fatal(err)
++			}
++		} else if err == nil || !strings.Contains(err.Error(), "TextStateKey") {
++			t.Fatalf("kind=%s must reject the text-only key: %v", kind, err)
++		}
++	}
++}
