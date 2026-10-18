@@ -1,0 +1,483 @@
+{
+  "date": "2026-10-18",
+  "version": "0.141.0",
+  "build": "158",
+  "status": "native text handoff repair qualified for private owner review; supported-alpha/full MVP remain open",
+  "source_commit": "622d31bbc5752eb4d0b84c1c3922823f44624bfd",
+  "clean_build_vcs": true,
+  "native_sha256": "570b805b42a9f3ee01acb6fecd3bdea5420c57a0b38dd247d1c52689127d82b5",
+  "agent_sha256": "cea0fd702622b7ded25e4319cd27e69df9ad11c7a7d519a77c2f5347bf7ac042",
+  "sdk": {
+    "schema": 1,
+    "archive": "third_party/vellum/vellum-274f5cc.tar.gz",
+    "archive_bytes": 18629888,
+    "sha256": "53fb72c7f0f078134f7b7d6650ec8e5807998e270ab21a0328456af03f8db274",
+    "manifest_sha256": "b98a3f0354d69843aa338c93b1d5801d75cf7e7faf8efcd9fe2e55c46591c4f7",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-274f5cc",
+    "source_commit": "274f5cc9b75873b2ad01fb86249bbda800bd568f",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 7456,
+    "bootstrap": {
+      "scripts/check-sdk.py": "b8062fbd4c57d1d8cb4d75a094184e1a5fa108cfa811fe9fb390f99f6d66be38",
+      "scripts/child_process.py": "04ba2610ddf112e936e8adcd9a81c03cff422843f993c2ce8a9e1acd96f39c9c",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "803d981c00f32d08a370577b37094848b2c79085cf3303a99b23d2a94336ac2c",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541"
+    }
+  },
+  "canonical_promoted": false,
+  "quality": {
+    "passed": true,
+    "exit_code": 0,
+    "elapsed_seconds": 235.2873536660336,
+    "scope": "Complete consumer quality gate against new pinned SDK"
+  },
+  "copied_runtime": [
+    {
+      "name": "native-smoke",
+      "command": [
+        "/private/tmp/elab-first-version-158-runtime/native",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 39.25370312505402
+    },
+    {
+      "name": "public-suites",
+      "command": [
+        "/Users/dshills/Development/projects/ELab/build/first-version-158-tools/build/elab-conformance",
+        "--agent-binary",
+        "/private/tmp/elab-first-version-158-runtime/agent",
+        "--native-binary",
+        "/private/tmp/elab-first-version-158-runtime/native",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/private/tmp/elab-first-version-158-runtime/public"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 48.390930290916
+    }
+  ],
+  "native_text_handoff": {
+    "passed": true,
+    "source_evidence": "Native-text-source-repair/checkpoint.json",
+    "sdk_source": "274f5cc9b75873b2ad01fb86249bbda800bd568f",
+    "source_native_replay": {
+      "passed": true,
+      "native_sha256": "9a746cb1971e602a1c7dcc6e96afb096c385b3891f92d3272589775afd870c71",
+      "original_pid": 19709,
+      "original_host_exit_code": 0,
+      "cursor_attempts": 6,
+      "cursor_requested_seconds": [
+        0.004,
+        0.006,
+        0.008,
+        0.01,
+        0.012,
+        0.014
+      ],
+      "all_packaged_agent_scope_transient_parity": true,
+      "interval_start_s": 0.006,
+      "interval_end_s": 0.02,
+      "retained_samples": 21,
+      "selected_samples": 15,
+      "domain_and_saved_bytes_preserved": true,
+      "scope": "Alternate modfile/isolated SDK development build; no exact clean copied review claim"
+    },
+    "source_sdk_quality": {
+      "passed": true,
+      "stages": [
+        {
+          "command": [
+            "go",
+            "test",
+            "-race",
+            "-count=1",
+            "./..."
+          ],
+          "exit_code": 0,
+          "seconds": 23.396914375014603
+        },
+        {
+          "command": [
+            "go",
+            "vet",
+            "./..."
+          ],
+          "exit_code": 0,
+          "seconds": 9.96966787497513
+        },
+        {
+          "command": [
+            "go",
+            "test",
+            "-race",
+            "-tags=offscreen",
+            "-count=1",
+            "-run",
+            "^Test(ManagedLegacyBoundary|ReviewFieldSettlement|ManagedTextFieldFocusLoss)",
+            "./..."
+          ],
+          "exit_code": 0,
+          "seconds": 23.623668916989118
+        },
+        {
+          "command": [
+            "go",
+            "vet",
+            "-tags=offscreen",
+            "./..."
+          ],
+          "exit_code": 0,
+          "seconds": 6.788503541960381
+        }
+      ]
+    },
+    "scope": "Pinned-source failing/passing Cocoa/FIFO guards and development native six-entry/interval parity; exact-source clean build and copied native smoke/public/reference integration; no new physical typing claim for copied bytes"
+  },
+  "live_measurement_ownership": {
+    "passed": true,
+    "source_evidence": [
+      "Live-cursor-source-repair/checkpoint.json",
+      "Live-window-source-repair/checkpoint.json"
+    ],
+    "packaged_public_comparison": {
+      "passed": true,
+      "scope_stage_matches": 4,
+      "stale_cursor_and_window_revision_refused": true,
+      "restart_clears_live_cursors_and_fixed_window": true,
+      "fresh_cursor_a_s": 0.006,
+      "fresh_cursor_b_s": 0.016,
+      "fresh_window_s": [
+        0.006,
+        0.02
+      ],
+      "retained_samples": 21,
+      "selected_samples": 15,
+      "fresh_measurement_preserves_graph_physics_document_history": true,
+      "scope": "Exact copied native/headless public commands; private native draft reset is separately proven by the two pinned-source mounted ownership regressions"
+    },
+    "scope": "Prior source-mounted private-run ownership and fresh exact copied public reset/refusal/measurement parity"
+  },
+  "recording_ownership": {
+    "passed": true,
+    "source_evidence": "Recording-owner-source-repair/checkpoint.json",
+    "packaged_public_comparison": {
+      "passed": true,
+      "captures": 2,
+      "rows_per_capture": 21,
+      "resistance_ohm": [
+        10000,
+        20000
+      ],
+      "stale_capture_id_refused": true,
+      "fresh_cursor_seek_window_s": 0.006,
+      "metadata_rows_and_live_physics_history_preserved": true,
+      "fresh_two_capture_reopen": true,
+      "scope": "Exact copied native/headless commands on two distinct saved captures; source mounted tests separately prove private-edit reset across capture selection"
+    },
+    "scope": "Prior source-mounted private capture ownership and fresh exact copied two-capture target/data checks"
+  },
+  "recorded_cursors": {
+    "passed": true,
+    "sample_count": 21,
+    "measured_delta_s": 0.008,
+    "scope_stage_matches": 4,
+    "captured_metadata_and_rows_unchanged": true,
+    "live_physics_document_history_unchanged": true,
+    "fresh_recorded_project_reopen": true,
+    "scope": "Exact copied native endpoint and matching headless agent commands on one identical saved capture; mounted one-click input/settlement is separately proven by pinned source regressions"
+  },
+  "value_correction": {
+    "passed": true,
+    "refusal_code": "invalid-params",
+    "rejected_edit_preserves_physics_and_history": true,
+    "correction_restarts_once": true,
+    "resistance_ohm": 2200,
+    "current_a": 0.001344737452917332,
+    "scope": "Exact copied native endpoint and headless packaged agent public commands; prior native typing/Apply evidence is a separate development-binary observation"
+  },
+  "acceptance": {
+    "passed": true,
+    "scope": "exact copied 0.141.0 /158 native runtime with development-file/outbound-IP denial; public commands",
+    "value_correction": {
+      "passed": true,
+      "refusal_code": "invalid-params",
+      "rejected_edit_preserves_physics_and_history": true,
+      "correction_restarts_once": true,
+      "resistance_ohm": 2200,
+      "current_a": 0.001344737452917332,
+      "scope": "Exact copied native endpoint and headless packaged agent public commands; prior native typing/Apply evidence is a separate development-binary observation"
+    },
+    "live_measurement_ownership": {
+      "passed": true,
+      "scope_stage_matches": 4,
+      "stale_cursor_and_window_revision_refused": true,
+      "restart_clears_live_cursors_and_fixed_window": true,
+      "fresh_cursor_a_s": 0.006,
+      "fresh_cursor_b_s": 0.016,
+      "fresh_window_s": [
+        0.006,
+        0.02
+      ],
+      "retained_samples": 21,
+      "selected_samples": 15,
+      "fresh_measurement_preserves_graph_physics_document_history": true,
+      "scope": "Exact copied native/headless public commands; private native draft reset is separately proven by the two pinned-source mounted ownership regressions"
+    },
+    "recorded_cursors": {
+      "passed": true,
+      "sample_count": 21,
+      "measured_delta_s": 0.008,
+      "scope_stage_matches": 4,
+      "captured_metadata_and_rows_unchanged": true,
+      "live_physics_document_history_unchanged": true,
+      "fresh_recorded_project_reopen": true,
+      "scope": "Exact copied native endpoint and matching headless agent commands on one identical saved capture; mounted one-click input/settlement is separately proven by pinned source regressions"
+    },
+    "recording_targets": {
+      "passed": true,
+      "captures": 2,
+      "rows_per_capture": 21,
+      "resistance_ohm": [
+        10000,
+        20000
+      ],
+      "stale_capture_id_refused": true,
+      "fresh_cursor_seek_window_s": 0.006,
+      "metadata_rows_and_live_physics_history_preserved": true,
+      "fresh_two_capture_reopen": true,
+      "scope": "Exact copied native/headless commands on two distinct saved captures; source mounted tests separately prove private-edit reset across capture selection"
+    },
+    "reference_parity": {
+      "passed": true,
+      "cases": [
+        {
+          "task": "led",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "3fa7d62e283b88765cb8c9b07533254aa899516a8b72298d37121f61e916dd82",
+          "project_sha256": "96635fc0cd1ab4b13258373c4e5ed474dc3239dda4dfc37202cbce59324cc032"
+        },
+        {
+          "task": "rc",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "6380351c8c51640b0221969b97259cf49161989f300d4eb1b9bdcf885759e338",
+          "project_sha256": "4c86701997fb227c1f3f8e55b2e8ec613ca7a51d75b4061356cd51185203eadf"
+        },
+        {
+          "task": "flasher",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "b0dc7c61c9d757086937176d7cc8de1539e4cac82e8f95d5f9a00576cc62d4b8",
+          "project_sha256": "d62dba5123d42b3dbf76356a7c28411a46ab09678aad9aa72ec727889c9a7a95"
+        }
+      ],
+      "comparison": "Every component/wire field; every reported result field except run/electrical identities; numerical rel 1e-9 / abs 1e-12",
+      "limitations": [
+        "Native endpoint loading/observation does not replace the recorded physical UI construction walkthrough",
+        "File failure, crash recovery, cancellation and live interaction have separate acceptance checks"
+      ]
+    },
+    "live_grid": {
+      "first_time_s": 2.201,
+      "resume_origin_s": 2.201,
+      "second_time_s": 3.442,
+      "final_time_s": 3.4450000000000003,
+      "paused_physics_stable": true,
+      "graph_settings_and_run_electrical_preserved": true,
+      "save_reopen_fresh": true
+    },
+    "limits": [
+      "Public command functionality; not new pointer/keyboard evidence or visible p95 qualification",
+      "Earlier retained-control and output-page checks retain their recorded scope. Schematic pointer and keyboard refusal/fresh actions are tested after actual native mesh preparation by semantic injection in the copied-runtime smoke. Standalone Cogent key-binding tests cover replacement refusal, own repeats, navigation/Escape, guarded states and public move/Undo parity. This is not physical NSEvent evidence. Earlier physical UI evidence remains scoped to its recorded build; no physically coalesced OS input/window-blur or visible-latency claim."
+    ],
+    "native_host_closed_normally": true
+  },
+  "release_diff": {
+    "base_release": "0.140.0 /157",
+    "base_source": "87db1ab95070668c3d54591c950f520fca295ac0",
+    "replacement_source": "622d31bbc5752eb4d0b84c1c3922823f44624bfd",
+    "consumer_production_files": [
+      "desktop/go.mod",
+      "third_party/vellum/sdk.lock.json",
+      "third_party/vellum/vellum-274f5cc.tar.gz"
+    ],
+    "native_go_files_unchanged": true,
+    "domain_transport_models_and_format_unchanged": true,
+    "sdk_changed": true,
+    "sdk_diff": {
+      "previous_source": {
+        "clean": true,
+        "commit": "677548d0ea93d7d6a689998eb8cf3d6f3ff9f59f"
+      },
+      "new_source": {
+        "clean": true,
+        "commit": "274f5cc9b75873b2ad01fb86249bbda800bd568f"
+      },
+      "changed_members": [
+        "drivers/cogent/editor.go",
+        "drivers/cogent/internal/textinput/encoding.go",
+        "drivers/cogent/internal/textinput/input.h",
+        "drivers/cogent/internal/textinput/input_darwin.go",
+        "drivers/cogent/internal/textinput/input_darwin.m",
+        "drivers/cogent/internal/textinput/input_darwin_test.go",
+        "drivers/cogent/internal/textinput/legacy_handoff_test.go",
+        "drivers/cogent/legacy_boundary_offscreen_test.go"
+      ],
+      "removed_members": [],
+      "files": 7456,
+      "bootstrap_unchanged": true,
+      "prepared_dependencies_unchanged": true
+    },
+    "production_diff": [
+      "Fallback keys queue validated empty acknowledgments after their originating toolkit FIFO positions",
+      "Cocoa fallback persists until owner acknowledgment and coherent text/selection publication",
+      "Bounded capacity refusal preserves and retries the marker during publication",
+      "Marker acknowledgment does not mutate text/shadows or bypass stale-input/document/run/command/value guards"
+    ],
+    "source_ledger": {
+      "sha256": "60d323c80a1c8396c7cc6eb6cba78d98225dd03714f7e6fcb552d1e8a34135e5",
+      "files": 68,
+      "sites": 393,
+      "public_ids": 162,
+      "binding_review": 160,
+      "routed_ids": 132,
+      "production_native_hashes_unchanged": true
+    },
+    "review": {
+      "scope": "Bounded self-review of the SDK legacy key acknowledgment repair",
+      "invariants": [
+        "Marker is queued after the fallback key in the originating toolkit FIFO; no owner/widget calls from Cocoa callbacks",
+        "Cocoa fallback persists until owner acknowledgment and coherent text/selection publication; new keys cannot use old native baseline",
+        "Bounded queue refusal leaves a pending marker; subsequent publication retries without blocking/spinning or losing the already forwarded legacy key",
+        "Only an empty, client-zero, non-delta marker with valid zero/unmarked fields is admitted; malformed mutation payloads refuse",
+        "Driver acknowledges a marker without decoding/mutating text, replacing shadows or weakening existing expected-text/epoch/document/run/command guards",
+        "Legacy Enter and controlled field delivery retain their ordinary paths; old native input and document/capture ownership tests remain required",
+        "No provider, account, network call, model, project format or public command is introduced"
+      ],
+      "findings": [],
+      "limits": [
+        "No full IME/reader/physical held/concurrent/blur or visible-p95 claim",
+        "Native replay is development candidate against old packaged agent; clean copied replacement qualification remains separate",
+        "Marker traffic adds one bounded metadata record per fallback key; no native latency/performance claim"
+      ]
+    },
+    "findings": [],
+    "limits": [
+      "Three no-window real Cocoa cases and driver FIFO/malformed-marker source regressions; not exhaustive OS/IME/reader qualification",
+      "Six native cursor entries and an interval match packaged agent in the source development build; clean copied runtime smoke/public/reference checks qualify package integration separately",
+      "No new physical typing or visible-p95 claim for these copied package bytes"
+    ]
+  },
+  "owner_acceptance": "Pending: owner answered Not tried yet; no acceptance inferred",
+  "preserved_bundles": {
+    "0.123.0-140": {
+      "files_verified": 113,
+      "manifest_sha256": "c2d35b4b8cf4920636a987e39b83d4d989729201b9164f0c23372c2ea1602bd3"
+    },
+    "0.124.0-141": {
+      "files_verified": 126,
+      "manifest_sha256": "d4b008f18f06ad0e7eca4b7187af709d3ba9359d27fd67c747181297faf7ed56"
+    },
+    "0.125.0-142": {
+      "files_verified": 124,
+      "manifest_sha256": "45e1fc51016b21e6a3fea9388ce113716075f4bc1e112e03b15e72b12bf69a8e"
+    },
+    "0.126.0-143": {
+      "files_verified": 124,
+      "manifest_sha256": "14d1fbbff5b1be63c13d14bfbb2462bbeeeacce208ad36e4cd54fb41b7d56d12"
+    },
+    "0.127.0-144": {
+      "files_verified": 130,
+      "manifest_sha256": "0073beb958b5128d383380e08d89ed1c5f926c5d14ae6aec6d57ef5e9a53e0ae"
+    },
+    "0.128.0-145": {
+      "files_verified": 131,
+      "manifest_sha256": "93a9e275f8c50995f1cab73ef03b94b62b99192e627ac527ca1ae5d5f46b660b"
+    },
+    "0.129.0-146": {
+      "files_verified": 134,
+      "manifest_sha256": "74ee03a4d3f89271b02df5d4b52edc61b125ac16492a9ae33966b78ea31a2179"
+    },
+    "0.130.0-147-focus": {
+      "files_verified": 139,
+      "manifest_sha256": "d63f38e2adc6e45d314a77453777f464ff3dfbd46e32a9f39e33ed0e6ac068b0"
+    },
+    "0.131.0-148": {
+      "files_verified": 129,
+      "manifest_sha256": "58cd867a86777a96fc8d7f322f9baffa8c0943cbb769908a2f751fdff4197d4c"
+    },
+    "0.132.0-149": {
+      "files_verified": 129,
+      "manifest_sha256": "31ea54a1e7cc531ae4c8745b014dd0c0b966b8df014d9809b682841e3581b797"
+    },
+    "0.133.0-150": {
+      "files_verified": 129,
+      "manifest_sha256": "509f75002de0031fcade4d739481e9fb71a2c298550fc8f645394696522e663c"
+    },
+    "0.134.0-151": {
+      "files_verified": 129,
+      "manifest_sha256": "36c05644dcdcaefe7241b0c78a02bd98fe703ff742b1a398d6095d0a3daa6c57"
+    },
+    "0.135.0-152": {
+      "files_verified": 140,
+      "manifest_sha256": "b8143b6736a122e7dc828781903ff64a56bc47a5e023daf3eacf42ece6ab5306"
+    },
+    "0.136.0-153": {
+      "files_verified": 137,
+      "manifest_sha256": "03ea57f7fdc2aea4d2ef285dbeb990329c32a075f9bc673439a2e0f94bcac73a"
+    },
+    "0.137.0-154": {
+      "files_verified": 151,
+      "manifest_sha256": "ae56437933b9312caf543173a0b1696601badfd40fe7342af1a52bbbcc0999f1"
+    },
+    "0.138.0-155": {
+      "files_verified": 134,
+      "manifest_sha256": "9ef7cd693ad97b6eb0ab58dbe6db8f5b621ca7d69e3dfa7f00aa1a72193e718d"
+    },
+    "0.139.0-156": {
+      "files_verified": 135,
+      "manifest_sha256": "ec49b66aa2c9a10c06df76882245bca16b69addbd8dfceabf6077e3f54da3155"
+    },
+    "0.140.0-157": {
+      "files_verified": 158,
+      "manifest_sha256": "29ecc32819f447565698ce114040d04fe020e8345959562ae006627ed697600f"
+    }
+  },
+  "preserved_previous_digest_metadata_matches": true,
+  "preserved_original_147_candidate": {
+    "files_verified": 135,
+    "manifest_sha256": "3aa7dd84084944c9926a907e5c87bbb559a8bbcb1d9ad19309fbf3a1c29b7d29"
+  },
+  "canonical": {
+    "version": "0.105.0 /120",
+    "native_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c"
+  },
+  "manifest_file_entries": 196,
+  "review_path": "/Users/dshills/Development/projects/ELab/build/ELab-0.141.0-158-review",
+  "launch_note": "Save and quit an earlier review before opening this replacement; same bundle identity. No owner window was operated or automatically opened.",
+  "known_limits": [
+    "Physically coalesced OS input, running pointer/window-blur, IME and exhaustive mounted conformance remain open",
+    "Complete VoiceOver, visible p95, wider hardware/OS, clean-account installation and ten-person study remain open",
+    "Private unsigned build; notarization and public distribution/native-rights qualification remain open",
+    "Dense 64-part/100-node topology can reach the existing integration work limit; source/committed physics survive",
+    "One LED print page is owner-confirmed readable and complete; other printer settings and measured margins/scale remain open"
+  ]
+}
