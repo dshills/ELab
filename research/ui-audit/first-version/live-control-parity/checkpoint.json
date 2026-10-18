@@ -1,0 +1,159 @@
+{
+  "date": "2026-10-18",
+  "status": "bounded actual native RC input/step/restart matches external agent and independent RC law",
+  "version": "0.125.0 /142",
+  "native_binary_sha256": "2c2c855970ac9ac6520efb2e11cf0f9788c026bc6b3435718494df24f0e4a1f2",
+  "agent_sha256": "b8e12442548a3c9ecb0f6bef435cc5d9edcdb3129ba43adbecf140ade20a6da0",
+  "harness": "separate bundle ID com.dshills.elab.live-controls-142; exact review executable; no recovery/appearance; fresh endpoint",
+  "continuity": "running app identified from inventory before binding by bundle ID; same endpoint observed immediately before and after every native phase; private host normal exit 0 observed through original session handle",
+  "runtime_bindings": [
+    {
+      "ui_id": "input-charge",
+      "command": "simulation.input.set",
+      "params": {
+        "mode": "charge"
+      }
+    },
+    {
+      "ui_id": "input-discharge",
+      "command": "simulation.input.set",
+      "params": {
+        "mode": "discharge"
+      }
+    },
+    {
+      "ui_id": "transient-step",
+      "command": "simulation.step.start",
+      "params": {
+        "duration_s": 0.001
+      }
+    },
+    {
+      "ui_id": "simulation.restart",
+      "command": "simulation.restart",
+      "params": {}
+    }
+  ],
+  "source_sites": [
+    {
+      "file": "desktop/scope.go",
+      "line": 260,
+      "function": "*screen.scopePanel",
+      "kind": "action-factory",
+      "expression": "s.action(\"input-\"+mode, modeLabels[mode], \"simulation.input.set\", workbench.InputParams{Mode: mode})",
+      "public_commands": [
+        "simulation.input.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 280,
+      "function": "*screen.scopePanel",
+      "kind": "action-factory",
+      "expression": "s.action(\"transient-step\", \"Step +1 sample\", \"simulation.step.start\", workbench.StepParams{Duration: state.TransientSettings.StepSeconds})",
+      "public_commands": [
+        "simulation.step.start"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 282,
+      "function": "*screen.scopePanel",
+      "kind": "registry-button",
+      "expression": "s.button(\"simulation.restart\", \"Restart\")",
+      "public_commands": [
+        "simulation.restart"
+      ],
+      "status": "literal-public-route"
+    }
+  ],
+  "source_sha256": {
+    "desktop/scope.go": "fdbd3cc1920f0a1444b823b99d124aaa5fbc9e4f4e831ead99ef0a6ee194faf3",
+    "desktop/main.go": "0762cc87fd023afdb881a22d02f7d56655e77e954bf8acd82976dc9a10cf266e",
+    "desktop/field_context.go": "4f3abac0bc24fd5054e89ad5e479a6a9196ba0ab52faa9134294743a34b74bd5",
+    "research/13-native-command-inventory.json": "e1685028b5eab84adc82a9fe0dd97f5f242cd2e1a19b81a180c2b5c51d5d5852"
+  },
+  "verification": {
+    "passed": true,
+    "phases": [
+      "queued-charge",
+      "charge-step",
+      "queued-discharge",
+      "discharge-step",
+      "restart"
+    ],
+    "comparison": "Every transient field (including retained samples/events) except independent run/electrical IDs; numeric rel 1e-9/abs 1e-12; exact graph/settings and native source/history invariants",
+    "independent_reference": {
+      "law": "V1=5*(1-exp(-1ms/10ms)); V2=V1*exp(-1ms/10ms)",
+      "charge_voltage_v": 0.47581290982020213,
+      "discharge_voltage_v": 0.43053332478988854,
+      "absolute_tolerance_v": 1e-12
+    },
+    "native_observed": {
+      "queued-charge": {
+        "time_s": 0,
+        "input_v": 5,
+        "voltage_v": 0,
+        "current_a": 0.0005,
+        "energy_j": 0
+      },
+      "charge-step": {
+        "time_s": 0.001,
+        "input_v": 5,
+        "voltage_v": 0.47581290982020213,
+        "current_a": 0.0004524187090179798,
+        "energy_j": 1.131989625757839e-07
+      },
+      "queued-discharge": {
+        "time_s": 0.001,
+        "input_v": 5,
+        "voltage_v": 0.47581290982020213,
+        "current_a": 0.0004524187090179798,
+        "energy_j": 1.131989625757839e-07
+      },
+      "discharge-step": {
+        "time_s": 0.002,
+        "input_v": 0,
+        "voltage_v": 0.4305333247898886,
+        "current_a": -4.305333247898886e-05,
+        "energy_j": 9.267947187731785e-08
+      },
+      "restart": {
+        "time_s": 0,
+        "input_v": 0,
+        "voltage_v": 0,
+        "current_a": 0,
+        "energy_j": 0
+      }
+    },
+    "limits": [
+      "RC-mode binding only; other graph mode inventories and numeric field entry not physically exercised",
+      "Not complete mounted 146-site binding coverage, VoiceOver/IME, or visible p95 evidence"
+    ],
+    "headless_agent_actor": "agent.stdio"
+  },
+  "quality": "Product/SDK source unchanged. Complete source lint/Staticcheck/root+native race/vet and exact package conformance remain applicable; no new compiled tests required for observation-only records. Verifier independently checks all retained reported transient fields, graph, settings, source/history, run/electrical guards, user actor and RC equations.",
+  "owner_feedback": {
+    "date": "2026-10-18",
+    "question_scope": "four walkthrough tasks in 0.125.0 /142",
+    "answer_verbatim": "Not tried yet",
+    "meaning": "owner acceptance and limitation review remain pending"
+  },
+  "limits": [
+    "Does not reduce syntax-ledger 146-site binding-review total; generic callback families and other instantiations remain unqualified",
+    "Earlier context-lost attempt remains ineligible; this fresh bounded retry supersedes no raw evidence",
+    "No numeric-field, VoiceOver/IME, native visible p95, physical print, promotion or new version claim"
+  ],
+  "evidence_sha256": {
+    "charge.ax.txt": "79eb497b4007314cdb9ce6b1cfc5253b0f7249f704279f8afe6d08ae98730f79",
+    "discharge-step.ax.txt": "ecbbe21398563eefe53f2486c27e41e7a482b000a4902553f43e630cb268eac3",
+    "discharge.ax.txt": "a0c0a57c628887e7c72efe7a574249cec83e22a7beee9a04b123e46180542d93",
+    "RC-control-check.elab": "b378903d6ba1c1cc63e0a9761ffb57448f468e519dd836f57a20bf1573948187",
+    "restart.ax.txt": "a73315c8744d98246227dd740784c69d6e38f3cb26766f2c396da0eb6a696ac2",
+    "verify.py": "685c439474e04e65c4da43eee85335662edf98aa86098a8a83de41aacc3ab698",
+    "charge-step.ax.txt": "bde4da5f7e193dff823a8a44e716551476e651a6d109f060200ead7c54b9edec",
+    "states.json.gz": "7d67e01a503bd913481132db7a1efc611bb1ade8ffb2c912326fc61596d01d72"
+  }
+}

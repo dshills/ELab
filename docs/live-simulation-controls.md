@@ -53,3 +53,10 @@ Before Step admission, waiting reserves no operation or retry key. Canceling tha
 Equivalent-unit retries share the original successful mutation fingerprint. A cached reply retains its original result and precedes newer context guards, matching the existing retry policy; it is not a current snapshot. Refresh `project.inspect` before depending on that result as current state. Reusing the key for a different duration still returns `key-reused`.
 
 Controlled tests hold the real initializer to compare wait/cancel behavior, reject stale contexts promptly, release one successful Step and recheck guards after an intervening command/publication. The [public workflow](../scripts/step-initialization-demo.py) separately verifies unit-equivalent replay, strict duplicate-field refusal and preservation of an unrelated saved document through both transports. No private delay controls are added to the product API.
+
+
+## Native RC control parity · October 18
+
+A bounded actual native check on the exact **0.125.0 /142** executable now matches the external agent for Charge, Discharge, Step +1 sample and Restart. The private endpoint was observed around every native action. Queuing either mode preserved committed time/voltage; Step applied it atomically. Both one-sample jobs are attributed to `user`. Charge gives 0.47581290982020213 V at 1 ms, then Discharge gives 0.4305333247898886 V at 2 ms, matching the independent 10 ms RC law within 1e-12 V. Restart retains Pause and the discharge mode while resetting time/startup voltage.
+
+Every reported transient field (including retained samples/events, except independent run/electrical IDs) matches the separately executed agent sequence; graph/settings and native source/history are preserved. [Source bindings, raw observations, verifier and limits](../research/ui-audit/first-version/live-control-parity/checkpoint.json). The original private host closed normally after saving its test copy. This qualifies these RC instantiations; it does not establish other input inventories, numeric entry, full mounted binding coverage, VoiceOver/IME or visible latency. No product/SDK source, review package or version changed.
