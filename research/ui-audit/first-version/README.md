@@ -312,3 +312,7 @@ Clean **0.128.0 /145** includes the retained text-field identity repair with its
 ### Numeric/button ownership and Apply blockers
 
 The [bounded follow-up](../../../docs/validation/control-owner/README.md) found three wrong-owner schedules beyond text fields and a normal one-click Apply conflict. The verified source uses logical owner keys for ordinary controls and accepted value-field continuation for Apply, preserving public IDs and actor conflict guards. Source/SDK quality passes; /145 is affected until replacement. Deterministic routing does not qualify physical OS interleaving/window blur.
+
+### Control-owner/Apply replacement review · 0.129.0 /146
+
+The verified repairs are packaged from clean `30b0507` with private SDK `ade66eb`, the matching agent and unchanged examples/notices. Exact copied native smoke/four-adapter conformance, reference parity and pulse/Pause/Resume/save/reopen through 3.4 s pass. [Receipt](control-owner-review-checkpoint.json), [walkthrough](../../35-first-version-review.md). All six prior review folders and canonical /120 remain unchanged. The source gate includes real-router numeric/button/text/slider and one-click Apply checks. No owner, physical OS interleaving/window-blur, visible-p95, accessibility or participant acceptance is inferred.

@@ -4,7 +4,7 @@ Private SDK `ade66eb3586c6d881647cea52f19048087e598c5` adds optional `ControlSta
 
 Exactly four members differ from `178945c`: `ui/node.go`, `ui/control_state_key_test.go`, `drivers/cogent/reconcile.go`, `drivers/cogent/control_state_key_test.go`. The archive has 7,453 hashed files, 18,625,527 bytes, SHA-256 `53b824706108f481ec1dcca842a72fee8ee7797ad2127e00489fda4e645ecf04`, manifest SHA-256 `9e30d55182850a11c54cb754782c3a7a66af2c3487cb0ccb85f874c8e31beb9e`. Prepared dependencies/bootstrap are unchanged; all four native replacements point to `build/.vellum-sdk-ade66eb`.
 
-Framework root/driver race/vet and focused offscreen checks pass. Consumer regressions cover wrong-owner numeric drafts, held Rotate/Restart, normal/fresh input and one-click Apply. The Apply repair uses only consecutive accepted value-field responses to continue its rendered context; intervening actor/field/document changes still refuse. [Evidence](validation/control-owner/README.md) records qualification. Review /145 remains immutable and affected until replacement.
+Framework root/driver race/vet and focused offscreen checks pass. Consumer regressions cover wrong-owner numeric drafts, held Rotate/Restart, normal/fresh input and one-click Apply. The Apply repair uses only consecutive accepted value-field responses to continue its rendered context; intervening actor/field/document changes still refuse. [Evidence](validation/control-owner/README.md) records source qualification. Clean [review /146](../research/ui-audit/first-version/control-owner-review-checkpoint.json) includes the repair and passes exact copied native smoke/four-adapter conformance, reference and pulse/save acceptance. Review /145 remains immutable and affected.
 
 ## Previous pinned integration: 178945c
 
