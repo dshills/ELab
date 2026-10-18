@@ -1,0 +1,109 @@
+{
+  "date": "2026-10-18",
+  "prior_goal_turn": "progress: 9ab2920 clean /153 qualification",
+  "source_base": "9ab29205ef85b9719b96a8d001ec34532a9e015f",
+  "status": "bounded native canvas focus/Right Arrow matches public agent; broader qualification remains open",
+  "production_changed": false,
+  "sdk_changed": false,
+  "product_version_increment": false,
+  "product_rebuild_or_promotion": false,
+  "identity": {
+    "review": "0.136.0 /153",
+    "review_source": "7400257290da4bfe6f8baed34c232337772d4800",
+    "native_sha256": "71dc5a02d876d7fd8937d2b99d18619b0dd79a5c736580e5d321b59b17d37d29",
+    "harness_sha256": "71dc5a02d876d7fd8937d2b99d18619b0dd79a5c736580e5d321b59b17d37d29",
+    "agent_sha256": "6efc3074d679a890b7362e3bb11e81fef08d1d92955bdccdf68feb9200c9bbf4",
+    "different_bundle_identifier": true,
+    "original_endpoint_host_pid": 2082
+  },
+  "native_input": {
+    "method": "CUA native click [495,327], pressKey Right, immediate AX diff",
+    "focused_control": "node:c2NoZW1hdGlj",
+    "before": {
+      "x": 0,
+      "y": -110
+    },
+    "after": {
+      "x": 10,
+      "y": -110
+    },
+    "history_actor": "user",
+    "undo_name": "Move component",
+    "current_a": 0.0029167965774405296,
+    "connectivity_and_full_result_unchanged": true
+  },
+  "comparison": {
+    "matching_packaged_agent": true,
+    "semantic_fields": [
+      "components",
+      "wires",
+      "nets",
+      "selected",
+      "drawing",
+      "undo_name",
+      "all LED result fields except independent run/electrical IDs"
+    ],
+    "saved_graph_matches": true
+  },
+  "process": {
+    "journaled_same_original_pid": true,
+    "native_host_closed_normally": true,
+    "exit_code": 0,
+    "extra_blank_instance_closed_via_cua": true,
+    "no_remaining_matching_native_processes": true
+  },
+  "attempts": {
+    "first_attempt_eligible": false,
+    "first_full_path_selection_elapsed_s": 2600.9674,
+    "reason": "Original host lease elapsed; extra default-launched blank instance was not the endpoint-backed retry",
+    "correction": "Cached screenshot revealed mismatch; close extra instance, select sole live bundle-ID instance, journal endpoint independently"
+  },
+  "preserved_review": {
+    "source_commit": "7400257290da4bfe6f8baed34c232337772d4800",
+    "release": "0.136.0 /153",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.136.0-153-review/elab-agent",
+    "agent_sha256": "6efc3074d679a890b7362e3bb11e81fef08d1d92955bdccdf68feb9200c9bbf4",
+    "receipt_sha256": "579763853fa6b2554a939cc4ecf4c3af0d2ace8c66fda7c88b8729a2934c5d4b",
+    "ledger_sha256": "9808dbabb9a61834f67863314655552547e4e406aa7b1d9c4f941a1eb885dbf4",
+    "production_source_files_verified": 68,
+    "runtime_inputs_verified": 343,
+    "manifest_file_entries_verified": 137,
+    "manifest_sha256": "03ea57f7fdc2aea4d2ef285dbeb990329c32a075f9bc673439a2e0f94bcac73a"
+  },
+  "quality": {
+    "reused_unchanged_source_gate_and_release_runtime": true,
+    "full_gate_rerun": false,
+    "new_production_tests": false
+  },
+  "self_review": {
+    "findings": [],
+    "review": [
+      "Byte identity plus explicit distinct bundle ID prevents confusing harness and owner app",
+      "Blank extra process is excluded before any qualifying action",
+      "Same original endpoint process observes exact expected user-owned move",
+      "Public replay compares full semantic data and numeric result, not only displayed rounded current",
+      "Normal original host exit, client cleanup and empty process inventory are retained",
+      "Tool durations, baseline viewport publication and snapshot polling are not UI latency measurements"
+    ]
+  },
+  "limits": [
+    "One automated native focus/Right Arrow only; no human keyboard trial",
+    "No fresh native Delete/Undo/autorepeat/concurrent/blur or field/IME evidence",
+    "No complete VoiceOver, eligible visible p95, broader hardware/distribution/study or printer qualification",
+    "Owner walkthrough Not tried yet; P0 remains 17 implemented /10 partial"
+  ],
+  "evidence_sha256": {
+    "README.md": "fb0f6dbe18d400e02ac04a4275128ed33a2edcc93c06437122b1d697138544a1",
+    "agent-replay.json": "abda7aa0e2000c97e30b8184fed32f6f9108d38640eb384ed22e22918739da5b",
+    "cleanup.json": "5fecfdc1172be4a01ce9de2a352b3629143336a15f76c8ad88de441f593a6d02",
+    "first-attempt.json": "7e124717435c2cf3e35beede4ab9aacd528e4bfe64c0e47874b723da64a0f3ef",
+    "first-host-process.json": "abe6b8cfa22437b62a4d3dfa2f4e1a6c0c30e21fc2ba19003b6c5332271ca2d4",
+    "harness-identity.json": "de23b75c04543ce8908579755efe028a12b381acd967254ae7922dea06cb6139",
+    "keyboard-moved.elab": "71ff8fc9bd72f40909e215ad2dc0290e9a63a40afd438ed8d2054d2eba07019d",
+    "native-host.txt": "73170f3fbc5b0284726efd0b4530913f7efff91613e3a3f67e88396dff8753c5",
+    "native-session.json": "c083db2ebdedfd3df37aae2f9d617b50f0815d8a0c4bda3fbd92145705e3460b",
+    "observer-source.py": "5aebb0d39791e3af467e0cda8fabf90375233f86cab8ffebf9d9380e18dc58fb",
+    "source-release-identity.json": "d73506b2b10b4911d20a49cc5d4af538f403b1db42d0f8e745fd5ebac9f476d8",
+    "ui-observation.txt": "a0134a751263c90d4a2aaf117cdfb8e4867f3ae3ddb0b2c96fede4f42f07fb72"
+  }
+}

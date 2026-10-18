@@ -1,0 +1,13 @@
+CUA observation excerpt (not an exported screenshot or complete AX tree)
+1. First full-path getApp call returned after 2600.9674 s, beyond the original controller's 600 s host lease. It cannot qualify that original PID. Later process inventory showed a separate default-launched blank harness instance, PID 1314.
+2. Cached screenshot returned promptly but showed that blank instance, not the endpoint-backed circuit; no input result counted.
+3. CUA super+w to the observed blank instance returned “Computer Use server error -10005: App quit”. Process inventory and later cleanup verify retirement.
+4. Exact bundle-ID selection while PID 2082 remained live returned the paused four-component/four-wire LED circuit, R1 selected, appearance session-only and autosave disabled. A fresh screenshot showed R1 at the top of the loop.
+5. Inputs: click [495,327] on R1 body, then pressKey Right.
+6. Immediate AX diff:
+~ 8 button Undo, Help: Move component · by user, ID: node:ZWRpdC51bmRv
+~ 54 text (settable) Undo: Move component, ID: node:dW5kby1uYW1l
++ 208 container node:c2NoZW1hdGlj
+~ 92 text (settable) Position 10, -110 · rotation 0°, ID: node:cGFydC1wb3NpdGlvbg
+The focused UI element is 208 container node:c2NoZW1hdGlj
+7. Independently journaled same-PID endpoint snapshots show R1 (0,-110) → (10,-110), user-owned Move component history, unchanged wires/nets/result, current 0.0029167965774405296 A. Owned host saved the project and exited normally with code 0.
