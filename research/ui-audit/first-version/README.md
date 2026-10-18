@@ -351,3 +351,8 @@ The final [read-only source/release identity check](../../../docs/validation/fir
 ### Fresh native canvas focus/Right Arrow · /153
 
 [The bounded native check](native-keyboard-153/README.md) uses a separately identified bundle with the byte-identical /153 executable. After excluding a slow selection/extra blank instance, CUA clicks R1 and presses Right; immediate AX reports schematic focus and (10, -110). Same-PID public snapshots show a user-owned Move component, exact preserved connectivity/current, saved graph and normal host closure. The matching packaged agent reproduces the complete semantic result. This adds one fresh native input path only; native repeat/Delete/Undo/interleaving/blur, IME/reader, visible latency and owner acceptance remain open. All release/source/SDK bytes are unchanged; no new app version or rebuild.
+
+
+### Native LED Delete / Undo / Redo · /153
+
+The [native history check](native-history-153/README.md) follows Backspace, Cmd+Z, Cmd+Shift+Z and Cmd+Z through CUA input and immediate AX observations on one original owned PID. All four graph/history/stale-state stages match the packaged agent; the complete graph is saved and the host exits normally. The UI marks prior readings stale throughout paused editing/restoration, in agreement with the PRD. Source/SDK/release bytes are unchanged; this adds the native history path only, with no native repeat/held/interleaving/blur, field/IME, reader, visible-p95 or owner acceptance upgrade.

@@ -1,0 +1,105 @@
+{
+  "date": "2026-10-18",
+  "prior_goal_turn": "progress: 7fca833 native canvas focus/Right Arrow qualification",
+  "source_base": "7fca83354daf469c707612d888dceed0965e7418",
+  "status": "bounded native Delete/Undo/Redo and paused stale-state parity verified; broader qualification remains open",
+  "production_changed": false,
+  "sdk_changed": false,
+  "product_version_increment": false,
+  "product_rebuild_or_promotion": false,
+  "native_input": {
+    "method": "CUA click R1 and Backspace / Cmd-Z / Cmd-Shift-Z / Cmd-Z, immediate AX after each input",
+    "focused_control": "node:c2NoZW1hdGlj",
+    "component_wire_counts": [
+      [
+        3,
+        2
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        4,
+        4
+      ]
+    ],
+    "user_owned_delete_history": true,
+    "stale_labels_visible": true,
+    "paused_results_stale_at_all_stages": true
+  },
+  "comparison": {
+    "matching_packaged_agent": true,
+    "stages": 4,
+    "fields": [
+      "components",
+      "wires",
+      "nets",
+      "selected",
+      "drawing",
+      "undo_name",
+      "redo_name",
+      "status",
+      "paused",
+      "all LED result fields except independent run/electrical IDs"
+    ],
+    "saved_graph_matches": true
+  },
+  "process": {
+    "original_endpoint_pid": 6872,
+    "same_pid_for_all_observations": true,
+    "normal_host_closure": true,
+    "exit_code": 0,
+    "no_remaining_matching_native_processes": true,
+    "semantic_mutations_after_seed_only_from_ui_until_save_close": true
+  },
+  "preserved_review": {
+    "source_commit": "7400257290da4bfe6f8baed34c232337772d4800",
+    "release": "0.136.0 /153",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.136.0-153-review/elab-agent",
+    "agent_sha256": "6efc3074d679a890b7362e3bb11e81fef08d1d92955bdccdf68feb9200c9bbf4",
+    "receipt_sha256": "579763853fa6b2554a939cc4ecf4c3af0d2ace8c66fda7c88b8729a2934c5d4b",
+    "ledger_sha256": "9808dbabb9a61834f67863314655552547e4e406aa7b1d9c4f941a1eb885dbf4",
+    "production_source_files_verified": 68,
+    "runtime_inputs_verified": 343,
+    "manifest_file_entries_verified": 137,
+    "manifest_sha256": "03ea57f7fdc2aea4d2ef285dbeb990329c32a075f9bc673439a2e0f94bcac73a"
+  },
+  "quality": {
+    "reused_unchanged_source_gate_and_release_runtime": true,
+    "full_gate_rerun": false,
+    "new_production_tests": false
+  },
+  "self_review": {
+    "findings": [],
+    "review": [
+      "Exact published executable and matching packaged agent, separate owned bundle identity",
+      "Agent reference generated before native inputs; observer has no intervening mutation path",
+      "Each expected graph/state stage compared strictly; result identities alone excluded",
+      "Actual AX stale cues agree with paused public state after deletion and restoration",
+      "Same original PID, saved full graph, normal exit and empty process inventory retained",
+      "No screenshot export, physical hardware-key, latency or full-MVP claim inferred"
+    ]
+  },
+  "limits": [
+    "Automated native LED history path only; no native repeat/held/interleaving/blur or field/IME qualification",
+    "No native Save dialog or Resume/Restart/fresh post-Undo solve in this sequence",
+    "No complete reader, eligible visible p95, broader environment/distribution/study or print evidence",
+    "Owner walkthrough Not tried yet; P0 stays 17 implemented /10 partial"
+  ],
+  "evidence_sha256": {
+    "README.md": "1f133693cf6ed9bdf6460ca37192bf94acba6daf798ded873a73964e7ae99633",
+    "agent-reference.json": "6eb167910ee31d6b3c3285312f49e60405c90d95985b84112946afe8bff864bf",
+    "history-restored.elab": "d280d89df116c95d95e38d51af04aa0edd19b7c478bb70ff4a6e25e15f31e163",
+    "native-host.txt": "864f6a84426a75e951a8030840997947928d122686d1829c5fb1d6932a63fad4",
+    "native-session.json": "7f3427fd35c4e899b8c49ba74621856511da6fbc153c60f016595ee2b6109f78",
+    "observer-source.py": "8249fff55185b99c4cc292e513919fdc4c1fee53c849efe8de6c93d88d2f35ae",
+    "source-release-identity.json": "d73506b2b10b4911d20a49cc5d4af538f403b1db42d0f8e745fd5ebac9f476d8",
+    "ui-observation.txt": "fcf041c10787076da6efbfb57aec32c24d100dcfa3316cef7fabcc22b831b6b1",
+    "verification.json": "89ebfe150e32cd7ee5eb4bd841b4ea24c7fade24b772b934aae3a48bf11b88fe"
+  }
+}
