@@ -1,0 +1,124 @@
+{
+  "date": "2026-10-18",
+  "release": "0.140.0 /157",
+  "passed": false,
+  "scope": "Requested native Cursor A text delivery in six automated attempts; no causal repair",
+  "observation_completed": true,
+  "attempts": [
+    {
+      "index": 1,
+      "requested_text": "4 ms",
+      "mode": "immediate Enter",
+      "actual_cursor": {
+        "requested_s": 0.004,
+        "time_s": 0.004,
+        "valid": true
+      },
+      "matches_requested": true,
+      "physics_document_history_preserved": true,
+      "packaged_agent_parity": true
+    },
+    {
+      "index": 2,
+      "requested_text": "6 ms",
+      "mode": "immediate Enter",
+      "actual_cursor": {
+        "requested_s": 0.006,
+        "time_s": 0.006,
+        "valid": true
+      },
+      "matches_requested": true,
+      "physics_document_history_preserved": true,
+      "packaged_agent_parity": true
+    },
+    {
+      "index": 3,
+      "requested_text": "8 ms",
+      "mode": "immediate Enter",
+      "actual_cursor": {
+        "requested_s": 0.006,
+        "time_s": 0.006,
+        "valid": true
+      },
+      "matches_requested": false,
+      "physics_document_history_preserved": true
+    },
+    {
+      "index": 4,
+      "requested_text": "10 ms",
+      "mode": "observe text before Enter",
+      "actual_cursor": {
+        "requested_s": 0.01,
+        "time_s": 0.01,
+        "valid": true
+      },
+      "matches_requested": true,
+      "physics_document_history_preserved": true,
+      "packaged_agent_parity": true
+    },
+    {
+      "index": 5,
+      "requested_text": "12 ms",
+      "mode": "observe text before Enter",
+      "actual_cursor": {
+        "requested_s": 0.012,
+        "time_s": 0.012,
+        "valid": true
+      },
+      "matches_requested": true,
+      "physics_document_history_preserved": true,
+      "packaged_agent_parity": true
+    },
+    {
+      "index": 6,
+      "requested_text": "14 ms",
+      "mode": "observe text before Enter",
+      "actual_cursor": {
+        "requested_s": 0.012,
+        "time_s": 0.012,
+        "valid": true
+      },
+      "matches_requested": false,
+      "physics_document_history_preserved": true
+    }
+  ],
+  "successful_requested_entries": 4,
+  "failed_requested_entries": 2,
+  "separate_focus_control_passed": true,
+  "cause": "unestablished; focus/native text publication is a hypothesis",
+  "source_release_identity": {
+    "source_commit": "87db1ab95070668c3d54591c950f520fca295ac0",
+    "release": "0.140.0 /157",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.140.0-157-review/elab-agent",
+    "agent_sha256": "45b0a66666684b54dd9fac18954c9cb61b7c6f127b9bcaff0315c62484d024bc",
+    "receipt_sha256": "47fe2a1fe5b1680fd772610b9c2ff97cd0269ae36cd2a9ced5790e3d33d58e1c",
+    "ledger_sha256": "60d323c80a1c8396c7cc6eb6cba78d98225dd03714f7e6fcb552d1e8a34135e5",
+    "production_source_files_verified": 68,
+    "runtime_inputs_verified": 343,
+    "manifest_file_entries_verified": 158,
+    "manifest_sha256": "29ecc32819f447565698ce114040d04fe020e8345959562ae006627ed697600f"
+  },
+  "source_sdk_release_unchanged": true,
+  "domain_and_saved_bytes_preserved": true,
+  "original_pid": 10736,
+  "original_host_exit_code": 0,
+  "next": "One bounded causal reproduction around focus/native text publication and exact refusal before changing source",
+  "limits": [
+    "Automated CUA entry; no human typing/IME or frequency/latency claim",
+    "Private text was not observed before Enter in attempts 1\u20133",
+    "One separate-focus passing control does not prove a causal mechanism",
+    "No product or SDK repair; /157 and previous evidence are preserved",
+    "Owner walkthrough remains Not tried yet"
+  ],
+  "files": {
+    "RC reference.elab": "5a96b8608be0909f865b61039e25415513aa1bfbe2b227b8efb8ffd05749ef0e",
+    "README.md": "b0320a2dd9e3e259826d75e9d85178a10020db0ebeb69c47ad0572938c128b06",
+    "control-source.py": "2a519203527045c312b917dcaaa6c09b9f215f90baa08466eb2994686fa3cf81",
+    "native-host.txt": "fe8e5b3c2a5becc1643b5f505bcc7efdeb6ca46ccebe983602a95732b63845da",
+    "native-session.json.gz": "2d94025bdcc504a37bd75128de43160eac619a1f00ade6000d24f614552fde44",
+    "observer-source.py": "b1c91582e99aee2d99a06a1de88f113696c901d9a8699f3818a5070e0e4ff9b4",
+    "process-verification.json": "80bff6fbedd260fd9c4457279966d8e6c2178aa82ed260a1cd6cf121c67f68d8",
+    "source-release-identity.json": "9a046cb3af2fbe9df149409fd2bd92a9475b99e464b176fb56ab466dac9f3157",
+    "ui-observation.txt": "4b5eaa5355ff08901b59cace80c551a324b2e90eb297d4aa30f115b7aeb07712"
+  }
+}
