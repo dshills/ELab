@@ -1,0 +1,13 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestSchematicKeyboardCannotAdoptReplacementSelection
+=== RUN   TestSchematicKeyboardCannotAdoptReplacementSelection/Backspace
+    schematic_keyboard_test.go:44: old schematic key changed the replacement selection Backspace
+=== RUN   TestSchematicKeyboardCannotAdoptReplacementSelection/RightArrow
+    schematic_keyboard_test.go:44: old schematic key changed the replacement selection RightArrow
+--- FAIL: TestSchematicKeyboardCannotAdoptReplacementSelection (0.01s)
+    --- FAIL: TestSchematicKeyboardCannotAdoptReplacementSelection/Backspace (0.01s)
+    --- FAIL: TestSchematicKeyboardCannotAdoptReplacementSelection/RightArrow (0.00s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	0.674s
+FAIL

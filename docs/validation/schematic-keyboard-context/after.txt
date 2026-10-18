@@ -1,0 +1,28 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestSchematicKeyboardCannotAdoptReplacementSelection
+=== RUN   TestSchematicKeyboardCannotAdoptReplacementSelection/Backspace
+=== RUN   TestSchematicKeyboardCannotAdoptReplacementSelection/RightArrow
+--- PASS: TestSchematicKeyboardCannotAdoptReplacementSelection (0.01s)
+    --- PASS: TestSchematicKeyboardCannotAdoptReplacementSelection/Backspace (0.01s)
+    --- PASS: TestSchematicKeyboardCannotAdoptReplacementSelection/RightArrow (0.01s)
+=== RUN   TestSchematicKeyboardOwnRepeatsMatchPublicMoveAndUndo
+--- PASS: TestSchematicKeyboardOwnRepeatsMatchPublicMoveAndUndo (0.03s)
+=== RUN   TestSchematicKeyboardRepeatDoesNotBorrowAgentSelection
+--- PASS: TestSchematicKeyboardRepeatDoesNotBorrowAgentSelection (0.02s)
+=== RUN   TestSchematicKeyboardNavigationAndEscapeKeepOriginalIntent
+--- PASS: TestSchematicKeyboardNavigationAndEscapeKeepOriginalIntent (0.02s)
+=== RUN   TestSchematicKeyboardRespectsBusyPendingAndHiddenCanvas
+=== RUN   TestSchematicKeyboardRespectsBusyPendingAndHiddenCanvas/busy
+=== RUN   TestSchematicKeyboardRespectsBusyPendingAndHiddenCanvas/pending
+=== RUN   TestSchematicKeyboardRespectsBusyPendingAndHiddenCanvas/hidden
+=== RUN   TestSchematicKeyboardRespectsBusyPendingAndHiddenCanvas/dragging
+--- PASS: TestSchematicKeyboardRespectsBusyPendingAndHiddenCanvas (0.03s)
+    --- PASS: TestSchematicKeyboardRespectsBusyPendingAndHiddenCanvas/busy (0.00s)
+    --- PASS: TestSchematicKeyboardRespectsBusyPendingAndHiddenCanvas/pending (0.00s)
+    --- PASS: TestSchematicKeyboardRespectsBusyPendingAndHiddenCanvas/hidden (0.03s)
+    --- PASS: TestSchematicKeyboardRespectsBusyPendingAndHiddenCanvas/dragging (0.00s)
+=== RUN   TestSchematicKeyboardPlannedActionKeepsDispatchPreconditions
+--- PASS: TestSchematicKeyboardPlannedActionKeepsDispatchPreconditions (0.00s)
+PASS
+ok  	github.com/dshills/elab/desktop	1.696s

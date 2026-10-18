@@ -1,0 +1,48 @@
+	w.OnFirst(events.KeyChord, func(e events.Event) {
+		if sourcePaneHidden(c.screen.service.Snapshot()) {
+			e.SetHandled()
+			return
+		}
+		chord := strings.ToLower(string(e.KeyChord()))
+		if direction := navigationDirection(chord); direction != "" {
+			captured := c.screen.service.Snapshot()
+			withWindowOwner(c.Owner, window, func() { c.navigateObject(direction, captured.CommandRevision, captured.Document.Generation) })
+			e.SetHandled()
+			return
+		}
+		dx, dy := 0., 0.
+		switch chord {
+		case "leftarrow":
+			dx = -10
+		case "rightarrow":
+			dx = 10
+		case "uparrow":
+			dy = -10
+		case "downarrow":
+			dy = 10
+		case "escape":
+			withWindowOwner(c.Owner, window, func() { c.dragID = ""; c.dragging = false; c.screen.invoke("drawing.cancel", struct{}{}) })
+			e.SetHandled()
+			return
+		case "delete", "backspace":
+			withWindowOwner(c.Owner, window, func() {
+				if id := c.screen.service.Snapshot().Selected; id != "" {
+					c.screen.invoke("object.delete", workbench.IDParams{ID: id})
+				}
+			})
+			e.SetHandled()
+			return
+		default:
+			return
+		}
+		withWindowOwner(c.Owner, window, func() {
+			state := c.screen.service.Snapshot()
+			graph := workbench.Graph{Components: state.Components, Wires: state.Wires}
+			if part, ok := graph.Component(state.Selected); ok && state.Drawing.Tool == "select" {
+				c.screen.invoke("component.move", workbench.MoveParams{ID: part.ID, Position: workbench.Point{X: part.Position.X + dx, Y: part.Position.Y + dy}})
+			} else {
+				c.screen.invoke("view.pan", map[string]float64{"dx": dx / c.View.Zoom, "dy": dy / c.View.Zoom})
+			}
+		})
+		e.SetHandled()
+	})

@@ -40,6 +40,8 @@ In another terminal, run `./elab-agent --connect /absolute/path/to/endpoint.json
 
 ## Review boundary and known limits
 
+- A newly reproduced /152 issue allows Backspace or arrow input to adopt an agent-replaced selection before the drawing context refreshes. Its source repair is verified; clean replacement qualification is next. The existing package remains unchanged. [Evidence](../docs/validation/schematic-keyboard-context/README.md).
+
 
 - Tested on this Apple Silicon Mac with macOS 26.6.2. The enforced minimum is 1040×720 in the mounted UI's units; the observed native frame is **1053×762 pixels**. App windows at 1280×800 and 1440×900 were inspected earlier. OS display modes, other hardware and monitor transitions remain unqualified.
 - A dense 64-part/100-node stress circuit reaches the existing 100 ms integration work limit before producing a sample; the committed graph and physical state are preserved. Supported size does not guarantee convergence.

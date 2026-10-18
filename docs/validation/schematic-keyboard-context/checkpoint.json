@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-18",
+  "prior_goal_turn": "progress: 59f7696 clean /152 qualification",
+  "source_base": "59f7696ea387e54d5480439b6bb354409b2b01d4",
+  "status": "schematic keyboard repair verified in source; replacement packaging next",
+  "production_changed": true,
+  "sdk_changed": false,
+  "public_commands_models_format_unchanged": true,
+  "product_version_increment": false,
+  "review_package_changed": false,
+  "reproduction": [
+    "Original Backspace binding deletes replacement selected LED",
+    "Original arrow binding moves replacement selected LED"
+  ],
+  "original_handler_matches_base_commit": true,
+  "repair": [
+    "Prepared context captured before owner admission",
+    "Public dispatch retains original command/document preconditions and move preimage",
+    "Only exact accepted own-key responses continue fast repeats",
+    "Fresh frame after unrelated work starts a new origin; stale callbacks cannot adopt it",
+    "Busy/pending/hidden/drag guards and successful Escape cleanup"
+  ],
+  "quality": {
+    "full_source_gate_exit_code": 0,
+    "python_tests": 51,
+    "native_race_s": 151.955,
+    "existing_mounted_race_s": 16.087,
+    "focused_race_s": 1.696,
+    "native_smoke_exit_code": 0
+  },
+  "fixture_scope": "Standalone Cogent HandleEvent through production binder; no complete mounted-canvas or OS focus/IME claim",
+  "planned_dispatch_scope": "Planned-command preconditions tested; no concurrent hook inside the actual handler",
+  "first_fixture_attempt": "Send cloned event; original handled-flag observation ineligible; replaced with HandleEvent",
+  "source_ledger": {
+    "sources": 68,
+    "sites": 391,
+    "binding_review_sites": 158,
+    "literal_routes": 207,
+    "public_commands": 162,
+    "routed_commands": 132,
+    "ids_aliases_routes_unchanged": true
+  },
+  "preserved_review": {
+    "review": "0.135.0 /152",
+    "review_source": "01e0a3e1ee8da153d8bd8e6d79eae15781fd17e3",
+    "manifest_entries_verified": 140,
+    "manifest_sha256": "b8143b6736a122e7dc828781903ff64a56bc47a5e023daf3eacf42ece6ab5306",
+    "canonical_120_native_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "sdk_unchanged": true,
+    "review_bytes_unchanged": true,
+    "product_rebuild_or_version_increment": false
+  },
+  "self_review": {
+    "findings": [],
+    "review": [
+      "Same production binder is mounted and tested; original body captured before semantic changes",
+      "Capture uses immutable atomic mesh context before acquiring owner",
+      "Repeat origin and accepted revisions come only from public response snapshots",
+      "No generic retry, no actor-snapshot adoption or SDK change",
+      "Existing shortcuts/window-lifetime guard, electrical preservation and one-key Undo remain",
+      "Native smoke and standalone injection are explicitly scoped separately from physical input"
+    ]
+  },
+  "source_sha256": {
+    "desktop/canvas.go": "164b644c58fd16b6c370cbad30fb063cb30d6b4bb47a2d982dbe664618802b5f",
+    "desktop/schematic_keyboard.go": "5d33c95abaed2f59b52101e925dc08dfebffa2947b6c947be59e0be3b1afc97d",
+    "desktop/schematic_keyboard_test.go": "e1d7b5ee777202437064f0cd7ee24f82c067bb0ec02f2462f5dccf401438b038",
+    "desktop/schematic_keyboard_smoke.go": "56218b91198bbee2943069d63ca27744c052de30d5355b674c8be2fd22607faa",
+    "desktop/smoke.go": "ac46ec2ad00afbc9f4796e2d53e071ebaba4e09d43ed400ebda9be07bbb7a917",
+    "research/13-native-command-inventory.json": "9808dbabb9a61834f67863314655552547e4e406aa7b1d9c4f941a1eb885dbf4"
+  },
+  "limits": [
+    "Clean replacement app/agent qualification is next",
+    "Owner walkthrough Not tried yet",
+    "No physical OS focus/IME/VoiceOver or eligible visible p95 evidence",
+    "No additional printer, hardware, clean-account, signing or study qualification",
+    "P0 remains 17 implemented /10 partial"
+  ],
+  "evidence_sha256": {
+    "README.md": "36bf9c85e3588ce442ba30033dcbaca024cc9e2002e6a9ba218c9890b8d47dac",
+    "after.txt": "9edbc36ba8be870afd54eeb5382f414ebda69c4efef68f837d08d49442726e2c",
+    "before.txt": "40d19373a488a64e9262c0f42b9e7b7dd8aecc62e77d6ed5008e23683fbae677",
+    "event-observer-first-attempt.txt": "e108769e5233c7c577f2a13e75b53da60c4ca339982cb2d9b6783a17d4043501",
+    "full-check.json": "f8b9cf19a7a79e052954b0fe40b01e80b72ec3322ce61d184f490239890c47e9",
+    "full-check.txt": "701c4343f9519cf70c8f809eeb433cd179069ab8df3f3dd358ac6c52840d4c0d",
+    "native-smoke.json": "f1f5b3a10583c3acdbb6d6045f07ef5ef09881064d393bce704f13acf82b27f1",
+    "native-smoke.txt": "148e23207015867b8dc3ac9b38433d5ce9d953e0ba17c604fb04494e91476ce3",
+    "old-handler.txt": "a4364efad0d409b0f0ea2fa5c71c350ce2d43ac26ea20d283fdc30912cf7a9c7",
+    "preserved-review.json": "7fe06c4ab841cd91e28927b8b635ccb380b57c956bdf6d461c17da16d6e7be24"
+  }
+}

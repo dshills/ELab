@@ -227,6 +227,10 @@ rendered:
 	if err := nativeExamplesSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	setStage("nativeSchematicKeyboardSmoke")
+	if err := nativeSchematicKeyboardSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	setStage("nativeSchematicPointerSmoke")
 	if err := nativeSchematicPointerSmoke(ctx, a, s); err != nil {
 		return err

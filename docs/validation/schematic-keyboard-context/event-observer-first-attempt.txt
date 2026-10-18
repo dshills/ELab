@@ -1,0 +1,13 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestSchematicKeyboardCannotAdoptReplacementSelection
+=== RUN   TestSchematicKeyboardCannotAdoptReplacementSelection/Backspace
+    schematic_keyboard_test.go:41: key did not reach production binding
+=== RUN   TestSchematicKeyboardCannotAdoptReplacementSelection/RightArrow
+    schematic_keyboard_test.go:41: key did not reach production binding
+--- FAIL: TestSchematicKeyboardCannotAdoptReplacementSelection (0.01s)
+    --- FAIL: TestSchematicKeyboardCannotAdoptReplacementSelection/Backspace (0.01s)
+    --- FAIL: TestSchematicKeyboardCannotAdoptReplacementSelection/RightArrow (0.00s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	0.665s
+FAIL
