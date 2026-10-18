@@ -332,3 +332,10 @@ The [causal follow-up](../../../docs/validation/native-focus-admission/README.md
 ### Corrected /147 owner review
 
 Clean `77f9319` qualifies the held-button repair in a separate `147-focus-review` folder, preserving the first /147 candidate. Exact copied native smoke (two admitted focus requests then observed completion), four public adapters, reference parity and pulse/Pause/Resume/save/reopen through 3.402 s pass. [Receipt](focus-completion-review-checkpoint.json), [walkthrough](../../35-first-version-review.md). SDK `677548d` is unchanged. All seven earlier review folders and canonical /120 are verified unchanged; no owner, physical OS interleaving/window-blur, full accessibility, visible-p95 or participant gate is upgraded.
+
+
+### Prepared schematic input replacement · 0.135.0 /152
+
+Clean `01e0a3e` packages the schematic command/document guard repair with the matching agent and unchanged examples/notices. The exact copied native smoke waits for a real mesh, refuses an old semantic press after agent replacement, waits for the current mesh and places one fresh LED. All four public adapters, LED/RC/flasher parity and live pulse/Pause/Resume/save/reopen through 3.4 s pass under development-file/outbound-IP denial. [Receipt](schematic-pointer-review-checkpoint.json), [walkthrough](../../35-first-version-review.md), [source reproduction and limits](../../../docs/validation/schematic-pointer-context/README.md). The 140-entry manifest, twelve earlier reviews, original /147 candidate and canonical /120 are verified; no owner window was operated. This is native preparation and semantic packet evidence, not physical NSEvent/IME/VoiceOver or visible-p95 proof. Owner acceptance and broader MVP gates remain open.
+
+A final [read-only source/release identity check](../../../docs/validation/first-version-152-source-identity.json) verifies 341 runtime inputs, 67 native source hashes and all 140 manifest entries against the clean source and packaged agent. The external and packaged acceptance receipts are byte-identical; this adds no separate wiring execution or physical input claim.
