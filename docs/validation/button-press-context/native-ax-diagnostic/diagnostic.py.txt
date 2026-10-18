@@ -1,0 +1,38 @@
+import json
+import subprocess
+import time
+from pathlib import Path
+
+out = Path('/private/tmp/elab-147-ax-diagnostic')
+out.mkdir(mode=0o700)
+log = (out/'native-smoke.txt').open('w')
+host = subprocess.Popen([
+    '/private/tmp/elab-first-version-147-runtime/native',
+    '--smoke', '--smoke-timeout', '2m',
+], stdout=log, stderr=subprocess.STDOUT)
+try:
+    deadline = time.monotonic()+15
+    while 'smoke: nativeLEDInspectorAccessibilitySmoke' not in (out/'native-smoke.txt').read_text():
+        assert host.poll() is None, 'host exited before AX stage'
+        assert time.monotonic() < deadline, 'AX stage not reached'
+        time.sleep(.02)
+    sampled = subprocess.run([
+        '/usr/bin/sample', str(host.pid), '1', '1', '-mayDie',
+        '-file', str(out/'native-stack.txt'),
+    ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=15)
+    (out/'sampler.txt').write_text(sampled.stdout)
+    code = host.wait(timeout=180)
+    report = dict(native_exit_code=code, sample_exit_code=sampled.returncode,
+                  native_path='/private/tmp/elab-first-version-147-runtime/native',
+                  scope='one owned copied-runtime process; no owner application operated')
+    (out/'report.json').write_text(json.dumps(report, indent=2)+'\n')
+    print(json.dumps(report))
+finally:
+    if host.poll() is None:
+        host.terminate()
+        try:
+            host.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            host.kill()
+            host.wait(timeout=5)
+    log.close()

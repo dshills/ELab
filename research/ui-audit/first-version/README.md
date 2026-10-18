@@ -320,3 +320,7 @@ The verified repairs are packaged from clean `30b0507` with private SDK `ade66eb
 ### Same-owner held-button callback blocker
 
 The [bounded real-router checks](../../../docs/validation/button-press-context/README.md) reproduce a held Close reversing an agent edit and held Undo borrowing the repainted agent history permission. Pinned SDK `677548d` keeps the originating pointer action; shared guards refuse old input while fresh/canceled mouse and keyboard, live-clock Pause and RC switch physics parity pass. Full source/SDK quality passes. /146 remains immutable and affected pending replacement; no physical OS interleaving/window-blur or broader acceptance claim is added.
+
+### Held-button candidate /147 · qualification failure preserved
+
+The clean candidate passes the full source gate and separate exact copied-runtime four-adapter public/reference/live/save acceptance. Native smoke fails at the five-second LED inspector accessibility request on two candidate runs and a current /146 comparison. A one-second owned-process native sample shows repeated `vellumAXProbe`/`vellumAXWalk`/hit-test work on the main thread; it does not establish the underlying cause. [Candidate checkpoint](button-press-candidate-checkpoint.json), [native sample and reports](../../../docs/validation/button-press-context/native-ax-diagnostic). No qualified /147 owner handoff or acceptance upgrade. All seven prior reviews and canonical /120 remain unchanged.

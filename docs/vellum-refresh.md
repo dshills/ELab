@@ -4,6 +4,8 @@ Private SDK `677548d0ea93d7d6a689998eb8cf3d6f3ff9f59f` preserves the action from
 
 Only `drivers/cogent/controls.go` and the new `drivers/cogent/button_context_test.go` differ from `ade66eb`. Dependencies/notices and all five bootstrap sources are identical. The archive has 7,454 hashed files, 18,627,256 bytes, SHA-256 `9233f875cf11829e68ccc62772f9d841c4e01c0da9b2364c0f6f6a7e0d871fe9`, manifest SHA-256 `f5e9dcab46eb4c6805587f0301f96745a4802abf2f2f50614bb42ebf3479cc89`. All four native replacements use `build/.vellum-sdk-677548d`. [Evidence](validation/button-press-context/README.md) records the before/after mounted checks and framework qualification. Review /146 remains immutable and affected pending replacement qualification.
 
+Clean source `b560f6d` is packaged as candidate /147. Full consumer quality and independent copied-runtime public/reference/live/save checks pass, but native LED accessibility smoke times out on two candidate runs and a current /146 comparison. The native sample records repeated accessibility traversal/hit-test work; cause remains unresolved. [Candidate checkpoint](../research/ui-audit/first-version/button-press-candidate-checkpoint.json). This is not a qualified replacement handoff.
+
 ## Previous pinned integration: ade66eb
 
 Private SDK `ade66eb3586c6d881647cea52f19048087e598c5` adds optional `ControlStateKey` for twelve simple managed control kinds. ELab scopes it to document generation and, in the component inspector, object ID. New owners cannot inherit private numeric text or pressed controls; public IDs stay stable. The earlier `TextStateKey` API remains compatible. Caller-owned editor/grid/tree/placement bindings retain their established contracts and refuse this key.
