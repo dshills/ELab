@@ -7,9 +7,8 @@ import (
 	"github.com/dshills/vellum/ui"
 )
 
-// A spinner commits on focus loss before its Place click reaches the owner.
 // Retain the parameters from our accepted response, not a later agent snapshot.
-// The ordinary label TextField can finish later and uses explicit settlement.
+// Explicit barriers also cover activation that does not move pointer focus.
 type placementFieldContinuation struct {
 	from, to actionContext
 	params   workbench.PlaceParams
@@ -19,6 +18,7 @@ type placementActionWork struct {
 	context actionContext
 	params  workbench.PlaceParams
 	failed  bool
+	stage   int
 }
 
 func placementParams(state workbench.Snapshot) workbench.PlaceParams {
@@ -85,12 +85,46 @@ func (s *screen) placementAction(state workbench.Snapshot) ui.Node {
 		}
 		pending := &placementActionWork{context: context, params: params}
 		s.pendingPlacement = pending
-		if params.Kind != "net-label" || s.settleField == nil {
-			s.finishPlacement(pending, nil)
-		} else if err := s.settleField("place-label", func(err error) { s.finishPlacement(pending, err) }); err != nil {
-			s.finishPlacement(pending, err)
-		}
+		s.settlePlacement(pending, 0)
 	}}, false)
+}
+
+func (s *screen) settlePlacement(pending *placementActionWork, stage int) {
+	if s.pendingPlacement != pending || pending.stage != stage {
+		return
+	}
+	if pending.failed {
+		s.finishPlacement(pending, nil)
+		return
+	}
+	fields := []string{"position-x", "position-y"}
+	if pending.params.Kind == "net-label" {
+		fields = append(fields, "place-label")
+	}
+	if stage == len(fields) {
+		s.finishPlacement(pending, nil)
+		return
+	}
+	settle := s.settleNumber
+	if fields[stage] == "place-label" {
+		settle = s.settleField
+	}
+	done := func(err error) {
+		if s.pendingPlacement != pending || pending.stage != stage {
+			return
+		}
+		if err != nil {
+			s.finishPlacement(pending, err)
+			return
+		}
+		pending.stage++
+		s.settlePlacement(pending, stage+1)
+	}
+	if settle == nil {
+		done(nil)
+	} else if err := settle(fields[stage], done); err != nil {
+		done(err)
+	}
 }
 
 func (s *screen) finishPlacement(pending *placementActionWork, err error) {

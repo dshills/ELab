@@ -99,7 +99,7 @@ func nativeSplitSupplySmoke(ctx context.Context, a *app.Application, s *screen) 
 			e  *ui.ChangeEvent
 		}{
 			{"part-list", &ui.ChangeEvent{SelectedID: "led"}},
-			{"position-x", &ui.ChangeEvent{Number: 350}}, {"position-y", &ui.ChangeEvent{Number: 100}}, {"place-at-position", nil},
+			{"position-x", &ui.ChangeEvent{Number: 350}}, {"position-y", &ui.ChangeEvent{Number: 100}}, {"fixture-place-accepted", nil},
 		} {
 			if err := smokeUI(s, action.id, action.e); err != nil {
 				return err

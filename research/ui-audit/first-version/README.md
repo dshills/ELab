@@ -418,3 +418,8 @@ October 18: [native legacy/Cocoa handoff source repair](../../../docs/validation
 October 18: [clean replacement qualification](native-text-review-checkpoint.json) incorporates SDK `274f5cc` from clean source `622d31b`. Exact copied native smoke/four-adapter/reference/measurement/recorded/live/save checks pass. Source Cocoa/FIFO and development native six-entry/interval behavior retain distinct scopes. All 196 files, eighteen prior qualified reviews, original /147 candidate and canonical /120 verify. Commands/models/format and native ledger remain unchanged; owner Not tried yet and broader typing/IME/reader/latency/environment/distribution/study gates remain open.
 
 October 18: [native /158 value/Apply and keyboard close](native-close-158/README.md) verifies complete ASCII entry, one Apply, Cmd+W/Cancel preserving edits/manual save, and fresh Cmd+W/Save-close with exact user save metadata and agent reopening parity. Clean semantic close precedes normal original-host exit; queued shutdown flags retain their scope. Source/SDK/release bytes and owner status are unchanged.
+
+
+### Numeric placement source repair · clean replacement pending
+
+October 18: [numeric-field settlement source proof](../../../docs/validation/number-field-placement/README.md) fixes the /158 accessibility Place failure. Mounted descriptor activation, pointer placement and guarded refusal tests pass; actual native accessibility Place accepts the complete private −110 draft and matches the packaged /158 agent. SDK race/vet, final complete consumer quality (170.309 s) and development native smoke (39.309 s) pass. Clean replacement packaging remains pending. Earlier /158 and all other reviews remain preserved; owner remains Not tried yet.

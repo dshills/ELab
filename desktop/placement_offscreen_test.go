@@ -48,6 +48,9 @@ func mountedPlacementControls(t *testing.T, s *screen) *mountedControlWindow {
 		return root
 	})
 	s.settleField = func(id string, done func(error)) error { return cogent.SettleTextField(m.ctx, s.app, "main", id, done) }
+	s.settleNumber = func(id string, done func(error)) error {
+		return cogent.SettleNumberField(m.ctx, s.app, "main", id, done)
+	}
 	return m
 }
 
@@ -68,6 +71,30 @@ func TestMountedPlacementOneClickUsesTypedCoordinate(t *testing.T) {
 	after := s.service.Snapshot()
 	if s.errorMessage != "" || len(after.Components) != 1 || after.Components[0].Position != (workbench.Point{X: 120}) {
 		t.Fatalf("one-click placement did not use typed X: position=%+v components=%+v error=%s", after.Drawing.Position, after.Components, s.errorMessage)
+	}
+}
+
+func TestMountedPlacementSequentialCoordinates(t *testing.T) {
+	s, cleanup := testScreen(t)
+	t.Cleanup(cleanup)
+	agentAction(t, s.service, "drawing.tool.set", workbench.ToolParams{Tool: "place", Kind: "resistor"})
+	agentAction(t, s.service, "drawing.position.set", workbench.PositionParams{Position: workbench.Point{X: -200}})
+	m := mountedPlacementControls(t, s)
+	for _, field := range []struct{ id, text string }{{"position-x", "0"}, {"position-y", "-110"}} {
+		clickMountedControl(t, m, field.id)
+		m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+		for _, r := range field.text {
+			m.input(cogent.ManualInput{Type: events.KeyChord, Rune: r})
+		}
+		m.frame()
+	}
+	// The Cocoa accessibility press invokes the descriptor action without
+	// transferring pointer focus from the numeric field first.
+	uiAction(t, s, "place-at-position", nil)
+	m.settle()
+	after := s.service.Snapshot()
+	if s.errorMessage != "" || len(after.Components) != 1 || after.Components[0].Position != (workbench.Point{Y: -110}) {
+		t.Fatalf("sequential coordinate placement: components=%+v drawing=%+v error=%s", after.Components, after.Drawing, s.errorMessage)
 	}
 }
 

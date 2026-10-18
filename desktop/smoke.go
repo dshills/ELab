@@ -304,6 +304,17 @@ rendered:
 }
 
 func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
+	// Batch fixtures run before their numeric widgets are mounted. They place
+	// already accepted coordinates through the public command; they do not test
+	// private input settlement. Mounted tests and native replay cover that path.
+	if id == "fixture-place-accepted" && event == nil {
+		state := s.service.Snapshot()
+		response := s.invokeAtCommandRevision("component.place", placementParams(state), state.CommandRevision, state.Document.Generation)
+		if response.Error != nil {
+			return fmt.Errorf("fixture placement: %s", response.Error.Message)
+		}
+		return nil
+	}
 	node, ok := findAction(s.view(), id)
 	if !ok || node.Disabled {
 		return fmt.Errorf("UI control %s is missing or disabled", id)
@@ -344,7 +355,7 @@ func smokeConstruct(s *screen) error {
 		if err := smokeUI(s, "position-y", &ui.ChangeEvent{Number: float32(p.position.Y)}); err != nil {
 			return err
 		}
-		if err := smokeUI(s, "place-at-position", nil); err != nil {
+		if err := smokeUI(s, "fixture-place-accepted", nil); err != nil {
 			return err
 		}
 	}
@@ -1124,7 +1135,7 @@ func nativeSwitchSmoke(ctx context.Context, a *app.Application, s *screen) error
 			event *ui.ChangeEvent
 		}{
 			{"selection", &ui.ChangeEvent{SelectedID: "W1"}}, {"delete-object", nil},
-			{"part-list", &ui.ChangeEvent{SelectedID: "switch"}}, {"position-x", &ui.ChangeEvent{Number: -100}}, {"position-y", &ui.ChangeEvent{Number: -60}}, {"place-at-position", nil},
+			{"part-list", &ui.ChangeEvent{SelectedID: "switch"}}, {"position-x", &ui.ChangeEvent{Number: -100}}, {"position-y", &ui.ChangeEvent{Number: -60}}, {"fixture-place-accepted", nil},
 			{"tool-wire", nil}, {"wire-from", &ui.ChangeEvent{SelectedID: "V1.positive"}}, {"wire-to", &ui.ChangeEvent{SelectedID: "S1.1"}}, {"connect-terminals", nil},
 			{"wire-from", &ui.ChangeEvent{SelectedID: "S1.2"}}, {"wire-to", &ui.ChangeEvent{SelectedID: "R1.1"}}, {"connect-terminals", nil},
 			{"switch-actuate", nil},
@@ -1179,7 +1190,7 @@ func smokeConstructDiode(s *screen) error {
 		event *ui.ChangeEvent
 	}{
 		{"selection", &ui.ChangeEvent{SelectedID: "D1"}}, {"delete-object", nil},
-		{"part-list", &ui.ChangeEvent{SelectedID: "diode"}}, {"position-x", &ui.ChangeEvent{Number: 200}}, {"position-y", &ui.ChangeEvent{Number: 0}}, {"place-at-position", nil},
+		{"part-list", &ui.ChangeEvent{SelectedID: "diode"}}, {"position-x", &ui.ChangeEvent{Number: 200}}, {"position-y", &ui.ChangeEvent{Number: 0}}, {"fixture-place-accepted", nil},
 	} {
 		if err := smokeUI(s, action.id, action.event); err != nil {
 			return err
@@ -1238,7 +1249,7 @@ func smokeConstructPotentiometer(s *screen) error {
 		event *ui.ChangeEvent
 	}{
 		{"selection", &ui.ChangeEvent{SelectedID: "R1"}}, {"delete-object", nil}, {"part-list", &ui.ChangeEvent{SelectedID: "potentiometer"}},
-		{"position-x", &ui.ChangeEvent{Number: 0}}, {"position-y", &ui.ChangeEvent{Number: -110}}, {"place-at-position", nil},
+		{"position-x", &ui.ChangeEvent{Number: 0}}, {"position-y", &ui.ChangeEvent{Number: -110}}, {"fixture-place-accepted", nil},
 	} {
 		if err := smokeUI(s, action.id, action.event); err != nil {
 			return err
@@ -1321,7 +1332,7 @@ func smokeConstructPotRC(s *screen) error {
 	}{
 		{"simulation.pause", nil}, {"selection", &ui.ChangeEvent{SelectedID: "R1"}},
 		{"delete-object", nil}, {"part-list", &ui.ChangeEvent{SelectedID: "potentiometer"}},
-		{"position-x", &ui.ChangeEvent{Number: 0}}, {"position-y", &ui.ChangeEvent{Number: -110}}, {"place-at-position", nil},
+		{"position-x", &ui.ChangeEvent{Number: 0}}, {"position-y", &ui.ChangeEvent{Number: -110}}, {"fixture-place-accepted", nil},
 	} {
 		if err := smokeUI(s, action.id, action.event); err != nil {
 			return err
@@ -1360,7 +1371,7 @@ func smokeConstructWaveform(s *screen, kind string) error {
 		event *ui.ChangeEvent
 	}{
 		{"selection", &ui.ChangeEvent{SelectedID: "V1"}}, {"delete-object", nil}, {"part-list", &ui.ChangeEvent{SelectedID: kind}},
-		{"position-x", &ui.ChangeEvent{Number: -200}}, {"position-y", &ui.ChangeEvent{Number: 0}}, {"place-at-position", nil},
+		{"position-x", &ui.ChangeEvent{Number: -200}}, {"position-y", &ui.ChangeEvent{Number: 0}}, {"fixture-place-accepted", nil},
 	} {
 		if err := smokeUI(s, action.id, action.event); err != nil {
 			return err

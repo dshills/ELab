@@ -1,0 +1,30 @@
+{
+  "sources": 68,
+  "sites": 393,
+  "public_ids": 162,
+  "routed_ids": 132,
+  "binding_review_sites": 160,
+  "command_alias_and_route_sets_unchanged": true,
+  "changed_hashes": [
+    "desktop/main.go",
+    "desktop/placement_actions.go"
+  ],
+  "changed_descriptors_before": [
+    {
+      "file": "desktop/placement_actions.go",
+      "function": "*screen.placementAction",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\tif s.pendingPlacement != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.placementFieldAccepted; accepted != nil && accepted.params.Kind == params.Kind && accepted.from.generation == context.generation && accepted.from.revision <= context.revision && context.revision <= accepted.to.revision && accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) {\n\t\tcontext = accepted.to\n\t\tparams = accepted.params\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\t\ts.invokeAtCommandRevision(\"component.place\", params, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := &placementActionWork{context: context, params: params}\n\ts.pendingPlacement = pending\n\tif params.Kind != \"net-label\" || s.settleField == nil {\n\t\ts.finishPlacement(pending, nil)\n\t} else if err := s.settleField(\"place-label\", func(err error) { s.finishPlacement(pending, err) }); err != nil {\n\t\ts.finishPlacement(pending, err)\n\t}\n}",
+      "status": "requires-binding-review"
+    }
+  ],
+  "changed_descriptors_after": [
+    {
+      "file": "desktop/placement_actions.go",
+      "function": "*screen.placementAction",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\tif s.pendingPlacement != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.placementFieldAccepted; accepted != nil && accepted.params.Kind == params.Kind && accepted.from.generation == context.generation && accepted.from.revision <= context.revision && context.revision <= accepted.to.revision && accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) {\n\t\tcontext = accepted.to\n\t\tparams = accepted.params\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\t\ts.invokeAtCommandRevision(\"component.place\", params, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := &placementActionWork{context: context, params: params}\n\ts.pendingPlacement = pending\n\ts.settlePlacement(pending, 0)\n}",
+      "status": "requires-binding-review"
+    }
+  ]
+}

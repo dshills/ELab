@@ -23,3 +23,11 @@ The action retains its rendered document/revision. Only its own successful `edit
 The mounted smoke harness now waits for the controlled draft to reach the actual form and for asynchronous Apply to complete. These are callback/mounted tests; [physical editing evidence](../research/ui-audit/value-apply/README.md) comes from CUA on an isolated pointer-coordinate prototype. Shared Vellum and the canonical application remain unchanged; dependency, full input/IME and accessibility qualification remain required.
 
 [Scoped validation and retained initial failures](validation/value-apply-validation.json) bind the final 45-stage native smoke, race/vet/lint checks, source hashes and dependency context.
+
+## Settling coordinates before Place
+
+Place now waits for explicit `SettleNumberField` barriers for X/Y, followed by label settlement when needed. Accessibility activation does not have to move pointer focus to commit a numeric draft. The final component still uses the shared guarded `component.place` command and only the coordinates accepted from its own field responses.
+
+An agent edit, another field's change, document replacement or failed settlement refuses the pending placement. Duplicate completions cannot skip a field or place twice. The SDK keeps spinners on their legacy input path; the barrier orders and validates commitment without turning them into managed Cocoa text clients.
+
+[Mounted regressions and actual native accessibility/pointer replay](validation/number-field-placement/README.md) verify the repaired source and independent agent parity. Batch smoke setup uses already accepted public coordinates before widgets mount; it does not qualify private input. Clean replacement packaging, exhaustive reader/IME and other unresolved input gates remain separate.

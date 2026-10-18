@@ -143,3 +143,72 @@ func TestPlacementDeferredLabelSettlement(t *testing.T) {
 		})
 	}
 }
+
+func TestPlacementDeferredCoordinateSettlement(t *testing.T) {
+	for _, scenario := range []string{"success", "agent-before-field", "agent-after-field", "other-field", "new-document", "admission-failure", "completion-failure"} {
+		t.Run(scenario, func(t *testing.T) {
+			s, cleanup := testScreen(t)
+			t.Cleanup(cleanup)
+			uiAction(t, s, "part-list", &ui.ChangeEvent{SelectedID: "resistor"})
+			var requests []string
+			finish := map[string]func(error){}
+			s.settleNumber = func(id string, done func(error)) error {
+				requests = append(requests, id)
+				finish[id] = done
+				if scenario == "admission-failure" {
+					return errors.New("numeric barrier unavailable")
+				}
+				return nil
+			}
+			before := s.service.Snapshot()
+			s.app.Do(func() { button, _ := findNode(s.view(), "place-at-position"); button.Activate() })
+			if scenario == "admission-failure" {
+				if s.pendingPlacement != nil || s.errorMessage == "" || !reflect.DeepEqual(before, s.service.Snapshot()) {
+					t.Fatal("failed admission placed or mutated the circuit")
+				}
+				return
+			}
+			if len(requests) != 1 || requests[0] != "position-x" || s.pendingPlacement == nil {
+				t.Fatal("Place did not wait for X")
+			}
+			s.app.Do(func() { finish["position-x"](nil); finish["position-x"](nil) })
+			if !reflect.DeepEqual(requests, []string{"position-x", "position-y"}) {
+				t.Fatal("duplicate completion skipped or repeated Y", requests)
+			}
+			if scenario == "agent-before-field" {
+				agentAction(t, s.service, "drawing.position.set", workbench.PositionParams{Position: workbench.Point{X: 200}})
+			}
+			if scenario != "completion-failure" {
+				s.app.Do(func() { field, _ := findNode(s.view(), "position-y"); field.Change(ui.ChangeEvent{Number: -110}) })
+			}
+			switch scenario {
+			case "agent-after-field":
+				agentAction(t, s.service, "drawing.position.set", workbench.PositionParams{Position: workbench.Point{X: 200}})
+			case "other-field":
+				uiAction(t, s, "pdf-margin", &ui.ChangeEvent{Number: 11})
+			case "new-document":
+				agentAction(t, s.service, "project.clear", workbench.ReplaceParams{DiscardChanges: true})
+			}
+			current := s.service.Snapshot()
+			s.app.Do(func() {
+				var err error
+				if scenario == "completion-failure" {
+					err = errors.New("numeric commit failed")
+				}
+				finish["position-y"](err)
+				finish["position-y"](err)
+			})
+			after := s.service.Snapshot()
+			if scenario == "success" {
+				if s.errorMessage != "" || len(after.Components) != 1 || after.Components[0].Position != (workbench.Point{X: before.Drawing.Position.X, Y: -110}) || after.CommandRevision != current.CommandRevision+1 {
+					t.Fatal("numeric settlement did not place exactly once", after.Components, s.errorMessage)
+				}
+			} else if s.errorMessage == "" || !reflect.DeepEqual(current, after) {
+				t.Fatal("failed/intervening numeric settlement placed a component", s.errorMessage)
+			}
+			if s.pendingPlacement != nil {
+				t.Fatal("numeric placement remained pending")
+			}
+		})
+	}
+}

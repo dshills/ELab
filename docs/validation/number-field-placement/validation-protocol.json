@@ -1,0 +1,21 @@
+{
+  "initial_smoke": {
+    "passed": false,
+    "reason": "Batch fixture invoked Place before numeric widgets mounted"
+  },
+  "correction": "Explicit accepted-state fixture placement through the public command; mounted and actual native input checks retained separately",
+  "earlier_full_gate": {
+    "passed": true,
+    "seconds": 237.37545816705097,
+    "qualifies_final_source": false,
+    "reason": "Smoke-fixture source changed during this earlier run"
+  },
+  "final_full_gate": {
+    "passed": true,
+    "exit_code": 0,
+    "elapsed_seconds": 170.3094873749651,
+    "scope": "Complete consumer quality gate against new pinned SDK"
+  },
+  "source_validation_scope": "Final Go product/fixture/test inputs with pinned SDK; documentation/audit evidence wording updated and reverified separately",
+  "native_replay_scope": "Working-tree development executables; no clean replacement release"
+}

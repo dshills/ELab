@@ -1,0 +1,309 @@
+{
+  "date": "2026-10-18",
+  "status": "source repair qualified; clean replacement app/agent pending",
+  "passed": true,
+  "source_parent_commit": "94d8432b81189c58b291b719a61a0a7811252a4a",
+  "source_sha256": {
+    "desktop/main.go": "19600cd596d9e0060207897a3b878f338c7738afb7df370e54a3a45937ee8114",
+    "desktop/placement_actions.go": "312deb732a7f065a31cf45d094daf201d637dc92398eaf3660e2fc558786f63e",
+    "desktop/placement_actions_test.go": "b2f377c6bc33be8bbc49d06627426bf99da845cbc9d670edfe19cbc8bdb2bc0d",
+    "desktop/placement_offscreen_test.go": "1abf7cab2afb76436a4352331b48b06ba40155ab1eeb44e6e4ee02d68d219e78",
+    "desktop/smoke.go": "7465ece5260834f2f93ad5372fce88263adc03721cad01c367b8b8f26ad6a343",
+    "desktop/split_supply_smoke.go": "6e7040ece354e96a0d70df96c3c0b51346869f46d79d7812cdac205ec514f005",
+    "desktop/go.mod": "1f8bf63f74a2abe8ac600e30597f42efa3591d8ed15f904098005a1a32234286",
+    "third_party/vellum/sdk.lock.json": "2f9ac0e120bdd09d5ffe2c3d8b5da4d24588455c5e6bc8d6f08c80e0dccc6395"
+  },
+  "sdk": {
+    "schema": 1,
+    "archive": "third_party/vellum/vellum-b22478c.tar.gz",
+    "archive_bytes": 18631976,
+    "sha256": "22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968",
+    "manifest_sha256": "dde338180afa8e27828853477ac42cfa96bc74054fb0f69bf1c4c96a8b259648",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-b22478c",
+    "source_commit": "b22478cf8cec8dda1ccdcd93d6ff6b62e2cc11de",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 7458,
+    "bootstrap": {
+      "scripts/check-sdk.py": "b8062fbd4c57d1d8cb4d75a094184e1a5fa108cfa811fe9fb390f99f6d66be38",
+      "scripts/child_process.py": "04ba2610ddf112e936e8adcd9a81c03cff422843f993c2ce8a9e1acd96f39c9c",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "803d981c00f32d08a370577b37094848b2c79085cf3303a99b23d2a94336ac2c",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541"
+    }
+  },
+  "sdk_source_sha256": {
+    "drivers/cogent/controls.go": "e69c130505e595621f34b0b8048637467957d7b8ebf3c99432bfb59360cd9268",
+    "drivers/cogent/editor.go": "3399f35bf6438d88ad5da3a1a7922462b79106dcdc870bc0ff5018b48c930e08",
+    "drivers/cogent/numberfield_settle.go": "fdcff7cc73f14113c2eb77980e89932d9d0ca3efdf948d63f703773a9abb2201",
+    "drivers/cogent/numberfield_settle_test.go": "f13b3c20fe367742445f1f433fe3a29e19553b9730c42f27400c584cfa2e585d"
+  },
+  "sdk_quality": {
+    "passed": true,
+    "stages": [
+      {
+        "command": [
+          "go",
+          "test",
+          "-race",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 0,
+        "seconds": 42.23681941698305
+      },
+      {
+        "command": [
+          "go",
+          "vet",
+          "./..."
+        ],
+        "exit_code": 0,
+        "seconds": 1.9684875420061871
+      },
+      {
+        "command": [
+          "go",
+          "test",
+          "-race",
+          "-tags=offscreen",
+          "-count=1",
+          "-run",
+          "^Test(NumberSettlement|ManagedLegacyBoundary|ReviewFieldSettlement|ManagedTextFieldFocusLoss)",
+          "./..."
+        ],
+        "exit_code": 0,
+        "seconds": 24.13565774995368
+      },
+      {
+        "command": [
+          "go",
+          "vet",
+          "-tags=offscreen",
+          "./..."
+        ],
+        "exit_code": 0,
+        "seconds": 1.3893262499477714
+      }
+    ]
+  },
+  "consumer_quality": {
+    "passed": true,
+    "exit_code": 0,
+    "elapsed_seconds": 170.3094873749651,
+    "scope": "Complete consumer quality gate against new pinned SDK"
+  },
+  "native_development_smoke": {
+    "passed": true,
+    "exit_code": 0,
+    "seconds": 39.308963750023395,
+    "scope": "Development candidate against isolated repaired SDK; no clean copied-runtime/release claim"
+  },
+  "native_replay": {
+    "accessibility": {
+      "pid": 38990,
+      "position": {
+        "x": 0,
+        "y": -110
+      },
+      "agent_parity": true,
+      "exit_code": 0
+    },
+    "pointer": {
+      "pid": 45834,
+      "position": {
+        "x": 0,
+        "y": -110
+      },
+      "agent_parity": true,
+      "exit_code": 0
+    },
+    "original_processes_absent": true,
+    "public_seed_and_save": true,
+    "complete_native_led_walkthrough": false,
+    "clean_release_qualification": false
+  },
+  "native_inventory": {
+    "sources": 68,
+    "sites": 393,
+    "binding_review": 160,
+    "public_ids": 162,
+    "routed_ids": 132,
+    "ledger_sha256": "effd5a03951c7d7f8371db5993d416fe488f565ad09ac16758fc757f1992c7e3"
+  },
+  "preservation": {
+    "passed": true,
+    "qualified_reviews": [
+      {
+        "folder": "build/ELab-0.123.0-140-review",
+        "entries": 113,
+        "manifest_sha256": "c2d35b4b8cf4920636a987e39b83d4d989729201b9164f0c23372c2ea1602bd3"
+      },
+      {
+        "folder": "build/ELab-0.124.0-141-review",
+        "entries": 126,
+        "manifest_sha256": "d4b008f18f06ad0e7eca4b7187af709d3ba9359d27fd67c747181297faf7ed56"
+      },
+      {
+        "folder": "build/ELab-0.125.0-142-review",
+        "entries": 124,
+        "manifest_sha256": "45e1fc51016b21e6a3fea9388ce113716075f4bc1e112e03b15e72b12bf69a8e"
+      },
+      {
+        "folder": "build/ELab-0.126.0-143-review",
+        "entries": 124,
+        "manifest_sha256": "14d1fbbff5b1be63c13d14bfbb2462bbeeeacce208ad36e4cd54fb41b7d56d12"
+      },
+      {
+        "folder": "build/ELab-0.127.0-144-review",
+        "entries": 130,
+        "manifest_sha256": "0073beb958b5128d383380e08d89ed1c5f926c5d14ae6aec6d57ef5e9a53e0ae"
+      },
+      {
+        "folder": "build/ELab-0.128.0-145-review",
+        "entries": 131,
+        "manifest_sha256": "93a9e275f8c50995f1cab73ef03b94b62b99192e627ac527ca1ae5d5f46b660b"
+      },
+      {
+        "folder": "build/ELab-0.129.0-146-review",
+        "entries": 134,
+        "manifest_sha256": "74ee03a4d3f89271b02df5d4b52edc61b125ac16492a9ae33966b78ea31a2179"
+      },
+      {
+        "folder": "build/ELab-0.130.0-147-focus-review",
+        "entries": 139,
+        "manifest_sha256": "d63f38e2adc6e45d314a77453777f464ff3dfbd46e32a9f39e33ed0e6ac068b0"
+      },
+      {
+        "folder": "build/ELab-0.131.0-148-review",
+        "entries": 129,
+        "manifest_sha256": "58cd867a86777a96fc8d7f322f9baffa8c0943cbb769908a2f751fdff4197d4c"
+      },
+      {
+        "folder": "build/ELab-0.132.0-149-review",
+        "entries": 129,
+        "manifest_sha256": "31ea54a1e7cc531ae4c8745b014dd0c0b966b8df014d9809b682841e3581b797"
+      },
+      {
+        "folder": "build/ELab-0.133.0-150-review",
+        "entries": 129,
+        "manifest_sha256": "509f75002de0031fcade4d739481e9fb71a2c298550fc8f645394696522e663c"
+      },
+      {
+        "folder": "build/ELab-0.134.0-151-review",
+        "entries": 129,
+        "manifest_sha256": "36c05644dcdcaefe7241b0c78a02bd98fe703ff742b1a398d6095d0a3daa6c57"
+      },
+      {
+        "folder": "build/ELab-0.135.0-152-review",
+        "entries": 140,
+        "manifest_sha256": "b8143b6736a122e7dc828781903ff64a56bc47a5e023daf3eacf42ece6ab5306"
+      },
+      {
+        "folder": "build/ELab-0.136.0-153-review",
+        "entries": 137,
+        "manifest_sha256": "03ea57f7fdc2aea4d2ef285dbeb990329c32a075f9bc673439a2e0f94bcac73a"
+      },
+      {
+        "folder": "build/ELab-0.137.0-154-review",
+        "entries": 151,
+        "manifest_sha256": "ae56437933b9312caf543173a0b1696601badfd40fe7342af1a52bbbcc0999f1"
+      },
+      {
+        "folder": "build/ELab-0.138.0-155-review",
+        "entries": 134,
+        "manifest_sha256": "9ef7cd693ad97b6eb0ab58dbe6db8f5b621ca7d69e3dfa7f00aa1a72193e718d"
+      },
+      {
+        "folder": "build/ELab-0.139.0-156-review",
+        "entries": 135,
+        "manifest_sha256": "ec49b66aa2c9a10c06df76882245bca16b69addbd8dfceabf6077e3f54da3155"
+      },
+      {
+        "folder": "build/ELab-0.140.0-157-review",
+        "entries": 158,
+        "manifest_sha256": "29ecc32819f447565698ce114040d04fe020e8345959562ae006627ed697600f"
+      },
+      {
+        "folder": "build/ELab-0.141.0-158-review",
+        "entries": 196,
+        "manifest_sha256": "fa5ccabcae2b0686a3c300c2bd56e8af10144eb5b3e1a7423c0e25914c8e102a"
+      }
+    ],
+    "original_147_candidate_entries": 135,
+    "original_147_candidate_manifest_sha256": "3aa7dd84084944c9926a907e5c87bbb559a8bbcb1d9ad19309fbf3a1c29b7d29",
+    "canonical_native_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "canonical_promoted": false
+  },
+  "commands_models_format_unchanged": true,
+  "owner_acceptance": "Not tried yet",
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "remaining": [
+    "Clean replacement build and exact copied-runtime/reference/live/save acceptance",
+    "Owner walkthrough and broader MVP gates"
+  ],
+  "evidence_sha256": {
+    "ELab-placement-build-info.raw.txt.gz": "e243d6f30b20c07d3ef90f2a5b4996826fd34a947154061595180363dab950f3",
+    "ELab-placement-build-info.txt": "46527d15968e97cef89e773388d35de3b60fd18cc6ddd97d48ce9452bf6e54f4",
+    "ELab-placement-final-build-info.raw.txt.gz": "367ff31556a969125682d0259a14f46ff21ae935cc62f25ccb28b28b4114e8cf",
+    "ELab-placement-final-build-info.txt": "0b6e5eced8c3e3cdd6b9b45d4c9ab64316d1305e86e6117b07231f804b178f13",
+    "Observed placement.elab": "135867ed1a06c7abc071792c43ad027997e82350fddc0220e20dfbdcbe9cae3e",
+    "README.md": "e81118ddbb3fd9754422918b31228258011be3fe00309cdd846cb4b3207a8899",
+    "consumer-focused-final.txt": "28ee535491e2001660e7a28fd35bb81014d7ef0fe41e4a1761ede899e55d0295",
+    "consumer-focused-initial.txt": "06b00365892301a61afb560b17d2b475102619dd2514093e73e74e0e7ed79aba",
+    "consumer.patch.gz": "5aefde80581d025d05796023057464e4acd6e9aa412f9b63c8e4841e38040730",
+    "consumer_quality.py": "ceb05286e19f4035b63255406d6d84223d8de21acb5aacd247ffb2a3ce3900f5",
+    "development-final-identity.json": "ce8cfb5c5522884926effbd29f8bb7bdad9a33a2ca0ca49f73c5710508f024e5",
+    "development-identity.json": "f0b2bfef80282bbe58782f2f27de0e551341ab279e029d43b76377e672303f9b",
+    "earlier-check.json": "49f808453d054c0b1e223880a2ae1b85a2cd9f2c2a15f0e3496a4cfc41dfad85",
+    "earlier-check.txt": "df87119b500f49f0d117b95f49b7dedf43e47ac9f691dbd1128c926741387112",
+    "export-result.json": "6550cb05e308d7c9df32e0d1a734a96d4dfe87a6d425ea2f441dc32d4fb70739",
+    "export.py": "9b11657e97b978ab84bbdb0ca3018651c405e9cf70a6d91453ce3f5d5b5a771d",
+    "export.txt": "9c9cd70d62c80eae733cec01ce797a18d7c6a384d541b9ae5faf1678c48ceafe",
+    "full-check.json": "bcacec158a73a0218a0c55bb5fc19c1d07a861e858134b595e7f3f1018381f77",
+    "full-check.txt": "0a9e2628a4f9e3eed3e5ac28023c2cb755440ba4323512cf8f0495991580fe21",
+    "native-build-final.txt": "853b8ca603ccaeb0b4eacb15fb1406068a3e029aeb6c484f667836d288828d06",
+    "native-build.txt": "c45d6b4b4daaae728f9ad63d8281515e7da97489949b18f3a3e8b0405036f60c",
+    "native-ledger-review.json": "bad30e49e018136cf21607a97839a425f0ba2f107d927b182eba1cb6f5e85b2d",
+    "native-observer.py": "0d4d5a92f626a4dca637abf2a6f490bd0a417682fc637f602be26b931ef14b63",
+    "native-parity.json.gz": "29c7828b224dd7474385364c5d6e4dd463deabf5dcdeb0f947fb893d216c6883",
+    "native-process-verification.json": "36b1221b86784cc7449e7032efeef3aaa6302f21a810455f6f511d022f775a0c",
+    "native-session.json.gz": "c7638be830cbd0fb89676963f3e364e3d85bf2f343a5b69b7e74e910a0bd801d",
+    "native-smoke-initial-refusal.json": "5c227d7ea3735fe1e3e9cb7c40ab8270c8f8584d5871ed40da6449e45186b5fd",
+    "native-smoke-initial-refusal.txt": "067395c10c91f30f69c8fae323edd6637fe9d5391ce8a529ec3baaa2948c36e9",
+    "native-smoke-initial-source.py": "013377de7dad400c4c1200f93106d5620f46bb51cd5535b4c8394d08a0e058ef",
+    "native-smoke-source.py": "c298b6def961cc12ed74190228f58009391e2d5f5ce83f4e98541ee6708a50f0",
+    "native-smoke.json": "dcd650a2f1e0ea80d35647c89ac0dd9f6d0ad0ac81bed9038ff286c5c934ca6c",
+    "native-smoke.txt": "3b26410e7fb30b4d38a88705b51cf981eac4f1bd6e31306c9af0d0304a3e2c98",
+    "native-ui-observation.txt": "0861a28989466adfdebdd223d6651bbc6d6bbf8f5bf9626a9a8a2806cf2f92fe",
+    "placed.ax.txt": "e554703d5fc8dfa279f053cf77d39380e4f78e2f156c46f4680b0c1b4d8dc786",
+    "placed.png": "e2fec4e902034366300ef5300ac857256aad658f486b6a665174eefa5fe5d3ec",
+    "pointer-Observed placement.elab": "135867ed1a06c7abc071792c43ad027997e82350fddc0220e20dfbdcbe9cae3e",
+    "pointer-native-observer.py": "6fc8ff46c265ae70746521fd8916fdaae7f59b2103c56beb6611817c3ee9a8e6",
+    "pointer-native-parity.json.gz": "15541e304a3871c10a739a634e730e0381d6d8504454b984eba51ac2699ec178",
+    "pointer-native-process-verification.json": "21c255ed18a577ee0d839cb605d8bb4c173ca5eb46e53914aaf7737830b32820",
+    "pointer-native-session.json.gz": "811ab92ce3c2755394d07a92682ac7dd4a43057601e59084984748d705e4943d",
+    "pointer-placed.ax.txt": "e554703d5fc8dfa279f053cf77d39380e4f78e2f156c46f4680b0c1b4d8dc786",
+    "pointer-placed.png": "538c37b6201a5df0bbabbcd9e2e1bf871c6be5aa67cba82d29894553445ac600",
+    "pointer-y-private.ax.txt": "a107b672b18483e2d273052be2e96a102e5900b4f0db969b58fc837717792b62",
+    "pointer-y-private.png": "a9bd078de2cc0ff2801fbc2fe88885a44ab3bfee45c2167e4041a747d7570a07",
+    "preservation.json": "9de8e2dced1cf1ca64e7fd43862710268f511944e068943952eb1774d6689668",
+    "prior-sdk.lock.json": "0dd6c860a8807529981f851354a030e48d74d110311cb744bafdc821eae774af",
+    "quality.py": "d31786999af34d86ba641f819928ff42d1cfeeff9597defad4eb28fe02b4bc19",
+    "sdk-diff.json": "63a9d9149e2c8d4b41882b448f23e10d0b0a26bcdd8402b9bafe28b2a187a60a",
+    "sdk-focused.txt": "efaee63e8c442038ce5f323735bd750a011c14ce4f73144eb1a7cf27e5313b98",
+    "sdk-quality.json": "0677df37eb2134f292db33b8e9bdfcb1421b9c509cbcbc42e8cee70e2cb6bda6",
+    "sdk-quality.txt": "9f681fb9d31de562f5c82d8cb603f0189ca4eaae9c42ddebbaa4e4bff665004b",
+    "self-review.json": "22881b1761b5ee57213b4d508288f46866c1367e20794565b8eef7c99c9c4aae",
+    "validation-protocol.json": "e52d4113467ab17088666e6d2097631525a25f13119b315be61daa3e1848e38d",
+    "vellum.commit.txt": "f19fe8cadc0a5d43d8fb665f942ae5a96d2aaaf597de56b097950e0bcabc554d",
+    "vellum.patch.gz": "6d36c141c7c090cfdd226cac7aa9f2f5045582dc32b013de918d1099fb0dd5a1",
+    "y-private.ax.txt": "a107b672b18483e2d273052be2e96a102e5900b4f0db969b58fc837717792b62",
+    "y-private.png": "df33b9073a8e2b682363c299585fd700a0900c022c82d4431ca761f126b8fa3a"
+  }
+}

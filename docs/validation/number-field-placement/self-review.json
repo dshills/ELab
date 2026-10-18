@@ -1,0 +1,20 @@
+{
+  "scope": "Self-review of numeric settlement and guarded placement continuation",
+  "findings": [],
+  "invariants": [
+    "Spinners retain client ID zero and do not join Cocoa native text clients",
+    "Numeric barrier shares originating FIFO, cancellation/window lifetime and one-request admission with existing settlement",
+    "Active numeric record identity is rechecked on refresh and delivery; disabled/retired/ambiguous controls refuse",
+    "Full finite draft parsing and Numeric bounds precede Change; composition refuses without partial publication",
+    "Explicit settlement retires queued numeric Change epochs, delivers changed value once and leaves future ordinary Changes usable",
+    "Only own accepted field responses advance the pending command/document context; foreign field, agent and document changes refuse",
+    "Duplicate/stale completions cannot skip a field stage or repeat placement",
+    "Batch smoke fixture placement explicitly uses already accepted public coordinates, while mounted and actual native tests qualify private input",
+    "Public command set, agent models and file format remain unchanged"
+  ],
+  "limits": [
+    "No exhaustive coverage of every NumberField action, full reader/IME/OS interleaving or visible-p95 claim",
+    "Source native replays and working-tree smoke do not qualify a clean copied release",
+    "Existing /158 remains affected pending clean replacement"
+  ]
+}
