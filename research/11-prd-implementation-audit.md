@@ -289,3 +289,8 @@ The rendered-button repair is now included in clean **0.126.0 /143**, built from
 
 
 One [actual paused potentiometer drag and native Undo](ui-audit/first-version/potentiometer-gesture/checkpoint.json) now supplement control-event evidence for EDIT-03/SIM-02. The exact /143 executable commits one history/event, preserves charge/time and agrees with an external agent; one Undo restores source and truthfully marks retained results stale. This does not close mid-drag actor/focus invalidation, running gesture, screen-reader/IME or full mounted coverage. P0 statuses stay 17 implemented /10 partial; no product/SDK/package change.
+
+
+### Held-slider context blocker · October 18
+
+The pinned driver’s real offscreen retained widgets reproduce an old drag overwriting an agent edit after repaint (20% → 94.0625%) and overwriting a replacement document with the same component IDs. The narrow Vellum source repair retains the originating callback so ELab’s existing revision/document guards refuse it. Uninterrupted and unchanged-repaint drags remain single user commands. [Reproduction, pin and validation](../docs/validation/held-slider-context/README.md). Review /143 still contains this defect until replacement; actual OS concurrent/running/focus-loss gestures and broader EDIT-03/SIM-02 gates remain open. No P0 status is upgraded.

@@ -1,0 +1,17 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/uninterrupted
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/unchanged-repaint
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-repaint
+    slider_invalidation_offscreen_test.go:207: held drag overwrote agent after repaint: before [{ID:P1 Resistance:10000 WiperPosition:0.2 UpperResistance:7999.400000000001 LowerResistance:2000.6000000000001 Terminal1Voltage:5 Terminal2Voltage:0 WiperVoltage:1.0002999967260118 Terminal1Current:0.0005000000004092792 Terminal2Current:-0.0004999999983634968 WiperCurrent:-2.0457823803055053e-12 Power:0.0024999999999999996}] after [{ID:P1 Resistance:10000 WiperPosition:0.940625 UpperResistance:594.6312499999996 LowerResistance:9405.36875 Terminal1Voltage:5 Terminal2Voltage:0 WiperVoltage:2.108913838299503 Terminal1Current:0.004861981541838743 Terminal2Current:-0.00022422447161356678 WiperCurrent:-0.004637757070225176 Power:0.01452927764512448}]
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-document-replacement
+    slider_invalidation_offscreen_test.go:207: held drag overwrote agent after repaint: before [{ID:P1 Resistance:10000 WiperPosition:0.5 UpperResistance:5000 LowerResistance:5000 Terminal1Voltage:5 Terminal2Voltage:0 WiperVoltage:1.94708002171507 Terminal1Current:0.0006105839956569859 Terminal2Current:-0.000389416004343014 WiperCurrent:-0.00022116799131397191 Power:0.0026222882009546426}] after [{ID:P1 Resistance:10000 WiperPosition:0.940625 UpperResistance:594.6312499999996 LowerResistance:9405.36875 Terminal1Voltage:5 Terminal2Voltage:0 WiperVoltage:2.108913838299503 Terminal1Current:0.004861981541838743 Terminal2Current:-0.00022422447161356678 WiperCurrent:-0.004637757070225176 Power:0.01452927764512448}]
+--- FAIL: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag (2.23s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/uninterrupted (0.56s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/unchanged-repaint (0.55s)
+    --- FAIL: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-repaint (0.55s)
+    --- FAIL: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-document-replacement (0.57s)
+FAIL
+exit status 1
+FAIL	github.com/dshills/elab/desktop	2.855s

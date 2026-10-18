@@ -1,0 +1,201 @@
+diff --git a/drivers/cogent/control_context_test.go b/drivers/cogent/control_context_test.go
+new file mode 100644
+index 0000000..d361b47
+--- /dev/null
++++ b/drivers/cogent/control_context_test.go
+@@ -0,0 +1,111 @@
++package cogent
++
++import (
++	"image"
++	"testing"
++
++	"cogentcore.org/core/core"
++	"cogentcore.org/core/events"
++	"github.com/dshills/vellum/app"
++	"github.com/dshills/vellum/ui"
++)
++
++func TestHeldSliderRetainsBeginCallbackAcrossControlledRepaint(t *testing.T) {
++	a, err := app.New(app.Config{})
++	if err != nil {
++		t.Fatal(err)
++	}
++	defer a.Close()
++	if err := a.Open(app.Window{ID: "main", Title: "Slider context", Width: 400, Height: 160, View: func() ui.Node { return ui.Node{ID: "root", Kind: ui.Column} }}); err != nil {
++		t.Fatal(err)
++	}
++	oldCalls, newCalls := 0, 0
++	n := ui.Node{ID: "root", Kind: ui.Column, Children: []ui.Node{{ID: "wiper", Kind: ui.Slider, Number: 50, Numeric: ui.Numeric{Min: 0, Max: 100, Step: 1}, Change: func(ui.ChangeEvent) { oldCalls++ }}}}
++	host := core.NewFrame(core.NewBody("held-slider"))
++	r, err := reconcile(host, nil, n, a, "main")
++	if err != nil {
++		t.Fatal(err)
++	}
++	slider := findRecord(r, "wiper").widget.(*core.Slider)
++	slider.Update()
++	slider.Geom.Size.Actual.Content.X = 300
++	slider.Geom.Size.Actual.Content.Y = 20
++	from, to := image.Pt(150, 10), image.Pt(225, 10)
++	begin := events.NewMouse(events.SlideStart, events.Left, from, 0)
++	begin.SetLocalOff(image.Point{})
++	slider.HandleEvent(begin)
++	move := events.NewMouseDrag(events.Left, to, from, from, 0)
++	move.Typ = events.SlideMove
++	move.SetLocalOff(image.Point{})
++	slider.HandleEvent(move)
++	if oldCalls != 0 || newCalls != 0 {
++		t.Fatal("preview committed")
++	}
++	n.Children[0].Number = 20
++	n.Children[0].Change = func(ui.ChangeEvent) { newCalls++ }
++	r, err = reconcile(host, r, n, a, "main")
++	if err != nil {
++		t.Fatal(err)
++	}
++	if findRecord(r, "wiper").widget != slider {
++		t.Fatal("fixture replaced the held widget")
++	}
++	end := events.NewMouseDrag(events.Left, to, from, from, 0)
++	end.Typ = events.SlideStop
++	end.SetLocalOff(image.Point{})
++	slider.HandleEvent(end)
++	a.Drain()
++	if oldCalls != 1 || newCalls != 0 {
++		t.Fatalf("gesture borrowed refreshed callback: origin=%d refreshed=%d", oldCalls, newCalls)
++	}
++	// A declined originating callback restores the current controlled value.
++	r, err = reconcile(host, r, n, a, "main")
++	if err != nil {
++		t.Fatal(err)
++	}
++	if slider.Value != 20 {
++		t.Fatal("declined old gesture did not restore current model", slider.Value)
++	}
++	slider.SetValue(30).SendChange()
++	a.Drain()
++	if oldCalls != 1 || newCalls != 1 {
++		t.Fatal("future independent change failed to use current callback")
++	}
++}
++
++func TestQueuedSliderChangeRetainsEventCallbackAcrossRebind(t *testing.T) {
++	a, err := app.New(app.Config{})
++	if err != nil {
++		t.Fatal(err)
++	}
++	defer a.Close()
++	if err := a.Open(app.Window{ID: "main", Title: "Queued context", Width: 200, Height: 100, View: func() ui.Node { return ui.Node{ID: "root", Kind: ui.Column} }}); err != nil {
++		t.Fatal(err)
++	}
++	oldCalls, newCalls := 0, 0
++	n := ui.Node{ID: "root", Kind: ui.Column, Children: []ui.Node{{ID: "slider", Kind: ui.Slider, Numeric: ui.Numeric{Min: 0, Max: 100, Step: 1}, Change: func(ui.ChangeEvent) { oldCalls++ }}}}
++	host := core.NewFrame(core.NewBody("queued-control"))
++	r, err := reconcile(host, nil, n, a, "main")
++	if err != nil {
++		t.Fatal(err)
++	}
++	slider := findRecord(r, "slider").widget.(*core.Slider)
++	slider.SetValue(30).SendChange() // owner delivery remains queued
++	n.Children[0].Change = func(ui.ChangeEvent) { newCalls++ }
++	r, err = reconcile(host, r, n, a, "main")
++	if err != nil {
++		t.Fatal(err)
++	}
++	if findRecord(r, "slider").widget != slider {
++		t.Fatal("fixture replaced the queued control")
++	}
++	a.Drain()
++	if oldCalls != 1 || newCalls != 0 {
++		t.Fatalf("queued event borrowed refreshed callback: origin=%d refreshed=%d", oldCalls, newCalls)
++	}
++	slider.SetValue(30).SendChange()
++	a.Drain()
++	if oldCalls != 1 || newCalls != 1 {
++		t.Fatal("future event did not use the new callback")
++	}
++}
+diff --git a/drivers/cogent/controls.go b/drivers/cogent/controls.go
+index c692778..4668497 100644
+--- a/drivers/cogent/controls.go
++++ b/drivers/cogent/controls.go
+@@ -40,6 +40,11 @@ type Semantics struct {
+ // settlement. Its nonzero size keeps independently allocated identities distinct.
+ type fieldChangeEpoch struct{ marker byte }
+ 
++// A held gesture belongs to the descriptor at its start, even if a controlled
++// refresh replaces the callback before release. Application context guards must
++// see that originating callback rather than borrow the refreshed descriptor.
++type controlChangeBinding struct{ callback func(ui.ChangeEvent) }
++
+ type controlState struct {
+ 	a                 *app.Application
+ 	window            string
+@@ -63,6 +68,7 @@ type controlState struct {
+ 	gridEdit          *gridEditBinding
+ 	placement         *placementBinding
+ 	fieldChanges      atomic.Pointer[fieldChangeEpoch]
++	sliderGesture     atomic.Pointer[controlChangeBinding]
+ 	fieldDelivered    string // owner: last delivered value, or controlled value applied by reconciliation
+ 	fieldState        *core.TextFieldEditingState
+ 	fieldSelection    *editor.Selection
+@@ -203,7 +209,14 @@ func mountControl(parent tree.Node, r *record, a *app.Application, window string
+ 	case ui.Selector:
+ 		widget = core.NewChooser(parent)
+ 	case ui.Slider:
+-		widget = core.NewSlider(parent)
++		slider := core.NewSlider(parent)
++		slider.OnFirst(events.SlideStart, func(events.Event) {
++			c.sliderGesture.Store(&controlChangeBinding{callback: r.node.Change})
++		})
++		// The Slider's own SlideStop handler emits Change first; dispatchControl
++		// captures the origin before this later handler retires the gesture.
++		slider.OnFinal(events.SlideStop, func(events.Event) { c.sliderGesture.Store(nil) })
++		widget = slider
+ 	case ui.NumberField:
+ 		widget = core.NewSpinner(parent)
+ 	case ui.TextField:
+@@ -323,6 +336,12 @@ func dispatchControl(r *record, e events.Event) {
+ 		return
+ 	} // private draft is synchronized only at the originating boundary/barrier
+ 	change := ui.ChangeEvent{ID: r.node.ID, Kind: r.node.Kind}
++	callback := r.node.Change
++	if change.Kind == ui.Slider {
++		if origin := r.control.sliderGesture.Load(); origin != nil {
++			callback = origin.callback
++		}
++	}
+ 	switch w := r.widget.(type) {
+ 	case *core.Switch:
+ 		change.Checked = w.IsChecked()
+@@ -346,7 +365,12 @@ func dispatchControl(r *record, e events.Event) {
+ 		if change.Kind == ui.TextField && r.control.fieldChanges.Load() != fieldEpoch {
+ 			return // explicit settlement already published this field's final value
+ 		}
+-		if r.control.disabled || r.node.Change == nil {
++		// Discrete controls keep their established latest-descriptor delivery.
++		// A slider change carries the callback of its originating interaction.
++		if change.Kind != ui.Slider {
++			callback = r.node.Change
++		}
++		if r.control.disabled || r.node.Change == nil || callback == nil {
+ 			requestControlRestore(r)
+ 			return
+ 		}
+@@ -379,7 +403,7 @@ func dispatchControl(r *record, e events.Event) {
+ 		if change.Kind == ui.TextField {
+ 			r.control.fieldDelivered = change.Text
+ 		}
+-		r.node.Change(change)
++		callback(change)
+ 		r.control.committed = true
+ 		r.control.a.Invalidate(r.control.window)
+ 	})
+@@ -838,6 +862,7 @@ func disposeControl(r *record) {
+ 	if r.control != nil {
+ 		disposePlacement(r)
+ 		r.control.retired = true
++		r.control.sliderGesture.Store(nil)
+ 		if r.control.tabs != nil {
+ 			for _, binding := range r.control.tabs.bindings {
+ 				binding.closeEpoch.Store(nil)

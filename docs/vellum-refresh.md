@@ -1,5 +1,13 @@
 # Current Vellum SDK integration
 
+ELab now pins private source `88dc650884f97629a6370e8408fd9e9242f1a7e0`, a narrow slider-context repair on `bc6b456`. A held potentiometer drag could borrow a newer callback after repaint and overwrite an intervening agent edit or replacement document. The repair retains the callback from gesture start through release and queued delivery, allowing ELab's existing context guards to refuse the old action. Discrete controls retain their established delivery semantics; no public API, model or project format changes.
+
+The archive has 7,449 hashed files, 18,621,213 bytes, SHA-256 `c5be13c5e74e555ebd3e13f82626d6c182bba34d08f034259538aea053a1c13a`. Its manifest SHA-256 is `cc39252c78acf160eb95b6b1a603e1b22aa4c716b0b2d0c1ab2a58c42b202d8c`. Exactly two source members differ: `drivers/cogent/controls.go` and its new `control_context_test.go`. Prepared upstream/typesetting and all five bootstrap sources are byte-identical. The lock and four native replacements point to `build/.vellum-sdk-88dc650`; previous archives/caches and the adjacent Vellum project are preserved.
+
+Framework driver race tests/vet and focused offscreen control/lifetime/accessibility tests/vet pass. The consumer's real retained-widget reproduction fails against the previous pin and passes against the repair. [Evidence and consumer qualification](validation/held-slider-context/README.md) distinguish source validation from a replacement packaged app. Review /143 remains immutable and contains the defect until a separately qualified replacement is delivered.
+
+## Previous pinned integration: bc6b456
+
 The first-version UI pass reproduced stale native accessibility bounds after child-only scrolling. ELab now pins private source `bc6b456f0c71b0327d0c02629b109eabbbc8994c`, based on `47b7153`, with a narrow scroll-publication repair. The adjacent Vellum checkout is unchanged. This is the release-freeze exception for a demonstrated defect, not a broad framework upgrade.
 
 The archive has 7,448 hashed files, 18,617,992 bytes, SHA-256 `f202a535b4cd931767e589e981c6e9265309ec262b48f28e9d5a57bbdf903fef`. Its manifest SHA-256 is `b3cc6914bb0557a297a2b34b75c2a076883c78ac65725348b83508e14c50b9a2`. Exactly four SDK source members differ from the previous archive: accessibility host publication, Scroll mounting, the new partial-scroll host and its regression test. All prepared upstream/typesetting files and verifier/bootstrap sources are unchanged. The lock and four native replacements point to `build/.vellum-sdk-bc6b456`; the previous archive/cache remain intact.

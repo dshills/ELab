@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-18",
+  "status": "source repair verified; immutable review /143 still requires a qualified replacement",
+  "source_base": "8cdd010ea3f0766ca87dea827c67052f575a216a",
+  "defect": {
+    "held_agent_edit": "20% changed to 94.0625% on old drag release after repaint",
+    "held_document_replacement": "same IDs in freshly loaded saved document overwritten by old drag"
+  },
+  "repair": {
+    "sdk_commit": "88dc650884f97629a6370e8408fd9e9242f1a7e0",
+    "archive": "third_party/vellum/vellum-88dc650.tar.gz",
+    "sha256": "c5be13c5e74e555ebd3e13f82626d6c182bba34d08f034259538aea053a1c13a",
+    "files": 7449,
+    "source_members_changed": 2,
+    "prepared_dependencies_and_bootstrap_unchanged": true,
+    "public_commands_models_and_project_format_unchanged": true
+  },
+  "regressions": {
+    "previous_pin": "uninterrupted and unchanged-repaint pass; agent-repaint and document-replacement fail",
+    "repaired_pin": "all four pass under race with real offscreen retained widgets/event routing and production ELab descriptors/guards",
+    "normal_drag": "one command revision and user undo entry",
+    "invalidated_drag": "exact domain snapshot unchanged"
+  },
+  "quality": {
+    "framework_driver": "race ./... and vet ./... exit 0",
+    "framework_offscreen": "targeted control/manual/native-field race tests and tagged vet exit 0",
+    "consumer": "scripts/check.sh exit 0; audit freshness, lint/imports/Staticcheck, 43 Python tests, root/native race and vet, held-slider offscreen race regression and tagged vet",
+    "native_race_s": 142.41,
+    "consumer_offscreen_race_s": 3.902
+  },
+  "scope": [
+    "Offscreen adapter uses actual retained widgets and pointer routing; no physical OS interleaving claim",
+    "Running/focus-loss/IME/screen-reader/visible p95 and exhaustive mounted conformance remain open",
+    "Owner four-task walkthrough not tried yet; no acceptance inferred",
+    "Existing review packages and canonical bundle unchanged; not promoted"
+  ],
+  "evidence_sha256": {
+    "README.md": "168809f6a2bc832cce8a85accca2ac44b4b3046369be19aab50638f8c4e4de3a",
+    "before.txt": "6a56a9b4fd9d538cb96ae3bbaff8d5d911393cbb911379497c2d089967e2c726",
+    "full-check.txt": "63ad59943d933353d4244953c46aa4876e8573e8cfa958b12ada9c74b36b2643",
+    "isolated-after.txt": "91252245ec2140d24ae25e85b715fb01b6fcbe498fb000ee3e1affdf775d7db4",
+    "prepare.txt": "e73c644413e0d8ba3893048601ea3268893bd6223c22f68c0df941fb269a767f",
+    "preserved-bundles.json": "53eeeea0d2c675147e1c66103d10574a6e1d69e02f9e5f985bd614dff822d7a6",
+    "prior-sdk.lock.json": "6fa0e1fc176dae316727bd971b4fd9aaee3db0500d35e1ed89194e5d60159b68",
+    "sdk-diff.json": "f9f4e58ff3afbaf210a1fbe3e1e5abb51e45eaa3d55b57fad5ba285fa2750d6f",
+    "sdk-driver-quality.txt": "6670a81c91ffc64d8488c6bc7cb1d20d7e1e0b8777bd13ca00cffceb1b1f593a",
+    "sdk-offscreen-quality.txt": "23d8a54c006aefff8f1b77b8d98a0dc92facd7b48b7510a3950821a2a010ceb2",
+    "vellum.commit.txt": "5c8a20095ab0382e358ba34b708008f9e6b504093d22582e9c50dbee9c60309f",
+    "vellum.patch": "4e4b1e571a52013a16f8e96860222516cedf7f92a282d1f96154e8e92fcb1ef5"
+  },
+  "review": [
+    "Current descriptor disabled/nil checks, numeric clamping, owner posting and invalidation are retained",
+    "Captured slider callback cannot borrow a refreshed revision/document context",
+    "SlideStop final listener runs after native Change; gesture binding also clears on disposal",
+    "Framework tests preserve established discrete-control latest-descriptor semantics",
+    "No exported API, public command, model, project format or prepared dependency changes"
+  ]
+}
