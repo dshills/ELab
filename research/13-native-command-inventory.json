@@ -59,7 +59,7 @@
     "desktop/shutdown.go": "39e6d600f9edf67e2fe6a09e6b2b5ada051e67c1cf3fac2e3efe3ec4fe631a26",
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
     "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
-    "desktop/value_apply.go": "2b67bd25e325a0edb829669ec8d1539ed217b9a9cfbb897c2834c4f16e724ee9",
+    "desktop/value_apply.go": "54dd7abe7e5d81c755a760524e5429e26472f5217fbb836c1bccdd12235fbf75",
     "desktop/verification.go": "550f32b3d90b99269bce6777233b68e9329b2ae704b5b2fca60a1a368fbab406",
     "desktop/view.go": "479d5cc45ba71a3d5fe6b59f430b5d381b4f8f69a6d71ae0f5759a9c59a44dd8",
     "desktop/viewport.go": "8452950aa3113be66c59ed10b8f26ef21e0a5be3d1b4aee5ec57fb8dbd966590",
@@ -3425,7 +3425,7 @@
     },
     {
       "file": "desktop/value_apply.go",
-      "line": 34,
+      "line": 35,
       "function": "*screen.changeValueDraft",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
@@ -3436,7 +3436,7 @@
     },
     {
       "file": "desktop/value_apply.go",
-      "line": 69,
+      "line": 80,
       "function": "*screen.valueApplyAction",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\tif s.pendingValueApply != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.valueDraftAccepted; accepted != nil \u0026\u0026 accepted.from.generation == context.generation \u0026\u0026\n\t\taccepted.from.revision \u003c= context.revision \u0026\u0026 context.revision \u003c= accepted.to.revision \u0026\u0026\n\t\taccepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) \u0026\u0026\n\t\taccepted.id == id \u0026\u0026 current.Selected == id \u0026\u0026 current.Drawing.Value == accepted.text {\n\t\tcontext = accepted.to\n\t\tparams.Value = accepted.text\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\n\t\ts.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := \u0026valueApply{context: context, params: params}\n\ts.pendingValueApply = pending\n\tdone := func(err error) {\n\t\tif s.pendingValueApply != pending {\n\t\t\treturn\n\t\t}\n\t\ts.pendingValueApply = nil\n\t\tif err != nil {\n\t\t\ts.errorMessage = fmt.Sprintf(\"Could not finish value entry: %v\", err)\n\t\t} else if !pending.failed {\n\t\t\ts.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)\n\t\t}\n\t\ts.app.Invalidate(\"main\")\n\t}\n\tif s.settleField == nil {\n\n\t\tdone(nil)\n\t} else if err := s.settleField(\"value-entry\", done); err != nil {\n\t\tdone(err)\n\t}\n}",
@@ -3444,7 +3444,7 @@
     },
     {
       "file": "desktop/value_apply.go",
-      "line": 83,
+      "line": 94,
       "function": "*screen.valueApplyAction",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)",
@@ -3455,7 +3455,7 @@
     },
     {
       "file": "desktop/value_apply.go",
-      "line": 96,
+      "line": 107,
       "function": "*screen.valueApplyAction",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)",

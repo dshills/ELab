@@ -26,6 +26,7 @@ type valueDraftContinuation struct {
 
 func (s *screen) changeValueDraft(e ui.ChangeEvent) {
 	pending := s.pendingValueApply
+	help, message, helpRevision := s.requestHelp, s.errorMessage, s.requestHelpRevision
 	var origin *actionContext
 	if s.fieldContext != nil {
 		copy := *s.fieldContext
@@ -37,6 +38,16 @@ func (s *screen) changeValueDraft(e ui.ChangeEvent) {
 	}
 	if result.Error == nil && origin != nil {
 		accepted := result.Result.(workbench.Snapshot)
+		// A corrected draft has not changed the component yet. Keep its value
+		// refusal visible until Apply succeeds, including during asynchronous
+		// settlement: hiding it here resizes the canvas and can invalidate Apply
+		// with an intervening viewport report. Only this field's own accepted
+		// response may continue the refusal; unrelated work still invalidates it.
+		if help != nil && help.Code == "invalid-params" && helpRevision == origin.revision &&
+			len(help.Objects) == 1 && help.Objects[0] == accepted.Selected {
+			s.requestHelp, s.errorMessage = help, message
+			s.requestHelpRevision = accepted.CommandRevision
+		}
 		from := *origin
 		if previous := s.valueDraftAccepted; previous != nil && previous.to == from && previous.id == accepted.Selected {
 			from = previous.from

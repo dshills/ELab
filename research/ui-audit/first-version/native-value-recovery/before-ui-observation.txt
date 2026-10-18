@@ -1,0 +1,8 @@
+Automated native CUA observation, 2026-10-18. No exported screenshot file.
+Original owned host PID 14934; exact /153 executable in separately identified harness.
+1. R1 selected; live DC; field 1 kΩ; LED current 2.917 mA.
+2. Typed 0; field showed 0. One Apply click. UI showed: That request could not be applied. Range 10–100000 Ω remained visible; circuit/current/history unchanged.
+3. Inspector AX controls disappeared from the CUA projection although screenshots still showed them. Used screenshot-grounded coordinates.
+4. First click/Cmd+A/type produced 02.2k, not the intended correction. Observed this before applying. A further Cmd+A visibly selected all; typing replaced it with exactly 2.2k. No Apply occurred for 02.2k.
+5. One Apply for the verified 2.2k draft showed: expected command revision 8; current command revision is 9. R1 and current remained 1 kΩ / 2.917 mA. No second Apply retry.
+6. Same-process observer recorded unchanged resistance and only invalid-draft agent parity. Its 300-second lease ended normally; app.close completed and original host exited 0. Failed recovery is retained as failed, not certified.

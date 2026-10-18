@@ -361,3 +361,5 @@ The [native history check](native-history-153/README.md) follows Backspace, Cmd+
 ### Native live value entry / one Apply / Undo · /153
 
 The [native value check](native-value-153/README.md) types `2.2k` into the real component field, proves the private draft leaves accepted physics unchanged, then clicks Apply once. Fresh current changes from 2.9167965774405296 mA to 1.344737452917332 mA; one circuit Undo after explicit sheet focus restores the original value/current. Both stages match the packaged agent in full semantic fields. The final graph is saved and the original host closes normally. This adds one ASCII entry path, with no full typing/IME, invalid-value, interleaved/blur, reader, visible-p95 or owner acceptance claim. Product/SDK/release bytes and versions remain unchanged.
+
+October 18: [invalid-value recovery reproduction and repair](native-value-recovery/README.md) records a new /153 native correction blocker, the bounded source fix and a passing native development harness/agent comparison. Clean replacement packaging remains pending; existing packages and owner walkthrough status are preserved.

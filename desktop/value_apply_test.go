@@ -202,3 +202,44 @@ func TestValueApplyOwnDraftContinuationRefusesInterveningEdits(t *testing.T) {
 		})
 	}
 }
+
+// Native text settlement can redraw before the Apply callback completes. Hiding
+// the refusal on a draft commit resized the canvas and invalidated that callback.
+func TestValueCorrectionKeepsRefusalUntilApplyCompletes(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	uiAction(t, s, "example.reset", nil)
+	uiAction(t, s, "selection", &ui.ChangeEvent{SelectedID: "R1"})
+	uiAction(t, s, "value-entry", &ui.ChangeEvent{Text: "0"})
+	s.app.Do(func() {
+		apply, _ := findNode(s.view(), "apply-value")
+		apply.Activate()
+	})
+	if s.requestHelp == nil || s.errorMessage == "" {
+		t.Fatal("expected a value refusal")
+	}
+	help, message := s.requestHelp, s.errorMessage
+	before := s.service.Snapshot()
+	var finish func(error)
+	s.settleField = func(_ string, done func(error)) error { finish = done; return nil }
+	s.app.Do(func() {
+		root := s.view()
+		apply, _ := findNode(root, "apply-value")
+		field, _ := findNode(root, "value-entry")
+		apply.Activate()
+		field.Change(ui.ChangeEvent{Text: "2.2k"})
+		root = s.view()
+		if _, ok := findNode(root, "messages"); !ok || s.requestHelp != help || s.errorMessage != message {
+			t.Fatal("draft correction hid its refusal before Apply finished")
+		}
+		if s.requestHelpRevision != s.service.Snapshot().CommandRevision {
+			t.Fatal("refusal did not follow its own accepted draft")
+		}
+		finish(nil)
+		s.view()
+	})
+	after := s.service.Snapshot()
+	if after.Circuit.Resistance != 2200 || after.CommandRevision != before.CommandRevision+2 || s.pendingValueApply != nil || s.requestHelp != nil || s.errorMessage != "" {
+		t.Fatal("single correction Apply failed or retained the refusal", s.errorMessage)
+	}
+}

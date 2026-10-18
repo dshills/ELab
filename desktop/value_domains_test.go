@@ -50,7 +50,14 @@ func TestNativeValueUnitsBoundsAndRefusalShareCommands(t *testing.T) {
 	if s.errorMessage == "" || !reflect.DeepEqual(before, s.service.Snapshot()) {
 		t.Fatal("native underflow was accepted or changed state")
 	}
-	uiAction(t, s, "value-entry", &ui.ChangeEvent{Text: "750 mV"})
+	refusal := s.errorMessage
+	s.app.Do(func() {
+		field, _ := findNode(s.view(), "value-entry")
+		field.Change(ui.ChangeEvent{Text: "750 mV"})
+	})
+	if s.errorMessage != refusal || s.service.Snapshot().Drawing.Value != "750 mV" {
+		t.Fatal("correction draft must preserve the refusal until Apply succeeds")
+	}
 	uiAction(t, s, "apply-value", nil)
 	component, _ = (workbench.Graph{Components: s.service.Snapshot().Components}).Component("V1")
 	if component.Value != .75 {
