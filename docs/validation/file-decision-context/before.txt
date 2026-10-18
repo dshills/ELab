@@ -1,0 +1,8 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedFileDecisionHeldDiscardPreservesAgentEdit
+    file_decision_offscreen_test.go:57: held Discard lost agent work: components=4→0 revision=3→4 pending="" error=
+--- FAIL: TestMountedFileDecisionHeldDiscardPreservesAgentEdit (0.12s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	0.721s
+FAIL

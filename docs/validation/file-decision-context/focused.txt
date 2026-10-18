@@ -1,0 +1,62 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedFileDecisionHeldDiscardPreservesAgentEdit
+--- PASS: TestMountedFileDecisionHeldDiscardPreservesAgentEdit (0.12s)
+=== RUN   TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit
+=== RUN   TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit/save-continue
+=== RUN   TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit/discard-continue
+=== RUN   TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit/cancel-file-action
+--- PASS: TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit (0.32s)
+    --- PASS: TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit/save-continue (0.11s)
+    --- PASS: TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit/discard-continue (0.11s)
+    --- PASS: TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit/cancel-file-action (0.11s)
+=== RUN   TestMountedFileDecisionHeldDiscardCannotUseReopenedPrompt
+--- PASS: TestMountedFileDecisionHeldDiscardCannotUseReopenedPrompt (0.14s)
+=== RUN   TestMountedFileDecisionFreshSaveKeepsAgentWorkBeforeContinuing
+--- PASS: TestMountedFileDecisionFreshSaveKeepsAgentWorkBeforeContinuing (0.12s)
+=== RUN   TestFileDecisionOldCompletionCannotUseReopenedIntent
+=== RUN   TestFileDecisionOldCompletionCannotUseReopenedIntent/save-continue
+=== RUN   TestFileDecisionOldCompletionCannotUseReopenedIntent/discard-continue
+=== RUN   TestFileDecisionOldCompletionCannotUseReopenedIntent/cancel-file-action
+=== RUN   TestFileDecisionOldCompletionCannotUseReopenedIntent/dismiss
+--- PASS: TestFileDecisionOldCompletionCannotUseReopenedIntent (0.35s)
+    --- PASS: TestFileDecisionOldCompletionCannotUseReopenedIntent/save-continue (0.09s)
+    --- PASS: TestFileDecisionOldCompletionCannotUseReopenedIntent/discard-continue (0.09s)
+    --- PASS: TestFileDecisionOldCompletionCannotUseReopenedIntent/cancel-file-action (0.09s)
+    --- PASS: TestFileDecisionOldCompletionCannotUseReopenedIntent/dismiss (0.09s)
+=== RUN   TestFileDecisionGuardReachesSharedCommandAdmission
+=== RUN   TestFileDecisionGuardReachesSharedCommandAdmission/clear
+=== RUN   TestFileDecisionGuardReachesSharedCommandAdmission/load
+--- PASS: TestFileDecisionGuardReachesSharedCommandAdmission (0.07s)
+    --- PASS: TestFileDecisionGuardReachesSharedCommandAdmission/clear (0.04s)
+    --- PASS: TestFileDecisionGuardReachesSharedCommandAdmission/load (0.03s)
+=== RUN   TestFileDecisionSaveRefusesReplacedDocumentBeforePicker
+--- PASS: TestFileDecisionSaveRefusesReplacedDocumentBeforePicker (0.05s)
+=== RUN   TestFileDecisionSavePickerKeepsCapturedAdmissionGuard
+--- PASS: TestFileDecisionSavePickerKeepsCapturedAdmissionGuard (0.05s)
+=== RUN   TestFileDecisionBusyPickerPreservesIntentAndReopensAfterCancel
+--- PASS: TestFileDecisionBusyPickerPreservesIntentAndReopensAfterCancel (0.07s)
+=== RUN   TestPickerRefusesAnInterveningProjectReplacement
+=== RUN   TestPickerRefusesAnInterveningProjectReplacement/file.save-as
+=== RUN   TestPickerRefusesAnInterveningProjectReplacement/file.open
+=== RUN   TestPickerRefusesAnInterveningProjectReplacement/export-svg
+--- PASS: TestPickerRefusesAnInterveningProjectReplacement (0.12s)
+    --- PASS: TestPickerRefusesAnInterveningProjectReplacement/file.save-as (0.04s)
+    --- PASS: TestPickerRefusesAnInterveningProjectReplacement/file.open (0.05s)
+    --- PASS: TestPickerRefusesAnInterveningProjectReplacement/export-svg (0.04s)
+=== RUN   TestPendingDiscardRefusesAnInterveningReplacement
+--- PASS: TestPendingDiscardRefusesAnInterveningReplacement (0.04s)
+=== RUN   TestNativeCloseCancelDiscardAndCleanAdmission
+=== RUN   TestNativeCloseCancelDiscardAndCleanAdmission/cancel-file-action
+=== RUN   TestNativeCloseCancelDiscardAndCleanAdmission/discard-continue
+--- PASS: TestNativeCloseCancelDiscardAndCleanAdmission (0.05s)
+    --- PASS: TestNativeCloseCancelDiscardAndCleanAdmission/cancel-file-action (0.03s)
+    --- PASS: TestNativeCloseCancelDiscardAndCleanAdmission/discard-continue (0.03s)
+=== RUN   TestNativeClosePreservesExistingDecisionAndBusyPicker
+--- PASS: TestNativeClosePreservesExistingDecisionAndBusyPicker (0.07s)
+=== RUN   TestNativeSaveBeforeCloseAndStaleDiscard
+--- PASS: TestNativeSaveBeforeCloseAndStaleDiscard (0.06s)
+=== RUN   TestNativeSaveBeforeCloseRefusesAnAgentReplacementDuringPicker
+--- PASS: TestNativeSaveBeforeCloseRefusesAnAgentReplacementDuringPicker (0.03s)
+PASS
+ok  	github.com/dshills/elab/desktop	3.291s

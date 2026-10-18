@@ -206,6 +206,8 @@ type screen struct {
 	fileBusy                            bool
 	fileMessage, pendingCommand         string
 	pendingParams                       json.RawMessage
+	pendingFileSerial                   uint64
+	fileDecisionContext                 *actionContext
 	chooseFile                          func(context.Context, app.FileOptions) (string, error)
 	serial                              uint64
 	errorMessage                        string
@@ -238,6 +240,11 @@ func (s *screen) invokeAtCommandRevision(id string, p any, rev uint64, generatio
 	if s.menuCommandRevision != nil {
 		rev = *s.menuCommandRevision
 	}
+	if s.fileDecisionContext != nil {
+		rev = s.fileDecisionContext.revision
+		generation = []uint64{s.fileDecisionContext.generation}
+	}
+
 	s.fileMessage = ""
 	s.serial++
 	raw, _ := json.Marshal(p)

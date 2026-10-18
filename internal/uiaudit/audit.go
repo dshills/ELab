@@ -194,6 +194,10 @@ func Audit(directory string) (Report, error) {
 						if len(n.Args) > 0 {
 							add(function, "domain-ingress", n, literalRoutes(n.Args[0]), routeStatus(n.Args[0]))
 						}
+					case "withFileDecision":
+						if len(n.Args) == 3 {
+							add(function, "callback-factory", n, nil, "requires-binding-review")
+						}
 					case "timeField":
 						add(function, "callback-factory", n, nil, "requires-binding-review")
 					case "OnFirst", "On", "Invoke", "Dispatch", "Register":

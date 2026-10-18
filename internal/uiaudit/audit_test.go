@@ -114,3 +114,18 @@ func view(s *screen,route string) {
 		t.Fatal("placement relay lost literal or dynamic route", r.Sites)
 	}
 }
+
+func TestInventoryTracksFileDecisionCallbackFactory(t *testing.T) {
+	dir := t.TempDir()
+	source := `package main
+func view(s *screen) {
+ s.withFileDecision(decision,true,func(){ s.invoke("project.clear",params) })
+}`
+	if err := os.WriteFile(filepath.Join(dir, "view.go"), []byte(source), 0600); err != nil {
+		t.Fatal(err)
+	}
+	report, err := Audit(dir)
+	if err != nil || len(report.Issues) != 0 || len(report.Sites) != 2 || report.Sites[0].Kind != "callback-factory" || report.Sites[0].Status != "requires-binding-review" || len(report.Sites[1].Commands) != 1 || report.Sites[1].Commands[0] != "project.clear" {
+		t.Fatal("decision callback factory or nested ingress lost", report.Sites, report.Issues, err)
+	}
+}

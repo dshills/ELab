@@ -1,0 +1,153 @@
+{
+  "sources": 65,
+  "sites": 398,
+  "binding_review_sites": 155,
+  "public_commands": 162,
+  "source_routes": 132,
+  "source_hashes_changed": {
+    "desktop/file_decision.go": {
+      "before": null,
+      "after": "0eefa5e911d9914966b47ca3fa439ec64c73f5da2868657a79d5ed899de62a67"
+    },
+    "desktop/files.go": {
+      "before": "09ef46c31bf583a57f3c8f5c4ed1fcaa1e8dcfd5745cdfa2a7a87dedabecdb67",
+      "after": "4178087b68c2e204598c18243ec26b067c1ad770f8293013cafe2f4862ec2058"
+    },
+    "desktop/main.go": {
+      "before": "04741f8bd6ccb96be0ac6608b77d56a52b999da91a50959a4bdef6921eaf3896",
+      "after": "f80298170f83df701670943b96867b28b6d4cb7b7d2e72e2be9b29268d271e13"
+    }
+  },
+  "removed_sites": [
+    {
+      "file": "desktop/files.go",
+      "line": 253,
+      "function": "*screen.continuePending",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(id, false, raw, nil)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 284,
+      "function": "*screen.filePrompt",
+      "kind": "node-Dismiss",
+      "expression": "Dismiss: func() {\n\tif s.fileBusy {\n\t\treturn\n\t}\n\ts.pendingCommand = \"\"\n\ts.pendingParams = nil\n\ts.app.Invalidate(\"main\")\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 296,
+      "function": "*screen.filePrompt",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\ts.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, func() { s.continuePending(false) })\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 297,
+      "function": "*screen.filePrompt",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, func() { s.continuePending(false) })",
+      "public_commands": [
+        "project.save"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 299,
+      "function": "*screen.filePrompt",
+      "kind": "node-Activate",
+      "expression": "Activate: func() { s.continuePending(true) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 300,
+      "function": "*screen.filePrompt",
+      "kind": "node-Activate",
+      "expression": "Activate: prompt.Dismiss",
+      "status": "requires-binding-review"
+    }
+  ],
+  "added_sites": [
+    {
+      "file": "desktop/files.go",
+      "line": 268,
+      "function": "*screen.continuePending",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(id, false, raw, clear)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 301,
+      "function": "*screen.filePrompt",
+      "kind": "callback-factory",
+      "expression": "s.withFileDecision(decision, false, func() {\n\ts.setPendingFileAction(\"\", nil)\n\ts.errorMessage = \"\"\n\ts.requestHelp = nil\n\ts.app.Invalidate(\"main\")\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 309,
+      "function": "*screen.filePrompt",
+      "kind": "node-Dismiss",
+      "expression": "Dismiss: dismiss",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 314,
+      "function": "*screen.filePrompt",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\ts.withFileDecision(decision, true, func() {\n\t\ts.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{ExpectedGeneration: &decision.generation}, func() {\n\t\t\tif s.pendingFileSerial == decision.serial {\n\t\t\t\ts.continuePending(false)\n\t\t\t}\n\t\t})\n\t})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 315,
+      "function": "*screen.filePrompt",
+      "kind": "callback-factory",
+      "expression": "s.withFileDecision(decision, true, func() {\n\ts.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{ExpectedGeneration: &decision.generation}, func() {\n\t\tif s.pendingFileSerial == decision.serial {\n\t\t\ts.continuePending(false)\n\t\t}\n\t})\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 316,
+      "function": "*screen.filePrompt",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{ExpectedGeneration: &decision.generation}, func() {\n\tif s.pendingFileSerial == decision.serial {\n\t\ts.continuePending(false)\n\t}\n})",
+      "public_commands": [
+        "project.save"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 323,
+      "function": "*screen.filePrompt",
+      "kind": "node-Activate",
+      "expression": "Activate: func() { s.withFileDecision(decision, true, func() { s.continuePending(true) }) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 323,
+      "function": "*screen.filePrompt",
+      "kind": "callback-factory",
+      "expression": "s.withFileDecision(decision, true, func() { s.continuePending(true) })",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 324,
+      "function": "*screen.filePrompt",
+      "kind": "node-Activate",
+      "expression": "Activate: dismiss",
+      "status": "requires-binding-review"
+    }
+  ],
+  "all_other_sites_equal_except_lines": true,
+  "public_alias_and_route_sets_unchanged": true
+}

@@ -1,0 +1,24 @@
+{
+  "production_files": [
+    "desktop/main.go",
+    "desktop/files.go",
+    "desktop/file_decision.go"
+  ],
+  "findings": [],
+  "review": [
+    "A rendered choice captures command/document revision, original pending document generation and a private pending-intent serial",
+    "All pending-intent assignment/clear sites use one helper that advances the serial and copies parameters",
+    "Save/Discard/Cancel/Dismiss reject stale rendered contexts; a replacement document cannot be saved/discarded through the old intent even after repaint",
+    "Cancel may dismiss an obsolete document intent when freshly rendered; it clears obsolete error/help state",
+    "Owner-scoped decision guard survives through invokeAtCommandRevision and is copied into asynchronous Save/Open requests; no later revision adoption",
+    "Guard scope is restored on return; synchronous shared refusal preserves pending intent",
+    "Async load retains its intent until success; progress/cancel remains reachable while the decision modal is hidden during file work",
+    "Save completion and intent cleanup require the originating serial, preserving newer UI decisions",
+    "Existing generation pins, save association/dirty checks and load supersession remain; ordinary standalone picker behavior is unchanged",
+    "SDK, public IDs/schema, models and project format are unchanged; auditor records the three guarded callback factories"
+  ],
+  "limits": [
+    "Actual retained-widget routing and semantic worker barriers, not physical OS menu/dialog/IME or VoiceOver acceptance",
+    "Clean replacement package and owner walkthrough remain separate"
+  ]
+}

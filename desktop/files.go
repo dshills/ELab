@@ -29,7 +29,7 @@ func nativeFileOptions(options app.FileOptions, platform string) app.FileOptions
 	return options
 }
 
-func (s *screen) requestReplace(id string, p any) {
+func (s *screen) requestReplace(id string, p any) workbench.Response {
 	raw, _ := json.Marshal(p)
 	var fields map[string]json.RawMessage
 	_ = json.Unmarshal(raw, &fields)
@@ -47,11 +47,11 @@ func (s *screen) requestReplace(id string, p any) {
 	}
 	result := s.invoke(dispatchID, json.RawMessage(raw))
 	if result.Error != nil && result.Error.Code == "unsaved-changes" {
-		s.pendingCommand = id
-		s.pendingParams = append(json.RawMessage{}, raw...)
+		s.setPendingFileAction(id, raw)
 		s.errorMessage = ""
 	}
 	s.app.Invalidate("main")
+	return result
 }
 func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 	if s.service.Snapshot().Closed {
@@ -71,6 +71,12 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 	s.serial++
 	serial := s.serial
 	state := s.service.Snapshot()
+	pendingSerial := s.pendingFileSerial
+	var decisionContext *actionContext
+	if s.fileDecisionContext != nil {
+		copy := *s.fileDecisionContext
+		decisionContext = &copy
+	}
 	raw, _ := json.Marshal(p)
 	var fields map[string]json.RawMessage
 	_ = json.Unmarshal(raw, &fields)
@@ -172,6 +178,10 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 		if err == nil {
 			revision := s.service.Snapshot().CommandRevision
 			request := workbench.Request{Version: 1, ID: fmt.Sprintf("ui-%d", serial), Key: fmt.Sprintf("ui-%d", serial), Command: id, Params: raw, ExpectedCommandRevision: &revision}
+			if decisionContext != nil {
+				request.ExpectedCommandRevision = &decisionContext.revision
+				request.ExpectedDocumentGeneration = &decisionContext.generation
+			}
 			response = s.service.Dispatch(ctx, request, "user")
 		}
 		_ = s.app.PostWindow(window, func() {
@@ -187,8 +197,7 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 				if (id == "project.load" || id == "project.save" || strings.HasPrefix(id, "export.") || (id == "verification.export" || id == "sweep.export") || id == "verification.import" || id == "sweep.import") && (response.Error.Code == "canceled" || response.Error.Code == "superseded") {
 					s.fileMessage = "File operation " + response.Error.Code + "; current project preserved"
 				} else if response.Error.Code == "unsaved-changes" {
-					s.pendingCommand = id
-					s.pendingParams = append(json.RawMessage{}, raw...)
+					s.setPendingFileAction(id, raw)
 				} else {
 					s.errorMessage = response.Error.Message
 				}
@@ -217,9 +226,8 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 						saveAssociated = state.ProjectWork.Associated != nil && *state.ProjectWork.Associated && sameGeneration
 						continueAction = saveAssociated && !current.Document.Dirty
 						state.Document = current.Document
-						if !sameGeneration && after != nil {
-							s.pendingCommand = ""
-							s.pendingParams = nil
+						if !sameGeneration && after != nil && s.pendingFileSerial == pendingSerial {
+							s.setPendingFileAction("", nil)
 						}
 					}
 					s.fileMessage = "Saved " + filepath.Base(path)
@@ -241,18 +249,25 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 }
 func (s *screen) continuePending(discard bool) {
 	id, raw := s.pendingCommand, append(json.RawMessage{}, s.pendingParams...)
-	s.pendingCommand = ""
-	s.pendingParams = nil
+	serial := s.pendingFileSerial
+	if id == "" {
+		return
+	}
 	if discard {
 		var p map[string]any
 		_ = json.Unmarshal(raw, &p)
 		p["discard_changes"] = true
 		raw, _ = json.Marshal(p)
 	}
+	clear := func() {
+		if s.pendingFileSerial == serial {
+			s.setPendingFileAction("", nil)
+		}
+	}
 	if id == "project.load" {
-		s.beginFile(id, false, raw, nil)
-	} else {
-		s.requestReplace(id, raw)
+		s.beginFile(id, false, raw, clear)
+	} else if result := s.requestReplace(id, raw); result.Error == nil {
+		clear()
 	}
 }
 func (s *screen) registerFileCommands() {
@@ -281,22 +296,31 @@ func (s *screen) registerFileCommands() {
 	}
 }
 func (s *screen) filePrompt() ui.Node {
-	prompt := ui.Node{ID: "unsaved-prompt", Kind: ui.Dialog, Open: s.pendingCommand != "", Text: "Unsaved project", Dismiss: func() {
-		if s.fileBusy {
-			return
-		}
-		s.pendingCommand = ""
-		s.pendingParams = nil
-		s.app.Invalidate("main")
-	}, Children: []ui.Node{heading("unsaved-title", "Keep your changes?"), label("unsaved-description", "This project has unsaved schematic or recorded-result changes. Save it before continuing, or discard the changes.")}}
+	decision := s.captureFileDecision()
+	dismiss := func() {
+		s.withFileDecision(decision, false, func() {
+			s.setPendingFileAction("", nil)
+			s.errorMessage = ""
+			s.requestHelp = nil
+			s.app.Invalidate("main")
+		})
+	}
+	// Keep the intent while work runs, but expose its progress/cancel controls.
+	prompt := ui.Node{ID: "unsaved-prompt", Kind: ui.Dialog, Open: s.pendingCommand != "" && !s.fileBusy, Text: "Unsaved project", Dismiss: dismiss, Children: []ui.Node{heading("unsaved-title", "Keep your changes?"), label("unsaved-description", "This project has unsaved schematic or recorded-result changes. Save it before continuing, or discard the changes.")}}
 	if s.errorMessage != "" {
 		prompt.Children = append(prompt.Children, label("unsaved-error", s.errorMessage))
 	}
 	prompt.Children = append(prompt.Children,
 		buttonStyle(ui.Node{ID: "save-continue", Kind: ui.Button, Text: "Save and continue", Disabled: s.fileBusy, Activate: func() {
-			s.beginFile("project.save", s.service.Snapshot().Document.Path == "", workbench.SaveParams{}, func() { s.continuePending(false) })
+			s.withFileDecision(decision, true, func() {
+				s.beginFile("project.save", s.service.Snapshot().Document.Path == "", workbench.SaveParams{ExpectedGeneration: &decision.generation}, func() {
+					if s.pendingFileSerial == decision.serial {
+						s.continuePending(false)
+					}
+				})
+			})
 		}}, true),
-		buttonStyle(ui.Node{ID: "discard-continue", Kind: ui.Button, Text: "Discard changes", Disabled: s.fileBusy, Activate: func() { s.continuePending(true) }}, false),
-		buttonStyle(ui.Node{ID: "cancel-file-action", Kind: ui.Button, Text: "Cancel", Disabled: s.fileBusy, Activate: prompt.Dismiss}, false))
+		buttonStyle(ui.Node{ID: "discard-continue", Kind: ui.Button, Text: "Discard changes", Disabled: s.fileBusy, Activate: func() { s.withFileDecision(decision, true, func() { s.continuePending(true) }) }}, false),
+		buttonStyle(ui.Node{ID: "cancel-file-action", Kind: ui.Button, Text: "Cancel", Disabled: s.fileBusy, Activate: dismiss}, false))
 	return prompt
 }

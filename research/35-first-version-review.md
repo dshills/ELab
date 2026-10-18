@@ -1,5 +1,7 @@
 # ELab first-version review · 0.132.0 /149
 
+**New work-loss blocker found:** a held Discard press can clear a later agent edit. The source repair passes focused retained-widget and file-admission checks; full quality passes; replacement qualification is pending. /149 remains immutable and affected.
+
 This is the updated owner-review alpha. Open [ELab.app](../build/ELab-0.132.0-149-review/ELab.app) in the [review folder](../build/ELab-0.132.0-149-review). It includes the matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required. The canonical app, nine earlier qualified review folders (0.123.0 /140 through 0.131.0 /148) and the original unqualified /147 candidate are preserved. Owner walkthrough remains pending (October 18: “Not tried yet”).
 
 Before opening the replacement, save your work and quit an earlier review app when ready. Version 0.132 fixes typing a coordinate and then clicking Place at X / Y once. Placement uses the snapped coordinates and label from its own accepted field responses. A new label finishes native text settlement before placing; focus returns to component search after success. Intervening agent edits, other fields, tool changes and document replacement still refuse safely. Earlier cursor, held-button, control ownership, one-click Apply, text, slider and clock repairs are included. Public IDs/commands, models and project format remain unchanged; Vellum stays pinned at `677548d`.
