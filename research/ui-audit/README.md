@@ -54,3 +54,8 @@ Version 0.41.0 / 56 extends the initial menu repair to every macOS selector. [Th
 [The scope ledger](scope-collapse/README.md) retains the rejected header-control candidate and shows corrected compact expansion, collapse and restoration at unchanged center/zoom. Version 0.40 already added independent persistent appearance profiles. These checkpoints improve the open items recorded above without claiming full keyboard/IME/screen-reader, distribution, performance or participant acceptance.
 
 October 18: [invalid-value recovery reproduction and repair](first-version/native-value-recovery/README.md) records a new /153 native correction blocker, the bounded source fix and a passing native development harness/agent comparison. Clean replacement packaging remains pending; existing packages and owner walkthrough status are preserved.
+
+
+### Invalid-value correction replacement · 0.137.0 /154
+
+Clean `2293ff8` packages the bounded repair with the matching agent and unchanged SDK/examples/notices. Exact copied native smoke and four public adapters pass under development-file/outbound-IP denial, followed by LED/RC/flasher parity, invalid-value/correction native-headless parity and live pulse/Pause/Resume/save/reopen through 3.436 s. [Receipt](first-version/value-recovery-review-checkpoint.json). The 151-entry manifest, fourteen earlier qualified reviews, original /147 candidate and canonical /120 are verified. Owner walkthrough remains Not tried yet. Prior source-native typing/Apply proof keeps its recorded development-binary scope; physical OS input, reader/IME, visible p95, broader environment and study gates remain open. Packaging is not promotion; no owner window or printer was operated.
