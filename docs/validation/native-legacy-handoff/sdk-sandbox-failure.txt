@@ -1,0 +1,59 @@
+# github.com/dshills/vellum/drivers/cogent [github.com/dshills/vellum/drivers/cogent.test]
+accessibility_darwin.m:605:43: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+accessibility_darwin.m:606:42: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+# github.com/dshills/vellum/drivers/cogent
+accessibility_darwin.m:605:43: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+accessibility_darwin.m:606:42: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+# github.com/dshills/vellum/drivers/cogent/cmd/platform-smoke.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+# github.com/dshills/vellum/drivers/cogent/cmd/gallery.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+# github.com/dshills/vellum/drivers/cogent/cmd/docking-smoke.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+# github.com/dshills/vellum/drivers/cogent/cmd/workbench.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+# github.com/dshills/vellum/drivers/cogent/internal/acceptance.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+# github.com/dshills/vellum/drivers/cogent/cmd/file-drop-smoke.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+# github.com/dshills/vellum/drivers/cogent.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+ok  	github.com/dshills/vellum/drivers/cogent	19.120s
+?   	github.com/dshills/vellum/drivers/cogent/cmd/accessibility-smoke	[no test files]
+ok  	github.com/dshills/vellum/drivers/cogent/cmd/breadcrumb-smoke	2.655s
+ok  	github.com/dshills/vellum/drivers/cogent/cmd/docking-smoke	3.125s
+ok  	github.com/dshills/vellum/drivers/cogent/cmd/file-drop-smoke	2.564s
+ok  	github.com/dshills/vellum/drivers/cogent/cmd/gallery	3.842s
+?   	github.com/dshills/vellum/drivers/cogent/cmd/history-smoke	[no test files]
+?   	github.com/dshills/vellum/drivers/cogent/cmd/mainqueue-smoke	[no test files]
+?   	github.com/dshills/vellum/drivers/cogent/cmd/multiwindow-smoke	[no test files]
+ok  	github.com/dshills/vellum/drivers/cogent/cmd/platform-smoke	1.875s
+?   	github.com/dshills/vellum/drivers/cogent/cmd/render-smoke	[no test files]
+ok  	github.com/dshills/vellum/drivers/cogent/cmd/tab-close-smoke	3.211s
+ok  	github.com/dshills/vellum/drivers/cogent/cmd/window-cycle-smoke	3.354s [no tests to run]
+?   	github.com/dshills/vellum/drivers/cogent/cmd/window-handoff-smoke	[no test files]
+?   	github.com/dshills/vellum/drivers/cogent/cmd/window-lifetime-smoke	[no test files]
+?   	github.com/dshills/vellum/drivers/cogent/cmd/window-size-smoke	[no test files]
+--- FAIL: TestAutomationCheckReadinessFailureStillClosesEndpoint (0.00s)
+    automation_native_test.go:54: listen unix /tmp/vellum-api-779668742/api.sock: bind: operation not permitted
+--- FAIL: TestAutomationCheckMissingReadinessAndWriteFailureCloseEndpoint (0.00s)
+    --- FAIL: TestAutomationCheckMissingReadinessAndWriteFailureCloseEndpoint/missing (0.00s)
+        automation_native_test.go:94: listen unix /tmp/vellum-api-2974649844/api.sock: bind: operation not permitted
+    --- FAIL: TestAutomationCheckMissingReadinessAndWriteFailureCloseEndpoint/empty (0.00s)
+        automation_native_test.go:94: listen unix /tmp/vellum-api-3737190865/api.sock: bind: operation not permitted
+    --- FAIL: TestAutomationCheckMissingReadinessAndWriteFailureCloseEndpoint/write (0.00s)
+        automation_native_test.go:94: listen unix /tmp/vellum-api-3745026801/api.sock: bind: operation not permitted
+--- FAIL: TestWorkbenchSemanticDomainAndVirtualQueries (0.00s)
+    automation_test.go:84: listen unix /tmp/vellum-api-4156549551/api.sock: bind: operation not permitted
+FAIL
+FAIL	github.com/dshills/vellum/drivers/cogent/cmd/workbench	13.097s
+ok  	github.com/dshills/vellum/drivers/cogent/internal/acceptance	4.376s
+ok  	github.com/dshills/vellum/drivers/cogent/internal/mailbox	3.915s
+ok  	github.com/dshills/vellum/drivers/cogent/internal/platformio	8.243s
+ok  	github.com/dshills/vellum/drivers/cogent/internal/textinput	5.001s
+ok  	github.com/dshills/vellum/drivers/cogent/internal/transport	2.305s
+FAIL

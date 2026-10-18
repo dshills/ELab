@@ -1,0 +1,10 @@
+--- FAIL: TestNativeLegacyHandoff (0.00s)
+    --- FAIL: TestNativeLegacyHandoff/legacy-handoff (0.00s)
+        legacy_handoff_test.go:53: activated Cocoa before the earlier legacy key was acknowledged
+    --- FAIL: TestNativeLegacyHandoff/legacy-select-all (0.00s)
+        legacy_handoff_test.go:53: selection publication bypassed queued select-all
+    --- FAIL: TestNativeLegacyHandoff/legacy-capacity-retry (0.00s)
+        legacy_handoff_test.go:53: capacity refusal permitted stale activation
+FAIL
+FAIL	github.com/dshills/vellum/drivers/cogent/internal/textinput	0.343s
+FAIL

@@ -1,0 +1,18 @@
+{
+  "scope": "Bounded self-review of the SDK legacy key acknowledgment repair",
+  "invariants": [
+    "Marker is queued after the fallback key in the originating toolkit FIFO; no owner/widget calls from Cocoa callbacks",
+    "Cocoa fallback persists until owner acknowledgment and coherent text/selection publication; new keys cannot use old native baseline",
+    "Bounded queue refusal leaves a pending marker; subsequent publication retries without blocking/spinning or losing the already forwarded legacy key",
+    "Only an empty, client-zero, non-delta marker with valid zero/unmarked fields is admitted; malformed mutation payloads refuse",
+    "Driver acknowledges a marker without decoding/mutating text, replacing shadows or weakening existing expected-text/epoch/document/run/command guards",
+    "Legacy Enter and controlled field delivery retain their ordinary paths; old native input and document/capture ownership tests remain required",
+    "No provider, account, network call, model, project format or public command is introduced"
+  ],
+  "findings": [],
+  "limits": [
+    "No full IME/reader/physical held/concurrent/blur or visible-p95 claim",
+    "Native replay is development candidate against old packaged agent; clean copied replacement qualification remains separate",
+    "Marker traffic adds one bounded metadata record per fallback key; no native latency/performance claim"
+  ]
+}

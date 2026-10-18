@@ -1,0 +1,186 @@
+{
+  "date": "2026-10-18",
+  "status": "SDK source repair qualified; clean replacement app/agent qualification pending",
+  "passed": true,
+  "previous_sdk": "677548d0ea93d7d6a689998eb8cf3d6f3ff9f59f",
+  "sdk": {
+    "schema": 1,
+    "archive": "third_party/vellum/vellum-274f5cc.tar.gz",
+    "archive_bytes": 18629888,
+    "sha256": "53fb72c7f0f078134f7b7d6650ec8e5807998e270ab21a0328456af03f8db274",
+    "manifest_sha256": "b98a3f0354d69843aa338c93b1d5801d75cf7e7faf8efcd9fe2e55c46591c4f7",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-274f5cc",
+    "source_commit": "274f5cc9b75873b2ad01fb86249bbda800bd568f",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 7456,
+    "bootstrap": {
+      "scripts/check-sdk.py": "b8062fbd4c57d1d8cb4d75a094184e1a5fa108cfa811fe9fb390f99f6d66be38",
+      "scripts/child_process.py": "04ba2610ddf112e936e8adcd9a81c03cff422843f993c2ce8a9e1acd96f39c9c",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "803d981c00f32d08a370577b37094848b2c79085cf3303a99b23d2a94336ac2c",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541"
+    }
+  },
+  "sdk_source_sha256": {
+    "drivers/cogent/editor.go": "c44bb30040e8c2c1bd8ab114f149426cc17a117bc95f3e96ff953fdba8e09917",
+    "drivers/cogent/internal/textinput/encoding.go": "a96d78575f2aa66413f76e07588a3f85d567b7d484c4757372e26c6fcd1d1bb2",
+    "drivers/cogent/internal/textinput/input.h": "55daab99c8bafd418dbf4592f3a3d81ecd3eb457ad7153c4c627faa024591f8b",
+    "drivers/cogent/internal/textinput/input_darwin.go": "031e967ef99b39d2293cfe74b519169d4666b47e3a9f8d18c2c93cd58a02f57a",
+    "drivers/cogent/internal/textinput/input_darwin.m": "3e30dd3ce36208a3cce164e9796f2ac9d905f90a9b76e6436b819ef8c22e29db",
+    "drivers/cogent/internal/textinput/input_darwin_test.go": "70783468890c6c39709885d5c65dd80eb2ff39bdc797ca053d35598ed20493af",
+    "drivers/cogent/internal/textinput/legacy_handoff_test.go": "c81a14357a618c09ca7e0e2b2d658c8a1c5853e62114ee3afae4304effc8fa38",
+    "drivers/cogent/legacy_boundary_offscreen_test.go": "4e4032cdf288951ed2fde5fa647626159095b2335f648044a570f6f2c6fabe17"
+  },
+  "consumer_input_sha256": {
+    "desktop/go.mod": "6184dc24274b681237f5c84503f73c4fb2ad0fe33bf6fcb6af1a3bf35d8f6fd3",
+    "third_party/vellum/sdk.lock.json": "0dd6c860a8807529981f851354a030e48d74d110311cb744bafdc821eae774af"
+  },
+  "native_ledger": {
+    "sha256": "60d323c80a1c8396c7cc6eb6cba78d98225dd03714f7e6fcb552d1e8a34135e5",
+    "files": 68,
+    "sites": 393,
+    "public_ids": 162,
+    "binding_review": 160,
+    "routed_ids": 132,
+    "production_native_hashes_unchanged": true
+  },
+  "quality": {
+    "passed": true,
+    "exit_code": 0,
+    "elapsed_seconds": 235.2873536660336,
+    "scope": "Complete consumer quality gate against new pinned SDK"
+  },
+  "sdk_quality": {
+    "passed": true,
+    "stages": [
+      {
+        "command": [
+          "go",
+          "test",
+          "-race",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 0,
+        "seconds": 23.396914375014603
+      },
+      {
+        "command": [
+          "go",
+          "vet",
+          "./..."
+        ],
+        "exit_code": 0,
+        "seconds": 9.96966787497513
+      },
+      {
+        "command": [
+          "go",
+          "test",
+          "-race",
+          "-tags=offscreen",
+          "-count=1",
+          "-run",
+          "^Test(ManagedLegacyBoundary|ReviewFieldSettlement|ManagedTextFieldFocusLoss)",
+          "./..."
+        ],
+        "exit_code": 0,
+        "seconds": 23.623668916989118
+      },
+      {
+        "command": [
+          "go",
+          "vet",
+          "-tags=offscreen",
+          "./..."
+        ],
+        "exit_code": 0,
+        "seconds": 6.788503541960381
+      }
+    ]
+  },
+  "native_development_smoke": {
+    "passed": true,
+    "exit_code": 0,
+    "seconds": 40.22087795904372,
+    "scope": "Development candidate against isolated repaired SDK; no clean copied-runtime/release claim"
+  },
+  "native_development_replay": {
+    "passed": true,
+    "native_sha256": "9a746cb1971e602a1c7dcc6e96afb096c385b3891f92d3272589775afd870c71",
+    "original_pid": 19709,
+    "original_host_exit_code": 0,
+    "cursor_attempts": 6,
+    "cursor_requested_seconds": [
+      0.004,
+      0.006,
+      0.008,
+      0.01,
+      0.012,
+      0.014
+    ],
+    "all_packaged_agent_scope_transient_parity": true,
+    "interval_start_s": 0.006,
+    "interval_end_s": 0.02,
+    "retained_samples": 21,
+    "selected_samples": 15,
+    "domain_and_saved_bytes_preserved": true,
+    "scope": "Alternate modfile/isolated SDK development build; no exact clean copied review claim"
+  },
+  "source_repair": "Fallback legacy keys queue validated empty ordered acknowledgments; Cocoa activation waits for coherent owner text/selection, with bounded capacity retry",
+  "public_commands_models_format_unchanged": true,
+  "prior_reviews_and_canonical_preserved": true,
+  "source_quality_failures_retained": [
+    "Sandbox denied existing test Unix sockets; qualified SDK rerun passed with local socket access",
+    "Consumer Staticcheck found temporary mixed-package diagnostic overlays; moved ignored sources to a dot directory without changing bytes, then final complete gate passed"
+  ],
+  "known_limits": [
+    "Preserved /157 contains old SDK and remains affected pending clean replacement",
+    "No owner/full IME/reader/OS interleaving/visible-p95/environment/distribution/study acceptance",
+    "SDK-marker traffic remains bounded but no performance percentile claim",
+    "Owner walkthrough remains Not tried yet; P0 remains 17 implemented /10 partial"
+  ],
+  "evidence_sha256": {
+    "RC reference.elab": "5a96b8608be0909f865b61039e25415513aa1bfbe2b227b8efb8ffd05749ef0e",
+    "README.md": "a12f8545e0dbd6fe04dc5dde9a4ba2ea016e9535471ce387c6bcaa7caf23b761",
+    "after.txt": "ecf89d7900abda70061890e391d5874317e5a7a067bbed01bcc82132bff39f18",
+    "before.txt": "888a39a6de302b8e318770751e25d517cd8f38ac9a964dafd9b340cc0d924d54",
+    "consumer-initial-failure.json": "d3af70123656dbdf556976be904012c49399af9e17d3fbd4dbe684ae0f13355a",
+    "consumer-initial-failure.txt": "e53f8e6cd6ce54046a12e9f90a0eea07bc4e330572efdef497acc10b30d822b4",
+    "consumer-quality-source.py": "2caea90aaa8a9617423b39a7710db69053a9fc83490df423462cede7c618c4f4",
+    "diagnostic-tooling-correction.json": "0b9cf599b8070f71aaa0c95a7eadd644c6ff14d032c2ee79b687eedd053dec7d",
+    "export.txt": "4db002976d25a8ece07bc2de7c2e1cad7062f14e571ee01bc2c115da76cc9e07",
+    "full-check.json": "45c11c19584518ab39f029960b892a063e283707b3480014dca397baccfff6a7",
+    "full-check.txt": "edd55945672220d07677d652c373141a060d20743dfd4459fdc0e40bb26f67f1",
+    "native-build-info.raw.txt.gz": "3913969bf6ef976edde0583d6d8f011edbf8e3e0bfc67e4e8b7c86ad354c7c50",
+    "native-build-info.txt": "002b88ecd624819741b8bd785743baaa3f24fa5f0a685b866431b9e919e32869",
+    "native-build-source.py": "d0d4fe99b260cb36d06e889db5c8a32576767366387e2329ebe728b180a95c55",
+    "native-build.txt": "7ebb3b1a3fc9b7ee7d5bc7f2f18939cd46a56fccc7e37ab70647555a0712d2f4",
+    "native-host.txt.gz": "2464b2a5698e8d01ecdb7af25d25ea7deda64069e838afe56b0e25dbb957a1c6",
+    "native-interval-verifier-source.py": "2d63e18f3dbb998e4f683917de2d4563588ef8c006b84db855005efc75796aaa",
+    "native-observer-source.py": "d823ca88dae8a38c61b507c599db94b620089100e3a10fae602819cb125f432a",
+    "native-process-verification.json": "e441b8efc4316f7daded0c95586be3629d6e4100131bcbb5add944974b74b97f",
+    "native-session.json.gz": "ca023d09ad00f0b53695eaaafe7303381526f16f4084b1bf6004626b52079fdc",
+    "native-smoke-source.py": "277e077a3b8d656590da1a95c85b716df0e182565e820147efd3996390991639",
+    "native-smoke.json": "353e5fbe187ad0b7b0b08f6942e0aa2bd3c68637e63f9e192c0d5761ee5b2502",
+    "native-smoke.txt": "5672e0f3127227aa797ec6ca7d3a37ad3adcca4345e9dfcfe9e39adf65155c2c",
+    "native-ui-observation.txt": "12387cfe879c460799ca8d828fae09d349236403efc2dc580eb8d41918fac4e5",
+    "prepare-test-source.py": "165a666a31afdef20a3071cd3ccff1e43fb31d16501435335bc45c02b0f3edcb",
+    "prepare.txt": "1a0ccf60c1aefde155a3300154ad4a4b9bfeef2a573e9c4ce4685ad43fd263db",
+    "preservation.json": "cb64ce40d83c5d2a81b88c8ec5ec37c7316382166db8685824eb83b67bb6cfc5",
+    "prior-sdk.lock.json": "4d97482bae4b2359dc3a97d24cd53ccebebe9238285aca2e5b2599bdcd21fe39",
+    "repair-source.py": "e4575e6aacbfaf0a10e17128c00042b04ecdaaba998803a81d62eb8445ec9745",
+    "sdk-diff.json": "4659c1d6daf210f60277f6471560b52035b4e72141d9b2c7a9986b7da237c0a2",
+    "sdk-quality-source.py": "8a9292607da9027b757808d56eab66a009334fb047d46e85626158e5e7b892d6",
+    "sdk-quality.json": "a0d6392fbb8b5f42888338d6e3aa81cb80ab7744784aca26a31b6a206aea5285",
+    "sdk-quality.txt": "27d2819993324e7fc5597e1586cfdbaa6081bfc01872a1fa8e493a00cb067421",
+    "sdk-sandbox-failure.json": "1314f4e03d2c7a2393eaeee6e80028085cfd541142f307fe91eadb5504cbdf8e",
+    "sdk-sandbox-failure.txt": "56a499e2aa11d0f0ed90bbc5229a7c8a66d4e615829b42933e3676c370e06f0e",
+    "self-review.json": "b8745f49b9e879dd0a59d81a538d81e302b6dbd47108ff1be120acc799eb134a",
+    "vellum.commit.txt": "d321216e1b132816fcce49b14d4efb2d92e67d8e4afd54d10c1e67f079dca7ef",
+    "vellum.patch.gz": "e3439fd4771a6ef443451c82e2fac3144d2bf65b97e02f5f8be7dad9abf5b832"
+  }
+}

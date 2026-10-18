@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "stages": [
+    {
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-count=1",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 23.396914375014603
+    },
+    {
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 9.96966787497513
+    },
+    {
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "-count=1",
+        "-run",
+        "^Test(ManagedLegacyBoundary|ReviewFieldSettlement|ManagedTextFieldFocusLoss)",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 23.623668916989118
+    },
+    {
+      "command": [
+        "go",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 6.788503541960381
+    }
+  ]
+}
