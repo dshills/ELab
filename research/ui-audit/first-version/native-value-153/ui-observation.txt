@@ -1,0 +1,19 @@
+CUA native observations, transcribed excerpts rather than complete AX trees or exported screenshots.
+Owned bundle com.dshills.elab.keyboard-153, original endpoint host PID 9916, live LED example with R1 selected.
+Initial AX: ● Live · DC simulation; Component value 1 kΩ; LED CURRENT 2.917 mA.
+
+Inputs: click Component value (81), super+a, typeText 2.2k.
+AX diff: Component value = 2.2k; focused UI element = value-entry.
+An authorized read-only endpoint inspection before Apply proves accepted R1 still 1000 Ω, current 0.0029167965774405296 A, same components/wires/nets/result/run/electrical revision/document as baseline. Controlled domain draft still 1 kΩ. First sandboxed socket read was denied before connecting; the authorized host read succeeded without mutation.
+
+Input: click Apply value (82) once.
+AX: Undo = Change value · by user; Component value = 2.2 kΩ.
+Live i:R1 = 1.3447 mA; LED CURRENT = 1.345 mA; LED VOLTAGE = 2.042 V; LED POWER = 2.75 mW.
+Focus remains value-entry. No second Apply or Enter is sent.
+A fresh screenshot shows the resistor caption R1 2.2 kohm and the live 1.345 mA card.
+
+Inputs: click visible R1 body [495,327] to focus the schematic; super+z.
+AX: Undo = example reset · by agent.socket; Redo = Change value · by user; Component value = 1 kΩ.
+Live i:R1 = 2.9168 mA; LED CURRENT = 2.917 mA; LED VOLTAGE = 2.083 V; LED POWER = 6.08 mW.
+Focused UI element = 208 container node:c2NoZW1hdGlj.
+Same original PID observes the agent-matched Apply and Undo stages, saves the restored graph and exits normally with code 0.

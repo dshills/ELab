@@ -356,3 +356,8 @@ The final [read-only source/release identity check](../../../docs/validation/fir
 ### Native LED Delete / Undo / Redo · /153
 
 The [native history check](native-history-153/README.md) follows Backspace, Cmd+Z, Cmd+Shift+Z and Cmd+Z through CUA input and immediate AX observations on one original owned PID. All four graph/history/stale-state stages match the packaged agent; the complete graph is saved and the host exits normally. The UI marks prior readings stale throughout paused editing/restoration, in agreement with the PRD. Source/SDK/release bytes are unchanged; this adds the native history path only, with no native repeat/held/interleaving/blur, field/IME, reader, visible-p95 or owner acceptance upgrade.
+
+
+### Native live value entry / one Apply / Undo · /153
+
+The [native value check](native-value-153/README.md) types `2.2k` into the real component field, proves the private draft leaves accepted physics unchanged, then clicks Apply once. Fresh current changes from 2.9167965774405296 mA to 1.344737452917332 mA; one circuit Undo after explicit sheet focus restores the original value/current. Both stages match the packaged agent in full semantic fields. The final graph is saved and the original host closes normally. This adds one ASCII entry path, with no full typing/IME, invalid-value, interleaved/blur, reader, visible-p95 or owner acceptance claim. Product/SDK/release bytes and versions remain unchanged.

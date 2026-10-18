@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-18",
+  "prior_goal_turn": "progress: 5e2e287 native Delete/Undo/Redo and stale-state parity",
+  "source_base": "5e2e287a3afd2a9cf2a76ea2ebd0fcbcba2645f8",
+  "status": "bounded native live unit entry/one Apply/one circuit Undo verified; broader typing and acceptance remain open",
+  "production_changed": false,
+  "sdk_changed": false,
+  "product_version_increment": false,
+  "product_rebuild_or_promotion": false,
+  "native_input": {
+    "method": "CUA native field click / Cmd-A / typeText 2.2k / one Apply click / sheet click / Cmd-Z, AX observations",
+    "private_text": "2.2k",
+    "before_apply_accepted_resistance_ohm": 1000,
+    "before_apply_graph_physics_and_document_unchanged": true,
+    "applied_resistance_ohm": 2200,
+    "applied_current_a": 0.001344737452917332,
+    "restored_resistance_ohm": 1000,
+    "restored_current_a": 0.0029167965774405296,
+    "one_effective_value_history_edit": true,
+    "live_and_fresh_at_all_observed_stages": true
+  },
+  "comparison": {
+    "matching_packaged_agent": true,
+    "stages": 2,
+    "fields": [
+      "components",
+      "wires",
+      "nets",
+      "selected",
+      "drawing",
+      "undo_name",
+      "redo_name",
+      "status",
+      "paused",
+      "all LED result fields except independent run/electrical IDs"
+    ],
+    "saved_graph_matches": true
+  },
+  "process": {
+    "original_endpoint_pid": 9916,
+    "same_pid_for_all_native_states": true,
+    "normal_host_closure": true,
+    "exit_code": 0,
+    "no_remaining_matching_native_processes": true,
+    "observer_only_reads_after_seed_until_save_close": true
+  },
+  "transport_attempt": "First sandboxed read denied at private socket before connection; authorized host read then verified pre-Apply state without mutation",
+  "preserved_review": {
+    "source_commit": "7400257290da4bfe6f8baed34c232337772d4800",
+    "release": "0.136.0 /153",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.136.0-153-review/elab-agent",
+    "agent_sha256": "6efc3074d679a890b7362e3bb11e81fef08d1d92955bdccdf68feb9200c9bbf4",
+    "receipt_sha256": "579763853fa6b2554a939cc4ecf4c3af0d2ace8c66fda7c88b8729a2934c5d4b",
+    "ledger_sha256": "9808dbabb9a61834f67863314655552547e4e406aa7b1d9c4f941a1eb885dbf4",
+    "production_source_files_verified": 68,
+    "runtime_inputs_verified": 343,
+    "manifest_file_entries_verified": 137,
+    "manifest_sha256": "03ea57f7fdc2aea4d2ef285dbeb990329c32a075f9bc673439a2e0f94bcac73a"
+  },
+  "quality": {
+    "reused_unchanged_source_gate_and_release_runtime": true,
+    "full_gate_rerun": false,
+    "new_production_tests": false
+  },
+  "self_review": {
+    "findings": [],
+    "review": [
+      "Agent reference generated independently before native inputs; byte-identical published executable",
+      "Typed private text observed while accepted graph/physics/document verified unchanged",
+      "Single Apply and one circuit Undo, with native and public history attribution",
+      "Explicit sheet focus avoids treating text Undo as circuit history",
+      "Strict accepted-state parity, saved graph, same original PID and normal cleanup retained",
+      "One ASCII typing path is not IME, concurrent typing, reader or latency acceptance"
+    ]
+  },
+  "limits": [
+    "One automated native ASCII unit entry path; no human keyboard/IME or invalid-value scenario",
+    "No concurrent/held/blur typing, full reader, eligible visible p95 or broader environment/study qualification",
+    "No native Save dialog or printer operation",
+    "Owner walkthrough Not tried yet; P0 stays 17 implemented /10 partial"
+  ],
+  "evidence_sha256": {
+    "README.md": "cdab24d91d616295cbaa41d1f233537d83374be2ddcd8b5d8cd2252f2284372a",
+    "agent-reference.json": "76c9e9a83f5500b7a1a5fd0d3f7b06d301ebb752eeb1d8d5adfa24505b7b58ca",
+    "before-apply.json": "1fce2300ed88c07b02b7b84ef8ce6a79e19886546f620dfe8096145cf43de0aa",
+    "native-host.txt": "39e4702bbea373581a13a1caba4c756e3d5dee20931ba30f3d95cd94ba98daab",
+    "native-session.json": "3abd5e72357536027b560e99fda1d3bda6cb8248b1396dcdf5689823ae6909a8",
+    "observer-source.py": "7ac7d8185bfc1cb032b9a7649dd2d03b2543dceef98d3811485c79a0966837b1",
+    "source-release-identity.json": "d73506b2b10b4911d20a49cc5d4af538f403b1db42d0f8e745fd5ebac9f476d8",
+    "ui-observation.txt": "1acfda21cf914ee2084bd31f49d3b60c91037b96f2ca17573668614c25938b90",
+    "value-restored.elab": "956801a6b7bb477f871421b0883fb0e0f422c941158c4c6325e1216b63ae2794",
+    "verification.json": "54e5663a8d8668d49c140a4a56aef77042b052551372cbf8e4f1aaefc29e0e1f"
+  }
+}

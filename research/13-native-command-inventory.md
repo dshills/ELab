@@ -199,3 +199,5 @@ The prepared-key repair is in clean 0.136.0 /153 with exact copied native mesh/s
 A [fresh /153 native focus/Right Arrow check](ui-audit/first-version/native-keyboard-153/README.md) now matches the packaged agent using a same-process endpoint journal and normal closure. Only this one native path is added; syntax counts and source hashes remain unchanged, and complete binding/focus/typing qualification remains open.
 
 A [native /153 Backspace/Undo/Redo follow-up](ui-audit/first-version/native-history-153/README.md) matches four complete graph/history stages and paused-stale results to the packaged agent, with normal original-host closure. Native repeat/interleaving/blur and full typing/focus remain open; source-ledger bytes/counts are unchanged.
+
+The [native /153 live unit-entry/Apply/Undo check](ui-audit/first-version/native-value-153/README.md) now matches the packaged agent while preserving accepted physics before Apply and restoring it with one Undo. This is one ASCII field path; full typing/IME/concurrent bindings remain open. No source-ledger bytes/counts changed.

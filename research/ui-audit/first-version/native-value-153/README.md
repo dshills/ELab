@@ -1,0 +1,21 @@
+# Native live unit value, one Apply and circuit Undo · /153
+
+October 18, 2026. Validation-only follow-up to the native focus/history checks. Product source, SDK, versions, commands, models, format and existing packages remain unchanged.
+
+A separately identified harness contains the byte-identical /153 executable. Its original endpoint-backed PID is 9916, with appearance/recovery persistence disabled. The matching packaged agent independently generates the reference for a live 5 V /1 kΩ LED example: `editor.value.set` with `2.2k`, `component.set` R1 to that value, then `edit.undo`. The native session is seeded identically and the controller thereafter only observes until final save/close ([observer source](observer-source.py), [agent reference](agent-reference.json)).
+
+CUA selects the sole live instance by bundle ID, clicks the native Component value field, sends Cmd+A and `typeText('2.2k')`, and observes the edited text and field focus. A read-only endpoint check before Apply proves components, wires, nets, full result, run/electrical identities and document still exactly match baseline ([snapshot](before-apply.json)). Accepted resistance stays 1000 Ω and current 0.0029167965774405296 A. The UI text is a private draft; the controlled domain draft is still `1 kΩ`. No premature electrical edit or history entry is inferred from typing. The first sandboxed socket read was denied before connection; an authorized host read succeeded. That transport restriction is not an application refusal.
+
+Exactly one CUA Apply click commits the value, normalizes the field to `2.2 kΩ`, and shows 1.345 mA. The same-PID public state has 2200 Ω and fresh current 0.001344737452917332 A. History is `Change value · by user`. No Enter or second Apply is sent. The field retains focus after Apply, so the test explicitly clicks the visible R1 body on a fresh screenshot before Cmd+Z; this targets circuit history rather than text editing. One Undo returns 1000 Ω and fresh current 0.0029167965774405296 A, with the expected Redo label and schematic focus ([UI excerpts](ui-observation.txt)).
+
+| Phase | Accepted resistance | Current | Result state |
+|---|---|---|---|
+| Typed text, before Apply | 1000 Ω | 2.9167965774405296 mA | Live, fresh |
+| One Apply | 2200 Ω | 1.344737452917332 mA | Live, fresh |
+| One circuit Undo | 1000 Ω | 2.9167965774405296 mA | Live, fresh |
+
+Both accepted native stages match every component/wire/net field, selection, drawing, Undo/Redo labels, status, pause state and all LED result fields except independent run/electrical identities ([journal](native-session.json)). One Undo restores the original accepted value, proving one effective circuit-history change. These are same-model functional comparisons, not new physical-device accuracy measurements. The controller saves the restored graph through public commands ([project](value-restored.elab)), verifies it matches the final native/reference graph, and closes the original host normally with code 0. All clients close and process inventory finds no matching native harness process ([verification](verification.json)). This is not a native file-dialog check.
+
+The [release/source identity proof](source-release-identity.json) verifies all 137 existing manifest entries, 68 native source hashes and 343 runtime inputs against clean source `7400257` and the packaged agent. The executable SHA-256 is `71dc5a02d876d7fd8937d2b99d18619b0dd79a5c736580e5d321b59b17d37d29`. No app rebuild, version increment, promotion or source/SDK edit occurs. The unchanged source/runtime quality gates are reused, not rerun.
+
+This adds one automated native ASCII unit-entry/Apply/Undo path. Screenshots were inspected in the tool session but not exported; durable UI evidence is the transcribed AX excerpt with same-process snapshots and saved graph. No human hardware-keyboard trial, IME/combining input, invalid-value recovery, concurrent agent edit during typing, held/blur delivery, full screen-reader acceptance, visible p95, other hardware/environment or study outcome is claimed. CUA/poll durations are not event-to-pixel measurements. Owner walkthrough remains “Not tried yet,” and P0 remains 17 implemented /10 partial. No printer or OS setting is changed. [Checkpoint](checkpoint.json).
