@@ -1,0 +1,287 @@
+{
+  "passed": true,
+  "transport": "owned headless stdio",
+  "release": "0.132.0 /149",
+  "agent_sha256": "0d74dfe03dc191ba4dc04ed5b5981c35310054ef6424c6fbb1a304d7cdebeb21",
+  "production_source_files_verified": 64,
+  "observations_sha256": "d274f5a5de3a96d8be6f5954594252f1b26edaeba96393c2be33bef40e0719a1",
+  "compared_cases": [
+    "mounted-complete",
+    "mounted-undo",
+    "native-adapter-complete"
+  ],
+  "complete": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "dc-source",
+        "name": "DC source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-dc.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -120
+        },
+        "value": 1000,
+        "unit": "\u03a9",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "D1",
+        "kind": "led",
+        "name": "Red LED",
+        "terminals": [
+          "anode",
+          "cathode"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 0,
+        "model": "elab.generic-red-led.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": -200,
+          "y": 120
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "D1.anode",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "D1.cathode",
+        "to": "GND.reference",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "GND.reference",
+        "to": "V1.negative",
+        "connected": true
+      }
+    ],
+    "nets": [
+      {
+        "id": "net:D1.anode",
+        "terminals": [
+          "D1.anode",
+          "R1.2"
+        ]
+      },
+      {
+        "id": "net:D1.cathode",
+        "terminals": [
+          "D1.cathode",
+          "GND.reference",
+          "V1.negative"
+        ]
+      },
+      {
+        "id": "net:R1.1",
+        "terminals": [
+          "R1.1",
+          "V1.positive"
+        ]
+      }
+    ],
+    "drawing": {
+      "tool": "wire",
+      "kind": "dc-source",
+      "position": {
+        "x": -200,
+        "y": 0
+      },
+      "wire_start": "",
+      "from": "",
+      "to": "",
+      "value": ""
+    },
+    "selected": "GND",
+    "undo_name": "Connect wire",
+    "result_stale": false,
+    "current_a": 0.0029167965774405296
+  },
+  "undone": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "dc-source",
+        "name": "DC source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-dc.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -120
+        },
+        "value": 1000,
+        "unit": "\u03a9",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "D1",
+        "kind": "led",
+        "name": "Red LED",
+        "terminals": [
+          "anode",
+          "cathode"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 0,
+        "model": "elab.generic-red-led.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": -200,
+          "y": 120
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "D1.anode",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "D1.cathode",
+        "to": "GND.reference",
+        "connected": true
+      }
+    ],
+    "nets": [
+      {
+        "id": "net:D1.anode",
+        "terminals": [
+          "D1.anode",
+          "R1.2"
+        ]
+      },
+      {
+        "id": "net:D1.cathode",
+        "terminals": [
+          "D1.cathode",
+          "GND.reference"
+        ]
+      },
+      {
+        "id": "net:R1.1",
+        "terminals": [
+          "R1.1",
+          "V1.positive"
+        ]
+      },
+      {
+        "id": "net:V1.negative",
+        "terminals": [
+          "V1.negative"
+        ]
+      }
+    ],
+    "drawing": {
+      "tool": "wire",
+      "kind": "dc-source",
+      "position": {
+        "x": -200,
+        "y": 0
+      },
+      "wire_start": "",
+      "from": "",
+      "to": "",
+      "value": ""
+    },
+    "selected": "GND",
+    "undo_name": "Connect wire",
+    "result_stale": true,
+    "current_a": null
+  },
+  "scope": "mounted selectors/buttons and macOS adapter callback bindings against exact public agent binary",
+  "limits": [
+    "No physical OS menu/IME/VoiceOver or event-to-pixel measurement",
+    "Current review bytes preserved; no product version increment or owner acceptance"
+  ]
+}
