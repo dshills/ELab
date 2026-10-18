@@ -1,0 +1,37 @@
+Transcribed CUA AX excerpts and screenshot observations; not a raw full-tool transcript.
+Original endpoint-backed native PID: 83402. Exact-path app selection 0.1230 seconds.
+Initial AX: Paused; Live RC scope; t=0.02 s /tau=10 ms /run 3 /paused;
+Step completed 20/20 staged samples; saved RC reference.elab; 4 components/4 wires.
+Initial screenshot (1053x762) shows schematic, charge curve, live readings 4.323 V and
+0.068 mA. Cursor controls are below the scope dock's visible area.
+Scroll the identified scope scroll area down one page. AX tree is unchanged,
+but screenshot confirms A/B fields and clear buttons are now visibly reachable.
+Fresh full AX resolves visible field/control IDs before interaction.
+
+A PRIVATE DRAFT:
+Click Cursor A time; Cmd+A; AX confirms field focus.
+CUA typeText('4 ms'); AX field value 4 ms, still focused.
+Controller records same scope, physics, history and document as baseline; no A yet.
+One click on B:
+AX shows A field 4 ms, committed help text and enabled A-clear button.
+Same-PID state confirms A requested/snapped 0.004 s, valid; active cursor b.
+Controller matches the independent public A-set/B-select sequence.
+
+B PRIVATE DRAFT / ENTER:
+Click Cursor B time; Cmd+A; AX confirms field focus.
+CUA typeText('16 ms'); AX field value 16 ms, still focused.
+Controller confirms accepted scope/physics/document unchanged from preceding stage.
+One Return:
+AX shows B field 16 ms, enabled B-clear button, and
+A 4 / B 16 ms /delta-t 12 ms /1/|delta-t| 83.33 Hz.
+Screenshot confirms the complete timing caption and both fields are visible.
+The 83.33 Hz value is the reciprocal selected interval, not a measured RC frequency.
+
+CLEAR:
+After fresh full AX, one click on the A-adjacent clear (node cursor-clear-a).
+AX: A field blank, A-clear disabled, timing caption reset to placement guidance.
+Same-PID state retains B at 16 ms, with A/delta/reciprocal fields absent.
+All native measurement stages match the packaged agent and preserve full simulation,
+21 retained samples/events, circuit, run/electrical IDs, document and history.
+No further UI actions. Original host closes normally after report verification.
+Screenshots were inspected in the tool session but were not exported.

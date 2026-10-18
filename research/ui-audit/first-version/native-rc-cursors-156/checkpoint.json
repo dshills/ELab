@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-18",
+  "source_base": "bb7a77264fa8f4e8c8637f2cd4cfdf4bdc229c6b",
+  "status": "bounded native live RC cursor entry/selection/timing/Clear verified against packaged agent and independent RC law; broader qualification remains open",
+  "production_changed": false,
+  "sdk_changed": false,
+  "product_version_increment": false,
+  "product_rebuild_or_promotion": false,
+  "native_input": {
+    "method": "CUA scope scroll, actual click/Cmd-A/typeText, one B click to settle A, B Return, one Clear A",
+    "observed_frame_px": [
+      1053,
+      762
+    ],
+    "private_drafts_preserve_accepted_state": true,
+    "cursor_a_s": 0.004,
+    "cursor_b_s": 0.016,
+    "delta_s": 0.012,
+    "reciprocal_interval_hz": 83.33333333333333,
+    "clear_removes_a_and_timing_preserves_b": true
+  },
+  "comparison": {
+    "full_scope_and_transient_match_agent_except_independent_ids": true,
+    "physical_state_document_history_unchanged": true,
+    "retained_samples": 21,
+    "saved_project_bytes_unchanged": true
+  },
+  "independent_reference": {
+    "resistance_ohm": 10000,
+    "capacitance_f": 1e-06,
+    "input_v": 5,
+    "time_constant_s": 0.01,
+    "voltage_law": "5*(1-exp(-t/0.01))",
+    "current_law": "5*exp(-t/0.01)/10000",
+    "relative_tolerance": 1e-10,
+    "absolute_tolerance_SI": 1e-12,
+    "readings": [
+      {
+        "probe_id": "v:C1",
+        "a": 1.6483997698218036,
+        "b": 3.990517410026723,
+        "delta": 2.3421176402049193
+      },
+      {
+        "probe_id": "i:R1",
+        "a": 0.0003351600230178196,
+        "b": 0.00010094825899732772,
+        "delta": -0.0002342117640204919
+      }
+    ]
+  },
+  "process": {
+    "original_endpoint_pid": 83402,
+    "normal_closure": true,
+    "exit_code": 0,
+    "no_remaining_matching_native_processes": true
+  },
+  "preserved_review": {
+    "source_commit": "22a84d590df498c023cabb94bf6ccf9883204a94",
+    "release": "0.139.0 /156",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.139.0-156-review/elab-agent",
+    "agent_sha256": "0b0d62a5b34156f04cb4ef298f6a8671af8b7e20e9fa1133c4a8cb79a32de5dd",
+    "receipt_sha256": "b2659269a286e3230deac30659fadb3d7df20d409fa8616a9d3d33425963c181",
+    "ledger_sha256": "b5cdacef44f6205d554ba8f1f315d4138e297ef0b1f1c2c1047148a7f5aa7d95",
+    "production_source_files_verified": 68,
+    "runtime_inputs_verified": 343,
+    "manifest_file_entries_verified": 135,
+    "manifest_sha256": "ec49b66aa2c9a10c06df76882245bca16b69addbd8dfceabf6077e3f54da3155"
+  },
+  "producer_sha256": {
+    "scripts/first-version-parity.py": "936f8c79a1a1e7278c299973c7edc8f925f88b158cc474759005ba97e6723370",
+    "scripts/persistence-demo.py": "4f3893eec22b3e6173aa75138e7774a43727b0bfc908c4bb56e8616e0d45dae5"
+  },
+  "quality": {
+    "reused_unchanged_source_and_runtime_gates": true,
+    "full_gate_rerun": false
+  },
+  "limits": [
+    "One paused RC scope sequence; seeded graph/trace, not UI drawing or new simulation-button acceptance",
+    "No plot drag, unfinished Clear settlement, running/concurrent/held/blur or full typing/IME/reader/p95 qualification",
+    "Owner walkthrough Not tried yet; P0 stays 17 implemented /10 partial"
+  ],
+  "evidence_sha256": {
+    "RC reference.elab": "5a96b8608be0909f865b61039e25415513aa1bfbe2b227b8efb8ffd05749ef0e",
+    "README.md": "2cd30ab20992f66886c6a5f4994439ed796b00ca83456c4052af9e88d3e6d6f7",
+    "native-host.txt": "6524de04f6b663e25b8bcb992905eb94ee5e421616a0dad349cabf61ce37beaa",
+    "native-session.json.gz": "bc4b9767a6fd6140f6aaf8150053455727244b59e899bdfe9fa5826e63a0b243",
+    "observer-source.py": "2983040097039a0057d177a020e945181f7c56bf2a633e92a23a4766f012f3e9",
+    "process-verification.json": "9308aae76110c25014a03c1e28cd8581ae5a3eb750f6a3683712bef9738b40fe",
+    "source-release-identity.json": "0922ea3d67ced36a474c6d90b1b9253dd12fa5f22523b8ea28d4f7fae977db70",
+    "ui-observation.txt": "ac1e001e74fafe1ba8c54acfbbc6098ffc8779082199d43755191fe2c9747e44"
+  }
+}
