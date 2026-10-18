@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-18",
+  "status": "ineligible for matched native/agent control parity; bounded attempt stopped",
+  "prepared_source": "0.125.0 /142 clean review executable, separate private bundle identity",
+  "native_binary_sha256": "2c2c855970ac9ac6520efb2e11cf0f9788c026bc6b3435718494df24f0e4a1f2",
+  "observed_native_events": [
+    "Charge: legend changed to pending: charge",
+    "Step +1 sample: caption 0.001 s; completed 1/1 samples; capacitor readout 0.476 V"
+  ],
+  "continuity_failure": [
+    "Native getApp observation had an unusually long return; no app-latency inference",
+    "Owned terminal host session 78926 later returned terminal exit 0; descriptor absent at public post-action query",
+    "Fresh full native observation showed a blank window; relation/timing to prior process cannot be established"
+  ],
+  "qualification": "No matched post-action public snapshot, no new source-level or runtime parity closure, no percentile sample",
+  "cleanup": "Cmd+W on separately named owned blank harness returned App quit; previous endpoint host already exit 0",
+  "source_changed": false,
+  "sdk_changed": false,
+  "physical_jobs_submitted": 0,
+  "evidence_sha256": {
+    "context-replaced.jpg": "5b2f5a8b09ffef240d7062ccd41c9aba1ac0c158525497a5d29fe51dfb24772c",
+    "prepared.json": "b8663d2ff129e3892ffb853a8165ef2c0e8e96ccc41ae0027f119998f7bcff4c",
+    "context-replaced.ax.txt": "1d84b48b3f06da9dbe3eba64db5efbd09aa7d2da6898c5a1e5a274dc5175c72a",
+    "host.txt": "dcac9ed01d7e3e7b1db97005b94dfdee39c0808d877f49a7a9e76aca57b9f852",
+    "before-native-actions.json": "b230dc066065f029898c6742934a92766a3d8465fea0a0434d21750f507348d6"
+  }
+}

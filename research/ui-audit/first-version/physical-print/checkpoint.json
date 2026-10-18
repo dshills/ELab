@@ -1,7 +1,7 @@
 {
   "date": "2026-10-17",
   "source_base": "a631f7a",
-  "status": "one native UI submission completed in real configured local queue; physical paper inspection pending",
+  "status": "one native UI submission completed in configured local queue; owner confirms paper readable and complete",
   "device": {
     "queue": "Brother_HL_L2390DW",
     "display_name": "Brother HL-L2390DW",
@@ -103,11 +103,10 @@
     "full_release_gate": "not rerun for this wording-only checkpoint"
   },
   "limits": [
-    "Paper not observed; owner inspection requested and pending",
     "Actual media/margins/scale not measured",
     "No A4/portrait/tiled/RC/flasher physical output qualification",
     "No device cancellation qualification",
-    "Spool completion is not proof of paper delivery"
+    "Paper evidence is the direct owner report for this one job; no agent inspection or general printer acceptance inferred"
   ],
   "ownership": {
     "private_host": "closed normally after acknowledged job became terminal; no project edits or unsaved changes",
@@ -131,5 +130,19 @@
   },
   "source_sha256": {
     "desktop/printing.go": "9c40645db6de5affc3ae9d654f72c7003671f5d8c23c8bd7de93ffa35bea8c59"
+  },
+  "updated": "2026-10-18",
+  "owner_inspection": {
+    "date": "2026-10-18",
+    "source": "direct owner reply to the job-161 inspection question in this chat",
+    "question_scope": "single LED-circuit page sent to Brother HL-L2390DW, system job 161; whole schematic and parts list readable, nothing cut off",
+    "answer_verbatim": "Printed clearly and completely",
+    "outcome": "owner-reported paper delivery, readability and completeness confirmed for this single page",
+    "not_measured": [
+      "actual media dimensions",
+      "physical margins",
+      "scale accuracy"
+    ],
+    "no_additional_job_submitted": true
   }
 }

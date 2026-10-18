@@ -1,6 +1,6 @@
 # First usable version: delivery plan
 
-Updated October 17, 2026. Owner: implementation agent; owner acceptance: project owner.
+Updated October 18, 2026. Owner: implementation agent; owner acceptance: project owner.
 
 ## Outcome and scope
 
@@ -75,7 +75,7 @@ New work loss, corrupted connectivity, misleading simulation, core user/agent mi
 | Agent surface | Reference graph/numerical/state parity passes. Preserve capabilities, structured outcomes and retry/conflict/cancel behavior. Inventory drift and remaining mounted binding evidence remain explicit; reference parity is not exhaustive conformance. |
 | Accessibility | Native Cocoa inspector selector checks pass, but external snapshots can omit visible controls. Complete VoiceOver acceptance is open. Prepared OS-settings test awaits actual permission; a posted question is not approval. |
 | Packaging/distribution | Prior copied app/agent pass offline with repository/SDK/toolchain/cache reads and outbound IP denied. Replacement bytes repeat this gate successfully; version/hash are in the replacement receipt. Clean account, other environments, signing/notarization and public distribution remain unqualified. |
-| Printing | Native submission of one LED page to the Brother queue completed as job 161. Actual paper, readability, margins, media and scale await owner inspection. Do not print more merely to fill evidence. |
+| Printing | Native submission of one LED page to the Brother queue completed as job 161. Owner confirmed October 18: “Printed clearly and completely.” Readability/completeness of this page are confirmed; measured margins/media/scale, other settings and device cancellation remain open. Do not print more merely to fill evidence. |
 | Acceptance | Owner walkthrough feedback is pending. The original ten-person study with corrections remains a broader MVP gate. |
 
 Integrity, simulation truthfulness and core parity cannot be waived. Broader environment/accessibility/timing gaps may be disclosed for a private owner-test alpha; explicit review is required before supported-alpha promotion. Full-MVP requirements remain open until established.
@@ -87,7 +87,7 @@ Integrity, simulation truthfulness and core parity cannot be waived. Broader env
 3. Run focused checks while fixing, then one full gate on final source. Repeat only checks invalidated by changes or failures.
 4. Build a new candidate for concrete fixes; do not increment versions for instrumentation or documentation alone.
 5. Report the closed gate or actual failing reproduction at each checkpoint. Test totals alone are not delivery progress.
-6. Waiting for owner feedback, settings permission, paper or participant access is not authorization to expand scope. Continue only independent release work.
+6. Waiting for owner workflow feedback, settings permission or participant access is not authorization to expand scope. Continue only independent release work.
 7. Preserve prior app folders and the owner's open work. Promote only a qualified candidate with rollback.
 
 Detailed history remains in the [UI evidence index](ui-audit/first-version/README.md), [consolidated review receipt](ui-audit/first-version/consolidated-review-checkpoint.json), [capacity benchmark](ui-audit/first-version/capacity-responsiveness-checkpoint.json), [clock repair receipt](ui-audit/first-version/live-clock-grid-checkpoint.json) and Git history. This plan governs upcoming work ahead of the historical continuation backlog.
