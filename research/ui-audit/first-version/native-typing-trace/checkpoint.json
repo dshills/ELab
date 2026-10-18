@@ -39,14 +39,14 @@
   ],
   "next": "One bounded source repair pass beginning with native-boundary regression, then focused replay and one final quality gate before packaging",
   "files": {
-    "Diagnostic-build-info.txt": "906cd0a533232d3922d48eeac1af92d2ce37661d9a804ed32707335a661bc81c",
+    "Diagnostic-build-info.txt": "ca3c680ead8c40244d1870e617a9e7820cc44c5f9cb36c0998c48108aeb11c4d",
     "Diagnostic-build.txt": "600357df22b96667e830ec0c46e39e1adec480c53e37428cc0381ef8f57e0875",
     "Overlay-controls.go.txt": "c0310bbc8e5892735af010d3d87af37f27d41dd9c2364c39695584cc36de6565",
     "Overlay-editor.go.txt": "5e0ee863d02e29c5326be78edaac3d16add01d4f654e89f2453abc0fd3d6c553",
     "Overlay-editor_geometry.go.txt": "e591e91eec4bde78ecae91bb2cf273d8040b89071e0aa1e1e966dcf7e70c22ae",
     "Overlay-main.go.txt": "8ce6d0689a370e4251fd41eb31763bb20c00780f9909126543210f1cddf1d8af",
     "RC reference.elab": "5a96b8608be0909f865b61039e25415513aa1bfbe2b227b8efb8ffd05749ef0e",
-    "README.md": "1e7cf4077f26009cf69a05d48be3c79b1eefa9f3a27f96544516c274d17753de",
+    "README.md": "32f55464d1a5e426dbbe20067613ac8d28dba6da3c6872018a8dc005ca06fa71",
     "native-session.json.gz": "5ac8fc56e20ec9ac6ca93f9bd1b0b49931b85ce6b88cc7ebb378d6da11f7dceb",
     "native-trace.txt.gz": "4082159e3a60555242e0454285fcf3c70f679d885c7061f0c24ad21d0cd58819",
     "observer-source.py": "b6bd35f87a8709acbdbd49f49b1b50dd067d819b3fce6d869d8113bd211a3991",
@@ -54,6 +54,12 @@
     "prepare-overlay-source.py": "c1be1c51eb6c187e0a32e20d90e10143d62800921996c28cd69356922d87a3c4",
     "process-verification.json": "89386c3b0ab7dd69a57ce8f6820929d85a0b61137480877a744ecbabeda96650",
     "source-release-identity.json": "9a046cb3af2fbe9df149409fd2bd92a9475b99e464b176fb56ab466dac9f3157",
-    "ui-observation.txt": "26d5083627c57987b2be0ffd95df7d9d119a6b0aee1caf9df42093c9cfcaf75f"
+    "ui-observation.txt": "26d5083627c57987b2be0ffd95df7d9d119a6b0aee1caf9df42093c9cfcaf75f",
+    "Diagnostic-build-info.raw.txt.gz": "c8914cffbc80160227bed93a6ccc455df271b581d36515d498479e2d832fdcba"
+  },
+  "metadata_normalization": {
+    "reason": "go version -m includes trailing tabs; normalize display text for repository whitespace checks",
+    "raw_metadata_sha256": "906cd0a533232d3922d48eeac1af92d2ce37661d9a804ed32707335a661bc81c",
+    "trace_and_source_evidence_unchanged": true
   }
 }
