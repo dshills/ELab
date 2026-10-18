@@ -1,0 +1,61 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/uninterrupted
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/unchanged-repaint
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-repaint
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-document-replacement
+--- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag (2.12s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/uninterrupted (0.52s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/unchanged-repaint (0.52s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-repaint (0.53s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-document-replacement (0.56s)
+=== RUN   TestMountedSliderKeyboardFocusChangePreservesContext
+=== RUN   TestMountedSliderKeyboardFocusChangePreservesContext/normal
+=== RUN   TestMountedSliderKeyboardFocusChangePreservesContext/replacement
+--- PASS: TestMountedSliderKeyboardFocusChangePreservesContext (1.09s)
+    --- PASS: TestMountedSliderKeyboardFocusChangePreservesContext/normal (0.54s)
+    --- PASS: TestMountedSliderKeyboardFocusChangePreservesContext/replacement (0.54s)
+=== RUN   TestMountedSliderRunningChargeAndAgentParity
+    slider_invalidation_offscreen_test.go:386: held 0.002→0.004 s; accepted at 0.004 s; wiper 0.940625; event charge 1.995280651 V; one user history/event; agent replay 4.626952142 V
+--- PASS: TestMountedSliderRunningChargeAndAgentParity (0.90s)
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/uninterrupted
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/unchanged-repaint
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-repaint
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-document-replacement
+--- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag (2.10s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/uninterrupted (0.51s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/unchanged-repaint (0.53s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-repaint (0.53s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-document-replacement (0.54s)
+=== RUN   TestMountedSliderKeyboardFocusChangePreservesContext
+=== RUN   TestMountedSliderKeyboardFocusChangePreservesContext/normal
+=== RUN   TestMountedSliderKeyboardFocusChangePreservesContext/replacement
+--- PASS: TestMountedSliderKeyboardFocusChangePreservesContext (1.08s)
+    --- PASS: TestMountedSliderKeyboardFocusChangePreservesContext/normal (0.53s)
+    --- PASS: TestMountedSliderKeyboardFocusChangePreservesContext/replacement (0.54s)
+=== RUN   TestMountedSliderRunningChargeAndAgentParity
+    slider_invalidation_offscreen_test.go:386: held 0.002→0.004 s; accepted at 0.004 s; wiper 0.940625; event charge 1.995280651 V; one user history/event; agent replay 4.626952142 V
+--- PASS: TestMountedSliderRunningChargeAndAgentParity (0.90s)
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/uninterrupted
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/unchanged-repaint
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-repaint
+=== RUN   TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-document-replacement
+--- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag (2.11s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/uninterrupted (0.51s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/unchanged-repaint (0.52s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-repaint (0.52s)
+    --- PASS: TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag/agent-document-replacement (0.55s)
+=== RUN   TestMountedSliderKeyboardFocusChangePreservesContext
+=== RUN   TestMountedSliderKeyboardFocusChangePreservesContext/normal
+=== RUN   TestMountedSliderKeyboardFocusChangePreservesContext/replacement
+--- PASS: TestMountedSliderKeyboardFocusChangePreservesContext (1.08s)
+    --- PASS: TestMountedSliderKeyboardFocusChangePreservesContext/normal (0.53s)
+    --- PASS: TestMountedSliderKeyboardFocusChangePreservesContext/replacement (0.54s)
+=== RUN   TestMountedSliderRunningChargeAndAgentParity
+    slider_invalidation_offscreen_test.go:386: held 0.002→0.004 s; accepted at 0.004 s; wiper 0.940625; event charge 1.995280651 V; one user history/event; agent replay 4.626952142 V
+--- PASS: TestMountedSliderRunningChargeAndAgentParity (0.90s)
+PASS
+ok  	github.com/dshills/elab/desktop	13.936s

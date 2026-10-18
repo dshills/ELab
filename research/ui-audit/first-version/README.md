@@ -287,3 +287,8 @@ A later deterministic native-driver check reproduced work loss when an agent edi
 ### Slider-context replacement ready
 
 The repair above is packaged in clean **0.127.0 /144** with the matching agent and unchanged example projects. Exact copied runtime passes native smoke, four public adapters, reference parity and pulse/Pause/Resume/save acceptance through 3.404 s. [Receipt](slider-review-checkpoint.json), [walkthrough](../../35-first-version-review.md). Earlier review folders and the canonical app remain unchanged; the owner has not tried the four tasks yet. No broader input/accessibility/performance or MVP gate is upgraded.
+
+
+### Running slider and keyboard focus
+
+The [bounded retained-widget follow-up](slider-running-focus/README.md) passes real-clock RC charging during a held drag, solver repaint, one commit/event, subsequent charging, agent replay at the accepted time and one truthful stale Undo. Tab moves keyboard focus without committing; an intervening document replacement still rejects release. Three focused race runs and the full quality gate pass. This is offscreen routing evidence, not actual OS window blur or a new external-process/visible-latency qualification. No production/SDK/version/bundle changes; /144 remains the owner review.

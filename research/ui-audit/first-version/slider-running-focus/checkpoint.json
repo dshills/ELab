@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-18",
+  "prior_goal_turn": "progress: repaired held-slider context and delivered qualified review /144",
+  "source_base": "e5c7b18d0420585a19e2122ac2d17686db18e873",
+  "status": "bounded running/keyboard-focus retained-widget qualification passed; no production repair needed",
+  "production_source_matches_review": "0.127.0 /144, clean build source 1f0a89a0723d2986081f1fda977d8f42a1de4f0e",
+  "changed_test": "desktop/slider_invalidation_offscreen_test.go",
+  "quality_gate_change": "all TestMountedSlider tests now run with offscreen/race, plus existing tagged vet",
+  "scope": {
+    "old_interruption_scenarios": 4,
+    "keyboard_focus_scenarios": 2,
+    "running_scenarios": 1,
+    "focused_repetitions": 3,
+    "focused_race_s": 13.936,
+    "full_gate_offscreen_race_s": 6.173,
+    "full_gate": "exit 0; audit freshness, lint/Staticcheck, 43 Python tests, root/native race/vet, mounted offscreen race/vet",
+    "default_native": "Go test cache reused for unchanged source; changed offscreen tests executed"
+  },
+  "independent_reference": {
+    "circuit": "5 V /10 k\u03a9 linear track /1 \u00b5F capacitor at wiper; source forced high",
+    "pre_event": "2.5*(1-exp(-t/0.0025))",
+    "post_event": "Thevenin target and resistance at accepted wiper; evolve from retained event voltage",
+    "voltage_tolerance_v": 0.002,
+    "event_charge_continuity_v": 1e-10,
+    "agent_time_tolerance_s": 1e-12
+  },
+  "preservation": {
+    "review_manifest_entries_verified": 130,
+    "review_manifest_sha256": "0073beb958b5128d383380e08d89ed1c5f926c5d14ae6aec6d57ef5e9a53e0ae",
+    "native_sha256": "1e8b481047b0a1b615195aa9aa78f25ec19351df3186c11494251930ad67d46b",
+    "production_SDK_models_commands_format_and_bundles_unchanged": true
+  },
+  "remaining": [
+    "Physical running/interleaved pointer behavior and actual OS window deactivation",
+    "IME, complete VoiceOver, visible p95 and exhaustive mounted conformance",
+    "Owner four-task walkthrough not tried yet; P0 statuses remain unchanged"
+  ],
+  "evidence_sha256": {
+    "race.txt": "92e7a92f6f1dc75bd5d3e9af2a05054d5f1eaf62864192556e62c1e686222988",
+    "README.md": "0bfebda4e0a742b5b7f100f75028f4e3548056d24876021324627a9ba57b7f9c",
+    "quality.txt": "dcb2bf56b29091656f7271084b6357534dc440f587fa61536bae365f609174f4"
+  },
+  "test_sha256": "fb20f737e11edbfdaede6ae62540be6bd86068e9ef665fdecd227e437b04cff7",
+  "check_script_sha256": "f28c79819e8f215e86a0da28c845c61c1a52b8e6c508d26faddaf491be4228b7"
+}
