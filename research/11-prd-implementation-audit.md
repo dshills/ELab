@@ -302,3 +302,8 @@ The held-slider repair is now included in clean **0.127.0 /144**, built from `1f
 ### Running slider and keyboard focus · October 18
 
 [Current retained-widget qualification](ui-audit/first-version/slider-running-focus/README.md) covers genuine live-clock publication during a held RC wiper drag, repaint, one user history/event, capacitor continuity and independent Thevenin references, continued output, public dispatcher agent replay, and one paused Undo with stale results. Tab focus moves without an early commit; a replacement document still refuses old release. This is offscreen pointer/keyboard routing with an in-process public agent replay. Actual OS window blur, physical running/interleaving, IME and broader gates remain open. The quality gate includes these tests; product/SDK/package remain /144, and P0 counts remain 17 implemented /10 partial.
+
+
+### Native pending value and document replacement · October 18
+
+The [actual native /144 field check](ui-audit/first-version/native-value-replacement/README.md) preserves the original graph during unfinished typing, removes the private field on document replacement and applies the fresh replacement value without carrying old text. A separate matching external headless agent agrees on the saved graph and all DC result fields. This is one field removal/remount path; it does not close every retained-identity schedule. App-switch/minimize attempts lacked conclusive activation evidence, so OS window deactivation remains unqualified. No code/SDK/version change, no new defect, no P0 status upgrade.

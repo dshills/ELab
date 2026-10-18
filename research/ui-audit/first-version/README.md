@@ -292,3 +292,8 @@ The repair above is packaged in clean **0.127.0 /144** with the matching agent a
 ### Running slider and keyboard focus
 
 The [bounded retained-widget follow-up](slider-running-focus/README.md) passes real-clock RC charging during a held drag, solver repaint, one commit/event, subsequent charging, agent replay at the accepted time and one truthful stale Undo. Tab moves keyboard focus without committing; an intervening document replacement still rejects release. Three focused race runs and the full quality gate pass. This is offscreen routing evidence, not actual OS window blur or a new external-process/visible-latency qualification. No production/SDK/version/bundle changes; /144 remains the owner review.
+
+
+### Native unfinished-field replacement
+
+The [bounded /144 native check](native-value-replacement/README.md) confirms private `2.2k` text does not mutate the old 1 kΩ graph, is removed on document load, and does not leak into a fresh 3.3 kΩ field/Apply. The final saved graph and all DC result fields agree with a separate matching headless agent. Cmd+Tab/minimize attempts have insufficient activation evidence and do not close OS window-blur acceptance. The owned host exited normally; canonical and all five review folders are unchanged. No production/SDK/version changes or P0 upgrade.

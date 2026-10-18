@@ -1,0 +1,15 @@
+# Native unfinished text does not overwrite a replacement document
+
+October 18, 2026. **Bounded native replacement check passed; OS deactivation remains unqualified.** This used the exact 0.127.0 /144 executable in the separately identified, owned `ELab-simulation-buttons.app` harness. The canonical app and all five review folders were verified unchanged. The owned harness was closed normally through its private public endpoint; the owner app was not operated.
+
+1. Load a private 1 kΩ LED fixture and select R2 through public commands. Click the actual native Component value field, select all and type `2.2k` without Return or Apply. AX displays the private text; public state still has `1 kΩ`, resistance 1000 Ω, the same command revision and a clean saved document.
+2. Attempt Cmd+Tab and the native minimize action. Both actions return, but the observations do **not** prove native key-window loss. AX retains the same focused-element description, and the screenshot has no conclusive activation marker. These attempts are retained as nonqualifying evidence; they do not close window-blur or interrupted-drag acceptance.
+3. Through the owned endpoint, load a different saved 3.3 kΩ document with the same resistor ID. Generation advances and selection clears. A fresh AX observation confirms the old Component value field is gone. Select R2 again: the new native field displays `3.3 kΩ`, not the unfinished `2.2k`.
+4. Raise the owned window through its exposed AX action and click Apply. The replacement remains 3300 Ω with unchanged graph/history tip and a clean document. Save to a new private `Final.elab`; it retains the replacement graph.
+5. A separate matching headless agent loads that final file. Every component/wire and every DC result field agree, excluding independent run/electrical identities (relative 1e-9, absolute 1e-12). Current is 0.9028703481 mA. The owned native process exits 0; final app inventory shows both owned and owner apps closed.
+
+[Unfinished text](06-after-app-switch.jpg), [fresh replacement Apply](12-fresh-apply.jpg), raw AX observations, three projects and compressed public states are retained here. The [read-only verifier](verify.py) checks the state/graph/history/result assertions without opening an app or editing a project. Run `python3 -B research/ui-audit/first-version/native-value-replacement/verify.py` from the source root.
+
+Initial agent setup attempted the unsupported `selection.set` ID; it refused. Discovery identified `component.select`, which was then used. This was a harness setup correction, not an application defect. No production source, command schema, model, project format, SDK or version changed. Existing source quality checks apply unchanged; only evidence/documentation is added.
+
+This proves one real native pending-field removal/remount case, not all retained-field identity schedules. It does not establish OS activation loss, held drag/window-blur behavior, IME, complete VoiceOver, visible p95, owner acceptance or exhaustive agent conformance. The earlier deterministic running/Tab checks remain separate evidence. No P0 status is upgraded.
