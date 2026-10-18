@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-18",
+  "release": "0.140.0 /157",
+  "scope": "Actual native Cursor A and interval-start private-draft reset after external agent restart, observed fresh-input retry/correction and exact packaged-agent parity",
+  "passed": true,
+  "original_pid": 8405,
+  "original_host_exit_code": 0,
+  "source_release_identity": {
+    "source_commit": "87db1ab95070668c3d54591c950f520fca295ac0",
+    "release": "0.140.0 /157",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.140.0-157-review/elab-agent",
+    "agent_sha256": "45b0a66666684b54dd9fac18954c9cb61b7c6f127b9bcaff0315c62484d024bc",
+    "receipt_sha256": "47fe2a1fe5b1680fd772610b9c2ff97cd0269ae36cd2a9ced5790e3d33d58e1c",
+    "ledger_sha256": "60d323c80a1c8396c7cc6eb6cba78d98225dd03714f7e6fcb552d1e8a34135e5",
+    "production_source_files_verified": 68,
+    "runtime_inputs_verified": 343,
+    "manifest_file_entries_verified": 158,
+    "manifest_sha256": "29ecc32819f447565698ce114040d04fe020e8345959562ae006627ed697600f"
+  },
+  "source_sdk_release_unchanged": true,
+  "private_cursor_run_ids": [
+    3,
+    4
+  ],
+  "private_interval_run_ids": [
+    4,
+    5
+  ],
+  "old_drafts_discarded": true,
+  "enter_preserves_replacement_domain": true,
+  "fresh_cursor_s": 0.006,
+  "fresh_window_s": [
+    0.006,
+    0.02
+  ],
+  "retained_samples": 21,
+  "selected_samples": 15,
+  "saved_bytes_preserved": true,
+  "input_anomalies": [
+    {
+      "action": "combined fresh cursor click/type/Return",
+      "outcome": "refused; A unset",
+      "intermediate_text_observed": false,
+      "cause": "unestablished",
+      "retry": "separate confirmed 6 ms then Return succeeded"
+    },
+    {
+      "action": "fresh interval typeText('6 ms')",
+      "outcome": "visible 6 m in two observations",
+      "cause": "unestablished",
+      "correction": "separate s, visibly confirmed 6 ms, then Return succeeded"
+    }
+  ],
+  "limits": [
+    "A and interval start only; source-mounted A/B/start/end evidence remains separate",
+    "Public graph/trace/window seeding, not new from-blank UI drawing",
+    "No reliable multi-character/rapid typing, full reader/IME/held/running/concurrent/blur or visible p95 acceptance",
+    "Screenshots inspected inline, not exported; durable UI record is transcription",
+    "Owner walkthrough remains Not tried yet"
+  ],
+  "files": {
+    "RC reference.elab": "5a96b8608be0909f865b61039e25415513aa1bfbe2b227b8efb8ffd05749ef0e",
+    "README.md": "d80c36fce981badd8dca4929ef2e306f8595a8606fe8a5949e348596d25c4a37",
+    "native-host.txt": "b771076b52f8c3ad9ddd75bc93f1df2c7d60f342fcb6be52a02c6d39c357af8d",
+    "native-session.json.gz": "13d353e0d8b197a525bc8fa72d7b46e0167f7a5a41531a67791f929c7519ff92",
+    "observer-source.py": "6d6936c8e04bec7698a6e464da3a366e02df38189fddd84abeda9b2512fcd0e7",
+    "process-verification.json": "01b587da77f558b97d60ac1f5a471e034891b5846acf5dc605f48c8f5467d008",
+    "source-release-identity.json": "9a046cb3af2fbe9df149409fd2bd92a9475b99e464b176fb56ab466dac9f3157",
+    "ui-observation.txt": "df7f98128c58cf22aa02ec14baa7b31a6254f9c3500b757baef775ae28eab5fa"
+  }
+}
