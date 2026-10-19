@@ -44,6 +44,8 @@ In another terminal, run `./elab-agent --connect /absolute/path/to/endpoint.json
 
 ## Review boundary and known limits
 
+- Newly reproduced in /165’s production bindings: a resistor/capacitor preset click can refuse after the value field commits unfinished text. [Source repair and scope](../docs/validation/value-preset-handoff/README.md) are validated; replacement packaging remains pending. This is separate from the existing Apply-value qualification.
+
 - Tested on this Apple Silicon Mac with macOS 26.6.2. The enforced minimum is 1040×720 in the mounted UI's units; the observed native frame is **1053×762 pixels**. App windows at 1280×800 and 1440×900 were inspected earlier. OS display modes, other hardware and monitor transitions remain unqualified.
 - A dense 64-part/100-node stress circuit reaches the existing 100 ms integration work limit before producing a sample; the committed graph and physical state are preserved. Supported size does not guarantee convergence.
 - Educational generic device models have the limits shown in the app. This is not general SPICE compatibility or PCB layout software.

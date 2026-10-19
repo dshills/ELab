@@ -1,0 +1,26 @@
+{
+  "status": "four_original_preset_failures_reproduced",
+  "command": [
+    "go",
+    "test",
+    "-C",
+    "desktop",
+    "-race",
+    "-tags=offscreen",
+    "-count=1",
+    "-timeout=60s",
+    "-run",
+    "^TestMountedButtonOwnerValuePresetsSettleOwnDraft$",
+    "-v",
+    "./..."
+  ],
+  "exit_code": 1,
+  "elapsed_s": 2.827240415965207,
+  "source_sha256": {
+    "desktop/component_inspector.go": "3a565a9c5c40dc50399b43e5dec3eb49543e04e8bfee070f5ab377a042fcf19f",
+    "desktop/value_apply.go": "54dd7abe7e5d81c755a760524e5429e26472f5217fbb836c1bccdd12235fbf75",
+    "desktop/value_presets_offscreen_test.go": "0cd886ed46fc99f90c870e83700fdcb37b3399d1123187a7331690d963a8988b"
+  },
+  "qualified_source_commit": "0e75875abe07d0c172902754aa8acec6062df7dc",
+  "scope": "Pinned retained widget/router test with production assembled callbacks; not physical OS input"
+}

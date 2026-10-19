@@ -5,7 +5,7 @@
     "desktop/actuation_controls.go": "9b0e8148f7ca32ac2f1802d69411fcd355c2df5b2af4b89df1084d413166ee1e",
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
     "desktop/canvas.go": "164b644c58fd16b6c370cbad30fb063cb30d6b4bb47a2d982dbe664618802b5f",
-    "desktop/component_inspector.go": "3a565a9c5c40dc50399b43e5dec3eb49543e04e8bfee070f5ab377a042fcf19f",
+    "desktop/component_inspector.go": "76c50a03f32d83b1a7fb313676be77aca7f998e6a122eff3405153fe8c238f25",
     "desktop/component_palette.go": "5d7b83aba4bd8202b899f0168848226f8217a8dd3dbd73d2ff6c8d99b752d3ab",
     "desktop/cursor_actions.go": "760fc37cc3fcd864732b2db13169a6019c0b20e755c6d511940655b2a55340c3",
     "desktop/dc_sweep.go": "6714f9c257faaf1e230e51dbc2c8b31a0d83ad9613eaa47d2de9bf8db495600f",
@@ -60,7 +60,7 @@
     "desktop/shutdown.go": "39e6d600f9edf67e2fe6a09e6b2b5ada051e67c1cf3fac2e3efe3ec4fe631a26",
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
     "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
-    "desktop/value_apply.go": "54dd7abe7e5d81c755a760524e5429e26472f5217fbb836c1bccdd12235fbf75",
+    "desktop/value_apply.go": "b0e380210aa477f9d848ed5bdc69502353c653f3ec6259d74c4159ed35df504e",
     "desktop/verification.go": "550f32b3d90b99269bce6777233b68e9329b2ae704b5b2fca60a1a368fbab406",
     "desktop/view.go": "aa6b8e57994864273f319965add9e618fd83eeb80a040cdc327674a749d18db7",
     "desktop/viewport.go": "8452950aa3113be66c59ed10b8f26ef21e0a5be3d1b4aee5ec57fb8dbd966590",
@@ -568,6 +568,14 @@
     },
     {
       "file": "desktop/component_inspector.go",
+      "line": 44,
+      "function": "*screen.componentInspector",
+      "kind": "callback-factory",
+      "expression": "s.valueApplyAction(state, part.ID, \"Apply label\")",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/component_inspector.go",
       "line": 56,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
@@ -576,25 +584,27 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 65,
+      "line": 56,
       "function": "*screen.componentInspector",
-      "kind": "action-factory",
-      "expression": "s.action(\"r-1k\", \"1 kΩ\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"1k\"})",
-      "public_commands": [
-        "component.set"
-      ],
-      "status": "literal-public-route"
+      "kind": "callback-factory",
+      "expression": "s.valueApplyAction(state, part.ID, \"Apply value\")",
+      "status": "requires-binding-review"
     },
     {
       "file": "desktop/component_inspector.go",
       "line": 65,
       "function": "*screen.componentInspector",
-      "kind": "action-factory",
-      "expression": "s.action(\"r-2k\", \"2 kΩ\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"2k\"})",
-      "public_commands": [
-        "component.set"
-      ],
-      "status": "literal-public-route"
+      "kind": "callback-factory",
+      "expression": "s.valuePresetAction(state, \"r-1k\", \"1 kΩ\", workbench.ValueParams{ID: part.ID, Value: \"1k\"})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 65,
+      "function": "*screen.componentInspector",
+      "kind": "callback-factory",
+      "expression": "s.valuePresetAction(state, \"r-2k\", \"2 kΩ\", workbench.ValueParams{ID: part.ID, Value: \"2k\"})",
+      "status": "requires-binding-review"
     },
     {
       "file": "desktop/component_inspector.go",
@@ -630,23 +640,17 @@
       "file": "desktop/component_inspector.go",
       "line": 81,
       "function": "*screen.componentInspector",
-      "kind": "action-factory",
-      "expression": "s.action(\"c-1u\", \"1 µF\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"1uF\"})",
-      "public_commands": [
-        "component.set"
-      ],
-      "status": "literal-public-route"
+      "kind": "callback-factory",
+      "expression": "s.valuePresetAction(state, \"c-1u\", \"1 µF\", workbench.ValueParams{ID: part.ID, Value: \"1uF\"})",
+      "status": "requires-binding-review"
     },
     {
       "file": "desktop/component_inspector.go",
       "line": 81,
       "function": "*screen.componentInspector",
-      "kind": "action-factory",
-      "expression": "s.action(\"c-100u\", \"100 µF\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"100uF\"})",
-      "public_commands": [
-        "component.set"
-      ],
-      "status": "literal-public-route"
+      "kind": "callback-factory",
+      "expression": "s.valuePresetAction(state, \"c-100u\", \"100 µF\", workbench.ValueParams{ID: part.ID, Value: \"100uF\"})",
+      "status": "requires-binding-review"
     },
     {
       "file": "desktop/component_inspector.go",
@@ -3417,7 +3421,7 @@
     },
     {
       "file": "desktop/value_apply.go",
-      "line": 35,
+      "line": 36,
       "function": "*screen.changeValueDraft",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
@@ -3428,16 +3432,16 @@
     },
     {
       "file": "desktop/value_apply.go",
-      "line": 80,
-      "function": "*screen.valueApplyAction",
+      "line": 92,
+      "function": "*screen.valueSetAction",
       "kind": "node-Activate",
-      "expression": "Activate: func() {\n\tif s.pendingValueApply != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.valueDraftAccepted; accepted != nil \u0026\u0026 accepted.from.generation == context.generation \u0026\u0026\n\t\taccepted.from.revision \u003c= context.revision \u0026\u0026 context.revision \u003c= accepted.to.revision \u0026\u0026\n\t\taccepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) \u0026\u0026\n\t\taccepted.id == id \u0026\u0026 current.Selected == id \u0026\u0026 current.Drawing.Value == accepted.text {\n\t\tcontext = accepted.to\n\t\tparams.Value = accepted.text\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\n\t\ts.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := \u0026valueApply{context: context, params: params}\n\ts.pendingValueApply = pending\n\tdone := func(err error) {\n\t\tif s.pendingValueApply != pending {\n\t\t\treturn\n\t\t}\n\t\ts.pendingValueApply = nil\n\t\tif err != nil {\n\t\t\ts.errorMessage = fmt.Sprintf(\"Could not finish value entry: %v\", err)\n\t\t} else if !pending.failed {\n\t\t\ts.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)\n\t\t}\n\t\ts.app.Invalidate(\"main\")\n\t}\n\tif s.settleField == nil {\n\n\t\tdone(nil)\n\t} else if err := s.settleField(\"value-entry\", done); err != nil {\n\t\tdone(err)\n\t}\n}",
+      "expression": "Activate: func() {\n\tif s.pendingValueApply != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.valueDraftAccepted; accepted != nil \u0026\u0026 accepted.from.generation == context.generation \u0026\u0026\n\t\taccepted.from.revision \u003c= context.revision \u0026\u0026 context.revision \u003c= accepted.to.revision \u0026\u0026\n\t\taccepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) \u0026\u0026\n\t\taccepted.id == params.ID \u0026\u0026 current.Selected == params.ID \u0026\u0026 current.Drawing.Value == accepted.text {\n\t\tcontext = accepted.to\n\t\tif !fixed {\n\t\t\tparams.Value = accepted.text\n\t\t}\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\n\t\ts.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := \u0026valueApply{context: context, params: params, fixed: fixed}\n\ts.pendingValueApply = pending\n\tdone := func(err error) {\n\t\tif s.pendingValueApply != pending {\n\t\t\treturn\n\t\t}\n\t\ts.pendingValueApply = nil\n\t\tif err != nil {\n\t\t\ts.errorMessage = fmt.Sprintf(\"Could not finish value entry: %v\", err)\n\t\t} else if !pending.failed {\n\t\t\ts.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)\n\t\t}\n\t\ts.app.Invalidate(\"main\")\n\t}\n\tif s.settleField == nil {\n\n\t\tdone(nil)\n\t} else if err := s.settleField(\"value-entry\", done); err != nil {\n\t\tdone(err)\n\t}\n}",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/value_apply.go",
-      "line": 94,
-      "function": "*screen.valueApplyAction",
+      "line": 108,
+      "function": "*screen.valueSetAction",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)",
       "public_commands": [
@@ -3447,8 +3451,8 @@
     },
     {
       "file": "desktop/value_apply.go",
-      "line": 107,
-      "function": "*screen.valueApplyAction",
+      "line": 121,
+      "function": "*screen.valueSetAction",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)",
       "public_commands": [

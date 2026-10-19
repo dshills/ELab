@@ -1,5 +1,7 @@
 # First-version UI walkthrough and issue list
 
+October 19 preset repair: [original-source failure and current source validation](../../../docs/validation/value-preset-handoff/README.md) prove all four shortcuts now settle only their own value draft and keep their fixed value. Mounted exact-agent/one-Undo/held-agent checks and deferred guards pass; full quality 207.671 s and development native smoke 42.681 s pass. /165 remains affected and preserved; clean replacement qualification is next. No new physical preset-input, owner acceptance, API/model/format/SDK change or promotion.
+
 October 19 stable-input preflight: [protected exact-/165 sessions and network control](../../../docs/validation/stable-frame-input-preflight/README.md) close normally and preserve shared geometry files, but AppKit reports no bundle ID and CUA/recorder targeting cannot proceed. No guard is weakened, test edit performed or frame captured. This narrows a test-environment limitation; it does not establish a product failure, latency result or owner acceptance.
 
 October 19 owner decision: [ordinary default-startup and clean-account installation qualification is deferred for the private alpha](private-alpha-owner-decisions.json). No account access, test pass, settings change, promotion or walkthrough acceptance is inferred. The broader requirement remains open; the earlier preflight retains its historical request-pending status.

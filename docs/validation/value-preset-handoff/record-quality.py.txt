@@ -1,0 +1,7 @@
+from pathlib import Path
+import hashlib,json,subprocess,time
+root=Path('/Users/dshills/Development/projects/ELab');folder=root/'docs/validation/value-preset-handoff';start=time.monotonic()
+with (folder/'quality-stdout.txt').open('w') as stdout,(folder/'quality-stderr.txt').open('w') as stderr:
+ p=subprocess.run(['./scripts/check.sh'],cwd=root,stdout=stdout,stderr=stderr,timeout=900)
+r=dict(passed=p.returncode==0,exit_code=p.returncode,command='./scripts/check.sh',elapsed_s=time.monotonic()-start,source_sha256={name:hashlib.sha256((root/name).read_bytes()).hexdigest() for name in ['desktop/component_inspector.go','desktop/value_apply.go','desktop/value_presets_test.go','desktop/value_presets_offscreen_test.go','internal/uiaudit/audit.go','internal/uiaudit/audit_test.go','research/13-native-command-inventory.json']})
+(folder/'quality.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps({k:r[k] for k in ['passed','exit_code','elapsed_s']}));raise SystemExit(p.returncode)

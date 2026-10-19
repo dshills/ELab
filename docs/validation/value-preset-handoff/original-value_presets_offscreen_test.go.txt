@@ -1,0 +1,81 @@
+//go:build offscreen
+
+package main
+
+import (
+	"reflect"
+	"testing"
+
+	"cogentcore.org/core/events"
+	"cogentcore.org/core/events/key"
+	"github.com/dshills/elab/workbench"
+	"github.com/dshills/vellum/drivers/cogent"
+	"github.com/dshills/vellum/ui"
+)
+
+func mountedValuePreset(t *testing.T, s *screen, preset string) *mountedControlWindow {
+	t.Helper()
+	m := newMountedControlWindow(t, s, func() ui.Node {
+		assembled := s.view()
+		root := ui.Node{ID: "root", Kind: ui.Column, Focus: ui.FocusRequest{ID: "value-entry", Sequence: 1}}
+		for _, id := range []string{"value-entry", preset} {
+			node, ok := findNode(assembled, id)
+			if !ok {
+				t.Fatalf("missing production value control %s", id)
+			}
+			root.Children = append(root.Children, node)
+		}
+		return root
+	})
+	s.settleField = func(id string, done func(error)) error {
+		return cogent.SettleTextField(m.ctx, s.app, "main", id, done)
+	}
+	return m
+}
+
+func TestMountedButtonOwnerValuePresetsSettleOwnDraft(t *testing.T) {
+	for _, fixture := range []struct {
+		preset, example, part, initial, draft string
+		want                                  float64
+	}{
+		{"r-1k", "example.reset", "R1", "3k", "2.2k", 1000},
+		{"r-2k", "example.reset", "R1", "3k", "2.2k", 2000},
+		{"c-1u", "example.rc", "C1", "47uF", "3.3uF", 1e-6},
+		{"c-100u", "example.rc", "C1", "47uF", "3.3uF", 100e-6},
+	} {
+		t.Run(fixture.preset, func(t *testing.T) {
+			s, cleanup := testScreen(t)
+			t.Cleanup(cleanup)
+			uiAction(t, s, fixture.example, nil)
+			agentAction(t, s.service, "simulation.pause", struct{}{})
+			agentAction(t, s.service, "component.select", workbench.IDParams{ID: fixture.part})
+			agentAction(t, s.service, "component.set", workbench.ValueParams{ID: fixture.part, Value: fixture.initial})
+			m := mountedValuePreset(t, s, fixture.preset)
+			before := s.service.Snapshot()
+			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+			for _, r := range fixture.draft {
+				m.input(cogent.ManualInput{Type: events.KeyChord, Rune: r})
+			}
+			if field := mountedControlElement(t, m, "value-entry"); field.Value != fixture.draft || !reflect.DeepEqual(before, s.service.Snapshot()) {
+				t.Fatal("fixture must retain private text without changing the circuit", field.Value)
+			}
+			clickMountedControl(t, m, fixture.preset)
+			after := s.service.Snapshot()
+			for _, part := range after.Components {
+				if part.ID == fixture.part && part.Value != fixture.want {
+					t.Fatalf("one preset click failed: value=%g want=%g revision=%d→%d error=%s", part.Value, fixture.want, before.CommandRevision, after.CommandRevision, s.errorMessage)
+				}
+			}
+			if s.errorMessage != "" || after.CommandRevision != before.CommandRevision+2 || !reflect.DeepEqual(before.Wires, after.Wires) {
+				t.Fatal("preset must settle its own draft and set the component once", s.errorMessage)
+			}
+			if after.UndoEntry == nil || before.UndoEntry != nil && after.UndoEntry.CommandRevision == before.UndoEntry.CommandRevision {
+				t.Fatal("preset did not create a circuit history entry")
+			}
+			uiAction(t, s, "edit.undo", nil)
+			if !reflect.DeepEqual(before.Components, s.service.Snapshot().Components) {
+				t.Fatal("one shared Undo did not restore the pre-preset circuit")
+			}
+		})
+	}
+}

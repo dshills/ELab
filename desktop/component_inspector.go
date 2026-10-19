@@ -62,7 +62,7 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 		}
 
 		if part.Kind == "resistor" {
-			inspector = append(inspector, ui.Node{ID: "presets", Kind: ui.Row, Children: []ui.Node{s.action("r-1k", "1 kΩ", "component.set", workbench.ValueParams{ID: part.ID, Value: "1k"}), s.action("r-2k", "2 kΩ", "component.set", workbench.ValueParams{ID: part.ID, Value: "2k"})}})
+			inspector = append(inspector, ui.Node{ID: "presets", Kind: ui.Row, Children: []ui.Node{s.valuePresetAction(state, "r-1k", "1 kΩ", workbench.ValueParams{ID: part.ID, Value: "1k"}), s.valuePresetAction(state, "r-2k", "2 kΩ", workbench.ValueParams{ID: part.ID, Value: "2k"})}})
 		}
 		if part.Kind == "inductor" {
 			inspector = append(inspector, s.inductorControls(state, part)...)
@@ -78,7 +78,7 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			inspector = append(inspector, quiet("cap-initial-label", "Initial voltage · pin 1 minus pin 2"), ui.Node{ID: "cap-initial", Kind: ui.NumberField, Number: float32(initial), Numeric: ui.Numeric{Min: -12, Max: 12, Step: .01}, Accessibility: ui.Accessibility{Name: "Capacitor initial voltage"}, Change: func(e ui.ChangeEvent) {
 				s.invoke("capacitor.initial.set", workbench.ValueParams{ID: part.ID, Value: fmt.Sprintf("%.9g V", e.Number)})
 			}}, s.action("cap-initial-default", "Use experiment initial voltage", "capacitor.initial.set", workbench.ValueParams{ID: part.ID, Value: "default"}))
-			inspector = append(inspector, ui.Node{ID: "cap-presets", Kind: ui.Row, Children: []ui.Node{s.action("c-1u", "1 µF", "component.set", workbench.ValueParams{ID: part.ID, Value: "1uF"}), s.action("c-100u", "100 µF", "component.set", workbench.ValueParams{ID: part.ID, Value: "100uF"})}})
+			inspector = append(inspector, ui.Node{ID: "cap-presets", Kind: ui.Row, Children: []ui.Node{s.valuePresetAction(state, "c-1u", "1 µF", workbench.ValueParams{ID: part.ID, Value: "1uF"}), s.valuePresetAction(state, "c-100u", "100 µF", workbench.ValueParams{ID: part.ID, Value: "100uF"})}})
 		}
 
 	} else if part.Kind == "npn" {

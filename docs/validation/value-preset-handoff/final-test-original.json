@@ -1,0 +1,23 @@
+{
+  "exit_code": 1,
+  "command": [
+    "go",
+    "test",
+    "-C",
+    "desktop",
+    "-overlay",
+    "/Users/dshills/Development/projects/ELab/docs/validation/value-preset-handoff/original-overlay.json",
+    "-race",
+    "-tags=offscreen",
+    "-count=1",
+    "-timeout=60s",
+    "-run",
+    "^TestMountedButtonOwnerValuePresetsSettleOwnDraft$",
+    "-v",
+    "./..."
+  ],
+  "elapsed_s": 6.034807209041901,
+  "original_source_matches_qualified_commit": true,
+  "failed_cases": 4,
+  "scope": "Final valid tests against original production files via Go overlay; current worktree sources not replaced"
+}

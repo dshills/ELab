@@ -1,0 +1,11 @@
+from pathlib import Path
+import hashlib,json,os,subprocess,time
+root=Path('/Users/dshills/Development/projects/ELab');folder=root/'docs/validation/value-preset-handoff'
+source={name:hashlib.sha256((root/name).read_bytes()).hexdigest() for name in ['desktop/component_inspector.go','desktop/value_apply.go','desktop/value_presets_offscreen_test.go']}
+for name in source:(folder/('original-'+Path(name).name+'.txt')).write_bytes((root/name).read_bytes())
+args=['go','test','-C','desktop','-race','-tags=offscreen','-count=1','-timeout=60s','-run','^TestMountedButtonOwnerValuePresetsSettleOwnDraft$','-v','./...']
+env=dict(os.environ,GOWORK='off',GOCACHE=str(root/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native');start=time.monotonic();p=subprocess.run(args,cwd=root,env=env,capture_output=True,text=True,timeout=120)
+(folder/'before-stdout.txt').write_text(p.stdout);(folder/'before-stderr.txt').write_text(p.stderr)
+assert p.returncode==1 and p.stdout.count('one preset click failed:')==4
+r=dict(status='four_original_preset_failures_reproduced',command=args,exit_code=p.returncode,elapsed_s=time.monotonic()-start,source_sha256=source,qualified_source_commit='0e75875abe07d0c172902754aa8acec6062df7dc',scope='Pinned retained widget/router test with production assembled callbacks; not physical OS input')
+(folder/'before.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps({k:r[k] for k in ['status','exit_code','elapsed_s']}))

@@ -14,6 +14,7 @@ type valueApply struct {
 	context actionContext
 	params  workbench.ValueParams
 	failed  bool
+	fixed   bool
 }
 
 // A focus loss can commit this field before its Apply click is delivered. Only
@@ -71,13 +72,24 @@ func (s *screen) changeValueDraft(e ui.ChangeEvent) {
 	}
 	state := result.Result.(workbench.Snapshot)
 	pending.context = actionContext{state.CommandRevision, state.Document.Generation}
-	pending.params.Value = e.Text
+	if !pending.fixed {
+		pending.params.Value = e.Text
+	}
 }
 
 func (s *screen) valueApplyAction(state workbench.Snapshot, id, text string) ui.Node {
+	return s.valueSetAction(state, "apply-value", text, workbench.ValueParams{ID: id, Value: state.Drawing.Value}, false)
+}
+
+func (s *screen) valuePresetAction(state workbench.Snapshot, control, text string, params workbench.ValueParams) ui.Node {
+	return s.valueSetAction(state, control, text, params, true)
+}
+
+// Presets and Apply share field settlement and actor/document guards. A preset
+// keeps its explicit value while the same field commits its private draft.
+func (s *screen) valueSetAction(state workbench.Snapshot, control, text string, params workbench.ValueParams, fixed bool) ui.Node {
 	context := actionContext{state.CommandRevision, state.Document.Generation}
-	params := workbench.ValueParams{ID: id, Value: state.Drawing.Value}
-	return buttonStyle(ui.Node{ID: "apply-value", Kind: ui.Button, Text: text, Disabled: s.pendingValueApply != nil, Accessibility: ui.Accessibility{Name: text}, Activate: func() {
+	return buttonStyle(ui.Node{ID: control, Kind: ui.Button, Text: text, Disabled: s.pendingValueApply != nil, Accessibility: ui.Accessibility{Name: text}, Activate: func() {
 		if s.pendingValueApply != nil {
 			return
 		}
@@ -85,16 +97,18 @@ func (s *screen) valueApplyAction(state workbench.Snapshot, id, text string) ui.
 		if accepted := s.valueDraftAccepted; accepted != nil && accepted.from.generation == context.generation &&
 			accepted.from.revision <= context.revision && context.revision <= accepted.to.revision &&
 			accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) &&
-			accepted.id == id && current.Selected == id && current.Drawing.Value == accepted.text {
+			accepted.id == params.ID && current.Selected == params.ID && current.Drawing.Value == accepted.text {
 			context = accepted.to
-			params.Value = accepted.text
+			if !fixed {
+				params.Value = accepted.text
+			}
 		}
 		if current.CommandRevision != context.revision || current.Document.Generation != context.generation {
 			// Use the ordinary shared refusal without flushing an obsolete field.
 			s.invokeAtCommandRevision("component.set", params, context.revision, context.generation)
 			return
 		}
-		pending := &valueApply{context: context, params: params}
+		pending := &valueApply{context: context, params: params, fixed: fixed}
 		s.pendingValueApply = pending
 		done := func(err error) {
 			if s.pendingValueApply != pending {

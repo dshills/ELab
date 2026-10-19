@@ -134,3 +134,24 @@ func view(s *screen) {
 		t.Fatal("decision callback factory or nested ingress lost", report.Sites, report.Issues, err)
 	}
 }
+
+func TestInventoryTracksValueSettlementFactories(t *testing.T) {
+	dir := t.TempDir()
+	source := `package main
+func view(s *screen) {
+ s.valueApplyAction(state, "R1", "Apply fake.command")
+ s.valuePresetAction(state, "r-2k", "Preset missing.command", params)
+}`
+	if err := os.WriteFile(filepath.Join(dir, "view.go"), []byte(source), 0600); err != nil {
+		t.Fatal(err)
+	}
+	r, err := Audit(dir)
+	if err != nil || len(r.Issues) != 0 || len(r.Sites) != 2 {
+		t.Fatal("value settlement factories omitted or labels mistaken for routes", r.Sites, r.Issues, err)
+	}
+	for _, site := range r.Sites {
+		if site.Kind != "callback-factory" || site.Status != "requires-binding-review" || len(site.Commands) != 0 {
+			t.Fatal("factory presence must not invent literal or runtime coverage", site)
+		}
+	}
+}
