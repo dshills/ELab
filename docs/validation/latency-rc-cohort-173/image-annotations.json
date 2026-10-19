@@ -1,0 +1,94 @@
+{
+  "manually_inspected_full_originals": [
+    {
+      "image": "baseline.png",
+      "source": "frame-bcb471bb69c220ebe40b31171e658146fc7beb4cabc5f681d5d2158135e7e169.png",
+      "role": "Private 2uF draft; accepted 1uF, tau10ms/run12"
+    },
+    {
+      "image": "fresh-zero.png",
+      "source": "frame-23d9bae7250dbc9d9abf52b145a02e10c4419024052f691a37a5223d2626867d.png",
+      "role": "Accepted 2uF, fresh tau20ms/run13; moving waveform and numerical readings"
+    },
+    {
+      "image": "fresh-millisecond.png",
+      "source": "frame-ea27c509386f6bde533d568c43cf5c262743b87cfb869454f12a5b39822e5719.png",
+      "role": "Accepted 2uF, fresh tau20ms/run13; moving waveform and numerical readings"
+    },
+    {
+      "image": "fresh-centisecond.png",
+      "source": "frame-3596087dedff05ef87866bfd850fc295a9f902006a371071b3ae7e7848dadfaf.png",
+      "role": "Accepted 2uF, fresh tau20ms/run13; moving waveform and numerical readings"
+    }
+  ],
+  "capacitor_box": [
+    618,
+    304,
+    704,
+    323
+  ],
+  "baseline_capacitor_sha256": "99bc96b7298ec4079dff68fdc7322d25784f3304c0717e59eefb6187c8a9e890",
+  "committed_capacitor_sha256": "2d430d207d92ad7fd29ffb79da86090a4372eecacf54daae4ff8997057198fa4",
+  "static_regions": [
+    {
+      "box": [
+        30,
+        75,
+        76,
+        102
+      ],
+      "rgb_sha256": "502da3840abed263299340d639fae055c163ac2fbd4842569874f765d795dc5d"
+    },
+    {
+      "box": [
+        724,
+        65,
+        807,
+        108
+      ],
+      "rgb_sha256": "11a232231a27c697f7f518717003ed34e8f67bd081e16b498a2a68f9ef9500e0"
+    },
+    {
+      "box": [
+        143,
+        510,
+        225,
+        530
+      ],
+      "rgb_sha256": "e7c2ed8627e00b25d8fefc457820f554e70de9d08c080cf4dae056f94b1695c6"
+    }
+  ],
+  "tau_templates": [
+    {
+      "image": "fresh-zero.png",
+      "box": [
+        305,
+        512,
+        359,
+        525
+      ],
+      "rgb_sha256": "9e31a902a4e24f2c3059e6c40b0a13d3a3cc4f130308f499bd1e08d621e0071f"
+    },
+    {
+      "image": "fresh-millisecond.png",
+      "box": [
+        329,
+        504,
+        383,
+        517
+      ],
+      "rgb_sha256": "3d310e8b59a60b35b1442841f4a82f881f49a0d24124c43210e6ab1e1a3126e6"
+    },
+    {
+      "image": "fresh-centisecond.png",
+      "box": [
+        322,
+        504,
+        376,
+        517
+      ],
+      "rgb_sha256": "795ca0eb9e8d897a54f3414da668fe01794a37dd8199f3ebce2fb71d74b96a8f"
+    }
+  ],
+  "method": "Exact accepted schematic-label hashes and exact RGB tau20ms text templates searched at translations inside the scope caption; no OCR or moving current/voltage template. Three raster variants cover initial zero, millisecond and centisecond text layouts."
+}

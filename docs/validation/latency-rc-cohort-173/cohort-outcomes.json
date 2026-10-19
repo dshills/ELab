@@ -1,0 +1,456 @@
+{
+  "scheduled": 20,
+  "retained_outcomes": 20,
+  "available": 12,
+  "unavailable": 8,
+  "replacements": 0,
+  "full_cohort_p95": null,
+  "performance_gate_passed": null,
+  "available_only_descriptive_ms": {
+    "min": 110.282875,
+    "median": 122.460875,
+    "max": 144.57208333333332
+  },
+  "outcomes": [
+    {
+      "id": "rc-01",
+      "original_status": "unavailable",
+      "available": false,
+      "reason": "uncommitted value; original cause unresolved",
+      "analysis": null
+    },
+    {
+      "id": "rc-02",
+      "original_status": "unavailable",
+      "available": false,
+      "reason": "explicit preparation abort before input/capture",
+      "analysis": null
+    },
+    {
+      "id": "rc-03",
+      "original_status": "collected_pending_pixel_analysis",
+      "available": false,
+      "reason": "target covered by another app; backend edit correct but no visible timing evidence",
+      "analysis": null
+    },
+    {
+      "id": "rc-04",
+      "original_status": "collected_pending_pixel_analysis",
+      "available": false,
+      "reason": "target covered by another app; backend edit correct but no visible timing evidence",
+      "analysis": null
+    },
+    {
+      "id": "rc-05",
+      "original_status": "collected_pending_pixel_analysis",
+      "available": false,
+      "reason": "target covered by another app; backend edit correct but no visible timing evidence",
+      "analysis": null
+    },
+    {
+      "id": "rc-06",
+      "original_status": "collected_pending_pixel_analysis",
+      "available": false,
+      "reason": "target covered by another app; backend edit correct but no visible timing evidence",
+      "analysis": null
+    },
+    {
+      "id": "rc-07",
+      "original_status": "collected_pending_pixel_analysis",
+      "available": false,
+      "reason": "target covered by another app; backend edit correct but no visible timing evidence",
+      "analysis": null
+    },
+    {
+      "id": "rc-08",
+      "original_status": "unavailable",
+      "available": false,
+      "reason": "target covered by another app; rc-08 also uncommitted under confounded foreground conditions",
+      "analysis": null
+    },
+    {
+      "id": "rc-09",
+      "original_status": "collected_pending_pixel_analysis",
+      "available": true,
+      "reason": null,
+      "analysis": {
+        "trial": "rc-09",
+        "measurement_status": "available",
+        "complete_frames": 165,
+        "unique_images": 163,
+        "roles": {
+          "private-draft-original-result": 8,
+          "committed-value-fresh-result": 157
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 9,
+        "marker_to_committed_ms": 118.21991666666666,
+        "marker_to_fresh_ms": 118.21991666666666,
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "missing_image",
+          "forged_eligibility",
+          "unfinished_input",
+          "wrong_native_run",
+          "old_parameter_labeled_committed",
+          "old_tau_labeled_fresh"
+        ]
+      }
+    },
+    {
+      "id": "rc-10",
+      "original_status": "collected_pending_pixel_analysis",
+      "available": true,
+      "reason": null,
+      "analysis": {
+        "trial": "rc-10",
+        "measurement_status": "available",
+        "complete_frames": 166,
+        "unique_images": 164,
+        "roles": {
+          "private-draft-original-result": 9,
+          "committed-value-fresh-result": 157
+        },
+        "first_committed_parameter_frame": 10,
+        "first_fresh_frame": 10,
+        "marker_to_committed_ms": 135.07691666666668,
+        "marker_to_fresh_ms": 135.07691666666668,
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "missing_image",
+          "forged_eligibility",
+          "unfinished_input",
+          "wrong_native_run",
+          "old_parameter_labeled_committed",
+          "old_tau_labeled_fresh"
+        ]
+      }
+    },
+    {
+      "id": "rc-11",
+      "original_status": "collected_pending_pixel_analysis",
+      "available": true,
+      "reason": null,
+      "analysis": {
+        "trial": "rc-11",
+        "measurement_status": "available",
+        "complete_frames": 167,
+        "unique_images": 166,
+        "roles": {
+          "private-draft-original-result": 9,
+          "committed-value-fresh-result": 158
+        },
+        "first_committed_parameter_frame": 10,
+        "first_fresh_frame": 10,
+        "marker_to_committed_ms": 137.97820833333333,
+        "marker_to_fresh_ms": 137.97820833333333,
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "missing_image",
+          "forged_eligibility",
+          "unfinished_input",
+          "wrong_native_run",
+          "old_parameter_labeled_committed",
+          "old_tau_labeled_fresh"
+        ]
+      }
+    },
+    {
+      "id": "rc-12",
+      "original_status": "collected_pending_pixel_analysis",
+      "available": true,
+      "reason": null,
+      "analysis": {
+        "trial": "rc-12",
+        "measurement_status": "available",
+        "complete_frames": 166,
+        "unique_images": 164,
+        "roles": {
+          "private-draft-original-result": 8,
+          "committed-value-fresh-result": 158
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 9,
+        "marker_to_committed_ms": 110.282875,
+        "marker_to_fresh_ms": 110.282875,
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "missing_image",
+          "forged_eligibility",
+          "unfinished_input",
+          "wrong_native_run",
+          "old_parameter_labeled_committed",
+          "old_tau_labeled_fresh"
+        ]
+      }
+    },
+    {
+      "id": "rc-13",
+      "original_status": "collected_pending_pixel_analysis",
+      "available": true,
+      "reason": null,
+      "analysis": {
+        "trial": "rc-13",
+        "measurement_status": "available",
+        "complete_frames": 165,
+        "unique_images": 163,
+        "roles": {
+          "private-draft-original-result": 8,
+          "committed-value-fresh-result": 157
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 9,
+        "marker_to_committed_ms": 129.58279166666668,
+        "marker_to_fresh_ms": 129.58279166666668,
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "missing_image",
+          "forged_eligibility",
+          "unfinished_input",
+          "wrong_native_run",
+          "old_parameter_labeled_committed",
+          "old_tau_labeled_fresh"
+        ]
+      }
+    },
+    {
+      "id": "rc-14",
+      "original_status": "collected_pending_pixel_analysis",
+      "available": true,
+      "reason": null,
+      "analysis": {
+        "trial": "rc-14",
+        "measurement_status": "available",
+        "complete_frames": 167,
+        "unique_images": 165,
+        "roles": {
+          "private-draft-original-result": 9,
+          "committed-value-fresh-result": 158
+        },
+        "first_committed_parameter_frame": 10,
+        "first_fresh_frame": 10,
+        "marker_to_committed_ms": 136.4425,
+        "marker_to_fresh_ms": 136.4425,
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "missing_image",
+          "forged_eligibility",
+          "unfinished_input",
+          "wrong_native_run",
+          "old_parameter_labeled_committed",
+          "old_tau_labeled_fresh"
+        ]
+      }
+    },
+    {
+      "id": "rc-15",
+      "original_status": "collected_pending_pixel_analysis",
+      "available": true,
+      "reason": null,
+      "analysis": {
+        "trial": "rc-15",
+        "measurement_status": "available",
+        "complete_frames": 165,
+        "unique_images": 163,
+        "roles": {
+          "private-draft-original-result": 8,
+          "committed-value-fresh-result": 157
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 9,
+        "marker_to_committed_ms": 118.13320833333333,
+        "marker_to_fresh_ms": 118.13320833333333,
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "missing_image",
+          "forged_eligibility",
+          "unfinished_input",
+          "wrong_native_run",
+          "old_parameter_labeled_committed",
+          "old_tau_labeled_fresh"
+        ]
+      }
+    },
+    {
+      "id": "rc-16",
+      "original_status": "collected_pending_pixel_analysis",
+      "available": true,
+      "reason": null,
+      "analysis": {
+        "trial": "rc-16",
+        "measurement_status": "available",
+        "complete_frames": 167,
+        "unique_images": 165,
+        "roles": {
+          "private-draft-original-result": 8,
+          "committed-value-fresh-result": 159
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 9,
+        "marker_to_committed_ms": 118.25466666666667,
+        "marker_to_fresh_ms": 118.25466666666667,
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "missing_image",
+          "forged_eligibility",
+          "unfinished_input",
+          "wrong_native_run",
+          "old_parameter_labeled_committed",
+          "old_tau_labeled_fresh"
+        ]
+      }
+    },
+    {
+      "id": "rc-17",
+      "original_status": "collected_pending_pixel_analysis",
+      "available": true,
+      "reason": null,
+      "analysis": {
+        "trial": "rc-17",
+        "measurement_status": "available",
+        "complete_frames": 166,
+        "unique_images": 164,
+        "roles": {
+          "private-draft-original-result": 8,
+          "committed-value-fresh-result": 158
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 9,
+        "marker_to_committed_ms": 118.25058333333334,
+        "marker_to_fresh_ms": 118.25058333333334,
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "missing_image",
+          "forged_eligibility",
+          "unfinished_input",
+          "wrong_native_run",
+          "old_parameter_labeled_committed",
+          "old_tau_labeled_fresh"
+        ]
+      }
+    },
+    {
+      "id": "rc-18",
+      "original_status": "collected_pending_pixel_analysis",
+      "available": true,
+      "reason": null,
+      "analysis": {
+        "trial": "rc-18",
+        "measurement_status": "available",
+        "complete_frames": 165,
+        "unique_images": 163,
+        "roles": {
+          "private-draft-original-result": 8,
+          "committed-value-fresh-result": 157
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 9,
+        "marker_to_committed_ms": 119.50591666666666,
+        "marker_to_fresh_ms": 119.50591666666666,
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "missing_image",
+          "forged_eligibility",
+          "unfinished_input",
+          "wrong_native_run",
+          "old_parameter_labeled_committed",
+          "old_tau_labeled_fresh"
+        ]
+      }
+    },
+    {
+      "id": "rc-19",
+      "original_status": "collected_pending_pixel_analysis",
+      "available": true,
+      "reason": null,
+      "analysis": {
+        "trial": "rc-19",
+        "measurement_status": "available",
+        "complete_frames": 166,
+        "unique_images": 164,
+        "roles": {
+          "private-draft-original-result": 9,
+          "committed-value-fresh-result": 157
+        },
+        "first_committed_parameter_frame": 10,
+        "first_fresh_frame": 10,
+        "marker_to_committed_ms": 144.57208333333332,
+        "marker_to_fresh_ms": 144.57208333333332,
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "missing_image",
+          "forged_eligibility",
+          "unfinished_input",
+          "wrong_native_run",
+          "old_parameter_labeled_committed",
+          "old_tau_labeled_fresh"
+        ]
+      }
+    },
+    {
+      "id": "rc-20",
+      "original_status": "collected_pending_pixel_analysis",
+      "available": true,
+      "reason": null,
+      "analysis": {
+        "trial": "rc-20",
+        "measurement_status": "available",
+        "complete_frames": 166,
+        "unique_images": 164,
+        "roles": {
+          "private-draft-original-result": 8,
+          "committed-value-fresh-result": 158
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 9,
+        "marker_to_committed_ms": 125.41583333333334,
+        "marker_to_fresh_ms": 125.41583333333334,
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "missing_image",
+          "forged_eligibility",
+          "unfinished_input",
+          "wrong_native_run",
+          "old_parameter_labeled_committed",
+          "old_tau_labeled_fresh"
+        ]
+      }
+    }
+  ]
+}
