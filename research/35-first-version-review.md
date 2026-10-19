@@ -10,7 +10,7 @@ Clean `ee4be59` passes default source quality (272.297 s), copied signed native 
 
 /172's original smoke timeout and its render-aware fixture repair, two new acceptance-fixture assertions, and the successful child's wrapper report-path error are retained. The final child passes and closes normally; a read-only postcheck verifies complete results and unchanged geometry without repeating UI work. Its elapsed duration is unavailable. [Receipt](ui-audit/first-version/sweep-handoff-review-checkpoint.json).
 
-The owner authorized cropped display recordings, but the new composition mode, calibration and cohorts remain pending. Earlier physical observations keep their recorded scope; owner acceptance, full accessibility/bindings/environment and hobbyist study remain open. No promotion is inferred.
+The authorized cropped-composition method now has a complete original 60-ID record, an admitted twenty-observation NPN block and a separately declared admitted twenty-observation LED block. Fresh-result p95 bounds are 169.661/162.495 ms within those fixture/method scopes. RC's complete percentile and 100 ms acknowledgment remain unqualified; overlapping windows halt the new RC block. [Current results](38-visible-responsiveness-results.md). Earlier physical observations keep their recorded scope; owner acceptance, full accessibility/bindings/environment and hobbyist study remain open. No promotion is inferred.
 
 ## Try these four tasks · 15–20 minutes
 

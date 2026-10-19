@@ -8,6 +8,12 @@ software-composition bounds and 14 unavailable outcomes**. NPN has a complete
 20-observation percentile; LED and RC have unavailable outcomes and no full-cohort
 p95. There is no overall PRD performance pass.
 
+A separately declared [follow-up](39-led-rc-followup-plan.md) now has a complete
+20-observation LED block with a 162.495 ms fresh-result p95 bound. Its RC block
+halts after four attempts because other windows overlap the crop: one available,
+three unavailable and sixteen untouched IDs. These observations are separate
+from the original collection summarized below.
+
 | Reference | Scheduled outcomes retained | Available bounds | Full-cohort p95 |
 |---|---:|---:|---|
 | LED | 20/20 | 14 | Unavailable: six harness outcomes |
@@ -129,3 +135,40 @@ and exclusive desktop conditions; never backfill failed IDs or calculate their
 full-cohort percentile from successful subsets. Owner walkthrough, broader
 performance coverage, accessibility/IME, other environments and the actual hobbyist
 study remain separate.
+
+The new LED block retains all twenty observations, independently of the original
+failed block. Bounds in milliseconds, n=20 and nearest-rank p95 at the 19th value:
+
+| Follow-up LED response | Minimum | Median | p95 | Maximum |
+|---|---:|---:|---:|---:|
+| Visible committed parameter | 102.122 | 127.890 | 146.289 | 146.484 |
+| Fresh valid result | 118.903 | 146.387 | 162.495 | 186.781 |
+
+All twenty native/agent/independent results and all 3,252 complete frames/3,098
+original PNGs replay. The fresh bound supports 500 ms within this fixture/method;
+the committed-value bound remains inconclusive against 100 ms because controller
+overhead is included. The original unavailable outcomes are neither replaced nor
+pooled into these percentiles.
+
+The new RC block has one admitted observation (`rc2-01`, 153.609 ms), not a
+percentile. Trials 02–03 commit correctly but contain 26 and seven overlapping
+complete frames. Trial 04 contains sixteen overlapping frames and leaves the
+private 2 µF draft uncommitted. All three are unavailable; do not discard their
+unknown frames or infer an application defect under these input/visibility
+conditions. The worker stops and IDs 05–20 remain unattempted.
+
+Both owned apps close normally. LED preserves shared settings; RC's wrapper
+retains its failed settings-equality assertion because shared window-file hashes
+change concurrently. The change's source is unproven, and settings are not
+restored. App artifacts and all 650 Go source hashes still match. About 86 MiB
+of new raw archives stay in ignored local storage, with tracked paths/hashes,
+member manifests, outcomes and replay tools. Missing archives must be restored,
+never silently regenerated. All other-app images stay outside Git.
+[Follow-up proof and replay](../docs/validation/latency-followup-173/README.md).
+
+Keep native RC work halted while other windows are opening over the crop.
+The next independent fix is baseline-content admission in the controller before
+marker/input: a complete frame alone does not prove that it contains ELab.
+Validate that guard offline against the preserved valid and overlapping images;
+keep the recorder, thresholds and all-frame acceptance rule unchanged. No new
+automatic RC retry cohort is authorized by this follow-up declaration.
