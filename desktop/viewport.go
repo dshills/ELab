@@ -63,6 +63,7 @@ func (s *screen) observeSchematicViewport(v canvas.Viewport, state workbench.Sna
 		result := s.service.Dispatch(context.Background(), workbench.Request{Version: 1, ID: id, Command: "view.viewport.set", Params: raw, ExpectedCommandRevision: &plan.revision, ExpectedDocumentGeneration: &plan.generation, Key: id}, "user")
 		if accepted, ok := result.Result.(workbench.Snapshot); result.Error == nil && ok {
 			s.continueVerificationViewport(actionContext{plan.revision, plan.generation}, accepted)
+			s.continueSweepSettingsViewport(actionContext{plan.revision, plan.generation}, accepted)
 			s.continueComponentStartupViewport(actionContext{plan.revision, plan.generation}, accepted)
 			if s.requestHelp != nil && s.requestHelpRevision == plan.revision {
 				// Showing a refusal can itself resize the canvas. Continue only

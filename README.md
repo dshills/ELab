@@ -12,6 +12,8 @@ All 30 earlier sealed reviews, three candidates and canonical /120 are preserved
 
 ## Build and run from source
 
+Unreleased source repairs [DC sweep Run handoff](docs/validation/dc-sweep-handoff/README.md): it captures typed range/point-count drafts before starting. The /171 review can refuse the first Run or use previous settings; replacement qualification is pending.
+
 Unreleased source includes [mixed-solver matrix optimizations](docs/validation/mixed-matrix-allocation/README.md). They reduce allocation objects and omit zero updates in larger systems while preserving recorded numerical results and existing limits. The /171 review above retains its earlier solver; this source work does not replace or promote that app.
 
 Use Go 1.25.6 or newer, Python 3.10 or newer, and Vellum's macOS native prerequisites. Normal builds verify and extract the [pinned private Vellum SDK](third_party/vellum/README.md), including its prepared Cogent and typesetting sources. A sibling Vellum checkout is no longer required. ELab's `desktop/go.mod` contains the four explicit local replacements into the verified build cache. Run `python3 scripts/prepare-vellum.py` before invoking native Go tools directly; `build.sh`, `lint.sh` and `check.sh` prepare it automatically.

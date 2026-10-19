@@ -77,6 +77,7 @@ func (s *screen) action(id, text, command string, p any) ui.Node {
 func (s *screen) view() ui.Node {
 	state := s.service.Snapshot()
 	s.pruneComponentStartup(state)
+	s.pruneSweepFieldRejections(state)
 	previousContext := s.actionContext
 	s.actionContext = &actionContext{state.CommandRevision, state.Document.Generation}
 	defer func() { s.actionContext = previousContext }()

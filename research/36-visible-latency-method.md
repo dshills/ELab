@@ -1,6 +1,6 @@
 # Visible latency: measurement decision
 
-October 19, 2026. Status: software clock check completed; a broader capture method is proposed, not authorized or executed.
+October 19, 2026. Status: software clock check completed; the owner authorized cropped display recordings on October 19. Implementation/calibration remains pending; no broader capture has run.
 
 The PRD retains two different targets: input event → visible acknowledgment at p95 ≤100 ms, and accepted edit → first valid updated sample at p95 ≤500 ms for LED, RC and resistor-loaded NPN. Backend timing and a draft appearing in an editor cannot establish either target. No target, reference circuit or acceptance rule changes here.
 
@@ -43,3 +43,7 @@ An acknowledged marker precedes the CUA input and accepted edit. A validated cau
 Use a declared percentile convention and retain raw values; do not report a p95 from only successful or selected trials. Difficult-solve navigation/cancel/save/undo remains separate required coverage. Photons, other display modes, monitor changes, human typing/IME, accessibility, owner acceptance and the hobbyist study are not inferred from screen-capture measurements.
 
 If the broader capture method is declined, retain window-only captures as functional/render evidence and keep visible latency unqualified. Independent release work can continue; the private-alpha environment deferral does not waive this PRD target.
+
+## Owner decision
+
+On October 19 the owner answered **“Authorize cropped display recordings”** to the explicit request covering tightly cropped owned-ELab-window display recordings for calibration and LED/RC/NPN timing trials, up to five seconds each, local files only and no audio. The request disclosed that notifications or other apps overlapping that rectangle could be recorded. This authorizes the proposed method within that scope; it does not grant a new macOS privacy permission or establish calibration/latency acceptance. Finish the reproduced sweep handoff repair before implementing and calibrating the new recorder mode.

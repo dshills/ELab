@@ -88,26 +88,12 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 	}})
 	for _, field := range []struct{ id, label, value string }{{"start", "Start", cfg.Start}, {"stop", "Stop", cfg.Stop}} {
 		field := field
-		nodes = append(nodes, quiet("sweep-"+field.id+"-label", field.label), ui.Node{ID: "sweep-range-" + field.id, Kind: ui.TextField, Text: field.value, Accessibility: ui.Accessibility{Name: "Sweep " + field.label}, Change: func(e ui.ChangeEvent) {
-			next := cfg
-			if field.id == "start" {
-				next.Start = e.Text
-			} else {
-				next.Stop = e.Text
-			}
-			s.invoke("sweep.settings.set", next)
+		nodes = append(nodes, quiet("sweep-"+field.id+"-label", field.label), ui.Node{ID: "sweep-range-" + field.id, Kind: ui.TextField, Text: field.value, ControlStateKey: sweepSettingsOwner(cfg), Accessibility: ui.Accessibility{Name: "Sweep " + field.label}, Change: func(e ui.ChangeEvent) {
+			s.changeSweepField(state, "sweep-range-"+field.id, e.Text)
 		}})
 	}
-	nodes = append(nodes, quiet("sweep-points-label", "Points · 2–201 · inclusive endpoints"), ui.Node{ID: "sweep-points", Kind: ui.TextField, Text: strconv.Itoa(cfg.Points), Accessibility: ui.Accessibility{Name: "Sweep point count"}, Change: func(e ui.ChangeEvent) {
-		count, err := strconv.Atoi(strings.TrimSpace(e.Text))
-		if err != nil {
-			s.errorMessage = "Enter a whole sweep point count"
-			s.app.Invalidate("main")
-			return
-		}
-		next := cfg
-		next.Points = count
-		s.invoke("sweep.settings.set", next)
+	nodes = append(nodes, quiet("sweep-points-label", "Points · 2–201 · inclusive endpoints"), ui.Node{ID: "sweep-points", Kind: ui.TextField, Text: strconv.Itoa(cfg.Points), ControlStateKey: sweepSettingsOwner(cfg), Accessibility: ui.Accessibility{Name: "Sweep point count"}, Change: func(e ui.ChangeEvent) {
+		s.changeSweepField(state, "sweep-points", e.Text)
 	}})
 	probeOptions := []ui.Option{{ID: "__auto", Label: "Auto readings"}}
 	for _, p := range sweep.Available {
@@ -171,9 +157,9 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 			nodes = append(nodes, quiet("sweep-progress-"+op.ID, fmt.Sprintf("%s · %d/%d points staged", op.Status, op.Completed, op.Total)), cancel)
 		}
 	}
-	start := s.action("sweep-start", "Run DC sweep", "sweep.start", workbench.SweepStartParams{})
+	start := s.sweepStartAction(state)
 	_, _, diagnostic := (workbench.Graph{Components: state.Components, Wires: state.Wires}).Compile()
-	start.Disabled = active || !valid || diagnostic != nil
+	start.Disabled = start.Disabled || active || !valid || diagnostic != nil
 	nodes = append(nodes, start, quiet("sweep-assumptions", "Capacitors: open"), quiet("sweep-source-help", "Sine: offset / pulse: low"), quiet("sweep-time-help", "Startup/time ignored"))
 	if len(sweep.Operations) > 0 {
 		ops := []ui.Option{}

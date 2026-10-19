@@ -235,6 +235,9 @@ type screen struct {
 	verificationAccepted                *verificationContinuation
 	verificationRejected                map[string]verificationFieldRejection
 	pendingVerificationAction           *verificationActionWork
+	sweepSettingsAccepted               *sweepSettingsContinuation
+	sweepFieldRejected                  map[string]sweepFieldRejection
+	pendingSweepStart                   *sweepStartWork
 	valueDraftAccepted                  *valueDraftContinuation
 	outputPageAccepted                  *outputPageContinuation
 	recordedTimingAccepted              *recordedTimingContinuation
