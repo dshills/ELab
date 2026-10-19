@@ -34,3 +34,11 @@ See [background Open](project-work.md), [captured Save](project-save.md) and [ag
 `elab-conformance --project-contract-suite --artifacts NEW_DIRECTORY` adds a real owned-file workflow to the ordinary three-adapter comparison. Add `--native-binary /absolute/path/to/ELab` to include a fresh packaged native socket session. It compares all eight detailed schemas and normalized public calls, and retains fourteen observed snapshots, the admitted save document, historical job and three observed refusal codes and the actual destination contents after the outside-writer refusal. Each adapter captures an RC project/kept recording, edits after Save admission, protects an external writer, explicitly overwrites, refuses a terminal cancellation and malformed Open, detaches with New, and reopens fresh/paused through both command forms.
 
 The checker rejects missing contracts, incorrect bounds/deadlines/observers/errors, omitted evidence, changed captured content/outcomes/time and adapter schema differences. Artifact paths are normalized for call comparison. Exact inspection/cancellation IDs must target their observed save job before comparison maps them to roles; native startup recovery legitimately shifts counters. Original IDs remain in the report; numerical state, history, kept results and persisted content are checked for preservation. Native viewport/layout publications are not required to be byte-identical. Controlled race tests separately block publication, prove cancellation boundaries and owned result copies, check exact deadline admission, validate literal/null paths, retain IDs after New and exercise failed-open retry after file repair. This does not establish every event ordering, filesystem, mounted input/accessibility or release gate.
+
+The [packaged /173 headless check](validation/project-job-release-173/README.md)
+also observes failed-Open retry after actual file repair, new-key success,
+start-admission versus terminal inspection, refused cancellation and joined
+shutdown through the exact released agent binary. A job's `command_revision`
+describes its captured admission; use a current full snapshot for the next
+mutation guard. Its retained initial client error demonstrates that distinction.
+These six checks add no native or exhaustive job-family qualification.
