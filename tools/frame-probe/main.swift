@@ -191,6 +191,13 @@ final class Collector: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked Se
 
     func stream(_ stream: SCStream, didOutputSampleBuffer sampleBuffer: CMSampleBuffer, of type: SCStreamOutputType) {
         guard type == .screen, failure == nil, finalReport == nil else { return }
+        recordSample(sampleBuffer, targetOnscreen: { targetInOnscreenStack() })
+    }
+
+    // Called only on queue. Synthetic offline samples supply receipt metadata
+    // explicitly; that path never queries a window or creates a capture stream.
+    func recordSample(_ sampleBuffer: CMSampleBuffer, targetOnscreen: () -> Bool) {
+        guard failure == nil, finalReport == nil else { return }
         do {
             guard frameCount < 300 else { throw ProbeError("Frame budget exceeded; capture is incomplete") }
             frameCount += 1
@@ -202,7 +209,7 @@ final class Collector: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked Se
             var row: [String: Any] = ["event": "frame", "index": frameCount,
                 "received_mach_ticks": String(received), "status": status as Any? ?? NSNull(),
                 "display_mach_ticks": displayed.map(String.init) as Any? ?? NSNull(),
-                "target_in_onscreen_stack_at_receipt": targetInOnscreenStack(),
+                "target_in_onscreen_stack_at_receipt": targetOnscreen(),
                 "eligible_for_latency": false]
             if let scale = attachment?[.scaleFactor] as? NSNumber { row["scale_factor"] = scale }
             if let rect = attachment?[.contentRect] { row["content_rect_description"] = String(describing: rect) }
@@ -223,19 +230,7 @@ final class Collector: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked Se
                 }
                 CGImageDestinationAddImage(writer, cg, nil)
                 guard CGImageDestinationFinalize(writer) else { throw ProbeError("Cannot finish PNG") }
-                let bytes = data as Data
-                let digest = sha256Hex(bytes)
-                let name = "frame-\(digest).png"
-                if images[digest] == nil {
-                    guard storedBytes + bytes.count <= 64 * 1024 * 1024 else {
-                        throw ProbeError("64 MiB image budget exceeded; capture is incomplete")
-                    }
-                    try bytes.write(to: output.appendingPathComponent(name), options: .withoutOverwriting)
-                    try FileManager.default.setAttributes([.posixPermissions: 0o600],
-                                                           ofItemAtPath: output.appendingPathComponent(name).path)
-                    storedBytes += bytes.count
-                    images[digest] = name
-                }
+                let (name, digest) = try recordPNG(data as Data)
                 row["png"] = name
                 row["png_sha256"] = digest
             }
@@ -244,8 +239,34 @@ final class Collector: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked Se
     }
 
     func stream(_ stream: SCStream, didStopWithError error: Error) {
-        let message = String(describing: error)
-        queue.async { self.failure = "Stream stopped: \(message)" }
+        recordStreamFailure(String(describing: error))
+    }
+
+    // The delegate can arrive on another queue. Preserve the first cause and
+    // ignore late callbacks after finalization, just as sample callbacks do.
+    func recordStreamFailure(_ message: String) {
+        queue.async {
+            guard self.failure == nil, self.finalReport == nil else { return }
+            self.failure = "Stream stopped: \(message)"
+        }
+    }
+
+    // Called only on queue, after encoding. The byte limit applies to unique
+    // images; even an at-limit duplicate must retain its separate frame row.
+    func recordPNG(_ bytes: Data) throws -> (String, String) {
+        let digest = sha256Hex(bytes)
+        let name = "frame-\(digest).png"
+        if images[digest] == nil {
+            guard bytes.count <= 64 * 1024 * 1024 - storedBytes else {
+                throw ProbeError("64 MiB image budget exceeded; capture is incomplete")
+            }
+            try bytes.write(to: output.appendingPathComponent(name), options: .withoutOverwriting)
+            try FileManager.default.setAttributes([.posixPermissions: 0o600],
+                                                   ofItemAtPath: output.appendingPathComponent(name).path)
+            storedBytes += bytes.count
+            images[digest] = name
+        }
+        return (name, digest)
     }
 
     func finish() -> [String: Any] {
@@ -313,8 +334,10 @@ func selfTest() throws {
           let decoded = try JSONSerialization.jsonObject(with: original) as? [String: String],
           decoded["mach_ticks"] == String(UInt64.max) else { throw ProbeError("Exclusive acknowledgment or tick precision check failed") }
     let journalCases = try journalFaultChecks()
+    let sampleCases = try sampleFaultChecks()
     let result: [String: Any] = ["self_tests_passed": true, "capture_executed": false,
-                                "eligible_latency_observations": 0, "journal_fault_cases": journalCases]
+                                "eligible_latency_observations": 0, "journal_fault_cases": journalCases,
+                                "sample_fault_cases": sampleCases]
     print(String(decoding: try JSONSerialization.data(withJSONObject: result, options: [.sortedKeys]), as: UTF8.self))
 }
 

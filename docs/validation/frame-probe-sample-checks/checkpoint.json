@@ -1,0 +1,88 @@
+{
+  "status": "offline_synthetic_sample_storage_and_error_checks_passed",
+  "base_commit": "110852b858e7e90429921afc0c6d71d3a483cc2b",
+  "source_sha256": {
+    "tools/frame-probe/main.swift": "ddd2da3a1164e9f5131654c9530477c641911f9350054a313bad69b33a73297d",
+    "tools/frame-probe/journal_checks.swift": "9e2af4e5539b6aac4f59451e3457c398aa04cd92072b31d4e9f50688020a0bd6",
+    "tools/frame-probe/sample_checks.swift": "32623880b862fbd278b45e05dcb8d086e8fbf9a3f26ccf4582db942bb045a1aa",
+    "tools/frame-probe/check.sh": "dbad1005abb301dcaffbc5c7c8edbdc4dc6115661e709a9cc27c5a30feb21c65",
+    "tools/frame-probe/README.md": "72a8dac4aab7fea7176b657a59ea35873944e1b7647dff5be47ef264b74b594d"
+  },
+  "recorder_sha256": "dcf06ebefa9ec76002f22f0e67564682b1c429af2f19fc208c504c669ec505e7",
+  "prior_recorder_sha256": "677c5e117c40ca8f60b5c54e43176324ce4c10f799cbcf8f56813f4532d4cbaa",
+  "prior_recorder_preserved": true,
+  "new_probe_runtime_capture_qualified": false,
+  "check_command": "sh tools/frame-probe/check.sh",
+  "check_exit_code": 0,
+  "swift_language_version": 6,
+  "warnings_as_errors": true,
+  "deployment_target": "arm64-apple-macosx14.0",
+  "journal_fault_cases": [
+    "existing-journal-refused-with-bytes-and-mode-preserved",
+    "directory-journal-destination-refused",
+    "journal-link-refused-with-target-preserved",
+    "dangling-journal-link-refused",
+    "private-new-journal-and-idempotent-finalization",
+    "second-collector-refused-with-marker-evidence-preserved",
+    "acknowledgment-write-failure-retained-with-prior-file-preserved"
+  ],
+  "sample_fault_cases": [
+    "idle-blank-suspended-started-stopped-journaled-without-images",
+    "missing-status-display-time-zero-time-and-image-remain-incomplete",
+    "complete-images-decode-deduplicate-and-keep-each-ineligible-frame",
+    "sample-and-stream-callbacks-after-finalization-do-not-change-evidence",
+    "existing-image-refused-with-prior-bytes-preserved-and-no-success-row",
+    "301st-callback-refused-at-production-300-frame-limit-first-error-retained",
+    "64-MiB-unique-byte-limit-keeps-duplicates-and-refuses-new-image",
+    "first-stream-error-stops-admission-and-survives-secondary-error"
+  ],
+  "prior_assignment_policy_variant_failed": true,
+  "original_binary_regression_replayed": false,
+  "initial_restricted_attempt_failed": true,
+  "final_check_required_macos_image_surface_access": true,
+  "capture_executed": false,
+  "window_query_executed": false,
+  "permission_preflight_executed": false,
+  "permission_requested": false,
+  "input_operated": false,
+  "eligible_latency_observations": 0,
+  "latency_gate_passed": null,
+  "app_rebuilt": false,
+  "canonical_promoted": false,
+  "owner_acceptance": false,
+  "go_source_checkpoint_verified": true,
+  "current_review_files_verified": 309,
+  "prior_evidence": [
+    {
+      "name": "frame-probe-journal-runtime",
+      "evidence_files": 48,
+      "checkpoint_sha256": "496165c3ca8efa552639fc6fc0857ebfd24573f110418104661fddcb13688fed"
+    },
+    {
+      "name": "frame-probe-journal-checks",
+      "evidence_files": 7,
+      "checkpoint_sha256": "69a7d74bea7ec871e76955fc24a79b2354c357bbdf17bcba22234ee81eaa1c31"
+    }
+  ],
+  "sdk_unchanged": true,
+  "evidence_sha256": {
+    "README.md": "fa73a886f2208ba93efd626eeb0fbab0edd87c4f6b93eab2ec9e25c0257edc87",
+    "baseline-main.swift.gz": "3a82d5a8a603ef25efad5cab8db19a09b224e819784b249020b01dba4f74b82e",
+    "compiler.txt": "c469aee809408e0f8f981436d9afb0cf3deb47b1647747357cf47aa1d7f9f922",
+    "final-check-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "final-check-stdout.txt": "da2b22debf9b500bf3c75e104c1d8d788a6dff122e7b9d3b1ba94250545cf6fb",
+    "first-check-stderr.txt": "56a2e36e7670527e22f7622921229811e5fba35c81b523587eb6fea797aa397c",
+    "first-check-stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "go-source-checkpoint-verification.json": "46685988021ecad9a45b20d90120e5903844666285912e23ec00608e444c787d",
+    "prior-error-policy.swift.gz": "8c1003b6c555f7e0776b27b744a2736e096b99523fd751571a4a8fad2dda5bc4",
+    "prior-policy-build-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "prior-policy-build-stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "prior-policy-report.json": "c1928d140d0bf8477a0fe53c790b5db4d0de11f81a97d3b168e36115ede9e4d3",
+    "prior-policy-stderr.txt": "feccd8eaca6cd78372db93a204b5ff762b14a41f8576d1a3b426177befe8822c",
+    "prior-policy-stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "prior-runtime-replay.json": "9d66987dbedafe847933bc482a743d8af6432ab6370a3fc5fa0ea32c75255c87",
+    "second-check-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "second-check-stdout.txt": "33bffab266665a6a3461220ef8a472f0139b82282dfaa09a3ea253f368f13585",
+    "verify.py": "b5d292f730db8e2e14df8d2c87da406f656b87d34f5eea0fddb29f2cb5b0f754"
+  }
+}
