@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/archive-165-tools/runtime_rehearsal.py", line 20, in <module>
+    c.ask('project.load',dict(path=str(example),discard_changes=True),True);state=c.ask('simulation.wait');assert state['paused'] and not state['document']['dirty'];states[label]=state
+                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

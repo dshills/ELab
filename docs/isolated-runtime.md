@@ -25,3 +25,17 @@ The external app and agents execute inside the generated macOS policy from an in
 The [qualification receipt](validation/runtime-portability-validation.json) retains the exact app/agent/controller hashes, source freeze, original/final harnesses, generated policies, control outcomes, process logs, complete public reports, typed review and saved project/recording files. Source/caches and IP networking are unavailable to the copied external processes; macOS frameworks, fonts, services, GPU drivers and ordinary user/system caches remain available. The native renderer's 45-stage smoke and matching electrical results are runtime evidence, not full physical input/accessibility or clean-account evidence.
 
 The test intentionally avoids installing software, modifying system settings, submitting a physical print job or replacing the canonical app. A forced process kill/power failure and blocked operating-system calls remain outside cooperative cleanup guarantees. `sandbox-exec` is a host qualification tool; it is not an application feature or a proposed distribution dependency.
+
+
+## Private review ZIP rehearsal
+
+`scripts/package_review.py` creates an exclusive-output ZIP from a release-pinned receipt, checks every archived file/hash/mode, then verifies a macOS `ditto` extraction into a Unicode path with spaces. It refuses existing output paths, extra/duplicate archive members, changed bytes/modes, links and noncanonical/traversal paths before extraction. The original review stays sealed. For example, use new output paths with the current /165 receipt:
+
+```sh
+python3 -B scripts/package_review.py \
+  --receipt research/ui-audit/first-version/recorded-timing-feedback-review-checkpoint.json \
+  --output /private/tmp/new-elab-review.zip \
+  --artifacts /private/tmp/new-elab-archive-results
+```
+
+[The /165 rehearsal](validation/review-archive-165/README.md) separately starts the extracted app/agent under the previously qualified denial policy and tests the three bundled examples and six saved-file reopens. That policy's canaries retain their original run scope. The ZIP is a private unsigned handoff; this does not qualify Finder Archive Utility, LaunchServices/document association, quarantine/Gatekeeper, normal user configuration, a clean account or installation/distribution. The sealed folder's manifest, build identity and broader open gates are unchanged.
