@@ -1,0 +1,164 @@
+from pathlib import Path
+import datetime
+import gzip
+import hashlib
+import importlib.util
+import json
+import os
+import signal
+import subprocess
+import sys
+import time
+
+root = Path('/Users/dshills/Development/projects/ELab')
+stage = Path(__file__).resolve().parent
+out = Path('/private/tmp/elab-frame-probe-sample-runtime-171')
+runtime = Path('/private/tmp/elab-first-version-171-signed-runtime')
+app = out / 'ELab-isolated-timing.app'
+binary = runtime / 'ELab.app/Contents/MacOS/ELab'
+endpoint = out / 'endpoint.json'
+sys.path.insert(0, str(root / 'scripts'))
+from package_review import members
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+receipt_path = root / 'research/ui-audit/first-version/appearance-work-review-checkpoint.json'
+receipt = json.loads(receipt_path.read_text())
+review = Path(receipt['review_path'])
+before_review = members(review)
+expected = dict(before_review); expected.pop('RELEASE_MANIFEST.json')
+assert expected == json.loads((review / 'RELEASE_MANIFEST.json').read_text())['files']
+assert sha(binary) == receipt['native_sha256'] and sha(runtime / 'elab-agent') == receipt['agent_sha256']
+before_copy = members(runtime / 'ELab.app')
+assert before_copy == members(review / 'ELab.app')
+assert (runtime / 'runtime.sb').read_bytes() == gzip.decompress((root / 'docs/validation/appearance-review-171/runtime.sb.gz').read_bytes())
+assert not endpoint.exists() and not (out / 'launcher.pid').exists()
+shared = Path.home() / 'Library/Cogent Core'
+geometry = lambda: {p.relative_to(shared).as_posix(): dict(sha256=sha(p), mode=oct(p.stat().st_mode & 0o777)) for p in shared.rglob('*') if p.is_file()}
+before_geometry = geometry(); assert before_geometry
+canonical = root / 'build/ELab.app/Contents/MacOS/ELab'
+canonical_before = sha(canonical)
+assert canonical_before == '914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c'
+probe = subprocess.run(['/usr/bin/sandbox-exec','-f',str(runtime / 'runtime.sb'),sys.executable,'-I',str(runtime / 'geometry-probe.py'),str(shared / 'window-geometry-0.3.6.json')], capture_output=True, text=True, timeout=15, check=True)
+(out / 'geometry-control.json').write_text(probe.stdout)
+controls = json.loads(probe.stdout)
+assert all(row['denied'] and row['errno'] in [1,13] for row in controls.values())
+os.umask(0o077)
+spec = importlib.util.spec_from_file_location('owned_client', root / 'scripts/persistence-demo.py')
+helper = importlib.util.module_from_spec(spec); spec.loader.exec_module(helper)
+command = ['/usr/bin/open','-n','-W','-g','-a',str(app),'--stdout',str(out / 'native-stdout.txt'),'--stderr',str(out / 'native-stderr.txt')]
+r = dict(status='starting', started_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(), command=command, native_sha256=sha(binary), launcher_sha256=sha(app / 'Contents/MacOS/ELabIsolatedLauncher'), launcher_source_sha256=sha(stage / 'launcher.swift'), policy_sha256=sha(runtime / 'runtime.sb'), receipt_sha256=sha(receipt_path), shared_geometry_before=before_geometry, controls=controls, capture_executed=False, input_operated=False, eligible_latency_observations=0, latency_gate_passed=None, forced_cleanup=False, native_exit_status=None, native_exit_status_reason='LaunchServices owns the process; open -W status does not establish native exit status.')
+launch = None; client = None; pid = None
+def save():
+    (out / 'report.json').write_text(json.dumps(r,indent=2)+'\n')
+def process_command():
+    if pid is None: return None
+    p = subprocess.run(['/bin/ps','-p',str(pid),'-o','command='],capture_output=True,text=True,timeout=5)
+    return p.stdout.strip() if p.returncode == 0 else None
+try:
+    with (out / 'open-output.txt').open('x') as log:
+        launch = subprocess.Popen(command,stdout=log,stderr=subprocess.STDOUT)
+    r['open_pid'] = launch.pid; save()
+    deadline = time.monotonic()+25
+    while not ((out / 'launcher.pid').exists() and endpoint.exists()):
+        if pid is None and (out / 'launcher.pid').exists():
+            value=(out / 'launcher.pid').read_text().strip()
+            if value.isdecimal():
+                pid=int(value);r['owned_pid']=pid;save()
+        assert launch.poll() is None, 'LaunchServices launcher ended before the owned endpoint'
+        assert time.monotonic() < deadline, 'Owned endpoint readiness deadline'
+        time.sleep(.05)
+    pid = int((out / 'launcher.pid').read_text().strip()); r['owned_pid'] = pid
+    observed = process_command(); r['observed_command'] = observed
+    assert observed and observed.startswith(str(binary)+' ') and str(endpoint) in observed
+    r['same_pid_after_exec'] = True; save()
+    client = helper.Client(str(endpoint),command_preconditions=True,agent_binary=runtime / 'agent')
+    state = client.ask('project.inspect'); assert not state['components'] and not state['wires']
+    client.ask('example.reset',dict(discard_changes=True),True)
+    client.ask('component.select',dict(id='R1'),True)
+    client.ask('simulation.resume',{},True)
+    state=client.ask('simulation.wait'); assert state['circuit']['resistance_ohm']==1000 and not state['result']['stale']
+    client.ask('project.save',dict(path=str(out/'baseline.elab')),True)
+    state=client.ask('project.inspect');r['baseline_file_sha256']=sha(out/'baseline.elab')
+    (out / 'initial.json').write_text(json.dumps(state,indent=2)+'\n')
+    reference=helper.Client(command_preconditions=True,agent_binary=runtime/'agent')
+    try:
+        reference.ask('example.reset',dict(discard_changes=True),True)
+        reference.ask('component.select',dict(id='R1'),True)
+        reference.ask('simulation.resume',{},True)
+        reference.ask('component.set',dict(id='R1',value='2k'),True)
+        expected=reference.ask('simulation.wait');assert expected['circuit']['resistance_ohm']==2000 and not expected['result']['stale']
+        (out/'agent-expected.json').write_text(json.dumps(expected,indent=2)+'\n')
+    finally:reference.close()
+    time.sleep(1)
+    registration = subprocess.run([str(stage / 'target-diagnostic'),str(pid)],capture_output=True,text=True,timeout=15,check=True)
+    (out / 'registration-stdout.txt').write_text(registration.stdout)
+    (out / 'registration-stderr.txt').write_text(registration.stderr)
+    identity = json.loads(registration.stdout); r['registration'] = identity
+    identity_ok = identity['process_registered'] and not identity['terminated'] and identity['bundle_identifier']=='com.dshills.elab' and identity['executable_path']==str(binary)
+    r['exact_target_identity_established'] = identity_ok
+    if identity_ok:
+        windows = subprocess.run([str(root / 'build/frame-probe-tools/frame-probe'),'--target-windows','--pid',str(pid),'--executable',str(binary),'--sha256',receipt['native_sha256']],capture_output=True,text=True,timeout=15)
+        (out / 'windows-stdout.txt').write_text(windows.stdout)
+        (out / 'windows-stderr.txt').write_text(windows.stderr)
+        r['window_query_exit_code'] = windows.returncode
+        if windows.returncode == 0:
+            r['target_windows'] = json.loads(windows.stdout)['target_windows']
+        r['status'] = 'ready_for_controller_binding' if windows.returncode==0 and len(r['target_windows'])==1 else 'owned_window_unavailable'
+    else:
+        r['status'] = 'exact_identity_refused'
+    save(); print(json.dumps({key:r.get(key) for key in ['status','owned_pid','registration','target_windows']}),flush=True)
+    if r['status'] == 'ready_for_controller_binding':
+        deadline=time.monotonic()+480
+        while not (out / 'stop.request').exists():
+            assert process_command() == observed, 'Owned process changed before controller cleanup'
+            assert time.monotonic() < deadline, 'Controller-binding hold expired'
+            time.sleep(.1)
+except BaseException as error:
+    r['status']='preflight_failed';r['error']=type(error).__name__+': '+str(error);save()
+    raise
+finally:
+    cleanup_error = None
+    try:
+        if client is not None:
+            final=client.ask('simulation.wait');(out/'final.json').write_text(json.dumps(final,indent=2)+'\n')
+            if (out/'baseline.elab').exists():
+                client.ask('project.save',dict(path=str(out/'final.elab')),True)
+                r['baseline_file_unchanged']=sha(out/'baseline.elab')==r['baseline_file_sha256']
+            if (out/'capture/report.json').exists():
+                capture=json.loads((out/'capture/report.json').read_text())
+                r['capture_executed']=capture.get('capture_executed',capture.get('capture_started',False))
+            if (out/'capture-action.json').exists():
+                action=json.loads((out/'capture-action.json').read_text())
+                r['input_operated']=action.get('input_call_invoked',False)
+                r['input_call_completed']=action.get('input_call_completed',False)
+            client.ask('project.inspect')
+            closed=client.ask('app.close',dict(discard_changes=True),True)
+            (out / 'close-response.json').write_text(json.dumps(closed,indent=2)+'\n')
+            assert closed['closed'] and closed['shutdown']['exit_ready'] and closed['shutdown']['status']=='completed'
+            client.close(); client=None
+        if launch is not None:
+            launch.wait(timeout=20); r['open_exit_code']=launch.returncode
+        deadline=time.monotonic()+10
+        while pid is not None and process_command() is not None and time.monotonic()<deadline: time.sleep(.05)
+        r['owned_process_absent'] = pid is not None and process_command() is None
+        r['endpoint_removed'] = not endpoint.exists()
+        assert r['owned_process_absent'] and r['endpoint_removed']
+    except BaseException as error:
+        cleanup_error=type(error).__name__+': '+str(error);r['cleanup_error']=cleanup_error
+        if client is not None:
+            try: client.close()
+            except Exception: pass
+        if pid is not None and process_command() is not None:
+            current=process_command()
+            assert current and current.startswith(str(binary)+' ') and str(endpoint) in current, 'Owned cleanup identity unavailable'
+            os.kill(pid,signal.SIGTERM);r['forced_cleanup']=True
+        if launch is not None and launch.poll() is None:
+            launch.wait(timeout=15)
+    finally:
+        r['shared_geometry_after']=geometry();r['shared_geometry_unchanged']=geometry()==before_geometry
+        r['review_unchanged']=members(review)==before_review
+        r['copied_bundle_unchanged']=members(runtime / 'ELab.app')==before_copy
+        r['canonical_unchanged']=sha(canonical)==canonical_before
+        r['ended_utc']=datetime.datetime.now(datetime.timezone.utc).isoformat();save()
+        assert r['shared_geometry_unchanged'] and r['review_unchanged'] and r['copied_bundle_unchanged'] and r['canonical_unchanged']
+    if cleanup_error: raise RuntimeError(cleanup_error)
+print(json.dumps({key:r.get(key) for key in ['status','owned_process_absent','endpoint_removed','forced_cleanup','shared_geometry_unchanged']}),flush=True)

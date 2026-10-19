@@ -1,0 +1,22 @@
+{
+  "source": "Completed CUA tool calls in this conversation",
+  "running_elab_inventory_count": 1,
+  "app_binding": "cua.getApp('/private/tmp/elab-first-version-171-signed-runtime/ELab.app')",
+  "owned_pid": 4713,
+  "owned_window_id": 155362,
+  "preparation": "click Component value (82); super+a; typeText('2k'); getAXState",
+  "apply": "applySampleTrial(sampleRuntimeApp,83)",
+  "observed_result": {
+    "error": null,
+    "input_call_completed": true,
+    "expected_readout": true
+  },
+  "controller_loader_attempt": {
+    "string_evaluation_refused": true,
+    "direct_function_definition_used": true,
+    "capture_or_apply_during_failed_loader": false
+  },
+  "input_api": "CUA App.click only",
+  "controller_clock_scope": "Event order/wall time only, not input-event timestamps",
+  "final_running_elab_inventory_count": 0
+}

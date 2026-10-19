@@ -1,0 +1,23 @@
+# Sample-checked recorder: fresh nominal /171 calibration
+
+**The updated recorder captures and finalizes normally in one protected /171 LED trial.** Exact recorder hash `dcf06ebefa9ec76002f22f0e67564682b1c429af2f19fc208c504c669ec505e7` is unchanged from the [15 offline fault checks](../frame-probe-sample-checks/README.md). Existing Screen Recording access is preflighted without requesting a permission. The LaunchServices launcher enters the existing sandbox, establishes exact /171 executable identity and one owned window, then CUA binds that running app. Shared geometry reads/writes are denied by an independently checked policy. No owner app or project is operated.
+
+Typing private `2k` leaves accepted R1 at 1 kΩ with its fresh 2.9168 mA result. A prepared CUA controller signals the armed recorder, reads and validates the complete `sample_runtime01` acknowledgment, then clicks Apply exactly once. The three-second recorder exits **0**, retaining **173 received complete timestamped frames**, **five distinct 1053×802 PNGs**, one marker and no collector/command error. Journal and capture files are 0600 inside a 0700 directory. Callback indexes, timestamps, image dimensions/digests/byte totals and marker/controller order replay from raw records.
+
+All five original PNGs were inspected manually. Frame 1 shows private `2k`, schematic 1 kΩ and 2.917 mA. Frame 9 dims Apply with the same accepted values. **Frame 11** first shows schematic **2 kΩ**, **Solving… · stale reading** and **Previous reading · stale** under the old current. **Frame 14** first shows fresh **1.477 mA**, 2.047 V and 3.02 mW. Frame 71 changes caret visibility while preserving the fresh values. `image-annotations.json` identifies these manual observations; there is no automated OCR or pixel oracle.
+
+The marker-to-first-fresh-frame interval is **186.354208 ms**. This is marker/Window-Server-frame arithmetic, not OS input/accepted-edit latency, a qualifying upper bound, p95 or a performance pass/failure. Display times increase strictly, precede receipt and agree with presentation/Mach arithmetic. Those observations do not calibrate physical pixels/clocks or prove unobscured visibility at the earlier display time. Receiving 173 complete callbacks also cannot establish that the OS dropped none. **Every frame remains ineligible: 0 eligible observations, latency decision null.**
+
+The public after-state has exactly the separate /171 agent's 2 kΩ graph and full fresh LED result (1.476723549 mA), with one electrical revision and run increment. `baseline.elab` is byte-identical; `final.elab` is saved separately. Public close reports completed cleanup, joined workers and exit readiness. Recorder and `open -W` exit 0; the three owned native/open/recorder PIDs are absent and the private endpoint is removed without forced cleanup. **Native exit status is unavailable**, because LaunchServices owns that process. CUA independently reports no running ELab afterward; stopped bindings must not be reused.
+
+All 309 /171 manifest entries, ZIP, copied/canonical app, SDK and shared geometry hashes/modes remain unchanged. All 647 current Go source hashes still match their existing quality checkpoint. The offline recorder code is unchanged; this step updates only its current README after capture. Historical offline evidence and earlier 175-frame capture remain immutable and replay within their own scopes. Their old document/source-admission guards are not rewritten to accept new documentation or binaries.
+
+The initial CUA attempt to load the prepared controller with string evaluation was refused before arming or input. Defining that same function directly resolves the orchestration issue; its actual `toString()` source matches the prepared producer and is retained. Only one capture and one Apply occur. No new privacy grant, settings change, app build, version increment, promotion or owner acceptance occurs.
+
+This supersedes the sample/error repair's **pending nominal runtime check only**. Actual OS fault/delivery/drop behavior, physical clock/pixels, visibility and the required LED/RC/NPN cohorts remain open, alongside ordinary startup, accessibility/IME and broader release acceptance. The source-only mixed-matrix optimization is not in the /171 app and receives no new native qualification here.
+
+The checkpoint binds source/binary identities, before/after/reference snapshots, saves, controller events, annotations, capture and cleanup/postflight. Text records are losslessly compressed; all five PNGs are original. Endpoint descriptors/credentials and temporary executables are excluded. Replay without launching or capturing:
+
+```sh
+python3 -B docs/validation/frame-probe-sample-runtime/verify.py
+```
