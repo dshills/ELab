@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "changed_source": [
+    "desktop/project_work.go"
+  ],
+  "changed_sites": [
+    {
+      "before": {
+        "file": "desktop/project_work.go",
+        "line": 60,
+        "function": "*screen.projectWorkControls",
+        "kind": "action-factory",
+        "expression": "s.action(\"project-work-cancel\", \"Cancel project \"+action, \"project.work.cancel\", workbench.IDParams{ID: w.ID})",
+        "public_commands": [
+          "project.work.cancel"
+        ],
+        "status": "literal-public-route"
+      },
+      "after": {
+        "file": "desktop/project_work.go",
+        "line": 61,
+        "function": "*screen.projectWorkControls",
+        "kind": "action-factory",
+        "expression": "s.action(\"project-work-cancel\", \"Cancel project \"+action, \"project.work.cancel\", workbench.IDParams{ID: w.ID})",
+        "public_commands": [
+          "project.work.cancel"
+        ],
+        "status": "literal-public-route"
+      }
+    }
+  ],
+  "source_count": 72,
+  "site_count": 397,
+  "route_count": 132,
+  "public_command_count": 164,
+  "semantics_unchanged_except_job_presentation": true
+}

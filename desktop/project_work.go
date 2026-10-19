@@ -18,13 +18,14 @@ func (s *screen) projectWorkControls(state workbench.Snapshot) []ui.Node {
 		return nil
 	}
 	action := "open"
-	if w.Command == "project.save" {
+	switch w.Command {
+	case "project.save":
 		action = "save"
-	} else if w.Command == "verification.import" || w.Command == "sweep.import" {
+	case "verification.import", "sweep.import":
 		action = "record import"
-	} else if w.Command == "recovery.dismiss" || w.Command == "recovery.configure" || w.Command == "recovery.scan" || w.Command == "recovery.checkpoint" || w.Command == "recovery.restore" {
+	case "recovery.dismiss", "recovery.configure", "recovery.scan", "recovery.checkpoint", "recovery.restore":
 		action = "recovery"
-	} else if w.Command == "export.schematic.svg" || w.Command == "export.scope.csv" || w.Command == "verification.export" {
+	case "export.schematic.svg", "export.schematic.pdf", "export.schematic.png", "export.scope.csv", "verification.export", "sweep.export":
 		action = "export"
 	}
 	title := "Project " + action
