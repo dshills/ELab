@@ -1,0 +1,24 @@
+[
+  {
+    "arguments": [
+      "--help"
+    ],
+    "exit_code": 0,
+    "expected_exit": 0
+  },
+  {
+    "arguments": [
+      "--capture"
+    ],
+    "exit_code": 1,
+    "expected_exit": 1
+  },
+  {
+    "arguments": [
+      "--check",
+      "--check"
+    ],
+    "exit_code": 1,
+    "expected_exit": 1
+  }
+]

@@ -1,0 +1,51 @@
+{
+  "swift": {
+    "command": [
+      "xcrun",
+      "swiftc",
+      "--version"
+    ],
+    "stdout": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx26.0",
+    "stderr": "swift-driver version: 1.168.6"
+  },
+  "os_version": {
+    "command": [
+      "sw_vers",
+      "-productVersion"
+    ],
+    "stdout": "26.6.2",
+    "stderr": ""
+  },
+  "os_build": {
+    "command": [
+      "sw_vers",
+      "-buildVersion"
+    ],
+    "stdout": "25G83",
+    "stderr": ""
+  },
+  "architecture": {
+    "command": [
+      "uname",
+      "-m"
+    ],
+    "stdout": "arm64",
+    "stderr": ""
+  },
+  "sdk_path": {
+    "command": [
+      "xcrun",
+      "--show-sdk-path"
+    ],
+    "stdout": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+    "stderr": ""
+  },
+  "sdk_version": {
+    "command": [
+      "xcrun",
+      "--show-sdk-version"
+    ],
+    "stdout": "27.0",
+    "stderr": ""
+  }
+}
