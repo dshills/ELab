@@ -1,0 +1,17 @@
+from pathlib import Path
+import datetime,hashlib,json,os,subprocess,time
+root=Path('/Users/dshills/Development/projects/ELab');folder=root/'docs/validation/verification-startup-reset';binary=root/'build/verification-startup-reset/elab';env=dict(os.environ,GOWORK='off',GOCACHE=str(root/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native');start=time.monotonic()
+with (folder/'native-build-stdout.txt').open('w') as stdout,(folder/'native-build-stderr.txt').open('w') as stderr:
+ p=subprocess.run(['go','build','-C','desktop','-mod=readonly','-o',str(binary),'.'],cwd=root,env=env,stdout=stdout,stderr=stderr,timeout=180)
+p.check_returncode();(folder/'native-build-info.txt').write_bytes(subprocess.check_output(['go','version','-m',str(binary)]))
+r=dict(passed=False,scope='Development binary from modified source; existing general native smoke, not physical startup-reset input or clean replacement qualification',binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(),build_exit_code=p.returncode,build_elapsed_s=time.monotonic()-start,started_utc=datetime.datetime.now(datetime.timezone.utc).isoformat());start=time.monotonic()
+with (folder/'native-smoke-stdout.txt').open('w') as stdout,(folder/'native-smoke-stderr.txt').open('w') as stderr:
+ native=subprocess.Popen([str(binary),'--smoke','--smoke-timeout','2m'],stdout=stdout,stderr=stderr)
+ r['owned_pid']=native.pid
+ try:r['native_exit_code']=native.wait(timeout=155)
+ finally:
+  if native.poll() is None:native.terminate();native.wait(timeout=10);r['forced_cleanup']=True
+ r['elapsed_s']=time.monotonic()-start;r['owned_process_absent']=subprocess.run(['/bin/ps','-p',str(native.pid)],capture_output=True).returncode!=0
+ events=[json.loads(line) for line in (folder/'native-smoke-stdout.txt').read_text().splitlines() if line.startswith('{"event":"elab.native.smoke"')]
+ r['passed']=native.returncode==0 and events==[dict(event='elab.native.smoke',passed=True)] and r['owned_process_absent'];(folder/'native-smoke.json').write_text(json.dumps(r,indent=2)+'\n')
+print(json.dumps(r));raise SystemExit(0 if r['passed'] else 1)

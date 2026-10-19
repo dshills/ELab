@@ -180,11 +180,8 @@ func (s *screen) finishVerificationRequest(pending *verificationActionWork) {
 		}
 	}
 	if pending.reset {
-		settings := pending.settings
-		settings.InitialVoltage = nil
-		settings.Capacitors = []workbench.CapacitorInitial{}
-		settings.InputMode = "auto"
-		settings.Step = 0
+		settings := workbench.DefaultVerificationSettings()
+		settings.Duration = pending.settings.Duration
 		s.invokeAtCommandRevision("verification.settings.set", settings, pending.context.revision, pending.context.generation)
 		return
 	}

@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "exit_code": 0,
+  "elapsed_s": 4.062950833002105,
+  "command": [
+    "go",
+    "test",
+    "-C",
+    "desktop",
+    "-race",
+    "-tags=offscreen",
+    "-count=1",
+    "-timeout=60s",
+    "-run",
+    "^Test(NativeProjectStartupClearsInductorScenarios|VerificationStartupReset|MountedVerificationProjectStartup)",
+    "-v",
+    "./..."
+  ],
+  "test_sha256": {
+    "desktop/verification_startup_reset_test.go": "e438b085b3850585579517e84e4f07838403666477653c4357982c19d777fff1",
+    "desktop/verification_startup_reset_offscreen_test.go": "bf1868caf3357a4459c21cce5c1df5f39761c197d272d9e58af164a000042ec2"
+  }
+}

@@ -62,7 +62,7 @@
     "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
     "desktop/value_apply.go": "b0e380210aa477f9d848ed5bdc69502353c653f3ec6259d74c4159ed35df504e",
     "desktop/verification.go": "0a4f566abb75ee12ab43e53f29bf1fbd08034f9301f44bf23bc33c40e79c4a1b",
-    "desktop/verification_actions.go": "974850832dec9a079a49a0c7f98addc46b5c9157d72b579f32723865f1347766",
+    "desktop/verification_actions.go": "8ebb049dcf889d33d5aa8692dfc22740e07e36bff0139aed5696f72cdc2d57e2",
     "desktop/view.go": "aa6b8e57994864273f319965add9e618fd83eeb80a040cdc327674a749d18db7",
     "desktop/viewport.go": "cb6211c7800eac0839d4bc82f99a2583f356afead8202f89145b061139f12f58",
     "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
@@ -3639,7 +3639,7 @@
     },
     {
       "file": "desktop/verification_actions.go",
-      "line": 188,
+      "line": 185,
       "function": "*screen.finishVerificationRequest",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"verification.settings.set\", settings, pending.context.revision, pending.context.generation)",
@@ -3650,7 +3650,7 @@
     },
     {
       "file": "desktop/verification_actions.go",
-      "line": 195,
+      "line": 192,
       "function": "*screen.finishVerificationRequest",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"simulation.verify\", workbench.VerifyParams{Duration: \u0026duration}, pending.context.revision, pending.context.generation)",

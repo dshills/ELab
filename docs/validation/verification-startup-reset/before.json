@@ -1,0 +1,24 @@
+{
+  "original_failure_reproduced": true,
+  "exit_code": 1,
+  "elapsed_s": 6.496133707929403,
+  "command": [
+    "go",
+    "test",
+    "-C",
+    "desktop",
+    "-race",
+    "-count=1",
+    "-timeout=60s",
+    "-run",
+    "^TestNativeProjectStartupClearsInductorScenarios$",
+    "-v",
+    "./..."
+  ],
+  "source_commit": "d58c1451bc75074ce941bc9a2387f53a4ea2ad09",
+  "source_sha256": {
+    "desktop/verification_actions.go": "974850832dec9a079a49a0c7f98addc46b5c9157d72b579f32723865f1347766",
+    "desktop/verification_startup_reset_test.go": "67ecfeeb15fae5dfa3b6e486ec047d2ed1bb16b8f1c22121b4d14da81e32a32d"
+  },
+  "scope": "Production assembled semantic reset/Verify actions and completed public sample reads; no physical OS input"
+}

@@ -1,0 +1,9 @@
+from pathlib import Path
+import hashlib,json,os,subprocess,time
+root=Path('/Users/dshills/Development/projects/ELab');folder=root/'docs/validation/verification-startup-reset'
+files=['desktop/verification_actions.go','desktop/verification_startup_reset_test.go']
+for name in files:(folder/('original-'+Path(name).name+'.txt')).write_bytes((root/name).read_bytes())
+args=['go','test','-C','desktop','-race','-count=1','-timeout=60s','-run','^TestNativeProjectStartupClearsInductorScenarios$','-v','./...'];env=dict(os.environ,GOWORK='off',GOCACHE=str(root/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native');start=time.monotonic();p=subprocess.run(args,cwd=root,env=env,capture_output=True,timeout=120)
+for suffix,data in [('stdout',p.stdout),('stderr',p.stderr)]: (folder/f'before-{suffix}.txt').write_bytes(data)
+assert p.returncode==1 and p.stdout.count(b'Use project startup retained scenario current:')==2
+r=dict(original_failure_reproduced=True,exit_code=p.returncode,elapsed_s=time.monotonic()-start,command=args,source_commit='d58c1451bc75074ce941bc9a2387f53a4ea2ad09',source_sha256={name:hashlib.sha256((root/name).read_bytes()).hexdigest() for name in files},scope='Production assembled semantic reset/Verify actions and completed public sample reads; no physical OS input');(folder/'before.json').write_text(json.dumps(r,indent=2)+'\n');print({k:r[k] for k in ['original_failure_reproduced','exit_code','elapsed_s']})

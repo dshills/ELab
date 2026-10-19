@@ -42,6 +42,7 @@ In another terminal, run `./elab-agent --connect /absolute/path/to/endpoint.json
 
 ## Review boundary and known limits
 
+- **Stored coil-scenario reset caveat in /167:** Use project startup can retain an agent-configured verification `inductor_initials` override. The saved component startup remains unchanged, but a subsequent captured run can use that scenario rather than the saved project. The source repair passes its documented source/development tests and awaits a clean replacement. [Evidence](../docs/validation/verification-startup-reset/README.md).
 - Tested on this Apple Silicon Mac with macOS 26.6.2. The enforced minimum is 1040×720 in the mounted UI's units; the observed native frame is **1053×762 pixels**. App windows at 1280×800 and 1440×900 were inspected earlier. OS display modes, other hardware and monitor transitions remain unqualified.
 - A dense 64-part/100-node stress circuit reaches the existing 100 ms integration work limit before producing a sample; the committed graph and physical state are preserved. Supported size does not guarantee convergence.
 - Educational generic device models have the limits shown in the app. This is not general SPICE compatibility or PCB layout software.

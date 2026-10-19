@@ -1,0 +1,23 @@
+{
+  "original_failure_reproduced": true,
+  "exit_code": 1,
+  "elapsed_s": 5.826038750004955,
+  "command": [
+    "go",
+    "test",
+    "-C",
+    "desktop",
+    "-overlay",
+    "/Users/dshills/Development/projects/ELab/docs/validation/verification-startup-reset/original-overlay.json",
+    "-race",
+    "-tags=offscreen",
+    "-count=1",
+    "-timeout=60s",
+    "-run",
+    "^Test(NativeProjectStartupClearsInductorScenarios|VerificationStartupReset|MountedVerificationProjectStartup)",
+    "-v",
+    "./..."
+  ],
+  "failed_leaf_cases": 4,
+  "scope": "Final tests with original /167 verification_actions.go through a Go overlay; no OS input"
+}
