@@ -1,0 +1,23 @@
+from pathlib import Path
+import copy,hashlib,json,subprocess,sys
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent;directory=Path('/private/tmp/elab-first-version-169-runtime')
+sys.path.insert(0,str(root/'scripts'));import runtime_isolation as runtime
+sdk,run_child=runtime.pinned_child_runner();shared=Path.home()/'Library/Cogent Core'
+def geometry():return {p.relative_to(shared).as_posix():dict(sha256=runtime.digest(p),mode=oct(p.stat().st_mode&0o777)) for p in shared.rglob('*') if p.is_file()}
+before=geometry();(directory/'retry-geometry-before.json').write_text(json.dumps(before,indent=2)+'\n')
+report=directory/'runtime-report.json';first=directory/'runtime-report-first-failed.json';assert not first.exists();report.rename(first);failed=json.loads(first.read_text());assert not failed['passed'] and failed['stages'][0]['status']=='completed' and failed['stages'][1]['status']=='failed'
+result=copy.deepcopy(failed);result.pop('error',None);result['stages']=result['stages'][:1];result['prior_failed_attempt']=dict(report=str(first),sha256=runtime.digest(first),public_report_sha256=runtime.digest(directory/'public/report.json'),scope='Original public suite failed native capacity graceful close after five seconds; retained without reinterpretation')
+controller=stage/'build/elab-conformance';assert runtime.digest(controller)==result['source_controller_sha256']
+assert runtime.bundle_tree(directory/'ELab.app')==result['source_bundle']==runtime.bundle_tree(Path(result['app_source']))
+assert runtime.digest(directory/'elab-agent')==result['source_agent_sha256']
+def save():report.write_text(json.dumps(result,indent=2)+'\n')
+command=[str(controller),'--agent-binary',str(directory/'agent'),'--native-binary',str(directory/'native'),'--project-contract-suite','--electrical-suite','--inductor-suite','--opamp-suite','--opamp-storage-suite','--capacity-suite','--artifacts',str(directory/'public-retry')]
+try:
+ runtime.execute_stage(result,directory,directory/'empty-working-directory','public-suites-retry',command,900,run_child,save)
+ public=json.loads((directory/'public-retry/report.json').read_text());assert public['passed'] and [a['name'] for a in public['adapters']]==['in-process','headless-stdio','headless-socket','native-socket']
+ result['public_report_path']=str(directory/'public-retry/report.json');result['public_report_sha256']=runtime.digest(directory/'public-retry/report.json')
+ result['copied_bundle_unchanged']=runtime.bundle_tree(directory/'ELab.app')==result['source_bundle']==runtime.bundle_tree(Path(result['app_source']))
+ result['agent_unchanged']=runtime.digest(directory/'elab-agent')==result['source_agent_sha256'];result['controller_unchanged']=runtime.digest(controller)==result['source_controller_sha256']
+ assert result['copied_bundle_unchanged'] and result['agent_unchanged'] and result['controller_unchanged'] and geometry()==before
+ result.update(passed=True,shared_geometry_before=before,shared_geometry_after=geometry(),shared_geometry_unchanged=True);save();print(json.dumps(dict(passed=True,stages=result['stages'],prior_failure_retained=True)))
+finally:assert geometry()==before,'shared geometry changed'

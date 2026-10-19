@@ -1,0 +1,113 @@
+import gzip,hashlib,json,plistlib,shutil,stat,subprocess,sys
+from pathlib import Path
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent
+version,build,source='0.152.0','169','aa3b18b23a3cbc1863f097722b96a3263394edca'
+review=root/'build'/f'ELab-{version}-{build}-review';prior=root/'build/ELab-0.151.0-168-review'
+sys.path.insert(0,str(root/'scripts'))
+from runtime_isolation import bundle_tree
+
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def write(p,value):
+ with p.open('x') as output:output.write(json.dumps(value,indent=2)+'\n')
+def gz(p,data):p.write_bytes(gzip.compress(data,mtime=0))
+def verify(folder,manifest_name):
+ manifest=json.loads((folder/manifest_name).read_text());paths=list(folder.rglob('*'))
+ assert not any(p.is_symlink() or not(p.is_file() or p.is_dir()) for p in paths)
+ assert {p.relative_to(folder).as_posix() for p in paths if p.is_file()}==set(manifest['files'])|{manifest_name}
+ for name,expected in manifest['files'].items():
+  p=folder/name;assert sha(p)==expected['sha256'] and oct(stat.S_IMODE(p.stat().st_mode))==expected['mode'],str(p)
+ return dict(files_verified=len(manifest['files']),manifest_sha256=sha(folder/manifest_name))
+def copy_observations(source_dir,destination):
+ destination.mkdir()
+ for p in sorted(source_dir.rglob('*')):
+  if not p.is_file() or p.name=='endpoint.json':continue
+  relative=p.relative_to(source_dir);q=destination/relative;q.parent.mkdir(parents=True,exist_ok=True)
+  if p.suffix in ['.json','.elab','.txt'] and p.name!='report.json':gz(q.with_name(q.name+'.gz'),p.read_bytes())
+  else:shutil.copyfile(p,q)
+
+assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()==source
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=root).strip()
+assert not (review/'RELEASE_MANIFEST.json').exists()
+previous=json.loads((root/'research/ui-audit/first-version/startup-reset-review-checkpoint.json').read_text())
+built=json.loads((stage/'build-result.json').read_text());assert built['passed'] and built['clean_build_vcs'] and built['source_commit']==source
+for name in ['elab','elab-agent','elab-conformance']:
+ info=(stage/'build'/(name+'-build-info.txt')).read_text();assert 'vcs.revision='+source in info and 'vcs.modified=false' in info
+info=plistlib.loads((review/'ELab.app/Contents/Info.plist').read_bytes());assert info['CFBundleShortVersionString']==version and info['CFBundleVersion']==build
+assert sha(review/'ELab.app/Contents/MacOS/ELab')==built['native_sha256'] and sha(review/'elab-agent')==built['agent_sha256']
+runtime=Path('/private/tmp/elab-first-version-169-runtime');acceptance=Path('/private/tmp/elab-first-version-169-acceptance')
+rr=json.loads((runtime/'runtime-report.json').read_text());ar=json.loads((acceptance/'report.json').read_text());public=json.loads(Path(rr['public_report_path']).read_text())
+assert rr['passed'] and ar['passed'] and public['passed'] and rr['shared_geometry_unchanged'] and ar['shared_geometry_unchanged']
+assert rr['source_bundle']==bundle_tree(review/'ELab.app') and rr['source_agent_sha256']==built['agent_sha256']
+assert all(s['status']=='completed' and s['exit_code']==0 for s in rr['stages'])
+startup=ar['component_startup_commands'];assert startup['passed'] and startup['native_headless_stages_equal'] and startup['fresh_saved_reopens']==8 and len(startup['cases'])==4
+cr=ar['coil_startup_reset_commands'];assert cr['passed'] and cr['native_headless_rows_equal'] and cr['four_fresh_saved_project_reopens']
+vr=ar['verification_handoff_commands'];assert vr['passed'] and vr['sample_rows_per_adapter']==424 and vr['native_headless_rows_equal']
+assert ar['native_host_closed_normally'] and ar['preset_value_commands']['values']==4
+proof=root/'docs/validation/component-startup-handoff';cp=json.loads((proof/'checkpoint.json').read_text());assert cp['source_quality']['passed'] and cp['original_failed_leaf_cases']==4 and cp['focused_passed_leaf_cases']==34
+for name,expected in cp['source_sha256'].items():assert sha(root/name)==expected,name
+for name,expected in cp['evidence_sha256'].items():assert sha(proof/name)==expected,name
+changed=subprocess.check_output(['git','diff','--name-only',previous['source_commit'],source,'--','desktop','workbench','transport','internal','cmd','go.mod','go.sum','third_party/vellum'],cwd=root,text=True).splitlines()
+expected=['desktop/'+n for n in ['component_inspector.go','component_startup_actions.go','component_startup_actions_offscreen_test.go','component_startup_smoke.go','examples_smoke.go','inductor_controls.go','inductor_smoke.go','led_fade_smoke.go','main.go','rc_high_pass_smoke.go','view.go','viewport.go']]+['internal/uiaudit/audit.go','internal/uiaudit/audit_test.go']
+assert changed==expected,changed
+ledger_path=root/'research/13-native-command-inventory.json';ledger=json.loads(ledger_path.read_text());old=json.loads((prior/'Evidence/Native-command-inventory.json').read_text())
+for key in ['public_commands','native_alias_targets','commands_with_source_routes','commands_without_source_routes','issues']:assert ledger[key]==old[key]
+assert len(ledger['source_sha256'])==71 and len(ledger['sites'])==397 and sum(s['status']=='requires-binding-review' for s in ledger['sites'])==173
+pin=json.loads((root/'third_party/vellum/sdk.lock.json').read_text());assert pin==previous['sdk'] and sha(root/pin['archive'])==pin['sha256']
+preserved={}
+for p in sorted((root/'build').glob('ELab-*-review')):
+ if p!=review and (p/'RELEASE_MANIFEST.json').exists():preserved[p.name.removeprefix('ELab-').removesuffix('-review')]=verify(p,'RELEASE_MANIFEST.json')
+assert len(preserved)==28
+for name,expected in previous['preserved_bundles'].items():assert preserved[name]==expected
+original=verify(root/'build/ELab-0.130.0-147-review','CANDIDATE_MANIFEST.json');failed=verify(root/'build/ELab-0.147.0-164-review','CANDIDATE_MANIFEST.json')
+assert original==previous['preserved_original_147_candidate'] and failed==previous['preserved_failed_164_candidate']
+canonical=previous['canonical'];assert sha(root/'build/ELab.app/Contents/MacOS/ELab')==canonical['native_sha256']
+for name in ['Examples','Licenses']:shutil.copytree(prior/name,review/name)
+evidence=review/'Evidence';evidence.mkdir()
+shutil.copytree(prior/'Evidence',evidence/'Historical-168')
+shutil.copytree(proof,evidence/'Component-startup-source-repair')
+for src,dest in [(ledger_path,'Native-command-inventory.json'),(root/'third_party/vellum/sdk.lock.json','SDK-lock.json'),(root/'research/ui-audit/first-version/private-alpha-owner-decisions.json','Owner-decisions.json'),(stage/'build-result.json','Build-result.json')]:shutil.copyfile(src,evidence/dest)
+for name,label in [('build_release.py','Build-source'),('runtime.py','Runtime-source'),('acceptance.py','Acceptance-source'),('verify_cases.py','Verify-cases-source'),('coil_reset_cases.py','Coil-cases-source'),('startup_cases.py','Startup-cases-source'),('run-acceptance.py','Acceptance-runner'),('seal.py','Seal-source'),('retry_public.py','Public-retry-source')]:shutil.copyfile(stage/name,evidence/(label+'.py.txt'))
+for name,label in [('elab','Native'),('elab-agent','Agent'),('elab-conformance','Conformance')]:
+ raw=(stage/'build'/(name+'-build-info.txt')).read_bytes();gz(evidence/(label+'-build-info.raw.txt.gz'),raw);(evidence/(label+'-build-info.txt')).write_text('\n'.join(line.rstrip() for line in raw.decode().splitlines())+'\n')
+for name in ['build.txt','package.txt','acceptance-output.txt']:gz(evidence/(name+'.gz'),(stage/name).read_bytes())
+shutil.copyfile(runtime/'runtime-report.json',evidence/'Runtime.json');gz(evidence/'Public-report.json.gz',Path(rr['public_report_path']).read_bytes())
+for name in ['native-smoke.log.txt','public-suites.log.txt','public-suites-retry.log.txt','runtime.sb','geometry-probe.py','geometry-probe-output.json']:gz(evidence/(name+'.gz'),(runtime/name).read_bytes())
+copy_observations(acceptance,evidence/'Runtime-acceptance')
+shutil.copyfile(runtime/'runtime-report-first-failed.json',evidence/'First-runtime-failure.json')
+gz(evidence/'First-public-report.json.gz',(runtime/'public/report.json').read_bytes())
+walkthrough=(root/'research/35-first-version-review.md').read_text();tasks='## Try these four tasks'+walkthrough.split('## Try these four tasks',1)[1].split('## Review boundary and known limits',1)[0]
+tasks=tasks.replace('Then change a value and inspect the paused/stale indicator.', 'For selected C1, type a startup voltage and click Restart once; it should use that value. Type another voltage and click Use experiment initial voltage once; the explicit override should clear. Inductor startup current and Reset startup to zero follow the same rule. Then change a value and inspect the paused/stale indicator.')
+readme=f'''# ELab private owner review · {version} /{build}
+
+Open **ELab.app** after saving and quitting an earlier review. Matching `elab-agent`, three editable Examples and framework licenses/notices are included. No Go, Python, Vellum checkout or account is needed. Owner walkthrough remains **Not tried yet**. All 28 earlier sealed reviews, two candidates and canonical /120 are preserved.
+
+This replacement repairs first-click component startup Reset/Restart. The selected capacitor or inductor's unfinished startup entry is settled before the requested action. Only its own accepted command/viewport sequence continues; another actor, document or selection change still refuses. Invalid Restart is refused, while an explicit default discards its own invalid entry. Existing public commands, numerical models, saved format and SDK `b22478c` are unchanged.
+
+Clean `{source[:7]}` passes copied native smoke, four public adapters and reference/value/preset/measurement/live/save integration under development-file/outbound-IP and shared-geometry denial. Four new capacitor/inductor default/Restart command comparisons match the packaged agent, with RC/RL equations, stale/invalid refusal and eight fresh saved reopens. The 424-row RC Verify and RL/RLC saved-coil reset regressions also pass. [Receipt](Evidence/Acceptance.json), [source proof](Evidence/Component-startup-source-repair/README.md).
+
+The initial public suite failed one native dense-circuit session's graceful-close timeout; the complete public retry passed. That failure is retained in Evidence/First-runtime-failure.json and First-public-report.json.gz; its cause remains unexplained. No failed run is counted as a pass.
+
+The 34 retained-widget private-input cases and copied public commands have separate scopes. Earlier physical/precision/RC-edge observations retain their original scope under Evidence/Historical-168. No new physical OS startup-input, typing/IME/reader or default-startup qualification is claimed. /168 remains preserved and affected by the component startup issue.
+
+'''+tasks+'''
+## Review boundary and known limits
+
+- Tested on this Apple Silicon workstation /macOS 26.6.2. Other hardware/displays, full typing/IME/VoiceOver and visible p95 latency remain unqualified.
+- Ordinary default-startup/clean-account installation qualification was explicitly deferred by the owner for this private alpha; the broader requirements remain open. Protected runtime checks do not qualify them.
+- Generic educational models are bounded, without general SPICE compatibility or physical part ratings. Dense networks can exhaust their integration budget without a sample; size support does not guarantee convergence.
+- An earlier NMOS Pause observation and one source-test LED Apply revision mismatch remain unexplained despite passing subsequent runs. Report a Pause or Apply action that fails.
+- Owner walkthrough, actual ten-person study, signing/notarization and public distribution remain open. One LED page printed clearly; other settings, scale/margins and cancellation remain unqualified.
+
+Private ad-hoc signing is not supported-alpha promotion.
+'''
+(review/'README.md').write_text(readme)
+(evidence/'Acceptance.json').write_text('{}\n');count=sum(p.is_file() for p in review.rglob('*'))
+receipt=dict(date='2026-10-19',version=version,build=build,status='Component startup Reset/Restart qualified for private owner review within source-mounted and copied-runtime scopes; broader gates remain open',source_commit=source,clean_build_vcs=True,native_sha256=built['native_sha256'],agent_sha256=built['agent_sha256'],sdk=pin,quality=dict(cp['source_quality'],scope='Complete source quality on final repair source; exact clean package separately qualified'),copied_runtime=rr['stages'],runtime_geometry_protection=dict(controls=rr['controls']['shared_geometry'],unchanged=True,scope='Test isolation; ordinary default startup remains unqualified'),component_startup=dict(source_evidence='Component-startup-source-repair/checkpoint.json',original_failed_leaf_cases=4,focused_passed_leaf_cases=34,copied_commands=startup,scope='Retained-widget private startup controls and copied public commands; no new physical OS startup input claim'),coil_startup_reset_commands=cr,verification_regression_commands=vr,acceptance=ar,release_diff=dict(base_release='0.151.0 /168',base_source_commit=previous['source_commit'],changed_runtime_and_tests=changed,models_format_commands_and_sdk_unchanged=True),historical_evidence=dict(directory='Historical-168',scope='Earlier observations remain historical; engine sources unchanged and current public suites pass'),preserved_bundles=preserved,preserved_original_147_candidate=original,preserved_failed_164_candidate=failed,canonical=canonical,canonical_promoted=False,owner_acceptance='Pending: owner answered Not tried yet; no acceptance inferred',private_alpha_environment_gate='Owner deferred default-startup/clean-account qualification; remains unqualified',p0_counts=dict(implemented=17,partial=10),manifest_file_entries=count,review_path=str(review),launch_note='Save and quit an earlier review before opening this replacement; no owner app was opened automatically.',known_limits=['One initial native capacity session failed graceful close; full retry passed, cause unresolved','No new physical OS startup input or general typing/IME/reader qualification','Visible p95, actual hobbyist study, distribution/signing and owner acceptance remain open','Default-startup/clean-account gate deferred for private alpha only','Historical Pause and source LED Apply revision mismatch remain unexplained; numerical topology/device limits remain'])
+receipt_path=root/'research/ui-audit/first-version/component-startup-review-checkpoint.json';write(receipt_path,receipt);(evidence/'Acceptance.json').write_bytes(receipt_path.read_bytes())
+files={p.relative_to(review).as_posix():dict(sha256=sha(p),mode=oct(stat.S_IMODE(p.stat().st_mode))) for p in sorted(review.rglob('*')) if p.is_file()};assert len(files)==count
+write(review/'RELEASE_MANIFEST.json',dict(version=version,build=build,status=receipt['status'],source_record_commit=source,source_build_clean=True,canonical_promoted=False,prior_review_entries_verified_unchanged={k:v['files_verified'] for k,v in preserved.items()},files=files))
+proofdir=root/'docs/validation/component-startup-review-169';proofdir.mkdir()
+shutil.copyfile(evidence/'Runtime.json',proofdir/'runtime.json');shutil.copyfile(evidence/'Public-report.json.gz',proofdir/'public-report.json.gz');shutil.copytree(evidence/'Runtime-acceptance',proofdir/'acceptance')
+for name in ['Build-result.json','Build-source.py.txt','Runtime-source.py.txt','Acceptance-source.py.txt','Verify-cases-source.py.txt','Coil-cases-source.py.txt','Startup-cases-source.py.txt','Public-retry-source.py.txt','First-runtime-failure.json','First-public-report.json.gz','public-suites-retry.log.txt.gz','Acceptance-runner.py.txt','Seal-source.py.txt','runtime.sb.gz','geometry-probe.py.gz','geometry-probe-output.json.gz','native-smoke.log.txt.gz','public-suites.log.txt.gz','build.txt.gz','package.txt.gz','acceptance-output.txt.gz']:shutil.copyfile(evidence/name,proofdir/name)
+write(proofdir/'preservation.json',dict(passed=True,preserved_bundles=preserved,original_147_candidate=original,failed_164_candidate=failed,canonical=canonical,canonical_promoted=False))
+print(json.dumps(dict(passed=True,release=version+' /'+build,source_commit=source,manifest_entries=count,previous_reviews=len(preserved),startup_cases=4,canonical_promoted=False)))
