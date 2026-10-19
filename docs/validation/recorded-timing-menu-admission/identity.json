@@ -1,0 +1,23 @@
+{
+  "test_file": "desktop/recorded_timing_menu_darwin_test.go",
+  "test_sha256": "1df5b7efb41b6d53402077fe91ee62eb1500b9a69c09ccb1232d0397350877b5",
+  "runtime_source_changed": false,
+  "release_receipt": "research/ui-audit/first-version/recorded-timing-review-checkpoint.json",
+  "release_receipt_sha256": "b801605edfcb93fe7d96d888db0f27c95eb9ded80a392c118b9232bc4a530120",
+  "commands": [
+    {
+      "command": "go test -race -run '^TestNativeRecordedTimingMenu' -v ./...",
+      "cwd": "desktop",
+      "passed": true,
+      "exit_code": 0,
+      "duration_s": 2.243
+    },
+    {
+      "command": "go vet ./...",
+      "cwd": "desktop",
+      "passed": true,
+      "exit_code": 0
+    }
+  ],
+  "scope": "In-memory assembled native callback/admission tests; no AppKit popup, private blur or physical input claim"
+}

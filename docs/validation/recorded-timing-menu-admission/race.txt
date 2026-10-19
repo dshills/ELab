@@ -1,0 +1,20 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestNativeRecordedTimingMenuFreshChoiceMatchesAgent
+--- PASS: TestNativeRecordedTimingMenuFreshChoiceMatchesAgent (0.15s)
+=== RUN   TestNativeRecordedTimingMenuRefusesInterveningContext
+=== RUN   TestNativeRecordedTimingMenuRefusesInterveningContext/agent-settings
+=== RUN   TestNativeRecordedTimingMenuRefusesInterveningContext/user-field
+=== RUN   TestNativeRecordedTimingMenuRefusesInterveningContext/other-recording
+=== RUN   TestNativeRecordedTimingMenuRefusesInterveningContext/new-document
+=== RUN   TestNativeRecordedTimingMenuRefusesInterveningContext/menu-reopened
+=== RUN   TestNativeRecordedTimingMenuRefusesInterveningContext/file-busy
+--- PASS: TestNativeRecordedTimingMenuRefusesInterveningContext (0.47s)
+    --- PASS: TestNativeRecordedTimingMenuRefusesInterveningContext/agent-settings (0.07s)
+    --- PASS: TestNativeRecordedTimingMenuRefusesInterveningContext/user-field (0.12s)
+    --- PASS: TestNativeRecordedTimingMenuRefusesInterveningContext/other-recording (0.08s)
+    --- PASS: TestNativeRecordedTimingMenuRefusesInterveningContext/new-document (0.07s)
+    --- PASS: TestNativeRecordedTimingMenuRefusesInterveningContext/menu-reopened (0.07s)
+    --- PASS: TestNativeRecordedTimingMenuRefusesInterveningContext/file-busy (0.07s)
+PASS
+ok  	github.com/dshills/elab/desktop	2.243s
