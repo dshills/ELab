@@ -1,0 +1,524 @@
+{
+  "date": "2026-10-19",
+  "scope": "First-version and original full-MVP gate reconciliation, not a completion claim",
+  "release": "0.157.0 /174",
+  "private_owner_review_ready": true,
+  "owner_acceptance": "Not tried yet",
+  "promotion_authorized": false,
+  "mvp_acceptance_proven": false,
+  "existing_engineering_counts": {
+    "implemented": 17,
+    "partial": 10,
+    "pending": 0
+  },
+  "functional_requirements": [
+    {
+      "id": "UI-01",
+      "requirement": "Vellum application foundation",
+      "acceptance": "Desktop application consumes Vellum's public APIs from an independent Go application; both visible and headless clients use the same semantic operations; a recorded, reproducible SDK/dependency baseline builds on a clean supported development environment",
+      "existing_engineering_status": "partial",
+      "assessment": "Partial: current-workstation builds and isolated copied runtime are proven; clean dependency bootstrap, supported account/OS installation and distribution remain unqualified",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#UI-01"
+    },
+    {
+      "id": "EDIT-01",
+      "requirement": "Discoverable circuit construction",
+      "acceptance": "A user can construct the LED circuit from blank using visible controls without entering SPICE syntax or using a context menu",
+      "existing_engineering_status": "implemented",
+      "assessment": "Implemented visible blank LED construction; novice discoverability still requires Gate D",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#EDIT-01"
+    },
+    {
+      "id": "EDIT-02",
+      "requirement": "Predictable connectivity",
+      "acceptance": "Tests distinguish endpoints, explicit junctions, crossings, and near misses; moving a connected component preserves its net; invalid placement remains a preview until committed",
+      "existing_engineering_status": "implemented",
+      "assessment": "Implemented within one sheet and existing bounds",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#EDIT-02"
+    },
+    {
+      "id": "EDIT-03",
+      "requirement": "Exact, reversible edits",
+      "acceptance": "`1k`, `2.2k`, `10 ms`, and `1 \u00b5F` parse into canonical values with visible units; ambiguous or invalid input is explained without changing the previous valid value; one undo restores each committed edit, including a complete slider drag",
+      "existing_engineering_status": "partial",
+      "assessment": "Partial: time/waveform units and exact round-trip value drafts now work through shared commands/native committed fields; control-event tests plus one actual mounted paused slider drag/Undo prove a single commit/event/history entry and charge/time continuity; offscreen real-clock running/Tab-focus/interruption and agent-replay checks now pass; actual /174 paused/running drags and held-click agent-edit call now match packaged-agent state and independent RC references; exact physical interleaving, window blur, typing and IME coverage remain open",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#EDIT-03"
+    },
+    {
+      "id": "EDIT-04",
+      "requirement": "Consistent navigation and selection",
+      "acceptance": "Mouse and keyboard can select parts/nets, inspect properties, pan, zoom, fit, and escape an unfinished operation without altering the circuit",
+      "existing_engineering_status": "partial",
+      "assessment": "Partial: core drawing/history/file keyboard loop is exercised; complete mounted navigation/focus and assistive-technology scenarios remain unqualified",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#EDIT-04"
+    },
+    {
+      "id": "SIM-01",
+      "requirement": "Automatic analysis",
+      "acceptance": "Completing or electrically editing a valid supported circuit triggers calculation without a separate Run step; drawing remains responsive while calculating",
+      "existing_engineering_status": "partial",
+      "assessment": "Partial: real-capacity backend and functional native live-run evidence exists; native main-loop/visible-latency and broader difficult-topology qualification remain open",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#SIM-01"
+    },
+    {
+      "id": "SIM-02",
+      "requirement": "Explicit state semantics",
+      "acceptance": "All actions follow the state contract below; traces from different electrical revisions are never joined into an apparently continuous result",
+      "existing_engineering_status": "partial",
+      "assessment": "Partial: pending/coalescing/cancellation/provenance evidence exists; complete mounted gesture invalidation and state-table qualification remain open",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#SIM-02"
+    },
+    {
+      "id": "SIM-03",
+      "requirement": "Honest status and time",
+      "acceptance": "Status uses text as well as color; simulated time and playback speed are visible; failure or lack of progress never becomes an apparently valid zero reading",
+      "existing_engineering_status": "implemented",
+      "assessment": "Implemented behavior in tested families; interpretation with people remains pending",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#SIM-03"
+    },
+    {
+      "id": "SIM-04",
+      "requirement": "Appropriate numerical resolution",
+      "acceptance": "Default analysis passes the electrical acceptance suite; insufficient resolution, solver failure, or unsupported conditions are shown explicitly; the app never silently swaps to a simpler model to maintain speed",
+      "existing_engineering_status": "implemented",
+      "assessment": "Implemented for the curated release reference suite on this workstation; broader PVT/waveform/device/SPICE qualification and other release gates remain separate",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#SIM-04"
+    },
+    {
+      "id": "SIM-05",
+      "requirement": "Bounded verification",
+      "acceptance": "Verify accepts duration and initial conditions through ordinary controls, records engine/model/settings versions, and produces a reproducible result for the supported suite",
+      "existing_engineering_status": "implemented",
+      "assessment": "Implemented within declared duration/step/storage envelope",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#SIM-05"
+    },
+    {
+      "id": "PART-01",
+      "requirement": "Ready parts and visible assumptions",
+      "acceptance": "Every palette part has a working model and correct pin mapping; its inspector identifies generic/ideal behavior and model limitations before a user relies on it",
+      "existing_engineering_status": "implemented",
+      "assessment": "Implemented generic/ideal inventory; no physical parts/ratings claim",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#PART-01"
+    },
+    {
+      "id": "VIEW-01",
+      "requirement": "Measurements on the circuit",
+      "acceptance": "Selected and pinned readings expose units, sign convention, reference direction, and simulation status; a stale pin is visibly stale",
+      "existing_engineering_status": "implemented",
+      "assessment": "Implemented for supported live probes/pins; full keyboard/screen-reader qualification remains in EDIT-04/ACCESS-01; captured-schematic interaction is future work",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#VIEW-01"
+    },
+    {
+      "id": "VIEW-02",
+      "requirement": "Optional explanatory animation",
+      "acceptance": "Animation can be disabled without losing information; polarity/current direction remains available numerically; LED brightness and moving dots are labeled as illustrative rather than calibrated physical rendering",
+      "existing_engineering_status": "implemented",
+      "assessment": "Implemented explanatory cues; dots/LED brightness labeled illustrative; OS integration and complete accessibility remain unqualified",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#VIEW-02"
+    },
+    {
+      "id": "SCOPE-01",
+      "requirement": "Discoverable plotting",
+      "acceptance": "A selected node/component has labeled plot actions; up to four traces retain labels, units, and source associations; removing a source marks its trace unavailable",
+      "existing_engineering_status": "implemented",
+      "assessment": "Implemented for selected live sources; recorded view suppresses current-schematic highlights; interactive captured-schematic highlighting is future work",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#SCOPE-01"
+    },
+    {
+      "id": "SCOPE-02",
+      "requirement": "Precise and bounded measurement",
+      "acceptance": "Users can type cursor times, read values/deltas, and obtain min/max over a specified interval; the measurement shows its interval and does not silently include earlier startup history",
+      "existing_engineering_status": "implemented",
+      "assessment": "Implemented sampled measurement behavior, shared unit-text time entry and optional captured-reference overlays with common axes; narrow-window endpoint cursor geometry repaired; full mounted interaction qualification remains in EDIT-03; RC manual input-edge repair qualified in /161, preserved /160 remains affected",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#SCOPE-02"
+    },
+    {
+      "id": "HELP-01",
+      "requirement": "Actionable recovery",
+      "acceptance": "Missing reference, disconnected required terminal, invalid parameter, missing/corrupt model, and nonconvergence each produce a relevant explanation; a known affected object is highlighted; no modal interrupts a temporary wire gesture",
+      "existing_engineering_status": "implemented",
+      "assessment": "Implemented known-cause recovery guidance; unknown causes are not fabricated; accessibility/discoverability remain separate gates",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#HELP-01"
+    },
+    {
+      "id": "HELP-02",
+      "requirement": "Working examples",
+      "acceptance": "All three examples open, run, explain one limitation, accept changes, and reset without modifying the original example",
+      "existing_engineering_status": "implemented",
+      "assessment": "Implemented guided editable examples/current reset; novice comprehension, accessibility and participant evidence remain separate gates",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#HELP-02"
+    },
+    {
+      "id": "FILE-01",
+      "requirement": "Complete local ownership",
+      "acceptance": "A project exported on one supported installation opens offline on a clean installation without fetching a model; unsupported newer formats open read-only when possible or fail clearly without rewriting the file",
+      "existing_engineering_status": "partial",
+      "assessment": "Partial: fresh-process reopening on this workstation also passes copied external runtimes with development-file/IP denial; clean supported OS/account installation remains unqualified",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#FILE-01"
+    },
+    {
+      "id": "FILE-02",
+      "requirement": "Reliable saves and recovery",
+      "acceptance": "Writes are atomic; failed saves preserve the last valid project; recovery offers the newest complete autosave without replacing an explicitly saved file silently",
+      "existing_engineering_status": "implemented",
+      "assessment": "Implemented tested process/filesystem behavior; no power-loss qualification claimed",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#FILE-02"
+    },
+    {
+      "id": "FILE-03",
+      "requirement": "Useful output",
+      "acceptance": "SVG represents the visible schematic with readable labels; bounded-result CSV includes time, signal names, units, and result identity; exports preserve the source project",
+      "existing_engineering_status": "implemented",
+      "assessment": "Implemented existing P0 output; PDF/PNG advance the owner P1 addition, captured in-app preview now shares the output renderer; local printer discovery/captured submission/status/cancel now have shared commands and isolated libcups fixture evidence; bounded fixed-scale tiling/page navigation/exact captured PNG now work; Brother job 161 completed and the owner confirms the LED schematic/parts list printed clearly and completely; measured media/margins/scale, other output settings and device cancellation remain unqualified; RC manual input-edge repair qualified in /161, preserved /160 remains affected",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#FILE-03"
+    },
+    {
+      "id": "ACCESS-01",
+      "requirement": "Nonvisual and keyboard alternatives",
+      "acceptance": "Component search, placement, connection by named terminal, value editing, plotting, save, and recovery are operable with keyboard and semantic controls; core labels/readings are checked with a screen reader on the pilot platform",
+      "existing_engineering_status": "partial",
+      "assessment": "Partial: core keyboard paths have direct evidence; complete focus/typing/IME and actual pilot-platform screen-reader acceptance remain open; AX labels alone do not prove access",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#ACCESS-01"
+    },
+    {
+      "id": "AGENT-01",
+      "requirement": "Complete capability parity",
+      "acceptance": "Every shipped user command, function, setting, and observable result has an equivalent documented agent operation; release coverage is 100%, including application/project lifecycle, editing, view controls, simulation, measurement, diagnostics, recovery, and export",
+      "existing_engineering_status": "partial",
+      "assessment": "Partial: 174 sites use dynamic/relay/custom resolution; this static category is not a count of untested bindings. Complete per-binding conformance, mounted typing/IME/focus, remaining dialog/gesture paths and OS lifecycle/runtime coverage remain open",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#AGENT-01"
+    },
+    {
+      "id": "AGENT-02",
+      "requirement": "Discoverable structured contract",
+      "acceptance": "Clients can enumerate supported capabilities and versions, obtain typed input/output schemas, units, defaults, preconditions, and error codes, and inspect application/project state by stable IDs without screen scraping",
+      "existing_engineering_status": "partial",
+      "assessment": "Partial: all-command annotation presence is established in source; exhaustive accuracy of units/defaults/preconditions/errors, behavior/state coverage and complete native binding qualification remain open; annotation presence alone is not full contract acceptance",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#AGENT-02"
+    },
+    {
+      "id": "AGENT-03",
+      "requirement": "Interactive and headless execution",
+      "acceptance": "A reference external client completes all three circuit workflows from an empty project without UI input; the same command sequences work through the in-process client interface and produce equivalent project state and numerical results",
+      "existing_engineering_status": "implemented",
+      "assessment": "Implemented: all four client paths pass the same three reference workflows on the recorded workstation; complete native action coverage and other release gates remain separate",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#AGENT-03"
+    },
+    {
+      "id": "AGENT-04",
+      "requirement": "Observable asynchronous operations",
+      "acceptance": "Every long-running operation returns an operation ID, exposes progress/completion/error/cancellation, and identifies the input revision and resulting run/artifacts; accepted work is distinguishable from completed work",
+      "existing_engineering_status": "partial",
+      "assessment": "Partial: appearance-specific identity gap is repaired in source; clean replacement packaging is qualified; complete asynchronous job/binding coverage and platform teardown qualification remain open",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#AGENT-04"
+    },
+    {
+      "id": "AGENT-05",
+      "requirement": "Reliable edits and shared recovery",
+      "acceptance": "Mutations support revision preconditions and retry deduplication; atomic edit batches commit fully or leave state unchanged; successful batches appear as named undoable actions and cannot silently overwrite intervening user changes",
+      "existing_engineering_status": "implemented",
+      "assessment": "Implemented: exact history-tip guards, original actor identity and explicit cross-actor acknowledgment prevent silent reversal of intervening work",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#AGENT-05"
+    },
+    {
+      "id": "AGENT-06",
+      "requirement": "Shared behavior and visible control",
+      "acceptance": "User, built-in, and external clients share validation, units, model limits, simulation state rules, and authorized capabilities; interactive agent changes are visible, attributed, and recoverable through the ordinary undo/recovery controls",
+      "existing_engineering_status": "implemented",
+      "assessment": "Implemented in tested paths; inherits unresolved behavior/coverage requirements above",
+      "full_acceptance_inferred": false,
+      "evidence_source": "research/11-prd-implementation-audit.json#AGENT-06"
+    }
+  ],
+  "quality_targets": [
+    {
+      "area": "Supported size",
+      "proposed_target": "At least 50 simulated components, 100 electrical nodes, and four traces using the curated library; publish the validated envelope and explain excess complexity without losing edit/save access",
+      "current_evidence": "Named 51-part/100-node and 64-part/four-probe fixtures have functional and older repeated backend evidence; current /174 capacity suite passes.",
+      "remaining": "Does not establish visible response at every topology or simultaneous maxima.",
+      "dependency": "engineering",
+      "evidence": "docs/capacity-performance.md",
+      "full_gate_pass_inferred": false
+    },
+    {
+      "area": "Editing feedback",
+      "proposed_target": "95th-percentile visible acknowledgment within 100 ms for supported edits; measure input event to visible acknowledgment, independently of solver completion",
+      "current_evidence": "100 ms visible acknowledgment remains inconclusive; controller overhead is included in recorded upper bounds.",
+      "remaining": "Needs a valid input-to-acknowledgment measurement method and declared observations; do not call these bounds a product failure.",
+      "dependency": "method_and_engineering",
+      "evidence": "research/38-visible-responsiveness-results.md",
+      "full_gate_pass_inferred": false
+    },
+    {
+      "area": "Live update",
+      "proposed_target": "95th-percentile time from accepted edit to the first valid updated sample within 500 ms on the three reference circuits; show Updating until then",
+      "current_evidence": "/173 full NPN and separate LED blocks support their named 500 ms target; RC blocks contain unavailable observations.",
+      "remaining": "No complete RC percentile and no automatic transfer to /174; preserve failed IDs and untouched observations.",
+      "dependency": "method_and_engineering",
+      "evidence": "research/38-visible-responsiveness-results.md",
+      "full_gate_pass_inferred": false
+    },
+    {
+      "area": "Verification",
+      "proposed_target": "Complete the reference 200 ms transient runs within 2 seconds on the locked reference configuration; this is wall time for a bounded test, not a universal real-time promise",
+      "current_evidence": "Older repeated suites separate zero-duration DC from 200 ms transient cases. Current /174 has three flasher refinement timings per adapter below 2 s.",
+      "remaining": "No universal runtime guarantee or full new repeated current-build timing gate; native UI timing is separate.",
+      "dependency": "engineering",
+      "evidence": "docs/performance-qualification.md",
+      "full_gate_pass_inferred": false
+    },
+    {
+      "area": "Responsiveness",
+      "proposed_target": "A slow or failed solve must not block navigation, cancel, save, or undo; benchmark these actions under a deliberately difficult fixture",
+      "current_evidence": "/141 backend command spans during actual capacity work and current source/copy integration retain their scopes.",
+      "remaining": "Native visible interaction under difficult solve and wider topology qualification remain open.",
+      "dependency": "engineering",
+      "evidence": "research/ui-audit/first-version/capacity-responsiveness-checkpoint.json",
+      "full_gate_pass_inferred": false
+    },
+    {
+      "area": "Numerical checks",
+      "proposed_target": "Meet the tolerances in the release suite below with default settings; tighten numerical resolution without materially changing accepted measurements",
+      "current_evidence": "Current /174 four-adapter electrical, coil/opamp/storage/capacity suites and native reference fixtures pass within declared generic models.",
+      "remaining": "Do not infer physical-device accuracy, all PVT or general SPICE support; preserve explicit unsupported/failure envelopes.",
+      "dependency": "engineering",
+      "evidence": "research/ui-audit/first-version/export-progress-review-checkpoint.json",
+      "full_gate_pass_inferred": false
+    },
+    {
+      "area": "Recovery",
+      "proposed_target": "Autosave complete committed changes within 5 seconds while storage is available; show save failure; fault-injection tests preserve the last successful manual save",
+      "current_evidence": "/126 automatic recovery has 240 named-fixture samples under 5 s; /128 backend/descriptor failure/retry and /161 native crash/capture recovery retain their scopes.",
+      "remaining": "Actual current native automatic storage warning persistence/readability while editing is not recorded; broad storage/power-loss remains unqualified.",
+      "dependency": "engineering",
+      "evidence": "docs/recovery-failure.md",
+      "full_gate_pass_inferred": false
+    },
+    {
+      "area": "Portability",
+      "proposed_target": "Native save/open round-trip retains connectivity, values, models, probes, initial conditions, and recorded results across clean installations of the supported version",
+      "current_evidence": "Current copied offline runtime, Unicode ZIP extraction and fresh saved-project reopens pass on this workstation.",
+      "remaining": "Clean-account/default startup and ordinary installation are unperformed; owner deferral is private-alpha only.",
+      "dependency": "separate_environment",
+      "evidence": "research/ui-audit/first-version/private-alpha-owner-decisions.json",
+      "full_gate_pass_inferred": false
+    },
+    {
+      "area": "Privacy",
+      "proposed_target": "No account or network dependency for the core workflow; project contents stay local unless the user explicitly exports or shares them; no mandatory telemetry",
+      "current_evidence": "Core reference workflows run offline without account/provider; copied runtime uses outbound-IP and development-file denial.",
+      "remaining": "Do not turn this recorded offline scope into a claim about new providers or future network features.",
+      "dependency": "engineering",
+      "evidence": "research/ui-audit/first-version/export-progress-review-checkpoint.json",
+      "full_gate_pass_inferred": false
+    },
+    {
+      "area": "Accessibility",
+      "proposed_target": "Status is understandable without color or motion; complete the core keyboard and screen-reader scenarios on the pilot platform; do not infer support from screenshots alone",
+      "current_evidence": "Core keyboard, AX/control labels and narrow native focus/input cases have evidence.",
+      "remaining": "Actual screen-reader core scenarios, full keyboard/focus/IME and participant interpretation remain open. No new OS permission is authorized.",
+      "dependency": "permission_and_engineering",
+      "evidence": "research/11-prd-implementation-audit.json#ACCESS-01",
+      "full_gate_pass_inferred": false
+    },
+    {
+      "area": "Agent parity",
+      "proposed_target": "100% of shipped user capabilities covered by the public command/query catalog and conformance tests; no core workflow requires UI automation; both client paths obey the same numerical and state-contract acceptance criteria",
+      "current_evidence": "164 semantic annotations, 72-file/397-site ledger, reference four-adapter workflows and twelve job families are recorded.",
+      "remaining": "100% complete per-capability behavior/binding/state acceptance is not proven; 174 dynamic/relay/custom sites are not an untested-action count.",
+      "dependency": "engineering",
+      "evidence": "research/13-native-command-inventory.json",
+      "full_gate_pass_inferred": false
+    }
+  ],
+  "release_scenarios": [
+    {
+      "scenario": "LED and resistor",
+      "required_result": "Build from blank; measure current; change 1 k\u03a9 to 2 k\u03a9 and see a lower current automatically. With the specified educational diode model at 27 \u00b0C, the research reference is approximately 2.9168 mA at 1 k\u03a9. Require agreement within 1% against an independently computed or reference-solver result for the identical model; check KVL/KCL separately",
+      "assessment": "Current packaged reference result plus recorded native blank construction; owner/newcomer acceptance remains unperformed.",
+      "full_acceptance_inferred": false
+    },
+    {
+      "scenario": "RC charging",
+      "required_result": "10 k\u03a9, 1 \u00b5F, 0\u20135 V pulse. For an ideal step, Vout at 10 ms is 3.160602794 V; account for finite source rise time. Require error within max(1 mV, 0.1% of reference magnitude) at predefined samples, and verify approximately 33.464 mV/4.966536 V periodic extrema using the matching stimulus",
+      "assessment": "Current independent ideal/finite/edge references and recorded native construction/measurements; all default cases remain scoped.",
+      "full_acceptance_inferred": false
+    },
+    {
+      "scenario": "NPN switch",
+      "required_result": "Base through 10 k\u03a9, collector load 1 k\u03a9 to 5 V. With `NPN(Is=1e-14 Bf=100)`, compare on/off states and transition timing against an independent reference. Research on-state reference is approximately 70.4 mV; proposed tolerance is max(1 mV, 1% of reference magnitude)",
+      "assessment": "Current pinned-model four-adapter suite and recorded actual native transistor workflows; not all real-device conditions.",
+      "full_acceptance_inferred": false
+    },
+    {
+      "scenario": "Live edit and pause",
+      "required_result": "Exercise every state-contract row, including invalidating a paused circuit, undo, repeated slider edits, switch events, and deletion of a probe source; stale or cross-revision values are never presented as current",
+      "assessment": "Named source/public/native cases pass; exhaustive physical state-table/gesture schedules remain unqualified.",
+      "full_acceptance_inferred": false
+    },
+    {
+      "scenario": "Fault recovery",
+      "required_result": "Remove ground, miss a connection, enter an invalid value, corrupt a model dependency, and provoke nonconvergence. Verify truthful status, relevant explanation, retained work, and undo/recovery",
+      "assessment": "Named missing-ground/value/model/nonconvergence/save/crash tests exist; current native automatic storage warning is the next bounded gap.",
+      "full_acceptance_inferred": false
+    },
+    {
+      "scenario": "Save and export",
+      "required_result": "Reopen on a clean offline installation; rerun bounded verification; compare against the same tolerances; inspect native, SVG, and CSV output and recovery after interrupted writes",
+      "assessment": "Copied offline saves/exports and native file decisions pass in recorded scopes; clean-installation and broader interrupted-storage evidence remain open.",
+      "full_acceptance_inferred": false
+    },
+    {
+      "scenario": "Capacity and accessibility",
+      "required_result": "Run a valid 50-component fixture with four traces, plus node-limit boundary cases; evaluate latency, cancellation, bounded history, and the keyboard/screen-reader path",
+      "assessment": "Named boundary/backend cases pass; visible difficult-solve and actual screen-reader core paths remain open.",
+      "full_acceptance_inferred": false
+    },
+    {
+      "scenario": "Agent end to end",
+      "required_result": "From an empty session, an external client creates each reference circuit, inspects models/connectivity, changes values, runs and measures it, fixes an introduced fault, saves/exports, closes, and reopens it without GUI input; repeat through the in-process interface and compare semantic project state and results",
+      "assessment": "Current reference workflows pass through in-process, stdio, headless socket and native socket; complete binding coverage is separate.",
+      "full_acceptance_inferred": false
+    },
+    {
+      "scenario": "Agent coverage and recovery",
+      "required_result": "Check every registered user action/query against the public catalog; test repeated requests, atomic batch failure, user/agent revision conflicts, undo, job cancellation, disconnect/reconnect, stale readings, and structured dialog decisions; no missing command or result is waived because screenshots could supply a workaround",
+      "assessment": "Catalog presence and named conflicts/retries/batches/jobs/decisions are recorded; complete per-capability and platform teardown acceptance remains partial.",
+      "full_acceptance_inferred": false
+    }
+  ],
+  "formative_study": [
+    {
+      "outcome": "First useful circuit",
+      "proposed_gate": "At least 8/10 overall and 4/5 newcomers build the LED circuit from blank and obtain a changing current reading within five minutes without facilitator intervention",
+      "status": "no_participant_observations",
+      "evidence": "research/first-use-study/README.md"
+    },
+    {
+      "outcome": "Meaningful experiment",
+      "proposed_gate": "At least 8/10 correctly predict or explain why increasing resistance reduces LED current after using the tool",
+      "status": "no_participant_observations",
+      "evidence": "research/first-use-study/README.md"
+    },
+    {
+      "outcome": "First waveform",
+      "proposed_gate": "At least 8/10 plot capacitor voltage and enter a cursor time without being told where the plot action is",
+      "status": "no_participant_observations",
+      "evidence": "research/first-use-study/README.md"
+    },
+    {
+      "outcome": "Recoverability",
+      "proposed_gate": "At least 8/10 repair an intentionally disconnected wire and undo an accidental deletion without losing work",
+      "status": "no_participant_observations",
+      "evidence": "research/first-use-study/README.md"
+    },
+    {
+      "outcome": "Result interpretation",
+      "proposed_gate": "At least 9/10 distinguish Running, Paused, and a stale/failed result in prepared scenarios; every observed case of failure presented as valid requires investigation before release",
+      "status": "no_participant_observations",
+      "evidence": "research/first-use-study/README.md"
+    },
+    {
+      "outcome": "Assumptions and ownership",
+      "proposed_gate": "At least 8/10 identify one relevant model limitation and save/reopen the experiment without missing dependencies",
+      "status": "no_participant_observations",
+      "evidence": "research/first-use-study/README.md"
+    }
+  ],
+  "delivery_gates": [
+    {
+      "gate": "A",
+      "assessment": "Recorded feasibility/architecture and shared-contract evidence exists; no new universal platform claim."
+    },
+    {
+      "gate": "B",
+      "assessment": "Engineering reference vertical slice exists with native blank construction, measurements, files and recovery in recorded scopes; owner acceptance remains pending."
+    },
+    {
+      "gate": "C",
+      "assessment": "Incomplete: full accessibility, per-capability agent conformance, visible performance and environment requirements remain open."
+    },
+    {
+      "gate": "D",
+      "assessment": "Incomplete: no ten-person formative sessions or corrections from participant findings."
+    }
+  ],
+  "owner_printing_addition": {
+    "status": "one_LED_page_readability_and_completeness_confirmed_by_owner",
+    "remaining": "Measured media/margins/scale, other settings/devices and cancellation are unqualified; no extra print job authorized by this reconciliation.",
+    "evidence": "research/ui-audit/first-version/physical-print/checkpoint.json"
+  },
+  "dependencies": [
+    {
+      "kind": "owner",
+      "items": [
+        "Four-task walkthrough feedback",
+        "Any private/supported-alpha promotion decision"
+      ]
+    },
+    {
+      "kind": "participants",
+      "items": [
+        "Ten-person hobbyist formative test with original thresholds"
+      ]
+    },
+    {
+      "kind": "environment_and_permission",
+      "items": [
+        "Separate clean macOS account/VM for defaults/install",
+        "Actual screen-reader workflow and any required OS settings permission",
+        "Developer ID/notarization/Gatekeeper for public distribution"
+      ]
+    },
+    {
+      "kind": "independent_engineering",
+      "items": [
+        "Current native automatic storage error/retry presentation while continuing edits",
+        "Complete per-capability contract/binding/state coverage",
+        "Timestamped visible-acknowledgment method and current reference/performance qualification",
+        "Difficult-solve visible responsiveness",
+        "Broader physical input/focus/IME, storage and teardown schedules"
+      ]
+    }
+  ],
+  "next_action": {
+    "id": "RECOVERY-NATIVE-ERROR-174",
+    "requirement": "FILE-02 and section 10 Recovery: show automatic save failure without losing work",
+    "plan": "One owned isolated /174 session, synthetic saved RC plus kept recording and private recovery folder. Obtain automatic good capsule, replace only that owned directory temporarily with an owned file, observe actual native Autosave needs attention plus detailed error while making one ordinary edit, repair storage, observe automatic success clearing without manual scan/checkpoint, verify manual file/old capsule/recording preserved, separate Save and normal Close. Compare structured public state and native AX/images.",
+    "excluded": [
+      "No new visible-latency cohort",
+      "No forced crash or owner files/settings changes",
+      "No new privacy grant",
+      "No permanent app/SDK change without a reproduced defect"
+    ],
+    "success": "Actual native warning/detail persist across ordinary edit and clear after automatic complete retry; source/manual/capture preserved; owned host closes normally.",
+    "stop_condition": "One focused reproduction pass; checkpoint any confirmed defect or inconclusive display observation before repair/retry expansion."
+  },
+  "inspection": "docs/validation/release-gate-reconciliation-174/inspection.json"
+}

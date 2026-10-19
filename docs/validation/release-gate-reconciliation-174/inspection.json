@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-19",
+  "worktree_commit": "e647ef9a",
+  "scope": "Read-only reconciliation; no new runtime/timing/owner observations",
+  "application_go_source_pins_verified": 650,
+  "source_mismatches": [],
+  "release": "0.157.0 /174",
+  "release_source_commit": "f852c2d293332151fafeb78fb87bec0ce4845692",
+  "native_sha256": "46f78038929c6bce7ed6b55da201d26cda0bb6279c80cea31abc188ca12dec2a",
+  "agent_sha256": "a8636912f15394e647a773d36395fd7f0380d9315f4c16a3e599a51390e6aa54",
+  "zip_sha256": "dcc743fc95459d7c46f218f5bf4e5ab7b22f8471c6b0a72c64c7299e237c68ff",
+  "four_adapters": [
+    "in-process",
+    "headless-stdio",
+    "headless-socket",
+    "native-socket"
+  ],
+  "flasher_200ms_verify_wall_s": {
+    "in-process": [
+      0.04590425,
+      0.061795583,
+      0.099279708
+    ],
+    "headless-stdio": [
+      0.049424708,
+      0.063824625,
+      0.105513375
+    ],
+    "headless-socket": [
+      0.045226834,
+      0.060094542,
+      0.101248291
+    ],
+    "native-socket": [
+      0.048473375,
+      0.063750584,
+      0.101740208
+    ]
+  },
+  "input_sha256": {
+    "research/07-product-requirements.md": "f427e062c1e92bb8ff7269d12bb6bedec37e1316a45a9caed462b25427fafadf",
+    "research/11-prd-implementation-audit.json": "bd874e245908d24d6d87bb4ab2237f45abbf3c582c55a0d544dc16207cfdde03",
+    "research/ui-audit/first-version/export-progress-review-checkpoint.json": "20d527cd372160f530d0e8238b358abaca76b76793d84eee42fdd751ea7ea528",
+    "research/ui-audit/first-version/private-alpha-owner-decisions.json": "e3356bb20782783ae63369fbc732740518cf2759b1004449521d7f97bf651892",
+    "research/38-visible-responsiveness-results.md": "fc2c17c40100b15bd215ba3618c052767c5bc4ad9fcfe98baa59e1e1d372f4af",
+    "research/39-led-rc-followup-plan.json": "cecc7c85c9b6d82a996613caba69598665ff708a502e50f3cfeed8866c61a307",
+    "research/40-background-job-coverage.md": "04f214e58276bfe780d4a0a867fe5767d8d0efcbe3953298741fa01b7efb9bae",
+    "research/13-native-command-inventory.json": "ce505baa0016ca1d5661bb58557bf8efebcf3f5f4d5b3a70640beef824b3d2f8",
+    "research/ui-audit/first-version/capacity-responsiveness-checkpoint.json": "40705dd3b0e50a776ac250a297a61efe03bd44db0e5333fc9d871b570aeb2bd2",
+    "docs/recovery-failure.md": "d8bea1219eef33d63f2e5334e9bbde9a2e6bf2867cff3fbb2905a4b5f7b2edcc",
+    "docs/recovery-timing.md": "98e383a87683ddc4d84251cc3e33bd861171d0d3dd8f39610d4ffe16158100b8",
+    "docs/performance-qualification.md": "478fee4f6fb2878d274647c6459afb9f8d6e82b03d6681c1e894d53cd501b879",
+    "docs/capacity-performance.md": "9e6d761850018af2f947d05ae215ad0ae3f374d47c3ad60f059f90becb5d8b7e",
+    "docs/validation/export-progress-review-174/Public-report.json.gz": "7cb3f3b9cc4d9a1c3d66ce762344fe3a7556e68e9cde93de3157220131994948",
+    "docs/validation/export-progress-review-174/acceptance/report.json": "519f4e0a52e0dd7a1ed7b505e7e822310870f7595cee3d2e3de43b3049502a92",
+    "docs/validation/export-progress-review-174/archive/package-report.json.gz": "2ffb27ef28d8ae961c5a58d242250618a23f6b5e1937c8c9a1b71cf67033a4f7",
+    "docs/validation/native-slider-input-174/report.json": "0053e7b0d633d83c04cd9785e2b2be6ef703982c775b841fe06d5eec829f4643",
+    "docs/validation/native-startup-input-174/report.json": "d550091cd2011077f428615be95144e07643bbaf8b325678c957343d8a27b98d",
+    "docs/validation/circuit-input-review-174/report.json": "2f0f843713ab6239d2c77dec0bcac4f564533d99766c645f0a553dcaa22f43ff",
+    "docs/validation/recovery-failure-validation.json": "c96b97869ae61268e089658998ff742b32cc11973759de16fc91f2d2277022aa",
+    "docs/validation/recovery-timing-validation.json": "13f7ef4e3b91d5e71f7624806a95d5d11c9d1795fc39c9035ff19885c5b3007d",
+    "docs/validation/native-startup-input-174/repo-hygiene/checks.json.gz": "42ff41e90b3728f755888f5cd07a2798fcba7f453310bdf6a3fd98d377fcd6ef",
+    "research/first-use-study/README.md": "e63b76a6d1ff554cd913cc0734a0d84b2d59e795d4c12a026e4f6a0d44e805ae"
+  },
+  "scope_notes": [
+    "Prior progress is authoritative: native startup qualification and byte-preserving archive suffix fix, root tests/vet and evidence replay passed in e647ef9a.",
+    "Historical source-pinned proofs keep original identities; their evidence is not silently relabeled as /174."
+  ]
+}

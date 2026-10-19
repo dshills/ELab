@@ -52,3 +52,5 @@ In another terminal, run `./elab-agent --connect /absolute/path/to/endpoint.json
 - The private bundle now has a strict-valid local ad-hoc resource signature. Developer ID, notarization, Gatekeeper and public distribution/native-rights qualification remain open. The versioned review folder is separate from `build/ELab.app` at 0.105.0 /120.
 
 The [delivery plan](34-first-version-plan.md), [updated build receipt](ui-audit/first-version/export-progress-review-checkpoint.json) and [native walkthrough/agent evidence](ui-audit/first-version/README.md) track remaining acceptance work. This handoff continues owner feedback; it does not reopen feature scope.
+
+The [gate reconciliation](41-release-gate-reconciliation.md) separates the ready private review from the original full-MVP requirements and owner/participant/environment prerequisites. Recent native slider/startup qualification does not waive those requirements. The next independent check is actual automatic storage-error presentation/retry while editing; no new package or owner acceptance follows from it.
