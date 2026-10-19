@@ -1,0 +1,39 @@
+from pathlib import Path
+import ast
+import hashlib
+import json
+import plistlib
+import subprocess
+
+ROOT=Path('/Users/dshills/Development/projects/ELab')
+STAGE=Path(__file__).resolve().parent
+OUT=Path('/private/tmp/elab-shutdown-error-176')
+RUNTIME=Path('/private/tmp/elab-first-version-176-signed-runtime')
+assert not OUT.exists()
+built=json.loads((STAGE/'build-result-signed.json').read_text())
+assert built['source_commit']=='f08e77ecde66a08d2799428e440a8f4fef15b0f7' and built['build']=='176'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(RUNTIME/'ELab.app/Contents/MacOS/ELab')==built['native_sha256']
+assert sha(RUNTIME/'elab-agent')==built['agent_sha256']
+assert json.loads((RUNTIME/'runtime-report.json').read_text())['passed']
+ast.parse((STAGE/'native_shutdown.py').read_text())
+OUT.mkdir(mode=0o700)
+app=OUT/'ELab-shutdown-error.app'
+binary=app/'Contents/MacOS/ELabIsolatedLauncher'
+binary.parent.mkdir(parents=True)
+template=ROOT/'docs/validation/native-recovery-error-174/producers'
+source=(template/'launcher.swift').read_text().replace('/private/tmp/elab-recovery-error-174','/private/tmp/elab-shutdown-error-176').replace('first-version-174','first-version-176')
+(OUT/'launcher.swift').write_text(source)
+info=plistlib.loads((template/'Info.plist').read_bytes())
+info.update(CFBundleDisplayName='ELab owned shutdown error test',CFBundleName='ELab owned shutdown error test')
+(app/'Contents/Info.plist').write_bytes(plistlib.dumps(info))
+with (OUT/'launcher-build.txt').open('x') as stream:
+    subprocess.run(['/usr/bin/xcrun','swiftc','-warnings-as-errors','-module-cache-path',str(STAGE/'swift-module-cache'),str(OUT/'launcher.swift'),'-o',str(binary)],stdout=stream,stderr=subprocess.STDOUT,check=True,timeout=90)
+plan=dict(release='0.159.0 /176',source_commit=built['source_commit'],native_sha256=built['native_sha256'],agent_sha256=built['agent_sha256'],
+    launcher_sha256=sha(binary),launcher_source_sha256=sha(OUT/'launcher.swift'),policy_sha256=sha(RUNTIME/'runtime.sb'),
+    controller_sha256=sha(STAGE/'native_shutdown.py'),scope='One owned LaunchServices session using the exact copied offline runtime. Real private appearance parse and recovery lease failures, saved LED preservation, CUA resize/scroll and one acknowledgement click. No owner projects, OS settings, privacy grant or display recording.',
+    intended_window='Supported minimum requested by CUA drag; actual observed bounds recorded separately',
+    final_observer='events.poll after the last failed-shutdown revision; full final snapshot and normal process/endpoint cleanup required',
+    fallback='On failed test, acknowledge only this owned failed shutdown through the public command; mark fallback and never claim native pointer acceptance')
+(OUT/'plan.json').write_text(json.dumps(plan,indent=2)+'\n')
+print(json.dumps(dict(passed=True,prepared=str(OUT),launcher_sha256=plan['launcher_sha256'])))

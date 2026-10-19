@@ -1,0 +1,72 @@
+{
+  "status": "completed",
+  "native_sha256": "bcb007445f9fde3aee22418413a82fd2772272be8816e2c51562a89fd6ae41d8",
+  "agent_sha256": "557437ef0d02202747ae6da78d04f58353fa4b43fb278f15cd579ef03dbdceed",
+  "source_commit": "f08e77ecde66a08d2799428e440a8f4fef15b0f7",
+  "shared_geometry_before": {
+    "window-geometry-0.3.6.json": {
+      "sha256": "a5b1f9c088561a2f0394109a58dcf8b5390a2c31337c62c16d62166475d30f32",
+      "mode": "0o644"
+    },
+    "window-geometry-0.3.6.lst": {
+      "sha256": "df81532effcd70929d78b1a39636ca7b5307bdaa05146da23cf8dde723247eec",
+      "mode": "0o644"
+    }
+  },
+  "controls": {
+    "read": {
+      "denied": true,
+      "errno": 1
+    },
+    "write_without_truncate": {
+      "denied": true,
+      "errno": 1
+    }
+  },
+  "started_utc": "2026-10-19T23:29:43.233983+00:00",
+  "forced_cleanup": false,
+  "fallback_acknowledgement": false,
+  "native_exit_status": null,
+  "native_exit_status_reason": "LaunchServices owns native exit; open -W is recorded separately",
+  "command": [
+    "/usr/bin/open",
+    "-n",
+    "-W",
+    "-g",
+    "-a",
+    "/private/tmp/elab-shutdown-error-176/ELab-shutdown-error.app",
+    "--stdout",
+    "/private/tmp/elab-shutdown-error-176/native-stdout.txt",
+    "--stderr",
+    "/private/tmp/elab-shutdown-error-176/native-stderr.txt"
+  ],
+  "open_pid": 6204,
+  "owned_pid": 6205,
+  "observed_command": "/private/tmp/elab-first-version-176-signed-runtime/ELab.app/Contents/MacOS/ELab --agent-endpoint /private/tmp/elab-shutdown-error-176/endpoint.json --no-recovery --no-appearance",
+  "same_pid_after_exec": true,
+  "manual_sha256": "a11a6d7d0cb43713e0fc1aefbd223729c5a1b82664b72e851ee00e93fe251688",
+  "appearance_sha256": "307162d9d039b958e2d68c5e4527c21e36e79e61cb3b0741569bcfab13b6bad7",
+  "protected_file": "/private/tmp/elab-shutdown-error-176/rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr/ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss/tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt/session-1d635ad722e250126d6bc694.json/retain",
+  "protected_sha256": "ccd633e347bbf6c6175acfa611a410018df146553558a369d7439a67ff810743",
+  "recovery_directory": "/private/tmp/elab-shutdown-error-176/rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr/ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss/tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt",
+  "shared_user_acknowledgement_observed": true,
+  "connected_agent_exit_code": 0,
+  "open_exit_code": 0,
+  "owned_process_absent": true,
+  "endpoint_removed": true,
+  "protected_files_unchanged": true,
+  "shared_geometry_after": {
+    "window-geometry-0.3.6.json": {
+      "sha256": "a5b1f9c088561a2f0394109a58dcf8b5390a2c31337c62c16d62166475d30f32",
+      "mode": "0o644"
+    },
+    "window-geometry-0.3.6.lst": {
+      "sha256": "df81532effcd70929d78b1a39636ca7b5307bdaa05146da23cf8dde723247eec",
+      "mode": "0o644"
+    }
+  },
+  "shared_geometry_unchanged": true,
+  "review_unchanged": true,
+  "copied_bundle_unchanged": true,
+  "canonical_unchanged": true
+}

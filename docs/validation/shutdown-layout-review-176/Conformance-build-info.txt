@@ -1,0 +1,18 @@
+/Users/dshills/Development/projects/ELab/build/first-version-176-tools/build/elab-conformance: go1.27.2
+	path	github.com/dshills/elab/cmd/elab-conformance
+	mod	github.com/dshills/elab	v0.0.0-20261019232254-f08e77ecde66
+	build	-buildmode=exe
+	build	-compiler=gc
+	build	DefaultGODEBUG=cryptocustomrand=1,httpservecontentmaxranges=1,tlssecpmlkem=0,tracebacklabels=0,urlstrictcolons=0,x509sslcertoverrideplatform=0
+	build	CGO_ENABLED=1
+	build	CGO_CFLAGS=
+	build	CGO_CPPFLAGS=
+	build	CGO_CXXFLAGS=
+	build	CGO_LDFLAGS=
+	build	GOARCH=arm64
+	build	GOOS=darwin
+	build	GOARM64=v8.0
+	build	vcs=git
+	build	vcs.revision=f08e77ecde66a08d2799428e440a8f4fef15b0f7
+	build	vcs.time=2026-10-19T23:22:54Z
+	build	vcs.modified=false

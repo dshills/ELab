@@ -1,0 +1,27 @@
+{
+  "source_commit": "f08e77ecde66a08d2799428e440a8f4fef15b0f7",
+  "release": "0.159.0 /176 clean exact copied headless agent",
+  "agent_sha256": "557437ef0d02202747ae6da78d04f58353fa4b43fb278f15cd579ef03dbdceed",
+  "fixture_sha256": "615d97f596c68da31dd314dcecfbf22627b2cbb149839d75e9927403559cb57a",
+  "recorded_rows": 209,
+  "scope": "One exact clean packaged headless process under the qualified offline runtime sandbox; 30 recorded-page cases and complete query snapshot purity. No native physical input or timing claim.",
+  "cases": [
+    "catalog and detailed discovery",
+    "captured metadata and SI output shape",
+    "omitted/zero/null defaults",
+    "100/100/9 and 200/9 exact paging",
+    "last row and exact empty EOF",
+    "negative/excess/fractional/overflow/unknown/duplicate inputs and unknown identity refusals",
+    "before/after complete snapshot and source file preservation",
+    "normal completed joined shutdown and exit 0"
+  ],
+  "sources": {
+    "workbench/commands.go": "d3b43711249d00129052cd4194178d8f0b48bb2eadc205be38a79e2d1df08837",
+    "workbench/verification.go": "74b923807f514c8709b76921fe4ccb4a6e384dee36f76c0cfef318c083370402",
+    "workbench/verification_types.go": "7e629c8f850f1bb4df4668a080dbfcb2cbc9f8839dd19f35a68ad358efb0ef83",
+    "workbench/verification_capabilities.go": "75e887065e71c7d87eb23f51a02f6cd21ed7af1d676697962ff73183d417f778",
+    "workbench/verification_capabilities_test.go": "1b2e96b53a381c691a382733dd49c55e6d7f84e4f8f3dd8e3a3ff26886ce7dc6",
+    "docs/verification.md": "6ff3a13bc94d6485bbc065dfbafbbeb4d30619e096a38d6d34b4073dbe3db089"
+  },
+  "finding_policy": "Preserve original runtime response and both ordinary/detailed schema forms. Repair discovery only after a concrete mismatch; preserve query semantics, IDs, numerical code and records."
+}

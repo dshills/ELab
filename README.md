@@ -4,15 +4,13 @@ ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N
 
 The [first-version delivery plan](research/34-first-version-plan.md) targets a usable macOS hobbyist alpha with frozen scope, ordered blockers and a concrete handoff.
 
-**Private review ready: 0.158.0 /175.** Use the [review app](build/ELab-0.158.0-175-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.158.0-175-review.zip) with its [checksum](build/ELab-0.158.0-175-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening.
+**Private review ready: 0.159.0 /176.** Use the [review app](build/ELab-0.159.0-176-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.159.0-176-review.zip) with its [checksum](build/ELab-0.159.0-176-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening.
 
-Clean `cc3cb7b` /SDK `b22478c` makes agent discovery describe the already accepted nullable paging defaults. Thirty exact packaged headless cases preserve every query snapshot and all 209 recorded rows. Full source quality, copied native smoke, all four adapters, native/headless reference workflows, strict local signature and archive/example reopens pass. Command execution, output schemas, models and saved format remain unchanged. The original mismatch, collector limitation and race-instrumented coil deadline failure stay preserved with the source repair. No new physical input or timing qualification is claimed.
+Clean `f08e77e` /SDK `b22478c` keeps the shutdown close action visible while long errors scroll. An actual copied-native check at a 1053×762 captured frame scrolls the error area and acknowledges once through the visible button, preserving the saved LED, full errors and protected files. Full source quality, copied native smoke, all four adapters, native/headless reference workflows, strict local signature and archive/example reopens pass. Shared commands, models, format and SDK remain unchanged.
 
-[Walkthrough](research/35-first-version-review.md), [receipt](research/ui-audit/first-version/operation-page-review-checkpoint.json), [proof](docs/validation/operation-page-review-175/README.md).
+[Walkthrough](research/35-first-version-review.md), [receipt](research/ui-audit/first-version/shutdown-layout-review-checkpoint.json), [proof](docs/validation/shutdown-layout-review-176/README.md).
 
-Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment and the actual hobbyist study remain open. Visible timing evidence stays scoped to /173, with RC and 100 ms acknowledgment unqualified. All 33 earlier sealed reviews, four candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.
-
-Source follow-up: [a long shutdown-error panel can clip its close action at minimum size](docs/validation/shutdown-error-layout/README.md) in mounted tests. The repair passes full source quality; clean replacement packaging is next. The packaged review remains 0.158.0 /175.
+Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment and the actual hobbyist study remain open. Visible latency stays scoped to /173, with RC and 100 ms acknowledgement unqualified. All 34 earlier sealed reviews, four candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.
 
 ## Build and run from source
 

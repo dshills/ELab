@@ -1,0 +1,186 @@
+"""Own one copied /176 session; CUA supplies resize, scroll and pointer input."""
+from pathlib import Path
+import datetime
+import hashlib
+import json
+import os
+import subprocess
+import sys
+import time
+
+ROOT = Path('/Users/dshills/Development/projects/ELab')
+STAGE = Path(__file__).resolve().parent
+OUT = Path('/private/tmp/elab-shutdown-error-176')
+RUNTIME = Path('/private/tmp/elab-first-version-176-signed-runtime')
+sys.path.insert(0, str(ROOT/'scripts'))
+from package_review import members
+
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+built = json.loads((STAGE/'build-result-signed.json').read_text())
+binary = RUNTIME/'ELab.app/Contents/MacOS/ELab'
+assert sha(binary) == built['native_sha256']
+assert sha(RUNTIME/'elab-agent') == built['agent_sha256']
+review = Path(built['review'])
+before_review, before_copy = members(review), members(RUNTIME/'ELab.app')
+assert before_copy == members(review/'ELab.app')
+canonical = ROOT/'build/ELab.app/Contents/MacOS/ELab'
+before_canonical = sha(canonical)
+shared = Path.home()/'Library/Cogent Core'
+geometry = lambda: {p.relative_to(shared).as_posix():dict(sha256=sha(p),mode=oct(p.stat().st_mode&0o777)) for p in shared.rglob('*') if p.is_file()}
+before_geometry = geometry()
+control = subprocess.run(['/usr/bin/sandbox-exec','-f',str(RUNTIME/'runtime.sb'),sys.executable,'-I',str(RUNTIME/'geometry-probe.py'),str(shared/'window-geometry-0.3.6.json')],capture_output=True,text=True,timeout=15,check=True)
+controls = json.loads(control.stdout)
+assert all(v['denied'] and v['errno'] in [1,13] for v in controls.values())
+os.umask(0o077)
+report = dict(status='starting',native_sha256=sha(binary),agent_sha256=sha(RUNTIME/'elab-agent'),
+    source_commit=built['source_commit'],shared_geometry_before=before_geometry,controls=controls,
+    started_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),forced_cleanup=False,
+    fallback_acknowledgement=False,native_exit_status=None,
+    native_exit_status_reason='LaunchServices owns native exit; open -W is recorded separately')
+def save():
+    (OUT/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+def write(name,value):
+    with (OUT/(name+'.json')).open('x') as stream:
+        json.dump(value,stream,indent=2);stream.write('\n')
+pid, client, host = None, None, None
+def process_command():
+    if pid is None:return None
+    result=subprocess.run(['/bin/ps','-p',str(pid),'-o','command='],capture_output=True,text=True,timeout=5)
+    return result.stdout.strip() if result.returncode==0 else None
+
+class Client:
+    def __init__(self):
+        self.process=subprocess.Popen([str(RUNTIME/'agent'),'--connect',str(OUT/'endpoint.json')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=(OUT/'agent-stderr.txt').open('x'),text=True)
+        self.sequence,self.command_revision,self.last=0,0,None
+        self.log=(OUT/'transcript.jsonl').open('x')
+    def ask(self,command,params=None,mutate=False,primed=None):
+        self.sequence+=1
+        request=dict(version=1,id=f'shutdown-{self.sequence}',command=command,params=params or {})
+        if mutate:request.update(key=f'shutdown-{self.sequence}',expected_command_revision=self.command_revision)
+        for attempt in range(8):
+            encoded=json.dumps(request,separators=(',',':'))
+            self.process.stdin.write(encoded+'\n');self.process.stdin.flush()
+            if primed:primed();primed=None
+            line=self.process.stdout.readline()
+            assert line,'connected agent terminated during '+command
+            response=json.loads(line)
+            self.log.write(json.dumps(dict(request_json=encoded,response=response))+'\n');self.log.flush()
+            assert response['version']==1 and response['id']==request['id']
+            result=response.get('result')
+            snapshot=result.get('snapshot') if command=='events.poll' and isinstance(result,dict) else result
+            if isinstance(snapshot,dict) and 'components' in snapshot and 'command_revision' in snapshot:
+                self.command_revision=snapshot['command_revision'];self.last=snapshot
+            if mutate and response.get('error',{}).get('code')=='conflict' and attempt<7:
+                report.setdefault('preparatory_guard_retries',[]).append(dict(command=command,id=request['id'],attempt=attempt+1))
+                self.ask('project.inspect');request['expected_command_revision']=self.command_revision;continue
+            assert 'error' not in response,response
+            return result
+        raise AssertionError('guard retry bound')
+    def close(self):
+        self.process.stdin.close();self.process.wait(timeout=10);self.log.close()
+        report['connected_agent_exit_code']=self.process.returncode
+        assert self.process.returncode==0,'connected agent exit failed'
+
+try:
+    command=['/usr/bin/open','-n','-W','-g','-a',str(OUT/'ELab-shutdown-error.app'),'--stdout',str(OUT/'native-stdout.txt'),'--stderr',str(OUT/'native-stderr.txt')]
+    report['command']=command
+    with (OUT/'open-output.txt').open('x') as stream:host=subprocess.Popen(command,stdout=stream,stderr=subprocess.STDOUT)
+    report['open_pid']=host.pid;save()
+    deadline=time.monotonic()+30
+    while not ((OUT/'launcher.pid').exists() and (OUT/'endpoint.json').exists()):
+        assert host.poll() is None and time.monotonic()<deadline,'native readiness deadline'
+        time.sleep(.05)
+    pid=int((OUT/'launcher.pid').read_text())
+    observed=process_command()
+    assert observed and observed.startswith(str(binary)+' ') and str(OUT/'endpoint.json') in observed
+    report.update(owned_pid=pid,observed_command=observed,same_pid_after_exec=True)
+    client=Client()
+    blank=client.ask('project.inspect');assert not blank['components'] and not blank['wires']
+    client.ask('example.reset',{},True);client.ask('simulation.pause',{},True);client.ask('simulation.wait')
+    client.ask('appearance.theme.set',dict(theme='light'),True)
+    manual=OUT/'Manual-LED.elab'
+    client.ask('project.save',dict(path=str(manual)),True)
+    baseline=client.ask('simulation.wait');assert not baseline['document']['dirty']
+    write('baseline',baseline);report['manual_sha256']=sha(manual)
+    appearance=OUT/'appearance.json'
+    data=json.dumps({'format':'elab.appearance','version':1,'theme':'dark','bad-field-'*350:True}).encode()
+    assert len(data)<=4096
+    appearance.write_bytes(data);report['appearance_sha256']=sha(appearance)
+    client.ask('appearance.configure',dict(path=str(appearance)),True)
+    appearance_state=client.ask('appearance.wait');assert appearance_state['appearance']['status']=='error'
+    recovery=OUT/('r'*240)/('s'*240)/('t'*240)
+    client.ask('recovery.configure',dict(directory=str(recovery),enabled=False,interval_s=1),True)
+    entries=list(recovery.iterdir());assert len(entries)==1 and entries[0].name.startswith('session-')
+    lease=entries[0];lease.unlink();lease.mkdir(mode=0o700)
+    protected=lease/'retain';protected.write_text('owned shutdown fault fixture\n')
+    report.update(protected_file=str(protected),protected_sha256=sha(protected),recovery_directory=str(recovery))
+    client.ask('app.close.start',{},True)
+    deadline=time.monotonic()+5
+    while True:
+        failed=client.ask('project.inspect')
+        if failed.get('shutdown',{}).get('status')=='failed':break
+        assert time.monotonic()<deadline,'failed shutdown deadline';time.sleep(.01)
+    assert failed['closed'] and failed['shutdown']['workers_joined'] and not failed['shutdown']['exit_ready']
+    assert len(failed['shutdown']['recovery_error'])>=700 and len(failed['shutdown']['appearance_error'])>=3500
+    for key in ['components','wires','result','document']:assert failed[key]==baseline[key],key
+    write('failed-shutdown',failed)
+    report['status']='ready_for_cua';save()
+    print(json.dumps(dict(status=report['status'],owned_pid=pid,observed_command=observed)),flush=True)
+    deadline=time.monotonic()+900
+    while not (OUT/'observe-ack.request').exists():
+        assert process_command()==observed and time.monotonic()<deadline,'owned input session ended or expired'
+        time.sleep(.1)
+    before=client.ask('project.inspect');write('before-ack',before)
+    def primed():
+        marker=OUT/'observer-ready.json'
+        if not marker.exists():write('observer-ready',dict(after_revision=before['revision'],owned_pid=pid))
+    report['status']='observing_ack';save()
+    after_revision=before['revision']
+    while True:
+        event=client.ask('events.poll',dict(after_revision=after_revision,timeout_ms=1000),primed=primed)
+        final=event.get('snapshot')
+        if final and final.get('shutdown',{}).get('exit_ready'):break
+        if final:after_revision=final['revision']
+        assert time.monotonic()<deadline,'pointer acknowledgement observation deadline'
+    write('after-ack',final)
+    assert final['closed'] and final['shutdown']['status']=='failed' and final['shutdown']['workers_joined']
+    assert final['shutdown']['error']==before['shutdown']['error']
+    for key in ['recovery_error','appearance_error']:assert final['shutdown'][key]==before['shutdown'][key]
+    for key in ['components','wires','nets','result','transient','mixed','paused','run_id','electrical_revision','document','undo_entry','redo_entry']:
+        assert final.get(key)==before.get(key),key
+    assert final['last_actor']=='user' and final['command_revision']==before['command_revision']+1
+    report['shared_user_acknowledgement_observed']=True
+    report['status']='acknowledged';save()
+except BaseException as error:
+    report.update(status='failed',error=type(error).__name__+': '+str(error));save();raise
+finally:
+    try:
+        if client is not None:
+            if process_command() is not None and not report.get('shared_user_acknowledgement_observed'):
+                current=client.ask('project.inspect')
+                if current.get('shutdown',{}).get('status')=='failed' and not current['shutdown']['exit_ready']:
+                    report['fallback_acknowledgement']=True
+                    write('fallback-ack',client.ask('app.close.acknowledge',dict(id=current['shutdown']['id']),True))
+                elif not current['closed']:
+                    if current['document']['dirty']:
+                        client.ask('project.save',dict(path=str(OUT/'Unexpected-test-state.elab')),True)
+                    client.ask('app.close',{},True)
+            client.close();client=None
+        if host is not None:host.wait(timeout=20);report['open_exit_code']=host.returncode
+        deadline=time.monotonic()+5
+        while pid is not None and (process_command() is not None or (OUT/'endpoint.json').exists()) and time.monotonic()<deadline:time.sleep(.05)
+        report.update(owned_process_absent=pid is not None and process_command() is None,endpoint_removed=not (OUT/'endpoint.json').exists())
+        assert report['owned_process_absent'] and report['endpoint_removed']
+        if 'manual_sha256' in report:assert sha(OUT/'Manual-LED.elab')==report['manual_sha256']
+        if 'appearance_sha256' in report:assert sha(OUT/'appearance.json')==report['appearance_sha256']
+        if 'protected_file' in report:assert sha(Path(report['protected_file']))==report['protected_sha256']
+        report['protected_files_unchanged']=True
+    except BaseException as error:
+        report['cleanup_error']=type(error).__name__+': '+str(error);raise
+    finally:
+        report.update(shared_geometry_after=geometry(),shared_geometry_unchanged=geometry()==before_geometry,
+            review_unchanged=members(review)==before_review,copied_bundle_unchanged=members(RUNTIME/'ELab.app')==before_copy,
+            canonical_unchanged=sha(canonical)==before_canonical)
+        assert all(report[k] for k in ['shared_geometry_unchanged','review_unchanged','copied_bundle_unchanged','canonical_unchanged'])
+        if report['status']=='acknowledged' and not report.get('cleanup_error'):report['status']='completed'
+        save()

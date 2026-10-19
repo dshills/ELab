@@ -1,5 +1,7 @@
 # First-version UI walkthrough and issue list
 
+October 19 replacement: **[0.159.0 /176](../../../docs/validation/shutdown-layout-review-176/README.md)** qualifies a visible close action beside scrollable shutdown errors. Full source/copy-runtime/reference/paging/signature/archive/example checks and one actual native error-scroll/acknowledgement pass. All 34 earlier reviews, four candidates and canonical are preserved. Controller over-polling remains explicit; owner and broader gates remain open.
+
 October 19 replacement: **[0.158.0 /175](../../../docs/validation/operation-page-review-175/README.md)** qualifies accurate nullable recorded-page discovery, with full source/copy-runtime/reference/paging/signature/archive/example checks. All 33 earlier sealed reviews, four candidates and canonical remain preserved. Source/private/physical scopes remain distinct; owner walkthrough and broader gates stay open.
 
 October 19 replacement: **[0.157.0 /174](../../../docs/validation/export-progress-review-174/README.md)** qualifies captured-export progress wording through full quality, copied native/four-adapter/reference acceptance, strict resource signature and all 286 extracted files/modes with example reopens. All 32 earlier sealed reviews, four candidates and canonical remain preserved. Commands/jobs/models/format/SDK are unchanged. Source/private/physical scopes stay distinct; timing remains scoped to /173. Owner Not tried yet; no promotion or broader acceptance.

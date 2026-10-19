@@ -1,0 +1,60 @@
+from pathlib import Path
+import json
+
+root=Path('/Users/dshills/Development/projects/ELab')
+r=json.loads((root/'research/ui-audit/first-version/shutdown-layout-review-checkpoint.json').read_text())
+assert r['version']=='0.159.0' and r['build']=='176'
+proof='docs/validation/shutdown-layout-review-176/README.md'
+receipt='research/ui-audit/first-version/shutdown-layout-review-checkpoint.json'
+summary=f'''Clean `{r['source_commit'][:7]}` /SDK `b22478c` keeps the shutdown close action visible while long errors scroll. An actual copied-native check at a 1053×762 captured frame scrolls the error area and acknowledges once through the visible button, preserving the saved LED, full errors and protected files. Full source quality, copied native smoke, all four adapters, native/headless reference workflows, strict local signature and archive/example reopens pass. Shared commands, models, format and SDK remain unchanged.'''
+limits='''Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment and the actual hobbyist study remain open. Visible latency stays scoped to /173, with RC and 100 ms acknowledgement unqualified. All 34 earlier sealed reviews, four candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.'''
+path=root/'README.md';s=path.read_text()
+intro=s[:s.index('**Private review ready:')];tail=s[s.index('## Build and run from source'):]
+path.write_text(intro+f'''**Private review ready: 0.159.0 /176.** Use the [review app](build/ELab-0.159.0-176-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.159.0-176-review.zip) with its [checksum](build/ELab-0.159.0-176-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening.
+
+{summary}
+
+[Walkthrough](research/35-first-version-review.md), [receipt]({receipt}), [proof]({proof}).
+
+{limits}
+
+'''+tail)
+path=root/'research/35-first-version-review.md';s=path.read_text()
+tail=s[s.index('## Try these four tasks'):].replace('operation-page-review-checkpoint.json','shutdown-layout-review-checkpoint.json')
+tail=tail.replace('The bounded automatic storage-error/retry and recorded-page discovery checks are now qualified within their documented scopes.', 'The bounded automatic storage-error/retry, recorded-page discovery and shutdown-error action checks are now qualified within their documented scopes.')
+path.write_text(f'''# ELab first-version review · 0.159.0 /176
+
+The [review folder](../build/ELab-0.159.0-176-review) includes [ELab.app](../build/ELab-0.159.0-176-review/ELab.app), matching `elab-agent`, three editable examples and framework notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is needed.
+
+The [ZIP](../build/ELab-0.159.0-176-review.zip) and [checksum](../build/ELab-0.159.0-176-review.zip.sha256) preserve all files/modes through macOS extraction into a Unicode path with spaces. Strict local signature and three examples/fresh saves/reopens verify. This does not establish installation, Developer ID, notarization or Gatekeeper acceptance.
+
+{summary}
+
+The test initiates failed shutdown through public commands, then uses one CUA coordinate click for acknowledgement. Its public event retains failed status and original errors while marking exit readiness; owned process/endpoint cleanup and shared settings/file preservation verify. This is one actual native case, not complete lifecycle, reader or novice acceptance. The observer's excessive closed-state polling is retained as a controller limitation and supplies no timing claim.
+
+[Receipt](ui-audit/first-version/shutdown-layout-review-checkpoint.json), [proof](../{proof}).
+
+{limits}
+
+'''+tail)
+path=root/'research/34-first-version-plan.md';s=path.read_text();marker='## Current position\n\n'
+entry=f'''- **Clean shutdown layout replacement qualified: 0.159.0 /176.** {summary} One actual native error-state case retains graph/files/failure identity through one user acknowledgement and normal owned cleanup. [Receipt](ui-audit/first-version/shutdown-layout-review-checkpoint.json), [proof](../{proof}). All 34 earlier reviews, four candidates and canonical are preserved. This supersedes the source checkpoint's pending packaging. Collector over-polling remains explicit; no new latency, full lifecycle/reader or owner acceptance follows.\n\n'''
+assert s.count(marker)==1;s=s.replace(marker,marker+entry,1)
+s=s.replace('Clean /174 packages and qualifies the export-progress correction.', 'Clean /174 packages the export-progress correction, /175 adds accurate nullable paging discovery, and /176 qualifies the shutdown-error close-action repair through source and one actual copied-native case.',1)
+lines=s.splitlines()
+for i,line in enumerate(lines):
+    if line.startswith('| 3 | Package the verified repairs |'):
+        lines[i]='| 3 | Package the verified repairs | Build one clean replacement app/agent from the repair commit. Exact copied runtime passes native smoke, public adapters, reference parity and the previously failing interaction. Record version/hashes and retain rollback. | Completed in /176 for the shutdown error layout, retaining prior paging, export, sweep and measurement workflows. Source, exact copied native/four-adapter/reference, actual native error-scroll/acknowledgement, signature/archive/example checks pass. Earlier failures and collector limitations remain preserved. |'
+    if line.startswith('| 4 | Hand over the replacement |'):
+        lines[i]=line.replace('0.158.0 /175','0.159.0 /176').replace('ELab-0.158.0-175-review','ELab-0.159.0-176-review')
+    if line.startswith('| Long shutdown errors clip the close acknowledgement |'):
+        lines[i]='| Long shutdown errors clip the close acknowledgement | **Closed in /176 within recorded source/copied-native scopes.** Two original minimum-size source failures and a larger passing control precede the repaired scroll/footer tests. One actual 1053×762 native frame, error scroll and one CUA coordinate acknowledgement preserve graph/files/error state and normal owned cleanup. [Proof](../docs/validation/shutdown-layout-review-176/README.md). Complete lifecycle/reader and owner acceptance remain separate. |'
+    if line.startswith('| Quality/correctness |'):
+        lines[i]=f'| Quality/correctness | Clean `{r["source_commit"][:7]}` /SDK `b22478c` passes full default quality ({r["quality"]["elapsed_s"]:.3f} s), copied native smoke/four adapters, native/headless reference and paging checks, and one actual native shutdown-error scroll/acknowledgement. Strict signature, archive modes and example reopens qualify /176. [Receipt](ui-audit/first-version/shutdown-layout-review-checkpoint.json). Original cutoff failures and observer over-polling remain recorded; no timing, full-binding or owner acceptance is inferred. |'
+path.write_text('\n'.join(lines)+'\n')
+for name,relative in [('research/ui-audit/first-version/README.md','../../../'),('research/ui-audit/README.md','../../')]:
+    path=root/name;s=path.read_text();at=s.index('\n')+1
+    path.write_text(s[:at]+f'\nOctober 19 replacement: **[0.159.0 /176]({relative+proof})** qualifies a visible close action beside scrollable shutdown errors. Full source/copy-runtime/reference/paging/signature/archive/example checks and one actual native error-scroll/acknowledgement pass. All 34 earlier reviews, four candidates and canonical are preserved. Controller over-polling remains explicit; owner and broader gates remain open.\n'+s[at:])
+with (root/'research/41-release-gate-reconciliation.md').open('a') as stream:
+    stream.write(f'\nThe clean [0.159.0 /176 replacement](../{proof}) now packages SHUTDOWN-CUTOFF-01 and adds one actual copied-native error scroll/coordinate acknowledgement with full shared-state/file preservation and normal owned cleanup. The source checkpoint stays historical. Controller over-polling is retained, with no new latency or complete lifecycle/reader/owner claim. P0 counts and broader gates are unchanged.\n')
+print(dict(passed=True,review='0.159.0 /176',owner_acceptance=False,canonical_promoted=False))

@@ -1,0 +1,127 @@
+from pathlib import Path
+import gzip
+import hashlib
+import json
+import shutil
+
+root=Path('/Users/dshills/Development/projects/ELab')
+stage=Path(__file__).resolve().parent
+proof=root/'docs/validation/shutdown-layout-review-176'
+receipt_path=root/'research/ui-audit/first-version/shutdown-layout-review-checkpoint.json'
+r=json.loads(receipt_path.read_text());review=Path(r['review_path'])
+archive=Path('/private/tmp/elab-176-archive')
+package=json.loads((archive/'report.json').read_text())
+assert r['version']=='0.159.0' and r['build']=='176' and package['passed']
+assert json.loads((archive/'example-report.json').read_text())['passed']
+proof.mkdir()
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+for path in (review/'Evidence').iterdir():
+    if path.is_file():shutil.copyfile(path,proof/path.name)
+    elif path.name in ['Runtime-acceptance','Packaged-paging']:
+        shutil.copytree(path,proof/('acceptance' if path.name=='Runtime-acceptance' else 'paging'))
+    elif path.name=='Native-shutdown':
+        target=proof/'native';target.mkdir()
+        refs={}
+        for item in path.iterdir():
+            assert item.is_file()
+            if item.name=='transcript.jsonl.gz':
+                refs['transcript']=dict(path=item.relative_to(root).as_posix(),bytes=item.stat().st_size,sha256=sha(item))
+            else:shutil.copyfile(item,target/item.name)
+        (target/'raw-evidence.json').write_text(json.dumps(refs,indent=2)+'\n')
+(proof/'archive').mkdir()
+for source,target in [('report.json','package-report.json.gz'),('example-report.json','example-report.json.gz'),('signature-report.json','signature-report.json.gz')]:
+    (proof/'archive'/target).write_bytes(gzip.compress((archive/source).read_bytes(),mtime=0))
+(proof/'preservation.json').write_text(json.dumps({k:v for k,v in r.items() if k.startswith('preserved_')},indent=2)+'\n')
+for name in ['publish_proof.py','publish_handoff.py']:
+    shutil.copyfile(stage/name,proof/(name+'.txt'))
+shutil.copyfile(stage/'verify_review.py',proof/'verify.py')
+native,public=[row['elapsed_seconds'] for row in r['copied_runtime']]
+(proof/'README.md').write_text(f'''# Shutdown layout review · 0.159.0 /176
+
+Clean `{r['source_commit']}` /SDK `b22478c` packages the
+[shutdown error layout repair](../shutdown-error-layout/README.md). Long errors
+scroll independently while “Close window anyway” stays fully visible. Its
+existing shared acknowledgement command, full errors, shutdown semantics,
+numerical code/models, saved format and SDK remain unchanged.
+
+Full default source quality passes in {r['quality']['elapsed_s']:.3f} s on the exact
+650 Go files. Original-layout minimum-size failures, the larger passing control,
+final source-mounted tests and the original diagnostic limitations stay in the
+source proof; its pending-packaging checkpoint remains historical.
+
+Copied signed native smoke ({native:.3f} s), four public adapters
+({public:.3f} s) and native/headless reference acceptance
+({r['acceptance']['elapsed_s']:.3f} s) pass with development-file, outbound-IP and
+shared-window-settings access denied. All 102 external process exits and 112
+completed joined shutdown responses verify. Existing LED/RC/flasher, sweep,
+Verify, startup, appearance, measurements, capacity and save/reopen checks pass.
+The separate matching packaged agent retains all thirty paging cases/95 requests.
+
+## Actual copied native shutdown case
+
+One owned LaunchServices session runs the exact copied app. Public commands
+prepare a saved synthetic LED, malformed private appearance JSON and a private
+nonempty recovery lease directory. They admit shutdown; the resulting failed
+screen retains the full original errors and joined workers without exit readiness.
+
+CUA selects the exact app path, raises it, resizes the captured frame from
+1053×802 to 1053×762, and scrolls the error area twice. The complete button stays
+visible in the same place while the lower error ending appears. One coordinate
+click at `(120,705)` acknowledges the failure. The public event captures command
+revision 8→9, actor `user`, unchanged failure/error data, exit readiness and exact
+preservation of graph/result/document and the manual, appearance and protected
+fault files. No control-plane acknowledgement or fallback is used.
+
+The connected agent and `open -W` exit 0; owned PID and endpoint disappear.
+LaunchServices owns the native process status, so its exact exit code is
+unavailable. Shared geometry, copied bundle, review app and canonical hashes stay
+unchanged. The captured-frame dimensions are observed; no exact content-area,
+hardware event timestamp, screen-reader or broader native-state claim follows.
+
+The bundle-ID lookup is ambiguous among older reviews; a rejected JS binding
+then requires `var` with the exact path. Neither issue launches another process.
+The post-click AX observation reports “App quit,” consistent with the captured
+acknowledgement and normal owned cleanup. CUA returns JPEG bytes: the initial
+metadata helper's PNG assumption refuses them, then `.jpg` suffixes preserve
+the exact original bytes without another observation or pixel conversion.
+
+The observer makes 5,857 requests, including 5,844 event polls. Closed-session
+polls return immediately: 5,843 unchanged responses precede the single changed
+acknowledgement event. Every unchanged snapshot is exact. This is a collector
+over-polling limitation; future collectors need backoff while closed but not
+exit-ready. No latency, load-free responsiveness or difficult-solve claim is made.
+The full original transcript remains in the sealed review and ZIP; the tracked
+proof pins its path/size/hash in `native/raw-evidence.json` rather than duplicating
+the large raw stream into Git. Read-only replay streams every original response.
+
+## Package and remaining gates
+
+All {r['manifest_file_entries']} sealed entries/{package['files_verified']}
+ZIP-extracted files and modes verify, with strict local ad-hoc signature and
+three example saves/fresh reopens. ZIP: {package['archive_bytes']:,} bytes,
+SHA-256 `{package['archive_sha256']}`. All 34 prior sealed reviews, four
+candidates, SDK and canonical /120 remain preserved. No owner project, OS setting,
+printer or privacy grant changes.
+
+Owner walkthrough remains **Not tried yet**; default-startup/clean-account
+qualification remains deferred for this private alpha. Full bindings,
+accessibility/environment, actual hobbyist study and broader MVP gates stay
+open. Local signing/extraction is not Developer ID, notarization, Gatekeeper or
+installation acceptance. Visible latency stays scoped to /173, with RC and
+100 ms acknowledgement unqualified. No canonical promotion.
+
+Read-only replay, with the sealed review/ZIP present:
+
+```sh
+python3 -B docs/validation/shutdown-layout-review-176/verify.py
+```
+
+[Receipt](../../../research/ui-audit/first-version/shutdown-layout-review-checkpoint.json),
+[review folder](../../../build/ELab-0.159.0-176-review),
+[ZIP](../../../build/ELab-0.159.0-176-review.zip).
+''')
+checkpoint=dict(receipt_sha256=sha(receipt_path),manifest_sha256=sha(review/'RELEASE_MANIFEST.json'),
+    archive_sha256=package['archive_sha256'],source_proof_checkpoint_sha256=r['source_proof_checkpoint_sha256'],
+    evidence_sha256={p.relative_to(proof).as_posix():sha(p) for p in sorted(proof.rglob('*')) if p.is_file()})
+(proof/'checkpoint.json').write_text(json.dumps(checkpoint,indent=2)+'\n')
+print(dict(passed=True,proof=str(proof),evidence_files=len(checkpoint['evidence_sha256']),native_raw_transcript='pinned in sealed review/ZIP; not duplicated in Git'))
