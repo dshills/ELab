@@ -1,0 +1,28 @@
+{
+  "frames": 166,
+  "complete_frames": 163,
+  "unique_images": 158,
+  "states": {
+    "private-draft-original-result": 9,
+    "committed-value-stale-result": 2,
+    "committed-value-fresh-result": 152
+  },
+  "first_committed_stale_frame": 10,
+  "first_fresh_frame": 13,
+  "marker_to_committed_stale_ms": 128.21516666666668,
+  "marker_to_fresh_ms": 178.21529166666667,
+  "future_at_receipt": 133,
+  "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+  "eligible_latency_observations": 0,
+  "latency_gate_passed": null,
+  "rejected_mutations": [
+    "shifted_display_clock",
+    "changed_crop",
+    "unacknowledged_marker",
+    "missing_image",
+    "wrong_pixel_scale",
+    "forged_eligibility",
+    "stale_pixels_labeled_fresh",
+    "unfinished_input"
+  ]
+}

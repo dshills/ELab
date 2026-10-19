@@ -1,0 +1,466 @@
+{
+  "version": 1,
+  "declared_utc": "2026-10-19T18:59:31.199329+00:00",
+  "status": "declared_before_collection",
+  "cohort_trials_run": 0,
+  "native_sha256": "ddd0e0cfdfad56c25c9d2d4d0882a1bb79095197101c9e79a844626bfaaa7a1a",
+  "agent_sha256": "134f9863e2885e384035e30550adfc5fe0bea1bdee9f3d3cd42feaf802bb7de5",
+  "recorder_sha256": "a8cec4e8f9d16b2b5ad6b751f5657b537c5ed6ea956e7695403168b445bb923f",
+  "reference_source": "internal/conformance/fixtures.go",
+  "reference_source_sha256": "6d1af00dea6c7dc786c5eb6c57147c689f71d43a064c4b2d9fb11dae2234e909",
+  "capture_seconds": 3,
+  "expected_host": {
+    "model": "Mac16,11",
+    "os_version": "26.6.2",
+    "os_build": "25G83",
+    "display_id": 3,
+    "display_mode": [
+      5120,
+      1440,
+      5120,
+      1440
+    ],
+    "window_global_points": {
+      "x": 2034,
+      "y": 303,
+      "width": 1053,
+      "height": 802
+    },
+    "point_pixel_scale": 1
+  },
+  "percentile": {
+    "convention": "nearest-rank",
+    "quantile": 0.95,
+    "required_per_reference": 20,
+    "rank_at_20": 19,
+    "successful_subset_forbidden": true
+  },
+  "thresholds_ms": {
+    "visible_acknowledgment": 100,
+    "first_valid_updated_sample": 500
+  },
+  "calibration_excluded": "docs/validation/display-causal-input-173",
+  "replacement_trials_forbidden": true,
+  "trials": [
+    {
+      "id": "led-01",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-02",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-03",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-04",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-05",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-06",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-07",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-08",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-09",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-10",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-11",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-12",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-13",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-14",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-15",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-16",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-17",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-18",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-19",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "led-20",
+      "reference": "led",
+      "part": "Limit",
+      "baseline": "1k",
+      "target": "2k"
+    },
+    {
+      "id": "rc-01",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-02",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-03",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-04",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-05",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-06",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-07",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-08",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-09",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-10",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-11",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-12",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-13",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-14",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-15",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-16",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-17",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-18",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-19",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "rc-20",
+      "reference": "rc",
+      "part": "Storage",
+      "baseline": "1uF",
+      "target": "2uF"
+    },
+    {
+      "id": "npn-01",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-02",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-03",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-04",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-05",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-06",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-07",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-08",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-09",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-10",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-11",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-12",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-13",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-14",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-15",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-16",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-17",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-18",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-19",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    },
+    {
+      "id": "npn-20",
+      "reference": "npn",
+      "part": "Drive",
+      "baseline": "0 V",
+      "target": "5 V"
+    }
+  ]
+}

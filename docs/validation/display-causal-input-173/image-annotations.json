@@ -1,0 +1,69 @@
+{
+  "method": "Manual inspection of original full PNGs plus exact four-ROI hashes for every complete frame; no OCR",
+  "regions": {
+    "resistor": [
+      450,
+      295,
+      540,
+      316
+    ],
+    "current": [
+      30,
+      718,
+      180,
+      744
+    ],
+    "reading_status": [
+      775,
+      728,
+      1010,
+      750
+    ],
+    "header_status": [
+      724,
+      60,
+      815,
+      121
+    ]
+  },
+  "states": [
+    {
+      "role": "private-draft-original-result",
+      "representative_first_frame": 1,
+      "representative_png": "frame-421f985f9f71bae70cbfb89d7edc2688d40b23709f7256bbf2eec02124560f27.png",
+      "hashes": {
+        "resistor": "5a428e4c2ff79cbfb44831619e81ba912d82eafed20a6040e2016478c5f9519c",
+        "current": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896",
+        "reading_status": "37969c24dda9f0a94c7ed1b0d67541fbb4507d72aad35881fa1480c623823eac",
+        "header_status": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+      }
+    },
+    {
+      "role": "committed-value-stale-result",
+      "representative_first_frame": 10,
+      "representative_png": "frame-3fecc6df33bab59eecc42ed7cfdc6992e103ae29bbd5824452276eab99f1f899.png",
+      "hashes": {
+        "resistor": "7d01389496b8497742a2e9ecad850ef263e7b5f837f5157c68d43964047f9ce2",
+        "current": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896",
+        "reading_status": "3387745dba51bb456576990f3f689a6c80dd46fd3bee477275e971bba05ba46f",
+        "header_status": "72be9d87053ecba2144263ebeb84068569268c137b2277f0bd234f7cdd494f34"
+      }
+    },
+    {
+      "role": "committed-value-fresh-result",
+      "representative_first_frame": 13,
+      "representative_png": "frame-09404c6616a2ba94ad18fb0d09875daaa6a217a032d504a44eab97418a78b593.png",
+      "hashes": {
+        "resistor": "7d01389496b8497742a2e9ecad850ef263e7b5f837f5157c68d43964047f9ce2",
+        "current": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d",
+        "reading_status": "37969c24dda9f0a94c7ed1b0d67541fbb4507d72aad35881fa1480c623823eac",
+        "header_status": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+      }
+    }
+  ],
+  "observations": {
+    "baseline": "Private 2k, schematic 1 k\u03a9, fresh 2.917 mA",
+    "stale": "Schematic 2 k\u03a9, Solving\u2026 \u00b7 stale reading, Previous reading \u00b7 stale, old 2.917 mA",
+    "fresh": "Schematic 2 k\u03a9, Live \u00b7 DC simulation, D1 DC operating point, fresh 1.477 mA / 2.047 V / 3.02 mW"
+  }
+}
