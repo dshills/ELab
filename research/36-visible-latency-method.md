@@ -1,6 +1,6 @@
 # Visible latency: measurement decision
 
-October 19, 2026. Status: software clock check completed; the owner authorized cropped display recordings on October 19. Implementation/calibration remains pending; no broader capture has run.
+October 19, 2026. Status: software clock check completed; the owner authorized cropped display recordings on October 19. The sweep repair is now packaged and qualified in clean /173. Cropped-mode implementation/calibration remains next; no broader capture has run.
 
 The PRD retains two different targets: input event → visible acknowledgment at p95 ≤100 ms, and accepted edit → first valid updated sample at p95 ≤500 ms for LED, RC and resistor-loaded NPN. Backend timing and a draft appearing in an editor cannot establish either target. No target, reference circuit or acceptance rule changes here.
 

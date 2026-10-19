@@ -1,0 +1,107 @@
+"""Copied public startup commands; private handoff is separately source-mounted."""
+import json
+import math
+
+
+def check(native, parity, out):
+    def session(target, label):
+        cases = []
+        for kind, example, part, command, initial, typed in [
+            ('capacitor', 'rc', 'C1', 'capacitor.initial.set', '2 V', '3 V'),
+            ('inductor', 'rl', 'L1', 'inductor.initial.set', '-20 mA', '30 mA'),
+        ]:
+            for action in ['default', 'restart']:
+                name = kind + '-' + action
+                target.ask('example.load', dict(id=example, discard_changes=True), True)
+                target.ask('simulation.wait')
+                target.ask('simulation.pause', {}, True)
+                target.ask('component.select', dict(id=part), True)
+                target.ask(command, dict(id=part, value=initial), True)
+                target.ask('simulation.restart', {}, True)
+                target.ask('simulation.wait')
+                target.ask('simulation.step', dict(duration_s=.001), True)
+                before = target.ask('simulation.wait')
+                target.ask(command, dict(id=part, value=typed), True)
+                accepted = target.ask('project.inspect')
+                # Deliberately retain an old guard: the client must not retry it.
+                target.command_revision = before['command_revision']
+                target.ask('simulation.restart', {}, True, expect='conflict')
+                refused = target.ask('project.inspect')
+                for key in ['components', 'wires', 'transient', 'mixed', 'run_id', 'electrical_revision', 'document', 'undo_entry', 'redo_entry']:
+                    assert refused.get(key) == accepted.get(key), (name, key)
+                if kind == 'inductor':
+                    target.ask(command, dict(id=part, value='20 mV'), True, expect='invalid-params')
+                    invalid = target.ask('project.inspect')
+                    for key in ['components', 'wires', 'transient', 'mixed', 'run_id', 'electrical_revision', 'document', 'undo_entry', 'redo_entry']:
+                        assert invalid.get(key) == accepted.get(key), (name, key)
+                if action == 'default':
+                    target.ask(command, dict(id=part, value='default'), True)
+                else:
+                    target.ask('simulation.restart', {}, True)
+                    target.ask('simulation.wait')
+                acted = target.ask('project.inspect')
+                field = 'initial_voltage_v' if kind == 'capacitor' else 'initial_current_a'
+                value = 3. if kind == 'capacitor' else .03
+                configured = next(p for p in acted['components'] if p['id'] == part)
+                assert configured.get(field) == (None if action == 'default' else value)
+                if action == 'default':
+                    assert acted['transient']['stale'] and acted['transient']['sample'] == accepted['transient']['sample']
+                    target.ask('simulation.restart', {}, True)
+                    target.ask('simulation.wait')
+                restarted = target.ask('project.inspect')
+                assert restarted['transient']['sample']['time_s'] == 0 and not restarted['transient']['stale']
+                samples = [restarted]
+                errors = []
+                start = 0. if action == 'default' else value
+                for i in range(7):
+                    if i:
+                        target.ask('simulation.step', dict(duration_s=.001), True)
+                        samples.append(target.ask('simulation.wait'))
+                    state = samples[-1]
+                    time_s = state['transient']['sample']['time_s']
+                    if kind == 'capacitor':
+                        actual = state['transient']['sample']['voltage_v']
+                        expected = 5 + (start-5)*math.exp(-time_s/.01)
+                        tolerance = 2e-12
+                    else:
+                        actual = next(p['current_a'] for p in state['mixed']['inductors'] if p['id'] == part)
+                        expected = .05 + (start-.05)*math.exp(-time_s/.01)
+                        tolerance = 1e-5
+                    errors.append(abs(actual-expected))
+                    assert errors[-1] <= tolerance, (name, time_s, actual, expected)
+                saved = out / (label + '-startup-' + name + '.elab')
+                target.ask('project.save', dict(path=str(saved)), True)
+                target.ask('simulation.wait')
+                fresh = parity.helper.Client(command_preconditions=True)
+                try:
+                    fresh.ask('project.load', dict(path=str(saved)), True)
+                    reopened = fresh.ask('simulation.wait')
+                    assert reopened['paused'] and not reopened['document']['dirty']
+                    assert reopened['components'] == restarted['components'] and reopened['wires'] == restarted['wires']
+                    assert reopened['transient']['sample']['time_s'] == 0
+                    parity.compare(reopened['transient'], restarted['transient'])
+                    parity.compare(reopened.get('mixed'), restarted.get('mixed'))
+                finally:
+                    fresh.close()
+                result = dict(name=name, before=before, accepted=accepted, refused=refused, acted=acted, restarted=restarted, samples=samples, reopened=reopened, max_equation_error=max(errors), fresh_saved_reopen=True)
+                (out / (label + '-startup-' + name + '.json')).write_text(json.dumps(result, indent=2)+'\n')
+                cases.append(result)
+        return cases
+
+    left = session(native, 'native')
+    reference = parity.helper.Client(command_preconditions=True)
+    try:
+        right = session(reference, 'headless')
+    finally:
+        reference.close()
+    for a, b in zip(left, right):
+        assert a['name'] == b['name']
+        for phase in ['before', 'accepted', 'refused', 'acted', 'restarted', 'reopened']:
+            for key in ['components', 'wires', 'selected', 'paused', 'transient_settings']:
+                assert a[phase].get(key) == b[phase].get(key), (a['name'], phase, key)
+            parity.compare(a[phase]['transient'], b[phase]['transient'])
+            parity.compare(a[phase].get('mixed'), b[phase].get('mixed'))
+        for x, y in zip(a['samples'], b['samples']):
+            parity.compare(x['transient'], y['transient'])
+            parity.compare(x.get('mixed'), y.get('mixed'))
+    return dict(passed=True, cases=[dict(name=c['name'], samples=len(c['samples']), max_equation_error=c['max_equation_error'], fresh_saved_reopen=True) for c in left], native_headless_stages_equal=True, stale_restart_and_invalid_coil_refused=True, fresh_saved_reopens=8, scope='Exact copied native/headless public commands, six 1 ms steps and RC/RL laws, eight fresh saved reopens. UI private draft settlement is separately qualified by 34 source-mounted cases; no physical OS startup input claim.')
