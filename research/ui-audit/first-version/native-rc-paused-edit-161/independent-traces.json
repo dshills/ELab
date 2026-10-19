@@ -1,0 +1,62 @@
+{
+  "passed": true,
+  "traces": [
+    {
+      "case": "restart",
+      "stage": "baseline",
+      "resistance_ohm": 10000,
+      "samples": 21,
+      "run_id": 3,
+      "trace_run_id": 3,
+      "electrical_revision": 2,
+      "time_s": 0.02,
+      "voltage_v": 4.323323583816936
+    },
+    {
+      "case": "restart",
+      "stage": "new-charge-10",
+      "resistance_ohm": 20000,
+      "samples": 11,
+      "run_id": 5,
+      "trace_run_id": 5,
+      "electrical_revision": 3,
+      "time_s": 0.010000000000000002,
+      "voltage_v": 1.967346701436833
+    },
+    {
+      "case": "restart",
+      "stage": "live-paused",
+      "resistance_ohm": 20000,
+      "samples": 21,
+      "run_id": 8,
+      "trace_run_id": 8,
+      "electrical_revision": 5,
+      "time_s": 0.02,
+      "voltage_v": 3.1606027941427883
+    },
+    {
+      "case": "resume",
+      "stage": "baseline",
+      "resistance_ohm": 20000,
+      "samples": 21,
+      "run_id": 3,
+      "trace_run_id": 3,
+      "electrical_revision": 2,
+      "time_s": 0.02,
+      "voltage_v": 3.1606027941427883
+    },
+    {
+      "case": "resume",
+      "stage": "live-paused",
+      "resistance_ohm": 10000,
+      "samples": 16,
+      "run_id": 5,
+      "trace_run_id": 5,
+      "electrical_revision": 3,
+      "time_s": 0.015,
+      "voltage_v": 3.8843491992578505
+    }
+  ],
+  "total_rows": 90,
+  "scope": "Five fresh trace snapshots: every scalar, capacitor energy and selected probe checked against RC exponential/Ohm law; stale snapshots checked for retention under original trace ownership rather than reinterpreted using edited resistance"
+}

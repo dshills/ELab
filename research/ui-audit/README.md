@@ -132,3 +132,7 @@ October 18: [grouped-inspector source repair](../../docs/validation/inspector-ac
 ### Native RC from blank · /161
 
 [Construction and core-control proof](first-version/native-rc-draw-161/README.md) verifies four placements, 10k Apply, named terminal wiring, charge/discharge samples, right-hand cursors and actual Resume/Pause against the packaged agent. All 43 final scalar/probe rows obey independent RC laws. Public saves/fresh startup reopening match; original host closes normally and stopped custom bundle is restored. Producer failures retain their scopes. Minor incomplete-network scope caption is deferred; no numerical failure. Source/SDK/version and 381 sealed entries unchanged, owner Not tried yet and P0 17 implemented /10 partial. Remaining paused post-trace value edit and flasher checks are separate.
+
+### Native paused RC resistance edits · /161
+
+[Stale/reset/history proof](first-version/native-rc-paused-edit-161/README.md) verifies actual value Apply, retained old trace ownership, visible stale cues/disabled Step, explicit Restart, Undo/Redo and direct Resume. Ninety fresh scalar/probe rows match independent laws; native state matches the packaged reference, and a separate actual agent Resume verifies zero-time reset. Both saved configurations reopen clean, original hosts close normally and baseline files/bundle are preserved. The evidence-routing error and missing first baseline image are disclosed. Source/SDK/version unchanged, owner Not tried yet, P0 17 implemented /10 partial; native flasher is next.

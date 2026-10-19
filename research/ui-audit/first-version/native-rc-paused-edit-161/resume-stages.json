@@ -1,0 +1,75 @@
+{
+  "passed": true,
+  "stages": [
+    {
+      "stage": "baseline",
+      "run_id": 3,
+      "electrical_revision": 2,
+      "trace_run_id": 3,
+      "time_s": 0.02,
+      "time_constant_s": 0.02,
+      "stale": false,
+      "dirty": false
+    },
+    {
+      "stage": "private-10k",
+      "run_id": 3,
+      "electrical_revision": 2,
+      "trace_run_id": 3,
+      "time_s": 0.02,
+      "time_constant_s": 0.02,
+      "stale": false,
+      "dirty": false
+    },
+    {
+      "stage": "edited-stale",
+      "run_id": 4,
+      "electrical_revision": 3,
+      "trace_run_id": 3,
+      "time_s": 0.02,
+      "time_constant_s": 0.02,
+      "stale": true,
+      "dirty": true
+    },
+    {
+      "stage": "live-running",
+      "run_id": 5,
+      "electrical_revision": 3,
+      "trace_run_id": 5,
+      "time_s": 0.013000000000000001,
+      "time_constant_s": 0.01,
+      "stale": false,
+      "dirty": true
+    },
+    {
+      "stage": "live-paused",
+      "run_id": 5,
+      "electrical_revision": 3,
+      "trace_run_id": 5,
+      "time_s": 0.015,
+      "time_constant_s": 0.01,
+      "stale": false,
+      "dirty": true
+    },
+    {
+      "stage": "allow-save-copy",
+      "run_id": 5,
+      "electrical_revision": 3,
+      "trace_run_id": 5,
+      "time_s": 0.015,
+      "time_constant_s": 0.01,
+      "stale": false,
+      "dirty": true
+    },
+    {
+      "stage": "finish",
+      "run_id": 5,
+      "electrical_revision": 3,
+      "trace_run_id": 5,
+      "time_s": 0.015,
+      "time_constant_s": 0.01,
+      "stale": false,
+      "dirty": false
+    }
+  ]
+}
