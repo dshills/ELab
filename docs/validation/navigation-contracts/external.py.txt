@@ -1,0 +1,50 @@
+from pathlib import Path
+import hashlib,importlib.util,json,subprocess,time
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent;folder=root/'docs/validation/navigation-contracts';work=Path('/private/tmp/elab-navigation-contracts');work.mkdir(mode=0o700)
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();spec=importlib.util.spec_from_file_location('helper',root/'scripts/persistence-demo.py');helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper);binary=stage/'elab-agent'
+commands=['selection.navigate','view.selection.center','view.pan','view.zoom'];observations={};host=None
+
+def observe(client,label):
+ client.ask('example.rc',dict(discard_changes=True),True);client.ask('simulation.wait');client.ask('simulation.pause',{},True);client.ask('simulation.step',dict(duration_s=.001),True);client.ask('simulation.wait')
+ before=client.ask('project.inspect');catalog=client.ask('capabilities.list');details={}
+ for cap in catalog['capabilities']:details[cap['id']]=client.ask('capabilities.list',dict(command=cap['id']))['capabilities'][0]
+ assert before==client.ask('project.inspect'),'discovery must be pure'
+ for command in commands:
+  contract=details[command]['input_schema']['x-command-contract'];assert contract['scope']=='schematic-navigation' and contract['completion']['mode']=='immediate shared state update; no asynchronous solver job'
+ client.ask('selection.navigate',dict(direction='first',kind='wires',center=None),True);selected=client.ask('project.inspect');wire=selected['selected']
+ assert wire==selected['wires'][0]['id'] and selected['view']==before['view']
+ client.ask('view.selection.center',dict(id=wire),True);centered=client.ask('project.inspect');assert not centered['viewport']['following']
+ client.ask('view.pan',dict(dx=40,dy=-20),True);panned=client.ask('project.inspect')
+ assert panned['view']['center']==dict(x=centered['view']['center']['x']+40,y=centered['view']['center']['y']-20)
+ client.ask('view.zoom',dict(factor=2,anchor=None),True);zoomed=client.ask('project.inspect');assert zoomed['view']['center']==panned['view']['center'] and zoomed['view']['zoom']==min(4,panned['view']['zoom']*2)
+ for command,params,code in [('view.selection.center',dict(id='R1'),'conflict'),('selection.navigate',dict(direction='next',kind='resistors'),'invalid-params'),('view.pan',dict(dx=3e6,dy=0),'invalid-params'),('view.zoom',dict(factor=1,anchor=dict(x=0)),'invalid-params')]:
+  client.ask(command,params,True,expect=code);assert client.ask('project.inspect')==zoomed
+ for state in [selected,centered,panned,zoomed]:
+  for key in ['components','wires','transient','mixed','run_id','electrical_revision','document','undo_entry','redo_entry']:assert state.get(key)==before.get(key),(label,key)
+ record=dict(before=before,selected=selected,centered=centered,panned=panned,zoomed=zoomed,catalog=catalog,details=details)
+ (folder/(label+'.json')).write_text(json.dumps(record,indent=2)+'\n');return record
+
+stdio=helper.Client(command_preconditions=True,agent_binary=binary)
+try:observations['stdio']=observe(stdio,'stdio');stdio.ask('app.close',dict(discard_changes=True),True)
+finally:stdio.close()
+endpoint=work/'endpoint.json';log=(work/'socket-host.log.txt').open('w');host=subprocess.Popen([str(binary),'--listen',str(endpoint)],stdout=log,stderr=subprocess.STDOUT);socket_client=None
+try:
+ deadline=time.monotonic()+10
+ while not endpoint.exists():assert host.poll() is None;assert time.monotonic()<deadline;time.sleep(.01)
+ socket_client=helper.Client(str(endpoint),command_preconditions=True,agent_binary=binary);observations['socket']=observe(socket_client,'socket');socket_client.ask('app.close',dict(discard_changes=True),True);socket_client.close();socket_client=None;assert host.wait(timeout=5)==0
+finally:
+ if socket_client:socket_client.close()
+ if host.poll() is None:host.terminate();host.wait(timeout=5)
+ log.close()
+assert observations['stdio']['catalog']==observations['socket']['catalog']
+assert observations['stdio']['details']==observations['socket']['details']
+old=helper.Client(command_preconditions=True,agent_binary=root/'build/ELab-0.152.0-169-review/elab-agent')
+try:old_catalog=old.ask('capabilities.list')
+finally:old.close()
+baseline={c['id']:c for c in json.loads((root/'build/capability-audit-169/detailed.json').read_text())};assert old_catalog==observations['stdio']['catalog']
+current=observations['stdio']['details'];changed=[name for name in baseline if baseline[name]!=current[name]];assert set(changed)==set(commands)
+assert len(current)==162 and len([c for c in current.values() if 'x-command-contract' in c['input_schema']])==142
+for name in current:assert baseline[name]['output_schema']==current[name]['output_schema'] and baseline[name]['mutation']==current[name]['mutation']
+(folder/'baseline-detailed.json').write_text(json.dumps(baseline,indent=2)+'\n')
+report=dict(passed=True,scope='Modified-source development agent over stdio and private headless socket; no native/physical UI or clean package qualification',development_agent_sha256=sha(binary),socket_host_pid=host.pid,socket_host_exit_code=host.returncode,socket_host_absent=subprocess.run(['/bin/ps','-p',str(host.pid)],capture_output=True).returncode!=0,ordinary_catalog_unchanged=True,output_schemas_and_command_ids_unchanged=True,detailed_commands_changed=changed,public_commands=162,contracts_before=138,contracts_after=142,remaining_without_contract=[name for name in current if 'x-command-contract' not in current[name]['input_schema']],discovery_pure=True,navigation_preserves_experiment_and_history=True,declared_refusals_preserve_full_snapshot=True)
+assert report['socket_host_absent'];(folder/'external.json').write_text(json.dumps(report,indent=2)+'\n');(folder/'development-agent-build-info.txt').write_bytes(subprocess.check_output(['go','version','-m',str(binary)]));print(report)

@@ -1,0 +1,20 @@
+{
+  "exit_code": 1,
+  "elapsed_s": 4.8434100419981405,
+  "source_commit": "a99581aa5f18093fe1b0291b20f6126902434550",
+  "command": [
+    "go",
+    "test",
+    "-race",
+    "-count=1",
+    "-run",
+    "^TestNavigationDiscoveryOwnedPureComplete$",
+    "-v",
+    "./workbench"
+  ],
+  "original_failure_reproduced": true,
+  "source_sha256": {
+    "workbench/capability_details.go": "2061e44790cb1e1b09d165c5b46147a302bef268814761265a6a4feb8c82f72b",
+    "workbench/navigation_capabilities_test.go": "382a23b824ea128aed1daa7f009558a3cf9d052ff33b523b1cc62a600257b018"
+  }
+}

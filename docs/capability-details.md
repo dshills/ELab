@@ -102,3 +102,7 @@ Page schemas now describe fixed-scale tiling, overlap, footer reservation and th
 ## Schematic editing contracts
 
 Fourteen schematic commands now expose snapping/occupancy, exact optional move preimages, configured-field duplication, named-net labels, selection/drafts, terminal planning, explicit connections/junctions and ordinary state/history effects. Incomplete component-move preimages now refuse rather than coercing missing coordinates to zero. See [complete family details and validation](schematic-command-contracts.md). Other family and native runtime acceptance remains separate.
+
+## Navigation contracts
+
+The four existing schematic [navigation commands](schematic-navigation.md) now have filtered semantic details: selection enums/stored order/wrapping, null defaults, exact selected-ID guards, world-coordinate and resulting-center limits, effective clamped zoom/anchor transforms, presentation-only effects and atomic refusal codes. Their in-process boundary tests and development-agent stdio/private-socket checks preserve the RC experiment and history. The ordinary catalog and all output schemas remain unchanged. The source audit finds 142 of 162 commands carrying `x-command-contract` (previously 138), with 20 still missing that extension. Presence is not exhaustive behavioral qualification. [Evidence and scope](validation/navigation-contracts/README.md); sealed /169 retains the original navigation metadata until a clean replacement is qualified.

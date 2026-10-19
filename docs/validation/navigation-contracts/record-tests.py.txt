@@ -1,0 +1,10 @@
+from pathlib import Path
+import hashlib,json,os,subprocess,time
+root=Path('/Users/dshills/Development/projects/ELab');folder=root/'docs/validation/navigation-contracts';env=dict(os.environ,GOWORK='off',GOCACHE=str(root/'build/go-cache'));pattern='^TestNavigation(Discovery|Discovered|Contracts)'
+args=['go','test','-race','-count=1','-run',pattern,'-v','./workbench'];start=time.monotonic();p=subprocess.run(args,cwd=root,env=env,capture_output=True,timeout=120)
+for suffix,data in [('stdout',p.stdout),('stderr',p.stderr)]:(folder/f'focused-{suffix}.txt').write_bytes(data)
+r=dict(passed=p.returncode==0,exit_code=p.returncode,elapsed_s=time.monotonic()-start,command=args,test_sha256=hashlib.sha256((root/'workbench/navigation_capabilities_test.go').read_bytes()).hexdigest());(folder/'focused.json').write_text(json.dumps(r,indent=2)+'\n');print(r);p.check_returncode()
+overlay=folder/'original-overlay.json';overlay.write_text(json.dumps(dict(Replace={str(root/'workbench/capability_details.go'):str(folder/'original-capability_details.go.txt')}),indent=2)+'\n')
+args=['go','test','-overlay',str(overlay),'-race','-count=1','-run','^TestNavigationDiscoveryOwnedPureComplete$','-v','./workbench'];start=time.monotonic();p=subprocess.run(args,cwd=root,env=env,capture_output=True,timeout=120)
+for suffix,data in [('stdout',p.stdout),('stderr',p.stderr)]:(folder/f'final-test-original-{suffix}.txt').write_bytes(data)
+r=dict(original_failure_reproduced=p.returncode==1,exit_code=p.returncode,elapsed_s=time.monotonic()-start,command=args,missing_contract_cases=p.stdout.count(b'missing navigation contract'));(folder/'final-test-original.json').write_text(json.dumps(r,indent=2)+'\n');print(r);assert p.returncode==1 and r['missing_contract_cases']==4

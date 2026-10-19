@@ -1,0 +1,18 @@
+{
+  "original_failure_reproduced": true,
+  "exit_code": 1,
+  "elapsed_s": 4.669155708979815,
+  "command": [
+    "go",
+    "test",
+    "-overlay",
+    "/Users/dshills/Development/projects/ELab/docs/validation/navigation-contracts/original-overlay.json",
+    "-race",
+    "-count=1",
+    "-run",
+    "^TestNavigationDiscoveryOwnedPureComplete$",
+    "-v",
+    "./workbench"
+  ],
+  "missing_contract_cases": 4
+}

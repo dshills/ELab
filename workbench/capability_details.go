@@ -77,6 +77,9 @@ func addCapabilityDetails(id string, schema map[string]any) {
 	if addViewportCapabilityDetails(id, schema) {
 		return
 	}
+	if addNavigationCapabilityDetails(id, schema) {
+		return
+	}
 	if addSchematicCapabilityDetails(id, schema) {
 		return
 	}
