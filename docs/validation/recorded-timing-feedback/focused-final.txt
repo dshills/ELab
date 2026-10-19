@@ -1,0 +1,104 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestRecordedTimingPageWaitsForAllFieldsAndRunsOnce
+--- PASS: TestRecordedTimingPageWaitsForAllFieldsAndRunsOnce (0.30s)
+=== RUN   TestRecordedTimingPageRefusesInterveningWork
+=== RUN   TestRecordedTimingPageRefusesInterveningWork/agent-before
+=== RUN   TestRecordedTimingPageRefusesInterveningWork/agent-after
+=== RUN   TestRecordedTimingPageRefusesInterveningWork/other-user-field
+=== RUN   TestRecordedTimingPageRefusesInterveningWork/other-recording
+=== RUN   TestRecordedTimingPageRefusesInterveningWork/new-document
+=== RUN   TestRecordedTimingPageRefusesInterveningWork/invalid-field
+--- PASS: TestRecordedTimingPageRefusesInterveningWork (0.75s)
+    --- PASS: TestRecordedTimingPageRefusesInterveningWork/agent-before (0.07s)
+    --- PASS: TestRecordedTimingPageRefusesInterveningWork/agent-after (0.12s)
+    --- PASS: TestRecordedTimingPageRefusesInterveningWork/other-user-field (0.16s)
+    --- PASS: TestRecordedTimingPageRefusesInterveningWork/other-recording (0.12s)
+    --- PASS: TestRecordedTimingPageRefusesInterveningWork/new-document (0.12s)
+    --- PASS: TestRecordedTimingPageRefusesInterveningWork/invalid-field (0.16s)
+=== RUN   TestRecordedTimingPageSettlementFailurePreservesState
+=== RUN   TestRecordedTimingPageSettlementFailurePreservesState/admission
+=== RUN   TestRecordedTimingPageSettlementFailurePreservesState/completion
+--- PASS: TestRecordedTimingPageSettlementFailurePreservesState (0.14s)
+    --- PASS: TestRecordedTimingPageSettlementFailurePreservesState/admission (0.07s)
+    --- PASS: TestRecordedTimingPageSettlementFailurePreservesState/completion (0.07s)
+=== RUN   TestRecordedTimingPagePreviousUsesAcceptedFieldSettings
+--- PASS: TestRecordedTimingPagePreviousUsesAcceptedFieldSettings (0.12s)
+=== RUN   TestRecordedTimingPageStopsWhenEditedThresholdHasNoMoreArrivals
+--- PASS: TestRecordedTimingPageStopsWhenEditedThresholdHasNoMoreArrivals (0.12s)
+=== RUN   TestNativeRecordedTimingDirectionWaitsForFieldsAndRunsOnce
+--- PASS: TestNativeRecordedTimingDirectionWaitsForFieldsAndRunsOnce (0.26s)
+=== RUN   TestNativeRecordedTimingDirectionRefusesInterveningWork
+=== RUN   TestNativeRecordedTimingDirectionRefusesInterveningWork/agent
+=== RUN   TestNativeRecordedTimingDirectionRefusesInterveningWork/other-user-field
+=== RUN   TestNativeRecordedTimingDirectionRefusesInterveningWork/other-recording
+=== RUN   TestNativeRecordedTimingDirectionRefusesInterveningWork/new-document
+=== RUN   TestNativeRecordedTimingDirectionRefusesInterveningWork/menu-reopened
+=== RUN   TestNativeRecordedTimingDirectionRefusesInterveningWork/file-busy
+=== RUN   TestNativeRecordedTimingDirectionRefusesInterveningWork/pending-file
+--- PASS: TestNativeRecordedTimingDirectionRefusesInterveningWork (0.88s)
+    --- PASS: TestNativeRecordedTimingDirectionRefusesInterveningWork/agent (0.12s)
+    --- PASS: TestNativeRecordedTimingDirectionRefusesInterveningWork/other-user-field (0.16s)
+    --- PASS: TestNativeRecordedTimingDirectionRefusesInterveningWork/other-recording (0.12s)
+    --- PASS: TestNativeRecordedTimingDirectionRefusesInterveningWork/new-document (0.12s)
+    --- PASS: TestNativeRecordedTimingDirectionRefusesInterveningWork/menu-reopened (0.12s)
+    --- PASS: TestNativeRecordedTimingDirectionRefusesInterveningWork/file-busy (0.12s)
+    --- PASS: TestNativeRecordedTimingDirectionRefusesInterveningWork/pending-file (0.12s)
+=== RUN   TestNativeRecordedTimingDirectionSettlementFailurePreservesState
+=== RUN   TestNativeRecordedTimingDirectionSettlementFailurePreservesState/admission
+=== RUN   TestNativeRecordedTimingDirectionSettlementFailurePreservesState/completion
+--- PASS: TestNativeRecordedTimingDirectionSettlementFailurePreservesState (0.14s)
+    --- PASS: TestNativeRecordedTimingDirectionSettlementFailurePreservesState/admission (0.07s)
+    --- PASS: TestNativeRecordedTimingDirectionSettlementFailurePreservesState/completion (0.07s)
+=== RUN   TestMountedRecordingTimingDirectionCommitsPrivateThreshold
+--- PASS: TestMountedRecordingTimingDirectionCommitsPrivateThreshold (0.52s)
+=== RUN   TestMountedRecordingTimingDirectionRefusesInvalidThresholdAndCorrects
+--- PASS: TestMountedRecordingTimingDirectionRefusesInvalidThresholdAndCorrects (0.61s)
+=== RUN   TestNativeRecordedTimingCorrectionRetainsFeedbackUntilDirectionCompletes
+=== RUN   TestNativeRecordedTimingCorrectionRetainsFeedbackUntilDirectionCompletes/agent-edit-false
+=== RUN   TestNativeRecordedTimingCorrectionRetainsFeedbackUntilDirectionCompletes/agent-edit-true
+--- PASS: TestNativeRecordedTimingCorrectionRetainsFeedbackUntilDirectionCompletes (0.51s)
+    --- PASS: TestNativeRecordedTimingCorrectionRetainsFeedbackUntilDirectionCompletes/agent-edit-false (0.26s)
+    --- PASS: TestNativeRecordedTimingCorrectionRetainsFeedbackUntilDirectionCompletes/agent-edit-true (0.26s)
+=== RUN   TestNativeRecordedTimingCorrectionDoesNotRetainOtherRequestHelp
+--- PASS: TestNativeRecordedTimingCorrectionDoesNotRetainOtherRequestHelp (0.16s)
+=== RUN   TestNativeRecordedTimingCorrectionSettlementErrorReplacesHeldFeedback
+--- PASS: TestNativeRecordedTimingCorrectionSettlementErrorReplacesHeldFeedback (0.16s)
+=== RUN   TestNativeRecordedTimingMenuFreshChoiceMatchesAgent
+--- PASS: TestNativeRecordedTimingMenuFreshChoiceMatchesAgent (0.15s)
+=== RUN   TestNativeRecordedTimingMenuRefusesInterveningContext
+=== RUN   TestNativeRecordedTimingMenuRefusesInterveningContext/agent-settings
+=== RUN   TestNativeRecordedTimingMenuRefusesInterveningContext/user-field
+=== RUN   TestNativeRecordedTimingMenuRefusesInterveningContext/other-recording
+=== RUN   TestNativeRecordedTimingMenuRefusesInterveningContext/new-document
+=== RUN   TestNativeRecordedTimingMenuRefusesInterveningContext/menu-reopened
+=== RUN   TestNativeRecordedTimingMenuRefusesInterveningContext/file-busy
+--- PASS: TestNativeRecordedTimingMenuRefusesInterveningContext (0.48s)
+    --- PASS: TestNativeRecordedTimingMenuRefusesInterveningContext/agent-settings (0.07s)
+    --- PASS: TestNativeRecordedTimingMenuRefusesInterveningContext/user-field (0.12s)
+    --- PASS: TestNativeRecordedTimingMenuRefusesInterveningContext/other-recording (0.08s)
+    --- PASS: TestNativeRecordedTimingMenuRefusesInterveningContext/new-document (0.07s)
+    --- PASS: TestNativeRecordedTimingMenuRefusesInterveningContext/menu-reopened (0.07s)
+    --- PASS: TestNativeRecordedTimingMenuRefusesInterveningContext/file-busy (0.07s)
+=== RUN   TestMountedRecordingTimingTypedThresholdThenNextMatchesAgent
+--- PASS: TestMountedRecordingTimingTypedThresholdThenNextMatchesAgent (0.51s)
+=== RUN   TestMountedRecordingTimingInvalidThresholdDoesNotAdvancePage
+--- PASS: TestMountedRecordingTimingInvalidThresholdDoesNotAdvancePage (0.61s)
+=== RUN   TestNativeRecordedTimingMatchesPublicQueryAndClears
+--- PASS: TestNativeRecordedTimingMatchesPublicQueryAndClears (0.22s)
+=== RUN   TestNativeRecordedTimingPagesAndDirectionReset
+--- PASS: TestNativeRecordedTimingPagesAndDirectionReset (0.39s)
+=== RUN   TestNativeViewportDefersCoalescesAndPreservesMessages
+--- PASS: TestNativeViewportDefersCoalescesAndPreservesMessages (0.00s)
+=== RUN   TestNativeViewportRetainsValueRefusalAcrossItsOwnLayout
+=== RUN   TestNativeViewportRetainsValueRefusalAcrossItsOwnLayout/agent-edit-false
+=== RUN   TestNativeViewportRetainsValueRefusalAcrossItsOwnLayout/agent-edit-true
+--- PASS: TestNativeViewportRetainsValueRefusalAcrossItsOwnLayout (0.07s)
+    --- PASS: TestNativeViewportRetainsValueRefusalAcrossItsOwnLayout/agent-edit-false (0.04s)
+    --- PASS: TestNativeViewportRetainsValueRefusalAcrossItsOwnLayout/agent-edit-true (0.04s)
+=== RUN   TestNativeViewportResizeReturningToMeasuredSizeCancelsPendingReport
+--- PASS: TestNativeViewportResizeReturningToMeasuredSizeCancelsPendingReport (0.00s)
+=== RUN   TestNativeViewportBackpressureRetainsOneDelivery
+--- PASS: TestNativeViewportBackpressureRetainsOneDelivery (0.00s)
+PASS
+ok  	github.com/dshills/elab/desktop	8.773s

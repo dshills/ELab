@@ -16,6 +16,7 @@ type recordedTimingFieldRejection struct {
 	context     actionContext
 	recordingID string
 	message     string
+	help        *workbench.DiagnosticHelp
 }
 
 type recordedTimingPageWork struct {
@@ -28,6 +29,7 @@ type recordedTimingPageWork struct {
 	next, total int
 	field       int
 	failed      bool
+	feedback    *recordedTimingFieldRejection
 }
 
 // Only this recording's accepted threshold/interval field responses can
@@ -53,7 +55,7 @@ func (s *screen) changeRecordedTimingField(state workbench.Snapshot, field, text
 	if response.Error != nil {
 		s.recordedTimingAccepted = nil
 		if origin != nil {
-			s.recordedTimingRejected = &recordedTimingFieldRejection{context: *origin, recordingID: r.ID, message: response.Error.Message}
+			s.recordedTimingRejected = &recordedTimingFieldRejection{context: *origin, recordingID: r.ID, message: response.Error.Message, help: response.Help}
 		}
 		if pending != nil {
 			pending.failed = true
@@ -77,6 +79,13 @@ func (s *screen) changeRecordedTimingField(state workbench.Snapshot, field, text
 	if pending != nil {
 		pending.context = s.recordedTimingAccepted.to
 		pending.settings, pending.next, pending.total = s.recordedTimingAccepted.settings, result.NextOffset, result.Total
+		if feedback := pending.feedback; feedback != nil {
+			// Hiding this action's related refusal can resize the canvas while
+			// its remaining fields settle. Keep it through our accepted response
+			// and clear it only when the direction/page action finishes.
+			s.requestHelp, s.errorMessage = feedback.help, feedback.message
+			s.requestHelpRevision = accepted.CommandRevision
+		}
 	}
 }
 
@@ -111,6 +120,13 @@ func (s *screen) beginRecordedTimingAction(state workbench.Snapshot, direction, 
 	context := actionContext{state.CommandRevision, state.Document.Generation}
 	pending := &recordedTimingPageWork{context: context, recordingID: r.ID, direction: direction, arrival: arrival, menuSerial: s.menuSerial, settings: workbench.RecordingTimingParams(result.Settings), next: result.NextOffset, total: result.Total}
 	current := s.service.Snapshot()
+	if rejected := s.recordedTimingRejected; rejected != nil && rejected.recordingID == r.ID && rejected.context.generation == current.Document.Generation &&
+		rejected.help != nil && rejected.help == s.requestHelp && rejected.help.Code == "invalid-params" && s.requestHelpRevision == current.CommandRevision {
+		// The help identity proves which field refused. Its revision may have
+		// continued through the viewport publisher's own error-row layout;
+		// unrelated requests and agent edits cannot supply this ownership.
+		pending.feedback = rejected
+	}
 	if rejected := s.recordedTimingRejected; arrival == "" && rejected != nil && rejected.recordingID == r.ID && rejected.context == (actionContext{current.CommandRevision, current.Document.Generation}) {
 		s.errorMessage = rejected.message
 		s.app.Invalidate("main")
@@ -161,6 +177,12 @@ func (s *screen) finishRecordedTimingPage(pending *recordedTimingPageWork) {
 		return
 	}
 	s.pendingRecordedTimingPage = nil
+	if feedback := pending.feedback; feedback != nil && s.requestHelp == feedback.help {
+		s.requestHelp = nil
+		if s.errorMessage == feedback.message {
+			s.errorMessage = ""
+		}
+	}
 	if pending.failed {
 		s.app.Invalidate("main")
 		return

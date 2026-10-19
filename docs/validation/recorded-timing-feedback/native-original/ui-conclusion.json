@@ -1,0 +1,10 @@
+{
+  "passed": false,
+  "native_interaction_completed": true,
+  "valid_AX_3V_rising_passed": true,
+  "valid_pointer_4V_falling_passed": true,
+  "invalid_threshold_refusal_passed": true,
+  "corrected_threshold_and_direction_first_attempt_passed": false,
+  "observed_failure": "After invalid input, choosing Rising with corrected private 3.5 V accepts the corrected level but refuses direction after a viewport update (expected command revision 16; current 17); Falling remains selected.",
+  "scope": "Exact clean /164 candidate in isolated bundle; private typing and native menus, public seeded pulse-NPN capture."
+}

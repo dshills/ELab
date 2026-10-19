@@ -42,7 +42,7 @@
     "desktop/printing.go": "9c40645db6de5affc3ae9d654f72c7003671f5d8c23c8bd7de93ffa35bea8c59",
     "desktop/probes.go": "4ee6051c65010292375e62c39a85e4cf7631c045b75146257564e2158ea806c3",
     "desktop/project_work.go": "f4109a9a2e8bfa2098a9bf7a35327f4dcd557e696f9ac9178c19788de0694c20",
-    "desktop/recorded_timing_actions.go": "becfcf1adaedfbca9f4aa52862fc5c2ad6a0e17a4f9b3ee6685c7962096d116a",
+    "desktop/recorded_timing_actions.go": "dbf75e522b7fdab7413302237bf66ffeefd4f6e3c777e22d63dbd57a16dd9d13",
     "desktop/recording.go": "830e7402a48c5148463df94857717d98b59ac4249f088ccd32bffd7c1cb1bcf0",
     "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
     "desktop/recording_statistics.go": "161cc2eb9e62f089a91eb1967b9d6ed8a9a30dd914af3b7705ad3584bee2caec",
@@ -2525,7 +2525,7 @@
     },
     {
       "file": "desktop/recorded_timing_actions.go",
-      "line": 52,
+      "line": 54,
       "function": "*screen.changeRecordedTimingField",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.timing.set\", textFieldParams(cfg, field, text), state.CommandRevision)",
@@ -2536,7 +2536,7 @@
     },
     {
       "file": "desktop/recorded_timing_actions.go",
-      "line": 100,
+      "line": 109,
       "function": "*screen.recordedTimingPageAction",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\ts.beginRecordedTimingAction(state, direction, \"\")\n}",
@@ -2544,7 +2544,7 @@
     },
     {
       "file": "desktop/recorded_timing_actions.go",
-      "line": 125,
+      "line": 141,
       "function": "*screen.beginRecordedTimingAction",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.timing.set\", pending.settings, pending.context.revision, pending.context.generation)",
@@ -2555,7 +2555,7 @@
     },
     {
       "file": "desktop/recorded_timing_actions.go",
-      "line": 199,
+      "line": 221,
       "function": "*screen.finishRecordedTimingPage",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.timing.set\", pending.settings, pending.context.revision, pending.context.generation)",

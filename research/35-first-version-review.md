@@ -1,6 +1,6 @@
 # ELab first-version review · 0.146.0 /163
 
-**October 19 update:** /163 has a reproduced native timing-direction handoff defect: choosing a direction can discard a privately typed threshold. [Source repair and evidence](../docs/validation/recorded-timing-direction/README.md) pass source checks and development native smoke; a clean replacement and fixed native-input replay remain pending. Preserve /163 for history and do not promote it.
+**October 19 update:** /163 has a native timing-direction handoff defect. Clean /164 fixes ordinary private-entry AX/pointer selection but fails correction after invalid text, so /164 remains unqualified. The [feedback source repair](../docs/validation/recorded-timing-feedback/README.md) passes full quality and development native smoke; fixed physical correction and a new clean replacement remain pending. Preserve both candidates and do not promote them.
 
 The updated private owner-review alpha is in the [review folder](../build/ELab-0.146.0-163-review), with [ELab.app](../build/ELab-0.146.0-163-review/ELab.app), matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required. All 23 earlier qualified review folders (0.123.0 /140 through 0.145.0 /162), the original unqualified /147 candidate and canonical 0.105.0 /120 app are preserved. Owner walkthrough remains “Not tried yet.”
 
