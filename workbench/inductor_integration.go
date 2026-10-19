@@ -26,16 +26,6 @@ type inductorStage struct {
 	x, capV []float64
 }
 
-// Each row has its own disjoint span, while a single allocation avoids the
-// per-row allocator/collector cost in the repeatedly rebuilt stage matrices.
-func inductorMatrix(size int) [][]float64 {
-	rows, values := make([][]float64, size), make([]float64, size*size)
-	for row := range rows {
-		rows[row] = values[row*size : (row+1)*size : (row+1)*size]
-	}
-	return rows
-}
-
 type inductorRoundoffError struct{}
 
 func (*inductorRoundoffError) Error() string {
@@ -45,7 +35,7 @@ func (*inductorRoundoffError) Error() string {
 func (n *mixedNetwork) radauEquations(x, old []float64, h float64, trace *Transient, end float64) ([][]float64, []float64, []float64) {
 	size := n.matrixSize(h)
 	dimension := 3 * size
-	matrix := inductorMatrix(dimension)
+	matrix := denseMatrix(dimension)
 	residual, tolerances := make([]float64, dimension), make([]float64, dimension)
 	for stage, c := range radauNodes {
 		offset := stage * size

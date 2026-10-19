@@ -1,0 +1,23 @@
+{
+  "passed": false,
+  "exit_code": 1,
+  "elapsed_s": 9.628085875068791,
+  "agent_sha256": "ab1cc7f8c4db8e8a466f09eac8176c0eaa6778c8f4bd740aae372afac5c48fbd",
+  "controller_sha256": "9daa5adfdfd3b92b7955c9c39ab07a65cb9b1ad4972e6c9c1dbf06913037ae8a",
+  "command": [
+    "/Users/dshills/Development/projects/ELab/build/mixed-matrix-work/elab-conformance",
+    "--agent-binary",
+    "/Users/dshills/Development/projects/ELab/build/mixed-matrix-work/elab-agent",
+    "--electrical-suite",
+    "--inductor-suite",
+    "--opamp-suite",
+    "--opamp-storage-suite",
+    "--capacity-suite",
+    "--inductor-performance-suite",
+    "--repetitions",
+    "20",
+    "--artifacts",
+    "/private/tmp/elab-mixed-matrix-public"
+  ],
+  "scope": "Modified-source development in-process/stdio/private headless sockets, real default clocks; no native, clean app package, physical input or visible latency claim"
+}

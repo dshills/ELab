@@ -1,0 +1,30 @@
+"""Run final development backends with real clocks and unchanged limits."""
+from pathlib import Path
+import hashlib
+import json
+import os
+import subprocess
+import time
+
+root = Path('/Users/dshills/Development/projects/ELab')
+stage = Path(__file__).resolve().parent
+out = Path('/private/tmp/elab-mixed-matrix-public')
+assert not out.exists()
+env = dict(os.environ, GOWORK='off', GOCACHE=str(root/'build/go-cache'), GOPROXY='off', GOTOOLCHAIN='local')
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+with (stage/'external-build.txt').open('x') as log:
+    for name in ('elab-agent', 'elab-conformance'):
+        subprocess.run(['go', 'build', '-o', str(stage/name), './cmd/'+name], cwd=root, env=env,
+                       stdout=log, stderr=subprocess.STDOUT, timeout=120, check=True)
+command = [str(stage/'elab-conformance'), '--agent-binary', str(stage/'elab-agent'),
+           '--electrical-suite', '--inductor-suite', '--opamp-suite', '--opamp-storage-suite',
+           '--capacity-suite', '--inductor-performance-suite', '--repetitions', '20', '--artifacts', str(out)]
+started = time.monotonic()
+with (stage/'external-stdout.txt').open('x') as stdout, (stage/'external-stderr.txt').open('x') as stderr:
+    result = subprocess.run(command, cwd=root, env=env, stdout=stdout, stderr=stderr, timeout=900)
+report = dict(passed=result.returncode == 0, exit_code=result.returncode, elapsed_s=time.monotonic()-started,
+              agent_sha256=sha(stage/'elab-agent'), controller_sha256=sha(stage/'elab-conformance'), command=command,
+              scope='Modified-source development in-process/stdio/private headless sockets, real default clocks; no native, clean app package, physical input or visible latency claim')
+(stage/'external.json').write_text(json.dumps(report, indent=2)+'\n')
+print({k:report[k] for k in ('passed', 'exit_code', 'elapsed_s')})
+raise SystemExit(result.returncode)

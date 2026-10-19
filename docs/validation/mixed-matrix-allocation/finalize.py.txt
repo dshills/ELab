@@ -1,0 +1,118 @@
+from pathlib import Path
+import gzip
+import hashlib
+import json
+import subprocess
+import sys
+
+root = Path('/Users/dshills/Development/projects/ELab')
+stage = Path(__file__).resolve().parent
+folder = root/'docs/validation/mixed-matrix-allocation'
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+read = lambda p: json.loads(p.read_text())
+quality_path = stage/'quality-final-default.json'
+if not quality_path.exists() or not read(quality_path)['passed']:
+    quality_path = stage/'quality-final-serial.json'
+q = read(quality_path)
+assert q['passed'] and q['sources_unchanged']
+assert all(sha(root/name) == digest for name, digest in q['source_sha256'].items())
+public_path = Path('/private/tmp/elab-mixed-matrix-final-public/report.json')
+baseline_path = Path('/private/tmp/elab-mixed-matrix-baseline-public/report.json')
+external, public, baseline = read(stage/'external-final.json'), read(public_path), read(baseline_path)
+assert external['passed'] and public['passed'] and baseline['passed']
+assert [a['name'] for a in public['adapters']] == ['in-process', 'headless-stdio', 'headless-socket']
+assert all(a['equivalent_to_in_process'] and a['inductor_performance']['backend_targets_passed'] for a in public['adapters'])
+assert all(len(case['samples']) == 20 for a in public['adapters'] for case in a['inductor_performance']['cases'])
+assert sum(len(case['samples']) for a in public['adapters'] for case in a['inductor_performance']['cases']) == 480
+before, after = read(stage/'before-samples.json'), read(stage/'final-samples.json')
+assert len(before) == len(after) == 2
+assert all(record['samples'] == 600 for record in before + after)
+for old, new in zip(before, after):
+    for key in ('capacitance_scale', 'samples', 'graph_sha256', 'accepted_memory_and_result_sha256', 'total_attempts', 'peak_sample_attempts'):
+        assert old[key] == new[key]
+capacity_before, capacity_after = read(stage/'capacity-before.json')[0], read(stage/'capacity-final.json')[0]
+for key in ('accepted_sha256', 'attempts', 'peak_attempts', 'samples', 'matrix_size'):
+    assert capacity_before[key] == capacity_after[key]
+budget = read(stage/'final-production-audit.json')
+assert budget['maximum_attempts'] == 512 and budget['maximum_wall_ms'] == 100
+assert budget['results'][0]['outcome'] == 'completed'
+assert budget['results'][1]['code'] == 'integration-time-limit' and budget['results'][1]['failed_sample_state_preserved']
+
+
+def put(name, data):
+    with (folder/name).open('xb') as out:
+        out.write(data)
+
+
+def copy(path, name=None, compressed=False):
+    put(name or path.name, gzip.compress(path.read_bytes(), mtime=0) if compressed else path.read_bytes())
+
+
+text_files = ['baseline-profile.txt', 'before-alloc-top.txt', 'before-cpu-top.txt',
+              'before-allocation.txt', 'before-assembly.txt', 'after-allocation.txt', 'after-assembly.txt',
+              'final-allocation.txt', 'sparse-flasher.txt', 'linear-crossover.txt',
+              'capacity-before.txt', 'capacity-after.txt', 'capacity-sparse.txt', 'capacity-final.txt',
+              'after-production-audit.txt', 'final-production-audit.txt', 'fixture-compile-first.txt',
+              'focused-race.txt', 'coupled-race.txt', 'final-focused-race.txt',
+              'external-build.txt', 'external-stdout.txt', 'external-stderr.txt',
+              'external-final-build.txt', 'external-final-stdout.txt', 'external-final-stderr.txt',
+              'baseline-external-stdout.txt', 'baseline-external-stderr.txt']
+for name in text_files:
+    copy(stage/name, name+'.gz', True)
+for name in ['before-samples.json', 'after-samples.json', 'sparse-samples.json', 'final-samples.json',
+             'capacity-before.json', 'capacity-after.json', 'capacity-sparse.json', 'capacity-final.json',
+             'baseline-audit.json', 'after-production-audit.json', 'final-production-audit.json',
+             'external.json', 'external-final.json', 'capacity-fixture.json']:
+    copy(stage/name)
+for name in ('cpu-before.prof', 'memory-before.prof'):
+    copy(stage/name)
+for name in ('quality-default', 'quality-serial', 'quality-final-default', 'quality-final-serial'):
+    if (stage/(name+'.json')).exists():
+        copy(stage/(name+'.json'))
+        for stream in ('stdout', 'stderr'):
+            copy(stage/(name+'-'+stream+'.txt'), name+'-'+stream+'.txt.gz', True)
+for name in ['capacity_diagnostic.go.txt', 'linear_modes.go.txt', 'baseline-mixed.go.txt',
+             'baseline-inductor_integration.go.txt', 'sparse-mixed.go.txt', 'capacity-old-overlay.json',
+             'capacity-new-overlay.json', 'capacity-sparse-overlay.json', 'linear-modes-overlay.json',
+             'external.py', 'external-final.py', 'quality.py', 'quality-final.py']:
+    copy(stage/name, name+'.txt' if name.endswith('.py') else name)
+copy(public_path, 'public-report.json.gz', True)
+summary = dict(passed=True, raw_report_sha256=sha(baseline_path),
+               adapters=[dict(name=a['name'], equivalent=a['equivalent_to_in_process'],
+                              coil_performance=a['inductor_performance']) for a in baseline['adapters']])
+put('baseline-public-summary.json.gz', gzip.compress((json.dumps(summary, indent=2)+'\n').encode(), mtime=0))
+for name in ('elab-agent', 'elab-conformance'):
+    info = subprocess.check_output(['go', 'version', '-m', str(stage/name)])
+    put(name+'-build-info.txt.gz', gzip.compress(info, mtime=0))
+copy(Path(__file__), 'finalize.py.txt')
+sys.path.insert(0, str(root/'scripts'))
+from package_review import members
+review = root/'build/ELab-0.154.0-171-review'
+actual = members(review)
+recorded = read(review/'RELEASE_MANIFEST.json')['files']
+actual.pop('RELEASE_MANIFEST.json')
+assert actual == recorded and len(actual) == 309
+assert sha(root/'build/ELab-0.154.0-171-review.zip') == '55aa5cf0376e6a8278b75a934f7e4c96812a4aec0e2ee15bdde85931cff64e37'
+assert sha(root/'build/ELab.app/Contents/MacOS/ELab') == '914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c'
+assert sha(root/'third_party/vellum/vellum-b22478c.tar.gz') == '22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968'
+comparison = dict(passed=True, exact_accepted_records=1400, attempt_counts_unchanged=True,
+    assembly_allocations_before=10, assembly_allocations_after=3, assembly_bytes_unchanged=768,
+    capacity_before=capacity_before, capacity_after=capacity_after,
+    public_backends=3, real_clock_coil_samples=480, current_review_files_verified=309,
+    prior_allocator_public_failure_retained=True, default_intermediate_race_failure_retained=True,
+    no_broad_timeout_cause_or_resolution_inferred=True, visible_latency_observations=0,
+    native_current_source_qualified=False, new_release_created=False, canonical_promoted=False)
+put('comparison.json', (json.dumps(comparison, indent=2)+'\n').encode())
+cp = dict(status='source_backend_matrix_work_validated_no_native_package',
+          baseline_commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip(),
+          source_sha256=q['source_sha256'], final_quality_report=quality_path.name,
+          final_quality_elapsed_s=q['elapsed_s'], final_quality_environment=q['environment'],
+          agent_sha256=external['agent_sha256'], controller_sha256=external['controller_sha256'],
+          sdk_lock_sha256=sha(root/'third_party/vellum/sdk.lock.json'),
+          native_ledger_sha256=sha(root/'research/13-native-command-inventory.json'),
+          exact_accepted_records=1400, public_backends=3, real_clock_coil_samples=480,
+          current_review='0.154.0 /171 (earlier allocator)', owner_walkthrough='Not tried yet',
+          canonical_promoted=False, full_prd_acceptance=False,
+          evidence_sha256={str(p.relative_to(folder)):sha(p) for p in sorted(folder.rglob('*')) if p.is_file()})
+put('checkpoint.json', (json.dumps(cp, indent=2)+'\n').encode())
+print(dict(passed=True, evidence_files=len(cp['evidence_sha256']), final_quality_s=q['elapsed_s'], accepted_records=1400, coil_samples=480))

@@ -217,15 +217,7 @@ func (n *mixedNetwork) deviceEquations(x, old []float64, dt float64, t *Transien
 // injections, then supplies its own coupled storage rows for all stages.
 func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, at float64, storageRows bool) ([][]float64, []float64) {
 	size := n.matrixSize(dt)
-	var a [][]float64
-	if len(n.inductors) > 0 {
-		a = inductorMatrix(size)
-	} else {
-		a = make([][]float64, size)
-		for i := range a {
-			a[i] = make([]float64, size)
-		}
-	}
+	a := denseMatrix(size)
 	f := make([]float64, size)
 	add := func(row, col int, v float64) {
 		if row >= 0 && col >= 0 {
@@ -346,11 +338,11 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 	return a, f
 }
 func linearSolve(a [][]float64, b []float64) ([]float64, error) {
-	return linearSolveMode(a, b, false)
+	return linearSolveMode(a, b, len(b) >= minimumZeroSkipSize)
 }
 
-// Retain the original arithmetic path for existing circuits. Collocation's
-// mostly zero stage blocks can omit zero updates without changing pivoting.
+// Omit zero updates in larger ordinary systems and collocation's mostly zero
+// stage blocks. Both paths use the same pivot search and nonzero update order.
 func linearSolveMode(a [][]float64, b []float64, skipZeros bool) ([]float64, error) {
 	n := len(b)
 	var columns []int

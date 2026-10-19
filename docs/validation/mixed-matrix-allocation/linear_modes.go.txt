@@ -1,0 +1,26 @@
+package workbench
+
+import (
+    "fmt"
+    "testing"
+)
+
+func BenchmarkLinearZeroUpdateCrossover(b *testing.B) {
+    for _, size := range []int{4, 8, 16, 32, 61} {
+        for _, skip := range []bool{false, true} {
+            b.Run(fmt.Sprintf("%d/%t",size,skip),func(b *testing.B) {
+                b.ReportAllocs()
+                for trial:=0;trial<b.N;trial++ {
+                    a:=denseMatrix(size);rhs:=make([]float64,size)
+                    for i:=range size {
+                        a[i][i]=3;rhs[i]=1
+                        if i>0 { a[i][i-1]=-1 } else { rhs[i]++ }
+                        if i+1<size { a[i][i+1]=-1 } else { rhs[i]++ }
+                    }
+                    x,err:=linearSolveMode(a,rhs,skip);if err!=nil { b.Fatal(err) }
+                    benchmarkMixedResidual=x
+                }
+            })
+        }
+    }
+}

@@ -1,0 +1,44 @@
+package workbench
+
+import (
+    "context"
+    "crypto/sha256"
+    "encoding/hex"
+    "encoding/json"
+    "os"
+    "testing"
+    "time"
+)
+
+func BenchmarkCapacityMatrixDiagnostic(b *testing.B) {
+    raw, err := os.ReadFile("/Users/dshills/Development/projects/ELab/build/mixed-matrix-work/capacity-fixture.json")
+    if err != nil { b.Fatal(err) }
+    var fixture struct { Graph Graph `json:"graph"`; Settings TransientSettings `json:"settings"`; Mode string `json:"mode"` }
+    if err := json.Unmarshal(raw, &fixture); err != nil { b.Fatal(err) }
+    c, _, diagnostic := fixture.Graph.Compile()
+    if diagnostic != nil { b.Fatal(diagnostic) }
+    rows := []map[string]any{}
+    for trial := 0; trial < b.N; trial++ {
+        kernel, err := newSimulationKernel(context.Background(), kernelPlan{compiled:c, settings:fixture.Settings, mode:fixture.Mode})
+        if err != nil { b.Fatal(err) }
+        digest := sha256.New(); encoder := json.NewEncoder(digest)
+        attempts, peakAttempts := 0, 0
+        elapsed, peak := time.Duration(0), time.Duration(0)
+        for sample := 1; sample <= 200; sample++ {
+            budget := newIntegrationBudget(); budget.elapsed = func() time.Duration { return 0 }
+            start := time.Now()
+            next, trace, err := advanceMixedBudget(kernel.mixed, kernel.trace, float64(sample)*.001, budget)
+            span := time.Since(start); elapsed += span; peak = max(peak,span)
+            if err != nil { b.Fatal(sample, budget.attempts, err) }
+            kernel.mixed, kernel.trace = next, trace
+            attempts += budget.attempts; peakAttempts = max(peakAttempts,budget.attempts)
+            if err := encoder.Encode(struct { X, C []float64; Result *MixedResult; Trace *Transient }{next.x,next.capV,next.result,trace}); err != nil { b.Fatal(err) }
+        }
+        rows=append(rows,map[string]any{"samples":200,"attempts":attempts,"peak_attempts":peakAttempts,"advance_ms":float64(elapsed)/float64(time.Millisecond),"peak_output_ms":float64(peak)/float64(time.Millisecond),"accepted_sha256":hex.EncodeToString(digest.Sum(nil)),"matrix_size":kernel.mixed.net.matrixSize(.001)})
+    }
+    if path := os.Getenv("ELAB_CAPACITY_MATRIX_REPORT"); path != "" {
+        data,_ := json.MarshalIndent(rows,"","  ")
+        f,err := os.OpenFile(path,os.O_CREATE|os.O_EXCL|os.O_WRONLY,0600);if err!=nil { b.Fatal(err) }
+        _,err=f.Write(append(data,'\n'));closeErr:=f.Close();if err!=nil || closeErr!=nil { b.Fatal(err,closeErr) }
+    }
+}
