@@ -42,7 +42,9 @@ Native regressions prove stale Apply/Delete refusal and normal fresh Apply. A co
 
 ## Remaining qualification
 
-Resolve the 157 dynamic/relay/custom sites against instantiated states and public parameters, and attach runtime evidence per user capability. Audit file Save/Discard/Cancel semantics, raw field commits/IME, full menu/keyboard/focus behavior, canvas gesture lifetimes and the framework's window lifecycle. Inspection/readout equivalence also needs explicit evidence where the UI consumes shared Go snapshots/functions directly. Full agent parity stays **partial** until those proofs exist; this inventory prevents source drift and makes the remaining work explicit.
+October 18: the [grouped-inspector source repair](../docs/validation/inspector-accessibility/README.md) changes only `view.go`'s production hash and source line locations. The 68 files, 393 sites, 162 public IDs, 132 routed IDs, semantic site expressions and route/alias sets retain their counts and meanings. Actual CUA invalid-value correction now retains external AX targets and matches the packaged agent; clean replacement qualification remains pending. New native smoke assertions are separate from the production binding ledger and do not establish general reader acceptance.
+
+Resolve the 160 dynamic/relay/custom sites against instantiated states and public parameters, and attach runtime evidence per user capability. Audit file Save/Discard/Cancel semantics, raw field commits/IME, full menu/keyboard/focus behavior, canvas gesture lifetimes and the framework's window lifecycle. Inspection/readout equivalence also needs explicit evidence where the UI consumes shared Go snapshots/functions directly. Full agent parity stays **partial** until those proofs exist; this inventory prevents source drift and makes the remaining work explicit.
 
 The 0.46.0 lifecycle checkpoint explicitly inventories `Window.CloseRequest`, preserves active file operations/decisions on repeated close, and adds File Close / Cmd+W through `app.close`. See [close evidence and remaining OS/runtime limits](../docs/native-close.md).
 

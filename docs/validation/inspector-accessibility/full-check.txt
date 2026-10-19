@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "requirements": 27,
+  "counts": {
+    "implemented": 17,
+    "partial": 10,
+    "pending": 0
+  },
+  "scope": "Requirement coverage validation only; does not establish product acceptance"
+}
+{"passed": true, "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-b22478c", "source": "b22478cf8cec8dda1ccdcd93d6ff6b62e2cc11de"}
+.....................................Starting owned
+Starting owned
+Starting owned
+..............
+----------------------------------------------------------------------
+Ran 51 tests in 1.153s
+
+OK
+?   	github.com/dshills/elab/cmd/elab-agent	[no test files]
+?   	github.com/dshills/elab/cmd/elab-conformance	[no test files]
+?   	github.com/dshills/elab/cmd/elab-ui-audit	[no test files]
+ok  	github.com/dshills/elab/internal/conformance	(cached)
+ok  	github.com/dshills/elab/internal/printspool	(cached)
+ok  	github.com/dshills/elab/internal/schematicpdf	(cached)
+--- FAIL: TestNativeInventoryMatchesReviewedLedger (0.11s)
+    audit_test.go:74: native sources/routes changed; review and regenerate the source inventory
+FAIL
+FAIL	github.com/dshills/elab/internal/uiaudit	0.507s
+ok  	github.com/dshills/elab/transport	(cached)
+ok  	github.com/dshills/elab/workbench	(cached)
+FAIL

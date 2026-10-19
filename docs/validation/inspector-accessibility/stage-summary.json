@@ -1,0 +1,82 @@
+{
+  "passed": true,
+  "stages": [
+    {
+      "stage": "baseline",
+      "resistance_ohm": 2000,
+      "draft_value": "2 k\u03a9",
+      "current_a": 0.001476723549138745,
+      "stale": false,
+      "document_dirty": false,
+      "run_id": 2,
+      "electrical_revision": 2,
+      "last_actor": "agent.socket"
+    },
+    {
+      "stage": "invalid-private",
+      "resistance_ohm": 2000,
+      "draft_value": "2 k\u03a9",
+      "current_a": 0.001476723549138745,
+      "stale": false,
+      "document_dirty": false,
+      "run_id": 2,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "refused",
+      "resistance_ohm": 2000,
+      "draft_value": "0",
+      "current_a": 0.001476723549138745,
+      "stale": false,
+      "document_dirty": false,
+      "run_id": 2,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "corrected-private",
+      "resistance_ohm": 2000,
+      "draft_value": "0",
+      "current_a": 0.001476723549138745,
+      "stale": false,
+      "document_dirty": false,
+      "run_id": 2,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "corrected",
+      "resistance_ohm": 2200,
+      "draft_value": "2.2 k\u03a9",
+      "current_a": 0.001344737452917332,
+      "stale": false,
+      "document_dirty": true,
+      "run_id": 3,
+      "electrical_revision": 3,
+      "last_actor": "user"
+    },
+    {
+      "stage": "allow-save",
+      "resistance_ohm": 2200,
+      "draft_value": "2.2 k\u03a9",
+      "current_a": 0.001344737452917332,
+      "stale": false,
+      "document_dirty": true,
+      "run_id": 3,
+      "electrical_revision": 3,
+      "last_actor": "user"
+    },
+    {
+      "stage": "finish",
+      "resistance_ohm": 2200,
+      "draft_value": "2.2 k\u03a9",
+      "current_a": 0.001344737452917332,
+      "stale": false,
+      "document_dirty": false,
+      "run_id": 3,
+      "electrical_revision": 3,
+      "last_actor": "agent.socket"
+    }
+  ]
+}

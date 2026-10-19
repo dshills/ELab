@@ -1,0 +1,14 @@
+{
+  "shared_helper_sha256": {
+    "scripts/first-version-parity.py": "936f8c79a1a1e7278c299973c7edc8f925f88b158cc474759005ba97e6723370",
+    "scripts/persistence-demo.py": "4f3893eec22b3e6173aa75138e7774a43727b0bfc908c4bb56e8616e0d45dae5",
+    "scripts/demo_session.py": "7faaaa2078bfefce1a775bb96364d444c0ebbbedb7007fb2a1709b34395181d7"
+  },
+  "shared_helpers_match_base_commit": true,
+  "production_ledger_sha256": "105beff4f7792e9f97c108413e094f043161c9b938e96d42e4c2fadf0636dd28",
+  "candidate_runtime_source_sha256": {
+    "desktop/view.go": "aa6b8e57994864273f319965add9e618fd83eeb80a040cdc327674a749d18db7",
+    "desktop/value_apply_smoke.go": "ef2bf2b9a7d87818aaf5876cd01d070fae09923f10294f6ea7f7d7e57629eca6"
+  },
+  "candidate_runtime_source_note": "view.go is the only production binding source changed; value_apply_smoke.go adds native qualification assertions"
+}

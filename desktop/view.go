@@ -39,6 +39,17 @@ func section(id, text string) ui.Node {
 func panel(id string, width float32, children ...ui.Node) ui.Node {
 	return ui.Node{ID: id, Kind: ui.Column, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: width}), MaxSize: ui.Some(ui.Size{Width: width}), Padding: ui.Some(ui.UniformInsets(16)), Gap: ui.Some(float32(12)), Background: ui.Some(paper)}, Children: children}
 }
+
+// Keep each inspector section in a stable accessibility group. A long flat
+// child list can lose its leaf controls in external AX traversal when request
+// guidance is inserted. Groups also give readers meaningful section boundaries;
+// their zero padding and existing gap preserve the rail's layout.
+func inspectorGroup(id, name string, children []ui.Node) []ui.Node {
+	if len(children) == 0 {
+		return nil
+	}
+	return []ui.Node{{ID: "inspector-group-" + id, Kind: ui.Column, Accessibility: ui.Accessibility{Name: name}, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(12))}, Children: children}}
+}
 func buttonStyle(n ui.Node, selected bool) ui.Node {
 	n.Style.Foreground = ui.Some(ink)
 	n.Style.Background = ui.Some(surface)
@@ -234,44 +245,45 @@ func (s *screen) view() ui.Node {
 		n.Style.Foreground = ui.Some(color.NRGBA{R: 168, G: 65, B: 68, A: 255})
 		inspector = append(inspector, n)
 	}
-	inspector = append(inspector, s.lcSamplingControls(state)...)
-	inspector = append(inspector, s.npnControls(state)...)
+	inspector = inspectorGroup("object", "Object inspector", inspector)
+	circuitControls := append(s.lcSamplingControls(state), s.npnControls(state)...)
 	if workbench.IsNetworkAnalysis(state.Analysis) {
-		inspector = append(inspector, section("mixed-title", "Circuit network"), quiet("mixed-help", "Bounded network simulation reports device currents, capacitor state and conservation residuals."))
+		circuitControls = append(circuitControls, section("mixed-title", "Circuit network"), quiet("mixed-help", "Bounded network simulation reports device currents, capacitor state and conservation residuals."))
 		if r := state.Mixed; r != nil {
 			for _, m := range r.MOSFETs {
-				inspector = append(inspector, quiet("mixed-"+m.ID, fmt.Sprintf("%s · %s\nVGS %.3f V · VDS %.3f V\nID %.4g mA · IG %.3g A", m.ID, m.State, m.VGS, m.VDS, m.DrainCurrent*1000, m.GateCurrent)))
+				circuitControls = append(circuitControls, quiet("mixed-"+m.ID, fmt.Sprintf("%s · %s\nVGS %.3f V · VDS %.3f V\nID %.4g mA · IG %.3g A", m.ID, m.State, m.VGS, m.VDS, m.DrainCurrent*1000, m.GateCurrent)))
 			}
 			for _, q := range r.Transistors {
-				inspector = append(inspector, quiet("mixed-"+q.TransistorID, fmt.Sprintf("%s · %s\nVBE %.3f V · VCE %.3f V", q.TransistorID, q.State, q.VBE, q.VCE)))
+				circuitControls = append(circuitControls, quiet("mixed-"+q.TransistorID, fmt.Sprintf("%s · %s\nVBE %.3f V · VCE %.3f V", q.TransistorID, q.State, q.VBE, q.VCE)))
 			}
 			for _, c := range r.Capacitors {
-				inspector = append(inspector, quiet("mixed-"+c.ID, fmt.Sprintf("%s %.3f V · %.3f µJ", c.ID, c.Voltage, c.Energy*1e6)))
+				circuitControls = append(circuitControls, quiet("mixed-"+c.ID, fmt.Sprintf("%s %.3f V · %.3f µJ", c.ID, c.Voltage, c.Energy*1e6)))
 			}
 		}
 	}
-	inspector = append(inspector, quiet("circuit-capacity", fmt.Sprintf("%d/%d simulated parts · %d/%d drawing objects\n%d/%d nodes (including ground)", state.SimulatedComponents, state.Limits.SimulatedComponents, len(state.Components), state.Limits.DrawingObjects, len(state.Nets), state.Limits.ElectricalNodes)), quiet("selection-navigation-help", "Canvas: Option + ← / →\nHome / End with Option: first / last"))
-	inspector = append(inspector, s.measurementInspector(state)...)
+	circuitControls = append(circuitControls, quiet("circuit-capacity", fmt.Sprintf("%d/%d simulated parts · %d/%d drawing objects\n%d/%d nodes (including ground)", state.SimulatedComponents, state.Limits.SimulatedComponents, len(state.Components), state.Limits.DrawingObjects, len(state.Nets), state.Limits.ElectricalNodes)), quiet("selection-navigation-help", "Canvas: Option + ← / →\nHome / End with Option: first / last"))
+	inspector = append(inspector, inspectorGroup("circuit", "Circuit information", circuitControls)...)
+	inspector = append(inspector, inspectorGroup("measurements", "Live measurements", s.measurementInspector(state))...)
 	if workbench.IsTransientAnalysis(state.Analysis) || state.Transient != nil {
-		inspector = append(inspector, s.probeInspector(state)...)
+		inspector = append(inspector, inspectorGroup("probes", "Scope probes", s.probeInspector(state))...)
 	}
-	inspector = append(inspector, s.pinnedReadingControls(state)...)
-	inspector = append(inspector, s.displayControls(state)...)
-	inspector = append(inspector, s.appearanceControls(state)...)
+	inspector = append(inspector, inspectorGroup("pinned", "Pinned readings", s.pinnedReadingControls(state))...)
+	inspector = append(inspector, inspectorGroup("display", "Circuit display", s.displayControls(state))...)
+	inspector = append(inspector, inspectorGroup("appearance", "Appearance", s.appearanceControls(state))...)
 	if !previewVisible(state) {
-		inspector = append(inspector, s.schematicPageControls(state)...)
+		inspector = append(inspector, inspectorGroup("output", "Schematic output", s.schematicPageControls(state))...)
 	}
-	inspector = append(inspector, s.diagnosticControls(state)...)
-	inspector = append(inspector, s.projectWorkControls(state)...)
-	inspector = append(inspector, s.inputWorkControls(state)...)
+	inspector = append(inspector, inspectorGroup("guidance", "Circuit guidance", s.diagnosticControls(state))...)
+	inspector = append(inspector, inspectorGroup("project-work", "File progress", s.projectWorkControls(state))...)
+	inspector = append(inspector, inspectorGroup("input-work", "Input progress", s.inputWorkControls(state))...)
 
 	if workbench.IsTransientAnalysis(state.Analysis) || state.Transient != nil {
-		inspector = append(inspector, s.transientInspector(state)...)
+		inspector = append(inspector, inspectorGroup("transient", "Live simulation", s.transientInspector(state))...)
 	}
-	inspector = append(inspector, s.recoveryInspector(state)...)
-	inspector = append(inspector, s.verificationInspector(state)...)
+	inspector = append(inspector, inspectorGroup("recovery", "Recovery", s.recoveryInspector(state))...)
+	inspector = append(inspector, inspectorGroup("verification", "Recorded verification", s.verificationInspector(state))...)
 	if !sweepVisible(state) {
-		inspector = append(inspector, s.sweepInspector(state)...)
+		inspector = append(inspector, inspectorGroup("sweep", "DC sweep", s.sweepInspector(state))...)
 	}
 	tools := ui.Node{ID: "tools", Kind: ui.Toolbar, Grow: true, Style: chromeStyle(), Children: []ui.Node{}}
 	for _, tool := range []string{"select", "wire", "pan"} {

@@ -19,34 +19,51 @@ import (
 // covers mounted inspector bindings; it does not certify an external reader or
 // explain why a separate CUA projection omits some of these controls.
 func nativeLEDInspectorAccessibilitySmoke(ctx context.Context, a *app.Application, s *screen) error {
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
-	var controls []cogent.AccessibilityElement
-	tick := time.NewTicker(20 * time.Millisecond)
-	defer tick.Stop()
-	for {
-		inspection, err := cogent.InspectAccessibility(ctx, "main")
-		if err != nil {
-			return err
-		}
-		controls = nil
-		for _, element := range inspection.Elements {
-			if element.DomainID == "value-entry" || element.DomainID == "apply-value" {
-				controls = append(controls, element)
+	waitControls := func(stage string) ([]cogent.AccessibilityElement, error) {
+		tick := time.NewTicker(20 * time.Millisecond)
+		defer tick.Stop()
+		for {
+			inspection, err := cogent.InspectAccessibility(ctx, "main")
+			if err != nil {
+				return nil, err
+			}
+			controls := []cogent.AccessibilityElement{}
+			for _, element := range inspection.Elements {
+				if element.DomainID == "value-entry" || element.DomainID == "apply-value" {
+					controls = append(controls, element)
+				}
+			}
+			ready := inspection.Reachable && inspection.NativeWindow && len(controls) == 2
+			for _, element := range controls {
+				ready = ready && element.Enabled && element.Frame[2] > 0 && element.Frame[3] > 0 && element.HitTestID == element.ID
+			}
+			if ready {
+				evidence, _ := json.Marshal(map[string]any{"event": "elab.led-inspector.accessibility.controls", "stage": stage, "native_elements": len(inspection.Elements), "controls": controls})
+				log.Print(string(evidence))
+				return controls, nil
+			}
+			select {
+			case <-ctx.Done():
+				return nil, fmt.Errorf("LED inspector native accessibility %s not ready: %w; controls=%+v", stage, ctx.Err(), controls)
+			case <-tick.C:
 			}
 		}
-		ready := inspection.Reachable && inspection.NativeWindow && len(controls) == 2
-		for _, element := range controls {
-			ready = ready && element.Enabled && element.Frame[2] > 0 && element.Frame[3] > 0 && element.HitTestID == element.ID
-		}
-		if ready {
-			break
-		}
-		select {
-		case <-ctx.Done():
-			return fmt.Errorf("LED inspector native accessibility not ready: %w; controls=%+v", ctx.Err(), controls)
-		case <-tick.C:
-		}
+	}
+	controls, err := waitControls("before-invalid-apply")
+	if err != nil {
+		return err
+	}
+	// Adding request guidance changes the inspector's retained child list. The
+	// value controls must remain published, measured and actionable so a reader
+	// can correct the refusal without falling back to pointer coordinates.
+	if err := nativeValueApplySmoke(ctx, a, s, "R1", "0", true); err != nil {
+		return fmt.Errorf("native inspector invalid Apply: %w", err)
+	}
+	refusedControls, err := waitControls("after-invalid-apply")
+	if err != nil {
+		return err
 	}
 	focus, err := waitNativeAccessibilityFocus(ctx, "value-entry", func(ctx context.Context) (cogent.AccessibilityInspection, error) {
 		return cogent.InspectAccessibility(ctx, "main")
@@ -73,7 +90,7 @@ func nativeLEDInspectorAccessibilitySmoke(ctx context.Context, a *app.Applicatio
 	if err != nil {
 		return err
 	}
-	evidence, _ := json.Marshal(map[string]any{"event": "elab.led-inspector.accessibility.smoke", "passed": true, "initial_native_controls": controls, "focus_requests": focus.Requests, "focus_admissions": focus.Admissions, "observed_focus_id": focus.FocusedID, "observed_focus_generation": focus.Generation, "resistance_ohm": state.Circuit.Resistance, "current_a": state.Result.Current, "scope": "in-process Cocoa selectors, not external AX or VoiceOver acceptance"})
+	evidence, _ := json.Marshal(map[string]any{"event": "elab.led-inspector.accessibility.smoke", "passed": true, "initial_native_controls": controls, "refused_native_controls": refusedControls, "invalid_value_preserved_state": true, "focus_requests": focus.Requests, "focus_admissions": focus.Admissions, "observed_focus_id": focus.FocusedID, "observed_focus_generation": focus.Generation, "resistance_ohm": state.Circuit.Resistance, "current_a": state.Result.Current, "scope": "in-process Cocoa selectors, not external AX or VoiceOver acceptance"})
 	log.Print(string(evidence))
 	return nil
 }

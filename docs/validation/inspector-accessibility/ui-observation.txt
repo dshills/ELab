@@ -1,0 +1,14 @@
+One original development test host, PID 60128, exec session 41310.
+Grouped candidate executable SHA 98590015ec818c145cd1968350b7f2b22c2bd7edba105513045b729582d78234.
+Public setup loads a saved LED fixture (2 kΩ, four wires including W5) and selects R1. A separate packaged /159 agent provides the reference. Endpoint observation only follows until explicit final Save and Close markers.
+
+1. CUA binds the exact owned custom bundle after its ready marker. Capture baseline.
+2. Fresh full AX -> Component value target. Click that index, Cmd+A, type 0. Capture invalid-private; observer verifies unchanged protected state.
+3. Fresh full AX -> Apply value target. Click once. Capture refused, write marker; observer verifies agent parity and unchanged protected state.
+4. Screenshot shows 0 and refusal while live prior current remains 1.477 mA. Full AX contains Component value, Apply value, selection and value heading inside Object inspector. A subsequent full AX observation also contains them; save refused-repeated.ax.txt.
+5. Use the freshly AX-identified Component value index, Cmd+A, type 2.2k. Capture corrected-private. Controls and prior refusal remain discoverable. Observer verifies unchanged protected state.
+6. Fresh full AX -> Apply value index. Click once. Capture corrected. Error clears, canonical 2.2 kΩ and fresh 1.345 mA appear. Observer verifies exact full result/scope/graph/history parity and .001344737452917332 A.
+7. Explicit allow-save marker permits public Save of Native corrected LED.elab and a separate agent reference file. Every field except view matches. Capture saved-copy after all-verified marker.
+8. Explicit finish marker permits public app.close. The same original exec session returns exit 0. Verify original PID absent, then restore the stopped disposable bundle's three preserved files. No post-close getApp/relaunch.
+
+No coordinate fallback was used in this replay. This is AX-identified CUA targeting and actual text input, not a VoiceOver session or a claim about the CUA implementation's underlying click mechanism. The original /159 failure remains preserved separately. Private transport credentials are excluded from evidence.
