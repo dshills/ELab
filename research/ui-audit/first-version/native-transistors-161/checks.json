@@ -1,0 +1,443 @@
+{
+  "passed": true,
+  "scope": "Completed NPN sequence from first attempt plus completed MOSFET retry; original first overall failure remains false.",
+  "npn": {
+    "npn-restart": {
+      "passed": true,
+      "sample_rows": 1,
+      "sample_time_s": 0,
+      "state": "saturation"
+    },
+    "npn-live-target": {
+      "time_s": 0.155,
+      "target_s": 0.155
+    },
+    "npn-paused": {
+      "passed": true,
+      "sample_rows": 177,
+      "sample_time_s": 0.17,
+      "state": "cutoff",
+      "exact_first_edge_both_sides": true
+    },
+    "npn-queued-low": {
+      "passed": true,
+      "sample_rows": 177,
+      "sample_time_s": 0.17,
+      "state": "cutoff"
+    },
+    "npn-step-low": {
+      "passed": true,
+      "sample_rows": 179,
+      "sample_time_s": 0.171,
+      "state": "cutoff"
+    },
+    "npn-queued-high": {
+      "passed": true,
+      "sample_rows": 179,
+      "sample_time_s": 0.171,
+      "state": "cutoff"
+    },
+    "npn-step-high": {
+      "passed": true,
+      "sample_rows": 181,
+      "sample_time_s": 0.17200000000000001,
+      "state": "saturation"
+    },
+    "npn-queued-auto": {
+      "passed": true,
+      "sample_rows": 181,
+      "sample_time_s": 0.17200000000000001,
+      "state": "saturation"
+    },
+    "npn-step-auto": {
+      "passed": true,
+      "sample_rows": 183,
+      "sample_time_s": 0.17300000000000001,
+      "state": "cutoff"
+    },
+    "npn-save": {
+      "passed": true,
+      "all_fields_except_view_match": true
+    }
+  },
+  "mosfet": {
+    "nmos-restart": {
+      "passed": true,
+      "kind": "nmos",
+      "source_v": 5,
+      "gate_source_v": 4.995004995004995,
+      "drain_current_a": 0.0029086192256459645,
+      "reference_current_a": 0.0029086192279679625,
+      "state": "triode"
+    },
+    "nmos-gate-probe": {
+      "passed": true,
+      "kind": "nmos",
+      "source_v": 5,
+      "gate_source_v": 4.995004995004995,
+      "drain_current_a": 0.0029086192256459645,
+      "reference_current_a": 0.0029086192279679625,
+      "state": "triode",
+      "trace": {
+        "passed": true,
+        "aligned_rows": 1,
+        "phases": [
+          5
+        ],
+        "per_row_values": 6,
+        "drain_voltage_bounded_by_2na_current_envelope": true,
+        "maximum_drain_voltage_point_reference_error_v": 2.3655964409563524e-09,
+        "strict_1mv_drain_voltage_reference_passed": true,
+        "scope": "Signed-current/gate/phase smoke with bounded load-line voltage. Strict 1 mV drain-voltage accuracy is reported separately, not required or claimed by the smoke."
+      }
+    },
+    "nmos-live-target": {
+      "time_s": 0.556,
+      "target_s": 0.555
+    },
+    "nmos-paused": {
+      "passed": true,
+      "aligned_rows": 512,
+      "phases": [
+        0,
+        5
+      ],
+      "per_row_values": 6,
+      "drain_voltage_bounded_by_2na_current_envelope": true,
+      "maximum_drain_voltage_point_reference_error_v": 0.0007647446081566756,
+      "strict_1mv_drain_voltage_reference_passed": true,
+      "scope": "Signed-current/gate/phase smoke with bounded load-line voltage. Strict 1 mV drain-voltage accuracy is reported separately, not required or claimed by the smoke.",
+      "exact_retained_edges_both_sides_s": [
+        0.2,
+        0.5
+      ]
+    },
+    "nmos-queued-low": {
+      "passed": true,
+      "kind": "nmos",
+      "source_v": 5,
+      "gate_source_v": 4.995004995004995,
+      "drain_current_a": 0.0029086192256457047,
+      "reference_current_a": 0.0029086192279679625,
+      "state": "triode",
+      "trace": {
+        "passed": true,
+        "aligned_rows": 512,
+        "phases": [
+          0,
+          5
+        ],
+        "per_row_values": 6,
+        "drain_voltage_bounded_by_2na_current_envelope": true,
+        "maximum_drain_voltage_point_reference_error_v": 0.0007647446081566756,
+        "strict_1mv_drain_voltage_reference_passed": true,
+        "scope": "Signed-current/gate/phase smoke with bounded load-line voltage. Strict 1 mV drain-voltage accuracy is reported separately, not required or claimed by the smoke."
+      }
+    },
+    "nmos-step-low": {
+      "passed": true,
+      "kind": "nmos",
+      "source_v": 0,
+      "gate_source_v": 0.0,
+      "drain_current_a": 1e-09,
+      "reference_current_a": 1e-09,
+      "state": "cutoff",
+      "trace": {
+        "passed": true,
+        "aligned_rows": 512,
+        "phases": [
+          0,
+          5
+        ],
+        "per_row_values": 6,
+        "drain_voltage_bounded_by_2na_current_envelope": true,
+        "maximum_drain_voltage_point_reference_error_v": 0.0007647446081664455,
+        "strict_1mv_drain_voltage_reference_passed": true,
+        "scope": "Signed-current/gate/phase smoke with bounded load-line voltage. Strict 1 mV drain-voltage accuracy is reported separately, not required or claimed by the smoke."
+      }
+    },
+    "nmos-queued-high": {
+      "passed": true,
+      "kind": "nmos",
+      "source_v": 0,
+      "gate_source_v": 0.0,
+      "drain_current_a": 1e-09,
+      "reference_current_a": 1e-09,
+      "state": "cutoff",
+      "trace": {
+        "passed": true,
+        "aligned_rows": 512,
+        "phases": [
+          0,
+          5
+        ],
+        "per_row_values": 6,
+        "drain_voltage_bounded_by_2na_current_envelope": true,
+        "maximum_drain_voltage_point_reference_error_v": 0.0007647446081664455,
+        "strict_1mv_drain_voltage_reference_passed": true,
+        "scope": "Signed-current/gate/phase smoke with bounded load-line voltage. Strict 1 mV drain-voltage accuracy is reported separately, not required or claimed by the smoke."
+      }
+    },
+    "nmos-step-high": {
+      "passed": true,
+      "kind": "nmos",
+      "source_v": 5,
+      "gate_source_v": 4.995004995004995,
+      "drain_current_a": 0.0029086192256457047,
+      "reference_current_a": 0.0029086192279679625,
+      "state": "triode",
+      "trace": {
+        "passed": true,
+        "aligned_rows": 512,
+        "phases": [
+          0,
+          5
+        ],
+        "per_row_values": 6,
+        "drain_voltage_bounded_by_2na_current_envelope": true,
+        "maximum_drain_voltage_point_reference_error_v": 0.0007647446081664455,
+        "strict_1mv_drain_voltage_reference_passed": true,
+        "scope": "Signed-current/gate/phase smoke with bounded load-line voltage. Strict 1 mV drain-voltage accuracy is reported separately, not required or claimed by the smoke."
+      }
+    },
+    "nmos-queued-auto": {
+      "passed": true,
+      "kind": "nmos",
+      "source_v": 5,
+      "gate_source_v": 4.995004995004995,
+      "drain_current_a": 0.0029086192256457047,
+      "reference_current_a": 0.0029086192279679625,
+      "state": "triode",
+      "trace": {
+        "passed": true,
+        "aligned_rows": 512,
+        "phases": [
+          0,
+          5
+        ],
+        "per_row_values": 6,
+        "drain_voltage_bounded_by_2na_current_envelope": true,
+        "maximum_drain_voltage_point_reference_error_v": 0.0007647446081664455,
+        "strict_1mv_drain_voltage_reference_passed": true,
+        "scope": "Signed-current/gate/phase smoke with bounded load-line voltage. Strict 1 mV drain-voltage accuracy is reported separately, not required or claimed by the smoke."
+      }
+    },
+    "nmos-step-auto": {
+      "passed": true,
+      "kind": "nmos",
+      "source_v": 5,
+      "gate_source_v": 4.995004995004995,
+      "drain_current_a": 0.0029086192256457047,
+      "reference_current_a": 0.0029086192279679625,
+      "state": "triode",
+      "trace": {
+        "passed": true,
+        "aligned_rows": 512,
+        "phases": [
+          0,
+          5
+        ],
+        "per_row_values": 6,
+        "drain_voltage_bounded_by_2na_current_envelope": true,
+        "maximum_drain_voltage_point_reference_error_v": 0.0007647446081664455,
+        "strict_1mv_drain_voltage_reference_passed": true,
+        "scope": "Signed-current/gate/phase smoke with bounded load-line voltage. Strict 1 mV drain-voltage accuracy is reported separately, not required or claimed by the smoke."
+      }
+    },
+    "nmos-save": {
+      "passed": true,
+      "all_fields_except_view_match": true
+    },
+    "pmos-restart": {
+      "passed": true,
+      "kind": "pmos",
+      "source_v": 5,
+      "gate_source_v": 0.0,
+      "drain_current_a": -1e-09,
+      "reference_current_a": -1e-09,
+      "state": "cutoff"
+    },
+    "pmos-gate-probe": {
+      "passed": true,
+      "kind": "pmos",
+      "source_v": 5,
+      "gate_source_v": 0.0,
+      "drain_current_a": -1e-09,
+      "reference_current_a": -1e-09,
+      "state": "cutoff",
+      "trace": {
+        "passed": true,
+        "aligned_rows": 1,
+        "phases": [
+          5
+        ],
+        "per_row_values": 6,
+        "drain_voltage_bounded_by_2na_current_envelope": true,
+        "maximum_drain_voltage_point_reference_error_v": 0.003217580256830388,
+        "strict_1mv_drain_voltage_reference_passed": false,
+        "scope": "Signed-current/gate/phase smoke with bounded load-line voltage. Strict 1 mV drain-voltage accuracy is reported separately, not required or claimed by the smoke."
+      }
+    },
+    "pmos-live-target": {
+      "time_s": 0.555,
+      "target_s": 0.555
+    },
+    "pmos-paused": {
+      "passed": true,
+      "aligned_rows": 512,
+      "phases": [
+        0,
+        5
+      ],
+      "per_row_values": 6,
+      "drain_voltage_bounded_by_2na_current_envelope": true,
+      "maximum_drain_voltage_point_reference_error_v": 0.003217580256830388,
+      "strict_1mv_drain_voltage_reference_passed": false,
+      "scope": "Signed-current/gate/phase smoke with bounded load-line voltage. Strict 1 mV drain-voltage accuracy is reported separately, not required or claimed by the smoke.",
+      "exact_retained_edges_both_sides_s": [
+        0.2,
+        0.5
+      ]
+    },
+    "pmos-queued-low": {
+      "passed": true,
+      "kind": "pmos",
+      "source_v": 5,
+      "gate_source_v": 0.0,
+      "drain_current_a": -1e-09,
+      "reference_current_a": -1e-09,
+      "state": "cutoff",
+      "trace": {
+        "passed": true,
+        "aligned_rows": 512,
+        "phases": [
+          0,
+          5
+        ],
+        "per_row_values": 6,
+        "drain_voltage_bounded_by_2na_current_envelope": true,
+        "maximum_drain_voltage_point_reference_error_v": 0.003217580256830388,
+        "strict_1mv_drain_voltage_reference_passed": false,
+        "scope": "Signed-current/gate/phase smoke with bounded load-line voltage. Strict 1 mV drain-voltage accuracy is reported separately, not required or claimed by the smoke."
+      }
+    },
+    "pmos-step-low": {
+      "passed": true,
+      "kind": "pmos",
+      "source_v": 0,
+      "gate_source_v": -4.995004995004995,
+      "drain_current_a": -0.002908619225645558,
+      "reference_current_a": -0.0029086192279679625,
+      "state": "triode",
+      "trace": {
+        "passed": true,
+        "aligned_rows": 512,
+        "phases": [
+          0,
+          5
+        ],
+        "per_row_values": 6,
+        "drain_voltage_bounded_by_2na_current_envelope": true,
+        "maximum_drain_voltage_point_reference_error_v": 0.003217580256830388,
+        "strict_1mv_drain_voltage_reference_passed": false,
+        "scope": "Signed-current/gate/phase smoke with bounded load-line voltage. Strict 1 mV drain-voltage accuracy is reported separately, not required or claimed by the smoke."
+      }
+    },
+    "pmos-queued-high": {
+      "passed": true,
+      "kind": "pmos",
+      "source_v": 0,
+      "gate_source_v": -4.995004995004995,
+      "drain_current_a": -0.002908619225645558,
+      "reference_current_a": -0.0029086192279679625,
+      "state": "triode",
+      "trace": {
+        "passed": true,
+        "aligned_rows": 512,
+        "phases": [
+          0,
+          5
+        ],
+        "per_row_values": 6,
+        "drain_voltage_bounded_by_2na_current_envelope": true,
+        "maximum_drain_voltage_point_reference_error_v": 0.003217580256830388,
+        "strict_1mv_drain_voltage_reference_passed": false,
+        "scope": "Signed-current/gate/phase smoke with bounded load-line voltage. Strict 1 mV drain-voltage accuracy is reported separately, not required or claimed by the smoke."
+      }
+    },
+    "pmos-step-high": {
+      "passed": true,
+      "kind": "pmos",
+      "source_v": 5,
+      "gate_source_v": 0.0,
+      "drain_current_a": -1e-09,
+      "reference_current_a": -1e-09,
+      "state": "cutoff",
+      "trace": {
+        "passed": true,
+        "aligned_rows": 512,
+        "phases": [
+          0,
+          5
+        ],
+        "per_row_values": 6,
+        "drain_voltage_bounded_by_2na_current_envelope": true,
+        "maximum_drain_voltage_point_reference_error_v": 0.003217580256830388,
+        "strict_1mv_drain_voltage_reference_passed": false,
+        "scope": "Signed-current/gate/phase smoke with bounded load-line voltage. Strict 1 mV drain-voltage accuracy is reported separately, not required or claimed by the smoke."
+      }
+    },
+    "pmos-queued-auto": {
+      "passed": true,
+      "kind": "pmos",
+      "source_v": 5,
+      "gate_source_v": 0.0,
+      "drain_current_a": -1e-09,
+      "reference_current_a": -1e-09,
+      "state": "cutoff",
+      "trace": {
+        "passed": true,
+        "aligned_rows": 512,
+        "phases": [
+          0,
+          5
+        ],
+        "per_row_values": 6,
+        "drain_voltage_bounded_by_2na_current_envelope": true,
+        "maximum_drain_voltage_point_reference_error_v": 0.003217580256830388,
+        "strict_1mv_drain_voltage_reference_passed": false,
+        "scope": "Signed-current/gate/phase smoke with bounded load-line voltage. Strict 1 mV drain-voltage accuracy is reported separately, not required or claimed by the smoke."
+      }
+    },
+    "pmos-step-auto": {
+      "passed": true,
+      "kind": "pmos",
+      "source_v": 5,
+      "gate_source_v": 0.0,
+      "drain_current_a": -1e-09,
+      "reference_current_a": -1e-09,
+      "state": "cutoff",
+      "trace": {
+        "passed": true,
+        "aligned_rows": 512,
+        "phases": [
+          0,
+          5
+        ],
+        "per_row_values": 6,
+        "drain_voltage_bounded_by_2na_current_envelope": true,
+        "maximum_drain_voltage_point_reference_error_v": 0.003217580256830388,
+        "strict_1mv_drain_voltage_reference_passed": false,
+        "scope": "Signed-current/gate/phase smoke with bounded load-line voltage. Strict 1 mV drain-voltage accuracy is reported separately, not required or claimed by the smoke."
+      }
+    },
+    "pmos-save": {
+      "passed": true,
+      "all_fields_except_view_match": true
+    }
+  },
+  "first_overall_passed": false,
+  "first_error": "AssertionError: ",
+  "strict_1mv_pmos_drain_voltage_qualified": false,
+  "precision_limit": "PMOS cutoff drain-node point reference differs by 3.218 mV in the retained native trace. Signed-current smoke uses the fixed existing 2 nA current bound and monotone LED/load-line voltage envelope; no strict 1 mV accuracy claim."
+}

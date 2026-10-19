@@ -1,0 +1,257 @@
+{
+  "example_id": "nmos",
+  "nmos_model": {
+    "id": "elab.generic-nmos.v1",
+    "threshold_v": 1.5,
+    "beta_a_per_v2": 0.1,
+    "lambda_per_v": 0.02,
+    "body_diode": {
+      "id": "elab.generic-silicon-diode.v1",
+      "is_a": 1e-9,
+      "n": 1.7,
+      "rs_ohm": 1,
+      "temperature_c": 27,
+      "limitations": "Generic silicon junction with Shockley forward/reverse leakage and finite series resistance; no reverse breakdown, capacitance, charge storage, thermal dynamics, ratings or physical part identity."
+    },
+    "limitations": "Generic enhancement NMOS with square-law channel, channel-length modulation and source-to-drain body diode. Body tied to source; zero gate current. No subthreshold conduction, body effect, gate/junction capacitance, charge storage, switching loss, breakdown, heating, ratings or named device identity. External capacitors provide circuit timing."
+  },
+  "recordings": {
+    "entries": [],
+    "selected_index": -1,
+    "viewing": false
+  },
+  "paused": true,
+  "scope_probes": {
+    "ids": [
+      "v:M1",
+      "v:M1.gate-source",
+      "i:M1.drain",
+      "i:D1",
+      "v:VIN.positive",
+      "i:M1.gate"
+    ]
+  },
+  "format": "elab.schematic",
+  "version": 4,
+  "graph": {
+    "components": [
+      {
+        "id": "VCC",
+        "kind": "dc-source",
+        "name": "DC source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -300,
+          "y": -120
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-dc.v1",
+        "rotation": 0
+      },
+      {
+        "id": "VIN",
+        "kind": "pulse-source",
+        "name": "Pulse source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -300,
+          "y": 60
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-square.v1",
+        "rotation": 0
+      },
+      {
+        "id": "RG",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": -140,
+          "y": 60
+        },
+        "value": 100,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "RPD",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 10,
+          "y": 190
+        },
+        "value": 100000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 90
+      },
+      {
+        "id": "RL",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -200
+        },
+        "value": 1000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "D1",
+        "kind": "led",
+        "name": "Red LED",
+        "terminals": [
+          "anode",
+          "cathode"
+        ],
+        "position": {
+          "x": 150,
+          "y": -80
+        },
+        "value": 0,
+        "model": "elab.generic-red-led.v1",
+        "rotation": 0
+      },
+      {
+        "id": "M1",
+        "kind": "nmos",
+        "name": "N-channel MOSFET",
+        "terminals": [
+          "gate",
+          "drain",
+          "source"
+        ],
+        "position": {
+          "x": 150,
+          "y": 60
+        },
+        "value": 0,
+        "model": "elab.generic-nmos.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND1",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 260,
+          "y": 220
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "VCC.positive",
+        "to": "RL.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "RL.2",
+        "to": "D1.anode",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "D1.cathode",
+        "to": "M1.drain",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "VIN.positive",
+        "to": "RG.1",
+        "connected": true
+      },
+      {
+        "id": "W5",
+        "from": "RG.2",
+        "to": "M1.gate",
+        "connected": true
+      },
+      {
+        "id": "W6",
+        "from": "M1.gate",
+        "to": "RPD.1",
+        "connected": true
+      },
+      {
+        "id": "W7",
+        "from": "RPD.2",
+        "to": "GND1.reference",
+        "connected": true
+      },
+      {
+        "id": "W8",
+        "from": "M1.source",
+        "to": "GND1.reference",
+        "connected": true
+      },
+      {
+        "id": "W9",
+        "from": "VCC.negative",
+        "to": "GND1.reference",
+        "connected": true
+      },
+      {
+        "id": "W10",
+        "from": "VIN.negative",
+        "to": "GND1.reference",
+        "connected": true
+      }
+    ]
+  },
+  "view": {
+    "center": {
+      "x": -192.25,
+      "y": -2.73655913980528
+    },
+    "zoom": 0.4903339191556005
+  },
+  "led_model": {
+    "id": "elab.generic-red-led.v1",
+    "is_a": 1e-20,
+    "n": 2,
+    "rs_ohm": 1,
+    "temperature_c": 27,
+    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+  },
+  "transient_settings": {
+    "step_s": 0.001,
+    "high_s": 0.2,
+    "low_s": 0.3,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.1
+  }
+}
