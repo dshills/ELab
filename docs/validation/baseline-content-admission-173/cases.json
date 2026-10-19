@@ -1,0 +1,2995 @@
+[
+  {
+    "name": "led2-01/first",
+    "should_admit": true,
+    "source_journal_sha256": "ae3eeea77808b5e4f3fd7502028f36437a1fe1f84b7b64a0db4feee6b5ac289f",
+    "source_frame_store_sha256": "3c296fc84799d24f735a039028fae39c3e62422c34f7d5cb6f288f51e7a52cc0",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-01",
+      "attempt_id": "offline-led2-01-first-20261019",
+      "frame_index": 1,
+      "png": "frame-6e5a6ff892c423b2c1bc2754e0fcd47980c74aa417021af250f64f9f54b8588b.png",
+      "png_sha256": "6e5a6ff892c423b2c1bc2754e0fcd47980c74aa417021af250f64f9f54b8588b",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "6e5a6ff892c423b2c1bc2754e0fcd47980c74aa417021af250f64f9f54b8588b",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-01",
+      "attempt_id": "offline-led2-01-first-20261019",
+      "frame_index": 1,
+      "png": "frame-6e5a6ff892c423b2c1bc2754e0fcd47980c74aa417021af250f64f9f54b8588b.png",
+      "png_sha256": "6e5a6ff892c423b2c1bc2754e0fcd47980c74aa417021af250f64f9f54b8588b",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-01/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "ae3eeea77808b5e4f3fd7502028f36437a1fe1f84b7b64a0db4feee6b5ac289f",
+    "source_frame_store_sha256": "3c296fc84799d24f735a039028fae39c3e62422c34f7d5cb6f288f51e7a52cc0",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-01",
+      "attempt_id": "offline-led2-01-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-3317ffb4e87cfe8fe916e57eaa4457ffcb4113fea635ee485630cdaca93a010d.png",
+      "png_sha256": "3317ffb4e87cfe8fe916e57eaa4457ffcb4113fea635ee485630cdaca93a010d",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "3317ffb4e87cfe8fe916e57eaa4457ffcb4113fea635ee485630cdaca93a010d",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-01",
+      "attempt_id": "offline-led2-01-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-3317ffb4e87cfe8fe916e57eaa4457ffcb4113fea635ee485630cdaca93a010d.png",
+      "png_sha256": "3317ffb4e87cfe8fe916e57eaa4457ffcb4113fea635ee485630cdaca93a010d",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-02/first",
+    "should_admit": true,
+    "source_journal_sha256": "14d729eb2f7eac49abe59039a1064ed81e2484a7e897eed27f911428e838fd27",
+    "source_frame_store_sha256": "d7388493a06585837f1eba65b0f338433ed438b4d477e29d4cc472594cff75c0",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-02",
+      "attempt_id": "offline-led2-02-first-20261019",
+      "frame_index": 1,
+      "png": "frame-18e0a6e5a354254cf188946711566faf7094d9341ec790569d0ac872fde6ebb6.png",
+      "png_sha256": "18e0a6e5a354254cf188946711566faf7094d9341ec790569d0ac872fde6ebb6",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "18e0a6e5a354254cf188946711566faf7094d9341ec790569d0ac872fde6ebb6",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-02",
+      "attempt_id": "offline-led2-02-first-20261019",
+      "frame_index": 1,
+      "png": "frame-18e0a6e5a354254cf188946711566faf7094d9341ec790569d0ac872fde6ebb6.png",
+      "png_sha256": "18e0a6e5a354254cf188946711566faf7094d9341ec790569d0ac872fde6ebb6",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-02/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "14d729eb2f7eac49abe59039a1064ed81e2484a7e897eed27f911428e838fd27",
+    "source_frame_store_sha256": "d7388493a06585837f1eba65b0f338433ed438b4d477e29d4cc472594cff75c0",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-02",
+      "attempt_id": "offline-led2-02-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-e6d12140f7a542aedb1aa6e1d946955eed152ce0a4b131d219a36b68da71d356.png",
+      "png_sha256": "e6d12140f7a542aedb1aa6e1d946955eed152ce0a4b131d219a36b68da71d356",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "e6d12140f7a542aedb1aa6e1d946955eed152ce0a4b131d219a36b68da71d356",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-02",
+      "attempt_id": "offline-led2-02-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-e6d12140f7a542aedb1aa6e1d946955eed152ce0a4b131d219a36b68da71d356.png",
+      "png_sha256": "e6d12140f7a542aedb1aa6e1d946955eed152ce0a4b131d219a36b68da71d356",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-03/first",
+    "should_admit": true,
+    "source_journal_sha256": "19013e5e5d1550348e94d47fe2ac3aaf9d79b633dedaf7e34e030875f518ddd1",
+    "source_frame_store_sha256": "be3b21ce63d0278c6a2a0c1e5ba713d43919a01b622baa75c1dc7c65b47c9bec",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-03",
+      "attempt_id": "offline-led2-03-first-20261019",
+      "frame_index": 1,
+      "png": "frame-60c2ab740c9a040803ade691becde81d93f13c5540549e2f4a128fef391c37b1.png",
+      "png_sha256": "60c2ab740c9a040803ade691becde81d93f13c5540549e2f4a128fef391c37b1",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "60c2ab740c9a040803ade691becde81d93f13c5540549e2f4a128fef391c37b1",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-03",
+      "attempt_id": "offline-led2-03-first-20261019",
+      "frame_index": 1,
+      "png": "frame-60c2ab740c9a040803ade691becde81d93f13c5540549e2f4a128fef391c37b1.png",
+      "png_sha256": "60c2ab740c9a040803ade691becde81d93f13c5540549e2f4a128fef391c37b1",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-03/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "19013e5e5d1550348e94d47fe2ac3aaf9d79b633dedaf7e34e030875f518ddd1",
+    "source_frame_store_sha256": "be3b21ce63d0278c6a2a0c1e5ba713d43919a01b622baa75c1dc7c65b47c9bec",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-03",
+      "attempt_id": "offline-led2-03-fresh-20261019",
+      "frame_index": 165,
+      "png": "frame-5c63b27293ab3a12125e4cab7f655837c18dbd793d3c642938b13de562956d19.png",
+      "png_sha256": "5c63b27293ab3a12125e4cab7f655837c18dbd793d3c642938b13de562956d19",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "5c63b27293ab3a12125e4cab7f655837c18dbd793d3c642938b13de562956d19",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-03",
+      "attempt_id": "offline-led2-03-fresh-20261019",
+      "frame_index": 165,
+      "png": "frame-5c63b27293ab3a12125e4cab7f655837c18dbd793d3c642938b13de562956d19.png",
+      "png_sha256": "5c63b27293ab3a12125e4cab7f655837c18dbd793d3c642938b13de562956d19",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-04/first",
+    "should_admit": true,
+    "source_journal_sha256": "71785c85d43e241ad3a6082a72c77e508ae30723fb8d464769b108453a915a05",
+    "source_frame_store_sha256": "0b4b847a20273ebfaf4d86701df04be028e69e93941e4efe89ea19342aa3ce3e",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-04",
+      "attempt_id": "offline-led2-04-first-20261019",
+      "frame_index": 1,
+      "png": "frame-c38dd1ae64665eec89718c4db32db1353a4de4709b8f6e929c9a0f41063e1279.png",
+      "png_sha256": "c38dd1ae64665eec89718c4db32db1353a4de4709b8f6e929c9a0f41063e1279",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "c38dd1ae64665eec89718c4db32db1353a4de4709b8f6e929c9a0f41063e1279",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-04",
+      "attempt_id": "offline-led2-04-first-20261019",
+      "frame_index": 1,
+      "png": "frame-c38dd1ae64665eec89718c4db32db1353a4de4709b8f6e929c9a0f41063e1279.png",
+      "png_sha256": "c38dd1ae64665eec89718c4db32db1353a4de4709b8f6e929c9a0f41063e1279",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-04/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "71785c85d43e241ad3a6082a72c77e508ae30723fb8d464769b108453a915a05",
+    "source_frame_store_sha256": "0b4b847a20273ebfaf4d86701df04be028e69e93941e4efe89ea19342aa3ce3e",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-04",
+      "attempt_id": "offline-led2-04-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-e662dbd81ed8152999dbac477e3fa54ff41f9e198964233dda336cbf9d761d83.png",
+      "png_sha256": "e662dbd81ed8152999dbac477e3fa54ff41f9e198964233dda336cbf9d761d83",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "e662dbd81ed8152999dbac477e3fa54ff41f9e198964233dda336cbf9d761d83",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-04",
+      "attempt_id": "offline-led2-04-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-e662dbd81ed8152999dbac477e3fa54ff41f9e198964233dda336cbf9d761d83.png",
+      "png_sha256": "e662dbd81ed8152999dbac477e3fa54ff41f9e198964233dda336cbf9d761d83",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-05/first",
+    "should_admit": true,
+    "source_journal_sha256": "ec896e1a1374febe4c1016253317c6c701e8f196b3729459b820da552e17b951",
+    "source_frame_store_sha256": "2098c5ec6cbb1e26a173da5955cbdc17f7bcc4c19a6444aabeb48a0a230a8d57",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-05",
+      "attempt_id": "offline-led2-05-first-20261019",
+      "frame_index": 1,
+      "png": "frame-472778f07cbf09913a6c566b10202c2b0fbd172461ea6a79d671e116796cb559.png",
+      "png_sha256": "472778f07cbf09913a6c566b10202c2b0fbd172461ea6a79d671e116796cb559",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "472778f07cbf09913a6c566b10202c2b0fbd172461ea6a79d671e116796cb559",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-05",
+      "attempt_id": "offline-led2-05-first-20261019",
+      "frame_index": 1,
+      "png": "frame-472778f07cbf09913a6c566b10202c2b0fbd172461ea6a79d671e116796cb559.png",
+      "png_sha256": "472778f07cbf09913a6c566b10202c2b0fbd172461ea6a79d671e116796cb559",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-05/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "ec896e1a1374febe4c1016253317c6c701e8f196b3729459b820da552e17b951",
+    "source_frame_store_sha256": "2098c5ec6cbb1e26a173da5955cbdc17f7bcc4c19a6444aabeb48a0a230a8d57",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-05",
+      "attempt_id": "offline-led2-05-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-8ac3b82cc0a2f41080977cdfca06f434a099ac78f6f18876ed93e8f4777770d1.png",
+      "png_sha256": "8ac3b82cc0a2f41080977cdfca06f434a099ac78f6f18876ed93e8f4777770d1",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "8ac3b82cc0a2f41080977cdfca06f434a099ac78f6f18876ed93e8f4777770d1",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-05",
+      "attempt_id": "offline-led2-05-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-8ac3b82cc0a2f41080977cdfca06f434a099ac78f6f18876ed93e8f4777770d1.png",
+      "png_sha256": "8ac3b82cc0a2f41080977cdfca06f434a099ac78f6f18876ed93e8f4777770d1",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-06/first",
+    "should_admit": true,
+    "source_journal_sha256": "54505c8d7b70a12d99a8b88d880c60d8e4cceebf6d80628e6e722fdbdca4577f",
+    "source_frame_store_sha256": "d05424bc8d42429e9b8ba73973045c9dfd4a9a20e390e63154ccc3f40b025160",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-06",
+      "attempt_id": "offline-led2-06-first-20261019",
+      "frame_index": 1,
+      "png": "frame-8803f3f011d9130c745671b7d98fec7e9848effafc9d6449047d05fc8e0a5dd2.png",
+      "png_sha256": "8803f3f011d9130c745671b7d98fec7e9848effafc9d6449047d05fc8e0a5dd2",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "8803f3f011d9130c745671b7d98fec7e9848effafc9d6449047d05fc8e0a5dd2",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-06",
+      "attempt_id": "offline-led2-06-first-20261019",
+      "frame_index": 1,
+      "png": "frame-8803f3f011d9130c745671b7d98fec7e9848effafc9d6449047d05fc8e0a5dd2.png",
+      "png_sha256": "8803f3f011d9130c745671b7d98fec7e9848effafc9d6449047d05fc8e0a5dd2",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-06/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "54505c8d7b70a12d99a8b88d880c60d8e4cceebf6d80628e6e722fdbdca4577f",
+    "source_frame_store_sha256": "d05424bc8d42429e9b8ba73973045c9dfd4a9a20e390e63154ccc3f40b025160",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-06",
+      "attempt_id": "offline-led2-06-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-705272d6f1d2f5baac20ce89fb9a039639aea0956a12658216df02d67c449954.png",
+      "png_sha256": "705272d6f1d2f5baac20ce89fb9a039639aea0956a12658216df02d67c449954",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "705272d6f1d2f5baac20ce89fb9a039639aea0956a12658216df02d67c449954",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-06",
+      "attempt_id": "offline-led2-06-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-705272d6f1d2f5baac20ce89fb9a039639aea0956a12658216df02d67c449954.png",
+      "png_sha256": "705272d6f1d2f5baac20ce89fb9a039639aea0956a12658216df02d67c449954",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-07/first",
+    "should_admit": true,
+    "source_journal_sha256": "fa59ae174c88293c84c53d982ee546eded3c53409bc0a6e5eafcc64c8278f5b2",
+    "source_frame_store_sha256": "be8b8aaa8de819807e2986deeb4fcf4e62c474f54fb07e0aac55b9eb5ec9f3e4",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-07",
+      "attempt_id": "offline-led2-07-first-20261019",
+      "frame_index": 1,
+      "png": "frame-ba0435f8bee501660c1c3348945b49ab58e0da8bd75855ff82b14137f6022abf.png",
+      "png_sha256": "ba0435f8bee501660c1c3348945b49ab58e0da8bd75855ff82b14137f6022abf",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "ba0435f8bee501660c1c3348945b49ab58e0da8bd75855ff82b14137f6022abf",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-07",
+      "attempt_id": "offline-led2-07-first-20261019",
+      "frame_index": 1,
+      "png": "frame-ba0435f8bee501660c1c3348945b49ab58e0da8bd75855ff82b14137f6022abf.png",
+      "png_sha256": "ba0435f8bee501660c1c3348945b49ab58e0da8bd75855ff82b14137f6022abf",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-07/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "fa59ae174c88293c84c53d982ee546eded3c53409bc0a6e5eafcc64c8278f5b2",
+    "source_frame_store_sha256": "be8b8aaa8de819807e2986deeb4fcf4e62c474f54fb07e0aac55b9eb5ec9f3e4",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-07",
+      "attempt_id": "offline-led2-07-fresh-20261019",
+      "frame_index": 166,
+      "png": "frame-2570b537c6d3fef83bc6875f6357e5555b063a8ab5525827c4f03b6f4b423e0e.png",
+      "png_sha256": "2570b537c6d3fef83bc6875f6357e5555b063a8ab5525827c4f03b6f4b423e0e",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "2570b537c6d3fef83bc6875f6357e5555b063a8ab5525827c4f03b6f4b423e0e",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-07",
+      "attempt_id": "offline-led2-07-fresh-20261019",
+      "frame_index": 166,
+      "png": "frame-2570b537c6d3fef83bc6875f6357e5555b063a8ab5525827c4f03b6f4b423e0e.png",
+      "png_sha256": "2570b537c6d3fef83bc6875f6357e5555b063a8ab5525827c4f03b6f4b423e0e",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-08/first",
+    "should_admit": true,
+    "source_journal_sha256": "5c5102d067f87b70510116facaa1e7ff6ec09027a68fb389c9e9ee1394ca27cc",
+    "source_frame_store_sha256": "97ab160e46184ea04af80c1ca25cfa61ed80b286eefb39043bcc2f6536e766c6",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-08",
+      "attempt_id": "offline-led2-08-first-20261019",
+      "frame_index": 1,
+      "png": "frame-fc2603fbfffb85395b889de236d4c40d58363292a36ef120f9a24a01d79fc0e6.png",
+      "png_sha256": "fc2603fbfffb85395b889de236d4c40d58363292a36ef120f9a24a01d79fc0e6",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "fc2603fbfffb85395b889de236d4c40d58363292a36ef120f9a24a01d79fc0e6",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-08",
+      "attempt_id": "offline-led2-08-first-20261019",
+      "frame_index": 1,
+      "png": "frame-fc2603fbfffb85395b889de236d4c40d58363292a36ef120f9a24a01d79fc0e6.png",
+      "png_sha256": "fc2603fbfffb85395b889de236d4c40d58363292a36ef120f9a24a01d79fc0e6",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-08/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "5c5102d067f87b70510116facaa1e7ff6ec09027a68fb389c9e9ee1394ca27cc",
+    "source_frame_store_sha256": "97ab160e46184ea04af80c1ca25cfa61ed80b286eefb39043bcc2f6536e766c6",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-08",
+      "attempt_id": "offline-led2-08-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-224984c4b41e43e11bac2535b861ed5fae56b0c7f959dd2693a370b329119a8a.png",
+      "png_sha256": "224984c4b41e43e11bac2535b861ed5fae56b0c7f959dd2693a370b329119a8a",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "224984c4b41e43e11bac2535b861ed5fae56b0c7f959dd2693a370b329119a8a",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-08",
+      "attempt_id": "offline-led2-08-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-224984c4b41e43e11bac2535b861ed5fae56b0c7f959dd2693a370b329119a8a.png",
+      "png_sha256": "224984c4b41e43e11bac2535b861ed5fae56b0c7f959dd2693a370b329119a8a",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-09/first",
+    "should_admit": true,
+    "source_journal_sha256": "e137ef086546624cd861c14c3c8fecd85640f3092dc428a31f25ba4ab5656fdd",
+    "source_frame_store_sha256": "c61effd03cd5c771284c765a2deaf3ec39dd802418b69d0d7f490bad9a2d65d9",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-09",
+      "attempt_id": "offline-led2-09-first-20261019",
+      "frame_index": 1,
+      "png": "frame-2fcf4b9ce5c679a7d27746af2e41f6bbb08b8314266cf6f63c3846ae7e86f43b.png",
+      "png_sha256": "2fcf4b9ce5c679a7d27746af2e41f6bbb08b8314266cf6f63c3846ae7e86f43b",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "2fcf4b9ce5c679a7d27746af2e41f6bbb08b8314266cf6f63c3846ae7e86f43b",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-09",
+      "attempt_id": "offline-led2-09-first-20261019",
+      "frame_index": 1,
+      "png": "frame-2fcf4b9ce5c679a7d27746af2e41f6bbb08b8314266cf6f63c3846ae7e86f43b.png",
+      "png_sha256": "2fcf4b9ce5c679a7d27746af2e41f6bbb08b8314266cf6f63c3846ae7e86f43b",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-09/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "e137ef086546624cd861c14c3c8fecd85640f3092dc428a31f25ba4ab5656fdd",
+    "source_frame_store_sha256": "c61effd03cd5c771284c765a2deaf3ec39dd802418b69d0d7f490bad9a2d65d9",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-09",
+      "attempt_id": "offline-led2-09-fresh-20261019",
+      "frame_index": 165,
+      "png": "frame-a0553367d3a91582a526fbf7f9896758024c81457622a3acf6c2ecd534ea686b.png",
+      "png_sha256": "a0553367d3a91582a526fbf7f9896758024c81457622a3acf6c2ecd534ea686b",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "a0553367d3a91582a526fbf7f9896758024c81457622a3acf6c2ecd534ea686b",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-09",
+      "attempt_id": "offline-led2-09-fresh-20261019",
+      "frame_index": 165,
+      "png": "frame-a0553367d3a91582a526fbf7f9896758024c81457622a3acf6c2ecd534ea686b.png",
+      "png_sha256": "a0553367d3a91582a526fbf7f9896758024c81457622a3acf6c2ecd534ea686b",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-10/first",
+    "should_admit": true,
+    "source_journal_sha256": "098b1aeb29ed715176d61210efb26826ca03c5482efe5dc72d06a77e7817d275",
+    "source_frame_store_sha256": "b0a98eb4adbd6cd5a7fcf788f675b3ea7437b48f209f2494fd28ecf643c4fd86",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-10",
+      "attempt_id": "offline-led2-10-first-20261019",
+      "frame_index": 1,
+      "png": "frame-9518bc92b5918de7b4e2fa4ee00e538352871095f71adafcde723c53640440cd.png",
+      "png_sha256": "9518bc92b5918de7b4e2fa4ee00e538352871095f71adafcde723c53640440cd",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "9518bc92b5918de7b4e2fa4ee00e538352871095f71adafcde723c53640440cd",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-10",
+      "attempt_id": "offline-led2-10-first-20261019",
+      "frame_index": 1,
+      "png": "frame-9518bc92b5918de7b4e2fa4ee00e538352871095f71adafcde723c53640440cd.png",
+      "png_sha256": "9518bc92b5918de7b4e2fa4ee00e538352871095f71adafcde723c53640440cd",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-10/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "098b1aeb29ed715176d61210efb26826ca03c5482efe5dc72d06a77e7817d275",
+    "source_frame_store_sha256": "b0a98eb4adbd6cd5a7fcf788f675b3ea7437b48f209f2494fd28ecf643c4fd86",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-10",
+      "attempt_id": "offline-led2-10-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-0f32686115ffb4000382e86e6184bccf99061a172e8572e676c5f8ff117de402.png",
+      "png_sha256": "0f32686115ffb4000382e86e6184bccf99061a172e8572e676c5f8ff117de402",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "0f32686115ffb4000382e86e6184bccf99061a172e8572e676c5f8ff117de402",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-10",
+      "attempt_id": "offline-led2-10-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-0f32686115ffb4000382e86e6184bccf99061a172e8572e676c5f8ff117de402.png",
+      "png_sha256": "0f32686115ffb4000382e86e6184bccf99061a172e8572e676c5f8ff117de402",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-11/first",
+    "should_admit": true,
+    "source_journal_sha256": "f8e4c62cc50d1622b11535f33fe954beec2bddf9808b74e4d818776351338f84",
+    "source_frame_store_sha256": "1d09bd3509934f70948ed664529adb319194644c57cc29d3527b0f458240463f",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-11",
+      "attempt_id": "offline-led2-11-first-20261019",
+      "frame_index": 1,
+      "png": "frame-699753b7e3d35bce0b4e6522ce0ceada059275c62e8e16e296d7ad9112692c17.png",
+      "png_sha256": "699753b7e3d35bce0b4e6522ce0ceada059275c62e8e16e296d7ad9112692c17",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "699753b7e3d35bce0b4e6522ce0ceada059275c62e8e16e296d7ad9112692c17",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-11",
+      "attempt_id": "offline-led2-11-first-20261019",
+      "frame_index": 1,
+      "png": "frame-699753b7e3d35bce0b4e6522ce0ceada059275c62e8e16e296d7ad9112692c17.png",
+      "png_sha256": "699753b7e3d35bce0b4e6522ce0ceada059275c62e8e16e296d7ad9112692c17",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-11/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "f8e4c62cc50d1622b11535f33fe954beec2bddf9808b74e4d818776351338f84",
+    "source_frame_store_sha256": "1d09bd3509934f70948ed664529adb319194644c57cc29d3527b0f458240463f",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-11",
+      "attempt_id": "offline-led2-11-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-0a742bc4408e74b9439007626c41dab8c8682242b29999d8ca8bcd7ef55c63fd.png",
+      "png_sha256": "0a742bc4408e74b9439007626c41dab8c8682242b29999d8ca8bcd7ef55c63fd",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "0a742bc4408e74b9439007626c41dab8c8682242b29999d8ca8bcd7ef55c63fd",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-11",
+      "attempt_id": "offline-led2-11-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-0a742bc4408e74b9439007626c41dab8c8682242b29999d8ca8bcd7ef55c63fd.png",
+      "png_sha256": "0a742bc4408e74b9439007626c41dab8c8682242b29999d8ca8bcd7ef55c63fd",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-12/first",
+    "should_admit": true,
+    "source_journal_sha256": "f67f50b233c1e175f8bd8c0682789532a8549bf244131e32a9788d82fd0d0e08",
+    "source_frame_store_sha256": "c2c675e3bd7d612a3f9d2e987acd0e24b881d742de46e5dbb2e646af98bca04b",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-12",
+      "attempt_id": "offline-led2-12-first-20261019",
+      "frame_index": 1,
+      "png": "frame-b9dd3e113e614167552f09941c004b290b9d7d64429e894099dcb364e75abb35.png",
+      "png_sha256": "b9dd3e113e614167552f09941c004b290b9d7d64429e894099dcb364e75abb35",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "b9dd3e113e614167552f09941c004b290b9d7d64429e894099dcb364e75abb35",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-12",
+      "attempt_id": "offline-led2-12-first-20261019",
+      "frame_index": 1,
+      "png": "frame-b9dd3e113e614167552f09941c004b290b9d7d64429e894099dcb364e75abb35.png",
+      "png_sha256": "b9dd3e113e614167552f09941c004b290b9d7d64429e894099dcb364e75abb35",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-12/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "f67f50b233c1e175f8bd8c0682789532a8549bf244131e32a9788d82fd0d0e08",
+    "source_frame_store_sha256": "c2c675e3bd7d612a3f9d2e987acd0e24b881d742de46e5dbb2e646af98bca04b",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-12",
+      "attempt_id": "offline-led2-12-fresh-20261019",
+      "frame_index": 165,
+      "png": "frame-824d6f54e416adb5b31fc8cca577c1321fbdd8e13e0d6715f1e573d1a5add8fa.png",
+      "png_sha256": "824d6f54e416adb5b31fc8cca577c1321fbdd8e13e0d6715f1e573d1a5add8fa",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "824d6f54e416adb5b31fc8cca577c1321fbdd8e13e0d6715f1e573d1a5add8fa",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-12",
+      "attempt_id": "offline-led2-12-fresh-20261019",
+      "frame_index": 165,
+      "png": "frame-824d6f54e416adb5b31fc8cca577c1321fbdd8e13e0d6715f1e573d1a5add8fa.png",
+      "png_sha256": "824d6f54e416adb5b31fc8cca577c1321fbdd8e13e0d6715f1e573d1a5add8fa",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-13/first",
+    "should_admit": true,
+    "source_journal_sha256": "2fd3224ed8d21a1ea3bf3e9dc5718efc8e26f04a873bacf4a4bc122d692356be",
+    "source_frame_store_sha256": "064031edef6fd867c5e819947335d408eefffee3e9f2e12988ce90d2c565dbe5",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-13",
+      "attempt_id": "offline-led2-13-first-20261019",
+      "frame_index": 1,
+      "png": "frame-1f125d29ca1e1c3d8a8f6a683d50087e500308d7dffc9269452cf038f0766293.png",
+      "png_sha256": "1f125d29ca1e1c3d8a8f6a683d50087e500308d7dffc9269452cf038f0766293",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "1f125d29ca1e1c3d8a8f6a683d50087e500308d7dffc9269452cf038f0766293",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-13",
+      "attempt_id": "offline-led2-13-first-20261019",
+      "frame_index": 1,
+      "png": "frame-1f125d29ca1e1c3d8a8f6a683d50087e500308d7dffc9269452cf038f0766293.png",
+      "png_sha256": "1f125d29ca1e1c3d8a8f6a683d50087e500308d7dffc9269452cf038f0766293",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-13/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "2fd3224ed8d21a1ea3bf3e9dc5718efc8e26f04a873bacf4a4bc122d692356be",
+    "source_frame_store_sha256": "064031edef6fd867c5e819947335d408eefffee3e9f2e12988ce90d2c565dbe5",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-13",
+      "attempt_id": "offline-led2-13-fresh-20261019",
+      "frame_index": 166,
+      "png": "frame-c9c7d5aa56627de64bd07063d7b9cdf3a7242cd4ef4353ae56fc0dd9b2232899.png",
+      "png_sha256": "c9c7d5aa56627de64bd07063d7b9cdf3a7242cd4ef4353ae56fc0dd9b2232899",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "c9c7d5aa56627de64bd07063d7b9cdf3a7242cd4ef4353ae56fc0dd9b2232899",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-13",
+      "attempt_id": "offline-led2-13-fresh-20261019",
+      "frame_index": 166,
+      "png": "frame-c9c7d5aa56627de64bd07063d7b9cdf3a7242cd4ef4353ae56fc0dd9b2232899.png",
+      "png_sha256": "c9c7d5aa56627de64bd07063d7b9cdf3a7242cd4ef4353ae56fc0dd9b2232899",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-14/first",
+    "should_admit": true,
+    "source_journal_sha256": "0cfb6f5adf343a26b082f36fb4d204891b576fb05eb64533f9c80a9649ab5347",
+    "source_frame_store_sha256": "6d47d98bd02f73985b6af293a5420428c45a71a67420e9eee6ecee45bd531905",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-14",
+      "attempt_id": "offline-led2-14-first-20261019",
+      "frame_index": 1,
+      "png": "frame-7027b286cb1e76b775784cda0e524860f4780323e6d10b9ae35995a7fc1823a1.png",
+      "png_sha256": "7027b286cb1e76b775784cda0e524860f4780323e6d10b9ae35995a7fc1823a1",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "7027b286cb1e76b775784cda0e524860f4780323e6d10b9ae35995a7fc1823a1",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-14",
+      "attempt_id": "offline-led2-14-first-20261019",
+      "frame_index": 1,
+      "png": "frame-7027b286cb1e76b775784cda0e524860f4780323e6d10b9ae35995a7fc1823a1.png",
+      "png_sha256": "7027b286cb1e76b775784cda0e524860f4780323e6d10b9ae35995a7fc1823a1",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-14/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "0cfb6f5adf343a26b082f36fb4d204891b576fb05eb64533f9c80a9649ab5347",
+    "source_frame_store_sha256": "6d47d98bd02f73985b6af293a5420428c45a71a67420e9eee6ecee45bd531905",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-14",
+      "attempt_id": "offline-led2-14-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-1354b80f3ea967a931be8a7673f276e5eb5850ee4c4d21a391880d37d291c300.png",
+      "png_sha256": "1354b80f3ea967a931be8a7673f276e5eb5850ee4c4d21a391880d37d291c300",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "1354b80f3ea967a931be8a7673f276e5eb5850ee4c4d21a391880d37d291c300",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-14",
+      "attempt_id": "offline-led2-14-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-1354b80f3ea967a931be8a7673f276e5eb5850ee4c4d21a391880d37d291c300.png",
+      "png_sha256": "1354b80f3ea967a931be8a7673f276e5eb5850ee4c4d21a391880d37d291c300",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-15/first",
+    "should_admit": true,
+    "source_journal_sha256": "f60f1472206fd52b88fbc4950ff2925fd715f9ec3bcdd22d0b91e2d0fe1be621",
+    "source_frame_store_sha256": "163aa81ceb46edf21fd669f8d545e1148585521991bf29385f37875aa595bbf5",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-15",
+      "attempt_id": "offline-led2-15-first-20261019",
+      "frame_index": 1,
+      "png": "frame-1b83fdf97dd1e50e5a39352639ec8384948e9020c77c4f7af29eeda29dfedf35.png",
+      "png_sha256": "1b83fdf97dd1e50e5a39352639ec8384948e9020c77c4f7af29eeda29dfedf35",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "1b83fdf97dd1e50e5a39352639ec8384948e9020c77c4f7af29eeda29dfedf35",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-15",
+      "attempt_id": "offline-led2-15-first-20261019",
+      "frame_index": 1,
+      "png": "frame-1b83fdf97dd1e50e5a39352639ec8384948e9020c77c4f7af29eeda29dfedf35.png",
+      "png_sha256": "1b83fdf97dd1e50e5a39352639ec8384948e9020c77c4f7af29eeda29dfedf35",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-15/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "f60f1472206fd52b88fbc4950ff2925fd715f9ec3bcdd22d0b91e2d0fe1be621",
+    "source_frame_store_sha256": "163aa81ceb46edf21fd669f8d545e1148585521991bf29385f37875aa595bbf5",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-15",
+      "attempt_id": "offline-led2-15-fresh-20261019",
+      "frame_index": 165,
+      "png": "frame-747082586a4cfd60f86dff6ddd33a449cd593a960c5ddf8bea53143f5c526d92.png",
+      "png_sha256": "747082586a4cfd60f86dff6ddd33a449cd593a960c5ddf8bea53143f5c526d92",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "747082586a4cfd60f86dff6ddd33a449cd593a960c5ddf8bea53143f5c526d92",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-15",
+      "attempt_id": "offline-led2-15-fresh-20261019",
+      "frame_index": 165,
+      "png": "frame-747082586a4cfd60f86dff6ddd33a449cd593a960c5ddf8bea53143f5c526d92.png",
+      "png_sha256": "747082586a4cfd60f86dff6ddd33a449cd593a960c5ddf8bea53143f5c526d92",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-16/first",
+    "should_admit": true,
+    "source_journal_sha256": "b0e9a8d1ee1180b51542e8f62e5eb224e6c8cfc9dd353cfd8d7ccc5982d1fec9",
+    "source_frame_store_sha256": "e1588f799aa1e4534ab7b2bc9f9326a0f0d69b64fe2b9b0236c417caca4780a4",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-16",
+      "attempt_id": "offline-led2-16-first-20261019",
+      "frame_index": 1,
+      "png": "frame-e9a7bd35fb4fe7f31f20ab1db57418f831190cd339b2a41d81afcccb8c61f291.png",
+      "png_sha256": "e9a7bd35fb4fe7f31f20ab1db57418f831190cd339b2a41d81afcccb8c61f291",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "e9a7bd35fb4fe7f31f20ab1db57418f831190cd339b2a41d81afcccb8c61f291",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-16",
+      "attempt_id": "offline-led2-16-first-20261019",
+      "frame_index": 1,
+      "png": "frame-e9a7bd35fb4fe7f31f20ab1db57418f831190cd339b2a41d81afcccb8c61f291.png",
+      "png_sha256": "e9a7bd35fb4fe7f31f20ab1db57418f831190cd339b2a41d81afcccb8c61f291",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-16/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "b0e9a8d1ee1180b51542e8f62e5eb224e6c8cfc9dd353cfd8d7ccc5982d1fec9",
+    "source_frame_store_sha256": "e1588f799aa1e4534ab7b2bc9f9326a0f0d69b64fe2b9b0236c417caca4780a4",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-16",
+      "attempt_id": "offline-led2-16-fresh-20261019",
+      "frame_index": 165,
+      "png": "frame-3f354f51ee7861d065b77ba8616cdd779ed9eccff922815b0d84a290e25811b6.png",
+      "png_sha256": "3f354f51ee7861d065b77ba8616cdd779ed9eccff922815b0d84a290e25811b6",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "3f354f51ee7861d065b77ba8616cdd779ed9eccff922815b0d84a290e25811b6",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-16",
+      "attempt_id": "offline-led2-16-fresh-20261019",
+      "frame_index": 165,
+      "png": "frame-3f354f51ee7861d065b77ba8616cdd779ed9eccff922815b0d84a290e25811b6.png",
+      "png_sha256": "3f354f51ee7861d065b77ba8616cdd779ed9eccff922815b0d84a290e25811b6",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-17/first",
+    "should_admit": true,
+    "source_journal_sha256": "59342d78d5c3d9a5c6a7cea4fc53e78e18597ee3490446e8ae03d3d95ce10c8b",
+    "source_frame_store_sha256": "08325afd7f8d662dc61f8ec5af925088426e81b8be0924e092247efd8da3c8d0",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-17",
+      "attempt_id": "offline-led2-17-first-20261019",
+      "frame_index": 1,
+      "png": "frame-2a801f87966d3b82971bff763795e08ad8a8a3f93c81be6ac0d8df9c58b15dd6.png",
+      "png_sha256": "2a801f87966d3b82971bff763795e08ad8a8a3f93c81be6ac0d8df9c58b15dd6",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "2a801f87966d3b82971bff763795e08ad8a8a3f93c81be6ac0d8df9c58b15dd6",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-17",
+      "attempt_id": "offline-led2-17-first-20261019",
+      "frame_index": 1,
+      "png": "frame-2a801f87966d3b82971bff763795e08ad8a8a3f93c81be6ac0d8df9c58b15dd6.png",
+      "png_sha256": "2a801f87966d3b82971bff763795e08ad8a8a3f93c81be6ac0d8df9c58b15dd6",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-17/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "59342d78d5c3d9a5c6a7cea4fc53e78e18597ee3490446e8ae03d3d95ce10c8b",
+    "source_frame_store_sha256": "08325afd7f8d662dc61f8ec5af925088426e81b8be0924e092247efd8da3c8d0",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-17",
+      "attempt_id": "offline-led2-17-fresh-20261019",
+      "frame_index": 166,
+      "png": "frame-96c1bea7f4fddae1d7076067bfed56f9a5674c6bca5c2c0c758bcb7a89bd935d.png",
+      "png_sha256": "96c1bea7f4fddae1d7076067bfed56f9a5674c6bca5c2c0c758bcb7a89bd935d",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "96c1bea7f4fddae1d7076067bfed56f9a5674c6bca5c2c0c758bcb7a89bd935d",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-17",
+      "attempt_id": "offline-led2-17-fresh-20261019",
+      "frame_index": 166,
+      "png": "frame-96c1bea7f4fddae1d7076067bfed56f9a5674c6bca5c2c0c758bcb7a89bd935d.png",
+      "png_sha256": "96c1bea7f4fddae1d7076067bfed56f9a5674c6bca5c2c0c758bcb7a89bd935d",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-18/first",
+    "should_admit": true,
+    "source_journal_sha256": "b0d417c271c8c4255c310b9282f4b679959ac82b8edc632e3f997d9a458265ef",
+    "source_frame_store_sha256": "04cd9aa396003630fcaf62541bf996daaa8a5915ce16bc11e421197e8a3be5a5",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-18",
+      "attempt_id": "offline-led2-18-first-20261019",
+      "frame_index": 1,
+      "png": "frame-c55ebaa504c87dbe68308ca9fdc7a78b1f2282c8d78877aa23f47eca72bed664.png",
+      "png_sha256": "c55ebaa504c87dbe68308ca9fdc7a78b1f2282c8d78877aa23f47eca72bed664",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "c55ebaa504c87dbe68308ca9fdc7a78b1f2282c8d78877aa23f47eca72bed664",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-18",
+      "attempt_id": "offline-led2-18-first-20261019",
+      "frame_index": 1,
+      "png": "frame-c55ebaa504c87dbe68308ca9fdc7a78b1f2282c8d78877aa23f47eca72bed664.png",
+      "png_sha256": "c55ebaa504c87dbe68308ca9fdc7a78b1f2282c8d78877aa23f47eca72bed664",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-18/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "b0d417c271c8c4255c310b9282f4b679959ac82b8edc632e3f997d9a458265ef",
+    "source_frame_store_sha256": "04cd9aa396003630fcaf62541bf996daaa8a5915ce16bc11e421197e8a3be5a5",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-18",
+      "attempt_id": "offline-led2-18-fresh-20261019",
+      "frame_index": 165,
+      "png": "frame-4a19957ca22e6db17accbbb1b8be0c6f24461c336d0975f966c7b971cdcabd01.png",
+      "png_sha256": "4a19957ca22e6db17accbbb1b8be0c6f24461c336d0975f966c7b971cdcabd01",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "4a19957ca22e6db17accbbb1b8be0c6f24461c336d0975f966c7b971cdcabd01",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-18",
+      "attempt_id": "offline-led2-18-fresh-20261019",
+      "frame_index": 165,
+      "png": "frame-4a19957ca22e6db17accbbb1b8be0c6f24461c336d0975f966c7b971cdcabd01.png",
+      "png_sha256": "4a19957ca22e6db17accbbb1b8be0c6f24461c336d0975f966c7b971cdcabd01",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-19/first",
+    "should_admit": true,
+    "source_journal_sha256": "71366114461f95e739414e5baf7f16584a54f149e960355ff57e5aa06d9c30f2",
+    "source_frame_store_sha256": "ac139c2ee340691743ad5ed66146be87a339c7a8512ec1e8f0c71fcad11e1979",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-19",
+      "attempt_id": "offline-led2-19-first-20261019",
+      "frame_index": 1,
+      "png": "frame-f9e5dc0c1570f252d3c908d580bf2c9d6ca33eff35fa9817a2792b3ce08c9f05.png",
+      "png_sha256": "f9e5dc0c1570f252d3c908d580bf2c9d6ca33eff35fa9817a2792b3ce08c9f05",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "f9e5dc0c1570f252d3c908d580bf2c9d6ca33eff35fa9817a2792b3ce08c9f05",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-19",
+      "attempt_id": "offline-led2-19-first-20261019",
+      "frame_index": 1,
+      "png": "frame-f9e5dc0c1570f252d3c908d580bf2c9d6ca33eff35fa9817a2792b3ce08c9f05.png",
+      "png_sha256": "f9e5dc0c1570f252d3c908d580bf2c9d6ca33eff35fa9817a2792b3ce08c9f05",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-19/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "71366114461f95e739414e5baf7f16584a54f149e960355ff57e5aa06d9c30f2",
+    "source_frame_store_sha256": "ac139c2ee340691743ad5ed66146be87a339c7a8512ec1e8f0c71fcad11e1979",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-19",
+      "attempt_id": "offline-led2-19-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-af1c08b09dc21c0888db5f4e7eef83486bcf41af82f9c59b35a8ceee48f4d739.png",
+      "png_sha256": "af1c08b09dc21c0888db5f4e7eef83486bcf41af82f9c59b35a8ceee48f4d739",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "af1c08b09dc21c0888db5f4e7eef83486bcf41af82f9c59b35a8ceee48f4d739",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-19",
+      "attempt_id": "offline-led2-19-fresh-20261019",
+      "frame_index": 164,
+      "png": "frame-af1c08b09dc21c0888db5f4e7eef83486bcf41af82f9c59b35a8ceee48f4d739.png",
+      "png_sha256": "af1c08b09dc21c0888db5f4e7eef83486bcf41af82f9c59b35a8ceee48f4d739",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-20/first",
+    "should_admit": true,
+    "source_journal_sha256": "700942586420b7d1786335c6244a0b39a53afc7711871adff85a4a7e0e80e89d",
+    "source_frame_store_sha256": "a54b13a0f77ab862f4bb5e17a0ef67cc888493845955ee56d5ecabcbfa66eb4c",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "led2-20",
+      "attempt_id": "offline-led2-20-first-20261019",
+      "frame_index": 1,
+      "png": "frame-615566c6f8c9b4615df800b0e672e41a25c9a027d57be66dee1019a9fa45803b.png",
+      "png_sha256": "615566c6f8c9b4615df800b0e672e41a25c9a027d57be66dee1019a9fa45803b",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "615566c6f8c9b4615df800b0e672e41a25c9a027d57be66dee1019a9fa45803b",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": true,
+            "rgb_sha256": "79f9beb92b84260dbf22280c9b8e64647ddcd213b0f3bd7ce5a777e77ef7481e"
+          },
+          {
+            "name": "current",
+            "matches": true,
+            "rgb_sha256": "f2956b525efb8e4deeb27517bface42a6dbb14806f00e5e7940a8bac53f8e896"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-20",
+      "attempt_id": "offline-led2-20-first-20261019",
+      "frame_index": 1,
+      "png": "frame-615566c6f8c9b4615df800b0e672e41a25c9a027d57be66dee1019a9fa45803b.png",
+      "png_sha256": "615566c6f8c9b4615df800b0e672e41a25c9a027d57be66dee1019a9fa45803b",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "led2-20/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "700942586420b7d1786335c6244a0b39a53afc7711871adff85a4a7e0e80e89d",
+    "source_frame_store_sha256": "a54b13a0f77ab862f4bb5e17a0ef67cc888493845955ee56d5ecabcbfa66eb4c",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "led2-20",
+      "attempt_id": "offline-led2-20-fresh-20261019",
+      "frame_index": 165,
+      "png": "frame-89c758faef9138bf8918b1782cbbc1dadf0891265cef687a50c22551e342cd6f.png",
+      "png_sha256": "89c758faef9138bf8918b1782cbbc1dadf0891265cef687a50c22551e342cd6f",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+        "image_sha256": "89c758faef9138bf8918b1782cbbc1dadf0891265cef687a50c22551e342cd6f",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "resistor",
+            "matches": false,
+            "rgb_sha256": "c4f2852ec20e1a0a8dc24798638883e40c58acbb4a8c7ac8f95f8516a0c3dd3b"
+          },
+          {
+            "name": "current",
+            "matches": false,
+            "rgb_sha256": "cdddf44bfd7d0c536fe31f1b5825adff8852a36026e95ef54369975e3bb0692d"
+          },
+          {
+            "name": "reading_status",
+            "matches": true,
+            "rgb_sha256": "ff0006348f970b7e3c45a694c648a15fde893507ccd36088e84192e2f88229d2"
+          },
+          {
+            "name": "header_status",
+            "matches": true,
+            "rgb_sha256": "b669cc39a03925b2cef7eee11c78bc143f6f2f0f038bf477b728d62750545ccd"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "led2-20",
+      "attempt_id": "offline-led2-20-fresh-20261019",
+      "frame_index": 165,
+      "png": "frame-89c758faef9138bf8918b1782cbbc1dadf0891265cef687a50c22551e342cd6f.png",
+      "png_sha256": "89c758faef9138bf8918b1782cbbc1dadf0891265cef687a50c22551e342cd6f",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "resistor",
+        "current",
+        "reading_status",
+        "header_status"
+      ]
+    }
+  },
+  {
+    "name": "rc2-01/first",
+    "should_admit": true,
+    "source_journal_sha256": "294b21fdf6a651dfd27554b8915ae35eebbb6f83403bc9f238422973464232af",
+    "source_frame_store_sha256": "7cb816a2473e17c217d0d774d96d2bd8e019c6b523a4d517c8414eb3e1ec6f92",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "rc2-01",
+      "attempt_id": "offline-rc2-01-first-20261019",
+      "frame_index": 1,
+      "png": "frame-d9227cee1a0efc97595968fad2587d1f3e2e5bcad375c3d3eeeaf4a6053d5282.png",
+      "png_sha256": "d9227cee1a0efc97595968fad2587d1f3e2e5bcad375c3d3eeeaf4a6053d5282",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "029aa6e15bd26051ed60f33455b75f2e5970fc03f90ce856b1fcbf17f80c1e62",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "029aa6e15bd26051ed60f33455b75f2e5970fc03f90ce856b1fcbf17f80c1e62",
+        "image_sha256": "d9227cee1a0efc97595968fad2587d1f3e2e5bcad375c3d3eeeaf4a6053d5282",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "accepted-capacitor",
+            "matches": true,
+            "rgb_sha256": "99bc96b7298ec4079dff68fdc7322d25784f3304c0717e59eefb6187c8a9e890"
+          },
+          {
+            "name": "fixture-title",
+            "matches": true,
+            "rgb_sha256": "502da3840abed263299340d639fae055c163ac2fbd4842569874f765d795dc5d"
+          },
+          {
+            "name": "live-header",
+            "matches": true,
+            "rgb_sha256": "11a232231a27c697f7f518717003ed34e8f67bd081e16b498a2a68f9ef9500e0"
+          },
+          {
+            "name": "scope-caption",
+            "matches": true,
+            "rgb_sha256": "e7c2ed8627e00b25d8fefc457820f554e70de9d08c080cf4dae056f94b1695c6"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "rc2-01",
+      "attempt_id": "offline-rc2-01-first-20261019",
+      "frame_index": 1,
+      "png": "frame-d9227cee1a0efc97595968fad2587d1f3e2e5bcad375c3d3eeeaf4a6053d5282.png",
+      "png_sha256": "d9227cee1a0efc97595968fad2587d1f3e2e5bcad375c3d3eeeaf4a6053d5282",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "029aa6e15bd26051ed60f33455b75f2e5970fc03f90ce856b1fcbf17f80c1e62",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "accepted-capacitor",
+        "fixture-title",
+        "live-header",
+        "scope-caption"
+      ]
+    }
+  },
+  {
+    "name": "rc2-01/fresh",
+    "should_admit": false,
+    "source_journal_sha256": "294b21fdf6a651dfd27554b8915ae35eebbb6f83403bc9f238422973464232af",
+    "source_frame_store_sha256": "7cb816a2473e17c217d0d774d96d2bd8e019c6b523a4d517c8414eb3e1ec6f92",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "rc2-01",
+      "attempt_id": "offline-rc2-01-fresh-20261019",
+      "frame_index": 166,
+      "png": "frame-09c79b1f541e645488511898e62afed5fa010feae33999207bc6295d33747544.png",
+      "png_sha256": "09c79b1f541e645488511898e62afed5fa010feae33999207bc6295d33747544",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "029aa6e15bd26051ed60f33455b75f2e5970fc03f90ce856b1fcbf17f80c1e62",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "029aa6e15bd26051ed60f33455b75f2e5970fc03f90ce856b1fcbf17f80c1e62",
+        "image_sha256": "09c79b1f541e645488511898e62afed5fa010feae33999207bc6295d33747544",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "accepted-capacitor",
+            "matches": false,
+            "rgb_sha256": "2d430d207d92ad7fd29ffb79da86090a4372eecacf54daae4ff8997057198fa4"
+          },
+          {
+            "name": "fixture-title",
+            "matches": true,
+            "rgb_sha256": "502da3840abed263299340d639fae055c163ac2fbd4842569874f765d795dc5d"
+          },
+          {
+            "name": "live-header",
+            "matches": true,
+            "rgb_sha256": "11a232231a27c697f7f518717003ed34e8f67bd081e16b498a2a68f9ef9500e0"
+          },
+          {
+            "name": "scope-caption",
+            "matches": true,
+            "rgb_sha256": "e7c2ed8627e00b25d8fefc457820f554e70de9d08c080cf4dae056f94b1695c6"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "rc2-01",
+      "attempt_id": "offline-rc2-01-fresh-20261019",
+      "frame_index": 166,
+      "png": "frame-09c79b1f541e645488511898e62afed5fa010feae33999207bc6295d33747544.png",
+      "png_sha256": "09c79b1f541e645488511898e62afed5fa010feae33999207bc6295d33747544",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "029aa6e15bd26051ed60f33455b75f2e5970fc03f90ce856b1fcbf17f80c1e62",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "accepted-capacitor",
+        "fixture-title",
+        "live-header",
+        "scope-caption"
+      ]
+    }
+  },
+  {
+    "name": "rc2-02/first",
+    "should_admit": false,
+    "source_journal_sha256": "41bbb88b9dabfade47a51476769bef91bfb082925a721eaf1a088750d434cba6",
+    "source_frame_store_sha256": "4b3bb2eccf4ecf49467e06c664857045704085e0ee83a19facd2c2576c61d3e3",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "rc2-02",
+      "attempt_id": "offline-rc2-02-first-20261019",
+      "frame_index": 1,
+      "png": "frame-a36b8a5a3045d2e77f1f1bf9f78dfb217cb9ceab29ffba3750c290b7ee5f4773.png",
+      "png_sha256": "a36b8a5a3045d2e77f1f1bf9f78dfb217cb9ceab29ffba3750c290b7ee5f4773",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "029aa6e15bd26051ed60f33455b75f2e5970fc03f90ce856b1fcbf17f80c1e62",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "029aa6e15bd26051ed60f33455b75f2e5970fc03f90ce856b1fcbf17f80c1e62",
+        "image_sha256": "a36b8a5a3045d2e77f1f1bf9f78dfb217cb9ceab29ffba3750c290b7ee5f4773",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "accepted-capacitor",
+            "matches": false,
+            "rgb_sha256": "cc6419eaa42d28b1da324825ced4041041f4f6c6ef51f9f145f8892953f8ff41"
+          },
+          {
+            "name": "fixture-title",
+            "matches": false,
+            "rgb_sha256": "7b57f5f2705cc8f37d0095e4c958287b727a24327b1c756b70b5ffc2dc724af1"
+          },
+          {
+            "name": "live-header",
+            "matches": false,
+            "rgb_sha256": "09910a710f1f6e85ce9ba90f8e1da1b13a822559c4b0cca0779fdaca10d0167c"
+          },
+          {
+            "name": "scope-caption",
+            "matches": false,
+            "rgb_sha256": "2e87d842c1ac1bf3cd3a3c7c970f21b0a71364232c87a8eae346addf42ca2d74"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "rc2-02",
+      "attempt_id": "offline-rc2-02-first-20261019",
+      "frame_index": 1,
+      "png": "frame-a36b8a5a3045d2e77f1f1bf9f78dfb217cb9ceab29ffba3750c290b7ee5f4773.png",
+      "png_sha256": "a36b8a5a3045d2e77f1f1bf9f78dfb217cb9ceab29ffba3750c290b7ee5f4773",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "029aa6e15bd26051ed60f33455b75f2e5970fc03f90ce856b1fcbf17f80c1e62",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "accepted-capacitor",
+        "fixture-title",
+        "live-header",
+        "scope-caption"
+      ]
+    }
+  },
+  {
+    "name": "rc2-03/first",
+    "should_admit": true,
+    "source_journal_sha256": "6962bfab714b5603bb9f25534e9c1e6289e0fada6d7459fcd01cc8ce66002b0b",
+    "source_frame_store_sha256": "fdcea7bc4a86f3594a12a914d5c83f3e590f699c372fa82a4845a19542d190e1",
+    "receipt": {
+      "version": 1,
+      "admitted": true,
+      "trial_id": "rc2-03",
+      "attempt_id": "offline-rc2-03-first-20261019",
+      "frame_index": 1,
+      "png": "frame-4b8fb4ad66cd44e22fa49bc9cc291d8ecb138ba60a425c13611f38f76c0e9adb.png",
+      "png_sha256": "4b8fb4ad66cd44e22fa49bc9cc291d8ecb138ba60a425c13611f38f76c0e9adb",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "029aa6e15bd26051ed60f33455b75f2e5970fc03f90ce856b1fcbf17f80c1e62",
+      "tool_exit_code": 0,
+      "result": {
+        "version": 1,
+        "admitted": true,
+        "code": "admitted",
+        "profile_sha256": "029aa6e15bd26051ed60f33455b75f2e5970fc03f90ce856b1fcbf17f80c1e62",
+        "image_sha256": "4b8fb4ad66cd44e22fa49bc9cc291d8ecb138ba60a425c13611f38f76c0e9adb",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "accepted-capacitor",
+            "matches": true,
+            "rgb_sha256": "99bc96b7298ec4079dff68fdc7322d25784f3304c0717e59eefb6187c8a9e890"
+          },
+          {
+            "name": "fixture-title",
+            "matches": true,
+            "rgb_sha256": "502da3840abed263299340d639fae055c163ac2fbd4842569874f765d795dc5d"
+          },
+          {
+            "name": "live-header",
+            "matches": true,
+            "rgb_sha256": "11a232231a27c697f7f518717003ed34e8f67bd081e16b498a2a68f9ef9500e0"
+          },
+          {
+            "name": "scope-caption",
+            "matches": true,
+            "rgb_sha256": "e7c2ed8627e00b25d8fefc457820f554e70de9d08c080cf4dae056f94b1695c6"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "rc2-03",
+      "attempt_id": "offline-rc2-03-first-20261019",
+      "frame_index": 1,
+      "png": "frame-4b8fb4ad66cd44e22fa49bc9cc291d8ecb138ba60a425c13611f38f76c0e9adb.png",
+      "png_sha256": "4b8fb4ad66cd44e22fa49bc9cc291d8ecb138ba60a425c13611f38f76c0e9adb",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "029aa6e15bd26051ed60f33455b75f2e5970fc03f90ce856b1fcbf17f80c1e62",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "accepted-capacitor",
+        "fixture-title",
+        "live-header",
+        "scope-caption"
+      ]
+    }
+  },
+  {
+    "name": "rc2-04/first",
+    "should_admit": false,
+    "source_journal_sha256": "3c96dbab458a23c68d0f36841643ff88f0df4607a378fc3f595056b99e9333e9",
+    "source_frame_store_sha256": "db218607cecae88a4c93b5e6ed8957de3d2443296a2ada2fc7d6f33fc0fec5fc",
+    "receipt": {
+      "version": 1,
+      "admitted": false,
+      "trial_id": "rc2-04",
+      "attempt_id": "offline-rc2-04-first-20261019",
+      "frame_index": 1,
+      "png": "frame-9f52eafbb39f0e41afbce7e56c2ca316174bcbd8083e9363837e93be7bfbe51a.png",
+      "png_sha256": "9f52eafbb39f0e41afbce7e56c2ca316174bcbd8083e9363837e93be7bfbe51a",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "029aa6e15bd26051ed60f33455b75f2e5970fc03f90ce856b1fcbf17f80c1e62",
+      "tool_exit_code": 2,
+      "result": {
+        "version": 1,
+        "admitted": false,
+        "code": "region-mismatch",
+        "message": "baseline does not match the declared ELab regions",
+        "profile_sha256": "029aa6e15bd26051ed60f33455b75f2e5970fc03f90ce856b1fcbf17f80c1e62",
+        "image_sha256": "9f52eafbb39f0e41afbce7e56c2ca316174bcbd8083e9363837e93be7bfbe51a",
+        "width": 1053,
+        "height": 802,
+        "regions": [
+          {
+            "name": "accepted-capacitor",
+            "matches": false,
+            "rgb_sha256": "e8299e1be77268d5a8fea3dc696a406eb96ea36a7c718ac7e75f3091b621c11b"
+          },
+          {
+            "name": "fixture-title",
+            "matches": false,
+            "rgb_sha256": "e2832dcedb7c664861e09ce9b6ae981f6bcd7354749e9496c5ec469d011acce5"
+          },
+          {
+            "name": "live-header",
+            "matches": false,
+            "rgb_sha256": "67c09a2b01b63e8c1942c5c7fcc92e1c78da08de434c4a8a8b0c2427cf56258e"
+          },
+          {
+            "name": "scope-caption",
+            "matches": false,
+            "rgb_sha256": "f9ff5aff24e4d372268c73eafc32ac330b0a0c1e0698ad8c0db670896af633b3"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "trial_id": "rc2-04",
+      "attempt_id": "offline-rc2-04-first-20261019",
+      "frame_index": 1,
+      "png": "frame-9f52eafbb39f0e41afbce7e56c2ca316174bcbd8083e9363837e93be7bfbe51a.png",
+      "png_sha256": "9f52eafbb39f0e41afbce7e56c2ca316174bcbd8083e9363837e93be7bfbe51a",
+      "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+      "profile_sha256": "029aa6e15bd26051ed60f33455b75f2e5970fc03f90ce856b1fcbf17f80c1e62",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        "accepted-capacitor",
+        "fixture-title",
+        "live-header",
+        "scope-caption"
+      ]
+    }
+  }
+]

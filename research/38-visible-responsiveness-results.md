@@ -167,8 +167,16 @@ never silently regenerated. All other-app images stay outside Git.
 [Follow-up proof and replay](../docs/validation/latency-followup-173/README.md).
 
 Keep native RC work halted while other windows are opening over the crop.
-The next independent fix is baseline-content admission in the controller before
-marker/input: a complete frame alone does not prove that it contains ELab.
-Validate that guard offline against the preserved valid and overlapping images;
-keep the recorder, thresholds and all-frame acceptance rule unchanged. No new
+The [offline baseline-content guard](../docs/validation/baseline-content-admission-173/README.md)
+now passes 45 saved-image cases with independent Go/Pillow RGB agreement:
+22 valid starts admitted, two covered starts refused and 21 already-edited
+states refused as baselines. Invalid receipts enter neither fake marker nor
+fake Apply callback. Controller/producer tests and the new Go tool's
+format/race/vet/static checks pass. No native input or capture occurs.
+
+This is prepared worker/controller tooling; a preserved producer revision and
+declaration are required before any future native use. `rc2-03` demonstrates
+that later coverage remains outside the initial check and still invalidates
+the recording. The frozen recorder, thresholds, all-frame rules and existing
+trials stay unchanged; there is no new observation or PRD gate pass. No new
 automatic RC retry cohort is authorized by this follow-up declaration.

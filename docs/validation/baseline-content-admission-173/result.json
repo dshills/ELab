@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "cases": 45,
+  "independent_png_decoder": "Pillow",
+  "go_png_decoder": "image/png",
+  "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+  "first_admitted": 22,
+  "first_refused": 2,
+  "fresh_state_refused": 21,
+  "late_occlusion_not_detected_by_initial_guard": [
+    "rc2-03"
+  ],
+  "actual_capture": false,
+  "actual_input": false,
+  "overall_prd_performance_pass": null,
+  "source_sha256": {
+    "tools/baseline-admission/replay_controller.mjs": "c1890bbb068eae8dc39b867f0c1fe3b9c3ad0c53c931a3b616fe7bbe17c1bc46",
+    "tools/baseline-admission/admission_test.go": "eeaec96b7e60c22cb06ef4a7b781faa7cd947a028d79a5130d345df006571385",
+    "tools/baseline-admission/controller.mjs": "0dbdb5a79eabe144b5df13b395f49fcfd4b764380074c0213c0e822be322a287",
+    "tools/baseline-admission/README.md": "25100085a2b3eef481074a09571adb32ba5f735ba2384025ed2a4ca21c69af31",
+    "tools/baseline-admission/replay.py": "4d31b04c40ae76bf2b8995f25d029e67e01bc6d9aa2b0899a9198d864f57d54b",
+    "tools/baseline-admission/controller.test.mjs": "fd14fd902d0147a0038163826618427fcdc606429b05da7422d565bba454fcd4",
+    "tools/baseline-admission/test_prepare.py": "094da09dfd61d187ec2397e299716ba34abe97e8d3e55dbd96cd8a29166f2a10",
+    "tools/baseline-admission/main.go": "a1dd6420c4b6cccef94f9137c17e352536223c1ee7f79e1378bd32d0bec14922",
+    "tools/baseline-admission/prepare.py": "ca682b0aeeed15dc8ba418ce3c2d8b2b76a32cd24b71f72c6b6281429531e53a",
+    "tools/baseline-admission/admission.go": "321a48d47bb444c6322aea8fb4605e84ac07514bae0d1db6b2e06e07d139d868",
+    "tools/baseline-admission/profiles/led.json": "f197e3482a708646f31a3492338bbbc6a876f2ac6ceef01db3bb4319ddb8b4f5",
+    "tools/baseline-admission/profiles/rc.json": "029aa6e15bd26051ed60f33455b75f2e5970fc03f90ce856b1fcbf17f80c1e62"
+  }
+}

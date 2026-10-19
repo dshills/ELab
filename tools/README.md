@@ -7,3 +7,8 @@ Staticcheck 0.8.1 uses x/tools 0.50.0 here because the pilot Go 1.27.2 compiler 
 Run heavy analyzers before, rather than concurrently with, the simulator's race-tested numerical suite. This keeps compiler/analyzer contention from consuming the mixed engine's explicit 100 ms per-output work budget. Such an exceeded budget remains a reported solver failure, never a fabricated result.
 
 The separate [cropped display probe](display-frame-probe/README.md) implements the owner-authorized calibration method with an explicit fixed owned-window crop. Its offline checks do not capture UI or qualify latency. The older [window probe](frame-probe/README.md) remains frozen for comparison.
+
+[Baseline admission](baseline-admission/README.md) analyzes an existing recorder
+PNG before a prospective controller marker/input operation. Its pinned image
+profiles and receipt gate have offline checks only; they do not capture UI,
+establish continued visibility or qualify a native trial.
