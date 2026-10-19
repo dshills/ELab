@@ -1,5 +1,7 @@
 # ELab first-version review · 0.146.0 /163
 
+**October 19 update:** /163 has a reproduced native timing-direction handoff defect: choosing a direction can discard a privately typed threshold. [Source repair and evidence](../docs/validation/recorded-timing-direction/README.md) pass source checks and development native smoke; a clean replacement and fixed native-input replay remain pending. Preserve /163 for history and do not promote it.
+
 The updated private owner-review alpha is in the [review folder](../build/ELab-0.146.0-163-review), with [ELab.app](../build/ELab-0.146.0-163-review/ELab.app), matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required. All 23 earlier qualified review folders (0.123.0 /140 through 0.145.0 /162), the original unqualified /147 candidate and canonical 0.105.0 /120 app are preserved. Owner walkthrough remains “Not tried yet.”
 
 Save your work and quit an earlier review before opening this replacement. Version 0.146 repairs recorded threshold paging: a typed valid threshold and Next arrivals now finish together; invalid text keeps its feedback until corrected. Paging settles the four related fields and continues only their accepted responses for the same recording/document. Agent edits, recording switches and unrelated actions remain guarded. The existing public commands, numerical models, saved format and SDK `b22478c` are unchanged. Preserved /162 has the two timing-field issues.

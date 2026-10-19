@@ -1,0 +1,80 @@
+{
+  "passed": true,
+  "changed_sources": {
+    "desktop/recorded_timing_actions.go": {
+      "before": "d744d38c6ce664fd7140986197c6e50c4b4b05110eeee50939026b29e20b320a",
+      "after": "becfcf1adaedfbca9f4aa52862fc5c2ad6a0e17a4f9b3ee6685c7962096d116a"
+    },
+    "desktop/recording_timing.go": {
+      "before": "b9b0891607b05936a920fd68e64290447df1068c1bb2319cc50f7015a9150c0d",
+      "after": "e0b01a5310cca8be31e99cc16ef120107117bd0b1ba02e29b154b7680728f75b"
+    }
+  },
+  "removed_non_line_sites": [
+    {
+      "expression": "Activate: func() {\n\tif s.pendingRecordedTimingPage != nil {\n\t\treturn\n\t}\n\tpending := &recordedTimingPageWork{context: context, recordingID: r.ID, direction: direction, settings: workbench.RecordingTimingParams(result.Settings), next: result.NextOffset, total: result.Total}\n\tcurrent := s.service.Snapshot()\n\tif rejected := s.recordedTimingRejected; rejected != nil && rejected.recordingID == r.ID && rejected.context == (actionContext{current.CommandRevision, current.Document.Generation}) {\n\t\ts.errorMessage = rejected.message\n\t\ts.app.Invalidate(\"main\")\n\t\treturn\n\t}\n\tif accepted := s.recordedTimingAccepted; accepted != nil && accepted.recordingID == r.ID && accepted.from.generation == context.generation &&\n\t\taccepted.from.revision <= context.revision && context.revision <= accepted.to.revision && accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) {\n\t\tpending.context = accepted.to\n\t\tpending.settings, pending.next, pending.total = accepted.settings, accepted.next, accepted.total\n\t}\n\tif current.CommandRevision != pending.context.revision || current.Document.Generation != pending.context.generation {\n\t\ts.invokeAtCommandRevision(\"recording.timing.set\", pending.settings, pending.context.revision, pending.context.generation)\n\t\treturn\n\t}\n\ts.pendingRecordedTimingPage = pending\n\ts.settleRecordedTimingPage(pending, 0)\n}",
+      "file": "desktop/recorded_timing_actions.go",
+      "function": "*screen.recordedTimingPageAction",
+      "kind": "node-Activate",
+      "status": "requires-binding-review"
+    },
+    {
+      "expression": "s.invokeAtCommandRevision(\"recording.timing.set\", pending.settings, pending.context.revision, pending.context.generation)",
+      "file": "desktop/recorded_timing_actions.go",
+      "function": "*screen.recordedTimingPageAction",
+      "kind": "domain-ingress",
+      "public_commands": [
+        "recording.timing.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.Direction = e.SelectedID\n\tnext.Offset = 0\n\ts.invoke(\"recording.timing.set\", next)\n}",
+      "file": "desktop/recording_timing.go",
+      "function": "*screen.recordingTimingControls",
+      "kind": "node-Change",
+      "status": "requires-binding-review"
+    },
+    {
+      "expression": "s.invoke(\"recording.timing.set\", next)",
+      "file": "desktop/recording_timing.go",
+      "function": "*screen.recordingTimingControls",
+      "kind": "domain-ingress",
+      "public_commands": [
+        "recording.timing.set"
+      ],
+      "status": "literal-public-route"
+    }
+  ],
+  "added_non_line_sites": [
+    {
+      "expression": "Activate: func() {\n\ts.beginRecordedTimingAction(state, direction, \"\")\n}",
+      "file": "desktop/recorded_timing_actions.go",
+      "function": "*screen.recordedTimingPageAction",
+      "kind": "node-Activate",
+      "status": "requires-binding-review"
+    },
+    {
+      "expression": "s.invokeAtCommandRevision(\"recording.timing.set\", pending.settings, pending.context.revision, pending.context.generation)",
+      "file": "desktop/recorded_timing_actions.go",
+      "function": "*screen.beginRecordedTimingAction",
+      "kind": "domain-ingress",
+      "public_commands": [
+        "recording.timing.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeRecordedTimingDirection(state, e.SelectedID)\n}",
+      "file": "desktop/recording_timing.go",
+      "function": "*screen.recordingTimingControls",
+      "kind": "node-Change",
+      "status": "requires-binding-review"
+    }
+  ],
+  "old_sites": 392,
+  "new_sites": 391,
+  "public_ids_unchanged": true,
+  "alias_and_route_sets_unchanged": true,
+  "issues": []
+}

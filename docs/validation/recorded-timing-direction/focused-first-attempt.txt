@@ -1,0 +1,10 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedRecordingTimingDirectionCommitsPrivateThreshold
+--- PASS: TestMountedRecordingTimingDirectionCommitsPrivateThreshold (0.54s)
+=== RUN   TestMountedRecordingTimingDirectionRefusesInvalidThresholdAndCorrects
+    recorded_timing_direction_offscreen_darwin_test.go:63: corrected threshold did not select direction on first attempt enter a finite threshold in V, optionally with m/u/µ/μ prefix; magnitude at most 1e12 SI
+--- FAIL: TestMountedRecordingTimingDirectionRefusesInvalidThresholdAndCorrects (0.47s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	1.649s
+FAIL

@@ -80,18 +80,33 @@ func nativeRecordingComparisonSmoke(ctx context.Context, a *app.Application, s *
 	if err := nativeRecordingStatisticsSmoke(ctx, a, s); err != nil {
 		return err
 	}
+	beforeTiming := s.service.Snapshot()
+	captureID := beforeTiming.Recording.ID
+	probe := beforeTiming.Recording.Scope.Available[0].ID
 	if err := a.PostWait(ctx, func() {
-		state := s.service.Snapshot()
-		beforeTiming := s.service.Snapshot()
-		probe := beforeTiming.Recording.Scope.Available[0].ID
 		for _, action := range []struct {
 			id    string
 			event *ui.ChangeEvent
-		}{{"recorded-timing-probe", &ui.ChangeEvent{SelectedID: probe}}, {"recorded-timing-level", &ui.ChangeEvent{Text: "0"}}, {"recorded-timing-direction", &ui.ChangeEvent{SelectedID: "rising"}}, {"recorded-timing-end", &ui.ChangeEvent{Text: "20 ms"}}} {
+		}{{"recorded-timing-probe", &ui.ChangeEvent{SelectedID: probe}}, {"recorded-timing-level", &ui.ChangeEvent{Text: "0"}}} {
 			if err := smokeUI(s, action.id, action.event); err != nil {
 				result <- err
 				return
 			}
+		}
+		result <- nil
+	}); err != nil {
+		return err
+	}
+	if err := <-result; err != nil {
+		return err
+	}
+	if err := nativeRecordedTimingDirectionSmoke(ctx, a, s, "rising"); err != nil {
+		return err
+	}
+	if err := a.PostWait(ctx, func() {
+		if err := smokeUI(s, "recorded-timing-end", &ui.ChangeEvent{Text: "20 ms"}); err != nil {
+			result <- err
+			return
 		}
 		timed := s.service.Snapshot()
 		if timed.Recording.Timing == nil || timed.Recording.Timing.Settings.ProbeID != probe || timed.Recording.Timing.Level != 0 || timed.Document != beforeTiming.Document || timed.Transient.Sample != beforeTiming.Transient.Sample {
@@ -110,7 +125,7 @@ func nativeRecordingComparisonSmoke(ctx context.Context, a *app.Application, s *
 			result <- err
 			return
 		}
-		if response := s.invoke("recording.keep.set", workbench.RecordingKeepParams{ID: state.Recording.ID, Keep: false}); response.Error != nil {
+		if response := s.invoke("recording.keep.set", workbench.RecordingKeepParams{ID: captureID, Keep: false}); response.Error != nil {
 			result <- fmt.Errorf("exclude owned smoke capture: %s", response.Error.Message)
 			return
 		}

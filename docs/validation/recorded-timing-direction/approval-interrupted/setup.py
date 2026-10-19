@@ -1,0 +1,9 @@
+import hashlib,json,plistlib,shutil,subprocess,sys
+from pathlib import Path
+root=Path('/Users/dshills/Development/projects/ELab');base=root/'build/native-timing-menu-163';sys.path.insert(0,str(root/'scripts'));from wiring_replay import validate_release
+proof=validate_release(root,root/'research/ui-audit/first-version/recorded-timing-review-checkpoint.json');bundle=root/'build/native-files-156-ui/ELab-value-recovery.app';live=[r for r in subprocess.check_output(['/bin/ps','-axo','pid=,comm='],text=True).splitlines() if 'ELab-value-recovery' in r];assert not live,live
+old=base/'harness-before';old.mkdir();rows={}
+for rel in ['Contents/MacOS/ELab-value-recovery','Contents/Info.plist','Contents/Resources/APP_MANIFEST.json']:
+ p=bundle/rel;shutil.copyfile(p,old/p.name);rows[rel]=hashlib.sha256(p.read_bytes()).hexdigest()
+assert rows['Contents/MacOS/ELab-value-recovery']=='570b805b42a9f3ee01acb6fecd3bdea5420c57a0b38dd247d1c52689127d82b5'
+review=root/'build/ELab-0.146.0-163-review';shutil.copyfile(review/'ELab.app/Contents/MacOS/ELab',bundle/'Contents/MacOS/ELab-value-recovery');(bundle/'Contents/MacOS/ELab-value-recovery').chmod(0o755);info=plistlib.loads((bundle/'Contents/Info.plist').read_bytes());info['CFBundleShortVersionString']='0.146.0';info['CFBundleVersion']='163';(bundle/'Contents/Info.plist').write_bytes(plistlib.dumps(info));shutil.copyfile(review/'ELab.app/Contents/Resources/APP_MANIFEST.json',bundle/'Contents/Resources/APP_MANIFEST.json');(base/'observations').mkdir();(base/'identity.json').write_text(json.dumps(dict(release=proof,native_sha256=hashlib.sha256((bundle/'Contents/MacOS/ELab-value-recovery').read_bytes()).hexdigest(),harness_before=rows,scope='Exact /163 executable in existing disposable custom bundle; blank start, actual native Examples loading and controls; no intact-bundle claim'),indent=2)+'\n');print('Qualified /163 identity verified; stopped custom bundle prepared')

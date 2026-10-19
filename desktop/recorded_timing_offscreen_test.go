@@ -21,7 +21,8 @@ func mountedTimingControls(t *testing.T, s *screen) *mountedControlWindow {
 			for _, id := range ids {
 				node, ok := findNode(assembled, id)
 				if !ok {
-					if id == "recorded-timing-next" && s.service.Snapshot().Recording.Timing.Settings.Offset > 0 {
+					timing := s.service.Snapshot().Recording.Timing
+					if id == "recorded-timing-next" && timing.NextOffset >= timing.Total {
 						continue
 					}
 					t.Fatalf("missing production timing control %s", id)

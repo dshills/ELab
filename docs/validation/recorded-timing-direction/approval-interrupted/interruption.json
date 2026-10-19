@@ -1,0 +1,42 @@
+{
+  "recorded_utc": "2026-10-19T04:46:18.664527+00:00",
+  "native_interaction_completed": false,
+  "approval_interruption": "Native scroll failed twice at review-model capacity; separate cleanup command also failed review-model capacity and was not executed.",
+  "owned_pid": 43093,
+  "cleanup_pending": false,
+  "disposable_bundle_restore_pending": false,
+  "scope": "Native/public seeded baseline and captured assets only; no threshold typing or direction-menu action occurred.",
+  "producer_errors": [
+    "Pre-show command-revision baseline invalidated by normal native viewport registration; graph/physics/document/timing protected state remained unchanged.",
+    "Direct saved-file parity included independent capture provenance; capture created_at/input_revision differ and must not be equated across independent runs."
+  ],
+  "owner_app_and_projects_untouched": true,
+  "updated_utc": "2026-10-19T06:52:01.224529+00:00",
+  "cleanup_review_failures": [
+    "review_model_at_capacity",
+    "review_deadline_timeout",
+    "review_model_at_capacity"
+  ],
+  "observer_session_id": 84191,
+  "guidance_requested": true,
+  "blocked_audit": {
+    "consecutive_goal_turns": 3,
+    "same_condition": "Automatic approval review unavailable: model capacity/deadline failures prevent native interaction and cleanup.",
+    "previous_turn": "Verified live observer wait; native test and cleanup did not execute after approval-review failures.",
+    "current_revalidation": "Observer session 84191 remains live; same cleanup action failed approval review at model capacity; current /163 release verifier passes; git working tree clean.",
+    "independent_release_work": "Current plan step is owner walkthrough. No additional actionable source blocker established. Remaining native/reader/visible-latency/environment/participant evidence cannot be replaced by repeated source checks or feature expansion.",
+    "native_threshold_menu_test_complete": false,
+    "owned_test_cleanup_pending": true,
+    "disposable_bundle_restore_pending": true,
+    "owner_walkthrough": "Not tried yet",
+    "guidance_requested": true
+  },
+  "resolution": {
+    "user_guidance": "Retry cleanup when review is available",
+    "cleanup_record": "cleanup.json",
+    "approval_review_succeeded": true,
+    "original_process_absent": true,
+    "bundle_restored": true,
+    "native_interaction_completed": false
+  }
+}

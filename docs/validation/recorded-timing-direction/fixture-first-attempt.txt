@@ -1,0 +1,11 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedRecordingTimingDirectionCommitsPrivateThreshold
+    recorded_timing_offscreen_test.go:27: missing production timing control recorded-timing-next
+--- FAIL: TestMountedRecordingTimingDirectionCommitsPrivateThreshold (0.37s)
+=== RUN   TestMountedRecordingTimingDirectionRefusesInvalidThresholdAndCorrects
+    recorded_timing_offscreen_test.go:27: missing production timing control recorded-timing-next
+--- FAIL: TestMountedRecordingTimingDirectionRefusesInvalidThresholdAndCorrects (0.32s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	1.348s
+FAIL

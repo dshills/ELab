@@ -42,11 +42,11 @@
     "desktop/printing.go": "9c40645db6de5affc3ae9d654f72c7003671f5d8c23c8bd7de93ffa35bea8c59",
     "desktop/probes.go": "4ee6051c65010292375e62c39a85e4cf7631c045b75146257564e2158ea806c3",
     "desktop/project_work.go": "f4109a9a2e8bfa2098a9bf7a35327f4dcd557e696f9ac9178c19788de0694c20",
-    "desktop/recorded_timing_actions.go": "d744d38c6ce664fd7140986197c6e50c4b4b05110eeee50939026b29e20b320a",
+    "desktop/recorded_timing_actions.go": "becfcf1adaedfbca9f4aa52862fc5c2ad6a0e17a4f9b3ee6685c7962096d116a",
     "desktop/recording.go": "830e7402a48c5148463df94857717d98b59ac4249f088ccd32bffd7c1cb1bcf0",
     "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
     "desktop/recording_statistics.go": "161cc2eb9e62f089a91eb1967b9d6ed8a9a30dd914af3b7705ad3584bee2caec",
-    "desktop/recording_timing.go": "b9b0891607b05936a920fd68e64290447df1068c1bb2319cc50f7015a9150c0d",
+    "desktop/recording_timing.go": "e0b01a5310cca8be31e99cc16ef120107117bd0b1ba02e29b154b7680728f75b",
     "desktop/recovery.go": "861a98a5411f432028f371925192b9ffb68198de6dd92246d8846d37fd9902fa",
     "desktop/recovery_read.go": "3f536a3af7ea2480b69a8142f600b24c194ce2f06148b46cc29634a7431a5ede",
     "desktop/routing.go": "4898c4c1de9d7de3c5f8ad751b15d7c0f199234243f62ec6ea949ee8d9ad2c1c",
@@ -2525,7 +2525,7 @@
     },
     {
       "file": "desktop/recorded_timing_actions.go",
-      "line": 50,
+      "line": 52,
       "function": "*screen.changeRecordedTimingField",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.timing.set\", textFieldParams(cfg, field, text), state.CommandRevision)",
@@ -2536,16 +2536,16 @@
     },
     {
       "file": "desktop/recorded_timing_actions.go",
-      "line": 89,
+      "line": 100,
       "function": "*screen.recordedTimingPageAction",
       "kind": "node-Activate",
-      "expression": "Activate: func() {\n\tif s.pendingRecordedTimingPage != nil {\n\t\treturn\n\t}\n\tpending := \u0026recordedTimingPageWork{context: context, recordingID: r.ID, direction: direction, settings: workbench.RecordingTimingParams(result.Settings), next: result.NextOffset, total: result.Total}\n\tcurrent := s.service.Snapshot()\n\tif rejected := s.recordedTimingRejected; rejected != nil \u0026\u0026 rejected.recordingID == r.ID \u0026\u0026 rejected.context == (actionContext{current.CommandRevision, current.Document.Generation}) {\n\t\ts.errorMessage = rejected.message\n\t\ts.app.Invalidate(\"main\")\n\t\treturn\n\t}\n\tif accepted := s.recordedTimingAccepted; accepted != nil \u0026\u0026 accepted.recordingID == r.ID \u0026\u0026 accepted.from.generation == context.generation \u0026\u0026\n\t\taccepted.from.revision \u003c= context.revision \u0026\u0026 context.revision \u003c= accepted.to.revision \u0026\u0026 accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) {\n\t\tpending.context = accepted.to\n\t\tpending.settings, pending.next, pending.total = accepted.settings, accepted.next, accepted.total\n\t}\n\tif current.CommandRevision != pending.context.revision || current.Document.Generation != pending.context.generation {\n\t\ts.invokeAtCommandRevision(\"recording.timing.set\", pending.settings, pending.context.revision, pending.context.generation)\n\t\treturn\n\t}\n\ts.pendingRecordedTimingPage = pending\n\ts.settleRecordedTimingPage(pending, 0)\n}",
+      "expression": "Activate: func() {\n\ts.beginRecordedTimingAction(state, direction, \"\")\n}",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/recorded_timing_actions.go",
-      "line": 106,
-      "function": "*screen.recordedTimingPageAction",
+      "line": 125,
+      "function": "*screen.beginRecordedTimingAction",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.timing.set\", pending.settings, pending.context.revision, pending.context.generation)",
       "public_commands": [
@@ -2555,7 +2555,7 @@
     },
     {
       "file": "desktop/recorded_timing_actions.go",
-      "line": 168,
+      "line": 199,
       "function": "*screen.finishRecordedTimingPage",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.timing.set\", pending.settings, pending.context.revision, pending.context.generation)",
@@ -2917,23 +2917,12 @@
       "line": 35,
       "function": "*screen.recordingTimingControls",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.Direction = e.SelectedID\n\tnext.Offset = 0\n\ts.invoke(\"recording.timing.set\", next)\n}",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeRecordedTimingDirection(state, e.SelectedID)\n}",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/recording_timing.go",
-      "line": 39,
-      "function": "*screen.recordingTimingControls",
-      "kind": "domain-ingress",
-      "expression": "s.invoke(\"recording.timing.set\", next)",
-      "public_commands": [
-        "recording.timing.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/recording_timing.go",
-      "line": 41,
+      "line": 38,
       "function": "*screen.recordingTimingControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeRecordedTimingField(state, \"second_level\", e.Text)\n}",
@@ -2941,7 +2930,7 @@
     },
     {
       "file": "desktop/recording_timing.go",
-      "line": 49,
+      "line": 46,
       "function": "*screen.recordingTimingControls",
       "kind": "callback-factory",
       "expression": "timeField(\"recorded-timing-\"+field.name, \"Threshold interval \"+field.name, field.value, false, func(text string) {\n\ts.changeRecordedTimingField(state, field.name+\"_s\", text)\n})",

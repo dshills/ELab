@@ -68,11 +68,26 @@ func nativeRecordingPulsesSmoke(ctx context.Context, a *app.Application, s *scre
 		for _, action := range []struct {
 			id    string
 			event *ui.ChangeEvent
-		}{{"recording-show", nil}, {"recorded-timing-probe", &ui.ChangeEvent{SelectedID: "v:VIN.positive"}}, {"recorded-timing-level", &ui.ChangeEvent{Text: "2.5 V"}}, {"recorded-timing-direction", &ui.ChangeEvent{SelectedID: "falling"}}, {"recorded-timing-second-level", &ui.ChangeEvent{Text: "4.5 V"}}} {
+		}{{"recording-show", nil}, {"recorded-timing-probe", &ui.ChangeEvent{SelectedID: "v:VIN.positive"}}, {"recorded-timing-level", &ui.ChangeEvent{Text: "2.5 V"}}} {
 			if err := smokeUI(s, action.id, action.event); err != nil {
 				done <- err
 				return
 			}
+		}
+		done <- nil
+	}); err != nil {
+		return err
+	}
+	if err := <-done; err != nil {
+		return err
+	}
+	if err := nativeRecordedTimingDirectionSmoke(ctx, a, s, "falling"); err != nil {
+		return err
+	}
+	if err := a.PostWait(ctx, func() {
+		if err := smokeUI(s, "recorded-timing-second-level", &ui.ChangeEvent{Text: "4.5 V"}); err != nil {
+			done <- err
+			return
 		}
 		state := s.service.Snapshot()
 		c := state.Recording.Timing.Cycle
