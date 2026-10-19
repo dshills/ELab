@@ -1,0 +1,72 @@
+{
+  "commands": {
+    "fixture": [
+      "/Users/dshills/Development/projects/ELab/build/display-calibration-fixture-tools/calibration-fixture",
+      "--show",
+      "--target",
+      "/private/tmp/elab-display-edge-occlusion-173-diagnostic/fixture-target.json",
+      "--output",
+      "/private/tmp/elab-display-edge-occlusion-173-diagnostic/fixture",
+      "--seconds",
+      "15"
+    ],
+    "display": [
+      "/Users/dshills/Development/projects/ELab/build/display-frame-probe-tools/display-frame-probe",
+      "--capture-display",
+      "--pid",
+      "36668",
+      "--window",
+      "155944",
+      "--executable",
+      "/private/tmp/elab-first-version-173-signed-runtime/ELab.app/Contents/MacOS/ELab",
+      "--sha256",
+      "ddd0e0cfdfad56c25c9d2d4d0882a1bb79095197101c9e79a844626bfaaa7a1a",
+      "--display",
+      "3",
+      "--crop",
+      "2034,303,1053,802",
+      "--output",
+      "/private/tmp/elab-display-edge-occlusion-173-diagnostic/capture",
+      "--seconds",
+      "3"
+    ],
+    "window": [
+      "/Users/dshills/Development/projects/ELab/build/frame-probe-tools/frame-probe",
+      "--capture",
+      "--pid",
+      "36668",
+      "--window",
+      "155944",
+      "--executable",
+      "/private/tmp/elab-first-version-173-signed-runtime/ELab.app/Contents/MacOS/ELab",
+      "--sha256",
+      "ddd0e0cfdfad56c25c9d2d4d0882a1bb79095197101c9e79a844626bfaaa7a1a",
+      "--output",
+      "/private/tmp/elab-display-edge-occlusion-173-diagnostic/window-capture",
+      "--seconds",
+      "3"
+    ]
+  },
+  "binaries": {
+    "/Users/dshills/Development/projects/ELab/build/display-frame-probe-tools/display-frame-probe": "a8cec4e8f9d16b2b5ad6b751f5657b537c5ed6ea956e7695403168b445bb923f",
+    "/Users/dshills/Development/projects/ELab/build/frame-probe-tools/frame-probe": "dcf06ebefa9ec76002f22f0e67564682b1c429af2f19fc208c504c669ec505e7",
+    "/Users/dshills/Development/projects/ELab/build/display-calibration-fixture-tools/calibration-fixture": "da7cdffae3a3b83c373100bbe0d0872c19af3c4afebeede14f46dcad5b0087c5",
+    "/private/tmp/elab-first-version-173-signed-runtime/ELab.app/Contents/MacOS/ELab": "ddd0e0cfdfad56c25c9d2d4d0882a1bb79095197101c9e79a844626bfaaa7a1a"
+  },
+  "attempted": true,
+  "predeclared_seconds": 3,
+  "fixture_seconds": 15,
+  "eligible_latency_observations": 0,
+  "latency_gate_passed": null,
+  "input_injected": false,
+  "capture_exit_codes": {
+    "display": 0,
+    "window": 0
+  },
+  "status": "captured_pending_independent_pixel_analysis",
+  "process_exit_codes": {
+    "fixture": 0,
+    "display": 0,
+    "window": 0
+  }
+}
