@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "command": [
+    "go",
+    "test",
+    "-race",
+    "-tags=offscreen",
+    "-count=1",
+    "-run",
+    "^(TestRenderedPauseAcceptsLiveSamplesWithoutInterveningCommands|TestMountedButtonOwnerPauseAcceptsLiveRepaintDuringHeldPress|TestRenderedSimulationButtonRefusesAgentDocumentReplacement)$",
+    "./..."
+  ],
+  "working_directory": "/Users/dshills/Development/projects/ELab/desktop",
+  "exit_code": 0,
+  "package_test_seconds": 2.157,
+  "sandbox_attempt": "Failed before tests because Go build-cache reads were denied; preserved separately.",
+  "warnings": "Existing AppKit accessibility deprecations and duplicate libobjc link warning.",
+  "source_sha256": {
+    "desktop/main.go": "19600cd596d9e0060207897a3b878f338c7738afb7df370e54a3a45937ee8114",
+    "desktop/simulation_button_context_test.go": "3dff8253c09be855ca2874592c497cbba8fb282904f7fad31ed902ec2cc6dd5c",
+    "desktop/button_context_offscreen_test.go": "b928f4b9ef87a94c75ea055043df691b92bbae83303e53c82b8224610256cd38"
+  }
+}

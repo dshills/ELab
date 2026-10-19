@@ -1,0 +1,117 @@
+{
+  "date": "2026-10-18",
+  "passed": true,
+  "status": "Bounded native six-cycle single-click reproduction passes; historical Pause cause remains unresolved",
+  "scope": "Recreated native NPN controls/save \u2192 NMOS example/probe sequence, six native Resume/Pause cycles, full reference state and paused stability; no universal input or original-cause claim",
+  "release": {
+    "source_commit": "35371eea567d0a644e45948fd2c05c377a2871e5",
+    "release": "0.144.0 /161",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.144.0-161-review/elab-agent",
+    "agent_sha256": "5fae1b65a82cfafaea0ed9092e47df85413dd67dfcdf59afda3d135f48595cc3",
+    "receipt_sha256": "5522e44f331e36c3f41c43400f01fe0f0f02ba07617d88e9d0170b9d84e75f44",
+    "ledger_sha256": "105beff4f7792e9f97c108413e094f043161c9b938e96d42e4c2fadf0636dd28",
+    "production_source_files_verified": 68,
+    "runtime_inputs_verified": 343,
+    "manifest_file_entries_verified": 381,
+    "manifest_sha256": "df97f993296af968a119863610f9a37d4e57be8211118700b459faa4336701d9"
+  },
+  "native_sha256": "5ccfa894a3524bc39c34150f1b3585a570b870c1db94710822807b0a2fe23b06",
+  "native_fixture_publicly_seeded": false,
+  "native_cycles": 6,
+  "single_click_cycle_actions": 12,
+  "full_native_reference_stages": 16,
+  "paused_stability_observation_seconds": 0.12,
+  "cycle_completion_observation_counts": [
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      1
+    ]
+  ],
+  "final_simulation_time_s": 1.039,
+  "historical_pause_cause_resolved": false,
+  "historical_incomplete_checkpoint": "research/ui-audit/first-version/native-transistors-161/checkpoint.json",
+  "focused_source_race_tests_passed": true,
+  "fresh_agent_reopen_processes": 4,
+  "normal_host_exit": {
+    "pid": 6294,
+    "exit_code": 0
+  },
+  "source_sdk_or_version_changed": false,
+  "canonical_promoted": false,
+  "owner_acceptance": "Not tried yet",
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "remaining_limits": [
+    "Historical incomplete Pause observation remains unexplained",
+    "Strict 1 mV PMOS cutoff drain-voltage comparison remains failed in prior evidence",
+    "Complete native input/accessibility/IME/latency/environment/distribution and owner gates remain open"
+  ],
+  "next_work": "Independent native controlled-interruption/recovery check preserving an owned last manual save",
+  "evidence_sha256": {
+    "Agent nmos.elab": "b1607d728276f37eb16dcf56344a7d7e7324c78c94d3f3100a95917e639e77a9",
+    "Agent npn.elab": "40da9ec527a9902755efb46bddf81a26484e0238ce29a901b14d37cc79b641b0",
+    "Native nmos.elab": "11833ac94259a433cb5960e88a8513809a614f0eb2cd87c3d09e4dcf202a714c",
+    "Native npn.elab": "0ed1e792a38ddb0824015e8e5149971dd4e3b1994699f422e54fdcedc0655aba",
+    "README.md": "14c7eff9cfd747f4789e6a012f6ea7cd8801ee5a16c602f25e5c1557266c07c3",
+    "cleanup.json": "093376ff0de0d6cc70622b42c6172650a088f51c6f5308fceb41b93fd03dedf8",
+    "cycle-1-pause-completion.json.gz": "3e72048e3149eff053e212011a1006df1502ce6906863fb2e49b41d53fcec190",
+    "cycle-1-resume-completion.json.gz": "da30cd81dfbb7ea72f6693745e4ab1e9c17e8d81bab801dda94824282b6d6c64",
+    "cycle-2-pause-completion.json.gz": "d441a9cbb67370e4811561572dd896e7d434208bfa6b6b23c10f67e485c5067a",
+    "cycle-2-resume-completion.json.gz": "2275bebfc40a08ff80b275a00e1c4c6b6ec2e3545b79559bde961581884ede16",
+    "cycle-3-pause-completion.json.gz": "db17adee6e07e5fad7e00802edc2538f908a9c2327b7a2ded69e18201228c4e5",
+    "cycle-3-resume-completion.json.gz": "bd13ca9dcd341468ef6b066c019ef396ab091be869fb61dba892f7dd134ea201",
+    "cycle-4-pause-completion.json.gz": "5a934d74ed84f25d97c5514849764757012f7dfaacdb3c98d6464b86493c6b2d",
+    "cycle-4-resume-completion.json.gz": "5919475617549f01c5b3ccec5429678a2b69a9293dff88f79c4487986dd89893",
+    "cycle-5-pause-completion.json.gz": "8f4df155c34eb844b6377d2cd322005279f1eb32cc30b4f2fd29617be1763c41",
+    "cycle-5-resume-completion.json.gz": "b4cf709295f98c1472ec45545d9743e5a715848f73efbc718c0070bc2158d56b",
+    "cycle-6-pause-completion.json.gz": "0a4e96c376fd543eaafd761164398e44a0a6ebbe684124b70e35a8fc8941c00a",
+    "cycle-6-paused.ax.txt": "2911f557a249a2194284ac33927e35c4ecd8c4b5e29054b007cf202725201207",
+    "cycle-6-paused.jpg": "42a63d919b9f8fa1fcc17053c16c1d11ddb0aa550738aefeffe64b823e5019d3",
+    "cycle-6-resume-completion.json.gz": "0ce47d8b75a3322d0ca9009a68764b812975470341237233053f75a7f1c68a5f",
+    "cycles.json": "16c9c0999abdf31e3fbea706c1195ee247193c5a5fa294f136a81dd816c4783f",
+    "finish.py": "cca010379a1836823ee8c689305067f1608ff04e39c72f75a058ebf20deab902",
+    "focused-source-tests-sandbox.txt": "03cab8bddf5ad7bad6b192dd48b79c5b2eeada0911d8583058bbe8618148677a",
+    "focused-source-tests.txt": "006a4948be90d4f8a234fffa478369d3ed217354bd0deb0bf031d2cde66cff0c",
+    "fresh-agent-reopen.json.gz": "9587be985511da4099883426d8f253472c2453fd5b1a37e54b2f82d97cb78db6",
+    "identity.json": "0da669e3782e12b789bb55e5033da64535e264637506d7e6850898be9a8a47c9",
+    "independent-references.json": "177f2729598bf9d80738cf713655e3c9b9b7d8e6e54a62a467f4b31c22ccb035",
+    "native-host.txt": "9f023e9754ee7c3f4674841cca3a891151e1b082ec5d70cc0d2ba7d5cfcd69ff",
+    "native-session.json.gz": "d8e84cfe2018b80ebaa9b742a7b96c1cac65337177379da6e5702e67c132d2b6",
+    "nmos-initial-pause-completion.json.gz": "1b032f694f109a9788197bb1c1e5cd419d6786491fba9a8bd4daa9018a82e97f",
+    "npn-initial-pause-completion.json.gz": "c80fa0d966279769d23ee3cb14c1488340da83ece69b8a4a33dc1b92e36daff7",
+    "npn-live-pause-completion.json.gz": "dd546f91483a9fb5c1864a9bc459dd5e0fe134fc1a5e19919fe42fe4561e126c",
+    "npn-resume-completion.json.gz": "2532c38a7f8c1ebd73bfed0f92a2163a55caecd9282cb4049cb66d5ee1a702af",
+    "observe.py": "a512e22e739f4a649036770ca646aa6b9bdef23224431f1a961290b5e0a690d2",
+    "observer-output.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "package.py": "b1d5b5277270eb7947d046158dab8b13ada560b63006d764dd98326c5e9a2dfa",
+    "preservation.json": "8fbb695dc7fb2a8d73e7388ab0ebc52788972750c710692f1c4f449a223a9230",
+    "references.py": "c19a667c89182a4e1ff7c275ae09d1abb2598f6918408d62713df4f8b4b5ef6d",
+    "setup.py": "cdccc16ca88750481176db780b5980659b6650e9aee3a502efc5dc065f10af6f",
+    "source-tests.json": "a5f0715023343c596195638aacfe27ce66cd2c7fd3ce3ad504527bf07861dac5",
+    "ui-capture-index.json": "893433b8c4df63307097ecfc0e17dec1afe93c4c599fc159daa4b41ba7163205",
+    "ui-captures.tar.gz": "a7d1cff9bc65a6ec315e3642594a5b15cf5f5dd331e5e9491f3998df93fff5ba",
+    "verify.py": "4aee5cc4741a8971c9cf28ce5e98e29a6235069f0e387148513c46272fb61bd1"
+  }
+}

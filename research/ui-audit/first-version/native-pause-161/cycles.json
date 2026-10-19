@@ -1,0 +1,81 @@
+{
+  "passed": true,
+  "cycles": [
+    {
+      "number": 1,
+      "passed": true,
+      "start_s": 0,
+      "end_s": 0.5750000000000001,
+      "command_revision_before": 21,
+      "command_revision_after": 23,
+      "visible_completion_observations": [
+        1,
+        1
+      ]
+    },
+    {
+      "number": 2,
+      "passed": true,
+      "start_s": 0.5750000000000001,
+      "end_s": 0.67,
+      "command_revision_before": 23,
+      "command_revision_after": 25,
+      "visible_completion_observations": [
+        1,
+        1
+      ]
+    },
+    {
+      "number": 3,
+      "passed": true,
+      "start_s": 0.67,
+      "end_s": 0.765,
+      "command_revision_before": 25,
+      "command_revision_after": 27,
+      "visible_completion_observations": [
+        1,
+        1
+      ]
+    },
+    {
+      "number": 4,
+      "passed": true,
+      "start_s": 0.765,
+      "end_s": 0.864,
+      "command_revision_before": 27,
+      "command_revision_after": 29,
+      "visible_completion_observations": [
+        1,
+        1
+      ]
+    },
+    {
+      "number": 5,
+      "passed": true,
+      "start_s": 0.864,
+      "end_s": 0.949,
+      "command_revision_before": 29,
+      "command_revision_after": 31,
+      "visible_completion_observations": [
+        1,
+        1
+      ]
+    },
+    {
+      "number": 6,
+      "passed": true,
+      "start_s": 0.949,
+      "end_s": 1.039,
+      "command_revision_before": 31,
+      "command_revision_after": 33,
+      "visible_completion_observations": [
+        1,
+        1
+      ]
+    }
+  ],
+  "single_clicks_per_cycle": 2,
+  "stable_paused_observation_seconds": 0.12,
+  "historical_cause_resolved": false,
+  "scope": "Six bounded native cycles with explicit completion and full reference parity; original earlier incomplete observation remains unexplained. These observations do not measure visible p95 latency or prove absence of every intermittent input issue."
+}
