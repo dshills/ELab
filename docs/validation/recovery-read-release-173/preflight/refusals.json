@@ -1,0 +1,61 @@
+[
+  {
+    "name": "hash-mismatch",
+    "command": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "-B",
+      "scripts/recovery-read-demo.py",
+      "--agent-binary",
+      "/private/tmp/elab-first-version-173-signed-runtime/elab-agent",
+      "--artifacts",
+      "build/release-recovery-reads-173-final/refused-hash-mismatch",
+      "--output",
+      "build/release-recovery-reads-173-final/hash-mismatch-should-not-exist.json",
+      "--agent-sha256",
+      "0000000000000000000000000000000000000000000000000000000000000000"
+    ],
+    "exit_code": 2,
+    "stdout": "",
+    "stderr": "usage: recovery-read-demo.py [-h] [--connect CONNECT]\n                             [--agent-binary AGENT_BINARY]\n                             [--agent-sha256 AGENT_SHA256] --output OUTPUT\n                             --artifacts ARTIFACTS\nrecovery-read-demo.py: error: agent SHA-256 differs; no session started\n",
+    "artifacts_created": false
+  },
+  {
+    "name": "optimized",
+    "command": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "-B",
+      "-O",
+      "scripts/recovery-read-demo.py",
+      "--agent-binary",
+      "/private/tmp/elab-first-version-173-signed-runtime/elab-agent",
+      "--artifacts",
+      "build/release-recovery-reads-173-final/refused-optimized",
+      "--output",
+      "build/release-recovery-reads-173-final/optimized-should-not-exist.json",
+      "--agent-sha256",
+      "134f9863e2885e384035e30550adfc5fe0bea1bdee9f3d3cd42feaf802bb7de5"
+    ],
+    "exit_code": 2,
+    "stdout": "",
+    "stderr": "usage: recovery-read-demo.py [-h] [--connect CONNECT]\n                             [--agent-binary AGENT_BINARY]\n                             [--agent-sha256 AGENT_SHA256] --output OUTPUT\n                             --artifacts ARTIFACTS\nrecovery-read-demo.py: error: validation requires Python assertions; run without -O/PYTHONOPTIMIZE\n",
+    "artifacts_created": false
+  },
+  {
+    "name": "missing-pin",
+    "command": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "-B",
+      "scripts/recovery-read-demo.py",
+      "--agent-binary",
+      "/private/tmp/elab-first-version-173-signed-runtime/elab-agent",
+      "--artifacts",
+      "build/release-recovery-reads-173-final/refused-missing-pin",
+      "--output",
+      "build/release-recovery-reads-173-final/missing-pin-should-not-exist.json"
+    ],
+    "exit_code": 2,
+    "stdout": "",
+    "stderr": "usage: recovery-read-demo.py [-h] [--connect CONNECT]\n                             [--agent-binary AGENT_BINARY]\n                             [--agent-sha256 AGENT_SHA256] --output OUTPUT\n                             --artifacts ARTIFACTS\nrecovery-read-demo.py: error: --agent-binary and --agent-sha256 must be supplied together\n",
+    "artifacts_created": false
+  }
+]

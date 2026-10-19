@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/opt/homebrew/opt/python@3.15/bin/python3.15",
+    "-B",
+    "scripts/recovery-read-demo.py",
+    "--agent-binary",
+    "/private/tmp/elab-first-version-173-signed-runtime/elab-agent",
+    "--agent-sha256",
+    "134f9863e2885e384035e30550adfc5fe0bea1bdee9f3d3cd42feaf802bb7de5",
+    "--artifacts",
+    "build/release-recovery-reads-173-evidence/files",
+    "--output",
+    "build/release-recovery-reads-173-evidence/result.json"
+  ],
+  "exit_code": 0
+}

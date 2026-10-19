@@ -100,6 +100,15 @@ Snapshots contain metadata only. Immutable result JSON is capped at 16 MiB; larg
 
 The [public read-job workflow](../scripts/recovery-read-demo.py) checks captured RC values and exact original Verify rows through both public transports, compares legacy queries, reassembles digest-checked chunks, preserves saved/capsule bytes and tests result retention after reconfiguration. Controlled core tests additionally cover blocked-read editing/Save, shared capacity, cancellation/deadline/Close, in-flight reconfiguration, eviction and ownership. Native tests and packaged smoke use the same Inspect and recording controls. These checks do not establish complete physical typing/accessibility or general latency acceptance.
 
+The [frozen /173 headless check](validation/recovery-read-release-173/README.md)
+adds explicit empty-EOF and invalid chunk-bound checks, unknown/terminal refusal
+purity, failed-result isolation and eight-job terminal eviction through the exact
+packaged agent. `--agent-binary` with `--agent-sha256` pins a workflow run to known
+bytes; a mismatch or optimized Python execution refuses before session startup.
+Passing reports include captured job metadata, digest-checked result bytes and
+the observed normal client exit. Active cancellation and native input retain
+their separate qualification scopes.
+
 Recovery candidates and inspection/read results expose [ownership status](recovery-ownership.md) as `active`, `inactive` or `unknown`. A present but unverifiable foreign lease keeps the capsule protected; `active_session:true` includes this conservative unknown case. Native controls distinguish it from confirmed activity, allow restoring a copy and disable dismissal. Preparation and commit recheck the same guard; repairing/closing the owner can restore a verifiable state. Source/capsule formats and explicit damaged-file handling remain unchanged.
 
 The [repeated automatic recovery protocol](recovery-timing.md) passes 240 paused/advancing native/headless samples and 20 exact process-crash restores on the recorded pilot workstation. Maximum dispatch-to-validated-capsule completion is 2.544445 s with the ordinary two-second schedule. This named-fixture timing result leaves general storage/hardware, maximum recording storage, automatic failure-display and broader release qualification separate.

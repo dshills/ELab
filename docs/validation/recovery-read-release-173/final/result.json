@@ -1,0 +1,1363 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "agent_binary_sha256": "134f9863e2885e384035e30550adfc5fe0bea1bdee9f3d3cd42feaf802bb7de5",
+  "observed_reads": [
+    {
+      "work": {
+        "id": "recovery-read-1",
+        "input": {
+          "kind": "inspection",
+          "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+          "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960"
+        },
+        "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/recovery",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 25,
+        "command_revision": 9,
+        "document_generation": 2,
+        "document_bytes": 4980,
+        "result_bytes": 4177,
+        "result_sha256": "fda15042b89fdf4314f28342cef5c9299b13ce717ad1c1fb51a3a83e3d5f3e03"
+      },
+      "chunk_ranges": [
+        [
+          0,
+          512
+        ],
+        [
+          512,
+          1024
+        ],
+        [
+          1024,
+          1536
+        ],
+        [
+          1536,
+          2048
+        ],
+        [
+          2048,
+          2560
+        ],
+        [
+          2560,
+          3072
+        ],
+        [
+          3072,
+          3584
+        ],
+        [
+          3584,
+          4096
+        ],
+        [
+          4096,
+          4177
+        ]
+      ],
+      "eof": {
+        "id": "recovery-read-1",
+        "offset": 4177,
+        "next_offset": 4177,
+        "total": 4177,
+        "sha256": "fda15042b89fdf4314f28342cef5c9299b13ce717ad1c1fb51a3a83e3d5f3e03",
+        "json_base64": ""
+      },
+      "reconstructed_sha256": "fda15042b89fdf4314f28342cef5c9299b13ce717ad1c1fb51a3a83e3d5f3e03",
+      "result_json_base64": "eyJpZCI6InJlY292ZXJ5LXJlYWQtMSIsImtpbmQiOiJpbnNwZWN0aW9uIiwiaW5zcGVjdGlvbiI6eyJkaXJlY3RvcnkiOiIvVXNlcnMvZHNoaWxscy9EZXZlbG9wbWVudC9wcm9qZWN0cy9FTGFiL2J1aWxkL3JlbGVhc2UtcmVjb3ZlcnktcmVhZHMtMTczLWV2aWRlbmNlL2ZpbGVzL3JlY292ZXJ5IiwiY2FuZGlkYXRlIjp7Im93bmVyX3N0YXR1cyI6ImFjdGl2ZSIsImlkIjoicmVjLTdkNzg3NWM0NTkzZjVhZTVhMWE3ZmIxYS0wMDAwMDAwMDAxIiwiZG9jdW1lbnRfa2V5IjoiN2Q3ODc1YzQ1OTNmNWFlNWExYTdmYjFhIiwic2F2ZWRfYXQiOiIyMDI2LTEwLTE5VDIxOjEyOjIxLjAyMTc1M1oiLCJzb3VyY2VfcGF0aCI6Ii9Vc2Vycy9kc2hpbGxzL0RldmVsb3BtZW50L3Byb2plY3RzL0VMYWIvYnVpbGQvcmVsZWFzZS1yZWNvdmVyeS1yZWFkcy0xNzMtZXZpZGVuY2UvZmlsZXMvc291cmNlLmVsYWIiLCJzaGEyNTYiOiI1NTc1NTEzMDUyZjNhZDYyZjZkZDFiNDEzNTc3OGI2YzYzMDBjNDE0NzhkYTYxZjYwMzAyZTc0NjFmMDZkOTYwIiwiY3VycmVudF9zZXNzaW9uIjp0cnVlLCJhY3RpdmVfc2Vzc2lvbiI6dHJ1ZSwicmVjb3JkaW5nX2NvdW50IjoxLCJjb21wb25lbnRzIjo0fSwiZG9jdW1lbnQiOnsiZXhhbXBsZV9pZCI6InJjIiwiZm9ybWF0IjoiZWxhYi5zY2hlbWF0aWMiLCJ2ZXJzaW9uIjo0LCJncmFwaCI6eyJjb21wb25lbnRzIjpbeyJpZCI6IlYxIiwia2luZCI6InB1bHNlLXNvdXJjZSIsIm5hbWUiOiJQdWxzZSBzb3VyY2UiLCJ0ZXJtaW5hbHMiOlsicG9zaXRpdmUiLCJuZWdhdGl2ZSJdLCJwb3NpdGlvbiI6eyJ4IjotMjAwLCJ5IjowfSwidmFsdWUiOjUsInVuaXQiOiJWIiwibW9kZWwiOiJpZGVhbC1zcXVhcmUudjEiLCJyb3RhdGlvbiI6MH0seyJpZCI6IlIxIiwia2luZCI6InJlc2lzdG9yIiwibmFtZSI6IlJlc2lzdG9yIiwidGVybWluYWxzIjpbIjEiLCIyIl0sInBvc2l0aW9uIjp7IngiOjAsInkiOi0xMTB9LCJ2YWx1ZSI6MTAwMDAsInVuaXQiOiLOqSIsIm1vZGVsIjoiaWRlYWwtcmVzaXN0b3IudjEiLCJyb3RhdGlvbiI6MH0seyJpZCI6IkMxIiwia2luZCI6ImNhcGFjaXRvciIsIm5hbWUiOiJDYXBhY2l0b3IiLCJ0ZXJtaW5hbHMiOlsiMSIsIjIiXSwicG9zaXRpb24iOnsieCI6MjAwLCJ5IjowfSwidmFsdWUiOjAuMDAwMDAxLCJ1bml0IjoiRiIsIm1vZGVsIjoiaWRlYWwtY2FwYWNpdG9yLnYxIiwicm90YXRpb24iOjB9LHsiaWQiOiJHTkQiLCJraW5kIjoiZ3JvdW5kIiwibmFtZSI6Ikdyb3VuZCIsInRlcm1pbmFscyI6WyJyZWZlcmVuY2UiXSwicG9zaXRpb24iOnsieCI6MCwieSI6MTEwfSwidmFsdWUiOjAsIm1vZGVsIjoiZ3JvdW5kLnYxIiwicm90YXRpb24iOjB9XSwid2lyZXMiOlt7ImlkIjoiVzEiLCJmcm9tIjoiVjEucG9zaXRpdmUiLCJ0byI6IlIxLjEiLCJjb25uZWN0ZWQiOnRydWV9LHsiaWQiOiJXMiIsImZyb20iOiJSMS4yIiwidG8iOiJDMS4xIiwiY29ubmVjdGVkIjp0cnVlfSx7ImlkIjoiVzMiLCJmcm9tIjoiQzEuMiIsInRvIjoiR05ELnJlZmVyZW5jZSIsImNvbm5lY3RlZCI6dHJ1ZX0seyJpZCI6Ilc0IiwiZnJvbSI6IkdORC5yZWZlcmVuY2UiLCJ0byI6IlYxLm5lZ2F0aXZlIiwiY29ubmVjdGVkIjp0cnVlfV19LCJ2aWV3Ijp7ImNlbnRlciI6eyJ4IjotMTMwLCJ5IjoyMH0sInpvb20iOjAuN30sInNjb3BlX3Byb2JlcyI6eyJpZHMiOlsidjpDMS4xIiwidjpWMS5wb3NpdGl2ZSJdfSwidHJhbnNpZW50X3NldHRpbmdzIjp7InN0ZXBfcyI6MC4wMDEsImhpZ2hfcyI6MC4wNSwibG93X3MiOjAuMDUsImluaXRpYWxfdm9sdGFnZV92IjowLCJzZWNvbmRzX3Blcl93YWxsX3NlY29uZCI6MC4wMn0sImxlZF9tb2RlbCI6eyJpZCI6ImVsYWIuZ2VuZXJpYy1yZWQtbGVkLnYxIiwiaXNfYSI6MWUtMjAsIm4iOjIsInJzX29obSI6MSwidGVtcGVyYXR1cmVfYyI6MjcsImxpbWl0YXRpb25zIjoiRWR1Y2F0aW9uYWwgZ2VuZXJpYyBkaW9kZTsgbm8gcGh5c2ljYWwgcGFydCBpZGVudGl0eSwgcmV2ZXJzZSBicmVha2Rvd24sIHRoZXJtYWwgZHluYW1pY3MsIHJhdGluZ3MsIG9yIGNhbGlicmF0ZWQgYnJpZ2h0bmVzcy4ifSwicGF1c2VkIjp0cnVlLCJyZWNvcmRpbmdzIjpbeyJmb3JtYXQiOiJlbGFiLnZlcmlmaWNhdGlvbiIsInZlcnNpb24iOjEsIm9wZXJhdGlvbl9pZCI6InZlcmlmeS0xIiwiY3JlYXRlZF9hdCI6IjIwMjYtMTAtMTlUMjE6MTI6MjEuMDEwMzUyWiIsImlucHV0X3JldmlzaW9uIjoxMCwiZWxlY3RyaWNhbF9yZXZpc2lvbiI6MiwiZG9jdW1lbnRfZ2VuZXJhdGlvbiI6MiwiZ3JhcGgiOnsiY29tcG9uZW50cyI6W3siaWQiOiJWMSIsImtpbmQiOiJwdWxzZS1zb3VyY2UiLCJuYW1lIjoiUHVsc2Ugc291cmNlIiwidGVybWluYWxzIjpbInBvc2l0aXZlIiwibmVnYXRpdmUiXSwicG9zaXRpb24iOnsieCI6LTIwMCwieSI6MH0sInZhbHVlIjo1LCJ1bml0IjoiViIsIm1vZGVsIjoiaWRlYWwtc3F1YXJlLnYxIiwicm90YXRpb24iOjB9LHsiaWQiOiJSMSIsImtpbmQiOiJyZXNpc3RvciIsIm5hbWUiOiJSZXNpc3RvciIsInRlcm1pbmFscyI6WyIxIiwiMiJdLCJwb3NpdGlvbiI6eyJ4IjowLCJ5IjotMTEwfSwidmFsdWUiOjEwMDAwLCJ1bml0IjoizqkiLCJtb2RlbCI6ImlkZWFsLXJlc2lzdG9yLnYxIiwicm90YXRpb24iOjB9LHsiaWQiOiJDMSIsImtpbmQiOiJjYXBhY2l0b3IiLCJuYW1lIjoiQ2FwYWNpdG9yIiwidGVybWluYWxzIjpbIjEiLCIyIl0sInBvc2l0aW9uIjp7IngiOjIwMCwieSI6MH0sInZhbHVlIjowLjAwMDAwMSwidW5pdCI6IkYiLCJtb2RlbCI6ImlkZWFsLWNhcGFjaXRvci52MSIsInJvdGF0aW9uIjowfSx7ImlkIjoiR05EIiwia2luZCI6Imdyb3VuZCIsIm5hbWUiOiJHcm91bmQiLCJ0ZXJtaW5hbHMiOlsicmVmZXJlbmNlIl0sInBvc2l0aW9uIjp7IngiOjAsInkiOjExMH0sInZhbHVlIjowLCJtb2RlbCI6Imdyb3VuZC52MSIsInJvdGF0aW9uIjowfV0sIndpcmVzIjpbeyJpZCI6IlcxIiwiZnJvbSI6IlYxLnBvc2l0aXZlIiwidG8iOiJSMS4xIiwiY29ubmVjdGVkIjp0cnVlfSx7ImlkIjoiVzIiLCJmcm9tIjoiUjEuMiIsInRvIjoiQzEuMSIsImNvbm5lY3RlZCI6dHJ1ZX0seyJpZCI6IlczIiwiZnJvbSI6IkMxLjIiLCJ0byI6IkdORC5yZWZlcmVuY2UiLCJjb25uZWN0ZWQiOnRydWV9LHsiaWQiOiJXNCIsImZyb20iOiJHTkQucmVmZXJlbmNlIiwidG8iOiJWMS5uZWdhdGl2ZSIsImNvbm5lY3RlZCI6dHJ1ZX1dfSwic2V0dGluZ3MiOnsic3RlcF9zIjowLjAwMSwiaGlnaF9zIjowLjA1LCJsb3dfcyI6MC4wNSwiaW5pdGlhbF92b2x0YWdlX3YiOjAsInNlY29uZHNfcGVyX3dhbGxfc2Vjb25kIjowLjAyfSwiaW5wdXRfbW9kZSI6ImF1dG8iLCJhbmFseXNpcyI6IlJDIHRyYW5zaWVudCIsImVuZ2luZSI6ImVsYWIuaWRlYWwtcmMtZXhhY3QudjEiLCJsZWRfbW9kZWwiOnsiaWQiOiJlbGFiLmdlbmVyaWMtcmVkLWxlZC52MSIsImlzX2EiOjFlLTIwLCJuIjoyLCJyc19vaG0iOjEsInRlbXBlcmF0dXJlX2MiOjI3LCJsaW1pdGF0aW9ucyI6IkVkdWNhdGlvbmFsIGdlbmVyaWMgZGlvZGU7IG5vIHBoeXNpY2FsIHBhcnQgaWRlbnRpdHksIHJldmVyc2UgYnJlYWtkb3duLCB0aGVybWFsIGR5bmFtaWNzLCByYXRpbmdzLCBvciBjYWxpYnJhdGVkIGJyaWdodG5lc3MuIn0sInByb2JlcyI6W3siaWQiOiJ2OkMxLjEiLCJsYWJlbCI6IkMxLjEgLyBncm91bmQiLCJ1bml0IjoiViIsInBvc2l0aXZlIjoiQzEuMSIsInJlZmVyZW5jZSI6Imdyb3VuZCJ9LHsiaWQiOiJ2OlYxLnBvc2l0aXZlIiwibGFiZWwiOiJWMS5wb3NpdGl2ZSAvIGdyb3VuZCIsInVuaXQiOiJWIiwicG9zaXRpdmUiOiJWMS5wb3NpdGl2ZSIsInJlZmVyZW5jZSI6Imdyb3VuZCJ9XSwiZHVyYXRpb25fcyI6MC4wMiwic2FtcGxlX2NvdW50IjoyMSwic3RhdGlzdGljcyI6W3sicHJvYmVfaWQiOiJ2OkMxLjEiLCJjb3VudCI6MjEsIm1pbiI6MCwibWF4Ijo0LjMyMzMyMzU4MzgxNjkzNiwic2FtcGxlX21lYW4iOjIuODA0NDAwMjAyODc1OTA4Nywic2FtcGxlX3JtcyI6My4wODQzMDk3MjQwMzA3NzF9LHsicHJvYmVfaWQiOiJ2OlYxLnBvc2l0aXZlIiwiY291bnQiOjIxLCJtaW4iOjUsIm1heCI6NSwic2FtcGxlX21lYW4iOjUsInNhbXBsZV9ybXMiOjV9XX1dLCJzZWxlY3RlZF9yZWNvcmRpbmciOjAsInZpZXdpbmdfcmVjb3JkaW5nIjpmYWxzZX19fQ==",
+      "structured_result": {
+        "id": "recovery-read-1",
+        "kind": "inspection",
+        "inspection": {
+          "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/recovery",
+          "candidate": {
+            "owner_status": "active",
+            "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+            "document_key": "7d7875c4593f5ae5a1a7fb1a",
+            "saved_at": "2026-10-19T21:12:21.021753Z",
+            "source_path": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/source.elab",
+            "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960",
+            "current_session": true,
+            "active_session": true,
+            "recording_count": 1,
+            "components": 4
+          },
+          "document": {
+            "example_id": "rc",
+            "format": "elab.schematic",
+            "version": 4,
+            "graph": {
+              "components": [
+                {
+                  "id": "V1",
+                  "kind": "pulse-source",
+                  "name": "Pulse source",
+                  "terminals": [
+                    "positive",
+                    "negative"
+                  ],
+                  "position": {
+                    "x": -200,
+                    "y": 0
+                  },
+                  "value": 5,
+                  "unit": "V",
+                  "model": "ideal-square.v1",
+                  "rotation": 0
+                },
+                {
+                  "id": "R1",
+                  "kind": "resistor",
+                  "name": "Resistor",
+                  "terminals": [
+                    "1",
+                    "2"
+                  ],
+                  "position": {
+                    "x": 0,
+                    "y": -110
+                  },
+                  "value": 10000,
+                  "unit": "\u03a9",
+                  "model": "ideal-resistor.v1",
+                  "rotation": 0
+                },
+                {
+                  "id": "C1",
+                  "kind": "capacitor",
+                  "name": "Capacitor",
+                  "terminals": [
+                    "1",
+                    "2"
+                  ],
+                  "position": {
+                    "x": 200,
+                    "y": 0
+                  },
+                  "value": 1e-06,
+                  "unit": "F",
+                  "model": "ideal-capacitor.v1",
+                  "rotation": 0
+                },
+                {
+                  "id": "GND",
+                  "kind": "ground",
+                  "name": "Ground",
+                  "terminals": [
+                    "reference"
+                  ],
+                  "position": {
+                    "x": 0,
+                    "y": 110
+                  },
+                  "value": 0,
+                  "model": "ground.v1",
+                  "rotation": 0
+                }
+              ],
+              "wires": [
+                {
+                  "id": "W1",
+                  "from": "V1.positive",
+                  "to": "R1.1",
+                  "connected": true
+                },
+                {
+                  "id": "W2",
+                  "from": "R1.2",
+                  "to": "C1.1",
+                  "connected": true
+                },
+                {
+                  "id": "W3",
+                  "from": "C1.2",
+                  "to": "GND.reference",
+                  "connected": true
+                },
+                {
+                  "id": "W4",
+                  "from": "GND.reference",
+                  "to": "V1.negative",
+                  "connected": true
+                }
+              ]
+            },
+            "view": {
+              "center": {
+                "x": -130,
+                "y": 20
+              },
+              "zoom": 0.7
+            },
+            "scope_probes": {
+              "ids": [
+                "v:C1.1",
+                "v:V1.positive"
+              ]
+            },
+            "transient_settings": {
+              "step_s": 0.001,
+              "high_s": 0.05,
+              "low_s": 0.05,
+              "initial_voltage_v": 0,
+              "seconds_per_wall_second": 0.02
+            },
+            "led_model": {
+              "id": "elab.generic-red-led.v1",
+              "is_a": 1e-20,
+              "n": 2,
+              "rs_ohm": 1,
+              "temperature_c": 27,
+              "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+            },
+            "paused": true,
+            "recordings": [
+              {
+                "format": "elab.verification",
+                "version": 1,
+                "operation_id": "verify-1",
+                "created_at": "2026-10-19T21:12:21.010352Z",
+                "input_revision": 10,
+                "electrical_revision": 2,
+                "document_generation": 2,
+                "graph": {
+                  "components": [
+                    {
+                      "id": "V1",
+                      "kind": "pulse-source",
+                      "name": "Pulse source",
+                      "terminals": [
+                        "positive",
+                        "negative"
+                      ],
+                      "position": {
+                        "x": -200,
+                        "y": 0
+                      },
+                      "value": 5,
+                      "unit": "V",
+                      "model": "ideal-square.v1",
+                      "rotation": 0
+                    },
+                    {
+                      "id": "R1",
+                      "kind": "resistor",
+                      "name": "Resistor",
+                      "terminals": [
+                        "1",
+                        "2"
+                      ],
+                      "position": {
+                        "x": 0,
+                        "y": -110
+                      },
+                      "value": 10000,
+                      "unit": "\u03a9",
+                      "model": "ideal-resistor.v1",
+                      "rotation": 0
+                    },
+                    {
+                      "id": "C1",
+                      "kind": "capacitor",
+                      "name": "Capacitor",
+                      "terminals": [
+                        "1",
+                        "2"
+                      ],
+                      "position": {
+                        "x": 200,
+                        "y": 0
+                      },
+                      "value": 1e-06,
+                      "unit": "F",
+                      "model": "ideal-capacitor.v1",
+                      "rotation": 0
+                    },
+                    {
+                      "id": "GND",
+                      "kind": "ground",
+                      "name": "Ground",
+                      "terminals": [
+                        "reference"
+                      ],
+                      "position": {
+                        "x": 0,
+                        "y": 110
+                      },
+                      "value": 0,
+                      "model": "ground.v1",
+                      "rotation": 0
+                    }
+                  ],
+                  "wires": [
+                    {
+                      "id": "W1",
+                      "from": "V1.positive",
+                      "to": "R1.1",
+                      "connected": true
+                    },
+                    {
+                      "id": "W2",
+                      "from": "R1.2",
+                      "to": "C1.1",
+                      "connected": true
+                    },
+                    {
+                      "id": "W3",
+                      "from": "C1.2",
+                      "to": "GND.reference",
+                      "connected": true
+                    },
+                    {
+                      "id": "W4",
+                      "from": "GND.reference",
+                      "to": "V1.negative",
+                      "connected": true
+                    }
+                  ]
+                },
+                "settings": {
+                  "step_s": 0.001,
+                  "high_s": 0.05,
+                  "low_s": 0.05,
+                  "initial_voltage_v": 0,
+                  "seconds_per_wall_second": 0.02
+                },
+                "input_mode": "auto",
+                "analysis": "RC transient",
+                "engine": "elab.ideal-rc-exact.v1",
+                "led_model": {
+                  "id": "elab.generic-red-led.v1",
+                  "is_a": 1e-20,
+                  "n": 2,
+                  "rs_ohm": 1,
+                  "temperature_c": 27,
+                  "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+                },
+                "probes": [
+                  {
+                    "id": "v:C1.1",
+                    "label": "C1.1 / ground",
+                    "unit": "V",
+                    "positive": "C1.1",
+                    "reference": "ground"
+                  },
+                  {
+                    "id": "v:V1.positive",
+                    "label": "V1.positive / ground",
+                    "unit": "V",
+                    "positive": "V1.positive",
+                    "reference": "ground"
+                  }
+                ],
+                "duration_s": 0.02,
+                "sample_count": 21,
+                "statistics": [
+                  {
+                    "probe_id": "v:C1.1",
+                    "count": 21,
+                    "min": 0,
+                    "max": 4.323323583816936,
+                    "sample_mean": 2.8044002028759087,
+                    "sample_rms": 3.084309724030771
+                  },
+                  {
+                    "probe_id": "v:V1.positive",
+                    "count": 21,
+                    "min": 5,
+                    "max": 5,
+                    "sample_mean": 5,
+                    "sample_rms": 5
+                  }
+                ]
+              }
+            ],
+            "selected_recording": 0,
+            "viewing_recording": false
+          }
+        }
+      },
+      "terminal_cancel_refusal": "unavailable",
+      "invalid_chunk_bounds_refusal": "invalid-params"
+    },
+    {
+      "work": {
+        "id": "recovery-read-3",
+        "input": {
+          "kind": "samples",
+          "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+          "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960",
+          "recording_index": 0,
+          "offset": 10,
+          "limit": 2
+        },
+        "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/recovery",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 31,
+        "command_revision": 10,
+        "document_generation": 2,
+        "document_bytes": 4980,
+        "result_bytes": 457,
+        "result_sha256": "af17da2d5a71b3d40f019af2aab526be6de9972219a186c765be51a200abc52d"
+      },
+      "chunk_ranges": [
+        [
+          0,
+          457
+        ]
+      ],
+      "eof": {
+        "id": "recovery-read-3",
+        "offset": 457,
+        "next_offset": 457,
+        "total": 457,
+        "sha256": "af17da2d5a71b3d40f019af2aab526be6de9972219a186c765be51a200abc52d",
+        "json_base64": ""
+      },
+      "reconstructed_sha256": "af17da2d5a71b3d40f019af2aab526be6de9972219a186c765be51a200abc52d",
+      "result_json_base64": "eyJpZCI6InJlY292ZXJ5LXJlYWQtMyIsImtpbmQiOiJzYW1wbGVzIiwic2FtcGxlcyI6eyJpZCI6InJlYy03ZDc4NzVjNDU5M2Y1YWU1YTFhN2ZiMWEtMDAwMDAwMDAwMSIsIm9mZnNldCI6MTAsIm5leHRfb2Zmc2V0IjoxMiwidG90YWwiOjIxLCJwcm9iZXMiOlt7ImlkIjoidjpDMS4xIiwibGFiZWwiOiJDMS4xIC8gZ3JvdW5kIiwidW5pdCI6IlYiLCJwb3NpdGl2ZSI6IkMxLjEiLCJyZWZlcmVuY2UiOiJncm91bmQifSx7ImlkIjoidjpWMS5wb3NpdGl2ZSIsImxhYmVsIjoiVjEucG9zaXRpdmUgLyBncm91bmQiLCJ1bml0IjoiViIsInBvc2l0aXZlIjoiVjEucG9zaXRpdmUiLCJyZWZlcmVuY2UiOiJncm91bmQifV0sInJvd3MiOlt7InRpbWVfcyI6MC4wMSwidmFsdWVzIjpbMy4xNjA2MDI3OTQxNDI3ODgzLDVdfSx7InRpbWVfcyI6MC4wMTEsInZhbHVlcyI6WzMuMzM1NjQ0NTgxNTA5NjAyLDVdfV19fQ==",
+      "structured_result": {
+        "id": "recovery-read-3",
+        "kind": "samples",
+        "samples": {
+          "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+          "offset": 10,
+          "next_offset": 12,
+          "total": 21,
+          "probes": [
+            {
+              "id": "v:C1.1",
+              "label": "C1.1 / ground",
+              "unit": "V",
+              "positive": "C1.1",
+              "reference": "ground"
+            },
+            {
+              "id": "v:V1.positive",
+              "label": "V1.positive / ground",
+              "unit": "V",
+              "positive": "V1.positive",
+              "reference": "ground"
+            }
+          ],
+          "rows": [
+            {
+              "time_s": 0.01,
+              "values": [
+                3.1606027941427883,
+                5
+              ]
+            },
+            {
+              "time_s": 0.011,
+              "values": [
+                3.335644581509602,
+                5
+              ]
+            }
+          ]
+        }
+      },
+      "terminal_cancel_refusal": "unavailable",
+      "invalid_chunk_bounds_refusal": "invalid-params"
+    },
+    {
+      "work": {
+        "id": "recovery-read-5",
+        "input": {
+          "kind": "inspection",
+          "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/recovery",
+        "status": "failed",
+        "phase": "validated-recovery",
+        "actor": "agent.stdio",
+        "input_revision": 37,
+        "command_revision": 11,
+        "document_generation": 2,
+        "document_bytes": 4980,
+        "result_bytes": 0,
+        "error": {
+          "code": "file-conflict",
+          "message": "Recovery snapshot changed; scan again before choosing it"
+        }
+      },
+      "structured_result_refusal": "not-ready"
+    },
+    {
+      "work": {
+        "id": "recovery-read-6",
+        "input": {
+          "kind": "inspection",
+          "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+          "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960"
+        },
+        "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other",
+        "status": "failed",
+        "phase": "reading-recovery",
+        "actor": "agent.stdio",
+        "input_revision": 47,
+        "command_revision": 13,
+        "document_generation": 2,
+        "document_bytes": 0,
+        "result_bytes": 0,
+        "error": {
+          "code": "invalid-recovery",
+          "message": "lstat /Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other/rec-7d7875c4593f5ae5a1a7fb1a-0000000001.elab-recovery: no such file or directory"
+        }
+      },
+      "structured_result_refusal": "not-ready"
+    },
+    {
+      "work": {
+        "id": "recovery-read-7",
+        "input": {
+          "kind": "inspection",
+          "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+          "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960"
+        },
+        "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other",
+        "status": "failed",
+        "phase": "reading-recovery",
+        "actor": "agent.stdio",
+        "input_revision": 51,
+        "command_revision": 14,
+        "document_generation": 2,
+        "document_bytes": 0,
+        "result_bytes": 0,
+        "error": {
+          "code": "invalid-recovery",
+          "message": "lstat /Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other/rec-7d7875c4593f5ae5a1a7fb1a-0000000001.elab-recovery: no such file or directory"
+        }
+      },
+      "structured_result_refusal": "not-ready"
+    },
+    {
+      "work": {
+        "id": "recovery-read-8",
+        "input": {
+          "kind": "inspection",
+          "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+          "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960"
+        },
+        "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other",
+        "status": "failed",
+        "phase": "reading-recovery",
+        "actor": "agent.stdio",
+        "input_revision": 55,
+        "command_revision": 15,
+        "document_generation": 2,
+        "document_bytes": 0,
+        "result_bytes": 0,
+        "error": {
+          "code": "invalid-recovery",
+          "message": "lstat /Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other/rec-7d7875c4593f5ae5a1a7fb1a-0000000001.elab-recovery: no such file or directory"
+        }
+      },
+      "structured_result_refusal": "not-ready"
+    },
+    {
+      "work": {
+        "id": "recovery-read-9",
+        "input": {
+          "kind": "inspection",
+          "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+          "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960"
+        },
+        "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other",
+        "status": "failed",
+        "phase": "reading-recovery",
+        "actor": "agent.stdio",
+        "input_revision": 59,
+        "command_revision": 16,
+        "document_generation": 2,
+        "document_bytes": 0,
+        "result_bytes": 0,
+        "error": {
+          "code": "invalid-recovery",
+          "message": "lstat /Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other/rec-7d7875c4593f5ae5a1a7fb1a-0000000001.elab-recovery: no such file or directory"
+        }
+      },
+      "structured_result_refusal": "not-ready"
+    },
+    {
+      "work": {
+        "id": "recovery-read-10",
+        "input": {
+          "kind": "inspection",
+          "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+          "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960"
+        },
+        "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other",
+        "status": "failed",
+        "phase": "reading-recovery",
+        "actor": "agent.stdio",
+        "input_revision": 63,
+        "command_revision": 17,
+        "document_generation": 2,
+        "document_bytes": 0,
+        "result_bytes": 0,
+        "error": {
+          "code": "invalid-recovery",
+          "message": "lstat /Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other/rec-7d7875c4593f5ae5a1a7fb1a-0000000001.elab-recovery: no such file or directory"
+        }
+      },
+      "structured_result_refusal": "not-ready"
+    },
+    {
+      "work": {
+        "id": "recovery-read-11",
+        "input": {
+          "kind": "inspection",
+          "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+          "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960"
+        },
+        "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other",
+        "status": "failed",
+        "phase": "reading-recovery",
+        "actor": "agent.stdio",
+        "input_revision": 67,
+        "command_revision": 18,
+        "document_generation": 2,
+        "document_bytes": 0,
+        "result_bytes": 0,
+        "error": {
+          "code": "invalid-recovery",
+          "message": "lstat /Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other/rec-7d7875c4593f5ae5a1a7fb1a-0000000001.elab-recovery: no such file or directory"
+        }
+      },
+      "structured_result_refusal": "not-ready"
+    },
+    {
+      "work": {
+        "id": "recovery-read-12",
+        "input": {
+          "kind": "inspection",
+          "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+          "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960"
+        },
+        "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other",
+        "status": "failed",
+        "phase": "reading-recovery",
+        "actor": "agent.stdio",
+        "input_revision": 71,
+        "command_revision": 19,
+        "document_generation": 2,
+        "document_bytes": 0,
+        "result_bytes": 0,
+        "error": {
+          "code": "invalid-recovery",
+          "message": "lstat /Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other/rec-7d7875c4593f5ae5a1a7fb1a-0000000001.elab-recovery: no such file or directory"
+        }
+      },
+      "structured_result_refusal": "not-ready"
+    },
+    {
+      "work": {
+        "id": "recovery-read-13",
+        "input": {
+          "kind": "inspection",
+          "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+          "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960"
+        },
+        "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other",
+        "status": "failed",
+        "phase": "reading-recovery",
+        "actor": "agent.stdio",
+        "input_revision": 75,
+        "command_revision": 20,
+        "document_generation": 2,
+        "document_bytes": 0,
+        "result_bytes": 0,
+        "error": {
+          "code": "invalid-recovery",
+          "message": "lstat /Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other/rec-7d7875c4593f5ae5a1a7fb1a-0000000001.elab-recovery: no such file or directory"
+        }
+      },
+      "structured_result_refusal": "not-ready"
+    }
+  ],
+  "retained_jobs": [
+    {
+      "id": "recovery-read-6",
+      "input": {
+        "kind": "inspection",
+        "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+        "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960"
+      },
+      "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other",
+      "status": "failed",
+      "phase": "reading-recovery",
+      "actor": "agent.stdio",
+      "input_revision": 47,
+      "command_revision": 13,
+      "document_generation": 2,
+      "document_bytes": 0,
+      "result_bytes": 0,
+      "error": {
+        "code": "invalid-recovery",
+        "message": "lstat /Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other/rec-7d7875c4593f5ae5a1a7fb1a-0000000001.elab-recovery: no such file or directory"
+      }
+    },
+    {
+      "id": "recovery-read-7",
+      "input": {
+        "kind": "inspection",
+        "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+        "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960"
+      },
+      "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other",
+      "status": "failed",
+      "phase": "reading-recovery",
+      "actor": "agent.stdio",
+      "input_revision": 51,
+      "command_revision": 14,
+      "document_generation": 2,
+      "document_bytes": 0,
+      "result_bytes": 0,
+      "error": {
+        "code": "invalid-recovery",
+        "message": "lstat /Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other/rec-7d7875c4593f5ae5a1a7fb1a-0000000001.elab-recovery: no such file or directory"
+      }
+    },
+    {
+      "id": "recovery-read-8",
+      "input": {
+        "kind": "inspection",
+        "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+        "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960"
+      },
+      "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other",
+      "status": "failed",
+      "phase": "reading-recovery",
+      "actor": "agent.stdio",
+      "input_revision": 55,
+      "command_revision": 15,
+      "document_generation": 2,
+      "document_bytes": 0,
+      "result_bytes": 0,
+      "error": {
+        "code": "invalid-recovery",
+        "message": "lstat /Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other/rec-7d7875c4593f5ae5a1a7fb1a-0000000001.elab-recovery: no such file or directory"
+      }
+    },
+    {
+      "id": "recovery-read-9",
+      "input": {
+        "kind": "inspection",
+        "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+        "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960"
+      },
+      "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other",
+      "status": "failed",
+      "phase": "reading-recovery",
+      "actor": "agent.stdio",
+      "input_revision": 59,
+      "command_revision": 16,
+      "document_generation": 2,
+      "document_bytes": 0,
+      "result_bytes": 0,
+      "error": {
+        "code": "invalid-recovery",
+        "message": "lstat /Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other/rec-7d7875c4593f5ae5a1a7fb1a-0000000001.elab-recovery: no such file or directory"
+      }
+    },
+    {
+      "id": "recovery-read-10",
+      "input": {
+        "kind": "inspection",
+        "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+        "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960"
+      },
+      "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other",
+      "status": "failed",
+      "phase": "reading-recovery",
+      "actor": "agent.stdio",
+      "input_revision": 63,
+      "command_revision": 17,
+      "document_generation": 2,
+      "document_bytes": 0,
+      "result_bytes": 0,
+      "error": {
+        "code": "invalid-recovery",
+        "message": "lstat /Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other/rec-7d7875c4593f5ae5a1a7fb1a-0000000001.elab-recovery: no such file or directory"
+      }
+    },
+    {
+      "id": "recovery-read-11",
+      "input": {
+        "kind": "inspection",
+        "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+        "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960"
+      },
+      "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other",
+      "status": "failed",
+      "phase": "reading-recovery",
+      "actor": "agent.stdio",
+      "input_revision": 67,
+      "command_revision": 18,
+      "document_generation": 2,
+      "document_bytes": 0,
+      "result_bytes": 0,
+      "error": {
+        "code": "invalid-recovery",
+        "message": "lstat /Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other/rec-7d7875c4593f5ae5a1a7fb1a-0000000001.elab-recovery: no such file or directory"
+      }
+    },
+    {
+      "id": "recovery-read-12",
+      "input": {
+        "kind": "inspection",
+        "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+        "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960"
+      },
+      "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other",
+      "status": "failed",
+      "phase": "reading-recovery",
+      "actor": "agent.stdio",
+      "input_revision": 71,
+      "command_revision": 19,
+      "document_generation": 2,
+      "document_bytes": 0,
+      "result_bytes": 0,
+      "error": {
+        "code": "invalid-recovery",
+        "message": "lstat /Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other/rec-7d7875c4593f5ae5a1a7fb1a-0000000001.elab-recovery: no such file or directory"
+      }
+    },
+    {
+      "id": "recovery-read-13",
+      "input": {
+        "kind": "inspection",
+        "id": "rec-7d7875c4593f5ae5a1a7fb1a-0000000001",
+        "sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960"
+      },
+      "directory": "/Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other",
+      "status": "failed",
+      "phase": "reading-recovery",
+      "actor": "agent.stdio",
+      "input_revision": 75,
+      "command_revision": 20,
+      "document_generation": 2,
+      "document_bytes": 0,
+      "result_bytes": 0,
+      "error": {
+        "code": "invalid-recovery",
+        "message": "lstat /Users/dshills/Development/projects/ELab/build/release-recovery-reads-173-evidence/files/other/rec-7d7875c4593f5ae5a1a7fb1a-0000000001.elab-recovery: no such file or directory"
+      }
+    }
+  ],
+  "evicted_read_id": "recovery-read-1",
+  "source_sha256": "923f757503789752ae8058082f36dfb6323a35b29d61204aab527f7b7e0cedb4",
+  "capsule_sha256": "5575513052f3ad62f6dd1b4135778b6c6300c41478da61f60302e7461f06d960",
+  "detailed_schemas": {
+    "start": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string",
+          "x-max-utf8-bytes": 128
+        },
+        "kind": {
+          "enum": [
+            "inspection",
+            "samples"
+          ],
+          "type": "string"
+        },
+        "limit": {
+          "default": 100,
+          "description": "Sample rows per page: omitted/zero uses 100; otherwise 1\u2013200. Offset may equal total.",
+          "maximum": 200,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "offset": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "recording_index": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "minimum": 0
+        },
+        "sha256": {
+          "description": "Exact advertised candidate SHA-256; case-sensitive comparison to the captured bytes.",
+          "pattern": "^[0-9a-fA-F]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "sha256"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-recovery-read",
+        "preconditions": [
+          "Recovery directory configured; exact candidate ID/hash is validated by worker",
+          "Fewer than four active recovery reads, shared with legacy recovery.inspect/recovery.samples"
+        ],
+        "effects": [
+          "Preserves live circuit, simulation/time, project/history/dirty state and recovery catalog/selection",
+          "Results stay tied to the captured directory and ID/hash across edits, New and recovery reconfiguration; only job metadata appears in snapshots",
+          "Reads/validates/projects/encodes outside editor lock, independently of project Save/Open work; no partial result",
+          "Caller disconnect does not cancel admitted work; explicit cancel or Close does; Close joins workers",
+          "Eight retained jobs; oldest terminal job is evicted on admission; active/canceling jobs keep their reader slot until worker returns"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed parameters"
+          },
+          {
+            "code": "busy",
+            "phase": "admission",
+            "when": "Four shared readers active"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Recovery not configured"
+          },
+          {
+            "code": "invalid-params",
+            "phase": "work",
+            "when": "Recording index or page invalid"
+          },
+          {
+            "code": "invalid-recovery",
+            "phase": "work",
+            "when": "File missing, inaccessible or invalid"
+          },
+          {
+            "code": "file-conflict",
+            "phase": "work",
+            "when": "Candidate hash no longer matches"
+          },
+          {
+            "code": "result-limit",
+            "phase": "work",
+            "when": "Encoded result exceeds 16 MiB"
+          },
+          {
+            "code": "canceled",
+            "phase": "work",
+            "when": "Read canceled; no result published"
+          },
+          {
+            "code": "timeout",
+            "phase": "work",
+            "when": "Cooperative deadline exceeded; no result published"
+          }
+        ],
+        "completion": {
+          "mode": "immediate admission; inspect exact returned recovery.reads job until terminal",
+          "observe": [
+            "recovery.read.inspect",
+            "project.inspect",
+            "events.poll"
+          ],
+          "cancel": "recovery.read.cancel",
+          "cooperative_deadline_s": 30
+        }
+      },
+      "x-inventory": "snapshot.recovery.candidates (exact id/sha256), snapshot.recovery.reads (retained job IDs)",
+      "x-kind-fields": {
+        "inspection": {
+          "forbidden": [
+            "recording_index",
+            "offset",
+            "limit"
+          ]
+        },
+        "samples": {
+          "optional": [
+            "offset",
+            "limit"
+          ],
+          "required": [
+            "recording_index"
+          ]
+        }
+      },
+      "x-max-concurrent-reads": 4,
+      "x-max-result-bytes": 16777216,
+      "x-max-retained-jobs": 8
+    },
+    "cancel": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-recovery-read",
+        "preconditions": null,
+        "effects": [
+          "Preserves live circuit, simulation/time, project/history/dirty state and recovery catalog/selection",
+          "Results stay tied to the captured directory and ID/hash across edits, New and recovery reconfiguration; only job metadata appears in snapshots"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed parameters"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Unknown or evicted read job"
+          },
+          {
+            "code": "unavailable",
+            "phase": "admission",
+            "when": "Job is already terminal"
+          }
+        ],
+        "completion": {
+          "mode": "cancellation request; inspect exact job until terminal",
+          "observe": [
+            "recovery.read.inspect",
+            "project.inspect"
+          ],
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-inventory": "snapshot.recovery.candidates (exact id/sha256), snapshot.recovery.reads (retained job IDs)",
+      "x-max-retained-jobs": 8
+    },
+    "inspect": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-recovery-read",
+        "preconditions": null,
+        "effects": [
+          "Preserves live circuit, simulation/time, project/history/dirty state and recovery catalog/selection",
+          "Results stay tied to the captured directory and ID/hash across edits, New and recovery reconfiguration; only job metadata appears in snapshots"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed parameters"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Unknown or evicted read job"
+          }
+        ],
+        "completion": {
+          "mode": "immediate owned in-memory query; no disk IO",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-inventory": "snapshot.recovery.candidates (exact id/sha256), snapshot.recovery.reads (retained job IDs)",
+      "x-max-retained-jobs": 8
+    },
+    "result": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-recovery-read",
+        "preconditions": [
+          "Retained job completed successfully"
+        ],
+        "effects": [
+          "Preserves live circuit, simulation/time, project/history/dirty state and recovery catalog/selection",
+          "Results stay tied to the captured directory and ID/hash across edits, New and recovery reconfiguration; only job metadata appears in snapshots",
+          "Decodes immutable retained JSON outside editor lock into independently owned typed result"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed parameters"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Unknown or evicted read job"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "No complete successful result"
+          },
+          {
+            "code": "result-too-large",
+            "phase": "admission",
+            "when": "Use recovery.read.chunk for a larger complete result"
+          }
+        ],
+        "completion": {
+          "mode": "immediate owned in-memory query; no disk IO",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-inventory": "snapshot.recovery.candidates (exact id/sha256), snapshot.recovery.reads (retained job IDs)",
+      "x-max-result-bytes": 1047552,
+      "x-max-retained-jobs": 8
+    },
+    "chunk": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "limit": {
+          "default": 65536,
+          "maximum": 65536,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "offset": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "x-command-contract": {
+        "version": 1,
+        "scope": "captured-recovery-read",
+        "preconditions": [
+          "Retained job completed successfully"
+        ],
+        "effects": [
+          "Preserves live circuit, simulation/time, project/history/dirty state and recovery catalog/selection",
+          "Results stay tied to the captured directory and ID/hash across edits, New and recovery reconfiguration; only job metadata appears in snapshots",
+          "Returns an owned base64 JSON byte slice with offset/next/total and whole-result SHA-256; omitted/zero limit uses 65536"
+        ],
+        "errors": [
+          {
+            "code": "invalid-params",
+            "phase": "admission",
+            "when": "Malformed parameters"
+          },
+          {
+            "code": "not-found",
+            "phase": "admission",
+            "when": "Unknown or evicted read job"
+          },
+          {
+            "code": "not-ready",
+            "phase": "admission",
+            "when": "No complete successful result"
+          }
+        ],
+        "completion": {
+          "mode": "immediate owned in-memory query; no disk IO",
+          "observe": null,
+          "cancel": "",
+          "cooperative_deadline_s": 0
+        }
+      },
+      "x-inventory": "snapshot.recovery.candidates (exact id/sha256), snapshot.recovery.reads (retained job IDs)",
+      "x-max-retained-jobs": 8,
+      "x-offset-range": "0 through result_bytes inclusive; end returns empty bytes"
+    }
+  },
+  "captured_graph": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "pulse-source",
+        "name": "Pulse source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-square.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -110
+        },
+        "value": 10000,
+        "unit": "\u03a9",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "C1",
+        "kind": "capacitor",
+        "name": "Capacitor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 1e-06,
+        "unit": "F",
+        "model": "ideal-capacitor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 110
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "C1.1",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "C1.2",
+        "to": "GND.reference",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "GND.reference",
+        "to": "V1.negative",
+        "connected": true
+      }
+    ]
+  },
+  "sample_page": {
+    "rows": [
+      {
+        "time_s": 0.01,
+        "values": [
+          3.1606027941427883,
+          5
+        ]
+      },
+      {
+        "time_s": 0.011,
+        "values": [
+          3.335644581509602,
+          5
+        ]
+      }
+    ],
+    "probes": [
+      {
+        "id": "v:C1.1",
+        "label": "C1.1 / ground",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      }
+    ],
+    "offset": 10,
+    "next_offset": 12,
+    "total": 21
+  },
+  "checks": [
+    "stable captured read IDs and progress/terminal metadata",
+    "exact pure-query inspection and original Verify sample parity",
+    "digest-checked 512-byte result chunks equal structured result",
+    "no partial result on hash failure",
+    "query/refusal/live/history/selection/file purity",
+    "retained result survives directory reconfiguration",
+    "inclusive empty EOF and rejected chunk bounds preserve source",
+    "unknown job query/cancel refusal purity",
+    "failed jobs expose no structured or chunked partial result",
+    "eight retained terminal jobs evict old result access"
+  ],
+  "limits": [
+    "Controlled tests qualify blocked reads, cancellation, four-reader capacity, eviction and Close joining",
+    "No complete physical typing/accessibility or general latency qualification"
+  ],
+  "client_exit_code": 0
+}
