@@ -1,0 +1,47 @@
+//go:build offscreen
+
+package main
+
+import (
+	"path/filepath"
+	"reflect"
+	"testing"
+
+	"cogentcore.org/core/events"
+	"cogentcore.org/core/events/key"
+	"github.com/dshills/elab/workbench"
+	"github.com/dshills/vellum/drivers/cogent"
+)
+
+func TestMountedComponentStartupPrecisionProbe(t *testing.T) {
+	for _, trigger := range []string{"return", "restart"} {
+		t.Run(trigger, func(t *testing.T) {
+			s, cleanup := testScreen(t)
+			t.Cleanup(cleanup)
+			prepareComponentStartup(t, s, "capacitor")
+			agentAction(t, s.service, "capacitor.initial.set", workbench.ValueParams{ID: "C1", Value: "0.12345678912345 V"})
+			agentAction(t, s.service, "simulation.restart", struct{}{})
+			agentAction(t, s.service, "project.save", workbench.SaveParams{Path: filepath.Join(t.TempDir(), "precise.elab")})
+			m := mountedComponentStartup(t, s, "capacitor")
+			if m.snapshot().FocusedID != "cap-initial" {
+				t.Fatal("startup field is not focused")
+			}
+			before := s.service.Snapshot()
+			if trigger == "return" {
+				m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeReturnEnter})
+			} else {
+				clickMountedControl(t, m, "simulation.restart")
+			}
+			after, err := s.service.Wait(m.ctx)
+			if err != nil || s.errorMessage != "" {
+				t.Fatal("startup action failed", err, s.errorMessage)
+			}
+			beforePart, _ := (workbench.Graph{Components: before.Components}).Component("C1")
+			afterPart, _ := (workbench.Graph{Components: after.Components}).Component("C1")
+			t.Logf("initial %.17g -> %.17g; command revision %d -> %d", *beforePart.InitialVoltage, *afterPart.InitialVoltage, before.CommandRevision, after.CommandRevision)
+			if !reflect.DeepEqual(before.Components, after.Components) || before.Document != after.Document || !reflect.DeepEqual(before.UndoEntry, after.UndoEntry) {
+				t.Fatal("untouched startup control changed graph/document/history")
+			}
+		})
+	}
+}

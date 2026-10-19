@@ -1,0 +1,12 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedComponentStartupPrecisionProbe
+=== RUN   TestMountedComponentStartupPrecisionProbe/return
+    startup_precision_probe_test.go:41: initial 0.12345678912345 -> 0.12345678912345; command revision 10 -> 10
+=== RUN   TestMountedComponentStartupPrecisionProbe/restart
+    startup_precision_probe_test.go:41: initial 0.12345678912345 -> 0.12345678912345; command revision 10 -> 11
+--- PASS: TestMountedComponentStartupPrecisionProbe (0.14s)
+    --- PASS: TestMountedComponentStartupPrecisionProbe/return (0.08s)
+    --- PASS: TestMountedComponentStartupPrecisionProbe/restart (0.06s)
+PASS
+ok  	github.com/dshills/elab/desktop	0.690s

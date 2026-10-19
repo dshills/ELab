@@ -174,7 +174,9 @@ Next, use the four walkthrough tasks below and record owner feedback. Fix a conc
 
 The [bounded native /174 slider qualification](../docs/validation/native-slider-input-174/README.md) now passes one paused drag/Undo and one running drag/Pause. Five complete graph/mixed/transient/scope stages match a fresh packaged agent; retained voltages agree with the independent piecewise RC law within 24.863 µV. One guarded agent edit completes inside the held-click call and survives release without a late user commit; exact OS event ordering is unavailable. Window blur was not established, and physical replacement/keyboard/reader/IME remain open. The owned host closes normally after a separate final save; owner settings, baseline, review/copy and canonical /120 remain unchanged. EDIT-03/SIM-02 stay partial. No new app version, latency cohort or promotion.
 
-Next bounded release-quality task: review the remaining circuit-input bindings against the current command ledger and existing guard tests, prioritizing a concrete unqualified work-preservation path. Preserve this evidence; add a repair only for a reproduced defect. Owner walkthrough, reader/environment and broader acceptance gates remain pending.
+The [selected circuit-input guard review](../docs/validation/circuit-input-review-174/README.md) verifies the current 72-file ledger and reviews value/preset, waveform, startup, wiper/switch and common owner guards. A suspected passive capacitor startup rounding defect does not reproduce: two temporary offscreen retained-widget probes preserve the exact stored value, document and history through untouched Return/Restart. No repair or new production test is added for that disproved concern.
+
+The next evidence gap is physical startup Reset/Restart with a private capacitor/inductor field and an intervening agent edit; existing source-mounted schedules are already covered. Any next native pass must declare its owned isolated session and preserve this evidence, owner settings and package bytes. Owner walkthrough, reader/environment and broader acceptance gates remain pending; no feature expansion or repeated unchanged full suite.
 
 ## Acceptance tasks
 

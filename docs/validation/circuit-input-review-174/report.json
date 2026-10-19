@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-19",
+  "source_commit": "a79fb6b",
+  "app_source_changed": false,
+  "ledger_files_verified": 72,
+  "ledger_sha256": "ce505baa0016ca1d5661bb58557bf8efebcf3f5f4d5b3a70640beef824b3d2f8",
+  "review_scope": "Selected-component circuit input ownership and precision; presence/source review is not full mounted binding conformance",
+  "reviewed_source_sha256": {
+    "desktop/component_inspector.go": "58232a639e86a0e40dfec31fb4fcc3cd19c551a645d459d3a754fed4027ef20b",
+    "desktop/actuation_controls.go": "9b0e8148f7ca32ac2f1802d69411fcd355c2df5b2af4b89df1084d413166ee1e",
+    "desktop/field_context.go": "996a42a6402abae65837cf2b5a63160d62777d0c71af7c545bf2c316df2c0a9a",
+    "desktop/component_startup_actions.go": "a7801c73956c5036ffcb0e41b39aaa638fdf9647f5ce3762b626f7ef72bd4291",
+    "desktop/value_apply.go": "b0e380210aa477f9d848ed5bdc69502353c653f3ec6259d74c4159ed35df504e",
+    "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
+    "desktop/inductor_controls.go": "326e6590bf52d5e7aa256d508f1a73c8dcb164b48692d2012e5706104d50c5c0",
+    "desktop/view.go": "95f0341a19888ed731d58255a8f37324fd3e6bd8e5654e17d0884a44e4feb649",
+    "desktop/main.go": "67f5f3e07d71d31f78d95b1ea784fceac443b544ddf474bb3591a328d83249c3",
+    "desktop/field_context_test.go": "c78fdf3ac0491924039f99f29a863320c3c791038c3bce35b4736107164e1915",
+    "desktop/field_continuation_test.go": "6130054722e44a263295092f7d35eb14676b75a7dba0a96c20f7f29616d7298e",
+    "desktop/actuation_controls_test.go": "e854c237a14c40bb7365a31863b8656872741cf7556291f837b20d7642266275",
+    "desktop/control_owner_offscreen_test.go": "371b670898b6527c17c0563630bd9bd39ae4c5cb89ec50ba637d50eea6d185b0",
+    "desktop/component_startup_actions_offscreen_test.go": "c186e58cae25fa1fc6ab46b9744644bf88637ab3bfafa6139c4cff62698ecd9b",
+    "desktop/value_apply_test.go": "66049378d8a27d9f33797c3455357dc107210103a87c2d79af92a797ca3eef01",
+    "desktop/value_presets_test.go": "4de0e06c17dac8b1747265b8642b9b9b710c26c7bc5b271e7b0edea374890844",
+    "desktop/source_pulse_timing_test.go": "ececc45b932c4fba37ee3c2c7e5ab9838bd1cfeda899bc4a2d8e62f8fc9c6050",
+    "desktop/shared_pulse_timing_test.go": "21d351207c7765aff02833f1ec6d96831892face35bcb74f8bc72babfb5477c9",
+    "desktop/switch_test.go": "5a081aba8f818deeaa89d6ce4c8afd6327cc5d7388f7f14efce7d935887ad509",
+    "desktop/waveform_quantities_test.go": "8b6c5c89123bc4be6287017d75c7886eaaf533ebcfc56e780318699445ea60ae"
+  },
+  "new_execution": {
+    "method": "Temporary Go overlay, pinned offscreen retained widgets; no physical OS input",
+    "test": "TestMountedComponentStartupPrecisionProbe",
+    "cases": {
+      "untouched_return": {
+        "initial_voltage_v": 0.12345678912345,
+        "final_voltage_v": 0.12345678912345,
+        "command_revision_before": 10,
+        "command_revision_after": 10
+      },
+      "untouched_restart": {
+        "initial_voltage_v": 0.12345678912345,
+        "final_voltage_v": 0.12345678912345,
+        "command_revision_before": 10,
+        "command_revision_after": 11
+      }
+    },
+    "components_document_history_unchanged": true,
+    "exit_code": 0,
+    "test_seconds": 0.69,
+    "race_instrumented": false
+  },
+  "findings": [],
+  "limitations": [
+    "Existing test sources were reviewed; their entire suites were not rerun.",
+    "Temporary probe is not added to production Go packages; it records a disproved concern.",
+    "No new physical input, IME/reader, distribution or owner acceptance.",
+    "Initial evidence report generation guessed nonexistent desktop/value_presets.go; corrected to actual desktop/value_apply.go before publication. Original traceback is in tool output."
+  ],
+  "files": {
+    "startup-precision-probe.go.txt": {
+      "sha256": "3b5501793b875b4de4e45db18c5566a0b223223ebc678fad3b37f5466d2df4f8",
+      "bytes": 1870
+    },
+    "initial-overlay-path-refusal.txt": {
+      "sha256": "66eccf85e25cfaccccdba927e60789ef693e54b220a765c3911834283bad2f95",
+      "bytes": 114
+    },
+    "startup-precision-probe.txt": {
+      "sha256": "458d71195029b7b4353e8884d8a2749eb1397e8390b189fcd5380e0a66ca74ca",
+      "bytes": 738
+    }
+  },
+  "sdk_commit": "b22478cf8cec8dda1ccdcd93d6ff6b62e2cc11de",
+  "sdk_lock_sha256": "2f9ac0e120bdd09d5ffe2c3d8b5da4d24588455c5e6bc8d6f08c80e0dccc6395",
+  "sdk_review_sha256": {
+    "build/.vellum-sdk-b22478c/drivers/cogent/controls.go": "e69c130505e595621f34b0b8048637467957d7b8ebf3c99432bfb59360cd9268",
+    "build/.vellum-sdk-b22478c/drivers/cogent/numberfield_settle.go": "fdcff7cc73f14113c2eb77980e89932d9d0ca3efdf948d63f703773a9abb2201",
+    "build/.vellum-sdk-b22478c/ui/controls.go": "48bd55211a32fc489b0afbdd29eabff6e81b9d4fec466ec24ae68c0ab618bdaf"
+  }
+}
