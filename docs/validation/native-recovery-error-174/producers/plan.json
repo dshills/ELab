@@ -1,0 +1,18 @@
+{
+  "id": "RECOVERY-NATIVE-ERROR-174",
+  "requirement": "FILE-02 and section 10 Recovery: show automatic save failure without losing work",
+  "plan": "One owned isolated /174 session, synthetic saved RC plus kept recording and private recovery folder. Obtain automatic good capsule, replace only that owned directory temporarily with an owned file, observe actual native Autosave needs attention plus detailed error while making one ordinary edit, repair storage, observe automatic success clearing without manual scan/checkpoint, verify manual file/old capsule/recording preserved, separate Save and normal Close. Compare structured public state and native AX/images.",
+  "excluded": [
+    "No new visible-latency cohort",
+    "No forced crash or owner files/settings changes",
+    "No new privacy grant",
+    "No permanent app/SDK change without a reproduced defect"
+  ],
+  "success": "Actual native warning/detail persist across ordinary edit and clear after automatic complete retry; source/manual/capture preserved; owned host closes normally.",
+  "stop_condition": "One focused reproduction pass; checkpoint any confirmed defect or inconclusive display observation before repair/retry expansion.",
+  "native_sha256": "46f78038929c6bce7ed6b55da201d26cda0bb6279c80cea31abc188ca12dec2a",
+  "agent_sha256": "a8636912f15394e647a773d36395fd7f0380d9315f4c16a3e599a51390e6aa54",
+  "maximum_native_seconds": 1200,
+  "ordinary_interval_s": 2,
+  "recorded_duration_s": 0.2
+}

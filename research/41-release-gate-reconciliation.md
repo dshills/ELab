@@ -97,3 +97,7 @@ inconclusive display observation. This is not a new latency cohort, crash test,
 OS settings change or feature campaign. A repair requires a reproduced defect.
 Owner/participant/environment prerequisites remain open while this independent
 engineering check proceeds.
+
+## Subsequent evidence
+
+RECOVERY-NATIVE-ERROR-174 [now passes its declared native case](../docs/validation/native-recovery-error-174/README.md), including warning persistence, automatic clearing, preserved source/capture and fresh agent reopens. The structured reconciliation and inspection record retain their original prelaunch checkpoint; this follow-up does not relabel their earlier source hashes or turn the broader Recovery gate into a universal pass. The [delivery plan](34-first-version-plan.md) records the next finite agent-query contract check.

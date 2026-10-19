@@ -558,3 +558,7 @@ October 18: [grouped-inspector source repair](../../../docs/validation/inspector
 ### Native /174 component startup input
 
 [One isolated session](../../../docs/validation/native-startup-input-174/README.md) verifies private capacitor/inductor entry with four first-click pointer Restart/Reset cases and one held-call agent edit. Five exact private snapshots and ten packaged-agent graph/transient/scope/mixed stages match, with independent RC/RL equations. The newer 40 mA remains accepted after release; exact OS ordering/refusal layer and broader input acceptance are unobserved. Normal saved cleanup preserves both baselines, settings, review/copy and canonical /120. No repair, new package or promotion.
+
+### Native /174 automatic storage error/retry
+
+[Actual native observations](../../../docs/validation/native-recovery-error-174/README.md) verify the visible autosave warning/detail through a native 20→30 kΩ edit and automatic clearing after private storage repair. Original manual save, prior capsule and all 209 capture rows survive; native/agent physics match, saved bytes are identical and two fresh reopens retain exact pages. Native viewport publication on warning removal is explicit. Normal saved cleanup preserves settings and app packages; no repair, new package or broader storage/performance/reader acceptance.
