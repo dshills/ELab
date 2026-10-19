@@ -8,6 +8,8 @@ The owner authorized this recorder method on October 19. That authorization does
 
 A [protected non-smoke launch preflight](../../docs/validation/latency-launch-preflight-170/README.md) now preserves exact /170 identity, one owned window and CUA binding: a temporary LaunchServices launcher explicitly execs into the verified sandbox before starting ELab. The test closes normally with unchanged shared geometry. This clears that launch/binding prerequisite only; it supplies no input, recording or latency observation. Use fresh paths/PID/window and repeat the guards for any subsequent session; never reuse the stopped binding.
 
+The subsequent [one-LED input/frame calibration](../../docs/validation/marker-input-calibration-170/README.md) validates a complete marker acknowledgment before one CUA Apply action and identifies the resulting schematic/readout image. Arm the recorder in the context with existing access, then start its short stream from a filesystem signal issued by the already-running CUA controller; a model/tool round trip consumed the earlier recording window. The Node-host recorder preflight returned access unavailable, so that context was not used for capture and no permission was requested. These observations do not qualify visibility, physical clock/pixels, fault paths or a latency cohort.
+
 ## Check without recording
 
 ```sh

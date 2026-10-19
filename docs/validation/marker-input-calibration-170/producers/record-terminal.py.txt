@@ -1,0 +1,29 @@
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+import time
+
+root=Path('/Users/dshills/Development/projects/ELab')
+out=Path('/private/tmp/elab-marker-input-calibration-170')
+recorder=root/'build/frame-probe-tools/frame-probe'
+assert hashlib.sha256(recorder.read_bytes()).hexdigest()=='6a861e71daad86de6d84ef5bba1d4933c659c51703c4a238a7d89d45681c5599'
+assert not (out/'capture').exists()
+r=json.loads((out/'report.json').read_text());assert r['owned_pid']==87592 and r['exact_target_identity_established'] and r['target_windows']==[dict(owner_pid=87592,window_id=154153)]
+preflight=subprocess.run([str(recorder),'--preflight'],capture_output=True,text=True,timeout=15,check=True)
+(out/'terminal-screen-preflight.json').write_text(preflight.stdout)
+access=json.loads(preflight.stdout);assert access['screen_access_previously_granted'] and not access['permission_requested']
+args=[str(recorder),'--capture','--pid','87592','--window','154153','--executable',r['registration']['executable_path'],'--sha256',r['native_sha256'],'--output',str(out/'capture'),'--seconds','3']
+start=time.monotonic()
+with (out/'recorder-terminal-stdout.txt').open('x') as stdout,(out/'recorder-terminal-stderr.txt').open('x') as stderr:
+    p=subprocess.Popen(args,stdout=stdout,stderr=stderr)
+    started=dict(pid=p.pid,command=args,recorder_sha256=hashlib.sha256(recorder.read_bytes()).hexdigest())
+    with (out/'recording-worker-started.json').open('x') as f:f.write(json.dumps(started,indent=2)+'\n')
+    print(json.dumps(started),flush=True)
+    try:p.wait(timeout=15)
+    except subprocess.TimeoutExpired:
+        p.terminate();p.wait(timeout=5);raise
+result=dict(**started,exit_code=p.returncode,elapsed_s=time.monotonic()-start)
+with (out/'recording-worker.json').open('x') as f:f.write(json.dumps(result,indent=2)+'\n')
+print(json.dumps(dict(exit_code=p.returncode,elapsed_s=result['elapsed_s'])),flush=True)
+raise SystemExit(p.returncode)

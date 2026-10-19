@@ -1,0 +1,12 @@
+{
+  "source": "Completed CUA tool call transcript",
+  "app_binding": "var markerApp = await cua.getApp('/private/tmp/elab-first-version-170-runtime/ELab.app');",
+  "prepared_input": "await markerApp.click(82); await markerApp.pressKey('super+a'); await markerApp.typeText('2k'); await markerApp.getAXState();",
+  "coordinated_invocation": "await terminalFs.writeFile('/private/tmp/elab-marker-input-calibration-170/terminal-input-controller.js.txt',terminalMarkerApply.toString(),{flag:'wx',mode:0o600}); await terminalFs.writeFile('/private/tmp/elab-marker-input-calibration-170/capture-start.request','CUA controller ready for the fresh stream.',{flag:'wx',mode:0o600}); var coordinatedMarkerResult = await terminalMarkerApply(markerApp);",
+  "observed_result": {
+    "error": null,
+    "input_call_completed": true,
+    "expected_readout": true
+  },
+  "clock_scope": "Controller event sequence only; no OS input-event or accepted-edit timestamp"
+}

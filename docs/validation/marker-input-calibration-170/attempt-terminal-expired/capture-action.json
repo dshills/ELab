@@ -1,0 +1,23 @@
+{
+  "input_call_invoked": false,
+  "input_call_completed": false,
+  "eligible_latency_observations": 0,
+  "latency_gate_passed": null,
+  "controller_clock_scope": "Sequence and wall timestamps establish controller order only; not input-event timestamps",
+  "events": [
+    {
+      "sequence": 1,
+      "name": "baseline_image_received",
+      "wall_time_utc": "2026-10-19T14:00:35.050Z",
+      "frame_index": 1,
+      "png": "frame-16e6e9119089b800ae4bf87dab81a5f155fc947d116bd77662455aa60658d790.png"
+    },
+    {
+      "sequence": 2,
+      "name": "marker_requested",
+      "wall_time_utc": "2026-10-19T14:00:35.054Z",
+      "id": "led_apply_terminal01"
+    }
+  ],
+  "error": "Error: Complete marker acknowledgment expired"
+}
