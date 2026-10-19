@@ -5,12 +5,13 @@ October 19, 2026. Frozen app: **ELab 0.156.0 /173**. Original
 
 The LED block has all 20 scheduled outcomes: **14 available software-frame bounds
 and six unavailable test-harness outcomes**. There is no full-cohort LED p95 or
-PRD performance pass. RC and NPN collection remain next.
+PRD performance pass. RC collection halts after one uncommitted edit and one
+preparation-only abort; NPN collection remains pending.
 
 | Reference | Scheduled outcomes retained | Available bounds | Full-cohort p95 |
 |---|---:|---:|---|
 | LED | 20/20 | 14 | Unavailable: six harness outcomes |
-| RC | 0/20 | 0 | Pending |
+| RC | 2/20 | 0 | Unavailable: uncommitted edit; preparation abort. Eighteen unattempted. |
 | Resistor-loaded NPN | 0/20 | 0 | Pending |
 
 Available LED bounds, in milliseconds; these are **descriptive values for n=14**,
@@ -42,7 +43,31 @@ PNGs remain in the [replayable proof](../docs/validation/latency-led-cohort-173/
 including the excluded first recording, initial region/analysis mistakes and
 their corrections. No app, solver, model, SDK or command changes occur.
 
-Continue with the original RC/NPN blocks. If a complete LED p95 is needed after
+The first RC trial has one completed CUA Apply call after private `2uF` input,
+but the accepted capacitor stays 1 µF, with unchanged electrical revision/run
+and τ = 10 ms. All 163 complete frames/161 original PNGs remain in the
+[halt and diagnostic proof](../docs/validation/latency-rc-halt-173/README.md).
+`rc-02` is explicitly aborted before input/capture; IDs 03–20 are untouched.
+There is no accepted edit from which to calculate a latency bound.
+
+Separate index-based Apply checks accept 2 µF while live and paused; the paused
+result is truthfully stale. A coordinate case has no confirmed input-call
+completion and remains inconclusive. The owner confirms manually resizing the
+diagnostic window to 1759×1014; that change is not an inferred layout bug or a
+controlled timing comparison. The RC headless preflight and retained native
+samples agree with an independent whole-period analytic solution. No application
+defect is reproduced or source repair made here.
+
+Both RC sessions save synthetic final projects and close normally. The original
+collection preserves shared settings. The functional diagnostic detects changed
+shared window-settings hashes and its wrapper fails the final equality assertion;
+the sandbox denies that process access and the change's source is unproven.
+Keep the failure and current settings. App artifacts and all 650 Go sources
+remain unchanged. No diagnostic result is promoted into the cohort.
+
+Resume only untouched RC IDs after restoring the declared test geometry in an
+isolated session with no concurrent interaction; stop on another uncommitted
+edit. Keep these unavailable outcomes and the separate NPN block. If a complete LED p95 is needed after
 the harness repair, declare a new cohort separately; do not backfill failed IDs
 or calculate a full-cohort percentile from the successful subset. Owner walkthrough,
 accessibility/IME, other environments and the hobbyist study remain separate.
