@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "scope": "Exact clean copied /161 native socket and headless stdio, independent RC equations, all scope/CSV rows, cursors and extrema; no physical input claim",
+  "headless": {
+    "passed": true,
+    "agent_sha256": "5fae1b65a82cfafaea0ed9092e47df85413dd67dfcdf59afda3d135f48595cc3",
+    "scope": "Exact copied /161 native socket or headless stdio; manual RC edge, scope, cursor and CSV",
+    "transport": "headless-stdio",
+    "errors": [],
+    "expected_edge_current_a": -0.00031606027941427883,
+    "actual_scope_edge_current_a": -0.00031606027941427883,
+    "actual_csv_edge_current_a": -0.00031606027941427883,
+    "solver_edge_current_a": -0.00031606027941427883,
+    "samples": 23,
+    "agent_exit_code": 0
+  },
+  "native_pid": 83345,
+  "native": {
+    "passed": true,
+    "agent_sha256": "5fae1b65a82cfafaea0ed9092e47df85413dd67dfcdf59afda3d135f48595cc3",
+    "scope": "Exact copied /161 native socket or headless stdio; manual RC edge, scope, cursor and CSV",
+    "transport": "native-socket",
+    "errors": [],
+    "expected_edge_current_a": -0.00031606027941427883,
+    "actual_scope_edge_current_a": -0.00031606027941427883,
+    "actual_csv_edge_current_a": -0.00031606027941427883,
+    "solver_edge_current_a": -0.00031606027941427883,
+    "samples": 23,
+    "agent_exit_code": 0
+  },
+  "complete_transient_scope_parity": true,
+  "native_exit_code": 0,
+  "normal_native_closure": true,
+  "final_native_exit_code": 0
+}

@@ -1,6 +1,6 @@
 # First-version UI walkthrough and issue list
 
-October 18 update: **[qualified /160](inspector-recovery-review-checkpoint.json)** incorporates the grouped-inspector repair from clean `4403097`, keeping external AX edit targets available after invalid Apply. Exact copied native smoke/four adapters/reference/measurement/live/save checks and [actual /160 CUA correction](../../../docs/validation/native-inspector-recovery-160/README.md) pass with no coordinate fallback and agent parity. Source Cocoa publication already survived the flat diagnostic; no framework root cause is inferred. Preserved /159 retains the recorded external failure. Owner remains “Not tried yet”; current RC physical acceptance and broader gates remain pending.
+October 18 update: **[qualified /161](rc-input-frame-review-checkpoint.json)** incorporates the RC input-edge probe-frame repair from clean `35371ee`, unchanged SDK `b22478c`. Copied native smoke/four adapters/reference/measurement/live/save checks and independent native/headless edge equations/CSV pass. All 381 manifest entries and prior packages verify. Preserved /160 remains affected. This is new public-command integration; physical native input observations retain their original build scopes. Owner remains “Not tried yet”; next physical acceptance is RC construction from individual parts.
 
 October 17, 2026. **Private review boundary reached; wider release/MVP qualification remains open.** These are direct observations of ELab's actual native window, using pointer, keyboard and accessibility actions. They are not participant results, a screen-reader study or visible-latency measurements.
 
@@ -448,3 +448,7 @@ October 18: [grouped-inspector source repair](../../../docs/validation/inspector
 ### RC input-edge source repair · clean replacement pending
 
 [Source proof](../../../docs/validation/rc-input-frames/README.md) rebuilds the immutable RC probe frame at manual input transitions. Original-source regression and preserved /160 public reproduction fail; all 12 repaired entry-path/orientation cases, independent 23-row scope/cursor/extrema/CSV checks and full quality (305.387 s) pass. Original history/storage state remain intact. Clean replacement packaging and integration are next; /160 remains affected, owner Not tried yet, P0 15 implemented /12 partial. No SDK/native-binding/command/model/format change or promotion.
+
+### RC input-edge replacement /161 qualified · October 18
+
+[Clean replacement qualification](rc-input-frame-review-checkpoint.json) packages `35371ee` with unchanged SDK `b22478c`. Exact copied native smoke (39.164 s), four adapters (48.825 s), reference/measurement/recorded/live/save checks pass. Independent native/headless RC equations validate both edge samples, all 23 scope/CSV rows, cursors/extrema and correct −.3160602794 mA at 10 ms. Native closes normally; all 381 entries, 21 earlier reviews, original candidate and canonical verify. No new physical input, reader, latency or owner acceptance is inferred. Owner Not tried yet, P0 17 implemented /10 partial, no promotion or scope expansion.
