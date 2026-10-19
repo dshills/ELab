@@ -1,0 +1,24 @@
+from pathlib import Path
+import gzip,hashlib,json,shutil
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent;out=Path('/private/tmp/elab-native-close-169-replay');folder=root/'docs/validation/native-capacity-close-169';folder.mkdir()
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();read=lambda p:json.loads(p.read_text())
+report=read(out/'report.json');assert report['passed'] and not report['original_failure_reproduced'] and len(report['sessions'])==9 and report['geometry_unchanged']
+receipt=root/'research/ui-audit/first-version/component-startup-review-checkpoint.json';review=root/'build/ELab-0.152.0-169-review';runtime=Path('/private/tmp/elab-first-version-169-runtime');source=root/'docs/validation/component-startup-review-169/First-public-report.json.gz'
+assert (runtime/'runtime.sb').read_bytes()==gzip.decompress((review/'Evidence/runtime.sb.gz').read_bytes())
+assert sha(review/'ELab.app/Contents/MacOS/ELab')==sha(runtime/'ELab.app/Contents/MacOS/ELab')==read(receipt)['native_sha256']
+assert sha(runtime/'elab-agent')==read(receipt)['agent_sha256']
+for name in ['native','agent']:
+ text=(runtime/name).read_text();assert text.startswith('#!/bin/sh\nset -eu\n') and str(runtime/'runtime.sb') in text and 'exec /usr/bin/sandbox-exec -f ' in text
+ (folder/(name+'-launcher.txt')).write_text(text)
+(folder/'runtime.sb.gz').write_bytes(gzip.compress((runtime/'runtime.sb').read_bytes(),mtime=0))
+isolation=dict(scope='Existing copied runtime policy and launchers checked after bounded replay, policy byte-equivalent to sealed /169 evidence; original sealed runtime canaries retain their earlier scope. Replay itself records geometry hashes/modes before and after; no fresh access canary or ordinary startup qualification.',policy_sha256=sha(runtime/'runtime.sb'),native_sha256=sha(runtime/'ELab.app/Contents/MacOS/ELab'),agent_sha256=sha(runtime/'elab-agent'),launcher_sha256={name:sha(runtime/name) for name in ['native','agent']},sealed_policy_member='Evidence/runtime.sb.gz');(folder/'isolation.json').write_text(json.dumps(isolation,indent=2)+'\n')
+shutil.copyfile(out/'report.json',folder/'report.json');shutil.copyfile(stage/'run.json',folder/'run.json')
+for name in ['replay.py','run.py','retain.py','first-preflight-replay.py','first-preflight-replay-output.txt','first-preflight-run.json']:
+ p=stage/name;shutil.copyfile(p,folder/(name+'.txt' if name.endswith('.py') else name))
+(folder/'replay-output.txt.gz').write_bytes(gzip.compress((stage/'replay-output.txt').read_bytes(),mtime=0))
+for entry in report['sessions']:
+ name=entry['name'];dest=folder/name;dest.mkdir()
+ for p in (out/name).iterdir():
+  if p.is_file() and p.name not in ['endpoint.json']:
+   (dest/(p.name+'.gz')).write_bytes(gzip.compress(p.read_bytes(),mtime=0))
+r=dict(status='bounded_non_reproduction_original_failure_open',source_release_identity=report['release_identity'],original_report_sha256=sha(source),replays=3,native_sessions=9,original_public_main_commands=486,nested_reopen_commands=24,max_close_response_s=max(s['close_response_s'] for s in report['sessions']),max_response_to_exit_s=max(s['response_to_exit_s'] for s in report['sessions']),geometry_unchanged=True,production_changed=False,new_release_created=False,original_failure_resolved=False,owner_acceptance=False,canonical_promoted=False,evidence_sha256={p.relative_to(folder).as_posix():sha(p) for p in sorted(folder.rglob('*')) if p.is_file()});(folder/'checkpoint.json').write_text(json.dumps(r,indent=2)+'\n');print(dict(retained_sessions=9,evidence_files=len(r['evidence_sha256']),original_failure_resolved=False))

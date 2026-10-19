@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+cd -- /private/tmp/elab-first-version-169-runtime/empty-working-directory
+exec /usr/bin/sandbox-exec -f /private/tmp/elab-first-version-169-runtime/runtime.sb /private/tmp/elab-first-version-169-runtime/ELab.app/Contents/MacOS/ELab "$@"

@@ -1,0 +1,81 @@
+from pathlib import Path
+import gzip,hashlib,importlib.util,json,os,signal,subprocess,sys,time
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent;out=Path('/private/tmp/elab-native-close-169-replay');out.mkdir(mode=0o700)
+sys.path.insert(0,str(root/'scripts'));from wiring_replay import validate_release
+identity=validate_release(root,root/'research/ui-audit/first-version/component-startup-review-checkpoint.json');assert identity['release']=='0.152.0 /169'
+runtime=Path('/private/tmp/elab-first-version-169-runtime');rr=json.loads((runtime/'runtime-report.json').read_text());assert rr['passed'] and rr['controls']['shared_geometry']['read']['denied'] and rr['controls']['shared_geometry']['write_without_truncate']['denied']
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();assert sha(runtime/'ELab.app/Contents/MacOS/ELab')==json.loads((root/'research/ui-audit/first-version/component-startup-review-checkpoint.json').read_text())['native_sha256'] and sha(runtime/'elab-agent')==identity['agent_sha256']
+shared=Path.home()/'Library/Cogent Core'
+def geometry():return {p.relative_to(shared).as_posix():dict(sha256=sha(p),mode=oct(p.stat().st_mode&0o777)) for p in shared.rglob('*') if p.is_file()}
+before=geometry();assert before==rr['shared_geometry_after']
+source=root/'docs/validation/component-startup-review-169/First-public-report.json.gz';first=json.loads(gzip.decompress(source.read_bytes()));case=next(c for a in first['adapters'] if a['name']=='native-socket' for c in a['capacity']['cases'] if c['name']=='capacity-64-parts');assert len(case['calls'])==162
+spec=importlib.util.spec_from_file_location('persistence',root/'scripts/persistence-demo.py');helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+Client=lambda endpoint:helper.Client(str(endpoint),command_preconditions=True,agent_binary=runtime/'agent')
+readonly={'project.inspect','simulation.wait','operation.inspect','operation.samples'}
+report=dict(passed=False,scope='Three bounded replays of the original 162 public main-session commands and nested save/reopen commands using exact copied /169 binaries. Public native shutdown only, not OS close-button, arbitrary workloads or a repair of the original intermittent failure.',release_identity=identity,original_report_sha256=sha(source),geometry_before=before,sessions=[])
+def save():
+ report['geometry_after']=geometry();report['geometry_unchanged']=report['geometry_after']==before
+ (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+
+def session(name,calls,source_path=None,nested=False):
+ directory=out/name;directory.mkdir(mode=0o700);endpoint=directory/'endpoint.json';log=(directory/'native.log.txt').open('w');client=None
+ host=subprocess.Popen([str(runtime/'native'),'--agent-endpoint',str(endpoint),'--no-appearance','--recovery-directory',str(directory/'recovery')],stdout=log,stderr=subprocess.STDOUT)
+ result=dict(name=name,owned_pid=host.pid,commands_expected=len(calls),commands_completed=0,closed=False);report['sessions'].append(result);save()
+ try:
+  deadline=time.monotonic()+20
+  while not endpoint.exists():
+   assert host.poll() is None,'host exited before endpoint';assert time.monotonic()<deadline,'endpoint readiness timeout';time.sleep(.02)
+  client=Client(endpoint);overflow=False
+  for entry in calls:
+   command=entry['command'];params=dict(entry['params'])
+   if 'path' in params:
+    if params['path']=='<source-project>':params['path']=str(source_path)
+    elif params['path'].startswith('<artifacts>/'):params['path']=str(directory/params['path'].removeprefix('<artifacts>/'))
+   expected='unavailable' if overflow and command=='simulation.step' else None
+   value=client.ask(command,params,command not in readonly,expect=expected)
+   result['commands_completed']+=1
+   if command=='component.place' and params.get('id')=='Overflow':overflow=True
+   if command=='simulation.verify':
+    capture=value['last_operation'];deadline=time.monotonic()+10
+    while True:
+     operation=client.ask('operation.inspect',dict(id=capture))['operation'];assert operation['status'] not in ['failed','canceled']
+     if operation['status']=='completed':break
+     assert time.monotonic()<deadline;time.sleep(.01)
+   if nested and command=='project.save':
+    excess=Path(params['path']).name=='excess.elab';reopen=next(r for r in case['reopens'] if r['kind']==('excess' if excess else 'valid'))
+    session(name+'-'+('excess' if excess else 'valid'),reopen['calls'],Path(params['path']))
+  state=client.ask('project.inspect');(directory/'before-close.json').write_text(json.dumps(state,indent=2)+'\n')
+  expected=case['boundary']['graph'] if overflow or source_path and source_path.name=='excess.elab' else case['graph']
+  assert state['components']==expected['components'] and state['wires']==expected['wires']
+  assert state['document']['recording_count']==1 and not state['document']['dirty']
+  start=time.monotonic();closed=client.ask('app.close',dict(discard_changes=True),True);result['close_response_s']=time.monotonic()-start
+  (directory/'close-response.json').write_text(json.dumps(closed,indent=2)+'\n');shutdown=closed['shutdown']
+  assert closed['closed'] and shutdown['exit_ready'] and shutdown['workers_joined'] and shutdown['recovery_finalized'] and shutdown['status']=='completed',shutdown
+  client.close();client=None
+  try:result['exit_code']=host.wait(timeout=5)
+  except subprocess.TimeoutExpired:
+   result['graceful_exit_timeout']=True
+   # This newly owned synthetic session has already admitted close. SIGQUIT
+   # retains Go stacks in its private log and terminates it for diagnosis.
+   host.send_signal(signal.SIGQUIT);result['diagnostic_signal']='SIGQUIT';result['exit_code']=host.wait(timeout=10)
+   raise AssertionError('owned native close exceeded five seconds; diagnostic stack retained')
+  result['response_to_exit_s']=time.monotonic()-start-result['close_response_s'];result['total_close_s']=time.monotonic()-start
+  assert result['exit_code']==0;result['closed']=True
+ finally:
+  if host.poll() is None:
+   host.terminate()
+   try:host.wait(timeout=10)
+   except subprocess.TimeoutExpired:host.kill();host.wait(timeout=5)
+   result['forced_cleanup']=True
+  if client:client.close()
+  log.close();result['owned_process_absent']=subprocess.run(['/bin/ps','-p',str(host.pid)],capture_output=True).returncode!=0;save()
+  assert geometry()==before
+try:
+ for n in range(3):session(f'trial-{n+1}',case['calls'],nested=True)
+ assert len(report['sessions'])==9 and all(s['closed'] and s['owned_process_absent'] for s in report['sessions'])
+ assert validate_release(root,root/'research/ui-audit/first-version/component-startup-review-checkpoint.json')==identity
+ report['passed']=True;report['original_failure_reproduced']=False
+except BaseException as error:
+ report['error']=type(error).__name__+': '+str(error);raise
+finally:save()
+print(json.dumps(dict(passed=report['passed'],sessions=len(report['sessions']),original_failure_reproduced=report.get('original_failure_reproduced'),max_response_to_exit_s=max(s['response_to_exit_s'] for s in report['sessions']),geometry_unchanged=report['geometry_unchanged'])))

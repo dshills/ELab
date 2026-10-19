@@ -1,0 +1,149 @@
+{
+  "passed": true,
+  "scope": "Three bounded replays of the original 162 public main-session commands and nested save/reopen commands using exact copied /169 binaries. Public native shutdown only, not OS close-button, arbitrary workloads or a repair of the original intermittent failure.",
+  "release_identity": {
+    "source_commit": "aa3b18b23a3cbc1863f097722b96a3263394edca",
+    "release": "0.152.0 /169",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.152.0-169-review/elab-agent",
+    "agent_sha256": "add3009d88fca569cd86ca133102ee7e74b91bd9a55a40f6a114a488d413205d",
+    "receipt_sha256": "42ca2d348cb665f8aa932951ed8e76d09d54a9a4854cd4b4547d8676b354a7f4",
+    "ledger_sha256": "53123090ff4b4059eadb2c1549396b1063851e39a43d4f78cbb1081e1b656ac0",
+    "production_source_files_verified": 71,
+    "runtime_inputs_verified": 349,
+    "manifest_file_entries_verified": 1393,
+    "manifest_sha256": "360eaa493d46d25a52d2127a0838330f5886f67dc336fc2dad566155155aeb63"
+  },
+  "original_report_sha256": "9ac6dddd9673980474b4e3a2328c8e219562569257d57415613d459978eecee5",
+  "geometry_before": {
+    "window-geometry-0.3.6.json": {
+      "sha256": "9666b9dbadc1ca73534406af4e7bbd832f9db24e8519569bde0b5b884c6f14ee",
+      "mode": "0o644"
+    },
+    "window-geometry-0.3.6.lst": {
+      "sha256": "0cacd87c7fb6c83f05737f71248f1b474f1d797d9cf132b4d0816b0e52582f2f",
+      "mode": "0o644"
+    }
+  },
+  "sessions": [
+    {
+      "name": "trial-1",
+      "owned_pid": 39009,
+      "commands_expected": 162,
+      "commands_completed": 162,
+      "closed": true,
+      "close_response_s": 0.003925584023818374,
+      "exit_code": 0,
+      "response_to_exit_s": 0.05982912494800985,
+      "total_close_s": 0.06375570897944272,
+      "owned_process_absent": true
+    },
+    {
+      "name": "trial-1-valid",
+      "owned_pid": 39013,
+      "commands_expected": 4,
+      "commands_completed": 4,
+      "closed": true,
+      "close_response_s": 0.0039326249388977885,
+      "exit_code": 0,
+      "response_to_exit_s": 0.3476352080469951,
+      "total_close_s": 0.35156924999319017,
+      "owned_process_absent": true
+    },
+    {
+      "name": "trial-1-excess",
+      "owned_pid": 39029,
+      "commands_expected": 4,
+      "commands_completed": 4,
+      "closed": true,
+      "close_response_s": 0.003743167035281658,
+      "exit_code": 0,
+      "response_to_exit_s": 0.34321487497072667,
+      "total_close_s": 0.34695975005161017,
+      "owned_process_absent": true
+    },
+    {
+      "name": "trial-2",
+      "owned_pid": 39040,
+      "commands_expected": 162,
+      "commands_completed": 162,
+      "closed": true,
+      "close_response_s": 0.003951624967157841,
+      "exit_code": 0,
+      "response_to_exit_s": 0.05469266592990607,
+      "total_close_s": 0.058644749922677875,
+      "owned_process_absent": true
+    },
+    {
+      "name": "trial-2-valid",
+      "owned_pid": 39046,
+      "commands_expected": 4,
+      "commands_completed": 4,
+      "closed": true,
+      "close_response_s": 0.0032888330752030015,
+      "exit_code": 0,
+      "response_to_exit_s": 0.33534949994646013,
+      "total_close_s": 0.3386393750552088,
+      "owned_process_absent": true
+    },
+    {
+      "name": "trial-2-excess",
+      "owned_pid": 39054,
+      "commands_expected": 4,
+      "commands_completed": 4,
+      "closed": true,
+      "close_response_s": 0.0033417079830542207,
+      "exit_code": 0,
+      "response_to_exit_s": 0.36084579199086875,
+      "total_close_s": 0.3641882500378415,
+      "owned_process_absent": true
+    },
+    {
+      "name": "trial-3",
+      "owned_pid": 39061,
+      "commands_expected": 162,
+      "commands_completed": 162,
+      "closed": true,
+      "close_response_s": 0.00404191599227488,
+      "exit_code": 0,
+      "response_to_exit_s": 0.07736520899925381,
+      "total_close_s": 0.08140833291690797,
+      "owned_process_absent": true
+    },
+    {
+      "name": "trial-3-valid",
+      "owned_pid": 39074,
+      "commands_expected": 4,
+      "commands_completed": 4,
+      "closed": true,
+      "close_response_s": 0.0034964579390361905,
+      "exit_code": 0,
+      "response_to_exit_s": 0.35534520796500146,
+      "total_close_s": 0.3588425829075277,
+      "owned_process_absent": true
+    },
+    {
+      "name": "trial-3-excess",
+      "owned_pid": 39080,
+      "commands_expected": 4,
+      "commands_completed": 4,
+      "closed": true,
+      "close_response_s": 0.002881582942791283,
+      "exit_code": 0,
+      "response_to_exit_s": 0.35010375001002103,
+      "total_close_s": 0.35298624995630234,
+      "owned_process_absent": true
+    }
+  ],
+  "geometry_after": {
+    "window-geometry-0.3.6.json": {
+      "sha256": "9666b9dbadc1ca73534406af4e7bbd832f9db24e8519569bde0b5b884c6f14ee",
+      "mode": "0o644"
+    },
+    "window-geometry-0.3.6.lst": {
+      "sha256": "0cacd87c7fb6c83f05737f71248f1b474f1d797d9cf132b4d0816b0e52582f2f",
+      "mode": "0o644"
+    }
+  },
+  "geometry_unchanged": true,
+  "original_failure_reproduced": false
+}

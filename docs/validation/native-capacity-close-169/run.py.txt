@@ -1,0 +1,7 @@
+from pathlib import Path
+import json,subprocess,sys,time
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent
+sys.path.insert(0,str(root/'scripts'));from runtime_isolation import pinned_child_runner
+sdk,run_child=pinned_child_runner();start=time.monotonic()
+with (stage/'replay-output.txt').open('x') as log:p=run_child([sys.executable,'-B',str(stage/'replay.py')],cwd=root,stdout=log,stderr=subprocess.STDOUT,timeout=180,check=False)
+r=dict(exit_code=p.returncode,elapsed_s=time.monotonic()-start);(stage/'run.json').write_text(json.dumps(r,indent=2)+'\n');print(r);raise SystemExit(p.returncode)
