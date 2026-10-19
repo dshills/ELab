@@ -1,0 +1,654 @@
+{
+  "date": "2026-10-19",
+  "version": "0.148.0",
+  "build": "165",
+  "status": "Recorded timing direction and correction feedback repair qualified for private owner review; broader gates remain open",
+  "source_commit": "0e75875abe07d0c172902754aa8acec6062df7dc",
+  "clean_build_vcs": true,
+  "native_sha256": "f75a72427b4556b163437132a46f0694b5845f6753db5aa9bf61f0d18e6a27de",
+  "agent_sha256": "3b6daa16b7b583077813f198a072bef6f2a1a62a61d8ce8bdd86f6bb2e6ef13c",
+  "sdk": {
+    "schema": 1,
+    "archive": "third_party/vellum/vellum-b22478c.tar.gz",
+    "archive_bytes": 18631976,
+    "sha256": "22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968",
+    "manifest_sha256": "dde338180afa8e27828853477ac42cfa96bc74054fb0f69bf1c4c96a8b259648",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-b22478c",
+    "source_commit": "b22478cf8cec8dda1ccdcd93d6ff6b62e2cc11de",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 7458,
+    "bootstrap": {
+      "scripts/check-sdk.py": "b8062fbd4c57d1d8cb4d75a094184e1a5fa108cfa811fe9fb390f99f6d66be38",
+      "scripts/child_process.py": "04ba2610ddf112e936e8adcd9a81c03cff422843f993c2ce8a9e1acd96f39c9c",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "803d981c00f32d08a370577b37094848b2c79085cf3303a99b23d2a94336ac2c",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541"
+    }
+  },
+  "canonical_promoted": false,
+  "quality": {
+    "passed": true,
+    "exit_code": 0,
+    "command": "./scripts/check.sh",
+    "started_utc": "2026-10-19T07:29:06.181415+00:00",
+    "duration_s": 197.94677641696762,
+    "scope": "Complete source quality gate; separate copied-runtime and numerical integration qualify the package",
+    "source_sha256": {
+      "desktop/recorded_timing_actions.go": "dbf75e522b7fdab7413302237bf66ffeefd4f6e3c777e22d63dbd57a16dd9d13",
+      "desktop/recorded_timing_feedback_darwin_test.go": "7a46f50e00a6f27a87445843739edfd7c7583ba3767608ebb435a2b5046cb823"
+    }
+  },
+  "copied_runtime": [
+    {
+      "name": "native-smoke",
+      "command": [
+        "/private/tmp/elab-first-version-165-runtime/native",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 38.56518845795654
+    },
+    {
+      "name": "public-suites",
+      "command": [
+        "/Users/dshills/Development/projects/ELab/build/first-version-165-tools/build/elab-conformance",
+        "--agent-binary",
+        "/private/tmp/elab-first-version-165-runtime/agent",
+        "--native-binary",
+        "/private/tmp/elab-first-version-165-runtime/native",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/private/tmp/elab-first-version-165-runtime/public"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 49.70151512499433
+    }
+  ],
+  "recorded_timing": {
+    "source_evidence": "Recorded-timing-feedback-source-repair/checkpoint.json",
+    "direction_source_evidence": "Recorded-timing-direction-source-repair/checkpoint.json",
+    "native_input_evidence": "Native-recorded-timing-165/checkpoint.json",
+    "native_input": {
+      "passed": true,
+      "source_commit": "0e75875abe07d0c172902754aa8acec6062df7dc",
+      "native_sha256": "f75a72427b4556b163437132a46f0694b5845f6753db5aa9bf61f0d18e6a27de",
+      "agent_sha256": "3b6daa16b7b583077813f198a072bef6f2a1a62a61d8ce8bdd86f6bb2e6ef13c",
+      "backend_stages": 17,
+      "capture_rows": 521,
+      "fresh_agent_reopens": 2,
+      "normal_closure": true,
+      "bundle_restored": true,
+      "owner_acceptance": false,
+      "evidence_sha256": {
+        "1-response.json.gz": "c5bea778211fd046169984ebadc7f90c15923cb7962863b678ae0e699b4d33b7",
+        "10-response.json.gz": "310f879f1f7a1724d7667713b0c92b715bcda93104dfb191a0665768188dcd58",
+        "11-response.json.gz": "593b9e6487ee44b2c5217d59a0ff3f597a4e1944fbf94530eb98490dd57ff269",
+        "12-response.json.gz": "20ae8a21fa2b7a7e168b16777e63a013e292542d1d5266143044f3d76d2e7cc9",
+        "13-response.json.gz": "364100c127b4e0a4a7f04dec73d10a08d1efe877271d9e35bc461ad75214a4d3",
+        "14-response.json.gz": "bde74818543a5c8aeb743ad09b4c8c01533fe26836c3e30ba3f2c24cbbfa459d",
+        "15-response.json.gz": "3bd41c2464e6bb72c23cac41df20a44966ce2b0380980efa538f5500af90f3c8",
+        "16-response.json.gz": "fcf9bb25f7f09f7317fe5c8701792b30deb86c88191bbf6aaad3fecc389987ef",
+        "17-response.json.gz": "d4d2e078158253d735a4147efb85ef5b803f51d67bb3fff0dad927702f78d4d3",
+        "2-response.json.gz": "a68b244d1fc8c55c6da832b073e54222b70379616b4b367bc4f5d36e919fa0d1",
+        "3-response.json.gz": "4f59258848b5fa972dd9e9a5f26f511054387acd427939634b5f0fd6473b0e6c",
+        "4-response.json.gz": "63b322f07711143e52cb9374275159cb63917108650631381894b75bf326b5e3",
+        "5-response.json.gz": "58a5ae7a1d1bb84eb280858229b488776f5a0b1fce6a2e653255a63a1850318f",
+        "6-response.json.gz": "33f91cb7a8d3ea7170d68473240957b64b7c27f4f5d2cdb9b18994690d6363f1",
+        "7-response.json.gz": "baefc940cfe0c69e00f0fab4631b070a204660cfd6b003fa088f950dc7e4b292",
+        "8-response.json.gz": "636cb50b47757b5a1acd525a9f0cd4083bcc228d523c39ba97f30f392fb37f2f",
+        "9-response.json.gz": "a685d9a808fc0ff8ecd03451ccb9920ef88b3a3608f2053d2c1bddc787bfc4ee",
+        "AX-3V-rising-menu.ax.txt.gz": "7bf569e9019a4a966496e53c099e7e966a5e4f20dd0411535c42c7a35dd8d8a4",
+        "AX-3V-rising.ax.txt.gz": "84efc15341f3947c621458ec433b6193931ee31023c998ae4b87645fa1b5fce3",
+        "AX-3V-rising.jpg": "8104604abdf77d553d3fbbc96b9f6db18f78a52d19034315ae9c233041f0f4bc",
+        "Agent timing.elab.gz": "4ad5be1b8855764b1b907570b6da5f45d16b2b663f5c82d496a2a6bb828fbb26",
+        "Native timing.elab.gz": "52f58502d12c227d4c99379c9fa434c4dd6255dbe799c4be63a915b77bf1d472",
+        "README.md": "cd2ec91ff7caf6ffbd0e8bb2c5e422e876eb83278d5b68dfb4ac8b4d4059763f",
+        "cleanup.json": "c5daff8c8946040d84ac85c84b3c96d10c706f48e395658603c1352b07f4972e",
+        "corrected-3.5V-rising-menu.ax.txt.gz": "c207bb621c88b6033586da457bd9c20d0ff643e3a1d110e250cfcc12da459f41",
+        "corrected-3.5V-rising.ax.txt.gz": "414d8c273797e9c6ce63e17005c45d956e1f9bce74a869ffa6e8317baba9a166",
+        "corrected-3.5V-rising.jpg": "ad4da8abaf1cbdc90d763f4143046bc845b82c915436be2cadbc2b834366a50e",
+        "corrected-previous.ax.txt.gz": "14b31574f83eb3416a0c9d149bf124e3616f9bb403379365c419b6c52fb70a66",
+        "corrected-previous.jpg": "777ace58ea9f0e93d4c79c4c941e006c9b7a92460d18292e0a937224bac6752b",
+        "final-visible.ax.txt.gz": "7528e88852427e576089185caab259441058719f750982f8e90ca87d388888c8",
+        "final-visible.jpg": "aac3b4597098ecf4987ec9fae522abe3578bc53cc4e4da432936a5ea69d91740",
+        "fresh-reopens.json.gz": "dde6e9533790290472d29a15c3840d4e5e09a3cc16f4f64d4004fb166266506b",
+        "identity.json": "415063f9158388b4a817fec5bf43bf0fb5f995b31fe96d35a68bd0b5d69e376e",
+        "invalid-direction-refused-menu.ax.txt.gz": "bce3a56135ac137776005170230d82cada4549099da3a1ab6d6e601f9cac844f",
+        "invalid-direction-refused.ax.txt.gz": "2bf8a97e7d7357050e2b1382ce49eaaf24306d5100d3bd4fdff96932e2fb7600",
+        "invalid-direction-refused.jpg": "0b9363189965946b356fbd75bbdb9fe1d0c3230d6836db94401d86c6d9b478dc",
+        "invalid-previous-refused.ax.txt.gz": "6f6a6c603bfd7980068377bb39c970b5152380ecd663c6b64e626685c9c90ce5",
+        "invalid-previous-refused.jpg": "2982022c512bb3aae8746fff21ba2084a5f80722996b633b70bc30df09c4fa74",
+        "native-host.txt.gz": "af7b3e1bcc2d8afa75a6008b6efff968f982157d089ef5d6e14357e0f443cc96",
+        "native-input-helpers.js": "78d1eb339c439755d3b66f92f5e46c361e6dee7e7e3c5be80856b7a6d41d6e4f",
+        "observe.py": "e01984d1b08ff73f3fd8136295915fba21b27f85f3037a2a8953bcfe72cd0688",
+        "paging-both-directions-menu.ax.txt.gz": "cdd60b71e4953dddf58943da0a77b6a7c87c9abb26363379866de1a2c8004f38",
+        "paging-both-directions.ax.txt.gz": "cf673126551b23c147cfa42d64868163608f4872bf3a0f851b5ea46747375a11",
+        "paging-both-directions.jpg": "ed179ab64d0ba3c21597b6078b3dc4ec65342599349e540f818106d1674e3239",
+        "paging-private-3V.ax.txt.gz": "c7aa8d0fd63eb88f0b1e63bb7bc9181981d190b30b164617005a5114d250496c",
+        "paging-private-3V.jpg": "4e645a1ce96662586293fd66f1ccfc91998f67a75bc6663f6f9222209c4cc9e7",
+        "paging-private-correction.ax.txt.gz": "8c6fda7ae7358edf43c64a70e46757df6ac82c410b04c3fa20037606a8c8f2e4",
+        "paging-private-correction.jpg": "4b32a3c2fb1537336aab5d6c9eacd3d2d6a5fb4421e489ea8cb3ffa688c15d72",
+        "paging-private-invalid.ax.txt.gz": "af77fddfe9177580f28d7b41bfb433073d9aca02668cc211a73b07c4299bdeca",
+        "paging-private-invalid.jpg": "11dd68b5bf2e5b546dcc010b026d7ecdd26a0230139ea6ac8097861befff3a4c",
+        "pointer-4V-falling-menu.ax.txt.gz": "b8ebead547517898e849f58eb690bacb0a673f928f732d01ec7ce9cddafb9107",
+        "pointer-4V-falling.ax.txt.gz": "d957cb71dc9b9b5a4dff44926556759b7ca77c9b2242c42a660d5357051f9e8f",
+        "pointer-4V-falling.jpg": "ae9030ad5b57bc24f958c1d3005641a90d4039e961ec9ccae303b098594a26ad",
+        "pointer-private-4V.ax.txt.gz": "c18785d1b4fc703ab7f0f2ed4f7641e6e446b9c5a2a6f09f4a80925a8d646ecf",
+        "pointer-private-4V.jpg": "09fbdaec2f8a928a78c26e52fd906554983fb015f101abf51c8c5cbe23e3713b",
+        "private-3V.ax.txt.gz": "c7aa8d0fd63eb88f0b1e63bb7bc9181981d190b30b164617005a5114d250496c",
+        "private-3V.jpg": "86aef29b92be4d7a217bd9ce50e5687e8a19fb340cdc2da4d63b4328d4a79ae9",
+        "private-correction.ax.txt.gz": "8c6fda7ae7358edf43c64a70e46757df6ac82c410b04c3fa20037606a8c8f2e4",
+        "private-correction.jpg": "b100c21e6b45a74b3d83b4c48c0a0e8e334e27c428d8c2f064891bd1fcbfa061",
+        "private-invalid.ax.txt.gz": "af77fddfe9177580f28d7b41bfb433073d9aca02668cc211a73b07c4299bdeca",
+        "private-invalid.jpg": "f59871db71bf5373411ddc1bd93672dda4444e799d2b955e4dbf8856886f53d5",
+        "ready.json": "e21fc855c1eabf5c582625486f6a25701ee309fb165bda547ff571cff5f73fa9",
+        "reopen.py": "610e4e2fda2c39727bda058a87c5f8694550e8029cea1afb1adb7633f0001d69",
+        "report.json.gz": "3bc8c29b6d2685afc2f9694feda7a544d70d3b999ea8ce634321cbfae910c668",
+        "requests/1.json": "4f5e5da4e5994383a69fac5232b63a2ac98926d314940354ee9da4e34800dd11",
+        "requests/10.json": "d1702d8eb7afd08cd95dd8bb6f2b346eaaa357ece7d59a94c7b0b67eb697bc55",
+        "requests/11.json": "99ed4a9854b15ef8ad89d9cbf3c920dd876a7f94d9d760fec96f622ec5e947ec",
+        "requests/12.json": "d30580ee4b3ada5f2e6e88203ef35332bf1456bdcf909c2dbfc0b8bd5b8731f5",
+        "requests/13.json": "e7f46a939e810b73af632c0446379ed638b8025358627b29bdf37c5946b90736",
+        "requests/14.json": "f0ed03e72f25979e4a95d47dcbc18feaf3301bfd1e2e1f4a741edd8d615ac453",
+        "requests/15.json": "f959e54b5e30870c20ebf72dbc75de4bc4cc37bea4b17a233a52d2fadbcf65da",
+        "requests/16.json": "fef9916225675cde65fee91269b73689d82038bb8a9e41800310bc2efb1b2d74",
+        "requests/17.json": "f2ebf6741b690b7f03a1c37e4477e16a5a942b04bbf3324da7353c6144c50277",
+        "requests/2.json": "f80fb284857b092c7b035cb8a2a5a81109fe7ef8dedbfefd65d533520ff2d38c",
+        "requests/3.json": "4baff66584a7758e83b06f80d3760817c1ef15d7e83c23a80f7610deb7b67598",
+        "requests/4.json": "bf88940eb356cdbe5b395ae9ee160b7cf80c5fbc29e74782dc4c028421f0bc4c",
+        "requests/5.json": "21f16c25c7588ef962238b957bff47eaf50b5c35012be65c30b16b468dd09eab",
+        "requests/6.json": "69e2c47f1e12b0aa7d320d3e937368c5e6402d513730215408fa36be49b4b96b",
+        "requests/7.json": "6f197a68c23d06842d4fa21b76e4b8100ee7a71a4169926ab19cca83dd4a1057",
+        "requests/8.json": "b78c0bf7f97de3f2a90c86b9c8904d131ee4f6a24a00a00a6d27bd1909d91793",
+        "requests/9.json": "e3f9b11c3a56d328d4dab7580b1349c26a0ab47e2c383434bd58ce91084ef63a",
+        "restore_checked.py": "a627958f4c9fb2e60d4986dba0a3d4b5ab06d1d076a3d6f69c15d97adaafb1a8",
+        "setup.py": "dcec0ea4963262ede0dc588926b27d090bb5a7f9f4e221abfa3ad0498a7e8be4",
+        "typed-threshold-next.ax.txt.gz": "e7ea41989222261ac5f384791e8772f15b865f55417e1b88f816ae28303283fc",
+        "typed-threshold-next.jpg": "c2b29cdcdebe5a0eec62d09c88982a5d39256c1330a9b32352a4d96df36ce096",
+        "ui-conclusion.json": "6d84c8e631b8b24d62c723c5ab71f9a43e8a3e4f309a48231a5d31b1eec22112",
+        "visible-baseline.ax.txt.gz": "32ce4c4273d88be1efa8e28081a3ef0e77e7b28a9077a8dba3097d5589c5b1f3",
+        "visible-baseline.jpg": "121854f250f3c680f964a9a972eb235814c74c87f79eb2fc749ca6fb2fa3cb14"
+      }
+    },
+    "copied_public_evidence": "Copied-recorded-timing-165/report.json",
+    "copied_public": {
+      "passed": true,
+      "scope": "Copied /165 native socket and headless stdio timing APIs; private field settlement/refusal feedback retains separate source-mounted proof",
+      "agent_sha256": "3b6daa16b7b583077813f198a072bef6f2a1a62a61d8ce8bdd86f6bb2e6ef13c",
+      "native_pid": 94814,
+      "native_exit_code": 0,
+      "normal_native_closure": true,
+      "stage_matches": 8,
+      "stale_page_revision_refused": true,
+      "invalid_threshold_refused": true,
+      "corrected_and_previous_pages_match": true,
+      "capture_metadata_rows_preserved": true,
+      "fresh_agent_reopens": 2,
+      "final_native_exit_code": 0
+    },
+    "scope": "Source-mounted guards, exact candidate executable native input, and copied API sequence retain distinct scopes"
+  },
+  "mosfet_cutoff": {
+    "source_evidence": "MOSFET-cutoff-source-repair/checkpoint.json",
+    "copied_public_evidence": "Copied-MOSFET-precision-165/report.json",
+    "copied_public": {
+      "passed": true,
+      "scope": "Exact clean copied /165 native socket/headless stdio with development-file and outbound-IP denial; strict MOSFET cutoff voltage reference, live/captured six-probe traces and fresh public reopens",
+      "agent_sha256": "3b6daa16b7b583077813f198a072bef6f2a1a62a61d8ce8bdd86f6bb2e6ef13c",
+      "headless": {
+        "nmos": {
+          "live": {
+            "passed": true,
+            "total_rows": 505,
+            "cutoff_rows": 302,
+            "maximum_drain_error_v": 4.440892098500626e-16,
+            "reference": {
+              "drain_magnitude_v": 3.689762762965529,
+              "current_a": 1e-09,
+              "body_reverse_exponential_bound_a": 3.599886132035504e-46,
+              "voltage_tolerance_v": 0.001
+            }
+          },
+          "captured": {
+            "passed": true,
+            "total_rows": 505,
+            "cutoff_rows": 302,
+            "maximum_drain_error_v": 4.440892098500626e-16,
+            "reference": {
+              "drain_magnitude_v": 3.689762762965529,
+              "current_a": 1e-09,
+              "body_reverse_exponential_bound_a": 3.599886132035504e-46,
+              "voltage_tolerance_v": 0.001
+            }
+          }
+        },
+        "pmos": {
+          "live": {
+            "passed": true,
+            "total_rows": 505,
+            "cutoff_rows": 203,
+            "maximum_drain_error_v": 8.304468224196171e-14,
+            "reference": {
+              "drain_magnitude_v": 3.689762762965529,
+              "current_a": 1e-09,
+              "body_reverse_exponential_bound_a": 3.599886132035504e-46,
+              "voltage_tolerance_v": 0.001
+            }
+          },
+          "captured": {
+            "passed": true,
+            "total_rows": 505,
+            "cutoff_rows": 203,
+            "maximum_drain_error_v": 8.304468224196171e-14,
+            "reference": {
+              "drain_magnitude_v": 3.689762762965529,
+              "current_a": 1e-09,
+              "body_reverse_exponential_bound_a": 3.599886132035504e-46,
+              "voltage_tolerance_v": 0.001
+            }
+          }
+        }
+      },
+      "native_pid": 94647,
+      "native": {
+        "nmos": {
+          "live": {
+            "passed": true,
+            "total_rows": 505,
+            "cutoff_rows": 302,
+            "maximum_drain_error_v": 4.440892098500626e-16,
+            "reference": {
+              "drain_magnitude_v": 3.689762762965529,
+              "current_a": 1e-09,
+              "body_reverse_exponential_bound_a": 3.599886132035504e-46,
+              "voltage_tolerance_v": 0.001
+            }
+          },
+          "captured": {
+            "passed": true,
+            "total_rows": 505,
+            "cutoff_rows": 302,
+            "maximum_drain_error_v": 4.440892098500626e-16,
+            "reference": {
+              "drain_magnitude_v": 3.689762762965529,
+              "current_a": 1e-09,
+              "body_reverse_exponential_bound_a": 3.599886132035504e-46,
+              "voltage_tolerance_v": 0.001
+            }
+          }
+        },
+        "pmos": {
+          "live": {
+            "passed": true,
+            "total_rows": 505,
+            "cutoff_rows": 203,
+            "maximum_drain_error_v": 8.304468224196171e-14,
+            "reference": {
+              "drain_magnitude_v": 3.689762762965529,
+              "current_a": 1e-09,
+              "body_reverse_exponential_bound_a": 3.599886132035504e-46,
+              "voltage_tolerance_v": 0.001
+            }
+          },
+          "captured": {
+            "passed": true,
+            "total_rows": 505,
+            "cutoff_rows": 203,
+            "maximum_drain_error_v": 8.304468224196171e-14,
+            "reference": {
+              "drain_magnitude_v": 3.689762762965529,
+              "current_a": 1e-09,
+              "body_reverse_exponential_bound_a": 3.599886132035504e-46,
+              "voltage_tolerance_v": 0.001
+            }
+          }
+        }
+      },
+      "native_exit_code": 0,
+      "normal_native_closure": true,
+      "full_graph_physics_scope_and_capture_rows_match": true,
+      "capture_metadata_provenance_exclusions": [
+        "created_at",
+        "document_generation",
+        "electrical_revision",
+        "input_revision",
+        "operation_id"
+      ],
+      "fresh_agent_reopens": 4,
+      "final_native_exit_code": 0
+    },
+    "scope": "Independent strict cutoff reference and exact copied native/headless six-probe live/Verify parity; physical input retains historical scope"
+  },
+  "rc_input_frames": {
+    "copied_public_evidence": "Copied-RC-edge-165/report.json",
+    "copied_public": {
+      "passed": true,
+      "scope": "Exact clean copied /165 native socket and headless stdio, independent RC equations, all scope/CSV rows, cursors and extrema; no physical input claim",
+      "headless": {
+        "passed": true,
+        "agent_sha256": "3b6daa16b7b583077813f198a072bef6f2a1a62a61d8ce8bdd86f6bb2e6ef13c",
+        "scope": "Exact copied /165 native socket or headless stdio; manual RC edge, scope, cursor and CSV",
+        "transport": "headless-stdio",
+        "errors": [],
+        "expected_edge_current_a": -0.00031606027941427883,
+        "actual_scope_edge_current_a": -0.00031606027941427883,
+        "actual_csv_edge_current_a": -0.00031606027941427883,
+        "solver_edge_current_a": -0.00031606027941427883,
+        "samples": 23,
+        "agent_exit_code": 0
+      },
+      "native_pid": 94728,
+      "native": {
+        "passed": true,
+        "agent_sha256": "3b6daa16b7b583077813f198a072bef6f2a1a62a61d8ce8bdd86f6bb2e6ef13c",
+        "scope": "Exact copied /165 native socket or headless stdio; manual RC edge, scope, cursor and CSV",
+        "transport": "native-socket",
+        "errors": [],
+        "expected_edge_current_a": -0.00031606027941427883,
+        "actual_scope_edge_current_a": -0.00031606027941427883,
+        "actual_csv_edge_current_a": -0.00031606027941427883,
+        "solver_edge_current_a": -0.00031606027941427883,
+        "samples": 23,
+        "agent_exit_code": 0
+      },
+      "complete_transient_scope_parity": true,
+      "native_exit_code": 0,
+      "normal_native_closure": true,
+      "final_native_exit_code": 0
+    }
+  },
+  "inherited_source_proofs": {
+    "Copied-MOSFET-precision-162": "Historical proof retains original source/build scope",
+    "Copied-MOSFET-precision-163": "Historical proof retains original source/build scope",
+    "Copied-RC-edge-161": "Historical proof retains original source/build scope",
+    "Copied-RC-edge-162": "Historical proof retains original source/build scope",
+    "Copied-RC-edge-163": "Historical proof retains original source/build scope",
+    "Copied-recorded-timing-163": "Historical proof retains original source/build scope",
+    "Inspector-accessibility-source-repair": "Historical proof retains original source/build scope",
+    "Live-cursor-source-repair": "Historical proof retains original source/build scope",
+    "Live-window-source-repair": "Historical proof retains original source/build scope",
+    "MOSFET-cutoff-source-repair": "Historical proof retains original source/build scope",
+    "Native-inspector-recovery-160": "Historical proof retains original source/build scope",
+    "Native-text-source-repair": "Historical proof retains original source/build scope",
+    "Numeric-placement-source-repair": "Historical proof retains original source/build scope",
+    "RC-input-frame-source-repair": "Historical proof retains original source/build scope",
+    "Recorded-timing-source-repair": "Historical proof retains original source/build scope",
+    "Recording-owner-source-repair": "Historical proof retains original source/build scope"
+  },
+  "acceptance": {
+    "passed": true,
+    "scope": "exact copied 0.148.0 /165 native runtime with development-file/outbound-IP denial; public commands",
+    "value_correction": {
+      "passed": true,
+      "refusal_code": "invalid-params",
+      "rejected_edit_preserves_physics_and_history": true,
+      "correction_restarts_once": true,
+      "resistance_ohm": 2200,
+      "current_a": 0.001344737452917332,
+      "scope": "Exact copied native endpoint and headless packaged agent public commands; prior native typing/Apply evidence is a separate development-binary observation"
+    },
+    "live_measurement_ownership": {
+      "passed": true,
+      "scope_stage_matches": 4,
+      "stale_cursor_and_window_revision_refused": true,
+      "restart_clears_live_cursors_and_fixed_window": true,
+      "fresh_cursor_a_s": 0.006,
+      "fresh_cursor_b_s": 0.016,
+      "fresh_window_s": [
+        0.006,
+        0.02
+      ],
+      "retained_samples": 21,
+      "selected_samples": 15,
+      "fresh_measurement_preserves_graph_physics_document_history": true,
+      "scope": "Exact copied native/headless public commands; private native draft reset is separately proven by the two pinned-source mounted ownership regressions"
+    },
+    "recorded_cursors": {
+      "passed": true,
+      "sample_count": 21,
+      "measured_delta_s": 0.008,
+      "scope_stage_matches": 4,
+      "captured_metadata_and_rows_unchanged": true,
+      "live_physics_document_history_unchanged": true,
+      "fresh_recorded_project_reopen": true,
+      "scope": "Exact copied native endpoint and matching headless agent commands on one identical saved capture; mounted one-click input/settlement is separately proven by pinned source regressions"
+    },
+    "recording_targets": {
+      "passed": true,
+      "captures": 2,
+      "rows_per_capture": 21,
+      "resistance_ohm": [
+        10000,
+        20000
+      ],
+      "stale_capture_id_refused": true,
+      "fresh_cursor_seek_window_s": 0.006,
+      "metadata_rows_and_live_physics_history_preserved": true,
+      "fresh_two_capture_reopen": true,
+      "scope": "Exact copied native/headless commands on two distinct saved captures; source mounted tests separately prove private-edit reset across capture selection"
+    },
+    "reference_parity": {
+      "passed": true,
+      "cases": [
+        {
+          "task": "led",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "3fa7d62e283b88765cb8c9b07533254aa899516a8b72298d37121f61e916dd82",
+          "project_sha256": "96635fc0cd1ab4b13258373c4e5ed474dc3239dda4dfc37202cbce59324cc032"
+        },
+        {
+          "task": "rc",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "6380351c8c51640b0221969b97259cf49161989f300d4eb1b9bdcf885759e338",
+          "project_sha256": "4c86701997fb227c1f3f8e55b2e8ec613ca7a51d75b4061356cd51185203eadf"
+        },
+        {
+          "task": "flasher",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "b0dc7c61c9d757086937176d7cc8de1539e4cac82e8f95d5f9a00576cc62d4b8",
+          "project_sha256": "d62dba5123d42b3dbf76356a7c28411a46ab09678aad9aa72ec727889c9a7a95"
+        }
+      ],
+      "comparison": "Every component/wire field; every reported result field except run/electrical identities; numerical rel 1e-9 / abs 1e-12",
+      "limitations": [
+        "Native endpoint loading/observation does not replace the recorded physical UI construction walkthrough",
+        "File failure, crash recovery, cancellation and live interaction have separate acceptance checks"
+      ]
+    },
+    "live_grid": {
+      "first_time_s": 2.2,
+      "resume_origin_s": 2.2,
+      "second_time_s": 3.4320000000000004,
+      "final_time_s": 3.4320000000000004,
+      "paused_physics_stable": true,
+      "graph_settings_and_run_electrical_preserved": true,
+      "save_reopen_fresh": true
+    },
+    "limits": [
+      "Public command functionality; not new pointer/keyboard evidence or visible p95 qualification",
+      "Earlier retained-control and output-page checks retain their recorded scope. Schematic pointer and keyboard refusal/fresh actions are tested after actual native mesh preparation by semantic injection in the copied-runtime smoke. Standalone Cogent key-binding tests cover replacement refusal, own repeats, navigation/Escape, guarded states and public move/Undo parity. This is not physical NSEvent evidence. Earlier physical UI evidence remains scoped to its recorded build; no physically coalesced OS input/window-blur or visible-latency claim."
+    ],
+    "native_host_closed_normally": true
+  },
+  "release_diff": {
+    "base_release": "0.146.0 /163",
+    "base_source": "846d0e0888603a5065a00e64675ecca42b89a157",
+    "replacement_source": "0e75875abe07d0c172902754aa8acec6062df7dc",
+    "changed_production_and_test_files": [
+      "desktop/recorded_timing_actions.go",
+      "desktop/recorded_timing_direction_darwin_test.go",
+      "desktop/recorded_timing_direction_offscreen_darwin_test.go",
+      "desktop/recorded_timing_feedback_darwin_test.go",
+      "desktop/recorded_timing_menu_darwin_test.go",
+      "desktop/recorded_timing_offscreen_test.go",
+      "desktop/recording_compare_smoke.go",
+      "desktop/recording_pulses_smoke.go",
+      "desktop/recording_timing.go",
+      "desktop/recording_timing_smoke.go"
+    ],
+    "repair": "Settle private timing fields before direction/page actions; preserve the exact owned refusal until corrected settlement finishes",
+    "public_commands_models_format_and_sdk_unchanged": true,
+    "native_inventory_review": {
+      "passed": true,
+      "changed_sources": [
+        "desktop/recorded_timing_actions.go"
+      ],
+      "non_line_sites_identical": true,
+      "public_ids_aliases_and_route_sets_identical": true,
+      "sources": 69,
+      "sites": 391,
+      "public_ids": 162,
+      "routed_ids": 132
+    },
+    "findings": [],
+    "limits": [
+      "Current copied numerical/API integration does not replace historical physical input observations",
+      "Exact executable native input proof is bounded to public-seeded pulse-NPN timing controls; no general reader/IME/visible-p95 or owner acceptance"
+    ]
+  },
+  "owner_acceptance": "Pending: owner answered Not tried yet; no acceptance inferred",
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "preserved_bundles": {
+    "0.123.0-140": {
+      "files_verified": 113,
+      "manifest_sha256": "c2d35b4b8cf4920636a987e39b83d4d989729201b9164f0c23372c2ea1602bd3"
+    },
+    "0.124.0-141": {
+      "files_verified": 126,
+      "manifest_sha256": "d4b008f18f06ad0e7eca4b7187af709d3ba9359d27fd67c747181297faf7ed56"
+    },
+    "0.125.0-142": {
+      "files_verified": 124,
+      "manifest_sha256": "45e1fc51016b21e6a3fea9388ce113716075f4bc1e112e03b15e72b12bf69a8e"
+    },
+    "0.126.0-143": {
+      "files_verified": 124,
+      "manifest_sha256": "14d1fbbff5b1be63c13d14bfbb2462bbeeeacce208ad36e4cd54fb41b7d56d12"
+    },
+    "0.127.0-144": {
+      "files_verified": 130,
+      "manifest_sha256": "0073beb958b5128d383380e08d89ed1c5f926c5d14ae6aec6d57ef5e9a53e0ae"
+    },
+    "0.128.0-145": {
+      "files_verified": 131,
+      "manifest_sha256": "93a9e275f8c50995f1cab73ef03b94b62b99192e627ac527ca1ae5d5f46b660b"
+    },
+    "0.129.0-146": {
+      "files_verified": 134,
+      "manifest_sha256": "74ee03a4d3f89271b02df5d4b52edc61b125ac16492a9ae33966b78ea31a2179"
+    },
+    "0.130.0-147-focus": {
+      "files_verified": 139,
+      "manifest_sha256": "d63f38e2adc6e45d314a77453777f464ff3dfbd46e32a9f39e33ed0e6ac068b0"
+    },
+    "0.131.0-148": {
+      "files_verified": 129,
+      "manifest_sha256": "58cd867a86777a96fc8d7f322f9baffa8c0943cbb769908a2f751fdff4197d4c"
+    },
+    "0.132.0-149": {
+      "files_verified": 129,
+      "manifest_sha256": "31ea54a1e7cc531ae4c8745b014dd0c0b966b8df014d9809b682841e3581b797"
+    },
+    "0.133.0-150": {
+      "files_verified": 129,
+      "manifest_sha256": "509f75002de0031fcade4d739481e9fb71a2c298550fc8f645394696522e663c"
+    },
+    "0.134.0-151": {
+      "files_verified": 129,
+      "manifest_sha256": "36c05644dcdcaefe7241b0c78a02bd98fe703ff742b1a398d6095d0a3daa6c57"
+    },
+    "0.135.0-152": {
+      "files_verified": 140,
+      "manifest_sha256": "b8143b6736a122e7dc828781903ff64a56bc47a5e023daf3eacf42ece6ab5306"
+    },
+    "0.136.0-153": {
+      "files_verified": 137,
+      "manifest_sha256": "03ea57f7fdc2aea4d2ef285dbeb990329c32a075f9bc673439a2e0f94bcac73a"
+    },
+    "0.137.0-154": {
+      "files_verified": 151,
+      "manifest_sha256": "ae56437933b9312caf543173a0b1696601badfd40fe7342af1a52bbbcc0999f1"
+    },
+    "0.138.0-155": {
+      "files_verified": 134,
+      "manifest_sha256": "9ef7cd693ad97b6eb0ab58dbe6db8f5b621ca7d69e3dfa7f00aa1a72193e718d"
+    },
+    "0.139.0-156": {
+      "files_verified": 135,
+      "manifest_sha256": "ec49b66aa2c9a10c06df76882245bca16b69addbd8dfceabf6077e3f54da3155"
+    },
+    "0.140.0-157": {
+      "files_verified": 158,
+      "manifest_sha256": "29ecc32819f447565698ce114040d04fe020e8345959562ae006627ed697600f"
+    },
+    "0.141.0-158": {
+      "files_verified": 196,
+      "manifest_sha256": "fa5ccabcae2b0686a3c300c2bd56e8af10144eb5b3e1a7423c0e25914c8e102a"
+    },
+    "0.142.0-159": {
+      "files_verified": 257,
+      "manifest_sha256": "4322975a12d56b48ee40f2d5ebb0d9432a4ae55653422f6bce84130eb10eaab2"
+    },
+    "0.143.0-160": {
+      "files_verified": 343,
+      "manifest_sha256": "fc635bf3e748c54130cfb0c21d932569d55debef4996880e06b1730d696e28ce"
+    },
+    "0.144.0-161": {
+      "files_verified": 381,
+      "manifest_sha256": "df97f993296af968a119863610f9a37d4e57be8211118700b459faa4336701d9"
+    },
+    "0.145.0-162": {
+      "files_verified": 432,
+      "manifest_sha256": "26d1dbc207a5913e981dc5b74904d1f1272a0120327e7fc2ed6a7b773bd328f5"
+    },
+    "0.146.0-163": {
+      "files_verified": 501,
+      "manifest_sha256": "997128f748eda91ae53c9e573e59b6650e0be8a8b3c9ad367c5d43e66d2e61a2"
+    }
+  },
+  "preserved_previous_digest_metadata_matches": true,
+  "preserved_original_147_candidate": {
+    "files_verified": 135,
+    "manifest_sha256": "3aa7dd84084944c9926a907e5c87bbb559a8bbcb1d9ad19309fbf3a1c29b7d29"
+  },
+  "preserved_failed_164_candidate": {
+    "files_verified": 4,
+    "manifest_sha256": "0092d861e829d66af5c68b249fab6dc28688e5397487af3b5c59eed1ef8331ed"
+  },
+  "canonical": {
+    "version": "0.105.0 /120",
+    "native_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c"
+  },
+  "manifest_file_entries": 788,
+  "review_path": "/Users/dshills/Development/projects/ELab/build/ELab-0.148.0-165-review",
+  "launch_note": "Save and quit an earlier review before opening this replacement; same bundle identity. Owner window was not operated or automatically opened.",
+  "known_limits": [
+    "Owner walkthrough and actual hobbyist study remain open; evidence categories are not completion percentages",
+    "Historical NMOS Pause observation remains unexplained; bounded retry/cycles passed without a causal repair",
+    "Full VoiceOver/IME/OS interleaving, visible p95 and other environments remain unqualified",
+    "Clean-account installation, signing/notarization and public distribution remain unqualified",
+    "64-part/100-node dense topology can reach the integration work budget before a staged sample",
+    "One printed LED page has owner readability confirmation; measured margins/media/scale and other device paths remain open"
+  ]
+}

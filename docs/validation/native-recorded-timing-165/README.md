@@ -1,0 +1,5 @@
+# Exact /165 native timing input qualification
+
+Clean candidate executable in a disposable custom bundle, with its packaged agent reference. Public commands seed a pulse-NPN capture. Private threshold input, AX direction selection, coordinate-opened native direction selection, invalid refusal and first-attempt correction pass. Next and invalid/corrected Previous use native AX activation; paging controls may be outside the visible sidebar, so no pointer reachability claim is made. All 17 backend checkpoints pass with protected graph/physics/history unchanged. Original metadata and all 521 rows remain exact, including two fresh copied-agent reopens of native and reference saves. The owned host closes normally at exit 0; process absence and three-file bundle restoration are verified. This proves neither from-blank construction nor whole-bundle packaging, general typing, accessibility-reader or owner acceptance.
+
+Large JSON, AX text, logs and synthetic saves are losslessly gzipped. Endpoint credentials are excluded. The source-proofs retain their original pending status; this later qualification supersedes it without changing historical evidence.

@@ -234,3 +234,6 @@ The October 19 recorded-timing direction repair changes only `recorded_timing_ac
 
 
 The October 19 timing-feedback repair changes only `recorded_timing_actions.go` and subsequent line positions. Every non-line site record and command/alias/route set stays identical at 69 files /391 sites /161 binding-review sites /162 public IDs /132 routed IDs. The same guarded timing command now holds only its related refusal through owned field settlement, avoiding error-layout invalidation; no command or SDK change. [Original clean /164 native failure and source proof](../docs/validation/recorded-timing-feedback/README.md). Fixed native correction and replacement qualification remain separate.
+
+
+Clean 0.148.0 /165 binds the unchanged 69-file/391-site/162-ID/132-route ledger to all 788 sealed review entries and 345 runtime inputs. [Receipt](ui-audit/first-version/recorded-timing-feedback-review-checkpoint.json). Exact candidate-executable native timing input now passes private threshold/menu/refusal/correction and AX paging against the packaged agent; copied API timing, MOSFET/RC and reference integration pass separately. Original source checkpoints retain historical pending scopes; this later receipt supersedes replacement status without altering their evidence. Complete per-binding/OS/reader conformance remains partial.
