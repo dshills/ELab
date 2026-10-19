@@ -128,3 +128,7 @@ October 18: [grouped-inspector source repair](../../docs/validation/inspector-ac
 ### RC input-edge replacement /161 qualified · October 18
 
 [Clean replacement qualification](first-version/rc-input-frame-review-checkpoint.json) packages `35371ee` with unchanged SDK `b22478c`. Exact copied native smoke (39.164 s), four adapters (48.825 s), reference/measurement/recorded/live/save checks pass. Independent native/headless RC equations validate both edge samples, all 23 scope/CSV rows, cursors/extrema and correct −.3160602794 mA at 10 ms. Native closes normally; all 381 entries, 21 earlier reviews, original candidate and canonical verify. No new physical input, reader, latency or owner acceptance is inferred. Owner Not tried yet, P0 17 implemented /10 partial, no promotion or scope expansion.
+
+### Native RC from blank · /161
+
+[Construction and core-control proof](first-version/native-rc-draw-161/README.md) verifies four placements, 10k Apply, named terminal wiring, charge/discharge samples, right-hand cursors and actual Resume/Pause against the packaged agent. All 43 final scalar/probe rows obey independent RC laws. Public saves/fresh startup reopening match; original host closes normally and stopped custom bundle is restored. Producer failures retain their scopes. Minor incomplete-network scope caption is deferred; no numerical failure. Source/SDK/version and 381 sealed entries unchanged, owner Not tried yet and P0 17 implemented /10 partial. Remaining paused post-trace value edit and flasher checks are separate.

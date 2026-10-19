@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/native-rc-draw-161-retry/live_observe.py", line 22, in <module>
+    for key in ['components','wires','nets','selected','document','undo_entry','redo_entry','run_id','electrical_revision']:assert paused[key]==baseline[key],key
+                                                                                                                                   ~~~~~~^^^^^
+KeyError: 'redo_entry'

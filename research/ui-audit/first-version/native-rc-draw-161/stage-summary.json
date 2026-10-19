@@ -1,0 +1,230 @@
+{
+  "passed": true,
+  "stages": [
+    {
+      "stage": "blank",
+      "components": 0,
+      "wires": 0,
+      "run_id": 1,
+      "electrical_revision": 1,
+      "paused": false,
+      "time_s": null
+    },
+    {
+      "stage": "paused-blank",
+      "components": 0,
+      "wires": 0,
+      "run_id": 1,
+      "electrical_revision": 1,
+      "paused": true,
+      "time_s": null
+    },
+    {
+      "stage": "part-1",
+      "components": 1,
+      "wires": 0,
+      "run_id": 2,
+      "electrical_revision": 2,
+      "paused": true,
+      "time_s": null
+    },
+    {
+      "stage": "part-2",
+      "components": 2,
+      "wires": 0,
+      "run_id": 3,
+      "electrical_revision": 3,
+      "paused": true,
+      "time_s": null
+    },
+    {
+      "stage": "resistor-private",
+      "components": 2,
+      "wires": 0,
+      "run_id": 3,
+      "electrical_revision": 3,
+      "paused": true,
+      "time_s": null
+    },
+    {
+      "stage": "resistor-10k",
+      "components": 2,
+      "wires": 0,
+      "run_id": 4,
+      "electrical_revision": 4,
+      "paused": true,
+      "time_s": null
+    },
+    {
+      "stage": "part-3",
+      "components": 3,
+      "wires": 0,
+      "run_id": 5,
+      "electrical_revision": 5,
+      "paused": true,
+      "time_s": null
+    },
+    {
+      "stage": "part-4",
+      "components": 4,
+      "wires": 0,
+      "run_id": 6,
+      "electrical_revision": 6,
+      "paused": true,
+      "time_s": null
+    },
+    {
+      "stage": "wire-1",
+      "components": 4,
+      "wires": 1,
+      "run_id": 7,
+      "electrical_revision": 7,
+      "paused": true,
+      "time_s": null
+    },
+    {
+      "stage": "wire-2",
+      "components": 4,
+      "wires": 2,
+      "run_id": 8,
+      "electrical_revision": 8,
+      "paused": true,
+      "time_s": null
+    },
+    {
+      "stage": "wire-3",
+      "components": 4,
+      "wires": 3,
+      "run_id": 9,
+      "electrical_revision": 9,
+      "paused": true,
+      "time_s": null
+    },
+    {
+      "stage": "wire-4",
+      "components": 4,
+      "wires": 4,
+      "run_id": 10,
+      "electrical_revision": 10,
+      "paused": true,
+      "time_s": null
+    },
+    {
+      "stage": "restart",
+      "components": 4,
+      "wires": 4,
+      "run_id": 11,
+      "electrical_revision": 10,
+      "paused": true,
+      "time_s": 0
+    },
+    {
+      "stage": "probes",
+      "components": 4,
+      "wires": 4,
+      "run_id": 11,
+      "electrical_revision": 10,
+      "paused": true,
+      "time_s": 0
+    },
+    {
+      "stage": "queued-charge",
+      "components": 4,
+      "wires": 4,
+      "run_id": 11,
+      "electrical_revision": 10,
+      "paused": true,
+      "time_s": 0
+    },
+    {
+      "stage": "charge-10",
+      "components": 4,
+      "wires": 4,
+      "run_id": 11,
+      "electrical_revision": 10,
+      "paused": true,
+      "time_s": 0.010000000000000002
+    },
+    {
+      "stage": "queued-discharge",
+      "components": 4,
+      "wires": 4,
+      "run_id": 11,
+      "electrical_revision": 10,
+      "paused": true,
+      "time_s": 0.010000000000000002
+    },
+    {
+      "stage": "discharge-1",
+      "components": 4,
+      "wires": 4,
+      "run_id": 11,
+      "electrical_revision": 10,
+      "paused": true,
+      "time_s": 0.011000000000000003
+    },
+    {
+      "stage": "discharge-10",
+      "components": 4,
+      "wires": 4,
+      "run_id": 11,
+      "electrical_revision": 10,
+      "paused": true,
+      "time_s": 0.02000000000000001
+    },
+    {
+      "stage": "private-a",
+      "components": 4,
+      "wires": 4,
+      "run_id": 11,
+      "electrical_revision": 10,
+      "paused": true,
+      "time_s": 0.02000000000000001
+    },
+    {
+      "stage": "a-and-select-b",
+      "components": 4,
+      "wires": 4,
+      "run_id": 11,
+      "electrical_revision": 10,
+      "paused": true,
+      "time_s": 0.02000000000000001
+    },
+    {
+      "stage": "private-b",
+      "components": 4,
+      "wires": 4,
+      "run_id": 11,
+      "electrical_revision": 10,
+      "paused": true,
+      "time_s": 0.02000000000000001
+    },
+    {
+      "stage": "timing",
+      "components": 4,
+      "wires": 4,
+      "run_id": 11,
+      "electrical_revision": 10,
+      "paused": true,
+      "time_s": 0.02000000000000001
+    },
+    {
+      "stage": "allow-save-copy",
+      "components": 4,
+      "wires": 4,
+      "run_id": 11,
+      "electrical_revision": 10,
+      "paused": true,
+      "time_s": 0.04000000000000001
+    },
+    {
+      "stage": "finish",
+      "components": 4,
+      "wires": 4,
+      "run_id": 11,
+      "electrical_revision": 10,
+      "paused": true,
+      "time_s": 0.04000000000000001
+    }
+  ]
+}

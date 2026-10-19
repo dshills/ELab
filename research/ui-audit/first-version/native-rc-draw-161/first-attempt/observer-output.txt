@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/native-rc-draw-161/observe.py", line 60, in <module>
+    s=wait(name);equivalent(s,r['reference'][name])
+                 ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dshills/Development/projects/ELab/build/native-rc-draw-161/observe.py", line 17, in equivalent
+    for key in ['components','wires','nets','selected','drawing','paused','transient_settings','undo_name','redo_name']:assert a.get(key)==b.get(key),(key,a.get(key),b.get(key))
+                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('drawing', {'tool': 'place', 'kind': 'pulse-source', 'position': {'x': -200, 'y': 0}, 'wire_start': '', 'from': '', 'to': '', 'value': ''}, {'tool': 'select', 'kind': 'dc-source', 'position': {'x': -200, 'y': 0}, 'wire_start': '', 'from': '', 'to': '', 'value': ''})

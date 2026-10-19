@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/native-rc-draw-161-retry/live_observe.py", line 12, in <module>
+    document=dict(graph=dict(components=baseline['components'],wires=baseline['wires']),transient_settings=baseline['transient_settings'],scope_probes=baseline['scope']['selected']);p.construct(ref,document)
+                                                                                                                                                                                      ~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/dshills/Development/projects/ELab/scripts/first-version-parity.py", line 63, in construct
+    client.ask('scope.probes.set', document['scope_probes'], True)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dshills/Development/projects/ELab/scripts/persistence-demo.py", line 53, in ask
+    assert 'error' not in response, response
+           ^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'help': {'source': 'request', 'code': 'invalid-params', 'severity': 'warning', 'summary': 'That request could not be applied.', 'action': 'Check the requested values and related highlighted parts/terminals. Existing circuit state was preserved.', 'details': 'json: cannot unmarshal array into Go value of type map[string]interface {}', 'object_ids': [], 'terminal_refs': [], 'wire_ids': []}, 'version': 1, 'id': 'persist-12', 'revision': 11, 'error': {'code': 'invalid-params', 'message': 'json: cannot unmarshal array into Go value of type map[string]interface {}'}}

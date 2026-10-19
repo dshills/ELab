@@ -1,0 +1,28 @@
+{
+  "overall_passed": true,
+  "first_attempt": {
+    "passed": false,
+    "pid": 85043,
+    "exit_code": -15,
+    "scope": "Controller advanced to source tool before paused-blank comparison completed; assertion then intentional cleanup, not a native crash"
+  },
+  "retry": {
+    "passed": true,
+    "pid": 85413,
+    "exit_code": 0,
+    "stage_acknowledgments": true,
+    "native_graph_seeded": false
+  },
+  "ui_helper_notes": [
+    "Initial offscreen From click refused before dispatch; scrolled selectors into view",
+    "Prefix ID helper selected the From label without opening a menu; exact ID matching corrected before all eight terminal choices"
+  ],
+  "live_reference_producer_errors": [
+    "Initial reference supplied scope_probes as an array rather than {ids:...}; no native mutation",
+    "Next producer accessed absent optional redo_entry; native Resume/Pause snapshots were already captured and retained",
+    "Final retained-snapshot verifier uses .get for optional entries, fresh reference replay to actual paused time and current paused-stability check; physical actions were not repeated"
+  ],
+  "live_scope": "Actual native Resume/Pause; public Step reference to observed simulated time, not wall-clock equality",
+  "quality_scope": "No product/SDK/version change; existing /161 full quality/runtime qualification reused",
+  "owner_acceptance": "Not tried yet"
+}
