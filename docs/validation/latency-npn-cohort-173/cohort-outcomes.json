@@ -1,0 +1,734 @@
+{
+  "scheduled": 20,
+  "retained_outcomes": 20,
+  "available": 20,
+  "unavailable": 0,
+  "replacements": 0,
+  "percentile_rank": 19,
+  "statistics_ms": {
+    "marker_to_committed_ms": {
+      "min": 102.81995833333333,
+      "median": 122.88118750000001,
+      "max": 141.86995833333333,
+      "nearest_rank_p95": 137.2935
+    },
+    "marker_to_fresh_ms": {
+      "min": 116.81416666666667,
+      "median": 132.46383333333335,
+      "max": 170.08070833333332,
+      "nearest_rank_p95": 169.66079166666665
+    }
+  },
+  "threshold_assessment": {
+    "acknowledgment": "inconclusive_controller_overhead_included",
+    "fresh_result": "supported_for_this_fixture_within_software_composition_method"
+  },
+  "overall_prd_performance_pass": null,
+  "outcomes": [
+    {
+      "id": "npn-01",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-01",
+        "measurement_status": "available",
+        "frames": 167,
+        "complete_frames": 164,
+        "unique_images": 158,
+        "states": {
+          "private-draft-original-result": 8,
+          "committed-value-fresh-result": 156
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 9,
+        "marker_to_committed_ms": 118.75545833333334,
+        "marker_to_fresh_ms": 118.75545833333334,
+        "future_at_receipt": 145,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-02",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-02",
+        "measurement_status": "available",
+        "frames": 165,
+        "complete_frames": 164,
+        "unique_images": 160,
+        "states": {
+          "private-draft-original-result": 8,
+          "committed-value-fresh-result": 156
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 9,
+        "marker_to_committed_ms": 119.79941666666667,
+        "marker_to_fresh_ms": 119.79941666666667,
+        "future_at_receipt": 141,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-03",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-03",
+        "measurement_status": "available",
+        "frames": 167,
+        "complete_frames": 164,
+        "unique_images": 160,
+        "states": {
+          "private-draft-original-result": 8,
+          "committed-value-fresh-result": 156
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 9,
+        "marker_to_committed_ms": 116.81416666666667,
+        "marker_to_fresh_ms": 116.81416666666667,
+        "future_at_receipt": 150,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-04",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-04",
+        "measurement_status": "available",
+        "frames": 165,
+        "complete_frames": 163,
+        "unique_images": 159,
+        "states": {
+          "private-draft-original-result": 10,
+          "committed-value-fresh-result": 153
+        },
+        "first_committed_parameter_frame": 11,
+        "first_fresh_frame": 11,
+        "marker_to_committed_ms": 141.86995833333333,
+        "marker_to_fresh_ms": 141.86995833333333,
+        "future_at_receipt": 144,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-05",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-05",
+        "measurement_status": "available",
+        "frames": 166,
+        "complete_frames": 163,
+        "unique_images": 158,
+        "states": {
+          "private-draft-original-result": 8,
+          "committed-value-fresh-result": 155
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 9,
+        "marker_to_committed_ms": 120.3825,
+        "marker_to_fresh_ms": 120.3825,
+        "future_at_receipt": 149,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-06",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-06",
+        "measurement_status": "available",
+        "frames": 166,
+        "complete_frames": 163,
+        "unique_images": 154,
+        "states": {
+          "private-draft-original-result": 8,
+          "committed-value-fresh-result": 155
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 9,
+        "marker_to_committed_ms": 119.89083333333333,
+        "marker_to_fresh_ms": 119.89083333333333,
+        "future_at_receipt": 144,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-07",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-07",
+        "measurement_status": "available",
+        "frames": 165,
+        "complete_frames": 162,
+        "unique_images": 155,
+        "states": {
+          "private-draft-original-result": 8,
+          "committed-value-stale-result": 1,
+          "committed-value-fresh-result": 153
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 10,
+        "marker_to_committed_ms": 125.45983333333334,
+        "marker_to_fresh_ms": 142.12641666666667,
+        "future_at_receipt": 145,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-08",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-08",
+        "measurement_status": "available",
+        "frames": 165,
+        "complete_frames": 162,
+        "unique_images": 155,
+        "states": {
+          "private-draft-original-result": 9,
+          "committed-value-fresh-result": 153
+        },
+        "first_committed_parameter_frame": 10,
+        "first_fresh_frame": 10,
+        "marker_to_committed_ms": 131.14554166666667,
+        "marker_to_fresh_ms": 131.14554166666667,
+        "future_at_receipt": 145,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-09",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-09",
+        "measurement_status": "available",
+        "frames": 165,
+        "complete_frames": 163,
+        "unique_images": 157,
+        "states": {
+          "private-draft-original-result": 8,
+          "committed-value-fresh-result": 155
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 9,
+        "marker_to_committed_ms": 128.59483333333333,
+        "marker_to_fresh_ms": 128.59483333333333,
+        "future_at_receipt": 143,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-10",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-10",
+        "measurement_status": "available",
+        "frames": 166,
+        "complete_frames": 163,
+        "unique_images": 156,
+        "states": {
+          "private-draft-original-result": 9,
+          "committed-value-fresh-result": 154
+        },
+        "first_committed_parameter_frame": 10,
+        "first_fresh_frame": 10,
+        "marker_to_committed_ms": 136.75333333333333,
+        "marker_to_fresh_ms": 136.75333333333333,
+        "future_at_receipt": 146,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-11",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-11",
+        "measurement_status": "available",
+        "frames": 165,
+        "complete_frames": 162,
+        "unique_images": 157,
+        "states": {
+          "private-draft-original-result": 8,
+          "committed-value-stale-result": 3,
+          "committed-value-fresh-result": 151
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 12,
+        "marker_to_committed_ms": 119.660875,
+        "marker_to_fresh_ms": 169.66079166666665,
+        "future_at_receipt": 143,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-12",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-12",
+        "measurement_status": "available",
+        "frames": 165,
+        "complete_frames": 163,
+        "unique_images": 158,
+        "states": {
+          "private-draft-original-result": 8,
+          "committed-value-fresh-result": 155
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 9,
+        "marker_to_committed_ms": 121.11533333333334,
+        "marker_to_fresh_ms": 121.11533333333334,
+        "future_at_receipt": 142,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-13",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-13",
+        "measurement_status": "available",
+        "frames": 165,
+        "complete_frames": 162,
+        "unique_images": 156,
+        "states": {
+          "private-draft-original-result": 10,
+          "committed-value-fresh-result": 152
+        },
+        "first_committed_parameter_frame": 11,
+        "first_fresh_frame": 11,
+        "marker_to_committed_ms": 137.2935,
+        "marker_to_fresh_ms": 137.2935,
+        "future_at_receipt": 141,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-14",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-14",
+        "measurement_status": "available",
+        "frames": 166,
+        "complete_frames": 163,
+        "unique_images": 157,
+        "states": {
+          "private-draft-original-result": 9,
+          "committed-value-fresh-result": 154
+        },
+        "first_committed_parameter_frame": 10,
+        "first_fresh_frame": 10,
+        "marker_to_committed_ms": 136.04483333333334,
+        "marker_to_fresh_ms": 136.04483333333334,
+        "future_at_receipt": 148,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-15",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-15",
+        "measurement_status": "available",
+        "frames": 165,
+        "complete_frames": 162,
+        "unique_images": 156,
+        "states": {
+          "private-draft-original-result": 8,
+          "committed-value-stale-result": 3,
+          "committed-value-fresh-result": 151
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 12,
+        "marker_to_committed_ms": 120.08075,
+        "marker_to_fresh_ms": 170.08070833333332,
+        "future_at_receipt": 141,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-16",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-16",
+        "measurement_status": "available",
+        "frames": 165,
+        "complete_frames": 163,
+        "unique_images": 156,
+        "states": {
+          "private-draft-original-result": 8,
+          "committed-value-fresh-result": 155
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 9,
+        "marker_to_committed_ms": 119.55920833333333,
+        "marker_to_fresh_ms": 119.55920833333333,
+        "future_at_receipt": 142,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-17",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-17",
+        "measurement_status": "available",
+        "frames": 166,
+        "complete_frames": 165,
+        "unique_images": 154,
+        "states": {
+          "private-draft-original-result": 9,
+          "committed-value-fresh-result": 156
+        },
+        "first_committed_parameter_frame": 10,
+        "first_fresh_frame": 10,
+        "marker_to_committed_ms": 133.782125,
+        "marker_to_fresh_ms": 133.782125,
+        "future_at_receipt": 144,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-18",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-18",
+        "measurement_status": "available",
+        "frames": 165,
+        "complete_frames": 162,
+        "unique_images": 152,
+        "states": {
+          "private-draft-original-result": 8,
+          "committed-value-fresh-result": 154
+        },
+        "first_committed_parameter_frame": 9,
+        "first_fresh_frame": 9,
+        "marker_to_committed_ms": 128.085375,
+        "marker_to_fresh_ms": 128.085375,
+        "future_at_receipt": 143,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-19",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-19",
+        "measurement_status": "available",
+        "frames": 166,
+        "complete_frames": 164,
+        "unique_images": 159,
+        "states": {
+          "private-draft-original-result": 7,
+          "committed-value-stale-result": 3,
+          "committed-value-fresh-result": 154
+        },
+        "first_committed_parameter_frame": 8,
+        "first_fresh_frame": 11,
+        "marker_to_committed_ms": 102.81995833333333,
+        "marker_to_fresh_ms": 152.81995833333335,
+        "future_at_receipt": 146,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    },
+    {
+      "id": "npn-20",
+      "available": true,
+      "original_status": "collected_pending_pixel_analysis",
+      "analysis": {
+        "trial": "npn-20",
+        "measurement_status": "available",
+        "frames": 164,
+        "complete_frames": 163,
+        "unique_images": 153,
+        "states": {
+          "private-draft-original-result": 9,
+          "committed-value-stale-result": 2,
+          "committed-value-fresh-result": 152
+        },
+        "first_committed_parameter_frame": 10,
+        "first_fresh_frame": 12,
+        "marker_to_committed_ms": 124.64704166666667,
+        "marker_to_fresh_ms": 157.98033333333333,
+        "future_at_receipt": 136,
+        "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+        "eligible_latency_observations": 0,
+        "latency_gate_passed": null,
+        "rejected_mutations": [
+          "shifted_display_clock",
+          "changed_crop",
+          "unacknowledged_marker",
+          "missing_image",
+          "wrong_pixel_scale",
+          "forged_eligibility",
+          "stale_pixels_labeled_fresh",
+          "unfinished_input",
+          "wrong_native_run"
+        ]
+      }
+    }
+  ]
+}

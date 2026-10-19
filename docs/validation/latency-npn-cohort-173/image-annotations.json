@@ -1,0 +1,82 @@
+{
+  "regions": {
+    "drive": [
+      282,
+      437,
+      350,
+      462
+    ],
+    "current": [
+      30,
+      716,
+      220,
+      745
+    ],
+    "voltage": [
+      290,
+      716,
+      440,
+      745
+    ],
+    "state": [
+      544,
+      714,
+      735,
+      745
+    ],
+    "header_status": [
+      724,
+      65,
+      807,
+      109
+    ],
+    "reading_status": [
+      765,
+      725,
+      1025,
+      747
+    ]
+  },
+  "states": [
+    {
+      "role": "private-draft-original-result",
+      "image": "baseline.png",
+      "source": "/private/tmp/elab-latency-cohort-npn-173/trials/npn-01/capture/frame-ac545b6ee3d56d42c1c7686479b94464f16cdd75598901d0a036544c5b207c7b.png",
+      "hashes": {
+        "drive": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "current": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "voltage": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "state": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "header_status": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "reading_status": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+      }
+    },
+    {
+      "role": "committed-value-stale-result",
+      "image": "stale.png",
+      "source": "/private/tmp/elab-latency-cohort-npn-173/trials/npn-07/capture/frame-65dd8acac4c05c4f075164a5bf711123fb01d34b9b8f4080da50f83598350db3.png",
+      "hashes": {
+        "drive": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "current": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "voltage": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "state": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "header_status": "9b65734178849678fe4448e64e06ebb8b2f800a1063f7a7761592fbd97803732",
+        "reading_status": "fc855a3c2d5382e53fe046f09062a4ed80befdaafc1b116c2abd99973e6509f9"
+      }
+    },
+    {
+      "role": "committed-value-fresh-result",
+      "image": "fresh.png",
+      "source": "/private/tmp/elab-latency-cohort-npn-173/trials/npn-01/capture/frame-b04e23691c26b6e6ea1513583e1cb814009b1323fccd64a66d1a9b29aa980981.png",
+      "hashes": {
+        "drive": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "current": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "voltage": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "state": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "header_status": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "reading_status": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+      }
+    }
+  ],
+  "manual_observation": "Three full originals manually inspected: private 5V/accepted0V cutoff; accepted5V with Solving/stale and old readings; accepted5V with Live, 4.930mA, 0.070V, Saturation and current result identity. Readout columns shift with content; each complete fixed ROI is recorded rather than assuming identical text origins."
+}

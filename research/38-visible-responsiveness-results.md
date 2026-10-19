@@ -3,16 +3,16 @@
 October 19, 2026. Frozen app: **ELab 0.156.0 /173**. Original
 [collection declaration](37-visible-latency-cohort-plan.md).
 
-The LED block has all 20 scheduled outcomes: **14 available software-frame bounds
-and six unavailable test-harness outcomes**. There is no full-cohort LED p95 or
-PRD performance pass. The RC block also retains all 20 outcomes: **12 available
-bounds and eight unavailable outcomes**. NPN collection remains pending.
+The original collection retains **all 60 scheduled outcomes: 46 available
+software-composition bounds and 14 unavailable outcomes**. NPN has a complete
+20-observation percentile; LED and RC have unavailable outcomes and no full-cohort
+p95. There is no overall PRD performance pass.
 
 | Reference | Scheduled outcomes retained | Available bounds | Full-cohort p95 |
 |---|---:|---:|---|
 | LED | 20/20 | 14 | Unavailable: six harness outcomes |
 | RC | 20/20 | 12 | Unavailable: one uncommitted edit, one preparation abort, six covered recordings |
-| Resistor-loaded NPN | 0/20 | 0 | Pending |
+| Resistor-loaded NPN | 20/20 | 20 | 137.294 ms committed value; 169.661 ms fresh result |
 
 Available LED bounds, in milliseconds; these are **descriptive values for n=14**,
 including controller overhead, from a before-input marker to the supplied
@@ -95,7 +95,37 @@ remain in private local capture directories, with hashes and unavailable records
 in the repo; those other-app images are excluded from Git. No app/SDK/source
 repair or replacement trial occurs.
 
-Continue with the separate original NPN block. If a complete LED or RC p95 is
-needed, declare a new cohort separately; do not backfill failed IDs
-or calculate a full-cohort percentile from the successful subset. Owner walkthrough,
-accessibility/IME, other environments and the hobbyist study remain separate.
+The original NPN block has **20/20 available bounds**, with one 0 V → 5 V
+base-drive edit per trial and no LED in the collector load. All native graphs,
+wire identities and results match the packaged agent and existing independent
+70-digit Decimal reference, with KCL/KVL/emitter-current/power checks. The on
+result is 4.929600780862 mA /70.399219138186 mV VCE. A producer draft's absent
+top-level model-field assumption is corrected before any cohort trial; the model
+is already checked in the complete nested NPN result. App/solver/SDK remain frozen.
+
+All 3,260 complete image frames and 3,130 original PNG files replay against three
+manually inspected states: private draft/original cutoff, committed 5 V with
+explicit stale readings, and fresh saturation. Twelve stale frames distinguish
+acknowledgment from the new valid result. Nine corruption classes are refused
+per recording. The worker and owned session exit normally, with shared settings,
+app artifacts and all 650 Go hashes unchanged.
+[NPN proof](../docs/validation/latency-npn-cohort-173/README.md).
+
+NPN bounds, in milliseconds; **n=20, nearest-rank p95 is the 19th value**:
+
+| Response | Minimum | Median | p95 | Maximum |
+|---|---:|---:|---:|---:|
+| Visible committed parameter | 102.820 | 122.881 | 137.294 | 141.870 |
+| Fresh valid result | 116.814 | 132.464 | 169.661 | 170.081 |
+
+The fresh-result bound supports the 500 ms target for this NPN fixture within
+the software-composition method. The acknowledgment bound is inconclusive against
+100 ms because controller overhead is included. Neither is an exact OS-input or
+physical display measurement, and neither establishes a general PRD gate pass.
+
+The fixed original collection is now recorded in full. Complete LED/RC
+percentiles would require separately declared cohorts with the repaired producer
+and exclusive desktop conditions; never backfill failed IDs or calculate their
+full-cohort percentile from successful subsets. Owner walkthrough, broader
+performance coverage, accessibility/IME, other environments and the actual hobbyist
+study remain separate.
