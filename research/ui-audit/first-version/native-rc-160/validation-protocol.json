@@ -1,0 +1,27 @@
+{
+  "overall_passed": false,
+  "successful_native_controller": {
+    "passed": true,
+    "pid": 71171,
+    "normal_exit_code": 0,
+    "graph_seeded": false,
+    "reference_wall_clock_synchronized": false,
+    "live_reference": "Paused public Step reproduces the observed native live time of146 ms; no wall-time equivalence or p95 claim"
+  },
+  "first_attempt": {
+    "passed": false,
+    "pid": 70687,
+    "exit_code": -15,
+    "reason": "Pause sent while AX still described blank sheet; RC loaded running and paused-loaded precondition failed",
+    "cleanup": "first-attempt/cleanup.json",
+    "scope": "Does not qualify rapid activation across replacement or establish the action ordering/root cause"
+  },
+  "measurement_defect": {
+    "scope": "Both native and independent packaged-agent scope duplicate the pre-edge i:R1 value; fresh public CSV does too",
+    "expected_after_current_a": -0.00031606027941427883,
+    "actual_scope_after_current_a": 0.00018393972058572113,
+    "public_reproduction_exit_code": 1
+  },
+  "source_sdk_version_unchanged": true,
+  "source_quality_and_copied_runtime_gates": "Existing /160 qualification reused; no product code changed"
+}

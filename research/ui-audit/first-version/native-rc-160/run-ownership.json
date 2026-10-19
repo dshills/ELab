@@ -1,0 +1,111 @@
+{
+  "passed": true,
+  "stages": [
+    {
+      "stage": "initial-restart",
+      "run_id": 3,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "probe-1",
+      "run_id": 3,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "probe-2",
+      "run_id": 3,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "allow-baseline-save",
+      "run_id": 3,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "control-baseline",
+      "run_id": 3,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "queued-charge",
+      "run_id": 3,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "charge-10",
+      "run_id": 3,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "queued-discharge",
+      "run_id": 3,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "discharge-10",
+      "run_id": 3,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "restart-discharge",
+      "run_id": 4,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "queued-live-charge",
+      "run_id": 4,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "live-paused",
+      "run_id": 4,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "restart-charge",
+      "run_id": 5,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "charge-20",
+      "run_id": 5,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "private-a",
+      "run_id": 5,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "a-and-select-b",
+      "run_id": 5,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "private-b",
+      "run_id": 5,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "timing",
+      "run_id": 5,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "clear-a",
+      "run_id": 5,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "allow-save-copy",
+      "run_id": 5,
+      "electrical_revision": 2
+    },
+    {
+      "stage": "finish",
+      "run_id": 5,
+      "electrical_revision": 2
+    }
+  ],
+  "scope": "Within-native run/electrical identity invariants; only three observed Restart actions create new runs"
+}

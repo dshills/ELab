@@ -3,8 +3,8 @@
   "scope": "Requirement coverage validation only; does not establish product acceptance",
   "requirements": 27,
   "counts": {
-    "implemented": 17,
-    "partial": 10,
+    "implemented": 15,
+    "partial": 12,
     "pending": 0
   },
   "rows": [
@@ -94,9 +94,9 @@
     },
     {
       "id": "SCOPE-02",
-      "evidence": "Retained/fixed intervals, exact sample cursors, deltas/extrema, CSV; sampled threshold brackets, high/low pulse, first-cycle duty and two-threshold rise/fall bounds; finite frequency guards; captured time-weighted mean/RMS/AC ripple/extrema on explicit intervals; actual /156 native RC cursor ASCII entry/focus-loss Select/Enter/Clear matches packaged-agent scope and independent RC voltage/current equations, preserving all 21 samples and circuit/history/document; actual native RC CSV Cancel/Save exports the selected 13-sample window with matching agent bytes, correct SI/provenance and independent RC checks, preserving the saved project and full trace",
-      "status": "implemented",
-      "assessment": "Implemented sampled measurement behavior, shared unit-text time entry and optional captured-reference overlays with common axes; narrow-window endpoint cursor geometry repaired; full mounted interaction qualification remains in EDIT-03"
+      "evidence": "Retained/fixed intervals, exact sample cursors, deltas/extrema, CSV; sampled threshold brackets, high/low pulse, first-cycle duty and two-threshold rise/fall bounds; finite frequency guards; captured time-weighted mean/RMS/AC ripple/extrema on explicit intervals; actual /156 native RC cursor ASCII entry/focus-loss Select/Enter/Clear matches packaged-agent scope and independent RC voltage/current equations, preserving all 21 samples and circuit/history/document; actual native RC CSV Cancel/Save exports the selected 13-sample window with matching agent bytes, correct SI/provenance and independent RC checks, preserving the saved project and full trace ; /160 actual native and fresh public-agent RC check finds stale current probe values at a manual charge/discharge edge, including wrong extrema and CSV boundary rows (native-rc-160)",
+      "status": "partial",
+      "assessment": "Partial: repair manual RC input-edge probe frames and verify retained scope/CSV against independent equations; previous evidence retains its documented scope"
     },
     {
       "id": "HELP-01",
@@ -124,9 +124,9 @@
     },
     {
       "id": "FILE-03",
-      "evidence": "SVG includes pins/palette/static cues/provenance; guarded SI CSV; printable macOS PDF/PNG uses shared A4/Letter page settings, captured provenance, six native/headless reference comparisons plus rectifier PNG review and neighboring-symbol pixel regression",
-      "status": "implemented",
-      "assessment": "Implemented existing P0 output; PDF/PNG advance the owner P1 addition, captured in-app preview now shares the output renderer; local printer discovery/captured submission/status/cancel now have shared commands and isolated libcups fixture evidence; bounded fixed-scale tiling/page navigation/exact captured PNG now work; Brother job 161 completed and the owner confirms the LED schematic/parts list printed clearly and completely; measured media/margins/scale, other output settings and device cancellation remain unqualified"
+      "evidence": "SVG includes pins/palette/static cues/provenance; guarded SI CSV; printable macOS PDF/PNG uses shared A4/Letter page settings, captured provenance, six native/headless reference comparisons plus rectifier PNG review and neighboring-symbol pixel regression ; /160 actual native and fresh public-agent RC check finds stale current probe values at a manual charge/discharge edge, including wrong extrema and CSV boundary rows (native-rc-160)",
+      "status": "partial",
+      "assessment": "Partial: repair manual RC input-edge probe frames and verify retained scope/CSV against independent equations; previous evidence retains its documented scope"
     },
     {
       "id": "ACCESS-01",

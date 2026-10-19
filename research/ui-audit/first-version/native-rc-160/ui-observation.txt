@@ -1,0 +1,14 @@
+Actual CUA observations, October 18, 2026; exact /160 executable in owned custom bundle.
+Blank → native Examples/RC charge-discharge → observe loaded running scope → Pause → Restart.
+Inspector probe menus: C1 voltage, R1 current. Explicit public baseline Save after probe selection.
+Charge → ten separate Step clicks, each awaited until scope time advances exactly 1 ms → 10 ms.
+Discharge → ten separately observed Step clicks → 20 ms. Native readings follow RC equations.
+Restart → Charge → Resume → observe running scope → Pause at 146 ms → verify frozen state.
+Restart → twenty separately observed Step clicks → 20 ms charge trace.
+Type A=4 ms privately → select B once commits A → type B=16 ms privately → Return commits.
+Scroll inspector to observe both voltage/current cursor readouts. Clear A retains B=16 ms.
+Public Save native/reference copies, then public Close; original host normal exit 0, PID absent.
+Fresh packaged agents reopen saved schematics at startup. No live-trace persistence claim.
+Independent post-run check finds stale i:R1 probe frame on second 10 ms input-edge sample.
+Public agent reproduction and CSV confirm the same wrong positive value after Discharge.
+Initial attempt used Pause before observing loaded RC; failed precondition and cleanup retained.

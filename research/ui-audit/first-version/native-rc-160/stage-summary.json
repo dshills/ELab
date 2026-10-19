@@ -1,0 +1,236 @@
+{
+  "controller_assertions_passed": true,
+  "scope_edge_projection_passed": false,
+  "stages": [
+    {
+      "stage": "blank",
+      "time_s": null,
+      "voltage_v": null,
+      "current_a": null,
+      "paused": false,
+      "run_id": 1,
+      "electrical_revision": 1,
+      "last_actor": "system"
+    },
+    {
+      "stage": "paused-loaded",
+      "time_s": 0.106,
+      "voltage_v": 2.2743065580636226,
+      "current_a": 0.00027256934419363774,
+      "paused": true,
+      "run_id": 2,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "initial-restart",
+      "time_s": 0,
+      "voltage_v": 0,
+      "current_a": 0.0005,
+      "paused": true,
+      "run_id": 3,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "probe-1",
+      "time_s": 0,
+      "voltage_v": 0,
+      "current_a": 0.0005,
+      "paused": true,
+      "run_id": 3,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "probe-2",
+      "time_s": 0,
+      "voltage_v": 0,
+      "current_a": 0.0005,
+      "paused": true,
+      "run_id": 3,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "allow-baseline-save",
+      "time_s": 0,
+      "voltage_v": 0,
+      "current_a": 0.0005,
+      "paused": true,
+      "run_id": 3,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "control-baseline",
+      "time_s": 0,
+      "voltage_v": 0,
+      "current_a": 0.0005,
+      "paused": true,
+      "run_id": 3,
+      "electrical_revision": 2,
+      "last_actor": "agent.socket"
+    },
+    {
+      "stage": "queued-charge",
+      "time_s": 0,
+      "voltage_v": 0,
+      "current_a": 0.0005,
+      "paused": true,
+      "run_id": 3,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "charge-10",
+      "time_s": 0.010000000000000002,
+      "voltage_v": 3.1606027941427888,
+      "current_a": 0.00018393972058572113,
+      "paused": true,
+      "run_id": 3,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "queued-discharge",
+      "time_s": 0.010000000000000002,
+      "voltage_v": 3.1606027941427888,
+      "current_a": 0.00018393972058572113,
+      "paused": true,
+      "run_id": 3,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "discharge-10",
+      "time_s": 0.02000000000000001,
+      "voltage_v": 1.1627207896741474,
+      "current_a": -0.00011627207896741473,
+      "paused": true,
+      "run_id": 3,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "restart-discharge",
+      "time_s": 0,
+      "voltage_v": 0,
+      "current_a": 0,
+      "paused": true,
+      "run_id": 4,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "queued-live-charge",
+      "time_s": 0,
+      "voltage_v": 0,
+      "current_a": 0,
+      "paused": true,
+      "run_id": 4,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "live-paused",
+      "time_s": 0.146,
+      "voltage_v": 4.999997718236815,
+      "current_a": 2.2817631846194787e-10,
+      "paused": true,
+      "run_id": 4,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "restart-charge",
+      "time_s": 0,
+      "voltage_v": 0,
+      "current_a": 0.0005,
+      "paused": true,
+      "run_id": 5,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "charge-20",
+      "time_s": 0.02000000000000001,
+      "voltage_v": 4.323323583816937,
+      "current_a": 6.766764161830627e-05,
+      "paused": true,
+      "run_id": 5,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "private-a",
+      "time_s": 0.02000000000000001,
+      "voltage_v": 4.323323583816937,
+      "current_a": 6.766764161830627e-05,
+      "paused": true,
+      "run_id": 5,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "a-and-select-b",
+      "time_s": 0.02000000000000001,
+      "voltage_v": 4.323323583816937,
+      "current_a": 6.766764161830627e-05,
+      "paused": true,
+      "run_id": 5,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "private-b",
+      "time_s": 0.02000000000000001,
+      "voltage_v": 4.323323583816937,
+      "current_a": 6.766764161830627e-05,
+      "paused": true,
+      "run_id": 5,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "timing",
+      "time_s": 0.02000000000000001,
+      "voltage_v": 4.323323583816937,
+      "current_a": 6.766764161830627e-05,
+      "paused": true,
+      "run_id": 5,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "clear-a",
+      "time_s": 0.02000000000000001,
+      "voltage_v": 4.323323583816937,
+      "current_a": 6.766764161830627e-05,
+      "paused": true,
+      "run_id": 5,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "allow-save-copy",
+      "time_s": 0.02000000000000001,
+      "voltage_v": 4.323323583816937,
+      "current_a": 6.766764161830627e-05,
+      "paused": true,
+      "run_id": 5,
+      "electrical_revision": 2,
+      "last_actor": "user"
+    },
+    {
+      "stage": "finish",
+      "time_s": 0.02000000000000001,
+      "voltage_v": 4.323323583816937,
+      "current_a": 6.766764161830627e-05,
+      "paused": true,
+      "run_id": 5,
+      "electrical_revision": 2,
+      "last_actor": "agent.socket"
+    }
+  ]
+}
