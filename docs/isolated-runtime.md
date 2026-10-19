@@ -39,3 +39,6 @@ python3 -B scripts/package_review.py \
 ```
 
 [The /165 rehearsal](validation/review-archive-165/README.md) separately starts the extracted app/agent under the previously qualified denial policy and tests the three bundled examples and six saved-file reopens. That policy's canaries retain their original run scope. The ZIP is a private unsigned handoff; this does not qualify Finder Archive Utility, LaunchServices/document association, quarantine/Gatekeeper, normal user configuration, a clean account or installation/distribution. The sealed folder's manifest, build identity and broader open gates are unchanged.
+
+
+A separate [exact /165 LaunchServices smoke observation](validation/launchservices-165/README.md) verifies macOS `open` reaches the extracted app's full native smoke success event and the same stage journal. It observes the exact native PID, endpoint removal and subsequent process absence. It does not infer target exit status from `open -W`, nor claim that a LaunchServices child inherits the earlier sandbox policy. Smoke-specific isolation differs from ordinary no-argument/default-configuration startup; clean-account, quarantine and distribution gates remain open.

@@ -622,3 +622,8 @@ Clean `35371ee` /SDK `b22478c` is packaged as 0.144.0 /161. [Receipt](ui-audit/f
 ### October 19: local private-review archive rehearsal
 
 The [ZIP extraction/runtime proof](../docs/validation/review-archive-165/README.md) adds macOS `ditto` extraction with all 789 file bytes/modes intact, exact extracted native/agent startup from a Unicode path with spaces, three example saves and six fresh reopens. The source review and receipt are unchanged; the failed first pause assertion remains explicit, and all 54 current Python tests pass. This closes only the local archive/executable delivery check. Finder/quarantine, default configuration, clean account/OS, signing/notarization, broader distribution and owner acceptance remain open. No version, app command, model or P0 status changes; 17 implemented /10 partial.
+
+
+### October 19: macOS LaunchServices smoke launch
+
+The [exact extracted /165 app-launch proof](../docs/validation/launchservices-165/README.md) passes through macOS `open`, preserves all 50 qualified smoke journal markers and the success event, observes the owned PID/command and subsequent absence, removes its endpoint, and preserves the extracted file tree. The launcher exits 0; target application exit status is unavailable and is not inferred. This smoke-mode run uses isolated temporary recovery/appearance storage with geometry saving disabled, so ordinary no-argument startup/default configuration, Finder/quarantine, clean account/OS, signing/notarization, distribution and owner acceptance remain open. No app source/version, PRD status or sealed review change.
