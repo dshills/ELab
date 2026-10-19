@@ -1,0 +1,36 @@
+from pathlib import Path
+import gzip,hashlib,io,json,lzma,shutil,tarfile
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent;proof=root/'docs/validation/display-frame-probe-runtime-clock';proof.mkdir()
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+locations=[('launch-helper-failure',Path('/private/tmp/elab-display-probe-calibration-173'),'display-frame-probe-calibration'),('initial-clock-refusal',Path('/private/tmp/elab-display-probe-calibration-173-second'),'display-frame-probe-calibration-second'),('nominal',Path('/private/tmp/elab-display-probe-calibration-173-third'),'display-frame-probe-calibration-third')]
+for label,out,producer in locations:
+ destination=proof/label;destination.mkdir()
+ report=json.loads((out/'report.json').read_text())
+ assert report['owned_process_absent'] and report['endpoint_removed'] and not report['forced_cleanup'] and report['shared_geometry_unchanged'] and report['review_unchanged'] and report['copied_bundle_unchanged'] and report['canonical_unchanged']
+ for p in sorted(out.rglob('*')):
+  if not p.is_file() or '.app' in str(p.relative_to(out)) or p.suffix=='.png' or p.name.endswith('endpoint.json'):continue
+  relative=p.relative_to(out);target=destination/relative;target.parent.mkdir(parents=True,exist_ok=True)
+  target.with_name(target.name+'.gz').write_bytes(gzip.compress(p.read_bytes(),mtime=0))
+ producers=destination/'producers';producers.mkdir()
+ for p in (root/'build'/producer).iterdir():
+  if p.suffix in ['.py','.swift','.plist'] or p.name.endswith('.initial.txt'):
+   (producers/(p.name+'.gz')).write_bytes(gzip.compress(p.read_bytes(),mtime=0))
+nominal=locations[-1][1];folder=nominal/'capture';rows=[json.loads(s) for s in (folder/'frames.jsonl').read_text().splitlines()];names=sorted({r['png'] for r in rows if 'png' in r})
+stream=io.BytesIO();manifest={}
+with tarfile.open(fileobj=stream,mode='w',format=tarfile.USTAR_FORMAT) as archive:
+ for name in names:
+  p=folder/name;data=p.read_bytes();assert sha(p)==name[6:-4]
+  assert p.stat().st_mode&0o777==0o600
+  entry=tarfile.TarInfo(name);entry.size=len(data);entry.mode=0o600;entry.mtime=0;entry.uid=entry.gid=0
+  archive.addfile(entry,io.BytesIO(data));manifest[name]=dict(sha256=sha(p),bytes=len(data),mode='0o600')
+compressed=lzma.compress(stream.getvalue(),format=lzma.FORMAT_XZ,preset=6)
+(proof/'nominal/frames.tar.xz').write_bytes(compressed)
+(proof/'nominal/png-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+for field,label in [(rows[0],'first'),(rows[-1],'last')]:shutil.copyfile(folder/field['png'],proof/'nominal'/(label+'.png'))
+shutil.copyfile(nominal/'cua-baseline.png',proof/'nominal/cua-baseline.png')
+for name in ['display-frame-probe-future-check.txt','display-frame-probe-future-final.txt','display-frame-probe-future-format.txt']:
+ (proof/(name+'.gz')).write_bytes(gzip.compress((root/'build'/name).read_bytes(),mtime=0))
+shutil.copyfile(Path(__file__),proof/'publish.py.txt')
+cp=dict(status='Future-at-receipt source assumption repaired; nominal raw crop succeeds; full calibration/cohorts pending',source_record_commit='526dda3',source_sha256={str(p.relative_to(root)):sha(p) for p in sorted((root/'tools/display-frame-probe').iterdir()) if p.suffix in ['.swift','.sh']},current_tool_sha256=sha(root/'build/display-frame-probe-tools/display-frame-probe'),preserved_initial_tool=dict(path='build/display-frame-probe-calibration-second/display-frame-probe-initial',sha256=sha(root/'build/display-frame-probe-calibration-second/display-frame-probe-initial')),initial_offline_checkpoint_sha256=sha(root/'docs/validation/display-frame-probe-offline/checkpoint.json'),preserved_artifacts={n:sha(root/n) for n in ['build/ELab-0.156.0-173-review/RELEASE_MANIFEST.json','build/ELab-0.156.0-173-review.zip','build/ELab.app/Contents/MacOS/ELab','build/frame-probe-tools/frame-probe','third_party/vellum/sdk.lock.json','third_party/vellum/vellum-b22478c.tar.gz']},eligible_latency_observations=0,latency_gate_passed=None,physical_clock_or_visibility_qualified=False)
+(proof/'checkpoint-prepared.tmp').write_text(json.dumps(cp,indent=2)+'\n')
+print(dict(evidence=str(proof),pngs=len(manifest),raw_png_bytes=sum(v['bytes'] for v in manifest.values()),archive_bytes=len(compressed)))

@@ -28,7 +28,8 @@ func testSample(
   status: Int? = SCFrameStatus.complete.rawValue, displayed: UInt64? = 200,
   scale: Double? = 1, contentScale: Double? = 1, width: Int = 4, height: Int = 3,
   content: CGRect? = CGRect(x: 0, y: 0, width: 4, height: 3),
-  screen: CGRect? = CGRect(x: 110, y: 210, width: 4, height: 3), image: Bool = true
+  screen: CGRect? = CGRect(x: 110, y: 210, width: 4, height: 3), image: Bool = true,
+  presentation: CMTime? = nil
 ) throws -> CMSampleBuffer {
   var pixel: CVPixelBuffer?
   guard
@@ -57,7 +58,8 @@ func testSample(
     let description
   else { throw ProbeError("Cannot describe synthetic pixels") }
   var timing = CMSampleTimingInfo(
-    duration: .invalid, presentationTimeStamp: CMTime(value: 1, timescale: 60),
+    duration: .invalid,
+    presentationTimeStamp: presentation ?? CMClockMakeHostTimeFromSystemUnits(displayed ?? 200),
     decodeTimeStamp: .invalid)
   var sample: CMSampleBuffer?
   let result =
@@ -206,7 +208,8 @@ func offlineChecks() throws {
   let badSamples: [(String, CMSampleBuffer)] = [
     ("missing-status", try testSample(status: nil)),
     ("missing-time", try testSample(displayed: nil)),
-    ("zero-time", try testSample(displayed: 0)), ("future-time", try testSample(displayed: 400)),
+    ("zero-time", try testSample(displayed: 0)),
+    ("mismatched-presentation-clock", try testSample(presentation: CMTime(value: 1, timescale: 1))),
     ("missing-scale", try testSample(scale: nil)),
     ("nan-scale", try testSample(scale: Double.nan)),
     ("infinite-content-scale", try testSample(contentScale: Double.infinity)),
@@ -276,6 +279,40 @@ func offlineChecks() throws {
       r["collector_error"] as? String == "Stream stopped: first" && (try rows(path)).isEmpty,
       "First stream failure or subsequent-frame refusal lost")
     cases.append("first-stream-error-retained-and-subsequent-frames-refused")
+  }
+  do {
+    let (path, c) = try collector("future-receipt")
+    let sample = try testSample(displayed: 400)
+    c.queue.sync { c.recordSample(sample, received: 300) }
+    let r = c.finish()
+    let journal = try rows(path)
+    try testRequire(
+      r["collector_error"] is NSNull && r["complete_frames"] as? Int == 1
+        && r["frames_with_display_time_after_receipt"] as? Int == 1
+        && r["clock_calibrated_for_latency"] as? Bool == false,
+      "Future supplied timestamp was hidden or treated as calibrated")
+    try testRequire(
+      journal.count == 1 && journal[0]["received_mach_ticks"] as? String == "300"
+        && journal[0]["display_mach_ticks"] as? String == "400"
+        && journal[0]["display_time_after_receipt"] as? Bool == true
+        && journal[0]["presentation_matches_converted_display_time"] as? Bool == true
+        && journal[0]["eligible_for_latency"] as? Bool == false,
+      "Future timestamp/receipt was rewritten or made eligible")
+    cases.append("future-display-time-retained-with-original-receipt-and-zero-eligibility")
+  }
+  do {
+    let (path, c) = try collector("prospective-after-end")
+    let sample = try testSample(displayed: c.deadline + 1)
+    c.queue.sync { c.recordSample(sample, received: 300) }
+    let r = c.finish()
+    let journal = try rows(path)
+    try testRequire(
+      r["collector_error"] is NSNull && r["complete_frames"] as? Int == 0
+        && r["unique_images"] as? Int == 0 && r["frames_outside_presentation_window"] as? Int == 1
+        && journal.count == 1 && journal[0]["outside_presentation_window"] as? Bool == true
+        && journal[0]["png"] == nil,
+      "Out-of-interval prospective frame stored pixels or lost metadata")
+    cases.append("prospective-frame-after-fixed-interval-keeps-metadata-without-pixels")
   }
   var png: Data?
   do {

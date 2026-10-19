@@ -1,6 +1,6 @@
 # Visible latency: measurement decision
 
-October 19, 2026. Status: software clock check completed; the owner authorized cropped display recordings on October 19. The sweep repair is now packaged and qualified in clean /173. A separate explicit-crop recorder now passes 53 offline guards; runtime crop/visibility calibration remains next and no broader capture has run.
+October 19, 2026. Status: software clock check completed; the owner authorized cropped display recordings on October 19. The sweep repair is now packaged and qualified in clean /173. The explicit-crop recorder now passes 55 offline checks and one nominal raw capture; full edge-marker/occlusion/clock and causal-input calibration remain next. No latency cohort has begun.
 
 The PRD retains two different targets: input event → visible acknowledgment at p95 ≤100 ms, and accepted edit → first valid updated sample at p95 ≤500 ms for LED, RC and resistor-loaded NPN. Backend timing and a draft appearing in an editor cannot establish either target. No target, reference circuit or acceptance rule changes here.
 
@@ -32,7 +32,7 @@ Implement and check these guards before executing the new capture:
 4. Retain source/configuration hashes, crop/display identities, timestamps, complete/incomplete statuses and every attempted trial. Reject mismatched clock/geometry, absent images or stream errors. Do not equate a callback gap with proof of a missed display update.
 5. Repeat the marker → acknowledged CUA action → causal acknowledgment/fresh-image sequence, preserving explicit stale labels and matching public agent physics. Public API state alone cannot identify the visible transition.
 
-The [offline recorder proof](../docs/validation/display-frame-probe-offline/README.md) now checks geometry/options/clock/metadata/storage guards with synthetic data. It has not exercised an actual display stream, pixel alignment or occlusion. Authorization permits the bounded runtime calibration; it does not qualify its output automatically.
+The initial [offline recorder proof](../docs/validation/display-frame-probe-offline/README.md) checks synthetic guards. The [native timestamp/nominal proof](../docs/validation/display-frame-probe-runtime-clock/README.md) now verifies real wrong-crop refusal and a three-second raw crop with 164 complete frames. An initial future-at-receipt refusal is preserved; supplied display and presentation timestamps agree, but receipt ordering does not establish physical visibility. The revised collector retains future diagnostics with zero eligibility. Five static UI features align at zero offset; edge markers, an owned occluder and causal input/clock interpretation remain pending. Authorization does not qualify that output automatically.
 
 ## How a later timing decision would work
 

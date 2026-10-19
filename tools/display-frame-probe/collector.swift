@@ -28,6 +28,13 @@ func captureDeadline(start: UInt64, seconds: Double, numerator: UInt32, denomina
   return deadline
 }
 
+// Agreement between two supplied representations, not proof of scanout or
+// receipt latency. SCK display time can be ahead of callback receipt; retain it.
+func matchingHostPresentation(_ presentation: CMTime, displayed: UInt64) -> Bool {
+  presentation.isValid && presentation.isNumeric && presentation.epoch == 0
+    && CMTimeCompare(presentation, CMClockMakeHostTimeFromSystemUnits(displayed)) == 0
+}
+
 // Queue-confined state. Receipt checks are injected only for offline synthetic
 // tests; the capture entry point always supplies independent CG target checks.
 final class DisplayCollector: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked Sendable {
@@ -50,6 +57,8 @@ final class DisplayCollector: NSObject, SCStreamOutput, SCStreamDelegate, @unche
   private var markerIDs = Set<String>()
   private var latestMarker: UInt64 = 0
   private var previousDisplay: UInt64 = 0
+  private var futureDisplayCount = 0
+  private var outsidePresentationWindow = 0
   private var finalReport: [String: Any]?
 
   init(
@@ -160,6 +169,15 @@ final class DisplayCollector: NSObject, SCStreamOutput, SCStreamDelegate, @unche
       row["presentation_value"] = String(presentation.value)
       row["presentation_timescale"] = presentation.timescale
     }
+    if let displayed {
+      let ahead = displayed > received
+      row["display_time_after_receipt"] = ahead
+      if ahead {
+        futureDisplayCount += 1
+        row["display_lead_at_receipt_ms"] =
+          Double(displayed - received) * Double(timebase.numer) / Double(timebase.denom) / 1_000_000
+      }
+    }
     var complete = false
     do {
       try verifyReceipt()
@@ -168,10 +186,14 @@ final class DisplayCollector: NSObject, SCStreamOutput, SCStreamDelegate, @unche
         throw ProbeError("Missing or unknown frame status")
       }
       if frameStatus == .complete {
-        guard let displayed, displayed > 0, displayed <= received, displayed <= deadline,
+        guard let displayed, displayed > 0,
           displayed >= previousDisplay,
           let buffer = CMSampleBufferGetImageBuffer(sample)
         else { throw ProbeError("Missing image or invalid/nonmonotonic display clock") }
+        guard matchingHostPresentation(presentation, displayed: displayed) else {
+          throw ProbeError("Presentation timestamp disagrees with the converted display clock")
+        }
+        row["presentation_matches_converted_display_time"] = true
         let w = CVPixelBufferGetWidth(buffer)
         let h = CVPixelBufferGetHeight(buffer)
         row["width_pixels"] = w
@@ -179,33 +201,40 @@ final class DisplayCollector: NSObject, SCStreamOutput, SCStreamDelegate, @unche
         try plan.validateFrame(
           width: w, height: h, content: content, screen: screen, scale: scale,
           contentScale: contentScale)
-        let image = CIImage(cvPixelBuffer: buffer)
-        guard let cg = context.createCGImage(image, from: image.extent) else {
-          throw ProbeError("Cannot encode cropped image")
-        }
-        let data = NSMutableData()
-        guard
-          let writer = CGImageDestinationCreateWithData(
-            data, UTType.png.identifier as CFString, 1, nil)
-        else {
-          throw ProbeError("Cannot create PNG encoder")
-        }
-        CGImageDestinationAddImage(writer, cg, nil)
-        guard CGImageDestinationFinalize(writer) else {
-          throw ProbeError("Cannot finish PNG encoder")
-        }
-        let (name, digest) = try recordPNG(data as Data)
-        row["png"] = name
-        row["png_sha256"] = digest
-        row["frame_geometry_validated"] = true
-        if let bound = upperBoundMilliseconds(
-          marker: latestMarker, displayed: displayed, numerator: timebase.numer,
-          denominator: timebase.denom)
-        {
-          row["since_acknowledged_marker_ms"] = bound
+        if displayed > deadline {
+          // A prospective frame beyond the predeclared recording interval is
+          // retained as metadata, never as pixels or a timing observation.
+          row["outside_presentation_window"] = true
+          outsidePresentationWindow += 1
+        } else {
+          let image = CIImage(cvPixelBuffer: buffer)
+          guard let cg = context.createCGImage(image, from: image.extent) else {
+            throw ProbeError("Cannot encode cropped image")
+          }
+          let data = NSMutableData()
+          guard
+            let writer = CGImageDestinationCreateWithData(
+              data, UTType.png.identifier as CFString, 1, nil)
+          else {
+            throw ProbeError("Cannot create PNG encoder")
+          }
+          CGImageDestinationAddImage(writer, cg, nil)
+          guard CGImageDestinationFinalize(writer) else {
+            throw ProbeError("Cannot finish PNG encoder")
+          }
+          let (name, digest) = try recordPNG(data as Data)
+          row["png"] = name
+          row["png_sha256"] = digest
+          row["frame_geometry_validated"] = true
+          if let bound = upperBoundMilliseconds(
+            marker: latestMarker, displayed: displayed, numerator: timebase.numer,
+            denominator: timebase.denom)
+          {
+            row["since_acknowledged_marker_ms"] = bound
+          }
+          complete = true
         }
         previousDisplay = displayed
-        complete = true
       } else if frameStatus != .idle && frameStatus != .started {
         throw ProbeError("Noncomplete stream status \(status) invalidates the trial")
       }
@@ -266,6 +295,9 @@ final class DisplayCollector: NSObject, SCStreamOutput, SCStreamDelegate, @unche
         "timebase_denominator": timebase.denom, "eligible_latency_observations": 0,
         "latency_gate_passed": NSNull(),
         "pixel_mapping_calibrated": false, "display_visibility_calibrated": false,
+        "clock_calibrated_for_latency": false,
+        "frames_with_display_time_after_receipt": futureDisplayCount,
+        "frames_outside_presentation_window": outsidePresentationWindow,
       ]
       finalReport = report
       return report
