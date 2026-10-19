@@ -369,6 +369,8 @@ func Catalog() []Capability {
 		typedCapability("workspace.layout.set", "Set the session schematic/scope split; preserves circuit, simulation and measurements", reflect.TypeOf(WorkspaceLayout{})),
 		typedCapability("diagnostics.details.set", "Show diagnostic details; session only; targets in diagnostic_presentation", reflect.TypeOf(DiagnosticDetailsParams{})),
 		typedCapability("appearance.configure", "Load and autosave bounded app theme preferences in background; empty path disables; inspect appearance", reflect.TypeOf(AppearanceConfigureParams{})),
+		queryCapability("appearance.work.inspect", "Inspect one retained appearance operation by stable ID, including captured input, progress, artifact and error", reflect.TypeOf(IDParams{}), reflect.TypeOf(AppearanceWork{})),
+		typedCapability("appearance.work.cancel", "Cancel the exact current appearance operation before publication; preserves session theme and existing files", reflect.TypeOf(IDParams{})),
 		capability("appearance.wait", "Wait up to 5 s for theme preference loading/saving; inspect appearance status/error", false, `{"type":"object","additionalProperties":false}`),
 		capability("appearance.theme.set", "Theme: light, dark, system; autosaves if configured; preserves circuit/history", true, `{"type":"object","required":["theme"],"properties":{"theme":{"type":"string","enum":["light","dark","system"]}},"additionalProperties":false}`),
 		typedCapability("display.preferences.set", "Set persisted voltage/current/motion/direction cues; signed current stays conventional. Preserves physics.", reflect.TypeOf(DisplayPreferences{})),

@@ -1,0 +1,82 @@
+from pathlib import Path
+import argparse
+import gzip
+import hashlib
+import json
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--verify', action='store_true')
+parser.add_argument('--artifacts', type=Path, required=True)
+args = parser.parse_args()
+folder = args.artifacts.resolve()
+sha = lambda data: hashlib.sha256(data).hexdigest()
+encoder = json.JSONEncoder(indent=2)
+
+
+def transcript_sha(records):
+    digest = hashlib.sha256()
+    for chunk in encoder.iterencode(records):
+        digest.update(chunk.encode())
+    digest.update(b'\n')
+    return digest.hexdigest()
+
+
+def verify(bundle):
+    for row in bundle['transcripts'].values():
+        for entry in row['entries']:
+            result = entry['response'].get('result')
+            if isinstance(result, dict) and 'schemas' in result:
+                ref = result['schemas'].get('$proof_registry')
+                if ref:
+                    result['schemas'] = bundle['registries'][ref]
+        assert transcript_sha(row['entries']) == row['original_json_sha256']
+
+
+if args.verify:
+    bundle = json.loads(gzip.decompress((folder/'protocol-transcripts.json.gz').read_bytes()))
+    verify(bundle)
+    print(dict(passed=True, exact_transcripts_reconstructed=len(bundle['transcripts'])))
+else:
+    bundle = dict(format='elab.appearance-protocol-proof', version=1, registries={}, transcripts={})
+    decoder = json.JSONDecoder()
+    for label in ('stdio', 'socket'):
+        original = gzip.decompress((folder/(label+'-transcript.json.gz')).read_bytes())
+        source = original.decode()
+        index = source.index('[')+1
+        entries = []
+        while True:
+            while source[index] in ' \n\t\r,':
+                index += 1
+            if source[index] == ']':
+                break
+            entry, index = decoder.raw_decode(source, index)
+            result = entry['response'].get('result')
+            if isinstance(result, dict) and 'schemas' in result:
+                registry = result['schemas']
+                identity = sha(json.dumps(registry, sort_keys=True, separators=(',', ':')).encode())
+                bundle['registries'].setdefault(identity, registry)
+                result['schemas'] = {'$proof_registry': identity}
+            entries.append(entry)
+        bundle['transcripts'][label] = dict(original_json_sha256=sha(original), entries=entries)
+    encoded = (json.dumps(bundle, indent=2)+'\n').encode()
+    # Verification restores shared registries in place; save the compact bytes
+    # first, and prove exact original JSON reconstruction before changing files.
+    verify(bundle)
+    with (folder/'protocol-transcripts.json.gz').open('xb') as out:
+        out.write(gzip.compress(encoded, mtime=0))
+    preserved = Path(__file__).resolve().parent/'before-transcript-compaction'
+    preserved.mkdir(mode=0o700)
+    old_checkpoint = (folder/'checkpoint.json').read_bytes()
+    checkpoint = json.loads(old_checkpoint)
+    for name in ('stdio-transcript.json.gz', 'socket-transcript.json.gz', 'checkpoint.json'):
+        (folder/name).rename(preserved/name)
+    with (folder/'compact-transcripts.py.txt').open('xb') as out:
+        out.write(Path(__file__).read_bytes())
+    checkpoint['protocol_compaction'] = dict(exact_reconstruction_verified=True,
+        original_checkpoint_sha256=sha(old_checkpoint), registries=len(bundle['registries']),
+        original_transcript_json_sha256={label: row['original_json_sha256'] for label, row in bundle['transcripts'].items()})
+    checkpoint['evidence_sha256'] = {p.relative_to(folder).as_posix(): sha(p.read_bytes()) for p in sorted(folder.rglob('*')) if p.is_file()}
+    with (folder/'checkpoint.json').open('x') as out:
+        out.write(json.dumps(checkpoint, indent=2)+'\n')
+    print(dict(passed=True, registries=len(bundle['registries']), bundle_bytes=len(encoded),
+               compressed_bytes=(folder/'protocol-transcripts.json.gz').stat().st_size))

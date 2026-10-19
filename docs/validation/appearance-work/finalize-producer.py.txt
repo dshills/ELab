@@ -1,0 +1,136 @@
+from pathlib import Path
+import gzip
+import hashlib
+import json
+import shutil
+import subprocess
+import sys
+
+root = Path('/Users/dshills/Development/projects/ELab')
+stage = Path(__file__).resolve().parent
+folder = root/'docs/validation/appearance-work'
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+quality = json.loads((stage/'quality-serial.json').read_text())
+assert quality['passed'] and quality['sources_unchanged']
+assert all(sha(root/name) == digest for name, digest in quality['source_sha256'].items())
+public = json.loads((stage/'qualified-public/external-final.json').read_text())
+native = json.loads((stage/'native.json').read_text())
+preservation = json.loads((stage/'preservation.json').read_text())
+assert public['passed'] and native['passed'] and preservation['passed']
+assert public['agent_sha256'] == native['agent_sha256'] == sha(stage/'elab-agent-qualified')
+assert native['native_sha256'] == sha(stage/'elab-qualified')
+assert all(row['exit_code'] == 0 and row['absent'] and row['endpoint_removed'] for row in native['process_exits'])
+assert native['shared_geometry_unchanged'] and public['host_absent']
+sys.path.insert(0, str(root/'scripts'))
+from package_review import members
+review = root/'build/ELab-0.153.0-170-review'
+review_files = members(review)
+manifest = json.loads((review/'RELEASE_MANIFEST.json').read_text())
+without_manifest = dict(review_files)
+without_manifest.pop('RELEASE_MANIFEST.json')
+assert without_manifest == manifest['files'] and len(without_manifest) == 1650
+assert sha(root/'build/ELab-0.153.0-170-review.zip') == preservation['archive_sha256']
+assert sha(root/'build/ELab.app/Contents/MacOS/ELab') == preservation['canonical_binary_sha256']
+assert sha(root/'third_party/vellum/vellum-b22478c.tar.gz') == preservation['sdk_archive_sha256']
+assert sha(root/'third_party/vellum/sdk.lock.json') == preservation['sdk_lock_sha256']
+shared = Path.home()/'Library/Cogent Core'
+geometry = {str(p.relative_to(shared)): dict(sha256=sha(p), mode=oct(p.stat().st_mode & 0o777)) for p in shared.rglob('*') if p.is_file()}
+assert geometry == native['shared_geometry_before']
+
+
+def put(name, data):
+    with (folder/name).open('xb') as out:
+        out.write(data)
+
+
+def copy(source, name, compressed=False):
+    data = source.read_bytes()
+    put(name, gzip.compress(data, mtime=0) if compressed else data)
+
+
+put('preservation-after-quality.json', (json.dumps(dict(passed=True,
+    review_files_verified=len(review_files), review_manifest_sha256=sha(review/'RELEASE_MANIFEST.json'),
+    archive_sha256=preservation['archive_sha256'], canonical_binary_sha256=preservation['canonical_binary_sha256'],
+    sdk_archive_sha256=preservation['sdk_archive_sha256'], sdk_lock_sha256=preservation['sdk_lock_sha256'],
+    shared_geometry_unchanged=True), indent=2)+'\n').encode())
+
+
+copies = [
+    ('original-missing-job.txt', 'original-missing-job.txt.gz', True),
+    ('original-admission-test.go.txt', 'original-admission-test.go.txt.gz', True),
+    ('focused-race-first.txt', 'initial-fixture-compile.txt.gz', True),
+    ('original-supersession.txt', 'original-supersession.txt.gz', True),
+    ('before-supersession-work.go.txt', 'before-supersession-work.go.txt.gz', True),
+    ('supersession_test.go.txt', 'supersession-regression.go.txt.gz', True),
+    ('focused-race-final.txt', 'focused-race.txt.gz', True),
+    ('quality.json', 'initial-quality.json', False),
+    ('quality-stdout.txt', 'initial-quality-stdout.txt.gz', True),
+    ('quality-stderr.txt', 'initial-quality-stderr.txt.gz', True),
+    ('quality-final.json', 'before-supersession-quality.json', False),
+    ('quality-final-stdout.txt', 'before-supersession-quality-stdout.txt.gz', True),
+    ('quality-final-stderr.txt', 'before-supersession-quality-stderr.txt.gz', True),
+    ('quality-after-supersession.json', 'after-repair-default-quality.json', False),
+    ('quality-after-supersession-stdout.txt', 'after-repair-default-quality-stdout.txt.gz', True),
+    ('quality-after-supersession-stderr.txt', 'after-repair-default-quality-stderr.txt.gz', True),
+    ('quality-serial.json', 'quality.json', False),
+    ('quality-serial-stdout.txt', 'quality-stdout.txt.gz', True),
+    ('quality-serial-stderr.txt', 'quality-stderr.txt.gz', True),
+    ('quality.py', 'quality-producer.py.txt', False),
+    ('external-stderr.txt', 'initial-public-harness-stderr.txt.gz', True),
+    ('external-first.py.txt', 'initial-public-harness.py.txt', False),
+    ('qualified-public/external.py', 'public-producer.py.txt', False),
+    ('qualified-public/external-final.json', 'public.json', False),
+    ('qualified-public/final-stdio.json', 'stdio.json', False),
+    ('qualified-public/final-socket.json', 'socket.json', False),
+    ('qualified-public/final-stdio-transcript.json', 'stdio-transcript.json.gz', True),
+    ('qualified-public/final-socket-transcript.json', 'socket-transcript.json.gz', True),
+    ('qualified-public/stdout.txt', 'public-stdout.txt.gz', True),
+    ('qualified-public/stderr.txt', 'public-stderr.txt.gz', True),
+    ('native.py', 'native-producer.py.txt', False),
+    ('native.json', 'native.json', False),
+    ('native-stdout.txt', 'native-stdout.txt.gz', True),
+    ('native-stderr.txt', 'native-stderr.txt.gz', True),
+    ('preservation.json', 'preservation.json', False),
+]
+for source, name, compressed in copies:
+    copy(stage/source, name, compressed)
+runtime = Path('/private/tmp/elab-appearance-work-native')
+for name in ('first.log', 'reopened.log', 'runtime.sb'):
+    copy(runtime/name, 'native-'+name+'.gz', True)
+for binary in ('elab-agent-qualified', 'elab-qualified'):
+    info = subprocess.check_output(['go', 'version', '-m', str(stage/binary)])
+    put(binary+'-build-info.txt.gz', gzip.compress(info, mtime=0))
+copy(Path(__file__), 'finalize-producer.py.txt', False)
+
+old = json.loads(subprocess.check_output(['git', 'show', 'HEAD:research/13-native-command-inventory.json'], cwd=root))
+new = json.loads((root/'research/13-native-command-inventory.json').read_text())
+assert old['source_sha256'] == new['source_sha256'] and old['sites'] == new['sites']
+assert old['native_alias_targets'] == new['native_alias_targets']
+assert old['commands_with_source_routes'] == new['commands_with_source_routes']
+added = [name for name in new['public_commands'] if name not in old['public_commands']]
+assert added == ['appearance.work.cancel', 'appearance.work.inspect']
+assert [name for name in new['commands_without_source_routes'] if name not in old['commands_without_source_routes']] == added
+inventory = dict(native_source_digests_and_sites_unchanged=True, aliases_and_routed_ids_unchanged=True,
+                 public_ids_added=added, sources=len(new['source_sha256']), sites=len(new['sites']),
+                 public_commands=len(new['public_commands']), source_routed=len(new['commands_with_source_routes']))
+put('inventory-review.json', (json.dumps(inventory, indent=2)+'\n').encode())
+leaves = sum(1 for line in (stage/'focused-race-final.txt').read_text().splitlines() if line.lstrip().startswith('--- PASS:'))
+checkpoint = dict(status='source_and_development_protocol_native_validated_clean_replacement_pending',
+                  baseline_source_commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip(),
+                  source_sha256=quality['source_sha256'], quality_elapsed_s=quality['elapsed_s'],
+                  quality_environment=quality['environment'], default_parallel_final_quality_passed=False,
+                  focused_pass_records=leaves, public_commands=164, contracts=164,
+                  native_sha256=native['native_sha256'], agent_sha256=public['agent_sha256'],
+                  native_sessions=2, source_cancellation_and_overlap_tested=True,
+                  public_transport_success_and_refusals_tested=True, native_physical_input_tested=False,
+                  original_missing_job_failure=True, intermediate_supersession_failure_repaired=True,
+                  initial_fixture_cleanup_failure_repaired=True,
+                  initial_concurrent_solver_time_budget_failures_retained=True,
+                  initial_public_harness_post_close_pipe_assumption_repaired=True,
+                  inventory=inventory, sdk_lock_sha256=sha(root/'third_party/vellum/sdk.lock.json'),
+                  current_review='0.153.0 /170; earlier implementation without these jobs',
+                  clean_replacement_packaged=False, canonical_promoted=False,
+                  owner_walkthrough='Not tried yet', full_agent04_acceptance=False,
+                  evidence_sha256={p.relative_to(folder).as_posix(): sha(p) for p in sorted(folder.rglob('*')) if p.is_file()})
+put('checkpoint.json', (json.dumps(checkpoint, indent=2)+'\n').encode())
+print(dict(status=checkpoint['status'], evidence_files=len(checkpoint['evidence_sha256']), quality_elapsed_s=quality['elapsed_s'], focused_pass_records=leaves))

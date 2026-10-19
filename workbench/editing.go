@@ -520,6 +520,12 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return err
 		}
 		return s.configureAppearanceLocked(p)
+	case "appearance.work.cancel":
+		var p IDParams
+		if err := params(raw, &p, "id"); err != nil {
+			return err
+		}
+		return s.cancelAppearanceWorkLocked(p.ID)
 	case "appearance.theme.set":
 		var p struct {
 			Theme string `json:"theme"`
@@ -532,9 +538,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		// An explicit choice, including the current value, supersedes a pending
 		// profile load. Retried commands are deduplicated before reaching here.
-		s.theme = p.Theme
-		s.appearanceChangedLocked()
-		return nil
+		return s.setAppearanceThemeLocked(p.Theme)
 	case "display.preferences.set":
 		p, err := decodeDisplayPreferences(raw)
 		if err != nil {

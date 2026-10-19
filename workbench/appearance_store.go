@@ -38,6 +38,7 @@ type appearanceStore struct {
 	ctx                  context.Context
 	cancel               context.CancelFunc
 	wake                 chan struct{}
+	latest               *appearanceJob
 }
 type appearanceReadFunc func(context.Context, string) (appearanceLoaded, error)
 
@@ -73,10 +74,7 @@ func readAppearance(ctx context.Context, path string) (appearanceLoaded, error) 
 }
 func (s *Service) configureAppearanceLocked(p AppearanceConfigureParams) error {
 	if p.Path == "" {
-		if s.appearanceStore != nil {
-			s.appearanceStore.cancel()
-		}
-		s.appearanceStore = nil
+		s.detachAppearanceLocked("canceled")
 		s.appearance = AppearanceState{Path: s.appearance.Path, Status: "disabled", SavedTheme: s.appearance.SavedTheme}
 		return nil
 	}
@@ -87,11 +85,15 @@ func (s *Service) configureAppearanceLocked(p AppearanceConfigureParams) error {
 	if err != nil {
 		return err
 	}
-	if s.appearanceStore != nil {
-		s.appearanceStore.cancel()
-	}
 	ctx, cancel := context.WithCancel(context.Background())
 	store := &appearanceStore{path: path, initialThemeRevision: s.themeRevision, ctx: ctx, cancel: cancel, wake: make(chan struct{}, 1)}
+	job, err := s.newAppearanceWorkLocked(store, "appearance.configure", "")
+	if err != nil {
+		cancel()
+		return err
+	}
+	s.detachAppearanceLocked("superseded")
+	store.latest, s.appearanceJob = job, job
 	s.appearanceStore = store
 	s.appearance = AppearanceState{Path: path, Status: "loading"}
 	s.appearanceWorkers++
@@ -100,10 +102,15 @@ func (s *Service) configureAppearanceLocked(p AppearanceConfigureParams) error {
 	go s.runAppearanceStore(store, read, publish)
 	return nil
 }
-func (s *Service) appearanceChangedLocked() {
-	s.themeRevision++
+func (s *Service) setAppearanceThemeLocked(theme string) error {
 	if store := s.appearanceStore; store != nil && s.appearance.Status != "error" {
-		if s.appearance.Status != "loading" && s.theme != s.appearance.SavedTheme {
+		job, err := s.newAppearanceWorkLocked(store, "appearance.theme.set", theme)
+		if err != nil {
+			return err
+		}
+		s.interruptAppearanceJobLocked(store.latest, "superseded")
+		store.latest, s.appearanceJob = job, job
+		if s.appearance.Status != "loading" {
 			s.appearance.Status = "saving"
 		}
 		select {
@@ -111,20 +118,36 @@ func (s *Service) appearanceChangedLocked() {
 		default:
 		}
 	}
+	s.theme = theme
+	s.themeRevision++
+	return nil
 }
-func (s *Service) appearanceSignalLocked() { s.revision++; s.signalLocked("preferences") }
+func (s *Service) appearanceSignalLocked() { s.revision++; s.signalLocked("preferences", "jobs") }
 func (s *Service) runAppearanceStore(store *appearanceStore, read appearanceReadFunc, publish projectPublishFunc) {
 	defer func() { store.cancel(); s.mu.Lock(); s.appearanceWorkers--; s.mu.Unlock(); s.liveWorkers.Done() }()
-	loaded, err := read(store.ctx, store.path)
 	s.mu.Lock()
 	if s.appearanceStore != store || store.ctx.Err() != nil {
 		s.mu.Unlock()
 		return
 	}
-	if err != nil {
-		s.appearance.Error = err.Error()
-		s.appearance.Status = "error"
+	reading := store.latest
+	reading.inProgress = true
+	reading.work.Status, reading.work.Phase = "running", "reading"
+	s.appearanceSignalLocked()
+	s.mu.Unlock()
+	loaded, err := read(store.ctx, store.path)
+	s.mu.Lock()
+	reading.inProgress = false
+	if reading.reason != "" {
+		s.finishAppearanceReasonLocked(reading)
 		s.appearanceSignalLocked()
+	}
+	if s.appearanceStore != store || store.ctx.Err() != nil {
+		s.mu.Unlock()
+		return
+	}
+	if err != nil {
+		s.failAppearanceStoreLocked(store, reading, err)
 		s.mu.Unlock()
 		return
 	}
@@ -143,8 +166,14 @@ func (s *Service) runAppearanceStore(store *appearanceStore, read appearanceRead
 			return
 		}
 		theme := s.theme
+		job := store.latest
 		needsSave := !loaded.exists || loaded.theme != theme
 		if !needsSave {
+			if operationActive(job.work.Status) {
+				job.work.SourceSHA256 = fmt.Sprintf("%x", loaded.hash)
+				s.completeAppearanceJobLocked(job, theme, fmt.Sprintf("%x", loaded.hash))
+				s.appearanceSignalLocked()
+			}
 			ready := AppearanceState{Path: store.path, Status: "ready", SavedTheme: theme}
 			if s.appearance != ready {
 				s.appearance = ready
@@ -163,48 +192,97 @@ func (s *Service) runAppearanceStore(store *appearanceStore, read appearanceRead
 			continue
 		}
 		s.appearance.Status = "saving"
+		job.inProgress = true
+		job.work.Status, job.work.Phase = "running", "preparing"
+		if loaded.exists {
+			job.work.SourceSHA256 = fmt.Sprintf("%x", loaded.hash)
+		}
+		s.appearanceSignalLocked()
 		s.mu.Unlock()
-		data, _ := json.MarshalIndent(appearanceFile{Format: "elab.appearance", Version: 1, Theme: theme}, "", "  ")
-		data = append(data, '\n')
-		ctx, cancel := context.WithTimeout(store.ctx, 5*time.Second)
-		err = os.MkdirAll(filepath.Dir(store.path), 0700)
-		var prepared *preparedFile
-		if err == nil {
-			source := ""
-			if loaded.exists {
-				source = store.path
-			}
-			prepared, err = prepareFileData(ctx, data, store.path, source, loaded.hash, false, ".elab-appearance-*", func(string, int) {})
+		var keepRunning bool
+		loaded, keepRunning = s.runAppearanceSave(store, job, loaded, theme, publish)
+		if !keepRunning {
+			return
 		}
-		if err == nil {
-			err = ctx.Err()
+	}
+}
+
+func (s *Service) failAppearanceStoreLocked(store *appearanceStore, job *appearanceJob, err error) {
+	s.failAppearanceJobLocked(job, err)
+	s.failAppearanceJobLocked(store.latest, err)
+	s.appearance.Error, s.appearance.Status = err.Error(), "error"
+	s.appearanceSignalLocked()
+}
+
+// Prepare and publish outside the editor lock. The locked publishing transition
+// is the cancellation boundary; detached publishers retain their actual result.
+func (s *Service) runAppearanceSave(store *appearanceStore, job *appearanceJob, loaded appearanceLoaded, theme string, publish projectPublishFunc) (appearanceLoaded, bool) {
+	data, _ := json.MarshalIndent(appearanceFile{Format: "elab.appearance", Version: 1, Theme: theme}, "", "  ")
+	data = append(data, '\n')
+	ctx, cancel := context.WithTimeout(job.ctx, 5*time.Second)
+	defer cancel()
+	err := os.MkdirAll(filepath.Dir(store.path), 0700)
+	var prepared *preparedFile
+	if err == nil {
+		source := ""
+		if loaded.exists {
+			source = store.path
 		}
-		if err == nil {
-			err = publish(prepared)
-		}
-		if prepared != nil {
-			if cleanup := os.Remove(prepared.temp); err == nil && cleanup != nil && !os.IsNotExist(cleanup) {
+		prepared, err = prepareFileData(ctx, data, store.path, source, loaded.hash, false, ".elab-appearance-*", func(string, int) {})
+	}
+	if err == nil {
+		err = ctx.Err()
+	}
+	s.mu.Lock()
+	current := s.appearanceStore == store && store.ctx.Err() == nil && job.reason == "" && operationActive(job.work.Status)
+	if current && err == nil {
+		job.publishing = true
+		job.work.Phase, job.work.Cancelable = "publishing", false
+		s.appearanceSignalLocked()
+	}
+	s.mu.Unlock()
+	published := false
+	if current && err == nil {
+		err = publish(prepared)
+		published = err == nil
+	}
+	var cleanupWarning string
+	if prepared != nil {
+		if cleanup := os.Remove(prepared.temp); cleanup != nil && !os.IsNotExist(cleanup) {
+			cleanupWarning = cleanup.Error()
+			if err == nil {
 				err = cleanup
 			}
 		}
-		cancel()
-		s.mu.Lock()
-		if s.appearanceStore != store || store.ctx.Err() != nil {
-			s.mu.Unlock()
-			return
-		}
-		if err != nil {
-			s.appearance.Error = err.Error()
-			s.appearance.Status = "error"
-			s.appearanceSignalLocked()
-			s.mu.Unlock()
-			return
-		}
-		loaded = appearanceLoaded{theme: theme, exists: true, hash: sha256.Sum256(data)}
-		s.appearance.SavedTheme = theme
-		s.appearanceSignalLocked()
-		s.mu.Unlock()
 	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	job.publishing, job.inProgress = false, false
+	job.work.CleanupWarning = cleanupWarning
+	if published {
+		job.work.Published, job.work.Bytes = true, len(data)
+		job.work.ResultTheme, job.work.ArtifactSHA256 = theme, fmt.Sprintf("%x", sha256.Sum256(data))
+		loaded = appearanceLoaded{theme: theme, exists: true, hash: sha256.Sum256(data)}
+	}
+	if job.reason != "" {
+		s.finishAppearanceReasonLocked(job)
+	} else if err != nil {
+		s.failAppearanceJobLocked(job, err)
+	} else if published {
+		s.completeAppearanceJobLocked(job, theme, job.work.ArtifactSHA256)
+	}
+	s.appearanceSignalLocked()
+	if s.appearanceStore != store || store.ctx.Err() != nil {
+		return loaded, false
+	}
+	if err != nil && job.reason == "" {
+		s.failAppearanceStoreLocked(store, job, err)
+		return loaded, false
+	}
+	if published {
+		s.appearance.SavedTheme = theme
+	}
+	return loaded, true
 }
 func (s *Service) waitAppearance(ctx context.Context) (Snapshot, error) {
 	for {

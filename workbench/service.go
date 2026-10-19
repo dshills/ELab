@@ -61,6 +61,7 @@ type Snapshot struct {
 	PartSearch             string                 `json:"part_search"`
 	Theme                  string                 `json:"theme"`
 	Appearance             AppearanceState        `json:"appearance"`
+	AppearanceWork         *AppearanceWork        `json:"appearance_work,omitempty"`
 	MatchingParts          []Part                 `json:"matching_parts"`
 	UndoName               string                 `json:"undo_name"`
 	RedoName               string                 `json:"redo_name"`
@@ -219,6 +220,10 @@ type Service struct {
 	appearanceWorkers           int
 	appearanceRead              appearanceReadFunc
 	appearancePublish           projectPublishFunc
+	appearanceJob               *appearanceJob
+	appearanceJobs              map[string]*appearanceJob
+	appearanceOrder             []string
+	appearanceSerial            uint64
 	cancel                      context.CancelFunc
 	solver                      func(context.Context, Circuit) (Result, error)
 	networkAdvance              networkAdvanceFunc
@@ -345,6 +350,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		PartSearch:             s.partSearch,
 		Theme:                  s.theme,
 		Appearance:             s.appearance,
+		AppearanceWork:         s.appearanceWorkLocked(),
 		MatchingParts:          filteredParts(s.partSearch),
 		Scope:                  s.scopeLocked(compiled),
 		ScopeVisible:           s.scopeVisible,
@@ -704,6 +710,18 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 		return fail("unknown-command", "enumerate capabilities.list for supported commands")
 	}
 	if !cap.Mutation {
+		if r.Command == "appearance.work.inspect" {
+			var p IDParams
+			if err := params(r.Params, &p, "id"); err != nil {
+				return fail("invalid-params", err.Error())
+			}
+			job := s.appearanceJobs[p.ID]
+			if job == nil {
+				return fail("operation-unavailable", "Appearance operation expired or is unknown")
+			}
+			out.Result = cloneAppearanceWork(&job.work)
+			return out
+		}
 		if r.Command == "app.close.inspect" {
 			result, err := s.shutdownQueryLocked(r.Params)
 			if err != nil {
@@ -1005,6 +1023,9 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	if r.Command == "simulation.verify" {
 		s.operations[s.lastOperation].summary.Actor = actor
 	}
+	if s.appearanceJob != nil && s.appearanceJob.work.CommandRevision == s.commandRevision+1 {
+		s.appearanceJob.work.Actor = actor
+	}
 	if s.projectJob != nil && s.projectJob.work.CommandRevision == s.commandRevision+1 {
 		s.projectJob.work.Actor = actor
 		s.projectJob.requestID = r.ID
@@ -1057,6 +1078,7 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	state.DCSweep = cloneSweepState(state.DCSweep)
 	state.SchematicPage = cloneSchematicPage(state.SchematicPage)
 	state.ProjectWork = cloneProjectWork(state.ProjectWork)
+	state.AppearanceWork = cloneAppearanceWork(state.AppearanceWork)
 	state.InputWork = cloneInputWork(state.InputWork)
 	state.Example = cloneExampleContext(state.Example)
 	state.DiagnosticPresentation = cloneDiagnosticPresentation(state.DiagnosticPresentation)

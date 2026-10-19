@@ -10,6 +10,8 @@ Clean `f4cb5c4` /SDK `b22478c` adds structured filtered discovery for navigation
 
 ## Build and run from source
 
+The current source adds [identified appearance load/save work](docs/appearance.md#identified-appearance-work), with exact-ID inspection and guarded cancellation shared by user/agent commands. Its catalog has 164 commands. This change is not in the preserved /170 review; [source/development validation](docs/validation/appearance-work/README.md) is tracked separately from clean replacement packaging.
+
 Use Go 1.25.6 or newer, Python 3.10 or newer, and Vellum's macOS native prerequisites. Normal builds verify and extract the [pinned private Vellum SDK](third_party/vellum/README.md), including its prepared Cogent and typesetting sources. A sibling Vellum checkout is no longer required. ELab's `desktop/go.mod` contains the four explicit local replacements into the verified build cache. Run `python3 scripts/prepare-vellum.py` before invoking native Go tools directly; `build.sh`, `lint.sh` and `check.sh` prepare it automatically.
 
 The SDK lock describes unreleased source builds. The [initial baseline](docs/vellum-baseline.json) and [packaged application qualification](docs/vellum-baseline-current.json) retain their historical release identities; changing the source dependency does not promote an application bundle.

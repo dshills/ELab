@@ -1,0 +1,193 @@
+from pathlib import Path
+import hashlib
+import json
+import os
+import subprocess
+import time
+
+ROOT = Path('/Users/dshills/Development/projects/ELab')
+STAGE = Path(__file__).resolve().parent
+OUT = Path('/private/tmp/elab-appearance-work')
+OUT.mkdir(mode=0o700)
+BINARY = STAGE/'elab-agent'
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+
+
+class Client:
+    def __init__(self, label, endpoint=None):
+        argv = [str(BINARY)] + (['--connect', str(endpoint)] if endpoint else [])
+        self.process = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                        stderr=(OUT/(label+'.stderr')).open('x'), text=True)
+        self.sequence = 0
+        self.command_revision = 0
+        self.log = []
+        self.label = label
+        self.ask('project.inspect')
+
+    def request(self, request, error=None):
+        self.process.stdin.write(json.dumps(request)+'\n')
+        self.process.stdin.flush()
+        response = json.loads(self.process.stdout.readline())
+        self.log.append(dict(request=request.copy(), response=response))
+        assert response['id'] == request['id']
+        if error:
+            assert response.get('error', {}).get('code') == error, response
+        else:
+            assert 'error' not in response, response
+        result = response.get('result')
+        if isinstance(result, dict) and 'command_revision' in result and 'components' in result:
+            self.command_revision = result['command_revision']
+        return response
+
+    def ask(self, command, params=None, mutation=False, error=None):
+        self.sequence += 1
+        req = dict(version=1, id=str(self.sequence), command=command, params=params or {})
+        if mutation:
+            req.update(expected_command_revision=self.command_revision, key='key-'+str(self.sequence))
+        return self.request(req, error).get('result')
+
+    def work(self, identity):
+        deadline = time.monotonic()+5
+        while True:
+            work = self.ask('appearance.work.inspect', dict(id=identity))
+            if work['status'] not in ('queued', 'running', 'canceling'):
+                return work
+            assert time.monotonic() < deadline, work
+            time.sleep(.005)
+
+    def close(self):
+        self.process.stdin.close()
+        assert self.process.wait(timeout=5) == 0
+        self.process.stdout.close()
+        (STAGE/(self.label+'-transcript.json')).write_text(json.dumps(self.log, indent=2)+'\n')
+
+
+def exercise(client, label):
+    folder = OUT/label
+    folder.mkdir(mode=0o700)
+    client.ask('example.rc', dict(discard_changes=True), True)
+    client.ask('simulation.wait')
+    client.ask('simulation.pause', {}, True)
+    client.ask('simulation.restart', {}, True)
+    client.ask('simulation.wait')
+    client.ask('simulation.step', dict(duration_s='10 ms'), True)
+    project = folder/'manual.elab'
+    client.ask('project.save', dict(path=str(project)), True)
+    before = client.ask('project.inspect')
+    saved_hash = sha(project)
+    catalog = client.ask('capabilities.list')
+    assert len(catalog['capabilities']) == 164 and catalog['version'] == 1 and catalog['schema_version'] == 2
+    details = {}
+    for cap in catalog['capabilities']:
+        expanded = client.ask('capabilities.list', dict(command=cap['id']))
+        detail = expanded['capabilities'][0]
+        assert detail['input_schema']['x-command-contract']['version'] == 1
+        details[cap['id']] = detail
+    assert client.ask('project.inspect') == before
+    for command in ('appearance.work.inspect', 'appearance.work.cancel'):
+        cap = details[command]
+        assert cap['mutation'] == (command == 'appearance.work.cancel')
+        assert cap['input_schema']['x-appearance-work']['retained_jobs'] == 32
+        client.ask(command, dict(id='unknown'), cap['mutation'], error='operation-unavailable')
+        client.ask(command, dict(id=None), cap['mutation'], error='invalid-params')
+    assert client.ask('project.inspect') == before
+
+    path = folder/'appearance.json'
+    admitted = client.ask('appearance.configure', dict(path=str(path)), True)
+    req = client.log[-1]['request'].copy()
+    identity = admitted['appearance_work']['id']
+    work = client.work(identity)
+    assert work['status'] == 'completed' and work['published'] and work['current_at_completion']
+    assert work['artifact_sha256'] == sha(path) and work['bytes'] == path.stat().st_size
+    assert work['input_revision'] == before['revision'] and work['document_generation'] == before['document']['generation']
+    assert work['electrical_revision'] == before['electrical_revision'] and work['input_run_id'] == before['run_id']
+    assert work['command_revision'] == admitted['command_revision'] and work['actor']
+    duplicate = client.request(req)
+    assert duplicate['duplicate'] and duplicate['result']['appearance_work']['id'] == identity
+    assert duplicate['result'] == admitted
+    # A cached admission contains an older command revision: explicitly observe
+    # current command state before submitting new intent.
+    client.ask('project.inspect')
+    noop = client.ask('appearance.theme.set', dict(theme='light'), True)['appearance_work']
+    noop_work = client.work(noop['id'])
+    assert noop['id'] != identity and noop_work['status'] == 'completed' and not noop_work['published']
+    assert noop_work['source_sha256'] == noop_work['artifact_sha256'] == sha(path)
+    dark = client.ask('appearance.theme.set', dict(theme='dark'), True)['appearance_work']
+    dark_work = client.work(dark['id'])
+    assert dark_work['status'] == 'completed' and dark_work['published'] and dark_work['result_theme'] == 'dark'
+    assert dark_work['source_sha256'] == noop_work['artifact_sha256'] and dark_work['artifact_sha256'] == sha(path)
+    assert client.ask('appearance.work.inspect', dict(id=identity)) == work
+    ready = client.ask('appearance.wait')
+    for key in ('components', 'wires', 'document', 'transient', 'run_id', 'electrical_revision', 'undo_entry', 'redo_entry'):
+        assert ready.get(key) == before.get(key), key
+    client.ask('appearance.work.cancel', dict(id=dark['id']), True, error='operation-unavailable')
+    assert client.ask('project.inspect') == ready
+    # A guard and retry key are mandatory for the cancellation command too.
+    client.request(dict(version=1, id='unguarded', command='appearance.work.cancel', params=dict(id=dark['id'])), error='invalid-request')
+
+    external = b'{"format":"elab.appearance","version":1,"theme":"system"}\n'
+    path.write_bytes(external)
+    conflict = client.ask('appearance.theme.set', dict(theme='light'), True)['appearance_work']
+    failed = client.work(conflict['id'])
+    assert failed['status'] == 'failed' and not failed['published'] and failed['error']
+    assert path.read_bytes() == external
+    assert client.ask('appearance.wait')['appearance']['status'] == 'error'
+    session = client.ask('appearance.theme.set', dict(theme='dark'), True)
+    assert session['appearance_work']['id'] == conflict['id'] and session['appearance_work']['command_revision'] != session['command_revision']
+    reloaded = client.ask('appearance.configure', dict(path=str(path)), True)['appearance_work']
+    reload_work = client.work(reloaded['id'])
+    assert reload_work['status'] == 'completed' and not reload_work['published'] and reload_work['artifact_sha256'] == sha(path)
+    assert client.ask('appearance.wait')['theme'] == 'system'
+    client.ask('appearance.configure', dict(path=''), True)
+    session = client.ask('appearance.theme.set', dict(theme='light'), True)
+    assert session['appearance_work']['id'] == reloaded['id'] and path.read_bytes() == external
+    client.ask('project.clear', dict(discard_changes=True), True)
+    assert client.ask('appearance.work.inspect', dict(id=dark['id'])) == dark_work
+    assert sha(project) == saved_hash
+    assert not list(folder.glob('.elab-appearance-*'))
+    report = dict(passed=True, public_commands=164, contracts=164, discovery_pure=True,
+                  original=work, noop=noop_work, saved=dark_work, conflict=failed, reload=reload_work,
+                  captured_rc_state_preserved=True, manual_project_sha256=saved_hash,
+                  terminal_cancellation_refused=True, physical_input=False)
+    (STAGE/(label+'.json')).write_text(json.dumps(report, indent=2)+'\n')
+    closed = client.ask('app.close', dict(discard_changes=True), True)
+    assert closed['shutdown']['status'] == 'completed' and closed['shutdown']['workers_joined'] and closed['shutdown']['exit_ready']
+    assert client.ask('appearance.work.inspect', dict(id=dark['id'])) == dark_work
+    return catalog, details
+
+
+stdio = Client('stdio')
+try:
+    left = exercise(stdio, 'stdio')
+finally:
+    stdio.close()
+
+endpoint = OUT/'endpoint.json'
+with (OUT/'host.log').open('x') as log:
+    host = subprocess.Popen([str(BINARY), '--listen', str(endpoint)], stdout=log, stderr=subprocess.STDOUT)
+    client = None
+    try:
+        deadline = time.monotonic()+10
+        while not endpoint.exists():
+            assert host.poll() is None and time.monotonic() < deadline
+            time.sleep(.01)
+        client = Client('socket', endpoint)
+        right = exercise(client, 'socket')
+        client.close()
+        client = None
+        assert host.wait(timeout=5) == 0
+    finally:
+        if client:
+            client.close()
+        if host.poll() is None:
+            host.terminate()
+            host.wait(timeout=5)
+assert left == right
+assert not endpoint.exists()
+report = dict(passed=True, scope='Development agent stdio and private headless Unix socket; deterministic accepted cancellation/overlap is tested at the source IO boundary; no native/physical input or clean-package claim',
+              agent_sha256=sha(BINARY), host_pid=host.pid, host_exit_code=host.returncode,
+              host_absent=subprocess.run(['/bin/ps', '-p', str(host.pid)], capture_output=True).returncode != 0,
+              matching_catalog_and_semantic_details=True, public_commands=164)
+assert report['host_absent']
+(STAGE/'external.json').write_text(json.dumps(report, indent=2)+'\n')
+print(report)

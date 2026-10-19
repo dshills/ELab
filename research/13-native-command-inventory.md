@@ -1,6 +1,8 @@
 # Native control and command inventory
 
-The [source ledger](13-native-command-inventory.json) records **71 production native Go files, 397 source sites and 162 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 132 public commands. The remaining 30 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
+The [source ledger](13-native-command-inventory.json) records **71 production native Go files, 397 source sites and 164 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 132 public commands. The remaining 32 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
+
+The appearance job change adds `appearance.work.inspect` and `appearance.work.cancel` to the public and non-source-routed sets. Review confirms every native source digest, site, alias, existing route and routed-ID set is unchanged. These advanced commands are available through the shared public service/agent CLI; this ledger does not claim dedicated native controls or runtime binding qualification for them.
 
 **173 sites require binding review.** The other categories are 198 literal routes, nine declared native-wrapper/menu sites and 17 registry declarations. These are syntax sites, including overlapping factories and callbacks; they are not 397 unique visible controls or 132 runtime-qualified capabilities. No literal route names an unknown command.
 

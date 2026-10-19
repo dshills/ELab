@@ -68,8 +68,10 @@ func commandEventTopics(command string, documentChanged bool) []string {
 		topics = append(topics, "project", "jobs")
 	case strings.HasPrefix(command, "example."):
 		topics = append(topics, "project", "view", "simulation", "diagnostics", "recordings")
-	case strings.HasPrefix(command, "display."), strings.HasPrefix(command, "appearance."):
+	case strings.HasPrefix(command, "display."):
 		topics = append(topics, "preferences")
+	case strings.HasPrefix(command, "appearance."):
+		topics = append(topics, "preferences", "jobs")
 	case strings.HasPrefix(command, "parts."):
 		topics = append(topics, "library")
 	case strings.HasPrefix(command, "app.close"):

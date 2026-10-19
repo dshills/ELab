@@ -1,0 +1,130 @@
+from pathlib import Path
+import hashlib
+import importlib.util
+import json
+import os
+import shutil
+import subprocess
+import sys
+import time
+
+root = Path('/Users/dshills/Development/projects/ELab')
+stage = Path(__file__).resolve().parent
+out = Path('/private/tmp/elab-appearance-work-native')
+out.mkdir(mode=0o700)
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+spec = importlib.util.spec_from_file_location('helper', root/'scripts/persistence-demo.py')
+helper = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(helper)
+shared = Path.home()/'Library/Cogent Core'
+geometry = lambda: {str(p.relative_to(shared)): dict(sha256=sha(p), mode=oct(p.stat().st_mode & 0o777)) for p in shared.rglob('*') if p.is_file()}
+before_geometry = geometry()
+canonical = root/'build/ELab.app/Contents/MacOS/ELab'
+review = root/'build/ELab-0.153.0-170-review/ELab.app/Contents/MacOS/ELab'
+before_binaries = {str(p): sha(p) for p in (canonical, review)}
+for name in ('elab', 'elab-agent'):
+    shutil.copyfile(stage/(name+'-qualified'), out/name)
+    (out/name).chmod(0o700)
+policy = out/'runtime.sb'
+policy.write_bytes(Path('/private/tmp/elab-first-version-170-runtime/runtime.sb').read_bytes())
+# Reads and writes to the entire shared preferences directory are denied.
+# Probe existing settings by non-truncating open; no settings are created.
+probe = out/'probe.py'
+probe.write_text('''import errno,json,os,sys
+p=sys.argv[1];r={}
+for name,flags in [('read',os.O_RDONLY),('write',os.O_WRONLY)]:
+ try:
+  fd=os.open(p,flags);os.close(fd);r[name]=False
+ except OSError as e:r[name]=e.errno in (errno.EACCES,errno.EPERM)
+print(json.dumps(r))
+''')
+existing = next(p for p in shared.rglob('*') if p.is_file())
+controls = json.loads(subprocess.check_output(['/usr/bin/sandbox-exec', '-f', str(policy), sys.executable, '-I', str(probe), str(existing)], text=True))
+assert all(controls.values())
+profile = out/'appearance.json'
+states = {}
+exits = []
+
+
+def run(label, reopen=False):
+    endpoint = out/(label+'.endpoint.json')
+    log = (out/(label+'.log')).open('x')
+    argv = ['/usr/bin/sandbox-exec', '-f', str(policy), str(out/'elab'), '--no-recovery', '--agent-endpoint', str(endpoint)]
+    argv += ['--appearance-file', str(profile)] if reopen else ['--no-appearance']
+    process = subprocess.Popen(argv, cwd=out, stdout=log, stderr=subprocess.STDOUT)
+    client = None
+    try:
+        deadline = time.monotonic()+15
+        while not endpoint.exists():
+            assert process.poll() is None and time.monotonic() < deadline
+            time.sleep(.01)
+        client = helper.Client(str(endpoint), command_preconditions=True, agent_binary=out/'elab-agent')
+        # Let the first owned viewport publication settle before purity checks.
+        time.sleep(.15)
+        initial = client.ask('appearance.wait')
+        if reopen:
+            assert initial['theme'] == 'dark' and not initial['components'] and not initial['document']['dirty']
+            startup = client.ask('appearance.work.inspect', dict(id=initial['appearance_work']['id']))
+            assert startup['status'] == 'completed' and not startup['published'] and startup['artifact_sha256'] == sha(profile)
+            states[label] = dict(initial=initial, work=startup)
+        else:
+            client.ask('example.rc', dict(discard_changes=True), True)
+            client.ask('simulation.wait')
+            client.ask('simulation.pause', {}, True)
+            client.ask('simulation.restart', {}, True)
+            client.ask('simulation.wait')
+            client.ask('simulation.step', dict(duration_s='10 ms'), True)
+            before = client.ask('project.inspect')
+            configured = client.ask('appearance.configure', dict(path=str(profile)), True)
+            ready = client.ask('appearance.wait')
+            original = client.ask('appearance.work.inspect', dict(id=configured['appearance_work']['id']))
+            assert original['status'] == 'completed' and original['published'] and original['artifact_sha256'] == sha(profile)
+            chosen = client.ask('appearance.theme.set', dict(theme='dark'), True)
+            saved = client.ask('appearance.wait')
+            work = client.ask('appearance.work.inspect', dict(id=chosen['appearance_work']['id']))
+            assert work['id'] != original['id'] and work['status'] == 'completed' and work['published'] and work['artifact_sha256'] == sha(profile)
+            assert work['actor'] and work['requested_theme'] == work['result_theme'] == 'dark'
+            assert client.ask('appearance.work.inspect', dict(id=original['id'])) == original
+            for key in ('components', 'wires', 'document', 'transient', 'run_id', 'electrical_revision', 'undo_entry', 'redo_entry'):
+                assert before.get(key) == saved.get(key), key
+            client.ask('appearance.work.cancel', dict(id=original['id']), True, expect='operation-unavailable')
+            client.ask('appearance.work.cancel', dict(id='unknown'), True, expect='operation-unavailable')
+            assert client.ask('appearance.work.inspect', dict(id=work['id'])) == work
+            catalog = client.ask('capabilities.list')
+            assert len(catalog['capabilities']) == 164
+            for command in ('appearance.work.inspect', 'appearance.work.cancel'):
+                detail = client.ask('capabilities.list', dict(command=command))['capabilities'][0]
+                assert detail['input_schema']['x-appearance-work']['retained_jobs'] == 32
+            states[label] = dict(before=before, configured=configured, ready=ready, original=original, saved=saved, work=work)
+        closed = client.ask('app.close', dict(discard_changes=True), True)
+        assert closed['shutdown']['status'] == 'completed' and closed['shutdown']['workers_joined'] and closed['shutdown']['exit_ready']
+        states[label]['closed'] = closed
+        client.close()
+        client = None
+        assert process.wait(timeout=5) == 0
+        exits.append(dict(pid=process.pid, exit_code=process.returncode, absent=subprocess.run(['/bin/ps', '-p', str(process.pid)], capture_output=True).returncode != 0, endpoint_removed=not endpoint.exists()))
+        assert exits[-1]['absent'] and exits[-1]['endpoint_removed']
+    finally:
+        if client:
+            client.close()
+        if process.poll() is None:
+            process.terminate()
+            process.wait(timeout=5)
+        log.close()
+
+
+try:
+    run('first')
+    run('reopened', True)
+    assert json.loads(profile.read_text())['theme'] == 'dark'
+    assert not list(out.glob('.elab-appearance-*'))
+finally:
+    assert geometry() == before_geometry
+    assert {str(p): sha(p) for p in (canonical, review)} == before_binaries
+report = dict(passed=True, scope='Modified-source development native executable, isolated preferences and source/toolchain/shared-geometry/network denial; public native socket and fresh process reopen only; no physical UI input, clean-source package or release qualification',
+              native_sha256=sha(out/'elab'), agent_sha256=sha(out/'elab-agent'), runtime_policy_sha256=sha(policy),
+              settings_denial_controls=controls, shared_geometry_unchanged=True,
+              shared_geometry_before=before_geometry, prior_binaries_unchanged=before_binaries,
+              sessions=states, process_exits=exits)
+(stage/'native.json').write_text(json.dumps(report, indent=2)+'\n')
+print(dict(passed=True, native_sessions=len(exits), normal_process_exits=all(row['exit_code'] == 0 for row in exits), shared_geometry_unchanged=True))
