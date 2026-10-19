@@ -1,6 +1,6 @@
 # Application discovery contracts
 
-Filtered `capabilities.list {"command":"..."}` publishes version 1 `x-command-contract` for all 164 current source IDs. The [clean /170 review](../research/ui-audit/first-version/discovery-review-checkpoint.json) packages the preceding 162-command annotation checkpoint. The source [appearance job change](appearance.md#identified-appearance-work) adds inspection/cancellation commands and an optional snapshot field; /170 does not contain it. Protocol and schema registry versions remain unchanged. Annotation presence is enforced for future commands; behavioral acceptance remains a separate obligation.
+Filtered `capabilities.list {"command":"..."}` publishes version 1 `x-command-contract` for all 164 current source IDs. The [clean /170 review](../research/ui-audit/first-version/discovery-review-checkpoint.json) packages the preceding 162-command annotation checkpoint. The source [appearance job change](appearance.md#identified-appearance-work) adds inspection/cancellation commands and an optional snapshot field; /170 does not contain it. The [clean /171 review](../research/ui-audit/first-version/appearance-work-review-checkpoint.json) now packages the appearance job lifecycle with copied native/headless file-outcome checks. Protocol and schema registry versions remain unchanged. Annotation presence is enforced for future commands; behavioral acceptance remains a separate obligation.
 
 | Family | Published behavior |
 |---|---|

@@ -1,0 +1,69 @@
+"""Preserve the unsigned candidate; package the clean input with ad-hoc signing."""
+from pathlib import Path
+import hashlib
+import json
+import os
+import shutil
+import subprocess
+import sys
+
+root = Path('/Users/dshills/Development/projects/ELab')
+stage = Path(__file__).resolve().parent
+sys.path.insert(0, str(root/'scripts'))
+from package_review import members
+from runtime_isolation import pinned_child_runner, bundle_tree
+
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+source = 'ba295b9317d93f21d7f9862bdb3b6d4675d300c7'
+assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip() == source
+assert not subprocess.check_output(['git', 'status', '--porcelain'], cwd=root).strip()
+review = root/'build/ELab-0.154.0-171-review'
+candidate = root/'build/ELab-0.154.0-171-unsigned-candidate'
+assert not candidate.exists()
+old = json.loads((stage/'build-result.json').read_text())
+assert old['source_commit'] == source and sha(review/'ELab.app/Contents/MacOS/ELab') == old['native_sha256']
+original = members(review)
+review.rename(candidate)
+assert members(candidate) == original
+diagnostic = candidate/'Evidence'
+diagnostic.mkdir()
+for name in ('signature-verify.txt', 'signature-details.txt', 'package.txt', 'build-result.json'):
+    shutil.copyfile(stage/name, diagnostic/name)
+failure = dict(passed=False, scope='Original unsigned /171 candidate strict bundle verification',
+               exit_code=1, error='code has no resources but signature indicates they must be present',
+               linker_signature_only=True, runtime_and_functional_checks_previously_passed=True,
+               prior_native_sha256=old['native_sha256'])
+(diagnostic/'signature-diagnostic.json').write_text(json.dumps(failure, indent=2)+'\n')
+files = members(candidate)
+(candidate/'CANDIDATE_MANIFEST.json').write_text(json.dumps(dict(source_record_commit=source,
+    status='Preserved unsigned candidate: strict bundle signature failure; not the new owner review', files=files), indent=2)+'\n')
+review.mkdir()
+sdk, run_child = pinned_child_runner()
+env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1')
+with (stage/'package-signed.txt').open('x') as log:
+    run_child([sys.executable, '-B', str(sdk/'scripts/package-app.py'), '--binary', str(stage/'build/elab'),
+               '--output', str(review/'ELab.app'), '--name', 'ELab', '--identifier', 'com.dshills.elab',
+               '--version', '0.154.0', '--build-version', '171', '--sign-identity', '-'],
+              cwd=root, env=env, stdout=log, stderr=subprocess.STDOUT, timeout=90, check=True)
+shutil.copyfile(stage/'build/elab-agent', review/'elab-agent')
+(review/'elab-agent').chmod(0o755)
+app = review/'ELab.app'
+manifest = json.loads((app/'Contents/Resources/APP_MANIFEST.json').read_text())
+assert manifest['source_binary_sha256'] == old['native_sha256'] == sha(stage/'build/elab')
+assert manifest['signed_identity'] == '-' and manifest['private_build'] is True
+verify = subprocess.run(['/usr/bin/codesign', '--verify', '--deep', '--strict', '--verbose=2', str(app)], capture_output=True)
+(stage/'signature-signed-verify.txt').write_bytes(verify.stdout+verify.stderr)
+verify.check_returncode()
+display = subprocess.run(['/usr/bin/codesign', '-dv', '--verbose=4', str(app)], capture_output=True, check=True)
+(stage/'signature-signed-details.txt').write_bytes(display.stdout+display.stderr)
+assert b'Signature=adhoc' in display.stderr and b'TeamIdentifier=not set' in display.stderr
+assert b'Info.plist=not bound' not in display.stderr and b'Sealed Resources=none' not in display.stderr
+result = dict(old, native_sha256=sha(app/'Contents/MacOS/ELab'),
+              source_native_sha256=old['native_sha256'], signed_identity='-',
+              strict_bundle_signature_valid=True, source_bundle=bundle_tree(app),
+              preserved_unsigned_candidate=str(candidate), unsigned_candidate_manifest_sha256=sha(candidate/'CANDIDATE_MANIFEST.json'))
+assert result['native_sha256'] != result['source_native_sha256']
+(stage/'build-result-signed.json').write_text(json.dumps(result, indent=2)+'\n')
+assert not subprocess.check_output(['git', 'status', '--porcelain'], cwd=root).strip()
+print(dict(passed=True, source_commit=source, native_sha256=result['native_sha256'],
+           raw_source_sha256=result['source_native_sha256'], signed_identity='-', strict_verified=True))

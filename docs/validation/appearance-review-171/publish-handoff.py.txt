@@ -1,0 +1,86 @@
+from pathlib import Path
+import json
+import shutil
+
+root = Path('/Users/dshills/Development/projects/ELab')
+stage = Path(__file__).resolve().parent
+proof = root/'docs/validation/appearance-review-171'
+r = json.loads((root/'research/ui-audit/first-version/appearance-work-review-checkpoint.json').read_text())
+assert r['version'] == '0.154.0' and r['build'] == '171'
+p = root/'README.md'
+s = p.read_text()
+tail = s[s.index('## Build and run from source'):]
+obsolete = 'The current source adds [identified appearance load/save work](docs/appearance.md#identified-appearance-work), with exact-ID inspection and guarded cancellation shared by user/agent commands. Its catalog has 164 commands. This change is not in the preserved /170 review; [source/development validation](docs/validation/appearance-work/README.md) is tracked separately from clean replacement packaging.\n\n'
+assert obsolete in tail
+tail = tail.replace(obsolete, '')
+top = '''# ELab
+
+ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N/P-channel MOSFET and inductor/RLC circuits from blank: place components, connect named terminals, move and rotate parts, and edit exact values while simulation updates live. Users and agents invoke the same validated application commands.
+
+The [first-version delivery plan](research/34-first-version-plan.md) targets a usable macOS hobbyist alpha with frozen scope, ordered blockers and a concrete handoff.
+
+**Private review ready: 0.154.0 /171.** Use the [review app](build/ELab-0.154.0-171-review/ELab.app) and matching `elab-agent`, or the [private ZIP](build/ELab-0.154.0-171-review.zip) with its [checksum](build/ELab-0.154.0-171-review.zip.sha256). No Go, Python, Vellum checkout or account is required to run it. Save and quit an earlier review before opening this replacement.
+
+Clean `ba295b9` /SDK `b22478c` adds [identified appearance work](docs/appearance.md#identified-appearance-work): captured load/save IDs, outcomes and guarded cancellation shared by users and agents. The catalog has 164 annotated commands and optional appearance_work snapshot data. Copied native smoke, all four public adapters, exact native/headless contracts and existing reference/startup/measurement/live/save checks pass. Source quality passes with `GOFLAGS=-p=1`; default parallel race runs reached existing 100 ms mixed-solver limits, retained without changing those limits. The bundle has a strict-valid local ad-hoc resource signature; all 310 ZIP files/modes and extracted examples/reopens verify. [Walkthrough](research/35-first-version-review.md), [receipt](research/ui-audit/first-version/appearance-work-review-checkpoint.json), [evidence](docs/validation/appearance-review-171/README.md).
+
+All 30 earlier sealed reviews, three candidates and canonical /120 are preserved. Owner walkthrough remains **Not tried yet**; [default-startup/clean-account qualification is deferred for this private alpha](research/ui-audit/first-version/private-alpha-owner-decisions.json). Complete job/native binding coverage, typing/IME/reader, visible latency, actual hobbyist study and public distribution remain open. Ad-hoc signing is not Developer ID, notarization or Gatekeeper acceptance. No canonical promotion is inferred.
+
+'''
+p.write_text(top+tail)
+p = root/'research/35-first-version-review.md'
+s = p.read_text()
+tail = s[s.index('## Try these four tasks'):]
+tail = tail.replace('- Tested on this Apple Silicon Mac with macOS 26.6.2. The enforced minimum is 1040×720 in the mounted UI\'s units; the observed native frame is **1053×762 pixels**. App windows at 1280×800 and 1440×900 were inspected earlier. OS display modes, other hardware and monitor transitions remain unqualified.', '- Workstation checks use Apple Silicon/macOS 26.6.2. Earlier UI tests enforced 1040×720 mounted units and observed a 1053×762 pixel frame; 1280×800 and 1440×900 windows were inspected on their recorded builds. Those are historical visual scopes, not new /171 physical input/display qualification. Other hardware and monitor transitions remain unqualified.')
+tail = tail.replace('the engine source is unchanged in /166;', 'the numerical engine is unchanged in this replacement;')
+tail = tail.replace('- This is a private unsigned build; notarization and public distribution/native-rights qualification remain open.', '- The private bundle now has a strict-valid local ad-hoc resource signature. Developer ID, notarization, Gatekeeper and public distribution/native-rights qualification remain open.')
+tail = tail.replace('ui-audit/first-version/value-preset-review-checkpoint.json', 'ui-audit/first-version/appearance-work-review-checkpoint.json')
+top = '''# ELab first-version review · 0.154.0 /171
+
+The [review folder](../build/ELab-0.154.0-171-review) includes [ELab.app](../build/ELab-0.154.0-171-review/ELab.app), matching `elab-agent`, three editable examples and framework notices. No Go, Python, Vellum checkout or account is needed to run it. Save and quit an earlier review before opening. All 30 earlier sealed reviews, three candidates and canonical /120 are preserved. Owner walkthrough remains **Not tried yet**.
+
+The [ZIP](../build/ELab-0.154.0-171-review.zip) and [checksum](../build/ELab-0.154.0-171-review.zip.sha256) preserve all 310 files/modes through macOS extraction into a Unicode path with spaces. The extracted agent loads three examples and freshly reopens saved copies; the extracted bundle's strict signature and complete tree verify. No extracted native-window/default-startup or clean-account qualification is claimed. [Evidence](../docs/validation/appearance-review-171/README.md).
+
+This version adds captured appearance load/save IDs, historical file outcomes and guarded inspection/cancellation. Existing theme/configuration controls still use the shared commands; the advanced job controls have no dedicated native button. All 164 public IDs carry semantic annotations, with an optional appearance_work snapshot member. Existing capability/output references, other registry definitions, protocol versions, native UI sources, models, saved format and SDK remain unchanged. Annotation presence is not exhaustive contract or binding acceptance.
+
+Clean `ba295b9` passes source quality with package serialization (481.842 s), copied signed native smoke (46.950 s), four public adapters (51.802 s) and acceptance (20.230 s). Exact native/headless appearance success/no-op/conflict/session-only/retained-ID outcomes match while preserving paused RC physics/history and manual saves. Source held-IO cancellation races retain their separate scope. Existing startup/RC/RL/Verify/reference/measurement/live/save checks pass. [Receipt](ui-audit/first-version/appearance-work-review-checkpoint.json). Default parallel race runs hit existing 100 ms solver limits; no limit was changed and no performance acceptance is inferred.
+
+Strict verification found that the first unsigned candidate's linker signature did not seal bundle resources. The SDK's explicit local ad-hoc option now binds the identifier, Info.plist and resources; the original candidate and diagnostic are preserved. This is not Developer ID signing, notarization or Gatekeeper acceptance. Earlier physical/numerical observations remain in the repository and preserved reviews. Pause/Apply and the /169 capacity close cause remain unexplained; no new physical OS input/reader/IME or visible-latency claim is made.
+
+'''
+p.write_text(top+tail)
+p = root/'research/34-first-version-plan.md'
+s = p.read_text()
+index = s.index('\n', s.index('## Current position'))+1
+s = s[:index]+'''\n- **Clean appearance-work replacement qualified: 0.154.0 /171.** Clean `ba295b9` /SDK `b22478c` packages captured load/save IDs, exact inspection and guarded cancellation. Source quality passes with package serialization (481.842 s); default parallel mixed-solver budget failures remain documented. Signed copied native smoke (46.950 s), all four adapters (51.802 s) and acceptance (20.230 s) pass. Native/headless 164-command discovery and actual appearance file outcomes match alongside reference/startup/measurement/live/save checks. Strict verification initially rejected an unsigned candidate; the new local ad-hoc signature binds identifier/resources, passes five admission counterexamples and verifies after ZIP extraction. All 309 sealed entries /310 extracted files/modes, three examples/reopens, 30 older reviews, three candidates and canonical verify. [Receipt](ui-audit/first-version/appearance-work-review-checkpoint.json), [proof](../docs/validation/appearance-review-171/README.md). No owner acceptance, promotion, Developer ID/notarization, broader agent coverage or performance claim.\n'''+s[index:]
+s = s.replace('Clean replacement packaging is next; /170 remains the earlier implementation and owner walkthrough Not tried yet.', 'The subsequent /171 receipt above qualifies clean packaging; /170 retains its earlier implementation and owner walkthrough remains Not tried yet.')
+s = s.replace('Completed in /170 for navigation/application discovery, with exact copied native/headless metadata/behavior and existing reference/startup/measurement/live/save checks. Source-private input retains separate scope; historical failures, earlier reviews and candidates remain preserved.', 'Completed in /171 for appearance work and a resource-sealed local ad-hoc bundle, with exact copied native/headless/API/reference/startup/measurement/live/save checks. Source-private input and held-IO races retain separate scopes; initial signature failure, historical failures and all earlier reviews/candidates remain preserved.')
+s = s.replace('[0.153.0 /170 review folder](../build/ELab-0.153.0-170-review)', '[0.154.0 /171 review folder](../build/ELab-0.154.0-171-review)', 1)
+start = s.index('**Current delivery step:');end = s.index('\n\n', start)
+s = s[:start]+'''**Current delivery step: owner walkthrough and bounded outstanding qualification.** The [clean /171 receipt](ui-audit/first-version/appearance-work-review-checkpoint.json) now packages the appearance-specific AGENT-04 identity repair and strict-valid local ad-hoc resource signature. Exhaustive asynchronous/semantic/native binding, environment, accessibility, performance and study requirements remain open. Default parallel race-gate time-budget failures are retained; a serialized source pass is not performance acceptance. Packaging does not authorize promotion or a feature/cosmetic campaign.'''+s[end:]
+lines = s.splitlines()
+for i, line in enumerate(lines):
+    if line.startswith('| Quality/correctness |'):
+        lines[i] = '| Quality/correctness | Clean `ba295b9` /SDK `b22478c` source quality with `GOFLAGS=-p=1` (481.842 s), signed copied native smoke (46.950 s), all four adapters (51.802 s), exact appearance/discovery and reference/startup/measurement/live/save acceptance (20.230 s), strict bundle signature and archive/example reopens qualify /171 within recorded scopes. [Receipt](ui-audit/first-version/appearance-work-review-checkpoint.json). Default parallel solver-budget failures and the repaired unsigned-candidate signature failure are preserved. No performance, complete binding, owner or broader acceptance is inferred. |'
+p.write_text('\n'.join(lines)+'\n')
+for name, link in [('research/ui-audit/first-version/README.md', '../../../docs/validation/appearance-review-171/README.md'),
+                   ('research/ui-audit/README.md', '../../docs/validation/appearance-review-171/README.md')]:
+    p = root/name;s = p.read_text();index = s.index('\n')+1
+    s = s[:index]+f'''\nOctober 19 replacement: **[0.154.0 /171]({link})** packages stable appearance jobs and a strict-valid local ad-hoc resource signature. Clean `ba295b9` /SDK `b22478c` passes copied native smoke, four adapters, exact 164-command/native-headless file outcomes and existing reference/startup/measurement/live/save checks. Source quality is qualified with package serialization; default parallel 100 ms solver refusals remain recorded. All 310 ZIP files/modes, extracted signature/examples/reopens and 30 previous sealed reviews/three candidates/canonical verify. Source/private input and physical observations keep their separate scopes. Owner Not tried yet; no promotion, Developer ID/notarization, visible-latency or broader acceptance claim.\n'''+s[index:]
+    p.write_text(s)
+p = root/'research/13-native-command-inventory.md'
+p.write_text(p.read_text()+'''\nClean 0.154.0 /171 now packages the two appearance-job IDs: the ledger remains 71 native files /397 sites /173 review-category sites /164 public IDs /132 source-routed IDs. Native source digests, sites, aliases and route sets are unchanged. [Receipt](ui-audit/first-version/appearance-work-review-checkpoint.json). Copied native/headless discovery/file outcomes and the strict local ad-hoc bundle signature pass; source held-IO races and earlier physical inputs retain separate scopes. The two advanced job commands have no dedicated native controls, and complete binding acceptance remains open.\n''')
+p = root/'docs/appearance.md';s = p.read_text()
+s = s.replace('This source change adds two public commands (164 total) and an optional snapshot field; it is not present in the preserved /170 review. See [validation and limits](validation/appearance-work/README.md).', 'The two public commands (164 total) and optional snapshot field are now packaged in [clean /171](../research/ui-audit/first-version/appearance-work-review-checkpoint.json); preserved /170 retains the global-only implementation. [Source validation](validation/appearance-work/README.md) and [copied signed runtime/archive validation](validation/appearance-review-171/README.md) retain their separate scopes and limits.')
+p.write_text(s)
+p = root/'docs/application-command-contracts.md';s = p.read_text().replace('Protocol and schema registry versions remain unchanged.', 'The [clean /171 review](../research/ui-audit/first-version/appearance-work-review-checkpoint.json) now packages the appearance job lifecycle with copied native/headless file-outcome checks. Protocol and schema registry versions remain unchanged.', 1);p.write_text(s)
+p = root/'docs/capability-details.md';s = p.read_text();s += '\n[Clean /171](../research/ui-audit/first-version/appearance-work-review-checkpoint.json) packages the 164-command appearance lifecycle and optional snapshot member, with matching copied native/headless detailed inputs and actual file outcomes. Source races, copied API behavior and earlier physical input evidence retain their separate scopes.\n';p.write_text(s)
+p = root/'research/11-prd-implementation-audit.md';lines = p.read_text().splitlines()
+for i, line in enumerate(lines):
+    if line.startswith('| AGENT-02 |'):
+        lines[i] = line.replace('while /170 remains the earlier checkpoint | Partial:', 'while /170 remains the earlier checkpoint; clean /171 now packages all 164 annotated inputs, optional appearance_work and native/headless file outcomes with strict-valid local resource signing | Partial:')
+    if line.startswith('| AGENT-04 |'):
+        line = line.replace('/170 remains the earlier global-only implementation', '/170 remains the earlier global-only implementation; clean /171 now qualifies matching copied native/headless appearance outcomes, 102 normal process exits and 112 completed shutdown responses, with source cancellation races separate')
+        lines[i] = line.replace('complete asynchronous job/binding coverage, clean replacement packaging and platform teardown qualification remain open', 'clean replacement packaging is qualified; complete asynchronous job/binding coverage and platform teardown qualification remain open')
+p.write_text('\n'.join(lines)+'\n')
+shutil.copyfile(Path(__file__), proof/'publish-handoff.py.txt')
+print(dict(passed=True, review='0.154.0 /171', owner_acceptance=False, canonical_promoted=False))

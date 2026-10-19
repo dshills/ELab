@@ -1,0 +1,219 @@
+"""Seal current evidence without duplicating all historical reviews in the ZIP."""
+from pathlib import Path
+import gzip
+import hashlib
+import json
+import plistlib
+import shutil
+import stat
+import subprocess
+import sys
+
+root = Path('/Users/dshills/Development/projects/ELab')
+stage = Path(__file__).resolve().parent
+sys.path.insert(0, str(root/'scripts'))
+from package_review import members
+from runtime_isolation import bundle_tree
+from wiring_replay import git_files, git_identity, runtime_input, RUNTIME_DIRS
+
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+read = lambda p: json.loads(p.read_text())
+source = 'ba295b9317d93f21d7f9862bdb3b6d4675d300c7'
+version, build = '0.154.0', '171'
+review = root/'build/ELab-0.154.0-171-review'
+runtime = Path('/private/tmp/elab-first-version-171-signed-runtime')
+acceptance = Path('/private/tmp/elab-first-version-171-signed-acceptance')
+proof = root/'docs/validation/appearance-work'
+receipt_path = root/'research/ui-audit/first-version/appearance-work-review-checkpoint.json'
+assert not receipt_path.exists() and not (review/'RELEASE_MANIFEST.json').exists()
+assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip() == source
+assert not subprocess.check_output(['git', 'status', '--porcelain'], cwd=root).strip()
+built = read(stage/'build-result-signed.json')
+cp = read(proof/'checkpoint.json')
+quality = read(proof/'quality.json')
+assert built['clean_build_vcs'] and built['source_commit'] == source and quality['passed']
+assert quality['environment'] == {'GOFLAGS': '-p=1'}
+assert all(sha(root/name) == digest for name, digest in quality['source_sha256'].items())
+assert all(sha(proof/name) == digest for name, digest in cp['evidence_sha256'].items())
+for name in ('elab', 'elab-agent', 'elab-conformance'):
+    info = (stage/'build'/(name+'-build-info.txt')).read_text()
+    assert 'vcs.revision='+source in info and 'vcs.modified=false' in info
+assert sha(review/'ELab.app/Contents/MacOS/ELab') == built['native_sha256']
+assert sha(review/'elab-agent') == built['agent_sha256']
+assert bundle_tree(review/'ELab.app') == built['source_bundle']
+assert read(stage/'signature-admission.json')['passed'] and built['strict_bundle_signature_valid']
+subprocess.run(['/usr/bin/codesign', '--verify', '--deep', '--strict', str(review/'ELab.app')], check=True)
+rr, ar = read(runtime/'runtime-report.json'), read(acceptance/'report.json')
+public = read(runtime/'public/report.json')
+assert rr['passed'] and ar['passed'] and public['passed']
+assert rr['shared_geometry_unchanged'] and ar['shared_geometry_unchanged']
+assert rr['source_bundle'] == built['source_bundle'] and rr['source_agent_sha256'] == built['agent_sha256']
+assert ar['discovery_commands']['commands'] == ar['discovery_commands']['semantic_annotations'] == 164
+assert ar['discovery_commands']['appearance_job_checks']['passed'] and ar['native_host_closed_normally']
+assert [row['name'] for row in public['adapters']] == ['in-process', 'headless-stdio', 'headless-socket', 'native-socket']
+assert all(row['status'] == 'completed' and row['exit_code'] == 0 for row in rr['stages'])
+
+
+def write(path, value):
+    with path.open('x') as out:
+        out.write(json.dumps(value, indent=2)+'\n')
+
+
+def gzcopy(source_path, destination):
+    with destination.open('xb') as out:
+        out.write(gzip.compress(source_path.read_bytes(), mtime=0))
+
+
+def verify_preserved(folder, manifest_name='RELEASE_MANIFEST.json'):
+    manifest = read(folder/manifest_name)
+    actual = members(folder)
+    assert actual.pop(manifest_name)['sha256'] == sha(folder/manifest_name)
+    assert actual == manifest['files'], str(folder)
+    return dict(files_verified=len(actual), manifest_sha256=sha(folder/manifest_name))
+
+
+previous = read(root/'research/ui-audit/first-version/discovery-review-checkpoint.json')
+preserved = {}
+for folder in sorted((root/'build').glob('ELab-*-review')):
+    if folder != review and (folder/'RELEASE_MANIFEST.json').exists():
+        preserved[folder.name.removeprefix('ELab-').removesuffix('-review')] = verify_preserved(folder)
+assert len(preserved) == 30
+assert all(preserved[name] == expected for name, expected in previous['preserved_bundles'].items())
+original = verify_preserved(root/'build/ELab-0.130.0-147-review', 'CANDIDATE_MANIFEST.json')
+failed = verify_preserved(root/'build/ELab-0.147.0-164-review', 'CANDIDATE_MANIFEST.json')
+unsigned = verify_preserved(Path(built['preserved_unsigned_candidate']), 'CANDIDATE_MANIFEST.json')
+assert original == previous['preserved_original_147_candidate'] and failed == previous['preserved_failed_164_candidate']
+assert unsigned['manifest_sha256'] == built['unsigned_candidate_manifest_sha256']
+canonical = previous['canonical']
+assert sha(root/'build/ELab.app/Contents/MacOS/ELab') == canonical['native_sha256']
+assert sha(root/'build/ELab-0.153.0-170-review.zip') == '2fef6c7249d7d393a33829808e1eac241bccaddb568fe62f23081f79b6be5357'
+pin = read(root/'third_party/vellum/sdk.lock.json')
+assert pin == previous['sdk'] and sha(root/pin['archive']) == pin['sha256']
+ledger = read(root/'research/13-native-command-inventory.json')
+assert len(ledger['source_sha256']) == 71 and len(ledger['sites']) == 397
+assert len(ledger['public_commands']) == 164 and len(ledger['commands_with_source_routes']) == 132
+shared = Path.home()/'Library/Cogent Core'
+geometry = {str(p.relative_to(shared)): dict(sha256=sha(p), mode=oct(p.stat().st_mode & 0o777)) for p in shared.rglob('*') if p.is_file()}
+assert geometry == rr['shared_geometry_after']
+tree = git_files(root, source)
+runtime_inputs = {name: tree[name] for name in tree if runtime_input(name)}
+actual_inputs = {str(p.relative_to(root)) for folder in RUNTIME_DIRS for p in (root/folder).rglob('*') if p.is_file() and runtime_input(str(p.relative_to(root)))}
+actual_inputs.update(name for name in ('go.mod', 'go.sum') if (root/name).is_file())
+assert actual_inputs == set(runtime_inputs)
+assert all(git_identity((root/name).read_bytes()) == identity for name, identity in runtime_inputs.items())
+
+for name in ('Examples', 'Licenses'):
+    shutil.copytree(root/'build/ELab-0.153.0-170-review'/name, review/name)
+evidence = review/'Evidence'
+evidence.mkdir()
+shutil.copytree(proof, evidence/'Appearance-source')
+for source_path, name in [(root/'research/13-native-command-inventory.json', 'Native-command-inventory.json'),
+                          (root/'third_party/vellum/sdk.lock.json', 'SDK-lock.json'),
+                          (root/'research/ui-audit/first-version/private-alpha-owner-decisions.json', 'Owner-decisions.json'),
+                          (stage/'build-result-signed.json', 'Build-result.json'),
+                          (stage/'signature-admission.json', 'Signature-admission.json')]:
+    shutil.copyfile(source_path, evidence/name)
+producers = ['build_release.py', 'sign_bundle.py', 'signed_bundle.py', 'signature_admission_checks.py',
+             'runtime-signed.py', 'acceptance-signed.py', 'run-acceptance-signed.py', 'discovery_cases.py',
+             'appearance_cases.py', 'verify_cases.py', 'coil_reset_cases.py', 'startup_cases.py', 'seal.py']
+for name in producers:
+    shutil.copyfile(stage/name, evidence/(name+'.txt'))
+for name, label in [('elab', 'Native'), ('elab-agent', 'Agent'), ('elab-conformance', 'Conformance')]:
+    raw_info = stage/'build'/(name+'-build-info.txt')
+    gzcopy(raw_info, evidence/(label+'-build-info.raw.txt.gz'))
+    (evidence/(label+'-build-info.txt')).write_text('\n'.join(line.rstrip() for line in raw_info.read_text().splitlines())+'\n')
+for name in ['build.txt', 'package.txt', 'package-signed.txt', 'signature-verify.txt', 'signature-details.txt',
+             'signature-signed-verify.txt', 'signature-signed-details.txt', 'acceptance-signed-output.txt',
+             'seal-first-output.txt', 'archive-first-output.txt']:
+    gzcopy(stage/name, evidence/(name+'.gz'))
+shutil.copyfile(runtime/'runtime-report.json', evidence/'Runtime.json')
+gzcopy(runtime/'public/report.json', evidence/'Public-report.json.gz')
+for name in ('native-smoke.log.txt', 'public-suites.log.txt', 'runtime.sb', 'geometry-probe.py', 'geometry-probe-output.json'):
+    gzcopy(runtime/name, evidence/(name+'.gz'))
+observations = evidence/'Runtime-acceptance'
+observations.mkdir()
+for path in sorted(acceptance.rglob('*')):
+    if not path.is_file() or path.name.endswith('endpoint.json'):
+        continue
+    destination = observations/path.relative_to(acceptance)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    if path.suffix in ('.json', '.elab', '.txt') and path.name != 'report.json':
+        gzcopy(path, destination.with_name(destination.name+'.gz'))
+    else:
+        shutil.copyfile(path, destination)
+exits, shutdowns = {}, {}
+for path in (runtime/'public').rglob('process-exit.json'):
+    value = read(path)
+    assert value['exit_code'] == 0 and not value['graceful_wait_timed_out'] and not value.get('wait_error') and not value.get('close_error') and not value.get('context_error_before_cancel')
+    exits[str(path.relative_to(runtime/'public'))] = value
+for path in (runtime/'public').rglob('shutdown-response.json'):
+    value = read(path)
+    assert not value.get('error') and not value['response'].get('error')
+    state = value['response']['result']
+    assert state['closed'] and state['shutdown']['status'] == 'completed' and state['shutdown']['workers_joined'] and state['shutdown']['exit_ready']
+    shutdowns[str(path.relative_to(runtime/'public'))] = value
+assert len(exits) == 102 and len(shutdowns) == 112
+for name, values in [('Process-exits.json.gz', exits), ('Shutdown-responses.json.gz', shutdowns)]:
+    with (evidence/name).open('xb') as out:
+        out.write(gzip.compress((json.dumps(values, indent=2)+'\n').encode(), mtime=0))
+
+walkthrough = (root/'research/35-first-version-review.md').read_text()
+tasks = '## Try these four tasks'+walkthrough.split('## Try these four tasks', 1)[1].split('## Review boundary and known limits', 1)[0]
+readme = f'''# ELab private owner review · {version} /{build}
+
+Save and quit an earlier review before opening **ELab.app**. Matching `elab-agent`, three editable Examples and framework notices are included. No Go, Python, Vellum checkout or account is required to run the app. Owner walkthrough remains **Not tried yet**; canonical /120 and all earlier reviews are preserved.
+
+This replacement makes appearance loads/saves inspectable by stable operation ID, with captured inputs, file hashes, progress and guarded cancellation. Existing theme and persistence controls still use the shared application commands. `appearance.work.inspect` and `appearance.work.cancel` are available to users/agents through the public API; they have no dedicated native button. An old ID cannot cancel a newer request. Once atomic publication starts, its actual outcome remains inspectable even after reconfiguration. Disabled/failed preference stores accept session-only choices without a new save job. `appearance.wait` remains a global compatibility wait; use the admitted ID to follow older work.
+
+Clean `{source[:7]}` /SDK `b22478c` passes copied signed native smoke, all four public adapters and matching native/headless appearance/discovery checks under development-file/network/shared-geometry denial. The catalog has 164 annotated commands and an optional appearance_work snapshot member. Models, saved schematic format and native UI sources are unchanged. Source cancellation races and mounted input tests retain their separate scopes. Source quality passes with package execution serialized; default parallel race runs hit existing 100 ms mixed-solver limits, and those failures remain recorded. No solver limit was increased and no visible-latency claim is made.
+
+The bundle now has an explicit local ad-hoc signature that binds its identifier and resources and passes strict verification. The original unsigned candidate failed strict verification and is preserved separately. This is not Developer ID signing, notarization, Gatekeeper or clean-account installation acceptance. Source and copied-runtime evidence is in Evidence/Acceptance.json; older historical evidence remains in the repository and preserved reviews rather than being duplicated in this ZIP.
+
+'''+tasks+'''
+For appearance work, retain the id from snapshot.appearance_work, then query appearance.work.inspect with that id. Cancel uses the ordinary mutation guard and retry key. Queries return historical read/published file hashes; they do not promise that external applications have left the file unchanged.
+
+## Review boundary and known limits
+
+- Tested on this Apple Silicon workstation /macOS 26.6.2. Owner walkthrough, full typing/IME/reader, physical input coverage, visible p95 latency and actual hobbyist study remain open.
+- Ordinary default-startup/clean-account installation qualification was explicitly deferred for this private alpha; protected runtime does not qualify it.
+- Generic educational models are bounded. Dense/stiff circuits can exhaust integration work without producing a new sample. No general SPICE or physical-device qualification is claimed.
+- Historical Pause/Apply and /169 capacity graceful-close observations remain unexplained; later passing checks do not establish their cause.
+- One LED page printed clearly and completely; other print settings, measured scale/margins and device paths remain unqualified. No new printer or owner window was operated for this package.
+- Complete asynchronous/native-binding and platform acceptance remain open. This private review does not promote the canonical app or establish broader MVP completion.
+'''
+(review/'README.md').write_text(readme)
+(evidence/'Acceptance.json').write_text('{}\n')
+count = sum(path.is_file() for path in review.rglob('*'))
+receipt = dict(date='2026-10-19', version=version, build=build,
+    status='Identified appearance operations and resource-sealed private review qualified within documented scopes',
+    source_commit=source, clean_build_vcs=True, native_sha256=built['native_sha256'],
+    source_native_sha256=built['source_native_sha256'], agent_sha256=built['agent_sha256'], sdk=pin,
+    quality=dict(quality, scope='Unchanged final Go sources; all source checks passed with GOFLAGS=-p=1; default parallel failures retained'),
+    source_proof_checkpoint_sha256=sha(proof/'checkpoint.json'), copied_runtime=rr['stages'], acceptance=ar,
+    signature=dict(identity='-', strict_verified=True, identifier='com.dshills.elab', team_identifier=None,
+                   resource_sealed=True, developer_id_signed=False, notarized=False,
+                   source_input_sha256=built['source_native_sha256'], packaged_sha256=built['native_sha256'],
+                   exact_artifact_admission=read(stage/'signature-admission.json')),
+    runtime_geometry_protection=dict(controls=rr['controls']['shared_geometry'], unchanged=True),
+    copied_process_exit_count=len(exits), ready_shutdown_response_count=len(shutdowns),
+    runtime_source_inputs=runtime_inputs, runtime_source_input_count=len(runtime_inputs),
+    native_inventory=dict(sources=71, sites=397, public_commands=164, source_routed=132),
+    preserved_bundles=preserved, preserved_original_147_candidate=original, preserved_failed_164_candidate=failed,
+    preserved_unsigned_171_candidate=unsigned, canonical=canonical, canonical_promoted=False,
+    owner_acceptance='Pending: owner answered Not tried yet; no acceptance inferred',
+    private_alpha_environment_gate='Owner deferred default-startup/clean-account qualification; remains unqualified',
+    p0_counts=dict(implemented=17, partial=10), manifest_file_entries=count, review_path=str(review),
+    launch_note='Save and quit an earlier review before opening; owner app not opened automatically',
+    known_limits=['Complete AGENT-04 and native binding coverage remain open',
+                  'Default parallel source race gate had mixed-solver time-budget failures; serialized pass is not performance acceptance',
+                  'Ad-hoc strict signature is not Developer ID, notarization or Gatekeeper acceptance',
+                  'Owner, clean-account, full typing/IME/reader, visible latency and actual study remain open',
+                  'Historical Pause/Apply/capacity shutdown causes remain unresolved'])
+write(receipt_path, receipt)
+(evidence/'Acceptance.json').write_bytes(receipt_path.read_bytes())
+files = members(review)
+assert len(files) == count
+write(review/'RELEASE_MANIFEST.json', dict(version=version, build=build, status=receipt['status'],
+    source_record_commit=source, source_build_clean=True, canonical_promoted=False, files=files))
+print(dict(passed=True, release=version+' /'+build, manifest_entries=count, preserved_reviews=len(preserved),
+           process_exits=len(exits), shutdown_responses=len(shutdowns), runtime_inputs=len(runtime_inputs)))

@@ -1,0 +1,27 @@
+import hashlib,json,os,shutil,subprocess,sys
+from pathlib import Path
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent
+version,build='0.154.0','171';review=root/'build'/f'ELab-{version}-{build}-review'
+source='ba295b9317d93f21d7f9862bdb3b6d4675d300c7'
+sys.path.insert(0,str(root/'scripts'))
+from runtime_isolation import pinned_child_runner
+sdk,run_child=pinned_child_runner()
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=root).strip(),'source must be clean'
+assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()==source
+assert not review.exists()
+(stage/'source.txt').write_text(source+'\n');(stage/'build').mkdir()
+env=dict(os.environ,GOWORK='off',GOCACHE=str(root/'build/go-cache'),GOPROXY='off',GOTOOLCHAIN='local',CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native',PYTHONDONTWRITEBYTECODE='1')
+with (stage/'build.txt').open('x') as log:
+ for name,cwd,target in [('elab-agent',root,'./cmd/elab-agent'),('elab-conformance',root,'./cmd/elab-conformance'),('elab',root/'desktop','.')]:
+  binary=stage/'build'/name
+  run_child(['go','build','-buildvcs=true','-o',str(binary),target],cwd=cwd,env=env,stdout=log,stderr=-2,timeout=120,check=True)
+  info=subprocess.check_output(['go','version','-m',str(binary)],cwd=root,text=True,timeout=15)
+  assert 'vcs.revision='+source in info and 'vcs.modified=false' in info
+  (stage/'build'/(name+'-build-info.txt')).write_text(info)
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=root).strip(),'build changed tracked source'
+review.mkdir()
+with (stage/'package.txt').open('x') as log:
+ run_child([sys.executable,'-B',str(sdk/'scripts/package-app.py'),'--binary',str(stage/'build/elab'),'--output',str(review/'ELab.app'),'--name','ELab','--identifier','com.dshills.elab','--version',version,'--build-version',build],cwd=root,env=env,stdout=log,stderr=-2,timeout=90,check=True)
+shutil.copyfile(stage/'build/elab-agent',review/'elab-agent');(review/'elab-agent').chmod(0o755)
+r=dict(passed=True,source_commit=source,clean_build_vcs=True,version=version,build=build,review=str(review),native_sha256=hashlib.sha256((stage/'build/elab').read_bytes()).hexdigest(),agent_sha256=hashlib.sha256((stage/'build/elab-agent').read_bytes()).hexdigest())
+(stage/'build-result.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps(r))
