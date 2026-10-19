@@ -1,0 +1,41 @@
+{
+  "source_repair_passed": true,
+  "clean_replacement_qualified": false,
+  "original_source_regression": "before-final-regression.txt",
+  "earlier_test_development_errors": [
+    {
+      "file": "initial-test-compile.txt",
+      "scope": "Test used nonexistent statistics field names; producer compile error, not a product failure"
+    },
+    {
+      "file": "initial-event-fixture.txt",
+      "scope": "Test assumed exactly two samples at a timestamp; multiple manual events can share it; fixture corrected to latest event pair"
+    }
+  ],
+  "first_quality_attempt": {
+    "passed": false,
+    "reason": "Sandbox denied local Unix socket binds",
+    "report": "sandbox-quality.json"
+  },
+  "final_quality_attempt": {
+    "passed": true,
+    "exit_code": 0,
+    "elapsed_seconds": 305.38683350000065,
+    "command": "./scripts/check.sh",
+    "scope": "Full consumer source quality gate with permission for local test sockets; no packaged runtime, physical input or owner acceptance claim",
+    "source_sha256": {
+      "workbench/transient.go": "751bc88bc5d677e6d3cefb9cffe305b5ad344bd0754755102b467651c6b265d6",
+      "workbench/rc_input_frames_test.go": "dea17664247ba6e6224153c0302c17575cf1d0f0d2d18a5dbdf5ef368e3b9148"
+    }
+  },
+  "public_checks": {
+    "original_release": "old-public/report.json",
+    "repaired_development": "fixed-public/report.json"
+  },
+  "limits": [
+    "Development working tree, not clean replacement release",
+    "No new physical native input or copied-runtime qualification",
+    "Owner walkthrough Not tried yet"
+  ],
+  "next_work": "Package committed source as a clean replacement and qualify RC edge plus existing native/public integration"
+}

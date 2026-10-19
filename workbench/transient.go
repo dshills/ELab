@@ -343,8 +343,9 @@ func (s *Service) applyRCInputLocked(c Compiled, mode string) {
 	s.pendingInputMode = ""
 	t.Mode = mode
 	t.PendingMode = ""
-	t.Sample.Input = rcInput(c, t, t.Sample.Time)
-	t.Sample.Current = (t.Sample.Input - t.Sample.Voltage) / c.Resistor.Value
+	// Rebuild the immutable probe frame as well as the scalar readings. Reusing
+	// or changing its previous frame would misreport an edge or rewrite history.
+	t.Sample = rcSample(c, t, t.Sample.Time, rcInput(c, t, t.Sample.Time), t.Sample.Voltage)
 	t.Events = append(t.Events, InputEvent{t.Sample.Time, mode})
 	if len(t.Events) > 64 {
 		t.Events = append([]InputEvent{}, t.Events[len(t.Events)-64:]...)

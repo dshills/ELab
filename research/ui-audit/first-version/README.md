@@ -444,3 +444,7 @@ October 18: [grouped-inspector source repair](../../../docs/validation/inspector
 ### Native RC control workflow · /160 measurement failure
 
 [Actual native controls and independent edge check](native-rc-160/README.md) pass explicit control/cursor/save/reopen assertions but expose stale scope/CSV current at a manual charge/discharge edge. Both native and exact packaged agent reproduce it; shared parity alone was insufficient. Initial fixture failure is retained, successful original host exits normally, and stopped custom bundle is restored. No production/SDK/version change or promotion. Repair is next; SCOPE-02 and FILE-03 are partial, current P0 15 implemented /12 partial, owner Not tried yet.
+
+### RC input-edge source repair · clean replacement pending
+
+[Source proof](../../../docs/validation/rc-input-frames/README.md) rebuilds the immutable RC probe frame at manual input transitions. Original-source regression and preserved /160 public reproduction fail; all 12 repaired entry-path/orientation cases, independent 23-row scope/cursor/extrema/CSV checks and full quality (305.387 s) pass. Original history/storage state remain intact. Clean replacement packaging and integration are next; /160 remains affected, owner Not tried yet, P0 15 implemented /12 partial. No SDK/native-binding/command/model/format change or promotion.

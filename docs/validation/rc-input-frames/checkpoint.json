@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-18",
+  "passed": true,
+  "scope": "RC source repair, full consumer quality and independent public-agent regression only",
+  "source_identity": {
+    "based_on_commit": "71c7f307a5206785063f45690719c7274ce3bf6f",
+    "working_tree_development_build": true,
+    "source_sha256": {
+      "workbench/transient.go": "751bc88bc5d677e6d3cefb9cffe305b5ad344bd0754755102b467651c6b265d6",
+      "workbench/rc_input_frames_test.go": "dea17664247ba6e6224153c0302c17575cf1d0f0d2d18a5dbdf5ef368e3b9148",
+      "docs/validation/rc-input-frames/reproduce.py": "e9562abccb008033a63b400b9910b866d2ee3b050a09131a40bc968624eac6df"
+    },
+    "agent_sha256": "a16a2a5deb6a2e7f98dce100659149cb2880b65a55ac811595444e272ce75680",
+    "sdk_lock_sha256": "2f9ac0e120bdd09d5ffe2c3d8b5da4d24588455c5e6bc8d6f08c80e0dccc6395",
+    "scope": "Core RC input-frame source repair; native bindings, commands, models, SDK and saved format unchanged; not a clean release package",
+    "sdk": "b22478cf8cec8dda1ccdcd93d6ff6b62e2cc11de",
+    "shared_helper_sha256": {
+      "scripts/persistence-demo.py": "4f3893eec22b3e6173aa75138e7774a43727b0bfc908c4bb56e8616e0d45dae5",
+      "scripts/demo_session.py": "7faaaa2078bfefce1a775bb96364d444c0ebbbedb7007fb2a1709b34395181d7"
+    }
+  },
+  "entry_path_orientation_cases": 12,
+  "manual_input_events": 36,
+  "full_quality": {
+    "passed": true,
+    "exit_code": 0,
+    "elapsed_seconds": 305.38683350000065,
+    "command": "./scripts/check.sh",
+    "scope": "Full consumer source quality gate with permission for local test sockets; no packaged runtime, physical input or owner acceptance claim",
+    "source_sha256": {
+      "workbench/transient.go": "751bc88bc5d677e6d3cefb9cffe305b5ad344bd0754755102b467651c6b265d6",
+      "workbench/rc_input_frames_test.go": "dea17664247ba6e6224153c0302c17575cf1d0f0d2d18a5dbdf5ef368e3b9148"
+    }
+  },
+  "public_reproduction_passed": true,
+  "original_release_reproduction_failed": true,
+  "clean_replacement_qualified": false,
+  "owner_acceptance": "Not tried yet",
+  "p0_counts": {
+    "implemented": 15,
+    "partial": 12
+  },
+  "canonical_promoted": false,
+  "evidence_sha256": {
+    "README.md": "f8de5835911f80e771259aeea2586640c57f8a3166b84267b495bc36c7ba3bbf",
+    "after.txt": "f59381669f905c338003d67de5e4281d8a880c1b731a3d7e5707c86bfb79f7d4",
+    "agent-build-info.raw.txt.gz": "e2749e6262cf8fba2ab0e8749a27b4b4eb0c2e30c1321180ef827d7db5f5b637",
+    "before-final-regression.txt": "e980b27c28b330da80bed62e7715f330c274879bf1c5c0048eafc165e37df9ff",
+    "development-identity.json": "4cbd65f8c2df9a481d4c5c0deb3003f8c1881dc8be065c1709087d42c693668d",
+    "fixed-public/RC edge.csv": "69c782b7b6fb7587924357f3a65bca553981e73faf1f60cf68ac0d9d56e04fb9",
+    "fixed-public/report.json": "750e538309d1c6aa6a7b51eee4b8f6cd18b5b12900529702c3e206a3f1e772d3",
+    "fixed-public/state.json.gz": "8caf9ce2b63fb4d2f731f721e11b6c558202f846ae92d7986fdfd6842c7cf38e",
+    "initial-event-fixture.txt": "8a9d420a76195dae8621e79d1ed6bca191539c01f53d33a4a827cc35493a255f",
+    "initial-test-compile.txt": "bda9c7624b3f09a2cf6790b8c111e407465a9ab873cd8aa28c8106f7e5b58276",
+    "old-public/RC edge.csv": "1d27563a6b986313fedb9beef8a9ef5ac1972943898bbbd6aea5a729f4bf3176",
+    "old-public/report.json": "71d2c2cb7d77c4b88e6243273f8ae78a15bbe7e0483e76a2d4737db3dd37a041",
+    "old-public/state.json.gz": "1fccc9fe03e958c1d377de8528e797086eded58ead6fed494924823ad90ec412",
+    "preservation.json": "2796f1870eefae8341259fd65d5ec36d67a6a751fba81093cb1ee97c46e78931",
+    "quality.json": "26314d7aed16432d96a293012cffa81af987258b63a4c98783267a61b0967176",
+    "quality.txt": "c4c1fcde6046f2fe937648df0a9ae694006674af8c3504a495dc59adff400ef0",
+    "reproduce.py": "e9562abccb008033a63b400b9910b866d2ee3b050a09131a40bc968624eac6df",
+    "sandbox-quality.json": "a32d3bb5a2d71866ed7a17dcd3726c2083d179ca6209c4b823f1c7dc76de6bf2",
+    "sandbox-quality.txt": "8789e7075aa6fd4f75093d9bc24e15a1dfd24e18433e30bfaa382e02357c5b6b",
+    "source-repair.patch.gz": "43e0f4b7e457730e5baad4b9d35785e1a39e2d8c9796d8bc688a86cd4b1839a7",
+    "validation-protocol.json": "2c18a9ac49a6cbcbd7f5e24722e26853ded31a80a7a0f27eaafe3de097524e8c"
+  }
+}

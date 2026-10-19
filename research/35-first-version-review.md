@@ -1,6 +1,6 @@
 # ELab first-version review · 0.143.0 /160
 
-**Known measurement blocker:** at a manual RC Charge → Discharge edge, scope and CSV repeat the pre-edge current although the solver current is correct. [Reproduction and scope](ui-audit/first-version/native-rc-160/README.md). Repair and replacement qualification are pending; do not promote this review.
+**Known measurement blocker:** at a manual RC Charge → Discharge edge, scope and CSV repeat the pre-edge current although the solver current is correct. [Reproduction and scope](ui-audit/first-version/native-rc-160/README.md). [Source repair and full quality pass](../docs/validation/rc-input-frames/README.md); clean replacement qualification is pending. Do not promote this affected review.
 
 
 This updated private owner-review alpha is in the [review folder](../build/ELab-0.143.0-160-review), with [ELab.app](../build/ELab-0.143.0-160-review/ELab.app), matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required. All 20 earlier qualified review folders (0.123.0 /140 through 0.142.0 /159), the original unqualified /147 candidate and canonical 0.105.0 /120 app are preserved. Owner walkthrough remains “Not tried yet.”

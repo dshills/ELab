@@ -1,0 +1,133 @@
+{
+  "passed": false,
+  "agent_sha256": "bf177e5f3d136196745f09bb4f090bc87ce7b45c82218fd5991fc890acd86cc4",
+  "scope": "Fresh owned stdio agent; manual RC edge, scope, cursor and public CSV",
+  "errors": [
+    {
+      "check": "scope v:V1 row 12",
+      "actual": 5,
+      "expected": 0
+    },
+    {
+      "check": "CSV v:V1 row 12",
+      "actual": 5.0,
+      "expected": 0
+    },
+    {
+      "check": "scope v:R1 row 12",
+      "actual": 1.8393972058572117,
+      "expected": -3.1606027941427883
+    },
+    {
+      "check": "CSV v:R1 row 12",
+      "actual": 1.8393972058572117,
+      "expected": -3.1606027941427883
+    },
+    {
+      "check": "scope i:V1 row 12",
+      "actual": 0.00018393972058572118,
+      "expected": -0.00031606027941427883
+    },
+    {
+      "check": "CSV i:V1 row 12",
+      "actual": 0.00018393972058572118,
+      "expected": -0.00031606027941427883
+    },
+    {
+      "check": "scope i:R1 row 12",
+      "actual": 0.00018393972058572118,
+      "expected": -0.00031606027941427883
+    },
+    {
+      "check": "CSV i:R1 row 12",
+      "actual": 0.00018393972058572118,
+      "expected": -0.00031606027941427883
+    },
+    {
+      "check": "scope i:C1 row 12",
+      "actual": 0.00018393972058572118,
+      "expected": -0.00031606027941427883
+    },
+    {
+      "check": "CSV i:C1 row 12",
+      "actual": 0.00018393972058572118,
+      "expected": -0.00031606027941427883
+    },
+    {
+      "check": "cursor v:V1 A",
+      "actual": 5,
+      "expected": 0
+    },
+    {
+      "check": "cursor v:V1 B",
+      "actual": 5,
+      "expected": 0
+    },
+    {
+      "check": "cursor v:R1 A",
+      "actual": 1.8393972058572117,
+      "expected": -3.1606027941427883
+    },
+    {
+      "check": "cursor v:R1 B",
+      "actual": 1.8393972058572117,
+      "expected": -3.1606027941427883
+    },
+    {
+      "check": "cursor i:V1 A",
+      "actual": 0.00018393972058572118,
+      "expected": -0.00031606027941427883
+    },
+    {
+      "check": "cursor i:V1 B",
+      "actual": 0.00018393972058572118,
+      "expected": -0.00031606027941427883
+    },
+    {
+      "check": "cursor i:R1 A",
+      "actual": 0.00018393972058572118,
+      "expected": -0.00031606027941427883
+    },
+    {
+      "check": "cursor i:R1 B",
+      "actual": 0.00018393972058572118,
+      "expected": -0.00031606027941427883
+    },
+    {
+      "check": "cursor i:C1 A",
+      "actual": 0.00018393972058572118,
+      "expected": -0.00031606027941427883
+    },
+    {
+      "check": "cursor i:C1 B",
+      "actual": 0.00018393972058572118,
+      "expected": -0.00031606027941427883
+    },
+    {
+      "check": "v:R1 minimum",
+      "actual": -2.8598316716894003,
+      "expected": -3.1606027941427883
+    },
+    {
+      "check": "i:V1 minimum",
+      "actual": -0.00028598316716894006,
+      "expected": -0.00031606027941427883
+    },
+    {
+      "check": "i:R1 minimum",
+      "actual": -0.00028598316716894006,
+      "expected": -0.00031606027941427883
+    },
+    {
+      "check": "i:C1 minimum",
+      "actual": -0.00028598316716894006,
+      "expected": -0.00031606027941427883
+    }
+  ],
+  "expected_edge_current_a": -0.00031606027941427883,
+  "actual_scope_edge_current_a": 0.00018393972058572118,
+  "actual_csv_edge_current_a": 0.00018393972058572118,
+  "solver_edge_current_a": -0.00031606027941427883,
+  "samples": 23,
+  "agent_exit_code": 0
+}
