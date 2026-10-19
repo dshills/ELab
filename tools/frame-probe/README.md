@@ -19,6 +19,8 @@ build/frame-probe-tools/frame-probe --help
 
 The check compiles with Swift 6 and warnings as errors, then exercises argument rejection, marker IDs, Mach-time conversion, precise tick serialization and refusal to overwrite an acknowledgment or existing output directory. It does not query windows, preflight/request screen permission, capture images, monitor input, open settings or operate ELab. An arm64/macOS 14 deployment target is a compiler setting, not a claim of tested OS support.
 
+Seven [offline journal/marker fault checks](../../docs/validation/frame-probe-journal-checks/README.md) now also cover existing files/directories, ordinary/dangling symlinks, a competing active collector, new-file permissions, repeated finalization and acknowledgment write failure. Journal creation uses an exclusive POSIX open; the prior constructor could truncate a pre-existing journal even though the outer fresh-directory guard protected the recorded trials. The repaired recorder has a new binary hash and requires a fresh runtime calibration. The earlier calibrated binary and evidence are preserved with their original scope.
+
 ## Capture contract — do not execute without authorization
 
 After the owner provides an isolated test session and specifically authorizes this recorder, use an independently owned ELab instance with synthetic test circuits. Obtain the exact PID from an owned test launch, then use `--target-windows --pid PID --executable /path/ELab --sha256 HASH` to report only that verified process’s on-screen window IDs. Wait for a window to become ready; refuse ambiguous targets. Never select the first app/window or guess an ID. Require its exact executable path and SHA-256 from the qualified review.

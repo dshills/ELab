@@ -1,0 +1,50 @@
+{
+  "status": "exclusive_journal_and_seven_offline_filesystem_marker_fault_cases_validated",
+  "base_commit": "323b87aa387fb13377d6e47a4fb9993b22a7b543",
+  "source_sha256": {
+    "tools/frame-probe/main.swift": "6dccb4eafa7fabff0dbfab85a685caf32d656d9770083c7f671a25e340efba4e",
+    "tools/frame-probe/journal_checks.swift": "9e2af4e5539b6aac4f59451e3457c398aa04cd92072b31d4e9f50688020a0bd6",
+    "tools/frame-probe/check.sh": "2847b1404931549e7831458c955abb16b07b6b718caf6d4535eccb104c9bcfcf"
+  },
+  "new_probe_sha256": "677c5e117c40ca8f60b5c54e43176324ce4c10f799cbcf8f56813f4532d4cbaa",
+  "prior_probe_sha256": "6a861e71daad86de6d84ef5bba1d4933c659c51703c4a238a7d89d45681c5599",
+  "prior_probe_preserved": true,
+  "new_probe_runtime_capture_qualified": false,
+  "original_constructor_regression_exit": 1,
+  "original_constructor_regression": "Existing frame journal was overwritten or admitted",
+  "check_command": "sh tools/frame-probe/check.sh",
+  "check_exit_code": 0,
+  "swift_language_version": 6,
+  "warnings_as_errors": true,
+  "deployment_target": "arm64-apple-macosx14.0",
+  "journal_fault_cases": [
+    "existing-journal-refused-with-bytes-and-mode-preserved",
+    "directory-journal-destination-refused",
+    "journal-link-refused-with-target-preserved",
+    "dangling-journal-link-refused",
+    "private-new-journal-and-idempotent-finalization",
+    "second-collector-refused-with-marker-evidence-preserved",
+    "acknowledgment-write-failure-retained-with-prior-file-preserved"
+  ],
+  "capture_executed": false,
+  "permission_preflight_executed": false,
+  "permission_requested": false,
+  "input_operated": false,
+  "eligible_latency_observations": 0,
+  "latency_gate_passed": null,
+  "app_rebuilt": false,
+  "canonical_promoted": false,
+  "owner_acceptance": false,
+  "sdk_unchanged": true,
+  "prior_marker_evidence_files_verified": 64,
+  "prior_marker_data_replay_passed": true,
+  "evidence_sha256": {
+    "README.md": "10691f03c4d7618600f4a88d02da26b115bc0868166060e3c0c6c7fed008ba05",
+    "final-stderr.txt.gz": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83",
+    "final-stdout.txt.gz": "f94d9c7b33b95ffff7fe910ce009a5b0c5423616dc46be1b0f9cc00eee9d9b83",
+    "original-regression.swift.txt.gz": "7dac610f35a6f883074735b635d74f44a24d91b20283b0b625d5614a174287bf",
+    "original-stderr.txt.gz": "ee6e294aa08229e744920cc674331d04089c9c4afe6ed1ae82e6a2c89367097e",
+    "original-stdout.txt.gz": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83",
+    "preservation.json": "1c1e9b7e394056625e182165eb549ec797231eb860ac763969ff1dd1336435c9"
+  }
+}

@@ -132,11 +132,13 @@ final class Collector: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked Se
         self.output = output
         self.window = window
         let file = output.appendingPathComponent("frames.jsonl")
-        guard FileManager.default.createFile(atPath: file.path, contents: nil,
-                                            attributes: [.posixPermissions: 0o600]) else {
-            throw ProbeError("Cannot create frame journal")
+        let descriptor = file.path.withCString {
+            Darwin.open($0, O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC, mode_t(0o600))
         }
-        journal = try FileHandle(forWritingTo: file)
+        guard descriptor >= 0 else {
+            throw ProbeError("Cannot create a new frame journal (errno \(errno)); existing evidence is never overwritten")
+        }
+        journal = FileHandle(fileDescriptor: descriptor, closeOnDealloc: true)
         super.init()
         guard mach_timebase_info(&timebase) == KERN_SUCCESS, timebase.denom != 0 else {
             throw ProbeError("Cannot establish Mach timebase")
@@ -310,7 +312,10 @@ func selfTest() throws {
     guard refused, try Data(contentsOf: ack) == original,
           let decoded = try JSONSerialization.jsonObject(with: original) as? [String: String],
           decoded["mach_ticks"] == String(UInt64.max) else { throw ProbeError("Exclusive acknowledgment or tick precision check failed") }
-    print("{\"self_tests_passed\":true,\"capture_executed\":false,\"eligible_latency_observations\":0}")
+    let journalCases = try journalFaultChecks()
+    let result: [String: Any] = ["self_tests_passed": true, "capture_executed": false,
+                                "eligible_latency_observations": 0, "journal_fault_cases": journalCases]
+    print(String(decoding: try JSONSerialization.data(withJSONObject: result, options: [.sortedKeys]), as: UTF8.self))
 }
 
 @main
