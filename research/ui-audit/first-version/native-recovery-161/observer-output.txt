@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/native-recovery-161/observe.py", line 89, in <module>
+    wait('allow-native-close');(out/'close-ready.json').write_text('{}\n');code=host.wait(timeout=30);assert code==0;client.close();client=None;report['hosts'][1].update(exit_code=code,normal_closure=True);stable_file();assert snapshot.read_bytes()==capsule_bytes;report['passed']=True;save()
+                                                                                ~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/subprocess.py", line 1445, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/subprocess.py", line 2310, in _wait
+    if self._wait_pidfd(timeout) or self._wait_kqueue(timeout):
+                                    ~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/subprocess.py", line 2286, in _wait_kqueue
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/dshills/Development/projects/ELab/build/native-files-156-ui/ELab-value-recovery.app/Contents/MacOS/ELab-value-recovery', '--agent-endpoint', '/Users/dshills/Development/projects/ELab/build/native-recovery-161/observations/restored/endpoint.json', '--recovery-directory', '/Users/dshills/Development/projects/ELab/build/native-recovery-161/recovery', '--no-appearance']' timed out after 30 seconds
