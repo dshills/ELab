@@ -1,0 +1,285 @@
+{
+  "date": "2026-10-19",
+  "scope": "Lifecycle-family review; presence and retained evidence are not complete AGENT-04 acceptance",
+  "agent_sha256": "134f9863e2885e384035e30550adfc5fe0bea1bdee9f3d3cd42feaf802bb7de5",
+  "discovery": {
+    "commands": 164,
+    "semantic_contracts": 164,
+    "completion_blocks": 156,
+    "discovery_preserves_snapshot": true,
+    "metadata_selectors": [
+      {
+        "command": "workspace.layout.set",
+        "observer": "project.inspect.workspace_layout",
+        "query": "project.inspect",
+        "result_path": [
+          "workspace_layout"
+        ]
+      },
+      {
+        "command": "workspace.layout.set",
+        "observer": "project.inspect.viewport",
+        "query": "project.inspect",
+        "result_path": [
+          "viewport"
+        ]
+      }
+    ],
+    "qualified_cancellation_hints": [
+      {
+        "command": "appearance.configure",
+        "text": "appearance.work.cancel targets exact current work before publication; configure with empty path disables the store even when an older publisher must finish",
+        "leading_command": "appearance.work.cancel"
+      },
+      {
+        "command": "appearance.theme.set",
+        "text": "appearance.work.cancel before publishing; does not undo the selected theme",
+        "leading_command": "appearance.work.cancel"
+      }
+    ],
+    "request_count": 168,
+    "collector_exit_code": 1,
+    "collector_failure_scope": "Postcollection summary assumed non-null observe; complete discovery/shutdown/result and zero owned-process exit already saved. Corrected offline analysis requires no relaunch.",
+    "actual_native_ui": false,
+    "actual_capture": false,
+    "complete_agent_qualification": false
+  },
+  "families": [
+    {
+      "id": "live-solving",
+      "entry_commands": [
+        "simulation.resume",
+        "simulation.restart",
+        "simulation.pause",
+        "simulation.wait"
+      ],
+      "observation": "run_id / electrical_revision / fresh/stale state",
+      "representative_source_test": {
+        "file": "workbench/live_network_test.go",
+        "name": "TestLiveNetworkDiscardsWorkAfterRestartAndClose"
+      },
+      "release_evidence": "docs/validation/sweep-review-173/acceptance/report.json",
+      "scope_and_remaining": "Live grid/reference acceptance; visible latency and physical deactivation/concurrent controls stay separate.",
+      "status": "partial-state-and-native-coverage"
+    },
+    {
+      "id": "manual-step",
+      "entry_commands": [
+        "simulation.step",
+        "simulation.step.start",
+        "simulation.work.cancel"
+      ],
+      "observation": "snapshot.step_work exact latest ID",
+      "representative_source_test": {
+        "file": "workbench/step_work_test.go",
+        "name": "TestAsyncStepAllowsEditingSaveAndCancellationWithoutPartialPhysics"
+      },
+      "release_evidence": "docs/validation/sweep-review-173/acceptance/report.json",
+      "scope_and_remaining": "Public reference/startup paths and source worker barriers; held physical Cancel states not exhaustively qualified.",
+      "status": "partial-state-and-native-coverage"
+    },
+    {
+      "id": "input-actuation",
+      "entry_commands": [
+        "simulation.input.set",
+        "potentiometer.wiper.set",
+        "switch.set"
+      ],
+      "observation": "input_work / pending applied mode / actuation_revision",
+      "representative_source_test": {
+        "file": "workbench/input_work_test.go",
+        "name": "TestBlockedWiperWorkAllowsNavigationSaveAndAtomicCancel"
+      },
+      "release_evidence": "docs/validation/sweep-review-173/acceptance/report.json",
+      "scope_and_remaining": "Live ownership/reference acceptance; full physical slider/window-blur/interleaving remains open.",
+      "status": "partial-state-and-native-coverage"
+    },
+    {
+      "id": "project-io",
+      "entry_commands": [
+        "project.save.start",
+        "project.load.start",
+        "export.start",
+        "verification.import.start",
+        "sweep.import.start",
+        "recovery.configure.start",
+        "recovery.work.start",
+        "recovery.restore.start",
+        "recovery.dismiss.start",
+        "project.work.inspect",
+        "project.work.cancel"
+      ],
+      "observation": "shared project_work exact retained IDs; publication is irreversible",
+      "representative_source_test": {
+        "file": "workbench/project_export_test.go",
+        "name": "TestExportPublishingFencesCancellationAndPreservesReplacement"
+      },
+      "release_evidence": "docs/validation/project-job-release-173/final/result.json",
+      "scope_and_remaining": "Six new packaged headless retry/refusal checks; current native reference/file evidence is narrower than every IO/decision/error path.",
+      "status": "partial-state-and-native-coverage"
+    },
+    {
+      "id": "verification",
+      "entry_commands": [
+        "simulation.verify",
+        "operation.inspect",
+        "operation.samples",
+        "operation.cancel"
+      ],
+      "observation": "retained operation IDs and captured input/result",
+      "representative_source_test": {
+        "file": "workbench/verification_test.go",
+        "name": "TestVerificationCancellationFailureAndAdmissionBounds"
+      },
+      "release_evidence": "docs/validation/sweep-review-173/acceptance/report.json",
+      "scope_and_remaining": "Four current public Verify scenarios plus reference suites; source-controlled cancellation differs from physical controls.",
+      "status": "partial-state-and-native-coverage"
+    },
+    {
+      "id": "dc-sweep",
+      "entry_commands": [
+        "sweep.start",
+        "sweep.inspect",
+        "sweep.cancel"
+      ],
+      "observation": "retained sweep IDs; complete curve publication",
+      "representative_source_test": {
+        "file": "workbench/dc_sweep_worker_test.go",
+        "name": "TestBlockedDCSweepAllowsEditingAndCancellation"
+      },
+      "release_evidence": "docs/validation/sweep-review-173/acceptance/report.json",
+      "scope_and_remaining": "Current copied native/headless four-curve parity; private-field settlement source proof and physical input retain distinct scopes.",
+      "status": "partial-state-and-native-coverage"
+    },
+    {
+      "id": "recovery-read",
+      "entry_commands": [
+        "recovery.read.start",
+        "recovery.read.inspect",
+        "recovery.read.result",
+        "recovery.read.chunk",
+        "recovery.read.cancel",
+        "recovery.inspect",
+        "recovery.samples"
+      ],
+      "observation": "retained read IDs; legacy reads are request scoped",
+      "representative_source_test": {
+        "file": "workbench/recovery_read_work_test.go",
+        "name": "TestRecoveryReadJobsSharePureReadSlotsAndCancelWithoutPartialResult"
+      },
+      "release_evidence": "docs/validation/recovery-read-release-173/final/result.json",
+      "scope_and_remaining": "Ten new packaged headless checks; blocked capacity/cancel/Close are controlled-source evidence, not new native trials.",
+      "status": "partial-state-and-native-coverage"
+    },
+    {
+      "id": "appearance",
+      "entry_commands": [
+        "appearance.configure",
+        "appearance.theme.set",
+        "appearance.work.inspect",
+        "appearance.work.cancel",
+        "appearance.wait"
+      ],
+      "observation": "captured retained work IDs and actual file outcomes",
+      "representative_source_test": {
+        "file": "workbench/appearance_work_test.go",
+        "name": "TestAppearanceWorkPublishingRetainsActualOutcomeAndCoalesces"
+      },
+      "release_evidence": "docs/validation/sweep-review-173/acceptance/report.json",
+      "scope_and_remaining": "Current inherited appearance/discovery outcomes and /171 source/public qualification; overlap/held physical cases are not blanket passes.",
+      "status": "partial-state-and-native-coverage"
+    },
+    {
+      "id": "preview",
+      "entry_commands": [
+        "print.preview.start",
+        "print.preview.page.set",
+        "print.preview.cancel",
+        "print.preview.close",
+        "print.preview.image"
+      ],
+      "observation": "exact preview ID / captured page / owned PNG bytes",
+      "representative_source_test": {
+        "file": "workbench/preview_contracts_test.go",
+        "name": "TestPreviewCancelAndCloseKeepWorkerSlotUntilActualReturn"
+      },
+      "release_evidence": "docs/validation/sweep-review-173/Runtime.json",
+      "scope_and_remaining": "Current native smoke plus source captured-page/byte/worker tests; does not qualify every physical page/navigation/cancel combination.",
+      "status": "partial-state-and-native-coverage"
+    },
+    {
+      "id": "printing",
+      "entry_commands": [
+        "print.printers.refresh",
+        "print.submit",
+        "print.job.refresh",
+        "print.job.cancel",
+        "print.work.cancel"
+      ],
+      "observation": "printing.work IDs; acknowledged spool job IDs retain separate outcome",
+      "representative_source_test": {
+        "file": "workbench/printing_test.go",
+        "name": "TestPrintSubmissionAcknowledgmentWinsLocalCancellation"
+      },
+      "release_evidence": "research/ui-audit/first-version/guarded-review-checkpoint.json",
+      "scope_and_remaining": "Source fake-spool lifecycle and earlier owner-confirmed page on its historical build; measured margins/media/device cancel and complete current native interaction stay open. No repeat printer operation.",
+      "status": "partial-state-and-native-coverage"
+    },
+    {
+      "id": "recorded-playback",
+      "entry_commands": [
+        "recording.play",
+        "recording.pause",
+        "recording.seek",
+        "recording.speed.set"
+      ],
+      "observation": "selected immutable recording / row / playing state; no retained solver job",
+      "representative_source_test": {
+        "file": "workbench/recording_test.go",
+        "name": "TestRecordingPulseEdgesCursorsAndPlaybackRemainIndependent"
+      },
+      "release_evidence": "docs/validation/sweep-review-173/acceptance/report.json",
+      "scope_and_remaining": "Current copied captured viewer/cursor/ownership checks and source playback tests; no blanket current-release physical playback clock/input-interleaving qualification.",
+      "status": "partial-state-and-native-coverage"
+    },
+    {
+      "id": "shutdown",
+      "entry_commands": [
+        "app.close.start",
+        "app.close",
+        "app.close.inspect",
+        "app.close.acknowledge"
+      ],
+      "observation": "irreversible shutdown ID / workers_joined / exit_ready",
+      "representative_source_test": {
+        "file": "workbench/shutdown_test.go",
+        "name": "TestShutdownWaitingDisconnectRetryAndActualWorkerJoining"
+      },
+      "release_evidence": "docs/validation/project-job-release-173/final/result.json",
+      "scope_and_remaining": "Normal packaged exit plus source controlled worker/failure/acknowledgment evidence; OS/window/process teardown is broader.",
+      "status": "partial-state-and-native-coverage"
+    }
+  ],
+  "source_quality": "docs/validation/sweep-smoke-admission/quality-default.json",
+  "source_quality_sha256": "8b0ecdfa5984a8e68bd4a0b2547a8997ceb332a23136ec6610d05bf55d844c3c",
+  "nonblocking_findings": [
+    {
+      "id": "UI-JOB-LABEL-01",
+      "priority": "P3",
+      "source": "desktop/project_work.go",
+      "source_sha256": "f4109a9a2e8bfa2098a9bf7a35327f4dcd557e696f9ac9178c19788de0694c20",
+      "commands": [
+        "export.schematic.pdf",
+        "export.schematic.png",
+        "sweep.export"
+      ],
+      "finding": "projectWorkControls classifies these captured exports as open, showing misleading Project open / Cancel project open text and the open-specific edit-supersession explanation.",
+      "scope": "Deterministic source review; no new native screenshot or product behavioral reproduction.",
+      "next": "Bounded correction of job-type presentation; preserve semantic commands/IDs/cancellation and validate once before a future clean review package.",
+      "producer_source": "workbench/project_export.go",
+      "producer_source_sha256": "1ca86698b55315c9005a53dd285412a2f1a766266286de28397ad320fb4d7a55"
+    }
+  ],
+  "overall_agent_gate_passed": false,
+  "overall_prd_passed": false
+}

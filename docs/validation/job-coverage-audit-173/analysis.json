@@ -1,0 +1,42 @@
+{
+  "commands": 164,
+  "semantic_contracts": 164,
+  "completion_blocks": 156,
+  "discovery_preserves_snapshot": true,
+  "metadata_selectors": [
+    {
+      "command": "workspace.layout.set",
+      "observer": "project.inspect.workspace_layout",
+      "query": "project.inspect",
+      "result_path": [
+        "workspace_layout"
+      ]
+    },
+    {
+      "command": "workspace.layout.set",
+      "observer": "project.inspect.viewport",
+      "query": "project.inspect",
+      "result_path": [
+        "viewport"
+      ]
+    }
+  ],
+  "qualified_cancellation_hints": [
+    {
+      "command": "appearance.configure",
+      "text": "appearance.work.cancel targets exact current work before publication; configure with empty path disables the store even when an older publisher must finish",
+      "leading_command": "appearance.work.cancel"
+    },
+    {
+      "command": "appearance.theme.set",
+      "text": "appearance.work.cancel before publishing; does not undo the selected theme",
+      "leading_command": "appearance.work.cancel"
+    }
+  ],
+  "request_count": 168,
+  "collector_exit_code": 1,
+  "collector_failure_scope": "Postcollection summary assumed non-null observe; complete discovery/shutdown/result and zero owned-process exit already saved. Corrected offline analysis requires no relaunch.",
+  "actual_native_ui": false,
+  "actual_capture": false,
+  "complete_agent_qualification": false
+}

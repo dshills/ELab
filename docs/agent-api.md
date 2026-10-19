@@ -12,6 +12,14 @@ All semantic commands use `workbench.Service.Dispatch`. Vellum widget callbacks,
 
 Responses include `version`, the request `id`, the session `revision`, and either `result` or structured `error` with `code`/`message`. Successful mutation results are full snapshots. Read `capabilities.list` for descriptions and input/output schemas. `project.inspect` reports components and terminals, wires, exact values/units, selection, viewport, model parameters, diagnostics, undo availability, last actor, and simulation state/results.
 
+Detailed `x-command-contract` completion guidance can name a query or a field
+within its result. For example, `project.inspect.workspace_layout` means call
+`project.inspect` and read `workspace_layout`; the selector is not a command ID.
+Observer lists may be null for immediate results. Cancellation hints can include
+qualifying text after the command name, especially around file publication. Use
+actual IDs/parameter schemas from the catalog and honor those conditions; do not
+dispatch a whole hint string. [Current lifecycle review](../research/40-background-job-coverage.md).
+
 Socket responses are bounded to 1 MiB; an oversized result returns `response-too-large` explicitly.
 
 Revision is a session admission version and changes on accepted mutations and solver result publication. `electrical_revision` changes on circuit configuration edits. Live switch/wiper input events preserve it and advance `actuation_revision`; that revision also guards Verify source association. `run_id` identifies calculation attempts. A selection or view change preserves the electrical revision and run. Live transient samples also change the session revision; `command_revision` changes only for admitted commands, allowing clients to distinguish edits from clock updates. The full-state guard requires the latest session revision. The optional command guard instead matches `command_revision`, which changes on every admitted mutation but remains stable during solver publication. It therefore detects intervening actors without clock-only conflicts. If both guards are supplied, both must match. Conflict/retry rules remain explicit. A `conflict` response is an explicit refusal; re-inspect before deciding how to proceed. `capabilities.list.mutation_preconditions` advertises the available guard fields and meanings; older versions only advertise the full-state guard. Native controls use the command guard and do not automatically resubmit after an intervening command conflict.
