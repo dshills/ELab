@@ -554,3 +554,7 @@ October 18: [grouped-inspector source repair](../../../docs/validation/inspector
 ### Native /174 potentiometer input
 
 [Preserved evidence](../../../docs/validation/native-slider-input-174/README.md) adds one paused drag/Undo, one running drag/Pause and one held-click containing a guarded agent edit. Five full graph/mixed/transient/scope stages match a fresh packaged agent; independent piecewise RC error is below 24.863 µV. The agent’s accepted 80% survives release without a late user history entry. Call timestamps do not prove exact OS event ordering; window blur and broader input acceptance remain open. The owned host closes normally after a separate save, preserving settings, baseline, review/copy and canonical /120. No application/SDK/package changes or promotion.
+
+### Native /174 component startup input
+
+[One isolated session](../../../docs/validation/native-startup-input-174/README.md) verifies private capacitor/inductor entry with four first-click pointer Restart/Reset cases and one held-call agent edit. Five exact private snapshots and ten packaged-agent graph/transient/scope/mixed stages match, with independent RC/RL equations. The newer 40 mA remains accepted after release; exact OS ordering/refusal layer and broader input acceptance are unobserved. Normal saved cleanup preserves both baselines, settings, review/copy and canonical /120. No repair, new package or promotion.

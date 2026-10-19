@@ -1,0 +1,99 @@
+{
+  "passed": true,
+  "evidence_files": 108,
+  "cases": [
+    "rc-restart",
+    "rc-default",
+    "rl-restart",
+    "rl-default",
+    "rl-agent-held-reset"
+  ],
+  "native_agent_stages": 10,
+  "private_draft_snapshots_unchanged": 5,
+  "archive_source_bytes_preserved": true,
+  "root_package_checks_passed": true,
+  "independent_references": {
+    "before-rc-restart": {
+      "samples": 6,
+      "maximum_absolute_errors": {
+        "voltage_v": 4.440892098500626e-16,
+        "current_a": 5.421010862427522e-20,
+        "energy_j": 1.6940658945086007e-21
+      }
+    },
+    "after-rc-restart": {
+      "samples": 1,
+      "maximum_absolute_errors": {
+        "voltage_v": 0.0,
+        "current_a": 0.0,
+        "energy_j": 0.0
+      }
+    },
+    "before-rc-default": {
+      "samples": 6,
+      "maximum_absolute_errors": {
+        "voltage_v": 4.440892098500626e-16,
+        "current_a": 5.421010862427522e-20,
+        "energy_j": 1.6940658945086007e-21
+      }
+    },
+    "after-rc-default": {
+      "samples": 6,
+      "maximum_absolute_errors": {
+        "voltage_v": 4.440892098500626e-16,
+        "current_a": 5.421010862427522e-20,
+        "energy_j": 1.6940658945086007e-21
+      }
+    },
+    "before-rl-restart": {
+      "samples": 6,
+      "maximum_absolute_errors": {
+        "voltage_v": 9.136247314245338e-11,
+        "current_a": 9.13625078369229e-13,
+        "energy_j": 6.891351638643739e-15
+      }
+    },
+    "after-rl-restart": {
+      "samples": 1,
+      "maximum_absolute_errors": {
+        "voltage_v": 4.440892098500626e-16,
+        "current_a": 3.469446951953614e-18,
+        "energy_j": 0.0
+      }
+    },
+    "before-rl-default": {
+      "samples": 6,
+      "maximum_absolute_errors": {
+        "voltage_v": 9.136247314245338e-11,
+        "current_a": 9.13625078369229e-13,
+        "energy_j": 6.891351638643739e-15
+      }
+    },
+    "after-rl-default": {
+      "samples": 6,
+      "maximum_absolute_errors": {
+        "voltage_v": 9.136247314245338e-11,
+        "current_a": 9.13625078369229e-13,
+        "energy_j": 6.891351638643739e-15
+      }
+    },
+    "before-rl-agent-held-reset": {
+      "samples": 6,
+      "maximum_absolute_errors": {
+        "voltage_v": 9.136247314245338e-11,
+        "current_a": 9.13625078369229e-13,
+        "energy_j": 6.891351638643739e-15
+      }
+    },
+    "after-rl-agent-held-reset": {
+      "samples": 6,
+      "maximum_absolute_errors": {
+        "voltage_v": 9.136247314245338e-11,
+        "current_a": 9.13625078369229e-13,
+        "energy_j": 6.891351638643739e-15
+      }
+    }
+  },
+  "comparison": "Full graph/transient/scope and mixed where present; independent run/electrical IDs excluded; rel 1e-9 abs 1e-12",
+  "scope": "Four native one-click startup cases; one held-click call containing a guarded agent edit. No exact OS input ordering or latency claim."
+}

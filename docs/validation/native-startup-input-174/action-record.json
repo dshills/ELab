@@ -1,0 +1,112 @@
+{
+  "scope": "Post-run reconstruction of CUA calls, not an OS event log. Images/AX/native snapshots are unmodified original observations.",
+  "cases": [
+    {
+      "case": "rc-restart",
+      "field_input": {
+        "point": [
+          842,
+          307
+        ],
+        "coordinate_basis": "rc-ready.jpg",
+        "keys": "super+a",
+        "typed": "3"
+      },
+      "action": {
+        "point": [
+          860,
+          518
+        ],
+        "coordinate_basis": "rc-restart-draft.jpg",
+        "clicks": 1
+      }
+    },
+    {
+      "case": "rc-default",
+      "field_input": {
+        "point": [
+          842,
+          307
+        ],
+        "coordinate_basis": "before-rc-default.jpg",
+        "keys": "super+a",
+        "typed": "4"
+      },
+      "action": {
+        "point": [
+          851,
+          360
+        ],
+        "coordinate_basis": "rc-default-draft.jpg",
+        "clicks": 1
+      }
+    },
+    {
+      "case": "rl-restart",
+      "field_input": {
+        "point": [
+          842,
+          307
+        ],
+        "coordinate_basis": "before-rl-restart.jpg",
+        "keys": "super+a",
+        "typed": "30 mA"
+      },
+      "action": {
+        "point": [
+          865,
+          518
+        ],
+        "coordinate_basis": "rl-restart-draft.jpg",
+        "clicks": 1
+      }
+    },
+    {
+      "case": "rl-default",
+      "field_input": {
+        "target": "Inductor initial current",
+        "index_source": "before-rl-default.ax.txt",
+        "keys": "super+a",
+        "typed": "40 mA"
+      },
+      "action": {
+        "point": [
+          834,
+          360
+        ],
+        "coordinate_basis": "rl-default-draft.jpg",
+        "clicks": 1
+      }
+    },
+    {
+      "case": "rl-agent-held-reset",
+      "field_input": {
+        "target": "Inductor initial current",
+        "index_source": "before-rl-agent-held-reset.ax.txt",
+        "keys": "super+a",
+        "typed": "30 mA"
+      },
+      "action": {
+        "point": [
+          834,
+          360
+        ],
+        "coordinate_basis": "rl-agent-held-reset-draft.jpg",
+        "duration_ms": 2000,
+        "clicks": 1
+      },
+      "agent": "Strict single attempt, exact captured revision, 40 mA; no retry"
+    }
+  ],
+  "setup_notes": [
+    "No ELab app was running before launch. Exact running copied app URL was selected.",
+    "Launcher CFBundleDisplayName is startup-specific; its inherited CFBundleName still says owned slider test. Actual executable/PID/endpoint were checked and refer to this startup session. No wrong process is controlled.",
+    "Copied runtime denies shared geometry access; stderr includes expected geometry-denial messages. All shared geometry hashes/modes match after closure."
+  ],
+  "limits": [
+    "Exact OS mouse-down/up order is unavailable.",
+    "The held call retained 40 mA; no public old Reset request or visible conflict was observed, so no particular rejection layer is claimed.",
+    "Intermediate Reset history entries were not individually undone through physical UI; final history tip and command deltas match the public replay.",
+    "No new latency cohort, blur, IME, reader or owner-acceptance claim."
+  ]
+}

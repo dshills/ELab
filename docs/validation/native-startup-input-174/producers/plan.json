@@ -1,0 +1,46 @@
+{
+  "release": "0.157.0 /174",
+  "native_sha256": "46f78038929c6bce7ed6b55da201d26cda0bb6279c80cea31abc188ca12dec2a",
+  "agent_sha256": "a8636912f15394e647a773d36395fd7f0380d9315f4c16a3e599a51390e6aa54",
+  "scope": "One isolated native session; CUA inputs and public agent commands only. No latency cohort.",
+  "cases": [
+    {
+      "id": "rc-restart",
+      "draft": "3",
+      "action": "Restart",
+      "expected": "Commit 3 V once, restart at t=0 and preserve charge startup 3 V."
+    },
+    {
+      "id": "rc-default",
+      "draft": "4",
+      "action": "Use experiment initial voltage",
+      "expected": "Commit private draft then restore inherited startup; truthful paused-stale readings."
+    },
+    {
+      "id": "rl-restart",
+      "draft": "30 mA",
+      "action": "Restart",
+      "expected": "Commit 30 mA once and restart at t=0 with matching coil current."
+    },
+    {
+      "id": "rl-default",
+      "draft": "40 mA",
+      "action": "Reset startup to zero",
+      "expected": "Commit draft then clear explicit startup."
+    },
+    {
+      "id": "rl-agent-held-reset",
+      "draft": "30 mA",
+      "action": "Hold Reset click 2 s; one agent set 40 mA after 0.5 s signal",
+      "expected": "Accepted agent 40 mA is not overwritten by old Reset. Strict worker records/refuses unavailable ordering without retry."
+    }
+  ],
+  "comparison": "Full graph/result/mixed/transient/scope against fresh packaged agent; independent RC/RL references.",
+  "limits": [
+    "No separate OS mouse-down/up timestamps",
+    "No window blur/IME/reader claim",
+    "No owner settings or files changed",
+    "Normal save then close; never discard unexpected work or force kill"
+  ],
+  "maximum_native_session_seconds": 1500
+}

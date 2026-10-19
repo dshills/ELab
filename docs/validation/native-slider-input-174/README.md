@@ -77,3 +77,10 @@ launching an app or reading owner settings:
 ```sh
 python3 -B docs/validation/native-slider-input-174/verify.py
 ```
+
+Repository hygiene correction: the archived `producers/potentiometer.go` was
+renamed to `potentiometer.go.txt` so it cannot become a standalone package during
+Go's recursive checks. Its bytes and both hashes are unchanged; the manifest's
+storage path is updated. The original manifest and reproduced package-build
+failure are retained in the following native startup-input proof. This changes
+no runtime evidence or production source.
