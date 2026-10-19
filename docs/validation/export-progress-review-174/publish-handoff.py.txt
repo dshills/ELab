@@ -1,0 +1,61 @@
+from pathlib import Path
+import json
+
+root = Path('/Users/dshills/Development/projects/ELab')
+r = json.loads((root / 'research/ui-audit/first-version/export-progress-review-checkpoint.json').read_text())
+assert r['version'] == '0.157.0' and r['build'] == '174'
+native, public = [row['elapsed_seconds'] for row in r['copied_runtime']]
+proof = 'docs/validation/export-progress-review-174/README.md'
+receipt = 'research/ui-audit/first-version/export-progress-review-checkpoint.json'
+path = root / 'README.md'
+old = path.read_text()
+intro = old[:old.index('**Private review ready:')]
+tail = old[old.index('## Build and run from source'):]
+path.write_text(intro + f'''**Private review ready: 0.157.0 /174.** Use the [review app](build/ELab-0.157.0-174-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.157.0-174-review.zip) with its [checksum](build/ELab-0.157.0-174-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening.
+
+Clean `f852c2d` /SDK `b22478c` corrects progress titles, Cancel labels and explanations for captured PDF, PNG and sweep exports. Full source quality passes ({r['quality']['elapsed_s']:.3f} s), copied signed native smoke ({native:.3f} s), all four public adapters ({public:.3f} s) and native/headless reference acceptance ({r['acceptance']['elapsed_s']:.3f} s). Commands/job IDs, cancellation/publication guards, numerical code/models, project format and SDK remain unchanged. No new physical Cancel or timing observation is claimed.
+
+All 285 sealed entries/286 ZIP-extracted files and modes, strict local resource signature and three examples/fresh saves/reopens verify. All 32 earlier sealed reviews, four candidates and canonical /120 remain intact. [Walkthrough](research/35-first-version-review.md), [receipt]({receipt}), [proof]({proof}).
+
+Owner walkthrough remains **Not tried yet**; [default-startup/clean-account qualification is deferred for this private alpha](research/ui-audit/first-version/private-alpha-owner-decisions.json). Complete bindings/accessibility/platform and the actual hobbyist study remain open. [Recorded timing](research/38-visible-responsiveness-results.md) stays scoped to /173; RC and 100 ms acknowledgment remain unqualified. No canonical promotion or broader MVP completion is inferred.
+
+''' + tail)
+path = root / 'research/35-first-version-review.md'
+old = path.read_text()
+tail = old[old.index('## Try these four tasks'):].replace('sweep-handoff-review-checkpoint.json', 'export-progress-review-checkpoint.json')
+path.write_text(f'''# ELab first-version review · 0.157.0 /174
+
+The [review folder](../build/ELab-0.157.0-174-review) includes [ELab.app](../build/ELab-0.157.0-174-review/ELab.app), matching `elab-agent`, three editable examples and framework notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is needed. Owner walkthrough remains **Not tried yet**; all earlier apps and canonical /120 are preserved.
+
+The [ZIP](../build/ELab-0.157.0-174-review.zip) and [checksum](../build/ELab-0.157.0-174-review.zip.sha256) preserve all 286 files/modes through macOS extraction into a Unicode path with spaces. The extracted strict signature and agent's three examples/fresh saves/reopens verify. This does not qualify extracted native startup, installation, Developer ID, notarization or Gatekeeper. [Evidence](../{proof}).
+
+This version corrects progress text for PDF, PNG and sweep exports. Their panel describes captured export work instead of an Open operation. Shared command IDs/parameters, cancellation/publication guards, numerical code/models, format and SDK remain unchanged. This is source/copied-runtime qualification; no new physical Cancel observation is claimed.
+
+Clean `f852c2d` passes full source quality ({r['quality']['elapsed_s']:.3f} s), copied signed native smoke ({native:.3f} s), all four adapters ({public:.3f} s) and existing native/headless reference acceptance ({r['acceptance']['elapsed_s']:.3f} s). Reference circuits, sweep/Verify, startup RC/RL, appearance/discovery, measurements, live capacity and saved projects retain their tested behavior. Shared settings remain unchanged. Earlier source/fixture/runtime failures retain their original scopes. [Receipt](ui-audit/first-version/export-progress-review-checkpoint.json).
+
+The complete original timing record and the separate admitted LED follow-up remain scoped to /173. Their fresh-result bounds do not establish timing for this new build; complete RC and 100 ms acknowledgment remain unqualified. [Current timing results](38-visible-responsiveness-results.md). Owner acceptance, complete accessibility/bindings/environment and actual hobbyist study remain open. No promotion is inferred.
+
+''' + tail)
+path = root / 'research/34-first-version-plan.md'
+s = path.read_text()
+marker = '## Current position\n\n'
+entry = f'''- **Clean export-progress replacement qualified: 0.157.0 /174.** Clean `f852c2d` /SDK `b22478c` packages correct PDF/PNG/sweep export progress text. Full quality passes ({r['quality']['elapsed_s']:.3f} s), copied native smoke ({native:.3f} s), four adapters ({public:.3f} s), native/headless reference acceptance ({r['acceptance']['elapsed_s']:.3f} s), strict signature and all 285 sealed/286 extracted files/modes with three example reopens. All 32 prior sealed reviews, four candidates and canonical /120 verify unchanged. [Receipt](ui-audit/first-version/export-progress-review-checkpoint.json), [proof](../{proof}). This supersedes the source proof's pending-packaging status. Commands/jobs/models/format/SDK are unchanged; no new physical input, timing or owner acceptance follows. Owner Not tried yet; no promotion.\n\n'''
+assert s.count(marker) == 1
+s = s.replace(marker, marker + entry, 1)
+s = s.replace('Package and qualify one clean replacement review, preserving /173 and canonical /120.', 'Clean /174 packages and qualifies the export-progress correction. Continue bounded release-quality/code review while owner walkthrough and broader qualification remain open; preserve /173 and canonical /120.', 1)
+lines = s.splitlines()
+for i, line in enumerate(lines):
+    if line.startswith('| 3 | Package the verified repairs |'):
+        lines[i] = '| 3 | Package the verified repairs | Build one clean replacement app/agent from the repair commit. Exact copied runtime passes native smoke, public adapters, reference parity and the previously failing interaction. Record version/hashes and retain rollback. | Completed in /174 for the progress wording correction, retaining /173 sweep/matrix behavior. Exact copied native/four-adapter/reference/signature/archive/example checks pass. Earlier failures and source/private-input scopes remain separate. |'
+    if line.startswith('| 4 | Hand over the replacement |'):
+        lines[i] = line.replace('0.156.0 /173', '0.157.0 /174').replace('ELab-0.156.0-173-review', 'ELab-0.157.0-174-review')
+    if line.startswith('| Quality/correctness |'):
+        lines[i] = f'| Quality/correctness | Clean `f852c2d` /SDK `b22478c` source quality ({r["quality"]["elapsed_s"]:.3f} s), copied signed smoke ({native:.3f} s), four adapters ({public:.3f} s), reference/startup/appearance/sweep/measurement/live/save acceptance ({r["acceptance"]["elapsed_s"]:.3f} s), strict signature and archive/example reopens qualify /174. [Receipt](ui-audit/first-version/export-progress-review-checkpoint.json). Initial source-ledger refusal and earlier failures remain recorded. No performance, full-binding or owner acceptance is inferred. |'
+path.write_text('\n'.join(lines) + '\n')
+for name, relative in [('research/ui-audit/first-version/README.md', '../../../'), ('research/ui-audit/README.md', '../../')]:
+    path = root / name
+    s = path.read_text()
+    at = s.index('\n') + 1
+    paragraph = f'\nOctober 19 replacement: **[0.157.0 /174]({relative + proof})** qualifies captured-export progress wording through full quality, copied native/four-adapter/reference acceptance, strict resource signature and all 286 extracted files/modes with example reopens. All 32 earlier sealed reviews, four candidates and canonical remain preserved. Commands/jobs/models/format/SDK are unchanged. Source/private/physical scopes stay distinct; timing remains scoped to /173. Owner Not tried yet; no promotion or broader acceptance.\n'
+    path.write_text(s[:at] + paragraph + s[at:])
+print(dict(review='0.157.0 /174', owner_acceptance=False, canonical_promoted=False))

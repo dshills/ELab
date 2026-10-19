@@ -1,0 +1,12 @@
+import hashlib,json,subprocess,sys,time
+from pathlib import Path
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent
+sys.path.insert(0,str(root/'scripts'));from runtime_isolation import pinned_child_runner
+sdk,run_child=pinned_child_runner();shared=Path.home()/'Library/Cogent Core'
+def geometry():return {p.relative_to(shared).as_posix():dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),mode=oct(p.stat().st_mode&0o777)) for p in shared.rglob('*') if p.is_file()}
+before=geometry();runtime=json.loads(Path('/private/tmp/elab-first-version-174-signed-runtime/runtime-report.json').read_text());assert runtime['passed'] and before==runtime['shared_geometry_after']
+start=time.monotonic()
+with (stage/'acceptance-signed-output.txt').open('x') as log:completed=run_child([sys.executable,'-B',str(stage/'acceptance-signed.py')],cwd=root,stdout=log,stderr=subprocess.STDOUT,timeout=300,check=True)
+after=geometry();assert after==before
+report=json.loads(Path('/private/tmp/elab-first-version-174-signed-acceptance-qualified/report.json').read_text());assert report['sweep_capture_commands']['passed'] and report['passed'] and report['discovery_commands']['passed'] and report['component_startup_commands']['passed'] and report['coil_startup_reset_commands']['passed'] and report['verification_handoff_commands']['passed'] and report['preset_value_commands']['passed'] and report['native_host_closed_normally']
+report['shared_geometry_unchanged']=True;report['elapsed_s']=time.monotonic()-start;Path('/private/tmp/elab-first-version-174-signed-acceptance-qualified/report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps({'passed':True,'elapsed_s':report['elapsed_s'],'preset_command_values':4,'shared_geometry_unchanged':True}))
