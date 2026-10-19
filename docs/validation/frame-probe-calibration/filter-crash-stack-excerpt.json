@@ -1,0 +1,28 @@
+{
+  "scope": "Selected stack symbols and termination from the recorder crash only; unrelated crash-report metadata omitted",
+  "source_sha256": "e268d543634424310359d609d3d1ecf5af0d3fb8628cd2ffb189aaaa499ae75b",
+  "pid": 22697,
+  "termination": {
+    "code": 6,
+    "namespace": "SIGNAL",
+    "indicator": "Abort trap: 6"
+  },
+  "frames": [
+    "__pthread_kill",
+    "pthread_kill",
+    "abort",
+    "__assert_rtn",
+    "SLSGetDisplaysWithRect",
+    "SLGetDisplaysWithRect",
+    "-[SCContentFilter setContentsAndStreamType]",
+    "-[SCContentFilter initWithDesktopIndependentWindow:]",
+    "@nonobjc SCContentFilter.init(desktopIndependentWindow:)",
+    "SCContentFilter.__allocating_init(desktopIndependentWindow:)",
+    "static Main.main()",
+    "static Main.$main()",
+    "async_MainTQ0_",
+    "thunk for @escaping @convention(thin) @async () -> ()",
+    "partial apply for thunk for @escaping @convention(thin) @async () -> ()",
+    "completeTaskWithClosure(swift::AsyncContext*, swift::SwiftError*)"
+  ]
+}

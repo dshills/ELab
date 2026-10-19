@@ -1,0 +1,104 @@
+import datetime, hashlib, json, os, subprocess, sys, tempfile, time
+from pathlib import Path
+root=Path('/Users/dshills/Development/projects/ELab')
+sys.path.insert(0,str(root/'scripts'))
+from wiring_replay import validate_release
+receipt=root/'research/ui-audit/first-version/recorded-timing-feedback-review-checkpoint.json'
+identity=validate_release(root,receipt)
+qualified=json.loads(receipt.read_text());binary=Path(qualified['review_path'])/'ELab.app/Contents/MacOS/ELab'
+probe=root/'build/frame-probe-tools/frame-probe'
+out=Path(tempfile.mkdtemp(prefix='elab-frame-calibration-',dir='/private/tmp'));os.chmod(out,0o700)
+endpoint=out/'endpoint.json';capture=out/'capture'
+r=dict(status='running',method_authorization='Direct owner reply: Authorize the recorder method',started_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),stage=str(out),release=identity,native_sha256=qualified['native_sha256'],probe_sha256=hashlib.sha256(probe.read_bytes()).hexdigest(),capture_executed=False,eligible_latency_observations=0,latency_gate_passed=None,forced_cleanup=False)
+process=None;recording=None
+
+def save():
+ (out/'report.json').write_text(json.dumps(r,indent=2)+'\n')
+
+def run(args,name):
+ p=subprocess.run(args,capture_output=True,text=True,timeout=15)
+ (out/(name+'-stdout.txt')).write_text(p.stdout);(out/(name+'-stderr.txt')).write_text(p.stderr)
+ r[name+'_exit_code']=p.returncode;p.check_returncode();return json.loads(p.stdout)
+
+try:
+ r['preflight']=run([str(probe),'--preflight'],'preflight')
+ assert r['preflight']==dict(screen_access_previously_granted=True,permission_requested=False,capture_executed=False)
+ argv=[str(binary),'--smoke','--smoke-timeout','2m','--agent-endpoint',str(endpoint)]
+ r['native_argv']=argv
+ with (out/'native-stdout.txt').open('x') as stdout, (out/'native-stderr.txt').open('x') as stderr:
+  process=subprocess.Popen(argv,stdout=stdout,stderr=stderr)
+  r['owned_pid']=process.pid;save();print(json.dumps(dict(stage=str(out),owned_pid=process.pid)),flush=True)
+  deadline=time.monotonic()+15
+  while not endpoint.exists():
+   assert process.poll() is None,'Native exited before endpoint readiness'
+   assert time.monotonic()<deadline,'Native endpoint readiness timed out'
+   time.sleep(.02)
+  r['observed_command']=subprocess.check_output(['/bin/ps','-p',str(process.pid),'-o','command='],text=True).strip()
+  assert str(endpoint) in r['observed_command'] and '--smoke' in r['observed_command']
+  deadline=time.monotonic()+15;r['target_queries']=[]
+  while True:
+   target=run([str(probe),'--target-windows','--pid',str(process.pid),'--executable',str(binary),'--sha256',qualified['native_sha256']],f'target-{len(r["target_queries"]):02}')
+   r['target_queries'].append(target);save()
+   assert len(target['target_windows'])<=1,'Refuse to select an ambiguous target'
+   if target['target_windows']:break
+   assert process.poll() is None and time.monotonic()<deadline,'Owned window did not become ready'
+   time.sleep(.2)
+  window=target['target_windows'][0];assert window['owner_pid']==process.pid
+  r['target']=target
+  args=[str(probe),'--capture','--pid',str(process.pid),'--window',str(window['window_id']),'--executable',str(binary),'--sha256',qualified['native_sha256'],'--output',str(capture),'--seconds','2']
+  r['recorder_argv']=args;save()
+  with (out/'recorder-stdout.txt').open('x') as stdout, (out/'recorder-stderr.txt').open('x') as stderr:
+   recording=subprocess.Popen(args,stdout=stdout,stderr=stderr)
+   deadline=time.monotonic()+5
+   while not (capture/'frames.jsonl').exists():
+    assert recording.poll() is None,'Recorder exited before journal readiness'
+    assert time.monotonic()<deadline,'Recorder journal readiness timed out'
+    time.sleep(.005)
+   marker=capture/'marker.request.new';marker.write_bytes(b'calibration_01');os.chmod(marker,0o600);os.replace(marker,capture/'marker.request')
+   ack=capture/'marker-calibration_01.json'
+   while not ack.exists():
+    assert recording.poll() is None,'Recorder exited before marker acknowledgment'
+    assert time.monotonic()<deadline,'Marker acknowledgment timed out'
+    time.sleep(.005)
+   # Exclusive file creation is not atomic publication; parse until complete.
+   while True:
+    try: acknowledged=json.loads(ack.read_text());break
+    except json.JSONDecodeError:
+     assert time.monotonic()<deadline,'Acknowledgment remained incomplete';time.sleep(.005)
+   assert acknowledged['id']=='calibration_01' and int(acknowledged['mach_ticks'])>0
+   r['marker_ack']=acknowledged;r['input_operated']=False
+   recording.wait(timeout=15);r['recorder_exit_code']=recording.returncode
+  r['capture_report']=json.loads((capture/'report.json').read_text());r['capture_executed']=True
+  assert recording.returncode==0,r['capture_report']
+  rows=[json.loads(line) for line in (capture/'frames.jsonl').read_text().splitlines()]
+  frames=[row for row in rows if row['event']=='frame'];images=[row for row in frames if 'png' in row]
+  assert images and all(not row['eligible_for_latency'] for row in frames)
+  assert r['capture_report']['marker_count']==1 and r['capture_report']['collector_error'] is None
+  assert (capture.stat().st_mode&0o777)==0o700
+  for path in capture.iterdir():assert (path.stat().st_mode&0o777)==0o600,path.name
+  for row in images:assert hashlib.sha256((capture/row['png']).read_bytes()).hexdigest()==row['png_sha256']
+  r['frames_received']=len(frames);r['images_received']=len(images)
+  r['timestamped_frames_after_marker']=sum('since_acknowledged_marker_ms' in row for row in frames)
+  r['window_contents_captured']=True;r['display_visibility_validated']=False
+  process.wait(timeout=145);r['native_exit_code']=process.returncode
+  assert process.returncode==0
+  events=[json.loads(line) for line in (out/'native-stdout.txt').read_text().splitlines() if line.startswith('{"event":"elab.native.smoke"')]
+  assert events==[dict(event='elab.native.smoke',passed=True)]
+  r['endpoint_removed']=not endpoint.exists();assert r['endpoint_removed']
+  r['owned_process_absent']=subprocess.run(['/bin/ps','-p',str(process.pid)],capture_output=True).returncode!=0
+  assert r['owned_process_absent']
+  assert validate_release(root,receipt)==identity
+  r['sealed_review_unchanged']=True;r['status']='window_capture_calibration_only'
+except BaseException as error:
+ r['status']='failed';r['error']=type(error).__name__+': '+str(error)
+ raise
+finally:
+ for child in [recording,process]:
+  if child is not None and child.poll() is None:
+   child.terminate();child.wait(timeout=10);r['forced_cleanup']=True
+ if process is not None:
+  r['final_native_exit_code']=process.returncode
+  r['owned_process_absent_after_cleanup']=subprocess.run(['/bin/ps','-p',str(process.pid)],capture_output=True).returncode!=0
+ if recording is not None:r['final_recorder_exit_code']=recording.returncode
+ r['ended_utc']=datetime.datetime.now(datetime.timezone.utc).isoformat();save()
+print(json.dumps({key:r[key] for key in ['status','stage','capture_executed','eligible_latency_observations','latency_gate_passed','forced_cleanup']}),flush=True)

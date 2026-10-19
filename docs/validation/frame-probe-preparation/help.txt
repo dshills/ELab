@@ -1,0 +1,3 @@
+frame-probe --self-test | --preflight | --capture --pid PID --window ID --executable /path/ELab --sha256 HASH --output /new/path [--seconds 0.1...5]
+frame-probe --target-windows --pid PID --executable /path/ELab --sha256 HASH (owned-window IDs only)
+Capture requires prior human authorization; this tool never requests OS permission or operates input. No latency decision is made.

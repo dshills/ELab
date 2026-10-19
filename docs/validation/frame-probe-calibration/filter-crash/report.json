@@ -1,0 +1,90 @@
+{
+  "status": "failed",
+  "method_authorization": "Direct owner reply: Authorize the recorder method",
+  "started_utc": "2026-10-19T09:20:52.823542+00:00",
+  "stage": "/private/tmp/elab-frame-calibration-0zgykc0v",
+  "release": {
+    "source_commit": "0e75875abe07d0c172902754aa8acec6062df7dc",
+    "release": "0.148.0 /165",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.148.0-165-review/elab-agent",
+    "agent_sha256": "3b6daa16b7b583077813f198a072bef6f2a1a62a61d8ce8bdd86f6bb2e6ef13c",
+    "receipt_sha256": "b7f4c75cff764dea3ef43adc0986b4607d07693fd973fdda00620f7da7518648",
+    "ledger_sha256": "c9ea340ca93b9c1ecbf98402f48bd5ffe5ad305e5562ac3f0211fbdf34a9200a",
+    "production_source_files_verified": 69,
+    "runtime_inputs_verified": 345,
+    "manifest_file_entries_verified": 788,
+    "manifest_sha256": "460216af4d18b58410ee833ad31b59f088ca7f44efdac0ff635f19874e395413"
+  },
+  "native_sha256": "f75a72427b4556b163437132a46f0694b5845f6753db5aa9bf61f0d18e6a27de",
+  "probe_sha256": "fd9e564f0443ce7fede0085dd9e794fb32964d34d4d697c77a81eea2ad2e9215",
+  "capture_executed": false,
+  "eligible_latency_observations": 0,
+  "latency_gate_passed": null,
+  "forced_cleanup": true,
+  "preflight_exit_code": 0,
+  "preflight": {
+    "screen_access_previously_granted": true,
+    "permission_requested": false,
+    "capture_executed": false
+  },
+  "native_argv": [
+    "/Users/dshills/Development/projects/ELab/build/ELab-0.148.0-165-review/ELab.app/Contents/MacOS/ELab",
+    "--smoke",
+    "--smoke-timeout",
+    "2m",
+    "--agent-endpoint",
+    "/private/tmp/elab-frame-calibration-0zgykc0v/endpoint.json"
+  ],
+  "owned_pid": 22687,
+  "observed_command": "/Users/dshills/Development/projects/ELab/build/ELab-0.148.0-165-review/ELab.app/Contents/MacOS/ELab --smoke --smoke-timeout 2m --agent-endpoint /private/tmp/elab-frame-calibration-0zgykc0v/endpoint.json",
+  "target_queries": [
+    {
+      "capture_executed": false,
+      "permission_requested": false,
+      "target_windows": []
+    },
+    {
+      "capture_executed": false,
+      "permission_requested": false,
+      "target_windows": [
+        {
+          "owner_pid": 22687,
+          "window_id": 151872
+        }
+      ]
+    }
+  ],
+  "target-00_exit_code": 0,
+  "target-01_exit_code": 0,
+  "target": {
+    "capture_executed": false,
+    "permission_requested": false,
+    "target_windows": [
+      {
+        "owner_pid": 22687,
+        "window_id": 151872
+      }
+    ]
+  },
+  "recorder_argv": [
+    "/Users/dshills/Development/projects/ELab/build/frame-probe-tools/frame-probe",
+    "--capture",
+    "--pid",
+    "22687",
+    "--window",
+    "151872",
+    "--executable",
+    "/Users/dshills/Development/projects/ELab/build/ELab-0.148.0-165-review/ELab.app/Contents/MacOS/ELab",
+    "--sha256",
+    "f75a72427b4556b163437132a46f0694b5845f6753db5aa9bf61f0d18e6a27de",
+    "--output",
+    "/private/tmp/elab-frame-calibration-0zgykc0v/capture",
+    "--seconds",
+    "2"
+  ],
+  "error": "AssertionError: Recorder exited before journal readiness",
+  "final_native_exit_code": -15,
+  "owned_process_absent_after_cleanup": true,
+  "final_recorder_exit_code": -6,
+  "ended_utc": "2026-10-19T09:20:53.482121+00:00"
+}

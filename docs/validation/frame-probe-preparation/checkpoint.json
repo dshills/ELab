@@ -1,0 +1,60 @@
+{
+  "status": "offline_checks_passed",
+  "scope": "Compilation and pure checks only; separate authorized runtime calibration is recorded in frame-probe-calibration",
+  "capture_executed": false,
+  "screen_permission_requested": false,
+  "alternate_capture_authorization_received": true,
+  "eligible_latency_observations": 0,
+  "latency_gate_passed": null,
+  "source_sha256": {
+    "tools/frame-probe/main.swift": "cc5ca54e5f1bb5a4c23c5d92ba396679dd6883b0869c6228d5d82d2775e57910",
+    "tools/frame-probe/check.sh": "d98fb2b95e55d269ec26be26dd2d7686cfcfca4710c29a5c2eb7ebe8c6b7f164",
+    "tools/frame-probe/README.md": "61282cd04df8295999e0f84a727cee602b97fd20712d7ae4a47725cb158dd8da"
+  },
+  "pure_check": {
+    "exit_code": 0,
+    "duration_s": 0.8988636250142008,
+    "swift_mode": 6,
+    "warnings_as_errors": true
+  },
+  "sdk_header": {
+    "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/ScreenCaptureKit.framework/Headers/SCStream.h",
+    "sha256": "11633abf2df86bd6c92345a9c4804a0746e18d4db39994ae29243671f332825b",
+    "display_time_declaration": "SCStreamFrameInfoDisplayTime",
+    "source_semantics": "Mach absolute time of Window Server frame-display event",
+    "capture_runtime_semantics_validated": false
+  },
+  "compiled_binary_sha256": "6a861e71daad86de6d84ef5bba1d4933c659c51703c4a238a7d89d45681c5599",
+  "elab_review": {
+    "receipt_sha256": "b7f4c75cff764dea3ef43adc0986b4607d07693fd973fdda00620f7da7518648",
+    "source_commit": "0e75875abe07d0c172902754aa8acec6062df7dc",
+    "version": "0.148.0",
+    "build": "165",
+    "native_sha256": "f75a72427b4556b163437132a46f0694b5845f6753db5aa9bf61f0d18e6a27de",
+    "canonical_promoted": false
+  },
+  "cua_api_preflight": {
+    "source": "cua.rewriteDocumentation inspected in this goal turn",
+    "native_snapshot_type": "{state: string, screenshot?: Uint8Array}",
+    "native_click_type": "Promise<void>",
+    "native_input_or_frame_timestamps_exposed": false,
+    "alternate_technology_requires_explicit_user_request": true,
+    "apps_or_windows_observed_for_this_preflight": false
+  },
+  "initial_pure_location_failure": {
+    "output": "initial-location-check.txt",
+    "exit_code": null,
+    "note": "An initial Foundation path-prefix check failed because an existing /private/tmp was abbreviated to /tmp while a missing child retained /private/tmp. The wrapper also printed the file, so its final status did not establish the check exit code. Final check above runs directly and succeeds after POSIX ancestor resolution; no capture was involved."
+  },
+  "compiler_output_artifact": "compiler-version.txt.gz",
+  "compiler_output_storage": "Lossless gzip of original compiler-version.txt; producer source retains its original output name.",
+  "evidence_sha256": {
+    "README.md": "599d95f9c3eaa60ca40a5aa5d35903f33e0eb29a55e25b9d56bd511275adf274",
+    "check-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "check-stdout.txt": "6fc95ec2bc5af19287e27f38c439db92ec6f9cdd86ad87fe3569f32516a9e49e",
+    "compiler-version.txt.gz": "2026e7a3c7a1ebd43f2716c85ca327d430590d02b5990f749acace0b1df07c50",
+    "help.txt": "3245a25bd69275e00a2500e9f09e57d3b55d5b15737956536589ee3e6b26f124",
+    "initial-location-check.txt": "ede4a5aca152b6e3dd24f1be9df4708457d8c3df35f599513e45a1c704ca6ead",
+    "record-preparation.py.txt": "017c0a7adc37d954973a56afa4058f5ecb81fb6db0903945b0337fe53155a73a"
+  }
+}
