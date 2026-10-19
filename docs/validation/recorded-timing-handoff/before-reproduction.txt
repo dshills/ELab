@@ -1,0 +1,8 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedRecordingTimingTypedThresholdThenNextMatchesAgent
+    recorded_timing_offscreen_test.go:65: one Next click failed after private threshold: level=3 V offset=0 revision=6→7 error=expected command revision 6; current command revision is 7
+--- FAIL: TestMountedRecordingTimingTypedThresholdThenNextMatchesAgent (0.32s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	0.919s
+FAIL

@@ -1,0 +1,4368 @@
+{
+  "format": "elab.native-command-inventory",
+  "version": 1,
+  "source_sha256": {
+    "desktop/actuation_controls.go": "9b0e8148f7ca32ac2f1802d69411fcd355c2df5b2af4b89df1084d413166ee1e",
+    "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
+    "desktop/canvas.go": "164b644c58fd16b6c370cbad30fb063cb30d6b4bb47a2d982dbe664618802b5f",
+    "desktop/component_inspector.go": "3a565a9c5c40dc50399b43e5dec3eb49543e04e8bfee070f5ab377a042fcf19f",
+    "desktop/component_palette.go": "5d7b83aba4bd8202b899f0168848226f8217a8dd3dbd73d2ff6c8d99b752d3ab",
+    "desktop/cursor_actions.go": "760fc37cc3fcd864732b2db13169a6019c0b20e755c6d511940655b2a55340c3",
+    "desktop/dc_sweep.go": "6714f9c257faaf1e230e51dbc2c8b31a0d83ad9613eaa47d2de9bf8db495600f",
+    "desktop/dc_sweep_canvas.go": "6404c77863729aedfd18a886e88d57889c51c374197189de91665d7142ad1022",
+    "desktop/diagnostic_help.go": "822fcdf9c5904570b42bf1b98322de00ed9fdbd17299584cefedcfeb8098f171",
+    "desktop/display_preferences.go": "f54283db2acec7240b861f415ce0855fbb7dc3349785883f2095002833bb9e13",
+    "desktop/drawing.go": "6b3af72a3b900487e91c57d182c1634e6a8b648dde2dbd96f9b51e143308ccb6",
+    "desktop/example_load.go": "21c8f683f88d56762de0b43849fe97338cbf4451f0cf147c21035f84b8602bbe",
+    "desktop/examples.go": "e072cde40cfd291300dbb08f127ea8bff5d520b3b70604d1d9622b9755c12ad8",
+    "desktop/field_context.go": "996a42a6402abae65837cf2b5a63160d62777d0c71af7c545bf2c316df2c0a9a",
+    "desktop/file_decision.go": "0eefa5e911d9914966b47ca3fa439ec64c73f5da2868657a79d5ed899de62a67",
+    "desktop/file_focus_darwin.go": "fd24d88b522308de015cb02496434e62343e221916167f4c84773cd22b5967a5",
+    "desktop/file_focus_other.go": "c027b71d35fbd52d344ed31b46bba5f5b828d1ae622ef7ca20b89f4f4423a343",
+    "desktop/files.go": "4178087b68c2e204598c18243ec26b067c1ad770f8293013cafe2f4862ec2058",
+    "desktop/inductor_controls.go": "e39fa6858b17c015b9d7003297257a69e402a038a2cbe7d720e142234ba97d77",
+    "desktop/input_work.go": "63b1644f065e82f1deaedc018bcfa5b855af2b885ac96dc3d68b2d4971f701bc",
+    "desktop/keyboard_workflow.go": "f1ef3cfeae1ead43841a5a8b0ac9b8d8348b6723568c9c2c48568a5b95bc8378",
+    "desktop/layout.go": "95c8d3aea1b220556a1a0b0cb90cb148c60494358f13fc6e94cded0a06498ddb",
+    "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
+    "desktop/main.go": "19600cd596d9e0060207897a3b878f338c7738afb7df370e54a3a45937ee8114",
+    "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
+    "desktop/menus.go": "d78bfdb0b8ad01e290c7a3a8179dafc72b3e2a6f8b65d3994ca69f334aff700c",
+    "desktop/menus_darwin.go": "3f7cd30cc99b38b4385e56303bbc790cce6e03add876634ff44cb267815522ea",
+    "desktop/menus_other.go": "933f36929566cc8e40c0e2afa85e3c99e4c40c1516c607cb8eec0dd59ef50c2e",
+    "desktop/native_chrome.go": "b85e2b7d3b6758052162cfdb47319351c6a33b18484760bf80692a530ccecd99",
+    "desktop/npn.go": "f355ebca5a937207f73da01d8358831d4f1f8da1e7e95e538ca4eda742f8cbaf",
+    "desktop/output_page_actions.go": "92b5592e3bb9ead8363e4c6f6c6b4ae9ac892926e253eb415a97a98bbdf8a923",
+    "desktop/pinned_readings.go": "40fc42f6d46c79f97a303b6a8fa660c6a47702c5bf36cf835a1d21e62009a251",
+    "desktop/placement_actions.go": "312deb732a7f065a31cf45d094daf201d637dc92398eaf3660e2fc558786f63e",
+    "desktop/pointer_darwin.go": "2562c9fb0d6e47268f534a92662b89602721670dbf29532cb116c40fd3aaa9c1",
+    "desktop/pointer_other.go": "7c451ae4f8235e78e3e2803086c738488ee5463e878b003a203b9929497461c1",
+    "desktop/print_page.go": "9eda4922d28184f3aeaf4c7a32a14b0e4dadedb4e8ef489f21565b6e670879fe",
+    "desktop/print_preview.go": "56b3ac5c0c25bbfd5603921a3600dff6a23671defbcd94d9b99c61794f18f158",
+    "desktop/printing.go": "9c40645db6de5affc3ae9d654f72c7003671f5d8c23c8bd7de93ffa35bea8c59",
+    "desktop/probes.go": "4ee6051c65010292375e62c39a85e4cf7631c045b75146257564e2158ea806c3",
+    "desktop/project_work.go": "f4109a9a2e8bfa2098a9bf7a35327f4dcd557e696f9ac9178c19788de0694c20",
+    "desktop/recording.go": "830e7402a48c5148463df94857717d98b59ac4249f088ccd32bffd7c1cb1bcf0",
+    "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
+    "desktop/recording_statistics.go": "161cc2eb9e62f089a91eb1967b9d6ed8a9a30dd914af3b7705ad3584bee2caec",
+    "desktop/recording_timing.go": "f2eb9e3fd241a81ee0aef093d74309da4527dea39ba955a66642f4b6a2bdf6e2",
+    "desktop/recovery.go": "861a98a5411f432028f371925192b9ffb68198de6dd92246d8846d37fd9902fa",
+    "desktop/recovery_read.go": "3f536a3af7ea2480b69a8142f600b24c194ce2f06148b46cc29634a7431a5ede",
+    "desktop/routing.go": "4898c4c1de9d7de3c5f8ad751b15d7c0f199234243f62ec6ea949ee8d9ad2c1c",
+    "desktop/sampling.go": "9caef58d4d66e4b9d90806e682cd5985567dd923262bf41daed39b2d3572faf4",
+    "desktop/schematic_keyboard.go": "5d33c95abaed2f59b52101e925dc08dfebffa2947b6c947be59e0be3b1afc97d",
+    "desktop/schematic_pointer_context.go": "e53dd3ab8685f160cd85eb366f9296ed2330094906704ded9f2dc2f645893356",
+    "desktop/scope.go": "fdbd3cc1920f0a1444b823b99d124aaa5fbc9e4f4e831ead99ef0a6ee194faf3",
+    "desktop/scope_context.go": "6a67324480a62c368711ea81d438b1b2bf93ea011d5d8a458325b3163482c46f",
+    "desktop/scope_overlay.go": "90c6ebc19d47b237257d1358c77f6ccd9ba7ac7910cff5d54504ad74c0ea1f38",
+    "desktop/scope_visibility.go": "9594a6afdb06c2d612c4a507ac90b9443651d38c4c88005e2af65ff2d3d6c686",
+    "desktop/shutdown.go": "39e6d600f9edf67e2fe6a09e6b2b5ada051e67c1cf3fac2e3efe3ec4fe631a26",
+    "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
+    "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
+    "desktop/value_apply.go": "54dd7abe7e5d81c755a760524e5429e26472f5217fbb836c1bccdd12235fbf75",
+    "desktop/verification.go": "550f32b3d90b99269bce6777233b68e9329b2ae704b5b2fca60a1a368fbab406",
+    "desktop/view.go": "aa6b8e57994864273f319965add9e618fd83eeb80a040cdc327674a749d18db7",
+    "desktop/viewport.go": "8452950aa3113be66c59ed10b8f26ef21e0a5be3d1b4aee5ec57fb8dbd966590",
+    "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
+    "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
+    "desktop/window_minimum.go": "f6c1590898646b8b570abac29c857162bf13b50d14f39809c8f7f92bee9d180e",
+    "desktop/window_minimum_darwin.go": "b7c9fe1d3bb1b7350f70dc4b1ba29708b8975ef0b507ba0595d730c4ddb607e8",
+    "desktop/window_minimum_other.go": "1acf27d143422fd66ad4e691aa191afd844510f24004de9aec1f3c8030ca0225",
+    "desktop/workflow.go": "af9bd26d9efe8f258f5d13cd11b680b638c475c139198ed4a0362cad96ad2bae",
+    "desktop/workspace.go": "b35de04775d1a1f058a3fb043ff19e85b1c62973ce5f2c3a5db9f39022f9fa32"
+  },
+  "public_commands": [
+    "app.close",
+    "app.close.acknowledge",
+    "app.close.inspect",
+    "app.close.start",
+    "appearance.configure",
+    "appearance.theme.set",
+    "appearance.wait",
+    "capabilities.list",
+    "capacitor.initial.set",
+    "circuit.connection.set",
+    "component.duplicate",
+    "component.move",
+    "component.place",
+    "component.rotate",
+    "component.select",
+    "component.set",
+    "diagnostics.details.set",
+    "display.inspect",
+    "display.preferences.set",
+    "drawing.cancel",
+    "drawing.position.set",
+    "drawing.tool.set",
+    "edit.batch",
+    "edit.redo",
+    "edit.undo",
+    "editor.value.set",
+    "events.poll",
+    "example.current.reset",
+    "example.flasher",
+    "example.load",
+    "example.npn",
+    "example.npn-pulse",
+    "example.rc",
+    "example.rectifier",
+    "example.reset",
+    "example.switch-npn",
+    "examples.list",
+    "export.page.set",
+    "export.schematic.pdf",
+    "export.schematic.png",
+    "export.schematic.svg",
+    "export.scope.csv",
+    "export.start",
+    "inductor.initial.set",
+    "measurement.inspect",
+    "measurement.pin.add",
+    "measurement.pin.move",
+    "measurement.pin.remove",
+    "measurement.select",
+    "object.delete",
+    "operation.cancel",
+    "operation.inspect",
+    "operation.samples",
+    "operation.select",
+    "parts.list",
+    "parts.search.set",
+    "potentiometer.wiper.set",
+    "print.destination.set",
+    "print.job.cancel",
+    "print.job.refresh",
+    "print.preview.cancel",
+    "print.preview.close",
+    "print.preview.image",
+    "print.preview.page.set",
+    "print.preview.start",
+    "print.printers.refresh",
+    "print.submit",
+    "print.work.cancel",
+    "project.clear",
+    "project.inspect",
+    "project.load",
+    "project.load.start",
+    "project.save",
+    "project.save.start",
+    "project.work.cancel",
+    "project.work.inspect",
+    "recording.compare",
+    "recording.compare.set",
+    "recording.cursor.clear",
+    "recording.cursor.select",
+    "recording.cursor.set",
+    "recording.keep.set",
+    "recording.pause",
+    "recording.play",
+    "recording.probes.set",
+    "recording.seek",
+    "recording.speed.set",
+    "recording.statistics",
+    "recording.statistics.set",
+    "recording.step",
+    "recording.timing",
+    "recording.timing.set",
+    "recording.view.set",
+    "recording.window.set",
+    "recovery.checkpoint",
+    "recovery.configure",
+    "recovery.configure.start",
+    "recovery.dismiss",
+    "recovery.dismiss.start",
+    "recovery.inspect",
+    "recovery.read.cancel",
+    "recovery.read.chunk",
+    "recovery.read.inspect",
+    "recovery.read.result",
+    "recovery.read.start",
+    "recovery.restore",
+    "recovery.restore.start",
+    "recovery.samples",
+    "recovery.scan",
+    "recovery.select",
+    "recovery.work.start",
+    "scope.cursor.clear",
+    "scope.cursor.select",
+    "scope.cursor.set",
+    "scope.probe.remove",
+    "scope.probes.set",
+    "scope.trace.select",
+    "scope.visibility.set",
+    "scope.window.set",
+    "selection.navigate",
+    "simulation.input.set",
+    "simulation.pause",
+    "simulation.pulse.timing.set",
+    "simulation.restart",
+    "simulation.resume",
+    "simulation.sampling.fit",
+    "simulation.step",
+    "simulation.step.start",
+    "simulation.transient.set",
+    "simulation.verify",
+    "simulation.wait",
+    "simulation.work.cancel",
+    "source.pulse.set",
+    "source.pulse.timing.set",
+    "source.sine.set",
+    "sweep.cancel",
+    "sweep.cursor.set",
+    "sweep.export",
+    "sweep.import",
+    "sweep.import.start",
+    "sweep.inspect",
+    "sweep.keep.set",
+    "sweep.select",
+    "sweep.settings.set",
+    "sweep.start",
+    "sweep.trace.select",
+    "sweep.visibility.set",
+    "switch.set",
+    "verification.export",
+    "verification.import",
+    "verification.import.start",
+    "verification.settings.set",
+    "view.fit",
+    "view.pan",
+    "view.selection.center",
+    "view.viewport.set",
+    "view.zoom",
+    "wire.begin",
+    "wire.connect",
+    "wire.junction.insert",
+    "wire.terminals.set",
+    "workspace.layout.set"
+  ],
+  "native_alias_targets": {
+    "appearance.dark": [
+      "appearance.theme.set"
+    ],
+    "appearance.light": [
+      "appearance.theme.set"
+    ],
+    "appearance.system": [
+      "appearance.theme.set"
+    ],
+    "example.cmos": [
+      "example.load"
+    ],
+    "example.flyback": [
+      "example.load"
+    ],
+    "example.led-fade": [
+      "example.load"
+    ],
+    "example.nmos": [
+      "example.load"
+    ],
+    "example.opamp-follower": [
+      "example.load"
+    ],
+    "example.opamp-inverting": [
+      "example.load"
+    ],
+    "example.pmos": [
+      "example.load"
+    ],
+    "example.rc-high-pass": [
+      "example.load"
+    ],
+    "example.rl": [
+      "example.load"
+    ],
+    "example.rlc": [
+      "example.load"
+    ],
+    "example.split-supply": [
+      "example.load"
+    ],
+    "file.open": [
+      "project.load",
+      "project.load.start"
+    ],
+    "file.save": [
+      "project.save",
+      "project.save.start"
+    ],
+    "file.save-as": [
+      "project.save",
+      "project.save.start"
+    ]
+  },
+  "sites": [
+    {
+      "file": "desktop/actuation_controls.go",
+      "line": 22,
+      "function": "*screen.potentiometerControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"potentiometer.wiper.set\", workbench.WiperParams{ID: part.ID, Position: float64(e.Number) / 100})",
+      "public_commands": [
+        "potentiometer.wiper.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/actuation_controls.go",
+      "line": 24,
+      "function": "*screen.potentiometerControls",
+      "kind": "node-Change",
+      "expression": "Change: change",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/actuation_controls.go",
+      "line": 24,
+      "function": "*screen.potentiometerControls",
+      "kind": "node-Change",
+      "expression": "Change: change",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/actuation_controls.go",
+      "line": 67,
+      "function": "*screen.switchControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"switch-actuate\", text, \"switch.set\", workbench.SwitchParams{ID: part.ID, Closed: !closed})",
+      "public_commands": [
+        "switch.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/appearance.go",
+      "line": 22,
+      "function": "setupAppearance",
+      "kind": "event-or-dispatch-router",
+      "expression": "service.Dispatch(context.Background(), workbench.Request{Version: 1, ID: \"startup-appearance\", Command: \"appearance.configure\", Params: raw, ExpectedCommandRevision: \u0026revision, Key: \"startup-appearance\"}, \"user\")",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/appearance.go",
+      "line": 22,
+      "function": "setupAppearance",
+      "kind": "request-command-field",
+      "expression": "Command: \"appearance.configure\"",
+      "public_commands": [
+        "appearance.configure"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/appearance.go",
+      "line": 37,
+      "function": "*screen.appearanceControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"appearance-enable\", \"Use saved theme on this device\", \"appearance.configure\", workbench.AppearanceConfigureParams{Path: path})",
+      "public_commands": [
+        "appearance.configure"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/appearance.go",
+      "line": 52,
+      "function": "*screen.appearanceControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"appearance-retry\", \"Reload saved theme\", \"appearance.configure\", workbench.AppearanceConfigureParams{Path: a.Path})",
+      "public_commands": [
+        "appearance.configure"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/appearance.go",
+      "line": 54,
+      "function": "*screen.appearanceControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"appearance-session-only\", \"Use theme for this session only\", \"appearance.configure\", workbench.AppearanceConfigureParams{})",
+      "public_commands": [
+        "appearance.configure"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 57,
+      "function": "*commandCanvas.Mount",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(events.Scroll, func(e events.Event) {\n\tif scroll, ok := e.(*events.MouseScroll); ok {\n\t\tcontext := c.pointerContext.Load()\n\t\twithWindowOwner(c.Owner, window, func() {\n\t\t\tc.withPreparedPointer(context, func() {\n\t\t\t\tanchor := c.world(e, w)\n\t\t\t\tfactor := math.Max(.25, math.Min(4, math.Exp(-float64(scroll.Delta.Y)*.003)))\n\t\t\t\tc.screen.invoke(\"view.zoom\", map[string]any{\"factor\": factor, \"anchor\": anchor})\n\t\t\t})\n\t\t})\n\t\te.SetHandled()\n\t}\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 64,
+      "function": "*commandCanvas.Mount",
+      "kind": "domain-ingress",
+      "expression": "c.screen.invoke(\"view.zoom\", map[string]any{\"factor\": factor, \"anchor\": anchor})",
+      "public_commands": [
+        "view.zoom"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 70,
+      "function": "*commandCanvas.Mount",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(events.MouseDown, func(e events.Event) {\n\tcontext := c.pointerContext.Load()\n\twithWindowOwner(c.Owner, window, func() {\n\t\tc.pointerGesture = c.withPreparedPointer(context, func() { c.routePointer(0, c.world(e, w), workbench.Point{}) })\n\t})\n\te.SetHandled()\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 77,
+      "function": "*commandCanvas.Mount",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(events.SlideMove, func(e events.Event) {\n\twithWindowOwner(c.Owner, window, func() {\n\t\tdelta := e.PrevDelta()\n\t\tc.routePreparedPointer(1, c.world(e, w), workbench.Point{X: float64(delta.X) / c.View.Zoom, Y: float64(delta.Y) / c.View.Zoom})\n\t})\n\te.SetHandled()\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 84,
+      "function": "*commandCanvas.Mount",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(events.SlideStop, func(e events.Event) {\n\twithWindowOwner(c.Owner, window, func() { c.routePreparedPointer(2, c.world(e, w), workbench.Point{}) })\n\te.SetHandled()\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 174,
+      "function": "*screen.canvasClick",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"drawing.position.set\", workbench.PositionParams{Position: point})",
+      "public_commands": [
+        "drawing.position.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 180,
+      "function": "*screen.canvasClick",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"wire.junction.insert\", workbench.JunctionInsertParams{WireIDs: ids, Position: \u0026point})",
+      "public_commands": [
+        "wire.junction.insert"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 188,
+      "function": "*screen.canvasClick",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"component.place\", workbench.PlaceParams{Kind: state.Drawing.Kind, Position: p, Value: value})",
+      "public_commands": [
+        "component.place"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 197,
+      "function": "*screen.canvasClick",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"wire.begin\", map[string]string{\"terminal\": ref})",
+      "public_commands": [
+        "wire.begin"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 199,
+      "function": "*screen.canvasClick",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"wire.connect\", workbench.ConnectParams{From: state.Drawing.WireStart, To: ref})",
+      "public_commands": [
+        "wire.connect"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 206,
+      "function": "*screen.canvasClick",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"measurement.select\", workbench.MeasurementSelectParams{Kind: \"terminal\", ID: ref})",
+      "public_commands": [
+        "measurement.select"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 213,
+      "function": "*screen.canvasClick",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"component.select\", workbench.IDParams{ID: id})",
+      "public_commands": [
+        "component.select"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 311,
+      "function": "*commandCanvas.routePointer",
+      "kind": "domain-ingress",
+      "expression": "c.screen.invoke(\"view.pan\", map[string]float64{\"dx\": -delta.X, \"dy\": -delta.Y})",
+      "public_commands": [
+        "view.pan"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 315,
+      "function": "*commandCanvas.routePointer",
+      "kind": "domain-ingress",
+      "expression": "c.screen.invoke(\"view.zoom\", map[string]any{\"factor\": factor, \"anchor\": p})",
+      "public_commands": [
+        "view.zoom"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 322,
+      "function": "*commandCanvas.routePointer",
+      "kind": "domain-ingress",
+      "expression": "c.screen.invoke(\"measurement.pin.move\", workbench.MoveParams{ID: strings.TrimPrefix(c.dragID, \"pin|\"), Position: position, PreviousPosition: \u0026c.dragOrigin})",
+      "public_commands": [
+        "measurement.pin.move"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 324,
+      "function": "*commandCanvas.routePointer",
+      "kind": "domain-ingress",
+      "expression": "c.screen.invoke(\"component.move\", workbench.MoveParams{ID: c.dragID, Position: position, PreviousPosition: \u0026c.dragOrigin})",
+      "public_commands": [
+        "component.move"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 379,
+      "function": "*commandCanvas.navigateObject",
+      "kind": "domain-ingress",
+      "expression": "c.screen.invokeAtCommandRevision(\"selection.navigate\", workbench.NavigateParams{Direction: direction, Center: true}, revision, generation)",
+      "public_commands": [
+        "selection.navigate"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 44,
+      "function": "*screen.componentInspector",
+      "kind": "node-Change",
+      "expression": "Change: s.changeValueDraft",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 56,
+      "function": "*screen.componentInspector",
+      "kind": "node-Change",
+      "expression": "Change: s.changeValueDraft",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 65,
+      "function": "*screen.componentInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"r-1k\", \"1 kΩ\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"1k\"})",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 65,
+      "function": "*screen.componentInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"r-2k\", \"2 kΩ\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"2k\"})",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 78,
+      "function": "*screen.componentInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: fmt.Sprintf(\"%.9g V\", e.Number)})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 79,
+      "function": "*screen.componentInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: fmt.Sprintf(\"%.9g V\", e.Number)})",
+      "public_commands": [
+        "capacitor.initial.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 80,
+      "function": "*screen.componentInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"cap-initial-default\", \"Use experiment initial voltage\", \"capacitor.initial.set\", workbench.ValueParams{ID: part.ID, Value: \"default\"})",
+      "public_commands": [
+        "capacitor.initial.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 81,
+      "function": "*screen.componentInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"c-1u\", \"1 µF\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"1uF\"})",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 81,
+      "function": "*screen.componentInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"c-100u\", \"100 µF\", \"component.set\", workbench.ValueParams{ID: part.ID, Value: \"100uF\"})",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 127,
+      "function": "*screen.partGeometryControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"rotate-part\", \"Rotate 90°\", \"component.rotate\", workbench.IDParams{ID: part.ID})",
+      "public_commands": [
+        "component.rotate"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 127,
+      "function": "*screen.partGeometryControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"duplicate-part\", \"Duplicate\", \"component.duplicate\", workbench.DuplicateParams{ID: part.ID})",
+      "public_commands": [
+        "component.duplicate"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_palette.go",
+      "line": 28,
+      "function": "*screen.componentPalette",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tresult := s.invoke(\"parts.search.set\", workbench.SearchParams{Query: e.Text})\n\tif result.Error == nil {\n\t\ttarget := \"part-search\"\n\t\tif len(result.Result.(workbench.Snapshot).MatchingParts) \u003e 0 {\n\t\t\ttarget = \"part-list\"\n\t\t}\n\t\ts.requestKeyboardFocus(target)\n\t}\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/component_palette.go",
+      "line": 29,
+      "function": "*screen.componentPalette",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"parts.search.set\", workbench.SearchParams{Query: e.Text})",
+      "public_commands": [
+        "parts.search.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_palette.go",
+      "line": 38,
+      "function": "*screen.componentPalette",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tfor _, option := range options {\n\t\tif option.ID == e.SelectedID {\n\t\t\ts.invoke(\"drawing.tool.set\", workbench.ToolParams{Tool: \"place\", Kind: e.SelectedID})\n\t\t\treturn\n\t\t}\n\t}\n\ts.errorMessage = \"Choose a component from the matching list.\"\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/component_palette.go",
+      "line": 41,
+      "function": "*screen.componentPalette",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"drawing.tool.set\", workbench.ToolParams{Tool: \"place\", Kind: e.SelectedID})",
+      "public_commands": [
+        "drawing.tool.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 46,
+      "function": "*screen.changeCursorTimeFor",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"scope.cursor.set\", map[string]any{\"cursor\": cursor, \"time_s\": text}, state.CommandRevision)",
+      "public_commands": [
+        "scope.cursor.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 48,
+      "function": "*screen.changeCursorTimeFor",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"recording.cursor.set\", map[string]any{\"operation_id\": recordingID, \"cursor\": cursor, \"time_s\": text}, state.CommandRevision)",
+      "public_commands": [
+        "recording.cursor.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 75,
+      "function": "*screen.cursorAction",
+      "kind": "action-factory",
+      "expression": "s.cursorActionFor(state, id, text, command, cursor, \"\")",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 79,
+      "function": "*screen.recordedCursorAction",
+      "kind": "action-factory",
+      "expression": "s.cursorActionFor(state, id, text, command, cursor, state.Recording.ID)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 84,
+      "function": "*screen.cursorActionFor",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\tif s.pendingCursorAction != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.cursorFieldAccepted; accepted != nil \u0026\u0026 accepted.recordingID == recordingID \u0026\u0026 accepted.from.generation == context.generation \u0026\u0026\n\t\taccepted.from.revision \u003c= context.revision \u0026\u0026 context.revision \u003c= accepted.to.revision \u0026\u0026\n\t\taccepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) {\n\t\tcontext = accepted.to\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\t\ts.invokeAtCommandRevision(command, workbench.CursorSelectParams{Cursor: cursor}, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := \u0026cursorActionWork{context: context, command: command, cursor: cursor, recordingID: recordingID}\n\ts.pendingCursorAction = pending\n\tif recordingID == \"\" \u0026\u0026 (current.Transient == nil || current.Transient.Stale) {\n\n\t\ts.finishCursorAction(pending, nil)\n\t} else {\n\t\ts.settleCursorActionField(pending, 0)\n\t}\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 95,
+      "function": "*screen.cursorActionFor",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(command, workbench.CursorSelectParams{Cursor: cursor}, context.revision, context.generation)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/cursor_actions.go",
+      "line": 154,
+      "function": "*screen.finishCursorAction",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(pending.command, workbench.CursorSelectParams{Cursor: pending.cursor}, pending.context.revision, pending.context.generation)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 47,
+      "function": "*screen.sweepInspector",
+      "kind": "node-Activate",
+      "expression": "Activate: func() { s.beginFile(\"sweep.import\", true, workbench.RecordingImportParams{}, nil) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 47,
+      "function": "*screen.sweepInspector",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(\"sweep.import\", true, workbench.RecordingImportParams{}, nil)",
+      "public_commands": [
+        "sweep.import"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 61,
+      "function": "*screen.sweepInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tpieces := strings.SplitN(e.SelectedID, \":\", 2)\n\tif len(pieces) != 2 {\n\t\treturn\n\t}\n\tnext := cfg\n\tnext.ComponentID, next.Parameter = pieces[0], pieces[1]\n\tnext.ProbeIDs = nil\n\tnext.Spacing = \"\"\n\tswitch next.Parameter {\n\tcase \"resistance\":\n\t\tnext.Start, next.Stop = \"100 Ω\", \"10k Ω\"\n\tcase \"wiper\":\n\t\tnext.Start, next.Stop = \"0\", \"1\"\n\tdefault:\n\t\tnext.Start, next.Stop = \"0 V\", \"5 V\"\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 78,
+      "function": "*screen.sweepInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"sweep.settings.set\", next)",
+      "public_commands": [
+        "sweep.settings.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 84,
+      "function": "*screen.sweepInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.Spacing = e.SelectedID\n\ts.invoke(\"sweep.settings.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 87,
+      "function": "*screen.sweepInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"sweep.settings.set\", next)",
+      "public_commands": [
+        "sweep.settings.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 91,
+      "function": "*screen.sweepInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tif field.id == \"start\" {\n\t\tnext.Start = e.Text\n\t} else {\n\t\tnext.Stop = e.Text\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 98,
+      "function": "*screen.sweepInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"sweep.settings.set\", next)",
+      "public_commands": [
+        "sweep.settings.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 101,
+      "function": "*screen.sweepInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tcount, err := strconv.Atoi(strings.TrimSpace(e.Text))\n\tif err != nil {\n\t\ts.errorMessage = \"Enter a whole sweep point count\"\n\t\ts.app.Invalidate(\"main\")\n\t\treturn\n\t}\n\tnext := cfg\n\tnext.Points = count\n\ts.invoke(\"sweep.settings.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 110,
+      "function": "*screen.sweepInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"sweep.settings.set\", next)",
+      "public_commands": [
+        "sweep.settings.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 129,
+      "function": "*screen.sweepInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.ProbeIDs = nil\n\tif e.SelectedID != \"__auto\" {\n\t\tnext.ProbeIDs = append([]string{}, cfg.ProbeIDs...)\n\t\tfor _, id := range next.ProbeIDs {\n\t\t\tif id == e.SelectedID {\n\t\t\t\treturn\n\t\t\t}\n\t\t}\n\t\tif len(next.ProbeIDs) \u003e= workbench.MaxScopeProbes {\n\t\t\ts.errorMessage = \"Remove a sweep reading before adding another\"\n\t\t\ts.app.Invalidate(\"main\")\n\t\t\treturn\n\t\t}\n\t\tnext.ProbeIDs = append(next.ProbeIDs, e.SelectedID)\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 146,
+      "function": "*screen.sweepInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"sweep.settings.set\", next)",
+      "public_commands": [
+        "sweep.settings.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 161,
+      "function": "*screen.sweepInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"sweep-probe-remove-\"+id, \"Remove \"+id, \"sweep.settings.set\", next)",
+      "public_commands": [
+        "sweep.settings.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 169,
+      "function": "*screen.sweepInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"sweep-cancel-\"+op.ID, \"Cancel sweep\", \"sweep.cancel\", workbench.IDParams{ID: op.ID})",
+      "public_commands": [
+        "sweep.cancel"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 174,
+      "function": "*screen.sweepInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"sweep-start\", \"Run DC sweep\", \"sweep.start\", workbench.SweepStartParams{})",
+      "public_commands": [
+        "sweep.start"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 183,
+      "function": "*screen.sweepInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"sweep.select\", workbench.IDParams{ID: e.SelectedID}) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 183,
+      "function": "*screen.sweepInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"sweep.select\", workbench.IDParams{ID: e.SelectedID})",
+      "public_commands": [
+        "sweep.select"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 184,
+      "function": "*screen.sweepInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"sweep-show\", \"View sweep\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
+      "public_commands": [
+        "sweep.visibility.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 190,
+      "function": "*screen.sweepInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"sweep.keep.set\", workbench.RecordingKeepParams{ID: op.ID, Keep: e.Checked})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 191,
+      "function": "*screen.sweepInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"sweep.keep.set\", workbench.RecordingKeepParams{ID: op.ID, Keep: e.Checked})",
+      "public_commands": [
+        "sweep.keep.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 195,
+      "function": "*screen.sweepInspector",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\ts.beginFile(\"sweep.export\", true, workbench.VerificationExportParams{ID: op.ID, Format: format}, nil)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 196,
+      "function": "*screen.sweepInspector",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(\"sweep.export\", true, workbench.VerificationExportParams{ID: op.ID, Format: format}, nil)",
+      "public_commands": [
+        "sweep.export"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 208,
+      "function": "*screen.sweepPanel",
+      "kind": "action-factory",
+      "expression": "s.action(\"sweep-back\", \"Back to circuit\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: false})",
+      "public_commands": [
+        "sweep.visibility.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 245,
+      "function": "*screen.sweepPanel",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"sweep.trace.select\", workbench.IDParams{ID: e.SelectedID}) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 245,
+      "function": "*screen.sweepPanel",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"sweep.trace.select\", workbench.IDParams{ID: e.SelectedID})",
+      "public_commands": [
+        "sweep.trace.select"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 245,
+      "function": "*screen.sweepPanel",
+      "kind": "node-Custom",
+      "expression": "Custom: s.sweepDrawing",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep.go",
+      "line": 255,
+      "function": "*screen.sweepPanel",
+      "kind": "action-factory",
+      "expression": "s.action(\"sweep-cursor-clear\", \"Clear point\", \"sweep.cursor.set\", workbench.SweepCursorParams{OperationID: sweep.Selected})",
+      "public_commands": [
+        "sweep.cursor.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/dc_sweep_canvas.go",
+      "line": 42,
+      "function": "*sweepCanvas.Mount",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(events.Scroll, func(e events.Event) { e.SetHandled() })",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep_canvas.go",
+      "line": 44,
+      "function": "*sweepCanvas.Mount",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(kind, func(e events.Event) {\n\tpos := e.Pos().Sub(w.Geom.Pos.Content.ToPoint())\n\twithWindowOwner(c.Owner, window, func() {\n\t\tif c.mountEpoch == epoch {\n\t\t\tc.placeCursor(float64(pos.X))\n\t\t}\n\t})\n\te.SetHandled()\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep_canvas.go",
+      "line": 54,
+      "function": "*sweepCanvas.Mount",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(events.SlideStop, func(e events.Event) { e.SetHandled() })",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep_canvas.go",
+      "line": 55,
+      "function": "*sweepCanvas.Mount",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(events.KeyChord, func(e events.Event) {\n\tswitch strings.ToLower(string(e.KeyChord())) {\n\tcase \"leftarrow\", \"rightarrow\", \"uparrow\", \"downarrow\":\n\t\te.SetHandled()\n\t}\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/dc_sweep_canvas.go",
+      "line": 76,
+      "function": "*sweepCanvas.placeCursor",
+      "kind": "domain-ingress",
+      "expression": "c.screen.invokeAtCommandRevision(\"sweep.cursor.set\", workbench.SweepCursorParams{OperationID: frame.id, Index: \u0026best}, frame.revision, frame.generation)",
+      "public_commands": [
+        "sweep.cursor.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/diagnostic_help.go",
+      "line": 30,
+      "function": "*screen.diagnosticControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"diagnostics.details.set\", workbench.DiagnosticDetailsParams{Visible: e.Checked})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/diagnostic_help.go",
+      "line": 31,
+      "function": "*screen.diagnosticControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"diagnostics.details.set\", workbench.DiagnosticDetailsParams{Visible: e.Checked})",
+      "public_commands": [
+        "diagnostics.details.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/display_preferences.go",
+      "line": 21,
+      "function": "*screen.displayControls",
+      "kind": "action-factory",
+      "expression": "s.action(id, text+\" · \"+word, \"display.preferences.set\", p)",
+      "public_commands": [
+        "display.preferences.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/display_preferences.go",
+      "line": 39,
+      "function": "*screen.displayControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) { p := prefs; p.Direction = e.SelectedID; s.invoke(\"display.preferences.set\", p) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/display_preferences.go",
+      "line": 39,
+      "function": "*screen.displayControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"display.preferences.set\", p)",
+      "public_commands": [
+        "display.preferences.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/display_preferences.go",
+      "line": 42,
+      "function": "*screen.displayControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tp := prefs\n\tp.VoltageRange = float64(e.Number)\n\tif e.Number == float32(.01) {\n\t\tp.VoltageRange = .01\n\t}\n\ts.invoke(\"display.preferences.set\", p)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/display_preferences.go",
+      "line": 48,
+      "function": "*screen.displayControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"display.preferences.set\", p)",
+      "public_commands": [
+        "display.preferences.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/example_load.go",
+      "line": 27,
+      "function": "*screen.registerExampleLoadCommands",
+      "kind": "event-or-dispatch-router",
+      "expression": "s.commands.Register(command.Command{ID: template.command, Label: template.label, Available: func() error {\n\tif s.fileBusy || s.pendingCommand != \"\" || s.service.Snapshot().Closed {\n\t\treturn fmt.Errorf(\"finish the current operation before loading an example\")\n\t}\n\treturn nil\n}, Execute: func(context.Context) error {\n\ts.requestReplace(\"example.load\", workbench.ExampleLoadParams{ID: template.id})\n\treturn nil\n}})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/example_load.go",
+      "line": 33,
+      "function": "*screen.registerExampleLoadCommands",
+      "kind": "domain-ingress",
+      "expression": "s.requestReplace(\"example.load\", workbench.ExampleLoadParams{ID: template.id})",
+      "public_commands": [
+        "example.load"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/examples.go",
+      "line": 18,
+      "function": "*screen.exampleGuidance",
+      "kind": "registry-button",
+      "expression": "s.button(\"example.current.reset\", \"Reset example\")",
+      "public_commands": [
+        "example.current.reset"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/examples.go",
+      "line": 20,
+      "function": "*screen.exampleGuidance",
+      "kind": "callback-assignment",
+      "expression": "reset.Activate = func() {\n\ts.requestReplace(\"example.current.reset\", workbench.ExampleResetParams{ExpectedID: info.ID, ExpectedGeneration: \u0026generation})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/examples.go",
+      "line": 21,
+      "function": "*screen.exampleGuidance",
+      "kind": "domain-ingress",
+      "expression": "s.requestReplace(\"example.current.reset\", workbench.ExampleResetParams{ExpectedID: info.ID, ExpectedGeneration: \u0026generation})",
+      "public_commands": [
+        "example.current.reset"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/field_context.go",
+      "line": 19,
+      "function": "*screen.bindFieldContext",
+      "kind": "callback-assignment",
+      "expression": "node.Change = func(event ui.ChangeEvent) {\n\tprevious, previousAccepted := s.fieldContext, s.fieldAccepted\n\ts.fieldContext = \u0026context\n\ts.fieldAccepted = nil\n\tdefer func() { s.fieldContext, s.fieldAccepted = previous, previousAccepted }()\n\tchange(event)\n\n\tif s.fieldAccepted != nil {\n\t\tcontext = *s.fieldAccepted\n\t}\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 48,
+      "function": "*screen.requestReplace",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(dispatchID, json.RawMessage(raw))",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 180,
+      "function": "*screen.beginFile",
+      "kind": "request-command-field",
+      "expression": "Command: id",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 185,
+      "function": "*screen.beginFile",
+      "kind": "event-or-dispatch-router",
+      "expression": "s.service.Dispatch(ctx, request, \"user\")",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 268,
+      "function": "*screen.continuePending",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(id, false, raw, clear)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 269,
+      "function": "*screen.continuePending",
+      "kind": "domain-ingress",
+      "expression": "s.requestReplace(id, raw)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 278,
+      "function": "*screen.registerFileCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"file.open\", \"Open…\", \"Meta+O\", func() { s.beginFile(\"project.load\", true, workbench.LoadParams{}, nil) }}",
+      "public_commands": [
+        "project.load",
+        "project.load.start"
+      ],
+      "status": "declared-native-wrapper"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 279,
+      "function": "*screen.registerFileCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"file.save\", \"Save\", \"Meta+S\", func() {\n\ts.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, nil)\n}}",
+      "public_commands": [
+        "project.save",
+        "project.save.start"
+      ],
+      "status": "declared-native-wrapper"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 282,
+      "function": "*screen.registerFileCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"file.save-as\", \"Save As…\", \"Meta+Shift+S\", func() { s.beginFile(\"project.save\", true, workbench.SaveParams{}, nil) }}",
+      "public_commands": [
+        "project.save",
+        "project.save.start"
+      ],
+      "status": "declared-native-wrapper"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 278,
+      "function": "*screen.registerFileCommands",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(\"project.load\", true, workbench.LoadParams{}, nil)",
+      "public_commands": [
+        "project.load"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 280,
+      "function": "*screen.registerFileCommands",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, nil)",
+      "public_commands": [
+        "project.save"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 282,
+      "function": "*screen.registerFileCommands",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(\"project.save\", true, workbench.SaveParams{}, nil)",
+      "public_commands": [
+        "project.save"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 285,
+      "function": "*screen.registerFileCommands",
+      "kind": "event-or-dispatch-router",
+      "expression": "s.commands.Register(command.Command{ID: entry.id, Label: entry.text, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts, Available: func() error {\n\tif s.service.Snapshot().Closed {\n\t\treturn fmt.Errorf(\"session is closing\")\n\t}\n\tif s.fileBusy || s.pendingCommand != \"\" {\n\t\treturn fmt.Errorf(\"finish the current file operation first\")\n\t}\n\treturn nil\n}, Execute:\tfunc(context.Context) error { entry.action(); return nil }})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 301,
+      "function": "*screen.filePrompt",
+      "kind": "callback-factory",
+      "expression": "s.withFileDecision(decision, false, func() {\n\ts.setPendingFileAction(\"\", nil)\n\ts.errorMessage = \"\"\n\ts.requestHelp = nil\n\ts.app.Invalidate(\"main\")\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 309,
+      "function": "*screen.filePrompt",
+      "kind": "node-Dismiss",
+      "expression": "Dismiss: dismiss",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 314,
+      "function": "*screen.filePrompt",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\ts.withFileDecision(decision, true, func() {\n\t\ts.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{ExpectedGeneration: \u0026decision.generation}, func() {\n\t\t\tif s.pendingFileSerial == decision.serial {\n\t\t\t\ts.continuePending(false)\n\t\t\t}\n\t\t})\n\t})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 315,
+      "function": "*screen.filePrompt",
+      "kind": "callback-factory",
+      "expression": "s.withFileDecision(decision, true, func() {\n\ts.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{ExpectedGeneration: \u0026decision.generation}, func() {\n\t\tif s.pendingFileSerial == decision.serial {\n\t\t\ts.continuePending(false)\n\t\t}\n\t})\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 316,
+      "function": "*screen.filePrompt",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{ExpectedGeneration: \u0026decision.generation}, func() {\n\tif s.pendingFileSerial == decision.serial {\n\t\ts.continuePending(false)\n\t}\n})",
+      "public_commands": [
+        "project.save"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 323,
+      "function": "*screen.filePrompt",
+      "kind": "node-Activate",
+      "expression": "Activate: func() { s.withFileDecision(decision, true, func() { s.continuePending(true) }) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 323,
+      "function": "*screen.filePrompt",
+      "kind": "callback-factory",
+      "expression": "s.withFileDecision(decision, true, func() { s.continuePending(true) })",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/files.go",
+      "line": 324,
+      "function": "*screen.filePrompt",
+      "kind": "node-Activate",
+      "expression": "Activate: dismiss",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/inductor_controls.go",
+      "line": 18,
+      "function": "*screen.inductorControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invokeAtCommandRevision(\"inductor.initial.set\", workbench.ValueParams{ID: part.ID, Value: e.Text}, state.CommandRevision)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/inductor_controls.go",
+      "line": 19,
+      "function": "*screen.inductorControls",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"inductor.initial.set\", workbench.ValueParams{ID: part.ID, Value: e.Text}, state.CommandRevision)",
+      "public_commands": [
+        "inductor.initial.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/inductor_controls.go",
+      "line": 21,
+      "function": "*screen.inductorControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"inductor-initial-default\", \"Reset startup to zero\", \"inductor.initial.set\", workbench.ValueParams{ID: part.ID, Value: \"default\"})",
+      "public_commands": [
+        "inductor.initial.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/input_work.go",
+      "line": 31,
+      "function": "*screen.inputWorkControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"input-work-cancel\", \"Cancel applying input\", \"simulation.work.cancel\", workbench.IDParams{ID: w.ID})",
+      "public_commands": [
+        "simulation.work.cancel"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 14,
+      "function": "*screen.focusAfterAction",
+      "kind": "callback-assignment",
+      "expression": "node.Activate = func() {\n\tactivate()\n\tif s.errorMessage == \"\" {\n\t\ts.requestKeyboardFocus(target)\n\t}\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 27,
+      "function": "*screen.placementControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changePlacementField(\"editor.value.set\", workbench.DraftParams{Value: e.Text})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 28,
+      "function": "*screen.placementControls",
+      "kind": "domain-ingress",
+      "expression": "s.changePlacementField(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
+      "public_commands": [
+        "editor.value.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 34,
+      "function": "*screen.placementControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changePlacementField(\"drawing.position.set\", workbench.PositionParams{Position: workbench.Point{X: float64(e.Number), Y: position.Y}})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 35,
+      "function": "*screen.placementControls",
+      "kind": "domain-ingress",
+      "expression": "s.changePlacementField(\"drawing.position.set\", workbench.PositionParams{Position: workbench.Point{X: float64(e.Number), Y: position.Y}})",
+      "public_commands": [
+        "drawing.position.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 38,
+      "function": "*screen.placementControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changePlacementField(\"drawing.position.set\", workbench.PositionParams{Position: workbench.Point{X: position.X, Y: float64(e.Number)}})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 39,
+      "function": "*screen.placementControls",
+      "kind": "domain-ingress",
+      "expression": "s.changePlacementField(\"drawing.position.set\", workbench.PositionParams{Position: workbench.Point{X: position.X, Y: float64(e.Number)}})",
+      "public_commands": [
+        "drawing.position.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 54,
+      "function": "*screen.placementControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"junction-join-routes\", \"Join named routes at X / Y\", \"wire.junction.insert\", workbench.JunctionInsertParams{WireIDs: ids, Position: \u0026point})",
+      "public_commands": [
+        "wire.junction.insert"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 63,
+      "function": "*screen.namedWireControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"wire-by-name\", \"Connect by name\", \"drawing.tool.set\", workbench.ToolParams{Tool: \"wire\"})",
+      "public_commands": [
+        "drawing.tool.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 82,
+      "function": "*screen.namedWireControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tv := e.SelectedID\n\tif v == \"__none\" {\n\t\tv = \"\"\n\t}\n\tchange(v)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 90,
+      "function": "*screen.namedWireControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"wire.terminals.set\", workbench.TerminalsParams{From: v, To: to})",
+      "public_commands": [
+        "wire.terminals.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 90,
+      "function": "*screen.namedWireControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"wire.terminals.set\", workbench.TerminalsParams{From: from, To: v})",
+      "public_commands": [
+        "wire.terminals.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/keyboard_workflow.go",
+      "line": 90,
+      "function": "*screen.namedWireControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"connect-terminals\", \"Connect wire\", \"wire.connect\", workbench.ConnectParams{From: from, To: to})",
+      "public_commands": [
+        "wire.connect"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/layout.go",
+      "line": 24,
+      "function": "*screen.commandMenu",
+      "kind": "registry-button",
+      "expression": "s.button(entry[0], entry[1])",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/layout.go",
+      "line": 28,
+      "function": "*screen.commandMenu",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tif action, ok := actions[e.SelectedID]; ok \u0026\u0026 !action.Disabled {\n\t\taction.Activate()\n\t}\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/layout.go",
+      "line": 95,
+      "function": "findAction",
+      "kind": "node-Change",
+      "expression": "Change: root.Change",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/layout.go",
+      "line": 102,
+      "function": "findAction",
+      "kind": "node-Activate",
+      "expression": "Activate: func() { choices.Change(ui.ChangeEvent{ID: root.ID, Kind: ui.MenuButton, SelectedID: id}) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/lifecycle.go",
+      "line": 11,
+      "function": "*screen.requestClose",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"app.close.acknowledge\", workbench.IDParams{ID: state.Shutdown.ID})",
+      "public_commands": [
+        "app.close.acknowledge"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/lifecycle.go",
+      "line": 19,
+      "function": "*screen.requestClose",
+      "kind": "domain-ingress",
+      "expression": "s.requestReplace(\"app.close\", workbench.ReplaceParams{})",
+      "public_commands": [
+        "app.close"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 106,
+      "function": "runNative",
+      "kind": "node-CloseRequest",
+      "expression": "CloseRequest: screen.requestClose",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 240,
+      "function": "*screen.invoke",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(id, p, s.service.Snapshot().CommandRevision)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 266,
+      "function": "*screen.invokeAtCommandRevision",
+      "kind": "request-command-field",
+      "expression": "Command: id",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 270,
+      "function": "*screen.invokeAtCommandRevision",
+      "kind": "event-or-dispatch-router",
+      "expression": "s.service.Dispatch(context.Background(), request, \"user\")",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 305,
+      "function": "*screen.registerCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"edit.undo\", \"Undo\", \"Meta+Z\"}",
+      "public_commands": [
+        "edit.undo"
+      ],
+      "status": "declared-registry-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 305,
+      "function": "*screen.registerCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"edit.redo\", \"Redo\", \"Meta+Shift+Z\"}",
+      "public_commands": [
+        "edit.redo"
+      ],
+      "status": "declared-registry-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 306,
+      "function": "*screen.registerCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"project.clear\", \"New blank\", \"\"}",
+      "public_commands": [
+        "project.clear"
+      ],
+      "status": "declared-registry-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 306,
+      "function": "*screen.registerCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"drawing.cancel\", \"Cancel drawing\", \"Escape\"}",
+      "public_commands": [
+        "drawing.cancel"
+      ],
+      "status": "declared-registry-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 307,
+      "function": "*screen.registerCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"app.close\", \"Close window\", \"Meta+W\"}",
+      "public_commands": [
+        "app.close"
+      ],
+      "status": "declared-registry-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 308,
+      "function": "*screen.registerCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"example.current.reset\", \"Reset current example\", \"\"}",
+      "public_commands": [
+        "example.current.reset"
+      ],
+      "status": "declared-registry-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 308,
+      "function": "*screen.registerCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"example.reset\", \"Load LED example\", \"\"}",
+      "public_commands": [
+        "example.reset"
+      ],
+      "status": "declared-registry-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 308,
+      "function": "*screen.registerCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"example.rc\", \"Load RC example\", \"\"}",
+      "public_commands": [
+        "example.rc"
+      ],
+      "status": "declared-registry-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 308,
+      "function": "*screen.registerCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"example.npn\", \"Load NPN LED example\", \"\"}",
+      "public_commands": [
+        "example.npn"
+      ],
+      "status": "declared-registry-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 308,
+      "function": "*screen.registerCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"example.switch-npn\", \"Load manual transistor LED switch\", \"\"}",
+      "public_commands": [
+        "example.switch-npn"
+      ],
+      "status": "declared-registry-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 308,
+      "function": "*screen.registerCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"example.npn-pulse\", \"Load blinking NPN LED\", \"\"}",
+      "public_commands": [
+        "example.npn-pulse"
+      ],
+      "status": "declared-registry-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 308,
+      "function": "*screen.registerCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"example.flasher\", \"Load capacitor-timed LED flasher\", \"\"}",
+      "public_commands": [
+        "example.flasher"
+      ],
+      "status": "declared-registry-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 308,
+      "function": "*screen.registerCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"example.rectifier\", \"Load diode rectifier and smoothing\", \"\"}",
+      "public_commands": [
+        "example.rectifier"
+      ],
+      "status": "declared-registry-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 309,
+      "function": "*screen.registerCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"simulation.pause\", \"Pause\", \"\"}",
+      "public_commands": [
+        "simulation.pause"
+      ],
+      "status": "declared-registry-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 309,
+      "function": "*screen.registerCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"simulation.resume\", \"Resume\", \"\"}",
+      "public_commands": [
+        "simulation.resume"
+      ],
+      "status": "declared-registry-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 309,
+      "function": "*screen.registerCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"simulation.restart\", \"Restart\", \"\"}",
+      "public_commands": [
+        "simulation.restart"
+      ],
+      "status": "declared-registry-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 309,
+      "function": "*screen.registerCommands",
+      "kind": "declared-registry-entry",
+      "expression": "{\"view.fit\", \"Fit circuit\", \"\"}",
+      "public_commands": [
+        "view.fit"
+      ],
+      "status": "declared-registry-route"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 312,
+      "function": "*screen.registerCommands",
+      "kind": "event-or-dispatch-router",
+      "expression": "s.commands.Register(command.Command{ID: entry.id, Label: entry.label, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts,\n\tAvailable: func() error {\n\t\tif s.fileBusy || s.pendingCommand != \"\" {\n\t\t\treturn fmt.Errorf(\"finish the current file operation first\")\n\t\t}\n\t\tstate := s.service.Snapshot()\n\t\tif state.Closed \u0026\u0026 entry.id != \"app.close\" {\n\t\t\treturn fmt.Errorf(\"session is closing\")\n\t\t}\n\t\tif entry.id == \"example.current.reset\" \u0026\u0026 state.Example == nil {\n\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t}\n\t\tif entry.id == \"edit.undo\" \u0026\u0026 !state.CanUndo {\n\t\t\treturn fmt.Errorf(\"nothing to undo\")\n\t\t}\n\t\tif entry.id == \"edit.redo\" \u0026\u0026 !state.CanRedo {\n\t\t\treturn fmt.Errorf(\"nothing to redo\")\n\t\t}\n\t\treturn nil\n\t}, Execute: func(context.Context) error {\n\t\tif entry.id == \"app.close\" {\n\t\t\ts.requestClose()\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"example.current.reset\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\tif state.Example == nil {\n\t\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t\t}\n\t\t\tgeneration := state.Document.Generation\n\t\t\ts.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"project.clear\" || entry.id == \"example.reset\" || entry.id == \"example.rc\" || entry.id == \"example.npn\" || entry.id == \"example.npn-pulse\" || entry.id == \"example.flasher\" || entry.id == \"example.switch-npn\" || entry.id == \"example.rectifier\" {\n\t\t\ts.requestReplace(entry.id, workbench.ReplaceParams{})\n\t\t\treturn nil\n\t\t}\n\t\tvar p any = struct{}{}\n\t\tif entry.id == \"edit.undo\" || entry.id == \"edit.redo\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\ttip := state.UndoEntry\n\t\t\tif entry.id == \"edit.redo\" {\n\t\t\t\ttip = state.RedoEntry\n\t\t\t}\n\t\t\tif tip != nil {\n\t\t\t\trevision := tip.CommandRevision\n\t\t\t\tp = workbench.HistoryParams{ExpectedEntryRevision: \u0026revision, AllowOtherActor: tip.Actor != \"user\"}\n\t\t\t}\n\t\t}\n\t\tif entry.id == \"view.fit\" {\n\t\t\tp = workbench.FitParams{Width: s.drawing.View.Width, Height: s.drawing.View.Height, FollowViewport: true}\n\t\t}\n\t\tr := s.invoke(entry.id, p)\n\t\tif r.Error != nil {\n\t\t\treturn fmt.Errorf(\"%s\", r.Error.Message)\n\t\t}\n\t\tif entry.id == \"drawing.cancel\" {\n\t\t\ts.requestKeyboardFocus(\"part-search\")\n\t\t}\n\t\ts.continueSimulationFocus(entry.id, r)\n\t\treturn nil\n\t},\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 342,
+      "function": "*screen.registerCommands",
+      "kind": "domain-ingress",
+      "expression": "s.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 346,
+      "function": "*screen.registerCommands",
+      "kind": "domain-ingress",
+      "expression": "s.requestReplace(entry.id, workbench.ReplaceParams{})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 364,
+      "function": "*screen.registerCommands",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(entry.id, p)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 418,
+      "function": "*screen.button",
+      "kind": "event-or-dispatch-router",
+      "expression": "s.commands.Invoke(context.Background(), id)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 431,
+      "function": "*screen.button",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(id, struct{}{}, rendered.revision, rendered.generation)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 443,
+      "function": "*screen.button",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(id, target)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/main.go",
+      "line": 446,
+      "function": "*screen.button",
+      "kind": "node-Activate",
+      "expression": "Activate: activate",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/measurement_inspection.go",
+      "line": 28,
+      "function": "*screen.measurementInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tp := workbench.MeasurementSelectParams{Kind: kind, ID: e.SelectedID}\n\tif e.SelectedID == \"__none\" {\n\t\tp = workbench.MeasurementSelectParams{}\n\t}\n\ts.invoke(\"measurement.select\", p)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/measurement_inspection.go",
+      "line": 33,
+      "function": "*screen.measurementInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"measurement.select\", p)",
+      "public_commands": [
+        "measurement.select"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/measurement_inspection.go",
+      "line": 82,
+      "function": "*screen.measurementInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"measurement-plot-\"+id, \"Plot\", \"scope.probes.set\", workbench.ProbeParams{IDs: withProbe(state.Scope.Selected, id)})",
+      "public_commands": [
+        "scope.probes.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/measurement_inspection.go",
+      "line": 84,
+      "function": "*screen.measurementInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"measurement-pin-\"+id, \"Pin\", \"measurement.pin.add\", workbench.PinSpec{ID: id, Position: defaultPinPosition(state, id)})",
+      "public_commands": [
+        "measurement.pin.add"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/measurement_inspection.go",
+      "line": 88,
+      "function": "*screen.measurementInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"measurement-clear\", \"Inspect selected object\", \"measurement.select\", workbench.MeasurementSelectParams{})",
+      "public_commands": [
+        "measurement.select"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/menus.go",
+      "line": 19,
+      "function": "(package)",
+      "kind": "native-menu-group",
+      "expression": "Commands: []string{\"project.clear\", \"file.open\", \"file.save\", \"file.save-as\", \"app.close\"}",
+      "public_commands": [
+        "project.clear",
+        "project.load",
+        "project.load.start",
+        "project.save",
+        "project.save.start",
+        "project.save",
+        "project.save.start",
+        "app.close"
+      ],
+      "status": "declared-native-wrapper"
+    },
+    {
+      "file": "desktop/menus.go",
+      "line": 20,
+      "function": "(package)",
+      "kind": "native-menu-group",
+      "expression": "Commands: []string{\"example.reset\", \"example.split-supply\", \"example.rc\", \"example.rc-high-pass\", \"example.rl\", \"example.rlc\", \"example.flyback\", \"example.npn\", \"example.switch-npn\", \"example.npn-pulse\", \"example.flasher\", \"example.led-fade\", \"example.nmos\", \"example.pmos\", \"example.cmos\", \"example.opamp-follower\", \"example.opamp-inverting\", \"example.rectifier\"}",
+      "public_commands": [
+        "example.reset",
+        "example.load",
+        "example.rc",
+        "example.load",
+        "example.load",
+        "example.load",
+        "example.load",
+        "example.npn",
+        "example.switch-npn",
+        "example.npn-pulse",
+        "example.flasher",
+        "example.load",
+        "example.load",
+        "example.load",
+        "example.load",
+        "example.load",
+        "example.load",
+        "example.rectifier"
+      ],
+      "status": "declared-native-wrapper"
+    },
+    {
+      "file": "desktop/menus.go",
+      "line": 21,
+      "function": "(package)",
+      "kind": "native-menu-group",
+      "expression": "Commands: []string{\"appearance.light\", \"appearance.dark\", \"appearance.system\"}",
+      "public_commands": [
+        "appearance.theme.set",
+        "appearance.theme.set",
+        "appearance.theme.set"
+      ],
+      "status": "declared-native-wrapper"
+    },
+    {
+      "file": "desktop/menus.go",
+      "line": 27,
+      "function": "*screen.registerAppearanceCommands",
+      "kind": "event-or-dispatch-router",
+      "expression": "s.commands.Register(command.Command{ID: \"appearance.\" + mode, Label: map[string]string{\"light\": \"Light\", \"dark\": \"Dark\", \"system\": \"System\"}[mode], Execute: func(context.Context) error {\n\tresult := s.invoke(\"appearance.theme.set\", map[string]string{\"theme\": mode})\n\tif result.Error != nil {\n\t\treturn fmt.Errorf(\"%s\", result.Error.Message)\n\t}\n\treturn nil\n}})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/menus.go",
+      "line": 28,
+      "function": "*screen.registerAppearanceCommands",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"appearance.theme.set\", map[string]string{\"theme\": mode})",
+      "public_commands": [
+        "appearance.theme.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/menus_darwin.go",
+      "line": 41,
+      "function": "*screen.nativeChoiceButton",
+      "kind": "node-Change",
+      "expression": "Change: node.Change",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/menus_darwin.go",
+      "line": 67,
+      "function": "*screen.nativeChoiceButton",
+      "kind": "callback-assignment",
+      "expression": "node.Activate = func() { s.showChoiceMenu(captured, choices, selection, revision) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/npn.go",
+      "line": 23,
+      "function": "*screen.npnControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"npn-off\", \"0 V\", \"component.set\", workbench.ValueParams{ID: c.Input.ID, Value: \"0 V\"})",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/npn.go",
+      "line": 24,
+      "function": "*screen.npnControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"npn-active\", \"0.8 V\", \"component.set\", workbench.ValueParams{ID: c.Input.ID, Value: \"0.8 V\"})",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/npn.go",
+      "line": 25,
+      "function": "*screen.npnControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"npn-on\", \"5 V\", \"component.set\", workbench.ValueParams{ID: c.Input.ID, Value: \"5 V\"})",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/output_page_actions.go",
+      "line": 21,
+      "function": "*screen.changeOutputPage",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"export.page.set\", page)",
+      "public_commands": [
+        "export.page.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/output_page_actions.go",
+      "line": 50,
+      "function": "*screen.outputPreviewAction",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\tif accepted := s.continuedOutputPage(context); accepted != nil {\n\t\tcontext = accepted.to\n\t}\n\ts.invokeAtCommandRevision(\"print.preview.start\", workbench.PreviewParams{}, context.revision, context.generation)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/output_page_actions.go",
+      "line": 54,
+      "function": "*screen.outputPreviewAction",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"print.preview.start\", workbench.PreviewParams{}, context.revision, context.generation)",
+      "public_commands": [
+        "print.preview.start"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/output_page_actions.go",
+      "line": 61,
+      "function": "*screen.outputFitAction",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\tif accepted := s.continuedOutputPage(context); accepted != nil {\n\t\tcontext = accepted.to\n\t\tpage = accepted.page\n\t}\n\tpage.Scale = nil\n\tpage.Tile = false\n\tpage.OverlapMM = nil\n\ts.invokeAtCommandRevision(\"export.page.set\", page, context.revision, context.generation)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/output_page_actions.go",
+      "line": 69,
+      "function": "*screen.outputFitAction",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"export.page.set\", page, context.revision, context.generation)",
+      "public_commands": [
+        "export.page.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/pinned_readings.go",
+      "line": 23,
+      "function": "*screen.pinnedReadingControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tif e.SelectedID == \"__none\" {\n\t\treturn\n\t}\n\tposition := defaultPinPosition(state, e.SelectedID)\n\ts.invoke(\"measurement.pin.add\", workbench.PinSpec{ID: e.SelectedID, Position: position})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/pinned_readings.go",
+      "line": 28,
+      "function": "*screen.pinnedReadingControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"measurement.pin.add\", workbench.PinSpec{ID: e.SelectedID, Position: position})",
+      "public_commands": [
+        "measurement.pin.add"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/pinned_readings.go",
+      "line": 41,
+      "function": "*screen.pinnedReadingControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tposition := pin.Position\n\tif axis == \"X\" {\n\t\tposition.X = float64(e.Number)\n\t} else {\n\t\tposition.Y = float64(e.Number)\n\t}\n\ts.invoke(\"measurement.pin.move\", workbench.MoveParams{ID: pin.ID, Position: position, PreviousPosition: \u0026pin.Position})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/pinned_readings.go",
+      "line": 48,
+      "function": "*screen.pinnedReadingControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"measurement.pin.move\", workbench.MoveParams{ID: pin.ID, Position: position, PreviousPosition: \u0026pin.Position})",
+      "public_commands": [
+        "measurement.pin.move"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/pinned_readings.go",
+      "line": 51,
+      "function": "*screen.pinnedReadingControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"pin-remove-\"+pin.ID, \"Remove pinned reading\", \"measurement.pin.remove\", workbench.IDParams{ID: pin.ID})",
+      "public_commands": [
+        "measurement.pin.remove"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/placement_actions.go",
+      "line": 46,
+      "function": "*screen.changePlacementField",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(command, params)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/placement_actions.go",
+      "line": 73,
+      "function": "*screen.placementAction",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\tif s.pendingPlacement != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.placementFieldAccepted; accepted != nil \u0026\u0026 accepted.params.Kind == params.Kind \u0026\u0026 accepted.from.generation == context.generation \u0026\u0026 accepted.from.revision \u003c= context.revision \u0026\u0026 context.revision \u003c= accepted.to.revision \u0026\u0026 accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) {\n\t\tcontext = accepted.to\n\t\tparams = accepted.params\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\t\ts.invokeAtCommandRevision(\"component.place\", params, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := \u0026placementActionWork{context: context, params: params}\n\ts.pendingPlacement = pending\n\ts.settlePlacement(pending, 0)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/placement_actions.go",
+      "line": 83,
+      "function": "*screen.placementAction",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"component.place\", params, context.revision, context.generation)",
+      "public_commands": [
+        "component.place"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/placement_actions.go",
+      "line": 138,
+      "function": "*screen.finishPlacement",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"component.place\", pending.params, pending.context.revision, pending.context.generation)",
+      "public_commands": [
+        "component.place"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 21,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tif choice.id == \"paper\" {\n\t\tnext.Paper = e.SelectedID\n\t} else {\n\t\tnext.Orientation = e.SelectedID\n\t}\n\ts.changeOutputPage(next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 31,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tv := float64(e.Number)\n\tnext.MarginMM = \u0026v\n\ts.changeOutputPage(next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 43,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tv := float64(e.Number) / 100\n\tnext.Scale = \u0026v\n\ts.changeOutputPage(next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 49,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tnext.Tile = e.Checked\n\tif next.Tile \u0026\u0026 next.Scale == nil {\n\t\tv := 1.\n\t\tnext.Scale = \u0026v\n\t}\n\tif !next.Tile {\n\t\tnext.OverlapMM = nil\n\t}\n\ts.changeOutputPage(next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 62,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tv := float64(e.Number)\n\tnext.OverlapMM = \u0026v\n\ts.changeOutputPage(next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_page.go",
+      "line": 78,
+      "function": "*screen.schematicPageControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tif toggle.id == \"color\" {\n\t\tnext.Color = e.Checked\n\t} else {\n\t\tnext.Measurements = e.Checked\n\t}\n\ts.changeOutputPage(next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_preview.go",
+      "line": 65,
+      "function": "readPrintPreview",
+      "kind": "event-or-dispatch-router",
+      "expression": "service.Dispatch(ctx, workbench.Request{Version: 1, ID: fmt.Sprintf(\"preview-image-%s-%d\", p.ID, len(data)), Command: \"print.preview.image\", Params: raw}, \"user\")",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_preview.go",
+      "line": 65,
+      "function": "readPrintPreview",
+      "kind": "request-command-field",
+      "expression": "Command: \"print.preview.image\"",
+      "public_commands": [
+        "print.preview.image"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/print_preview.go",
+      "line": 102,
+      "function": "*screen.printPreviewPanel",
+      "kind": "action-factory",
+      "expression": "s.action(\"preview-close\", \"Back to circuit\", \"print.preview.close\", workbench.IDParams{ID: p.ID})",
+      "public_commands": [
+        "print.preview.close"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/print_preview.go",
+      "line": 104,
+      "function": "*screen.printPreviewPanel",
+      "kind": "action-factory",
+      "expression": "s.action(\"preview-cancel\", \"Cancel\", \"print.preview.cancel\", workbench.IDParams{ID: p.ID})",
+      "public_commands": [
+        "print.preview.cancel"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/print_preview.go",
+      "line": 132,
+      "function": "*screen.printPreviewPanel",
+      "kind": "action-factory",
+      "expression": "s.action(\"preview-previous\", \"Previous page\", \"print.preview.page.set\", workbench.PreviewPageParams{ID: p.ID, Index: p.PageIndex - 1})",
+      "public_commands": [
+        "print.preview.page.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/print_preview.go",
+      "line": 134,
+      "function": "*screen.printPreviewPanel",
+      "kind": "action-factory",
+      "expression": "s.action(\"preview-next\", \"Next page\", \"print.preview.page.set\", workbench.PreviewPageParams{ID: p.ID, Index: p.PageIndex + 1})",
+      "public_commands": [
+        "print.preview.page.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/print_preview.go",
+      "line": 136,
+      "function": "*screen.printPreviewPanel",
+      "kind": "node-Activate",
+      "expression": "Activate: func() { s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{PreviewID: p.ID}, nil) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/print_preview.go",
+      "line": 136,
+      "function": "*screen.printPreviewPanel",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{PreviewID: p.ID}, nil)",
+      "public_commands": [
+        "export.schematic.png"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/printing.go",
+      "line": 14,
+      "function": "*screen.printingControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"printers-refresh\", \"Refresh printers\", \"print.printers.refresh\", struct{}{})",
+      "public_commands": [
+        "print.printers.refresh"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/printing.go",
+      "line": 33,
+      "function": "*screen.printingControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"print.destination.set\", workbench.PrintDestinationParams{PrinterID: e.SelectedID, Copies: printing.Copies})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/printing.go",
+      "line": 34,
+      "function": "*screen.printingControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"print.destination.set\", workbench.PrintDestinationParams{PrinterID: e.SelectedID, Copies: printing.Copies})",
+      "public_commands": [
+        "print.destination.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/printing.go",
+      "line": 35,
+      "function": "*screen.printingControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"print.destination.set\", map[string]any{\"printer_id\": printing.PrinterID, \"copies\": e.Number})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/printing.go",
+      "line": 36,
+      "function": "*screen.printingControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"print.destination.set\", map[string]any{\"printer_id\": printing.PrinterID, \"copies\": e.Number})",
+      "public_commands": [
+        "print.destination.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/printing.go",
+      "line": 49,
+      "function": "*screen.printingControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"printer-submit\", label, \"print.submit\", workbench.PrintSubmitParams{PreviewID: p.ID, PrinterID: printing.PrinterID, Copies: printing.Copies})",
+      "public_commands": [
+        "print.submit"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/printing.go",
+      "line": 60,
+      "function": "*screen.printingControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"printer-work-cancel\", \"Cancel preparation\", \"print.work.cancel\", workbench.IDParams{ID: w.ID})",
+      "public_commands": [
+        "print.work.cancel"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/printing.go",
+      "line": 75,
+      "function": "*screen.printingControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"printer-refresh-\"+job.ID, \"Refresh job\", \"print.job.refresh\", workbench.IDParams{ID: job.ID})",
+      "public_commands": [
+        "print.job.refresh"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/printing.go",
+      "line": 77,
+      "function": "*screen.printingControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"printer-cancel-\"+job.ID, \"Cancel print job\", \"print.job.cancel\", workbench.IDParams{ID: job.ID})",
+      "public_commands": [
+        "print.job.cancel"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/probes.go",
+      "line": 67,
+      "function": "*screen.probeInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"remove-probe-\"+missing.ID, \"Remove \"+missing.ID, \"scope.probe.remove\", workbench.IDParams{ID: missing.ID})",
+      "public_commands": [
+        "scope.probe.remove"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/probes.go",
+      "line": 81,
+      "function": "*screen.probeInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tids := append([]string{}, state.Scope.Selected...)\n\tif i \u003c len(ids) {\n\t\tids = append(ids[:i], ids[i+1:]...)\n\t}\n\tif e.SelectedID != \"__none\" {\n\t\tfor _, id := range ids {\n\t\t\tif id == e.SelectedID {\n\t\t\t\treturn\n\t\t\t}\n\t\t}\n\t\tat := min(i, len(ids))\n\t\tids = append(ids, \"\")\n\t\tcopy(ids[at+1:], ids[at:])\n\t\tids[at] = e.SelectedID\n\t}\n\ts.invoke(\"scope.probes.set\", workbench.ProbeParams{IDs: ids})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/probes.go",
+      "line": 97,
+      "function": "*screen.probeInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"scope.probes.set\", workbench.ProbeParams{IDs: ids})",
+      "public_commands": [
+        "scope.probes.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/probes.go",
+      "line": 102,
+      "function": "*screen.probeInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"inspect-trace-\"+p.ID, \"Inspect \"+p.Label, \"scope.trace.select\", workbench.IDParams{ID: p.ID})",
+      "public_commands": [
+        "scope.trace.select"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/probes.go",
+      "line": 109,
+      "function": "*screen.probeInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"trace-focus-clear\", \"Clear trace highlight\", \"scope.trace.select\", workbench.IDParams{})",
+      "public_commands": [
+        "scope.trace.select"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/probes.go",
+      "line": 133,
+      "function": "*screen.cursorControls",
+      "kind": "action-factory",
+      "expression": "s.cursorAction(state, \"cursor-select-\"+cursor.id, strings.ToUpper(cursor.id), \"scope.cursor.select\", cursor.id)",
+      "public_commands": [
+        "scope.cursor.select"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/probes.go",
+      "line": 139,
+      "function": "*screen.cursorControls",
+      "kind": "callback-factory",
+      "expression": "timeField(\"cursor-time-\"+cursor.id, \"Cursor \"+strings.ToUpper(cursor.id)+\" time\", value, t == nil || t.Stale, func(text string) {\n\ts.changeCursorTime(state, cursor.id, text)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/probes.go",
+      "line": 149,
+      "function": "*screen.cursorControls",
+      "kind": "action-factory",
+      "expression": "s.cursorAction(state, \"cursor-clear-\"+cursor.id, \"×\", \"scope.cursor.clear\", cursor.id)",
+      "public_commands": [
+        "scope.cursor.clear"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/project_work.go",
+      "line": 60,
+      "function": "*screen.projectWorkControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"project-work-cancel\", \"Cancel project \"+action, \"project.work.cancel\", workbench.IDParams{ID: w.ID})",
+      "public_commands": [
+        "project.work.cancel"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 40,
+      "function": "*screen.recordingInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tids := append([]string{}, r.Scope.Selected...)\n\tif i \u003c len(ids) {\n\t\tids = append(ids[:i], ids[i+1:]...)\n\t}\n\tif e.SelectedID != \"__none\" {\n\t\tfor _, id := range ids {\n\t\t\tif id == e.SelectedID {\n\t\t\t\treturn\n\t\t\t}\n\t\t}\n\t\tat := min(i, len(ids))\n\t\tids = append(ids, \"\")\n\t\tcopy(ids[at+1:], ids[at:])\n\t\tids[at] = e.SelectedID\n\t}\n\ts.invoke(\"recording.probes.set\", workbench.ProbeParams{IDs: ids})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 56,
+      "function": "*screen.recordingInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"recording.probes.set\", workbench.ProbeParams{IDs: ids})",
+      "public_commands": [
+        "recording.probes.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 59,
+      "function": "*screen.recordingInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"recorded-whole-window\", \"Show complete recording\", \"recording.window.set\", workbench.RecordingWindowParams{End: r.LastSampleTime})",
+      "public_commands": [
+        "recording.window.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 66,
+      "function": "*screen.recordingInspector",
+      "kind": "callback-factory",
+      "expression": "timeField(\"recorded-window-\"+side, \"Recorded interval \"+side, value, r.Duration == 0, func(text string) {\n\tp := workbench.RecordingWindowParams{Start: r.Scope.Window.Start, End: r.Scope.Window.End}\n\ts.invokeAtCommandRevision(\"recording.window.set\", textFieldParams(p, side+\"_s\", text), state.CommandRevision)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 68,
+      "function": "*screen.recordingInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"recording.window.set\", textFieldParams(p, side+\"_s\", text), state.CommandRevision)",
+      "public_commands": [
+        "recording.window.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 95,
+      "function": "*screen.recordingInspector",
+      "kind": "event-or-dispatch-router",
+      "expression": "s.service.Dispatch(context.Background(), workbench.Request{Version: 1, ID: \"ui-recorded-source\", Command: \"operation.inspect\", Params: raw}, \"user\")",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 95,
+      "function": "*screen.recordingInspector",
+      "kind": "request-command-field",
+      "expression": "Command: \"operation.inspect\"",
+      "public_commands": [
+        "operation.inspect"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 133,
+      "function": "*screen.recordingPanel",
+      "kind": "action-factory",
+      "expression": "s.action(\"recorded-back-live\", \"View live\", \"recording.view.set\", workbench.RecordingViewParams{Mode: \"live\"})",
+      "public_commands": [
+        "recording.view.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 136,
+      "function": "*screen.recordingPanel",
+      "kind": "action-factory",
+      "expression": "s.action(\"recorded-\"+direction, map[string]string{\"previous\": \"Previous\", \"next\": \"Next\"}[direction], \"recording.step\", workbench.RecordingStepParams{Direction: direction})",
+      "public_commands": [
+        "recording.step"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 144,
+      "function": "*screen.recordingPanel",
+      "kind": "action-factory",
+      "expression": "s.action(\"recorded-play\", \"Play\", \"recording.play\", workbench.RecordingPlayParams{Speed: speed})",
+      "public_commands": [
+        "recording.play"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 146,
+      "function": "*screen.recordingPanel",
+      "kind": "action-factory",
+      "expression": "s.action(\"recorded-pause\", \"Pause\", \"recording.pause\", struct{}{})",
+      "public_commands": [
+        "recording.pause"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 149,
+      "function": "*screen.recordingPanel",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tindex := int(e.Number)\n\ts.invoke(\"recording.seek\", workbench.RecordingSeekParams{Index: \u0026index})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 151,
+      "function": "*screen.recordingPanel",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"recording.seek\", workbench.RecordingSeekParams{Index: \u0026index})",
+      "public_commands": [
+        "recording.seek"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 152,
+      "function": "*screen.recordingPanel",
+      "kind": "callback-factory",
+      "expression": "timeField(\"recorded-time\", \"Recorded seek time\", r.Time, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.seek\", map[string]any{\"time_s\": text}, state.CommandRevision)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 153,
+      "function": "*screen.recordingPanel",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"recording.seek\", map[string]any{\"time_s\": text}, state.CommandRevision)",
+      "public_commands": [
+        "recording.seek"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 154,
+      "function": "*screen.recordingPanel",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"recording.speed.set\", workbench.RecordingPlayParams{Speed: float64(e.Number)})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 155,
+      "function": "*screen.recordingPanel",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"recording.speed.set\", workbench.RecordingPlayParams{Speed: float64(e.Number)})",
+      "public_commands": [
+        "recording.speed.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 170,
+      "function": "*screen.recordingPanel",
+      "kind": "node-Custom",
+      "expression": "Custom: s.scope",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 182,
+      "function": "*screen.recordingCursors",
+      "kind": "action-factory",
+      "expression": "s.recordedCursorAction(state, \"recorded-cursor-select-\"+c.id, strings.ToUpper(c.id), \"recording.cursor.select\", c.id)",
+      "public_commands": [
+        "recording.cursor.select"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 187,
+      "function": "*screen.recordingCursors",
+      "kind": "callback-factory",
+      "expression": "timeField(\"recorded-cursor-\"+c.id, \"Recorded cursor \"+strings.ToUpper(c.id), at, false, func(text string) {\n\ts.changeCursorTimeFor(state, c.id, text, r.ID)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 190,
+      "function": "*screen.recordingCursors",
+      "kind": "action-factory",
+      "expression": "s.recordedCursorAction(state, \"recorded-cursor-clear-\"+c.id, \"×\", \"recording.cursor.clear\", c.id)",
+      "public_commands": [
+        "recording.cursor.clear"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_compare.go",
+      "line": 31,
+      "function": "*screen.recordingComparisonControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\treference := e.SelectedID\n\tif reference == \"__none\" {\n\t\treference = \"\"\n\t}\n\n\tnext := workbench.RecordingCompareParams{ID: r.ID, ReferenceID: reference}\n\tif r.Comparison != nil {\n\t\tnext.ShowStatistics = r.Comparison.Settings.ShowStatistics\n\t\tnext.ShowOverlay = r.Comparison.Settings.ShowOverlay\n\t}\n\ts.invoke(\"recording.compare.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_compare.go",
+      "line": 43,
+      "function": "*screen.recordingComparisonControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"recording.compare.set\", next)",
+      "public_commands": [
+        "recording.compare.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_compare.go",
+      "line": 49,
+      "function": "*screen.recordingComparisonControls",
+      "kind": "callback-factory",
+      "expression": "timeField(\"recorded-compare-time\", \"Requested comparison time\", at, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.compare.set\", map[string]any{\"id\": r.ID, \"reference_id\": comparison.Settings.ReferenceID, \"time_s\": text, \"show_statistics\": comparison.Settings.ShowStatistics, \"show_overlay\": comparison.Settings.ShowOverlay}, state.CommandRevision)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_compare.go",
+      "line": 50,
+      "function": "*screen.recordingComparisonControls",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"recording.compare.set\", map[string]any{\"id\": r.ID, \"reference_id\": comparison.Settings.ReferenceID, \"time_s\": text, \"show_statistics\": comparison.Settings.ShowStatistics, \"show_overlay\": comparison.Settings.ShowOverlay}, state.CommandRevision)",
+      "public_commands": [
+        "recording.compare.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_compare.go",
+      "line": 52,
+      "function": "*screen.recordingComparisonControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := workbench.RecordingCompareParams(comparison.Settings)\n\tnext.ShowOverlay = e.Checked\n\ts.invoke(\"recording.compare.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_compare.go",
+      "line": 55,
+      "function": "*screen.recordingComparisonControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"recording.compare.set\", next)",
+      "public_commands": [
+        "recording.compare.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_compare.go",
+      "line": 68,
+      "function": "*screen.recordingComparisonControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := workbench.RecordingCompareParams(comparison.Settings)\n\tnext.ShowStatistics = e.Checked\n\ts.invoke(\"recording.compare.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_compare.go",
+      "line": 71,
+      "function": "*screen.recordingComparisonControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"recording.compare.set\", next)",
+      "public_commands": [
+        "recording.compare.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_statistics.go",
+      "line": 20,
+      "function": "*screen.recordingStatisticsControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tp := workbench.RecordingStatisticsParams{ID: r.ID}\n\tif e.SelectedID != \"__none\" {\n\t\tp.ProbeID, p.End = e.SelectedID, r.Duration\n\t\tif r.Statistics != nil {\n\t\t\tp.Start, p.End = r.Statistics.Settings.Start, r.Statistics.Settings.End\n\t\t}\n\t}\n\ts.invoke(\"recording.statistics.set\", p)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_statistics.go",
+      "line": 28,
+      "function": "*screen.recordingStatisticsControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"recording.statistics.set\", p)",
+      "public_commands": [
+        "recording.statistics.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_statistics.go",
+      "line": 44,
+      "function": "*screen.recordingStatisticsControls",
+      "kind": "callback-factory",
+      "expression": "timeField(\"recorded-statistics-\"+field.name, \"Measurement interval \"+field.name, field.value, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.statistics.set\", textFieldParams(cfg, field.name+\"_s\", text), state.CommandRevision)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_statistics.go",
+      "line": 45,
+      "function": "*screen.recordingStatisticsControls",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"recording.statistics.set\", textFieldParams(cfg, field.name+\"_s\", text), state.CommandRevision)",
+      "public_commands": [
+        "recording.statistics.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_timing.go",
+      "line": 20,
+      "function": "*screen.recordingTimingControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tp := workbench.RecordingTimingParams{ID: r.ID, Level: \"0\", Direction: \"both\"}\n\tif e.SelectedID != \"__none\" {\n\t\tp.ProbeID = e.SelectedID\n\t\tp.End = r.Duration\n\t}\n\ts.invoke(\"recording.timing.set\", p)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_timing.go",
+      "line": 26,
+      "function": "*screen.recordingTimingControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"recording.timing.set\", p)",
+      "public_commands": [
+        "recording.timing.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_timing.go",
+      "line": 33,
+      "function": "*screen.recordingTimingControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.Level = e.Text\n\tnext.Offset = 0\n\ts.invoke(\"recording.timing.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_timing.go",
+      "line": 37,
+      "function": "*screen.recordingTimingControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"recording.timing.set\", next)",
+      "public_commands": [
+        "recording.timing.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_timing.go",
+      "line": 38,
+      "function": "*screen.recordingTimingControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.Direction = e.SelectedID\n\tnext.Offset = 0\n\ts.invoke(\"recording.timing.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_timing.go",
+      "line": 42,
+      "function": "*screen.recordingTimingControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"recording.timing.set\", next)",
+      "public_commands": [
+        "recording.timing.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_timing.go",
+      "line": 44,
+      "function": "*screen.recordingTimingControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.SecondLevel = e.Text\n\tnext.Offset = 0\n\ts.invoke(\"recording.timing.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_timing.go",
+      "line": 48,
+      "function": "*screen.recordingTimingControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"recording.timing.set\", next)",
+      "public_commands": [
+        "recording.timing.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_timing.go",
+      "line": 55,
+      "function": "*screen.recordingTimingControls",
+      "kind": "callback-factory",
+      "expression": "timeField(\"recorded-timing-\"+field.name, \"Threshold interval \"+field.name, field.value, false, func(text string) {\n\tp := map[string]any{\"id\": cfg.ID, \"probe_id\": cfg.ProbeID, \"level\": cfg.Level, \"second_level\": cfg.SecondLevel, \"direction\": cfg.Direction, \"start_s\": cfg.Start, \"end_s\": cfg.End, \"limit\": cfg.Limit, \"offset\": 0}\n\tp[field.name+\"_s\"] = text\n\ts.invokeAtCommandRevision(\"recording.timing.set\", p, state.CommandRevision)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_timing.go",
+      "line": 58,
+      "function": "*screen.recordingTimingControls",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"recording.timing.set\", p, state.CommandRevision)",
+      "public_commands": [
+        "recording.timing.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_timing.go",
+      "line": 81,
+      "function": "*screen.recordingTimingControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"recorded-timing-previous\", \"Previous arrivals\", \"recording.timing.set\", previous)",
+      "public_commands": [
+        "recording.timing.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_timing.go",
+      "line": 86,
+      "function": "*screen.recordingTimingControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"recorded-timing-next\", \"Next arrivals\", \"recording.timing.set\", next)",
+      "public_commands": [
+        "recording.timing.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recovery.go",
+      "line": 25,
+      "function": "setupRecovery",
+      "kind": "event-or-dispatch-router",
+      "expression": "service.Dispatch(context.Background(), workbench.Request{Version: 1, ID: \"startup-recovery\", Command: \"recovery.configure\", Params: raw, ExpectedRevision: \u0026revision, Key: \"startup-recovery\"}, \"user\")",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recovery.go",
+      "line": 25,
+      "function": "setupRecovery",
+      "kind": "request-command-field",
+      "expression": "Command: \"recovery.configure\"",
+      "public_commands": [
+        "recovery.configure"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recovery.go",
+      "line": 38,
+      "function": "*screen.recoveryInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"recovery-enable\", \"Enable autosave\", \"recovery.configure.start\", workbench.RecoveryConfigureParams{Directory: directory, Enabled: true, Interval: 2})",
+      "public_commands": [
+        "recovery.configure.start"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recovery.go",
+      "line": 48,
+      "function": "*screen.recoveryInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"recovery-toggle\", text, \"recovery.configure.start\", workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: !recovery.Enabled, Interval: recovery.Interval})",
+      "public_commands": [
+        "recovery.configure.start"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recovery.go",
+      "line": 50,
+      "function": "*screen.recoveryInspector",
+      "kind": "callback-factory",
+      "expression": "timeField(\"recovery-interval\", \"Autosave interval\", recovery.Interval, busy, func(text string) {\n\ts.invokeAtCommandRevision(\"recovery.configure.start\", textFieldParams(workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: recovery.Enabled, Interval: recovery.Interval}, \"interval_s\", text), state.CommandRevision)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recovery.go",
+      "line": 51,
+      "function": "*screen.recoveryInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"recovery.configure.start\", textFieldParams(workbench.RecoveryConfigureParams{Directory: recovery.Directory, Enabled: recovery.Enabled, Interval: recovery.Interval}, \"interval_s\", text), state.CommandRevision)",
+      "public_commands": [
+        "recovery.configure.start"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recovery.go",
+      "line": 52,
+      "function": "*screen.recoveryInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"recovery-checkpoint\", \"Save recovery snapshot now\", \"recovery.work.start\", workbench.RecoveryWorkParams{Kind: \"checkpoint\"})",
+      "public_commands": [
+        "recovery.work.start"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recovery.go",
+      "line": 52,
+      "function": "*screen.recoveryInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"recovery-scan\", \"Refresh recovery list\", \"recovery.work.start\", workbench.RecoveryWorkParams{Kind: \"scan\"})",
+      "public_commands": [
+        "recovery.work.start"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recovery.go",
+      "line": 85,
+      "function": "*screen.recoveryInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"recovery.select\", workbench.IDParams{ID: id})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recovery.go",
+      "line": 90,
+      "function": "*screen.recoveryInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"recovery.select\", workbench.IDParams{ID: id})",
+      "public_commands": [
+        "recovery.select"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recovery.go",
+      "line": 94,
+      "function": "*screen.recoveryInspector",
+      "kind": "node-Activate",
+      "expression": "Activate: func() { s.requestReplace(\"recovery.restore\", choice) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recovery.go",
+      "line": 94,
+      "function": "*screen.recoveryInspector",
+      "kind": "domain-ingress",
+      "expression": "s.requestReplace(\"recovery.restore\", choice)",
+      "public_commands": [
+        "recovery.restore"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recovery.go",
+      "line": 95,
+      "function": "*screen.recoveryInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"recovery-dismiss\", \"Dismiss this snapshot\", \"recovery.dismiss.start\", choice)",
+      "public_commands": [
+        "recovery.dismiss.start"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recovery.go",
+      "line": 107,
+      "function": "*screen.recoveryInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"recovery-dismiss-\"+problem.ID, \"Dismiss damaged snapshot\", \"recovery.dismiss.start\", workbench.RecoveryChoiceParams{ID: problem.ID, SHA256: problem.SHA256})",
+      "public_commands": [
+        "recovery.dismiss.start"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recovery_read.go",
+      "line": 81,
+      "function": "readRecoveryResult",
+      "kind": "event-or-dispatch-router",
+      "expression": "service.Dispatch(ctx, workbench.Request{Version: 1, ID: fmt.Sprintf(\"recovery-result-%s-%d\", work.ID, len(data)), Command: \"recovery.read.chunk\", Params: raw}, \"user\")",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recovery_read.go",
+      "line": 81,
+      "function": "readRecoveryResult",
+      "kind": "request-command-field",
+      "expression": "Command: \"recovery.read.chunk\"",
+      "public_commands": [
+        "recovery.read.chunk"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recovery_read.go",
+      "line": 106,
+      "function": "*screen.recoveryReadControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"recovery-inspect-copy\", \"Inspect saved copy\", \"recovery.read.start\", params)",
+      "public_commands": [
+        "recovery.read.start"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recovery_read.go",
+      "line": 113,
+      "function": "*screen.recoveryReadControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"recovery-read-cancel-\"+work.ID, \"Cancel read\", \"recovery.read.cancel\", workbench.IDParams{ID: work.ID})",
+      "public_commands": [
+        "recovery.read.cancel"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recovery_read.go",
+      "line": 155,
+      "function": "*screen.recoveryReadControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ti, err := strconv.Atoi(e.SelectedID)\n\tif err != nil {\n\t\treturn\n\t}\n\ts.invoke(\"recovery.read.start\", workbench.RecoveryReadParams{Kind: \"samples\", ID: choice.ID, SHA256: choice.SHA256, Recording: \u0026i, Limit: 20})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recovery_read.go",
+      "line": 160,
+      "function": "*screen.recoveryReadControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"recovery.read.start\", workbench.RecoveryReadParams{Kind: \"samples\", ID: choice.ID, SHA256: choice.SHA256, Recording: \u0026i, Limit: 20})",
+      "public_commands": [
+        "recovery.read.start"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recovery_read.go",
+      "line": 177,
+      "function": "*screen.recoveryReadControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"recovery-samples-previous\", \"Previous rows\", \"recovery.read.start\", previous)",
+      "public_commands": [
+        "recovery.read.start"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recovery_read.go",
+      "line": 179,
+      "function": "*screen.recoveryReadControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"recovery-samples-next\", \"Next rows\", \"recovery.read.start\", next)",
+      "public_commands": [
+        "recovery.read.start"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/sampling.go",
+      "line": 25,
+      "function": "*screen.lcSamplingControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"fit-circuit-sampling\", \"Fit sampling\", \"simulation.sampling.fit\", struct{}{})",
+      "public_commands": [
+        "simulation.sampling.fit"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/schematic_keyboard.go",
+      "line": 28,
+      "function": "*commandCanvas.bindSchematicKeys",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(events.KeyChord, func(e events.Event) {\n\tchord := strings.ToLower(string(e.KeyChord()))\n\tif !schematicKeySupported(chord) {\n\t\treturn\n\t}\n\n\tcaptured := c.pointerContext.Load()\n\twithWindowOwner(c.Owner, window, func() { c.routeSchematicKey(chord, captured) })\n\te.SetHandled()\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/schematic_keyboard.go",
+      "line": 66,
+      "function": "*commandCanvas.routeSchematicKey",
+      "kind": "domain-ingress",
+      "expression": "c.screen.invokeAtCommandRevision(command, params, expected.revision, expected.generation)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 46,
+      "function": "*scopeCanvas.Mount",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(events.Scroll, func(e events.Event) { forwardScopeScroll(w, e) })",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 48,
+      "function": "*scopeCanvas.Mount",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(kind, func(e events.Event) {\n\tif c.screen != nil {\n\t\tframe := c.frame.Load()\n\t\tpos := e.Pos().Sub(w.Geom.Pos.Content.ToPoint())\n\t\twithWindowOwner(c.Owner, window, func() {\n\t\t\tif c.mountEpoch == epoch {\n\t\t\t\tc.cursorGesture(frame, float64(pos.X), kind == events.MouseDown)\n\t\t\t}\n\t\t})\n\t}\n\te.SetHandled()\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 61,
+      "function": "*scopeCanvas.Mount",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(events.SlideStop, func(e events.Event) {\n\twithWindowOwner(c.Owner, window, func() {\n\t\tif c.mountEpoch == epoch {\n\t\t\tc.gesture = nil\n\t\t}\n\t})\n\te.SetHandled()\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 69,
+      "function": "*scopeCanvas.Mount",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(events.KeyChord, func(e events.Event) {\n\tswitch strings.ToLower(string(e.KeyChord())) {\n\tcase \"leftarrow\", \"rightarrow\", \"uparrow\", \"downarrow\":\n\t\te.SetHandled()\n\t}\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 260,
+      "function": "*screen.scopePanel",
+      "kind": "action-factory",
+      "expression": "s.action(\"input-\"+mode, modeLabels[mode], \"simulation.input.set\", workbench.InputParams{Mode: mode})",
+      "public_commands": [
+        "simulation.input.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 273,
+      "function": "*screen.scopePanel",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"scope.trace.select\", workbench.IDParams{ID: id})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 278,
+      "function": "*screen.scopePanel",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"scope.trace.select\", workbench.IDParams{ID: id})",
+      "public_commands": [
+        "scope.trace.select"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 280,
+      "function": "*screen.scopePanel",
+      "kind": "action-factory",
+      "expression": "s.action(\"transient-step\", \"Step +1 sample\", \"simulation.step.start\", workbench.StepParams{Duration: state.TransientSettings.StepSeconds})",
+      "public_commands": [
+        "simulation.step.start"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 282,
+      "function": "*screen.scopePanel",
+      "kind": "registry-button",
+      "expression": "s.button(\"simulation.restart\", \"Restart\")",
+      "public_commands": [
+        "simulation.restart"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 291,
+      "function": "*screen.scopePanel",
+      "kind": "action-factory",
+      "expression": "s.action(\"step-work-cancel\", \"Cancel step\", \"simulation.work.cancel\", workbench.IDParams{ID: work.ID})",
+      "public_commands": [
+        "simulation.work.cancel"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 309,
+      "function": "*screen.scopePanel",
+      "kind": "node-Activate",
+      "expression": "Activate: func() { s.beginFile(\"export.scope.csv\", true, workbench.SaveParams{}, nil) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 309,
+      "function": "*screen.scopePanel",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(\"export.scope.csv\", true, workbench.SaveParams{}, nil)",
+      "public_commands": [
+        "export.scope.csv"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 314,
+      "function": "*screen.scopePanel",
+      "kind": "node-Custom",
+      "expression": "Custom: s.scope",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 366,
+      "function": "*screen.transientInspector",
+      "kind": "callback-factory",
+      "expression": "timeField(\"setting-\"+setting.id, setting.text, setting.value, false, func(text string) {\n\ts.invokeAtCommandRevision(\"simulation.transient.set\", textFieldParams(cfg, field, text), state.CommandRevision)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 367,
+      "function": "*screen.transientInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"simulation.transient.set\", textFieldParams(cfg, field, text), state.CommandRevision)",
+      "public_commands": [
+        "simulation.transient.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 371,
+      "function": "*screen.transientInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\n\tvalue := float64(e.Number)\n\tif e.Number == float32(setting.min) {\n\t\tvalue = setting.min\n\t}\n\tif e.Number == float32(setting.max) {\n\t\tvalue = setting.max\n\t}\n\tsetting.set(\u0026next, value/setting.scale)\n\ts.invoke(\"simulation.transient.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/scope.go",
+      "line": 384,
+      "function": "*screen.transientInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"simulation.transient.set\", next)",
+      "public_commands": [
+        "simulation.transient.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/scope_context.go",
+      "line": 41,
+      "function": "*scopeCanvas.applyCursorFrame",
+      "kind": "domain-ingress",
+      "expression": "c.screen.invokeAtCommandRevision(command, params, revision, frame.generation)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/scope_visibility.go",
+      "line": 21,
+      "function": "*screen.scopeVisibilityButton",
+      "kind": "action-factory",
+      "expression": "s.action(\"scope-visibility\", text, \"scope.visibility.set\", workbench.ScopeVisibilityParams{Visible: !state.ScopeVisible})",
+      "public_commands": [
+        "scope.visibility.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/scope_visibility.go",
+      "line": 43,
+      "function": "*screen.collapsedScope",
+      "kind": "action-factory",
+      "expression": "s.action(\"scope-expand\", \"Show scope\", \"scope.visibility.set\", workbench.ScopeVisibilityParams{Visible: true})",
+      "public_commands": [
+        "scope.visibility.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/shutdown.go",
+      "line": 15,
+      "function": "*screen.shutdownView",
+      "kind": "action-factory",
+      "expression": "s.action(\"shutdown-acknowledge\", \"Close window anyway\", \"app.close.acknowledge\", workbench.IDParams{ID: work.ID})",
+      "public_commands": [
+        "app.close.acknowledge"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/theme.go",
+      "line": 80,
+      "function": "*screen.themeMenu",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"appearance.theme.set\", map[string]string{\"theme\": e.SelectedID}) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/theme.go",
+      "line": 80,
+      "function": "*screen.themeMenu",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"appearance.theme.set\", map[string]string{\"theme\": e.SelectedID})",
+      "public_commands": [
+        "appearance.theme.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/time_fields.go",
+      "line": 14,
+      "function": "timeField",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) { change(e.Text) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/value_apply.go",
+      "line": 35,
+      "function": "*screen.changeValueDraft",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"editor.value.set\", workbench.DraftParams{Value: e.Text})",
+      "public_commands": [
+        "editor.value.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/value_apply.go",
+      "line": 80,
+      "function": "*screen.valueApplyAction",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\tif s.pendingValueApply != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.valueDraftAccepted; accepted != nil \u0026\u0026 accepted.from.generation == context.generation \u0026\u0026\n\t\taccepted.from.revision \u003c= context.revision \u0026\u0026 context.revision \u003c= accepted.to.revision \u0026\u0026\n\t\taccepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) \u0026\u0026\n\t\taccepted.id == id \u0026\u0026 current.Selected == id \u0026\u0026 current.Drawing.Value == accepted.text {\n\t\tcontext = accepted.to\n\t\tparams.Value = accepted.text\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\n\t\ts.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := \u0026valueApply{context: context, params: params}\n\ts.pendingValueApply = pending\n\tdone := func(err error) {\n\t\tif s.pendingValueApply != pending {\n\t\t\treturn\n\t\t}\n\t\ts.pendingValueApply = nil\n\t\tif err != nil {\n\t\t\ts.errorMessage = fmt.Sprintf(\"Could not finish value entry: %v\", err)\n\t\t} else if !pending.failed {\n\t\t\ts.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)\n\t\t}\n\t\ts.app.Invalidate(\"main\")\n\t}\n\tif s.settleField == nil {\n\n\t\tdone(nil)\n\t} else if err := s.settleField(\"value-entry\", done); err != nil {\n\t\tdone(err)\n\t}\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/value_apply.go",
+      "line": 94,
+      "function": "*screen.valueApplyAction",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/value_apply.go",
+      "line": 107,
+      "function": "*screen.valueApplyAction",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 21,
+      "function": "*screen.verificationInspector",
+      "kind": "node-Activate",
+      "expression": "Activate: func() { s.beginFile(\"verification.import\", true, workbench.RecordingImportParams{}, nil) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 21,
+      "function": "*screen.verificationInspector",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(\"verification.import\", true, workbench.RecordingImportParams{}, nil)",
+      "public_commands": [
+        "verification.import"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 32,
+      "function": "*screen.verificationInspector",
+      "kind": "callback-factory",
+      "expression": "timeField(\"verify-\"+field.id, field.label, field.value, false, func(text string) {\n\ts.invokeAtCommandRevision(\"verification.settings.set\", textFieldParams(cfg, name, text), state.CommandRevision)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 33,
+      "function": "*screen.verificationInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"verification.settings.set\", textFieldParams(cfg, name, text), state.CommandRevision)",
+      "public_commands": [
+        "verification.settings.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 51,
+      "function": "*screen.verificationInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.InputMode = e.SelectedID\n\ts.invoke(\"verification.settings.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 54,
+      "function": "*screen.verificationInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"verification.settings.set\", next)",
+      "public_commands": [
+        "verification.settings.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 60,
+      "function": "*screen.verificationInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tv := float64(e.Number)\n\tnext.InitialVoltage = \u0026v\n\ts.invoke(\"verification.settings.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 64,
+      "function": "*screen.verificationInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"verification.settings.set\", next)",
+      "public_commands": [
+        "verification.settings.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 91,
+      "function": "*screen.verificationInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.Capacitors = append([]workbench.CapacitorInitial{}, cfg.Capacitors...)\n\tfound := false\n\tfor i := range next.Capacitors {\n\t\tif next.Capacitors[i].ID == part.ID {\n\t\t\tnext.Capacitors[i].Voltage = float64(e.Number)\n\t\t\tfound = true\n\t\t}\n\t}\n\tif !found {\n\t\tnext.Capacitors = append(next.Capacitors, workbench.CapacitorInitial{ID: part.ID, Voltage: float64(e.Number)})\n\t}\n\ts.invoke(\"verification.settings.set\", next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 104,
+      "function": "*screen.verificationInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"verification.settings.set\", next)",
+      "public_commands": [
+        "verification.settings.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 113,
+      "function": "*screen.verificationInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"verify-project-startup\", \"Use project startup\", \"verification.settings.set\", reset)",
+      "public_commands": [
+        "verification.settings.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 122,
+      "function": "*screen.verificationInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"verify-start\", \"Verify\", \"simulation.verify\", workbench.VerifyParams{Duration: \u0026duration})",
+      "public_commands": [
+        "simulation.verify"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 144,
+      "function": "*screen.verificationInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"operation.select\", workbench.IDParams{ID: id})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 149,
+      "function": "*screen.verificationInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"operation.select\", workbench.IDParams{ID: id})",
+      "public_commands": [
+        "operation.select"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 159,
+      "function": "*screen.verificationInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"recording-keep\", keepLabel, \"recording.keep.set\", workbench.RecordingKeepParams{ID: operation.ID, Keep: !operation.KeptInProject})",
+      "public_commands": [
+        "recording.keep.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 169,
+      "function": "*screen.verificationInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"verify-cancel\", \"Cancel verification\", \"operation.cancel\", workbench.IDParams{ID: operation.ID})",
+      "public_commands": [
+        "operation.cancel"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 174,
+      "function": "*screen.verificationInspector",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"diagnostics.details.set\", workbench.DiagnosticDetailsParams{Visible: e.Checked})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 175,
+      "function": "*screen.verificationInspector",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"diagnostics.details.set\", workbench.DiagnosticDetailsParams{Visible: e.Checked})",
+      "public_commands": [
+        "diagnostics.details.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 183,
+      "function": "*screen.verificationInspector",
+      "kind": "action-factory",
+      "expression": "s.action(\"recording-show\", \"View recorded plot\", \"recording.view.set\", workbench.RecordingViewParams{Mode: \"recorded\"})",
+      "public_commands": [
+        "recording.view.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 188,
+      "function": "*screen.verificationInspector",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\ts.beginFile(\"verification.export\", true, workbench.VerificationExportParams{ID: preview.ID, Format: format}, nil)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/verification.go",
+      "line": 189,
+      "function": "*screen.verificationInspector",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(\"verification.export\", true, workbench.VerificationExportParams{ID: preview.ID, Format: format}, nil)",
+      "public_commands": [
+        "verification.export"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 75,
+      "function": "*screen.action",
+      "kind": "node-Activate",
+      "expression": "Activate: func() { s.invokeAtCommandRevision(command, p, context.revision, context.generation) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 75,
+      "function": "*screen.action",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(command, p, context.revision, context.generation)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 130,
+      "function": "*screen.view",
+      "kind": "command-menu",
+      "expression": "s.commandMenu(\"file-menu\", \"File\", [][2]string{{\"project.clear\", \"New schematic\"}, {\"file.open\", \"Open…\"}, {\"file.save\", \"Save\"}, {\"file.save-as\", \"Save as…\"}, {\"app.close\", \"Close window\"}})",
+      "public_commands": [
+        "project.clear",
+        "project.load",
+        "project.load.start",
+        "project.save",
+        "project.save.start",
+        "project.save",
+        "project.save.start",
+        "app.close"
+      ],
+      "status": "declared-native-wrapper"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 131,
+      "function": "*screen.view",
+      "kind": "registry-button",
+      "expression": "s.button(\"file.save\", \"Save\")",
+      "public_commands": [
+        "project.save",
+        "project.save.start"
+      ],
+      "status": "declared-native-wrapper"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 132,
+      "function": "*screen.view",
+      "kind": "command-menu",
+      "expression": "s.commandMenu(\"examples-menu\", \"Examples\", [][2]string{{\"example.reset\", \"LED circuit\"}, {\"example.split-supply\", \"Split-rail DC supply\"}, {\"example.rc\", \"RC charge / discharge\"}, {\"example.rc-high-pass\", \"RC high-pass filter\"}, {\"example.rl\", \"Coil buildup / decay\"}, {\"example.rlc\", \"RLC ringing\"}, {\"example.flyback\", \"Coil / flyback diode\"}, {\"example.npn\", \"Transistor LED\"}, {\"example.switch-npn\", \"Manual transistor switch\"}, {\"example.npn-pulse\", \"Blinking LED\"}, {\"example.flasher\", \"Capacitor-timed flasher\"}, {\"example.led-fade\", \"LED fade\"}, {\"example.nmos\", \"MOSFET LED switch\"}, {\"example.pmos\", \"High-side MOSFET LED\"}, {\"example.cmos\", \"CMOS inverter\"}, {\"example.opamp-follower\", \"Op-amp follower\"}, {\"example.opamp-inverting\", \"Inverting amplifier\"}, {\"example.rectifier\", \"Rectifier / smoothing\"}})",
+      "public_commands": [
+        "example.reset",
+        "example.load",
+        "example.rc",
+        "example.load",
+        "example.load",
+        "example.load",
+        "example.load",
+        "example.npn",
+        "example.switch-npn",
+        "example.npn-pulse",
+        "example.flasher",
+        "example.load",
+        "example.load",
+        "example.load",
+        "example.load",
+        "example.load",
+        "example.load",
+        "example.rectifier"
+      ],
+      "status": "declared-native-wrapper"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 133,
+      "function": "*screen.view",
+      "kind": "registry-button",
+      "expression": "s.button(\"edit.undo\", \"Undo\")",
+      "public_commands": [
+        "edit.undo"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 133,
+      "function": "*screen.view",
+      "kind": "registry-button",
+      "expression": "s.button(\"edit.redo\", \"Redo\")",
+      "public_commands": [
+        "edit.redo"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 185,
+      "function": "*screen.view",
+      "kind": "node-Activate",
+      "expression": "Activate: func() { s.beginFile(\"export.schematic.svg\", true, workbench.SaveParams{}, nil) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 185,
+      "function": "*screen.view",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(\"export.schematic.svg\", true, workbench.SaveParams{}, nil)",
+      "public_commands": [
+        "export.schematic.svg"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 186,
+      "function": "*screen.view",
+      "kind": "node-Activate",
+      "expression": "Activate: func() { s.beginFile(\"export.schematic.pdf\", true, workbench.PDFExportParams{}, nil) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 186,
+      "function": "*screen.view",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(\"export.schematic.pdf\", true, workbench.PDFExportParams{}, nil)",
+      "public_commands": [
+        "export.schematic.pdf"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 187,
+      "function": "*screen.view",
+      "kind": "node-Activate",
+      "expression": "Activate: func() { s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{}, nil) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 187,
+      "function": "*screen.view",
+      "kind": "domain-ingress",
+      "expression": "s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{}, nil)",
+      "public_commands": [
+        "export.schematic.png"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 204,
+      "function": "*screen.view",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"component.select\", workbench.IDParams{ID: id})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 209,
+      "function": "*screen.view",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"component.select\", workbench.IDParams{ID: id})",
+      "public_commands": [
+        "component.select"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 211,
+      "function": "*screen.view",
+      "kind": "action-factory",
+      "expression": "s.action(\"selection-previous\", \"Back\", \"selection.navigate\", workbench.NavigateParams{Direction: \"previous\", Center: true})",
+      "public_commands": [
+        "selection.navigate"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 213,
+      "function": "*screen.view",
+      "kind": "action-factory",
+      "expression": "s.action(\"selection-next\", \"Next\", \"selection.navigate\", workbench.NavigateParams{Direction: \"next\", Center: true})",
+      "public_commands": [
+        "selection.navigate"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 216,
+      "function": "*screen.view",
+      "kind": "action-factory",
+      "expression": "s.action(\"selection-center\", \"Center\", \"view.selection.center\", workbench.CenterSelectionParams{ID: state.Selected})",
+      "public_commands": [
+        "view.selection.center"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 230,
+      "function": "*screen.view",
+      "kind": "action-factory",
+      "expression": "s.action(\"wire-insert-junction\", \"Insert junction on this wire\", \"wire.junction.insert\", workbench.JunctionInsertParams{WireIDs: []string{w.ID}})",
+      "public_commands": [
+        "wire.junction.insert"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 244,
+      "function": "*screen.view",
+      "kind": "action-factory",
+      "expression": "s.action(\"delete-object\", \"Delete selected\", \"object.delete\", workbench.IDParams{ID: state.Selected})",
+      "public_commands": [
+        "object.delete"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 290,
+      "function": "*screen.view",
+      "kind": "action-factory",
+      "expression": "s.action(\"tool-\"+tool, strings.ToUpper(tool[:1])+tool[1:], \"drawing.tool.set\", workbench.ToolParams{Tool: tool})",
+      "public_commands": [
+        "drawing.tool.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 293,
+      "function": "*screen.view",
+      "kind": "registry-button",
+      "expression": "s.button(\"view.fit\", \"Fit\")",
+      "public_commands": [
+        "view.fit"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 295,
+      "function": "*screen.view",
+      "kind": "registry-button",
+      "expression": "s.button(\"drawing.cancel\", \"Esc\")",
+      "public_commands": [
+        "drawing.cancel"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 295,
+      "function": "*screen.view",
+      "kind": "action-factory",
+      "expression": "s.action(\"sweep-open\", \"DC sweep\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
+      "public_commands": [
+        "sweep.visibility.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 501,
+      "function": "*screen.view",
+      "kind": "node-Custom",
+      "expression": "Custom: s.drawing",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/view.go",
+      "line": 514,
+      "function": "*screen.view",
+      "kind": "registry-button",
+      "expression": "s.button(pause, pauseText)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/viewport.go",
+      "line": 63,
+      "function": "*screen.observeSchematicViewport",
+      "kind": "event-or-dispatch-router",
+      "expression": "s.service.Dispatch(context.Background(), workbench.Request{Version: 1, ID: id, Command: \"view.viewport.set\", Params: raw, ExpectedCommandRevision: \u0026plan.revision, ExpectedDocumentGeneration: \u0026plan.generation, Key: id}, \"user\")",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/viewport.go",
+      "line": 63,
+      "function": "*screen.observeSchematicViewport",
+      "kind": "request-command-field",
+      "expression": "Command: \"view.viewport.set\"",
+      "public_commands": [
+        "view.viewport.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/waveforms.go",
+      "line": 25,
+      "function": "*screen.waveformControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invokeAtCommandRevision(\"source.sine.set\", map[string]any{\"id\": p.ID, \"waveform\": textFieldParams(cfg, field.name, e.Text)}, state.CommandRevision)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/waveforms.go",
+      "line": 26,
+      "function": "*screen.waveformControls",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"source.sine.set\", map[string]any{\"id\": p.ID, \"waveform\": textFieldParams(cfg, field.name, e.Text)}, state.CommandRevision)",
+      "public_commands": [
+        "source.sine.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/waveforms.go",
+      "line": 47,
+      "function": "*screen.waveformControls",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"source.pulse.set\", map[string]any{\"id\": p.ID, \"waveform\": textFieldParams(cfg, field.name, text)}, state.CommandRevision)",
+      "public_commands": [
+        "source.pulse.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/waveforms.go",
+      "line": 49,
+      "function": "*screen.waveformControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) { commit(e.Text) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/waveforms.go",
+      "line": 51,
+      "function": "*screen.waveformControls",
+      "kind": "callback-factory",
+      "expression": "timeField(\"pulse-\"+field.id, field.label, field.value, false, commit)",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/waveforms.go",
+      "line": 72,
+      "function": "*screen.waveformControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"fit-waveform-sampling\", \"Fit waveform sampling\", \"simulation.sampling.fit\", struct{}{})",
+      "public_commands": [
+        "simulation.sampling.fit"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/waveforms.go",
+      "line": 91,
+      "function": "*screen.pulseClockControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invokePulseClockAtRevision(clock.Shared, workbench.PulseTimingParams{ID: p.ID, Frequency: e.Text, Duty: clock.DutyText}, state.CommandRevision)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/waveforms.go",
+      "line": 94,
+      "function": "*screen.pulseClockControls",
+      "kind": "callback-factory",
+      "expression": "timeField(\"pulse-period-time\", \"Pulse source period\", clock.Period, false, func(text string) {\n\ts.invokePulseClockAtRevision(clock.Shared, map[string]any{\"id\": p.ID, \"period_s\": text, \"duty_percent\": clock.DutyText}, state.CommandRevision)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/waveforms.go",
+      "line": 97,
+      "function": "*screen.pulseClockControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invokePulseClockAtRevision(clock.Shared, workbench.PulseTimingParams{ID: p.ID, Period: clock.Period, Duty: e.Text}, state.CommandRevision)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/waveforms.go",
+      "line": 107,
+      "function": "*screen.invokePulseClockAtRevision",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"simulation.pulse.timing.set\", params, revision)",
+      "public_commands": [
+        "simulation.pulse.timing.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/waveforms.go",
+      "line": 109,
+      "function": "*screen.invokePulseClockAtRevision",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"source.pulse.timing.set\", params, revision)",
+      "public_commands": [
+        "source.pulse.timing.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/workflow.go",
+      "line": 57,
+      "function": "*screen.partPlotControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"plot-\"+probe.ID, text, \"scope.probes.set\", workbench.ProbeParams{IDs: withProbe(state.Scope.Selected, probe.ID)})",
+      "public_commands": [
+        "scope.probes.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/workflow.go",
+      "line": 97,
+      "function": "*screen.scopeWindowControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"scope-live-window\", \"Follow live history\", \"scope.window.set\", workbench.ScopeWindow{Mode: \"live\"})",
+      "public_commands": [
+        "scope.window.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/workflow.go",
+      "line": 104,
+      "function": "*screen.scopeWindowControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"scope-latest-window\", \"Last 200 ms\", \"scope.window.set\", workbench.ScopeWindow{Mode: \"fixed\", Start: math.Max(lo, hi-.2), End: hi})",
+      "public_commands": [
+        "scope.window.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/workflow.go",
+      "line": 113,
+      "function": "*screen.scopeWindowControls",
+      "kind": "callback-factory",
+      "expression": "timeField(\"window-\"+side, \"Scope interval \"+side, value, t == nil || t.Stale, func(text string) {\n\tp := sc.Window\n\tp.Mode = \"fixed\"\n\ts.invokeAtCommandRevision(\"scope.window.set\", textFieldParams(p, side+\"_s\", text), state.CommandRevision)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/workflow.go",
+      "line": 116,
+      "function": "*screen.scopeWindowControls",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"scope.window.set\", textFieldParams(p, side+\"_s\", text), state.CommandRevision)",
+      "public_commands": [
+        "scope.window.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/workflow.go",
+      "line": 149,
+      "function": "*screen.scopeWindowControls",
+      "kind": "request-command-field",
+      "expression": "Command: \"component.set\"",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/workflow.go",
+      "line": 151,
+      "function": "*screen.scopeWindowControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"cap-pair-\"+value, \"Both capacitors · \"+value, \"edit.batch\", workbench.BatchParams{Name: \"Set both capacitors to \" + value, Edits: edits})",
+      "public_commands": [
+        "edit.batch"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/workspace.go",
+      "line": 41,
+      "function": "*screen.workspaceDock",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tfraction := float64(e.Number)\n\tif e.Number == float32(.35) {\n\t\tfraction = .35\n\t} else if e.Number == float32(.85) {\n\t\tfraction = .85\n\t}\n\ts.invokeAtCommandRevision(\"workspace.layout.set\", workbench.WorkspaceLayout{SchematicFraction: fraction}, state.CommandRevision, state.Document.Generation)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/workspace.go",
+      "line": 48,
+      "function": "*screen.workspaceDock",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"workspace.layout.set\", workbench.WorkspaceLayout{SchematicFraction: fraction}, state.CommandRevision, state.Document.Generation)",
+      "public_commands": [
+        "workspace.layout.set"
+      ],
+      "status": "literal-public-route"
+    }
+  ],
+  "commands_with_source_routes": [
+    "app.close",
+    "app.close.acknowledge",
+    "appearance.configure",
+    "appearance.theme.set",
+    "capacitor.initial.set",
+    "component.duplicate",
+    "component.move",
+    "component.place",
+    "component.rotate",
+    "component.select",
+    "component.set",
+    "diagnostics.details.set",
+    "display.preferences.set",
+    "drawing.cancel",
+    "drawing.position.set",
+    "drawing.tool.set",
+    "edit.batch",
+    "edit.redo",
+    "edit.undo",
+    "editor.value.set",
+    "example.current.reset",
+    "example.flasher",
+    "example.load",
+    "example.npn",
+    "example.npn-pulse",
+    "example.rc",
+    "example.rectifier",
+    "example.reset",
+    "example.switch-npn",
+    "export.page.set",
+    "export.schematic.pdf",
+    "export.schematic.png",
+    "export.schematic.svg",
+    "export.scope.csv",
+    "inductor.initial.set",
+    "measurement.pin.add",
+    "measurement.pin.move",
+    "measurement.pin.remove",
+    "measurement.select",
+    "object.delete",
+    "operation.cancel",
+    "operation.inspect",
+    "operation.select",
+    "parts.search.set",
+    "potentiometer.wiper.set",
+    "print.destination.set",
+    "print.job.cancel",
+    "print.job.refresh",
+    "print.preview.cancel",
+    "print.preview.close",
+    "print.preview.image",
+    "print.preview.page.set",
+    "print.preview.start",
+    "print.printers.refresh",
+    "print.submit",
+    "print.work.cancel",
+    "project.clear",
+    "project.load",
+    "project.load.start",
+    "project.save",
+    "project.save.start",
+    "project.work.cancel",
+    "recording.compare.set",
+    "recording.cursor.clear",
+    "recording.cursor.select",
+    "recording.cursor.set",
+    "recording.keep.set",
+    "recording.pause",
+    "recording.play",
+    "recording.probes.set",
+    "recording.seek",
+    "recording.speed.set",
+    "recording.statistics.set",
+    "recording.step",
+    "recording.timing.set",
+    "recording.view.set",
+    "recording.window.set",
+    "recovery.configure",
+    "recovery.configure.start",
+    "recovery.dismiss.start",
+    "recovery.read.cancel",
+    "recovery.read.chunk",
+    "recovery.read.start",
+    "recovery.restore",
+    "recovery.select",
+    "recovery.work.start",
+    "scope.cursor.clear",
+    "scope.cursor.select",
+    "scope.cursor.set",
+    "scope.probe.remove",
+    "scope.probes.set",
+    "scope.trace.select",
+    "scope.visibility.set",
+    "scope.window.set",
+    "selection.navigate",
+    "simulation.input.set",
+    "simulation.pause",
+    "simulation.pulse.timing.set",
+    "simulation.restart",
+    "simulation.resume",
+    "simulation.sampling.fit",
+    "simulation.step.start",
+    "simulation.transient.set",
+    "simulation.verify",
+    "simulation.work.cancel",
+    "source.pulse.set",
+    "source.pulse.timing.set",
+    "source.sine.set",
+    "sweep.cancel",
+    "sweep.cursor.set",
+    "sweep.export",
+    "sweep.import",
+    "sweep.keep.set",
+    "sweep.select",
+    "sweep.settings.set",
+    "sweep.start",
+    "sweep.trace.select",
+    "sweep.visibility.set",
+    "switch.set",
+    "verification.export",
+    "verification.import",
+    "verification.settings.set",
+    "view.fit",
+    "view.pan",
+    "view.selection.center",
+    "view.viewport.set",
+    "view.zoom",
+    "wire.begin",
+    "wire.connect",
+    "wire.junction.insert",
+    "wire.terminals.set",
+    "workspace.layout.set"
+  ],
+  "commands_without_source_routes": [
+    "app.close.inspect",
+    "app.close.start",
+    "appearance.wait",
+    "capabilities.list",
+    "circuit.connection.set",
+    "display.inspect",
+    "events.poll",
+    "examples.list",
+    "export.start",
+    "measurement.inspect",
+    "operation.samples",
+    "parts.list",
+    "project.inspect",
+    "project.work.inspect",
+    "recording.compare",
+    "recording.statistics",
+    "recording.timing",
+    "recovery.checkpoint",
+    "recovery.dismiss",
+    "recovery.inspect",
+    "recovery.read.inspect",
+    "recovery.read.result",
+    "recovery.restore.start",
+    "recovery.samples",
+    "recovery.scan",
+    "simulation.step",
+    "simulation.wait",
+    "sweep.import.start",
+    "sweep.inspect",
+    "verification.import.start"
+  ],
+  "issues": [],
+  "limitations": [
+    "All top-level desktop production Go files are parsed, including both platform adapters; test/smoke files are excluded.",
+    "Literal public routes are source mappings, not execution coverage. Native aliases are reviewed declarations, not inferred call-graph proofs.",
+    "Dynamic routing, callback factories, gestures, dialog decisions and field assignments require branch/state and mounted-runtime qualification.",
+    "No Go type checking or interprocedural binding is performed; relay callbacks and generated IDs are retained as expressions.",
+    "Vellum internals and Objective-C event delivery are outside this inventory; their contracts and actual accessibility/gesture evidence remain separate.",
+    "Commands without literal ingress may be agent queries, headless lifecycle or dynamically routed UI actions; absence is not automatically a missing user feature."
+  ]
+}

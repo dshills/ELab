@@ -1,0 +1,447 @@
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"errors"
+	"flag"
+	"fmt"
+	"log"
+	"os"
+	"path/filepath"
+	"strings"
+	"sync/atomic"
+	"time"
+
+	"cogentcore.org/core/core"
+	"github.com/dshills/elab/transport"
+	"github.com/dshills/elab/workbench"
+	"github.com/dshills/vellum/app"
+	"github.com/dshills/vellum/canvas"
+	"github.com/dshills/vellum/command"
+	"github.com/dshills/vellum/drivers/cogent"
+	"github.com/dshills/vellum/ui"
+)
+
+func main() {
+	if err := runNative(); err != nil {
+		log.Print(err)
+		os.Exit(1)
+	}
+}
+
+func runNative() (runErr error) {
+	endpoint := flag.String("agent-endpoint", "", "enable local agent access and write a private descriptor to this new file")
+	recoveryDirectory := flag.String("recovery-directory", "", "private autosave directory (default: user configuration directory)")
+	noRecovery := flag.Bool("no-recovery", false, "skip automatic recovery setup")
+	appearanceFile := flag.String("appearance-file", "", "theme preference file (default: user configuration directory)")
+	noAppearance := flag.Bool("no-appearance", false, "use theme for this session only")
+	smoke := flag.Bool("smoke", false, "verify native drawing and UI command results, then close")
+	smokeTimeout := flag.Duration("smoke-timeout", 20*time.Second, "native smoke harness deadline (up to 2 minutes; does not alter solver work limits)")
+	flag.Parse()
+	if *smokeTimeout <= 0 || *smokeTimeout > 2*time.Minute {
+		return fmt.Errorf("smoke-timeout must be positive and at most 2 minutes")
+	}
+	if *smoke {
+		// Honor the fixture's requested viewport and preserve the user's saved
+		// window geometry. Ordinary app launches keep their normal persistence.
+		previous := core.DebugSettings.DisableWindowGeometrySaver
+		core.DebugSettings.DisableWindowGeometrySaver = true
+		defer func() { core.DebugSettings.DisableWindowGeometrySaver = previous }()
+	}
+	service := workbench.New()
+	defer func() {
+		service.Close()
+		if work := service.Snapshot().Shutdown; work != nil && work.Error != nil && !work.ExitReady {
+			runErr = errors.Join(runErr, fmt.Errorf("shutdown cleanup failed: %s / %s", work.RecoveryError, work.AppearanceError))
+		}
+	}()
+	if !*noRecovery {
+		directory := *recoveryDirectory
+		if *smoke && directory == "" {
+			var err error
+			directory, err = os.MkdirTemp("", "elab-smoke-recovery-")
+			if err != nil {
+				return err
+			}
+			defer func() { service.Close(); _ = os.RemoveAll(directory) }()
+		}
+		if err := setupRecovery(service, directory); err != nil {
+			log.Print("Recovery unavailable: ", err)
+		}
+	}
+	if !*noAppearance {
+		path := *appearanceFile
+		if *smoke && path == "" {
+			directory, err := os.MkdirTemp("", "elab-smoke-appearance-")
+			if err != nil {
+				return err
+			}
+			path = filepath.Join(directory, "appearance.json")
+			defer func() { service.Close(); _ = os.RemoveAll(directory) }()
+		}
+		if err := setupAppearance(service, path); err != nil {
+			log.Printf("Appearance unavailable: %v", err)
+		}
+	}
+	a, err := app.New(app.Config{})
+	if err != nil {
+		return err
+	}
+	defer a.Close()
+	screen := &screen{app: a, service: service, commands: command.New(), displayStarted: time.Now()}
+	screen.requestKeyboardFocus("part-search")
+	view := canvas.Viewport{Width: 800, Height: 500, Zoom: 1}
+	renderer := &cogent.MeshCanvas{Owner: a, Window: "main", View: &view, Prepare: func(v canvas.Viewport) (*canvas.Mesh, error) { return screen.mesh(v) }, OnError: func(err error) { log.Print("schematic: ", err) }}
+	screen.drawing = &commandCanvas{MeshCanvas: renderer, screen: screen}
+	scopeView := canvas.Viewport{Width: 800, Height: 120, Zoom: 1}
+	screen.scope = &scopeCanvas{MeshCanvas: &cogent.MeshCanvas{Owner: a, Window: "main", View: &scopeView, Prepare: screen.scopeMesh, OnError: func(err error) { log.Print("scope: ", err) }}, screen: screen}
+	screen.registerCommands()
+	width, height := float32(minimumWindowWidthDP), float32(initialWindowHeightDP)
+	if *smoke {
+		// The full pixel-inspection fixture includes two distant reading cards.
+		// Compact-window layout is inspected separately in the UI audit.
+		width, height = 1260, 1100
+	}
+	screen.window, err = a.OpenWindow(app.Window{ID: "main", Title: "ELab · Live electronics", Width: width, Height: height, View: screen.view, CloseRequest: screen.requestClose})
+	if err != nil {
+		return err
+	}
+	screen.settleField = func(id string, done func(error)) error {
+		return cogent.SettleTextField(a.Context(), a, "main", id, done)
+	}
+	screen.settleNumber = func(id string, done func(error)) error {
+		return cogent.SettleNumberField(a.Context(), a, "main", id, done)
+	}
+	screen.drawing.pointer = newPointerBridge(a, screen.window, screen.routeNativePointer)
+	defer screen.drawing.pointer.close()
+	if *endpoint != "" {
+		server, err := transport.Listen(service, *endpoint)
+		if err != nil {
+			return err
+		}
+		defer server.Close()
+		log.Printf("Local agent endpoint descriptor: %s", *endpoint)
+	}
+	go func() {
+		ticker := time.NewTicker(33 * time.Millisecond)
+		defer ticker.Stop()
+		var menusInstalled bool
+		var last, lastCommand uint64
+		var lastFrame, lastMotion time.Time
+		for {
+			select {
+			case <-a.Context().Done():
+				return
+			case <-ticker.C:
+				if !menusInstalled {
+					if services, err := a.Services(); err == nil {
+						menusInstalled = true
+						if err := services.SetMenu(a.Context(), applicationMenus); err != nil {
+							log.Printf("Application menus unavailable: %v", err)
+						}
+					}
+				}
+				state := service.Snapshot()
+				if state.ReadyToExit() {
+					a.Close()
+					return
+				}
+				if !state.Closed && state.Display.Animate && time.Since(lastMotion) >= 125*time.Millisecond {
+					lastMotion = time.Now()
+					_ = a.PostWindow(screen.window, func() {
+						if !service.Snapshot().Display.Animate || screen.drawing.widget == nil {
+							return
+						}
+						screen.renderRevision++
+						screen.drawing.Revision = screen.renderRevision
+						// Sync requests a canvas repaint without rebuilding the form
+						// tree, preserving text focus while illustrative dots move.
+						if err := screen.drawing.Sync(screen.drawing.widget); err != nil && !errors.Is(err, cogent.ErrFrameNotReady) {
+							log.Printf("current animation: %v", err)
+						}
+					})
+				}
+				// Solver samples remain independent of presentation. Keep commands immediate
+				// while pacing autonomous trace repaints to four frames per second.
+				if state.Revision != last && (!workbench.IsTransientAnalysis(state.Analysis) || state.CommandRevision != lastCommand || time.Since(lastFrame) >= 250*time.Millisecond) {
+					lastFrame = time.Now()
+					lastCommand = state.CommandRevision
+					last = state.Revision
+					a.Invalidate("main")
+				}
+			}
+		}
+	}()
+	smokeResult := make(chan error, 1)
+	if *smoke {
+		go func() { smokeResult <- nativeSmoke(a, screen, renderer, *smokeTimeout); a.Close() }()
+	}
+	if err := a.Run(context.Background(), cogent.Driver{Commands: screen.commands, Theme: desktopTheme()}); err != nil {
+		return err
+	}
+	if *smoke {
+		if err := <-smokeResult; err != nil {
+			return err
+		}
+		fmt.Println(`{"event":"elab.native.smoke","passed":true}`)
+	}
+	return nil
+}
+
+type screen struct {
+	viewportPending                     *viewportReport
+	viewportSerial                      uint64
+	keyboardFocus                       ui.FocusRequest
+	recoveryInspection, recoverySamples recoveryReadCache
+	nativePointerPane                   string
+	sweepDrawing                        *sweepCanvas
+	previewPixels                       previewPixels
+	requestHelp                         *workbench.DiagnosticHelp
+	requestHelpRevision                 uint64
+	displayStarted                      time.Time
+	app                                 *app.Application
+	window                              app.WindowRef
+	service                             *workbench.Service
+	commands                            *command.Registry
+	drawing                             *commandCanvas
+	scope                               *scopeCanvas
+	fileBusy                            bool
+	fileMessage, pendingCommand         string
+	pendingParams                       json.RawMessage
+	pendingFileSerial                   uint64
+	fileDecisionContext                 *actionContext
+	chooseFile                          func(context.Context, app.FileOptions) (string, error)
+	serial                              uint64
+	errorMessage                        string
+	renderRevision, lastDrawRevision    uint64
+	lastDrawAnalysis                    string
+	lastPalette                         appPalette
+	nativePalette                       atomic.Pointer[appPalette]
+	menuSerial                          uint64
+	menuCommandRevision                 *uint64
+	actionContext                       *actionContext
+	fieldContext                        *actionContext
+	pointerContext                      *actionContext
+	pointerAccepted                     *actionContext
+	fieldAccepted                       *actionContext
+	settleField                         func(string, func(error)) error
+	settleNumber                        func(string, func(error)) error
+	pendingValueApply                   *valueApply
+	valueDraftAccepted                  *valueDraftContinuation
+	outputPageAccepted                  *outputPageContinuation
+	placementFieldAccepted              *placementFieldContinuation
+	pendingPlacement                    *placementActionWork
+	cursorFieldAccepted                 *cursorFieldContinuation
+	pendingCursorAction                 *cursorActionWork
+}
+
+func (s *screen) invoke(id string, p any) workbench.Response {
+	return s.invokeAtCommandRevision(id, p, s.service.Snapshot().CommandRevision)
+}
+func (s *screen) invokeAtCommandRevision(id string, p any, rev uint64, generation ...uint64) workbench.Response {
+	if s.pointerContext != nil {
+		rev = s.pointerContext.revision
+		generation = []uint64{s.pointerContext.generation}
+	}
+	if s.fieldContext != nil {
+		rev = s.fieldContext.revision
+		generation = []uint64{s.fieldContext.generation}
+	}
+	if s.menuCommandRevision != nil {
+		rev = *s.menuCommandRevision
+	}
+	if s.fileDecisionContext != nil {
+		rev = s.fileDecisionContext.revision
+		generation = []uint64{s.fileDecisionContext.generation}
+	}
+
+	s.fileMessage = ""
+	s.serial++
+	raw, _ := json.Marshal(p)
+	if s.requestHelp != nil && rev != s.requestHelpRevision {
+		s.requestHelp = nil
+		s.errorMessage = ""
+	}
+	request := workbench.Request{Version: 1, ID: fmt.Sprintf("ui-%d", s.serial), Command: id, Params: raw, ExpectedCommandRevision: &rev, Key: fmt.Sprintf("ui-%d", s.serial)}
+	if len(generation) > 0 {
+		request.ExpectedDocumentGeneration = &generation[0]
+	}
+	result := s.service.Dispatch(context.Background(), request, "user")
+	if s.pointerContext != nil {
+		s.pointerAccepted = nil
+		if state, ok := result.Result.(workbench.Snapshot); result.Error == nil && ok {
+			s.pointerAccepted = &actionContext{state.CommandRevision, state.Document.Generation}
+		}
+	}
+	if s.fieldContext != nil {
+		s.fieldAccepted = nil
+		if state, ok := result.Result.(workbench.Snapshot); result.Error == nil && ok {
+			// Record this dispatch's accepted context, never a later snapshot:
+			// an agent may already have changed the service again.
+			s.fieldAccepted = &actionContext{state.CommandRevision, state.Document.Generation}
+		}
+	}
+	if result.Error != nil {
+		s.errorMessage = result.Error.Message
+		s.requestHelp = result.Help
+		s.requestHelpRevision = rev
+	} else if id == "diagnostics.details.set" && s.requestHelp != nil {
+		if state, ok := result.Result.(workbench.Snapshot); ok {
+			s.requestHelpRevision = state.CommandRevision
+		}
+	} else if id != "diagnostics.details.set" {
+		s.errorMessage = ""
+		s.requestHelp = nil
+	}
+	s.app.Invalidate("main")
+	return result
+}
+func (s *screen) registerCommands() {
+	s.registerFileCommands()
+	s.registerAppearanceCommands()
+	s.registerExampleLoadCommands()
+	for _, entry := range []struct{ id, label, shortcut string }{
+		{"edit.undo", "Undo", "Meta+Z"}, {"edit.redo", "Redo", "Meta+Shift+Z"},
+		{"project.clear", "New blank", ""}, {"drawing.cancel", "Cancel drawing", "Escape"},
+		{"app.close", "Close window", "Meta+W"},
+		{"example.current.reset", "Reset current example", ""}, {"example.reset", "Load LED example", ""}, {"example.rc", "Load RC example", ""}, {"example.npn", "Load NPN LED example", ""}, {"example.switch-npn", "Load manual transistor LED switch", ""}, {"example.npn-pulse", "Load blinking NPN LED", ""}, {"example.flasher", "Load capacitor-timed LED flasher", ""}, {"example.rectifier", "Load diode rectifier and smoothing", ""},
+		{"simulation.pause", "Pause", ""}, {"simulation.resume", "Resume", ""}, {"simulation.restart", "Restart", ""}, {"view.fit", "Fit circuit", ""},
+	} {
+		entry := entry
+		err := s.commands.Register(command.Command{ID: entry.id, Label: entry.label, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts,
+			Available: func() error {
+				if s.fileBusy || s.pendingCommand != "" {
+					return fmt.Errorf("finish the current file operation first")
+				}
+				state := s.service.Snapshot()
+				if state.Closed && entry.id != "app.close" {
+					return fmt.Errorf("session is closing")
+				}
+				if entry.id == "example.current.reset" && state.Example == nil {
+					return fmt.Errorf("load an example before resetting it")
+				}
+				if entry.id == "edit.undo" && !state.CanUndo {
+					return fmt.Errorf("nothing to undo")
+				}
+				if entry.id == "edit.redo" && !state.CanRedo {
+					return fmt.Errorf("nothing to redo")
+				}
+				return nil
+			}, Execute: func(context.Context) error {
+				if entry.id == "app.close" {
+					s.requestClose()
+					return nil
+				}
+				if entry.id == "example.current.reset" {
+					state := s.service.Snapshot()
+					if state.Example == nil {
+						return fmt.Errorf("load an example before resetting it")
+					}
+					generation := state.Document.Generation
+					s.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: &generation})
+					return nil
+				}
+				if entry.id == "project.clear" || entry.id == "example.reset" || entry.id == "example.rc" || entry.id == "example.npn" || entry.id == "example.npn-pulse" || entry.id == "example.flasher" || entry.id == "example.switch-npn" || entry.id == "example.rectifier" {
+					s.requestReplace(entry.id, workbench.ReplaceParams{})
+					return nil
+				}
+				var p any = struct{}{}
+				if entry.id == "edit.undo" || entry.id == "edit.redo" {
+					state := s.service.Snapshot()
+					tip := state.UndoEntry
+					if entry.id == "edit.redo" {
+						tip = state.RedoEntry
+					}
+					if tip != nil {
+						revision := tip.CommandRevision
+						p = workbench.HistoryParams{ExpectedEntryRevision: &revision, AllowOtherActor: tip.Actor != "user"}
+					}
+				}
+				if entry.id == "view.fit" {
+					p = workbench.FitParams{Width: s.drawing.View.Width, Height: s.drawing.View.Height, FollowViewport: true}
+				}
+				r := s.invoke(entry.id, p)
+				if r.Error != nil {
+					return fmt.Errorf("%s", r.Error.Message)
+				}
+				if entry.id == "drawing.cancel" {
+					s.requestKeyboardFocus("part-search")
+				}
+				s.continueSimulationFocus(entry.id, r)
+				return nil
+			},
+		})
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+func (s *screen) continueSimulationFocus(id string, response workbench.Response) {
+	if response.Error != nil || id != "simulation.pause" && id != "simulation.resume" {
+		return
+	}
+	// The header replaces this button when the clock changes. Continue focus
+	// once after accepted commands, including guarded rendered buttons.
+	target := "simulation.pause"
+	if response.Result.(workbench.Snapshot).Paused {
+		target = "simulation.resume"
+	}
+	s.requestKeyboardFocus(target)
+}
+
+func (s *screen) button(id, text string) ui.Node {
+	help := ""
+	state := s.service.Snapshot()
+	if id == "edit.undo" {
+		help = state.UndoName
+	}
+	if id == "edit.redo" {
+		help = state.RedoName
+	}
+	tip := state.UndoEntry
+	if id == "edit.redo" {
+		tip = state.RedoEntry
+	}
+	if (id == "edit.undo" || id == "edit.redo") && tip != nil {
+		help = tip.Name + " · by " + tip.Actor
+		if tip.Actor != "user" && tip.Actor != "" {
+			if strings.HasPrefix(tip.Actor, "agent") {
+				text += " agent"
+			} else {
+				text += " other"
+			}
+		}
+	}
+
+	activate := func() { s.commands.Invoke(context.Background(), id) }
+	if id == "simulation.pause" || id == "simulation.resume" || id == "simulation.restart" {
+		rendered := s.actionContext
+		if rendered == nil {
+			state := s.service.Snapshot()
+			rendered = &actionContext{state.CommandRevision, state.Document.Generation}
+		}
+		activate = func() {
+			if err := s.commands.Enabled(id); err != nil {
+				s.errorMessage = err.Error()
+				s.app.Invalidate("main")
+				return
+			}
+			response := s.invokeAtCommandRevision(id, struct{}{}, rendered.revision, rendered.generation)
+			s.continueSimulationFocus(id, response)
+		}
+	}
+	if (id == "edit.undo" || id == "edit.redo") && tip != nil {
+		revision := tip.CommandRevision
+		target := workbench.HistoryParams{ExpectedEntryRevision: &revision, AllowOtherActor: tip.Actor != "user"}
+		activate = func() {
+			if err := s.commands.Enabled(id); err != nil {
+				s.errorMessage = err.Error()
+				return
+			}
+			s.invoke(id, target)
+		}
+	}
+	return buttonStyle(ui.Node{ID: id, Kind: ui.Button, Text: text, Disabled: s.commands.Enabled(id) != nil, Accessibility: ui.Accessibility{Name: text, Help: help}, Activate: activate}, false)
+}

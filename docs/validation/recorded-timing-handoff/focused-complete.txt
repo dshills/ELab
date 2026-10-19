@@ -1,0 +1,40 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestRecordedTimingPageWaitsForAllFieldsAndRunsOnce
+--- PASS: TestRecordedTimingPageWaitsForAllFieldsAndRunsOnce (0.30s)
+=== RUN   TestRecordedTimingPageRefusesInterveningWork
+=== RUN   TestRecordedTimingPageRefusesInterveningWork/agent-before
+=== RUN   TestRecordedTimingPageRefusesInterveningWork/agent-after
+=== RUN   TestRecordedTimingPageRefusesInterveningWork/other-user-field
+=== RUN   TestRecordedTimingPageRefusesInterveningWork/other-recording
+=== RUN   TestRecordedTimingPageRefusesInterveningWork/new-document
+=== RUN   TestRecordedTimingPageRefusesInterveningWork/invalid-field
+--- PASS: TestRecordedTimingPageRefusesInterveningWork (0.75s)
+    --- PASS: TestRecordedTimingPageRefusesInterveningWork/agent-before (0.07s)
+    --- PASS: TestRecordedTimingPageRefusesInterveningWork/agent-after (0.12s)
+    --- PASS: TestRecordedTimingPageRefusesInterveningWork/other-user-field (0.16s)
+    --- PASS: TestRecordedTimingPageRefusesInterveningWork/other-recording (0.12s)
+    --- PASS: TestRecordedTimingPageRefusesInterveningWork/new-document (0.12s)
+    --- PASS: TestRecordedTimingPageRefusesInterveningWork/invalid-field (0.16s)
+=== RUN   TestRecordedTimingPageSettlementFailurePreservesState
+=== RUN   TestRecordedTimingPageSettlementFailurePreservesState/admission
+=== RUN   TestRecordedTimingPageSettlementFailurePreservesState/completion
+--- PASS: TestRecordedTimingPageSettlementFailurePreservesState (0.14s)
+    --- PASS: TestRecordedTimingPageSettlementFailurePreservesState/admission (0.07s)
+    --- PASS: TestRecordedTimingPageSettlementFailurePreservesState/completion (0.07s)
+=== RUN   TestRecordedTimingPagePreviousUsesAcceptedFieldSettings
+--- PASS: TestRecordedTimingPagePreviousUsesAcceptedFieldSettings (0.12s)
+=== RUN   TestRecordedTimingPageStopsWhenEditedThresholdHasNoMoreArrivals
+--- PASS: TestRecordedTimingPageStopsWhenEditedThresholdHasNoMoreArrivals (0.12s)
+=== RUN   TestMountedRecordingTimingTypedThresholdThenNextMatchesAgent
+--- PASS: TestMountedRecordingTimingTypedThresholdThenNextMatchesAgent (0.53s)
+=== RUN   TestMountedRecordingTimingInvalidThresholdDoesNotAdvancePage
+--- PASS: TestMountedRecordingTimingInvalidThresholdDoesNotAdvancePage (0.61s)
+=== RUN   TestNativeRecordedPulseReadoutsUseSharedTimingAndSurviveFilters
+--- PASS: TestNativeRecordedPulseReadoutsUseSharedTimingAndSurviveFilters (0.69s)
+=== RUN   TestNativeRecordedTimingMatchesPublicQueryAndClears
+--- PASS: TestNativeRecordedTimingMatchesPublicQueryAndClears (0.22s)
+=== RUN   TestNativeRecordedTimingPagesAndDirectionReset
+--- PASS: TestNativeRecordedTimingPagesAndDirectionReset (0.39s)
+PASS
+ok  	github.com/dshills/elab/desktop	5.512s

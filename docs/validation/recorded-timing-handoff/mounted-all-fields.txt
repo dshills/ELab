@@ -1,0 +1,10 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedRecordingTimingTypedThresholdThenNextMatchesAgent
+--- PASS: TestMountedRecordingTimingTypedThresholdThenNextMatchesAgent (0.52s)
+=== RUN   TestMountedRecordingTimingInvalidThresholdDoesNotAdvancePage
+    recorded_timing_offscreen_test.go:77: invalid threshold advanced page or cleared validation: offset=8 error=
+--- FAIL: TestMountedRecordingTimingInvalidThresholdDoesNotAdvancePage (0.46s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	1.578s
+FAIL

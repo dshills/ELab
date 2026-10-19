@@ -230,6 +230,9 @@ type screen struct {
 	pendingValueApply                   *valueApply
 	valueDraftAccepted                  *valueDraftContinuation
 	outputPageAccepted                  *outputPageContinuation
+	recordedTimingAccepted              *recordedTimingContinuation
+	recordedTimingRejected              *recordedTimingFieldRejection
+	pendingRecordedTimingPage           *recordedTimingPageWork
 	placementFieldAccepted              *placementFieldContinuation
 	pendingPlacement                    *placementActionWork
 	cursorFieldAccepted                 *cursorFieldContinuation

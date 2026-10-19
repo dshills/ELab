@@ -1,0 +1,68 @@
+//go:build offscreen
+
+package main
+
+import (
+	"reflect"
+	"testing"
+
+	"github.com/dshills/elab/workbench"
+	"github.com/dshills/vellum/ui"
+)
+
+func prepareMountedTiming(t *testing.T, service *workbench.Service) {
+	t.Helper()
+	agentAction(t, service, "example.npn-pulse", workbench.ReplaceParams{})
+	agentAction(t, service, "simulation.pause", struct{}{})
+	duration := .5
+	agentAction(t, service, "simulation.verify", workbench.VerifyParams{Duration: &duration, ProbeIDs: []string{"v:VIN.positive"}})
+	completedVerification(t, service, service.Snapshot().LastOperation)
+	agentAction(t, service, "recording.view.set", workbench.RecordingViewParams{Mode: "recorded"})
+	state := service.Snapshot()
+	agentAction(t, service, "recording.timing.set", workbench.RecordingTimingParams{ID: state.Recording.ID, ProbeID: "v:VIN.positive", Level: "2.5 V", Direction: "both", End: .5})
+}
+
+func mountedTimingControls(t *testing.T, s *screen) *mountedControlWindow {
+	t.Helper()
+	return newMountedControlWindow(t, s, func() ui.Node {
+		assembled := s.view()
+		root := ui.Node{ID: "root", Kind: ui.Column, Focus: ui.FocusRequest{ID: "recorded-timing-level", Sequence: 1}}
+		for _, id := range []string{"recorded-timing-level", "recorded-timing-next"} {
+			node, ok := findNode(assembled, id)
+			if !ok {
+				t.Fatalf("missing production timing control %s", id)
+			}
+			node.MinWidth, node.MinHeight = 190, 40
+			root.Children = append(root.Children, node)
+		}
+		return root
+	})
+}
+
+func TestMountedRecordingTimingTypedThresholdThenNextMatchesAgent(t *testing.T) {
+	s, cleanup := testScreen(t)
+	t.Cleanup(cleanup)
+	agent := workbench.New()
+	t.Cleanup(agent.Close)
+	for _, service := range []*workbench.Service{s.service, agent} {
+		prepareMountedTiming(t, service)
+	}
+	m := mountedTimingControls(t, s)
+	before := s.service.Snapshot()
+	typeMountedCursor(t, m, "recorded-timing-level", "3 V")
+	if !reflect.DeepEqual(before, s.service.Snapshot()) {
+		t.Fatal("private threshold draft changed accepted measurements")
+	}
+	clickMountedControl(t, m, "recorded-timing-next")
+	cfg := workbench.RecordingTimingParams(agent.Snapshot().Recording.Timing.Settings)
+	cfg.Level = "3 V"
+	agentAction(t, agent, "recording.timing.set", cfg)
+	cfg = workbench.RecordingTimingParams(agent.Snapshot().Recording.Timing.Settings)
+	cfg.Offset = agent.Snapshot().Recording.Timing.NextOffset
+	agentAction(t, agent, "recording.timing.set", cfg)
+	after := s.service.Snapshot()
+	if s.errorMessage != "" || after.CommandRevision != before.CommandRevision+2 || !reflect.DeepEqual(after.Recording.Timing, agent.Snapshot().Recording.Timing) {
+		t.Fatalf("one Next click failed after private threshold: level=%s offset=%d revision=%d→%d error=%s", after.Recording.Timing.Settings.Level, after.Recording.Timing.Settings.Offset, before.CommandRevision, after.CommandRevision, s.errorMessage)
+	}
+	assertCursorMeasurementPreservesPhysics(t, before, after)
+}

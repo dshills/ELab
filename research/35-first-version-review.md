@@ -1,5 +1,7 @@
 # ELab first-version review · 0.145.0 /162
 
+A subsequent [recorded timing paging source repair](../docs/validation/recorded-timing-handoff/README.md) passes focused and full source checks. This preserved /162 build still has two timing-field issues: a typed valid threshold can make Next arrivals refuse, and invalid text can be ignored while paging clears its feedback. A clean replacement is being qualified; current source evidence does not establish new physical input acceptance.
+
 The updated private owner-review alpha is in the [review folder](../build/ELab-0.145.0-162-review), with [ELab.app](../build/ELab-0.145.0-162-review/ELab.app), matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required. All 22 earlier qualified review folders (0.123.0 /140 through 0.144.0 /161), the original unqualified /147 candidate and canonical 0.105.0 /120 app are preserved. Owner walkthrough remains “Not tried yet.”
 
 Save your work and quit an earlier review before opening this replacement. Version 0.145 repairs MOSFET cutoff voltage convergence: a small current residual can hide a drain-voltage error near a weakly conducting LED load. The native app and external agent now require the existing Newton voltage-correction check in MOSFET networks. Device models, public commands, saved format, native bindings and Vellum SDK `b22478c` are unchanged. The preserved /161 PMOS example retains the earlier 3.218 mV discrepancy.

@@ -1,0 +1,63 @@
+{
+  "passed": true,
+  "scope": "Modified-source mounted/retained timing paging; clean replacement remains pending",
+  "source_identity": {
+    "source_base": "dd3dfd1fee53a8a5456cb51275e6a881fc950f34",
+    "production_and_test_sha256": {
+      "desktop/main.go": "2c224411f11c8e1caba8aa5a91b86ad02bd28443804edb0b14d929f72f7ef1e6",
+      "desktop/recording_timing.go": "b9b0891607b05936a920fd68e64290447df1068c1bb2319cc50f7015a9150c0d",
+      "scripts/check.sh": "afef5423b72767d6e5fdef1ff0c089636a8b690358402eadc29efba064467b4b",
+      "desktop/recorded_timing_actions.go": "d744d38c6ce664fd7140986197c6e50c4b4b05110eeee50939026b29e20b320a",
+      "desktop/recorded_timing_actions_test.go": "f08a042c1e4cf8ebb488047c84068c437a41f7c407aad790b9638fcf8b971047",
+      "desktop/recorded_timing_offscreen_test.go": "3a4d5380668fa8de4d375578e30a59ad0522f81fa8c33b3125e760a9ba868ba6"
+    },
+    "native_inventory_sha256": "116128c503aaf1f78c9c61b118ee12317c24d1883f6f95a6adfd11c0b6e89a92",
+    "scope": "Modified-source mounted/retained-callback proof. No new app package or physical input acceptance."
+  },
+  "full_quality": {
+    "passed": true,
+    "exit_code": 0,
+    "command": "./scripts/check.sh",
+    "started_utc": "2026-10-19T03:59:38.777682+00:00",
+    "duration_s": 187.54614374996163
+  },
+  "original_source_reproduces_both_failures": true,
+  "evidence_sha256": {
+    "README.md": "4f68f7144d11ed524ebf1a64c545dec0735559023403735393e7972639362f48",
+    "before-regression.go.txt": "0d3239c0565f3fd5bb4b9a11ec58e0984338faf9ab165680f12a6448a771e270",
+    "before-reproduction.txt": "7ea0f96b2a1b77d3e729975b3f1e37d37e95927c88e08cc7182e24f9248ab7c3",
+    "fixture-corrections.txt": "845c44381f3bd5ec097930f8efe4cee9e11527366390a2002c130375166e6bd3",
+    "fixture-first.go.txt": "40e8fc6d69d51b66e388704c5998174972e51a5197851353543e2651551f2730",
+    "fixture-layout-failure.txt": "fe3deae4e9a1cc3d34fcab543dbb0a2a01650a7ec5722994f4988a1aafe31945",
+    "fixture-settlement-failure.txt": "0125b64466d0e281d92b7234c7f2be3c22fc23a142f05f590871db5cc8bb6a5d",
+    "fixture-unit-failures.txt": "5fdd6f1337221d3734df8b7751eb53a38f2558543f8d4d23e257737b55636d30",
+    "focused-complete.txt": "24737156f4a55769fcacc7b78ee3bd68c599c09c9d432e0f5f6c06a2737f1755",
+    "inventory-review.json": "11f94126714b3f37a9a65cf0b3ca3732d1b49f505eb1860c87bf9c2431537274",
+    "inventory.json": "116128c503aaf1f78c9c61b118ee12317c24d1883f6f95a6adfd11c0b6e89a92",
+    "mounted-all-fields.txt": "8a2264f07627b5c3df78daefae23e32cce738504e1dbcccd077d7e4c11de2532",
+    "native-build-info.txt.gz": "ee9504d5984448f2bfd3fd569d7cfdb994e3f02175ab95a3f0f939dc05dc95e0",
+    "native-build.txt": "339151eb2a9c23208dccda36b8181dfaa860e000e7cdbea033925415651e0e8a",
+    "native-smoke.json": "60e92e8fe697eeea3c0fc62b7647f45296e3edbf4a9f4f6b8f9f5693ad483172",
+    "native-smoke.txt": "8f308827e4bab41b04bf5dbdb74ca07abbdd928aface7d11ba7c7722e271f16a",
+    "original-final-regression.txt": "989e9ee3db3054be3d38027a3a469c7362b685a436c85b090614b578976f7554",
+    "original-overlay/empty.go.txt": "df1d036cbbf3df46e2045071e082245ece204c7f53ecf0a4e022bff9bb228f47",
+    "original-overlay/helper_test.go.txt": "6fa13ce3cbdf2ed3b34b4fa6c0851df162d0f12a4993871f336b0bc084fd37fa",
+    "original-overlay/main.go.txt": "19600cd596d9e0060207897a3b878f338c7738afb7df370e54a3a45937ee8114",
+    "original-overlay/overlay.json": "700da2fdd84be839ce9b951cf273d4c96337c62d4defbb7c99e34ab8606ce0ce",
+    "original-overlay/recording_timing.go.txt": "f2eb9e3fd241a81ee0aef093d74309da4527dea39ba955a66642f4b6a2bdf6e2",
+    "preservation.json": "d033decf504e0e88c2443a612f654d37dd8fbf60f2a2d944310628529c4934a6",
+    "previous-inventory.json": "105beff4f7792e9f97c108413e094f043161c9b938e96d42e4c2fadf0636dd28",
+    "quality.json": "0e5870b156c67c8edc02c52f1ef5e9da3ec147cff794b1223512262b8a2b5249",
+    "quality.txt": "d034580dc131341abc236fb52393299427da4711ebc594d7372adc52b14faf6a",
+    "source-identity.json": "384b50c0ecb6533c5831ad463bfec7826443eada0f29928eb12dd2823c80df6a",
+    "source-repair.patch.gz": "608e96f1126226cf41584b914b856c7207e610909505e72303ce5917c5386c2b",
+    "verify.py": "570b3358b0d2f92d7087fdcc53d8075be905f85ed9c4ca18114551550ffc6476"
+  },
+  "development_native_smoke": {
+    "passed": true,
+    "exit_code": 0,
+    "duration_s": 38.96806874999311,
+    "native_sha256": "25c9532a3224aa38dc8a36a42045e8d6d9419a4698ba37d28e582a6696626089",
+    "scope": "Modified-source development native smoke; not a clean release or physical input acceptance"
+  }
+}
