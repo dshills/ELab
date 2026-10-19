@@ -89,6 +89,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 type mixedNetwork struct {
 	dc            bool
 	nonlinear     bool
+	hasMOSFET     bool
 	c             Compiled
 	nodes         []string
 	index         map[string]int
@@ -113,6 +114,7 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 		}
 	}
 	for _, p := range c.MixedGraph.Components {
+		n.hasMOSFET = n.hasMOSFET || IsMOSFETKind(p.Kind)
 		switch p.Kind {
 		case "resistor", "capacitor", "inductor", "switch", "potentiometer":
 		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
@@ -504,7 +506,7 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 			}
 		}
 		var delta []float64
-		if good && (len(n.inductors) > 0 || len(n.opamps) > 0) {
+		if good && (len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET) {
 			rhs := make([]float64, size)
 			for i := range f {
 				rhs[i] = -f[i]

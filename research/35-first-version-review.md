@@ -1,5 +1,7 @@
 # ELab first-version review · 0.144.0 /161
 
+A subsequent [MOSFET cutoff convergence source repair](../docs/validation/mosfet-cutoff-precision/README.md) passes independent before/after checks and the full quality gate. This preserved /161 review still has the disclosed 3.218 mV PMOS off-drain discrepancy. A clean replacement is being qualified; the original failed result remains part of the evidence.
+
 The updated private owner-review alpha is in the [review folder](../build/ELab-0.144.0-161-review), with [ELab.app](../build/ELab-0.144.0-161-review/ELab.app), matching `elab-agent`, three example projects and framework notices. Go, Python, a Vellum checkout and an account are not required. All 21 earlier qualified review folders (0.123.0 /140 through 0.143.0 /160), the original unqualified /147 candidate and canonical 0.105.0 /120 app are preserved. Owner walkthrough remains “Not tried yet.”
 
 Save your work and quit an earlier review before opening this replacement. Version 0.144 repairs RC probe frames at manual Charge/Discharge/Auto changes: scope, cursors, extrema and CSV retain correct values on both sides of the input edge. Capacitor voltage and energy stay continuous, and earlier samples remain unchanged. Preserved /160 has the measurement defect. Vellum remains pinned to `b22478c`; native bindings, public commands, device models and saved format are unchanged.

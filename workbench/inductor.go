@@ -26,8 +26,8 @@ type InductorResult struct {
 }
 
 // Small current residuals do not bound voltage error near a controlled
-// current source. Check the actual Newton correction before accepting an L
-// or powered op-amp network; this is tighter than integration voltage accuracy.
+// current source. Check the actual Newton correction before accepting an L,
+// powered op-amp or MOSFET network; this is tighter than integration accuracy.
 func (n *mixedNetwork) voltageCorrectionConverged(x, delta []float64, stages int) bool {
 	size := len(x) / stages
 	for stage := range stages {

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/docs/validation/mosfet-cutoff-precision/reproduce.py", line 130, in <module>
+    report['cases'][kind] = run_case(client, kind, assets)
+                            ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dshills/Development/projects/ELab/docs/validation/mosfet-cutoff-precision/reproduce.py", line 98, in run_case
+    assert captured == rows
+           ^^^^^^^^^^^^^^^^
+AssertionError

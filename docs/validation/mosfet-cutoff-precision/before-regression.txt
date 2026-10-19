@@ -1,0 +1,11 @@
+=== RUN   TestMOSFETCutoffDrainVoltagePrecision
+=== RUN   TestMOSFETCutoffDrainVoltagePrecision/nmos
+    mosfet_cutoff_precision_test.go:69: 302 cutoff samples, max drain error 0.000764744608157 V
+=== RUN   TestMOSFETCutoffDrainVoltagePrecision/pmos
+    mosfet_cutoff_precision_test.go:67: 203 cutoff samples: maximum drain error 0.00321758025683 V; limit 0.001 V
+--- FAIL: TestMOSFETCutoffDrainVoltagePrecision (0.04s)
+    --- PASS: TestMOSFETCutoffDrainVoltagePrecision/nmos (0.02s)
+    --- FAIL: TestMOSFETCutoffDrainVoltagePrecision/pmos (0.02s)
+FAIL
+FAIL	github.com/dshills/elab/workbench	0.325s
+FAIL
