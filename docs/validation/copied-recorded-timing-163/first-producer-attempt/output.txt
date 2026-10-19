@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/first-version-163-tools/timing_acceptance.py", line 65, in <module>
+    client=p.helper.Client(command_preconditions=True,agent_binary=launcher);left=run_case(client,'headless');client.close();client=None
+                                                                                  ~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/dshills/Development/projects/ELab/build/first-version-163-tools/timing_acceptance.py", line 31, in run_case
+    assert baseline['recording']['timing']['total']>8
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+KeyError: 'total'
