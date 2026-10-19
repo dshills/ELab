@@ -1,0 +1,61 @@
+from pathlib import Path
+import json
+
+root = Path('/Users/dshills/Development/projects/ELab')
+r = json.loads((root/'research/ui-audit/first-version/operation-page-review-checkpoint.json').read_text())
+assert r['version']=='0.158.0' and r['build']=='175'
+proof = 'docs/validation/operation-page-review-175/README.md'
+receipt = 'research/ui-audit/first-version/operation-page-review-checkpoint.json'
+paragraph = f'''Clean `{r['source_commit'][:7]}` /SDK `b22478c` makes agent discovery describe the already accepted nullable paging defaults. Thirty exact packaged headless cases preserve every query snapshot and all 209 recorded rows. Full source quality, copied native smoke, all four adapters, native/headless reference workflows, strict local signature and archive/example reopens pass. Command execution, output schemas, models and saved format remain unchanged. The original mismatch, collector limitation and race-instrumented coil deadline failure stay preserved with the source repair. No new physical input or timing qualification is claimed.'''
+limits = '''Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment and the actual hobbyist study remain open. Visible timing evidence stays scoped to /173, with RC and 100 ms acknowledgment unqualified. All 33 earlier sealed reviews, four candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.'''
+path = root/'README.md'
+s = path.read_text()
+intro, tail = s[:s.index('**Private review ready:')], s[s.index('## Build and run from source'):]
+path.write_text(intro+f'''**Private review ready: 0.158.0 /175.** Use the [review app](build/ELab-0.158.0-175-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.158.0-175-review.zip) with its [checksum](build/ELab-0.158.0-175-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening.
+
+{paragraph}
+
+[Walkthrough](research/35-first-version-review.md), [receipt]({receipt}), [proof]({proof}).
+
+{limits}
+
+'''+tail)
+path = root/'research/35-first-version-review.md'
+s = path.read_text()
+tail = s[s.index('## Try these four tasks'):].replace('export-progress-review-checkpoint.json','operation-page-review-checkpoint.json')
+tail = tail.replace('The next independent check is actual automatic storage-error presentation/retry while editing; no new package or owner acceptance follows from it.', 'The bounded automatic storage-error/retry and recorded-page discovery checks are now qualified within their documented scopes. Owner walkthrough and the remaining participant/environment prerequisites stay open; repeated engineering checks cannot substitute for them.')
+path.write_text(f'''# ELab first-version review · 0.158.0 /175
+
+The [review folder](../build/ELab-0.158.0-175-review) includes [ELab.app](../build/ELab-0.158.0-175-review/ELab.app), matching `elab-agent`, three editable examples and framework notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is needed.
+
+The [ZIP](../build/ELab-0.158.0-175-review.zip) and [checksum](../build/ELab-0.158.0-175-review.zip.sha256) preserve all files/modes through macOS extraction into a Unicode path with spaces. The extracted strict signature and three examples/fresh saves/reopens verify. This does not establish installation, Developer ID, notarization or Gatekeeper acceptance.
+
+{paragraph}
+
+[Receipt](ui-audit/first-version/operation-page-review-checkpoint.json), [proof](../{proof}).
+
+{limits}
+
+'''+tail)
+path = root/'research/34-first-version-plan.md'
+s = path.read_text()
+marker = '## Current position\n\n'
+entry = f'''- **Clean recorded-paging replacement qualified: 0.158.0 /175.** {paragraph} [Receipt](ui-audit/first-version/operation-page-review-checkpoint.json), [proof](../{proof}). This supersedes the source checkpoint's pending-packaging status. Owner Not tried yet; no promotion. Continue only bounded release-quality work while owner/participant/environment prerequisites remain open.\n\n'''
+s = s.replace(marker,marker+entry,1)
+lines = s.splitlines()
+for i,line in enumerate(lines):
+    if line.startswith('| 3 | Package the verified repairs |'):
+        lines[i]='| 3 | Package the verified repairs | Build one clean replacement app/agent from the repair commit. Exact copied runtime passes native smoke, public adapters, reference parity and the previously failing interaction. Record version/hashes and retain rollback. | Completed in /175 for nullable paging discovery, retaining the prior export/sweep/measurement workflows. Exact copied native/four-adapter/reference/paging/signature/archive/example checks pass; original failures remain preserved. |'
+    if line.startswith('| 4 | Hand over the replacement |'):
+        lines[i]=line.replace('0.157.0 /174','0.158.0 /175').replace('ELab-0.157.0-174-review','ELab-0.158.0-175-review')
+    if line.startswith('Next bounded agent-contract task:'):
+        lines[i]='Completed bounded agent-contract slice: `operation.inspect`/`operation.samples` discovery, nullable defaults, maximum/exact EOF paging, invalid bounds/identity, metadata and full query purity are source-qualified and repeated against the exact clean /175 packaged agent. [Proof](../docs/validation/operation-page-review-175/README.md). This does not close exhaustive AGENT-02 acceptance. Continue only independent review or reproduced release blockers; owner feedback and broader prerequisites remain separate.'
+    if line.startswith('| Quality/correctness |'):
+        lines[i]=f'| Quality/correctness | Clean `{r["source_commit"][:7]}` /SDK `b22478c` passes full default quality ({r["quality"]["elapsed_s"]:.3f} s), copied native smoke/four adapters, native/headless reference acceptance and thirty exact packaged paging cases. Strict signature, archive modes and example reopens qualify /175. [Receipt](ui-audit/first-version/operation-page-review-checkpoint.json). The original schema mismatch and coil race-wall failure remain recorded. No performance, full-binding or owner acceptance is inferred. |'
+path.write_text('\n'.join(lines)+'\n')
+for name,relative in [('research/ui-audit/first-version/README.md','../../../'),('research/ui-audit/README.md','../../')]:
+    path=root/name;s=path.read_text();at=s.index('\n')+1
+    path.write_text(s[:at]+f'\nOctober 19 replacement: **[0.158.0 /175]({relative+proof})** qualifies accurate nullable recorded-page discovery, with full source/copy-runtime/reference/paging/signature/archive/example checks. All 33 earlier sealed reviews, four candidates and canonical remain preserved. Source/private/physical scopes remain distinct; owner walkthrough and broader gates stay open.\n'+s[at:])
+with (root/'research/41-release-gate-reconciliation.md').open('a') as stream:
+    stream.write(f'\nThe clean [0.158.0 /175 replacement](../{proof}) now packages and qualifies PAGE-NULL-SCHEMA-01 through exact copied native/headless discovery, thirty packaged paging cases and archive/example checks. The original source checkpoint remains historical; P0 counts, owner and broader gates are unchanged.\n')
+print(dict(passed=True,review='0.158.0 /175',owner_acceptance=False,canonical_promoted=False))

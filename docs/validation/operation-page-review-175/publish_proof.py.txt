@@ -1,0 +1,92 @@
+from pathlib import Path
+import gzip
+import hashlib
+import json
+import shutil
+
+root = Path('/Users/dshills/Development/projects/ELab')
+stage = Path(__file__).resolve().parent
+proof = root/'docs/validation/operation-page-review-175'
+receipt_path = root/'research/ui-audit/first-version/operation-page-review-checkpoint.json'
+r = json.loads(receipt_path.read_text())
+review = Path(r['review_path'])
+archive = Path('/private/tmp/elab-175-archive')
+package = json.loads((archive/'report.json').read_text())
+assert r['version'] == '0.158.0' and r['build'] == '175' and package['passed']
+proof.mkdir()
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+for path in (review/'Evidence').iterdir():
+    if path.is_file():
+        shutil.copyfile(path, proof/path.name)
+    elif path.name in ['Runtime-acceptance', 'Packaged-paging']:
+        shutil.copytree(path, proof/('acceptance' if path.name == 'Runtime-acceptance' else 'paging'))
+(proof/'archive').mkdir()
+for name, target in [('report.json', 'package-report.json.gz'),
+                     ('example-report.json', 'example-report.json.gz'),
+                     ('signature-report.json', 'signature-report.json.gz')]:
+    (proof/'archive'/target).write_bytes(gzip.compress((archive/name).read_bytes(), mtime=0))
+(proof/'preservation.json').write_text(json.dumps({k:v for k,v in r.items() if k.startswith('preserved_')}, indent=2)+'\n')
+for name in ['publish_proof.py', 'publish_handoff.py']:
+    shutil.copyfile(stage/name, proof/(name+'.txt'))
+shutil.copyfile(stage/'verify_review.py', proof/'verify.py')
+native, public = [row['elapsed_seconds'] for row in r['copied_runtime']]
+(proof/'README.md').write_text(f'''# Recorded paging review · 0.158.0 /175
+
+Clean `{r['source_commit']}` /SDK `b22478c` packages the
+[source repair](../operation-page-contract-174/README.md): agent discovery now
+advertises the already accepted nullable offset/limit defaults. Both catalog
+forms agree with runtime behavior. The required recording ID, command decoder,
+paging algorithm, numeric output schemas, models, saved format and SDK remain
+unchanged. The original /174 mismatch and collector limitation stay preserved.
+
+Full default source quality passes in {r['quality']['elapsed_s']:.3f} s on the exact
+650 Go sources. Its earlier race-instrumented coil deadline failure is retained;
+the existing ordinary-agent test method preserves production guards and all
+capture assertions. This is not a numerical or visible-performance improvement.
+
+Copied signed native smoke ({native:.3f} s), all four public adapters
+({public:.3f} s), and native/headless reference acceptance
+({r['acceptance']['elapsed_s']:.3f} s) pass under development-file, outbound-IP
+and shared-window-settings denial. All 102 external process exits are normal;
+112 retained shutdown responses report completed joined cleanup. Native/headless
+discovery agrees. LED/RC/flasher, sweep/Verify, RC/RL startup, appearance,
+measurement, capacity and save/reopen checks retain their tested behavior.
+
+One separate exact packaged headless session passes thirty paging cases and
+95 requests. Every query preserves the full snapshot, exact metadata/probe order
+and all 209 recorded rows, including duplicate edge rows, 100/100/9 and 200/9
+pages, nullable defaults, final row, empty EOF and structured refusals. Malformed
+duplicate fields return transport `invalid-json`; the next snapshot is unchanged.
+The synthetic source file stays exact and normal joined shutdown/process exit is
+0. This adds headless behavior evidence, not new physical native input.
+
+All {r['manifest_file_entries']} sealed entries and {package['files_verified']}
+ZIP-extracted files/modes verify, along with the strict local ad-hoc signature
+and three example saves/fresh reopens. The ZIP is {package['archive_bytes']:,}
+bytes, SHA-256 `{package['archive_sha256']}`.
+All 33 prior sealed reviews, four candidates, SDK and canonical /120 remain
+unchanged. No owner project or setting, printer or privacy grant is changed.
+
+Owner walkthrough remains **Not tried yet**. Default-startup/clean-account
+qualification remains deferred for this private alpha. Signing/extraction does
+not establish Developer ID, notarization, Gatekeeper or installation acceptance.
+Full bindings/accessibility/environment, the actual hobbyist study and broader
+MVP gates remain open. Visible latency evidence stays scoped to /173; complete
+RC and 100 ms acknowledgment remain unqualified. No canonical promotion.
+
+Read-only replay:
+
+```sh
+python3 -B docs/validation/operation-page-review-175/verify.py
+```
+
+[Receipt](../../../research/ui-audit/first-version/operation-page-review-checkpoint.json),
+[review folder](../../../build/ELab-0.158.0-175-review),
+[ZIP](../../../build/ELab-0.158.0-175-review.zip).
+''')
+checkpoint = dict(receipt_sha256=sha(receipt_path),
+    manifest_sha256=sha(review/'RELEASE_MANIFEST.json'), archive_sha256=package['archive_sha256'],
+    source_proof_checkpoint_sha256=r['source_proof_checkpoint_sha256'],
+    evidence_sha256={p.relative_to(proof).as_posix():sha(p) for p in sorted(proof.rglob('*')) if p.is_file()})
+(proof/'checkpoint.json').write_text(json.dumps(checkpoint, indent=2)+'\n')
+print(dict(passed=True, proof=str(proof), evidence_files=len(checkpoint['evidence_sha256'])))

@@ -1,0 +1,18 @@
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+import sys
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent
+sys.path.insert(0,str(root/'scripts'))
+from package_review import run
+from signed_bundle import admit
+receipt=root/'research/ui-audit/first-version/operation-page-review-checkpoint.json'
+archive=root/'build/ELab-0.158.0-175-review.zip';out=Path('/private/tmp/elab-175-archive')
+report=run(receipt,archive,out);assert report['passed']
+built=json.loads((stage/'build-result-signed.json').read_text());app=Path(report['extracted_review'])/'ELab.app'
+assert admit(app,built,stage/'build/elab')==app/'Contents/MacOS/ELab'
+signature=dict(passed=True,scope='ZIP-extracted exact /175 tree, clean VCS/raw source identity and strict ad-hoc signature; no extracted native startup or clean-account claim',native_sha256=hashlib.sha256((app/'Contents/MacOS/ELab').read_bytes()).hexdigest())
+(out/'signature-report.json').write_text(json.dumps(signature,indent=2)+'\n')
+with archive.with_suffix('.zip.sha256').open('x') as f:f.write(report['archive_sha256']+'  '+archive.name+'\n')
+print({k:report[k] for k in ('passed','archive_bytes','files_verified','archive_sha256')})

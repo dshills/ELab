@@ -1,0 +1,227 @@
+{
+  "passed": true,
+  "scope": "macOS copied runtime with development-file and outbound IP denial; controller unrestricted",
+  "app_source": "/Users/dshills/Development/projects/ELab/build/ELab-0.158.0-175-review/ELab.app",
+  "source_bundle": {
+    ".": {
+      "mode": 493,
+      "sha256": null
+    },
+    "Contents": {
+      "mode": 493,
+      "sha256": null
+    },
+    "Contents/Info.plist": {
+      "mode": 420,
+      "sha256": "9d001bdc29314c6491b143975c87c68926a1c62fe8691f54c78e912239214298"
+    },
+    "Contents/MacOS": {
+      "mode": 493,
+      "sha256": null
+    },
+    "Contents/MacOS/ELab": {
+      "mode": 493,
+      "sha256": "326bb26039bcd53ed9acfef2519a23dbc9eb1bf38d8d4ce9be4adb2acf3f4093"
+    },
+    "Contents/Resources": {
+      "mode": 493,
+      "sha256": null
+    },
+    "Contents/Resources/APP_MANIFEST.json": {
+      "mode": 420,
+      "sha256": "190938f814a6d95ee9db03df1f67a5311d4af22d5ed475d24bed05e106d12710"
+    },
+    "Contents/_CodeSignature": {
+      "mode": 493,
+      "sha256": null
+    },
+    "Contents/_CodeSignature/CodeResources": {
+      "mode": 420,
+      "sha256": "391784538742654f64e5efb57288ade733b66c0a07d5ec695e1adb6b3a4e8d1e"
+    }
+  },
+  "source_agent_sha256": "066411e7d785a21eb6a7c4b695c0bb4f1b89bd62724859cdb62f3a7b41bfe47a",
+  "source_controller_sha256": "0f3d38b1112aed4b3d5310b244d9ab7c8af581f12900e800f46efda54f83d1f2",
+  "system_dependencies": [
+    "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+    "/System/Library/Frameworks/Carbon.framework/Versions/A/Carbon",
+    "/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa",
+    "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+    "/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics",
+    "/System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices",
+    "/System/Library/Frameworks/CoreText.framework/Versions/A/CoreText",
+    "/System/Library/Frameworks/CoreVideo.framework/Versions/A/CoreVideo",
+    "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+    "/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit",
+    "/System/Library/Frameworks/ImageIO.framework/Versions/A/ImageIO",
+    "/System/Library/Frameworks/Metal.framework/Versions/A/Metal",
+    "/System/Library/Frameworks/OpenGL.framework/Versions/A/OpenGL",
+    "/System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore",
+    "/System/Library/Frameworks/Security.framework/Versions/A/Security",
+    "/System/Library/Frameworks/UniformTypeIdentifiers.framework/Versions/A/UniformTypeIdentifiers",
+    "/System/Library/Frameworks/UserNotifications.framework/Versions/A/UserNotifications",
+    "/usr/lib/libSystem.B.dylib",
+    "/usr/lib/libcups.2.dylib",
+    "/usr/lib/libobjc.A.dylib",
+    "/usr/lib/libresolv.9.dylib"
+  ],
+  "blocked_development": {
+    "repository": {
+      "root": "/Users/dshills/Development/projects/ELab",
+      "canary": "/Users/dshills/Development/projects/ELab/README.md"
+    },
+    "sdk": {
+      "root": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-b22478c",
+      "canary": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-b22478c/go.mod"
+    },
+    "sibling_vellum": {
+      "root": "/Users/dshills/Development/projects/Vellum",
+      "canary": "/Users/dshills/Development/projects/Vellum/go.mod"
+    },
+    "go_toolchain": {
+      "root": "/opt/homebrew/Cellar/go/1.27.2/libexec",
+      "canary": "/opt/homebrew/Cellar/go/1.27.2/libexec/VERSION"
+    },
+    "go_build_cache": {
+      "root": "/Users/dshills/Library/Caches/go-build",
+      "canary": "/Users/dshills/Library/Caches/go-build/README"
+    },
+    "project_go_cache": {
+      "root": "/Users/dshills/Development/projects/ELab/build/go-cache",
+      "canary": "/Users/dshills/Development/projects/ELab/build/go-cache/README"
+    },
+    "go_module_cache": {
+      "root": "/Users/dshills/Development/Go/pkg/mod",
+      "canary": "/Users/dshills/Development/Go/pkg/mod/cache/download/golang.org/x/text/@v/v0.9.0.mod"
+    },
+    "developer_sdk": {
+      "root": "/Applications/Xcode.app/Contents/Developer",
+      "canary": "/Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild"
+    }
+  },
+  "stages": [
+    {
+      "name": "native-smoke",
+      "command": [
+        "/private/tmp/elab-first-version-175-signed-runtime/native",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 47.229960583965294
+    },
+    {
+      "name": "public-suites",
+      "command": [
+        "/Users/dshills/Development/projects/ELab/build/first-version-175-tools/build/elab-conformance",
+        "--agent-binary",
+        "/private/tmp/elab-first-version-175-signed-runtime/agent",
+        "--native-binary",
+        "/private/tmp/elab-first-version-175-signed-runtime/native",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/private/tmp/elab-first-version-175-signed-runtime/public"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 47.03625579201616
+    }
+  ],
+  "controls": {
+    "allowed_read": true,
+    "files": {
+      "repository": {
+        "denied": true,
+        "errno": 1
+      },
+      "sdk": {
+        "denied": true,
+        "errno": 1
+      },
+      "sibling_vellum": {
+        "denied": true,
+        "errno": 1
+      },
+      "go_toolchain": {
+        "denied": true,
+        "errno": 1
+      },
+      "go_build_cache": {
+        "denied": true,
+        "errno": 1
+      },
+      "project_go_cache": {
+        "denied": true,
+        "errno": 1
+      },
+      "go_module_cache": {
+        "denied": true,
+        "errno": 1
+      },
+      "developer_sdk": {
+        "denied": true,
+        "errno": 1
+      }
+    },
+    "network": {
+      "ipv4_tcp": {
+        "denied": true,
+        "errno": 1
+      },
+      "ipv4_udp": {
+        "denied": true,
+        "errno": 1
+      },
+      "ipv6_tcp": {
+        "denied": true,
+        "errno": 1
+      },
+      "ipv6_udp": {
+        "denied": true,
+        "errno": 1
+      }
+    },
+    "shared_geometry": {
+      "read": {
+        "denied": true,
+        "errno": 1
+      },
+      "write_without_truncate": {
+        "denied": true,
+        "errno": 1
+      }
+    }
+  },
+  "public_report_sha256": "2c9e92375c5003992d046864682afca05221ea579a89b358d5a13c14791c02ea",
+  "copied_bundle_unchanged": true,
+  "agent_unchanged": true,
+  "controller_unchanged": true,
+  "shared_geometry_before": {
+    "window-geometry-0.3.6.json": {
+      "sha256": "a5b1f9c088561a2f0394109a58dcf8b5390a2c31337c62c16d62166475d30f32",
+      "mode": "0o644"
+    },
+    "window-geometry-0.3.6.lst": {
+      "sha256": "df81532effcd70929d78b1a39636ca7b5307bdaa05146da23cf8dde723247eec",
+      "mode": "0o644"
+    }
+  },
+  "shared_geometry_after": {
+    "window-geometry-0.3.6.json": {
+      "sha256": "a5b1f9c088561a2f0394109a58dcf8b5390a2c31337c62c16d62166475d30f32",
+      "mode": "0o644"
+    },
+    "window-geometry-0.3.6.lst": {
+      "sha256": "df81532effcd70929d78b1a39636ca7b5307bdaa05146da23cf8dde723247eec",
+      "mode": "0o644"
+    }
+  },
+  "shared_geometry_unchanged": true
+}
