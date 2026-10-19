@@ -1,0 +1,23 @@
+{
+  "original_failure_reproduced": true,
+  "exit_code": 1,
+  "elapsed_s": 6.920088791986927,
+  "command": [
+    "go",
+    "test",
+    "-C",
+    "desktop",
+    "-overlay",
+    "/Users/dshills/Development/projects/ELab/docs/validation/component-startup-handoff/original-overlay.json",
+    "-race",
+    "-tags=offscreen",
+    "-count=1",
+    "-timeout=60s",
+    "-run",
+    "^TestMountedComponentStartupOneClick$",
+    "-v",
+    "./..."
+  ],
+  "failed_leaf_cases": 4,
+  "scope": "Final one-click cases with original production component controls through Go overlay; uncalled smoke-only waiter stubbed for original screen type; no OS input"
+}

@@ -228,6 +228,10 @@ type screen struct {
 	settleField                         func(string, func(error)) error
 	settleNumber                        func(string, func(error)) error
 	pendingValueApply                   *valueApply
+	componentStartupAccepted            *componentStartupContinuation
+	componentStartupRejected            *componentStartupRejection
+	pendingComponentStartup             *componentStartupWork
+	componentStartupEpoch               uint64
 	verificationAccepted                *verificationContinuation
 	verificationRejected                map[string]verificationFieldRejection
 	pendingVerificationAction           *verificationActionWork
@@ -352,6 +356,13 @@ func (s *screen) registerCommands() {
 					s.requestReplace(entry.id, workbench.ReplaceParams{})
 					return nil
 				}
+				if entry.id == "simulation.restart" {
+					state := s.service.Snapshot()
+					if part, ok := (workbench.Graph{Components: state.Components}).Component(state.Selected); ok && (part.Kind == "capacitor" || part.Kind == "inductor") {
+						s.beginComponentStartup(state, part, false)
+						return nil
+					}
+				}
 				var p any = struct{}{}
 				if entry.id == "edit.undo" || entry.id == "edit.redo" {
 					state := s.service.Snapshot()
@@ -433,6 +444,14 @@ func (s *screen) button(id, text string) ui.Node {
 				s.errorMessage = err.Error()
 				s.app.Invalidate("main")
 				return
+			}
+			if id == "simulation.restart" {
+				if part, ok := (workbench.Graph{Components: state.Components}).Component(state.Selected); ok && (part.Kind == "capacitor" || part.Kind == "inductor") {
+					captured := state
+					captured.CommandRevision, captured.Document.Generation = rendered.revision, rendered.generation
+					s.beginComponentStartup(captured, part, false)
+					return
+				}
 			}
 			response := s.invokeAtCommandRevision(id, struct{}{}, rendered.revision, rendered.generation)
 			s.continueSimulationFocus(id, response)

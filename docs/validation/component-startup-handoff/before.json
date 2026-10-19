@@ -1,0 +1,29 @@
+{
+  "original_failure_reproduced": true,
+  "exit_code": 1,
+  "elapsed_s": 3.516679708031006,
+  "command": [
+    "go",
+    "test",
+    "-C",
+    "desktop",
+    "-race",
+    "-tags=offscreen",
+    "-count=1",
+    "-timeout=60s",
+    "-run",
+    "^TestMountedComponentStartupOneClick$",
+    "-v",
+    "./..."
+  ],
+  "source_commit": "0f9c9842e7297c2f2d9c11a5a368a9f2430a7118",
+  "source_sha256": {
+    "desktop/main.go": "267ae55cf056fbb03a02268cb105deb7230deb8f9bbfbece94cc46fae42fce69",
+    "desktop/view.go": "aa6b8e57994864273f319965add9e618fd83eeb80a040cdc327674a749d18db7",
+    "desktop/component_inspector.go": "76c50a03f32d83b1a7fb313676be77aca7f998e6a122eff3405153fe8c238f25",
+    "desktop/inductor_controls.go": "e39fa6858b17c015b9d7003297257a69e402a038a2cbe7d720e142234ba97d77",
+    "desktop/viewport.go": "cb6211c7800eac0839d4bc82f99a2583f356afead8202f89145b061139f12f58",
+    "desktop/component_startup_actions_offscreen_test.go": "8277b16d885b287541a4a1ab1801198ad580e6d398809e6d640d58fe54f27370"
+  },
+  "scope": "Production retained widgets/router; four valid default/Restart cases fail, invalid default cases recorded separately"
+}

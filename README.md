@@ -4,9 +4,11 @@ ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N
 
 The [first-version delivery plan](research/34-first-version-plan.md) defines the current release target: a usable macOS hobbyist alpha, with frozen scope, ordered blockers and a concrete packaged-app handoff.
 
-**Private review ready: 0.151.0 /168.** Use the [review app](build/ELab-0.151.0-168-review/ELab.app) and matching `elab-agent`, or the [private ZIP](build/ELab-0.151.0-168-review.zip) with its [SHA-256 checksum](build/ELab-0.151.0-168-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening this one.
+**Current packaged private review: 0.151.0 /168.** Use the [review app](build/ELab-0.151.0-168-review/ELab.app) and matching `elab-agent`, or the [private ZIP](build/ELab-0.151.0-168-review.zip) with its [SHA-256 checksum](build/ELab-0.151.0-168-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening this one.
 
 Clean `0f9c984` /SDK `b22478c` repairs Use project startup retaining a Verify coil-current scenario. Shared defaults now restore saved circuit startup while preserving duration, live state/history and user/agent guards. Source quality, retained-widget tests, copied native/four-adapter integration, RL/RLC scenario/reset captures, four fresh retained-record reopens and the existing 424-row RC Verify regression pass within their documented scopes. ZIP extraction and example reopens pass. All 27 earlier sealed reviews, two candidates and canonical /120 are preserved; /167 remains affected by the stored-coil reset issue. [Walkthrough and limits](research/35-first-version-review.md), [receipt](research/ui-audit/first-version/startup-reset-review-checkpoint.json). Owner walkthrough remains “Not tried yet”; the [default-startup/clean-account gate is deferred for the private alpha](research/ui-audit/first-version/private-alpha-owner-decisions.json). Physical OS reset input, full typing/IME/reader, visible latency, signing and broader acceptance remain open.
+
+A later [component startup repair](docs/validation/component-startup-handoff/README.md) addresses first-click Reset/Restart after editing capacitor or inductor startup. Its source and development validation passes; /168 is preserved and still has that issue. A clean replacement remains pending.
 
 ## Build and run from source
 

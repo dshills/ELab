@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "exit_code": 0,
+  "elapsed_s": 15.033975583035499,
+  "command": [
+    "go",
+    "test",
+    "-C",
+    "desktop",
+    "-race",
+    "-tags=offscreen",
+    "-count=1",
+    "-timeout=60s",
+    "-run",
+    "^TestMountedComponentStartup",
+    "-v",
+    "./..."
+  ],
+  "test_sha256": {
+    "desktop/component_startup_actions_offscreen_test.go": "c186e58cae25fa1fc6ab46b9744644bf88637ab3bfafa6139c4cff62698ecd9b"
+  }
+}

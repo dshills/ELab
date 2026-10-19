@@ -1,0 +1,9 @@
+from pathlib import Path
+import hashlib,json,os,subprocess,time
+root=Path('/Users/dshills/Development/projects/ELab');folder=root/'docs/validation/component-startup-handoff'
+files=['desktop/main.go','desktop/view.go','desktop/component_inspector.go','desktop/inductor_controls.go','desktop/viewport.go','desktop/component_startup_actions_offscreen_test.go']
+for name in files:(folder/('original-'+Path(name).name+'.txt')).write_bytes((root/name).read_bytes())
+args=['go','test','-C','desktop','-race','-tags=offscreen','-count=1','-timeout=60s','-run','^TestMountedComponentStartupOneClick$','-v','./...'];env=dict(os.environ,GOWORK='off',GOCACHE=str(root/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native');start=time.monotonic();p=subprocess.run(args,cwd=root,env=env,capture_output=True,timeout=120)
+for suffix,data in [('stdout',p.stdout),('stderr',p.stderr)]: (folder/f'before-{suffix}.txt').write_bytes(data)
+assert p.returncode==1 and p.stdout.count(b'expected command revision')==4
+r=dict(original_failure_reproduced=True,exit_code=p.returncode,elapsed_s=time.monotonic()-start,command=args,source_commit='0f9c9842e7297c2f2d9c11a5a368a9f2430a7118',source_sha256={name:hashlib.sha256((root/name).read_bytes()).hexdigest() for name in files},scope='Production retained widgets/router; four valid default/Restart cases fail, invalid default cases recorded separately');(folder/'before.json').write_text(json.dumps(r,indent=2)+'\n');print({k:r[k] for k in ['original_failure_reproduced','exit_code','elapsed_s']})

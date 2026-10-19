@@ -1,5 +1,7 @@
 # Native UI audit and repairs — October 14, 2026
 
+October 19 component startup repair: [four original first-click failures and guarded source repair](../../docs/validation/component-startup-handoff/README.md) cover capacitor/inductor default and Restart after private entry. Mounted pointer/descriptor, invalid-entry discard/refusal, agent interleaving and independent public-command RC/RL parity pass. Full source quality (234.160 s) and development native smoke (50.258 s) pass; /168 remains affected and preserved, clean replacement pending. No new physical OS input or owner acceptance claim.
+
 The original empty-workspace capture showed clipped Inspector copy, dark inputs with dark text, and an increasingly crowded header. Smaller-window testing exposed a second problem: an unnecessary growing spacer reduced the toolbar allocation, and its horizontal scrollbar cut into the buttons. The user also identified the custom popup menus as boxy and unlike macOS menus.
 
 The repaired app uses consistent content/padding widths, bounded controls, readable Light/Dark palettes, grouped actions, explicit toolbar height, and slim themed native scrollbar handles. File, Examples and Theme now open actual AppKit menus through Vellum’s native menu service. Native RC menu selection and keyboard activation were observed, with shared command tests preserving unsaved-change checks. The compact transient layout keeps the scope, cursors, metrics and footer visible; Fit reveals the complete circuit.

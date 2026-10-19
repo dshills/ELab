@@ -16,7 +16,10 @@ func nativeLEDFadeSmoke(ctx context.Context, a *app.Application, s *screen) erro
 		}
 		select {
 		case err := <-result:
-			return err
+			if err != nil {
+				return err
+			}
+			return waitNativeComponentStartup(ctx, a, s)
 		case <-ctx.Done():
 			return ctx.Err()
 		}

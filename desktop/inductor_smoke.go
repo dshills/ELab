@@ -18,7 +18,10 @@ func nativeInductorSmoke(ctx context.Context, a *app.Application, s *screen) err
 		}
 		select {
 		case err := <-result:
-			return err
+			if err != nil {
+				return err
+			}
+			return waitNativeComponentStartup(ctx, a, s)
 		case <-ctx.Done():
 			return ctx.Err()
 		}
@@ -52,8 +55,11 @@ func nativeInductorSmoke(ctx context.Context, a *app.Application, s *screen) err
 			if err := smokeUI(s, "inductor-initial-default", nil); err != nil {
 				return err
 			}
-			return smokeUI(s, "simulation.restart", nil)
+			return nil
 		}); err != nil {
+			return err
+		}
+		if err := owner(func() error { return smokeUI(s, "simulation.restart", nil) }); err != nil {
 			return err
 		}
 		if _, err := s.service.Wait(ctx); err != nil {

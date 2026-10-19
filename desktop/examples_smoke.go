@@ -81,30 +81,33 @@ func nativeExamplesSmoke(ctx context.Context, a *app.Application, s *screen) err
 		return err
 	}
 	if err := nativeManualTransistorSmoke(ctx, a, s); err != nil {
-		return err
+		return fmt.Errorf("nativeManualTransistorSmoke: %w", err)
 	}
 	if err := nativeRCHighPassSmoke(ctx, a, s); err != nil {
-		return err
+		return fmt.Errorf("nativeRCHighPassSmoke: %w", err)
 	}
 	if err := nativeLEDFadeSmoke(ctx, a, s); err != nil {
-		return err
+		return fmt.Errorf("nativeLEDFadeSmoke: %w", err)
 	}
 	if err := nativeNMOSSmoke(ctx, a, s); err != nil {
-		return err
+		return fmt.Errorf("nativeNMOSSmoke: %w", err)
 	}
 	if err := nativePMOSSmoke(ctx, a, s); err != nil {
-		return err
+		return fmt.Errorf("nativePMOSSmoke: %w", err)
 	}
 	if err := nativeCMOSSmoke(ctx, a, s); err != nil {
-		return err
+		return fmt.Errorf("nativeCMOSSmoke: %w", err)
 	}
 	if err := nativeInductorSmoke(ctx, a, s); err != nil {
-		return err
+		return fmt.Errorf("nativeInductorSmoke: %w", err)
 	}
 	if err := nativeSplitSupplySmoke(ctx, a, s); err != nil {
-		return err
+		return fmt.Errorf("nativeSplitSupplySmoke: %w", err)
 	}
-	return nativeRectifierSmoke(ctx, a, s)
+	if err := nativeRectifierSmoke(ctx, a, s); err != nil {
+		return fmt.Errorf("nativeRectifierSmoke: %w", err)
+	}
+	return nil
 }
 
 func nativeRectifierSmoke(ctx context.Context, a *app.Application, s *screen) error {
@@ -125,12 +128,18 @@ func nativeRectifierSmoke(ctx context.Context, a *app.Application, s *screen) er
 		return err
 	}
 	for _, id := range []string{"simulation.pause", "simulation.restart"} {
+		if _, err := waitNativeViewport(ctx, a, s, func(workbench.Snapshot) bool { return true }); err != nil {
+			return err
+		}
 		if err := a.PostWait(ctx, func() { ready <- smokeUI(s, id, nil) }); err != nil {
 			return err
 		}
 		if err := <-ready; err != nil {
 			return err
 		}
+	}
+	if err := waitNativeComponentStartup(ctx, a, s); err != nil {
+		return err
 	}
 	for i := 0; i < 20; i++ {
 		if err := a.PostWait(ctx, func() { ready <- smokeUI(s, "transient-step", nil) }); err != nil {

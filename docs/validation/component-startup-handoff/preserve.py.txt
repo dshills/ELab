@@ -1,0 +1,13 @@
+from pathlib import Path
+import hashlib,json,stat
+root=Path('/Users/dshills/Development/projects/ELab');folder=root/'docs/validation/component-startup-handoff';sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();receipt=root/'research/ui-audit/first-version/startup-reset-review-checkpoint.json';cp=json.loads(receipt.read_text())
+reports={}
+for manifest_path in sorted((root/'build').glob('ELab-*-review/RELEASE_MANIFEST.json')):
+ sealed=manifest_path.parent;files=json.loads(manifest_path.read_text())['files'];assert {p.relative_to(sealed).as_posix() for p in sealed.rglob('*') if p.is_file()}==set(files)|{'RELEASE_MANIFEST.json'}
+ for name,expected in files.items():
+  p=sealed/name;assert not p.is_symlink() and sha(p)==expected['sha256'] and oct(stat.S_IMODE(p.stat().st_mode))==expected['mode'],p
+ reports[sealed.name]=dict(manifest_entries=len(files),manifest_sha256=sha(manifest_path))
+sealed=root/'build/ELab-0.151.0-168-review';assert reports[sealed.name]['manifest_entries']==1207
+archive=root/'build/ELab-0.151.0-168-review.zip';archive_sha=sha(archive);assert archive_sha=='7c4c914ff58ce100e912aef663026432bc5df8b9c8bd66347f2f5d70f6ac005f'
+canonical=sha(root/'build/ELab.app/Contents/MacOS/ELab');assert canonical=='914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c'
+r=dict(passed=True,scope='Read-only sealed file bytes/modes, current archive and canonical executable; no changed-source release admission',receipt_sha256=sha(receipt),review_path=str(sealed),manifest_entries=1207,manifest_sha256=sha(sealed/'RELEASE_MANIFEST.json'),archive_sha256=archive_sha,canonical_native_sha256=canonical,sealed_reviews=reports);(folder/'preservation.json').write_text(json.dumps(r,indent=2)+'\n');print(dict(passed=True,sealed_reviews=len(reports),current_manifest_entries=1207))

@@ -76,8 +76,8 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 				initial = *part.InitialVoltage
 			}
 			inspector = append(inspector, quiet("cap-initial-label", "Initial voltage · pin 1 minus pin 2"), ui.Node{ID: "cap-initial", Kind: ui.NumberField, Number: float32(initial), Numeric: ui.Numeric{Min: -12, Max: 12, Step: .01}, Accessibility: ui.Accessibility{Name: "Capacitor initial voltage"}, Change: func(e ui.ChangeEvent) {
-				s.invoke("capacitor.initial.set", workbench.ValueParams{ID: part.ID, Value: fmt.Sprintf("%.9g V", e.Number)})
-			}}, s.action("cap-initial-default", "Use experiment initial voltage", "capacitor.initial.set", workbench.ValueParams{ID: part.ID, Value: "default"}))
+				s.changeComponentStartup(state, part, fmt.Sprintf("%.9g V", e.Number))
+			}}, s.componentStartupDefault(state, part))
 			inspector = append(inspector, ui.Node{ID: "cap-presets", Kind: ui.Row, Children: []ui.Node{s.valuePresetAction(state, "c-1u", "1 µF", workbench.ValueParams{ID: part.ID, Value: "1uF"}), s.valuePresetAction(state, "c-100u", "100 µF", workbench.ValueParams{ID: part.ID, Value: "100uF"})}})
 		}
 
@@ -119,6 +119,9 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	}
 	for i := range inspector {
 		scopeComponentControlState(&inspector[i], part.ID)
+		if inspector[i].ID == "cap-initial" || inspector[i].ID == "inductor-initial" {
+			inspector[i].ControlStateKey = s.startupControlStateKey(part.ID)
+		}
 	}
 	return inspector
 }

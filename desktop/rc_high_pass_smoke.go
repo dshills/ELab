@@ -18,7 +18,10 @@ func nativeRCHighPassSmoke(ctx context.Context, a *app.Application, s *screen) e
 		}
 		select {
 		case err := <-done:
-			return err
+			if err != nil {
+				return err
+			}
+			return waitNativeComponentStartup(ctx, a, s)
 		case <-ctx.Done():
 			return ctx.Err()
 		}
