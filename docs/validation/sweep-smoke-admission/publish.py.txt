@@ -1,0 +1,28 @@
+from pathlib import Path
+import gzip
+import hashlib
+import json
+import shutil
+
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent;proof=root/'docs/validation/sweep-smoke-admission'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+read=lambda p:json.loads(p.read_text())
+assert not (proof/'checkpoint.json').exists()
+quality=read(stage/'quality-default.json')
+assert quality['passed'] and quality['environment']=={} and quality['sources_unchanged']
+assert len(quality['source_sha256'])==650 and all(sha(root/name)==digest for name,digest in quality['source_sha256'].items())
+for name in ['quality-default.json','quality.py']:
+ shutil.copyfile(stage/name,proof/(name if name.endswith('.json') else name+'.txt'))
+for name in ['quality-default-stdout.txt','quality-default-stderr.txt']:
+ (proof/(name+'.gz')).write_bytes(gzip.compress((stage/name).read_bytes(),mtime=0))
+shutil.copyfile(root/'desktop/dc_sweep_smoke.go',proof/'final-source.go.txt')
+shutil.copyfile(Path(__file__),proof/'publish.py.txt')
+p=proof/'README.md';p.write_text(p.read_text()+f"\nThe final default `./scripts/check.sh` passes in **{quality['elapsed_s']:.3f} s**, with all 650 Go hashes unchanged during the run. Lint/static checks, 54 Python tests, root/native race and vet, and mounted-control race/vet pass. Root packages can reuse their unchanged test cache; the native suite runs after the smoke source change. Clean replacement build/runtime/archive qualification is next.\n")
+artifacts=['build/ELab-0.154.0-171-review/RELEASE_MANIFEST.json','build/ELab-0.154.0-171-review.zip','build/ELab-0.155.0-172-failed-candidate/CANDIDATE_MANIFEST.json','third_party/vellum/sdk.lock.json','third_party/vellum/vellum-b22478c.tar.gz','build/frame-probe-tools/frame-probe']
+assert sha(root/'build/frame-probe-tools/frame-probe')=='dcf06ebefa9ec76002f22f0e67564682b1c429af2f19fc208c504c669ec505e7'
+old=read(root/'research/ui-audit/first-version/appearance-work-review-checkpoint.json');assert sha(root/'build/ELab.app/Contents/MacOS/ELab')==old['canonical']['native_sha256']
+cp=dict(status='Sweep native smoke fixture synchronization repaired; clean replacement pending',baseline_commit='bbd971cfd0c088f2bdd4a4b0c87439b5648d0030',native_inventory_sha256=sha(root/'research/13-native-command-inventory.json'),prior_sweep_checkpoint_sha256=sha(root/'docs/validation/dc-sweep-handoff/checkpoint.json'),preserved_artifacts={name:sha(root/name) for name in artifacts},preserved_manifests={'build/ELab-0.154.0-171-review':'RELEASE_MANIFEST.json','build/ELab-0.155.0-172-failed-candidate':'CANDIDATE_MANIFEST.json'},canonical_native_sha256=old['canonical']['native_sha256'],capture_executed=False,replacement_qualified=False,evidence_sha256={p.relative_to(proof).as_posix():sha(p) for p in sorted(proof.rglob('*')) if p.is_file()})
+(proof/'checkpoint.json').write_text(json.dumps(cp,indent=2)+'\n')
+plan=root/'research/34-first-version-plan.md';s=plan.read_text();at=s.index('\n',s.index('## Current position'))+1
+s=s[:at]+f"\n- **Sweep replacement fixture repaired; new clean package next.** Clean /172 passes strict signing/admission but times out in the old synchronous DC sweep smoke; it is preserved as a failed candidate. The render-aware diagnostic passes the full native smoke. The final harness now waits for rendered accepted values and checks asynchronous pending/error/new-curve admission; default full quality passes ({quality['elapsed_s']:.3f} s), with only this smoke source changed. [Proof](../docs/validation/sweep-smoke-admission/README.md). Application bindings, shared commands, solver, models, format and SDK are unchanged by this fixture repair. The eventual internal cause of the original pending request remains unestablished. Clean replacement, cropped recorder implementation/calibration and owner walkthrough retain separate pending gates.\n"+s[at:];plan.write_text(s)
+print(dict(passed=True,quality_s=quality['elapsed_s'],proof=str(proof)))

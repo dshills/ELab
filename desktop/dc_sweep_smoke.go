@@ -38,7 +38,7 @@ func nativeDCSweepSmoke(ctx context.Context, a *app.Application, s *screen) erro
 		for _, action := range []struct {
 			id    string
 			event *ui.ChangeEvent
-		}{{"sweep-probe", &ui.ChangeEvent{SelectedID: "i:D1"}}, {"sweep-points", &ui.ChangeEvent{Text: "11"}}, {"sweep-range-start", &ui.ChangeEvent{Text: "0.05 V"}}, {"sweep-spacing", &ui.ChangeEvent{SelectedID: "logarithmic"}}, {"sweep-start", nil}} {
+		}{{"sweep-probe", &ui.ChangeEvent{SelectedID: "i:D1"}}, {"sweep-points", &ui.ChangeEvent{Text: "11"}}, {"sweep-range-start", &ui.ChangeEvent{Text: "0.05 V"}}, {"sweep-spacing", &ui.ChangeEvent{SelectedID: "logarithmic"}}} {
 			if err := smokeUI(s, action.id, action.event); err != nil {
 				result <- err
 				return
@@ -46,6 +46,17 @@ func nativeDCSweepSmoke(ctx context.Context, a *app.Application, s *screen) erro
 		}
 		result <- nil
 	}); err != nil {
+		return err
+	}
+	if err := <-result; err != nil {
+		return err
+	}
+	// These fixture callbacks change accepted values, not private native text.
+	// Let the controls render those values before Run settles their native FIFO.
+	if _, err := waitNativeViewport(ctx, a, s, func(workbench.Snapshot) bool { return true }); err != nil {
+		return err
+	}
+	if err := a.PostWait(ctx, func() { result <- smokeUI(s, "sweep-start", nil) }); err != nil {
 		return err
 	}
 	if err := <-result; err != nil {
@@ -59,8 +70,36 @@ func nativeDCSweepSmoke(ctx context.Context, a *app.Application, s *screen) erro
 			return ctx.Err()
 		case <-ticker.C:
 		}
-		state := s.service.Snapshot()
+		// A later settlement refusal must fail here, rather than masquerading as
+		// a solver timeout. Never treat an older selected curve as this Run.
+		type admission struct {
+			state   workbench.Snapshot
+			pending bool
+			message string
+		}
+		done := make(chan admission, 1)
+		if err := a.PostWait(ctx, func() {
+			done <- admission{s.service.Snapshot(), s.pendingSweepStart != nil, s.errorMessage}
+		}); err != nil {
+			return err
+		}
+		var observed admission
+		select {
+		case observed = <-done:
+		case <-ctx.Done():
+			return ctx.Err()
+		}
+		if observed.pending {
+			continue
+		}
+		if observed.message != "" {
+			return fmt.Errorf("native sweep admission: %s", observed.message)
+		}
+		state := observed.state
 		if state.DCSweep == nil {
+			continue
+		}
+		if state.DCSweep.Selected == before.DCSweep.Selected {
 			continue
 		}
 		op := selectedSweep(state.DCSweep)

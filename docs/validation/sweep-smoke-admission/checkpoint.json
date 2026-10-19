@@ -1,0 +1,41 @@
+{
+  "status": "Sweep native smoke fixture synchronization repaired; clean replacement pending",
+  "baseline_commit": "bbd971cfd0c088f2bdd4a4b0c87439b5648d0030",
+  "native_inventory_sha256": "b3cb64dc4d53f7735350368d20dd80b700b7e458ab513240d6ed9f142c51cbb3",
+  "prior_sweep_checkpoint_sha256": "fc73826a1303be7e0a4757e0e5d635d8e8b824e7ff6fb956c3addb5cc208472b",
+  "preserved_artifacts": {
+    "build/ELab-0.154.0-171-review/RELEASE_MANIFEST.json": "72704802cfb9a29080715ed9802a1ea0e428b77f94f5f8b004b0651446a7b72f",
+    "build/ELab-0.154.0-171-review.zip": "55aa5cf0376e6a8278b75a934f7e4c96812a4aec0e2ee15bdde85931cff64e37",
+    "build/ELab-0.155.0-172-failed-candidate/CANDIDATE_MANIFEST.json": "90b345ae833589fa958d06689a8af5653cf8c90d3174451124c067bcf721bc90",
+    "third_party/vellum/sdk.lock.json": "2f9ac0e120bdd09d5ffe2c3d8b5da4d24588455c5e6bc8d6f08c80e0dccc6395",
+    "third_party/vellum/vellum-b22478c.tar.gz": "22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968",
+    "build/frame-probe-tools/frame-probe": "dcf06ebefa9ec76002f22f0e67564682b1c429af2f19fc208c504c669ec505e7"
+  },
+  "preserved_manifests": {
+    "build/ELab-0.154.0-171-review": "RELEASE_MANIFEST.json",
+    "build/ELab-0.155.0-172-failed-candidate": "CANDIDATE_MANIFEST.json"
+  },
+  "canonical_native_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+  "capture_executed": false,
+  "replacement_qualified": false,
+  "evidence_sha256": {
+    "README.md": "300b9c3c7df1714cff2eb3bb9456ee17ee41ff56b8e8cd67281a499d3ef97c92",
+    "copied-native-failed.txt.gz": "c4c044c320d43b2cc7224da6454263de157916d8cf94d024e5fa52a955f97bc9",
+    "copied-runtime-failed.json.gz": "1a4445c702492f46522a4eb120ab553471457cd2770ac38e841f6658bf76da15",
+    "dc_sweep_smoke-second.go.txt.gz": "79788c0b3e3c82ff396e06059d15f1041e7d69a757a757e939b95e734b51bd65",
+    "dc_sweep_smoke.go.txt.gz": "34c828ca9e7bd155b06a91ddffd8cd31f88ba14eff3e5bf5237e85640a1f1842",
+    "diagnostics.json": "570417f3c633fabaf17c151899803285d8154bf6ec980d4aad48da15e61c4af0",
+    "final-source.go.txt": "f80a7b9a0e366ff5b9718fb605db7aa6705763505f2927d055504939d4dd6ad3",
+    "native-diagnostic-second.txt.gz": "1be3092e07428ad7e8d7c5d31b4d8d07b6f7e732b0fe16fac931695e50ca8c8c",
+    "native-diagnostic.txt.gz": "90a9b0df182fbe2e7d546829a11308fd66f48471d214aacbe053bd53da916df0",
+    "original-source.go.txt.gz": "01e5150f1545b418640ec40aa83e4e0e72016b3f05bd2094a8baaa5e85a860a7",
+    "overlay-second.json.gz": "44f83d95403428b313e70bad819bfb7cfc1fc2b9a747fc7bd05f8f4d49c205f4",
+    "overlay.json.gz": "c51c39b0847931ecc42d1485f9b5ab02ea9f8285c82c11432de2363a11c825d5",
+    "publish.py.txt": "8b834530cbf60e6253980ef93cb2600ad929d99869c720be8650253c31df6c74",
+    "quality-default-stderr.txt.gz": "4f0084dc67edfeaee569a6f00f58c88f7c8951426371cfc68c17e2b69e391686",
+    "quality-default-stdout.txt.gz": "835fe8d646005b120ae3ffb4e6484d28e87630b8d3ceadfddb90ce1af0137dab",
+    "quality-default.json": "8b0ecdfa5984a8e68bd4a0b2547a8997ceb332a23136ec6610d05bf55d844c3c",
+    "quality.py.txt": "5039ccc749218925f353365db56bc294901239c79fce363b4abaf40a5ed4a3e6",
+    "verify.py": "816223f5151cfc506430a8becfc36780f165ce977d4879372074ca3fcce0d60a"
+  }
+}
