@@ -1,0 +1,13 @@
+import Darwin
+let markerPath = "/private/tmp/elab-frame-probe-journal-runtime-170/launcher.pid"
+let descriptor = markerPath.withCString { Darwin.open($0, O_WRONLY | O_CREAT | O_EXCL, mode_t(0o600)) }
+guard descriptor >= 0 else { perror("create owned launcher PID"); exit(73) }
+let bytes = Array("\(getpid())\n".utf8)
+let written = bytes.withUnsafeBytes { Darwin.write(descriptor, $0.baseAddress, $0.count) }
+guard written == bytes.count, Darwin.close(descriptor) == 0 else { perror("write owned launcher PID"); exit(74) }
+let arguments: [String] = ["/usr/bin/sandbox-exec", "-f", "/private/tmp/elab-first-version-170-runtime/runtime.sb", "/private/tmp/elab-first-version-170-runtime/ELab.app/Contents/MacOS/ELab", "--agent-endpoint", "/private/tmp/elab-frame-probe-journal-runtime-170/endpoint.json", "--no-recovery", "--no-appearance"]
+var pointers = arguments.map { strdup($0) }
+pointers.append(nil)
+_ = pointers.withUnsafeMutableBufferPointer { execv("/usr/bin/sandbox-exec", $0.baseAddress!) }
+perror("enter owned native sandbox")
+exit(127)

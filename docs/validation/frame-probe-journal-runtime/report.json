@@ -1,0 +1,89 @@
+{
+  "status": "ready_for_controller_binding",
+  "started_utc": "2026-10-19T14:24:01.709025+00:00",
+  "command": [
+    "/usr/bin/open",
+    "-n",
+    "-W",
+    "-g",
+    "-a",
+    "/private/tmp/elab-frame-probe-journal-runtime-170/ELab-isolated-timing.app",
+    "--stdout",
+    "/private/tmp/elab-frame-probe-journal-runtime-170/native-stdout.txt",
+    "--stderr",
+    "/private/tmp/elab-frame-probe-journal-runtime-170/native-stderr.txt"
+  ],
+  "native_sha256": "8197a39c5740117e0ab298ae9cf869b222a073e0b8738dfa0f251232d5efa50b",
+  "launcher_sha256": "903e0d2e42250a549e861609f3d8f407f1a3f8f50abf38bd998bc322cbc9f09e",
+  "launcher_source_sha256": "77672717b53d00902e26e31c445f7c2f9656f264fd5df69e9f500c43788bed4d",
+  "policy_sha256": "6b64706f7f3c6b96204e4071a0d2f9d8b8cecce588c92bb1538c567827ae0e1b",
+  "receipt_sha256": "add4a0c89ad57ca63fd74976c8117851d6fa40a38c8211fad7f9c3631b4f418f",
+  "shared_geometry_before": {
+    "window-geometry-0.3.6.json": {
+      "sha256": "9666b9dbadc1ca73534406af4e7bbd832f9db24e8519569bde0b5b884c6f14ee",
+      "mode": "0o644"
+    },
+    "window-geometry-0.3.6.lst": {
+      "sha256": "0cacd87c7fb6c83f05737f71248f1b474f1d797d9cf132b4d0816b0e52582f2f",
+      "mode": "0o644"
+    }
+  },
+  "controls": {
+    "read": {
+      "denied": true,
+      "errno": 1
+    },
+    "write_without_truncate": {
+      "denied": true,
+      "errno": 1
+    }
+  },
+  "capture_executed": true,
+  "input_operated": true,
+  "eligible_latency_observations": 0,
+  "latency_gate_passed": null,
+  "forced_cleanup": false,
+  "native_exit_status": null,
+  "native_exit_status_reason": "LaunchServices owns the process; open -W status does not establish native exit status.",
+  "open_pid": 24633,
+  "owned_pid": 24634,
+  "observed_command": "/private/tmp/elab-first-version-170-runtime/ELab.app/Contents/MacOS/ELab --agent-endpoint /private/tmp/elab-frame-probe-journal-runtime-170/endpoint.json --no-recovery --no-appearance",
+  "same_pid_after_exec": true,
+  "baseline_file_sha256": "9ba929d20c014c45a4a20cc01974d83b574f3112a4ad46c860b01a7a24e1ea2b",
+  "registration": {
+    "bundle_identifier": "com.dshills.elab",
+    "capture_executed": false,
+    "executable_path": "/private/tmp/elab-first-version-170-runtime/ELab.app/Contents/MacOS/ELab",
+    "pid": 24634,
+    "process_registered": true,
+    "terminated": false
+  },
+  "exact_target_identity_established": true,
+  "window_query_exit_code": 0,
+  "target_windows": [
+    {
+      "owner_pid": 24634,
+      "window_id": 154282
+    }
+  ],
+  "baseline_file_unchanged": true,
+  "input_call_completed": true,
+  "open_exit_code": 0,
+  "owned_process_absent": true,
+  "endpoint_removed": true,
+  "shared_geometry_after": {
+    "window-geometry-0.3.6.json": {
+      "sha256": "9666b9dbadc1ca73534406af4e7bbd832f9db24e8519569bde0b5b884c6f14ee",
+      "mode": "0o644"
+    },
+    "window-geometry-0.3.6.lst": {
+      "sha256": "0cacd87c7fb6c83f05737f71248f1b474f1d797d9cf132b4d0816b0e52582f2f",
+      "mode": "0o644"
+    }
+  },
+  "shared_geometry_unchanged": true,
+  "review_unchanged": true,
+  "copied_bundle_unchanged": true,
+  "canonical_unchanged": true,
+  "ended_utc": "2026-10-19T14:26:42.069235+00:00"
+}

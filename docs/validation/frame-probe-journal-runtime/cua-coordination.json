@@ -1,0 +1,14 @@
+{
+  "source": "Completed CUA tool calls in this conversation",
+  "running_elab_inventory_count": 1,
+  "app_binding": "cua.getApp('/private/tmp/elab-first-version-170-runtime/ELab.app')",
+  "preparation": "click Component value (82); super+a; typeText('2k'); getAXState",
+  "apply": "applyJournalTrial(journalRuntimeApp,83)",
+  "observed_result": {
+    "error": null,
+    "input_call_completed": true,
+    "expected_readout": true
+  },
+  "input_api": "CUA App.click only",
+  "controller_clock_scope": "Event order/wall time only, not input-event timestamps"
+}

@@ -1,0 +1,37 @@
+from pathlib import Path
+import hashlib
+import os
+import json
+import subprocess
+import time
+
+os.umask(0o077)
+root=Path('/Users/dshills/Development/projects/ELab')
+out=Path('/private/tmp/elab-frame-probe-journal-runtime-170')
+recorder=root/'build/frame-probe-tools/frame-probe'
+assert hashlib.sha256(recorder.read_bytes()).hexdigest()=='677c5e117c40ca8f60b5c54e43176324ce4c10f799cbcf8f56813f4532d4cbaa'
+assert not (out/'capture').exists()
+r=json.loads((out/'report.json').read_text());assert r['exact_target_identity_established'] and r['registration']['pid']==r['owned_pid'] and len(r['target_windows'])==1 and r['target_windows'][0]['owner_pid']==r['owned_pid']
+pid=str(r['owned_pid']);window=str(r['target_windows'][0]['window_id'])
+preflight=subprocess.run([str(recorder),'--preflight'],capture_output=True,text=True,timeout=15,check=True)
+(out/'terminal-screen-preflight.json').write_text(preflight.stdout)
+access=json.loads(preflight.stdout);assert access['screen_access_previously_granted'] and not access['permission_requested']
+print(json.dumps(dict(status='armed_for_cua_start_signal')),flush=True)
+deadline=time.monotonic()+60
+while not (out/'capture-start.request').exists():
+    assert time.monotonic()<deadline,'CUA start-signal wait expired'
+    time.sleep(.002)
+args=[str(recorder),'--capture','--pid',pid,'--window',window,'--executable',r['registration']['executable_path'],'--sha256',r['native_sha256'],'--output',str(out/'capture'),'--seconds','3']
+start=time.monotonic()
+with (out/'recorder-terminal-stdout.txt').open('x') as stdout,(out/'recorder-terminal-stderr.txt').open('x') as stderr:
+    p=subprocess.Popen(args,stdout=stdout,stderr=stderr)
+    started=dict(pid=p.pid,command=args,recorder_sha256=hashlib.sha256(recorder.read_bytes()).hexdigest())
+    with (out/'recording-worker-started.json').open('x') as f:f.write(json.dumps(started,indent=2)+'\n')
+    print(json.dumps(started),flush=True)
+    try:p.wait(timeout=15)
+    except subprocess.TimeoutExpired:
+        p.terminate();p.wait(timeout=5);raise
+result=dict(**started,exit_code=p.returncode,elapsed_s=time.monotonic()-start)
+with (out/'recording-worker.json').open('x') as f:f.write(json.dumps(result,indent=2)+'\n')
+print(json.dumps(dict(exit_code=p.returncode,elapsed_s=result['elapsed_s'])),flush=True)
+raise SystemExit(p.returncode)
