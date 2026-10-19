@@ -1,0 +1,30 @@
+{
+  "trial": "led-10",
+  "measurement_status": "available",
+  "frames": 168,
+  "complete_frames": 164,
+  "unique_images": 156,
+  "states": {
+    "private-draft-original-result": 7,
+    "committed-value-stale-result": 2,
+    "committed-value-fresh-result": 155
+  },
+  "first_committed_parameter_frame": 9,
+  "first_fresh_frame": 11,
+  "marker_to_committed_ms": 113.76516666666667,
+  "marker_to_fresh_ms": 147.098375,
+  "future_at_receipt": 134,
+  "interval_scope": "Marker to supplied composition-frame timestamp; no OS input-event or acceptance timestamp",
+  "eligible_latency_observations": 0,
+  "latency_gate_passed": null,
+  "rejected_mutations": [
+    "shifted_display_clock",
+    "changed_crop",
+    "unacknowledged_marker",
+    "missing_image",
+    "wrong_pixel_scale",
+    "forged_eligibility",
+    "stale_pixels_labeled_fresh",
+    "unfinished_input"
+  ]
+}

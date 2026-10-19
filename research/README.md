@@ -55,3 +55,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Continuing implementation and code quality](10-continuation-progress.md): local checkpoints, reviewed concurrency fixes, pinned lint tooling, bounded Verify operations and recorded exports.
 
 - [First-version delivery plan](34-first-version-plan.md), [visible-latency method](36-visible-latency-method.md) and [fixed collection protocol](37-visible-latency-cohort-plan.md): current alpha cut line, calibration evidence and the declared LED/RC/NPN responsiveness trials.
+
+- [Visible responsiveness results](38-visible-responsiveness-results.md): all scheduled outcomes, available software-frame bounds and reasons a complete percentile is unavailable.

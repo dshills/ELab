@@ -1,6 +1,8 @@
 # Visible responsiveness: fixed collection protocol
 
-October 19, 2026. Status: declared before collection; **zero cohort trials run**.
+October 19, 2026. Original declaration: **zero cohort trials had run when published**.
+Current collection progress is recorded separately in [results](38-visible-responsiveness-results.md).
+The machine-readable precollection declaration remains unchanged.
 The [measurement decision](36-visible-latency-method.md) and original PRD thresholds
 remain authoritative. The [causal composition calibration](../docs/validation/display-causal-input-173/README.md)
 now demonstrates the complete baseline → acknowledged marker → CUA Apply →

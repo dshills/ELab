@@ -1,0 +1,58 @@
+{
+  "id": "led-17",
+  "input_call_invoked": true,
+  "input_call_completed": true,
+  "eligible_latency_observations": 0,
+  "latency_gate_passed": null,
+  "events": [
+    {
+      "sequence": 1,
+      "name": "capture_start_requested",
+      "wall_time_utc": "2026-10-19T19:07:47.082Z"
+    },
+    {
+      "sequence": 2,
+      "name": "baseline_image_received",
+      "wall_time_utc": "2026-10-19T19:07:47.328Z",
+      "frame_index": 1,
+      "png": "frame-e8f5faf8f360a4624edc5e8d95739c6e45517ea4e3424609c5674a43785b8a09.png"
+    },
+    {
+      "sequence": 3,
+      "name": "marker_requested",
+      "wall_time_utc": "2026-10-19T19:07:47.329Z",
+      "id": "led_17"
+    },
+    {
+      "sequence": 4,
+      "name": "complete_acknowledgment_validated",
+      "wall_time_utc": "2026-10-19T19:07:47.336Z",
+      "id": "led_17"
+    },
+    {
+      "sequence": 5,
+      "name": "input_call_will_invoke",
+      "wall_time_utc": "2026-10-19T19:07:47.336Z",
+      "api": "CUA App.click",
+      "apply_index": 76
+    },
+    {
+      "sequence": 6,
+      "name": "input_call_completed",
+      "wall_time_utc": "2026-10-19T19:07:47.357Z"
+    },
+    {
+      "sequence": 7,
+      "name": "after_input_ax_observed",
+      "wall_time_utc": "2026-10-19T19:07:47.781Z"
+    }
+  ],
+  "controller_clock_scope": "Ordered wall time only; no OS input-event timestamp",
+  "marker_acknowledgment": {
+    "event": "marker",
+    "frame_count_before": 2,
+    "id": "led_17",
+    "mach_ticks": "23193959530178"
+  },
+  "after_ax_has_expected_readout": true
+}
