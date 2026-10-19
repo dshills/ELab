@@ -1,0 +1,16 @@
+Owned original /159 native executable in the existing disposable value-recovery bundle.
+Initial baseline file load and R1 selection are public seeded setup, explicitly separate from the prior native blank construction evidence.
+
+Actual CUA sequence:
+1. Capture baseline. Focus Component value; Cmd+A; type 2k. Capture private draft and wait for observer verification of unchanged accepted state.
+2. Fresh AX Apply value once; capture edited. Fresh AX Undo; capture undo. Fresh AX Redo; capture redo.
+3. Open Selected object native menu; choose W4; Delete selected. Capture selected-wire and deleted. Observer verifies three wires and stale prior reading.
+4. Connect by name; scroll outer left rail at [203,550] down 0.6. Open Wire from terminal native menu; choose observed GND1.reference. Open Wire to terminal menu; choose observed V1.negative. A fresh helper lookup immediately after the menu choice did not find Connect wire; no Connect was dispatched. A subsequent full AX/screenshot shows both chosen terminals and enabled Connect wire. Click the observed button once; capture reconnected. Observer verifies W5 and fresh result parity.
+5. Selected object menu -> observed R1. Capture selected-again. Focus Component value; Cmd+A; type 0; fresh AX Apply value once. Capture refused and unchanged-state verification.
+6. Several subsequent full AX reads still omit Component value, Apply value, selection and other inspector leaves, while the screenshot visibly contains them. Lookup raises before any correction action. Saved refused.ax.txt and corrected-private.ax.txt preserve the omission. Do not classify it as successful AX recovery.
+7. Fresh screenshot, pointer click visible field [850,431], Cmd+A, type 2.2k. Capture corrected-private. Observer verifies unchanged accepted state and prior error retained.
+8. Fresh screenshot shows 2.2k. Pointer click Apply [800,484] once. Capture corrected. AX leaves reappear; live result is 1.345 mA. Observer verifies full parity and exact current.
+9. Explicit allow-save-copy marker permits public Save into Native edited LED.elab and separate agent reference Save. Capture saved-copy after completion. Every field except view matches.
+10. Explicit finish marker permits public app.close. Original exec session 85555 returns exit 0. Verify original PID 54987 absent before restoring the stopped disposable bundle. No getApp after close.
+
+The controller uses 900-second observation leases per marker; the same original host/session is retained throughout. Captures write a screenshot first, then a full AX tree. Native circuit edits are user attributed; public seed/save/close are agent attributed. Endpoint credentials are excluded from committed evidence.

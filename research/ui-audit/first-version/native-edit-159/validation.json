@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "scope": "Evidence and source-ledger consistency only; does not close the recorded AX failure",
+  "prd_requirements": 27,
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "native_source_files": 68,
+  "native_sites": 393,
+  "public_commands": 162,
+  "source_routes": 132,
+  "release_manifest_entries": 257,
+  "evidence_hashes_verified": 44,
+  "go_runtime_gate_repeated": false,
+  "product_sdk_version_unchanged": true,
+  "initial_prebuilt_auditor": {
+    "result": "refused current ledger",
+    "vcs_revision": "b2f485bb4138a144a878a468a0abee3cfa223a39",
+    "scope": "Older ignored build/elab-ui-audit; not the current source auditor"
+  },
+  "current_source_auditor": {
+    "command": "GOWORK=off GOCACHE=build/go-cache go run ./cmd/elab-ui-audit --verify research/13-native-command-inventory.json",
+    "passed": true
+  },
+  "diff_whitespace_check_passed": true
+}

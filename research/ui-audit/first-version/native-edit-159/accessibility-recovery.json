@@ -1,0 +1,63 @@
+{
+  "passed": false,
+  "status": "open native accessibility recovery defect",
+  "release": "0.142.0 /159",
+  "scope": "CUA macOS accessibility tree observation, not a VoiceOver run",
+  "visible_field_and_apply": true,
+  "private_draft_and_domain_unchanged_checks_passed": true,
+  "pointer_correction_and_apply_passed": true,
+  "native_accessibility_correction_completed": false,
+  "reproduction": "Select R1, enter 0, Apply. Inspector leaves remain visible but selection/value-entry/apply-value/value-title disappear from repeated full AX observations; row presets remain. Correct 2.2k using visible pointer controls; AX leaves reappear after successful Apply.",
+  "stages": [
+    {
+      "stage": "selected-again",
+      "reported": {
+        "selection": true,
+        "value-entry": true,
+        "apply-value": true,
+        "value-title": true,
+        "presets": true
+      }
+    },
+    {
+      "stage": "refused",
+      "reported": {
+        "selection": true,
+        "value-entry": false,
+        "apply-value": false,
+        "value-title": false,
+        "presets": true
+      }
+    },
+    {
+      "stage": "corrected-private",
+      "reported": {
+        "selection": true,
+        "value-entry": false,
+        "apply-value": false,
+        "value-title": false,
+        "presets": true
+      }
+    },
+    {
+      "stage": "corrected",
+      "reported": {
+        "selection": true,
+        "value-entry": true,
+        "apply-value": true,
+        "value-title": true,
+        "presets": true
+      }
+    },
+    {
+      "stage": "saved-copy",
+      "reported": {
+        "selection": true,
+        "value-entry": true,
+        "apply-value": true,
+        "value-title": true,
+        "presets": true
+      }
+    }
+  ]
+}
