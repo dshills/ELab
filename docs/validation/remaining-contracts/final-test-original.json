@@ -1,0 +1,18 @@
+{
+  "original_failure_reproduced": true,
+  "exit_code": 1,
+  "elapsed_s": 5.100865999935195,
+  "command": [
+    "go",
+    "test",
+    "-overlay",
+    "/Users/dshills/Development/projects/ELab/docs/validation/remaining-contracts/original-overlay.json",
+    "-race",
+    "-count=1",
+    "-run",
+    "^TestApplicationRemainingDiscoveryCompletePureOwned$",
+    "-v",
+    "./workbench"
+  ],
+  "missing_contracts": 20
+}

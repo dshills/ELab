@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "exit_code": 0,
+  "elapsed_s": 5.129986708983779,
+  "command": [
+    "go",
+    "test",
+    "-race",
+    "-count=1",
+    "-run",
+    "^TestApplication(Remaining|Inspection|Preference|Example|Compatibility|Catalog)",
+    "-v",
+    "./workbench"
+  ],
+  "test_sha256": "3447bafa5b9e5c3f86618c412f22403d84cbda1595c1e7060ed5d8e43857ef6c"
+}

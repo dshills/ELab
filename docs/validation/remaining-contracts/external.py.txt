@@ -1,0 +1,75 @@
+from pathlib import Path
+import hashlib,importlib.util,json,subprocess,time
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent;folder=root/'docs/validation/remaining-contracts';out=Path('/private/tmp/elab-remaining-contracts');out.mkdir(mode=0o700)
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();spec=importlib.util.spec_from_file_location('helper',root/'scripts/persistence-demo.py');helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper);binary=stage/'elab-agent';baseline_binary=stage/'baseline-agent'
+
+def discover(client):
+ catalog=client.ask('capabilities.list');details={c['id']:client.ask('capabilities.list',dict(command=c['id']))['capabilities'][0] for c in catalog['capabilities']};return catalog,details
+baseline=helper.Client(command_preconditions=True,agent_binary=baseline_binary)
+try:old_catalog,old_details=discover(baseline)
+finally:baseline.close()
+(folder/'baseline.json').write_text(json.dumps(dict(catalog=old_catalog,details=old_details),indent=2)+'\n')
+expected_missing=[name for name,c in old_details.items() if 'x-command-contract' not in c['input_schema']];assert len(expected_missing)==20
+
+def exercise(client,label):
+ directory=out/label;directory.mkdir();client.ask('example.reset',dict(discard_changes=True),True);client.ask('simulation.wait');client.ask('simulation.pause',{},True)
+ saved=directory/'manual-project.elab';client.ask('project.save',dict(path=str(saved)),True);client.ask('simulation.wait');saved_sha=sha(saved)
+ before=client.ask('project.inspect');catalog,details=discover(client);assert client.ask('project.inspect')==before
+ assert len(details)==162 and all('x-command-contract' in c['input_schema'] for c in details.values())
+ assert catalog==old_catalog and all(c['output_schema']==old_details[name]['output_schema'] and c['mutation']==old_details[name]['mutation'] for name,c in details.items())
+ changed=[name for name in details if details[name]!=old_details[name]];assert changed==expected_missing
+ idle=client.ask('events.poll',dict(after_revision=before['revision'],timeout_ms=0));assert not idle['changed'] and not idle['timed_out'] and idle['coalesced'] and 'snapshot' not in idle
+ client.ask('events.poll',dict(after_revision=before['revision']+10000,timeout_ms=0),expect='conflict')
+ frame=client.ask('display.inspect',dict(phase=1));assert frame['phase']==0
+ client.ask('display.inspect',dict(phase=1.01),expect='invalid-params')
+ assert client.ask('project.inspect')==before
+ client.ask('diagnostics.details.set',dict(visible=True),True);detailed=client.ask('project.inspect');assert detailed['diagnostic_presentation']['details_visible'] and detailed['document']==before['document']
+ event=client.ask('events.poll',dict(after_revision=before['revision'],timeout_ms=0));assert event['changed'] and event['snapshot']['diagnostic_presentation']['details_visible']
+ prefs=dict(voltage_color=True,voltage_range_v=30,current_cues=True,current_motion=True,reduced_motion=True,direction='electron')
+ client.ask('display.preferences.set',prefs,True);display=client.ask('project.inspect');assert display['document']['dirty'] and not display['display']['animate'] and display['display']['preferences']==prefs and display['undo_entry']['name']=='Change display preferences'
+ bad=dict(prefs,current_cues=False);client.ask('display.preferences.set',bad,True,expect='invalid-params');assert client.ask('project.inspect')==display
+ path=directory/'appearance.json';client.ask('appearance.configure',dict(path=str(path)),True);ready=client.ask('appearance.wait');assert ready['appearance']['status']=='ready'
+ theme_stages=[]
+ for theme in details['appearance.theme.set']['input_schema']['properties']['theme']['enum']:
+  client.ask('appearance.theme.set',dict(theme=theme),True);state=client.ask('appearance.wait');assert state['theme']==theme and json.loads(path.read_text())['theme']==theme
+  for key in ['components','wires','result','run_id','electrical_revision','document','undo_entry','redo_entry']:assert state.get(key)==display.get(key),(label,key)
+  theme_stages.append(state)
+ pref_bytes=path.read_bytes();client.ask('appearance.configure',dict(path=''),True);disabled=client.ask('appearance.wait');assert disabled['appearance']['status']=='disabled' and path.read_bytes()==pref_bytes
+ corrupt=directory/'corrupt-appearance.json';corrupt.write_text('not JSON');client.ask('appearance.configure',dict(path=str(corrupt)),True);failed=client.ask('appearance.wait');assert failed['appearance']['status']=='error' and failed['appearance']['error']
+ client.ask('appearance.theme.set',dict(theme='dark'),True);assert corrupt.read_text()=='not JSON';client.ask('appearance.configure',dict(path=''),True)
+ aliases={'example.reset':'led','example.rc':'rc','example.npn':'npn','example.npn-pulse':'blink','example.flasher':'flasher','example.switch-npn':'switch-npn','example.rectifier':'rectifier'};alias_stages=[]
+ for command,identity in aliases.items():
+  admitted=client.ask(command,dict(discard_changes=True),True);assert not admitted['paused'] and details[command]['input_schema']['x-example-id']==identity
+  client.ask('simulation.wait');client.ask('simulation.pause',{},True);state=client.ask('project.inspect');assert state['example']['info']['id']==identity
+  client.ask(command,{},True,expect='unsaved-changes');assert client.ask('project.inspect')==state
+  alias_stages.append(state)
+ client.ask('example.load',dict(id='rc',discard_changes=True),True);client.ask('simulation.wait');client.ask('simulation.pause',{},True);original=client.ask('project.inspect')
+ client.ask('component.move',dict(id='R1',position=dict(x=800,y=700)),True)
+ client.ask('example.current.reset',dict(expected_example_id='led',discard_changes=True),True,expect='conflict')
+ client.ask('example.current.reset',dict(expected_example_id='rc'),True,expect='unsaved-changes')
+ client.ask('example.current.reset',dict(expected_example_id='rc',discard_changes=True),True);reset=client.ask('simulation.wait');assert reset['paused'] and reset['components']==original['components'] and reset['document']['generation']>original['document']['generation']
+ client.ask('example.load',dict(id='missing',discard_changes=True),True,expect='not-found')
+ client.ask('example.reset',dict(discard_changes=True),True);client.ask('simulation.wait');client.ask('simulation.pause',{},True);connected=client.ask('project.inspect')
+ client.ask('circuit.connection.set',dict(connected=False),True);disconnected=client.ask('project.inspect');assert len(disconnected['wires'])==len(connected['wires'])-1
+ client.ask('circuit.connection.set',dict(connected=False),True);no_op=client.ask('project.inspect');assert no_op['wires']==disconnected['wires'] and no_op['run_id']==disconnected['run_id'] and no_op['undo_entry']==disconnected['undo_entry']
+ client.ask('circuit.connection.set',dict(connected=True),True);restored=client.ask('project.inspect');assert len(restored['wires'])==len(connected['wires'])
+ client.ask('project.clear',dict(discard_changes=True),True);client.ask('example.current.reset',{},True,expect='unavailable');client.ask('circuit.connection.set',dict(connected=False),True,expect='invalid-params')
+ assert sha(saved)==saved_sha
+ result=dict(catalog=catalog,details=details,before=before,idle=idle,frame=frame,detailed=detailed,event=event,display=display,theme_stages=theme_stages,disabled=disabled,persistence_error=failed,aliases=alias_stages,original=original,reset=reset,connected=connected,disconnected=disconnected,no_op=no_op,restored=restored,manual_save_unchanged=True)
+ (folder/(label+'.json')).write_text(json.dumps(result,indent=2)+'\n');return result
+
+stdio=helper.Client(command_preconditions=True,agent_binary=binary)
+try:left=exercise(stdio,'stdio');stdio.ask('app.close',dict(discard_changes=True),True)
+finally:stdio.close()
+endpoint=out/'endpoint.json';log=(out/'socket.log.txt').open('w');host=subprocess.Popen([str(binary),'--listen',str(endpoint)],stdout=log,stderr=subprocess.STDOUT);client=None
+try:
+ deadline=time.monotonic()+10
+ while not endpoint.exists():assert host.poll() is None;assert time.monotonic()<deadline;time.sleep(.01)
+ client=helper.Client(str(endpoint),command_preconditions=True,agent_binary=binary);right=exercise(client,'socket');client.ask('app.close',dict(discard_changes=True),True);client.close();client=None;assert host.wait(timeout=5)==0
+finally:
+ if client:client.close()
+ if host.poll() is None:host.terminate();host.wait(timeout=5)
+ log.close()
+assert left['catalog']==right['catalog'] and left['details']==right['details']
+report=dict(passed=True,scope='Modified-source development agent over stdio/private headless socket; private preference files only; no new native/physical input or clean package qualification',baseline_source_commit='cbbc97136978999e708433d1c6ab11a95ed606d4',baseline_agent_sha256=sha(baseline_binary),development_agent_sha256=sha(binary),public_commands=162,contracts_before=142,contracts_after=162,remaining_without_contract=[],detailed_commands_changed=expected_missing,ordinary_catalog_and_outputs_unchanged=True,pure_discovery=True,display_and_theme_preserve_electrical_state=True,project_display_preferences_dirty_and_undoable=True,private_preference_persistence_and_error_outcomes=True,legacy_aliases=7,protected_current_example_reset=True,compatibility_connection_and_noop=True,manual_saves_preserved=True,socket_host_pid=host.pid,socket_host_exit_code=host.returncode,socket_host_absent=subprocess.run(['/bin/ps','-p',str(host.pid)],capture_output=True).returncode!=0)
+assert report['socket_host_absent'];(folder/'external.json').write_text(json.dumps(report,indent=2)+'\n');print(report)

@@ -1,0 +1,5 @@
+from pathlib import Path
+import hashlib,json,subprocess,time
+root=Path('/Users/dshills/Development/projects/ELab');folder=root/'docs/validation/remaining-contracts';files=['workbench/'+name for name in ['capability_details.go','inspection_capabilities.go','preference_capabilities.go','example_capabilities.go','application_capabilities_test.go']];sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();before={name:sha(root/name) for name in files};start=time.monotonic()
+with (folder/'quality-stdout.txt').open('wb') as stdout,(folder/'quality-stderr.txt').open('wb') as stderr:p=subprocess.run(['./scripts/check.sh'],cwd=root,stdout=stdout,stderr=stderr,timeout=900)
+assert before=={name:sha(root/name) for name in files};r=dict(passed=p.returncode==0,exit_code=p.returncode,elapsed_s=time.monotonic()-start,command='./scripts/check.sh',source_sha256=before,quality_runner_sha256=sha(root/'scripts/check.sh'));(folder/'quality.json').write_text(json.dumps(r,indent=2)+'\n');print({k:r[k] for k in ['passed','exit_code','elapsed_s']});raise SystemExit(p.returncode)

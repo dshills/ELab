@@ -1,0 +1,21 @@
+{
+  "source_commit": "cbbc97136978999e708433d1c6ab11a95ed606d4",
+  "exit_code": 1,
+  "elapsed_s": 4.8100049999775365,
+  "command": [
+    "go",
+    "test",
+    "-race",
+    "-count=1",
+    "-run",
+    "^TestApplicationRemainingDiscoveryCompletePureOwned$",
+    "-v",
+    "./workbench"
+  ],
+  "source_sha256": {
+    "workbench/capability_details.go": "8c05e5fc5111fd0ea68be3d190dfcbecbbbb20fdfb9744ed99d0c3d3625bb9cc",
+    "workbench/application_capabilities_test.go": "31b1f7ee33db98ca90c97666d70e1401f582eb764ae1257d26bd1aba34a940d7"
+  },
+  "original_failure_reproduced": true,
+  "missing_contracts": 20
+}

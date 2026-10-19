@@ -1,0 +1,18 @@
+from pathlib import Path
+import hashlib,json,stat,sys
+root=Path('/Users/dshills/Development/projects/ELab');folder=root/'docs/validation/remaining-contracts';sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();read=lambda p:json.loads(p.read_text());sys.path.insert(0,str(root/'scripts'));from wiring_replay import validate_release
+receipt=root/'research/ui-audit/first-version/component-startup-review-checkpoint.json';cp=read(receipt);sealed=Path(cp['review_path'])
+reports={}
+for manifest in sorted((root/'build').glob('ELab-*-review/RELEASE_MANIFEST.json')):
+ directory=manifest.parent;files=read(manifest)['files'];assert {p.relative_to(directory).as_posix() for p in directory.rglob('*') if p.is_file()}==set(files)|{manifest.name}
+ for name,item in files.items():
+  p=directory/name;assert not p.is_symlink() and sha(p)==item['sha256'] and oct(stat.S_IMODE(p.stat().st_mode))==item['mode'],p
+ reports[directory.name]=dict(manifest_sha256=sha(manifest),entries=len(files))
+assert len(reports)==29 and reports[sealed.name]['entries']==1393
+assert sha(root/'build/ELab-0.152.0-169-review.zip')=='3bb1d687883104444fdad0462eef19f9082ff366f71164a53421d080c0f927bb'
+assert sha(root/'build/ELab.app/Contents/MacOS/ELab')==cp['canonical']['native_sha256']
+try:validate_release(root,receipt)
+except ValueError as error:
+ reason=str(error);assert reason=='runtime source input set differs from review'
+else:raise AssertionError('old package must not admit newly changed source')
+r=dict(passed=True,scope='Read-only sealed bytes/modes, current ZIP/canonical and expected refusal of changed-source admission; no new package qualification',receipt_sha256=sha(receipt),sealed_reviews=reports,current_archive_sha256=sha(root/'build/ELab-0.152.0-169-review.zip'),canonical_native_sha256=cp['canonical']['native_sha256'],old_release_admission_refused=True,refusal_reason=reason);(folder/'preservation.json').write_text(json.dumps(r,indent=2)+'\n');print(dict(passed=True,sealed_reviews=29,old_release_admission_refused=True))
