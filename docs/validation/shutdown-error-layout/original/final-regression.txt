@@ -1,0 +1,18 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible
+=== RUN   TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/light-1040x720
+    button_context_offscreen_test.go:95: scene=(0,0)-(1040,720) button=(32,706)-(208,712) visible=true errors=796/3516
+    button_context_offscreen_test.go:111: shutdown acknowledgement is clipped below a readable button height
+=== RUN   TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/dark-1040x720
+    button_context_offscreen_test.go:95: scene=(0,0)-(1040,720) button=(32,706)-(208,712) visible=true errors=795/3516
+    button_context_offscreen_test.go:111: shutdown acknowledgement is clipped below a readable button height
+=== RUN   TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/light-1280x800
+    button_context_offscreen_test.go:95: scene=(0,0)-(1280,800) button=(32,598)-(208,647) visible=true errors=795/3516
+--- FAIL: TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible (1.20s)
+    --- FAIL: TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/light-1040x720 (0.43s)
+    --- FAIL: TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/dark-1040x720 (0.38s)
+    --- PASS: TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/light-1280x800 (0.39s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	1.859s
+FAIL

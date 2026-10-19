@@ -91,12 +91,18 @@ func newMountedWiper(t *testing.T, s *screen) *mountedWiper {
 
 func newMountedControlWindow(t *testing.T, s *screen, view func() ui.Node) *mountedControlWindow {
 	t.Helper()
+	theme := ui.Theme{Default: ui.Style{Foreground: ui.Some(color.NRGBA{R: 24, G: 24, B: 24, A: 255}), Background: ui.Some(color.NRGBA{R: 248, G: 248, B: 248, A: 255}), Typography: ui.Some(ui.Typography{Family: "Noto Sans", Size: 16})}}
+	return newMountedControlWindowSize(t, s, view, 520, 180, theme)
+}
+
+func newMountedControlWindowSize(t *testing.T, s *screen, view func() ui.Node, width, height float32, theme ui.Theme) *mountedControlWindow {
+	t.Helper()
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	t.Cleanup(cancel)
 	if _, err := s.service.Wait(ctx); err != nil {
 		t.Fatal(err)
 	}
-	if err := s.app.Open(app.Window{ID: "main", Title: "Mounted controls", Width: 520, Height: 180, View: view}); err != nil {
+	if err := s.app.Open(app.Window{ID: "main", Title: "Mounted controls", Width: width, Height: height, View: view}); err != nil {
 		t.Fatal(err)
 	}
 	clock, err := execution.NewManualClock(time.Unix(1730000000, 0).UTC(), 256, 256)
@@ -110,7 +116,7 @@ func newMountedControlWindow(t *testing.T, s *screen, view func() ui.Node) *moun
 	}
 	t.Cleanup(executor.Close)
 	config := cogent.ManualConfig{Clock: clock, Executor: executor, LogicalDPI: 160, OwnerBatch: 7, EventCapacity: 128, MaxWindows: 1}
-	config.Theme = ui.Theme{Default: ui.Style{Foreground: ui.Some(color.NRGBA{R: 24, G: 24, B: 24, A: 255}), Background: ui.Some(color.NRGBA{R: 248, G: 248, B: 248, A: 255}), Typography: ui.Some(ui.Typography{Family: "Noto Sans", Size: 16})}}
+	config.Theme = theme
 	if err := fs.WalkDir(fonts.Default, ".", func(path string, entry fs.DirEntry, err error) error {
 		if err != nil {
 			return err

@@ -10,6 +10,8 @@ Clean `cc3cb7b` /SDK `b22478c` makes agent discovery describe the already accept
 
 Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment and the actual hobbyist study remain open. Visible timing evidence stays scoped to /173, with RC and 100 ms acknowledgment unqualified. All 33 earlier sealed reviews, four candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.
 
+Source follow-up: [a long shutdown-error panel can clip its close action at minimum size](../docs/validation/shutdown-error-layout/README.md) in mounted tests. The repair passes full source quality; clean replacement packaging is next. The packaged review remains 0.158.0 /175.
+
 ## Try these four tasks · 15–20 minutes
 
 1. **Build an LED loop.** Start on the blank sheet. Place a DC source, resistor, red LED and ground. Use 5 V and 1 kΩ. Try typing a coordinate and clicking Place directly. Wire source positive → resistor → LED anode, LED cathode → ground, ground → source negative. Expect about **2.917 mA** with the generic model. Change the resistor to `2k`: about **1.477 mA**. Try leaving unfinished value text and clicking a resistor/capacitor preset once; the chosen preset should apply. Undo/redo, delete a wire and reconnect it. For value recovery, enter `0` for the resistor and Apply: the circuit should stay unchanged. Replace it with `2.2k` and Apply once: the error should clear and current should be about **1.345 mA**. An incomplete drawing must not present old readings as current.

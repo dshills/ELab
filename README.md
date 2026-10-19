@@ -12,6 +12,8 @@ Clean `cc3cb7b` /SDK `b22478c` makes agent discovery describe the already accept
 
 Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment and the actual hobbyist study remain open. Visible timing evidence stays scoped to /173, with RC and 100 ms acknowledgment unqualified. All 33 earlier sealed reviews, four candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.
 
+Source follow-up: [a long shutdown-error panel can clip its close action at minimum size](docs/validation/shutdown-error-layout/README.md) in mounted tests. The repair passes full source quality; clean replacement packaging is next. The packaged review remains 0.158.0 /175.
+
 ## Build and run from source
 
 Use Go 1.25.6 or newer, Python 3.10 or newer, and Vellum's macOS native prerequisites. Normal builds verify and extract the [pinned private Vellum SDK](third_party/vellum/README.md), including its prepared Cogent and typesetting sources. A sibling Vellum checkout is no longer required. ELab's `desktop/go.mod` contains the four explicit local replacements into the verified build cache. Run `python3 scripts/prepare-vellum.py` before invoking native Go tools directly; `build.sh`, `lint.sh` and `check.sh` prepare it automatically.

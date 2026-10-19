@@ -1,0 +1,30 @@
+{
+  "finding": "SHUTDOWN-CUTOFF-01",
+  "source_repair_qualified": true,
+  "replacement_package_qualified": false,
+  "full_mvp_complete": false,
+  "canonical_promoted": false,
+  "quality": {
+    "command": "GOPROXY=off ./scripts/check.sh",
+    "exit_code": 0,
+    "elapsed_seconds": 226.7483720779419,
+    "started_unix": 1792451807.848873,
+    "finished_unix": 1792452034.597246
+  },
+  "preserved": {
+    "build/ELab.app/Contents/MacOS/ELab": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "build/ELab-0.158.0-175-review/ELab.app/Contents/MacOS/ELab": "326bb26039bcd53ed9acfef2519a23dbc9eb1bf38d8d4ce9be4adb2acf3f4093",
+    "build/ELab-0.158.0-175-review/elab-agent": "066411e7d785a21eb6a7c4b695c0bb4f1b89bd62724859cdb62f3a7b41bfe47a",
+    "build/ELab-0.158.0-175-review.zip": "02bbaf342fcecf441d3cb7180920877de7d12c906bcb33a216871fc9b78f1387",
+    "third_party/vellum/vellum-b22478c.tar.gz": "22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968"
+  },
+  "manifest_sha256": "c02a9c22b84c2436119d3bb9d0f9432836d461ba15e2dbcdeb52dfbba25de93c",
+  "owner_walkthrough": "Not tried yet",
+  "original_minimum_button_height": 6,
+  "fixed_button_height": 49,
+  "original_failures": 2,
+  "original_larger_window_control": "passed",
+  "final_mounted_scenarios": 3,
+  "physical_native_input": false,
+  "patch_encoding": "gzip preserves original unified patch bytes; original whitespace-check refusal retained"
+}

@@ -1,0 +1,78 @@
+from pathlib import Path
+import hashlib
+import json
+import shutil
+
+root = Path('/Users/dshills/Development/projects/ELab')
+stage = root/'build/shutdown-layout-175-work'
+proof = root/'docs/validation/shutdown-error-layout'
+status = json.loads((stage/'full-quality-status.json').read_text())
+assert status['exit_code'] == 0
+pins = json.loads((stage/'quality-source-pins.json').read_text())['source_sha256']
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+assert len(pins) == 650 and all(sha(root/n) == digest for n,digest in pins.items())
+for source, target in [('full-quality.txt','full-quality.txt'),('full-quality-status.json','status.json')]:
+    shutil.copyfile(stage/source,proof/'quality'/target)
+shutil.copyfile(stage/'original-layout-overlay.json',proof/'diagnosis/original-layout-overlay.json')
+shutil.copyfile(__file__,proof/'finalize-proof.py.txt')
+base = json.loads((root/'research/ui-audit/first-version/operation-page-review-checkpoint.json').read_text())
+preserved = {
+    'build/ELab.app/Contents/MacOS/ELab': base['canonical']['native_sha256'],
+    'build/ELab-0.158.0-175-review/ELab.app/Contents/MacOS/ELab': base['native_sha256'],
+    'build/ELab-0.158.0-175-review/elab-agent': base['agent_sha256'],
+    'build/ELab-0.158.0-175-review.zip': (root/'build/ELab-0.158.0-175-review.zip.sha256').read_text().split()[0],
+    base['sdk']['archive']: base['sdk']['sha256'],
+}
+assert all(sha(root/n)==digest for n,digest in preserved.items())
+elapsed = status['elapsed_seconds']
+readme = proof/'README.md'
+text = readme.read_text()
+assert '## Final source gate' not in text
+readme.write_text(text+f'''
+## Final source gate
+
+The final default `GOPROXY=off ./scripts/check.sh` exits 0 in {elapsed:.3f} s:
+SDK/import/format/Staticcheck, native ledger and PRD-audit consistency,
+54 Python checks, both modules' race/vet, and selected mounted controls/vet pass.
+The final 650-file Go pin set is checked before this checkpoint. The original
+overlay remains an expected failure and its larger-window control remains a
+pass. This is not a new solver, visible-latency or full-accessibility decision.
+
+Read-only replay:
+
+```sh
+python3 -B docs/validation/shutdown-error-layout/verify.py
+```
+
+The source repair is qualified; one clean matching private app/agent replacement
+and its copied-runtime qualification are next. The existing /175 app, agent,
+ZIP, SDK and canonical /120 hash unchanged. No replacement release or promotion
+is claimed by this source checkpoint.
+''')
+entry = f'''- **Long shutdown-error cutoff repaired in source.** The exact final mounted test against original /175 layout source reproduces a 6-pixel close-action target in light/dark at 1040×720, with a passing 1280×800 control. A scrollable error body now preserves a 49-pixel footer action. All three real-file fault scenarios preserve circuit/files and dispatch one existing shared acknowledgement; both minimum-size errors scroll independently. Full default quality passes ({elapsed:.3f} s). Only the shutdown view changes in production; models/commands/format/SDK and the native ledger's routes remain unchanged. [Proof](../docs/validation/shutdown-error-layout/README.md). Next: one clean private replacement app/agent and copied-runtime checks; /175 and canonical remain preserved. This is source/software layout qualification, not new physical native/reader/timing or owner acceptance.\n\n'''
+plan = root/'research/34-first-version-plan.md'
+text = plan.read_text();marker='## Current position\n\n'
+assert text.count(marker)==1
+text=text.replace(marker,marker+entry,1)
+marker='| Issue | Severity and closure |\n|---|---|\n'
+assert marker in text
+text=text.replace(marker,marker+'| Long shutdown errors clip the close acknowledgement | **Source repair qualified; replacement packaging pending.** Actual file/lease failures plus final original-source overlay show a 6-pixel initial action at minimum size in both themes. The repaired error-body scroll keeps the 49-pixel action visible and retains error/circuit/file state through shared acknowledgement. [Proof](../docs/validation/shutdown-error-layout/README.md). Existing /175 is preserved; no new physical UI claim. |\n',1)
+plan.write_text(text)
+for name in ['README.md','research/35-first-version-review.md']:
+    path=root/name;text=path.read_text()
+    marker='## Build and run from source' if name=='README.md' else '## Try these four tasks'
+    at=text.index(marker)
+    relative='' if name=='README.md' else '../'
+    paragraph=f'Source follow-up: [a long shutdown-error panel can clip its close action at minimum size]({relative}docs/validation/shutdown-error-layout/README.md) in mounted tests. The repair passes full source quality; clean replacement packaging is next. The packaged review remains 0.158.0 /175.\n\n'
+    path.write_text(text[:at]+paragraph+text[at:])
+with (root/'research/41-release-gate-reconciliation.md').open('a') as stream:
+    stream.write('\nSHUTDOWN-CUTOFF-01 [is repaired and source-qualified](../docs/validation/shutdown-error-layout/README.md). Long actual cleanup errors no longer clip the shared close acknowledgement in the tested minimum-size layouts. This adds a finite software error-state check; full native/platform/binding/reader and owner gates remain open. A matching replacement package is next. The earlier reconciled source pins and P0 counts remain historical and unchanged.\n')
+files={p.relative_to(proof).as_posix():dict(bytes=p.stat().st_size,sha256=sha(p)) for p in sorted(proof.rglob('*')) if p.is_file() and p.name not in ['checkpoint.json','manifest.json']}
+(proof/'manifest.json').write_text(json.dumps({'files':files},indent=2)+'\n')
+checkpoint=dict(finding='SHUTDOWN-CUTOFF-01',source_repair_qualified=True,replacement_package_qualified=False,
+    full_mvp_complete=False,canonical_promoted=False,quality=status,preserved=preserved,
+    manifest_sha256=sha(proof/'manifest.json'),owner_walkthrough='Not tried yet',
+    original_minimum_button_height=6,fixed_button_height=49,original_failures=2,original_larger_window_control='passed',
+    final_mounted_scenarios=3,physical_native_input=False)
+(proof/'checkpoint.json').write_text(json.dumps(checkpoint,indent=2)+'\n')
+print(dict(passed=True,source_quality_seconds=elapsed,evidence_files=len(files),replacement_packaging=False))

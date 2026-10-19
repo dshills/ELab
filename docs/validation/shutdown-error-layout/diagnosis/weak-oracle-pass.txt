@@ -1,0 +1,8 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestProbeShutdownLongErrors
+    shutdown_layout_probe_offscreen_test.go:106: real error lengths recovery=758 appearance=3516
+    shutdown_layout_probe_offscreen_test.go:115: scene=(0,0)-(1040,720) button=(32,706)-(208,712) visible=true
+--- PASS: TestProbeShutdownLongErrors (0.66s)
+PASS
+ok  	github.com/dshills/elab/desktop	2.343s

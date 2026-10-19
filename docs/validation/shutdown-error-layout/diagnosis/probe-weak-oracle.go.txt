@@ -1,0 +1,119 @@
+//go:build offscreen
+
+package main
+
+import (
+ "context"
+ "crypto/sha256"
+ "encoding/hex"
+ "encoding/json"
+ "image"
+ "image/color"
+ "image/png"
+ "io/fs"
+ "os"
+ "path/filepath"
+ "strings"
+ "testing"
+ "time"
+
+ "cogentcore.org/core/text/fonts"
+ "github.com/dshills/elab/workbench"
+ "github.com/dshills/vellum/app"
+ "github.com/dshills/vellum/drivers/cogent"
+ "github.com/dshills/vellum/execution"
+ "github.com/dshills/vellum/ui"
+)
+
+func probeShutdownWindow(t *testing.T, s *screen, view func() ui.Node) *mountedControlWindow {
+	t.Helper()
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	t.Cleanup(cancel)
+	if _, err := s.service.Wait(ctx); err != nil {
+		t.Fatal(err)
+	}
+	if err := s.app.Open(app.Window{ID: "main", Title: "Mounted controls", Width: 1040, Height: 720, View: view}); err != nil {
+		t.Fatal(err)
+	}
+	clock, err := execution.NewManualClock(time.Unix(1730000000, 0).UTC(), 256, 256)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(clock.Close)
+	executor, err := execution.NewManual(8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(executor.Close)
+	config := cogent.ManualConfig{Clock: clock, Executor: executor, LogicalDPI: 160, OwnerBatch: 7, EventCapacity: 128, MaxWindows: 1}
+	config.Theme = ui.Theme{Default: ui.Style{Foreground: ui.Some(color.NRGBA{R: 24, G: 24, B: 24, A: 255}), Background: ui.Some(color.NRGBA{R: 248, G: 248, B: 248, A: 255}), Typography: ui.Some(ui.Typography{Family: "Noto Sans", Size: 16})}}
+	if err := fs.WalkDir(fonts.Default, ".", func(path string, entry fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if entry.IsDir() || !strings.HasSuffix(path, ".ttf") && !strings.HasSuffix(path, ".otf") {
+			return nil
+		}
+		data, err := fs.ReadFile(fonts.Default, path)
+		if err != nil {
+			return err
+		}
+		h := sha256.Sum256(data)
+		config.Fonts = append(config.Fonts, cogent.ManualFont{Name: path, Data: data, SHA256: hex.EncodeToString(h[:])})
+		return nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+	manual, err := cogent.NewManual(ctx, s.app, config)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() {
+		closeCtx, closeCancel := context.WithTimeout(context.Background(), time.Second)
+		defer closeCancel()
+		if err := manual.Close(closeCtx); err != nil {
+			t.Error(err)
+		}
+	})
+	m := &mountedControlWindow{t: t, ctx: ctx, screen: s, manual: manual, clock: clock}
+	m.settle()
+	m.window = m.snapshot()
+	return m
+}
+
+func TestProbeShutdownLongErrors(t *testing.T) {
+ s, cleanup := testScreen(t)
+ t.Cleanup(cleanup)
+ directory := t.TempDir()
+ appearance := filepath.Join(directory,"bad-appearance.json")
+ data, err := json.Marshal(map[string]any{"format":"elab.appearance","version":1,"theme":"dark", strings.Repeat("bad-field-",350):true})
+ if err != nil || len(data)>workbench.MaxAppearanceBytes { t.Fatal("bad fixture",err,len(data)) }
+ if err:=os.WriteFile(appearance,data,0600); err!=nil {t.Fatal(err)}
+ agentAction(t,s.service,"appearance.configure",workbench.AppearanceConfigureParams{Path:appearance})
+ agentAction(t,s.service,"appearance.wait",struct{}{})
+ recovery:=filepath.Join(directory,strings.Repeat("r",200),strings.Repeat("s",200),strings.Repeat("t",200))
+ agentAction(t,s.service,"recovery.configure",workbench.RecoveryConfigureParams{Directory:recovery,Interval:1})
+ entries,err:=os.ReadDir(recovery)
+ if err!=nil || len(entries)!=1 {t.Fatal("lease fixture",err)}
+ lease:=filepath.Join(recovery,entries[0].Name())
+ if err:=os.Remove(lease);err!=nil {t.Fatal(err)}
+ if err:=os.Mkdir(lease,0700);err!=nil {t.Fatal(err)}
+ if err:=os.WriteFile(filepath.Join(lease,"retain"),[]byte("owned fault fixture"),0600);err!=nil {t.Fatal(err)}
+ agentAction(t,s.service,"app.close.start",workbench.ReplaceParams{})
+ deadline:=time.Now().Add(3*time.Second)
+ for s.service.Snapshot().Shutdown.Status!="failed" {if time.Now().After(deadline){t.Fatal("shutdown timeout")};time.Sleep(time.Millisecond)}
+ state:=s.service.Snapshot()
+ t.Logf("real error lengths recovery=%d appearance=%d",len(state.Shutdown.RecoveryError),len(state.Shutdown.AppearanceError))
+ m:=probeShutdownWindow(t,s,s.view)
+ im,err:=m.manual.Capture(m.ctx,"main")
+ if err!=nil {t.Fatal(err)}
+ f,err:=os.Create("../build/shutdown-layout-175-work/original.png")
+ if err!=nil {t.Fatal(err)}
+ if err:=png.Encode(f,im);err!=nil {t.Fatal(err)}
+ if err:=f.Close();err!=nil {t.Fatal(err)}
+ button:=mountedControlElement(t,m,"shutdown-acknowledge")
+ t.Logf("scene=%v button=%v visible=%v",im.Bounds(),button.Bounds,button.Visible)
+ if button.Bounds.Empty() || !button.Bounds.In(image.Rect(0,0,1040,720)) || !button.Visible {t.Fatal("shutdown acknowledgement is unreachable at the supported minimum size")}
+ clickMountedControl(t,m,"shutdown-acknowledge")
+ if !s.service.Snapshot().ReadyToExit() {t.Fatal("visible acknowledgement did not close")}
+}

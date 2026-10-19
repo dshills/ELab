@@ -1,0 +1,10 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestProbeShutdownLongErrors
+    shutdown_layout_probe_offscreen_test.go:106: real error lengths recovery=759 appearance=3516
+    shutdown_layout_probe_offscreen_test.go:115: scene=(0,0)-(1040,720) button=(32,706)-(208,712) visible=true
+    shutdown_layout_probe_offscreen_test.go:116: shutdown acknowledgement is clipped below a readable button height at the supported minimum size
+--- FAIL: TestProbeShutdownLongErrors (0.66s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	1.328s
+FAIL

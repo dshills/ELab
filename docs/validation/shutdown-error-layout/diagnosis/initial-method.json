@@ -1,0 +1,17 @@
+{
+  "kind": "Functional offscreen layout diagnosis; not visible latency or physical OS input",
+  "base_commit": "66c731964ace5403c82ddd63a3e861165282a1d6",
+  "release": "0.158.0 /175",
+  "application_source_files_unchanged": 650,
+  "temporary_probe": "desktop/shutdown_layout_probe_offscreen_test.go",
+  "supported_minimum_pixels": [
+    1040,
+    720
+  ],
+  "logical_dpi": 160,
+  "faults": [
+    "Owned malformed appearance JSON below the 4096-byte limit",
+    "Owned nonempty directory at the recovery lease path"
+  ],
+  "decision": "Repair only if actual close acknowledgement is outside the scene or cannot dispatch the shared acknowledgement command; otherwise preserve the negative result and remove the temporary probe."
+}

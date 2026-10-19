@@ -1,0 +1,16 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible
+=== RUN   TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/light-1040x720
+    button_context_offscreen_test.go:82: cogent: invalid manual configuration or copied adapter: explicit managed colors and font family required
+=== RUN   TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/dark-1040x720
+    button_context_offscreen_test.go:82: cogent: invalid manual configuration or copied adapter: explicit managed colors and font family required
+=== RUN   TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/light-1280x800
+    button_context_offscreen_test.go:82: cogent: invalid manual configuration or copied adapter: explicit managed colors and font family required
+--- FAIL: TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible (0.16s)
+    --- FAIL: TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/light-1040x720 (0.07s)
+    --- FAIL: TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/dark-1040x720 (0.04s)
+    --- FAIL: TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/light-1280x800 (0.04s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	0.778s
+FAIL

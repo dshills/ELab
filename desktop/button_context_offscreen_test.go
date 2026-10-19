@@ -3,6 +3,14 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"image"
+	"image/color"
+	"image/png"
+	"os"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"testing"
@@ -10,10 +18,127 @@ import (
 
 	"cogentcore.org/core/events"
 	"cogentcore.org/core/events/key"
+	"cogentcore.org/core/math32"
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/drivers/cogent"
 	"github.com/dshills/vellum/ui"
 )
+
+func TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible(t *testing.T) {
+	for _, fixture := range []struct {
+		theme         string
+		width, height int
+	}{{"light", 1040, 720}, {"dark", 1040, 720}, {"light", 1280, 800}} {
+		t.Run(fmt.Sprintf("%s-%dx%d", fixture.theme, fixture.width, fixture.height), func(t *testing.T) {
+			s, cleanup := testScreen(t)
+			t.Cleanup(cleanup)
+			agentAction(t, s.service, "example.reset", workbench.ReplaceParams{})
+			agentAction(t, s.service, "simulation.pause", struct{}{})
+			agentAction(t, s.service, "appearance.theme.set", map[string]string{"theme": fixture.theme})
+			directory := t.TempDir()
+			manual := filepath.Join(directory, "manual.elab")
+			agentAction(t, s.service, "project.save", workbench.SaveParams{Path: manual})
+			original, err := os.ReadFile(manual)
+			if err != nil {
+				t.Fatal(err)
+			}
+			appearance := filepath.Join(directory, "appearance.json")
+			data, err := json.Marshal(map[string]any{"format": "elab.appearance", "version": 1, "theme": "dark", strings.Repeat("bad-field-", 350): true})
+			if err != nil || len(data) > workbench.MaxAppearanceBytes {
+				t.Fatal("appearance fixture must reach parsing within its real byte limit", err)
+			}
+			if err := os.WriteFile(appearance, data, 0600); err != nil {
+				t.Fatal(err)
+			}
+			agentAction(t, s.service, "appearance.configure", workbench.AppearanceConfigureParams{Path: appearance})
+			agentAction(t, s.service, "appearance.wait", struct{}{})
+			recovery := filepath.Join(directory, strings.Repeat("r", 200), strings.Repeat("s", 200), strings.Repeat("t", 200))
+			agentAction(t, s.service, "recovery.configure", workbench.RecoveryConfigureParams{Directory: recovery, Interval: 1})
+			entries, err := os.ReadDir(recovery)
+			if err != nil || len(entries) != 1 || !strings.HasPrefix(entries[0].Name(), "session-") {
+				t.Fatal("owned recovery fixture must contain exactly one lease", err)
+			}
+			lease := filepath.Join(recovery, entries[0].Name())
+			if err := os.Remove(lease); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.Mkdir(lease, 0700); err != nil {
+				t.Fatal(err)
+			}
+			protected := filepath.Join(lease, "retain")
+			if err := os.WriteFile(protected, []byte("owned fault fixture"), 0600); err != nil {
+				t.Fatal(err)
+			}
+			agentAction(t, s.service, "app.close.start", workbench.ReplaceParams{})
+			deadline := time.Now().Add(3 * time.Second)
+			for s.service.Snapshot().Shutdown.Status != "failed" {
+				if time.Now().After(deadline) {
+					t.Fatal("shutdown did not report the actual cleanup failure")
+				}
+				time.Sleep(time.Millisecond)
+			}
+			before := s.service.Snapshot()
+			if before.ReadyToExit() || len(before.Shutdown.AppearanceError) < 3500 || len(before.Shutdown.RecoveryError) < 600 {
+				t.Fatal("fault fixture omitted the long real errors")
+			}
+			theme := desktopTheme()
+			// Manual windows require an explicit managed font and background.
+			// Preserve the app's kind styles and sizes with a transparent default.
+			theme.Default.Background = ui.Some(color.NRGBA{})
+			theme.Default.Typography.Value.Family = "Noto Sans"
+			m := newMountedControlWindowSize(t, s, s.view, float32(fixture.width), float32(fixture.height), theme)
+			im, err := m.manual.Capture(m.ctx, "main")
+			if err != nil {
+				t.Fatal(err)
+			}
+			button := mountedControlElement(t, m, "shutdown-acknowledge")
+			t.Logf("scene=%v button=%v visible=%v errors=%d/%d", im.Bounds(), button.Bounds, button.Visible, len(before.Shutdown.RecoveryError), len(before.Shutdown.AppearanceError))
+			if artifacts := os.Getenv("ELAB_SHUTDOWN_LAYOUT_ARTIFACTS"); artifacts != "" {
+				path := filepath.Join(artifacts, fmt.Sprintf("%s-%dx%d.png", fixture.theme, fixture.width, fixture.height))
+				file, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0600)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err := png.Encode(file, im); err != nil {
+					_ = file.Close()
+					t.Fatal(err)
+				}
+				if err := file.Close(); err != nil {
+					t.Fatal(err)
+				}
+			}
+			if !button.Visible || button.Bounds.Dy() < 32 || !button.Bounds.In(image.Rect(0, 0, fixture.width, fixture.height)) {
+				t.Fatal("shutdown acknowledgement is clipped below a readable button height")
+			}
+			root := s.view()
+			for id, message := range map[string]string{"shutdown-recovery-error": before.Shutdown.RecoveryError, "shutdown-appearance-error": before.Shutdown.AppearanceError} {
+				if node, ok := findNode(root, id); !ok || node.Text != message {
+					t.Fatal("shutdown omitted or shortened the actual error", id)
+				}
+			}
+			if fixture.width == 1040 {
+				scroll := mountedControlElement(t, m, "shutdown-error-scroll")
+				errorBefore := mountedControlElement(t, m, "shutdown-appearance-error")
+				m.input(cogent.ManualInput{Type: events.Scroll, Position: scroll.Bounds.Min.Add(scroll.Bounds.Size().Div(2)), Delta: math32.Vec2(0, 1000)})
+				errorAfter := mountedControlElement(t, m, "shutdown-appearance-error")
+				t.Logf("error scroll: %v -> %v; footer=%v", errorBefore.Bounds, errorAfter.Bounds, mountedControlElement(t, m, "shutdown-acknowledge").Bounds)
+				if errorAfter.Bounds == errorBefore.Bounds || mountedControlElement(t, m, "shutdown-acknowledge").Bounds != button.Bounds {
+					t.Fatal("long errors do not scroll independently of the close action")
+				}
+			}
+			clickMountedControl(t, m, "shutdown-acknowledge")
+			after := s.service.Snapshot()
+			if !after.ReadyToExit() || after.Shutdown.Status != "failed" || after.Shutdown.RecoveryError != before.Shutdown.RecoveryError || after.Shutdown.AppearanceError != before.Shutdown.AppearanceError || after.CommandRevision != before.CommandRevision+1 || after.LastActor != "user" || after.Document != before.Document || !reflect.DeepEqual(after.Components, before.Components) || !reflect.DeepEqual(after.Wires, before.Wires) || !reflect.DeepEqual(after.Result, before.Result) {
+				t.Fatal("one shared acknowledgement hid the failure or changed the circuit")
+			}
+			for path, want := range map[string][]byte{manual: original, appearance: data, protected: []byte("owned fault fixture")} {
+				if got, err := os.ReadFile(path); err != nil || !bytes.Equal(got, want) {
+					t.Fatal("acknowledgement changed protected file", path, err)
+				}
+			}
+		})
+	}
+}
 
 func TestMountedButtonOwnerKeepsPressContextAcrossAgentSwitchEdit(t *testing.T) {
 	for _, agentEdit := range []bool{false, true} {

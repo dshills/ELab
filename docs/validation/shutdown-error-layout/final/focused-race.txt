@@ -1,0 +1,23 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible
+=== RUN   TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/light-1040x720
+    button_context_offscreen_test.go:95: scene=(0,0)-(1040,720) button=(32,639)-(208,688) visible=true errors=796/3516
+    button_context_offscreen_test.go:124: error scroll: (32,419)-(522,623) -> (32,186)-(522,623); footer=(32,639)-(208,688)
+=== RUN   TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/dark-1040x720
+    button_context_offscreen_test.go:95: scene=(0,0)-(1040,720) button=(32,639)-(208,688) visible=true errors=795/3516
+    button_context_offscreen_test.go:124: error scroll: (32,419)-(522,623) -> (32,186)-(522,623); footer=(32,639)-(208,688)
+=== RUN   TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/light-1280x800
+    button_context_offscreen_test.go:95: scene=(0,0)-(1280,800) button=(32,719)-(208,768) visible=true errors=796/3516
+--- PASS: TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible (2.09s)
+    --- PASS: TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/light-1040x720 (0.71s)
+    --- PASS: TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/dark-1040x720 (0.66s)
+    --- PASS: TestMountedButtonOwnerShutdownLongErrorsKeepAcknowledgementVisible/light-1280x800 (0.72s)
+=== RUN   TestNativeShutdownFailureUsesSharedExplicitAcknowledgement
+=== RUN   TestNativeShutdownFailureUsesSharedExplicitAcknowledgement/button
+=== RUN   TestNativeShutdownFailureUsesSharedExplicitAcknowledgement/window
+--- PASS: TestNativeShutdownFailureUsesSharedExplicitAcknowledgement (0.03s)
+    --- PASS: TestNativeShutdownFailureUsesSharedExplicitAcknowledgement/button (0.02s)
+    --- PASS: TestNativeShutdownFailureUsesSharedExplicitAcknowledgement/window (0.01s)
+PASS
+ok  	github.com/dshills/elab/desktop	3.804s
