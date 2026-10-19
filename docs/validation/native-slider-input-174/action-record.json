@@ -1,0 +1,47 @@
+{
+  "scope": "Action record reconstructed from CUA calls after execution; not a timestamped OS event log. Screenshots and AX bytes are original unmodified observations.",
+  "cases": [
+    {
+      "case": "paused-drag",
+      "pointer_api": "sliderApp174.drag([889,137],[951,137])",
+      "coordinate_basis": "native/drag-ready.jpg",
+      "before": "before-paused-drag.json",
+      "after": "after-paused-drag.json",
+      "followup": "pressKey(super+z)",
+      "followup_after": "after-paused-undo.json"
+    },
+    {
+      "case": "running-drag",
+      "before_resume": "before-running-resume.json",
+      "resume": "fresh AX Resume button",
+      "coordinate_basis": "native/before-running-drag.jpg",
+      "before": "before-running-drag.json",
+      "pointer_api": "sliderApp174.drag([889,137],[951,137])",
+      "pause": "fresh AX Pause button after observed drag state",
+      "after": "after-running-pause.json"
+    },
+    {
+      "case": "agent-hold-01",
+      "coordinate_basis": "native/before-agent-hold.jpg",
+      "before": "before-agent-hold-rendered.json",
+      "pointer_api": "sliderApp174.click([951,137],{durationMs:2000})",
+      "controller": "agent-hold-controller.json",
+      "strict_agent_request": "agent-interruption-result.json",
+      "after": "after-agent-hold.json"
+    }
+  ],
+  "unattempted": [
+    "Window blur while held: CUA exposes atomic drag/click but no separate mouse-down/move/up; no reliable deactivation sequence was established. No other app or OS settings were changed."
+  ],
+  "setup_notes": [
+    "Default Swift module cache outside writable roots refused compilation. Successful retry used a private build-local module cache; no sandbox bypass.",
+    "Bundle-ID CUA binding refused ambiguity among registered historical ELab paths. Exact observed running /tmp/elab-first-version-174-signed-runtime/ELab.app URL was then selected; no wrong app was launched.",
+    "The held-click CUA result exceeded output context after completion; exclusive controller/AX/image files and the original worker handle were inspected, without repeating input.",
+    "Framework stderr reports denied shared geometry access; the denial canary and exact before/after shared hashes confirm isolation."
+  ],
+  "limits": [
+    "No exact OS mouse-down/up timestamps, screen scanout or acknowledgment-latency measurement.",
+    "No physical document-replacement interleaving, window blur, keyboard slider control, IME or reader qualification.",
+    "One paused drag, one running drag, one held-click/agent-edit attempt; no population or reliability estimate."
+  ]
+}

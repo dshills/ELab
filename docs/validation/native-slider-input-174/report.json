@@ -1,0 +1,34 @@
+{
+  "passed": true,
+  "evidence_files": 73,
+  "native_agent_stages": 5,
+  "comparison": "Full graph/mixed/transient/scope; independent run/electrical IDs excluded; rel 1e-9 abs 1e-12",
+  "rc_reference": {
+    "before-paused-drag": {
+      "samples": 6,
+      "maximum_absolute_error_v": 2.346191450319779e-05
+    },
+    "after-paused-drag": {
+      "samples": 8,
+      "maximum_absolute_error_v": 2.346191450319779e-05
+    },
+    "after-paused-undo": {
+      "samples": 8,
+      "maximum_absolute_error_v": 2.346191450319779e-05
+    },
+    "after-running-pause": {
+      "samples": 512,
+      "maximum_absolute_error_v": 2.4862728251751065e-05
+    },
+    "after-agent-hold": {
+      "samples": 8,
+      "maximum_absolute_error_v": 2.346191450319779e-05
+    },
+    "before-running-drag": {
+      "samples": 512,
+      "maximum_absolute_error_v": 2.4862728251751065e-05
+    }
+  },
+  "rc_tolerance_v": 0.002,
+  "scope": "One paused drag/Undo, one running drag/Pause, one held-click agent-edit call; no OS timing/blur claim"
+}
