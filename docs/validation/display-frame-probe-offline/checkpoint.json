@@ -1,0 +1,44 @@
+{
+  "status": "Explicit cropped display recorder implemented; offline guards pass; runtime calibration pending",
+  "baseline_commit": "3a20396d02dbaf34d51f8cb07dcef3edc8c5990e",
+  "source_sha256": {
+    "tools/display-frame-probe/check.sh": "2dfce5de216ff587cb854f579564df432afbf7b3e9242e557ecc8c6a22771843",
+    "tools/display-frame-probe/checks.swift": "a027b24101f8c4ebf01601786f11177f08778912e121ced24f415b11c3e57a0b",
+    "tools/display-frame-probe/collector.swift": "0d9792b6dc95c6d87f4e3db40a4d7bbc76c5705d50a78b7669c3a16edf1463dc",
+    "tools/display-frame-probe/geometry.swift": "1d4194e2390c7cb29f18869f850ec7d9cfa863a30934a099e20d9db9466a3e2a",
+    "tools/display-frame-probe/journal_checks.swift": "2ad2f0136a07f40fd044be725ec5cd7f5dbd469c930b1bc60e3710aacc60abc7",
+    "tools/display-frame-probe/main.swift": "bd9b51ae302f135d92fb1473334826386ff97f2c7c90360ccce7d0db6dbaa49a",
+    "tools/display-frame-probe/support.swift": "d9f891ed159a7cfbd26b04a282348670749c6a7872d8ad335f3b4cbcf7699fcf"
+  },
+  "tool_sha256": "4a940486b4e1e011c157f1bf4be973604e83340a4c635538731aa4a9a32de105",
+  "frozen_window_recorder_sha256": "dcf06ebefa9ec76002f22f0e67564682b1c429af2f19fc208c504c669ec505e7",
+  "review_receipt_sha256": "1b2af5ddb0b0d923f47e5ed4ef3b01958bceecc4fb125bc38144507110c508e0",
+  "preserved_artifacts": {
+    "build/ELab-0.156.0-173-review/RELEASE_MANIFEST.json": "d8424eeeb928bfd7998a41eab3258b15aa8658646390ce0c96d86b2adf90d15d",
+    "build/ELab-0.156.0-173-review.zip": "fc056d3e704dc956114c1bb0a745a5cbac0218019c1b89bc3c0883174bcd6677",
+    "build/ELab.app/Contents/MacOS/ELab": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "third_party/vellum/sdk.lock.json": "2f9ac0e120bdd09d5ffe2c3d8b5da4d24588455c5e6bc8d6f08c80e0dccc6395",
+    "third_party/vellum/vellum-b22478c.tar.gz": "22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968"
+  },
+  "go_sources_checked_unchanged": 650,
+  "capture_executed": false,
+  "eligible_latency_observations": 0,
+  "frozen_window_source_sha256": {
+    "tools/frame-probe/main.swift": "ddd2da3a1164e9f5131654c9530477c641911f9350054a313bad69b33a73297d",
+    "tools/frame-probe/journal_checks.swift": "9e2af4e5539b6aac4f59451e3457c398aa04cd92072b31d4e9f50688020a0bd6",
+    "tools/frame-probe/sample_checks.swift": "32623880b862fbd278b45e05dcb8d086e8fbf9a3f26ccf4582db942bb045a1aa",
+    "tools/frame-probe/check.sh": "dbad1005abb301dcaffbc5c7c8edbdc4dc6115661e709a9cc27c5a30feb21c65"
+  },
+  "evidence_sha256": {
+    "README.md": "be2cfe2ad187bba33e481a9880821e04c1d11aba567b9c300785901b46cfc990",
+    "display-frame-probe-check-final.txt.gz": "123cd0b736baff9908f26954e641ee0f5f4c75724449f9b87ca154ab56ff3fff",
+    "display-frame-probe-check-first.txt.gz": "ae6f7b4653acedbab2a9889ef105e6269637bde0709161a4095051c89227c812",
+    "display-frame-probe-check-second.txt.gz": "ac24dba64918e47670b14ca9b0d2479202eaf507190385cc9df3ebf6538d26f8",
+    "display-frame-probe-check-third.txt.gz": "b78a484d9a07b7e1c378e33aa48d45ecabf4dfb1325ff4132c3b0cfe734d939b",
+    "display-frame-probe-format.txt.gz": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83",
+    "publish.py.txt": "6e379eca0111ff6d4e322bd3d7191a5d1f4020f3516804514f2c5edcac4532f7",
+    "report.json": "59e0bd741d006abd48fb27ef08cf96e33150bead8a7617432707466f709604a5",
+    "tool-readme-at-offline.md": "52b55c5dfaee5cc1c823ba9251ecf6d3fd632b2b87fed96f9b1900bbff22ae54",
+    "verify.py": "037a2086b8160c05ee2196635a421af5707ec5b23ac01db1cab295a011d17f23"
+  }
+}

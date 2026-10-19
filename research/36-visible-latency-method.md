@@ -1,6 +1,6 @@
 # Visible latency: measurement decision
 
-October 19, 2026. Status: software clock check completed; the owner authorized cropped display recordings on October 19. The sweep repair is now packaged and qualified in clean /173. Cropped-mode implementation/calibration remains next; no broader capture has run.
+October 19, 2026. Status: software clock check completed; the owner authorized cropped display recordings on October 19. The sweep repair is now packaged and qualified in clean /173. A separate explicit-crop recorder now passes 53 offline guards; runtime crop/visibility calibration remains next and no broader capture has run.
 
 The PRD retains two different targets: input event → visible acknowledgment at p95 ≤100 ms, and accepted edit → first valid updated sample at p95 ≤500 ms for LED, RC and resistor-loaded NPN. Backend timing and a draft appearing in an editor cannot establish either target. No target, reference circuit or acceptance rule changes here.
 
@@ -16,9 +16,9 @@ The first check incorrectly required reconstructed integer ticks to fall strictl
 
 Pixel mapping also needs independent calibration. A content rectangle, content scale, point/pixel scale and output dimensions describe different transforms. The next method must retain all of them numerically and validate alignment against known owned-window pixels. Matching PNG dimensions alone is insufficient. [Apple content-filter geometry reference](https://developer.apple.com/documentation/screencapturekit/sccontentfilter/contentrect), [frame metadata sample](https://developer.apple.com/documentation/screencapturekit/capturing-screen-content-in-macos).
 
-## Proposed next action: cropped display-composition capture
+## Authorized next action: cropped display-composition capture
 
-Request authorization for a separate ScreenCaptureKit display-composition mode, cropped **before output** to the independently verified owned ELab test window's rectangle. Keep the current window-only recorder and its evidence intact. The crop would be fixed for a trial and stay entirely within one display. No whole-display image output, audio/microphone, global input listener, alternative input injector, upload or privacy-permission request is proposed.
+The owner authorized a separate ScreenCaptureKit display-composition mode, cropped **before output** to the independently verified owned ELab test window's rectangle. Keep the current window-only recorder and its evidence intact. The crop would be fixed for a trial and stay entirely within one display. No whole-display image output, audio/microphone, global input listener, alternative input injector, upload or privacy-permission request is proposed.
 
 This differs from the authorized window-only filter: another app's window or notification overlapping that rectangle could appear in the locally saved images. A moving/hidden/replaced target must invalidate the trial; cropping does not remove that privacy risk. This broader set of possible pixels requires separate owner authorization before any such capture. Existing Screen Recording access is not consent to use the new scope.
 
@@ -32,7 +32,7 @@ Implement and check these guards before executing the new capture:
 4. Retain source/configuration hashes, crop/display identities, timestamps, complete/incomplete statuses and every attempted trial. Reject mismatched clock/geometry, absent images or stream errors. Do not equate a callback gap with proof of a missed display update.
 5. Repeat the marker → acknowledged CUA action → causal acknowledgment/fresh-image sequence, preserving explicit stale labels and matching public agent physics. Public API state alone cannot identify the visible transition.
 
-These are proposed checks, not existing test results. Authorization would permit preparing and executing this method within those bounds; it would not qualify its output automatically.
+The [offline recorder proof](../docs/validation/display-frame-probe-offline/README.md) now checks geometry/options/clock/metadata/storage guards with synthetic data. It has not exercised an actual display stream, pixel alignment or occlusion. Authorization permits the bounded runtime calibration; it does not qualify its output automatically.
 
 ## How a later timing decision would work
 
