@@ -6,6 +6,8 @@ CUA's documented native observation API returns snapshots without input/frame ti
 
 The owner authorized this recorder method on October 19. That authorization does not grant OS privacy access or permit changes to shared preferences. `--preflight` reads existing Screen Recording access without requesting it, enumerating windows or recording; unlike `--self-test`, it is an OS access check.
 
+A [protected non-smoke launch preflight](../../docs/validation/latency-launch-preflight-170/README.md) now preserves exact /170 identity, one owned window and CUA binding: a temporary LaunchServices launcher explicitly execs into the verified sandbox before starting ELab. The test closes normally with unchanged shared geometry. This clears that launch/binding prerequisite only; it supplies no input, recording or latency observation. Use fresh paths/PID/window and repeat the guards for any subsequent session; never reuse the stopped binding.
+
 ## Check without recording
 
 ```sh

@@ -1,0 +1,9 @@
+import AppKit
+import Foundation
+let pid = Int32(CommandLine.arguments[1])!
+let app = NSRunningApplication(processIdentifier: pid)
+let result: [String: Any] = ["pid": pid, "process_registered": app != nil,
+    "bundle_identifier": app?.bundleIdentifier as Any? ?? NSNull(),
+    "executable_path": app?.executableURL?.path as Any? ?? NSNull(),
+    "terminated": app?.isTerminated as Any? ?? NSNull(), "capture_executed": false]
+print(String(decoding: try JSONSerialization.data(withJSONObject: result, options: [.sortedKeys]), as: UTF8.self))
