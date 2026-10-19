@@ -1,0 +1,91 @@
+from pathlib import Path
+import gzip
+import hashlib
+import json
+import os
+import subprocess
+import sys
+import time
+
+root = Path('/Users/dshills/Development/projects/ELab')
+stage = Path(__file__).resolve().parent
+runtime = Path('/private/tmp/elab-first-version-170-runtime')
+out = Path('/private/tmp/elab-conformance-shutdown-diagnostics')
+assert not out.exists(), 'refusing to replace integration artifacts'
+sys.path.insert(0, str(root / 'scripts'))
+from package_review import members
+from wiring_replay import git_files, git_identity, runtime_input, RUNTIME_DIRS
+
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+receipt_path = root / 'research/ui-audit/first-version/discovery-review-checkpoint.json'
+receipt = json.loads(receipt_path.read_text())
+tool_source = lambda name: name.startswith(('cmd/elab-conformance/', 'internal/conformance/'))
+tree = git_files(root, receipt['source_commit'])
+runtime_inputs = {name for name in tree if runtime_input(name) and not tool_source(name)}
+actual_inputs = {p.relative_to(root).as_posix() for folder in RUNTIME_DIRS for p in (root / folder).rglob('*') if p.is_file() and runtime_input(p.relative_to(root).as_posix()) and not tool_source(p.relative_to(root).as_posix())}
+actual_inputs.update(name for name in ['go.mod', 'go.sum'] if (root / name).is_file())
+assert actual_inputs == runtime_inputs
+assert all(git_identity((root / name).read_bytes()) == tree[name] for name in runtime_inputs)
+assert json.loads((root / 'third_party/vellum/sdk.lock.json').read_text()) == receipt['sdk']
+review = Path(receipt['review_path'])
+manifest = json.loads((review / 'RELEASE_MANIFEST.json').read_text())
+before_review = members(review)
+expected = dict(before_review)
+expected.pop('RELEASE_MANIFEST.json')
+assert expected == manifest['files'] and len(expected) == 1650
+assert sha(runtime / 'ELab.app/Contents/MacOS/ELab') == receipt['native_sha256']
+assert sha(runtime / 'elab-agent') == receipt['agent_sha256']
+assert members(runtime / 'ELab.app') == members(review / 'ELab.app')
+for wrapper, binary in [('native','ELab.app/Contents/MacOS/ELab'), ('agent','elab-agent')]:
+    assert (runtime / wrapper).read_text() == '#!/bin/sh\nset -eu\ncd -- '+str(runtime / 'empty-working-directory')+'\nexec /usr/bin/sandbox-exec -f '+str(runtime / 'runtime.sb')+' '+str(runtime / binary)+' "$@"\n'
+assert (runtime / 'runtime.sb').read_bytes() == gzip.decompress((root / 'docs/validation/discovery-review-170/runtime.sb.gz').read_bytes())
+canonical = root / 'build/ELab.app/Contents/MacOS/ELab'
+canonical_before = sha(canonical)
+assert canonical_before == '914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c'
+archive = root / 'build/ELab-0.153.0-170-review.zip'
+assert sha(archive) == '2fef6c7249d7d393a33829808e1eac241bccaddb568fe62f23081f79b6be5357'
+shared = Path.home() / 'Library/Cogent Core'
+geometry = lambda: {p.relative_to(shared).as_posix(): dict(sha256=sha(p), mode=oct(p.stat().st_mode & 0o777)) for p in shared.rglob('*') if p.is_file()}
+before_geometry = geometry()
+assert before_geometry
+policy_before = {name:sha(runtime / name) for name in ['runtime.sb','native','agent']}
+probe = subprocess.run(['/usr/bin/sandbox-exec', '-f', str(runtime / 'runtime.sb'), sys.executable, '-I', str(runtime / 'geometry-probe.py'), str(shared / 'window-geometry-0.3.6.json')], capture_output=True, check=True, timeout=15)
+controls = json.loads(probe.stdout)
+assert all(row['denied'] and row['errno'] in [1,13] for row in controls.values())
+command = [str(stage / 'elab-conformance'), '--agent-binary', str(runtime / 'agent'), '--native-binary', str(runtime / 'native'), '--capacity-suite', '--artifacts', str(out)]
+started = time.monotonic()
+with (stage / 'integration-stdout.txt').open('xb') as stdout, (stage / 'integration-stderr.txt').open('xb') as stderr:
+    result = subprocess.run(command, cwd=root, stdout=stdout, stderr=stderr, timeout=300)
+report = dict(passed=False, command=command, controller_sha256=sha(stage / 'elab-conformance'), receipt_sha256=sha(receipt_path), native_sha256=receipt['native_sha256'], agent_sha256=receipt['agent_sha256'], exit_code=result.returncode, elapsed_s=time.monotonic()-started, shared_geometry_controls=controls, unchanged_nonconformance_runtime_inputs=len(runtime_inputs))
+try:
+    assert geometry() == before_geometry
+    assert members(review) == before_review
+    assert sha(canonical) == canonical_before
+    assert sha(archive) == '2fef6c7249d7d393a33829808e1eac241bccaddb568fe62f23081f79b6be5357'
+    assert sha(runtime / 'ELab.app/Contents/MacOS/ELab') == receipt['native_sha256']
+    assert sha(runtime / 'elab-agent') == receipt['agent_sha256']
+    assert members(runtime / 'ELab.app') == members(review / 'ELab.app')
+    assert {name:sha(runtime / name) for name in policy_before} == policy_before
+    report.update(shared_geometry_unchanged=True, shared_geometry_before=before_geometry, shared_geometry_after=geometry(), review_files_verified=len(before_review), review_unchanged=True, canonical_sha256=canonical_before, archive_unchanged=True, runtime_policy_sha256=policy_before)
+    assert result.returncode == 0
+    public = json.loads((out / 'report.json').read_text())
+    assert public['passed'] and len(public['adapters']) == 4
+    exits = {}
+    for path in sorted(out.rglob('process-exit.json')):
+        value = json.loads(path.read_text())
+        assert value['pid'] > 0 and value['exit_code'] == 0
+        assert not value['graceful_wait_timed_out'] and not value.get('wait_error') and not value.get('close_error') and not value.get('context_error_before_cancel')
+        assert value['wait_limit_s'] == 5 and value['wait_duration_s'] >= 0
+        exits[path.relative_to(out).as_posix()] = value
+    shutdowns = {}
+    for path in sorted(out.rglob('shutdown-response.json')):
+        value = json.loads(path.read_text())
+        assert not value.get('error') and not value['response'].get('error')
+        state = value['response']['result']; work = state['shutdown']
+        assert state['closed'] and work['status'] == 'completed' and work['exit_ready'] and work['workers_joined'] and work['recovery_finalized']
+        shutdowns[path.relative_to(out).as_posix()] = dict(response_id=value['response']['id'], shutdown_id=work['id'], status=work['status'])
+    assert len(exits) == 45 and len(shutdowns) == 36, (len(exits), len(shutdowns))
+    report.update(passed=True, process_exits=exits, shutdowns=shutdowns, process_exit_count=len(exits), shutdown_response_count=len(shutdowns), native_process_exit_count=sum(name.startswith('native-socket/') for name in exits), public_report_sha256=sha(out / 'report.json'))
+finally:
+    (stage / 'integration.json').write_text(json.dumps(report, indent=2)+'\n')
+print(json.dumps({key:report[key] for key in ['passed','elapsed_s','process_exit_count','shutdown_response_count','native_process_exit_count']}))

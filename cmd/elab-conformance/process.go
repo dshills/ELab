@@ -27,6 +27,7 @@ type processClient struct {
 	done     chan error
 	log      *os.File
 	cancel   context.CancelFunc
+	context  context.Context
 }
 
 func processFactory(binary, mode string) conformance.Factory {
@@ -35,7 +36,7 @@ func processFactory(binary, mode string) conformance.Factory {
 			return nil, err
 		}
 		processCtx, cancel := context.WithCancel(ctx)
-		client := &processClient{cancel: cancel, done: make(chan error, 1)}
+		client := &processClient{cancel: cancel, context: processCtx, done: make(chan error, 1)}
 		client.log, err = os.OpenFile(filepath.Join(dir, "process.log"), os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0600)
 		if err != nil {
 			cancel()
@@ -146,20 +147,52 @@ func (c *processClient) Dispatch(ctx context.Context, r workbench.Request) (resp
 	return response, err
 }
 func (c *processClient) Close() error {
+	return c.closeWithin(5 * time.Second)
+}
+
+func (c *processClient) closeWithin(limit time.Duration) error {
+	started := time.Now()
+	observation := processExit{PID: c.command.Process.Pid, WaitStarted: started.UTC(), WaitLimitSeconds: limit.Seconds()}
 	if c.stdin != nil {
 		c.stdin.Close()
 	}
+	timer := time.NewTimer(limit)
+	defer timer.Stop()
 	var err error
+	var contextErr error
 	select {
 	case err = <-c.done:
-	case <-time.After(5 * time.Second):
+		contextErr = c.context.Err()
+	case <-timer.C:
+		observation.GracefulWaitTimedOut = true
+		contextErr = c.context.Err()
 		c.cancel()
 		err = <-c.done
-		err = errors.Join(fmt.Errorf("owned session did not close gracefully"), err)
+	}
+	observation.WaitFinished = time.Now().UTC()
+	observation.WaitDurationSeconds = time.Since(started).Seconds()
+	if err != nil {
+		observation.WaitError = err.Error()
+	}
+	if c.command.ProcessState != nil {
+		code := c.command.ProcessState.ExitCode()
+		observation.ExitCode = &code
+	}
+	// Read the process context before our final cleanup cancellation. A caller
+	// deadline and the harness's own timeout are different exit circumstances.
+	if contextErr != nil {
+		observation.ContextError = contextErr.Error()
+	}
+	if observation.GracefulWaitTimedOut {
+		err = errors.Join(fmt.Errorf("owned session PID %d did not close gracefully within %s", observation.PID, limit), err)
 	}
 	c.cancel()
 	if c.stdout != nil {
 		err = errors.Join(err, c.stdout.Close())
 	}
-	return errors.Join(err, c.log.Close())
+	err = errors.Join(err, c.log.Close())
+	if err != nil {
+		observation.CloseError = err.Error()
+	}
+	return errors.Join(err, writeProcessExit(filepath.Join(filepath.Dir(c.log.Name()), "process-exit.json"), observation))
 }

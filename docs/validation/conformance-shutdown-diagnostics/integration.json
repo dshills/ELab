@@ -1,0 +1,653 @@
+{
+  "passed": true,
+  "command": [
+    "/Users/dshills/Development/projects/ELab/build/conformance-shutdown-diagnostics/elab-conformance",
+    "--agent-binary",
+    "/private/tmp/elab-first-version-170-runtime/agent",
+    "--native-binary",
+    "/private/tmp/elab-first-version-170-runtime/native",
+    "--capacity-suite",
+    "--artifacts",
+    "/private/tmp/elab-conformance-shutdown-diagnostics"
+  ],
+  "controller_sha256": "a79c3c55f657158769da22eae0bb0030e7894901b0c6180205b92ed0c63f64a0",
+  "receipt_sha256": "add4a0c89ad57ca63fd74976c8117851d6fa40a38c8211fad7f9c3631b4f418f",
+  "native_sha256": "8197a39c5740117e0ab298ae9cf869b222a073e0b8738dfa0f251232d5efa50b",
+  "agent_sha256": "1087ac9dc359f7ebc5d455283e4f0b923d794a0e8247b9a27cd2d6ec3ff45a36",
+  "exit_code": 0,
+  "elapsed_s": 24.892598083009943,
+  "shared_geometry_controls": {
+    "read": {
+      "denied": true,
+      "errno": 1
+    },
+    "write_without_truncate": {
+      "denied": true,
+      "errno": 1
+    }
+  },
+  "unchanged_nonconformance_runtime_inputs": 312,
+  "shared_geometry_unchanged": true,
+  "shared_geometry_before": {
+    "window-geometry-0.3.6.json": {
+      "sha256": "9666b9dbadc1ca73534406af4e7bbd832f9db24e8519569bde0b5b884c6f14ee",
+      "mode": "0o644"
+    },
+    "window-geometry-0.3.6.lst": {
+      "sha256": "0cacd87c7fb6c83f05737f71248f1b474f1d797d9cf132b4d0816b0e52582f2f",
+      "mode": "0o644"
+    }
+  },
+  "shared_geometry_after": {
+    "window-geometry-0.3.6.json": {
+      "sha256": "9666b9dbadc1ca73534406af4e7bbd832f9db24e8519569bde0b5b884c6f14ee",
+      "mode": "0o644"
+    },
+    "window-geometry-0.3.6.lst": {
+      "sha256": "0cacd87c7fb6c83f05737f71248f1b474f1d797d9cf132b4d0816b0e52582f2f",
+      "mode": "0o644"
+    }
+  },
+  "review_files_verified": 1651,
+  "review_unchanged": true,
+  "canonical_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+  "archive_unchanged": true,
+  "runtime_policy_sha256": {
+    "runtime.sb": "6b64706f7f3c6b96204e4071a0d2f9d8b8cecce588c92bb1538c567827ae0e1b",
+    "native": "3d1fa7745e2bf879a11fc631fff3745f54d9cac900cad8b7399463b4682f217a",
+    "agent": "f75528ee8cbd39c7d45af552cbfe7015f09eb5552e8f980067a65a0e50b97927"
+  },
+  "process_exits": {
+    "headless-socket/capacity/capacity-100-nodes/process/process-exit.json": {
+      "pid": 79218,
+      "wait_started_at": "2026-10-19T13:39:48.610157Z",
+      "wait_finished_at": "2026-10-19T13:39:48.647783Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.037626,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-socket/capacity/capacity-100-nodes/reopen-excess/process/process-exit.json": {
+      "pid": 79240,
+      "wait_started_at": "2026-10-19T13:39:48.554238Z",
+      "wait_finished_at": "2026-10-19T13:39:48.589193Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.034954542,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-socket/capacity/capacity-100-nodes/reopen-valid/process/process-exit.json": {
+      "pid": 79239,
+      "wait_started_at": "2026-10-19T13:39:48.376328Z",
+      "wait_finished_at": "2026-10-19T13:39:48.405987Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.029660833,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-socket/capacity/capacity-64-parts/process/process-exit.json": {
+      "pid": 79242,
+      "wait_started_at": "2026-10-19T13:39:49.661386Z",
+      "wait_finished_at": "2026-10-19T13:39:49.669037Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.007650458,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-socket/capacity/capacity-64-parts/reopen-excess/process/process-exit.json": {
+      "pid": 79252,
+      "wait_started_at": "2026-10-19T13:39:49.606219Z",
+      "wait_finished_at": "2026-10-19T13:39:49.64303Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.036810708,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-socket/capacity/capacity-64-parts/reopen-valid/process/process-exit.json": {
+      "pid": 79251,
+      "wait_started_at": "2026-10-19T13:39:49.424092Z",
+      "wait_finished_at": "2026-10-19T13:39:49.46289Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.038797917,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-socket/capacity/capacity-rc-mosfet/process/process-exit.json": {
+      "pid": 79255,
+      "wait_started_at": "2026-10-19T13:39:52.524374Z",
+      "wait_finished_at": "2026-10-19T13:39:52.537836Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.013462041,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-socket/capacity/capacity-rc-mosfet/reopen-excess/process/process-exit.json": {
+      "pid": 79285,
+      "wait_started_at": "2026-10-19T13:39:52.464455Z",
+      "wait_finished_at": "2026-10-19T13:39:52.503681Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.039225417,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-socket/capacity/capacity-rc-mosfet/reopen-valid/process/process-exit.json": {
+      "pid": 79284,
+      "wait_started_at": "2026-10-19T13:39:52.285679Z",
+      "wait_finished_at": "2026-10-19T13:39:52.321214Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.035535208,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-socket/led/initial/process-exit.json": {
+      "pid": 79211,
+      "wait_started_at": "2026-10-19T13:39:47.177523Z",
+      "wait_finished_at": "2026-10-19T13:39:47.177525Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 1.875e-06,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-socket/led/reopened/process-exit.json": {
+      "pid": 79213,
+      "wait_started_at": "2026-10-19T13:39:47.150667Z",
+      "wait_finished_at": "2026-10-19T13:39:47.177349Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.026682542,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-socket/npn/initial/process-exit.json": {
+      "pid": 79216,
+      "wait_started_at": "2026-10-19T13:39:47.525844Z",
+      "wait_finished_at": "2026-10-19T13:39:47.525845Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 1.5e-06,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-socket/npn/reopened/process-exit.json": {
+      "pid": 79217,
+      "wait_started_at": "2026-10-19T13:39:47.49962Z",
+      "wait_finished_at": "2026-10-19T13:39:47.525684Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.026063417,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-socket/rc/initial/process-exit.json": {
+      "pid": 79214,
+      "wait_started_at": "2026-10-19T13:39:47.356439Z",
+      "wait_finished_at": "2026-10-19T13:39:47.356441Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 1.666e-06,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-socket/rc/reopened/process-exit.json": {
+      "pid": 79215,
+      "wait_started_at": "2026-10-19T13:39:47.334609Z",
+      "wait_finished_at": "2026-10-19T13:39:47.356299Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.021694709,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-stdio/capacity/capacity-100-nodes/process/process-exit.json": {
+      "pid": 79147,
+      "wait_started_at": "2026-10-19T13:39:43.422499Z",
+      "wait_finished_at": "2026-10-19T13:39:43.4225Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 1.458e-06,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-stdio/capacity/capacity-100-nodes/reopen-excess/process/process-exit.json": {
+      "pid": 79152,
+      "wait_started_at": "2026-10-19T13:39:43.402237Z",
+      "wait_finished_at": "2026-10-19T13:39:43.402239Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 1.917e-06,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-stdio/capacity/capacity-100-nodes/reopen-valid/process/process-exit.json": {
+      "pid": 79151,
+      "wait_started_at": "2026-10-19T13:39:43.263418Z",
+      "wait_finished_at": "2026-10-19T13:39:43.263419Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 1.875e-06,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-stdio/capacity/capacity-64-parts/process/process-exit.json": {
+      "pid": 79153,
+      "wait_started_at": "2026-10-19T13:39:44.283398Z",
+      "wait_finished_at": "2026-10-19T13:39:44.2834Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 1.709e-06,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-stdio/capacity/capacity-64-parts/reopen-excess/process/process-exit.json": {
+      "pid": 79156,
+      "wait_started_at": "2026-10-19T13:39:44.265365Z",
+      "wait_finished_at": "2026-10-19T13:39:44.265367Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 1.542e-06,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-stdio/capacity/capacity-64-parts/reopen-valid/process/process-exit.json": {
+      "pid": 79155,
+      "wait_started_at": "2026-10-19T13:39:44.138456Z",
+      "wait_finished_at": "2026-10-19T13:39:44.138458Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 2.042e-06,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-stdio/capacity/capacity-rc-mosfet/process/process-exit.json": {
+      "pid": 79157,
+      "wait_started_at": "2026-10-19T13:39:46.999059Z",
+      "wait_finished_at": "2026-10-19T13:39:46.99906Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 1.917e-06,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-stdio/capacity/capacity-rc-mosfet/reopen-excess/process/process-exit.json": {
+      "pid": 79205,
+      "wait_started_at": "2026-10-19T13:39:46.980279Z",
+      "wait_finished_at": "2026-10-19T13:39:46.980281Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 1.75e-06,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-stdio/capacity/capacity-rc-mosfet/reopen-valid/process/process-exit.json": {
+      "pid": 79200,
+      "wait_started_at": "2026-10-19T13:39:46.849869Z",
+      "wait_finished_at": "2026-10-19T13:39:46.849871Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 1.959e-06,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-stdio/led/initial/process-exit.json": {
+      "pid": 79134,
+      "wait_started_at": "2026-10-19T13:39:42.194329Z",
+      "wait_finished_at": "2026-10-19T13:39:42.19433Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 1.459e-06,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-stdio/led/reopened/process-exit.json": {
+      "pid": 79135,
+      "wait_started_at": "2026-10-19T13:39:42.193807Z",
+      "wait_finished_at": "2026-10-19T13:39:42.194193Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.000386584,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-stdio/npn/initial/process-exit.json": {
+      "pid": 79138,
+      "wait_started_at": "2026-10-19T13:39:42.448377Z",
+      "wait_finished_at": "2026-10-19T13:39:42.448379Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 1.333e-06,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-stdio/npn/reopened/process-exit.json": {
+      "pid": 79145,
+      "wait_started_at": "2026-10-19T13:39:42.44791Z",
+      "wait_finished_at": "2026-10-19T13:39:42.448272Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.000361458,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-stdio/rc/initial/process-exit.json": {
+      "pid": 79136,
+      "wait_started_at": "2026-10-19T13:39:42.328839Z",
+      "wait_finished_at": "2026-10-19T13:39:42.32884Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 9.58e-07,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "headless-stdio/rc/reopened/process-exit.json": {
+      "pid": 79137,
+      "wait_started_at": "2026-10-19T13:39:42.328523Z",
+      "wait_finished_at": "2026-10-19T13:39:42.328698Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.000174625,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "native-socket/capacity/capacity-100-nodes/process/process-exit.json": {
+      "pid": 79392,
+      "wait_started_at": "2026-10-19T13:39:56.985251Z",
+      "wait_finished_at": "2026-10-19T13:39:57.0312Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.045948625,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "native-socket/capacity/capacity-100-nodes/reopen-excess/process/process-exit.json": {
+      "pid": 79445,
+      "wait_started_at": "2026-10-19T13:39:56.617956Z",
+      "wait_finished_at": "2026-10-19T13:39:56.963415Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.345458333,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "native-socket/capacity/capacity-100-nodes/reopen-valid/process/process-exit.json": {
+      "pid": 79424,
+      "wait_started_at": "2026-10-19T13:39:56.023909Z",
+      "wait_finished_at": "2026-10-19T13:39:56.346858Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.322947791,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "native-socket/capacity/capacity-64-parts/process/process-exit.json": {
+      "pid": 79450,
+      "wait_started_at": "2026-10-19T13:39:59.116571Z",
+      "wait_finished_at": "2026-10-19T13:39:59.179842Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.063271,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "native-socket/capacity/capacity-64-parts/reopen-excess/process/process-exit.json": {
+      "pid": 79480,
+      "wait_started_at": "2026-10-19T13:39:58.748841Z",
+      "wait_finished_at": "2026-10-19T13:39:59.096496Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.347653292,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "native-socket/capacity/capacity-64-parts/reopen-valid/process/process-exit.json": {
+      "pid": 79475,
+      "wait_started_at": "2026-10-19T13:39:58.149714Z",
+      "wait_finished_at": "2026-10-19T13:39:58.496999Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.347283916,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "native-socket/capacity/capacity-rc-mosfet/process/process-exit.json": {
+      "pid": 79485,
+      "wait_started_at": "2026-10-19T13:40:03.168348Z",
+      "wait_finished_at": "2026-10-19T13:40:03.230684Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.062335584,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "native-socket/capacity/capacity-rc-mosfet/reopen-excess/process/process-exit.json": {
+      "pid": 79506,
+      "wait_started_at": "2026-10-19T13:40:02.782612Z",
+      "wait_finished_at": "2026-10-19T13:40:03.146703Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.364090166,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "native-socket/capacity/capacity-rc-mosfet/reopen-valid/process/process-exit.json": {
+      "pid": 79500,
+      "wait_started_at": "2026-10-19T13:40:02.177966Z",
+      "wait_finished_at": "2026-10-19T13:40:02.530077Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.352109375,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "native-socket/led/initial/process-exit.json": {
+      "pid": 79289,
+      "wait_started_at": "2026-10-19T13:39:53.317776Z",
+      "wait_finished_at": "2026-10-19T13:39:53.317782Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 5.792e-06,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "native-socket/led/reopened/process-exit.json": {
+      "pid": 79365,
+      "wait_started_at": "2026-10-19T13:39:52.90547Z",
+      "wait_finished_at": "2026-10-19T13:39:53.317568Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.41209625,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "native-socket/npn/initial/process-exit.json": {
+      "pid": 79383,
+      "wait_started_at": "2026-10-19T13:39:54.829501Z",
+      "wait_finished_at": "2026-10-19T13:39:54.829503Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 1.833e-06,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "native-socket/npn/reopened/process-exit.json": {
+      "pid": 79386,
+      "wait_started_at": "2026-10-19T13:39:54.424059Z",
+      "wait_finished_at": "2026-10-19T13:39:54.829282Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.405221333,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "native-socket/rc/initial/process-exit.json": {
+      "pid": 79374,
+      "wait_started_at": "2026-10-19T13:39:54.078774Z",
+      "wait_finished_at": "2026-10-19T13:39:54.078775Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 1.333e-06,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    },
+    "native-socket/rc/reopened/process-exit.json": {
+      "pid": 79377,
+      "wait_started_at": "2026-10-19T13:39:53.673195Z",
+      "wait_finished_at": "2026-10-19T13:39:54.078594Z",
+      "wait_limit_s": 5,
+      "wait_duration_s": 0.405396792,
+      "graceful_wait_timed_out": false,
+      "exit_code": 0
+    }
+  },
+  "shutdowns": {
+    "headless-socket/capacity/capacity-100-nodes/reopen-excess/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "headless-socket/capacity/capacity-100-nodes/reopen-valid/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "headless-socket/capacity/capacity-100-nodes/shutdown-response.json": {
+      "response_id": "conformance-163-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "headless-socket/capacity/capacity-64-parts/reopen-excess/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "headless-socket/capacity/capacity-64-parts/reopen-valid/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "headless-socket/capacity/capacity-64-parts/shutdown-response.json": {
+      "response_id": "conformance-168-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "headless-socket/capacity/capacity-rc-mosfet/reopen-excess/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "headless-socket/capacity/capacity-rc-mosfet/reopen-valid/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "headless-socket/capacity/capacity-rc-mosfet/shutdown-response.json": {
+      "response_id": "conformance-821-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "headless-stdio/capacity/capacity-100-nodes/reopen-excess/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "headless-stdio/capacity/capacity-100-nodes/reopen-valid/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "headless-stdio/capacity/capacity-100-nodes/shutdown-response.json": {
+      "response_id": "conformance-164-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "headless-stdio/capacity/capacity-64-parts/reopen-excess/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "headless-stdio/capacity/capacity-64-parts/reopen-valid/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "headless-stdio/capacity/capacity-64-parts/shutdown-response.json": {
+      "response_id": "conformance-169-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "headless-stdio/capacity/capacity-rc-mosfet/reopen-excess/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "headless-stdio/capacity/capacity-rc-mosfet/reopen-valid/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "headless-stdio/capacity/capacity-rc-mosfet/shutdown-response.json": {
+      "response_id": "conformance-863-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "in-process/capacity/capacity-100-nodes/reopen-excess/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "in-process/capacity/capacity-100-nodes/reopen-valid/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "in-process/capacity/capacity-100-nodes/shutdown-response.json": {
+      "response_id": "conformance-172-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "in-process/capacity/capacity-64-parts/reopen-excess/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "in-process/capacity/capacity-64-parts/reopen-valid/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "in-process/capacity/capacity-64-parts/shutdown-response.json": {
+      "response_id": "conformance-173-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "in-process/capacity/capacity-rc-mosfet/reopen-excess/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "in-process/capacity/capacity-rc-mosfet/reopen-valid/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "in-process/capacity/capacity-rc-mosfet/shutdown-response.json": {
+      "response_id": "conformance-1040-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "native-socket/capacity/capacity-100-nodes/reopen-excess/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "native-socket/capacity/capacity-100-nodes/reopen-valid/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "native-socket/capacity/capacity-100-nodes/shutdown-response.json": {
+      "response_id": "conformance-156-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "native-socket/capacity/capacity-64-parts/reopen-excess/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "native-socket/capacity/capacity-64-parts/reopen-valid/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "native-socket/capacity/capacity-64-parts/shutdown-response.json": {
+      "response_id": "conformance-165-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "native-socket/capacity/capacity-rc-mosfet/reopen-excess/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "native-socket/capacity/capacity-rc-mosfet/reopen-valid/shutdown-response.json": {
+      "response_id": "conformance-6-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    },
+    "native-socket/capacity/capacity-rc-mosfet/shutdown-response.json": {
+      "response_id": "conformance-784-attempt-0",
+      "shutdown_id": "shutdown-1",
+      "status": "completed"
+    }
+  },
+  "process_exit_count": 45,
+  "shutdown_response_count": 36,
+  "native_process_exit_count": 15,
+  "public_report_sha256": "ab69020284c5c0ea03447c441a2cbad6cdb5859432c186bfbd9d74a9f1bde607"
+}

@@ -1,0 +1,145 @@
+{
+  "status": "conformance_tooling_false_success_repaired_and_diagnostics_validated",
+  "base_commit": "62b3387cb247f47c528833350de748caa76e0134",
+  "source_sha256": {
+    "cmd/elab-conformance/process.go": "81c80505c5c98bd7196699f7de7c59502481af717134eb55bb6b1261e399c6c6",
+    "cmd/elab-conformance/process_exit.go": "1f6140602c2238b38b741b0532e19d65cdadd84cca804198be7215d7782738b1",
+    "cmd/elab-conformance/process_exit_test.go": "f5ead23db2e0189ef75a0fde9011ed0666ba62ad26ef4174e5a02c180a34a6e5",
+    "internal/conformance/electrical.go": "c6972d47b2449a112fc8dab6171bf40d38f80291e71a22d6943f388cb2cc3f61",
+    "internal/conformance/shutdown.go": "aa0fb5548a04edac97c53bf9a3431636b63c561081bac1a99c7543b09e69236f",
+    "internal/conformance/shutdown_test.go": "b6f8cb982352a059c00b71b6aeb93985d97fd568a7eff4a5c76caa273c5ceae7"
+  },
+  "original_false_success_cases": [
+    "TestElectricalShutdownRequiresCompletedCleanupAndRetainsResponse/failed",
+    "TestElectricalShutdownRequiresCompletedCleanupAndRetainsResponse/acknowledged-failure",
+    "TestElectricalShutdownRequiresCompletedCleanupAndRetainsResponse/running",
+    "TestElectricalShutdownRequiresCompletedCleanupAndRetainsResponse/missing",
+    "TestElectricalShutdownRequiresCompletedCleanupAndRetainsResponse/open"
+  ],
+  "focused_race_leaf_cases": [
+    "TestOwnedProcessExitEvidence/normal",
+    "TestOwnedProcessExitEvidence/exit-error",
+    "TestOwnedProcessExitEvidence/timeout",
+    "TestOwnedProcessExitEvidence/caller-canceled",
+    "TestOwnedProcessExitEvidence/existing-evidence",
+    "TestElectricalShutdownRequiresCompletedCleanupAndRetainsResponse/normal",
+    "TestElectricalShutdownRequiresCompletedCleanupAndRetainsResponse/failed",
+    "TestElectricalShutdownRequiresCompletedCleanupAndRetainsResponse/acknowledged-failure",
+    "TestElectricalShutdownRequiresCompletedCleanupAndRetainsResponse/running",
+    "TestElectricalShutdownRequiresCompletedCleanupAndRetainsResponse/missing",
+    "TestElectricalShutdownRequiresCompletedCleanupAndRetainsResponse/open",
+    "TestElectricalShutdownRequiresCompletedCleanupAndRetainsResponse/transport",
+    "TestElectricalShutdownRequiresCompletedCleanupAndRetainsResponse/refused",
+    "TestElectricalShutdownRequiresCompletedCleanupAndRetainsResponse/existing-evidence",
+    "TestElectricalShutdownRequiresCompletedCleanupAndRetainsResponse/earlier-failure"
+  ],
+  "quality": {
+    "passed": true,
+    "exit_code": 0,
+    "elapsed_s": 136.54804629192222,
+    "command": "./scripts/check.sh",
+    "source_sha256": {
+      "cmd/elab-conformance/process.go": "81c80505c5c98bd7196699f7de7c59502481af717134eb55bb6b1261e399c6c6",
+      "cmd/elab-conformance/process_exit.go": "1f6140602c2238b38b741b0532e19d65cdadd84cca804198be7215d7782738b1",
+      "cmd/elab-conformance/process_exit_test.go": "f5ead23db2e0189ef75a0fde9011ed0666ba62ad26ef4174e5a02c180a34a6e5",
+      "internal/conformance/electrical.go": "c6972d47b2449a112fc8dab6171bf40d38f80291e71a22d6943f388cb2cc3f61",
+      "internal/conformance/shutdown.go": "aa0fb5548a04edac97c53bf9a3431636b63c561081bac1a99c7543b09e69236f",
+      "internal/conformance/shutdown_test.go": "b6f8cb982352a059c00b71b6aeb93985d97fd568a7eff4a5c76caa273c5ceae7"
+    },
+    "quality_runner_sha256": "2b38f66e99f04ae6f336a364d1b059438e106ddc45766de25373cbf3ebfb4925"
+  },
+  "integration": {
+    "passed": true,
+    "command": [
+      "/Users/dshills/Development/projects/ELab/build/conformance-shutdown-diagnostics/elab-conformance",
+      "--agent-binary",
+      "/private/tmp/elab-first-version-170-runtime/agent",
+      "--native-binary",
+      "/private/tmp/elab-first-version-170-runtime/native",
+      "--capacity-suite",
+      "--artifacts",
+      "/private/tmp/elab-conformance-shutdown-diagnostics"
+    ],
+    "controller_sha256": "a79c3c55f657158769da22eae0bb0030e7894901b0c6180205b92ed0c63f64a0",
+    "receipt_sha256": "add4a0c89ad57ca63fd74976c8117851d6fa40a38c8211fad7f9c3631b4f418f",
+    "native_sha256": "8197a39c5740117e0ab298ae9cf869b222a073e0b8738dfa0f251232d5efa50b",
+    "agent_sha256": "1087ac9dc359f7ebc5d455283e4f0b923d794a0e8247b9a27cd2d6ec3ff45a36",
+    "exit_code": 0,
+    "elapsed_s": 24.892598083009943,
+    "shared_geometry_controls": {
+      "read": {
+        "denied": true,
+        "errno": 1
+      },
+      "write_without_truncate": {
+        "denied": true,
+        "errno": 1
+      }
+    },
+    "unchanged_nonconformance_runtime_inputs": 312,
+    "shared_geometry_unchanged": true,
+    "shared_geometry_before": {
+      "window-geometry-0.3.6.json": {
+        "sha256": "9666b9dbadc1ca73534406af4e7bbd832f9db24e8519569bde0b5b884c6f14ee",
+        "mode": "0o644"
+      },
+      "window-geometry-0.3.6.lst": {
+        "sha256": "0cacd87c7fb6c83f05737f71248f1b474f1d797d9cf132b4d0816b0e52582f2f",
+        "mode": "0o644"
+      }
+    },
+    "shared_geometry_after": {
+      "window-geometry-0.3.6.json": {
+        "sha256": "9666b9dbadc1ca73534406af4e7bbd832f9db24e8519569bde0b5b884c6f14ee",
+        "mode": "0o644"
+      },
+      "window-geometry-0.3.6.lst": {
+        "sha256": "0cacd87c7fb6c83f05737f71248f1b474f1d797d9cf132b4d0816b0e52582f2f",
+        "mode": "0o644"
+      }
+    },
+    "review_files_verified": 1651,
+    "review_unchanged": true,
+    "canonical_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "archive_unchanged": true,
+    "runtime_policy_sha256": {
+      "runtime.sb": "6b64706f7f3c6b96204e4071a0d2f9d8b8cecce588c92bb1538c567827ae0e1b",
+      "native": "3d1fa7745e2bf879a11fc631fff3745f54d9cac900cad8b7399463b4682f217a",
+      "agent": "f75528ee8cbd39c7d45af552cbfe7015f09eb5552e8f980067a65a0e50b97927"
+    },
+    "process_exit_count": 45,
+    "shutdown_response_count": 36,
+    "native_process_exit_count": 15,
+    "public_report_sha256": "ab69020284c5c0ea03447c441a2cbad6cdb5859432c186bfbd9d74a9f1bde607"
+  },
+  "retained_session_files": 126,
+  "app_rebuilt": false,
+  "version_incremented": false,
+  "canonical_promoted": false,
+  "original_169_timeout_resolved": false,
+  "owner_acceptance": false,
+  "source_scope": "Changed conformance tooling only; 312 other runtime inputs and SDK match sealed /170",
+  "evidence_sha256": {
+    "README.md": "7bca6b0110d85f9e4ec1b9959dbc2173720c8b35005733239f980a6593a66e9a",
+    "focused-race.txt.gz": "870201a809551cdb4442d6bd3bdd3968c3baa41eaae450f5cc934df1bad123a5",
+    "initial-quality-stderr.txt.gz": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83",
+    "initial-quality-stdout.txt.gz": "0a3b7ebc68e7e9adfdd600bf866e6f603f9fa80bff5af99c6c1e1a9e144c100f",
+    "initial-quality.json": "09614cd8e9aeeeb907c694fd4bc88f45e5cd11b03a84af82d7b09ee4eea90e9b",
+    "integration-producer.py.txt": "9324e0f6949878e5f20625a756b4ce6e890cda54cd2dbb6f64bc67f42e39af36",
+    "integration-stderr.txt.gz": "08b02f5542192e7ab1d013e529cdbf1f91675e33cfea881f21d09a8f8f43ead7",
+    "integration-stdout.txt.gz": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83",
+    "integration.json": "68613bd2379bb485225112164d0a861327563afa427d32d3d7a0801fc9b1a1a4",
+    "original-electrical.go.txt.gz": "7db47ea9d4af30ad678df0003333b8797408cb2a3618a139547a13ee69945140",
+    "original-failure.txt.gz": "b224ac33c3ddd2ce3ade36bea47c48a4fe1a7f383c6f27b2fe1bba8e7d45bc28",
+    "public-report.json.gz": "ae7559b5987a72f0349f1d515a98093197662ab2f1eb46aadc70c31d25d804f2",
+    "quality-stderr.txt.gz": "67736933bec8b108aa8be36555bcca646fd7ef8dd1112605e3f77f55a3b1171e",
+    "quality-stdout.txt.gz": "5a3beadf9f8c9e240a85dee5faa8437636e827b61054c2519acc152056139543",
+    "quality.json": "b39cb5302542070b91bb8dbe9b803629cb3560225314765236c616c5e58b8c21",
+    "sandbox-quality-stderr.txt.gz": "090613d8203dae7ea3e16adef410069d3dea471bd536d7c3c7e4dd30a50ef4fa",
+    "sandbox-quality-stdout.txt.gz": "0793c6546e8e021a043bf979f434369a8acad8e3050e337d9fdefd6c98948b5e",
+    "sandbox-quality.json": "aa7268fed851a1c6ab50e78109cacd65563334a400dfda3a818410db9fa1f4ad",
+    "sandbox-startup-probe.json": "0571b1608b1141525de0a0634dfde5b8607137fc5307efaa463e7e559a8f0d37",
+    "session-records.json.gz": "864f16a46d1f969c65f2835b5c8d9e1f3f5176ec208efdccbf391ee3d41bccc4",
+    "controller-build-info.txt.gz": "b54f8a093429bee167ac0b83dbcdb014666dfa9f559f31b89d63ce84d6dffeac"
+  }
+}

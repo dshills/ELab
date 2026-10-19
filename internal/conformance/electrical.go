@@ -135,7 +135,7 @@ func electricalSession(ctx context.Context, factory Factory, dir string, run fun
 		s.ctx = cleanup
 		_, inspectErr := s.state("project.inspect", nil, false)
 		if inspectErr == nil {
-			inspectErr = s.ask("app.close", workbench.ReplaceParams{DiscardChanges: true}, true, nil)
+			inspectErr = s.closeElectrical()
 		}
 		cancel()
 		err = errors.Join(err, inspectErr, client.Close())
