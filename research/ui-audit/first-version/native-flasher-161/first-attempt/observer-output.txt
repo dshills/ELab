@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/native-flasher-161/observe.py", line 69, in <module>
+    ref.ask('scope.trace.select',dict(id='v:Q2.collector'),True);reference('focus-q2');focused=wait('focus-q2');protected(probed,focused);equivalent(focused,r['reference']['focus-q2']);assert focused['trace_focus']['objects']==['Q2'];mark('focus-q2-verified.json');timing=measure('10',focused,targets)
+                                                                                                                                                                                                ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'objects'
