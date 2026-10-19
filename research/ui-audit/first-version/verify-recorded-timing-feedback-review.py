@@ -17,10 +17,24 @@ def read(path):
     return json.loads(gzip.decompress(path.read_bytes()) if path.suffix == '.gz' else path.read_text())
 
 
+def verify_readme(receipt, text):
+    advertised = re.findall(r'\*\*Private review ready: ([0-9.]+) /([0-9]+)\.\*\*', text)
+    assert advertised == [(receipt['version'], receipt['build'])], 'README advertises a different private review'
+    review = Path(receipt['review_path']).relative_to(ROOT).as_posix()
+    assert ']('+review+'/ELab.app)' in text, 'README app link differs from receipt'
+    assert '](research/ui-audit/first-version/recorded-timing-feedback-review-checkpoint.json)' in text
+    blocks = [block for block in re.findall(r'```sh\n(.*?)```', text, re.S) if 'scripts/package-app.py' in block]
+    assert len(blocks) == 1
+    assert 'python3 -B scripts/prepare-vellum.py' in blocks[0], 'Packaging must resolve and verify the current SDK'
+    assert '"$ELAB_SDK_CACHE/scripts/package-app.py"' in blocks[0]
+    assert 'build/.vellum-sdk-' not in blocks[0], 'Packaging must not select an obsolete cache'
+
+
 def main():
     receipt_path = ROOT/'research/ui-audit/first-version/recorded-timing-feedback-review-checkpoint.json'
     identity = validate_release(ROOT,receipt_path)
     receipt = read(receipt_path)
+    verify_readme(receipt, (ROOT/'README.md').read_text())
     review = Path(receipt['review_path'])
     assert receipt_path.read_bytes() == (review/'Evidence/Acceptance.json').read_bytes()
     assert receipt['source_commit'] == '0e75875abe07d0c172902754aa8acec6062df7dc'

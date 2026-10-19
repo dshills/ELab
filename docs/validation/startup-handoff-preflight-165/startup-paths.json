@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "source_sha256": {
+    "desktop/main.go": "2c224411f11c8e1caba8aa5a91b86ad02bd28443804edb0b14d929f72f7ef1e6",
+    "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
+    "desktop/recovery.go": "861a98a5411f432028f371925192b9ffb68198de6dd92246d8846d37fd9902fa",
+    "workbench/appearance_store.go": "e2b2a4c3b22658a0fc3bb6b31908fefcf0e6e6ebd1e92f80487d9e42509342f5",
+    "workbench/recovery.go": "190ef4a5cb9e6a5045cd6b3e8ca8ea0ad213bd71ccfd13b79ee188deff0b722a",
+    "build/.vellum-sdk-b22478c/drivers/cogent/build/upstream/system/driver/desktop/desktop_darwin.go": "c3150d2976b9e7dc4445c6d3f08e871e4095f33b9220ce0ba9f9909679456617",
+    "build/.vellum-sdk-b22478c/drivers/cogent/build/upstream/system/driver/base/app.go": "f7c39f21a905e044e12a5e24f8bb708b26b04d1aaae4f08dfef26c8f7ff914dd",
+    "build/.vellum-sdk-b22478c/drivers/cogent/build/upstream/core/windowgeometry.go": "4d506b97d425f7fcfe9ec93884c111aa8048578f30e6367b059845e1be7d9afa"
+  },
+  "facts": [
+    "DefaultAppearanceFile and DefaultRecoveryDirectory use os.UserConfigDir plus ELab",
+    "Native setup accepts custom recovery-directory and appearance-file flags; no-recovery/no-appearance disable those stores",
+    "Non-smoke Cogent desktop DataDir uses user.Current().HomeDir/Library, independent of those ELab flags",
+    "CogentCoreDataDir joins DataDir with Cogent Core; geometry files use window-geometry-0.3.6.json/lst/lck",
+    "Only smoke mode sets DisableWindowGeometrySaver before app initialization",
+    "No ordinary current-account launch or HOME reassignment was performed; separate account or VM availability was asked asynchronously"
+  ]
+}

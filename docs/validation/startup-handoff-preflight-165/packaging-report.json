@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "scope": "The current README SDK resolver and development packager CLI, with only binary/output arguments substituted to use the clean /165 binary and a new private destination. No source rebuild, application launch or release qualification claim.",
+  "binary": "/Users/dshills/Development/projects/ELab/build/first-version-165-tools/build/elab",
+  "binary_sha256": "f75a72427b4556b163437132a46f0694b5845f6753db5aa9bf61f0d18e6a27de",
+  "output": "/private/tmp/elab-readme-packaging-165/ELab-local.app",
+  "substitutions": [
+    "--binary uses existing clean /165 executable",
+    "--output uses new temporary test destination"
+  ],
+  "exit_code": 0,
+  "verified_sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-b22478c",
+  "sdk_source": "b22478cf8cec8dda1ccdcd93d6ff6b62e2cc11de",
+  "sdk_reverified_after_packaging": true,
+  "private_build": true,
+  "development_version": "0.0.0 /1"
+}

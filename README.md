@@ -4,7 +4,7 @@ ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N
 
 The [first-version delivery plan](research/34-first-version-plan.md) defines the current release target: a usable macOS hobbyist alpha, with frozen scope, ordered blockers and a concrete packaged-app handoff.
 
-**Private review ready: 0.144.0 /161.** The [review app](build/ELab-0.144.0-161-review/ELab.app) and matching agent repair RC scope/cursor/extrema/CSV values at manual input changes. Clean `35371ee`, complete source quality, exact copied native smoke/four public adapters and reference/measurement/live/save checks pass. An independent 23-row RC check also passes through the copied native app and headless agent, including −0.3160602794 mA immediately after discharge at 10 ms. Preserved /160 remains affected. Save and quit an earlier review before opening this one. All 21 earlier reviews and the canonical app are preserved. [Walkthrough and limits](research/35-first-version-review.md), [qualification receipt](research/ui-audit/first-version/rc-input-frame-review-checkpoint.json). Owner walkthrough remains “Not tried yet”; wider qualification is still open.
+**Private review ready: 0.148.0 /165.** Use the [review app](build/ELab-0.148.0-165-review/ELab.app) and matching `elab-agent`, or the [private ZIP](build/ELab-0.148.0-165-review.zip) with its [SHA-256 checksum](build/ELab-0.148.0-165-review.zip.sha256). The packaged app needs no Go, Python, Vellum checkout or account. Save and quit an earlier review before opening this one. Clean `0e75875` /SDK `b22478c` passes the complete source quality gate, exact native timing correction, copied native/four-adapter/reference/measurement/live/save checks, and independent MOSFET precision and RC edge/CSV regressions. ZIP extraction preserves all file bytes/modes; direct extracted startup and macOS LaunchServices smoke pass within their documented scopes. All 24 prior qualified folders, two unqualified candidates and canonical /120 are preserved. [Walkthrough and limits](research/35-first-version-review.md), [qualification receipt](research/ui-audit/first-version/recorded-timing-feedback-review-checkpoint.json). /161 and /163 remain affected by later-discovered defects; /164 is unqualified. Owner walkthrough remains “Not tried yet”; clean-account, signing, accessibility, visible-latency and wider acceptance gates remain open.
 
 Choose **Examples → Split-rail DC supply** to explore [stacked DC sources and signed rail voltages](docs/floating-dc-sources.md). Two 3 V sources produce +3 V and −3 V around their midpoint reference. [Linear source/passive networks](docs/linear-network-solves.md) also solve 24 V stacks without artificial small-step nonconvergence, within the existing ±30 V node limit. [Nonlinear startup](docs/nonlinear-startup.md) also supports 24/30 V generic LED loads through a bounded grounded-constraint retry and rejects undefined floating MOSFET gates at zero supply.
 
@@ -12,7 +12,7 @@ Choose **Examples → MOSFET LED switch** for pulse-driven NMOS/LED simulation, 
 
 **Examples → Coil current buildup and decay**, **RLC ringing and damping**, and **Coil switching and flyback diode** add live ideal-inductor experiments. Set signed startup current, inspect current/voltage/energy, and save independent Verify captures through the same user and agent commands. See [inductors and their model limits](docs/inductors.md). LC drawings also offer **Fit sampling** to reveal ringing that coarse scope samples can miss. See [the sampling hint and its limits](docs/lc-sampling.md).
 
-## Run the desktop app
+## Build and run from source
 
 Use Go 1.25.6 or newer, Python 3.10 or newer, and Vellum's macOS native prerequisites. Normal builds verify and extract the [pinned private Vellum SDK](third_party/vellum/README.md), including its prepared Cogent and typesetting sources. A sibling Vellum checkout is no longer required. ELab's `desktop/go.mod` contains the four explicit local replacements into the verified build cache. Run `python3 scripts/prepare-vellum.py` before invoking native Go tools directly; `build.sh`, `lint.sh` and `check.sh` prepare it automatically.
 
@@ -52,18 +52,19 @@ Drag a selected part to move it with its wires. Pan drags the sheet; scroll zoom
 For a local double-clickable development bundle, after building:
 
 ```sh
-python3 -B build/.vellum-sdk-ade66eb/scripts/package-app.py --binary build/elab \
+ELAB_SDK_CACHE=$(python3 -B scripts/prepare-vellum.py | python3 -c 'import json, sys; print(json.load(sys.stdin)["sdk"])')
+python3 -B "$ELAB_SDK_CACHE/scripts/package-app.py" --binary build/elab \
   --output build/ELab-local.app --name ELab --identifier com.dshills.elab \
   --version 0.0.0 --build-version 1 --platform darwin
 ```
 
-The packager requires a new output path. This example creates an unreleased development bundle. The qualified local checkpoint remains `build/ELab.app` at 0.105.0 /120; its previous 0.104 bundle is preserved as `build/ELab-0.104.0-119-preserved.app`.
+The packager requires a new output path. This example creates an unreleased development bundle. The canonical app remains `build/ELab.app` at 0.105.0 /120, separate from the current owner-review app linked above. Its previous 0.104 bundle is preserved as `build/ELab-0.104.0-119-preserved.app`.
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).
 
 **File → Close window** / **Cmd+W** use shared [unsaved-work close protection](docs/native-close.md), preserving active file operations and pending choices.
 
-**Export PDF** creates a [printable schematic](docs/schematic-pdf.md) with shared A4/Letter page settings. **Export PNG** creates a [schematic image](docs/schematic-image.md) from the same Output page settings. [Print captured page](docs/printing.md) submits the preview to a chosen macOS printer through shared commands, with observable spool jobs and cancellation. Physical-device qualification remains pending.
+**Export PDF** creates a [printable schematic](docs/schematic-pdf.md) with shared A4/Letter page settings. **Export PNG** creates a [schematic image](docs/schematic-image.md) from the same Output page settings. [Print captured page](docs/printing.md) submits the preview to a chosen macOS printer through shared commands, with observable spool jobs and cancellation. The owner confirmed that one LED page printed clearly and completely; measured margins/media/scale, other settings and device paths remain unqualified. [Print evidence](research/ui-audit/first-version/physical-print/checkpoint.json).
 
 The packaging script requires a new output path. This creates a private unsigned bundle; public distribution and platform qualification remain future gates.
 
@@ -257,7 +258,7 @@ Transient failures now expose [distinct integration-limit causes and recovery](d
 
 Waveform sources now show [shared schematic/export annotations](docs/source-annotations.md) for sine parameters, pulse timing and applied/pending/stale input state. Fit includes the annotation block.
 
-[Captured DC sweeps](docs/dc-sweeps.md) plot source bias, resistance or wiper position without changing live physics. **DC sweep → Open sweep JSON…** reopens shared curves, including on a blank sheet. Users and agents share import, trace/cursor, keep, export and project-save commands. [Schematic PDF/PNG output](docs/schematic-pdf.md), [print preview](docs/print-preview.md) and [local printer submission](docs/printing.md) are available; physical printer qualification remains pending. [Captured-run comparisons](docs/recording-comparison.md) now include optional dashed reference traces on shared axes, without alignment or extrapolation.
+[Captured DC sweeps](docs/dc-sweeps.md) plot source bias, resistance or wiper position without changing live physics. **DC sweep → Open sweep JSON…** reopens shared curves, including on a blank sheet. Users and agents share import, trace/cursor, keep, export and project-save commands. [Schematic PDF/PNG output](docs/schematic-pdf.md), [print preview](docs/print-preview.md) and [local printer submission](docs/printing.md) are available; one LED page has [owner-confirmed readability and completeness](research/ui-audit/first-version/physical-print/checkpoint.json), while other printer settings/device paths remain unqualified. [Captured-run comparisons](docs/recording-comparison.md) now include optional dashed reference traces on shared axes, without alignment or extrapolation.
 
 Agents can inspect [sweep command contracts](docs/capability-details.md#sweep-command-contracts) for normalized parameter bounds, state/error conditions and completion behavior. Native **Clear point** and `sweep.cursor.set {"index":null}` share the same clearing behavior; omitting the index remains invalid.
 
