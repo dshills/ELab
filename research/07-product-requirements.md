@@ -315,6 +315,8 @@ Track task completion, first-success time, help requests, errors, explanation ac
 | C: MVP hardening | Full curated library, verification snapshots, exports, accessibility, capacity, recovery, and agent conformance | Functional, electrical, and complete agent-parity acceptance suites pass on the recorded support configuration |
 | D: hobbyist validation | Formative sessions and prioritized corrections | Proposed user gates met or explicitly revised with evidence; no unresolved issue that presents a failed/stale solve as a current valid result, corrupts connectivity, or loses saved work |
 
+The [prepared formative-study packet](first-use-study/README.md) operationalizes the existing ten-person Gate D without changing its thresholds. It contains blank recording/scoring forms and an engineering-checked RC fixture; it has no participant observations and does not establish acceptance.
+
 No calendar estimates are assigned until Gate A resolves engineering feasibility and team capacity. Passing the demonstration circuits is necessary but insufficient: invalid edits and ordinary recovery are release criteria, not optional polish.
 
 ## 13 Decisions and risks to resolve

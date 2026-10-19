@@ -1,0 +1,13 @@
+import gzip,hashlib,importlib.util,json,sys
+from pathlib import Path
+root=Path('/Users/dshills/Development/projects/ELab');folder=root/'research/first-use-study/fixtures';sys.path.insert(0,str(root/'scripts'))
+from wiring_replay import validate_release
+from demo_session import require_fresh_demo_session
+release=validate_release(root,root/'research/ui-audit/first-version/recorded-timing-feedback-review-checkpoint.json')
+spec=importlib.util.spec_from_file_location('helper',root/'scripts/persistence-demo.py');h=importlib.util.module_from_spec(spec);spec.loader.exec_module(h);c=h.Client(command_preconditions=True,agent_binary=release['agent']);states={}
+try:
+ require_fresh_demo_session(c.ask('project.inspect'));c.ask('project.load',dict(path=str(folder/'RC-no-traces.elab')),True);c.ask('simulation.pause',{},True);c.ask('scope.probes.set',dict(ids=['v:C1']),True);c.ask('simulation.restart',{},True);c.ask('simulation.step',dict(duration_s=.01),True);state=c.ask('simulation.wait');states['paused']=state;assert state['paused'] and not state['transient']['stale']
+ c.ask('simulation.resume',{},True);state=c.ask('simulation.wait');states['running']=state;assert not state['paused'] and not state['transient']['stale']
+ c.ask('simulation.pause',{},True);c.ask('component.set',dict(id='C1',value='2uF'),True);state=c.ask('simulation.wait');states['stale']=state;assert state['paused'] and state['transient']['stale']
+finally:c.close()
+(folder/'state-preflight.json.gz').write_bytes(gzip.compress((json.dumps(dict(passed=True,scope='Exact packaged-agent preparation of the three status conditions; engineering observations only, not participant responses or visible UI acceptance.',release=release,states=states,participants=0),indent=2)+'\n').encode(),mtime=0));print(json.dumps(dict(passed=True,states=list(states),participants=0)))

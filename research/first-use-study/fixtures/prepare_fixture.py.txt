@@ -1,0 +1,24 @@
+import gzip,hashlib,importlib.util,json,math,sys
+from pathlib import Path
+root=Path('/Users/dshills/Development/projects/ELab');folder=root/'research/first-use-study/fixtures';sys.path.insert(0,str(root/'scripts'))
+from wiring_replay import validate_release
+from demo_session import require_fresh_demo_session
+release=validate_release(root,root/'research/ui-audit/first-version/recorded-timing-feedback-review-checkpoint.json')
+spec=importlib.util.spec_from_file_location('helper',root/'scripts/persistence-demo.py');h=importlib.util.module_from_spec(spec);spec.loader.exec_module(h)
+path=folder/'RC-no-traces.elab';assert not path.exists()
+client=h.Client(command_preconditions=True,agent_binary=release['agent']);raw={}
+try:
+ require_fresh_demo_session(client.ask('project.inspect'));client.ask('example.rc',{},True);client.ask('simulation.pause',{},True);client.ask('simulation.restart',{},True);client.ask('simulation.wait')
+ client.ask('scope.probes.set',dict(ids=[]),True);client.ask('scope.visibility.set',dict(visible=True),True);client.ask('scope.cursor.clear',dict(cursor='a'),True);client.ask('scope.cursor.clear',dict(cursor='b'),True);client.ask('simulation.resume',{},True);client.ask('simulation.wait');client.ask('project.save',dict(path=str(path)),True);raw['generated']=client.ask('simulation.wait')
+finally:client.close()
+client=h.Client(command_preconditions=True,agent_binary=release['agent'])
+try:
+ require_fresh_demo_session(client.ask('project.inspect'));client.ask('project.load',dict(path=str(path)),True);state=client.ask('simulation.wait');raw['fresh_reopen']=state
+ assert not state['paused'] and not state['document']['dirty'] and not state['selected'];assert state['scope']['selected']==[] and state['scope']['traces']==[] and state['scope_visible']
+ assert 'a' not in state['scope'] and 'b' not in state['scope'] and not state['transient']['stale'];assert state['transient']['sample']['time_s']==0
+ client.ask('simulation.pause',{},True);client.ask('simulation.input.set',dict(mode='charge'),True);client.ask('simulation.restart',{},True);client.ask('simulation.step',dict(duration_s=.01),True);state=client.ask('simulation.wait');raw['analytic_rehearsal']=state
+ expected=5*(1-math.exp(-1));actual=state['transient']['sample']['voltage_v'];assert math.isclose(actual,expected,rel_tol=0,abs_tol=1e-9)
+finally:client.close()
+(folder/'raw-preflight.json.gz').write_bytes(gzip.compress((json.dumps(raw,indent=2)+'\n').encode(),mtime=0))
+r=dict(passed=True,scope='Engineering fixture preparation and one fresh exact packaged-agent reopen, not a participant session or physical UI check.',release=release,fixture_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),empty_scope_selection_persisted=True,no_preplaced_cursors=True,no_preselected_component=True,scope_visible=True,saved_pause_preference=False,fresh_live_time_s=0,analytic_charge_time_s=.01,analytic_charge_voltage_v=actual,analytic_reference_v=expected,fixture_sha256_after_rehearsal=hashlib.sha256(path.read_bytes()).hexdigest(),participants=0)
+(folder/'preflight.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps({k:r[k] for k in ['passed','empty_scope_selection_persisted','analytic_charge_voltage_v','participants']}))

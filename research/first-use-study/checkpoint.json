@@ -1,0 +1,58 @@
+{
+  "status": "prepared_unrun",
+  "protocol_revision": 1,
+  "date": "2026-10-19",
+  "source_requirements": "research/07-product-requirements.md#formative-hobbyist-test",
+  "source_section_sha256": "30ee133df4e3ecc3cd757853e0860352e1cd314b291cd6e7dc32b70379e139c6",
+  "review_receipt_sha256": "b7f4c75cff764dea3ef43adc0986b4607d07693fd973fdda00620f7da7518648",
+  "build": "0.148.0 /165",
+  "native_sha256": "f75a72427b4556b163437132a46f0694b5845f6753db5aa9bf61f0d18e6a27de",
+  "agent_sha256": "3b6daa16b7b583077813f198a072bef6f2a1a62a61d8ce8bdd86f6bb2e6ef13c",
+  "planned_participants": 10,
+  "planned_strata": {
+    "new_to_simulators": 5,
+    "circuit_building": 5
+  },
+  "measured_participants": 0,
+  "study_outcomes": null,
+  "study_gate_passed": null,
+  "owner_acceptance": false,
+  "fixture_preflight_passed": true,
+  "protocol_choices_pending_owner_review": [
+    "Preassigned sampling strata retain overlapping actual experience attributes",
+    "G1 uses changed-current time; first accepted-current time is also recorded",
+    "Literal PRD help rules are distinct from the primary unassisted full-loop count",
+    "The invalid interpretation condition is stale; failed-solver usability is not claimed"
+  ],
+  "method_sources": [
+    {
+      "url": "https://www.gov.uk/service-manual/user-research/using-moderated-usability-testing",
+      "accessed": "2026-10-19",
+      "purpose": "Goal-based tasks, neutral moderation and discussion guide"
+    },
+    {
+      "url": "https://www.gov.uk/service-manual/user-research/getting-users-consent-for-research",
+      "accessed": "2026-10-19",
+      "purpose": "Understandable and continuing consent"
+    },
+    {
+      "url": "https://www.gov.uk/service-manual/user-research/taking-notes-and-recording-user-research-sessions",
+      "accessed": "2026-10-19",
+      "purpose": "Consent for notes/optional recordings"
+    }
+  ],
+  "files_sha256": {
+    "README.md": "e63b76a6d1ff554cd913cc0734a0d84b2d59e795d4c12a026e4f6a0d44e805ae",
+    "fixtures/RC-no-traces.elab": "efe09345107bb687dafe8282d923bdeacf0b3cf94eb1b2853f78f17135a53284",
+    "fixtures/preflight.json": "0585065e9fd39cf092c1defdd17d19a48713253d4a3ac0c5bfe543f19fd545e9",
+    "fixtures/prepare_fixture.py.txt": "b3c8d329971ef261d78e01d4b13820177a38daef90997e0f374cbacf36a91463",
+    "fixtures/prepare_states.py.txt": "722bfcc0fdd48c2b950bfe512c4c0f9142c877b84685f4ed17f3b1f2906315a2",
+    "fixtures/raw-preflight.json.gz": "1c40c80095521bbff9bf6eb035647f8501df09b4fad8dace7bbc0b87d9a0673b",
+    "fixtures/state-preflight.json.gz": "b874154ed47b44fc7ccb55cbd316e0b5a3e6758a48d09c788f1fd3c68b5bba25",
+    "participant-tasks.md": "aaae81040200db3a8f4acac74935575e8ee48096118fa28a8a1ee4e9107e0f9f",
+    "prd-formative-excerpt.md": "ec313f840019dfc6947593b100ea6d03109a0b098883f9edde3ca60ad65d3c74",
+    "results-summary.md": "84974d5cd9c04069d2770d750977470b1ca10be1dfcf3d60e36ee5671a66d971",
+    "session-form.md": "2c6ab348e1658bdd4d10e19c1ae0ef8f03cd96c1e93433c72421ea4fe3ad6cd0",
+    "verify-packet.py": "bff28bfa86de79c8afd42c920a5adc30999b33eec89dea534bc270f1aefb1bbc"
+  }
+}

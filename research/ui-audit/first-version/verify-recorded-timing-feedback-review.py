@@ -34,7 +34,9 @@ def main():
     receipt_path = ROOT/'research/ui-audit/first-version/recorded-timing-feedback-review-checkpoint.json'
     identity = validate_release(ROOT,receipt_path)
     receipt = read(receipt_path)
-    verify_readme(receipt, (ROOT/'README.md').read_text())
+    readme = (ROOT/'README.md').read_text()
+    verify_readme(receipt, readme)
+    assert './build/elab --smoke --smoke-timeout 2m' in readme, 'Use the qualified full native-smoke timeout'
     review = Path(receipt['review_path'])
     assert receipt_path.read_bytes() == (review/'Evidence/Acceptance.json').read_bytes()
     assert receipt['source_commit'] == '0e75875abe07d0c172902754aa8acec6062df7dc'
