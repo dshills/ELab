@@ -1,0 +1,102 @@
+import gzip,hashlib,json,plistlib,shutil,stat,subprocess,sys
+from pathlib import Path
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent
+version,build,source='0.153.0','170','f4cb5c4e949139f94242b49bc5f3fbb9c3acdd2c'
+review=root/'build'/f'ELab-{version}-{build}-review';prior=root/'build/ELab-0.152.0-169-review'
+sys.path.insert(0,str(root/'scripts'));from runtime_isolation import bundle_tree
+
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def write(p,value):
+ with p.open('x') as output:output.write(json.dumps(value,indent=2)+'\n')
+def gz(p,data):p.write_bytes(gzip.compress(data,mtime=0))
+def verify(folder,manifest_name):
+ manifest=json.loads((folder/manifest_name).read_text());paths=list(folder.rglob('*'))
+ assert not any(p.is_symlink() or not(p.is_file() or p.is_dir()) for p in paths)
+ assert {p.relative_to(folder).as_posix() for p in paths if p.is_file()}==set(manifest['files'])|{manifest_name}
+ for name,expected in manifest['files'].items():
+  p=folder/name;assert sha(p)==expected['sha256'] and oct(stat.S_IMODE(p.stat().st_mode))==expected['mode'],str(p)
+ return dict(files_verified=len(manifest['files']),manifest_sha256=sha(folder/manifest_name))
+def copy_observations(source_dir,destination):
+ destination.mkdir()
+ for p in sorted(source_dir.rglob('*')):
+  if not p.is_file() or p.name=='endpoint.json':continue
+  relative=p.relative_to(source_dir);q=destination/relative;q.parent.mkdir(parents=True,exist_ok=True)
+  if p.suffix in ['.json','.elab','.txt'] and p.name!='report.json':gz(q.with_name(q.name+'.gz'),p.read_bytes())
+  else:shutil.copyfile(p,q)
+
+assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()==source
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=root).strip()
+assert not (review/'RELEASE_MANIFEST.json').exists()
+previous=json.loads((root/'research/ui-audit/first-version/component-startup-review-checkpoint.json').read_text())
+built=json.loads((stage/'build-result.json').read_text());assert built['passed'] and built['clean_build_vcs'] and built['source_commit']==source
+for name in ['elab','elab-agent','elab-conformance']:
+ info=(stage/'build'/(name+'-build-info.txt')).read_text();assert 'vcs.revision='+source in info and 'vcs.modified=false' in info
+info=plistlib.loads((review/'ELab.app/Contents/Info.plist').read_bytes());assert info['CFBundleShortVersionString']==version and info['CFBundleVersion']==build
+assert sha(review/'ELab.app/Contents/MacOS/ELab')==built['native_sha256'] and sha(review/'elab-agent')==built['agent_sha256']
+runtime=Path('/private/tmp/elab-first-version-170-runtime');acceptance=Path('/private/tmp/elab-first-version-170-acceptance')
+rr=json.loads((runtime/'runtime-report.json').read_text());ar=json.loads((acceptance/'report.json').read_text());public=json.loads((runtime/'public/report.json').read_text())
+assert rr['passed'] and ar['passed'] and public['passed'] and rr['shared_geometry_unchanged'] and ar['shared_geometry_unchanged']
+assert rr['source_bundle']==bundle_tree(review/'ELab.app') and rr['source_agent_sha256']==built['agent_sha256']
+assert [s['name'] for s in rr['stages']]==['native-smoke','public-suites'] and all(s['status']=='completed' and s['exit_code']==0 for s in rr['stages'])
+discovery=ar['discovery_commands'];assert discovery['passed'] and discovery['commands']==discovery['semantic_annotations']==162 and discovery['native_headless_detailed_inputs_equal'] and len(discovery['detailed_inputs_changed'])==24
+assert ar['native_host_closed_normally'] and ar['component_startup_commands']['fresh_saved_reopens']==8 and ar['verification_handoff_commands']['sample_rows_per_adapter']==424 and ar['coil_startup_reset_commands']['four_fresh_saved_project_reopens']
+proof=root/'docs/validation/remaining-contracts';cp=json.loads((proof/'checkpoint.json').read_text());assert cp['source_quality']['passed'] and cp['original_missing_contracts']==20 and cp['focused_leaf_cases']==31
+for name,expected in cp['source_sha256'].items():assert sha(root/name)==expected,name
+for name,expected in cp['evidence_sha256'].items():assert sha(proof/name)==expected,name
+navigation=root/'docs/validation/navigation-contracts';nav=json.loads((navigation/'checkpoint.json').read_text());assert nav['original_missing_contracts']==4 and nav['focused_leaf_cases']==26
+for name in ['workbench/navigation_capabilities.go','workbench/navigation_capabilities_test.go']:assert sha(root/name)==nav['source_sha256'][name]
+for name,expected in nav['evidence_sha256'].items():assert sha(navigation/name)==expected,name
+changed=subprocess.check_output(['git','diff','--name-only',previous['source_commit'],source,'--','desktop','workbench','transport','internal','cmd','go.mod','go.sum','third_party/vellum'],cwd=root,text=True).splitlines()
+expected=['workbench/'+n for n in ['application_capabilities_test.go','capability_details.go','example_capabilities.go','inspection_capabilities.go','navigation_capabilities.go','navigation_capabilities_test.go','preference_capabilities.go']];assert changed==expected,changed
+ledger_path=root/'research/13-native-command-inventory.json';ledger=json.loads(ledger_path.read_text());assert ledger_path.read_bytes()==(prior/'Evidence/Native-command-inventory.json').read_bytes()
+assert len(ledger['source_sha256'])==71 and len(ledger['sites'])==397 and sum(s['status']=='requires-binding-review' for s in ledger['sites'])==173
+pin=json.loads((root/'third_party/vellum/sdk.lock.json').read_text());assert pin==previous['sdk'] and sha(root/pin['archive'])==pin['sha256']
+preserved={}
+for p in sorted((root/'build').glob('ELab-*-review')):
+ if p!=review and (p/'RELEASE_MANIFEST.json').exists():preserved[p.name.removeprefix('ELab-').removesuffix('-review')]=verify(p,'RELEASE_MANIFEST.json')
+assert len(preserved)==29
+for name,expected in previous['preserved_bundles'].items():assert preserved[name]==expected
+original=verify(root/'build/ELab-0.130.0-147-review','CANDIDATE_MANIFEST.json');failed=verify(root/'build/ELab-0.147.0-164-review','CANDIDATE_MANIFEST.json');assert original==previous['preserved_original_147_candidate'] and failed==previous['preserved_failed_164_candidate']
+canonical=previous['canonical'];assert sha(root/'build/ELab.app/Contents/MacOS/ELab')==canonical['native_sha256']
+for name in ['Examples','Licenses']:shutil.copytree(prior/name,review/name)
+evidence=review/'Evidence';evidence.mkdir();shutil.copytree(prior/'Evidence',evidence/'Historical-169');shutil.copytree(proof,evidence/'Application-discovery-source');shutil.copytree(navigation,evidence/'Navigation-discovery-source');shutil.copytree(root/'docs/validation/native-capacity-close-169',evidence/'Historical-capacity-close-169')
+for src,dest in [(ledger_path,'Native-command-inventory.json'),(root/'third_party/vellum/sdk.lock.json','SDK-lock.json'),(root/'research/ui-audit/first-version/private-alpha-owner-decisions.json','Owner-decisions.json'),(stage/'build-result.json','Build-result.json')]:shutil.copyfile(src,evidence/dest)
+producers=[('build_release.py','Build-source'),('runtime.py','Runtime-source'),('acceptance.py','Acceptance-source'),('verify_cases.py','Verify-cases-source'),('coil_reset_cases.py','Coil-cases-source'),('startup_cases.py','Startup-cases-source'),('discovery_cases.py','Discovery-cases-source'),('run-acceptance.py','Acceptance-runner'),('seal.py','Seal-source')]
+for name,label in producers:shutil.copyfile(stage/name,evidence/(label+'.py.txt'))
+for name,label in [('elab','Native'),('elab-agent','Agent'),('elab-conformance','Conformance')]:
+ raw=(stage/'build'/(name+'-build-info.txt')).read_bytes();gz(evidence/(label+'-build-info.raw.txt.gz'),raw);(evidence/(label+'-build-info.txt')).write_text('\n'.join(line.rstrip() for line in raw.decode().splitlines())+'\n')
+for name in ['build.txt','package.txt','acceptance-output.txt']:gz(evidence/(name+'.gz'),(stage/name).read_bytes())
+shutil.copyfile(runtime/'runtime-report.json',evidence/'Runtime.json');gz(evidence/'Public-report.json.gz',(runtime/'public/report.json').read_bytes())
+for name in ['native-smoke.log.txt','public-suites.log.txt','runtime.sb','geometry-probe.py','geometry-probe-output.json']:gz(evidence/(name+'.gz'),(runtime/name).read_bytes())
+copy_observations(acceptance,evidence/'Runtime-acceptance')
+walkthrough=(root/'research/35-first-version-review.md').read_text();tasks='## Try these four tasks'+walkthrough.split('## Try these four tasks',1)[1].split('## Review boundary and known limits',1)[0]
+readme=f'''# ELab private owner review · {version} /{build}
+
+Save and quit an earlier review before opening **ELab.app**. Matching `elab-agent`, three editable Examples and framework notices are included. No Go, Python, Vellum checkout or account is needed. Owner walkthrough remains **Not tried yet**. All 29 earlier sealed reviews, two candidates and canonical /120 are preserved.
+
+This replacement adds structured filtered discovery for the last 24 previously unannotated public commands: navigation, inspection/events, preferences, examples and legacy connection. All 162 public IDs carry version 1 x-command-contract; a source guard rejects future omissions. Ordinary catalog, output schemas, protocol/schema versions, mutation classification, handlers, numerical models, project format, native bindings and SDK are unchanged. Annotation presence is not exhaustive behavior acceptance.
+
+Clean `{source[:7]}` passes copied native smoke, four public adapters and exact native/headless discovery/behavior under development-file/outbound-IP/shared-geometry denial. All 162 detailed inputs match; the same ordinary catalog and outputs remain compatible with /169. Public navigation, events, display/history, private theme-file success/error, seven loader aliases/protected reset and connection no-ops pass; explicit private manual saves remain unchanged. Source pure-query and private-input tests retain separate scopes. Existing startup/RC/RL/Verify/reference/measurement/live/save checks also pass. [Receipt](Evidence/Acceptance.json).
+
+The legacy appearance store has global status rather than per-operation IDs; this is disclosed, not claimed repaired. Broader job identity, exhaustive semantic/native binding qualification, physical typing/IME/reader, visible latency, clean installation and participant acceptance remain open. Earlier physical observations and intermittent Pause/Apply/shutdown failures retain historical scopes; no new OS input or resolution of those causes is claimed.
+
+'''+tasks+'''
+## Review boundary and known limits
+
+- Tested on this Apple Silicon workstation /macOS 26.6.2. Other hardware/displays, full typing/IME/VoiceOver and visible p95 latency remain unqualified.
+- Owner explicitly deferred ordinary default-startup/clean-account installation qualification for this private alpha; protected runtime does not qualify those broader requirements.
+- Educational generic models remain bounded; dense circuits can exhaust integration work without producing a sample. No general SPICE/physical-device qualification.
+- Historical native Pause, LED Apply and one /169 capacity graceful-close timeout remain unexplained despite passing subsequent checks. Retained evidence stays under Historical-169 and Historical-capacity-close-169.
+- Owner walkthrough, actual hobbyist study, signing/notarization and public distribution remain open. One LED page printed clearly; other print settings/scale/margins/cancellation remain unqualified.
+
+Private ad-hoc signing and packaging are not supported-alpha promotion.
+'''
+(review/'README.md').write_text(readme);(evidence/'Acceptance.json').write_text('{}\n');count=sum(p.is_file() for p in review.rglob('*'))
+receipt=dict(date='2026-10-19',version=version,build=build,status='All-command discovery annotations qualified within source and copied-runtime private-review scopes; broader acceptance remains open',source_commit=source,clean_build_vcs=True,native_sha256=built['native_sha256'],agent_sha256=built['agent_sha256'],sdk=pin,quality=dict(cp['source_quality'],scope='Full final source quality, including navigation/application tests; clean package separately qualified'),copied_runtime=rr['stages'],runtime_geometry_protection=dict(controls=rr['controls']['shared_geometry'],unchanged=True,scope='Test isolation; ordinary startup remains unqualified'),discovery=dict(annotation_count=162,annotation_omissions=0,application_source='Application-discovery-source/checkpoint.json',navigation_source='Navigation-discovery-source/checkpoint.json',original_missing_annotations=24,source_focused_leaf_cases=57,copied_commands=discovery,complete_behavior_acceptance=False,legacy_appearance_has_no_job_id=True),component_startup_commands=ar['component_startup_commands'],coil_startup_reset_commands=ar['coil_startup_reset_commands'],verification_regression_commands=ar['verification_handoff_commands'],acceptance=ar,release_diff=dict(base_release='0.152.0 /169',base_source_commit=previous['source_commit'],changed_runtime_and_tests=changed,handlers_models_format_commands_sdk_and_native_sources_unchanged=True),historical_evidence=dict(directory='Historical-169',scope='Earlier observations remain historical; no resolved Pause/Apply/capacity-close cause inferred'),preserved_bundles=preserved,preserved_original_147_candidate=original,preserved_failed_164_candidate=failed,canonical=canonical,canonical_promoted=False,owner_acceptance='Pending: owner answered Not tried yet; no acceptance inferred',private_alpha_environment_gate='Owner deferred default-startup/clean-account qualification; remains unqualified',p0_counts=dict(implemented=17,partial=10),manifest_file_entries=count,review_path=str(review),launch_note='Save and quit an earlier review before opening this replacement; no owner app opened automatically.',known_limits=['Annotations do not prove exhaustive contract accuracy or native binding acceptance','Legacy appearance store has no per-job ID','Historical Pause/Apply/capacity shutdown observations remain unresolved','Visible p95, typing/IME/reader, actual study, distribution/signing and owner acceptance remain open','Default-startup/clean-account gate deferred for private alpha only'])
+receipt_path=root/'research/ui-audit/first-version/discovery-review-checkpoint.json';write(receipt_path,receipt);(evidence/'Acceptance.json').write_bytes(receipt_path.read_bytes())
+files={p.relative_to(review).as_posix():dict(sha256=sha(p),mode=oct(stat.S_IMODE(p.stat().st_mode))) for p in sorted(review.rglob('*')) if p.is_file()};assert len(files)==count
+write(review/'RELEASE_MANIFEST.json',dict(version=version,build=build,status=receipt['status'],source_record_commit=source,source_build_clean=True,canonical_promoted=False,prior_review_entries_verified_unchanged={k:v['files_verified'] for k,v in preserved.items()},files=files))
+proofdir=root/'docs/validation/discovery-review-170';proofdir.mkdir();shutil.copyfile(evidence/'Runtime.json',proofdir/'runtime.json');shutil.copyfile(evidence/'Public-report.json.gz',proofdir/'public-report.json.gz');shutil.copytree(evidence/'Runtime-acceptance',proofdir/'acceptance')
+for name in [label+'.py.txt' for _,label in producers]+['Build-result.json','runtime.sb.gz','geometry-probe.py.gz','geometry-probe-output.json.gz','native-smoke.log.txt.gz','public-suites.log.txt.gz','build.txt.gz','package.txt.gz','acceptance-output.txt.gz']:shutil.copyfile(evidence/name,proofdir/name)
+write(proofdir/'preservation.json',dict(passed=True,preserved_bundles=preserved,original_147_candidate=original,failed_164_candidate=failed,canonical=canonical,canonical_promoted=False))
+print(json.dumps(dict(passed=True,release=version+' /'+build,source_commit=source,manifest_entries=count,previous_reviews=len(preserved),annotated_commands=162,canonical_promoted=False)))

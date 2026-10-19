@@ -1,6 +1,6 @@
 # Application discovery contracts
 
-Filtered `capabilities.list {"command":"..."}` now publishes version 1 `x-command-contract` for all 162 current public IDs. The last twenty annotations cover the following existing behaviors. This source change is not in the sealed /169 app/agent. The ordinary catalog, output schemas, protocol/schema versions, mutation classification and handlers are unchanged. Annotation presence is enforced for future commands; behavioral acceptance remains a separate obligation.
+Filtered `capabilities.list {"command":"..."}` now publishes version 1 `x-command-contract` for all 162 current public IDs. The last twenty annotations cover the following existing behaviors. The [clean /170 review](../research/ui-audit/first-version/discovery-review-checkpoint.json) packages these annotations; /169 stays preserved with its earlier metadata. The ordinary catalog, output schemas, protocol/schema versions, mutation classification and handlers are unchanged. Annotation presence is enforced for future commands; behavioral acceptance remains a separate obligation.
 
 | Family | Published behavior |
 |---|---|
