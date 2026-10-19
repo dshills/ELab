@@ -790,6 +790,7 @@ func nativeWorkflowSmoke(ctx context.Context, a *app.Application, s *screen) err
 
 func nativeVerificationSmoke(ctx context.Context, a *app.Application, s *screen) error {
 	started := make(chan error, 1)
+	previous := s.service.Snapshot().LastOperation
 	if err := a.PostWait(ctx, func() {
 		if err := smokeUI(s, "verify-duration", &ui.ChangeEvent{Text: "20 ms"}); err != nil {
 			started <- err
@@ -806,6 +807,10 @@ func nativeVerificationSmoke(ctx context.Context, a *app.Application, s *screen)
 	if err := <-started; err != nil {
 		return err
 	}
+	id, err := waitNativeVerificationAdmission(ctx, a, s, previous)
+	if err != nil {
+		return err
+	}
 	ticker := time.NewTicker(20 * time.Millisecond)
 	defer ticker.Stop()
 	for {
@@ -816,7 +821,7 @@ func nativeVerificationSmoke(ctx context.Context, a *app.Application, s *screen)
 		}
 		state := s.service.Snapshot()
 		for _, operation := range state.Operations {
-			if operation.ID != state.LastOperation {
+			if operation.ID != id {
 				continue
 			}
 			if operation.Status == "failed" || operation.Status == "canceled" {

@@ -1,0 +1,26 @@
+{
+  "original_failure_reproduced": true,
+  "exit_code": 1,
+  "elapsed_s": 4.380962542025372,
+  "command": [
+    "go",
+    "test",
+    "-C",
+    "desktop",
+    "-race",
+    "-tags=offscreen",
+    "-count=1",
+    "-timeout=60s",
+    "-run",
+    "^TestMountedVerificationStartUsesUnfinishedDuration$",
+    "-v",
+    "./..."
+  ],
+  "source_commit": "c28c564919e61fe9b76de148337c5ba9b332e11d",
+  "source_sha256": {
+    "desktop/main.go": "2c224411f11c8e1caba8aa5a91b86ad02bd28443804edb0b14d929f72f7ef1e6",
+    "desktop/verification.go": "550f32b3d90b99269bce6777233b68e9329b2ae704b5b2fca60a1a368fbab406",
+    "desktop/verification_handoff_offscreen_test.go": "8e70d8e4627e9cc68e6ea2167b6fa3f643de31614e150201f442bd2a1355e621"
+  },
+  "scope": "Production assembled callbacks through pinned retained widgets/router; no physical OS input"
+}

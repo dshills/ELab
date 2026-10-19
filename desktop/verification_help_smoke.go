@@ -53,6 +53,10 @@ func nativeVerificationFailureSmoke(ctx context.Context, a *app.Application, s *
 	}); err != nil {
 		return err
 	}
+	id, err := waitNativeVerificationAdmission(ctx, a, s, before.LastOperation)
+	if err != nil {
+		return err
+	}
 	ticker := time.NewTicker(10 * time.Millisecond)
 	defer ticker.Stop()
 	for {
@@ -63,7 +67,7 @@ func nativeVerificationFailureSmoke(ctx context.Context, a *app.Application, s *
 		}
 		state := s.service.Snapshot()
 		for _, operation := range state.Operations {
-			if operation.ID != state.LastOperation || operation.Status == "queued" || operation.Status == "running" {
+			if operation.ID != id || operation.Status == "queued" || operation.Status == "running" {
 				continue
 			}
 			if operation.Status != "failed" || operation.FailureHelp == nil || operation.Error == nil || operation.Error.Code != "solve-failed" || !reflect.DeepEqual(before.Transient, state.Transient) || before.Document != state.Document || state.Verification != nil {

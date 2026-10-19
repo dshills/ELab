@@ -155,3 +155,20 @@ func view(s *screen) {
 		}
 	}
 }
+
+func TestInventoryTracksVerificationSettlementFactory(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "view.go"), []byte(`package main
+ func view(s *screen) { s.verificationAction(state,false); s.verificationAction(state,true) }`), 0600); err != nil {
+		t.Fatal(err)
+	}
+	r, err := Audit(dir)
+	if err != nil || len(r.Issues) != 0 || len(r.Sites) != 2 {
+		t.Fatal("verification factories omitted", r.Sites, r.Issues, err)
+	}
+	for _, site := range r.Sites {
+		if site.Kind != "callback-factory" || site.Status != "requires-binding-review" || len(site.Commands) != 0 {
+			t.Fatal("factory must not invent routes or runtime coverage", site)
+		}
+	}
+}

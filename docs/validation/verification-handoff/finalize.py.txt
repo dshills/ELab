@@ -1,0 +1,27 @@
+from pathlib import Path
+import gzip,hashlib,json,shutil
+root=Path('/Users/dshills/Development/projects/ELab');folder=root/'docs/validation/verification-handoff';stage=root/'build/verification-handoff'
+read=lambda p:json.loads(p.read_text())
+quality=read(folder/'quality.json');native=read(folder/'native-smoke.json');focused=read(folder/'focused.json');original=read(folder/'final-test-original.json')
+assert quality['passed'] and quality['exit_code']==0 and native['passed'] and native['native_exit_code']==0 and native['owned_process_absent'] and focused['passed']
+assert original['failed_leaf_cases']==11 and original['failed_test_nodes']==13
+assert not (folder/'checkpoint.json').exists()
+for name in ['record-before.py','record-tests.py','record-quality.py','native-check.py','check-invalid-continuation.py','finalize.py']:
+ shutil.copyfile(stage/name,folder/(name+'.txt'))
+for name in ['invalid-continuation.go.txt','invalid-continuation-overlay.json']:
+ shutil.copyfile(stage/name,folder/name)
+for p in list(folder.iterdir()):
+ if p.name.endswith(('-stdout.txt','-stderr.txt','-build-info.txt')) or p.name == 'original-test-helper.go.txt':
+  p.with_suffix(p.suffix+'.gz').write_bytes(gzip.compress(p.read_bytes(),mtime=0));p.unlink()
+p=folder/'README.md';s=p.read_text().replace('Final full source quality and general development native smoke are recorded in `quality.json` and `native-smoke.json` when complete.',f"Final full source quality passes in {quality['elapsed_s']:.3f} s, including lint, 54 Python checks, root/native race tests, vet and registered mounted tests. General development native smoke passes in {native['elapsed_s']:.3f} s with exit 0 and no owned process remaining. Records are in `quality.json` and `native-smoke.json`.");p.write_text(s)
+
+p=root/'README.md';text=p.read_text().replace('The guarded source repair is under validation; /166 remains unchanged and affected.', 'The guarded source repair passes full source quality and development native smoke; clean replacement packaging is pending. /166 remains unchanged and affected.');p.write_text(text)
+p=root/'research/34-first-version-plan.md';text=p.read_text().replace('Verify form blocker reproduced; source repair in validation.', 'Verify form blocker reproduced; source repair validated.').replace('full quality and development native smoke are pending.', f"full source quality passes in {quality['elapsed_s']:.3f} s and development native smoke in {native['elapsed_s']:.3f} s, with the failed fixture runs retained.").replace('Current delivery step: qualify the Verify source repair, then build one clean replacement.', 'Current delivery step: build one clean replacement from the validated Verify repair.')
+row='| Verify first-click fields and invalid-text fallback | **Source repair validated; clean replacement pending.** Eleven original-production mounted failures, independent agent sample/RC-law comparisons, guarded deferred/refusal/viewport tests, full source quality and development native smoke pass. The failed native fixture assumptions and their bounded repairs are retained. [Proof](../docs/validation/verification-handoff/README.md). /166 stays preserved and affected; no new physical OS/reader/IME or owner-acceptance claim. |\n'
+text=text.replace('| Preset refuses its own value-field commit |',row+'| Preset refuses its own value-field commit |',1);p.write_text(text)
+p=root/'research/35-first-version-review.md';text=p.read_text().replace('The guarded source repair is being validated and still needs a clean replacement.', 'The guarded source repair passes its documented source/development tests and still needs a clean replacement.');p.write_text(text)
+p=root/'research/ui-audit/README.md';text=p.read_text().replace('Full quality/native-development validation is in progress.',f"Full source quality passes in {quality['elapsed_s']:.3f} s and development native smoke in {native['elapsed_s']:.3f} s. Failed fixture assumptions and their guarded repairs are retained.");p.write_text(text)
+
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+r=dict(status='source_repair_validated_replacement_pending',original_source_commit='c28c564919e61fe9b76de148337c5ba9b332e11d',source_sha256=quality['source_sha256'],source_quality=quality,general_native_smoke=native,original_failed_leaf_cases=11,scope='Production assembled retained-widget/router tests, independent public-agent sample/RC-law comparisons and general development native smoke. No new physical OS/IME/reader, visible-latency or clean replacement qualification.',public_commands_changed=False,models_changed=False,project_format_changed=False,sdk_changed=False,owner_walkthrough='Not tried yet',owner_acceptance=False,canonical_promoted=False,new_app_release_created=False,evidence_sha256={p.relative_to(folder).as_posix():sha(p) for p in sorted(folder.rglob('*')) if p.is_file()})
+(folder/'checkpoint.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps(dict(sealed_files=len(r['evidence_sha256']),quality_s=quality['elapsed_s'],native_smoke_s=native['elapsed_s'],new_release_created=False)))

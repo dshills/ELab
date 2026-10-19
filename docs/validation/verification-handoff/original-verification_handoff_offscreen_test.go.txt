@@ -1,0 +1,61 @@
+//go:build offscreen
+
+package main
+
+import (
+	"reflect"
+	"testing"
+
+	"cogentcore.org/core/events"
+	"cogentcore.org/core/events/key"
+	"github.com/dshills/vellum/drivers/cogent"
+	"github.com/dshills/vellum/ui"
+)
+
+func mountedVerificationStart(t *testing.T, s *screen) *mountedControlWindow {
+	t.Helper()
+	m := newMountedControlWindow(t, s, func() ui.Node {
+		assembled := s.view()
+		root := ui.Node{ID: "root", Kind: ui.Column, Focus: ui.FocusRequest{ID: "verify-duration", Sequence: 1}}
+		for _, id := range []string{"verify-duration", "verify-start"} {
+			node, ok := findNode(assembled, id)
+			if !ok {
+				t.Fatalf("missing Verify control %s", id)
+			}
+			root.Children = append(root.Children, node)
+		}
+		return root
+	})
+	s.settleField = func(id string, done func(error)) error {
+		return cogent.SettleTextField(m.ctx, s.app, "main", id, done)
+	}
+	return m
+}
+
+func TestMountedVerificationStartUsesUnfinishedDuration(t *testing.T) {
+	s, cleanup := testScreen(t)
+	t.Cleanup(cleanup)
+	uiAction(t, s, "example.rc", nil)
+	agentAction(t, s.service, "simulation.pause", struct{}{})
+	agentAction(t, s.service, "simulation.restart", struct{}{})
+	m := mountedVerificationStart(t, s)
+	before := s.service.Snapshot()
+	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+	for _, r := range "200 ms" {
+		m.input(cogent.ManualInput{Type: events.KeyChord, Rune: r})
+	}
+	if field := mountedControlElement(t, m, "verify-duration"); field.Value != "200 ms" || !reflect.DeepEqual(before, s.service.Snapshot()) {
+		t.Fatal("fixture must retain private duration without changing accepted settings", field.Value)
+	}
+	clickMountedControl(t, m, "verify-start")
+	after := s.service.Snapshot()
+	if s.errorMessage != "" || len(after.Operations) != len(before.Operations)+1 || after.VerificationSettings.Duration != .2 {
+		t.Fatalf("one Verify click did not capture typed duration: duration=%g operations=%d→%d revision=%d→%d error=%s", after.VerificationSettings.Duration, len(before.Operations), len(after.Operations), before.CommandRevision, after.CommandRevision, s.errorMessage)
+	}
+	if after.Operations[len(after.Operations)-1].RequestedDuration != .2 {
+		t.Fatal("Verify captured the old duration")
+	}
+	if before.RunID != after.RunID || !reflect.DeepEqual(before.Transient, after.Transient) || !reflect.DeepEqual(before.Components, after.Components) || !reflect.DeepEqual(before.Wires, after.Wires) {
+		t.Fatal("independent verification changed the live experiment")
+	}
+}

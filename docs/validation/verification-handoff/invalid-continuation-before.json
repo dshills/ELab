@@ -1,0 +1,27 @@
+{
+  "reproduced": true,
+  "exit_code": 1,
+  "elapsed_s": 8.193314332980663,
+  "command": [
+    "go",
+    "test",
+    "-C",
+    "desktop",
+    "-overlay",
+    "/Users/dshills/Development/projects/ELab/build/verification-handoff/invalid-continuation-overlay.json",
+    "-race",
+    "-tags=offscreen",
+    "-count=1",
+    "-timeout=60s",
+    "-run",
+    "^TestMountedVerificationInvalidDurationSurvivesStepEdit$",
+    "-v",
+    "./..."
+  ],
+  "scope": "Additional mounted field-refusal check against the initial repair; separate from original /166 production replay",
+  "source_sha256": {
+    "desktop/main.go": "158e08abbd7fb160f4a63aee62b92b59b42a11bd1f54cfd50bddf4942a5c455e",
+    "desktop/verification_actions.go": "3e9f0f09f33f7a4d4474c2dacb76c10beedf6097bd36f06e4e842ad347d6f271"
+  },
+  "overlay_test_sha256": "e4d2b6eb671172dc445ac261158ac00d4ad5743dca93b54c8e8faffd9d6212b5"
+}

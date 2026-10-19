@@ -1,0 +1,8 @@
+import hashlib,json,os,subprocess,time
+from pathlib import Path
+root=Path('/Users/dshills/Development/projects/ELab');folder=root/'docs/validation/verification-handoff'
+files=['desktop/main.go','desktop/verification.go','desktop/verification_handoff_offscreen_test.go']
+for name in files:(folder/('original-'+Path(name).name+'.txt')).write_bytes((root/name).read_bytes())
+args=['go','test','-C','desktop','-race','-tags=offscreen','-count=1','-timeout=60s','-run','^TestMountedVerificationStartUsesUnfinishedDuration$','-v','./...'];env=dict(os.environ,GOWORK='off',GOCACHE=str(root/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native');start=time.monotonic();p=subprocess.run(args,cwd=root,env=env,capture_output=True,text=True,timeout=120)
+(folder/'before-stdout.txt').write_text(p.stdout);(folder/'before-stderr.txt').write_text(p.stderr);assert p.returncode==1 and 'operations=0→0' in p.stdout and 'expected command revision' in p.stdout
+r=dict(original_failure_reproduced=True,exit_code=p.returncode,elapsed_s=time.monotonic()-start,command=args,source_commit='c28c564919e61fe9b76de148337c5ba9b332e11d',source_sha256={name:hashlib.sha256((root/name).read_bytes()).hexdigest() for name in files},scope='Production assembled callbacks through pinned retained widgets/router; no physical OS input');(folder/'before.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps({k:r[k] for k in ['original_failure_reproduced','exit_code','elapsed_s']}))

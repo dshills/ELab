@@ -228,6 +228,9 @@ type screen struct {
 	settleField                         func(string, func(error)) error
 	settleNumber                        func(string, func(error)) error
 	pendingValueApply                   *valueApply
+	verificationAccepted                *verificationContinuation
+	verificationRejected                map[string]verificationFieldRejection
+	pendingVerificationAction           *verificationActionWork
 	valueDraftAccepted                  *valueDraftContinuation
 	outputPageAccepted                  *outputPageContinuation
 	recordedTimingAccepted              *recordedTimingContinuation

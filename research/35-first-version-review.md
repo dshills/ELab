@@ -42,6 +42,7 @@ In another terminal, run `./elab-agent --connect /absolute/path/to/endpoint.json
 
 ## Review boundary and known limits
 
+- **New Verify blocker in this preserved /166 package:** unfinished duration/sample step can refuse the first click; numeric startup drafts can capture old values; invalid duration can use prior settings. The guarded source repair passes its documented source/development tests and still needs a clean replacement. Until then, commit valid Verify fields with Enter and check the accepted values before starting a capture. [Evidence](../docs/validation/verification-handoff/README.md).
 - Tested on this Apple Silicon Mac with macOS 26.6.2. The enforced minimum is 1040×720 in the mounted UI's units; the observed native frame is **1053×762 pixels**. App windows at 1280×800 and 1440×900 were inspected earlier. OS display modes, other hardware and monitor transitions remain unqualified.
 - A dense 64-part/100-node stress circuit reaches the existing 100 ms integration work limit before producing a sample; the committed graph and physical state are preserved. Supported size does not guarantee convergence.
 - Educational generic device models have the limits shown in the app. This is not general SPICE compatibility or PCB layout software.

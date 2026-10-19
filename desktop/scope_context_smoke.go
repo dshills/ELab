@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 	"reflect"
+	"time"
 
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/app"
@@ -64,27 +65,51 @@ func nativeScopeContextSmoke(ctx context.Context, a *app.Application, s *screen)
 	if err := <-ready; err != nil {
 		return err
 	}
-	if _, err := smokeScopeHash(ctx, a, s, nil); err != nil {
-		return err
-	}
-	if err := a.PostWait(ctx, func() {
-		frame := s.scope.frame.Load()
-		if frame == nil {
-			ready <- fmt.Errorf("fresh scope context missing")
-			return
+	// A canvas readback may precede a deferred viewport publication. Wait for
+	// an actually rebuilt plot with current input context, then apply both
+	// gesture events on one owner turn. Never rebase a stale prepared frame.
+	bounded, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+	for {
+		if _, err := smokeScopeHash(bounded, a, s, nil); err != nil {
+			return err
 		}
-		before := s.service.Snapshot()
-		s.scope.cursorGesture(frame, frame.left+(frame.right-frame.left)*.25, true)
-		s.scope.cursorGesture(frame, frame.left+(frame.right-frame.left)*.75, false)
-		s.scope.gesture = nil
-		after := s.service.Snapshot()
-		if after.Scope.A == nil || math.Abs(after.Scope.A.Requested-.014) > 1e-15 || s.errorMessage != "" || before.RunID != after.RunID || before.Transient.Sample != after.Transient.Sample || before.Document != after.Document || !reflect.DeepEqual(before.UndoEntry, after.UndoEntry) {
-			ready <- fmt.Errorf("fresh prepared scope drag failed or changed live work")
-			return
+		type outcome struct {
+			fresh bool
+			err   error
 		}
-		ready <- nil
-	}); err != nil {
-		return err
+		checked := make(chan outcome, 1)
+		if err := a.PostWait(bounded, func() {
+			frame := s.scope.frame.Load()
+			before := s.service.Snapshot()
+			if frame == nil || frame.revision != before.CommandRevision || frame.generation != before.Document.Generation {
+				checked <- outcome{}
+				return
+			}
+			s.scope.cursorGesture(frame, frame.left+(frame.right-frame.left)*.25, true)
+			s.scope.cursorGesture(frame, frame.left+(frame.right-frame.left)*.75, false)
+			s.scope.gesture = nil
+			after := s.service.Snapshot()
+			var failure error
+			if after.Scope.A == nil || math.Abs(after.Scope.A.Requested-.014) > 1e-15 || s.errorMessage != "" || before.RunID != after.RunID || before.Transient.Sample != after.Transient.Sample || before.Document != after.Document || !reflect.DeepEqual(before.UndoEntry, after.UndoEntry) {
+				failure = fmt.Errorf("fresh prepared scope drag failed or changed live work: frame=%+v command_revision=%d→%d cursor=%+v error=%q run_preserved=%t sample_preserved=%t document_preserved=%t history_preserved=%t", frame, before.CommandRevision, after.CommandRevision, after.Scope.A, s.errorMessage, before.RunID == after.RunID, before.Transient.Sample == after.Transient.Sample, before.Document == after.Document, reflect.DeepEqual(before.UndoEntry, after.UndoEntry))
+			}
+			checked <- outcome{fresh: true, err: failure}
+		}); err != nil {
+			return err
+		}
+		select {
+		case result := <-checked:
+			if result.fresh {
+				return result.err
+			}
+		case <-bounded.Done():
+			return bounded.Err()
+		}
+		select {
+		case <-bounded.Done():
+			return fmt.Errorf("scope did not prepare current input context: %w", bounded.Err())
+		case <-time.After(10 * time.Millisecond):
+		}
 	}
-	return <-ready
 }

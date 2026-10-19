@@ -24,13 +24,17 @@ func nativeRecordingComparisonSmoke(ctx context.Context, a *app.Application, s *
 	if err := <-result; err != nil {
 		return err
 	}
+	id, err := waitNativeVerificationAdmission(ctx, a, s, before.LastOperation)
+	if err != nil {
+		return err
+	}
 	ticker := time.NewTicker(20 * time.Millisecond)
 	defer ticker.Stop()
 	for {
 		state := s.service.Snapshot()
 		ready := false
 		for _, op := range state.Operations {
-			if op.ID == state.LastOperation {
+			if op.ID == id {
 				if op.Status == "failed" || op.Status == "canceled" {
 					return fmt.Errorf("comparison smoke verification failed: %+v", op)
 				}

@@ -1,6 +1,6 @@
 # Native control and command inventory
 
-The [source ledger](13-native-command-inventory.json) records **69 production native Go files, 391 source sites and 162 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 132 public commands. The remaining 30 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
+The [source ledger](13-native-command-inventory.json) records **70 production native Go files, 393 source sites and 162 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 132 public commands. The remaining 30 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
 
 **161 sites require binding review.** The other categories are 204 literal routes, nine declared native-wrapper/menu sites and 17 registry declarations. These are syntax sites, including overlapping factories and callbacks; they are not 391 unique visible controls or 132 runtime-qualified capabilities. No literal route names an unknown command.
 
@@ -237,3 +237,5 @@ The October 19 timing-feedback repair changes only `recorded_timing_actions.go` 
 
 
 Clean 0.148.0 /165 binds the unchanged 69-file/391-site/162-ID/132-route ledger to all 788 sealed review entries and 345 runtime inputs. [Receipt](ui-audit/first-version/recorded-timing-feedback-review-checkpoint.json). Exact candidate-executable native timing input now passes private threshold/menu/refusal/correction and AX paging against the packaged agent; copied API timing, MOSFET/RC and reference integration pass separately. Original source checkpoints retain historical pending scopes; this later receipt supersedes replacement status without altering their evidence. Complete per-binding/OS/reader conformance remains partial.
+
+October 19: the [Verify form repair](../docs/validation/verification-handoff/README.md) adds one guarded action helper and records its two factories without inventing literal routes. The ledger has 70 native files /393 sites /170 requiring binding review /162 public IDs /132 routed IDs; public IDs, aliases and route sets are unchanged. The static review category does not count untested bindings. Source-mounted private fields and independent public-agent captures retain separate scopes; clean replacement and physical OS/reader/IME qualification remain open.

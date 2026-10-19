@@ -1,0 +1,23 @@
+from pathlib import Path
+import hashlib,json,os,subprocess,time
+root=Path('/Users/dshills/Development/projects/ELab');stage=root/'build/verification-handoff';folder=root/'docs/validation/verification-handoff'
+extra='''
+func TestMountedVerificationInvalidDurationSurvivesStepEdit(t *testing.T) {
+ s,cleanup:=testScreen(t);t.Cleanup(cleanup)
+ uiAction(t,s,"example.rc",nil);agentAction(t,s.service,"simulation.pause",struct{}{})
+ m:=mountedVerificationStart(t,s)
+ typeMountedCursor(t,m,"verify-duration","nope")
+ clickMountedControl(t,m,"verify-start")
+ if s.errorMessage=="" || len(s.service.Snapshot().Operations)!=0 {t.Fatal("first invalid duration started capture")}
+ typeMountedCursor(t,m,"verify-step","1 ms")
+ clickMountedControl(t,m,"verify-start")
+ if s.errorMessage=="" || len(s.service.Snapshot().Operations)!=0 {t.Fatal("editing sample step forgot the invalid duration and captured old settings")}
+}
+'''
+fixture=stage/'invalid-continuation.go.txt';fixture.write_text((root/'desktop/verification_handoff_offscreen_test.go').read_text()+extra)
+overlay=stage/'invalid-continuation-overlay.json';overlay.write_text(json.dumps({'Replace':{str(root/'desktop/verification_handoff_offscreen_test.go'):str(fixture)}},indent=2)+'\n')
+args=['go','test','-C','desktop','-overlay',str(overlay),'-race','-tags=offscreen','-count=1','-timeout=60s','-run','^TestMountedVerificationInvalidDurationSurvivesStepEdit$','-v','./...'];env=dict(os.environ,GOWORK='off',GOCACHE=str(root/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native');start=time.monotonic();p=subprocess.run(args,cwd=root,env=env,capture_output=True,timeout=120)
+for suffix,data in [('stdout',p.stdout),('stderr',p.stderr)]: (folder/f'invalid-continuation-before-{suffix}.txt').write_bytes(data)
+assert p.returncode==1 and b'editing sample step forgot the invalid duration' in p.stdout
+(folder/'invalid-continuation-before.json').write_text(json.dumps(dict(reproduced=True,exit_code=p.returncode,elapsed_s=time.monotonic()-start,command=args,source_sha256={name:hashlib.sha256((root/name).read_bytes()).hexdigest() for name in ['desktop/main.go','desktop/verification_actions.go']},overlay_test_sha256=hashlib.sha256(fixture.read_bytes()).hexdigest(),scope='Additional mounted field-refusal check against the initial repair; separate from original /166 production replay'),indent=2)+'\n')
+(stage/'additional-mounted-test.txt').write_text(extra);print(dict(reproduced=True,exit_code=p.returncode))

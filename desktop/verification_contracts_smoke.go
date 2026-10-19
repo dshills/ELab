@@ -48,6 +48,10 @@ func nativeVerificationContractsSmoke(ctx context.Context, a *app.Application, s
 	if err := <-ready; err != nil {
 		return err
 	}
+	id, err := waitNativeVerificationAdmission(ctx, a, s, before.LastOperation)
+	if err != nil {
+		return err
+	}
 	ticker := time.NewTicker(20 * time.Millisecond)
 	defer ticker.Stop()
 	for {
@@ -58,7 +62,7 @@ func nativeVerificationContractsSmoke(ctx context.Context, a *app.Application, s
 		}
 		state := s.service.Snapshot()
 		for _, operation := range state.Operations {
-			if operation.ID != state.LastOperation {
+			if operation.ID != id {
 				continue
 			}
 			if operation.Status == "failed" || operation.Status == "canceled" {

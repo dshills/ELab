@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "exit_code": 0,
+  "elapsed_s": 10.752764000091702,
+  "command": [
+    "go",
+    "test",
+    "-C",
+    "desktop",
+    "-race",
+    "-tags=offscreen",
+    "-count=1",
+    "-timeout=60s",
+    "-run",
+    "^Test(MountedVerification|Verification(Deferred|Settlement|OwnViewport))",
+    "-v",
+    "./..."
+  ],
+  "test_sha256": {
+    "desktop/verification_handoff_test.go": "f1ec96a28437cb496ccd2b26cd963dff6611a7b748a150f8f6f264450e41a555",
+    "desktop/verification_handoff_offscreen_test.go": "90425de11445669411ecf325c95eb6788df255527833f70dafc84b8f6f56fd90"
+  }
+}

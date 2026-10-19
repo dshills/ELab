@@ -9,6 +9,7 @@ import (
 )
 
 func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
+	s.pruneVerificationRejections(state)
 	cfg := state.VerificationSettings
 	transient := workbench.IsTransientAnalysis(state.Analysis)
 	active := false
@@ -30,7 +31,7 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 				name = "sample_step_s"
 			}
 			nodes = append(nodes, quiet("verify-label-"+field.id, field.label), timeField("verify-"+field.id, field.label, field.value, false, func(text string) {
-				s.invokeAtCommandRevision("verification.settings.set", textFieldParams(cfg, name, text), state.CommandRevision)
+				s.changeVerificationSettings(state, "verify-"+field.id, textFieldParams(cfg, name, text))
 			}))
 		}
 		modes := []ui.Option{}
@@ -51,7 +52,7 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 		nodes = append(nodes, ui.Node{ID: "verify-mode", Kind: ui.Selector, Options: modes, SelectedID: cfg.InputMode, Accessibility: ui.Accessibility{Name: "Verification input mode"}, Change: func(e ui.ChangeEvent) {
 			next := cfg
 			next.InputMode = e.SelectedID
-			s.invoke("verification.settings.set", next)
+			s.changeVerificationSettings(state, "verify-mode", next)
 		}})
 		initial := state.TransientSettings.InitialVoltage
 		if cfg.InitialVoltage != nil {
@@ -61,7 +62,7 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 			next := cfg
 			v := float64(e.Number)
 			next.InitialVoltage = &v
-			s.invoke("verification.settings.set", next)
+			s.changeVerificationSettings(state, "verify-initial", next)
 		}})
 		graph := workbench.Graph{Components: state.Components, Wires: state.Wires}
 		compiled, _, diagnostic := graph.Compile()
@@ -101,28 +102,19 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 				if !found {
 					next.Capacitors = append(next.Capacitors, workbench.CapacitorInitial{ID: part.ID, Voltage: float64(e.Number)})
 				}
-				s.invoke("verification.settings.set", next)
+				s.changeVerificationSettings(state, "verify-cap-"+part.ID, next)
 			}})
 		}
 	}
-	reset := cfg
-	reset.InitialVoltage = nil
-	reset.Capacitors = []workbench.CapacitorInitial{}
-	reset.InputMode = "auto"
-	reset.Step = 0
-	resetButton := s.action("verify-project-startup", "Use project startup", "verification.settings.set", reset)
+	resetButton := s.verificationAction(state, true)
 	resetButton.Accessibility.Name = "Use project startup and sampling"
 	resetButton.Accessibility.Help = "Clear verification input mode, sampling and startup overrides; preserve duration and the live circuit."
 	nodes = append(nodes, resetButton)
 
-	duration := cfg.Duration
-	if !transient {
-		duration = 0
-	}
-	button := s.action("verify-start", "Verify", "simulation.verify", workbench.VerifyParams{Duration: &duration})
+	button := s.verificationAction(state, false)
 	graph := workbench.Graph{Components: state.Components, Wires: state.Wires}
 	_, _, diagnostic := graph.Compile()
-	button.Disabled = active || diagnostic != nil
+	button.Disabled = button.Disabled || active || diagnostic != nil
 	nodes = append(nodes, button)
 	if !transient {
 		nodes = append(nodes, quiet("verify-dc-help", "DC records one operating point. Use project startup to clear transient overrides."))

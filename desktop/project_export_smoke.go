@@ -43,13 +43,17 @@ func nativeExportSmoke(ctx context.Context, a *app.Application, s *screen) error
 	}
 	for _, control := range []string{"export-svg", "export-csv", "verify-export-json", "verify-export-csv"} {
 		if control == "verify-export-json" {
+			previous := s.service.Snapshot().LastOperation
 			if err := a.PostWait(ctx, func() { action <- smokeUI(s, "verify-start", nil) }); err != nil {
 				return err
 			}
 			if err := <-action; err != nil {
 				return err
 			}
-			id := s.service.Snapshot().LastOperation
+			id, err := waitNativeVerificationAdmission(ctx, a, s, previous)
+			if err != nil {
+				return err
+			}
 			for {
 				raw := []byte(fmt.Sprintf(`{"id":%q}`, id))
 				response := s.service.Dispatch(ctx, workbench.Request{Version: 1, ID: "smoke-inspect", Command: "operation.inspect", Params: raw}, "smoke")

@@ -1,0 +1,24 @@
+{
+  "original_failure_reproduced": true,
+  "exit_code": 1,
+  "elapsed_s": 11.283222665893845,
+  "command": [
+    "go",
+    "test",
+    "-C",
+    "desktop",
+    "-overlay",
+    "/Users/dshills/Development/projects/ELab/docs/validation/verification-handoff/original-overlay.json",
+    "-race",
+    "-tags=offscreen",
+    "-count=1",
+    "-timeout=60s",
+    "-run",
+    "^TestMountedVerification",
+    "-v",
+    "./..."
+  ],
+  "failed_test_nodes": 13,
+  "failed_leaf_cases": 11,
+  "scope": "Final mounted tests with original main, verification, viewport and native fixture source; new action/admission helpers and helper-specific tests omitted via overlay; no OS input"
+}
