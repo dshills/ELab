@@ -1,0 +1,369 @@
+{
+  "date": "2026-10-19",
+  "version": "0.149.0",
+  "build": "166",
+  "status": "Value-preset field handoff repair qualified for private owner review within source-mounted and copied-runtime scopes; broader gates remain open",
+  "source_commit": "c28c564919e61fe9b76de148337c5ba9b332e11d",
+  "clean_build_vcs": true,
+  "native_sha256": "25208975e7baa4bfd0f2150e6cf96ae69d647c2bbcc8f626ec861e492399d3c3",
+  "agent_sha256": "0537128c29cecc3afda8542647162ac545600c1141b244c028475f05ea64e3e0",
+  "sdk": {
+    "schema": 1,
+    "archive": "third_party/vellum/vellum-b22478c.tar.gz",
+    "archive_bytes": 18631976,
+    "sha256": "22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968",
+    "manifest_sha256": "dde338180afa8e27828853477ac42cfa96bc74054fb0f69bf1c4c96a8b259648",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-b22478c",
+    "source_commit": "b22478cf8cec8dda1ccdcd93d6ff6b62e2cc11de",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 7458,
+    "bootstrap": {
+      "scripts/check-sdk.py": "b8062fbd4c57d1d8cb4d75a094184e1a5fa108cfa811fe9fb390f99f6d66be38",
+      "scripts/child_process.py": "04ba2610ddf112e936e8adcd9a81c03cff422843f993c2ce8a9e1acd96f39c9c",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "803d981c00f32d08a370577b37094848b2c79085cf3303a99b23d2a94336ac2c",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541"
+    }
+  },
+  "quality": {
+    "passed": true,
+    "exit_code": 0,
+    "command": "./scripts/check.sh",
+    "elapsed_s": 207.6708312080009,
+    "source_sha256": {
+      "desktop/component_inspector.go": "76c50a03f32d83b1a7fb313676be77aca7f998e6a122eff3405153fe8c238f25",
+      "desktop/value_apply.go": "b0e380210aa477f9d848ed5bdc69502353c653f3ec6259d74c4159ed35df504e",
+      "desktop/value_presets_test.go": "4de0e06c17dac8b1747265b8642b9b9b710c26c7bc5b271e7b0edea374890844",
+      "desktop/value_presets_offscreen_test.go": "23d69743d50491a719ce93a4f65db6597c39fd611fedd389fbb809c87d70a2d8",
+      "internal/uiaudit/audit.go": "e407b3eafc1d927107f7b2d34ff72361b5d3edf0d01a333e531e0620b6308f63",
+      "internal/uiaudit/audit_test.go": "dbe875bc133b9ad412c5ffe1a73164d6f92bb56d35c70b751f6906c68d670d36",
+      "research/13-native-command-inventory.json": "4a6090fc184607354f4e0988ef8450c727c13988c6a1594a3b6f79ddf221a93a"
+    },
+    "scope": "Complete source quality on the final repair source; exact clean package separately qualified"
+  },
+  "copied_runtime": [
+    {
+      "name": "native-smoke",
+      "command": [
+        "/private/tmp/elab-first-version-166-runtime/native",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 39.81716758396942
+    },
+    {
+      "name": "public-suites",
+      "command": [
+        "/Users/dshills/Development/projects/ELab/build/first-version-166-tools/build/elab-conformance",
+        "--agent-binary",
+        "/private/tmp/elab-first-version-166-runtime/agent",
+        "--native-binary",
+        "/private/tmp/elab-first-version-166-runtime/native",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/private/tmp/elab-first-version-166-runtime/public"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 51.172263749991544
+    }
+  ],
+  "runtime_geometry_protection": {
+    "controls": {
+      "read": {
+        "denied": true,
+        "errno": 1
+      },
+      "write_without_truncate": {
+        "denied": true,
+        "errno": 1
+      }
+    },
+    "unchanged": true,
+    "scope": "Test process isolation; ordinary default startup remains unqualified"
+  },
+  "preset_handoff": {
+    "source_evidence": "Value-preset-source-repair/checkpoint.json",
+    "original_failed_presets": 4,
+    "mounted_values_match_agent": true,
+    "one_circuit_undo": true,
+    "held_agent_refusal_and_fresh_action": true,
+    "deferred_and_interruption_guards": true,
+    "copied_command_values": {
+      "passed": true,
+      "values": 4,
+      "native_headless_stage_matches": 8,
+      "single_circuit_undo": true,
+      "scope": "Copied native/headless public component.set commands for the four preset values; UI field handoff is separately qualified by retained-widget source regressions, not this API sequence"
+    },
+    "scope": "Retained-widget production callbacks and copied native/headless commands; no new physical OS input claim"
+  },
+  "acceptance": {
+    "passed": true,
+    "scope": "exact copied 0.149.0 /166 native runtime with development-file/outbound-IP denial; public commands",
+    "value_correction": {
+      "passed": true,
+      "refusal_code": "invalid-params",
+      "rejected_edit_preserves_physics_and_history": true,
+      "correction_restarts_once": true,
+      "resistance_ohm": 2200,
+      "current_a": 0.001344737452917332,
+      "scope": "Exact copied native endpoint and headless packaged agent public commands; prior native typing/Apply evidence is a separate development-binary observation"
+    },
+    "preset_value_commands": {
+      "passed": true,
+      "values": 4,
+      "native_headless_stage_matches": 8,
+      "single_circuit_undo": true,
+      "scope": "Copied native/headless public component.set commands for the four preset values; UI field handoff is separately qualified by retained-widget source regressions, not this API sequence"
+    },
+    "live_measurement_ownership": {
+      "passed": true,
+      "scope_stage_matches": 4,
+      "stale_cursor_and_window_revision_refused": true,
+      "restart_clears_live_cursors_and_fixed_window": true,
+      "fresh_cursor_a_s": 0.006,
+      "fresh_cursor_b_s": 0.016,
+      "fresh_window_s": [
+        0.006,
+        0.02
+      ],
+      "retained_samples": 21,
+      "selected_samples": 15,
+      "fresh_measurement_preserves_graph_physics_document_history": true,
+      "scope": "Exact copied native/headless public commands; private native draft reset is separately proven by the two pinned-source mounted ownership regressions"
+    },
+    "recorded_cursors": {
+      "passed": true,
+      "sample_count": 21,
+      "measured_delta_s": 0.008,
+      "scope_stage_matches": 4,
+      "captured_metadata_and_rows_unchanged": true,
+      "live_physics_document_history_unchanged": true,
+      "fresh_recorded_project_reopen": true,
+      "scope": "Exact copied native endpoint and matching headless agent commands on one identical saved capture; mounted one-click input/settlement is separately proven by pinned source regressions"
+    },
+    "recording_targets": {
+      "passed": true,
+      "captures": 2,
+      "rows_per_capture": 21,
+      "resistance_ohm": [
+        10000,
+        20000
+      ],
+      "stale_capture_id_refused": true,
+      "fresh_cursor_seek_window_s": 0.006,
+      "metadata_rows_and_live_physics_history_preserved": true,
+      "fresh_two_capture_reopen": true,
+      "scope": "Exact copied native/headless commands on two distinct saved captures; source mounted tests separately prove private-edit reset across capture selection"
+    },
+    "reference_parity": {
+      "passed": true,
+      "cases": [
+        {
+          "task": "led",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "3fa7d62e283b88765cb8c9b07533254aa899516a8b72298d37121f61e916dd82",
+          "project_sha256": "96635fc0cd1ab4b13258373c4e5ed474dc3239dda4dfc37202cbce59324cc032"
+        },
+        {
+          "task": "rc",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "6380351c8c51640b0221969b97259cf49161989f300d4eb1b9bdcf885759e338",
+          "project_sha256": "4c86701997fb227c1f3f8e55b2e8ec613ca7a51d75b4061356cd51185203eadf"
+        },
+        {
+          "task": "flasher",
+          "constructed_graph_matches_native_fixture": true,
+          "native_ui_numerical_reference_matches": true,
+          "native_endpoint_matches": true,
+          "fixture_sha256": "b0dc7c61c9d757086937176d7cc8de1539e4cac82e8f95d5f9a00576cc62d4b8",
+          "project_sha256": "d62dba5123d42b3dbf76356a7c28411a46ab09678aad9aa72ec727889c9a7a95"
+        }
+      ],
+      "comparison": "Every component/wire field; every reported result field except run/electrical identities; numerical rel 1e-9 / abs 1e-12",
+      "limitations": [
+        "Native endpoint loading/observation does not replace the recorded physical UI construction walkthrough",
+        "File failure, crash recovery, cancellation and live interaction have separate acceptance checks"
+      ]
+    },
+    "live_grid": {
+      "first_time_s": 2.2,
+      "resume_origin_s": 2.2,
+      "second_time_s": 3.418,
+      "final_time_s": 3.422,
+      "paused_physics_stable": true,
+      "graph_settings_and_run_electrical_preserved": true,
+      "save_reopen_fresh": true
+    },
+    "limits": [
+      "Public command functionality; not new pointer/keyboard evidence or visible p95 qualification",
+      "Earlier retained-control and output-page checks retain their recorded scope. Schematic pointer and keyboard refusal/fresh actions are tested after actual native mesh preparation by semantic injection in the copied-runtime smoke. Standalone Cogent key-binding tests cover replacement refusal, own repeats, navigation/Escape, guarded states and public move/Undo parity. This is not physical NSEvent evidence. Earlier physical UI evidence remains scoped to its recorded build; no physically coalesced OS input/window-blur or visible-latency claim."
+    ],
+    "native_host_closed_normally": true,
+    "shared_geometry_unchanged": true,
+    "elapsed_s": 17.753335791057907
+  },
+  "release_diff": {
+    "base_release": "0.148.0 /165",
+    "base_source_commit": "0e75875abe07d0c172902754aa8acec6062df7dc",
+    "changed_runtime_and_tests": [
+      "desktop/component_inspector.go",
+      "desktop/value_apply.go",
+      "desktop/value_presets_offscreen_test.go",
+      "desktop/value_presets_test.go",
+      "internal/uiaudit/audit.go",
+      "internal/uiaudit/audit_test.go"
+    ],
+    "models_format_commands_and_sdk_unchanged": true
+  },
+  "historical_evidence": {
+    "directory": "Historical-165",
+    "scope": "Original /165 and inherited source/build observations remain historical; numerical engine source unchanged and new public suites pass"
+  },
+  "preserved_bundles": {
+    "0.123.0-140": {
+      "files_verified": 113,
+      "manifest_sha256": "c2d35b4b8cf4920636a987e39b83d4d989729201b9164f0c23372c2ea1602bd3"
+    },
+    "0.124.0-141": {
+      "files_verified": 126,
+      "manifest_sha256": "d4b008f18f06ad0e7eca4b7187af709d3ba9359d27fd67c747181297faf7ed56"
+    },
+    "0.125.0-142": {
+      "files_verified": 124,
+      "manifest_sha256": "45e1fc51016b21e6a3fea9388ce113716075f4bc1e112e03b15e72b12bf69a8e"
+    },
+    "0.126.0-143": {
+      "files_verified": 124,
+      "manifest_sha256": "14d1fbbff5b1be63c13d14bfbb2462bbeeeacce208ad36e4cd54fb41b7d56d12"
+    },
+    "0.127.0-144": {
+      "files_verified": 130,
+      "manifest_sha256": "0073beb958b5128d383380e08d89ed1c5f926c5d14ae6aec6d57ef5e9a53e0ae"
+    },
+    "0.128.0-145": {
+      "files_verified": 131,
+      "manifest_sha256": "93a9e275f8c50995f1cab73ef03b94b62b99192e627ac527ca1ae5d5f46b660b"
+    },
+    "0.129.0-146": {
+      "files_verified": 134,
+      "manifest_sha256": "74ee03a4d3f89271b02df5d4b52edc61b125ac16492a9ae33966b78ea31a2179"
+    },
+    "0.130.0-147-focus": {
+      "files_verified": 139,
+      "manifest_sha256": "d63f38e2adc6e45d314a77453777f464ff3dfbd46e32a9f39e33ed0e6ac068b0"
+    },
+    "0.131.0-148": {
+      "files_verified": 129,
+      "manifest_sha256": "58cd867a86777a96fc8d7f322f9baffa8c0943cbb769908a2f751fdff4197d4c"
+    },
+    "0.132.0-149": {
+      "files_verified": 129,
+      "manifest_sha256": "31ea54a1e7cc531ae4c8745b014dd0c0b966b8df014d9809b682841e3581b797"
+    },
+    "0.133.0-150": {
+      "files_verified": 129,
+      "manifest_sha256": "509f75002de0031fcade4d739481e9fb71a2c298550fc8f645394696522e663c"
+    },
+    "0.134.0-151": {
+      "files_verified": 129,
+      "manifest_sha256": "36c05644dcdcaefe7241b0c78a02bd98fe703ff742b1a398d6095d0a3daa6c57"
+    },
+    "0.135.0-152": {
+      "files_verified": 140,
+      "manifest_sha256": "b8143b6736a122e7dc828781903ff64a56bc47a5e023daf3eacf42ece6ab5306"
+    },
+    "0.136.0-153": {
+      "files_verified": 137,
+      "manifest_sha256": "03ea57f7fdc2aea4d2ef285dbeb990329c32a075f9bc673439a2e0f94bcac73a"
+    },
+    "0.137.0-154": {
+      "files_verified": 151,
+      "manifest_sha256": "ae56437933b9312caf543173a0b1696601badfd40fe7342af1a52bbbcc0999f1"
+    },
+    "0.138.0-155": {
+      "files_verified": 134,
+      "manifest_sha256": "9ef7cd693ad97b6eb0ab58dbe6db8f5b621ca7d69e3dfa7f00aa1a72193e718d"
+    },
+    "0.139.0-156": {
+      "files_verified": 135,
+      "manifest_sha256": "ec49b66aa2c9a10c06df76882245bca16b69addbd8dfceabf6077e3f54da3155"
+    },
+    "0.140.0-157": {
+      "files_verified": 158,
+      "manifest_sha256": "29ecc32819f447565698ce114040d04fe020e8345959562ae006627ed697600f"
+    },
+    "0.141.0-158": {
+      "files_verified": 196,
+      "manifest_sha256": "fa5ccabcae2b0686a3c300c2bd56e8af10144eb5b3e1a7423c0e25914c8e102a"
+    },
+    "0.142.0-159": {
+      "files_verified": 257,
+      "manifest_sha256": "4322975a12d56b48ee40f2d5ebb0d9432a4ae55653422f6bce84130eb10eaab2"
+    },
+    "0.143.0-160": {
+      "files_verified": 343,
+      "manifest_sha256": "fc635bf3e748c54130cfb0c21d932569d55debef4996880e06b1730d696e28ce"
+    },
+    "0.144.0-161": {
+      "files_verified": 381,
+      "manifest_sha256": "df97f993296af968a119863610f9a37d4e57be8211118700b459faa4336701d9"
+    },
+    "0.145.0-162": {
+      "files_verified": 432,
+      "manifest_sha256": "26d1dbc207a5913e981dc5b74904d1f1272a0120327e7fc2ed6a7b773bd328f5"
+    },
+    "0.146.0-163": {
+      "files_verified": 501,
+      "manifest_sha256": "997128f748eda91ae53c9e573e59b6650e0be8a8b3c9ad367c5d43e66d2e61a2"
+    },
+    "0.148.0-165": {
+      "files_verified": 788,
+      "manifest_sha256": "460216af4d18b58410ee833ad31b59f088ca7f44efdac0ff635f19874e395413"
+    }
+  },
+  "preserved_original_147_candidate": {
+    "files_verified": 135,
+    "manifest_sha256": "3aa7dd84084944c9926a907e5c87bbb559a8bbcb1d9ad19309fbf3a1c29b7d29"
+  },
+  "preserved_failed_164_candidate": {
+    "files_verified": 4,
+    "manifest_sha256": "0092d861e829d66af5c68b249fab6dc28688e5397487af3b5c59eed1ef8331ed"
+  },
+  "canonical": {
+    "version": "0.105.0 /120",
+    "native_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c"
+  },
+  "canonical_promoted": false,
+  "owner_acceptance": "Pending: owner answered Not tried yet; no acceptance inferred",
+  "private_alpha_environment_gate": "Owner deferred default-startup/clean-account qualification; remains unqualified",
+  "p0_counts": {
+    "implemented": 17,
+    "partial": 10
+  },
+  "manifest_file_entries": 900,
+  "review_path": "/Users/dshills/Development/projects/ELab/build/ELab-0.149.0-166-review",
+  "launch_note": "Save and quit an earlier review before opening this replacement; no owner app was automatically opened.",
+  "known_limits": [
+    "No new physical OS preset input or general typing/IME/reader qualification",
+    "Visible p95, actual hobbyist study, distribution/signing and owner acceptance remain open",
+    "Default-startup/clean-account gate deferred for private alpha only",
+    "Historical NMOS Pause observation unresolved; dense topology convergence and general device accuracy remain bounded"
+  ]
+}
