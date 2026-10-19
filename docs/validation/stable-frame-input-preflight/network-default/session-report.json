@@ -1,0 +1,71 @@
+{
+  "status": "closed_normally",
+  "stage": "/private/tmp/elab-frame-input-fu4mnrx3",
+  "release": {
+    "source_commit": "0e75875abe07d0c172902754aa8acec6062df7dc",
+    "release": "0.148.0 /165",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.148.0-165-review/elab-agent",
+    "agent_sha256": "3b6daa16b7b583077813f198a072bef6f2a1a62a61d8ce8bdd86f6bb2e6ef13c",
+    "receipt_sha256": "b7f4c75cff764dea3ef43adc0986b4607d07693fd973fdda00620f7da7518648",
+    "ledger_sha256": "c9ea340ca93b9c1ecbf98402f48bd5ffe5ad305e5562ac3f0211fbdf34a9200a",
+    "production_source_files_verified": 69,
+    "runtime_inputs_verified": 345,
+    "manifest_file_entries_verified": 788,
+    "manifest_sha256": "460216af4d18b58410ee833ad31b59f088ca7f44efdac0ff635f19874e395413"
+  },
+  "controls": {
+    "read": {
+      "denied": true,
+      "errno": 1
+    },
+    "write_without_truncate": {
+      "denied": true,
+      "errno": 1
+    }
+  },
+  "shared_geometry_before": {
+    "window-geometry-0.3.6.json": {
+      "sha256": "9666b9dbadc1ca73534406af4e7bbd832f9db24e8519569bde0b5b884c6f14ee",
+      "mode": "0o644"
+    },
+    "window-geometry-0.3.6.lst": {
+      "sha256": "0cacd87c7fb6c83f05737f71248f1b474f1d797d9cf132b4d0816b0e52582f2f",
+      "mode": "0o644"
+    }
+  },
+  "scope": "Stable exact /165 test process: private recovery/appearance paths, sandbox denial of shared Cogent Core reads/writes with default network policy (control). Not default-startup qualification.",
+  "started_utc": "2026-10-19T09:33:47.528285+00:00",
+  "forced_cleanup": false,
+  "eligible_latency_observations": 0,
+  "latency_gate_passed": null,
+  "argv": [
+    "/usr/bin/sandbox-exec",
+    "-f",
+    "/private/tmp/elab-frame-input-fu4mnrx3/session.sb",
+    "/Users/dshills/Development/projects/ELab/build/ELab-0.148.0-165-review/ELab.app/Contents/MacOS/ELab",
+    "--agent-endpoint",
+    "/private/tmp/elab-frame-input-fu4mnrx3/endpoint.json",
+    "--recovery-directory",
+    "/private/tmp/elab-frame-input-fu4mnrx3/recovery",
+    "--appearance-file",
+    "/private/tmp/elab-frame-input-fu4mnrx3/appearance.json"
+  ],
+  "owned_pid": 27806,
+  "native_exit_code": 0,
+  "owned_process_absent": true,
+  "endpoint_removed": true,
+  "shared_geometry_after": {
+    "window-geometry-0.3.6.json": {
+      "sha256": "9666b9dbadc1ca73534406af4e7bbd832f9db24e8519569bde0b5b884c6f14ee",
+      "mode": "0o644"
+    },
+    "window-geometry-0.3.6.lst": {
+      "sha256": "0cacd87c7fb6c83f05737f71248f1b474f1d797d9cf132b4d0816b0e52582f2f",
+      "mode": "0o644"
+    }
+  },
+  "sealed_review_unchanged": true,
+  "final_native_exit_code": 0,
+  "owned_process_absent_after_cleanup": true,
+  "ended_utc": "2026-10-19T09:34:26.168929+00:00"
+}

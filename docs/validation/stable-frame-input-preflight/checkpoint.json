@@ -1,0 +1,111 @@
+{
+  "status": "stable_input_setup_not_qualified",
+  "date": "2026-10-19",
+  "release_receipt_sha256": "b7f4c75cff764dea3ef43adc0986b4607d07693fd973fdda00620f7da7518648",
+  "native_sha256": "f75a72427b4556b163437132a46f0694b5845f6753db5aa9bf61f0d18e6a27de",
+  "cases": {
+    "network-denied": {
+      "owned_pid": 26624,
+      "native_exit_code": 0,
+      "normal_close": true,
+      "shared_geometry_unchanged": true,
+      "endpoint_removed": true,
+      "owned_process_absent": true,
+      "recorder_capture_attempted": false,
+      "bundle_identifier": null,
+      "controls": {
+        "read": {
+          "denied": true,
+          "errno": 1
+        },
+        "write_without_truncate": {
+          "denied": true,
+          "errno": 1
+        }
+      }
+    },
+    "network-default": {
+      "owned_pid": 27806,
+      "native_exit_code": 0,
+      "normal_close": true,
+      "shared_geometry_unchanged": true,
+      "endpoint_removed": true,
+      "owned_process_absent": true,
+      "recorder_capture_attempted": false,
+      "bundle_identifier": null,
+      "controls": {
+        "read": {
+          "denied": true,
+          "errno": 1
+        },
+        "write_without_truncate": {
+          "denied": true,
+          "errno": 1
+        }
+      }
+    }
+  },
+  "recorded_refusal": {
+    "command": "frame-probe --target-windows for PID 26624 and qualified executable/hash",
+    "exit_code": 1,
+    "stderr": "frame-probe: Exact target process/executable identity not established",
+    "source": "Observed tool result; recorder identity checks retained"
+  },
+  "cua_binding": {
+    "target": "/Users/dshills/Development/projects/ELab/build/ELab-0.148.0-165-review/ELab.app",
+    "result": "Running application not found: com.dshills.elab",
+    "tested_case": "network-denied"
+  },
+  "network_denial_explains_missing_bundle_id": false,
+  "root_cause_established": false,
+  "test_input_operated": false,
+  "capture_executed": false,
+  "eligible_latency_observations": 0,
+  "latency_gate_passed": null,
+  "all_matching_native_processes_absent": true,
+  "sealed_review_unchanged": true,
+  "ordinary_startup_qualified": false,
+  "owner_acceptance": false,
+  "evidence_sha256": {
+    "README.md": "e47629a1352db3307d539d1f6d1550301bf181f24b4a349e83f4e7233cfa709a",
+    "network-default/agent-expected.json.gz": "14302767ac4b62f60f23848d04230e7ac92a00917b26f7cd8870f1c3f52c08d2",
+    "network-default/baseline.elab": "9ba929d20c014c45a4a20cc01974d83b574f3112a4ad46c860b01a7a24e1ea2b",
+    "network-default/baseline.json.gz": "8e60006f893f24b98359fb0d8281ac0e8f46eb1987ec256cd7dba65b8b2224fa",
+    "network-default/final.elab": "956801a6b7bb477f871421b0883fb0e0f422c941158c4c6325e1216b63ae2794",
+    "network-default/final.json.gz": "ddcd5c7269dd33973d6d5bde34a3d21ce15dffb6ef79a3b0676c94474715d4cb",
+    "network-default/native-stderr.txt.gz": "bd8b23ffcf637b02d5d72d7038923e9ecb9f0acf105d5ec26f67d74fa3535091",
+    "network-default/native-stdout.txt.gz": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83",
+    "network-default/permission-probe-stderr.txt.gz": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83",
+    "network-default/permission-probe-stdout.txt.gz": "e75fefd6679cb0b7522aad48743d9603d3044ed5f9f55ee023788b0453df9b15",
+    "network-default/permission_probe.py": "711d6a1e74ad820ca63cdbb5eaf4a19110c410bcad0c86e522ad0b94c21571e1",
+    "network-default/registration-stderr.txt.gz": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83",
+    "network-default/registration-stdout.txt.gz": "1481e3c084a1788432a55f9812cee3794c1f16af2b31edab1f16a4ae586359ae",
+    "network-default/session-report.json": "8b4f792d9294c4be37c71f1aadefd000f0b758e89292ffa19c6241cb1a845699",
+    "network-default/session.sb": "76463ff3970e5437c693f697d1034e03a8e0a85b08c22ee3a990ce294ecd7d86",
+    "network-denied/agent-expected.json.gz": "14302767ac4b62f60f23848d04230e7ac92a00917b26f7cd8870f1c3f52c08d2",
+    "network-denied/baseline.elab": "9ba929d20c014c45a4a20cc01974d83b574f3112a4ad46c860b01a7a24e1ea2b",
+    "network-denied/baseline.json.gz": "b845442c3126d5bb6cefaefacaec99c93c7629461740b9b383308216f52e57aa",
+    "network-denied/final.elab": "956801a6b7bb477f871421b0883fb0e0f422c941158c4c6325e1216b63ae2794",
+    "network-denied/final.json.gz": "a2eceadae27e948763a7bac8d0421c72e690b94fbb4dee15b9639d7aef8b7943",
+    "network-denied/native-stderr.txt.gz": "e146adf23e65025b6c41d43ce331d9e326722bc019ed086dab102d39d2a2bc7d",
+    "network-denied/native-stdout.txt.gz": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83",
+    "network-denied/permission-probe-stderr.txt.gz": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83",
+    "network-denied/permission-probe-stdout.txt.gz": "e75fefd6679cb0b7522aad48743d9603d3044ed5f9f55ee023788b0453df9b15",
+    "network-denied/permission_probe.py": "711d6a1e74ad820ca63cdbb5eaf4a19110c410bcad0c86e522ad0b94c21571e1",
+    "network-denied/registration-observation.json": "f41fd7d7d01cd2e9f99b86b58968617eeac83c82566af2de9b402baed9e2029b",
+    "network-denied/session-report.json": "53fbc92f168d0cf1242be53fa536b7606d91ac705fcca73821a7d4efae117a3c",
+    "network-denied/session.sb": "d0df5651516540fdb9dcc38ce414ee8a4eb1a101d617eea1be5dec34733b0bc6",
+    "session-network-default.py.txt": "a155a0075af99b8c7bad2f09f4b343e63964d5d38b09c81303abeba2fd8e431f",
+    "session-network-denied.py.txt": "135f364630ef78d6092d64f5143d2dd6cc769c0ebbdf0cc7ca9c0efb30f6e3f1",
+    "target-diagnostic.swift.txt": "306bc50af741194e5dc98f9ffd1100df89ef5ab6302c8ab8ed9e77901418afef"
+  },
+  "diagnostic_build": {
+    "source": "target-diagnostic.swift.txt",
+    "compiled_binary_sha256": "9f7d9deacfefcb5a9de8c42a5d00891848abe754e4cb22179d05cc33077810e6",
+    "swift_mode": 6,
+    "warnings_as_errors": true,
+    "exit_code": 0,
+    "source_of_status": "Completed compiler exec session 4608",
+    "capture_executed": false
+  }
+}

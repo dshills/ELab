@@ -1,0 +1,4 @@
+(version 1)
+(allow default)
+(deny file-read* file-write* (subpath "/Users/dshills/Library/Cogent Core"))
+(deny network-outbound (remote ip "*:*"))

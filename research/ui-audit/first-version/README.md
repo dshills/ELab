@@ -1,5 +1,7 @@
 # First-version UI walkthrough and issue list
 
+October 19 stable-input preflight: [protected exact-/165 sessions and network control](../../../docs/validation/stable-frame-input-preflight/README.md) close normally and preserve shared geometry files, but AppKit reports no bundle ID and CUA/recorder targeting cannot proceed. No guard is weakened, test edit performed or frame captured. This narrows a test-environment limitation; it does not establish a product failure, latency result or owner acceptance.
+
 October 19 owner decision: [ordinary default-startup and clean-account installation qualification is deferred for the private alpha](private-alpha-owner-decisions.json). No account access, test pass, settings change, promotion or walkthrough acceptance is inferred. The broader requirement remains open; the earlier preflight retains its historical request-pending status.
 
 October 19 recorder calibration: after explicit owner authorization, the [standalone recorder](../../../tools/frame-probe/README.md) captures only the owned exact-/165 smoke window: 103 timestamped frames, 18 distinct images, one marker acknowledgment and normal recorder/app exits. [Evidence](../../../docs/validation/frame-probe-calibration/README.md) preserves readiness and filter-startup failures. Existing screen access was used without requesting permission. No test input was operated, visibility is unvalidated and eligible latency observations remain zero; no p95 or acceptance claim.
