@@ -79,11 +79,13 @@ func addVerificationCapabilityDetails(id string, schema map[string]any) bool {
 		contract.Effects = []string{"Pure owned summary and captured metadata; completed records include final solver/statistical results; no live or view mutation", "Failed captured Verify operations include failure_help: explanation/action/technical reason, preserving the original error code/message. Source association is reported separately; no current-object cause is guessed. No partial samples are available on failure."}
 		failure("not-found", "admission", "ID unknown or evicted")
 	case "operation.samples":
-		inputProperty(schema, "offset")["minimum"] = 0
-		inputProperty(schema, "offset")["x-maximum-inclusive"] = "record sample count"
+		offset := inputProperty(schema, "offset")
+		offset["minimum"], offset["default"] = 0, 0
+		offset["x-maximum-inclusive"] = "record sample count"
+		offset["description"] = "Omitted or null starts at zero; offset may equal total for an empty last page."
 		limit := inputProperty(schema, "limit")
 		limit["minimum"], limit["maximum"], limit["default"] = 0, 200, 100
-		limit["description"] = "Omitted or zero defaults to 100; otherwise 1–200. Offset may equal total for an empty last page."
+		limit["description"] = "Omitted, null or zero defaults to 100; otherwise 1–200. Offset may equal total for an empty last page."
 		contract.Preconditions = []string{"id names a retained completed recording"}
 		contract.Effects = []string{"Pure owned exact rows and probe descriptors; preserve duplicate edge timestamps and probe order; next_offset/total describe captured rows"}
 		failure("not-found", "admission", "ID unknown or evicted")

@@ -141,3 +141,69 @@ func TestVerificationNullInheritanceAndExplicitEmptySemantics(t *testing.T) {
 		t.Fatal("full settings omission did not clear global override")
 	}
 }
+
+func TestVerificationPageDiscoveryMatchesNullDefaults(t *testing.T) {
+	var ordinary map[string]any
+	for _, capability := range Catalog() {
+		if capability.ID == "operation.samples" {
+			if err := json.Unmarshal(capability.Input, &ordinary); err != nil {
+				t.Fatal(err)
+			}
+			var output map[string]any
+			if err := json.Unmarshal(capability.OutputSchema, &output); err != nil {
+				t.Fatal(err)
+			}
+			if ref, ok := output["$ref"].(string); ok {
+				output = nil
+				if err := json.Unmarshal(SchemaRegistry()[ref], &output); err != nil {
+					t.Fatal(err)
+				}
+			}
+			for _, name := range []string{"offset", "next_offset", "total"} {
+				if inputProperty(output, name)["type"] != "integer" {
+					t.Fatal("nullable input widened numeric output", name)
+				}
+			}
+		}
+	}
+	if ordinary == nil {
+		t.Fatal("missing sample-page capability")
+	}
+	detailed := sweepDetailSchema(t, "operation.samples")
+	for label, schema := range map[string]map[string]any{"ordinary": ordinary, "detailed": detailed} {
+		for _, name := range []string{"offset", "limit"} {
+			if !reflect.DeepEqual(inputProperty(schema, name)["type"], []any{"integer", "null"}) {
+				t.Errorf("%s %s does not advertise accepted null defaults", label, name)
+			}
+		}
+		if inputProperty(schema, "id")["type"] != "string" {
+			t.Fatal("required recording identity widened", label)
+		}
+	}
+	if inputProperty(detailed, "offset")["default"] != float64(0) || inputProperty(detailed, "limit")["default"] != float64(100) {
+		t.Error("discovery does not identify the actual page defaults")
+	}
+	s := pausedRC(t)
+	defer s.Close()
+	started := call(t, s, "simulation.verify", map[string]any{"duration_s": .2}, "capture").Result.(Snapshot)
+	view := awaitOperation(t, s, started.LastOperation)
+	if view.Operation.Status != "completed" || view.Metadata.SampleCount <= 100 {
+		t.Fatal("page-default fixture needs a complete multi-page recording")
+	}
+	before := s.Snapshot()
+	want := call(t, s, "operation.samples", map[string]any{"id": view.Operation.ID}, "default").Result.(VerificationPage)
+	if want.Offset != 0 || want.NextOffset != 100 || len(want.Rows) != 100 {
+		t.Fatal("unexpected default page")
+	}
+	for _, params := range []map[string]any{
+		{"id": view.Operation.ID, "offset": nil},
+		{"id": view.Operation.ID, "limit": nil},
+		{"id": view.Operation.ID, "offset": nil, "limit": nil},
+		{"id": view.Operation.ID, "offset": 0, "limit": 0},
+	} {
+		got := call(t, s, "operation.samples", params, fmt.Sprint(params)).Result.(VerificationPage)
+		if !reflect.DeepEqual(got, want) || !reflect.DeepEqual(before, s.Snapshot()) {
+			t.Fatal("null/zero defaults changed pages or project state", params)
+		}
+	}
+}

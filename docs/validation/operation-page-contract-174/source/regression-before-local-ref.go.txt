@@ -1,0 +1,203 @@
+package workbench
+
+import (
+	"encoding/json"
+	"fmt"
+	"math"
+	"reflect"
+	"testing"
+)
+
+func TestVerificationDiscoveryAndOwnedModeInventory(t *testing.T) {
+	for _, id := range []string{"verification.settings.set", "simulation.verify", "operation.inspect", "operation.samples", "operation.select", "operation.cancel"} {
+		schema := sweepDetailSchema(t, id)
+		if schema["x-command-contract"] == nil {
+			t.Fatal("missing command contract", id)
+		}
+	}
+	for _, tc := range []struct {
+		analysis string
+		modes    []string
+	}{
+		{"DC operating point", []string{"auto"}},
+		{"RC transient", []string{"auto", "charge", "discharge"}},
+		{NPNTransientAnalysis, []string{"auto", "high", "low"}},
+		{MixedAnalysis, []string{"auto", "high", "low"}},
+		{NetworkTransientAnalysis, []string{"auto", "high", "low"}},
+		{WaveformAnalysis, []string{"auto", "high", "low"}},
+	} {
+		if got := VerificationInputModes(tc.analysis); !reflect.DeepEqual(got, tc.modes) {
+			t.Fatal(tc.analysis, got)
+		}
+	}
+	s := pausedRC(t)
+	defer s.Close()
+	state := s.Snapshot()
+	state.VerificationInputModes[0] = "corrupt"
+	if s.Snapshot().VerificationInputModes[0] != "auto" {
+		t.Fatal("mode inventory aliases published snapshot")
+	}
+	response := call(t, s, "verification.settings.set", DefaultVerificationSettings(), "owned-modes")
+	response.Result.(Snapshot).VerificationInputModes[0] = "corrupt"
+	retry := call(t, s, "verification.settings.set", DefaultVerificationSettings(), "owned-modes")
+	if retry.Result.(Snapshot).VerificationInputModes[0] != "auto" {
+		t.Fatal("mode inventory aliases retry cache")
+	}
+	// Detailed inputs must not widen the numeric output schema to unit strings.
+	var output map[string]any
+	if err := json.Unmarshal(SchemaRegistry()[SnapshotSchemaID], &output); err != nil {
+		t.Fatal(err)
+	}
+	if inputProperty(output, "verification_settings.duration_s")["type"] != "number" || output["x-command-contract"] != nil {
+		t.Fatal("command detail leaked into numeric settings output")
+	}
+}
+
+func TestPublishedVerificationBoundsMatchSettingsAdmission(t *testing.T) {
+	s := pausedRC(t)
+	defer s.Close()
+	schema := sweepDetailSchema(t, "verification.settings.set")
+	global := inputProperty(schema, "initial_voltage_v")["anyOf"].([]any)[0].(map[string]any)
+	capItem := inputProperty(schema, "capacitor_initials")["items"].(map[string]any)
+	capVoltage := inputProperty(capItem, "voltage_v")
+	for _, tc := range []struct {
+		name     string
+		min, max float64
+		set      func(*VerificationSettings, float64)
+	}{
+		{"global", global["minimum"].(float64), global["maximum"].(float64), func(c *VerificationSettings, v float64) { c.InitialVoltage = &v }},
+		{"capacitor", capVoltage["minimum"].(float64), capVoltage["maximum"].(float64), func(c *VerificationSettings, v float64) { c.Capacitors = []CapacitorInitial{{ID: "C1", Voltage: v}} }},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			for _, v := range []float64{tc.min, tc.max} {
+				cfg := DefaultVerificationSettings()
+				tc.set(&cfg, v)
+				call(t, s, "verification.settings.set", cfg, fmt.Sprintf("%s-%g", tc.name, v))
+			}
+			for _, v := range []float64{math.Nextafter(tc.min, math.Inf(-1)), math.Nextafter(tc.max, math.Inf(1))} {
+				cfg := DefaultVerificationSettings()
+				tc.set(&cfg, v)
+				before := s.Snapshot()
+				refuse(t, s, "verification.settings.set", cfg, "invalid-params")
+				if !reflect.DeepEqual(before, s.Snapshot()) {
+					t.Fatal("invalid defaults mutated state")
+				}
+			}
+		})
+	}
+	for _, v := range []float64{0, 1e-6, 1} {
+		cfg := DefaultVerificationSettings()
+		cfg.Step = v
+		call(t, s, "verification.settings.set", cfg, fmt.Sprintf("step-%g", v))
+	}
+	for _, v := range []float64{-1e-6, math.Nextafter(1e-6, 0), math.Nextafter(1, 2)} {
+		cfg := DefaultVerificationSettings()
+		cfg.Step = v
+		refuse(t, s, "verification.settings.set", cfg, "invalid-params")
+	}
+}
+
+func TestVerificationNullInheritanceAndExplicitEmptySemantics(t *testing.T) {
+	s := pausedRC(t)
+	defer s.Close()
+	initial := 2.
+	cfg := DefaultVerificationSettings()
+	cfg.Duration, cfg.InitialVoltage, cfg.InputMode = .002, &initial, "discharge"
+	cfg.Capacitors = []CapacitorInitial{{ID: "C1", Voltage: 1}}
+	call(t, s, "verification.settings.set", cfg, "defaults")
+	for _, p := range []map[string]any{{"probe_ids": nil}, {"capacitor_initials": nil}, {"capacitor_initials": []CapacitorInitial{{"C1", 0}, {"C1", 1}}}} {
+		before := s.Snapshot()
+		refuse(t, s, "simulation.verify", p, "invalid-params")
+		if !reflect.DeepEqual(before, s.Snapshot()) {
+			t.Fatal("invalid start mutated state")
+		}
+	}
+	response := call(t, s, "simulation.verify", map[string]any{"initial_voltage_v": nil, "input_mode": nil, "capacitor_initials": []any{}, "probe_ids": []any{}}, "empty")
+	view := awaitOperation(t, s, response.Result.(Snapshot).LastOperation)
+	if view.Operation.Status != "completed" || view.Metadata.InputMode != "discharge" || view.Metadata.Settings.InitialVoltage != 2 || len(view.Metadata.Probes) != 0 {
+		t.Fatal("null inheritance/empty list semantics changed", view)
+	}
+	part, _ := view.Metadata.Graph.Component("C1")
+	if part.InitialVoltage != nil {
+		t.Fatal("explicit empty list inherited capacitor override")
+	}
+	page := call(t, s, "operation.samples", VerificationPageParams{ID: view.Operation.ID}, "page").Result.(VerificationPage)
+	if len(page.Rows) != view.Metadata.SampleCount || len(page.Probes) != 0 {
+		t.Fatal("default sample page changed")
+	}
+	end := call(t, s, "operation.samples", VerificationPageParams{ID: view.Operation.ID, Offset: page.Total}, "end").Result.(VerificationPage)
+	if len(end.Rows) != 0 || end.NextOffset != end.Total {
+		t.Fatal("inclusive end offset refused")
+	}
+	refuse(t, s, "operation.samples", VerificationPageParams{ID: view.Operation.ID, Limit: 201}, "invalid-params")
+	refuse(t, s, "operation.cancel", IDParams{ID: view.Operation.ID}, "unavailable")
+	call(t, s, "operation.select", IDParams{}, "clear")
+	if s.Snapshot().SelectedOperation != "" {
+		t.Fatal("empty selection did not clear")
+	}
+	// Full replacement omission/null clears the global pointer, unlike a start override.
+	call(t, s, "verification.settings.set", map[string]any{"duration_s": "2 ms", "sample_step_s": 0, "input_mode": "auto", "capacitor_initials": []any{}}, "reset")
+	if s.Snapshot().VerificationSettings.InitialVoltage != nil {
+		t.Fatal("full settings omission did not clear global override")
+	}
+}
+
+func TestVerificationPageDiscoveryMatchesNullDefaults(t *testing.T) {
+	var ordinary map[string]any
+	for _, capability := range Catalog() {
+		if capability.ID == "operation.samples" {
+			if err := json.Unmarshal(capability.Input, &ordinary); err != nil {
+				t.Fatal(err)
+			}
+			var output map[string]any
+			if err := json.Unmarshal(capability.OutputSchema, &output); err != nil {
+				t.Fatal(err)
+			}
+			for _, name := range []string{"offset", "next_offset", "total"} {
+				if inputProperty(output, name)["type"] != "integer" {
+					t.Fatal("nullable input widened numeric output", name)
+				}
+			}
+		}
+	}
+	if ordinary == nil {
+		t.Fatal("missing sample-page capability")
+	}
+	detailed := sweepDetailSchema(t, "operation.samples")
+	for label, schema := range map[string]map[string]any{"ordinary": ordinary, "detailed": detailed} {
+		for _, name := range []string{"offset", "limit"} {
+			if !reflect.DeepEqual(inputProperty(schema, name)["type"], []any{"integer", "null"}) {
+				t.Errorf("%s %s does not advertise accepted null defaults", label, name)
+			}
+		}
+		if inputProperty(schema, "id")["type"] != "string" {
+			t.Fatal("required recording identity widened", label)
+		}
+	}
+	if inputProperty(detailed, "offset")["default"] != float64(0) || inputProperty(detailed, "limit")["default"] != float64(100) {
+		t.Error("discovery does not identify the actual page defaults")
+	}
+	s := pausedRC(t)
+	defer s.Close()
+	started := call(t, s, "simulation.verify", map[string]any{"duration_s": .2}, "capture").Result.(Snapshot)
+	view := awaitOperation(t, s, started.LastOperation)
+	if view.Operation.Status != "completed" || view.Metadata.SampleCount <= 100 {
+		t.Fatal("page-default fixture needs a complete multi-page recording")
+	}
+	before := s.Snapshot()
+	want := call(t, s, "operation.samples", map[string]any{"id": view.Operation.ID}, "default").Result.(VerificationPage)
+	if want.Offset != 0 || want.NextOffset != 100 || len(want.Rows) != 100 {
+		t.Fatal("unexpected default page")
+	}
+	for _, params := range []map[string]any{
+		{"id": view.Operation.ID, "offset": nil},
+		{"id": view.Operation.ID, "limit": nil},
+		{"id": view.Operation.ID, "offset": nil, "limit": nil},
+		{"id": view.Operation.ID, "offset": 0, "limit": 0},
+	} {
+		got := call(t, s, "operation.samples", params, fmt.Sprint(params)).Result.(VerificationPage)
+		if !reflect.DeepEqual(got, want) || !reflect.DeepEqual(before, s.Snapshot()) {
+			t.Fatal("null/zero defaults changed pages or project state", params)
+		}
+	}
+}

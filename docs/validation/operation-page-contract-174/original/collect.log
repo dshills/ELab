@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/operation-pages-174-work/collect.py", line 118, in <module>
+    read_case('duplicate-limit', 'operation.samples', {}, 'invalid-params', raw_params=raw)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dshills/Development/projects/ELab/build/operation-pages-174-work/collect.py", line 54, in read_case
+    result = ask(command, params, error=expected_error, raw_params=raw_params)
+  File "/Users/dshills/Development/projects/ELab/build/operation-pages-174-work/collect.py", line 41, in ask
+    assert response['id'] == request['id'] and response['version'] == 1
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

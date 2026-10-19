@@ -1,0 +1,60 @@
+{
+  "finding": "PAGE-NULL-SCHEMA-01",
+  "confirmed": true,
+  "schema_mismatches": [
+    {
+      "discovery": "ordinary",
+      "field": "offset",
+      "advertised": {
+        "type": "integer"
+      }
+    },
+    {
+      "discovery": "ordinary",
+      "field": "limit",
+      "advertised": {
+        "type": "integer"
+      }
+    },
+    {
+      "discovery": "detailed",
+      "field": "offset",
+      "advertised": {
+        "minimum": 0,
+        "type": "integer",
+        "x-maximum-inclusive": "record sample count"
+      }
+    },
+    {
+      "discovery": "detailed",
+      "field": "limit",
+      "advertised": {
+        "default": 100,
+        "description": "Omitted or zero defaults to 100; otherwise 1\u2013200. Offset may equal total for an empty last page.",
+        "maximum": 200,
+        "minimum": 0,
+        "type": "integer"
+      }
+    }
+  ],
+  "accepted_null_default_queries": 3,
+  "preceding_pure_cases": 29,
+  "collector_complete": false,
+  "collector_refusal": "The duplicate-limit request correctly returns transport invalid-json with empty id and revision 0; the collector incorrectly expected query invalid-params with correlated id. No postduplicate purity query was sent.",
+  "duplicate_request_response": {
+    "request_json": "{\"version\":1,\"id\":\"pages-92\",\"command\":\"operation.samples\",\"params\":{\"id\":\"record-1\",\"limit\":1,\"limit\":2}}",
+    "response": {
+      "version": 1,
+      "id": "",
+      "revision": 0,
+      "error": {
+        "code": "invalid-json",
+        "message": "duplicate field \"limit\""
+      }
+    }
+  },
+  "normal_agent_exit_code": 0,
+  "completed_joined_shutdown": true,
+  "source_fixture_sha256": "615d97f596c68da31dd314dcecfbf22627b2cbb149839d75e9927403559cb57a",
+  "scope": "Original /174 runtime evidence, not an overall passing paging run. Queries preceding transport refusal and accepted-null/schema mismatch remain valid."
+}

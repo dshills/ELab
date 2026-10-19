@@ -1,0 +1,26 @@
+{
+  "finding": "PAGE-NULL-SCHEMA-01",
+  "source_repair_qualified": true,
+  "original_release": "0.157.0 /174 affected",
+  "clean_replacement_qualified": false,
+  "quality": {
+    "command": "GOPROXY=off ./scripts/check.sh",
+    "exit_code": 0,
+    "elapsed_seconds": 359.5405058860779,
+    "started_unix": 1792450437.977389,
+    "finished_unix": 1792450797.517896
+  },
+  "original_partial_cases": 29,
+  "development_pure_cases": 30,
+  "preserved": {
+    "build/ELab.app/Contents/MacOS/ELab": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "build/ELab-0.157.0-174-review/ELab.app/Contents/MacOS/ELab": "46f78038929c6bce7ed6b55da201d26cda0bb6279c80cea31abc188ca12dec2a",
+    "build/ELab-0.157.0-174-review/elab-agent": "a8636912f15394e647a773d36395fd7f0380d9315f4c16a3e599a51390e6aa54",
+    "build/ELab-0.157.0-174-review.zip": "dcc743fc95459d7c46f218f5bf4e5ab7b22f8471c6b0a72c64c7299e237c68ff",
+    "third_party/vellum/vellum-b22478c.tar.gz": "22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968"
+  },
+  "manifest_sha256": "2a69cd74bffeef85112ea1ba8fb5fa667cd2ea493b50f042cf9450b3df388a98",
+  "full_mvp_complete": false,
+  "canonical_promoted": false,
+  "owner_walkthrough": "Not tried yet"
+}

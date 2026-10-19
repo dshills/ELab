@@ -90,6 +90,7 @@ func TestPerformanceMeasurementsUseFreshChangedRuns(t *testing.T) {
 }
 
 func TestInductorPerformanceFixturesUseChangedRunsAndFullCaptures(t *testing.T) {
+	factory := ordinaryAgentFactory(t)
 	ctx, cancel := context.WithTimeout(t.Context(), 2*time.Minute)
 	defer cancel()
 	for _, count := range []int{0, 19, 101} {
@@ -99,7 +100,7 @@ func TestInductorPerformanceFixturesUseChangedRunsAndFullCaptures(t *testing.T) 
 	}
 	for _, name := range []string{"rl", "rlc", "flyback", "npn-coil"} {
 		t.Run(name, func(t *testing.T) {
-			err := electricalSession(ctx, InProcess, t.TempDir(), func(s *session) error {
+			err := electricalSession(ctx, factory, t.TempDir(), func(s *session) error {
 				if err := preparePerformance(s, name); err != nil {
 					return err
 				}

@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "requirements": 27,
+  "counts": {
+    "implemented": 17,
+    "partial": 10,
+    "pending": 0
+  },
+  "scope": "Requirement coverage validation only; does not establish product acceptance"
+}
+{"passed": true, "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-b22478c", "source": "b22478cf8cec8dda1ccdcd93d6ff6b62e2cc11de"}
+........................................Starting owned
+Starting owned
+Starting owned
+..............
+----------------------------------------------------------------------
+Ran 54 tests in 1.198s
+
+OK
+?   	github.com/dshills/elab/cmd/elab-agent	[no test files]
+ok  	github.com/dshills/elab/cmd/elab-conformance	3.430s
+?   	github.com/dshills/elab/cmd/elab-ui-audit	[no test files]
+--- FAIL: TestInductorPerformanceFixturesUseChangedRunsAndFullCaptures (3.85s)
+    --- FAIL: TestInductorPerformanceFixturesUseChangedRunsAndFullCaptures/npn-coil (0.49s)
+        performance_test.go:123: electrical Verify: &{Code:integration-time-limit Message:mixed integration exceeded its work budget: elapsed-time limit (100 attempted, maximum 512; 114.420 ms elapsed, maximum 100 ms); reduce sample step at 0.0013371243 s, step 1.19e-07: ratio +Inf, errors mixed integration exceeded its work budget: elapsed-time limit (99 attempted, maximum 512; 114.386 ms elapsed, maximum 100 ms); reduce sample step / mixed integration exceeded its work budget: elapsed-time limit (99 attempted, maximum 512; 114.388 ms elapsed, maximum 100 ms); reduce sample step / <nil>}
+FAIL
+FAIL	github.com/dshills/elab/internal/conformance	121.909s
+ok  	github.com/dshills/elab/internal/printspool	(cached)
+ok  	github.com/dshills/elab/internal/schematicpdf	(cached)
+ok  	github.com/dshills/elab/internal/uiaudit	1.668s
+ok  	github.com/dshills/elab/transport	1.765s
+ok  	github.com/dshills/elab/workbench	81.917s
+FAIL

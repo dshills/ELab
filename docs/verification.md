@@ -28,7 +28,7 @@ Models and kernels are identical to live LED, RC, NPN DC/pulse and mixed simulat
 | `verification.settings.set` | Full `{duration_s,sample_step_s,input_mode,capacitor_initials:[{id,voltage_v}],initial_voltage_v?}`; session-only defaults, no physical/document edit |
 | `simulation.verify` | Optional duration/sample step/mode/initial overrides and `probe_ids`; captures defaults if omitted; DC explicit duration must be zero. Returns Snapshot with `last_operation` and queued summary |
 | `operation.inspect` | `{id}`; structured status/progress/error plus captured graph, settings, model/engine identity and, when completed, final results/statistics |
-| `operation.samples` | `{id,offset?,limit?}`; completed recorded rows with SI probe descriptors; default limit 100, max 200, `next_offset` / `total` |
+| `operation.samples` | `{id,offset?,limit?}`; completed recorded rows with SI probe descriptors; omitted/null offset starts at 0; omitted/null/zero limit is 100, otherwise 1–200; offset equal to total returns an empty EOF page with `next_offset == total` |
 | `operation.select` | `{id}`; selects the recorded native preview; empty ID clears it |
 | `operation.cancel` | `{id}`; accepts queued/running cancellation; inspect until terminal. Finished operations refuse cancellation |
 | `verification.export` | `{id,path,format:"json"|"csv",overwrite?,expected_document_generation?}`; completed record only, atomically published |

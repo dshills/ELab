@@ -270,6 +270,11 @@ func queryCapability(id, description string, input, output reflect.Type) Capabil
 	if id == "events.poll" {
 		inputSchema["properties"].(map[string]any)["timeout_ms"] = map[string]any{"type": []string{"integer", "null"}, "minimum": 0, "maximum": MaxEventWaitMS, "default": 1000}
 	}
+	if id == "operation.samples" {
+		for _, name := range []string{"offset", "limit"} {
+			inputProperty(inputSchema, name)["type"] = []string{"integer", "null"}
+		}
+	}
 	data, _ := json.Marshal(inputSchema)
 	cap := capability(id, description, false, string(data))
 	cap.OutputSchema, _ = json.Marshal(typeSchema(output))

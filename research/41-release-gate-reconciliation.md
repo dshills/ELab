@@ -101,3 +101,5 @@ engineering check proceeds.
 ## Subsequent evidence
 
 RECOVERY-NATIVE-ERROR-174 [now passes its declared native case](../docs/validation/native-recovery-error-174/README.md), including warning persistence, automatic clearing, preserved source/capture and fresh agent reopens. The structured reconciliation and inspection record retain their original prelaunch checkpoint; this follow-up does not relabel their earlier source hashes or turn the broader Recovery gate into a universal pass. The [delivery plan](34-first-version-plan.md) records the next finite agent-query contract check.
+
+PAGE-NULL-SCHEMA-01 [is now repaired and source-qualified](../docs/validation/operation-page-contract-174/README.md): both agent catalogs describe the already accepted null paging defaults, with exact public behavior and query-purity checks. This finite AGENT-02 slice does not change the historical reconciliation/source pins, 17 implemented/10 partial P0 counts, pending owner walkthrough or Gates C/D. Clean replacement packaging remains separate.

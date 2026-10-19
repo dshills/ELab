@@ -1,0 +1,10 @@
+=== RUN   TestVerificationPageDiscoveryMatchesNullDefaults
+    verification_capabilities_test.go:175: ordinary offset does not advertise accepted null defaults
+    verification_capabilities_test.go:175: ordinary limit does not advertise accepted null defaults
+    verification_capabilities_test.go:175: detailed offset does not advertise accepted null defaults
+    verification_capabilities_test.go:175: detailed limit does not advertise accepted null defaults
+    verification_capabilities_test.go:183: discovery does not identify the actual page defaults
+--- FAIL: TestVerificationPageDiscoveryMatchesNullDefaults (0.01s)
+FAIL
+FAIL	github.com/dshills/elab/workbench	0.320s
+FAIL
