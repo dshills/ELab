@@ -1,0 +1,71 @@
+"""Record original /181 acceptance versus repaired final-result refusal."""
+from pathlib import Path
+from importlib.machinery import SourceFileLoader
+import argparse,copy,hashlib,importlib.util,json,time
+ROOT=Path('/Users/dshills/Development/projects/ELab');parser=argparse.ArgumentParser();parser.add_argument('mode',choices=['original','fixed']);parser.add_argument('agent',type=Path);args=parser.parse_args()
+OUT=Path('/private/tmp/elab-recording-final-'+args.mode);OUT.mkdir(mode=0o700)
+src=ROOT/'docs/validation/junction-boundary-review-179/producers/collect.py.txt';spec=importlib.util.spec_from_loader('owned_final_client',SourceFileLoader('owned_final_client',str(src)));m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);m.OUT=OUT;m.AGENT=args.agent
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+receipt=ROOT/'research/ui-audit/first-version/terminal-validation-review-checkpoint.json';release=json.loads(receipt.read_text())
+if args.mode=='original':assert sha(args.agent.with_name('elab-agent'))==release['agent_sha256']
+plan=dict(mode=args.mode,agent_sha256=sha(args.agent.with_name('elab-agent')),receipt_sha256=sha(receipt),client_sha256=sha(src),scope='Thirteen final-scalar/identity mutations with untouched captured rows/statistics, three embedded-project cases and intact byte-identical export controls. Owned headless only.')
+(OUT/'plan.json').write_text(json.dumps(plan,indent=2)+'\n');c=m.Client(args.mode);exits=[];families=[]
+def unchanged(a,b):
+ excluded={'project_work','revision','command_revision','last_actor'};assert {k:v for k,v in a.items() if k not in excluded}=={k:v for k,v in b.items() if k not in excluded}
+def wait(identifier):
+ deadline=time.monotonic()+20
+ while True:
+  view=c.ask('operation.inspect',dict(id=identifier));status=view['operation']['status']
+  if status=='completed':return view
+  assert status in ('queued','running') and time.monotonic()<deadline;time.sleep(.02)
+try:
+ for name in ('led','npn','blink'):
+  folder=OUT/name;folder.mkdir();c.ask('example.load',dict(id=name,discard_changes=True),True);c.ask('simulation.pause',{},True);c.ask('simulation.restart',{},True);live=c.ask('simulation.wait')
+  good=folder/'good.json' if args.mode=='original' else Path('/private/tmp/elab-recording-final-original')/name/'good.json'
+  if args.mode=='original':
+   probes=['i:'+next(p['id'] for p in live['components'] if p['kind']=='led')]
+   if name!='led':
+    q=next(p['id'] for p in live['components'] if p['kind']=='npn');probes=['i:'+q+'.'+pin for pin in ('base','collector','emitter')]
+   accepted=c.ask('simulation.verify',dict(duration_s=.02 if name=='blink' else 0,probe_ids=probes),True);identifier=accepted['last_operation'];wait(identifier)
+   c.ask('verification.export',dict(id=identifier,path=str(good),format='json'),True)
+  data=json.loads(good.read_text());good_sha=sha(good)
+  c.ask('verification.import',dict(path=str(good)),True);imported=c.ask('project.inspect');good_id=imported['last_operation']
+  copied=folder/'good-reexport.json';c.ask('verification.export',dict(id=good_id,path=str(copied),format='json'),True);assert good.read_bytes()==copied.read_bytes()
+  mutations=['current_a'] if name=='led' else ['base_current_a','collector_current_a','emitter_current_a','base_resistor_id','load_resistor_id','led_id']
+  cases=[]
+  for index,field in enumerate(mutations):
+   bad=folder/(field+'.json') if args.mode=='original' else Path('/private/tmp/elab-recording-final-original')/name/(field+'.json')
+   if args.mode=='original':
+    changed=copy.deepcopy(data);result=changed['metadata']['led' if name=='led' else 'npn'];result[field]='Other' if field.endswith('_id') else result[field]+.001
+    bad.write_text(json.dumps(changed,indent=2)+'\n')
+   changed=json.loads(bad.read_text());assert changed['rows']==data['rows'] and changed['metadata']['statistics']==data['metadata']['statistics']
+   before=c.ask('project.inspect')
+   if args.mode=='original':
+    c.ask('verification.import',dict(path=str(bad)),True);after=c.ask('project.inspect');bad_id=after['last_operation'];accepted=c.ask('operation.inspect',dict(id=bad_id));page=c.ask('operation.samples',dict(id=bad_id,limit=200))
+    assert accepted['metadata']==changed['metadata'] and page['rows']==changed['rows']
+   else:
+    c.ask('verification.import',dict(path=str(bad)),True,error='invalid-recording');after=c.ask('project.inspect');unchanged(before,after);accepted=None
+   outcome=dict(field=field,before=before,after=after,accepted=accepted,malformed_sha256=sha(bad))
+   (folder/(field+'-outcome.json')).write_text(json.dumps(outcome,indent=2)+'\n');cases.append(outcome)
+   if index==0:
+    project=folder/'bad-embedded.elab' if args.mode=='original' else Path('/private/tmp/elab-recording-final-original')/name/'bad-embedded.elab'
+    if args.mode=='original':c.ask('project.save',dict(path=str(project)),True)
+    fresh=m.Client(args.mode+'-'+name+'-fresh')
+    try:
+     fresh_before=fresh.ask('project.inspect')
+     if args.mode=='original':
+      fresh.ask('project.load',dict(path=str(project)),True);fresh_after=fresh.ask('simulation.wait');assert not fresh_after['document']['dirty']
+      assert any(entry['data']==changed for entry in json.loads(project.read_text())['recordings']['entries'])
+     else:
+      fresh.ask('project.load',dict(path=str(project)),True,error='invalid-document');fresh_after=fresh.ask('project.inspect');unchanged(fresh_before,fresh_after)
+      fresh.ask('verification.import',dict(path=str(good)),True)
+     (folder/'embedded.json').write_text(json.dumps(dict(before=fresh_before,after=fresh_after,project_sha256=sha(project)),indent=2)+'\n');exits.append(fresh.close())
+    finally:
+     if fresh.process.poll() is None:exits.append(fresh.close())
+  assert sha(good)==good_sha
+  families.append(dict(name=name,cases=len(cases),good_sha256=good_sha,intact_reexport_exact=True))
+ exits.append(c.close())
+finally:
+ if c.process.poll() is None:exits.append(c.close())
+report=dict(passed=True,mode=args.mode,families=families,mutations=sum(f['cases'] for f in families),embedded_projects=3,process_exits=exits)
+(OUT/'report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report),flush=True)

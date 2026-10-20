@@ -172,10 +172,19 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	if err := validateRecordedResults(m, c); err != nil {
 		return nil, err
 	}
-	if m.Mixed != nil {
-		// The final device state and the last plotted row describe the same
-		// accepted instant, including the right side of a source edge.
-		frame := mixedSample(c, m.Mixed, 0)
+	// Every stored final result and the last plotted row describe the same
+	// accepted instant, including the right side of a source edge. Reconstruct
+	// probe references from the saved result only; never rerun an imported solve.
+	var frame TraceSample
+	switch {
+	case m.Mixed != nil:
+		frame = mixedSample(c, m.Mixed, 0)
+	case m.NPN != nil:
+		frame = npnTraceSample(c, m.NPN, m.NPN, m.Duration, 0)
+	case m.LED != nil:
+		frame = ledTraceSample(c, *m.LED)
+	}
+	if frame.frame != nil {
 		last := d.Rows[len(d.Rows)-1]
 		for i, probe := range m.Probes {
 			value, ok := frameValue(frame, probe)
@@ -208,7 +217,7 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		}
 	case NPNAnalysis, NPNTransientAnalysis:
 		r := m.NPN
-		if r == nil || m.LED != nil || m.Mixed != nil || r.Stale || r.Engine != NPNEngineID || r.Model != TransistorModel() || r.TransistorID != c.Transistor.ID || r.SupplyID != c.Source.ID || r.InputID != c.Input.ID {
+		if r == nil || m.LED != nil || m.Mixed != nil || r.Stale || r.Engine != NPNEngineID || r.Model != TransistorModel() || r.TransistorID != c.Transistor.ID || r.SupplyID != c.Source.ID || r.InputID != c.Input.ID || r.BaseResistorID != c.BaseResistor.ID || r.LoadResistorID != c.Resistor.ID || r.LEDID != c.LED.ID {
 			return fmt.Errorf("invalid recorded NPN final result")
 		}
 	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis, InductorAnalysis:

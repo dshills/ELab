@@ -12,6 +12,8 @@ Full source quality, copied native smoke, all four public adapters, reference/st
 
 [Walkthrough](research/35-first-version-review.md), [receipt](research/ui-audit/first-version/terminal-validation-review-checkpoint.json), [proof](docs/validation/terminal-validation-review-181/README.md).
 
+**Source repair pending replacement:** [RECORD-FINAL-01](docs/validation/recording-final-consistency/README.md) closes inconsistent imported LED/NPN final metadata. /181 accepts the reproduced altered records and remains preserved. Corrected source passes full quality and exact original-file refusal checks; this is not yet a replacement-build qualification.
+
 Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment, broader corruption/fuzzing and the actual hobbyist study remain open. Visible latency stays scoped to /173, with RC and 100 ms acknowledgement unqualified. All 39 earlier sealed reviews, four candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.
 
 ## Build and run from source
