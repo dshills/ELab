@@ -7,3 +7,5 @@ The new NPN data profile copies six exact regions from the manually inspected or
 This adds one JSON profile and documentation, no application/Go/SDK/decoder change. The same Go binary and all 659 application Go hashes remain exact. No new capture, input, cohort observation or native qualification occurs here. Original archives/annotations and current RC data remain unchanged.
 
 The next native LED/NPN blocks must pin the actual /185 app/agent, existing recorder, original classifiers/templates, profile and producer. Each gets twenty separately named IDs, stops at the first unavailable outcome and retains all planned results. No repeated completed RC block, old-cohort replacement, pooling, retuning, new privacy grant or promotion is authorized by this data-only proof. Owner walkthrough and broader gates remain open.
+
+Subsequent native qualification is recorded separately in the [current /185 NPN block](52-current-npn-visible-results.md): twenty observations and all-frame/physics/corruption replay. The data-only proof above remains unchanged; it is not retroactively relabeled as native evidence. Current RC/LED are also complete within their own scopes.

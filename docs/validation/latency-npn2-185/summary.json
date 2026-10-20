@@ -1,0 +1,1341 @@
+{
+  "passed": true,
+  "date": "2026-10-20",
+  "timezone": "America/Chicago",
+  "cohort_id": "npn2-current-185",
+  "release": "0.168.0 /185",
+  "native_sha256": "ecd24e458e0db4a0e580747b37145c7d30e9c8f4be686731df78cb690b38a330",
+  "agent_sha256": "2992a176cb26a85db197cb7879650464da34cd272ce462bed9fb01b2ef35c59e",
+  "scheduled": 20,
+  "attempted": 20,
+  "available": 20,
+  "unavailable": 0,
+  "not_attempted": 0,
+  "replacements": 0,
+  "pooled_with_earlier_cohorts": false,
+  "percentile": {
+    "convention": "nearest-rank",
+    "rank": 19,
+    "count": 20
+  },
+  "marker_to_committed_p95_ms": 144.71875,
+  "marker_to_fresh_p95_ms": 177.93725,
+  "p95_trial": "npn2-19",
+  "p95_exact_fraction_ms": [
+    711749,
+    4000
+  ],
+  "minimum_fresh_ms": 109.86133333333333,
+  "maximum_fresh_ms": 185.57854166666667,
+  "fresh_sample_500ms_supported": true,
+  "acknowledgment_100ms_status": "inconclusive: conservative marker bound includes controller overhead",
+  "raw_eligible_latency_observations": 0,
+  "raw_flags_unchanged": true,
+  "overall_prd_performance_pass": false,
+  "owner_acceptance": false,
+  "full_mvp_complete": false,
+  "canonical_promoted": false,
+  "complete_frames": 3264,
+  "unique_images": 3115,
+  "image_bytes": 457467824,
+  "corruption_classes": 9,
+  "corruption_exercises": 180,
+  "application_go_sources_unchanged": 659,
+  "native_exact_exit_status": null,
+  "session_wrapper_exit_code": 0,
+  "worker_wrapper_exit_code": 0,
+  "open_exit_code": 0,
+  "trial_results": [
+    {
+      "id": "npn2-01",
+      "available": true,
+      "marker_to_committed_ms": 109.86133333333333,
+      "marker_to_fresh_ms": 109.86133333333333,
+      "committed_bound_fraction_ms": [
+        41198,
+        375
+      ],
+      "fresh_bound_fraction_ms": [
+        41198,
+        375
+      ],
+      "complete_frames": 164,
+      "unique_images": 154,
+      "image_bytes": 22618291,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 155
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 140
+    },
+    {
+      "id": "npn2-02",
+      "available": true,
+      "marker_to_committed_ms": 102.72941666666667,
+      "marker_to_fresh_ms": 169.39554166666667,
+      "committed_bound_fraction_ms": [
+        1232753,
+        12000
+      ],
+      "fresh_bound_fraction_ms": [
+        4065493,
+        24000
+      ],
+      "complete_frames": 162,
+      "unique_images": 156,
+      "image_bytes": 22906513,
+      "roles": {
+        "private-draft-original-result": 8,
+        "committed-value-stale-result": 4,
+        "committed-value-fresh-result": 150
+      },
+      "first_committed_frame": 9,
+      "first_fresh_frame": 13,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 151
+    },
+    {
+      "id": "npn2-03",
+      "available": true,
+      "marker_to_committed_ms": 133.304375,
+      "marker_to_fresh_ms": 133.304375,
+      "committed_bound_fraction_ms": [
+        213287,
+        1600
+      ],
+      "fresh_bound_fraction_ms": [
+        213287,
+        1600
+      ],
+      "complete_frames": 162,
+      "unique_images": 155,
+      "image_bytes": 22765321,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 153
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 148
+    },
+    {
+      "id": "npn2-04",
+      "available": true,
+      "marker_to_committed_ms": 102.24579166666666,
+      "marker_to_fresh_ms": 185.57854166666667,
+      "committed_bound_fraction_ms": [
+        2453899,
+        24000
+      ],
+      "fresh_bound_fraction_ms": [
+        890777,
+        4800
+      ],
+      "complete_frames": 165,
+      "unique_images": 158,
+      "image_bytes": 23198289,
+      "roles": {
+        "private-draft-original-result": 8,
+        "committed-value-stale-result": 5,
+        "committed-value-fresh-result": 152
+      },
+      "first_committed_frame": 9,
+      "first_fresh_frame": 14,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 146
+    },
+    {
+      "id": "npn2-05",
+      "available": true,
+      "marker_to_committed_ms": 120.44854166666667,
+      "marker_to_fresh_ms": 120.44854166666667,
+      "committed_bound_fraction_ms": [
+        578153,
+        4800
+      ],
+      "fresh_bound_fraction_ms": [
+        578153,
+        4800
+      ],
+      "complete_frames": 165,
+      "unique_images": 158,
+      "image_bytes": 23206474,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 156
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 142
+    },
+    {
+      "id": "npn2-06",
+      "available": true,
+      "marker_to_committed_ms": 130.07341666666667,
+      "marker_to_fresh_ms": 163.40641666666667,
+      "committed_bound_fraction_ms": [
+        1560881,
+        12000
+      ],
+      "fresh_bound_fraction_ms": [
+        1960877,
+        12000
+      ],
+      "complete_frames": 162,
+      "unique_images": 156,
+      "image_bytes": 22915386,
+      "roles": {
+        "private-draft-original-result": 6,
+        "committed-value-stale-result": 2,
+        "committed-value-fresh-result": 154
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 12,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 151
+    },
+    {
+      "id": "npn2-07",
+      "available": true,
+      "marker_to_committed_ms": 127.09433333333334,
+      "marker_to_fresh_ms": 177.09408333333334,
+      "committed_bound_fraction_ms": [
+        381283,
+        3000
+      ],
+      "fresh_bound_fraction_ms": [
+        2125129,
+        12000
+      ],
+      "complete_frames": 162,
+      "unique_images": 152,
+      "image_bytes": 22319114,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-stale-result": 3,
+        "committed-value-fresh-result": 150
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 13,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 143
+    },
+    {
+      "id": "npn2-08",
+      "available": true,
+      "marker_to_committed_ms": 114.33791666666667,
+      "marker_to_fresh_ms": 114.33791666666667,
+      "committed_bound_fraction_ms": [
+        274411,
+        2400
+      ],
+      "fresh_bound_fraction_ms": [
+        274411,
+        2400
+      ],
+      "complete_frames": 164,
+      "unique_images": 157,
+      "image_bytes": 23060574,
+      "roles": {
+        "private-draft-original-result": 8,
+        "committed-value-fresh-result": 156
+      },
+      "first_committed_frame": 9,
+      "first_fresh_frame": 9,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 139
+    },
+    {
+      "id": "npn2-09",
+      "available": true,
+      "marker_to_committed_ms": 93.53366666666666,
+      "marker_to_fresh_ms": 176.8665,
+      "committed_bound_fraction_ms": [
+        280601,
+        3000
+      ],
+      "fresh_bound_fraction_ms": [
+        353733,
+        2000
+      ],
+      "complete_frames": 163,
+      "unique_images": 157,
+      "image_bytes": 23052831,
+      "roles": {
+        "private-draft-original-result": 8,
+        "committed-value-stale-result": 4,
+        "committed-value-fresh-result": 151
+      },
+      "first_committed_frame": 9,
+      "first_fresh_frame": 13,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 145
+    },
+    {
+      "id": "npn2-10",
+      "available": true,
+      "marker_to_committed_ms": 122.169,
+      "marker_to_fresh_ms": 122.169,
+      "committed_bound_fraction_ms": [
+        122169,
+        1000
+      ],
+      "fresh_bound_fraction_ms": [
+        122169,
+        1000
+      ],
+      "complete_frames": 163,
+      "unique_images": 155,
+      "image_bytes": 22765416,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 154
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 164,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 137
+    },
+    {
+      "id": "npn2-11",
+      "available": true,
+      "marker_to_committed_ms": 144.71875,
+      "marker_to_fresh_ms": 144.71875,
+      "committed_bound_fraction_ms": [
+        4631,
+        32
+      ],
+      "fresh_bound_fraction_ms": [
+        4631,
+        32
+      ],
+      "complete_frames": 164,
+      "unique_images": 158,
+      "image_bytes": 23204749,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-fresh-result": 154
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 11,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 145
+    },
+    {
+      "id": "npn2-12",
+      "available": true,
+      "marker_to_committed_ms": 126.05058333333334,
+      "marker_to_fresh_ms": 126.05058333333334,
+      "committed_bound_fraction_ms": [
+        1512607,
+        12000
+      ],
+      "fresh_bound_fraction_ms": [
+        1512607,
+        12000
+      ],
+      "complete_frames": 163,
+      "unique_images": 157,
+      "image_bytes": 23060024,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 154
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 144
+    },
+    {
+      "id": "npn2-13",
+      "available": true,
+      "marker_to_committed_ms": 153.95383333333334,
+      "marker_to_fresh_ms": 153.95383333333334,
+      "committed_bound_fraction_ms": [
+        923723,
+        6000
+      ],
+      "fresh_bound_fraction_ms": [
+        923723,
+        6000
+      ],
+      "complete_frames": 163,
+      "unique_images": 156,
+      "image_bytes": 22910656,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-fresh-result": 153
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 11,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 138
+    },
+    {
+      "id": "npn2-14",
+      "available": true,
+      "marker_to_committed_ms": 112.09545833333334,
+      "marker_to_fresh_ms": 162.09516666666667,
+      "committed_bound_fraction_ms": [
+        2690291,
+        24000
+      ],
+      "fresh_bound_fraction_ms": [
+        972571,
+        6000
+      ],
+      "complete_frames": 163,
+      "unique_images": 155,
+      "image_bytes": 22761018,
+      "roles": {
+        "private-draft-original-result": 8,
+        "committed-value-stale-result": 3,
+        "committed-value-fresh-result": 152
+      },
+      "first_committed_frame": 9,
+      "first_fresh_frame": 12,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 140
+    },
+    {
+      "id": "npn2-15",
+      "available": true,
+      "marker_to_committed_ms": 122.69245833333333,
+      "marker_to_fresh_ms": 172.69216666666668,
+      "committed_bound_fraction_ms": [
+        2944619,
+        24000
+      ],
+      "fresh_bound_fraction_ms": [
+        1036153,
+        6000
+      ],
+      "complete_frames": 162,
+      "unique_images": 155,
+      "image_bytes": 22761653,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-stale-result": 3,
+        "committed-value-fresh-result": 150
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 13,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 164,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 140
+    },
+    {
+      "id": "npn2-16",
+      "available": true,
+      "marker_to_committed_ms": 136.10208333333333,
+      "marker_to_fresh_ms": 136.10208333333333,
+      "committed_bound_fraction_ms": [
+        65329,
+        480
+      ],
+      "fresh_bound_fraction_ms": [
+        65329,
+        480
+      ],
+      "complete_frames": 164,
+      "unique_images": 156,
+      "image_bytes": 22910743,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-fresh-result": 154
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 11,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 145
+    },
+    {
+      "id": "npn2-17",
+      "available": true,
+      "marker_to_committed_ms": 144.59129166666668,
+      "marker_to_fresh_ms": 177.9245,
+      "committed_bound_fraction_ms": [
+        3470191,
+        24000
+      ],
+      "fresh_bound_fraction_ms": [
+        355849,
+        2000
+      ],
+      "complete_frames": 163,
+      "unique_images": 154,
+      "image_bytes": 22612990,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-stale-result": 2,
+        "committed-value-fresh-result": 151
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 13,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 145
+    },
+    {
+      "id": "npn2-18",
+      "available": true,
+      "marker_to_committed_ms": 144.204,
+      "marker_to_fresh_ms": 144.204,
+      "committed_bound_fraction_ms": [
+        36051,
+        250
+      ],
+      "fresh_bound_fraction_ms": [
+        36051,
+        250
+      ],
+      "complete_frames": 163,
+      "unique_images": 157,
+      "image_bytes": 23058635,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-fresh-result": 153
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 11,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 145
+    },
+    {
+      "id": "npn2-19",
+      "available": true,
+      "marker_to_committed_ms": 144.60408333333334,
+      "marker_to_fresh_ms": 177.93725,
+      "committed_bound_fraction_ms": [
+        1735249,
+        12000
+      ],
+      "fresh_bound_fraction_ms": [
+        711749,
+        4000
+      ],
+      "complete_frames": 164,
+      "unique_images": 154,
+      "image_bytes": 22614002,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-stale-result": 2,
+        "committed-value-fresh-result": 152
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 13,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 167,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 145
+    },
+    {
+      "id": "npn2-20",
+      "available": true,
+      "marker_to_committed_ms": 131.22904166666666,
+      "marker_to_fresh_ms": 131.22904166666666,
+      "committed_bound_fraction_ms": [
+        3149497,
+        24000
+      ],
+      "fresh_bound_fraction_ms": [
+        3149497,
+        24000
+      ],
+      "complete_frames": 163,
+      "unique_images": 155,
+      "image_bytes": 22765145,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 154
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "agent_npn_law": {
+        "method": "70-digit Decimal Newton and closed-form convolution; same pinned educational models, independent code/algorithms",
+        "generator_sha256": "19da68f77f38b8b351386fdbb2342f988ed221137a61bfbcdee0486450bed976",
+        "drive_v": 5,
+        "absolute_errors": {
+          "vbe_v": 1.1102230246251565e-16,
+          "vce_v": 8.326672684688674e-17,
+          "base_current_a": 5.421010862427522e-20,
+          "collector_current_a": 0.0
+        },
+        "residuals": {
+          "base_kcl_a": -2.8189256484623115e-18,
+          "collector_kcl_a": -6.071532165918825e-18,
+          "base_loop_v": 0.0,
+          "load_loop_v": 0.0,
+          "emitter_kcl_a": 0.0,
+          "power_w": 0.0
+        }
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 143
+    }
+  ],
+  "method_scope": "Warm running /185 NPN 0\u21925 V drive resistor-loaded NPN reference on the pinned host/display/fixture; software composition upper bounds, not physical scanout or exact OS-event/acceptance times",
+  "reference_process_exit_codes": "Not retained by reused helper; no separate zero-exit claim"
+}

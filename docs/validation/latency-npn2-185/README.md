@@ -1,0 +1,23 @@
+# Current-build NPN visible-response block · /185
+
+October 20, 2026. All **twenty predeclared `npn2` trials are available** on exact **0.168.0 /185** native app/agent. No unavailable/not-attempted result, replacement, retry, pooling or image/threshold retuning. [Immutable declaration](declaration.json), [complete ledger](session/cohort-result.json.gz), [summary](summary.json).
+
+**Nearest-rank marker-to-first-fresh p95 upper bound: 177.93725 ms**, rank 19/20, `npn2-19`, exact 711,749/4,000 ms. Bounds range 109.861333333–185.578541667 ms. This supports **500 ms first-valid-sample within the declared warm-running resistor-loaded NPN/software-composition fixture**. Committed-parameter p95 is 144.71875 ms. **100 ms acknowledgment remains inconclusive:** the marker bound includes controller overhead rather than exact OS input/acceptance time. A bound above the target does not establish slow app behavior. Current RC/LED and older /173 data stay separate and immutable; no cross-build causal speed comparison.
+
+The original fixture has a 5 V collector supply, 1 kΩ collector load, 10 kΩ base resistor, grounded emitter and generic Ebers–Moll NPN; no LED. A private 5 V Drive draft leaves accepted 0 V/cutoff physics unchanged. Independently bound first-complete-image admission precedes one acknowledged marker and one CUA Apply. Drive becomes 5 V and the transistor saturates: collector current 4.929600780862 mA, VCE 70.399219138186 mV. Native full graph/model/result matches the packaged agent, with only process-local result identities excluded. Frozen independently generated high-precision model values, direct Ebers–Moll laws, base/collector/emitter KCL, base/load KVL and power balance agree.
+
+The first original baseline/fresh images and all-frame analysis were inspected before trial 02. All **3,264 complete frames** classify against the unchanged six-region baseline/stale/fresh templates, including **28 explicit stale frames** carrying old values under solving/stale labels. Independent Go/Pillow decoding agrees in all 120 first-region comparisons. The original nine corruption classes are refused for every trial (180 exercises). The exact source adaptation audit changes only native identity, original-template path, optimized-Python refusal and image byte access through the previously qualified private archive loader. Every original pixel/clock/geometry/state/physics/corruption predicate is unchanged; original inline storage and loader sources survive.
+
+All **3,311 received callbacks**, **3,115 unique PNGs** and **457,467,824 original image bytes** remain intact. Twelve out-of-presentation callbacks have no PNG under unchanged rules; 2,872 future-at-receipt diagnostics remain retained. Raw recorder flags and zero eligible-observation fields are unchanged; analytical bounds are derived separately. Relevant-region classification is not proof of all unmeasured pixels or future overlays. No physical scanout, exact event/acceptance time, cold/difficult/general interaction, reader/IME/all bindings, other environments, owner/study acceptance, promotion or overall PRD performance/MVP claim.
+
+Original pixels remain in private temporary storage and ignored lossless archives, directories 0700/files 0600. Archives include an unmodified CUA JPEG and total **64,004,096 bytes**. Git contains metadata and hash/member manifests only. [Archive pointers](image-stores.json), [original-byte manifest](manifest.json). Missing local evidence must be restored, never recaptured to regenerate a trial.
+
+The synthetic project is saved separately and public close completes. Session/worker wrappers and `open -W` exit 0; only the owned process/endpoint disappear without forced cleanup. Exact native and individual headless-reference exit codes are not retained and are not inferred. Shared settings, review/copy, SDK, canonical /120 and all 659 application Go hashes remain exact. No app/source/command/model/format/tolerance change or new release.
+
+Replay with Python and Pillow:
+
+```sh
+python3 -B docs/validation/latency-npn2-185/verify.py
+```
+
+The local bundled interpreter is `/Users/dshills/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3`. Replay opens no app, records no pixels, sends no input and extracts no files. It verifies all archived bytes and pins, independently recomputes rank 19 from raw tick fractions, repeats 120 first-region comparisons, every frame/paired result/independent law and all 180 corruption exercises. Retained local archives/build artifacts/templates are required. Optimized Python is refused. [Artifacts](artifacts.json), [checkpoint](checkpoint.json), [terminal results](terminal-results.json).
