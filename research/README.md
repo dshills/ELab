@@ -6,7 +6,9 @@ This first research phase covers **24 product families**, **82 selected source r
 
 ## Start here
 
-**Current delivery plan:** [First usable version](34-first-version-plan.md) — October 17, 2026. Frozen hobbyist alpha scope, six ordered work packages, release checks and a concrete app handoff. This is the active implementation priority; full PRD acceptance remains separate.
+**Remaining first-version work:** [Completion checklist](66-first-version-completion-checklist.md) — October 20, 2026. Detailed native repair, workflow, agent, data, quality, packaging and owner-acceptance tasks, with pass conditions and the additional full-MVP gates.
+
+**Current delivery plan:** [First usable version](34-first-version-plan.md) — updated October 20, 2026. Frozen hobbyist alpha scope, six ordered work packages, release checks and a concrete app handoff. This is the active implementation priority; full PRD acceptance remains separate.
 
 **Product definition:** [ELab product requirements](07-product-requirements.md) — Draft 0.3, October 13, 2026. Defines the hobbyist workflow, live simulation contract, complete user/agent capability parity, Vellum UI foundation, MVP boundaries, acceptance criteria, and release validation.
 

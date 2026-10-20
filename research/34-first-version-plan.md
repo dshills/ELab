@@ -2,6 +2,8 @@
 
 Updated October 20, 2026. Owner: implementation agent; owner acceptance: project owner.
 
+The [remaining-work checklist](66-first-version-completion-checklist.md) expands the current finish criteria into concrete tasks, dependencies and pass conditions, while retaining the separate full-MVP requirements.
+
 ## Outcome and scope
 
 Deliver a **private macOS hobbyist alpha** that lets the owner draw a circuit, watch it simulate, edit values, measure a waveform, undo a mistake, save/reopen and export a schematic. An external agent must perform the same reference workflows through public commands. The core runs offline without an account.
