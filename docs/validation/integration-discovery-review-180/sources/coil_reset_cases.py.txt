@@ -1,0 +1,105 @@
+"""Copied native/headless coil scenarios; UI reset is separately source-mounted."""
+import copy
+import json
+import math
+import time
+
+
+def check(native, parity, out):
+    def capture(target, duration):
+        before = target.ask('project.inspect')
+        admitted = target.ask('simulation.verify', dict(duration_s=duration, probe_ids=['i:L1', 'v:L1']), True)
+        identity = admitted['last_operation']
+        assert identity and identity != before.get('last_operation')
+        deadline = time.monotonic() + 10
+        while True:
+            operation = target.ask('operation.inspect', dict(id=identity))
+            status = operation['operation']['status']
+            assert status not in ['failed', 'canceled'], operation
+            if status == 'completed':
+                break
+            assert time.monotonic() < deadline
+            time.sleep(.01)
+        page = target.ask('operation.samples', dict(id=identity, limit=200))
+        assert page['total'] == len(page['rows']) and page['next_offset'] >= page['total']
+        return dict(metadata=operation['metadata'], probes=page['probes'], rows=page['rows'])
+
+    def current(result):
+        return next(p['initial_current_a'] for p in result['metadata']['graph']['components'] if p['id'] == 'L1')
+
+    def session(target, label):
+        cases = []
+        for example in ['rl', 'rlc']:
+            target.ask('example.load', dict(id=example, discard_changes=True), True)
+            target.ask('simulation.wait')
+            target.ask('simulation.pause', {}, True)
+            target.ask('inductor.initial.set', dict(id='L1', value='-20 mA'), True)
+            target.ask('simulation.restart', {}, True)
+            target.ask('simulation.wait')
+            target.ask('simulation.step', dict(duration_s=.002), True)
+            live = target.ask('simulation.wait')
+            scenario = dict(duration_s=.005, sample_step_s=.0005, input_mode='high', initial_voltage_v=1., capacitor_initials=[], inductor_initials=[dict(id='L1', current_a=.03)])
+            if example == 'rlc':
+                scenario['capacitor_initials'] = [dict(id='C1', voltage_v=2.)]
+            target.ask('verification.settings.set', scenario, True)
+            before = capture(target, .005)
+            assert current(before) == .03 and abs(before['rows'][0]['values'][0]-.03) < 1e-12
+            # This is the public payload of the production default projection,
+            # not an injection of native input. Duration alone is preserved.
+            defaults = dict(duration_s=.005, sample_step_s=0, input_mode='auto', capacitor_initials=[])
+            target.ask('verification.settings.set', defaults, True)
+            reset = target.ask('project.inspect')
+            assert reset['verification_settings'] == defaults
+            after = capture(target, .005)
+            assert current(after) == -.02 and abs(after['rows'][0]['values'][0]-(-.02)) < 1e-12
+            state = target.ask('project.inspect')
+            for key in ['components', 'wires', 'transient', 'mixed', 'run_id', 'electrical_revision', 'undo_entry', 'redo_entry']:
+                assert state.get(key) == live.get(key) == reset.get(key), (example, key)
+            assert next(p['initial_current_a'] for p in state['components'] if p['id'] == 'L1') == -.02
+            max_error = None
+            if example == 'rl':
+                errors = []
+                for row in after['rows']:
+                    expected = .05 + (-.02-.05)*math.exp(-row['time_s']/.01)
+                    errors.append(abs(row['values'][0]-expected))
+                    assert errors[-1] <= 1e-5 and abs(row['values'][1]-(5-100*expected)) <= .001
+                max_error = max(errors)
+            saved = out / (label + '-coil-' + example + '.elab')
+            target.ask('project.save', dict(path=str(saved)), True)
+            target.ask('simulation.wait')
+            fresh = parity.helper.Client(command_preconditions=True)
+            try:
+                fresh.ask('project.load', dict(path=str(saved)), True)
+                reopened = fresh.ask('simulation.wait')
+                assert reopened['paused'] and reopened['transient']['sample']['time_s'] == 0 and not reopened['document']['dirty']
+                assert next(p['initial_current_a'] for p in reopened['components'] if p['id'] == 'L1') == -.02
+                assert reopened['document']['recording_count'] == 2
+                restored = {}
+                for entry in reopened['operations']:
+                    metadata = fresh.ask('operation.inspect', dict(id=entry['id']))['metadata']
+                    key = next(p['initial_current_a'] for p in metadata['graph']['components'] if p['id'] == 'L1')
+                    page = fresh.ask('operation.samples', dict(id=entry['id'], limit=200))
+                    restored[key] = dict(metadata=metadata, probes=page['probes'], rows=page['rows'])
+                assert restored == {.03:before, -.02:after}
+            finally:
+                fresh.close()
+            outcome = dict(example=example, scenario=scenario, defaults=defaults, before=before, reset=reset, after=after, live=live, state=state, reopened=reopened, fresh_recordings_equal=True, rl_max_current_error_a=max_error)
+            (out / (label + '-coil-' + example + '.json')).write_text(json.dumps(outcome, indent=2)+'\n')
+            cases.append(outcome)
+        return cases
+
+    native_cases = session(native, 'native')
+    reference = parity.helper.Client(command_preconditions=True)
+    try:
+        headless_cases = session(reference, 'headless')
+    finally:
+        reference.close()
+    for left, right in zip(native_cases, headless_cases):
+        assert left['example'] == right['example']
+        for phase in ['before', 'after']:
+            a, b = left[phase], right[phase]
+            for key in ['graph', 'settings', 'engine', 'input_mode', 'probes', 'duration_s', 'sample_count']:
+                assert a['metadata'][key] == b['metadata'][key], (left['example'], phase, key)
+            parity.compare(a['metadata']['statistics'], b['metadata']['statistics'])
+            assert a['probes'] == b['probes'] and a['rows'] == b['rows']
+    return dict(passed=True, cases=[dict(example=c['example'], before_rows=len(c['before']['rows']), after_rows=len(c['after']['rows']), restored_startup_a=-.02, scenario_startup_a=.03, fresh_recordings_equal=True, rl_max_current_error_a=c['rl_max_current_error_a']) for c in native_cases], native_headless_rows_equal=True, live_and_saved_startup_and_history_preserved=True, four_fresh_saved_project_reopens=True, scope='Exact copied native/headless public settings projection and captures; production reset input is separately qualified by retained-widget and semantic source regressions. No new physical OS input claim.')

@@ -4,15 +4,15 @@ ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N
 
 The [first-version delivery plan](research/34-first-version-plan.md) targets a usable macOS hobbyist alpha with frozen scope, ordered blockers and a concrete handoff.
 
-**Current private review: 0.162.0 /179.** Use the [review app](build/ELab-0.162.0-179-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.162.0-179-review.zip) with its [checksum](build/ELab-0.162.0-179-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening.
+**Current private review: 0.163.0 /180.** Use the [review app](build/ELab-0.163.0-180-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.163.0-180-review.zip) with its [checksum](build/ELab-0.163.0-180-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening.
 
-Clean `d8a20ce` /SDK `b22478c` fixes [GEOMETRY-DRAFT-01](docs/validation/component-geometry-handoff/README.md): Rotate and Duplicate finish their own selected value-field draft before issuing one shared geometry command. Drafts still need Apply to change configured values; intervening agent/other-field work remains guarded. Models, simulation equations, public commands, formats and SDK are unchanged.
+Clean `8efce9a` /SDK `b22478c` corrects [NUMERICS-DISCOVERY-01](docs/validation/integration-discovery/README.md): detailed value-command discovery now identifies the actual SDIRK2 capacitor engines and separate exact RC, algebraic NPN and Radau IIA paths. Historical recordings keep their engine and rows. Only two filtered guidance strings change; ordinary catalog, other annotations/outputs, numerical kernels, models, commands, native bindings, formats and SDK are unchanged.
 
-Full source quality, copied native smoke, all four public adapters, reference/startup/measurement/sweep/live/save checks, thirty paging cases, strict local signature and ZIP/example reopens pass. Copied native/headless commands match 24 geometry/Undo stages across six part types; the private first-click and deferred/held-agent cases retain their separate source-mounted scope. Advanced-pin files/recovery and floating-source checks remain covered. No new physical input or latency acceptance is inferred.
+Full source quality, copied native smoke, all four public adapters, reference/startup/measurement/sweep/live/save checks, thirty paging cases, strict local signature and ZIP/example reopens pass. Native/headless discovery agrees, with twelve paired physics states across six families. Earlier geometry, advanced-pin/recovery and floating-source checks remain covered. No new physical input or visible-latency acceptance is inferred.
 
-[Walkthrough](research/35-first-version-review.md), [receipt](research/ui-audit/first-version/geometry-action-review-checkpoint.json), [proof](docs/validation/geometry-action-review-179/README.md).
+[Walkthrough](research/35-first-version-review.md), [receipt](research/ui-audit/first-version/integration-discovery-review-checkpoint.json), [proof](docs/validation/integration-discovery-review-180/README.md).
 
-Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment and the actual hobbyist study remain open. Visible latency stays scoped to /173, with RC and 100 ms acknowledgement unqualified. All 37 earlier sealed reviews, four candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.
+Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment and the actual hobbyist study remain open. Visible latency stays scoped to /173, with RC and 100 ms acknowledgement unqualified. All 38 earlier sealed reviews, four candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.
 
 ## Build and run from source
 

@@ -1,0 +1,52 @@
+"""Exercise exact artifact/source/resource guards before the signed runtime."""
+from pathlib import Path
+import copy
+import json
+import shutil
+import tempfile
+
+from signed_bundle import admit
+
+stage = Path(__file__).resolve().parent
+expected = json.loads((stage/'build-result-signed.json').read_text())
+app = Path(expected['review'])/'ELab.app'
+raw = stage/'build/elab'
+assert admit(app, expected, raw) == app/'Contents/MacOS/ELab'
+failures = {}
+for name, field, value in [('packaged-digest', 'native_sha256', '0'*64),
+                           ('raw-source-digest', 'source_native_sha256', '0'*64),
+                           ('clean-vcs-identity', 'source_commit', '0'*40)]:
+    changed = copy.deepcopy(expected)
+    changed[field] = value
+    try:
+        admit(app, changed, raw)
+    except ValueError as error:
+        failures[name] = str(error)
+    else:
+        raise AssertionError('invalid build receipt admitted: '+name)
+with tempfile.TemporaryDirectory(prefix='elab-signed-admission-') as directory:
+    copied = Path(directory)/'ELab.app'
+    shutil.copytree(app, copied)
+    resource = copied/'Contents/Resources/APP_MANIFEST.json'
+    resource.write_bytes(resource.read_bytes()+b'\n')
+    try:
+        admit(copied, expected, raw)
+    except ValueError as error:
+        failures['changed-resource-tree'] = str(error)
+    else:
+        raise AssertionError('changed signed resource admitted')
+    # Even a new tree digest cannot make a changed signed resource valid.
+    from runtime_isolation import bundle_tree
+    changed = dict(expected, source_bundle=bundle_tree(copied))
+    import subprocess
+    try:
+        admit(copied, changed, raw)
+    except subprocess.CalledProcessError:
+        failures['invalid-resource-signature'] = 'Strict codesign verification rejected the changed signed resource'
+    else:
+        raise AssertionError('changed signed resource bypassed signature verification')
+assert admit(app, expected, raw) == app/'Contents/MacOS/ELab'
+report = dict(passed=True, valid_exact_artifact_accepted=True, refusals=failures,
+              scope='Owned copied fixture only; raw/source identity, whole tree and strict signature are all required')
+(stage/'signature-admission.json').write_text(json.dumps(report, indent=2)+'\n')
+print(report)

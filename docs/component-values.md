@@ -56,7 +56,8 @@ and rows; importing one does not switch the current live solver or relabel that
 capture. See [capacitor integration](capacitor-integration.md). The source
 correction replaces an obsolete backward-Euler description in discovery only;
 no method selector, device law, tolerance, budget, file format or ordinary
-catalog change is introduced. The preserved /179 package retains the old text
-until a replacement package is qualified.
+catalog change is introduced. The [0.163.0 /180 replacement](validation/integration-discovery-review-180/README.md)
+qualifies this correction through exact copied native/headless discovery and six
+live families. Preserved /179 retains the old text.
 
 Applying that untouched text preserves the graph, run/electrical identity, simulated time, dirty state and undo/redo entries. It is still an admitted command, so command/event revisions and actor information may advance. Saving/reopening retains numeric SI and reconstructs an exact editable draft. Plot/schematic captions and measurement readouts may still use display precision; they are not used as editable source values.
