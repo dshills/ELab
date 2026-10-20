@@ -1,0 +1,18 @@
+"""Freeze all declared mode/lifecycle runs, retaining both reference fixture errors."""
+from pathlib import Path
+import gzip,hashlib,json,shutil,subprocess
+ROOT=Path('/Users/dshills/Development/projects/ELab');STAGE=ROOT/'build/mode-review-183-tools';OUT=ROOT/'docs/validation/mode-lifecycle-review-183'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+(OUT/'raw').mkdir();(OUT/'producers').mkdir();manifest={}
+for label,folder in [('discovery',Path('/private/tmp/elab-mode-review-183-discovery')),('initial',Path('/private/tmp/elab-mode-review-183')),('final',Path('/private/tmp/elab-mode-review-183-final')),('stage',STAGE)]:
+ for p in sorted(folder.rglob('*')):
+  if not p.is_file() or label=='stage' and (p.suffix=='.py' or p.name.endswith('.py.txt')):continue
+  assert not p.is_symlink();data=p.read_bytes();stored=gzip.compress(data,mtime=0);target=OUT/'raw'/label/str(p.relative_to(folder));target=target.with_name(target.name+'.gz');target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(stored)
+  manifest[str(target.relative_to(OUT))]=dict(original_bytes=len(data),original_sha256=hashlib.sha256(data).hexdigest(),stored_sha256=sha(target))
+for p in STAGE.iterdir():
+ if p.is_file() and (p.suffix=='.py' or p.name.endswith('.py.txt')):shutil.copyfile(p,OUT/'producers'/(p.name+'.txt' if p.suffix=='.py' else p.name))
+receipt=ROOT/'research/ui-audit/first-version/recorded-dc-review-checkpoint.json';release=json.loads(receipt.read_text());final=json.loads(Path('/private/tmp/elab-mode-review-183-final/report.json').read_text());analysis=json.loads(Path('/private/tmp/elab-mode-review-183-final/analysis.json').read_text());assert final['passed'] and analysis['passed']
+assert all(sha(ROOT/n)==h for n,h in release['quality']['source_sha256'].items())
+report=dict(passed=True,release='0.166.0 /183',source_commit=release['source_commit'],documentation_parent_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),receipt_sha256=sha(receipt),release_checkpoint_sha256=sha(ROOT/'docs/validation/recorded-dc-review-183/checkpoint.json'),release_manifest_sha256=sha(Path(release['review_path'])/'RELEASE_MANIFEST.json'),agent_sha256=release['agent_sha256'],cases=12,recorded_rows=analysis['recorded_rows'],matched_live_values=analysis['live_record_values_matched'],independent_row_law_checks=analysis['independent_row_law_checks'],independent_final_kcl_nodes=analysis['independent_final_kcl_nodes'],complete_final_states_matched=analysis['complete_final_states_matched'],charge_continuity_channels=analysis['charge_continuity_channels'],fresh_reopened_capture_exports=24,unchanged_after_restart_exports=12,normal_final_processes=24,final_requests=519,all_declared_normal_processes=32,all_declared_requests=678,initial_emitter_reference_error_preserved=True,offline_transistor_key_error_preserved=True,new_product_defect=False,source_changed=False,new_release=False,native_input=False,performance_qualified=False,owner_acceptance=False,full_mvp_complete=False,helper_sha256=sha(ROOT/'docs/validation/junction-boundary-review-179/producers/collect.py.txt'))
+(OUT/'report.json').write_text(json.dumps(report,indent=2)+'\n');(OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+cp=dict(files={str(p.relative_to(OUT)):sha(p) for p in sorted(OUT.rglob('*')) if p.is_file() and p.name!='checkpoint.json'});(OUT/'checkpoint.json').write_text(json.dumps(cp,indent=2)+'\n');print(dict(proof_files=len(cp['files'])+1,raw_files=len(manifest)))

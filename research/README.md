@@ -57,3 +57,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [First-version delivery plan](34-first-version-plan.md), [visible-latency method](36-visible-latency-method.md) and [fixed collection protocol](37-visible-latency-cohort-plan.md): current alpha cut line, calibration evidence and the declared LED/RC/NPN responsiveness trials.
 
 - [Visible responsiveness results](38-visible-responsiveness-results.md): all scheduled outcomes, available software-frame bounds and reasons a complete percentile is unavailable.
+
+- [Source modes, restart and captured experiments](42-source-modes-and-captures.md): twelve bounded /183 electronics/lifecycle cases with independent equations, immutable captures and fresh saved-file reopens; no source/version change.

@@ -57,3 +57,5 @@ python3 scripts/verification-demo.py --connect build/verify.endpoint.json \
 Recorded JSON/CSV exports now retain their immutable captured asset in [background export work](project-export.md), including when the original session record is later evicted. Format/model metadata is unchanged.
 
 Recorded import now reads/validates outside the editor lock and preserves later viewer choices; kept capacity is rechecked at attachment. See [background import](project-import.md).
+
+A [twelve-case /183 mode/lifecycle review](validation/mode-lifecycle-review-183/README.md) checks explicit Verify modes independently of later live input changes. Repeating the original startup scenario after a live mode change/restart preserves exact captured rows/statistics; saved records freshly reopen unchanged. Independent RC, Ohm, signed current-balance and LED-law checks supplement shared-kernel live/Verify parity. This finite headless evidence adds no native, general accuracy/performance or owner acceptance.

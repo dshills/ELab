@@ -1,0 +1,13 @@
+from pathlib import Path
+from importlib.machinery import SourceFileLoader
+import importlib.util,json,hashlib
+ROOT=Path('/Users/dshills/Development/projects/ELab');OUT=Path('/private/tmp/elab-mode-review-183-discovery');OUT.mkdir(mode=0o700)
+src=ROOT/'docs/validation/junction-boundary-review-179/producers/collect.py.txt';spec=importlib.util.spec_from_loader('mode_discover',SourceFileLoader('mode_discover',str(src)));m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);m.OUT=OUT;m.AGENT=Path('/private/tmp/elab-first-version-183-signed-runtime/agent')
+c=m.Client('discovery');results=[]
+try:
+ for name in ('rc','blink','led-fade'):
+  c.ask('example.load',dict(id=name,discard_changes=True),True);c.ask('simulation.pause',{},True);c.ask('simulation.restart',{},True);state=c.ask('simulation.wait')
+  (OUT/(name+'.json')).write_text(json.dumps(state,indent=2)+'\n');result=dict(name=name,analysis=state['analysis'],components=[{k:v for k,v in p.items() if k in ('id','kind','value','initial_voltage_v','waveform')} for p in state['components']],modes=state['live_input_modes'],sources=state.get('source_annotations'),scope=[t['probe'] for t in state['scope']['traces']],transient=state['transient']['sample']);results.append(result);print(json.dumps(result),flush=True)
+ result=c.close();(OUT/'report.json').write_text(json.dumps(dict(passed=True,results=results,process=result),indent=2)+'\n')
+finally:
+ if c.process.poll() is None:c.close()

@@ -1,0 +1,54 @@
+"""Independent RC propagation, source phase and LED/KCL/Ohm checks."""
+from decimal import Decimal
+import math
+
+
+def source_levels(mode, at, high=.05, low=.05):
+    if mode in ('charge','high'):return [5.]
+    if mode in ('discharge','low'):return [0.]
+    t,h,l=map(lambda x:Decimal(str(x)),(at,high,low));phase=t%(h+l)
+    if t>0 and (abs(phase)<Decimal('1e-12') or abs(phase-h)<Decimal('1e-12')):return [0.,5.]
+    return [5. if phase<h else 0.]
+
+
+def rc_voltage(mode, at, initial=2., tau=.01):
+    remaining=Decimal(str(at));v=initial;phase=0
+    while remaining>0:
+        step=min(remaining,Decimal('.05'));u=5. if mode=='charge' or mode=='auto' and phase%2==0 else 0.
+        v=u+(v-u)*math.exp(-float(step)/tau);remaining-=step;phase+=1
+    return v
+
+
+def led_current(voltage, model):
+    # Solve the published series-resistance Shockley law by monotone bisection.
+    saturation=model['is_a'];rs=model['rs_ohm'];nv=model['n']*1.380649e-23*(model['temperature_c']+273.15)/1.602176634e-19
+    lo=-saturation;hi=max(voltage/rs,0.)+saturation
+    for _ in range(160):
+        mid=(lo+hi)/2;exponent=(voltage-mid*rs)/nv
+        f=mid-saturation*math.expm1(min(exponent,700))
+        if f>0:hi=mid
+        else:lo=mid
+    return (lo+hi)/2
+
+
+def check_rows(name, mode, document):
+    rows=document['rows'];metadata=document['metadata'];errors=dict(source_v=0.,rc_voltage_v=0.,ohm_a=0.,kcl_a=0.,led_law_a=0.);checked=0
+    for row in rows:
+        t=row['time_s'];v=row['values']
+        if name!='flasher':
+            errors['source_v']=max(errors['source_v'],min(abs(v[0]-x) for x in source_levels(mode,t)))
+        if name=='rc':
+            cap=rc_voltage(mode,t);errors['rc_voltage_v']=max(errors['rc_voltage_v'],abs(v[1]-cap))
+            errors['ohm_a']=max(errors['ohm_a'],abs(v[2]-(v[0]-v[1])/10000))
+            errors['kcl_a']=max(errors['kcl_a'],abs(v[2]-v[3]));checked+=3
+        elif name=='blink':
+            errors['ohm_a']=max(errors['ohm_a'],abs(v[3]-(v[0]-v[1])/10000))
+            assert [p['reference'] for p in metadata['probes'][3:]]==['into device','into device','out of device']
+            errors['kcl_a']=max(errors['kcl_a'],abs(v[3]+v[4]-v[5]));checked+=2
+            assert v[4]>.002 if v[0]>2.5 else abs(v[4])<1e-8
+        elif name=='led-fade':
+            errors['ohm_a']=max(errors['ohm_a'],abs(v[2]-(v[0]-v[1])/1000))
+            errors['kcl_a']=max(errors['kcl_a'],abs(v[2]-v[3]-v[4]))
+            errors['led_law_a']=max(errors['led_law_a'],abs(v[4]-led_current(v[1],metadata['led_model'])));checked+=3
+    assert errors['source_v']<1e-9 and errors['rc_voltage_v']<1e-9 and all(errors[k]<1e-9 for k in ('ohm_a','kcl_a','led_law_a')),(name,mode,errors)
+    return dict(rows=len(rows),independent_law_checks=checked,max_errors=errors)

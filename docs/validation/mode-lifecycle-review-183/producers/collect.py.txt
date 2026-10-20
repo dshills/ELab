@@ -1,0 +1,80 @@
+"""Twelve /183 input-mode, live/Verify and captured-asset lifecycle cases."""
+from pathlib import Path
+from importlib.machinery import SourceFileLoader
+import copy,hashlib,importlib.util,json,math,time,traceback
+from reference import check_rows
+ROOT=Path('/Users/dshills/Development/projects/ELab');OUT=Path('/private/tmp/elab-mode-review-183-final');OUT.mkdir(mode=0o700)
+helper=ROOT/'docs/validation/junction-boundary-review-179/producers/collect.py.txt';spec=importlib.util.spec_from_loader('mode_client',SourceFileLoader('mode_client',str(helper)));m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);m.OUT=OUT;m.AGENT=Path('/private/tmp/elab-first-version-183-signed-runtime/agent')
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();receipt=ROOT/'research/ui-audit/first-version/recorded-dc-review-checkpoint.json';release=json.loads(receipt.read_text());assert sha(m.AGENT.with_name('elab-agent'))==release['agent_sha256']
+probes={'rc':['v:V1.positive','v:C1','i:R1','i:C1'],'blink':['v:VIN.positive','v:Q1.base','v:Q1.collector','i:Q1.base','i:Q1.collector','i:Q1.emitter'],'led-fade':['v:V1.positive','v:C1','i:R1','i:C1','i:D1'],'flasher':['v:Q1.collector','v:Q2.collector','v:C1','v:C2','i:D1','i:D2']}
+cases=[dict(name=name,mode=mode,duration=.1,step=.001,initial=2. if name in ('rc','led-fade') else 0.) for name in probes for mode in ('auto','charge','discharge') if name=='rc']+[dict(name=name,mode=mode,duration=.1,step=.001,initial=2. if name=='led-fade' else 0.) for name in ('blink','led-fade','flasher') for mode in ('auto','high','low')]
+plan=dict(release='0.166.0 /183',receipt_sha256=sha(receipt),agent_sha256=release['agent_sha256'],helper_sha256=sha(helper),source_files=658,cases=cases,scope='Owned headless startup modes, queued source changes/charge continuity, restart, independent RC/Ohm/KCL/LED laws, same-kernel live/Verify parity and immutable saved captures; no native/timing/whole-PRD or hardware certification',bounds=dict(voltage_v=1e-9,current_a=1e-9,live_record_value_abs=1e-10,live_record_value_rel=1e-9,charge_continuity_v=1e-9))
+(OUT/'plan.json').write_text(json.dumps(plan,indent=2)+'\n');results=[];exits=[];failure=None
+source_keys=('components','wires','drawing','transient','mixed','npn','result','scope','paused','run_id','electrical_revision','actuation_revision','undo_entry','redo_entry','transient_settings')
+
+def save(path,data):path.write_text(json.dumps(data,indent=2)+'\n')
+def wait(c,identifier):
+ deadline=time.monotonic()+30
+ while True:
+  view=c.ask('operation.inspect',dict(id=identifier));status=view['operation']['status']
+  if status=='completed':return view
+  assert status in ('queued','running') and time.monotonic()<deadline,view;time.sleep(.02)
+def capture(c,case,folder,label):
+ before=c.ask('project.inspect');accepted=c.ask('simulation.verify',dict(duration_s=case['duration'],sample_step_s=case['step'],input_mode=case['mode'],probe_ids=probes[case['name']]),True);identifier=accepted['last_operation'];op=wait(c,identifier);after=c.ask('project.inspect')
+ for key in source_keys:assert before.get(key)==after.get(key),(label,key)
+ path=folder/(label+'.json');c.ask('verification.export',dict(id=identifier,path=str(path),format='json'),True);data=json.loads(path.read_text());assert data['metadata']==op['metadata'] and data['metadata']['input_mode']==case['mode']
+ save(folder/(label+'-source-before.json'),before);save(folder/(label+'-source-after.json'),after)
+ return identifier,data,path
+try:
+ for case in cases:
+  name,mode=case['name'],case['mode'];label=name+'-'+mode;folder=OUT/label;folder.mkdir();c=m.Client(label)
+  try:
+   c.ask('example.load',dict(id=name,discard_changes=True),True);c.ask('simulation.pause',{},True);c.ask('simulation.wait')
+   cfg=dict(step_s=case['step'],high_s=.05,low_s=.05,initial_voltage_v=case['initial'],seconds_per_wall_second=.02);c.ask('simulation.transient.set',cfg,True);c.ask('simulation.restart',{},True);c.ask('simulation.wait')
+   c.ask('scope.probes.set',dict(ids=probes[name]),True);c.ask('simulation.input.set',dict(mode=mode),True);c.ask('simulation.restart',{},True);baseline=c.ask('simulation.wait')
+   assert baseline['transient']['input_mode']==mode and baseline['transient']['sample']['time_s']==0
+   c.ask('simulation.step',dict(duration_s=case['duration']),True);live=c.ask('simulation.wait');save(folder/'baseline.json',baseline);save(folder/'live.json',live)
+   first,data,original=capture(c,case,folder,'first');laws=check_rows(name,mode,data);matched=0
+   for index,trace in enumerate(live['scope']['traces']):
+    assert trace['probe']['id']==probes[name][index]
+    for point in trace['points']:
+     rows=[r for r in data['rows'] if r['time_s']==point['time_s']]
+     assert any(math.isclose(r['values'][index],point['value'],abs_tol=1e-10,rel_tol=1e-9) for r in rows),(label,point)
+     matched+=1
+   other=('discharge' if mode!='discharge' else 'charge') if name=='rc' else ('low' if mode!='low' else 'high')
+   before=c.ask('project.inspect');c.ask('simulation.input.set',dict(mode=other),True);pending=c.ask('project.inspect');save(folder/'pending-before.json',before);save(folder/'pending.json',pending)
+   assert pending['transient']['pending_input_mode']==other
+   for key in ('sample','samples','input_mode'):assert pending['transient'][key]==before['transient'][key],(label,key)
+   c.ask('simulation.step',dict(duration_s=.001),True);changed=c.ask('simulation.wait');save(folder/'changed.json',changed)
+   assert changed['transient']['input_mode']==other and math.isclose(changed['transient']['sample']['time_s'],.101,abs_tol=1e-12)
+   continuity=0
+   for index,probe in enumerate(probes[name]):
+    if probe.startswith('v:C'):
+     old=next(t for t in live['scope']['traces'] if t['probe']['id']==probe)['points'][-1]['value'];points=[p for p in changed['scope']['traces'][index]['points'] if p['time_s']==.1]
+     assert len(points)>=2 and all(abs(p['value']-old)<1e-9 for p in points),(label,probe,old,points);continuity+=1
+   for key in ('components','wires','drawing','run_id','electrical_revision','undo_entry','redo_entry'):assert changed.get(key)==before.get(key),(label,key)
+   c.ask('simulation.restart',{},True);restarted=c.ask('simulation.wait');save(folder/'restarted.json',restarted)
+   assert restarted['run_id']==changed['run_id']+1 and restarted['transient']['sample']['time_s']==0 and restarted['transient']['input_mode']==other
+   assert c.ask('operation.inspect',dict(id=first))['metadata']==data['metadata']
+   after_export=folder/'first-after-restart.json';c.ask('verification.export',dict(id=first,path=str(after_export),format='json'),True);assert original.read_bytes()==after_export.read_bytes()
+   second,again,second_path=capture(c,case,folder,'second');assert again['rows']==data['rows'] and again['metadata']['statistics']==data['metadata']['statistics']
+   saved=folder/'project.elab';c.ask('project.save',dict(path=str(saved)),True);saved_sha=sha(saved);fresh=m.Client(label+'-fresh')
+   try:
+    fresh.ask('project.load',dict(path=str(saved)),True);reopened=fresh.ask('simulation.wait');save(folder/'reopened.json',reopened)
+    assert reopened['paused'] and not reopened['document']['dirty'] and reopened['document']['recording_count']==2 and reopened['transient']['sample']['time_s']==0
+    assert reopened['components']==baseline['components'] and reopened['wires']==baseline['wires'] and reopened['transient_settings']==cfg
+    count=0
+    for entry in reopened['operations']:
+     op=fresh.ask('operation.inspect',dict(id=entry['id']));origin=op['metadata']['operation_id'];expected,path=(data,original) if origin==first else (again,second_path);assert origin in (first,second) and op['metadata']==expected['metadata']
+     dest=folder/('reopened-'+origin+'.json');fresh.ask('verification.export',dict(id=entry['id'],path=str(dest),format='json'),True);assert dest.read_bytes()==path.read_bytes();count+=1
+    assert count==2 and sha(saved)==saved_sha;exits.append(fresh.close())
+   finally:
+    if fresh.process.poll() is None:exits.append(fresh.close())
+   exits.append(c.close());result=dict(case=case,passed=True,laws=laws,live_record_values_matched=matched,charge_continuity_channels=continuity,recorded_rows=len(data['rows']),same_scenario_after_live_mode_change_exact=True,immutable_capture_export_exact=True,two_fresh_reopened_exports_exact=True,saved_sha256=saved_sha)
+   save(folder/'result.json',result);results.append(result);print(json.dumps(result),flush=True)
+  finally:
+   if c.process.poll() is None:exits.append(c.close())
+except BaseException:
+ failure=traceback.format_exc();raise
+finally:
+ save(OUT/'report.json',dict(passed=failure is None and len(results)==12,results=results,process_exits=exits,failure=failure,agent_unchanged=sha(m.AGENT.with_name('elab-agent'))==release['agent_sha256']))

@@ -1,0 +1,65 @@
+"""Offline graph-current balances and lifecycle replay over retained /183 cases."""
+from pathlib import Path
+import json,math
+from reference import check_rows
+OUT=Path('/private/tmp/elab-mode-review-183-final')
+
+def graph_kcl(metadata):
+    graph=metadata['graph'];mixed=metadata['mixed'];parent={p['id']+'.'+pin:p['id']+'.'+pin for p in graph['components'] for pin in p['terminals']}
+    def find(x):
+        while parent[x]!=x:x=parent[x]
+        return x
+    def union(a,b):parent[find(a)]=find(b)
+    for wire in graph['wires']:
+        if wire['connected']:union(wire['from'],wire['to'])
+    grounds=[p['id']+'.reference' for p in graph['components'] if p['kind']=='ground']
+    for ground in grounds[1:]:union(grounds[0],ground)
+    balance={find(pin):0. for pin in parent}
+    def add(pin,current):balance[find(pin)]+=current
+    def branch(identity,a,b,current):add(identity+'.'+a,current);add(identity+'.'+b,-current)
+    for kind in ('resistors','capacitors'):
+        for part in mixed[kind]:branch(part['id'],'1','2',part['current_a'])
+    for part in mixed['leds']:branch(part['id'],'anode','cathode',part['current_a'])
+    for part in mixed['sources']:branch(part['id'],'positive','negative',-part['current_a'])
+    for part in mixed['transistors']:
+        add(part['transistor_id']+'.base',part['base_current_a']);add(part['transistor_id']+'.collector',part['collector_current_a']);add(part['transistor_id']+'.emitter',-part['emitter_current_a'])
+    error=max(abs(v) for v in balance.values());assert error<1e-9,(metadata['input_mode'],balance)
+    return dict(nodes=len(balance),max_residual_a=error,balance_a=balance)
+
+
+def main():
+    report=json.loads((OUT/'report.json').read_text());assert report['passed'] and len(report['results'])==12
+    checked=[]
+    for result in report['results']:
+        case=result['case'];label=case['name']+'-'+case['mode'];folder=OUT/label
+        read=lambda name:json.loads((folder/name).read_text())
+        first=read('first.json');again=read('second.json');live=read('live.json');baseline=read('baseline.json');pending=read('pending.json');before=read('pending-before.json');changed=read('changed.json');restarted=read('restarted.json');reopened=read('reopened.json')
+        assert check_rows(case['name'],case['mode'],first)==result['laws']
+        assert first['rows']==again['rows'] and first['metadata']['statistics']==again['metadata']['statistics']
+        kind='npn' if case['name']=='blink' else 'mixed';final=None;kcl=None
+        if kind in first['metadata']:
+            strip=lambda d:{k:v for k,v in d.items() if k!='run_id'}
+            assert strip(live[kind])==strip(first['metadata'][kind]);final=True
+            if kind=='mixed':kcl=graph_kcl(first['metadata'])
+        other=('discharge' if case['mode']!='discharge' else 'charge') if case['name']=='rc' else ('low' if case['mode']!='low' else 'high')
+        expected_input=0. if other in ('discharge','low') else 5.
+        for state in (changed,restarted):
+            assert state['transient']['input_mode']==other and abs(state['transient']['sample']['input_v']-expected_input)<1e-9
+        assert reopened['transient']['input_mode']=='auto' and reopened['transient']['sample']['time_s']==0
+        # Restart/Open use saved startup, rather than resuming capacitor charge.
+        caps=[p for p in first['metadata']['graph']['components'] if p['kind']=='capacitor'];startup=[]
+        for cap in caps:
+            wanted=cap.get('initial_voltage_v',case['initial'])
+            for phase,state in [('baseline',baseline),('restart',restarted),('reopen',reopened)]:
+                if case['name']=='rc':got=state['transient']['sample']['voltage_v']
+                else:got=next(p for p in state['mixed']['capacitors'] if p['id']==cap['id'])['voltage_v']
+                assert abs(got-wanted)<1e-9,(label,phase,cap['id'],got,wanted)
+            startup.append(dict(id=cap['id'],voltage_v=wanted))
+        # No schematic/history/electrical changes from applied input or restart.
+        for key in ('components','wires','drawing','electrical_revision','undo_entry','redo_entry','transient_settings'):
+            assert all(state.get(key)==baseline.get(key) for state in (before,pending,changed,restarted)),(label,key)
+        checked.append(dict(label=label,complete_final_state_matches=final,independent_final_kcl=kcl,startup_capacitors=startup,reopen_starts_auto=True))
+    return dict(passed=True,cases=checked,recorded_rows=sum(r['recorded_rows'] for r in report['results']),live_record_values_matched=sum(r['live_record_values_matched'] for r in report['results']),independent_row_law_checks=sum(r['laws']['independent_law_checks'] for r in report['results']),charge_continuity_channels=sum(r['charge_continuity_channels'] for r in report['results']),complete_final_states_matched=sum(r['complete_final_state_matches'] is True for r in checked),independent_final_kcl_nodes=sum(r['independent_final_kcl']['nodes'] for r in checked if r['independent_final_kcl']),normal_final_process_exits=len(report['process_exits']),final_requests=sum(r['requests'] for r in report['process_exits']))
+
+if __name__=='__main__':
+    summary=main();(OUT/'analysis.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary),flush=True)
