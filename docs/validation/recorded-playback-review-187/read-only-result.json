@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "scope": "Read-only first release replay of the retained checkpoint, signatures, source, ZIP, inherited case evidence and all prior artifacts; starts no app or tests",
+  "replay_session": 98108,
+  "exit_code": 0,
+  "first_verified_checkpoint": "checkpoint-verified-before-log.json",
+  "pipeline": {
+    "clean_build": {
+      "session": 88879,
+      "exit_code": 0
+    },
+    "strict_admission": {
+      "exit_code": 0
+    },
+    "copied_runtime": {
+      "session": 65320,
+      "exit_code": 0
+    },
+    "reference_acceptance": {
+      "session": 21087,
+      "exit_code": 0
+    },
+    "paging": {
+      "exit_code": 0,
+      "cases": 30,
+      "requests": 95
+    },
+    "seal": {
+      "session": 22659,
+      "exit_code": 0
+    },
+    "archive": {
+      "session": 31263,
+      "exit_code": 0
+    },
+    "extracted_examples": {
+      "exit_code": 0
+    }
+  },
+  "native_physical_input": false,
+  "new_visible_latency": false,
+  "canonical_promoted": false
+}

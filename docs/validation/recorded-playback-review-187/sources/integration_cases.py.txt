@@ -1,0 +1,88 @@
+"""Exact packaged native/headless numerical-discovery and live-family parity."""
+from pathlib import Path
+import copy
+import gzip
+import hashlib
+import json
+
+from floating_cases import close
+
+
+def check(native, parity, out):
+    root = Path('/Users/dshills/Development/projects/ELab')
+    previous = root/'docs/validation/integration-discovery/raw/original-final'
+    old_catalog = json.loads(gzip.decompress((previous/'ordinary.json.gz').read_bytes()))
+    old_details = json.loads(gzip.decompress((previous/'details.json.gz').read_bytes()))
+    fixture = out/'integration-waveform.elab'
+    fixture.write_bytes(gzip.decompress((previous/'waveform.elab.gz').read_bytes()))
+    fixture_sha = hashlib.sha256(fixture.read_bytes()).hexdigest()
+    cases = [('flasher', 'elab.mixed-mna-sdirk2.v1'),
+             ('rc-high-pass', 'elab.network-mna-sdirk2.v1'),
+             ('rc', 'elab.ideal-rc-exact.v1'),
+             ('blink', 'elab.npn-switch-quasistatic.v1'),
+             ('rlc', 'elab.rlc-mna-radau5.v1'),
+             ('waveform', 'elab.network-waveforms-mna-sdirk2.v1')]
+
+    def session(client, label):
+        client.ask('simulation.pause', {}, True)
+        before = client.ask('project.inspect')
+        catalog = client.ask('capabilities.list')
+        details = {command: client.ask('capabilities.list', dict(command=command))
+                   for command in ('component.place', 'component.set')}
+        after = client.ask('project.inspect')
+        # Native layout publication can change presentation context during reads.
+        excluded = {'view', 'viewport', 'revision', 'command_revision', 'last_actor'}
+        assert {k:v for k,v in before.items() if k not in excluded} == {k:v for k,v in after.items() if k not in excluded}
+        assert catalog == old_catalog
+        for command, detail in details.items():
+            old, new = copy.deepcopy(old_details[command]), copy.deepcopy(detail)
+            old_text = old['capabilities'][0]['input_schema']['x-network-numerics'].pop('time_integration')
+            new_text = new['capabilities'][0]['input_schema']['x-network-numerics'].pop('time_integration')
+            assert 'retain backward Euler' in old_text and 'retain backward Euler' not in new_text
+            assert 'SDIRK2' in new_text and 'historical' in new_text
+            assert all(engine in new_text for _,engine in cases)
+            assert old == new
+        observed = []
+        for name, engine in cases:
+            if name == 'waveform':
+                client.ask('project.load', dict(path=str(fixture),discard_changes=True), True)
+            else:
+                client.ask('example.load', dict(id=name,discard_changes=True), True)
+            client.ask('simulation.pause', {}, True)
+            client.ask('simulation.restart', {}, True)
+            baseline = client.ask('simulation.wait')
+            client.ask('simulation.step', dict(duration_s=.001), True)
+            live = client.ask('simulation.wait')
+            assert baseline['transient']['engine'] == live['transient']['engine'] == engine
+            assert baseline['transient']['sample']['time_s'] == 0 and live['transient']['sample']['time_s'] == .001
+            assert not live['transient']['stale']
+            value = dict(name=name,engine=engine,baseline=baseline,live=live)
+            (out/(label+'-integration-'+name+'.json')).write_text(json.dumps(value,indent=2)+'\n')
+            observed.append(value)
+        result = dict(catalog=catalog,details=details,before=before,after=after)
+        (out/(label+'-integration-discovery.json')).write_text(json.dumps(result,indent=2)+'\n')
+        return observed,result
+
+    actual, native_discovery = session(native, 'native')
+    reference = parity.helper.Client(command_preconditions=True)
+    try:
+        expected, headless_discovery = session(reference, 'headless')
+        close(reference)
+    finally:
+        if reference.process.poll() is None:
+            reference.close()
+    assert native_discovery['catalog'] == headless_discovery['catalog']
+    assert native_discovery['details'] == headless_discovery['details']
+    for left,right in zip(actual,expected):
+        assert left['name'] == right['name'] and left['engine'] == right['engine']
+        for phase in ('baseline','live'):
+            for key in ('components','wires','transient_settings','source_sampling','source_warnings'):
+                assert left[phase].get(key) == right[phase].get(key),(left['name'],phase,key)
+            for key in ('result','mixed','transient','scope'):
+                parity.compare(left[phase].get(key),right[phase].get(key),left['name']+'.'+phase+'.'+key)
+    assert hashlib.sha256(fixture.read_bytes()).hexdigest() == fixture_sha
+    return dict(passed=True,cases_per_adapter=6,paired_physics_states=12,
+                corrected_detailed_text_fields=2,ordinary_discovery_unchanged=True,
+                all_other_detailed_fields_unchanged=True,native_headless_discovery_equal=True,
+                fixture_sha256=fixture_sha,fixture_unchanged=True,
+                scope='Exact copied /180 native endpoint and headless agent public commands; no physical input, solver change or visible-latency claim')
