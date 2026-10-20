@@ -1,4 +1,12 @@
-# ELab first-version review · 0.171.0 /188
+# ELab first private alpha · 0.172.0 /189
+
+**Start here:** open [ELab.app](../build/ELab-0.172.0-189-alpha/ELab.app) from the [alpha folder](../build/ELab-0.172.0-189-alpha). It includes the matching external agent, three editable examples and notices. Save and quit another ELab window first. Try `Examples/LED-2k.elab`, edit its resistance, then Save As and reopen your copy. No development tools or account are needed.
+
+This is the tested /189 app and agent, packaged for owner use. Source quality, internal rendering, shared commands, save/reopen and package checks pass. Recent automated native window captures were blank; current interactive appearance and the recorded-time → Previous recheck remain unverified. If that action refuses, commit the time with Enter before Previous. Report a blank window or any blocked core task as the first priority. Full accessibility, broader environment/performance checks and public distribution remain open. [Handoff receipt](ui-audit/first-version/private-alpha-handoff-189.json).
+
+The four tasks below apply to this alpha. External-agent instructions use the alpha folder and its matching `elab-agent`. The following /188 packaging and defect notes retain their historical scope; they do not qualify /189 native interaction.
+
+## Preserved /188 engineering checkpoint
 
 The [review folder](../build/ELab-0.171.0-188-review) includes [ELab.app](../build/ELab-0.171.0-188-review/ELab.app), matching `elab-agent`, three editable examples and notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is required.
 
