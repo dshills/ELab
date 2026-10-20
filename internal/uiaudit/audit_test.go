@@ -189,6 +189,22 @@ func TestInventoryTracksComponentStartupDefaultFactory(t *testing.T) {
 	}
 }
 
+func TestInventoryTracksRecordedPlaySettlementFactory(t *testing.T) {
+	dir := t.TempDir()
+	source := `package main; func view(s *screen) { s.recordedPlayAction(state) }`
+	if err := os.WriteFile(filepath.Join(dir, "view.go"), []byte(source), 0600); err != nil {
+		t.Fatal(err)
+	}
+	report, err := Audit(dir)
+	if err != nil || len(report.Issues) != 0 || len(report.Sites) != 1 {
+		t.Fatal(report, err)
+	}
+	site := report.Sites[0]
+	if site.Kind != "callback-factory" || site.Status != "requires-binding-review" || len(site.Commands) != 0 {
+		t.Fatal("factory must not invent routes or runtime coverage", site)
+	}
+}
+
 func TestInventoryTracksRelatedValueActionRoute(t *testing.T) {
 	directory := t.TempDir()
 	source := `package main

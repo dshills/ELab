@@ -1,0 +1,9 @@
+# Recorded Play: commit the entry before playback
+
+October 20, 2026. **RECORD-PLAY-01 (P2)**: /186's first Play click after a private index, time or speed edit can fail against the old revision; invalid index/time input can lose its error and start from the previous position. Activation that keeps field focus can ignore private input.
+
+Play now settles its three fields in order, then uses the existing shared seek/speed/Play commands. Exact own responses continue the action; unrelated user/agent/document/capture work still refuses it. Invalid entries remain stopped with feedback, and fresh correction recovers. Duplicate callbacks do not start playback twice. No new model, solver, format, command ID or SDK change.
+
+Ten final mounted leaves fail against original production source and pass with the fix, through pointer and no-focus-loss activation. Deferred and mounted tests cover correction, full accepted-state preservation, agent interleavings, duplicate barriers and viewport ownership. Full default quality passes in **231.254 s** on **664 application Go files plus three tools**, including lint/imports/Staticcheck, 65 Python tests, root/native race/vet and configured mounted UI checks. The reviewed source inventory is 73 native sources /401 sites /164 commands /132 routed IDs, with public commands/aliases/coverage unchanged.
+
+The [source proof](../docs/validation/recorded-playback-settlement/README.md) retains original product failures and separate harness/inventory mistakes, final source/logs and a read-only byte/source replay. These are mounted SDK software-input checks, not new physical OS typing or reader/IME acceptance. A clean replacement review and exact copied-runtime qualification remain next; /186, canonical /120 and earlier evidence remain unchanged. Owner walkthrough remains Not tried yet and broader MVP gates remain open.

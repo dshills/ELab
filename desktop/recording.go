@@ -141,8 +141,7 @@ func (s *screen) recordingPanel(state workbench.Snapshot) ui.Node {
 	if speed == 0 {
 		speed = .1
 	}
-	play := s.action("recorded-play", "Play", "recording.play", workbench.RecordingPlayParams{Speed: speed})
-	play.Disabled = r.Duration == 0 || r.Playing
+	play := s.recordedPlayAction(state)
 	pause := s.action("recorded-pause", "Pause", "recording.pause", struct{}{})
 	pause.Disabled = !r.Playing
 	controls = append(controls, play, pause)
@@ -155,13 +154,13 @@ func (s *screen) recordingPanel(state workbench.Snapshot) ui.Node {
 		indexControl = ui.Node{ID: "recorded-index", Kind: ui.NumberField, Number: float32(r.Index), MinWidth: 90, Numeric: ui.Numeric{Min: 0, Max: float32(r.Total - 1), Step: 1}, Accessibility: ui.Accessibility{Name: "Recorded sample index"}, Change: func(e ui.ChangeEvent) {
 			// Preserve the entry for shared integer validation, as with agent
 			// requests. Truncating here silently selected a different sample.
-			s.invoke("recording.seek", map[string]any{"index": e.Number})
+			s.changeRecordedPlayField(state, "recorded-index", map[string]any{"index": e.Number})
 		}}
 	}
 	position := []ui.Node{quiet("recorded-status", status), indexControl, timeField("recorded-time", "Recorded seek time", r.Time, false, func(text string) {
-		s.invokeAtCommandRevision("recording.seek", map[string]any{"time_s": text}, state.CommandRevision)
+		s.changeRecordedPlayField(state, "recorded-time", map[string]any{"time_s": text})
 	}), quiet("recorded-speed-label", "sim s / wall s"), {ID: "recorded-speed", Kind: ui.NumberField, Number: float32(speed), MinWidth: 80, Numeric: ui.Numeric{Min: .001, Max: 10, Step: .001}, Accessibility: ui.Accessibility{Name: "Recorded playback speed"}, Change: func(e ui.ChangeEvent) {
-		s.invoke("recording.speed.set", workbench.RecordingPlayParams{Speed: float64(e.Number)})
+		s.changeRecordedPlayField(state, "recorded-speed", workbench.RecordingPlayParams{Speed: float64(e.Number)})
 	}}}
 	legend := []string{}
 	if r.ReferenceOverlay != nil {

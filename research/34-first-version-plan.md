@@ -33,6 +33,8 @@ Updated October 20, 2026. **ELab 0.169.0 /186 is qualified for the private owner
 | Owner decisions | One LED print confirmed clear/complete. Four-task walkthrough **Not tried yet**. Clean-account/default-startup gate **deferred for private alpha only**; it is not a test pass. [Recorded decisions](ui-audit/first-version/private-alpha-owner-decisions.json). |
 | Broader MVP | P0 remains **17 implemented /10 partial**. Full bindings/accessibility/environment, broader performance/distribution and the actual hobbyist study remain open. [Gate reconciliation](41-release-gate-reconciliation.md). |
 
+**Newer source repair, replacement pending:** [RECORD-PLAY-01](57-recorded-playback-entry-settlement.md) fixes first-click Play after unfinished index/time/speed entry and preserves invalid-entry refusals. Ten original mounted failures become passing pointer/no-focus-loss regressions, and full 231.254 s lint/race/vet/mounted quality passes. /186 remains the latest qualified package until a clean replacement passes exact copied-runtime/signature/archive checks. No new physical input or latency claim.
+
 Keep the app/model/format/SDK scope frozen while the owner review is pending. Work on a concrete remaining release scenario or reproduced defect; avoid new device batches, cosmetic campaigns and repeated completed checks. Preserve canonical /120, all 42 earlier sealed reviews, six candidates and original failed/unavailable evidence. [Engineering checkpoint history](34-engineering-checkpoint-history.md).
 
 ## Ordered work and finish criteria

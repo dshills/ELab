@@ -1,0 +1,21 @@
+# Recorded Play entry settlement · source repair
+
+October 20, 2026. **RECORD-PLAY-01 (P2)** is reproduced and repaired in source. On /186's original binding, a private sample-index, seek-time or playback-speed edit commits on focus loss, then the first Play click fails against the old command revision. Invalid index/time edits can instead lose their error and play from the old position. Activation without focus loss skips private input altogether.
+
+Play now settles index, time and speed in order through the existing shared **`recording.seek`**, **`recording.speed.set`** and **`recording.play`** commands. Only exact accepted responses from this form and the owner-published viewport response may continue the pending action. Invalid-entry feedback survives other successful field edits; fresh correction recovers. Unrelated agent/user changes, capture/document replacement, failed settlement and duplicate callbacks cannot overwrite work or dispatch Play twice.
+
+Ten final mounted regression leaves fail against the original production `recording.go`: three valid and two invalid entries, each through pointer activation and direct activation without focus loss. They pass with the repair; the no-edit pointer control passes too. Mounted refusal cases also recover through freshly focused corrected text and one Play click. Deferred owner tests cover field order, duplicates, exact accepted speed, stale work and viewport ownership. A real managed widget with private input refuses a retained Play action after agent work. Accepted state, live physics, graph/settings/history and captured data stay unchanged on refusal. The mounted fixtures use SDK manual software input and actual text/number settlement barriers; **this is not new physical macOS typing or a packaged-runtime test**.
+
+Full default `scripts/check.sh` passes in **231.254 seconds**: lint/imports/Staticcheck, 65 Python tests, root/native race tests and vet, configured mounted race checks and offscreen vet. All **664 application Go sources plus three existing tool files** remain exact during this gate. No new command, model, solver, numerical tolerance/budget, file format or SDK change.
+
+The reviewed inventory has **73 production native sources /401 sites /164 public commands /132 routed IDs**. Five production source identities change, including the new helper. Seven non-line site records are replaced by eight reviewed records, accounting for relocated literal dispatches and the new callback factory/activation. The parser explicitly recognizes the factory without inventing routes. Public commands, aliases, coverage sets and limitations stay exact. Inventory presence does not close runtime binding acceptance.
+
+Preserved collector failures are separate: the first diagnostic incorrectly rejected disabled Play after a successful start; the corrected original diagnostic exposes five product failures. The first full-toolbar fixture stacked fields outside its small window, so some pointer clicks missed Play. A two-row fixture fixes that clipping and retains the no-edit control; no product defect is inferred from the harness layout. The inventory test initially refuses the intentionally unreviewed ledger, then passes after a fresh parser and reviewed candidate. The fresh audit build's module-cache write warning is retained. Original source, failed outputs and final test sources are preserved.
+
+[Report](report.json), [original mounted failures](raw/stage/original-regression-final-output.txt.gz), [final regressions](raw/stage/focused-final-output.txt.gz), [full quality](raw/stage/full-quality.json.gz), [outcomes](raw/stage/terminal-results.json.gz), [byte manifest](manifest.json).
+
+```sh
+python3 -B docs/validation/recorded-playback-settlement/verify.py
+```
+
+This read-only replay verifies archived bytes, exact current source and ledger, original/final outcomes, canonical /120, SDK and the /186 release receipt. It starts no app or tests. **A clean replacement review app/agent and copied-runtime qualification remain required.** /186 stays immutable with its original affected Play binding. Existing /185 and /173 latency receipts remain scoped; no new percentile is claimed. Owner walkthrough remains Not tried yet, P0 17 implemented /10 partial, and broader binding/reader/IME/environment/study/MVP gates stay open. No promotion.
