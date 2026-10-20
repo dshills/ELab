@@ -1,0 +1,395 @@
+{
+  "date": "2026-10-20",
+  "kind": "separate-recorded-position-candidate",
+  "source_commit": "a2182c743a87fb0653333d9db609a003d5fc199c",
+  "clean_build_vcs": true,
+  "version": "0.174.0",
+  "build": "191",
+  "candidate": "/Users/dshills/Development/projects/ELab/build/ELab-0.174.0-191-candidate",
+  "native_sha256": "1a84984c2557590ee657d4500f6bc0a651359815b2610e3af72cb955627c8c38",
+  "agent_sha256": "03be12146172e2caca3fc570bcdf6a5f319ea304760683ebe6d580d3475fc9a6",
+  "strict_local_signature_valid": true,
+  "quality_source": "docs/validation/recorded-position-recovery/report.json",
+  "quality_go_inputs_matched": 670,
+  "headless": {
+    "reference_workflows": 3,
+    "recording_viewer_contracts": 11,
+    "recording_viewer_refusals": 10,
+    "example_save_and_fresh_reopens": 3,
+    "position_correction_transport_cases": 6,
+    "captured_rows": 1001,
+    "captured_rows_metadata_and_saved_bytes_preserved": true,
+    "protocol_process_exits": 7,
+    "existing_script_process_exits": 5,
+    "all_exit_codes_zero": true
+  },
+  "archive": {
+    "archive": "/Users/dshills/Development/projects/ELab/build/ELab-0.174.0-191-candidate.zip",
+    "archive_sha256": "6b9c928a728c5f7923db93a47662c6cc55692679d32fe69761e1389778758a99",
+    "archive_bytes": 34951584,
+    "files_verified": 114,
+    "source_package_unchanged": true,
+    "extracted_bytes_and_modes_equal": true,
+    "strict_extracted_signature_valid": true
+  },
+  "protected_files": {
+    "build/ELab.app/Contents/MacOS/ELab": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "build/ELab-0.172.0-189-alpha/ELab.app/Contents/MacOS/ELab": "a8cf9d053f9cce67f902fe09fe47d5917aa07588982290ce566d546d3b3faf7f",
+    "build/ELab-0.172.0-189-alpha/elab-agent": "f1f4419dba2d692b19d988921d7bd4286688ae1b4ba143c603860595c6772e59",
+    "build/ELab-0.173.0-190-native-unavailable-candidate/ELab.app/Contents/MacOS/ELab": "86d32ebc67d1dd059b952e405f7b695949c8d7cde359b77127a597108fb190bd",
+    "build/ELab-0.173.0-190-native-unavailable-candidate/elab-agent": "4fcf417e0a425447273c7676f1c67239a61966c0dee74dcbd7f89442eda04801",
+    "third_party/vellum/sdk.lock.json": "2f9ac0e120bdd09d5ffe2c3d8b5da4d24588455c5e6bc8d6f08c80e0dccc6395",
+    "third_party/vellum/vellum-b22478c.tar.gz": "22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968"
+  },
+  "native_started": false,
+  "native_input_accepted": false,
+  "owner_window_reserved": true,
+  "current_owner_alpha": "0.172.0 /189",
+  "ready_for_owner_testing": false,
+  "release_qualified": false,
+  "promoted": false,
+  "producer_error": {
+    "error": "Missing demo_session import path",
+    "fixed_by": "Add scripts to the producer Python import path",
+    "app_or_agent_started_on_failed_attempt": false,
+    "production_source_changed": false
+  },
+  "scope": "Clean package, exact matching headless agent and local archive checks. /191 native startup/input, full owner walkthrough and broader MVP acceptance remain open. Historical native numerical fixtures are comparison references, not fresh native observations.",
+  "raw": {
+    "checks/LED-2k.elab": {
+      "stored": "raw/checks/LED-2k.elab.gz",
+      "bytes": 2536,
+      "sha256": "96635fc0cd1ab4b13258373c4e5ed474dc3239dda4dfc37202cbce59324cc032"
+    },
+    "checks/LED-flasher.elab": {
+      "stored": "raw/checks/LED-flasher.elab.gz",
+      "bytes": 7335,
+      "sha256": "d62dba5123d42b3dbf76356a7c28411a46ab09678aad9aa72ec727889c9a7a95"
+    },
+    "checks/RC-charge.elab": {
+      "stored": "raw/checks/RC-charge.elab.gz",
+      "bytes": 2600,
+      "sha256": "4c86701997fb227c1f3f8e55b2e8ec613ca7a51d75b4061356cd51185203eadf"
+    },
+    "checks/example-LED-2k-bridge-exit.json": {
+      "stored": "raw/checks/example-LED-2k-bridge-exit.json.gz",
+      "bytes": 66,
+      "sha256": "de579bbef609132671e0a0ab247c4afb3d4a4d36affa5a47ffa9e1c324450401"
+    },
+    "checks/example-LED-2k-protocol.jsonl": {
+      "stored": "raw/checks/example-LED-2k-protocol.jsonl.gz",
+      "bytes": 95640,
+      "sha256": "fd7333d78bb489ad09028bab68a73d1956a70fbfcf60c1a34d9ea969a2ea076f"
+    },
+    "checks/example-LED-2k-shutdown.json": {
+      "stored": "raw/checks/example-LED-2k-shutdown.json.gz",
+      "bytes": 338,
+      "sha256": "cf411639bd57e764af541aa49ce66ee1b7acc954d562152f36022fed0814ec84"
+    },
+    "checks/example-LED-2k-stderr.txt": {
+      "stored": "raw/checks/example-LED-2k-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "checks/example-LED-flasher-bridge-exit.json": {
+      "stored": "raw/checks/example-LED-flasher-bridge-exit.json.gz",
+      "bytes": 66,
+      "sha256": "de579bbef609132671e0a0ab247c4afb3d4a4d36affa5a47ffa9e1c324450401"
+    },
+    "checks/example-LED-flasher-protocol.jsonl": {
+      "stored": "raw/checks/example-LED-flasher-protocol.jsonl.gz",
+      "bytes": 165044,
+      "sha256": "96b99958899a03a74e6fd724af088f60f74364fae15d156e5bd960dd5c40dc9e"
+    },
+    "checks/example-LED-flasher-shutdown.json": {
+      "stored": "raw/checks/example-LED-flasher-shutdown.json.gz",
+      "bytes": 338,
+      "sha256": "cf411639bd57e764af541aa49ce66ee1b7acc954d562152f36022fed0814ec84"
+    },
+    "checks/example-LED-flasher-stderr.txt": {
+      "stored": "raw/checks/example-LED-flasher-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "checks/example-RC-charge-bridge-exit.json": {
+      "stored": "raw/checks/example-RC-charge-bridge-exit.json.gz",
+      "bytes": 66,
+      "sha256": "de579bbef609132671e0a0ab247c4afb3d4a4d36affa5a47ffa9e1c324450401"
+    },
+    "checks/example-RC-charge-protocol.jsonl": {
+      "stored": "raw/checks/example-RC-charge-protocol.jsonl.gz",
+      "bytes": 98388,
+      "sha256": "dd9c2b5a17aea5689452ee7469ee1c09e1b28380442c8f50b40dd1b7381cbbf5"
+    },
+    "checks/example-RC-charge-shutdown.json": {
+      "stored": "raw/checks/example-RC-charge-shutdown.json.gz",
+      "bytes": 338,
+      "sha256": "d1a2fc8cf23c5f8952f56bc10411aaa711a020060785e1db93c6abe458de143a"
+    },
+    "checks/example-RC-charge-stderr.txt": {
+      "stored": "raw/checks/example-RC-charge-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "checks/positions-after.elab": {
+      "stored": "raw/checks/positions-after.elab.gz",
+      "bytes": 185173,
+      "sha256": "a885add18cfec6e72e07eb5f07c06fe366e01a72a0fb50a2dab0de0b76651431"
+    },
+    "checks/positions-before.elab": {
+      "stored": "raw/checks/positions-before.elab.gz",
+      "bytes": 185173,
+      "sha256": "a885add18cfec6e72e07eb5f07c06fe366e01a72a0fb50a2dab0de0b76651431"
+    },
+    "checks/recorded-positions-bridge-exit.json": {
+      "stored": "raw/checks/recorded-positions-bridge-exit.json.gz",
+      "bytes": 67,
+      "sha256": "f700caf6fa4f57800bb0cda5661d7a0db86c2da9eb0bd30a78b8ee6cf6afc761"
+    },
+    "checks/recorded-positions-protocol.jsonl": {
+      "stored": "raw/checks/recorded-positions-protocol.jsonl.gz",
+      "bytes": 2075704,
+      "sha256": "007ce340a68a937335fd71a1711c36a418e34cf33cf08cf91bbe8cda7cedd359"
+    },
+    "checks/recorded-positions-shutdown.json": {
+      "stored": "raw/checks/recorded-positions-shutdown.json.gz",
+      "bytes": 339,
+      "sha256": "040d36cbf2b368086301c2be23e321259790cffa421f38f29b147b7c9bae0b26"
+    },
+    "checks/recorded-positions-stderr.txt": {
+      "stored": "raw/checks/recorded-positions-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "checks/recording-viewer/original-record.json": {
+      "stored": "raw/checks/recording-viewer/original-record.json.gz",
+      "bytes": 11326,
+      "sha256": "51cd2a078b6747c28a4e4e742a286f481b9ee2e8c097823782d8f8872538cc48"
+    },
+    "checks/recording-viewer/record-after-controls.json": {
+      "stored": "raw/checks/recording-viewer/record-after-controls.json.gz",
+      "bytes": 11326,
+      "sha256": "51cd2a078b6747c28a4e4e742a286f481b9ee2e8c097823782d8f8872538cc48"
+    },
+    "checks/recording-viewer/recorded-experiment.elab": {
+      "stored": "raw/checks/recording-viewer/recorded-experiment.elab.gz",
+      "bytes": 19227,
+      "sha256": "43c33dda7443c7cdc5ad5c9cbd5d357dc7acf72e1bb32afd9750f4a687ea46eb"
+    },
+    "checks/recording-viewer.json": {
+      "stored": "raw/checks/recording-viewer.json.gz",
+      "bytes": 66277,
+      "sha256": "9aece33051bb3f88cffcc86b3b4c8a6de38c4d83841af58680db896d54fb1440"
+    },
+    "checks/reference/flasher-observed.json": {
+      "stored": "raw/checks/reference/flasher-observed.json.gz",
+      "bytes": 520507,
+      "sha256": "d1a0a4658dd0982fbf9a19b81282788d0fdc239c7c612ba864d68e11ffa8b45f"
+    },
+    "checks/reference/flasher.elab": {
+      "stored": "raw/checks/reference/flasher.elab.gz",
+      "bytes": 7335,
+      "sha256": "d62dba5123d42b3dbf76356a7c28411a46ab09678aad9aa72ec727889c9a7a95"
+    },
+    "checks/reference/led-observed.json": {
+      "stored": "raw/checks/reference/led-observed.json.gz",
+      "bytes": 27031,
+      "sha256": "810092ce5ad89b4e9de5792578071a824dd1497c6c936e1fdab8907ebca53e3d"
+    },
+    "checks/reference/led.elab": {
+      "stored": "raw/checks/reference/led.elab.gz",
+      "bytes": 2536,
+      "sha256": "96635fc0cd1ab4b13258373c4e5ed474dc3239dda4dfc37202cbce59324cc032"
+    },
+    "checks/reference/rc-observed.json": {
+      "stored": "raw/checks/reference/rc-observed.json.gz",
+      "bytes": 32476,
+      "sha256": "c5d5e19ecb46268420be5b272a06aa1506e61b71c4d9acdf8e9b783ec7a541b6"
+    },
+    "checks/reference/rc.elab": {
+      "stored": "raw/checks/reference/rc.elab.gz",
+      "bytes": 2600,
+      "sha256": "4c86701997fb227c1f3f8e55b2e8ec613ca7a51d75b4061356cd51185203eadf"
+    },
+    "checks/reference/report.json": {
+      "stored": "raw/checks/reference/report.json.gz",
+      "bytes": 1515,
+      "sha256": "529d0ef8e777144ceab6feeb2f0f0d629c21fa1b794051bde1f20b558c0104b4"
+    },
+    "checks/reopen-LED-2k-bridge-exit.json": {
+      "stored": "raw/checks/reopen-LED-2k-bridge-exit.json.gz",
+      "bytes": 66,
+      "sha256": "987377e986969dcc8ccf99fa06c699bb36b7e515585bb496ece4f6d13fdbfc7a"
+    },
+    "checks/reopen-LED-2k-protocol.jsonl": {
+      "stored": "raw/checks/reopen-LED-2k-protocol.jsonl.gz",
+      "bytes": 74885,
+      "sha256": "a9239da9e32deda85cf0a1184981ee15c2f2fd52d0ed8eeaf10388aa01f60109"
+    },
+    "checks/reopen-LED-2k-shutdown.json": {
+      "stored": "raw/checks/reopen-LED-2k-shutdown.json.gz",
+      "bytes": 337,
+      "sha256": "895ea4e89224cce49b6a284f86bb4d89c7c1005bccd9418bcf53f00288d6788d"
+    },
+    "checks/reopen-LED-2k-stderr.txt": {
+      "stored": "raw/checks/reopen-LED-2k-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "checks/reopen-LED-flasher-bridge-exit.json": {
+      "stored": "raw/checks/reopen-LED-flasher-bridge-exit.json.gz",
+      "bytes": 66,
+      "sha256": "987377e986969dcc8ccf99fa06c699bb36b7e515585bb496ece4f6d13fdbfc7a"
+    },
+    "checks/reopen-LED-flasher-protocol.jsonl": {
+      "stored": "raw/checks/reopen-LED-flasher-protocol.jsonl.gz",
+      "bytes": 126107,
+      "sha256": "4da55dcf78ca0750b2e5064cf85995236c550716dc4e79f8a8361ff5648ce886"
+    },
+    "checks/reopen-LED-flasher-shutdown.json": {
+      "stored": "raw/checks/reopen-LED-flasher-shutdown.json.gz",
+      "bytes": 337,
+      "sha256": "895ea4e89224cce49b6a284f86bb4d89c7c1005bccd9418bcf53f00288d6788d"
+    },
+    "checks/reopen-LED-flasher-stderr.txt": {
+      "stored": "raw/checks/reopen-LED-flasher-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "checks/reopen-RC-charge-bridge-exit.json": {
+      "stored": "raw/checks/reopen-RC-charge-bridge-exit.json.gz",
+      "bytes": 66,
+      "sha256": "987377e986969dcc8ccf99fa06c699bb36b7e515585bb496ece4f6d13fdbfc7a"
+    },
+    "checks/reopen-RC-charge-protocol.jsonl": {
+      "stored": "raw/checks/reopen-RC-charge-protocol.jsonl.gz",
+      "bytes": 77063,
+      "sha256": "f503885b22918082b0e46b38ac610b110444357441968b68c7277bf144090eee"
+    },
+    "checks/reopen-RC-charge-shutdown.json": {
+      "stored": "raw/checks/reopen-RC-charge-shutdown.json.gz",
+      "bytes": 337,
+      "sha256": "3372d0c8b561c2fb8515c7d30e716b23adfc212a28ea85482749c4f143eb4d53"
+    },
+    "checks/reopen-RC-charge-stderr.txt": {
+      "stored": "raw/checks/reopen-RC-charge-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "checks/report.json": {
+      "stored": "raw/checks/report.json.gz",
+      "bytes": 7597,
+      "sha256": "b48291521db09ded0f8fac902ee2cfb75e7f48c287d4690619a78bb591376894"
+    },
+    "archive/ditto.txt": {
+      "stored": "raw/archive/ditto.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "archive/report.json": {
+      "stored": "raw/archive/report.json.gz",
+      "bytes": 22480,
+      "sha256": "c588972e35afdf7c91fd16ad852c450bbe51b31c5814f005ba05a7eb8cab35ba"
+    },
+    "archive/signature.txt": {
+      "stored": "raw/archive/signature.txt.gz",
+      "bytes": 275,
+      "sha256": "632737b8efa3aad84be2d2662772a52058de29c171bf1affa4b03952754b0a2c"
+    },
+    "producer/source-commit.txt": {
+      "stored": "raw/producer/source-commit.txt.gz",
+      "bytes": 41,
+      "sha256": "e176989fccb15324a1cd7edd28875f6ed1812fe9d80d8031eaefa31394e52e7c"
+    },
+    "producer/build_release.py": {
+      "stored": "raw/producer/build_release.py.gz",
+      "bytes": 3526,
+      "sha256": "9d66875308e15adc06ebefecbf00576e000dc81e9b55e4d734628af23317c36d"
+    },
+    "producer/build-result-signed.json": {
+      "stored": "raw/producer/build-result-signed.json.gz",
+      "bytes": 1537,
+      "sha256": "007e4dc16690e921d4fc28d1b37def01dafa8a1a2155b55b9aa9fa4539181a5f"
+    },
+    "producer/build.txt": {
+      "stored": "raw/producer/build.txt.gz",
+      "bytes": 653,
+      "sha256": "d9af5f14091848f52c21eea97b811f6fd62b18d53984d60ff90c3ff7e7d871f6"
+    },
+    "producer/package.txt": {
+      "stored": "raw/producer/package.txt.gz",
+      "bytes": 371,
+      "sha256": "a8b97be8f0a6fd604ad1293e09c08fe90c745b55f95c856de9701e25495abcdd"
+    },
+    "producer/signature-signed-details.txt": {
+      "stored": "raw/producer/signature-signed-details.txt.gz",
+      "bytes": 911,
+      "sha256": "eb7ad0fe6b69cf7eaf979f4a526d936f2cdb848c902cce24b3af7d37f9b9aa5a"
+    },
+    "producer/signature-signed-verify.txt": {
+      "stored": "raw/producer/signature-signed-verify.txt.gz",
+      "bytes": 219,
+      "sha256": "56a685ca215464e3f62f00611222a6b56d68160c217cea9fd7bdddccb3bf03fa"
+    },
+    "producer/preservation-before.json": {
+      "stored": "raw/producer/preservation-before.json.gz",
+      "bytes": 865,
+      "sha256": "18e46cdd3292d00d202b6dad0fbebbf5edf42a7aed5f0cbf72664ca94334655c"
+    },
+    "producer/example-sources.json": {
+      "stored": "raw/producer/example-sources.json.gz",
+      "bytes": 553,
+      "sha256": "cf51365f2152fa789703b4e0216839357f364554fdc9a6bdfe5dffef8ffefc6e"
+    },
+    "producer/client.py": {
+      "stored": "raw/producer/client.py.gz",
+      "bytes": 2045,
+      "sha256": "c9e6f7a599cabc25644acec0de5dc672fc94175ba7d6e16c76290c872de1b4bb"
+    },
+    "producer/check_candidate.py": {
+      "stored": "raw/producer/check_candidate.py.gz",
+      "bytes": 6603,
+      "sha256": "6761d084ff74da3b912264a53add101a45f7aad28f4315ea5ba9e5a6d2c5ce89"
+    },
+    "producer/check_candidate-initial.py.txt": {
+      "stored": "raw/producer/check_candidate-initial.py.txt.gz",
+      "bytes": 6564,
+      "sha256": "9a4c1a748729446a2d113734de2142cc147467447e424b268e9d3214a83d5682"
+    },
+    "producer/initial-import-error.json": {
+      "stored": "raw/producer/initial-import-error.json.gz",
+      "bytes": 195,
+      "sha256": "07c8ab8fdb3b1b9905b154f10456d4b49709181efdd025b9f6e0904052756305"
+    },
+    "producer/check-stdout.txt": {
+      "stored": "raw/producer/check-stdout.txt.gz",
+      "bytes": 1875,
+      "sha256": "2abd859a0b1a3517710536394b371f67ade840021e24a98345afebcbac468774"
+    },
+    "producer/check-stderr.txt": {
+      "stored": "raw/producer/check-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "producer/archive_candidate.py": {
+      "stored": "raw/producer/archive_candidate.py.gz",
+      "bytes": 3828,
+      "sha256": "c09db66118343261522289c00ae6d7e4cc41e787c8e482a33daae5a1d75acad6"
+    },
+    "build/elab-agent-build-info.txt": {
+      "stored": "raw/build/elab-agent-build-info.txt.gz",
+      "bytes": 700,
+      "sha256": "4298c9fa5ab4ebe18c481c8da4b98da0e88018d305e5fa4df05eb7d89db1b990"
+    },
+    "build/elab-conformance-build-info.txt": {
+      "stored": "raw/build/elab-conformance-build-info.txt.gz",
+      "bytes": 712,
+      "sha256": "2d68047e41f47ca30d04407b480e64dbf02120320d0d15d74dd2b935c05f6c6b"
+    },
+    "build/elab-build-info.txt": {
+      "stored": "raw/build/elab-build-info.txt.gz",
+      "bytes": 4170,
+      "sha256": "798ac140e3f8f9c55deedb48f49bb453410dbbb99abab133753ea6ef3412feb4"
+    }
+  }
+}

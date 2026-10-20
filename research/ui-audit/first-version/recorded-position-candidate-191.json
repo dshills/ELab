@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-20",
+  "kind": "separate-recorded-position-candidate",
+  "version": "0.174.0",
+  "build": "191",
+  "source_commit": "a2182c743a87fb0653333d9db609a003d5fc199c",
+  "candidate": "/Users/dshills/Development/projects/ELab/build/ELab-0.174.0-191-candidate",
+  "native_sha256": "1a84984c2557590ee657d4500f6bc0a651359815b2610e3af72cb955627c8c38",
+  "agent_sha256": "03be12146172e2caca3fc570bcdf6a5f319ea304760683ebe6d580d3475fc9a6",
+  "headless": {
+    "reference_workflows": 3,
+    "recording_viewer_contracts": 11,
+    "recording_viewer_refusals": 10,
+    "example_save_and_fresh_reopens": 3,
+    "position_correction_transport_cases": 6,
+    "captured_rows": 1001,
+    "captured_rows_metadata_and_saved_bytes_preserved": true,
+    "protocol_process_exits": 7,
+    "existing_script_process_exits": 5,
+    "all_exit_codes_zero": true
+  },
+  "archive": {
+    "archive": "/Users/dshills/Development/projects/ELab/build/ELab-0.174.0-191-candidate.zip",
+    "archive_sha256": "6b9c928a728c5f7923db93a47662c6cc55692679d32fe69761e1389778758a99",
+    "archive_bytes": 34951584,
+    "files_verified": 114,
+    "source_package_unchanged": true,
+    "extracted_bytes_and_modes_equal": true,
+    "strict_extracted_signature_valid": true
+  },
+  "native_started": false,
+  "native_input_accepted": false,
+  "owner_window_reserved": true,
+  "current_owner_alpha": "0.172.0 /189",
+  "ready_for_owner_testing": false,
+  "release_qualified": false,
+  "promoted": false,
+  "scope": "Clean package, exact matching headless agent and local archive checks. /191 native startup/input, full owner walkthrough and broader MVP acceptance remain open. Historical native numerical fixtures are comparison references, not fresh native observations.",
+  "evidence": "docs/validation/recorded-position-candidate-191/report.json"
+}
