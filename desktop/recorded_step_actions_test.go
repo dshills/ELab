@@ -31,7 +31,7 @@ func TestRecordedStepWaitsForFieldsAndIgnoresOtherTransportAdmissions(t *testing
 			opposite := recordedPlayControl(t, s, "recorded-"+other)
 			play := recordedPlayControl(t, s, "recorded-play")
 			s.app.Do(func() { step.Activate(); opposite.Activate(); play.Activate(); step.Activate() })
-			if !reflect.DeepEqual(before, s.service.Snapshot()) || !reflect.DeepEqual(order, []string{"recorded-index"}) {
+			if !reflect.DeepEqual(before, s.service.Snapshot()) || !reflect.DeepEqual(order, []string{"recorded-time"}) {
 				t.Fatal("transport action failed to wait once", order)
 			}
 			for _, id := range []string{"recorded-next", "recorded-previous", "recorded-play"} {
@@ -42,7 +42,7 @@ func TestRecordedStepWaitsForFieldsAndIgnoresOtherTransportAdmissions(t *testing
 			for _, field := range []struct {
 				id    string
 				event ui.ChangeEvent
-			}{{"recorded-index", ui.ChangeEvent{Number: 2}}, {"recorded-time", ui.ChangeEvent{Text: "3 ms"}}, {"recorded-speed", ui.ChangeEvent{Number: .0078125}}} {
+			}{{"recorded-time", ui.ChangeEvent{Text: "2 ms"}}, {"recorded-index", ui.ChangeEvent{Number: 3}}, {"recorded-speed", ui.ChangeEvent{Number: .0078125}}} {
 				uiAction(t, s, field.id, &field.event)
 				if finish[field.id] == nil {
 					t.Fatal("field barrier missing", field.id)
@@ -54,7 +54,7 @@ func TestRecordedStepWaitsForFieldsAndIgnoresOtherTransportAdmissions(t *testing
 			if direction == "previous" {
 				want = 2
 			}
-			if !reflect.DeepEqual(order, []string{"recorded-index", "recorded-time", "recorded-speed"}) || s.pendingRecordedPlayback != nil || s.errorMessage != "" || after.Recording.Index != want || after.Recording.Playing || after.Recording.Speed != .0078125 || after.CommandRevision != before.CommandRevision+4 {
+			if !reflect.DeepEqual(order, []string{"recorded-time", "recorded-index", "recorded-speed"}) || s.pendingRecordedPlayback != nil || s.errorMessage != "" || after.Recording.Index != want || after.Recording.Playing || after.Recording.Speed != .0078125 || after.CommandRevision != before.CommandRevision+4 {
 				t.Fatal("transport did not use its own fields once", order, after.Recording, s.errorMessage)
 			}
 			assertCursorMeasurementPreservesPhysics(t, before, after)
@@ -76,7 +76,7 @@ func TestRecordedStepRefusesInterveningWork(t *testing.T) {
 				step := recordedPlayControl(t, s, "recorded-"+direction)
 				s.app.Do(step.Activate)
 				if scenario == "agent-after-field" {
-					uiAction(t, s, "recorded-index", &ui.ChangeEvent{Number: 3})
+					uiAction(t, s, "recorded-time", &ui.ChangeEvent{Text: "3 ms"})
 				}
 				switch scenario {
 				case "capture-replaced":
@@ -94,12 +94,12 @@ func TestRecordedStepRefusesInterveningWork(t *testing.T) {
 				before := s.service.Snapshot()
 				s.app.Do(func() {
 					if scenario == "agent-before-field" || scenario == "other-user-field" || scenario == "wrong-field" {
-						id := "recorded-index"
+						id := "recorded-time"
 						if scenario == "wrong-field" {
 							id = "recorded-speed"
 						}
 						field, _ := findNode(s.view(), id)
-						field.Change(ui.ChangeEvent{Number: 4})
+						field.Change(ui.ChangeEvent{Text: "4 ms", Number: 4})
 					}
 					for range 3 {
 						finish(nil)

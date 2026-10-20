@@ -44,7 +44,7 @@
     "desktop/printing.go": "9c40645db6de5affc3ae9d654f72c7003671f5d8c23c8bd7de93ffa35bea8c59",
     "desktop/probes.go": "4ee6051c65010292375e62c39a85e4cf7631c045b75146257564e2158ea806c3",
     "desktop/project_work.go": "916f2081ce3d223b91c0c24081afbdae1e2a6e917ec58d90ebe64e87dc690646",
-    "desktop/recorded_playback_actions.go": "e12fb437bba46f4d62f903d247452b1b92af2f67e1b75c65f4632a5564477db7",
+    "desktop/recorded_playback_actions.go": "cde17642f1badc4f4d835a51663408cef97adc2df421b7db720e481174096879",
     "desktop/recorded_timing_actions.go": "dbf75e522b7fdab7413302237bf66ffeefd4f6e3c777e22d63dbd57a16dd9d13",
     "desktop/recording.go": "903657cc947bad09960cf5949fa9fe6d9031b3cafe542753dbd83c8fa4ae9eb3",
     "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
@@ -2589,7 +2589,7 @@
     },
     {
       "file": "desktop/recorded_playback_actions.go",
-      "line": 80,
+      "line": 83,
       "function": "*screen.changeRecordedPlaybackField",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.speed.set\", params, state.CommandRevision, state.Document.Generation)",
@@ -2600,7 +2600,7 @@
     },
     {
       "file": "desktop/recorded_playback_actions.go",
-      "line": 82,
+      "line": 85,
       "function": "*screen.changeRecordedPlaybackField",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.seek\", params, state.CommandRevision, state.Document.Generation)",
@@ -2611,7 +2611,7 @@
     },
     {
       "file": "desktop/recorded_playback_actions.go",
-      "line": 128,
+      "line": 131,
       "function": "*screen.recordedPlaybackAction",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\tif s.pendingRecordedPlayback != nil {\n\t\treturn\n\t}\n\tpending := \u0026recordedPlaybackWork{context: actionContext{state.CommandRevision, state.Document.Generation}, recordingID: r.ID, values: recordedPlaybackState(r), direction: direction}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.recordedPlaybackAccepted; accepted != nil \u0026\u0026 accepted.recordingID == r.ID \u0026\u0026 accepted.from.generation == pending.context.generation \u0026\u0026 accepted.from.revision \u003c= pending.context.revision \u0026\u0026 pending.context.revision \u003c= accepted.to.revision \u0026\u0026 accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) \u0026\u0026 current.Recording != nil \u0026\u0026 recordedPlaybackValuesMatch(accepted, current.Recording, direction != \"\") {\n\t\tpending.context, pending.values = accepted.to, accepted.values\n\t}\n\tif current.CommandRevision != pending.context.revision || current.Document.Generation != pending.context.generation || current.Recording == nil || current.Recording.ID != r.ID {\n\t\ts.finishRecordedPlayback(pending)\n\t\treturn\n\t}\n\ts.pendingRecordedPlayback = pending\n\ts.settleRecordedPlayback(pending, 0)\n}",
@@ -2619,7 +2619,7 @@
     },
     {
       "file": "desktop/recorded_playback_actions.go",
-      "line": 203,
+      "line": 206,
       "function": "*screen.finishRecordedPlayback",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.step\", workbench.RecordingStepParams{Direction: pending.direction}, pending.context.revision, pending.context.generation)",
@@ -2630,7 +2630,7 @@
     },
     {
       "file": "desktop/recorded_playback_actions.go",
-      "line": 210,
+      "line": 213,
       "function": "*screen.finishRecordedPlayback",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.play\", workbench.RecordingPlayParams{Speed: speed}, pending.context.revision, pending.context.generation)",

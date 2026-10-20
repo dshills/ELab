@@ -36,10 +36,13 @@ type recordedPlaybackWork struct {
 	direction   string
 }
 
+// Managed time can publish focus-loss Change while the first native barrier is
+// pending. Settle it before legacy numeric controls so its own callback belongs
+// to that barrier. Later-field, stale-origin and unrelated-work guards stay exact.
 var recordedPlaybackFields = []struct {
 	id     string
 	number bool
-}{{"recorded-index", true}, {"recorded-time", false}, {"recorded-speed", true}}
+}{{"recorded-time", false}, {"recorded-index", true}, {"recorded-speed", true}}
 
 func recordedPlaybackState(r *workbench.RecordingView) recordedPlaybackValues {
 	return recordedPlaybackValues{r.Index, r.Time, r.Speed}

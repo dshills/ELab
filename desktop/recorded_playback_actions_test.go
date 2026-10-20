@@ -38,13 +38,13 @@ func TestRecordedPlaySettlesFieldsInOrderOnce(t *testing.T) {
 	play := recordedPlayControl(t, s, "recorded-play")
 	s.app.Do(play.Activate)
 	s.app.Do(play.Activate)
-	if !reflect.DeepEqual(order, []string{"recorded-index"}) || !reflect.DeepEqual(before, s.service.Snapshot()) || !recordedPlayControl(t, s, "recorded-play").Disabled {
-		t.Fatal("Play did not wait once for index settlement", order)
+	if !reflect.DeepEqual(order, []string{"recorded-time"}) || !reflect.DeepEqual(before, s.service.Snapshot()) || !recordedPlayControl(t, s, "recorded-play").Disabled {
+		t.Fatal("Play did not wait once for managed-time settlement", order)
 	}
 	for _, field := range []struct {
 		id    string
 		event ui.ChangeEvent
-	}{{"recorded-index", ui.ChangeEvent{Number: 2}}, {"recorded-time", ui.ChangeEvent{Text: "3 ms"}}, {"recorded-speed", ui.ChangeEvent{Number: .0078125}}} {
+	}{{"recorded-time", ui.ChangeEvent{Text: "2 ms"}}, {"recorded-index", ui.ChangeEvent{Number: 3}}, {"recorded-speed", ui.ChangeEvent{Number: .0078125}}} {
 		uiAction(t, s, field.id, &field.event)
 		if finish[field.id] == nil || s.service.Snapshot().Recording.Playing {
 			t.Fatal("Play skipped a field barrier", field.id, order)
@@ -52,7 +52,7 @@ func TestRecordedPlaySettlesFieldsInOrderOnce(t *testing.T) {
 		s.app.Do(func() { finish[field.id](nil); finish[field.id](nil) })
 	}
 	after := s.service.Snapshot()
-	if !reflect.DeepEqual(order, []string{"recorded-index", "recorded-time", "recorded-speed"}) || s.pendingRecordedPlayback != nil || s.errorMessage != "" || !after.Recording.Playing || after.Recording.Speed != .0078125 || after.Recording.Index < 3 || after.CommandRevision != before.CommandRevision+4 {
+	if !reflect.DeepEqual(order, []string{"recorded-time", "recorded-index", "recorded-speed"}) || s.pendingRecordedPlayback != nil || s.errorMessage != "" || !after.Recording.Playing || after.Recording.Speed != .0078125 || after.Recording.Index < 3 || after.CommandRevision != before.CommandRevision+4 {
 		t.Fatal("Play failed to use its exact accepted fields once", order, after.Recording, s.errorMessage)
 	}
 	assertCursorMeasurementPreservesPhysics(t, before, after)
@@ -69,7 +69,7 @@ func TestRecordedPlayRefusesInterveningWork(t *testing.T) {
 			play := recordedPlayControl(t, s, "recorded-play")
 			s.app.Do(play.Activate)
 			if scenario == "agent-after-field" {
-				uiAction(t, s, "recorded-index", &ui.ChangeEvent{Number: 3})
+				uiAction(t, s, "recorded-time", &ui.ChangeEvent{Text: "3 ms"})
 			}
 			switch scenario {
 			case "capture-replaced":
@@ -87,12 +87,12 @@ func TestRecordedPlayRefusesInterveningWork(t *testing.T) {
 			before := s.service.Snapshot()
 			s.app.Do(func() {
 				if scenario == "agent-before-field" || scenario == "other-user-field" || scenario == "wrong-field" {
-					id := "recorded-index"
+					id := "recorded-time"
 					if scenario == "wrong-field" {
 						id = "recorded-speed"
 					}
 					field, _ := findNode(s.view(), id)
-					field.Change(ui.ChangeEvent{Number: 4})
+					field.Change(ui.ChangeEvent{Text: "4 ms", Number: 4})
 				}
 				for range 3 {
 					finish(nil)
