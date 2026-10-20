@@ -1,0 +1,99 @@
+{
+  "date": "2026-10-20",
+  "change": "Actionable recorded-position request guidance",
+  "base_commit": "a3a90d6d8abe1ae9d5bd4804bdfe849ad5f419d8",
+  "source_only": true,
+  "in_alpha_189": false,
+  "release_qualified": false,
+  "promoted": false,
+  "original_failures": {
+    "public_groups": [
+      "rc",
+      "dc"
+    ],
+    "native_view_callback": true
+  },
+  "final_tests": {
+    "public_refusals": 10,
+    "native_agent_help_equal": true,
+    "valid_ranges_and_units": true,
+    "dc_zero_only": true,
+    "refusal_snapshot_unchanged": true,
+    "correction_then_previous": true
+  },
+  "quality": {
+    "exit_code": 0,
+    "elapsed_s": 389.72582475002855,
+    "source_files": 670,
+    "sources_unchanged": true,
+    "full_check_sh": true
+  },
+  "restricted_quality": {
+    "exit_code": 1,
+    "reason": "Local Unix socket bind denied by shell sandbox; unchanged permitted rerun passed"
+  },
+  "scope": "Shared dispatcher and native view/callback source tests. No new packaged/native-window, latency, accessibility, owner or full-MVP acceptance.",
+  "observed_alpha_problem": "research/ui-audit/first-version/native-alpha-189b/invalid.jpg",
+  "raw": {
+    "original-public.txt": {
+      "stored": "original-public.txt.gz",
+      "sha256": "7df6b20e4adec3ba342e5c7cd60b023b5ab658254703dfab7a33b7f234d65756",
+      "bytes": 1095
+    },
+    "original-native.txt": {
+      "stored": "original-native.txt.gz",
+      "sha256": "e584601c643941356e193035e42af03065d574904ed15be797eb357433facd95",
+      "bytes": 315
+    },
+    "focused-0.txt": {
+      "stored": "focused-0.txt.gz",
+      "sha256": "8ffb867250e4dfee7ca7c9f982a3377d1a99ef3c41c8bdb7baa4b616c5cf0266",
+      "bytes": 46
+    },
+    "focused-1.txt": {
+      "stored": "focused-1.txt.gz",
+      "sha256": "ae181d53007daf1da26b76ead7927cf36723a83ecb410f6b7d23f5af9d61f5ae",
+      "bytes": 135
+    },
+    "quality.json": {
+      "stored": "quality.json.gz",
+      "sha256": "c9a144af6fc78e647b70a664b4a76423e829f31ddf044cdab34cd129f539ff68",
+      "bytes": 71806
+    },
+    "quality-stdout.txt": {
+      "stored": "quality-stdout.txt.gz",
+      "sha256": "738c491e0032270234d3c971abcc14bb37dacce8d8ad57c23a96b838f43d4e06",
+      "bytes": 1003
+    },
+    "quality-stderr.txt": {
+      "stored": "quality-stderr.txt.gz",
+      "sha256": "936aef3ba82ffbd44c17b5201b13ab1c4e85cb87830ca83f91290a8c7fa23b82",
+      "bytes": 346
+    },
+    "quality-restricted.json": {
+      "stored": "quality-restricted.json.gz",
+      "sha256": "793c92ac5386278649785ffcda2ae2ce9426400079c84161f802b83eae8ff5ef",
+      "bytes": 71806
+    },
+    "quality-restricted-stdout.txt": {
+      "stored": "quality-restricted-stdout.txt.gz",
+      "sha256": "7e99d52be9a2a7ef53b59a824ce28e98b4b4857fed7bde83628f35096064ce28",
+      "bytes": 3233
+    },
+    "quality-restricted-stderr.txt": {
+      "stored": "quality-restricted-stderr.txt.gz",
+      "sha256": "646657042e1018755bd7f6579a0f520daf0f2ac6961010e4b532d12fef12336e",
+      "bytes": 164
+    },
+    "quality.py": {
+      "stored": "quality.py.gz",
+      "sha256": "f87b9caadbff13048481164b35f54e88ea727924ba68d73de914026b2c80aa74",
+      "bytes": 1136
+    }
+  },
+  "source": {
+    "workbench/diagnostic_help.go": "8553daf544616eeb1d07d8dee811ba94f303e6359938a8c75a7bd7fe1f02c2c7",
+    "workbench/diagnostic_help_test.go": "b6e2401a4876b1fbd908ff9445a00638691663d1f79553864e352adb735a96a4",
+    "desktop/diagnostic_help_test.go": "34686f7fc9148260af06a6feaeecda5075420c79a9274eb3b052c52ca4eedd94"
+  }
+}

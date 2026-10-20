@@ -12,6 +12,10 @@ Applicable failed command responses include an optional `help` object with the s
 
 Native request context is local to that response and scoped to its command revision. Opening its technical disclosure retains the explanation. An intervening user/agent command clears obsolete local context; numerical publication alone does not. Requests from an external agent expose the same help to that agent without mutating global diagnostics or another client's failed-request display. This preserves the failed-mutation atomicity contract.
 
+Rejected `recording.seek` positions explain the selected capture's actual whole-index and time ranges, with `ms`/`us` unit guidance. A single-sample DC capture instead instructs index `0` or time `0 s`. Original error codes and detailed validation messages remain available, and the guidance adds no circuit highlights or state changes. Native time-field refusal displays this same response help; correcting the entry clears it and permits the requested recorded step. This source follow-up is not included in the unchanged /189 alpha.
+
+[Source validation](validation/recorded-position-guidance/report.json) preserves the original generic-message failures and the passing full repository check. Ten public refusal cases cover RC/DC syntax, fractional indices, bounds and ambiguous positions; the native view/callback test checks identical agent help, unchanged refused state, and correction followed by Previous. This adds no new packaged-window or full accessibility acceptance.
+
 ## Shared command and state semantics
 
 `diagnostics.details.set {"visible":true}` is the same command used by the native disclosure; `false` closes it. It requires normal revision/retry admission and changes session presentation only. It preserves physical time/state, editing selection, unfinished wires, undo/history and dirty flags. New/load/example/recovery replacement clears disclosure state. No diagnostic interaction launches a modal during an incomplete circuit gesture.

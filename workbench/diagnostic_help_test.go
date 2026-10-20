@@ -116,3 +116,58 @@ func TestDiagnosticDetailsStrictInputsAndProjectLifecycle(t *testing.T) {
 		t.Fatal("new project retained technical disclosure preference")
 	}
 }
+
+func TestRecordedPositionRefusalExplainsSelectedCaptureWithoutMutation(t *testing.T) {
+	for _, kind := range []string{"rc", "dc"} {
+		t.Run(kind, func(t *testing.T) {
+			var s *Service
+			params := VerifyParams{}
+			if kind == "rc" {
+				s = pausedRC(t)
+				duration := .02
+				params.Duration = &duration
+			} else {
+				s = NewExample()
+				settled(t, s)
+				call(t, s, "simulation.pause", struct{}{}, "pause")
+			}
+			t.Cleanup(s.Close)
+			_, view := verify(t, s, params, "capture")
+			call(t, s, "recording.view.set", RecordingViewParams{Mode: "recorded"}, "show")
+			index := 0
+			if kind == "rc" {
+				index = 4
+			}
+			call(t, s, "recording.seek", RecordingSeekParams{Index: &index}, "position")
+			before := s.Snapshot()
+			for i, bad := range []any{
+				map[string]any{"time_s": "oops"},
+				map[string]any{"index": 1.5},
+				map[string]any{"index": view.Metadata.SampleCount},
+				map[string]any{"time_s": view.Metadata.Duration + 1},
+				map[string]any{"index": 0, "time_s": 0},
+			} {
+				raw, err := json.Marshal(bad)
+				if err != nil {
+					t.Fatal(err)
+				}
+				revision := before.CommandRevision
+				response := s.Dispatch(context.Background(), Request{Version: 1, ID: fmt.Sprint(i), Key: fmt.Sprint("bad-", i), Command: "recording.seek", Params: raw, ExpectedCommandRevision: &revision}, "agent.test")
+				if response.Error == nil || response.Error.Code != "invalid-params" || response.Help == nil {
+					t.Fatal("missing structured position refusal", response)
+				}
+				help := response.Help
+				if help.Source != "request" || help.Code != response.Error.Code || help.Details != response.Error.Message || len(help.Objects)+len(help.Terminals)+len(help.Wires) != 0 || !reflect.DeepEqual(before, s.Snapshot()) {
+					t.Fatal("position guidance lost details, invented a location or mutated state", help)
+				}
+				if kind == "rc" {
+					if !strings.Contains(help.Summary, "recording") || !strings.Contains(help.Action, "0 to 20") || !strings.Contains(help.Action, "0.02 s") || !strings.Contains(help.Action, "ms") {
+						t.Fatalf("position refusal hides valid range or units: %+v", help)
+					}
+				} else if !strings.Contains(help.Action, "sample index 0 or time 0 s") || strings.Contains(help.Action, "3 ms") {
+					t.Fatalf("DC guidance suggests an unavailable position: %+v", help)
+				}
+			}
+		})
+	}
+}

@@ -26,6 +26,8 @@ The wider implemented library stays available. Freeze Vellum, models, project fo
 
 The engineering checkpoint below preserves the prior /188 review's original qualification scope.
 
+**Source follow-up after /189:** the native invalid-time check exposed generic recovery guidance. Rejected recorded positions now show the selected capture's valid index/time ranges and time units; DC guidance correctly limits the position to index 0 or time 0 s. Shared agent/native view feedback, ten public refusal cases, preserved state and correction/Previous tests pass. Full `check.sh` passes in 389.726 s across unchanged 670 Go inputs. The first restricted run's local-socket permission failures remain preserved. [Validation](../docs/validation/recorded-position-guidance/report.json), [behavior](../docs/diagnostic-guidance.md). This source fix is queued for the next alpha build; the available /189 app and agent remain unchanged. No broader gate or owner acceptance is claimed.
+
 Updated October 20, 2026. **ELab 0.171.0 /188 is the latest packaged private review. Its source/API/signature/archive receipts retain their scopes, but a new actual-native recorded-time defect is open. It is not promoted or accepted as the full MVP.** The owner has not tried the four tasks yet. The app and matching agent are in the [review folder](../build/ELab-0.171.0-188-review); start with the [15–20 minute walkthrough](35-first-version-review.md).
 
 | Area | Current evidence and remaining work |

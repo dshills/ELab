@@ -1,7 +1,10 @@
 package main
 
 import (
+	"context"
+	"encoding/json"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/dshills/elab/workbench"
@@ -25,6 +28,46 @@ func TestNativeDiagnosticDisclosureMatchesAgentAndKeepsWireGesture(t *testing.T)
 	if s.service.Snapshot().DiagnosticPresentation.DetailsVisible {
 		t.Fatal("agent disclosure disagrees with UI")
 	}
+}
+
+func TestNativeRecordedTimeRefusalUsesSharedActionableHelpAndCorrection(t *testing.T) {
+	s, cleanup := recordedCursorRC(t)
+	defer cleanup()
+	index := 4
+	agentAction(t, s.service, "recording.seek", workbench.RecordingSeekParams{Index: &index})
+	before := s.service.Snapshot()
+	raw, err := json.Marshal(map[string]any{"time_s": "oops"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	revision := before.CommandRevision
+	response := s.service.Dispatch(context.Background(), workbench.Request{Version: 1, ID: "bad-position", Key: "bad-position", Command: "recording.seek", Params: raw, ExpectedCommandRevision: &revision}, "agent.test")
+	if response.Error == nil || response.Help == nil || !reflect.DeepEqual(before, s.service.Snapshot()) {
+		t.Fatal("agent refusal changed the recording")
+	}
+	field := recordedPlayControl(t, s, "recorded-time")
+	s.app.Do(func() { field.Change(ui.ChangeEvent{Text: "oops"}) })
+	if !reflect.DeepEqual(s.requestHelp, response.Help) || !reflect.DeepEqual(before, s.service.Snapshot()) {
+		t.Fatal("native invalid time differs from shared agent guidance")
+	}
+	s.app.Do(func() {
+		root := s.view()
+		summary, ok := findNode(root, "diagnostic-0-summary")
+		if !ok || summary.Text != response.Help.Summary || !strings.Contains(summary.Text, "recording") {
+			t.Fatal("visible summary hides the invalid recording position")
+		}
+		action, ok := findNode(root, "diagnostic-0-action")
+		if !ok || action.Text != response.Help.Action || !strings.Contains(action.Text, "0.02 s") || !strings.Contains(action.Text, "ms") {
+			t.Fatal("visible action hides the valid range or time units")
+		}
+	})
+	uiAction(t, s, "recorded-time", &ui.ChangeEvent{Text: "3 ms"})
+	uiAction(t, s, "recorded-previous", nil)
+	after := s.service.Snapshot()
+	if after.Recording.Index != 2 || s.requestHelp != nil || s.errorMessage != "" {
+		t.Fatal("correction did not recover and clear shared guidance", after.Recording, s.errorMessage)
+	}
+	assertCursorMeasurementPreservesPhysics(t, before, after)
 }
 
 func TestNativeFailedValueKeepsSharedRequestHelpThroughDisclosure(t *testing.T) {

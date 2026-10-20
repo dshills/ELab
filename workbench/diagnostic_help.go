@@ -2,6 +2,7 @@ package workbench
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
 )
 
@@ -190,5 +191,15 @@ func (s *Service) requestDiagnosticLocked(r Request, code, message string) *Diag
 	}
 	c, _, _ := s.graph.Compile()
 	help := makeDiagnosticHelp(s.graph, c, Diagnostic{Code: code, Message: message}, "request", refs)
+	if code == "invalid-params" && r.Command == "recording.seek" {
+		if record, err := s.selectedRecordLocked(); err == nil {
+			help.Summary = "Choose a valid position in the recording."
+			help.Action = fmt.Sprintf("Use a whole sample index from 0 to %d, or a time from 0 s to %g s. Time units such as ms and us are accepted. Your circuit is unchanged.", len(record.rows)-1, record.metadata.Duration)
+			if record.metadata.Duration == 0 {
+				help.Summary = "This recording has one sample."
+				help.Action = "Use sample index 0 or time 0 s. Your circuit is unchanged."
+			}
+		}
+	}
 	return &help
 }
