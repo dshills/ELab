@@ -1,14 +1,14 @@
-# ELab first-version review · 0.166.0 /183
+# ELab first-version review · 0.168.0 /185
 
-The [review folder](../build/ELab-0.166.0-183-review) includes [ELab.app](../build/ELab-0.166.0-183-review/ELab.app), matching `elab-agent`, three editable examples and framework notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is needed.
+The [review folder](../build/ELab-0.168.0-185-review) includes [ELab.app](../build/ELab-0.168.0-185-review/ELab.app), matching `elab-agent`, three editable examples and framework notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is needed.
 
-The [ZIP](../build/ELab-0.166.0-183-review.zip) and [checksum](../build/ELab-0.166.0-183-review.zip.sha256) preserve all 622 files/modes through macOS extraction into a Unicode path with spaces. Strict local signature and three examples/fresh saves/reopens verify. This does not establish installation, Developer ID, notarization or Gatekeeper acceptance.
+The [ZIP](../build/ELab-0.168.0-185-review.zip) and [checksum](../build/ELab-0.168.0-185-review.zip.sha256) preserve all 520 files/modes through macOS extraction into a Unicode path with spaces. Strict local signature and three examples/fresh saves/reopens verify. This does not establish installation, Developer ID, notarization or Gatekeeper acceptance.
 
-Clean `99be11d2` /SDK `b22478c` packages RECORD-FINAL-01 and RECORD-DC-UI-01. Saved LED/NPN final metadata must agree with selected captured channels and component identities. Both copied native/headless adapters refuse 26 altered records and six embedded projects while preserving current work. Valid one-row DC recordings remain viewable; intact and post-refusal exports remain exact. The original /181 acceptances and failed /182 native attempt/candidate stay preserved. No solver/model/tolerance/budget/command/format/SDK change or arbitrary-history certification is introduced.
+Clean `fbb5a66a` /SDK `b22478c` packages UI-INSPECTOR-WIDTH-01. Text-only Inspector groups and wrapping frames use their available bounded width. Original mounted shrinkage fails six subcases; the repaired mounted cases and eleven copied-native frame/text checks pass across RC, NMOS, PMOS and CMOS. The first /184 measurement guard used natural text widths and exited 1; that unqualified candidate and exact failure stay preserved. No solver/model/tolerance/budget/command/format/SDK change is introduced.
 
-Source quality, copied native smoke, four adapters, reference/measurement/sweep/live/save and inherited terminal/numerical/geometry/pin-reader/recovery/floating/paging checks pass. All 40 earlier sealed reviews, five candidates and canonical /120 survive. Owner walkthrough remains Not tried yet; no promotion or broader MVP completion follows.
+Source quality, copied native smoke, four adapters, reference/measurement/sweep/live/save and inherited recording-consistency/DC-viewer/terminal/numerical/geometry/pin-reader/recovery/floating/paging checks pass. All 41 earlier sealed reviews, six candidates and canonical /120 survive. Owner walkthrough remains Not tried yet; no promotion or broader MVP completion follows.
 
-[Receipt](ui-audit/first-version/recorded-dc-review-checkpoint.json), [proof](../docs/validation/recorded-dc-review-183/README.md).
+[Receipt](ui-audit/first-version/inspector-width-review-checkpoint.json), [proof](../docs/validation/inspector-width-review-185/README.md).
 
 ## Try these four tasks · 15–20 minutes
 
@@ -52,6 +52,6 @@ In another terminal, run `./elab-agent --connect /absolute/path/to/endpoint.json
 - The earlier /160 native invalid-value check retained edit controls in external AX traversal without coordinate fallback; that physical observation retains its original build scope. Complete reader, IME, other inspector states and OS interleavings remain unqualified.
 - The private bundle now has a strict-valid local ad-hoc resource signature. Developer ID, notarization, Gatekeeper and public distribution/native-rights qualification remain open. The versioned review folder is separate from `build/ELab.app` at 0.105.0 /120.
 
-The [delivery plan](34-first-version-plan.md), [updated build receipt](ui-audit/first-version/terminal-validation-review-checkpoint.json) and [native walkthrough/agent evidence](ui-audit/first-version/README.md) track remaining acceptance work. This handoff continues owner feedback; it does not reopen feature scope.
+The [delivery plan](34-first-version-plan.md), [updated build receipt](ui-audit/first-version/inspector-width-review-checkpoint.json) and [native walkthrough/agent evidence](ui-audit/first-version/README.md) track remaining acceptance work. This handoff continues owner feedback; it does not reopen feature scope.
 
 The [gate reconciliation](41-release-gate-reconciliation.md) separates the ready private review from the original full-MVP requirements and owner/participant/environment prerequisites. Recent native slider/startup qualification does not waive those requirements. The bounded automatic storage-error/retry, recorded-page discovery and shutdown-error action checks are now qualified within their documented scopes. Owner walkthrough and the remaining participant/environment prerequisites stay open; repeated engineering checks cannot substitute for them.

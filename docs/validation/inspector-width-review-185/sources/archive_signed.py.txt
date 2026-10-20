@@ -1,0 +1,25 @@
+from pathlib import Path
+import hashlib
+import json
+import sys
+
+ROOT=Path('/Users/dshills/Development/projects/ELab')
+STAGE=Path(__file__).resolve().parent
+sys.path.insert(0,str(ROOT/'scripts'))
+from package_review import run
+from signed_bundle import admit
+
+receipt=ROOT/'research/ui-audit/first-version/inspector-width-review-checkpoint.json'
+archive=ROOT/'build/ELab-0.168.0-185-review.zip'
+out=Path('/private/tmp/elab-185-archive')
+report=run(receipt,archive,out)
+assert report['passed']
+built=json.loads((STAGE/'build-result-signed.json').read_text())
+app=Path(report['extracted_review'])/'ELab.app'
+assert admit(app,built,STAGE/'build/elab')==app/'Contents/MacOS/ELab'
+(out/'signature-report.json').write_text(json.dumps(dict(passed=True,
+    scope='Exact extracted tree and strict ad-hoc signature; no extracted native startup/clean-account claim',
+    native_sha256=hashlib.sha256((app/'Contents/MacOS/ELab').read_bytes()).hexdigest()),indent=2)+'\n')
+with archive.with_suffix('.zip.sha256').open('x') as stream:
+    stream.write(report['archive_sha256']+'  '+archive.name+'\n')
+print({k:report[k] for k in ('passed','archive_bytes','files_verified','archive_sha256')})

@@ -1,0 +1,162 @@
+"""Copied native/headless old-file, new-save and inactive-store recovery checks."""
+import gzip
+import hashlib
+import json
+from pathlib import Path
+
+from floating_cases import fresh, close
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def check(native, parity, out):
+    root=Path('/Users/dshills/Development/projects/ELab')
+    proof=root/'docs/validation/pinned-probe-roundtrip'
+    fixtures=json.loads(gzip.decompress((proof/'original/fixtures.json.gz').read_bytes()))
+    inputs=out/'legacy-pin-input';inputs.mkdir()
+    cases=[]
+    for case in fixtures:
+        copied=dict(case)
+        for kind in ('present','missing'):
+            data=gzip.decompress((proof/'original'/case['name']/(kind+'.elab.gz')).read_bytes())
+            path=inputs/(case['name']+'-'+kind+'.elab')
+            with path.open('xb') as stream:
+                stream.write(data)
+            assert sha(path)==case[kind+'_sha256']
+            copied[kind]=str(path)
+        cases.append(copied)
+    (out/'legacy-pin-plan.json').write_text(json.dumps(dict(source_proof_checkpoint_sha256=sha(proof/'checkpoint.json'),cases=cases),indent=2)+'\n')
+
+    def session(target,label):
+        results=[]
+        for case in cases:
+            for kind in ('present','missing'):
+                path=Path(case[kind]);digest=case[kind+'_sha256']
+                target.ask('project.clear',dict(discard_changes=True),True)
+                target.ask('simulation.pause',{},True)
+                target.ask('project.load',dict(path=str(path)),True)
+                state=fresh(target) if kind=='present' else target.ask('project.inspect')
+                document=json.loads(path.read_text())
+                assert not state['document']['dirty'] and state['components']==document['graph']['components'] and state['wires']==document['graph']['wires']
+                assert [p['definition'] for p in state['pinned_readings']]==document['pinned_readings']['items']
+                for pin in state['pinned_readings']:
+                    if kind=='present':
+                        assert pin['state']=='live' and 'value' in pin and pin['time_s']==0
+                    else:
+                        assert pin['state']=='unavailable' and 'value' not in pin
+                result=dict(name=case['name'],kind=kind,source_sha256=digest,loaded=state)
+                if kind=='present':
+                    pin=state['pinned_readings'][0]['definition']
+                    position=dict(pin['position']);position['x']+=20
+                    target.ask('measurement.pin.move',dict(id=pin['id'],position=position),True)
+                    moved=target.ask('project.inspect')
+                    assert moved['document']['preferences_dirty'] and not moved['document']['schematic_dirty']
+                    for key in ('components','wires','mixed','transient','run_id','electrical_revision'):
+                        assert moved.get(key)==state.get(key),key
+                    target.ask('edit.undo',{},True)
+                    undone=target.ask('project.inspect')
+                    assert not undone['document']['dirty'] and undone['pinned_readings']==state['pinned_readings']
+                    saved=out/f'{label}-pin-saved-{case["name"]}.elab'
+                    target.ask('project.save',dict(path=str(saved)),True)
+                    written=json.loads(saved.read_text())
+                    assert written['graph']==document['graph'] and written['pinned_readings']==document['pinned_readings']
+                    reference=parity.helper.Client(command_preconditions=True)
+                    try:
+                        reference.ask('project.load',dict(path=str(saved)),True)
+                        reopened=fresh(reference)
+                        assert reopened['components']==state['components'] and reopened['wires']==state['wires']
+                        assert not reopened['document']['dirty']
+                        parity.compare(reopened['pinned_readings'],state['pinned_readings'])
+                        close(reference)
+                    finally:
+                        if reference.process.poll() is None:
+                            reference.close()
+                    result.update(moved=moved,undone=undone,reopened=reopened,saved_path=str(saved),saved_sha256=sha(saved))
+                assert sha(path)==digest
+                (out/f'{label}-pin-{case["name"]}-{kind}.json').write_text(json.dumps(result,indent=2)+'\n')
+                results.append(result)
+        return results
+
+    def recover(target,label):
+        results=[]
+        for example,probe in [('nmos','v:M1.gate-source'),('opamp-follower','v:U1.input-difference')]:
+            name=label+'-pin-recovery-'+example
+            target.ask('example.load',dict(id=example,discard_changes=True),True)
+            target.ask('simulation.pause',{},True)
+            target.ask('simulation.restart',{},True)
+            fresh(target)
+            manual=out/(name+'-manual.elab')
+            target.ask('project.save',dict(path=str(manual)),True)
+            manual_digest=sha(manual)
+            directory=out/(name+'-store');detached=out/(name+'-detached')
+            target.ask('recovery.configure',dict(directory=str(directory),enabled=False,interval_s=2),True)
+            target.ask('measurement.pin.add',dict(id=probe,position=dict(x=500,y=300)),True)
+            before=target.ask('project.inspect')
+            target.ask('recovery.checkpoint',{},True)
+            candidates=target.ask('project.inspect')['recovery']['candidates']
+            assert len(candidates)==1 and candidates[0]['current_session'] and candidates[0]['active_session']
+            chosen=candidates[0]
+            capsule=directory/(chosen['id']+'.elab-recovery')
+            capsule_digest=sha(capsule)
+            assert capsule_digest==chosen['sha256']
+            # Public reconfiguration retires the old lease; it neither deletes
+            # the captured file nor fabricates an inactive process/crash.
+            target.ask('recovery.configure',dict(directory=str(detached),enabled=False,interval_s=2),True)
+            target.ask('project.clear',dict(discard_changes=True),True)
+            target.ask('recovery.configure',dict(directory=str(directory),enabled=False,interval_s=2),True)
+            inactive=next(c for c in target.ask('project.inspect')['recovery']['candidates'] if c['id']==chosen['id'])
+            assert not inactive['active_session'] and not inactive['current_session'] and inactive['owner_status']=='inactive'
+            target.ask('recovery.restore',dict(id=chosen['id'],sha256=capsule_digest),True)
+            restored=fresh(target)
+            assert restored['document']['dirty'] and restored['document']['path']=='' and restored['document']['recovered_from']==str(manual)
+            assert restored['components']==before['components'] and restored['wires']==before['wires']
+            parity.compare(restored['pinned_readings'],before['pinned_readings'])
+            saved=out/(name+'-recovered.elab')
+            target.ask('project.save',dict(path=str(saved)),True)
+            reference=parity.helper.Client(command_preconditions=True)
+            try:
+                reference.ask('project.load',dict(path=str(saved)),True)
+                reopened=fresh(reference)
+                assert not reopened['document']['dirty']
+                parity.compare(reopened['pinned_readings'],before['pinned_readings'])
+                close(reference)
+            finally:
+                if reference.process.poll() is None:
+                    reference.close()
+            assert sha(manual)==manual_digest and sha(capsule)==capsule_digest
+            result=dict(example=example,probe=probe,before=before,candidate=chosen,inactive=inactive,restored=restored,reopened=reopened,
+                        manual_path=str(manual),manual_sha256=manual_digest,capsule_path=str(capsule),capsule_sha256=capsule_digest,
+                        saved_path=str(saved),saved_sha256=sha(saved),manual_and_capsule_unchanged=True)
+            (out/(name+'.json')).write_text(json.dumps(result,indent=2)+'\n')
+            results.append(result)
+        return results
+
+    left=session(native,'native')
+    left_recovery=recover(native,'native')
+    reference=parity.helper.Client(command_preconditions=True)
+    try:
+        right=session(reference,'headless')
+        right_recovery=recover(reference,'headless')
+        close(reference)
+    finally:
+        if reference.process.poll() is None:
+            reference.close()
+    for a,b in zip(left,right):
+        assert (a['name'],a['kind'])==(b['name'],b['kind'])
+        for key in ('components','wires'):
+            assert a['loaded'][key]==b['loaded'][key]
+        parity.compare(a['loaded']['pinned_readings'],b['loaded']['pinned_readings'])
+        if a['kind']=='present':
+            for key in ('mixed','transient','scope'):
+                parity.compare(a['loaded'].get(key),b['loaded'].get(key))
+            parity.compare(a['reopened']['pinned_readings'],b['reopened']['pinned_readings'])
+    for a,b in zip(left_recovery,right_recovery):
+        assert a['example']==b['example']
+        parity.compare(a['restored']['pinned_readings'],b['restored']['pinned_readings'])
+    return dict(passed=True,legacy_inputs=12,native_headless_legacy_opens=24,new_saves_and_fresh_reopens=12,
+                live_pin_definitions_per_adapter=44,unavailable_pin_definitions_per_adapter=44,
+                inactive_store_recovery_cases=4,recovered_saved_reopens=4,move_undo_preserves_physics=True,
+                old_file_manual_and_capsule_bytes_unchanged=True,
+                scope='Exact copied native/headless public commands; original /177 bytes, new saves, controlled lease-retired recovery. No physical input, crash, automatic-warning or visible-latency claim.')
