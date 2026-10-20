@@ -80,8 +80,10 @@ func constrainRail(nodes []ui.Node, width float32) {
 			// a label's MaxSize. Text wraps to that allocation, then its own
 			// smaller box clips the result. A frame clamps the allocation
 			// before the child text is shaped. Keep the label's ID and text.
+			// Give that frame its bounded width even when every sibling is
+			// text; otherwise the column shrinks to the longest word.
 			caption := *node
-			*node = ui.Node{ID: railLabelBoundsPrefix + caption.ID, Kind: ui.Column, Style: ui.Style{MaxSize: caption.Style.MaxSize, Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0))}, Children: []ui.Node{caption}}
+			*node = ui.Node{ID: railLabelBoundsPrefix + caption.ID, Kind: ui.Column, MinWidth: maximum.Width, Style: ui.Style{MaxSize: caption.Style.MaxSize, Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0))}, Children: []ui.Node{caption}}
 		}
 	}
 }

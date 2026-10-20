@@ -17,6 +17,9 @@ import (
 // Exercise real Vellum label mounting, text shaping and final allocation. A
 // source-tree max-width assertion alone cannot detect shaped text being clipped.
 func nativeRailLabelsSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	if err := nativeInspectorTextSmoke(ctx, a, s); err != nil {
+		return err
+	}
 	done := make(chan error, 1)
 	if err := a.PostWait(ctx, func() {
 		for _, action := range []struct {
@@ -113,5 +116,101 @@ func nativeRailLabelsSmoke(ctx context.Context, a *app.Application, s *screen) e
 		return fmt.Errorf("rail text exceeds its actual content box or lost source text")
 	}
 	// The newly placed part leaves the protected-close fixture dirty.
+	return nil
+}
+
+// Text-only sections must use the rail's available wrapping width as well as
+// contain their shaped text. Check native allocations, independent of font/DPI.
+func nativeInspectorTextSmoke(ctx context.Context, a *app.Application, s *screen) error {
+	type geometry struct {
+		Example      string  `json:"example"`
+		ID           string  `json:"id"`
+		Group        float32 `json:"group_width_px"`
+		Allocated    float32 `json:"allocated_width_px"`
+		Actual       float32 `json:"actual_width_px"`
+		Shaped       float32 `json:"shaped_right_px"`
+		CompleteText bool    `json:"complete_text"`
+		Truncated    bool    `json:"truncated"`
+	}
+	var measured []geometry
+	for _, example := range []string{"rc", "nmos", "pmos", "cmos"} {
+		done := make(chan error, 1)
+		if err := a.PostWait(ctx, func() {
+			for _, action := range []struct {
+				id string
+				p  any
+			}{
+				{"example.load", workbench.ExampleLoadParams{ID: example, DiscardChanges: true}},
+				{"simulation.pause", struct{}{}},
+				{"simulation.restart", struct{}{}},
+			} {
+				if r := s.invoke(action.id, action.p); r.Error != nil {
+					done <- fmt.Errorf("inspector width fixture %s: %s", example, r.Error.Message)
+					return
+				}
+			}
+			done <- nil
+		}); err != nil {
+			return err
+		}
+		select {
+		case err := <-done:
+			if err != nil {
+				return err
+			}
+		case <-ctx.Done():
+			return ctx.Err()
+		}
+		var sample []geometry
+		_, err := waitNativeViewport(ctx, a, s, func(state workbench.Snapshot) bool {
+			if state.Status == "updating" || s.drawing.widget == nil {
+				return false
+			}
+			labels := map[string]*core.Text{}
+			var group float32
+			s.drawing.widget.Scene.WidgetWalkDown(func(w core.Widget, base *core.WidgetBase) bool {
+				if base.Name == "inspector-group-circuit" {
+					group = base.Geom.Size.Actual.Content.X
+				}
+				if text, ok := w.(*core.Text); ok {
+					labels[base.Name] = text
+				}
+				return true
+			})
+			if group <= 0 {
+				return false
+			}
+			ids := []string{"circuit-capacity", "selection-navigation-help"}
+			if example != "rc" {
+				ids = append(ids, "mixed-help")
+			}
+			root := s.view()
+			sample = nil
+			for _, id := range ids {
+				label := labels[id]
+				node, ok := findNode(root, id)
+				if !ok || label == nil || label.PaintText() == nil || label.Geom.Size.Actual.Content.X <= 0 {
+					return false
+				}
+				paint := label.PaintText()
+				same := strings.Join(strings.Fields(string(paint.Source.Join())), " ") == strings.Join(strings.Fields(node.Text), " ")
+				sample = append(sample, geometry{Example: example, ID: id, Group: group, Allocated: label.Geom.Size.Alloc.Content.X, Actual: label.Geom.Size.Actual.Content.X, Shaped: paint.Bounds.Max.X, CompleteText: same, Truncated: paint.Truncated})
+			}
+			return true
+		})
+		if err != nil {
+			return err
+		}
+		measured = append(measured, sample...)
+	}
+	passed := true
+	for _, sample := range measured {
+		passed = passed && sample.Allocated >= sample.Group*0.9 && sample.Allocated <= sample.Group+1 && sample.CompleteText && !sample.Truncated && sample.Shaped <= sample.Actual+1
+	}
+	evidence, _ := json.Marshal(map[string]any{"event": "elab.inspector-width.smoke", "passed": passed, "labels": measured})
+	log.Print(string(evidence))
+	if !passed {
+		return fmt.Errorf("inspector text lacks its available wrapping width or clips source text")
+	}
 	return nil
 }

@@ -1,0 +1,15 @@
+# Inspector text wrapping · UI-INSPECTOR-WIDTH-01
+
+Source qualified October 19, 2026; P2 readability. The clean /183 native MOSFET walkthrough showed circuit guidance wrapping into roughly 80-pixel columns inside a much wider Inspector. The six final mounted subcases reproduce the shrinkage on the original production layout. /183 remains the current qualified package and is preserved; this source checkpoint does not qualify a replacement native binary.
+
+Text-only accessibility groups and their passive label frames could shrink to the longest word. Giving only the group a minimum width left the inner frames narrow. The repair bounds the group to the Inspector's existing 248-unit content width and gives each existing label frame its available wrapping width. The same constraint routine clamps narrower rails. No vertical growth, SDK edit, text/ID/accessibility replacement, public command change or circuit/simulation change is introduced.
+
+The final regression mounts the production circuit-information group for RC, NMOS, PMOS and CMOS with the pinned real retained adapter and bundled Noto Sans. Each example is checked on initial rendering and repaint: label frames span 236 pixels, text fits inside the frames and group, guidance avoids the tall narrow shape, IDs/text remain and the whole accepted service snapshot stays exact. Separate 152/248-unit rail cases check group bounds. All six subcases fail against the original layout and pass with the repair. The suite is registered in the default mounted gate. A native smoke extension checks actual allocation, complete source text and shaped bounds across the same four examples; running that new native binary is a separate qualification step.
+
+The record preserves the initial manual-theme failure, group-only unsuccessful fix, and overly strict natural-text-width assertion. A short shaped line can legitimately be narrower than its frame, so the final test checks frame allocation and containment. Those fixture attempts do not count as product failures. Native fonts/DPI and complete-screen visual review remain separate from the bundled-font mounted test.
+
+The command ledger changes only the two layout-source hashes and line locations. All 400 non-line site records, 164 public commands, 132 routed commands, aliases and categories stay identical. The native smoke source is excluded from the binding inventory under the existing policy. Full default quality freezes 659 application Go files plus three existing tool files; its elapsed time is recorded in report.json. No source changes during the gate are permitted.
+
+Run `python3 -B docs/validation/inspector-width/verify.py` for read-only replay. It checks hashes, the original six failures and repaired mounted cases, full quality, unchanged routes, forty-one preserved reviews, SDK and canonical app. It opens no application and refuses optimized Python.
+
+No promotion, owner acceptance, new physical input/latency, complete accessibility/platform qualification or full MVP completion is inferred. [Report](report.json), [manifest](manifest.json), [checkpoint](checkpoint.json).

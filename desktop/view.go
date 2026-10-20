@@ -40,15 +40,18 @@ func panel(id string, width float32, children ...ui.Node) ui.Node {
 	return ui.Node{ID: id, Kind: ui.Column, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: width}), MaxSize: ui.Some(ui.Size{Width: width}), Padding: ui.Some(ui.UniformInsets(16)), Gap: ui.Some(float32(12)), Background: ui.Some(paper)}, Children: children}
 }
 
+const inspectorContentWidth float32 = 248
+
 // Keep each inspector section in a stable accessibility group. A long flat
 // child list can lose its leaf controls in external AX traversal when request
-// guidance is inserted. Groups also give readers meaningful section boundaries;
-// their zero padding and existing gap preserve the rail's layout.
+// guidance is inserted. Groups also give readers meaningful section boundaries.
+// Their fixed content width prevents text-only groups from shrinking to the
+// longest word; zero padding and the existing gap preserve vertical spacing.
 func inspectorGroup(id, name string, children []ui.Node) []ui.Node {
 	if len(children) == 0 {
 		return nil
 	}
-	return []ui.Node{{ID: "inspector-group-" + id, Kind: ui.Column, Accessibility: ui.Accessibility{Name: name}, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(12))}, Children: children}}
+	return []ui.Node{{ID: "inspector-group-" + id, Kind: ui.Column, MinWidth: inspectorContentWidth, Accessibility: ui.Accessibility{Name: name}, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(12))}, Children: children}}
 }
 func buttonStyle(n ui.Node, selected bool) ui.Node {
 	n.Style.Foreground = ui.Some(ink)
@@ -492,7 +495,7 @@ func (s *screen) view() ui.Node {
 		palette = s.sweepInspector(state)
 	}
 	constrainRail(palette, 152)
-	constrainRail(inspector, 248)
+	constrainRail(inspector, inspectorContentWidth)
 	filename := "Untitled"
 	if state.Document.Path != "" {
 		filename = filepath.Base(state.Document.Path)
@@ -517,7 +520,7 @@ func (s *screen) view() ui.Node {
 		{ID: "workspace", Kind: ui.Row, Grow: true, Style: ui.Style{Gap: ui.Some(float32(10))}, Children: []ui.Node{
 			{ID: "parts-scroll", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 200}), MaxSize: ui.Some(ui.Size{Width: 200}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("palette", 152, palette...)}},
 			{ID: "schematic-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(12)), Gap: ui.Some(float32(8)), Background: ui.Some(paper)}, Children: schematicChildren},
-			{ID: "sidebar", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 296}), MaxSize: ui.Some(ui.Size{Width: 296}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("sidebar-content", 248, inspector...)}},
+			{ID: "sidebar", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 296}), MaxSize: ui.Some(ui.Size{Width: 296}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("sidebar-content", inspectorContentWidth, inspector...)}},
 		}},
 		{ID: "readings", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 72}), Gap: ui.Some(float32(10)), Align: ui.Some(ui.AlignCenter)}, Children: []ui.Node{metric("current", currentTitle, current), metric("voltage", voltageTitle, voltage), metric("power", powerTitle, power), panel("simulation-info", 232, section("simulation-title", "Live simulation"), quiet("reading-status", readStatus))}},
 		{ID: "footer-row", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 20}), Gap: ui.Some(float32(8))}, Children: []ui.Node{quiet("footer", fmt.Sprintf("%s · %d components · %d wires · last change: %s", filename, len(state.Components), len(state.Wires), state.LastActor)), {ID: "footer-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, quiet("zoom", fmt.Sprintf("%.0f%%", state.View.Zoom*100)), quiet("grid-info", "10-unit snap · local workspace")}},
