@@ -8,6 +8,8 @@ Clean `c31c65d2` /Vellum `b22478c` packages RECORD-STEP-01. Previous/Next apply 
 
 [Receipt](ui-audit/first-version/recorded-step-review-checkpoint.json), [release proof](../docs/validation/recorded-step-review-188/README.md), [source proof](../docs/validation/recorded-step-settlement/README.md). All 44 earlier reviews, six candidates and canonical /120 remain intact. Owner walkthrough remains Not tried yet; no promotion or full MVP acceptance. Existing RC/LED/NPN timing retains its /185 scope; /188 adds no timing cohort.
 
+**Known native follow-up:** [Recorded time → Previous](61-native-recorded-transport-order.md) refuses in one actual /188 case despite passing mounted/API checks. Commit the time with Enter before Previous as the observed workaround. This remains an open defect; the remaining native transport batch was not qualified.
+
 ## Try these four tasks · 15–20 minutes
 
 1. **Build an LED loop.** Start on the blank sheet. Place a DC source, resistor, red LED and ground. Use 5 V and 1 kΩ. Try typing a coordinate and clicking Place directly. Wire source positive → resistor → LED anode, LED cathode → ground, ground → source negative. Expect about **2.917 mA** with the generic model. Change the resistor to `2k`: about **1.477 mA**. Try leaving unfinished value text and clicking a resistor/capacitor preset once; the chosen preset should apply. Undo/redo, delete a wire and reconnect it. For value recovery, enter `0` for the resistor and Apply: the circuit should stay unchanged. Replace it with `2.2k` and Apply once: the error should clear and current should be about **1.345 mA**. An incomplete drawing must not present old readings as current.

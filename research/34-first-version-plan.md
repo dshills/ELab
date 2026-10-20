@@ -22,7 +22,7 @@ The wider implemented library stays available. Freeze Vellum, models, project fo
 
 ## Current position
 
-Updated October 20, 2026. **ELab 0.171.0 /188 is qualified for the private owner walkthrough. It is not promoted or accepted as the full MVP.** The owner has not tried the four tasks yet. The app and matching agent are in the [review folder](../build/ELab-0.171.0-188-review); start with the [15–20 minute walkthrough](35-first-version-review.md).
+Updated October 20, 2026. **ELab 0.171.0 /188 is the latest packaged private review. Its source/API/signature/archive receipts retain their scopes, but a new actual-native recorded-time defect is open. It is not promoted or accepted as the full MVP.** The owner has not tried the four tasks yet. The app and matching agent are in the [review folder](../build/ELab-0.171.0-188-review); start with the [15–20 minute walkthrough](35-first-version-review.md).
 
 | Area | Current evidence and remaining work |
 |---|---|
@@ -32,6 +32,8 @@ Updated October 20, 2026. **ELab 0.171.0 /188 is qualified for the private owner
 | Files and recovery | Existing save/import/recovery repairs remain qualified within their receipts. The [structured-corruption diagnostic](54-structured-corruption-review.md) retains its 20,028 mutations, 18 dirty-work-preserving public refusals and separate guided fuzz run. No broad corruption/power-loss guarantee is inferred. |
 | Owner decisions | One LED print confirmed clear/complete. Four-task walkthrough **Not tried yet**. Clean-account/default-startup gate **deferred for private alpha only**, not a pass. [Decisions](ui-audit/first-version/private-alpha-owner-decisions.json). |
 | Broader MVP | P0 stays **17 implemented /10 partial**. Full bindings/accessibility/environment, broader performance/distribution and the actual hobbyist study remain open. [Gate reconciliation](41-release-gate-reconciliation.md). |
+
+**New actual-native defect, investigation in progress:** [RECORD-NATIVE-ORDER-01](61-native-recorded-transport-order.md) reproduces `3 ms` → Previous refusing on the first click in exact /188, despite passing mounted/source/API checks. Native index → Next works. Enter then Previous is a separately observed workaround. /188's prior scoped receipts remain intact; native time-entry acceptance is open and this case must be repaired/rechecked before claiming it. Remaining planned native transport cases were not backfilled or relabeled.
 
 Keep the app/model/format/SDK scope frozen while the owner review is pending. Work on a concrete remaining release scenario or reproduced defect; avoid new device batches, cosmetic campaigns and repeated completed checks. Preserve canonical /120, all 44 earlier sealed reviews, six candidates and original failed/unavailable evidence. [Engineering checkpoint history](34-engineering-checkpoint-history.md).
 
