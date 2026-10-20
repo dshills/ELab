@@ -1,0 +1,63 @@
+"""Exact copied native/headless geometry commands; private input is source-scoped."""
+import copy
+import json
+from floating_cases import close
+
+
+def check(native,parity,out):
+    kinds=('resistor','net-label','capacitor','inductor','sine-source','finite-pulse-source')
+    def session(target,label):
+        outcomes=[]
+        for index,kind in enumerate(kinds,1):
+            target.ask('project.clear',dict(discard_changes=True),True)
+            target.ask('simulation.pause',{},True)
+            identity='GEOPART'+str(index)
+            target.ask('component.place',dict(id=identity,kind=kind,position=dict(x=0,y=0)),True)
+            if kind=='net-label':target.ask('component.set',dict(id=identity,value='OUTPUT'),True)
+            if kind=='capacitor':target.ask('capacitor.initial.set',dict(id=identity,value='2.5 V'),True)
+            if kind=='inductor':target.ask('inductor.initial.set',dict(id=identity,value='-20 mA'),True)
+            if kind=='sine-source':target.ask('source.sine.set',dict(id=identity,waveform=dict(amplitude_v=1.25,offset_v=-.5,frequency_hz=17,phase_degrees=45)),True)
+            if kind=='finite-pulse-source':target.ask('source.pulse.set',dict(id=identity,waveform=dict(high_v=-1,low_v=-3,high_s=.02,low_s=.03,rise_s=.001,fall_s=.002)),True)
+            target.ask('editor.value.set',dict(value='unfinished value'),True)
+            before=target.ask('project.inspect');original=before['components'][0]
+            target.ask('component.rotate',dict(id=identity),True);rotated=target.ask('project.inspect')
+            expected=dict(original,rotation=90)
+            assert rotated['components']==[expected] and rotated['wires']==before['wires']
+            for key in ('run_id','electrical_revision','transient','mixed','result'):
+                assert rotated.get(key)==before.get(key),key
+            target.ask('edit.undo',{},True);rotation_undone=target.ask('project.inspect')
+            assert rotation_undone['components']==before['components'] and rotation_undone['wires']==before['wires']
+            target.ask('editor.value.set',dict(value='unfinished value'),True)
+            target.ask('component.duplicate',dict(id=identity),True);duplicated=target.ask('project.inspect')
+            assert len(duplicated['components'])==2 and duplicated['wires']==before['wires']
+            duplicate=next(c for c in duplicated['components'] if c['id']==duplicated['selected'])
+            assert duplicate['id']!=identity and duplicate['position']!=original['position']
+            assert {k:v for k,v in duplicate.items() if k not in ('id','position')}=={k:v for k,v in original.items() if k not in ('id','position')}
+            target.ask('edit.undo',{},True);dup_undone=target.ask('project.inspect')
+            assert dup_undone['components']==before['components'] and dup_undone['wires']==before['wires']
+            result=dict(kind=kind,before=before,rotated=rotated,rotation_undone=rotation_undone,duplicated=duplicated,dup_undone=dup_undone)
+            (out/(label+'-geometry-'+kind+'.json')).write_text(json.dumps(result,indent=2)+'\n');outcomes.append(result)
+        return outcomes
+    actual=session(native,'native')
+    reference=parity.helper.Client(command_preconditions=True)
+    try:
+        expected=session(reference,'headless');close(reference)
+    finally:
+        if reference.process.poll() is None:reference.close()
+    paired=0
+    for left,right in zip(actual,expected):
+        assert left['kind']==right['kind']
+        for stage in ('rotated','rotation_undone','duplicated','dup_undone'):
+            a,b=copy.deepcopy(left[stage]),copy.deepcopy(right[stage])
+            if stage=='duplicated':
+                # Lifetime ID reservations differ between the two owned sessions.
+                # Compare the allocated copy's complete metadata under one sentinel.
+                for state in (a,b):
+                    for part in state['components']:
+                        if part['id']==state['selected']:part['id']='COPY'
+                    state['selected']='COPY'
+            for key in ('components','wires','paused'):
+                assert a[key]==b[key],(left['kind'],stage,key)
+            paired+=1
+    assert paired==24
+    return dict(passed=True,cases_per_adapter=6,paired_stages=paired,configured_values_waveforms_startup_preserved=True,wire_count_unchanged=True,single_undo_restores_graph=True,scope='Exact copied native/headless public editor.value.set then Rotate/Undo/Duplicate/Undo on six incomplete one-part graphs. Configured values stay unchanged. Copy IDs are compared under one sentinel because lifetime reservations differ. Private field/one-click/deferred/held guards are separately source-mounted, not new physical OS input or this API sequence.')

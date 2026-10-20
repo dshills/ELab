@@ -57,6 +57,7 @@ reported problems and their bytes are preserved.
 owned /180 Open crashes and 24 original-source panic regressions. The source
 repair passes dirty-state/file preservation, saved-edit fresh reopening, recovery
 and full quality checks. Standalone recorded import remains a noncrashing refusal
-on both original and corrected agents. This is source/headless qualification;
-preserved /180 remains affected until a clean replacement is qualified. Valid
+on both original and corrected agents. The [0.164.0 /181 replacement](validation/terminal-validation-review-181/README.md)
+now qualifies exact copied native/headless refusal, recovery-problem preservation
+and fresh saved-edit reopening. Preserved /180 remains affected. Valid
 file shapes/versions, solver models, commands and native bindings are unchanged.

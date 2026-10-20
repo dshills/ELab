@@ -4,17 +4,15 @@ ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N
 
 The [first-version delivery plan](research/34-first-version-plan.md) targets a usable macOS hobbyist alpha with frozen scope, ordered blockers and a concrete handoff.
 
-**Current private review: 0.163.0 /180.** Use the [review app](build/ELab-0.163.0-180-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.163.0-180-review.zip) with its [checksum](build/ELab-0.163.0-180-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening.
+**Current private review: 0.164.0 /181.** Use the [review app](build/ELab-0.164.0-181-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.164.0-181-review.zip) with its [checksum](build/ELab-0.164.0-181-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening.
 
-Clean `8efce9a` /SDK `b22478c` corrects [NUMERICS-DISCOVERY-01](docs/validation/integration-discovery/README.md): detailed value-command discovery now identifies the actual SDIRK2 capacitor engines and separate exact RC, algebraic NPN and Radau IIA paths. Historical recordings keep their engine and rows. Only two filtered guidance strings change; ordinary catalog, other annotations/outputs, numerical kernels, models, commands, native bindings, formats and SDK are unchanged.
+Clean `accca492` /SDK `b22478c` fixes [FILE-TERMINALS-01](docs/validation/terminal-shape-validation/README.md): malformed saved terminal arrays refuse before scope/pin derivation, preserving current work. Exact copied native/headless commands reject the original crash files, report malformed recovery capsules without rewriting them and freshly reopen saved surviving edits. /180 and its actual crash evidence stay preserved. Numerical kernels, models, budgets, commands, native bindings, formats and SDK are unchanged.
 
-**Replacement pending:** [FILE-TERMINALS-01](docs/validation/terminal-shape-validation/README.md) reproduces /180 crashes when opening malformed terminal arrays. The source fix now refuses those files while preserving current work; a clean replacement still needs qualification. /180 remains preserved and affected.
+Full source quality, copied native smoke, all four public adapters, reference/startup/measurement/sweep/live/save checks, thirty paging cases, strict local signature and ZIP/example reopens pass. Ten loader/recovery physics stages match between native/headless sessions. Earlier numerical-discovery, geometry, pin-file/recovery and floating-source checks remain covered. No new physical input, automatic startup recovery or visible-latency acceptance is inferred.
 
-Full source quality, copied native smoke, all four public adapters, reference/startup/measurement/sweep/live/save checks, thirty paging cases, strict local signature and ZIP/example reopens pass. Native/headless discovery agrees, with twelve paired physics states across six families. Earlier geometry, advanced-pin/recovery and floating-source checks remain covered. No new physical input or visible-latency acceptance is inferred.
+[Walkthrough](research/35-first-version-review.md), [receipt](research/ui-audit/first-version/terminal-validation-review-checkpoint.json), [proof](docs/validation/terminal-validation-review-181/README.md).
 
-[Walkthrough](research/35-first-version-review.md), [receipt](research/ui-audit/first-version/integration-discovery-review-checkpoint.json), [proof](docs/validation/integration-discovery-review-180/README.md).
-
-Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment and the actual hobbyist study remain open. Visible latency stays scoped to /173, with RC and 100 ms acknowledgement unqualified. All 38 earlier sealed reviews, four candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.
+Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment, broader corruption/fuzzing and the actual hobbyist study remain open. Visible latency stays scoped to /173, with RC and 100 ms acknowledgement unqualified. All 39 earlier sealed reviews, four candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.
 
 ## Build and run from source
 

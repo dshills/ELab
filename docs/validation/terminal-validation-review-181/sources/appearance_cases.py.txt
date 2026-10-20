@@ -1,0 +1,98 @@
+"""Exact copied appearance job API outcomes; source tests own held-IO races."""
+import hashlib
+import json
+
+
+def check(native, parity, out):
+    sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+
+    def exercise(client, label):
+        directory = out/(label+'-appearance')
+        directory.mkdir(mode=0o700)
+        client.ask('appearance.configure', dict(path=''), True)
+        client.ask('appearance.theme.set', dict(theme='light'), True)
+        client.ask('example.rc', dict(discard_changes=True), True)
+        client.ask('simulation.wait')
+        client.ask('simulation.pause', {}, True)
+        client.ask('simulation.restart', {}, True)
+        client.ask('simulation.wait')
+        client.ask('simulation.step', dict(duration_s='10 ms'), True)
+        project = directory/'manual.elab'
+        client.ask('project.save', dict(path=str(project)), True)
+        before = client.ask('project.inspect')
+        project_hash = sha(project)
+        path = directory/'appearance.json'
+
+        def inspect(identity):
+            return client.ask('appearance.work.inspect', dict(id=identity))
+
+        def completed(admission):
+            client.ask('appearance.wait')
+            work = inspect(admission['appearance_work']['id'])
+            assert work['status'] == 'completed' and not work['cancelable']
+            assert work['command_revision'] == admission['command_revision']
+            assert work['input_revision'] < admission['revision'] and work['actor']
+            assert work['document_generation'] == before['document']['generation']
+            assert work['electrical_revision'] == before['electrical_revision'] and work['input_run_id'] == before['run_id']
+            assert work['artifact_sha256'] == sha(path)
+            return work
+
+        admitted = client.ask('appearance.configure', dict(path=str(path)), True)
+        created = completed(admitted)
+        assert created['published'] and created['current_at_completion'] and created['bytes'] == path.stat().st_size
+        assert created['input_theme'] == created['result_theme'] == 'light' and created['command'] == 'appearance.configure'
+        same = completed(client.ask('appearance.theme.set', dict(theme='light'), True))
+        assert same['id'] != created['id'] and not same['published'] and same['bytes'] == 0
+        assert same['source_sha256'] == same['artifact_sha256'] == created['artifact_sha256']
+        saved = completed(client.ask('appearance.theme.set', dict(theme='dark'), True))
+        assert saved['published'] and saved['requested_theme'] == saved['result_theme'] == 'dark'
+        assert saved['source_sha256'] == created['artifact_sha256'] and saved['artifact_sha256'] != created['artifact_sha256']
+        assert inspect(created['id']) == created and inspect(same['id']) == same
+        stable = client.ask('project.inspect')
+        for key in ('components', 'wires', 'document', 'transient', 'run_id', 'electrical_revision', 'undo_entry', 'redo_entry'):
+            assert stable.get(key) == before.get(key), (label, key)
+        for identity in (created['id'], saved['id'], 'unknown'):
+            client.ask('appearance.work.cancel', dict(id=identity), True, expect='operation-unavailable')
+        assert inspect(saved['id']) == saved
+
+        external = b'{"format":"elab.appearance","version":1,"theme":"system"}\n'
+        path.write_bytes(external)
+        failed_admission = client.ask('appearance.theme.set', dict(theme='light'), True)
+        failed_state = client.ask('appearance.wait')
+        failed = inspect(failed_admission['appearance_work']['id'])
+        assert failed['status'] == 'failed' and failed['error'] and not failed['published']
+        assert failed_state['appearance']['status'] == 'error' and path.read_bytes() == external
+        session = client.ask('appearance.theme.set', dict(theme='dark'), True)
+        assert session['appearance_work'] == failed and session['command_revision'] != failed['command_revision']
+        reloaded = completed(client.ask('appearance.configure', dict(path=str(path)), True))
+        assert not reloaded['published'] and reloaded['result_theme'] == 'system'
+        client.ask('appearance.configure', dict(path=''), True)
+        disabled = client.ask('appearance.theme.set', dict(theme='light'), True)
+        assert disabled['appearance']['status'] == 'disabled' and disabled['appearance_work'] == reloaded
+        assert disabled['command_revision'] != reloaded['command_revision'] and path.read_bytes() == external
+        client.ask('project.clear', dict(discard_changes=True), True)
+        assert inspect(saved['id']) == saved and inspect(failed['id']) == failed
+        assert sha(project) == project_hash and not list(directory.glob('.elab-appearance-*'))
+        report = dict(passed=True, created=created, no_op=same, saved=saved, failed=failed, reloaded=reloaded,
+                      captured_rc_state_preserved=True, manual_project_sha256=project_hash,
+                      stale_terminal_and_unknown_cancellation_refused=True,
+                      disabled_and_error_choices_admit_no_job=True, project_replacement_retains_outcomes=True)
+        (out/(label+'-appearance.json')).write_text(json.dumps(report, indent=2)+'\n')
+        return report
+
+    left = exercise(native, 'native')
+    reference = parity.helper.Client(command_preconditions=True)
+    try:
+        right = exercise(reference, 'headless')
+    finally:
+        reference.close()
+    compared = ('command', 'status', 'phase', 'input_theme', 'requested_theme', 'result_theme',
+                'source_sha256', 'artifact_sha256', 'bytes', 'cancelable', 'superseded', 'published', 'current_at_completion', 'error')
+    for phase in ('created', 'no_op', 'saved', 'reloaded'):
+        assert {k:left[phase].get(k) for k in compared} == {k:right[phase].get(k) for k in compared}, phase
+    assert left['failed']['error']['code'] == right['failed']['error']['code']
+    return dict(passed=True, matching_successful_job_outcomes=4, matching_failure_code=left['failed']['error']['code'],
+                retained_original_identity=True, captured_rc_state_and_manual_files_preserved=True,
+                terminal_cancel_refusals=True, schema_and_command_versions_unchanged=True,
+                source_held_io_cancellation_races_separate=True,
+                scope='Exact copied native socket and packaged headless stdio commands; no accepted held-IO cancellation or physical UI claim')
