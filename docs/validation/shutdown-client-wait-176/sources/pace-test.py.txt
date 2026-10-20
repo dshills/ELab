@@ -1,0 +1,168 @@
+"""Check bounded, read-only shutdown waiting with instantaneous RPC responses."""
+import copy
+import importlib.util
+from pathlib import Path
+import threading
+import unittest
+from unittest.mock import patch
+
+spec = importlib.util.spec_from_file_location('shutdown_wait_client', Path(__file__).with_name('persistence-demo.py'))
+helper = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(helper)
+
+
+def work(status, identifier='shutdown-1'):
+    return dict(id=identifier, status=status, exit_ready=status == 'completed',
+                error={'code': 'shutdown-failed', 'message': 'retained cause'} if status == 'failed' else None)
+
+
+class Clock:
+    def __init__(self):
+        self.now = 0.
+        self.delays = []
+
+    def monotonic(self):
+        return self.now
+
+    def sleep(self, delay):
+        self.delays.append(delay)
+        self.now += delay
+
+
+class ShutdownWaitTests(unittest.TestCase):
+    def fixture(self, replies=(), error=None):
+        clock = Clock()
+        client = object.__new__(helper.Client)
+        pending = list(replies)
+        calls = []
+
+        def ask(command, params=None, mutate=False):
+            calls.append((clock.now, command, params, mutate))
+            self.assertLess(len(calls), 20, 'busy observation exceeded its bounded request count')
+            self.assertEqual(command, 'app.close.inspect')
+            self.assertEqual(params, {'id': 'shutdown-1'})
+            self.assertFalse(mutate)
+            if error is not None:
+                raise error
+            return pending.pop(0) if pending else work('running')
+
+        client.ask = ask
+        client.close = lambda: self.fail('observer does not own client cleanup')
+        for name, value in [('monotonic', clock.monotonic), ('sleep', clock.sleep)]:
+            timer = patch.object(helper.time, name, value)
+            timer.start()
+            self.addCleanup(timer.stop)
+        return client, clock, calls
+
+    def test_instant_pending_replies_are_paced_and_timeout_without_mutation(self):
+        client, clock, calls = self.fixture()
+        initial = work('queued')
+        original = copy.deepcopy(initial)
+        with self.assertRaises(TimeoutError):
+            client.wait_for_shutdown_outcome(initial, timeout_s=.2, poll_interval_s=.05)
+        self.assertEqual(initial, original)
+        self.assertEqual(len(calls), 4)
+        for actual, expected in zip([c[0] for c in calls], [0., .05, .1, .15]):
+            self.assertAlmostEqual(actual, expected)
+        self.assertAlmostEqual(clock.now, .2)
+
+    def test_failed_outcome_is_returned_without_acknowledging_it(self):
+        failed = work('failed')
+        client, clock, calls = self.fixture([work('running'), failed])
+        result = client.wait_for_shutdown_outcome(work('queued'))
+        self.assertIs(result, failed)
+        self.assertFalse(result['exit_ready'])
+        self.assertEqual(result['error'], {'code': 'shutdown-failed', 'message': 'retained cause'})
+        self.assertEqual(len(calls), 2)
+        self.assertEqual(clock.delays, [.05])
+
+    def test_already_terminal_outcome_needs_no_query_or_delay(self):
+        for status in ('completed', 'failed'):
+            with self.subTest(status=status):
+                client, clock, calls = self.fixture()
+                initial = work(status)
+                self.assertIs(client.wait_for_shutdown_outcome(initial, timeout_s=0), initial)
+                self.assertEqual(calls, [])
+                self.assertEqual(clock.delays, [])
+
+    def test_zero_timeout_pending_work_sends_no_request(self):
+        client, _, calls = self.fixture()
+        with self.assertRaises(TimeoutError):
+            client.wait_for_shutdown_outcome(work('queued'), timeout_s=0)
+        self.assertEqual(calls, [])
+
+    def test_backoff_is_clamped_to_the_remaining_budget(self):
+        client, clock, calls = self.fixture()
+        with self.assertRaises(TimeoutError):
+            client.wait_for_shutdown_outcome(work('queued'), timeout_s=.02, poll_interval_s=.05)
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(clock.delays, [.02])
+
+    def test_late_rpc_result_is_not_reported_as_an_on_time_outcome(self):
+        client, clock, calls = self.fixture()
+        ask = client.ask
+
+        def late(command, params=None, mutate=False):
+            ask(command, params, mutate)
+            clock.now = 1.
+            return work('completed')
+
+        client.ask = late
+        with self.assertRaises(TimeoutError):
+            client.wait_for_shutdown_outcome(work('queued'), timeout_s=.2)
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(clock.delays, [])
+
+    def test_cancel_before_query_and_during_backoff_never_cancels_the_job(self):
+        client, clock, calls = self.fixture()
+        canceled = threading.Event()
+        canceled.set()
+        with self.assertRaises(InterruptedError):
+            client.wait_for_shutdown_outcome(work('queued'), cancel_event=canceled)
+        self.assertEqual(calls, [])
+
+        class CancelDuringWait:
+            def is_set(self):
+                return False
+
+            def wait(self, delay):
+                clock.sleep(delay/2)
+                return True
+
+        with self.assertRaises(InterruptedError):
+            client.wait_for_shutdown_outcome(work('queued'), cancel_event=CancelDuringWait())
+        self.assertEqual(len(calls), 1)
+
+    def test_transport_failure_propagates_without_retry_or_fabricated_outcome(self):
+        failure = EOFError('owned transport ended')
+        client, clock, calls = self.fixture(error=failure)
+        with self.assertRaises(EOFError) as raised:
+            client.wait_for_shutdown_outcome(work('queued'))
+        self.assertIs(raised.exception, failure)
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(clock.delays, [])
+
+    def test_other_or_malformed_job_cannot_satisfy_the_observation(self):
+        for reply in (work('completed', 'other'), work('unknown'), None):
+            with self.subTest(reply=reply):
+                client, clock, calls = self.fixture([reply])
+                with self.assertRaises(ValueError):
+                    client.wait_for_shutdown_outcome(work('queued'))
+                self.assertEqual(len(calls), 1)
+                self.assertEqual(clock.delays, [])
+
+    def test_invalid_budget_or_identity_is_rejected_before_io(self):
+        client, _, calls = self.fixture()
+        for name, values in [('timeout_s', [-1, float('nan'), float('inf'), 10**1000, True, '1']),
+                             ('poll_interval_s', [0, -1, float('nan'), float('inf'), 10**1000, True, None])]:
+            for value in values:
+                with self.subTest(name=name, value=value), self.assertRaises(ValueError):
+                    client.wait_for_shutdown_outcome(work('queued'), **{name: value})
+        for initial in (None, {}, dict(id='', status='queued'), dict(id=1, status='queued')):
+            with self.subTest(initial=initial), self.assertRaises(ValueError):
+                client.wait_for_shutdown_outcome(initial)
+        self.assertEqual(calls, [])
+
+
+if __name__ == '__main__':
+    unittest.main()

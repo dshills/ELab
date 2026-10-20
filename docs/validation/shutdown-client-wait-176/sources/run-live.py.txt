@@ -1,0 +1,60 @@
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+import sys
+
+ROOT=Path('/Users/dshills/Development/projects/ELab')
+STAGE=Path(__file__).resolve().parent
+OUT=Path('/private/tmp/elab-shutdown-wait-176-final')
+RUNTIME=Path('/private/tmp/elab-first-version-176-signed-runtime')
+receipt=json.loads((ROOT/'research/ui-audit/first-version/shutdown-layout-review-checkpoint.json').read_text())
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(RUNTIME/'elab-agent')==receipt['agent_sha256']
+OUT.mkdir(mode=0o700)
+bridge='''#!/usr/bin/env python3
+from pathlib import Path
+import hashlib,json,subprocess,sys
+out=Path(__file__).resolve().parent
+config=json.loads((out/'bridge-config.json').read_text())
+assert hashlib.sha256(Path(config['binary']).read_bytes()).hexdigest()==config['agent_sha256']
+err=(out/'agent-stderr.txt').open('x')
+child=subprocess.Popen([config['wrapper']],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=err,text=True)
+report=dict(pid=child.pid,agent_sha256=config['agent_sha256'],requests=0)
+try:
+ with (out/'transcript.jsonl').open('x') as log:
+  for line in sys.stdin:
+   child.stdin.write(line);child.stdin.flush()
+   reply=child.stdout.readline()
+   assert reply,'agent stopped before its reply'
+   request,response=json.loads(line),json.loads(reply)
+   assert response['version']==request['version']==1 and response['id']==request['id']
+   log.write(json.dumps(dict(request_json=line.rstrip('\\n'),response=response))+'\\n');log.flush()
+   report['requests']+=1
+   sys.stdout.write(reply);sys.stdout.flush()
+finally:
+ child.stdin.close();child.wait(timeout=10);err.close()
+ report['exit_code']=child.returncode
+ (out/'process-exit.json').write_text(json.dumps(report,indent=2)+'\\n')
+assert child.returncode==0
+'''
+cases=[]
+for scenario in ['success','failure']:
+    case=OUT/scenario;case.mkdir(mode=0o700)
+    config=dict(binary=str(RUNTIME/'elab-agent'),wrapper=str(RUNTIME/'agent'),agent_sha256=receipt['agent_sha256'])
+    (case/'bridge-config.json').write_text(json.dumps(config,indent=2)+'\n')
+    wrapper=case/'record-agent';wrapper.write_text(bridge);wrapper.chmod(0o700)
+    command=[sys.executable,'-B',str(ROOT/'scripts/shutdown-demo.py'),'--agent-binary',str(wrapper),'--scenario',scenario,'--output',str(case/'report.json'),'--artifacts',str(case/'artifacts')]
+    with (case/'demo-output.txt').open('x') as stream:
+        result=subprocess.run(command,cwd=ROOT,stdout=stream,stderr=subprocess.STDOUT,timeout=60)
+    assert result.returncode==0,(scenario,(case/'demo-output.txt').read_text())
+    report=json.loads((case/'report.json').read_text());exit_report=json.loads((case/'process-exit.json').read_text())
+    assert report['passed'] and exit_report['exit_code']==0
+    rows=[json.loads(line) for line in (case/'transcript.jsonl').read_text().splitlines()]
+    inspections=[row for row in rows if json.loads(row['request_json'])['command']=='app.close.inspect']
+    assert all(json.loads(row['request_json'])['command']!='events.poll' for row in rows)
+    cases.append(dict(scenario=scenario,passed=True,requests=len(rows),shutdown_inspections=len(inspections),agent_exit_code=0,command=command))
+summary=dict(passed=True,release='0.159.0 /176',agent_sha256=receipt['agent_sha256'],cases=cases,
+    scope='Two fresh owned headless sessions through the exact published agent and byte-preserving recorder; no native window, model change or timing acceptance')
+(OUT/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+print(json.dumps(summary,indent=2))

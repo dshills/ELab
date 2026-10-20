@@ -5,7 +5,6 @@ import hashlib
 import importlib.util
 import json
 from pathlib import Path
-import time
 
 
 spec = importlib.util.spec_from_file_location('helper', Path(__file__).with_name('persistence-demo.py'))
@@ -18,6 +17,8 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--connect')
+    parser.add_argument('--agent-binary', type=Path,
+                        help='Use this matching agent instead of build/elab-agent')
     parser.add_argument('--scenario', choices=('success', 'failure'), required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--artifacts', type=Path, required=True)
@@ -26,7 +27,10 @@ def main():
     root.mkdir(mode=0o700, parents=True, exist_ok=False)
     directory = root / 'recovery'
     directory.mkdir(mode=0o700)
-    client = connect_demo_client(helper.Client, args.connect, command_preconditions=True)
+    client_options = dict(command_preconditions=True)
+    if args.agent_binary is not None:
+        client_options['agent_binary'] = args.agent_binary
+    client = connect_demo_client(helper.Client, args.connect, **client_options)
     try:
         schemas = {command: client.ask('capabilities.list', {'command': command})['capabilities'][0]['input_schema']
                    for command in ('app.close', 'app.close.start', 'app.close.inspect', 'app.close.acknowledge')}
@@ -72,11 +76,7 @@ def main():
         assert work['input_revision'] == before['revision'] and work['command_revision'] == closed['command_revision']
         assert work['document_generation'] == before['document']['generation'] and work['actor']
         if args.scenario == 'failure':
-            deadline = time.monotonic() + 15
-            while work['status'] in ('queued', 'running'):
-                work = client.ask('app.close.inspect', {'id': work['id']})
-                assert time.monotonic() < deadline
-                time.sleep(.01)
+            work = client.wait_for_shutdown_outcome(work)
             assert work['status'] == 'failed' and work['error']['code'] == 'shutdown-failed'
             assert work['workers_joined'] and not work['exit_ready'] and not work['recovery_finalized']
             assert work['recovery_error'] and not work.get('appearance_error')

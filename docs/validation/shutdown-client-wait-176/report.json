@@ -1,0 +1,79 @@
+{
+  "passed": true,
+  "kind": "Python example-client/tooling follow-up; no application code change",
+  "base_release": "0.159.0 /176",
+  "base_receipt": {
+    "path": "research/ui-audit/first-version/shutdown-layout-review-checkpoint.json",
+    "sha256": "991a1a4618a20fccacd9b3d6fe6fa44fdf6d11c56e611bf94bfc0cad9ec2b47e"
+  },
+  "application_go_files_unchanged": 650,
+  "packaged_runtime_inputs_unchanged": 358,
+  "preserved": {
+    "build/ELab.app/Contents/MacOS/ELab": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "build/ELab-0.159.0-176-review/ELab.app/Contents/MacOS/ELab": "bcb007445f9fde3aee22418413a82fd2772272be8816e2c51562a89fd6ae41d8",
+    "build/ELab-0.159.0-176-review/elab-agent": "557437ef0d02202747ae6da78d04f58353fa4b43fb278f15cd579ef03dbdceed",
+    "build/ELab-0.159.0-176-review.zip": "3f38afd45f33f1b09dbbb998be1018515709d5e0c22068ff5980b20342089d39",
+    "third_party/vellum/vellum-b22478c.tar.gz": "22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968"
+  },
+  "python_runtime": "3.15.0 (main, Oct  9 2026, 11:16:41) [Clang 21.0.0 (clang-2100.3.34.2)]",
+  "python_310_syntax": "accepted; not an execution matrix",
+  "python_tests": 65,
+  "pace_removal_counterexample": "expected failure at 20 requests; normal method uses four requests over 0.2 virtual seconds",
+  "selection_counterexample": "New optional flag initially overrode a prefilled client default with None; final omission/explicit test and implementation corrected before final runs",
+  "earlier_explicit_agent_runs": {
+    "path": "/private/tmp/elab-shutdown-wait-176",
+    "summary_sha256": "7c6f30287709eb8d90f8b89163f503a96d1bcdbdb64e35f38fd2b23547bb37ad",
+    "used_for_final_qualification": false
+  },
+  "final_live_source_sha256": {
+    "scripts/persistence-demo.py": "551e6a111078d2988192e7b6dd61a541121deebfaae992c3f3be43c051bddfef",
+    "scripts/shutdown-demo.py": "239be9ee29ac03605eca0a9380375d3a3dd4f57c183e2bbb7b1b1fa95462d581",
+    "scripts/test_shutdown_wait.py": "d0b0c08bf9a4b76b4fd33aa62319c2ec5096f918bec694bc6430f98ae3d3df9b"
+  },
+  "final_live_cases": [
+    {
+      "scenario": "success",
+      "passed": true,
+      "requests": 24,
+      "shutdown_inspections": 0,
+      "agent_exit_code": 0,
+      "command": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "/Users/dshills/Development/projects/ELab/scripts/shutdown-demo.py",
+        "--agent-binary",
+        "/private/tmp/elab-shutdown-wait-176-final/success/record-agent",
+        "--scenario",
+        "success",
+        "--output",
+        "/private/tmp/elab-shutdown-wait-176-final/success/report.json",
+        "--artifacts",
+        "/private/tmp/elab-shutdown-wait-176-final/success/artifacts"
+      ]
+    },
+    {
+      "scenario": "failure",
+      "passed": true,
+      "requests": 31,
+      "shutdown_inspections": 2,
+      "agent_exit_code": 0,
+      "command": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "/Users/dshills/Development/projects/ELab/scripts/shutdown-demo.py",
+        "--agent-binary",
+        "/private/tmp/elab-shutdown-wait-176-final/failure/record-agent",
+        "--scenario",
+        "failure",
+        "--output",
+        "/private/tmp/elab-shutdown-wait-176-final/failure/report.json",
+        "--artifacts",
+        "/private/tmp/elab-shutdown-wait-176-final/failure/artifacts"
+      ]
+    }
+  ],
+  "app_version_changed": false,
+  "new_native_window": false,
+  "latency_acceptance": false,
+  "full_mvp_complete": false
+}

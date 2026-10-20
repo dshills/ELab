@@ -1,0 +1,118 @@
+#!/usr/bin/env python3
+"""Qualify successful/failed protected shutdown through either public transport."""
+import argparse
+import hashlib
+import importlib.util
+import json
+from pathlib import Path
+
+
+spec = importlib.util.spec_from_file_location('helper', Path(__file__).with_name('persistence-demo.py'))
+helper = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(helper)
+
+
+def main():
+    from demo_session import connect_demo_client
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--connect')
+    parser.add_argument('--agent-binary', type=Path,
+                        help='Use this matching agent instead of build/elab-agent')
+    parser.add_argument('--scenario', choices=('success', 'failure'), required=True)
+    parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--artifacts', type=Path, required=True)
+    args = parser.parse_args()
+    root = args.artifacts.resolve()
+    root.mkdir(mode=0o700, parents=True, exist_ok=False)
+    directory = root / 'recovery'
+    directory.mkdir(mode=0o700)
+    client_options = dict(command_preconditions=True)
+    if args.agent_binary is not None:
+        client_options['agent_binary'] = args.agent_binary
+    client = connect_demo_client(helper.Client, args.connect, **client_options)
+    try:
+        schemas = {command: client.ask('capabilities.list', {'command': command})['capabilities'][0]['input_schema']
+                   for command in ('app.close', 'app.close.start', 'app.close.inspect', 'app.close.acknowledge')}
+        client.ask('example.rc', {'discard_changes': True}, True)
+        client.ask('simulation.pause', {}, True)
+        client.ask('simulation.wait')
+        client.ask('recovery.configure', dict(directory=str(directory), enabled=False, interval_s=2), True)
+        project = root / 'saved.elab'
+        client.ask('project.save', {'path': str(project)}, True)
+        saved_digest = hashlib.sha256(project.read_bytes()).hexdigest()
+        client.ask('component.set', dict(id='R1', value='20k'), True)
+        client.ask('recovery.checkpoint', {}, True)
+        old = client.ask('project.inspect')['recovery']['candidates'][0]
+        old_file = directory / (old['id'] + '.elab-recovery')
+        old_digest = hashlib.sha256(old_file.read_bytes()).hexdigest()
+        # A different document's owned snapshot must survive current discard.
+        client.ask('example.rc', {'discard_changes': True}, True)
+        client.ask('simulation.pause', {}, True)
+        client.ask('component.set', dict(id='R1', value='30k'), True)
+        client.ask('recovery.checkpoint', {}, True)
+        state = client.ask('simulation.wait')
+        current = next(c for c in state['recovery']['candidates'] if c['id'] != old['id'])
+        current_file = directory / (current['id'] + '.elab-recovery')
+        leases = list(directory.glob('session-*.json'))
+        assert len(leases) == 1
+        protected = None
+        if args.scenario == 'failure':
+            # Deliberately fault only this newly owned lease path. A nonempty
+            # directory refuses removal; acknowledging must not retry/remove it.
+            leases[0].unlink()
+            leases[0].mkdir(mode=0o700)
+            protected = leases[0] / 'retain'
+            protected.write_bytes(b'owned shutdown fault fixture')
+        before = client.ask('project.inspect')
+        client.ask('app.close', {}, True, 'unsaved-changes')
+        assert client.ask('project.inspect') == before
+        client.ask('app.close.start', dict(discard_changes=True, expected_document_generation=before['document']['generation']+1), True, 'conflict')
+        assert client.ask('project.inspect') == before
+        command = 'app.close' if args.scenario == 'success' else 'app.close.start'
+        closed = client.ask(command, {'discard_changes': True}, True)
+        work = closed['shutdown']
+        assert closed['closed'] and work['id'] and not work['cancelable']
+        assert work['input_revision'] == before['revision'] and work['command_revision'] == closed['command_revision']
+        assert work['document_generation'] == before['document']['generation'] and work['actor']
+        if args.scenario == 'failure':
+            work = client.wait_for_shutdown_outcome(work)
+            assert work['status'] == 'failed' and work['error']['code'] == 'shutdown-failed'
+            assert work['workers_joined'] and not work['exit_ready'] and not work['recovery_finalized']
+            assert work['recovery_error'] and not work.get('appearance_error')
+            frozen = client.ask('project.inspect')
+            assert client.ask('app.close.inspect', {'id': work['id']}) == work
+            client.ask('view.pan', {'dx': 1, 'dy': 1}, True, 'closed')
+            client.ask('app.close.acknowledge', {'id': 'wrong'}, True, 'not-found')
+            assert client.ask('project.inspect') == frozen
+            closed = client.ask('app.close.acknowledge', {'id': work['id']}, True)
+            acknowledged = closed['shutdown']
+            assert acknowledged['exit_ready'] and acknowledged['status'] == 'failed' and acknowledged['error'] == work['error']
+            assert protected.read_bytes() == b'owned shutdown fault fixture'
+        else:
+            assert work['status'] == 'completed' and work['recovery_finalized'] and work['workers_joined'] and work['exit_ready']
+            assert not leases[0].exists()
+        for key in ('document', 'components', 'wires', 'run_id', 'electrical_revision', 'transient', 'undo_entry'):
+            assert closed.get(key) == before.get(key), key
+        assert not current_file.exists()
+        assert hashlib.sha256(old_file.read_bytes()).hexdigest() == old_digest
+        assert hashlib.sha256(project.read_bytes()).hexdigest() == saved_digest
+        report = dict(passed=True, scenario=args.scenario, transport='native-socket' if args.connect else 'headless-stdio',
+                      detailed_schemas=schemas, captured_components=before['components'],
+                      outcome={key: work[key] for key in ('status', 'phase', 'discard_recovery', 'checkpoint_recovery', 'cancelable', 'recovery_finalized', 'workers_joined', 'exit_ready')},
+                      error_code=work.get('error', {}).get('code'), acknowledgement_exit_ready=closed['shutdown']['exit_ready'],
+                      checks=['Dirty/default and stale document guard refuse without mutation', 'Stable shutdown identity, captured input/actor and explicit admission/outcome',
+                              'Current recovery discarded; other-document snapshot and explicit saved bytes retained', 'Closed source/history/physics preserved',
+                              'Success waits for finalization and joins; failure remains inspectable until exact acknowledgement'],
+                      limits=['Controlled tests qualify held recovery serialization, blocked DC worker, wait disconnect/retry and owner responsiveness',
+                              'Domain exit readiness precedes platform window/process teardown; no full OS/display/physical-input qualification'])
+        with args.output.open('x') as target:
+            json.dump(report, target, indent=2)
+            target.write('\n')
+        print(json.dumps(dict(passed=True, scenario=args.scenario, transport=report['transport'])))
+    finally:
+        client.close()
+
+
+if __name__ == '__main__':
+    main()

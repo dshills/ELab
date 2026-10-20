@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "release": "0.159.0 /176",
+  "agent_sha256": "557437ef0d02202747ae6da78d04f58353fa4b43fb278f15cd579ef03dbdceed",
+  "cases": [
+    {
+      "scenario": "success",
+      "passed": true,
+      "requests": 24,
+      "shutdown_inspections": 0,
+      "agent_exit_code": 0,
+      "command": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "/Users/dshills/Development/projects/ELab/scripts/shutdown-demo.py",
+        "--agent-binary",
+        "/private/tmp/elab-shutdown-wait-176-final/success/record-agent",
+        "--scenario",
+        "success",
+        "--output",
+        "/private/tmp/elab-shutdown-wait-176-final/success/report.json",
+        "--artifacts",
+        "/private/tmp/elab-shutdown-wait-176-final/success/artifacts"
+      ]
+    },
+    {
+      "scenario": "failure",
+      "passed": true,
+      "requests": 31,
+      "shutdown_inspections": 2,
+      "agent_exit_code": 0,
+      "command": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "/Users/dshills/Development/projects/ELab/scripts/shutdown-demo.py",
+        "--agent-binary",
+        "/private/tmp/elab-shutdown-wait-176-final/failure/record-agent",
+        "--scenario",
+        "failure",
+        "--output",
+        "/private/tmp/elab-shutdown-wait-176-final/failure/report.json",
+        "--artifacts",
+        "/private/tmp/elab-shutdown-wait-176-final/failure/artifacts"
+      ]
+    }
+  ],
+  "scope": "Two fresh owned headless sessions through the exact published agent and byte-preserving recorder; no native window, model change or timing acceptance"
+}

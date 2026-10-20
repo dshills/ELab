@@ -264,6 +264,13 @@ Mutations also accept optional top-level `expected_document_generation` from the
 
 `app.close.inspect {id}` returns owned retained progress/error/outcome without IO. Cleanup failure remains failed and holds automatic native/headless-socket exit; `app.close.acknowledge {id}` is the only mutation allowed after close, accepts an exact failed job, preserves its error and sets exit readiness. Use the waiting command when a final outcome response is needed: successful immediate shutdown may exit the host before a later query. Caller disconnect stops only the wait; a retry of the original waiting key joins the same job. No cancellation is possible after admission. See [shutdown contract](shutdown.md).
 
+After close, `events.poll` returns immediately even for an unchanged cursor and a
+positive timeout. It can report `closed:true` while `shutdown.exit_ready:false`.
+Use paced job inspection for pending outcomes, retain a waiting close or explicit
+acknowledgement response, and treat transport loss as inconclusive. The Python
+example client's `wait_for_shutdown_outcome` provides a read-only terminal wait;
+it does not acknowledge failed cleanup or certify process exit.
+
 On graceful exit, the socket server stops accepting connections and lets already admitted replies finish before retiring their connections. Existing six-second dispatch and ten-second connection deadlines still bound this drain. Exit readiness must not truncate the final waiting `app.close` response. Forced endpoint cleanup before domain exit readiness still cancels work and closes idle/active connections promptly; a completed socket write is not a client acknowledgment or a guarantee against an external process kill.
 
 `simulation.pulse.timing.set {"id":"VIN","frequency_hz":"20 Hz","duty_percent":"25 %"}` sets the shared ideal-square clock. Supply either `frequency_hz` quantity text or `period_s` numeric seconds/time text, plus percent text. All current `pulse-source` components share these experiment phases; finite pulses remain independent. `snapshot.pulse_timings` includes configured values, editable text, `source_kind` and `shared`. The command preserves sampling/playback and refuses phases shorter than the current sample step. It supports guards, retries, one named undo and atomic `edit.batch`. See [full contract and limits](shared-pulse-clock.md).

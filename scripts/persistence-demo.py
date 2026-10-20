@@ -2,6 +2,7 @@
 """Verify portable schematic persistence across sessions and desktop/headless APIs."""
 import argparse
 import json
+import math
 from pathlib import Path
 import subprocess
 import tempfile
@@ -52,6 +53,62 @@ class Client:
             else:
                 assert 'error' not in response, response
             return response.get('result')
+
+    def wait_for_shutdown_outcome(self, work, *, timeout_s=15,
+                                  poll_interval_s=.05, cancel_event=None):
+        """Observe completed/failed work without acknowledging or closing it.
+
+        Closed-session events.poll returns immediately, even before exit is
+        ready. Inspect the captured shutdown ID instead and pace pending reads.
+        A failed result is terminal, not permission to acknowledge it. Timeout
+        and cancellation are cooperative between synchronous RPCs; the caller
+        must separately bound transport IO and retain ownership of its client.
+        """
+        for name, value, positive in [('timeout_s', timeout_s, False),
+                                      ('poll_interval_s', poll_interval_s, True)]:
+            try:
+                valid = (not isinstance(value, bool) and isinstance(value, (int, float))
+                         and math.isfinite(value) and value >= 0
+                         and (not positive or value > 0))
+            except OverflowError:
+                valid = False
+            if not valid:
+                raise ValueError(name+' must be finite and '+('positive' if positive else 'nonnegative'))
+        if not isinstance(work, dict) or not isinstance(work.get('id'), str) or not work['id']:
+            raise ValueError('A captured shutdown job ID is required')
+        identifier = work['id']
+        deadline = time.monotonic()+timeout_s
+
+        def canceled():
+            if cancel_event is not None and cancel_event.is_set():
+                raise InterruptedError('Shutdown observation canceled; accepted close continues')
+
+        def terminal(value):
+            if (not isinstance(value, dict) or value.get('id') != identifier
+                    or value.get('status') not in ('queued', 'running', 'completed', 'failed')):
+                raise ValueError('Shutdown observation returned an incompatible job')
+            return value['status'] in ('completed', 'failed')
+
+        canceled()
+        if terminal(work):
+            return work
+        while True:
+            canceled()
+            if time.monotonic() >= deadline:
+                raise TimeoutError('Shutdown observation timed out; accepted close continues')
+            work = self.ask('app.close.inspect', {'id': identifier})
+            canceled()
+            if time.monotonic() >= deadline:
+                raise TimeoutError('Shutdown observation timed out; accepted close continues')
+            if terminal(work):
+                return work
+            delay = min(poll_interval_s, deadline-time.monotonic())
+            if delay <= 0:
+                raise TimeoutError('Shutdown observation timed out; accepted close continues')
+            if cancel_event is None:
+                time.sleep(delay)
+            elif cancel_event.wait(delay):
+                raise InterruptedError('Shutdown observation canceled; accepted close continues')
 
     def close(self):
         self.process.stdin.close()

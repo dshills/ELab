@@ -1,5 +1,7 @@
 # First-version UI walkthrough and issue list
 
+October 19 client follow-up: [paced shutdown observation](../../../docs/validation/shutdown-client-wait-176/README.md) adds a reusable terminal-outcome wait and documents immediate closed-event replies. All 65 Python tests and two exact-/176-agent workflows (55 raw requests, normal exits) pass. Failure acknowledgement remains an explicit caller action. All application sources/runtime inputs and app artifacts are unchanged; original collector over-polling stays preserved. No new UI interaction, version, timing or owner acceptance.
+
 October 19 replacement: **[0.159.0 /176](../../../docs/validation/shutdown-layout-review-176/README.md)** qualifies a visible close action beside scrollable shutdown errors. Full source/copy-runtime/reference/paging/signature/archive/example checks and one actual native error-scroll/acknowledgement pass. All 34 earlier reviews, four candidates and canonical are preserved. Controller over-polling remains explicit; owner and broader gates remain open.
 
 October 19 replacement: **[0.158.0 /175](../../../docs/validation/operation-page-review-175/README.md)** qualifies accurate nullable recorded-page discovery, with full source/copy-runtime/reference/paging/signature/archive/example checks. All 33 earlier sealed reviews, four candidates and canonical remain preserved. Source/private/physical scopes remain distinct; owner walkthrough and broader gates stay open.

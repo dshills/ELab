@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import hashlib,json,subprocess,sys
+out=Path(__file__).resolve().parent
+config=json.loads((out/'bridge-config.json').read_text())
+assert hashlib.sha256(Path(config['binary']).read_bytes()).hexdigest()==config['agent_sha256']
+err=(out/'agent-stderr.txt').open('x')
+child=subprocess.Popen([config['wrapper']],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=err,text=True)
+report=dict(pid=child.pid,agent_sha256=config['agent_sha256'],requests=0)
+try:
+ with (out/'transcript.jsonl').open('x') as log:
+  for line in sys.stdin:
+   child.stdin.write(line);child.stdin.flush()
+   reply=child.stdout.readline()
+   assert reply,'agent stopped before its reply'
+   request,response=json.loads(line),json.loads(reply)
+   assert response['version']==request['version']==1 and response['id']==request['id']
+   log.write(json.dumps(dict(request_json=line.rstrip('\n'),response=response))+'\n');log.flush()
+   report['requests']+=1
+   sys.stdout.write(reply);sys.stdout.flush()
+finally:
+ child.stdin.close();child.wait(timeout=10);err.close()
+ report['exit_code']=child.returncode
+ (out/'process-exit.json').write_text(json.dumps(report,indent=2)+'\n')
+assert child.returncode==0

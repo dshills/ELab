@@ -23,4 +23,32 @@ Admission is irreversible: workers are canceled and source editing is frozen, so
 
 Native and headless socket hosts wait for exit readiness before normal automatic teardown. Stdio keeps serving a failed outcome until acknowledgement; EOF or process signals can still end a host, and internal `Service.Close()` joins outstanding work. Domain exit readiness precedes platform/window/process teardown; it does not certify the OS lifecycle, UI callback queue, physical input, display completion or a general latency bound.
 
+After `app.close.start`, the Python example client's
+`wait_for_shutdown_outcome(snapshot['shutdown'])` inspects that exact job ID at
+most once per 50 ms by default, with a 15-second cooperative observation budget.
+It returns completed **or failed** metadata; failed does not mean exit-ready.
+It never acknowledges, retries cleanup, mutates the circuit or closes the client.
+Optional cancellation stops only observation. The budget and cancellation are
+checked between synchronous RPCs; callers must separately bound transport IO.
+Timeout or transport loss is not evidence that cleanup finished. Use waiting
+`app.close` when a final response is required, since a successful host can exit
+before a later inspection. Keep the explicit acknowledgement response after
+reviewing an actual failure; another poll may race host exit.
+
+`events.poll` is not a blocking shutdown wait once the service is closed: it
+returns the current closed snapshot immediately, even if nothing changed and
+exit is not ready. A custom observer that continues after close needs a positive
+client-side backoff, cancellation and a deadline. A failed outcome should be
+presented for review, without automatic acknowledgement. The `/176` UI collector's
+over-polling remains preserved in its [original evidence](validation/shutdown-layout-review-176/README.md).
+
+The public workflow accepts `--agent-binary PATH` to select a matching packaged
+agent or forwarding wrapper; omission keeps the existing `build/elab-agent`
+default. `--connect` still requires a designated fresh owned session.
+
+[Client-wait validation](validation/shutdown-client-wait-176/README.md) records
+controlled pacing/cancellation/deadline tests and public success/failure runs
+against the unchanged `/176` agent. This is developer tooling; no new app
+release or native interaction is implied.
+
 The [public workflow](../scripts/shutdown-demo.py) runs success/failure scenarios through headless or an owned native endpoint. It proves dirty/stale refusal purity, exact captured identity, preservation of current source/physics/history and saved bytes, current-document recovery retirement with another document's copy retained, and explicit failure acknowledgement without retry/removal of a nonempty owned fault fixture. Controlled tests hold the recovery mutex and an uncooperative DC solve, verify wait disconnect/retry and joining, inspect cloned metadata, test native buttons/window policy and prevent new pickers. A stdio pipe regression proves failed shutdown remains inspectable until its acknowledgement reply is delivered. Native/GPU smoke closes its owned session only after shared readiness. Complete platform/resource, physical-input/accessibility and visible-latency acceptance remain separate gates.
