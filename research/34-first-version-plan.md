@@ -33,6 +33,8 @@ Updated October 20, 2026. **ELab 0.170.0 /187 is qualified for the private owner
 | Owner decisions | One LED print confirmed clear/complete. Four-task walkthrough **Not tried yet**. Clean-account/default-startup gate **deferred for private alpha only**, not a pass. [Decisions](ui-audit/first-version/private-alpha-owner-decisions.json). |
 | Broader MVP | P0 stays **17 implemented /10 partial**. Full bindings/accessibility/environment, broader performance/distribution and the actual hobbyist study remain open. [Gate reconciliation](41-release-gate-reconciliation.md). |
 
+**Newer source repair, replacement pending:** [RECORD-STEP-01](59-recorded-step-entry-settlement.md) fixes Previous/Next after private index/time/speed entry and at accepted boundaries. Twenty-four original mounted regression leaves become passing pointer/no-focus-loss/boundary checks; full 238.983 s lint/race/vet/mounted quality passes. /187 remains the latest qualified package until the separate clean replacement passes copied-runtime/signature/archive checks. No new physical input or latency claim.
+
 Keep the app/model/format/SDK scope frozen while the owner review is pending. Work on a concrete remaining release scenario or reproduced defect; avoid new device batches, cosmetic campaigns and repeated completed checks. Preserve canonical /120, all 43 earlier sealed reviews, six candidates and original failed/unavailable evidence. [Engineering checkpoint history](34-engineering-checkpoint-history.md).
 
 ## Ordered work and finish criteria

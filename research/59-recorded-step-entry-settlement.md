@@ -1,0 +1,9 @@
+# Recorded Previous/Next: apply the entry before stepping
+
+October 20, 2026. **RECORD-STEP-01 (P2)**: /187's first Previous/Next click after private index/time/speed input can fail against the old revision, while invalid input can move from the old row and clear its error. Boundary-disabled controls require a second click after a newly typed position; activation without blur ignores private input.
+
+Previous, Next and Play now share the guarded field-settlement path and existing shared commands. Valid entries apply before one step; invalid entries retain feedback until corrected. Transient boundaries permit settling a new position, while unchanged boundaries refuse without moving/wrapping. DC navigation stays disabled. Own accepted speed can continue through normal viewer ticks/end; unrelated user/agent/capture/document work remains guarded. No model, solver, format, command-ID or SDK change.
+
+Fourteen original diagnostic leaves and 24 final mounted regression leaves fail on the original step binding. Fixed pointer/no-focus-loss/boundary/correction tests pass, along with deferred ownership/duplicate controls, real ticker completion and an agent-after-ticker refusal. Existing Play, DC and native/agent picker checks pass. Full default quality passes in **238.983 s** on **666 application Go files plus three tools**, including lint/imports/Staticcheck, 65 Python tests, root/native race/vet and configured mounted UI checks. The ledger is 73 sources /402 sites /164 commands /132 routed IDs, with public routes/aliases/coverage sets unchanged.
+
+The [source proof](../docs/validation/recorded-step-settlement/README.md) retains original source/logs, exact test-only private-name adapters, final source and a read-only replay. These are mounted software-input checks, not physical OS typing or a packaged app. A clean replacement review remains next; /187 and canonical /120 remain untouched. Owner walkthrough and broader MVP acceptance stay pending.

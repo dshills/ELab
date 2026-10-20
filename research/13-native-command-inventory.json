@@ -27,7 +27,7 @@
     "desktop/keyboard_workflow.go": "f1ef3cfeae1ead43841a5a8b0ac9b8d8348b6723568c9c2c48568a5b95bc8378",
     "desktop/layout.go": "fc635970ed6c28fabdbca30c273980a2a3a9867724026b02df00890993800878",
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
-    "desktop/main.go": "f87872e7c1d8b4df742b638e815170344bb0c4ab6f4eb1f6e36f267ff7df81e9",
+    "desktop/main.go": "9db76fdc7b98977210b69bed89c3ec029c1d672d7ba22089fe983202d9f4510d",
     "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
     "desktop/menus.go": "d78bfdb0b8ad01e290c7a3a8179dafc72b3e2a6f8b65d3994ca69f334aff700c",
     "desktop/menus_darwin.go": "3f7cd30cc99b38b4385e56303bbc790cce6e03add876634ff44cb267815522ea",
@@ -44,9 +44,9 @@
     "desktop/printing.go": "9c40645db6de5affc3ae9d654f72c7003671f5d8c23c8bd7de93ffa35bea8c59",
     "desktop/probes.go": "4ee6051c65010292375e62c39a85e4cf7631c045b75146257564e2158ea806c3",
     "desktop/project_work.go": "916f2081ce3d223b91c0c24081afbdae1e2a6e917ec58d90ebe64e87dc690646",
-    "desktop/recorded_playback_actions.go": "b03d0e2e03bab5208b6ba35cdce6cc1e7729dd0d1f7fc41f684cd7cae124755c",
+    "desktop/recorded_playback_actions.go": "e12fb437bba46f4d62f903d247452b1b92af2f67e1b75c65f4632a5564477db7",
     "desktop/recorded_timing_actions.go": "dbf75e522b7fdab7413302237bf66ffeefd4f6e3c777e22d63dbd57a16dd9d13",
-    "desktop/recording.go": "2ab785c11d539ade510bf4551a7d616637b77f6b3cc6a5969338df8e8bac1a6c",
+    "desktop/recording.go": "903657cc947bad09960cf5949fa9fe6d9031b3cafe542753dbd83c8fa4ae9eb3",
     "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
     "desktop/recording_statistics.go": "161cc2eb9e62f089a91eb1967b9d6ed8a9a30dd914af3b7705ad3584bee2caec",
     "desktop/recording_timing.go": "e0b01a5310cca8be31e99cc16ef120107117bd0b1ba02e29b154b7680728f75b",
@@ -66,8 +66,8 @@
     "desktop/value_apply.go": "ff6bdf287e6ddd8deba1178a1b223dfff5055552fc8eea8e4c02250a373dfead",
     "desktop/verification.go": "0a4f566abb75ee12ab43e53f29bf1fbd08034f9301f44bf23bc33c40e79c4a1b",
     "desktop/verification_actions.go": "8ebb049dcf889d33d5aa8692dfc22740e07e36bff0139aed5696f72cdc2d57e2",
-    "desktop/view.go": "96cadcf94e1a034a93b7b3e2028b5ad8aadbbe30c47b28577d94718482b1cae4",
-    "desktop/viewport.go": "abd3e9a7481cadd51d547a72ec7201592468914eaef1f8144c8e60c604cb8510",
+    "desktop/view.go": "791ae64fe7a9b2c8ef1169390b24dba2a44a9660bc9edeead79cabd02a1b71dd",
+    "desktop/viewport.go": "51df8542fe930574a7b2f68c7b8d4f69ddc08e79bac88177e29903adc33fa8fc",
     "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
     "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
     "desktop/window_minimum.go": "f6c1590898646b8b570abac29c857162bf13b50d14f39809c8f7f92bee9d180e",
@@ -2589,8 +2589,8 @@
     },
     {
       "file": "desktop/recorded_playback_actions.go",
-      "line": 78,
-      "function": "*screen.changeRecordedPlayField",
+      "line": 80,
+      "function": "*screen.changeRecordedPlaybackField",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.speed.set\", params, state.CommandRevision, state.Document.Generation)",
       "public_commands": [
@@ -2600,8 +2600,8 @@
     },
     {
       "file": "desktop/recorded_playback_actions.go",
-      "line": 80,
-      "function": "*screen.changeRecordedPlayField",
+      "line": 82,
+      "function": "*screen.changeRecordedPlaybackField",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.seek\", params, state.CommandRevision, state.Document.Generation)",
       "public_commands": [
@@ -2611,16 +2611,27 @@
     },
     {
       "file": "desktop/recorded_playback_actions.go",
-      "line": 116,
-      "function": "*screen.recordedPlayAction",
+      "line": 128,
+      "function": "*screen.recordedPlaybackAction",
       "kind": "node-Activate",
-      "expression": "Activate: func() {\n\tif s.pendingRecordedPlay != nil {\n\t\treturn\n\t}\n\tpending := \u0026recordedPlayWork{context: actionContext{state.CommandRevision, state.Document.Generation}, recordingID: r.ID, values: recordedPlayState(r)}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.recordedPlayAccepted; accepted != nil \u0026\u0026 accepted.recordingID == r.ID \u0026\u0026 accepted.from.generation == pending.context.generation \u0026\u0026 accepted.from.revision \u003c= pending.context.revision \u0026\u0026 pending.context.revision \u003c= accepted.to.revision \u0026\u0026 accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) \u0026\u0026 current.Recording != nil \u0026\u0026 recordedPlayState(current.Recording) == accepted.values {\n\t\tpending.context, pending.values = accepted.to, accepted.values\n\t}\n\tif current.CommandRevision != pending.context.revision || current.Document.Generation != pending.context.generation || current.Recording == nil || current.Recording.ID != r.ID {\n\t\ts.finishRecordedPlay(pending)\n\t\treturn\n\t}\n\ts.pendingRecordedPlay = pending\n\ts.settleRecordedPlay(pending, 0)\n}",
+      "expression": "Activate: func() {\n\tif s.pendingRecordedPlayback != nil {\n\t\treturn\n\t}\n\tpending := \u0026recordedPlaybackWork{context: actionContext{state.CommandRevision, state.Document.Generation}, recordingID: r.ID, values: recordedPlaybackState(r), direction: direction}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.recordedPlaybackAccepted; accepted != nil \u0026\u0026 accepted.recordingID == r.ID \u0026\u0026 accepted.from.generation == pending.context.generation \u0026\u0026 accepted.from.revision \u003c= pending.context.revision \u0026\u0026 pending.context.revision \u003c= accepted.to.revision \u0026\u0026 accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) \u0026\u0026 current.Recording != nil \u0026\u0026 recordedPlaybackValuesMatch(accepted, current.Recording, direction != \"\") {\n\t\tpending.context, pending.values = accepted.to, accepted.values\n\t}\n\tif current.CommandRevision != pending.context.revision || current.Document.Generation != pending.context.generation || current.Recording == nil || current.Recording.ID != r.ID {\n\t\ts.finishRecordedPlayback(pending)\n\t\treturn\n\t}\n\ts.pendingRecordedPlayback = pending\n\ts.settleRecordedPlayback(pending, 0)\n}",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/recorded_playback_actions.go",
-      "line": 194,
-      "function": "*screen.finishRecordedPlay",
+      "line": 203,
+      "function": "*screen.finishRecordedPlayback",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"recording.step\", workbench.RecordingStepParams{Direction: pending.direction}, pending.context.revision, pending.context.generation)",
+      "public_commands": [
+        "recording.step"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recorded_playback_actions.go",
+      "line": 210,
+      "function": "*screen.finishRecordedPlayback",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.play\", workbench.RecordingPlayParams{Speed: speed}, pending.context.revision, pending.context.generation)",
       "public_commands": [
@@ -2752,24 +2763,21 @@
       "file": "desktop/recording.go",
       "line": 136,
       "function": "*screen.recordingPanel",
-      "kind": "action-factory",
-      "expression": "s.action(\"recorded-\"+direction, map[string]string{\"previous\": \"Previous\", \"next\": \"Next\"}[direction], \"recording.step\", workbench.RecordingStepParams{Direction: direction})",
-      "public_commands": [
-        "recording.step"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/recording.go",
-      "line": 144,
-      "function": "*screen.recordingPanel",
       "kind": "callback-factory",
-      "expression": "s.recordedPlayAction(state)",
+      "expression": "s.recordedPlaybackAction(state, direction)",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/recording.go",
-      "line": 145,
+      "line": 143,
+      "function": "*screen.recordingPanel",
+      "kind": "callback-factory",
+      "expression": "s.recordedPlaybackAction(state, \"\")",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording.go",
+      "line": 144,
       "function": "*screen.recordingPanel",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-pause\", \"Pause\", \"recording.pause\", struct{}{})",
@@ -2780,31 +2788,31 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 154,
+      "line": 153,
       "function": "*screen.recordingPanel",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\n\ts.changeRecordedPlayField(state, \"recorded-index\", map[string]any{\"index\": e.Number})\n}",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\n\ts.changeRecordedPlaybackField(state, \"recorded-index\", map[string]any{\"index\": e.Number})\n}",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/recording.go",
-      "line": 160,
+      "line": 159,
       "function": "*screen.recordingPanel",
       "kind": "callback-factory",
-      "expression": "timeField(\"recorded-time\", \"Recorded seek time\", r.Time, false, func(text string) {\n\ts.changeRecordedPlayField(state, \"recorded-time\", map[string]any{\"time_s\": text})\n})",
+      "expression": "timeField(\"recorded-time\", \"Recorded seek time\", r.Time, false, func(text string) {\n\ts.changeRecordedPlaybackField(state, \"recorded-time\", map[string]any{\"time_s\": text})\n})",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/recording.go",
-      "line": 162,
+      "line": 161,
       "function": "*screen.recordingPanel",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeRecordedPlayField(state, \"recorded-speed\", workbench.RecordingPlayParams{Speed: float64(e.Number)})\n}",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeRecordedPlaybackField(state, \"recorded-speed\", workbench.RecordingPlayParams{Speed: float64(e.Number)})\n}",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/recording.go",
-      "line": 178,
+      "line": 177,
       "function": "*screen.recordingPanel",
       "kind": "node-Custom",
       "expression": "Custom: s.scope",
@@ -2812,7 +2820,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 190,
+      "line": 189,
       "function": "*screen.recordingCursors",
       "kind": "action-factory",
       "expression": "s.recordedCursorAction(state, \"recorded-cursor-select-\"+c.id, strings.ToUpper(c.id), \"recording.cursor.select\", c.id)",
@@ -2823,7 +2831,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 195,
+      "line": 194,
       "function": "*screen.recordingCursors",
       "kind": "callback-factory",
       "expression": "timeField(\"recorded-cursor-\"+c.id, \"Recorded cursor \"+strings.ToUpper(c.id), at, false, func(text string) {\n\ts.changeCursorTimeFor(state, c.id, text, r.ID)\n})",
@@ -2831,7 +2839,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 198,
+      "line": 197,
       "function": "*screen.recordingCursors",
       "kind": "action-factory",
       "expression": "s.recordedCursorAction(state, \"recorded-cursor-clear-\"+c.id, \"×\", \"recording.cursor.clear\", c.id)",

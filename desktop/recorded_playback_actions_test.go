@@ -52,7 +52,7 @@ func TestRecordedPlaySettlesFieldsInOrderOnce(t *testing.T) {
 		s.app.Do(func() { finish[field.id](nil); finish[field.id](nil) })
 	}
 	after := s.service.Snapshot()
-	if !reflect.DeepEqual(order, []string{"recorded-index", "recorded-time", "recorded-speed"}) || s.pendingRecordedPlay != nil || s.errorMessage != "" || !after.Recording.Playing || after.Recording.Speed != .0078125 || after.Recording.Index < 3 || after.CommandRevision != before.CommandRevision+4 {
+	if !reflect.DeepEqual(order, []string{"recorded-index", "recorded-time", "recorded-speed"}) || s.pendingRecordedPlayback != nil || s.errorMessage != "" || !after.Recording.Playing || after.Recording.Speed != .0078125 || after.Recording.Index < 3 || after.CommandRevision != before.CommandRevision+4 {
 		t.Fatal("Play failed to use its exact accepted fields once", order, after.Recording, s.errorMessage)
 	}
 	assertCursorMeasurementPreservesPhysics(t, before, after)
@@ -98,7 +98,7 @@ func TestRecordedPlayRefusesInterveningWork(t *testing.T) {
 					finish(nil)
 				}
 			})
-			if s.pendingRecordedPlay != nil || s.errorMessage == "" || !reflect.DeepEqual(before, s.service.Snapshot()) {
+			if s.pendingRecordedPlayback != nil || s.errorMessage == "" || !reflect.DeepEqual(before, s.service.Snapshot()) {
 				t.Fatal("old Play borrowed intervening work", s.errorMessage)
 			}
 		})
@@ -119,11 +119,11 @@ func TestRecordedPlayRetainedButtonContinuesOnlyOwnFields(t *testing.T) {
 			case "other-field":
 				uiAction(t, s, "pdf-margin", &ui.ChangeEvent{Number: 11})
 			case "viewport":
-				from := *s.recordedPlayAccepted
+				from := *s.recordedPlaybackAccepted
 				agentAction(t, s.service, "view.viewport.set", workbench.ViewportParams{Width: 900, Height: 600})
 				accepted := s.service.Snapshot()
 				// This helper is called only by our accepted viewport publisher.
-				s.app.Do(func() { s.continueRecordedPlayViewport(from.to, accepted) })
+				s.app.Do(func() { s.continueRecordedPlaybackViewport(from.to, accepted) })
 			}
 			before := s.service.Snapshot()
 			s.app.Do(play.Activate)
@@ -158,12 +158,12 @@ func TestRecordedPlayRejectionSurvivesOtherFieldUntilCorrection(t *testing.T) {
 			before := s.service.Snapshot()
 			play := recordedPlayControl(t, s, "recorded-play")
 			s.app.Do(play.Activate)
-			if !reflect.DeepEqual(before, s.service.Snapshot()) || s.errorMessage != message || s.pendingRecordedPlay != nil {
+			if !reflect.DeepEqual(before, s.service.Snapshot()) || s.errorMessage != message || s.pendingRecordedPlayback != nil {
 				t.Fatal("other field cleared refusal and played old data", s.errorMessage)
 			}
 			uiAction(t, s, id, &good)
 			uiAction(t, s, "recorded-play", nil)
-			if !s.service.Snapshot().Recording.Playing || len(s.recordedPlayRejected) != 0 {
+			if !s.service.Snapshot().Recording.Playing || len(s.recordedPlaybackRejected) != 0 {
 				t.Fatal("correction did not recover Play")
 			}
 		})
@@ -186,7 +186,7 @@ func TestRecordedPlaySettlementFailurePreservesState(t *testing.T) {
 			before := s.service.Snapshot()
 			play := recordedPlayControl(t, s, "recorded-play")
 			s.app.Do(func() { play.Activate(); finish(errors.New("composition unfinished")) })
-			if s.pendingRecordedPlay != nil || s.errorMessage == "" || !reflect.DeepEqual(before, s.service.Snapshot()) {
+			if s.pendingRecordedPlayback != nil || s.errorMessage == "" || !reflect.DeepEqual(before, s.service.Snapshot()) {
 				t.Fatal("failed settlement played stale state", s.errorMessage)
 			}
 		})
@@ -199,7 +199,7 @@ func TestRecordedPlayViewportCannotBorrowAnotherOwnerOrValue(t *testing.T) {
 			s, cleanup := recordedCursorRC(t)
 			t.Cleanup(cleanup)
 			uiAction(t, s, "recorded-index", &ui.ChangeEvent{Number: 3})
-			before := *s.recordedPlayAccepted
+			before := *s.recordedPlaybackAccepted
 			accepted := s.service.Snapshot()
 			from := before.to
 			accepted.CommandRevision++
@@ -215,8 +215,8 @@ func TestRecordedPlayViewportCannotBorrowAnotherOwnerOrValue(t *testing.T) {
 			case "speed":
 				accepted.Recording.Speed = .0078125
 			}
-			s.app.Do(func() { s.continueRecordedPlayViewport(from, accepted) })
-			if *s.recordedPlayAccepted != before {
+			s.app.Do(func() { s.continueRecordedPlaybackViewport(from, accepted) })
+			if *s.recordedPlaybackAccepted != before {
 				t.Fatal("viewport advanced an unrelated context or value", scenario)
 			}
 		})
@@ -230,10 +230,10 @@ func TestRecordedPlayRejectionContinuesViewportAndExpiresWithOwner(t *testing.T)
 	s.app.Do(func() { field.Change(ui.ChangeEvent{Text: "bad"}) })
 	message := s.errorMessage
 	play := recordedPlayControl(t, s, "recorded-play")
-	from := s.recordedPlayAccepted.to
+	from := s.recordedPlaybackAccepted.to
 	agentAction(t, s.service, "view.viewport.set", workbench.ViewportParams{Width: 900, Height: 600})
 	accepted := s.service.Snapshot()
-	s.app.Do(func() { s.continueRecordedPlayViewport(from, accepted); play.Activate() })
+	s.app.Do(func() { s.continueRecordedPlaybackViewport(from, accepted); play.Activate() })
 	if !reflect.DeepEqual(accepted, s.service.Snapshot()) || s.errorMessage != message {
 		t.Fatal("viewport hid rejection or played", s.errorMessage)
 	}
@@ -247,7 +247,7 @@ func TestRecordedPlayRejectionContinuesViewportAndExpiresWithOwner(t *testing.T)
 	s.app.Do(func() { field.Change(ui.ChangeEvent{Text: "bad"}) })
 	agentAction(t, s.service, "recording.view.set", workbench.RecordingViewParams{Mode: "live"})
 	s.app.Do(func() { s.view() })
-	if len(s.recordedPlayRejected) != 0 {
+	if len(s.recordedPlaybackRejected) != 0 {
 		t.Fatal("hidden viewer inherited stale rejection")
 	}
 }

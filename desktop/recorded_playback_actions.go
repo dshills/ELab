@@ -7,18 +7,19 @@ import (
 	"github.com/dshills/vellum/ui"
 )
 
-type recordedPlayValues struct {
+type recordedPlaybackValues struct {
 	index       int
 	time, speed float64
 }
 
-type recordedPlayContinuation struct {
+type recordedPlaybackContinuation struct {
 	from, to    actionContext
 	recordingID string
-	values      recordedPlayValues
+	values      recordedPlaybackValues
+	playing     bool
 }
 
-type recordedPlayRejection struct {
+type recordedPlaybackRejection struct {
 	generation  uint64
 	recordingID string
 	value       float64
@@ -26,24 +27,25 @@ type recordedPlayRejection struct {
 	help        *workbench.DiagnosticHelp
 }
 
-type recordedPlayWork struct {
+type recordedPlaybackWork struct {
 	context     actionContext
 	recordingID string
-	values      recordedPlayValues
+	values      recordedPlaybackValues
 	field       int
 	failed      bool
+	direction   string
 }
 
-var recordedPlayFields = []struct {
+var recordedPlaybackFields = []struct {
 	id     string
 	number bool
 }{{"recorded-index", true}, {"recorded-time", false}, {"recorded-speed", true}}
 
-func recordedPlayState(r *workbench.RecordingView) recordedPlayValues {
-	return recordedPlayValues{r.Index, r.Time, r.Speed}
+func recordedPlaybackState(r *workbench.RecordingView) recordedPlaybackValues {
+	return recordedPlaybackValues{r.Index, r.Time, r.Speed}
 }
 
-func recordedPlayFieldValue(r *workbench.RecordingView, id string) float64 {
+func recordedPlaybackFieldValue(r *workbench.RecordingView, id string) float64 {
 	switch id {
 	case "recorded-index":
 		return float64(r.Index)
@@ -54,20 +56,20 @@ func recordedPlayFieldValue(r *workbench.RecordingView, id string) float64 {
 	}
 }
 
-// Only this capture's own field responses can continue a rendered Play action.
+// Only this capture's own field responses can continue a related viewer action.
 // Rejections retain their canonical value until correction or owner replacement;
 // another field's successful edit must not play with the old rejected value.
-func (s *screen) changeRecordedPlayField(state workbench.Snapshot, id string, params any) {
+func (s *screen) changeRecordedPlaybackField(state workbench.Snapshot, id string, params any) {
 	r := state.Recording
-	pending := s.pendingRecordedPlay
+	pending := s.pendingRecordedPlayback
 	var origin *actionContext
 	if s.fieldContext != nil {
 		copy := *s.fieldContext
 		origin = &copy
 	}
-	if pending != nil && (origin == nil || *origin != pending.context || r.ID != pending.recordingID || pending.field >= len(recordedPlayFields) || recordedPlayFields[pending.field].id != id) {
+	if pending != nil && (origin == nil || *origin != pending.context || r.ID != pending.recordingID || pending.field >= len(recordedPlaybackFields) || recordedPlaybackFields[pending.field].id != id) {
 		pending.failed = true
-		s.recordedPlayAccepted = nil
+		s.recordedPlaybackAccepted = nil
 		s.errorMessage = "Recorded playback entries changed. Review them and try again."
 		s.requestHelp = nil
 		s.app.Invalidate("main")
@@ -80,15 +82,15 @@ func (s *screen) changeRecordedPlayField(state workbench.Snapshot, id string, pa
 		response = s.invokeAtCommandRevision("recording.seek", params, state.CommandRevision, state.Document.Generation)
 	}
 	if response.Error != nil {
-		s.recordedPlayAccepted = nil
+		s.recordedPlaybackAccepted = nil
 		if origin != nil && response.Error.Code == "invalid-params" {
-			if s.recordedPlayRejected == nil {
-				s.recordedPlayRejected = make(map[string]recordedPlayRejection)
+			if s.recordedPlaybackRejected == nil {
+				s.recordedPlaybackRejected = make(map[string]recordedPlaybackRejection)
 			}
-			s.recordedPlayRejected[id] = recordedPlayRejection{origin.generation, r.ID, recordedPlayFieldValue(r, id), response.Error.Message, response.Help}
+			s.recordedPlaybackRejected[id] = recordedPlaybackRejection{origin.generation, r.ID, recordedPlaybackFieldValue(r, id), response.Error.Message, response.Help}
 			// A refusal itself is not an accepted edit. Its unchanged context
 			// can only advance through our explicitly observed viewport response.
-			s.recordedPlayAccepted = &recordedPlayContinuation{*origin, *origin, r.ID, recordedPlayState(r)}
+			s.recordedPlaybackAccepted = &recordedPlaybackContinuation{from: *origin, to: *origin, recordingID: r.ID, values: recordedPlaybackState(r), playing: r.Playing}
 		}
 		if pending != nil {
 			pending.failed = true
@@ -96,57 +98,67 @@ func (s *screen) changeRecordedPlayField(state workbench.Snapshot, id string, pa
 		return
 	}
 	accepted := response.Result.(workbench.Snapshot)
-	delete(s.recordedPlayRejected, id)
-	s.pruneRecordedPlayRejections(accepted)
+	delete(s.recordedPlaybackRejected, id)
+	s.pruneRecordedPlaybackRejections(accepted)
 	if origin == nil {
 		return
 	}
 	from := *origin
-	if previous := s.recordedPlayAccepted; previous != nil && previous.to == from && previous.recordingID == r.ID {
+	if previous := s.recordedPlaybackAccepted; previous != nil && previous.to == from && previous.recordingID == r.ID {
 		from = previous.from
 	}
-	s.recordedPlayAccepted = &recordedPlayContinuation{from, actionContext{accepted.CommandRevision, accepted.Document.Generation}, r.ID, recordedPlayState(accepted.Recording)}
+	s.recordedPlaybackAccepted = &recordedPlaybackContinuation{from: from, to: actionContext{accepted.CommandRevision, accepted.Document.Generation}, recordingID: r.ID, values: recordedPlaybackState(accepted.Recording), playing: accepted.Recording.Playing}
 	if pending != nil {
-		pending.context, pending.values = s.recordedPlayAccepted.to, s.recordedPlayAccepted.values
+		pending.context, pending.values = s.recordedPlaybackAccepted.to, s.recordedPlaybackAccepted.values
 	}
 }
 
-func (s *screen) recordedPlayAction(state workbench.Snapshot) ui.Node {
+func (s *screen) recordedPlaybackAction(state workbench.Snapshot, direction string) ui.Node {
 	r := state.Recording
-	return buttonStyle(ui.Node{ID: "recorded-play", Kind: ui.Button, Text: "Play", Accessibility: ui.Accessibility{Name: "Play"}, Disabled: r.Duration == 0 || r.Playing || s.pendingRecordedPlay != nil, Activate: func() {
-		if s.pendingRecordedPlay != nil {
+	id, label, help := "recorded-play", "Play", ""
+	disabled := r.Duration == 0 || r.Playing
+	if direction != "" {
+		id, label = "recorded-"+direction, map[string]string{"previous": "Previous", "next": "Next"}[direction]
+		// The accepted index can still be at a boundary while a new position
+		// is private in a native field. Let settlement precede shared boundary
+		// validation; single-row DC recordings still have no step available.
+		disabled = r.Total <= 1
+		help = "Applies your position entry, then moves one captured sample. Moving beyond either end reports the recording boundary."
+	}
+	return buttonStyle(ui.Node{ID: id, Kind: ui.Button, Text: label, Accessibility: ui.Accessibility{Name: label, Help: help}, Disabled: disabled || s.pendingRecordedPlayback != nil, Activate: func() {
+		if s.pendingRecordedPlayback != nil {
 			return
 		}
-		pending := &recordedPlayWork{context: actionContext{state.CommandRevision, state.Document.Generation}, recordingID: r.ID, values: recordedPlayState(r)}
+		pending := &recordedPlaybackWork{context: actionContext{state.CommandRevision, state.Document.Generation}, recordingID: r.ID, values: recordedPlaybackState(r), direction: direction}
 		current := s.service.Snapshot()
-		if accepted := s.recordedPlayAccepted; accepted != nil && accepted.recordingID == r.ID && accepted.from.generation == pending.context.generation && accepted.from.revision <= pending.context.revision && pending.context.revision <= accepted.to.revision && accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) && current.Recording != nil && recordedPlayState(current.Recording) == accepted.values {
+		if accepted := s.recordedPlaybackAccepted; accepted != nil && accepted.recordingID == r.ID && accepted.from.generation == pending.context.generation && accepted.from.revision <= pending.context.revision && pending.context.revision <= accepted.to.revision && accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) && current.Recording != nil && recordedPlaybackValuesMatch(accepted, current.Recording, direction != "") {
 			pending.context, pending.values = accepted.to, accepted.values
 		}
 		if current.CommandRevision != pending.context.revision || current.Document.Generation != pending.context.generation || current.Recording == nil || current.Recording.ID != r.ID {
-			s.finishRecordedPlay(pending)
+			s.finishRecordedPlayback(pending)
 			return
 		}
-		s.pendingRecordedPlay = pending
-		s.settleRecordedPlay(pending, 0)
+		s.pendingRecordedPlayback = pending
+		s.settleRecordedPlayback(pending, 0)
 	}}, false)
 }
 
-func (s *screen) settleRecordedPlay(pending *recordedPlayWork, index int) {
-	if s.pendingRecordedPlay != pending || pending.field != index {
+func (s *screen) settleRecordedPlayback(pending *recordedPlaybackWork, index int) {
+	if s.pendingRecordedPlayback != pending || pending.field != index {
 		return
 	}
-	if pending.failed || index == len(recordedPlayFields) {
-		s.pendingRecordedPlay = nil
+	if pending.failed || index == len(recordedPlaybackFields) {
+		s.pendingRecordedPlayback = nil
 		if pending.failed {
 			s.app.Invalidate("main")
 			return
 		}
-		s.finishRecordedPlay(pending)
+		s.finishRecordedPlayback(pending)
 		return
 	}
-	field := recordedPlayFields[index]
+	field := recordedPlaybackFields[index]
 	done := func(err error) {
-		if s.pendingRecordedPlay != pending || pending.field != index {
+		if s.pendingRecordedPlayback != pending || pending.field != index {
 			return
 		}
 		pending.field++
@@ -155,7 +167,7 @@ func (s *screen) settleRecordedPlay(pending *recordedPlayWork, index int) {
 			s.errorMessage = fmt.Sprintf("Could not finish recorded playback entry: %v", err)
 			s.requestHelp = nil
 		}
-		s.settleRecordedPlay(pending, index+1)
+		s.settleRecordedPlayback(pending, index+1)
 	}
 	settle := s.settleField
 	if field.number {
@@ -168,24 +180,28 @@ func (s *screen) settleRecordedPlay(pending *recordedPlayWork, index int) {
 	}
 }
 
-func (s *screen) finishRecordedPlay(pending *recordedPlayWork) {
+func (s *screen) finishRecordedPlayback(pending *recordedPlaybackWork) {
 	current := s.service.Snapshot()
-	s.pruneRecordedPlayRejections(current)
+	s.pruneRecordedPlaybackRejections(current)
 	if current.CommandRevision == pending.context.revision && current.Document.Generation == pending.context.generation {
 		if current.Recording == nil || current.Recording.ID != pending.recordingID || !current.Recording.Viewing {
-			s.errorMessage = "The recording changed. Review it before starting playback."
+			s.errorMessage = "The recording changed. Review it before continuing recorded playback."
 			s.requestHelp = nil
 			s.app.Invalidate("main")
 			return
 		}
-		for _, field := range recordedPlayFields {
-			if rejected, ok := s.recordedPlayRejected[field.id]; ok {
+		for _, field := range recordedPlaybackFields {
+			if rejected, ok := s.recordedPlaybackRejected[field.id]; ok {
 				s.errorMessage, s.requestHelp = rejected.message, rejected.help
 				s.requestHelpRevision = current.CommandRevision
 				s.app.Invalidate("main")
 				return
 			}
 		}
+	}
+	if pending.direction != "" {
+		s.invokeAtCommandRevision("recording.step", workbench.RecordingStepParams{Direction: pending.direction}, pending.context.revision, pending.context.generation)
+		return
 	}
 	speed := pending.values.speed
 	if speed == 0 {
@@ -194,21 +210,29 @@ func (s *screen) finishRecordedPlay(pending *recordedPlayWork) {
 	s.invokeAtCommandRevision("recording.play", workbench.RecordingPlayParams{Speed: speed}, pending.context.revision, pending.context.generation)
 }
 
-func (s *screen) pruneRecordedPlayRejections(state workbench.Snapshot) {
-	for id, rejected := range s.recordedPlayRejected {
-		if state.Recording == nil || !state.Recording.Viewing || state.Document.Generation != rejected.generation || state.Recording.ID != rejected.recordingID || recordedPlayFieldValue(state.Recording, id) != rejected.value {
-			delete(s.recordedPlayRejected, id)
+func (s *screen) pruneRecordedPlaybackRejections(state workbench.Snapshot) {
+	for id, rejected := range s.recordedPlaybackRejected {
+		if state.Recording == nil || !state.Recording.Viewing || state.Document.Generation != rejected.generation || state.Recording.ID != rejected.recordingID || recordedPlaybackFieldValue(state.Recording, id) != rejected.value {
+			delete(s.recordedPlaybackRejected, id)
 		}
 	}
 }
 
-func (s *screen) continueRecordedPlayViewport(from actionContext, accepted workbench.Snapshot) {
-	previous := s.recordedPlayAccepted
-	if previous == nil || previous.to != from || accepted.Document.Generation != from.generation || accepted.Recording == nil || accepted.Recording.ID != previous.recordingID || recordedPlayState(accepted.Recording) != previous.values {
+func (s *screen) continueRecordedPlaybackViewport(from actionContext, accepted workbench.Snapshot) {
+	previous := s.recordedPlaybackAccepted
+	if previous == nil || previous.to != from || accepted.Document.Generation != from.generation || accepted.Recording == nil || accepted.Recording.ID != previous.recordingID || !recordedPlaybackValuesMatch(previous, accepted.Recording, true) {
 		return
 	}
 	previous.to = actionContext{accepted.CommandRevision, accepted.Document.Generation}
-	if pending := s.pendingRecordedPlay; pending != nil && pending.context == from {
+	if pending := s.pendingRecordedPlayback; pending != nil && pending.context == from {
 		pending.context = previous.to
 	}
+}
+
+func recordedPlaybackValuesMatch(accepted *recordedPlaybackContinuation, current *workbench.RecordingView, allowTicks bool) bool {
+	// After our own speed response, the viewer ticker can advance (or reach
+	// the end) without a command revision change. Stepping uses the current
+	// stored row. It must not mistake that presentation progress for an agent
+	// edit, or borrow another speed. Play retains its stricter paused values.
+	return recordedPlaybackState(current) == accepted.values || allowTicks && accepted.playing && current.Speed == accepted.values.speed
 }

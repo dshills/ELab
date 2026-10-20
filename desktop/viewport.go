@@ -65,7 +65,7 @@ func (s *screen) observeSchematicViewport(v canvas.Viewport, state workbench.Sna
 			s.continueVerificationViewport(actionContext{plan.revision, plan.generation}, accepted)
 			s.continueSweepSettingsViewport(actionContext{plan.revision, plan.generation}, accepted)
 			s.continueComponentStartupViewport(actionContext{plan.revision, plan.generation}, accepted)
-			s.continueRecordedPlayViewport(actionContext{plan.revision, plan.generation}, accepted)
+			s.continueRecordedPlaybackViewport(actionContext{plan.revision, plan.generation}, accepted)
 			if s.requestHelp != nil && s.requestHelpRevision == plan.revision {
 				// Showing a refusal can itself resize the canvas. Continue only
 				// that refusal's context through this accepted layout observation;

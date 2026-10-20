@@ -202,7 +202,7 @@ func Audit(directory string) (Report, error) {
 						if len(n.Args) == 3 {
 							add(function, "callback-factory", n, nil, "requires-binding-review")
 						}
-					case "timeField", "valueApplyAction", "valuePresetAction", "verificationAction", "componentStartupDefault", "recordedPlayAction":
+					case "timeField", "valueApplyAction", "valuePresetAction", "verificationAction", "componentStartupDefault", "recordedPlaybackAction":
 						add(function, "callback-factory", n, nil, "requires-binding-review")
 					case "OnFirst", "On", "Invoke", "Dispatch", "Register":
 						add(function, "event-or-dispatch-router", n, nil, "requires-binding-review")

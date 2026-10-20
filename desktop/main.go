@@ -243,9 +243,9 @@ type screen struct {
 	recordedTimingAccepted              *recordedTimingContinuation
 	recordedTimingRejected              *recordedTimingFieldRejection
 	pendingRecordedTimingPage           *recordedTimingPageWork
-	recordedPlayAccepted                *recordedPlayContinuation
-	recordedPlayRejected                map[string]recordedPlayRejection
-	pendingRecordedPlay                 *recordedPlayWork
+	recordedPlaybackAccepted            *recordedPlaybackContinuation
+	recordedPlaybackRejected            map[string]recordedPlaybackRejection
+	pendingRecordedPlayback             *recordedPlaybackWork
 	placementFieldAccepted              *placementFieldContinuation
 	pendingPlacement                    *placementActionWork
 	cursorFieldAccepted                 *cursorFieldContinuation

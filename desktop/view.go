@@ -81,7 +81,7 @@ func (s *screen) view() ui.Node {
 	state := s.service.Snapshot()
 	s.pruneComponentStartup(state)
 	s.pruneSweepFieldRejections(state)
-	s.pruneRecordedPlayRejections(state)
+	s.pruneRecordedPlaybackRejections(state)
 	previousContext := s.actionContext
 	s.actionContext = &actionContext{state.CommandRevision, state.Document.Generation}
 	defer func() { s.actionContext = previousContext }()

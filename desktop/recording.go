@@ -133,15 +133,14 @@ func (s *screen) recordingPanel(state workbench.Snapshot) ui.Node {
 	controls := []ui.Node{s.scopeVisibilityButton(state), section("recorded-scope-title", "Recorded scope"), quiet("recorded-scope-caption", caption), s.action("recorded-back-live", "View live", "recording.view.set", workbench.RecordingViewParams{Mode: "live"})}
 	for _, direction := range []string{"previous", "next"} {
 		direction := direction
-		n := s.action("recorded-"+direction, map[string]string{"previous": "Previous", "next": "Next"}[direction], "recording.step", workbench.RecordingStepParams{Direction: direction})
-		n.Disabled = direction == "previous" && r.Index == 0 || direction == "next" && r.Index == r.Total-1
+		n := s.recordedPlaybackAction(state, direction)
 		controls = append(controls, n)
 	}
 	speed := r.Speed
 	if speed == 0 {
 		speed = .1
 	}
-	play := s.recordedPlayAction(state)
+	play := s.recordedPlaybackAction(state, "")
 	pause := s.action("recorded-pause", "Pause", "recording.pause", struct{}{})
 	pause.Disabled = !r.Playing
 	controls = append(controls, play, pause)
@@ -154,13 +153,13 @@ func (s *screen) recordingPanel(state workbench.Snapshot) ui.Node {
 		indexControl = ui.Node{ID: "recorded-index", Kind: ui.NumberField, Number: float32(r.Index), MinWidth: 90, Numeric: ui.Numeric{Min: 0, Max: float32(r.Total - 1), Step: 1}, Accessibility: ui.Accessibility{Name: "Recorded sample index"}, Change: func(e ui.ChangeEvent) {
 			// Preserve the entry for shared integer validation, as with agent
 			// requests. Truncating here silently selected a different sample.
-			s.changeRecordedPlayField(state, "recorded-index", map[string]any{"index": e.Number})
+			s.changeRecordedPlaybackField(state, "recorded-index", map[string]any{"index": e.Number})
 		}}
 	}
 	position := []ui.Node{quiet("recorded-status", status), indexControl, timeField("recorded-time", "Recorded seek time", r.Time, false, func(text string) {
-		s.changeRecordedPlayField(state, "recorded-time", map[string]any{"time_s": text})
+		s.changeRecordedPlaybackField(state, "recorded-time", map[string]any{"time_s": text})
 	}), quiet("recorded-speed-label", "sim s / wall s"), {ID: "recorded-speed", Kind: ui.NumberField, Number: float32(speed), MinWidth: 80, Numeric: ui.Numeric{Min: .001, Max: 10, Step: .001}, Accessibility: ui.Accessibility{Name: "Recorded playback speed"}, Change: func(e ui.ChangeEvent) {
-		s.changeRecordedPlayField(state, "recorded-speed", workbench.RecordingPlayParams{Speed: float64(e.Number)})
+		s.changeRecordedPlaybackField(state, "recorded-speed", workbench.RecordingPlayParams{Speed: float64(e.Number)})
 	}}}
 	legend := []string{}
 	if r.ReferenceOverlay != nil {

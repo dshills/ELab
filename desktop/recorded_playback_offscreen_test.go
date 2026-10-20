@@ -135,7 +135,7 @@ func TestMountedNumericOwnerRecordedPlayWithoutFocusLoss(t *testing.T) {
 			m.settle()
 			after := s.service.Snapshot()
 			if field.text == "bad" || field.text == "1.5" {
-				if !reflect.DeepEqual(before, after) || s.errorMessage == "" || s.pendingRecordedPlay != nil {
+				if !reflect.DeepEqual(before, after) || s.errorMessage == "" || s.pendingRecordedPlayback != nil {
 					t.Fatal("activation discarded invalid private input", s.errorMessage)
 				}
 				return
@@ -144,7 +144,7 @@ func TestMountedNumericOwnerRecordedPlayWithoutFocusLoss(t *testing.T) {
 			if field.id == "recorded-speed" {
 				speed, index = .0078125, 0
 			}
-			if !after.Recording.Playing || after.Recording.Index < index || after.Recording.Speed != speed || after.CommandRevision != before.CommandRevision+2 || s.errorMessage != "" || s.pendingRecordedPlay != nil {
+			if !after.Recording.Playing || after.Recording.Index < index || after.Recording.Speed != speed || after.CommandRevision != before.CommandRevision+2 || s.errorMessage != "" || s.pendingRecordedPlayback != nil {
 				t.Fatal("activation played before private input settled", after.Recording, s.errorMessage)
 			}
 			assertCursorMeasurementPreservesPhysics(t, before, after)
@@ -163,7 +163,7 @@ func TestMountedNumericOwnerRecordedPlayPrivateEntryRefusesAgent(t *testing.T) {
 	// Retain the original activation, as with an already queued native action.
 	s.app.Do(play.Activate)
 	m.settle()
-	if !reflect.DeepEqual(before, s.service.Snapshot()) || s.errorMessage == "" || s.pendingRecordedPlay != nil {
+	if !reflect.DeepEqual(before, s.service.Snapshot()) || s.errorMessage == "" || s.pendingRecordedPlayback != nil {
 		t.Fatal("private entry/Play overwrote intervening agent work", s.errorMessage)
 	}
 }
