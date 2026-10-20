@@ -1,0 +1,3542 @@
+[
+  {
+    "id": "npn-01-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-01/capture/frames.tar.xz",
+    "source_archive_sha256": "34ad8c53dab087a01953f73c2be7c7528b3f5a29175e2808007abaf314f4e93a",
+    "source_journal_sha256": "f79be846fdcf0a96d260c8d111adcd0e3a5d99eb9b989613bbf448df1dd2cfb2",
+    "frame_index": 1,
+    "png": "frame-ac545b6ee3d56d42c1c7686479b94464f16cdd75598901d0a036544c5b207c7b.png",
+    "png_sha256": "ac545b6ee3d56d42c1c7686479b94464f16cdd75598901d0a036544c5b207c7b",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "ac545b6ee3d56d42c1c7686479b94464f16cdd75598901d0a036544c5b207c7b",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-01-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-01/capture/frames.tar.xz",
+    "source_archive_sha256": "34ad8c53dab087a01953f73c2be7c7528b3f5a29175e2808007abaf314f4e93a",
+    "source_journal_sha256": "f79be846fdcf0a96d260c8d111adcd0e3a5d99eb9b989613bbf448df1dd2cfb2",
+    "frame_index": 166,
+    "png": "frame-b04e23691c26b6e6ea1513583e1cb814009b1323fccd64a66d1a9b29aa980981.png",
+    "png_sha256": "b04e23691c26b6e6ea1513583e1cb814009b1323fccd64a66d1a9b29aa980981",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "b04e23691c26b6e6ea1513583e1cb814009b1323fccd64a66d1a9b29aa980981",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-02-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-02/capture/frames.tar.xz",
+    "source_archive_sha256": "bfedadc2edae7e23176e9778dd5ca9afa8d185e8e4c71821e74cc4bdd25a403d",
+    "source_journal_sha256": "939e3bf83a14165856ac6471d46f33197cac3cac794063cfdcb586393eaba904",
+    "frame_index": 1,
+    "png": "frame-a4c4b58f7e5536fcd1b75a3afb4d2954883c30838c7d67a2344376bc0da4cd57.png",
+    "png_sha256": "a4c4b58f7e5536fcd1b75a3afb4d2954883c30838c7d67a2344376bc0da4cd57",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "a4c4b58f7e5536fcd1b75a3afb4d2954883c30838c7d67a2344376bc0da4cd57",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-02-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-02/capture/frames.tar.xz",
+    "source_archive_sha256": "bfedadc2edae7e23176e9778dd5ca9afa8d185e8e4c71821e74cc4bdd25a403d",
+    "source_journal_sha256": "939e3bf83a14165856ac6471d46f33197cac3cac794063cfdcb586393eaba904",
+    "frame_index": 165,
+    "png": "frame-0a6b7eee928aa64b80c3c8dbdaa67260a11d58d934a8c2ec2a76a7b6fda0b774.png",
+    "png_sha256": "0a6b7eee928aa64b80c3c8dbdaa67260a11d58d934a8c2ec2a76a7b6fda0b774",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "0a6b7eee928aa64b80c3c8dbdaa67260a11d58d934a8c2ec2a76a7b6fda0b774",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-03-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-03/capture/frames.tar.xz",
+    "source_archive_sha256": "b0bb6913e29d611dcf3aa94b37754c7c6445dc44a14012ebc016a3399d3b3e09",
+    "source_journal_sha256": "08fc64c625313dcd4da47bac3d82ecc4bfd9006428f648ed64c6f4e318efd832",
+    "frame_index": 1,
+    "png": "frame-ecef8405061c2c09dc236bffb2a2f3ad06d8172b25ef45be89b83b7d140a2c48.png",
+    "png_sha256": "ecef8405061c2c09dc236bffb2a2f3ad06d8172b25ef45be89b83b7d140a2c48",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "ecef8405061c2c09dc236bffb2a2f3ad06d8172b25ef45be89b83b7d140a2c48",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-03-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-03/capture/frames.tar.xz",
+    "source_archive_sha256": "b0bb6913e29d611dcf3aa94b37754c7c6445dc44a14012ebc016a3399d3b3e09",
+    "source_journal_sha256": "08fc64c625313dcd4da47bac3d82ecc4bfd9006428f648ed64c6f4e318efd832",
+    "frame_index": 166,
+    "png": "frame-eea41a1e161a5a37098e298c81a2bef77ee64bc41862829dd423e17bfb9a4245.png",
+    "png_sha256": "eea41a1e161a5a37098e298c81a2bef77ee64bc41862829dd423e17bfb9a4245",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "eea41a1e161a5a37098e298c81a2bef77ee64bc41862829dd423e17bfb9a4245",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-04-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-04/capture/frames.tar.xz",
+    "source_archive_sha256": "2a13de9389ecb2ece4acba71bab073079a3f79d2ad911b42c5e08e4d8957f60f",
+    "source_journal_sha256": "0ca72118c20363972bc5255b6a1cd6a8e91d5082dd25cc93f9fd4c22e917739a",
+    "frame_index": 1,
+    "png": "frame-3aaeda455ed40809d538b2ab0046f838d5630f98bc20b95f2ded8d10cd1fbb3d.png",
+    "png_sha256": "3aaeda455ed40809d538b2ab0046f838d5630f98bc20b95f2ded8d10cd1fbb3d",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "3aaeda455ed40809d538b2ab0046f838d5630f98bc20b95f2ded8d10cd1fbb3d",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-04-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-04/capture/frames.tar.xz",
+    "source_archive_sha256": "2a13de9389ecb2ece4acba71bab073079a3f79d2ad911b42c5e08e4d8957f60f",
+    "source_journal_sha256": "0ca72118c20363972bc5255b6a1cd6a8e91d5082dd25cc93f9fd4c22e917739a",
+    "frame_index": 165,
+    "png": "frame-ce9e3767dd7d6331cc63c65e4a9fa0caaaabb0ad59517790e5cd6600a341f817.png",
+    "png_sha256": "ce9e3767dd7d6331cc63c65e4a9fa0caaaabb0ad59517790e5cd6600a341f817",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "ce9e3767dd7d6331cc63c65e4a9fa0caaaabb0ad59517790e5cd6600a341f817",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-05-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-05/capture/frames.tar.xz",
+    "source_archive_sha256": "a381dce1b394664686db6120e8613456eb95aa4f3322e30aea9c9b61c535aaf9",
+    "source_journal_sha256": "74cb259a0c70c7b7375859e5f814d88e7a05b42a8b73a33d795a7854b1ccf042",
+    "frame_index": 1,
+    "png": "frame-c61ef6c8c513e1ff89776ec08c6d7998198c087b4b550a864e6811be990001ca.png",
+    "png_sha256": "c61ef6c8c513e1ff89776ec08c6d7998198c087b4b550a864e6811be990001ca",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "c61ef6c8c513e1ff89776ec08c6d7998198c087b4b550a864e6811be990001ca",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-05-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-05/capture/frames.tar.xz",
+    "source_archive_sha256": "a381dce1b394664686db6120e8613456eb95aa4f3322e30aea9c9b61c535aaf9",
+    "source_journal_sha256": "74cb259a0c70c7b7375859e5f814d88e7a05b42a8b73a33d795a7854b1ccf042",
+    "frame_index": 165,
+    "png": "frame-700f288a37b658606f9e3b3d5790ebdc1a308423ac523461f3f7e039d22074f0.png",
+    "png_sha256": "700f288a37b658606f9e3b3d5790ebdc1a308423ac523461f3f7e039d22074f0",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "700f288a37b658606f9e3b3d5790ebdc1a308423ac523461f3f7e039d22074f0",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-06-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-06/capture/frames.tar.xz",
+    "source_archive_sha256": "ffcaa051ef91bfeaf0b8af6b99ad744d1c985c484fc20632e6cd1e92a97ae20c",
+    "source_journal_sha256": "59e051d75b2946d4638a29d45bf1af4bd20f004e3a2f826abb3f5b4d5e39d464",
+    "frame_index": 1,
+    "png": "frame-d011f9ab6ea8f5bd804b6d2c1b4fb4875a1a12dfa87e28094b2505dbef046d8e.png",
+    "png_sha256": "d011f9ab6ea8f5bd804b6d2c1b4fb4875a1a12dfa87e28094b2505dbef046d8e",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "d011f9ab6ea8f5bd804b6d2c1b4fb4875a1a12dfa87e28094b2505dbef046d8e",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-06-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-06/capture/frames.tar.xz",
+    "source_archive_sha256": "ffcaa051ef91bfeaf0b8af6b99ad744d1c985c484fc20632e6cd1e92a97ae20c",
+    "source_journal_sha256": "59e051d75b2946d4638a29d45bf1af4bd20f004e3a2f826abb3f5b4d5e39d464",
+    "frame_index": 165,
+    "png": "frame-427ce97cf8266bea2f6dcab78608895bcf0f1f9dffbdd4b929ec74f5e6168eb8.png",
+    "png_sha256": "427ce97cf8266bea2f6dcab78608895bcf0f1f9dffbdd4b929ec74f5e6168eb8",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "427ce97cf8266bea2f6dcab78608895bcf0f1f9dffbdd4b929ec74f5e6168eb8",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-07-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-07/capture/frames.tar.xz",
+    "source_archive_sha256": "db5bc6eebee90a994f8b292844e48cc144e4df6f9f1806a06770791725c23b9e",
+    "source_journal_sha256": "5c6df3119cba2025e3e637b668c21084eb44464e38396d09f869580d3ce5014b",
+    "frame_index": 1,
+    "png": "frame-432063ca7f6cd40accab45d6fde8b94be01653e0f1e1abf1f8d5138724a3d021.png",
+    "png_sha256": "432063ca7f6cd40accab45d6fde8b94be01653e0f1e1abf1f8d5138724a3d021",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "432063ca7f6cd40accab45d6fde8b94be01653e0f1e1abf1f8d5138724a3d021",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-07-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-07/capture/frames.tar.xz",
+    "source_archive_sha256": "db5bc6eebee90a994f8b292844e48cc144e4df6f9f1806a06770791725c23b9e",
+    "source_journal_sha256": "5c6df3119cba2025e3e637b668c21084eb44464e38396d09f869580d3ce5014b",
+    "frame_index": 164,
+    "png": "frame-457a2f10ac03afc87cc69bdc9c8ca3b46139b872c0211d41daf0e720b5254379.png",
+    "png_sha256": "457a2f10ac03afc87cc69bdc9c8ca3b46139b872c0211d41daf0e720b5254379",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "457a2f10ac03afc87cc69bdc9c8ca3b46139b872c0211d41daf0e720b5254379",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-08-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-08/capture/frames.tar.xz",
+    "source_archive_sha256": "d5d9c325164f187aa835d5e4c8386c83af29e57628889504c109e6e0ff2551dd",
+    "source_journal_sha256": "2c5580242c726562d2d71afda920b0db311def282926cda14763c2bf32ef4413",
+    "frame_index": 1,
+    "png": "frame-c7631e3fe3b555f0f2e6707bafd82c8aa501a85500ca6b62518760d2e9e560c7.png",
+    "png_sha256": "c7631e3fe3b555f0f2e6707bafd82c8aa501a85500ca6b62518760d2e9e560c7",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "c7631e3fe3b555f0f2e6707bafd82c8aa501a85500ca6b62518760d2e9e560c7",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-08-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-08/capture/frames.tar.xz",
+    "source_archive_sha256": "d5d9c325164f187aa835d5e4c8386c83af29e57628889504c109e6e0ff2551dd",
+    "source_journal_sha256": "2c5580242c726562d2d71afda920b0db311def282926cda14763c2bf32ef4413",
+    "frame_index": 164,
+    "png": "frame-53a8f7da328295f00ccc80728538d7c38314e3c448275e36b387b1efc7303f17.png",
+    "png_sha256": "53a8f7da328295f00ccc80728538d7c38314e3c448275e36b387b1efc7303f17",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "53a8f7da328295f00ccc80728538d7c38314e3c448275e36b387b1efc7303f17",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-09-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-09/capture/frames.tar.xz",
+    "source_archive_sha256": "6d07f73df72431fd30650e65cecf9e173c34036439844a7598f974d238c1c316",
+    "source_journal_sha256": "f817fdf955600fb9fa7b095ac31e3dd942d85b3b187dbfecbe41eb1ff4465d9c",
+    "frame_index": 1,
+    "png": "frame-91a38862904aaef16fa61a9660f384ccd37a737b66c0234d92918fa7d18cd478.png",
+    "png_sha256": "91a38862904aaef16fa61a9660f384ccd37a737b66c0234d92918fa7d18cd478",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "91a38862904aaef16fa61a9660f384ccd37a737b66c0234d92918fa7d18cd478",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-09-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-09/capture/frames.tar.xz",
+    "source_archive_sha256": "6d07f73df72431fd30650e65cecf9e173c34036439844a7598f974d238c1c316",
+    "source_journal_sha256": "f817fdf955600fb9fa7b095ac31e3dd942d85b3b187dbfecbe41eb1ff4465d9c",
+    "frame_index": 165,
+    "png": "frame-fc17f288efa4e8b7aff85deb595caaf0a08cb9021c4cb87239eec4c401e89d79.png",
+    "png_sha256": "fc17f288efa4e8b7aff85deb595caaf0a08cb9021c4cb87239eec4c401e89d79",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "fc17f288efa4e8b7aff85deb595caaf0a08cb9021c4cb87239eec4c401e89d79",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-10-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-10/capture/frames.tar.xz",
+    "source_archive_sha256": "6459649e1a76f6ad6badb8d576d55882090df2e6008bedfa14c85bd76a51cb68",
+    "source_journal_sha256": "31679e3020d322112229715de0c536c5782ceaaed56cf6feb9ad8b470ba08e16",
+    "frame_index": 1,
+    "png": "frame-e1aeb524a5110eed6f71a99bc791b4a5d4f201bc034a7a7458e072e1381e66b2.png",
+    "png_sha256": "e1aeb524a5110eed6f71a99bc791b4a5d4f201bc034a7a7458e072e1381e66b2",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "e1aeb524a5110eed6f71a99bc791b4a5d4f201bc034a7a7458e072e1381e66b2",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-10-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-10/capture/frames.tar.xz",
+    "source_archive_sha256": "6459649e1a76f6ad6badb8d576d55882090df2e6008bedfa14c85bd76a51cb68",
+    "source_journal_sha256": "31679e3020d322112229715de0c536c5782ceaaed56cf6feb9ad8b470ba08e16",
+    "frame_index": 165,
+    "png": "frame-028a745730cba298dffa372f4a55626d1bc03de54759eec2d8db43b415b9ba3c.png",
+    "png_sha256": "028a745730cba298dffa372f4a55626d1bc03de54759eec2d8db43b415b9ba3c",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "028a745730cba298dffa372f4a55626d1bc03de54759eec2d8db43b415b9ba3c",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-11-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-11/capture/frames.tar.xz",
+    "source_archive_sha256": "8e21e08c4f929856d2600b93a5eb61475d2f54ff071b6bc17d742c1b195c48a3",
+    "source_journal_sha256": "e0ca3a93a58f7b10c6dab27ccfbffc1456f92c3356b2ca8211f16ca7437b910b",
+    "frame_index": 1,
+    "png": "frame-56ea52cf492c61fbaef724c564f441478f11ee56abed02cfb48934b2abdfb5bc.png",
+    "png_sha256": "56ea52cf492c61fbaef724c564f441478f11ee56abed02cfb48934b2abdfb5bc",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "56ea52cf492c61fbaef724c564f441478f11ee56abed02cfb48934b2abdfb5bc",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-11-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-11/capture/frames.tar.xz",
+    "source_archive_sha256": "8e21e08c4f929856d2600b93a5eb61475d2f54ff071b6bc17d742c1b195c48a3",
+    "source_journal_sha256": "e0ca3a93a58f7b10c6dab27ccfbffc1456f92c3356b2ca8211f16ca7437b910b",
+    "frame_index": 164,
+    "png": "frame-992cc94ff331aa1742a71cda27ced4a71193aa4bf1a828e09d1ea8274c6152b3.png",
+    "png_sha256": "992cc94ff331aa1742a71cda27ced4a71193aa4bf1a828e09d1ea8274c6152b3",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "992cc94ff331aa1742a71cda27ced4a71193aa4bf1a828e09d1ea8274c6152b3",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-12-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-12/capture/frames.tar.xz",
+    "source_archive_sha256": "89b86a47c102041c774f4e3f389e9106997d7b3a815d5b71ce41d10549bc74b2",
+    "source_journal_sha256": "9cb8956a30d0ebe6caf6720ce4ab91a121de7abaaffe02a9d2194573879c0412",
+    "frame_index": 1,
+    "png": "frame-a8674006f9287756b993f731a157f12e2ace37e33bcfe71c14e44414e2ed24a2.png",
+    "png_sha256": "a8674006f9287756b993f731a157f12e2ace37e33bcfe71c14e44414e2ed24a2",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "a8674006f9287756b993f731a157f12e2ace37e33bcfe71c14e44414e2ed24a2",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-12-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-12/capture/frames.tar.xz",
+    "source_archive_sha256": "89b86a47c102041c774f4e3f389e9106997d7b3a815d5b71ce41d10549bc74b2",
+    "source_journal_sha256": "9cb8956a30d0ebe6caf6720ce4ab91a121de7abaaffe02a9d2194573879c0412",
+    "frame_index": 165,
+    "png": "frame-e8510ecfaa30a7c0138a06fe153b510b19cc838d48f3d706152630e1bc7bf812.png",
+    "png_sha256": "e8510ecfaa30a7c0138a06fe153b510b19cc838d48f3d706152630e1bc7bf812",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "e8510ecfaa30a7c0138a06fe153b510b19cc838d48f3d706152630e1bc7bf812",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-13-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-13/capture/frames.tar.xz",
+    "source_archive_sha256": "9ce6438b8c88c4e90d470889c9d0f308fc6f15fc8adc562e14dc9062b40e31ee",
+    "source_journal_sha256": "3c7922407677751742ddeff2b901e68d24cf1ea11a0b470c4c55417303bdf75e",
+    "frame_index": 1,
+    "png": "frame-d8832eb537a5023b11f69a35887dc652f9692fe6a08bf83b2a29cbd58b94a26d.png",
+    "png_sha256": "d8832eb537a5023b11f69a35887dc652f9692fe6a08bf83b2a29cbd58b94a26d",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "d8832eb537a5023b11f69a35887dc652f9692fe6a08bf83b2a29cbd58b94a26d",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-13-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-13/capture/frames.tar.xz",
+    "source_archive_sha256": "9ce6438b8c88c4e90d470889c9d0f308fc6f15fc8adc562e14dc9062b40e31ee",
+    "source_journal_sha256": "3c7922407677751742ddeff2b901e68d24cf1ea11a0b470c4c55417303bdf75e",
+    "frame_index": 164,
+    "png": "frame-065507b1555ad91b67e1712c68e30fb75ca1a43bbf1fcdc7b4af5575294fb335.png",
+    "png_sha256": "065507b1555ad91b67e1712c68e30fb75ca1a43bbf1fcdc7b4af5575294fb335",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "065507b1555ad91b67e1712c68e30fb75ca1a43bbf1fcdc7b4af5575294fb335",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-14-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-14/capture/frames.tar.xz",
+    "source_archive_sha256": "4f05c4b18202a8dc6e5466e1c9ac41fdbeff545d350dce11e428feb3657beb06",
+    "source_journal_sha256": "597049f6ab41ce95c46508e3ea52f74a45e07198f23e2af2b3cd4bdc52649096",
+    "frame_index": 1,
+    "png": "frame-70d9076748169ffb8ef49fdf94439a9b6d98d60f545308ad3e46dd697120ad25.png",
+    "png_sha256": "70d9076748169ffb8ef49fdf94439a9b6d98d60f545308ad3e46dd697120ad25",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "70d9076748169ffb8ef49fdf94439a9b6d98d60f545308ad3e46dd697120ad25",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-14-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-14/capture/frames.tar.xz",
+    "source_archive_sha256": "4f05c4b18202a8dc6e5466e1c9ac41fdbeff545d350dce11e428feb3657beb06",
+    "source_journal_sha256": "597049f6ab41ce95c46508e3ea52f74a45e07198f23e2af2b3cd4bdc52649096",
+    "frame_index": 165,
+    "png": "frame-b455fc631a077cf088318287cd6fb9bb5ebe29f161ec1d883ae2dca362b6b44d.png",
+    "png_sha256": "b455fc631a077cf088318287cd6fb9bb5ebe29f161ec1d883ae2dca362b6b44d",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "b455fc631a077cf088318287cd6fb9bb5ebe29f161ec1d883ae2dca362b6b44d",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-15-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-15/capture/frames.tar.xz",
+    "source_archive_sha256": "1cea6727f7d1836b2260fe6380df4a73d384ee049a69caa0d21085ada12f7463",
+    "source_journal_sha256": "d9579cccd2e6264dbbef8a3a4a10fc2cc9168a6809bcd97a02d60ae0b740e1c0",
+    "frame_index": 1,
+    "png": "frame-c3ca58553fc045419d236e2fcc9ebaa2b9c7982a53ef49aacbe4ac10737adb7d.png",
+    "png_sha256": "c3ca58553fc045419d236e2fcc9ebaa2b9c7982a53ef49aacbe4ac10737adb7d",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "c3ca58553fc045419d236e2fcc9ebaa2b9c7982a53ef49aacbe4ac10737adb7d",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-15-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-15/capture/frames.tar.xz",
+    "source_archive_sha256": "1cea6727f7d1836b2260fe6380df4a73d384ee049a69caa0d21085ada12f7463",
+    "source_journal_sha256": "d9579cccd2e6264dbbef8a3a4a10fc2cc9168a6809bcd97a02d60ae0b740e1c0",
+    "frame_index": 164,
+    "png": "frame-c1f7c45c794aa203ae87198a3347419062cff979e83f1206c918157211fdd213.png",
+    "png_sha256": "c1f7c45c794aa203ae87198a3347419062cff979e83f1206c918157211fdd213",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "c1f7c45c794aa203ae87198a3347419062cff979e83f1206c918157211fdd213",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-16-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-16/capture/frames.tar.xz",
+    "source_archive_sha256": "ee24bad357ba97243cf22ea40ff654087c8d374228212222f19cca1f81d621b7",
+    "source_journal_sha256": "99374c04ba312db6d2eeabb049fea9e3837864252b3c61b28139a456c9e32187",
+    "frame_index": 1,
+    "png": "frame-358467231386a1d7f3beb0d32ab2784f8db77a589198e4dabb8779507f87966b.png",
+    "png_sha256": "358467231386a1d7f3beb0d32ab2784f8db77a589198e4dabb8779507f87966b",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "358467231386a1d7f3beb0d32ab2784f8db77a589198e4dabb8779507f87966b",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-16-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-16/capture/frames.tar.xz",
+    "source_archive_sha256": "ee24bad357ba97243cf22ea40ff654087c8d374228212222f19cca1f81d621b7",
+    "source_journal_sha256": "99374c04ba312db6d2eeabb049fea9e3837864252b3c61b28139a456c9e32187",
+    "frame_index": 165,
+    "png": "frame-8d246a1e4b8ff71f9cfd1f3221d4b1bc2960daceddc1dffc6ba179ad229fdd2e.png",
+    "png_sha256": "8d246a1e4b8ff71f9cfd1f3221d4b1bc2960daceddc1dffc6ba179ad229fdd2e",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "8d246a1e4b8ff71f9cfd1f3221d4b1bc2960daceddc1dffc6ba179ad229fdd2e",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-17-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-17/capture/frames.tar.xz",
+    "source_archive_sha256": "aa89b9efe46f66cd80dbcfd695fc0d61542841c62abe990de1ecab56e9040a16",
+    "source_journal_sha256": "f663acb5424a7028f13fec7c6d67a07190864ed51380a657da27f7fbadaa5934",
+    "frame_index": 1,
+    "png": "frame-bc0dfeaf3f5577cbf40bb61d675d5c25de8e873fd3af1391bfb72f41edb36bfa.png",
+    "png_sha256": "bc0dfeaf3f5577cbf40bb61d675d5c25de8e873fd3af1391bfb72f41edb36bfa",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "bc0dfeaf3f5577cbf40bb61d675d5c25de8e873fd3af1391bfb72f41edb36bfa",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-17-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-17/capture/frames.tar.xz",
+    "source_archive_sha256": "aa89b9efe46f66cd80dbcfd695fc0d61542841c62abe990de1ecab56e9040a16",
+    "source_journal_sha256": "f663acb5424a7028f13fec7c6d67a07190864ed51380a657da27f7fbadaa5934",
+    "frame_index": 166,
+    "png": "frame-fcd53711447c60019bc35dde17ff3eafdbb88e3b1948d5d8eea23d5466cb810f.png",
+    "png_sha256": "fcd53711447c60019bc35dde17ff3eafdbb88e3b1948d5d8eea23d5466cb810f",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "fcd53711447c60019bc35dde17ff3eafdbb88e3b1948d5d8eea23d5466cb810f",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-18-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-18/capture/frames.tar.xz",
+    "source_archive_sha256": "116d13c7d916dfe2a0d714291cbd2c80d87c9b145b04d045a870ae17b6dfe428",
+    "source_journal_sha256": "a3e0ae2186c9995c75c6ff3a69bb20df49cdab792d9d3440366d93187f2df7d4",
+    "frame_index": 1,
+    "png": "frame-efc1d80ae28885e2ac76898b150441a051759902e9ed7bd8e5236a52a7e7ae54.png",
+    "png_sha256": "efc1d80ae28885e2ac76898b150441a051759902e9ed7bd8e5236a52a7e7ae54",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "efc1d80ae28885e2ac76898b150441a051759902e9ed7bd8e5236a52a7e7ae54",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-18-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-18/capture/frames.tar.xz",
+    "source_archive_sha256": "116d13c7d916dfe2a0d714291cbd2c80d87c9b145b04d045a870ae17b6dfe428",
+    "source_journal_sha256": "a3e0ae2186c9995c75c6ff3a69bb20df49cdab792d9d3440366d93187f2df7d4",
+    "frame_index": 164,
+    "png": "frame-976774ccef82940974e0b42fdaf204fe177d2b77c0951bee9d643c99f948da12.png",
+    "png_sha256": "976774ccef82940974e0b42fdaf204fe177d2b77c0951bee9d643c99f948da12",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "976774ccef82940974e0b42fdaf204fe177d2b77c0951bee9d643c99f948da12",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-19-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-19/capture/frames.tar.xz",
+    "source_archive_sha256": "39fd665df89390e0740e9cc303e973ce62331a120d5af5a4734bbb73708ce005",
+    "source_journal_sha256": "34b79e9c454af56e4a5dcd80ed61f6cb0b490ff49408c43c7cb8c39a1ef9d2df",
+    "frame_index": 1,
+    "png": "frame-7107c3b31a576a3bddb7e01bfa50d3af9380ed96079c00687c09590e4c413e52.png",
+    "png_sha256": "7107c3b31a576a3bddb7e01bfa50d3af9380ed96079c00687c09590e4c413e52",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "7107c3b31a576a3bddb7e01bfa50d3af9380ed96079c00687c09590e4c413e52",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-19-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-19/capture/frames.tar.xz",
+    "source_archive_sha256": "39fd665df89390e0740e9cc303e973ce62331a120d5af5a4734bbb73708ce005",
+    "source_journal_sha256": "34b79e9c454af56e4a5dcd80ed61f6cb0b490ff49408c43c7cb8c39a1ef9d2df",
+    "frame_index": 166,
+    "png": "frame-a2234661690f54847e05b48814a54acfff23706d09b5cdabd24c4c1b3d6028a0.png",
+    "png_sha256": "a2234661690f54847e05b48814a54acfff23706d09b5cdabd24c4c1b3d6028a0",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "a2234661690f54847e05b48814a54acfff23706d09b5cdabd24c4c1b3d6028a0",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-20-baseline",
+    "expected_admitted": true,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-20/capture/frames.tar.xz",
+    "source_archive_sha256": "221be29b248825e6bb0fb634021d261f55a707aa4ec949b95b508bf162a2eccd",
+    "source_journal_sha256": "7bc1f4102cda8f9138052d19e06c2906c07ed12f0cb767570432c57f10077184",
+    "frame_index": 1,
+    "png": "frame-9ad2bd5861c4f31b098ff2a96407c9eb0321ae68ed51ed297331036fa6814505.png",
+    "png_sha256": "9ad2bd5861c4f31b098ff2a96407c9eb0321ae68ed51ed297331036fa6814505",
+    "tool_exit_code": 0,
+    "decision": {
+      "version": 1,
+      "admitted": true,
+      "code": "admitted",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "9ad2bd5861c4f31b098ff2a96407c9eb0321ae68ed51ed297331036fa6814505",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": true,
+          "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": true,
+          "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "560d76b93c9c669749970f0fc382e50ae77958e1e998bd52f1b9ab336a87eb73",
+        "matches": true
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "8303708b404acefcbfb9ae1002259e65ae049eca8c9e9d5833e2436111686d88",
+        "matches": true
+      }
+    ]
+  },
+  {
+    "id": "npn-20-fresh",
+    "expected_admitted": false,
+    "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+    "tool_sha256": "dea3dfcf19418752ee052f7b2242a5ae2208fde59bae84cbbea8928d97622dbf",
+    "source_archive": "docs/validation/latency-npn-cohort-173/session/trials/npn-20/capture/frames.tar.xz",
+    "source_archive_sha256": "221be29b248825e6bb0fb634021d261f55a707aa4ec949b95b508bf162a2eccd",
+    "source_journal_sha256": "7bc1f4102cda8f9138052d19e06c2906c07ed12f0cb767570432c57f10077184",
+    "frame_index": 164,
+    "png": "frame-ea7446ee5f19d3e3c7d70aa588f2f28ae5095a0c752a7f410b4a4aeedda0c682.png",
+    "png_sha256": "ea7446ee5f19d3e3c7d70aa588f2f28ae5095a0c752a7f410b4a4aeedda0c682",
+    "tool_exit_code": 2,
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "ea7446ee5f19d3e3c7d70aa588f2f28ae5095a0c752a7f410b4a4aeedda0c682",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": false,
+          "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96"
+        },
+        {
+          "name": "voltage",
+          "matches": false,
+          "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790"
+        },
+        {
+          "name": "state",
+          "matches": false,
+          "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c"
+        },
+        {
+          "name": "header_status",
+          "matches": true,
+          "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "0d4877a48d0102f6dcdf292196ebabc59d1374fa11024bb93a2b7df408f3ed96",
+        "matches": false
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "d369acbd37a56b3071962a2d45283467129776801c5bfd07fbc7fedb2a87c790",
+        "matches": false
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "b66621542df793ee4eba25383b3177932c337a4832b5cf0eb98fa524396a8a8c",
+        "matches": false
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "b42d3f375c9ef078a094ec421ced4e64d460da5f174f760039c28b962c5da0b2",
+        "matches": true
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "2bc022afc720f9035ff879f30393e4a933e574dc645c7dfee224191c18fbbdec",
+        "matches": false
+      }
+    ]
+  },
+  {
+    "id": "npn-explicit-stale",
+    "expected_admitted": false,
+    "png_sha256": "65dd8acac4c05c4f075164a5bf711123fb01d34b9b8f4080da50f83598350db3",
+    "decision": {
+      "version": 1,
+      "admitted": false,
+      "code": "region-mismatch",
+      "message": "baseline does not match the declared ELab regions",
+      "profile_sha256": "36f76d2381052f55980efd78797dbda33cf364d0f7d2b6d3d43d4a7256de1453",
+      "image_sha256": "65dd8acac4c05c4f075164a5bf711123fb01d34b9b8f4080da50f83598350db3",
+      "width": 1053,
+      "height": 802,
+      "regions": [
+        {
+          "name": "drive",
+          "matches": false,
+          "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c"
+        },
+        {
+          "name": "current",
+          "matches": true,
+          "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197"
+        },
+        {
+          "name": "voltage",
+          "matches": true,
+          "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081"
+        },
+        {
+          "name": "state",
+          "matches": true,
+          "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c"
+        },
+        {
+          "name": "header_status",
+          "matches": false,
+          "rgb_sha256": "9b65734178849678fe4448e64e06ebb8b2f800a1063f7a7761592fbd97803732"
+        },
+        {
+          "name": "reading_status",
+          "matches": false,
+          "rgb_sha256": "fc855a3c2d5382e53fe046f09062a4ed80befdaafc1b116c2abd99973e6509f9"
+        }
+      ]
+    },
+    "pillow_regions": [
+      {
+        "name": "drive",
+        "rgb_sha256": "60ed428cb48ddc78a7a4c0342819018383cd675a5f477f6a94e56d7c91ac592c",
+        "matches": false
+      },
+      {
+        "name": "current",
+        "rgb_sha256": "285ffad06bd8299a038ad3e702f71bf9734a99f6128896a7a99806e1abffc197",
+        "matches": true
+      },
+      {
+        "name": "voltage",
+        "rgb_sha256": "75f9e36dbac925c678bdcc208bb5f45c4c1e07713bf22fb7d344f24bd91f4081",
+        "matches": true
+      },
+      {
+        "name": "state",
+        "rgb_sha256": "87818f0ceb76ed6f3e0069b7b49c5360547eeb74364ed17fc2cba6003f42d69c",
+        "matches": true
+      },
+      {
+        "name": "header_status",
+        "rgb_sha256": "9b65734178849678fe4448e64e06ebb8b2f800a1063f7a7761592fbd97803732",
+        "matches": false
+      },
+      {
+        "name": "reading_status",
+        "rgb_sha256": "fc855a3c2d5382e53fe046f09062a4ed80befdaafc1b116c2abd99973e6509f9",
+        "matches": false
+      }
+    ],
+    "tool_exit_code": 2
+  }
+]

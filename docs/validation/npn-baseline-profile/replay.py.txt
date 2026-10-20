@@ -1,0 +1,24 @@
+"""Data-only NPN profile check using preserved originals; never captures/input."""
+from pathlib import Path
+import gzip,hashlib,io,json,os,subprocess,sys,tarfile,tempfile
+from PIL import Image
+ROOT=Path('/Users/dshills/Development/projects/ELab');OUT=Path(__file__).resolve().parent;PROOF=ROOT/'docs/validation/latency-npn-cohort-173';PROFILE=ROOT/'tools/baseline-admission/profiles/npn.json';TOOL=ROOT/'build/baseline-admission-tools/baseline-admission';sha=lambda data:hashlib.sha256(data).hexdigest();declared=json.loads(PROFILE.read_text());cases=[]
+os.umask(0o077)
+with tempfile.TemporaryDirectory(prefix='elab-npn-profile-',dir='/private/tmp') as tmp:
+ for n in range(1,21):
+  folder=PROOF/'session/trials'/f'npn-{n:02}'/'capture';rows=[json.loads(s) for s in gzip.decompress((folder/'frames.jsonl.gz').read_bytes()).splitlines()];frames=[v for v in rows if v.get('png')];manifest=json.loads((folder/'image-manifest.json').read_text());archive=folder/'frames.tar.xz'
+  with tarfile.open(archive,'r:xz') as tar:
+   for role,frame,expected in [('baseline',frames[0],True),('fresh',frames[-1],False)]:
+    member=tar.getmember(frame['png']);assert member.isfile() and member.mode==0o600;raw=tar.extractfile(member).read();assert sha(raw)==frame['png_sha256']==manifest[frame['png']]['sha256'] and len(raw)==manifest[frame['png']]['bytes'];image=Path(tmp)/frame['png'];image.write_bytes(raw)
+    result=subprocess.run([str(TOOL),'--profile',str(PROFILE),'--image',str(image),'--sha256',frame['png_sha256']],capture_output=True,text=True,timeout=2);decision=json.loads(result.stdout);assert decision['admitted']==expected and result.returncode==(0 if expected else 2)
+    rgba=Image.open(io.BytesIO(raw)).convert('RGBA');regions=[]
+    for region in declared['regions']:
+     crop=rgba.crop(region['rect']);assert crop.getchannel('A').getextrema()==(255,255);digest=sha(crop.convert('RGB').tobytes());regions.append(dict(name=region['name'],rgb_sha256=digest,matches=digest==region['rgb_sha256']))
+    assert regions==decision['regions'];cases.append(dict(id=f'npn-{n:02}-{role}',expected_admitted=expected,profile_sha256=sha(PROFILE.read_bytes()),tool_sha256=sha(TOOL.read_bytes()),source_archive=str(archive.relative_to(ROOT)),source_archive_sha256=sha(archive.read_bytes()),source_journal_sha256=sha(gzip.decompress((folder/'frames.jsonl.gz').read_bytes())),frame_index=frame['index'],png=frame['png'],png_sha256=frame['png_sha256'],tool_exit_code=result.returncode,decision=decision,pillow_regions=regions))
+ # A separately inspected explicit stale state also must not admit.
+ raw=(PROOF/'stale.png').read_bytes();image=Path(tmp)/'stale.png';image.write_bytes(raw);r=subprocess.run([str(TOOL),'--profile',str(PROFILE),'--image',str(image),'--sha256',sha(raw)],capture_output=True,text=True,timeout=2);d=json.loads(r.stdout);assert r.returncode==2 and not d['admitted'];rgba=Image.open(io.BytesIO(raw)).convert('RGBA');regions=[]
+ for region in declared['regions']:
+  crop=rgba.crop(region['rect']);assert crop.getchannel('A').getextrema()==(255,255);digest=sha(crop.convert('RGB').tobytes());regions.append(dict(name=region['name'],rgb_sha256=digest,matches=digest==region['rgb_sha256']))
+ assert regions==d['regions'];cases.append(dict(id='npn-explicit-stale',expected_admitted=False,png_sha256=sha(raw),decision=d,pillow_regions=regions,tool_exit_code=r.returncode))
+(OUT/'cases.json').write_text(json.dumps(cases,indent=2)+'\n');report=dict(passed=True,cases=41,baseline_admitted=20,fresh_refused=20,explicit_stale_refused=1,region_comparisons=246,profile_sha256=sha(PROFILE.read_bytes()),tool_sha256=sha(TOOL.read_bytes()),original_annotations_sha256=sha((PROOF/'image-annotations.json').read_bytes()),actual_capture=False,actual_input=False,native_profile_qualified=False,app_code_changed=False)
+(OUT/'report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))

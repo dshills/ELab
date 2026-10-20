@@ -6,10 +6,17 @@ opaque RGB pixels in pinned regions. It never captures the desktop, opens ELab,
 changes a project, or supplies an input operation.
 
 The profiles preserve the already inspected LED/RC annotations in
-`docs/validation/latency-followup-173/{led,rc}/image-annotations.json`. They require
+`docs/validation/latency-followup-173/{led,rc}/image-annotations.json` and the
+NPN annotation in `docs/validation/latency-npn-cohort-173/image-annotations.json`. They require
 the original accepted component value and recognizable live-view regions.
 They are specific to the declared 1053×802 geometry, theme, fonts and fixtures.
 A mismatch refuses admission; do not retune a profile to admit an unknown frame.
+
+The NPN profile checks the accepted 0 V drive, cutoff current/voltage/state and
+live/result identity in six regions. Its data-only proof admits twenty preserved
+baselines and refuses twenty fresh results plus one explicit stale result, with
+independent Go/Pillow agreement. See `docs/validation/npn-baseline-profile/`.
+That proves the saved-image decisions, not native current-build qualification.
 
 Build from the tools module:
 
