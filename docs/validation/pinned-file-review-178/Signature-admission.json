@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "valid_exact_artifact_accepted": true,
+  "refusals": {
+    "packaged-digest": "signed artifact is not bound to its exact clean raw input",
+    "raw-source-digest": "signed artifact is not bound to its exact clean raw input",
+    "clean-vcs-identity": "signed executable lost the clean source identity",
+    "changed-resource-tree": "signed bundle tree differs from the independently recorded build",
+    "invalid-resource-signature": "Strict codesign verification rejected the changed signed resource"
+  },
+  "scope": "Owned copied fixture only; raw/source identity, whole tree and strict signature are all required"
+}

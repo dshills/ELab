@@ -33,7 +33,9 @@ repairs an older terminal-name list that let Save succeed but made Open and
 recovery reject those definitions. Physical names now follow the library; known
 voltage differences retain their voltage-only grammar. Present owners still
 require an exact available probe. Existing affected files open without rewriting
-under the corrected reader; the /177 package remains affected pending replacement.
+under the corrected reader. The [0.161.0 /178 replacement](validation/pinned-file-review-178/README.md)
+qualifies exact copied native/headless opens, new saves and controlled inactive-store
+recovery. The affected /177 package and its original failures remain preserved.
 
 Older builds lacking this optional version-4 extension refuse the field instead of dropping it. Files without pins omit it and remain compatible with previous version-4 readers. This follows the document’s existing optional model-extension policy; it is not a promise that all older binaries read every new version-4 extension.
 

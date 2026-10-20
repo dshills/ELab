@@ -1,0 +1,270 @@
+import importlib.util,json,sys,time,subprocess,hashlib,shutil,functools
+from pathlib import Path
+root=Path('/Users/dshills/Development/projects/ELab')
+stage=root/'build/first-version-178-tools'
+out=Path('/private/tmp/elab-first-version-178-signed-acceptance-final');out.mkdir(mode=0o700)
+sys.path.insert(0,str(root/'scripts'))
+def module(name,file):
+ s=importlib.util.spec_from_file_location(name,root/'scripts'/file);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
+parity=module('release_parity','first-version-parity.py');parity.helper.Client=functools.partial(parity.helper.Client,agent_binary=Path('/private/tmp/elab-first-version-178-signed-runtime/agent'))
+endpoint=out/'endpoint.json';log=(out/'native-host.txt').open('w')
+host=subprocess.Popen(['/private/tmp/elab-first-version-178-signed-runtime/native','--agent-endpoint',str(endpoint),'--no-recovery','--no-appearance'],stdout=log,stderr=subprocess.STDOUT)
+client=None
+try:
+ deadline=time.monotonic()+30
+ while not endpoint.exists():
+  assert host.poll() is None,'native host exited before endpoint'
+  assert time.monotonic()<deadline,'endpoint timeout'
+  time.sleep(.05)
+ sys.argv=['first-version-parity.py','--connect',str(endpoint),'--artifacts',str(out/'parity')]
+ parity.main()
+ client=parity.helper.Client(str(endpoint),command_preconditions=True)
+ def correction_session(target, label):
+  target.ask('example.reset',dict(discard_changes=True),True);target.ask('simulation.wait')
+  target.ask('component.select',dict(id='R1'),True)
+  target.ask('editor.value.set',dict(value='0'),True);before=target.ask('project.inspect')
+  target.ask('component.set',dict(id='R1',value='0'),True,expect='invalid-params')
+  refused=target.ask('project.inspect')
+  for key in ['components','wires','nets','result','run_id','electrical_revision','document','undo_name','redo_name','undo_entry','redo_entry']:
+   assert before.get(key)==refused.get(key),key
+  target.ask('editor.value.set',dict(value='2.2k'),True)
+  target.ask('component.set',dict(id='R1',value='2.2k'),True);corrected=target.ask('simulation.wait')
+  assert corrected['circuit']['resistance_ohm']==2200 and not corrected['result']['stale']
+  assert corrected['run_id']==before['run_id']+1 and corrected['electrical_revision']==before['electrical_revision']+1
+  for name,state in [('before',before),('refused',refused),('corrected',corrected)]:
+   (out/(label+'-'+name+'.json')).write_text(json.dumps(state,indent=2)+'\n')
+  return refused,corrected
+ native_correction=correction_session(client,'native-correction')
+ reference=parity.helper.Client(command_preconditions=True)
+ try:headless_correction=correction_session(reference,'headless-correction')
+ finally:reference.close()
+ for left,right in zip(native_correction,headless_correction):
+  for key in ['components','wires','nets','drawing','selected','undo_name','redo_name','status','paused']:assert left[key]==right[key],key
+  parity.compare(left['result'],right['result'])
+ correction_report=dict(passed=True,refusal_code='invalid-params',rejected_edit_preserves_physics_and_history=True,correction_restarts_once=True,resistance_ohm=2200,current_a=native_correction[1]['result']['current_a'],scope='Exact copied native endpoint and headless packaged agent public commands; prior native typing/Apply evidence is a separate development-binary observation')
+
+ def preset_values(target,label):
+  outcomes=[]
+  for control,example,part,initial,draft,value in [('r-1k','example.reset','R1','3k','2.2k','1k'),('r-2k','example.reset','R1','3k','2.2k','2k'),('c-1u','example.rc','C1','47uF','3.3uF','1uF'),('c-100u','example.rc','C1','47uF','3.3uF','100uF')]:
+   target.ask(example,dict(discard_changes=True),True);target.ask('simulation.wait');target.ask('simulation.pause',{},True)
+   target.ask('component.select',dict(id=part),True);target.ask('component.set',dict(id=part,value=initial),True);target.ask('simulation.restart',{},True);before=target.ask('simulation.wait')
+   target.ask('editor.value.set',dict(value=draft),True);typed=target.ask('project.inspect')
+   assert typed['components']==before['components'] and typed['wires']==before['wires']
+   target.ask('component.set',dict(id=part,value=value),True);accepted=target.ask('simulation.wait')
+   assert accepted['run_id']==typed['run_id']+1 and accepted['electrical_revision']==typed['electrical_revision']+1 and accepted['wires']==before['wires']
+   assert accepted['undo_entry']['command_revision']!=before['undo_entry']['command_revision']
+   target.ask('edit.undo',{},True);undone=target.ask('simulation.wait');assert undone['components']==before['components'] and undone['wires']==before['wires']
+   outcome=dict(control=control,requested_value=value,accepted=accepted,undone=undone)
+   (out/(label+'-'+control+'.json')).write_text(json.dumps(outcome,indent=2)+'\n');outcomes.append(outcome)
+  return outcomes
+ native_presets=preset_values(client,'native-preset-values')
+ reference=parity.helper.Client(command_preconditions=True)
+ try:headless_presets=preset_values(reference,'headless-preset-values')
+ finally:reference.close()
+ for left,right in zip(native_presets,headless_presets):
+  assert left['control']==right['control'] and left['requested_value']==right['requested_value']
+  for phase in ['accepted','undone']:
+   for key in ['components','wires','nets','drawing','paused']:assert left[phase][key]==right[phase][key],(left['control'],phase,key)
+   parity.compare(left[phase].get('result'),right[phase].get('result'))
+   parity.compare(left[phase].get('transient'),right[phase].get('transient'))
+ preset_report=dict(passed=True,values=4,native_headless_stage_matches=8,single_circuit_undo=True,scope='Copied native/headless public component.set commands for the four preset values; UI field handoff is separately qualified by retained-widget source regressions, not this API sequence')
+
+ import pin_cases
+ pin_report=pin_cases.check(client,parity,out)
+
+ import floating_cases
+ floating_report=floating_cases.check(client,parity,out)
+
+ import sweep_cases
+ sweep_report=sweep_cases.check(client,parity,out)
+ import verify_cases
+ verify_report=verify_cases.check(client,parity,out)
+ import coil_reset_cases
+ coil_reset_report=coil_reset_cases.check(client,parity,out)
+ import startup_cases
+ startup_report=startup_cases.check(client,parity,out)
+ import discovery_cases
+ discovery_report=discovery_cases.check(client,parity,out)
+
+ # Restart resets live measurements; old command contexts refuse and fresh edits use the new run.
+ def live_owner_session(target,label):
+  target.ask('example.rc',dict(discard_changes=True),True);target.ask('simulation.wait');target.ask('simulation.pause',{},True)
+  target.ask('simulation.input.set',dict(mode='charge'),True);target.ask('simulation.restart',{},True);target.ask('simulation.wait')
+  target.ask('scope.probes.set',dict(ids=['v:C1','i:R1']),True);target.ask('simulation.step',dict(duration_s=.02),True);target.ask('simulation.wait')
+  target.ask('scope.cursor.set',dict(cursor='a',time_s=.008),True);target.ask('scope.cursor.set',dict(cursor='b',time_s=.016),True)
+  target.ask('scope.window.set',dict(mode='fixed',start_s=.004,end_s=.018),True);old=target.ask('project.inspect')
+  target.ask('simulation.restart',{},True);target.ask('simulation.wait');target.ask('simulation.step',dict(duration_s=.02),True);reset=target.ask('simulation.wait')
+  assert reset['run_id']==old['run_id']+1 and reset['document']['generation']==old['document']['generation']
+  assert 'a' not in reset['scope'] and 'b' not in reset['scope'] and reset['scope']['window']['mode']=='live'
+  assert len(reset['transient']['samples'])==21 and not reset['transient']['stale']
+  refused=[]
+  for command,params in [('scope.cursor.set',dict(cursor='a',time_s=.008)),('scope.window.set',dict(mode='fixed',start_s=.008,end_s=.02))]:
+   before=target.ask('project.inspect');target.command_revision=old['command_revision']
+   target.ask(command,params,True,expect='conflict');after=target.ask('project.inspect')
+   for key in ['components','wires','nets','scope','transient','mixed','run_id','electrical_revision','document','undo_entry','redo_entry']:assert before.get(key)==after.get(key),key
+   refused.append(after)
+  before=target.ask('project.inspect')
+  target.ask('scope.cursor.set',dict(cursor='a',time_s='6 ms'),True);target.ask('scope.cursor.set',dict(cursor='b',time_s='16 ms'),True)
+  target.ask('scope.window.set',dict(mode='fixed',start_s=.006,end_s=.02),True);fresh=target.ask('project.inspect')
+  assert fresh['scope']['a']['requested_s']==.006 and fresh['scope']['b']['requested_s']==.016
+  assert abs(fresh['scope']['delta_s']-.01)<1e-12 and fresh['scope']['window']['start_s']==.006
+  assert all(len(trace['points'])==15 for trace in fresh['scope']['traces'])
+  for key in ['components','wires','nets','transient','mixed','run_id','electrical_revision','document','undo_entry','redo_entry']:assert before.get(key)==fresh.get(key),key
+  for name,state in [('before',old),('reset',reset),('refused-cursor',refused[0]),('refused-window',refused[1]),('fresh',fresh)]:
+   (out/(label+'-'+name+'.json')).write_text(json.dumps(state,indent=2)+'\n')
+  return reset,*refused,fresh
+ owner_native=live_owner_session(client,'live-owner-native')
+ reference=parity.helper.Client(command_preconditions=True)
+ try:owner_headless=live_owner_session(reference,'live-owner-headless')
+ finally:reference.close()
+ for left,right in zip(owner_native,owner_headless):
+  for key in ['components','wires','nets','selected','paused','transient_settings','undo_name','redo_name']:assert left.get(key)==right.get(key),key
+  parity.compare(left['scope'],right['scope']);parity.compare(left['transient'],right['transient'])
+ live_owner_report=dict(passed=True,scope_stage_matches=4,stale_cursor_and_window_revision_refused=True,restart_clears_live_cursors_and_fixed_window=True,fresh_cursor_a_s=.006,fresh_cursor_b_s=.016,fresh_window_s=[.006,.02],retained_samples=21,selected_samples=15,fresh_measurement_preserves_graph_physics_document_history=True,scope='Exact copied native/headless public commands; private native draft reset is separately proven by the two pinned-source mounted ownership regressions')
+ # Saved capture is shared intentionally: compare command behavior on identical captured rows.
+ client.ask('example.rc',dict(discard_changes=True),True)
+ client.ask('simulation.pause',{},True);client.ask('simulation.restart',{},True);client.ask('simulation.wait')
+ admitted=client.ask('simulation.verify',dict(duration_s=.02,probe_ids=['v:C1','i:C1']),True)
+ capture_id=admitted['last_operation'];deadline=time.monotonic()+10
+ while True:
+  captured=client.ask('operation.inspect',dict(id=capture_id));status=captured['operation']['status']
+  assert status not in ('failed','canceled'),captured
+  if status=='completed':break
+  assert time.monotonic()<deadline,'recorded RC verification deadline';time.sleep(.01)
+ client.ask('recording.view.set',dict(mode='recorded'),True)
+ rows=client.ask('operation.samples',dict(id=capture_id,limit=100))['rows'];assert len(rows)==21
+ recorded_project=out/'recorded-session.elab';client.ask('project.save',dict(path=str(recorded_project)),True);client.ask('simulation.wait')
+ def recorded_session(target,label):
+  before=target.ask('project.inspect');identity=before['recording']['id']
+  metadata=target.ask('operation.inspect',dict(id=identity))['metadata']
+  assert metadata==captured['metadata']
+  assert target.ask('operation.samples',dict(id=identity,limit=100))['rows']==rows
+  def set_cursor(cursor,time_s):target.ask('recording.cursor.set',dict(operation_id=identity,cursor=cursor,time_s=time_s),True)
+  set_cursor('a',.004);set_cursor('a',.008)
+  target.ask('recording.cursor.select',dict(cursor='b'),True);selected=target.ask('project.inspect')
+  assert selected['recording']['scope']['active_cursor']=='b' and selected['recording']['scope']['a']['requested_s']==.008
+  set_cursor('b',.016);measured=target.ask('project.inspect')
+  assert abs(measured['recording']['scope']['delta_s']-.008)<1e-12
+  set_cursor('a',.004);set_cursor('a',.008)
+  target.ask('recording.cursor.clear',dict(cursor='a'),True);cleared=target.ask('project.inspect')
+  assert 'a' not in cleared['recording']['scope'] and 'delta_s' not in cleared['recording']['scope']
+  set_cursor('a',0);startup=target.ask('project.inspect')
+  assert startup['recording']['scope']['a']['time_s']==0
+  for state in (selected,measured,cleared,startup):
+   for key in ['components','wires','run_id','electrical_revision','transient','mixed','document','undo_entry','redo_entry']:
+    assert state.get(key)==before.get(key),key
+  assert target.ask('operation.inspect',dict(id=identity))['metadata']==metadata
+  assert target.ask('operation.samples',dict(id=identity,limit=100))['rows']==rows
+  for name,state in [('baseline',before),('selected',selected),('measured',measured),('cleared',cleared),('startup',startup)]:
+   (out/(label+'-'+name+'.json')).write_text(json.dumps(state,indent=2)+'\n')
+  return selected,measured,cleared,startup
+ recorded_native=recorded_session(client,'recorded-native')
+ reference=parity.helper.Client(command_preconditions=True)
+ try:
+  reference.ask('project.load',dict(path=str(recorded_project)),True);reference.ask('simulation.wait')
+  recorded_headless=recorded_session(reference,'recorded-headless')
+ finally:reference.close()
+ for left,right in zip(recorded_native,recorded_headless):parity.compare(left['recording']['scope'],right['recording']['scope'])
+ fresh=parity.helper.Client(command_preconditions=True)
+ try:
+  fresh.ask('project.load',dict(path=str(recorded_project)),True);reopened_recording=fresh.ask('simulation.wait')
+  identity=reopened_recording['recording']['id']
+  assert reopened_recording['paused'] and reopened_recording['transient']['sample']['time_s']==0 and not reopened_recording['document']['dirty']
+  assert fresh.ask('operation.inspect',dict(id=identity))['metadata']==captured['metadata']
+  assert fresh.ask('operation.samples',dict(id=identity,limit=100))['rows']==rows
+  (out/'recorded-fresh-reopen.json').write_text(json.dumps(reopened_recording,indent=2)+'\n')
+ finally:fresh.close()
+ recorded_report=dict(passed=True,sample_count=len(rows),measured_delta_s=.008,scope_stage_matches=4,captured_metadata_and_rows_unchanged=True,live_physics_document_history_unchanged=True,fresh_recorded_project_reopen=True,scope='Exact copied native endpoint and matching headless agent commands on one identical saved capture; mounted one-click input/settlement is separately proven by pinned source regressions')
+ # Two distinct captures make selected-source identity observable across a saved project.
+ first_capture=client.ask('project.inspect')['recording']['id']
+ first_meta=client.ask('operation.inspect',dict(id=first_capture))['metadata']
+ first_rows=client.ask('operation.samples',dict(id=first_capture,limit=100))['rows']
+ client.ask('component.set',dict(id='R1',value='20k'),True)
+ client.ask('simulation.restart',{},True);client.ask('simulation.wait')
+ admitted=client.ask('simulation.verify',dict(duration_s=.02,probe_ids=['v:C1','i:C1']),True)
+ second_capture=admitted['last_operation'];deadline=time.monotonic()+10
+ while True:
+  capture=client.ask('operation.inspect',dict(id=second_capture));status=capture['operation']['status']
+  assert status not in ('failed','canceled'),capture
+  if status=='completed':break
+  assert time.monotonic()<deadline,'second captured RC deadline';time.sleep(.01)
+ second_meta=capture['metadata'];second_rows=client.ask('operation.samples',dict(id=second_capture,limit=100))['rows']
+ assert len(first_rows)==len(second_rows)==21 and first_rows!=second_rows
+ def resistance(metadata):return next(c['value'] for c in metadata['graph']['components'] if c['id']=='R1')
+ assert resistance(first_meta)==10000 and resistance(second_meta)==20000
+ client.ask('operation.select',dict(id=second_capture),True)
+ dual_project=out/'two-capture-session.elab';client.ask('project.save',dict(path=str(dual_project)),True);dual_saved=client.ask('simulation.wait')
+ assert dual_saved['document']['recording_count']==2
+ def target_session(target,label,identities):
+  original={value:(target.ask('operation.inspect',dict(id=identity))['metadata'],target.ask('operation.samples',dict(id=identity,limit=100))['rows']) for value,identity in identities.items()}
+  target.ask('operation.select',dict(id=identities[10000]),True)
+  target.ask('recording.cursor.set',dict(operation_id=identities[10000],cursor='a',time_s=.008),True)
+  target.ask('operation.select',dict(id=identities[20000]),True);before=target.ask('project.inspect')
+  target.ask('recording.cursor.set',dict(operation_id=identities[10000],cursor='a',time_s=.008),True,expect='conflict')
+  refused=target.ask('project.inspect')
+  for key in ['recording','components','wires','document','run_id','electrical_revision','transient','mixed','undo_entry','redo_entry']:assert before.get(key)==refused.get(key),key
+  target.ask('recording.cursor.set',dict(operation_id=identities[20000],cursor='a',time_s=.006),True)
+  target.ask('recording.seek',dict(time_s=.006),True)
+  target.ask('recording.window.set',dict(start_s=.006,end_s=.02),True);fresh_target=target.ask('project.inspect')
+  recording=fresh_target['recording'];assert recording['id']==identities[20000]
+  assert recording['scope']['a']['requested_s']==.006 and recording['sample_index']==6 and recording['scope']['window']['start_s']==.006
+  for key in ['components','wires','document','run_id','electrical_revision','transient','mixed','undo_entry','redo_entry']:assert before.get(key)==fresh_target.get(key),key
+  for value,identity in identities.items():
+   assert target.ask('operation.inspect',dict(id=identity))['metadata']==original[value][0]
+   assert target.ask('operation.samples',dict(id=identity,limit=100))['rows']==original[value][1]
+  for name,state in [('before',before),('refused',refused),('fresh-target',fresh_target)]:
+   (out/(label+'-'+name+'.json')).write_text(json.dumps(state,indent=2)+'\n')
+  return fresh_target
+ native_target=target_session(client,'targets-native',{10000:first_capture,20000:second_capture})
+ reference=parity.helper.Client(command_preconditions=True)
+ try:
+  reference.ask('project.load',dict(path=str(dual_project)),True);loaded=reference.ask('simulation.wait')
+  assert loaded['paused'] and loaded['transient']['sample']['time_s']==0 and loaded['document']['recording_count']==2 and not loaded['document']['dirty']
+  identities={}
+  for entry in loaded['operations']:
+   metadata=reference.ask('operation.inspect',dict(id=entry['id']))['metadata'];value=resistance(metadata);identities[value]=entry['id']
+   expected_meta,expected_rows=(first_meta,first_rows) if value==10000 else (second_meta,second_rows)
+   assert metadata==expected_meta and reference.ask('operation.samples',dict(id=entry['id'],limit=100))['rows']==expected_rows
+  assert set(identities)=={10000,20000}
+  headless_target=target_session(reference,'targets-headless',identities)
+ finally:reference.close()
+ parity.compare(native_target['recording']['scope'],headless_target['recording']['scope'])
+ assert native_target['recording']['readings']==headless_target['recording']['readings']
+ target_report=dict(passed=True,captures=2,rows_per_capture=21,resistance_ohm=[10000,20000],stale_capture_id_refused=True,fresh_cursor_seek_window_s=.006,metadata_rows_and_live_physics_history_preserved=True,fresh_two_capture_reopen=True,scope='Exact copied native/headless commands on two distinct saved captures; source mounted tests separately prove private-edit reset across capture selection')
+ fixture=out/'capacity-input.elab';shutil.copyfile(root/'docs/validation/live-clock-grid/capacity-pulse.elab',fixture)
+ client.ask('project.load',{'path':str(fixture),'discard_changes':True},True);client.ask('simulation.wait')
+ client.ask('simulation.restart',{},True);baseline=client.ask('simulation.wait')
+ assert baseline['paused'] and not baseline['transient']['stale']
+ (out/'baseline.json').write_text(json.dumps(baseline,indent=2))
+ def reach(target):
+  deadline=time.monotonic()+45
+  while True:
+   s=client.ask('project.inspect')
+   assert s['status']!='error' and not s['transient']['stale'] and not s['mixed']['stale'],s['diagnostics']
+   assert s['run_id']==baseline['run_id'] and s['electrical_revision']==baseline['electrical_revision']
+   if s['transient']['sample']['time_s']>=target:return s
+   assert time.monotonic()<deadline,('live deadline',target,s['transient']['sample']['time_s'])
+   time.sleep(.05)
+ client.ask('simulation.resume',{},True);first=reach(2.2)
+ client.ask('simulation.pause',{},True);paused=client.ask('project.inspect');origin=paused['transient']['sample']['time_s']
+ time.sleep(.15);stable=client.ask('project.inspect');assert stable['transient']==paused['transient'] and stable['mixed']==paused['mixed']
+ client.ask('simulation.resume',{},True);second=reach(max(origin+1.2,3.41))
+ client.ask('simulation.pause',{},True);final=client.ask('project.inspect')
+ for k in ['components','wires','transient_settings']:assert final[k]==baseline[k],k
+ saved=out/'capacity-saved.elab';client.ask('project.save',{'path':str(saved)},True);client.ask('simulation.wait')
+ client.ask('project.load',{'path':str(saved),'discard_changes':True},True);reopen=client.ask('simulation.wait')
+ for k in ['components','wires','transient_settings']:assert reopen[k]==baseline[k],k
+ assert reopen['paused'] and not reopen['transient']['stale'] and not reopen['document']['dirty']
+ for name,state in [('first',first),('paused',paused),('second',second),('final',final),('reopened',reopen)]: (out/(name+'.json')).write_text(json.dumps(state,indent=2))
+ report={'passed':True,'scope':'exact copied 0.161.0 /178 native runtime with development-file/outbound-IP denial; public commands','pinned_file_commands':pin_report,'floating_source_commands':floating_report,'sweep_capture_commands':sweep_report,'value_correction':correction_report,'preset_value_commands':preset_report,'verification_handoff_commands':verify_report,'coil_startup_reset_commands':coil_reset_report,'component_startup_commands':startup_report,'discovery_commands':discovery_report,'live_measurement_ownership':live_owner_report,'recorded_cursors':recorded_report,'recording_targets':target_report,'reference_parity':json.loads((out/'parity/report.json').read_text()),'live_grid':{'first_time_s':first['transient']['sample']['time_s'],'resume_origin_s':origin,'second_time_s':second['transient']['sample']['time_s'],'final_time_s':final['transient']['sample']['time_s'],'paused_physics_stable':True,'graph_settings_and_run_electrical_preserved':True,'save_reopen_fresh':True},'limits':['Public command functionality; not new pointer/keyboard evidence or visible p95 qualification','Earlier retained-control and output-page checks retain their recorded scope. Schematic pointer and keyboard refusal/fresh actions are tested after actual native mesh preparation by semantic injection in the copied-runtime smoke. Standalone Cogent key-binding tests cover replacement refusal, own repeats, navigation/Escape, guarded states and public move/Undo parity. This is not physical NSEvent evidence. Earlier physical UI evidence remains scoped to its recorded build; no physically coalesced OS input/window-blur or visible-latency claim.']}
+ client.ask('app.close',{},True);client.close();client=None
+ assert host.wait(timeout=15)==0
+ report['native_host_closed_normally']=True
+ (out/'report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
+finally:
+ if client:client.close()
+ if host.poll() is None:
+  host.terminate()
+  try:host.wait(timeout=10)
+  except subprocess.TimeoutExpired:host.kill();host.wait(timeout=5)
+ log.close()
