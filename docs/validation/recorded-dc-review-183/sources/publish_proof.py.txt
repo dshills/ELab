@@ -1,0 +1,97 @@
+"""Publish scoped release evidence; full case corpus stays in the sealed review/ZIP."""
+from pathlib import Path
+import hashlib
+import json
+import shutil
+
+ROOT=Path('/Users/dshills/Development/projects/ELab')
+STAGE=Path(__file__).resolve().parent
+REVIEW=ROOT/'build/ELab-0.166.0-183-review'
+PROOF=ROOT/'docs/validation/recorded-dc-review-183'
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def read(path):
+    return json.loads(path.read_text())
+
+
+def main():
+    receipt=ROOT/'research/ui-audit/first-version/recorded-dc-review-checkpoint.json'
+    archive=Path('/private/tmp/elab-183-archive')
+    packaged=read(archive/'report.json')
+    examples=read(archive/'example-report.json')
+    assert packaged['passed'] and examples['passed'] and len(examples['cases'])==3
+    assert sha(ROOT/'build/ELab-0.166.0-183-review.zip')==packaged['archive_sha256']
+    assert read(archive/'signature-report.json')['passed']
+    accepted=read(receipt)
+    assert accepted['acceptance']['pinned_file_commands']['passed']
+    assert not PROOF.exists()
+    PROOF.mkdir()
+    selected={}
+
+    def copy(relative,target):
+        source=REVIEW/relative
+        destination=PROOF/target
+        destination.parent.mkdir(parents=True,exist_ok=True)
+        shutil.copyfile(source,destination)
+        assert sha(source)==sha(destination)
+        selected[target]=dict(source=relative,sha256=sha(source))
+
+    for name in ('Acceptance.json','Build-result.json','Runtime.json','Public-report.json.gz',
+                 'Process-exits.json.gz','Shutdown-responses.json.gz','Signature-admission.json',
+                 'SDK-lock.json','Native-command-inventory.json','Owner-decisions.json','Paging-plan.json',
+                 'source-commit.txt',
+                 'Native-build-info.txt','Agent-build-info.txt','Conformance-build-info.txt',
+                 'Native-build-info.raw.txt.gz','Agent-build-info.raw.txt.gz','Conformance-build-info.raw.txt.gz',
+                 'build.txt.gz','package.txt.gz','signature-signed-verify.txt.gz','signature-signed-details.txt.gz',
+                 'acceptance-final-output.txt.gz','acceptance-run-output.txt.gz','paging-output.txt.gz',
+                 'native-smoke.log.txt.gz','public-suites.log.txt.gz','runtime.sb.gz','geometry-probe-output.json.gz'):
+        copy('Evidence/'+name,name)
+    copy('Evidence/Runtime-acceptance/report.json.gz','Reference-acceptance.json.gz')
+    copy('RELEASE_MANIFEST.json','Release-manifest.json')
+    for p in sorted((REVIEW/'Evidence/Runtime-acceptance').glob('*-floating-*')):
+        copy(str(p.relative_to(REVIEW)),'floating/'+p.name)
+    for p in sorted((REVIEW/'Evidence/Runtime-acceptance').rglob('*')):
+        relative=str(p.relative_to(REVIEW/'Evidence/Runtime-acceptance'))
+        if p.is_file() and ('-pin-' in relative or relative.startswith('legacy-pin-input/') or relative=='legacy-pin-plan.json.gz'):
+            copy(str(p.relative_to(REVIEW)),'pins/'+relative)
+    for p in sorted((REVIEW/'Evidence/Runtime-acceptance').glob('*-geometry-*')):
+        copy(str(p.relative_to(REVIEW)),'geometry/'+p.name)
+    for p in sorted((REVIEW/'Evidence/Runtime-acceptance').glob('*integration*')):
+        if p.is_file():
+            copy(str(p.relative_to(REVIEW)),'integration/'+p.name)
+    for p in sorted((REVIEW/'Evidence/Runtime-acceptance').rglob('*')):
+        relative=str(p.relative_to(REVIEW/'Evidence/Runtime-acceptance'))
+        if p.is_file() and relative.startswith(('terminal-input/','native-terminal-','headless-terminal-')):
+            copy(str(p.relative_to(REVIEW)),'terminal/'+relative)
+    for p in sorted((REVIEW/'Evidence/Runtime-acceptance').rglob('*')):
+        relative=str(p.relative_to(REVIEW/'Evidence/Runtime-acceptance'))
+        if p.is_file() and relative.startswith(('recording-final-input/','native-recording-final-','headless-recording-final-')):
+            copy(str(p.relative_to(REVIEW)),'recording-final/'+relative)
+    for p in sorted((REVIEW/'Evidence/Packaged-paging').iterdir()):
+        if p.is_file():
+            copy(str(p.relative_to(REVIEW)),'paging/'+p.name)
+    for p in sorted((REVIEW/'Evidence').glob('*.py*.txt')):
+        copy(str(p.relative_to(REVIEW)),'sources/'+p.name)
+    (PROOF/'archive').mkdir()
+    for name in ('report.json','signature-report.json','example-report.json'):
+        shutil.copyfile(archive/name,PROOF/'archive'/name)
+    shutil.copyfile(STAGE/'publish_proof.py',PROOF/'sources/publish_proof.py.txt')
+    (PROOF/'selected-source-files.json').write_text(json.dumps(selected,indent=2)+'\n')
+    result=dict(passed=True,version=accepted['version'],build=accepted['build'],source_commit=accepted['source_commit'],
+        archive_sha256=packaged['archive_sha256'],archive_bytes=packaged['archive_bytes'],
+        manifest_entries=accepted['manifest_file_entries'],extracted_files=packaged['files_verified'],
+        source_proof_checkpoint_sha256=accepted['source_proof_checkpoint_sha256'],
+        original_inconsistent_acceptances_preserved=True,canonical_promoted=False,
+        new_physical_input=False,new_visible_latency=False,owner_acceptance=False,full_mvp_complete=False,
+        scope='Clean exact copied native/agent and ZIP replacement for RECORD-FINAL-01 and RECORD-DC-UI-01; exact inconsistent-record/project refusals, whole-state preservation and valid byte-identical controls, earlier physical observations keep their original build scopes',
+        full_evidence_location='Sealed review Evidence/ and ZIP; selected new regression/producers/metadata are tracked here without repeating the full historical case corpus')
+    (PROOF/'report.json').write_text(json.dumps(result,indent=2)+'\n')
+    print(dict(passed=True,selected_evidence_files=len(selected),archive_bytes=result['archive_bytes']))
+
+
+if __name__=='__main__':
+    main()

@@ -1,18 +1,14 @@
-# ELab first-version review · 0.164.0 /181
+# ELab first-version review · 0.166.0 /183
 
-The [review folder](../build/ELab-0.164.0-181-review) includes [ELab.app](../build/ELab-0.164.0-181-review/ELab.app), matching `elab-agent`, three editable examples and framework notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is needed.
+The [review folder](../build/ELab-0.166.0-183-review) includes [ELab.app](../build/ELab-0.166.0-183-review/ELab.app), matching `elab-agent`, three editable examples and framework notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is needed.
 
-The [ZIP](../build/ELab-0.164.0-181-review.zip) and [checksum](../build/ELab-0.164.0-181-review.zip.sha256) preserve all 507 files/modes through macOS extraction into a Unicode path with spaces. Strict local signature and three examples/fresh saves/reopens verify. This does not establish installation, Developer ID, notarization or Gatekeeper acceptance.
+The [ZIP](../build/ELab-0.166.0-183-review.zip) and [checksum](../build/ELab-0.166.0-183-review.zip.sha256) preserve all 622 files/modes through macOS extraction into a Unicode path with spaces. Strict local signature and three examples/fresh saves/reopens verify. This does not establish installation, Developer ID, notarization or Gatekeeper acceptance.
 
-Clean `accca492` /SDK `b22478c` packages [FILE-TERMINALS-01](../docs/validation/terminal-shape-validation/README.md). The shared decoder refuses malformed saved terminal arrays before deriving probes, preserving dirty circuit/physics/history. Exact native/headless commands reject the two original crash files, report malformed recovery capsules without rewriting them and freshly reopen saved surviving edits. /180 and its crash evidence remain preserved. No guessed pin, silent repair, format/model/solver/budget/command/native-binding/SDK change is introduced.
+Clean `99be11d2` /SDK `b22478c` packages RECORD-FINAL-01 and RECORD-DC-UI-01. Saved LED/NPN final metadata must agree with selected captured channels and component identities. Both copied native/headless adapters refuse 26 altered records and six embedded projects while preserving current work. Valid one-row DC recordings remain viewable; intact and post-refusal exports remain exact. The original /181 acceptances and failed /182 native attempt/candidate stay preserved. No solver/model/tolerance/budget/command/format/SDK change or arbitrary-history certification is introduced.
 
-Full source quality, copied native smoke, all four adapters, reference/startup/measurement/sweep/live/save checks and thirty paging cases pass. Ten paired loader/recovery physics stages match. Earlier numerical-discovery, geometry, advanced-pin/recovery and floating-source regressions remain checked. No new physical OS input, automatic startup recovery or visible-latency measurement is claimed.
+Source quality, copied native smoke, four adapters, reference/measurement/sweep/live/save and inherited terminal/numerical/geometry/pin-reader/recovery/floating/paging checks pass. All 40 earlier sealed reviews, five candidates and canonical /120 survive. Owner walkthrough remains Not tried yet; no promotion or broader MVP completion follows.
 
-[Receipt](ui-audit/first-version/terminal-validation-review-checkpoint.json), [proof](../docs/validation/terminal-validation-review-181/README.md).
-
-**Known review limitations:** /181 accepts the reproduced [inconsistent saved results](../docs/validation/recording-final-consistency/README.md) and has a [native DC recording view failure](../docs/validation/recorded-dc-control/README.md). /182 is preserved as a failed candidate after exposing that view error; source repairs await a clean replacement. No ordinary valid-save corruption is demonstrated.
-
-Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment, broader corruption/fuzzing and the actual hobbyist study remain open. Visible latency stays scoped to /173, with RC and 100 ms acknowledgement unqualified. All 39 earlier sealed reviews, four candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.
+[Receipt](ui-audit/first-version/recorded-dc-review-checkpoint.json), [proof](../docs/validation/recorded-dc-review-183/README.md).
 
 ## Try these four tasks · 15–20 minutes
 
