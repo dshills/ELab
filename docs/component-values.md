@@ -42,4 +42,21 @@ These three command details now expose normalized value domains, source relation
 
 The selected component's `snapshot.drawing.value` is also the native Inspector text. It now preserves the exact stored floating-point value. The formatter tries compact engineering-unit spellings, verifies each by parsing it, and falls back to a shortest round-trip SI decimal. Shorter exact spellings win; ties prefer a normalized engineering magnitude. Examples include `1 µF` and `1 kΩ`. A high-precision value keeps enough digits rather than silently rounding on the next Apply. Net-label text retains its existing case-sensitive semantics.
 
+## Numerical method discovery
+
+Detailed `component.place` and `component.set` discovery includes
+`x-network-numerics.time_integration`. It describes the current mixed RC/NPN,
+general capacitor and waveform engines as two-stage SDIRK2, with their current
+engine IDs. The single-RC exact exponential, algebraic NPN pulse phases and
+inductor Radau IIA paths remain separate. Capacitor-free networks retain their
+algebraic equations within the corresponding engine family.
+
+Historical backward-Euler recordings remain readable with their original engine
+and rows; importing one does not switch the current live solver or relabel that
+capture. See [capacitor integration](capacitor-integration.md). The source
+correction replaces an obsolete backward-Euler description in discovery only;
+no method selector, device law, tolerance, budget, file format or ordinary
+catalog change is introduced. The preserved /179 package retains the old text
+until a replacement package is qualified.
+
 Applying that untouched text preserves the graph, run/electrical identity, simulated time, dirty state and undo/redo entries. It is still an admitted command, so command/event revisions and actor information may advance. Saving/reopening retains numeric SI and reconstructs an exact editable draft. Plot/schematic captions and measurement readouts may still use display precision; they are not used as editable source values.

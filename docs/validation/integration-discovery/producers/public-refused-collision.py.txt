@@ -1,0 +1,48 @@
+"""Record original/fixed public integration guidance and six live engine families."""
+from pathlib import Path
+from importlib.machinery import SourceFileLoader
+import argparse,gzip,hashlib,importlib.util,json,sys,traceback
+ROOT=Path('/Users/dshills/Development/projects/ELab')
+parser=argparse.ArgumentParser();parser.add_argument('mode',choices=['original','fixed']);parser.add_argument('agent',type=Path);args=parser.parse_args()
+source=ROOT/'docs/validation/junction-boundary-review-179/producers/collect.py.txt'
+spec=importlib.util.spec_from_loader('owned_junction_client',SourceFileLoader('owned_junction_client',str(source)));module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+out=Path('/private/tmp/elab-integration-discovery-'+args.mode);out.mkdir(mode=0o700)
+module.OUT=out;module.AGENT=args.agent
+sha=lambda data:hashlib.sha256(data).hexdigest()
+plan=dict(mode=args.mode,agent_path=str(args.agent),client_source=str(source.relative_to(ROOT)),client_sha256=sha(source.read_bytes()),scope='Pure detailed discovery and six fresh live result families via owned headless stdio; no native window or owner settings')
+(out/'plan.json').write_text(json.dumps(plan,indent=2)+'\n')
+client=module.Client(args.mode);failure=None;observations=[];exits=[]
+try:
+ client.ask('simulation.pause',{},True)
+ before=client.ask('project.inspect')
+ ordinary=client.ask('capabilities.list');(out/'ordinary.json').write_text(json.dumps(ordinary,indent=2)+'\n')
+ details={}
+ for command in ['component.place','component.set']:
+  detail=client.ask('capabilities.list',dict(command=command));details[command]=detail
+  text=detail['capabilities'][0]['input_schema']['x-network-numerics']['time_integration']
+  assert ('retain backward Euler' in text)==(args.mode=='original')
+ assert client.ask('project.inspect')==before
+ (out/'details.json').write_text(json.dumps(details,indent=2)+'\n')
+ fixture=gzip.decompress((ROOT/'docs/validation/finite-phase-review-179/raw/triangle/project.elab.gz').read_bytes())
+ (out/'waveform.elab').write_bytes(fixture)
+ cases=[('flasher','elab.mixed-mna-sdirk2.v1'),('rc-high-pass','elab.network-mna-sdirk2.v1'),('rc','elab.ideal-rc-exact.v1'),('npn-pulse','elab.npn-switch-quasistatic.v1'),('rlc','elab.rlc-mna-radau5.v1'),('waveform','elab.network-waveforms-mna-sdirk2.v1')]
+ for name,engine in cases:
+  if name=='waveform':client.ask('project.load',dict(path=str(out/'waveform.elab'),discard_changes=True),True)
+  else:client.ask('example.load',dict(id='blink' if name=='npn-pulse' else name,discard_changes=True),True)
+  client.ask('simulation.pause',{},True);client.ask('simulation.restart',{},True);baseline=client.ask('simulation.wait')
+  assert baseline['transient']['engine']==engine and baseline['transient']['sample']['time_s']==0
+  client.ask('simulation.step',dict(duration_s=.001),True);live=client.ask('simulation.wait')
+  assert live['transient']['engine']==engine and live['transient']['sample']['time_s']==.001
+  assert not live['transient']['stale']
+  (out/(name+'-baseline.json')).write_text(json.dumps(baseline,indent=2)+'\n')
+  (out/(name+'-live.json')).write_text(json.dumps(live,indent=2)+'\n')
+  for command,detail in details.items():
+   text=detail['capabilities'][0]['input_schema']['x-network-numerics']['time_integration']
+   if args.mode=='fixed':assert engine in text
+  observations.append(dict(name=name,engine=engine,time_s=.001))
+except BaseException:
+ failure=traceback.format_exc();raise
+finally:
+ if client.process.poll() is None:exits.append(client.close())
+ report=dict(passed=failure is None,mode=args.mode,observations=observations,failure=failure,process_exits=exits)
+ (out/'report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report),flush=True)

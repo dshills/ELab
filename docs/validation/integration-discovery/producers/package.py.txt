@@ -1,0 +1,26 @@
+"""Freeze the source/public discovery correction evidence without app packaging."""
+from pathlib import Path
+import gzip,hashlib,json,shutil
+root=Path('/Users/dshills/Development/projects/ELab');stage=root/'build/integration-discovery-work';out=root/'docs/validation/integration-discovery'
+quality=json.loads((stage/'full-quality.json').read_text());assert quality['exit_code']==0 and quality['sources_unchanged']
+sha=lambda b:hashlib.sha256(b).hexdigest()
+(out/'raw').mkdir();(out/'producers').mkdir();manifest={}
+def retain(p,relative):
+ data=p.read_bytes();stored=gzip.compress(data,mtime=0);destination=out/'raw'/(relative+'.gz');destination.parent.mkdir(exist_ok=True,parents=True);destination.write_bytes(stored)
+ manifest[str(destination.relative_to(out))]=dict(original_bytes=len(data),original_sha256=sha(data),stored_sha256=sha(stored))
+for label,path in [('original-initial','/private/tmp/elab-integration-discovery-original'),('original-final','/private/tmp/elab-integration-discovery-original-final'),('fixed-final','/private/tmp/elab-integration-discovery-fixed-final')]:
+ for p in sorted(Path(path).iterdir()):
+  assert p.is_file() and not p.is_symlink();retain(p,label+'/'+p.name)
+for name in ('original-focused.log','fixed-focused.log','full-quality.log','full-quality.json','source-before-quality.json','development-runtime.json','comparison.json','original-public.log','original-refused-collision.log','original-public-final.log','fixed-public.log','value_capabilities-original.go.txt','value_capabilities-final.go.txt','integration_discovery_test.go.txt','production.diff'):
+ retain(stage/name,'stage/'+name)
+for name in ('public.py','quality.py','analyze.py','package.py'):
+ shutil.copyfile(stage/name,out/'producers'/(name+'.txt'))
+for name in ('public-initial.py.txt','public-refused-collision.py.txt'):
+ shutil.copyfile(stage/name,out/'producers'/name)
+(out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+receipt=root/'research/ui-audit/first-version/geometry-action-review-checkpoint.json';runtime=json.loads((stage/'development-runtime.json').read_text())
+dependencies=['docs/validation/junction-boundary-review-179/producers/collect.py.txt','scripts/first-version-parity.py','scripts/package_review.py']
+report=dict(passed=True,defect='NUMERICS-DISCOVERY-01',preserved_release='0.162.0 /179',preserved_receipt_sha256=sha(receipt.read_bytes()),development_agent_sha256=runtime['agent_sha256'],application_go_sources=655,quality_elapsed_seconds=quality['elapsed_seconds'],production_go_files_changed=1,new_go_test_files=1,changed_filtered_text_fields=2,live_engine_families=6,matched_physics_states=12,requests=115,normal_process_exits=3,source_qualified=True,replacement_packaging_pending=True,solver_changed=False,native_input=False,new_release=False,owner_acceptance=False,full_mvp_complete=False,dependencies={name:sha((root/name).read_bytes()) for name in dependencies})
+(out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+checkpoint=dict(files={str(p.relative_to(out)):sha(p.read_bytes()) for p in sorted(out.rglob('*')) if p.is_file() and p.name!='checkpoint.json'})
+(out/'checkpoint.json').write_text(json.dumps(checkpoint,indent=2)+'\n');print(json.dumps(dict(proof_files=len(checkpoint['files'])+1,raw_files=len(manifest))))

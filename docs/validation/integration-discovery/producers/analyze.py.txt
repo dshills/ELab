@@ -1,0 +1,36 @@
+"""Offline comparison of original /179 and corrected development observations."""
+from pathlib import Path
+import copy,importlib.util,json,sys
+ROOT=Path('/Users/dshills/Development/projects/ELab');sys.path.insert(0,str(ROOT/'scripts'))
+spec=importlib.util.spec_from_file_location('shared_numerical_parity',ROOT/'scripts/first-version-parity.py');parity=importlib.util.module_from_spec(spec);spec.loader.exec_module(parity)
+a=Path('/private/tmp/elab-integration-discovery-original-final');b=Path('/private/tmp/elab-integration-discovery-fixed-final')
+read=lambda p:json.loads(p.read_text())
+assert read(a/'ordinary.json')==read(b/'ordinary.json')
+old,new=read(a/'details.json'),read(b/'details.json')
+for command in ('component.place','component.set'):
+ x,y=copy.deepcopy(old[command]),copy.deepcopy(new[command])
+ ox=x['capabilities'][0]['input_schema']['x-network-numerics'].pop('time_integration')
+ ny=y['capabilities'][0]['input_schema']['x-network-numerics'].pop('time_integration')
+ assert 'retain backward Euler' in ox and 'retain backward Euler' not in ny and 'historical' in ny
+ assert x==y,command
+ for engine in ('elab.mixed-mna-sdirk2.v1','elab.network-mna-sdirk2.v1','elab.network-waveforms-mna-sdirk2.v1','elab.ideal-rc-exact.v1','elab.npn-switch-quasistatic.v1','elab.rlc-mna-radau5.v1'):assert engine in ny
+cases=[]
+for name in ('flasher','rc-high-pass','rc','npn-pulse','rlc','waveform'):
+ for suffix in ('baseline','live'):
+  left,right=read(a/(name+'-'+suffix+'.json')),read(b/(name+'-'+suffix+'.json'))
+  for key in ('components','wires','transient_settings','display_preferences','source_sampling','source_warnings','scope_probes'):
+   assert left.get(key)==right.get(key),(name,suffix,key)
+  for key in ('result','mixed','transient','scope'):
+   parity.compare(left.get(key),right.get(key),name+'.'+suffix+'.'+key)
+ cases.append(name)
+first=read(Path('/private/tmp/elab-integration-discovery-original/report.json'))
+assert not first['passed'] and 'not-found' in first['failure'] and len(first['observations'])==3
+exits=[first['process_exits'][0]]
+for folder in (a,b):
+ result=read(folder/'report.json');assert result['passed'] and result['failure'] is None and len(result['observations'])==6
+ exits+=result['process_exits']
+for outcome in exits:
+ assert outcome['exit_code']==0 and outcome['shutdown']['status']=='completed'
+ assert all(outcome['shutdown'][k] for k in ('workers_joined','recovery_finalized','exit_ready'))
+report=dict(passed=True,changed_filtered_text_fields=2,ordinary_discovery_unchanged=True,all_other_detailed_discovery_unchanged=True,live_families=cases,matched_complete_physics_states=12,normal_process_exits=len(exits),requests=sum(item['requests'] for item in exits),initial_collector_wrong_example_id_retained=True,refused_output_collision_started_agent=False,solver_changed=False,native_input=False,new_release=False)
+(ROOT/'build/integration-discovery-work/comparison.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))

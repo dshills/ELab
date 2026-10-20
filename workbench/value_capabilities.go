@@ -1,5 +1,7 @@
 package workbench
 
+import "fmt"
+
 // Editing domains are distinct from analysis overrides (for example a signed
 // swept DC bias); this discovery describes ordinary schematic value commands.
 func addValueCapabilityDetails(id string, schema map[string]any) bool {
@@ -52,7 +54,8 @@ func addValueCapabilityDetails(id string, schema map[string]any) bool {
 			"max_newton_iterations":           maxMixedNewtonIterations, "max_nonlinear_node_update_v": maxMixedNewtonDelta,
 			"nonlinear_update_scope": "The node-update limit applies to legacy networks without L. L networks instead limit forward diode/B-E/B-C junction increments and absolute MOS gate-source increments to 0.2 V; reverse-biased junctions may approach conduction in one proposal. All convergence and node-range checks remain required.",
 			"max_abs_node_voltage_v": maxMixedNodeVoltage,
-			"time_integration":       "Existing network circuits retain backward Euler and other legacy engines remain unchanged. L networks use elab.rlc-mna-radau5.v1 three-stage Radau IIA, conservative full/two-half current/node/charge checks and an LC step ceiling. Existing per-output attempt/time budgets remain; no device-model substitution.",
+			"time_integration": fmt.Sprintf("Current mixed RC/NPN, general capacitor and waveform networks use two-stage SDIRK2 (%s, %s, %s), with full/two-half capacitor error checks. Capacitor-free networks remain algebraic within their engine family. Single-RC uses its exact exponential path (%s); resistor-load NPN pulse phases remain algebraic (%s). L networks use three-stage fifth-order Radau IIA (%s), conservative full/two-half current/node/charge checks and an LC step ceiling. Readable historical backward-Euler captures retain their recorded engine and samples; they are not relabeled or replayed. Existing per-output attempt/time budgets remain; no device-model substitution.",
+				MixedEngineID, NetworkEngineID, WaveformEngineID, RCEngineID, NPNTransientEngineID, InductorEngineID),
 			"inductor_numerics": map[string]any{
 				"engine": InductorEngineID, "minimum_internal_step_s": minimumInductorStep,
 				"kcl_absolute_floor_a": inductorKCLAbsolute, "kcl_relative_jacobian_scale": inductorKCLRelative,
