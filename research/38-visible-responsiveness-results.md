@@ -180,3 +180,7 @@ that later coverage remains outside the initial check and still invalidates
 the recording. The frozen recorder, thresholds, all-frame rules and existing
 trials stay unchanged; there is no new observation or PRD gate pass. No new
 automatic RC retry cohort is authorized by this follow-up declaration.
+
+## Subsequent native admission calibration · no cohort observations
+
+The [native admission proof](../docs/validation/native-baseline-admission-173/README.md) records two separately declared RC calibration cases on preserved /173. The initial content gate admits a genuine baseline and permits one marker/Apply, refuses an already changed capacitor before either callback, and refuses cross-case receipt reuse. Independent PNG regions and RC physics agree. All 328 complete frames remain intact, including one negative-case presentation-window exception; full-recording visibility and timing eligibility are not established. Zero new cohort observations or percentile; every original and `rc2` outcome/untouched ID remains unchanged. A future timing block needs a new finite declaration and all-frame analysis, not automatic retry or pooling.

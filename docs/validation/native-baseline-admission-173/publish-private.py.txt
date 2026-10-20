@@ -1,0 +1,34 @@
+"""Preserve native calibration metadata and ignored lossless frame archives."""
+from pathlib import Path
+import gzip,hashlib,io,json,tarfile,shutil,subprocess,os
+os.umask(0o077)
+ROOT=Path('/Users/dshills/Development/projects/ELab');STAGE=Path(__file__).resolve().parent;OUT=Path('/private/tmp/elab-native-baseline-admission-173');PROOF=ROOT/'docs/validation/native-baseline-admission-173';ARCHIVE=ROOT/'build/validation-evidence/native-baseline-admission-173'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert not PROOF.exists() and not ARCHIVE.exists();PROOF.mkdir();ARCHIVE.mkdir(parents=True,mode=0o700)
+analysis=json.loads((OUT/'analysis.json').read_text());assert analysis['passed'] and analysis['complete_frames']==328 and analysis['unique_images']==326
+manifest={};archives=[]
+for case in ['admission-good-01','admission-edited-01']:
+ folder=OUT/'trials'/case/'capture';paths=sorted(folder.glob('frame-*.png'));dest=ARCHIVE/(case+'.tar.xz');entries={}
+ with tarfile.open(dest,'w:xz') as tar:
+  for p in paths:
+   assert not p.is_symlink();raw=p.read_bytes();i=tarfile.TarInfo(p.name);i.size=len(raw);i.mode=0o600;i.mtime=0;tar.addfile(i,io.BytesIO(raw));entries[p.name]=dict(sha256=hashlib.sha256(raw).hexdigest(),bytes=len(raw),mode='0o600')
+ archives.append(dict(case=case,path=str(dest.relative_to(ROOT)),sha256=sha(dest),bytes=dest.stat().st_size,files=entries))
+# CUA's unmodified JPEG observation stays local, as do any incidental pixels.
+media=ARCHIVE/'cua-before.tar.xz'
+raw=(OUT/'cua-before.jpg').read_bytes()
+with tarfile.open(media,'w:xz') as tar:
+ i=tarfile.TarInfo('cua-before.jpg');i.size=len(raw);i.mode=0o600;i.mtime=0;tar.addfile(i,io.BytesIO(raw))
+archives.append(dict(case='cua-before',path=str(media.relative_to(ROOT)),sha256=sha(media),bytes=media.stat().st_size,files={'cua-before.jpg':dict(sha256=hashlib.sha256(raw).hexdigest(),bytes=len(raw),mode='0o600')}))
+for base,label in [(OUT,'session'),(STAGE,'producers')]:
+ for p in sorted(base.rglob('*')):
+  if not p.is_file() or p.is_symlink() or '__pycache__' in p.parts or 'module-cache' in p.parts:continue
+  relative=p.relative_to(base)
+  if p.suffix.lower() in ('.png','.jpg','.jpeg') or any(part.endswith('.app') for part in relative.parts) or p.name=='endpoint.json' or p.name=='target-diagnostic':continue
+  data=p.read_bytes();stored=gzip.compress(data,mtime=0);q=PROOF/label/(str(relative)+'.gz');q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(stored)
+  manifest[str(q.relative_to(PROOF))]=dict(original_path=str(p),original_bytes=len(data),original_sha256=hashlib.sha256(data).hexdigest(),stored_sha256=sha(q))
+(PROOF/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');(PROOF/'image-archives.json').write_text(json.dumps(archives,indent=2)+'\n')
+(PROOF/'analysis.json').write_bytes((OUT/'analysis.json').read_bytes());(PROOF/'declaration.json').write_bytes((STAGE/'declaration.json').read_bytes())
+receipt=ROOT/'research/ui-audit/first-version/inspector-width-review-checkpoint.json';release=json.loads(receipt.read_text());app173=json.loads((ROOT/'research/ui-audit/first-version/sweep-handoff-review-checkpoint.json').read_text())
+report=dict(passed=True,date='2026-10-19',timezone='America/Chicago',scope='Two native RC baseline admission integration cases on preserved /173; no cohort or latency qualification',tested_version=app173['version'],tested_build=app173['build'],tested_native_sha256=app173['native_sha256'],tested_agent_sha256=app173['agent_sha256'],current_release='0.168.0 /185',current_receipt_sha256=sha(receipt),current_go_sources=release['quality']['source_sha256'],source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),cohort_trials=0,eligible_latency_observations=0,timing_percentile=None,whole_recording_visibility_qualified=False,complete_frames=328,unique_recorder_images=326,recorder_bytes=analysis['image_bytes'],archive_bytes=sum(v['bytes'] for v in archives),native_exit_status=None,open_exit_code=0,session_wrapper_exit_code=0,worker_wrapper_exit_code=0,headless_reference_exit_codes='Not retained by the reused helper; no per-reference zero-exit claim',original_cohorts_unchanged=True,controller_loading_refusal='CUA refused eval before controller execution; the declared source was then supplied as literal JavaScript and matched with Function.toString before use. No code generation was used.',quality=dict(controller_tests=28,prepare_tests=6,application_source_changed=False),native_guard_qualified=True,performance_gate_passed=False,owner_acceptance=False,full_mvp_complete=False)
+(PROOF/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+print(json.dumps(dict(metadata_files=len(manifest),archive_bytes=report['archive_bytes'],recorder_images=326,eligible_latency_observations=0)))

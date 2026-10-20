@@ -1,0 +1,73 @@
+"""Exact declared RC fixture and an independent whole-period closed form."""
+import math
+
+PARTS=[('Supply','pulse-source','5 V',-200,0),('Limit','resistor','10k',0,-110),
+       ('Storage','capacitor','1uF',200,0),('Earth','ground','',0,110)]
+WIRES=[('Supply.positive','Limit.1'),('Limit.2','Storage.1'),
+       ('Storage.2','Earth.reference'),('Earth.reference','Supply.negative')]
+SETTINGS=dict(step_s=.001,high_s=.05,low_s=.05,initial_voltage_v=0,seconds_per_wall_second=.02)
+
+def seed(target,canonical=None):
+    if canonical is not None and canonical.exists():
+        target.ask('project.load',dict(path=str(canonical),discard_changes=True),True)
+    else:
+        target.ask('project.clear',dict(discard_changes=True),True)
+        target.ask('simulation.pause',{},True)
+        for name,kind,value,x,y in PARTS:
+            target.ask('component.place',dict(id=name,kind=kind,value=value,position=dict(x=x,y=y)),True)
+        for a,b in WIRES:target.ask('wire.connect',{'from':a,'to':b},True)
+    target.ask('component.select',dict(id='Storage'),True)
+    target.ask('simulation.resume',{},True)
+    value=target.ask('simulation.wait')
+    assert value['transient'] and not value['transient']['stale'] and value['transient']['input_mode']=='auto'
+    assert value['transient']['settings']==SETTINGS
+    if canonical is not None and not canonical.exists():target.ask('project.save',dict(path=str(canonical)),True)
+    return value
+
+def reference_voltage(at,resistance,capacitance,settings=SETTINGS):
+    # Solve complete periods as a geometric series, then the partial phase.
+    # No ELab sample integration, recurrence over timesteps or solver import.
+    tau=resistance*capacitance;high=settings['high_s'];low=settings['low_s'];period=high+low
+    cycles=math.floor(at/period);phase=at-cycles*period
+    a=math.exp(-high/tau);b=math.exp(-low/tau);q=a*b
+    steady_low=5*(1-a)*b/(1-q)
+    start=steady_low+(settings['initial_voltage_v']-steady_low)*q**cycles
+    if phase<=high:return 5+(start-5)*math.exp(-phase/tau)
+    peak=5+(start-5)*a
+    return peak*math.exp(-(phase-high)/tau)
+
+def independent(state):
+    transient=state['transient'];parts={p['id']:p for p in state['components']}
+    r=parts['Limit']['value'];c=parts['Storage']['value']
+    assert r==10000 and c in [1e-6,2e-6]
+    assert transient['engine']=='elab.ideal-rc-exact.v1' and not transient['stale']
+    assert transient['settings']==SETTINGS and transient['input_mode']=='auto'
+    assert abs(transient['time_constant_s']-r*c)<1e-15
+    maxima=dict(voltage_v=0.,current_a=0.,energy_j=0.)
+    samples=transient['samples']+[transient['sample']]
+    for sample in samples:
+        at=sample['time_s'];assert at>=0
+        v=reference_voltage(at,r,c)
+        phase=at%(.1);edge=at>0 and min(abs(phase),abs(phase-.05),abs(phase-.1))<=1e-12
+        assert sample['input_v'] in [0,5]
+        if not edge:assert sample['input_v']==(5 if phase<.05 else 0)
+        expected=dict(voltage_v=v,current_a=(sample['input_v']-v)/r,energy_j=.5*c*v*v)
+        for key,value in expected.items():maxima[key]=max(maxima[key],abs(sample[key]-value))
+    assert maxima['voltage_v']<1e-8 and maxima['current_a']<1e-12 and maxima['energy_j']<1e-15,maxima
+    return dict(checked_samples=len(samples),time_constant_s=r*c,maximum_absolute_error=maxima,
+                formula='Whole-period geometric-series solution plus exact partial high/low phase from zero startup')
+
+def compare_at_time(native,reference):
+    reference.ask('simulation.pause',{},True);reference.ask('simulation.restart',{},True);reference.ask('simulation.wait')
+    at=native['transient']['sample']['time_s']
+    if at>0:reference.ask('simulation.step',dict(duration_s=at),True)
+    expected=reference.ask('simulation.wait')
+    for key in ['components','nets','model','transient_settings']:assert native[key]==expected[key],key
+    semantics=lambda wires:[{k:v for k,v in wire.items() if k!='id'} for wire in wires]
+    assert semantics(native['wires'])==semantics(expected['wires'])
+    for key in ['engine','source_id','resistor_id','capacitor_id','output_net','time_constant_s','settings','input_mode']:
+        assert native['transient'][key]==expected['transient'][key],key
+    for key in ['time_s','input_v','voltage_v','current_a','energy_j']:
+        assert abs(native['transient']['sample'][key]-expected['transient']['sample'][key])<1e-10,key
+    independent(native);independent(expected)
+    return expected

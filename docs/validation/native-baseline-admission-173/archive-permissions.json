@@ -1,0 +1,12 @@
+{
+  "archive_directory_mode_before": "0o755",
+  "archive_directory_mode_after": "0o700",
+  "archive_file_modes_before": {
+    "build/validation-evidence/native-baseline-admission-173/admission-good-01.tar.xz": "0o644",
+    "build/validation-evidence/native-baseline-admission-173/admission-edited-01.tar.xz": "0o644",
+    "build/validation-evidence/native-baseline-admission-173/cua-before.tar.xz": "0o644"
+  },
+  "archive_file_mode_after": "0o600",
+  "all_archive_bytes_unchanged": true,
+  "reason": "Private image storage; temporary recorder files were already under 0700/0600"
+}
