@@ -1,0 +1,97 @@
+"""Exact copied native/headless refusals for the preserved /180 crash bytes."""
+from pathlib import Path
+import gzip
+import hashlib
+import json
+
+from floating_cases import close
+
+
+def check(native, parity, out):
+    root = Path('/Users/dshills/Development/projects/ELab')
+    source = root/'docs/validation/terminal-shape-validation/raw'
+    inputs = out/'terminal-input'; inputs.mkdir()
+    files = {}
+    for case in ('scope-empty','pins-short'):
+        folder = inputs/case; folder.mkdir()
+        for name in ('original.elab','malformed.elab'):
+            path = folder/name
+            path.write_bytes(gzip.decompress((source/'original-final'/case/(name+'.gz')).read_bytes()))
+            files[str(path)] = hashlib.sha256(path.read_bytes()).hexdigest()
+    bad_record = inputs/'malformed-record.json'
+    bad_record.write_bytes(gzip.decompress((source/'import-controls/malformed-record.json.gz').read_bytes()))
+    files[str(bad_record)] = hashlib.sha256(bad_record.read_bytes()).hexdigest()
+
+    def equivalent(before, after):
+        # Native layout may publish in response to background job presentation.
+        excluded = {'project_work','revision','command_revision','last_actor','view','viewport'}
+        assert {k:v for k,v in before.items() if k not in excluded} == {k:v for k,v in after.items() if k not in excluded}
+
+    def session(client, label):
+        results = []
+        for case in ('scope-empty','pins-short'):
+            folder = out/(label+'-terminal-'+case); folder.mkdir()
+            original, bad = inputs/case/'original.elab', inputs/case/'malformed.elab'
+            document = json.loads(original.read_text())
+            resistor = next(p['id'] for p in document['graph']['components'] if p['kind']=='resistor')
+            client.ask('project.load',dict(path=str(original),discard_changes=True),True)
+            client.ask('simulation.wait')
+            client.ask('component.set',dict(id=resistor,value='20k'),True)
+            before = client.ask('project.inspect'); assert before['document']['dirty']
+            client.ask('project.load',dict(path=str(bad),discard_changes=True),True,expect='invalid-document')
+            refused = client.ask('project.inspect'); equivalent(before,refused)
+            assert refused['project_work']['status']=='failed' and refused['project_work']['error']['code']=='invalid-document'
+            client.ask('project.load',dict(path=str(original)),True,expect='unsaved-changes')
+            equivalent(refused,client.ask('project.inspect'))
+            store = folder/'recovery'; store.mkdir(mode=0o700)
+            client.ask('recovery.configure',dict(directory=str(store),enabled=False,interval_s=1),True)
+            malformed = json.loads(bad.read_text())
+            compact = json.dumps(malformed,separators=(',',':')).encode(); key = 'a'*24
+            identifier = 'rec-'+key+'-0000000001'
+            capsule = dict(format='elab.recovery',version=1,id=identifier,document_key=key,session='b'*24,sequence=1,command_revision=1,saved_at='2026-10-19T00:00:00Z',document_sha256=hashlib.sha256(compact).hexdigest(),document=malformed)
+            capsule_path = store/(identifier+'.elab-recovery')
+            capsule_path.write_text(json.dumps(capsule,separators=(',',':'))+'\n')
+            capsule_sha = hashlib.sha256(capsule_path.read_bytes()).hexdigest()
+            scan_before = client.ask('project.inspect'); client.ask('recovery.scan',{},True)
+            scanned = client.ask('project.inspect')
+            assert not scanned['recovery']['candidates'] and len(scanned['recovery']['problems'])==1
+            assert 'terminal metadata' in scanned['recovery']['problems'][0]['message']
+            for field in ('components','wires','transient','mixed','run_id','electrical_revision','document','undo_entry','redo_entry'):
+                assert scan_before.get(field)==scanned.get(field),field
+            saved = folder/'surviving-edit.elab'; client.ask('project.save',dict(path=str(saved)),True)
+            fresh = parity.helper.Client(command_preconditions=True)
+            try:
+                fresh.ask('project.load',dict(path=str(saved)),True); reopened=fresh.ask('simulation.wait')
+                assert not reopened['document']['dirty'] and reopened['components']==before['components'] and reopened['wires']==before['wires']
+                assert abs(reopened['transient']['sample']['current_a']-5/20000)<1e-12
+                close(fresh)
+            finally:
+                if fresh.process.poll() is None:fresh.close()
+            client.ask('project.load',dict(path=str(original),discard_changes=True),True); valid=client.ask('simulation.wait')
+            assert not valid['document']['dirty'] and valid['components']==document['graph']['components']
+            assert hashlib.sha256(capsule_path.read_bytes()).hexdigest()==capsule_sha
+            result=dict(case=case,before=before,refused=refused,scan_before=scan_before,scanned=scanned,reopened=reopened,valid=valid,capsule_sha256=capsule_sha,saved_sha256=hashlib.sha256(saved.read_bytes()).hexdigest())
+            (folder/'result.json').write_text(json.dumps(result,indent=2)+'\n'); results.append(result)
+        before=client.ask('project.inspect')
+        client.ask('verification.import',dict(path=str(bad_record)),True,expect='invalid-recording')
+        after=client.ask('project.inspect');equivalent(before,after)
+        (out/(label+'-terminal-import.json')).write_text(json.dumps(dict(before=before,after=after),indent=2)+'\n')
+        return results
+
+    actual=session(native,'native'); reference=parity.helper.Client(command_preconditions=True)
+    try:
+        expected=session(reference,'headless'); close(reference)
+    finally:
+        if reference.process.poll() is None:reference.close()
+    paired=0
+    for left,right in zip(actual,expected):
+        assert left['case']==right['case']
+        for phase in ('before','refused','scanned','reopened','valid'):
+            for field in ('components','wires','transient_settings'):
+                assert left[phase].get(field)==right[phase].get(field),(left['case'],phase,field)
+            for field in ('result','mixed','transient','scope'):
+                parity.compare(left[phase].get(field),right[phase].get(field),left['case']+'.'+phase+'.'+field)
+            paired+=1
+    assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==digest for p,digest in files.items())
+    (inputs/'plan.json').write_text(json.dumps(dict(files=files,source_proof=str(source.parent),scope='Exact preserved /180 malformed Open and import bytes'),indent=2)+'\n')
+    return dict(passed=True,cases_per_adapter=2,invalid_document_refusals=4,recovery_problem_cases=4,surviving_saved_fresh_reopens=4,paired_physics_stages=paired,standalone_import_refusals=2,original_inputs_unchanged=True,scope='Exact copied native/headless public loader/recovery commands and fresh saves; no physical input, automatic startup recovery or original recording-import crash claim')

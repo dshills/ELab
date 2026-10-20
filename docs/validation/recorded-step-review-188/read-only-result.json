@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "scope": "Read-only first replay of retained checkpoint, source/signatures/ZIP, all six paired step stages/four boundary refusals, inherited cases and prior artifacts; starts no app or tests",
+  "replay_session": 20966,
+  "exit_code": 0,
+  "first_verified_checkpoint": "checkpoint-verified-before-log.json",
+  "pipeline": {
+    "clean_build": {
+      "session": 89562,
+      "exit_code": 0
+    },
+    "strict_admission": {
+      "exit_code": 0
+    },
+    "copied_runtime": {
+      "session": 1438,
+      "exit_code": 0
+    },
+    "reference_acceptance": {
+      "session": 46558,
+      "exit_code": 0
+    },
+    "paging": {
+      "exit_code": 0,
+      "cases": 30,
+      "requests": 95
+    },
+    "seal": {
+      "session": 16486,
+      "exit_code": 0
+    },
+    "archive": {
+      "session": 72672,
+      "exit_code": 0
+    },
+    "extracted_examples": {
+      "exit_code": 0
+    }
+  },
+  "native_physical_input": false,
+  "new_visible_latency": false,
+  "canonical_promoted": false
+}

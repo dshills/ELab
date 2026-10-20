@@ -1,0 +1,43 @@
+import argparse,hashlib,json,os,subprocess,sys
+from pathlib import Path
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent
+sys.path.insert(0,str(root/'scripts'))
+import runtime_isolation as runtime
+from signed_bundle import admit
+built=json.loads((stage/'build-result-signed.json').read_text())
+runtime.bundle_executable=lambda app:admit(app,built,stage/'build/elab')
+shared=Path.home()/'Library/Cogent Core'
+def geometry():
+ return {p.relative_to(shared).as_posix():dict(sha256=runtime.digest(p),mode=oct(p.stat().st_mode&0o777)) for p in shared.rglob('*') if p.is_file()}
+before=geometry();assert before and not any(p.is_symlink() for p in shared.rglob('*'))
+profile=runtime.sandbox_profile
+runtime.sandbox_profile=lambda roots:profile([*roots,shared])
+original_controls=runtime.controls
+
+def controls(directory,policy,canaries,run_child):
+ result=original_controls(directory,policy,canaries,run_child)
+ source=directory/'geometry-probe.py';source.write_text('''import errno,json,os,sys
+result={}
+for name,flags in [('read',os.O_RDONLY),('write_without_truncate',os.O_WRONLY)]:
+ try:
+  fd=os.open(sys.argv[1],flags);os.close(fd);result[name]={'denied':False}
+ except OSError as e:result[name]={'denied':e.errno in (errno.EPERM,errno.EACCES),'errno':e.errno}
+print(json.dumps(result))
+''')
+ completed=run_child(['/usr/bin/sandbox-exec','-f',str(policy),sys.executable,'-I',str(source),str(shared/'window-geometry-0.3.6.json')],cwd=directory,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15,check=True)
+ value=completed.stdout.decode() if isinstance(completed.stdout,bytes) else completed.stdout
+ (directory/'geometry-probe-output.json').write_text(value)
+ result['shared_geometry']=json.loads(value);assert all(row['denied'] and row['errno'] in [1,13] for row in result['shared_geometry'].values())
+ assert geometry()==before
+ return result
+runtime.controls=controls
+out=Path('/private/tmp/elab-first-version-188-signed-runtime')
+args=argparse.Namespace(app=root/'build/ELab-0.171.0-188-review/ELab.app',agent_binary=root/'build/ELab-0.171.0-188-review/elab-agent',conformance_binary=stage/'build/elab-conformance',artifacts=out)
+try:
+ result=runtime.run(args)
+ assert result['passed'] and geometry()==before
+ result['shared_geometry_before']=before;result['shared_geometry_after']=geometry();result['shared_geometry_unchanged']=True
+ (out/'runtime-report.json').write_text(json.dumps(result,indent=2)+'\n')
+finally:
+ assert geometry()==before,'shared geometry files changed'
+print(json.dumps({'passed':result['passed'],'report':str(out/'runtime-report.json'),'shared_geometry_unchanged':True}))

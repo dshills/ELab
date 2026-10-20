@@ -1,0 +1,157 @@
+"""One exact clean /188 recorded-page contract probe with complete raw JSONL."""
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import sys
+
+ROOT = Path('/Users/dshills/Development/projects/ELab')
+STAGE = ROOT/'build/first-version-188-tools'
+OUT = Path('/private/tmp/elab-operation-pages-188')
+RUNTIME = Path('/private/tmp/elab-first-version-188-signed-runtime')
+assert sys.flags.optimize == 0
+BINARY = RUNTIME/'elab-agent'
+plan = json.loads((STAGE/'paging-plan.json').read_text())
+assert hashlib.sha256(BINARY.read_bytes()).hexdigest() == plan['agent_sha256']
+assert hashlib.sha256((OUT/'recorded-rc.elab').read_bytes()).hexdigest() == plan['fixture_sha256']
+assert all(hashlib.sha256((ROOT/n).read_bytes()).hexdigest() == h for n, h in plan['sources'].items())
+transcript = (OUT/'transcript.jsonl').open('x')
+process = subprocess.Popen([str(RUNTIME/'agent')], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                           stderr=(OUT/'stderr.txt').open('x'), text=True)
+sequence, latest = 0, None
+report = {'passed': False, 'behavior_passed': False, 'findings': [], 'cases': []}
+
+
+def ask(command, params=None, mutation=False, error=None, raw_params=None):
+    global sequence, latest
+    sequence += 1
+    request = {'version': 1, 'id': f'pages-{sequence}', 'command': command, 'params': params or {}}
+    if mutation:
+        request.update(key=f'pages-{sequence}', expected_command_revision=latest['command_revision'])
+    encoded = json.dumps(request, separators=(',', ':'))
+    if raw_params is not None:
+        assert encoded.endswith('"params":{}}')
+        encoded = encoded[:-3]+raw_params+'}'
+    process.stdin.write(encoded+'\n')
+    process.stdin.flush()
+    response_line = process.stdout.readline()
+    assert response_line, command+' terminated'
+    response = json.loads(response_line)
+    transcript.write(json.dumps({'request_json': encoded, 'response': response})+'\n')
+    transcript.flush()
+    assert response['version'] == 1
+    if error == 'invalid-json':
+        assert raw_params is not None and response['id'] == '' and response['revision'] == 0
+    else:
+        assert response['id'] == request['id']
+    if error:
+        assert response.get('error', {}).get('code') == error, (command, response)
+    else:
+        assert 'error' not in response, (command, response)
+    result = response.get('result')
+    if isinstance(result, dict) and 'components' in result and 'command_revision' in result:
+        latest = result
+    return result
+
+
+def read_case(name, command, params, expected_error=None, raw_params=None):
+    before = ask('project.inspect')
+    result = ask(command, params, error=expected_error, raw_params=raw_params)
+    after = ask('project.inspect')
+    assert before == after, name+' mutated project state'
+    report['cases'].append({'name': name, 'command': command, 'error': expected_error, 'snapshot_unchanged': True})
+    return result
+
+
+def write(name, value):
+    with (OUT/(name+'.json')).open('x') as stream:
+        json.dump(value, stream, indent=2)
+        stream.write('\n')
+
+
+try:
+    blank = ask('project.inspect')
+    assert blank['components'] == [] and blank['wires'] == [] and not blank['document']['dirty']
+    ask('project.load', {'path': str(OUT/'recorded-rc.elab')}, True)
+    baseline = ask('simulation.wait')
+    write('baseline', baseline)
+    assert baseline['paused'] and not baseline['document']['dirty']
+    identifier = baseline['recording']['id']
+    recorded = json.loads((OUT/'recorded-rc.elab').read_text())['recordings']['entries'][0]['data']
+    assert len(recorded['rows']) == 209
+    catalog = read_case('ordinary-discovery', 'capabilities.list', {})
+    detail = read_case('detailed-discovery', 'capabilities.list', {'command': 'operation.samples'})
+    inspection_detail = read_case('inspect-discovery', 'capabilities.list', {'command': 'operation.inspect'})
+    write('catalog', catalog)
+    write('samples-detail', detail)
+    write('inspect-detail', inspection_detail)
+    view = read_case('captured-metadata', 'operation.inspect', {'id': identifier})
+    assert view['metadata'] == recorded['metadata'] and view['operation']['status'] == 'completed'
+    assert not view['operation']['source_unchanged']
+
+    def page(name, params, offset, count):
+        result = read_case(name, 'operation.samples', {'id': identifier, **params})
+        assert result == {'id': identifier, 'offset': offset, 'next_offset': offset+count,
+                          'total': 209, 'probes': recorded['metadata']['probes'],
+                          'rows': recorded['rows'][offset:offset+count]}, name
+        return result
+
+    first = page('omitted-defaults', {}, 0, 100)
+    assert page('zero-limit', {'limit': 0}, 0, 100) == first
+    for name, params in [('null-offset', {'offset': None}), ('null-limit', {'limit': None}),
+                         ('null-both', {'offset': None, 'limit': None})]:
+        assert page(name, params, 0, 100) == first
+    middle = page('default-middle', {'offset': 100}, 100, 100)
+    tail = page('default-tail', {'offset': 200}, 200, 9)
+    assert first['rows']+middle['rows']+tail['rows'] == recorded['rows']
+    large = page('maximum-page', {'limit': 200}, 0, 200)
+    end = page('maximum-tail', {'offset': 200, 'limit': 200}, 200, 9)
+    assert large['rows']+end['rows'] == recorded['rows']
+    page('last-row', {'offset': 208, 'limit': 1}, 208, 1)
+    page('empty-eof', {'offset': 209}, 209, 0)
+    for name, params in [('negative-offset', {'offset': -1}), ('past-eof', {'offset': 210}),
+                         ('negative-limit', {'limit': -1}), ('excess-limit', {'limit': 201}),
+                         ('fractional-offset', {'offset': .5}), ('fractional-limit', {'limit': 1.5}),
+                         ('overflow-offset', {'offset': 2**63}), ('overflow-limit', {'limit': 2**63}),
+                         ('unknown-field', {'unused': 1})]:
+        read_case(name, 'operation.samples', {'id': identifier, **params}, 'invalid-params')
+    for name, params, error in [('missing-id', {}, 'invalid-params'), ('null-id', {'id': None}, 'invalid-params'),
+                                ('empty-id', {'id': ''}, 'not-found'), ('unknown-id', {'id': 'no-such-record'}, 'not-found')]:
+        read_case(name, 'operation.samples', params, error)
+    read_case('unknown-inspection', 'operation.inspect', {'id': 'no-such-record'}, 'not-found')
+    raw = '{"id":'+json.dumps(identifier)+',"limit":1,"limit":2}'
+    read_case('duplicate-limit', 'operation.samples', {}, 'invalid-json', raw_params=raw)
+    for label, response in [('ordinary', catalog), ('detailed', detail)]:
+        capability = next(c for c in response['capabilities'] if c['id'] == 'operation.samples')
+        for field in ['offset', 'limit']:
+            schema = capability['input_schema']['properties'][field]
+            types = schema.get('type')
+            types = [types] if isinstance(types, str) else types
+            if 'null' not in types:
+                report['findings'].append({'id': 'PAGE-NULL-SCHEMA-01', 'discovery': label,
+                    'field': field, 'advertised': schema,
+                    'actual': 'Explicit null accepted and returns the exact default page; full snapshot unchanged'})
+    final = ask('project.inspect')
+    assert final == baseline
+    write('final', final)
+    report['behavior_passed'] = True
+    report['source_file_unchanged'] = hashlib.sha256((OUT/'recorded-rc.elab').read_bytes()).hexdigest() == plan['fixture_sha256']
+    assert report['source_file_unchanged']
+    report['passed'] = not report['findings']
+finally:
+    if latest and latest['document']['dirty']:
+        ask('project.save', {'path': str(OUT/'Unexpected-test-state.elab')}, True)
+        report['unexpected_state_saved'] = True
+    closed = ask('app.close', {}, True)
+    write('close-response', closed)
+    assert closed['closed'] and closed['shutdown']['exit_ready'] and closed['shutdown']['workers_joined']
+    process.stdin.close()
+    process.wait(timeout=10)
+    report['process_exit_code'] = process.returncode
+    report['requests'] = sequence
+    transcript.close()
+    write('report', report)
+print(json.dumps({'passed': report['passed'], 'behavior_passed': report['behavior_passed'],
+                  'cases': len(report['cases']), 'findings': report['findings'],
+                  'process_exit_code': report['process_exit_code']}))
+assert report['passed'] and process.returncode == 0, 'Recorded contract mismatch; original runtime evidence retained'

@@ -1,0 +1,55 @@
+from pathlib import Path
+import json
+R=Path(__file__).resolve().parents[2];S=Path(__file__).resolve().parent
+r=json.loads((R/'research/ui-audit/first-version/recorded-step-review-checkpoint.json').read_text());a=json.loads((R/'docs/validation/recorded-step-review-188/archive/report.json').read_text());assert r['acceptance']['passed'] and a['passed']
+assert not (R/'research/60-recorded-step-review.md').exists()
+q=r['quality'];short=r['source_commit'][:8];count=a['files_verified']
+summary=f'''**Current private review: 0.171.0 /188.** Use the [review app](build/ELab-0.171.0-188-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.171.0-188-review.zip) with its [checksum](build/ELab-0.171.0-188-review.zip.sha256). Save and quit an earlier review before opening; no development tools or account are required.
+
+Clean `{short}` /Vellum `b22478c` fixes [Previous/Next after unfinished recorded entries](research/59-recorded-step-entry-settlement.md). Index, time and speed commit before one step; invalid input retains feedback until corrected. New private positions also work from accepted boundaries; unchanged boundaries refuse without wrapping and DC steps stay disabled. Unrelated user/agent changes remain guarded. Twenty-four original mounted failures become passing pointer/no-focus-loss regressions. Full source quality, copied native smoke, four public adapters, inherited reference/storage checks, strict signature and ZIP/example reopens pass. Public commands, models, solver, formats and SDK are unchanged.
+
+[Walkthrough](research/35-first-version-review.md), [receipt](research/ui-audit/first-version/recorded-step-review-checkpoint.json), [proof](docs/validation/recorded-step-review-188/README.md), [delivery plan](research/34-first-version-plan.md).
+
+Existing [RC](research/47-current-rc-visible-results.md), [LED](research/50-current-led-visible-results.md) and [NPN](research/52-current-npn-visible-results.md) timing retains its /185 software-composition scope. /188 adds no new physical typing or percentile. Owner walkthrough remains **Not tried yet**; default-startup/clean-account qualification stays deferred for private alpha only. Broader accessibility/environment/performance/study and full MVP gates remain open. All 44 earlier reviews, six candidates and canonical /120 stay intact. No promotion.
+
+'''
+p=R/'README.md';v=p.read_text();a0=v.index('**Current private review:');b=v.index('## Build and run from source');p.write_text(v[:a0]+summary+v[b:])
+p=R/'research/35-first-version-review.md';v=p.read_text();tasks=v[v.index('## Try these four tasks'):].replace('0.170.0-187','0.171.0-188')
+p.write_text(f'''# ELab first-version review · 0.171.0 /188
+
+The [review folder](../build/ELab-0.171.0-188-review) includes [ELab.app](../build/ELab-0.171.0-188-review/ELab.app), matching `elab-agent`, three editable examples and notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is required.
+
+The [ZIP](../build/ELab-0.171.0-188-review.zip) and [checksum](../build/ELab-0.171.0-188-review.zip.sha256) preserve all **{count} files/modes** through macOS extraction into a Unicode path with spaces. Strict local signature and three example saves/fresh reopens pass. Installation, Developer ID, notarization and Gatekeeper acceptance remain separate.
+
+Clean `{short}` /Vellum `b22478c` packages RECORD-STEP-01. Previous/Next apply unfinished index, seek-time and speed entries before moving one stored row; invalid input retains its error and correction recovers. Boundary drafts work on the first click; unchanged boundaries refuse without wrapping. Exact own responses continue the action; unrelated user/agent work remains guarded. Twenty-four original mounted regressions become passing pointer/no-focus-loss checks. Full source quality ({q['elapsed_s']:.3f} s), copied native/four-adapter/reference/storage/paging and signature/archive checks pass. Eleven Inspector frames remain complete and contained. Source-mounted software input and copied public commands retain distinct scopes; no new physical OS typing is claimed.
+
+[Receipt](ui-audit/first-version/recorded-step-review-checkpoint.json), [release proof](../docs/validation/recorded-step-review-188/README.md), [source proof](../docs/validation/recorded-step-settlement/README.md). All 44 earlier reviews, six candidates and canonical /120 remain intact. Owner walkthrough remains Not tried yet; no promotion or full MVP acceptance. Existing RC/LED/NPN timing retains its /185 scope; /188 adds no timing cohort.
+
+'''+tasks)
+p=R/'research/34-first-version-plan.md';v=p.read_text();start=v.index('Updated October 20, 2026. **ELab',v.index('## Current position'));end=v.index('Keep the app/model/format/SDK scope frozen',start)
+v=v[:start]+f'''Updated October 20, 2026. **ELab 0.171.0 /188 is qualified for the private owner walkthrough. It is not promoted or accepted as the full MVP.** The owner has not tried the four tasks yet. The app and matching agent are in the [review folder](../build/ELab-0.171.0-188-review); start with the [15–20 minute walkthrough](35-first-version-review.md).
+
+| Area | Current evidence and remaining work |
+|---|---|
+| App and packaging | Clean `{short}` /Vellum `b22478c`; RECORD-STEP-01 entry settlement/refusal, full {q['elapsed_s']:.3f} s source quality (666 application Go files plus three tools), copied native/four-adapter/reference checks, strict signature and all {count} extracted files/modes plus examples pass. [Release receipt](ui-audit/first-version/recorded-step-review-checkpoint.json). /187 and original failures stay preserved. |
+| Live simulation response | Separate twenty-observation **/185** blocks: [RC](47-current-rc-visible-results.md) 136.965 ms, [LED](50-current-led-visible-results.md) 169.889 ms, [NPN](52-current-npn-visible-results.md) 177.937 ms fresh p95 upper bounds. Each supports 500 ms in its warm-running software-composition fixture. /188 adds no percentile. Do not repeat completed blocks without an invalidating change. 100 ms acknowledgment and cold/difficult/general/wider-environment response remain open. |
+| User/agent parity | Reference workflows and scoped native/public-command checks pass. [Recorded stepping](60-recorded-step-review.md) uses shared seek/speed/step commands after settling native fields, retaining invalid-entry errors and refusing unrelated work. Full callbacks/reader/IME acceptance remains open; inventory totals are not runtime coverage. |
+| Files and recovery | Existing save/import/recovery repairs remain qualified within their receipts. The [structured-corruption diagnostic](54-structured-corruption-review.md) retains its 20,028 mutations, 18 dirty-work-preserving public refusals and separate guided fuzz run. No broad corruption/power-loss guarantee is inferred. |
+| Owner decisions | One LED print confirmed clear/complete. Four-task walkthrough **Not tried yet**. Clean-account/default-startup gate **deferred for private alpha only**, not a pass. [Decisions](ui-audit/first-version/private-alpha-owner-decisions.json). |
+| Broader MVP | P0 stays **17 implemented /10 partial**. Full bindings/accessibility/environment, broader performance/distribution and the actual hobbyist study remain open. [Gate reconciliation](41-release-gate-reconciliation.md). |
+
+'''+v[end:]
+v=v.replace('all 43 earlier sealed reviews','all 44 earlier sealed reviews').replace('Completed in /187 for RECORD-PLAY-01','Completed in /188 for RECORD-STEP-01').replace('all 507 archive files/modes',f'all {count} archive files/modes').replace('[0.170.0 /187 review folder](../build/ELab-0.170.0-187-review)','[0.171.0 /188 review folder](../build/ELab-0.171.0-188-review)').replace('/187 completes the recorded Play entry-settlement repair and exact replacement qualification.','/188 completes the recorded Previous/Next entry-settlement repair and exact replacement qualification.')
+p.write_text(v)
+p=R/'research/59-recorded-step-entry-settlement.md';p.write_text(p.read_text()+'\nSubsequent replacement qualification: [0.171.0 /188](60-recorded-step-review.md) now passes clean-build, copied-runtime, signature, paging and archive/example checks. The source proof keeps its original replacement-pending phase; this new receipt closes that phase within its stated scopes.\n')
+(R/'research/60-recorded-step-review.md').write_text(f'''# Recorded Previous/Next entry settlement · private review 0.171.0 /188
+
+The [review folder](../build/ELab-0.171.0-188-review) and [ZIP](../build/ELab-0.171.0-188-review.zip) package RECORD-STEP-01 from clean `{r['source_commit']}` /Vellum `b22478c`. Previous/Next apply unfinished index/time/speed before one stored-row step. Invalid entries stay stopped with feedback and fresh correction recovers; unrelated user/agent work still refuses the pending action. Twenty-four original mounted failures become passing pointer/no-focus-loss regressions. No public-command, model, solver, format or SDK change.
+
+Full lint/imports/Staticcheck, 65 Python tests, root/native race/vet and configured mounted checks pass in **{q['elapsed_s']:.3f} s**, freezing 666 application Go files plus three tools. Exact copied native smoke, four adapters and inherited reference/storage/capture/numerical/geometry/pin/floating/paging checks pass. Public conformance records 102 normal exits and 112 joined/ready shutdown responses; the acceptance host closes normally and shared geometry stays exact under the existing isolation policy. The mounted source tests exercise the affected binding; six paired copied seek/speed/step stages and four boundary refusals test the public command sequence without claiming physical UI input.
+
+Strict ad-hoc signature and all **{count} extracted files/modes** pass, with three example saves/fresh reopens. ZIP **{a['archive_bytes']:,} bytes**, SHA-256 **`{a['archive_sha256']}`**. All 44 earlier reviews, six candidates, canonical /120 and SDK remain intact. [Receipt](ui-audit/first-version/recorded-step-review-checkpoint.json), [source proof](../docs/validation/recorded-step-settlement/README.md), [release proof/replay](../docs/validation/recorded-step-review-188/README.md), [walkthrough](35-first-version-review.md).
+
+Owner walkthrough remains **Not tried yet**. Clean-account/default-startup remains owner-deferred for private alpha only. Existing /185 and /173 timing retains its scopes; /188 adds no percentile. P0 remains 17 implemented /10 partial; broader bindings/accessibility/environment/performance/distribution/study and overall MVP acceptance remain open. No promotion.
+''')
+print('Updated current review handoff without changing source or historical evidence')

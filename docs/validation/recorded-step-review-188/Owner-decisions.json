@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-19",
+  "source": "Direct owner reply in the project conversation",
+  "question": "Is a disposable macOS account or VM available for the ordinary startup and installation check? The framework stores window geometry in the current user's shared Library folder, so I need a separate session to test defaults without changing your settings.",
+  "answer": "Defer this gate for the private alpha",
+  "gate": "Ordinary default startup and clean-account installation qualification",
+  "private_alpha_disposition": "deferred_by_owner",
+  "qualification_performed": false,
+  "gate_passed": null,
+  "broader_mvp_requirement": "open",
+  "owner_walkthrough": "Not tried yet",
+  "promotion_authorized": false,
+  "settings_changes_authorized": false,
+  "scope_note": "This defers this environment gate for the private alpha only. It does not record acceptance, waive other gates, authorize shared settings changes, or alter historical evidence.",
+  "recorder_method_authorization": {
+    "date": "2026-10-19",
+    "question": "May I use the prepared native recorder for isolated ELab latency tests? CUA\u2019s computer-use rules require explicit authorization for another capture technology, and its snapshots lack timestamps. The recorder targets one ELab window and saves locally; any macOS privacy grant would be confirmed separately.",
+    "answer": "Authorize the recorder method",
+    "os_privacy_grant_authorized": false,
+    "shared_settings_changes_authorized": false
+  }
+}
