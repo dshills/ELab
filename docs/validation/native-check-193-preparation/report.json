@@ -1,0 +1,182 @@
+{
+  "date": "2026-10-20",
+  "kind": "native-fixture-preparation-only",
+  "source_commit": "b30fae07",
+  "candidate": "0.176.0 /193",
+  "agent_sha256": "537c14d6f7075ba6105085660912fe19a3be29ec5be7fc45fe9cab4c9fb083b9",
+  "owner_response": "I'm back online and working",
+  "desktop_reserved_for_owner": true,
+  "native_started": false,
+  "native_input_accepted": false,
+  "current_owner_alpha": "0.172.0 /189",
+  "promoted": false,
+  "fixtures": {
+    "rc": {
+      "rows": 1001,
+      "project_sha256": "c5640ecdea82d6ede49f3d55a89498817d593b9905c369090e5ed3a600326ad6",
+      "normal_shutdown": true,
+      "exit_code": 0,
+      "requests": 26
+    },
+    "npn": {
+      "rows": 521,
+      "project_sha256": "07994ea45d49386dd07136f819cf921c42d58a5e4a8afdb99659fda8c6141b09",
+      "normal_shutdown": true,
+      "exit_code": 0,
+      "requests": 23
+    }
+  },
+  "limitations": [
+    "No native launch, input, capture, latency or owner acceptance.",
+    "Producer contains a redundant self-comparison of saved-file hash. It does not establish before/after file preservation. Independent checkpoint verifies only the present files against recorded fixture hashes.",
+    "Preparation clients use discard_changes true only for their own synthetic headless projects. The proposed future native session must refuse cleanup of unexpected owner work.",
+    "Saved recordings reset session index and timing on reopen; seed through public commands after loading.",
+    "No native launcher, runtime copy or cleanup guard has been created or tested in this preparation."
+  ],
+  "files": [
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/fixtures.json",
+      "evidence": "fixtures.json.gz",
+      "source_sha256": "6d9ad09dd09550cd53007501292e480e2b8c18e4ff48346d9f78cfff248e5d7f",
+      "compressed_sha256": "12d0f82d4f71192e89661f37b9fb9d660d5d6de6495b1a04fa4c0b0a3aaa2b52"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/npn-baseline.json",
+      "evidence": "npn-baseline.json.gz",
+      "source_sha256": "172e48cf317b19e57299003c8b9fb8dbbad5b8fffb44f0f056abe5fdbdc5dfe1",
+      "compressed_sha256": "8678b21fc87044af683a00e698d7b8eb3bbbba5346d80e786d3a30cf31eda133"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/npn-bridge-exit.json",
+      "evidence": "npn-bridge-exit.json.gz",
+      "source_sha256": "19861600facad4567ea737af9cbf15233ce12dbc2f9a138ea592341ad86f3470",
+      "compressed_sha256": "50b27708cc161346989304096ea3f70913646cf90ac3dc577059f4a553270124"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/npn-expected.json",
+      "evidence": "npn-expected.json.gz",
+      "source_sha256": "62d9e2bdace2382f25b463a909bc14e4ba01ed7048447f9226189c01318a303a",
+      "compressed_sha256": "3ae4b46d7e51cd74396aab59c6ceef843a3af164427ff4c5ea2ca1204e12ffce"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/npn-fixture.elab",
+      "evidence": "npn-fixture.elab.gz",
+      "source_sha256": "07994ea45d49386dd07136f819cf921c42d58a5e4a8afdb99659fda8c6141b09",
+      "compressed_sha256": "5bd3176609279e3ecc710aed2b0ed9a1353a8a84cd8c2fdb65efc8d0819d9afd"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/npn-metadata.json",
+      "evidence": "npn-metadata.json.gz",
+      "source_sha256": "23748ed4fd2dcb3bf11dbc351928d42fbb80e1a333c54ba59aaf70dba0917727",
+      "compressed_sha256": "af981601fb5e91ba193c57045d050c5cc2cb36cd4c7ea15c37a7da5e5037bae4"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/npn-protocol.jsonl",
+      "evidence": "npn-protocol.jsonl.gz",
+      "source_sha256": "a747471ef4277617a902ff657b29b4d8f058ebede772cb96a315fbca3b0dd333",
+      "compressed_sha256": "3042998bbff603d079530a5b3947db5c7400626b9dc809accc0edd651c93f5be"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/npn-rows.json",
+      "evidence": "npn-rows.json.gz",
+      "source_sha256": "7ec643cb9075f8b4a0f7181fbd615db60040ef24fc61b7b8444640950c4be583",
+      "compressed_sha256": "997bd6d7152a14825017561f9ebd04f0a9a019651abfd3c75418556045515097"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/npn-shutdown.json",
+      "evidence": "npn-shutdown.json.gz",
+      "source_sha256": "2c4bec1f1047ac49cca4d48dc25ccd09b1201b17b45141e5b88d8e6eb5ca368c",
+      "compressed_sha256": "b0b9998b599648fc83482f5973a7875ce8e3041d4d028a847d77b3e51173f618"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/npn-stderr.txt",
+      "evidence": "npn-stderr.txt.gz",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressed_sha256": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/plan.json",
+      "evidence": "plan.json.gz",
+      "source_sha256": "a50bbd5dac5b4fa34ca7b8a55d9e214d464efbc1b351fe0b469e08b091d90f7c",
+      "compressed_sha256": "97d9acfc1bc53482ac6ba53a005632c745c27d1ff7eda88a58ff6c76c84fb442"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/rc-baseline.json",
+      "evidence": "rc-baseline.json.gz",
+      "source_sha256": "c231dd504feb83cd0a2dfe58b44ee45c3c1a6bf8f64f1fa72072b1043484f4ca",
+      "compressed_sha256": "d5ed9097fb82aa342d144e6a42cee56ac1fee0dca4b3a1f28433040a603526c1"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/rc-bridge-exit.json",
+      "evidence": "rc-bridge-exit.json.gz",
+      "source_sha256": "3fbda9ffd4db05d9bd3717e4859a43af3c18bff20bff807f135a72a26ff4deb1",
+      "compressed_sha256": "a52dabc71f76265faf07a107427955b7b085e877f959c4e4d94189b9f0906fc3"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/rc-expected.json",
+      "evidence": "rc-expected.json.gz",
+      "source_sha256": "451dca06193ec154269ffc50098b0cc0bea56d9eb6da9df69421436d3fc98875",
+      "compressed_sha256": "3f267510e33377c7bf2e5d17a4514622673ef3f7a798a8fdaa5de4aa8eb1414e"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/rc-fixture.elab",
+      "evidence": "rc-fixture.elab.gz",
+      "source_sha256": "c5640ecdea82d6ede49f3d55a89498817d593b9905c369090e5ed3a600326ad6",
+      "compressed_sha256": "5700a16809bbfe8fe742e0a1735940e68cdabeb2f29bda06b575ddaca76ac595"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/rc-metadata.json",
+      "evidence": "rc-metadata.json.gz",
+      "source_sha256": "6e314bcae86374fbfc762b703dce97ee41925d57b34835911d157f6b313b102e",
+      "compressed_sha256": "714cef6d6dca308000174d9dc1e556f97914907e430b0db785316912756175af"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/rc-protocol.jsonl",
+      "evidence": "rc-protocol.jsonl.gz",
+      "source_sha256": "29e2fb48ff1f592e58d87d6a2890f27fdb845699be481e221d3e01799301621d",
+      "compressed_sha256": "768213ba263197bac3816535ff4225ac50312e80e854b881640c6e8dc82a2f1d"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/rc-rows.json",
+      "evidence": "rc-rows.json.gz",
+      "source_sha256": "673f71ac4902190edb5dc609b9eeb9464f2d9a3949545ace561efbb92e29cd68",
+      "compressed_sha256": "b2e90940fadadfc373dc47674252857fcd748881c53d74fb03aceed664bd03fb"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/rc-shutdown.json",
+      "evidence": "rc-shutdown.json.gz",
+      "source_sha256": "c810853c3be498b81dd67d2bb5afd080a9b279c0bff7a75e0b1acd2700c81e63",
+      "compressed_sha256": "930f9686ee40c7700160f129308013fa21c0238bf47761585e7ce50948628923"
+    },
+    {
+      "source": "/private/tmp/elab-native-check-193-prepared/rc-stderr.txt",
+      "evidence": "rc-stderr.txt.gz",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressed_sha256": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83"
+    },
+    {
+      "source": "/Users/dshills/Development/projects/ELab/build/native-check-193-prep/client.py",
+      "evidence": "client.py.gz",
+      "source_sha256": "d2c3728c47e13cecb53af2eeb631e3d7ab22ffec1da15f2036032d8de031c751",
+      "compressed_sha256": "52c273cc62cec2cf2c06635fe087f1c00e4e18d9bc17014fbedf47ee913ba0c1"
+    },
+    {
+      "source": "/Users/dshills/Development/projects/ELab/build/native-check-193-prep/prepare-stderr.txt",
+      "evidence": "prepare-stderr.txt.gz",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressed_sha256": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83"
+    },
+    {
+      "source": "/Users/dshills/Development/projects/ELab/build/native-check-193-prep/prepare-stdout.txt",
+      "evidence": "prepare-stdout.txt.gz",
+      "source_sha256": "0c61321fbcb53ab460e8d113fe808b764d61c22e6a356f2c813f0a8ee460a5b2",
+      "compressed_sha256": "c44e3a93da15301c07614441b3bd227fd4eba6fa5ee2b0cb12036d3a39a6b8ee"
+    },
+    {
+      "source": "/Users/dshills/Development/projects/ELab/build/native-check-193-prep/prepare.py",
+      "evidence": "prepare.py.gz",
+      "source_sha256": "ceb7c8364ce0c9cc002dbc1c4b195b1218ae00ff093a9049a874e17f82cb0939",
+      "compressed_sha256": "1827d52309fe5506c135cd5daff852940e88fbbe50a16ffab37062682eba3cdd"
+    }
+  ]
+}

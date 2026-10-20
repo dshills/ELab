@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-20",
+  "kind": "native-fixture-preparation-only",
+  "source_commit": "b30fae07",
+  "candidate": "0.176.0 /193",
+  "agent_sha256": "537c14d6f7075ba6105085660912fe19a3be29ec5be7fc45fe9cab4c9fb083b9",
+  "owner_response": "I'm back online and working",
+  "desktop_reserved_for_owner": true,
+  "native_started": false,
+  "native_input_accepted": false,
+  "current_owner_alpha": "0.172.0 /189",
+  "promoted": false,
+  "fixtures": {
+    "rc": {
+      "rows": 1001,
+      "project_sha256": "c5640ecdea82d6ede49f3d55a89498817d593b9905c369090e5ed3a600326ad6",
+      "normal_shutdown": true,
+      "exit_code": 0,
+      "requests": 26
+    },
+    "npn": {
+      "rows": 521,
+      "project_sha256": "07994ea45d49386dd07136f819cf921c42d58a5e4a8afdb99659fda8c6141b09",
+      "normal_shutdown": true,
+      "exit_code": 0,
+      "requests": 23
+    }
+  },
+  "limitations": [
+    "No native launch, input, capture, latency or owner acceptance.",
+    "Producer contains a redundant self-comparison of saved-file hash. It does not establish before/after file preservation. Independent checkpoint verifies only the present files against recorded fixture hashes.",
+    "Preparation clients use discard_changes true only for their own synthetic headless projects. The proposed future native session must refuse cleanup of unexpected owner work.",
+    "Saved recordings reset session index and timing on reopen; seed through public commands after loading.",
+    "No native launcher, runtime copy or cleanup guard has been created or tested in this preparation."
+  ],
+  "evidence": "docs/validation/native-check-193-preparation/report.json"
+}
