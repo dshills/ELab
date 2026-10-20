@@ -1,0 +1,257 @@
+{
+  "date": "2026-10-20",
+  "kind": "combined-timing-repair-candidate",
+  "source_commit": "f8b4bd543748ad7d3aadabd62e07f257c2c07da8",
+  "clean_build_vcs": true,
+  "version": "0.176.0",
+  "build": "193",
+  "candidate": "/Users/dshills/Development/projects/ELab/build/ELab-0.176.0-193-candidate",
+  "native_sha256": "ee9371715982f5c1c998421a3554efefba214cde8f57367a924a388dca3a0afd",
+  "agent_sha256": "537c14d6f7075ba6105085660912fe19a3be29ec5be7fc45fe9cab4c9fb083b9",
+  "strict_local_signature_valid": true,
+  "quality_source": "docs/validation/coupled-timing-fields/report.json",
+  "quality_go_inputs_matched": 670,
+  "mounted_source_timing_cases": 58,
+  "headless": {
+    "arrival_cases": 4,
+    "transition_cases": 6,
+    "atomic_settings_cases": 6,
+    "captured_rows": 521,
+    "whole_snapshot_refusals": 6,
+    "pure_queries_and_configuration_match": true,
+    "capture_metadata_rows_and_raw_bytes_preserved": true,
+    "fresh_reopen_rows_timing_and_export_equal": true,
+    "source_project_bytes_preserved": true,
+    "normal_owned_shutdowns": 4,
+    "all_exit_codes_zero": true,
+    "workers_joined_recovery_finalized_exit_ready": true
+  },
+  "archive": {
+    "archive": "/Users/dshills/Development/projects/ELab/build/ELab-0.176.0-193-candidate.zip",
+    "archive_sha256": "fc40cbfb2de521bc62b0a1d137ffc2906372d71fe171204c6480d8271ca8fa63",
+    "archive_bytes": 34987119,
+    "files_verified": 114,
+    "source_package_unchanged": true,
+    "extracted_bytes_and_modes_equal": true,
+    "strict_extracted_signature_valid": true
+  },
+  "protected_files": {
+    "build/ELab.app/Contents/MacOS/ELab": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "build/ELab-0.172.0-189-alpha/ELab.app/Contents/MacOS/ELab": "a8cf9d053f9cce67f902fe09fe47d5917aa07588982290ce566d546d3b3faf7f",
+    "build/ELab-0.172.0-189-alpha/elab-agent": "f1f4419dba2d692b19d988921d7bd4286688ae1b4ba143c603860595c6772e59",
+    "build/ELab-0.173.0-190-native-unavailable-candidate/ELab.app/Contents/MacOS/ELab": "86d32ebc67d1dd059b952e405f7b695949c8d7cde359b77127a597108fb190bd",
+    "build/ELab-0.173.0-190-native-unavailable-candidate/elab-agent": "4fcf417e0a425447273c7676f1c67239a61966c0dee74dcbd7f89442eda04801",
+    "third_party/vellum/sdk.lock.json": "2f9ac0e120bdd09d5ffe2c3d8b5da4d24588455c5e6bc8d6f08c80e0dccc6395",
+    "third_party/vellum/vellum-b22478c.tar.gz": "22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968",
+    "build/ELab-0.174.0-191-candidate/ELab.app/Contents/MacOS/ELab": "1a84984c2557590ee657d4500f6bc0a651359815b2610e3af72cb955627c8c38",
+    "build/ELab-0.174.0-191-candidate/elab-agent": "03be12146172e2caca3fc570bcdf6a5f319ea304760683ebe6d580d3475fc9a6",
+    "build/ELab-0.175.0-192-candidate/ELab.app/Contents/MacOS/ELab": "ae2ef18d0d8337b06159616cbf51bdfc36fca6a8b30db98b0cac9624bf20f08e",
+    "build/ELab-0.175.0-192-candidate/elab-agent": "728634038cf3d47b2161ee5d459c36fe1380d87586111b47f506a2781621b14b"
+  },
+  "entire_candidates_191_and_192_unchanged": true,
+  "native_started": false,
+  "native_input_accepted": false,
+  "owner_window_reserved": true,
+  "current_owner_alpha": "0.172.0 /189",
+  "ready_for_owner_testing": false,
+  "release_qualified": false,
+  "promoted": false,
+  "scope": "Clean package, matching headless agent and local archive. Existing source proof separately covers private buffers, per-field recovery and capture/probe ownership. No fresh native window/OS input, owner, distribution, latency or full-MVP acceptance.",
+  "raw": {
+    "checks/after-timing-capture.json": {
+      "stored": "raw/checks/after-timing-capture.json.gz",
+      "bytes": 60816,
+      "sha256": "add923e9daed59c9a9f452cb3ad17fdd488b9dd1edb17e41efb8320cec1d1413"
+    },
+    "checks/arrivals/flasher.json": {
+      "stored": "raw/checks/arrivals/flasher.json.gz",
+      "bytes": 42938,
+      "sha256": "c8fcc1f394dbf145ded40e1897b0a701fd53eb22b2509534ec03e00c3cde5e55"
+    },
+    "checks/arrivals/timed-captures.elab": {
+      "stored": "raw/checks/arrivals/timed-captures.elab.gz",
+      "bytes": 129601,
+      "sha256": "e3bb9e4e75fafb9f6a237b9516fb4f03b2d13f653b89e80d1e13cb724ab7652f"
+    },
+    "checks/arrivals.json": {
+      "stored": "raw/checks/arrivals.json.gz",
+      "bytes": 19358,
+      "sha256": "31d5dddeaaa356a00547ab27ed46bed0b96f571646cd2b8f8eb0441a51c24e66"
+    },
+    "checks/coupled-settings-bridge-exit.json": {
+      "stored": "raw/checks/coupled-settings-bridge-exit.json.gz",
+      "bytes": 67,
+      "sha256": "f700caf6fa4f57800bb0cda5661d7a0db86c2da9eb0bd30a78b8ee6cf6afc761"
+    },
+    "checks/coupled-settings-protocol.jsonl": {
+      "stored": "raw/checks/coupled-settings-protocol.jsonl.gz",
+      "bytes": 2249310,
+      "sha256": "1e286a37ab5b395be7b6ca7998545fc785f33595ee8db73be7e2745f944aceb9"
+    },
+    "checks/coupled-settings-shutdown.json": {
+      "stored": "raw/checks/coupled-settings-shutdown.json.gz",
+      "bytes": 339,
+      "sha256": "6e64808862cd4983c1f85901fd1730bc0dd16217fed7c21defbe1da4ee7e29dc"
+    },
+    "checks/coupled-settings-stderr.txt": {
+      "stored": "raw/checks/coupled-settings-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "checks/fresh-capture.json": {
+      "stored": "raw/checks/fresh-capture.json.gz",
+      "bytes": 60816,
+      "sha256": "add923e9daed59c9a9f452cb3ad17fdd488b9dd1edb17e41efb8320cec1d1413"
+    },
+    "checks/fresh-reopen-bridge-exit.json": {
+      "stored": "raw/checks/fresh-reopen-bridge-exit.json.gz",
+      "bytes": 67,
+      "sha256": "16e8c79b11954afd01cd21ad5f18ce754a8c44a70c33bcb1c2d7585dca271c5b"
+    },
+    "checks/fresh-reopen-protocol.jsonl": {
+      "stored": "raw/checks/fresh-reopen-protocol.jsonl.gz",
+      "bytes": 222787,
+      "sha256": "d4a2f25906552060f4fc79153c05285c282d6ea22c61513a3ba76fac76dfc381"
+    },
+    "checks/fresh-reopen-shutdown.json": {
+      "stored": "raw/checks/fresh-reopen-shutdown.json.gz",
+      "bytes": 338,
+      "sha256": "cf411639bd57e764af541aa49ce66ee1b7acc954d562152f36022fed0814ec84"
+    },
+    "checks/fresh-reopen-stderr.txt": {
+      "stored": "raw/checks/fresh-reopen-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "checks/original-capture.json": {
+      "stored": "raw/checks/original-capture.json.gz",
+      "bytes": 60816,
+      "sha256": "add923e9daed59c9a9f452cb3ad17fdd488b9dd1edb17e41efb8320cec1d1413"
+    },
+    "checks/report.json": {
+      "stored": "raw/checks/report.json.gz",
+      "bytes": 48302,
+      "sha256": "e745e4a829782b4443901b163177ea569662c5c2e1c98af55b724289ee24f069"
+    },
+    "checks/timed-result.elab": {
+      "stored": "raw/checks/timed-result.elab.gz",
+      "bytes": 97482,
+      "sha256": "e5cb50abbce4fc6e12a53825354cdab9fa0b1b128b7f4d9feeda9647714741b4"
+    },
+    "checks/transitions/flasher-transitions.json": {
+      "stored": "raw/checks/transitions/flasher-transitions.json.gz",
+      "bytes": 42938,
+      "sha256": "8e169cd9f371584f7db140847bcb2cf85b99fc66886dc19f23a5efab0d922386"
+    },
+    "checks/transitions/transitions.elab": {
+      "stored": "raw/checks/transitions/transitions.elab.gz",
+      "bytes": 129601,
+      "sha256": "b1efdc29af072a31a20cf9fb0e2e6a8f16c2a1248b3c719ea8d527a529067daf"
+    },
+    "checks/transitions.json": {
+      "stored": "raw/checks/transitions.json.gz",
+      "bytes": 51973,
+      "sha256": "a8e792a3f3a853afe657a2b3bb5f26eebb4b1b81fd767d47278efe939b79e8f9"
+    },
+    "archive/report.json": {
+      "stored": "raw/archive/report.json.gz",
+      "bytes": 22992,
+      "sha256": "5044a5ed44426817ccb2aa417bae01648942ceaa3a87db6682476e43718d0261"
+    },
+    "archive/ditto.txt": {
+      "stored": "raw/archive/ditto.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "archive/signature.txt": {
+      "stored": "raw/archive/signature.txt.gz",
+      "bytes": 275,
+      "sha256": "dbe9e9137d4aff1bbe15810ba40f39fc6f69541f0388f425976ee99162c1718a"
+    },
+    "producer/source-commit.txt": {
+      "stored": "raw/producer/source-commit.txt.gz",
+      "bytes": 41,
+      "sha256": "63dd91968228d489659248f0ad9abc07a002b1709a192530d8b3b4592d5c0cb9"
+    },
+    "producer/build_release.py": {
+      "stored": "raw/producer/build_release.py.gz",
+      "bytes": 3526,
+      "sha256": "1c0328a9f6b5466b9b5b5c40c95f3237f5e5b5edc19a50397a7f9f3780dc8ad3"
+    },
+    "producer/build-result-signed.json": {
+      "stored": "raw/producer/build-result-signed.json.gz",
+      "bytes": 1537,
+      "sha256": "a32fe244f93d50c6e4e436f7423933050a5acf25f2cb8dafd0044ed95b934ed6"
+    },
+    "producer/build.txt": {
+      "stored": "raw/producer/build.txt.gz",
+      "bytes": 654,
+      "sha256": "25f876100de8299e8c44238759e299536eba571a228eac64de91b06345cd4992"
+    },
+    "producer/package.txt": {
+      "stored": "raw/producer/package.txt.gz",
+      "bytes": 371,
+      "sha256": "d898df986b8a471194c7897dbb7348297eeb118df665e2c1132e8befc5c96b31"
+    },
+    "producer/signature-signed-details.txt": {
+      "stored": "raw/producer/signature-signed-details.txt.gz",
+      "bytes": 911,
+      "sha256": "b37b36de79ee9c8741e1a4681d1d8d343c4faa34cc9c6ae9c15905204a335250"
+    },
+    "producer/signature-signed-verify.txt": {
+      "stored": "raw/producer/signature-signed-verify.txt.gz",
+      "bytes": 219,
+      "sha256": "50780cbbbb44e1af00cccf5aa22d92836dcbac0fc8f2b0bbe78bc78d19ec0734"
+    },
+    "producer/preservation-before.json": {
+      "stored": "raw/producer/preservation-before.json.gz",
+      "bytes": 1369,
+      "sha256": "e287f0d6f27b431990426733f7f3e7a38cca56c814514838a4e2eef8a9017b15"
+    },
+    "producer/prior-candidates-before.json": {
+      "stored": "raw/producer/prior-candidates-before.json.gz",
+      "bytes": 41365,
+      "sha256": "393c2f1a925260046046dbdbc456204e5ea897c453ba8a77ae26114874b1e665"
+    },
+    "producer/client.py": {
+      "stored": "raw/producer/client.py.gz",
+      "bytes": 2045,
+      "sha256": "31d237054e69331d3c533c815cb6e548b5b0f12e335bd6c1b2b2cf39997aa995"
+    },
+    "producer/check_candidate.py": {
+      "stored": "raw/producer/check_candidate.py.gz",
+      "bytes": 6875,
+      "sha256": "c7aa57fcca47ad35eecb7b3267de3f7c82be62a966c80338db2a5741a3cd3725"
+    },
+    "producer/check-stdout.txt": {
+      "stored": "raw/producer/check-stdout.txt.gz",
+      "bytes": 891,
+      "sha256": "ef853d31519577a2a8851be55b636f547fd65bf89c72050ca160f714223b5a3b"
+    },
+    "producer/check-stderr.txt": {
+      "stored": "raw/producer/check-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "producer/archive_candidate.py": {
+      "stored": "raw/producer/archive_candidate.py.gz",
+      "bytes": 4020,
+      "sha256": "8452db8b09955ba2d099520c3d4c77f7ca9cf84350ae05af38df97703707634f"
+    },
+    "build/elab-agent-build-info.txt": {
+      "stored": "raw/build/elab-agent-build-info.txt.gz",
+      "bytes": 700,
+      "sha256": "1ca8d1969dcee9d3e3904d9cf67260ad3b1346e8ebefacbdb7e79bb8a3a391d5"
+    },
+    "build/elab-conformance-build-info.txt": {
+      "stored": "raw/build/elab-conformance-build-info.txt.gz",
+      "bytes": 712,
+      "sha256": "cd338f46a6ba2d28d19a70fdd1900364719035e4d24ae50cb2150059f9c9a799"
+    },
+    "build/elab-build-info.txt": {
+      "stored": "raw/build/elab-build-info.txt.gz",
+      "bytes": 4170,
+      "sha256": "8033e4bed177dae540a30ef2b1bbb7d3288445fb9fbd07cab3c1970a661a5845"
+    }
+  }
+}

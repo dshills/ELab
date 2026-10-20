@@ -13,3 +13,5 @@ The initial fixture incorrectly used a helper that aborts on expected validation
 Full `scripts/check.sh` passes in 316.235 s with 670 Go inputs unchanged during the gate. It includes prior public timing parity plus interrupted/deferred/menu/viewport/agent/document/recording guards. The reviewed native inventory retains 73 sources, 402 sites, 164 public commands and 132 routes; route and binding expressions are unchanged.
 
 [Report and raw hashes](report.json). Packaging and actual native input acceptance remain open. The owner window stays reserved; no broader qualification gate is closed.
+
+Subsequent [combined /193 candidate checks](../timing-candidate-193/README.md) pass for the matching packaged headless agent and local archive. The native app has not been launched, so actual private-input acceptance remains open. The original source records above retain their scope.

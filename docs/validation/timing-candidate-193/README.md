@@ -1,0 +1,11 @@
+# Combined timing repair candidate /193
+
+Clean `f8b4bd54` builds ELab 0.176.0 /193 with the matching external agent. It combines the prior recording/verification/sweep corrections with timing-field recovery, capture/probe ownership and coupled retained-entry revalidation. The owner's /189 app stays current; /193 has not been launched. /190, /191 and /192 remain preserved.
+
+The exact packaged agent passes four arrival workflows (RC, ideal pulse NPN and both flasher currents), six transition workflows (RC charge/discharge, finite ramp, NPN duplicate-time edges and both flasher currents), and six atomic-setting/probe cases. These include analytic RC/ramp bounds, 100 ms ideal pulse spacing, sampled flasher bounds, whole-window/paged agreement and entry-order/filter invariance. Every targeted invalid setter preserves the whole snapshot; pure queries match configured measurements and preserve live physics/history/document state.
+
+The two-probe NPN fixture retains all 521 rows, metadata and raw export bytes through timing changes. A fresh process reopens its project, reproduces the timing and exports byte-identical capture data. Its saved project bytes stay unchanged. All four owned headless clients close with joined workers, finalized recovery, exit readiness and exit code zero. The separate source gate covers 58 mounted timing cases and matches all 670 current Go inputs; those unchanged tests are not repeated in this package run.
+
+The package includes the app, matching agent, three editable paused examples, 102 license/notice files, guidance and rollback. ZIP creation and macOS ditto extraction into a path with spaces and µ preserve all 114 files and modes. Strict local ad-hoc signature checks pass before and after extraction. Protected canonical/owner/prior executables and SDK inputs remain unchanged; the complete /191 and /192 package trees also match their prior manifests. No claim is made about owner-edited schematic files or preferences.
+
+[Report and raw hashes](report.json). This is package/headless evidence, not native input, accessibility, clean-account startup, notarization or owner acceptance. Private UI buffers remain separately qualified by source-mounted tests. The owner's /189 window stays reserved; /193 is a separate unqualified candidate.
