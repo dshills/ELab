@@ -1,0 +1,13 @@
+# /189 independent package preparation
+
+October 20, 2026. **Remaining independent package checks pass on /189; native acceptance remains open.** The original candidate is unchanged. A separate [candidate ZIP rehearsal](../build/ELab-0.172.0-189-candidate-rehearsal.zip) is explicitly unqualified and does not replace the installed app or /188 review.
+
+The copied native/headless acceptance scenarios pass in 21.246 seconds, including recorded-step/refusal/correction behavior, files/recovery, independent references, startup, measurements/cursors and the live pulsed-capacity regression. The host exits normally. The exact copied agent also passes 30 captured-data paging cases with 95 raw requests, complete query snapshot purity and unchanged source data. Those checks exercise public commands rather than physical UI entry.
+
+The 34,976,477-byte ZIP preserves all 114 files and modes through macOS extraction into a Unicode path with spaces. The extracted app passes strict signature/raw-input/clean-VCS admission. All three editable examples save and reopen in six fresh extracted-agent processes, with matching graph/settings/numerical results and normal joined shutdown. It includes the matching app/agent, current examples, existing notices, explicit candidate status and rollback guidance. Full [evidence and read-only replay](../docs/validation/candidate-package-gates-189/README.md) preserve all raw results and producer inputs.
+
+The prior [internal-frame and four-adapter gates](64-frame-and-public-gates.md) retain their distinct scopes. No new source/version, native first-click pass, latency percentile, physical print, privacy grant, ordinary startup/installation or owner acceptance is inferred. P0 remains 17 implemented /10 partial; the full MVP is not accepted.
+
+A separate read-only OS metadata observation reports an active/awake main display and a logged-in on-console session at output time. Lock status was not queried, and no pixels/input/settings were accessed or changed. This neither establishes an unlocked desktop nor explains the earlier blank images. Further native observation needs a focused check; repeated source/API/package runs will not close it.
+
+Next: distinguish general native-window observation availability from the ELab window's presentation/capture path with one controlled diagnostic, then recheck the exact candidate's original `3 ms` → Previous interaction if rendered observation is usable. If that case passes, finish the remaining native entry cases before qualification and owner handoff. Keep the current candidate and all earlier evidence; do not rebuild or rerun completed independent gates without an invalidating change.
