@@ -1,0 +1,35 @@
+from pathlib import Path
+import gzip,hashlib,json,shutil,subprocess
+root=Path('/Users/dshills/Development/projects/ELab');stage=root/'build/component-copy-handoff';out=root/'docs/validation/component-geometry-handoff'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+quality=json.loads((stage/'quality.json').read_text());native=json.loads((stage/'native-smoke.json').read_text())
+assert quality['passed'] and quality['source_unchanged'] and native['passed'] and native['shared_geometry_unchanged'] and native['source_unchanged']
+assert all(sha(root/n)==v for n,v in quality['source_sha256'].items())
+receipt=root/'research/ui-audit/first-version/pin-reader-review-checkpoint.json';release=json.loads(receipt.read_text())
+changed={n for n,v in release['quality']['source_sha256'].items() if quality['source_sha256'][n]!=v}
+assert changed=={'desktop/component_inspector.go','desktop/value_apply.go','internal/uiaudit/audit.go','internal/uiaudit/audit_test.go'},changed
+assert set(quality['source_sha256'])-set(release['quality']['source_sha256'])=={'desktop/component_geometry_actions_test.go','desktop/component_geometry_actions_offscreen_test.go'}
+base=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
+out.mkdir()
+for name in ['original-result.txt','first-fixed-result.txt','focused-result.txt','focused-final-result.txt','original-final-result.txt','quality-output.txt','native-build-output.txt','native-build-info.txt','native-smoke-output.txt','original-inventory.json','inventory-candidate.json','original-final-overlay.json','overlay.json']:
+ (out/(name+'.gz')).write_bytes(gzip.compress((stage/name).read_bytes(),mtime=0))
+for name in ['quality.json','native-smoke.json','inventory-review.json','original-value_apply.go.txt','original-component_inspector.go.txt','original-audit.go.txt','review_offscreen_test.go.txt','quality.py','native.py','publish.py']:
+ shutil.copy2(stage/name,out/(name+'.txt' if name.endswith('.py') else name))
+for name in sorted(changed|{'desktop/component_geometry_actions_test.go','desktop/component_geometry_actions_offscreen_test.go'}):
+ shutil.copy2(root/name,out/(name.replace('/','-')+'.txt'))
+patch=subprocess.check_output(['git','diff','--','desktop/component_inspector.go','desktop/value_apply.go','internal/uiaudit/audit.go','internal/uiaudit/audit_test.go'],cwd=root)
+(out/'source.diff.gz').write_bytes(gzip.compress(patch,mtime=0))
+for name,location in [('original-value_apply.go.txt','desktop/value_apply.go'),('original-component_inspector.go.txt','desktop/component_inspector.go'),('original-audit.go.txt','internal/uiaudit/audit.go')]:
+ assert (out/name).read_bytes()==subprocess.check_output(['git','show',base+':'+location],cwd=root)
+import sys
+sys.path.insert(0,str(root/'scripts'))
+from package_review import members
+review=Path(release['review_path']);manifest=json.loads((review/'RELEASE_MANIFEST.json').read_text());actual=members(review);actual.pop('RELEASE_MANIFEST.json');assert actual==manifest['files'] and len(actual)==529
+archive=root/'build/ELab-0.161.0-178-review.zip';assert sha(archive)=='7198e0881c394c509c79aa6a268c3fa89f2b2a33aaf8e33f63c868bfa696317b'
+canonical=root/'build/ELab.app/Contents/MacOS/ELab';assert sha(canonical)==release['canonical']['native_sha256']
+archive_sdk=root/release['sdk']['archive'];assert sha(archive_sdk)==release['sdk']['sha256']
+preservation=dict(passed=True,receipt_sha256=sha(receipt),manifest_sha256=sha(review/'RELEASE_MANIFEST.json'),manifest_entries=529,archive_sha256=sha(archive),canonical_native_sha256=sha(canonical),sdk=release['sdk'])
+(out/'preservation.json').write_text(json.dumps(preservation,indent=2)+'\n')
+report=dict(passed=True,issue='GEOMETRY-DRAFT-01',status='source_qualified_replacement_pending',original_source_commit=base,original_final_test_failures=12,final_mounted_ordinary_cases=12,final_mounted_held_agent_cases=2,deferred_success_cases=2,deferred_refusal_cases=16,pre_activation_continuation_cases=4,first_focused_fixture_failure='Two expected field-admission failures were incorrectly invoked with a success-only UI test helper; corrected to the same production callback with explicit refusal assertions. Original log preserved.',source_files=654,source_quality_elapsed_seconds=quality['elapsed_seconds'],general_native_smoke_elapsed_seconds=native['elapsed_seconds'],app_release_created=False,canonical_promoted=False,new_physical_input=False,new_visible_latency=False,models_changed=False,commands_changed=False,format_changed=False,sdk_changed=False,owner_walkthrough='Not tried yet',owner_acceptance=False,full_mvp_complete=False)
+(out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+print(json.dumps(report))

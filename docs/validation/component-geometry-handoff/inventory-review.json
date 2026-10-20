@@ -1,0 +1,94 @@
+{
+  "passed": true,
+  "scope": "Reviewed transfer of the three former valueSetAction sites to guarded shared valueRelatedAction plus its three literal factories. No command or route-set change.",
+  "removed": [
+    {
+      "expression": "Activate: func() {\n\tif s.pendingValueApply != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.valueDraftAccepted; accepted != nil && accepted.from.generation == context.generation &&\n\t\taccepted.from.revision <= context.revision && context.revision <= accepted.to.revision &&\n\t\taccepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) &&\n\t\taccepted.id == params.ID && current.Selected == params.ID && current.Drawing.Value == accepted.text {\n\t\tcontext = accepted.to\n\t\tif !fixed {\n\t\t\tparams.Value = accepted.text\n\t\t}\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\n\t\ts.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := &valueApply{context: context, params: params, fixed: fixed}\n\ts.pendingValueApply = pending\n\tdone := func(err error) {\n\t\tif s.pendingValueApply != pending {\n\t\t\treturn\n\t\t}\n\t\ts.pendingValueApply = nil\n\t\tif err != nil {\n\t\t\ts.errorMessage = fmt.Sprintf(\"Could not finish value entry: %v\", err)\n\t\t} else if !pending.failed {\n\t\t\ts.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)\n\t\t}\n\t\ts.app.Invalidate(\"main\")\n\t}\n\tif s.settleField == nil {\n\n\t\tdone(nil)\n\t} else if err := s.settleField(\"value-entry\", done); err != nil {\n\t\tdone(err)\n\t}\n}",
+      "file": "desktop/value_apply.go",
+      "function": "*screen.valueSetAction",
+      "kind": "node-Activate",
+      "status": "requires-binding-review"
+    },
+    {
+      "expression": "s.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)",
+      "file": "desktop/value_apply.go",
+      "function": "*screen.valueSetAction",
+      "kind": "domain-ingress",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "expression": "s.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)",
+      "file": "desktop/value_apply.go",
+      "function": "*screen.valueSetAction",
+      "kind": "domain-ingress",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    }
+  ],
+  "added": [
+    {
+      "expression": "s.valueRelatedAction(state, \"rotate-part\", \"Rotate 90\u00b0\", owner, true, \"component.rotate\", func(value workbench.ValueParams) any { return workbench.IDParams{ID: value.ID} })",
+      "file": "desktop/component_inspector.go",
+      "function": "*screen.partGeometryControls",
+      "kind": "action-factory",
+      "public_commands": [
+        "component.rotate"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "expression": "s.valueRelatedAction(state, \"duplicate-part\", \"Duplicate\", owner, true, \"component.duplicate\", func(value workbench.ValueParams) any { return workbench.DuplicateParams{ID: value.ID} })",
+      "file": "desktop/component_inspector.go",
+      "function": "*screen.partGeometryControls",
+      "kind": "action-factory",
+      "public_commands": [
+        "component.duplicate"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "expression": "s.valueRelatedAction(state, control, text, params, fixed, \"component.set\", func(value workbench.ValueParams) any { return value })",
+      "file": "desktop/value_apply.go",
+      "function": "*screen.valueSetAction",
+      "kind": "action-factory",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "expression": "Activate: func() {\n\tif s.pendingValueApply != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.valueDraftAccepted; accepted != nil && accepted.from.generation == context.generation &&\n\t\taccepted.from.revision <= context.revision && context.revision <= accepted.to.revision &&\n\t\taccepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) &&\n\t\taccepted.id == params.ID && current.Selected == params.ID && current.Drawing.Value == accepted.text {\n\t\tcontext = accepted.to\n\t\tif !fixed {\n\t\t\tparams.Value = accepted.text\n\t\t}\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\n\t\ts.invokeAtCommandRevision(command, commandParams(params), context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := &valueApply{context: context, params: params, fixed: fixed}\n\ts.pendingValueApply = pending\n\tdone := func(err error) {\n\t\tif s.pendingValueApply != pending {\n\t\t\treturn\n\t\t}\n\t\ts.pendingValueApply = nil\n\t\tif err != nil {\n\t\t\ts.errorMessage = fmt.Sprintf(\"Could not finish value entry: %v\", err)\n\t\t} else if !pending.failed {\n\t\t\ts.invokeAtCommandRevision(command, commandParams(pending.params), pending.context.revision, pending.context.generation)\n\t\t}\n\t\ts.app.Invalidate(\"main\")\n\t}\n\tif s.settleField == nil {\n\n\t\tdone(nil)\n\t} else if err := s.settleField(\"value-entry\", done); err != nil {\n\t\tdone(err)\n\t}\n}",
+      "file": "desktop/value_apply.go",
+      "function": "*screen.valueRelatedAction",
+      "kind": "node-Activate",
+      "status": "requires-binding-review"
+    },
+    {
+      "expression": "s.invokeAtCommandRevision(command, commandParams(params), context.revision, context.generation)",
+      "file": "desktop/value_apply.go",
+      "function": "*screen.valueRelatedAction",
+      "kind": "domain-ingress",
+      "status": "requires-binding-review"
+    },
+    {
+      "expression": "s.invokeAtCommandRevision(command, commandParams(pending.params), pending.context.revision, pending.context.generation)",
+      "file": "desktop/value_apply.go",
+      "function": "*screen.valueRelatedAction",
+      "kind": "domain-ingress",
+      "status": "requires-binding-review"
+    }
+  ],
+  "sources": 72,
+  "sites": 400,
+  "categories": {
+    "literal-public-route": 198,
+    "requires-binding-review": 176,
+    "declared-native-wrapper": 9,
+    "declared-registry-route": 17
+  }
+}

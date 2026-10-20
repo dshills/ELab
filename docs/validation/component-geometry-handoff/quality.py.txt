@@ -1,0 +1,16 @@
+from pathlib import Path
+import hashlib,json,os,subprocess,time
+root=Path('/Users/dshills/Development/projects/ELab');stage=root/'build/component-copy-handoff'
+release=json.loads((root/'research/ui-audit/first-version/pin-reader-review-checkpoint.json').read_text())
+paths=sorted(set(release['quality']['source_sha256'])|{'desktop/component_geometry_actions_test.go','desktop/component_geometry_actions_offscreen_test.go'})
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+before={name:sha(root/name) for name in paths};assert len(before)==654
+(stage/'quality-before.json').write_text(json.dumps(before,indent=2)+'\n')
+env=dict(os.environ,GOPROXY='off',GOWORK='off');start=time.monotonic()
+with (stage/'quality-output.txt').open('xb') as output:
+ result=subprocess.run([str(root/'scripts/check.sh')],cwd=root,env=env,stdout=output,stderr=subprocess.STDOUT)
+after={name:sha(root/name) for name in paths}
+report=dict(passed=result.returncode==0,exit_code=result.returncode,elapsed_seconds=time.monotonic()-start,source_unchanged=before==after,source_sha256=after)
+(stage/'quality.json').write_text(json.dumps(report,indent=2)+'\n')
+assert report['passed'] and report['source_unchanged'],report
+print(json.dumps({k:v for k,v in report.items() if k!='source_sha256'}))

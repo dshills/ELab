@@ -31,3 +31,22 @@ Place now waits for explicit `SettleNumberField` barriers for X/Y, followed by l
 An agent edit, another field's change, document replacement or failed settlement refuses the pending placement. Duplicate completions cannot skip a field or place twice. The SDK keeps spinners on their legacy input path; the barrier orders and validates commitment without turning them into managed Cocoa text clients.
 
 [Mounted regressions and actual native accessibility/pointer replay](validation/number-field-placement/README.md) verify the repaired source and independent agent parity. Batch smoke setup uses already accepted public coordinates before widgets mount; it does not qualify private input. Clean replacement packaging, exhaustive reader/IME and other unresolved input gates remain separate.
+
+## Rotate and Duplicate after value entry
+
+The selected part's Rotate and Duplicate controls now wait for the same guarded
+value-field settlement used by Apply. They may continue only consecutive accepted
+`editor.value.set` replies from that object/document; another actor, field,
+selection, document or failed settlement still refuses the obsolete action.
+One click then issues the existing shared `component.rotate` or
+`component.duplicate` command exactly once. Private value text is a draft: these
+actions retain the configured value, waveform and startup settings. Use Apply
+value/label to change those configured values before duplicating. A single Undo
+reverses the geometry/copy operation.
+
+[Source regressions](validation/component-geometry-handoff/README.md) reproduce
+twelve first-click failures against the original production bindings and compare
+the corrected mounted controls with separate public-agent commands. Deferred
+completion, held-agent edit and replacement/refusal cases keep their original
+guards. This is source/retained-widget qualification, with clean replacement and
+physical OS/IME/reader acceptance separate.

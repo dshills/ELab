@@ -91,7 +91,7 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	inspector = append(inspector, s.waveformControls(state, part)...)
 	inspector = append(inspector, s.partPlotControls(state, part)...)
 	if part.Kind == "opamp" {
-		inspector = append(inspector, s.partGeometryControls(part)...)
+		inspector = append(inspector, s.partGeometryControls(state, part)...)
 		inspector = append(inspector, quiet("part-model-id", "Model: "+part.Model), quiet("opamp-model", "Gain 100,000 · input 10 MΩ\nOutput 50 Ω scale · active limit 20 mA\nNo internal bandwidth or slew model."))
 	}
 	for _, entry := range workbench.Library() {
@@ -115,7 +115,7 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 		}
 	}
 	if part.Kind != "opamp" {
-		inspector = append(inspector, s.partGeometryControls(part)...)
+		inspector = append(inspector, s.partGeometryControls(state, part)...)
 	}
 	for i := range inspector {
 		scopeComponentControlState(&inspector[i], part.ID)
@@ -126,6 +126,13 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	return inspector
 }
 
-func (s *screen) partGeometryControls(part workbench.Component) []ui.Node {
-	return []ui.Node{quiet("part-position", fmt.Sprintf("Position %.0f, %.0f · rotation %d°", part.Position.X, part.Position.Y, part.Rotation)), s.action("rotate-part", "Rotate 90°", "component.rotate", workbench.IDParams{ID: part.ID}), s.action("duplicate-part", "Duplicate", "component.duplicate", workbench.DuplicateParams{ID: part.ID})}
+func (s *screen) partGeometryControls(state workbench.Snapshot, part workbench.Component) []ui.Node {
+	rotate := s.action("rotate-part", "Rotate 90°", "component.rotate", workbench.IDParams{ID: part.ID})
+	duplicate := s.action("duplicate-part", "Duplicate", "component.duplicate", workbench.DuplicateParams{ID: part.ID})
+	if part.Unit != "" || part.Kind == "net-label" {
+		owner := workbench.ValueParams{ID: part.ID}
+		rotate = s.valueRelatedAction(state, "rotate-part", "Rotate 90°", owner, true, "component.rotate", func(value workbench.ValueParams) any { return workbench.IDParams{ID: value.ID} })
+		duplicate = s.valueRelatedAction(state, "duplicate-part", "Duplicate", owner, true, "component.duplicate", func(value workbench.ValueParams) any { return workbench.DuplicateParams{ID: value.ID} })
+	}
+	return []ui.Node{quiet("part-position", fmt.Sprintf("Position %.0f, %.0f · rotation %d°", part.Position.X, part.Position.Y, part.Rotation)), rotate, duplicate}
 }

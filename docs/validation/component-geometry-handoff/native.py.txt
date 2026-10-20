@@ -1,0 +1,38 @@
+from pathlib import Path
+import hashlib,json,os,shutil,subprocess,time
+root=Path('/Users/dshills/Development/projects/ELab');stage=root/'build/component-copy-handoff'
+quality=json.loads((stage/'quality.json').read_text());assert quality['passed'] and quality['source_unchanged']
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert all(sha(root/n)==v for n,v in quality['source_sha256'].items())
+shared=Path.home()/'Library/Cogent Core'
+def geometry():
+ assert not any(p.is_symlink() for p in shared.rglob('*'))
+ return {p.relative_to(shared).as_posix():dict(sha256=sha(p),mode=oct(p.stat().st_mode&0o777)) for p in shared.rglob('*') if p.is_file()}
+before=geometry();runtime=Path('/private/tmp/elab-component-geometry-native');runtime.mkdir(mode=0o700)
+profile=runtime/'runtime.sb';shutil.copy2(Path('/private/tmp/elab-first-version-178-signed-runtime/runtime.sb'),profile)
+env=dict(os.environ,GOWORK='off',GOPROXY='off',GOCACHE=str(root/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native')
+binary=stage/'elab-native'
+with (stage/'native-build-output.txt').open('xb') as output:
+ build=subprocess.run(['go','build','-o',str(binary),'.'],cwd=root/'desktop',env=env,stdout=output,stderr=subprocess.STDOUT)
+assert build.returncode==0
+(stage/'native-build-info.txt').write_bytes(subprocess.check_output(['go','version','-m',str(binary)]))
+shutil.copy2(binary,runtime/'elab-native');assert sha(runtime/'elab-native')==sha(binary)
+endpoint=runtime/'endpoint.json';argv=['/usr/bin/sandbox-exec','-f',str(profile),str(runtime/'elab-native'),'--smoke','--smoke-timeout','2m','--agent-endpoint',str(endpoint)]
+start=time.monotonic();failure=None;code=None;pid=None
+try:
+ with (stage/'native-smoke-output.txt').open('xb') as output:
+  child=subprocess.Popen(argv,cwd=runtime,env=env,stdout=output,stderr=subprocess.STDOUT);pid=child.pid
+  try:code=child.wait(timeout=150)
+  except subprocess.TimeoutExpired:
+   child.terminate();code=child.wait(timeout=10);raise
+ assert code==0
+ assert '"event":"elab.native.smoke","passed":true' in (stage/'native-smoke-output.txt').read_text()
+ assert not endpoint.exists()
+except BaseException as error:
+ failure=repr(error);raise
+finally:
+ report=dict(passed=code==0 and failure is None,exit_code=code,pid=pid,argv=argv,elapsed_seconds=time.monotonic()-start,binary_sha256=sha(binary),runtime_binary_sha256=sha(runtime/'elab-native'),endpoint_absent=not endpoint.exists(),geometry_before=before,geometry_after=geometry(),failure=failure,scope='Development modified-source native general smoke with public endpoint, private smoke recovery/appearance storage and shared geometry/repository/network denial. Not a clean replacement or new physical Rotate/Duplicate input acceptance.')
+ report['shared_geometry_unchanged']=report['geometry_before']==report['geometry_after'];report['source_unchanged']=all(sha(root/n)==v for n,v in quality['source_sha256'].items())
+ (stage/'native-smoke.json').write_text(json.dumps(report,indent=2)+'\n')
+ assert report['shared_geometry_unchanged'] and report['source_unchanged']
+print(json.dumps({k:v for k,v in report.items() if k not in ('argv','geometry_before','geometry_after')}))

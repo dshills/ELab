@@ -188,3 +188,23 @@ func TestInventoryTracksComponentStartupDefaultFactory(t *testing.T) {
 		t.Fatal("factory must not invent routes or runtime coverage", site)
 	}
 }
+
+func TestInventoryTracksRelatedValueActionRoute(t *testing.T) {
+	directory := t.TempDir()
+	source := `package main
+func view(s *screen,route string) {
+ s.valueRelatedAction(state,"copy","Label fake.command",params,true,"component.duplicate",encode)
+ s.valueRelatedAction(state,"dynamic","Dynamic",params,false,route,encode)
+ s.valueRelatedAction(state,"unknown","Rotate",params,true,"missing.command",encode)
+}`
+	if err := os.WriteFile(filepath.Join(directory, "view.go"), []byte(source), 0600); err != nil {
+		t.Fatal(err)
+	}
+	report, err := Audit(directory)
+	if err != nil || len(report.Issues) != 1 || !strings.Contains(report.Issues[0], "missing.command") || len(report.Sites) != 3 {
+		t.Fatal("related value route tracking failed", report.Sites, report.Issues, err)
+	}
+	if len(report.Sites[0].Commands) != 1 || report.Sites[0].Commands[0] != "component.duplicate" || report.Sites[1].Status != "requires-binding-review" || len(report.Sites[1].Commands) != 0 {
+		t.Fatal("route confused with text or dynamic value action", report.Sites)
+	}
+}

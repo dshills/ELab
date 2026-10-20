@@ -67,7 +67,7 @@ func (s *screen) changeValueDraft(e ui.ChangeEvent) {
 	}
 	if s.fieldContext == nil || *s.fieldContext != pending.context {
 		pending.failed = true
-		s.errorMessage = "Value entry changed while Apply was pending. Review it and apply again."
+		s.errorMessage = "Value entry changed while this action was pending. Review it and try again."
 		return
 	}
 	state := result.Result.(workbench.Snapshot)
@@ -88,6 +88,13 @@ func (s *screen) valuePresetAction(state workbench.Snapshot, control, text strin
 // Presets and Apply share field settlement and actor/document guards. A preset
 // keeps its explicit value while the same field commits its private draft.
 func (s *screen) valueSetAction(state workbench.Snapshot, control, text string, params workbench.ValueParams, fixed bool) ui.Node {
+	return s.valueRelatedAction(state, control, text, params, fixed, "component.set", func(value workbench.ValueParams) any { return value })
+}
+
+// Related component actions may settle the selected value draft without
+// applying it. Only consecutive accepted changes from value-entry may continue
+// the rendered context; another actor, field, owner or document still refuses.
+func (s *screen) valueRelatedAction(state workbench.Snapshot, control, text string, params workbench.ValueParams, fixed bool, command string, commandParams func(workbench.ValueParams) any) ui.Node {
 	context := actionContext{state.CommandRevision, state.Document.Generation}
 	return buttonStyle(ui.Node{ID: control, Kind: ui.Button, Text: text, Disabled: s.pendingValueApply != nil, Accessibility: ui.Accessibility{Name: text}, Activate: func() {
 		if s.pendingValueApply != nil {
@@ -105,7 +112,7 @@ func (s *screen) valueSetAction(state workbench.Snapshot, control, text string, 
 		}
 		if current.CommandRevision != context.revision || current.Document.Generation != context.generation {
 			// Use the ordinary shared refusal without flushing an obsolete field.
-			s.invokeAtCommandRevision("component.set", params, context.revision, context.generation)
+			s.invokeAtCommandRevision(command, commandParams(params), context.revision, context.generation)
 			return
 		}
 		pending := &valueApply{context: context, params: params, fixed: fixed}
@@ -118,7 +125,7 @@ func (s *screen) valueSetAction(state workbench.Snapshot, control, text string, 
 			if err != nil {
 				s.errorMessage = fmt.Sprintf("Could not finish value entry: %v", err)
 			} else if !pending.failed {
-				s.invokeAtCommandRevision("component.set", pending.params, pending.context.revision, pending.context.generation)
+				s.invokeAtCommandRevision(command, commandParams(pending.params), pending.context.revision, pending.context.generation)
 			}
 			s.app.Invalidate("main")
 		}

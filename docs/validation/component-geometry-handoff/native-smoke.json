@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "exit_code": 0,
+  "pid": 80434,
+  "argv": [
+    "/usr/bin/sandbox-exec",
+    "-f",
+    "/private/tmp/elab-component-geometry-native/runtime.sb",
+    "/private/tmp/elab-component-geometry-native/elab-native",
+    "--smoke",
+    "--smoke-timeout",
+    "2m",
+    "--agent-endpoint",
+    "/private/tmp/elab-component-geometry-native/endpoint.json"
+  ],
+  "elapsed_seconds": 46.37551791605074,
+  "binary_sha256": "71cfb0da3602b62044e3c6a2637d07fef048c6e01481c63c66251c40bd7b1411",
+  "runtime_binary_sha256": "71cfb0da3602b62044e3c6a2637d07fef048c6e01481c63c66251c40bd7b1411",
+  "endpoint_absent": true,
+  "geometry_before": {
+    "window-geometry-0.3.6.json": {
+      "sha256": "a5b1f9c088561a2f0394109a58dcf8b5390a2c31337c62c16d62166475d30f32",
+      "mode": "0o644"
+    },
+    "window-geometry-0.3.6.lst": {
+      "sha256": "df81532effcd70929d78b1a39636ca7b5307bdaa05146da23cf8dde723247eec",
+      "mode": "0o644"
+    }
+  },
+  "geometry_after": {
+    "window-geometry-0.3.6.json": {
+      "sha256": "a5b1f9c088561a2f0394109a58dcf8b5390a2c31337c62c16d62166475d30f32",
+      "mode": "0o644"
+    },
+    "window-geometry-0.3.6.lst": {
+      "sha256": "df81532effcd70929d78b1a39636ca7b5307bdaa05146da23cf8dde723247eec",
+      "mode": "0o644"
+    }
+  },
+  "failure": null,
+  "scope": "Development modified-source native general smoke with public endpoint, private smoke recovery/appearance storage and shared geometry/repository/network denial. Not a clean replacement or new physical Rotate/Duplicate input acceptance.",
+  "shared_geometry_unchanged": true,
+  "source_unchanged": true
+}

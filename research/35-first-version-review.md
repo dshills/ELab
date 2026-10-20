@@ -1,5 +1,7 @@
 # ELab first-version review · 0.161.0 /178
 
+**Known first-click issue:** /178 can refuse Rotate or Duplicate after value-field focus loss. [The source repair](../docs/validation/component-geometry-handoff/README.md) lets the action continue only its own accepted draft change; a qualified replacement remains next. Configured values still change through Apply value/label.
+
 The [review folder](../build/ELab-0.161.0-178-review) includes [ELab.app](../build/ELab-0.161.0-178-review/ELab.app), matching `elab-agent`, three editable examples and framework notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is needed.
 
 The [ZIP](../build/ELab-0.161.0-178-review.zip) and [checksum](../build/ELab-0.161.0-178-review.zip.sha256) preserve all 530 files/modes through macOS extraction into a Unicode path with spaces. Strict local signature and three examples/fresh saves/reopens verify. This does not establish installation, Developer ID, notarization or Gatekeeper acceptance.

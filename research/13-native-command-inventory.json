@@ -5,7 +5,7 @@
     "desktop/actuation_controls.go": "9b0e8148f7ca32ac2f1802d69411fcd355c2df5b2af4b89df1084d413166ee1e",
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
     "desktop/canvas.go": "164b644c58fd16b6c370cbad30fb063cb30d6b4bb47a2d982dbe664618802b5f",
-    "desktop/component_inspector.go": "58232a639e86a0e40dfec31fb4fcc3cd19c551a645d459d3a754fed4027ef20b",
+    "desktop/component_inspector.go": "6334db6bc02028829a2a7d63b30c22e685ea91f8bf2944600a34b02ec78f0400",
     "desktop/component_palette.go": "5d7b83aba4bd8202b899f0168848226f8217a8dd3dbd73d2ff6c8d99b752d3ab",
     "desktop/component_startup_actions.go": "a7801c73956c5036ffcb0e41b39aaa638fdf9647f5ce3762b626f7ef72bd4291",
     "desktop/cursor_actions.go": "760fc37cc3fcd864732b2db13169a6019c0b20e755c6d511940655b2a55340c3",
@@ -62,7 +62,7 @@
     "desktop/shutdown.go": "39c1d9db0f15f23fc69d810ed37dc62262f9e752c7f4ae14e45b3a47afe1f337",
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
     "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
-    "desktop/value_apply.go": "b0e380210aa477f9d848ed5bdc69502353c653f3ec6259d74c4159ed35df504e",
+    "desktop/value_apply.go": "ff6bdf287e6ddd8deba1178a1b223dfff5055552fc8eea8e4c02250a373dfead",
     "desktop/verification.go": "0a4f566abb75ee12ab43e53f29bf1fbd08034f9301f44bf23bc33c40e79c4a1b",
     "desktop/verification_actions.go": "8ebb049dcf889d33d5aa8692dfc22740e07e36bff0139aed5696f72cdc2d57e2",
     "desktop/view.go": "95f0341a19888ed731d58255a8f37324fd3e6bd8e5654e17d0884a44e4feb649",
@@ -656,10 +656,32 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 130,
+      "line": 131,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"duplicate-part\", \"Duplicate\", \"component.duplicate\", workbench.DuplicateParams{ID: part.ID})",
+      "public_commands": [
+        "component.duplicate"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 134,
+      "function": "*screen.partGeometryControls",
+      "kind": "action-factory",
+      "expression": "s.valueRelatedAction(state, \"rotate-part\", \"Rotate 90°\", owner, true, \"component.rotate\", func(value workbench.ValueParams) any { return workbench.IDParams{ID: value.ID} })",
+      "public_commands": [
+        "component.rotate"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/component_inspector.go",
+      "line": 135,
+      "function": "*screen.partGeometryControls",
+      "kind": "action-factory",
+      "expression": "s.valueRelatedAction(state, \"duplicate-part\", \"Duplicate\", owner, true, \"component.duplicate\", func(value workbench.ValueParams) any { return workbench.DuplicateParams{ID: value.ID} })",
       "public_commands": [
         "component.duplicate"
       ],
@@ -3469,33 +3491,38 @@
     },
     {
       "file": "desktop/value_apply.go",
-      "line": 92,
+      "line": 91,
       "function": "*screen.valueSetAction",
+      "kind": "action-factory",
+      "expression": "s.valueRelatedAction(state, control, text, params, fixed, \"component.set\", func(value workbench.ValueParams) any { return value })",
+      "public_commands": [
+        "component.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/value_apply.go",
+      "line": 99,
+      "function": "*screen.valueRelatedAction",
       "kind": "node-Activate",
-      "expression": "Activate: func() {\n\tif s.pendingValueApply != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.valueDraftAccepted; accepted != nil \u0026\u0026 accepted.from.generation == context.generation \u0026\u0026\n\t\taccepted.from.revision \u003c= context.revision \u0026\u0026 context.revision \u003c= accepted.to.revision \u0026\u0026\n\t\taccepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) \u0026\u0026\n\t\taccepted.id == params.ID \u0026\u0026 current.Selected == params.ID \u0026\u0026 current.Drawing.Value == accepted.text {\n\t\tcontext = accepted.to\n\t\tif !fixed {\n\t\t\tparams.Value = accepted.text\n\t\t}\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\n\t\ts.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := \u0026valueApply{context: context, params: params, fixed: fixed}\n\ts.pendingValueApply = pending\n\tdone := func(err error) {\n\t\tif s.pendingValueApply != pending {\n\t\t\treturn\n\t\t}\n\t\ts.pendingValueApply = nil\n\t\tif err != nil {\n\t\t\ts.errorMessage = fmt.Sprintf(\"Could not finish value entry: %v\", err)\n\t\t} else if !pending.failed {\n\t\t\ts.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)\n\t\t}\n\t\ts.app.Invalidate(\"main\")\n\t}\n\tif s.settleField == nil {\n\n\t\tdone(nil)\n\t} else if err := s.settleField(\"value-entry\", done); err != nil {\n\t\tdone(err)\n\t}\n}",
+      "expression": "Activate: func() {\n\tif s.pendingValueApply != nil {\n\t\treturn\n\t}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.valueDraftAccepted; accepted != nil \u0026\u0026 accepted.from.generation == context.generation \u0026\u0026\n\t\taccepted.from.revision \u003c= context.revision \u0026\u0026 context.revision \u003c= accepted.to.revision \u0026\u0026\n\t\taccepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) \u0026\u0026\n\t\taccepted.id == params.ID \u0026\u0026 current.Selected == params.ID \u0026\u0026 current.Drawing.Value == accepted.text {\n\t\tcontext = accepted.to\n\t\tif !fixed {\n\t\t\tparams.Value = accepted.text\n\t\t}\n\t}\n\tif current.CommandRevision != context.revision || current.Document.Generation != context.generation {\n\n\t\ts.invokeAtCommandRevision(command, commandParams(params), context.revision, context.generation)\n\t\treturn\n\t}\n\tpending := \u0026valueApply{context: context, params: params, fixed: fixed}\n\ts.pendingValueApply = pending\n\tdone := func(err error) {\n\t\tif s.pendingValueApply != pending {\n\t\t\treturn\n\t\t}\n\t\ts.pendingValueApply = nil\n\t\tif err != nil {\n\t\t\ts.errorMessage = fmt.Sprintf(\"Could not finish value entry: %v\", err)\n\t\t} else if !pending.failed {\n\t\t\ts.invokeAtCommandRevision(command, commandParams(pending.params), pending.context.revision, pending.context.generation)\n\t\t}\n\t\ts.app.Invalidate(\"main\")\n\t}\n\tif s.settleField == nil {\n\n\t\tdone(nil)\n\t} else if err := s.settleField(\"value-entry\", done); err != nil {\n\t\tdone(err)\n\t}\n}",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/value_apply.go",
-      "line": 108,
-      "function": "*screen.valueSetAction",
+      "line": 115,
+      "function": "*screen.valueRelatedAction",
       "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"component.set\", params, context.revision, context.generation)",
-      "public_commands": [
-        "component.set"
-      ],
-      "status": "literal-public-route"
+      "expression": "s.invokeAtCommandRevision(command, commandParams(params), context.revision, context.generation)",
+      "status": "requires-binding-review"
     },
     {
       "file": "desktop/value_apply.go",
-      "line": 121,
-      "function": "*screen.valueSetAction",
+      "line": 128,
+      "function": "*screen.valueRelatedAction",
       "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"component.set\", pending.params, pending.context.revision, pending.context.generation)",
-      "public_commands": [
-        "component.set"
-      ],
-      "status": "literal-public-route"
+      "expression": "s.invokeAtCommandRevision(command, commandParams(pending.params), pending.context.revision, pending.context.generation)",
+      "status": "requires-binding-review"
     },
     {
       "file": "desktop/verification.go",
