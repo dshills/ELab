@@ -1,0 +1,58 @@
+"""Public fixture/observation only; native input is performed exclusively by CUA."""
+from pathlib import Path
+import hashlib,json,subprocess,sys,time
+ROOT=Path(__file__).resolve().parents[2];OUT=Path('/private/tmp/elab-alpha-visible-189b');RUNTIME=Path('/private/tmp/elab-alpha-visible-189b-runtime')
+class Client:
+ def __init__(self,name,connect=True):
+  self.name,self.sequence,self.revision=name,0,None
+  self.log=(OUT/(name+'-protocol.jsonl')).open('x')
+  args=[str(RUNTIME/'agent')]+(['--connect',str(OUT/'endpoint.json')] if connect else [])
+  self.process=subprocess.Popen(args,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=(OUT/(name+'-stderr.txt')).open('x'),text=True)
+ def ask(self,command,params=None,mutate=False):
+  self.sequence+=1;request=dict(version=1,id=f'{self.name}-{self.sequence}',command=command,params={} if params is None else params)
+  if mutate:
+   assert self.revision is not None
+   request.update(key=f'{self.name}-{self.sequence}',expected_command_revision=self.revision)
+  self.log.write(json.dumps(dict(request=request))+'\n');self.log.flush();self.process.stdin.write(json.dumps(request)+'\n');self.process.stdin.flush()
+  line=self.process.stdout.readline();assert line,('EOF',command);response=json.loads(line);self.log.write(json.dumps(dict(response=response))+'\n');self.log.flush();assert response['id']==request['id']
+  if 'error' in response:raise RuntimeError(json.dumps(response))
+  result=response.get('result')
+  if isinstance(result,dict) and 'components' in result and 'command_revision' in result:self.revision=result['command_revision']
+  return result
+ def close_connection(self):
+  self.process.stdin.close();code=self.process.wait(timeout=10);self.log.close();assert code==0
+  (OUT/(self.name+'-bridge-exit.json')).write_text(json.dumps(dict(exit_code=code,requests=self.sequence,connection_only=True),indent=2)+'\n')
+def write(name,value):(OUT/(name+'.json')).write_text(json.dumps(value,indent=2)+'\n')
+def main():
+ name=sys.argv[1];assert name.replace('-','').isalnum();client=Client(name)
+ try:
+  before=client.ask('project.inspect')
+  if name=='fixture':
+   assert not before['components'] and not before['wires']
+   client.ask('example.rc',dict(discard_changes=True),True);client.ask('simulation.pause',{},True);client.ask('simulation.wait')
+   client.ask('verification.settings.set',dict(duration_s=1,sample_step_s=.001,input_mode='charge',initial_voltage_v=0,capacitor_initials=[],inductor_initials=[]),True)
+   admitted=client.ask('simulation.verify',dict(duration_s=1,probe_ids=['v:C1','i:R1']),True);identity=admitted['last_operation'];deadline=time.monotonic()+15
+   while True:
+    capture=client.ask('operation.inspect',dict(id=identity));status=capture['operation']['status'];assert status not in ('failed','canceled')
+    if status=='completed':break
+    assert time.monotonic()<deadline;time.sleep(.01)
+   client.ask('operation.select',dict(id=identity),True);client.ask('recording.view.set',dict(mode='recorded'),True);client.ask('recording.speed.set',dict(seconds_per_wall_second=.001),True)
+   state=client.ask('project.inspect');assert state['paused'] and not state['recording']['playing'] and state['recording']['sample_count']==1001 and state['recording']['sample_index']==0
+   rows=[]
+   for offset in range(0,1001,100):rows+=client.ask('operation.samples',dict(id=identity,offset=offset,limit=100))['rows']
+   assert len(rows)==1001;write('capture-metadata',capture['metadata']);write('capture-rows',rows)
+   client.ask('project.save',dict(path=str(OUT/'fixture.elab')),True)
+   state=client.ask('project.inspect');write(name,state)
+   print(json.dumps(dict(name=name,paused=state['paused'],recording=state['recording']['id'],rows=state['recording']['sample_count'],index=state['recording']['sample_index'],source_sha256=hashlib.sha256((OUT/'fixture.elab').read_bytes()).hexdigest())))
+  elif name=='original-final':
+   identity=before['recording']['id'];metadata=client.ask('operation.inspect',dict(id=identity))['metadata'];rows=[]
+   for offset in range(0,1001,100):rows+=client.ask('operation.samples',dict(id=identity,offset=offset,limit=100))['rows']
+   assert metadata==json.loads((OUT/'capture-metadata.json').read_text()) and rows==json.loads((OUT/'capture-rows.json').read_text())
+   client.ask('project.save',dict(path=str(OUT/'fixture-final.elab')),True);state=client.ask('project.inspect');write(name,state)
+   assert (OUT/'fixture.elab').read_bytes()==(OUT/'fixture-final.elab').read_bytes()
+   print(json.dumps(dict(captured_rows_unchanged=len(rows),metadata_unchanged=True,saved_bytes_equal=True,index=state['recording']['sample_index'])))
+  else:
+   state=before;write(name,state)
+   viewer=state.get('recording');print(json.dumps(dict(name=name,command_revision=state['command_revision'],last_actor=state['last_actor'],paused=state['paused'],recording=None if not viewer else {k:viewer[k] for k in ('id','sample_index','time_s','playing','seconds_per_wall_second')})))
+ finally:client.close_connection()
+if __name__=='__main__':main()
