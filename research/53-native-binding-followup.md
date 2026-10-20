@@ -1,0 +1,11 @@
+# Native binding follow-up and audit-tool freshness
+
+October 20, 2026. A bounded source review followed existing potentiometer/switch, display-preference, probe/trace and LC sampling Fit callbacks into shared command dispatch and the captured field/menu revision/document guards. No release-blocking application defect is confirmed. Existing regression tests were reviewed, not rerun or relabeled as new physical-input coverage. [Evidence](../docs/validation/native-binding-followup-185/README.md).
+
+The general local `build/elab-ui-audit` was stale: verification exited 1, its parser reported 375 sites and its compiled catalog lacked the two appearance-work commands. Native source hashes were already exact. A fresh current-source build reports 72 production sources, 400 sites, 164 public command IDs and 132 source-routed IDs; its candidate is byte-identical to the committed ledger and verification passes. Both candidate reports, original failure and executable hashes survive. The prior binary is retained privately in the ignored work folder; the general local audit helper is refreshed. No ledger regeneration, production source change or new app package was needed.
+
+A source-level minor follow-up remains: recommitting the unchanged displayed voltage color range can convert its stored float64 preference through a float32 NumberField. This is separate from simulation values and lacks an actual OS input reproduction. Do not turn it into a cosmetic release campaign while owner feedback is pending. The existing precise-wiper guard already avoids the corresponding actuator problem.
+
+All 659 application Go hashes, current review receipt and canonical app remain exact. Read-only metadata/source/tool replay passes; no app opens, inputs, captures or full test rerun. This does not close every callback, all runtime routes, AGENT-02 or reader/IME/environment acceptance. Static syntax counts are not counts of untested or proven visible controls.
+
+The three current-build RC/LED/NPN timing blocks are complete and remain separate. Next independent work must identify a concrete unreviewed failure or preservation scenario; repeat only checks invalidated by that work. Owner walkthrough and the actual hobbyist study remain pending; clean-account startup remains explicitly deferred for the private alpha. No promotion or broader MVP completion.

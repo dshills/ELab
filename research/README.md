@@ -54,10 +54,12 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 
 - [Continuing implementation and code quality](10-continuation-progress.md): local checkpoints, reviewed concurrency fixes, pinned lint tooling, bounded Verify operations and recorded exports.
 
-- [First-version delivery plan](34-first-version-plan.md), [visible-latency method](36-visible-latency-method.md) and [fixed collection protocol](37-visible-latency-cohort-plan.md): current alpha cut line, calibration evidence and the declared LED/RC/NPN responsiveness trials.
+- [First-version delivery plan](34-first-version-plan.md), [visible-latency method](36-visible-latency-method.md) and [fixed collection protocol](37-visible-latency-cohort-plan.md): current alpha cut line, calibration evidence and the original declared responsiveness trials. Separate current /185 [RC](47-current-rc-visible-results.md), [LED](50-current-led-visible-results.md) and [NPN](52-current-npn-visible-results.md) blocks each complete twenty observations below 500 ms within their warm-running/software-composition scopes.
 
-- [Visible responsiveness results](38-visible-responsiveness-results.md): all scheduled outcomes, available software-frame bounds and reasons a complete percentile is unavailable.
+- [Visible responsiveness results](38-visible-responsiveness-results.md): all scheduled outcomes and separately scoped software-frame percentiles; 100 ms acknowledgment and broader performance remain open.
 
 - [Source modes, restart and captured experiments](42-source-modes-and-captures.md): twelve bounded /183 electronics/lifecycle cases with independent equations, immutable captures and fresh saved-file reopens; no source/version change.
 
 - [Native MOSFET controls and signed readings](43-native-mosfet-review.md): ten /183 native states and fresh saved reopens, independent signed current/power checks, precise PMOS presentation documentation and preserved input-method limitations.
+
+- [Bounded native binding follow-up](53-native-binding-followup.md): actuator/display/probe/sampling source review, preserved stale-audit-tool failure, exact current ledger verification and refreshed local helper; no new physical/runtime/full-binding qualification.

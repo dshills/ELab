@@ -269,3 +269,5 @@ now packages the geometry/value-draft relay. Its exact copied runtime and shared
 public geometry/Undo checks pass. The ledger stays 72 sources/400 syntax sites,
 164 public IDs and 132 routed IDs; neither factory presence nor copied public
 commands establish complete physical binding coverage.
+
+October 20 audit-helper freshness: an old local executable reported 375 sites and omitted the two appearance-work commands despite exact native source digests. A fresh current-source tool passes and produces a byte-identical 400-site candidate; the committed ledger was not regenerated. Both reports and the failure survive in the [bounded review](../docs/validation/native-binding-followup-185/README.md). The local helper is refreshed, with the old executable retained separately. If using an older local build, rebuild the tool from current source before interpreting a drift report: `GOWORK=off go build -o build/elab-ui-audit ./cmd/elab-ui-audit`. Source/tool freshness remains distinct from runtime binding coverage.
