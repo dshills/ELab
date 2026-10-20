@@ -44,3 +44,19 @@ Open now performs file reading and strict validation outside the editor lock. Im
 Save/Save As now serialize and write a committed capture outside the editor lock. Later edits remain dirty and publication has an explicit cancellation boundary. External changes during preparation are rechecked before replacement. [Captured saves and recovery ordering](project-save.md).
 
 Save/Export share the file-publication implementation; SVG/scope/record encoding is also background work. [Export capture and artifact identity](project-export.md).
+
+## Malformed terminal arrays
+
+The current source checks component kind and exact ordered library terminals
+before deriving saved scope/pinned-reading inventories. Other metadata and model
+validation remains required. Invalid terminal arrays return `invalid-document`
+without replacing the current circuit; malformed recovery documents remain
+reported problems and their bytes are preserved.
+
+[FILE-TERMINALS-01](validation/terminal-shape-validation/README.md) reproduces two
+owned /180 Open crashes and 24 original-source panic regressions. The source
+repair passes dirty-state/file preservation, saved-edit fresh reopening, recovery
+and full quality checks. Standalone recorded import remains a noncrashing refusal
+on both original and corrected agents. This is source/headless qualification;
+preserved /180 remains affected until a clean replacement is qualified. Valid
+file shapes/versions, solver models, commands and native bindings are unchanged.

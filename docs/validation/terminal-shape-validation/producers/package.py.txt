@@ -1,0 +1,27 @@
+"""Freeze malformed-terminal parser repair evidence, preserving failed attempts."""
+from pathlib import Path
+import gzip,hashlib,json,shutil,subprocess
+root=Path('/Users/dshills/Development/projects/ELab');stage=root/'build/terminal-shape-validation-work';out=root/'docs/validation/terminal-shape-validation'
+sha=lambda b:hashlib.sha256(b).hexdigest()
+quality=json.loads((stage/'full-quality.json').read_text());assert quality['exit_code']==0 and quality['sources_unchanged'] and quality['source_files']==659
+(out/'raw').mkdir();(out/'producers').mkdir();manifest={}
+def retain(p,relative):
+ data=p.read_bytes();stored=gzip.compress(data,mtime=0);target=out/'raw'/(relative+'.gz');target.parent.mkdir(exist_ok=True,parents=True);target.write_bytes(stored)
+ manifest[str(target.relative_to(out))]=dict(original_bytes=len(data),original_sha256=sha(data),stored_sha256=sha(stored))
+for label,path in [('original-initial','/private/tmp/elab-terminal-shape-original-180'),('original-final','/private/tmp/elab-terminal-shape-original-180-final'),('fixed','/private/tmp/elab-terminal-shape-fixed'),('import-controls','/private/tmp/elab-terminal-shape-import-controls')]:
+ folder=Path(path)
+ for p in sorted(folder.rglob('*')):
+  if p.is_file():
+   assert not p.is_symlink();retain(p,label+'/'+str(p.relative_to(folder)))
+for name in ('original-focused.log','fixed-before-integration.log','fixed-fixture-permission-error.log','fixed-before-map.log','fixed-focused.log','final-regression-original.log','original-fixture-id-error.log','original-public.log','fixed-public.log','import-controls.log','full-quality.log','full-quality.json','source-before-quality.json','development-runtime.json','development-build-info.txt','original-overlay.json','persistence-original.go.txt','persistence-final.go.txt','document_terminals-final.go.txt','document_terminals-fixture-error.go.txt','production.diff'):
+ retain(stage/name,'stage/'+name)
+for name in ('public_original.py','public_fixed.py','import_controls.py','quality.py','package.py'):
+ shutil.copyfile(stage/name,out/'producers'/(name+'.txt'))
+shutil.copyfile(stage/'public_original-initial.py.txt',out/'producers/public_original-initial.py.txt')
+(out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+receipt=root/'research/ui-audit/first-version/integration-discovery-review-checkpoint.json';runtime=json.loads((stage/'development-runtime.json').read_text())
+dependencies=['docs/validation/junction-boundary-review-179/producers/collect.py.txt','scripts/package_review.py']
+report=dict(passed=True,defect='FILE-TERMINALS-01',severity='P1 malformed Open/recovery document crash',preserved_release='0.163.0 /180',preserved_receipt_sha256=sha(receipt.read_bytes()),development_agent_sha256=runtime['agent_sha256'],source_parent_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),application_go_sources=656,quality_elapsed_seconds=quality['elapsed_seconds'],production_go_files_changed=1,new_go_test_files=1,original_panic_regressions=24,owned_original_crashes=2,repaired_file_cases=2,recovery_problem_cases=2,noncrashing_record_import_controls=2,normal_declared_exits=6,retained_declared_requests=64,source_qualified=True,replacement_packaging_pending=True,solver_changed=False,new_release=False,native_input=False,owner_acceptance=False,full_mvp_complete=False,dependencies={n:sha((root/n).read_bytes()) for n in dependencies})
+(out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+checkpoint=dict(files={str(p.relative_to(out)):sha(p.read_bytes()) for p in sorted(out.rglob('*')) if p.is_file() and p.name!='checkpoint.json'})
+(out/'checkpoint.json').write_text(json.dumps(checkpoint,indent=2)+'\n');print(json.dumps(dict(proof_files=len(checkpoint['files'])+1,raw_files=len(manifest))))

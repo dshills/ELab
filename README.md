@@ -8,6 +8,8 @@ The [first-version delivery plan](research/34-first-version-plan.md) targets a u
 
 Clean `8efce9a` /SDK `b22478c` corrects [NUMERICS-DISCOVERY-01](docs/validation/integration-discovery/README.md): detailed value-command discovery now identifies the actual SDIRK2 capacitor engines and separate exact RC, algebraic NPN and Radau IIA paths. Historical recordings keep their engine and rows. Only two filtered guidance strings change; ordinary catalog, other annotations/outputs, numerical kernels, models, commands, native bindings, formats and SDK are unchanged.
 
+**Replacement pending:** [FILE-TERMINALS-01](docs/validation/terminal-shape-validation/README.md) reproduces /180 crashes when opening malformed terminal arrays. The source fix now refuses those files while preserving current work; a clean replacement still needs qualification. /180 remains preserved and affected.
+
 Full source quality, copied native smoke, all four public adapters, reference/startup/measurement/sweep/live/save checks, thirty paging cases, strict local signature and ZIP/example reopens pass. Native/headless discovery agrees, with twelve paired physics states across six families. Earlier geometry, advanced-pin/recovery and floating-source checks remain covered. No new physical input or visible-latency acceptance is inferred.
 
 [Walkthrough](research/35-first-version-review.md), [receipt](research/ui-audit/first-version/integration-discovery-review-checkpoint.json), [proof](docs/validation/integration-discovery-review-180/README.md).

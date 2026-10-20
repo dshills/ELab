@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "defect": "FILE-TERMINALS-01",
+  "severity": "P1 malformed Open/recovery document crash",
+  "preserved_release": "0.163.0 /180",
+  "preserved_receipt_sha256": "37b01de03ac02ced4ae4c08cbc6394507e764bb2a03cce5fa3ec49571484b7c1",
+  "development_agent_sha256": "3049b5ad7763a1201aa590e209404827b2abd2ccce0c860fe5e8160c5d94654a",
+  "source_parent_commit": "241ae02826b9f1b476f05b9ee1ad0f27a662f215",
+  "application_go_sources": 656,
+  "quality_elapsed_seconds": 355.3797565000132,
+  "production_go_files_changed": 1,
+  "new_go_test_files": 1,
+  "original_panic_regressions": 24,
+  "owned_original_crashes": 2,
+  "repaired_file_cases": 2,
+  "recovery_problem_cases": 2,
+  "noncrashing_record_import_controls": 2,
+  "normal_declared_exits": 6,
+  "retained_declared_requests": 64,
+  "source_qualified": true,
+  "replacement_packaging_pending": true,
+  "solver_changed": false,
+  "new_release": false,
+  "native_input": false,
+  "owner_acceptance": false,
+  "full_mvp_complete": false,
+  "dependencies": {
+    "docs/validation/junction-boundary-review-179/producers/collect.py.txt": "09b7bbf7e95c22b0802f3c4090ffd20dd4812c1370f843bbbbe2a8ea3cffbdc2",
+    "scripts/package_review.py": "d46cb8e19da20d775b08a08b80e4e270b64785ce2bcbe628496637321a71725d"
+  }
+}

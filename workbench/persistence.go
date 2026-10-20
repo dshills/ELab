@@ -160,13 +160,24 @@ func decodeDocument(data []byte) (Document, error) {
 	if err := params(raw.Graph, &graphFields, "components", "wires"); err != nil {
 		return d, err
 	}
-	for _, component := range graphFields.Components {
+	terminalDefinitions := map[string][]string{}
+	for _, part := range libraryParts() {
+		terminalDefinitions[part.Kind] = part.Terminals
+	}
+	for index, component := range graphFields.Components {
 		if err := params(component, &Component{}, "id", "kind", "name", "terminals", "position", "value", "rotation"); err != nil {
 			return d, err
 		}
 		var p Component
 		if err := json.Unmarshal(component, &p); err != nil {
 			return d, err
+		}
+		// Probe and pinned-reading validation below derives branch references
+		// from these terminals. Check their library shape before indexing any
+		// untrusted saved array; full component metadata is still checked below.
+		terminals, known := terminalDefinitions[p.Kind]
+		if !known || !reflect.DeepEqual(p.Terminals, terminals) {
+			return d, fmt.Errorf("component %d has invalid kind or terminal metadata", index+1)
 		}
 		if p.Sine != nil {
 			if err := paramsNested(component, "sine", &SineWaveform{}, "amplitude_v", "offset_v", "frequency_hz", "phase_degrees"); err != nil {

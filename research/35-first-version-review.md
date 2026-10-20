@@ -44,6 +44,7 @@ In another terminal, run `./elab-agent --connect /absolute/path/to/endpoint.json
 
 ## Review boundary and known limits
 
+- **Replacement pending for FILE-TERMINALS-01.** Two owned /180 processes crash when Open reads malformed terminal arrays before probe validation. The [source repair](../docs/validation/terminal-shape-validation/README.md) now refuses those exact files, preserving unsaved work and reporting malformed recovery data without rewriting it. Full source quality passes; clean replacement qualification is next. /180 remains preserved and affected; no ordinary valid-save corruption is demonstrated.
 - Workstation checks use Apple Silicon/macOS 26.6.2. Earlier UI tests enforced 1040×720 mounted units and observed a 1053×762 pixel frame; 1280×800 and 1440×900 windows were inspected on their recorded builds. Those observations retain their historical physical input/display scopes. Other hardware and monitor transitions remain unqualified.
 - Earlier dense 64-part/100-node stress checks reached the integration work limit before producing a sample, preserving committed graph and physical state. The [matrix repair](../docs/validation/mixed-matrix-allocation/README.md) improves measured fixtures but retains classified pressure failures and the cooperative 100 ms limit. Supported size does not guarantee convergence.
 - Educational generic device models have the limits shown in the app. This is not general SPICE compatibility or PCB layout software.

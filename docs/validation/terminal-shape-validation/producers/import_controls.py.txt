@@ -1,0 +1,22 @@
+"""Control: standalone malformed recorded graphs already refuse without a crash."""
+from pathlib import Path
+from importlib.machinery import SourceFileLoader
+import gzip,hashlib,importlib.util,json
+ROOT=Path('/Users/dshills/Development/projects/ELab');OUT=Path('/private/tmp/elab-terminal-shape-import-controls');OUT.mkdir(mode=0o700)
+src=ROOT/'docs/validation/junction-boundary-review-179/producers/collect.py.txt';spec=importlib.util.spec_from_loader('owned_import_control',SourceFileLoader('owned_import_control',str(src)));m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+record=json.loads(gzip.decompress((ROOT/'docs/validation/finite-phase-review-179/raw/triangle/record.json.gz').read_bytes()))
+for p in record['metadata']['graph']['components']:
+ if p['kind']=='resistor':p['terminals']=[]
+path=OUT/'malformed-record.json';path.write_text(json.dumps(record,indent=2)+'\n');digest=hashlib.sha256(path.read_bytes()).hexdigest();outcomes=[]
+for label,agent in [('original',Path('/private/tmp/elab-first-version-180-signed-runtime/agent')),('fixed',Path('/private/tmp/elab-terminal-shape-runtime/agent'))]:
+ folder=OUT/label;folder.mkdir();m.OUT=folder;m.AGENT=agent;c=m.Client(label)
+ try:
+  before=c.ask('project.inspect');c.ask('verification.import',dict(path=str(path)),True,error='invalid-recording');after=c.ask('project.inspect')
+  excluded={'project_work','revision','command_revision','last_actor'};assert {k:v for k,v in before.items() if k not in excluded}=={k:v for k,v in after.items() if k not in excluded}
+  (folder/'before.json').write_text(json.dumps(before,indent=2)+'\n');(folder/'after.json').write_text(json.dumps(after,indent=2)+'\n')
+  outcomes.append(dict(label=label,invalid_recording_refused=True,snapshot_preserved=True,process=c.close()))
+ finally:
+  if c.process.poll() is None:c.close()
+assert hashlib.sha256(path.read_bytes()).hexdigest()==digest
+report=dict(passed=True,malformed_record_sha256=digest,outcomes=outcomes,scope='Standalone recording import is a noncrashing control on both original and fixed agents; no original import crash claim')
+(OUT/'report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))

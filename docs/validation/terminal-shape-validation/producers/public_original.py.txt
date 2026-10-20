@@ -1,0 +1,43 @@
+"""Own two /180 processes to reproduce malformed terminal-array Open crashes."""
+from pathlib import Path
+from importlib.machinery import SourceFileLoader
+import hashlib,importlib.util,json,traceback
+ROOT=Path('/Users/dshills/Development/projects/ELab');OUT=Path('/private/tmp/elab-terminal-shape-original-180-final');OUT.mkdir(mode=0o700)
+source=ROOT/'docs/validation/junction-boundary-review-179/producers/collect.py.txt';spec=importlib.util.spec_from_loader('owned_protocol_client',SourceFileLoader('owned_protocol_client',str(source)));m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+m.AGENT=Path('/private/tmp/elab-first-version-180-signed-runtime/agent')
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+receipt=ROOT/'research/ui-audit/first-version/integration-discovery-review-checkpoint.json';release=json.loads(receipt.read_text());assert sha(m.AGENT.with_name('elab-agent'))==release['agent_sha256']
+fixture=ROOT/'build/ELab-0.163.0-180-review/Examples/RC-charge.elab';fixture_sha=sha(fixture)
+plan=dict(release='0.163.0 /180',receipt_sha256=sha(receipt),agent_sha256=release['agent_sha256'],fixture_sha256=fixture_sha,client_sha256=sha(source),cases=['scope-empty','pins-short'],scope='Two owned deliberate crash reproductions only; private circuit files, no UI or owner project')
+(OUT/'plan.json').write_text(json.dumps(plan,indent=2)+'\n');results=[]
+for label in plan['cases']:
+ folder=OUT/label;folder.mkdir();m.OUT=folder;valid=folder/'original.elab';valid.write_bytes(fixture.read_bytes());document=json.loads(valid.read_text());resistor=next(p['id'] for p in document['graph']['components'] if p['kind']=='resistor')
+ for p in document['graph']['components']:
+  if p['kind']=='resistor':p['terminals']=[] if label=='scope-empty' else p['terminals'][:1]
+ if label=='pins-short':document['pinned_readings']=dict(items=[])
+ bad=folder/'malformed.elab';bad.write_text(json.dumps(document,indent=2)+'\n');original_sha,bad_sha=sha(valid),sha(bad)
+ c=m.Client(label);expected_eof=False
+ try:
+  c.ask('project.load',dict(path=str(valid)),True);c.ask('simulation.wait')
+  c.ask('component.set',dict(id=resistor,value='20k'),True);before=c.ask('project.inspect');assert before['document']['dirty']
+  (folder/'before-open.json').write_text(json.dumps(before,indent=2)+'\n')
+  try:c.ask('project.load',dict(path=str(bad),discard_changes=True),True)
+  except AssertionError as error:
+   assert 'unexpected EOF' in str(error);expected_eof=True
+  assert expected_eof,'malformed file unexpectedly did not reproduce the process crash'
+  c.process.wait(timeout=10);assert c.process.returncode==2
+  stderr=(folder/(label+'-stderr.txt')).read_text()
+  assert 'panic: runtime error: index out of range' in stderr and 'workbench.probeInventory' in stderr and 'workbench.decodeDocument' in stderr
+  assert ('workbench.validatePinPreferences' in stderr)==(label=='pins-short')
+  assert sha(valid)==original_sha and sha(bad)==bad_sha
+  result=dict(name=label,reproduced=True,pid=c.process.pid,exit_code=c.process.returncode,expected_eof=True,requests=c.sequence,original_sha256=original_sha,malformed_sha256=bad_sha,original_and_malformed_unchanged=True,normal_shutdown=False,scope='Intentional owned crash; unsaved synthetic 20k state captured in before-open.json, no owner data involved')
+  (folder/'result.json').write_text(json.dumps(result,indent=2)+'\n');results.append(result)
+ finally:
+  if c.process.poll() is None:
+   # Unexpected noncrashing test failures still get a normal owned close.
+   c.close()
+  else:
+   if not c.process.stdin.closed:c.process.stdin.close()
+   c.log.close()
+report=dict(passed=len(results)==2,results=results,fixture_unchanged=sha(fixture)==fixture_sha,agent_unchanged=sha(m.AGENT.with_name('elab-agent'))==release['agent_sha256'])
+(OUT/'report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report),flush=True)

@@ -1,0 +1,51 @@
+"""Open exact /180 crash inputs with the repaired owned development agent."""
+from pathlib import Path
+from importlib.machinery import SourceFileLoader
+import copy,hashlib,importlib.util,json,traceback
+ROOT=Path('/Users/dshills/Development/projects/ELab');OUT=Path('/private/tmp/elab-terminal-shape-fixed');OUT.mkdir(mode=0o700)
+source=ROOT/'docs/validation/junction-boundary-review-179/producers/collect.py.txt';spec=importlib.util.spec_from_loader('owned_protocol_client',SourceFileLoader('owned_protocol_client',str(source)));m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+m.AGENT=Path('/private/tmp/elab-terminal-shape-runtime/agent');sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+original=Path('/private/tmp/elab-terminal-shape-original-180-final');results=[];exits=[]
+(OUT/'plan.json').write_text(json.dumps(dict(agent_sha256=sha(m.AGENT.with_name('elab-agent')),client_sha256=sha(source),cases=['scope-empty','pins-short'],scope='Exact original crash bytes; dirty-document/physics/history/file preservation, malformed recovery scan, separately saved surviving edits and fresh valid opens. Owned headless only.'),indent=2)+'\n')
+def equivalent(a,b):
+ excluded={'project_work','revision','command_revision','last_actor'}
+ assert {k:v for k,v in a.items() if k not in excluded}=={k:v for k,v in b.items() if k not in excluded}
+for label in ['scope-empty','pins-short']:
+ folder=OUT/label;folder.mkdir();m.OUT=folder
+ valid=original/label/'original.elab';bad=original/label/'malformed.elab';valid_sha,bad_sha=sha(valid),sha(bad)
+ resistor=next(p['id'] for p in json.loads(valid.read_text())['graph']['components'] if p['kind']=='resistor')
+ c=m.Client(label);fresh=None
+ try:
+  c.ask('project.load',dict(path=str(valid)),True);c.ask('simulation.wait')
+  c.ask('component.set',dict(id=resistor,value='20k'),True);before=c.ask('project.inspect');assert before['document']['dirty']
+  c.ask('project.load',dict(path=str(bad),discard_changes=True),True,error='invalid-document');refused=c.ask('project.inspect');equivalent(before,refused)
+  assert refused['project_work']['status']=='failed' and refused['project_work']['error']['code']=='invalid-document'
+  c.ask('project.load',dict(path=str(valid)),True,error='unsaved-changes');equivalent(refused,c.ask('project.inspect'))
+  # Configure an empty private store, then add a checksum-valid damaged capsule.
+  store=folder/'recovery';store.mkdir(mode=0o700);c.ask('recovery.configure',dict(directory=str(store),enabled=False,interval_s=1),True)
+  document=json.loads(bad.read_text());compact=json.dumps(document,separators=(',',':')).encode();key='a'*24;identifier='rec-'+key+'-0000000001'
+  capsule=dict(format='elab.recovery',version=1,id=identifier,document_key=key,session='b'*24,sequence=1,command_revision=1,saved_at='2026-10-19T00:00:00Z',document_sha256=hashlib.sha256(compact).hexdigest(),document=document)
+  capsule_path=store/(identifier+'.elab-recovery');capsule_path.write_text(json.dumps(capsule,separators=(',',':'))+'\n');capsule_sha=sha(capsule_path)
+  scan_before=c.ask('project.inspect');c.ask('recovery.scan',{},True);scanned=c.ask('project.inspect')
+  assert not scanned['recovery']['candidates'] and len(scanned['recovery']['problems'])==1
+  assert 'terminal metadata' in scanned['recovery']['problems'][0]['message']
+  for key_name in ['components','wires','transient','mixed','run_id','electrical_revision','document','undo_entry','redo_entry']:
+   assert scan_before.get(key_name)==scanned.get(key_name),key_name
+  assert sha(capsule_path)==capsule_sha
+  saved=folder/'surviving-edit.elab';c.ask('project.save',dict(path=str(saved)),True)
+  fresh=m.Client(label+'-fresh');fresh.ask('project.load',dict(path=str(saved)),True);reopened=fresh.ask('simulation.wait')
+  assert not reopened['document']['dirty'] and reopened['components']==before['components'] and reopened['wires']==before['wires']
+  assert next(p['value'] for p in reopened['components'] if p['id']==resistor)==20000
+  exits.append(fresh.close());fresh=None
+  c.ask('project.load',dict(path=str(valid),discard_changes=True),True);valid_open=c.ask('simulation.wait');assert not valid_open['document']['dirty']
+  assert valid_open['components']==json.loads(valid.read_text())['graph']['components']
+  for name,state in [('before',before),('refused',refused),('scan-before',scan_before),('scanned',scanned),('reopened-surviving',reopened),('valid-open',valid_open)]:
+   (folder/(name+'.json')).write_text(json.dumps(state,indent=2)+'\n')
+  assert sha(valid)==valid_sha and sha(bad)==bad_sha and sha(capsule_path)==capsule_sha
+  result=dict(name=label,passed=True,original_sha256=valid_sha,malformed_sha256=bad_sha,capsule_sha256=capsule_sha,saved_sha256=sha(saved),invalid_document_refusal=True,dirty_snapshot_preserved=True,unsaved_guard_retained=True,malformed_capsule_reported_without_rewrite=True,surviving_edits_saved_and_reopened=True,valid_open_after_failure=True)
+  (folder/'result.json').write_text(json.dumps(result,indent=2)+'\n');results.append(result);exits.append(c.close())
+ finally:
+  if fresh is not None and fresh.process.poll() is None:exits.append(fresh.close())
+  if c.process.poll() is None:exits.append(c.close())
+report=dict(passed=len(results)==2,results=results,process_exits=exits)
+(OUT/'report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report),flush=True)
