@@ -1,0 +1,75 @@
+"""Refuse the exact /181 inconsistent final results through both copied adapters."""
+from pathlib import Path
+import gzip
+import hashlib
+import json
+import time
+
+from floating_cases import close
+
+
+def check(native, parity, out):
+    root=Path('/Users/dshills/Development/projects/ELab')
+    source=root/'docs/validation/recording-final-consistency/raw/original'
+    inputs=out/'recording-final-input';inputs.mkdir()
+    fields={name:(['current_a'] if name=='led' else ['base_current_a','collector_current_a','emitter_current_a','base_resistor_id','load_resistor_id','led_id']) for name in ('led','npn','blink')}
+    files={}
+    for name, mutations in fields.items():
+        folder=inputs/name;folder.mkdir()
+        for filename in ['good.json','bad-embedded.elab']+[field+'.json' for field in mutations]:
+            p=folder/filename;p.write_bytes(gzip.decompress((source/name/(filename+'.gz')).read_bytes()));files[str(p)]=hashlib.sha256(p.read_bytes()).hexdigest()
+
+    def equivalent(before,after):
+        excluded={'project_work','revision','command_revision','last_actor','view','viewport'}
+        assert {k:v for k,v in before.items() if k not in excluded}=={k:v for k,v in after.items() if k not in excluded}
+
+    def session(client,label):
+        results=[]
+        for name,mutations in fields.items():
+            client.ask('example.reset',dict(discard_changes=True),True);client.ask('simulation.pause',{},True)
+            client.ask('component.set',dict(id='R1',value='2k'),True);client.ask('simulation.restart',{},True);client.ask('simulation.wait')
+            good=inputs/name/'good.json';client.ask('verification.import',dict(path=str(good)),True)
+            baseline=client.ask('project.inspect');record=baseline['last_operation'];assert baseline['document']['dirty']
+            if name in ('led','npn'):
+                assert baseline['recording']['sample_count']==1 and baseline['recording']['viewing'] and baseline['recording']['sample_index']==0
+                # Give the native view an ordinary render interval before querying
+                # the same selection; /182 failed when its zero-span field rendered.
+                time.sleep(.2)
+                ready=client.ask('project.inspect');equivalent(baseline,ready)
+            copied=out/(label+'-recording-final-'+name+'-good.json')
+            client.ask('verification.export',dict(id=record,path=str(copied),format='json'),True);assert copied.read_bytes()==good.read_bytes()
+            cases=[]
+            for field in mutations:
+                before=client.ask('project.inspect')
+                client.ask('verification.import',dict(path=str(inputs/name/(field+'.json'))),True,expect='invalid-recording')
+                after=client.ask('project.inspect');equivalent(before,after)
+                assert after['project_work']['status']=='failed' and after['project_work']['error']['code']=='invalid-recording'
+                cases.append(dict(field=field,before=before,after=after))
+            before=client.ask('project.inspect')
+            client.ask('project.load',dict(path=str(inputs/name/'bad-embedded.elab'),discard_changes=True),True,expect='invalid-document')
+            after=client.ask('project.inspect');equivalent(before,after)
+            assert after['project_work']['error']['code']=='invalid-document'
+            second=out/(label+'-recording-final-'+name+'-after-refusal.json')
+            client.ask('verification.export',dict(id=record,path=str(second),format='json'),True);assert second.read_bytes()==good.read_bytes()
+            result=dict(name=name,cases=cases,embedded_before=before,embedded_after=after,good_sha256=hashlib.sha256(good.read_bytes()).hexdigest(),byte_identical_export_before_and_after=True)
+            (out/(label+'-recording-final-'+name+'-result.json')).write_text(json.dumps(result,indent=2)+'\n');results.append(result)
+        return results
+
+    actual=session(native,'native');reference=parity.helper.Client(command_preconditions=True)
+    try:
+        expected=session(reference,'headless');close(reference)
+    finally:
+        if reference.process.poll() is None:reference.close()
+    paired=0
+    for left,right in zip(actual,expected):
+        assert left['name']==right['name'] and left['good_sha256']==right['good_sha256']
+        for a,b in zip(left['cases'],right['cases']):
+            assert a['field']==b['field']
+            for field in ('components','wires','drawing','paused'):
+                assert a['after'].get(field)==b['after'].get(field),(left['name'],a['field'],field)
+            for field in ('result','npn','mixed','transient','scope'):
+                parity.compare(a['after'].get(field),b['after'].get(field),left['name']+'.'+a['field']+'.'+field)
+            paired+=1
+    assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in files.items())
+    (inputs/'plan.json').write_text(json.dumps(dict(source_proof=str(source.parent.parent),files=files,scope='Exact /181 accepted inconsistent records and embedded projects; valid controls unchanged'),indent=2)+'\n')
+    return dict(passed=True,record_cases_per_adapter=13,invalid_recording_refusals=26,invalid_document_refusals=6,intact_byte_identical_exports=6,post_refusal_byte_identical_exports=6,paired_preserved_stages=paired,original_inputs_unchanged=True,scope='Exact copied native/headless public import/Open commands preserve dirty editor, viewer, graph, physics and history; no new physical input or authentication of arbitrary solver history')

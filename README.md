@@ -1,22 +1,16 @@
 # ELab
 
-**Source repair ready:** [fractional recorded indices](research/55-recorded-index-validation.md) now use shared validation and pass full quality. A clean replacement app/agent is still being prepared; the /185 review below retains its affected callback.
-
 ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N/P-channel MOSFET and inductor/RLC circuits from blank: place components, connect named terminals, move and rotate parts, and edit exact values while simulation updates live. Users and agents invoke the same validated application commands.
 
-The [first-version delivery plan](research/34-first-version-plan.md) targets a usable macOS hobbyist alpha with frozen scope, ordered blockers and a concrete handoff.
+**Current private review: 0.169.0 /186.** Use the [review app](build/ELab-0.169.0-186-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.169.0-186-review.zip) with its [checksum](build/ELab-0.169.0-186-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening.
 
-**Current private review: 0.168.0 /185.** Use the [review app](build/ELab-0.168.0-185-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.168.0-185-review.zip) with its [checksum](build/ELab-0.168.0-185-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening.
+Clean `da48318d` /Vellum `b22478c` fixes [fractional recorded sample indices](research/55-recorded-index-validation.md): `1.5` now reaches shared integer validation and is refused, instead of silently selecting row 1. Valid integer rows and fresh correction still work. Four original failing regression cases become passing callback/mounted-widget checks. Full source quality, copied native smoke, four public adapters, inherited reference/storage checks, strict signature and ZIP/example reopens pass. No model, solver, tolerance, format, command-ID or SDK change.
 
-Clean `fbb5a66a` /SDK `b22478c` fixes [narrow Inspector text](docs/validation/inspector-native-frame/README.md). Text-only groups and wrapping frames use the available bounded width. Six original mounted failures become passing regressions; eleven native wrapping-frame/text checks pass across RC, NMOS, PMOS and CMOS. The /184 native measurement failure remains an unqualified candidate; it compared natural text boxes with group width and did not measure the frames.
+[Walkthrough](research/35-first-version-review.md), [receipt](research/ui-audit/first-version/recorded-index-review-checkpoint.json), [proof](docs/validation/recorded-index-review-186/README.md), [delivery plan](research/34-first-version-plan.md).
 
-Full source quality, copied native smoke, all four public adapters, reference/startup/measurement/sweep/live/save checks, thirty paging cases, strict local signature and ZIP/example reopens pass. Earlier recording-consistency/DC-viewer, terminal, numerical-discovery, geometry, pin-file/recovery and floating-source checks remain covered. Solvers, models, tolerances, budgets, commands, formats and SDK are unchanged. Three separate twenty-trial [RC](research/47-current-rc-visible-results.md), [LED](research/50-current-led-visible-results.md) and [NPN](research/52-current-npn-visible-results.md) blocks support fresh-result p95 bounds of 136.965/169.889/177.937 ms within their /185 software-composition fixtures.
+The separate twenty-trial [RC](research/47-current-rc-visible-results.md), [LED](research/50-current-led-visible-results.md) and [NPN](research/52-current-npn-visible-results.md) timing blocks retain their explicit /185 software-composition scopes, with fresh p95 bounds 136.965/169.889/177.937 ms. /186 adds no percentile; 100 ms acknowledgment and broader performance remain open. The [bounded malformed-file diagnostic](research/54-structured-corruption-review.md) retains its source scope and original timeout/unguided-run history.
 
-[Walkthrough](research/35-first-version-review.md), [receipt](research/ui-audit/first-version/inspector-width-review-checkpoint.json), [proof](docs/validation/inspector-width-review-185/README.md).
-
-A bounded [malformed-file diagnostic](research/54-structured-corruption-review.md) adds structured mutation, public refusal/preservation and guided fuzz evidence on unchanged source; full diagnostic race/vet/formatting pass, with the initial timeout and unguided run retained.
-
-Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment, broader corruption/fuzzing and the actual hobbyist study remain open. Current /185 RC, LED and NPN each have twenty visible bounds supporting the scoped 500 ms target. No further repeats of these completed blocks are planned without a concrete invalidating change. The 100 ms acknowledgment and overall performance gates remain unqualified. All 41 earlier sealed reviews, six candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.
+Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification stays deferred for this private alpha. Complete bindings/accessibility/environment, broader robustness and the actual hobbyist study remain open. All 42 earlier sealed reviews, six candidates and canonical /120 remain intact. This private review is not promoted or accepted as the full MVP.
 
 ## Build and run from source
 

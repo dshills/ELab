@@ -67,3 +67,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Structured malformed-file diagnostic](54-structured-corruption-review.md): 20,028 mutations, eighteen dirty-work-preserving public refusals and separately scoped guided/unguided fuzz evidence, with the original race timeout retained and the full unchanged race pass completed. Current actions are separated from the verbatim [engineering history](34-engineering-checkpoint-history.md).
 
 - [Recorded sample-index validation](55-recorded-index-validation.md): reproduced fractional-index truncation, shared-command source repair, original failing/fixed passing mounted and callback regressions and full quality. Clean replacement qualification remains next.
+
+- [0.169.0 /186 recorded-index replacement](56-recorded-index-review.md): clean app/agent, exact copied validation/preservation cases, strict signature, ZIP and example reopens; original /185 source/failures and all prior artifacts preserved. Owner walkthrough remains pending.

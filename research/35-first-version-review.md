@@ -1,18 +1,14 @@
-# ELab first-version review · 0.168.0 /185
+# ELab first-version review · 0.169.0 /186
 
-October 20 source follow-up: [RECORD-INDEX-01](55-recorded-index-validation.md) finds that /185 silently truncates fractional recorded sample indices. Its source repair passes shared refusal/correction and full quality; a clean replacement is being prepared. Use whole-number sample indices in this existing review. This note does not relabel /185 as repaired.
+The [review folder](../build/ELab-0.169.0-186-review) includes [ELab.app](../build/ELab-0.169.0-186-review/ELab.app), matching `elab-agent`, three editable examples and framework notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is needed.
 
-The [review folder](../build/ELab-0.168.0-185-review) includes [ELab.app](../build/ELab-0.168.0-185-review/ELab.app), matching `elab-agent`, three editable examples and framework notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is needed.
+The [ZIP](../build/ELab-0.169.0-186-review.zip) and [checksum](../build/ELab-0.169.0-186-review.zip.sha256) preserve all 492 files/modes through macOS extraction into a Unicode path with spaces. Strict local signature and three examples/fresh saves/reopens pass. This does not establish installation, Developer ID, notarization or Gatekeeper acceptance.
 
-The [ZIP](../build/ELab-0.168.0-185-review.zip) and [checksum](../build/ELab-0.168.0-185-review.zip.sha256) preserve all 520 files/modes through macOS extraction into a Unicode path with spaces. Strict local signature and three examples/fresh saves/reopens verify. This does not establish installation, Developer ID, notarization or Gatekeeper acceptance.
+Clean `da48318d` /Vellum `b22478c` packages RECORD-INDEX-01. A fractional recorded sample index is refused through shared integer validation instead of silently truncated; a fresh integer correction still selects its exact stored row. Original callback/mounted-entry regressions fail and corrected refusal/control cases pass. Full source quality, copied native smoke, four adapters and inherited reference/storage/capture/paging checks pass. Eleven Inspector frame/text checks remain complete and contained. Source/mounted widget input and copied public commands have distinct scopes; no new physical OS typing is claimed.
 
-Clean `fbb5a66a` /SDK `b22478c` packages UI-INSPECTOR-WIDTH-01. Text-only Inspector groups and wrapping frames use their available bounded width. Original mounted shrinkage fails six subcases; the repaired mounted cases and eleven copied-native frame/text checks pass across RC, NMOS, PMOS and CMOS. The first /184 measurement guard used natural text widths and exited 1; that unqualified candidate and exact failure stay preserved. No solver/model/tolerance/budget/command/format/SDK change is introduced.
+[Receipt](ui-audit/first-version/recorded-index-review-checkpoint.json), [proof](../docs/validation/recorded-index-review-186/README.md), [source proof](../docs/validation/recorded-index-validation/README.md). All 42 earlier sealed reviews, six candidates and canonical /120 survive. Owner walkthrough remains Not tried yet; no promotion or broader MVP completion.
 
-Source quality, copied native smoke, four adapters, reference/measurement/sweep/live/save and inherited recording-consistency/DC-viewer/terminal/numerical/geometry/pin-reader/recovery/floating/paging checks pass. All 41 earlier sealed reviews, six candidates and canonical /120 survive. Owner walkthrough remains Not tried yet; no promotion or broader MVP completion follows.
-
-[Receipt](ui-audit/first-version/inspector-width-review-checkpoint.json), [proof](../docs/validation/inspector-width-review-185/README.md).
-
-Three separate current-build twenty-observation blocks—[RC](47-current-rc-visible-results.md), [LED](50-current-led-visible-results.md) and [NPN](52-current-npn-visible-results.md)—support fresh-result p95 bounds of 136.965/169.889/177.937 ms within their warm-running software-composition fixtures, each below 500 ms. The 100 ms acknowledgment and broader performance/owner gates remain open. No app or sealed package changed; no automatic repeats of completed blocks are planned without an invalidating change.
+The separate twenty-observation [RC](47-current-rc-visible-results.md), [LED](50-current-led-visible-results.md) and [NPN](52-current-npn-visible-results.md) timing blocks retain their /185 scopes and 136.965/169.889/177.937 ms fresh p95 bounds. /186 adds no new timing cohort. 100 ms acknowledgment and broader performance/owner gates remain open. Do not automatically repeat completed blocks without an invalidating change.
 
 ## Try these four tasks · 15–20 minutes
 
