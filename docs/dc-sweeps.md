@@ -44,7 +44,7 @@ Regression tests cover analytic loaded dividers, existing independent LED/NPN ke
 
 Use `capabilities.list {"command":"sweep.start"}` (or any `sweep.*` ID) for [parameter domains and command contracts](capability-details.md#sweep-command-contracts). The ordinary catalog remains compact. Cursor clearing requires `{"index":null}`; omitting `index` is refused. Native **Clear point** uses the explicit-null command, and guards still refuse a stale operation ID.
 
-Source after /191 retains rejected Start, Stop and Points text under the existing document, target and accepted-value guards. Correcting back to the previously accepted entry can then run the sweep without first moving focus; untouched invalid text still refuses. Successful settings and Run continue through the shared public commands. [Source validation](validation/analysis-entry-correction/README.md); the owner's /189 alpha and separate /191 candidate do not contain this correction yet.
+The separate /192 candidate retains rejected Start, Stop and Points text under the existing document, target and accepted-value guards. Correcting back to the previously accepted entry can then run the sweep without first moving focus; untouched invalid text still refuses. Successful settings and Run continue through the shared public commands. [Source validation](validation/analysis-entry-correction/README.md), [package checks](validation/analysis-candidate-192/README.md); actual native input acceptance remains open. The owner's /189 alpha and separate /191 candidate do not contain this correction.
 
 ## Logarithmic resistance experiment
 

@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-20",
+  "kind": "separate-analysis-correction-candidate",
+  "version": "0.175.0",
+  "build": "192",
+  "source_commit": "9d99e9f4bd19b1766116112c1abaa0d96238f6c4",
+  "candidate": "/Users/dshills/Development/projects/ELab/build/ELab-0.175.0-192-candidate",
+  "native_sha256": "ae2ef18d0d8337b06159616cbf51bdfc36fca6a8b30db98b0cac9624bf20f08e",
+  "agent_sha256": "728634038cf3d47b2161ee5d459c36fe1380d87586111b47f506a2781621b14b",
+  "headless": {
+    "verification_cases": 8,
+    "sweep_cases": 8,
+    "whole_snapshot_refusals": 16,
+    "rc_captures_checked_against_independent_equation": 4,
+    "dc_curves_checked_against_open_capacitor_law": 8,
+    "all_saved_rows_and_curves_reopen_exactly": true,
+    "live_physics_and_history_preserved": true,
+    "verification_session_defaults_reset_on_reopen": true,
+    "scope_selection_and_transient_settings_reopen": true
+  },
+  "archive": {
+    "archive": "/Users/dshills/Development/projects/ELab/build/ELab-0.175.0-192-candidate.zip",
+    "archive_sha256": "fe1cc33a9bf0b6b77a55cdc1db56be7e9c2179026bf828ad07126a08286e3d0e",
+    "archive_bytes": 35005054,
+    "files_verified": 114,
+    "source_package_unchanged": true,
+    "extracted_bytes_and_modes_equal": true,
+    "strict_extracted_signature_valid": true
+  },
+  "native_started": false,
+  "native_input_accepted": false,
+  "owner_window_reserved": true,
+  "current_owner_alpha": "0.172.0 /189",
+  "ready_for_owner_testing": false,
+  "release_qualified": false,
+  "promoted": false,
+  "process_attempts": [
+    {
+      "label": "final",
+      "processes": 2,
+      "all_exit_codes_zero": true,
+      "shutdown_joined_and_ready": true,
+      "acceptance_counted": true
+    },
+    {
+      "label": "initial-probe-error",
+      "processes": 1,
+      "all_exit_codes_zero": true,
+      "shutdown_joined_and_ready": true,
+      "acceptance_counted": false
+    },
+    {
+      "label": "session-default-error",
+      "processes": 2,
+      "all_exit_codes_zero": true,
+      "shutdown_joined_and_ready": true,
+      "acceptance_counted": false
+    },
+    {
+      "label": "scope-field-error",
+      "processes": 2,
+      "all_exit_codes_zero": true,
+      "shutdown_joined_and_ready": true,
+      "acceptance_counted": false
+    }
+  ],
+  "scope": "Clean package and matching headless agent only. Private draft recovery remains mounted-offscreen source evidence; no fresh native startup/input, owner or full-MVP acceptance.",
+  "evidence": "docs/validation/analysis-candidate-192/report.json"
+}

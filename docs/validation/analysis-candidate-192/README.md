@@ -1,0 +1,13 @@
+# Analysis correction candidate /192
+
+Clean `9d99e9f4` produces ELab 0.175.0 /192 and its matching external agent. This separate candidate combines the earlier recording corrections with the verification/sweep entry repair. The owner's /189 app remains current; the /192 native app has not been launched. /190 and /191 remain preserved separately.
+
+The matching packaged agent passes sixteen analysis cases: eight Verify/startup-reset and eight sweep corrections. Every rejected settings request preserves the whole snapshot. Corrected requests accept the prior or a different value. Four completed RC captures match the independently calculated charge/current equations; eight DC curves match open-capacitor voltages/current, KCL and power checks. Live circuit physics and history remain unchanged. All four captured row sets and all eight curves reopen exactly in a fresh process, with graph, scope selection and transient settings preserved. Verification defaults correctly reset because they are session-only.
+
+The package includes the app, matching agent, three editable paused examples, 102 license/notice files, guidance and rollback. ZIP creation and macOS ditto extraction into a path with spaces and µ preserve all 114 files and modes. Strict local ad-hoc signature checks pass before and after extraction. All 670 Go inputs match the source quality gate; no unchanged source tests are repeated. Canonical /120, the /189 app/agent, /190 and /191 app/agents, the whole /191 package, and SDK inputs are unchanged.
+
+Three producer errors remain preserved separately: an unrequested probe selection, an incorrect expectation that verification defaults persist, and a saved-document field name used on a snapshot. Only producer expectations/requests change; application code is unchanged. The final attempt contributes the sixteen acceptance cases. All seven owned headless processes across the four attempts close with joined workers, finalized recovery, exit readiness and exit code zero; only two belong to the final attempt.
+
+[Report and raw hashes](report.json). This is local package/headless evidence, not native input, accessibility, clean-account startup, notarization or owner acceptance. The source's 48 mounted offscreen cases remain a separate scope. The current owner window is reserved.
+
+Clarification of the earlier source-proof narrative: verification defaults are session-only and do not mark the document dirty. Kept captured results can change recording dirtiness. The source tests allow that legitimate captured-result change while checking exact live physics, schematic identity and circuit history.

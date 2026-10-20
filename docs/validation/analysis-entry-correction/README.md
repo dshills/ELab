@@ -13,3 +13,5 @@ The initial tests used a cursor-specific helper that incorrectly required the wh
 Full `scripts/check.sh` passes in 308.114 s with 670 Go inputs unchanged during the gate. It includes prior owner/agent/held-action, document/field/target and deferred-settlement guards. The reviewed native inventory still has 73 sources, 402 sites, 164 commands and 132 routes.
 
 [Report and raw hashes](report.json). Packaging and actual native input acceptance remain open. The owner window stays reserved; these results do not close broader MVP gates.
+
+Subsequent clarification: verification defaults are session-only and do not mark the document dirty. The legitimate dirtiness change above comes from kept captured results, rather than the verification settings themselves. The original assertion logs and narrative remain preserved. The [separate /192 package check](../analysis-candidate-192/README.md) verifies default reset alongside exact reopening of captured results; native input acceptance remains open.
