@@ -26,6 +26,15 @@ Pin edits preserve time, charge, simulation run/electrical revision, edit select
 
 Version-4 `.elab` files optionally store `pinned_readings.items`, containing only stable probe IDs and positions. Strict validation rejects null/missing fields, extra fields, duplicate/invalid IDs, non-grid/nonfinite/out-of-range coordinates and excess pins. Missing-source pins remain portable as unavailable preferences. New/load/example replacement installs that document’s pins or clears them. Reopen starts fresh simulation; recorded values and pin values are never trusted from this field. Recovery captures even preference-only dirty changes.
 
+Every published voltage/current probe must remain readable, including MOSFET
+gate/drain/source and gate-source voltage, and powered op-amp terminal,
+input-difference and supply readings. [PIN-REOPEN-01](validation/pinned-probe-roundtrip/README.md)
+repairs an older terminal-name list that let Save succeed but made Open and
+recovery reject those definitions. Physical names now follow the library; known
+voltage differences retain their voltage-only grammar. Present owners still
+require an exact available probe. Existing affected files open without rewriting
+under the corrected reader; the /177 package remains affected pending replacement.
+
 Older builds lacking this optional version-4 extension refuse the field instead of dropping it. Files without pins omit it and remain compatible with previous version-4 readers. This follows the document’s existing optional model-extension policy; it is not a promise that all older binaries read every new version-4 extension.
 
 SVG renders both visible card lines at saved world positions and includes the exact exported measurement/status provenance in metadata. It preserves the source project. Power, arbitrary derived expressions, and pins of captured recorded values remain outside this slice; current/voltage display preferences, full keyboard selection, screen-reader qualification and visible latency remain separate acceptance work.

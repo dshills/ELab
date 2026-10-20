@@ -1,0 +1,84 @@
+"""Preserve completed reader repair checks and exact earlier saved bytes."""
+from pathlib import Path
+import gzip
+import hashlib
+import json
+import shutil
+
+ROOT=Path.cwd()
+STAGE=ROOT/'build/pinned-probe-roundtrip-work'
+PROOF=ROOT/'docs/validation/pinned-probe-roundtrip'
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def read(path):
+    return json.loads(path.read_text())
+
+
+def main():
+    quality=read(STAGE/'quality.json')
+    assert quality['passed'] and quality['exit_code']==0 and quality['source_unchanged']
+    assert len(quality['source_sha256'])==652
+    assert all(sha(ROOT/name)==digest for name,digest in quality['source_sha256'].items())
+    receipt=ROOT/'research/ui-audit/first-version/floating-input-review-checkpoint.json'
+    base=read(receipt)
+    changed=[name for name,digest in base['quality']['source_sha256'].items() if sha(ROOT/name)!=digest]
+    assert changed==['workbench/pinned_readings.go']
+    assert set(quality['source_sha256'])-set(base['quality']['source_sha256'])=={'workbench/pinned_probe_roundtrip_test.go'}
+    assert sha(STAGE/'pinned_readings.original.go.txt')==base['quality']['source_sha256']['workbench/pinned_readings.go']
+    identities=read(STAGE/'runtime-identities.json')
+    assert identities['original']['sha256']==base['agent_sha256']
+    assert all(sha(Path(value['path']))==value['sha256'] for value in identities.values())
+    artifacts={
+        'build/ELab.app/Contents/MacOS/ELab':base['canonical']['native_sha256'],
+        'build/ELab-0.160.0-177-review/ELab.app/Contents/MacOS/ELab':base['native_sha256'],
+        'build/ELab-0.160.0-177-review/elab-agent':base['agent_sha256'],
+        'build/ELab-0.160.0-177-review.zip':'c1938f9cec8b720bfdc11a2553eece00b81562d00ba25d06acd0bbcbe2739c8a',
+        base['sdk']['archive']:base['sdk']['sha256'],
+        'build/pinned-probe-roundtrip-work/elab-agent':identities['final']['sha256'],
+    }
+    assert all(sha(ROOT/name)==digest for name,digest in artifacts.items())
+    (PROOF/'sources').mkdir();(PROOF/'checks').mkdir()
+    for name in ('pinned_readings.go','pinned_probe_roundtrip_test.go'):
+        shutil.copyfile(ROOT/'workbench'/name,PROOF/'sources'/(name+'.txt'))
+    shutil.copyfile(STAGE/'pinned_readings.original.go.txt',PROOF/'sources/pinned_readings.go.original.txt')
+    for name in ('public_cases.py','collect_proof.py'):
+        shutil.copyfile(STAGE/name,PROOF/'sources'/(name+'.txt'))
+    for name in ('original-test.txt','focused.txt','focused-final.txt','final-tests-original-source.txt',
+                 'original-public.txt','final-public.txt','build.txt','quality.txt'):
+        (PROOF/'checks'/(name+'.gz')).write_bytes(gzip.compress((STAGE/name).read_bytes(),mtime=0))
+    for name in ('quality.json','negative-control.json','runtime-identities.json'):
+        shutil.copyfile(STAGE/name,PROOF/name)
+    shutil.copyfile('/private/tmp/elab-pinned-probe-fixed-runtime/runtime.sb',PROOF/'sources/runtime.sb.txt')
+    totals={}
+    for label,directory in [('original',Path('/private/tmp/elab-pinned-probe-original-177')),('final',Path('/private/tmp/elab-pinned-probe-fixed'))]:
+        report=read(directory/'report.json')
+        assert report['passed'] and report['expected_original_failures']==(label=='original')
+        processes=[read(p) for p in directory.rglob('process-exit.json')]
+        assert all(p['exit_code']==0 for p in processes)
+        totals[label]=dict(processes=len(processes),requests=sum(p['requests'] for p in processes))
+        destination=PROOF/label;destination.mkdir()
+        for p in sorted(directory.rglob('*')):
+            if not p.is_file():
+                continue
+            q=destination/p.relative_to(directory);q.parent.mkdir(parents=True,exist_ok=True)
+            if p.suffix=='.gz':
+                shutil.copyfile(p,q)
+            else:
+                q.with_name(q.name+'.gz').write_bytes(gzip.compress(p.read_bytes(),mtime=0))
+    assert totals==dict(original=dict(processes=18,requests=176),final=dict(processes=12,requests=60))
+    result=dict(passed=True,issue='PIN-REOPEN-01',base_release='0.160.0 /177',
+        base_receipt=dict(path=str(receipt.relative_to(ROOT)),sha256=sha(receipt)),
+        changed_production=changed,added_test='workbench/pinned_probe_roundtrip_test.go',
+        application_go_source_count=652,artifacts=artifacts,totals=totals,fixtures=6,exact_file_reopens=12,
+        live_pin_definitions=44,missing_pin_definitions=44,quality_elapsed_s=quality['elapsed_s'],
+        replacement_packaged=False,new_native_input=False,new_visible_latency=False,owner_acceptance=False,full_mvp_complete=False)
+    (PROOF/'report.json').write_text(json.dumps(result,indent=2)+'\n')
+    print('Collected single-file reader repair, 236 raw requests, exact older files and source quality; artifacts preserved.')
+
+
+if __name__=='__main__':
+    main()

@@ -1,5 +1,7 @@
 # ELab first-version review · 0.160.0 /177
 
+**Known save/reopen blocker:** [PIN-REOPEN-01](../docs/validation/pinned-probe-roundtrip/README.md) makes /177 refuse saved MOSFET/op-amp pinned readings, including files whose source was deleted. Save itself succeeds and the bytes remain intact. The reader repair is in source; the /177 package below stays affected until a replacement qualifies.
+
 The [review folder](../build/ELab-0.160.0-177-review) includes [ELab.app](../build/ELab-0.160.0-177-review/ELab.app), matching `elab-agent`, three editable examples and framework notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is needed.
 
 The [ZIP](../build/ELab-0.160.0-177-review.zip) and [checksum](../build/ELab-0.160.0-177-review.zip.sha256) preserve all 372 files/modes through macOS extraction into a Unicode path with spaces. Strict local signature and three examples/fresh saves/reopens verify. This does not establish installation, Developer ID, notarization or Gatekeeper acceptance.

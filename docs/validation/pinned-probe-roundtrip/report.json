@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "issue": "PIN-REOPEN-01",
+  "base_release": "0.160.0 /177",
+  "base_receipt": {
+    "path": "research/ui-audit/first-version/floating-input-review-checkpoint.json",
+    "sha256": "923cadf9432ffd66782445484057f21f5c668a1fdcc4931892585157b49b4aee"
+  },
+  "changed_production": [
+    "workbench/pinned_readings.go"
+  ],
+  "added_test": "workbench/pinned_probe_roundtrip_test.go",
+  "application_go_source_count": 652,
+  "artifacts": {
+    "build/ELab.app/Contents/MacOS/ELab": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "build/ELab-0.160.0-177-review/ELab.app/Contents/MacOS/ELab": "f07c3eb6dd3f69c077ddb3e1b3d630e32d3d74595e7a8bf87940ee66cb1be0e3",
+    "build/ELab-0.160.0-177-review/elab-agent": "2861e9e014c12b6edc093b4965f8515be30aeee9948ecd8bb761e6f1cb30cc55",
+    "build/ELab-0.160.0-177-review.zip": "c1938f9cec8b720bfdc11a2553eece00b81562d00ba25d06acd0bbcbe2739c8a",
+    "third_party/vellum/vellum-b22478c.tar.gz": "22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968",
+    "build/pinned-probe-roundtrip-work/elab-agent": "0591030520cb883800de6611063e09f4364657e1161a2702516b976ca878bd75"
+  },
+  "totals": {
+    "original": {
+      "processes": 18,
+      "requests": 176
+    },
+    "final": {
+      "processes": 12,
+      "requests": 60
+    }
+  },
+  "fixtures": 6,
+  "exact_file_reopens": 12,
+  "live_pin_definitions": 44,
+  "missing_pin_definitions": 44,
+  "quality_elapsed_s": 366.2317696249811,
+  "replacement_packaged": false,
+  "new_native_input": false,
+  "new_visible_latency": false,
+  "owner_acceptance": false,
+  "full_mvp_complete": false
+}

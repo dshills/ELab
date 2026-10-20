@@ -4,7 +4,9 @@ ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N
 
 The [first-version delivery plan](research/34-first-version-plan.md) targets a usable macOS hobbyist alpha with frozen scope, ordered blockers and a concrete handoff.
 
-**Private review ready: 0.160.0 /177.** Use the [review app](build/ELab-0.160.0-177-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.160.0-177-review.zip) with its [checksum](build/ELab-0.160.0-177-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening.
+**Current private review: 0.160.0 /177.** Use the [review app](build/ELab-0.160.0-177-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.160.0-177-review.zip) with its [checksum](build/ELab-0.160.0-177-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening.
+
+**Known save/reopen blocker:** [PIN-REOPEN-01](docs/validation/pinned-probe-roundtrip/README.md) makes /177 reject files containing supported MOSFET/op-amp pinned readings, despite a successful Save. Files stay intact; the corrected source reopens them without rewriting. A replacement package is required before this issue is closed.
 
 Clean `7f1ab95` /SDK `b22478c` fixes FLOATING-INPUT-01: floating DC source transient `input_v` now reports positive minus negative through Step, switch edges and Power off. Solver physics, plotted probes, models, commands, formats, native bindings and SDK are unchanged. Four topologies match through copied native/headless commands with ten paired Step snapshots and eight fresh saved-project reopens.
 

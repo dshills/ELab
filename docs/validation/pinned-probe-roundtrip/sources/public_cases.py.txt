@@ -1,0 +1,161 @@
+"""Create private affected files, then reopen their exact bytes through public commands."""
+import argparse
+import gzip
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import time
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+class Client:
+    def __init__(self, agent, folder):
+        self.folder=folder
+        folder.mkdir(parents=True)
+        self.log=(folder/'stderr.txt').open('w')
+        self.process=subprocess.Popen([str(agent)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=self.log,text=True)
+        self.rows=[]
+        self.command_revision=0
+        self.ask('project.inspect')
+
+    def ask(self, command, params=None, mutate=False, error=None):
+        seq=len(self.rows)+1
+        request=dict(version=1,id=f'pins-{seq}',command=command,params=params or {})
+        if mutate:
+            request.update(key=f'pins-{seq}',expected_command_revision=self.command_revision)
+        self.process.stdin.write(json.dumps(request)+'\n')
+        self.process.stdin.flush()
+        response=json.loads(self.process.stdout.readline())
+        self.rows.append(dict(request=request,response=response))
+        assert response['version']==1 and response['id']==request['id']
+        assert response.get('error',{}).get('code')==error,response
+        result=response.get('result')
+        if isinstance(result,dict) and 'components' in result:
+            self.command_revision=result['command_revision']
+        return response if error else result
+
+    def fresh(self):
+        deadline=time.monotonic()+15
+        while True:
+            state=self.ask('project.inspect')
+            assert state['status']!='error',state['diagnostics']
+            if state['status']=='paused' and state.get('transient') and not state['transient']['stale']:
+                return state
+            assert time.monotonic()<deadline
+            time.sleep(.02)
+
+    def close(self):
+        state=self.ask('app.close',dict(discard_changes=True),True)
+        job=state['shutdown']
+        assert state['closed'] and job['status']=='completed' and job['workers_joined'] and job['exit_ready']
+        self.process.stdin.close()
+        assert self.process.wait(timeout=10)==0
+
+    def finish(self):
+        if self.process.poll() is None:
+            self.process.stdin.close()
+            self.process.wait(timeout=10)
+        with gzip.open(self.folder/'transcript.jsonl.gz','wt') as target:
+            for row in self.rows:
+                target.write(json.dumps(row)+'\n')
+        self.log.close()
+        (self.folder/'process-exit.json').write_text(json.dumps(dict(exit_code=self.process.returncode,requests=len(self.rows)),indent=2)+'\n')
+
+
+def create(agent, output):
+    cases=[]
+    for example,owner,start in [('nmos','M1',0),('pmos','M1',0),('opamp-follower','U1',0),('opamp-follower','U1',8),('opamp-inverting','U1',0),('opamp-inverting','U1',8)]:
+        folder=output/f'{example}-{start}'
+        folder.mkdir()
+        client=Client(agent,folder/'creator')
+        try:
+            client.ask('example.load',dict(id=example),True)
+            client.ask('simulation.pause',mutate=True)
+            client.ask('simulation.restart',mutate=True)
+            state=client.fresh()
+            inventory=[p for p in state['scope']['available'] if p['positive'].split('.',1)[0]==owner]
+            ids=[p['id'] for p in inventory[start:start+8]]
+            assert ids
+            for i,id in enumerate(ids):
+                client.ask('measurement.pin.add',dict(id=id,position=dict(x=i*20,y=300)),True)
+            before=client.ask('project.inspect')
+            for key in ('components','wires','mixed','transient','run_id','electrical_revision'):
+                assert before.get(key)==state.get(key),key
+            present=folder/'present.elab'
+            client.ask('project.save',dict(path=str(present)),True)
+            assert not client.ask('project.inspect')['document']['dirty']
+            client.ask('object.delete',dict(id=owner),True)
+            missing_state=client.ask('project.inspect')
+            missing=folder/'missing.elab'
+            client.ask('project.save',dict(path=str(missing)),True)
+            for label,value in [('source-state',before),('missing-state',missing_state)]:
+                with gzip.open(folder/(label+'.json.gz'),'wt') as target:
+                    json.dump(value,target)
+            case=dict(name=folder.name,owner=owner,ids=ids,present=str(present),missing=str(missing),
+                      present_sha256=sha(present),missing_sha256=sha(missing))
+            client.close()
+            cases.append(case)
+        finally:
+            client.finish()
+    (output/'fixtures.json').write_text(json.dumps(cases,indent=2)+'\n')
+    return cases
+
+
+def reopen(agent, output, cases, expect_bug):
+    results=[]
+    for case in cases:
+        for kind in ('present','missing'):
+            path=Path(case[kind]);digest=case[kind+'_sha256']
+            assert sha(path)==digest
+            folder=output/'readers'/(case['name']+'-'+kind)
+            client=Client(agent,folder)
+            try:
+                before=client.ask('project.inspect')
+                response=client.ask('project.load',dict(path=str(path)),True,error='invalid-document' if expect_bug else None)
+                if expect_bug:
+                    assert 'pinned reading' in response['error']['message'],response
+                    state=client.ask('project.inspect')
+                    for key in ('components','wires','nets','mixed','transient','document','run_id','electrical_revision','undo_entry','redo_entry'):
+                        assert state.get(key)==before.get(key),key
+                else:
+                    state=client.fresh() if kind=='present' else client.ask('project.inspect')
+                    assert not state['document']['dirty']
+                    assert [p['definition']['id'] for p in state['pinned_readings']]==case['ids']
+                    for pin in state['pinned_readings']:
+                        if kind=='present':
+                            assert pin['state']=='live' and 'value' in pin
+                        else:
+                            assert pin['state']=='unavailable' and 'value' not in pin
+                with gzip.open(folder/'state.json.gz','wt') as target:
+                    json.dump(state,target)
+                assert sha(path)==digest
+                client.close()
+                results.append(dict(case=case['name'],kind=kind,source_path=str(path),source_sha256=digest,
+                                    expected_error='invalid-document' if expect_bug else None,file_unchanged=True))
+            finally:
+                client.finish()
+    return results
+
+
+def main():
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--agent',type=Path,required=True)
+    parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--reuse',type=Path)
+    parser.add_argument('--expect-bug',action='store_true')
+    args=parser.parse_args()
+    args.output.mkdir()
+    cases=json.loads((args.reuse/'fixtures.json').read_text()) if args.reuse else create(args.agent,args.output)
+    results=reopen(args.agent,args.output,cases,args.expect_bug)
+    report=dict(passed=True,expected_original_failures=args.expect_bug,cases=cases,reopens=results,
+                mode='Reopen exact earlier saved bytes' if args.reuse else 'Create then reopen private fixtures')
+    (args.output/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+    print(json.dumps(dict(passed=True,expected_original_failures=args.expect_bug,fixtures=len(cases),reopens=len(results))))
+
+
+if __name__=='__main__':
+    main()

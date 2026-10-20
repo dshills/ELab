@@ -167,11 +167,17 @@ func validPinnedProbeID(id string) bool {
 	if len(parts) == 1 {
 		return true
 	}
-	switch parts[1] {
-	case "1", "2", "positive", "negative", "anode", "cathode", "base", "collector", "emitter", "wiper", "reference", "node":
-		return true
+	// Keep missing-source preferences portable using the same physical pin
+	// names as the library. Present owners still require an exact probe match.
+	for _, part := range libraryParts() {
+		for _, terminal := range part.Terminals {
+			if parts[1] == terminal {
+				return true
+			}
+		}
 	}
-	return false
+	// These voltage differences are probes rather than physical terminals.
+	return strings.HasPrefix(id, "v:") && (parts[1] == "gate-source" || parts[1] == "input-difference" || parts[1] == "supply")
 }
 
 // PinnedReadingBounds is shared by native drawing/hit testing, Fit and export.
