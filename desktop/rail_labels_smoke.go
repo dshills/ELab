@@ -126,6 +126,7 @@ func nativeInspectorTextSmoke(ctx context.Context, a *app.Application, s *screen
 		Example      string  `json:"example"`
 		ID           string  `json:"id"`
 		Group        float32 `json:"group_width_px"`
+		Frame        float32 `json:"frame_width_px"`
 		Allocated    float32 `json:"allocated_width_px"`
 		Actual       float32 `json:"actual_width_px"`
 		Shaped       float32 `json:"shaped_right_px"`
@@ -167,6 +168,7 @@ func nativeInspectorTextSmoke(ctx context.Context, a *app.Application, s *screen
 				return false
 			}
 			labels := map[string]*core.Text{}
+			frames := map[string]float32{}
 			var group float32
 			s.drawing.widget.Scene.WidgetWalkDown(func(w core.Widget, base *core.WidgetBase) bool {
 				if base.Name == "inspector-group-circuit" {
@@ -174,6 +176,9 @@ func nativeInspectorTextSmoke(ctx context.Context, a *app.Application, s *screen
 				}
 				if text, ok := w.(*core.Text); ok {
 					labels[base.Name] = text
+				}
+				if strings.HasPrefix(base.Name, railLabelBoundsPrefix) {
+					frames[base.Name] = base.Geom.Size.Actual.Content.X
 				}
 				return true
 			})
@@ -188,13 +193,14 @@ func nativeInspectorTextSmoke(ctx context.Context, a *app.Application, s *screen
 			sample = nil
 			for _, id := range ids {
 				label := labels[id]
+				frame := frames[railLabelBoundsPrefix+id]
 				node, ok := findNode(root, id)
-				if !ok || label == nil || label.PaintText() == nil || label.Geom.Size.Actual.Content.X <= 0 {
+				if !ok || label == nil || frame <= 0 || label.PaintText() == nil || label.Geom.Size.Actual.Content.X <= 0 {
 					return false
 				}
 				paint := label.PaintText()
 				same := strings.Join(strings.Fields(string(paint.Source.Join())), " ") == strings.Join(strings.Fields(node.Text), " ")
-				sample = append(sample, geometry{Example: example, ID: id, Group: group, Allocated: label.Geom.Size.Alloc.Content.X, Actual: label.Geom.Size.Actual.Content.X, Shaped: paint.Bounds.Max.X, CompleteText: same, Truncated: paint.Truncated})
+				sample = append(sample, geometry{Example: example, ID: id, Group: group, Frame: frame, Allocated: label.Geom.Size.Alloc.Content.X, Actual: label.Geom.Size.Actual.Content.X, Shaped: paint.Bounds.Max.X, CompleteText: same, Truncated: paint.Truncated})
 			}
 			return true
 		})
@@ -205,7 +211,7 @@ func nativeInspectorTextSmoke(ctx context.Context, a *app.Application, s *screen
 	}
 	passed := true
 	for _, sample := range measured {
-		passed = passed && sample.Allocated >= sample.Group*0.9 && sample.Allocated <= sample.Group+1 && sample.CompleteText && !sample.Truncated && sample.Shaped <= sample.Actual+1
+		passed = passed && sample.Frame >= sample.Group*0.9 && sample.Frame <= sample.Group+1 && sample.Actual <= sample.Frame+1 && sample.CompleteText && !sample.Truncated && sample.Shaped <= sample.Actual+1
 	}
 	evidence, _ := json.Marshal(map[string]any{"event": "elab.inspector-width.smoke", "passed": passed, "labels": measured})
 	log.Print(string(evidence))

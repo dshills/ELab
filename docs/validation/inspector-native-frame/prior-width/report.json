@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-19",
+  "issue": "UI-INSPECTOR-WIDTH-01",
+  "severity": "P2 readability",
+  "source_parent_commit": "dbb82a7c1577b1cdccdf0656a9ba52175e6270e1",
+  "source_qualified": true,
+  "replacement_packaging_pending": true,
+  "new_release": false,
+  "native_fix_qualified": false,
+  "original_subcase_failures": 6,
+  "fixed_subcases": 6,
+  "examples": [
+    "rc",
+    "nmos",
+    "pmos",
+    "cmos"
+  ],
+  "repaint_passes_per_example": 2,
+  "available_label_frame_px": 236,
+  "constrained_rail_widths": [
+    152,
+    248
+  ],
+  "application_sources": 659,
+  "tool_sources": 3,
+  "quality_elapsed_seconds": 229.25331525004003,
+  "prior_receipt_sha256": "2bb3042007322ccc66a92ecc59ef7c170bcb5f23152b65c279ff6d8daf15bb94",
+  "solver_changed": false,
+  "commands_changed": false,
+  "sdk_changed": false,
+  "owner_acceptance": false,
+  "full_mvp_complete": false,
+  "scope": "Mounted production circuit groups and native geometry smoke source; corrected native binary still requires copied runtime qualification",
+  "fixture_history": [
+    "Initial manual theme missing explicit background/font failed before meaningful rendering",
+    "Group minimum alone corrected outer width but left inner text frames narrow",
+    "Initial natural-text-width threshold was too strict for short shaped lines; final regression checks frame allocation and containment instead"
+  ]
+}
