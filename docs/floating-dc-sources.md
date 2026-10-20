@@ -18,6 +18,14 @@ Use the ordinary `component.place`, `component.rotate`, `wire.connect` and `comp
 
 Only **DC** sources gain floating terminals in this checkpoint. Pulse, sine and finite-pulse sources still require a directly grounded negative terminal, and NPN emitters remain grounded. Every network needs an explicit common reference and connected required terminals. An electrically isolated source is not made solvable by adding a decorative ground elsewhere.
 
+For a network transient, `transient.sample.input_v` and each retained sample's
+`input_v` describe the primary source's **positive minus negative** voltage,
+including a manual Power off/on override. They are distinct from the
+positive-terminal-to-ground probe. A [source reporting repair](validation/floating-source-input/README.md)
+corrects steps and switch-event samples that previously used only the positive
+node. The numerical solver and selected probe values were already differential;
+the /176 package remains affected until a replacement is qualified.
+
 The existing MNA branch already enforces `Vpositive − Vnegative = source voltage`. Compilation now uses both actual terminals when checking independence of ideal source constraints. Source loops—whether redundant or contradictory—and capacitor/source startup constraint loops refuse rather than inventing currents. A capacitor directly across a source still refuses the existing impulse-model case. A resistor in the return path is supported: direct source-positive to capacitor is not itself a parallel source/capacitor constraint.
 
 The three-source capacity, component/node limits, Newton iteration ceiling and integration attempt/time budgets stay unchanged. [Linear source/passive networks now take full affine corrections](linear-network-solves.md); nonlinear circuits retain their 0.2 V update cap. Accepted node voltages must remain within ±30 V. Review found a converged initial guess could bypass that range check; acceptance now checks it as well as the existing check after updates. A stack within per-source input bounds can still fail the overall range or convergence limits. Such failure remains explicit; no simplified model or guessed state is substituted.

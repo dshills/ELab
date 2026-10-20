@@ -4,7 +4,9 @@ ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N
 
 The [first-version delivery plan](research/34-first-version-plan.md) targets a usable macOS hobbyist alpha with frozen scope, ordered blockers and a concrete handoff.
 
-**Private review ready: 0.159.0 /176.** Use the [review app](build/ELab-0.159.0-176-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.159.0-176-review.zip) with its [checksum](build/ELab-0.159.0-176-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening.
+**Current private review: 0.159.0 /176.** Use the [review app](build/ELab-0.159.0-176-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.159.0-176-review.zip) with its [checksum](build/ELab-0.159.0-176-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening.
+
+Source review found [FLOATING-INPUT-01](docs/validation/floating-source-input/README.md): /176 can report a floating DC source's positive node as transient `input_v`. Differential probes and solved physics remain correct. The source repair awaits a qualified replacement package; /176 and its recorded evidence stay preserved.
 
 Clean `f08e77e` /SDK `b22478c` keeps the shutdown close action visible while long errors scroll. An actual copied-native check at a 1053×762 captured frame scrolls the error area and acknowledges once through the visible button, preserving the saved LED, full errors and protected files. Full source quality, copied native smoke, all four adapters, native/headless reference workflows, strict local signature and archive/example reopens pass. Shared commands, models, format and SDK remain unchanged.
 

@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "agent": "/private/tmp/elab-floating-input-fixed-runtime/agent",
+  "cases": [
+    {
+      "return_resistor": false,
+      "switched": false,
+      "requests": 10,
+      "agent_exit": 0,
+      "expected_bug": false,
+      "mismatch_count": 0,
+      "first_mismatch": null
+    },
+    {
+      "return_resistor": false,
+      "switched": true,
+      "requests": 13,
+      "agent_exit": 0,
+      "expected_bug": false,
+      "mismatch_count": 0,
+      "first_mismatch": null
+    },
+    {
+      "return_resistor": true,
+      "switched": false,
+      "requests": 10,
+      "agent_exit": 0,
+      "expected_bug": false,
+      "mismatch_count": 0,
+      "first_mismatch": null
+    },
+    {
+      "return_resistor": true,
+      "switched": true,
+      "requests": 13,
+      "agent_exit": 0,
+      "expected_bug": false,
+      "mismatch_count": 0,
+      "first_mismatch": null
+    }
+  ]
+}

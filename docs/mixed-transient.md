@@ -28,7 +28,7 @@ There are at most 100 Newton iterations per attempt, 512 adaptive attempts and a
 
 The NPN remains an educational, memoryless junction model with no physical part calibration, breakdown, heating, Early effect, junction capacitance or intrinsic switching/storage delay. The external capacitors now provide genuine dynamic state. Capacitors are ideal and unpolarized, with no ESR/leakage. LED reverse current is neglected. Node solutions are bounded to ±30 V; source and component value limits remain unchanged.
 
-The mixed engine supports **100 nodes including ground and 64 simulated parts**, with **3 sources, 4 capacitors, 2 grounded-emitter NPNs, 64 resistors and 4 LEDs**; other supported network parts retain their [published bounds](circuit-capacity.md). All source negatives must be grounded. At least one capacitor and NPN are required to select this engine. Open pins, disconnected islands, shorts, unknown models and excess complexity are diagnosed. Direct ideal-source/capacitor connections and redundant source/capacitor constraint loops are refused: impulse or indeterminate startup-current cases are not modeled. Existing simpler LED, RC and pulse-NPN engines remain available.
+The mixed engine supports **100 nodes including ground and 64 simulated parts**, with **3 sources, 4 capacitors, 2 grounded-emitter NPNs, 64 resistors and 4 LEDs**; other supported network parts retain their [published bounds](circuit-capacity.md). Waveform source negatives must be grounded; [DC sources may float within a ground-referenced network](floating-dc-sources.md). At least one capacitor and NPN are required to select this engine. Open pins, disconnected islands, shorts, unknown models and excess complexity are diagnosed. Direct ideal-source/capacitor connections and redundant source/capacitor constraint loops are refused: impulse or indeterminate startup-current cases are not modeled. Existing simpler LED, RC and pulse-NPN engines remain available.
 
 ## Shared commands and persistence
 
@@ -41,6 +41,12 @@ Snapshot `mixed` contains engine/run/electrical revision, time, all non-ground a
 `mixed.kcl_residual_a` is the maximum node-current residual. Power balance uses instantaneous capacitor terminal power `voltage × current`; `power_residual_w` is the remaining balance error. Fresh SDIRK2 and Radau results report zero `numerical_damping_w`: an internal stage history is not an accepted-state energy difference. Historical backward-Euler captures retain their original nonnegative damping readout. Readings at source events/time zero use constrained capacitor currents.
 
 The common `transient` carries the rolling primary trace, events, mode/pending mode, stale state, run/time identity and settings. Here `voltage_v` is the primary transistor's VCE, `current_a` is the primary LED current (or collector current without LEDs), `capacitor_voltage_v` is the primary capacitor's signed voltage, and `energy_j` is its stored energy. Omitted zero optional fields mean zero. `time_constant_s` is zero because the nonlinear network has no single RC time constant. Up to 512 samples and 64 events are retained; all other current device readings are in `mixed`.
+
+`input_v` denotes the primary source's positive-minus-negative voltage, including
+the accepted side of an input/switch edge. A floating source's positive node
+relative to ground is a separate probe. [FLOATING-INPUT-01](validation/floating-source-input/README.md)
+repairs network steps/event samples that confused those two quantities; /176
+remains affected until the corrected source is packaged and qualified.
 
 Version 2 `.elab` files store optional component `initial_voltage_v` plus graph, model metadata and experiment settings. Existing version 1 and version 2 files still load. The new reader rejects initial-condition metadata on non-capacitors or out-of-range values. Older builds explicitly reject the new field or report an unsupported mixed topology. Files do not contain solver vectors, device results, waveform history or credentials.
 

@@ -1,0 +1,114 @@
+"""Owned headless reproduction; no native window or shared settings access."""
+import argparse
+import gzip
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import time
+
+
+def run(agent, output, returned, switched, expect_bug):
+    output.mkdir()
+    rows = []
+    with (output/'stderr.txt').open('wb') as errors:
+        process = subprocess.Popen([str(agent)], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                   stderr=errors, text=True)
+        revision = 0
+
+        def ask(command, params=None, mutate=False):
+            nonlocal revision
+            number = len(rows)+1
+            request = dict(version=1, id=f'floating-{number}', command=command, params=params or {})
+            if mutate:
+                request.update(key=f'floating-{number}', expected_command_revision=revision)
+            line = json.dumps(request)+'\n'
+            process.stdin.write(line)
+            process.stdin.flush()
+            response = json.loads(process.stdout.readline())
+            rows.append(dict(request=request, response=response))
+            assert response['id'] == request['id'] and response['version'] == 1 and not response.get('error'), response
+            result = response['result']
+            if isinstance(result, dict) and 'command_revision' in result:
+                revision = result['command_revision']
+            return result
+
+        try:
+            ask('project.inspect')
+            ask('simulation.pause', mutate=True)
+            parts = [('V1', 'dc-source', -200, 0, '5 V'), ('R1', 'resistor', 0, -110, '10k'),
+                     ('C1', 'capacitor', 200, 0, '1uF'), ('GND', 'ground', 0, 110, '')]
+            if switched:
+                parts.append(('S1', 'switch', -100, -60, ''))
+            edits = [dict(command='component.place', params=dict(id=i, kind=k, position=dict(x=x,y=y), value=v))
+                     for i,k,x,y,v in parts]
+            wires = [('V1.positive','R1.1'), ('R1.2','C1.1'), ('C1.2','V1.negative'), ('C1.1','GND.reference')]
+            if returned:
+                wires = [('V1.positive','C1.1'), ('C1.2','GND.reference'), ('V1.negative','R1.1'), ('R1.2','GND.reference')]
+            if switched:
+                wires[0] = ('S1.2',wires[0][1])
+                wires.append(('V1.positive','S1.1'))
+            edits += [dict(command='wire.connect',params=dict(id=f'W{i+1}', **{'from':a,'to':b})) for i,(a,b) in enumerate(wires)]
+            ask('edit.batch',dict(name='Floating RC reference',edits=edits),True)
+            if switched:
+                ask('switch.set',dict(id='S1',closed=True),True)
+            ask('simulation.restart',mutate=True)
+            deadline = time.monotonic()+15
+            while True:
+                state = ask('project.inspect')
+                if state['status'] == 'paused' and state.get('transient') and not state['transient']['stale']:
+                    break
+                assert time.monotonic()<deadline, state
+                time.sleep(.02)
+            ask('scope.probes.set',dict(ids=['v:V1','v:V1.positive','v:C1']),True)
+            stages = [ask('simulation.step',dict(duration_s=.02),True)]
+            if switched:
+                ask('switch.set',dict(id='S1',closed=False),True)
+                stages.append(ask('simulation.step',dict(duration_s=.001),True))
+            old_count = len(stages[-1]['transient']['samples'])
+            ask('simulation.input.set',dict(mode='low'),True)
+            off = ask('simulation.step',dict(duration_s=.001),True)
+            mismatches = []
+            for stage_index, stage in enumerate(stages):
+                for sample, point in zip(stage['transient']['samples'], stage['scope']['traces'][0]['points'], strict=True):
+                    assert abs(point['value']-5)<1e-12
+                    if abs(sample['input_v']-5)>1e-12:
+                        mismatches.append(dict(stage=stage_index,time_s=sample['time_s'],input_v=sample['input_v'],expected_v=5))
+            for sample in off['transient']['samples'][old_count:]:
+                if abs(sample['input_v'])>1e-12:
+                    mismatches.append(dict(stage='off',time_s=sample['time_s'],input_v=sample['input_v'],expected_v=0))
+            assert bool(mismatches) == expect_bug, mismatches[:3]
+            closed = ask('app.close',dict(discard_changes=True),True)
+            assert closed['shutdown']['status']=='completed' and closed['shutdown']['exit_ready'] and closed['shutdown']['workers_joined']
+            process.stdin.close()
+            exit_code = process.wait(timeout=5)
+            assert exit_code == 0
+            return dict(return_resistor=returned,switched=switched,requests=len(rows),agent_exit=exit_code,
+                        expected_bug=expect_bug,mismatch_count=len(mismatches),first_mismatch=mismatches[0] if mismatches else None)
+        finally:
+            with gzip.open(output/'transcript.jsonl.gz','wt') as target:
+                for row in rows:
+                    target.write(json.dumps(row)+'\n')
+            if process.poll() is None:
+                process.stdin.close()
+                process.wait(timeout=5)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--agent',type=Path,required=True)
+    parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--expect-bug',action='store_true')
+    args = parser.parse_args()
+    args.output.mkdir()
+    results = []
+    for returned in (False,True):
+        for switched in (False,True):
+            results.append(run(args.agent,args.output/f'return-{int(returned)}-switch-{int(switched)}',returned,switched,args.expect_bug))
+    report = dict(passed=True,agent=str(args.agent),cases=results)
+    (args.output/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+    print(json.dumps(report))
+
+
+if __name__=='__main__':
+    main()

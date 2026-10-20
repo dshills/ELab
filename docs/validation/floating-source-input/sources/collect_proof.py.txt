@@ -1,0 +1,78 @@
+"""Collect completed source/public checks without editing any frozen review."""
+from pathlib import Path
+import gzip
+import hashlib
+import json
+import shutil
+
+ROOT = Path.cwd()
+STAGE = ROOT/'build/floating-input-review-work'
+PROOF = ROOT/'docs/validation/floating-source-input'
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main():
+    quality = json.loads((STAGE/'quality.json').read_text())
+    assert quality['passed'] and quality['source_unchanged'] and quality['exit_code'] == 0
+    assert len(quality['source_sha256']) == 651
+    for relative, digest in quality['source_sha256'].items():
+        assert sha(ROOT/relative) == digest, relative
+    receipt_path = ROOT/'research/ui-audit/first-version/shutdown-layout-review-checkpoint.json'
+    base = json.loads(receipt_path.read_text())
+    changes = [p for p,d in base['quality']['source_sha256'].items() if sha(ROOT/p) != d]
+    assert changes == ['workbench/mixed_transient.go','workbench/switch_actuation.go'], changes
+    runtime_changes = []
+    for relative, digest in base['runtime_source_inputs'].items():
+        data = (ROOT/relative).read_bytes()
+        if hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest() != digest:
+            runtime_changes.append(relative)
+    assert runtime_changes == changes
+    artifacts = {
+        'build/ELab.app/Contents/MacOS/ELab':'914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c',
+        'build/ELab-0.159.0-176-review/ELab.app/Contents/MacOS/ELab':base['native_sha256'],
+        'build/ELab-0.159.0-176-review/elab-agent':base['agent_sha256'],
+        'build/ELab-0.159.0-176-review.zip':'3f38afd45f33f1b09dbbb998be1018515709d5e0c22068ff5980b20342089d39',
+        'third_party/vellum/vellum-b22478c.tar.gz':'22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968',
+        'build/floating-input-review-work/elab-agent':'8a0875c714c7707721d6a60d2ffe1710e2b67a2f029d46217251b7c3b37f43fa',
+    }
+    for relative, digest in artifacts.items():
+        assert sha(ROOT/relative) == digest, relative
+    for dirname in ('sources','checks','public'):
+        (PROOF/dirname).mkdir()
+    for name in ('mixed_transient.go','switch_actuation.go','floating_input_test.go'):
+        shutil.copy2(ROOT/'workbench'/name, PROOF/'sources'/(name+'.txt'))
+    for name in ('mixed_transient','switch_actuation'):
+        shutil.copy2(STAGE/(name+'.original.go.txt'),PROOF/'sources'/(name+'.go.original.txt'))
+    for name in ('public_cases.py','collect_proof.py'):
+        shutil.copy2(STAGE/name,PROOF/'sources'/(name+'.txt'))
+    shutil.copy2(STAGE/'agent-build-info.txt',PROOF/'sources/agent-build-info.txt')
+    shutil.copy2('/private/tmp/elab-floating-input-fixed-runtime/runtime.sb',PROOF/'sources/runtime.sb.txt')
+    shutil.copy2('/private/tmp/elab-floating-input-fixed-runtime/agent',PROOF/'sources/agent-wrapper.txt')
+    for name in ('original-test.txt','final-test-original-source.txt','focused.txt','quality.txt','original-public.txt','final-public.txt'):
+        (PROOF/'checks'/(name+'.gz')).write_bytes(gzip.compress((STAGE/name).read_bytes(),mtime=0))
+    shutil.copy2(STAGE/'quality.json',PROOF/'quality.json')
+    for label, original in [('original','/private/tmp/elab-floating-input-original-176'),('final','/private/tmp/elab-floating-input-fixed')]:
+        destination = PROOF/'public'/label
+        destination.mkdir()
+        shutil.copy2(Path(original)/'report.json',destination/'report.json')
+        for case in sorted(p for p in Path(original).iterdir() if p.is_dir()):
+            out = destination/case.name
+            out.mkdir()
+            shutil.copy2(case/'transcript.jsonl.gz',out/'transcript.jsonl.gz')
+            (out/'stderr.txt.gz').write_bytes(gzip.compress((case/'stderr.txt').read_bytes(),mtime=0))
+    report = dict(passed=True,issue='FLOATING-INPUT-01',date_local='2026-10-19',
+                  base_receipt=dict(path=str(receipt_path.relative_to(ROOT)),sha256=sha(receipt_path)),
+                  changed_production=changes,application_go_source_count=651,added_test='workbench/floating_input_test.go',
+                  runtime_input_count=358,changed_runtime_inputs=runtime_changes,
+                  artifacts=artifacts,quality_elapsed_s=quality['elapsed_s'],public_requests=92,
+                  paired_step_snapshots=10,new_native_interaction=False,replacement_packaged=False,
+                  native_binding_change=False,model_change=False,owner_acceptance=False,full_mvp_complete=False)
+    (PROOF/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+    print('Collected final source/public/quality evidence; only two production files changed, frozen artifacts preserved.')
+
+
+if __name__=='__main__':
+    main()

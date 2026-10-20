@@ -1,5 +1,7 @@
 # PRD implementation audit
 
+October 19 source follow-up: [FLOATING-INPUT-01](../docs/validation/floating-source-input/README.md) reproduces an incorrect transient `input_v` scalar for floating DC sources in four /176 public circuits. Differential probes and solver physics remain correct. The final regression fails on original source and passes on corrected source. Four corrected public cases preserve ten otherwise identical physical/state stages; full default quality passes in 359.596 s. /176 remains affected pending a clean replacement. This adds bounded source/headless reporting evidence, no physical UI or broader acceptance; P0 classifications remain 17 implemented /10 partial.
+
 Audited against [PRD draft 0.3](07-product-requirements.md), starting at local checkpoint `90927b3` on October 13, 2026 and reconciled with the /160 native RC measurement failure, source repair and owner print report on October 18; the canonical app remains at the 0.105.0 checkpoint. This is an engineering conformance audit, not a participant or screen-reader study. Passing existing demonstrations does not establish MVP completion. Proposed targets and original scope are preserved.
 
 **Status terms:** Implemented means the stated behavior has direct source/test evidence within the documented envelope. Partial means some acceptance conditions remain unmet or unverified. Pending means evidence is absent or a release gate has not been performed. No row below declares an unperformed human, clean-installation, platform or visible-latency test passed.

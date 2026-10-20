@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "issue": "FLOATING-INPUT-01",
+  "date_local": "2026-10-19",
+  "base_receipt": {
+    "path": "research/ui-audit/first-version/shutdown-layout-review-checkpoint.json",
+    "sha256": "991a1a4618a20fccacd9b3d6fe6fa44fdf6d11c56e611bf94bfc0cad9ec2b47e"
+  },
+  "changed_production": [
+    "workbench/mixed_transient.go",
+    "workbench/switch_actuation.go"
+  ],
+  "application_go_source_count": 651,
+  "added_test": "workbench/floating_input_test.go",
+  "runtime_input_count": 358,
+  "changed_runtime_inputs": [
+    "workbench/mixed_transient.go",
+    "workbench/switch_actuation.go"
+  ],
+  "artifacts": {
+    "build/ELab.app/Contents/MacOS/ELab": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "build/ELab-0.159.0-176-review/ELab.app/Contents/MacOS/ELab": "bcb007445f9fde3aee22418413a82fd2772272be8816e2c51562a89fd6ae41d8",
+    "build/ELab-0.159.0-176-review/elab-agent": "557437ef0d02202747ae6da78d04f58353fa4b43fb278f15cd579ef03dbdceed",
+    "build/ELab-0.159.0-176-review.zip": "3f38afd45f33f1b09dbbb998be1018515709d5e0c22068ff5980b20342089d39",
+    "third_party/vellum/vellum-b22478c.tar.gz": "22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968",
+    "build/floating-input-review-work/elab-agent": "8a0875c714c7707721d6a60d2ffe1710e2b67a2f029d46217251b7c3b37f43fa"
+  },
+  "quality_elapsed_s": 359.5960409579566,
+  "public_requests": 92,
+  "paired_step_snapshots": 10,
+  "new_native_interaction": false,
+  "replacement_packaged": false,
+  "native_binding_change": false,
+  "model_change": false,
+  "owner_acceptance": false,
+  "full_mvp_complete": false
+}

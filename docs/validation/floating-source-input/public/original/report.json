@@ -1,0 +1,62 @@
+{
+  "passed": true,
+  "agent": "/private/tmp/elab-first-version-176-signed-runtime/agent",
+  "cases": [
+    {
+      "return_resistor": false,
+      "switched": false,
+      "requests": 10,
+      "agent_exit": 0,
+      "expected_bug": true,
+      "mismatch_count": 21,
+      "first_mismatch": {
+        "stage": 0,
+        "time_s": 0.001,
+        "input_v": 4.524185720147746,
+        "expected_v": 5
+      }
+    },
+    {
+      "return_resistor": false,
+      "switched": true,
+      "requests": 13,
+      "agent_exit": 0,
+      "expected_bug": true,
+      "mismatch_count": 43,
+      "first_mismatch": {
+        "stage": 0,
+        "time_s": 0.001,
+        "input_v": 4.524230957793055,
+        "expected_v": 5
+      }
+    },
+    {
+      "return_resistor": true,
+      "switched": false,
+      "requests": 10,
+      "agent_exit": 0,
+      "expected_bug": true,
+      "mismatch_count": 21,
+      "first_mismatch": {
+        "stage": 0,
+        "time_s": 0.001,
+        "input_v": 0.47581427985225344,
+        "expected_v": 5
+      }
+    },
+    {
+      "return_resistor": true,
+      "switched": true,
+      "requests": 13,
+      "agent_exit": 0,
+      "expected_bug": true,
+      "mismatch_count": 43,
+      "first_mismatch": {
+        "stage": 0,
+        "time_s": 0.001,
+        "input_v": 0.4762214200649401,
+        "expected_v": 5
+      }
+    }
+  ]
+}

@@ -91,7 +91,7 @@ func advanceLiveNetwork(state *mixedState, t *Transient, end float64, desired Gr
 		return nil, nil, err
 	}
 	// advanceMixed already retained the left-hand output at end.
-	trace.Sample = mixedSample(compiled, right.result, right.result.Nodes[compiled.Supply])
+	trace.Sample = mixedSample(compiled, right.result, mixedSourceVoltage(compiled, right.result))
 	appendTrace(trace, trace.Sample)
 	for _, part := range changes {
 		mode := "open"

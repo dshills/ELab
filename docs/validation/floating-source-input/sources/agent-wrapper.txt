@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+cd -- /private/tmp/elab-floating-input-fixed-runtime/empty
+exec /usr/bin/sandbox-exec -f /private/tmp/elab-floating-input-fixed-runtime/runtime.sb /private/tmp/elab-floating-input-fixed-runtime/elab-agent "$@"

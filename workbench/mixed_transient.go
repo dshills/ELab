@@ -12,6 +12,13 @@ func IsNPNTransientAnalysis(a string) bool {
 func IsNPNTransientEngine(e string) bool {
 	return e == InductorEngineID || e == WaveformEngineID || e == NPNTransientEngineID || e == MixedEngineID || e == NetworkEngineID || e == "elab.network-waveforms-mna-be.v1" || e == "elab.mixed-mna-be.v1" || e == "elab.network-mna-be.v1"
 }
+
+// Use the solved source difference, including the accepted side of an edge.
+// A floating DC source's positive terminal need not equal its applied voltage.
+func mixedSourceVoltage(c Compiled, r *MixedResult) float64 {
+	return r.Nodes[c.TerminalNet[c.Source.ID+".positive"]] - r.Nodes[c.TerminalNet[c.Source.ID+".negative"]]
+}
+
 func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 	_, region := MixedRegion(r)
 	p := TraceSample{Time: r.Time, Input: input, Voltage: r.Nodes[compiled.Output], State: region}
@@ -132,7 +139,7 @@ func advanceMixedBudget(state *mixedState, t *Transient, end float64, budget *in
 				}
 			}
 			if legacy {
-				appendTrace(trace, mixedSample(cur.net.c, cur.result, cur.result.Nodes[cur.net.c.Supply]))
+				appendTrace(trace, mixedSample(cur.net.c, cur.result, mixedSourceVoltage(cur.net.c, cur.result)))
 			}
 			if err := budget.take(); err != nil {
 				return nil, nil, err
@@ -142,7 +149,7 @@ func advanceMixedBudget(state *mixedState, t *Transient, end float64, budget *in
 				return nil, nil, err
 			}
 			cur = right
-			appendTrace(trace, mixedSample(cur.net.c, cur.result, cur.result.Nodes[cur.net.c.Supply]))
+			appendTrace(trace, mixedSample(cur.net.c, cur.result, mixedSourceVoltage(cur.net.c, cur.result)))
 			for _, p := range cur.net.sources {
 				if nextSourceCorner(p, trace, at, p.ID == cur.net.c.Source.ID) == corner {
 					mode := "pulse:" + p.ID + ":corner"
@@ -157,7 +164,7 @@ func advanceMixedBudget(state *mixedState, t *Transient, end float64, budget *in
 			}
 		}
 	}
-	trace.Sample = mixedSample(cur.net.c, cur.result, cur.result.Nodes[cur.net.c.Supply])
+	trace.Sample = mixedSample(cur.net.c, cur.result, mixedSourceVoltage(cur.net.c, cur.result))
 	appendTrace(trace, trace.Sample)
 	return cur, trace, nil
 }

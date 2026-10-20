@@ -1,5 +1,7 @@
 # ELab first-version review · 0.159.0 /176
 
+**Known issue awaiting a replacement:** [FLOATING-INPUT-01](../docs/validation/floating-source-input/README.md) affects transient `input_v` for floating DC sources. It reports the positive node relative to ground rather than positive minus negative. Solved physics and differential probes are correct; the repair is in source and does not change the /176 package below.
+
 The [review folder](../build/ELab-0.159.0-176-review) includes [ELab.app](../build/ELab-0.159.0-176-review/ELab.app), matching `elab-agent`, three editable examples and framework notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is needed.
 
 The [ZIP](../build/ELab-0.159.0-176-review.zip) and [checksum](../build/ELab-0.159.0-176-review.zip.sha256) preserve all files/modes through macOS extraction into a Unicode path with spaces. Strict local signature and three examples/fresh saves/reopens verify. This does not establish installation, Developer ID, notarization or Gatekeeper acceptance.
