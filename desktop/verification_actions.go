@@ -15,6 +15,7 @@ type verificationContinuation struct {
 type verificationFieldRejection struct {
 	generation uint64
 	value      float64
+	text       string
 	message    string
 	help       *workbench.DiagnosticHelp
 }
@@ -37,6 +38,14 @@ type verificationActionWork struct {
 // Only accepted responses from this form can continue a related action. Keep
 // their settings with the context; a later snapshot only proves freshness.
 func (s *screen) changeVerificationSettings(state workbench.Snapshot, id string, params any) {
+	s.changeVerificationField(state, id, params, "")
+}
+
+func (s *screen) changeVerificationTime(state workbench.Snapshot, id, name, text string) {
+	s.changeVerificationField(state, id, textFieldParams(state.VerificationSettings, name, text), text)
+}
+
+func (s *screen) changeVerificationField(state workbench.Snapshot, id string, params any, text string) {
 	pending := s.pendingVerificationAction
 	var origin *actionContext
 	if s.fieldContext != nil {
@@ -57,7 +66,7 @@ func (s *screen) changeVerificationSettings(state workbench.Snapshot, id string,
 			if s.verificationRejected == nil {
 				s.verificationRejected = make(map[string]verificationFieldRejection)
 			}
-			s.verificationRejected[id] = verificationFieldRejection{generation: origin.generation, value: verificationTextValue(state.VerificationSettings, id), message: response.Error.Message, help: response.Help}
+			s.verificationRejected[id] = verificationFieldRejection{generation: origin.generation, value: verificationTextValue(state.VerificationSettings, id), text: text, message: response.Error.Message, help: response.Help}
 		}
 		if pending != nil {
 			pending.failed = true

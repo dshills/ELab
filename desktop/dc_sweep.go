@@ -42,6 +42,7 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 	if sweep == nil {
 		return nil
 	}
+	s.pruneSweepFieldRejections(state)
 	cfg := sweep.Settings
 	nodes := []ui.Node{section("sweep-settings-title", "DC parameter sweep"), quiet("sweep-settings-help", "Independent DC points."), quiet("sweep-live-help", "Live circuit unchanged.")}
 	nodes = append(nodes, buttonStyle(ui.Node{ID: "sweep-import", Kind: ui.Button, Text: "Open sweep JSON…", Accessibility: ui.Accessibility{Name: "Open captured DC sweep JSON"}, Disabled: s.fileBusy || s.pendingCommand != "", Activate: func() { s.beginFile("sweep.import", true, workbench.RecordingImportParams{}, nil) }}, false))
@@ -88,11 +89,19 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 	}})
 	for _, field := range []struct{ id, label, value string }{{"start", "Start", cfg.Start}, {"stop", "Stop", cfg.Stop}} {
 		field := field
-		nodes = append(nodes, quiet("sweep-"+field.id+"-label", field.label), ui.Node{ID: "sweep-range-" + field.id, Kind: ui.TextField, Text: field.value, ControlStateKey: sweepSettingsOwner(cfg), Accessibility: ui.Accessibility{Name: "Sweep " + field.label}, Change: func(e ui.ChangeEvent) {
+		value := field.value
+		if rejected, ok := s.sweepFieldRejected["sweep-range-"+field.id]; ok {
+			value = rejected.text
+		}
+		nodes = append(nodes, quiet("sweep-"+field.id+"-label", field.label), ui.Node{ID: "sweep-range-" + field.id, Kind: ui.TextField, Text: value, ControlStateKey: sweepSettingsOwner(cfg), Accessibility: ui.Accessibility{Name: "Sweep " + field.label}, Change: func(e ui.ChangeEvent) {
 			s.changeSweepField(state, "sweep-range-"+field.id, e.Text)
 		}})
 	}
-	nodes = append(nodes, quiet("sweep-points-label", "Points · 2–201 · inclusive endpoints"), ui.Node{ID: "sweep-points", Kind: ui.TextField, Text: strconv.Itoa(cfg.Points), ControlStateKey: sweepSettingsOwner(cfg), Accessibility: ui.Accessibility{Name: "Sweep point count"}, Change: func(e ui.ChangeEvent) {
+	points := strconv.Itoa(cfg.Points)
+	if rejected, ok := s.sweepFieldRejected["sweep-points"]; ok {
+		points = rejected.text
+	}
+	nodes = append(nodes, quiet("sweep-points-label", "Points · 2–201 · inclusive endpoints"), ui.Node{ID: "sweep-points", Kind: ui.TextField, Text: points, ControlStateKey: sweepSettingsOwner(cfg), Accessibility: ui.Accessibility{Name: "Sweep point count"}, Change: func(e ui.ChangeEvent) {
 		s.changeSweepField(state, "sweep-points", e.Text)
 	}})
 	probeOptions := []ui.Option{{ID: "__auto", Label: "Auto readings"}}

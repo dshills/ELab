@@ -30,9 +30,15 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 			if field.id == "step" {
 				name = "sample_step_s"
 			}
-			nodes = append(nodes, quiet("verify-label-"+field.id, field.label), timeField("verify-"+field.id, field.label, field.value, false, func(text string) {
-				s.changeVerificationSettings(state, "verify-"+field.id, textFieldParams(cfg, name, text))
-			}))
+			entry := timeField("verify-"+field.id, field.label, field.value, false, func(text string) {
+				s.changeVerificationTime(state, "verify-"+field.id, name, text)
+			})
+			// Keep the refused entry distinct from the accepted value so a
+			// fresh correction back to that value still emits Change.
+			if rejected, ok := s.verificationRejected[entry.ID]; ok {
+				entry.Text = rejected.text
+			}
+			nodes = append(nodes, quiet("verify-label-"+field.id, field.label), entry)
 		}
 		modes := []ui.Option{}
 		labels := map[string]string{"auto": "Auto", "charge": "Charge", "discharge": "Discharge", "high": "High", "low": "Low"}

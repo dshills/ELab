@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-20",
+  "change": "Correct rejected verification and sweep entries back to accepted values",
+  "base_commit": "07b40a4adfbc54ee3e26129c8dfce4aa476a5e12",
+  "source_only": true,
+  "in_alpha_189": false,
+  "in_candidate_191": false,
+  "packaged": false,
+  "release_qualified": false,
+  "promoted": false,
+  "original": {
+    "passed": false,
+    "failing_leaves": [
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-range-start/bad/without-blur/accepted",
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-range-stop/13_V/without-blur/accepted",
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-points/seven/without-blur/accepted",
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-points/999/without-blur/accepted",
+      "TestMountedVerificationCorrectionToAcceptedTime/verify-start/verify-duration/without-blur/accepted",
+      "TestMountedVerificationCorrectionToAcceptedTime/verify-start/verify-step/without-blur/accepted",
+      "TestMountedVerificationCorrectionToAcceptedTime/verify-project-startup/verify-duration/without-blur/accepted",
+      "TestMountedVerificationCorrectionToAcceptedTime/verify-project-startup/verify-step/without-blur/accepted"
+    ],
+    "passing_leaves": 40
+  },
+  "final": {
+    "passed": true,
+    "failing_leaves": [],
+    "passing_leaves": 48
+  },
+  "checks": {
+    "verification_cases": 24,
+    "sweep_cases": 24,
+    "pointer_and_activation_without_blur": true,
+    "untouched_invalid_entries_refused": true,
+    "accepted_and_different_corrections": true,
+    "one_settings_commit_then_one_requested_action": true,
+    "live_circuit_and_history_preserved": true,
+    "completed_verifications_and_sweeps_match_independent_public_agents": true
+  },
+  "quality": {
+    "exit_code": 0,
+    "elapsed_s": 308.11382524995133,
+    "sources_unchanged": true,
+    "scope": "Full check.sh for verification/sweep rejected-entry correction; no packaged/native UI qualification inferred"
+  },
+  "scope": "Mounted offscreen controls and independent public-service results. Existing held-action, actor/document/field/target and settlement guards remain covered by full quality. No new native pixels, OS typing, accessibility, package, owner or full-MVP acceptance.",
+  "evidence": "docs/validation/analysis-entry-correction/report.json"
+}

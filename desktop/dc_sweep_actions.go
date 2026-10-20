@@ -18,6 +18,7 @@ type sweepFieldRejection struct {
 	generation uint64
 	target     string
 	value      string
+	text       string
 	message    string
 	help       *workbench.DiagnosticHelp
 }
@@ -89,7 +90,10 @@ func (s *screen) changeSweepField(state workbench.Snapshot, id, text string) {
 			if s.sweepFieldRejected == nil {
 				s.sweepFieldRejected = make(map[string]sweepFieldRejection)
 			}
-			s.sweepFieldRejected[id] = sweepFieldRejection{origin.generation, sweepSettingsOwner(settings), previousValue, s.errorMessage, s.requestHelp}
+			s.sweepFieldRejected[id] = sweepFieldRejection{
+				generation: origin.generation, target: sweepSettingsOwner(settings),
+				value: previousValue, text: text, message: s.errorMessage, help: s.requestHelp,
+			}
 		}
 		if pending != nil {
 			pending.failed = true

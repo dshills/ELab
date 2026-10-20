@@ -44,6 +44,8 @@ Regression tests cover analytic loaded dividers, existing independent LED/NPN ke
 
 Use `capabilities.list {"command":"sweep.start"}` (or any `sweep.*` ID) for [parameter domains and command contracts](capability-details.md#sweep-command-contracts). The ordinary catalog remains compact. Cursor clearing requires `{"index":null}`; omitting `index` is refused. Native **Clear point** uses the explicit-null command, and guards still refuse a stale operation ID.
 
+Source after /191 retains rejected Start, Stop and Points text under the existing document, target and accepted-value guards. Correcting back to the previously accepted entry can then run the sweep without first moving focus; untouched invalid text still refuses. Successful settings and Run continue through the shared public commands. [Source validation](validation/analysis-entry-correction/README.md); the owner's /189 alpha and separate /191 candidate do not contain this correction yet.
+
 ## Logarithmic resistance experiment
 
 Choose the LED example, select **R1 · Resistance**, set Start **100 Ω**, Stop **100k Ω**, Points **7**, then choose **Logarithmic spacing** and run. Each step multiplies resistance by approximately 3.162. The center sample is approximately 3162.28 Ω; current falls as resistance increases. Click measured samples for exact stored current/voltage. Sweeping 100k Ω down to 100 Ω retains descending acquisition order while the display axis stays ascending. Changing target resets spacing to linear because a new target's default range may include zero.

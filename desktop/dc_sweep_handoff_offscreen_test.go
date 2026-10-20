@@ -162,3 +162,75 @@ func TestMountedDCSweepRunUsesUnfinishedSettings(t *testing.T) {
 		}
 	}
 }
+
+func TestMountedDCSweepCorrectionToAcceptedEntry(t *testing.T) {
+	for _, edit := range []struct{ id, bad, different string }{
+		{"sweep-range-start", "bad", "1 V"}, {"sweep-range-stop", "13 V", "4 V"},
+		{"sweep-points", "seven", "9"}, {"sweep-points", "999", "9"},
+	} {
+		for _, mode := range []string{"pointer", "without-blur"} {
+			for _, correction := range []string{"none", "accepted", "different"} {
+				t.Run(edit.id+"/"+edit.bad+"/"+mode+"/"+correction, func(t *testing.T) {
+					s, cleanup := testScreen(t)
+					t.Cleanup(cleanup)
+					uiAction(t, s, "example.reset", nil)
+					agentAction(t, s.service, "simulation.pause", struct{}{})
+					cfg := s.service.Snapshot().DCSweep.Settings
+					cfg.Points = 7
+					agentAction(t, s.service, "sweep.settings.set", cfg)
+					m := mountedSweepStart(t, s, edit.id)
+					activate := func() {
+						if mode == "pointer" {
+							clickMountedControl(t, m, "sweep-start")
+						} else {
+							button := verificationControl(t, s, "sweep-start")
+							s.app.Do(button.Activate)
+							m.settle()
+						}
+					}
+					before := s.service.Snapshot()
+					typeMountedCursor(t, m, edit.id, edit.bad)
+					activate()
+					if s.errorMessage == "" || !reflect.DeepEqual(before, s.service.Snapshot()) {
+						t.Fatal("invalid sweep entry did not preserve accepted state")
+					}
+					if correction != "none" {
+						text := sweepFieldValue(cfg, edit.id)
+						if correction == "different" {
+							text = edit.different
+							switch edit.id {
+							case "sweep-range-start":
+								cfg.Start = text
+							case "sweep-range-stop":
+								cfg.Stop = text
+							default:
+								cfg.Points = 9
+							}
+						}
+						typeMountedCursor(t, m, edit.id, text)
+					}
+					activate()
+					after := s.service.Snapshot()
+					if correction == "none" {
+						if s.errorMessage == "" || !reflect.DeepEqual(before, after) {
+							t.Fatal("untouched invalid sweep entry was silently accepted")
+						}
+						return
+					}
+					if s.errorMessage != "" || len(after.DCSweep.Operations) != 1 || !reflect.DeepEqual(after.DCSweep.Settings, cfg) || after.CommandRevision != before.CommandRevision+2 || len(s.sweepFieldRejected) != 0 {
+						t.Fatalf("correction failed: settings=%+v want=%+v operations=%d error=%q", after.DCSweep.Settings, cfg, len(after.DCSweep.Operations), s.errorMessage)
+					}
+					assertAnalysisSettingsPreserveLiveCircuit(t, before, after)
+					curve := awaitNativeSweep(t, s)
+					agent := workbench.NewExample()
+					t.Cleanup(agent.Close)
+					agentAction(t, agent, "sweep.start", workbench.SweepStartParams{Settings: &cfg})
+					expected := awaitNativeSweep(t, &screen{service: agent, app: s.app})
+					if !reflect.DeepEqual(curve.DCSweep.Result, expected.DCSweep.Result) {
+						t.Fatal("completed corrected sweep differs from independent public agent")
+					}
+				})
+			}
+		}
+	}
+}

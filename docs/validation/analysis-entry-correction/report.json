@@ -1,0 +1,188 @@
+{
+  "date": "2026-10-20",
+  "change": "Correct rejected verification and sweep entries back to accepted values",
+  "base_commit": "07b40a4adfbc54ee3e26129c8dfce4aa476a5e12",
+  "source_only": true,
+  "in_alpha_189": false,
+  "in_candidate_191": false,
+  "packaged": false,
+  "release_qualified": false,
+  "promoted": false,
+  "original": {
+    "passed": false,
+    "failing_leaves": [
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-range-start/bad/without-blur/accepted",
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-range-stop/13_V/without-blur/accepted",
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-points/seven/without-blur/accepted",
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-points/999/without-blur/accepted",
+      "TestMountedVerificationCorrectionToAcceptedTime/verify-start/verify-duration/without-blur/accepted",
+      "TestMountedVerificationCorrectionToAcceptedTime/verify-start/verify-step/without-blur/accepted",
+      "TestMountedVerificationCorrectionToAcceptedTime/verify-project-startup/verify-duration/without-blur/accepted",
+      "TestMountedVerificationCorrectionToAcceptedTime/verify-project-startup/verify-step/without-blur/accepted"
+    ],
+    "passing_leaves": 40
+  },
+  "final": {
+    "passed": true,
+    "failing_leaves": [],
+    "passing_leaves": 48
+  },
+  "checks": {
+    "verification_cases": 24,
+    "sweep_cases": 24,
+    "pointer_and_activation_without_blur": true,
+    "untouched_invalid_entries_refused": true,
+    "accepted_and_different_corrections": true,
+    "one_settings_commit_then_one_requested_action": true,
+    "live_circuit_and_history_preserved": true,
+    "completed_verifications_and_sweeps_match_independent_public_agents": true
+  },
+  "initial_fixture_error": {
+    "description": "Cursor-only helper incorrectly required the whole document to stay identical despite legitimate analysis preference and kept-recording changes",
+    "extra_failing_cases": [
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-points/999/pointer/accepted",
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-points/999/pointer/different",
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-points/999/without-blur/different",
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-points/seven/pointer/accepted",
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-points/seven/pointer/different",
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-points/seven/without-blur/different",
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-range-start/bad/pointer/accepted",
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-range-start/bad/pointer/different",
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-range-start/bad/without-blur/different",
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-range-stop/13_V/pointer/accepted",
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-range-stop/13_V/pointer/different",
+      "TestMountedDCSweepCorrectionToAcceptedEntry/sweep-range-stop/13_V/without-blur/different",
+      "TestMountedVerificationCorrectionToAcceptedTime/verify-start/verify-duration/pointer/accepted",
+      "TestMountedVerificationCorrectionToAcceptedTime/verify-start/verify-duration/pointer/different",
+      "TestMountedVerificationCorrectionToAcceptedTime/verify-start/verify-duration/without-blur/different",
+      "TestMountedVerificationCorrectionToAcceptedTime/verify-start/verify-step/pointer/accepted",
+      "TestMountedVerificationCorrectionToAcceptedTime/verify-start/verify-step/pointer/different",
+      "TestMountedVerificationCorrectionToAcceptedTime/verify-start/verify-step/without-blur/different"
+    ],
+    "correction": "Require exact live circuit, physical state, schematic identity/dirtiness and circuit history; separately check accepted settings and capture counts",
+    "production_source_unchanged_during_fixture_correction": true
+  },
+  "quality": {
+    "exit_code": 0,
+    "elapsed_s": 308.11382524995133,
+    "sources_unchanged": true,
+    "scope": "Full check.sh for verification/sweep rejected-entry correction; no packaged/native UI qualification inferred"
+  },
+  "source_files": 670,
+  "source_sha256": {
+    "desktop/verification.go": "ba066fb1ced5195e453aedd1b6542c29f6139f4afaeba0a43d4e0faf6eb9472d",
+    "desktop/verification_actions.go": "5ae6d3f81dec5677785d5a6df76d1c00563099510e16c18cb68216588915c900",
+    "desktop/dc_sweep.go": "b51e4b91c68e815a13b1c499c4353ceec696830231338f48da58fd479a5c76be",
+    "desktop/dc_sweep_actions.go": "8c8e606cd3922ef52387efcbd6995343c7dcfe94cb4273c360b1447976abdae6",
+    "desktop/verification_handoff_offscreen_test.go": "0e2f5e448cbe52ef28686a87360e1d71ae64db55c69998def2384ad9b3f03a02",
+    "desktop/dc_sweep_handoff_offscreen_test.go": "0b6a6b7a48aa7f273ec38deb5fb636d97506e68a417a4795db65d8787c5b10b4"
+  },
+  "scope": "Mounted offscreen controls and independent public-service results. Existing held-action, actor/document/field/target and settlement guards remain covered by full quality. No new native pixels, OS typing, accessibility, package, owner or full-MVP acceptance.",
+  "raw": {
+    "original.jsonl": {
+      "stored": "original.jsonl.gz",
+      "bytes": 66436,
+      "sha256": "982cdcbf3ba32445e7d4703a7b7f77239fb8ae0f63a1343f0d4104b701411fca"
+    },
+    "original-stderr.txt": {
+      "stored": "original-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "original-final.jsonl": {
+      "stored": "original-final.jsonl.gz",
+      "bytes": 60225,
+      "sha256": "4fed40606275aaee2b85624e6cc5a214cee425d18bc73fe963ab90ce06c14006"
+    },
+    "original-final-stderr.txt": {
+      "stored": "original-final-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "original-final-summary.json": {
+      "stored": "original-final-summary.json.gz",
+      "bytes": 880,
+      "sha256": "a1ffbd8c084d95db251e7605bfb9c2be69767a8a6e757e3238db6860deec63c7"
+    },
+    "final-focused.jsonl": {
+      "stored": "final-focused.jsonl.gz",
+      "bytes": 55617,
+      "sha256": "7ad31b646f37f67680bf440560b4ce388ddb64f36c94248d1c1a8632142d8fd0"
+    },
+    "final-focused-stderr.txt": {
+      "stored": "final-focused-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "final-focused-summary.json": {
+      "stored": "final-focused-summary.json.gz",
+      "bytes": 69,
+      "sha256": "c78271b669f866d29a9b3c1c983660790984d58b11212fbfdd4afbc085d3504a"
+    },
+    "native-inventory-before.json": {
+      "stored": "native-inventory-before.json.gz",
+      "bytes": 179342,
+      "sha256": "8db8d020073b2073c38bac74ad9e4d0fbe7bd46d051e19330e60fb51238a6144"
+    },
+    "native-inventory-candidate.json": {
+      "stored": "native-inventory-candidate.json.gz",
+      "bytes": 179314,
+      "sha256": "9d2f64e28f4412e9d85769540db45dccac68eb6e7890f59e5e9933fc4453af63"
+    },
+    "inventory-review.json": {
+      "stored": "inventory-review.json.gz",
+      "bytes": 2234,
+      "sha256": "1c18a31138e09fe44a72ebac86d16980d8c4ae81bd78b3fe3028a1e27315a63a"
+    },
+    "quality.py": {
+      "stored": "quality.py.gz",
+      "bytes": 1169,
+      "sha256": "497f38753084557d1674fa6524f360bc2a22328531b924930ca9af1769a1da28"
+    },
+    "quality.json": {
+      "stored": "quality.json.gz",
+      "bytes": 71816,
+      "sha256": "a8b795ac868785c58f05dbdac31084864423a9e503664bb069d67dd5213bae82"
+    },
+    "quality-stdout.txt": {
+      "stored": "quality-stdout.txt.gz",
+      "bytes": 1003,
+      "sha256": "1cdedf674f857f6ab1fbba4938542c2c08564c44b3da356f5fa286bdc73d6c96"
+    },
+    "quality-stderr.txt": {
+      "stored": "quality-stderr.txt.gz",
+      "bytes": 346,
+      "sha256": "143656b167aa0e38046ddf005626d9bc5bb9ef81124988ec0dd03dc149c70f27"
+    },
+    "original-verification.go.txt": {
+      "stored": "original-verification.go.txt.gz",
+      "bytes": 9449,
+      "sha256": "0a4f566abb75ee12ab43e53f29bf1fbd08034f9301f44bf23bc33c40e79c4a1b"
+    },
+    "original-verification_actions.go.txt": {
+      "stored": "original-verification_actions.go.txt.gz",
+      "bytes": 7936,
+      "sha256": "8ebb049dcf889d33d5aa8692dfc22740e07e36bff0139aed5696f72cdc2d57e2"
+    },
+    "original-dc_sweep.go.txt": {
+      "stored": "original-dc_sweep.go.txt.gz",
+      "bytes": 14205,
+      "sha256": "434e23f2edc77e0ce4f99e5519d4b6a3068557b3b64e064b96b9cd0b99b1290e"
+    },
+    "original-dc_sweep_actions.go.txt": {
+      "stored": "original-dc_sweep_actions.go.txt.gz",
+      "bytes": 6798,
+      "sha256": "4ba391dc6631a559eab896337200268fe31f4fafd7e0497fc4bdc4e7c86d675c"
+    },
+    "initial-verification_handoff_offscreen_test.go.txt": {
+      "stored": "initial-verification_handoff_offscreen_test.go.txt.gz",
+      "bytes": 17418,
+      "sha256": "b4c828564e973c3705722f27cca5a52954e36012a6ff482cac85582029562fa5"
+    },
+    "initial-dc_sweep_handoff_offscreen_test.go.txt": {
+      "stored": "initial-dc_sweep_handoff_offscreen_test.go.txt.gz",
+      "bytes": 9392,
+      "sha256": "62a80eb5c7a062ca0f160e350a5866b6e1530b25a05675576f686c102dd50b7e"
+    }
+  }
+}

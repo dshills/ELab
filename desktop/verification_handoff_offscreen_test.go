@@ -325,3 +325,93 @@ func TestMountedVerificationRefusalOwnership(t *testing.T) {
 		})
 	}
 }
+
+func TestMountedVerificationCorrectionToAcceptedTime(t *testing.T) {
+	for _, action := range []string{"verify-start", "verify-project-startup"} {
+		for _, field := range []string{"verify-duration", "verify-step"} {
+			for _, mode := range []string{"pointer", "without-blur"} {
+				for _, correction := range []string{"none", "accepted", "different"} {
+					t.Run(action+"/"+field+"/"+mode+"/"+correction, func(t *testing.T) {
+						s, cleanup := testScreen(t)
+						t.Cleanup(cleanup)
+						uiAction(t, s, "example.rc", nil)
+						agentAction(t, s.service, "simulation.pause", struct{}{})
+						cfg := s.service.Snapshot().VerificationSettings
+						cfg.Duration, cfg.Step, cfg.InputMode = .02, .001, "charge"
+						agentAction(t, s.service, "verification.settings.set", cfg)
+						m := mountedVerificationStart(t, s)
+						activate := func() {
+							if mode == "pointer" {
+								clickMountedControl(t, m, action)
+							} else {
+								button := verificationControl(t, s, action)
+								s.app.Do(button.Activate)
+								m.settle()
+							}
+						}
+						before := s.service.Snapshot()
+						typeMountedCursor(t, m, field, "bad")
+						activate()
+						if s.errorMessage == "" || !reflect.DeepEqual(before, s.service.Snapshot()) {
+							t.Fatal("invalid timing entry did not preserve accepted state")
+						}
+						if correction != "none" {
+							text := timeText(verificationTextValue(cfg, field))
+							if correction == "different" {
+								if field == "verify-step" {
+									cfg.Step = .002
+								} else {
+									cfg.Duration = .03
+								}
+								text = timeText(verificationTextValue(cfg, field))
+							}
+							typeMountedCursor(t, m, field, text)
+						}
+						activate()
+						after := s.service.Snapshot()
+						if correction == "none" {
+							if s.errorMessage == "" || !reflect.DeepEqual(before, after) {
+								t.Fatal("untouched invalid timing entry was silently accepted")
+							}
+							return
+						}
+						wantOperations := 1
+						if action == "verify-project-startup" {
+							wantOperations = 0
+							duration := cfg.Duration
+							cfg = workbench.DefaultVerificationSettings()
+							cfg.Duration = duration
+						}
+						if s.errorMessage != "" || len(after.Operations) != wantOperations || !reflect.DeepEqual(after.VerificationSettings, cfg) || after.CommandRevision != before.CommandRevision+2 || len(s.verificationRejected) != 0 {
+							t.Fatalf("correction failed: settings=%+v want=%+v operations=%d error=%q", after.VerificationSettings, cfg, len(after.Operations), s.errorMessage)
+						}
+						assertAnalysisSettingsPreserveLiveCircuit(t, before, after)
+						if wantOperations != 0 {
+							completedVerification(t, s.service, after.LastOperation)
+							agent := workbench.New()
+							t.Cleanup(agent.Close)
+							agentAction(t, agent, "example.rc", workbench.ReplaceParams{})
+							agentAction(t, agent, "simulation.pause", struct{}{})
+							agentAction(t, agent, "verification.settings.set", cfg)
+							agentAction(t, agent, "simulation.verify", workbench.VerifyParams{Duration: &cfg.Duration})
+							completedVerification(t, agent, agent.Snapshot().LastOperation)
+							compareVerificationSamples(t, s.service, after.LastOperation, agent, agent.Snapshot().LastOperation)
+						}
+					})
+				}
+			}
+		}
+	}
+}
+
+// Analysis settings and kept captures can change preference/recording dirtiness;
+// they must leave the live circuit, physical state and circuit history intact.
+func assertAnalysisSettingsPreserveLiveCircuit(t *testing.T, before, after workbench.Snapshot) {
+	t.Helper()
+	if before.RunID != after.RunID || before.ElectricalRevision != after.ElectricalRevision || before.Document.Generation != after.Document.Generation || before.Document.Path != after.Document.Path || before.Document.SchematicDirty != after.Document.SchematicDirty ||
+		!reflect.DeepEqual(before.Components, after.Components) || !reflect.DeepEqual(before.Wires, after.Wires) ||
+		!reflect.DeepEqual(before.Result, after.Result) || !reflect.DeepEqual(before.Transient, after.Transient) || !reflect.DeepEqual(before.Mixed, after.Mixed) ||
+		!reflect.DeepEqual(before.UndoEntry, after.UndoEntry) || !reflect.DeepEqual(before.RedoEntry, after.RedoEntry) {
+		t.Fatal("analysis settings or capture changed the live circuit or circuit history")
+	}
+}
