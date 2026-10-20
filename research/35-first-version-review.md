@@ -6,6 +6,8 @@ This is the tested /189 app and agent, packaged for owner use. Source quality, i
 
 The four tasks below apply to this alpha. External-agent instructions use the alpha folder and its matching `elab-agent`. The following /188 packaging and defect notes retain their historical scope; they do not qualify /189 native interaction.
 
+**Owner feedback has started:** on October 20, after requesting a normal /189 launch, the owner reports: “I see the canvas, parts list and toolbar.” This confirms the initial interface is visible in that owner session. [Observation](ui-audit/first-version/owner-feedback-189.json). No drawing, simulation, measurement or file-task acceptance has been reported yet. Automated blank captures remain unexplained; a separate /190 candidate stays unqualified and does not replace this alpha.
+
 ## Preserved /188 engineering checkpoint
 
 The [review folder](../build/ELab-0.171.0-188-review) includes [ELab.app](../build/ELab-0.171.0-188-review/ELab.app), matching `elab-agent`, three editable examples and notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is required.

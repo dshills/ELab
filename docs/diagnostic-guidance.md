@@ -16,6 +16,8 @@ Rejected `recording.seek` positions explain the selected capture's actual whole-
 
 [Source validation](validation/recorded-position-guidance/report.json) preserves the original generic-message failures and the passing full repository check. Ten public refusal cases cover RC/DC syntax, fractional indices, bounds and ambiguous positions; the native view/callback test checks identical agent help, unchanged refused state, and correction followed by Previous. This adds no new packaged-window or full accessibility acceptance.
 
+A [clean /190 candidate check](../research/ui-audit/first-version/native-feedback-190/receipt.json) adds fifteen packaged native-socket/headless RC/DC refusals, equal shared help and preserved snapshots. CUA native accessibility input exposes the new summary/ranges and correction reaches sample 2 at 2 ms. All 1,001 captured rows, metadata and saved circuit bytes remain exact. Captured window content is blank, so this is accessibility/command evidence only; /190 remains unqualified and /189 remains the current owner alpha.
+
 ## Shared command and state semantics
 
 `diagnostics.details.set {"visible":true}` is the same command used by the native disclosure; `false` closes it. It requires normal revision/retry admission and changes session presentation only. It preserves physical time/state, editing selection, unfinished wires, undo/history and dirty flags. New/load/example/recovery replacement clears disclosure state. No diagnostic interaction launches a modal during an incomplete circuit gesture.
