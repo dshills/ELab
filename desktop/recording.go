@@ -124,6 +124,7 @@ func (s *screen) recordingInspector(state workbench.Snapshot) []ui.Node {
 	return nodes
 }
 func (s *screen) recordingPanel(state workbench.Snapshot) ui.Node {
+	s.pruneRecordedPlaybackRejections(state)
 	r := state.Recording
 	status := "paused"
 	if r.Playing {
@@ -150,16 +151,28 @@ func (s *screen) recordingPanel(state workbench.Snapshot) ui.Node {
 	indexControl.MinWidth = 90
 	indexControl.Accessibility.Name = "Recorded sample index"
 	if r.Total > 1 {
-		indexControl = ui.Node{ID: "recorded-index", Kind: ui.NumberField, Number: float32(r.Index), MinWidth: 90, Numeric: ui.Numeric{Min: 0, Max: float32(r.Total - 1), Step: 1}, Accessibility: ui.Accessibility{Name: "Recorded sample index"}, Change: func(e ui.ChangeEvent) {
+		numeric := ui.Numeric{Min: 0, Max: float32(r.Total - 1), Step: 1}
+		index := float32(r.Index)
+		if rejected, ok := s.recordedPlaybackRejected["recorded-index"]; ok && numeric.Validate(rejected.number) == nil {
+			index = rejected.number
+		}
+		indexControl = ui.Node{ID: "recorded-index", Kind: ui.NumberField, Number: index, MinWidth: 90, Numeric: numeric, Accessibility: ui.Accessibility{Name: "Recorded sample index"}, Change: func(e ui.ChangeEvent) {
 			// Preserve the entry for shared integer validation, as with agent
 			// requests. Truncating here silently selected a different sample.
-			s.changeRecordedPlaybackField(state, "recorded-index", map[string]any{"index": e.Number})
+			s.changeRecordedPlaybackField(state, "recorded-index", e)
 		}}
 	}
-	position := []ui.Node{quiet("recorded-status", status), indexControl, timeField("recorded-time", "Recorded seek time", r.Time, false, func(text string) {
-		s.changeRecordedPlaybackField(state, "recorded-time", map[string]any{"time_s": text})
-	}), quiet("recorded-speed-label", "sim s / wall s"), {ID: "recorded-speed", Kind: ui.NumberField, Number: float32(speed), MinWidth: 80, Numeric: ui.Numeric{Min: .001, Max: 10, Step: .001}, Accessibility: ui.Accessibility{Name: "Recorded playback speed"}, Change: func(e ui.ChangeEvent) {
-		s.changeRecordedPlaybackField(state, "recorded-speed", workbench.RecordingPlayParams{Speed: float64(e.Number)})
+	seek := timeField("recorded-time", "Recorded seek time", r.Time, false, func(text string) {
+		s.changeRecordedPlaybackField(state, "recorded-time", ui.ChangeEvent{Text: text})
+	})
+	// Keep rejected input visible until correction or owner/value replacement.
+	// Otherwise a fresh edit back to the accepted value looks unchanged to the
+	// SDK settlement barrier, leaving the previous rejection stuck in place.
+	if rejected, ok := s.recordedPlaybackRejected["recorded-time"]; ok {
+		seek.Text = rejected.text
+	}
+	position := []ui.Node{quiet("recorded-status", status), indexControl, seek, quiet("recorded-speed-label", "sim s / wall s"), {ID: "recorded-speed", Kind: ui.NumberField, Number: float32(speed), MinWidth: 80, Numeric: ui.Numeric{Min: .001, Max: 10, Step: .001}, Accessibility: ui.Accessibility{Name: "Recorded playback speed"}, Change: func(e ui.ChangeEvent) {
+		s.changeRecordedPlaybackField(state, "recorded-speed", e)
 	}}}
 	legend := []string{}
 	if r.ReferenceOverlay != nil {

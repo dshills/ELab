@@ -234,3 +234,142 @@ func TestMountedNumericOwnerRecordedStepPrivateEntryRefusesAgent(t *testing.T) {
 		})
 	}
 }
+
+func TestMountedNumericOwnerRecordedCanonicalCorrection(t *testing.T) {
+	for _, action := range []string{"next", "previous", "play"} {
+		for _, field := range []string{"recorded-index", "recorded-time"} {
+			for _, mode := range []string{"pointer", "without-blur"} {
+				for _, correction := range []string{"none", "canonical", "different"} {
+					t.Run(action+"/"+field+"/"+mode+"/"+correction, func(t *testing.T) {
+						s, cleanup := recordedCursorRC(t)
+						t.Cleanup(cleanup)
+						index := 8
+						agentAction(t, s.service, "recording.seek", workbench.RecordingSeekParams{Index: &index})
+						agentAction(t, s.service, "recording.speed.set", workbench.RecordingPlayParams{Speed: .00390625})
+						var m *mountedControlWindow
+						if action == "play" {
+							m = mountedRecordedPlay(t, s, field)
+						} else {
+							m = mountedRecordedStep(t, s, field)
+						}
+						before := s.service.Snapshot()
+						activate := func() {
+							if mode == "pointer" {
+								clickMountedControl(t, m, "recorded-"+action)
+							} else {
+								n := recordedPlayControl(t, s, "recorded-"+action)
+								s.app.Do(n.Activate)
+								m.settle()
+							}
+						}
+						bad := "1.5"
+						if field == "recorded-time" {
+							bad = "bad"
+						}
+						typeRecordedPlay(t, m, bad)
+						activate()
+						if !reflect.DeepEqual(before, s.service.Snapshot()) || s.errorMessage == "" {
+							t.Fatal("invalid entry did not refuse before correction", s.errorMessage)
+						}
+						if correction != "none" {
+							clickMountedControl(t, m, field)
+							text := "8"
+							if correction == "different" {
+								text = "3"
+							}
+							if field == "recorded-time" {
+								text += " ms"
+							}
+							typeRecordedPlay(t, m, text)
+						}
+						activate()
+						after := s.service.Snapshot()
+						if correction == "none" {
+							if !reflect.DeepEqual(before, after) || s.errorMessage == "" {
+								t.Fatal("untouched rejected input was silently accepted")
+							}
+							return
+						}
+						want := 8
+						if correction == "different" {
+							want = 3
+						}
+						if action == "next" {
+							want++
+						} else if action == "previous" {
+							want--
+						}
+						matched := after.Recording.Index == want
+						if action == "play" {
+							matched = after.Recording.Playing && after.Recording.Index >= want
+						} else {
+							matched = matched && !after.Recording.Playing
+						}
+						if !matched || after.CommandRevision != before.CommandRevision+2 || s.errorMessage != "" || len(s.recordedPlaybackRejected) != 0 {
+							t.Fatalf("fresh %s correction failed: want %s from %d got %+v error=%q", correction, action, want, after.Recording, s.errorMessage)
+						}
+						assertCursorMeasurementPreservesPhysics(t, before, after)
+					})
+				}
+			}
+		}
+	}
+}
+
+func TestRecordedPlaybackRejectedDraftRetainsOwnerAndAcceptedValueGuards(t *testing.T) {
+	for _, field := range []string{"recorded-index", "recorded-time"} {
+		for _, scenario := range []string{"agent-position", "capture-replaced", "other-field"} {
+			t.Run(field+"/"+scenario, func(t *testing.T) {
+				s, cleanup := recordedCursorRC(t)
+				t.Cleanup(cleanup)
+				index := 8
+				agentAction(t, s.service, "recording.seek", workbench.RecordingSeekParams{Index: &index})
+				before := s.service.Snapshot()
+				control := recordedPlayControl(t, s, field)
+				event := ui.ChangeEvent{Number: 1.5}
+				if field == "recorded-time" {
+					event = ui.ChangeEvent{Text: "bad"}
+				}
+				s.app.Do(func() { control.Change(event) })
+				if s.errorMessage == "" || !reflect.DeepEqual(before, s.service.Snapshot()) {
+					t.Fatal("refusal changed accepted state")
+				}
+				want := float32(8)
+				switch scenario {
+				case "agent-position":
+					index = 6
+					want = 6
+					agentAction(t, s.service, "recording.seek", workbench.RecordingSeekParams{Index: &index})
+				case "capture-replaced":
+					duration := .02
+					agentAction(t, s.service, "simulation.verify", workbench.VerifyParams{Duration: &duration})
+					completedVerification(t, s.service, s.service.Snapshot().LastOperation)
+					agentAction(t, s.service, "recording.seek", workbench.RecordingSeekParams{Index: &index})
+					if s.service.Snapshot().Recording.ID == before.Recording.ID {
+						t.Fatal("fixture did not replace capture")
+					}
+				case "other-field":
+					agentAction(t, s.service, "recording.speed.set", workbench.RecordingPlayParams{Speed: .0078125})
+				}
+				accepted := s.service.Snapshot()
+				control = recordedPlayControl(t, s, field)
+				if !reflect.DeepEqual(accepted, s.service.Snapshot()) {
+					t.Fatal("rendering draft changed accepted state")
+				}
+				if scenario == "other-field" {
+					if len(s.recordedPlaybackRejected) != 1 || field == "recorded-index" && control.Number != 1.5 || field == "recorded-time" && control.Text != "bad" {
+						t.Fatal("unrelated field erased rejected input", control)
+					}
+				} else {
+					text := "8 ms"
+					if want == 6 {
+						text = "6 ms"
+					}
+					if len(s.recordedPlaybackRejected) != 0 || field == "recorded-index" && control.Number != want || field == "recorded-time" && control.Text != text {
+						t.Fatal("replaced owner/value retained rejected input", control)
+					}
+				}
+			})
+		}
+	}
+}

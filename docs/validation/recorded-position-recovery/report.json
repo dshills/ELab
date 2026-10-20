@@ -1,0 +1,144 @@
+{
+  "date": "2026-10-20",
+  "change": "Correct rejected recorded positions back to the accepted value",
+  "base_commit": "423abb47",
+  "source_only": true,
+  "in_alpha_189": false,
+  "packaged": false,
+  "release_qualified": false,
+  "promoted": false,
+  "original": {
+    "command": [
+      "go",
+      "test",
+      "-race",
+      "-tags=offscreen",
+      "-overlay=/Users/dshills/Development/projects/ELab/build/canonical-recovery-probe/original-production-overlay.json",
+      "-run",
+      "^(TestMountedNumericOwnerRecordedCanonicalCorrection|TestRecordedPlaybackRejectedDraftRetainsOwnerAndAcceptedValueGuards)$",
+      "-count=1",
+      "-json",
+      "."
+    ],
+    "exit_code": 1,
+    "elapsed_s": 14.239093416952528,
+    "failing_leaves": [
+      "TestMountedNumericOwnerRecordedCanonicalCorrection/next/recorded-index/without-blur/canonical",
+      "TestMountedNumericOwnerRecordedCanonicalCorrection/next/recorded-time/without-blur/canonical",
+      "TestMountedNumericOwnerRecordedCanonicalCorrection/previous/recorded-index/without-blur/canonical",
+      "TestMountedNumericOwnerRecordedCanonicalCorrection/previous/recorded-time/without-blur/canonical",
+      "TestMountedNumericOwnerRecordedCanonicalCorrection/play/recorded-index/without-blur/canonical",
+      "TestMountedNumericOwnerRecordedCanonicalCorrection/play/recorded-time/without-blur/canonical",
+      "TestRecordedPlaybackRejectedDraftRetainsOwnerAndAcceptedValueGuards/recorded-index/other-field",
+      "TestRecordedPlaybackRejectedDraftRetainsOwnerAndAcceptedValueGuards/recorded-time/other-field"
+    ],
+    "passing_leaves": 34
+  },
+  "final": {
+    "race": true,
+    "passing_leaves": 42,
+    "transport_cases": 36,
+    "owner_and_value_retention_cases": 6,
+    "pointer_and_activation_without_blur": true,
+    "untouched_invalid_entries_refused": true,
+    "one_seek_then_one_transport": true,
+    "physics_document_and_history_preserved": true
+  },
+  "inventory": {
+    "sources": 73,
+    "sites": 402,
+    "public_commands": 164,
+    "source_routes": 132,
+    "public_routes_unchanged": true
+  },
+  "quality": {
+    "exit_code": 0,
+    "elapsed_s": 261.85070020810235,
+    "sources_unchanged": true,
+    "scope": "Full check.sh for recorded-position rejected-input recovery; no packaged/native UI qualification inferred"
+  },
+  "source_files": 670,
+  "source_sha256": {
+    "desktop/recorded_playback_actions.go": "161479a80a2d585df228f081b9b594cd95706803afec4bf33f6468e612c96a29",
+    "desktop/recording.go": "9f6e6022b8a87782a7e1c87ba255f22af9661b0490b1894bbab33b3114a4794e",
+    "desktop/recorded_step_offscreen_test.go": "0bbd4797ef97deb7ab1553741a9eb0a53ed90b01a85aa06287c8b00b3ac82019"
+  },
+  "scope": "Mounted offscreen pointer/activation and direct callback behavior. Existing owner/actor/capture/revision barriers remain in place; full check.sh includes prior guard suites. No new physical OS input, accessibility, native pixels, package, latency or owner-workflow acceptance. Owner /189 app remains unchanged.",
+  "raw": {
+    "original-production-overlay.json": {
+      "stored": "original-production-overlay.json.gz",
+      "bytes": 394,
+      "sha256": "674b8fb7ac8ba100a58e6393f0672dfcc9fa3d6ada6d1935dab0044e36dfad9e"
+    },
+    "original-final-summary.json": {
+      "stored": "original-final-summary.json.gz",
+      "bytes": 1298,
+      "sha256": "2f8a380bccb7422dbbe71adf18455e81f7d5ce0415cdbd2277d41b12bacf8872"
+    },
+    "original-final.jsonl": {
+      "stored": "original-final.jsonl.gz",
+      "bytes": 73092,
+      "sha256": "00526b791a8e8298558dff1a929c4ac6aa36fd9af0ae958e07ead171d98c465b"
+    },
+    "original-final-stderr.txt": {
+      "stored": "original-final-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "original-recorded_playback_actions.go.txt": {
+      "stored": "original-recorded_playback_actions.go.txt.gz",
+      "bytes": 9885,
+      "sha256": "cde17642f1badc4f4d835a51663408cef97adc2df421b7db720e481174096879"
+    },
+    "original-recording.go.txt": {
+      "stored": "original-recording.go.txt.gz",
+      "bytes": 10283,
+      "sha256": "903657cc947bad09960cf5949fa9fe6d9031b3cafe542753dbd83c8fa4ae9eb3"
+    },
+    "focused-final.jsonl": {
+      "stored": "focused-final.jsonl.gz",
+      "bytes": 49397,
+      "sha256": "fdefff6e7ea63d6877c7d3385afd5b15a2766aa8fb5df1d19a5ea407965c0993"
+    },
+    "focused-final-stderr.txt": {
+      "stored": "focused-final-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "inventory-review.json": {
+      "stored": "inventory-review.json.gz",
+      "bytes": 2737,
+      "sha256": "1a4508511706db1f4cc318ed49d1c701ec8c41de97ebd0401b447da3563884b3"
+    },
+    "native-inventory-before.json": {
+      "stored": "native-inventory-before.json.gz",
+      "bytes": 179436,
+      "sha256": "c8f7306c4a5167303201e019d9ed77d72e989ef2e4a8083659f19b54b5f53372"
+    },
+    "native-inventory-candidate.json": {
+      "stored": "native-inventory-candidate.json.gz",
+      "bytes": 179342,
+      "sha256": "8db8d020073b2073c38bac74ad9e4d0fbe7bd46d051e19330e60fb51238a6144"
+    },
+    "quality.py": {
+      "stored": "quality.py.gz",
+      "bytes": 1166,
+      "sha256": "01c20bdc7b61b4965713f88190bf80ac7f70696ad27fb6360088be8fdbffcea4"
+    },
+    "quality.json": {
+      "stored": "quality.json.gz",
+      "bytes": 71813,
+      "sha256": "5aa1b593f31f912fa36090dad0e60ffa75726c8e18797c6af996822731ebd27e"
+    },
+    "quality-stdout.txt": {
+      "stored": "quality-stdout.txt.gz",
+      "bytes": 1003,
+      "sha256": "5c167142bb711bd9acef47bed5f87419cecedd9156c81780dcfce8ef4f5317ed"
+    },
+    "quality-stderr.txt": {
+      "stored": "quality-stderr.txt.gz",
+      "bytes": 346,
+      "sha256": "c3040442c177eb4909a84cc0bdb12e1682ea09aafa84328c301b11e820402355"
+    }
+  }
+}

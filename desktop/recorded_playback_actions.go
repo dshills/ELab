@@ -23,6 +23,8 @@ type recordedPlaybackRejection struct {
 	generation  uint64
 	recordingID string
 	value       float64
+	text        string
+	number      float32
 	message     string
 	help        *workbench.DiagnosticHelp
 }
@@ -60,9 +62,9 @@ func recordedPlaybackFieldValue(r *workbench.RecordingView, id string) float64 {
 }
 
 // Only this capture's own field responses can continue a related viewer action.
-// Rejections retain their canonical value until correction or owner replacement;
+// Rejections retain the input and its accepted value until correction or owner replacement;
 // another field's successful edit must not play with the old rejected value.
-func (s *screen) changeRecordedPlaybackField(state workbench.Snapshot, id string, params any) {
+func (s *screen) changeRecordedPlaybackField(state workbench.Snapshot, id string, entry ui.ChangeEvent) {
 	r := state.Recording
 	pending := s.pendingRecordedPlayback
 	var origin *actionContext
@@ -78,6 +80,15 @@ func (s *screen) changeRecordedPlaybackField(state workbench.Snapshot, id string
 		s.app.Invalidate("main")
 		return
 	}
+	var params any
+	switch id {
+	case "recorded-index":
+		params = map[string]any{"index": entry.Number}
+	case "recorded-time":
+		params = map[string]any{"time_s": entry.Text}
+	default:
+		params = workbench.RecordingPlayParams{Speed: float64(entry.Number)}
+	}
 	var response workbench.Response
 	if id == "recorded-speed" {
 		response = s.invokeAtCommandRevision("recording.speed.set", params, state.CommandRevision, state.Document.Generation)
@@ -90,7 +101,11 @@ func (s *screen) changeRecordedPlaybackField(state workbench.Snapshot, id string
 			if s.recordedPlaybackRejected == nil {
 				s.recordedPlaybackRejected = make(map[string]recordedPlaybackRejection)
 			}
-			s.recordedPlaybackRejected[id] = recordedPlaybackRejection{origin.generation, r.ID, recordedPlaybackFieldValue(r, id), response.Error.Message, response.Help}
+			s.recordedPlaybackRejected[id] = recordedPlaybackRejection{
+				generation: origin.generation, recordingID: r.ID,
+				value: recordedPlaybackFieldValue(r, id), text: entry.Text, number: entry.Number,
+				message: response.Error.Message, help: response.Help,
+			}
 			// A refusal itself is not an accepted edit. Its unchanged context
 			// can only advance through our explicitly observed viewport response.
 			s.recordedPlaybackAccepted = &recordedPlaybackContinuation{from: *origin, to: *origin, recordingID: r.ID, values: recordedPlaybackState(r), playing: r.Playing}
