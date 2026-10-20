@@ -65,3 +65,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Bounded native binding follow-up](53-native-binding-followup.md): actuator/display/probe/sampling source review, preserved stale-audit-tool failure, exact current ledger verification and refreshed local helper; no new physical/runtime/full-binding qualification.
 
 - [Structured malformed-file diagnostic](54-structured-corruption-review.md): 20,028 mutations, eighteen dirty-work-preserving public refusals and separately scoped guided/unguided fuzz evidence, with the original race timeout retained and the full unchanged race pass completed. Current actions are separated from the verbatim [engineering history](34-engineering-checkpoint-history.md).
+
+- [Recorded sample-index validation](55-recorded-index-validation.md): reproduced fractional-index truncation, shared-command source repair, original failing/fixed passing mounted and callback regressions and full quality. Clean replacement qualification remains next.

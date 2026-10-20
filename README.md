@@ -1,5 +1,7 @@
 # ELab
 
+**Source repair ready:** [fractional recorded indices](research/55-recorded-index-validation.md) now use shared validation and pass full quality. A clean replacement app/agent is still being prepared; the /185 review below retains its affected callback.
+
 ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N/P-channel MOSFET and inductor/RLC circuits from blank: place components, connect named terminals, move and rotate parts, and edit exact values while simulation updates live. Users and agents invoke the same validated application commands.
 
 The [first-version delivery plan](research/34-first-version-plan.md) targets a usable macOS hobbyist alpha with frozen scope, ordered blockers and a concrete handoff.

@@ -1,5 +1,7 @@
 # ELab first-version review · 0.168.0 /185
 
+October 20 source follow-up: [RECORD-INDEX-01](55-recorded-index-validation.md) finds that /185 silently truncates fractional recorded sample indices. Its source repair passes shared refusal/correction and full quality; a clean replacement is being prepared. Use whole-number sample indices in this existing review. This note does not relabel /185 as repaired.
+
 The [review folder](../build/ELab-0.168.0-185-review) includes [ELab.app](../build/ELab-0.168.0-185-review/ELab.app), matching `elab-agent`, three editable examples and framework notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is needed.
 
 The [ZIP](../build/ELab-0.168.0-185-review.zip) and [checksum](../build/ELab-0.168.0-185-review.zip.sha256) preserve all 520 files/modes through macOS extraction into a Unicode path with spaces. Strict local signature and three examples/fresh saves/reopens verify. This does not establish installation, Developer ID, notarization or Gatekeeper acceptance.

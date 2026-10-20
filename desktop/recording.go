@@ -153,8 +153,9 @@ func (s *screen) recordingPanel(state workbench.Snapshot) ui.Node {
 	indexControl.Accessibility.Name = "Recorded sample index"
 	if r.Total > 1 {
 		indexControl = ui.Node{ID: "recorded-index", Kind: ui.NumberField, Number: float32(r.Index), MinWidth: 90, Numeric: ui.Numeric{Min: 0, Max: float32(r.Total - 1), Step: 1}, Accessibility: ui.Accessibility{Name: "Recorded sample index"}, Change: func(e ui.ChangeEvent) {
-			index := int(e.Number)
-			s.invoke("recording.seek", workbench.RecordingSeekParams{Index: &index})
+			// Preserve the entry for shared integer validation, as with agent
+			// requests. Truncating here silently selected a different sample.
+			s.invoke("recording.seek", map[string]any{"index": e.Number})
 		}}
 	}
 	position := []ui.Node{quiet("recorded-status", status), indexControl, timeField("recorded-time", "Recorded seek time", r.Time, false, func(text string) {
