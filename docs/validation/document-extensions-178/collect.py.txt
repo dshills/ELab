@@ -1,0 +1,117 @@
+"""Exact /178 headless mixed incomplete-document extension round trips."""
+from pathlib import Path
+import hashlib,json,os,select,shutil,subprocess,time,traceback
+
+ROOT=Path('/Users/dshills/Development/projects/ELab')
+OUT=Path('/private/tmp/elab-document-extension-review-178')
+SOURCE=ROOT/'build/ELab-0.161.0-178-review/elab-agent'
+EXPECTED='67d1bd63b695cc4407f8c6f70ba4748d14d260d79c52c61fe6a8f439b010b7c7'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+KINDS=['dc-source','resistor','led','capacitor','inductor','sine-source','finite-pulse-source','pulse-source','pmos','nmos','npn','opamp','ground','junction','net-label','potentiometer','diode','switch']
+IDS=['VDC','R1','D1','C1','L1','VSIN','VPULSE','VSQUARE','MP','MN','Q1','U1','GND','J1','NET','P1','DSI','S1']
+CASES=[
+ dict(name='lower',values=['0 V','10 ohm','1 pF','1 uH','10 ohm'],sine=dict(amplitude_v=0,offset_v=-12,frequency_hz=.1,phase_degrees=-360),pulse=dict(high_v=-12,low_v=-12,high_s=.000001,low_s=.000999,rise_s=.000001,fall_s=.000999),cap='-12 V',coil='-1 A',wiper=0,closed=False,voltage_range=.01,direction='conventional',motion=False,reduced=False,label='A'*32),
+ dict(name='upper',values=['12 V','100k ohm','1 F','100 H','100k ohm'],sine=dict(amplitude_v=12,offset_v=0,frequency_hz=1000,phase_degrees=360),pulse=dict(high_v=12,low_v=-12,high_s=10,low_s=10,rise_s=10,fall_s=10),cap='12 V',coil='1 A',wiper=1,closed=True,voltage_range=30,direction='electron',motion=True,reduced=True,label='Power+-./_0123456789'),
+ dict(name='precise',values=['3.141592653589793 V','1234.5678901234567 ohm','1.2345678901234567 uF','12.345678901234567 mH','9876.543210987654 ohm'],sine=dict(amplitude_v=1.2345678901234567,offset_v=-.12345678901234567,frequency_hz=12.345678901234567,phase_degrees=-12.345678901234567),pulse=dict(high_v=-1.2345678901234567,low_v=-6.543210987654321,high_s=.012345678901234567,low_s=.02345678901234567,rise_s=.00012345678901234567,fall_s=.00023456789012345678),cap='-1.2345678901234567 V',coil='123.45678901234567 mA',wiper=.12345678901234567,closed=True,voltage_range=1.2345678901234567,direction='electron',motion=True,reduced=False,label='SIG_test+/-1.2'),
+ dict(name='defaults',values=['5 V','1k ohm','1 uF','10 mH','10k ohm'],sine=dict(amplitude_v=2.5,offset_v=0,frequency_hz=10,phase_degrees=0),pulse=dict(high_v=5,low_v=0,high_s=.05,low_s=.05,rise_s=.001,fall_s=.001),cap='default',coil='default',wiper=.5,closed=False,voltage_range=5,direction='conventional',motion=False,reduced=False,label='SIGNAL')]
+
+class Client:
+ def __init__(self,name):
+  self.name=name;self.counter=0;self.command_revision=0;self.buffer=b'';self.finished=False
+  self.log=(OUT/(name+'-rpc.jsonl')).open('x');self.stderr=(OUT/(name+'-stderr.txt')).open('xb')
+  self.process=subprocess.Popen([str(OUT/'agent')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=self.stderr)
+  self.ask('project.inspect')
+ def ask(self,command,params=None,mutate=False):
+  self.counter+=1;r=dict(version=1,id=self.name+'-'+str(self.counter),command=command,params=params or {})
+  if mutate:r.update(key=r['id'],expected_command_revision=self.command_revision)
+  self.process.stdin.write((json.dumps(r)+'\n').encode());self.process.stdin.flush()
+  deadline=time.monotonic()+15
+  while b'\n' not in self.buffer:
+   remaining=deadline-time.monotonic()
+   if remaining<=0 or not select.select([self.process.stdout],[],[],remaining)[0]:raise TimeoutError(command)
+   data=os.read(self.process.stdout.fileno(),65536)
+   if not data:raise RuntimeError('EOF during '+command)
+   self.buffer+=data
+  line,self.buffer=self.buffer.split(b'\n',1);response=json.loads(line)
+  self.log.write(json.dumps(dict(request=r,response=response))+'\n');self.log.flush()
+  assert response['id']==r['id'] and not response.get('error'),response
+  result=response.get('result')
+  if isinstance(result,dict) and 'components' in result:self.command_revision=result['command_revision']
+  return result
+ def close(self):
+  if self.finished:return
+  state=self.ask('app.close',dict(discard_changes=True),True);work=state['shutdown'];deadline=time.monotonic()+15
+  while work['status'] in ('queued','running'):
+   assert time.monotonic()<deadline
+   time.sleep(.05);work=self.ask('app.close.inspect',dict(id=work['id']))
+  assert work['status']=='completed' and work['workers_joined'] and work['recovery_finalized'] and work['exit_ready'],work
+  self.process.stdin.close();code=self.process.wait(timeout=5);assert code==0,code
+  self.stderr.close();self.log.close();self.finished=True
+  exits.append(dict(session=self.name,exit_code=code,requests=self.counter,shutdown=work))
+
+def snapshot(client):return client.ask('project.inspect')
+def check_state(state,document):
+ assert state['components']==document['graph']['components'] and state['wires']==document['graph']['wires']
+ assert state['view']==document['view'] and state['paused']==document['paused']
+ assert state['transient_settings']==document['transient_settings']
+ assert state['scope']['selected']==document['scope_probes']['ids']
+ assert state['display']['preferences']==document['display_preferences']
+ assert [p['definition'] for p in state['pinned_readings']]==document['pinned_readings']['items']
+ assert all(p['state']=='unavailable' and 'value' not in p for p in state['pinned_readings'])
+ assert not state['document']['dirty']
+
+assert sha(SOURCE)==EXPECTED
+OUT.mkdir(mode=0o700)
+shutil.copy2(SOURCE,OUT/'elab-agent');assert sha(OUT/'elab-agent')==EXPECTED
+profile=Path('/private/tmp/elab-first-version-178-signed-runtime/runtime.sb');shutil.copy2(profile,OUT/'runtime.sb')
+wrapper=OUT/'agent';wrapper.write_text('#!/bin/sh\nset -eu\ncd /private/tmp/elab-document-extension-review-178\nexec /usr/bin/sandbox-exec -f /private/tmp/elab-document-extension-review-178/runtime.sb /private/tmp/elab-document-extension-review-178/elab-agent "$@"\n');wrapper.chmod(0o700)
+(OUT/'plan.json').write_text(json.dumps(dict(scope='Four mixed incomplete graphs with all 18 library parts, boundary/precise waveform/startup/wiper/display/probe settings; exact saved document/fresh reopen/byte-identical resave. Headless only; no numerical accuracy, native UI, timing, recovery or distribution acceptance.',source_commit='3250604feee11e5edd06ff3ead21fe36e288376a',release='0.161.0 /178',agent_sha256=EXPECTED,cases=CASES,kinds=KINDS,ids=IDS),indent=2)+'\n')
+exits=[];results=[];clients=[];failure=None
+try:
+ for case in CASES:
+  name=case['name'];client=Client(name+'-writer');clients.append(client);client.ask('simulation.pause',{},True)
+  parts=client.ask('parts.list');(OUT/(name+'-parts.json')).write_text(json.dumps(parts,indent=2)+'\n')
+  for i,(identity,kind) in enumerate(zip(IDS,KINDS)):
+   client.ask('component.place',dict(id=identity,kind=kind,position=dict(x=(i%6)*200-500,y=(i//6)*200-200)),True)
+   for rotation in range((i+CASES.index(case))%4):client.ask('component.rotate',dict(id=identity),True)
+  for identity,value in zip(['VDC','R1','C1','L1','P1'],case['values']):client.ask('component.set',dict(id=identity,value=value),True)
+  client.ask('component.set',dict(id='NET',value=case['label']),True)
+  client.ask('source.sine.set',dict(id='VSIN',waveform=case['sine']),True)
+  client.ask('source.pulse.set',dict(id='VPULSE',waveform=case['pulse']),True)
+  client.ask('capacitor.initial.set',dict(id='C1',value=case['cap']),True)
+  client.ask('inductor.initial.set',dict(id='L1',value=case['coil']),True)
+  client.ask('potentiometer.wiper.set',dict(id='P1',position=case['wiper']),True)
+  client.ask('switch.set',dict(id='S1',closed=case['closed']),True)
+  client.ask('display.preferences.set',dict(voltage_color=True,voltage_range_v=case['voltage_range'],current_cues=True,current_motion=case['motion'],reduced_motion=case['reduced'],direction=case['direction']),True)
+  probes=['v:VPULSE','i:VSIN','v:U1.input-difference','v:MN.gate-source','i:MP.drain','v:P1.wiper']
+  client.ask('scope.probes.set',dict(ids=probes),True)
+  for i,probe in enumerate(probes+['v:L1','i:C1']):client.ask('measurement.pin.add',dict(id=probe,position=dict(x=i*100-400,y=500)),True)
+  client.ask('view.pan',dict(dx=123.45678901234567,dy=-234.56789012345678),True)
+  client.ask('view.zoom',dict(factor=1.2345678901234567),True)
+  before=snapshot(client);assert len(before['components'])==18 and not before['wires'] and before['document']['dirty']
+  path=OUT/(name+' Ω schematic.elab');client.ask('project.save',dict(path=str(path)),True);data=path.read_bytes();document=json.loads(data)
+  assert document['version']==4 and len(document['graph']['components'])==18
+  check_state(snapshot(client),document)
+  assert document['graph']['components']==before['components'] and document['view']==before['view']
+  assert document['graph']['components'][5]['sine']==case['sine'] and document['graph']['components'][6]['pulse']==case['pulse']
+  client.close()
+  reopened=[]
+  for attempt in range(2):
+   fresh=Client(name+'-reader-'+str(attempt));clients.append(fresh)
+   fresh.ask('project.load',dict(path=str(path)),True);state=snapshot(fresh);check_state(state,document)
+   copy=OUT/(name+'-resave-'+str(attempt)+'.elab');fresh.ask('project.save',dict(path=str(copy)),True)
+   assert copy.read_bytes()==data and path.read_bytes()==data
+   reopened.append(state);fresh.close()
+  result=dict(name=name,passed=True,file=str(path),sha256=sha(path),document=document,before=before,reopened=reopened)
+  (OUT/(name+'-result.json')).write_text(json.dumps(result,indent=2)+'\n');results.append(dict(name=name,sha256=sha(path),fresh_reopens=2,byte_identical_resaves=2))
+except BaseException:
+ failure=traceback.format_exc();raise
+finally:
+ cleanup=[]
+ for client in clients:
+  if not client.finished:
+   try:client.close()
+   except BaseException:cleanup.append(dict(session=client.name,error=traceback.format_exc(),poll=client.process.poll()))
+ report=dict(passed=failure is None and not cleanup,agent_sha256=EXPECTED,results=results,exits=exits,failure=failure,cleanup_errors=cleanup,original_release_agent_unchanged=sha(SOURCE)==EXPECTED)
+ (OUT/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+ print(json.dumps(dict(passed=report['passed'],cases=len(results),sessions=len(exits),requests=sum(e['requests'] for e in exits),cleanup_errors=len(cleanup))))
