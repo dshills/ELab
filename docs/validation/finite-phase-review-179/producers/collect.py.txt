@@ -1,0 +1,96 @@
+"""Public /179 live/Verify/persistence review of full-phase finite ramps."""
+from pathlib import Path
+import hashlib,importlib.util,json,math,sys,time,traceback
+from reference import at,corners
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent;out=Path('/private/tmp/elab-finite-phase-review-179');out.mkdir(mode=0o700)
+sys.path.insert(0,str(root/'scripts'))
+spec=importlib.util.spec_from_file_location('phase_helper',root/'scripts/persistence-demo.py');helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+agent=Path('/private/tmp/elab-first-version-179-signed-runtime/agent');binary=agent.with_name('elab-agent')
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+receipt=root/'research/ui-audit/first-version/geometry-action-review-checkpoint.json';release=json.loads(receipt.read_text());assert sha(binary)==release['agent_sha256']
+base=dict(high_v=5.,low_v=0.,high_s=.007,low_s=.013,rise_s=.002,fall_s=.003)
+cases=[dict(name='full-rise',pulse=dict(base,rise_s=.007),duration=.061,step=.001),dict(name='full-fall',pulse=dict(base,fall_s=.013),duration=.061,step=.001),dict(name='triangle',pulse=dict(base,rise_s=.007,fall_s=.013),duration=.061,step=.001),dict(name='negative-triangle',pulse=dict(high_v=-1.,low_v=-3.,high_s=.02,low_s=.03,rise_s=.02,fall_s=.03),duration=.151,step=.001),dict(name='minimum-high',pulse=dict(high_v=5.,low_v=0.,high_s=.000001,low_s=.000999,rise_s=.000001,fall_s=.000999),duration=.003001,step=.000005),dict(name='minimum-low',pulse=dict(high_v=5.,low_v=0.,high_s=.000999,low_s=.000001,rise_s=.000999,fall_s=.000001),duration=.003001,step=.000005),dict(name='constant-level',pulse=dict(base,high_v=2.5,low_v=2.5,rise_s=.007,fall_s=.013),duration=.061,step=.001),dict(name='decimal-cycle',pulse=dict(high_v=5.,low_v=0.,high_s=.006,low_s=.004,rise_s=.006,fall_s=.004),duration=.030001,step=.001)]
+plan=dict(release='0.162.0 /179',source_commit=release['source_commit'],receipt_sha256=sha(receipt),agent_sha256=sha(binary),scope='Eight owned finite-pulse RC circuits; exact-source analytic forcing/RC references, live/Verify channel parity, unique corner events and kept-record save/fresh reopen. Headless only; no new native/timing/device or whole-PRD acceptance.',limits=dict(capacitor_voltage_error_v=.003,source_voltage_error_v=1e-9,current_error_a=3e-7,corner_time_error_s=1e-12,maximum_verify_output_steps=1000,retain_live_samples=512),cases=cases)
+(out/'plan.json').write_text(json.dumps(plan,indent=2)+'\n');results=[];exits=[];failure=None
+
+def close(client,label):
+    state=client.ask('app.close',dict(discard_changes=True),True);work=state['shutdown']
+    assert state['closed'] and work['status']=='completed' and all(work[k] for k in ('workers_joined','recovery_finalized','exit_ready'))
+    client.close();assert client.process.returncode==0
+    exits.append(dict(session=label,exit_code=0,shutdown=work))
+
+def wait(client,identifier):
+    deadline=time.monotonic()+30
+    while True:
+        record=client.ask('operation.inspect',dict(id=identifier))
+        status=record['operation']['status']
+        if status=='completed':return record
+        assert status in ('queued','running','canceling'),record
+        assert time.monotonic()<deadline,'Verify observation deadline'
+        time.sleep(.02)
+
+try:
+ for case in cases:
+    name=case['name'];folder=out/name;folder.mkdir();client=helper.Client(command_preconditions=True,agent_binary=agent)
+    try:
+        client.ask('simulation.pause',{},True)
+        edits=[]
+        for identity,kind,x,y,value in [('V1','finite-pulse-source',-200,0,''),('R1','resistor',0,-110,'10k'),('C1','capacitor',200,0,'1uF'),('GND','ground',0,110,'')]:
+            params=dict(id=identity,kind=kind,position=dict(x=x,y=y))
+            if value:params['value']=value
+            edits.append(dict(command='component.place',params=params))
+        edits.append(dict(command='source.pulse.set',params=dict(id='V1',waveform=case['pulse'])))
+        for a,b in [('V1.positive','R1.1'),('R1.2','C1.1'),('C1.2','GND.reference'),('GND.reference','V1.negative')]:edits.append(dict(command='wire.connect',params=dict(from_=a,to=b)))
+        for edit in edits:
+            if edit['command']=='wire.connect':edit['params']['from']=edit['params'].pop('from_')
+        client.ask('edit.batch',dict(name='Finite full-phase RC',edits=edits),True)
+        cfg=dict(step_s=case['step'],high_s=.05,low_s=.05,initial_voltage_v=0.,seconds_per_wall_second=min(.02,1000*case['step']))
+        client.ask('simulation.transient.set',cfg,True)
+        probes=['v:V1','v:C1','i:R1','i:C1'];client.ask('scope.probes.set',dict(ids=probes),True)
+        client.ask('simulation.restart',{},True);baseline=client.ask('simulation.wait')
+        (folder/'baseline.json').write_text(json.dumps(baseline,indent=2)+'\n')
+        client.ask('simulation.step',dict(duration_s=case['duration']),True);live=client.ask('simulation.wait')
+        (folder/'live.json').write_text(json.dumps(live,indent=2)+'\n')
+        for key in ('components','wires','transient_settings','document','run_id','electrical_revision','undo_entry','redo_entry'):assert baseline.get(key)==live.get(key),(name,key)
+        accepted=client.ask('simulation.verify',dict(duration_s=case['duration'],sample_step_s=case['step'],probe_ids=probes),True)
+        record=wait(client,accepted['last_operation']);(folder/'operation.json').write_text(json.dumps(record,indent=2)+'\n')
+        exported=folder/'record.json';client.ask('verification.export',dict(id=accepted['last_operation'],path=str(exported),format='json'),True)
+        data=json.loads(exported.read_text());rows=data['rows'];assert data['metadata']['sample_count']==len(rows)
+        max_errors=dict(source_v=0.,capacitor_v=0.,current_a=0.);matched=0
+        for row in rows:
+            source,cap=at(case['pulse'],row['time_s']);wanted=[source,cap,(source-cap)/10000,(source-cap)/10000]
+            for i,(got,want) in enumerate(zip(row['values'],wanted)):
+                key='source_v' if i==0 else 'capacitor_v' if i==1 else 'current_a';max_errors[key]=max(max_errors[key],abs(got-want))
+        assert max_errors['source_v']<1e-9 and max_errors['capacitor_v']<.003 and max_errors['current_a']<3e-7,(name,max_errors)
+        for index,trace in enumerate(live['scope']['traces']):
+            assert trace['probe']['id']==probes[index]
+            for point in trace['points']:
+                candidates=[r for r in rows if r['time_s']==point['time_s']]
+                assert any(math.isclose(r['values'][index],point['value'],rel_tol=1e-9,abs_tol=1e-12) for r in candidates),(name,point)
+                matched+=1
+        expected=corners(case['pulse'],case['duration']);events=[e['time_s'] for e in live['transient']['events'] if e['mode']=='pulse:V1:corner']
+        assert len(events)==len(expected) and all(abs(a-b)<1e-12 for a,b in zip(events,expected)),(name,events,expected)
+        saved=folder/'project.elab';client.ask('project.save',dict(path=str(saved)),True);saved_hash=sha(saved)
+        fresh=helper.Client(command_preconditions=True,agent_binary=agent)
+        try:
+            fresh.ask('project.load',dict(path=str(saved)),True);reopened=fresh.ask('simulation.wait')
+            assert reopened['paused'] and not reopened['document']['dirty'] and reopened['document']['recording_count']==1
+            assert reopened['components']==live['components'] and reopened['wires']==live['wires'] and reopened['transient']['sample']['time_s']==0
+            view=fresh.ask('operation.inspect',dict(id=reopened['last_operation']))
+            assert view['metadata']==record['metadata']
+            copy=folder/'reopened-record.json';fresh.ask('verification.export',dict(id=reopened['last_operation'],path=str(copy),format='json'),True)
+            assert copy.read_bytes()==exported.read_bytes() and sha(saved)==saved_hash
+            (folder/'reopened.json').write_text(json.dumps(reopened,indent=2)+'\n');close(fresh,name+'-fresh')
+        finally:
+            if fresh.process.poll() is None:fresh.close()
+        close(client,name+'-live')
+        result=dict(name=name,passed=True,recorded_rows=len(rows),retained_live_rows=len(live['transient']['samples']),live_record_values_matched=matched,expected_corners=expected,observed_corners=events,max_errors=max_errors,project_sha256=saved_hash,record_sha256=sha(exported),saved_record_reopened_exact=True)
+        (folder/'result.json').write_text(json.dumps(result,indent=2)+'\n');results.append(result)
+        print(json.dumps(result),flush=True)
+    finally:
+        if client.process.poll() is None:close(client,name+'-error-cleanup')
+except BaseException:
+ failure=traceback.format_exc();raise
+finally:
+ report=dict(passed=failure is None and len(results)==8,results=results,process_exits=exits,failure=failure,agent_unchanged=sha(binary)==release['agent_sha256'])
+ (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')

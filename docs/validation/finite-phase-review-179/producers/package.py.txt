@@ -1,0 +1,17 @@
+from pathlib import Path
+import gzip,hashlib,json,shutil,sys
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent;src=Path('/private/tmp/elab-finite-phase-review-179');dst=root/'docs/validation/finite-phase-review-179';dst.mkdir()
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+r=json.loads((src/'report.json').read_text());assert r['passed'] and r['failure'] is None and len(r['results'])==8 and len(r['process_exits'])==16
+receipt_path=root/'research/ui-audit/first-version/geometry-action-review-checkpoint.json';receipt=json.loads(receipt_path.read_text());assert all(sha(root/n)==v for n,v in receipt['quality']['source_sha256'].items()) and len(receipt['quality']['source_sha256'])==654
+index={}
+for p in sorted(src.rglob('*')):
+ if not p.is_file():continue
+ relative=p.relative_to(src);target=dst/'raw'/relative;target=target.with_name(target.name+'.gz');target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(gzip.compress(p.read_bytes(),mtime=0));index[str(target.relative_to(dst))]=dict(original_sha256=sha(p),original_bytes=p.stat().st_size,stored_sha256=sha(target))
+(dst/'producers').mkdir()
+for name in ('collect.py','reference.py','package.py'):
+ shutil.copy2(stage/name,dst/'producers'/(name+'.txt'))
+(dst/'producers/collection-output.txt.gz').write_bytes(gzip.compress((stage/'collection-output.txt').read_bytes(),mtime=0))
+(dst/'manifest.json').write_text(json.dumps(index,indent=2)+'\n')
+summary=dict(passed=True,release='0.162.0 /179',receipt_sha256=sha(receipt_path),agent_sha256=receipt['agent_sha256'],source_files_unchanged=654,cases=8,recorded_rows=sum(c['recorded_rows'] for c in r['results']),live_channel_values_matched=sum(c['live_record_values_matched'] for c in r['results']),unique_corner_events=sum(len(c['observed_corners']) for c in r['results']),fresh_exact_record_reopens=8,normal_process_exits=16,max_errors={k:max(c['max_errors'][k] for c in r['results']) for k in ('source_v','capacitor_v','current_a')},application_changed=False,new_release=False,new_native_input=False,new_latency_observations=False,owner_acceptance=False,full_mvp_complete=False,scope='Eight exact /179 headless finite-pulse RC boundary cases and independent analytic references; no additional defect reproduced. Existing budgets, solver/model/source/saved formats and warning policies unchanged.')
+(dst/'report.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary))

@@ -60,3 +60,17 @@ Each call replaces a complete definition. Every nested field is required and non
 An actual change is one undoable electrical edit. Running simulation restarts from configured startup; paused accepted readings, capacitor charge and time stay visible as stale until Restart or Resume. Electrical edits clear live scope cursors/window, preserve independent captured rows and leave experiment sampling/playback unchanged. Identical normalized fields preserve physics/history/dirty state, although successful command revisions can still advance. Atomic batches validate against staged components and either commit together or preserve the entire prior state. Ordinary recording `source_unchanged` follows electrical/document/actuation revisions rather than a later numerical resemblance to an old graph.
 
 These contracts add discovery information without changing the commands, device models, solver, work limits, file formats, ordinary catalog or output schemas. [Qualification evidence](validation/waveform-contracts-validation.json) distinguishes native callback coverage and owned native-socket workflows from full physical input/accessibility or hardware validation.
+
+## Full-phase ramp validation
+
+The [exact /179 boundary review](validation/finite-phase-review-179/README.md)
+checks eight RC configurations with rise/fall equal to their phases, negative
+and constant levels, minimum-length phases and decimal cycle boundaries. All
+1,685 captured rows match an independent piecewise-linear/exponential reference;
+retained live/Verify channels and complete final mixed results agree. All 49
+unique corners survive and eight kept recordings reopen byte-identically.
+Maximum capacitor error is 60.687 µV within the existing 3 mV bound. The minimum
+cases retain unresolved sampling warnings; corner samples and internal accuracy
+do not establish that the output grid meets the four-samples-per-ramp target.
+No model/solver/format/budget change or additional defect results from this
+bounded review; broader topology, native input and hardware gates remain separate.

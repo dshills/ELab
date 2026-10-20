@@ -1,0 +1,33 @@
+"""Independent piecewise-linear forcing and exact first-order RC propagation."""
+from decimal import Decimal
+import math
+D=lambda value:Decimal(str(value))
+
+def segments(p):
+    low,high=D(p['low_v']),D(p['high_v']);rise,fall=D(p['rise_s']),D(p['fall_s']);hi,lo=D(p['high_s']),D(p['low_s'])
+    return [(rise,low,(high-low)/rise),(hi-rise,high,Decimal(0)),(fall,high,(low-high)/fall),(lo-fall,low,Decimal(0))]
+
+def at(p,time,tau=.01):
+    remaining=D(time);voltage=0.;source=float(p['low_v']);pieces=segments(p)
+    while remaining>0:
+        for duration,u,slope in pieces:
+            if duration==0:continue
+            interval=min(duration,remaining);h=float(interval);start=float(u);m=float(slope)
+            # Exact convolution for a linear forcing segment, stable for short h.
+            em=math.expm1(-h/tau)
+            voltage=voltage+(start-voltage)*(-em)+m*(h+tau*em)
+            source=float(u+slope*interval);remaining-=interval
+            if remaining==0:return source,voltage
+    return source,voltage
+
+def corners(p,duration):
+    if p['high_v']==p['low_v']:return []
+    hi,lo=D(p['high_s']),D(p['low_s']);period=hi+lo
+    offsets=sorted({D(p['rise_s']),hi,hi+D(p['fall_s']),period})
+    result=[];cycle=Decimal(0)
+    while cycle*period<D(duration):
+        for offset in offsets:
+            value=cycle*period+offset
+            if value<=D(duration):result.append(float(value))
+        cycle+=1
+    return result
