@@ -1,0 +1,17 @@
+# /189 internal frame and copied public-command gates
+
+October 20, 2026. The unchanged clean `b49fd7ad` /189 candidate passes one native smoke run and the copied public command suites. **The original native time/Previous finding remains open, and /189 remains unqualified.** [Unavailable native recheck](../native-recorded-transport-189/README.md).
+
+The native smoke exits 0 after **49.696 seconds**. All **48 named stages** complete, covering the first GPU canvas readback, subsequent schematic/scope checks, Inspector layout and lifecycle. The first readback must contain at least 500 qualifying schematic pixels. Eleven Inspector labels retain complete text without truncation and fit their measured frames. These results show that the test's offscreen canvas path can generate frames. They do not prove whole-window presentation or establish why CUA's ordinary window images were blank.
+
+The smoke is a different startup mode: it uses a 1260×1100 window, disables shared geometry saving and uses private recovery/appearance paths. The unavailable ordinary protected window was 1053×802. No external screenshot, OS input sequence, replacement capture method or visible latency trial is added here. This is not a controlled isolation of the blank-window cause.
+
+The independent copied command gates finish in **48.901 seconds**. In-process, headless stdio, headless socket and native socket adapters pass the three workflows and their equivalence checks, along with project contracts, electrical references, inductors, op-amps, op-amp storage and capacity cases. Each adapter reports 294 electrical, 22 inductor, 931 op-amp, 752 storage and 4,900 capacity checks. These are the exercised public-command cases, not complete native binding coverage or all possible user/agent interactions.
+
+All **102 child exit records** report exit 0 without a graceful-wait timeout; all **112 shutdown responses** report completed jobs, joined workers, finalized recovery and readiness to exit. The separate native smoke PID also disappears after exit 0. Candidate/copy bytes and modes, the /188 review, canonical binary and shared geometry remain exact through the runs. No app/model/solver/format/SDK/source/version change, promotion, physical print, privacy grant or owner acceptance.
+
+These independent gates were moved forward while rendered native observation is unavailable so a later native recheck need not repeat them without an invalidating change. They do not qualify the replacement or close the original `3 ms` → Previous case. The exact 670 Go inputs still match the prior 274.391-second full source gate.
+
+Raw data are retained in 713 files inside one deterministic, non-executed data archive: 47,785,345 raw bytes compressed to 5,328,294 bytes. Separate smoke/controller logs, source excerpts and producers are frozen beside it. The first report replay incorrectly counted two diagnostic `smoke:` messages as named stages; the failed verifier/output are retained. Final replay checks 48 source-declared stages plus those two exact diagnostic messages, without altering any application output.
+
+Run `python3 -B docs/validation/frame-and-public-gates-189/verify.py` for read-only archive/source/artifact/report/count replay. It extracts no files and starts no app, subprocess, test or capture. It checks the recorded results; it does not rerun numerical suites or reproduce the unavailable native interaction.

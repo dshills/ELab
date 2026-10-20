@@ -1,0 +1,164 @@
+{
+  "date": "2026-10-20",
+  "source_commit": "b49fd7ad4ef67b9cbb5002a47dd281e5f5287e2e",
+  "candidate": "0.172.0 /189",
+  "frame_smoke": {
+    "status": "completed",
+    "scope": "Existing in-app native smoke and GPU canvas readbacks only; no external screenshot or native coordinate-input acceptance",
+    "source_commit": "b49fd7ad4ef67b9cbb5002a47dd281e5f5287e2e",
+    "candidate": "/Users/dshills/Development/projects/ELab/build/ELab-0.172.0-189-native-unavailable-candidate",
+    "native_sha256": "a8cf9d053f9cce67f902fe09fe47d5917aa07588982290ce566d546d3b3faf7f",
+    "candidate_bundle": {
+      ".": {
+        "mode": 493,
+        "sha256": null
+      },
+      "Contents": {
+        "mode": 493,
+        "sha256": null
+      },
+      "Contents/Info.plist": {
+        "mode": 420,
+        "sha256": "c0a11d0031d2dcc54d9678fbe4c1f7f043c40340bf28b40f8a16cf98fc28811e"
+      },
+      "Contents/MacOS": {
+        "mode": 493,
+        "sha256": null
+      },
+      "Contents/MacOS/ELab": {
+        "mode": 493,
+        "sha256": "a8cf9d053f9cce67f902fe09fe47d5917aa07588982290ce566d546d3b3faf7f"
+      },
+      "Contents/Resources": {
+        "mode": 493,
+        "sha256": null
+      },
+      "Contents/Resources/APP_MANIFEST.json": {
+        "mode": 420,
+        "sha256": "96350fa4ef6b0064b8263740c540e0499c27eaf64d89574cca9bc2a70385292d"
+      },
+      "Contents/_CodeSignature": {
+        "mode": 493,
+        "sha256": null
+      },
+      "Contents/_CodeSignature/CodeResources": {
+        "mode": 420,
+        "sha256": "fe180f58f0b157ea3b2393f6128e51fedcd62322968a15fc27f9c354986c0d36"
+      }
+    },
+    "policy_sha256": "6b64706f7f3c6b96204e4071a0d2f9d8b8cecce588c92bb1538c567827ae0e1b",
+    "shared_geometry_before": {
+      "window-geometry-0.3.6.json": {
+        "sha256": "a5b1f9c088561a2f0394109a58dcf8b5390a2c31337c62c16d62166475d30f32",
+        "mode": "0o644"
+      },
+      "window-geometry-0.3.6.lst": {
+        "sha256": "770d6b2821e383274d241331b7d12b371a182ae38ffb08bcd94c3e5286b0ccda",
+        "mode": "0o644"
+      }
+    },
+    "canonical_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "qualified_replacement": false,
+    "native_time_previous_closed": false,
+    "external_capture_performed": false,
+    "command": [
+      "/private/tmp/elab-frame-diagnostic-189/native",
+      "--smoke",
+      "--smoke-timeout",
+      "2m"
+    ],
+    "timeout_seconds": 180,
+    "exit_code": 0,
+    "elapsed_seconds": 49.69625404197723,
+    "owned_pid": 9617,
+    "owned_process_absent": true,
+    "postprocess_ps_returncode": 1,
+    "postprocess_command": "",
+    "shared_geometry_after": {
+      "window-geometry-0.3.6.json": {
+        "sha256": "a5b1f9c088561a2f0394109a58dcf8b5390a2c31337c62c16d62166475d30f32",
+        "mode": "0o644"
+      },
+      "window-geometry-0.3.6.lst": {
+        "sha256": "770d6b2821e383274d241331b7d12b371a182ae38ffb08bcd94c3e5286b0ccda",
+        "mode": "0o644"
+      }
+    },
+    "shared_geometry_unchanged": true,
+    "candidate_unchanged": true,
+    "copied_bundle_unchanged": true,
+    "prior_review_unchanged": true,
+    "canonical_unchanged": true,
+    "stdout_sha256": "5431abf7d749dcbcca3679d807be414e0073ae221e434d38acfdb82be4b7ba80",
+    "stderr_sha256": "a002335ffca8016e336b54e1b881aa347ae314b84b964d5785f35e16befea251"
+  },
+  "public_controller": {
+    "status": "completed",
+    "source_commit": "b49fd7ad4ef67b9cbb5002a47dd281e5f5287e2e",
+    "native_sha256": "a8cf9d053f9cce67f902fe09fe47d5917aa07588982290ce566d546d3b3faf7f",
+    "agent_sha256": "f1f4419dba2d692b19d988921d7bd4286688ae1b4ba143c603860595c6772e59",
+    "controller_sha256": "5a42046cc695cbcff99d4fac00cc9ea444694d434bab5636fb33ed492f9331df",
+    "scope": "Independent copied four-adapter public commands/reference/storage gates; no native private-entry or whole-window presentation acceptance",
+    "native_time_previous_closed": false,
+    "qualified_replacement": false,
+    "policy_sha256": "6b64706f7f3c6b96204e4071a0d2f9d8b8cecce588c92bb1538c567827ae0e1b",
+    "command": [
+      "/Users/dshills/Development/projects/ELab/build/first-version-189-tools/build/elab-conformance",
+      "--agent-binary",
+      "/private/tmp/elab-public-contracts-189/agent",
+      "--native-binary",
+      "/private/tmp/elab-public-contracts-189/native",
+      "--project-contract-suite",
+      "--electrical-suite",
+      "--inductor-suite",
+      "--opamp-suite",
+      "--opamp-storage-suite",
+      "--capacity-suite",
+      "--artifacts",
+      "/private/tmp/elab-public-contracts-189/public"
+    ],
+    "shared_geometry_before": {
+      "window-geometry-0.3.6.json": {
+        "sha256": "a5b1f9c088561a2f0394109a58dcf8b5390a2c31337c62c16d62166475d30f32",
+        "mode": "0o644"
+      },
+      "window-geometry-0.3.6.lst": {
+        "sha256": "770d6b2821e383274d241331b7d12b371a182ae38ffb08bcd94c3e5286b0ccda",
+        "mode": "0o644"
+      }
+    },
+    "canonical_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "exit_code": 0,
+    "elapsed_seconds": 48.90060000005178,
+    "public_report_sha256": "debad4a896b1b71603ae17fc3061fbfa86949604b4fada0244d4096c69523448",
+    "public_passed": true,
+    "shared_geometry_after": {
+      "window-geometry-0.3.6.json": {
+        "sha256": "a5b1f9c088561a2f0394109a58dcf8b5390a2c31337c62c16d62166475d30f32",
+        "mode": "0o644"
+      },
+      "window-geometry-0.3.6.lst": {
+        "sha256": "770d6b2821e383274d241331b7d12b371a182ae38ffb08bcd94c3e5286b0ccda",
+        "mode": "0o644"
+      }
+    },
+    "shared_geometry_unchanged": true,
+    "candidate_unchanged": true,
+    "copied_bundle_unchanged": true,
+    "agent_unchanged": true,
+    "controller_unchanged": true,
+    "prior_review_unchanged": true,
+    "canonical_unchanged": true,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "31ea345d0691fcbde225d49dd5af1659a6a85cd248df6455335903892dc2525d"
+  },
+  "source_proof_checkpoint_sha256": "fddf664dba573d918e0416c35a0882c4c9aabdcab54e8284bf4cf04123a10c9e",
+  "native_unavailable_checkpoint_sha256": "44a8607f1d91dfa465c00bfe27657bd930ff36db6fa803d401ca21ddb0e5e78a",
+  "qualified_replacement": false,
+  "native_time_previous_closed": false,
+  "blank_window_cause_confirmed": false,
+  "external_capture_performed": false,
+  "new_version": false,
+  "prior_release_receipt_sha256": "2bfa2c5b0f5fc9eaeac130b069df6f022f657619fb2362121f43a59ae79086c0",
+  "sdk_lock_sha256": "2f9ac0e120bdd09d5ffe2c3d8b5da4d24588455c5e6bc8d6f08c80e0dccc6395"
+}
