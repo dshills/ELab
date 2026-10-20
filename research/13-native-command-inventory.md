@@ -261,3 +261,9 @@ Clean 0.153.0 /170 retains every native source/ledger byte and the 71-file/397-s
 Clean 0.154.0 /171 now packages the two appearance-job IDs: the ledger remains 71 native files /397 sites /173 review-category sites /164 public IDs /132 source-routed IDs. Native source digests, sites, aliases and route sets are unchanged. [Receipt](ui-audit/first-version/appearance-work-review-checkpoint.json). Copied native/headless discovery/file outcomes and the strict local ad-hoc bundle signature pass; source held-IO races and earlier physical inputs retain separate scopes. The two advanced job commands have no dedicated native controls, and complete binding acceptance remains open.
 
 The unreleased [DC sweep Run handoff repair](../docs/validation/dc-sweep-handoff/README.md) adds one production helper file and refreshes four others. Total sites, public/alias/route sets and 132 source-routed IDs are unchanged. Factoring guarded settlement changes the static categories from 198 literal/173 review sites to 197 literal/174 review sites; this is not a count of untested behaviors. Thirty focused retained-widget/continuation cases cover the named Run fields, failures and interruptions. The /171 app retains its older bindings; clean replacement and physical input qualification remain separate.
+
+The [clean /179 replacement](../docs/validation/geometry-action-review-179/README.md)
+now packages the geometry/value-draft relay. Its exact copied runtime and shared
+public geometry/Undo checks pass. The ledger stays 72 sources/400 syntax sites,
+164 public IDs and 132 routed IDs; neither factory presence nor copied public
+commands establish complete physical binding coverage.

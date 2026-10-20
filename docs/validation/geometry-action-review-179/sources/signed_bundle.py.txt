@@ -1,0 +1,39 @@
+"""Admit only the exact signed artifact produced from the pinned clean input.
+
+The SDK manifest names the pre-signing binary. A signed executable necessarily
+has a different digest, so require the independent build receipt, complete tree,
+raw-input hash, clean VCS identity and strict resource signature together.
+"""
+from pathlib import Path
+import hashlib
+import json
+import plistlib
+import subprocess
+import sys
+
+root = Path('/Users/dshills/Development/projects/ELab')
+sys.path.insert(0, str(root/'scripts'))
+from runtime_isolation import bundle_tree, regular
+
+
+def admit(app, expected, raw):
+    sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+    if bundle_tree(app) != expected['source_bundle']:
+        raise ValueError('signed bundle tree differs from the independently recorded build')
+    info = plistlib.loads(regular(app/'Contents/Info.plist').read_bytes())
+    if (info['CFBundleExecutable'] != 'ELab' or info['CFBundleIdentifier'] != 'com.dshills.elab'
+            or info['CFBundleShortVersionString'] != expected['version'] or info['CFBundleVersion'] != expected['build']):
+        raise ValueError('signed bundle identity differs from the pinned build')
+    binary = regular(app/'Contents/MacOS/ELab')
+    manifest = json.loads(regular(app/'Contents/Resources/APP_MANIFEST.json').read_text())
+    if (manifest.get('private_build') is not True or manifest.get('signed_identity') != '-'
+            or manifest.get('source_binary_sha256') != expected['source_native_sha256']
+            or sha(regular(raw)) != expected['source_native_sha256']
+            or sha(binary) != expected['native_sha256']):
+        raise ValueError('signed artifact is not bound to its exact clean raw input')
+    built = subprocess.check_output(['go', 'version', '-m', str(binary)], text=True, timeout=15)
+    if ('vcs.revision='+expected['source_commit'] not in built or 'vcs.modified=false' not in built):
+        raise ValueError('signed executable lost the clean source identity')
+    subprocess.run(['/usr/bin/codesign', '--verify', '--deep', '--strict', str(app)],
+                   capture_output=True, check=True, timeout=30)
+    return binary

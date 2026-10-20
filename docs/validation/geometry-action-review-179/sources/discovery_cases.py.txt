@@ -1,0 +1,112 @@
+"""Exact copied native/headless discovery; native layout publications stay separate."""
+from pathlib import Path
+import hashlib,json
+
+
+def check(native,parity,out):
+    root=Path('/Users/dshills/Development/projects/ELab')
+    folder=out
+    sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+    old_binary=Path('/private/tmp/elab-first-version-170-runtime/elab-agent')
+    receipt=json.loads((root/'research/ui-audit/first-version/discovery-review-checkpoint.json').read_text())
+    assert sha(old_binary)==receipt['agent_sha256']
+    old=parity.helper.Client(command_preconditions=True,agent_binary=Path('/private/tmp/elab-first-version-170-runtime/agent'))
+    try:
+        old_catalog=old.ask('capabilities.list')
+        old_details={c['id']:old.ask('capabilities.list',dict(command=c['id']))['capabilities'][0] for c in old_catalog['capabilities']}
+    finally:old.close()
+    (out/'discovery-baseline-170.json').write_text(json.dumps(dict(catalog=old_catalog,details=old_details),indent=2)+'\n')
+    expected_changed=['operation.samples','diagnostics.details.set','appearance.configure','appearance.wait','appearance.theme.set','display.preferences.set']
+    added=['appearance.work.inspect','appearance.work.cancel']
+    assert len(old_details)==162 and all('x-command-contract' in c['input_schema'] for c in old_details.values())
+    def equivalent(left,right):
+        # Real native owner layout can publish during a read-only query or
+        # after a refusal. Preserve those observations but compare every
+        # nonpresentation snapshot field; source pure-query tests are exact.
+        excluded={'view','viewport','revision','command_revision','last_actor'}
+        return {k:v for k,v in left.items() if k not in excluded}=={k:v for k,v in right.items() if k not in excluded}
+    def discover(client):
+        catalog=client.ask('capabilities.list')
+        details={c['id']:client.ask('capabilities.list',dict(command=c['id']))['capabilities'][0] for c in catalog['capabilities']}
+        return catalog,details
+    def exercise(client,label):
+     directory=out/label;directory.mkdir();client.ask('example.reset',dict(discard_changes=True),True);client.ask('simulation.wait');client.ask('simulation.pause',{},True)
+     saved=directory/'manual-project.elab';client.ask('project.save',dict(path=str(saved)),True);client.ask('simulation.wait');saved_sha=sha(saved)
+     before=client.ask('project.inspect');catalog,details=discover(client);assert equivalent(client.ask('project.inspect'),before)
+     assert len(details)==164 and all('x-command-contract' in c['input_schema'] for c in details.values())
+     assert [name for name in details if name not in old_details]==added
+     import copy
+     expected_catalog=copy.deepcopy(old_catalog['capabilities'])
+     sample=next(c for c in expected_catalog if c['id']=='operation.samples')
+     for field in ['offset','limit']: sample['input_schema']['properties'][field]['type']=['integer','null']
+     assert [cap for cap in catalog['capabilities'] if cap['id'] not in added]==expected_catalog
+     assert all(c['output_schema']==old_details[name]['output_schema'] and c['mutation']==old_details[name]['mutation'] for name,c in details.items() if name in old_details)
+     changed=[name for name in details if name in old_details and details[name]!=old_details[name]];assert changed==expected_changed,changed
+     registry=json.loads(json.dumps(catalog['schemas']));snapshot=registry['urn:elab:snapshot:1'];assert 'appearance_work' in snapshot['properties'] and 'appearance_work' not in snapshot['required'];snapshot['properties'].pop('appearance_work');assert registry==old_catalog['schemas']
+     idle=client.ask('events.poll',dict(after_revision=before['revision'],timeout_ms=0));assert not idle['timed_out'] and idle['coalesced']; assert idle['changed'] or 'snapshot' not in idle
+     client.ask('events.poll',dict(after_revision=before['revision']+10000,timeout_ms=0),expect='conflict')
+     frame=client.ask('display.inspect',dict(phase=1));assert frame['phase']==0
+     client.ask('display.inspect',dict(phase=1.01),expect='invalid-params')
+     assert equivalent(client.ask('project.inspect'),before)
+     client.ask('diagnostics.details.set',dict(visible=True),True);detailed=client.ask('project.inspect');assert detailed['diagnostic_presentation']['details_visible'] and detailed['document']==before['document']
+     event=client.ask('events.poll',dict(after_revision=before['revision'],timeout_ms=0));assert event['changed'] and event['snapshot']['diagnostic_presentation']['details_visible']
+     prefs=dict(voltage_color=True,voltage_range_v=30,current_cues=True,current_motion=True,reduced_motion=True,direction='electron')
+     client.ask('display.preferences.set',prefs,True);display=client.ask('project.inspect');assert display['document']['dirty'] and not display['display']['animate'] and display['display']['preferences']==prefs and display['undo_entry']['name']=='Change display preferences'
+     bad=dict(prefs,current_cues=False);client.ask('display.preferences.set',bad,True,expect='invalid-params');assert equivalent(client.ask('project.inspect'),display)
+     path=directory/'appearance.json';client.ask('appearance.configure',dict(path=str(path)),True);ready=client.ask('appearance.wait');assert ready['appearance']['status']=='ready'
+     theme_stages=[]
+     for theme in details['appearance.theme.set']['input_schema']['properties']['theme']['enum']:
+      client.ask('appearance.theme.set',dict(theme=theme),True);state=client.ask('appearance.wait');assert state['theme']==theme and json.loads(path.read_text())['theme']==theme
+      for key in ['components','wires','result','run_id','electrical_revision','document','undo_entry','redo_entry']:assert state.get(key)==display.get(key),(label,key)
+      theme_stages.append(state)
+     pref_bytes=path.read_bytes();client.ask('appearance.configure',dict(path=''),True);disabled=client.ask('appearance.wait');assert disabled['appearance']['status']=='disabled' and path.read_bytes()==pref_bytes
+     corrupt=directory/'corrupt-appearance.json';corrupt.write_text('not JSON');client.ask('appearance.configure',dict(path=str(corrupt)),True);failed=client.ask('appearance.wait');assert failed['appearance']['status']=='error' and failed['appearance']['error']
+     client.ask('appearance.theme.set',dict(theme='dark'),True);assert corrupt.read_text()=='not JSON';client.ask('appearance.configure',dict(path=''),True)
+     aliases={'example.reset':'led','example.rc':'rc','example.npn':'npn','example.npn-pulse':'blink','example.flasher':'flasher','example.switch-npn':'switch-npn','example.rectifier':'rectifier'};alias_stages=[]
+     for command,identity in aliases.items():
+      admitted=client.ask(command,dict(discard_changes=True),True);assert not admitted['paused'] and details[command]['input_schema']['x-example-id']==identity
+      client.ask('simulation.wait');client.ask('simulation.pause',{},True);state=client.ask('project.inspect');assert state['example']['info']['id']==identity
+      client.ask(command,{},True,expect='unsaved-changes');assert equivalent(client.ask('project.inspect'),state)
+      alias_stages.append(state)
+     client.ask('example.load',dict(id='rc',discard_changes=True),True);client.ask('simulation.wait');client.ask('simulation.pause',{},True);original=client.ask('project.inspect')
+     client.ask('component.move',dict(id='R1',position=dict(x=800,y=700)),True)
+     client.ask('example.current.reset',dict(expected_example_id='led',discard_changes=True),True,expect='conflict')
+     client.ask('example.current.reset',dict(expected_example_id='rc'),True,expect='unsaved-changes')
+     client.ask('example.current.reset',dict(expected_example_id='rc',discard_changes=True),True);reset=client.ask('simulation.wait');assert reset['paused'] and reset['components']==original['components'] and reset['document']['generation']>original['document']['generation']
+     client.ask('example.load',dict(id='missing',discard_changes=True),True,expect='not-found')
+     client.ask('example.reset',dict(discard_changes=True),True);client.ask('simulation.wait');client.ask('simulation.pause',{},True);connected=client.ask('project.inspect')
+     client.ask('circuit.connection.set',dict(connected=False),True);disconnected=client.ask('project.inspect');assert len(disconnected['wires'])==len(connected['wires'])-1
+     client.ask('circuit.connection.set',dict(connected=False),True);no_op=client.ask('project.inspect');assert no_op['wires']==disconnected['wires'] and no_op['run_id']==disconnected['run_id'] and no_op['undo_entry']==disconnected['undo_entry']
+     client.ask('circuit.connection.set',dict(connected=True),True);restored=client.ask('project.inspect');assert len(restored['wires'])==len(connected['wires'])
+     client.ask('project.clear',dict(discard_changes=True),True);client.ask('example.current.reset',{},True,expect='unavailable');client.ask('circuit.connection.set',dict(connected=False),True,expect='invalid-params')
+     assert sha(saved)==saved_sha
+     result=dict(catalog=catalog,details=details,before=before,idle=idle,frame=frame,detailed=detailed,event=event,display=display,theme_stages=theme_stages,disabled=disabled,persistence_error=failed,aliases=alias_stages,original=original,reset=reset,connected=connected,disconnected=disconnected,no_op=no_op,restored=restored,manual_save_unchanged=True)
+     (folder/(label+'.json')).write_text(json.dumps(result,indent=2)+'\n');return result
+
+    left=exercise(native,'native-discovery')
+    reference=parity.helper.Client(command_preconditions=True)
+    try:right=exercise(reference,'headless-discovery')
+    finally:reference.close()
+    assert left['catalog']==right['catalog'] and left['details']==right['details']
+    def navigation(target,label):
+        target.ask('example.rc',dict(discard_changes=True),True);target.ask('simulation.wait');target.ask('simulation.pause',{},True)
+        target.ask('simulation.step',dict(duration_s=.001),True);before=target.ask('simulation.wait')
+        target.ask('selection.navigate',dict(direction='first',kind='components',center=True),True)
+        selected=target.ask('project.inspect');identity=selected['selected']
+        target.ask('view.pan',dict(dx=40,dy=-20),True);target.ask('view.zoom',dict(factor=2,anchor=None),True)
+        target.ask('view.selection.center',dict(id=identity),True);after=target.ask('project.inspect')
+        for key in ['components','wires','transient','mixed','run_id','electrical_revision','document','undo_entry','redo_entry']:assert before.get(key)==after.get(key),key
+        target.ask('view.selection.center',dict(id='absent'),True,expect='conflict')
+        target.ask('view.pan',dict(dx=3e6,dy=0),True,expect='invalid-params')
+        refused=target.ask('project.inspect');assert equivalent(after,refused)
+        result=dict(before=before,selected=selected,after=after,refused=refused)
+        (out/(label+'-navigation.json')).write_text(json.dumps(result,indent=2)+'\n');return result
+    import appearance_cases
+    appearance_report=appearance_cases.check(native,parity,out)
+    a=navigation(native,'native-discovery');reference=parity.helper.Client(command_preconditions=True)
+    try:b=navigation(reference,'headless-discovery')
+    finally:reference.close()
+    for phase in ['selected','after','refused']:
+        for key in ['components','wires','selected','transient_settings','paused']:assert a[phase].get(key)==b[phase].get(key),key
+        parity.compare(a[phase]['transient'],b[phase]['transient']);parity.compare(a[phase].get('mixed'),b[phase].get('mixed'))
+    return dict(passed=True,commands=164,semantic_annotations=164,old_annotations=162,added_commands=added,detailed_inputs_changed=expected_changed,existing_capabilities_except_two_nullable_inputs_and_output_references_unchanged=True,snapshot_optional_appearance_work_added=True,other_registry_definitions_unchanged=True,native_headless_detailed_inputs_equal=True,examples_preferences_events_connection_and_navigation=True,explicit_private_saves_preserved=True,appearance_job_checks=appearance_report,scope='Exact copied native/headless public discovery and behavior. Native layout can advance presentation/revision fields during queries; every other field is compared. Source query-purity and private input evidence remain separate; no physical OS/reader/IME or exhaustive semantic acceptance claim.')

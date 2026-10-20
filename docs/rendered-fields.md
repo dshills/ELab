@@ -50,3 +50,8 @@ the corrected mounted controls with separate public-agent commands. Deferred
 completion, held-agent edit and replacement/refusal cases keep their original
 guards. This is source/retained-widget qualification, with clean replacement and
 physical OS/IME/reader acceptance separate.
+
+The [clean /179 replacement](validation/geometry-action-review-179/README.md) now
+packages this source repair and passes exact copied runtime, public geometry/Undo,
+signature/archive and example checks. Source-mounted private input retains its
+own scope; physical OS/IME/reader and broader acceptance remain separate.

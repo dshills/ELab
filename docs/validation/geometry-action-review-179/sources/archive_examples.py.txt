@@ -1,0 +1,30 @@
+import hashlib,importlib.util,json,subprocess,sys
+from pathlib import Path
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent;out=Path('/private/tmp/elab-179-archive')
+sys.path.insert(0,str(root/'scripts'))
+from runtime_isolation import launcher
+spec=importlib.util.spec_from_file_location('parity',root/'scripts/first-version-parity.py');p=importlib.util.module_from_spec(spec);spec.loader.exec_module(p)
+report=json.loads((out/'report.json').read_text());assert report['passed'];extracted=Path(report['extracted_review']);working=out/'saved-examples';working.mkdir();wrapper=out/'extracted-agent';launcher(wrapper,Path('/private/tmp/elab-first-version-179-signed-runtime/runtime.sb'),extracted/'elab-agent',working)
+def close(client):
+ state=client.ask('app.close',dict(discard_changes=True),True);job=state['shutdown']
+ assert state['closed'] and job['status']=='completed' and job['workers_joined'] and job['recovery_finalized'] and job['exit_ready']
+ client.close();assert client.process.returncode==0
+
+cases=[]
+for filename in ['LED-2k.elab','RC-charge.elab','LED-flasher.elab']:
+ fixture=extracted/'Examples'/filename;before=hashlib.sha256(fixture.read_bytes()).hexdigest();document=json.loads(fixture.read_text());client=p.helper.Client(command_preconditions=True,agent_binary=wrapper)
+ try:
+  client.ask('project.load',dict(path=str(fixture)),True);loaded=client.ask('simulation.wait');assert not loaded['document']['dirty'] and loaded['paused']==document['paused']
+  assert loaded['components']==document['graph']['components'] and loaded['wires']==document['graph']['wires']
+  saved=working/filename;client.ask('project.save',dict(path=str(saved)),True);saved_state=client.ask('simulation.wait')
+ finally:close(client)
+ fresh=p.helper.Client(command_preconditions=True,agent_binary=wrapper)
+ try:
+  fresh.ask('project.load',dict(path=str(saved)),True);reopened=fresh.ask('simulation.wait');assert not reopened['document']['dirty'] and reopened['paused']==document['paused']
+  for key in ['components','wires','nets','transient_settings','scope_probes']:assert reopened.get(key)==loaded.get(key),(filename,key)
+  for key in ['result','transient','mixed','npn']:p.compare(loaded.get(key),reopened.get(key),filename+'.'+key)
+ finally:close(fresh)
+ assert hashlib.sha256(fixture.read_bytes()).hexdigest()==before
+ cases.append(dict(example=filename,fixture_unchanged=True,saved_reopen_fresh=True,paused=document['paused'],saved_sha256=hashlib.sha256(saved.read_bytes()).hexdigest()))
+r=dict(passed=True,scope='ZIP-extracted /179 headless executable under the already-proven denial policy; three source examples and three fresh saves/reopens. No extracted native window/default-startup claim.',agent_sha256=hashlib.sha256((extracted/'elab-agent').read_bytes()).hexdigest(),cases=cases)
+(out/'example-report.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps(r))

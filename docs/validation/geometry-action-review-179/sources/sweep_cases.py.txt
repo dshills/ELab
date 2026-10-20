@@ -1,0 +1,65 @@
+"""Exact copied public sweep captures; source mounted tests own the private-input claim."""
+import copy
+import json
+import time
+
+
+def check(native, parity, out):
+    def session(target, label):
+        cases = []
+        for name, overrides, count in [
+            ('start', {'start': '1 V'}, 51),
+            ('stop', {'stop': '4 V'}, 51),
+            ('points', {'points': 7}, 7),
+            ('resistance', {'component_id': 'R1', 'parameter': 'resistance', 'start': '100 ohm', 'stop': '10k ohm', 'points': 9}, 9),
+        ]:
+            target.ask('example.reset', {'discard_changes': True}, True)
+            target.ask('simulation.wait')
+            target.ask('simulation.pause', {}, True)
+            before = target.ask('simulation.wait')
+            settings = copy.deepcopy(before['dc_sweep']['settings'])
+            settings.update(overrides)
+            settings['probe_ids'] = ['i:D1']
+            admitted = target.ask('sweep.start', {'settings': settings}, True)
+            identity = admitted['dc_sweep']['selected_operation']
+            deadline = time.monotonic()+15
+            while True:
+                inspected = target.ask('sweep.inspect', {'id': identity})
+                status = inspected['operation']['status']
+                assert status not in ('failed', 'canceled'), inspected
+                if status == 'completed':
+                    break
+                assert time.monotonic() < deadline, name
+                time.sleep(.01)
+            after = target.ask('project.inspect')
+            assert inspected['metadata']['settings'] == settings
+            assert len(inspected['result']['points']) == count
+            assert inspected['result'] == after['dc_sweep']['result']
+            for key in ('components', 'wires', 'nets', 'result', 'run_id', 'electrical_revision', 'undo_entry', 'redo_entry'):
+                assert before.get(key) == after.get(key), (name, key)
+            expected_document = dict(before['document'], recordings_dirty=True, recording_count=before['document']['recording_count']+1, format_version=5)
+            assert after['document'] == expected_document, (name, after['document'], expected_document)
+            wrong = dict(settings, points=999)
+            target.ask('sweep.start', {'settings': wrong}, True, expect='invalid-params')
+            refused = target.ask('project.inspect')
+            for key in ('components', 'wires', 'result', 'run_id', 'electrical_revision', 'document', 'undo_entry', 'redo_entry', 'dc_sweep'):
+                assert after.get(key) == refused.get(key), (name, 'refused', key)
+            value = dict(name=name, before=before, admitted=admitted, inspected=inspected, after=after, refused=refused)
+            (out/(label+'-sweep-'+name+'.json')).write_text(json.dumps(value, indent=2)+'\n')
+            cases.append(value)
+        return cases
+    left = session(native, 'native')
+    reference = parity.helper.Client(command_preconditions=True)
+    try:
+        right = session(reference, 'headless')
+    finally:
+        reference.close()
+    for a,b in zip(left,right):
+        assert a['name'] == b['name']
+        assert a['inspected']['metadata']['settings'] == b['inspected']['metadata']['settings']
+        parity.compare(a['inspected']['result'], b['inspected']['result'])
+        for key in ('components','wires','nets','result','paused'):
+            parity.compare(a['after'].get(key), b['after'].get(key))
+    return dict(passed=True, captures_per_adapter=4, points_per_capture=[51,51,7,9], invalid_settings_refusals=8,
+                captured_settings_and_curves_match=True, live_graph_physics_history_preserved=True, exact_retained_capture_document_transition=True,
+                scope='Exact copied native/headless public sweep.start settings, captured metadata and complete curves. Thirty source retained-widget/deferred cases qualify private field settlement separately; this does not assert physical OS sweep typing on these package bytes.')

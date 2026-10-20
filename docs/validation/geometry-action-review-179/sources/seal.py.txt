@@ -1,0 +1,239 @@
+"""Seal /179 only after clean-source, exact copied runtime and regression checks."""
+from pathlib import Path
+import gzip
+import hashlib
+import json
+import shutil
+import subprocess
+import sys
+
+ROOT = Path('/Users/dshills/Development/projects/ELab')
+STAGE = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT/'scripts'))
+from package_review import members
+from runtime_isolation import bundle_tree
+from wiring_replay import git_files, git_identity, runtime_input, RUNTIME_DIRS
+
+
+def read(path):
+    return json.loads(path.read_text())
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def write(path, value):
+    with path.open('x') as stream:
+        stream.write(json.dumps(value, indent=2)+'\n')
+
+
+def gzcopy(source, target):
+    with target.open('xb') as stream:
+        stream.write(gzip.compress(source.read_bytes(), mtime=0))
+
+
+def preserved(folder, manifest_name='RELEASE_MANIFEST.json'):
+    manifest = read(folder/manifest_name)
+    actual = members(folder)
+    actual.pop(manifest_name)
+    assert actual == manifest['files'], folder
+    return dict(files_verified=len(actual), manifest_sha256=sha(folder/manifest_name))
+
+
+def main():
+    version, build = '0.162.0', '179'
+    source = (STAGE/'source-commit.txt').read_text().strip()
+    review = ROOT/'build/ELab-0.162.0-179-review'
+    receipt_path = ROOT/'research/ui-audit/first-version/geometry-action-review-checkpoint.json'
+    runtime = Path('/private/tmp/elab-first-version-179-signed-runtime')
+    acceptance = Path('/private/tmp/elab-first-version-179-signed-acceptance-final')
+    paging = Path('/private/tmp/elab-operation-pages-179')
+    proof = ROOT/'docs/validation/component-geometry-handoff'
+    assert not receipt_path.exists() and not (review/'RELEASE_MANIFEST.json').exists()
+    assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip() == source
+    assert not subprocess.check_output(['git','status','--porcelain'],cwd=ROOT).strip()
+    built = read(STAGE/'build-result-signed.json')
+    quality = read(proof/'quality.json')
+    assert built['source_commit']==source and built['clean_build_vcs'] and quality['passed']
+    assert quality['exit_code']==0 and quality['source_unchanged'] and len(quality['source_sha256'])==654
+    assert all(sha(ROOT/name)==digest for name,digest in quality['source_sha256'].items())
+    assert all(sha(proof/name)==digest for name,digest in read(proof/'checkpoint.json')['files'].items())
+    assert sha(review/'ELab.app/Contents/MacOS/ELab')==built['native_sha256']
+    assert sha(review/'elab-agent')==built['agent_sha256']
+    assert bundle_tree(review/'ELab.app')==built['source_bundle']
+    assert read(STAGE/'signature-admission.json')['passed']
+    subprocess.run(['/usr/bin/codesign','--verify','--deep','--strict',str(review/'ELab.app')],check=True)
+    rr, ar, pages = read(runtime/'runtime-report.json'), read(acceptance/'report.json'), read(paging/'report.json')
+    public = read(runtime/'public/report.json')
+    assert rr['passed'] and ar['passed'] and public['passed'] and pages['passed']
+    assert rr['shared_geometry_unchanged'] and ar['shared_geometry_unchanged']
+    assert rr['source_bundle']==built['source_bundle'] and rr['source_agent_sha256']==built['agent_sha256']
+    assert [a['name'] for a in public['adapters']]==['in-process','headless-stdio','headless-socket','native-socket']
+    assert all(s['status']=='completed' and s['exit_code']==0 for s in rr['stages'])
+    assert ar['native_host_closed_normally'] and ar['discovery_commands']['commands']==164
+    geometry_commands=ar['geometry_action_commands']
+    assert geometry_commands['passed'] and geometry_commands['cases_per_adapter']==6 and geometry_commands['paired_stages']==24
+    pins=ar['pinned_file_commands']
+    assert pins['passed'] and pins['native_headless_legacy_opens']==24 and pins['new_saves_and_fresh_reopens']==12
+    assert pins['inactive_store_recovery_cases']==4 and pins['recovered_saved_reopens']==4
+    floating = ar['floating_source_commands']
+    assert floating['passed'] and floating['cases']==4 and floating['paired_step_snapshots']==10
+    assert floating['fresh_saved_reopens']==8 and floating['zero_input_mismatches']
+    assert len(pages['cases'])==30 and pages['requests']==95 and pages['process_exit_code']==0
+    previous = read(ROOT/'research/ui-audit/first-version/pin-reader-review-checkpoint.json')
+    previous_reviews = {folder.name.removeprefix('ELab-').removesuffix('-review'):preserved(folder)
+                        for folder in sorted((ROOT/'build').glob('ELab-*-review'))
+                        if folder!=review and (folder/'RELEASE_MANIFEST.json').exists()}
+    assert len(previous_reviews)==37
+    assert all(previous_reviews[name]==entry for name,entry in previous['preserved_bundles'].items())
+    candidates = {key:preserved(ROOT/'build'/name,'CANDIDATE_MANIFEST.json') for key,name in [
+        ('preserved_original_147_candidate','ELab-0.130.0-147-review'),
+        ('preserved_failed_164_candidate','ELab-0.147.0-164-review'),
+        ('preserved_unsigned_171_candidate','ELab-0.154.0-171-unsigned-candidate'),
+        ('preserved_failed_172_candidate','ELab-0.155.0-172-failed-candidate')]}
+    assert all(candidates[key]==previous[key] for key in candidates)
+    assert sha(ROOT/'build/ELab.app/Contents/MacOS/ELab')==previous['canonical']['native_sha256']
+    pin = read(ROOT/'third_party/vellum/sdk.lock.json')
+    assert pin==previous['sdk'] and sha(ROOT/pin['archive'])==pin['sha256']
+    ledger = read(ROOT/'research/13-native-command-inventory.json')
+    assert len(ledger['source_sha256'])==72 and len(ledger['sites'])==400
+    assert len(ledger['public_commands'])==164 and len(ledger['commands_with_source_routes'])==132
+    shared = Path.home()/'Library/Cogent Core'
+    geometry = {str(p.relative_to(shared)):dict(sha256=sha(p),mode=oct(p.stat().st_mode&0o777)) for p in shared.rglob('*') if p.is_file()}
+    assert geometry==rr['shared_geometry_after']
+    tree = git_files(ROOT,source)
+    inputs = {name:identity for name,identity in tree.items() if runtime_input(name)}
+    actual = {str(p.relative_to(ROOT)) for folder in RUNTIME_DIRS for p in (ROOT/folder).rglob('*')
+              if p.is_file() and runtime_input(str(p.relative_to(ROOT)))}
+    actual.update(name for name in ('go.mod','go.sum') if (ROOT/name).is_file())
+    assert len(inputs)==358 and actual==set(inputs)
+    assert all(git_identity((ROOT/name).read_bytes())==identity for name,identity in inputs.items())
+    exits, shutdowns = {}, {}
+    for path in (runtime/'public').rglob('process-exit.json'):
+        value=read(path)
+        assert value['exit_code']==0 and not value['graceful_wait_timed_out']
+        assert not any(value.get(k) for k in ('wait_error','close_error','context_error_before_cancel'))
+        exits[str(path.relative_to(runtime/'public'))]=value
+    for path in (runtime/'public').rglob('shutdown-response.json'):
+        value=read(path);state=value['response']['result']
+        assert not value.get('error') and not value['response'].get('error')
+        assert state['closed'] and state['shutdown']['status']=='completed'
+        assert state['shutdown']['workers_joined'] and state['shutdown']['exit_ready']
+        shutdowns[str(path.relative_to(runtime/'public'))]=value
+    assert len(exits)==102 and len(shutdowns)==112
+    for name in ('Examples','Licenses'):
+        shutil.copytree(ROOT/'build/ELab-0.161.0-178-review'/name,review/name)
+    evidence=review/'Evidence';evidence.mkdir()
+    shutil.copytree(proof,evidence/'Geometry-source')
+    for src,name in [(ROOT/'research/13-native-command-inventory.json','Native-command-inventory.json'),
+                     (ROOT/'third_party/vellum/sdk.lock.json','SDK-lock.json'),
+                     (ROOT/'research/ui-audit/first-version/private-alpha-owner-decisions.json','Owner-decisions.json'),
+                     (STAGE/'build-result-signed.json','Build-result.json'),(STAGE/'signature-admission.json','Signature-admission.json'),
+                     (STAGE/'source-commit.txt','source-commit.txt'),(STAGE/'paging-plan.json','Paging-plan.json')]:
+        shutil.copyfile(src,evidence/name)
+    producers=['build_release.py','signed_bundle.py','signature_admission_checks.py','runtime-signed.py',
+               'acceptance-signed.py','run-acceptance-signed.py','pin_cases.py','geometry_cases.py','floating_cases.py','sweep_cases.py','verify_cases.py',
+               'coil_reset_cases.py','startup_cases.py','discovery_cases.py','appearance_cases.py','collect-paging.py',
+               'archive_signed.py','archive_examples.py','seal.py']
+    for name in producers:
+        shutil.copyfile(STAGE/name,evidence/(name+'.txt'))
+    for name in ('seal-preflight-error.py.txt','seal-preflight-error.json'):
+        gzcopy(STAGE/name,evidence/(name+'.gz'))
+    for binary,label in [('elab','Native'),('elab-agent','Agent'),('elab-conformance','Conformance')]:
+        info=STAGE/'build'/(binary+'-build-info.txt')
+        assert 'vcs.revision='+source in info.read_text() and 'vcs.modified=false' in info.read_text()
+        gzcopy(info,evidence/(label+'-build-info.raw.txt.gz'))
+        (evidence/(label+'-build-info.txt')).write_text('\n'.join(line.rstrip() for line in info.read_text().splitlines())+'\n')
+    for name in ('build.txt','package.txt','signature-signed-verify.txt','signature-signed-details.txt',
+                 'acceptance-final-output.txt','acceptance-run-output.txt','paging-output.txt'):
+        gzcopy(STAGE/name,evidence/(name+'.gz'))
+    shutil.copyfile(runtime/'runtime-report.json',evidence/'Runtime.json')
+    gzcopy(runtime/'public/report.json',evidence/'Public-report.json.gz')
+    for name in ('native-smoke.log.txt','public-suites.log.txt','runtime.sb','geometry-probe.py','geometry-probe-output.json'):
+        gzcopy(runtime/name,evidence/(name+'.gz'))
+    for name,values in [('Process-exits.json.gz',exits),('Shutdown-responses.json.gz',shutdowns)]:
+        (evidence/name).write_bytes(gzip.compress((json.dumps(values,indent=2)+'\n').encode(),mtime=0))
+    for folder,label in [(acceptance,'Runtime-acceptance'),(paging,'Packaged-paging')]:
+        dest=evidence/label;dest.mkdir()
+        for p in sorted(folder.rglob('*')):
+            if not p.is_file() or p.name.endswith('endpoint.json'):
+                continue
+            q=dest/p.relative_to(folder);q.parent.mkdir(parents=True,exist_ok=True)
+            gzcopy(p,q.with_name(q.name+'.gz'))
+    tasks=(ROOT/'research/35-first-version-review.md').read_text().split('## Try these four tasks',1)[1].split('## Review boundary and known limits',1)[0]
+    (review/'README.md').write_text(f'''# ELab private owner review · {version} /{build}
+
+Save and quit an earlier review before opening ELab.app. Matching elab-agent,
+three editable Examples and framework notices are included. No development tools
+or account are needed. Canonical /120 and all 37 earlier reviews remain preserved.
+Owner walkthrough is still Not tried yet.
+
+This replacement fixes GEOMETRY-DRAFT-01: Rotate and Duplicate finish the selected
+value-field draft before dispatching the existing shared geometry command once.
+Only their own accepted field replies can continue the rendered owner/document
+context; intervening agent/other-field work still refuses. Drafts need Apply to
+change configured values. Source mounted cases, deferred and held-agent guards
+remain distinct from the copied API checks. Models, equations, public commands,
+saved format and SDK are unchanged; native bindings contain the repaired relay.
+Copied native/headless commands check six part types, Rotate/Undo/Duplicate/Undo
+and configured waveform/startup preservation. No new physical OS input claim.
+Previous advanced-pin, floating-source and saved/recovery checks still pass.
+
+Clean {source[:7]} /SDK b22478c passes full source quality, copied native smoke,
+four public adapters and reference/startup/measurement/sweep/live/save checks.
+Floating-source and 30 paging cases remain checked. Strict local ad-hoc signing
+binds executable/resources. Runtime denies development files, outbound IP and
+shared geometry; this is not ordinary installation, Developer ID or Gatekeeper.
+
+## Try these four tasks{tasks}
+## Review boundary and known limits
+
+Owner walkthrough, complete bindings, physical typing/IME/reader, broader platform,
+performance and actual hobbyist study remain open. Default startup/clean-account
+qualification is owner-deferred for the private alpha only. Visible timing stays
+scoped to /173; no new visible latency or full RC percentile is claimed. Solver
+budgets remain bounded; difficult circuits can fail without publishing a sample.
+One earlier LED page printed clearly and completely; other output/device/media
+and cancellation checks stay separate. Historical Pause/Apply/capacity-close
+causes remain unresolved. All prior failures are preserved. No promotion.
+''')
+    (evidence/'Acceptance.json').write_text('{}\n')
+    count=sum(p.is_file() for p in review.rglob('*'))
+    receipt=dict(date='2026-10-19',version=version,build=build,
+        status='Component geometry/value-draft replacement qualified within documented scopes',
+        source_commit=source,clean_build_vcs=True,native_sha256=built['native_sha256'],
+        source_native_sha256=built['source_native_sha256'],agent_sha256=built['agent_sha256'],sdk=pin,
+        quality=dict(passed=True,elapsed_s=quality['elapsed_seconds'],environment={'GOPROXY':'off','GOWORK':'off'},
+                     source_sha256=quality['source_sha256'],scope='Exact final 654 application Go files; full default quality passes; twelve original geometry/value-draft failures retained'),
+        source_proof_checkpoint_sha256=sha(proof/'checkpoint.json'),packaged_geometry=geometry_commands,packaged_pins=pins,packaged_floating=floating,packaged_paging=pages,
+        copied_runtime=rr['stages'],acceptance=ar,
+        signature=dict(identity='-',strict_verified=True,identifier='com.dshills.elab',team_identifier=None,
+                       resource_sealed=True,developer_id_signed=False,notarized=False,
+                       source_input_sha256=built['source_native_sha256'],packaged_sha256=built['native_sha256'],
+                       exact_artifact_admission=read(STAGE/'signature-admission.json')),
+        runtime_geometry_protection=dict(controls=rr['controls']['shared_geometry'],unchanged=True),
+        copied_process_exit_count=len(exits),ready_shutdown_response_count=len(shutdowns),
+        runtime_source_inputs=inputs,runtime_source_input_count=len(inputs),
+        native_inventory=dict(sources=72,sites=400,public_commands=164,source_routed=132),
+        preserved_bundles=previous_reviews,canonical=previous['canonical'],canonical_promoted=False,
+        owner_acceptance='Pending: owner answered Not tried yet; no acceptance inferred',
+        private_alpha_environment_gate='Owner deferred default-startup/clean-account qualification; remains unqualified',
+        p0_counts=dict(implemented=17,partial=10),manifest_file_entries=count,review_path=str(review),
+        launch_note='Save and quit an earlier review before opening; owner app not opened automatically',
+        known_limits=['Complete native bindings, physical typing/IME/reader and platform/environment remain open',
+                      'Solver budgets remain; no new visible timing or full performance qualification',
+                      'Local ad-hoc signature is not Developer ID, notarization or Gatekeeper acceptance',
+                      'Owner walkthrough and actual hobbyist study remain pending',
+                      'Historical Pause/Apply/capacity shutdown causes remain unresolved'],**candidates)
+    write(receipt_path,receipt)
+    (evidence/'Acceptance.json').write_bytes(receipt_path.read_bytes())
+    files=members(review);assert len(files)==count
+    write(review/'RELEASE_MANIFEST.json',dict(version=version,build=build,status=receipt['status'],
+          source_record_commit=source,source_build_clean=True,canonical_promoted=False,files=files))
+    print(dict(passed=True,release=version+' /'+build,manifest_entries=count,preserved_reviews=len(previous_reviews),
+               process_exits=len(exits),shutdown_responses=len(shutdowns),runtime_inputs=len(inputs)))
+
+
+if __name__=='__main__':
+    main()
