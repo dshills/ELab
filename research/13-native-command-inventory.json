@@ -45,7 +45,7 @@
     "desktop/probes.go": "4ee6051c65010292375e62c39a85e4cf7631c045b75146257564e2158ea806c3",
     "desktop/project_work.go": "916f2081ce3d223b91c0c24081afbdae1e2a6e917ec58d90ebe64e87dc690646",
     "desktop/recorded_playback_actions.go": "161479a80a2d585df228f081b9b594cd95706803afec4bf33f6468e612c96a29",
-    "desktop/recorded_timing_actions.go": "8a2ea4c19b9714195ed008805461141e651530cef87dbf2ec823eb0ca621e412",
+    "desktop/recorded_timing_actions.go": "5c6792dc474f238105dd7ae037b7f7c2d089e4b6c2dee34b5df0e3bf4d5b1d82",
     "desktop/recording.go": "78023fa29fed6aaa4259a5855ae53a4b9f7cbf9c051bdfc0197fccbeb90b70bf",
     "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
     "desktop/recording_statistics.go": "161cc2eb9e62f089a91eb1967b9d6ed8a9a30dd914af3b7705ad3584bee2caec",
@@ -62,7 +62,7 @@
     "desktop/scope_visibility.go": "9594a6afdb06c2d612c4a507ac90b9443651d38c4c88005e2af65ff2d3d6c686",
     "desktop/shutdown.go": "39c1d9db0f15f23fc69d810ed37dc62262f9e752c7f4ae14e45b3a47afe1f337",
     "desktop/theme.go": "e164e9a397a39d120b81ab80584e045e2ad50c636f1b8a510da1df3bbbcd7e88",
-    "desktop/time_fields.go": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0",
+    "desktop/time_fields.go": "95e7aea3e173449ca0b555f2677f22dd2c757accee1bf91a6a1424a958a19aa6",
     "desktop/value_apply.go": "ff6bdf287e6ddd8deba1178a1b223dfff5055552fc8eea8e4c02250a373dfead",
     "desktop/verification.go": "ba066fb1ced5195e453aedd1b6542c29f6139f4afaeba0a43d4e0faf6eb9472d",
     "desktop/verification_actions.go": "5ae6d3f81dec5677785d5a6df76d1c00563099510e16c18cb68216588915c900",
@@ -2641,10 +2641,10 @@
     },
     {
       "file": "desktop/recorded_timing_actions.go",
-      "line": 56,
-      "function": "*screen.changeRecordedTimingField",
+      "line": 60,
+      "function": "*screen.changeRecordedTimingFields",
       "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"recording.timing.set\", textFieldParams(cfg, field, text), state.CommandRevision)",
+      "expression": "s.invokeAtCommandRevision(\"recording.timing.set\", textFieldsParams(cfg, fields), state.CommandRevision)",
       "public_commands": [
         "recording.timing.set"
       ],
@@ -2652,7 +2652,7 @@
     },
     {
       "file": "desktop/recorded_timing_actions.go",
-      "line": 119,
+      "line": 127,
       "function": "*screen.recordedTimingPageAction",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\ts.beginRecordedTimingAction(state, direction, \"\")\n}",
@@ -2660,7 +2660,7 @@
     },
     {
       "file": "desktop/recorded_timing_actions.go",
-      "line": 149,
+      "line": 157,
       "function": "*screen.beginRecordedTimingAction",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.timing.set\", pending.settings, pending.context.revision, pending.context.generation)",
@@ -2671,7 +2671,7 @@
     },
     {
       "file": "desktop/recorded_timing_actions.go",
-      "line": 235,
+      "line": 271,
       "function": "*screen.finishRecordedTimingPage",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.timing.set\", pending.settings, pending.context.revision, pending.context.generation)",

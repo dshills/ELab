@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-20",
+  "change": "Revalidate retained dependent timing values together before the requested action",
+  "base_commit": "b237182a412d2b9123225c9c20fb026405067eb4",
+  "source_only": true,
+  "in_alpha_189": false,
+  "in_candidate_192": false,
+  "packaged": false,
+  "native_started": false,
+  "release_qualified": false,
+  "promoted": false,
+  "original": {
+    "passed": false,
+    "passing_leaves": 3,
+    "failing_leaves": [
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-level/direction/private",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-level/direction/committed",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-level/page/private",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-level/page/committed",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-second-level/direction/private",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-second-level/direction/committed",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-second-level/page/private",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-second-level/page/committed",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-start/direction/private",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-start/direction/committed",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-end/direction/private",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-end/direction/committed",
+      "TestMountedRecordingTimingRejectedPairCanCommitTogether"
+    ]
+  },
+  "final": {
+    "passed": true,
+    "passing_leaves": 16,
+    "failing_leaves": []
+  },
+  "coverage": {
+    "coupled_context_cases": 12,
+    "full_timing_result_matches_independent_public_agent": true,
+    "retained_pair_atomic_case": 1,
+    "intervening_agent_menu_file_controls": 3,
+    "private_and_committed_other_field": true,
+    "whole_snapshot_preserved_after_intervening_work": true,
+    "live_physics_document_and_history_preserved": true,
+    "previous_timing_and_permanent_invalid_guards_in_full_quality": true
+  },
+  "quality": {
+    "exit_code": 0,
+    "elapsed_s": 349.9231008749921,
+    "sources_unchanged": true,
+    "scope": "Full check.sh for coupled timing-field revalidation; no packaged/native UI qualification inferred"
+  },
+  "scope": "Mounted software input and assembled selector callbacks, plus independent public service comparisons. Revalidation occurs after successful field settlement under the exact pending revision/document/capture and menu/file context. New invalid native commits retain existing failure behavior. No fresh OS typing/menu, native pixels, packaged binary, latency, owner or full-MVP acceptance.",
+  "evidence": "docs/validation/coupled-timing-fields/report.json"
+}

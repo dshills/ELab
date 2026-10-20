@@ -251,3 +251,157 @@ func TestMountedRecordingTimingProbeOwnsPrivateDraft(t *testing.T) {
 		})
 	}
 }
+
+func TestMountedRecordingTimingCoupledCorrectionMatchesAgent(t *testing.T) {
+	for _, edit := range []struct{ field, rejected, other, corrected string }{
+		{"recorded-timing-level", "4 V", "recorded-timing-second-level", "4.5 V"},
+		{"recorded-timing-second-level", "2.5 V", "recorded-timing-level", "2 V"},
+		{"recorded-timing-start", "400 ms", "recorded-timing-end", "500 ms"},
+		{"recorded-timing-end", "100 ms", "recorded-timing-start", "0 s"},
+	} {
+		for _, action := range []string{"direction", "page"} {
+			if action == "page" && (edit.field == "recorded-timing-start" || edit.field == "recorded-timing-end") {
+				continue // Short corrected windows can have no next page.
+			}
+			for _, delivery := range []string{"private", "committed"} {
+				t.Run(edit.field+"/"+action+"/"+delivery, func(t *testing.T) {
+					s, cleanup := testScreen(t)
+					t.Cleanup(cleanup)
+					agent := workbench.New()
+					t.Cleanup(agent.Close)
+					for _, service := range []*workbench.Service{s.service, agent} {
+						prepareRecordedTiming(t, service)
+						cfg := workbench.RecordingTimingParams(service.Snapshot().Recording.Timing.Settings)
+						cfg.SecondLevel = "4 V"
+						if edit.field == "recorded-timing-start" {
+							cfg.End = .3
+						} else if edit.field == "recorded-timing-end" {
+							cfg.Start = .2
+						}
+						agentAction(t, service, "recording.timing.set", cfg)
+					}
+					m := mountedTimingControls(t, s)
+					typeMountedCursor(t, m, edit.field, edit.rejected)
+					changeMountedTimingDirection(t, s, m)
+					if s.errorMessage == "" {
+						t.Fatal("fixture did not reject the dependent entry")
+					}
+					typeMountedCursor(t, m, edit.other, edit.corrected)
+					if delivery == "committed" {
+						other := "recorded-timing-start"
+						if other == edit.other {
+							other = "recorded-timing-end"
+						}
+						clickMountedControl(t, m, other)
+					}
+					before := s.service.Snapshot()
+					if action == "page" {
+						button := verificationControl(t, s, "recorded-timing-next")
+						s.app.Do(button.Activate)
+						m.settle()
+					} else {
+						changeMountedTimingDirection(t, s, m)
+					}
+					after := s.service.Snapshot()
+					want := workbench.RecordingTimingParams(agent.Snapshot().Recording.Timing.Settings)
+					switch edit.field {
+					case "recorded-timing-level":
+						want.Level, want.SecondLevel = edit.rejected, edit.corrected
+					case "recorded-timing-second-level":
+						want.SecondLevel, want.Level = edit.rejected, edit.corrected
+					case "recorded-timing-start":
+						want.Start, want.End = .4, .5
+					case "recorded-timing-end":
+						want.Start, want.End = 0, .1
+					}
+					agentAction(t, agent, "recording.timing.set", want)
+					if action == "page" {
+						want.Offset = agent.Snapshot().Recording.Timing.NextOffset
+					} else {
+						want.Direction = "rising"
+					}
+					agentAction(t, agent, "recording.timing.set", want)
+					revisions := uint64(2)
+					if delivery == "private" {
+						revisions++
+					}
+					if s.errorMessage != "" || after.CommandRevision != before.CommandRevision+revisions || !reflect.DeepEqual(after.Recording.Timing, agent.Snapshot().Recording.Timing) {
+						t.Fatalf("valid coupled entries did not match public atomic settings: got=%+v want=%+v error=%q", after.Recording.Timing.Settings, want, s.errorMessage)
+					}
+					assertCursorMeasurementPreservesPhysics(t, before, after)
+				})
+			}
+		}
+	}
+}
+
+func TestMountedRecordingTimingRejectedPairCanCommitTogether(t *testing.T) {
+	s, cleanup := testScreen(t)
+	t.Cleanup(cleanup)
+	prepareRecordedTiming(t, s.service)
+	cfg := workbench.RecordingTimingParams(s.service.Snapshot().Recording.Timing.Settings)
+	cfg.SecondLevel = "4 V"
+	agentAction(t, s.service, "recording.timing.set", cfg)
+	m := mountedTimingControls(t, s)
+	for _, edit := range []struct{ id, text string }{{"recorded-timing-level", "4 V"}, {"recorded-timing-second-level", "2.5 V"}} {
+		typeMountedCursor(t, m, edit.id, edit.text)
+		clickMountedControl(t, m, "recorded-timing-start")
+		if s.errorMessage == "" {
+			t.Fatal("fixture needs two individually rejected values")
+		}
+	}
+	before := s.service.Snapshot()
+	changeMountedTimingDirection(t, s, m)
+	after := s.service.Snapshot()
+	cfg.Level, cfg.SecondLevel, cfg.Direction = "4 V", "2.5 V", "rising"
+	if s.errorMessage != "" || after.CommandRevision != before.CommandRevision+2 || workbench.RecordingTimingParams(after.Recording.Timing.Settings) != cfg {
+		t.Fatalf("valid pair did not commit atomically before direction: got=%+v error=%q", after.Recording.Timing.Settings, s.errorMessage)
+	}
+	assertCursorMeasurementPreservesPhysics(t, before, after)
+}
+
+func TestMountedRecordingTimingRevalidationRefusesInterveningWork(t *testing.T) {
+	for _, scenario := range []string{"agent", "menu", "file"} {
+		t.Run(scenario, func(t *testing.T) {
+			s, cleanup := testScreen(t)
+			t.Cleanup(cleanup)
+			prepareRecordedTiming(t, s.service)
+			cfg := workbench.RecordingTimingParams(s.service.Snapshot().Recording.Timing.Settings)
+			cfg.SecondLevel = "4 V"
+			agentAction(t, s.service, "recording.timing.set", cfg)
+			field := verificationControl(t, s, "recorded-timing-level")
+			s.app.Do(func() { field.Change(ui.ChangeEvent{Text: "4 V"}) })
+			if s.errorMessage == "" {
+				t.Fatal("fixture did not reject the dependent threshold")
+			}
+			field = verificationControl(t, s, "recorded-timing-second-level")
+			s.app.Do(func() { field.Change(ui.ChangeEvent{Text: "4.5 V"}) })
+			var finish func(error)
+			s.settleField = func(_ string, done func(error)) error { finish = done; return nil }
+			node := verificationControl(t, s, "recorded-timing-direction")
+			s.app.Do(func() { node.Change(ui.ChangeEvent{SelectedID: "rising"}) })
+			if finish == nil || s.pendingRecordedTimingPage == nil {
+				t.Fatal("fixture did not defer direction settlement")
+			}
+			switch scenario {
+			case "agent":
+				agentAction(t, s.service, "editor.value.set", workbench.DraftParams{Value: "agent draft"})
+			case "menu":
+				s.app.Do(func() { s.menuSerial++ })
+			case "file":
+				s.app.Do(func() { s.fileBusy = true })
+			}
+			before := s.service.Snapshot()
+			s.app.Do(func() {
+				for range 4 {
+					if s.pendingRecordedTimingPage != nil {
+						finish(nil)
+					}
+				}
+			})
+			if s.errorMessage == "" || s.pendingRecordedTimingPage != nil || !reflect.DeepEqual(before, s.service.Snapshot()) {
+				t.Fatal("revalidation applied private entries after intervening work", s.errorMessage)
+			}
+		})
+	}
+}

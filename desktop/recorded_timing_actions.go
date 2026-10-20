@@ -37,6 +37,10 @@ type recordedTimingPageWork struct {
 // Only this recording's accepted threshold/interval field responses can
 // continue a page or direction choice. Never adopt a later agent's settings.
 func (s *screen) changeRecordedTimingField(state workbench.Snapshot, field, text string) {
+	s.changeRecordedTimingFields(state, map[string]string{field: text})
+}
+
+func (s *screen) changeRecordedTimingFields(state workbench.Snapshot, fields map[string]string) {
 	r := state.Recording
 	pending := s.pendingRecordedTimingPage
 	var origin *actionContext
@@ -53,17 +57,19 @@ func (s *screen) changeRecordedTimingField(state workbench.Snapshot, field, text
 	}
 	cfg := workbench.RecordingTimingParams(r.Timing.Settings)
 	cfg.Offset = 0
-	response := s.invokeAtCommandRevision("recording.timing.set", textFieldParams(cfg, field, text), state.CommandRevision)
+	response := s.invokeAtCommandRevision("recording.timing.set", textFieldsParams(cfg, fields), state.CommandRevision)
 	if response.Error != nil {
 		s.recordedTimingAccepted = nil
 		if origin != nil && response.Error.Code == "invalid-params" {
 			if s.recordedTimingRejected == nil {
 				s.recordedTimingRejected = make(map[string]*recordedTimingFieldRejection)
 			}
-			s.recordedTimingRejected[field] = &recordedTimingFieldRejection{
-				context: *origin, recordingID: r.ID, probeID: cfg.ProbeID,
-				value: recordedTimingFieldValue(cfg, field), text: text,
-				message: response.Error.Message, help: response.Help,
+			for field, text := range fields {
+				s.recordedTimingRejected[field] = &recordedTimingFieldRejection{
+					context: *origin, recordingID: r.ID, probeID: cfg.ProbeID,
+					value: recordedTimingFieldValue(cfg, field), text: text,
+					message: response.Error.Message, help: response.Help,
+				}
 			}
 		}
 		if pending != nil {
@@ -71,7 +77,9 @@ func (s *screen) changeRecordedTimingField(state workbench.Snapshot, field, text
 		}
 		return
 	}
-	delete(s.recordedTimingRejected, field)
+	for field := range fields {
+		delete(s.recordedTimingRejected, field)
+	}
 	accepted := response.Result.(workbench.Snapshot)
 	s.pruneRecordedTimingRejections(accepted)
 	if origin == nil {
@@ -158,6 +166,9 @@ func (s *screen) settleRecordedTimingPage(pending *recordedTimingPageWork, index
 		return
 	}
 	if pending.failed || index == 4 {
+		if !pending.failed {
+			s.revalidateRecordedTimingFields(pending)
+		}
 		s.finishRecordedTimingPage(pending)
 		return
 	}
@@ -178,6 +189,31 @@ func (s *screen) settleRecordedTimingPage(pending *recordedTimingPageWork, index
 	} else if err := s.settleField(fields[index], done); err != nil {
 		done(err)
 	}
+}
+
+// A retained value can become valid after another field changes, even though
+// native settlement emits no new Change for that unchanged text. Revalidate
+// all owned retained entries together against this action's exact context.
+func (s *screen) revalidateRecordedTimingFields(pending *recordedTimingPageWork) {
+	if pending.arrival != "" && (s.menuSerial != pending.menuSerial || s.fileBusy || s.pendingCommand != "") {
+		return
+	}
+	current := s.service.Snapshot()
+	s.pruneRecordedTimingRejections(current)
+	if current.CommandRevision != pending.context.revision || current.Document.Generation != pending.context.generation || current.Recording == nil || current.Recording.ID != pending.recordingID {
+		return
+	}
+	fields := make(map[string]string)
+	for field, rejected := range s.recordedTimingRejected {
+		fields[field] = rejected.text
+	}
+	if len(fields) == 0 {
+		return
+	}
+	previous, previousAccepted := s.fieldContext, s.fieldAccepted
+	s.fieldContext, s.fieldAccepted = &pending.context, nil
+	defer func() { s.fieldContext, s.fieldAccepted = previous, previousAccepted }()
+	s.changeRecordedTimingFields(current, fields)
 }
 
 func (s *screen) finishRecordedTimingPage(pending *recordedTimingPageWork) {

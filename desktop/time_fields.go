@@ -32,9 +32,15 @@ func timeText(seconds float64) string {
 // textFieldParams replaces one captured numeric field with committed quantity
 // text; the shared command parser validates units and all coupled fields.
 func textFieldParams(base any, field, text string) map[string]any {
+	return textFieldsParams(base, map[string]string{field: text})
+}
+
+func textFieldsParams(base any, fields map[string]string) map[string]any {
 	raw, _ := json.Marshal(base)
 	var out map[string]any
 	_ = json.Unmarshal(raw, &out)
-	out[field] = text
+	for field, text := range fields {
+		out[field] = text
+	}
 	return out
 }

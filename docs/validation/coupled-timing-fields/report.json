@@ -1,0 +1,161 @@
+{
+  "date": "2026-10-20",
+  "change": "Revalidate retained dependent timing values together before the requested action",
+  "base_commit": "b237182a412d2b9123225c9c20fb026405067eb4",
+  "source_only": true,
+  "in_alpha_189": false,
+  "in_candidate_192": false,
+  "packaged": false,
+  "native_started": false,
+  "release_qualified": false,
+  "promoted": false,
+  "original": {
+    "passed": false,
+    "passing_leaves": 3,
+    "failing_leaves": [
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-level/direction/private",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-level/direction/committed",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-level/page/private",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-level/page/committed",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-second-level/direction/private",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-second-level/direction/committed",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-second-level/page/private",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-second-level/page/committed",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-start/direction/private",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-start/direction/committed",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-end/direction/private",
+      "TestMountedRecordingTimingCoupledCorrectionMatchesAgent/recorded-timing-end/direction/committed",
+      "TestMountedRecordingTimingRejectedPairCanCommitTogether"
+    ]
+  },
+  "final": {
+    "passed": true,
+    "passing_leaves": 16,
+    "failing_leaves": []
+  },
+  "coverage": {
+    "coupled_context_cases": 12,
+    "full_timing_result_matches_independent_public_agent": true,
+    "retained_pair_atomic_case": 1,
+    "intervening_agent_menu_file_controls": 3,
+    "private_and_committed_other_field": true,
+    "whole_snapshot_preserved_after_intervening_work": true,
+    "live_physics_document_and_history_preserved": true,
+    "previous_timing_and_permanent_invalid_guards_in_full_quality": true
+  },
+  "quality": {
+    "exit_code": 0,
+    "elapsed_s": 349.9231008749921,
+    "sources_unchanged": true,
+    "scope": "Full check.sh for coupled timing-field revalidation; no packaged/native UI qualification inferred"
+  },
+  "source_files": 670,
+  "source_sha256": {
+    "desktop/recorded_timing_actions.go": "5c6792dc474f238105dd7ae037b7f7c2d089e4b6c2dee34b5df0e3bf4d5b1d82",
+    "desktop/time_fields.go": "95e7aea3e173449ca0b555f2677f22dd2c757accee1bf91a6a1424a958a19aa6",
+    "desktop/recorded_timing_offscreen_test.go": "59c7f71211ed99f227fba2da72ad4eaba387b7456206ad428ddf7ec1c09262f4"
+  },
+  "scope": "Mounted software input and assembled selector callbacks, plus independent public service comparisons. Revalidation occurs after successful field settlement under the exact pending revision/document/capture and menu/file context. New invalid native commits retain existing failure behavior. No fresh OS typing/menu, native pixels, packaged binary, latency, owner or full-MVP acceptance.",
+  "raw": {
+    "original.jsonl": {
+      "stored": "original.jsonl.gz",
+      "bytes": 24626,
+      "sha256": "cae9fc9ca0c9850c3d828dab778318c65f08686ee6aa12274add407fe38af014"
+    },
+    "original-stderr.txt": {
+      "stored": "original-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "original-overlay.json": {
+      "stored": "original-overlay.json.gz",
+      "bytes": 386,
+      "sha256": "70d72642c6c794be6bb85d595cc90969571017b580ee5f79e4fbfe0a1758b320"
+    },
+    "original-final.jsonl": {
+      "stored": "original-final.jsonl.gz",
+      "bytes": 28446,
+      "sha256": "e1915117af1ccb81f0a7703f9044edb8cb2a914a8658b93becd3b9a83bb4440d"
+    },
+    "original-final-stderr.txt": {
+      "stored": "original-final-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "original-final-summary.json": {
+      "stored": "original-final-summary.json.gz",
+      "bytes": 1386,
+      "sha256": "c786a367c3616d94128c9e9e50e524dd88c64be8a069d03f50e52be13f6be2ee"
+    },
+    "final-focused.jsonl": {
+      "stored": "final-focused.jsonl.gz",
+      "bytes": 16317,
+      "sha256": "46449e19d647e184f9835e90c026d442b1f2ef7acc25a4212fe67c2ce7fd0fcb"
+    },
+    "final-focused-stderr.txt": {
+      "stored": "final-focused-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "final-all.jsonl": {
+      "stored": "final-all.jsonl.gz",
+      "bytes": 20139,
+      "sha256": "b7eec9a08281788379c65298d5516175e3bd9036350a9dac050e1b3578cec505"
+    },
+    "final-all-stderr.txt": {
+      "stored": "final-all-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "final-all-summary.json": {
+      "stored": "final-all-summary.json.gz",
+      "bytes": 69,
+      "sha256": "f978a9b0a55081b327ea003779148e93c54bdde6c5dfa99f747b466b50286918"
+    },
+    "original-recorded_timing_actions.go.txt": {
+      "stored": "original-recorded_timing_actions.go.txt.gz",
+      "bytes": 10399,
+      "sha256": "8a2ea4c19b9714195ed008805461141e651530cef87dbf2ec823eb0ca621e412"
+    },
+    "original-time_fields.go.txt": {
+      "stored": "original-time_fields.go.txt.gz",
+      "bytes": 1412,
+      "sha256": "40984fb0b6d2a640bc7efd2e03b303ebec828a3f3fe447ac7e01f35b469ba6d0"
+    },
+    "native-inventory-before.json": {
+      "stored": "native-inventory-before.json.gz",
+      "bytes": 179314,
+      "sha256": "84d485464627c64fe7ccd34660c1bc83a04d3716ba43f623d29915792c81abff"
+    },
+    "native-inventory-candidate.json": {
+      "stored": "native-inventory-candidate.json.gz",
+      "bytes": 179311,
+      "sha256": "ad487f5ec50da9c2292c7ef6a5615cbd70d55b8fed4f5378935ebf6dafc92122"
+    },
+    "inventory-review.json": {
+      "stored": "inventory-review.json.gz",
+      "bytes": 1337,
+      "sha256": "82b66857c085bb2d2bfe56fe9722c1442ae9c2993f3ef93d50647f1df67e4c4b"
+    },
+    "quality.py": {
+      "stored": "quality.py.gz",
+      "bytes": 1158,
+      "sha256": "0fcb13e4cb9cfb9083e16a3c2b2081e19a51899d0988cf92dfe4e1817c710f2a"
+    },
+    "quality.json": {
+      "stored": "quality.json.gz",
+      "bytes": 71804,
+      "sha256": "8bf4b8df4dcb358fd8a5752f174e899786d25b926de6ff08ef9cc59eab887d2d"
+    },
+    "quality-stdout.txt": {
+      "stored": "quality-stdout.txt.gz",
+      "bytes": 1004,
+      "sha256": "db504fb53e7d965d8b02af6b3a4d5affa996926c89bcc31499b605d9c4d62809"
+    },
+    "quality-stderr.txt": {
+      "stored": "quality-stderr.txt.gz",
+      "bytes": 346,
+      "sha256": "846c05fa146652f455023ab8a914ccce42fd6e48655d19c47109cb9a94822208"
+    }
+  }
+}
