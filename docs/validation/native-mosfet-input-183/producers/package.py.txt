@@ -1,0 +1,36 @@
+"""Freeze bounded native MOSFET evidence and its unresolved input observations."""
+from pathlib import Path
+import gzip,hashlib,json,shutil,subprocess,struct
+ROOT=Path('/Users/dshills/Development/projects/ELab');STAGE=ROOT/'build/mosfet-native-review-183-tools';OUT=ROOT/'docs/validation/native-mosfet-input-183'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+(OUT/'raw').mkdir();(OUT/'producers').mkdir();manifest={}
+def retain(p,name):
+ data=p.read_bytes();target=OUT/'raw'/name
+ if p.suffix=='.png':stored=data;target=target.with_suffix('.jpg')
+ else:stored=gzip.compress(data,mtime=0);target=target.with_name(target.name+'.gz')
+ target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(stored);manifest[str(target.relative_to(OUT))]=dict(original_sha256=hashlib.sha256(data).hexdigest(),original_bytes=len(data),stored_sha256=sha(target),compressed=p.suffix!='.png',original_name=str(p))
+for label,folder in [('native',Path('/private/tmp/elab-mosfet-native-review-183')),('reference-initial',Path('/private/tmp/elab-mosfet-reference-183')),('reference',Path('/private/tmp/elab-mosfet-reference-183-final'))]:
+ for p in sorted(folder.rglob('*')):
+  if not p.is_file() or any(part.endswith('.app') for part in p.relative_to(folder).parts):continue
+  assert not p.is_symlink();retain(p,label+'/'+str(p.relative_to(folder)))
+for p in sorted(STAGE.iterdir()):
+ if not p.is_file():continue
+ if p.suffix in ('.py','.swift') or p.name.endswith('.py.txt'):shutil.copyfile(p,OUT/'producers'/(p.name+'.txt' if not p.name.endswith('.txt') else p.name))
+ else:retain(p,'stage/'+p.name)
+receipt=ROOT/'research/ui-audit/first-version/recorded-dc-review-checkpoint.json';release=json.loads(receipt.read_text());reference=json.loads(Path('/private/tmp/elab-mosfet-reference-183-final/report.json').read_text());controller=json.loads(Path('/private/tmp/elab-mosfet-native-review-183/controller.json').read_text());assert reference['passed'] and controller['owned_process_absent'] and controller['endpoint_removed'] and not controller['forced_cleanup']
+assert all(sha(ROOT/n)==h for n,h in release['quality']['source_sha256'].items())
+images={}
+for p in (OUT/'raw/native').glob('*.jpg'):
+ data=p.read_bytes();assert data[:2]==b'\xff\xd8';offset=2;size=None
+ while offset<len(data):
+  assert data[offset]==255
+  while data[offset]==255:offset+=1
+  marker=data[offset];offset+=1
+  if marker in (1,216,217) or 208<=marker<=215:continue
+  length=struct.unpack('>H',data[offset:offset+2])[0];assert length>=2
+  if marker in (192,193,194,195,197,198,199,201,202,203,205,206,207):
+   height,width=struct.unpack('>HH',data[offset+3:offset+7]);size=dict(width=width,height=height,media_type='image/jpeg');break
+  offset+=length
+ assert size is not None;images[p.name]=size
+report=dict(passed=True,scope='Ten accepted native MOSFET electrical states and three fresh saved reopens; mixed AX-item/Return running outcome and named Pause attempts are unqualified, with a separate direct menu-keyboard passing control',release='0.166.0 /183',source_commit=release['source_commit'],documentation_parent_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),receipt_sha256=sha(receipt),release_checkpoint_sha256=sha(ROOT/'docs/validation/recorded-dc-review-183/checkpoint.json'),release_manifest_sha256=sha(Path(release['review_path'])/'RELEASE_MANIFEST.json'),agent_sha256=release['agent_sha256'],native_sha256=release['native_sha256'],accepted_native_states=10,fresh_saved_reopens=3,reference_processes=6,reference_requests=sum(p['requests'] for p in reference['process_exits']),initial_reference_field_error_preserved=True,native_observer_connections=16,native_observer_requests=22,native_host_exit_status=None,launchservices_wait_exit_code=controller['open_exit_code'],owned_normal_shutdown=controller['shutdown'],initial_named_pause_established=False,hybrid_item_return_preserved_pause=False,direct_pointer_keyboard_menu_preserved_pause=True,private_draft_whole_snapshot_unchanged=True,pmos_power_documentation_corrected=True,application_go_sources_unchanged=658,new_product_defect_established=False,source_changed=False,new_release=False,owner_acceptance=False,full_mvp_complete=False,images=images,dependencies={n:sha(ROOT/n) for n in ('docs/validation/junction-boundary-review-179/producers/collect.py.txt','docs/validation/latency-launch-preflight-170/launcher.swift.txt','scripts/persistence-demo.py','scripts/package_review.py')},pmos_documentation_sha256=sha(ROOT/'docs/pmos.md'))
+(OUT/'report.json').write_text(json.dumps(report,indent=2)+'\n');(OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');cp=dict(files={str(p.relative_to(OUT)):sha(p) for p in sorted(OUT.rglob('*')) if p.is_file() and p.name!='checkpoint.json'});(OUT/'checkpoint.json').write_text(json.dumps(cp,indent=2)+'\n');print(dict(files=len(cp['files'])+1,raw_files=len(manifest)))

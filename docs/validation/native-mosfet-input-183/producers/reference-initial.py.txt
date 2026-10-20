@@ -1,0 +1,72 @@
+"""Independent square-law/load-line, signed KCL and power checks."""
+import math
+
+
+def junction_current(v, m, extra_resistance=0.):
+    saturation=m['is_a'];rs=m['rs_ohm']+extra_resistance;nv=m['n']*1.380649e-23*(m['temperature_c']+273.15)/1.602176634e-19
+    lo=-saturation;hi=max(v/rs,0.)+saturation
+    for _ in range(120):
+        mid=(lo+hi)/2;f=mid-saturation*math.expm1(min((v-mid*rs)/nv,700))
+        if f>0:hi=mid
+        else:lo=mid
+    return (lo+hi)/2
+
+
+def positive_current(gate,drain,m):
+    over=gate-abs(m['threshold_v'])
+    channel=0.
+    if over>0:
+        channel=m['beta_a_per_v2']*(over*drain-drain*drain/2) if drain<over else m['beta_a_per_v2']*over*over/2
+        channel*=1+m['lambda_per_v']*drain
+    return channel-junction_current(-drain,m['body_diode'])
+
+
+def expected(snapshot):
+    parts={p['id']:p for p in snapshot['components']};mixed=snapshot['mixed'];input_v=next(s['voltage_v'] for s in mixed['sources'] if s['id']=='VIN')
+    if 'MN' in parts:
+        n,p=snapshot['nmos_model'],snapshot['pmos_model'];load=parts['RL']['value'];lo,hi=0.,5.
+        for _ in range(100):
+            output=(lo+hi)/2;balance=positive_current(5-input_v,5-output,p)-positive_current(input_v,output,n)-output/load
+            if balance>0:lo=output
+            else:hi=output
+        output=(lo+hi)/2
+        return {'MN':dict(vgs=input_v,vds=output,drain=positive_current(input_v,output,n)), 'MP':dict(vgs=input_v-5,vds=output-5,drain=-positive_current(5-input_v,5-output,p))}
+    kind=parts['M1']['kind'];model=snapshot['nmos_model'] if kind=='nmos' else snapshot['pmos_model'];pull=parts['RPD' if kind=='nmos' else 'RPU']['value'];gate=(input_v*pull+(5*parts['RG']['value'] if kind=='pmos' else 0.))/(pull+parts['RG']['value']);vg=gate if kind=='nmos' else 5-gate
+    lo,hi=0.,5.
+    for _ in range(100):
+        vd=(lo+hi)/2;current=positive_current(vg,vd,model);load_current=junction_current(5-vd,snapshot['led_model'],parts['RL']['value'])
+        if current>load_current:hi=vd
+        else:lo=vd
+    vd=(lo+hi)/2;sign=1. if kind=='nmos' else -1.
+    return {'M1':dict(vgs=sign*vg,vds=sign*vd,drain=sign*positive_current(vg,vd,model))}
+
+
+def laws(snapshot):
+    mixed=snapshot['mixed'];reference=expected(snapshot);errors=dict(voltage_v=0.,current_a=0.,power_w=0.)
+    for m in mixed['mosfets']:
+        want=reference[m['id']];errors['voltage_v']=max(errors['voltage_v'],abs(m['vgs_v']-want['vgs']),abs(m['vds_v']-want['vds']));errors['current_a']=max(errors['current_a'],abs(m['drain_current_a']-want['drain']))
+        assert m['gate_current_a']==0 and m['source_current_a']==m['drain_current_a'] and m['power_w']>=0
+        errors['power_w']=max(errors['power_w'],abs(m['power_w']-m['vds_v']*m['drain_current_a']))
+    assert errors['voltage_v']<1e-5 and errors['current_a']<1e-8 and errors['power_w']<1e-12,errors
+    parts={p['id']:p for p in snapshot['components']};parent={p['id']+'.'+pin:p['id']+'.'+pin for p in parts.values() for pin in p['terminals']}
+    def find(x):
+        while parent[x]!=x:x=parent[x]
+        return x
+    def union(a,b):parent[find(a)]=find(b)
+    for wire in snapshot['wires']:
+        if wire['connected']:union(wire['from'],wire['to'])
+    grounds=[p['id']+'.reference' for p in parts.values() if p['kind']=='ground']
+    for ground in grounds[1:]:union(grounds[0],ground)
+    sums={find(pin):0. for pin in parent}
+    def add(pin,i):sums[find(pin)]+=i
+    def branch(identity,a,b,i):add(identity+'.'+a,i);add(identity+'.'+b,-i)
+    consumed=delivered=0.
+    for kind in ('resistors','leds'):
+        for r in mixed[kind]:
+            branch(r['id'],*('anode','cathode') if kind=='leds' else ('1','2'),r['current_a']);consumed+=r['voltage_v']*r['current_a']
+            if kind=='resistors':assert abs(r['current_a']-r['voltage_v']/parts[r['id']]['value'])<1e-9
+    for r in mixed['sources']:branch(r['id'],'positive','negative',-r['current_a']);delivered+=r['voltage_v']*r['current_a']
+    for r in mixed['mosfets']:
+        add(r['id']+'.gate',r['gate_current_a']);add(r['id']+'.drain',r['drain_current_a']);add(r['id']+'.source',-r['source_current_a']);consumed+=r['vds_v']*r['drain_current_a']
+    kcl=max(abs(x) for x in sums.values());power=delivered-consumed;assert kcl<1e-9 and abs(power)<1e-8,(sums,power)
+    return dict(devices=len(mixed['mosfets']),independent_nodes=len(sums),max_errors=errors,kcl_residual_a=kcl,power_balance_w=power,reference=reference)

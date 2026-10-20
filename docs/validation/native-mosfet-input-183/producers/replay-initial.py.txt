@@ -1,0 +1,49 @@
+"""Replay ten accepted native states with the exact /183 public agent."""
+from pathlib import Path
+from importlib.machinery import SourceFileLoader
+import hashlib,importlib.util,json,math,traceback
+from reference import laws
+ROOT=Path('/Users/dshills/Development/projects/ELab');NATIVE=Path('/private/tmp/elab-mosfet-native-review-183');OUT=Path('/private/tmp/elab-mosfet-reference-183');OUT.mkdir(mode=0o700)
+src=ROOT/'docs/validation/junction-boundary-review-179/producers/collect.py.txt';spec=importlib.util.spec_from_loader('mosfet_client',SourceFileLoader('mosfet_client',str(src)));m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);m.OUT=OUT;m.AGENT=Path('/private/tmp/elab-first-version-183-signed-runtime/agent')
+receipt=ROOT/'research/ui-audit/first-version/recorded-dc-review-checkpoint.json';release=json.loads(receipt.read_text());sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();assert sha(m.AGENT.with_name('elab-agent'))==release['agent_sha256']
+(OUT/'plan.json').write_text(json.dumps(dict(release='0.166.0 /183',agent_sha256=release['agent_sha256'],receipt_sha256=sha(receipt),cases=['nmos','pmos','cmos'],scope='Ten native endpoint states; physical graph/full results/live history with local run/electrical identities excluded. Three native saved projects freshly reopen. Independent load-line/current/power laws. Original mixed AX-item/Return running outcome is separate, not a successful paused selection.'),indent=2)+'\n')
+def equal(a,b,path=''):
+ if isinstance(a,(int,float)) and not isinstance(a,bool) and isinstance(b,(int,float)) and not isinstance(b,bool):assert math.isclose(a,b,rel_tol=1e-9,abs_tol=1e-12),(path,a,b)
+ elif isinstance(a,dict):
+  assert set(a)==set(b),(path,set(a)^set(b))
+  for k in a:
+   if k not in ('run_id','electrical_revision'):equal(a[k],b[k],path+'.'+k)
+ elif isinstance(a,list):
+  assert len(a)==len(b),(path,len(a),len(b))
+  for i,(x,y) in enumerate(zip(a,b)):equal(x,y,path+f'[{i}]')
+ else:assert a==b,(path,a,b)
+def check(c,label):
+ actual=json.loads((NATIVE/(label+'.json')).read_text());expected=c.ask('simulation.wait')
+ for key in ('components','wires','nets','transient_settings','selected','paused'):assert actual[key]==expected[key],(label,key)
+ for key in ('mixed','transient','scope'):equal(actual[key],expected[key],label+'.'+key)
+ result=dict(label=label,complete_state_parity=True,laws=laws(actual),native_state_sha256=sha(NATIVE/(label+'.json')))
+ (OUT/(label+'.json')).write_text(json.dumps(dict(expected=expected,result=result),indent=2)+'\n');return result
+results=[];exits=[];reopens=[];failure=None
+try:
+ for name in ('nmos','pmos','cmos'):
+  c=m.Client(name)
+  try:
+   c.ask('example.load',dict(id=name,discard_changes=True),True);c.ask('simulation.pause',{},True);c.ask('simulation.restart',{},True);c.ask('simulation.wait');results.append(check(c,name+'-auto'))
+   for mode in ('low','high'):
+    c.ask('simulation.input.set',dict(mode=mode),True);c.ask('simulation.step',dict(duration_s=.001),True);results.append(check(c,name+'-'+mode))
+   if name=='cmos':
+    c.ask('component.select',dict(id='VIN'),True);c.ask('editor.value.set',dict(value='2.5 V'),True);c.ask('component.set',dict(id='VIN',value='2.5 V'),True);c.ask('simulation.restart',{},True);results.append(check(c,'cmos-midpoint'))
+   exits.append(c.close())
+  finally:
+   if c.process.poll() is None:exits.append(c.close())
+  saved=NATIVE/(name+'-midpoint.elab' if name=='cmos' else name+'-high.elab');before=sha(saved);fresh=m.Client(name+'-fresh')
+  try:
+   fresh.ask('project.load',dict(path=str(saved)),True);state=fresh.ask('simulation.wait');document=json.loads(saved.read_text());assert state['paused'] and not state['document']['dirty'] and state['components']==document['graph']['components'] and state['wires']==document['graph']['wires'] and state['transient']['sample']['time_s']==0
+   evidence=dict(name=name,state=state,laws=laws(state),source_unchanged=sha(saved)==before,source_sha256=before);(OUT/(name+'-fresh.json')).write_text(json.dumps(evidence,indent=2)+'\n');reopens.append(dict(name=name,source_unchanged=True));exits.append(fresh.close())
+  finally:
+   if fresh.process.poll() is None:exits.append(fresh.close())
+except BaseException:
+ failure=traceback.format_exc();raise
+finally:
+ report=dict(passed=failure is None and len(results)==10 and len(reopens)==3,results=results,fresh_reopens=reopens,process_exits=exits,failure=failure);(OUT/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+print(json.dumps(report),flush=True)

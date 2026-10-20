@@ -1,0 +1,14 @@
+"""Read the owned paused native session without injecting user actions."""
+from pathlib import Path
+from importlib.machinery import SourceFileLoader
+import importlib.util,json,subprocess,sys
+ROOT=Path('/Users/dshills/Development/projects/ELab');OUT=Path('/private/tmp/elab-mosfet-native-review-183');name=sys.argv[1]
+assert name.replace('-','').isalnum()
+src=ROOT/'docs/validation/junction-boundary-review-179/producers/collect.py.txt';spec=importlib.util.spec_from_loader('owned_native_observer',SourceFileLoader('owned_native_observer',str(src)));m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+c=m.Client.__new__(m.Client);c.name=name;c.sequence=c.command_revision=0;c.log=(OUT/(name+'-protocol.jsonl')).open('x');c.process=subprocess.Popen(['/private/tmp/elab-first-version-183-signed-runtime/agent','--connect',str(OUT/'endpoint.json')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=(OUT/(name+'-stderr.txt')).open('x'),text=True)
+try:
+ state=c.ask('project.inspect');assert state['paused'];(OUT/(name+'.json')).write_text(json.dumps(state,indent=2)+'\n');print(json.dumps(dict(name=name,paused=state['paused'],time_s=state['transient']['sample']['time_s'],input_mode=state['transient']['input_mode'],mosfets=state['mixed']['mosfets'])),flush=True)
+ if len(sys.argv)>2 and sys.argv[2]=='save':
+  path=OUT/(name+'.elab');c.ask('project.save',dict(path=str(path)),True);saved=c.ask('project.inspect');assert not saved['document']['dirty'];(OUT/(name+'-saved.json')).write_text(json.dumps(saved,indent=2)+'\n')
+finally:
+ c.process.stdin.close();c.process.wait(timeout=10);c.log.close();(OUT/(name+'-bridge-exit.json')).write_text(json.dumps(dict(exit_code=c.process.returncode,requests=c.sequence,closed_connection_only=True),indent=2)+'\n');assert c.process.returncode==0

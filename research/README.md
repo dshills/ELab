@@ -59,3 +59,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Visible responsiveness results](38-visible-responsiveness-results.md): all scheduled outcomes, available software-frame bounds and reasons a complete percentile is unavailable.
 
 - [Source modes, restart and captured experiments](42-source-modes-and-captures.md): twelve bounded /183 electronics/lifecycle cases with independent equations, immutable captures and fresh saved-file reopens; no source/version change.
+
+- [Native MOSFET controls and signed readings](43-native-mosfet-review.md): ten /183 native states and fresh saved reopens, independent signed current/power checks, precise PMOS presentation documentation and preserved input-method limitations.
