@@ -1,0 +1,26 @@
+from pathlib import Path
+import gzip,hashlib,json,shutil,sys
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent;source=Path('/private/tmp/elab-geometry-input-179');proof=root/'docs/validation/native-geometry-input-179';proof.mkdir()
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+report=json.loads((source/'report.json').read_text());assert report['owned_process_absent'] and report['endpoint_removed'] and report['open_exit_code']==0 and not report['forced_cleanup']
+assert not report.get('cleanup_error')
+assert all(report[k] for k in ('shared_geometry_unchanged','review_unchanged','copied_bundle_unchanged','canonical_unchanged','baseline_file_unchanged'))
+receipt_path=root/'research/ui-audit/first-version/geometry-action-review-checkpoint.json';receipt=json.loads(receipt_path.read_text());assert sha(receipt_path)==report['receipt_sha256']
+assert all(sha(root/n)==v for n,v in receipt['quality']['source_sha256'].items()) and len(receipt['quality']['source_sha256'])==654
+index={}
+for p in sorted(source.rglob('*')):
+ if not p.is_file() or any(part.endswith('.app') for part in p.parts) or p.name in ('elab-agent','agent','endpoint.json'):continue
+ relative=p.relative_to(source);target=proof/'native'/relative
+ if p.suffix not in ('.jpg','.png'):
+  target=target.with_name(target.name+'.gz');target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(gzip.compress(p.read_bytes(),mtime=0));encoding='gzip'
+ else:target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,target);encoding='identity'
+ index[str(target.relative_to(proof))]=dict(original_sha256=sha(p),original_bytes=p.stat().st_size,stored_sha256=sha(target),encoding=encoding)
+producers=proof/'producers';producers.mkdir()
+for name in ('session.py','control.py','reference.py','launcher.swift','plan.json','method-addendum.json','action-record.json','package.py'):
+ shutil.copy2(stage/name,producers/(name+'.txt' if name.endswith(('.py','.swift')) else name))
+for name in ('session-output.txt','reference-output.txt'):
+ (producers/(name+'.gz')).write_bytes(gzip.compress((stage/name).read_bytes(),mtime=0))
+(proof/'manifest.json').write_text(json.dumps(index,indent=2)+'\n')
+summary=dict(status='bounded_native_evidence_recorded',release='0.162.0 /179',native_sha256=report['native_sha256'],agent_sha256=report['agent_sha256'],receipt_sha256=report['receipt_sha256'],declared_cases=4,successful_declared_cases=3,inconclusive_declared_cases=1,additional_declared_named_case_passed=True,qualified_cases=4,matched_reference_states=14,baseline_files_unchanged=True,shared_geometry_unchanged=True,normal_owned_cleanup=True,native_exit_code=None,native_exit_code_reason=report['native_exit_status_reason'],open_wait_exit_code=0,source_files_unchanged=654,application_changed=False,new_release=False,new_latency_observations=False,owner_acceptance=False,full_mvp_complete=False,scope='One native pointer Rotate plus three named native Duplicate activations, four native Undos and independent exact-agent replay. Original coordinate Duplicate attempt stays inconclusive; no complete four-original-case pass, exact OS event timestamps, general typing/IME/reader or broader gate claim.')
+(proof/'report.json').write_text(json.dumps(summary,indent=2)+'\n')
+print(json.dumps(summary))

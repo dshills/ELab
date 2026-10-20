@@ -1,0 +1,54 @@
+"""Fresh exact /179 agent replay of captured native geometry states."""
+from pathlib import Path
+import hashlib,importlib.util,json,math,sys
+root=Path('/Users/dshills/Development/projects/ELab');out=Path('/private/tmp/elab-geometry-input-179');assets=out/'reference';assets.mkdir()
+sys.path.insert(0,str(root/'scripts'))
+spec=importlib.util.spec_from_file_location('geometry_parity',root/'scripts/first-version-parity.py');parity=importlib.util.module_from_spec(spec);spec.loader.exec_module(parity)
+r=json.loads((out/'report.json').read_text());assert r['owned_process_absent'] and r['endpoint_removed']
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(out/'elab-agent')==r['agent_sha256']
+client=parity.helper.Client(command_preconditions=True,agent_binary=out/'agent');matches=[];closed=[]
+def read(name):return json.loads((out/(name+'.json')).read_text())
+def compare(name):
+ actual=client.ask('simulation.wait');native=read(name)
+ for key in ('components','wires','nets','selected','drawing','transient_settings','paused','analysis'):
+  assert actual.get(key)==native.get(key),(name,key,actual.get(key),native.get(key))
+ for key in ('result','mixed','transient','scope','pinned_readings'):
+  parity.compare(actual.get(key),native.get(key),name+'.'+key)
+ for key in ('path','dirty','schematic_dirty','preferences_dirty','recordings_dirty','recording_count','format_version','recovered_from'):
+  assert actual['document'].get(key)==native['document'].get(key),(name,key)
+ (assets/(name+'.json')).write_text(json.dumps(actual,indent=2)+'\n');matches.append(name);return actual
+
+def load(filename,part,step=False):
+ client.ask('project.load',dict(path=str(out/filename),discard_changes=True),True)
+ client.ask('component.select',dict(id=part),True);client.ask('simulation.wait')
+ if step:client.ask('simulation.step',dict(duration_s=.005),True);client.ask('simulation.wait')
+
+def close(target,name):
+ state=target.ask('app.close',dict(discard_changes=True),True);work=state['shutdown']
+ assert state['closed'] and work['status']=='completed' and work['workers_joined'] and work['recovery_finalized'] and work['exit_ready']
+ target.close();assert target.process.returncode==0
+ (assets/(name+'-close.json')).write_text(json.dumps(state,indent=2)+'\n');closed.append(dict(name=name,exit_code=target.process.returncode,shutdown=work))
+try:
+ load('Baseline-LED-179.elab','R1');compare('before-led-rotate')
+ client.ask('editor.value.set',dict(value='2.2k'),True);client.ask('component.rotate',dict(id='R1'),True);compare('after-led-rotate')
+ client.ask('edit.undo',{},True);compare('after-led-rotate-undo');compare('before-led-duplicate')
+ client.ask('editor.value.set',dict(value='unfinished'),True);compare('after-led-duplicate-attempt')
+ for name,filename,part,draft,step in [('led-duplicate-named','Baseline-LED-179.elab','R1','unfinished',False),('rl-duplicate','Baseline-RL-179.elab','L1','100 mH',True),('pulse-duplicate','Baseline-PULSE-179.elab','VPULSE','7 V',False)]:
+  load(filename,part,step);compare('before-'+name)
+  client.ask('editor.value.set',dict(value=draft),True);client.ask('component.duplicate',dict(id=part),True);compare('after-'+name)
+  client.ask('edit.undo',{},True);compare('after-'+name+'-undo')
+ saved=out/'Reference-Final-Geometry-179.elab';client.ask('project.save',dict(path=str(saved)),True)
+ assert saved.read_bytes()==(out/'Final-Geometry-179.elab').read_bytes()
+ close(client,'replay')
+ fresh=parity.helper.Client(command_preconditions=True,agent_binary=out/'agent')
+ try:
+  fresh.ask('project.load',dict(path=str(out/'Final-Geometry-179.elab')),True);state=fresh.ask('simulation.wait')
+  assert not state['document']['dirty'] and state['components']==read('final')['components'] and state['wires']==read('final')['wires']
+  (assets/'fresh-final.json').write_text(json.dumps(state,indent=2)+'\n');close(fresh,'fresh-final')
+ finally:
+  if fresh.process.poll() is None:fresh.close()
+ report=dict(passed=True,agent_sha256=sha(out/'elab-agent'),matched_states=matches,matched_state_count=len(matches),closed_processes=closed,native_final_byte_identical_resave=True,fresh_native_final_reopen=True,scope='Fresh packaged headless agent public replay; complete graph/selection/draft/pause/settings and full result/mixed/transient/scope/pins compare. Run/electrical identities excluded, numeric rel1e-9/abs1e-12. Viewport and document generation/actor/history identities are session-local; native user history and observed layout deltas checked separately. The inconclusive Duplicate attempt matches draft-only semantics, not a successful copy.')
+ (assets/'report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps({k:v for k,v in report.items() if k!='closed_processes'}))
+finally:
+ if client.process.poll() is None:client.close()

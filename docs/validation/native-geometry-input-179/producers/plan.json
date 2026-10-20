@@ -1,0 +1,56 @@
+{
+  "release": "0.162.0 /179",
+  "source_commit": "d8a20ced587c9d484135743eb2695ed2670e70e2",
+  "native_sha256": "633386817dec8de450e09c3e7d9014922ddc70283ccddffb7340f4a940194e03",
+  "agent_sha256": "4a09df67f8e621eb85b505672cb11c1e7df6881b4f50fea18301a9b0a2681cca",
+  "scope": "Four declared private value-field entries and single native geometry actions plus Undo on one exact isolated owned app. UI inputs by CUA only, public state/parity by matching agent. No display recording, privacy grant, print or owner project.",
+  "cases": [
+    {
+      "id": "led-rotate",
+      "example": "led",
+      "part": "R1",
+      "draft": "2.2k",
+      "action": "Rotate 90\u00b0",
+      "configured_value_unchanged": true
+    },
+    {
+      "id": "led-duplicate",
+      "example": "led",
+      "part": "R1",
+      "draft": "unfinished",
+      "action": "Duplicate",
+      "configured_value_unchanged": true
+    },
+    {
+      "id": "rl-duplicate",
+      "example": "rl",
+      "part": "L1",
+      "startup": "-20 mA",
+      "draft": "100 mH",
+      "action": "Duplicate",
+      "configured_value_unchanged": true
+    },
+    {
+      "id": "pulse-duplicate",
+      "example": null,
+      "part": "VPULSE",
+      "kind": "finite-pulse-source",
+      "waveform": {
+        "high_v": -1,
+        "low_v": -3,
+        "high_s": 0.02,
+        "low_s": 0.03,
+        "rise_s": 0.001,
+        "fall_s": 0.002
+      },
+      "draft": "7 V",
+      "action": "Duplicate",
+      "configured_value_unchanged": true
+    }
+  ],
+  "limits": [
+    "No complete IME/typing/reader or all-binding acceptance",
+    "Native agent concurrency, blur and difficult-solve latency remain separate",
+    "Only owned synthetic files and processes; normal save/close required"
+  ]
+}

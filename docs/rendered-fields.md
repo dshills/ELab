@@ -55,3 +55,11 @@ The [clean /179 replacement](validation/geometry-action-review-179/README.md) no
 packages this source repair and passes exact copied runtime, public geometry/Undo,
 signature/archive and example checks. Source-mounted private input retains its
 own scope; physical OS/IME/reader and broader acceptance remain separate.
+
+[Exact /179 native input](validation/native-geometry-input-179/README.md) now adds
+one coordinate Rotate and three named native Duplicate activations with retained
+configured values, waveform/startup and one native Undo each. Three original
+cases pass; an original coordinate attempt remains inconclusive, and a declared
+additional named-button case passes. Fourteen complete states match the fresh
+packaged agent. This does not qualify every physical pointer/keyboard/IME/reader
+schedule or replace the inconclusive observation.

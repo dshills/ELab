@@ -1,0 +1,12 @@
+{
+  "scope": "Post-run reconstruction of CUA calls, not an OS event or timing log. Target was the exact /tmp/elab-geometry-input-179/ELab.app after the owned sandbox launcher registered it.",
+  "selection": {"bundle_id_attempt": "ambiguous; no alternate app selected", "successful_path": "/tmp/elab-geometry-input-179/ELab.app", "raise": "exposed Raise action", "zoom": "exposed zoom the window action", "original_image_px": [1053,802], "zoomed_image_px": [5054,1410]},
+  "cases": [
+    {"id":"led-rotate","method":"coordinate pointer action","field":{"point":[4865,432],"keys":"super+a","typed":"2.2k"},"action":{"point":[4798,970],"clicks":1,"basis":"led-zoomed.jpg"},"undo":{"point":[380,87],"clicks":1},"outcome":"passed"},
+    {"id":"led-duplicate","method":"coordinate pointer attempt","field":{"point":[4865,432],"keys":"super+a","typed":"unfinished"},"action":{"point":[4798,1060],"clicks":1,"basis":"led-rotated.jpg"},"outcome":"inconclusive target; draft committed but no copy; no app-cause claim","replacement":false},
+    {"id":"led-duplicate-named","declaration":"method-addendum.json before this extra case","method":"named native accessibility activation","field":{"index":82,"keys":"super+a","typed":"unfinished"},"action":{"index":95,"name":"Duplicate","activations":1},"undo":{"index":8,"activations":1},"outcome":"passed"},
+    {"id":"rl-duplicate","method":"named native accessibility activation","field":{"index":83,"keys":"super+a","typed":"100 mH"},"action":{"index":98,"name":"Duplicate","activations":1},"undo":{"index":8,"activations":1},"outcome":"passed; late viewport-only publication during private interval retained"},
+    {"id":"pulse-duplicate","method":"named native accessibility activation","field":{"index":77,"keys":"super+a","typed":"7 V"},"action":{"index":112,"name":"Duplicate","activations":1},"undo":{"index":8,"activations":1},"outcome":"passed"}
+  ],
+  "preparation_observations": ["PIL was unavailable to a read-only image-size helper; native sips metadata was used without installing anything", "A read-only owned-PID query was sandbox-denied; it succeeded with reviewed execution before input", "Native zoom enlarged only the owned app window; no OS display or shared settings change"]
+}
