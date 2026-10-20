@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-20",
+  "change": "Recover rejected timing fields and bind private drafts to the captured probe",
+  "base_commit": "eb150a127685180be856a69a4fa2a99cef90523a",
+  "source_only": true,
+  "in_alpha_189": false,
+  "in_candidate_192": false,
+  "packaged": false,
+  "native_started": false,
+  "release_qualified": false,
+  "promoted": false,
+  "original": {
+    "passed": false,
+    "passing_leaves": 24,
+    "failing_leaves": [
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-level/page-without-blur/accepted",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-level/page-without-blur/different",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-level/direction-without-blur/accepted",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-second-level/page-without-blur/accepted",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-second-level/page-without-blur/different",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-second-level/direction-without-blur/accepted",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-start/page-without-blur/accepted",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-start/page-without-blur/different",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-start/direction-without-blur/accepted",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-end/page-without-blur/accepted",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-end/page-without-blur/different",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-end/direction-without-blur/accepted",
+      "TestMountedRecordingTimingOtherFieldCannotEraseRefusal/page",
+      "TestMountedRecordingTimingOtherFieldCannotEraseRefusal/direction",
+      "TestMountedRecordingTimingProbeOwnsPrivateDraft/recorded-timing-level",
+      "TestMountedRecordingTimingProbeOwnsPrivateDraft/recorded-timing-second-level",
+      "TestMountedRecordingTimingProbeOwnsPrivateDraft/recorded-timing-start",
+      "TestMountedRecordingTimingProbeOwnsPrivateDraft/recorded-timing-end"
+    ]
+  },
+  "final": {
+    "passed": true,
+    "passing_leaves": 42,
+    "failing_leaves": []
+  },
+  "coverage": {
+    "correction_cases": 36,
+    "other_field_refusal_cases": 2,
+    "probe_owner_and_fresh_input_cases": 4,
+    "whole_snapshot_preserved_on_refusal": true,
+    "live_physics_document_and_history_preserved": true,
+    "accepted_and_different_corrections": true,
+    "untouched_invalid_input_refused": true,
+    "original_timing_routes_and_binding_expressions_unchanged": true
+  },
+  "quality": {
+    "exit_code": 0,
+    "elapsed_s": 316.23462999996264,
+    "sources_unchanged": true,
+    "scope": "Full check.sh for recorded-timing field recovery and probe ownership; no packaged/native UI qualification inferred"
+  },
+  "scope": "Mounted offscreen pointer/selector/action buffers and original-source replay. Full quality includes existing public timing parity and deferred/menu/viewport/agent/owner guards. No new native pixels/OS menu input, package, owner, latency or broader MVP acceptance.",
+  "evidence": "docs/validation/timing-field-recovery/report.json"
+}

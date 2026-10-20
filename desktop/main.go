@@ -241,7 +241,7 @@ type screen struct {
 	valueDraftAccepted                  *valueDraftContinuation
 	outputPageAccepted                  *outputPageContinuation
 	recordedTimingAccepted              *recordedTimingContinuation
-	recordedTimingRejected              *recordedTimingFieldRejection
+	recordedTimingRejected              map[string]*recordedTimingFieldRejection
 	pendingRecordedTimingPage           *recordedTimingPageWork
 	recordedPlaybackAccepted            *recordedPlaybackContinuation
 	recordedPlaybackRejected            map[string]recordedPlaybackRejection

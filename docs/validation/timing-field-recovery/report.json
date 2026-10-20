@@ -1,0 +1,224 @@
+{
+  "date": "2026-10-20",
+  "change": "Recover rejected timing fields and bind private drafts to the captured probe",
+  "base_commit": "eb150a127685180be856a69a4fa2a99cef90523a",
+  "source_only": true,
+  "in_alpha_189": false,
+  "in_candidate_192": false,
+  "packaged": false,
+  "native_started": false,
+  "release_qualified": false,
+  "promoted": false,
+  "original": {
+    "passed": false,
+    "passing_leaves": 24,
+    "failing_leaves": [
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-level/page-without-blur/accepted",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-level/page-without-blur/different",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-level/direction-without-blur/accepted",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-second-level/page-without-blur/accepted",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-second-level/page-without-blur/different",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-second-level/direction-without-blur/accepted",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-start/page-without-blur/accepted",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-start/page-without-blur/different",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-start/direction-without-blur/accepted",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-end/page-without-blur/accepted",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-end/page-without-blur/different",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-end/direction-without-blur/accepted",
+      "TestMountedRecordingTimingOtherFieldCannotEraseRefusal/page",
+      "TestMountedRecordingTimingOtherFieldCannotEraseRefusal/direction",
+      "TestMountedRecordingTimingProbeOwnsPrivateDraft/recorded-timing-level",
+      "TestMountedRecordingTimingProbeOwnsPrivateDraft/recorded-timing-second-level",
+      "TestMountedRecordingTimingProbeOwnsPrivateDraft/recorded-timing-start",
+      "TestMountedRecordingTimingProbeOwnsPrivateDraft/recorded-timing-end"
+    ]
+  },
+  "final": {
+    "passed": true,
+    "passing_leaves": 42,
+    "failing_leaves": []
+  },
+  "coverage": {
+    "correction_cases": 36,
+    "other_field_refusal_cases": 2,
+    "probe_owner_and_fresh_input_cases": 4,
+    "whole_snapshot_preserved_on_refusal": true,
+    "live_physics_document_and_history_preserved": true,
+    "accepted_and_different_corrections": true,
+    "untouched_invalid_input_refused": true,
+    "original_timing_routes_and_binding_expressions_unchanged": true
+  },
+  "initial_fixture_error": {
+    "description": "uiAction helper aborts on expected validation errors, preventing direction refusal/correction cases from reaching their assertions",
+    "extra_failures": [
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-end/direction-without-blur/different",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-end/direction-without-blur/none",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-level/direction-without-blur/different",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-level/direction-without-blur/none",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-second-level/direction-without-blur/different",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-second-level/direction-without-blur/none",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-start/direction-without-blur/different",
+      "TestMountedRecordingTimingCorrectionAfterRefusal/recorded-timing-start/direction-without-blur/none"
+    ],
+    "correction": "Invoke the assembled selector Change callback directly, then inspect the expected outcome",
+    "production_source_unchanged_during_fixture_correction": true
+  },
+  "quality": {
+    "exit_code": 0,
+    "elapsed_s": 316.23462999996264,
+    "sources_unchanged": true,
+    "scope": "Full check.sh for recorded-timing field recovery and probe ownership; no packaged/native UI qualification inferred"
+  },
+  "source_files": 670,
+  "source_sha256": {
+    "desktop/main.go": "86bbbb68f402fa117fd556b54a6959c9c1564c0af64e9bb0c29ddb9c97d12374",
+    "desktop/view.go": "09d2946c16920f9e8d9e6c86424a47a586445a59e68480b4a0ad77fd827c616b",
+    "desktop/recorded_timing_actions.go": "8a2ea4c19b9714195ed008805461141e651530cef87dbf2ec823eb0ca621e412",
+    "desktop/recording_timing.go": "a7ceb35ed3cd66fed4ca88ff07600a7c44c7280db3e436f99092874b3262d3f0",
+    "desktop/recording.go": "78023fa29fed6aaa4259a5855ae53a4b9f7cbf9c051bdfc0197fccbeb90b70bf",
+    "desktop/recorded_timing_offscreen_test.go": "b302c981ffb6e8b07f53419c14192d2d1b01e987f88e036cd7759a6d9303c8ce"
+  },
+  "scope": "Mounted offscreen pointer/selector/action buffers and original-source replay. Full quality includes existing public timing parity and deferred/menu/viewport/agent/owner guards. No new native pixels/OS menu input, package, owner, latency or broader MVP acceptance.",
+  "raw": {
+    "original.jsonl": {
+      "stored": "original.jsonl.gz",
+      "bytes": 56383,
+      "sha256": "d25205ae012de887ae007c3087e277522c1fe337139b2bc9b4774d56f310c012"
+    },
+    "original-stderr.txt": {
+      "stored": "original-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "initial-recorded_timing_offscreen_test.go.txt": {
+      "stored": "initial-recorded_timing_offscreen_test.go.txt.gz",
+      "bytes": 7773,
+      "sha256": "7fd3cc106912931510bf902f78caccd1737f9275b4f2bac05c4b12d9300146fd"
+    },
+    "original-final.jsonl": {
+      "stored": "original-final.jsonl.gz",
+      "bytes": 54223,
+      "sha256": "85b1824020b9c9fb73f22e73d9785e72b7f62ff9f861722b1f26c630ca991e76"
+    },
+    "original-final-stderr.txt": {
+      "stored": "original-final-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "probe-owner-before.jsonl": {
+      "stored": "probe-owner-before.jsonl.gz",
+      "bytes": 7799,
+      "sha256": "0488a7d4d0e911e5438101334d177bd66e06a73c49cb737778dd1ff93d89fe82"
+    },
+    "probe-owner-before-stderr.txt": {
+      "stored": "probe-owner-before-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "original-overlay.json": {
+      "stored": "original-overlay.json.gz",
+      "bytes": 879,
+      "sha256": "0b267f49350e58d85b0f220f3ed9b3961285fc27e448f642afc937b6f3da7f87"
+    },
+    "original-all.jsonl": {
+      "stored": "original-all.jsonl.gz",
+      "bytes": 61278,
+      "sha256": "e497cb08aaf577c536242875e793768e6f58558189d10136ceb57fbae80b300e"
+    },
+    "original-all-stderr.txt": {
+      "stored": "original-all-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "original-all-summary.json": {
+      "stored": "original-all-summary.json.gz",
+      "bytes": 1823,
+      "sha256": "8021d7431f911ce788627e02f1fc22c1e3589e507a8b305b754eae38d3cfc3ce"
+    },
+    "final-focused.jsonl": {
+      "stored": "final-focused.jsonl.gz",
+      "bytes": 45937,
+      "sha256": "06183423bf3b3c2cbadbda67b7546d4246451c2b98510f251543166e8d0271a6"
+    },
+    "final-focused-stderr.txt": {
+      "stored": "final-focused-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "final-all.jsonl": {
+      "stored": "final-all.jsonl.gz",
+      "bytes": 50757,
+      "sha256": "5664c02e81311b961ab7f6f762a26eca446f8f88ab70947f58bc156d471da37a"
+    },
+    "final-all-stderr.txt": {
+      "stored": "final-all-stderr.txt.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "final-all-summary.json": {
+      "stored": "final-all-summary.json.gz",
+      "bytes": 69,
+      "sha256": "bf4a1134f88281e3bed84745321cc9553964daf0f4da63de213240b1f21e57b9"
+    },
+    "native-inventory-before.json": {
+      "stored": "native-inventory-before.json.gz",
+      "bytes": 179314,
+      "sha256": "9d2f64e28f4412e9d85769540db45dccac68eb6e7890f59e5e9933fc4453af63"
+    },
+    "native-inventory-candidate.json": {
+      "stored": "native-inventory-candidate.json.gz",
+      "bytes": 179314,
+      "sha256": "84d485464627c64fe7ccd34660c1bc83a04d3716ba43f623d29915792c81abff"
+    },
+    "inventory-review.json": {
+      "stored": "inventory-review.json.gz",
+      "bytes": 568,
+      "sha256": "4af7bbcd8899bae4b7be963b182aab117de62646a49e5f900be547106b5d7140"
+    },
+    "quality.py": {
+      "stored": "quality.py.gz",
+      "bytes": 1175,
+      "sha256": "533c3fa651d4431487485ceed4b7a8257ce22701253ee3baeba9dfa6e8da2b2d"
+    },
+    "quality.json": {
+      "stored": "quality.json.gz",
+      "bytes": 71822,
+      "sha256": "571bbeb0ce48808322a99f619a7625f915b27e134c3bd9d538f8f57d333a6275"
+    },
+    "quality-stdout.txt": {
+      "stored": "quality-stdout.txt.gz",
+      "bytes": 1004,
+      "sha256": "98433a49f05e892313c6f6db4146154841a95be03a6d88d70580dedafd44487c"
+    },
+    "quality-stderr.txt": {
+      "stored": "quality-stderr.txt.gz",
+      "bytes": 346,
+      "sha256": "efbe4486b9fb0734e65c4d5f5c1fad63ea407c7282cb35310741d2a800145fc3"
+    },
+    "original-main.go.txt": {
+      "stored": "original-main.go.txt.gz",
+      "bytes": 19006,
+      "sha256": "9db76fdc7b98977210b69bed89c3ec029c1d672d7ba22089fe983202d9f4510d"
+    },
+    "original-view.go.txt": {
+      "stored": "original-view.go.txt.gz",
+      "bytes": 28515,
+      "sha256": "791ae64fe7a9b2c8ef1169390b24dba2a44a9660bc9edeead79cabd02a1b71dd"
+    },
+    "original-recorded_timing_actions.go.txt": {
+      "stored": "original-recorded_timing_actions.go.txt.gz",
+      "bytes": 9088,
+      "sha256": "dbf75e522b7fdab7413302237bf66ffeefd4f6e3c777e22d63dbd57a16dd9d13"
+    },
+    "original-recording_timing.go.txt": {
+      "stored": "original-recording_timing.go.txt.gz",
+      "bytes": 6545,
+      "sha256": "e0b01a5310cca8be31e99cc16ef120107117bd0b1ba02e29b154b7680728f75b"
+    },
+    "original-recording.go.txt": {
+      "stored": "original-recording.go.txt.gz",
+      "bytes": 10764,
+      "sha256": "9f6e6022b8a87782a7e1c87ba255f22af9661b0490b1894bbab33b3114a4794e"
+    }
+  }
+}

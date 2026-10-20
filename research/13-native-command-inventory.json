@@ -27,7 +27,7 @@
     "desktop/keyboard_workflow.go": "f1ef3cfeae1ead43841a5a8b0ac9b8d8348b6723568c9c2c48568a5b95bc8378",
     "desktop/layout.go": "fc635970ed6c28fabdbca30c273980a2a3a9867724026b02df00890993800878",
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
-    "desktop/main.go": "9db76fdc7b98977210b69bed89c3ec029c1d672d7ba22089fe983202d9f4510d",
+    "desktop/main.go": "86bbbb68f402fa117fd556b54a6959c9c1564c0af64e9bb0c29ddb9c97d12374",
     "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
     "desktop/menus.go": "d78bfdb0b8ad01e290c7a3a8179dafc72b3e2a6f8b65d3994ca69f334aff700c",
     "desktop/menus_darwin.go": "3f7cd30cc99b38b4385e56303bbc790cce6e03add876634ff44cb267815522ea",
@@ -45,11 +45,11 @@
     "desktop/probes.go": "4ee6051c65010292375e62c39a85e4cf7631c045b75146257564e2158ea806c3",
     "desktop/project_work.go": "916f2081ce3d223b91c0c24081afbdae1e2a6e917ec58d90ebe64e87dc690646",
     "desktop/recorded_playback_actions.go": "161479a80a2d585df228f081b9b594cd95706803afec4bf33f6468e612c96a29",
-    "desktop/recorded_timing_actions.go": "dbf75e522b7fdab7413302237bf66ffeefd4f6e3c777e22d63dbd57a16dd9d13",
-    "desktop/recording.go": "9f6e6022b8a87782a7e1c87ba255f22af9661b0490b1894bbab33b3114a4794e",
+    "desktop/recorded_timing_actions.go": "8a2ea4c19b9714195ed008805461141e651530cef87dbf2ec823eb0ca621e412",
+    "desktop/recording.go": "78023fa29fed6aaa4259a5855ae53a4b9f7cbf9c051bdfc0197fccbeb90b70bf",
     "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
     "desktop/recording_statistics.go": "161cc2eb9e62f089a91eb1967b9d6ed8a9a30dd914af3b7705ad3584bee2caec",
-    "desktop/recording_timing.go": "e0b01a5310cca8be31e99cc16ef120107117bd0b1ba02e29b154b7680728f75b",
+    "desktop/recording_timing.go": "a7ceb35ed3cd66fed4ca88ff07600a7c44c7280db3e436f99092874b3262d3f0",
     "desktop/recovery.go": "861a98a5411f432028f371925192b9ffb68198de6dd92246d8846d37fd9902fa",
     "desktop/recovery_read.go": "3f536a3af7ea2480b69a8142f600b24c194ce2f06148b46cc29634a7431a5ede",
     "desktop/routing.go": "4898c4c1de9d7de3c5f8ad751b15d7c0f199234243f62ec6ea949ee8d9ad2c1c",
@@ -66,7 +66,7 @@
     "desktop/value_apply.go": "ff6bdf287e6ddd8deba1178a1b223dfff5055552fc8eea8e4c02250a373dfead",
     "desktop/verification.go": "ba066fb1ced5195e453aedd1b6542c29f6139f4afaeba0a43d4e0faf6eb9472d",
     "desktop/verification_actions.go": "5ae6d3f81dec5677785d5a6df76d1c00563099510e16c18cb68216588915c900",
-    "desktop/view.go": "791ae64fe7a9b2c8ef1169390b24dba2a44a9660bc9edeead79cabd02a1b71dd",
+    "desktop/view.go": "09d2946c16920f9e8d9e6c86424a47a586445a59e68480b4a0ad77fd827c616b",
     "desktop/viewport.go": "51df8542fe930574a7b2f68c7b8d4f69ddc08e79bac88177e29903adc33fa8fc",
     "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
     "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
@@ -2641,7 +2641,7 @@
     },
     {
       "file": "desktop/recorded_timing_actions.go",
-      "line": 54,
+      "line": 56,
       "function": "*screen.changeRecordedTimingField",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.timing.set\", textFieldParams(cfg, field, text), state.CommandRevision)",
@@ -2652,7 +2652,7 @@
     },
     {
       "file": "desktop/recorded_timing_actions.go",
-      "line": 109,
+      "line": 119,
       "function": "*screen.recordedTimingPageAction",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\ts.beginRecordedTimingAction(state, direction, \"\")\n}",
@@ -2660,7 +2660,7 @@
     },
     {
       "file": "desktop/recorded_timing_actions.go",
-      "line": 141,
+      "line": 149,
       "function": "*screen.beginRecordedTimingAction",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.timing.set\", pending.settings, pending.context.revision, pending.context.generation)",
@@ -2671,7 +2671,7 @@
     },
     {
       "file": "desktop/recorded_timing_actions.go",
-      "line": 221,
+      "line": 235,
       "function": "*screen.finishRecordedTimingPage",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.timing.set\", pending.settings, pending.context.revision, pending.context.generation)",
@@ -2750,7 +2750,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 134,
+      "line": 140,
       "function": "*screen.recordingPanel",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-back-live\", \"View live\", \"recording.view.set\", workbench.RecordingViewParams{Mode: \"live\"})",
@@ -2761,7 +2761,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 137,
+      "line": 143,
       "function": "*screen.recordingPanel",
       "kind": "callback-factory",
       "expression": "s.recordedPlaybackAction(state, direction)",
@@ -2769,7 +2769,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 144,
+      "line": 150,
       "function": "*screen.recordingPanel",
       "kind": "callback-factory",
       "expression": "s.recordedPlaybackAction(state, \"\")",
@@ -2777,7 +2777,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 145,
+      "line": 151,
       "function": "*screen.recordingPanel",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-pause\", \"Pause\", \"recording.pause\", struct{}{})",
@@ -2788,7 +2788,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 159,
+      "line": 165,
       "function": "*screen.recordingPanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\n\ts.changeRecordedPlaybackField(state, \"recorded-index\", e)\n}",
@@ -2796,7 +2796,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 165,
+      "line": 171,
       "function": "*screen.recordingPanel",
       "kind": "callback-factory",
       "expression": "timeField(\"recorded-time\", \"Recorded seek time\", r.Time, false, func(text string) {\n\ts.changeRecordedPlaybackField(state, \"recorded-time\", ui.ChangeEvent{Text: text})\n})",
@@ -2804,7 +2804,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 174,
+      "line": 180,
       "function": "*screen.recordingPanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeRecordedPlaybackField(state, \"recorded-speed\", e)\n}",
@@ -2812,7 +2812,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 190,
+      "line": 196,
       "function": "*screen.recordingPanel",
       "kind": "node-Custom",
       "expression": "Custom: s.scope",
@@ -2820,7 +2820,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 202,
+      "line": 208,
       "function": "*screen.recordingCursors",
       "kind": "action-factory",
       "expression": "s.recordedCursorAction(state, \"recorded-cursor-select-\"+c.id, strings.ToUpper(c.id), \"recording.cursor.select\", c.id)",
@@ -2831,7 +2831,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 207,
+      "line": 213,
       "function": "*screen.recordingCursors",
       "kind": "callback-factory",
       "expression": "timeField(\"recorded-cursor-\"+c.id, \"Recorded cursor \"+strings.ToUpper(c.id), at, false, func(text string) {\n\ts.changeCursorTimeFor(state, c.id, text, r.ID)\n})",
@@ -2839,7 +2839,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 210,
+      "line": 216,
       "function": "*screen.recordingCursors",
       "kind": "action-factory",
       "expression": "s.recordedCursorAction(state, \"recorded-cursor-clear-\"+c.id, \"×\", \"recording.cursor.clear\", c.id)",
@@ -2964,7 +2964,7 @@
     },
     {
       "file": "desktop/recording_timing.go",
-      "line": 20,
+      "line": 21,
       "function": "*screen.recordingTimingControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tp := workbench.RecordingTimingParams{ID: r.ID, Level: \"0\", Direction: \"both\"}\n\tif e.SelectedID != \"__none\" {\n\t\tp.ProbeID = e.SelectedID\n\t\tp.End = r.Duration\n\t}\n\ts.invoke(\"recording.timing.set\", p)\n}",
@@ -2972,7 +2972,7 @@
     },
     {
       "file": "desktop/recording_timing.go",
-      "line": 26,
+      "line": 27,
       "function": "*screen.recordingTimingControls",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"recording.timing.set\", p)",
@@ -2983,7 +2983,7 @@
     },
     {
       "file": "desktop/recording_timing.go",
-      "line": 33,
+      "line": 34,
       "function": "*screen.recordingTimingControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeRecordedTimingField(state, \"level\", e.Text)\n}",
@@ -2991,7 +2991,7 @@
     },
     {
       "file": "desktop/recording_timing.go",
-      "line": 35,
+      "line": 36,
       "function": "*screen.recordingTimingControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeRecordedTimingDirection(state, e.SelectedID)\n}",
@@ -2999,7 +2999,7 @@
     },
     {
       "file": "desktop/recording_timing.go",
-      "line": 38,
+      "line": 39,
       "function": "*screen.recordingTimingControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeRecordedTimingField(state, \"second_level\", e.Text)\n}",
@@ -3007,7 +3007,7 @@
     },
     {
       "file": "desktop/recording_timing.go",
-      "line": 46,
+      "line": 47,
       "function": "*screen.recordingTimingControls",
       "kind": "callback-factory",
       "expression": "timeField(\"recorded-timing-\"+field.name, \"Threshold interval \"+field.name, field.value, false, func(text string) {\n\ts.changeRecordedTimingField(state, field.name+\"_s\", text)\n})",
@@ -3754,7 +3754,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 136,
+      "line": 137,
       "function": "*screen.view",
       "kind": "command-menu",
       "expression": "s.commandMenu(\"file-menu\", \"File\", [][2]string{{\"project.clear\", \"New schematic\"}, {\"file.open\", \"Open…\"}, {\"file.save\", \"Save\"}, {\"file.save-as\", \"Save as…\"}, {\"app.close\", \"Close window\"}})",
@@ -3772,7 +3772,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 137,
+      "line": 138,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"file.save\", \"Save\")",
@@ -3784,7 +3784,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 138,
+      "line": 139,
       "function": "*screen.view",
       "kind": "command-menu",
       "expression": "s.commandMenu(\"examples-menu\", \"Examples\", [][2]string{{\"example.reset\", \"LED circuit\"}, {\"example.split-supply\", \"Split-rail DC supply\"}, {\"example.rc\", \"RC charge / discharge\"}, {\"example.rc-high-pass\", \"RC high-pass filter\"}, {\"example.rl\", \"Coil buildup / decay\"}, {\"example.rlc\", \"RLC ringing\"}, {\"example.flyback\", \"Coil / flyback diode\"}, {\"example.npn\", \"Transistor LED\"}, {\"example.switch-npn\", \"Manual transistor switch\"}, {\"example.npn-pulse\", \"Blinking LED\"}, {\"example.flasher\", \"Capacitor-timed flasher\"}, {\"example.led-fade\", \"LED fade\"}, {\"example.nmos\", \"MOSFET LED switch\"}, {\"example.pmos\", \"High-side MOSFET LED\"}, {\"example.cmos\", \"CMOS inverter\"}, {\"example.opamp-follower\", \"Op-amp follower\"}, {\"example.opamp-inverting\", \"Inverting amplifier\"}, {\"example.rectifier\", \"Rectifier / smoothing\"}})",
@@ -3812,7 +3812,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 139,
+      "line": 140,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"edit.undo\", \"Undo\")",
@@ -3823,7 +3823,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 139,
+      "line": 140,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"edit.redo\", \"Redo\")",
@@ -3834,7 +3834,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 191,
+      "line": 192,
       "function": "*screen.view",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.svg\", true, workbench.SaveParams{}, nil) }",
@@ -3842,7 +3842,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 191,
+      "line": 192,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.svg\", true, workbench.SaveParams{}, nil)",
@@ -3853,7 +3853,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 192,
+      "line": 193,
       "function": "*screen.view",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.pdf\", true, workbench.PDFExportParams{}, nil) }",
@@ -3861,7 +3861,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 192,
+      "line": 193,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.pdf\", true, workbench.PDFExportParams{}, nil)",
@@ -3872,7 +3872,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 193,
+      "line": 194,
       "function": "*screen.view",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{}, nil) }",
@@ -3880,7 +3880,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 193,
+      "line": 194,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{}, nil)",
@@ -3891,7 +3891,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 210,
+      "line": 211,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"component.select\", workbench.IDParams{ID: id})\n}",
@@ -3899,7 +3899,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 215,
+      "line": 216,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"component.select\", workbench.IDParams{ID: id})",
@@ -3910,7 +3910,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 217,
+      "line": 218,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"selection-previous\", \"Back\", \"selection.navigate\", workbench.NavigateParams{Direction: \"previous\", Center: true})",
@@ -3921,7 +3921,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 219,
+      "line": 220,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"selection-next\", \"Next\", \"selection.navigate\", workbench.NavigateParams{Direction: \"next\", Center: true})",
@@ -3932,7 +3932,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 222,
+      "line": 223,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"selection-center\", \"Center\", \"view.selection.center\", workbench.CenterSelectionParams{ID: state.Selected})",
@@ -3943,7 +3943,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 236,
+      "line": 237,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"wire-insert-junction\", \"Insert junction on this wire\", \"wire.junction.insert\", workbench.JunctionInsertParams{WireIDs: []string{w.ID}})",
@@ -3954,7 +3954,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 250,
+      "line": 251,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"delete-object\", \"Delete selected\", \"object.delete\", workbench.IDParams{ID: state.Selected})",
@@ -3965,7 +3965,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 296,
+      "line": 297,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"tool-\"+tool, strings.ToUpper(tool[:1])+tool[1:], \"drawing.tool.set\", workbench.ToolParams{Tool: tool})",
@@ -3976,7 +3976,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 299,
+      "line": 300,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"view.fit\", \"Fit\")",
@@ -3987,7 +3987,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 301,
+      "line": 302,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"drawing.cancel\", \"Esc\")",
@@ -3998,7 +3998,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 301,
+      "line": 302,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-open\", \"DC sweep\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
@@ -4009,7 +4009,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 507,
+      "line": 508,
       "function": "*screen.view",
       "kind": "node-Custom",
       "expression": "Custom: s.drawing",
@@ -4017,7 +4017,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 520,
+      "line": 521,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(pause, pauseText)",

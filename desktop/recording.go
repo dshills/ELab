@@ -119,7 +119,13 @@ func (s *screen) recordingInspector(state workbench.Snapshot) []ui.Node {
 		}
 	}
 	for i := range nodes {
-		scopeOwnedControlState(&nodes[i], "recording:"+r.ID)
+		owner := "recording:" + r.ID
+		if r.Timing != nil && strings.HasPrefix(nodes[i].ID, "recorded-timing-") {
+			// Thresholds and interval drafts belong to this captured channel,
+			// even when another channel has identical accepted settings.
+			owner += ":timing:" + r.Timing.Settings.ProbeID
+		}
+		scopeOwnedControlState(&nodes[i], owner)
 	}
 	return nodes
 }

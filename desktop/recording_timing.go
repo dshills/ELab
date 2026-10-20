@@ -8,6 +8,7 @@ import (
 )
 
 func (s *screen) recordingTimingControls(state workbench.Snapshot) []ui.Node {
+	s.pruneRecordedTimingRejections(state)
 	r := state.Recording
 	options := []ui.Option{{ID: "__none", Label: "Timing off"}}
 	for _, probe := range r.Scope.Available {
@@ -30,12 +31,12 @@ func (s *screen) recordingTimingControls(state workbench.Snapshot) []ui.Node {
 	}
 	result := r.Timing
 	cfg := workbench.RecordingTimingParams(result.Settings)
-	nodes = append(nodes, quiet("recorded-timing-help", "Saved-row brackets; no interpolation.\nTiming interval is separate from plot."), quiet("recorded-timing-level-label", "Threshold · "+result.Probe.Unit), ui.Node{ID: "recorded-timing-level", Kind: ui.TextField, Text: cfg.Level, Accessibility: ui.Accessibility{Name: "Threshold level in " + result.Probe.Unit}, Change: func(e ui.ChangeEvent) {
+	nodes = append(nodes, quiet("recorded-timing-help", "Saved-row brackets; no interpolation.\nTiming interval is separate from plot."), quiet("recorded-timing-level-label", "Threshold · "+result.Probe.Unit), ui.Node{ID: "recorded-timing-level", Kind: ui.TextField, Text: s.recordedTimingEntryText(cfg, "level"), Accessibility: ui.Accessibility{Name: "Threshold level in " + result.Probe.Unit}, Change: func(e ui.ChangeEvent) {
 		s.changeRecordedTimingField(state, "level", e.Text)
 	}}, ui.Node{ID: "recorded-timing-direction", Kind: ui.Selector, Options: []ui.Option{{ID: "both", Label: "Both directions"}, {ID: "rising", Label: "Rising arrivals"}, {ID: "falling", Label: "Falling arrivals"}}, SelectedID: cfg.Direction, Accessibility: ui.Accessibility{Name: "Threshold arrival direction"}, Change: func(e ui.ChangeEvent) {
 		s.changeRecordedTimingDirection(state, e.SelectedID)
 	}})
-	nodes = append(nodes, quiet("recorded-timing-second-level-label", "Other threshold · "+result.Probe.Unit+" (optional)"), ui.Node{ID: "recorded-timing-second-level", Kind: ui.TextField, Text: cfg.SecondLevel, Accessibility: ui.Accessibility{Name: "Other transition threshold in " + result.Probe.Unit}, Change: func(e ui.ChangeEvent) {
+	nodes = append(nodes, quiet("recorded-timing-second-level-label", "Other threshold · "+result.Probe.Unit+" (optional)"), ui.Node{ID: "recorded-timing-second-level", Kind: ui.TextField, Text: s.recordedTimingEntryText(cfg, "second_level"), Accessibility: ui.Accessibility{Name: "Other transition threshold in " + result.Probe.Unit}, Change: func(e ui.ChangeEvent) {
 		s.changeRecordedTimingField(state, "second_level", e.Text)
 	}})
 	for _, field := range []struct {
@@ -43,9 +44,11 @@ func (s *screen) recordingTimingControls(state workbench.Snapshot) []ui.Node {
 		value float64
 	}{{"start", cfg.Start}, {"end", cfg.End}} {
 		field := field
-		nodes = append(nodes, quiet("recorded-timing-"+field.name+"-label", "Timing "+field.name+" · time"), timeField("recorded-timing-"+field.name, "Threshold interval "+field.name, field.value, false, func(text string) {
+		entry := timeField("recorded-timing-"+field.name, "Threshold interval "+field.name, field.value, false, func(text string) {
 			s.changeRecordedTimingField(state, field.name+"_s", text)
-		}))
+		})
+		entry.Text = s.recordedTimingEntryText(cfg, field.name+"_s")
+		nodes = append(nodes, quiet("recorded-timing-"+field.name+"-label", "Timing "+field.name+" · time"), entry)
 	}
 	nodes = append(nodes, quiet("recorded-timing-count", fmt.Sprintf("%d arrivals · %d saved rows", result.Total, result.WindowSamples)))
 	for _, spacing := range []struct {

@@ -15,6 +15,8 @@ type recordedTimingContinuation struct {
 type recordedTimingFieldRejection struct {
 	context     actionContext
 	recordingID string
+	probeID     string
+	value, text string
 	message     string
 	help        *workbench.DiagnosticHelp
 }
@@ -54,19 +56,27 @@ func (s *screen) changeRecordedTimingField(state workbench.Snapshot, field, text
 	response := s.invokeAtCommandRevision("recording.timing.set", textFieldParams(cfg, field, text), state.CommandRevision)
 	if response.Error != nil {
 		s.recordedTimingAccepted = nil
-		if origin != nil {
-			s.recordedTimingRejected = &recordedTimingFieldRejection{context: *origin, recordingID: r.ID, message: response.Error.Message, help: response.Help}
+		if origin != nil && response.Error.Code == "invalid-params" {
+			if s.recordedTimingRejected == nil {
+				s.recordedTimingRejected = make(map[string]*recordedTimingFieldRejection)
+			}
+			s.recordedTimingRejected[field] = &recordedTimingFieldRejection{
+				context: *origin, recordingID: r.ID, probeID: cfg.ProbeID,
+				value: recordedTimingFieldValue(cfg, field), text: text,
+				message: response.Error.Message, help: response.Help,
+			}
 		}
 		if pending != nil {
 			pending.failed = true
 		}
 		return
 	}
-	s.recordedTimingRejected = nil
+	delete(s.recordedTimingRejected, field)
+	accepted := response.Result.(workbench.Snapshot)
+	s.pruneRecordedTimingRejections(accepted)
 	if origin == nil {
 		return
 	}
-	accepted := response.Result.(workbench.Snapshot)
 	result := accepted.Recording.Timing
 	from := *origin
 	if previous := s.recordedTimingAccepted; previous != nil && previous.to == from && previous.recordingID == r.ID {
@@ -120,17 +130,15 @@ func (s *screen) beginRecordedTimingAction(state workbench.Snapshot, direction, 
 	context := actionContext{state.CommandRevision, state.Document.Generation}
 	pending := &recordedTimingPageWork{context: context, recordingID: r.ID, direction: direction, arrival: arrival, menuSerial: s.menuSerial, settings: workbench.RecordingTimingParams(result.Settings), next: result.NextOffset, total: result.Total}
 	current := s.service.Snapshot()
-	if rejected := s.recordedTimingRejected; rejected != nil && rejected.recordingID == r.ID && rejected.context.generation == current.Document.Generation &&
-		rejected.help != nil && rejected.help == s.requestHelp && rejected.help.Code == "invalid-params" && s.requestHelpRevision == current.CommandRevision {
-		// The help identity proves which field refused. Its revision may have
-		// continued through the viewport publisher's own error-row layout;
-		// unrelated requests and agent edits cannot supply this ownership.
-		pending.feedback = rejected
-	}
-	if rejected := s.recordedTimingRejected; arrival == "" && rejected != nil && rejected.recordingID == r.ID && rejected.context == (actionContext{current.CommandRevision, current.Document.Generation}) {
-		s.errorMessage = rejected.message
-		s.app.Invalidate("main")
-		return
+	s.pruneRecordedTimingRejections(current)
+	for _, rejected := range s.recordedTimingRejected {
+		if rejected.recordingID == r.ID && rejected.context.generation == current.Document.Generation &&
+			rejected.help != nil && rejected.help == s.requestHelp && rejected.help.Code == "invalid-params" && s.requestHelpRevision == current.CommandRevision {
+			// Only this field's help can continue its refusal through the
+			// viewport publisher's error-row layout and its own correction.
+			pending.feedback = rejected
+			break
+		}
 	}
 	if accepted := s.recordedTimingAccepted; accepted != nil && accepted.recordingID == r.ID && accepted.from.generation == context.generation &&
 		accepted.from.revision <= context.revision && context.revision <= accepted.to.revision && accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) {
@@ -193,12 +201,18 @@ func (s *screen) finishRecordedTimingPage(pending *recordedTimingPageWork) {
 		return
 	}
 	current := s.service.Snapshot()
-	if rejected := s.recordedTimingRejected; rejected != nil && rejected.recordingID == pending.recordingID && rejected.context == (actionContext{current.CommandRevision, current.Document.Generation}) {
-		s.errorMessage = rejected.message
-		s.app.Invalidate("main")
-		return
-	}
+	s.pruneRecordedTimingRejections(current)
 	if current.CommandRevision == pending.context.revision && current.Document.Generation == pending.context.generation {
+		// Settle first so a fresh private correction can replace its refusal.
+		// Another field's success must not accept an untouched invalid entry.
+		for _, field := range []string{"level", "second_level", "start_s", "end_s"} {
+			if rejected := s.recordedTimingRejected[field]; rejected != nil {
+				s.errorMessage, s.requestHelp = rejected.message, rejected.help
+				s.requestHelpRevision = current.CommandRevision
+				s.app.Invalidate("main")
+				return
+			}
+		}
 		if current.Recording == nil || current.Recording.ID != pending.recordingID || !current.Recording.Viewing {
 			s.errorMessage = "The selected recording changed. Review it before changing threshold timing."
 			s.app.Invalidate("main")
@@ -219,4 +233,33 @@ func (s *screen) finishRecordedTimingPage(pending *recordedTimingPageWork) {
 		pending.settings.Offset = pending.next
 	}
 	s.invokeAtCommandRevision("recording.timing.set", pending.settings, pending.context.revision, pending.context.generation)
+}
+
+func recordedTimingFieldValue(cfg workbench.RecordingTimingParams, field string) string {
+	switch field {
+	case "level":
+		return cfg.Level
+	case "second_level":
+		return cfg.SecondLevel
+	case "start_s":
+		return timeText(cfg.Start)
+	default:
+		return timeText(cfg.End)
+	}
+}
+
+func (s *screen) recordedTimingEntryText(cfg workbench.RecordingTimingParams, field string) string {
+	if rejected := s.recordedTimingRejected[field]; rejected != nil {
+		return rejected.text
+	}
+	return recordedTimingFieldValue(cfg, field)
+}
+
+func (s *screen) pruneRecordedTimingRejections(state workbench.Snapshot) {
+	r := state.Recording
+	for field, rejected := range s.recordedTimingRejected {
+		if r == nil || !r.Viewing || r.Timing == nil || state.Document.Generation != rejected.context.generation || r.ID != rejected.recordingID || r.Timing.Settings.ProbeID != rejected.probeID || recordedTimingFieldValue(workbench.RecordingTimingParams(r.Timing.Settings), field) != rejected.value {
+			delete(s.recordedTimingRejected, field)
+		}
+	}
 }
