@@ -1,0 +1,32 @@
+"""Frozen LED fixture and independent Shockley/KVL reference, not app code."""
+from pathlib import Path
+import json,math
+ROOT=Path('/Users/dshills/Development/projects/ELab')
+PARTS=[('Supply','dc-source','5 V',-200,0),('Limit','resistor','1k',0,-110),('Light','led','',200,0),('Earth','ground','',0,110)]
+WIRES=[('Supply.positive','Limit.1'),('Limit.2','Light.anode'),('Light.cathode','Earth.reference'),('Earth.reference','Supply.negative')]
+def seed(target,canonical=None):
+ if canonical is not None and canonical.exists():target.ask('project.load',dict(path=str(canonical),discard_changes=True),True)
+ else:
+  target.ask('project.clear',dict(discard_changes=True),True);target.ask('simulation.pause',{},True)
+  for name,kind,value,x,y in PARTS:target.ask('component.place',dict(id=name,kind=kind,value=value,position=dict(x=x,y=y)),True)
+  for a,b in WIRES:target.ask('wire.connect',{'from':a,'to':b},True)
+ target.ask('component.select',dict(id='Limit'),True);target.ask('simulation.resume',{},True);state=target.ask('simulation.wait');assert state['result'] and not state['result']['stale'] and state['circuit']['resistance_ohm']==1000
+ if canonical is not None and not canonical.exists():target.ask('project.save',dict(path=str(canonical)),True)
+ return state
+
+def independent(state):
+ model=state['result']['model'];v=state['circuit']['voltage_v'];r=state['circuit']['resistance_ohm'];vt=1.380649e-23*(273.15+model['temperature_c'])/1.602176634e-19;lo=0.;hi=v/r
+ for _ in range(160):
+  mid=(lo+hi)/2;drop=model['n']*vt*math.log1p(mid/model['is_a'])+mid*model['rs_ohm']
+  if mid*r+drop<v:lo=mid
+  else:hi=mid
+ expected=(lo+hi)/2;frozen=json.loads((ROOT/'internal/conformance/testdata/electrical-reference.json').read_text());reference=next(row for row in frozen['led'] if float(row['resistance_ohm'])==r);assert abs(expected-float(reference['current_a']))<1e-14
+ for key in ['id','is_a','n','rs_ohm','temperature_c']:assert model[key]==(frozen['led_model'][key] if key=='id' else float(frozen['led_model'][key]))
+ assert abs(state['result']['current_a']-expected)<1e-12 and abs(state['result']['kvl_residual_v'])<1e-10
+ return dict(current_a=expected,absolute_error_a=abs(state['result']['current_a']-expected),kvl_residual_v=state['result']['kvl_residual_v'],formula='Independent bisection of declared Shockley LED plus series resistance and KVL')
+def compare_states(native,expected):
+ for key in ('components','nets','model','circuit'):assert native[key]==expected[key],key
+ semantics=lambda wires:[{k:v for k,v in wire.items() if k!='id'} for wire in wires];assert semantics(native['wires'])==semantics(expected['wires'])
+ actual=dict(native['result']);anticipated=dict(expected['result'])
+ for key in ('run_id','electrical_revision'):actual.pop(key);anticipated.pop(key)
+ assert actual==anticipated;independent(native);independent(expected)

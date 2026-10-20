@@ -1,0 +1,11 @@
+# Current-build LED visible-response block
+
+Declared October 20, 2026, before native launch or collection. The [immutable machine-readable declaration](49-current-led-timing-plan.json) pins actual producers, exact /185 app/agent, admission profile/tool, recorder, original classifier and host geometry. Its zero-trial count is not overwritten by outcomes.
+
+One block of twenty new IDs `led3-01`–`led3-20` edits Limit from 1 kΩ to 2 kΩ in the original 5 V /generic Shockley LED loop. Reference positions/connectivity, live DC mode, original image-state templates, three-second crop, software-clock rules and 100/500 ms targets remain fixed. The completed /173 LED block is historical; it is not relabeled, pooled or replaced. The completed current RC block remains untouched.
+
+Independently bind the worker's first complete-image admission to the current journal/profile/tool/unique handshake before one acknowledged marker and one CUA Apply. Full-recording relevant-region/state, geometry, clock, native/packaged-agent result and independent LED-law/KVL analysis must pass. Inspect the first recording's originals and complete analysis before permitting trial 02. Stop on the first unavailable outcome, preserving it and all remaining scheduled IDs as not attempted. No retry, favorable replacement block, template/threshold retuning, shortened/extended recording or new privacy grant.
+
+Only twenty available bounds permit nearest-rank p95, rank 19. Marker intervals include controller overhead; over-target bounds are inconclusive about actual product latency. Raw recorder flags stay unchanged. No exact OS event/acceptance time, physical scanout, cold/difficult/general interaction, other reference/current-build NPN, broader environment/reader/IME/bindings, owner/participant acceptance or promotion is inferred.
+
+Existing authorizations cover local silent cropped LED/RC/NPN recordings up to five seconds. Keep original pixels in private temporary directories and ignored lossless archives (0700/0600); Git gets metadata and hash/member manifests. Restore missing archives, never regenerate a trial. Save synthetic baselines/finals separately and close the owned host normally. The registration prelude is not part of the cohort; each trial folder contains its authoritative fixture/result.

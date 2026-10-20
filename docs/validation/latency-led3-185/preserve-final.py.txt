@@ -1,0 +1,43 @@
+"""Archive every original LED3 image privately, then preserve non-pixel evidence."""
+from pathlib import Path
+import gzip,hashlib,io,json,os,shutil,tarfile
+os.umask(0o077)
+ROOT=Path('/Users/dshills/Development/projects/ELab');STAGE=Path(__file__).resolve().parent;OUT=Path('/private/tmp/elab-latency-led3-185');PROOF=ROOT/'docs/validation/latency-led3-185';ARCHIVES=ROOT/'build/validation-evidence/latency-led3-185';h=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert not PROOF.exists() and not ARCHIVES.exists();PROOF.mkdir();ARCHIVES.mkdir(parents=True,mode=0o700)
+summary=json.loads((OUT/'summary.json').read_text());plan=json.loads((STAGE/'declaration.json').read_text());assert summary['available']==summary['scheduled']==20
+stores=[]
+for trial in plan['trials']:
+ capture=OUT/'trials'/trial['id']/'capture';report=json.loads((capture/'report.json').read_text());paths=sorted(capture.glob('frame-*.png'));assert len(paths)==report['unique_images'] and sum(p.stat().st_size for p in paths)==report['image_bytes']
+ archive=ARCHIVES/(trial['id']+'.tar.xz');entries={}
+ with tarfile.open(archive,'w:xz') as tar:
+  for p in paths:
+   assert not p.is_symlink() and p.stat().st_mode&0o777==0o600;data=p.read_bytes();digest=hashlib.sha256(data).hexdigest();assert p.name=='frame-'+digest+'.png'
+   info=tarfile.TarInfo(p.name);info.mode=0o600;info.mtime=0;info.size=len(data);tar.addfile(info,io.BytesIO(data));entries[p.name]=dict(bytes=len(data),sha256=digest)
+ assert archive.stat().st_mode&0o777==0o600
+ store=dict(archive_path=str(archive.relative_to(ROOT)),archive_sha256=h(archive),archive_bytes=archive.stat().st_size,member_count=len(entries),image_bytes=report['image_bytes'])
+ (capture/'frame-store.json').write_text(json.dumps(store,indent=2)+'\n');(capture/'image-manifest.json').write_text(json.dumps(entries,indent=2)+'\n');stores.append(dict(id=trial['id'],**store))
+media=ARCHIVES/'cua-before.tar.xz';data=(OUT/'cua-before.jpg').read_bytes()
+with tarfile.open(media,'w:xz') as tar:
+ info=tarfile.TarInfo('cua-before.jpg');info.size=len(data);info.mode=0o600;info.mtime=0;tar.addfile(info,io.BytesIO(data))
+observation=dict(archive_path=str(media.relative_to(ROOT)),archive_sha256=h(media),archive_bytes=media.stat().st_size,member='cua-before.jpg',sha256=hashlib.sha256(data).hexdigest(),bytes=len(data))
+manifest={}
+for base,label in [(OUT,'session'),(STAGE,'producers')]:
+ for p in sorted(base.rglob('*')):
+  if not p.is_file() or p.is_symlink() or '__pycache__' in p.parts or 'module-cache' in p.parts:continue
+  relative=p.relative_to(base)
+  if p.suffix.lower() in ('.png','.jpg','.jpeg') or any(s.endswith('.app') for s in relative.parts) or p.name in ('endpoint.json','target-diagnostic'):continue
+  raw=p.read_bytes();stored=gzip.compress(raw,mtime=0);q=PROOF/label/(str(relative)+'.gz');q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(stored)
+  manifest[str(q.relative_to(PROOF))]=dict(original_path=str(p),original_bytes=len(raw),original_sha256=hashlib.sha256(raw).hexdigest(),stored_sha256=h(q))
+for trial in plan['trials']:
+ source=OUT/'trials'/trial['id']/'capture/frame-store.json';dest=PROOF/'session/trials'/trial['id']/'capture/frame-store.json';dest.write_bytes(source.read_bytes())
+(PROOF/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');(PROOF/'image-stores.json').write_text(json.dumps(dict(stores=stores,cua_observation=observation),indent=2)+'\n')
+(PROOF/'summary.json').write_bytes((OUT/'summary.json').read_bytes());(PROOF/'declaration.json').write_bytes((STAGE/'declaration.json').read_bytes())
+for name in ('analyze.py','frame_store.py'):shutil.copyfile(STAGE/name,PROOF/name)
+shutil.copyfile(STAGE/'reference.py',PROOF/'reference.py.txt');(PROOF/'dependencies').mkdir()
+for name in ('prepare.py','controller.mjs','profiles/led.json'):
+ source=ROOT/'tools/baseline-admission'/name;shutil.copyfile(source,PROOF/'dependencies'/(Path(name).name+'.txt'))
+receipt=ROOT/'research/ui-audit/first-version/inspector-width-review-checkpoint.json';sdk=ROOT/'third_party/vellum/sdk.lock.json'
+artifacts=dict(current_receipt_sha256=h(receipt),sdk_lock_sha256=h(sdk),plan_sha256=h(ROOT/'research/49-current-led-timing-plan.json'),prior_native_admission_checkpoint_sha256=h(ROOT/'docs/validation/native-baseline-admission-173/checkpoint.json'),legacy_method_dependencies={str((ROOT/'docs/validation/latency-followup-173/led'/n).relative_to(ROOT)):h(ROOT/'docs/validation/latency-followup-173/led'/n) for n in ('analyze.py','image-annotations.json')},private_archive_directory_mode='0o700',private_archive_file_mode='0o600',archive_total_bytes=sum(v['archive_bytes'] for v in stores)+observation['archive_bytes'],metadata_files=len(manifest),current_go_sources=plan['current_go_sources'])
+(PROOF/'artifacts.json').write_text(json.dumps(artifacts,indent=2)+'\n')
+(PROOF/'terminal-results.json').write_text(json.dumps(dict(session_handle=13852,session_wrapper_exit_code=0,worker_handle=55862,worker_wrapper_exit_code=0,open_exit_code=0,native_exact_exit_status=None,source='Authoritative wait results after final trial; both handles terminal. LaunchServices native status is distinct.'),indent=2)+'\n')
+print(json.dumps(dict(passed=True,trials=20,archived_images=summary['unique_images'],raw_image_bytes=summary['image_bytes'],archive_bytes=artifacts['archive_total_bytes'],metadata_files=len(manifest))))

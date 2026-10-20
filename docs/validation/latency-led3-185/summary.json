@@ -1,0 +1,827 @@
+{
+  "passed": true,
+  "date": "2026-10-20",
+  "timezone": "America/Chicago",
+  "cohort_id": "led3-current-185",
+  "release": "0.168.0 /185",
+  "native_sha256": "ecd24e458e0db4a0e580747b37145c7d30e9c8f4be686731df78cb690b38a330",
+  "agent_sha256": "2992a176cb26a85db197cb7879650464da34cd272ce462bed9fb01b2ef35c59e",
+  "scheduled": 20,
+  "attempted": 20,
+  "available": 20,
+  "unavailable": 0,
+  "not_attempted": 0,
+  "replacements": 0,
+  "pooled_with_earlier_cohorts": false,
+  "percentile": {
+    "convention": "nearest-rank",
+    "rank": 19,
+    "count": 20
+  },
+  "marker_to_committed_p95_ms": 140.41720833333332,
+  "marker_to_fresh_p95_ms": 169.889,
+  "p95_trial": "led3-09",
+  "p95_exact_fraction_ms": [
+    169889,
+    1000
+  ],
+  "minimum_fresh_ms": 117.68716666666667,
+  "maximum_fresh_ms": 178.65595833333333,
+  "fresh_sample_500ms_supported": true,
+  "acknowledgment_100ms_status": "inconclusive: conservative marker bound includes controller overhead",
+  "raw_eligible_latency_observations": 0,
+  "raw_flags_unchanged": true,
+  "overall_prd_performance_pass": false,
+  "owner_acceptance": false,
+  "full_mvp_complete": false,
+  "canonical_promoted": false,
+  "complete_frames": 3266,
+  "unique_images": 3127,
+  "image_bytes": 432248941,
+  "corruption_classes": 8,
+  "corruption_exercises": 160,
+  "application_go_sources_unchanged": 659,
+  "native_exact_exit_status": null,
+  "session_wrapper_exit_code": 0,
+  "worker_wrapper_exit_code": 0,
+  "open_exit_code": 0,
+  "trial_results": [
+    {
+      "id": "led3-01",
+      "available": true,
+      "marker_to_committed_ms": 109.64695833333333,
+      "marker_to_fresh_ms": 142.98016666666666,
+      "committed_bound_fraction_ms": [
+        2631527,
+        24000
+      ],
+      "fresh_bound_fraction_ms": [
+        857881,
+        6000
+      ],
+      "complete_frames": 163,
+      "unique_images": 156,
+      "image_bytes": 21563568,
+      "roles": {
+        "private-draft-original-result": 8,
+        "committed-value-stale-result": 2,
+        "committed-value-fresh-result": 153
+      },
+      "first_committed_frame": 9,
+      "first_fresh_frame": 11,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 144
+    },
+    {
+      "id": "led3-02",
+      "available": true,
+      "marker_to_committed_ms": 128.65633333333332,
+      "marker_to_fresh_ms": 178.65595833333333,
+      "committed_bound_fraction_ms": [
+        385969,
+        3000
+      ],
+      "fresh_bound_fraction_ms": [
+        4287743,
+        24000
+      ],
+      "complete_frames": 164,
+      "unique_images": 160,
+      "image_bytes": 22117299,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-stale-result": 2,
+        "committed-value-fresh-result": 152
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 13,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 144
+    },
+    {
+      "id": "led3-03",
+      "available": true,
+      "marker_to_committed_ms": 105.723875,
+      "marker_to_fresh_ms": 122.3905,
+      "committed_bound_fraction_ms": [
+        845791,
+        8000
+      ],
+      "fresh_bound_fraction_ms": [
+        244781,
+        2000
+      ],
+      "complete_frames": 162,
+      "unique_images": 152,
+      "image_bytes": 21009760,
+      "roles": {
+        "private-draft-original-result": 8,
+        "committed-value-stale-result": 1,
+        "committed-value-fresh-result": 153
+      },
+      "first_committed_frame": 9,
+      "first_fresh_frame": 10,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 164,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 142
+    },
+    {
+      "id": "led3-04",
+      "available": true,
+      "marker_to_committed_ms": 127.887,
+      "marker_to_fresh_ms": 161.22020833333335,
+      "committed_bound_fraction_ms": [
+        127887,
+        1000
+      ],
+      "fresh_bound_fraction_ms": [
+        773857,
+        4800
+      ],
+      "complete_frames": 163,
+      "unique_images": 159,
+      "image_bytes": 21978803,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-stale-result": 2,
+        "committed-value-fresh-result": 152
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 12,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 152
+    },
+    {
+      "id": "led3-05",
+      "available": true,
+      "marker_to_committed_ms": 93.4185,
+      "marker_to_fresh_ms": 143.418125,
+      "committed_bound_fraction_ms": [
+        186837,
+        2000
+      ],
+      "fresh_bound_fraction_ms": [
+        229469,
+        1600
+      ],
+      "complete_frames": 164,
+      "unique_images": 156,
+      "image_bytes": 21564358,
+      "roles": {
+        "private-draft-original-result": 8,
+        "committed-value-stale-result": 2,
+        "committed-value-fresh-result": 154
+      },
+      "first_committed_frame": 9,
+      "first_fresh_frame": 11,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 143
+    },
+    {
+      "id": "led3-06",
+      "available": true,
+      "marker_to_committed_ms": 125.72875,
+      "marker_to_fresh_ms": 125.72875,
+      "committed_bound_fraction_ms": [
+        100583,
+        800
+      ],
+      "fresh_bound_fraction_ms": [
+        100583,
+        800
+      ],
+      "complete_frames": 164,
+      "unique_images": 159,
+      "image_bytes": 21976849,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 155
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 140
+    },
+    {
+      "id": "led3-07",
+      "available": true,
+      "marker_to_committed_ms": 136.82270833333334,
+      "marker_to_fresh_ms": 136.82270833333334,
+      "committed_bound_fraction_ms": [
+        656749,
+        4800
+      ],
+      "fresh_bound_fraction_ms": [
+        656749,
+        4800
+      ],
+      "complete_frames": 163,
+      "unique_images": 157,
+      "image_bytes": 21701564,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-fresh-result": 153
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 11,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 145
+    },
+    {
+      "id": "led3-08",
+      "available": true,
+      "marker_to_committed_ms": 143.77904166666667,
+      "marker_to_fresh_ms": 143.77904166666667,
+      "committed_bound_fraction_ms": [
+        3450697,
+        24000
+      ],
+      "fresh_bound_fraction_ms": [
+        3450697,
+        24000
+      ],
+      "complete_frames": 163,
+      "unique_images": 158,
+      "image_bytes": 21839762,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-fresh-result": 153
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 11,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 147
+    },
+    {
+      "id": "led3-09",
+      "available": true,
+      "marker_to_committed_ms": 119.88933333333334,
+      "marker_to_fresh_ms": 169.889,
+      "committed_bound_fraction_ms": [
+        89917,
+        750
+      ],
+      "fresh_bound_fraction_ms": [
+        169889,
+        1000
+      ],
+      "complete_frames": 163,
+      "unique_images": 155,
+      "image_bytes": 21426302,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-stale-result": 2,
+        "committed-value-fresh-result": 152
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 12,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 143
+    },
+    {
+      "id": "led3-10",
+      "available": true,
+      "marker_to_committed_ms": 140.41720833333332,
+      "marker_to_fresh_ms": 157.08370833333333,
+      "committed_bound_fraction_ms": [
+        3370013,
+        24000
+      ],
+      "fresh_bound_fraction_ms": [
+        3770009,
+        24000
+      ],
+      "complete_frames": 161,
+      "unique_images": 154,
+      "image_bytes": 21287075,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-stale-result": 1,
+        "committed-value-fresh-result": 151
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 11,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 164,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 147
+    },
+    {
+      "id": "led3-11",
+      "available": true,
+      "marker_to_committed_ms": 111.56758333333333,
+      "marker_to_fresh_ms": 144.90075,
+      "committed_bound_fraction_ms": [
+        1338811,
+        12000
+      ],
+      "fresh_bound_fraction_ms": [
+        579603,
+        4000
+      ],
+      "complete_frames": 165,
+      "unique_images": 159,
+      "image_bytes": 21978397,
+      "roles": {
+        "private-draft-original-result": 8,
+        "committed-value-stale-result": 2,
+        "committed-value-fresh-result": 155
+      },
+      "first_committed_frame": 9,
+      "first_fresh_frame": 11,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 149
+    },
+    {
+      "id": "led3-12",
+      "available": true,
+      "marker_to_committed_ms": 109.92629166666667,
+      "marker_to_fresh_ms": 143.25941666666668,
+      "committed_bound_fraction_ms": [
+        2638231,
+        24000
+      ],
+      "fresh_bound_fraction_ms": [
+        1719113,
+        12000
+      ],
+      "complete_frames": 164,
+      "unique_images": 159,
+      "image_bytes": 21977304,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-stale-result": 1,
+        "committed-value-fresh-result": 154
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 11,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 147
+    },
+    {
+      "id": "led3-13",
+      "available": true,
+      "marker_to_committed_ms": 126.78541666666666,
+      "marker_to_fresh_ms": 126.78541666666666,
+      "committed_bound_fraction_ms": [
+        60857,
+        480
+      ],
+      "fresh_bound_fraction_ms": [
+        60857,
+        480
+      ],
+      "complete_frames": 162,
+      "unique_images": 156,
+      "image_bytes": 21574617,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 153
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 139
+    },
+    {
+      "id": "led3-14",
+      "available": true,
+      "marker_to_committed_ms": 101.02058333333333,
+      "marker_to_fresh_ms": 117.68716666666667,
+      "committed_bound_fraction_ms": [
+        1212247,
+        12000
+      ],
+      "fresh_bound_fraction_ms": [
+        706123,
+        6000
+      ],
+      "complete_frames": 164,
+      "unique_images": 159,
+      "image_bytes": 21976563,
+      "roles": {
+        "private-draft-original-result": 7,
+        "committed-value-stale-result": 1,
+        "committed-value-fresh-result": 156
+      },
+      "first_committed_frame": 8,
+      "first_fresh_frame": 9,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 141
+    },
+    {
+      "id": "led3-15",
+      "available": true,
+      "marker_to_committed_ms": 111.66041666666666,
+      "marker_to_fresh_ms": 161.66020833333334,
+      "committed_bound_fraction_ms": [
+        53597,
+        480
+      ],
+      "fresh_bound_fraction_ms": [
+        775969,
+        4800
+      ],
+      "complete_frames": 163,
+      "unique_images": 153,
+      "image_bytes": 21149991,
+      "roles": {
+        "private-draft-original-result": 8,
+        "committed-value-stale-result": 3,
+        "committed-value-fresh-result": 152
+      },
+      "first_committed_frame": 9,
+      "first_fresh_frame": 12,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 148
+    },
+    {
+      "id": "led3-16",
+      "available": true,
+      "marker_to_committed_ms": 119.18054166666667,
+      "marker_to_fresh_ms": 152.51370833333334,
+      "committed_bound_fraction_ms": [
+        2860333,
+        24000
+      ],
+      "fresh_bound_fraction_ms": [
+        3660329,
+        24000
+      ],
+      "complete_frames": 164,
+      "unique_images": 156,
+      "image_bytes": 21564174,
+      "roles": {
+        "private-draft-original-result": 8,
+        "committed-value-stale-result": 2,
+        "committed-value-fresh-result": 154
+      },
+      "first_committed_frame": 9,
+      "first_fresh_frame": 11,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 141
+    },
+    {
+      "id": "led3-17",
+      "available": true,
+      "marker_to_committed_ms": 120.02054166666667,
+      "marker_to_fresh_ms": 120.02054166666667,
+      "committed_bound_fraction_ms": [
+        2880493,
+        24000
+      ],
+      "fresh_bound_fraction_ms": [
+        2880493,
+        24000
+      ],
+      "complete_frames": 164,
+      "unique_images": 154,
+      "image_bytes": 21285977,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 155
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 148
+    },
+    {
+      "id": "led3-18",
+      "available": true,
+      "marker_to_committed_ms": 119.81975,
+      "marker_to_fresh_ms": 153.15283333333332,
+      "committed_bound_fraction_ms": [
+        479279,
+        4000
+      ],
+      "fresh_bound_fraction_ms": [
+        918917,
+        6000
+      ],
+      "complete_frames": 164,
+      "unique_images": 157,
+      "image_bytes": 21702428,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-stale-result": 2,
+        "committed-value-fresh-result": 153
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 12,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 148
+    },
+    {
+      "id": "led3-19",
+      "available": true,
+      "marker_to_committed_ms": 111.70891666666667,
+      "marker_to_fresh_ms": 128.375375,
+      "committed_bound_fraction_ms": [
+        1340507,
+        12000
+      ],
+      "fresh_bound_fraction_ms": [
+        1027003,
+        8000
+      ],
+      "complete_frames": 164,
+      "unique_images": 153,
+      "image_bytes": 21147823,
+      "roles": {
+        "private-draft-original-result": 8,
+        "committed-value-stale-result": 1,
+        "committed-value-fresh-result": 155
+      },
+      "first_committed_frame": 9,
+      "first_fresh_frame": 10,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 144
+    },
+    {
+      "id": "led3-20",
+      "available": true,
+      "marker_to_committed_ms": 126.62966666666667,
+      "marker_to_fresh_ms": 143.29629166666666,
+      "committed_bound_fraction_ms": [
+        379889,
+        3000
+      ],
+      "fresh_bound_fraction_ms": [
+        3439111,
+        24000
+      ],
+      "complete_frames": 162,
+      "unique_images": 155,
+      "image_bytes": 21426327,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-stale-result": 1,
+        "committed-value-fresh-result": 151
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 12,
+      "native_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "agent_led_law": {
+        "current_a": 0.0014767235491387446,
+        "absolute_error_a": 4.336808689942018e-19,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "formula": "Independent bisection of declared Shockley LED plus series resistance and KVL"
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 140
+    }
+  ],
+  "method_scope": "Warm running /185 LED 1\u21922 kohm reference on the pinned host/display/fixture; software composition upper bounds, not physical scanout or exact OS-event/acceptance times",
+  "reference_process_exit_codes": "Not retained by reused helper; no separate zero-exit claim"
+}

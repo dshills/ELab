@@ -10,7 +10,7 @@ Source quality, copied native smoke, four adapters, reference/measurement/sweep/
 
 [Receipt](ui-audit/first-version/inspector-width-review-checkpoint.json), [proof](../docs/validation/inspector-width-review-185/README.md).
 
-An additional [current-build RC block](47-current-rc-visible-results.md) now has all twenty available observations, with a 136.965 ms marker-to-fresh p95 bound supporting 500 ms within the declared warm-running RC/software-composition fixture. The 100 ms acknowledgment target remains inconclusive; older LED/NPN scopes and broader performance/owner gates stay separate. No app or sealed package changed.
+An additional [current-build RC block](47-current-rc-visible-results.md) now has all twenty available observations, with a 136.965 ms marker-to-fresh p95 bound supporting 500 ms within the declared warm-running RC/software-composition fixture. The 100 ms acknowledgment target remains inconclusive; older LED/NPN scopes and broader performance/owner gates stay separate. No app or sealed package changed. The separate [current LED block](50-current-led-visible-results.md) also completes twenty observations, with fresh p95 bound 169.889 ms supporting 500 ms within its fixture; NPN and broader/100 ms gates remain open.
 
 ## Try these four tasks · 15–20 minutes
 
