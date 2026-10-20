@@ -146,10 +146,18 @@ func (s *screen) recordingPanel(state workbench.Snapshot) ui.Node {
 	pause := s.action("recorded-pause", "Pause", "recording.pause", struct{}{})
 	pause.Disabled = !r.Playing
 	controls = append(controls, play, pause)
-	position := []ui.Node{quiet("recorded-status", status), {ID: "recorded-index", Kind: ui.NumberField, Number: float32(r.Index), MinWidth: 90, Numeric: ui.Numeric{Min: 0, Max: float32(r.Total - 1), Step: 1}, Accessibility: ui.Accessibility{Name: "Recorded sample index"}, Change: func(e ui.ChangeEvent) {
-		index := int(e.Number)
-		s.invoke("recording.seek", workbench.RecordingSeekParams{Index: &index})
-	}}, timeField("recorded-time", "Recorded seek time", r.Time, false, func(text string) {
+	// DC captures have one row and no editable index range. Vellum numeric
+	// fields require a positive span, so expose the fixed position as text.
+	indexControl := quiet("recorded-index", fmt.Sprint(r.Index))
+	indexControl.MinWidth = 90
+	indexControl.Accessibility.Name = "Recorded sample index"
+	if r.Total > 1 {
+		indexControl = ui.Node{ID: "recorded-index", Kind: ui.NumberField, Number: float32(r.Index), MinWidth: 90, Numeric: ui.Numeric{Min: 0, Max: float32(r.Total - 1), Step: 1}, Accessibility: ui.Accessibility{Name: "Recorded sample index"}, Change: func(e ui.ChangeEvent) {
+			index := int(e.Number)
+			s.invoke("recording.seek", workbench.RecordingSeekParams{Index: &index})
+		}}
+	}
+	position := []ui.Node{quiet("recorded-status", status), indexControl, timeField("recorded-time", "Recorded seek time", r.Time, false, func(text string) {
 		s.invokeAtCommandRevision("recording.seek", map[string]any{"time_s": text}, state.CommandRevision)
 	}), quiet("recorded-speed-label", "sim s / wall s"), {ID: "recorded-speed", Kind: ui.NumberField, Number: float32(speed), MinWidth: 80, Numeric: ui.Numeric{Min: .001, Max: 10, Step: .001}, Accessibility: ui.Accessibility{Name: "Recorded playback speed"}, Change: func(e ui.ChangeEvent) {
 		s.invoke("recording.speed.set", workbench.RecordingPlayParams{Speed: float64(e.Number)})

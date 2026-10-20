@@ -1,0 +1,35 @@
+"""Freeze the failed /182 native attempt and bounded DC rendering repair."""
+from pathlib import Path
+import gzip,hashlib,json,shutil,subprocess
+root=Path('/Users/dshills/Development/projects/ELab');stage=root/'build/recorded-dc-control-work';out=root/'docs/validation/recorded-dc-control';out.mkdir(exist_ok=True)
+sha=lambda b:hashlib.sha256(b).hexdigest()
+q=json.loads((stage/'full-quality.json').read_text());assert q['exit_code']==0 and q['sources_unchanged'] and q['source_files']==661
+(out/'raw').mkdir();(out/'producers').mkdir();manifest={}
+def retain(p,relative):
+ data=p.read_bytes();stored=gzip.compress(data,mtime=0);target=out/'raw'/(relative+'.gz');target.parent.mkdir(exist_ok=True,parents=True);target.write_bytes(stored)
+ manifest[str(target.relative_to(out))]=dict(original_sha256=sha(data),original_bytes=len(data),stored_sha256=sha(stored))
+release=root/'build/first-version-182-tools'
+for name in ('acceptance-final-output.txt','acceptance-run-output.txt','build-result-signed.json','signature-admission.json','runtime-output.txt','source-commit.txt'):
+ retain(release/name,'failed-release/'+name)
+for name in ('elab','elab-agent','elab-conformance'):
+ retain(release/'build'/(name+'-build-info.txt'),'failed-release/'+name+'-build-info.txt')
+candidate=root/'build/ELab-0.165.0-182-review';retain(candidate/'CANDIDATE_MANIFEST.json','failed-release/CANDIDATE_MANIFEST.json')
+runtime=Path('/private/tmp/elab-first-version-182-signed-runtime');retain(runtime/'runtime-report.json','failed-release/runtime-report.json')
+folder=Path('/private/tmp/elab-first-version-182-signed-acceptance-final')
+files={}
+for p in sorted(folder.rglob('*')):
+ if p.is_file():
+  assert not p.is_symlink();relative=str(p.relative_to(folder));files[relative]=sha(p.read_bytes())
+  if relative=='native-host.txt' or relative.startswith(('recording-final-input/','native-recording-final-')):retain(p,'failed-native/'+relative)
+(stage/'failed-acceptance-inventory.json').write_text(json.dumps(dict(directory=str(folder),files=files),indent=2)+'\n')
+for source,name in [('desktop/recording.go','recording-final.go.txt'),('desktop/recording_dc_test.go','recording_dc-final.go.txt')]:shutil.copyfile(root/source,stage/name)
+(stage/'production.diff').write_bytes(subprocess.check_output(['git','diff','--','desktop/recording.go'],cwd=root))
+for p in sorted(stage.iterdir()):
+ if p.is_file() and p.suffix!='.py':retain(p,'stage/'+p.name)
+for name in ('quality.py','package.py'):shutil.copyfile(stage/name,out/'producers'/(name+'.txt'))
+(out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+receipt=root/'research/ui-audit/first-version/terminal-validation-review-checkpoint.json'
+report=dict(passed=True,defect='RECORD-DC-UI-01',severity='P1 one-row DC native viewer failure',preserved_release='0.164.0 /181',failed_candidate='0.165.0 /182',source_parent_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),application_go_sources=658,quality_elapsed_seconds=q['elapsed_seconds'],original_source_failures=2,fixed_dc_families=2,validated_dc_transient_selections=8,production_go_files_changed=1,new_go_test_files=1,prior_receipt_sha256=sha(receipt.read_bytes()),prior_recording_final_checkpoint_sha256=sha((root/'docs/validation/recording-final-consistency/checkpoint.json').read_bytes()),candidate_manifest_sha256=sha((candidate/'CANDIDATE_MANIFEST.json').read_bytes()),source_qualified=True,replacement_packaging_pending=True,solver_changed=False,new_release=False,native_fix_qualified=False,native_host_exit_code=None,owner_acceptance=False,full_mvp_complete=False)
+(out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+cp=dict(files={str(p.relative_to(out)):sha(p.read_bytes()) for p in sorted(out.rglob('*')) if p.is_file() and p.name!='checkpoint.json'})
+(out/'checkpoint.json').write_text(json.dumps(cp,indent=2)+'\n');print(dict(files=len(cp['files'])+1,raw=len(manifest)))

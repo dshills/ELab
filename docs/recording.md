@@ -8,6 +8,8 @@ A time seek/cursor snaps to the nearest saved sample, selecting the latest/right
 
 The plot retains first/last samples and each of 128 ordered buckets' minimum/maximum points (at most 258 points per trace). Reduction is visibly labeled. Cursor lookup, statistics, paged samples and JSON/CSV exports use all original data, including edge rows. Statistics are sample-based, not time-weighted. An interval with no exact samples is labeled unavailable instead of inventing values. A DC record is one point at time zero and has no playback duration.
 
+The source UI now shows a one-row record’s fixed index as readable text; multiple-row captures keep exact numeric seeking. This avoids the zero-span numeric-control failure exposed by native /182 qualification. [RECORD-DC-UI-01 evidence](validation/recorded-dc-control/README.md) retains the failed candidate and source repair; a clean replacement is pending. The shared `recording.seek` command still accepts DC index zero.
+
 ## Shared commands
 
 All mutations require the ordinary revision and retry key. Inspect `snapshot.recording` for current position, viewing/playback state, readings, scope, reduction policy and complete sample count.

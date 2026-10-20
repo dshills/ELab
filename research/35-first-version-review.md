@@ -10,7 +10,7 @@ Full source quality, copied native smoke, all four adapters, reference/startup/m
 
 [Receipt](ui-audit/first-version/terminal-validation-review-checkpoint.json), [proof](../docs/validation/terminal-validation-review-181/README.md).
 
-**Known review limitation:** /181 accepts the reproduced [inconsistent LED/NPN recorded final metadata](../docs/validation/recording-final-consistency/README.md). The source correction passes full quality and exact-file refusal/work-preservation checks; clean replacement qualification remains pending. Intact controls re-export unchanged. No ordinary valid-save corruption is demonstrated.
+**Known review limitations:** /181 accepts the reproduced [inconsistent saved results](../docs/validation/recording-final-consistency/README.md) and has a [native DC recording view failure](../docs/validation/recorded-dc-control/README.md). /182 is preserved as a failed candidate after exposing that view error; source repairs await a clean replacement. No ordinary valid-save corruption is demonstrated.
 
 Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment, broader corruption/fuzzing and the actual hobbyist study remain open. Visible latency stays scoped to /173, with RC and 100 ms acknowledgement unqualified. All 39 earlier sealed reviews, four candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.
 
