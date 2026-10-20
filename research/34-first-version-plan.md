@@ -40,6 +40,8 @@ The [engineering history](34-engineering-checkpoint-history.md) preserves the pr
 
 **Desktop reserved October 20:** the owner replied “I'm back online and working.” The /193 native check remains deferred until renewed availability. Two isolated headless RC/NPN fixtures and six proposed cases are [prepared](../docs/validation/native-check-193-preparation/README.md); both fixture clients closed normally. No native launch, capture, app replacement or new version was made.
 
+**Desktop-independent checklist work now passes on /193:** the exact copied agent completes reference/project/electrical/storage/capacity suites across in-process, stdio and socket paths, plus viewer/position corrections, sixteen analysis cases and fresh example/captured-result reopening. Eight file and four IP controls qualify the sandboxed external paths; five historical helper clients are disclosed as unrestricted. All owned processes exit normally, and 670 Go hashes retain the existing full source gate. [Evidence](../docs/validation/headless-release-193/README.md). This advances checklist items 3–8 without a native launch or feature change. Native fixes/UI/adapter acceptance and owner walkthrough remain open.
+
 Keep the app/model/format/SDK scope frozen while the owner review is pending. Work on a concrete remaining release scenario or reproduced defect; avoid new device batches, cosmetic campaigns and repeated completed checks. Preserve canonical /120, all 44 earlier sealed reviews, six candidates and original failed/unavailable evidence. [Engineering checkpoint history](34-engineering-checkpoint-history.md).
 
 ## Ordered work and finish criteria

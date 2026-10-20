@@ -1,0 +1,99 @@
+{
+  "date": "2026-10-20",
+  "kind": "final-candidate-headless-release-qualification",
+  "candidate": "0.176.0 /193",
+  "agent_sha256": "537c14d6f7075ba6105085660912fe19a3be29ec5be7fc45fe9cab4c9fb083b9",
+  "controller_sha256": "8c046ba15bea8fcaaecdca4da3facde861458ae44fa43687ed65e753af1dac70",
+  "passed": true,
+  "source_quality": {
+    "passed": true,
+    "go_inputs_matched": 670,
+    "prior_full_quality_exit_code": 0,
+    "prior_full_quality_elapsed_s": 349.9231008749921,
+    "source_commit": "f8b4bd543748ad7d3aadabd62e07f257c2c07da8",
+    "subsequent_commits_documentation_only": true,
+    "full_quality_repeated": false,
+    "controller_build_exit_code": 0,
+    "controller_build_note": "Sandbox denied Go stat-cache write during build; compiler still completed with exit 0. No escalation or retry was needed."
+  },
+  "adapters": [
+    {
+      "adapter": "in-process",
+      "workflows": 3,
+      "project_checks": 11,
+      "independent_electrical_checks": 294,
+      "inductor_checks": 22,
+      "opamp_checks": 931,
+      "opamp_storage_checks": 752,
+      "capacity_checks": 4900
+    },
+    {
+      "adapter": "headless-stdio",
+      "workflows": 3,
+      "project_checks": 11,
+      "independent_electrical_checks": 294,
+      "inductor_checks": 22,
+      "opamp_checks": 931,
+      "opamp_storage_checks": 752,
+      "capacity_checks": 4900
+    },
+    {
+      "adapter": "headless-socket",
+      "workflows": 3,
+      "project_checks": 11,
+      "independent_electrical_checks": 294,
+      "inductor_checks": 22,
+      "opamp_checks": 931,
+      "opamp_storage_checks": 752,
+      "capacity_checks": 4900
+    }
+  ],
+  "recording": {
+    "historical_native_reference_workflows": 3,
+    "viewer_contracts": 11,
+    "viewer_refusals": 10,
+    "position_correction_cases": 6,
+    "position_rows_preserved": 1001,
+    "capture_metadata_and_saved_bytes_preserved": true,
+    "examples_fresh_reopened": 3
+  },
+  "analysis": {
+    "verification_cases": 8,
+    "sweep_cases": 8,
+    "verification_captures": 4,
+    "sweep_curves": 8,
+    "fresh_reopen_exact_rows_and_curves": true,
+    "independent_rc_laws_and_dc_open_capacitor_checks": true
+  },
+  "shutdown": {
+    "conformance_external_exits_zero": 68,
+    "conformance_shutdown_responses_joined_ready": 84,
+    "direct_protocol_exits_zero_joined_ready": 9,
+    "existing_script_exits_zero": 5,
+    "no_conformance_graceful_timeout": true
+  },
+  "offline": {
+    "file_denial_controls": 8,
+    "ip_denial_controls": 4,
+    "allowed_control_read_passed": true,
+    "sandboxed_clients": "All 68 conformance external processes and nine direct protocol processes.",
+    "unrestricted_clients": "The in-process controller and five historical-workflow/viewer helper processes. These five use the exact copied agent without the sandbox wrapper.",
+    "producer_scope_correction": "The raw orchestrator scope string overstates sandboxing if read as applying to every helper. This report narrows the claim to the observed invocation paths; no check was rerun or output relabeled."
+  },
+  "package_unchanged": true,
+  "protected_executables_sdk_unchanged": true,
+  "native_started": false,
+  "desktop_interaction": false,
+  "native_input_accepted": false,
+  "owner_workflow_accepted": false,
+  "release_qualified": false,
+  "promoted": false,
+  "elapsed_seconds": 33.51507154200226,
+  "raw_archive": {
+    "path": "raw.tar.gz",
+    "sha256": "08d74be0fd88f9176d7b46527abdfde664deb4507c7117160c8a338c76649cae",
+    "bytes": 4662343,
+    "files": 611
+  },
+  "scope": "Exact copied /193 headless integration, independent numerical checks, protocol corrections and persistence. Existing source quality retained by exact match. Native app, private UI buffers, visible performance, ordinary startup, clean-account installation and owner acceptance remain separate."
+}

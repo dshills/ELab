@@ -15,6 +15,8 @@ Current position:
 
 The critical path is: **validate the combined repair candidate → fix any reproduced blocker → qualify the final bytes → owner walkthrough → designate one release with rollback.** Documentation preparation does not close an interaction or acceptance gate.
 
+**Execution checkpoint, October 20:** [exact /193 headless qualification](../docs/validation/headless-release-193/README.md) now passes reference workflows, project/electrical/storage/capacity suites across three non-native adapters, viewer/position corrections, sixteen analysis cases and fresh saved-result/example reopens. Sandboxed external paths also pass development-file/IP-denial controls; five helper clients are explicitly outside that sandbox claim. All owned processes close normally. The 670 Go files still match the completed full-quality gate, so item 7 is satisfied for current source. This advances the headless portions of items 3–8. Items 1–2, native adapter/input acceptance, owner feedback and promotion remain open; no native app was started.
+
 ## Remaining private-alpha checklist
 
 ### 1. Accept the input fixes through actual native controls
@@ -57,7 +59,7 @@ Use /193 as the starting candidate; do not rebuild merely to begin testing. Exer
 
 ### 4. Qualify shared user/agent behavior for the release workflows
 
-**Status:** reference parity is established on earlier packages; /193 has targeted headless timing checks, not a new complete adapter qualification. **Responsible:** engineering.
+**Status:** /193 now passes three non-native adapters and targeted timing/analysis/viewer checks. Final native socket and actual input qualification remain open; exhaustive binding conformance is not claimed. **Responsible:** engineering.
 
 - [ ] Pin the final app and its matching agent to the same source/version; exercise the affected workflows through the visible app endpoint and headless agent.
 - [ ] Compare components, connections, values, probes, measurements, result provenance, history and saved projects—not just successful command responses.
@@ -69,7 +71,7 @@ Use /193 as the starting candidate; do not rebuild merely to begin testing. Exer
 
 ### 5. Preserve project data, captured results and recovery behavior
 
-**Status:** broad earlier evidence and targeted /193 capture reopening exist. **Responsible:** engineering. Do not destructively test the owner's actual projects.
+**Status:** exact /193 headless file contracts, example reopens, preserved recording data and fresh reopening of four captures/eight curves pass. Broader native/recovery evidence retains its earlier scope. **Responsible:** engineering. Do not destructively test the owner's actual projects.
 
 - [ ] Save/reopen on the final candidate preserves graph, values, model identities, source/initial settings, selected probes and kept results as specified by the format.
 - [ ] Recorded rows, metadata and raw exports remain unchanged while position/timing/measurement settings change.
@@ -81,7 +83,7 @@ Use /193 as the starting candidate; do not rebuild merely to begin testing. Exer
 
 ### 6. Resolve any numerical or simulation-state regression introduced by the repairs
 
-**Status:** independent electrical references and prior solver checks exist; current repairs do not change solver/model code. **Responsible:** engineering.
+**Status:** exact /193 headless three-adapter electrical/storage/capacity checks now pass; current repairs do not change solver/model code. Native state/input qualification remains separate. **Responsible:** engineering.
 
 - [ ] Confirm the final change set is limited to the qualified areas. If physics, models, sampling or state semantics change, rerun the corresponding independent numerical and timestep-refinement checks.
 - [ ] Keep the established LED, RC and NPN tolerances from the PRD; do not loosen bounds merely to get a passing build.
@@ -92,7 +94,7 @@ Use /193 as the starting candidate; do not rebuild merely to begin testing. Exer
 
 ### 7. Finish source quality on the final implementation
 
-**Status:** the source used for /193 passed the full quality gate; no repeat is needed for unchanged code. **Responsible:** engineering.
+**Status:** satisfied for current implementation: all 670 Go files match the source that passed the full quality gate, and subsequent commits are documentation-only. Reopen only if implementation changes. **Responsible:** engineering.
 
 - [ ] For any new repair, retain a focused failing reproduction and meaningful regression checks, then review the change for Go structure, error handling, concurrency and ownership.
 - [ ] Format/lint and run relevant focused tests during repair. Run `scripts/check.sh` once on the final changed source: PRD coverage check, lint/static analysis, Python tests, root and desktop race tests/vet, and the configured mounted offscreen tests.
@@ -103,7 +105,7 @@ Use /193 as the starting candidate; do not rebuild merely to begin testing. Exer
 
 ### 8. Complete final-package integration and offline operation
 
-**Status:** /193 signatures and archive/extraction checks pass. Its targeted headless checks do not replace the full copied-runtime coverage previously recorded for /189. **Responsible:** engineering.
+**Status:** /193 signatures/archive checks and the new copied headless integration/offline checks pass. Native copied-runtime coverage on /193 remains open; earlier /189 native evidence is not relabeled. **Responsible:** engineering.
 
 - [ ] Exercise the affected final native/agent integration from the exact candidate or extracted package, with version/hash recorded.
 - [ ] Complete any invalidated copied-runtime/offline checks: no dependency on the source checkout, Vellum checkout, Go toolchain/cache, account or outbound service for core use.
