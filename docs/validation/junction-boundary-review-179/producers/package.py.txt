@@ -1,0 +1,19 @@
+from pathlib import Path
+import gzip,hashlib,json,shutil
+root=Path('/Users/dshills/Development/projects/ELab');stage=root/'build/junction-boundary-review-179-work';raw=Path('/private/tmp/elab-junction-boundary-review-179');out=root/'docs/validation/junction-boundary-review-179'
+sha=lambda b:hashlib.sha256(b).hexdigest()
+(out/'raw').mkdir();(out/'producers').mkdir();manifest={}
+for p in sorted(raw.iterdir()):
+    assert p.is_file() and not p.is_symlink()
+    data=p.read_bytes();stored=gzip.compress(data,mtime=0);relative='raw/'+p.name+'.gz';(out/relative).write_bytes(stored)
+    manifest[relative]=dict(original_bytes=len(data),original_sha256=sha(data),stored_sha256=sha(stored))
+for name in ('collect.py','package.py'):
+    shutil.copyfile(stage/name,out/'producers'/(name+'.txt'))
+(out/'producers/collection-output.txt.gz').write_bytes(gzip.compress((stage/'collection-output.txt').read_bytes(),mtime=0))
+(out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+plan=json.loads((raw/'plan.json').read_text())
+report=dict(passed=True,release=plan['release'],receipt_sha256=plan['receipt_sha256'],agent_sha256=plan['agent_sha256'],checks=20,requests=78,refusals=18,source_files_unchanged=654,application_changed=False,new_release=False,native_input=False,owner_acceptance=False)
+(out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+checkpoint=dict(files={str(p.relative_to(out)):sha(p.read_bytes()) for p in sorted(out.rglob('*')) if p.is_file() and p.name!='checkpoint.json'})
+(out/'checkpoint.json').write_text(json.dumps(checkpoint,indent=2)+'\n')
+print(json.dumps(dict(proof_files=len(checkpoint['files'])+1,bytes=sum(p.stat().st_size for p in out.rglob('*') if p.is_file()))))

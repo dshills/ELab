@@ -1,0 +1,207 @@
+"""Owned exact-release junction boundary checks; preserve every protocol exchange."""
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+import time
+import traceback
+
+ROOT = Path('/Users/dshills/Development/projects/ELab')
+OUT = Path('/private/tmp/elab-junction-boundary-review-179')
+AGENT = Path('/private/tmp/elab-first-version-179-signed-runtime/agent')
+RECEIPT = ROOT/'research/ui-audit/first-version/geometry-action-review-checkpoint.json'
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+
+
+class Client:
+    def __init__(self, name):
+        self.name, self.sequence, self.command_revision = name, 0, 0
+        self.log = (OUT/(name+'-protocol.jsonl')).open('x')
+        self.process = subprocess.Popen([str(AGENT)], stdin=subprocess.PIPE,
+                                        stdout=subprocess.PIPE, stderr=(OUT/(name+'-stderr.txt')).open('x'), text=True)
+        self.ask('project.inspect')
+
+    def ask(self, command, params=None, mutate=False, error=None):
+        self.sequence += 1
+        request = dict(version=1, id=f'junction-{self.sequence}', command=command,
+                       params={} if params is None else params)
+        if mutate:
+            request.update(key=f'{self.name}-{self.sequence}', expected_command_revision=self.command_revision)
+        self.log.write(json.dumps(dict(request=request))+'\n'); self.log.flush()
+        self.process.stdin.write(json.dumps(request)+'\n'); self.process.stdin.flush()
+        line = self.process.stdout.readline()
+        assert line, ('unexpected EOF', command)
+        response = json.loads(line)
+        self.log.write(json.dumps(dict(response=response))+'\n'); self.log.flush()
+        assert response['id'] == request['id']
+        if error:
+            assert response.get('error', {}).get('code') == error, response
+        else:
+            assert 'error' not in response, response
+        result = response.get('result')
+        if isinstance(result, dict) and 'components' in result and 'command_revision' in result:
+            self.command_revision = result['command_revision']
+        return result
+
+    def close(self):
+        state = self.ask('app.close', dict(discard_changes=True), True)
+        work = state['shutdown']; deadline = time.monotonic()+15
+        while work['status'] in ('queued', 'running'):
+            assert time.monotonic() < deadline, 'shutdown deadline'
+            time.sleep(.05)
+            work = self.ask('app.close.inspect', dict(id=work['id']))
+        assert work['status'] == 'completed'
+        assert all(work[key] for key in ('workers_joined', 'recovery_finalized', 'exit_ready'))
+        self.process.stdin.close(); self.process.wait(timeout=5); self.log.close()
+        assert self.process.returncode == 0
+        return dict(name=self.name, pid=self.process.pid, exit_code=0, shutdown=work,
+                    requests=self.sequence)
+
+
+def partition(state):
+    """Independent explicit-wire graph traversal, without using compiled net IDs."""
+    adjacency = {p['id']+'.'+pin: set() for p in state['components'] for pin in p['terminals']}
+    for wire in state['wires']:
+        if wire['connected']:
+            adjacency[wire['from']].add(wire['to']); adjacency[wire['to']].add(wire['from'])
+    remaining = set(adjacency); groups = []
+    while remaining:
+        pending = [min(remaining)]; group = set()
+        while pending:
+            ref = pending.pop()
+            if ref in group:
+                continue
+            group.add(ref); pending.extend(adjacency[ref]-group)
+        remaining -= group; groups.append(sorted(group))
+    return sorted(groups)
+
+
+def main():
+    assert not __debug__ is False, 'assertions required'
+    receipt = json.loads(RECEIPT.read_text())
+    assert sha(AGENT.with_name('elab-agent')) == receipt['agent_sha256']
+    for relative, digest in receipt['quality']['source_sha256'].items():
+        assert sha(ROOT/relative) == digest
+    OUT.mkdir(mode=0o700)
+    plan = dict(release='0.162.0 /179', agent_sha256=receipt['agent_sha256'],
+                receipt_sha256=sha(RECEIPT), source_count=654,
+                scope='Headless explicit junction boundary/atomicity/history/persistence only; synthetic incomplete helper graphs, no numerical or native-input claim',
+                cases=['nine crossings stay separate', 'malformed/unknown/duplicate/over-eight/route/endpoint/ID refusals preserve complete state',
+                       'staged insertion rolls back graph and all ID reservations after a later invalid edit',
+                       'exact eight-route insertion with junction ID W1 skips generated-W collision and leaves ninth route separate',
+                       'one undo restores original graph, redo restores exact split identities',
+                       'deleting joined object removes all and only its incident wires, undo restores',
+                       'deleted/undone successful IDs remain reserved',
+                       'kept graph saves and reopens byte-identically in a fresh process'])
+    (OUT/'plan.json').write_text(json.dumps(plan, indent=2)+'\n')
+    clients, exits, checks, failure = [], [], [], None
+    try:
+        c = Client('writer'); clients.append(c)
+        c.ask('simulation.pause', {}, True)
+        edits = []
+        for i in range(1, 10):
+            length = 200+40*i
+            for suffix, sign in [('a', -1), ('b', 1)]:
+                # Eight overlapping horizontal routes plus a ninth vertical crossing.
+                point = dict(x=sign*length if i < 9 else 0, y=0 if i < 9 else sign*length)
+                edits.append(dict(command='component.place', params=dict(id=f'End{i}{suffix}', kind='junction', position=point)))
+            edits.append(dict(command='wire.connect', params=dict(id=f'Route{i}', **{'from':f'End{i}a.node', 'to':f'End{i}b.node'})))
+        c.ask('edit.batch', dict(name='Nine independent explicit routes', edits=edits), True)
+        baseline = c.ask('simulation.wait')
+        assert baseline['limits']['drawing_objects'] == 100 and baseline['limits']['wires'] == 300
+        assert len(partition(baseline)) == 9
+        (OUT/'baseline.json').write_text(json.dumps(baseline, indent=2)+'\n')
+        routes = [f'Route{i}' for i in range(1, 9)]
+        default = dict(id='W1', wire_ids=routes, position=dict(x=0, y=0))
+        invalid = [
+            ('empty routes', dict(default, wire_ids=[])),
+            ('nine routes', dict(default, wire_ids=routes+['Route9'])),
+            ('duplicate route', dict(default, wire_ids=['Route1','Route1'])),
+            ('unknown last route', dict(default, wire_ids=routes[:-1]+['Missing'])),
+            ('missing multi position', dict(id='W1', wire_ids=routes)),
+            ('null multi position', dict(default, position=None)),
+            ('partial position', dict(default, position=dict(x=0))),
+            ('null coordinate', dict(default, position=dict(x=0,y=None))),
+            ('off-route position', dict(default, position=dict(x=0,y=1000))),
+            ('occupied endpoint', dict(default, position=dict(x=-240,y=0))),
+            ('near endpoint', dict(id='W1', wire_ids=['Route1'], position=dict(x=-235,y=0))),
+            ('out-of-bounds position', dict(default, position=dict(x=10001,y=0))),
+            ('existing wire ID', dict(default, id='Route9')),
+            ('invalid ID', dict(default, id='9invalid')),
+        ]
+        for name, params in invalid:
+            before = c.ask('project.inspect')
+            c.ask('wire.junction.insert', params, True, 'invalid-params')
+            assert c.ask('project.inspect') == before, name
+            checks.append(dict(name=name, passed=True))
+        # Rollback after a valid staged eight-route mutation must release W1..W9.
+        c.ask('edit.batch', dict(name='Refused staged junction', edits=[
+            dict(command='wire.junction.insert', params=default),
+            dict(command='wire.connect', params={'from':'missing.node','to':'End9a.node'})
+        ]), True, 'invalid-params')
+        assert c.ask('project.inspect') == baseline
+        checks.append(dict(name='late batch rollback', passed=True))
+        c.ask('wire.junction.insert', default, True)
+        joined = c.ask('simulation.wait')
+        assert len(joined['components']) == 19 and len(joined['wires']) == 17
+        assert joined['selected'] == 'W1' and joined['drawing']['tool'] == 'select'
+        assert {w['id'] for w in joined['wires']} == set(routes+['Route9']+[f'W{i}' for i in range(2,10)])
+        groups = partition(joined)
+        assert len(groups) == 2 and ['End9a.node','End9b.node'] in groups
+        assert sorted(sum((group for group in groups if len(group)>2), [])) == sorted(['W1.node']+[f'End{i}{s}.node' for i in range(1,9) for s in 'ab'])
+        originals = {w['id']: w for w in baseline['wires']}
+        for wire in joined['wires']:
+            if wire['id'] in routes:
+                assert wire == dict(originals[wire['id']], to='W1.node')
+        assert next(w for w in joined['wires'] if w['id']=='Route9') == originals['Route9']
+        (OUT/'joined.json').write_text(json.dumps(joined, indent=2)+'\n')
+        checks.append(dict(name='eight-route junction and unrelated crossing', passed=True))
+        c.ask('edit.undo', {}, True); undone = c.ask('simulation.wait')
+        assert undone['components'] == baseline['components'] and undone['wires'] == baseline['wires']
+        assert partition(undone) == partition(baseline)
+        (OUT/'undone.json').write_text(json.dumps(undone, indent=2)+'\n')
+        c.ask('edit.redo', {}, True); redone = c.ask('simulation.wait')
+        assert redone['components'] == joined['components'] and redone['wires'] == joined['wires']
+        (OUT/'redone.json').write_text(json.dumps(redone, indent=2)+'\n')
+        checks.append(dict(name='one undo and redo restore exact identities', passed=True))
+        c.ask('object.delete', dict(id='W1'), True); deleted = c.ask('simulation.wait')
+        assert deleted['components'] == baseline['components'] and deleted['wires'] == [originals['Route9']]
+        (OUT/'deleted.json').write_text(json.dumps(deleted, indent=2)+'\n')
+        c.ask('edit.undo', {}, True); restored = c.ask('simulation.wait')
+        assert restored['components'] == joined['components'] and restored['wires'] == joined['wires']
+        (OUT/'restored.json').write_text(json.dumps(restored, indent=2)+'\n')
+        checks.append(dict(name='delete incident legs and undo', passed=True))
+        c.ask('edit.undo', {}, True); unjoined = c.ask('simulation.wait')
+        assert unjoined['wires'] == baseline['wires']
+        for reserved in ('W1','W2','W9'):
+            before = c.ask('project.inspect')
+            c.ask('wire.junction.insert', dict(default,id=reserved), True, 'invalid-params')
+            assert c.ask('project.inspect') == before
+        checks.append(dict(name='successful undone IDs remain reserved', passed=True))
+        c.ask('edit.redo', {}, True); final = c.ask('simulation.wait')
+        assert final['components'] == joined['components'] and final['wires'] == joined['wires']
+        saved = OUT/'junction.elab'; c.ask('project.save',dict(path=str(saved)),True)
+        saved_sha = sha(saved)
+        fresh = Client('reader'); clients.append(fresh)
+        fresh.ask('project.load', dict(path=str(saved)), True); reopened = fresh.ask('simulation.wait')
+        assert reopened['components'] == final['components'] and reopened['wires'] == final['wires']
+        assert partition(reopened) == partition(final) and not reopened['document']['dirty']
+        (OUT/'reopened.json').write_text(json.dumps(reopened, indent=2)+'\n')
+        resaved = OUT/'resaved.elab'; fresh.ask('project.save',dict(path=str(resaved)),True)
+        assert saved.read_bytes() == resaved.read_bytes() and sha(saved) == saved_sha
+        checks.append(dict(name='fresh reopen and byte-identical save', passed=True))
+    except BaseException:
+        failure = traceback.format_exc()
+        raise
+    finally:
+        for client in reversed(clients):
+            if client.process.poll() is None:
+                exits.append(client.close())
+        report = dict(passed=failure is None, checks=checks, failure=failure, process_exits=exits,
+                      agent_unchanged=sha(AGENT.with_name('elab-agent')) == receipt['agent_sha256'])
+        (OUT/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+        print(json.dumps(report),flush=True)
+
+
+if __name__ == '__main__':
+    main()

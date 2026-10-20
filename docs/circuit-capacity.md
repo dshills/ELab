@@ -23,7 +23,7 @@ The tested envelope admits **64 simulated parts and 100 electrical nodes includi
 | Generic red LEDs | 4 |
 | Selected scope traces | 6 |
 
-Existing device ranges, grounded-source/emitter rules, floating/open-pin checks, ideal-constraint restrictions, numerical tolerances, output work guards and operation/document size bounds remain in effect. The original capacity expansion retained its numerical kernel. Current unreleased general capacitor networks use [SDIRK2 with new engine identities](capacitor-integration.md); device models and the published work/accuracy bounds remain. The envelope does not imply convergence for every arrangement of parts.
+Existing device ranges, grounded waveform-source negative terminals and NPN emitters, floating/open-pin checks, ideal-constraint restrictions, numerical tolerances, output work guards and operation/document size bounds remain in effect. DC sources may float within a ground-referenced network. The original capacity expansion retained its numerical kernel. Current unreleased general capacitor networks use [SDIRK2 with new engine identities](capacitor-integration.md); device models and the published work/accuracy bounds remain. The envelope does not imply convergence for every arrangement of parts.
 
 ## Fixtures and evidence
 
