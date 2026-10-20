@@ -1,0 +1,120 @@
+"""Copied-runtime Verify scenarios; private input is a separate source proof."""
+import copy
+import json
+import math
+import time
+
+
+def check(native, parity, out):
+    def save(name, value):
+        (out / (name + '.json')).write_text(json.dumps(value, indent=2) + '\n')
+
+    def samples(target, identity):
+        rows, probes, offset = [], None, 0
+        while True:
+            page = target.ask('operation.samples', dict(id=identity, offset=offset, limit=200))
+            if probes is None:
+                probes = page['probes']
+            assert probes == page['probes']
+            rows.extend(page['rows'])
+            if page['next_offset'] >= page['total']:
+                assert len(rows) == page['total']
+                return probes, rows
+            assert page['next_offset'] > offset
+            offset = page['next_offset']
+
+    def session(target, label):
+        outcomes = []
+        for case in ['duration', 'sample-step', 'default-voltage', 'capacitor-voltage']:
+            target.ask('example.rc', dict(discard_changes=True), True)
+            target.ask('simulation.wait')
+            target.ask('simulation.pause', {}, True)
+            target.ask('simulation.input.set', dict(mode='charge'), True)
+            target.ask('simulation.restart', {}, True)
+            target.ask('simulation.wait')
+            target.ask('simulation.step', dict(duration_s=.02), True)
+            live = target.ask('simulation.wait')
+            settings = dict(duration_s=.1, sample_step_s=0, input_mode='charge', capacitor_initials=[])
+            initial = 0.
+            if case == 'duration':
+                settings['duration_s'] = .02
+            elif case == 'sample-step':
+                settings['sample_step_s'] = .0005
+            elif case == 'default-voltage':
+                settings['initial_voltage_v'], initial = 2., 2.
+            else:
+                settings['capacitor_initials'] = [dict(id='C1', voltage_v=3.)]
+                initial = 3.
+            target.ask('verification.settings.set', settings, True)
+            accepted = target.ask('project.inspect')
+            assert accepted['verification_settings'] == settings
+            invalid = copy.deepcopy(settings)
+            invalid['duration_s'] = 'nope'
+            target.ask('verification.settings.set', invalid, True, expect='invalid-params')
+            refused = target.ask('project.inspect')
+            for key in ['verification_settings', 'components', 'wires', 'transient', 'run_id', 'electrical_revision', 'document', 'undo_entry', 'redo_entry']:
+                assert refused.get(key) == accepted.get(key), (case, key)
+            # A later accepted settings update must not let an obsolete actor
+            # overwrite it. Intentional conflicts bypass the helper's retry.
+            old_revision = target.command_revision
+            other = copy.deepcopy(settings)
+            other['input_mode'] = 'discharge'
+            target.ask('verification.settings.set', other, True)
+            changed = target.ask('project.inspect')
+            target.command_revision = old_revision
+            target.ask('verification.settings.set', settings, True, expect='conflict')
+            stale = target.ask('project.inspect')
+            assert stale['verification_settings'] == other
+            assert stale['components'] == changed['components'] and stale['transient'] == changed['transient']
+            target.ask('verification.settings.set', settings, True)
+            before = target.ask('project.inspect')
+            admitted = target.ask('simulation.verify', dict(duration_s=settings['duration_s'], probe_ids=['v:C1', 'i:R1']), True)
+            identity = admitted['last_operation']
+            assert identity and identity != before.get('last_operation')
+            deadline = time.monotonic() + 10
+            while True:
+                captured = target.ask('operation.inspect', dict(id=identity))
+                status = captured['operation']['status']
+                assert status not in ['failed', 'canceled'], captured
+                if status == 'completed':
+                    break
+                assert time.monotonic() < deadline, case
+                time.sleep(.01)
+            metadata = captured['metadata']
+            probes, rows = samples(target, identity)
+            assert len(rows) == metadata['sample_count'] and len(rows) > 1
+            voltage = next(i for i, p in enumerate(probes) if p['id'] in ['v:C1', 'v:C1.1'])
+            current = next(i for i, p in enumerate(probes) if p['id'] == 'i:R1')
+            errors = []
+            for row in rows:
+                value = 5 + (initial - 5) * math.exp(-row['time_s'] / .01)
+                errors.append(abs(row['values'][voltage] - value))
+                assert abs(row['values'][voltage] - value) <= 2e-12, (case, row)
+                assert abs(row['values'][current] - (5 - value) / 10000) <= 2e-15, (case, row)
+            after = target.ask('project.inspect')
+            for key in ['components', 'wires', 'transient', 'run_id', 'electrical_revision', 'undo_entry', 'redo_entry']:
+                assert before.get(key) == after.get(key) == live.get(key), (case, key)
+            assert after['document']['generation'] == before['document']['generation']
+            reset = dict(duration_s=settings['duration_s'], sample_step_s=0, input_mode='auto', capacitor_initials=[])
+            target.ask('verification.settings.set', reset, True)
+            reset_state = target.ask('project.inspect')
+            assert reset_state['verification_settings'] == reset
+            assert len(reset_state['operations']) == len(after['operations'])
+            outcome = dict(case=case, settings=settings, accepted=accepted, refused=refused, stale=stale, before=before, metadata=metadata, probes=probes, rows=rows, after=after, reset=reset_state, max_voltage_error_v=max(errors))
+            save(label + '-verify-' + case, outcome)
+            outcomes.append(outcome)
+        return outcomes
+
+    native_cases = session(native, 'native')
+    reference = parity.helper.Client(command_preconditions=True)
+    try:
+        reference_cases = session(reference, 'headless')
+    finally:
+        reference.close()
+    for left, right in zip(native_cases, reference_cases):
+        assert left['case'] == right['case'] and left['settings'] == right['settings']
+        for key in ['graph', 'settings', 'input_mode', 'analysis', 'engine', 'probes', 'duration_s', 'sample_count']:
+            assert left['metadata'][key] == right['metadata'][key], (left['case'], key)
+        parity.compare(left['metadata']['statistics'], right['metadata']['statistics'])
+        assert left['probes'] == right['probes'] and left['rows'] == right['rows']
+    return dict(passed=True, cases=[dict(name=c['case'], rows=len(c['rows']), duration_s=c['settings']['duration_s'], max_voltage_error_v=c['max_voltage_error_v']) for c in native_cases], sample_rows_per_adapter=sum(len(c['rows']) for c in native_cases), native_headless_rows_equal=True, rc_voltage_tolerance_v=2e-12, rc_current_tolerance_a=2e-15, invalid_settings_and_stale_revision_refused=True, live_physics_and_history_preserved=True, startup_reset_preserves_duration=True, scope='Exact copied native and headless public commands. No native private-field settlement or new OS input claim; those retained-widget source tests remain separately scoped.')

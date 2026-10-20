@@ -1,0 +1,132 @@
+"""Exact copied native/headless FLOATING-INPUT-01 cases; no private UI input."""
+import json
+import math
+import time
+
+
+def fresh(target):
+    deadline = time.monotonic()+15
+    while True:
+        state = target.ask('project.inspect')
+        assert state['status'] != 'error', state['diagnostics']
+        if state['status'] == 'paused' and state.get('transient') and not state['transient']['stale']:
+            return state
+        assert time.monotonic() < deadline, 'fresh paused initialization timed out'
+        time.sleep(.02)
+
+
+def close(target):
+    state = target.ask('app.close', dict(discard_changes=True), True)
+    work = state['shutdown']
+    assert state['closed'] and work['status'] == 'completed' and work['workers_joined']
+    assert work['recovery_finalized'] and work['exit_ready']
+    target.close()
+    assert target.process.returncode == 0
+
+
+def check(native, parity, out):
+    def session(target, label):
+        results = []
+        for case_index, (returned, switched) in enumerate(((False, False), (False, True), (True, False), (True, True)), 1):
+            name = f'return-{int(returned)}-switch-{int(switched)}'
+            source, resistor, cap, ground, switch = [prefix+'FI'+str(case_index) for prefix in ('V','R','C','G','S')]
+            target.ask('project.clear', dict(discard_changes=True), True)
+            target.ask('simulation.pause', {}, True)
+            parts = [(source,'dc-source',-200,0,'5 V'),(resistor,'resistor',0,-110,'10k'),
+                     (cap,'capacitor',200,0,'1uF'),(ground,'ground',0,110,'')]
+            if switched:
+                parts.append((switch,'switch',-100,-60,''))
+            edits = [dict(command='component.place',params=dict(id=i,kind=k,position=dict(x=x,y=y),value=v))
+                     for i,k,x,y,v in parts]
+            wires = [(source+'.positive',resistor+'.1'),(resistor+'.2',cap+'.1'),
+                     (cap+'.2',source+'.negative'),(cap+'.1',ground+'.reference')]
+            if returned:
+                wires = [(source+'.positive',cap+'.1'),(cap+'.2',ground+'.reference'),
+                         (source+'.negative',resistor+'.1'),(resistor+'.2',ground+'.reference')]
+            if switched:
+                wires[0] = (switch+'.2',wires[0][1])
+                wires.append((source+'.positive',switch+'.1'))
+            edits += [dict(command='wire.connect',params=dict(id=f'WFI{case_index}{i}',**{'from':a,'to':b}))
+                      for i,(a,b) in enumerate(wires,1)]
+            target.ask('edit.batch',dict(name='Floating RC input reference',edits=edits),True)
+            if switched:
+                target.ask('switch.set',dict(id=switch,closed=True),True)
+            target.ask('simulation.restart',{},True)
+            fresh(target)
+            target.ask('scope.probes.set',dict(ids=['v:'+source,'v:'+source+'.positive','v:'+cap]),True)
+            target.ask('scope.window.set',dict(mode='live'),True)
+            for cursor in ('a','b'):
+                target.ask('scope.cursor.clear',dict(cursor=cursor),True)
+            target.ask('scope.cursor.select',dict(cursor='a'),True)
+            baseline = target.ask('project.inspect')
+            stages = [target.ask('simulation.step',dict(duration_s=.02),True)]
+            charging_error = abs(stages[0]['mixed']['capacitors'][0]['voltage_v'] - 5*-math.expm1(-.02/((10001 if switched else 10000)*1e-6)))
+            assert charging_error < .003
+            for key in ('document','undo_entry','run_id','electrical_revision'):
+                assert baseline.get(key) == stages[0].get(key), key
+            if switched:
+                target.ask('switch.set',dict(id=switch,closed=False),True)
+                stages.append(target.ask('simulation.step',dict(duration_s=.001),True))
+                state = stages[-1]['switch_states'][0]
+                assert not state['pending'] and not state['applied_closed']
+            for stage in stages:
+                points = stage['scope']['traces'][0]['points']
+                samples = stage['transient']['samples']
+                assert len(points) == len(samples)
+                for sample,point in zip(samples,points):
+                    assert point['time_s'] == sample['time_s']
+                    assert abs(sample['input_v']-5)<1e-12 and abs(point['value']-5)<1e-12
+            assert abs(stages[0]['scope']['traces'][1]['points'][-1]['value']-5) > .1
+            previous = stages[-1]
+            target.ask('simulation.input.set',dict(mode='low'),True)
+            off = target.ask('simulation.step',dict(duration_s=.001),True)
+            count = len(previous['transient']['samples'])
+            assert off['transient']['samples'][:count] == previous['transient']['samples']
+            for sample,point in zip(off['transient']['samples'][count:],off['scope']['traces'][0]['points'][count:]):
+                assert abs(sample['input_v'])<1e-12 and abs(point['value'])<1e-12
+            assert abs(off['transient']['sample']['input_v'])<1e-12
+            stages.append(off)
+            saved = out/f'{label}-floating-{name}.elab'
+            target.ask('project.save',dict(path=str(saved)),True)
+            reference = parity.helper.Client(command_preconditions=True)
+            try:
+                reference.ask('project.load',dict(path=str(saved)),True)
+                reopened = fresh(reference)
+                assert reopened['components']==off['components'] and reopened['wires']==off['wires']
+                assert not reopened['document']['dirty'] and reopened['transient']['mode']=='auto'
+                assert reopened['transient']['sample']['time_s']==0
+                assert abs(reopened['transient']['sample']['input_v']-5)<1e-12
+                close(reference)
+            finally:
+                if reference.process.poll() is None:
+                    reference.close()
+            result = dict(name=name,return_resistor=returned,switched=switched,baseline=baseline,
+                          stages=stages,reopened=reopened,charging_error_v=charging_error,saved_path=str(saved))
+            (out/f'{label}-floating-{name}.json').write_text(json.dumps(result,indent=2)+'\n')
+            results.append(result)
+        return results
+
+    left = session(native,'native')
+    reference = parity.helper.Client(command_preconditions=True)
+    try:
+        right = session(reference,'headless')
+        close(reference)
+    finally:
+        if reference.process.poll() is None:
+            reference.close()
+    matches = 0
+    for a,b in zip(left,right):
+        assert a['name']==b['name'] and len(a['stages'])==len(b['stages'])
+        for x,y in zip(a['stages'],b['stages']):
+            for key in ('components','wires','paused','transient_settings'):
+                assert x[key]==y[key],(a['name'],key)
+            for key in ('mixed','transient','scope'):
+                parity.compare(x.get(key),y.get(key),a['name']+'.'+key)
+            matches += 1
+        for key in ('mixed','transient','scope'):
+            parity.compare(a['reopened'].get(key),b['reopened'].get(key),a['name']+'.reopened.'+key)
+    assert matches==10
+    return dict(passed=True,cases=4,adapters=['native-socket','headless-stdio'],
+                paired_step_snapshots=matches,fresh_saved_reopens=8,zero_input_mismatches=True,
+                max_charging_error_v=max(c['charging_error_v'] for c in left+right),
+                scope='Exact copied native/agent public construction, Step, switch and low input; preserved history; eight fresh agent save/reopens. No new physical input or visible latency claim.')

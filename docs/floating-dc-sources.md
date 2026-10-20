@@ -24,7 +24,9 @@ including a manual Power off/on override. They are distinct from the
 positive-terminal-to-ground probe. A [source reporting repair](validation/floating-source-input/README.md)
 corrects steps and switch-event samples that previously used only the positive
 node. The numerical solver and selected probe values were already differential;
-the /176 package remains affected until a replacement is qualified.
+the [0.160.0 /177 replacement](validation/floating-input-review-177/README.md)
+now qualifies that reporting repair through copied native/headless commands and
+fresh saved-project reopens. The /176 package stays affected and preserved.
 
 The existing MNA branch already enforces `Vpositive − Vnegative = source voltage`. Compilation now uses both actual terminals when checking independence of ideal source constraints. Source loops—whether redundant or contradictory—and capacitor/source startup constraint loops refuse rather than inventing currents. A capacitor directly across a source still refuses the existing impulse-model case. A resistor in the return path is supported: direct source-positive to capacitor is not itself a parallel source/capacitor constraint.
 

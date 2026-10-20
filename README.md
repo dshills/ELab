@@ -4,15 +4,15 @@ ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N
 
 The [first-version delivery plan](research/34-first-version-plan.md) targets a usable macOS hobbyist alpha with frozen scope, ordered blockers and a concrete handoff.
 
-**Current private review: 0.159.0 /176.** Use the [review app](build/ELab-0.159.0-176-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.159.0-176-review.zip) with its [checksum](build/ELab-0.159.0-176-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening.
+**Private review ready: 0.160.0 /177.** Use the [review app](build/ELab-0.160.0-177-review/ELab.app) and matching `elab-agent`, or the [ZIP](build/ELab-0.160.0-177-review.zip) with its [checksum](build/ELab-0.160.0-177-review.zip.sha256). No Go, Python, Vellum checkout or account is required. Save and quit an earlier review before opening.
 
-Source review found [FLOATING-INPUT-01](docs/validation/floating-source-input/README.md): /176 can report a floating DC source's positive node as transient `input_v`. Differential probes and solved physics remain correct. The source repair awaits a qualified replacement package; /176 and its recorded evidence stay preserved.
+Clean `7f1ab95` /SDK `b22478c` fixes FLOATING-INPUT-01: floating DC source transient `input_v` now reports positive minus negative through Step, switch edges and Power off. Solver physics, plotted probes, models, commands, formats, native bindings and SDK are unchanged. Four topologies match through copied native/headless commands with ten paired Step snapshots and eight fresh saved-project reopens.
 
-Clean `f08e77e` /SDK `b22478c` keeps the shutdown close action visible while long errors scroll. An actual copied-native check at a 1053×762 captured frame scrolls the error area and acknowledges once through the visible button, preserving the saved LED, full errors and protected files. Full source quality, copied native smoke, all four adapters, native/headless reference workflows, strict local signature and archive/example reopens pass. Shared commands, models, format and SDK remain unchanged.
+Full source quality, copied native smoke, all four public adapters, reference/startup/measurement/sweep/live/save checks, thirty paging cases, strict local signature and ZIP/example reopens pass. The initial comparison script's wrong output field is preserved; the corrected script completes in a fresh session. Earlier physical observations retain their original build scopes; no new physical input or latency acceptance is inferred.
 
-[Walkthrough](research/35-first-version-review.md), [receipt](research/ui-audit/first-version/shutdown-layout-review-checkpoint.json), [proof](docs/validation/shutdown-layout-review-176/README.md).
+[Walkthrough](research/35-first-version-review.md), [receipt](research/ui-audit/first-version/floating-input-review-checkpoint.json), [proof](docs/validation/floating-input-review-177/README.md).
 
-Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment and the actual hobbyist study remain open. Visible latency stays scoped to /173, with RC and 100 ms acknowledgement unqualified. All 34 earlier sealed reviews, four candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.
+Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment and the actual hobbyist study remain open. Visible latency stays scoped to /173, with RC and 100 ms acknowledgement unqualified. All 35 earlier sealed reviews, four candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.
 
 ## Build and run from source
 

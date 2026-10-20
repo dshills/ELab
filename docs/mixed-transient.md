@@ -45,8 +45,10 @@ The common `transient` carries the rolling primary trace, events, mode/pending m
 `input_v` denotes the primary source's positive-minus-negative voltage, including
 the accepted side of an input/switch edge. A floating source's positive node
 relative to ground is a separate probe. [FLOATING-INPUT-01](validation/floating-source-input/README.md)
-repairs network steps/event samples that confused those two quantities; /176
-remains affected until the corrected source is packaged and qualified.
+repairs network steps/event samples that confused those two quantities. The
+[0.160.0 /177 replacement](validation/floating-input-review-177/README.md) now
+qualifies that repair through copied native/headless commands; /176 remains
+affected and preserved.
 
 Version 2 `.elab` files store optional component `initial_voltage_v` plus graph, model metadata and experiment settings. Existing version 1 and version 2 files still load. The new reader rejects initial-condition metadata on non-capacitors or out-of-range values. Older builds explicitly reject the new field or report an unsupported mixed topology. Files do not contain solver vectors, device results, waveform history or credentials.
 

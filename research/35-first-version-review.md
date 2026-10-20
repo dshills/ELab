@@ -1,18 +1,16 @@
-# ELab first-version review · 0.159.0 /176
+# ELab first-version review · 0.160.0 /177
 
-**Known issue awaiting a replacement:** [FLOATING-INPUT-01](../docs/validation/floating-source-input/README.md) affects transient `input_v` for floating DC sources. It reports the positive node relative to ground rather than positive minus negative. Solved physics and differential probes are correct; the repair is in source and does not change the /176 package below.
+The [review folder](../build/ELab-0.160.0-177-review) includes [ELab.app](../build/ELab-0.160.0-177-review/ELab.app), matching `elab-agent`, three editable examples and framework notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is needed.
 
-The [review folder](../build/ELab-0.159.0-176-review) includes [ELab.app](../build/ELab-0.159.0-176-review/ELab.app), matching `elab-agent`, three editable examples and framework notices. Save and quit an earlier review before opening. No Go, Python, Vellum checkout or account is needed.
+The [ZIP](../build/ELab-0.160.0-177-review.zip) and [checksum](../build/ELab-0.160.0-177-review.zip.sha256) preserve all 372 files/modes through macOS extraction into a Unicode path with spaces. Strict local signature and three examples/fresh saves/reopens verify. This does not establish installation, Developer ID, notarization or Gatekeeper acceptance.
 
-The [ZIP](../build/ELab-0.159.0-176-review.zip) and [checksum](../build/ELab-0.159.0-176-review.zip.sha256) preserve all files/modes through macOS extraction into a Unicode path with spaces. Strict local signature and three examples/fresh saves/reopens verify. This does not establish installation, Developer ID, notarization or Gatekeeper acceptance.
+Clean `7f1ab95` /SDK `b22478c` packages [FLOATING-INPUT-01](../docs/validation/floating-source-input/README.md). Network transient `input_v` reports the primary source's positive-minus-negative voltage through steps, switch edges and Power off. Solved physics and differential probes remain correct; models, commands, saved format, native bindings and SDK are unchanged. Four topologies match through copied native/headless commands, ten paired Step snapshots and eight fresh saved-project reopens. Original /176 failures stay preserved.
 
-Clean `f08e77e` /SDK `b22478c` keeps the shutdown close action visible while long errors scroll. An actual copied-native check at a 1053×762 captured frame scrolls the error area and acknowledges once through the visible button, preserving the saved LED, full errors and protected files. Full source quality, copied native smoke, all four adapters, native/headless reference workflows, strict local signature and archive/example reopens pass. Shared commands, models, format and SDK remain unchanged.
+Full source quality, copied native smoke, all four adapters, reference/startup/measurement/sweep/live/save checks and thirty paging cases pass. The initial comparison collector selected `mode` instead of `input_mode`; its failure and synthetic save are retained, and the corrected producer completes normally in a fresh session. These are copied API/software checks; prior physical UI evidence retains its original build scope. No new visible latency measurement is claimed.
 
-The test initiates failed shutdown through public commands, then uses one CUA coordinate click for acknowledgement. Its public event retains failed status and original errors while marking exit readiness; owned process/endpoint cleanup and shared settings/file preservation verify. This is one actual native case, not complete lifecycle, reader or novice acceptance. The observer's excessive closed-state polling is retained as a controller limitation and supplies no timing claim.
+[Receipt](ui-audit/first-version/floating-input-review-checkpoint.json), [proof](../docs/validation/floating-input-review-177/README.md).
 
-[Receipt](ui-audit/first-version/shutdown-layout-review-checkpoint.json), [proof](../docs/validation/shutdown-layout-review-176/README.md).
-
-Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment and the actual hobbyist study remain open. Visible latency stays scoped to /173, with RC and 100 ms acknowledgement unqualified. All 34 earlier sealed reviews, four candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.
+Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment and the actual hobbyist study remain open. Visible latency stays scoped to /173, with RC and 100 ms acknowledgement unqualified. All 35 earlier sealed reviews, four candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.
 
 ## Try these four tasks · 15–20 minutes
 
@@ -55,6 +53,6 @@ In another terminal, run `./elab-agent --connect /absolute/path/to/endpoint.json
 - The earlier /160 native invalid-value check retained edit controls in external AX traversal without coordinate fallback; that physical observation retains its original build scope. Complete reader, IME, other inspector states and OS interleavings remain unqualified.
 - The private bundle now has a strict-valid local ad-hoc resource signature. Developer ID, notarization, Gatekeeper and public distribution/native-rights qualification remain open. The versioned review folder is separate from `build/ELab.app` at 0.105.0 /120.
 
-The [delivery plan](34-first-version-plan.md), [updated build receipt](ui-audit/first-version/shutdown-layout-review-checkpoint.json) and [native walkthrough/agent evidence](ui-audit/first-version/README.md) track remaining acceptance work. This handoff continues owner feedback; it does not reopen feature scope.
+The [delivery plan](34-first-version-plan.md), [updated build receipt](ui-audit/first-version/floating-input-review-checkpoint.json) and [native walkthrough/agent evidence](ui-audit/first-version/README.md) track remaining acceptance work. This handoff continues owner feedback; it does not reopen feature scope.
 
 The [gate reconciliation](41-release-gate-reconciliation.md) separates the ready private review from the original full-MVP requirements and owner/participant/environment prerequisites. Recent native slider/startup qualification does not waive those requirements. The bounded automatic storage-error/retry, recorded-page discovery and shutdown-error action checks are now qualified within their documented scopes. Owner walkthrough and the remaining participant/environment prerequisites stay open; repeated engineering checks cannot substitute for them.
