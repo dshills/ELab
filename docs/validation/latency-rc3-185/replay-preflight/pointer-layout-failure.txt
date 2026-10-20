@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/docs/validation/latency-rc3-185/verify.py", line 94, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/Users/dshills/Development/projects/ELab/docs/validation/latency-rc3-185/verify.py", line 74, in main
+    assert replay.returncode==0,(ident,replay.stdout)
+           ^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('rc3-01', 'Traceback (most recent call last):\n  File "/Users/dshills/Development/projects/ELab/docs/validation/latency-rc3-185/analyze.py", line 37, in <module>\n    images=load_images(capture)\n           ^^^^^^^^^^^^^^^^^^^^\n  File "/Users/dshills/Development/projects/ELab/docs/validation/latency-rc3-185/frame_store.py", line 28, in load_images\n    assert len(paths) == expected_count and sum(p.stat().st_size for p in paths) == expected_bytes\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n')

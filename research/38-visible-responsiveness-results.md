@@ -1,7 +1,6 @@
 # Visible responsiveness results
 
-October 19, 2026. Frozen app: **ELab 0.156.0 /173**. Original
-[collection declaration](37-visible-latency-cohort-plan.md).
+Updated October 20, 2026. A separate [current /185 RC block](47-current-rc-visible-results.md) now has **20/20 available observations**, fresh-result p95 bound **136.965 ms** supporting 500 ms within its declared warm-running/software-composition fixture. Acknowledgment and overall performance remain unqualified. Original and follow-up scopes below use frozen **ELab 0.156.0 /173** and are preserved: [original declaration](37-visible-latency-cohort-plan.md).
 
 The original collection retains **all 60 scheduled outcomes: 46 available
 software-composition bounds and 14 unavailable outcomes**. NPN has a complete
@@ -184,3 +183,9 @@ automatic RC retry cohort is authorized by this follow-up declaration.
 ## Subsequent native admission calibration · no cohort observations
 
 The [native admission proof](../docs/validation/native-baseline-admission-173/README.md) records two separately declared RC calibration cases on preserved /173. The initial content gate admits a genuine baseline and permits one marker/Apply, refuses an already changed capacitor before either callback, and refuses cross-case receipt reuse. Independent PNG regions and RC physics agree. All 328 complete frames remain intact, including one negative-case presentation-window exception; full-recording visibility and timing eligibility are not established. Zero new cohort observations or percentile; every original and `rc2` outcome/untouched ID remains unchanged. A future timing block needs a new finite declaration and all-frame analysis, not automatic retry or pooling.
+
+## Current /185 RC · complete separately declared block
+
+All twenty `rc3` IDs are available, with no replacement, retry, pooling or template/threshold retuning. Nearest-rank p95 is **136.964916667 ms** (rank 19, `rc3-15`, exact 1,643,579/12,000 ms); range 110.691625–143.135250 ms. The marker-to-fresh bound supports 500 ms within the warm-running RC/software-composition fixture. The identical committed-parameter bound exceeds 100 ms but remains inconclusive about actual acknowledgment because controller overhead is included. No raw recorder flag changes or overall PRD/current-other-reference/cold/difficult-solve/owner acceptance.
+
+All 3,298 callbacks, 3,269 complete frames and 3,235 unique PNGs remain intact; private ignored archives retain 450,160,554 original image bytes. All-frame/independent RC/agent analysis, 80 independent initial-region decoder comparisons and 160 corruption exercises replay. A gzip-only pointer-packaging failure is corrected with exact metadata copies and retained explicitly; no recording or result changes. [Results](47-current-rc-visible-results.md), [full proof](../docs/validation/latency-rc3-185/README.md). The original and `rc2` outcomes/untouched IDs remain immutable and unpooled.

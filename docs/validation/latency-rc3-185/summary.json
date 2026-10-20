@@ -1,0 +1,972 @@
+{
+  "passed": true,
+  "date": "2026-10-20",
+  "timezone": "America/Chicago",
+  "cohort_id": "rc3-current-185",
+  "release": "0.168.0 /185",
+  "native_sha256": "ecd24e458e0db4a0e580747b37145c7d30e9c8f4be686731df78cb690b38a330",
+  "agent_sha256": "2992a176cb26a85db197cb7879650464da34cd272ce462bed9fb01b2ef35c59e",
+  "scheduled": 20,
+  "attempted": 20,
+  "available": 20,
+  "unavailable": 0,
+  "not_attempted": 0,
+  "replacements": 0,
+  "pooled_with_earlier_cohorts": false,
+  "percentile": {
+    "convention": "nearest-rank",
+    "rank": 19,
+    "count": 20
+  },
+  "marker_to_committed_p95_ms": 136.96491666666665,
+  "marker_to_fresh_p95_ms": 136.96491666666665,
+  "p95_trial": "rc3-15",
+  "p95_exact_fraction_ms": [
+    1643579,
+    12000
+  ],
+  "minimum_fresh_ms": 110.691625,
+  "maximum_fresh_ms": 143.13525,
+  "fresh_sample_500ms_supported": true,
+  "acknowledgment_100ms_status": "inconclusive: conservative marker bound includes controller overhead",
+  "raw_eligible_latency_observations": 0,
+  "raw_flags_unchanged": true,
+  "overall_prd_performance_pass": false,
+  "owner_acceptance": false,
+  "full_mvp_complete": false,
+  "canonical_promoted": false,
+  "complete_frames": 3269,
+  "unique_images": 3235,
+  "image_bytes": 450160554,
+  "corruption_classes": 8,
+  "corruption_exercises": 160,
+  "application_go_sources_unchanged": 659,
+  "native_exact_exit_status": null,
+  "session_wrapper_exit_code": 0,
+  "worker_wrapper_exit_code": 0,
+  "open_exit_code": 0,
+  "trial_results": [
+    {
+      "id": "rc3-01",
+      "available": true,
+      "marker_to_committed_ms": 121.23408333333333,
+      "marker_to_fresh_ms": 121.23408333333333,
+      "committed_bound_fraction_ms": [
+        1454809,
+        12000
+      ],
+      "fresh_bound_fraction_ms": [
+        1454809,
+        12000
+      ],
+      "complete_frames": 163,
+      "unique_images": 161,
+      "image_bytes": 22443818,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 154
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_rc_law": {
+        "checked_samples": 62,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 62,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 164,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 144
+    },
+    {
+      "id": "rc3-02",
+      "available": true,
+      "marker_to_committed_ms": 121.63616666666667,
+      "marker_to_fresh_ms": 121.63616666666667,
+      "committed_bound_fraction_ms": [
+        729817,
+        6000
+      ],
+      "fresh_bound_fraction_ms": [
+        729817,
+        6000
+      ],
+      "complete_frames": 165,
+      "unique_images": 163,
+      "image_bytes": 22668569,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 156
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 136
+    },
+    {
+      "id": "rc3-03",
+      "available": true,
+      "marker_to_committed_ms": 125.89333333333333,
+      "marker_to_fresh_ms": 125.89333333333333,
+      "committed_bound_fraction_ms": [
+        9442,
+        75
+      ],
+      "fresh_bound_fraction_ms": [
+        9442,
+        75
+      ],
+      "complete_frames": 163,
+      "unique_images": 161,
+      "image_bytes": 22379717,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 154
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 141
+    },
+    {
+      "id": "rc3-04",
+      "available": true,
+      "marker_to_committed_ms": 134.47775,
+      "marker_to_fresh_ms": 134.47775,
+      "committed_bound_fraction_ms": [
+        537911,
+        4000
+      ],
+      "fresh_bound_fraction_ms": [
+        537911,
+        4000
+      ],
+      "complete_frames": 164,
+      "unique_images": 162,
+      "image_bytes": 22541777,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-fresh-result": 154
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 11,
+      "native_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 148
+    },
+    {
+      "id": "rc3-05",
+      "available": true,
+      "marker_to_committed_ms": 130.998,
+      "marker_to_fresh_ms": 130.998,
+      "committed_bound_fraction_ms": [
+        65499,
+        500
+      ],
+      "fresh_bound_fraction_ms": [
+        65499,
+        500
+      ],
+      "complete_frames": 163,
+      "unique_images": 162,
+      "image_bytes": 22517655,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 154
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_rc_law": {
+        "checked_samples": 62,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 62,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 141
+    },
+    {
+      "id": "rc3-06",
+      "available": true,
+      "marker_to_committed_ms": 126.25179166666666,
+      "marker_to_fresh_ms": 126.25179166666666,
+      "committed_bound_fraction_ms": [
+        3030043,
+        24000
+      ],
+      "fresh_bound_fraction_ms": [
+        3030043,
+        24000
+      ],
+      "complete_frames": 162,
+      "unique_images": 160,
+      "image_bytes": 22263135,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 153
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_rc_law": {
+        "checked_samples": 62,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 62,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 164,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 145
+    },
+    {
+      "id": "rc3-07",
+      "available": true,
+      "marker_to_committed_ms": 134.577375,
+      "marker_to_fresh_ms": 134.577375,
+      "committed_bound_fraction_ms": [
+        1076619,
+        8000
+      ],
+      "fresh_bound_fraction_ms": [
+        1076619,
+        8000
+      ],
+      "complete_frames": 164,
+      "unique_images": 163,
+      "image_bytes": 22688756,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-fresh-result": 154
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 11,
+      "native_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 164,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 145
+    },
+    {
+      "id": "rc3-08",
+      "available": true,
+      "marker_to_committed_ms": 143.13525,
+      "marker_to_fresh_ms": 143.13525,
+      "committed_bound_fraction_ms": [
+        572541,
+        4000
+      ],
+      "fresh_bound_fraction_ms": [
+        572541,
+        4000
+      ],
+      "complete_frames": 163,
+      "unique_images": 161,
+      "image_bytes": 22406181,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-fresh-result": 153
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 11,
+      "native_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 145
+    },
+    {
+      "id": "rc3-09",
+      "available": true,
+      "marker_to_committed_ms": 122.25629166666667,
+      "marker_to_fresh_ms": 122.25629166666667,
+      "committed_bound_fraction_ms": [
+        2934151,
+        24000
+      ],
+      "fresh_bound_fraction_ms": [
+        2934151,
+        24000
+      ],
+      "complete_frames": 163,
+      "unique_images": 161,
+      "image_bytes": 22411418,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 154
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 137
+    },
+    {
+      "id": "rc3-10",
+      "available": true,
+      "marker_to_committed_ms": 134.747125,
+      "marker_to_fresh_ms": 134.747125,
+      "committed_bound_fraction_ms": [
+        1077977,
+        8000
+      ],
+      "fresh_bound_fraction_ms": [
+        1077977,
+        8000
+      ],
+      "complete_frames": 165,
+      "unique_images": 163,
+      "image_bytes": 22680399,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-fresh-result": 155
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 11,
+      "native_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 150
+    },
+    {
+      "id": "rc3-11",
+      "available": true,
+      "marker_to_committed_ms": 120.13758333333334,
+      "marker_to_fresh_ms": 120.13758333333334,
+      "committed_bound_fraction_ms": [
+        1441651,
+        12000
+      ],
+      "fresh_bound_fraction_ms": [
+        1441651,
+        12000
+      ],
+      "complete_frames": 164,
+      "unique_images": 162,
+      "image_bytes": 22546258,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 155
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_rc_law": {
+        "checked_samples": 62,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 62,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 148
+    },
+    {
+      "id": "rc3-12",
+      "available": true,
+      "marker_to_committed_ms": 110.691625,
+      "marker_to_fresh_ms": 110.691625,
+      "committed_bound_fraction_ms": [
+        885533,
+        8000
+      ],
+      "fresh_bound_fraction_ms": [
+        885533,
+        8000
+      ],
+      "complete_frames": 164,
+      "unique_images": 162,
+      "image_bytes": 22545158,
+      "roles": {
+        "private-draft-original-result": 8,
+        "committed-value-fresh-result": 156
+      },
+      "first_committed_frame": 9,
+      "first_fresh_frame": 9,
+      "native_rc_law": {
+        "checked_samples": 62,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 62,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 151
+    },
+    {
+      "id": "rc3-13",
+      "available": true,
+      "marker_to_committed_ms": 135.44220833333333,
+      "marker_to_fresh_ms": 135.44220833333333,
+      "committed_bound_fraction_ms": [
+        3250613,
+        24000
+      ],
+      "fresh_bound_fraction_ms": [
+        3250613,
+        24000
+      ],
+      "complete_frames": 165,
+      "unique_images": 163,
+      "image_bytes": 22694120,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-fresh-result": 155
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 11,
+      "native_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 149
+    },
+    {
+      "id": "rc3-14",
+      "available": true,
+      "marker_to_committed_ms": 119.29554166666667,
+      "marker_to_fresh_ms": 119.29554166666667,
+      "committed_bound_fraction_ms": [
+        2863093,
+        24000
+      ],
+      "fresh_bound_fraction_ms": [
+        2863093,
+        24000
+      ],
+      "complete_frames": 164,
+      "unique_images": 163,
+      "image_bytes": 22690724,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 155
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_rc_law": {
+        "checked_samples": 62,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 62,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 147
+    },
+    {
+      "id": "rc3-15",
+      "available": true,
+      "marker_to_committed_ms": 136.96491666666665,
+      "marker_to_fresh_ms": 136.96491666666665,
+      "committed_bound_fraction_ms": [
+        1643579,
+        12000
+      ],
+      "fresh_bound_fraction_ms": [
+        1643579,
+        12000
+      ],
+      "complete_frames": 159,
+      "unique_images": 157,
+      "image_bytes": 21838337,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-fresh-result": 149
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 11,
+      "native_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 160,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 139
+    },
+    {
+      "id": "rc3-16",
+      "available": true,
+      "marker_to_committed_ms": 116.22708333333334,
+      "marker_to_fresh_ms": 116.22708333333334,
+      "committed_bound_fraction_ms": [
+        55789,
+        480
+      ],
+      "fresh_bound_fraction_ms": [
+        55789,
+        480
+      ],
+      "complete_frames": 160,
+      "unique_images": 159,
+      "image_bytes": 22132099,
+      "roles": {
+        "private-draft-original-result": 5,
+        "committed-value-fresh-result": 155
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 145
+    },
+    {
+      "id": "rc3-17",
+      "available": true,
+      "marker_to_committed_ms": 125.67620833333334,
+      "marker_to_fresh_ms": 125.67620833333334,
+      "committed_bound_fraction_ms": [
+        3016229,
+        24000
+      ],
+      "fresh_bound_fraction_ms": [
+        3016229,
+        24000
+      ],
+      "complete_frames": 164,
+      "unique_images": 163,
+      "image_bytes": 22694023,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-fresh-result": 154
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 11,
+      "native_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 150
+    },
+    {
+      "id": "rc3-18",
+      "available": true,
+      "marker_to_committed_ms": 127.28466666666667,
+      "marker_to_fresh_ms": 127.28466666666667,
+      "committed_bound_fraction_ms": [
+        190927,
+        1500
+      ],
+      "fresh_bound_fraction_ms": [
+        190927,
+        1500
+      ],
+      "complete_frames": 165,
+      "unique_images": 163,
+      "image_bytes": 22667622,
+      "roles": {
+        "private-draft-original-result": 10,
+        "committed-value-fresh-result": 155
+      },
+      "first_committed_frame": 11,
+      "first_fresh_frame": 11,
+      "native_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 149
+    },
+    {
+      "id": "rc3-19",
+      "available": true,
+      "marker_to_committed_ms": 120.33279166666667,
+      "marker_to_fresh_ms": 120.33279166666667,
+      "committed_bound_fraction_ms": [
+        2887987,
+        24000
+      ],
+      "fresh_bound_fraction_ms": [
+        2887987,
+        24000
+      ],
+      "complete_frames": 164,
+      "unique_images": 163,
+      "image_bytes": 22691087,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 155
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 166,
+      "outside_presentation_window": 1,
+      "future_at_receipt": 152
+    },
+    {
+      "id": "rc3-20",
+      "available": true,
+      "marker_to_committed_ms": 125.82625,
+      "marker_to_fresh_ms": 125.82625,
+      "committed_bound_fraction_ms": [
+        100661,
+        800
+      ],
+      "fresh_bound_fraction_ms": [
+        100661,
+        800
+      ],
+      "complete_frames": 165,
+      "unique_images": 163,
+      "image_bytes": 22659701,
+      "roles": {
+        "private-draft-original-result": 9,
+        "committed-value-fresh-result": 156
+      },
+      "first_committed_frame": 10,
+      "first_fresh_frame": 10,
+      "native_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "agent_rc_law": {
+        "checked_samples": 61,
+        "time_constant_s": 0.02,
+        "maximum_absolute_error": {
+          "voltage_v": 1.7763568394002505e-15,
+          "current_a": 2.168404344971009e-19,
+          "energy_j": 1.6940658945086007e-20
+        },
+        "formula": "Whole-period geometric-series solution plus exact partial high/low phase from zero startup"
+      },
+      "frames_received": 165,
+      "outside_presentation_window": 0,
+      "future_at_receipt": 144
+    }
+  ],
+  "method_scope": "Warm running /185 RC 1\u21922 uF reference on the pinned host/display/fixture; software composition upper bounds, not physical scanout or exact OS-event/acceptance times",
+  "reference_process_exit_codes": "Not retained by reused helper; no separate zero-exit claim"
+}
