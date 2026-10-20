@@ -63,3 +63,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Native MOSFET controls and signed readings](43-native-mosfet-review.md): ten /183 native states and fresh saved reopens, independent signed current/power checks, precise PMOS presentation documentation and preserved input-method limitations.
 
 - [Bounded native binding follow-up](53-native-binding-followup.md): actuator/display/probe/sampling source review, preserved stale-audit-tool failure, exact current ledger verification and refreshed local helper; no new physical/runtime/full-binding qualification.
+
+- [Structured malformed-file diagnostic](54-structured-corruption-review.md): 20,028 mutations, eighteen dirty-work-preserving public refusals and separately scoped guided/unguided fuzz evidence, with the original race timeout retained and the full unchanged race pass completed. Current actions are separated from the verbatim [engineering history](34-engineering-checkpoint-history.md).

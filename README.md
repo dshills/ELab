@@ -12,6 +12,8 @@ Full source quality, copied native smoke, all four public adapters, reference/st
 
 [Walkthrough](research/35-first-version-review.md), [receipt](research/ui-audit/first-version/inspector-width-review-checkpoint.json), [proof](docs/validation/inspector-width-review-185/README.md).
 
+A bounded [malformed-file diagnostic](research/54-structured-corruption-review.md) adds structured mutation, public refusal/preservation and guided fuzz evidence on unchanged source; full diagnostic race/vet/formatting pass, with the initial timeout and unguided run retained.
+
 Owner walkthrough remains **Not tried yet**. Default-startup/clean-account qualification remains deferred for this private alpha. Complete bindings/accessibility/environment, broader corruption/fuzzing and the actual hobbyist study remain open. Current /185 RC, LED and NPN each have twenty visible bounds supporting the scoped 500 ms target. No further repeats of these completed blocks are planned without a concrete invalidating change. The 100 ms acknowledgment and overall performance gates remain unqualified. All 41 earlier sealed reviews, six candidates and canonical /120 remain intact; no promotion or broader MVP completion is inferred.
 
 ## Build and run from source
