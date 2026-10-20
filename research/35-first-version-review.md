@@ -8,7 +8,7 @@ Clean `c31c65d2` /Vellum `b22478c` packages RECORD-STEP-01. Previous/Next apply 
 
 [Receipt](ui-audit/first-version/recorded-step-review-checkpoint.json), [release proof](../docs/validation/recorded-step-review-188/README.md), [source proof](../docs/validation/recorded-step-settlement/README.md). All 44 earlier reviews, six candidates and canonical /120 remain intact. Owner walkthrough remains Not tried yet; no promotion or full MVP acceptance. Existing RC/LED/NPN timing retains its /185 scope; /188 adds no timing cohort.
 
-**Known native follow-up:** [Recorded time → Previous](61-native-recorded-transport-order.md) refuses in one actual /188 case despite passing mounted/API checks. Commit the time with Enter before Previous as the observed workaround. This remains an open defect; the remaining native transport batch was not qualified.
+**Known native follow-up:** [Recorded time → Previous](61-native-recorded-transport-order.md) refuses in one actual /188 case despite passing mounted/API checks. Commit the time with Enter before Previous as the observed workaround. This remains an open defect; the remaining native transport batch was not qualified. A [clean /189 candidate](63-recorded-transport-native-recheck.md) contains the source repair, but blank window pixels prevented its native transport recheck; it is not a qualified replacement.
 
 ## Try these four tasks · 15–20 minutes
 

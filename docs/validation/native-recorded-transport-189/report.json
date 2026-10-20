@@ -1,0 +1,148 @@
+{
+  "date": "2026-10-20",
+  "source_commit": "b49fd7ad4ef67b9cbb5002a47dd281e5f5287e2e",
+  "candidate_version": "0.172.0",
+  "candidate_build": "189",
+  "build_and_strict_signature_passed": true,
+  "native_recheck_available": false,
+  "original_native_failure_closed": false,
+  "native_cause_confirmed": false,
+  "qualified_replacement": false,
+  "planned_transport_cases_executed": 0,
+  "headless_reference_passed": true,
+  "source_proof_checkpoint_sha256": "fddf664dba573d918e0416c35a0882c4c9aabdcab54e8284bf4cf04123a10c9e",
+  "prior_release_receipt_sha256": "2bfa2c5b0f5fc9eaeac130b069df6f022f657619fb2362121f43a59ae79086c0",
+  "canonical_sha256": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+  "sdk_lock_sha256": "2f9ac0e120bdd09d5ffe2c3d8b5da4d24588455c5e6bc8d6f08c80e0dccc6395",
+  "reference": {
+    "passed": true,
+    "scope": "Fresh packaged headless reopen and numerical/reference controls; native time/Previous recheck unavailable; original /188 failure remains open",
+    "rows_restored_exact": 1001,
+    "independent_rc_rows": 1001,
+    "max_voltage_error_v": 4.440892098500626e-15,
+    "max_current_error_a": 4.440892098500626e-19,
+    "native_matched_states": [],
+    "native_transport_recheck_available": false,
+    "reference_time_previous_index": 2,
+    "original_source_unchanged": true,
+    "source_sha256": "f9e9f08a939222b2405a66cee80c4c463f47a0396e83e845cd4839178e7ef1ae",
+    "shutdown": {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.stdio",
+      "input_revision": 13,
+      "command_revision": 11,
+      "document_generation": 2,
+      "discard_recovery": true,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    }
+  },
+  "controller": {
+    "status": "ready_for_cua",
+    "release": "0.172.0 /189 candidate",
+    "qualification_pending": true,
+    "source_commit": "b49fd7ad4ef67b9cbb5002a47dd281e5f5287e2e",
+    "source_payload_exact": true,
+    "observation_ttl_removed": true,
+    "receipt_sha256": "2bfa2c5b0f5fc9eaeac130b069df6f022f657619fb2362121f43a59ae79086c0",
+    "native_sha256": "a8cf9d053f9cce67f902fe09fe47d5917aa07588982290ce566d546d3b3faf7f",
+    "agent_sha256": "f1f4419dba2d692b19d988921d7bd4286688ae1b4ba143c603860595c6772e59",
+    "policy_sha256": "6b64706f7f3c6b96204e4071a0d2f9d8b8cecce588c92bb1538c567827ae0e1b",
+    "launcher_sha256": "63da12811633600b697ac72edfb4fa03752038cf9a8f3558beffdf8a5e5b47f3",
+    "shared_geometry_before": {
+      "window-geometry-0.3.6.json": {
+        "sha256": "a5b1f9c088561a2f0394109a58dcf8b5390a2c31337c62c16d62166475d30f32",
+        "mode": "0o644"
+      },
+      "window-geometry-0.3.6.lst": {
+        "sha256": "770d6b2821e383274d241331b7d12b371a182ae38ffb08bcd94c3e5286b0ccda",
+        "mode": "0o644"
+      }
+    },
+    "eligible_latency_observations": 0,
+    "native_exit_status": null,
+    "native_exit_status_reason": "LaunchServices owns the native host; open -W status is separate",
+    "forced_cleanup": false,
+    "open_pid": 99827,
+    "owned_pid": 99828,
+    "observed_command": "/private/tmp/elab-recorded-transport-189-runtime/ELab.app/Contents/MacOS/ELab --agent-endpoint /private/tmp/elab-native-recorded-transport-189/endpoint.json --no-recovery --no-appearance",
+    "same_pid_after_exec": true,
+    "shutdown": {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.socket",
+      "input_revision": 27,
+      "command_revision": 13,
+      "document_generation": 2,
+      "discard_recovery": true,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    },
+    "open_exit_code": 0,
+    "owned_process_absent": true,
+    "endpoint_removed": true,
+    "shared_geometry_after": {
+      "window-geometry-0.3.6.json": {
+        "sha256": "a5b1f9c088561a2f0394109a58dcf8b5390a2c31337c62c16d62166475d30f32",
+        "mode": "0o644"
+      },
+      "window-geometry-0.3.6.lst": {
+        "sha256": "770d6b2821e383274d241331b7d12b371a182ae38ffb08bcd94c3e5286b0ccda",
+        "mode": "0o644"
+      }
+    },
+    "shared_geometry_unchanged": true,
+    "review_unchanged": true,
+    "copied_app_unchanged": true,
+    "canonical_unchanged": true,
+    "prior_review_unchanged": true
+  },
+  "candidate": {
+    "qualified_release": false,
+    "native_recheck": "unavailable: blank window pixels",
+    "original_native_failure_closed": false,
+    "built_location": "/Users/dshills/Development/projects/ELab/build/ELab-0.172.0-189-review",
+    "preserved_candidate": "/Users/dshills/Development/projects/ELab/build/ELab-0.172.0-189-native-unavailable-candidate",
+    "renamed_without_byte_or_mode_changes": true,
+    "candidate_members": {
+      "ELab.app/Contents/Info.plist": {
+        "sha256": "c0a11d0031d2dcc54d9678fbe4c1f7f043c40340bf28b40f8a16cf98fc28811e",
+        "mode": "0o644"
+      },
+      "ELab.app/Contents/MacOS/ELab": {
+        "sha256": "a8cf9d053f9cce67f902fe09fe47d5917aa07588982290ce566d546d3b3faf7f",
+        "mode": "0o755"
+      },
+      "ELab.app/Contents/Resources/APP_MANIFEST.json": {
+        "sha256": "96350fa4ef6b0064b8263740c540e0499c27eaf64d89574cca9bc2a70385292d",
+        "mode": "0o644"
+      },
+      "ELab.app/Contents/_CodeSignature/CodeResources": {
+        "sha256": "fe180f58f0b157ea3b2393f6128e51fedcd62322968a15fc27f9c354986c0d36",
+        "mode": "0o644"
+      },
+      "elab-agent": {
+        "sha256": "f1f4419dba2d692b19d988921d7bd4286688ae1b4ba143c603860595c6772e59",
+        "mode": "0o755"
+      }
+    },
+    "temporary_runtime_decommission": {
+      "path": "/private/tmp/elab-recorded-transport-189-runtime/ELab.app/Contents/MacOS/ELab",
+      "sha256": "a8cf9d053f9cce67f902fe09fe47d5917aa07588982290ce566d546d3b3faf7f",
+      "before_mode": "0o755",
+      "after_mode": "0o644",
+      "bytes_unchanged": true,
+      "after_normal_close": true
+    },
+    "note": "Only the owned temporary runtime loses execute permission; preserved signed candidate and agent are unchanged. Build receipt retains its historical output path."
+  }
+}
