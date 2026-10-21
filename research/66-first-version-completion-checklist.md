@@ -9,9 +9,11 @@ The existing [delivery plan](34-first-version-plan.md) defines the first deliver
 Current position:
 
 - **Owner version: 0.172.0 /189.** Its initial canvas, parts list and toolbar are owner-confirmed visible. The four owner workflow tasks have not been accepted.
-- **Repair candidate: 0.176.0 /193**, built from `f8b4bd543748ad7d3aadabd62e07f257c2c07da8`. It contains the subsequent recording, verification, sweep and timing-input fixes. Source quality, selected packaged-agent scenarios, local signatures and archive checks pass. Its native app has not been launched or accepted.
+- **Last packaged headless candidate: 0.176.0 /193**. **Public-Vellum native candidate: 0.177.0 /194**, built from `bb0365887a6d9f2b092a6ade753c796362a78b58`. Targeted native input and data-preservation checks pass, but its blank-inspector document transition blocks acceptance. The inspector repair passes full source quality and needs a new native candidate. Neither replaces /189.
 - **No new component family or analysis feature is needed to finish this cut.** MOSFETs, transient simulation, probes, cursors, persistence, exports and printing already exist. Shipped features still need honest behavior and appropriate validation.
-- The owner is working on the desktop. Native testing waits for renewed availability. The ordinary startup/clean-account gate was explicitly deferred for the private alpha only.
+- The owner authorized desktop use on October 21. The isolated /194 session completed targeted native input checks and exposed a blank-inspector transition blocker; its repaired replacement needs native validation. The ordinary startup/clean-account gate remains explicitly deferred for the private alpha only.
+
+**October 21 native checkpoint:** the public-Vellum **0.177.0 /194** candidate passed representative actual recording/timing, Verify/reset and sweep corrections, agent interleaving, exact data preservation and fresh reopening. It also exposed a blank inspector after replacing a long recording document with the LED example. [Findings and repair scope](67-native-release-acceptance.md), [frozen native evidence](../docs/validation/native-acceptance-194/README.md). The fix is not in /194; no promotion or complete workflow/layout acceptance has occurred.
 
 The critical path is: **validate the combined repair candidate → fix any reproduced blocker → qualify the final bytes → owner walkthrough → designate one release with rollback.** Documentation preparation does not close an interaction or acceptance gate.
 

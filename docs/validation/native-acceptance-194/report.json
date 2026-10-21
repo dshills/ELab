@@ -1,0 +1,226 @@
+{
+  "candidate": "0.177.0 /194",
+  "source_commit": "bb0365887a6d9f2b092a6ade753c796362a78b58",
+  "native_sha256": "9d31baef246f2974f2aeb076068d9142779762057bccdd01a221b339056780c6",
+  "agent_sha256": "292bda461009b23951abb6ab83f3b94712bdd1d11dd8d545aca2d114d9b9e0b8",
+  "status": "targeted_native_inputs_passed_inspector_blocker_found",
+  "promoted": false,
+  "release_accepted": false,
+  "input_acceptance": {
+    "status": "passed",
+    "rc": {
+      "sample_index": 9,
+      "time_s": 0.009000000000000001,
+      "readings": [
+        {
+          "probe": {
+            "id": "v:C1",
+            "label": "C1 voltage",
+            "unit": "V",
+            "positive": "C1.1",
+            "reference": "C1.2"
+          },
+          "value": 2.967151701297005,
+          "min": 0,
+          "max": 4.999999999999996
+        },
+        {
+          "probe": {
+            "id": "i:R1",
+            "label": "R1 current",
+            "unit": "A",
+            "positive": "R1.1",
+            "reference": "R1.2"
+          },
+          "value": 0.00020328482987029951,
+          "min": 4.440892098500626e-19,
+          "max": 0.0005
+        }
+      ],
+      "matches_prepared_exact": true
+    },
+    "npn": [
+      {
+        "name": "same-level-rising",
+        "level_si": 2.5,
+        "second_level": 4,
+        "probe_id": "v:VIN.positive",
+        "offset": 0,
+        "total_crossings": 5,
+        "exact_packaged_headless_match": true
+      },
+      {
+        "name": "next-no-enter",
+        "level_si": 3,
+        "second_level": 4,
+        "probe_id": "v:VIN.positive",
+        "offset": 8,
+        "total_crossings": 10,
+        "exact_packaged_headless_match": true
+      },
+      {
+        "name": "paired-correction",
+        "level_si": 4,
+        "second_level": 4.5,
+        "probe_id": "v:VIN.positive",
+        "offset": 0,
+        "total_crossings": 5,
+        "exact_packaged_headless_match": true
+      },
+      {
+        "name": "swapped-rejections",
+        "level_si": 4,
+        "second_level": 2.5,
+        "probe_id": "v:VIN.positive",
+        "offset": 0,
+        "total_crossings": 5,
+        "exact_packaged_headless_match": true
+      },
+      {
+        "name": "agent-probe-change",
+        "level_si": 2.5,
+        "second_level": 4,
+        "probe_id": "v:Q1.collector",
+        "offset": 0,
+        "total_crossings": 5,
+        "exact_packaged_headless_match": true
+      },
+      {
+        "name": "fresh-probe-entry",
+        "level_si": 3,
+        "second_level": 4,
+        "probe_id": "v:Q1.collector",
+        "offset": 0,
+        "total_crossings": 5,
+        "exact_packaged_headless_match": true
+      }
+    ],
+    "headless_shutdown": {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.stdio",
+      "input_revision": 6,
+      "command_revision": 3,
+      "document_generation": 2,
+      "discard_recovery": false,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    },
+    "npn_521_rows_preserved": true,
+    "all_cases_preserve_live_physics": true
+  },
+  "analysis_acceptance": {
+    "status": "passed",
+    "native_verify_corrected_duration_without_return": true,
+    "native_startup_reset_corrected_sampling_without_return": true,
+    "native_sweep_start_stop_count_corrected_without_return": true,
+    "verify_sample_count": 105,
+    "three_identical_51_point_sweeps": true,
+    "rc_original_1001_rows_preserved": true,
+    "live_physics_preserved": true,
+    "saved_results_fresh_reopen_exact": true,
+    "verify_rows_match_exact_packaged_agent": true,
+    "headless_shutdowns": [
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 5,
+        "command_revision": 3,
+        "document_generation": 2,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      },
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 17,
+        "command_revision": 6,
+        "document_generation": 2,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      }
+    ],
+    "limitations": [
+      "Representative native fields, not all verification startup/initial fields or all rejection branches",
+      "Native CUA field focus can settle after a later observation; initial focus-delivery failures retained",
+      "No complete four-task physical workflow or minimum-size/both-theme acceptance claimed"
+    ]
+  },
+  "native_menu_led_current_ma": 2.917,
+  "appearance": "Native Light and session-only Dark observed at 1053x802; complete clipping/minimum-layout acceptance remains open",
+  "new_blocker": "Long recording inspector scroll survives shorter LED document replacement and can leave inspector blank. Mounted regression reproduces; repaired source needs native replacement validation.",
+  "session": {
+    "status": "closed",
+    "source_commit": "bb0365887a6d9f2b092a6ade753c796362a78b58",
+    "native_sha256": "9d31baef246f2974f2aeb076068d9142779762057bccdd01a221b339056780c6",
+    "agent_sha256": "292bda461009b23951abb6ab83f3b94712bdd1d11dd8d545aca2d114d9b9e0b8",
+    "runtime": "/private/tmp/elab-native-194-runtime",
+    "endpoint": "/private/tmp/elab-native-194/endpoint.json",
+    "owner_apps_untouched": true,
+    "open_pid": 16864,
+    "owned_pid": 16865,
+    "observed_command": "/private/tmp/elab-native-194-runtime/ELab.app/Contents/MacOS/ELab --agent-endpoint /private/tmp/elab-native-194/endpoint.json --no-recovery --no-appearance",
+    "shutdown": {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.socket",
+      "input_revision": 100,
+      "command_revision": 66,
+      "document_generation": 5,
+      "discard_recovery": false,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    },
+    "open_exit_code": 0,
+    "owned_process_absent": true,
+    "endpoint_removed": true,
+    "candidate_native_unchanged": true,
+    "runtime_native_unchanged": true
+  },
+  "preserved": {
+    "build/ELab.app/Contents/MacOS/ELab": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+    "build/ELab-0.172.0-189-alpha/ELab.app/Contents/MacOS/ELab": "a8cf9d053f9cce67f902fe09fe47d5917aa07588982290ce566d546d3b3faf7f",
+    "build/ELab-0.172.0-189-alpha/elab-agent": "f1f4419dba2d692b19d988921d7bd4286688ae1b4ba143c603860595c6772e59",
+    "third_party/vellum/sdk.lock.json": "1c90747e8621753ecd0d174b84d0ba999b035497d7771dccc908fcb86469cd47",
+    "third_party/vellum/vellum-e58d405-elab1.tar.gz": "2930c7cbd513e08294572189bf50e8fa4f084d05871107d07d49da6404a8fd57",
+    "third_party/vellum/vellum-b22478c.tar.gz": "22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968"
+  },
+  "prior_candidate_trees_preserved": [
+    "ELab-0.174.0-191-candidate",
+    "ELab-0.175.0-192-candidate",
+    "ELab-0.176.0-193-candidate"
+  ],
+  "raw_archive": {
+    "path": "raw.tar.gz",
+    "sha256": "13cb200bf728d14eff58c70afbf951e920024617b61e16684d2be44938c56690",
+    "files": 93,
+    "bytes": 891170
+  },
+  "limitations": [
+    "No owner four-workflow acceptance",
+    "No complete physical drawing workflow, all bindings, all startup inputs, latency or clean-account acceptance",
+    "CUA offscreen field and focus-delivery failures retained; keyboard-focused followups are the accepted native cases",
+    "Initial empty capture became visible after the owned window was raised; no renderer fault inferred",
+    "Exact /194 app and agent retained; repair not present in those bytes"
+  ]
+}

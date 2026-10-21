@@ -1,0 +1,15 @@
+{
+  "status": "source_quality_passed_native_replacement_pending",
+  "quality_exit_code": 0,
+  "source_files": 671,
+  "source_hashes_preserved": true,
+  "production_change": "Fresh inspector scroll container owned by document generation",
+  "new_regression": "TestMountedInspectorScrollReturnsToStartForNewDocument",
+  "before": "Mounted retained-widget failure: LED selection rectangle empty after replacing a deeply scrolled recorded NPN document",
+  "after": "Mounted viewport returns to the selection control for the replacement document; normal repaint and component edit retain the current host and scroll",
+  "inventory_review": "Only desktop/view.go source checksum changed; command routes and sites identical",
+  "initial_quality_failure": "Stale source inventory rejected before regeneration; raw output retained",
+  "raw_archive_sha256": "45c53c6d16d44dc5da89b8d504663d6e6a8e5a6b5da809456ffd579a867cc881",
+  "native_candidate_accepted": false,
+  "promoted": false
+}
