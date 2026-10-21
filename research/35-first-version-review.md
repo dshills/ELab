@@ -2,7 +2,7 @@
 
 The [separate review app](../build/ELab-0.178.0-195-candidate/ELab.app) is prepared for owner testing. It includes the public Vellum update, prior input fixes and the repaired blank-inspector transition. The existing /189 owner app and projects are preserved. The isolated engineering test window is closed; this guide does not assume an app is currently open. Save work before switching binaries, and use a separate project copy. /195 is not a promoted release.
 
-Try the four tasks below when convenient. Start with the ordinary workflow; you do not need to run the detailed engineering regressions. Report a blocked action or a confusing control even if you find a way around it.
+Engineering reference checks now pass on these exact bytes; [scope and remaining steps](68-first-version-engineering-handoff.md). Your latest answer was “Not tried yet,” so owner acceptance is still pending. Try the four tasks below when convenient. Start with the ordinary workflow; you do not need to run the detailed engineering regressions. Report a blocked action or a confusing control even if you find a way around it.
 
 ## 1. Draw and edit an LED circuit
 
@@ -14,7 +14,7 @@ The generic LED model should report about **2.917 mA**. Change the resistor to `
 
 Load the RC example from Examples. Pause, Restart, then Step ten samples. For the default 10 kΩ /1 µF circuit, capacitor voltage should be about **3.161 V at 10 ms**. Resume and watch the voltage change, then Pause again.
 
-Try Charge and Discharge. Capacitor voltage should remain continuous when the input changes. Use the voltage/current probes and scope cursors to inspect the trace. Notice whether it is clear which probe, time and live or recorded result you are viewing.
+Try Charge and Discharge. While paused, the change is queued until Step or Resume; capacitor voltage should remain continuous when it applies. Use the voltage/current probes and scope cursors to inspect the trace. Notice whether it is clear which probe, time and live or recorded result you are viewing.
 
 ## 3. Inspect the transistor flasher
 
@@ -49,4 +49,4 @@ The /195 candidate folder contains the matching `elab-agent`. It accepts one JSO
 
 A standalone agent has its own headless project. To control a visible app, a future session must be launched with `--agent-endpoint /absolute/path/to/new-descriptor.json`; connect the matching agent with `--connect /absolute/path/to/new-descriptor.json`. Keep any existing owner work saved before choosing which app to run. Public command discovery documents mutation revision guards and retry keys; the same validated commands back the UI.
 
-The [delivery plan](34-first-version-plan.md), [remaining checklist](66-first-version-completion-checklist.md) and [candidate receipt](ui-audit/first-version/inspector-candidate-195.json) track /195. The [native/package evidence](../docs/validation/inspector-candidate-195/README.md) records exact scope and hashes. The previous [October 20 history](35-first-version-review-history-2026-10-20.md) and [verbatim /189 guide](35-first-version-review-history-2026-10-21.md) remain preserved. No owner acceptance of the four tasks has been recorded.
+The [delivery plan](34-first-version-plan.md), [remaining checklist](66-first-version-completion-checklist.md) and [candidate receipt](ui-audit/first-version/inspector-candidate-195.json) track /195. The [native/package evidence](../docs/validation/inspector-candidate-195/README.md) records exact scope and hashes. The previous [October 20 history](35-first-version-review-history-2026-10-20.md) and [verbatim /189 guide](35-first-version-review-history-2026-10-21.md) remain preserved. The [later native walkthrough](../docs/validation/native-walkthrough-195/README.md) advances engineering evidence without changing the candidate package. No owner acceptance of the four tasks has been recorded.

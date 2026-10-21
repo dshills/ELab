@@ -1,5 +1,7 @@
 # Repaired inspector candidate: ELab 0.178.0 /195
 
+**Later engineering evidence:** the [native walkthrough](../native-walkthrough-195/README.md) completes the declared reference workflows, remaining representative input classes and minimum/working-size layout pass on these same bytes. The report below retains its original checkpoint and limitations. Owner acceptance and promotion remain pending.
+
 The clean `8d7d6463` app and matching agent contain the inspector document-ownership repair and the pinned public Vellum source with existing compatibility fixes. [Exact report](report.json), [raw manifest](raw-manifest.json), [raw evidence](raw.tar.gz), [candidate receipt](../../../research/ui-audit/first-version/inspector-candidate-195.json).
 
 The /194 blank-inspector blocker is repaired in the real native app. A CUA accessibility-focus request and keyboard navigation reveal the long recorded NPN timing section; the native Examples menu then opens the LED circuit. The new document returns the inspector to its visible header, selector and measurements. Initial wheel/focus attempts are retained, including the screenshot that still shows the header; only the later visibly scrolled timing section counts as the transition setup. The paired [mounted regression and full source gate](../inspector-scroll-ownership/README.md) also prove ordinary edits/repaints retain the current scroll viewport.

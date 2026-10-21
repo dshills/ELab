@@ -1,0 +1,437 @@
+{
+  "date": "2026-10-21",
+  "candidate": "0.178.0 /195",
+  "source_commit": "8d7d646344cf8a98a9638494fa0fe4d5661e2e3a",
+  "native_sha256": "b668fecefc1f09c30078bfbeaa07d80d3364f208b9db1d28445dbcd37b2420ac",
+  "agent_sha256": "b5dfc91eb98fff3b5176072fca868e027c11b63c24a3ecb53ab296de4253627b",
+  "archive_sha256": "76da198544ebb7aff0d1fc1d9e98b1bf052e37abbc44963396ef99c8f9a2f02d",
+  "passed": true,
+  "native_reference_workflows_engineering_passed": true,
+  "owner_workflow_accepted": false,
+  "walkthrough": {
+    "passed": true,
+    "candidate": "0.178.0 /195",
+    "cases": [
+      {
+        "name": "led",
+        "project": "LED-built-native.elab",
+        "sha256": "29016499a03c2f83edf3c75066f7405355f7cc54687bba53779253f2e0dfda08",
+        "graph_values_models_settings_probes_preserved": true,
+        "exact_packaged_agent_matches": true
+      },
+      {
+        "name": "rc",
+        "project": "RC-native.elab",
+        "sha256": "c1b7f72c1e638b050ab536d5d5b3107670999d44b188cb1fa98bdc8d4c0d0357",
+        "graph_values_models_settings_probes_preserved": true,
+        "exact_packaged_agent_matches": true
+      },
+      {
+        "name": "flasher10",
+        "project": "Flasher-10u-native.elab",
+        "sha256": "df1ca69805543a99f844c2b58757e62bc98a0dfb0c52cb4529a518ea3d30e515",
+        "graph_values_models_settings_probes_preserved": true,
+        "exact_packaged_agent_matches": true
+      },
+      {
+        "name": "flasher20",
+        "project": "Flasher-20u-native.elab",
+        "sha256": "ff54248792be3d360efcf11a216cb63fec95ca5ee05df2e331f09bfef9ed2eb4",
+        "graph_values_models_settings_probes_preserved": true,
+        "exact_packaged_agent_matches": true
+      },
+      {
+        "name": "rc-recorded",
+        "project": "RC-recorded-recovered.elab",
+        "sha256": "c5640ecdea82d6ede49f3d55a89498817d593b9905c369090e5ed3a600326ad6",
+        "graph_values_models_settings_probes_preserved": true,
+        "exact_packaged_agent_matches": true
+      },
+      {
+        "name": "dc-recorded",
+        "project": "LED-DC-recorded.elab",
+        "sha256": "aacd361c3c365fc6db844ebc62c478df4df475562ba3bec97a5b962c5a65388d",
+        "graph_values_models_settings_probes_preserved": true,
+        "exact_packaged_agent_matches": true
+      }
+    ],
+    "shutdowns": [
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 6,
+        "command_revision": 3,
+        "document_generation": 2,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      },
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 12,
+        "command_revision": 7,
+        "document_generation": 2,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      },
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 96,
+        "command_revision": 22,
+        "document_generation": 2,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      },
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 47,
+        "command_revision": 14,
+        "document_generation": 2,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      },
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 5,
+        "command_revision": 3,
+        "document_generation": 2,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      },
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 6,
+        "command_revision": 3,
+        "document_generation": 2,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      }
+    ],
+    "source_commit": "8d7d646344cf8a98a9638494fa0fe4d5661e2e3a",
+    "native_sha256": "b668fecefc1f09c30078bfbeaa07d80d3364f208b9db1d28445dbcd37b2420ac",
+    "agent_sha256": "b5dfc91eb98fff3b5176072fca868e027c11b63c24a3ecb53ab296de4253627b",
+    "independent_rc_reference": {
+      "charge_10ms": {
+        "time_s": 0.010000000000000002,
+        "input_v": 5,
+        "voltage_v": 3.1606027941427888,
+        "current_a": 0.00018393972058572113,
+        "energy_j": 4.9947050111716015e-06
+      },
+      "discharge_after_10ms": {
+        "time_s": 0.02000000000000001,
+        "input_v": 0,
+        "voltage_v": 1.1627207896741474,
+        "current_a": -0.00011627207896741473,
+        "energy_j": 6.759598173702364e-07
+      },
+      "csv_rows": 40,
+      "csv_all_trace_points_match": true,
+      "csv_positive_time_rows_match_analytic_law": true,
+      "initial_duplicate_zero_row": "Original paused discharge startup and applied Charge startup are both retained; the first zero-time current is intentionally zero."
+    },
+    "independent_crossing_arithmetic": {
+      "10uF": {
+        "v:Q1.collector": {
+          "rising_crossings_1_5V_interpolated_s": [
+            14.231662614020172,
+            14.71950305898039,
+            15.207687775136812,
+            15.695391501145272,
+            16.183603933638647
+          ],
+          "periods_s": [
+            0.4878404449602183,
+            0.48818471615642167,
+            0.48770372600846024,
+            0.4882124324933752
+          ],
+          "mean_period_s": 0.48798532990461885
+        },
+        "v:Q2.collector": {
+          "rising_crossings_1_5V_interpolated_s": [
+            14.475489035533906,
+            14.963645812209213,
+            15.451641008330737,
+            15.939468971768981,
+            16.42764884300626
+          ],
+          "periods_s": [
+            0.4881567766753072,
+            0.4879951961215241,
+            0.4878279634382441,
+            0.48817987123727846
+          ],
+          "mean_period_s": 0.48803995186808846
+        }
+      },
+      "20uF": {
+        "v:Q1.collector": {
+          "rising_crossings_1_5V_interpolated_s": [
+            6.014726091444522,
+            6.990704196813037,
+            7.966786897805142
+          ],
+          "periods_s": [
+            0.9759781053685153,
+            0.9760827009921051
+          ],
+          "mean_period_s": 0.9760304031803102,
+          "ratio_to_10uF": 2.000122428621131
+        },
+        "v:Q2.collector": {
+          "rising_crossings_1_5V_interpolated_s": [
+            6.502816251857124,
+            7.478775543218729,
+            8.454697238725679
+          ],
+          "periods_s": [
+            0.9759592913616055,
+            0.9759216955069494
+          ],
+          "mean_period_s": 0.9759404934342775,
+          "ratio_to_10uF": 1.9997143465378893
+        }
+      }
+    },
+    "limits": [
+      "Native versus matching agent comparisons test parity, not independent device accuracy.",
+      "Collector crossing interpolation is a calculation from saved samples, separate from the UI nearest-sample cursor values.",
+      "Live time, rolling history, cursors and measurement sessions are not claimed persisted by project save.",
+      "Clean-account/default installation remains owner-deferred; no owner workflow acceptance or promotion."
+    ]
+  },
+  "final_native_inputs": {
+    "passed": true,
+    "native_index_invalid_text_delivered_by_keyboard": true,
+    "native_index_bad_then_accepted_8_next_without_return_reaches_9": true,
+    "native_index_readings_match_exact_packaged_agent": true,
+    "native_sample_step_bad_then_accepted_0_verify_without_return": true,
+    "native_verify_105_rows_match_fresh_packaged_agent": true,
+    "original_1001_rows_preserved": true,
+    "original_live_physics_preserved": true,
+    "both_saved_recordings_reopen_exact": true,
+    "saved_project_sha256": "6b268662f09f9f23130dfb459bea20cb9413ba97b2f3c69ec058fce9bf8cdf8a",
+    "shutdowns": [
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 22,
+        "command_revision": 8,
+        "document_generation": 3,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      }
+    ],
+    "native_session": {
+      "status": "closed",
+      "source_commit": "8d7d646344cf8a98a9638494fa0fe4d5661e2e3a",
+      "native_sha256": "b668fecefc1f09c30078bfbeaa07d80d3364f208b9db1d28445dbcd37b2420ac",
+      "agent_sha256": "b5dfc91eb98fff3b5176072fca868e027c11b63c24a3ecb53ab296de4253627b",
+      "runtime": "/private/tmp/elab-input-final-195-runtime",
+      "endpoint": "/private/tmp/elab-input-final-195/endpoint.json",
+      "owner_apps_untouched": true,
+      "open_pid": 78201,
+      "owned_pid": 78202,
+      "observed_command": "/private/tmp/elab-input-final-195-runtime/ELab.app/Contents/MacOS/ELab --agent-endpoint /private/tmp/elab-input-final-195/endpoint.json --no-recovery --no-appearance",
+      "shutdown": {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.socket",
+        "input_revision": 27,
+        "command_revision": 16,
+        "document_generation": 2,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      },
+      "open_exit_code": 0,
+      "owned_process_absent": true,
+      "endpoint_removed": true,
+      "candidate_native_unchanged": true,
+      "runtime_native_unchanged": true
+    },
+    "limitations": [
+      "Numeric field accessibility value reports the accepted 8 while local validation retains rejection; the screenshot records the framework-worded error. No claim that AX exposes the raw bad draft.",
+      "Representative input classes, not exhaustive keyboard/IME/screen-reader or every verification startup override."
+    ]
+  },
+  "native_sessions": [
+    {
+      "status": "closed",
+      "source_commit": "8d7d646344cf8a98a9638494fa0fe4d5661e2e3a",
+      "native_sha256": "b668fecefc1f09c30078bfbeaa07d80d3364f208b9db1d28445dbcd37b2420ac",
+      "agent_sha256": "b5dfc91eb98fff3b5176072fca868e027c11b63c24a3ecb53ab296de4253627b",
+      "runtime": "/private/tmp/elab-walkthrough-195-runtime",
+      "endpoint": "/private/tmp/elab-walkthrough-195/endpoint.json",
+      "owner_apps_untouched": true,
+      "open_pid": 47052,
+      "owned_pid": 47053,
+      "observed_command": "/private/tmp/elab-walkthrough-195-runtime/ELab.app/Contents/MacOS/ELab --agent-endpoint /private/tmp/elab-walkthrough-195/endpoint.json --no-recovery --no-appearance",
+      "shutdown": {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.socket",
+        "input_revision": 9286,
+        "command_revision": 183,
+        "document_generation": 5,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      },
+      "open_exit_code": 0,
+      "owned_process_absent": true,
+      "endpoint_removed": true,
+      "candidate_native_unchanged": true,
+      "runtime_native_unchanged": true
+    },
+    {
+      "status": "closed",
+      "source_commit": "8d7d646344cf8a98a9638494fa0fe4d5661e2e3a",
+      "native_sha256": "b668fecefc1f09c30078bfbeaa07d80d3364f208b9db1d28445dbcd37b2420ac",
+      "agent_sha256": "b5dfc91eb98fff3b5176072fca868e027c11b63c24a3ecb53ab296de4253627b",
+      "runtime": "/private/tmp/elab-input-final-195-runtime",
+      "endpoint": "/private/tmp/elab-input-final-195/endpoint.json",
+      "owner_apps_untouched": true,
+      "open_pid": 78201,
+      "owned_pid": 78202,
+      "observed_command": "/private/tmp/elab-input-final-195-runtime/ELab.app/Contents/MacOS/ELab --agent-endpoint /private/tmp/elab-input-final-195/endpoint.json --no-recovery --no-appearance",
+      "shutdown": {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.socket",
+        "input_revision": 27,
+        "command_revision": 16,
+        "document_generation": 2,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      },
+      "open_exit_code": 0,
+      "owned_process_absent": true,
+      "endpoint_removed": true,
+      "candidate_native_unchanged": true,
+      "runtime_native_unchanged": true
+    }
+  ],
+  "physical_input_scope": "CUA native component search/keyboard placement, named terminal wiring, value edit/Undo/Redo/delete/repair, native RC/flasher examples and transport/probes/cursors, capacitor preset, native CSV dialog, invalid/corrected inputs. Fixture seeding and owned project saves are explicitly public API; prior /195 native Save/Open/SVG/cancel evidence is reused.",
+  "layout": {
+    "themes": [
+      "Light",
+      "Dark"
+    ],
+    "minimum_capture_px": [
+      1053,
+      762
+    ],
+    "minimum_declared_dp": [
+      1040,
+      720
+    ],
+    "minimum_floor_confirmed_by_resize_clamp": true,
+    "normal_capture_px": [
+      1293,
+      834
+    ],
+    "scope_final_control_revealed_by_native_tab": true,
+    "schematic_expands_when_scope_hidden": true,
+    "exhaustive_layout_or_accessibility": false
+  },
+  "quality": {
+    "all_671_go_hashes_still_match_full_gate": true,
+    "full_go_suite_repeated": false,
+    "implementation_changed": false,
+    "prior_gate": "docs/validation/inspector-scroll-ownership/report.json"
+  },
+  "preservation": {
+    "canonical_120_owner_189_and_both_sdks_unchanged": true,
+    "prior_191_through_194_trees_unchanged": true,
+    "candidate_195_matches_all_124_archived_file_bytes_and_modes": true,
+    "original_fixtures_unchanged": true
+  },
+  "offline": "Both native copies and fresh agent subprocesses run under the retained deny policy for source/SDK/toolchain/cache/shared geometry and outbound IP. Controllers and CUA run outside that child policy; this is not clean-account/default installation acceptance.",
+  "prior_evidence": [
+    "docs/validation/native-acceptance-194",
+    "docs/validation/inspector-candidate-195",
+    "docs/validation/headless-release-193",
+    "research/ui-audit/first-version/native-decisions-156",
+    "research/ui-audit/first-version/native-recovery-161",
+    "research/ui-audit/first-version/native-recording-recovery-161",
+    "docs/validation/native-recovery-error-174"
+  ],
+  "known_minor_feedback": [
+    "Rejected numeric editor text uses framework-worded validation feedback and AX reports the accepted value; native correction and transport recovery pass."
+  ],
+  "owner_feedback": "October 21: Not tried yet. No owner workflow acceptance or request to promote.",
+  "limitations": [
+    "Representative private-alpha workflows and affected input classes only; broader MVP accessibility/IME, exhaustive bindings, performance, participant study and distribution retain their separate gates.",
+    "No fresh PDF/PNG/margin/scale/tiling or physical print qualification; prior complete readable print confirmation is retained.",
+    "Ordinary startup/clean-account installation remains explicitly owner-deferred for this private alpha."
+  ],
+  "ready_for_owner_testing": true,
+  "release_qualified": false,
+  "promoted": false,
+  "raw_archive": {
+    "files": 207,
+    "sha256": "e32770887b2da00e863cacda536da91f661e8d40a5d52cc999b099ee693946eb",
+    "bytes": 6822302
+  }
+}
