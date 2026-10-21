@@ -2,6 +2,8 @@
 
 Updated October 21, 2026. This is the remaining-work checklist, based on the current repository and recorded results. It does not claim that pending checks have passed.
 
+**Latest owner direction:** continue electronics work without owner review. The [next five engineering items](69-next-five-engineering-items.md) now govern ongoing work. Owner task results remain unobserved and are not relabeled as passed; the earlier owner-walkthrough dependency below is superseded as a condition for proceeding. Existing /195 private-alpha evidence remains valid, and no additional feature scope is introduced.
+
 ## What “first version” means
 
 The existing [delivery plan](34-first-version-plan.md) defines the first deliverable as a **private macOS hobbyist alpha**: draw, simulate, edit, measure, undo, save/reopen and export, with the same operations available to agents. This checklist retains that scope. The original [PRD](07-product-requirements.md) defines a larger MVP; its additional requirements appear separately below and are not silently waived.
@@ -17,7 +19,7 @@ Current position:
 
 **Earlier October 21 native checkpoint:** the public-Vellum **0.177.0 /194** candidate passed representative actual recording/timing, Verify/reset and sweep corrections, agent interleaving, exact data preservation and fresh reopening. It also exposed a blank inspector after replacing a long recording document with the LED example. [Findings and repair scope](67-native-release-acceptance.md), [frozen native evidence](../docs/validation/native-acceptance-194/README.md). The fix is not in /194; [the /195 native/package check](../docs/validation/inspector-candidate-195/README.md) passes the repaired transition. At that checkpoint the physical workflows/layout were unaccepted; the later report above advances engineering evidence only. No owner acceptance or promotion has occurred.
 
-The remaining critical path is: **owner walkthrough on /195 → resolve any reproduced blocker → designate one release with rollback.** Documentation preparation does not close an interaction or acceptance gate.
+The active engineering path is: **complete the bounded next-five queue → resolve reproduced blockers → designate one engineering release with rollback.** Owner walkthrough is deferred by the latest direction and may inform later fixes; it no longer blocks this path. Documentation preparation does not establish an unobserved test result.
 
 **Historical execution checkpoint, October 20:** [exact /193 headless qualification](../docs/validation/headless-release-193/README.md) now passes reference workflows, project/electrical/storage/capacity suites across three non-native adapters, viewer/position corrections, sixteen analysis cases and fresh saved-result/example reopens. Sandboxed external paths also pass development-file/IP-denial controls; five helper clients are explicitly outside that sandbox claim. All owned processes close normally. At that checkpoint all 670 Go files matched the completed quality gate; current source has the separately qualified 671-file gate. This advances the headless portions of items 3–8. Items 1–2, native adapter/input acceptance, owner feedback and promotion remain open; no native app was started.
 

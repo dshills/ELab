@@ -1,5 +1,7 @@
 # First-version engineering handoff
 
+**Subsequent owner direction, October 21:** continue electronics work without owner review. The [next-five queue](69-next-five-engineering-items.md) supersedes owner review as the prerequisite for further engineering/release preparation. The original handoff below and its unobserved owner results remain historical facts, not test passes.
+
 October 21, 2026. **ELab 0.178.0 /195 has passed the private-alpha engineering reference checks. Owner testing and release designation remain.** No feature work or further dependency upgrade is needed for this cut.
 
 Use the existing [review app](../build/ELab-0.178.0-195-candidate/ELab.app), matching [agent](../build/ELab-0.178.0-195-candidate/elab-agent) and [four-task walkthrough](35-first-version-review.md). The owner’s latest answer for this exact candidate is **“Not tried yet.”** /189 is preserved; /195 is not promoted.
