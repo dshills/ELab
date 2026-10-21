@@ -20,9 +20,9 @@ Existing [RC](research/47-current-rc-visible-results.md), [LED](research/50-curr
 
 ## Build and run from source
 
-Use Go 1.25.6 or newer, Python 3.10 or newer, and Vellum's macOS native prerequisites. Normal builds verify and extract the [pinned private Vellum SDK](third_party/vellum/README.md), including its prepared Cogent and typesetting sources. A sibling Vellum checkout is no longer required. ELab's `desktop/go.mod` contains the four explicit local replacements into the verified build cache. Run `python3 scripts/prepare-vellum.py` before invoking native Go tools directly; `build.sh`, `lint.sh` and `check.sh` prepare it automatically.
+Use Go 1.25.6 or newer, Python 3.10 or newer, and Vellum's macOS native prerequisites. Normal builds verify and extract the [pinned SDK from public Vellum source](third_party/vellum/README.md), including prepared Cogent/typesetting sources and explicit compatibility fixes. Public base `e58d405` and the patch/archive hashes are pinned in `third_party/vellum/sdk.lock.json`. A sibling Vellum checkout is not required. ELab's `desktop/go.mod` contains the four explicit local replacements into the verified build cache. Run `python3 scripts/prepare-vellum.py` before invoking native Go tools directly; `build.sh`, `lint.sh` and `check.sh` prepare it automatically.
 
-The SDK lock describes unreleased source builds. The [initial baseline](docs/vellum-baseline.json) and [packaged application qualification](docs/vellum-baseline-current.json) retain their historical release identities; changing the source dependency does not promote an application bundle.
+The SDK lock distinguishes the public repository commit from the compatibility-patched source and unreleased SDK artifact. The [initial baseline](docs/vellum-baseline.json) and [packaged application qualification](docs/vellum-baseline-current.json) retain their historical release identities; changing the source dependency does not promote an application bundle.
 
 From the ELab directory:
 

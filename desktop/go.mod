@@ -5,7 +5,7 @@ go 1.25.6
 require (
 	cogentcore.org/core v0.3.46-0.20261009095036-5cc519b24044
 	github.com/dshills/vellum v0.0.0
-	github.com/dshills/vellum/drivers/cogent v0.0.0
+	github.com/dshills/vellum/drivers/cogent v0.0.0-20261021143700-e58d40581fe2
 )
 
 require (
@@ -17,7 +17,7 @@ require (
 	github.com/chewxy/math32 v1.11.2 // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
-	github.com/go-gl/glfw/v3.4/glfw v0.1.0-pre.1.0.20260628091122-0bd588dc30cf // indirect
+	github.com/go-gl/glfw/v3.4/glfw v0.1.0-pre.1.0.20260628091122-0bd588dc30cf
 	github.com/go-text/typesetting v0.3.5-0.20260418130854-c41d02a44bec // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
@@ -47,10 +47,10 @@ require (
 )
 
 replace (
-	cogentcore.org/core => ../build/.vellum-sdk-b22478c/drivers/cogent/build/upstream
-	github.com/dshills/vellum => ../build/.vellum-sdk-b22478c
-	github.com/dshills/vellum/drivers/cogent => ../build/.vellum-sdk-b22478c/drivers/cogent
-	github.com/go-text/typesetting => ../build/.vellum-sdk-b22478c/drivers/cogent/build/typesetting
+	cogentcore.org/core => ../build/.vellum-sdk-e58d405-elab1/drivers/cogent/build/upstream
+	github.com/dshills/vellum => ../build/.vellum-sdk-e58d405-elab1
+	github.com/dshills/vellum/drivers/cogent => ../build/.vellum-sdk-e58d405-elab1/drivers/cogent
+	github.com/go-text/typesetting => ../build/.vellum-sdk-e58d405-elab1/drivers/cogent/build/typesetting
 )
 
 require github.com/dshills/elab v0.0.0

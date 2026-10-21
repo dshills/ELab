@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-21",
+  "repository": "https://github.com/dshills/vellum",
+  "upstream_commit": "e58d40581fe21d1de53fd54cab1bcf6acf11c163",
+  "derived_source_commit": "96e22bf25809148b9a28169baf1b24cba72af475",
+  "sdk_cache": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-e58d405-elab1",
+  "archive": "third_party/vellum/vellum-e58d405-elab1.tar.gz",
+  "archive_bytes": 20374442,
+  "archive_sha256": "2930c7cbd513e08294572189bf50e8fa4f084d05871107d07d49da6404a8fd57",
+  "manifest_sha256": "bdb27cbe5bd77854af161ef82ccf4404662f8f9bcdaf8c78812bea396b808900",
+  "sdk_files_verified": 8408,
+  "bootstrap_files": 6,
+  "compatibility_patch": {
+    "path": "third_party/vellum/patches/elab-public-e58d405-compat.patch",
+    "sha256": "667d2881838a072934e3d06342cc6995dd182ed2390d9d509a635d2da20cf660"
+  },
+  "compatibility_source_and_test_files": 22,
+  "application_go_sources_unchanged": true,
+  "application_go_files": 670,
+  "validation": {
+    "full_check_sh_exit_code": 0,
+    "python_tests": 67,
+    "focused_preparer_tests": 10,
+    "framework_ui_race_exit_code": 0,
+    "framework_driver_offscreen_race_exit_code": 0,
+    "framework_no_window_text_handoff_race_exit_code": 0,
+    "native_development_build_exit_code": 0,
+    "consumer_compile_exit_code": 0,
+    "post_test_sdk_integrity_verified": true,
+    "original_sdk_archive_and_cache_verified": true,
+    "native_development_binary_sha256": "a8b77d7345b6e783b2841447ae21d3add74f37e43d2c79ebe470b2f9421587ee"
+  },
+  "initial_failures": {
+    "unpatched_public_compile": "Missing ControlStateKey, SupportsControlStateKey and SettleNumberField; raw compiler output preserved.",
+    "module_graph": "Initial compile requested go mod tidy; tidy completed offline.",
+    "framework_test_command": "Initial framework UI test placed -C after another flag and exited 2 before tests; corrected invocation passed."
+  },
+  "preservation": {
+    "passed": true,
+    "protected": {
+      "third_party/vellum/vellum-b22478c.tar.gz": "22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968",
+      "build/ELab.app/Contents/MacOS/ELab": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+      "build/ELab-0.172.0-189-alpha/ELab.app/Contents/MacOS/ELab": "a8cf9d053f9cce67f902fe09fe47d5917aa07588982290ce566d546d3b3faf7f",
+      "build/ELab-0.172.0-189-alpha/elab-agent": "f1f4419dba2d692b19d988921d7bd4286688ae1b4ba143c603860595c6772e59",
+      "build/ELab-0.176.0-193-candidate/ELab.app/Contents/MacOS/ELab": "ee9371715982f5c1c998421a3554efefba214cde8f57367a924a388dca3a0afd",
+      "build/ELab-0.176.0-193-candidate/elab-agent": "537c14d6f7075ba6105085660912fe19a3be29ec5be7fc45fe9cab4c9fb083b9"
+    },
+    "compatibility_patch_reverse_check": true,
+    "derived_source_clean": true,
+    "native_app_launched": false
+  },
+  "visible_elab_app_launched": false,
+  "desktop_control": false,
+  "owner_app_replaced": false,
+  "replacement_package_created": false,
+  "release_qualified": false,
+  "promoted": false,
+  "scope": "Source dependency migration, provenance/integrity, native compilation, no-window framework regression tests and full ELab source/offscreen quality. Existing app packages retain their original SDK. No physical pointer/typing, visible native acceptance, packaging/promotion or full-MVP claim.",
+  "raw_archive": {
+    "path": "raw.tar.gz",
+    "files": 41,
+    "sha256": "ef079fdcd25f668d11e3cb0ffaa665d48cc1b59445245126eac80df84895335a",
+    "bytes": 47477
+  }
+}

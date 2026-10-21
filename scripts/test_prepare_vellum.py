@@ -52,7 +52,8 @@ class PrepareVellumTests(unittest.TestCase):
                 member.size = len(data)
                 member.mode = 0o644
                 archive.addfile(member, io.BytesIO(data))
-        self.pin = {"schema": 1, "archive": "third_party/vellum/fixture.tar.gz",
+        self.pin = {"schema": 2, "archive": "third_party/vellum/fixture.tar.gz",
+                    "repository": prepare.REPOSITORY, "upstream_commit": "a" * 40,
                     "archive_bytes": self.archive.stat().st_size,
                     "sha256": prepare.digest(self.archive), "manifest_sha256": hashlib.sha256(raw).hexdigest(),
                     "cache": "build/.vellum-sdk-fixture", "prefix": "vellum-v0.0.0-fixture", "version": "v0.0.0-fixture",
@@ -94,6 +95,34 @@ class PrepareVellumTests(unittest.TestCase):
                         prepare.prepare_sdk(self.root)
                     run.assert_not_called()
                 self.assertFalse(self.cache.exists())
+
+    def test_public_source_identity_is_required_before_commands(self):
+        for changes in [{"repository": "https://example.com/not-vellum"},
+                        {"upstream_commit": "main"}, {"source_commit": "b" * 40}]:
+            with self.subTest(changes=changes):
+                original = dict(self.pin)
+                self.pin.update(changes)
+                self.write_pin()
+                with mock.patch.object(prepare.subprocess, "run") as run:
+                    with self.assertRaisesRegex(ValueError, "repository/commit|compatibility patch"):
+                        prepare.prepare_sdk(self.root)
+                    run.assert_not_called()
+                self.pin = original
+        self.write_pin()
+
+    def test_derived_sdk_requires_unchanged_patch_provenance(self):
+        path = self.root / "third_party/vellum/patches/compat.patch"
+        path.parent.mkdir()
+        path.write_bytes(b"recorded compatibility patch\n")
+        self.pin.update(upstream_commit="b" * 40, compatibility_patch={
+            "path": "third_party/vellum/patches/compat.patch", "sha256": prepare.digest(path)})
+        self.write_pin()
+        self.assertEqual(prepare.prepare_sdk(self.root), self.cache)
+        path.write_bytes(b"modified patch\n")
+        with mock.patch.object(prepare.subprocess, "run") as run:
+            with self.assertRaisesRegex(ValueError, "compatibility patch differs"):
+                prepare.prepare_sdk(self.root)
+            run.assert_not_called()
 
     def test_modified_or_extra_cache_files_are_preserved(self):
         prepare.prepare_sdk(self.root)

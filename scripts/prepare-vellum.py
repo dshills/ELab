@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify and materialize ELab's pinned private Vellum SDK."""
+"""Verify and materialize ELab's pinned Vellum SDK from public source."""
 
 import hashlib
 import json
@@ -12,9 +12,10 @@ import tarfile
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
+REPOSITORY = "https://github.com/dshills/vellum"
 BOOTSTRAP = {
     "scripts/check-sdk.py", "scripts/child_process.py", "scripts/sdk_environment.py",
-    "scripts/native_gpu.py", "scripts/native_archive.py",
+    "scripts/native_gpu.py", "scripts/native_archive.py", "scripts/native_linkers.py",
 }
 MODULES = {
     "github.com/dshills/vellum": "",
@@ -59,13 +60,28 @@ def regular(path):
 
 def load_pin(root):
     pin = json.loads((root / "third_party/vellum/sdk.lock.json").read_text())
-    if pin.get("schema") != 1 or pin.get("private_build") is not True:
+    if pin.get("schema") != 2 or pin.get("private_build") is not True:
         raise ValueError("unsupported SDK pin")
     for name in ["sha256", "manifest_sha256"]:
         if not re.fullmatch(r"[0-9a-f]{64}", pin.get(name, "")):
             raise ValueError("invalid SDK digest")
     if not re.fullmatch(r"[0-9a-f]{40}", pin.get("source_commit", "")):
         raise ValueError("invalid SDK source commit")
+    if (pin.get("repository") != REPOSITORY
+            or not re.fullmatch(r"[0-9a-f]{40}", pin.get("upstream_commit", ""))):
+        raise ValueError("invalid public SDK repository/commit")
+    patch = pin.get("compatibility_patch")
+    if patch is not None:
+        if (not isinstance(patch, dict) or set(patch) != {"path", "sha256"}
+                or not re.fullmatch(r"[0-9a-f]{64}", patch.get("sha256", ""))
+                or relative(patch.get("path")).parent != Path("third_party/vellum/patches")):
+            raise ValueError("invalid SDK compatibility patch pin")
+        path = root / relative(patch["path"])
+        regular(path)
+        if digest(path) != patch["sha256"]:
+            raise ValueError("SDK compatibility patch differs from its trusted pin")
+    elif pin["source_commit"] != pin["upstream_commit"]:
+        raise ValueError("derived SDK source requires a pinned compatibility patch")
     if pin.get("module") != "github.com/dshills/vellum" or set(pin.get("bootstrap", {})) != BOOTSTRAP:
         raise ValueError("invalid SDK module/bootstrap pin")
     if any(not re.fullmatch(r"[0-9a-f]{64}", value) for value in pin["bootstrap"].values()):

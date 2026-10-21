@@ -1,5 +1,13 @@
 # Current Vellum SDK integration
 
+## Public repository migration · October 21, 2026
+
+The active source dependency now comes from [dshills/vellum](https://github.com/dshills/vellum) at public commit `e58d40581fe21d1de53fd54cab1bcf6acf11c163`. Native preparation and the four explicit replacements remain necessary under the upstream consumer contract. ELab's previously required control ownership/numeric settlement APIs are absent from that snapshot; the [explicit compatibility patch](../third_party/vellum/patches/elab-public-e58d405-compat.patch) carries those and the existing held-input, legacy-handoff and scroll-publication fixes forward. Local derived source is `96e22bf25809148b9a28169baf1b24cba72af475`; it is not an upstream commit.
+
+The active archive is `vellum-e58d405-elab1.tar.gz`, with 8,408 hashed members and a separate manifest. Schema 2 pins the public repository/base, derived source, compatibility patch, archive/manifest and six bootstrap files, now including `native_linkers.py`. All four module replacements use `build/.vellum-sdk-e58d405-elab1`. [Validation](validation/vellum-public-source-update/README.md) records source/build checks and their limits. No app was launched or promoted; /189 and /193 retain their original binaries and dependency qualification. Native acceptance with this dependency is still required for a future replacement package.
+
+## Previous integration: 677548d
+
 Private SDK `677548d0ea93d7d6a689998eb8cf3d6f3ff9f59f` preserves the action from an ordinary left-button press through release and queued delivery. Existing ELab revision/history guards reject old Close/Undo actions after an agent edit, even when repaint retains the same logical owner. Keyboard/programmatic current-callback and placement behavior remain unchanged.
 
 Only `drivers/cogent/controls.go` and the new `drivers/cogent/button_context_test.go` differ from `ade66eb`. Dependencies/notices and all five bootstrap sources are identical. The archive has 7,454 hashed files, 18,627,256 bytes, SHA-256 `9233f875cf11829e68ccc62772f9d841c4e01c0da9b2364c0f6f6a7e0d871fe9`, manifest SHA-256 `f5e9dcab46eb4c6805587f0301f96745a4802abf2f2f50614bb42ebf3479cc89`. All four native replacements use `build/.vellum-sdk-677548d`. [Evidence](validation/button-press-context/README.md) records the before/after mounted checks and framework qualification. Review /146 remains immutable and contains the held-button defect; the qualified replacement is recorded below.

@@ -1,8 +1,10 @@
 # First usable version: delivery plan
 
-Updated October 20, 2026. Owner: implementation agent; owner acceptance: project owner.
+Updated October 21, 2026. Owner: implementation agent; owner acceptance: project owner.
 
 The [remaining-work checklist](66-first-version-completion-checklist.md) expands the current finish criteria into concrete tasks, dependencies and pass conditions, while retaining the separate full-MVP requirements.
+
+**Owner-directed dependency update, October 21:** source builds now use public Vellum base `e58d405`, with the required existing ELab input/ownership fixes recorded as a compatibility patch. [Dependency record](../third_party/vellum/README.md). This explicit dependency request supersedes the framework freeze for this migration only. The /189 owner app and /193 candidate remain unchanged on their historical SDK; neither qualifies a future package built with the new dependency. Carry the new source/build results forward, then qualify the affected native interactions and replacement bytes before any promotion.
 
 ## Outcome and scope
 

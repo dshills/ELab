@@ -1,6 +1,6 @@
 # Items required to complete the first version
 
-October 20, 2026. This is the remaining-work checklist, based on the current repository and recorded results. It does not claim that pending checks have passed.
+Updated October 21, 2026. This is the remaining-work checklist, based on the current repository and recorded results. It does not claim that pending checks have passed.
 
 ## What “first version” means
 
@@ -16,6 +16,8 @@ Current position:
 The critical path is: **validate the combined repair candidate → fix any reproduced blocker → qualify the final bytes → owner walkthrough → designate one release with rollback.** Documentation preparation does not close an interaction or acceptance gate.
 
 **Execution checkpoint, October 20:** [exact /193 headless qualification](../docs/validation/headless-release-193/README.md) now passes reference workflows, project/electrical/storage/capacity suites across three non-native adapters, viewer/position corrections, sixteen analysis cases and fresh saved-result/example reopens. Sandboxed external paths also pass development-file/IP-denial controls; five helper clients are explicitly outside that sandbox claim. All owned processes close normally. The 670 Go files still match the completed full-quality gate, so item 7 is satisfied for current source. This advances the headless portions of items 3–8. Items 1–2, native adapter/input acceptance, owner feedback and promotion remain open; no native app was started.
+
+**Dependency change, October 21:** the owner requested migration to public Vellum. Source builds now use [public base `e58d405` with explicit compatibility fixes](../third_party/vellum/README.md). The prior checkpoint remains evidence for unchanged /193 bytes, not for a package using the new SDK. Source quality and affected package/native qualification must account for this new pin; native and owner gates stay open.
 
 ## Remaining private-alpha checklist
 
