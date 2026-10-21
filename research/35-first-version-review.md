@@ -1,6 +1,6 @@
-# Try ELab 0.172.0 /189
+# Try ELab 0.178.0 /195
 
-The [private alpha app](../build/ELab-0.172.0-189-alpha/ELab.app) is the version currently open for your review. You confirmed that its canvas, parts list and toolbar are visible. Keep using that window; no restart or replacement is needed for this walkthrough. Save your work before choosing another example.
+The [separate review app](../build/ELab-0.178.0-195-candidate/ELab.app) is prepared for owner testing. It includes the public Vellum update, prior input fixes and the repaired blank-inspector transition. The existing /189 owner app and projects are preserved. The isolated engineering test window is closed; this guide does not assume an app is currently open. Save work before switching binaries, and use a separate project copy. /195 is not a promoted release.
 
 Try the four tasks below when convenient. Start with the ordinary workflow; you do not need to run the detailed engineering regressions. Report a blocked action or a confusing control even if you find a way around it.
 
@@ -30,16 +30,16 @@ The included Examples files are editable copies; Save As preserves their startin
 
 ## Known limits of this exact version
 
-- After an invalid index, time, Verify or sweep entry, correcting back to its previous accepted value can leave an action blocked. Timing thresholds and intervals have related recovery problems. Report the entered text and action; do not assume a refused action used the new value.
-- A private unfinished timing entry can target an agent-selected different probe. Avoid simultaneous agent changes to timing probes while editing those fields in /189. These defects have source and headless fixes in the separate **/193 candidate**, whose native acceptance is pending. It has not replaced your app.
-- Earlier automated window captures were blank for an unexplained reason. Your visible initial window is confirmed; report a blank window if you actually encounter one.
-- Generic educational models are not general SPICE compatibility or PCB design. Complete accessibility/IME, other environments, broader performance, the hobbyist study and public distribution remain open. The private app has a local ad-hoc signature; it is not notarized. You deferred clean-account/default-startup qualification for this private alpha.
+- The four complete physical workflows and full minimum/normal-size layout pass remain open. Native /195 checks cover the repaired inspector transition, LED editing/Undo/Redo, preservation decisions, Save/Open and SVG export. LED/RC/flasher graph and numerical comparisons also pass through the native endpoint and matching agent; those reconstructions use public commands.
+- Representative recording/timing, Verify/reset and sweep correction paths passed with actual native input on /194. /195 carries the same controls and passes the full mounted source suite; additional native field branches remain on the checklist. Report a refusal or surprising target with the exact input and action.
+- Generic educational models are not general SPICE compatibility or PCB design. Complete accessibility/IME, broader environments/performance, the hobbyist study and public distribution remain open. The private app has a local ad-hoc signature and is not notarized. You deferred clean-account/default-startup qualification for this private alpha. The tested host is macOS 26.6.2 arm64.
+
 
 For useful feedback, include the task, exact action or text, expected result and visible result. A saved `.elab` file and screenshot can help reproduce a failure. No task acceptance has been recorded yet.
 
 ## External agents
 
-The alpha folder contains the matching `elab-agent`. It accepts one JSON request per line on stdin and replies on stdout. These discovery calls are read-only:
+The /195 candidate folder contains the matching `elab-agent`. It accepts one JSON request per line on stdin and replies on stdout. These discovery calls are read-only:
 
 ```json
 {"version":1,"id":"catalog","command":"capabilities.list","params":{}}
@@ -47,6 +47,6 @@ The alpha folder contains the matching `elab-agent`. It accepts one JSON request
 {"version":1,"id":"state","command":"project.inspect","params":{}}
 ```
 
-A standalone agent has its own headless project. To control a visible app, a future session must be launched with `--agent-endpoint /absolute/path/to/new-descriptor.json`; connect the matching agent with `--connect /absolute/path/to/new-descriptor.json`. Do not restart the current owner window just for this walkthrough. Public command discovery documents mutation revision guards and retry keys; the same validated commands back the UI.
+A standalone agent has its own headless project. To control a visible app, a future session must be launched with `--agent-endpoint /absolute/path/to/new-descriptor.json`; connect the matching agent with `--connect /absolute/path/to/new-descriptor.json`. Keep any existing owner work saved before choosing which app to run. Public command discovery documents mutation revision guards and retry keys; the same validated commands back the UI.
 
-The [delivery plan](34-first-version-plan.md) tracks qualification and the [candidate receipt](ui-audit/first-version/timing-candidate-193.json) identifies /193. The [previous walkthrough and engineering history](35-first-version-review-history-2026-10-20.md) are preserved verbatim, including historical /188 and early /189 status statements. Use this page for the current /189 owner tasks.
+The [delivery plan](34-first-version-plan.md), [remaining checklist](66-first-version-completion-checklist.md) and [candidate receipt](ui-audit/first-version/inspector-candidate-195.json) track /195. The [native/package evidence](../docs/validation/inspector-candidate-195/README.md) records exact scope and hashes. The previous [October 20 history](35-first-version-review-history-2026-10-20.md) and [verbatim /189 guide](35-first-version-review-history-2026-10-21.md) remain preserved. No owner acceptance of the four tasks has been recorded.

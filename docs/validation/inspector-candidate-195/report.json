@@ -1,0 +1,293 @@
+{
+  "date": "2026-10-21",
+  "version": "0.178.0",
+  "build": "195",
+  "source_commit": "8d7d646344cf8a98a9638494fa0fe4d5661e2e3a",
+  "clean_build_vcs": true,
+  "native_sha256": "b668fecefc1f09c30078bfbeaa07d80d3364f208b9db1d28445dbcd37b2420ac",
+  "agent_sha256": "b5dfc91eb98fff3b5176072fca868e027c11b63c24a3ecb53ab296de4253627b",
+  "candidate": "/Users/dshills/Development/projects/ELab/build/ELab-0.178.0-195-candidate",
+  "source_quality": "docs/validation/inspector-scroll-ownership/report.json",
+  "quality_go_inputs": 671,
+  "native": {
+    "status": "targeted_native_repair_passed",
+    "source_commit": "8d7d646344cf8a98a9638494fa0fe4d5661e2e3a",
+    "native_sha256": "b668fecefc1f09c30078bfbeaa07d80d3364f208b9db1d28445dbcd37b2420ac",
+    "agent_sha256": "b5dfc91eb98fff3b5176072fca868e027c11b63c24a3ecb53ab296de4253627b",
+    "inspector_transition_verified": true,
+    "inspector_visual_evidence": [
+      "long-inspector-keyboard-revealed.jpg",
+      "led-inspector-restored.jpg",
+      "led-dark.jpg"
+    ],
+    "method": "CUA keyboard/accessibility focus revealed long recording timing section; native Examples menu replaced it; screenshots show new inspector at top. Initial wheel/AX focus attempts retained.",
+    "led_native_edit_undo_redo": true,
+    "displayed_current_ma_sequence": [
+      2.917,
+      1.477,
+      2.917,
+      1.477
+    ],
+    "native_save_chooser_cancel_and_unsaved_cancel_preserve_edit": true,
+    "native_save_and_open_dialogs_verified": true,
+    "saved_project": {
+      "path": "/private/tmp/elab-native-195/LED UI.elab",
+      "sha256": "0f9b9217c2581e50a8391d66fb0cd802e450b6cdd3728abf761f65c4cbbd8f29",
+      "graph_and_result_match_exact_packaged_agent": true
+    },
+    "native_svg_export": {
+      "path": "/private/tmp/elab-native-195/LED schematic.svg",
+      "sha256": "a396da462dbcd0eb74f2d784f6a048fd65b0099fdf18d1845f3df92f5f33c9ca",
+      "bytes": 9288,
+      "component_labels_complete": true
+    },
+    "original_npn_fixture_file_unchanged": true,
+    "themes_observed": [
+      "Light",
+      "Dark"
+    ],
+    "capture_size": [
+      1053,
+      802
+    ],
+    "counterpart_shutdown": {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.stdio",
+      "input_revision": 6,
+      "command_revision": 3,
+      "document_generation": 2,
+      "discard_recovery": false,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    },
+    "release_qualified": false,
+    "promoted": false,
+    "limitations": [
+      "Not physical drawing/wiring from blank or complete RC/flasher interaction walkthrough",
+      "No all-controls/minimum-height/second-working-size layout acceptance",
+      "No new latency, clean-account, distribution, accessibility/IME or owner acceptance",
+      "SVG format/labels checked; no fresh PDF/CSV or additional physical print test in this native session"
+    ]
+  },
+  "reference_workflows": {
+    "status": "passed",
+    "cases": [
+      {
+        "name": "led",
+        "constructed_graph_exact": true,
+        "matches_historical_native_numerical_reference": true,
+        "native_endpoint_matches_exact_packaged_agent": true
+      },
+      {
+        "name": "rc",
+        "constructed_graph_exact": true,
+        "matches_historical_native_numerical_reference": true,
+        "native_endpoint_matches_exact_packaged_agent": true
+      },
+      {
+        "name": "flasher",
+        "constructed_graph_exact": true,
+        "matches_historical_native_numerical_reference": true,
+        "native_endpoint_matches_exact_packaged_agent": true
+      }
+    ],
+    "headless_shutdowns": [
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 21,
+        "command_revision": 15,
+        "document_generation": 1,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      },
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 24,
+        "command_revision": 16,
+        "document_generation": 1,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      },
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 139,
+        "command_revision": 62,
+        "document_generation": 1,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      }
+    ],
+    "scope": "Public command reconstruction plus native endpoint numerical parity; no physical native drawing/wiring or owner first-use acceptance"
+  },
+  "session": {
+    "status": "closed",
+    "source_commit": "8d7d646344cf8a98a9638494fa0fe4d5661e2e3a",
+    "native_sha256": "b668fecefc1f09c30078bfbeaa07d80d3364f208b9db1d28445dbcd37b2420ac",
+    "agent_sha256": "b5dfc91eb98fff3b5176072fca868e027c11b63c24a3ecb53ab296de4253627b",
+    "runtime": "/private/tmp/elab-native-195-runtime",
+    "endpoint": "/private/tmp/elab-native-195/endpoint.json",
+    "owner_apps_untouched": true,
+    "open_pid": 39124,
+    "owned_pid": 39125,
+    "observed_command": "/private/tmp/elab-native-195-runtime/ELab.app/Contents/MacOS/ELab --agent-endpoint /private/tmp/elab-native-195/endpoint.json --no-recovery --no-appearance",
+    "shutdown": {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.socket",
+      "input_revision": 170,
+      "command_revision": 43,
+      "document_generation": 7,
+      "discard_recovery": false,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    },
+    "open_exit_code": 0,
+    "owned_process_absent": true,
+    "endpoint_removed": true,
+    "candidate_native_unchanged": true,
+    "runtime_native_unchanged": true
+  },
+  "archive": {
+    "passed": true,
+    "source_commit": "8d7d646344cf8a98a9638494fa0fe4d5661e2e3a",
+    "candidate": "/Users/dshills/Development/projects/ELab/build/ELab-0.178.0-195-candidate",
+    "archive": "/Users/dshills/Development/projects/ELab/build/ELab-0.178.0-195-candidate.zip",
+    "archive_sha256": "76da198544ebb7aff0d1fc1d9e98b1bf052e37abbc44963396ef99c8f9a2f02d",
+    "archive_bytes": 35454918,
+    "verified_files": 124,
+    "strict_extracted_signature_valid": true,
+    "extracted_bytes_and_modes_match": true,
+    "examples": [
+      {
+        "file": "LED-2k.elab",
+        "sha256": "96635fc0cd1ab4b13258373c4e5ed474dc3239dda4dfc37202cbce59324cc032",
+        "graph_preserved": true,
+        "paused_and_clean": true,
+        "shutdown": {
+          "id": "shutdown-1",
+          "status": "completed",
+          "phase": "completed",
+          "actor": "agent.stdio",
+          "input_revision": 6,
+          "command_revision": 3,
+          "document_generation": 2,
+          "discard_recovery": false,
+          "checkpoint_recovery": false,
+          "cancelable": false,
+          "recovery_finalized": true,
+          "workers_joined": true,
+          "exit_ready": true
+        }
+      },
+      {
+        "file": "LED-flasher.elab",
+        "sha256": "d62dba5123d42b3dbf76356a7c28411a46ab09678aad9aa72ec727889c9a7a95",
+        "graph_preserved": true,
+        "paused_and_clean": true,
+        "shutdown": {
+          "id": "shutdown-1",
+          "status": "completed",
+          "phase": "completed",
+          "actor": "agent.stdio",
+          "input_revision": 6,
+          "command_revision": 3,
+          "document_generation": 2,
+          "discard_recovery": false,
+          "checkpoint_recovery": false,
+          "cancelable": false,
+          "recovery_finalized": true,
+          "workers_joined": true,
+          "exit_ready": true
+        }
+      },
+      {
+        "file": "RC-charge.elab",
+        "sha256": "4c86701997fb227c1f3f8e55b2e8ec613ca7a51d75b4061356cd51185203eadf",
+        "graph_preserved": true,
+        "paused_and_clean": true,
+        "shutdown": {
+          "id": "shutdown-1",
+          "status": "completed",
+          "phase": "completed",
+          "actor": "agent.stdio",
+          "input_revision": 5,
+          "command_revision": 3,
+          "document_generation": 2,
+          "discard_recovery": false,
+          "checkpoint_recovery": false,
+          "cancelable": false,
+          "recovery_finalized": true,
+          "workers_joined": true,
+          "exit_ready": true
+        }
+      }
+    ],
+    "current_sdk_notices_included": true,
+    "source_hashes_match_671": true,
+    "protected_files_preserved": {
+      "build/ELab.app/Contents/MacOS/ELab": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+      "build/ELab-0.172.0-189-alpha/ELab.app/Contents/MacOS/ELab": "a8cf9d053f9cce67f902fe09fe47d5917aa07588982290ce566d546d3b3faf7f",
+      "build/ELab-0.172.0-189-alpha/elab-agent": "f1f4419dba2d692b19d988921d7bd4286688ae1b4ba143c603860595c6772e59",
+      "third_party/vellum/sdk.lock.json": "1c90747e8621753ecd0d174b84d0ba999b035497d7771dccc908fcb86469cd47",
+      "third_party/vellum/vellum-e58d405-elab1.tar.gz": "2930c7cbd513e08294572189bf50e8fa4f084d05871107d07d49da6404a8fd57",
+      "third_party/vellum/vellum-b22478c.tar.gz": "22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968"
+    },
+    "prior_candidate_trees_preserved": [
+      "ELab-0.174.0-191-candidate",
+      "ELab-0.175.0-192-candidate",
+      "ELab-0.176.0-193-candidate",
+      "ELab-0.177.0-194-candidate"
+    ],
+    "ready_for_owner_testing": true,
+    "release_qualified": false,
+    "promoted": false,
+    "limits": [
+      "No extracted native startup, installation/quarantine/notarization/clean-account acceptance",
+      "Physical four-workflow and complete layout/owner acceptance remain open"
+    ]
+  },
+  "environment": {
+    "macos": "26.6.2",
+    "architecture": "arm64"
+  },
+  "raw_archive": {
+    "files": 74,
+    "sha256": "b132d728a826209b4d86da3668c95f9576b3d9d2d35dca1722cdb54324b8934d",
+    "bytes": 869196
+  },
+  "ready_for_owner_testing": true,
+  "full_native_workflows_accepted": false,
+  "release_qualified": false,
+  "promoted": false,
+  "owner_alpha_preserved": "0.172.0 /189"
+}

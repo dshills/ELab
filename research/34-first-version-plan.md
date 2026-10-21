@@ -6,6 +6,8 @@ The [remaining-work checklist](66-first-version-completion-checklist.md) expands
 
 **Owner-directed dependency update, October 21:** source builds now use public Vellum base `e58d405`, with the required existing ELab input/ownership fixes recorded as a compatibility patch. [Dependency record](../third_party/vellum/README.md). This explicit dependency request supersedes the framework freeze for this migration only. The /189 owner app and /193 candidate remain unchanged on their historical SDK; neither qualifies a future package built with the new dependency. Carry the new source/build results forward, then qualify the affected native interactions and replacement bytes before any promotion.
 
+**Native repair checkpoint, October 21:** the [0.178.0 /195 review candidate](../docs/validation/inspector-candidate-195/README.md) repairs a blank inspector found during /194 native testing. Full source checks pass; actual inspector transition, LED editing/Undo/Redo, native Save/Open/SVG, exact LED/RC/flasher native-agent comparisons and package extraction/example reopens pass within their documented scope. Both owned test apps are closed. /189 and canonical packages are unchanged. Continue the remaining input branches, complete physical reference workflows and minimum/normal-size layout checks, then obtain owner feedback and designate one release. No promotion or complete workflow acceptance has occurred.
+
 ## Outcome and scope
 
 Deliver a **private macOS hobbyist alpha** that lets the owner draw a circuit, watch it simulate, edit values, measure a waveform, undo a mistake, save/reopen and export a schematic. An external agent must perform the same reference workflows through public commands. The core runs offline without an account.

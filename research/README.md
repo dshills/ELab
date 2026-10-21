@@ -72,4 +72,4 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 
 - [0.169.0 /186 recorded-index replacement](56-recorded-index-review.md): clean app/agent, exact copied validation/preservation cases, strict signature, ZIP and example reopens; original /185 source/failures and all prior artifacts preserved. Owner walkthrough remains pending.
 
-- [Native release acceptance and inspector repair](67-native-release-acceptance.md): actual /194 input and numerical passes, preserved recordings, and a reproduced blank-inspector blocker requiring a new repaired candidate.
+- [Native release acceptance and inspector repair](67-native-release-acceptance.md): actual /194 input and numerical passes, preserved recordings, the reproduced inspector blocker, and its native-verified /195 replacement with package checks.

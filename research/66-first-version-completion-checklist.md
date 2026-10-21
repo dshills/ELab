@@ -9,11 +9,11 @@ The existing [delivery plan](34-first-version-plan.md) defines the first deliver
 Current position:
 
 - **Owner version: 0.172.0 /189.** Its initial canvas, parts list and toolbar are owner-confirmed visible. The four owner workflow tasks have not been accepted.
-- **Last packaged headless candidate: 0.176.0 /193**. **Public-Vellum native candidate: 0.177.0 /194**, built from `bb0365887a6d9f2b092a6ade753c796362a78b58`. Targeted native input and data-preservation checks pass, but its blank-inspector document transition blocks acceptance. The inspector repair passes full source quality and needs a new native candidate. Neither replaces /189.
+- **Current review candidate: 0.178.0 /195**, built from clean `8d7d646344cf8a98a9638494fa0fe4d5661e2e3a`. Full source quality, repaired native inspector transition, LED edit/Undo/Redo, Save/Open/SVG, three native/agent reference comparisons and package/extraction/example checks pass within their recorded scope. It preserves /189 and is not promoted. /194 remains preserved with its original blank-inspector failure.
 - **No new component family or analysis feature is needed to finish this cut.** MOSFETs, transient simulation, probes, cursors, persistence, exports and printing already exist. Shipped features still need honest behavior and appropriate validation.
-- The owner authorized desktop use on October 21. The isolated /194 session completed targeted native input checks and exposed a blank-inspector transition blocker; its repaired replacement needs native validation. The ordinary startup/clean-account gate remains explicitly deferred for the private alpha only.
+- The owner authorized desktop use on October 21. The isolated /194 session completed targeted native input checks and exposed a blank-inspector transition blocker; /195 repairs that transition in the native app. The ordinary startup/clean-account gate remains explicitly deferred for the private alpha only.
 
-**October 21 native checkpoint:** the public-Vellum **0.177.0 /194** candidate passed representative actual recording/timing, Verify/reset and sweep corrections, agent interleaving, exact data preservation and fresh reopening. It also exposed a blank inspector after replacing a long recording document with the LED example. [Findings and repair scope](67-native-release-acceptance.md), [frozen native evidence](../docs/validation/native-acceptance-194/README.md). The fix is not in /194; no promotion or complete workflow/layout acceptance has occurred.
+**October 21 native checkpoint:** the public-Vellum **0.177.0 /194** candidate passed representative actual recording/timing, Verify/reset and sweep corrections, agent interleaving, exact data preservation and fresh reopening. It also exposed a blank inspector after replacing a long recording document with the LED example. [Findings and repair scope](67-native-release-acceptance.md), [frozen native evidence](../docs/validation/native-acceptance-194/README.md). The fix is not in /194; [the /195 native/package check](../docs/validation/inspector-candidate-195/README.md) passes the repaired transition. No promotion or complete workflow/layout acceptance has occurred.
 
 The critical path is: **validate the combined repair candidate → fix any reproduced blocker → qualify the final bytes → owner walkthrough → designate one release with rollback.** Documentation preparation does not close an interaction or acceptance gate.
 
@@ -25,16 +25,16 @@ The critical path is: **validate the combined repair candidate → fix any repro
 
 ### 1. Accept the input fixes through actual native controls
 
-**Status:** source and packaged-agent evidence exists; native acceptance remains open. **Responsible:** engineering. **Dependency:** an available desktop and a separately owned test session.
+**Status:** representative actual /194 native corrections and exact agent comparisons pass. /195 passes the repaired document transition and the full mounted source suite. The additional branches listed below remain open. **Responsible:** engineering. **Dependency:** an available desktop and a separately owned test session.
 
-Use /193 as the starting candidate; do not rebuild merely to begin testing. Exercise these specific problem classes with actual typing and the relevant button or menu, including activation without Enter/focus loss:
+Continue with /195; reuse unaffected /194 actual-input evidence and the unchanged-control source checks. Exercise these specific problem classes with actual typing and the relevant button or menu, including activation without Enter/focus loss:
 
 - [ ] Invalid recorded index/time → correction to the previously accepted value → Previous/Next/Play. The correction and requested transport action must both take effect correctly.
 - [ ] Invalid Verify duration/sample step → correction to the accepted value → Verify or Use project startup. No old accepted value may silently replace rejected text.
 - [ ] Invalid DC sweep Start/Stop/Points → correction → Run. The accepted curve must use the visible corrected settings.
 - [ ] Invalid timing threshold or interval → correction → direction selection or paging. Invalid text must keep a relevant error; correction must recover on the first intended action.
 - [ ] Dependent thresholds/interval bounds that become valid together must commit together where supported by the repaired retained-entry flow. An individually invalid intermediate value must not produce a measurement using old settings.
-- [ ] An unfinished timing draft must not commit into a different probe selected by an agent. Fresh input for the new probe must remain usable.
+- [x] An unfinished timing draft must not commit into a different probe selected by an agent. Fresh input for the new probe must remain usable. Exact /194 native/agent probe-ownership case passed; /195 does not change that control logic.
 - [ ] Recorded-position refusal must visibly explain the valid index/time range and units, including a one-row DC capture.
 
 **Done when:** each declared native case has an observed outcome matching the public command result, with capture rows/metadata preserved and no unreported fallback, wrong target or blocked correction. Retain failures or unavailable observations rather than replacing them with passing attempts. The [prepared fixtures](../docs/validation/native-check-193-preparation/README.md) cover six proposed cases; they do **not** cover this entire list or constitute native execution.
@@ -43,7 +43,7 @@ Use /193 as the starting candidate; do not rebuild merely to begin testing. Exer
 
 **Status:** earlier native observations exist; complete acceptance of the combined candidate is open. **Responsible:** engineering, followed by owner feedback.
 
-- [ ] Observe a real visible window with schematic, parts list and toolbar; distinguish a failed capture from a user-visible display defect.
+- [x] Observe a real visible window with schematic, parts list and toolbar; distinguish a failed capture from a user-visible display defect. /195 Light/Dark observations and restored-inspector screenshots pass.
 - [ ] Check essential controls in both themes at the declared minimum layout size and one normal working size. Check resized windows rather than assuming a large-window screenshot proves minimum-size behavior.
 - [ ] Confirm buttons and labels are complete, scroll areas behave normally, native menus are usable, and the inspector/scope controls remain reachable.
 - [ ] Check keyboard focus, visible errors and a corrected field after error-driven layout changes in the affected workflows.
@@ -98,25 +98,25 @@ Use /193 as the starting candidate; do not rebuild merely to begin testing. Exer
 
 ### 7. Finish source quality on the final implementation
 
-**Status:** satisfied for current implementation: all 670 Go files match the source that passed the full quality gate, and subsequent commits are documentation-only. Reopen only if implementation changes. **Responsible:** engineering.
+**Status:** satisfied for the /195 implementation: all 671 Go files match the source that passed the full quality gate, including the new inspector-scroll regression. Reopen only if implementation changes. **Responsible:** engineering.
 
-- [ ] For any new repair, retain a focused failing reproduction and meaningful regression checks, then review the change for Go structure, error handling, concurrency and ownership.
-- [ ] Format/lint and run relevant focused tests during repair. Run `scripts/check.sh` once on the final changed source: PRD coverage check, lint/static analysis, Python tests, root and desktop race tests/vet, and the configured mounted offscreen tests.
-- [ ] Record source identity and test scope; ensure the candidate actually contains the qualified source.
-- [ ] Leave the worktree clean with changes committed. Preserve existing owner work, earlier candidates and original failed evidence.
+- [x] For any new repair, retain a focused failing reproduction and meaningful regression checks, then review the change for Go structure, error handling, concurrency and ownership.
+- [x] Format/lint and run relevant focused tests during repair. Run `scripts/check.sh` once on the final changed source: PRD coverage check, lint/static analysis, Python tests, root and desktop race tests/vet, and the configured mounted offscreen tests.
+- [x] Record source identity and test scope; ensure the candidate actually contains the qualified source.
+- [x] Leave the worktree clean with changes committed. Preserve existing owner work, earlier candidates and original failed evidence.
 
 **Done when:** final changed source passes required checks and review, and no unresolved regression remains. Documentation-only edits do not require another full Go test campaign.
 
 ### 8. Complete final-package integration and offline operation
 
-**Status:** /193 signatures/archive checks and the new copied headless integration/offline checks pass. Native copied-runtime coverage on /193 remains open; earlier /189 native evidence is not relabeled. **Responsible:** engineering.
+**Status:** /195 copied native/agent reference comparisons and native inspector/LED/save/export checks pass under the isolated policy. Signature, exact 124-file ZIP/extraction and three extracted-agent example reopens pass. Complete physical workflows and ordinary/extracted native startup remain separate. **Responsible:** engineering.
 
 - [ ] Exercise the affected final native/agent integration from the exact candidate or extracted package, with version/hash recorded.
 - [ ] Complete any invalidated copied-runtime/offline checks: no dependency on the source checkout, Vellum checkout, Go toolchain/cache, account or outbound service for core use.
-- [ ] Confirm app/agent identity, editable examples, notices, version, checksum, rollback and known-limit documentation match the selected release.
-- [ ] If bytes change, repeat affected signature/archive/extraction and example save/reopen checks. Otherwise retain the already passing /193 archive evidence.
+- [x] Confirm app/agent identity, editable examples, notices, version, checksum, rollback and known-limit documentation match the selected review candidate. Release designation remains open.
+- [x] If bytes change, repeat affected signature/archive/extraction and example save/reopen checks. /195 archive/extraction and example reopens pass; this does not establish native extracted startup.
 
-**Done when:** the exact distributed private-alpha bytes have the required integration coverage and can perform the reference jobs locally. Do not create /194 or another package merely for new documentation or instrumentation.
+**Done when:** the exact distributed private-alpha bytes have the required integration coverage and can perform the reference jobs locally. Do not create another package merely for new documentation or instrumentation; /195 exists for the reproduced inspector repair.
 
 ### 9. Make the startup and distribution boundary explicit
 
@@ -133,7 +133,7 @@ Use /193 as the starting candidate; do not rebuild merely to begin testing. Exer
 **Status:** initial display confirmed; four-task acceptance pending. **Responsible:** owner for observations; engineering for diagnosis and repair.
 
 - [ ] Record success, confusion or failure for the four tasks in the [owner walkthrough](35-first-version-review.md).
-- [ ] Identify the exact build for each observation. /189 feedback remains valuable, but cannot prove acceptance of input fixes present only in /193.
+- [ ] Identify the exact build for each observation. /189 feedback remains valuable, but cannot prove acceptance of fixes in the /195 review candidate.
 - [ ] After native qualification, offer the combined candidate for the affected owner retest without replacing or closing existing work unexpectedly.
 - [ ] Resolve reproduced work-loss, wrong-result, wrong-target and blocked core-task defects; record any minor remaining limitation clearly.
 
