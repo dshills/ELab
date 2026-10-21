@@ -71,6 +71,12 @@ func TestProjectDiscoveryOwnedPureBoundsAndCompletion(t *testing.T) {
 				}
 			}
 		}
+		if strings.HasPrefix(id, "project.save") {
+			text := strings.Join(contract.Preconditions, " ") + " " + strings.Join(contract.Effects, " ")
+			if strings.Contains(text, "No active analysis") || !strings.Contains(text, "partial results") || !strings.Contains(text, "Later completed kept results remain unsaved/dirty") {
+				t.Fatal(id, "discovery contradicts save-during-analysis ownership")
+			}
+		}
 		// A detailed response owns every mutable layer and cannot poison discovery.
 		schema["x-project-work"].(map[string]any)["retained_jobs"] = 0
 		againSchema, again := projectDetailedSchema(t, s, id)

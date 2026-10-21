@@ -26,9 +26,6 @@ func (s *Service) startProjectSaveLocked(p SaveParams) error {
 	if s.activeProjectWorkLocked() && s.projectJob.work.Command != "project.load" {
 		return &actionError{"busy", "Finish or cancel the active project file operation first"}
 	}
-	if s.verificationActiveLocked() {
-		return &actionError{"busy", "Finish or cancel the active analysis before saving the project"}
-	}
 	if err := s.checkDocumentGenerationLocked(p.ExpectedGeneration); err != nil {
 		return err
 	}
@@ -43,6 +40,9 @@ func (s *Service) startProjectSaveLocked(p SaveParams) error {
 	if err != nil {
 		return err
 	}
+	// Capture only completed kept results. Analysis workers publish immutable
+	// records under the same mutex; later completions remain dirty against this
+	// save's captured membership, even if they finish before file publication.
 	capture := saveCapture{document: s.documentLocked(), generation: s.documentGeneration, sourcePath: s.documentPath, disk: s.diskHash,
 		graph: contentHash(s.graph, s.transientSettings), preferences: preferencesHash(s.pins, s.displayPreferences, s.exampleID), recordings: s.recordingMembershipHashLocked(), overwrite: p.Overwrite}
 	// A new explicit Save supersedes a pending Open. Its later file failure does

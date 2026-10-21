@@ -170,18 +170,6 @@ func (s *Service) requireRecordingSlotLocked() error {
 	}
 	return &actionError{"record-limit", "The project keeps eight recordings. Exclude one from the project before creating or importing another."}
 }
-func (s *Service) verificationActiveLocked() bool {
-	if s.sweepWorkers != 0 {
-		return true
-	}
-	for _, operation := range s.operations {
-		if operationActive(operation.summary.Status) {
-			return true
-		}
-	}
-	return false
-}
-
 func (s *Service) recordingMembershipHashLocked() [32]byte {
 	ids := []string{}
 	for _, id := range s.operationOrder {

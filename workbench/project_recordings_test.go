@@ -184,7 +184,7 @@ func TestProjectLegacySchematicsRemainReadable(t *testing.T) {
 	}
 }
 
-func TestProjectReplacementCancelsOldVerificationAndSaveRefusesPendingWork(t *testing.T) {
+func TestProjectReplacementCancelsOldVerification(t *testing.T) {
 	s := pausedFlasher(t)
 	defer s.Close()
 	duration := 5.
@@ -193,20 +193,6 @@ func TestProjectReplacementCancelsOldVerificationAndSaveRefusesPendingWork(t *te
 	s.mu.Lock()
 	operation := s.operations[id]
 	s.mu.Unlock()
-	path := filepath.Join(t.TempDir(), "pending.elab")
-	raw, _ := json.Marshal(SaveParams{Path: path})
-	revision := s.Snapshot().Revision
-	save := s.Dispatch(context.Background(), Request{Version: 1, ID: "save-pending", Command: "project.save", Params: raw, ExpectedRevision: &revision, Key: "save-pending"}, "test")
-	if save.Error != nil && save.Error.Code == "conflict" {
-		revision = save.Revision
-		save = s.Dispatch(context.Background(), Request{Version: 1, ID: "save-pending", Command: "project.save", Params: raw, ExpectedRevision: &revision, Key: "save-pending"}, "test")
-	}
-	if save.Error == nil || save.Error.Code != "busy" {
-		t.Fatalf("pending Verify save: %+v", save.Error)
-	}
-	if _, err := os.Stat(path); !os.IsNotExist(err) {
-		t.Fatal("busy save published a file")
-	}
 	call(t, s, "project.clear", ReplaceParams{DiscardChanges: true}, "replace")
 	before := s.Snapshot()
 	select {
