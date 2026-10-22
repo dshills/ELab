@@ -1,5 +1,8 @@
 # Using the first engineering alpha
 
+**Latest delivery:** [the owner-selected unsigned macOS release is ready](72-unsigned-release.md). It uses the same /196 runtime bytes, adds distribution instructions and completes exact extracted-native checks. The private engineering-alpha checkpoint below remains preserved.
+
+
 October 22, 2026. [ELab 0.179.0 /196](../build/ELab-0.179.0-196-alpha/ELab.app) is the designated private engineering alpha. [Release package, evidence and limitations](71-first-engineering-release.md). Your review is deferred by instruction; it does not block this release and no review result is inferred.
 
 The core tasks remain useful for optional feedback:

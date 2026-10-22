@@ -1,0 +1,13 @@
+# ELab 0.179.0 unsigned-release readiness
+
+October 22, 2026. The owner selected **“Prepare an unsigned release.”** [Release handoff](../../../research/72-unsigned-release.md), [receipt](report.json), [raw manifest](raw-manifest.json), [retained producers and observations](raw.tar.gz).
+
+The downloadable ZIP contains the unchanged /196 app and agent, three examples, current locked dependency notices, agent protocol, installation instructions, rollback and known limitations. It preserves all 127 members, hashes and executable modes on macOS extraction. Both binaries are arm64, declare a macOS 26.0 deployment target and load only system libraries. Testing is on macOS 26.6.2; other OS/hardware acceptance is not inferred.
+
+Unlike the earlier copied-runtime check, this pass starts the exact newly extracted native binary directly from a folder containing spaces and Unicode. Source/SDK/toolchain/cache/shared geometry access and outbound IP are denied; appearance/recovery writes are disabled. Its actual window renders the flasher and scope, and Fit shows the whole imported circuit. Three reference workflows agree through that native endpoint and the exact extracted external agent. Owned sessions complete joined shutdown, process/endpoint disappearance and exit zero. Extracted package members remain unchanged after native use.
+
+A separate, explicitly quarantined test copy is assessed with spctl. It is rejected with exit 3, as expected for this unsigned channel. It is never launched, no quarantine is removed and no security setting is changed. This is a policy observation, not a successful downloaded-app trust approval or a clean-account installation test. The app has an ad-hoc integrity seal, no Developer ID and no notarization. Apple guidance is linked from the package.
+
+The [existing source/electrical/input/output qualification](../engineering-release-196/README.md) still applies because all runtime bytes and all 672 tracked Go source inputs are unchanged. The full source test suite is not repeated for packaging/documentation. Recoverable cursor-entry and file-panel suffix limitations remain explicitly documented. No feature, solver, model, SDK or format was changed. Owner review and clean-account installation remain deferred; full PRD MVP acceptance is not asserted.
+
+The raw archive excludes binary copies, endpoint credentials and compiler caches. Every retained member is verified against the manifest after archiving. Older engineering-alpha packages, owner versions and prior evidence are preserved. Local readiness is complete; no upload, public hosting or Git push was performed.

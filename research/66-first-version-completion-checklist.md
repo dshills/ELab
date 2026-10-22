@@ -1,5 +1,8 @@
 # Items required to complete the first version
 
+**Unsigned delivery, October 22:** the owner-selected [macOS arm64 release is ready](72-unsigned-release.md). The prior engineering-alpha checkpoints below retain their recorded scope.
+
+
 **Current release, October 22, 2026:** [ELab 0.179.0 /196 first private engineering alpha](71-first-engineering-release.md) is packaged and designated. The five-item engineering queue is complete; full source quality, applicable native/agent/electrical/output checks and package validation pass within their recorded scope. Owner review is deferred by instruction. Canonical /120, owner /189 and previous candidates are preserved. Full PRD MVP, broad accessibility/study and public distribution are not claimed; clean-account startup remains explicitly deferred for this private alpha.
 
 ## Historical plan and broader acceptance checklist

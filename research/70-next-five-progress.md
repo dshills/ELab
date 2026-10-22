@@ -1,5 +1,8 @@
 # Next-five execution
 
+**Unsigned delivery, October 22:** the owner-selected [macOS arm64 release is ready](72-unsigned-release.md). The prior engineering-alpha checkpoints below retain their recorded scope.
+
+
 October 21, 2026. Work follows [the ordered queue](69-next-five-engineering-items.md), without owner review or feature expansion. Current sealed /195 remains preserved; it does not contain the repair below.
 
 ## 1. Demanding simulation interaction

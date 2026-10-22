@@ -1,5 +1,8 @@
 # First engineering release: ELab 0.179.0 /196
 
+**Latest delivery:** [the owner-selected unsigned macOS release is ready](72-unsigned-release.md). It uses the same /196 runtime bytes, adds distribution instructions and completes exact extracted-native checks. The private engineering-alpha checkpoint below remains preserved.
+
+
 October 22, 2026. **The private macOS hobbyist engineering alpha is packaged and ready to use.** The five-item queue is complete within its declared scope. Owner review is deferred by instruction; no new features were added. This is the first engineering release designation, not full PRD MVP or public-distribution acceptance.
 
 - [Open ELab](../build/ELab-0.179.0-196-alpha/ELab.app)

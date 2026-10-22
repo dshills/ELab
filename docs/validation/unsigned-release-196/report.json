@@ -1,0 +1,156 @@
+{
+  "passed": true,
+  "scope": "Owner-authorized unsigned macOS arm64 release readiness",
+  "archive_sha256": "fcb9714728bea0ff602c14f42555eb4fc55ca28e5b178b0be76c2d74cb424edf",
+  "archive_members_preserved_after_extracted_native_use": true,
+  "exact_extracted_native_started_and_rendered": true,
+  "extracted_native_reference_workflows": 3,
+  "all_final_sessions_shutdown_normally": true,
+  "system_dependencies": [
+    {
+      "file": "ELab.app/Contents/MacOS/ELab",
+      "architecture": "arm64",
+      "dependencies_system_only": true,
+      "sha256": "116dfd1edc8c15871b4147633dea9b68bbbc59d7da5ea1aa7d0fa067f92eb227"
+    },
+    {
+      "file": "elab-agent",
+      "architecture": "arm64",
+      "dependencies_system_only": true,
+      "sha256": "4e9b8e88cae9889099fe8edb473b1d4b261ad98c496af64fa5a5128b9d3ec544"
+    }
+  ],
+  "quarantine_assessment": {
+    "exit_code": 3,
+    "output": "/private/tmp/elab-unsigned-release-196/Quarantined assessment.app: rejected\n",
+    "elapsed_s": 0.15955974999815226
+  },
+  "expected_gatekeeper_rejection_observed": true,
+  "security_overrides_performed": false,
+  "quarantined_app_launched": false,
+  "developer_id_signed": false,
+  "notarized": false,
+  "clean_account_installation_tested": false,
+  "owner_review": "deferred by instruction",
+  "known_issues_disposition": "Invalid cursor Return and file-panel basename suffix behavior remain recoverable, state-preserving documented limitations; no new source repair or feature added",
+  "ready_for_unsigned_release": true,
+  "published": false,
+  "date": "2026-10-22",
+  "version": "0.179.0",
+  "build": "196",
+  "release": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.179.0-macos-arm64",
+  "archive": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.179.0-macos-arm64.zip",
+  "source_commit": "885af1ad3c2a130092e532e8ffe966a5c6789889",
+  "owner_authorization": "Prepare an unsigned release",
+  "source_alpha_qualification": "docs/validation/engineering-release-196/report.json",
+  "archive_files": 127,
+  "raw_files": 44,
+  "raw_archive_sha256": "8801f6ea4259ba9ab61ef6966ff14f21a45c487ee6a969de4621bdc87d784b5c",
+  "native_session": {
+    "status": "closed",
+    "source_commit": "885af1ad3c2a130092e532e8ffe966a5c6789889",
+    "native_sha256": "116dfd1edc8c15871b4147633dea9b68bbbc59d7da5ea1aa7d0fa067f92eb227",
+    "agent_sha256": "4e9b8e88cae9889099fe8edb473b1d4b261ad98c496af64fa5a5128b9d3ec544",
+    "runtime": "/private/tmp/elab-unsigned-native-196-runtime",
+    "endpoint": "/private/tmp/elab-unsigned-native-196/endpoint.json",
+    "owner_apps_untouched": true,
+    "open_pid": 89737,
+    "owned_pid": 89739,
+    "observed_command": "/private/tmp/elab-unsigned-release-196/Extracted download \u00b5 with spaces/ELab-0.179.0-macos-arm64/ELab.app/Contents/MacOS/ELab --agent-endpoint /private/tmp/elab-unsigned-native-196/endpoint.json --no-recovery --no-appearance",
+    "shutdown": {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.socket",
+      "input_revision": 133,
+      "command_revision": 30,
+      "document_generation": 4,
+      "discard_recovery": false,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    },
+    "open_exit_code": 0,
+    "owned_process_absent": true,
+    "endpoint_removed": true,
+    "candidate_native_unchanged": true,
+    "runtime_native_unchanged": true
+  },
+  "native_workflows": {
+    "status": "passed",
+    "cases": [
+      {
+        "name": "led",
+        "constructed_graph_exact": true,
+        "matches_historical_native_numerical_reference": true,
+        "native_endpoint_matches_exact_packaged_agent": true
+      },
+      {
+        "name": "rc",
+        "constructed_graph_exact": true,
+        "matches_historical_native_numerical_reference": true,
+        "native_endpoint_matches_exact_packaged_agent": true
+      },
+      {
+        "name": "flasher",
+        "constructed_graph_exact": true,
+        "matches_historical_native_numerical_reference": true,
+        "native_endpoint_matches_exact_packaged_agent": true
+      }
+    ],
+    "headless_shutdowns": [
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 21,
+        "command_revision": 15,
+        "document_generation": 1,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      },
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 24,
+        "command_revision": 16,
+        "document_generation": 1,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      },
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 139,
+        "command_revision": 62,
+        "document_generation": 1,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      }
+    ],
+    "scope": "Public command reconstruction plus native endpoint numerical parity; no physical native drawing/wiring or owner first-use acceptance"
+  },
+  "no_new_runtime_source_or_feature": true,
+  "security_policy": "quarantined test copy assessed and rejected; no quarantine removal or Gatekeeper override",
+  "minimum_macos": "26.0",
+  "tested_macos": "26.6.2"
+}

@@ -1,5 +1,8 @@
 # First-version engineering handoff
 
+**Latest delivery:** [the owner-selected unsigned macOS release is ready](72-unsigned-release.md). It uses the same /196 runtime bytes, adds distribution instructions and completes exact extracted-native checks. The private engineering-alpha checkpoint below remains preserved.
+
+
 October 22, 2026. **The first private engineering alpha, ELab 0.179.0 /196, is packaged and ready.** [Open app](../build/ELab-0.179.0-196-alpha/ELab.app), [release ZIP](../build/ELab-0.179.0-196-alpha.zip), [complete release handoff](71-first-engineering-release.md).
 
 The five ordered engineering items are complete within their declared scope. Owner review is deferred by instruction and is not a release prerequisite. The sole product repair enables Save during independent Verify/sweep work while preserving completed results and unsaved later completion. No new feature or framework update was added.
