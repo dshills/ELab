@@ -1,5 +1,12 @@
 # First usable version: delivery plan
 
+**Current release, October 22, 2026:** [ELab 0.179.0 /196 first private engineering alpha](71-first-engineering-release.md) is packaged and designated. The five-item engineering queue is complete; full source quality, applicable native/agent/electrical/output checks and package validation pass within their recorded scope. Owner review is deferred by instruction. Canonical /120, owner /189 and previous candidates are preserved. Full PRD MVP, broad accessibility/study and public distribution are not claimed; clean-account startup remains explicitly deferred for this private alpha.
+
+## Historical plan and broader acceptance checklist
+
+The earlier checkpoints below preserve their original status. Statements that /195 is current or that owner review blocks designation are superseded by the release above. Broader PRD requirements remain separate from this completed private engineering release.
+
+
 Updated October 21, 2026. Owner: implementation agent; owner acceptance: project owner.
 
 The [remaining-work checklist](66-first-version-completion-checklist.md) expands the current finish criteria into concrete tasks, dependencies and pass conditions, while retaining the separate full-MVP requirements.

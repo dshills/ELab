@@ -10,7 +10,7 @@ The repair removes only the blanket analysis admission refusal. Existing seriali
 
 Three new deterministic regression cases fail on the original source: verification completion before or after file publication, and a pending sweep. They pass with the repair, preserving earlier recordings, valid selection, live physics, fresh reopening and later-result dirtiness. The old replacement/cancellation regression remains; its obsolete Save-refusal assertion is replaced by these preservation checks.
 
-The repaired development agent passes seven observed real-running spans: pan, move, Undo, Save, value edit, Undo and Pause, followed by explicit Verify cancellation. Before/after observations retain the same running job with successful step progress. The electrical edit truthfully marks paused results stale; Restart restores a fresh result. The original file and 21-row recording remain exact; cancellation publishes no result rows. Owned clients finish joined shutdown and exit zero. This is backend interaction evidence, not visible latency. Affected native Save acceptance is reserved for the matching final candidate.
+The repaired development agent passes seven observed real-running spans: pan, move, Undo, Save, value edit, Undo and Pause, followed by explicit Verify cancellation. Before/after observations retain the same running job with successful step progress. The electrical edit truthfully marks paused results stale; Restart restores a fresh result. The original file and 21-row recording remain exact; cancellation publishes no result rows. Owned clients finish joined shutdown and exit zero. This is backend interaction evidence, not visible latency. Matching /196 native Command-S acceptance now passes while the same Verify advances from 50% to 57%; subsequent completion is truthfully dirty and was saved separately.
 
 ## 2. Existing user/agent coverage
 
@@ -20,10 +20,16 @@ Fresh development-agent checks pass current catalog identity and pure discovery;
 
 This closes the selected queue scope. It is not exhaustive every-binding, event/platform or screen-reader acceptance. Native final-package confirmation still follows the source checkpoint.
 
-## Remaining sequence
+## 3. Core keyboard workflow
 
-3. Run the core keyboard workflow on a separately owned matching native candidate, including correction/focus and Save/reopen. Reuse /195 reference physics and unaffected control evidence.
-4. Qualify existing schematic SVG/PDF/PNG page bounds, margins, scale and tiling using local files and previews; do not submit a physical print.
-5. Complete source/package qualification and designate the engineering release with owner review explicitly deferred. Preserve /189, canonical /120, /195 and all failed evidence. No public-distribution or clean-account pass is inferred.
+/196 blank LED placement, four named-terminal wires, invalid-resistance refusal and correction, native Save/Open pass using keyboard input. Readings match 2.917 mA at 1 kΩ and 1.477 mA at 2 kΩ. RC voltage/current probe choices and cursor times 1/10 ms commit on Tab and yield Δt 9 ms and 3.161 V at 10 ms. A control timeout/unintended Save panel was dismissed without writing. Invalid cursor Return resets the rejected draft with generic refusal; valid correction works. This is scoped core-keyboard evidence, not exhaustive draft-retention/IME/accessibility acceptance.
 
-Raw current-run artifacts are under `/private/tmp/elab-next-five-195`; their producers are under ignored `build/next-five-tools`. The final evidence archive/receipt will freeze them after the remaining checks. No new native app has yet been launched in this queue.
+## 4. Schematic output
+
+Native page controls match public A4/12 mm settings. Existing SVG/PDF/PNG commands produce complete fitted Letter/A4 drawings and all 12 fixed-scale tile pages. Page size, bounds, margin pixels, scale/overlap footers and preview/direct PNG byte matching pass. Independent parser/Poppler renders were visually inspected. Invalid settings/page identities refuse without replacing work. No physical printer job was submitted.
+
+## 5. First engineering release
+
+**Completed October 22:** [0.179.0 /196 first private engineering alpha](71-first-engineering-release.md). Full quality matches 672 source hashes; exact native/agent references, three-adapter project/electrical regressions, signature, extraction, three example reopens and final joined shutdown pass. No new feature or dependency upgrade. Owner review remains deferred; no full PRD/public-distribution or clean-account pass is inferred.
+
+[The frozen receipt and raw evidence](../docs/validation/engineering-release-196/README.md) retain original failures, corrected harness attempts, the interrupted first /196 session and its disposition. The separate final owned native session supplies normal shutdown proof. /189, canonical /120, /195, locked dependencies and old candidates are preserved. No further item in this bounded queue remains.

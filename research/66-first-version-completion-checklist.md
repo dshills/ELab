@@ -1,5 +1,12 @@
 # Items required to complete the first version
 
+**Current release, October 22, 2026:** [ELab 0.179.0 /196 first private engineering alpha](71-first-engineering-release.md) is packaged and designated. The five-item engineering queue is complete; full source quality, applicable native/agent/electrical/output checks and package validation pass within their recorded scope. Owner review is deferred by instruction. Canonical /120, owner /189 and previous candidates are preserved. Full PRD MVP, broad accessibility/study and public distribution are not claimed; clean-account startup remains explicitly deferred for this private alpha.
+
+## Historical plan and broader acceptance checklist
+
+The earlier checkpoints below preserve their original status. Statements that /195 is current or that owner review blocks designation are superseded by the release above. Broader PRD requirements remain separate from this completed private engineering release.
+
+
 Updated October 21, 2026. This is the remaining-work checklist, based on the current repository and recorded results. It does not claim that pending checks have passed.
 
 **Latest owner direction:** continue electronics work without owner review. The [next five engineering items](69-next-five-engineering-items.md) now govern ongoing work. Owner task results remain unobserved and are not relabeled as passed; the earlier owner-walkthrough dependency below is superseded as a condition for proceeding. Existing /195 private-alpha evidence remains valid, and no additional feature scope is introduced.

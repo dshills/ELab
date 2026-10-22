@@ -1,0 +1,299 @@
+{
+  "date": "2026-10-22",
+  "kind": "first-private-macos-engineering-alpha",
+  "passed": true,
+  "source_commit": "885af1ad3c2a130092e532e8ffe966a5c6789889",
+  "version": "0.179.0",
+  "build": "196",
+  "release": "/Users/dshills/Development/projects/ELab/build/ELab-0.179.0-196-alpha",
+  "archive": "/Users/dshills/Development/projects/ELab/build/ELab-0.179.0-196-alpha.zip",
+  "archive_sha256": "8879774b02b0f43c99db9547f32c6cabf0efed9d53752c819a5a7b8d28217596",
+  "native_sha256": "116dfd1edc8c15871b4147633dea9b68bbbc59d7da5ea1aa7d0fa067f92eb227",
+  "agent_sha256": "4e9b8e88cae9889099fe8edb473b1d4b261ad98c496af64fa5a5128b9d3ec544",
+  "quality": {
+    "passed": true,
+    "quality_exit_code": 0,
+    "source_commit": "885af1ad3c2a130092e532e8ffe966a5c6789889",
+    "go_source_count": 672,
+    "all_source_hashes_match": true,
+    "required_checks": "scripts/check.sh: PRD audit, lint, 67 Python tests, root/desktop race tests and vet, mounted offscreen race tests and vet",
+    "original_restricted_socket_failure_retained": true
+  },
+  "package": {
+    "passed": true,
+    "source_commit": "885af1ad3c2a130092e532e8ffe966a5c6789889",
+    "release": "/Users/dshills/Development/projects/ELab/build/ELab-0.179.0-196-alpha",
+    "archive": "/Users/dshills/Development/projects/ELab/build/ELab-0.179.0-196-alpha.zip",
+    "archive_sha256": "8879774b02b0f43c99db9547f32c6cabf0efed9d53752c819a5a7b8d28217596",
+    "archive_bytes": 35457681,
+    "verified_files": 127,
+    "strict_extracted_signature_valid": true,
+    "extracted_bytes_and_modes_match": true,
+    "examples": [
+      {
+        "file": "LED-2k.elab",
+        "sha256": "96635fc0cd1ab4b13258373c4e5ed474dc3239dda4dfc37202cbce59324cc032",
+        "graph_preserved": true,
+        "paused_and_clean": true,
+        "shutdown": {
+          "id": "shutdown-1",
+          "status": "completed",
+          "phase": "completed",
+          "actor": "agent.stdio",
+          "input_revision": 6,
+          "command_revision": 3,
+          "document_generation": 2,
+          "discard_recovery": false,
+          "checkpoint_recovery": false,
+          "cancelable": false,
+          "recovery_finalized": true,
+          "workers_joined": true,
+          "exit_ready": true
+        }
+      },
+      {
+        "file": "LED-flasher.elab",
+        "sha256": "d62dba5123d42b3dbf76356a7c28411a46ab09678aad9aa72ec727889c9a7a95",
+        "graph_preserved": true,
+        "paused_and_clean": true,
+        "shutdown": {
+          "id": "shutdown-1",
+          "status": "completed",
+          "phase": "completed",
+          "actor": "agent.stdio",
+          "input_revision": 6,
+          "command_revision": 3,
+          "document_generation": 2,
+          "discard_recovery": false,
+          "checkpoint_recovery": false,
+          "cancelable": false,
+          "recovery_finalized": true,
+          "workers_joined": true,
+          "exit_ready": true
+        }
+      },
+      {
+        "file": "RC-charge.elab",
+        "sha256": "4c86701997fb227c1f3f8e55b2e8ec613ca7a51d75b4061356cd51185203eadf",
+        "graph_preserved": true,
+        "paused_and_clean": true,
+        "shutdown": {
+          "id": "shutdown-1",
+          "status": "completed",
+          "phase": "completed",
+          "actor": "agent.stdio",
+          "input_revision": 5,
+          "command_revision": 3,
+          "document_generation": 2,
+          "discard_recovery": false,
+          "checkpoint_recovery": false,
+          "cancelable": false,
+          "recovery_finalized": true,
+          "workers_joined": true,
+          "exit_ready": true
+        }
+      }
+    ],
+    "current_sdk_notices_included": true,
+    "protected_files_preserved": {
+      "build/ELab.app/Contents/MacOS/ELab": "914c1ba7547d9d1608cc1c8a0ff1bdeca42918e9343108b712e933c43e5d5b7c",
+      "build/ELab-0.172.0-189-alpha/ELab.app/Contents/MacOS/ELab": "a8cf9d053f9cce67f902fe09fe47d5917aa07588982290ce566d546d3b3faf7f",
+      "build/ELab-0.172.0-189-alpha/elab-agent": "f1f4419dba2d692b19d988921d7bd4286688ae1b4ba143c603860595c6772e59",
+      "third_party/vellum/sdk.lock.json": "1c90747e8621753ecd0d174b84d0ba999b035497d7771dccc908fcb86469cd47",
+      "third_party/vellum/vellum-e58d405-elab1.tar.gz": "2930c7cbd513e08294572189bf50e8fa4f084d05871107d07d49da6404a8fd57",
+      "third_party/vellum/vellum-b22478c.tar.gz": "22e38dbb24179292d69353421197ac867aa90c883eed85f1cbcdff999eb57968",
+      "build/ELab-0.178.0-195-candidate.zip": "76da198544ebb7aff0d1fc1d9e98b1bf052e37abbc44963396ef99c8f9a2f02d"
+    },
+    "prior_candidate_trees_preserved": [
+      "ELab-0.178.0-195-candidate",
+      "ELab-0.174.0-191-candidate",
+      "ELab-0.172.0-189-native-unavailable-candidate",
+      "ELab-0.176.0-193-candidate",
+      "ELab-0.177.0-194-candidate",
+      "ELab-0.155.0-172-failed-candidate",
+      "ELab-0.173.0-190-native-unavailable-candidate",
+      "ELab-0.154.0-171-unsigned-candidate",
+      "ELab-0.175.0-192-candidate"
+    ],
+    "candidate_pair_unchanged": true,
+    "engineering_release_qualified": true,
+    "public_distribution_qualified": false
+  },
+  "native_session": {
+    "status": "closed",
+    "source_commit": "885af1ad3c2a130092e532e8ffe966a5c6789889",
+    "native_sha256": "116dfd1edc8c15871b4147633dea9b68bbbc59d7da5ea1aa7d0fa067f92eb227",
+    "agent_sha256": "4e9b8e88cae9889099fe8edb473b1d4b261ad98c496af64fa5a5128b9d3ec544",
+    "runtime": "/private/tmp/elab-release-196-runtime",
+    "endpoint": "/private/tmp/elab-release-196/endpoint.json",
+    "owner_apps_untouched": true,
+    "open_pid": 80892,
+    "owned_pid": 80893,
+    "observed_command": "/private/tmp/elab-release-196-runtime/ELab.app/Contents/MacOS/ELab --agent-endpoint /private/tmp/elab-release-196/endpoint.json --no-recovery --no-appearance",
+    "shutdown": {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.socket",
+      "input_revision": 132,
+      "command_revision": 29,
+      "document_generation": 4,
+      "discard_recovery": false,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    },
+    "open_exit_code": 0,
+    "owned_process_absent": true,
+    "endpoint_removed": true,
+    "candidate_native_unchanged": true,
+    "runtime_native_unchanged": true
+  },
+  "reference_parity": {
+    "status": "passed",
+    "cases": [
+      {
+        "name": "led",
+        "constructed_graph_exact": true,
+        "matches_historical_native_numerical_reference": true,
+        "native_endpoint_matches_exact_packaged_agent": true
+      },
+      {
+        "name": "rc",
+        "constructed_graph_exact": true,
+        "matches_historical_native_numerical_reference": true,
+        "native_endpoint_matches_exact_packaged_agent": true
+      },
+      {
+        "name": "flasher",
+        "constructed_graph_exact": true,
+        "matches_historical_native_numerical_reference": true,
+        "native_endpoint_matches_exact_packaged_agent": true
+      }
+    ],
+    "headless_shutdowns": [
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 21,
+        "command_revision": 15,
+        "document_generation": 1,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      },
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 24,
+        "command_revision": 16,
+        "document_generation": 1,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      },
+      {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 139,
+        "command_revision": 62,
+        "document_generation": 1,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      }
+    ],
+    "scope": "Public command reconstruction plus native endpoint numerical parity; no physical native drawing/wiring or owner first-use acceptance"
+  },
+  "adapters": [
+    {
+      "name": "in-process",
+      "equivalent_to_in_process": true,
+      "reference_workflows": 3,
+      "project_contracts_passed": true,
+      "independent_electrical_references_passed": true
+    },
+    {
+      "name": "headless-stdio",
+      "equivalent_to_in_process": true,
+      "reference_workflows": 3,
+      "project_contracts_passed": true,
+      "independent_electrical_references_passed": true
+    },
+    {
+      "name": "headless-socket",
+      "equivalent_to_in_process": true,
+      "reference_workflows": 3,
+      "project_contracts_passed": true,
+      "independent_electrical_references_passed": true
+    }
+  ],
+  "native_save": {
+    "passed": true,
+    "native_save_during_same_running_verify": true,
+    "progress_before_percent": 50,
+    "progress_after_percent": 57,
+    "verification_later_completed": true,
+    "later_recording_truthfully_dirty": true,
+    "completed_recording_saved_separately": true,
+    "prior_session_shutdown": "Interrupted session: its controller receipt remained ready_for_cua; old processes absent on October 22. No orderly shutdown inferred. Fresh final native session supplies separate joined-shutdown evidence."
+  },
+  "keyboard": {
+    "blank_led_placement_wiring": true,
+    "invalid_resistance_preserves_accepted_circuit": true,
+    "corrected_2k_current_mA": 1.477,
+    "native_save_open": true,
+    "rc_voltage_current_probes": true,
+    "cursor_a_ms": 1,
+    "cursor_b_ms": 10,
+    "delta_ms": 9,
+    "capacitor_voltage_at_10ms_V": 3.161,
+    "limits": [
+      "An automation timeout and unintended Save panel were dismissed without writing",
+      "Rejected cursor Return resets its draft and gives generic refusal; valid correction commits on Tab",
+      "Native file-panel extension entry produced a double .elab suffix in one owned test artifact",
+      "Not exhaustive keyboard/IME/accessibility acceptance"
+    ]
+  },
+  "output": {
+    "fitted_letter_a4": true,
+    "margin_mm": 12,
+    "svg_components_wires_present": true,
+    "tiled_pages_reviewed": 12,
+    "explicit_scale": 1,
+    "tile_overlap_mm": 5,
+    "all_page_png_bytes_match_captured_preview": true,
+    "visual_review_passed": true,
+    "physical_print_submitted": false
+  },
+  "owner_review": "deferred by instruction; unobserved",
+  "engineering_release_qualified": true,
+  "full_prd_mvp_accepted": false,
+  "public_distribution_qualified": false,
+  "clean_account_startup": "deferred for private alpha",
+  "raw_archive_sha256": "0e5205fc1b226c03eae8e5701b517edc3d5ac045d9264e0b4e217fcb2171392d",
+  "raw_files": 328,
+  "scope_limits": [
+    "Single macOS 26.6.2 arm64 workstation; local ad-hoc signature, not notarized",
+    "Source/SDK/toolchain/cache/shared geometry/outbound IP denied for isolated copied test runtime; this does not prove OS privacy or clean-account installation",
+    "Earlier interrupted /196 session has no normal-shutdown proof; saved artifacts retained and processes verified absent; final native session has separate joined shutdown",
+    "Owner study, exhaustive commands/events/accessibility, broader performance and public distribution remain outside this engineering alpha"
+  ]
+}
