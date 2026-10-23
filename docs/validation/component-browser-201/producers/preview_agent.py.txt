@@ -1,0 +1,17 @@
+from pathlib import Path
+import importlib.util,json,subprocess
+root=Path('/Users/dshills/Development/projects/ELab');out=Path('/private/tmp/elab-browser-201-preview2');stage=root/'build/component-browser-201-tools'
+pid=int((out/'launcher.pid').read_text());argv=subprocess.check_output(['/bin/ps','-p',str(pid),'-o','command='],text=True).strip();assert argv.startswith(str(out/'ELab.app/Contents/MacOS/ELab')+' ') and str(out/'endpoint.json') in argv
+agent=out/'agent';agent.write_text('#!/bin/sh\nexec /usr/bin/sandbox-exec -f '+str(out/'runtime.sb')+' '+str(root/'build/releases/ELab-0.180.2-macos-arm64/elab-agent')+' "$@"\n');agent.chmod(0o755)
+spec=importlib.util.spec_from_file_location('client201',root/'scripts/persistence-demo.py');helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+c=helper.Client(str(out/'endpoint.json'),command_preconditions=True,agent_binary=agent)
+before=c.ask('project.inspect');assert before['part_category']=='semiconductors' and before['part_search']=='op-amp' and before['drawing']['kind']=='opamp'
+parts=c.ask('parts.list');assert len(parts)==18 and all(p['category'] and type(p['common'])==bool for p in parts)
+checks=[]
+for group in before['part_categories']:
+ s=c.ask('parts.category.set',{'category':group['id']},True);assert s['part_category']==group['id'] and not s['part_search'] and len(s['matching_parts'])==group['count'];checks.append(dict(category=group['id'],count=len(s['matching_parts'])))
+assert s['drawing']['kind']=='opamp' and not s['components'] and not s['document']['dirty']
+s=c.ask('parts.category.set',{'category':'all'},True)
+s=c.ask('drawing.cancel',{},True)
+c.close();report=dict(passed=True,owned_preview_pid=pid,catalog_kinds=len(parts),groups=checks,native_ui_selected_opamp=True,agent_category_updates_native_ui=True,components_unchanged=True,document_clean=True,bridge='unchanged /200 v1 socket client; final new agent is checked separately')
+(stage/'preview-agent.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))

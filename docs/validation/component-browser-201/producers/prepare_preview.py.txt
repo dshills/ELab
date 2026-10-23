@@ -1,0 +1,11 @@
+from pathlib import Path
+import plistlib,subprocess
+root=Path('/Users/dshills/Development/projects/ELab');out=Path('/private/tmp/elab-browser-201-preview');app=out/'ELab.app'
+assert not (out/'launcher.pid').exists()
+policy=out/'runtime.sb';policy.write_bytes(Path('/private/tmp/elab-first-version-188-signed-runtime/runtime.sb').read_bytes())
+source=(root/'docs/validation/latency-launch-preflight-170/launcher.swift.txt').read_text().replace('/private/tmp/elab-latency-launch-preflight-170',str(out)).replace('/private/tmp/elab-first-version-170-runtime',str(out))
+(out/'launcher.swift').write_text(source)
+subprocess.run(['/usr/bin/xcrun','swiftc','-module-cache-path',str(out/'swift-cache'),str(out/'launcher.swift'),'-o',str(app/'Contents/MacOS/ELabLauncher')],check=True,timeout=60)
+p=app/'Contents/Info.plist';info=plistlib.loads(p.read_bytes());info['CFBundleExecutable']='ELabLauncher';info['CFBundleIdentifier']='com.dshills.elab.browser201';p.write_bytes(plistlib.dumps(info))
+subprocess.run(['/usr/bin/codesign','--force','--deep','--sign','-',str(app)],check=True,timeout=30)
+print(app)

@@ -1,0 +1,60 @@
+from pathlib import Path
+import hashlib,json,shutil,subprocess
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent;dest=root/'docs/validation/component-browser-201'
+assert (stage/'quality-exit-code.txt').read_text().strip()=='0'
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=root).strip()
+b=json.loads((stage/'build-result-signed.json').read_text());package=json.loads((stage/'package-report.json').read_text());protocol=json.loads((stage/'protocol-report.json').read_text());native=json.loads((stage/'native-ui.json').read_text())
+assert protocol['passed'] and protocol['source_commit']==b['source_commit'] and native['passed'] and native['native_sha256']==b['native_sha256']
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(Path(package['archive']))==package['archive_sha256'] and sha(Path(package['release'])/'ELab.app/Contents/MacOS/ELab')==b['native_sha256']
+dest.mkdir(parents=True)
+for name in ('quality.txt','quality-final.txt','quality-serial.txt','quality-exit-code.txt','protocol-report.json','build-result-signed.json','package-report.json','native-ui.json','signature-signed-verify.txt','preview-agent.json','native-agent-report.json'):
+ shutil.copyfile(stage/name,dest/name)
+shutil.copytree(stage/'build',dest/'build-info',ignore=shutil.ignore_patterns('elab','elab-agent','elab-conformance'))
+producers=dest/'producers';producers.mkdir()
+for name in ('build_release.py','protocol_check.py','package.py','freeze.py','prepare_preview.py','preview_agent.py','close_preview.py','native_agent_check.py'):
+ (producers/(name+'.txt')).write_bytes((stage/name).read_bytes())
+shutil.copytree(stage/'early-previews',dest/'early-ui')
+shutil.copytree(stage/'final-ui',root/'research/ui-audit/component-browser-201',dirs_exist_ok=True)
+files=subprocess.check_output(['git','ls-files','-z','*.go'],cwd=root).decode().strip('\0').split('\0');inputs={n:sha(root/n) for n in files}
+for name in ('desktop/go.mod','desktop/go.sum','third_party/vellum/sdk.lock.json','research/13-native-command-inventory.json','scripts/check.sh'):inputs[name]=sha(root/name)
+(dest/'source-inputs.json').write_text(json.dumps(inputs,indent=2)+'\n')
+report=dict(passed=True,kind='component-browser-existing-catalog',version=b['version'],build=b['build'],source_commit=b['source_commit'],clean_build_vcs=True,native_sha256=b['native_sha256'],agent_sha256=b['agent_sha256'],source_checks=dict(command="GOFLAGS='-p=1' GOPROXY=off PYTHONDONTWRITEBYTECODE=1 ./scripts/check.sh",exit_code=0,go_source_count=len(files),scope='goimports/staticcheck; 67 Python tests; all root/desktop race tests and vet; mounted offscreen race checks and vet',initial_attempts='two default package-parallel runs hit the pre-existing flasher integration work-time limit; the identical suite passed with Go packages serialized; no limits changed or tests skipped'),public_protocol=protocol,native_ui=native,package=package,component_kinds=18,new_component_models=False,file_format_changed=False,pinned_sdk_changed=False,public_commands=166,owner_documents_modified=False,published=False,developer_id_signed=False,notarized=False,limitations=['Preliminary isolated preview captures included stale/blank images; the All-view outer-scroll experiment failed at small sizes and was not retained','Clean-account installation, complete PRD, VoiceOver and IME qualification remain deferred','Earlier native pointer/drag and flasher timing limitations are not requalified by this browser change'])
+(dest/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+(dest/'README.md').write_text('''# Component browser /201
+
+October 23, 2026. ELab 0.181.0. See the [receipt](report.json),
+[packaged-agent checks](protocol-report.json), [native checks](native-ui.json),
+and [package validation](package-report.json). The user/agent contract is in
+[component-browser.md](../../component-browser.md).
+
+Common, six families and global name/alias search organize the unchanged 18
+kinds. Rows reuse the sheet's symbol geometry. A local presentation adapter
+adds artwork to the existing managed ListBox; the pinned SDK is unchanged.
+The final All view scrolls within that bounded list, with category/search above.
+No device models, file format, simulation limits or editing behavior were added.
+
+Shared category/search commands publish session-only state and preserve the
+graph, simulation, history and document dirty flag. Tests cover UI/agent parity,
+category inventories, global aliases, invalid/stale admission, isolated metadata,
+keyboard search/selection, and symbol coverage. The packaged agent additionally
+checks retained retry ownership and direct placement outside the visible group.
+
+Two initial default package-parallel quality runs hit the existing flasher
+integration work-time limit. The identical full suite passed with GOFLAGS=-p=1,
+including conformance, race, vet, mounted tests and all 67 Python tests. No limits
+were changed and no tests were skipped. Logs retain all three attempts.
+
+Owned native previews verified Common/category names, vector symbols, global
+search and keyboard selection, plus external-client category changes. Preliminary
+captures include blank/stale images and an unsuccessful full-height outer-scroll
+experiment; they are retained under early-ui and do not qualify the final layout.
+Final packaged UI observations and images identify the released binary separately.
+The owner app's documents were preserved. Old packages were not replaced.
+
+ZIP extraction into a Unicode/spaces path preserves members and modes and passes
+strict ad-hoc signature verification. Developer ID/notarization, clean-account
+installation, complete PRD and VoiceOver/IME acceptance remain outside this work.
+''')
+manifest={str(p.relative_to(dest)):dict(sha256=sha(p),bytes=p.stat().st_size) for p in sorted(dest.rglob('*')) if p.is_file()}
+(dest/'MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n');print(json.dumps(dict(passed=True,files=len(manifest),source_commit=b['source_commit'],archive_sha256=package['archive_sha256'])))

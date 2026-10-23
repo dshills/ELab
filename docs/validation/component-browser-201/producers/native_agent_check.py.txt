@@ -1,0 +1,22 @@
+from pathlib import Path
+import hashlib,importlib.util,json,sys
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent;out=Path('/private/tmp/elab-browser-201-final-native')
+b=json.loads((stage/'build-result-signed.json').read_text());release=root/'build/releases/ELab-0.181.0-macos-arm64';binary=release/'elab-agent'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(binary)==b['agent_sha256'] and sha(release/'ELab.app/Contents/MacOS/ELab')==b['native_sha256']
+spec=importlib.util.spec_from_file_location('client201',root/'scripts/persistence-demo.py');helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+c=helper.Client(str(out/'endpoint.json'),command_preconditions=True,agent_binary=binary)
+if sys.argv[1:]==['--reset']:
+ before=c.ask('project.inspect');assert not before['components'] and not before['document']['dirty']
+ c.ask('parts.category.set',{'category':'common'},True)
+ after=c.ask('drawing.cancel',{},True);assert after['part_category']=='common' and after['part_search']=='' and after['drawing']['tool']=='select' and not after['document']['dirty']
+ c.close();(stage/'native-after.json').write_text(json.dumps(after,indent=2)+'\n');print('Browser restored to Common and Select; normal app stays open.');sys.exit(0)
+try:
+ before=c.ask('project.inspect');assert before['part_category']=='all' and before['part_search']=='MOSFET' and len(before['matching_parts'])==2 and before['drawing']['kind']=='switch'
+ assert not before['components'] and not before['document']['dirty']
+ s=c.ask('parts.category.set',{'category':'passives'},True);assert s['part_search']=='' and len(s['matching_parts'])==4
+ s=c.ask('parts.search.set',{'query':'op-amp'},True);assert len(s['matching_parts'])==1 and s['matching_parts'][0]['kind']=='opamp'
+ assert s['part_category']=='passives' and not s['document']['dirty'] and not s['components']
+finally:c.close()
+(stage/'native-agent-report.json').write_text(json.dumps(dict(passed=True,native_sha256=b['native_sha256'],agent_sha256=b['agent_sha256'],ui_selected_final_catalog_kind=True,ui_global_search_observed_by_agent=True,agent_category_and_global_search_sent=True,circuit_unchanged=True,document_clean=True,app_left_running=True),indent=2)+'\n')
+print('Matching packaged agent observed native keyboard selection/search and updated native browser; circuit unchanged and clean.')

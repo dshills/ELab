@@ -1,0 +1,42 @@
+import hashlib,json,os,shutil,subprocess,sys
+from pathlib import Path
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent
+version,build='0.181.0','201';review=root/'build'/f'ELab-{version}-{build}-candidate'
+source=(stage/'source-commit.txt').read_text().strip()
+sys.path.insert(0,str(root/'scripts'))
+from runtime_isolation import pinned_child_runner
+sdk,run_child=pinned_child_runner()
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=root).strip(),'source must be clean'
+assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()==source
+assert not review.exists()
+(stage/'source.txt').write_text(source+'\n');(stage/'build').mkdir()
+env=dict(os.environ,GOWORK='off',GOCACHE=str(root/'build/go-cache'),GOPROXY='off',GOTOOLCHAIN='local',CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native',PYTHONDONTWRITEBYTECODE='1')
+with (stage/'build.txt').open('x') as log:
+ for name,cwd,target in [('elab-agent',root,'./cmd/elab-agent'),('elab-conformance',root,'./cmd/elab-conformance'),('elab',root/'desktop','.')]:
+  binary=stage/'build'/name
+  run_child(['go','build','-buildvcs=true','-o',str(binary),target],cwd=cwd,env=env,stdout=log,stderr=-2,timeout=120,check=True)
+  info=subprocess.check_output(['go','version','-m',str(binary)],cwd=root,text=True,timeout=15)
+  assert 'vcs.revision='+source in info and 'vcs.modified=false' in info
+  (stage/'build'/(name+'-build-info.txt')).write_text(info)
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=root).strip(),'build changed tracked source'
+review.mkdir()
+with (stage/'package.txt').open('x') as log:
+ run_child([sys.executable,'-B',str(sdk/'scripts/package-app.py'),'--binary',str(stage/'build/elab'),'--output',str(review/'ELab.app'),'--name','ELab','--identifier','com.dshills.elab','--version',version,'--build-version',build,'--sign-identity','-'],cwd=root,env=env,stdout=log,stderr=-2,timeout=90,check=True)
+shutil.copyfile(stage/'build/elab-agent',review/'elab-agent');(review/'elab-agent').chmod(0o755)
+
+app=review/'ELab.app'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+from runtime_isolation import bundle_tree
+raw_sha=sha(stage/'build/elab')
+manifest=json.loads((app/'Contents/Resources/APP_MANIFEST.json').read_text())
+assert manifest['source_binary_sha256']==raw_sha and manifest['signed_identity']=='-' and manifest['private_build'] is True
+verified=subprocess.run(['/usr/bin/codesign','--verify','--deep','--strict','--verbose=2',str(app)],capture_output=True)
+(stage/'signature-signed-verify.txt').write_bytes(verified.stdout+verified.stderr);verified.check_returncode()
+display=subprocess.run(['/usr/bin/codesign','-dv','--verbose=4',str(app)],capture_output=True,check=True)
+(stage/'signature-signed-details.txt').write_bytes(display.stdout+display.stderr)
+assert b'Signature=adhoc' in display.stderr and b'TeamIdentifier=not set' in display.stderr
+assert b'Info.plist=not bound' not in display.stderr and b'Sealed Resources=none' not in display.stderr
+r=dict(passed=True,source_commit=source,clean_build_vcs=True,version=version,build=build,review=str(review),native_sha256=sha(app/'Contents/MacOS/ELab'),agent_sha256=sha(review/'elab-agent'),source_native_sha256=raw_sha,signed_identity='-',strict_bundle_signature_valid=True,source_bundle=bundle_tree(app))
+assert r['native_sha256']!=raw_sha
+(stage/'build-result-signed.json').write_text(json.dumps(r,indent=2)+'\n')
+print(json.dumps({k:v for k,v in r.items() if k!='source_bundle'}))

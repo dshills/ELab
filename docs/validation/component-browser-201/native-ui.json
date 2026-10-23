@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "scope": "Final packaged binary: Common/symbols, native category menu, keyboard All-list navigation and reveal, typed global search, external packaged-agent round trip; pointer wheel/drag not qualified",
+  "source_commit": "feb8aed35968fdb3e28a51a5c6d3c9a001a55269",
+  "native_sha256": "59d73ef4e08533212c095b6cda56d969f8e5e7df2589e808f00d072af287067f",
+  "agent_sha256": "47cab4741f339000249956d0e1716a20356aa2fb4b051e14cebcba89bdb9caaf",
+  "app": "build/releases/ELab-0.181.0-macos-arm64/ELab.app",
+  "common_six_symbols_and_names_visible": true,
+  "native_categories_and_counts": true,
+  "all_eighteen_reachable_by_arrows": true,
+  "last_kind_selected": "switch",
+  "last_row_automatically_revealed": true,
+  "typed_global_search": "MOSFET -> nmos and pmos",
+  "agent_changed_category": "passives",
+  "agent_global_search_visible": "op-amp -> Powered op-amp",
+  "document_clean": true,
+  "components_unchanged": true,
+  "app_left_running": true,
+  "final_category": "common",
+  "final_tool": "select",
+  "normal_recovery_and_appearance_defaults": true,
+  "ready_window_size": [
+    2214,
+    1265
+  ],
+  "owner_documents_modified": false,
+  "images": {
+    "01-common.png": "d3cd307e9f9ec2fce7f3a4172fe86fc8820d992984575c04a0c001626d20fafe",
+    "02-all-bottom.png": "447ec435d8cd4ff82e42da7e88112576d8860643242fabf8b0bb6b7d36894ff5",
+    "03-all-last-parts.png": "071e5590961367102a7aeacdb473e62f76ff7fded6216e860aa010c464c6537d",
+    "04-all-scrollbar-end.png": "e7b683d2fd063fc880f221c8ce7645c3fc516b981412ffe871c11120a882bb78",
+    "05-all-keyboard-last.png": "0fccab9d3d9feb425b4a9748ef4f23dcf5b4d0997eb78ddbc2f39b1fb0c7e7b3",
+    "06-all-wheel.png": "76096957e9f7f3e5b4b5ae71398d385942bde22c9aa702cc934dfb090aa572c9",
+    "07-global-search.png": "49cae32a1472253713199ce4ee2f3459ca875deb812209fbe54fbee4323d206e",
+    "08-global-search-keyboard.png": "b73a696b688bb5df7487d1c853009e48a6f77f16ab546e9bc181865502218e05",
+    "09-agent-global-search.png": "a23c76d5af3b60a565fa22e448ce960b2460e2e067ec70705badd3d75de5a3f0",
+    "10-ready.png": "259916edb959ea5380868d684d8bbb47145c7d4446d1380c89cc7b48780ba339"
+  },
+  "limitations": [
+    "CUA wheel, thumb/track coordinate interactions did not visibly move this list; physical pointer scrolling is not claimed as verified",
+    "CUA End did not move focus; ordinary Down navigation and Return selected and revealed the final row",
+    "Preliminary private launchers returned some blank/stale captures; final normal bundle renders are saved separately"
+  ]
+}

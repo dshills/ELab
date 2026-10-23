@@ -1,0 +1,14 @@
+from pathlib import Path
+import importlib.util,json,subprocess,time
+root=Path('/Users/dshills/Development/projects/ELab');out=Path('/private/tmp/elab-browser-201-preview')
+pid=int((out/'launcher.pid').read_text());argv=subprocess.check_output(['/bin/ps','-p',str(pid),'-o','command='],text=True).strip();assert argv.startswith(str(out/'ELab.app/Contents/MacOS/ELab')+' ') and str(out/'endpoint.json') in argv
+agent=out/'agent';agent.write_text('#!/bin/sh\nexec /usr/bin/sandbox-exec -f '+str(out/'runtime.sb')+' '+str(root/'build/releases/ELab-0.180.2-macos-arm64/elab-agent')+' "$@"\n');agent.chmod(0o755)
+spec=importlib.util.spec_from_file_location('client201',root/'scripts/persistence-demo.py');helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+c=helper.Client(str(out/'endpoint.json'),command_preconditions=True,agent_binary=agent)
+s=c.ask('project.inspect');assert not s['document']['dirty'] and not s['components']
+closed=c.ask('app.close',dict(discard_changes=False),True);job=c.wait_for_shutdown_outcome(closed['shutdown']);assert job['status']=='completed' and job['exit_ready'];c.close()
+for _ in range(100):
+ if not (out/'endpoint.json').exists():break
+ time.sleep(.05)
+assert not (out/'endpoint.json').exists()
+(out/'closed.json').write_text(json.dumps(dict(pid=pid,shutdown=job,endpoint_removed=True),indent=2)+'\n');print('Owned preview closed; owner apps preserved')

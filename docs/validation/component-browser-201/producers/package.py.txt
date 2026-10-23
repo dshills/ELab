@@ -1,0 +1,77 @@
+from pathlib import Path
+import hashlib,json,shutil,stat,subprocess,sys,zipfile
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent
+assert (stage/'quality-exit-code.txt').read_text().strip()=='0'
+b=json.loads((stage/'build-result-signed.json').read_text());check=json.loads((stage/'protocol-report.json').read_text());assert check['passed'] and check['source_commit']==b['source_commit']
+sys.path.insert(0,str(root/'scripts'))
+from package_review import members,verify_archive
+previous=root/'build/releases/ELab-0.180.2-macos-arm64';preserved=members(previous)
+release=root/'build/releases/ELab-0.181.0-macos-arm64';assert not release.exists();release.mkdir()
+candidate=Path(b['review']);shutil.copytree(candidate/'ELab.app',release/'ELab.app');shutil.copy2(candidate/'elab-agent',release/'elab-agent')
+for name in ('Examples','Licenses'):shutil.copytree(previous/name,release/name)
+for name in ('AGENT_PROTOCOL.md','ROLLBACK.md'):shutil.copy2(previous/name,release/name)
+readme=(previous/'README.md').read_text().replace('ELab 0.180.2','ELab 0.181.0')
+readme=readme.replace('## Examples','''## Component browser
+
+The library starts in Common with six everyday parts. Use its category menu for
+Sources, Passives, Semiconductors, Amplifiers / ICs, Switches, Connections or All
+components. Schematic symbols appear beside the names. Type a name or alias in
+Search all components and press Return. Search covers all 18 parts regardless of
+category; clearing it returns to that category. Choosing a category clears search.
+All components scrolls within its list, leaving search and category above it.
+Use the arrows and Return/Space to choose a part, then click the sheet or use the
+existing exact-position controls. No component kinds or models were added.
+
+The shared agent interface adds parts.category.set with a category ID. Inspect
+part_categories, part_category, part_search and matching_parts in project.inspect;
+parts.list includes category and common metadata for all kinds. Browser state
+is session-only and does not change the circuit or dirty flag. Direct placement
+through drawing.tool.set / component.place remains available independently of
+the visible filter. The source docs/component-browser.md describes the contract.
+
+## Examples''',1)
+(release/'README.md').write_text(readme)
+(release/'RELEASE_NOTES.md').write_text(f'''# ELab 0.181.0 /201 — October 23, 2026
+
+The component browser now starts in Common, groups the unchanged 18 component
+kinds into six families, and shows the actual schematic symbols beside names.
+A visible search label clarifies that queries cover the entire catalog. Clearing
+search returns to the selected group; selecting a group clears search. The All
+view has a bounded managed list so search/category stay above its scroll area.
+Existing keyboard navigation, exact placement, wiring and accessibility remain.
+
+Users and external agents share parts.category.set and parts.search.set.
+Snapshot inventories and parts.list describe the groups and Common membership.
+Browsing preserves the circuit, simulation, undo history and document dirty flag.
+No new simulated components, device models or file-format changes are included.
+
+Source: {b['source_commit']}. Full lint, Python, race, vet and mounted checks and
+packaged-agent category/search/retry/placement checks are recorded in
+ docs/validation/component-browser-201. Native Common/category/symbol/keyboard
+checks used owned previews; earlier preview capture/scroll failures are retained
+in the evidence. Final packaged UI verification is recorded separately there.
+An initial suite attempt hit the existing flasher work-time limit during a
+concurrent preview build; the final serial quality run is the qualifying result.
+
+The owner-selected unsigned Apple Silicon/macOS 26.0+ channel retains an ad-hoc
+integrity seal without Developer ID or notarization. Clean-account installation,
+full PRD acceptance, VoiceOver and IME qualification remain outside this change.
+Earlier packages and the owner's existing application documents are preserved.
+'''.replace('\n docs/validation','\ndocs/validation'))
+status=dict(kind='unsigned-macos-arm64-feature',version=b['version'],build=b['build'],source_commit=b['source_commit'],native_sha256=b['native_sha256'],agent_sha256=b['agent_sha256'],architecture='arm64',binary_minimum_macos='26.0',developer_id_signed=False,ad_hoc_integrity_seal=True,notarized=False,validation_receipt='docs/validation/component-browser-201/report.json',published=False)
+(release/'RELEASE_STATUS.json').write_text(json.dumps(status,indent=2)+'\n');(release/'RELEASE_MANIFEST.json').write_text(json.dumps(dict(status=status,files=members(release)),indent=2)+'\n')
+expected=members(release);archive=release.parent/(release.name+'.zip');assert not archive.exists()
+with archive.open('xb') as f:
+ archive.chmod(0o644)
+ with zipfile.ZipFile(f,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+  for name,value in expected.items():
+   entry=zipfile.ZipInfo(release.name+'/'+name,date_time=(1980,1,1,0,0,0));entry.create_system=3;entry.external_attr=(stat.S_IFREG|int(value['mode'],8))<<16;entry.compress_type=zipfile.ZIP_DEFLATED;z.writestr(entry,(release/name).read_bytes(),compresslevel=9)
+verify_archive(archive,release.name,expected)
+out=Path('/private/tmp/elab-component-browser-201-extracted');assert not out.exists()
+subprocess.run(['/usr/bin/ditto','-x','-k',str(archive),str(out/'Extracted download µ with spaces')],check=True,timeout=120)
+extracted=out/'Extracted download µ with spaces'/release.name
+assert members(extracted)==expected and members(previous)==preserved
+subprocess.run(['/usr/bin/codesign','--verify','--deep','--strict','--verbose=2',str(extracted/'ELab.app')],check=True,timeout=30)
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+report=dict(release=str(release),archive=str(archive),archive_sha256=sha(archive),extracted=str(extracted),files_verified=len(expected),bytes_and_modes_match=True,strict_ad_hoc_signature_valid=True,previous_release_unchanged=True)
+(stage/'package-report.json').write_text(json.dumps(report,indent=2)+'\n');Path(str(archive)+'.sha256').write_text(report['archive_sha256']+'  '+archive.name+'\n');print(json.dumps(report,indent=2))

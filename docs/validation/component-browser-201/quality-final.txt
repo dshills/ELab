@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "requirements": 27,
+  "counts": {
+    "implemented": 17,
+    "partial": 10,
+    "pending": 0
+  },
+  "scope": "Requirement coverage validation only; does not establish product acceptance"
+}
+{"passed": true, "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-e58d405-elab2", "source": "6ebc97bff24817b63586c920d42700c0761db304"}
+..........................................Starting owned
+Starting owned
+Starting owned
+.........................
+----------------------------------------------------------------------
+Ran 67 tests in 1.477s
+
+OK
+?   	github.com/dshills/elab/cmd/elab-agent	[no test files]
+ok  	github.com/dshills/elab/cmd/elab-conformance	(cached)
+?   	github.com/dshills/elab/cmd/elab-ui-audit	[no test files]
+--- FAIL: TestPerformanceSuiteRetainsCoverageAndCircuitIdentities (32.76s)
+    performance_test.go:39: flasher warm: electrical Verify: &{Code:integration-time-limit Message:mixed integration exceeded its work budget: elapsed-time limit (22 attempted, maximum 512; 100.179 ms elapsed, maximum 100 ms); reduce sample step at 0.0935137034 s, step 8.7e-07: ratio +Inf, errors <nil> / <nil> / mixed integration exceeded its work budget: elapsed-time limit (21 attempted, maximum 512; 100.145 ms elapsed, maximum 100 ms); reduce sample step}
+--- FAIL: TestPerformanceMeasurementsUseFreshChangedRuns (5.57s)
+    --- FAIL: TestPerformanceMeasurementsUseFreshChangedRuns/flasher (0.76s)
+        performance_test.go:86: electrical Verify: &{Code:integration-time-limit Message:mixed integration exceeded its work budget: elapsed-time limit (22 attempted, maximum 512; 101.180 ms elapsed, maximum 100 ms); reduce sample step at 0.0935137034 s, step 8.7e-07: ratio +Inf, errors <nil> / <nil> / mixed integration exceeded its work budget: elapsed-time limit (21 attempted, maximum 512; 101.144 ms elapsed, maximum 100 ms); reduce sample step}
+FAIL
+FAIL	github.com/dshills/elab/internal/conformance	130.192s
+ok  	github.com/dshills/elab/internal/printspool	(cached)
+ok  	github.com/dshills/elab/internal/schematicpdf	(cached)
+ok  	github.com/dshills/elab/internal/uiaudit	1.677s
+ok  	github.com/dshills/elab/transport	(cached)
+ok  	github.com/dshills/elab/workbench	90.041s
+FAIL

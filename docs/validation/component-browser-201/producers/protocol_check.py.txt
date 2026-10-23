@@ -1,0 +1,43 @@
+from pathlib import Path
+import hashlib,importlib.util,json
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent
+b=json.loads((stage/'build-result-signed.json').read_text());binary=Path(b['review'])/'elab-agent'
+assert hashlib.sha256(binary.read_bytes()).hexdigest()==b['agent_sha256']
+spec=importlib.util.spec_from_file_location('client',root/'scripts/persistence-demo.py');helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+c=helper.Client(command_preconditions=True,agent_binary=binary)
+report=dict(source_commit=b['source_commit'],agent_sha256=b['agent_sha256'],groups=[],queries=[])
+try:
+ before=c.ask('project.inspect');assert before['part_category']=='common' and len(before['matching_parts'])==6
+ parts=c.ask('parts.list');assert len(parts)==18 and len({p['kind'] for p in parts})==18
+ assert sum(p['common'] for p in parts)==6 and all(p['category'] for p in parts)
+ caps=c.ask('capabilities.list',{'command':'parts.category.set'})['capabilities'];assert len(caps)==1
+ schema=caps[0]['input_schema'];assert set(schema['properties']['category']['enum'])=={g['id'] for g in before['part_categories']}
+ for group in before['part_categories']:
+  s=c.ask('parts.category.set',{'category':group['id']},True)
+  assert s['part_category']==group['id'] and not s['part_search'] and len(s['matching_parts'])==group['count']
+  report['groups'].append(dict(id=group['id'],count=len(s['matching_parts'])))
+ c.ask('parts.category.set',{'category':'passives'},True)
+ for query,kinds in [('battery',{'dc-source'}),('MOSFET',{'nmos','pmos'}),('op-amp',{'opamp'}),('no-such-part',set()),('  ',{'resistor','capacitor','inductor','potentiometer'})]:
+  s=c.ask('parts.search.set',{'query':query},True);assert {p['kind'] for p in s['matching_parts']}==kinds and s['part_category']=='passives'
+  report['queries'].append(dict(query=query,kinds=sorted(kinds)))
+ c.ask('parts.category.set',{'category':'common'},True)
+ s=c.ask('project.inspect');c.ask('parts.category.set',{'category':'invalid'},True,expect='invalid-params');after=c.ask('project.inspect');assert s==after
+ for key in ('components','wires','document','run_id','electrical_revision','undo_name','redo_name'):
+  assert before[key]==after[key],key
+ # Retained retries must restore the accepted category result, rather than
+ # recomputing matching_parts from another actor's later browser state.
+ request=dict(version=1,id='browser-retry',command='parts.category.set',params={'category':'passives'},expected_command_revision=c.command_revision,key='browser-retry')
+ def raw_ask(value):
+  c.process.stdin.write(json.dumps(value)+'\n');c.process.stdin.flush();r=json.loads(c.process.stdout.readline());assert 'error' not in r,r;return r
+ first=raw_ask(request);c.ask('project.inspect');c.ask('parts.category.set',{'category':'common'},True)
+ retried=raw_ask(request);assert retried.get('duplicate') and first['result']==retried['result'] and first['revision']==retried['revision'] and len(retried['result']['matching_parts'])==4
+ assert c.ask('project.inspect')['part_category']=='common'
+ c.ask('drawing.tool.set',{'tool':'place','kind':'nmos'},True)
+ s=c.ask('component.place',{'kind':'nmos','position':{'x':0,'y':0}},True);assert s['components'][0]['kind']=='nmos' and s['document']['dirty']
+ s=c.ask('parts.category.set',{'category':'sources'},True);assert s['document']['dirty'] and len(s['components'])==1
+ c.ask('project.clear',{'discard_changes':True},True)
+ # Undo history can keep the clear dirty; explicitly permit closing our own fixture.
+ job=c.ask('app.close',{'discard_changes':True},True)['shutdown'];job=c.wait_for_shutdown_outcome(job);assert job['status']=='completed' and job['exit_ready']
+ report.update(passed=True,catalog_kinds=18,global_search=True,browser_preserves_document_and_physics=True,retained_retry_owned=True,direct_agent_placement=True,shutdown=job)
+finally:c.close()
+(stage/'protocol-report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))
