@@ -1,0 +1,14 @@
+from pathlib import Path
+import importlib.util,json,subprocess
+R=Path('/Users/dshills/Development/projects/ELab');O=Path('/private/tmp/elab-ui-198-review');s=json.loads((O/'session.json').read_text());assert subprocess.check_output(['/bin/ps','-p',str(s['owned_pid']),'-o','command='],text=True).strip()==s['observed_command']
+spec=importlib.util.spec_from_file_location('client',R/'scripts/persistence-demo.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);c=m.Client(str(O/'endpoint.json'),command_preconditions=True,agent_binary=Path('/private/tmp/elab-ui-198-runtime/agent'))
+try:
+ assert not c.ask('project.inspect')['document']['dirty']
+ c.ask('project.load',{'path':str(O/'RC.elab')},True);c.ask('simulation.wait');c.ask('view.fit',{},True)
+ baseline=c.ask('project.inspect');before={k:baseline.get(k) for k in ('document','components','wires','transient','transient_settings','scope','run_id','electrical_revision','undo_entry','redo_entry')};changes=[]
+ for section in ('document','component','simulation'):
+  c.ask('workspace.inspector.set',{'section':section},True);a=c.ask('project.inspect');assert a['inspector_section']==section and {k:a.get(k) for k in before}==before;changes.append(section)
+ c.ask('appearance.theme.set',{'theme':'dark'},True);a=c.ask('project.inspect');assert a['theme']=='dark' and not a['document']['dirty']
+ (O/'navigation-report.json').write_text(json.dumps(dict(passed=True,shared_section_values=changes,physical_state_history_and_document_preserved=True,final_section=a['inspector_section'],theme=a['theme'],state=a),indent=2)+'\n')
+finally:c.close()
+print('Native agent navigation and physical-state preservation passed; dark RC fixture ready.')

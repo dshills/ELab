@@ -1,0 +1,11 @@
+from pathlib import Path
+import importlib.util,json,subprocess
+R=Path('/Users/dshills/Development/projects/ELab');O=Path('/private/tmp/elab-ui-198-review');s=json.loads((O/'session.json').read_text());assert subprocess.check_output(['/bin/ps','-p',str(s['owned_pid']),'-o','command='],text=True).strip()==s['observed_command']
+spec=importlib.util.spec_from_file_location('client',R/'scripts/persistence-demo.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);c=m.Client(str(O/'endpoint.json'),command_preconditions=True,agent_binary=Path('/private/tmp/elab-ui-198-runtime/agent'))
+try:
+ a=c.ask('project.inspect');r=next(x for x in a['components'] if x['id']=='R1');assert r['value']==12000 and a['document']['path']==str(O/'RC.elab') and not a['document']['dirty'] and a['project_work']['status']=='completed' and a['project_work']['actor']=='user' and a['inspector_section']=='simulation' and a['theme']=='light'
+ (O/'ui-edited-state.json').write_text(json.dumps(a,indent=2)+'\n')
+ c.ask('simulation.restart',{},True);c.ask('simulation.step',{'duration_s':.01},True);a=c.ask('project.inspect');assert a['paused'] and not a['document']['dirty']
+ (O/'ui-interaction-report.json').write_text(json.dumps(dict(passed=True,selected_component='R1',accepted_value_ohm=12000,ui_save_completed=True,save_actor='user',document_clean=True,inspector_section=a['inspector_section'],theme=a['theme'],scope_time_s=a['transient']['sample']['time_s'] if 'time_s' in a['transient']['sample'] else a['transient']['sample'].get('time'),scope_voltage_v=a['transient']['sample']['voltage_v'],scope='CUA native selection menu, accessibility value field and Apply, toolbar Save, Step and window zoom; public agent observes accepted state; final 10 ms trace advanced through public agent command'),indent=2)+'\n')
+ print(json.dumps(dict(passed=True,value_ohm=r['value'],saved_by=a['project_work']['actor'],clean=not a['document']['dirty'])))
+finally:c.close()

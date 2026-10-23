@@ -2,17 +2,15 @@
 
 ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N/P-channel MOSFET and inductor/RLC circuits from blank: place components, connect named terminals, move and rotate parts, and edit exact values while simulation updates live. Users and agents invoke the same validated application commands.
 
-## Document workspace redesign
-
-The current source uses an Apple-inspired document workspace: a quiet toolbar, dedicated component library, central canvas, fixed **Inspect / Simulate / Document** navigation, compact live readings, and coordinated light/dark appearance. Users and agents share the inspector selection command. See the [design decisions](research/73-native-ui-design.md) and [inspector workflow](docs/workspace-layout.md#inspector-sections). The packaged redesign is recorded separately from the preserved release below.
-
 ## Downloadable release
 
-**ELab 0.179.0 /196 is ready as an unsigned macOS arm64 release.** [Download ZIP](build/releases/ELab-0.179.0-macos-arm64.zip), [SHA-256 checksum](build/releases/ELab-0.179.0-macos-arm64.zip.sha256), or [open app](build/releases/ELab-0.179.0-macos-arm64/ELab.app). The package includes the matching agent, three editable examples, instructions, dependency notices and rollback.
+**ELab 0.180.0 /198 includes the redesigned document workspace.** [Open app](build/releases/ELab-0.180.0-macos-arm64/ELab.app), [download ZIP](build/releases/ELab-0.180.0-macos-arm64.zip), or [verify SHA-256](build/releases/ELab-0.180.0-macos-arm64.zip.sha256). The package includes the matching agent, three editable examples, instructions, dependency notices and rollback.
 
-Requires Apple Silicon and macOS 26.0 or later; tested on macOS 26.6.2. No development tools or account are required for the packaged core workflow. The app has an ad-hoc integrity seal but no Developer ID or notarization, so Gatekeeper can block a downloaded copy. See [installation instructions](build/releases/ELab-0.179.0-macos-arm64/README.md) and [release scope, checks and limitations](research/72-unsigned-release.md). Owner review and clean-account installation remain deferred; full PRD MVP acceptance is not claimed.
+The UI follows a document-editor layout: quiet toolbar, dedicated component library, central canvas, fixed **Inspect / Simulate / Document** navigation, compact live readings, and coordinated light/dark appearance. Users and agents share the inspector selection command. See the [design decisions and screenshots](research/73-native-ui-design.md) and [inspector workflow](docs/workspace-layout.md#inspector-sections).
 
-The extracted app and agent pass core LED/RC/flasher work offline, alongside the existing source quality, numerical, persistence and output checks. No new features were added. Earlier owner /189, candidates and engineering-alpha packages remain preserved. Files are prepared locally; nothing has been publicly uploaded or pushed.
+Requires Apple Silicon and macOS 26.0 or later; tested on macOS 26.6.2. The owner-selected unsigned channel retains an ad-hoc integrity seal, without Developer ID or notarization. Gatekeeper can block a downloaded copy. See [installation instructions](build/releases/ELab-0.180.0-macos-arm64/README.md) and [validation receipt](docs/validation/native-ui-198/report.json). Source quality checks, native/agent LED/RC/flasher references, visual checks, native value editing/Save and ZIP extraction passed their recorded scope. No electronics feature or file-format change is included.
+
+The [0.179.0 /196 release](build/releases/ELab-0.179.0-macos-arm64/ELab.app), owner /189 and earlier packages remain preserved. Owner review and clean-account installation remain deferred; full PRD MVP acceptance is not claimed. Everything is prepared locally; nothing has been publicly uploaded or pushed.
 
 ## Build and run from source
 

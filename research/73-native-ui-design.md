@@ -43,3 +43,11 @@ Final package, screenshots, quality-check results and any remaining limitations 
 ## Boundaries
 
 The implementation uses Vellum/Cogent widgets, macOS window chrome and the existing AppKit menu bridge. It does not claim a complete AppKit conversion, Liquid Glass materials, full VoiceOver qualification, or new electronics capabilities. The component list still uses Vellum's managed list presentation. Very small workspaces and large circuits still require zoom, Fit or scope resizing. Public signing/notarization remains governed by the existing unsigned-release decision.
+
+## Delivered build and evidence
+
+The final build is **ELab 0.180.0 /198**, from clean source `063ea93567f477aa0ccf91bf22557e057136ec51`. [Open the packaged app](../build/releases/ELab-0.180.0-macos-arm64/ELab.app), or use its [ZIP](../build/releases/ELab-0.180.0-macos-arm64.zip). The earlier /197 candidate is retained as an intermediate pass; /198 corrects the light background discovered behind dark inspector navigation.
+
+The [validation receipt](../docs/validation/native-ui-198/report.json) records the full `scripts/check.sh` pass against all 676 unchanged tracked Go source files: goimports, staticcheck, 67 Python tests, root/desktop race tests, vet and mounted-control race regressions. The ZIP was extracted into a Unicode path containing spaces; all 127 files and modes match, the integrity seal verifies, and app/agent bytes remain unchanged after execution. LED/RC/flasher numerical results match historical references and the paired packaged agent. The native UI also selected R1, accepted 12k, saved through the toolbar, stepped the scope, switched inspector sections and changed appearance through its native menu.
+
+[Before/after visual evidence](ui-audit/native-redesign-198/README.md) includes compact light/dark, document-output and large-window captures. The test app closed with joined workers and its endpoint removed. The previous unsigned release is unchanged. A long filename or agent actor in the footer can still wrap at the compact size; this narrow status-text limitation is recorded, rather than claiming that every possible string/layout has been qualified.

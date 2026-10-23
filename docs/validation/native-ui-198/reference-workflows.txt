@@ -1,0 +1,71 @@
+{
+  "status": "passed",
+  "cases": [
+    {
+      "name": "led",
+      "constructed_graph_exact": true,
+      "matches_historical_native_numerical_reference": true,
+      "native_endpoint_matches_exact_packaged_agent": true
+    },
+    {
+      "name": "rc",
+      "constructed_graph_exact": true,
+      "matches_historical_native_numerical_reference": true,
+      "native_endpoint_matches_exact_packaged_agent": true
+    },
+    {
+      "name": "flasher",
+      "constructed_graph_exact": true,
+      "matches_historical_native_numerical_reference": true,
+      "native_endpoint_matches_exact_packaged_agent": true
+    }
+  ],
+  "headless_shutdowns": [
+    {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.stdio",
+      "input_revision": 21,
+      "command_revision": 15,
+      "document_generation": 1,
+      "discard_recovery": false,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    },
+    {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.stdio",
+      "input_revision": 24,
+      "command_revision": 16,
+      "document_generation": 1,
+      "discard_recovery": false,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    },
+    {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.stdio",
+      "input_revision": 139,
+      "command_revision": 62,
+      "document_generation": 1,
+      "discard_recovery": false,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    }
+  ],
+  "scope": "Public command reconstruction plus native endpoint numerical parity; no physical native drawing/wiring or owner first-use acceptance"
+}

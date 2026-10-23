@@ -1,0 +1,100 @@
+{
+  "passed": true,
+  "kind": "native-document-workspace-ui-redesign",
+  "version": "0.180.0",
+  "build": "198",
+  "source_commit": "063ea93567f477aa0ccf91bf22557e057136ec51",
+  "clean_build_vcs": true,
+  "native_sha256": "728ba554a8294f1badcde6a1d84d64a134918d8afcfc61801ad58cdae8612f97",
+  "agent_sha256": "4280ef96f50e917773b4f6a7b37978146034395d1e8216cf0398fbf07eb4e710",
+  "release": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.180.0-macos-arm64",
+  "archive": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.180.0-macos-arm64.zip",
+  "archive_sha256": "503fcedd0c7ed68ad188ae82915fe0f8b1189e49016ebe6ee9f953994d13016c",
+  "source_quality": {
+    "command": "./scripts/check.sh",
+    "exit_code": 0,
+    "go_source_count": 676,
+    "inputs_unchanged": true,
+    "scope": "goimports, staticcheck, 67 Python tests, root and desktop race tests, vet, mounted control race regressions"
+  },
+  "native_headless_reference_workflows": [
+    {
+      "name": "led",
+      "constructed_graph_exact": true,
+      "matches_historical_native_numerical_reference": true,
+      "native_endpoint_matches_exact_packaged_agent": true
+    },
+    {
+      "name": "rc",
+      "constructed_graph_exact": true,
+      "matches_historical_native_numerical_reference": true,
+      "native_endpoint_matches_exact_packaged_agent": true
+    },
+    {
+      "name": "flasher",
+      "constructed_graph_exact": true,
+      "matches_historical_native_numerical_reference": true,
+      "native_endpoint_matches_exact_packaged_agent": true
+    }
+  ],
+  "shared_inspector_navigation_preserves_circuit": true,
+  "native_ui_edit_and_save_observed": {
+    "passed": true,
+    "selected_component": "R1",
+    "accepted_value_ohm": 12000,
+    "ui_save_completed": true,
+    "save_actor": "user",
+    "document_clean": true,
+    "inspector_section": "simulation",
+    "theme": "light",
+    "scope_time_s": 0.01,
+    "scope_voltage_v": 2.8270089574646082,
+    "scope": "CUA native selection menu, accessibility value field and Apply, toolbar Save, Step and window zoom; public agent observes accepted state; final 10 ms trace advanced through public agent command"
+  },
+  "visual_checks": {
+    "compact_window": true,
+    "large_window": true,
+    "light": true,
+    "dark": true,
+    "inspect": true,
+    "simulate": true,
+    "document": true,
+    "scope_step": true,
+    "source": "CUA app screenshots and accessibility state",
+    "screenshots": "research/ui-audit/native-redesign-198",
+    "qualification": "Observed states only; not exhaustive visual, keyboard, IME or accessibility acceptance"
+  },
+  "package": {
+    "verified_members": 127,
+    "zip_extraction_bytes_and_modes_match": true,
+    "strict_ad_hoc_seal": true,
+    "app_and_agent_unchanged_after_execution": true
+  },
+  "owned_native_shutdown": {
+    "id": "shutdown-1",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "agent.socket",
+    "input_revision": 187,
+    "command_revision": 60,
+    "document_generation": 6,
+    "discard_recovery": false,
+    "checkpoint_recovery": false,
+    "cancelable": false,
+    "recovery_finalized": true,
+    "workers_joined": true,
+    "exit_ready": true
+  },
+  "previous_release_preserved": true,
+  "canonical_app_replaced": false,
+  "published": false,
+  "developer_id_signed": false,
+  "notarized": false,
+  "limitations": [
+    "Vellum managed list presentation retained; controls are not all AppKit",
+    "Compact scope controls scroll vertically",
+    "Long footer filenames or agent actor text can wrap in a small window",
+    "Owner review and clean-account startup remain deferred",
+    "Full PRD, platform, command/event, VoiceOver and IME acceptance not asserted"
+  ]
+}

@@ -1,0 +1,18 @@
+/Users/dshills/Development/projects/ELab/build/ui-redesign-198-tools/build/elab-agent: go1.27.3
+	path	github.com/dshills/elab/cmd/elab-agent
+	mod	github.com/dshills/elab	v0.179.1-0.20261023083721-063ea93567f4	
+	build	-buildmode=exe
+	build	-compiler=gc
+	build	DefaultGODEBUG=cryptocustomrand=1,httpservecontentmaxranges=1,tlssecpmlkem=0,tracebacklabels=0,urlstrictcolons=0,x509sslcertoverrideplatform=0
+	build	CGO_ENABLED=1
+	build	CGO_CFLAGS=
+	build	CGO_CPPFLAGS=
+	build	CGO_CXXFLAGS=
+	build	CGO_LDFLAGS=
+	build	GOARCH=arm64
+	build	GOOS=darwin
+	build	GOARM64=v8.0
+	build	vcs=git
+	build	vcs.revision=063ea93567f477aa0ccf91bf22557e057136ec51
+	build	vcs.time=2026-10-23T08:37:21Z
+	build	vcs.modified=false

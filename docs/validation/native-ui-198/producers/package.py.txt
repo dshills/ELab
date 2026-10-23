@@ -1,0 +1,72 @@
+from pathlib import Path
+import hashlib,json,shutil,stat,subprocess,sys,zipfile
+R=Path('/Users/dshills/Development/projects/ELab');S=Path(__file__).resolve().parent;O=Path('/private/tmp/elab-ui-198-package');O.mkdir(mode=0o700)
+sys.path.insert(0,str(R/'scripts'))
+from package_review import members,verify_archive
+b=json.loads((S/'build-result-signed.json').read_text());candidate=Path(b['review']);previous=R/'build/releases/ELab-0.179.0-macos-arm64';preserved=members(previous)
+p=R/'build/releases/ELab-0.180.0-macos-arm64';assert not p.exists();p.mkdir()
+shutil.copytree(candidate/'ELab.app',p/'ELab.app');shutil.copy2(candidate/'elab-agent',p/'elab-agent')
+for name in ('Examples','Licenses'):shutil.copytree(previous/name,p/name)
+for name in ('AGENT_PROTOCOL.md','ROLLBACK.md'):shutil.copy2(previous/name,p/name)
+readme=(previous/'README.md').read_text().replace('ELab 0.179.0','ELab 0.180.0')
+readme=readme.replace('## First circuit','''## Document workspace
+
+The redesign follows the document/canvas/inspector organization of Apple creative
+apps. The left library holds components; the center holds the schematic. The
+right inspector has three sections: Inspect for selected-object editing and
+measurements, Simulate for timing/probes/analysis, and Document for export/print,
+page settings, appearance and recovery. Navigation stays visible while the form
+scrolls. Live scope and compact readings remain available below the circuit.
+
+## First circuit''')
+readme=readme.replace('Fit to page exports','Use the Document inspector for output. Fit to page exports')
+(p/'README.md').write_text(readme)
+(p/'AGENT_PROTOCOL.md').write_text((p/'AGENT_PROTOCOL.md').read_text()+'''\nInspector navigation is shared: workspace.inspector.set takes section component,
+simulation, or document. project.inspect.inspector_section reports the accepted
+session-only selection. Saved schematics and electrical state are unchanged.\n''')
+(p/'RELEASE_NOTES.md').write_text(f'''# ELab 0.180.0 /198 — October 23, 2026
+
+Native UI redesign built from clean source {b['source_commit']}.
+
+The document workspace has a compact toolbar, dedicated component library,
+fixed Inspect / Simulate / Document navigation, a central canvas, compact live
+readings, restrained blue selection and coordinated light/dark surfaces.
+Simulation timing and sampling appear first in Simulate; output actions and
+page settings appear first in Document. Inspector scrolling resets for a new
+document or section and stays in place during ordinary edits. Toolbar icons
+retain accessible action names and history-actor descriptions. Named plot
+colors remain independent of the interface accent.
+
+The new workspace.inspector.set presentation command is available equally to
+users and agents. The existing electronics models, file format, value bounds,
+revision guards, save/recovery behavior and output commands remain in use.
+No new electronics feature is included. Vellum/Cogent controls are retained;
+this is an Apple-inspired layout, not a conversion of every widget to AppKit.
+
+Source checks, exact-byte native/agent numerical comparisons, visual screenshots
+and package verification are recorded in docs/validation/native-ui-198 in the
+source repository. The historical /196 release and earlier owner packages are
+preserved. No public hosting, installation or canonical-app replacement occurs.
+
+Apple Silicon, minimum macOS 26.0; tested on 26.6.2. Ad-hoc integrity seal,
+without Developer ID or notarization. The owner selected this unsigned channel.
+Clean-account installation, owner first-use feedback, full accessibility/IME
+qualification and every platform/command/event remain outside this validation.
+Compact scope controls may scroll vertically; use the divider or Hide scope.
+The component list retains Vellum's list presentation. Educational circuit
+models are not physical part-rating certification or general SPICE support.
+''')
+status=dict(kind='unsigned-macos-arm64-release',version=b['version'],build=b['build'],source_commit=b['source_commit'],native_sha256=b['native_sha256'],agent_sha256=b['agent_sha256'],owner_authorized_channel='Prepare an unsigned release',architecture='arm64',binary_minimum_macos='26.0',tested_macos='26.6.2',developer_id_signed=False,ad_hoc_integrity_seal=True,notarized=False,validation_receipt='docs/validation/native-ui-198/report.json',owner_review='deferred',clean_account_installation='deferred; not tested',full_prd_mvp_accepted=False,published=False)
+(p/'RELEASE_STATUS.json').write_text(json.dumps(status,indent=2)+'\n');(p/'RELEASE_MANIFEST.json').write_text(json.dumps(dict(status=status,files=members(p)),indent=2)+'\n')
+expected=members(p);archive=p.parent/(p.name+'.zip');assert not archive.exists()
+with archive.open('xb') as f:
+ archive.chmod(0o644)
+ with zipfile.ZipFile(f,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+  for name,v in expected.items():
+   e=zipfile.ZipInfo(p.name+'/'+name,date_time=(1980,1,1,0,0,0));e.create_system=3;e.external_attr=(stat.S_IFREG|int(v['mode'],8))<<16;e.compress_type=zipfile.ZIP_DEFLATED;z.writestr(e,(p/name).read_bytes(),compresslevel=9)
+verify_archive(archive,p.name,expected);extract=O/'Extracted download µ with spaces';r=subprocess.run(['/usr/bin/ditto','-x','-k',str(archive),str(extract)],capture_output=True,timeout=120);(O/'ditto.txt').write_bytes(r.stdout+r.stderr);r.check_returncode();extracted=extract/p.name;assert members(extracted)==expected and members(previous)==preserved
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(extracted/'ELab.app/Contents/MacOS/ELab')==b['native_sha256'] and sha(extracted/'elab-agent')==b['agent_sha256']
+r=subprocess.run(['/usr/bin/codesign','--verify','--deep','--strict','--verbose=2',str(extracted/'ELab.app')],capture_output=True,timeout=30);(O/'signature.txt').write_bytes(r.stdout+r.stderr);r.check_returncode()
+report=dict(release=str(p),archive=str(archive),archive_sha256=sha(archive),extracted=str(extracted),files_verified=len(expected),bytes_and_modes_match=True,app_agent_bytes_match_clean_candidate=True,strict_ad_hoc_signature_valid=True,previous_release_unchanged=True,previous_release_members=preserved)
+(O/'report.json').write_text(json.dumps(report,indent=2)+'\n');Path(str(archive)+'.sha256').write_text(sha(archive)+'  '+archive.name+'\n');print(json.dumps({k:v for k,v in report.items() if k!='previous_release_members'},indent=2))
