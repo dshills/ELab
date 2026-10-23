@@ -1,0 +1,90 @@
+{
+  "kind": "session-colored-technical-details",
+  "source_checks_passed": true,
+  "release_ready": false,
+  "source_parent_commit": "86351189dabb656d0595e48fc4fdecc49168ea9c",
+  "source_inputs": 866,
+  "absent_source_inputs": [
+    "go.sum"
+  ],
+  "source_quality_command": "GOFLAGS='-p=1' GOPROXY=off PYTHONDONTWRITEBYTECODE=1 ./scripts/check.sh",
+  "quality_exit_code": 0,
+  "desktop_race_seconds": 173.949,
+  "mounted_race_seconds": 149.661,
+  "python_tests": 67,
+  "unchanged_root_results": "Reused Go test cache where valid; native inventory tests ran against the changed theme source.",
+  "sdk": {
+    "schema": 2,
+    "repository": "https://github.com/dshills/vellum",
+    "upstream_commit": "e58d40581fe21d1de53fd54cab1bcf6acf11c163",
+    "source_commit": "211e3fe22aa2069721e77c607d0005f78fc0d9f0",
+    "compatibility_patch": {
+      "path": "third_party/vellum/patches/elab-public-e58d405-disclosure-theme-compat.patch",
+      "sha256": "cc275003461fed01ec95d683cd308dc92249917c200a54e132d871b6fbb0977b"
+    },
+    "archive": "third_party/vellum/vellum-e58d405-elab7.tar.gz",
+    "archive_bytes": 20387868,
+    "sha256": "dcb8b11c12f5452433d900683b3b32fc9dd3b2c0106cdedb06b3dfb032fc2cc2",
+    "manifest_sha256": "e865eb53b278e752b1300a01715103d989e9d4fdbfbb7d0d30160e8daa7be8cc",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-e58d405-elab7",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 8425,
+    "bootstrap": {
+      "scripts/check-sdk.py": "482cd470d79655440f0e8ef07fa1097ee4e96d9c16c851e9c37c43cc4c07c1e3",
+      "scripts/child_process.py": "f907c7c6ce54871c9693be9fd8a9088cf09bd22cabc4e48d3abc7191f75bc7e6",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "2e7c76e72dcb489ee405dd54bdca95392c6e907ed3822dc46242425cf9ae54e4",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541",
+      "scripts/native_linkers.py": "18fb7c193157035cf940259a202b816b18e227c0ceb125a2727b629340f99af7"
+    }
+  },
+  "sdk_checks": {
+    "driver_race_command": "go test -race ./... (Vellum drivers/cogent)",
+    "offscreen_vet_command": "go vet -tags=offscreen ./... (Vellum drivers/cogent)",
+    "disclosure_race_command": "go test -race -tags=offscreen -run ^TestDisclosure -count=1 .",
+    "passed": true,
+    "initial_socket_denial_retained": true
+  },
+  "sdk_member_comparison": {
+    "changed_files": [
+      "SDK_DOCUMENTATION.md",
+      "drivers/cogent/disclosure.go",
+      "drivers/cogent/disclosure_offscreen_test.go"
+    ],
+    "source_commit": "211e3fe22aa2069721e77c607d0005f78fc0d9f0",
+    "old_archive_preserved": true,
+    "bootstrap_unchanged": true,
+    "file_count": 8425
+  },
+  "mounted_checks": {
+    "descriptor_baseline_failed": true,
+    "sdk_heading_baseline_failed": true,
+    "surface_only_old_driver_failed": true,
+    "new_driver_passed": true,
+    "painted_surface_and_ink": true,
+    "physical_mouse_expansion": true,
+    "agent_collapse": true,
+    "circuit_document_time_history_preserved": true,
+    "size": [
+      320,
+      360
+    ],
+    "capture_scope": "Actual Vellum offscreen rendering with managed Noto Sans fonts; no native macOS window claim"
+  },
+  "native_acceptance": "Pending for this SDK and preceding guidance/file-menu changes. No new graphical launch requested.",
+  "images_sha256": {
+    "research/ui-audit/disclosure-theme-208/01-before-dark.png": "8b0023f6e663a9e365bb69db3c6da6458185fb2845dca3823fda6138a1bddd31",
+    "research/ui-audit/disclosure-theme-208/02-surface-only-dark.png": "7a3e39623d6dc8c722c909f3a301cba1bf611a27213daf1303f5f526cd60c469",
+    "research/ui-audit/disclosure-theme-208/03-final-dark.png": "e6ad76872401edf8de2afdb7cec0b9192b7638a60b3f474bab68d9116bde6da6",
+    "research/ui-audit/disclosure-theme-208/04-final-light.png": "86dd60893536caa9fa8f44e9174fb4e9689babbdc6c62059d3d0b9d278437a54"
+  },
+  "raw_archive_sha256": "48b7ae2de9ab57d793d1aa6d93e53a5f8384796535bd8bcc9b2abf249fb94438",
+  "raw_members": 30,
+  "new_commands": 0,
+  "new_components": 0,
+  "owner_review_required": false,
+  "download_unchanged": "0.181.4 /205"
+}

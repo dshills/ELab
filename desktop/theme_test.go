@@ -3,8 +3,32 @@ package main
 import (
 	"testing"
 
+	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/ui"
 )
+
+func TestDiagnosticDisclosureUsesTheSessionPalette(t *testing.T) {
+	for _, mode := range []string{"light", "dark"} {
+		t.Run(mode, func(t *testing.T) {
+			s, cleanup := testScreen(t)
+			t.Cleanup(cleanup)
+			uiAction(t, s, "example.reset", nil)
+			uiAction(t, s, "theme-menu", &ui.ChangeEvent{SelectedID: mode})
+			s.app.Do(func() {
+				s.invoke("component.set", workbench.ValueParams{ID: "R1", Value: "oops"})
+				node, ok := findNode(s.view(), "diagnostic-details")
+				if !ok {
+					t.Fatal("missing diagnostic disclosure")
+				}
+				style, err := ui.ResolveStyle(node, desktopTheme())
+				palette := resolvePalette(mode, false)
+				if err != nil || style.Foreground.Value != palette.Ink || style.Background.Value != palette.Surface {
+					t.Fatal("disclosure falls back to a different session palette", mode, style, err)
+				}
+			})
+		})
+	}
+}
 
 func TestNativeThemeMenuMatchesSharedStateAndColors(t *testing.T) {
 	s, cleanup := testScreen(t)

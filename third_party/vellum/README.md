@@ -56,7 +56,7 @@ macOS event-position and scrollbar wheel fixes; old archives remain preserved.
 
 ## Fast release repair (ELab 0.181.3)
 
-The active source is `899b2ba3bc01c9708385a2b10d4f8154a5f257e2`, with the
+That repair's source is `899b2ba3bc01c9708385a2b10d4f8154a5f257e2`, with the
 [complete compatibility patch](patches/elab-public-e58d405-ui-release-compat.patch),
 `vellum-e58d405-elab6.tar.gz` and `build/.vellum-sdk-e58d405-elab6`.
 Native testing of /203 found that a fast gesture can release before any SlideStart.
@@ -66,6 +66,25 @@ slides retain their start/move/stop path. Both paths retain bounds and owner
 admission. A new manual-window test performs movement and release without advancing
 the drag timer, for both orientations; the existing classified-slide tests remain.
 All preceding compatibility fixes are included; historical archives are preserved.
+
+## Session-colored disclosure headings
+
+The active source is `211e3fe22aa2069721e77c607d0005f78fc0d9f0`, with the
+[complete compatibility patch](patches/elab-public-e58d405-disclosure-theme-compat.patch),
+`vellum-e58d405-elab7.tar.gz` and `build/.vellum-sdk-e58d405-elab7`.
+Disclosure headings use the native action-button style to inherit their managed
+foreground. The previous text-button style replaced it with the process-wide
+primary color, ignoring a consumer's dark session palette. A manual-window
+regression paints two independently colored disclosures and swaps their styles
+after mounting; existing ownership, accessibility and keyboard tests remain.
+Only the disclosure implementation, its test and the generated SDK provenance
+note differ from elab6. Dependency bytes, notices and bootstrap sources are
+unchanged. ELab separately supplies each disclosure's session surface color.
+
+This is an ELab compatibility build from the same public base, not a new upstream
+release. The /204 and /205 packages retain their qualified elab6 runtime. The
+elab7 source/offscreen checks do not qualify a newly launched native app or
+replace those preserved downloads. [Repair and evidence](../../research/85-disclosure-theme.md).
 
 The exporter still marks SDK artifacts as private builds because public SDK/distribution qualification remains incomplete. **Public source availability is distinct from a qualified public SDK release.** MIT licensing, upstream notices, `SDK_MANIFEST.json` and `PRIVATE_BUILD.txt` remain included. Existing archives/caches, app bundles and their historical validation are unchanged. This dependency update does not qualify or replace the /189 owner app or /193 candidate.
 

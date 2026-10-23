@@ -287,3 +287,11 @@ compiled menu-object regression; it does not add domain commands.
 The first review used an obsolete local auditor; its unknown-command report is
 retained, and the current source auditor passes. Counts remain source evidence,
 not exhaustive physical-input or agent-parity qualification.
+
+October 23 disclosure palette repair: only `desktop/theme.go`'s production hash
+changes. Every semantic site, public command, alias and coverage set is unchanged
+at 76 sources/404 sites/166 IDs/134 routes. The private Vellum heading uses an
+inherited foreground; its separate SDK regression covers simultaneous palettes
+and post-mount updates. ELab's mounted paint/expansion and shared-agent collapse
+preserve physics and history. [Repair and current qualification](85-disclosure-theme.md).
+This does not close native-device, screen-reader or exhaustive binding acceptance.

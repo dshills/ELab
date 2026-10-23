@@ -55,7 +55,7 @@ func applyPalette(node *ui.Node, palette appPalette) {
 		node.Style.Foreground = ui.Some(palette.Paper)
 	}
 	switch node.Kind {
-	case ui.TextField, ui.NumberField, ui.MultilineText, ui.Selector, ui.MenuButton, ui.Button:
+	case ui.TextField, ui.NumberField, ui.MultilineText, ui.Selector, ui.MenuButton, ui.Button, ui.Disclosure:
 		node.Style.CornerRadius = ui.Some(float32(5))
 		if node.Kind == ui.Button && node.Appearance == "" {
 			node.Appearance = ui.ButtonSecondary
