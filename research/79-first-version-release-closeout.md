@@ -19,8 +19,9 @@ or repacked merely for documentation.
 ## Remaining checks completed
 
 The exact ZIP was newly extracted into a Unicode/space-containing directory.
-External native and agent processes performed the three reference workflows,
-project contracts and independent electrical checks while denied the repository,
+External native and agent processes performed the LED/RC/NPN reference workflows,
+project contracts, independent electrical references and separate same-kernel
+flasher timestep refinement while denied the repository,
 SDK, Go/Xcode tools, caches, shared window geometry and outbound IP. Four adapters
 agree; the controller and in-process adapter are explicitly outside that policy.
 All 45 conformance subprocesses exit normally with code zero and no timeout;

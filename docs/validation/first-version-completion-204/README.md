@@ -12,8 +12,9 @@ Formal PRD MVP acceptance and broader environment/study gates are not asserted.
 [Runtime qualification](runtime-report.json) uses newly extracted exact binaries
 from a Unicode/space path. External native and stdio/socket agents deny source,
 SDK, tools, caches, shared geometry and outbound IP. The controller/in-process
-adapter is unrestricted. Four adapters pass LED/RC/flasher reference workflows,
-project contracts and independent electrical tests including flasher refinement.
+adapter is unrestricted. Four adapters pass LED/RC/NPN reference workflows and project contracts,
+independent electrical references and separate same-kernel flasher timestep
+refinement. Flasher refinement is not an independent flasher reference.
 All 45 owned conformance subprocesses exit zero without graceful-wait timeouts;
 no endpoint descriptor remains. Package members remain unchanged after execution.
 
