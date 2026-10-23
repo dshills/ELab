@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "method": "CUA keyboard input for search/list/exact placement, four named wires, Fit, object choice, invalid-value correction, Undo/Redo and native Save/Open; theme/panel checks additionally used CUA clicks",
+  "native_sha256": "7eab343ef8c38b7cab0a153be0c4886f7c159ae10252ca1c168aa4911256e310",
+  "native_pid": 35337,
+  "extracted_app": "/private/tmp/elab-first-version-completion-204/Extracted download \u00b5 with spaces/ELab-0.181.3-macos-arm64/ELab.app",
+  "initial_document": "fresh blank; no appearance/recovery; shared geometry access denied",
+  "ui_led_current_1k_mA": 2.917,
+  "ui_led_current_2k_mA": 1.477,
+  "invalid_zero_preserved_accepted_result": true,
+  "invalid_feedback": "That request could not be applied. Existing circuit state was preserved.",
+  "first_action_correction": true,
+  "undo_redo": true,
+  "native_save_open": true,
+  "saved_project_sha256": "8db819ddfa9c31a690282605efb94687e69414f329232cce62c5077c7f598c48",
+  "graph_verified_from_actual_saved_file": true,
+  "clean_reopen": true,
+  "compact_window_pixels": [
+    1053,
+    802
+  ],
+  "light_and_dark": true,
+  "inspect_simulate_document_reachable": true,
+  "owned_native_close": {
+    "endpoint_removed": true,
+    "pid_absent": true,
+    "observation": "CUA normal close; endpoint no longer exists; shell kill -0 35337 returns no such process. No GUI process exit code or GUI shutdown job was captured."
+  },
+  "limits": [
+    "Native-menu keys sent before a menu appeared did not select the requested terminal; reading the open menu then choosing it passed with normal focus continuation",
+    "The prepared launcher executed the exact extracted app successfully, but the first CUA wrapper-ID attachment returned application-not-found after delayed approval; attached to already-running extracted app without relaunch",
+    "A separate read-only observer could not start its nested sandbox in the restricted shell; saved-file graph and CUA results provide the native evidence",
+    "Generic value-refusal wording remains recoverable; screen reader/IME acceptance remains separate"
+  ]
+}

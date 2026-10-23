@@ -1,0 +1,376 @@
+{
+  "passed": true,
+  "agent_sha256": "00731e8957481a729743fc3fb7a04697d666dedd8a38f85f2c14603e90df432f",
+  "cases": [
+    {
+      "file": "LED-2k.elab",
+      "sha256": "96635fc0cd1ab4b13258373c4e5ed474dc3239dda4dfc37202cbce59324cc032",
+      "graph_preserved": true,
+      "pause_preserved": true,
+      "clean": true,
+      "result": {
+        "run_id": 2,
+        "electrical_revision": 2,
+        "engine": "elab.series-led-dc.v1",
+        "model": {
+          "id": "elab.generic-red-led.v1",
+          "is_a": 1e-20,
+          "n": 2,
+          "rs_ohm": 1,
+          "temperature_c": 27,
+          "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+        },
+        "current_a": 0.001476723549138745,
+        "led_voltage_v": 2.04655290172251,
+        "resistor_voltage_v": 2.95344709827749,
+        "led_power_w": 0.0030221928645318623,
+        "resistor_power_w": 0.004361424881161862,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "node_voltage_v": {
+          "ground": 0,
+          "led-anode": 2.04655290172251,
+          "net:D2.anode": 2.04655290172251,
+          "net:D2.cathode": 0,
+          "net:R2.1": 5,
+          "supply": 5
+        },
+        "stale": false,
+        "source_id": "V2",
+        "resistor_id": "R2",
+        "led_id": "D2"
+      },
+      "mixed": null,
+      "transient": null,
+      "shutdown": {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 6,
+        "command_revision": 3,
+        "document_generation": 2,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      }
+    },
+    {
+      "file": "LED-flasher.elab",
+      "sha256": "d62dba5123d42b3dbf76356a7c28411a46ab09678aad9aa72ec727889c9a7a95",
+      "graph_preserved": true,
+      "pause_preserved": true,
+      "clean": true,
+      "result": null,
+      "mixed": {
+        "engine": "elab.mixed-mna-sdirk2.v1",
+        "run_id": 2,
+        "electrical_revision": 2,
+        "time_s": 0,
+        "nodes_v": {
+          "net:C1.1": 0.7769377805880154,
+          "net:C1.2": 0.6769377805880155,
+          "net:C2.1": 0.6758035458711396,
+          "net:C2.2": 0.6758035458711396,
+          "net:D1.anode": 2.843752218917493,
+          "net:D2.anode": 2.7450324431790794,
+          "net:GND1.reference": 0,
+          "net:RB1.1": 5
+        },
+        "transistors": [
+          {
+            "transistor_id": "Q1",
+            "model": {
+              "id": "elab.generic-npn.v1",
+              "saturation_current_a": 1e-14,
+              "forward_beta": 100,
+              "reverse_beta": 1,
+              "temperature_c": 27,
+              "limitations": "Educational Ebers\u2013Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+            },
+            "base_current_a": 2.2249806079978584e-05,
+            "collector_current_a": 0.002224980608997419,
+            "emitter_current_a": 0.0022472304150773976,
+            "vbe_v": 0.6758035458711396,
+            "vce_v": 0.7769377805880154,
+            "power_w": 0.0017437079940496206,
+            "state": "active"
+          },
+          {
+            "transistor_id": "Q2",
+            "model": {
+              "id": "elab.generic-npn.v1",
+              "saturation_current_a": 1e-14,
+              "forward_beta": 100,
+              "reverse_beta": 1,
+              "temperature_c": 27,
+              "limitations": "Educational Ebers\u2013Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."
+            },
+            "base_current_a": 2.3247219306617564e-05,
+            "collector_current_a": 0.002324721930616032,
+            "emitter_current_a": 0.0023479691499226495,
+            "vbe_v": 0.6769377805880155,
+            "vce_v": 0.6758035458711396,
+            "power_w": 0.00158679224491698,
+            "state": "saturation"
+          }
+        ],
+        "capacitors": [
+          {
+            "id": "C1",
+            "voltage_v": 0.09999999999999998,
+            "current_a": -6.873282791491411e-05,
+            "energy_j": 4.999999999999998e-08
+          },
+          {
+            "id": "C2",
+            "voltage_v": 0,
+            "current_a": -6.975437379510354e-05,
+            "energy_j": 0
+          }
+        ],
+        "leds": [
+          {
+            "id": "D1",
+            "current_a": 0.002156247781082531,
+            "voltage_v": 2.0668144383294775,
+            "power_w": 0.004456564046557274
+          },
+          {
+            "id": "D2",
+            "current_a": 0.0022549675568208968,
+            "voltage_v": 2.06922889730794,
+            "power_w": 0.004666044031065683
+          }
+        ],
+        "resistors": [
+          {
+            "id": "RL1",
+            "current_a": 0.0021562477810825073,
+            "voltage_v": 2.156247781082507,
+            "power_w": 0.004649404493423236
+          },
+          {
+            "id": "RL2",
+            "current_a": 0.0022549675568209206,
+            "voltage_v": 2.2549675568209206,
+            "power_w": 0.005084878682314912
+          },
+          {
+            "id": "RB1",
+            "current_a": 9.200417987508214e-05,
+            "voltage_v": 4.3241964541288604,
+            "power_w": 0.00039784414838086403
+          },
+          {
+            "id": "RB2",
+            "current_a": 9.198004722153159e-05,
+            "voltage_v": 4.323062219411985,
+            "power_w": 0.0003976354670831335
+          }
+        ],
+        "sources": [
+          {
+            "id": "V1",
+            "current_a": 0.004595199565000041,
+            "voltage_v": 5,
+            "power_w": 0.022975997825000205
+          }
+        ],
+        "kcl_residual_a": 3.1496073110703904e-17,
+        "power_residual_w": -4.662069341687669e-18,
+        "numerical_damping_w": 0,
+        "stale": false
+      },
+      "transient": {
+        "transistor_id": "Q1",
+        "led_id": "D1",
+        "engine": "elab.mixed-mna-sdirk2.v1",
+        "run_id": 2,
+        "electrical_revision": 2,
+        "source_id": "V1",
+        "resistor_id": "",
+        "capacitor_id": "C1",
+        "output_net": "net:C1.1",
+        "time_constant_s": 0,
+        "settings": {
+          "step_s": 0.005,
+          "high_s": 0.05,
+          "low_s": 0.05,
+          "initial_voltage_v": 0,
+          "seconds_per_wall_second": 0.5
+        },
+        "input_mode": "auto",
+        "sample": {
+          "capacitor_voltage_v": 0.09999999999999998,
+          "base_current_a": 2.2249806079978584e-05,
+          "vbe_v": 0.6758035458711396,
+          "state": "active",
+          "time_s": 0,
+          "input_v": 5,
+          "voltage_v": 0.7769377805880154,
+          "current_a": 0.002156247781082531,
+          "energy_j": 4.999999999999998e-08
+        },
+        "samples": [
+          {
+            "capacitor_voltage_v": 0.09999999999999998,
+            "base_current_a": 2.2249806079978584e-05,
+            "vbe_v": 0.6758035458711396,
+            "state": "active",
+            "time_s": 0,
+            "input_v": 5,
+            "voltage_v": 0.7769377805880154,
+            "current_a": 0.002156247781082531,
+            "energy_j": 4.999999999999998e-08
+          }
+        ],
+        "events": [
+          {
+            "time_s": 0,
+            "mode": "restart"
+          }
+        ],
+        "stale": false
+      },
+      "shutdown": {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 6,
+        "command_revision": 3,
+        "document_generation": 2,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      }
+    },
+    {
+      "file": "RC-charge.elab",
+      "sha256": "4c86701997fb227c1f3f8e55b2e8ec613ca7a51d75b4061356cd51185203eadf",
+      "graph_preserved": true,
+      "pause_preserved": true,
+      "clean": true,
+      "result": null,
+      "mixed": null,
+      "transient": {
+        "engine": "elab.ideal-rc-exact.v1",
+        "run_id": 2,
+        "electrical_revision": 2,
+        "source_id": "V2",
+        "resistor_id": "R2",
+        "capacitor_id": "C1",
+        "output_net": "net:C1.1",
+        "time_constant_s": 0.01,
+        "settings": {
+          "step_s": 0.001,
+          "high_s": 0.05,
+          "low_s": 0.05,
+          "initial_voltage_v": 0,
+          "seconds_per_wall_second": 0.02
+        },
+        "input_mode": "auto",
+        "sample": {
+          "time_s": 0,
+          "input_v": 5,
+          "voltage_v": 0,
+          "current_a": 0.0005,
+          "energy_j": 0
+        },
+        "samples": [
+          {
+            "time_s": 0,
+            "input_v": 5,
+            "voltage_v": 0,
+            "current_a": 0.0005,
+            "energy_j": 0
+          }
+        ],
+        "events": [
+          {
+            "time_s": 0,
+            "mode": "restart"
+          }
+        ],
+        "stale": false
+      },
+      "shutdown": {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 5,
+        "command_revision": 3,
+        "document_generation": 2,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      }
+    },
+    {
+      "file": "LED-keyboard.elab",
+      "sha256": "8db819ddfa9c31a690282605efb94687e69414f329232cce62c5077c7f598c48",
+      "graph_preserved": true,
+      "pause_preserved": true,
+      "clean": true,
+      "result": {
+        "run_id": 2,
+        "electrical_revision": 2,
+        "engine": "elab.series-led-dc.v1",
+        "model": {
+          "id": "elab.generic-red-led.v1",
+          "is_a": 1e-20,
+          "n": 2,
+          "rs_ohm": 1,
+          "temperature_c": 27,
+          "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+        },
+        "current_a": 0.001476723549138745,
+        "led_voltage_v": 2.04655290172251,
+        "resistor_voltage_v": 2.95344709827749,
+        "led_power_w": 0.0030221928645318623,
+        "resistor_power_w": 0.004361424881161862,
+        "kvl_residual_v": -1.249000902703301e-16,
+        "node_voltage_v": {
+          "ground": 0,
+          "led-anode": 2.04655290172251,
+          "net:D1.anode": 2.04655290172251,
+          "net:D1.cathode": 0,
+          "net:R1.1": 5,
+          "supply": 5
+        },
+        "stale": false,
+        "source_id": "V1",
+        "resistor_id": "R1",
+        "led_id": "D1"
+      },
+      "mixed": null,
+      "transient": null,
+      "shutdown": {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.stdio",
+        "input_revision": 6,
+        "command_revision": 3,
+        "document_generation": 2,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      }
+    }
+  ],
+  "scope": "Fresh packaged-agent reopening of all three bundled examples and the actual native keyboard-created project; offline denial qualified separately"
+}

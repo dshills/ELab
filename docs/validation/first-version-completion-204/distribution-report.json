@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "dependencies": [
+    {
+      "file": "ELab.app/Contents/MacOS/ELab",
+      "architecture": "arm64",
+      "system_only": true,
+      "sha256": "7eab343ef8c38b7cab0a153be0c4886f7c159ae10252ca1c168aa4911256e310"
+    },
+    {
+      "file": "elab-agent",
+      "architecture": "arm64",
+      "system_only": true,
+      "sha256": "00731e8957481a729743fc3fb7a04697d666dedd8a38f85f2c14603e90df432f"
+    }
+  ],
+  "security_overrides_performed": false,
+  "quarantined_app_launched": false,
+  "assessment": {
+    "exit_code": 3,
+    "output": "/private/tmp/elab-first-version-completion-204/Quarantined assessment.app: rejected\n"
+  },
+  "expected_unsigned_rejection": true,
+  "initial_restricted_assessment": {
+    "exit_code": 1,
+    "output": "/private/tmp/elab-first-version-completion-204/Quarantined assessment.app: internal error in Code Signing subsystem\n"
+  }
+}

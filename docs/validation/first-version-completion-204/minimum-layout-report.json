@@ -1,0 +1,60 @@
+{
+  "passed": true,
+  "scope": "Native minimum/working-size header, component browser and Inspect workspace; no circuit edits",
+  "minimum_pixels": [
+    1053,
+    762
+  ],
+  "declared_minimum_dp": [
+    1040,
+    720
+  ],
+  "working_pixels": [
+    1221,
+    969
+  ],
+  "themes": [
+    "Light",
+    "Dark"
+  ],
+  "original_size_restored": true,
+  "original_theme_restored": "Light",
+  "before_after_document": "Untitled circuit, clean, 0 components, 0 wires, Undo/Redo disabled, empty search",
+  "observed_release_pid": 24667,
+  "owned_helper_pid": 45492,
+  "process_paths_verified": true,
+  "owned_helper_close": {
+    "passed": true,
+    "owned_pid": 45492,
+    "shutdown": {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.socket",
+      "input_revision": 3,
+      "command_revision": 4,
+      "document_generation": 1,
+      "discard_recovery": false,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    },
+    "owned_process_absent": true,
+    "endpoint_removed": true,
+    "forwarder_exit_code": 0,
+    "before_close": {
+      "components": 0,
+      "wires": 0,
+      "dirty": false,
+      "marker": "capacitor"
+    },
+    "native_sha256": "7eab343ef8c38b7cab0a153be0c4886f7c159ae10252ca1c168aa4911256e310"
+  },
+  "limitations": [
+    "CUA selected the existing release window because both instances share a bundle identifier; the owned helper was identified separately with a private presentation marker and closed through its endpoint",
+    "This pass changes only window size and theme temporarily; no claim of unchanged preference-file timestamps or OS window position",
+    "Populated LED compact, RC/flasher workflow, and scope/inspector scrolling checks are recorded separately; this is not every pane/state at every size"
+  ]
+}

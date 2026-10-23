@@ -1,0 +1,38 @@
+from pathlib import Path
+import hashlib,json,tarfile,os
+R=Path('/Users/dshills/Development/projects/ELab');D=R/'docs/validation/first-version-completion-204';S=Path(__file__).resolve().parent;O=Path('/private/tmp/elab-first-version-completion-204');sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+report=json.loads((D/'report.json').read_text());assert report['passed'];assert report['minimum_layout']['passed'];assert not (O/'keyboard-review/endpoint.json').exists()
+for pid in (35337,45492):
+ try:os.kill(pid,0)
+ except ProcessLookupError:pass
+ else:raise RuntimeError('owned test PID remains present')
+for manifest,archive in [('raw-manifest.json','raw.tar.gz'),('minimum-raw-manifest.json','minimum-raw.tar.gz')]:
+ m=json.loads((D/manifest).read_text())
+ with tarfile.open(D/archive) as t:
+  assert set(t.getnames())==set(m)
+  for n,v in m.items():data=t.extractfile(n).read();assert hashlib.sha256(data).hexdigest()==v['sha256'] and len(data)==v['bytes']
+for name,h in json.loads((R/'docs/validation/ui-input-204/source-inputs.json').read_text()).items():assert sha(R/name)==h,name
+for name,x in report['captures'].items():assert sha(R/name)==x['sha256'],name
+assert sha(Path(report['archive']))==report['archive_sha256'];assert sha(Path(report['release'])/'ELab.app/Contents/MacOS/ELab')==report['native_sha256'];assert sha(Path(report['release'])/'elab-agent')==report['agent_sha256']
+requirements=[
+ (1,'Native input corrections','qualified_scoped',['docs/validation/ui-input-204/native-ui.json','docs/validation/first-version-completion-204/keyboard-report.json','docs/validation/native-walkthrough-195/report.json']),
+ (2,'Minimum and working-size theme/layout controls','qualified_scoped',['docs/validation/first-version-completion-204/minimum-layout-report.json','docs/validation/ui-input-204/native-ui.json']),
+ (3,'LED, RC, flasher and keep/share reference workflows','qualified_scoped',['docs/validation/first-version-completion-204/runtime-report.json','docs/validation/first-version-completion-204/keyboard-report.json','docs/validation/first-version-completion-204/examples-report.json','docs/validation/native-walkthrough-195/report.json','docs/validation/engineering-release-196/report.json']),
+ (4,'Shared user/agent reference behavior','qualified_scoped',['docs/validation/first-version-completion-204/runtime-report.json','docs/validation/ui-input-204/protocol-report.json','docs/validation/native-ui-198/navigation-report.json']),
+ (5,'Project/capture/recovery preservation and owned cleanup','qualified_scoped',['docs/validation/first-version-completion-204/examples-report.json','docs/validation/first-version-completion-204/minimum-layout-report.json','docs/validation/first-version-completion-204/source-carryover.json','docs/validation/ui-input-204/quality.txt']),
+ (6,'Applicable electrical and simulation-state correctness','qualified_scoped',['docs/validation/first-version-completion-204/runtime-report.json','docs/validation/first-version-completion-204/source-carryover.json']),
+ (7,'Source quality, review, identity and clean repository','qualified_scoped',['docs/validation/ui-input-204/quality-exit-code.txt','docs/validation/ui-input-204/source-inputs.json','docs/validation/first-version-completion-204/source-carryover.json']),
+ (8,'Exact package/extraction/offline operation','qualified_scoped',['docs/validation/first-version-completion-204/runtime-report.json','docs/validation/ui-input-204/package-report.json','docs/validation/first-version-completion-204/distribution-report.json']),
+ (9,'Startup/distribution boundary and owner deferral','boundary_recorded_clean_account_deferred',['research/ui-audit/first-version/private-alpha-owner-decisions.json','docs/validation/first-version-completion-204/distribution-report.json','research/79-first-version-release-closeout.md']),
+ (10,'Actual owner workflow results','deferred_by_owner_unobserved',['research/69-next-five-engineering-items.md','research/35-first-version-review.md']),
+ (11,'Blocking defect dispositions, current release and rollback','qualified_scoped',['research/79-first-version-release-closeout.md','research/66-first-version-completion-checklist.md','docs/validation/ui-input-204/report.json'])]
+rows=[]
+for n,title,status,evidence in requirements:
+ for f in evidence:assert (R/f).is_file(),f
+ rows.append(dict(item=n,requirement=title,disposition=status,evidence={f:sha(R/f) for f in evidence}))
+assert len(rows)==11
+matrix=dict(scope='Original first usable private macOS cut line in research/34-first-version-plan.md; owner-approved unsigned channel',source_commit=report['source_commit'],version=report['version'],build=report['build'],requirements=rows,owner_deferrals_are_not_test_passes=True,full_prd_mvp_accepted=False,broader_open_gates=['Full user/agent dynamic coverage','Keyboard/screen-reader/IME qualification','Visible performance/difficult-solve targets','Complete capacity/state acceptance','Clean setup/account installation','Broader distribution qualification','Ten-person hobbyist study','Complete printing-device scope','Formal 27-P0 PRD acceptance'],repository_clean_checked_separately_after_evidence_commit=True)
+(D/'acceptance-matrix.json').write_text(json.dumps(matrix,indent=2)+'\n')
+# The owned launcher is no longer executable; all evidence and product bytes stay.
+(O/'keyboard-review/ELab-release-check-204.app/Contents/MacOS/ELabOwnedLauncher').chmod(0o644)
+print(json.dumps(dict(passed=True,requirements_audited=len(rows),scope=matrix['scope'],package_unchanged=True,owned_test_processes_absent=True)))

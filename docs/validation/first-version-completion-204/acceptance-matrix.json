@@ -1,0 +1,132 @@
+{
+  "scope": "Original first usable private macOS cut line in research/34-first-version-plan.md; owner-approved unsigned channel",
+  "source_commit": "06ab9893a39a5ba13beb4dc774ceb1d27bd97d35",
+  "version": "0.181.3",
+  "build": "204",
+  "requirements": [
+    {
+      "item": 1,
+      "requirement": "Native input corrections",
+      "disposition": "qualified_scoped",
+      "evidence": {
+        "docs/validation/ui-input-204/native-ui.json": "ee5d306f8c6cc94e6ebcf48bc365fe06f741f686059a4e451b5a629660513979",
+        "docs/validation/first-version-completion-204/keyboard-report.json": "61ef07d5b26f744a5cec822a99a9960c56ce3f378330e3fd15c46b42e86d14b5",
+        "docs/validation/native-walkthrough-195/report.json": "d41081c2cf63f1e2e4bd647eea7edd80493f7f4aa3e5af43549fef9c765ab078"
+      }
+    },
+    {
+      "item": 2,
+      "requirement": "Minimum and working-size theme/layout controls",
+      "disposition": "qualified_scoped",
+      "evidence": {
+        "docs/validation/first-version-completion-204/minimum-layout-report.json": "85d8b4c837281cfbc645f95029ae38c49e0ec97c778d556d829189c30c037c90",
+        "docs/validation/ui-input-204/native-ui.json": "ee5d306f8c6cc94e6ebcf48bc365fe06f741f686059a4e451b5a629660513979"
+      }
+    },
+    {
+      "item": 3,
+      "requirement": "LED, RC, flasher and keep/share reference workflows",
+      "disposition": "qualified_scoped",
+      "evidence": {
+        "docs/validation/first-version-completion-204/runtime-report.json": "9d699724f4454e1b7fdce3cce7098d4d12df0e5ce497f90635ea2fd470b430ca",
+        "docs/validation/first-version-completion-204/keyboard-report.json": "61ef07d5b26f744a5cec822a99a9960c56ce3f378330e3fd15c46b42e86d14b5",
+        "docs/validation/first-version-completion-204/examples-report.json": "b8a5754e03633974a4fd8e25af7f9f2f887f47f15e88e70506710579f6270930",
+        "docs/validation/native-walkthrough-195/report.json": "d41081c2cf63f1e2e4bd647eea7edd80493f7f4aa3e5af43549fef9c765ab078",
+        "docs/validation/engineering-release-196/report.json": "8286221e10b2cb89a036d5d60e1f094dc592cfa5c6e47fe1d3c5dda3efc5ce10"
+      }
+    },
+    {
+      "item": 4,
+      "requirement": "Shared user/agent reference behavior",
+      "disposition": "qualified_scoped",
+      "evidence": {
+        "docs/validation/first-version-completion-204/runtime-report.json": "9d699724f4454e1b7fdce3cce7098d4d12df0e5ce497f90635ea2fd470b430ca",
+        "docs/validation/ui-input-204/protocol-report.json": "bd2fd08b370cf1c29dfccf08294a2695080c25b8f6ff6cbbac8c24c5db8c4ae4",
+        "docs/validation/native-ui-198/navigation-report.json": "5f3271e00199a44c78f2e0d4b5771adc44edf02ad2ec033329397bf623d708ae"
+      }
+    },
+    {
+      "item": 5,
+      "requirement": "Project/capture/recovery preservation and owned cleanup",
+      "disposition": "qualified_scoped",
+      "evidence": {
+        "docs/validation/first-version-completion-204/examples-report.json": "b8a5754e03633974a4fd8e25af7f9f2f887f47f15e88e70506710579f6270930",
+        "docs/validation/first-version-completion-204/minimum-layout-report.json": "85d8b4c837281cfbc645f95029ae38c49e0ec97c778d556d829189c30c037c90",
+        "docs/validation/first-version-completion-204/source-carryover.json": "fd37c6fd057adeecefdd325817f1080ba28a1e9e8be458c8c8bcf887ff302548",
+        "docs/validation/ui-input-204/quality.txt": "5918be721ef7f58bffbbfbe1a0f091d27b5986932008fd60e8bb1cb3a5565e26"
+      }
+    },
+    {
+      "item": 6,
+      "requirement": "Applicable electrical and simulation-state correctness",
+      "disposition": "qualified_scoped",
+      "evidence": {
+        "docs/validation/first-version-completion-204/runtime-report.json": "9d699724f4454e1b7fdce3cce7098d4d12df0e5ce497f90635ea2fd470b430ca",
+        "docs/validation/first-version-completion-204/source-carryover.json": "fd37c6fd057adeecefdd325817f1080ba28a1e9e8be458c8c8bcf887ff302548"
+      }
+    },
+    {
+      "item": 7,
+      "requirement": "Source quality, review, identity and clean repository",
+      "disposition": "qualified_scoped",
+      "evidence": {
+        "docs/validation/ui-input-204/quality-exit-code.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "docs/validation/ui-input-204/source-inputs.json": "4443ecff8ac100a71d711f1736943ab846cd17f142adad645dc4ccde81d96e59",
+        "docs/validation/first-version-completion-204/source-carryover.json": "fd37c6fd057adeecefdd325817f1080ba28a1e9e8be458c8c8bcf887ff302548"
+      }
+    },
+    {
+      "item": 8,
+      "requirement": "Exact package/extraction/offline operation",
+      "disposition": "qualified_scoped",
+      "evidence": {
+        "docs/validation/first-version-completion-204/runtime-report.json": "9d699724f4454e1b7fdce3cce7098d4d12df0e5ce497f90635ea2fd470b430ca",
+        "docs/validation/ui-input-204/package-report.json": "77354987fb59e01748ae8c6ff49b86c5a06365d2b3d79595a1acacdd655cf843",
+        "docs/validation/first-version-completion-204/distribution-report.json": "183782785f59f4d0cdb6a66f44cd9215a42ee0b3beb2583f793970861c036a84"
+      }
+    },
+    {
+      "item": 9,
+      "requirement": "Startup/distribution boundary and owner deferral",
+      "disposition": "boundary_recorded_clean_account_deferred",
+      "evidence": {
+        "research/ui-audit/first-version/private-alpha-owner-decisions.json": "e3356bb20782783ae63369fbc732740518cf2759b1004449521d7f97bf651892",
+        "docs/validation/first-version-completion-204/distribution-report.json": "183782785f59f4d0cdb6a66f44cd9215a42ee0b3beb2583f793970861c036a84",
+        "research/79-first-version-release-closeout.md": "f53483ba92611dbbcaa66f9776f49d109c7302864c2ba1c20c827610cc607e13"
+      }
+    },
+    {
+      "item": 10,
+      "requirement": "Actual owner workflow results",
+      "disposition": "deferred_by_owner_unobserved",
+      "evidence": {
+        "research/69-next-five-engineering-items.md": "2843f1cf4b793e6ef971569f45965e86ae98bc163bce7f4a66f33cd07a30b3e6",
+        "research/35-first-version-review.md": "8949402d4526cc96508ef533bed4a216a649cf5ae9ab39c776fb69c7456ea561"
+      }
+    },
+    {
+      "item": 11,
+      "requirement": "Blocking defect dispositions, current release and rollback",
+      "disposition": "qualified_scoped",
+      "evidence": {
+        "research/79-first-version-release-closeout.md": "f53483ba92611dbbcaa66f9776f49d109c7302864c2ba1c20c827610cc607e13",
+        "research/66-first-version-completion-checklist.md": "f8c65c7fedf247954ce57f2e12259bd4678efded0f86ed19c71611e54781e5a7",
+        "docs/validation/ui-input-204/report.json": "79c9a8e427842408aeb04a14f8bf2ef0ac9bc17871050a6fd7ef5bd2362e5545"
+      }
+    }
+  ],
+  "owner_deferrals_are_not_test_passes": true,
+  "full_prd_mvp_accepted": false,
+  "broader_open_gates": [
+    "Full user/agent dynamic coverage",
+    "Keyboard/screen-reader/IME qualification",
+    "Visible performance/difficult-solve targets",
+    "Complete capacity/state acceptance",
+    "Clean setup/account installation",
+    "Broader distribution qualification",
+    "Ten-person hobbyist study",
+    "Complete printing-device scope",
+    "Formal 27-P0 PRD acceptance"
+  ],
+  "repository_clean_checked_separately_after_evidence_commit": true
+}

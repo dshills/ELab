@@ -6,6 +6,12 @@ ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N
 
 **ELab 0.181.3 /204 fixes scope, sweep and divider mouse gestures.** [Open app](build/releases/ELab-0.181.3-macos-arm64/ELab.app), [download ZIP](build/releases/ELab-0.181.3-macos-arm64.zip), or [verify SHA-256](build/releases/ELab-0.181.3-macos-arm64.zip.sha256). Fast drags retain their release position, secondary clicks leave drawings and measurements unchanged, and completed placement avoids a false stale-input warning. Inspector scrolling and scrollbar dragging were rechecked. The existing 18-component browser, shared user/agent commands and file formats are unchanged. The package includes its matching agent, editable examples, instructions, dependency notices and rollback.
 
+The [first-version release closeout](research/79-first-version-release-closeout.md)
+reconciles the checklist to this exact package, including extracted offline
+workflows, native keyboard construction and Save/Open. Owner review and
+clean-account installation retain their recorded deferrals; full PRD MVP
+acceptance remains separate.
+
 The UI follows a document-editor layout: quiet toolbar, dedicated component library, central canvas, fixed **Inspect / Simulate / Document** navigation, compact live readings, and coordinated light/dark appearance. Users and agents share category, search, inspector and editing commands. See the [component browser contract](docs/component-browser.md), [design decisions](research/73-native-ui-design.md) and [inspector workflow](docs/workspace-layout.md#inspector-sections).
 
 Requires Apple Silicon and macOS 26.0 or later; tested on macOS 26.6.2. The owner-selected unsigned channel retains an ad-hoc integrity seal, without Developer ID or notarization. Gatekeeper can block a downloaded copy. See [installation instructions](build/releases/ELab-0.181.3-macos-arm64/README.md) and the [validation receipt](docs/validation/ui-input-204/report.json) for source, packaged-agent, native UI and archive checks and their limitations. No component models or file-format changes are included. Browser state is session-only and does not mark the circuit edited.

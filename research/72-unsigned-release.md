@@ -1,5 +1,8 @@
 # ELab 0.179.0: unsigned release ready
 
+**Current successor:** [ELab 0.181.3 /204](79-first-version-release-closeout.md).
+This document preserves the original /196 release designation and its evidence.
+
 October 22, 2026. The owner selected **“Prepare an unsigned release.”** The macOS arm64 release is prepared, checked and ready for that channel. No feature was added and no review response is required.
 
 - [Release ZIP](../build/releases/ELab-0.179.0-macos-arm64.zip)

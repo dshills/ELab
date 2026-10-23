@@ -1,5 +1,8 @@
 # First engineering release: ELab 0.179.0 /196
 
+**Current successor:** [ELab 0.181.3 /204](79-first-version-release-closeout.md).
+This document preserves the original /196 release designation and its evidence.
+
 **Latest delivery:** [the owner-selected unsigned macOS release is ready](72-unsigned-release.md). It uses the same /196 runtime bytes, adds distribution instructions and completes exact extracted-native checks. The private engineering-alpha checkpoint below remains preserved.
 
 

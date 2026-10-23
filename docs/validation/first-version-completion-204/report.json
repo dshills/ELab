@@ -1,0 +1,240 @@
+{
+  "passed": true,
+  "scope": "First usable private macOS hobbyist version with the owner-selected unsigned download channel, as defined by research/34-first-version-plan.md; not complete PRD MVP acceptance",
+  "date": "2026-10-23",
+  "version": "0.181.3",
+  "build": "204",
+  "source_commit": "06ab9893a39a5ba13beb4dc774ceb1d27bd97d35",
+  "native_sha256": "7eab343ef8c38b7cab0a153be0c4886f7c159ae10252ca1c168aa4911256e310",
+  "agent_sha256": "00731e8957481a729743fc3fb7a04697d666dedd8a38f85f2c14603e90df432f",
+  "release": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.181.3-macos-arm64",
+  "archive": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.181.3-macos-arm64.zip",
+  "archive_sha256": "7d935187b8e8113e1a1697db9a0ff9133b6f3d756b1811204b36ffc45a73e27f",
+  "runtime_adapter_count": 4,
+  "reference_workflows_per_adapter": 3,
+  "project_contracts_and_independent_electrical": true,
+  "owned_external_processes_with_zero_graceful_exits": 45,
+  "retained_public_endpoint_descriptors": 0,
+  "native_keyboard": {
+    "passed": true,
+    "method": "CUA keyboard input for search/list/exact placement, four named wires, Fit, object choice, invalid-value correction, Undo/Redo and native Save/Open; theme/panel checks additionally used CUA clicks",
+    "native_sha256": "7eab343ef8c38b7cab0a153be0c4886f7c159ae10252ca1c168aa4911256e310",
+    "native_pid": 35337,
+    "extracted_app": "/private/tmp/elab-first-version-completion-204/Extracted download \u00b5 with spaces/ELab-0.181.3-macos-arm64/ELab.app",
+    "initial_document": "fresh blank; no appearance/recovery; shared geometry access denied",
+    "ui_led_current_1k_mA": 2.917,
+    "ui_led_current_2k_mA": 1.477,
+    "invalid_zero_preserved_accepted_result": true,
+    "invalid_feedback": "That request could not be applied. Existing circuit state was preserved.",
+    "first_action_correction": true,
+    "undo_redo": true,
+    "native_save_open": true,
+    "saved_project_sha256": "8db819ddfa9c31a690282605efb94687e69414f329232cce62c5077c7f598c48",
+    "graph_verified_from_actual_saved_file": true,
+    "clean_reopen": true,
+    "compact_window_pixels": [
+      1053,
+      802
+    ],
+    "light_and_dark": true,
+    "inspect_simulate_document_reachable": true,
+    "owned_native_close": {
+      "endpoint_removed": true,
+      "pid_absent": true,
+      "observation": "CUA normal close; endpoint no longer exists; shell kill -0 35337 returns no such process. No GUI process exit code or GUI shutdown job was captured."
+    },
+    "limits": [
+      "Native-menu keys sent before a menu appeared did not select the requested terminal; reading the open menu then choosing it passed with normal focus continuation",
+      "The prepared launcher executed the exact extracted app successfully, but the first CUA wrapper-ID attachment returned application-not-found after delayed approval; attached to already-running extracted app without relaunch",
+      "A separate read-only observer could not start its nested sandbox in the restricted shell; saved-file graph and CUA results provide the native evidence",
+      "Generic value-refusal wording remains recoverable; screen reader/IME acceptance remains separate"
+    ]
+  },
+  "source_quality": "docs/validation/ui-input-204/report.json; all 690 recorded Go/module/SDK/check-script inputs still match",
+  "retained_production_source_count": 206,
+  "historical_checks_reused": [
+    "docs/validation/engineering-release-196/report.json: Save during analysis and measured fitted/tiled output, with matching unchanged worker/output sources",
+    "docs/validation/native-walkthrough-195/README.md: unaffected recording/timing/error correction and RC/flasher native tasks",
+    "docs/validation/native-ui-198/report.json: document workspace and session inspector command behavior",
+    "docs/validation/example-document-200/report.json: clean example baseline and actual-edit dirty protection",
+    "docs/validation/ui-input-204/report.json: current source quality, browser agent contract, scope/sweep/divider/native mouse checks and archive identity"
+  ],
+  "owner_review": "deferred by instruction; not a usability pass",
+  "ordinary_clean_account_installation": "explicitly deferred for this private alpha; not tested",
+  "developer_id_signed": false,
+  "notarized": false,
+  "expected_gatekeeper_rejection_observed": true,
+  "full_prd_mvp_accepted": false,
+  "new_app_code": false,
+  "new_features": false,
+  "rebuilt": false,
+  "repackaged": false,
+  "published": false,
+  "raw_archive_sha256": "5ee3b4d4107c38821ce3133330393b1356b87d0477597e92c3d3dd92bd44d8ca",
+  "raw_files": 226,
+  "limitations": [
+    "Formal PRD acceptance, ten-person study, exhaustive agent/accessibility/IME and visible-latency qualification remain open beyond the declared first usable version",
+    "Ordinary /204 no-argument startup is separately observed in ui-input-204; this isolated CLI startup does not pass a clean-account gate",
+    "Source/hash reuse is scoped by source-carryover.json; source identity alone is not native UI behavior evidence",
+    "Initial restricted spctl error is retained; separate authorized read-only assessment returned expected rejection; no quarantined launch or security override occurred"
+  ],
+  "minimum_layout": {
+    "passed": true,
+    "scope": "Native minimum/working-size header, component browser and Inspect workspace; no circuit edits",
+    "minimum_pixels": [
+      1053,
+      762
+    ],
+    "declared_minimum_dp": [
+      1040,
+      720
+    ],
+    "working_pixels": [
+      1221,
+      969
+    ],
+    "themes": [
+      "Light",
+      "Dark"
+    ],
+    "original_size_restored": true,
+    "original_theme_restored": "Light",
+    "before_after_document": "Untitled circuit, clean, 0 components, 0 wires, Undo/Redo disabled, empty search",
+    "observed_release_pid": 24667,
+    "owned_helper_pid": 45492,
+    "process_paths_verified": true,
+    "owned_helper_close": {
+      "passed": true,
+      "owned_pid": 45492,
+      "shutdown": {
+        "id": "shutdown-1",
+        "status": "completed",
+        "phase": "completed",
+        "actor": "agent.socket",
+        "input_revision": 3,
+        "command_revision": 4,
+        "document_generation": 1,
+        "discard_recovery": false,
+        "checkpoint_recovery": false,
+        "cancelable": false,
+        "recovery_finalized": true,
+        "workers_joined": true,
+        "exit_ready": true
+      },
+      "owned_process_absent": true,
+      "endpoint_removed": true,
+      "forwarder_exit_code": 0,
+      "before_close": {
+        "components": 0,
+        "wires": 0,
+        "dirty": false,
+        "marker": "capacitor"
+      },
+      "native_sha256": "7eab343ef8c38b7cab0a153be0c4886f7c159ae10252ca1c168aa4911256e310"
+    },
+    "limitations": [
+      "CUA selected the existing release window because both instances share a bundle identifier; the owned helper was identified separately with a private presentation marker and closed through its endpoint",
+      "This pass changes only window size and theme temporarily; no claim of unchanged preference-file timestamps or OS window position",
+      "Populated LED compact, RC/flasher workflow, and scope/inspector scrolling checks are recorded separately; this is not every pane/state at every size"
+    ]
+  },
+  "minimum_raw_archive_sha256": "1a89bfea8dfb4e87b4d131ada3f36e45d1d721bfee7df449ccededc7a8a22892",
+  "captures": {
+    "research/ui-audit/first-version-completion-204/01-led-keyboard-built.jpg": {
+      "sha256": "33d2ee5384187a12a04ee19a3e28687d56b85b5251c0d58e7042c94c62d487bb",
+      "bytes": 124334,
+      "pixels": [
+        1053,
+        802
+      ]
+    },
+    "research/ui-audit/first-version-completion-204/02-invalid-value.jpg": {
+      "sha256": "ccdc509009562773eced136653f0dbf61eb6a8b3c27c9be7ca6f01ac80b590bc",
+      "bytes": 111382,
+      "pixels": [
+        1053,
+        802
+      ]
+    },
+    "research/ui-audit/first-version-completion-204/03-corrected-2k.jpg": {
+      "sha256": "9b241ffca0f5dbd8f6b8a6ecfaf268b2a7716abef7ecc0967c321d3e1f4b9940",
+      "bytes": 109214,
+      "pixels": [
+        1053,
+        802
+      ]
+    },
+    "research/ui-audit/first-version-completion-204/04-led-reopened.jpg": {
+      "sha256": "7bfce73373a040c95a85dd03fd095129f4f3ef3c2dddeaecac08eb75de4b35ab",
+      "bytes": 114490,
+      "pixels": [
+        1053,
+        802
+      ]
+    },
+    "research/ui-audit/first-version-completion-204/05-compact-dark.jpg": {
+      "sha256": "b4d92635983995bcdfc402c10f94cd9c1de8bcc891daa752d1f34939b1e5972c",
+      "bytes": 108108,
+      "pixels": [
+        1053,
+        802
+      ]
+    },
+    "research/ui-audit/first-version-completion-204/06-compact-dark-simulate.jpg": {
+      "sha256": "d04f95c1c3acd4e9e141f84fbb37af00e7648b168d2bbb1232b8021d52b20e0b",
+      "bytes": 101688,
+      "pixels": [
+        1053,
+        802
+      ]
+    },
+    "research/ui-audit/first-version-completion-204/07-compact-dark-document.jpg": {
+      "sha256": "a2b685687bb9eb828b162f2e537bbd9abed6119795744dbd2659750e10785116",
+      "bytes": 94504,
+      "pixels": [
+        1053,
+        802
+      ]
+    },
+    "research/ui-audit/first-version-completion-204/08-minimum-light.jpg": {
+      "sha256": "daec9dbd45463013644d4c33400fa04522690079e5103c06352c913cd7afa4b8",
+      "bytes": 110982,
+      "pixels": [
+        1053,
+        762
+      ]
+    },
+    "research/ui-audit/first-version-completion-204/09-minimum-dark.jpg": {
+      "sha256": "02981884338e01d2992d6b05eba1927bbb7f6f0126848a2b4e32c5605aa3bdd8",
+      "bytes": 106290,
+      "pixels": [
+        1053,
+        762
+      ]
+    },
+    "research/ui-audit/first-version-completion-204/10-window-restored.jpg": {
+      "sha256": "6b05ddf9c9aae64b1b9f50c5be1787f85532ab375cb9e6c95f284d1e65ad4733",
+      "bytes": 142140,
+      "pixels": [
+        1221,
+        969
+      ]
+    },
+    "research/ui-audit/first-version-completion-204/11-working-dark.jpg": {
+      "sha256": "2f76649b1b4877b2a446450f9aaffbb9777e53361ec1a65351fb0f889ecbad42",
+      "bytes": 132327,
+      "pixels": [
+        1221,
+        969
+      ]
+    },
+    "research/ui-audit/first-version-completion-204/12-before-minimum.jpg": {
+      "sha256": "7a31bd0bc9a12de1e5c32ef42939c68f386eb5782542ab242ac7076883f9d5a1",
+      "bytes": 142206,
+      "pixels": [
+        1221,
+        969
+      ]
+    }
+  }
+}
