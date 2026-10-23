@@ -55,3 +55,15 @@ in the [Save baseline](83-native-save-keyboard.md); a narrowly scoped native men
 repair is under source validation. Do not claim native key acceptance until
 the changed binary is actually exercised. Existing owned-session scrolling
 checks continue without another launch prompt.
+
+## Checkpoint: disclosure session colors
+
+The subsequent [theme repair](85-disclosure-theme.md) fixes two reproduced
+causes of the light/blue Technical details box in Dark. The private elab7 SDK
+changes only disclosure code, its regression and generated provenance; old
+dependencies, caches and release packages remain preserved. Source, complete
+driver tests, mounted paint/expansion and shared-agent collapse pass. The clean
+/208 candidate and matching agent checks pass; changed native paint/keys and
+the preceding file-menu/guidance checks remain pending, so /205 stays the download.
+Continue item 5 and applicable existing-session checks without another launch
+permission request. Record a concrete failure before extending further UI fixes.

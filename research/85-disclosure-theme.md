@@ -65,3 +65,8 @@ changed SDK and the preceding /207 guidance/file-menu changes remains pending.
 No fresh launch prompt is queued: the owner's standing authorization is saved
 in `AGENTS.md`, and the existing owned session remains available for applicable
 unchanged-code checks. No new component, model, command or file format is added.
+
+The [clean 0.181.7 /208 candidate](../docs/validation/disclosure-theme-208/candidate-report.json)
+builds from `15c3effd`, verifies its strict ad-hoc signature and passes the matching
+headless cursor protocol with normal joined shutdown. All 866 captured inputs
+still match. It remains held for native acceptance; /205 stays the download.

@@ -35,3 +35,12 @@ disclosure paint/fonts/keys and the preceding /207 file-menu/guidance changes
 remain pending; a candidate must stay unpromoted until those checks pass. The
 current download remains /205. Standing launch/test authorization is saved in
 `AGENTS.md`; no fresh launch prompt is left waiting for the owner.
+
+The [clean 0.181.7 /208 candidate](candidate-report.json) now builds from
+`15c3effd437b2ff2eaa6e3ece0d125c1fcb0c277`, verifies its strict ad-hoc signature
+and passes the matching headless cursor protocol with completed joined shutdown.
+All 866 captured source/check inputs still match. Candidate logs preserve harmless
+denied module-stat cache writes; clean VCS identity is verified for all binaries.
+[Native acceptance](native-acceptance-pending.json) remains pending, so the
+candidate is held and the /205 download is unchanged. No graphical launch was
+used to produce this receipt, and owner review is not required for engineering work.
