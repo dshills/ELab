@@ -29,3 +29,12 @@ package or run a full suite merely for documentation. For implementation changes
 retain focused regressions, run the required quality gate and qualify affected
 packaged behavior. Use the saved run/desktop authorization without requesting it
 again. Do not close or modify owner projects for testing.
+
+## Checkpoint: component-value guidance
+
+Item 1 is complete in maintenance package 0.181.4 /205. The
+[repair notes](81-component-value-guidance.md) and
+[receipt](../docs/validation/value-guidance-205/report.json) identify source,
+quality, candidate/extracted agent, native-code-equivalent UI/socket and archive
+checks. /204 remains preserved. Next: item 2, cursor/measurement refusal and
+correction. Item 3 remains applicable to each subsequent repair.

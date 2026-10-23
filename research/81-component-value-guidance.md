@@ -54,7 +54,23 @@ value after another actor's edit.
   required mounted-control race tests and offscreen vet. The desktop race run
   took 174.194 seconds; the mounted run took 145.407 seconds. Exit code: 0.
 
-The affected packaged/native checks are tracked in
-`build/value-guidance-205-tools/`. Their final receipt must identify the exact
-source and binary before a new package is promoted. This does not close the
-remaining IME, screen-reader, every-binding or participant-study requirements.
+The [0.181.4 /205 receipt](../docs/validation/value-guidance-205/report.json)
+identifies clean source `ef3a63b05403a5ad0028d2c6af8d76faa3409ad6`, the candidate
+and extracted agents, and the ZIP. All eight numeric kinds pass refusal,
+correction and stale-revision checks through both agents and the native socket.
+Malformed requests retain generic help without changing accepted state.
+
+At 1053×802, CUA verified retained invalid input, readable wrapped guidance,
+first-Apply correction from 1 kΩ / 2.917 mA to 2 kΩ / 1.477 mA, and one Undo.
+[Images and method](ui-audit/value-guidance-205/README.md) distinguish the isolated
+native test bundle from the distribution bundle. Their unsigned compiled
+executables are byte-identical; signatures and bundle identities differ so that
+CUA cannot accidentally route actions to the owner's session. The owned test
+closed, removed its endpoint and disappeared from CUA's running-app inventory.
+
+The [ZIP](../build/releases/ELab-0.181.4-macos-arm64.zip) passed member/mode and
+Unicode/space extraction checks and strict ad-hoc signature verification. Its
+SHA-256 is `d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b`.
+The /204 release remains unchanged. Nothing was publicly uploaded or pushed.
+This does not close IME, screen-reader, every-binding or participant-study
+requirements, and makes no additional electrical accuracy claim.

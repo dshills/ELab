@@ -1,0 +1,87 @@
+"""Exercise actionable numeric refusals through the exact candidate agent."""
+from pathlib import Path
+import argparse
+import hashlib
+import importlib.util
+import json
+
+root = Path('/Users/dshills/Development/projects/ELab')
+stage = Path(__file__).resolve().parent
+parser = argparse.ArgumentParser()
+parser.add_argument('--connect')
+parser.add_argument('--agent-binary', type=Path)
+parser.add_argument('--output', type=Path)
+args = parser.parse_args()
+build = json.loads((stage / 'build-result-signed.json').read_text())
+binary = args.agent_binary or Path(build['review']) / 'elab-agent'
+assert hashlib.sha256(binary.read_bytes()).hexdigest() == build['agent_sha256']
+spec = importlib.util.spec_from_file_location('client', root / 'scripts/persistence-demo.py')
+helper = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(helper)
+c = helper.Client(endpoint=args.connect, command_preconditions=True, agent_binary=binary)
+report = dict(source_commit=build['source_commit'], agent_sha256=build['agent_sha256'],
+              transport='native-socket' if args.connect else 'headless-stdio', agent_binary=str(binary), domains=[])
+
+
+def raw(command, params, revision=None, key=None):
+    c.sequence += 1
+    request = dict(version=1, id=f'value-refusal-{c.sequence}', command=command,
+                   params=params, expected_command_revision=c.command_revision if revision is None else revision,
+                   key=key or f'value-refusal-{c.sequence}')
+    c.process.stdin.write(json.dumps(request) + '\n')
+    c.process.stdin.flush()
+    line = c.process.stdout.readline()
+    assert line, 'agent ended during refusal test'
+    return json.loads(line)
+
+
+try:
+    for kind, parameter, range_text, corrected in [
+        ('resistor', 'resistance', '10–100000 Ω', '2.2k'),
+        ('potentiometer', 'resistance', '10–100000 Ω', '10k'),
+        ('capacitor', 'capacitance', '1 pF–1 F', '22uF'),
+        ('inductor', 'inductance', '1 µH–100 H', '10mH'),
+        ('dc-source', 'voltage', '0–12 V', '3V'),
+        ('pulse-source', 'voltage', '0–12 V', '3V'),
+        ('sine-source', 'amplitude', '0–12 V', '3V'),
+        ('finite-pulse-source', 'high voltage', '−12–12 V', '3V'),
+    ]:
+        c.ask('project.clear', {'discard_changes': True}, True)
+        c.ask('simulation.pause', {}, True)
+        s = c.ask('component.place', {'kind': kind, 'position': {'x': 0, 'y': 0}}, True)
+        identifier = s['components'][0]['id']
+        before = c.ask('simulation.wait')
+        bad = raw('component.set', {'id': identifier, 'value': 'nonsense'})
+        assert bad['error']['code'] == 'invalid-params', bad
+        help = bad['help']
+        assert identifier in help['summary'] and parameter in help['summary'], help
+        assert range_text in help['action'] and 'previous value' in help['action'], help
+        assert help['details'] == bad['error']['message'] and help['object_ids'] == [identifier], help
+        assert before == c.ask('project.inspect'), 'refusal changed accepted state'
+        old_revision = before['command_revision']
+        first_help = dict(help)
+        c.ask('component.set', {'id': identifier, 'value': corrected}, True)
+        after = c.ask('simulation.wait')
+        stale = raw('component.set', {'id': identifier, 'value': 'nonsense'}, old_revision)
+        assert stale['error']['code'] == 'conflict' and 'help' not in stale, stale
+        assert after == c.ask('project.inspect'), 'stale request changed state'
+        assert help == first_help, 'prior guidance changed after correction'
+        report['domains'].append(dict(kind=kind, id=identifier, help=first_help,
+                                      corrected_value=after['components'][0]['value']))
+    before = c.ask('project.inspect')
+    malformed = raw('component.set', {'id': identifier, 'value': 'nonsense', 'extra': True})
+    assert malformed['error']['code'] == 'invalid-params', malformed
+    assert malformed['help']['summary'] == 'That request could not be applied.', malformed
+    assert before == c.ask('project.inspect'), 'malformed request changed state'
+    job = c.ask('app.close', {'discard_changes': True}, True)['shutdown']
+    job = c.wait_for_shutdown_outcome(job)
+    assert job['status'] == 'completed' and job['exit_ready'], job
+    report.update(passed=True, refusal_preserves_full_state=True,
+                  correction_and_stale_guard=True, malformed_guidance_not_invented=True,
+                  shutdown=job)
+finally:
+    c.close()
+name = 'native-protocol-report.json' if args.connect else 'protocol-report.json'
+(args.output or stage / name).write_text(json.dumps(report, indent=2) + '\n')
+print(json.dumps(dict(passed=report['passed'], domains=len(report['domains']),
+                      transport=report['transport'], source_commit=report['source_commit'])))

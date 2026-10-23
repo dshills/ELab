@@ -1,0 +1,575 @@
+{
+  "passed": true,
+  "kind": "contextual-component-value-refusal-guidance",
+  "source_commit": "ef3a63b05403a5ad0028d2c6af8d76faa3409ad6",
+  "version": "0.181.4",
+  "build": "205",
+  "native_sha256": "c835e29209d652c06e217644cf8825c3000ea5d61f1579cfe4bb1ab0262fab3d",
+  "agent_sha256": "e5bb556fdf49922644e75ab54342bccd6b3ccbe66b214a95c23b6c3668e5c33c",
+  "source_quality_exit_code": 0,
+  "source_quality_scope": "lint/staticcheck, 67 Python, complete root/desktop race/vet, required mounted controls race and offscreen vet",
+  "agent": {
+    "source_commit": "ef3a63b05403a5ad0028d2c6af8d76faa3409ad6",
+    "agent_sha256": "e5bb556fdf49922644e75ab54342bccd6b3ccbe66b214a95c23b6c3668e5c33c",
+    "transport": "headless-stdio",
+    "domains": [
+      {
+        "kind": "resistor",
+        "id": "R1",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "R1 needs a valid resistance.",
+          "action": "Enter 10\u2013100000 \u03a9. Bare SI or \u03a9/ohm; k/K/M prefixes, for example 2.2k or 0.1M \u03a9. The previous value (1 k\u03a9) is unchanged.",
+          "details": "enter a finite value in \u03a9",
+          "object_ids": [
+            "R1"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 2200
+      },
+      {
+        "kind": "potentiometer",
+        "id": "P1",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "P1 needs a valid resistance.",
+          "action": "Enter 10\u2013100000 \u03a9. Bare SI or \u03a9/ohm; k/K/M prefixes, for example 2.2k or 0.1M \u03a9. The previous value (10 k\u03a9) is unchanged.",
+          "details": "enter a finite value in \u03a9",
+          "object_ids": [
+            "P1"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 10000
+      },
+      {
+        "kind": "capacitor",
+        "id": "C1",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "C1 needs a valid capacitance.",
+          "action": "Enter 1 pF\u20131 F. Bare SI or F; p/n/u/\u00b5/\u03bc/m prefixes, for example 1 \u00b5F or 100nF. The previous value (1 \u00b5F) is unchanged.",
+          "details": "enter a finite value in F",
+          "object_ids": [
+            "C1"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 2.2e-05
+      },
+      {
+        "kind": "inductor",
+        "id": "L1",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "L1 needs a valid inductance.",
+          "action": "Enter 1 \u00b5H\u2013100 H. Bare SI or H; n/u/\u00b5/\u03bc/m prefixes, for example 10 mH or 100uH. The previous value (10 mH) is unchanged.",
+          "details": "enter a finite value in H",
+          "object_ids": [
+            "L1"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 0.01
+      },
+      {
+        "kind": "dc-source",
+        "id": "V1",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "V1 needs a valid voltage.",
+          "action": "Enter 0\u201312 V. Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V. The previous value (5 V) is unchanged.",
+          "details": "enter a finite value in V",
+          "object_ids": [
+            "V1"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 3
+      },
+      {
+        "kind": "pulse-source",
+        "id": "V2",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "V2 needs a valid voltage.",
+          "action": "Enter 0\u201312 V. Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V. The previous value (5 V) is unchanged.",
+          "details": "enter a finite value in V",
+          "object_ids": [
+            "V2"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 3
+      },
+      {
+        "kind": "sine-source",
+        "id": "V3",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "V3 needs a valid amplitude.",
+          "action": "Enter 0\u201312 V. Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V. With the current 0 V offset, amplitude cannot exceed 12 V. The previous value (2.5 V) is unchanged.",
+          "details": "enter a finite value in V",
+          "object_ids": [
+            "V3"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 3
+      },
+      {
+        "kind": "finite-pulse-source",
+        "id": "V4",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "V4 needs a valid high voltage.",
+          "action": "Enter \u221212\u201312 V. Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V. High level must be at least the current low level of 0 V. The previous value (5 V) is unchanged.",
+          "details": "enter a finite value in V",
+          "object_ids": [
+            "V4"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 3
+      }
+    ],
+    "passed": true,
+    "refusal_preserves_full_state": true,
+    "correction_and_stale_guard": true,
+    "malformed_guidance_not_invented": true,
+    "shutdown": {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.stdio",
+      "input_revision": 33,
+      "command_revision": 34,
+      "document_generation": 9,
+      "discard_recovery": true,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    }
+  },
+  "extracted_agent": {
+    "source_commit": "ef3a63b05403a5ad0028d2c6af8d76faa3409ad6",
+    "agent_sha256": "e5bb556fdf49922644e75ab54342bccd6b3ccbe66b214a95c23b6c3668e5c33c",
+    "transport": "headless-stdio",
+    "agent_binary": "/private/tmp/elab-value-guidance-205-extracted/Extracted download \u00b5 with spaces/ELab-0.181.4-macos-arm64/elab-agent",
+    "domains": [
+      {
+        "kind": "resistor",
+        "id": "R1",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "R1 needs a valid resistance.",
+          "action": "Enter 10\u2013100000 \u03a9. Bare SI or \u03a9/ohm; k/K/M prefixes, for example 2.2k or 0.1M \u03a9. The previous value (1 k\u03a9) is unchanged.",
+          "details": "enter a finite value in \u03a9",
+          "object_ids": [
+            "R1"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 2200
+      },
+      {
+        "kind": "potentiometer",
+        "id": "P1",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "P1 needs a valid resistance.",
+          "action": "Enter 10\u2013100000 \u03a9. Bare SI or \u03a9/ohm; k/K/M prefixes, for example 2.2k or 0.1M \u03a9. The previous value (10 k\u03a9) is unchanged.",
+          "details": "enter a finite value in \u03a9",
+          "object_ids": [
+            "P1"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 10000
+      },
+      {
+        "kind": "capacitor",
+        "id": "C1",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "C1 needs a valid capacitance.",
+          "action": "Enter 1 pF\u20131 F. Bare SI or F; p/n/u/\u00b5/\u03bc/m prefixes, for example 1 \u00b5F or 100nF. The previous value (1 \u00b5F) is unchanged.",
+          "details": "enter a finite value in F",
+          "object_ids": [
+            "C1"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 2.2e-05
+      },
+      {
+        "kind": "inductor",
+        "id": "L1",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "L1 needs a valid inductance.",
+          "action": "Enter 1 \u00b5H\u2013100 H. Bare SI or H; n/u/\u00b5/\u03bc/m prefixes, for example 10 mH or 100uH. The previous value (10 mH) is unchanged.",
+          "details": "enter a finite value in H",
+          "object_ids": [
+            "L1"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 0.01
+      },
+      {
+        "kind": "dc-source",
+        "id": "V1",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "V1 needs a valid voltage.",
+          "action": "Enter 0\u201312 V. Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V. The previous value (5 V) is unchanged.",
+          "details": "enter a finite value in V",
+          "object_ids": [
+            "V1"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 3
+      },
+      {
+        "kind": "pulse-source",
+        "id": "V2",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "V2 needs a valid voltage.",
+          "action": "Enter 0\u201312 V. Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V. The previous value (5 V) is unchanged.",
+          "details": "enter a finite value in V",
+          "object_ids": [
+            "V2"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 3
+      },
+      {
+        "kind": "sine-source",
+        "id": "V3",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "V3 needs a valid amplitude.",
+          "action": "Enter 0\u201312 V. Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V. With the current 0 V offset, amplitude cannot exceed 12 V. The previous value (2.5 V) is unchanged.",
+          "details": "enter a finite value in V",
+          "object_ids": [
+            "V3"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 3
+      },
+      {
+        "kind": "finite-pulse-source",
+        "id": "V4",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "V4 needs a valid high voltage.",
+          "action": "Enter \u221212\u201312 V. Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V. High level must be at least the current low level of 0 V. The previous value (5 V) is unchanged.",
+          "details": "enter a finite value in V",
+          "object_ids": [
+            "V4"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 3
+      }
+    ],
+    "passed": true,
+    "refusal_preserves_full_state": true,
+    "correction_and_stale_guard": true,
+    "malformed_guidance_not_invented": true,
+    "shutdown": {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.stdio",
+      "input_revision": 33,
+      "command_revision": 34,
+      "document_generation": 9,
+      "discard_recovery": true,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    }
+  },
+  "native_socket": {
+    "source_commit": "ef3a63b05403a5ad0028d2c6af8d76faa3409ad6",
+    "agent_sha256": "e5bb556fdf49922644e75ab54342bccd6b3ccbe66b214a95c23b6c3668e5c33c",
+    "transport": "native-socket",
+    "domains": [
+      {
+        "kind": "resistor",
+        "id": "R2",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "R2 needs a valid resistance.",
+          "action": "Enter 10\u2013100000 \u03a9. Bare SI or \u03a9/ohm; k/K/M prefixes, for example 2.2k or 0.1M \u03a9. The previous value (1 k\u03a9) is unchanged.",
+          "details": "enter a finite value in \u03a9",
+          "object_ids": [
+            "R2"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 2200
+      },
+      {
+        "kind": "potentiometer",
+        "id": "P1",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "P1 needs a valid resistance.",
+          "action": "Enter 10\u2013100000 \u03a9. Bare SI or \u03a9/ohm; k/K/M prefixes, for example 2.2k or 0.1M \u03a9. The previous value (10 k\u03a9) is unchanged.",
+          "details": "enter a finite value in \u03a9",
+          "object_ids": [
+            "P1"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 10000
+      },
+      {
+        "kind": "capacitor",
+        "id": "C1",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "C1 needs a valid capacitance.",
+          "action": "Enter 1 pF\u20131 F. Bare SI or F; p/n/u/\u00b5/\u03bc/m prefixes, for example 1 \u00b5F or 100nF. The previous value (1 \u00b5F) is unchanged.",
+          "details": "enter a finite value in F",
+          "object_ids": [
+            "C1"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 2.2e-05
+      },
+      {
+        "kind": "inductor",
+        "id": "L1",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "L1 needs a valid inductance.",
+          "action": "Enter 1 \u00b5H\u2013100 H. Bare SI or H; n/u/\u00b5/\u03bc/m prefixes, for example 10 mH or 100uH. The previous value (10 mH) is unchanged.",
+          "details": "enter a finite value in H",
+          "object_ids": [
+            "L1"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 0.01
+      },
+      {
+        "kind": "dc-source",
+        "id": "V2",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "V2 needs a valid voltage.",
+          "action": "Enter 0\u201312 V. Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V. The previous value (5 V) is unchanged.",
+          "details": "enter a finite value in V",
+          "object_ids": [
+            "V2"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 3
+      },
+      {
+        "kind": "pulse-source",
+        "id": "V3",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "V3 needs a valid voltage.",
+          "action": "Enter 0\u201312 V. Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V. The previous value (5 V) is unchanged.",
+          "details": "enter a finite value in V",
+          "object_ids": [
+            "V3"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 3
+      },
+      {
+        "kind": "sine-source",
+        "id": "V4",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "V4 needs a valid amplitude.",
+          "action": "Enter 0\u201312 V. Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V. With the current 0 V offset, amplitude cannot exceed 12 V. The previous value (2.5 V) is unchanged.",
+          "details": "enter a finite value in V",
+          "object_ids": [
+            "V4"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 3
+      },
+      {
+        "kind": "finite-pulse-source",
+        "id": "V5",
+        "help": {
+          "source": "request",
+          "code": "invalid-params",
+          "severity": "warning",
+          "summary": "V5 needs a valid high voltage.",
+          "action": "Enter \u221212\u201312 V. Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V. High level must be at least the current low level of 0 V. The previous value (5 V) is unchanged.",
+          "details": "enter a finite value in V",
+          "object_ids": [
+            "V5"
+          ],
+          "terminal_refs": [],
+          "wire_ids": []
+        },
+        "corrected_value": 3
+      }
+    ],
+    "passed": true,
+    "refusal_preserves_full_state": true,
+    "correction_and_stale_guard": true,
+    "malformed_guidance_not_invented": true,
+    "shutdown": {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.socket",
+      "input_revision": 49,
+      "command_revision": 46,
+      "document_generation": 10,
+      "discard_recovery": true,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    }
+  },
+  "native_equivalence": {
+    "source_commit": "ef3a63b05403a5ad0028d2c6af8d76faa3409ad6",
+    "candidate_native_sha256": "c835e29209d652c06e217644cf8825c3000ea5d61f1579cfe4bb1ab0262fab3d",
+    "native_test_sha256": "196182d9d43204aef0f4be4ab1483fcd36c450af10c297cbb90abf32149433f1",
+    "unsigned_code_sha256": "4005938bc3444a40d4d374c13189a6f9afbe2dea7b78421f08766d14d0292799",
+    "unsigned_compiled_executables_identical": true,
+    "native_test_bundle_id": "com.dshills.elab.value-guidance205",
+    "native_test_scope": "Same compiled source, separately identified/signed test bundle; not exact distribution bundle",
+    "isolated_appearance_and_recovery": true,
+    "shared_geometry_access_denied": true
+  },
+  "native_visible": {
+    "passed": true,
+    "window_pixels": [
+      1053,
+      802
+    ],
+    "rejected_value": "0",
+    "accepted_resistance_ohm": 1000,
+    "prior_current_mA": 2.917,
+    "corrected_resistance_ohm": 2000,
+    "corrected_current_mA": 1.477,
+    "first_apply_recovery": true,
+    "one_undo_restores_previous": true,
+    "wrapped_guidance_readable": true,
+    "screenshots": "research/ui-audit/value-guidance-205",
+    "owned_test_app_absent_from_cua_inventory": true,
+    "endpoint_removed": true
+  },
+  "package": {
+    "passed": true,
+    "release": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.181.4-macos-arm64",
+    "archive": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.181.4-macos-arm64.zip",
+    "archive_sha256": "d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b",
+    "members": 127,
+    "source_commit": "ef3a63b05403a5ad0028d2c6af8d76faa3409ad6",
+    "native_sha256": "c835e29209d652c06e217644cf8825c3000ea5d61f1579cfe4bb1ab0262fab3d",
+    "agent_sha256": "e5bb556fdf49922644e75ab54342bccd6b3ccbe66b214a95c23b6c3668e5c33c",
+    "extraction_verified": true,
+    "unicode_space_path_verified": true,
+    "modes_preserved": true,
+    "strict_ad_hoc_signature_valid": true,
+    "previous_release_unchanged": true,
+    "sdk_license_record_matches_active_pin": true
+  },
+  "new_commands": false,
+  "new_models": false,
+  "published": false,
+  "limitations": [
+    "Native visible checks used a distinct test bundle with identical unsigned compiled code; no exact distribution-bundle desktop qualification claimed",
+    "Full PRD, participant study, clean-account, screen reader and IME acceptance remain open",
+    "No new independent electrical accuracy claim; unchanged model/solver scope retains prior evidence"
+  ]
+}
