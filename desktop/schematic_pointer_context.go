@@ -13,6 +13,14 @@ func (c *commandCanvas) pointerToken() string {
 }
 
 func (c *commandCanvas) routePreparedPointer(phase int, p, delta workbench.Point) {
+	// Click-only placement/wiring/inspection has already completed on down.
+	// A subsequent auto-fit can advance the revision before release; there is
+	// no edit to admit on that release, and it must not report a stale gesture.
+	if phase == 2 && !c.dragging {
+		c.pointerGesture = nil
+		c.dragID = ""
+		return
+	}
 	context := c.pointerContext.Load()
 	if phase == 1 || phase == 2 {
 		context = c.pointerGesture

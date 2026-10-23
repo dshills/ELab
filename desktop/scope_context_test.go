@@ -1,9 +1,11 @@
 package main
 
 import (
+	"math"
 	"reflect"
 	"testing"
 
+	"cogentcore.org/core/events"
 	"github.com/dshills/elab/workbench"
 )
 
@@ -20,6 +22,56 @@ func scopeContextRC(t *testing.T) (*screen, func()) {
 		}
 	})
 	return s, cleanup
+}
+
+func TestScopeShortDragUsesStartAndReleaseWithoutMoveEvents(t *testing.T) {
+	s, cleanup := scopeContextRC(t)
+	defer cleanup()
+	before := s.service.Snapshot()
+	s.app.Do(func() {
+		frame := s.scope.frame.Load()
+		point := func(f float64) float64 { return frame.left + f*(frame.right-frame.left) }
+		s.scope.cursorPointer(frame, events.MouseDown, events.Left, point(.1))
+		s.scope.cursorPointer(frame, events.SlideStart, events.Left, point(.6))
+		if got := s.service.Snapshot().Scope.A; got == nil || math.Abs(got.Requested-.012) > 1e-12 {
+			t.Fatal("single movement did not update cursor", got)
+		}
+		s.scope.cursorPointer(frame, events.SlideStop, events.Left, point(.9))
+	})
+	after := s.service.Snapshot()
+	if after.Scope.A == nil || math.Abs(after.Scope.A.Requested-.018) > 1e-12 || s.scope.gesture != nil {
+		t.Fatal("final release position lost or gesture retained", after.Scope.A)
+	}
+	assertCursorMeasurementPreservesPhysics(t, before, after)
+}
+
+func TestScopeSecondaryClickAndReleaseCannotRetargetMeasurements(t *testing.T) {
+	s, cleanup := scopeContextRC(t)
+	defer cleanup()
+	s.app.Do(func() {
+		frame := s.scope.frame.Load()
+		s.scope.cursorPointer(frame, events.MouseDown, events.Left, frame.left)
+	})
+	before := s.service.Snapshot()
+	s.app.Do(func() {
+		frame := s.scope.frame.Load()
+		for _, kind := range []events.Types{events.MouseDown, events.SlideStart, events.SlideMove, events.SlideStop} {
+			s.scope.cursorPointer(frame, kind, events.Right, frame.right)
+		}
+	})
+	if !reflect.DeepEqual(before, s.service.Snapshot()) || s.scope.gesture != nil {
+		t.Fatal("secondary gesture changed a measurement")
+	}
+	s.app.Do(func() {
+		frame := s.scope.frame.Load()
+		s.scope.cursorPointer(frame, events.MouseDown, events.Left, frame.left)
+	})
+	agentAction(t, s.service, "scope.cursor.select", workbench.CursorSelectParams{Cursor: "b"})
+	before = s.service.Snapshot()
+	s.app.Do(func() { s.scope.cursorPointer(s.scope.frame.Load(), events.SlideStop, events.Left, 500) })
+	if !reflect.DeepEqual(before, s.service.Snapshot()) {
+		t.Fatal("release adopted an intervening agent change")
+	}
 }
 
 func TestScopeClickRejectsStaleWindowAndFreshFrameUsesCapturedAxis(t *testing.T) {

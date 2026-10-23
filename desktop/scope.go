@@ -44,28 +44,20 @@ func (c *scopeCanvas) Mount(parent tree.Node) core.Widget {
 	}
 	c.widget = w
 	w.OnFirst(events.Scroll, func(e events.Event) { forwardScopeScroll(w, e) })
-	for _, kind := range []events.Types{events.MouseDown, events.SlideMove} {
+	for _, kind := range []events.Types{events.MouseDown, events.SlideStart, events.SlideMove, events.SlideStop} {
 		w.OnFirst(kind, func(e events.Event) {
 			if c.screen != nil {
 				frame := c.frame.Load()
 				pos := e.Pos().Sub(w.Geom.Pos.Content.ToPoint())
 				withWindowOwner(c.Owner, window, func() {
 					if c.mountEpoch == epoch {
-						c.cursorGesture(frame, float64(pos.X), kind == events.MouseDown)
+						c.cursorPointer(frame, kind, e.MouseButton(), float64(pos.X))
 					}
 				})
 			}
 			e.SetHandled()
 		})
 	}
-	w.OnFirst(events.SlideStop, func(e events.Event) {
-		withWindowOwner(c.Owner, window, func() {
-			if c.mountEpoch == epoch {
-				c.gesture = nil
-			}
-		})
-		e.SetHandled()
-	})
 	w.OnFirst(events.KeyChord, func(e events.Event) {
 		switch strings.ToLower(string(e.KeyChord())) {
 		case "leftarrow", "rightarrow", "uparrow", "downarrow":

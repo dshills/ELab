@@ -18,6 +18,20 @@ func prepareSchematicPointer(t *testing.T, s *screen) {
 	}
 }
 
+func TestSchematicClickReleaseAfterViewportUpdateIsAnUnchangedNoop(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	agentAction(t, s.service, "drawing.tool.set", workbench.ToolParams{Tool: "place", Kind: "resistor"})
+	prepareSchematicPointer(t, s)
+	s.app.Do(func() { s.routeNativePointer("schematic", 0, workbench.Point{X: 120, Y: 80}, workbench.Point{}) })
+	agentAction(t, s.service, "view.pan", map[string]float64{"dx": 20, "dy": 10})
+	before := s.service.Snapshot()
+	s.app.Do(func() { s.routeNativePointer("schematic", 2, workbench.Point{X: 120, Y: 80}, workbench.Point{}) })
+	if !reflect.DeepEqual(before, s.service.Snapshot()) || s.errorMessage != "" || s.drawing.pointerGesture != nil {
+		t.Fatal("non-editing release reported a stale action or changed circuit", s.errorMessage)
+	}
+}
+
 func TestSchematicPreparedPointerCannotPlaceIntoReplacement(t *testing.T) {
 	s, cleanup := testScreen(t)
 	defer cleanup()

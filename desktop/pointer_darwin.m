@@ -13,6 +13,9 @@ void elabInstallPointerMonitor(void) {
         elabPointerMonitor = [[NSEvent addLocalMonitorForEventsMatchingMask:mask handler:^NSEvent *(NSEvent *event) {
             NSWindow *window = [event window];
             if (window == nil || ![[window title] isEqualToString:@"ELab · Live electronics"]) return event;
+            // macOS Control-click is a secondary click. Let the ordinary
+            // event path classify it; it must not start a canvas edit.
+            if ([event type] == NSEventTypeLeftMouseDown && ([event modifierFlags] & NSEventModifierFlagControl)) return event;
             NSView *view = [window contentView];
             NSPoint point = [view convertPoint:[event locationInWindow] fromView:nil];
             CGFloat scale = [window backingScaleFactor];

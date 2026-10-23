@@ -70,6 +70,10 @@ func (c *commandCanvas) Mount(parent tree.Node) core.Widget {
 	w.OnFirst(events.MouseDown, func(e events.Event) {
 		context := c.pointerContext.Load()
 		withWindowOwner(c.Owner, window, func() {
+			if e.MouseButton() != events.Left {
+				c.pointerGesture = nil
+				return
+			}
 			c.pointerGesture = c.withPreparedPointer(context, func() { c.routePointer(0, c.world(e, w), workbench.Point{}) })
 		})
 		e.SetHandled()
@@ -344,9 +348,10 @@ func (s *screen) routeNativePointer(pane string, phase int, p, delta workbench.P
 		if !sweepVisible(state) || s.sweepDrawing == nil {
 			return
 		}
-		if phase == 0 || phase == 1 {
+		if phase >= 0 && phase <= 2 {
 			screenPoint := s.sweepDrawing.View.Screen(canvas.Point{X: p.X, Y: p.Y})
-			s.sweepDrawing.placeCursor(screenPoint.X)
+			kind := []events.Types{events.MouseDown, events.SlideMove, events.SlideStop}[phase]
+			s.sweepDrawing.cursorPointer(s.sweepDrawing.frame.Load(), kind, events.Left, screenPoint.X)
 		}
 	case "schematic":
 		if !sourcePaneHidden(state) {

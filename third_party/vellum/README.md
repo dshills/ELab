@@ -28,7 +28,7 @@ window dragging is owned by macOS. No electronics or agent command changes.
 
 ## macOS wheel and scrollbar input repair (ELab 0.181.1)
 
-The active source is `ebb20812644fb179af280fe2a1683490eef294e5`, with the
+That repair used source `ebb20812644fb179af280fe2a1683490eef294e5`, with the
 [complete compatibility patch](patches/elab-public-e58d405-event-position-compat.patch),
 `vellum-e58d405-elab4.tar.gz` and `build/.vellum-sdk-e58d405-elab4`.
 Button and wheel callbacks use the matching current AppKit event's window-local
@@ -40,6 +40,19 @@ remain intact. The prepared dependency stage records input/output hashes and
 regression tests. A second stage removes a redundant wheel inversion from the
 scrollbar handler; regression tests compare frame and scrollbar movement in
 both directions and at the bounds. Prior SDK archives and caches remain unchanged.
+
+## Coalesced divider drag repair (ELab 0.181.2)
+
+The active source is `71605ec3c9bbf774686395d181809a02ec2d667b`, with the
+[complete compatibility patch](patches/elab-public-e58d405-ui-input-compat.patch),
+`vellum-e58d405-elab5.tar.gz` and `build/.vellum-sdk-e58d405-elab5`.
+The controlled split-pane handle now accepts SlideStart and SlideStop positions
+as well as SlideMove. A fast/coalesced drag with one movement no longer loses
+its first or final position. Secondary buttons do not resize the split. The
+existing numeric bounds, owner admission and retained pane/draft behavior remain.
+The regression uses actual manual-window mouse input with one movement and a
+distinct release position, in both orientations. This builds on both preceding
+macOS event-position and scrollbar wheel fixes; old archives remain preserved.
 
 The exporter still marks SDK artifacts as private builds because public SDK/distribution qualification remains incomplete. **Public source availability is distinct from a qualified public SDK release.** MIT licensing, upstream notices, `SDK_MANIFEST.json` and `PRIVATE_BUILD.txt` remain included. Existing archives/caches, app bundles and their historical validation are unchanged. This dependency update does not qualify or replace the /189 owner app or /193 candidate.
 

@@ -9,6 +9,7 @@ import (
 	"testing"
 	"time"
 
+	"cogentcore.org/core/events"
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/app"
 	"github.com/dshills/vellum/canvas"
@@ -35,6 +36,52 @@ func awaitNativeSweep(t *testing.T, s *screen) workbench.Snapshot {
 	}
 	t.Fatal("native sweep did not complete")
 	return workbench.Snapshot{}
+}
+
+func TestNativeSweepShortDragReleaseAndSecondaryClick(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	uiAction(t, s, "example.reset", nil)
+	uiAction(t, s, "simulation.pause", nil)
+	uiAction(t, s, "sweep-points", &ui.ChangeEvent{Text: "11"})
+	uiAction(t, s, "sweep-start", nil)
+	awaitNativeSweep(t, s)
+	s.app.Do(func() {
+		s.view()
+		_, _ = s.sweepMesh(*s.sweepDrawing.View)
+		frame := s.sweepDrawing.frame.Load()
+		point := func(f float64) float64 { return frame.left + f*(frame.right-frame.left) }
+		s.sweepDrawing.cursorPointer(frame, events.MouseDown, events.Left, point(.1))
+		s.sweepDrawing.cursorPointer(frame, events.SlideStart, events.Left, point(.6))
+		s.sweepDrawing.cursorPointer(frame, events.SlideStop, events.Left, point(.9))
+	})
+	before := s.service.Snapshot()
+	if before.DCSweep.Cursor == nil || *before.DCSweep.Cursor != 9 || s.sweepDrawing.gesture != nil {
+		t.Fatal("short sweep drag lost its final point", before.DCSweep.Cursor)
+	}
+	s.app.Do(func() {
+		frame := s.sweepDrawing.frame.Load()
+		for _, kind := range []events.Types{events.MouseDown, events.SlideStart, events.SlideStop} {
+			s.sweepDrawing.cursorPointer(frame, kind, events.Right, frame.left)
+		}
+	})
+	if !reflect.DeepEqual(before, s.service.Snapshot()) {
+		t.Fatal("secondary click changed the sweep")
+	}
+	s.app.Do(func() {
+		_, _ = s.sweepMesh(*s.sweepDrawing.View)
+		frame := s.sweepDrawing.frame.Load()
+		s.sweepDrawing.cursorPointer(frame, events.MouseDown, events.Left, frame.left)
+	})
+	agentAction(t, s.service, "sweep.trace.select", workbench.IDParams{ID: "v:V1"})
+	before = s.service.Snapshot()
+	s.app.Do(func() {
+		_, _ = s.sweepMesh(*s.sweepDrawing.View)
+		s.sweepDrawing.cursorPointer(s.sweepDrawing.frame.Load(), events.SlideStop, events.Left, 300)
+	})
+	if !reflect.DeepEqual(before, s.service.Snapshot()) || s.sweepDrawing.gesture != nil {
+		t.Fatal("sweep release adopted an intervening agent change")
+	}
 }
 func TestNativeDCSweepMatchesAgentAndUsesParameterAxis(t *testing.T) {
 	s, cleanup := testScreen(t)

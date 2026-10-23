@@ -3,6 +3,7 @@ package main
 import (
 	"math"
 
+	"cogentcore.org/core/events"
 	"github.com/dshills/elab/workbench"
 )
 
@@ -17,6 +18,19 @@ type scopePlotFrame struct {
 type scopeGesture struct {
 	origin   *scopePlotFrame
 	revision uint64
+}
+
+// A coalesced drag can contain only SlideStart and SlideStop, without a
+// SlideMove. Admit both positions through the original gesture's revision guard.
+func (c *scopeCanvas) cursorPointer(frame *scopePlotFrame, kind events.Types, button events.Buttons, px float64) {
+	if button != events.Left {
+		c.gesture = nil
+		return
+	}
+	c.cursorGesture(frame, px, kind == events.MouseDown)
+	if kind == events.SlideStop {
+		c.gesture = nil
+	}
 }
 
 func (c *scopeCanvas) applyCursorFrame(frame *scopePlotFrame, px float64, revision uint64) (uint64, bool) {
