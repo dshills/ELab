@@ -142,12 +142,14 @@ func (b *pointerBridge) deliver(frame pointerFrame, phase int, point, delta work
 	b.mu.Lock()
 	current := b.frame
 	b.mu.Unlock()
-	if frame.pane == "schematic" && (phase == 1 || phase == 2) {
+	if (frame.pane == "schematic" || frame.pane == "sweep") && (phase == 1 || phase == 2) {
 		// Continuations retain the canvas gesture's accepted command/document
-		// guard. Its own selection/pan can repaint before a queued release.
+		// guard. Its own selection, pan or sweep cursor can repaint before release.
 		// A different actor or replacement is rejected by that guard.
 		current.token, frame.token = "", ""
-		current.view.Center = frame.view.Center
+		if frame.pane == "schematic" {
+			current.view.Center = frame.view.Center
+		}
 	}
 	if current != frame {
 		return

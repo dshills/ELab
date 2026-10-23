@@ -28,8 +28,10 @@ type sweepCanvas struct {
 }
 
 type sweepGesture struct {
-	origin   *sweepPlotFrame
-	revision uint64
+	origin        *sweepPlotFrame
+	revision      uint64
+	position      float64
+	positionValid bool
 }
 
 func (c *sweepCanvas) Mount(parent tree.Node) core.Widget {
@@ -47,7 +49,7 @@ func (c *sweepCanvas) Mount(parent tree.Node) core.Widget {
 	}
 	c.widget = w
 	w.OnFirst(events.Scroll, func(e events.Event) { e.SetHandled() })
-	for _, kind := range []events.Types{events.MouseDown, events.SlideStart, events.SlideMove, events.SlideStop} {
+	for _, kind := range []events.Types{events.MouseDown, events.MouseUp, events.SlideStart, events.SlideMove, events.SlideStop} {
 		w.OnFirst(kind, func(e events.Event) {
 			frame := c.frame.Load()
 			pos := e.Pos().Sub(w.Geom.Pos.Content.ToPoint())
@@ -86,16 +88,22 @@ func (c *sweepCanvas) cursorPointer(frame *sweepPlotFrame, kind events.Types, bu
 		}
 	}
 	g := c.gesture
+	finish := kind == events.MouseUp || kind == events.SlideStop
+	if finish && g != nil && g.positionValid && g.position == x {
+		c.gesture = nil
+		return
+	}
 	if g == nil || frame == nil || frame.revision < g.origin.revision || frame.revision > g.revision || frame.generation != g.origin.generation || frame.id != g.origin.id {
 		c.gesture = nil
 		return
 	}
 	next, ok := c.applyCursorFrame(frame, x, g.revision)
-	if !ok || kind == events.SlideStop {
+	if !ok || finish {
 		c.gesture = nil
 		return
 	}
 	g.revision = next
+	g.position, g.positionValid = x, true
 }
 
 func (c *sweepCanvas) applyCursorFrame(frame *sweepPlotFrame, x float64, revision uint64) (uint64, bool) {

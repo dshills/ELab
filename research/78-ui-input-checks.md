@@ -4,20 +4,22 @@ October 23, 2026. Scope: existing ELab controls, mouse gestures and scrolling.
 No electronics features, device models, public commands or document formats are
 added. The starting /202 document was clean and empty. Built-in examples and
 owned temporary edits/recordings provided the test content. Synthetic circuit
-edits were undone or discarded. Autosave was temporarily disabled before those
-edits and re-enabled once the document was clean; existing recovery copies were
-preserved.
+edits were undone or discarded. Autosave was temporarily disabled for the drawing/recording tests and restored
+after cleanup. A preliminary sweep was also run with the normal autosave setting;
+its owned unsaved result was discarded. The existing 20-component recovery copy
+remained listed with its original timestamp and was never opened or dismissed.
 
 ## Findings and fixes
 
 1. **Short live/recorded scope drags lost their movement.** A native queue can
-   coalesce a quick drag to MouseDown, SlideStart and SlideStop, with no SlideMove.
-   The scope listened only to MouseDown/SlideMove. It now applies the start and
-   final release positions using its existing original-document/run/recording/
+   coalesce a quick drag to MouseDown/MouseUp before any slide classification,
+   or to SlideStart/SlideStop without SlideMove. The scope now applies both raw
+   and classified final release positions using its existing original-document/run/recording/
    cursor/revision guard. Repainting its own successful cursor commands is
    allowed; an intervening actor or selection change still retires the gesture.
 2. **Short divider drags could do nothing.** Vellum's controlled split handle
-   also listened only to SlideMove. It now accepts SlideStart/SlideStop positions.
+   also listened only to SlideMove. It now accepts raw MouseUp as well as
+   SlideStart/SlideStop positions, retaining the original primary press.
    Regression tests send actual manual-window input with a single movement and
    a different final release, in both orientations, retaining the existing
    bounds and controlled owner callbacks.
@@ -31,7 +33,7 @@ preserved.
    command or reporting a stale edit. Actual drag commits still use their guard.
 5. **Sweep drags lost their final point.** The discrete sweep cursor now handles
    start/movement/release through a retained gesture context, including the
-   native bridge's release packet. Another actor, document, sweep or trace
+   native bridge's release packet across its own cursor repaint. Another actor, document, sweep or trace
    change cannot be adopted by the release. Point selection remains discrete
    and uses the same sweep.cursor.set command available to external agents.
 
@@ -59,3 +61,24 @@ Saved captures distinguish baseline failures from final packaged-app checks in
 short drags, final release positions, secondary clicks and stale agent admission.
 The final validation receipt will identify the exact source, SDK and app tested.
 No claim of complete OS input, accessibility, IME or every possible device is made.
+
+## Native verification and rejected preliminary candidate
+
+The first /203 candidate passed source, race and mounted checks but failed the
+actual fast scope drag: A remained at 4.460052986512524 s. It is preserved as a
+preliminary candidate, not the current qualified release. This exposed the raw
+MouseUp case absent from the first classified-drag regression.
+
+The /204 preview moved scope A from 0.5523362235067438 s to
+894.340077071291 ms with a short drag. Right-click and Control-click left it
+unchanged. A divider drag changed 0.65 to 0.47680414. A separate sweep check
+exposed the native frame-token rejection across cursor repaint; after repair,
+a short drag moved point 2 (0.833333333 V) to point 6 (4.16666667 V).
+Secondary clicks left point 6 selected. On the LED template, right/Control-click
+in placement mode kept four components; a primary click placed exactly one fifth
+component without a false stale-input warning. Undo restored the clean template.
+The native bridge regression now exercises its actual owner delivery after
+repainting, both with its own cursor write and an intervening agent trace change.
+
+Final packaged /204 checks and exact artifact hashes are recorded separately in
+`docs/validation/ui-input-204`. Preview evidence does not qualify a different binary.

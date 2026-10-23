@@ -3,11 +3,13 @@
 package main
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/canvas"
+	"github.com/dshills/vellum/ui"
 )
 
 // Exercise the actual owner-delivery method without installing an OS monitor.
@@ -95,6 +97,50 @@ func TestSchematicNativeQueuedPanContinuesOnlyOwnWrites(t *testing.T) {
 			}
 			if s.errorMessage != "" || first.View.Center.X != -20 || after.View.Center.X != -50 || after.CommandRevision != before.CommandRevision+1 {
 				t.Fatal("queued pan failed to continue its own accepted write", s.errorMessage, after.View)
+			}
+		})
+	}
+}
+
+func TestSweepNativeQueuedReleaseSurvivesOnlyOwnCursorRepaint(t *testing.T) {
+	for _, intervene := range []bool{false, true} {
+		t.Run(map[bool]string{false: "own-cursor", true: "agent-trace"}[intervene], func(t *testing.T) {
+			s, cleanup := testScreen(t)
+			defer cleanup()
+			uiAction(t, s, "example.reset", nil)
+			uiAction(t, s, "simulation.pause", nil)
+			uiAction(t, s, "sweep-points", &ui.ChangeEvent{Text: "11"})
+			uiAction(t, s, "sweep-start", nil)
+			awaitNativeSweep(t, s)
+			b := &pointerBridge{route: s.routeNativePointer}
+			b.enabled.Store(true)
+			publish := func() {
+				s.view()
+				_, _ = s.sweepMesh(*s.sweepDrawing.View)
+				frame := s.sweepDrawing.frame.Load()
+				b.publish(0, 0, *s.sweepDrawing.View, "sweep", fmt.Sprintf("%s/%d/%d", frame.id, frame.revision, frame.generation))
+			}
+			s.app.Do(publish)
+			pressed := b.frame
+			point := func(f float64) workbench.Point {
+				frame := s.sweepDrawing.frame.Load()
+				p := s.sweepDrawing.View.World(canvas.Point{X: frame.left + f*(frame.right-frame.left), Y: 100})
+				return workbench.Point{X: p.X, Y: p.Y}
+			}
+			s.app.Do(func() { b.deliver(pressed, 0, point(.1), workbench.Point{}) })
+			if intervene {
+				agentAction(t, s.service, "sweep.trace.select", workbench.IDParams{ID: "v:V1"})
+			}
+			s.app.Do(publish)
+			before := s.service.Snapshot()
+			s.app.Do(func() { b.deliver(pressed, 2, point(.9), workbench.Point{}) })
+			after := s.service.Snapshot()
+			if intervene {
+				if !reflect.DeepEqual(before, after) {
+					t.Fatal("queued sweep release adopted another actor's change")
+				}
+			} else if after.DCSweep.Cursor == nil || *after.DCSweep.Cursor != 9 || after.CommandRevision != before.CommandRevision+1 || s.sweepDrawing.gesture != nil {
+				t.Fatal("own cursor repaint swallowed native release", after.DCSweep.Cursor, s.errorMessage)
 			}
 		})
 	}

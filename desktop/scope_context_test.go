@@ -45,6 +45,23 @@ func TestScopeShortDragUsesStartAndReleaseWithoutMoveEvents(t *testing.T) {
 	assertCursorMeasurementPreservesPhysics(t, before, after)
 }
 
+func TestScopeFastReleaseWithoutAnyDragClassification(t *testing.T) {
+	s, cleanup := scopeContextRC(t)
+	defer cleanup()
+	before := s.service.Snapshot()
+	s.app.Do(func() {
+		frame := s.scope.frame.Load()
+		point := func(f float64) float64 { return frame.left + f*(frame.right-frame.left) }
+		s.scope.cursorPointer(frame, events.MouseDown, events.Left, point(.1))
+		s.scope.cursorPointer(frame, events.MouseUp, events.Left, point(.9))
+	})
+	after := s.service.Snapshot()
+	if after.Scope.A == nil || math.Abs(after.Scope.A.Requested-.018) > 1e-12 || s.scope.gesture != nil {
+		t.Fatal("final release position lost or gesture retained", after.Scope.A)
+	}
+	assertCursorMeasurementPreservesPhysics(t, before, after)
+}
+
 func TestScopeSecondaryClickAndReleaseCannotRetargetMeasurements(t *testing.T) {
 	s, cleanup := scopeContextRC(t)
 	defer cleanup()

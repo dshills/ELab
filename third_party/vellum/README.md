@@ -43,7 +43,7 @@ both directions and at the bounds. Prior SDK archives and caches remain unchange
 
 ## Coalesced divider drag repair (ELab 0.181.2)
 
-The active source is `71605ec3c9bbf774686395d181809a02ec2d667b`, with the
+That preliminary repair used source `71605ec3c9bbf774686395d181809a02ec2d667b`, with the
 [complete compatibility patch](patches/elab-public-e58d405-ui-input-compat.patch),
 `vellum-e58d405-elab5.tar.gz` and `build/.vellum-sdk-e58d405-elab5`.
 The controlled split-pane handle now accepts SlideStart and SlideStop positions
@@ -53,6 +53,19 @@ existing numeric bounds, owner admission and retained pane/draft behavior remain
 The regression uses actual manual-window mouse input with one movement and a
 distinct release position, in both orientations. This builds on both preceding
 macOS event-position and scrollbar wheel fixes; old archives remain preserved.
+
+## Fast release repair (ELab 0.181.3)
+
+The active source is `899b2ba3bc01c9708385a2b10d4f8154a5f257e2`, with the
+[complete compatibility patch](patches/elab-public-e58d405-ui-release-compat.patch),
+`vellum-e58d405-elab6.tar.gz` and `build/.vellum-sdk-e58d405-elab6`.
+Native testing of /203 found that a fast gesture can release before any SlideStart.
+The controlled split now also retains primary MouseDown/MouseUp input and applies
+the final position when native slide classification never starts. Classified
+slides retain their start/move/stop path. Both paths retain bounds and owner
+admission. A new manual-window test performs movement and release without advancing
+the drag timer, for both orientations; the existing classified-slide tests remain.
+All preceding compatibility fixes are included; historical archives are preserved.
 
 The exporter still marks SDK artifacts as private builds because public SDK/distribution qualification remains incomplete. **Public source availability is distinct from a qualified public SDK release.** MIT licensing, upstream notices, `SDK_MANIFEST.json` and `PRIVATE_BUILD.txt` remain included. Existing archives/caches, app bundles and their historical validation are unchanged. This dependency update does not qualify or replace the /189 owner app or /193 candidate.
 

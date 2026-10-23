@@ -44,7 +44,7 @@ func (c *scopeCanvas) Mount(parent tree.Node) core.Widget {
 	}
 	c.widget = w
 	w.OnFirst(events.Scroll, func(e events.Event) { forwardScopeScroll(w, e) })
-	for _, kind := range []events.Types{events.MouseDown, events.SlideStart, events.SlideMove, events.SlideStop} {
+	for _, kind := range []events.Types{events.MouseDown, events.MouseUp, events.SlideStart, events.SlideMove, events.SlideStop} {
 		w.OnFirst(kind, func(e events.Event) {
 			if c.screen != nil {
 				frame := c.frame.Load()

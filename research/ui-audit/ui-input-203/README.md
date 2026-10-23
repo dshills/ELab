@@ -1,7 +1,7 @@
 # UI mouse and scrolling evidence
 
 CUA returned these unmodified window captures from ELab 0.181.1 /202. They are
-baseline/first-pass evidence, before the fixes in /203. Actions and outcomes are
+baseline/first-pass evidence, before the maintenance fixes. Actions and outcomes are
 listed in [the maintenance notes](../../78-ui-input-checks.md).
 
 1. Starting clean empty circuit, 2214×1264.
@@ -20,5 +20,10 @@ listed in [the maintenance notes](../../78-ui-input-checks.md).
 captured size is 1221×969 rather than the original size; neither capture proves
 exact native-window movement or original-size restoration.
 
-Final /203 packaged-app captures and captions are appended separately after
-verification; baseline captures do not qualify repaired behavior.
+15. Preliminary /203 packaged app: fast drag still left A at 4.460052986512524 s.
+This failed native gate is retained and is not final acceptance evidence.
+16. /204 preview: raw-release scope cursor moved, and a divider drag reduced the
+schematic share. Scope A shows 894.340077071291 ms.
+17. /204 sweep preview after the redraw guard repair: point 6, 4.16666667 V,
+after dragging from point 2. These previews support the repair; final packaged
+checks are recorded separately in the validation receipt.

@@ -16,19 +16,26 @@ type scopePlotFrame struct {
 	left, right, start, end float64
 }
 type scopeGesture struct {
-	origin   *scopePlotFrame
-	revision uint64
+	origin        *scopePlotFrame
+	revision      uint64
+	position      float64
+	positionValid bool
 }
 
-// A coalesced drag can contain only SlideStart and SlideStop, without a
-// SlideMove. Admit both positions through the original gesture's revision guard.
+// A quick drag may release before native drag classification, or contain
+// SlideStart and SlideStop without any SlideMove. Admit both positions through the original gesture's revision guard.
 func (c *scopeCanvas) cursorPointer(frame *scopePlotFrame, kind events.Types, button events.Buttons, px float64) {
 	if button != events.Left {
 		c.gesture = nil
 		return
 	}
+	finish := kind == events.MouseUp || kind == events.SlideStop
+	if g := c.gesture; finish && g != nil && g.positionValid && g.position == px {
+		c.gesture = nil
+		return
+	}
 	c.cursorGesture(frame, px, kind == events.MouseDown)
-	if kind == events.SlideStop {
+	if finish {
 		c.gesture = nil
 	}
 }
@@ -83,6 +90,7 @@ func (c *scopeCanvas) cursorGesture(frame *scopePlotFrame, px float64, begin boo
 		return
 	}
 	g.revision = next
+	g.position, g.positionValid = px, true
 }
 
 func (c *scopeCanvas) placeCursor(px float64) {
