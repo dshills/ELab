@@ -8,6 +8,8 @@ persists across turns, context resets, and release/test builds.
 
 The owner's explicit instruction is: “Stop asking for permission to run ELab,
 you have it!” Treat this as standing authorization, not a one-launch exception.
+The owner reaffirmed this on October 23, 2026, while leaving the room. Their
+absence does not revoke authorization or require another confirmation.
 
 - Do not ask the user again for permission to launch or run ELab, attach to an
   existing ELab session, or use the desktop for ELab testing.
