@@ -88,6 +88,7 @@ func (s *screen) view() ui.Node {
 	s.pruneSweepFieldRejections(state)
 	s.pruneRecordedPlaybackRejections(state)
 	s.pruneRecordedTimingRejections(state)
+	s.pruneCursorTimeRejections(state)
 	previousContext := s.actionContext
 	s.actionContext = &actionContext{state.CommandRevision, state.Document.Generation}
 	defer func() { s.actionContext = previousContext }()

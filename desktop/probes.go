@@ -147,6 +147,7 @@ func (s *screen) cursorControls(state workbench.Snapshot) ui.Node {
 			field.Text = ""
 			field.Accessibility.Help = "Enter a time to place this cursor. " + field.Accessibility.Help
 		}
+		s.applyCursorTimeRejection(state, cursor.id, "", &field)
 		nodes = append(nodes, field)
 		clear := s.cursorAction(state, "cursor-clear-"+cursor.id, "×", "scope.cursor.clear", cursor.id)
 		clear.Disabled = clear.Disabled || cursor.value == nil

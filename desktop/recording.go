@@ -210,9 +210,11 @@ func (s *screen) recordingCursors(state workbench.Snapshot) ui.Node {
 		if c.value != nil {
 			at = c.value.Requested
 		}
-		nodes = append(nodes, timeField("recorded-cursor-"+c.id, "Recorded cursor "+strings.ToUpper(c.id), at, false, func(text string) {
+		field := timeField("recorded-cursor-"+c.id, "Recorded cursor "+strings.ToUpper(c.id), at, false, func(text string) {
 			s.changeCursorTimeFor(state, c.id, text, r.ID)
-		}))
+		})
+		s.applyCursorTimeRejection(state, c.id, r.ID, &field)
+		nodes = append(nodes, field)
 		clear := s.recordedCursorAction(state, "recorded-cursor-clear-"+c.id, "×", "recording.cursor.clear", c.id)
 		clear.Disabled = clear.Disabled || c.value == nil
 		nodes = append(nodes, clear)

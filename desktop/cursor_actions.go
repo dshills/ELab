@@ -49,11 +49,13 @@ func (s *screen) changeCursorTimeFor(state workbench.Snapshot, cursor, text, rec
 	}
 	if response.Error != nil {
 		s.cursorFieldAccepted = nil
+		s.retainCursorTimeRejection(state, cursor, text, recordingID, origin, response)
 		if pending != nil {
 			pending.failed = true
 		}
 		return
 	}
+	delete(s.cursorTimeRejected, cursorTimeFieldKey(cursor, recordingID))
 	if origin == nil {
 		return
 	}
@@ -128,6 +130,9 @@ func (s *screen) settleCursorActionField(pending *cursorActionWork, index int) {
 	done := func(err error) {
 		if s.pendingCursorAction != pending || pending.field != index {
 			return
+		}
+		if err == nil && !pending.failed {
+			s.retryCursorTimeRejection(pending, index)
 		}
 		pending.field++
 		if err != nil {
