@@ -59,6 +59,8 @@ type Snapshot struct {
 	Verification           *VerificationPreview   `json:"verification,omitempty"`
 	LastExport             *Artifact              `json:"last_export,omitempty"`
 	SchematicPage          SchematicPage          `json:"schematic_page"`
+	PartCategory           string                 `json:"part_category"`
+	PartCategories         []PartCategory         `json:"part_categories"`
 	PartSearch             string                 `json:"part_search"`
 	Theme                  string                 `json:"theme"`
 	Appearance             AppearanceState        `json:"appearance"`
@@ -175,6 +177,7 @@ type Service struct {
 	lastExport                       *Artifact
 	exportPage                       SchematicPage
 	scopeWindow                      *ScopeWindow
+	partCategory                     string
 	partSearch                       string
 	nextHistoryName                  string
 	scopeProbes                      []string
@@ -351,11 +354,13 @@ func (s *Service) snapshotLocked() Snapshot {
 		Operations:             []OperationSummary{},
 		SelectedOperation:      s.selectedOperation,
 		LastOperation:          s.lastOperation,
+		PartCategory:           browserCategory(s.partCategory),
+		PartCategories:         PartCategories(),
 		PartSearch:             s.partSearch,
 		Theme:                  s.theme,
 		Appearance:             s.appearance,
 		AppearanceWork:         s.appearanceWorkLocked(),
-		MatchingParts:          filteredParts(s.partSearch),
+		MatchingParts:          browserParts(s.partCategory, s.partSearch),
 		Scope:                  s.scopeLocked(compiled),
 		ScopeVisible:           s.scopeVisible,
 		Mixed:                  cloneMixed(s.mixed),
@@ -1151,7 +1156,8 @@ func cloneSnapshot(state Snapshot) Snapshot {
 		state.Verification = &preview
 	}
 	state.LastExport = cloneArtifact(state.LastExport)
-	state.MatchingParts = filteredParts(state.PartSearch)
+	state.PartCategories = PartCategories()
+	state.MatchingParts = browserParts(state.PartCategory, state.PartSearch)
 	state.Scope = cloneScope(state.Scope)
 	state.Mixed = cloneMixed(state.Mixed)
 	state.NPN = cloneNPN(state.NPN)

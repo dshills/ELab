@@ -23,7 +23,7 @@ func TestSchematicDiscoveryContractsAreOwnedPureAndBounded(t *testing.T) {
 	s := New()
 	defer s.Close()
 	before := s.Snapshot()
-	commands := []string{"parts.search.set", "component.duplicate", "component.move", "component.rotate", "component.select", "object.delete", "drawing.tool.set", "drawing.position.set", "drawing.cancel", "wire.connect", "wire.begin", "wire.terminals.set", "wire.junction.insert", "editor.value.set"}
+	commands := []string{"parts.category.set", "parts.search.set", "component.duplicate", "component.move", "component.rotate", "component.select", "object.delete", "drawing.tool.set", "drawing.position.set", "drawing.cancel", "wire.connect", "wire.begin", "wire.terminals.set", "wire.junction.insert", "editor.value.set"}
 	for _, command := range commands {
 		raw, _ := json.Marshal(CapabilityQuery{Command: command})
 		response := s.Dispatch(context.Background(), Request{Version: 1, ID: command, Command: "capabilities.list", Params: raw}, "agent")
@@ -40,6 +40,11 @@ func TestSchematicDiscoveryContractsAreOwnedPureAndBounded(t *testing.T) {
 			t.Fatal(command, "missing state/effect/observation contract")
 		}
 		switch command {
+		case "parts.category.set":
+			choices, ok := inputProperty(schema, "category")["enum"].([]any)
+			if !ok || len(choices) != 8 || choices[0] != "common" || choices[7] != "connections" {
+				t.Fatal("category discovery missing", choices)
+			}
 		case "parts.search.set":
 			if inputProperty(schema, "query")["x-max-utf8-bytes"] != float64(128) {
 				t.Fatal("search byte bound missing")

@@ -132,6 +132,8 @@ func ValidID(id string) bool {
 }
 
 type Part struct {
+	Category     string                `json:"category"`
+	Common       bool                  `json:"common"`
 	ValueType    string                `json:"value_type"`
 	ValueDomain  *ComponentValueDomain `json:"value_domain,omitempty"`
 	Aliases      []string              `json:"aliases"`
@@ -170,6 +172,7 @@ func libraryParts() []Part {
 func Library() []Part {
 	parts := libraryParts()
 	for i := range parts {
+		parts[i].Category, parts[i].Common = partGroup(parts[i].Kind)
 		parts[i].ValueType = "none"
 		if parts[i].Kind == "net-label" {
 			parts[i].ValueType = "label"

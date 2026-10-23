@@ -4,7 +4,7 @@ package workbench
 // native focus mechanics. Dynamic inventories come from the current snapshot.
 func addSchematicCapabilityDetails(id string, schema map[string]any) bool {
 	switch id {
-	case "parts.search.set", "component.duplicate", "component.move", "component.rotate", "component.select", "object.delete", "drawing.tool.set", "drawing.position.set", "drawing.cancel", "wire.connect", "wire.begin", "wire.terminals.set", "wire.junction.insert", "editor.value.set":
+	case "parts.category.set", "parts.search.set", "component.duplicate", "component.move", "component.rotate", "component.select", "object.delete", "drawing.tool.set", "drawing.position.set", "drawing.cancel", "wire.connect", "wire.begin", "wire.terminals.set", "wire.junction.insert", "editor.value.set":
 	default:
 		return false
 	}
@@ -56,6 +56,14 @@ func addSchematicCapabilityDetails(id string, schema map[string]any) bool {
 		schema["x-position-rounding"] = "nearest grid; halfway values round away from zero; bounds apply before snapping"
 	}
 	switch id {
+	case "parts.category.set":
+		ids := []string{}
+		for _, category := range PartCategories() {
+			ids = append(ids, category.ID)
+		}
+		inputProperty(schema, "category")["enum"] = ids
+		schema["examples"] = []any{PartCategoryParams{Category: "common"}}
+		contract.Effects = append(contract.Effects, "Selects snapshot.part_category and clears part_search; matching_parts contains that group. Session only; preserves graph, physics, history, chosen drawing kind and document dirty state")
 	case "parts.search.set", "editor.value.set":
 		name := "query"
 		if id == "editor.value.set" {
@@ -65,7 +73,7 @@ func addSchematicCapabilityDetails(id string, schema map[string]any) bool {
 		p["maxLength"], p["x-max-utf8-bytes"] = 128, 128
 		contract.Effects = append(contract.Effects, "Stores raw text as session state; preserves graph, physics, history and document dirty state")
 		if id == "parts.search.set" {
-			contract.Effects = append(contract.Effects, "Matching is case-insensitive with trimmed whitespace-separated tokens; every token must occur in name/kind/pins/units/default/model/aliases; empty matches all; does not change the chosen drawing kind")
+			contract.Effects = append(contract.Effects, "Matching is case-insensitive with trimmed whitespace-separated tokens; every token must occur in name/kind/pins/units/default/model/aliases; nonempty searches all 18 parts regardless of category; empty returns to the chosen category (default Common); does not change the chosen drawing kind")
 			schema["examples"] = []any{SearchParams{Query: "red led"}}
 		} else {
 			contract.Effects = append(contract.Effects, "Does not parse or apply a numeric value; component.set performs validation/commit. Selection or graph normalization may replace the draft with the selected committed value")

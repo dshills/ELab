@@ -447,6 +447,20 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			}
 		}
 		return s.setScopeWindowLocked(p)
+	case "parts.category.set":
+		var p PartCategoryParams
+		if err := params(raw, &p, "category"); err != nil {
+			return err
+		}
+		valid := false
+		for _, category := range PartCategories() {
+			valid = valid || category.ID == p.Category
+		}
+		if !valid {
+			return fmt.Errorf("choose a category from snapshot.part_categories")
+		}
+		s.partCategory, s.partSearch = p.Category, ""
+		return nil
 	case "parts.search.set":
 		var p SearchParams
 		if err := params(raw, &p, "query"); err != nil {

@@ -6,6 +6,8 @@ This first research phase covers **24 product families**, **82 selected source r
 
 ## Start here
 
+**Component browser:** [Common, categories, search and schematic symbols](76-component-browser.md) — October 23, 2026. Organization of the existing 18 kinds with the same user/agent browser commands; no new device models.
+
 **Remaining first-version work:** [Completion checklist](66-first-version-completion-checklist.md) — October 20, 2026. Detailed native repair, workflow, agent, data, quality, packaging and owner-acceptance tasks, with pass conditions and the additional full-MVP gates.
 
 **Current delivery plan:** [First usable version](34-first-version-plan.md) — updated October 20, 2026. Frozen hobbyist alpha scope, six ordered work packages, release checks and a concrete app handoff. This is the active implementation priority; full PRD acceptance remains separate.

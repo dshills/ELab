@@ -37,6 +37,11 @@ func testScreen(t *testing.T) (*screen, func()) {
 func uiAction(t *testing.T, s *screen, id string, event *ui.ChangeEvent) {
 	t.Helper()
 	s.app.Do(func() {
+		// Follow the visible browser navigation for non-Common fixture parts.
+		if id == "part-list" && event != nil && !matchingPart(s.view(), event.SelectedID) {
+			category, _ := findAction(s.view(), "part-category")
+			category.Change(ui.ChangeEvent{SelectedID: "all"})
+		}
 		root := s.view()
 		if err := ui.Validate(root); err != nil {
 			t.Fatal(err)

@@ -32,6 +32,9 @@ var atomicBatchCommands = [...]string{
 }
 
 func filteredParts(query string) []Part {
+	if strings.TrimSpace(query) == "" {
+		return Library()
+	}
 	out := []Part{}
 	query = strings.ToLower(strings.TrimSpace(query))
 	tokens := strings.Fields(query)

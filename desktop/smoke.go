@@ -315,6 +315,13 @@ func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
 		}
 		return nil
 	}
+	// Fixtures navigate the same category selector as a person when the
+	// requested part is outside the current browser view.
+	if id == "part-list" && event != nil && !matchingPart(s.view(), event.SelectedID) {
+		if err := smokeUI(s, "part-category", &ui.ChangeEvent{SelectedID: "all"}); err != nil {
+			return err
+		}
+	}
 	node, ok := findAction(s.view(), id)
 	if !ok {
 		for _, section := range []string{"component", "simulation", "document"} {

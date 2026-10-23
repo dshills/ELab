@@ -156,158 +156,7 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 			}
 			b.stroke(c, width, transformed...)
 		}
-		switch part.Kind {
-		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
-			p := make([]canvas.Point, 49)
-			for i := range p {
-				angle := float64(i) * 2 * math.Pi / 48
-				p[i] = canvas.Point{X: 34 * math.Cos(angle), Y: 34 * math.Sin(angle)}
-			}
-			stroke(ink, 2.5, p...)
-			if part.Kind == "sine-source" {
-				wave := make([]canvas.Point, 33)
-				for i := range wave {
-					x := -22 + 44*float64(i)/32
-					wave[i] = canvas.Point{X: x, Y: -10 * math.Sin(2*math.Pi*float64(i)/32)}
-				}
-				stroke(ink, 2, wave...)
-			} else if part.Kind == "finite-pulse-source" {
-				stroke(ink, 2, canvas.Point{X: -20, Y: 10}, canvas.Point{X: -14, Y: -10}, canvas.Point{X: -4, Y: -10}, canvas.Point{X: 4, Y: 10}, canvas.Point{X: 14, Y: 10}, canvas.Point{X: 20, Y: -10})
-			} else if part.Kind == "pulse-source" {
-				stroke(ink, 2, canvas.Point{X: -20, Y: 10}, canvas.Point{X: -12, Y: 10}, canvas.Point{X: -12, Y: -10}, canvas.Point{X: 0, Y: -10}, canvas.Point{X: 0, Y: 10}, canvas.Point{X: 12, Y: 10}, canvas.Point{X: 12, Y: -10}, canvas.Point{X: 20, Y: -10})
-			} else {
-				stroke(ink, 2, canvas.Point{X: -9, Y: -13}, canvas.Point{X: 9, Y: -13})
-				stroke(ink, 2, canvas.Point{X: 0, Y: -22}, canvas.Point{X: 0, Y: -4})
-				stroke(ink, 2, canvas.Point{X: -9, Y: 15}, canvas.Point{X: 9, Y: 15})
-			}
-		case "inductor":
-			points := workbench.InductorPolyline()
-			coil := make([]canvas.Point, len(points))
-			for k, p := range points {
-				coil[k] = canvas.Point{X: p.X, Y: p.Y}
-			}
-			stroke(ink, 2.5, coil...)
-		case "capacitor":
-			stroke(ink, 3, canvas.Point{X: -24, Y: -9}, canvas.Point{X: 24, Y: -9})
-			stroke(ink, 3, canvas.Point{X: -24, Y: 9}, canvas.Point{X: 24, Y: 9})
-			stroke(wireColor, 2.5, canvas.Point{Y: -32}, canvas.Point{Y: -9})
-			stroke(wireColor, 2.5, canvas.Point{Y: 9}, canvas.Point{Y: 32})
-		case "switch":
-			stroke(wireColor, 2.5, canvas.Point{X: -55}, canvas.Point{X: -25})
-			stroke(wireColor, 2.5, canvas.Point{X: 25}, canvas.Point{X: 55})
-			end := canvas.Point{X: 25, Y: -22}
-			closed := part.SwitchClosed != nil && *part.SwitchClosed
-			for _, input := range state.SwitchStates {
-				if input.ID == part.ID && input.AppliedClosed != nil {
-					closed = *input.AppliedClosed
-				}
-			}
-			if closed {
-				end.Y = 0
-			}
-			stroke(ink, 3, canvas.Point{X: -25}, end)
-		case "potentiometer":
-			stroke(ink, 2.5, canvas.Point{X: -55}, canvas.Point{X: -43}, canvas.Point{X: -35, Y: -15}, canvas.Point{X: -21, Y: 15}, canvas.Point{X: -7, Y: -15}, canvas.Point{X: 7, Y: 15}, canvas.Point{X: 21, Y: -15}, canvas.Point{X: 35, Y: 15}, canvas.Point{X: 43}, canvas.Point{X: 55})
-			contact := 35 * (1 - 2*(*part.WiperPosition))
-			stroke(ink, 2.5, canvas.Point{Y: -45}, canvas.Point{X: contact, Y: -17}, canvas.Point{X: contact - 5, Y: -25})
-			stroke(ink, 2.5, canvas.Point{X: contact, Y: -17}, canvas.Point{X: contact + 5, Y: -25})
-		case "resistor":
-			stroke(ink, 2.5, canvas.Point{X: -55}, canvas.Point{X: -43}, canvas.Point{X: -35, Y: -15}, canvas.Point{X: -21, Y: 15}, canvas.Point{X: -7, Y: -15}, canvas.Point{X: 7, Y: 15}, canvas.Point{X: 21, Y: -15}, canvas.Point{X: 35, Y: 15}, canvas.Point{X: 43}, canvas.Point{X: 55})
-		case "diode":
-			stroke(ink, 3, canvas.Point{X: -20, Y: -24}, canvas.Point{X: 20, Y: -24}, canvas.Point{Y: 17}, canvas.Point{X: -20, Y: -24})
-			stroke(ink, 3, canvas.Point{X: -22, Y: 19}, canvas.Point{X: 22, Y: 19})
-			stroke(wireColor, 2.5, canvas.Point{Y: -32}, canvas.Point{Y: -24})
-			stroke(wireColor, 2.5, canvas.Point{Y: 19}, canvas.Point{Y: 32})
-		case "led":
-			led := color.NRGBA{R: 157, G: 42, B: 50, A: 255}
-			current := 0.
-			if state.Result != nil && !state.Result.Stale && state.Result.LEDID == part.ID {
-				current = state.Result.Current
-			}
-			if state.NPN != nil && !state.NPN.Stale && state.NPN.LEDID == part.ID {
-				current = state.NPN.CollectorCurrent
-			}
-			if state.Mixed != nil && !state.Mixed.Stale {
-				for _, l := range state.Mixed.LEDs {
-					if l.ID == part.ID {
-						current = l.Current
-					}
-				}
-			}
-			if current > 1e-6 {
-				strength := math.Min(1, math.Sqrt(current/.003))
-				led = color.NRGBA{R: uint8(157 + 81*strength), G: uint8(42 + 45*strength), B: uint8(50 + 18*strength), A: 255}
-			}
-			stroke(led, 3, canvas.Point{X: -20, Y: -24}, canvas.Point{X: 20, Y: -24}, canvas.Point{Y: 17}, canvas.Point{X: -20, Y: -24})
-			stroke(ink, 3, canvas.Point{X: -22, Y: 19}, canvas.Point{X: 22, Y: 19})
-			stroke(wireColor, 2.5, canvas.Point{Y: -32}, canvas.Point{Y: -24})
-			stroke(wireColor, 2.5, canvas.Point{Y: 19}, canvas.Point{Y: 32})
-			for _, y := range []float64{-15, 5} {
-				stroke(led, 2, canvas.Point{X: 30, Y: y}, canvas.Point{X: 50, Y: y - 20}, canvas.Point{X: 44, Y: y - 20})
-				stroke(led, 2, canvas.Point{X: 50, Y: y - 20}, canvas.Point{X: 50, Y: y - 14})
-			}
-		case "opamp":
-			for _, path := range workbench.OpAmpSymbolPaths() {
-				points := make([]canvas.Point, len(path))
-				for k, at := range path {
-					points[k] = canvas.Point{X: at.X, Y: at.Y}
-				}
-				stroke(ink, 2.5, points...)
-			}
-			for _, label := range workbench.OpAmpSupplyLabels(part) {
-				b.text(label.At.X, label.At.Y, label.Text, muted)
-			}
-		case "nmos", "pmos":
-			stroke(wireColor, 2.5, canvas.Point{X: -40}, canvas.Point{X: -16})
-			stroke(ink, 3, canvas.Point{X: -16, Y: -20}, canvas.Point{X: -16, Y: 20})
-			for _, y := range []float64{-16, 0, 16} {
-				stroke(ink, 3, canvas.Point{X: -7, Y: y - 4}, canvas.Point{X: -7, Y: y + 4})
-			}
-			stroke(ink, 2.5, canvas.Point{X: -7, Y: -16}, canvas.Point{X: 25, Y: -16}, canvas.Point{X: 25, Y: -35})
-			stroke(ink, 2.5, canvas.Point{X: -7, Y: 16}, canvas.Point{X: 25, Y: 16}, canvas.Point{X: 25, Y: 35})
-			stroke(ink, 2.5, canvas.Point{X: -7}, canvas.Point{X: 25}, canvas.Point{X: 25, Y: 16})
-			if part.Kind == "pmos" {
-				stroke(accent, 2.5, canvas.Point{X: -2, Y: -5}, canvas.Point{X: 7}, canvas.Point{X: -2, Y: 5})
-			} else {
-				stroke(accent, 2.5, canvas.Point{X: 4, Y: -5}, canvas.Point{X: -5}, canvas.Point{X: 4, Y: 5})
-			}
-			for _, pin := range []struct {
-				x, y float64
-				name string
-			}{{-46, -20, "G"}, {32, -36, "D"}, {32, 18, "S"}} {
-				at := point(pin.x, pin.y)
-				b.text(at.X, at.Y, pin.name, muted)
-			}
-		case "npn":
-			stroke(ink, 3, canvas.Point{X: -12, Y: -20}, canvas.Point{X: -12, Y: 20})
-			stroke(wireColor, 2.5, canvas.Point{X: -40}, canvas.Point{X: -12})
-			stroke(ink, 2.5, canvas.Point{X: -12, Y: -10}, canvas.Point{X: 25, Y: -30}, canvas.Point{X: 25, Y: -35})
-			stroke(ink, 2.5, canvas.Point{X: -12, Y: 10}, canvas.Point{X: 25, Y: 30}, canvas.Point{X: 25, Y: 35})
-			stroke(accent, 3, canvas.Point{X: 12, Y: 15}, canvas.Point{X: 25, Y: 30}, canvas.Point{X: 5, Y: 25})
-			for _, pin := range []struct {
-				x, y float64
-				name string
-			}{{-46, -20, "B"}, {32, -36, "C"}, {32, 18, "E"}} {
-				p := point(pin.x, pin.y)
-				b.text(p.X, p.Y, pin.name, muted)
-			}
-		case "junction":
-			if connectionCount[part.ID+".node"] > 0 {
-				center := point(0, 0)
-				b.quad(center.X-3, center.Y-3, 6, 6, wireColor)
-			}
-		case "net-label":
-			stroke(ink, 2, canvas.Point{}, canvas.Point{X: 10}, canvas.Point{X: 10, Y: -7}, canvas.Point{X: 18}, canvas.Point{X: 10, Y: 7}, canvas.Point{X: 10})
-			at := point(22, 4)
-			b.text(at.X, at.Y, part.Label, ink)
-		case "ground":
-			stroke(wireColor, 2.5, canvas.Point{Y: -20}, canvas.Point{})
-			for i := 0; i < 3; i++ {
-				width := 22. - float64(i)*7
-				y := float64(i) * 7
-				stroke(ink, 2.5, canvas.Point{X: -width, Y: y}, canvas.Point{X: width, Y: y})
-			}
-		}
+		drawComponentSymbol(b, state, part, ink, muted, accent, wireColor, connectionCount[part.ID+".node"] > 0)
 		if diagnosticObjects[part.ID] {
 			stroke(diagnosticColor, 2.5, canvas.Point{X: -76, Y: -58}, canvas.Point{X: 76, Y: -58}, canvas.Point{X: 76, Y: 58}, canvas.Point{X: -76, Y: 58}, canvas.Point{X: -76, Y: -58})
 			b.text(part.Position.X+82, part.Position.Y-50, "!", diagnosticColor)
@@ -400,4 +249,171 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 
 func nativePartLabelPosition(part workbench.Component, title string) workbench.Point {
 	return workbench.CanvasPartLabelPosition(part, title)
+}
+
+// drawComponentSymbol supplies the sheet and browser with identical symbol geometry.
+func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbench.Component, ink, muted, accent, wireColor color.NRGBA, connected bool) {
+	point := func(x, y float64) canvas.Point {
+		p := workbench.RotateLocal(workbench.Point{X: x, Y: y}, part.Rotation)
+		return canvas.Point{X: p.X + part.Position.X, Y: p.Y + part.Position.Y}
+	}
+	stroke := func(c color.NRGBA, width float64, p ...canvas.Point) {
+		transformed := make([]canvas.Point, len(p))
+		for i, v := range p {
+			transformed[i] = point(v.X, v.Y)
+		}
+		b.stroke(c, width, transformed...)
+	}
+	switch part.Kind {
+	case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
+		p := make([]canvas.Point, 49)
+		for i := range p {
+			angle := float64(i) * 2 * math.Pi / 48
+			p[i] = canvas.Point{X: 34 * math.Cos(angle), Y: 34 * math.Sin(angle)}
+		}
+		stroke(ink, 2.5, p...)
+		if part.Kind == "sine-source" {
+			wave := make([]canvas.Point, 33)
+			for i := range wave {
+				x := -22 + 44*float64(i)/32
+				wave[i] = canvas.Point{X: x, Y: -10 * math.Sin(2*math.Pi*float64(i)/32)}
+			}
+			stroke(ink, 2, wave...)
+		} else if part.Kind == "finite-pulse-source" {
+			stroke(ink, 2, canvas.Point{X: -20, Y: 10}, canvas.Point{X: -14, Y: -10}, canvas.Point{X: -4, Y: -10}, canvas.Point{X: 4, Y: 10}, canvas.Point{X: 14, Y: 10}, canvas.Point{X: 20, Y: -10})
+		} else if part.Kind == "pulse-source" {
+			stroke(ink, 2, canvas.Point{X: -20, Y: 10}, canvas.Point{X: -12, Y: 10}, canvas.Point{X: -12, Y: -10}, canvas.Point{X: 0, Y: -10}, canvas.Point{X: 0, Y: 10}, canvas.Point{X: 12, Y: 10}, canvas.Point{X: 12, Y: -10}, canvas.Point{X: 20, Y: -10})
+		} else {
+			stroke(ink, 2, canvas.Point{X: -9, Y: -13}, canvas.Point{X: 9, Y: -13})
+			stroke(ink, 2, canvas.Point{X: 0, Y: -22}, canvas.Point{X: 0, Y: -4})
+			stroke(ink, 2, canvas.Point{X: -9, Y: 15}, canvas.Point{X: 9, Y: 15})
+		}
+	case "inductor":
+		points := workbench.InductorPolyline()
+		coil := make([]canvas.Point, len(points))
+		for k, p := range points {
+			coil[k] = canvas.Point{X: p.X, Y: p.Y}
+		}
+		stroke(ink, 2.5, coil...)
+	case "capacitor":
+		stroke(ink, 3, canvas.Point{X: -24, Y: -9}, canvas.Point{X: 24, Y: -9})
+		stroke(ink, 3, canvas.Point{X: -24, Y: 9}, canvas.Point{X: 24, Y: 9})
+		stroke(wireColor, 2.5, canvas.Point{Y: -32}, canvas.Point{Y: -9})
+		stroke(wireColor, 2.5, canvas.Point{Y: 9}, canvas.Point{Y: 32})
+	case "switch":
+		stroke(wireColor, 2.5, canvas.Point{X: -55}, canvas.Point{X: -25})
+		stroke(wireColor, 2.5, canvas.Point{X: 25}, canvas.Point{X: 55})
+		end := canvas.Point{X: 25, Y: -22}
+		closed := part.SwitchClosed != nil && *part.SwitchClosed
+		for _, input := range state.SwitchStates {
+			if input.ID == part.ID && input.AppliedClosed != nil {
+				closed = *input.AppliedClosed
+			}
+		}
+		if closed {
+			end.Y = 0
+		}
+		stroke(ink, 3, canvas.Point{X: -25}, end)
+	case "potentiometer":
+		stroke(ink, 2.5, canvas.Point{X: -55}, canvas.Point{X: -43}, canvas.Point{X: -35, Y: -15}, canvas.Point{X: -21, Y: 15}, canvas.Point{X: -7, Y: -15}, canvas.Point{X: 7, Y: 15}, canvas.Point{X: 21, Y: -15}, canvas.Point{X: 35, Y: 15}, canvas.Point{X: 43}, canvas.Point{X: 55})
+		contact := 35 * (1 - 2*(*part.WiperPosition))
+		stroke(ink, 2.5, canvas.Point{Y: -45}, canvas.Point{X: contact, Y: -17}, canvas.Point{X: contact - 5, Y: -25})
+		stroke(ink, 2.5, canvas.Point{X: contact, Y: -17}, canvas.Point{X: contact + 5, Y: -25})
+	case "resistor":
+		stroke(ink, 2.5, canvas.Point{X: -55}, canvas.Point{X: -43}, canvas.Point{X: -35, Y: -15}, canvas.Point{X: -21, Y: 15}, canvas.Point{X: -7, Y: -15}, canvas.Point{X: 7, Y: 15}, canvas.Point{X: 21, Y: -15}, canvas.Point{X: 35, Y: 15}, canvas.Point{X: 43}, canvas.Point{X: 55})
+	case "diode":
+		stroke(ink, 3, canvas.Point{X: -20, Y: -24}, canvas.Point{X: 20, Y: -24}, canvas.Point{Y: 17}, canvas.Point{X: -20, Y: -24})
+		stroke(ink, 3, canvas.Point{X: -22, Y: 19}, canvas.Point{X: 22, Y: 19})
+		stroke(wireColor, 2.5, canvas.Point{Y: -32}, canvas.Point{Y: -24})
+		stroke(wireColor, 2.5, canvas.Point{Y: 19}, canvas.Point{Y: 32})
+	case "led":
+		led := color.NRGBA{R: 157, G: 42, B: 50, A: 255}
+		current := 0.
+		if state.Result != nil && !state.Result.Stale && state.Result.LEDID == part.ID {
+			current = state.Result.Current
+		}
+		if state.NPN != nil && !state.NPN.Stale && state.NPN.LEDID == part.ID {
+			current = state.NPN.CollectorCurrent
+		}
+		if state.Mixed != nil && !state.Mixed.Stale {
+			for _, l := range state.Mixed.LEDs {
+				if l.ID == part.ID {
+					current = l.Current
+				}
+			}
+		}
+		if current > 1e-6 {
+			strength := math.Min(1, math.Sqrt(current/.003))
+			led = color.NRGBA{R: uint8(157 + 81*strength), G: uint8(42 + 45*strength), B: uint8(50 + 18*strength), A: 255}
+		}
+		stroke(led, 3, canvas.Point{X: -20, Y: -24}, canvas.Point{X: 20, Y: -24}, canvas.Point{Y: 17}, canvas.Point{X: -20, Y: -24})
+		stroke(ink, 3, canvas.Point{X: -22, Y: 19}, canvas.Point{X: 22, Y: 19})
+		stroke(wireColor, 2.5, canvas.Point{Y: -32}, canvas.Point{Y: -24})
+		stroke(wireColor, 2.5, canvas.Point{Y: 19}, canvas.Point{Y: 32})
+		for _, y := range []float64{-15, 5} {
+			stroke(led, 2, canvas.Point{X: 30, Y: y}, canvas.Point{X: 50, Y: y - 20}, canvas.Point{X: 44, Y: y - 20})
+			stroke(led, 2, canvas.Point{X: 50, Y: y - 20}, canvas.Point{X: 50, Y: y - 14})
+		}
+	case "opamp":
+		for _, path := range workbench.OpAmpSymbolPaths() {
+			points := make([]canvas.Point, len(path))
+			for k, at := range path {
+				points[k] = canvas.Point{X: at.X, Y: at.Y}
+			}
+			stroke(ink, 2.5, points...)
+		}
+		for _, label := range workbench.OpAmpSupplyLabels(part) {
+			b.text(label.At.X, label.At.Y, label.Text, muted)
+		}
+	case "nmos", "pmos":
+		stroke(wireColor, 2.5, canvas.Point{X: -40}, canvas.Point{X: -16})
+		stroke(ink, 3, canvas.Point{X: -16, Y: -20}, canvas.Point{X: -16, Y: 20})
+		for _, y := range []float64{-16, 0, 16} {
+			stroke(ink, 3, canvas.Point{X: -7, Y: y - 4}, canvas.Point{X: -7, Y: y + 4})
+		}
+		stroke(ink, 2.5, canvas.Point{X: -7, Y: -16}, canvas.Point{X: 25, Y: -16}, canvas.Point{X: 25, Y: -35})
+		stroke(ink, 2.5, canvas.Point{X: -7, Y: 16}, canvas.Point{X: 25, Y: 16}, canvas.Point{X: 25, Y: 35})
+		stroke(ink, 2.5, canvas.Point{X: -7}, canvas.Point{X: 25}, canvas.Point{X: 25, Y: 16})
+		if part.Kind == "pmos" {
+			stroke(accent, 2.5, canvas.Point{X: -2, Y: -5}, canvas.Point{X: 7}, canvas.Point{X: -2, Y: 5})
+		} else {
+			stroke(accent, 2.5, canvas.Point{X: 4, Y: -5}, canvas.Point{X: -5}, canvas.Point{X: 4, Y: 5})
+		}
+		for _, pin := range []struct {
+			x, y float64
+			name string
+		}{{-46, -20, "G"}, {32, -36, "D"}, {32, 18, "S"}} {
+			at := point(pin.x, pin.y)
+			b.text(at.X, at.Y, pin.name, muted)
+		}
+	case "npn":
+		stroke(ink, 3, canvas.Point{X: -12, Y: -20}, canvas.Point{X: -12, Y: 20})
+		stroke(wireColor, 2.5, canvas.Point{X: -40}, canvas.Point{X: -12})
+		stroke(ink, 2.5, canvas.Point{X: -12, Y: -10}, canvas.Point{X: 25, Y: -30}, canvas.Point{X: 25, Y: -35})
+		stroke(ink, 2.5, canvas.Point{X: -12, Y: 10}, canvas.Point{X: 25, Y: 30}, canvas.Point{X: 25, Y: 35})
+		stroke(accent, 3, canvas.Point{X: 12, Y: 15}, canvas.Point{X: 25, Y: 30}, canvas.Point{X: 5, Y: 25})
+		for _, pin := range []struct {
+			x, y float64
+			name string
+		}{{-46, -20, "B"}, {32, -36, "C"}, {32, 18, "E"}} {
+			p := point(pin.x, pin.y)
+			b.text(p.X, p.Y, pin.name, muted)
+		}
+	case "junction":
+		if connected {
+			center := point(0, 0)
+			b.quad(center.X-3, center.Y-3, 6, 6, wireColor)
+		}
+	case "net-label":
+		stroke(ink, 2, canvas.Point{}, canvas.Point{X: 10}, canvas.Point{X: 10, Y: -7}, canvas.Point{X: 18}, canvas.Point{X: 10, Y: 7}, canvas.Point{X: 10})
+		at := point(22, 4)
+		b.text(at.X, at.Y, part.Label, ink)
+	case "ground":
+		stroke(wireColor, 2.5, canvas.Point{Y: -20}, canvas.Point{})
+		for i := 0; i < 3; i++ {
+			width := 22. - float64(i)*7
+			y := float64(i) * 7
+			stroke(ink, 2.5, canvas.Point{X: -width, Y: y}, canvas.Point{X: width, Y: y})
+		}
+	}
 }
