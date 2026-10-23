@@ -525,7 +525,7 @@ func (s *screen) view() ui.Node {
 	} else {
 		s.previewPixels = previewPixels{}
 	}
-	root := ui.Node{ID: "root", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.Insets{Top: 32}), Gap: ui.Some(float32(1)), Background: ui.Some(surface)}, Children: []ui.Node{
+	root := ui.Node{ID: "root", Kind: ui.Column, Grow: true, Style: ui.Style{Gap: ui.Some(float32(1)), Background: ui.Some(surface)}, Children: []ui.Node{
 		{ID: "header", Kind: ui.Row, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Height: 48}), MaxSize: ui.Some(ui.Size{Height: 48}), Padding: ui.Some(ui.Insets{Top: 4, Bottom: 4, Left: 12, Right: 12}), Gap: ui.Some(float32(10)), Align: ui.Some(ui.AlignCenter), Background: ui.Some(paper)}, Children: []ui.Node{s.documentTitle(state), toolbar, statusNode, s.button(pause, pauseText)}},
 		{ID: "workspace", Kind: ui.Row, Grow: true, Style: ui.Style{Gap: ui.Some(float32(1))}, Children: []ui.Node{
 			{ID: "parts-scroll", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 224}), MaxSize: ui.Some(ui.Size{Width: 224}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("palette", 176, palette...)}},

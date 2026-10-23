@@ -9,7 +9,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"sync/atomic"
 	"time"
@@ -104,11 +103,9 @@ func runNative() (runErr error) {
 		// Compact-window layout is inspected separately in the UI audit.
 		width, height = 1260, 1100
 	}
-	chrome := app.WindowChrome{}
-	if runtime.GOOS == "darwin" {
-		chrome.Style = app.ChromeUnified
-	}
-	screen.window, err = a.OpenWindow(app.Window{Chrome: chrome, ID: "main", Title: "ELab · Live electronics", Width: width, Height: height, View: screen.view, CloseRequest: screen.requestClose})
+	// Keep the system title bar outside the editor content so macOS owns window
+	// dragging, double-click behavior and the standard window controls.
+	screen.window, err = a.OpenWindow(app.Window{ID: "main", Title: "ELab · Live electronics", Width: width, Height: height, View: screen.view, CloseRequest: screen.requestClose})
 	if err != nil {
 		return err
 	}

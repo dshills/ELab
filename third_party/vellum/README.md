@@ -8,6 +8,24 @@ The public snapshot omits APIs and input fixes already used by ELab. The checked
 
 The driver requirement names public pseudo-version `v0.0.0-20261021143700-e58d40581fe2`. The root module's `v0.0.0` requirement is retained by upstream's driver requirement and Go module selection; both modules are replaced by the same exact locked SDK. The local replacements carry the compatibility patch; a module version alone does not describe those derived bytes.
 
+## macOS pointer repair (ELab 0.180.1)
+
+The active compatibility source is `6ebc97bff24817b63586c920d42700c0761db304`.
+The [complete compatibility patch](patches/elab-public-e58d405-pointer-compat.patch)
+adds standard macOS arrow, I-beam, pointing-hand, crosshair and horizontal/vertical
+resize cursors. Their artwork and accessibility sizing come from macOS instead
+of Vellum's 32dp raster artwork. Unsupported/custom shapes retain the existing
+raster path. Per-window native ownership, request retirement and repeated-hover
+fast paths remain enforced. Regression tests cover cache bounds, allocation
+failure, teardown, switching back to cached raster artwork and repeated hover.
+
+`vellum-e58d405-elab2.tar.gz` and `build/.vellum-sdk-e58d405-elab2` are the active
+archive/cache. The lock records the complete derived patch and archive inventory.
+The preceding `elab1` archive, cache and compatibility patch remain preserved;
+the preceding paragraphs describe that historical pin. ELab separately restores
+the default system title bar and removes the unified-header inset so normal
+window dragging is owned by macOS. No electronics or agent command changes.
+
 The exporter still marks SDK artifacts as private builds because public SDK/distribution qualification remains incomplete. **Public source availability is distinct from a qualified public SDK release.** MIT licensing, upstream notices, `SDK_MANIFEST.json` and `PRIVATE_BUILD.txt` remain included. Existing archives/caches, app bundles and their historical validation are unchanged. This dependency update does not qualify or replace the /189 owner app or /193 candidate.
 
 Run SDK Python utilities with `python3 -B` to preserve cache integrity. Normal build/lint/check scripts prepare the SDK automatically. Portable headless Go commands remain independent of Vellum. [Update validation](../../docs/validation/vellum-public-source-update/README.md) records the compile incompatibility, preserved fixes and final checks.
