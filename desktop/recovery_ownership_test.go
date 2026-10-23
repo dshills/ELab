@@ -29,6 +29,7 @@ func TestNativeUnknownRecoveryOwnerKeepsCopyAndDisablesDismiss(t *testing.T) {
 	user, cleanup := testScreen(t)
 	defer cleanup()
 	agentAction(t, user.service, "recovery.configure", workbench.RecoveryConfigureParams{Directory: directory, Enabled: false, Interval: 2})
+	uiAction(t, user, "inspector-section-document", nil)
 	state := user.service.Snapshot()
 	if len(state.Recovery.Candidates) != 1 || state.Recovery.Candidates[0].OwnerStatus != workbench.RecoveryOwnerUnknown {
 		t.Fatal("native state lost unknown owner")

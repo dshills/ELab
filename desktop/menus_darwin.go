@@ -60,7 +60,11 @@ func (s *screen) nativeChoiceButton(node ui.Node, selection bool, revision uint6
 		node.Accessibility.Help += " "
 	}
 	if selection || checked != "" {
-		node.Accessibility.Help += "Current choice: " + node.Text + ". "
+		current := checked
+		if selection {
+			current = node.Text
+		}
+		node.Accessibility.Help += "Current choice: " + current + ". "
 	}
 	node.Accessibility.Help += "Opens a native menu. Use arrow keys to choose and Escape to dismiss."
 	captured := node

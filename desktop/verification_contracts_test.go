@@ -17,6 +17,7 @@ func TestNativeVerifyModesFollowSharedInventory(t *testing.T) {
 		cfg := s.service.Snapshot().VerificationSettings
 		cfg.InputMode = "charge"
 		agentAction(t, s.service, "verification.settings.set", cfg)
+		uiAction(t, s, "inspector-section-simulation", nil)
 		state := s.service.Snapshot()
 		s.app.Do(func() {
 			node, ok := findAction(s.view(), "verify-mode")
@@ -61,6 +62,7 @@ func TestNativeDCVerifyCanResetIncompatibleDefaults(t *testing.T) {
 	settings.InputMode = "charge"
 	settings.Step = .002
 	agentAction(t, s.service, "verification.settings.set", settings)
+	uiAction(t, s, "inspector-section-simulation", nil)
 	s.app.Do(func() {
 		if _, ok := findAction(s.view(), "verify-project-startup"); !ok {
 			t.Fatal("DC workflow hides the reset needed to clear incompatible retained startup defaults")

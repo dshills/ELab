@@ -23,3 +23,17 @@ Tests cover layout bounds and refusal atomicity, owned/pure discovery, physical 
 The public reference `scripts/workspace-layout-demo.py` runs a fresh native session first, then a headless replay using `--sizes-from`. Both inspect the same commands, measured-view transitions, recorded cursor preservation and file/session boundary. Direct native accessibility inspection sets the divider from 65% to 80% and shows the fitted NMOS example grow from about 29% to 41% at the default window. This is an improvement over the previous fixed scope allocation, not a claim that every label is readable at every size.
 
 The fraction is a preference rather than a guaranteed minimum pixel size. Large schematics still need zooming or scope collapse for readable labels. Full responsive rail/tool layouts, complete keyboard/IME/accessibility acceptance and visible latency remain open. Callback and mounted event tests do not establish every physical pointer/scrollbar gesture.
+
+## Inspector sections
+
+The document workspace separates the right inspector into **Inspect**, **Simulate**, and **Document**. Navigation stays above a single scrolling form. Inspect contains selected-object editing and measurements. Simulate starts with live timing and sampling controls, followed by probes, verification and sweeps. Document starts with export/print actions and page settings, followed by appearance, display and recovery. The component library remains on the left.
+
+Users and agents select the same section:
+
+```json
+{"command":"workspace.inspector.set","params":{"section":"simulation"}}
+```
+
+Allowed `section` values are `component`, `simulation`, and `document`; they map to Inspect, Simulate, and Document respectively. The normal request envelope, mutation guards and retry key are required as described in the agent API. `project.inspect.inspector_section` reports the accepted section. Detailed discovery describes the contract, and view/preference events announce changes.
+
+The initial section is `component`. This choice is session-only, survives document replacement, and is absent from saved schematic files. It changes no graph, electrical revision, simulation time, history, dirty state, probes or cursor measurements. Hidden sections have no mounted fields or keyboard targets. Each newly selected section and replacement document starts at the top of its form; ordinary edits and repaints preserve the current section's scroll. Print-preview and sweep workspaces retain their existing focused inspectors.

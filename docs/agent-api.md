@@ -56,6 +56,8 @@ Positions snap to a 10-unit grid within ±10000; up to 100 drawing objects and 3
 
 `simulation.pause` stops automatic calculation. Electrical edits while paused remain paused and mark the previous result stale. `simulation.resume` calculates the current circuit. `simulation.restart` recalculates; it preserves the paused condition when already paused. `simulation.wait` completes immediately for paused/incomplete/error/closed states, so inspect the returned status before relying on a result. The LED engine provides a DC operating point. The separate ideal RC engine provides the live transient described below.
 
+Inspector navigation is also shared: `workspace.inspector.set` accepts `section: "component"`, `"simulation"`, or `"document"`. Read `project.inspect.inspector_section` for the current session selection. It never changes the circuit or saved file. See [workspace layout](workspace-layout.md#inspector-sections).
+
 ## NPN LED switch workflow
 
 `parts.list` includes `npn` with named `base`, `collector`, and `emitter` pins. Place it through `component.place`; connect wires and edit source/resistor values through the existing commands. `example.npn` loads the editable 5 V supply / separate 5 V drive / 10 kΩ base / 1 kΩ LED load example, with `discard_changes:true` required if the current document is dirty.

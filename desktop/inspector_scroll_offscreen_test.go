@@ -44,6 +44,7 @@ func TestMountedInspectorScrollReturnsToStartForNewDocument(t *testing.T) {
 	completedVerification(t, s.service, s.service.Snapshot().LastOperation)
 	uiAction(t, s, "recording-show", nil)
 	uiAction(t, s, "recorded-timing-probe", &ui.ChangeEvent{SelectedID: "v:VIN.positive"})
+	uiAction(t, s, "inspector-section-component", nil)
 	view := func() ui.Node {
 		return ui.Node{ID: "root", Kind: ui.Column, Grow: true, Children: []ui.Node{inspectorScrollNode(t, s.view())}}
 	}

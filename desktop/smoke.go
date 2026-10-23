@@ -316,6 +316,19 @@ func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
 		return nil
 	}
 	node, ok := findAction(s.view(), id)
+	if !ok {
+		for _, section := range []string{"component", "simulation", "document"} {
+			page, exists := findAction(s.view(), "inspector-section-"+section)
+			if !exists {
+				continue
+			}
+			page.Activate()
+			node, ok = findAction(s.view(), id)
+			if ok {
+				break
+			}
+		}
+	}
 	if !ok || node.Disabled {
 		return fmt.Errorf("UI control %s is missing or disabled", id)
 	}

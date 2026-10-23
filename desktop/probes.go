@@ -58,7 +58,9 @@ func probeColor(name string) color.NRGBA {
 	case "Blue":
 		return color.NRGBA{R: 67, G: 118, B: 201, A: 255}
 	default:
-		return accent
+		// Measurement colors retain their named identities independently of
+		// the interface selection accent.
+		return color.NRGBA{R: 18, G: 117, B: 113, A: 255}
 	}
 }
 func (s *screen) probeInspector(state workbench.Snapshot) []ui.Node {

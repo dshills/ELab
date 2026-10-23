@@ -20,6 +20,7 @@ func prepareLCSamplingScreen(t *testing.T, s *screen, minimum bool) {
 	agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "L1", Value: coil})
 	agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "C1", Value: cap})
 	agentAction(t, s.service, "component.select", workbench.IDParams{})
+	uiAction(t, s, "inspector-section-simulation", nil)
 }
 
 func TestNativeLCSamplingFitMatchesAgentWithoutSelectedComponent(t *testing.T) {

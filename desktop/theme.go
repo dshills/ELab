@@ -13,13 +13,13 @@ func paletteForTheme(mode string) appPalette { return resolvePalette(mode, matco
 func resolvePalette(mode string, systemDark bool) appPalette {
 	if mode == "dark" || mode == "system" && systemDark {
 		return appPalette{
-			Ink: color.NRGBA{R: 229, G: 237, B: 243, A: 255}, Muted: color.NRGBA{R: 163, G: 181, B: 195, A: 255},
-			Accent: color.NRGBA{R: 88, G: 211, B: 197, A: 255}, Paper: color.NRGBA{R: 27, G: 38, B: 49, A: 255},
-			Surface: color.NRGBA{R: 39, G: 53, B: 67, A: 255}, Grid: color.NRGBA{R: 52, G: 70, B: 85, A: 255},
+			Ink: color.NRGBA{R: 240, G: 240, B: 242, A: 255}, Muted: color.NRGBA{R: 164, G: 164, B: 170, A: 255},
+			Accent: color.NRGBA{R: 100, G: 173, B: 255, A: 255}, Paper: color.NRGBA{R: 30, G: 30, B: 32, A: 255},
+			Surface: color.NRGBA{R: 42, G: 42, B: 45, A: 255}, Grid: color.NRGBA{R: 57, G: 57, B: 61, A: 255},
 			Danger: color.NRGBA{R: 255, G: 147, B: 153, A: 255},
 		}
 	}
-	return appPalette{Ink: ink, Muted: muted, Accent: accent, Paper: paper, Surface: surface, Grid: color.NRGBA{R: 211, G: 222, B: 230, A: 255}, Danger: color.NRGBA{R: 168, G: 65, B: 68, A: 255}}
+	return appPalette{Ink: ink, Muted: muted, Accent: accent, Paper: paper, Surface: surface, Grid: color.NRGBA{R: 224, G: 224, B: 228, A: 255}, Danger: color.NRGBA{R: 168, G: 65, B: 68, A: 255}}
 }
 
 // Resolve colors per descriptor tree, without mutating a live driver theme or
@@ -56,6 +56,10 @@ func applyPalette(node *ui.Node, palette appPalette) {
 	}
 	switch node.Kind {
 	case ui.TextField, ui.NumberField, ui.MultilineText, ui.Selector, ui.MenuButton, ui.Button:
+		node.Style.CornerRadius = ui.Some(float32(5))
+		if node.Kind == ui.Button && node.Appearance == "" {
+			node.Appearance = ui.ButtonSecondary
+		}
 		if !node.Style.Background.Set {
 			node.Style.Background = ui.Some(palette.Surface)
 		}

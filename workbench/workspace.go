@@ -20,6 +20,11 @@ func (s *Service) setWorkspaceLayoutLocked(p WorkspaceLayout) error {
 }
 
 func addWorkspaceCapabilityDetails(id string, schema map[string]any) bool {
+	if id == "workspace.inspector.set" {
+		inputProperty(schema, "section")["enum"] = []string{"component", "simulation", "document"}
+		schema["x-command-contract"] = commandContractDetail{Version: 1, Scope: "workspace-inspector", Preconditions: []string{"Ordinary revision/document guards and retries apply"}, Effects: []string{"Select Component, Simulation or Document inspector; default component", "Session only, survives document replacement; does not change circuit, simulation, history, dirty state or saved files"}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Missing/unknown section, malformed or extra fields"}, {"conflict", "admission", "Revision/document guard changed"}}, Completion: &commandCompletionDetail{Mode: "immediate shared inspector selection", Observe: []string{"project.inspect.inspector_section", "events.poll"}}}
+		return true
+	}
 	if id != "workspace.layout.set" {
 		return false
 	}
@@ -38,4 +43,19 @@ func addWorkspaceCapabilityDetails(id string, schema map[string]any) bool {
 		Completion: &commandCompletionDetail{Mode: "immediate shared layout preference; native allocation follows asynchronously", Observe: []string{"project.inspect.workspace_layout", "project.inspect.viewport", "events.poll"}},
 	}
 	return true
+}
+
+// InspectorParams selects a presentation section without changing the circuit.
+type InspectorParams struct {
+	Section string `json:"section"`
+}
+
+func (s *Service) setInspectorSectionLocked(p InspectorParams) error {
+	switch p.Section {
+	case "component", "simulation", "document":
+		s.inspectorSection = p.Section
+		return nil
+	default:
+		return fmt.Errorf("section must be component, simulation or document")
+	}
 }

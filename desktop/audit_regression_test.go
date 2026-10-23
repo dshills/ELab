@@ -32,6 +32,7 @@ func TestNativeSearchModelAssumptionsAndUnavailableProbeRecovery(t *testing.T) {
 	agentAction(t, s.service, "scope.probes.set", workbench.ProbeParams{IDs: []string{"v:C1", "i:C1"}})
 	uiAction(t, s, "selection", &ui.ChangeEvent{SelectedID: "C1"})
 	uiAction(t, s, "delete-object", nil)
+	uiAction(t, s, "inspector-section-simulation", nil)
 	if _, ok := findNode(s.view(), "probe-unavailable-v:C1"); !ok {
 		t.Fatal("native missing-source explanation absent")
 	}

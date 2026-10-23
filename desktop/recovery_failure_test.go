@@ -52,6 +52,7 @@ func TestNativeAutomaticRecoveryFailureAndRetryPresentation(t *testing.T) {
 		return workbench.Snapshot{}
 	}
 	failed := await(true)
+	uiAction(t, user, "inspector-section-document", nil)
 	user.app.Do(func() {
 		root := user.view()
 		if err := ui.Validate(root); err != nil {

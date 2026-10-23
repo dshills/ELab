@@ -96,4 +96,18 @@ func (s *screen) namedWireControls(state workbench.Snapshot) []ui.Node {
 	return nodes
 }
 
-func (s *screen) requestKeyboardFocus(id string) { s.keyboardFocus.Sequence++; s.keyboardFocus.ID = id }
+func (s *screen) requestKeyboardFocus(id string) {
+	// A sampling action can remove its own button. Reveal its destination page
+	// before requesting focus, using the same presentation command as agents.
+	if id == "setting-step" {
+		state := s.service.Snapshot()
+		if state.InspectorSection != "simulation" {
+			result := s.invokeAtCommandRevision("workspace.inspector.set", workbench.InspectorParams{Section: "simulation"}, state.CommandRevision, state.Document.Generation)
+			if result.Error != nil {
+				return
+			}
+		}
+	}
+	s.keyboardFocus.Sequence++
+	s.keyboardFocus.ID = id
+}

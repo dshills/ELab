@@ -13,6 +13,9 @@ import (
 
 func mountedTimingControls(t *testing.T, s *screen) *mountedControlWindow {
 	t.Helper()
+	if s.service.Snapshot().InspectorSection != "simulation" {
+		uiAction(t, s, "inspector-section-simulation", nil)
+	}
 	m := newMountedControlWindow(t, s, func() ui.Node {
 		assembled := s.view()
 		root := ui.Node{ID: "root", Kind: ui.Column, Focus: ui.FocusRequest{ID: "recorded-timing-level", Sequence: 1}}

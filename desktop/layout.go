@@ -3,7 +3,7 @@ package main
 import "github.com/dshills/vellum/ui"
 
 func chromeStyle() ui.Style {
-	return ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(6)), Align: ui.Some(ui.AlignCenter), Background: ui.Some(paper), Grow: ui.Some(float32(1)), MinSize: ui.Some(ui.Size{Width: 320, Height: 48}), MaxSize: ui.Some(ui.Size{Height: 48})}
+	return ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(4)), Align: ui.Some(ui.AlignCenter), Background: ui.Some(paper), Grow: ui.Some(float32(1)), MinSize: ui.Some(ui.Size{Width: 200, Height: 32}), MaxSize: ui.Some(ui.Size{Height: 32})}
 }
 
 func desktopTheme() ui.Theme {
@@ -12,7 +12,7 @@ func desktopTheme() ui.Theme {
 		kinds[kind] = ui.Style{Foreground: ui.Some(ink), Background: ui.Some(surface)}
 	}
 	kinds[ui.Label] = ui.Style{Padding: ui.Some(ui.UniformInsets(0))}
-	return ui.Theme{Default: ui.Style{Typography: ui.Some(ui.Typography{Size: 13}), Foreground: ui.Some(ink)}, Kinds: kinds}
+	return ui.Theme{Default: ui.Style{Typography: ui.Some(ui.Typography{Family: "Helvetica Neue", Size: 13}), Foreground: ui.Some(ink)}, Kinds: kinds}
 }
 
 // Menu choices reuse the mounted command buttons' enablement and callbacks,

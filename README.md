@@ -2,6 +2,10 @@
 
 ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N/P-channel MOSFET and inductor/RLC circuits from blank: place components, connect named terminals, move and rotate parts, and edit exact values while simulation updates live. Users and agents invoke the same validated application commands.
 
+## Document workspace redesign
+
+The current source uses an Apple-inspired document workspace: a quiet toolbar, dedicated component library, central canvas, fixed **Inspect / Simulate / Document** navigation, compact live readings, and coordinated light/dark appearance. Users and agents share the inspector selection command. See the [design decisions](research/73-native-ui-design.md) and [inspector workflow](docs/workspace-layout.md#inspector-sections). The packaged redesign is recorded separately from the preserved release below.
+
 ## Downloadable release
 
 **ELab 0.179.0 /196 is ready as an unsigned macOS arm64 release.** [Download ZIP](build/releases/ELab-0.179.0-macos-arm64.zip), [SHA-256 checksum](build/releases/ELab-0.179.0-macos-arm64.zip.sha256), or [open app](build/releases/ELab-0.179.0-macos-arm64/ELab.app). The package includes the matching agent, three editable examples, instructions, dependency notices and rollback.

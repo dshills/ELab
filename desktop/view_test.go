@@ -43,6 +43,21 @@ func uiAction(t *testing.T, s *screen, id string, event *ui.ChangeEvent) {
 		}
 		node, ok := findAction(root, id)
 		if !ok {
+			// Walk the real inspector navigation before activating a control
+			// that moved to another page. Hidden controls are not mounted.
+			for _, section := range []string{"component", "simulation", "document"} {
+				page, exists := findAction(s.view(), "inspector-section-"+section)
+				if !exists {
+					continue
+				}
+				page.Activate()
+				node, ok = findAction(s.view(), id)
+				if ok {
+					break
+				}
+			}
+		}
+		if !ok {
 			t.Fatalf("missing UI control %s", id)
 		}
 		if node.Disabled {
@@ -220,6 +235,7 @@ func TestFileControlsUseSharedPersistenceAndProtectUnsavedChanges(t *testing.T) 
 	if work := s.service.Snapshot().ProjectWork; work == nil || work.Status != "completed" || work.Actor != "user" || work.ResultGeneration != s.service.Snapshot().Document.Generation {
 		t.Fatal("native open did not expose its shared completed job")
 	}
+	uiAction(t, s, "inspector-section-document", nil)
 	s.app.Do(func() {
 		if _, ok := findNode(s.view(), "project-work-status"); !ok {
 			t.Fatal("native open job status is missing")

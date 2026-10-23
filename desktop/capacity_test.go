@@ -18,6 +18,7 @@ func TestNativeCapacitySharedConstructionAndMesh(t *testing.T) {
 	if err != nil || len(state.Nets) != 100 || state.SimulatedComponents != 51 || state.Limits.SimulatedComponents != 64 {
 		t.Fatal("native capacity failed", err)
 	}
+	uiAction(t, s, "inspector-section-simulation", nil)
 	if _, ok := findNode(s.view(), "circuit-capacity"); !ok {
 		t.Fatal("capacity assumptions hidden")
 	}

@@ -68,6 +68,7 @@ func TestNativeSourceSamplingFitKeepsFocusAndRefusesRetainedAction(t *testing.T)
 		t.Fatal(err)
 	}
 	agentAction(t, s.service, "simulation.pause", struct{}{})
+	uiAction(t, s, "inspector-section-simulation", nil)
 	var retained ui.Node
 	s.app.Do(func() {
 		var ok bool

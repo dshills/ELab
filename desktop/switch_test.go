@@ -107,7 +107,7 @@ func TestNativeUndoButtonRefusesAnInterveningActorTip(t *testing.T) {
 	}
 	s.errorMessage = ""
 	fresh, ok := findNode(s.view(), "edit.undo")
-	if !ok || !strings.Contains(fresh.Text, "agent") || !strings.Contains(fresh.Accessibility.Help, "agent") {
+	if !ok || !strings.Contains(fresh.Accessibility.Name, "agent") || !strings.Contains(fresh.Accessibility.Help, "agent") {
 		t.Fatal("history actor hidden")
 	}
 	s.app.Do(fresh.Activate)

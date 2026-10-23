@@ -23,6 +23,7 @@ func TestMountedInspectorTextGroupsUseAvailableRailWidth(t *testing.T) {
 			if _, err := s.service.Wait(t.Context()); err != nil {
 				t.Fatal(err)
 			}
+			uiAction(t, s, "inspector-section-simulation", nil)
 			before := s.service.Snapshot()
 			view := func() ui.Node {
 				group, ok := findNode(s.view(), "inspector-group-circuit")

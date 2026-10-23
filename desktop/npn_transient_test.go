@@ -91,7 +91,7 @@ func TestNPNPulseDrawingAndControlsMatchAgents(t *testing.T) {
 			t.Fatal("NPN experiment exposes irrelevant capacitor initial voltage")
 		}
 		n, ok := findNode(root, "scope-title")
-		if !ok || n.Text != "LIVE NPN SCOPE" {
+		if !ok || n.Text != "Live NPN scope" {
 			t.Fatal("missing NPN scope")
 		}
 	})

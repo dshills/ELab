@@ -10,6 +10,7 @@ import (
 
 func captureOutputAction(t *testing.T, s *screen, id string) ui.Node {
 	t.Helper()
+	uiAction(t, s, "inspector-section-document", nil)
 	var node ui.Node
 	s.app.Do(func() {
 		state := s.service.Snapshot()

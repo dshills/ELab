@@ -130,9 +130,9 @@ func TestInductorSummaryNamesCoilAndIncludesCapacitorEnergy(t *testing.T) {
 				voltageID, voltage = capacitor.ID, fmt.Sprintf("%.3f V", capacitor.Voltage)
 			}
 			want := map[string]string{
-				"current-title": coil.ID + " CURRENT", "current-value": fmt.Sprintf("%.5g mA", coil.Current*1000),
-				"voltage-title": voltageID + " VOLTAGE", "voltage-value": voltage,
-				"power-title": "L + C STORED ENERGY", "power-value": fmt.Sprintf("%.3g µJ", energy*1e6),
+				"current-title": coil.ID + " current", "current-value": fmt.Sprintf("%.5g mA", coil.Current*1000),
+				"voltage-title": voltageID + " voltage", "voltage-value": voltage,
+				"power-title": "L + C stored energy", "power-value": fmt.Sprintf("%.3g µJ", energy*1e6),
 			}
 			// Selecting a resistor must not silently retarget these named
 			// whole-network summaries away from the first coil/capacitor.

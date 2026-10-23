@@ -12,17 +12,17 @@ import (
 )
 
 var (
-	ink     = color.NRGBA{R: 30, G: 44, B: 58, A: 255}
-	muted   = color.NRGBA{R: 102, G: 118, B: 133, A: 255}
-	accent  = color.NRGBA{R: 18, G: 117, B: 113, A: 255}
+	ink     = color.NRGBA{R: 29, G: 29, B: 31, A: 255}
+	muted   = color.NRGBA{R: 110, G: 110, B: 115, A: 255}
+	accent  = color.NRGBA{R: 0, G: 112, B: 235, A: 255}
 	paper   = color.NRGBA{R: 255, G: 255, B: 255, A: 255}
-	surface = color.NRGBA{R: 243, G: 246, B: 249, A: 255}
+	surface = color.NRGBA{R: 242, G: 242, B: 247, A: 255}
 )
 
 func label(id, text string) ui.Node { return ui.Node{ID: id, Kind: ui.Label, Text: text} }
 func heading(id, text string) ui.Node {
 	n := label(id, text)
-	n.Style.Typography = ui.Some(ui.Typography{Size: 18, Weight: 600})
+	n.Style.Typography = ui.Some(ui.Typography{Size: 16, Weight: 600})
 	return n
 }
 func quiet(id, text string) ui.Node {
@@ -32,12 +32,16 @@ func quiet(id, text string) ui.Node {
 	return n
 }
 func section(id, text string) ui.Node {
-	n := quiet(id, strings.ToUpper(text))
-	n.Style.Typography = ui.Some(ui.Typography{Size: 11, Weight: 600})
+	n := quiet(id, text)
+	n.Style.Typography = ui.Some(ui.Typography{Size: 12, Weight: 600})
 	return n
 }
 func panel(id string, width float32, children ...ui.Node) ui.Node {
-	return ui.Node{ID: id, Kind: ui.Column, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: width}), MaxSize: ui.Some(ui.Size{Width: width}), Padding: ui.Some(ui.UniformInsets(16)), Gap: ui.Some(float32(12)), Background: ui.Some(paper)}, Children: children}
+	n := ui.Node{ID: id, Kind: ui.Column, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: width}), MaxSize: ui.Some(ui.Size{Width: width}), Padding: ui.Some(ui.UniformInsets(16)), Gap: ui.Some(float32(12)), Background: ui.Some(paper)}, Children: children}
+	if id == "sidebar-content" {
+		n.Grow = true
+	}
+	return n
 }
 
 const inspectorContentWidth float32 = 248
@@ -54,10 +58,12 @@ func inspectorGroup(id, name string, children []ui.Node) []ui.Node {
 	return []ui.Node{{ID: "inspector-group-" + id, Kind: ui.Column, MinWidth: inspectorContentWidth, Accessibility: ui.Accessibility{Name: name}, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(12))}, Children: children}}
 }
 func buttonStyle(n ui.Node, selected bool) ui.Node {
+	n.Appearance = ui.ButtonQuiet
+	n.Style.CornerRadius = ui.Some(float32(5))
 	n.Style.Foreground = ui.Some(ink)
-	n.Style.Background = ui.Some(surface)
+	n.Style.Background = ui.Some(paper)
 	n.Style.Typography = ui.Some(ui.Typography{Size: 13, Weight: 500})
-	n.Style.Padding = ui.Some(ui.Insets{Top: 9, Bottom: 9, Left: 14, Right: 14})
+	n.Style.Padding = ui.Some(ui.Insets{Top: 5, Bottom: 5, Left: 9, Right: 9})
 	if selected {
 		n.Style.Background = ui.Some(accent)
 		n.Style.Foreground = ui.Some(paper)
@@ -142,9 +148,10 @@ func (s *screen) view() ui.Node {
 	// Reserve the complete action row even when both history labels include
 	// "agent"/"other". Otherwise the toolbar clips Theme while header space
 	// remains unused beside the status controls.
-	toolbar.Style.MinSize = ui.Some(ui.Size{Width: 560, Height: 48})
+	toolbar.Style.MinSize = ui.Some(ui.Size{Width: 300, Height: 32})
 	for i := range toolbar.Children {
-		toolbar.Children[i].Style.Padding = ui.Some(ui.Insets{Top: 7, Bottom: 7, Left: 9, Right: 9})
+		toolbar.Children[i] = documentToolbarAction(toolbar.Children[i])
+		toolbar.Children[i].Style.Padding = ui.Some(ui.Insets{Top: 4, Bottom: 4, Left: 7, Right: 7})
 	}
 	pause, pauseText := "simulation.pause", "Pause"
 	if state.Paused {
@@ -320,7 +327,7 @@ func (s *screen) view() ui.Node {
 	message := ""
 	for _, candidate := range state.Recovery.Candidates {
 		if !candidate.ActiveSession || candidate.OwnerStatus == workbench.RecoveryOwnerUnknown {
-			message = "Recovery available · choose a snapshot in the Inspector to restore a copy."
+			message = "Recovery available · choose a snapshot in the Document inspector to restore a copy."
 			break
 		}
 	}
@@ -479,8 +486,8 @@ func (s *screen) view() ui.Node {
 	}
 	metric := func(id, title, value string) ui.Node {
 		n := heading(id+"-value", value)
-		n.Style.Typography = ui.Some(ui.Typography{Size: 24, Weight: 500})
-		return ui.Node{ID: id, Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(14)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: []ui.Node{section(id+"-title", title), n}}
+		n.Style.Typography = ui.Some(ui.Typography{Size: 18, Weight: 500})
+		return ui.Node{ID: id, Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.Insets{Top: 5, Bottom: 5, Left: 12, Right: 12}), Gap: ui.Some(float32(2)), Background: ui.Some(paper)}, Children: []ui.Node{section(id+"-title", title), n}}
 	}
 	// Native max sizes constrain content, while padding consumes extra space.
 	// Bound descendants too: a long selector or button must not widen the rail.
@@ -496,7 +503,8 @@ func (s *screen) view() ui.Node {
 	} else if sweepVisible(state) {
 		palette = s.sweepInspector(state)
 	}
-	constrainRail(palette, 152)
+	palette, inspector = s.organizeWorkspace(palette, inspector, state)
+	constrainRail(palette, 176)
 	constrainRail(inspector, inspectorContentWidth)
 	filename := "Untitled"
 	if state.Document.Path != "" {
@@ -517,17 +525,17 @@ func (s *screen) view() ui.Node {
 	} else {
 		s.previewPixels = previewPixels{}
 	}
-	root := ui.Node{ID: "root", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(12)), Gap: ui.Some(float32(10)), Background: ui.Some(surface)}, Children: []ui.Node{
-		{ID: "header", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 60}), Padding: ui.Some(ui.UniformInsets(12)), Gap: ui.Some(float32(8)), Align: ui.Some(ui.AlignCenter), Background: ui.Some(paper)}, Children: []ui.Node{heading("title", "ELab"), toolbar, statusNode, s.button(pause, pauseText)}},
-		{ID: "workspace", Kind: ui.Row, Grow: true, Style: ui.Style{Gap: ui.Some(float32(10))}, Children: []ui.Node{
-			{ID: "parts-scroll", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 200}), MaxSize: ui.Some(ui.Size{Width: 200}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("palette", 152, palette...)}},
-			{ID: "schematic-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(12)), Gap: ui.Some(float32(8)), Background: ui.Some(paper)}, Children: schematicChildren},
+	root := ui.Node{ID: "root", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.Insets{Top: 32}), Gap: ui.Some(float32(1)), Background: ui.Some(surface)}, Children: []ui.Node{
+		{ID: "header", Kind: ui.Row, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Height: 48}), MaxSize: ui.Some(ui.Size{Height: 48}), Padding: ui.Some(ui.Insets{Top: 4, Bottom: 4, Left: 12, Right: 12}), Gap: ui.Some(float32(10)), Align: ui.Some(ui.AlignCenter), Background: ui.Some(paper)}, Children: []ui.Node{s.documentTitle(state), toolbar, statusNode, s.button(pause, pauseText)}},
+		{ID: "workspace", Kind: ui.Row, Grow: true, Style: ui.Style{Gap: ui.Some(float32(1))}, Children: []ui.Node{
+			{ID: "parts-scroll", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 224}), MaxSize: ui.Some(ui.Size{Width: 224}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("palette", 176, palette...)}},
+			{ID: "schematic-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(8)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: schematicChildren},
 			// A replacement document owns a fresh inspector viewport. Reusing the
 			// previous document's long recording offset can leave a shorter form blank.
-			{ID: fmt.Sprintf("sidebar-%d", state.Document.Generation), Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 296}), MaxSize: ui.Some(ui.Size{Width: 296}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("sidebar-content", inspectorContentWidth, inspector...)}},
+			s.inspectorRail(state, inspector),
 		}},
-		{ID: "readings", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 72}), Gap: ui.Some(float32(10)), Align: ui.Some(ui.AlignCenter)}, Children: []ui.Node{metric("current", currentTitle, current), metric("voltage", voltageTitle, voltage), metric("power", powerTitle, power), panel("simulation-info", 232, section("simulation-title", "Live simulation"), quiet("reading-status", readStatus))}},
-		{ID: "footer-row", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 20}), Gap: ui.Some(float32(8))}, Children: []ui.Node{quiet("footer", fmt.Sprintf("%s · %d components · %d wires · last change: %s", filename, len(state.Components), len(state.Wires), state.LastActor)), {ID: "footer-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, quiet("zoom", fmt.Sprintf("%.0f%%", state.View.Zoom*100)), quiet("grid-info", "10-unit snap · local workspace")}},
+		{ID: "readings", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 48}), Gap: ui.Some(float32(1)), Align: ui.Some(ui.AlignCenter)}, Children: []ui.Node{metric("current", currentTitle, current), metric("voltage", voltageTitle, voltage), metric("power", powerTitle, power), compactReadingStatus(readStatus)}},
+		{ID: "footer-row", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 24}), Padding: ui.Some(ui.Insets{Left: 10, Right: 10}), Gap: ui.Some(float32(8))}, Children: []ui.Node{quiet("footer", fmt.Sprintf("%s · %d components · %d wires · last change: %s", filename, len(state.Components), len(state.Wires), state.LastActor)), {ID: "footer-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, quiet("zoom", fmt.Sprintf("%.0f%%", state.View.Zoom*100)), quiet("grid-info", "10-unit snap · local workspace")}},
 		s.filePrompt(),
 	}}
 	if sourcePaneHidden(state) {

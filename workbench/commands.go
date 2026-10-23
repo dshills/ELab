@@ -371,6 +371,7 @@ func Catalog() []Capability {
 		typedCapability("example.load", "Load a known example ID into a new editable document; protects unsaved work and optional document generation", reflect.TypeOf(ExampleLoadParams{})),
 		typedCapability("example.current.reset", "Restore the current example template, not another example; protects unsaved work and optional expected_example_id/document generation", reflect.TypeOf(ExampleResetParams{})),
 		typedCapability("scope.visibility.set", "Show/hide the scope dock for this session; preserves acquisition, recorded playback and measurements", reflect.TypeOf(ScopeVisibilityParams{})),
+		typedCapability("workspace.inspector.set", "Select the Component, Simulation or Document inspector; session presentation only", reflect.TypeOf(InspectorParams{})),
 		typedCapability("workspace.layout.set", "Set the session schematic/scope split; preserves circuit, simulation and measurements", reflect.TypeOf(WorkspaceLayout{})),
 		typedCapability("diagnostics.details.set", "Show diagnostic details; session only; targets in diagnostic_presentation", reflect.TypeOf(DiagnosticDetailsParams{})),
 		typedCapability("appearance.configure", "Load and autosave bounded app theme preferences in background; empty path disables; inspect appearance", reflect.TypeOf(AppearanceConfigureParams{})),

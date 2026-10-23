@@ -46,6 +46,7 @@ func TestNativeStaleExampleResetButtonRefusesReplacement(t *testing.T) {
 	s, cleanup := testScreen(t)
 	defer cleanup()
 	uiAction(t, s, "example.rc", nil)
+	uiAction(t, s, "inspector-section-document", nil)
 	var captured ui.Node
 	s.app.Do(func() {
 		node, ok := findNode(s.view(), "example.current.reset")

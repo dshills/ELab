@@ -13,6 +13,9 @@ import (
 
 func verificationControl(t *testing.T, s *screen, id string) ui.Node {
 	t.Helper()
+	if _, ok := findNode(s.view(), id); !ok {
+		uiAction(t, s, "inspector-section-simulation", nil)
+	}
 	var node ui.Node
 	s.app.Do(func() {
 		var ok bool

@@ -14,6 +14,7 @@ import (
 )
 
 type Snapshot struct {
+	InspectorSection       string                 `json:"inspector_section"`
 	WorkspaceLayout        WorkspaceLayout        `json:"workspace_layout"`
 	Viewport               ViewportState          `json:"viewport"`
 	PulseTimings           []PulseTiming          `json:"pulse_timings"`
@@ -100,6 +101,7 @@ type savedResponse struct {
 	project     *projectJob
 }
 type Service struct {
+	inspectorSection                 string
 	workspaceLayout                  WorkspaceLayout
 	shutdown                         *shutdownJob
 	printState                       *PrintState
@@ -243,6 +245,7 @@ func newService(solver func(context.Context, Circuit) (Result, error)) *Service 
 func newGraphService(solver func(context.Context, Circuit) (Result, error), graph Graph) *Service {
 	s := &Service{
 		workspaceLayout:        DefaultWorkspaceLayout(),
+		inspectorSection:       "component",
 		revision:               1,
 		sweepImport:            prepareSweepImport,
 		sweepCompute:           computeDCSweep,
@@ -315,6 +318,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	}
 	out := Snapshot{
 		WorkspaceLayout:        s.workspaceLayout,
+		InspectorSection:       s.inspectorSection,
 		Viewport:               cloneViewport(s.viewport),
 		PulseTimings:           s.pulseTimingsLocked(),
 		Shutdown:               s.shutdownViewLocked(),

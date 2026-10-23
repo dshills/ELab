@@ -21,6 +21,9 @@ import (
 
 func mountedOutputPage(t *testing.T, s *screen, control string) *mountedControlWindow {
 	t.Helper()
+	if state := s.service.Snapshot(); !previewVisible(state) && state.InspectorSection != "document" {
+		uiAction(t, s, "inspector-section-document", nil)
+	}
 	return newMountedControlWindow(t, s, func() ui.Node {
 		state := s.service.Snapshot()
 		root := ui.Node{ID: "root", Kind: ui.Column}
