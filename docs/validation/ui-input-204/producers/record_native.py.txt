@@ -1,0 +1,46 @@
+from pathlib import Path
+import hashlib,json
+r=Path('/Users/dshills/Development/projects/ELab');s=Path(__file__).resolve().parent;b=json.loads((s/'build-result-signed.json').read_text());e=r/'research/ui-audit/ui-input-204'
+checks=dict(live_scope_fast_drag=dict(before_seconds=3.8900529865125244,after_seconds=4.3823458574181124,passed=True),scope_secondary_click=dict(right_and_control_click_preserve_cursor=True,passed=True),divider=dict(before=.65,after=.47680414,passed=True),inspector_scroll=dict(wheel_reached_lower_pinned_controls=True,thumb_returned_to_top=True,passed=True),sweep_fast_drag=dict(before_point=2,before_voltage=.833333333,after_point=6,after_voltage=4.16666667,secondary_click_preserves_point=True,passed=True),placement=dict(right_and_control_click_count=4,primary_click_count=5,false_stale_warning=False,undo_restored_count=4,passed=True),cleanup=dict(document_clean=True,autosave_restored=True,original_recovery_copy_still_listed='20 components · 0 recordings · Oct 23, 10:10:12',owner_recovery_opened_or_dismissed=False,app_left_open=True,passed=True))
+n=dict(passed=True,method='CUA native window actions, accessibility state and unmodified returned window captures',version=b['version'],build=b['build'],source_commit=b['source_commit'],native_sha256=b['native_sha256'],application=str(Path(b['review']).parent/'releases/ELab-0.181.3-macos-arm64/ELab.app'),process_identity='PID 24667; ps verified exact build/releases/ELab-0.181.3-macos-arm64/ELab.app/Contents/MacOS/ELab',window_size=[1221,969],checks=checks,captures={str(f.relative_to(r)):dict(sha256=hashlib.sha256(f.read_bytes()).hexdigest(),bytes=f.stat().st_size) for f in sorted(e.glob('*.jpg'))},limitations=['Broad preview/Save/slider/recorded-navigation/pan checks used the baseline /202; see research/78-ui-input-checks.md','Immediate snapshots sometimes precede repaint; capture 05 is retained beside the settled capture 06, obtained without another UI input','One placement action was refused by CUA with windowNotFoundAtPosition before input; refresh and retry passed','No complete native-device, VoiceOver, IME or title-bar movement qualification is claimed'])
+(s/'native-ui.json').write_text(json.dumps(n,indent=2)+'\n')
+(e/'README.md').write_text('''# Packaged ELab 0.181.3 /204 input evidence
+
+Unmodified CUA window captures from the exact packaged executable identified by
+[the receipt](../../../docs/validation/ui-input-204/native-ui.json). Native process
+identity was checked separately against the release path. No owner file was edited.
+
+1. Scope fast drag changed A from 3.8900529865125244 s to 4.3823458574181124 s;
+right-click and Control-click preserved it. Divider drag changed 0.65 to 0.47680414.
+The right rail was not yet painted in this immediate capture; later captures show it.
+2. Inspector thumb returned to the top after wheel scrolling to lower pinned controls.
+3. Sweep drag moved point 2 (0.833333333 V) to point 6 (4.16666667 V). Secondary
+clicks preserved point 6. The synthetic sweep was unkept, restoring the clean template.
+4. Secondary clicks kept four components; primary click placed a fifth, with no
+false stale-input warning. The placement was subsequently undone.
+5. Immediate capture after changing inspector section; some content has not painted.
+6. Settled capture of the same clean four-component LED template, with no additional
+UI input between captures 5 and 6. Autosave was restored; existing recovery stayed
+listed with its original 20-component count and timestamp. App left open here.
+
+The [baseline and preview captions](../ui-input-203/README.md) retain the first-pass
+failures and rejected /203 candidate. They do not qualify the final executable.
+''')
+p=r/'research/78-ui-input-checks.md';v=p.read_text();v += '''
+## Final packaged result
+
+ELab 0.181.3 /204, clean source `06ab9893a39a5ba13beb4dc774ceb1d27bd97d35`,
+passed the full lint/static/Python/root/desktop/race/vet/mounted suite. The exact
+pinned SDK split regressions and packaged-agent checks passed. ZIP extraction
+retained files and modes in a Unicode/spaces path and passed strict ad-hoc signature
+verification. The previous qualified /202 package remains unchanged.
+
+Native testing of the packaged app confirmed fast scope drag (3.8900529865125244 s
+→ 4.3823458574181124 s), divider resize (0.65 → 0.47680414), sweep drag (point 2
+→ point 6), harmless secondary clicks, inspector wheel/thumb input, and primary
+placement without a false warning. Synthetic edits were undone/unkept; autosave
+was restored and the clean LED template was left open. Immediate screenshots can
+precede repaint; both immediate and later settled captures are retained rather than
+interpreting every blank capture as a persistent input failure. [Final captions](ui-audit/ui-input-204/README.md)
+and [validation receipt](../docs/validation/ui-input-204/report.json) identify details.
+''';p.write_text(v)

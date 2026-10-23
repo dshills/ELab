@@ -1,0 +1,45 @@
+from pathlib import Path
+import hashlib,json,shutil,subprocess
+r=Path('/Users/dshills/Development/projects/ELab');s=Path(__file__).resolve().parent;d=r/'docs/validation/ui-input-204'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+b=json.loads((s/'build-result-signed.json').read_text());p=json.loads((s/'package-report.json').read_text());a=json.loads((s/'protocol-report.json').read_text());n=json.loads((s/'native-ui.json').read_text());pin=json.loads((r/'third_party/vellum/sdk.lock.json').read_text())
+assert (s/'quality-exit-code.txt').read_text().strip()=='0' and a['passed'] and n['passed']
+assert a['source_commit']==b['source_commit'] and n['native_sha256']==b['native_sha256']
+assert sha(Path(p['archive']))==p['archive_sha256'] and sha(Path(p['release'])/'ELab.app/Contents/MacOS/ELab')==b['native_sha256']
+d.mkdir()
+for f in ['quality.txt','quality-exit-code.txt','prepare-sdk.txt','sdk-split.txt','focused-tests.txt','build-result-signed.json','protocol-report.json','package-report.json','native-ui.json','signature-signed-verify.txt','signature-signed-details.txt','inventory.txt']:
+ shutil.copyfile(s/f,d/f)
+shutil.copytree(s/'build',d/'build-info',ignore=shutil.ignore_patterns('elab','elab-agent','elab-conformance'))
+(d/'producers').mkdir()
+for f in ['pin_sdk.py','build_release.py','protocol_check.py','package.py','freeze.py']:
+ shutil.copyfile(s/f,d/'producers'/(f+'.txt'))
+files=subprocess.check_output(['git','ls-files','-z','*.go'],cwd=r).decode().strip('\0').split('\0');inputs={f:sha(r/f) for f in files}
+for f in ['desktop/go.mod','desktop/go.sum','third_party/vellum/sdk.lock.json',pin['archive'],pin['compatibility_patch']['path'],'scripts/check.sh','scripts/lint.sh']:inputs[f]=sha(r/f)
+(d/'source-inputs.json').write_text(json.dumps(inputs,indent=2)+'\n')
+report=dict(passed=True,kind='mouse-gesture-and-ui-scroll-maintenance',version=b['version'],build=b['build'],source_commit=b['source_commit'],clean_build_vcs=True,native_sha256=b['native_sha256'],agent_sha256=b['agent_sha256'],sdk=pin,source_checks=dict(command="GOFLAGS='-p=1' GOPROXY=off PYTHONDONTWRITEBYTECODE=1 ./scripts/check.sh",exit_code=0,scope='lint/staticcheck; Python; complete root and desktop race/vet; mounted offscreen race/vet'),public_protocol=a,native_ui=n,package=p,component_kinds=18,new_features=False,new_commands=False,published=False,developer_id_signed=False,notarized=False,limitations=['The broad first-pass UI audit used /202; preview and final packaged evidence are identified separately','Preliminary /203 passed source checks but failed native fast dragging and was not promoted','Native title-bar movement/exact original size restoration was not proved by the automation','Clean-account installation, complete PRD, VoiceOver and IME qualification remain separate'])
+(d/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+(d/'README.md').write_text('''# Mouse and scrolling maintenance /204
+
+ELab 0.181.3, October 23, 2026. The [receipt](report.json) identifies the clean
+source, exact native executable, matching agent, SDK and extracted download.
+[Native checks](native-ui.json) distinguish the final package from the
+[first-pass and preview evidence](../../../research/ui-audit/ui-input-203/README.md).
+The [research notes](../../../research/78-ui-input-checks.md) describe all findings.
+
+Fast scope/split drags now accept raw release events when the native drag timer
+never starts. Classified start/move/stop paths remain supported. The sweep bridge
+accepts its own cursor repaint while its retained command/document/sweep guard
+rejects intervening actor changes. Secondary clicks cannot edit the plots or
+schematic; completed placement releases cannot emit false stale-input errors.
+The existing shared commands, models and formats are unchanged.
+
+The preliminary /203 native fast-drag failure was retained, diagnosed and repaired
+before promotion. Regression tests exercise raw release, coalesced slide events,
+actual split manual-window input and the real native owner delivery after redraw.
+The complete source/race/vet/mounted suite, exact pinned SDK split regressions,
+packaged-agent protocol check, extraction/mode/Unicode-path verification and strict
+ad-hoc signature verification passed. This remains the owner-selected unsigned
+channel without Developer ID or notarization. No download was publicly uploaded.
+''')
+manifest={str(f.relative_to(d)):dict(sha256=sha(f),bytes=f.stat().st_size) for f in sorted(d.rglob('*')) if f.is_file()}
+(d/'MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n');print(json.dumps(dict(passed=True,files=len(manifest),source_commit=b['source_commit'],archive_sha256=p['archive_sha256'])))

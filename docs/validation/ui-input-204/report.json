@@ -1,0 +1,254 @@
+{
+  "passed": true,
+  "kind": "mouse-gesture-and-ui-scroll-maintenance",
+  "version": "0.181.3",
+  "build": "204",
+  "source_commit": "06ab9893a39a5ba13beb4dc774ceb1d27bd97d35",
+  "clean_build_vcs": true,
+  "native_sha256": "7eab343ef8c38b7cab0a153be0c4886f7c159ae10252ca1c168aa4911256e310",
+  "agent_sha256": "00731e8957481a729743fc3fb7a04697d666dedd8a38f85f2c14603e90df432f",
+  "sdk": {
+    "schema": 2,
+    "repository": "https://github.com/dshills/vellum",
+    "upstream_commit": "e58d40581fe21d1de53fd54cab1bcf6acf11c163",
+    "source_commit": "899b2ba3bc01c9708385a2b10d4f8154a5f257e2",
+    "compatibility_patch": {
+      "path": "third_party/vellum/patches/elab-public-e58d405-ui-release-compat.patch",
+      "sha256": "86c279f5dbe1145fdb4027a44902385d7fdb70e9f0724b86634baa6a66aad418"
+    },
+    "archive": "third_party/vellum/vellum-e58d405-elab6.tar.gz",
+    "archive_bytes": 20386702,
+    "sha256": "0a36e4f00524cf4f98f468590226587adf22d5095b1e7b3c2d4c431797b721b5",
+    "manifest_sha256": "31c08615e1d9cbb042e3638b9a1121849c14edc0f61735cf26af8274cfa02cea",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-e58d405-elab6",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 8425,
+    "bootstrap": {
+      "scripts/check-sdk.py": "482cd470d79655440f0e8ef07fa1097ee4e96d9c16c851e9c37c43cc4c07c1e3",
+      "scripts/child_process.py": "f907c7c6ce54871c9693be9fd8a9088cf09bd22cabc4e48d3abc7191f75bc7e6",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "2e7c76e72dcb489ee405dd54bdca95392c6e907ed3822dc46242425cf9ae54e4",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541",
+      "scripts/native_linkers.py": "18fb7c193157035cf940259a202b816b18e227c0ceb125a2727b629340f99af7"
+    }
+  },
+  "source_checks": {
+    "command": "GOFLAGS='-p=1' GOPROXY=off PYTHONDONTWRITEBYTECODE=1 ./scripts/check.sh",
+    "exit_code": 0,
+    "scope": "lint/staticcheck; Python; complete root and desktop race/vet; mounted offscreen race/vet"
+  },
+  "public_protocol": {
+    "source_commit": "06ab9893a39a5ba13beb4dc774ceb1d27bd97d35",
+    "agent_sha256": "00731e8957481a729743fc3fb7a04697d666dedd8a38f85f2c14603e90df432f",
+    "groups": [
+      {
+        "id": "common",
+        "count": 6
+      },
+      {
+        "id": "all",
+        "count": 18
+      },
+      {
+        "id": "sources",
+        "count": 4
+      },
+      {
+        "id": "passives",
+        "count": 4
+      },
+      {
+        "id": "semiconductors",
+        "count": 5
+      },
+      {
+        "id": "amplifiers",
+        "count": 1
+      },
+      {
+        "id": "switches",
+        "count": 1
+      },
+      {
+        "id": "connections",
+        "count": 3
+      }
+    ],
+    "queries": [
+      {
+        "query": "battery",
+        "kinds": [
+          "dc-source"
+        ]
+      },
+      {
+        "query": "MOSFET",
+        "kinds": [
+          "nmos",
+          "pmos"
+        ]
+      },
+      {
+        "query": "op-amp",
+        "kinds": [
+          "opamp"
+        ]
+      },
+      {
+        "query": "no-such-part",
+        "kinds": []
+      },
+      {
+        "query": "  ",
+        "kinds": [
+          "capacitor",
+          "inductor",
+          "potentiometer",
+          "resistor"
+        ]
+      }
+    ],
+    "passed": true,
+    "catalog_kinds": 18,
+    "global_search": true,
+    "browser_preserves_document_and_physics": true,
+    "retained_retry_owned": true,
+    "direct_agent_placement": true,
+    "shutdown": {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.stdio",
+      "input_revision": 22,
+      "command_revision": 23,
+      "document_generation": 2,
+      "discard_recovery": true,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    }
+  },
+  "native_ui": {
+    "passed": true,
+    "method": "CUA native window actions, accessibility state and unmodified returned window captures",
+    "version": "0.181.3",
+    "build": "204",
+    "source_commit": "06ab9893a39a5ba13beb4dc774ceb1d27bd97d35",
+    "native_sha256": "7eab343ef8c38b7cab0a153be0c4886f7c159ae10252ca1c168aa4911256e310",
+    "application": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.181.3-macos-arm64/ELab.app",
+    "process_identity": "PID 24667; ps verified exact build/releases/ELab-0.181.3-macos-arm64/ELab.app/Contents/MacOS/ELab",
+    "window_size": [
+      1221,
+      969
+    ],
+    "checks": {
+      "live_scope_fast_drag": {
+        "before_seconds": 3.8900529865125244,
+        "after_seconds": 4.3823458574181124,
+        "passed": true
+      },
+      "scope_secondary_click": {
+        "right_and_control_click_preserve_cursor": true,
+        "passed": true
+      },
+      "divider": {
+        "before": 0.65,
+        "after": 0.47680414,
+        "passed": true
+      },
+      "inspector_scroll": {
+        "wheel_reached_lower_pinned_controls": true,
+        "thumb_returned_to_top": true,
+        "passed": true
+      },
+      "sweep_fast_drag": {
+        "before_point": 2,
+        "before_voltage": 0.833333333,
+        "after_point": 6,
+        "after_voltage": 4.16666667,
+        "secondary_click_preserves_point": true,
+        "passed": true
+      },
+      "placement": {
+        "right_and_control_click_count": 4,
+        "primary_click_count": 5,
+        "false_stale_warning": false,
+        "undo_restored_count": 4,
+        "passed": true
+      },
+      "cleanup": {
+        "document_clean": true,
+        "autosave_restored": true,
+        "original_recovery_copy_still_listed": "20 components \u00b7 0 recordings \u00b7 Oct 23, 10:10:12",
+        "owner_recovery_opened_or_dismissed": false,
+        "app_left_open": true,
+        "passed": true
+      }
+    },
+    "captures": {
+      "research/ui-audit/ui-input-204/01-scope-and-divider.jpg": {
+        "sha256": "644d992c46de836d637306e1c3daf03ccd272b7f9aa7565242aa5d399a7480d6",
+        "bytes": 180600
+      },
+      "research/ui-audit/ui-input-204/02-inspector-thumb.jpg": {
+        "sha256": "01c57a93e88c42ce43d7506ff514420024ceebf6ca45580e72f74120b98195a0",
+        "bytes": 186878
+      },
+      "research/ui-audit/ui-input-204/03-sweep-drag.jpg": {
+        "sha256": "ead533338afa1d4fe20d600c33afeecb21bb1bfb12653fe909d65e75df3270dd",
+        "bytes": 156907
+      },
+      "research/ui-audit/ui-input-204/04-primary-placement.jpg": {
+        "sha256": "97bea4b14165f800bf4341a0ae0b7b641c678a7de20b5d8a44a79c31033a2f08",
+        "bytes": 134997
+      },
+      "research/ui-audit/ui-input-204/05-clean-final.jpg": {
+        "sha256": "77a3a5b68b888a5de0784485a51b2b80a825912fc651d1ee84f7756645fe8cd3",
+        "bytes": 144036
+      },
+      "research/ui-audit/ui-input-204/06-clean-settled.jpg": {
+        "sha256": "beacd6b1ca64094f7c0ffa33467b94442489a074d0d3765e47ab0b9955057922",
+        "bytes": 144030
+      }
+    },
+    "limitations": [
+      "Broad preview/Save/slider/recorded-navigation/pan checks used the baseline /202; see research/78-ui-input-checks.md",
+      "Immediate snapshots sometimes precede repaint; capture 05 is retained beside the settled capture 06, obtained without another UI input",
+      "One placement action was refused by CUA with windowNotFoundAtPosition before input; refresh and retry passed",
+      "No complete native-device, VoiceOver, IME or title-bar movement qualification is claimed"
+    ]
+  },
+  "package": {
+    "passed": true,
+    "release": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.181.3-macos-arm64",
+    "archive": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.181.3-macos-arm64.zip",
+    "archive_sha256": "7d935187b8e8113e1a1697db9a0ff9133b6f3d756b1811204b36ffc45a73e27f",
+    "members": 127,
+    "source_commit": "06ab9893a39a5ba13beb4dc774ceb1d27bd97d35",
+    "native_sha256": "7eab343ef8c38b7cab0a153be0c4886f7c159ae10252ca1c168aa4911256e310",
+    "agent_sha256": "00731e8957481a729743fc3fb7a04697d666dedd8a38f85f2c14603e90df432f",
+    "extraction_verified": true,
+    "unicode_space_path_verified": true,
+    "modes_preserved": true,
+    "strict_ad_hoc_signature_valid": true,
+    "previous_release_unchanged": true,
+    "sdk_license_record_matches_active_pin": true
+  },
+  "component_kinds": 18,
+  "new_features": false,
+  "new_commands": false,
+  "published": false,
+  "developer_id_signed": false,
+  "notarized": false,
+  "limitations": [
+    "The broad first-pass UI audit used /202; preview and final packaged evidence are identified separately",
+    "Preliminary /203 passed source checks but failed native fast dragging and was not promoted",
+    "Native title-bar movement/exact original size restoration was not proved by the automation",
+    "Clean-account installation, complete PRD, VoiceOver and IME qualification remain separate"
+  ]
+}

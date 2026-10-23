@@ -82,3 +82,20 @@ repainting, both with its own cursor write and an intervening agent trace change
 
 Final packaged /204 checks and exact artifact hashes are recorded separately in
 `docs/validation/ui-input-204`. Preview evidence does not qualify a different binary.
+
+## Final packaged result
+
+ELab 0.181.3 /204, clean source `06ab9893a39a5ba13beb4dc774ceb1d27bd97d35`,
+passed the full lint/static/Python/root/desktop/race/vet/mounted suite. The exact
+pinned SDK split regressions and packaged-agent checks passed. ZIP extraction
+retained files and modes in a Unicode/spaces path and passed strict ad-hoc signature
+verification. The previous qualified /202 package remains unchanged.
+
+Native testing of the packaged app confirmed fast scope drag (3.8900529865125244 s
+→ 4.3823458574181124 s), divider resize (0.65 → 0.47680414), sweep drag (point 2
+→ point 6), harmless secondary clicks, inspector wheel/thumb input, and primary
+placement without a false warning. Synthetic edits were undone/unkept; autosave
+was restored and the clean LED template was left open. Immediate screenshots can
+precede repaint; both immediate and later settled captures are retained rather than
+interpreting every blank capture as a persistent input failure. [Final captions](ui-audit/ui-input-204/README.md)
+and [validation receipt](../docs/validation/ui-input-204/report.json) identify details.

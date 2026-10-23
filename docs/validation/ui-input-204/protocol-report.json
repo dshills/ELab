@@ -1,0 +1,93 @@
+{
+  "source_commit": "06ab9893a39a5ba13beb4dc774ceb1d27bd97d35",
+  "agent_sha256": "00731e8957481a729743fc3fb7a04697d666dedd8a38f85f2c14603e90df432f",
+  "groups": [
+    {
+      "id": "common",
+      "count": 6
+    },
+    {
+      "id": "all",
+      "count": 18
+    },
+    {
+      "id": "sources",
+      "count": 4
+    },
+    {
+      "id": "passives",
+      "count": 4
+    },
+    {
+      "id": "semiconductors",
+      "count": 5
+    },
+    {
+      "id": "amplifiers",
+      "count": 1
+    },
+    {
+      "id": "switches",
+      "count": 1
+    },
+    {
+      "id": "connections",
+      "count": 3
+    }
+  ],
+  "queries": [
+    {
+      "query": "battery",
+      "kinds": [
+        "dc-source"
+      ]
+    },
+    {
+      "query": "MOSFET",
+      "kinds": [
+        "nmos",
+        "pmos"
+      ]
+    },
+    {
+      "query": "op-amp",
+      "kinds": [
+        "opamp"
+      ]
+    },
+    {
+      "query": "no-such-part",
+      "kinds": []
+    },
+    {
+      "query": "  ",
+      "kinds": [
+        "capacitor",
+        "inductor",
+        "potentiometer",
+        "resistor"
+      ]
+    }
+  ],
+  "passed": true,
+  "catalog_kinds": 18,
+  "global_search": true,
+  "browser_preserves_document_and_physics": true,
+  "retained_retry_owned": true,
+  "direct_agent_placement": true,
+  "shutdown": {
+    "id": "shutdown-1",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "agent.stdio",
+    "input_revision": 22,
+    "command_revision": 23,
+    "document_generation": 2,
+    "discard_recovery": true,
+    "checkpoint_recovery": false,
+    "cancelable": false,
+    "recovery_finalized": true,
+    "workers_joined": true,
+    "exit_ready": true
+  }
+}
