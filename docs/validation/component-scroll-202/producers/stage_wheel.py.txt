@@ -1,0 +1,15 @@
+from pathlib import Path
+import difflib,hashlib,json
+r=Path('/Users/dshills/Development/projects/ELab/build/vellum-public-e58d405/drivers/cogent')
+u=r/'build/upstream'; p=r/'native/patches/scrollwheel';p.mkdir()
+before_root=Path('/Users/dshills/Development/projects/ELab/build/.vellum-sdk-e58d405-elab3/drivers/cogent/build/upstream')
+names=['core/slider.go','core/slider_scroll_vellum_test.go']
+inputs={};outputs={};diff=[]
+for name in names:
+ src=before_root/name;before=src.read_text() if src.exists() else '';after=(u/name).read_text()
+ inputs[name]=hashlib.sha256(src.read_bytes()).hexdigest() if src.exists() else None
+ outputs[name]=hashlib.sha256((u/name).read_bytes()).hexdigest()
+ diff.extend(difflib.unified_diff(before.splitlines(True),after.splitlines(True),fromfile='a/'+name if src.exists() else '/dev/null',tofile='b/'+name))
+f=p/'0108-scrollbar-wheel-direction.patch';f.write_text(''.join(diff))
+for name,data in [('original-hashes.json',inputs),('output-hashes.json',outputs)]: (p/name).write_text(json.dumps(data,indent=2)+'\n')
+m=r/'native/dependencies.json';data=json.loads(m.read_text());data['dependencies'][0]['stages'].append(dict(origin='ELab scrollbar wheel direction compatibility',inputs='native/patches/scrollwheel/original-hashes.json',outputs='native/patches/scrollwheel/output-hashes.json',patches=[dict(file='native/patches/scrollwheel/'+f.name,sha256=hashlib.sha256(f.read_bytes()).hexdigest())]));m.write_text(json.dumps(data,indent=2)+'\n')

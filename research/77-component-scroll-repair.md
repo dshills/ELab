@@ -33,9 +33,10 @@ before changes. The first repaired preview visibly scrolled to the last row and
 back with the wheel, and the thumb could be dragged down and back up. Coordinate
 clicks selected Resistor and focused Search; typing mosfet and Return produced
 two results. A stale/resized intermediate capture is retained separately from
-the refreshed reverse-drag confirmation. The later scrollbar-wheel correction
-requires its own final packaged-app check; preview evidence does not stand in
-for that check.
+the refreshed reverse-drag confirmation. The final /202 packaged app separately passed wheel up/down over both rows and
+scrollbar, proportional middle thumb movement, dragging to both ends, component
+selection and search-field focus. Search/category remained fixed. The normal
+app was left open in All with Select active and a clean empty circuit.
 
 Final artifact identity, test results and observations belong in
 [the /202 validation receipt](../docs/validation/component-scroll-202/README.md).

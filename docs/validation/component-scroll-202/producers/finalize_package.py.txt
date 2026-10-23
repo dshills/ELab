@@ -1,0 +1,33 @@
+from pathlib import Path
+import hashlib,json,shutil,stat,subprocess,sys,zipfile
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent
+sys.path.insert(0,str(root/'scripts'));from package_review import members,verify_archive
+b=json.loads((stage/'build-result-signed.json').read_text());p=json.loads((stage/'package-report.json').read_text());release=Path(p['release']);archive=Path(p['archive']);pin=json.loads((root/'third_party/vellum/sdk.lock.json').read_text());sdk=root/pin['cache'];licenses=release/'Licenses/Vellum'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(release/'ELab.app/Contents/MacOS/ELab')==b['native_sha256']
+assert sha(archive)==p['archive_sha256']
+shutil.copy2(stage/'package-report.json',stage/'package-report-preliminary.json')
+archive.rename(stage/'ELab-0.181.1-preliminary.zip');(archive.parent/(archive.name+'.sha256')).rename(stage/'ELab-0.181.1-preliminary.zip.sha256')
+for name in ('LICENSE','PRIVATE_BUILD.txt','THIRD_PARTY_INVENTORY.json'):shutil.copy2(sdk/name,licenses/name)
+shutil.rmtree(licenses/'THIRD_PARTY_NOTICES');shutil.copytree(sdk/'THIRD_PARTY_NOTICES',licenses/'THIRD_PARTY_NOTICES')
+shutil.copy2(root/'third_party/vellum/sdk.lock.json',licenses/'sdk.lock.json')
+assert (licenses/'sdk.lock.json').read_bytes()==(root/'third_party/vellum/sdk.lock.json').read_bytes()
+status=json.loads((release/'RELEASE_STATUS.json').read_text())
+files=members(release);files.pop('RELEASE_MANIFEST.json')
+(release/'RELEASE_MANIFEST.json').write_text(json.dumps(dict(status=status,files=files),indent=2)+'\n')
+expected=members(release)
+with archive.open('xb') as f:
+ archive.chmod(0o644)
+ with zipfile.ZipFile(f,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+  for name,value in expected.items():
+   entry=zipfile.ZipInfo(release.name+'/'+name,date_time=(1980,1,1,0,0,0));entry.create_system=3;entry.external_attr=(stat.S_IFREG|int(value['mode'],8))<<16;entry.compress_type=zipfile.ZIP_DEFLATED;z.writestr(entry,(release/name).read_bytes(),compresslevel=9)
+verify_archive(archive,release.name,expected)
+out=Path('/private/tmp/elab-component-scroll-202-final-extracted');assert not out.exists()
+subprocess.run(['/usr/bin/ditto','-x','-k',str(archive),str(out/'Extracted download µ with spaces')],check=True,timeout=120)
+extracted=out/'Extracted download µ with spaces'/release.name
+assert members(extracted)==expected
+subprocess.run(['/usr/bin/codesign','--verify','--deep','--strict','--verbose=2',str(extracted/'ELab.app')],check=True,timeout=30)
+assert sha(release/'ELab.app/Contents/MacOS/ELab')==b['native_sha256']
+(archive.parent/(archive.name+'.sha256')).write_text(sha(archive)+'  '+archive.name+'\n')
+p.update(archive_sha256=sha(archive),members=len(expected),sdk_license_record_matches_active_pin=True,preliminary_notice_pin_corrected_before_handoff=True,native_binary_unchanged_after_correction=True)
+(stage/'package-report.json').write_text(json.dumps(p,indent=2)+'\n');print(json.dumps(p))

@@ -1,0 +1,53 @@
+from pathlib import Path
+import hashlib,json,shutil,subprocess
+r=Path('/Users/dshills/Development/projects/ELab');s=Path(__file__).resolve().parent;d=r/'docs/validation/component-scroll-202'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+b=json.loads((s/'build-result-signed.json').read_text());p=json.loads((s/'package-report.json').read_text());a=json.loads((s/'protocol-report.json').read_text());n=json.loads((s/'native-ui.json').read_text());pin=json.loads((r/'third_party/vellum/sdk.lock.json').read_text())
+assert (s/'quality-final-exit-code.txt').read_text().strip()=='0' and a['passed'] and n['passed']
+assert a['source_commit']==b['source_commit'] and n['native_sha256']==b['native_sha256']
+assert sha(Path(p['archive']))==p['archive_sha256'] and sha(Path(p['release'])/'ELab.app/Contents/MacOS/ELab')==b['native_sha256']
+d.mkdir()
+for f in ['quality.txt','quality-exit-code.txt','quality-final.txt','quality-final-exit-code.txt','prepare-sdk-final.txt','export-sdk-final.txt','pointer-sdk-final.txt','scrollbar-sdk-final.txt','build-result-signed.json','protocol-report.json','package-report.json','native-ui.json','signature-signed-verify.txt','signature-signed-details.txt']:
+ shutil.copyfile(s/f,d/f)
+shutil.copytree(s/'build',d/'build-info',ignore=shutil.ignore_patterns('elab','elab-agent','elab-conformance'))
+(d/'producers').mkdir()
+for f in ['stage_sdk.py','stage_wheel.py','pin_sdk_final.py','build_release.py','protocol_check.py','package.py','finalize_package.py','freeze.py']:
+ shutil.copyfile(s/f,d/'producers'/(f+'.txt'))
+files=subprocess.check_output(['git','ls-files','-z','*.go'],cwd=r).decode().strip('\0').split('\0')
+inputs={f:sha(r/f) for f in files}
+for f in ['desktop/go.mod','desktop/go.sum','third_party/vellum/sdk.lock.json',pin['archive'],pin['compatibility_patch']['path'],'scripts/check.sh','scripts/lint.sh']:
+ inputs[f]=sha(r/f)
+(d/'source-inputs.json').write_text(json.dumps(inputs,indent=2)+'\n')
+report=dict(passed=True,kind='native-mouse-scroll-maintenance',version=b['version'],build=b['build'],source_commit=b['source_commit'],clean_build_vcs=True,native_sha256=b['native_sha256'],agent_sha256=b['agent_sha256'],sdk=pin,source_checks=dict(command="GOFLAGS='-p=1' GOPROXY=off PYTHONDONTWRITEBYTECODE=1 ./scripts/check.sh",exit_code=0,scope='lint/staticcheck; 67 Python tests; complete root and desktop race/vet; mounted offscreen race/vet',initial_attempt='sandbox denied local agent sockets; an electrical reference also exceeded its existing 100ms integration limit; final authorized run passed without changing limits or skipping tests'),public_protocol=a,native_ui=n,package=p,component_kinds=18,new_features=False,new_commands=False,owner_documents_modified=False,published=False,developer_id_signed=False,notarized=False,limitations=['Earlier /201 and first-preview captures are separate from final packaged UI evidence','Clean-account installation, complete PRD, VoiceOver and IME qualification remain outside this maintenance repair'])
+(d/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+(d/'README.md').write_text('''# All components scrolling /202
+
+October 23, 2026. ELab 0.181.1. The [receipt](report.json) identifies the exact
+native app, matching agent, pinned SDK and extracted archive. [Native pointer
+results](native-ui.json) and [capture captions](../../../research/ui-audit/component-scroll-202/README.md)
+distinguish /201 failures, the first preview and final packaged-app checks.
+
+macOS button/wheel callbacks now use the matching event location. Disabled-mode
+virtual coordinates, finite/range validation and one DPR conversion are retained.
+A redundant scrollbar wheel inversion was removed. The complete derived patch
+and both reconstruction stages are checksum-pinned in the SDK lock. Regression
+tests cover event-vs-hardware selection/fallback, relative mode, invalid event
+positions and frame/scrollbar direction and bounds on both axes.
+
+The full source suite passed with Go packages serialized. The first sandboxed
+attempt could not start local agent sockets; its electrical reference also hit
+the pre-existing integration work-time budget. Both attempt logs are retained.
+The final authorized run passed without solver-limit changes or skipped tests.
+Dependency race tests and consumer native/offscreen checks passed. The packaged
+agent checks the unchanged catalog, categories, aliases, purity, retries and
+placement. Archive extraction preserves files/modes in a Unicode/spaces path;
+the extracted app passes strict ad-hoc signature verification. A final metadata
+review corrected the download notices folder's copied SDK lock before handoff;
+the app binary and its native pointer qualification stayed unchanged.
+
+No component models, shared commands or document formats changed. Owner documents
+and the preceding release were preserved. Developer ID/notarization, clean-account
+installation and full accessibility/PRD qualification remain separate.
+''')
+manifest={str(f.relative_to(d)):dict(sha256=sha(f),bytes=f.stat().st_size) for f in sorted(d.rglob('*')) if f.is_file()}
+(d/'MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n');print(json.dumps(dict(passed=True,files=len(manifest),source_commit=b['source_commit'],archive_sha256=p['archive_sha256'])))

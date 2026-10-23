@@ -1,0 +1,58 @@
+from pathlib import Path
+import hashlib,json,shutil,stat,subprocess,sys,zipfile
+root=Path('/Users/dshills/Development/projects/ELab');stage=Path(__file__).resolve().parent
+assert (stage/'quality-final-exit-code.txt').read_text().strip()=='0'
+b=json.loads((stage/'build-result-signed.json').read_text());check=json.loads((stage/'protocol-report.json').read_text());assert check['passed'] and check['source_commit']==b['source_commit']
+sys.path.insert(0,str(root/'scripts'));from package_review import members,verify_archive
+previous=root/'build/releases/ELab-0.181.0-macos-arm64';preserved=members(previous)
+release=root/'build/releases/ELab-0.181.1-macos-arm64';assert not release.exists();release.mkdir()
+candidate=Path(b['review']);shutil.copytree(candidate/'ELab.app',release/'ELab.app');shutil.copy2(candidate/'elab-agent',release/'elab-agent')
+for name in ('Examples','Licenses'):shutil.copytree(previous/name,release/name)
+for name in ('AGENT_PROTOCOL.md','ROLLBACK.md'):shutil.copy2(previous/name,release/name)
+
+pin=json.loads((root/'third_party/vellum/sdk.lock.json').read_text());sdk=root/pin['cache'];licenses=release/'Licenses/Vellum'
+for name in ('LICENSE','PRIVATE_BUILD.txt','THIRD_PARTY_INVENTORY.json'):shutil.copy2(sdk/name,licenses/name)
+shutil.rmtree(licenses/'THIRD_PARTY_NOTICES');shutil.copytree(sdk/'THIRD_PARTY_NOTICES',licenses/'THIRD_PARTY_NOTICES')
+shutil.copy2(root/'third_party/vellum/sdk.lock.json',licenses/'sdk.lock.json')
+
+readme=(previous/'README.md').read_text().replace('ELab 0.181.0','ELab 0.181.1')
+readme=readme.replace('## Component browser','''## Scrolling repair
+
+Mouse wheel input and scrollbar grabs use the macOS event's actual location.
+Wheel direction is consistent over component rows and the scrollbar itself.
+The component set and shared user/agent commands are unchanged.
+
+## Component browser''',1)
+(release/'README.md').write_text(readme)
+(release/'RELEASE_NOTES.md').write_text(f'''# ELab 0.181.1 /202 — October 23, 2026
+
+Fixes wheel scrolling and scrollbar dragging in All components. macOS button
+and wheel callbacks now use their event location instead of a later hardware
+cursor position. Relative mouse mode keeps GLFW virtual coordinates. A redundant
+scrollbar wheel inversion was also removed, so scrolling over the rows and the
+thumb has the same direction. No new features, component models, file formats
+or agent commands are included.
+
+Source: {b['source_commit']}. Source, dependency, packaged-agent, archive and
+native pointer results are recorded in docs/validation/component-scroll-202.
+Prior releases and documents are preserved. The owner-selected unsigned channel
+uses an ad-hoc integrity seal, without Developer ID or notarization.
+''')
+status=dict(kind='unsigned-macos-arm64-maintenance',version=b['version'],build=b['build'],source_commit=b['source_commit'],native_sha256=b['native_sha256'],agent_sha256=b['agent_sha256'],architecture='arm64',binary_minimum_macos='26.0',developer_id_signed=False,ad_hoc_integrity_seal=True,notarized=False,validation_receipt='docs/validation/component-scroll-202/report.json',published=False)
+(release/'RELEASE_STATUS.json').write_text(json.dumps(status,indent=2)+'\n');(release/'RELEASE_MANIFEST.json').write_text(json.dumps(dict(status=status,files=members(release)),indent=2)+'\n')
+expected=members(release);archive=release.parent/(release.name+'.zip');assert not archive.exists()
+with archive.open('xb') as f:
+ archive.chmod(0o644)
+ with zipfile.ZipFile(f,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+  for name,value in expected.items():
+   entry=zipfile.ZipInfo(release.name+'/'+name,date_time=(1980,1,1,0,0,0));entry.create_system=3;entry.external_attr=(stat.S_IFREG|int(value['mode'],8))<<16;entry.compress_type=zipfile.ZIP_DEFLATED;z.writestr(entry,(release/name).read_bytes(),compresslevel=9)
+verify_archive(archive,release.name,expected)
+out=Path('/private/tmp/elab-component-scroll-202-extracted');assert not out.exists()
+subprocess.run(['/usr/bin/ditto','-x','-k',str(archive),str(out/'Extracted download µ with spaces')],check=True,timeout=120)
+extracted=out/'Extracted download µ with spaces'/release.name
+assert members(extracted)==expected and members(previous)==preserved
+subprocess.run(['/usr/bin/codesign','--verify','--deep','--strict','--verbose=2',str(extracted/'ELab.app')],check=True,timeout=30)
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+(archive.parent/(archive.name+'.sha256')).write_text(sha(archive)+'  '+archive.name+'\n')
+report=dict(passed=True,release=str(release),archive=str(archive),archive_sha256=sha(archive),members=len(expected),source_commit=b['source_commit'],native_sha256=b['native_sha256'],agent_sha256=b['agent_sha256'],extraction_verified=True,unicode_space_path_verified=True,modes_preserved=True,strict_ad_hoc_signature_valid=True,previous_release_unchanged=True)
+(stage/'package-report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))

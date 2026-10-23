@@ -1,0 +1,12 @@
+from pathlib import Path
+import hashlib,json,subprocess,tarfile
+r=Path('/Users/dshills/Development/projects/ELab');s=r/'build/vellum-public-e58d405'
+patch=r/'third_party/vellum/patches/elab-public-e58d405-event-position-compat.patch'
+patch.write_bytes(subprocess.check_output(['git','diff','--binary','e58d40581fe21d1de53fd54cab1bcf6acf11c163','HEAD'],cwd=s))
+a=r/'third_party/vellum/vellum-e58d405-elab4.tar.gz'
+with tarfile.open(a) as t:
+ b=t.extractfile('vellum-v0.1.0-alpha.2/SDK_MANIFEST.json').read();m=json.loads(b)
+p=r/'third_party/vellum/sdk.lock.json';d=json.loads(p.read_text());d.update(source_commit=m['source']['commit'],compatibility_patch=dict(path=str(patch.relative_to(r)),sha256=hashlib.sha256(patch.read_bytes()).hexdigest()),archive=str(a.relative_to(r)),archive_bytes=a.stat().st_size,sha256=hashlib.sha256(a.read_bytes()).hexdigest(),manifest_sha256=hashlib.sha256(b).hexdigest(),cache='build/.vellum-sdk-e58d405-elab4',files=len(m['files']))
+p.write_text(json.dumps(d,indent=2)+'\n')
+p=r/'desktop/go.mod';p.write_text(p.read_text().replace('.vellum-sdk-e58d405-elab3','.vellum-sdk-e58d405-elab4'))
+print(d['source_commit'],d['files'])

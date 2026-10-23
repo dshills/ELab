@@ -1,0 +1,206 @@
+{
+  "passed": true,
+  "kind": "native-mouse-scroll-maintenance",
+  "version": "0.181.1",
+  "build": "202",
+  "source_commit": "1631661c1bde01c6e2b0e0b35518beae0a735296",
+  "clean_build_vcs": true,
+  "native_sha256": "cb1b0ddebb6c86d1b5e88a5749bd0aedb675bd7c84f5162a9a814a8414b86c88",
+  "agent_sha256": "87f9b9a4f31fc24931f86407f89bf3fceaa44cf5cecc0794c08193279a01b4eb",
+  "sdk": {
+    "schema": 2,
+    "repository": "https://github.com/dshills/vellum",
+    "upstream_commit": "e58d40581fe21d1de53fd54cab1bcf6acf11c163",
+    "source_commit": "ebb20812644fb179af280fe2a1683490eef294e5",
+    "compatibility_patch": {
+      "path": "third_party/vellum/patches/elab-public-e58d405-event-position-compat.patch",
+      "sha256": "3dbdb874eb64c228a092cde38cacd43b1d7f6651f2279d89ef53326268e8a77c"
+    },
+    "archive": "third_party/vellum/vellum-e58d405-elab4.tar.gz",
+    "archive_bytes": 20385812,
+    "sha256": "0ea2a5528d73567221d2c85e9434cdb5ff17f224f3a630ecfdb31346986baf4a",
+    "manifest_sha256": "c9c4b24ab9cef2197034e28d4b6812fa9ce0fa14b25cbb868a483cd913c4268f",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-e58d405-elab4",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 8425,
+    "bootstrap": {
+      "scripts/check-sdk.py": "482cd470d79655440f0e8ef07fa1097ee4e96d9c16c851e9c37c43cc4c07c1e3",
+      "scripts/child_process.py": "f907c7c6ce54871c9693be9fd8a9088cf09bd22cabc4e48d3abc7191f75bc7e6",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "2e7c76e72dcb489ee405dd54bdca95392c6e907ed3822dc46242425cf9ae54e4",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541",
+      "scripts/native_linkers.py": "18fb7c193157035cf940259a202b816b18e227c0ceb125a2727b629340f99af7"
+    }
+  },
+  "source_checks": {
+    "command": "GOFLAGS='-p=1' GOPROXY=off PYTHONDONTWRITEBYTECODE=1 ./scripts/check.sh",
+    "exit_code": 0,
+    "scope": "lint/staticcheck; 67 Python tests; complete root and desktop race/vet; mounted offscreen race/vet",
+    "initial_attempt": "sandbox denied local agent sockets; an electrical reference also exceeded its existing 100ms integration limit; final authorized run passed without changing limits or skipping tests"
+  },
+  "public_protocol": {
+    "source_commit": "1631661c1bde01c6e2b0e0b35518beae0a735296",
+    "agent_sha256": "87f9b9a4f31fc24931f86407f89bf3fceaa44cf5cecc0794c08193279a01b4eb",
+    "groups": [
+      {
+        "id": "common",
+        "count": 6
+      },
+      {
+        "id": "all",
+        "count": 18
+      },
+      {
+        "id": "sources",
+        "count": 4
+      },
+      {
+        "id": "passives",
+        "count": 4
+      },
+      {
+        "id": "semiconductors",
+        "count": 5
+      },
+      {
+        "id": "amplifiers",
+        "count": 1
+      },
+      {
+        "id": "switches",
+        "count": 1
+      },
+      {
+        "id": "connections",
+        "count": 3
+      }
+    ],
+    "queries": [
+      {
+        "query": "battery",
+        "kinds": [
+          "dc-source"
+        ]
+      },
+      {
+        "query": "MOSFET",
+        "kinds": [
+          "nmos",
+          "pmos"
+        ]
+      },
+      {
+        "query": "op-amp",
+        "kinds": [
+          "opamp"
+        ]
+      },
+      {
+        "query": "no-such-part",
+        "kinds": []
+      },
+      {
+        "query": "  ",
+        "kinds": [
+          "capacitor",
+          "inductor",
+          "potentiometer",
+          "resistor"
+        ]
+      }
+    ],
+    "passed": true,
+    "catalog_kinds": 18,
+    "global_search": true,
+    "browser_preserves_document_and_physics": true,
+    "retained_retry_owned": true,
+    "direct_agent_placement": true,
+    "shutdown": {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.stdio",
+      "input_revision": 22,
+      "command_revision": 23,
+      "document_generation": 2,
+      "discard_recovery": true,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    }
+  },
+  "native_ui": {
+    "passed": true,
+    "method": "CUA native app actions and unchanged returned window captures",
+    "app": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.181.1-macos-arm64/ELab.app",
+    "native_sha256": "cb1b0ddebb6c86d1b5e88a5749bd0aedb675bd7c84f5162a9a814a8414b86c88",
+    "source_commit": "1631661c1bde01c6e2b0e0b35518beae0a735296",
+    "normal_product_launch": true,
+    "all_components_count": 18,
+    "wheel_over_rows_down_and_up": true,
+    "wheel_over_scrollbar_down_and_up": true,
+    "thumb_drag_down_to_bottom": true,
+    "thumb_drag_up_via_middle_to_top": true,
+    "proportional_middle_position_verified": true,
+    "mouse_component_selection": "Resistor",
+    "mouse_search_focus_verified": true,
+    "category_and_search_remain_fixed": true,
+    "final_view": "all",
+    "final_tool": "select",
+    "circuit_components": 0,
+    "circuit_wires": 0,
+    "document_clean": true,
+    "owner_documents_modified": false,
+    "app_left_running": true,
+    "preview_test_app_closed": true,
+    "preceding_owner_app_preserved": true,
+    "evidence_directory": "research/ui-audit/component-scroll-202",
+    "evidence": {
+      "09-final-top.jpg": "f68b0bafe2c5cf94533c8d463b51db4a03d68251e5fbda8b449e26179bae5a6d",
+      "10-final-wheel-over-scrollbar-down.jpg": "f8b44718feba9a8925ded6d96a6c36c1b1e3969b23210847160f11405fe1609f",
+      "11-final-wheel-over-scrollbar-up.jpg": "0b321da5e4efec4d0ad77d5138a582e3fe059d9450f9c694ba8382a2e82bf80f",
+      "12-final-wheel-rows-down.jpg": "4356544dbedd776d29b069007dbe1b004bd69c9a5108b5be4b5e3608a181bed9",
+      "13-final-thumb-middle.jpg": "8934bedaffd3411f6cb6c7bb5acd1a2961fc33313dff90845c2f75c0d0dd4f64",
+      "14-final-thumb-top.jpg": "f47e5e96da569320e81458b2ee1a2c9796b10e9cf6133cfa98ece52647fa92f0",
+      "15-final-thumb-bottom.jpg": "9bd0dfb63e49af0da661dc80bd3e4b1cbd3c65875fbaef7c3d109520f7cfd024",
+      "16-final-wheel-rows-up.jpg": "db6a37553c79229ddc4f384c1b902ad723be39d72af093c79f417e264f6a7a8a",
+      "17-final-ready-ax.txt": "583c269f4f13159fae7043772c77590b87d686f68d74426a906edb80d2d21a6a",
+      "17-final-ready.jpg": "dfe08e0827bde8369798035c466e6531a4d0156a2176d02571ef691690b9208e"
+    },
+    "default_recovery_and_appearance_enabled": true
+  },
+  "package": {
+    "passed": true,
+    "release": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.181.1-macos-arm64",
+    "archive": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.181.1-macos-arm64.zip",
+    "archive_sha256": "58ecfccc13af9529336547eef2e6673d8264e1b1494f3b2b3be4182402c66505",
+    "members": 127,
+    "source_commit": "1631661c1bde01c6e2b0e0b35518beae0a735296",
+    "native_sha256": "cb1b0ddebb6c86d1b5e88a5749bd0aedb675bd7c84f5162a9a814a8414b86c88",
+    "agent_sha256": "87f9b9a4f31fc24931f86407f89bf3fceaa44cf5cecc0794c08193279a01b4eb",
+    "extraction_verified": true,
+    "unicode_space_path_verified": true,
+    "modes_preserved": true,
+    "strict_ad_hoc_signature_valid": true,
+    "previous_release_unchanged": true,
+    "sdk_license_record_matches_active_pin": true,
+    "preliminary_notice_pin_corrected_before_handoff": true,
+    "native_binary_unchanged_after_correction": true
+  },
+  "component_kinds": 18,
+  "new_features": false,
+  "new_commands": false,
+  "owner_documents_modified": false,
+  "published": false,
+  "developer_id_signed": false,
+  "notarized": false,
+  "limitations": [
+    "Earlier /201 and first-preview captures are separate from final packaged UI evidence",
+    "Clean-account installation, complete PRD, VoiceOver and IME qualification remain outside this maintenance repair"
+  ]
+}
