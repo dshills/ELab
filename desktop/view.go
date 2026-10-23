@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"image/color"
-	"path/filepath"
 	"strings"
 
 	"github.com/dshills/elab/workbench"
@@ -506,10 +505,7 @@ func (s *screen) view() ui.Node {
 	palette, inspector = s.organizeWorkspace(palette, inspector, state)
 	constrainRail(palette, 176)
 	constrainRail(inspector, inspectorContentWidth)
-	filename := "Untitled"
-	if state.Document.Path != "" {
-		filename = filepath.Base(state.Document.Path)
-	}
+	filename := documentName(state)
 	if state.Document.Dirty {
 		filename += " · Unsaved"
 	}

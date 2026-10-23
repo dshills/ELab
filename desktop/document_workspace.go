@@ -25,12 +25,18 @@ func documentToolbarAction(n ui.Node) ui.Node {
 	return n
 }
 
-func (s *screen) documentTitle(state workbench.Snapshot) ui.Node {
-	name := "Untitled circuit"
+func documentName(state workbench.Snapshot) string {
 	if state.Document.Path != "" {
-		name = filepath.Base(state.Document.Path)
+		return filepath.Base(state.Document.Path)
 	}
-	title := heading("title", name)
+	if state.Example != nil && state.Example.Info.Title != "" {
+		return state.Example.Info.Title
+	}
+	return "Untitled circuit"
+}
+
+func (s *screen) documentTitle(state workbench.Snapshot) ui.Node {
+	title := heading("title", documentName(state))
 	title.Style.Typography = ui.Some(ui.Typography{Size: 14, Weight: 600})
 	title.Style.MaxSize = ui.Some(ui.Size{Width: 220, Height: 20})
 	subtitle := "ELab"

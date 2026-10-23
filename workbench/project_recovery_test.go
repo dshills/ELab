@@ -11,6 +11,9 @@ import (
 func manualRecoveryService(t *testing.T) *Service {
 	t.Helper()
 	s := pausedRC(t)
+	// Recovery fixtures exercise unsaved work, rather than an untouched template.
+	call(t, s, "component.set", ValueParams{ID: "R1", Value: "12k"}, "initial-edit")
+	call(t, s, "simulation.restart", struct{}{}, "restart-edited")
 	call(t, s, "recovery.configure", RecoveryConfigureParams{Directory: filepath.Join(t.TempDir(), "recovery"), Enabled: false, Interval: 1}, "configure")
 	return s
 }

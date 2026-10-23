@@ -226,6 +226,10 @@ func (s *Service) loadExampleLocked(id string, discard bool) error {
 	s.selected = d.selected
 	s.viewport.Following = true
 	s.fitViewportLocked()
+	// A shipped template is the clean starting point for this editable copy.
+	// It has no file association, but loading it is not an unsaved user edit.
+	s.savedGraph = contentHash(s.graph, s.transientSettings)
+	s.savedPreferences = preferencesHash(s.pins, s.displayPreferences, s.exampleID)
 	return nil
 }
 func (s *Service) resetCurrentExampleLocked(p ExampleResetParams) error {

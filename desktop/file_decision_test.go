@@ -20,6 +20,8 @@ func TestFileDecisionOldCompletionCannotUseReopenedIntent(t *testing.T) {
 			s, cleanup := testScreen(t)
 			t.Cleanup(cleanup)
 			uiAction(t, s, "example.reset", nil)
+			// Save decisions require an actual edit; shipped templates start clean.
+			agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "3k"})
 			uiAction(t, s, "project.clear", nil)
 			var old ui.Node
 			s.app.Do(func() {
@@ -63,6 +65,8 @@ func TestFileDecisionGuardReachesSharedCommandAdmission(t *testing.T) {
 			t.Cleanup(cleanup)
 			openCloseTestWindow(t, s)
 			uiAction(t, s, "example.reset", nil)
+			// Save decisions require an actual edit; shipped templates start clean.
+			agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "3k"})
 			if kind == "load" {
 				fixture := workbench.NewExample()
 				t.Cleanup(fixture.Close)
@@ -97,6 +101,8 @@ func TestFileDecisionSaveRefusesReplacedDocumentBeforePicker(t *testing.T) {
 	t.Cleanup(cleanup)
 	openCloseTestWindow(t, s)
 	uiAction(t, s, "example.reset", nil)
+	// Save decisions require an actual edit; shipped templates start clean.
+	agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "3k"})
 	uiAction(t, s, "project.clear", nil)
 	agentAction(t, s.service, "project.clear", workbench.ReplaceParams{DiscardChanges: true})
 	agentAction(t, s.service, "component.place", workbench.PlaceParams{ID: "R2", Kind: "resistor", Value: "3k"})
@@ -118,6 +124,8 @@ func TestFileDecisionSavePickerKeepsCapturedAdmissionGuard(t *testing.T) {
 	t.Cleanup(cleanup)
 	openCloseTestWindow(t, s)
 	uiAction(t, s, "example.reset", nil)
+	// Save decisions require an actual edit; shipped templates start clean.
+	agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "3k"})
 	uiAction(t, s, "project.clear", nil)
 	path := filepath.Join(t.TempDir(), "must-not-save.elab")
 	entered, release := make(chan struct{}), make(chan struct{})
@@ -149,6 +157,8 @@ func TestFileDecisionBusyPickerPreservesIntentAndReopensAfterCancel(t *testing.T
 	t.Cleanup(cleanup)
 	openCloseTestWindow(t, s)
 	uiAction(t, s, "example.reset", nil)
+	// Save decisions require an actual edit; shipped templates start clean.
+	agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "3k"})
 	uiAction(t, s, "project.clear", nil)
 	var buttons []ui.Node
 	s.app.Do(func() {

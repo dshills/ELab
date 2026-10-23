@@ -49,6 +49,7 @@ func TestRecoveryControlContractsKeepDiscoveryAndExistingDisableBounds(t *testin
 func TestRecoverySelectionUsesCachedCatalogWithoutStorage(t *testing.T) {
 	s := pausedRC(t)
 	defer s.Close()
+	call(t, s, "component.set", ValueParams{ID: "R1", Value: "12k"}, "edit-template")
 	call(t, s, "recovery.select", IDParams{ID: ""}, "clear-unconfigured")
 	refuse(t, s, "recovery.select", IDParams{ID: "unknown"}, "invalid-params")
 	directory := recoverySetupDirectory(t)

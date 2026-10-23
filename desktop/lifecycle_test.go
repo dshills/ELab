@@ -37,6 +37,8 @@ func TestNativeCloseCancelDiscardAndCleanAdmission(t *testing.T) {
 			defer cleanup()
 			openCloseTestWindow(t, s)
 			uiAction(t, s, "example.reset", nil)
+			// Save decisions require an actual edit; shipped templates start clean.
+			agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "3k"})
 			before := s.service.Snapshot()
 			requestTestClose(t, s)
 			if s.pendingCommand != "app.close" || !reflect.DeepEqual(before, s.service.Snapshot()) {
@@ -63,6 +65,8 @@ func TestNativeClosePreservesExistingDecisionAndBusyPicker(t *testing.T) {
 	defer cleanup()
 	openCloseTestWindow(t, s)
 	uiAction(t, s, "example.reset", nil)
+	// Save decisions require an actual edit; shipped templates start clean.
+	agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "3k"})
 	uiAction(t, s, "project.clear", nil)
 	command, params := s.pendingCommand, append(json.RawMessage(nil), s.pendingParams...)
 	before := s.service.Snapshot()
@@ -96,6 +100,8 @@ func TestNativeSaveBeforeCloseAndStaleDiscard(t *testing.T) {
 	defer cleanup()
 	openCloseTestWindow(t, s)
 	uiAction(t, s, "example.reset", nil)
+	// Save decisions require an actual edit; shipped templates start clean.
+	agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "3k"})
 	path := filepath.Join(t.TempDir(), "saved-before-close.elab")
 	s.chooseFile = func(context.Context, app.FileOptions) (string, error) { return path, nil }
 	requestTestClose(t, s)
@@ -109,6 +115,8 @@ func TestNativeSaveBeforeCloseAndStaleDiscard(t *testing.T) {
 	defer finish()
 	openCloseTestWindow(t, other)
 	uiAction(t, other, "example.reset", nil)
+	// Save decisions require an actual edit; shipped templates start clean.
+	agentAction(t, other.service, "component.set", workbench.ValueParams{ID: "R1", Value: "3k"})
 	requestTestClose(t, other)
 	agentAction(t, other.service, "project.clear", workbench.ReplaceParams{DiscardChanges: true})
 	before := other.service.Snapshot()
@@ -129,6 +137,8 @@ func TestNativeSaveBeforeCloseRefusesAnAgentReplacementDuringPicker(t *testing.T
 	defer cleanup()
 	openCloseTestWindow(t, s)
 	uiAction(t, s, "example.reset", nil)
+	// Save decisions require an actual edit; shipped templates start clean.
+	agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "3k"})
 	path := filepath.Join(t.TempDir(), "old-close-save.elab")
 	entered, release := make(chan struct{}), make(chan struct{})
 	var once sync.Once

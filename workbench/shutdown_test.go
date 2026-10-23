@@ -74,6 +74,7 @@ func awaitShutdownWork(t *testing.T, s *Service, status string) *ShutdownWork {
 func TestShutdownImmediateAdmissionOwnershipAndFailureAcknowledgement(t *testing.T) {
 	s := pausedRC(t)
 	defer s.Close()
+	call(t, s, "component.set", ValueParams{ID: "R1", Value: "12k"}, "edit-template")
 	directory := recoverySetupDirectory(t)
 	configureRecovery(t, s, directory, false)
 	store := configuredStore(t, s)

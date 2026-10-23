@@ -51,6 +51,7 @@ func TestPendingDiscardRefusesAnInterveningReplacement(t *testing.T) {
 	s, cleanup := testScreen(t)
 	defer cleanup()
 	uiAction(t, s, "example.reset", nil)
+	agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "3k"})
 	uiAction(t, s, "project.clear", nil)
 	if s.pendingCommand != "project.clear" {
 		t.Fatal("fixture lacks protected pending action")

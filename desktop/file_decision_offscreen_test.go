@@ -48,6 +48,8 @@ func TestMountedFileDecisionHeldDiscardPreservesAgentEdit(t *testing.T) {
 	s, cleanup := testScreen(t)
 	t.Cleanup(cleanup)
 	uiAction(t, s, "example.reset", nil)
+	// Save decisions require an actual edit; shipped templates start clean.
+	agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "3k"})
 	uiAction(t, s, "project.clear", nil)
 	m := mountedFileDecision(t, s)
 	button := mountedControlElement(t, m, "discard-continue")
@@ -72,6 +74,8 @@ func TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit(t *testing.T) {
 			s, cleanup := testScreen(t)
 			t.Cleanup(cleanup)
 			uiAction(t, s, "example.reset", nil)
+			// Save decisions require an actual edit; shipped templates start clean.
+			agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "3k"})
 			uiAction(t, s, "project.clear", nil)
 			calls := atomic.Int32{}
 			s.chooseFile = func(context.Context, app.FileOptions) (string, error) { calls.Add(1); return "", app.ErrCanceled }
@@ -102,6 +106,8 @@ func TestMountedFileDecisionHeldDiscardCannotUseReopenedPrompt(t *testing.T) {
 	s, cleanup := testScreen(t)
 	t.Cleanup(cleanup)
 	uiAction(t, s, "example.reset", nil)
+	// Save decisions require an actual edit; shipped templates start clean.
+	agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "3k"})
 	uiAction(t, s, "project.clear", nil)
 	m := mountedFileDecision(t, s)
 	button := mountedControlElement(t, m, "discard-continue")
@@ -134,6 +140,8 @@ func TestMountedFileDecisionFreshSaveKeepsAgentWorkBeforeContinuing(t *testing.T
 	s, cleanup := testScreen(t)
 	t.Cleanup(cleanup)
 	uiAction(t, s, "example.reset", nil)
+	// Save decisions require an actual edit; shipped templates start clean.
+	agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "3k"})
 	uiAction(t, s, "project.clear", nil)
 	agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "2k"})
 	before := s.service.Snapshot()

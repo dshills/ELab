@@ -194,6 +194,7 @@ func TestApplicationExampleAliasAndResetContracts(t *testing.T) {
 			if state.Example == nil || state.Example.Info.ID != id {
 				t.Fatal("published alias loaded wrong template")
 			}
+			call(t, s, "component.move", MoveParams{ID: state.Components[0].ID, Position: Point{X: 900, Y: 700}}, "edit-template")
 			refuse(t, s, command, ReplaceParams{}, "unsaved-changes")
 			wrong := state.Document.Generation + 1
 			refuse(t, s, command, ReplaceParams{DiscardChanges: true, ExpectedGeneration: &wrong}, "conflict")
