@@ -1,0 +1,33 @@
+from pathlib import Path
+import hashlib,importlib.util,json
+R=Path('/Users/dshills/Development/projects/ELab');S=Path(__file__).resolve().parent
+b=json.loads((S/'build-result-signed.json').read_text());binary=Path(b['review'])/'elab-agent'
+assert hashlib.sha256(binary.read_bytes()).hexdigest()==b['agent_sha256']
+spec=importlib.util.spec_from_file_location('client',R/'scripts/persistence-demo.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+c=m.Client(command_preconditions=True,agent_binary=binary);report=dict(source_commit=b['source_commit'],agent_sha256=b['agent_sha256'],scope='Isolated packaged agent protocol plus source/mounted UI checks; no owner desktop interaction',examples=[])
+try:
+ catalog=c.ask('examples.list')
+ for info in catalog:
+  c.ask('example.load',{'id':info['id']},True)
+  state=c.ask('simulation.wait');doc=state['document']
+  assert all(not doc[k] for k in ('dirty','schematic_dirty','preferences_dirty','recordings_dirty'))
+  assert not doc['path'] and state['example']['info']==info and not state['example']['modified']
+  c.ask('simulation.pause',{},True)
+  report['examples'].append(dict(id=info['id'],title=info['title'],clean_after_load_and_solve=True,no_discard_consent_needed=True))
+ c.ask('example.load',{'id':'rc'},True);c.ask('simulation.wait');c.ask('simulation.pause',{},True)
+ c.ask('simulation.step',{'duration_s':.005},True)
+ assert not c.ask('project.inspect')['document']['dirty']
+ c.ask('component.set',{'id':'R1','value':'20k'},True)
+ assert c.ask('project.inspect')['document']['dirty']
+ c.ask('example.load',{'id':'led'},True,expect='unsaved-changes')
+ c.ask('edit.undo',{},True)
+ assert not c.ask('project.inspect')['document']['dirty']
+ c.ask('example.load',{'id':'rc'},True);c.ask('simulation.wait')
+ path=S/'My RC example.elab';c.ask('project.save',{'path':str(path)},True)
+ state=c.ask('project.inspect');assert state['document']['path']==str(path) and not state['document']['dirty']
+ c.ask('example.load',{'id':'led'},True);c.ask('simulation.wait')
+ job=c.ask('app.close',{'discard_changes':False},True)['shutdown'];job=c.wait_for_shutdown_outcome(job)
+ assert job['status']=='completed' and all(job[k] for k in ('workers_joined','recovery_finalized','exit_ready'))
+ report.update(passed=True,live_step_keeps_template_clean=True,real_edit_protected=True,undo_to_template_clean=True,clean_example_can_be_saved=True,saved_copy_can_be_replaced_without_prompt=True,clean_example_close=job)
+finally:c.close()
+(S/'protocol-report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))

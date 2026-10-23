@@ -1,0 +1,59 @@
+from pathlib import Path
+import hashlib,json,shutil,subprocess
+R=Path('/Users/dshills/Development/projects/ELab');S=Path(__file__).resolve().parent;D=R/'docs/validation/example-document-200'
+assert (S/'quality-exit-code.txt').read_text().strip()=='0'
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=R).strip()
+b=json.loads((S/'build-result-signed.json').read_text());p=json.loads(Path('/private/tmp/elab-examples-200-zip/report.json').read_text());protocol=json.loads((S/'protocol-report.json').read_text());assert b['source_commit']==protocol['source_commit'] and protocol['passed']
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(Path(p['archive']))==p['archive_sha256'];assert sha(Path(p['release'])/'elab-agent')==b['agent_sha256'];assert sha(Path(p['release'])/'ELab.app/Contents/MacOS/ELab')==b['native_sha256']
+D.mkdir(parents=True)
+for name,target in [('quality-final.txt','quality.txt'),('quality-exit-code.txt','quality-exit-code.txt'),('reproduction.txt','initial-reproduction.txt'),('dirty-recovery-race-final.txt','focused-recovery-race.txt'),('desktop-focused.txt','focused-ui-race.txt'),('protocol-report.json','protocol-report.json'),('build-result-signed.json','build-result.json'),('signature-signed-verify.txt','candidate-signature.txt')]:shutil.copyfile(S/name,D/target)
+shutil.copyfile('/private/tmp/elab-examples-200-zip/report.json',D/'package-report.json');shutil.copyfile('/private/tmp/elab-examples-200-zip/signature.txt',D/'extracted-signature.txt')
+shutil.copyfile(S/'My RC example.elab',D/'saved-example.elab')
+shutil.copytree(S/'build',D/'build-info',ignore=shutil.ignore_patterns('elab','elab-agent','elab-conformance'))
+producers=D/'producers';producers.mkdir()
+for name in ('build_release.py','protocol_check.py','package.py','freeze.py'):(producers/(name+'.txt')).write_bytes((S/name).read_bytes())
+files=subprocess.check_output(['git','ls-files','-z','*.go'],cwd=R).decode().strip('\0').split('\0');inputs={n:sha(R/n) for n in files}
+for name in ('desktop/go.mod','desktop/go.sum','third_party/vellum/sdk.lock.json','research/13-native-command-inventory.json'):inputs[name]=sha(R/name)
+report=dict(passed=True,kind='example-clean-baseline-and-document-title-bugfix',version=b['version'],build=b['build'],source_commit=b['source_commit'],clean_build_vcs=True,native_sha256=b['native_sha256'],agent_sha256=b['agent_sha256'],source_checks=dict(command='./scripts/check.sh',exit_code=0,go_source_count=len(files),scope='goimports/staticcheck, 67 Python tests, root/desktop race tests and vet, mounted offscreen race checks and vet'),public_protocol=dict(examples_tested=len(protocol['examples']),all_untouched_examples_clean=True,switching_without_discard=True,real_edits_protected=True,undo_to_template_clean=True,clean_examples_can_be_saved=True,clean_close_completed=True),ui_checks=dict(menu_agent_parity=True,all_catalog_titles=True,saved_filename_takes_precedence=True,edited_marker_tracks_document=True,real_edit_dialog_and_recovery_fixtures=True),package=p,desktop_control_used=False,owner_apps_closed_or_replaced=False,published=False,developer_id_signed=False,notarized=False,limitations=['No physical desktop interaction for this patch; user work and current apps preserved','Previous pointer/drag visual and flasher native timing limitations are not requalified','Clean-account installation and complete PRD, VoiceOver and IME acceptance remain deferred'])
+(D/'report.json').write_text(json.dumps(report,indent=2)+'\n');(D/'source-inputs.json').write_text(json.dumps(inputs,indent=2)+'\n')
+(D/'README.md').write_text('''# Example clean baseline and title repair /200
+
+October 23, 2026. ELab 0.180.2. [Receipt](report.json),
+[public protocol checks](protocol-report.json), [package](package-report.json).
+
+The owner reported a Save prompt when switching untouched examples, and an
+Untitled circuit heading for a loaded example. The shared loader now establishes
+the graph/settings and presentation baseline from the loaded template. Its file
+association remains empty; explicit Save can still keep a copy. Live physics,
+pause/step and navigation do not create an edit. Real graph/settings, display/pin
+and kept-result changes remain protected. Reset returns to a clean template;
+undo/redo compares against the same baseline. No dirty-guard bypass is added.
+
+The title area and footer use the example catalog title. A saved filename takes
+precedence; genuinely unnamed blank schematics retain Untitled circuit. The
+existing example metadata already supplies the same name to agents. No file
+format, model or public command is added.
+
+The initial regression reproduced schematic and preference dirty flags on an
+untouched LED template. Old protection/recovery fixtures that depended on that
+bug were updated to make real edits. The initial desktop suite stalled waiting
+for a picker its obsolete fixture no longer opened; that owned process was
+stopped and the corrected fixtures passed. The first full check could not bind
+private Unix sockets in the sandbox; the complete check passed with the local
+socket access those tests need. No production guard or solver limits were relaxed.
+
+The packaged agent checked all 18 shipped templates without discard consent,
+ran/stepped RC without setting dirty, confirmed real-edit refusal and undo-to-clean,
+saved a clean example, switched again, and closed with workers joined. UI tests
+cover legacy/generic menu routes against the agent, all example names, saved-name
+precedence, edited indicators, and real-edit dialog/recovery protections. The
+full source check and all 67 Python tests passed.
+
+ZIP extraction into a Unicode/spaces path preserved all members and modes and
+passed strict ad-hoc signature verification. No desktop control was used for
+this patch. Open owner apps and previous packages were preserved. Physical UI
+acceptance, earlier pointer/flasher limits, clean-account installation and full
+PRD/VoiceOver/IME acceptance remain outside this receipt.
+''')
+manifest={str(x.relative_to(D)):dict(sha256=sha(x),bytes=x.stat().st_size) for x in sorted(D.rglob('*')) if x.is_file()};(D/'MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n');print(json.dumps(dict(passed=True,files=len(manifest),source_commit=b['source_commit'],archive_sha256=p['archive_sha256'])))

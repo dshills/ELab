@@ -1,0 +1,53 @@
+{
+  "passed": true,
+  "kind": "example-clean-baseline-and-document-title-bugfix",
+  "version": "0.180.2",
+  "build": "200",
+  "source_commit": "1f1cae82d8d42b915be8ca50247bcf5cde70b067",
+  "clean_build_vcs": true,
+  "native_sha256": "90c216591da721a9b3f95b804bd667930ef5258c1b65785212b70921ed70d0d0",
+  "agent_sha256": "a54f597bac92dc9e5cc219f9c4b3b1658b4bb062ce9264372f6276d4d36efe3e",
+  "source_checks": {
+    "command": "./scripts/check.sh",
+    "exit_code": 0,
+    "go_source_count": 678,
+    "scope": "goimports/staticcheck, 67 Python tests, root/desktop race tests and vet, mounted offscreen race checks and vet"
+  },
+  "public_protocol": {
+    "examples_tested": 18,
+    "all_untouched_examples_clean": true,
+    "switching_without_discard": true,
+    "real_edits_protected": true,
+    "undo_to_template_clean": true,
+    "clean_examples_can_be_saved": true,
+    "clean_close_completed": true
+  },
+  "ui_checks": {
+    "menu_agent_parity": true,
+    "all_catalog_titles": true,
+    "saved_filename_takes_precedence": true,
+    "edited_marker_tracks_document": true,
+    "real_edit_dialog_and_recovery_fixtures": true
+  },
+  "package": {
+    "release": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.180.2-macos-arm64",
+    "archive": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.180.2-macos-arm64.zip",
+    "archive_sha256": "1a9dca0796987b61101a2317515bc7a5ea039a35f53161687720a085b500a688",
+    "extracted": "/private/tmp/elab-examples-200-zip/Extracted download \u00b5 with spaces/ELab-0.180.2-macos-arm64",
+    "files_verified": 127,
+    "bytes_and_modes_match": true,
+    "app_agent_bytes_match_clean_candidate": true,
+    "strict_ad_hoc_signature_valid": true,
+    "previous_release_unchanged": true
+  },
+  "desktop_control_used": false,
+  "owner_apps_closed_or_replaced": false,
+  "published": false,
+  "developer_id_signed": false,
+  "notarized": false,
+  "limitations": [
+    "No physical desktop interaction for this patch; user work and current apps preserved",
+    "Previous pointer/drag visual and flasher native timing limitations are not requalified",
+    "Clean-account installation and complete PRD, VoiceOver and IME acceptance remain deferred"
+  ]
+}

@@ -1,0 +1,67 @@
+from pathlib import Path
+import hashlib,json,shutil,stat,subprocess,sys,zipfile
+assert (Path(__file__).resolve().parent/'quality-exit-code.txt').read_text().strip()=='0'
+R=Path('/Users/dshills/Development/projects/ELab');S=Path(__file__).resolve().parent;O=Path('/private/tmp/elab-examples-200-zip');O.mkdir(mode=0o700)
+sys.path.insert(0,str(R/'scripts'))
+from package_review import members,verify_archive
+b=json.loads((S/'build-result-signed.json').read_text());check=json.loads((S/'protocol-report.json').read_text());assert check['passed'] and check['source_commit']==b['source_commit']
+candidate=Path(b['review']);previous=R/'build/releases/ELab-0.180.1-macos-arm64';preserved=members(previous)
+p=R/'build/releases/ELab-0.180.2-macos-arm64';assert not p.exists();p.mkdir()
+shutil.copytree(candidate/'ELab.app',p/'ELab.app');shutil.copy2(candidate/'elab-agent',p/'elab-agent')
+for name in ('Examples','Licenses'):shutil.copytree(previous/name,p/name)
+for name in ('AGENT_PROTOCOL.md','ROLLBACK.md'):shutil.copy2(previous/name,p/name)
+readme=(previous/'README.md').read_text().replace('ELab 0.180.1','ELab 0.180.2')
+readme=readme.replace('## Document workspace','''## Examples
+
+Opening an example establishes a clean editable copy. You can switch between
+untouched examples without a save prompt, even while live simulation runs.
+Real circuit, settings, display/pin and retained-result edits remain protected.
+Undoing edits back to the template clears the dirty flag. The title area and
+footer show the example's catalog name until you save it under a filename.
+Save still lets you keep a copy of an untouched example.
+
+## Document workspace''')
+(p/'README.md').write_text(readme)
+(p/'RELEASE_NOTES.md').write_text(f'''# ELab 0.180.2 /200 — October 23, 2026
+
+Opening a shipped example now establishes its own clean starting point rather
+than comparing it with an empty document. Switching untouched examples no longer
+asks to save, and ordinary live simulation does not mark them edited. Real edits
+and retained results still use the existing save protection. Reset returns to a
+clean template; undo/redo tracks dirty state against that baseline. Untouched
+examples can still be saved explicitly as a copy.
+
+The title area and footer use the example's catalog name. Saved projects retain
+their filename, including copies originally based on an example. Blank drawings
+continue to use Untitled circuit.
+
+The same example commands and document flags serve users and AI agents. The
+capability details describe the corrected clean-template behavior. No electronics
+models, file format, commands or features are added. The /199 native title-bar
+and pointer changes remain included.
+
+Clean source: {b['source_commit']}. Source checks, real-edit save/close/recovery
+regressions, UI menu/agent parity and a packaged-agent pass through all 18 examples
+are recorded in docs/validation/example-document-200 in the source repository.
+No owner desktop session was used for this patch; physical UI acceptance remains
+outside this run. Earlier packages and open owner apps are preserved.
+
+Apple Silicon, minimum macOS 26.0. Ad-hoc integrity seal without Developer ID or
+notarization, as selected by the owner. The pre-existing /199 physical pointer/drag
+verification and flasher timing limitations are not requalified by this repair.
+Clean-account installation, full PRD, VoiceOver and IME acceptance remain deferred.
+''')
+status=dict(kind='unsigned-macos-arm64-bugfix',version=b['version'],build=b['build'],source_commit=b['source_commit'],native_sha256=b['native_sha256'],agent_sha256=b['agent_sha256'],architecture='arm64',binary_minimum_macos='26.0',developer_id_signed=False,ad_hoc_integrity_seal=True,notarized=False,validation_receipt='docs/validation/example-document-200/report.json',physical_native_ui='not exercised; current owner apps preserved',clean_account_installation='deferred',published=False)
+(p/'RELEASE_STATUS.json').write_text(json.dumps(status,indent=2)+'\n');(p/'RELEASE_MANIFEST.json').write_text(json.dumps(dict(status=status,files=members(p)),indent=2)+'\n')
+expected=members(p);archive=p.parent/(p.name+'.zip');assert not archive.exists()
+with archive.open('xb') as f:
+ archive.chmod(0o644)
+ with zipfile.ZipFile(f,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+  for name,v in expected.items():
+   e=zipfile.ZipInfo(p.name+'/'+name,date_time=(1980,1,1,0,0,0));e.create_system=3;e.external_attr=(stat.S_IFREG|int(v['mode'],8))<<16;e.compress_type=zipfile.ZIP_DEFLATED;z.writestr(e,(p/name).read_bytes(),compresslevel=9)
+verify_archive(archive,p.name,expected);extract=O/'Extracted download µ with spaces';r=subprocess.run(['/usr/bin/ditto','-x','-k',str(archive),str(extract)],capture_output=True,timeout=120);(O/'ditto.txt').write_bytes(r.stdout+r.stderr);r.check_returncode();extracted=extract/p.name;assert members(extracted)==expected and members(previous)==preserved
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(extracted/'ELab.app/Contents/MacOS/ELab')==b['native_sha256'] and sha(extracted/'elab-agent')==b['agent_sha256']
+r=subprocess.run(['/usr/bin/codesign','--verify','--deep','--strict','--verbose=2',str(extracted/'ELab.app')],capture_output=True,timeout=30);(O/'signature.txt').write_bytes(r.stdout+r.stderr);r.check_returncode()
+report=dict(release=str(p),archive=str(archive),archive_sha256=sha(archive),extracted=str(extracted),files_verified=len(expected),bytes_and_modes_match=True,app_agent_bytes_match_clean_candidate=True,strict_ad_hoc_signature_valid=True,previous_release_unchanged=True)
+(O/'report.json').write_text(json.dumps(report,indent=2)+'\n');Path(str(archive)+'.sha256').write_text(sha(archive)+'  '+archive.name+'\n');print(json.dumps(report,indent=2))

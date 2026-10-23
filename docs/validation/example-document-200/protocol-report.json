@@ -1,0 +1,136 @@
+{
+  "source_commit": "1f1cae82d8d42b915be8ca50247bcf5cde70b067",
+  "agent_sha256": "a54f597bac92dc9e5cc219f9c4b3b1658b4bb062ce9264372f6276d4d36efe3e",
+  "scope": "Isolated packaged agent protocol plus source/mounted UI checks; no owner desktop interaction",
+  "examples": [
+    {
+      "id": "led",
+      "title": "LED current limiter",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    },
+    {
+      "id": "split-supply",
+      "title": "Split-rail DC supply",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    },
+    {
+      "id": "rc",
+      "title": "RC charge and discharge",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    },
+    {
+      "id": "rc-high-pass",
+      "title": "RC high-pass edge detector",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    },
+    {
+      "id": "rl",
+      "title": "Coil current buildup and decay",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    },
+    {
+      "id": "rlc",
+      "title": "RLC ringing and damping",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    },
+    {
+      "id": "flyback",
+      "title": "Coil switching and flyback diode",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    },
+    {
+      "id": "npn",
+      "title": "Transistor LED switch",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    },
+    {
+      "id": "switch-npn",
+      "title": "Manual transistor LED switch",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    },
+    {
+      "id": "pmos",
+      "title": "High-side MOSFET LED switch",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    },
+    {
+      "id": "nmos",
+      "title": "MOSFET LED switch",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    },
+    {
+      "id": "cmos",
+      "title": "Complementary MOSFET inverter",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    },
+    {
+      "id": "opamp-follower",
+      "title": "Op-amp voltage follower",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    },
+    {
+      "id": "opamp-inverting",
+      "title": "Inverting op-amp amplifier",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    },
+    {
+      "id": "blink",
+      "title": "Pulse-controlled LED",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    },
+    {
+      "id": "flasher",
+      "title": "Capacitor-timed LED flasher",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    },
+    {
+      "id": "led-fade",
+      "title": "Capacitor-buffered LED fade",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    },
+    {
+      "id": "rectifier",
+      "title": "Diode rectifier and smoothing",
+      "clean_after_load_and_solve": true,
+      "no_discard_consent_needed": true
+    }
+  ],
+  "passed": true,
+  "live_step_keeps_template_clean": true,
+  "real_edit_protected": true,
+  "undo_to_template_clean": true,
+  "clean_example_can_be_saved": true,
+  "saved_copy_can_be_replaced_without_prompt": true,
+  "clean_example_close": {
+    "id": "shutdown-1",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "agent.stdio",
+    "input_revision": 72,
+    "command_revision": 46,
+    "document_generation": 22,
+    "discard_recovery": false,
+    "checkpoint_recovery": false,
+    "cancelable": false,
+    "recovery_finalized": true,
+    "workers_joined": true,
+    "exit_ready": true
+  }
+}
