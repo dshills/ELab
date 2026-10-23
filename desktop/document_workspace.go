@@ -112,7 +112,7 @@ func (s *screen) inspectorRail(state workbench.Snapshot, groups []ui.Node) ui.No
 			}
 			actions = append(actions, action)
 		}
-		header := ui.Node{ID: "inspector-navigation", Kind: ui.Toolbar, Style: ui.Style{Padding: ui.Some(ui.Insets{Top: 10, Left: 16, Right: 16, Bottom: 2}), Gap: ui.Some(float32(2)), MinSize: ui.Some(ui.Size{Height: 42}), MaxSize: ui.Some(ui.Size{Height: 42})}, Accessibility: ui.Accessibility{Name: "Inspector section"}, Children: actions}
+		header := ui.Node{ID: "inspector-navigation", Kind: ui.Toolbar, Style: ui.Style{Background: ui.Some(paper), Padding: ui.Some(ui.Insets{Top: 10, Left: 16, Right: 16, Bottom: 2}), Gap: ui.Some(float32(2)), MinSize: ui.Some(ui.Size{Height: 42}), MaxSize: ui.Some(ui.Size{Height: 42})}, Accessibility: ui.Accessibility{Name: "Inspector section"}, Children: actions}
 		children = append([]ui.Node{header}, children...)
 	}
 	return ui.Node{ID: "inspector-rail", Kind: ui.Column, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 296}), MaxSize: ui.Some(ui.Size{Width: 296}), Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0)), Background: ui.Some(paper)}, Children: children}

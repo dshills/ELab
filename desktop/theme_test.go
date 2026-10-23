@@ -17,7 +17,7 @@ func TestNativeThemeMenuMatchesSharedStateAndColors(t *testing.T) {
 	}
 	root := s.view()
 	dark := resolvePalette("dark", false)
-	for _, id := range []string{"part-search", "selection", "schematic", "rc-scope"} {
+	for _, id := range []string{"part-search", "selection", "schematic", "rc-scope", "inspector-navigation"} {
 		node, ok := findNode(root, id)
 		if !ok && id == "rc-scope" {
 			continue
