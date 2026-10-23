@@ -357,6 +357,9 @@ func (s *screen) view() ui.Node {
 	}
 	messages := quiet("messages", message)
 	messages.Style.MaxSize = ui.Some(ui.Size{Height: 40})
+	if s.requestHelp != nil && s.requestHelp.Details == s.errorMessage {
+		messages.Accessibility.Help = s.requestHelp.Action
+	}
 	if s.errorMessage != "" {
 		messages.Style.Foreground = ui.Some(color.NRGBA{R: 168, G: 65, B: 68, A: 255})
 	}

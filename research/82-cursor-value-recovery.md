@@ -62,9 +62,14 @@ The final full quality gate passed after the additional retry repair: lint,
 staticcheck, 67 Python tests, root/desktop race and vet, and required mounted
 control race checks and offscreen vet. Root results were reused from cache where
 unchanged; desktop race took 175.481 seconds and mounted checks 148.989 seconds.
-The initial full pass is retained separately. A clean candidate build,
-packaged-agent checks and visible native correction/layout checks remain
-required before promoting /206. These
-focused tests do not establish full PRD, IME, screen-reader or participant-study
+The initial full pass is retained separately. The clean /206 candidate and its
+matching headless/equivalent native-socket checks pass. Native correction and
+history retry pass, but Simulate hides the detailed correction action. **/206
+is held, not released.** [Preserved receipt and failures](../docs/validation/cursor-guidance-206/README.md).
+The source repair brings guidance into each inspector page and exposes its
+action through the summary's accessibility help. Mounted light/dark rendering
+at 320×360 confirms readable bounds and units without changing physics; fresh
+native presentation qualification remains separate. These
+checks do not establish full PRD, IME, screen-reader or participant-study
 acceptance. No new feature, model, solver mode, public command or file format is
 part of this repair.

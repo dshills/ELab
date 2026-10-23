@@ -38,3 +38,20 @@ Item 1 is complete in maintenance package 0.181.4 /205. The
 quality, candidate/extracted agent, native-code-equivalent UI/socket and archive
 checks. /204 remains preserved. Next: item 2, cursor/measurement refusal and
 correction. Item 3 remains applicable to each subsequent repair.
+
+## Checkpoint: cursor correction and native Save baseline
+
+Item 2's cursor input repair passes source, headless agent, equivalent native
+socket and visible correction/history retry checks. /206 is held because its
+Simulate page hides detailed guidance. [Evidence and preserved failure](../docs/validation/cursor-guidance-206/README.md).
+The [inspector source repair](84-inspector-guidance-and-native-editing.md) has
+focused unit and mounted light/dark coverage; fresh native qualification remains
+separate. Item 3 continues to apply to that change.
+
+Item 4's native tests preserve default/explicit/Unicode/repeated-extension
+filenames and a direct agent's extensionless path. There is no remaining
+reproduced path-normalization defect. A related Command-A failure is documented
+in the [Save baseline](83-native-save-keyboard.md); a narrowly scoped native menu
+repair is under source validation. Do not claim native key acceptance until
+the changed binary is actually exercised. Existing owned-session scrolling
+checks continue without another launch prompt.

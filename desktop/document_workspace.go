@@ -85,6 +85,13 @@ func (s *screen) organizeWorkspace(library, groups []ui.Node, state workbench.Sn
 		}
 		section := "component"
 		switch strings.TrimPrefix(group.ID, "inspector-group-") {
+		case "guidance":
+			// Errors belong to the current task. Moving to another page clears
+			// request feedback, so an Inspect-only group is unreachable elsewhere.
+			for page := range pages {
+				pages[page] = append(pages[page], group)
+			}
+			continue
 		case "circuit", "probes", "transient", "verification", "sweep":
 			section = "simulation"
 		case "appearance", "display", "output", "recovery", "project-work":
@@ -95,6 +102,9 @@ func (s *screen) organizeWorkspace(library, groups []ui.Node, state workbench.Sn
 	pages["document"] = append(pages["document"], inspectorGroup("document-actions", "Share and print", document)...)
 	pages["document"] = append(pages["document"], inspectorGroup("document-help", "Help and examples", help)...)
 	priority := map[string]int{"source-sampling": 0, "transient": 1, "probes": 2, "verification": 3, "sweep": 4, "circuit": 5, "document-actions": 0, "output": 1, "appearance": 2, "display": 3, "recovery": 4, "project-work": 5, "document-help": 6}
+	if state.InspectorSection != "component" {
+		priority["guidance"] = -1
+	}
 	selected := pages[state.InspectorSection]
 	slices.SortStableFunc(selected, func(a, b ui.Node) int {
 		return priority[strings.TrimPrefix(a.ID, "inspector-group-")] - priority[strings.TrimPrefix(b.ID, "inspector-group-")]

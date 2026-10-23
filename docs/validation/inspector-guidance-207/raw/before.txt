@@ -1,0 +1,10 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+--- FAIL: TestRequestGuidanceRemainsInTheActiveInspector (0.43s)
+    --- FAIL: TestRequestGuidanceRemainsInTheActiveInspector/simulation (0.14s)
+        document_workspace_test.go:35: active inspector hides the shared correction instructions simulation &{request invalid-params warning Choose a valid time for cursor A. Enter a time from 0 s to 0.02 s. Units such as ms and us are accepted; bare numbers are seconds. Existing cursor positions and circuit state are unchanged. time_s: use a time such as 10 ms, 250 us, or 0.01 s [] [] []}
+    --- FAIL: TestRequestGuidanceRemainsInTheActiveInspector/document (0.14s)
+        document_workspace_test.go:35: active inspector hides the shared correction instructions document &{request invalid-params warning Choose a valid time for cursor A. Enter a time from 0 s to 0.02 s. Units such as ms and us are accepted; bare numbers are seconds. Existing cursor positions and circuit state are unchanged. time_s: use a time such as 10 ms, 250 us, or 0.01 s [] [] []}
+FAIL
+FAIL	github.com/dshills/elab/desktop	1.112s
+FAIL

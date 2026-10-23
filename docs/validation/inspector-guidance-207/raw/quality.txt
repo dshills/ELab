@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "requirements": 27,
+  "counts": {
+    "implemented": 17,
+    "partial": 10,
+    "pending": 0
+  },
+  "scope": "Requirement coverage validation only; does not establish product acceptance"
+}
+{"passed": true, "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-e58d405-elab6", "source": "899b2ba3bc01c9708385a2b10d4f8154a5f257e2"}
+..........................................Starting owned
+Starting owned
+Starting owned
+.........................
+----------------------------------------------------------------------
+Ran 67 tests in 1.622s
+
+OK
+?   	github.com/dshills/elab/cmd/elab-agent	[no test files]
+ok  	github.com/dshills/elab/cmd/elab-conformance	(cached)
+?   	github.com/dshills/elab/cmd/elab-ui-audit	[no test files]
+--- FAIL: TestCapacityPerformanceMeasuresFullSizeChangedCaptures (1.05s)
+    --- FAIL: TestCapacityPerformanceMeasuresFullSizeChangedCaptures/capacity-100-nodes (0.25s)
+        capacity_performance_test.go:118: ordinary agent stopped before endpoint: exit status 1
+    --- FAIL: TestCapacityPerformanceMeasuresFullSizeChangedCaptures/capacity-64-parts (0.01s)
+        capacity_performance_test.go:118: ordinary agent stopped before endpoint: exit status 1
+    --- FAIL: TestCapacityPerformanceMeasuresFullSizeChangedCaptures/capacity-rc-mosfet (0.01s)
+        capacity_performance_test.go:118: ordinary agent stopped before endpoint: exit status 1
+--- FAIL: TestInductorPerformanceFixturesUseChangedRunsAndFullCaptures (1.02s)
+    --- FAIL: TestInductorPerformanceFixturesUseChangedRunsAndFullCaptures/rl (0.22s)
+        performance_test.go:124: ordinary agent stopped before endpoint: exit status 1
+    --- FAIL: TestInductorPerformanceFixturesUseChangedRunsAndFullCaptures/rlc (0.01s)
+        performance_test.go:124: ordinary agent stopped before endpoint: exit status 1
+    --- FAIL: TestInductorPerformanceFixturesUseChangedRunsAndFullCaptures/flyback (0.01s)
+        performance_test.go:124: ordinary agent stopped before endpoint: exit status 1
+    --- FAIL: TestInductorPerformanceFixturesUseChangedRunsAndFullCaptures/npn-coil (0.01s)
+        performance_test.go:124: ordinary agent stopped before endpoint: exit status 1
+FAIL
+FAIL	github.com/dshills/elab/internal/conformance	87.615s
+ok  	github.com/dshills/elab/internal/printspool	(cached)
+ok  	github.com/dshills/elab/internal/schematicpdf	(cached)
+ok  	github.com/dshills/elab/internal/uiaudit	1.516s
+ok  	github.com/dshills/elab/transport	(cached)
+ok  	github.com/dshills/elab/workbench	(cached)
+FAIL

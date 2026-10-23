@@ -1,0 +1,184 @@
+Window: "ELab · Live electronics", App: ELab Cursor Recovery.
+0 standard window ELab · Live electronics, Secondary Actions: Raise
+	1 container node:cm9vdA
+		2 row node:aGVhZGVy
+			3 container node:ZG9jdW1lbnQtdGl0bGU
+				4 text (settable) RC charge and discharge, ID: node:dGl0bGU
+				5 text (settable) ELab, ID: node:ZG9jdW1lbnQtc3VidGl0bGU
+			6 toolbar node:dG9vbGJhcg
+				7 button File, Help: Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:ZmlsZS1tZW51
+				8 button Save, ID: node:ZmlsZS5zYXZl
+				9 button Examples, Help: Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:ZXhhbXBsZXMtbWVudQ
+				10 button Undo agent, Help: example rc · by agent.socket, ID: node:ZWRpdC51bmRv
+				11 button (disabled) Redo, ID: node:ZWRpdC5yZWRv
+				12 button Appearance theme, Help: Current choice: Light. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:dGhlbWUtbWVudQ
+			13 text (settable) Ⅱ Paused, ID: node:c3RhdHVz
+			14 button Resume, ID: node:c2ltdWxhdGlvbi5yZXN1bWU
+		15 split group Schematic and scope divider, ID: node:d29ya3NwYWNlLXNwbGl0, Help: Drag to resize; Up/Down adjusts the schematic share, Home/End selects its limits. Scope controls scroll when space is limited.
+			16 row node:d29ya3NwYWNl
+				17 scroll area node:cGFydHMtc2Nyb2xs
+					18 container node:cGFsZXR0ZQ
+						19 text (settable) Components, ID: node:cGFydHMtdGl0bGU
+						20 button Component category, ID: node:cGFydC1jYXRlZ29yeQ, Help: Common holds six everyday parts. Choosing a category clears search. Current choice: Common · 6 ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+						21 text (settable) Search all components, ID: node:cGFydC1zZWFyY2gtbGFiZWw
+						22 text field (settable) Search components, Help: Search all categories by name or hobbyist alias. Return focuses the matching component list., ID: node:cGFydC1zZWFyY2g
+						23 list (settable) Matching components, ID: node:cGFydC1saXN0, Help: Use Up/Down, Home/End, page keys or an initial letter to choose a part. Return or Space chooses the focused row. Tab moves to exact placement.
+							24 row (settable, boolean) DC source, Value: off, ID: option:cGFydC1saXN0:ZGMtc291cmNl
+							25 row (settable, boolean) Resistor, Value: off, ID: option:cGFydC1saXN0:cmVzaXN0b3I
+							26 row (settable, boolean) Red LED, Value: off, ID: option:cGFydC1saXN0:bGVk
+							27 row (settable, boolean) Capacitor, Value: off, ID: option:cGFydC1saXN0:Y2FwYWNpdG9y
+							28 row (settable, boolean) Ground, Value: off, ID: option:cGFydC1saXN0:Z3JvdW5k
+							29 row (settable, boolean) SPST switch, Value: off, ID: option:cGFydC1saXN0:c3dpdGNo
+						30 text (settable) 6 matches · arrows choose · Tab to position, ID: node:cGxhY2VtZW50LWhlbHA
+						31 button Connect by name, ID: node:d2lyZS1ieS1uYW1l
+				32 container node:c2NoZW1hdGljLXBhbmVs
+					33 toolbar node:dG9vbHM
+						34 button Select, ID: node:dG9vbC1zZWxlY3Q
+						35 button Wire, ID: node:dG9vbC13aXJl
+						36 button Pan, ID: node:dG9vbC1wYW4
+						37 button Esc, ID: node:ZHJhd2luZy5jYW5jZWw
+						38 row node:dG9vbC1zcGFjZXI
+						39 button DC sweep, ID: node:c3dlZXAtb3Blbg
+						40 button Fit, ID: node:dmlldy5maXQ, Help: Fit the complete schematic and follow workspace resizing. Pan, zoom or center an object to return to manual positioning.
+					41 text (settable) Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom, ID: node:c2NoZW1hdGljLWhlbHA
+					42 text (settable) Choose a valid time for cursor A., ID: node:bWVzc2FnZXM
+				43 container node:aW5zcGVjdG9yLXJhaWw
+					44 toolbar Inspector section, ID: node:aW5zcGVjdG9yLW5hdmlnYXRpb24
+						45 button Inspect inspector, ID: node:aW5zcGVjdG9yLXNlY3Rpb24tY29tcG9uZW50
+						46 button Simulate inspector, Help: Selected inspector section., ID: node:aW5zcGVjdG9yLXNlY3Rpb24tc2ltdWxhdGlvbg
+						47 button Document inspector, ID: node:aW5zcGVjdG9yLXNlY3Rpb24tZG9jdW1lbnQ
+					48 scroll area node:c2lkZWJhci0yLXNpbXVsYXRpb24
+						49 container node:c2lkZWJhci1jb250ZW50
+							50 container Live simulation, ID: node:aW5zcGVjdG9yLWdyb3VwLXRyYW5zaWVudA
+								51 text (settable) RC experiment, ID: node:dHJhbnNpZW50LXRpdGxl
+								52 text (settable) Ideal RC response. Changing settings restarts from the initial voltage., ID: node:dHJhbnNpZW50LWhlbHA
+								53 text (settable) Sample step, ID: node:c2V0dGluZy1sYWJlbC1zdGVw
+								54 text field (settable) Sample step, Help: Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds., Value: 1 ms, ID: node:c2V0dGluZy1zdGVw
+								55 text (settable) Pulse high, ID: node:c2V0dGluZy1sYWJlbC1oaWdo
+								56 text field (settable) Pulse high, Help: Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds., Value: 50 ms, ID: node:c2V0dGluZy1oaWdo
+								57 text (settable) Pulse low, ID: node:c2V0dGluZy1sYWJlbC1sb3c
+								58 text field (settable) Pulse low, Help: Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds., Value: 50 ms, ID: node:c2V0dGluZy1sb3c
+								59 text (settable) Initial voltage · V, ID: node:c2V0dGluZy1sYWJlbC1pbml0aWFs
+								60 stepper (settable, integer) Initial voltage · V, Value: 0, ID: node:c2V0dGluZy1pbml0aWFs
+								61 text (settable) Playback · sim s / wall s, ID: node:c2V0dGluZy1sYWJlbC1zcGVlZA
+								62 stepper (settable, float) Playback · sim s / wall s, Value: 0.02, ID: node:c2V0dGluZy1zcGVlZA
+							63 container Scope probes, ID: node:aW5zcGVjdG9yLWdyb3VwLXByb2Jlcw
+								64 text (settable) Scope probes, ID: node:cHJvYmVzLXRpdGxl
+								65 text (settable) ID: node:cHJvYmVzLWhlbHA, Choose up to six traces. Voltages reference ground or the named second pin; currents follow the named direction.
+								66 button Scope probe 1, ID: node:cHJvYmUtMA, Help: Current choice: C1.1 / ground · V ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+								67 button Scope probe 2, ID: node:cHJvYmUtMQ, Help: Current choice: V1.positive / ground · V ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+								68 button Scope probe 3, Help: Current choice: Hidden ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:cHJvYmUtMg
+								69 button Scope probe 4, Help: Current choice: Hidden ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:cHJvYmUtMw
+								70 button Scope probe 5, Help: Current choice: Hidden ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:cHJvYmUtNA
+								71 button Scope probe 6, Help: Current choice: Hidden ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:cHJvYmUtNQ
+								72 button Inspect C1.1 / ground, ID: node:aW5zcGVjdC10cmFjZS12OkMxLjE
+								73 text (settable) Teal · C1.1 → ground, ID: node:cHJvYmUtZGlyZWN0aW9uLXY6QzEuMQ
+								74 button Inspect V1.positive / ground, ID: node:aW5zcGVjdC10cmFjZS12OlYxLnBvc2l0aXZl
+								75 text (settable) Amber · V1.positive → ground, ID: node:cHJvYmUtZGlyZWN0aW9uLXY6VjEucG9zaXRpdmU
+								76 text (settable) Measure an interval, ID: node:c2NvcGUtd2luZG93LXRpdGxl
+								77 button Follow live history, ID: node:c2NvcGUtbGl2ZS13aW5kb3c
+								78 button Last 200 ms, ID: node:c2NvcGUtbGF0ZXN0LXdpbmRvdw
+								79 text (settable) start · time, ID: node:d2luZG93LWxhYmVsLXN0YXJ0
+								80 text field (settable) Scope interval start, Help: Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds., Value: 0 s, ID: node:d2luZG93LXN0YXJ0
+								81 text (settable) end · time, ID: node:d2luZG93LWxhYmVsLWVuZA
+								82 text field (settable) Scope interval end, Help: Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds., Value: 20 ms, ID: node:d2luZG93LWVuZA
+								83 text (settable) 0–20 ms · sample statistics, ID: node:d2luZG93LXN1bW1hcnk
+								84 text (settable) ID: node:c3RhdHMtdjpDMS4x, v:C1.1 · 21 samples
+Min 0 · Max 4.323 V
+Mean 2.804 · RMS 3.084 V
+								85 text (settable) ID: node:c3RhdHMtdjpWMS5wb3NpdGl2ZQ, v:V1.positive · 21 samples
+Min 5 · Max 5 V
+Mean 5 · RMS 5 V
+							86 container Recorded verification, ID: node:aW5zcGVjdG9yLWdyb3VwLXZlcmlmaWNhdGlvbg
+								87 text (settable) Verify from startup, ID: node:dmVyaWZpY2F0aW9uLXRpdGxl
+								88 text (settable) Records a separate run from captured startup conditions. Your live circuit and time stay unchanged., ID: node:dmVyaWZpY2F0aW9uLWhlbHA
+								89 button Open recorded run, ID: node:cmVjb3JkaW5nLWltcG9ydA
+								90 text (settable) Duration, ID: node:dmVyaWZ5LWxhYmVsLWR1cmF0aW9u
+								91 text field (settable) Duration, Help: Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds., Value: 100 ms, ID: node:dmVyaWZ5LWR1cmF0aW9u
+								92 text (settable) Sample step (0 = project), ID: node:dmVyaWZ5LWxhYmVsLXN0ZXA
+								93 text field (settable) Sample step (0 = project), Help: Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds., Value: 0 s, ID: node:dmVyaWZ5LXN0ZXA
+								94 button Verification input mode, Help: Current choice: Auto ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:dmVyaWZ5LW1vZGU
+								95 text (settable) Default initial voltage · V, ID: node:dmVyaWZ5LWluaXRpYWwtbGFiZWw
+								96 stepper (settable, integer) Verification default initial voltage, Value: 0, ID: node:dmVyaWZ5LWluaXRpYWw
+								97 text (settable) C1 startup · pin 1 minus 2 · V, ID: node:dmVyaWZ5LWNhcC1sYWJlbC1DMQ
+								98 stepper (settable, integer) Verify C1 initial voltage, Value: 0, ID: node:dmVyaWZ5LWNhcC1DMQ
+								99 button Use project startup and sampling, ID: node:dmVyaWZ5LXByb2plY3Qtc3RhcnR1cA, Help: Clear verification input mode, sampling and startup overrides; preserve duration and the live circuit.
+								100 button Verify, ID: node:dmVyaWZ5LXN0YXJ0
+								101 button Selected verification operation, ID: node:dmVyaWZ5LW9wZXJhdGlvbg, Help: Current choice: Choose a recorded run… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+							102 container DC sweep, ID: node:aW5zcGVjdG9yLWdyb3VwLXN3ZWVw
+								103 text (settable) DC parameter sweep, ID: node:c3dlZXAtc2V0dGluZ3MtdGl0bGU
+								104 text (settable) Independent DC points., ID: node:c3dlZXAtc2V0dGluZ3MtaGVscA
+								105 text (settable) Live circuit unchanged., ID: node:c3dlZXAtbGl2ZS1oZWxw
+								106 button Open captured DC sweep JSON, ID: node:c3dlZXAtaW1wb3J0
+								107 button Sweep parameter, Help: Current choice: V1 · DC bias ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:c3dlZXAtdGFyZ2V0
+								108 button Sweep point spacing, ID: node:c3dlZXAtc3BhY2luZw, Help: Current choice: Linear spacing ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+								109 text (settable) Start, ID: node:c3dlZXAtc3RhcnQtbGFiZWw
+								110 text field (settable) Sweep Start, Value: 0 V, ID: node:c3dlZXAtcmFuZ2Utc3RhcnQ
+								111 text (settable) Stop, ID: node:c3dlZXAtc3RvcC1sYWJlbA
+								112 text field (settable) Sweep Stop, Value: 5 V, ID: node:c3dlZXAtcmFuZ2Utc3RvcA
+								113 text (settable) Points · 2–201 · inclusive endpoints, ID: node:c3dlZXAtcG9pbnRzLWxhYmVs
+								114 text field (settable) Sweep point count, Value: 51, ID: node:c3dlZXAtcG9pbnRz
+								115 button Next sweep reading, ID: node:c3dlZXAtcHJvYmU, Help: Current choice: Auto readings ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+								116 button Run DC sweep, ID: node:c3dlZXAtc3RhcnQ
+								117 text (settable) Capacitors: open, ID: node:c3dlZXAtYXNzdW1wdGlvbnM
+								118 text (settable) Sine: offset / pulse: low, ID: node:c3dlZXAtc291cmNlLWhlbHA
+								119 text (settable) Startup/time ignored, ID: node:c3dlZXAtdGltZS1oZWxw
+							120 container Circuit information, ID: node:aW5zcGVjdG9yLWdyb3VwLWNpcmN1aXQ
+								121 text (settable) ID: node:Y2lyY3VpdC1jYXBhY2l0eQ, 3/64 simulated parts · 4/100 drawing objects
+3/100 nodes (including ground)
+								122 text (settable) ID: node:c2VsZWN0aW9uLW5hdmlnYXRpb24taGVscA, Canvas: Option + ← / →
+Home / End with Option: first / last
+			123 splitter (settable, float) Schematic and scope divider, Value: 0.65, ID: split:d29ya3NwYWNlLXNwbGl0, Help: Drag to resize; Up/Down adjusts the schematic share, Home/End selects its limits. Scope controls scroll when space is limited.
+			124 scroll area node:c2NvcGUtc2Nyb2xs
+				125 container node:c2NvcGUtcGFuZWw
+					126 toolbar node:c2NvcGUtdG9vbGJhcg
+						127 button Hide scope, Help: Expand or collapse the dock without changing simulation or recorded measurements, ID: node:c2NvcGUtdmlzaWJpbGl0eQ
+						128 text (settable) Live RC scope, ID: node:c2NvcGUtdGl0bGU
+						129 text (settable) t = 0.02 s · τ = 10 ms · run 3 · paused, ID: node:c2NvcGUtY2FwdGlvbg
+						130 button Auto, ID: node:aW5wdXQtYXV0bw
+						131 button Charge, ID: node:aW5wdXQtY2hhcmdl
+						132 button Discharge, ID: node:aW5wdXQtZGlzY2hhcmdl
+						133 button Step +1 sample, ID: node:dHJhbnNpZW50LXN0ZXA
+						134 button Restart, ID: node:c2ltdWxhdGlvbi5yZXN0YXJ0
+					135 toolbar node:c2NvcGUtdHJhY2Utcm93
+						136 button Export scope CSV, ID: node:ZXhwb3J0LWNzdg
+						137 button Inspect trace source, ID: node:c2NvcGUtdHJhY2UtZm9jdXM, Help: Current choice: Inspect trace… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+						138 text (settable) Teal: C1.1 / ground · Amber: V1.positive / ground, ID: node:c2NvcGUtbGVnZW5k
+					139 text (settable) Step completed · 20/20 staged samples, ID: node:c3RlcC13b3JrLXN0YXR1cw
+					140 toolbar node:c2NvcGUtY3Vyc29ycw
+						141 button A, ID: node:Y3Vyc29yLXNlbGVjdC1h
+						142 text field (settable) Cursor A time, Value: oops, ID: node:Y3Vyc29yLXRpbWUtYQ, Help: Enter a time to place this cursor. Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds.
+						143 button (disabled) ×, ID: node:Y3Vyc29yLWNsZWFyLWE
+						144 button B, ID: node:Y3Vyc29yLXNlbGVjdC1i
+						145 text field (settable) Cursor B time, ID: node:Y3Vyc29yLXRpbWUtYg, Help: Enter a time to place this cursor. Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds.
+						146 button (disabled) ×, ID: node:Y3Vyc29yLWNsZWFyLWI
+						147 text (settable) ms · click / drag plot to place selected cursor, ID: node:Y3Vyc29yLW1lYXN1cmVtZW50
+		148 row node:cmVhZGluZ3M
+			149 container node:Y3VycmVudA
+				150 text (settable) RC current, ID: node:Y3VycmVudC10aXRsZQ
+				151 text (settable) 0.068 mA, ID: node:Y3VycmVudC12YWx1ZQ
+			152 container node:dm9sdGFnZQ
+				153 text (settable) Capacitor voltage, ID: node:dm9sdGFnZS10aXRsZQ
+				154 text (settable) 4.323 V, ID: node:dm9sdGFnZS12YWx1ZQ
+			155 container node:cG93ZXI
+				156 text (settable) Stored energy, ID: node:cG93ZXItdGl0bGU
+				157 text (settable) 9.35 µJ, ID: node:cG93ZXItdmFsdWU
+			158 container node:c2ltdWxhdGlvbi1pbmZv
+				159 text (settable) Live simulation, ID: node:c2ltdWxhdGlvbi10aXRsZQ
+				160 text (settable) C1 · t = 0.02 s · paused, ID: node:cmVhZGluZy1zdGF0dXM
+		161 row node:Zm9vdGVyLXJvdw
+			162 text (settable) RC charge and discharge · 4 components · 4 wires · last change: user, ID: node:Zm9vdGVy
+			163 row node:Zm9vdGVyLXNwYWNlcg
+			164 text (settable) 48%, ID: node:em9vbQ
+			165 text (settable) 10-unit snap · local workspace, ID: node:Z3JpZC1pbmZv
+	166 close button
+	167 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	168 minimize button
+	169 text ELab · Live electronics
+170 menu bar
+	171 ELab Cursor Recovery
+	172 File
+	173 Examples
+	174 Appearance
+
+The focused UI element is 144 button B, ID: node:Y3Vyc29yLXNlbGVjdC1i

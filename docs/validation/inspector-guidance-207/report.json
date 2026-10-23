@@ -1,0 +1,40 @@
+{
+  "kind": "inspector-request-guidance-and-native-file-editing-source-checkpoint",
+  "source_checks_passed": true,
+  "release_ready": false,
+  "source_parent_commit": "4010b891b66fc56d57ffd879a6a2ee6aa86ebfd4",
+  "source_inputs": 865,
+  "absent_source_inputs": [
+    "go.sum"
+  ],
+  "command": "GOFLAGS='-p=1' GOPROXY=off PYTHONDONTWRITEBYTECODE=1 ./scripts/check.sh",
+  "quality_exit_code": 0,
+  "quality_scope": "lint/staticcheck; 67 Python tests; complete root/desktop race and vet; required mounted-control race and offscreen vet",
+  "root_conformance_seconds": 118.2,
+  "desktop_race_seconds": 176.694,
+  "mounted_race_seconds": 150.333,
+  "mounted_layout": "320x360 inspector in Light/Dark using the managed test font, not a native window capture",
+  "native_menu_fixture": "Production Objective-C helpers compiled with -Wall -Wextra -Werror and exercised as detached menu objects; no GUI window, global menu or clipboard mutation. Included in complete desktop race checks.",
+  "source_inventory_review": {
+    "changed_sources": [
+      "desktop/view.go",
+      "desktop/document_workspace.go"
+    ],
+    "public_commands": 166,
+    "source_routes": 134,
+    "sites": 404,
+    "sources": 76,
+    "binding_definitions_unchanged": true
+  },
+  "initial_gate": "Failed ordinary agent startup in the restricted sandbox. Separate local Unix socket probe returned EPERM. Automatically reviewed socket access allows final suite to pass.",
+  "initial_layout_fixture": "The first test harness imposed a white default background. Explicit transparent default fixes the test fixture; no production color change is claimed.",
+  "initial_evidence_freeze": "A producer assumed the standard-library root module had go.sum and stopped. No source was changed; final input capture explicitly records its absence.",
+  "native_acceptance": "Pending for changed guidance layout and file editing keys/lifecycle. Existing /206 native input and scrolling tests are separate evidence.",
+  "owner_authorization": "Saved standing authorization in AGENTS.md; no new launch request or security-setting change.",
+  "preserved_releases": [
+    "0.181.3 /204",
+    "0.181.4 /205"
+  ],
+  "new_commands": 0,
+  "new_components": 0
+}

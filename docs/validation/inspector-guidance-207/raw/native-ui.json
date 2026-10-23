@@ -1,0 +1,13 @@
+{
+  "passed": false,
+  "status": "pending",
+  "scope": "Source and mounted fixes require a fresh native app check; /206 input and scrolling observations do not qualify changed /207 guidance or menus.",
+  "required_checks": [
+    "Detailed cursor bounds and unit action visible in Simulate at compact size",
+    "Command-A selects the full native Save filename",
+    "Native text undo, cut, copy and paste use the file field responder",
+    "Cancel and Save restore the application menu and focus",
+    "Repeated dialogs and normal owned shutdown leave no temporary menu"
+  ],
+  "owner_authorization": "Standing authorization saved in AGENTS.md. Reuse the running owned session for applicable checks; do not request permission again or queue an unattended launch prompt."
+}

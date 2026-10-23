@@ -21,6 +21,13 @@ you have it!” Treat this as standing authorization, not a one-launch exception
   Do not ask the owner to authorize ELab again or imply authorization is missing.
 - Prefer reusing an already-running owned test session. Check its actual state
   after a tool timeout before launching another copy.
+- The owner explicitly reported that launch-tool approval prompts still appeared
+  despite this authorization. Do not assume that changing a test app's name or
+  bundle identifier avoids those prompts. Reuse the running owned ELab session
+  for desktop checks. Do not leave unattended work waiting on another launch
+  approval; continue available source, agent and offscreen checks if launch
+  tooling cannot honor the standing authorization. Do not weaken platform
+  security or approval settings as a workaround.
 - Preserve the user's projects and existing application sessions. Use disposable
   fixtures for testing and close owned test sessions normally when finished.
 

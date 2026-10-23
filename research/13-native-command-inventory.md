@@ -1,6 +1,6 @@
 # Native control and command inventory
 
-The [source ledger](13-native-command-inventory.json) records **72 production native Go files, 400 source sites and 164 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 132 public commands. The remaining 32 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features.
+The current [source ledger](13-native-command-inventory.json) records **76 production native Go files, 404 source sites and 166 public command IDs**. Literal calls, request fields, registry declarations and reviewed native aliases reference 134 public commands. The remaining 32 IDs are listed explicitly; many are discovery/inspection queries, legacy aliases, waiting variants or dynamically routed asynchronous actions. That list is not automatically a list of missing features. Dated paragraphs below preserve the counts and scopes of earlier checkpoints.
 
 The one-row DC recording presentation repair changes only `desktop/recording.go`’s source hash and site locations. Every non-line binding field, command, alias, coverage set and count remains identical. A fixed DC index is readable text; transient numeric seek uses the same public command. [Source evidence](../docs/validation/recorded-dc-control/README.md) retains the failed /182 native attempt and source correction, and [clean /183](../docs/validation/recorded-dc-review-183/README.md) qualifies exact copied native/headless DC viewing and recorded-file outcomes.
 
@@ -10,7 +10,7 @@ The export-progress presentation correction changes only `desktop/project_work.g
 
 The appearance job change adds `appearance.work.inspect` and `appearance.work.cancel` to the public and non-source-routed sets. Review confirms every native source digest, site, alias, existing route and routed-ID set is unchanged. These advanced commands are available through the shared public service/agent CLI; this ledger does not claim dedicated native controls or runtime binding qualification for them.
 
-**176 sites require binding review.** The other categories are 198 literal routes, nine declared native-wrapper/menu sites and 17 registry declarations. These are syntax sites, including overlapping factories and callbacks; they are not 400 unique visible controls or 132 runtime-qualified capabilities. No literal route names an unknown command.
+**178 sites require binding review.** The other categories are 200 literal routes, nine declared native-wrapper/menu sites and 17 registry declarations. These are syntax sites, including overlapping factories and callbacks; they are not 404 unique visible controls or 134 runtime-qualified capabilities. No literal route names an unknown command.
 
 The ledger covers action/button/menu factories, package-level native menus, registry tables, callback fields/assignments, time-field factories, custom canvases, event routers, direct request command fields and shared dispatch bridges. Each entry retains its source, line, enclosing function and expression. File hashes and the public ID set make changes reproducible and reviewable. Both platform Go files are included; smoke/tests, framework internals and Objective-C event delivery are excluded and remain separate evidence scopes.
 
@@ -52,7 +52,7 @@ Native regressions prove stale Apply/Delete refusal and normal fresh Apply. A co
 
 October 18: the [grouped-inspector source repair](../docs/validation/inspector-accessibility/README.md) changes only `view.go`'s production hash and source line locations. The 68 files, 393 sites, 162 public IDs, 132 routed IDs, semantic site expressions and route/alias sets retain their counts and meanings. Actual CUA invalid-value correction now retains external AX targets and matches the packaged agent; [clean /160 replacement qualification](ui-audit/first-version/inspector-recovery-review-checkpoint.json) now verifies exact copied integration and actual native correction. New native smoke assertions are separate from the production binding ledger and do not establish general reader acceptance.
 
-Resolve the 176 dynamic/relay/custom sites against instantiated states and public parameters, and attach runtime evidence per user capability. Audit file Save/Discard/Cancel semantics, raw field commits/IME, full menu/keyboard/focus behavior, canvas gesture lifetimes and the framework's window lifecycle. Inspection/readout equivalence also needs explicit evidence where the UI consumes shared Go snapshots/functions directly. Full agent parity stays **partial** until those proofs exist; this inventory prevents source drift and makes the remaining work explicit.
+Resolve the 178 dynamic/relay/custom sites against instantiated states and public parameters, and attach runtime evidence per user capability. Audit file Save/Discard/Cancel semantics, raw field commits/IME, full menu/keyboard/focus behavior, canvas gesture lifetimes and the framework's window lifecycle. Inspection/readout equivalence also needs explicit evidence where the UI consumes shared Go snapshots/functions directly. Full agent parity stays **partial** until those proofs exist; this inventory prevents source drift and makes the remaining work explicit.
 
 The 0.46.0 lifecycle checkpoint explicitly inventories `Window.CloseRequest`, preserves active file operations/decisions on repeated close, and adds File Close / Cmd+W through `app.close`. See [close evidence and remaining OS/runtime limits](../docs/native-close.md).
 
@@ -275,3 +275,15 @@ October 20 audit-helper freshness: an old local executable reported 375 sites an
 October 20 recorded-index validation repair: only `desktop/recording.go` changes in production. Review identifies exactly two non-line site changes in `*screen.recordingPanel`: its Change callback and existing `recording.seek` ingress now forward the original numeric entry for shared integer validation, instead of truncating it. All 72 source files /400 sites /164 public IDs /132 routed IDs, aliases, classifications and coverage sets remain unchanged. [Source proof](../docs/validation/recorded-index-validation/README.md) retains original callback/mounted failures, fixed refusal/correction checks, full quality and collector mistakes. Clean replacement/physical typing remain separate.
 
 Clean 0.169.0 /186 packages the recorded-index numeric forwarding repair from `da48318d`. The exact 72-source/400-site/164-command/132-route ledger is bound to 358 runtime source inputs, strict signing, copied native/public checks and a verified ZIP. [Receipt](ui-audit/first-version/recorded-index-review-checkpoint.json). Source-mounted private numeric input and copied public refusals retain separate scopes; physical typing and exhaustive binding acceptance remain open.
+
+October 23: the cursor rejection helper adds one production Go source without
+changing semantic site definitions (76 sources/404 sites/166 IDs/134 routes).
+The active-inspector guidance repair then changes only `view.go` and
+`document_workspace.go` hashes and source locations. Every site's non-line
+fields, alias and command/coverage set remains identical. The Objective-C
+file-panel editing bridge is outside this Go inventory and has a separate
+compiled menu-object regression; it does not add domain commands.
+[Source checks and pending native scope](../docs/validation/inspector-guidance-207/README.md).
+The first review used an obsolete local auditor; its unknown-command report is
+retained, and the current source auditor passes. Counts remain source evidence,
+not exhaustive physical-input or agent-parity qualification.

@@ -3,14 +3,75 @@
 package main
 
 import (
+	"fmt"
+	"image/color"
+	"image/png"
+	"os"
+	"path/filepath"
 	"reflect"
 	"testing"
 
 	"cogentcore.org/core/events"
 	"cogentcore.org/core/math32"
+	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/drivers/cogent"
 	"github.com/dshills/vellum/ui"
 )
+
+func TestMountedInspectorRequestGuidanceStaysVisibleOnTaskPages(t *testing.T) {
+	for _, section := range []string{"simulation", "document"} {
+		for _, themeName := range []string{"light", "dark"} {
+			t.Run(section+"/"+themeName, func(t *testing.T) {
+				s, cleanup := testScreen(t)
+				t.Cleanup(cleanup)
+				uiAction(t, s, "example.rc", nil)
+				uiAction(t, s, "simulation.pause", nil)
+				uiAction(t, s, "simulation.restart", nil)
+				agentAction(t, s.service, "simulation.step", workbench.StepParams{Duration: .02})
+				agentAction(t, s.service, "appearance.theme.set", map[string]string{"theme": themeName})
+				uiAction(t, s, "inspector-section-"+section, nil)
+				s.app.Do(func() {
+					field, _ := findNode(s.view(), "cursor-time-a")
+					field.Change(ui.ChangeEvent{Text: "oops"})
+				})
+				before := s.service.Snapshot()
+				view := func() ui.Node {
+					rail, ok := findNode(s.view(), "inspector-rail")
+					if !ok {
+						t.Fatal("missing inspector rail")
+					}
+					return ui.Node{ID: "root", Kind: ui.Column, Grow: true, Children: []ui.Node{rail}}
+				}
+				theme := inspectorLayoutTestTheme()
+				// Preserve the production palette on unstyled child groups; the
+				// width-test helper's white default would falsify dark rendering.
+				theme.Default.Background = ui.Some(color.NRGBA{})
+				m := newMountedControlWindowSize(t, s, view, 320, 360, theme)
+				rail := mountedControlElement(t, m, inspectorScrollNode(t, s.view()).ID)
+				action := mountedControlElement(t, m, "diagnostic-0-action")
+				if !action.Visible || action.Bounds.Dy() < 28 || !action.Bounds.In(rail.Bounds) {
+					t.Fatalf("correction instructions are clipped: action=%v rail=%v", action.Bounds, rail.Bounds)
+				}
+				assertCursorMeasurementPreservesPhysics(t, before, s.service.Snapshot())
+				if artifacts := os.Getenv("ELAB_GUIDANCE_LAYOUT_ARTIFACTS"); artifacts != "" {
+					im, err := m.manual.Capture(m.ctx, "main")
+					if err != nil {
+						t.Fatal(err)
+					}
+					file, err := os.OpenFile(filepath.Join(artifacts, fmt.Sprintf("%s-%s.png", section, themeName)), os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0600)
+					if err != nil {
+						t.Fatal(err)
+					}
+					err = png.Encode(file, im)
+					closeErr := file.Close()
+					if err != nil || closeErr != nil {
+						t.Fatal(err, closeErr)
+					}
+				}
+			})
+		}
+	}
+}
 
 func TestMountedInspectorNavigationStaysVisibleAndPreservesCircuit(t *testing.T) {
 	s, cleanup := testScreen(t)
