@@ -1,0 +1,66 @@
+{
+  "source_commit": "ef3a63b05403a5ad0028d2c6af8d76faa3409ad6",
+  "candidate_version": "0.181.4",
+  "candidate_build": "205",
+  "agent_sha256": "e5bb556fdf49922644e75ab54342bccd6b3ccbe66b214a95c23b6c3668e5c33c",
+  "native_equivalence": {
+    "source_commit": "ef3a63b05403a5ad0028d2c6af8d76faa3409ad6",
+    "candidate_native_sha256": "c835e29209d652c06e217644cf8825c3000ea5d61f1579cfe4bb1ab0262fab3d",
+    "native_test_sha256": "196182d9d43204aef0f4be4ab1483fcd36c450af10c297cbb90abf32149433f1",
+    "unsigned_code_sha256": "4005938bc3444a40d4d374c13189a6f9afbe2dea7b78421f08766d14d0292799",
+    "unsigned_compiled_executables_identical": true,
+    "native_test_bundle_id": "com.dshills.elab.value-guidance205",
+    "native_test_scope": "Same compiled source, separately identified/signed test bundle; not exact distribution bundle",
+    "isolated_appearance_and_recovery": true,
+    "shared_geometry_access_denied": true
+  },
+  "save_source_sha256": "4178087b68c2e204598c18243ec26b067c1ad770f8293013cafe2f4862ec2058",
+  "fixture_files": {
+    "Explicit.elab": {
+      "sha256": "272a0276d589b14f14291061a0c2828cb2919a172d0c5dcb4cc6b36f642597bd",
+      "bytes": 767
+    },
+    "Intentional.elab.elab": {
+      "sha256": "272a0276d589b14f14291061a0c2828cb2919a172d0c5dcb4cc6b36f642597bd",
+      "bytes": 767
+    },
+    "Timer.v2 \u00b5.elab": {
+      "sha256": "272a0276d589b14f14291061a0c2828cb2919a172d0c5dcb4cc6b36f642597bd",
+      "bytes": 767
+    },
+    "Untitled.elab": {
+      "sha256": "272a0276d589b14f14291061a0c2828cb2919a172d0c5dcb4cc6b36f642597bd",
+      "bytes": 767
+    },
+    "Agent requested path": {
+      "sha256": "272a0276d589b14f14291061a0c2828cb2919a172d0c5dcb4cc6b36f642597bd",
+      "bytes": 767
+    }
+  },
+  "native_panel_returned_path": "/tmp/elab-value-guidance-205/save-panel-fixtures/Intentional.elab.elab",
+  "default_name_exact": true,
+  "explicit_suffix_exact": true,
+  "compound_unicode_exact": true,
+  "intentional_double_suffix_preserved": true,
+  "agent_bare_path_preserved": true,
+  "fresh_loads_clean": true,
+  "original_fixtures_unchanged": true,
+  "keyboard_select_all_in_native_panel": "Command-A did not extend the initial basename selection to the full name; no Edit menu was present. AX full-name selection worked.",
+  "initial_test_assertion": "Corrected the fixture assertion to accept macOS /tmp URL alias for the requested /private/tmp directory; no application repair for that alias.",
+  "shutdown": {
+    "id": "shutdown-1",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "agent.socket",
+    "input_revision": 57,
+    "command_revision": 13,
+    "document_generation": 6,
+    "discard_recovery": true,
+    "checkpoint_recovery": false,
+    "cancelable": false,
+    "recovery_finalized": true,
+    "workers_joined": true,
+    "exit_ready": true
+  },
+  "scope": "Native path behavior and agent reloads for disposable blank schematics; not a complete keyboard-save qualification"
+}

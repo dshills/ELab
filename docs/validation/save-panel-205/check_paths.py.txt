@@ -1,0 +1,60 @@
+from pathlib import Path
+import hashlib
+import importlib.util
+import json
+
+root = Path('/Users/dshills/Development/projects/ELab')
+stage = Path(__file__).resolve().parent
+base = Path('/private/tmp/elab-value-guidance-205')
+directory = base / 'save-panel-fixtures'
+build = json.loads((root / 'build/value-guidance-205-tools/build-result-signed.json').read_text())
+equivalence = json.loads((root / 'build/value-guidance-205-tools/native-equivalence.json').read_text())
+binary = Path(build['review']) / 'elab-agent'
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(binary) == build['agent_sha256']
+assert sha(base / 'ELab Value Guidance.app/Contents/MacOS/ELab Value Guidance') == equivalence['native_test_sha256']
+expected = {'Untitled.elab', 'Explicit.elab', 'Timer.v2 µ.elab', 'Intentional.elab.elab'}
+assert {p.name for p in directory.iterdir()} == expected
+files = {}
+for name in sorted(expected):
+    path = directory / name
+    doc = json.loads(path.read_text())
+    assert doc['format'] == 'elab.schematic' and doc['version'] == 4
+    files[name] = dict(sha256=sha(path), bytes=path.stat().st_size)
+spec = importlib.util.spec_from_file_location('client', root / 'scripts/persistence-demo.py')
+helper = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(helper)
+c = helper.Client(endpoint=str(base / 'endpoint.json'), command_preconditions=True, agent_binary=binary)
+try:
+    state = c.ask('project.inspect')
+    panel_path = state['document']['path']
+    assert Path(panel_path).resolve() == (directory / 'Intentional.elab.elab').resolve()
+    assert not state['document']['dirty']
+    bare = directory / 'Agent requested path'
+    state = c.ask('project.save', {'path': str(bare)}, True)
+    assert state['document']['path'] == str(bare) and bare.is_file() and not Path(str(bare) + '.elab').exists()
+    for name in sorted(expected | {bare.name}):
+        state = c.ask('project.load', {'path': str(directory / name)}, True)
+        state = c.ask('simulation.wait')
+        assert state['document']['path'] == str(directory / name) and not state['document']['dirty']
+        assert not state['components'] and not state['wires']
+    assert all(sha(directory / name) == value['sha256'] for name, value in files.items())
+    files[bare.name] = dict(sha256=sha(bare), bytes=bare.stat().st_size)
+    job = c.ask('app.close', {'discard_changes': True}, True)['shutdown']
+    job = c.wait_for_shutdown_outcome(job)
+    assert job['status'] == 'completed' and job['exit_ready']
+finally:
+    c.close()
+report = dict(source_commit=build['source_commit'], candidate_version=build['version'], candidate_build=build['build'],
+              agent_sha256=build['agent_sha256'], native_equivalence=equivalence,
+              save_source_sha256=sha(root / 'desktop/files.go'), fixture_files=files,
+              native_panel_returned_path=panel_path, default_name_exact=True,
+              explicit_suffix_exact=True, compound_unicode_exact=True,
+              intentional_double_suffix_preserved=True, agent_bare_path_preserved=True,
+              fresh_loads_clean=True, original_fixtures_unchanged=True,
+              keyboard_select_all_in_native_panel='Command-A did not extend the initial basename selection to the full name; no Edit menu was present. AX full-name selection worked.',
+              initial_test_assertion='Corrected the fixture assertion to accept macOS /tmp URL alias for the requested /private/tmp directory; no application repair for that alias.',
+              shutdown=job,
+              scope='Native path behavior and agent reloads for disposable blank schematics; not a complete keyboard-save qualification')
+(stage / 'report.json').write_text(json.dumps(report, indent=2) + '\n')
+print(json.dumps(dict(path_checks_passed=True, files=len(files), native_select_all_issue=True, shutdown_completed=True)))
